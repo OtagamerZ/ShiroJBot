@@ -1,4 +1,4 @@
-/*
+ /*
  * This file is part of Shiro J Bot.
  * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
  *
@@ -200,6 +200,7 @@ public class Deck extends DAO<Deck> {
 		int weight = 0;
 		double penalty = 0;
 		for (Evogear e : evogear) {
+			weight += e.getTier();
 			if ((!e.isSpell() && getOrigins().major() == Race.MACHINE) || (e.isSpell() && getOrigins().major() == Race.MYSTICAL)) {
 				weight -= 1;
 			}
