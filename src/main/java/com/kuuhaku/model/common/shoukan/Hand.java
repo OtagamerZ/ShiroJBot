@@ -629,11 +629,10 @@ public class Hand {
 
 			int quart = value / 4;
 			if (value < 0) {
-				value = regdeg.reduce(Degen.class, value - quart);
+				value -= quart - regdeg.reduce(Degen.class, quart);
 			} else {
-				value = regdeg.reduce(Regen.class, value - quart);
+				value -= quart - regdeg.reduce(Regen.class, quart);
 			}
-			value += quart;
 
 			double prcnt = getHPPrcnt();
 			if (origin.demon()) {
