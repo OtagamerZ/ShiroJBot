@@ -781,7 +781,7 @@ public class Shoukan extends GameInstance<Phase> {
 				switch (c) {
 					case PIERCING -> you.modHP((int) -(dmg * 0.5 * c.getValue(e.getTier()) / 100));
 					case WOUNDING -> {
-						int val = dmg * c.getValue(e.getTier()) / 100;
+						int val = (int) (dmg * 0.5 * c.getValue(e.getTier()) / 100);
 						you.getRegDeg().add(new Degen(val, 0.1));
 
 						if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(2)) {
@@ -905,7 +905,7 @@ public class Shoukan extends GameInstance<Phase> {
 					switch (c) {
 						case PIERCING -> op.modHP((int) -(dmg * mitigation * c.getValue(e.getTier()) / 100));
 						case WOUNDING -> {
-							int val = dmg * c.getValue(e.getTier()) / 100;
+							int val = (int) (dmg * mitigation * c.getValue(e.getTier()) / 100);
 							op.getRegDeg().add(new Degen(val, 0.1));
 
 							if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(2)) {
