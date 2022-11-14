@@ -69,7 +69,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -1526,17 +1525,14 @@ public class Shoukan extends GameInstance<Phase> {
 								if (deque.size() > 1) add(deque.getLast());
 							}};
 
-							try {
-								Drawable<?> d = curr.requestChoice(cards).get();
+							curr.requestChoice(cards).thenAccept(d -> {
 								curr.getCards().add(d);
 								deque.remove(d);
 								curr.setUsedDestiny(true);
 
 								curr.showHand();
-								reportEvent("str/destiny_draw");
-							} catch (ExecutionException | InterruptedException e) {
-								reportEvent("error/destiny_draw");
-							}
+								reportEvent("str/destiny_draw", curr.getName());
+							});
 						});
 					}
 				}
@@ -1552,7 +1548,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						int i = 3;
 						Iterator<Drawable<?>> it = curr.getDiscard().iterator();
-						while (it.hasNext() && i --> 0) {
+						while (it.hasNext() && i-- > 0) {
 							Drawable<?> d = it.next();
 
 							CardType type;
@@ -1605,7 +1601,7 @@ public class Shoukan extends GameInstance<Phase> {
 								.sendFile(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")
 								.queue()
 				);
-				
+
 				put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
 						reportResult(GameReport.SUCCESS, "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
