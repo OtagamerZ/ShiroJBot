@@ -68,6 +68,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -494,9 +495,11 @@ public abstract class Utils {
 			}
 		}
 
+		AtomicBoolean lock = new AtomicBoolean(false);
 		ma.queue(s -> Pages.buttonize(s,
 						Map.of(parseEmoji(Constants.ACCEPT), w -> {
-							if (action.apply(w)) {
+							if (!lock.get() && action.apply(w)) {
+								lock.set(true);
 								w.getMessage().delete().queue(null, Utils::doNothing);
 								unlock(allowed);
 							}
