@@ -115,18 +115,19 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Transient
 	private int state = 0b10;
 	/*
-	0x0F F FFF FF
-	   │ │ │││ └┴ 0001 1111
-	   │ │ │││       │ │││└ solid
-	   │ │ │││       │ ││└─ available
-	   │ │ │││       │ │└── defending
-	   │ │ │││       │ └─── flipped
-	   │ │ │││       └ sealed
-	   │ │ ││└─ (0 - 15) sleeping
-	   │ │ │└── (0 - 15) stunned
-	   │ │ └─── (0 - 15) stasis
-	   │ └ (0 - 15) cooldown
-	   └ (0 - 15) taunt
+	0x0F FFFF FF
+	   │ ││││ └┴ 0011 1111
+	   │ ││││      ││ │││└ solid
+	   │ ││││      ││ ││└─ available
+	   │ ││││      ││ │└── defending
+	   │ ││││      ││ └─── flipped
+	   │ ││││      │└ sealed
+	   │ ││││      └─ switched
+	   │ │││└─ (0 - 15) sleeping
+	   │ ││└── (0 - 15) stunned
+	   │ │└─── (0 - 15) stasis
+	   │ └──── (0 - 15) taunt
+	   └ (0 - 15) cooldown
 	 */
 
 	@Override
@@ -551,6 +552,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		state = Bit.set(state, 4, sealed);
 	}
 
+	public boolean hasSwitched() {
+		return Bit.on(state, 5);
+	}
+
+	public void setSwitched(boolean sealed) {
+		state = Bit.set(state, 5, sealed);
+	}
+
 	public boolean isSleeping() {
 		return !isStunned() && Bit.on(state, 3, 4);
 	}
@@ -601,18 +610,18 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int getCooldown() {
-		return Bit.get(state, 6, 4);
+		return Bit.get(state, 7, 4);
 	}
 
 	@Override
 	public void setCooldown(int time) {
-		int curr = Bit.get(state, 6, 4);
-		state = Bit.set(state, 6, Math.max(curr, time), 4);
+		int curr = Bit.get(state, 7, 4);
+		state = Bit.set(state, 7, Math.max(curr, time), 4);
 	}
 
 	public void reduceCooldown(int time) {
-		int curr = Bit.get(state, 6, 4);
-		state = Bit.set(state, 6, Math.max(0, curr - time), 4);
+		int curr = Bit.get(state, 7, 4);
+		state = Bit.set(state, 7, Math.max(0, curr - time), 4);
 	}
 
 	public Senshi getTarget() {
@@ -620,9 +629,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public int getTaunt() {
-		int taunt = Bit.get(state, 7, 4);
+		int taunt = Bit.get(state, 6, 4);
 		if (taunt == 0 || (target == null || target.getSide() == getSide() || target.getIndex() == -1)) {
-			state = Bit.set(state, 7, 0, 4);
+			state = Bit.set(state, 6, 0, 4);
 			target = null;
 			taunt = 0;
 		}
@@ -634,13 +643,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (stats.popFlag(Flag.NO_TAUNT)) return;
 
 		this.target = target;
-		int curr = Bit.get(state, 7, 4);
-		state = Bit.set(state, 7, Math.max(curr, time), 4);
+		int curr = Bit.get(state, 6, 4);
+		state = Bit.set(state, 6, Math.max(curr, time), 4);
 	}
 
 	public void reduceTaunt(int time) {
-		int curr = Bit.get(state, 7, 4);
-		state = Bit.set(state, 7, Math.max(0, curr - time), 4);
+		int curr = Bit.get(state, 6, 4);
+		state = Bit.set(state, 6, Math.max(0, curr - time), 4);
 	}
 
 	@Override

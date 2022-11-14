@@ -361,12 +361,18 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!chosen.isAvailable()) {
 			getChannel().sendMessage(getLocale().get("error/card_unavailable")).queue();
 			return false;
-		} else if (chosen.isFlipped()) {
+		} else if (chosen.hasSwitched()) {
+			getChannel().sendMessage(getLocale().get("error/card_switched")).queue();
+			return false;
+		}
+
+		if (chosen.isFlipped()) {
 			chosen.setFlipped(false);
 		} else {
 			chosen.setDefending(!chosen.isDefending());
 		}
 
+		chosen.setSwitched(true);
 		reportEvent("str/flip_card", curr.getName(), chosen, chosen.getState().toString(getLocale()));
 		return true;
 	}
@@ -1671,6 +1677,7 @@ public class Shoukan extends GameInstance<Phase> {
 					s.reduceSleep(1);
 					s.reduceStun(1);
 					s.reduceCooldown(1);
+					s.setSwitched(false);
 
 					s.getStats().expireMods();
 					for (Evogear e : s.getEquipments()) {
