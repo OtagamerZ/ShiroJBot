@@ -643,9 +643,11 @@ public class Arena implements Renderer {
 								g1.setClip(clip);
 
 								g1.setColor(new Color(255, 0, 0, 200));
+
+								Point offset = new Point((int) (rect.width * 1.25), (int) (rect.height * 1.25));
 								g1.fillArc(
-										rect.x, rect.y,
-										(int) (rect.width * 1.25), (int) (rect.height * 1.25), 90,
+										rect.x - offset.x / 2, rect.y - offset.y / 2,
+										rect.width + offset.x, rect.height + offset.y, 90,
 										hand.getOriginCooldown() * 360 / maxCd
 								);
 
