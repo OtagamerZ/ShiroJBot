@@ -1,60 +1,50 @@
 package com.kuuhaku.manager;
 
-import com.kuuhaku.Constants;
-import org.mapdb.DB;
-import org.mapdb.DBMaker;
-import org.mapdb.HTreeMap;
-import org.mapdb.Serializer;
+import org.ehcache.Cache;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.config.builders.ExpiryPolicyBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
 
+import java.time.Duration;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
 
 public class CacheManager {
 	private final ScheduledExecutorService exec = Executors.newScheduledThreadPool(3);
-	private final DB db = DBMaker.heapDB().make();
+	private final org.ehcache.CacheManager cm = CacheManagerBuilder.newCacheManagerBuilder().build(true);
 
-	private final HTreeMap<String, byte[]> cardCache = db.hashMap("card", Serializer.STRING, Serializer.BYTE_ARRAY)
-			.expireAfterCreate(30, TimeUnit.MINUTES)
-			.expireAfterGet(30, TimeUnit.MINUTES)
-			.expireExecutor(exec)
-			.expireExecutorPeriod(TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES))
-			.expireStoreSize(Constants.GB)
-			.counterEnable()
-			.create();
+	private final Cache<String, byte[]> resource = cm.createCache("resource",
+			CacheConfigurationBuilder
+					.newCacheConfigurationBuilder(String.class, byte[].class, ResourcePoolsBuilder.heap(100))
+					.withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofMinutes(30)))
+	);
+	private final Cache<String, String> locale = cm.createCache("locale",
+			CacheConfigurationBuilder
+					.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(100))
+					.withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofMinutes(30)))
+	);
 
-	private final HTreeMap<String, byte[]> resourceCache = db.hashMap("resource", Serializer.STRING, Serializer.BYTE_ARRAY)
-			.expireAfterCreate(30, TimeUnit.MINUTES)
-			.expireAfterGet(30, TimeUnit.MINUTES)
-			.expireExecutor(exec)
-			.expireExecutorPeriod(TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES))
-			.expireStoreSize(Constants.GB)
-			.counterEnable()
-			.create();
-
-	private final HTreeMap<String, String> emoteCache = db.hashMap("emote", Serializer.STRING, Serializer.STRING).create();
-
-	private final HTreeMap<String, String> localeCache = db.hashMap("locale", Serializer.STRING, Serializer.STRING)
-			.expireAfterCreate(30, TimeUnit.MINUTES)
-			.expireAfterGet(30, TimeUnit.MINUTES)
-			.expireExecutor(exec)
-			.expireExecutorPeriod(TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES))
-			.expireStoreSize(128 * Constants.MB)
-			.create();
-
-	public HTreeMap<String, byte[]> getCardCache() {
-		return cardCache;
+	public Cache<String, byte[]> getResourceCache() {
+		return resource;
 	}
 
-	public HTreeMap<String, byte[]> getResourceCache() {
-		return resourceCache;
+	public byte[] computeResource(String key, BiFunction<String, byte[], byte[]> mapper) {
+		byte[] bytes = mapper.apply(key, resource.get(key));
+		resource.put(key, bytes);
+
+		return bytes;
 	}
 
-	public HTreeMap<String, String> getEmoteCache() {
-		return emoteCache;
+	public Cache<String, String> getLocaleCache() {
+		return locale;
 	}
 
-	public HTreeMap<String, String> getLocaleCache() {
-		return localeCache;
+	public String computeLocale(String key, BiFunction<String, String, String> mapper) {
+		String value = mapper.apply(key, locale.get(key));
+		locale.put(key, value);
+
+		return value;
 	}
 }

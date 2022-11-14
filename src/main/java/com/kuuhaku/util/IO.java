@@ -53,7 +53,7 @@ public abstract class IO {
 	}
 
 	public static BufferedImage getResourceAsImage(String path) {
-		byte[] bytes = Main.getCacheManager().getResourceCache().compute(path, (k, v) -> {
+		byte[] bytes = Main.getCacheManager().computeResource(path, (k, v) -> {
 			if (v != null && v.length > 0) return v;
 
 			try (InputStream is = IO.class.getClassLoader().getResourceAsStream(path)) {
@@ -78,7 +78,7 @@ public abstract class IO {
 	}
 
 	public static BufferedImage getImage(String url) {
-		byte[] bytes = Main.getCacheManager().getResourceCache().compute(url, (k, v) -> {
+		byte[] bytes = Main.getCacheManager().computeResource(url, (k, v) -> {
 			if (v != null && v.length > 0) return v;
 
 			try {

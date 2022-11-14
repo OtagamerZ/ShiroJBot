@@ -53,7 +53,9 @@ public enum I18N {
 		String lower = key.toLowerCase();
 		if (!key.equals(lower)) return get(lower);
 
-		return Main.getCacheManager().getLocaleCache().computeIfAbsent(name() + "-" + key, k -> {
+		return Main.getCacheManager().computeLocale(name() + "-" + key, (k, v) -> {
+			if (v != null) return v;
+
 			try {
 				String message = ResourceBundle.getBundle("locale/lang", locale).getString(key);
 				String icon;
@@ -84,7 +86,9 @@ public enum I18N {
 			}
 		}
 
-		return Main.getCacheManager().getLocaleCache().computeIfAbsent(name() + "-" + key, k -> {
+		return Main.getCacheManager().computeLocale(name() + "-" + key, (k, v) -> {
+			if (v != null) return v;
+
 			try {
 				String message = ResourceBundle.getBundle("locale/lang", locale).getString(key);
 				String icon;

@@ -217,7 +217,7 @@ public class Card extends DAO<Card> {
 		byte[] cardBytes;
 		if (f.exists()) {
 			File finalF = f;
-			cardBytes = Main.getCacheManager().getCardCache().compute(id, (k, v) -> {
+			cardBytes = Main.getCacheManager().computeResource(id, (k, v) -> {
 				if (v != null && v.length > 0) return v;
 
 				try {
