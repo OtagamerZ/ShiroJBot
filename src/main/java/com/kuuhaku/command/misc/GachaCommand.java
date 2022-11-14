@@ -115,13 +115,8 @@ public class GachaCommand implements Executable {
 
 						g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 20));
 
-						List<StashedCard> acts = new ArrayList<>();
 						for (String s : result) {
-							acts.add(drawCard(g2d, locale, acc, s, type));
-						}
-
-						for (StashedCard act : acts) {
-							act.save();
+							drawCard(g2d, locale, acc, s, type);
 						}
 
 						if (gacha.getCurrency() == Currency.CR) {
@@ -145,7 +140,7 @@ public class GachaCommand implements Executable {
 		}
 	}
 
-	private StashedCard drawCard(Graphics2D g2d, I18N locale, Account acc, String card, String type) {
+	private void drawCard(Graphics2D g2d, I18N locale, Account acc, String card, String type) {
 		Kawaipon kp = acc.getKawaipon();
 		Deck deck = acc.getCurrentDeck();
 		String hPath = deck.getStyling().getFrame().isLegacy() ? "old" : "new";
@@ -172,9 +167,7 @@ public class GachaCommand implements Executable {
 					g2d.drawImage(c.drawCard(kc.isChrome()), 5, 20, null);
 
 					kc.setKawaipon(kp);
-					kc.setStashEntry(new StashedCard(kp, kc));
-
-					return kc.getStashEntry();
+					kc.store();
 				}
 				case EVOGEAR -> {
 					Evogear e = DAO.find(Evogear.class, card);
@@ -184,7 +177,8 @@ public class GachaCommand implements Executable {
 						g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/hero.png"), 5, 20, null);
 					}
 
-					return new StashedCard(kp, c, tp);
+					StashedCard sc = new StashedCard(kp, c, tp);
+					sc.save();
 				}
 				case FIELD -> {
 					Field f = DAO.find(Field.class, card);
@@ -192,13 +186,13 @@ public class GachaCommand implements Executable {
 					g2d.drawImage(f.render(locale, deck), 5, 20, null);
 					g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/buffed.png"), 5, 20, null);
 
-					return new StashedCard(kp, c, tp);
+					StashedCard sc = new StashedCard(kp, c, tp);
+					sc.save();
 				}
 			}
 		} finally {
 			g2d.translate(265, 0);
 		}
 
-		return null;
 	}
 }
