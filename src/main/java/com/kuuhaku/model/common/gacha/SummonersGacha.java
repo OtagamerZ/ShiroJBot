@@ -45,7 +45,7 @@ public class SummonersGacha extends Gacha<String> {
 	}
 
 	private SummonersGacha(List<Object[]> pool) {
-		super(5000, Currency.CR, 3,
+		super(6200, Currency.CR, 3,
 				new RandomList<>(2.5 - Spawn.getRarityMult()) {{
 					for (Object[] card : pool) {
 						add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
