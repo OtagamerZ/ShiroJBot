@@ -181,6 +181,7 @@ public class Hand {
 	private transient Account account;
 	private transient String lastMessage;
 	private transient boolean forfeit;
+	private transient boolean usedDestiny;
 	private transient String defeat;
 	private transient int kills = 0;
 	private transient byte cooldown = 0;
@@ -677,6 +678,10 @@ public class Hand {
 		return origin.demon() || getHPPrcnt() < 0.5;
 	}
 
+	public boolean isCritical() {
+		return getHPPrcnt() < 0.25;
+	}
+
 	public RegDeg getRegDeg() {
 		return regdeg;
 	}
@@ -767,6 +772,14 @@ public class Hand {
 
 	public void setForfeit(boolean forfeit) {
 		this.forfeit = forfeit;
+	}
+
+	public boolean hasUsedDestiny() {
+		return usedDestiny;
+	}
+
+	public void setUsedDestiny(boolean usedDestiny) {
+		this.usedDestiny = usedDestiny;
 	}
 
 	public boolean isDefeated() {

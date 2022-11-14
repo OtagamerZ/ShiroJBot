@@ -69,6 +69,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -1505,6 +1506,34 @@ public class Shoukan extends GameInstance<Phase> {
 							curr.manualDraw(curr.getRemainingDraws());
 							curr.showHand();
 							reportEvent("str/draw_card", curr.getName(), rem, "s");
+						});
+					}
+
+					if (curr.isCritical() && !curr.hasUsedDestiny()) {
+						put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
+							if (curr.selectionPending()) {
+								reportEvent("error/pending_choice");
+								return;
+							}
+
+							LinkedList<Drawable<?>> deque = curr.getRealDeck();
+							List<Drawable<?>> cards = new ArrayList<>() {{
+								add(deque.getFirst());
+								if (deque.size() > 2) add(deque.get((deque.size() - 1) / 2));
+								if (deque.size() > 1) add(deque.getLast());
+							}};
+
+							try {
+								Drawable<?> d = curr.requestChoice(cards).get();
+								curr.getCards().add(d);
+								deque.remove(d);
+								curr.setUsedDestiny(true);
+
+								curr.showHand();
+								reportEvent("str/destiny_draw");
+							} catch (ExecutionException | InterruptedException e) {
+								reportEvent("error/destiny_draw");
+							}
 						});
 					}
 				}
