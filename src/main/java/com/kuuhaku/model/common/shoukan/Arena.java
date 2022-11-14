@@ -645,7 +645,7 @@ public class Arena implements Renderer {
 								g1.setColor(new Color(255, 0, 0, 200));
 								g1.fillArc(
 										rect.x, rect.y,
-										rect.width * 2, rect.height * 2, 90,
+										(int) (rect.width * 1.25), (int) (rect.height * 1.25), 90,
 										hand.getOriginCooldown() * 360 / maxCd
 								);
 
