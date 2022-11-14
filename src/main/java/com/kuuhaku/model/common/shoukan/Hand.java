@@ -184,10 +184,6 @@ public class Hand {
 	private transient String defeat;
 	private transient int kills = 0;
 	private transient byte cooldown = 0;
-	/*
-	0xF
-	  └ (0 - 127) origin effect
-	 */
 
 	private transient Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = null;
 
@@ -787,16 +783,15 @@ public class Hand {
 	}
 
 	public int getOriginCooldown() {
-		return Bit.get(cooldown, 0, 8);
+		return cooldown;
 	}
 
 	public void setOriginCooldown(int time) {
-		cooldown = (byte) Bit.set(cooldown, 0, time, 8);
+		cooldown = (byte) Math.max(cooldown, time);
 	}
 
 	public void reduceOriginCooldown(int time) {
-		byte curr = (byte) Bit.get(cooldown, 1, 8);
-		cooldown = (byte) Bit.set(cooldown, 1, Math.max(0, curr - time), 8);
+		cooldown = (byte) Math.max(0, cooldown - time);
 	}
 
 	public int getKills() {
