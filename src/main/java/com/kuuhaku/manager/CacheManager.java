@@ -1,5 +1,6 @@
 package com.kuuhaku.manager;
 
+import com.kuuhaku.Constants;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.HTreeMap;
@@ -11,13 +12,14 @@ import java.util.concurrent.TimeUnit;
 
 public class CacheManager {
 	private final ScheduledExecutorService exec = Executors.newScheduledThreadPool(3);
-	private final DB db = DBMaker.memoryDB().make();
+	private final DB db = DBMaker.heapDB().make();
 
 	private final HTreeMap<String, byte[]> cardCache = db.hashMap("card", Serializer.STRING, Serializer.BYTE_ARRAY)
 			.expireAfterCreate(30, TimeUnit.MINUTES)
 			.expireAfterGet(30, TimeUnit.MINUTES)
 			.expireExecutor(exec)
 			.expireExecutorPeriod(TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES))
+			.expireStoreSize(Constants.GB)
 			.counterEnable()
 			.create();
 
@@ -26,6 +28,7 @@ public class CacheManager {
 			.expireAfterGet(30, TimeUnit.MINUTES)
 			.expireExecutor(exec)
 			.expireExecutorPeriod(TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES))
+			.expireStoreSize(Constants.GB)
 			.counterEnable()
 			.create();
 
@@ -36,6 +39,7 @@ public class CacheManager {
 			.expireAfterGet(30, TimeUnit.MINUTES)
 			.expireExecutor(exec)
 			.expireExecutorPeriod(TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES))
+			.expireStoreSize(128 * Constants.MB)
 			.create();
 
 	public HTreeMap<String, byte[]> getCardCache() {
