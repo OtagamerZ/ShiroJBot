@@ -35,7 +35,7 @@ public class DailyGacha extends Gacha<String> {
 				     SELECT c.id
 				          , CASE
 				                WHEN f.card_id IS NOT NULL THEN 0.025
-				                WHEN e.card_id IS NOT NULL THEN (5.0 - e.tier) / 2
+				                WHEN e.card_id IS NOT NULL THEN (5.0 - e.tier) / 2.5
 				                ELSE 6.0 - get_rarity_index(c.rarity)
 				         END AS value
 				     FROM card c
