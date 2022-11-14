@@ -99,7 +99,7 @@ public class DeckAddCommand implements Executable {
 			for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
 				StashedCard sc = stash.get(i);
 				if (sc.getCard().equals(card)) {
-					addToDeck(event, locale, dk, sc, card);
+					if (!addToDeck(event, locale, dk, sc, card)) return;
 					j++;
 				}
 			}
@@ -112,7 +112,7 @@ public class DeckAddCommand implements Executable {
 		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					Deck dk = d.refresh();
-					addToDeck(event, locale, dk, sc, card);
+					if (!addToDeck(event, locale, dk, sc, card)) return;
 					dk.save();
 
 					event.channel().sendMessage(locale.get("success/deck_add")).queue();
@@ -127,10 +127,10 @@ public class DeckAddCommand implements Executable {
 				});
 	}
 
-	private void addToDeck(MessageData.Guild event, I18N locale, Deck d, StashedCard sc, Card card) {
+	private boolean addToDeck(MessageData.Guild event, I18N locale, Deck d, StashedCard sc, Card card) {
 		if (sc == null) {
 			event.channel().sendMessage(locale.get("error/invalid_value")).queue();
-			return;
+			return false;
 		}
 
 		switch (sc.getType()) {
@@ -139,13 +139,13 @@ public class DeckAddCommand implements Executable {
 
 				if (s.isFusion()) {
 					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
-					return;
+					return false;
 				} else if (sc.getKawaiponCard().isChrome()) {
 					event.channel().sendMessage(locale.get("error/cannot_add_chrome")).queue();
-					return;
+					return false;
 				} else if (d.getSenshi().size() >= 36) {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
-					return;
+					return false;
 				}
 
 				d.getSenshi().add(s);
@@ -153,7 +153,7 @@ public class DeckAddCommand implements Executable {
 			case EVOGEAR -> {
 				if (d.getEvogear().size() >= 24) {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
-					return;
+					return false;
 				}
 
 				d.getEvogear().add(DAO.find(Evogear.class, card.getId()));
@@ -161,13 +161,15 @@ public class DeckAddCommand implements Executable {
 			case FIELD -> {
 				if (d.getFields().size() >= 3) {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
-					return;
+					return false;
 				}
 
 				d.getFields().add(DAO.find(Field.class, card.getId()));
 			}
 		}
+
 		sc.setDeck(d);
 		sc.save();
+		return true;
 	}
 }
