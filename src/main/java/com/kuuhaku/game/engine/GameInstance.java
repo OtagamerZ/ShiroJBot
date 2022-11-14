@@ -198,8 +198,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 		timeout.stop();
 		if (code == GameReport.SUCCESS) {
 			exec.complete(null);
+
+			int prize = (int) (500 * Calc.rng(0.75, 1.25));
 			for (String uid : getPlayers()) {
-				DAO.find(Account.class, uid).addCR((long) (500 * Calc.rng(0.75, 1.25)), getClass().getSimpleName());
+				DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
 			}
 		} else {
 			exec.completeExceptionally(new GameReport(code));
