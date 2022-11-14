@@ -32,7 +32,7 @@ public class SummonersGacha extends Gacha<String> {
 				SELECT c.id
 				     , CASE
 				           WHEN s.card_id IS NOT NULL THEN 6.0 - get_rarity_index(c.rarity)
-				           WHEN e.card_id IS NOT NULL THEN (5.0 - e.tier) / 2.5
+				           WHEN e.card_id IS NOT NULL THEN (5.0 - e.tier) / 2
 				           ELSE 0.025
 				    END
 				FROM card c
