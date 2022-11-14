@@ -326,7 +326,7 @@ public class GuildListener extends ListenerAdapter {
 
 				chosen.sendMessageEmbeds(eb.build())
 						.addFile(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png")
-						.delay(1, TimeUnit.MINUTES)
+						.delay((long) (60 - 60 * Spawn.getQuantityMult()), TimeUnit.SECONDS)
 						.flatMap(Message::delete)
 						.queue(null, Utils::doNothing);
 			}
@@ -355,7 +355,7 @@ public class GuildListener extends ListenerAdapter {
 						.addField("Captcha", "`" + drop.getCaptcha(true) + "`", true);
 
 				chosen.sendMessageEmbeds(eb.build())
-						.delay(1, TimeUnit.MINUTES)
+						.delay((long) (60 - 60 * Spawn.getQuantityMult()), TimeUnit.SECONDS)
 						.flatMap(Message::delete)
 						.queue(null, Utils::doNothing);
 			}

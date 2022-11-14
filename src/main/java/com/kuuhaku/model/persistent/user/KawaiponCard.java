@@ -61,14 +61,6 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	@Fetch(FetchMode.JOIN)
 	private StashedCard stashEntry;
 
-	public StashedCard getStashEntry() {
-		return stashEntry;
-	}
-
-	public void setStashEntry(StashedCard stashEntry) {
-		this.stashEntry = stashEntry;
-	}
-
 	public KawaiponCard() {
 	}
 
@@ -129,6 +121,14 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	public void collect(Kawaipon kawaipon) {
 		this.kawaipon = kawaipon;
 		save();
+	}
+
+	public StashedCard getStashEntry() {
+		return stashEntry;
+	}
+
+	public void setStashEntry(StashedCard stashEntry) {
+		this.stashEntry = stashEntry;
 	}
 
 	@Override

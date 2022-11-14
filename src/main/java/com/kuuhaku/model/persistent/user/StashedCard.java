@@ -23,6 +23,8 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Spawn;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import org.hibernate.annotations.Fetch;
@@ -88,7 +90,11 @@ public class StashedCard extends DAO<StashedCard> {
 		try {
 			return DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.stashEntry.id = ?1", id);
 		} catch (NoResultException e) {
-			return null;
+			KawaiponCard kc = new KawaiponCard(card, Calc.chance(0.1 * (1 + Spawn.getRarityMult())));
+			kc.setStashEntry(this);
+			kc.save();
+
+			return kc;
 		}
 	}
 

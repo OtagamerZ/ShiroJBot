@@ -25,7 +25,6 @@ import com.kuuhaku.model.common.SingleUseReference;
 import com.kuuhaku.model.common.drop.CreditDrop;
 import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.enums.Rarity;
-import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
@@ -42,11 +41,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public abstract class Spawn {
-	private static final Map<String, SingleUseReference<KawaiponCard>> spawnedCards = ExpiringMap.builder()
-			.expiration(1, TimeUnit.MINUTES)
+	private static final ExpiringMap<String, SingleUseReference<KawaiponCard>> spawnedCards = ExpiringMap.builder()
+			.variableExpiration()
 			.build();
-	private static final Map<String, SingleUseReference<Drop<?>>> spawnedDrops = ExpiringMap.builder()
-			.expiration(1, TimeUnit.MINUTES)
+	private static final ExpiringMap<String, SingleUseReference<Drop<?>>> spawnedDrops = ExpiringMap.builder()
+			.variableExpiration()
 			.build();
 
 	private static Pair<Integer, MoonIllumination> illum = null;
@@ -57,7 +56,6 @@ public abstract class Spawn {
 	public synchronized static KawaiponCard getKawaipon(TextChannel channel) {
 		if (spawnedCards.containsKey(channel.getId())) return null;
 
-		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
 		double dropRate = 8 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
 
@@ -101,7 +99,11 @@ public abstract class Spawn {
 			lastCards.add(chosen);
 
 			card = new KawaiponCard(chosen, Calc.chance(0.1 * rarityBonus));
-			spawnedCards.put(channel.getId(), new SingleUseReference<>(card));
+			spawnedCards.put(
+					channel.getId(),
+					new SingleUseReference<>(card),
+					(long) (60 - 60 * getQuantityMult()), TimeUnit.SECONDS
+			);
 		}
 
 		return card;
@@ -110,18 +112,21 @@ public abstract class Spawn {
 	public synchronized static Drop<?> getDrop(TextChannel channel) {
 		if (spawnedDrops.containsKey(channel.getId())) return null;
 
-		GuildConfig config = DAO.find(GuildConfig.class, channel.getGuild().getId());
 		double dropRate = 10 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
 		double rarityBonus = 1 + getRarityMult();
 
 		Drop<?> drop = null;
 		if (Calc.chance(dropRate)) {
 			RandomList<Drop<?>> rPool = new RandomList<>(3 - rarityBonus) {{
-				add(new CreditDrop(config.getLocale()));
+				add(new CreditDrop());
 			}};
 
 			drop = rPool.get();
-			spawnedDrops.put(channel.getId(), new SingleUseReference<>(drop));
+			spawnedDrops.put(
+					channel.getId(),
+					new SingleUseReference<>(drop),
+					(long) (60 - 60 * getQuantityMult()), TimeUnit.SECONDS
+			);
 		}
 
 		return drop;

@@ -240,6 +240,10 @@ public class Account extends DAO<Account> implements Blacklistable {
 		boolean update = false;
 		while (decks.size() < settings.getDeckCapacity()) {
 			Deck d = new Deck(this);
+			if (decks.isEmpty()) {
+				d.setCurrent(true);
+			}
+
 			decks.add(d);
 			update = true;
 		}
