@@ -1407,7 +1407,10 @@ public class Shoukan extends GameInstance<Phase> {
 					messages.compute(m.getTextChannel().getId(), replaceMessages(m));
 
 					if (!registered.get()) {
-						getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+						if (!message.startsWith("str/game_history")) {
+							getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+						}
+
 						registered.set(true);
 					}
 				});
