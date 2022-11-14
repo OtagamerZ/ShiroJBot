@@ -19,12 +19,15 @@
 package com.kuuhaku.game.engine;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.GameChannel;
 import com.kuuhaku.model.common.PatternCache;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
@@ -195,6 +198,9 @@ public abstract class GameInstance<T extends Enum<T>> {
 		timeout.stop();
 		if (code == GameReport.SUCCESS) {
 			exec.complete(null);
+			for (String uid : getPlayers()) {
+				DAO.find(Account.class, uid).addCR((long) (500 * Calc.rng(0.75, 1.25)), getClass().getSimpleName());
+			}
 		} else {
 			exec.completeExceptionally(new GameReport(code));
 		}
