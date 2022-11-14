@@ -32,6 +32,7 @@ import org.hibernate.annotations.FetchMode;
 
 import jakarta.persistence.*;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "stashed_card")
@@ -40,6 +41,9 @@ public class StashedCard extends DAO<StashedCard> {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private int id;
+
+	@Column(name = "uuid", unique = true, length = 36)
+	private String uuid = UUID.randomUUID().toString();
 
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "card_id")
@@ -70,9 +74,13 @@ public class StashedCard extends DAO<StashedCard> {
 		this.card = card;
 		this.type = type;
 		this.kawaipon = kawaipon;
+		if (type == CardType.KAWAIPON) {
+			this.uuid = getKawaiponCard().getUUID();
+		}
 	}
 
 	public StashedCard(Kawaipon kawaipon, KawaiponCard card) {
+		this.uuid = card.getUUID();
 		this.card = card.getCard();
 		this.type = CardType.KAWAIPON;
 		this.kawaipon = kawaipon;
@@ -80,6 +88,10 @@ public class StashedCard extends DAO<StashedCard> {
 
 	public int getId() {
 		return id;
+	}
+
+	public String getUUID() {
+		return uuid;
 	}
 
 	public Card getCard() {
