@@ -80,7 +80,7 @@ import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 public class Shoukan extends GameInstance<Phase> {
 	private final long seed = ThreadLocalRandom.current().nextLong();
 	private final String GIF_PATH = "https://raw.githubusercontent.com/OtagamerZ/ShoukanAssets/master/gifs/";
-	
+
 	private final ShoukanParams params;
 	private final Arena arena;
 	private final Map<Side, Hand> hands;
@@ -99,7 +99,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public Shoukan(I18N locale, ShoukanParams params, String p1, String p2) {
 		super(locale, new String[]{p1, p2});
-		
+
 		this.params = Utils.getOr(params, new ShoukanParams());
 		this.arena = new Arena(this);
 		this.hands = Map.of(
