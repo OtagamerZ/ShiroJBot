@@ -630,12 +630,27 @@ public class Arena implements Renderer {
 
 							g1.drawImage(ori.major().getBadge(), rect.x, rect.y, rect.width, rect.height, null);
 
-							g1.setColor(new Color(255, 0, 0, 200));
-							g1.fillArc(
-									rect.x, rect.y,
-									rect.width, rect.height, 90,
-									hand.getOriginCooldown() * 360 / maxCd
-							);
+							if (hand.getOriginCooldown() > 0) {
+								Polygon clip = Graph.makePoly(new Dimension(rect.width, rect.height),
+										0.5, 0,
+										1, 1 / 4d,
+										1, 1 / 4d * 3,
+										0.5, 1,
+										0, 1 / 4d * 3,
+										0, 1 / 4d
+								);
+								clip.translate(rect.x, rect.y);
+								g1.setClip(clip);
+
+								g1.setColor(new Color(255, 0, 0, 200));
+								g1.fillArc(
+										rect.x, rect.y,
+										rect.width, rect.height, 90,
+										hand.getOriginCooldown() * 360 / maxCd
+								);
+
+								g1.setClip(null);
+							}
 
 							xOffset = rect.width + MARGIN.x;
 						}

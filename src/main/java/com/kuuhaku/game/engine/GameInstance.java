@@ -23,6 +23,7 @@ import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.GameChannel;
 import com.kuuhaku.model.common.PatternCache;
 import com.kuuhaku.model.common.SimpleMessageListener;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
@@ -55,7 +56,14 @@ public abstract class GameInstance<T extends Enum<T>> {
 	private T phase;
 	private boolean initialized;
 
+	private final I18N locale;
+	private final String[] players;
 	private final Deque<HistoryLog> history = new ArrayDeque<>();
+
+	public GameInstance(I18N locale, String[] players) {
+		this.locale = locale;
+		this.players = players;
+	}
 
 	public final CompletableFuture<Void> start(Guild guild, TextChannel... channels) {
 		return exec = CompletableFuture.runAsync(() -> {
@@ -103,6 +111,14 @@ public abstract class GameInstance<T extends Enum<T>> {
 	protected abstract void begin();
 
 	protected abstract void runtime(User user, String value) throws InvocationTargetException, IllegalAccessException;
+
+	public I18N getLocale() {
+		return locale;
+	}
+
+	public String[] getPlayers() {
+		return players;
+	}
 
 	public void setTimeout(Consumer<Integer> action, int time, TimeUnit unit) {
 		if (timeout != null) {
