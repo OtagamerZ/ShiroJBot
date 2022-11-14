@@ -95,10 +95,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (e.hasCharm(Charm.CLONE)) {
-			List<SlotColumn> slts = game.getOpenSlots(getSide(), true);
-			if (!slts.isEmpty()) {
-				slts.get(0).setTop(withCopy(s -> s.getStats().setAttrMult(-1 + (0.25 * e.getTier()))));
-			}
+			game.putAtOpenSlot(getSide(), true,
+					withCopy(s -> s.getStats().setAttrMult(-1 + (0.25 * e.getTier())))
+			);
 		}
 
 		return true;
@@ -902,10 +901,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (e.hasCharm(Charm.CLONE)) {
-				List<SlotColumn> slts = game.getOpenSlots(getSide(), true);
-				if (!slts.isEmpty()) {
-					slts.get(0).setTop(withCopy(s -> s.getStats().setAttrMult(-1 + (0.25 * e.getTier()))));
-				}
+				game.putAtOpenSlot(getSide(), true,
+						withCopy(s -> s.getStats().setAttrMult(-1 + (0.25 * e.getTier())))
+				);
 			}
 
 			return true;
