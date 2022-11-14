@@ -48,7 +48,7 @@ public abstract class Constants {
 
 	public static final double P_HOURS_IN_DAY = 23 + (56d / 60) + (4d / 3600);
 
-	public static final long KB = 1;
+	public static final long B = 1;
 	public static final long KB = 1024;
 	public static final long MB = 1024 * 1024;
 	public static final long GB = 1024 * 1024 * 1024;
