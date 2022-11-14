@@ -627,13 +627,13 @@ public class Hand {
 				}
 			}
 
-			int half = value / 2;
+			int quart = value / 4;
 			if (value < 0) {
-				value = regdeg.reduce(Degen.class, value - half);
+				value = regdeg.reduce(Degen.class, value - quart);
 			} else {
-				value = regdeg.reduce(Regen.class, value - half);
+				value = regdeg.reduce(Regen.class, value - quart);
 			}
-			value += half;
+			value += quart;
 
 			double prcnt = getHPPrcnt();
 			if (origin.demon()) {
