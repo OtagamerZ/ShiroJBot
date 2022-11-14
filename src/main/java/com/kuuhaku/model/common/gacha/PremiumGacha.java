@@ -31,7 +31,7 @@ public class PremiumGacha extends Gacha<String> {
 		this(DAO.queryAllUnmapped("""
 				SELECT c.id
 				     , CASE
-				           WHEN f.card_id IS NOT NULL THEN 0.1
+				           WHEN f.card_id IS NOT NULL THEN 0.075
 				           WHEN e.card_id IS NOT NULL THEN (5.0 - e.tier) / 1.25
 				           ELSE 6.0 - get_rarity_index(c.rarity)
 				    END

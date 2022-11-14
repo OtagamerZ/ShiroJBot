@@ -33,7 +33,7 @@ public class SummonersGacha extends Gacha<String> {
 				     , CASE
 				           WHEN s.card_id IS NOT NULL THEN 6.0 - get_rarity_index(c.rarity)
 				           WHEN e.card_id IS NOT NULL THEN (5.0 - e.tier) / 2
-				           ELSE 0.05
+				           ELSE 0.025
 				    END
 				FROM card c
 				         LEFT JOIN senshi s ON c.id = s.card_id AND get_type(c.id) & 2 = 2 AND get_rarity_index(c.rarity) BETWEEN 1 AND 5 AND NOT has(tags, 'FUSION')

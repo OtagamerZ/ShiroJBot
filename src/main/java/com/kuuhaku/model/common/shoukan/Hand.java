@@ -862,12 +862,12 @@ public class Hand {
 						if (lastMessage != null) {
 							m.getChannel().retrieveMessageById(lastMessage)
 									.flatMap(Objects::nonNull, Message::delete)
-									.queue();
+									.queue(null, Utils::doNothing);
 						}
 
 						lastMessage = m.getId();
 					}
-				});
+				}, Utils::doNothing);
 	}
 
 	public CompletableFuture<Drawable<?>> requestChoice(List<Drawable<?>> cards) {

@@ -161,7 +161,7 @@ public class SeeCardCommand implements Executable {
 										})
 										.filter(s -> !s.isBlank())
 										.map(s -> "`" + s + "`")
-										.collect(Collectors.joining(" ")),
+										.collect(Collectors.joining("　")),
 								false
 						);
 					}

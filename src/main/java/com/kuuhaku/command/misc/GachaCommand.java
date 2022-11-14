@@ -177,7 +177,7 @@ public class GachaCommand implements Executable {
 				case EVOGEAR -> {
 					Evogear e = DAO.find(Evogear.class, card);
 
-					g2d.drawImage(e.render(locale, deck), 20, 36, null);
+					g2d.drawImage(e.render(locale, deck), 5, 20, null);
 					if (e.getTier() == 4) {
 						g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/hero.png"), 5, 20, null);
 					}
@@ -187,7 +187,7 @@ public class GachaCommand implements Executable {
 				case FIELD -> {
 					Field f = DAO.find(Field.class, card);
 
-					g2d.drawImage(f.render(locale, deck), 20, 36, null);
+					g2d.drawImage(f.render(locale, deck), 5, 20, null);
 					g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/buffed.png"), 5, 20, null);
 
 					return new StashedCard(kp, c, tp);
