@@ -63,7 +63,6 @@ import java.util.stream.Collectors;
 
 public class GuildListener extends ListenerAdapter {
 	private static final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
-	private static final ConcurrentMap<String, ExpiringMap<String, Message>> messages = new ConcurrentHashMap<>();
 	private static final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
 	private static final Set<String> locks = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
@@ -362,13 +361,6 @@ public class GuildListener extends ListenerAdapter {
 							.queue(null, Utils::doNothing);
 				}
 			}
-
-			messages.computeIfAbsent(data.guild().getId(), k ->
-					ExpiringMap.builder()
-							.maxSize(64)
-							.expiration(1, TimeUnit.DAYS)
-							.build()
-			).put(data.message().getId(), data.message());
 		} finally {
 			locks.remove(event.getAuthor().getId());
 		}
@@ -471,10 +463,6 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 		}
-	}
-
-	public static List<Message> getMessages(Guild guild) {
-		return List.copyOf(Utils.getOr(messages.get(guild.getId()), Map.<String, Message>of()).values());
 	}
 
 	public static Map<String, CopyOnWriteArrayList<SimpleMessageListener>> getHandler() {
