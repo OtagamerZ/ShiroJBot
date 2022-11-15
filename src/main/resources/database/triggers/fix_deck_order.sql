@@ -64,7 +64,7 @@ BEGIN
       AND ds.index = x.index
       AND ds.index <> x.proper;
 
-    RETURN NEW;
+    RETURN COALESCE(NEW, OLD);
 END;
 $$;
 
