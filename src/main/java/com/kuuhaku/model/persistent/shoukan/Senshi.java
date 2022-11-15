@@ -185,7 +185,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public List<Evogear> getEquipments() {
-		equipments.removeIf(e -> !equals(e.getEquipper()));
+		equipments.removeIf(e -> !equals(e.getEquipper()) || isSupporting());
 
 		while (equipments.size() > 3) {
 			hand.getGraveyard().add(equipments.removeFirst());
