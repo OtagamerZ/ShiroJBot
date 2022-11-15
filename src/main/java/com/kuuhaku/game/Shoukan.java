@@ -1641,6 +1641,8 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public String getString(String key, Object... params) {
+		if (key == null) return "";
+
 		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(), getLocale()));
 		if (str != null) {
 			return str.getValue().formatted(params);
