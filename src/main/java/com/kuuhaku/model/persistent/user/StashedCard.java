@@ -99,14 +99,13 @@ public class StashedCard extends DAO<StashedCard> {
 	}
 
 	public KawaiponCard getKawaiponCard() {
-		try {
-			return DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.uuid = ?1", uuid);
-		} catch (NoResultException e) {
-			KawaiponCard kc = new KawaiponCard(uuid, card, Calc.chance(0.1 * (1 + Spawn.getRarityMult())));
+		KawaiponCard kc = DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.uuid = ?1", uuid);
+		if (kc == null) {
+			kc = new KawaiponCard(uuid, card, Calc.chance(0.1 * (1 + Spawn.getRarityMult())));
 			kc.save();
-
-			return kc;
 		}
+
+		return kc;
 	}
 
 	public CardType getType() {
