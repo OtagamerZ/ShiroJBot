@@ -24,6 +24,8 @@ import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.util.Spawn;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
 import java.util.List;
 
 public class DailyGacha extends Gacha<String> {
@@ -46,7 +48,7 @@ public class DailyGacha extends Gacha<String> {
 				     LIMIT 50
 				     ) x
 				ORDER BY x.value
-				""", System.currentTimeMillis()));
+				""", LocalDate.now().get(ChronoField.DAY_OF_YEAR)));
 	}
 
 	private DailyGacha(List<Object[]> pool) {
