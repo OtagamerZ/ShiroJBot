@@ -677,9 +677,6 @@ public class CardExtra implements Cloneable {
 		clone.removeTemporary();
 
 		clone.race = race;
-		clone.vanity = vanity;
-		clone.disguise = disguise;
-		clone.write = write;
 		clone.source = source;
 		clone.description = description;
 		clone.effect = effect;
