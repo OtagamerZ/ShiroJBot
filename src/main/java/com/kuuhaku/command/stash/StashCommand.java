@@ -89,7 +89,7 @@ public class StashCommand implements Executable {
 			put("n", "AND c.card.id LIKE '%%'||?%s||'%%'");
 			put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'");
 			put("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'");
-			put("c", "AND c.chrome = TRUE");
+			put("c", "AND c.card.chrome = TRUE");
 			put("k", "AND c.type = 'KAWAIPON'");
 			put("e", "AND c.type = 'EVOGEAR'");
 			put("f", "AND c.type = 'FIELD'");
