@@ -65,6 +65,7 @@ public class GuildListener extends ListenerAdapter {
 	private static final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
 	private static final ConcurrentMap<String, ExpiringMap<String, Message>> messages = new ConcurrentHashMap<>();
 	private static final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
+	private static final Set<String> locks = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 	@Override
 	public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event) {
@@ -192,181 +193,185 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-		if (event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
+		if (event.getAuthor().isBot() || !event.getChannel().canTalk() || !locks.add(event.getAuthor().getId())) return;
 
-		String content = event.getMessage().getContentRaw();
-		MessageData.Guild data;
 		try {
-			data = new MessageData.Guild(event);
-		} catch (NullPointerException e) {
-			return;
-		}
+			String content = event.getMessage().getContentRaw();
+			MessageData.Guild data;
+			try {
+				data = new MessageData.Guild(event);
+			} catch (NullPointerException e) {
+				return;
+			}
 
-		GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
-		I18N locale = config.getLocale();
-		if (!Objects.equals(config.getName(), data.guild().getName())) {
-			config.setName(data.guild().getName());
-			config.save();
-		}
+			GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
+			I18N locale = config.getLocale();
+			if (!Objects.equals(config.getName(), data.guild().getName())) {
+				config.setName(data.guild().getName());
+				config.save();
+			}
 
-		if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
-			Member mb = event.getMember();
-			if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
-				String name = Unidecode.decode(mb.getEffectiveName()).trim();
-				if (!name.equals(mb.getEffectiveName())) {
-					if (name.length() < 3) {
-						name = locale.get("zalgo/name_" + Calc.rng(1, 4));
+			if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
+				Member mb = event.getMember();
+				if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
+					String name = Unidecode.decode(mb.getEffectiveName()).trim();
+					if (!name.equals(mb.getEffectiveName())) {
+						if (name.length() < 3) {
+							name = locale.get("zalgo/name_" + Calc.rng(1, 4));
+						}
+
+						mb.modifyNickname(name).queue();
 					}
-
-					mb.modifyNickname(name).queue();
 				}
 			}
-		}
 
-		Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
-		int lvl = profile.getLevel();
+			Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
+			int lvl = profile.getLevel();
 
-		profile.addXp(15);
-		profile.save();
+			profile.addXp(15);
+			profile.save();
 
-		Account account = profile.getAccount();
-		if (!Objects.equals(account.getName(), data.user().getName())) {
-			account.setName(data.user().getName());
-			account.save();
-		}
-
-		AtomicReference<TextChannel> notifs = new AtomicReference<>();
-		if (config.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
-			notifs.set(config.getSettings().getNotificationsChannel());
-			if (notifs.get() == null) {
-				notifs.set(event.getChannel());
-			}
-		}
-
-		if (profile.getLevel() > lvl) {
-			int high = account.getHighestLevel();
-			int prize = 0;
-			if (profile.getLevel() > high) {
-				prize = profile.getLevel() * 150;
-				account.addCR(prize, "Level up prize");
+			Account account = profile.getAccount();
+			if (!Objects.equals(account.getName(), data.user().getName())) {
+				account.setName(data.user().getName());
+				account.save();
 			}
 
-			if (notifs.get() != null) {
-				notifs.get().sendMessage(locale.get(prize > 0 ? "str/level_up_prize" : "str/level_up", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
-			}
-		}
-
-		DynamicProperty dp = account.getDynamicProperty("message_count");
-		int count = NumberUtils.toInt(dp.getValue()) + 1;
-		dp.setValue(count);
-		dp.save();
-
-		DAO.apply(Account.class, account.getUid(), acc -> {
-			Title t = acc.checkTitles();
-			if (t != null && notifs.get() != null) {
-				notifs.get().sendMessage(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName())).queue();
-			}
-		});
-
-		if (toHandle.containsKey(data.guild().getId())) {
-			List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
-			for (SimpleMessageListener evt : evts) {
-				if (!evt.isClosed() && evt.checkChannel(data.channel())) {
-					evt.onGuildMessageReceived(event);
+			AtomicReference<TextChannel> notifs = new AtomicReference<>();
+			if (config.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
+				notifs.set(config.getSettings().getNotificationsChannel());
+				if (notifs.get() == null) {
+					notifs.set(event.getChannel());
 				}
 			}
-			evts.removeIf(SimpleMessageListener::isClosed);
-		}
 
-		EventData ed = new EventData(config, profile);
-		if (content.toLowerCase().startsWith(config.getPrefix())) {
-			processCommand(data, ed, content);
-		}
+			if (profile.getLevel() > lvl) {
+				int high = account.getHighestLevel();
+				int prize = 0;
+				if (profile.getLevel() > high) {
+					prize = profile.getLevel() * 150;
+					account.addCR(prize, "Level up prize");
+				}
 
-		if (PatternCache.matches(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
-			data.channel().sendMessage(locale.get("str/mentioned",
-					data.user().getAsMention(),
-					config.getPrefix(),
-					Constants.SERVER_ROOT
-			)).queue();
-		}
+				if (notifs.get() != null) {
+					notifs.get().sendMessage(locale.get(prize > 0 ? "str/level_up_prize" : "str/level_up", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
+				}
+			}
 
-		if (!event.getAuthor().equals(event.getJDA().getSelfUser()) && Utils.between(content.length(), 3, 255)) {
-			List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
-					data.guild().getId(), StringUtils.stripAccents(content)
-			);
+			DynamicProperty dp = account.getDynamicProperty("message_count");
+			int count = NumberUtils.toInt(dp.getValue()) + 1;
+			dp.setValue(count);
+			dp.save();
 
-			for (CustomAnswer ca : cas) {
-				if (ca.getChannels().isEmpty() || ca.getChannels().contains(event.getChannel().getId())) {
-					if (ca.getUsers().isEmpty() || ca.getUsers().contains(event.getAuthor().getId())) {
-						if (Calc.chance(ca.getChance() / (event.getAuthor().isBot() ? 2d : 1d))) {
-							event.getChannel().sendTyping()
-									.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
-									.flatMap(v -> event.getChannel().sendMessage(ca.getAnswer()))
-									.queue();
-							break;
+			DAO.apply(Account.class, account.getUid(), acc -> {
+				Title t = acc.checkTitles();
+				if (t != null && notifs.get() != null) {
+					notifs.get().sendMessage(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName())).queue();
+				}
+			});
+
+			if (toHandle.containsKey(data.guild().getId())) {
+				List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
+				for (SimpleMessageListener evt : evts) {
+					if (!evt.isClosed() && evt.checkChannel(data.channel())) {
+						evt.onGuildMessageReceived(event);
+					}
+				}
+				evts.removeIf(SimpleMessageListener::isClosed);
+			}
+
+			EventData ed = new EventData(config, profile);
+			if (content.toLowerCase().startsWith(config.getPrefix())) {
+				processCommand(data, ed, content);
+			}
+
+			if (PatternCache.matches(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
+				data.channel().sendMessage(locale.get("str/mentioned",
+						data.user().getAsMention(),
+						config.getPrefix(),
+						Constants.SERVER_ROOT
+				)).queue();
+			}
+
+			if (!event.getAuthor().equals(event.getJDA().getSelfUser()) && Utils.between(content.length(), 3, 255)) {
+				List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
+						data.guild().getId(), StringUtils.stripAccents(content)
+				);
+
+				for (CustomAnswer ca : cas) {
+					if (ca.getChannels().isEmpty() || ca.getChannels().contains(event.getChannel().getId())) {
+						if (ca.getUsers().isEmpty() || ca.getUsers().contains(event.getAuthor().getId())) {
+							if (Calc.chance(ca.getChance() / (event.getAuthor().isBot() ? 2d : 1d))) {
+								event.getChannel().sendTyping()
+										.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
+										.flatMap(v -> event.getChannel().sendMessage(ca.getAnswer()))
+										.queue();
+								break;
+							}
 						}
 					}
 				}
 			}
-		}
 
-		List<TextChannel> channels = config.getSettings().getKawaiponChannels();
-		if (!channels.isEmpty()) {
-			TextChannel chosen = Utils.getRandomEntry(channels);
+			List<TextChannel> channels = config.getSettings().getKawaiponChannels();
+			if (!channels.isEmpty()) {
+				TextChannel chosen = Utils.getRandomEntry(channels);
 
-			KawaiponCard kc = Spawn.getKawaipon(chosen);
-			if (kc != null) {
-				EmbedBuilder eb = new EmbedBuilder()
-						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
-						.setTitle(kc + " (" + kc.getCard().getAnime() + ")")
-						.setColor(kc.getCard().getRarity().getColor(kc.isChrome()))
-						.setImage("attachment://card.png")
-						.setFooter(locale.get("str/card_instructions", config.getPrefix(), kc.getPrice()));
+				KawaiponCard kc = Spawn.getKawaipon(chosen);
+				if (kc != null) {
+					EmbedBuilder eb = new EmbedBuilder()
+							.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
+							.setTitle(kc + " (" + kc.getCard().getAnime() + ")")
+							.setColor(kc.getCard().getRarity().getColor(kc.isChrome()))
+							.setImage("attachment://card.png")
+							.setFooter(locale.get("str/card_instructions", config.getPrefix(), kc.getPrice()));
 
-				chosen.sendMessageEmbeds(eb.build())
-						.addFile(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png")
-						.delay((long) (60 - 60 * Spawn.getQuantityMult()), TimeUnit.SECONDS)
-						.flatMap(Message::delete)
-						.queue(null, Utils::doNothing);
+					chosen.sendMessageEmbeds(eb.build())
+							.addFile(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png")
+							.delay((long) (60 - 60 * Spawn.getQuantityMult()), TimeUnit.SECONDS)
+							.flatMap(Message::delete)
+							.queue(null, Utils::doNothing);
+				}
 			}
-		}
 
-		channels = config.getSettings().getDropChannels();
-		if (!channels.isEmpty()) {
-			TextChannel chosen = Utils.getRandomEntry(channels);
+			channels = config.getSettings().getDropChannels();
+			if (!channels.isEmpty()) {
+				TextChannel chosen = Utils.getRandomEntry(channels);
 
-			Drop<?> drop = Spawn.getDrop(chosen);
-			if (drop != null) {
-				Random rng = drop.getRng();
+				Drop<?> drop = Spawn.getDrop(chosen);
+				if (drop != null) {
+					Random rng = drop.getRng();
 
-				EmbedBuilder eb = new EmbedBuilder()
-						.setAuthor(locale.get("str/drop_spawn", drop.getRarity().getIndex()))
-						.setColor(drop.getRarity().getColor(false))
-						.setDescription(drop.getContent().toString(locale))
-						.setFooter(locale.get("str/drop_instructions", config.getPrefix(), drop.getCaptcha(true)))
-						.addField(
-								locale.get("str/drop_requirements"),
-								drop.getConditions().stream()
-										.map(dc -> dc.toString(locale, rng))
-										.collect(Collectors.joining("\n")),
-								true
-						)
-						.addField("Captcha", "`" + drop.getCaptcha(true) + "`", true);
+					EmbedBuilder eb = new EmbedBuilder()
+							.setAuthor(locale.get("str/drop_spawn", drop.getRarity().getIndex()))
+							.setColor(drop.getRarity().getColor(false))
+							.setDescription(drop.getContent().toString(locale))
+							.setFooter(locale.get("str/drop_instructions", config.getPrefix(), drop.getCaptcha(true)))
+							.addField(
+									locale.get("str/drop_requirements"),
+									drop.getConditions().stream()
+											.map(dc -> dc.toString(locale, rng))
+											.collect(Collectors.joining("\n")),
+									true
+							)
+							.addField("Captcha", "`" + drop.getCaptcha(true) + "`", true);
 
-				chosen.sendMessageEmbeds(eb.build())
-						.delay((long) (60 - 60 * Spawn.getQuantityMult()), TimeUnit.SECONDS)
-						.flatMap(Message::delete)
-						.queue(null, Utils::doNothing);
+					chosen.sendMessageEmbeds(eb.build())
+							.delay((long) (60 - 60 * Spawn.getQuantityMult()), TimeUnit.SECONDS)
+							.flatMap(Message::delete)
+							.queue(null, Utils::doNothing);
+				}
 			}
-		}
 
-		messages.computeIfAbsent(data.guild().getId(), k ->
-				ExpiringMap.builder()
-						.maxSize(64)
-						.expiration(1, TimeUnit.DAYS)
-						.build()
-		).put(data.message().getId(), data.message());
+			messages.computeIfAbsent(data.guild().getId(), k ->
+					ExpiringMap.builder()
+							.maxSize(64)
+							.expiration(1, TimeUnit.DAYS)
+							.build()
+			).put(data.message().getId(), data.message());
+		} finally {
+			locks.remove(event.getAuthor().getId());
+		}
 	}
 
 	private void processCommand(MessageData.Guild data, EventData event, String content) {
