@@ -151,20 +151,30 @@ public class DeckAddCommand implements Executable {
 				d.getSenshi().add(s);
 			}
 			case EVOGEAR -> {
-				if (d.getEvogear().size() >= 24) {
+				Evogear e = DAO.find(Evogear.class, sc.getCard().getId());
+
+				if (e.getTier() < 1) {
+					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
+					return false;
+				} else if (d.getEvogear().size() >= 24) {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
 					return false;
 				}
 
-				d.getEvogear().add(DAO.find(Evogear.class, sc.getCard().getId()));
+				d.getEvogear().add(e);
 			}
 			case FIELD -> {
-				if (d.getFields().size() >= 3) {
+				Field f = DAO.find(Field.class, sc.getCard().getId());
+
+				if (f.isEffect()) {
+					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
+					return false;
+				} else if (d.getFields().size() >= 3) {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
 					return false;
 				}
 
-				d.getFields().add(DAO.find(Field.class, sc.getCard().getId()));
+				d.getFields().add(f);
 			}
 		}
 
