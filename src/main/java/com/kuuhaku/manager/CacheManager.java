@@ -1,25 +1,33 @@
 package com.kuuhaku.manager;
 
+import com.kuuhaku.Constants;
 import org.ehcache.Cache;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.config.units.EntryUnit;
 import org.ehcache.config.units.MemoryUnit;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.function.BiFunction;
 
 public class CacheManager {
-	private final org.ehcache.CacheManager cm = CacheManagerBuilder.newCacheManagerBuilder().build(true);
+	private final File folder = new File("cache");
+	private final org.ehcache.CacheManager cm = CacheManagerBuilder.newCacheManagerBuilder()
+			.with(CacheManagerBuilder.persistence(folder))
+			.build(true);
 
 	private final Cache<String, byte[]> resource = cm.createCache("resource",
 			CacheConfigurationBuilder
 					.newCacheConfigurationBuilder(
 							String.class, byte[].class,
 							ResourcePoolsBuilder.newResourcePoolsBuilder()
-									.heap(128, MemoryUnit.MB)
-									.offheap(1, MemoryUnit.GB)
+									.heap(32, EntryUnit.ENTRIES)
+									.offheap(512, MemoryUnit.MB)
+									.disk(2, MemoryUnit.GB)
+
 					)
 					.withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofMinutes(30)))
 	);
@@ -28,6 +36,13 @@ public class CacheManager {
 					.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(128))
 					.withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofMinutes(30)))
 	);
+
+	public CacheManager() {
+		if (!folder.exists() && !folder.mkdir()) {
+			Constants.LOGGER.fatal("Failed to create cache directory");
+			System.exit(1);
+		}
+	}
 
 	public Cache<String, byte[]> getResourceCache() {
 		return resource;
