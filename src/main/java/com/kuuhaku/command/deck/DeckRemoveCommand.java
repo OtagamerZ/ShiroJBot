@@ -32,7 +32,6 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
-import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
@@ -64,12 +63,6 @@ import java.util.Set;
 public class DeckRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
-		if (kp.getStash().isEmpty()) {
-			event.channel().sendMessage(locale.get("error/empty_stash")).queue();
-			return;
-		}
-
 		Deck d = data.profile().getAccount().getCurrentDeck();
 		if (d == null) {
 			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();

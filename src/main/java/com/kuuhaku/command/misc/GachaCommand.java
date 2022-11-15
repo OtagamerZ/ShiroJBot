@@ -163,10 +163,11 @@ public class GachaCommand implements Executable {
 			switch (tp) {
 				case KAWAIPON -> {
 					KawaiponCard kc = new KawaiponCard(c, Calc.chance(0.1 * (1 - Spawn.getRarityMult())));
+					kc.setKawaipon(kp);
+					kc.save();
 
 					g2d.drawImage(c.drawCard(kc.isChrome()), 5, 20, null);
 
-					kc.setKawaipon(kp);
 					new StashedCard(kp, kc).save();
 				}
 				case EVOGEAR -> {
