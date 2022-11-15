@@ -27,7 +27,7 @@ BEGIN
             WHEN 'KAWAIPON' THEN BEGIN
                 DELETE
                 FROM deck_senshi
-                WHERE kawaipon_uid = OLD.kawaipon_uid
+                WHERE deck_id = OLD.deck_id
                   AND index IN (
                                SELECT index
                                FROM deck_senshi
@@ -39,7 +39,7 @@ BEGIN
             WHEN 'EVOGEAR' THEN BEGIN
                 DELETE
                 FROM deck_evogear
-                WHERE kawaipon_uid = OLD.kawaipon_uid
+                WHERE deck_id = OLD.deck_id
                   AND index IN (
                                SELECT index
                                FROM deck_evogear
@@ -51,7 +51,7 @@ BEGIN
             WHEN 'FIELD' THEN BEGIN
                 DELETE
                 FROM deck_field
-                WHERE kawaipon_uid = OLD.kawaipon_uid
+                WHERE deck_id = OLD.deck_id
                   AND index IN (
                                SELECT index
                                FROM deck_field
