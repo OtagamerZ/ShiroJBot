@@ -69,9 +69,10 @@ public abstract class Drop<T> {
 							SELECT COALESCE(GEO_MEAN(NULLIF(x.count, 0)), 1)
 							FROM (
 							     SELECT COUNT(1) AS count
-							     FROM kawaipon_card
-							     WHERE stash_entry IS NULL
-							     GROUP BY kawaipon_uid
+							     FROM kawaipon_card kc
+							     LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
+							     WHERE sc.id IS NULL
+							     GROUP BY kc.kawaipon_uid
 							     ) AS x
 							""");
 
@@ -93,8 +94,9 @@ public abstract class Drop<T> {
 							FROM (
 							     SELECT COUNT(1) AS count
 							     FROM kawaipon_card kc
-							              INNER JOIN card c ON kc.card_id = c.id
-							     WHERE kc.stash_entry IS NULL
+							     INNER JOIN card c ON kc.card_id = c.id
+							     LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
+							     WHERE sc.id IS NULL
 							       AND c.anime_id = ?1
 							     GROUP BY kc.kawaipon_uid
 							     ) AS x

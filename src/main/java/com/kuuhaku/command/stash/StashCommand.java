@@ -98,7 +98,7 @@ public class StashCommand implements Executable {
 
 		XStringBuilder query = new XStringBuilder("""
 				SELECT c FROM StashedCard c
-				LEFT JOIN KawaiponCard kc ON kc.stashEntry = c
+				LEFT JOIN KawaiponCard kc ON kc.uuid = c.uuid
 				LEFT JOIN Evogear e ON e.card = c.card
 				WHERE c.kawaipon.uid = ?1
 				""");

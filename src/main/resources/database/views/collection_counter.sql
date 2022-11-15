@@ -23,5 +23,6 @@ SELECT kc.kawaipon_uid                       AS uid
      , COUNT(1) FILTER (WHERE kc.chrome)     AS chrome
 FROM kawaipon_card kc
          INNER JOIN card c ON c.id = kc.card_id
-WHERE kc.stash_entry IS NULL
+         LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
+WHERE sc.id IS NULL
 GROUP BY kc.kawaipon_uid, c.anime_id;

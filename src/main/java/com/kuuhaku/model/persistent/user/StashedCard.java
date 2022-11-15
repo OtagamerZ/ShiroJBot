@@ -42,7 +42,7 @@ public class StashedCard extends DAO<StashedCard> {
 	@Column(name = "id", nullable = false)
 	private int id;
 
-	@Column(name = "uuid", unique = true, length = 36)
+	@Column(name = "uuid", nullable = false, unique = true, length = 36)
 	private String uuid = UUID.randomUUID().toString();
 
 	@ManyToOne(optional = false)
@@ -100,10 +100,9 @@ public class StashedCard extends DAO<StashedCard> {
 
 	public KawaiponCard getKawaiponCard() {
 		try {
-			return DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.stashEntry.id = ?1", id);
+			return DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.uuid = ?1", uuid);
 		} catch (NoResultException e) {
-			KawaiponCard kc = new KawaiponCard(card, Calc.chance(0.1 * (1 + Spawn.getRarityMult())));
-			kc.setStashEntry(this);
+			KawaiponCard kc = new KawaiponCard(uuid, card, Calc.chance(0.1 * (1 + Spawn.getRarityMult())));
 			kc.save();
 
 			return kc;

@@ -77,9 +77,6 @@ public class StashRemoveCommand implements Executable {
 							return;
 						}
 
-						kc.setStashEntry(null);
-						kc.save();
-
 						sc.delete();
 					} else {
 						event.channel().sendMessage(locale.get("error/not_kawaipon")).queue();

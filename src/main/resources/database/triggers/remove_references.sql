@@ -40,10 +40,6 @@ BEGIN
     WHERE df.deck_id = x.id
       AND df.index = x.index;
 
-    UPDATE kawaipon_card
-    SET stash_entry = NULL
-    WHERE stash_entry = OLD.id;
-
     RETURN OLD;
 END;
 $$;

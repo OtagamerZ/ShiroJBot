@@ -56,15 +56,18 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "stash_entry")
-	@Fetch(FetchMode.JOIN)
-	private StashedCard stashEntry;
+	private transient StashedCard stashEntry;
 
 	public KawaiponCard() {
 	}
 
 	public KawaiponCard(Card card, boolean chrome) {
+		this.card = card;
+		this.chrome = chrome;
+	}
+
+	public KawaiponCard(String uuid, Card card, boolean chrome) {
+		this.uuid = uuid;
 		this.card = card;
 		this.chrome = chrome;
 	}
@@ -113,22 +116,12 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 		this.kawaipon = kawaipon;
 	}
 
-	public void store() {
-		this.stashEntry = new StashedCard(kawaipon, this);
-		save();
-	}
-
-	public void collect(Kawaipon kawaipon) {
-		this.kawaipon = kawaipon;
-		save();
-	}
-
 	public StashedCard getStashEntry() {
-		return stashEntry;
-	}
+		if (stashEntry == null) {
+			stashEntry = DAO.query(StashedCard.class, "SELECT sc FROM StashedCard sc WHERE sc.uuid = ?1", uuid);
+		}
 
-	public void setStashEntry(StashedCard stashEntry) {
-		this.stashEntry = stashEntry;
+		return stashEntry;
 	}
 
 	@Override
@@ -141,11 +134,11 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		KawaiponCard that = (KawaiponCard) o;
-		return chrome == that.chrome && Objects.equals(card, that.card) && stashEntry == null;
+		return chrome == that.chrome && Objects.equals(card, that.card) && getStashEntry() == null;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(chrome, card, stashEntry);
+		return Objects.hash(chrome, card);
 	}
 }

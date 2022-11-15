@@ -32,7 +32,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Entity
@@ -99,75 +98,84 @@ public class Kawaipon extends DAO<Kawaipon> {
 	}
 
 	public Set<KawaiponCard> getCollection() {
-		return cards.parallelStream()
-				.filter(c -> c.getStashEntry() == null)
-				.collect(Collectors.toSet());
+		return Set.copyOf(DAO.queryAll(KawaiponCard.class, """
+				SELECT kc
+				FROM KawaiponCard kc
+				LEFT JOIN StashedCard sc ON kc.uuid = sc.uuid
+				WHERE sc.id IS NULL
+				  AND kc.kawaipon.uid = ?1
+				""", account.getUid()));
 	}
 
 	public KawaiponCard getCard(Card card, boolean chrome) {
-		return cards.parallelStream()
-				.filter(c -> c.getStashEntry() == null)
-				.filter(c -> c.getCard().equals(card) && c.isChrome() == chrome)
-				.findFirst().orElse(null);
+		return DAO.query(KawaiponCard.class, """
+				SELECT kc
+				FROM KawaiponCard kc
+				LEFT JOIN StashedCard sc ON kc.uuid = sc.uuid
+				WHERE sc.id IS NULL
+				  AND kc.kawaipon.uid = ?1
+				  AND kc.card = ?2
+				  AND kc.chrome = ?3
+				""", account.getUid(), card, chrome);
 	}
 
 	public boolean hasCard(Card card, boolean chrome) {
-		return cards.parallelStream()
-				.filter(c -> c.getStashEntry() == null)
-				.anyMatch(c -> c.getCard().equals(card) && c.isChrome() == chrome);
+		return getCard(card, chrome) != null;
 	}
 
 	public Pair<Integer, Integer> countCards() {
-		AtomicInteger normal = new AtomicInteger();
-		AtomicInteger chrome = new AtomicInteger();
+		Object[] vals = DAO.queryUnmapped("""
+				SELECT COUNT(1) FILTER (WHERE NOT kc.chrome)
+				     , COUNT(1) FILTER (WHERE kc.chrome)
+				FROM kawaipon_card kc
+				LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
+				WHERE sc.id IS NULL
+				  AND kc.kawaipon_uid = ?1
+				""", account.getUid());
 
-		cards.parallelStream()
-				.filter(c -> c.getStashEntry() == null)
-				.forEach(c -> {
-					if (c.isChrome()) {
-						chrome.getAndIncrement();
-					} else {
-						normal.getAndIncrement();
-					}
-				});
+		if (vals == null) {
+			return new Pair<>(0, 0);
+		}
 
-		return new Pair<>(normal.get(), chrome.get());
+		return new Pair<>(((Number) vals[0]).intValue(), ((Number) vals[1]).intValue());
 	}
 
 	public Pair<Integer, Integer> countCards(Anime anime) {
-		AtomicInteger normal = new AtomicInteger();
-		AtomicInteger chrome = new AtomicInteger();
+		Object[] vals = DAO.queryUnmapped("""
+				SELECT COUNT(1) FILTER (WHERE NOT kc.chrome)
+				     , COUNT(1) FILTER (WHERE kc.chrome)
+				FROM kawaipon_card kc
+				INNER JOIN card c ON kc.card_id = c.id
+				LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
+				WHERE sc.id IS NULL
+				  AND kc.kawaipon_uid = ?1
+				  AND c.anime_id = ?2
+				""", account.getUid(), anime.getId());
 
-		cards.parallelStream()
-				.filter(c -> c.getStashEntry() == null)
-				.filter(c -> c.getCard().getAnime().equals(anime))
-				.forEach(c -> {
-					if (c.isChrome()) {
-						chrome.getAndIncrement();
-					} else {
-						normal.getAndIncrement();
-					}
-				});
+		if (vals == null) {
+			return new Pair<>(0, 0);
+		}
 
-		return new Pair<>(normal.get(), chrome.get());
+		return new Pair<>(((Number) vals[0]).intValue(), ((Number) vals[1]).intValue());
 	}
 
 	public Pair<Integer, Integer> countCards(Rarity rarity) {
-		AtomicInteger normal = new AtomicInteger();
-		AtomicInteger chrome = new AtomicInteger();
+		Object[] vals = DAO.queryUnmapped("""
+				SELECT COUNT(1) FILTER (WHERE NOT kc.chrome)
+				     , COUNT(1) FILTER (WHERE kc.chrome)
+				FROM kawaipon_card kc
+				INNER JOIN card c ON kc.card_id = c.id
+				LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
+				WHERE sc.id IS NULL
+				  AND kc.kawaipon_uid = ?1
+				  AND c.rarity = ?2
+				""", account.getUid(), rarity.name());
 
-		cards.parallelStream()
-				.filter(c -> c.getStashEntry() == null)
-				.filter(c -> c.getCard().getRarity() == rarity)
-				.forEach(c -> {
-					if (c.isChrome()) {
-						chrome.getAndIncrement();
-					} else {
-						normal.getAndIncrement();
-					}
-				});
+		if (vals == null) {
+			return new Pair<>(0, 0);
+		}
 
-		return new Pair<>(normal.get(), chrome.get());
+		return new Pair<>(((Number) vals[0]).intValue(), ((Number) vals[1]).intValue());
 	}
 
 	public List<StashedCard> getNotInUse() {

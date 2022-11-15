@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -70,7 +71,7 @@ public class StashAddCommand implements Executable {
 			return;
 		}
 
-		kc.store();
+		new StashedCard(kp, kc).save();
 		event.channel().sendMessage(locale.get("success/card_stored")).queue();
 	}
 }
