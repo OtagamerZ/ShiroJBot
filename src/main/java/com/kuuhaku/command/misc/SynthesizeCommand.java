@@ -153,7 +153,14 @@ public class SynthesizeCommand implements Executable {
 						Kawaipon kp = data.profile().getAccount().getKawaipon();
 
 						for (StashedCard sc : cards) {
-							Utils.getOr(sc.getKawaiponCard(), sc).delete();
+							if (sc.getType() == CardType.KAWAIPON) {
+								KawaiponCard kc = sc.getKawaiponCard(false);
+								if (kc != null) {
+									kc.delete();
+								}
+							}
+
+							sc.delete();
 						}
 
 						if (Calc.chance(field)) {
