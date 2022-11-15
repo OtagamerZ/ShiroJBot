@@ -128,6 +128,7 @@ public class Trade {
 
 	public void accept() {
 		left.addCR(rightValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
+		left.consumeCR(leftValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
 		DAO.apply("""
 				UPDATE StashedCard sc
 				SET kawaipon = ?1
@@ -135,6 +136,7 @@ public class Trade {
 				""", left.getKawaipon(), rightOffers);
 
 		right.addCR(leftValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
+		right.consumeCR(rightValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
 		DAO.apply("""    
 				UPDATE StashedCard sc
 				SET kawaipon = ?1
