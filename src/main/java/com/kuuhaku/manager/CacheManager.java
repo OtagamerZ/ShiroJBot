@@ -5,24 +5,28 @@ import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.config.units.MemoryUnit;
 
 import java.time.Duration;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.BiFunction;
 
 public class CacheManager {
-	private final ScheduledExecutorService exec = Executors.newScheduledThreadPool(3);
 	private final org.ehcache.CacheManager cm = CacheManagerBuilder.newCacheManagerBuilder().build(true);
 
 	private final Cache<String, byte[]> resource = cm.createCache("resource",
 			CacheConfigurationBuilder
-					.newCacheConfigurationBuilder(String.class, byte[].class, ResourcePoolsBuilder.heap(100))
+					.newCacheConfigurationBuilder(
+							String.class, byte[].class,
+							ResourcePoolsBuilder.newResourcePoolsBuilder()
+									.heap(128, MemoryUnit.MB)
+									.offheap(512, MemoryUnit.GB)
+									.disk(2, MemoryUnit.GB)
+					)
 					.withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofMinutes(30)))
 	);
 	private final Cache<String, String> locale = cm.createCache("locale",
 			CacheConfigurationBuilder
-					.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(100))
+					.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(128))
 					.withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofMinutes(30)))
 	);
 
