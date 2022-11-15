@@ -67,7 +67,7 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS remove_deck_reference ON deck_senshi;
+DROP TRIGGER IF EXISTS remove_deck_reference ON stashed_card;
 CREATE TRIGGER remove_deck_reference
     BEFORE UPDATE OR DELETE
     ON stashed_card
