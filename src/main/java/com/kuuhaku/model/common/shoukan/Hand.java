@@ -128,6 +128,9 @@ public class Hand {
 
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
+		if (d instanceof Senshi s && s.getStats().popFlag(Flag.NO_DEATH)) {
+			return false;
+		}
 
 		if (getGame().getCurrentSide() != getSide()) {
 			Hand op = getOther();
