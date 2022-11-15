@@ -19,8 +19,7 @@ public class CacheManager {
 							String.class, byte[].class,
 							ResourcePoolsBuilder.newResourcePoolsBuilder()
 									.heap(128, MemoryUnit.MB)
-									.offheap(512, MemoryUnit.MB)
-									.disk(2, MemoryUnit.GB)
+									.offheap(1, MemoryUnit.GB)
 					)
 					.withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofMinutes(30)))
 	);
