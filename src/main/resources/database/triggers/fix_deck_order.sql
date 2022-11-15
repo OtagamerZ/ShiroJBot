@@ -33,7 +33,8 @@ BEGIN
          ) x
     WHERE ds.deck_id = x.deck_id
       AND ds.senshi_card_id = x.senshi_card_id
-      AND ds.index = x.index;
+      AND ds.index = x.index
+      AND ds.index <> x.proper;
 
     UPDATE deck_evogear ds
     SET index = x.proper
@@ -46,7 +47,8 @@ BEGIN
          ) x
     WHERE ds.deck_id = x.deck_id
       AND ds.evogear_card_id = x.evogear_card_id
-      AND ds.index = x.index;
+      AND ds.index = x.index
+      AND ds.index <> x.proper;
 
     UPDATE deck_field ds
     SET index = x.proper
@@ -59,7 +61,8 @@ BEGIN
          ) x
     WHERE ds.deck_id = x.deck_id
       AND ds.field_card_id = x.field_card_id
-      AND ds.index = x.index;
+      AND ds.index = x.index
+      AND ds.index <> x.proper;
 
     RETURN NEW;
 END;
