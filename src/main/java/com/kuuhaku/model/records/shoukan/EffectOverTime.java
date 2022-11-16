@@ -24,8 +24,10 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Closeable;
 import java.util.EnumSet;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
@@ -38,10 +40,12 @@ public record EffectOverTime(
 		AtomicInteger turns,
 		AtomicInteger limit,
 		AtomicBoolean lock,
-		EnumSet<Trigger> triggers
-) implements Comparable<EffectOverTime> {
+		EnumSet<Trigger> triggers,
+		long SERIAL,
+		AtomicBoolean closed
+) implements Comparable<EffectOverTime>, Closeable {
 	public EffectOverTime(Senshi source, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
-		this(source, side != source.getSide(), side, effect, null, null, new AtomicBoolean(), EnumSet.of(Trigger.NONE, triggers));
+		this(source, side != source.getSide(), side, effect, null, null, new AtomicBoolean(), EnumSet.of(Trigger.NONE, triggers), ThreadLocalRandom.current().nextLong(), new AtomicBoolean());
 	}
 
 	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, int turns, int limit, Trigger... triggers) {
@@ -49,7 +53,9 @@ public record EffectOverTime(
 				turns < 0 ? null : new AtomicInteger(turns),
 				limit < 0 ? null : new AtomicInteger(limit),
 				new AtomicBoolean(),
-				EnumSet.of(turns > -1 ? Trigger.ON_TURN_BEGIN : Trigger.NONE, triggers)
+				EnumSet.of(turns > -1 ? Trigger.ON_TURN_BEGIN : Trigger.NONE, triggers),
+				ThreadLocalRandom.current().nextLong(),
+				new AtomicBoolean()
 		);
 	}
 
@@ -77,17 +83,21 @@ public record EffectOverTime(
 		return turns != null || limit != null;
 	}
 
+	public boolean removed() {
+		return closed.get();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		EffectOverTime that = (EffectOverTime) o;
-		return Objects.equals(source, that.source) && side == that.side;
+		return SERIAL == that.SERIAL && side == that.side;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(source, side);
+		return Objects.hash(side, SERIAL);
 	}
 
 	@Override
@@ -96,5 +106,10 @@ public record EffectOverTime(
 		if (limit != null) return limit.get() - other.limit.get();
 
 		return Integer.MIN_VALUE;
+	}
+
+	@Override
+	public void close() {
+		closed.set(true);
 	}
 }
