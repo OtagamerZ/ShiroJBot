@@ -53,7 +53,7 @@ import java.util.Set;
 		category = Category.MISC
 )
 @Signature({
-		"<action:word:r>[all]",
+		"<action:word:r>[all,ghost]",
 		"<card:word:r> <amount:number>"
 })
 @Requires({
@@ -70,12 +70,16 @@ public class DeckRemoveCommand implements Executable {
 		}
 
 		if (args.has("action")) {
-			DAO.applyNative("UPDATE stashed_card SET deck_id = NULL WHERE kawaipon_uid = ?1 AND deck_id = ?2",
-					event.user().getId(), d.getId()
-			);
-			DAO.applyNative("DELETE FROM deck_senshi WHERE deck_id = ?1", d.getId());
-			DAO.applyNative("DELETE FROM deck_evogear WHERE deck_id = ?1", d.getId());
-			DAO.applyNative("DELETE FROM deck_field WHERE deck_id = ?1", d.getId());
+			if (args.getString("action").equalsIgnoreCase("all")) {
+				DAO.applyNative("UPDATE stashed_card SET deck_id = NULL WHERE kawaipon_uid = ?1 AND deck_id = ?2",
+						event.user().getId(), d.getId()
+				);
+				DAO.applyNative("DELETE FROM deck_senshi WHERE deck_id = ?1", d.getId());
+				DAO.applyNative("DELETE FROM deck_evogear WHERE deck_id = ?1", d.getId());
+				DAO.applyNative("DELETE FROM deck_field WHERE deck_id = ?1", d.getId());
+			} else {
+				DAO.applyNative("CALL clear_ghosts(?1)", d.getId());
+			}
 
 			event.channel().sendMessage(locale.get("success/deck_clear")).queue();
 			return;
