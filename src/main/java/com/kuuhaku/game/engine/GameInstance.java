@@ -20,6 +20,7 @@ package com.kuuhaku.game.engine;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.GameChannel;
 import com.kuuhaku.model.common.PatternCache;
@@ -199,9 +200,11 @@ public abstract class GameInstance<T extends Enum<T>> {
 		if (code == GameReport.SUCCESS) {
 			exec.complete(null);
 
-			int prize = (int) (500 * Calc.rng(0.75, 1.25));
-			for (String uid : getPlayers()) {
-				DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
+			if (!(this instanceof Shoukan s && s.isSingleplayer())) {
+				int prize = (int) (500 * Calc.rng(0.75, 1.25));
+				for (String uid : getPlayers()) {
+					DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
+				}
 			}
 		} else {
 			exec.completeExceptionally(new GameReport(code));

@@ -1088,6 +1088,10 @@ public class Shoukan extends GameInstance<Phase> {
 		return arena;
 	}
 
+	public boolean isSingleplayer() {
+		return singleplayer;
+	}
+
 	public StateSnap getSnapshot() {
 		return snapshot;
 	}
