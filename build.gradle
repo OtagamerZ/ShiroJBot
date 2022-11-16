@@ -36,6 +36,7 @@ application {
 	applicationDefaultJvmArgs = [
 			"-Xms512M",
 			"-Xmx4G",
+			"-XX:MaxDirectMemorySize=2G",
 			"-XX:+UseZGC",
 			"-XX:+HeapDumpOnOutOfMemoryError",
 			"-XX:HeapDumpPath=/shiro/ShiroJBot/logs/memdump.hprof",
