@@ -32,7 +32,7 @@ BEGIN
                                SELECT index
                                FROM deck_senshi
                                WHERE deck_id = OLD.deck_id
-                                 AND card_id = OLD.card_id
+                                 AND senshi_card_id = OLD.card_id
                                LIMIT 1
                                );
             END;
@@ -44,7 +44,7 @@ BEGIN
                                SELECT index
                                FROM deck_evogear
                                WHERE deck_id = OLD.deck_id
-                                 AND card_id = OLD.card_id
+                                 AND evogear_card_id = OLD.card_id
                                LIMIT 1
                                );
             END;
@@ -56,7 +56,7 @@ BEGIN
                                SELECT index
                                FROM deck_field
                                WHERE deck_id = OLD.deck_id
-                                 AND card_id = OLD.card_id
+                                 AND field_card_id = OLD.card_id
                                LIMIT 1
                                );
             END;
