@@ -25,9 +25,9 @@ import com.kuuhaku.events.ConsoleListener;
 import com.kuuhaku.events.cron.ScheduledEvents;
 import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
+import com.kuuhaku.managers.CacheManager;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.managers.CacheManager;
 import com.kuuhaku.utils.Helper;
 import com.kuuhaku.utils.ShiroInfo;
 import net.dv8tion.jda.api.JDA;
@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 
 public class Main implements Thread.UncaughtExceptionHandler {
 	private static ShiroInfo info;
@@ -57,6 +58,8 @@ public class Main implements Thread.UncaughtExceptionHandler {
 	private static ShardManager shiroShards;
 	static boolean exiting = false;
 	static ConfigurableApplicationContext spring;
+
+	private static final Main INSTANCE = new Main();
 
 	static {
 		Helper.logger(Main.class).info("""
@@ -69,7 +72,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 	public static void main(String[] args) throws Exception {
 		ImageIO.setUseCache(false);
-		Thread.setDefaultUncaughtExceptionHandler(new Main());
+		Thread.setDefaultUncaughtExceptionHandler(INSTANCE);
 		info = new ShiroInfo();
 		cmdManager = new CommandManager();
 		cacheManager = new CacheManager();
@@ -78,7 +81,12 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
-				.setEventPool(Executors.newFixedThreadPool(20), true)
+				.setEventPool(new ForkJoinPool(
+						Runtime.getRuntime().availableProcessors(),
+						ForkJoinPool.defaultForkJoinWorkerThreadFactory,
+						INSTANCE,
+						true
+				), true)
 				.addEventListeners(ShiroInfo.getShiroEvents())
 				.build();
 
