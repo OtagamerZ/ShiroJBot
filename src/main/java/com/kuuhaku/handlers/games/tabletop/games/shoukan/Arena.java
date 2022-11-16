@@ -45,8 +45,6 @@ public class Arena {
 	private final Map<Side, List<SlotColumn>> slots;
 	private final Map<Side, BondedList<Drawable>> graveyard;
 	private final BondedList<Drawable> banned;
-	private final BufferedImage back = Helper.getResourceAsImage(this.getClass(), "shoukan/backdrop.jpg");
-	private final BufferedImage front;
 	private Field field = null;
 	private boolean updateField = true;
 
@@ -91,9 +89,6 @@ public class Arena {
 				})
 		);
 		this.banned = new BondedList<>(Drawable::reset);
-
-		assert back != null;
-		front = new BufferedImage(back.getWidth(), back.getHeight(), BufferedImage.TYPE_INT_ARGB);
 	}
 
 	public Map<Side, List<SlotColumn>> getSlots() {
@@ -119,46 +114,45 @@ public class Arena {
 
 	public BufferedImage render(Shoukan game, Map<Side, Hand> hands) {
 		try {
-			if (updateField) {
-				assert back != null;
-				Graphics2D g2d = back.createGraphics();
-				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
-				BufferedImage arena = Helper.getResourceAsImage(this.getClass(), "shoukan/arenas/" + (field == null ? "default" : field.getField().toLowerCase(Locale.ROOT)) + ".png");
+			BufferedImage bi = Helper.getResourceAsImage(this.getClass(), "shoukan/backdrop.jpg");
 
-				assert arena != null;
-				g2d.drawImage(arena, 0, 0, null);
-				updateField = false;
-				g2d.dispose();
-			}
+			assert bi != null;
+			Graphics2D g2d = bi.createGraphics();
+			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+			BufferedImage arena = Helper.getResourceAsImage(this.getClass(), "shoukan/arenas/" + (field == null ? "default" : field.getField().toLowerCase(Locale.ROOT)) + ".png");
+
+			assert arena != null;
+			g2d.drawImage(arena, 0, 0, null);
+			updateField = false;
+			g2d.dispose();
 
 			NContract<BufferedImage> sides = new NContract<>(2, imgs -> {
-				Graphics2D g2d = front.createGraphics();
-				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+				Graphics2D g = arena.createGraphics();
+				g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 
-				g2d.setComposite(AlphaComposite.Clear);
-				g2d.fillRect(0, 0, front.getWidth(), front.getHeight());
-				g2d.setComposite(AlphaComposite.SrcOver);
+				g.setComposite(AlphaComposite.Clear);
+				g.fillRect(0, 0, arena.getWidth(), arena.getHeight());
+				g.setComposite(AlphaComposite.SrcOver);
 
 				for (BufferedImage img : imgs) {
-					g2d.drawImage(img, 0, 0, null);
+					g.drawImage(img, 0, 0, null);
 				}
-				g2d.dispose();
+				g.dispose();
 
-				return front;
+				return arena;
 			});
 
 			ExecutorService exec = Executors.newFixedThreadPool(2);
 			for (Map.Entry<Side, List<SlotColumn>> entry : slots.entrySet()) {
 				exec.execute(() -> {
-					assert back != null;
-					BufferedImage layer = new BufferedImage(back.getWidth(), back.getHeight(), BufferedImage.TYPE_INT_ARGB);
-					Graphics2D g2d = layer.createGraphics();
+					BufferedImage layer = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
+					Graphics2D g = layer.createGraphics();
 
 					Side key = entry.getKey();
 					List<SlotColumn> value = entry.getValue();
 					Hand h = hands.get(key);
 					LinkedList<Drawable> grv = graveyard.get(key);
-					g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 75));
+					g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 75));
 
 					String name;
 					if (h instanceof TeamHand th) {
@@ -170,128 +164,128 @@ public class Arena {
 					if (key == game.getCurrentSide()) {
 						FrameColor fc = h.getAcc().getFrame();
 
-						g2d.setColor(fc.getThemeColor());
-						g2d.setBackground(fc.getBackgroundColor());
+						g.setColor(fc.getThemeColor());
+						g.setBackground(fc.getBackgroundColor());
 
 						name = ">>> " + name + " <<<";
 					} else {
-						g2d.setColor(Color.white);
+						g.setColor(Color.white);
 					}
 
 					if (key == Side.TOP)
-						Profile.printCenteredString(name, 1253, 499, 822, g2d);
+						Profile.printCenteredString(name, 1253, 499, 822, g);
 					else
-						Profile.printCenteredString(name, 1253, 499, 998, g2d);
+						Profile.printCenteredString(name, 1253, 499, 998, g);
 
-					g2d.setBackground(Color.BLACK);
+					g.setBackground(Color.BLACK);
 					BufferedImage broken = Helper.getResourceAsImage(this.getClass(), "shoukan/broken.png");
 					for (int i = 0; i < value.size(); i++) {
 						SlotColumn c = value.get(i);
 						switch (key) {
 							case TOP -> {
 								if (c.isUnavailable()) {
-									g2d.drawImage(broken, 499 + (257 * i), 387, null);
+									g.drawImage(broken, 499 + (257 * i), 387, null);
 								} else if (c.getTop() != null) {
 									Champion d = c.getTop();
-									g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 387, null);
+									g.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 387, null);
 
 									String path = d.getAcc().getFrame().name().startsWith("LEGACY_") ? "old" : "new";
 									if (!d.isFlipped()) {
 										if (d.isBuffed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 484 + (257 * i), 372, null);
+											g.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 484 + (257 * i), 372, null);
 										else if (d.isNerfed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 484 + (257 * i), 372, null);
+											g.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 484 + (257 * i), 372, null);
 										else if (d.getHero() != null)
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 484 + (257 * i), 372, null);
+											g.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 484 + (257 * i), 372, null);
 									}
 
 									if (d.getHero() != null) {
-										g2d.setColor(Color.orange);
-										g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-										Profile.printCenteredString("HP: " + d.getHero().getHitpoints(), 257, 484 + (257 * i), 377, g2d);
+										g.setColor(Color.orange);
+										g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
+										Profile.printCenteredString("HP: " + d.getHero().getHitpoints(), 257, 484 + (257 * i), 377, g);
 									}
 								}
 
 								if (c.isUnavailable()) {
-									g2d.drawImage(broken, 499 + (257 * i), 0, null);
+									g.drawImage(broken, 499 + (257 * i), 0, null);
 								} else if (c.getBottom() != null) {
 									Equipment d = c.getBottom();
-									g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 0, null);
+									g.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 0, null);
 								}
 							}
 							case BOTTOM -> {
 								if (c.isUnavailable()) {
-									g2d.drawImage(broken, 499 + (257 * i), 1013, null);
+									g.drawImage(broken, 499 + (257 * i), 1013, null);
 								} else if (c.getTop() != null) {
 									Champion d = c.getTop();
-									g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1013, null);
+									g.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1013, null);
 
 									String path = d.getAcc().getFrame().name().startsWith("LEGACY_") ? "old" : "new";
 									if (!d.isFlipped()) {
 										if (d.isBuffed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 484 + (257 * i), 998, null);
+											g.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/buffed.png"), 484 + (257 * i), 998, null);
 										else if (d.isNerfed())
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 484 + (257 * i), 998, null);
+											g.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/nerfed.png"), 484 + (257 * i), 998, null);
 										else if (d.getHero() != null)
-											g2d.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 484 + (257 * i), 998, null);
+											g.drawImage(Helper.getResourceAsImage(this.getClass(), "kawaipon/frames/" + path + "/hero.png"), 484 + (257 * i), 998, null);
 									}
 
 									if (d.getHero() != null) {
-										g2d.setColor(Color.orange);
-										g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
-										Profile.printCenteredString("HP: " + d.getHero().getHitpoints(), 257, 484 + (257 * i), 1390, g2d);
+										g.setColor(Color.orange);
+										g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 20));
+										Profile.printCenteredString("HP: " + d.getHero().getHitpoints(), 257, 484 + (257 * i), 1390, g);
 									}
 								}
 
 								if (c.isUnavailable()) {
-									g2d.drawImage(broken, 499 + (257 * i), 1400, null);
+									g.drawImage(broken, 499 + (257 * i), 1400, null);
 								} else if (c.getBottom() != null) {
 									Equipment d = c.getBottom();
-									g2d.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1400, null);
+									g.drawImage(d.drawCard(d.isFlipped()), 499 + (257 * i), 1400, null);
 								}
 							}
 						}
 
 						float prcnt = (float) h.getHp() / h.getBaseHp();
-						g2d.setColor(prcnt > 2 / 3f ? Color.green : prcnt > 1 / 3f ? Color.yellow : Color.red);
-						g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 65));
+						g.setColor(prcnt > 2 / 3f ? Color.green : prcnt > 1 / 3f ? Color.yellow : Color.red);
+						g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 65));
 
 						String hp = "HP: %04d".formatted(Math.max(0, h.getHp()));
 						String mp = h.isHidingMana() ? "MP: --" : "MP: %02d".formatted(Math.max(0, h.getMana()));
 
-						int hpWidth = g2d.getFontMetrics().stringWidth(hp);
+						int hpWidth = g.getFontMetrics().stringWidth(hp);
 						Profile.drawOutlinedText(
 								hp,
 								key == Side.TOP ? 10 : 2240 - hpWidth,
-								key == Side.TOP ? 82 : 1638, g2d
+								key == Side.TOP ? 82 : 1638, g
 						);
 
 						if (h.getBleeding() > 0) {
-							g2d.setColor(new Color(153, 0, 0));
+							g.setColor(new Color(153, 0, 0));
 							Profile.drawOutlinedText(
 									"(-" + h.getBleeding() + ")",
-									key == Side.TOP ? hpWidth + 10 : (2230 - hpWidth) - g2d.getFontMetrics().stringWidth("(-" + h.getBleeding() + ")"),
-									key == Side.TOP ? 82 : 1638, g2d
+									key == Side.TOP ? hpWidth + 10 : (2230 - hpWidth) - g.getFontMetrics().stringWidth("(-" + h.getBleeding() + ")"),
+									key == Side.TOP ? 82 : 1638, g
 							);
 						} else if (h.getRegeneration() > 0) {
-							g2d.setColor(new Color(0, 153, 89));
+							g.setColor(new Color(0, 153, 89));
 							Profile.drawOutlinedText(
 									"(+" + h.getRegeneration() + ")",
-									key == Side.TOP ? hpWidth + 10 : (2230 - hpWidth) - g2d.getFontMetrics().stringWidth("(+" + h.getRegeneration() + ")"),
-									key == Side.TOP ? 82 : 1638, g2d
+									key == Side.TOP ? hpWidth + 10 : (2230 - hpWidth) - g.getFontMetrics().stringWidth("(+" + h.getRegeneration() + ")"),
+									key == Side.TOP ? 82 : 1638, g
 							);
 						}
 
-						g2d.setColor(h.isNullMode() ? new Color(88, 0, 255) : Color.cyan);
+						g.setColor(h.isNullMode() ? new Color(88, 0, 255) : Color.cyan);
 						Profile.drawOutlinedText(
 								mp,
-								key == Side.TOP ? 10 : 2240 - g2d.getFontMetrics().stringWidth(mp),
-								key == Side.TOP ? 168 : 1725, g2d
+								key == Side.TOP ? 10 : 2240 - g.getFontMetrics().stringWidth(mp),
+								key == Side.TOP ? 168 : 1725, g
 						);
 
-						g2d.setColor(Color.white);
+						g.setColor(Color.white);
 						if (grv.size() > 0) {
-							g2d.drawImage(grv.peekLast().drawCard(false),
+							g.drawImage(grv.peekLast().drawCard(false),
 									key == Side.TOP ? 1889 : 137,
 									key == Side.TOP ? 193 : 1206, null);
 
@@ -302,49 +296,49 @@ public class Arena {
 								else count[2]++;
 							}
 
-							Profile.printCenteredString("%02d/%02d/%02d".formatted((Object[]) count), 225, key == Side.TOP ? 1889 : 137, key == Side.TOP ? 178 : 1638, g2d);
+							Profile.printCenteredString("%02d/%02d/%02d".formatted((Object[]) count), 225, key == Side.TOP ? 1889 : 137, key == Side.TOP ? 178 : 1638, g);
 						}
 
 						if (h.getRealDeque().size() > 0) {
 							Drawable d = h.getRealDeque().peek();
 							assert d != null;
-							g2d.drawImage(d.drawCard(true),
+							g.drawImage(d.drawCard(true),
 									key == Side.TOP ? 137 : 1889,
 									key == Side.TOP ? 193 : 1206, null);
 
 							Triple<Race, Boolean, Race> combo = h.getCombo();
 							if (combo.getLeft() != Race.NONE)
-								g2d.drawImage(combo.getLeft().getIcon(),
+								g.drawImage(combo.getLeft().getIcon(),
 										key == Side.TOP ? 137 : 1889,
 										key == Side.TOP ? 543 : 1078, 128, 128, null);
 							if (combo.getRight() != Race.NONE)
-								g2d.drawImage(combo.getRight().getIcon(),
+								g.drawImage(combo.getRight().getIcon(),
 										key == Side.TOP ? 284 : 2036,
 										key == Side.TOP ? 568 : 1103, 78, 78, null);
 						}
 
 						if (h.getLockTime() > 0) {
 							BufferedImage lock = Helper.getResourceAsImage(this.getClass(), "shoukan/locked.png");
-							g2d.drawImage(lock,
+							g.drawImage(lock,
 									key == Side.TOP ? 137 : 1889,
 									key == Side.TOP ? 193 : 1206, null);
 						}
 					}
 
-					g2d.dispose();
+					g.dispose();
 
 					sides.addSignature(key.ordinal(), layer);
 				});
 			}
 
-			Graphics2D g2d = sides.get().createGraphics();
+			Graphics2D g = sides.get().createGraphics();
 			if (field != null) {
-				g2d.drawImage(field.drawCard(false), 1889, 700, null);
+				g.drawImage(field.drawCard(false), 1889, 700, null);
 			}
 
 			if (banned.peekLast() != null) {
 				Drawable d = banned.peekLast();
-				g2d.drawImage(d.drawCard(false), 137, 700, null);
+				g.drawImage(d.drawCard(false), 137, 700, null);
 			}
 
 			Map<String, Integer> locks = Map.of(
@@ -359,21 +353,20 @@ public class Arena {
 					"effect"
 			};
 
-			g2d.setColor(Color.red);
-			g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 65));
+			g.setColor(Color.red);
+			g.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 65));
 			for (int i = 0; i < lockNames.length; i++) {
 				String name = locks.get(lockNames[i]) > 0 ? lockNames[i] + "_lock" : lockNames[i] + "_unlock";
 				BufferedImage icon;
 				icon = Helper.getResourceAsImage(this.getClass(), "shoukan/" + name + ".png");
-				g2d.drawImage(icon, 919 + (i * 166), 835, null);
+				g.drawImage(icon, 919 + (i * 166), 835, null);
 				if (locks.get(lockNames[i]) > 0)
-					Profile.drawOutlinedText(String.valueOf(locks.get(lockNames[i])), 1009 + (i * 166), 860 + g2d.getFontMetrics().getHeight() / 2, g2d);
+					Profile.drawOutlinedText(String.valueOf(locks.get(lockNames[i])), 1009 + (i * 166), 860 + g.getFontMetrics().getHeight() / 2, g);
 			}
 
-			g2d.dispose();
+			g.dispose();
 
-			assert back != null;
-			return Helper.applyOverlay(back, front);
+			return arena;
 		} catch (NullPointerException | InterruptedException | ExecutionException e) {
 			Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
 			return null;

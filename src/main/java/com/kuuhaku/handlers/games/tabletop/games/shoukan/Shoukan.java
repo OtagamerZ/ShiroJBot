@@ -93,7 +93,7 @@ public class Shoukan extends GlobalGame {
 	private final Map<String, Message> message = new HashMap<>();
 	private final List<Champion> fusions = CardDAO.getFusions();
 	private final boolean team;
-	private final boolean record;
+	private final boolean record = false;
 	private final Map<Side, EnumSet<Achievement>> achievements = new HashMap<>();
 	private final Map<Achievement, JSONObject> achData = new HashMap<>();
 	private final Map<Side, Map<Race, Integer>> summoned = Map.of(
@@ -128,7 +128,6 @@ public class Shoukan extends GlobalGame {
 			}
 		};
 		this.team = players.length == 4;
-		this.record = record;
 		this.tourMatch = match;
 
 		if (team) {
@@ -3083,7 +3082,7 @@ public class Shoukan extends GlobalGame {
 			}
 		}
 
-		if (false && !getFrames().isEmpty() && Main.getInfo().getEncoderClient() != null) {
+		if (!getFrames().isEmpty() && Main.getInfo().getEncoderClient() != null) {
 			try {
 				getFrames().add(Helper.compress(Helper.atob(getArena().addHands(arena.render(this, hands), hands.values()), "jpg")));
 			} catch (IOException ignore) {
