@@ -36,5 +36,5 @@ CREATE TRIGGER switch_active_deck
     BEFORE UPDATE OF current
     ON deck
     FOR EACH ROW
-    WHEN ( OLD.current <> NEW.current AND NEW.current IS TRUE )
+    WHEN ( NEW.current IS TRUE )
 EXECUTE PROCEDURE t_switch_active_deck();

@@ -16,25 +16,23 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION t_switch_active_title()
+CREATE OR REPLACE FUNCTION t_rename_description()
     RETURNS TRIGGER
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
-    UPDATE account_title d
-    SET current = FALSE
-    WHERE d.account_uid = NEW.account_uid
-    AND d.id <> NEW.id;
+    UPDATE card_descriptions cd
+    SET id = NEW.id
+    WHERE cd.id = OLD.id;
 
     RETURN NEW;
 END;
 $$;
 
-DROP TRIGGER IF EXISTS switch_active_title ON account_title;
-CREATE TRIGGER switch_active_title
-    BEFORE UPDATE OF current
-    ON account_title
+DROP TRIGGER IF EXISTS rename_description ON card;
+CREATE TRIGGER rename_description
+    BEFORE UPDATE OF id
+    ON card
     FOR EACH ROW
-    WHEN ( NEW.current IS TRUE )
-EXECUTE PROCEDURE t_switch_active_title();
+EXECUTE PROCEDURE t_rename_description();
