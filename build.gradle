@@ -35,7 +35,7 @@ application {
 	getMainClass().set("com.kuuhaku.Main")
 	applicationDefaultJvmArgs = [
 			"-Xms512M",
-			"-Xmx4G",
+			"-Xmx2G",
 			"-XX:MaxDirectMemorySize=2G",
 			"-XX:+UseZGC",
 			"-XX:+HeapDumpOnOutOfMemoryError",
