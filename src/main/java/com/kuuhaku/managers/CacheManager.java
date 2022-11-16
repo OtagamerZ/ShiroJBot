@@ -1,39 +1,47 @@
 package com.kuuhaku.managers;
 
-import org.mapdb.DB;
-import org.mapdb.DBMaker;
-import org.mapdb.HTreeMap;
-import org.mapdb.Serializer;
+import org.ehcache.Cache;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.config.builders.ExpiryPolicyBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.config.units.EntryUnit;
+import org.ehcache.config.units.MemoryUnit;
 
+import java.io.File;
+import java.time.Duration;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
 
 public class CacheManager {
 	private final ScheduledExecutorService exec = Executors.newScheduledThreadPool(2);
-	private final DB db = DBMaker.memoryDB().make();
+	private final File folder = new File("cache");
+	private final org.ehcache.CacheManager cm = CacheManagerBuilder.newCacheManagerBuilder()
+			.with(CacheManagerBuilder.persistence(folder))
+			.build(true);
 
-	private final HTreeMap<String, byte[]> cardCache = db.hashMap("card", Serializer.STRING, Serializer.BYTE_ARRAY)
-			.expireAfterCreate(30, TimeUnit.MINUTES)
-			.expireAfterGet(30, TimeUnit.MINUTES)
-			.expireExecutor(exec)
-			.expireExecutorPeriod(TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES))
-			.counterEnable()
-			.create();
+	private final Cache<String, byte[]> resource = cm.createCache("resource",
+			CacheConfigurationBuilder
+					.newCacheConfigurationBuilder(
+							String.class, byte[].class,
+							ResourcePoolsBuilder.newResourcePoolsBuilder()
+									.heap(32, EntryUnit.ENTRIES)
+									.offheap(512, MemoryUnit.MB)
+									.disk(2, MemoryUnit.GB)
 
-	private final HTreeMap<String, byte[]> resourceCache = db.hashMap("resource", Serializer.STRING, Serializer.BYTE_ARRAY)
-			.expireAfterCreate(30, TimeUnit.MINUTES)
-			.expireAfterGet(30, TimeUnit.MINUTES)
-			.expireExecutor(exec)
-			.expireExecutorPeriod(TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES))
-			.counterEnable()
-			.create();
+					)
+					.withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofMinutes(30)))
+	);
 
-	public HTreeMap<String, byte[]> getCardCache() {
-		return cardCache;
+	public Cache<String, byte[]> getResourceCache() {
+		return resource;
 	}
 
-	public HTreeMap<String, byte[]> getResourceCache() {
-		return resourceCache;
+	public byte[] computeResource(String key, BiFunction<String, byte[], byte[]> mapper) {
+		byte[] bytes = mapper.apply(key, resource.get(key));
+		resource.put(key, bytes);
+
+		return bytes;
 	}
 }

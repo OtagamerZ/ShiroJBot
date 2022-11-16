@@ -197,7 +197,7 @@ public class Card {
 		if (cardBytes == null) {
 			if (f.exists()) {
 				File finalF = f;
-				cardBytes = Main.getCacheManager().getCardCache().computeIfAbsent(id, k -> {
+				cardBytes = Main.getCacheManager().computeResource(id, (k, v) -> {
 					try {
 						return FileUtils.readFileToByteArray(finalF);
 					} catch (IOException e) {
