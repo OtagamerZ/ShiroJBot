@@ -564,6 +564,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return !isStunned() && Bit.on(state, 3, 4);
 	}
 
+	public void awake() {
+		int curr = Bit.get(state, 3, 4);
+
+		if (Calc.chance(100d / (curr + 1))) {
+			state = Bit.set(state, 3, 0, 4);
+		}
+	}
+
 	public void setSleep(int time) {
 		if (stats.popFlag(Flag.NO_SLEEP)) return;
 
