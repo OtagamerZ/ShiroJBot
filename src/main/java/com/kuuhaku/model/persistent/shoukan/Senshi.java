@@ -576,6 +576,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return !isStunned() && Bit.on(state, 3, 4);
 	}
 
+	public int getRemainingSleep() {
+		return Bit.get(state, 3, 4);
+	}
+
 	public void awake() {
 		int curr = Bit.get(state, 3, 4);
 
@@ -600,6 +604,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return !isStasis() && Bit.on(state, 4, 4);
 	}
 
+	public int getRemainingStun() {
+		return Bit.get(state, 4, 4);
+	}
+
 	public void setStun(int time) {
 		if (stats.popFlag(Flag.NO_STUN)) return;
 
@@ -614,6 +622,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public boolean isStasis() {
 		return Bit.on(state, 5, 4);
+	}
+
+	public int getRemainingStasis() {
+		return Bit.get(state, 5, 4);
 	}
 
 	public void setStasis(int time) {
@@ -646,6 +658,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public Senshi getTarget() {
 		return target;
+	}
+
+	public int getRemainingTaunt() {
+		return Bit.get(state, 6, 4);
 	}
 
 	public int getTaunt() {
@@ -1019,16 +1035,30 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				op.filter(out, out);
 			}
 
-			if (isStasis()) {
-				g1.drawImage(IO.getResourceAsImage("shoukan/states/stasis.png"), 0, 0, null);
-			} else if (isStunned()) {
-				g1.drawImage(IO.getResourceAsImage("shoukan/states/stun.png"), 0, 0, null);
-			} else if (isSleeping()) {
-				g1.drawImage(IO.getResourceAsImage("shoukan/states/sleep.png"), 0, 0, null);
-			} else if (isDefending()) {
+			boolean over = false;
+			String[] states = {"stasis", "stun", "sleep", "taunt", "defense"};
+			int[] timers = {getRemainingStasis(), getRemainingStun(), getRemainingSleep(), getRemainingTaunt()};
+			for (int i = 0; i < timers.length; i++) {
+				int time = timers[i];
+
+				if (time > 0) {
+					over = true;
+					BufferedImage overlay = IO.getResourceAsImage("shoukan/states/" + states[i] + ".png");
+					g1.drawImage(overlay, 0, 0, null);
+
+					String str = locale.get("str/turns", time);
+
+					g1.setColor(Graph.getColor(overlay));
+					g1.setFont(Drawable.FONT);
+					Graph.drawOutlinedString(g1, str,
+							225 / 2 - g1.getFontMetrics().stringWidth(str) / 2, 350 - Drawable.FONT.getSize(),
+							2, Color.BLACK
+					);
+				}
+			}
+
+			if (!over && isDefending()) {
 				g1.drawImage(IO.getResourceAsImage("shoukan/states/defense.png"), 0, 0, null);
-			} else if (getTarget() != null) {
-				g1.drawImage(IO.getResourceAsImage("shoukan/states/taunt.png"), 0, 0, null);
 			}
 		});
 
