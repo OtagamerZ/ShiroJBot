@@ -168,6 +168,7 @@ public class Hand {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		d.setHand(this);
+		getData().put("last_discarded_" + d.getClass().getSimpleName().toLowerCase(), d);
 		getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
 		d.setAvailable(false);
 
