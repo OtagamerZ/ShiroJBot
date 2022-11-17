@@ -47,7 +47,7 @@ public enum Charm {
 	public String getDescription(I18N locale, int tier) {
 		String val;
 		if (Utils.equalsAny(this, WARDING, TIMEWARP)) {
-			val = locale.get("str/" + getValue(tier) + "_time");
+			val = locale.get("str/" + getValue(tier) + "_time").toLowerCase();
 		} else {
 			val = String.valueOf(getValue(tier));
 		}

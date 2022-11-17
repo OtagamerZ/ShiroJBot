@@ -110,6 +110,8 @@ public abstract class IO {
 				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 				if (param instanceof WebPWriteParam webp) {
 					webp.setCompressionType(param.getCompressionTypes()[WebPWriteParam.LOSSY_COMPRESSION]);
+				} else {
+					param.setCompressionType(param.getCompressionTypes()[0]);
 				}
 
 				param.setCompressionQuality(quality);
