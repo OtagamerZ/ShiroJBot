@@ -81,6 +81,10 @@ public class Hand {
 			e.getEquipper().getEquipments().remove(e);
 		}
 
+		if (d.isSolid()) {
+			getData().put("last_drawn_" + d.getClass().getSimpleName().toLowerCase(), d);
+		}
+
 		d.setSlot(null);
 		return true;
 	});
@@ -367,6 +371,7 @@ public class Hand {
 
 			out.add(d);
 		}
+		
 		return out;
 	}
 

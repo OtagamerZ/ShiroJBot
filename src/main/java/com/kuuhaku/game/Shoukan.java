@@ -255,7 +255,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}));
 		}
 
-		getData(side).put("lastSummon", copy);
+		curr.getData().put("lastSummon", copy);
 		reportEvent("str/place_card",
 				curr.getName(),
 				copy.isFlipped() ? getLocale().get("str/a_card") : copy,
@@ -310,7 +310,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		target.getEquipments().add(copy);
-		getData(side).put("lastEquipment", copy);
+		curr.getData().put("lastEquipment", copy);
 		reportEvent("str/equip_card",
 				curr.getName(),
 				copy.isFlipped() ? getLocale().get("str/an_equipment") : copy,
@@ -340,7 +340,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		chosen.setAvailable(false);
 		arena.setField(chosen.copy());
-		getData(side).put("lastField", chosen);
+		curr.getData().put("lastField", chosen);
 		reportEvent("str/place_field", curr.getName(), chosen);
 		return true;
 	}
@@ -618,7 +618,7 @@ public class Shoukan extends GameInstance<Phase> {
 				chosen.setAvailable(false);
 			}
 
-			getData(side).put("lastSpell", copy);
+			curr.getData().put("lastSpell", copy);
 			trigger(ON_SPELL, side);
 			reportEvent("str/spell_shield");
 			return false;
@@ -647,7 +647,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		getData(side).put("lastSpell", copy);
+		curr.getData().put("lastSpell", copy);
 		trigger(ON_SPELL, side);
 		reportEvent("str/activate_card",
 				curr.getName(),
@@ -728,7 +728,7 @@ public class Shoukan extends GameInstance<Phase> {
 				chosen.setAvailable(false);
 			}
 
-			getData(side).put("lastAbility", chosen);
+			curr.getData().put("lastAbility", chosen);
 			trigger(ON_ABILITY, side);
 			reportEvent("str/spell_shield");
 			return false;
@@ -744,7 +744,7 @@ public class Shoukan extends GameInstance<Phase> {
 			chosen.setAvailable(false);
 		}
 
-		getData(side).put("lastAbility", chosen);
+		curr.getData().put("lastAbility", chosen);
 		trigger(ON_ABILITY, side);
 		reportEvent("str/card_special", curr.getName(), chosen);
 		return !curr.selectionPending();
@@ -1305,10 +1305,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 	}
 
-	public JSONObject getData(Side side) {
-		return data.computeIfAbsent(side, k -> new JSONObject());
-	}
-
 	private BiFunction<String, String, String> replaceMessages(Message message) {
 		resetTimer();
 		addButtons(message);
@@ -1330,8 +1326,6 @@ public class Shoukan extends GameInstance<Phase> {
 	private void reportEvent(String message, Object... args) {
 		resetTimer();
 		trigger(ON_TICK);
-
-		data.entrySet().removeIf(e -> e.getValue() == null || e.getValue().isEmpty());
 
 		List<Side> sides = List.of(getCurrentSide(), getOtherSide());
 		for (Side side : sides) {
