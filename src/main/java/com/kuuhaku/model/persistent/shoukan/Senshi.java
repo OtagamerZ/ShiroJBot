@@ -256,6 +256,18 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 	}
 
+	public List<Senshi> getNearby() {
+		return new ArrayList<>() {{
+			if (getLeft() != null) {
+				add(getLeft());
+			}
+
+			if (getRight() != null) {
+				add(getRight());
+			}
+		}};
+	}
+
 	@Override
 	public Hand getHand() {
 		return hand;

@@ -964,6 +964,10 @@ public class Shoukan extends GameInstance<Phase> {
 			if (!ignore) {
 				if (enemy != null) {
 					if (enemy.isSupporting()) {
+						for (Senshi s : enemy.getNearby()) {
+							s.awake();
+						}
+
 						op.getGraveyard().add(enemy);
 
 						dmg = 0;
@@ -985,6 +989,10 @@ public class Shoukan extends GameInstance<Phase> {
 								you.modHP((int) -((enemyStats - ally.getActiveAttr()) * mitigation));
 							}
 
+							for (Senshi s : ally.getNearby()) {
+								s.awake();
+							}
+
 							you.getGraveyard().add(ally);
 
 							reportEvent("str/combat", ally, enemy, getLocale().get("str/combat_defeat", pHP - you.getHP()));
@@ -1000,6 +1008,10 @@ public class Shoukan extends GameInstance<Phase> {
 								return true;
 							} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
 								trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
+
+								for (Senshi s : ally.getNearby()) {
+									s.awake();
+								}
 
 								you.getGraveyard().add(ally);
 
@@ -1024,13 +1036,26 @@ public class Shoukan extends GameInstance<Phase> {
 									dmg = Math.max(0, dmg - enemyStats);
 								}
 
+								for (Senshi s : enemy.getNearby()) {
+									s.awake();
+								}
+
 								op.getGraveyard().add(enemy);
 
 								outcome = "str/combat_success";
 							} else {
 								trigger(ON_CLASH, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_LOSE));
 
+								for (Senshi s : enemy.getNearby()) {
+									s.awake();
+								}
+
 								op.getGraveyard().add(enemy);
+
+								for (Senshi s : ally.getNearby()) {
+									s.awake();
+								}
+
 								you.getGraveyard().add(ally);
 
 								dmg = 0;
