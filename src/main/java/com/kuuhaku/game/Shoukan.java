@@ -1663,6 +1663,10 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
+	public boolean putAtOpenSlot(Side side, Senshi card) {
+		return putAtOpenSlot(side, true, card) || putAtOpenSlot(side, false, card);
+	}
+
 	public String getString(String key, Object... params) {
 		if (key == null) return "";
 
