@@ -280,6 +280,7 @@ public class Arena implements Renderer {
 			g1.setColor(new Color(0x50000000, true));
 			g1.fillRect(0, 0, w, SIZE.height);
 			g1.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
+			g1.setClip(new Rectangle(0, 0, SIZE.width, SIZE.height));
 
 			Graph.applyTransformed(g1, 0, SIZE.height, g2 -> {
 				String hist = history.stream()
