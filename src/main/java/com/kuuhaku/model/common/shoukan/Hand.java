@@ -139,12 +139,10 @@ public class Hand {
 		if (getGame().getCurrentSide() != getSide()) {
 			Hand op = getOther();
 
-			if (op.kills % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+			if (++op.kills % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
 				getGame().getArena().getBanned().add(d);
 				return false;
 			}
-
-			op.kills++;
 		}
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
