@@ -893,6 +893,8 @@ public class Hand {
 	}
 
 	public CompletableFuture<Drawable<?>> requestChoice(List<Drawable<?>> cards, boolean hide) {
+		if (selection != null) return null;
+
 		cards = cards.stream().filter(Objects::nonNull).toList();
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
 

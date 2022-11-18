@@ -1537,7 +1537,7 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 					}
 
-					if (curr.isCritical() && !curr.hasUsedDestiny()) {
+					if (curr.isCritical() && !curr.hasUsedDestiny() && !curr.selectionPending()) {
 						put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
 							if (curr.selectionPending()) {
 								reportEvent("error/pending_choice");
