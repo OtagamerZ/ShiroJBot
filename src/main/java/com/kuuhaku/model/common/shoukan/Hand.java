@@ -67,7 +67,7 @@ public class Hand {
 	private final Side side;
 	private final Origin origin;
 
-	private final List<Drawable<?>> cards = new BondedList<>((d, it) -> {
+	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		d.setHand(this);
@@ -88,7 +88,7 @@ public class Hand {
 		d.setSlot(null);
 		return true;
 	});
-	private final LinkedList<Drawable<?>> deck = new BondedLinkedList<>((d, it) -> {
+	private final BondedLinkedList<Drawable<?>> deck = new BondedLinkedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		d.setHand(this);
@@ -105,7 +105,7 @@ public class Hand {
 		d.reset();
 		return true;
 	});
-	private final LinkedList<Drawable<?>> graveyard = new BondedLinkedList<>((d, it) -> {
+	private final BondedLinkedList<Drawable<?>> graveyard = new BondedLinkedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		if (d instanceof Senshi s) {
@@ -162,7 +162,7 @@ public class Hand {
 
 		return d.keepOnDestroy();
 	});
-	private final List<Drawable<?>> discard = new BondedList<>((d, it) -> {
+	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		d.setHand(this);

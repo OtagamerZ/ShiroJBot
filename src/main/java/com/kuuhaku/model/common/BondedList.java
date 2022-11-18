@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class BondedList<T> extends ArrayList<T> {
 	private final BiFunction<T, ListIterator<T>, Boolean> onAdd;
@@ -112,6 +113,21 @@ public class BondedList<T> extends ArrayList<T> {
 	public T remove(int index) {
 		onRemove.accept(get(index));
 		return super.remove(index);
+	}
+
+	public T removeOn(Predicate<T> cond) {
+		Iterator<T> it = iterator();
+		while (it.hasNext()) {
+			T t = it.next();
+			if (cond.test(t)) {
+				onRemove.accept(t);
+				it.remove();
+
+				return t;
+			}
+		}
+
+		return null;
 	}
 
 	@Override
