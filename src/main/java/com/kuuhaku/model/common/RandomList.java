@@ -2,8 +2,6 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.Constants;
 import kotlin.Pair;
-import org.apache.commons.collections4.Bag;
-import org.apache.commons.collections4.bag.TreeBag;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -12,7 +10,7 @@ import java.util.random.RandomGenerator;
 
 public class RandomList<T> {
 	private final NavigableMap<Double, T> map = new TreeMap<>();
-	private final TreeBag<Pair<Double, T>> pool = new TreeBag<>(Comparator.comparingDouble(Pair::getFirst));
+	private final Set<Pair<Double, T>> pool = new TreeSet<>(Comparator.comparingDouble(Pair::getFirst));
 	private final RandomGenerator rng;
 	private final BiFunction<Double, Double, Double> randGen;
 	private final double fac;
@@ -56,6 +54,7 @@ public class RandomList<T> {
 
 		total += weight;
 		map.put(total, item);
+		System.out.println(new Pair<>(weight, item));
 		pool.add(new Pair<>(weight, item));
 	}
 
@@ -89,7 +88,7 @@ public class RandomList<T> {
 		return map.values();
 	}
 
-	public Bag<Pair<Double, T>> entries() {
+	public Set<Pair<Double, T>> entries() {
 		return pool;
 	}
 }
