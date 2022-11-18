@@ -255,7 +255,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}));
 		}
 
-		curr.getData().put("lastSummon", copy);
+		curr.getData().put("last_summon", copy);
 		reportEvent("str/place_card",
 				curr.getName(),
 				copy.isFlipped() ? getLocale().get("str/a_card") : copy,
@@ -310,7 +310,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		target.getEquipments().add(copy);
-		curr.getData().put("lastEquipment", copy);
+		curr.getData().put("last_equipment", copy);
 		reportEvent("str/equip_card",
 				curr.getName(),
 				copy.isFlipped() ? getLocale().get("str/an_equipment") : copy,
@@ -340,7 +340,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		chosen.setAvailable(false);
 		arena.setField(chosen.copy());
-		curr.getData().put("lastField", chosen);
+		curr.getData().put("last_field", chosen);
 		reportEvent("str/place_field", curr.getName(), chosen);
 		return true;
 	}
@@ -618,7 +618,7 @@ public class Shoukan extends GameInstance<Phase> {
 				chosen.setAvailable(false);
 			}
 
-			curr.getData().put("lastSpell", copy);
+			curr.getData().put("last_spell", copy);
 			trigger(ON_SPELL, side);
 			reportEvent("str/spell_shield");
 			return false;
@@ -647,7 +647,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		curr.getData().put("lastSpell", copy);
+		curr.getData().put("last_spell", copy);
 		trigger(ON_SPELL, side);
 		reportEvent("str/activate_card",
 				curr.getName(),
@@ -728,7 +728,7 @@ public class Shoukan extends GameInstance<Phase> {
 				chosen.setAvailable(false);
 			}
 
-			curr.getData().put("lastAbility", chosen);
+			curr.getData().put("last_ability", chosen);
 			trigger(ON_ABILITY, side);
 			reportEvent("str/spell_shield");
 			return false;
@@ -744,7 +744,7 @@ public class Shoukan extends GameInstance<Phase> {
 			chosen.setAvailable(false);
 		}
 
-		curr.getData().put("lastAbility", chosen);
+		curr.getData().put("last_ability", chosen);
 		trigger(ON_ABILITY, side);
 		reportEvent("str/card_special", curr.getName(), chosen);
 		return !curr.selectionPending();
