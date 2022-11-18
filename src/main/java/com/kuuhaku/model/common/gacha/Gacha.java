@@ -53,7 +53,7 @@ public abstract class Gacha<T> {
 	public final double rarityOf(T value) {
 		return pool.entries().stream()
 				.filter(e -> e.getSecond().equals(value))
-				.peek(System.out::println)
+				.peek(e -> System.out.println(value + " -> " + e))
 				.mapToDouble(Pair::getFirst)
 				.findFirst()
 				.orElse(0);
