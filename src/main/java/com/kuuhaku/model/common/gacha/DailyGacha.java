@@ -59,5 +59,7 @@ public class DailyGacha extends Gacha<String> {
 					}
 				}}
 		);
+
+		System.out.println(pool);
 	}
 }
