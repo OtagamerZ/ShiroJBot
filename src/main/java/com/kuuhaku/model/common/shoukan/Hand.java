@@ -190,6 +190,7 @@ public class Hand {
 	private transient boolean usedDestiny;
 	private transient String defeat;
 	private transient int kills = 0;
+	private transient int hpDelta = 0;
 	private transient byte cooldown = 0;
 
 	private transient Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = null;
@@ -660,6 +661,7 @@ public class Hand {
 		if (!pure) {
 			int delta = before - this.hp;
 			if (delta > 0) {
+				hpDelta = -delta;
 				game.trigger(Trigger.ON_DAMAGE, side);
 
 				if (origin.synergy() == Race.VIRUS) {
@@ -668,6 +670,7 @@ public class Hand {
 					getOther().modHP((int) -(delta * 0.01));
 				}
 			} else if (delta < 0) {
+				hpDelta = delta;
 				game.trigger(Trigger.ON_HEAL, side);
 			}
 		}
@@ -679,6 +682,10 @@ public class Hand {
 
 	public double getHPPrcnt() {
 		return hp / (double) base.hp();
+	}
+
+	public int getHpDelta() {
+		return hpDelta;
 	}
 
 	public boolean isLowLife() {
