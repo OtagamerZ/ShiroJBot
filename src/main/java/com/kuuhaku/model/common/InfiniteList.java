@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.LinkedList;
 
 public class InfiniteList<T> extends ArrayDeque<T> {
 	public InfiniteList() {
@@ -47,16 +46,16 @@ public class InfiniteList<T> extends ArrayDeque<T> {
 	}
 
 	public T peekNext() {
-		LinkedList<T> aux = new LinkedList<>(this);
+		ArrayDeque<T> aux = new ArrayDeque<>(this);
 
-		aux.addLast(aux.pollFirst());
+		aux.addLast(aux.removeFirst());
 		return aux.getFirst();
 	}
 
 	public T peekPrevious() {
-		LinkedList<T> aux = new LinkedList<>(this);
+		ArrayDeque<T> aux = new ArrayDeque<>(this);
 
-		aux.addFirst(aux.pollLast());
+		aux.addFirst(aux.removeLast());
 		return aux.getLast();
 	}
 

@@ -28,7 +28,6 @@ import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
-import com.kuuhaku.model.common.BondedLinkedList;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Fonts;
@@ -86,7 +85,7 @@ public class Hand {
 		d.setSlot(null);
 		return true;
 	});
-	private final BondedLinkedList<Drawable<?>> deck = new BondedLinkedList<>((d, it) -> {
+	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		d.setHand(this);
@@ -103,7 +102,7 @@ public class Hand {
 		d.reset();
 		return true;
 	});
-	private final BondedLinkedList<Drawable<?>> graveyard = new BondedLinkedList<>((d, it) -> {
+	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(this)) return false;
 
 		if (d instanceof Senshi s) {
@@ -288,15 +287,15 @@ public class Hand {
 		return Math.max(0, base.handCapacity().apply(game.getTurn()) - getHandCount());
 	}
 
-	public BondedLinkedList<Drawable<?>> getRealDeck() {
+	public BondedList<Drawable<?>> getRealDeck() {
 		deck.removeIf(d -> !equals(d.getHand()));
 
 		return deck;
 	}
 
-	public BondedLinkedList<Drawable<?>> getDeck() {
+	public BondedList<Drawable<?>> getDeck() {
 		if (getLockTime(Lock.DECK) > 0) {
-			return new BondedLinkedList<>();
+			return new BondedList<>();
 		}
 
 		return getRealDeck();
@@ -324,7 +323,7 @@ public class Hand {
 		}
 
 		for (int i = 0; i < value; i++) {
-			Drawable<?> d = deck.pollFirst();
+			Drawable<?> d = deck.removeFirst();
 
 			if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
 				modHP(50);
@@ -342,8 +341,8 @@ public class Hand {
 	}
 
 	public Drawable<?> draw() {
-		LinkedList<Drawable<?>> deck = getDeck();
-		Drawable<?> d = deck.pollFirst();
+		BondedList<Drawable<?>> deck = getDeck();
+		Drawable<?> d = deck.removeFirst();
 
 		if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
 			modHP(50);
@@ -374,7 +373,7 @@ public class Hand {
 	}
 
 	public Drawable<?> draw(String card) {
-		LinkedList<Drawable<?>> deck = getDeck();
+		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
 			Drawable<?> d = deck.get(i);
@@ -399,7 +398,7 @@ public class Hand {
 	}
 
 	public Drawable<?> draw(Race race) {
-		LinkedList<Drawable<?>> deck = getDeck();
+		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Senshi s && s.getRace().isRace(race)) {
@@ -420,7 +419,7 @@ public class Hand {
 	}
 
 	public Drawable<?> draw(Predicate<Drawable<?>> cond) {
-		LinkedList<Drawable<?>> deck = getDeck();
+		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
 			Drawable<?> d = deck.get(i);
@@ -445,7 +444,7 @@ public class Hand {
 	}
 
 	public Drawable<?> drawSenshi() {
-		LinkedList<Drawable<?>> deck = getDeck();
+		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Senshi s) {
@@ -466,7 +465,7 @@ public class Hand {
 	}
 
 	public Drawable<?> drawEvogear() {
-		LinkedList<Drawable<?>> deck = getDeck();
+		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Evogear e) {
@@ -490,7 +489,7 @@ public class Hand {
 	}
 
 	public Drawable<?> drawEquipment() {
-		LinkedList<Drawable<?>> deck = getDeck();
+		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Evogear e && !e.isSpell()) {
@@ -511,7 +510,7 @@ public class Hand {
 	}
 
 	public Drawable<?> drawSpell() {
-		LinkedList<Drawable<?>> deck = getDeck();
+		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Evogear e && e.isSpell()) {
@@ -531,7 +530,7 @@ public class Hand {
 		return null;
 	}
 
-	public BondedLinkedList<Drawable<?>> getGraveyard() {
+	public BondedList<Drawable<?>> getGraveyard() {
 		graveyard.removeIf(d -> !equals(d.getHand()));
 
 		return graveyard;

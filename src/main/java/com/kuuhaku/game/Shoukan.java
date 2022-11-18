@@ -35,6 +35,7 @@ import com.kuuhaku.game.engine.PhaseConstraint;
 import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
@@ -1544,7 +1545,7 @@ public class Shoukan extends GameInstance<Phase> {
 								return;
 							}
 
-							LinkedList<Drawable<?>> deque = curr.getRealDeck();
+							BondedList<Drawable<?>> deque = curr.getRealDeck();
 							List<Drawable<?>> cards = new ArrayList<>() {{
 								add(deque.getFirst());
 								if (deque.size() > 2) add(deque.get((deque.size() - 1) / 2));

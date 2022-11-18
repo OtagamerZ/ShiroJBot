@@ -26,7 +26,7 @@ import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
-import com.kuuhaku.model.common.BondedLinkedList;
+import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
@@ -79,7 +79,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private CardAttributes base = new CardAttributes();
 
 	@Transient
-	private transient BondedLinkedList<Evogear> equipments = new BondedLinkedList<>((e, it) -> {
+	private transient BondedList<Evogear> equipments = new BondedList<>((e, it) -> {
 		e.setEquipper(this);
 		e.setHand(getHand());
 		e.executeAssert(Trigger.ON_INITIALIZE);
@@ -185,7 +185,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return out;
 	}
 
-	public BondedLinkedList<Evogear> getEquipments() {
+	public BondedList<Evogear> getEquipments() {
 		equipments.removeIf(e -> !equals(e.getEquipper()) || isSupporting());
 
 		while (equipments.size() > 3) {
@@ -943,7 +943,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public void reset() {
-		equipments = new BondedLinkedList<>((e, it) -> {
+		equipments = new BondedList<>((e, it) -> {
 			e.setEquipper(this);
 			e.setHand(getHand());
 			e.executeAssert(Trigger.ON_INITIALIZE);

@@ -23,10 +23,13 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
-import com.kuuhaku.model.common.BondedLinkedList;
+import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.*;
+import com.kuuhaku.model.enums.shoukan.Lock;
+import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.model.records.shoukan.Origin;
@@ -40,8 +43,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Deque;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -72,7 +77,7 @@ public class Arena implements Renderer {
 
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
-	private final BondedLinkedList<Drawable<?>> banned = new BondedLinkedList<>((d, it) -> {
+	private final BondedList<Drawable<?>> banned = new BondedList<>((d, it) -> {
 		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
 		d.getHand().getOther().addKill();
 
@@ -114,7 +119,7 @@ public class Arena implements Renderer {
 		return slots.get(side).stream().allMatch(sc -> sc.getTop() == null);
 	}
 
-	public BondedLinkedList<Drawable<?>> getBanned() {
+	public BondedList<Drawable<?>> getBanned() {
 		return banned;
 	}
 

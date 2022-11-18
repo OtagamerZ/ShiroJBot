@@ -18,13 +18,15 @@
 
 package com.kuuhaku.model.common;
 
+import org.apache.commons.collections4.list.TreeList;
+
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class BondedList<T> extends ArrayList<T> {
+public class BondedList<T> extends TreeList<T> {
 	private final BiFunction<T, ListIterator<T>, Boolean> onAdd;
 	private final Consumer<T> onRemove;
 
@@ -67,6 +69,14 @@ public class BondedList<T> extends ArrayList<T> {
 		addAll(c);
 	}
 
+	public T getFirst() {
+		return get(0);
+	}
+
+	public T getLast() {
+		return get(size() - 1);
+	}
+
 	@Override
 	public boolean add(T t) {
 		if (t != null && onAdd.apply(t, listIterator(Math.max(0, size() - 1)))) {
@@ -81,6 +91,14 @@ public class BondedList<T> extends ArrayList<T> {
 		if (t != null && onAdd.apply(t, listIterator(Math.max(0, size() - 1)))) {
 			super.add(index, t);
 		}
+	}
+
+	public void addFirst(T t) {
+		add(0, t);
+	}
+
+	public void addlast(T t) {
+		add(t);
 	}
 
 	@Override
@@ -117,6 +135,14 @@ public class BondedList<T> extends ArrayList<T> {
 	public T remove(int index) {
 		onRemove.accept(get(index));
 		return super.remove(index);
+	}
+
+	public T removeFirst() {
+		return remove(0);
+	}
+
+	public T removeLast() {
+		return remove(size() - 1);
 	}
 
 	public T removeFirst(Predicate<T> cond) {
