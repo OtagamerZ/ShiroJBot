@@ -115,7 +115,7 @@ public class BondedList<T> extends ArrayList<T> {
 		return super.remove(index);
 	}
 
-	public T removeOn(Predicate<T> cond) {
+	public T removeFirst(Predicate<T> cond) {
 		Iterator<T> it = iterator();
 		while (it.hasNext()) {
 			T t = it.next();
