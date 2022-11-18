@@ -807,10 +807,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				cachedEffect.forScript(getEffect())
 						.withConst("self", this)
 						.withConst("game", hand.getGame())
+						.withConst("data", stats.getData())
 						.withVar("ep", ep)
 						.withVar("side", hand.getSide())
-						.withVar("trigger", trigger)
 						.withVar("props", extractValues(hand.getGame().getLocale(), this))
+						.withVar("trigger", trigger)
 						.run();
 			}
 
@@ -827,12 +828,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				if (curse.isBlank() || !curse.contains(ep.trigger().name())) continue;
 
 				Utils.exec(curse, Map.of(
-						"ep", ep,
 						"self", this,
-						"trigger", trigger,
 						"game", hand.getGame(),
+						"data", stats.getData(),
+						"ep", ep,
 						"side", hand.getSide(),
-						"props", extractValues(hand.getGame().getLocale(), this)
+						"props", extractValues(hand.getGame().getLocale(), this),
+						"trigger", trigger
 				));
 			}
 
@@ -869,12 +871,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			base.lock();
 
 			Utils.exec(getEffect(), Map.of(
-					"ep", new EffectParameters(trigger, getSide()),
 					"self", this,
-					"trigger", trigger,
 					"game", hand.getGame(),
+					"data", stats.getData(),
+					"ep", new EffectParameters(trigger, getSide()),
 					"side", hand.getSide(),
-					"props", extractValues(hand.getGame().getLocale(), this)
+					"props", extractValues(hand.getGame().getLocale(), this),
+					"trigger", trigger
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);

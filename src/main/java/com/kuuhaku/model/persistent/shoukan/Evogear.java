@@ -336,6 +336,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			cachedEffect.forScript(getEffect())
 					.withConst("evo", this)
 					.withConst("game", hand.getGame())
+					.withConst("data", stats.getData())
 					.withVar("ep", ep)
 					.withVar("side", hand.getSide())
 					.withVar("props", extractValues(hand.getGame().getLocale(), this));
@@ -375,14 +376,15 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 		try {
 			Utils.exec(getEffect(), Map.of(
-					"ep", new EffectParameters(trigger, getSide()),
-					"self", equipper,
 					"evo", this,
-					"trigger", trigger,
 					"game", hand.getGame(),
+					"data", stats.getData(),
+					"ep", new EffectParameters(trigger, getSide()),
 					"side", hand.getSide(),
-					"props", extractValues(hand.getGame().getLocale(), this)
-			));
+					"props", extractValues(hand.getGame().getLocale(), this),
+					"self", equipper,
+					"trigger", trigger
+					));
 		} catch (ActivationException ignored) {
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
