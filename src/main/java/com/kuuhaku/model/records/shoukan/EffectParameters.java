@@ -21,23 +21,25 @@ package com.kuuhaku.model.records.shoukan;
 import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Flag;
+import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.*;
 
-public record EffectParameters(Trigger trigger, Source source, Target... targets) {
-	public EffectParameters(Trigger trigger) {
-		this(trigger, new Source());
+public record EffectParameters(Trigger trigger, Side side, Source source, Target... targets) {
+	public EffectParameters(Trigger trigger, Side side) {
+		this(trigger, side, new Source());
 	}
 
-	public EffectParameters(Trigger trigger, Target... targets) {
-		this(trigger, new Source(), targets);
+	public EffectParameters(Trigger trigger, Side side, Target... targets) {
+		this(trigger, side, new Source(), targets);
 	}
 
-	public EffectParameters(Trigger trigger, Source source, Target... targets) {
+	public EffectParameters(Trigger trigger, Side side, Source source, Target... targets) {
 		this.trigger = trigger;
+		this.side = side;
 		this.source = source;
 
 		Set<Target> tgts = new HashSet<>(List.of(targets));

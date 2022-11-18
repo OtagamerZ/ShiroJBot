@@ -375,7 +375,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 		try {
 			Utils.exec(getEffect(), Map.of(
-					"ep", new EffectParameters(trigger),
+					"ep", new EffectParameters(trigger, getSide()),
 					"self", equipper,
 					"evo", this,
 					"trigger", trigger,
@@ -391,14 +391,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	public EffectParameters toParameters(Targeting tgt) {
 		return switch (targetType) {
-			case NONE -> new EffectParameters(ON_ACTIVATE);
-			case ALLY -> new EffectParameters(ON_ACTIVATE, asSource(ON_ACTIVATE),
+			case NONE -> new EffectParameters(ON_ACTIVATE, getSide());
+			case ALLY -> new EffectParameters(ON_ACTIVATE, getSide(), asSource(ON_ACTIVATE),
 					new Target(tgt.ally(), hand.getSide(), tgt.allyPos(), ON_SPELL_TARGET, TargetType.ALLY)
 			);
-			case ENEMY -> new EffectParameters(ON_ACTIVATE, asSource(ON_ACTIVATE),
+			case ENEMY -> new EffectParameters(ON_ACTIVATE, getSide(), asSource(ON_ACTIVATE),
 					new Target(tgt.enemy(), hand.getSide().getOther(), tgt.enemyPos(), ON_SPELL_TARGET, TargetType.ENEMY)
 			);
-			case BOTH -> new EffectParameters(ON_ACTIVATE, asSource(ON_ACTIVATE),
+			case BOTH -> new EffectParameters(ON_ACTIVATE, getSide(), asSource(ON_ACTIVATE),
 					new Target(tgt.ally(), hand.getSide(), tgt.allyPos(), ON_SPELL_TARGET, TargetType.ALLY),
 					new Target(tgt.enemy(), hand.getSide().getOther(), tgt.enemyPos(), ON_SPELL_TARGET, TargetType.ENEMY)
 			);

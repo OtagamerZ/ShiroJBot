@@ -807,12 +807,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			for (Evogear e : equipments) {
-				e.execute(new EffectParameters(trigger, ep.source(), ep.targets()));
+				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
 			}
 
 			Senshi sup = getSupport();
 			if (sup != null) {
-				sup.execute(new EffectParameters(Trigger.ON_DEFER, ep.source(), ep.targets()));
+				sup.execute(new EffectParameters(Trigger.ON_DEFER, getSide(), ep.source(), ep.targets()));
 			}
 
 			for (@Language("Groovy") String curse : stats.getCurses()) {
@@ -861,7 +861,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			base.lock();
 
 			Utils.exec(getEffect(), Map.of(
-					"ep", new EffectParameters(trigger),
+					"ep", new EffectParameters(trigger, getSide()),
 					"self", this,
 					"trigger", trigger,
 					"game", hand.getGame(),

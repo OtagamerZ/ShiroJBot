@@ -1237,28 +1237,28 @@ public class Shoukan extends GameInstance<Phase> {
 		for (SlotColumn slt : slts) {
 			Senshi s = slt.getTop();
 			if (s != null) {
-				s.execute(new EffectParameters(trigger, s.asSource(trigger)));
+				s.execute(new EffectParameters(trigger, side, s.asSource(trigger)));
 			}
 
 			s = slt.getBottom();
 			if (s != null) {
-				s.execute(new EffectParameters(trigger, s.asSource(trigger)));
+				s.execute(new EffectParameters(trigger, side, s.asSource(trigger)));
 			}
 		}
 
 		for (EffectHolder<?> leech : hands.get(side).getLeeches()) {
-			leech.execute(new EffectParameters(trigger, leech.asSource(ON_LEECH)));
+			leech.execute(new EffectParameters(trigger, side, leech.asSource(ON_LEECH)));
 		}
 
-		triggerEOTs(new EffectParameters(trigger));
+		triggerEOTs(new EffectParameters(trigger, side));
 	}
 
 	public boolean trigger(Trigger trigger, Source source) {
 		if (restoring) return false;
 
-		EffectParameters ep = new EffectParameters(trigger, source);
+		EffectParameters ep = new EffectParameters(trigger, source.side(), source);
 		if (source.execute(ep)) {
-			triggerEOTs(new EffectParameters(trigger, source));
+			triggerEOTs(new EffectParameters(trigger, source.side(), source));
 			return true;
 		}
 
@@ -1268,13 +1268,13 @@ public class Shoukan extends GameInstance<Phase> {
 	public boolean trigger(Trigger trigger, Source source, Target... targets) {
 		if (restoring) return false;
 
-		EffectParameters ep = new EffectParameters(trigger, source, targets);
+		EffectParameters ep = new EffectParameters(trigger, source.side(), source, targets);
 		for (Target t : targets) {
 			t.execute(ep);
 		}
 
 		if (source.execute(ep)) {
-			triggerEOTs(new EffectParameters(trigger, source, targets));
+			triggerEOTs(new EffectParameters(trigger, source.side(), source, targets));
 			return true;
 		}
 
@@ -1301,9 +1301,9 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (ep.size() == 0) {
-				if (checkSide.test(getCurrentSide()) && effect.triggers().contains(ep.trigger())) {
+				if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger())) {
 					effect.decreaseLimit();
-					effect.effect().accept(effect, new EffectParameters(ep.trigger()));
+					effect.effect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
 
 					if (effect.side() == null) {
 						effect.lock().set(true);
@@ -1312,13 +1312,13 @@ public class Shoukan extends GameInstance<Phase> {
 			} else if (ep.source() != null) {
 				if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
 					effect.decreaseLimit();
-					effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.source(), ep.targets()));
+					effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
 				}
 
 				for (Target t : ep.targets()) {
 					if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
 						effect.decreaseLimit();
-						effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.source(), ep.targets()));
+						effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
 					}
 				}
 			}
