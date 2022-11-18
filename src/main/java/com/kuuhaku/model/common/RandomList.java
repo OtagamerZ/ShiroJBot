@@ -10,7 +10,7 @@ import java.util.random.RandomGenerator;
 
 public class RandomList<T> {
 	private final NavigableMap<Double, T> map = new TreeMap<>();
-	private final Set<Pair<Double, T>> pool = new TreeSet<>(Comparator.comparingDouble(Pair::getFirst));
+	private final List<Pair<Double, T>> pool = new ArrayList<>();
 	private final RandomGenerator rng;
 	private final BiFunction<Double, Double, Double> randGen;
 	private final double fac;
@@ -51,10 +51,9 @@ public class RandomList<T> {
 
 	public void add(@Nonnull T item, double weight) {
 		if (weight <= 0) return;
-
+//Comparator.comparingDouble(Pair::getFirst)
 		total += weight;
 		map.put(total, item);
-		System.out.println(new Pair<>(weight, item));
 		pool.add(new Pair<>(weight, item));
 	}
 
@@ -88,7 +87,7 @@ public class RandomList<T> {
 		return map.values();
 	}
 
-	public Set<Pair<Double, T>> entries() {
+	public List<Pair<Double, T>> entries() {
 		return pool;
 	}
 }
