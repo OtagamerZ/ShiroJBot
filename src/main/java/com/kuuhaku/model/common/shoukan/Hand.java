@@ -907,6 +907,14 @@ public class Hand {
 		});
 	}
 
+	public void requestChoice(List<Drawable<?>> cards, Consumer<Drawable<?>> act) {
+		requestChoice(cards).thenAccept(act);
+	}
+
+	public void requestChoice(Predicate<Drawable<?>> cond, Consumer<Drawable<?>> act) {
+		requestChoice(cards.stream().filter(cond).toList()).thenAccept(act);
+	}
+
 	public BufferedImage renderChoices() {
 		List<Drawable<?>> cards = selection.getFirst();
 
@@ -939,14 +947,6 @@ public class Hand {
 		g2d.dispose();
 
 		return bi;
-	}
-
-	public void requestChoice(Predicate<Drawable<?>> cond, Consumer<Drawable<?>> act) {
-		requestChoice(cards.stream().filter(cond).toList()).thenAccept(act);
-	}
-
-	public void requestChoice(List<Drawable<?>> cards, Consumer<Drawable<?>> act) {
-		requestChoice(cards).thenAccept(act);
 	}
 
 	public Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> getSelection() {
