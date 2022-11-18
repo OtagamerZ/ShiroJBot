@@ -32,17 +32,14 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONObject;
-import kotlin.Pair;
+import kotlin.Triple;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 
@@ -193,7 +190,7 @@ public class Hand {
 	private transient int hpDelta = 0;
 	private transient byte cooldown = 0;
 
-	private transient Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = null;
+	private transient Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> selection = null;
 
 	public Hand(String uid, Shoukan game, Side side) {
 		this.uid = uid;
@@ -371,7 +368,7 @@ public class Hand {
 
 			out.add(d);
 		}
-		
+
 		return out;
 	}
 
@@ -892,14 +889,18 @@ public class Hand {
 	}
 
 	public CompletableFuture<Drawable<?>> requestChoice(List<Drawable<?>> cards) {
+		return requestChoice(cards, false);
+	}
+
+	public CompletableFuture<Drawable<?>> requestChoice(List<Drawable<?>> cards, boolean hide) {
 		cards = cards.stream().filter(Objects::nonNull).toList();
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
 
-		selection = new Pair<>(cards, new CompletableFuture<>());
+		selection = new Triple<>(cards, hide, new CompletableFuture<>());
 
 		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFile(IO.getBytes(renderChoices(), "png"), "choices.png")));
 
-		return selection.getSecond().thenApply(d -> {
+		return selection.getThird().thenApply(d -> {
 			msg.delete().queue(null, Utils::doNothing);
 			selection = null;
 
@@ -909,6 +910,10 @@ public class Hand {
 
 	public void requestChoice(List<Drawable<?>> cards, Consumer<Drawable<?>> act) {
 		requestChoice(cards).thenAccept(act);
+	}
+
+	public void requestChoice(List<Drawable<?>> cards, boolean hide, Consumer<Drawable<?>> act) {
+		requestChoice(cards, hide).thenAccept(act);
 	}
 
 	public void requestChoice(Predicate<Drawable<?>> cond, Consumer<Drawable<?>> act) {
@@ -935,7 +940,13 @@ public class Hand {
 			int x = offset + 10 + (Drawable.SIZE.width + 10) * i;
 
 			Drawable<?> d = cards.get(i);
-			g2d.drawImage(d.render(game.getLocale(), userDeck), x,100, null);
+			if (selection.getSecond()) {
+				DeckStyling style = userDeck.getStyling();
+				g2d.drawImage(style.getFrame().getBack(userDeck), x + 15, 115, null);
+			} else {
+				g2d.drawImage(d.render(game.getLocale(), userDeck), x, 100, null);
+			}
+
 			if (d.isAvailable()) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
 						x + (Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
@@ -949,7 +960,7 @@ public class Hand {
 		return bi;
 	}
 
-	public Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> getSelection() {
+	public Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> getSelection() {
 		return selection;
 	}
 

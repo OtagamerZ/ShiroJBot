@@ -57,6 +57,7 @@ import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import com.kuuhaku.util.json.JSONUtils;
 import kotlin.Pair;
+import kotlin.Triple;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -662,14 +663,14 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 		if (!curr.selectionPending()) return false;
 
-		Pair<List<Drawable<?>>, CompletableFuture<Drawable<?>>> selection = curr.getSelection();
+		Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> selection = curr.getSelection();
 		if (!Utils.between(args.getInt("choice"), 1, selection.getFirst().size())) {
 			getChannel().sendMessage(getLocale().get("error/invalid_selection_index")).queue();
 			return false;
 		}
 
 		Drawable<?> chosen = selection.getFirst().get(args.getInt("choice") - 1);
-		selection.getSecond().complete(chosen);
+		selection.getThird().complete(chosen);
 
 		reportEvent("str/select_card", curr.getName(), args.getInt("choice"));
 		return true;
