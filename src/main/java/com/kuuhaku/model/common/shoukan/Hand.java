@@ -275,7 +275,7 @@ public class Hand {
 		return origin;
 	}
 
-	public List<Drawable<?>> getCards() {
+	public BondedList<Drawable<?>> getCards() {
 		cards.removeIf(d -> !equals(d.getHand()));
 
 		return cards;
@@ -289,15 +289,15 @@ public class Hand {
 		return Math.max(0, base.handCapacity().apply(game.getTurn()) - getHandCount());
 	}
 
-	public LinkedList<Drawable<?>> getRealDeck() {
+	public BondedLinkedList<Drawable<?>> getRealDeck() {
 		deck.removeIf(d -> !equals(d.getHand()));
 
 		return deck;
 	}
 
-	public LinkedList<Drawable<?>> getDeck() {
+	public BondedLinkedList<Drawable<?>> getDeck() {
 		if (getLockTime(Lock.DECK) > 0) {
-			return new LinkedList<>();
+			return new BondedLinkedList<>();
 		}
 
 		return getRealDeck();
@@ -532,13 +532,13 @@ public class Hand {
 		return null;
 	}
 
-	public LinkedList<Drawable<?>> getGraveyard() {
+	public BondedLinkedList<Drawable<?>> getGraveyard() {
 		graveyard.removeIf(d -> !equals(d.getHand()));
 
 		return graveyard;
 	}
 
-	public List<Drawable<?>> getDiscard() {
+	public BondedList<Drawable<?>> getDiscard() {
 		discard.removeIf(d -> !cards.contains(d));
 
 		return discard;

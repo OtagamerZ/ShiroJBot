@@ -40,6 +40,10 @@ public class BondedList<T> extends ArrayList<T> {
 		return new BondedList<>(onAdd, onRemove);
 	}
 
+	public BondedList() {
+		this((a, b) -> true, t -> {});
+	}
+
 	public BondedList(BiFunction<T, ListIterator<T>, Boolean> onAdd) {
 		this(onAdd, t -> {});
 	}

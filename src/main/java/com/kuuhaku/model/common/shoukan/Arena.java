@@ -114,7 +114,7 @@ public class Arena implements Renderer {
 		return slots.get(side).stream().allMatch(sc -> sc.getTop() == null);
 	}
 
-	public LinkedList<Drawable<?>> getBanned() {
+	public BondedLinkedList<Drawable<?>> getBanned() {
 		return banned;
 	}
 

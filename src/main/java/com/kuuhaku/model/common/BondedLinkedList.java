@@ -41,6 +41,10 @@ public class BondedLinkedList<T> extends LinkedList<T> {
 		return new BondedLinkedList<>(onAdd, onRemove);
 	}
 
+	public BondedLinkedList() {
+		this((a, b) -> true, t -> {});
+	}
+
 	public BondedLinkedList(BiFunction<T, ListIterator<T>, Boolean> onAdd) {
 		this(onAdd, t -> {
 		});
