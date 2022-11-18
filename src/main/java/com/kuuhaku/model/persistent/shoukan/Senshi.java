@@ -684,7 +684,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setTaunt(Senshi target, int time) {
-		if (stats.popFlag(Flag.NO_TAUNT)) return;
+		if (target == null || stats.popFlag(Flag.NO_TAUNT)) return;
 
 		this.target = target;
 		int curr = Bit.get(state, 6, 4);
