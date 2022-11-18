@@ -55,6 +55,7 @@ public class RandomList<T> {
 		total += weight;
 		map.put(total, item);
 		pool.add(new Pair<>(weight, item));
+		System.out.println(pool);
 	}
 
 	public T get() {
