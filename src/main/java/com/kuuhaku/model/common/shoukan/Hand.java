@@ -23,6 +23,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
+import com.kuuhaku.exceptions.SelectionException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.shoukan.Drawable;
@@ -893,7 +894,7 @@ public class Hand {
 	}
 
 	public CompletableFuture<Drawable<?>> requestChoice(List<Drawable<?>> cards, boolean hide) {
-		if (selection != null) return null;
+		if (selection != null) throw new SelectionException("err/pending_selection");
 
 		cards = cards.stream().filter(Objects::nonNull).toList();
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");

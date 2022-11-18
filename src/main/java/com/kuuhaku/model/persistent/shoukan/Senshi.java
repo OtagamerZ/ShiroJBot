@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
+import com.kuuhaku.exceptions.SelectionException;
 import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
@@ -849,6 +850,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			return false;
 		} catch (ActivationException e) {
+			if (e instanceof SelectionException && trigger != Trigger.ON_ACTIVATE) return false;
+
 			Shoukan game = hand.getGame();
 			game.getChannel().sendMessage(game.getLocale().get("error/activation", game.getString(e.getMessage()))).queue();
 			return false;
