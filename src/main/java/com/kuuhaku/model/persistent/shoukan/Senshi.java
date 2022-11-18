@@ -262,6 +262,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				add(getLeft());
 			}
 
+			if (getFrontline() != null) {
+				add(getFrontline());
+			}
+
+			if (getSupport() != null) {
+				add(getSupport());
+			}
+
 			if (getRight() != null) {
 				add(getRight());
 			}
