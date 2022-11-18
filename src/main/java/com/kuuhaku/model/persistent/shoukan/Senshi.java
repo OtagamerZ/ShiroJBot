@@ -533,7 +533,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public void setDefending(boolean defending) {
 		state = Bit.set(state, 2, defending);
 
-		if (!isFlipped()) {
+		if (!isFlipped() && slot != null) {
 			hand.getGame().trigger(Trigger.ON_SWITCH, asSource(Trigger.ON_SWITCH));
 		}
 	}
@@ -549,7 +549,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public void setFlipped(boolean flipped) {
-		if (isFlipped() && !flipped) {
+		if (isFlipped() && !flipped && slot != null) {
 			setDefending(true);
 
 			if (hand != null) {
