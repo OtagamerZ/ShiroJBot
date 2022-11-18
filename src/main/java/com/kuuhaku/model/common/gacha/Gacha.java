@@ -55,7 +55,7 @@ public abstract class Gacha<T> {
 				.filter(e -> e.getSecond().equals(value))
 				.mapToDouble(Pair::getFirst)
 				.findFirst()
-				.orElse(0);
+				.orElseThrow();
 
 		System.out.println(value + " -> " + r);
 		return r;
