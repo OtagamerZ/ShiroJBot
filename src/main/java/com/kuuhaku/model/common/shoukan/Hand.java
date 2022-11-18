@@ -940,11 +940,13 @@ public class Hand {
 			int x = offset + 10 + (Drawable.SIZE.width + 10) * i;
 
 			Drawable<?> d = cards.get(i);
+			Deck deck = Utils.getOr(d.getHand(), this).userDeck;
+
 			if (selection.getSecond()) {
-				DeckStyling style = userDeck.getStyling();
-				g2d.drawImage(style.getFrame().getBack(userDeck), x + 15, 115, null);
+				DeckStyling style = deck.getStyling();
+				g2d.drawImage(style.getFrame().getBack(deck), x + 15, 115, null);
 			} else {
-				g2d.drawImage(d.render(game.getLocale(), userDeck), x, 100, null);
+				g2d.drawImage(d.render(game.getLocale(), deck), x, 100, null);
 			}
 
 			if (d.isAvailable()) {
