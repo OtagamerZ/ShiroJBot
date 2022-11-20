@@ -71,8 +71,9 @@ public class Hand {
 		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			for (Evogear e : s.getEquipments()) {
-				it.add(e);
+			Iterator<Evogear> i = s.getEquipments().iterator();
+			while (i.hasNext()) {
+				it.add(i.next());
 			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
@@ -92,8 +93,9 @@ public class Hand {
 		getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			for (Evogear e : s.getEquipments()) {
-				it.add(e);
+			Iterator<Evogear> i = s.getEquipments().iterator();
+			while (i.hasNext()) {
+				it.add(i.next());
 			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
@@ -143,8 +145,9 @@ public class Hand {
 		}
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			for (Evogear e : s.getEquipments()) {
-				it.add(e);
+			Iterator<Evogear> i = s.getEquipments().iterator();
+			while (i.hasNext()) {
+				it.add(i.next());
 			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);

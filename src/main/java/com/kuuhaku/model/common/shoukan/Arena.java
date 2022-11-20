@@ -43,10 +43,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Deque;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -82,8 +80,9 @@ public class Arena implements Renderer {
 		d.getHand().getOther().addKill();
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			for (Evogear e : s.getEquipments()) {
-				it.add(e);
+			Iterator<Evogear> i = s.getEquipments().iterator();
+			while (i.hasNext()) {
+				it.add(i.next());
 			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
