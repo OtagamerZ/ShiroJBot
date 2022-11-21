@@ -30,11 +30,8 @@ import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-import org.apache.commons.imaging.ImageReadException;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 @Command(
 		name = "perfil",
@@ -55,18 +52,11 @@ public class ProfileCommand implements Executable {
 
 		channel.sendMessage(I18n.getString("str_generating-profile")).queue(m -> {
 			try {
-				if (acc.hasAnimatedBg() && Objects.requireNonNull(Helper.getFileType(acc.getBg())).contains("gif")) {
-					File pf = Profile.applyAnimatedBackground(acc, Profile.makeProfile(mb, mb.getGuild()));
-					channel.sendMessage(I18n.getString("str_profile", mb.getEffectiveName()))
-							.addFile(pf, "perfil.gif")
-							.flatMap(s -> m.delete())
-							.queue(null, t -> m.editMessage(I18n.getString("err_profile-too-big")).queue());
-				} else
-					channel.sendMessage(I18n.getString("str_profile", mb.getEffectiveName()))
-							.addFile(Helper.writeAndGet(Profile.makeProfile(mb, mb.getGuild()), "perfil", "png"))
-							.flatMap(s -> m.delete())
-							.queue(null, t -> m.editMessage(I18n.getString("err_profile-too-big")).queue());
-			} catch (IOException | NullPointerException | ImageReadException e) {
+				channel.sendMessage(I18n.getString("str_profile", mb.getEffectiveName()))
+						.addFile(Helper.writeAndGet(Profile.makeProfile(mb, mb.getGuild()), "perfil", "png"))
+						.flatMap(s -> m.delete())
+						.queue(null, t -> m.editMessage(I18n.getString("err_profile-too-big")).queue());
+			} catch (IOException | NullPointerException e) {
 				m.editMessage(I18n.getString("err_profile-generation-error")).queue();
 			} catch (InsufficientPermissionException e) {
 				m.editMessage(I18n.getString("err_no-attach-files-permission")).queue();

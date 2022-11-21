@@ -49,7 +49,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -80,10 +79,8 @@ public class Profile {
 		}
 
 		try {
-			if (!acc.hasAnimatedBg() || !Objects.requireNonNull(Helper.getFileType(acc.getBg())).contains("gif")) {
-				BufferedImage bg = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage(acc.getBg())), bi.getWidth(), bi.getHeight());
-				g2d.drawImage(bg, 0, 0, null);
-			}
+			BufferedImage bg = Helper.scaleAndCenterImage(ImageIO.read(Helper.getImage(acc.getBg())), bi.getWidth(), bi.getHeight());
+			g2d.drawImage(bg, 0, 0, null);
 
 			if (main == null)
 				main = Helper.reverseColor(Helper.colorThief(acc.getBg()));
