@@ -976,6 +976,8 @@ public class Shoukan extends GameInstance<Phase> {
 						outcome = "str/combat_success";
 					} else {
 						boolean dbl = op.getOrigin().synergy() == Race.WARBEAST && Calc.chance(2);
+						boolean unstop = ally.getStats().popFlag(Flag.UNSTOPPABLE);
+
 						int enemyStats = enemy.getActiveAttr(dbl);
 						int eEquipStats = enemy.getActiveEquips(dbl);
 						int eCombatStats = enemyStats;
@@ -983,7 +985,7 @@ public class Shoukan extends GameInstance<Phase> {
 							eCombatStats -= eEquipStats;
 						}
 
-						if (ally.getActiveAttr() < eCombatStats) {
+						if (!unstop && ally.getActiveAttr() < eCombatStats) {
 							trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
 							pHP = you.getHP();
 
@@ -1008,7 +1010,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 								reportEvent("str/combat", ally, enemy, getLocale().get("str/combat_miss"));
 								return true;
-							} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
+							} else if (!unstop && !ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
 								trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
 
 								for (Senshi s : ally.getNearby()) {
@@ -1030,7 +1032,7 @@ public class Shoukan extends GameInstance<Phase> {
 								return true;
 							}
 
-							if (ally.getActiveAttr() > eCombatStats) {
+							if (unstop || ally.getActiveAttr() > eCombatStats) {
 								trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
 								if (enemy.isDefending() || enemy.getStats().popFlag(Flag.NO_DAMAGE)) {
 									dmg = 0;

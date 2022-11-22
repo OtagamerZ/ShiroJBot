@@ -66,5 +66,7 @@ public enum Flag {
 	/** Does not consume an action **/
 	FREE_ACTION,
 	/** Can attack while defending **/
-	ALWAYS_ATTACK
+	ALWAYS_ATTACK,
+	/** Will always defeat the target **/
+	UNSTOPPABLE
 }
