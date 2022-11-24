@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;
+import java.io.Closeable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -16,7 +17,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public abstract class DAO<T extends DAO<T>> implements DAOListener {
+public abstract class DAO<T extends DAO<T>> implements DAOListener, Closeable {
 	public static <T extends DAO<T>, ID> T find(@Nonnull Class<T> klass, @Nonnull ID id) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -437,5 +438,10 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			afterDelete();
 			em.close();
 		}
+	}
+
+	@Override
+	public void close() {
+		save();
 	}
 }
