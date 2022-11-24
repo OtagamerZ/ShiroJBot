@@ -154,10 +154,9 @@ public class DeckRemoveCommand implements Executable {
 			return false;
 		}
 
-		Deck dk = d.refresh();
 		switch (sc.getType()) {
 			case KAWAIPON -> {
-				Iterator<Senshi> it = dk.getSenshi().iterator();
+				Iterator<Senshi> it = d.getSenshi().iterator();
 				while (it.hasNext()) {
 					Senshi s = it.next();
 					if (s.getCard().equals(sc.getCard())) {
@@ -167,7 +166,7 @@ public class DeckRemoveCommand implements Executable {
 				}
 			}
 			case EVOGEAR -> {
-				Iterator<Evogear> it = dk.getEvogear().iterator();
+				Iterator<Evogear> it = d.getEvogear().iterator();
 				while (it.hasNext()) {
 					Evogear e = it.next();
 					if (e.getCard().equals(sc.getCard())) {
@@ -177,7 +176,7 @@ public class DeckRemoveCommand implements Executable {
 				}
 			}
 			case FIELD -> {
-				Iterator<Field> it = dk.getFields().iterator();
+				Iterator<Field> it = d.getFields().iterator();
 				while (it.hasNext()) {
 					Field f = it.next();
 					if (f.getCard().equals(sc.getCard())) {
