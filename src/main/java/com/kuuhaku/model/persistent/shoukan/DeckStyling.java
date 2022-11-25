@@ -75,6 +75,10 @@ public class DeckStyling implements Serializable {
 	}
 
 	public DeckOrder getSenshiOrder() {
+		if (senshiOrder == null || !senshiOrder.isAllowed(Senshi.class)) {
+			return DeckOrder.NAME;
+		}
+
 		return senshiOrder;
 	}
 
@@ -83,6 +87,10 @@ public class DeckStyling implements Serializable {
 	}
 
 	public DeckOrder getEvogearOrder() {
+		if (evogearOrder == null || !evogearOrder.isAllowed(Evogear.class)) {
+			return DeckOrder.NAME;
+		}
+
 		return evogearOrder;
 	}
 

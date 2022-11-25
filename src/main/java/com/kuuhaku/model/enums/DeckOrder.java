@@ -44,7 +44,12 @@ public enum DeckOrder {
 		return clause;
 	}
 
-	public Set<Class<? extends Drawable<?>>> getAllowed() {
-		return allowed;
+	public boolean isAllowed(Class<? extends Drawable<?>> klass) {
+		return allowed.isEmpty() || allowed.contains(klass);
+	}
+
+	@Override
+	public String toString() {
+		return clause;
 	}
 }

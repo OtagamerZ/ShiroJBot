@@ -130,7 +130,7 @@
 				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
 				 WHERE sc.kawaipon_uid = ?1
 				   AND sc.deck_id = ?2
-				 """, account.getUid(), id);
+				 """ + styling.getSenshiOrder(), account.getUid(), id);
 	 }
 
 	 public List<Senshi> getSenshi() {
@@ -173,7 +173,7 @@
 				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
 				 WHERE sc.kawaipon_uid = ?1
 				   AND sc.deck_id = ?2
-				 """, account.getUid(), id);
+				 """ + styling.getEvogearOrder(), account.getUid(), id);
 	 }
 
 	 public List<Evogear> getEvogear() {
