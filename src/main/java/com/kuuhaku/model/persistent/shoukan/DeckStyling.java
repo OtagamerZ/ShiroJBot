@@ -43,11 +43,11 @@ public class DeckStyling implements Serializable {
 	private SlotSkin slot = SlotSkin.DEFAULT;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "senshi_order", nullable = false)
+	@Column(name = "senshi_order", nullable = true)
 	private DeckOrder senshiOrder = DeckOrder.NAME;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "evogear_order", nullable = false)
+	@Column(name = "evogear_order", nullable = true)
 	private DeckOrder evogearOrder = DeckOrder.NAME;
 
 	@ManyToOne
