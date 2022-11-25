@@ -95,15 +95,14 @@ public class DeckAddCommand implements Executable {
 				return;
 			}
 
-			DAO.apply(Deck.class, d.getId(), dk -> {
-				for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
-					StashedCard sc = stash.get(i);
-					if (sc.getCard().equals(card)) {
-						if (!addToDeck(event, locale, dk, sc)) break;
-						j++;
-					}
+			Deck dk = d.refresh();
+			for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
+				StashedCard sc = stash.get(i);
+				if (sc.getCard().equals(card)) {
+					if (!addToDeck(event, locale, dk, sc)) break;
+					j++;
 				}
-			});
+			}
 
 			event.channel().sendMessage(locale.get("success/deck_add")).queue();
 			return;
