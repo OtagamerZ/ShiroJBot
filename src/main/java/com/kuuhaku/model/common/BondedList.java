@@ -31,7 +31,8 @@ public class BondedList<T> extends TreeList<T> {
 	private final Consumer<T> onRemove;
 
 	public static <T> BondedList<T> withBind(BiFunction<T, ListIterator<T>, Boolean> onAdd) {
-		return withBind(onAdd, t -> {});
+		return withBind(onAdd, t -> {
+		});
 	}
 
 	public static <T> BondedList<T> withBind(Consumer<T> onRemove) {
@@ -43,11 +44,13 @@ public class BondedList<T> extends TreeList<T> {
 	}
 
 	public BondedList() {
-		this((a, b) -> true, t -> {});
+		this((a, b) -> true, t -> {
+		});
 	}
 
 	public BondedList(BiFunction<T, ListIterator<T>, Boolean> onAdd) {
-		this(onAdd, t -> {});
+		this(onAdd, t -> {
+		});
 	}
 
 	public BondedList(Consumer<T> onRemove) {
@@ -60,7 +63,8 @@ public class BondedList<T> extends TreeList<T> {
 	}
 
 	public BondedList(@Nonnull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> onAdd) {
-		this(c, onAdd, t -> {});
+		this(c, onAdd, t -> {
+		});
 	}
 
 	public BondedList(@Nonnull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> onAdd, Consumer<T> onRemove) {
@@ -78,15 +82,6 @@ public class BondedList<T> extends TreeList<T> {
 	}
 
 	@Override
-	public boolean add(T t) {
-		if (t != null && onAdd.apply(t, listIterator(Math.max(0, size() - 1)))) {
-			return super.add(t);
-		}
-
-		return false;
-	}
-
-	@Override
 	public void add(int index, T t) {
 		if (t != null && onAdd.apply(t, listIterator(Math.max(0, size() - 1)))) {
 			super.add(index, t);
@@ -98,27 +93,22 @@ public class BondedList<T> extends TreeList<T> {
 	}
 
 	public void addlast(T t) {
-		add(t);
+		add(size(), t);
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		List<? extends T> filtered = c.stream()
-				.filter(Objects::nonNull)
-				.filter(t -> onAdd.apply(t, listIterator(Math.max(0, size() - 1))))
-				.toList();
-
-		return super.addAll(filtered);
+		return addAll(size(), c);
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		List<? extends T> filtered = c.stream()
-				.filter(Objects::nonNull)
-				.filter(t -> onAdd.apply(t, listIterator(Math.max(0, size() - 1))))
-				.toList();
+		int before = size();
+		for (T t : c) {
+			add(index++, t);
+		}
 
-		return super.addAll(index, filtered);
+		return before != size();
 	}
 
 	@Override
