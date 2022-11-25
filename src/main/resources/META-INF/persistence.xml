@@ -63,6 +63,7 @@
         <class>com.kuuhaku.model.persistent.shoukan.Senshi</class>
         <class>com.kuuhaku.model.persistent.shoukan.LocalizedDescription</class>
         <class>com.kuuhaku.model.persistent.shoukan.LocalizedString</class>
+        <class>com.kuuhaku.model.persistent.shoukan.MatchHistory</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>

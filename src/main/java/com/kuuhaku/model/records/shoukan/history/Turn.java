@@ -37,6 +37,14 @@ public record Turn(Side top, Side bottom, List<String> banned, String field) {
 		Hand bot = top.getOther();
 
 		Side topSide = new Side(
+				top.getHP(),
+				top.getMP(),
+				new Locks(
+						top.getLockTime(Lock.EFFECT),
+						top.getLockTime(Lock.SPELL),
+						top.getLockTime(Lock.TAUNT),
+						top.getLockTime(Lock.DECK)
+				),
 				Drawable.ids(top.getCards()),
 				Drawable.ids(top.getDeck()),
 				Drawable.ids(top.getGraveyard()),
@@ -47,16 +55,18 @@ public record Turn(Side top, Side bottom, List<String> banned, String field) {
 								safeGet(sc.getBottom(), Senshi::getId),
 								sc.getLock()
 						)
-				),
-				new Locks(
-						top.getLockTime(Lock.EFFECT),
-						top.getLockTime(Lock.SPELL),
-						top.getLockTime(Lock.TAUNT),
-						top.getLockTime(Lock.DECK)
 				)
 		);
 
 		Side botSide = new Side(
+				bot.getHP(),
+				bot.getMP(),
+				new Locks(
+						bot.getLockTime(Lock.EFFECT),
+						bot.getLockTime(Lock.SPELL),
+						bot.getLockTime(Lock.TAUNT),
+						bot.getLockTime(Lock.DECK)
+				),
 				Drawable.ids(bot.getCards()),
 				Drawable.ids(bot.getDeck()),
 				Drawable.ids(bot.getGraveyard()),
@@ -67,12 +77,6 @@ public record Turn(Side top, Side bottom, List<String> banned, String field) {
 								safeGet(sc.getBottom(), Senshi::getId),
 								sc.getLock()
 						)
-				),
-				new Locks(
-						bot.getLockTime(Lock.EFFECT),
-						bot.getLockTime(Lock.SPELL),
-						bot.getLockTime(Lock.TAUNT),
-						bot.getLockTime(Lock.DECK)
 				)
 		);
 
