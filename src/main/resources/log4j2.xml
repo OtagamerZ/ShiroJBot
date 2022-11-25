@@ -29,8 +29,8 @@
                     disableAnsi="false"/>
         </Console>
 
-        <RollingFile name="InfoLog" fileName="logs/stacktrace.log" filePattern="logs/stacktrace-%i.log.gz"
-                     immediateFlush="false" append="false">
+        <RollingRandomAccessFile name="InfoLog" fileName="logs/stacktrace.log" filePattern="logs/stacktrace-%i.log.gz"
+                                 immediateFlush="false" append="false">
             <PatternLayout
                     pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level %C{36}.%M():%L - %msg%n%n"
                     disableAnsi="false"/>
@@ -38,7 +38,7 @@
                 <OnStartupTriggeringPolicy/>
             </Policies>
             <DefaultRolloverStrategy max="4"/>
-        </RollingFile>
+        </RollingRandomAccessFile>
 
         <RandomAccessFile name="ErrorLog" fileName="logs/error.log" immediateFlush="false" append="false">
             <PatternLayout
