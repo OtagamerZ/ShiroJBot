@@ -75,11 +75,7 @@ public class RegDeg {
 			}
 		}
 
-		try {
-			return val;
-		} finally {
-			values.removeIf(v -> v.getValue() <= 0);
-		}
+		return val;
 	}
 
 	public int next() {
