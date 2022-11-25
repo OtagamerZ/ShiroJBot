@@ -37,7 +37,7 @@
             <Policies>
                 <OnStartupTriggeringPolicy/>
             </Policies>
-            <DefaultRolloverStrategy max="4"/>
+            <DefaultRolloverStrategy max="4" fileIndex="min"/>
         </RollingRandomAccessFile>
 
         <RandomAccessFile name="ErrorLog" fileName="logs/error.log" immediateFlush="false" append="false">
