@@ -95,7 +95,7 @@ public class DeckAddCommand implements Executable {
 				return;
 			}
 
-			try (Deck dk = d.refresh()) {
+			DAO.apply(Deck.class, d.getId(), dk -> {
 				for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
 					StashedCard sc = stash.get(i);
 					if (sc.getCard().equals(card)) {
@@ -103,7 +103,7 @@ public class DeckAddCommand implements Executable {
 						j++;
 					}
 				}
-			}
+			});
 
 			event.channel().sendMessage(locale.get("success/deck_add")).queue();
 			return;

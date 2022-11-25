@@ -116,7 +116,7 @@ public class DeckRemoveCommand implements Executable {
 				return;
 			}
 
-			try (Deck dk = d.refresh()) {
+			DAO.apply(Deck.class, d.getId(), dk -> {
 				for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
 					StashedCard sc = stash.get(i);
 					if (sc.getCard().equals(card)) {
@@ -124,7 +124,7 @@ public class DeckRemoveCommand implements Executable {
 						j++;
 					}
 				}
-			}
+			});
 
 			event.channel().sendMessage(locale.get("success/deck_remove")).queue();
 			return;
@@ -160,6 +160,7 @@ public class DeckRemoveCommand implements Executable {
 				while (it.hasNext()) {
 					Senshi s = it.next();
 					if (s.getCard().equals(sc.getCard())) {
+						System.out.println(s);
 						it.remove();
 						break;
 					}
@@ -170,6 +171,7 @@ public class DeckRemoveCommand implements Executable {
 				while (it.hasNext()) {
 					Evogear e = it.next();
 					if (e.getCard().equals(sc.getCard())) {
+						System.out.println(e);
 						it.remove();
 						break;
 					}
@@ -180,6 +182,7 @@ public class DeckRemoveCommand implements Executable {
 				while (it.hasNext()) {
 					Field f = it.next();
 					if (f.getCard().equals(sc.getCard())) {
+						System.out.println(f);
 						it.remove();
 						break;
 					}
