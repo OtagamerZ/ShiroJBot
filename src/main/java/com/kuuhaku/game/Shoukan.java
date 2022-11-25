@@ -41,13 +41,11 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.id.LocalizedId;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.shoukan.LocalizedString;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.model.records.shoukan.*;
+import com.kuuhaku.model.records.shoukan.history.Match;
 import com.kuuhaku.model.records.shoukan.history.Turn;
 import com.kuuhaku.model.records.shoukan.snapshot.Player;
 import com.kuuhaku.model.records.shoukan.snapshot.Slot;
@@ -1473,6 +1471,10 @@ public class Shoukan extends GameInstance<Phase> {
 							.queue();
 				}
 			}
+		}
+
+		if (!singleplayer) {
+			new MatchHistory(new Match(this)).save();
 		}
 
 		close(code);

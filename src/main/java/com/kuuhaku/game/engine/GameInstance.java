@@ -26,10 +26,8 @@ import com.kuuhaku.model.common.GameChannel;
 import com.kuuhaku.model.common.PatternCache;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.shoukan.MatchHistory;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
-import com.kuuhaku.model.records.shoukan.history.Match;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
@@ -202,16 +200,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 		if (code == GameReport.SUCCESS) {
 			exec.complete(null);
 
-			boolean reward = true;
-			if (this instanceof Shoukan s) {
-				if (s.isSingleplayer()) {
-					reward = false;
-				} else {
-					new MatchHistory(new Match(s)).save();
-				}
-			}
-
-			if (reward) {
+			if (!(this instanceof Shoukan s && s.isSingleplayer())) {
 				int prize = (int) (500 * Calc.rng(0.75, 1.25));
 				for (String uid : getPlayers()) {
 					DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
