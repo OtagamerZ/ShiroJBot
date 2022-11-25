@@ -231,7 +231,7 @@
 
 	 public List<Field> getFields() {
 		 if (field == null) {
-			 field = getEvogearRaw().stream()
+			 field = getFieldsRaw().stream()
 					 .map(id -> DAO.find(Field.class, id))
 					 .toList();
 		 }
