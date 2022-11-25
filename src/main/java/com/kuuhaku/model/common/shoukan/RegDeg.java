@@ -66,7 +66,7 @@ public class RegDeg {
 
 		for (ValueOverTime vot : values) {
 			if (!vot.getClass().equals(klass)) {
-				if ((val = vot.reduce(val)) == 0) {
+				if ((val = vot.reduce(val)) <= 0) {
 					break;
 				}
 			}
@@ -75,7 +75,7 @@ public class RegDeg {
 		try {
 			return val;
 		} finally {
-			values.removeIf(v -> v.getValue() == 0);
+			values.removeIf(v -> v.getValue() <= 0);
 		}
 	}
 
@@ -83,7 +83,7 @@ public class RegDeg {
 		try {
 			return values.stream().mapToInt(ValueOverTime::next).sum();
 		} finally {
-			values.removeIf(v -> v.getValue() == 0);
+			values.removeIf(v -> v.getValue() <= 0);
 		}
 	}
 
