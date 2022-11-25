@@ -125,9 +125,9 @@
 
 	 public List<String> getSenshiRaw() {
 		 return DAO.queryAllNative(String.class, """
-				 SELECT s.card_id
-				 FROM senshi s
-				 INNER JOIN stashed_card sc ON sc.card_id = s.card_id
+				 SELECT d.card_id
+				 FROM senshi d
+				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
 				 WHERE sc.kawaipon_uid = ?1
 				   AND sc.deck_id = ?2
 				 """, account.getUid(), id);
@@ -168,9 +168,9 @@
 
 	 public List<String> getEvogearRaw() {
 		 return DAO.queryAllNative(String.class, """
-				 SELECT e.card_id
-				 FROM evogear e
-				 INNER JOIN stashed_card sc ON sc.card_id = e.card_id
+				 SELECT d.card_id
+				 FROM evogear d
+				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
 				 WHERE sc.kawaipon_uid = ?1
 				   AND sc.deck_id = ?2
 				 """, account.getUid(), id);
@@ -221,9 +221,9 @@
 
 	 public List<String> getFieldsRaw() {
 		 return DAO.queryAllNative(String.class, """
-				 SELECT f.card_id
-				 FROM field f
-				 INNER JOIN stashed_card sc ON sc.card_id = f.card_id
+				 SELECT d.card_id
+				 FROM field d
+				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
 				 WHERE sc.kawaipon_uid = ?1
 				   AND sc.deck_id = ?2
 				 """, account.getUid(), id);
