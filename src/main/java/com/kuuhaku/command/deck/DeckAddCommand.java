@@ -147,8 +147,6 @@ public class DeckAddCommand implements Executable {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
 					return false;
 				}
-
-				d.getSenshi().add(s);
 			}
 			case EVOGEAR -> {
 				Evogear e = DAO.find(Evogear.class, sc.getCard().getId());
@@ -160,8 +158,6 @@ public class DeckAddCommand implements Executable {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
 					return false;
 				}
-
-				d.getEvogear().add(e);
 			}
 			case FIELD -> {
 				Field f = DAO.find(Field.class, sc.getCard().getId());
@@ -173,8 +169,6 @@ public class DeckAddCommand implements Executable {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
 					return false;
 				}
-
-				d.getFields().add(f);
 			}
 		}
 

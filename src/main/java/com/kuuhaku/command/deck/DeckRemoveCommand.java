@@ -29,9 +29,6 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
@@ -43,7 +40,6 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -116,15 +112,15 @@ public class DeckRemoveCommand implements Executable {
 				return;
 			}
 
-			DAO.apply(Deck.class, d.getId(), dk -> {
-				for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
-					StashedCard sc = stash.get(i);
-					if (sc.getCard().equals(card)) {
-						if (!removeFromDeck(event, locale, dk, sc)) break;
-						j++;
-					}
+			for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
+				StashedCard sc = stash.get(i);
+				if (sc.getCard().equals(card)) {
+					sc.setDeck(null);
+					sc.save();
+
+					j++;
 				}
-			});
+			}
 
 			event.channel().sendMessage(locale.get("success/deck_remove")).queue();
 			return;
@@ -132,9 +128,13 @@ public class DeckRemoveCommand implements Executable {
 
 		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
-					Deck dk = d.refresh();
-					if (!removeFromDeck(event, locale, dk, sc)) return;
-					dk.save();
+					if (sc == null) {
+						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+						return;
+					}
+
+					sc.setDeck(null);
+					sc.save();
 
 					event.channel().sendMessage(locale.get("success/deck_remove")).queue();
 				})
@@ -146,52 +146,5 @@ public class DeckRemoveCommand implements Executable {
 					event.channel().sendMessage(locale.get("error/not_owned")).queue();
 					return null;
 				});
-	}
-
-	private boolean removeFromDeck(MessageData.Guild event, I18N locale, Deck d, StashedCard sc) {
-		if (sc == null) {
-			event.channel().sendMessage(locale.get("error/invalid_value")).queue();
-			return false;
-		}
-
-		switch (sc.getType()) {
-			case KAWAIPON -> {
-				Iterator<Senshi> it = d.getSenshi().iterator();
-				while (it.hasNext()) {
-					Senshi s = it.next();
-					if (s.getCard().equals(sc.getCard())) {
-						System.out.println(s);
-						it.remove();
-						break;
-					}
-				}
-			}
-			case EVOGEAR -> {
-				Iterator<Evogear> it = d.getEvogear().iterator();
-				while (it.hasNext()) {
-					Evogear e = it.next();
-					if (e.getCard().equals(sc.getCard())) {
-						System.out.println(e);
-						it.remove();
-						break;
-					}
-				}
-			}
-			case FIELD -> {
-				Iterator<Field> it = d.getFields().iterator();
-				while (it.hasNext()) {
-					Field f = it.next();
-					if (f.getCard().equals(sc.getCard())) {
-						System.out.println(f);
-						it.remove();
-						break;
-					}
-				}
-			}
-		}
-
-		sc.setDeck(null);
-		sc.save();
-		return true;
 	}
 }
