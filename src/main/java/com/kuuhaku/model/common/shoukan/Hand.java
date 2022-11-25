@@ -639,11 +639,13 @@ public class Hand {
 				}
 			}
 
-			int quart = value / 4;
-			if (value < 0) {
-				value -= quart - regdeg.reduce(Degen.class, quart);
-			} else {
-				value -= quart - regdeg.reduce(Regen.class, quart);
+			if (regdeg.peek() != 0) {
+				int quart = value / 4;
+				if (value < 0) {
+					value -= quart - regdeg.reduce(Degen.class, quart);
+				} else {
+					value -= quart - regdeg.reduce(Regen.class, quart);
+				}
 			}
 
 			double prcnt = getHPPrcnt();
