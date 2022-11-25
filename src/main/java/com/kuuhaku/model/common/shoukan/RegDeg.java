@@ -64,11 +64,14 @@ public class RegDeg {
 	public <T extends ValueOverTime> int reduce(Class<T> klass, int val) {
 		if (val == 0) return 0;
 
+		System.out.println(klass + " - " + val);
 		for (ValueOverTime vot : values) {
 			if (!vot.getClass().equals(klass)) {
+				System.out.println(vot.getClass() + " (" + vot.getValue() + ") reducing");
 				if ((val = vot.reduce(val)) <= 0) {
 					break;
 				}
+				System.out.println("Post reduction: " + val);
 			}
 		}
 
