@@ -29,7 +29,7 @@
                     disableAnsi="false"/>
         </Console>
 
-        <RollingRandomAccessFile name="InfoLog" fileName="logs/stacktrace.log" filePattern="logs/stacktrace-%i.log"
+        <RollingRandomAccessFile name="InfoLog" fileName="logs/stacktrace.log" filePattern="logs/old/stacktrace-%i.log"
                                  immediateFlush="false">
             <PatternLayout
                     pattern="%d{dd MMM yyyy HH:mm:ss}{GMT-3} PID %pid [%tn] %-5level %C{36}.%M():%L - %msg%n%n"
