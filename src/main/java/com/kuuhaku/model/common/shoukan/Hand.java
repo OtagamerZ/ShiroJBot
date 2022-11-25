@@ -115,7 +115,10 @@ public class Hand {
 				}
 			}
 
-			if (s.getStats().popFlag(Flag.NO_DEATH)) {
+			if (getGame().getCurrentSide() != getSide() && Calc.chance(s.getDodge() / 2d)) {
+				getGame().getChannel().sendMessage(getGame().getLocale().get("str/avoid_destruction")).queue();
+				return false;
+			} else if (s.getStats().popFlag(Flag.NO_DEATH)) {
 				return false;
 			} else if (ward != null) {
 				int charges = ward.getStats().getData().getInt("uses", 0) + 1;

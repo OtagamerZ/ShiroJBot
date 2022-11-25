@@ -327,9 +327,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public boolean execute(EffectParameters ep) {
-		if (hand.getLockTime(Lock.EFFECT) > 0) return false;
-
-		if (!hasEffect() || (!(ep.trigger() == ON_ACTIVATE && isSpell()) && !getEffect().contains(ep.trigger().name())))
+		if (base.isLocked() || isSpell()) return false;
+		else if (hand.getLockTime(Lock.EFFECT) > 0) return false;
+		else if (!hasEffect() || (!(ep.trigger() == ON_ACTIVATE && isSpell()) && !getEffect().contains(ep.trigger().name())))
 			return false;
 
 		try {
@@ -384,7 +384,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					"props", extractValues(hand.getGame().getLocale(), this),
 					"self", equipper,
 					"trigger", trigger
-					));
+			));
 		} catch (ActivationException ignored) {
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
