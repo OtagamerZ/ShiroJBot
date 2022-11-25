@@ -394,6 +394,11 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi chosen = slot.getBottom();
+		if (!chosen.isAvailable()) {
+			getChannel().sendMessage(getLocale().get("error/card_unavailable")).queue();
+			return false;
+		}
+
 		slot.swap();
 
 		reportEvent("str/promote_card",

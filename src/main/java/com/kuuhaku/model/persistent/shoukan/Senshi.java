@@ -992,58 +992,80 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		DeckStyling style = deck.getStyling();
 		if (isFlipped()) {
 			g2d.drawImage(style.getFrame().getBack(deck), 15, 15, null);
-			g2d.dispose();
+		} else {
+			Senshi card = Utils.getOr(stats.getDisguise(), this);
+			String desc = isSealed() ? "" : card.getDescription(locale);
+			BufferedImage img = card.getVanity().drawCardNoBorder(style.isUsingChrome());
 
-			return out;
+			Graph.applyTransformed(g2d, 15, 15, g1 -> {
+				g1.setClip(style.getFrame().getBoundary());
+				g1.drawImage(img, 0, 0, null);
+				g1.setClip(null);
+
+				g1.drawImage(style.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
+				g1.drawImage(card.getRace().getIcon(), 190, 12, null);
+
+				g1.setFont(FONT);
+				g1.setColor(style.getFrame().getPrimaryColor());
+				String name = Graph.abbreviate(g1, card.getVanity().getName(), MAX_NAME_WIDTH);
+				Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
+
+				if (!desc.isEmpty()) {
+					g1.setColor(style.getFrame().getSecondaryColor());
+					g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
+
+					int y = 276;
+					String tags = card.processTags(locale);
+					if (tags != null) {
+						g1.drawString(tags, 7, 275);
+						y += 11;
+					}
+
+					Graph.drawMultilineString(g1, desc,
+							7, y, 211, 3,
+							card.parseValues(g1, deck, this), card.highlightValues(g1, style.getFrame().isLegacy())
+					);
+				}
+
+				if (!stats.getWrite().isBlank() && getSlot().getIndex() > -1) {
+					g1.setColor(Color.ORANGE);
+					g1.setFont(Drawable.FONT.deriveFont(15f));
+					Graph.drawOutlinedString(g1, stats.getWrite(), 25, 49 + (23 + g1.getFontMetrics().getHeight()) / 2, 2, Color.BLACK);
+				}
+
+				if (!stats.hasFlag(Flag.HIDE_STATS)) {
+					card.drawCosts(g1);
+					if (!isSupporting()) {
+						card.drawAttributes(g1, !desc.isEmpty());
+					}
+				}
+			});
+
+			if (hand != null) {
+				boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
+				String path = "kawaipon/frames/" + (legacy ? "old" : "new") + "/";
+
+				if (stats.hasFlag(Flag.EMPOWERED)) {
+					BufferedImage emp = IO.getResourceAsImage(path + "empowered.png");
+
+					g2d.drawImage(emp, 0, 0, null);
+				}
+
+				double mult = getFieldMult(hand.getGame().getArena().getField());
+				if (mult != 1) {
+					BufferedImage indicator = null;
+					if (mult > 1) {
+						indicator = IO.getResourceAsImage(path + "/buffed.png");
+					} else if (mult < 1) {
+						indicator = IO.getResourceAsImage(path + "/nerfed.png");
+					}
+
+					g2d.drawImage(indicator, 0, 0, null);
+				}
+			}
 		}
 
-		Senshi card = Utils.getOr(stats.getDisguise(), this);
-		String desc = isSealed() ? "" : card.getDescription(locale);
-		BufferedImage img = card.getVanity().drawCardNoBorder(style.isUsingChrome());
-
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
-			g1.setClip(style.getFrame().getBoundary());
-			g1.drawImage(img, 0, 0, null);
-			g1.setClip(null);
-
-			g1.drawImage(style.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
-			g1.drawImage(card.getRace().getIcon(), 190, 12, null);
-
-			g1.setFont(FONT);
-			g1.setColor(style.getFrame().getPrimaryColor());
-			String name = Graph.abbreviate(g1, card.getVanity().getName(), MAX_NAME_WIDTH);
-			Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
-
-			if (!desc.isEmpty()) {
-				g1.setColor(style.getFrame().getSecondaryColor());
-				g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
-
-				int y = 276;
-				String tags = card.processTags(locale);
-				if (tags != null) {
-					g1.drawString(tags, 7, 275);
-					y += 11;
-				}
-
-				Graph.drawMultilineString(g1, desc,
-						7, y, 211, 3,
-						card.parseValues(g1, deck, this), card.highlightValues(g1, style.getFrame().isLegacy())
-				);
-			}
-
-			if (!stats.getWrite().isBlank() && getSlot().getIndex() > -1) {
-				g1.setColor(Color.ORANGE);
-				g1.setFont(Drawable.FONT.deriveFont(15f));
-				Graph.drawOutlinedString(g1, stats.getWrite(), 25, 49 + (23 + g1.getFontMetrics().getHeight()) / 2, 2, Color.BLACK);
-			}
-
-			if (!stats.hasFlag(Flag.HIDE_STATS)) {
-				card.drawCosts(g1);
-				if (!isSupporting()) {
-					card.drawAttributes(g1, !desc.isEmpty());
-				}
-			}
-
 			if (!isAvailable()) {
 				RescaleOp op = new RescaleOp(0.5f, 0, null);
 				op.filter(out, out);
@@ -1072,33 +1094,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 			}
 
-			if (!over && isDefending()) {
+			if (!over && !isFlipped() && isDefending()) {
 				g1.drawImage(IO.getResourceAsImage("shoukan/states/defense.png"), 0, 0, null);
 			}
 		});
-
-		if (hand != null) {
-			boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
-			String path = "kawaipon/frames/" + (legacy ? "old" : "new") + "/";
-
-			if (stats.hasFlag(Flag.EMPOWERED)) {
-				BufferedImage emp = IO.getResourceAsImage(path + "empowered.png");
-
-				g2d.drawImage(emp, 0, 0, null);
-			}
-
-			double mult = getFieldMult(hand.getGame().getArena().getField());
-			if (mult != 1) {
-				BufferedImage indicator = null;
-				if (mult > 1) {
-					indicator = IO.getResourceAsImage(path + "/buffed.png");
-				} else if (mult < 1) {
-					indicator = IO.getResourceAsImage(path + "/nerfed.png");
-				}
-
-				g2d.drawImage(indicator, 0, 0, null);
-			}
-		}
 
 		g2d.dispose();
 
