@@ -799,7 +799,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		switch (you.getOrigin().synergy()) {
-			case SHIKI -> {
+			case SHIKIGAMI -> {
 				List<SlotColumn> slts = arena.getSlots(you.getSide());
 				for (SlotColumn slt : slts) {
 					if (slt.hasTop()) {
@@ -944,7 +944,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			switch (you.getOrigin().synergy()) {
-				case SHIKI -> {
+				case SHIKIGAMI -> {
 					List<SlotColumn> slts = arena.getSlots(op.getSide());
 					for (SlotColumn slt : slts) {
 						if (slt.hasTop()) {
@@ -977,7 +977,7 @@ public class Shoukan extends GameInstance<Phase> {
 						dmg = 0;
 						outcome = "str/combat_success";
 					} else {
-						boolean dbl = op.getOrigin().synergy() == Race.WARBEAST && Calc.chance(2);
+						boolean dbl = op.getOrigin().synergy() == Race.CYBERBEAST && Calc.chance(2);
 						boolean unstop = ally.getStats().popFlag(Flag.UNSTOPPABLE);
 
 						int enemyStats = enemy.getActiveAttr(dbl);
