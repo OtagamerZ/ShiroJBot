@@ -44,6 +44,9 @@ public class MatchHistory extends DAO<Field> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject data;
 
+	public MatchHistory() {
+	}
+
 	public MatchHistory(Match match) {
 		this.head = new JSONObject(match.info());
 		this.data = new JSONObject(match);
