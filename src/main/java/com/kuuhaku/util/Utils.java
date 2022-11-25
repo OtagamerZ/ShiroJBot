@@ -1084,4 +1084,18 @@ public abstract class Utils {
 
 		return hash.substring(0, length);
 	}
+
+	public static <In, Out> List<Out> map(Collection<In> in, Function<In, Out> mapper) {
+		return in.stream().map(mapper).toList();
+	}
+
+	public static <In, Out> Out safeGet(In in, Function<In, Out> getter) {
+		if (in == null) return null;
+
+		try {
+			return getter.apply(in);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

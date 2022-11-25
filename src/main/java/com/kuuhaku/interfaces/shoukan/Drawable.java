@@ -351,4 +351,8 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			return new Target();
 		}
 	}
+
+	static List<String> ids(List<? extends Drawable<?>> cards) {
+		return Utils.map(cards, Drawable::getId);
+	}
 }

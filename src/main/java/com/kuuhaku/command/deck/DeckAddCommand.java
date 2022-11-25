@@ -142,7 +142,7 @@ public class DeckAddCommand implements Executable {
 				} else if (sc.getKawaiponCard().isChrome()) {
 					event.channel().sendMessage(locale.get("error/cannot_add_chrome")).queue();
 					return false;
-				} else if (d.getSenshi().size() >= 36) {
+				} else if (d.getSenshiRaw().size() >= 36) {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
 					return false;
 				}
@@ -153,7 +153,7 @@ public class DeckAddCommand implements Executable {
 				if (e.getTier() < 1) {
 					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
 					return false;
-				} else if (d.getEvogear().size() >= 24) {
+				} else if (d.getEvogearRaw().size() >= 24) {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
 					return false;
 				}
@@ -164,7 +164,7 @@ public class DeckAddCommand implements Executable {
 				if (f.isEffect()) {
 					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
 					return false;
-				} else if (d.getFields().size() >= 3) {
+				} else if (d.getFieldsRaw().size() >= 3) {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
 					return false;
 				}

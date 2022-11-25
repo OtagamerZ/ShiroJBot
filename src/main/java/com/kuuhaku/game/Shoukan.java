@@ -48,6 +48,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.model.records.shoukan.*;
+import com.kuuhaku.model.records.shoukan.history.Turn;
 import com.kuuhaku.model.records.shoukan.snapshot.Player;
 import com.kuuhaku.model.records.shoukan.snapshot.Slot;
 import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
@@ -63,6 +64,7 @@ import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.ArrayUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
@@ -88,7 +90,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Map<Side, Hand> hands;
 	private final Map<String, String> messages = new HashMap<>();
 	private final Set<EffectOverTime> eots = new TreeSet<>();
-	private final Map<Side, JSONObject> data = new HashMap<>();
+	private final List<Turn> turns = new TreeList<>();
 
 	private final boolean singleplayer;
 	private StateSnap snapshot = null;
@@ -1117,6 +1119,10 @@ public class Shoukan extends GameInstance<Phase> {
 		return arena;
 	}
 
+	public List<Turn> getTurns() {
+		return turns;
+	}
+
 	public boolean isSingleplayer() {
 		return singleplayer;
 	}
@@ -1712,6 +1718,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected void nextTurn() {
+		turns.add(Turn.from(this));
+
 		Hand curr = getCurrent();
 		trigger(ON_TURN_END, curr.getSide());
 		curr.flushDiscard();
@@ -1763,7 +1771,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		curr.showHand();
-		reportEvent("str/game_turn_change", "<@" + curr.getUid() + ">", getTurn());
+		reportEvent("str/game_turn_change", "<@" + curr.getUid() + ">", (int) Math.ceil(getTurn() / 2d));
 
 		takeSnapshot();
 	}
