@@ -52,7 +52,6 @@
  import java.util.*;
  import java.util.concurrent.atomic.AtomicInteger;
  import java.util.stream.Collectors;
- import java.util.stream.IntStream;
  import java.util.stream.Stream;
 
  @Entity
@@ -531,18 +530,8 @@
 					 if (ori.size() == 2) {
 						 allSame = false;
 
-						 Race curr = ori.get(1);
-						 if (races.getCount(curr) == races.getCount(r)) {
-							 Race keep = IntStream.range(0, getSenshi().size())
-									 .mapToObj(i -> new Pair<>(i, getSenshi().get(i).getRace()))
-									 .filter(p -> Utils.equalsAny(p.getSecond(), curr, r))
-									 .map(Pair::getSecond)
-									 .findFirst()
-									 .orElse(Race.NONE);
-
-							 if (keep != Race.NONE) {
-								 ori.set(1, keep);
-							 }
+						 if (races.getCount(ori.get(1)) == races.getCount(r)) {
+							 origin = new Origin(Race.MIXED, ori.toArray(Race[]::new));
 						 }
 					 }
 
