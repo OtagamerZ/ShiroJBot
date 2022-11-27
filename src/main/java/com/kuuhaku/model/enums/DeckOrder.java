@@ -26,8 +26,8 @@ import java.util.Set;
 public enum DeckOrder {
 	NAME("ORDER BY d.card_id"),
 	ATK("ORDER BY d.atk DESC, d.card_id"),
-	DEF("ORDER BY d.def DESC, d.card_id"),
-	ATTR("ORDER BY d.atk + d.def DESC, d.card_id"),
+	DEF("ORDER BY d.dfs DESC, d.card_id"),
+	ATTR("ORDER BY d.atk + d.dfs DESC, d.card_id"),
 	COST("ORDER BY d.sacrifices DESC, d.blood DESC, d.mana DESC, d.card_id"),
 	TIER("ORDER BY d.tier DESC", Evogear.class);
 
