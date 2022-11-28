@@ -85,8 +85,10 @@ public class BondedList<T> extends TreeList<T> {
 
 	@Override
 	public void add(int index, T t) {
-		if (t != null && onAdd.apply(t, listIterator(Math.max(0, size() - 1)))) {
-			super.add(index, t);
+		ListIterator<T> it = listIterator(index);
+
+		if (t != null && onAdd.apply(t, it)) {
+			it.add(t);
 		}
 	}
 
