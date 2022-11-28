@@ -126,7 +126,7 @@ public class SlotColumn {
 		Senshi current = getBottom();
 		if (Objects.equals(bottom, current)) return;
 
-		if (bottom != null && !Objects.equals(bottom.getHand(), game.getCurrent()) && bottom.getStats().popFlag(Flag.NO_CONVERT)) {
+		if (bottom != null && !Objects.equals(bottom.getHand(), game.getCurrent()) && bottom.popFlag(Flag.NO_CONVERT)) {
 			return;
 		}
 

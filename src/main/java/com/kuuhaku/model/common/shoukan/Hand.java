@@ -118,7 +118,7 @@ public class Hand {
 			if (getGame().getCurrentSide() != getSide() && Calc.chance(s.getDodge() / 2d)) {
 				getGame().getChannel().sendMessage(getGame().getLocale().get("str/avoid_destruction")).queue();
 				return false;
-			} else if (s.getStats().popFlag(Flag.NO_DEATH)) {
+			} else if (s.popFlag(Flag.NO_DEATH)) {
 				return false;
 			} else if (ward != null) {
 				int charges = ward.getStats().getData().getInt("uses", 0) + 1;
@@ -134,7 +134,7 @@ public class Hand {
 
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
-		if (d instanceof Senshi s && s.getStats().popFlag(Flag.NO_DEATH)) {
+		if (d instanceof Senshi s && s.popFlag(Flag.NO_DEATH)) {
 			return false;
 		}
 
@@ -862,7 +862,7 @@ public class Hand {
 				});
 			}
 
-			if ((d instanceof Senshi s && s.getStats().hasFlag(Flag.EMPOWERED)) || (d instanceof Evogear e && e.getStats().hasFlag(Flag.EMPOWERED))) {
+			if ((d instanceof Senshi s && s.hasFlag(Flag.EMPOWERED)) || (d instanceof Evogear e && e.getStats().hasFlag(Flag.EMPOWERED))) {
 				boolean legacy = userDeck.getStyling().getFrame().isLegacy();
 				BufferedImage emp = IO.getResourceAsImage("kawaipon/frames/" + (legacy ? "old" : "new") + "/empowered.png");
 

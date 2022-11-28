@@ -43,7 +43,7 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 		this.source = source;
 
 		Set<Target> tgts = new HashSet<>(List.of(targets));
-		if (source.card() instanceof Senshi s && s.getStats().hasFlag(Flag.EMPOWERED)) {
+		if (source.card() instanceof Senshi s && s.hasFlag(Flag.EMPOWERED)) {
 			for (Target tgt : tgts) {
 				if (tgt.index() > 0) {
 					tgts.add(new Target(

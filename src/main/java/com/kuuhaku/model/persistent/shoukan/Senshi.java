@@ -160,6 +160,22 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return stats;
 	}
 
+	public boolean hasFlag(Flag flag) {
+		for (Evogear e : equipments) {
+			if (e.getStats().hasFlag(flag)) return true;
+		}
+
+		return stats.hasFlag(flag);
+	}
+
+	public boolean popFlag(Flag flag) {
+		for (Evogear e : equipments) {
+			if (e.getStats().popFlag(flag)) return true;
+		}
+
+		return stats.popFlag(flag);
+	}
+
 	@Override
 	public List<String> getTags() {
 		List<String> out = new ArrayList<>();
@@ -377,7 +393,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public double getFieldMult(Field f) {
-		if (stats.hasFlag(Flag.IGNORE_FIELD)) return 1;
+		if (hasFlag(Flag.IGNORE_FIELD)) return 1;
 
 		double mult = 1;
 		Race[] races = getRace().split();
@@ -459,25 +475,25 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public int getEquipDmg() {
-		if (stats.hasFlag(Flag.NO_EQUIP)) return 0;
+		if (hasFlag(Flag.NO_EQUIP)) return 0;
 
 		return equipments.stream().mapToInt(Evogear::getDmg).sum();
 	}
 
 	public int getEquipDfs() {
-		if (stats.hasFlag(Flag.NO_EQUIP)) return 0;
+		if (hasFlag(Flag.NO_EQUIP)) return 0;
 
 		return equipments.stream().mapToInt(Evogear::getDfs).sum();
 	}
 
 	public int getEquipDodge() {
-		if (stats.hasFlag(Flag.NO_EQUIP)) return 0;
+		if (hasFlag(Flag.NO_EQUIP)) return 0;
 
 		return equipments.stream().mapToInt(Evogear::getDodge).sum();
 	}
 
 	public int getEquipBlock() {
-		if (stats.hasFlag(Flag.NO_EQUIP)) return 0;
+		if (hasFlag(Flag.NO_EQUIP)) return 0;
 
 		return equipments.stream().mapToInt(Evogear::getBlock).sum();
 	}
@@ -487,7 +503,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (isDefending()) return getEquipDfs();
 			return getEquipDmg();
 		} finally {
-			stats.popFlag(Flag.NO_EQUIP);
+			popFlag(Flag.NO_EQUIP);
 		}
 	}
 
@@ -503,7 +519,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			return getEquipDmg();
 		} finally {
-			stats.popFlag(Flag.NO_EQUIP);
+			popFlag(Flag.NO_EQUIP);
 		}
 	}
 
@@ -540,7 +556,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean canAttack() {
-		return (!isDefending() || (stats.popFlag(Flag.ALWAYS_ATTACK) && !isFlipped())) && isAvailable();
+		return (!isDefending() || (popFlag(Flag.ALWAYS_ATTACK) && !isFlipped())) && isAvailable();
 	}
 
 	@Override
@@ -598,7 +614,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setSleep(int time) {
-		if (stats.popFlag(Flag.NO_SLEEP)) return;
+		if (popFlag(Flag.NO_SLEEP)) return;
 
 		int curr = Bit.get(state, 3, 4);
 		state = Bit.set(state, 3, Math.max(curr, time), 4);
@@ -618,7 +634,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setStun(int time) {
-		if (stats.popFlag(Flag.NO_STUN)) return;
+		if (popFlag(Flag.NO_STUN)) return;
 
 		int curr = Bit.get(state, 4, 4);
 		state = Bit.set(state, 4, Math.max(curr, time), 4);
@@ -638,7 +654,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setStasis(int time) {
-		if (stats.popFlag(Flag.NO_STASIS)) return;
+		if (popFlag(Flag.NO_STASIS)) return;
 
 		int curr = Bit.get(state, 5, 4);
 		state = Bit.set(state, 5, Math.max(curr, time), 4);
@@ -685,7 +701,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setTaunt(Senshi target, int time) {
-		if (target == null || stats.popFlag(Flag.NO_TAUNT)) return;
+		if (target == null || popFlag(Flag.NO_TAUNT)) return;
 
 		this.target = target;
 		int curr = Bit.get(state, 6, 4);
@@ -722,7 +738,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			return true;
 		}
 
-		return pop ? stats.popFlag(Flag.BLIND) : stats.hasFlag(Flag.BLIND);
+		return pop ? popFlag(Flag.BLIND) : hasFlag(Flag.BLIND);
 	}
 
 	public boolean isSupporting() {
@@ -768,7 +784,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public boolean execute(EffectParameters ep) {
 		if (base.isLocked()) return false;
-		else if (stats.popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0) return false;
+		else if (popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0) return false;
 
 		Trigger trigger = null;
 		Senshi s = this;
@@ -839,7 +855,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				));
 			}
 
-			stats.popFlag(Flag.EMPOWERED);
+			popFlag(Flag.EMPOWERED);
 			return true;
 		} catch (TargetException e) {
 			TargetType type = stats.getData().getEnum(TargetType.class, "targeting");
@@ -906,7 +922,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isProtected() {
-		if (isStasis() || stats.popFlag(Flag.IGNORE_EFFECT)) {
+		if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
 			return true;
 		}
 
@@ -1033,7 +1049,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					Graph.drawOutlinedString(g1, stats.getWrite(), 25, 49 + (23 + g1.getFontMetrics().getHeight()) / 2, 2, Color.BLACK);
 				}
 
-				if (!stats.hasFlag(Flag.HIDE_STATS)) {
+				if (!hasFlag(Flag.HIDE_STATS)) {
 					card.drawCosts(g1);
 					if (!isSupporting()) {
 						card.drawAttributes(g1, !desc.isEmpty());
@@ -1045,7 +1061,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
 				String path = "kawaipon/frames/" + (legacy ? "old" : "new") + "/";
 
-				if (stats.hasFlag(Flag.EMPOWERED)) {
+				if (hasFlag(Flag.EMPOWERED)) {
 					BufferedImage emp = IO.getResourceAsImage(path + "empowered.png");
 
 					g2d.drawImage(emp, 0, 0, null);

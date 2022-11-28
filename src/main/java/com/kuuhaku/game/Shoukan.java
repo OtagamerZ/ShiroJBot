@@ -731,7 +731,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Senshi enemy = tgt.enemy();
 		if (enemy != null && enemy.isProtected()) {
 			curr.consumeMP(1);
-			if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
+			if (!chosen.popFlag(Flag.FREE_ACTION)) {
 				chosen.setAvailable(false);
 			}
 
@@ -747,7 +747,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.consumeMP(1);
-		if (getPhase() != Phase.PLAN && !chosen.getStats().popFlag(Flag.FREE_ACTION)) {
+		if (getPhase() != Phase.PLAN && !chosen.popFlag(Flag.FREE_ACTION)) {
 			chosen.setAvailable(false);
 		}
 
@@ -818,7 +818,7 @@ public class Shoukan extends GameInstance<Phase> {
 			case SPAWN -> you.getRegDeg().add(new Degen((int) (you.getBase().hp() * 0.05), 0.2));
 		}
 
-		if (ally.getSlot() != null && !ally.getStats().popFlag(Flag.FREE_ACTION)) {
+		if (ally.getSlot() != null && !ally.popFlag(Flag.FREE_ACTION)) {
 			ally.setAvailable(false);
 		}
 
@@ -872,7 +872,7 @@ public class Shoukan extends GameInstance<Phase> {
 			enemy.setFlipped(false);
 		}
 
-		if (enemy == null && !arena.isFieldEmpty(op.getSide()) && !ally.getStats().popFlag(Flag.DIRECT)) {
+		if (enemy == null && !arena.isFieldEmpty(op.getSide()) && !ally.popFlag(Flag.DIRECT)) {
 			getChannel().sendMessage(getLocale().get("error/field_not_empty")).queue();
 			return false;
 		} else if (enemy != null && enemy.isStasis()) {
@@ -891,7 +891,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 		trigger(ON_ATTACK, ally.asSource(ON_ATTACK), t);
 
-		if (ally.getSlot() != null && !ally.getStats().popFlag(Flag.FREE_ACTION)) {
+		if (ally.getSlot() != null && !ally.popFlag(Flag.FREE_ACTION)) {
 			ally.setAvailable(false);
 		}
 
@@ -963,9 +963,9 @@ public class Shoukan extends GameInstance<Phase> {
 				case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
 			}
 
-			boolean ignore = ally.getStats().popFlag(Flag.NO_COMBAT);
+			boolean ignore = ally.popFlag(Flag.NO_COMBAT);
 			if (!ignore && enemy != null) {
-				ignore = enemy.getSlot() == null || enemy.getStats().popFlag(Flag.IGNORE_COMBAT);
+				ignore = enemy.getSlot() == null || enemy.popFlag(Flag.IGNORE_COMBAT);
 			}
 
 			if (!ignore) {
@@ -981,12 +981,12 @@ public class Shoukan extends GameInstance<Phase> {
 						outcome = "str/combat_success";
 					} else {
 						boolean dbl = op.getOrigin().synergy() == Race.CYBERBEAST && Calc.chance(2);
-						boolean unstop = ally.getStats().popFlag(Flag.UNSTOPPABLE);
+						boolean unstop = ally.popFlag(Flag.UNSTOPPABLE);
 
 						int enemyStats = enemy.getActiveAttr(dbl);
 						int eEquipStats = enemy.getActiveEquips(dbl);
 						int eCombatStats = enemyStats;
-						if (ally.getStats().popFlag(Flag.IGNORE_EQUIP)) {
+						if (ally.popFlag(Flag.IGNORE_EQUIP)) {
 							eCombatStats -= eEquipStats;
 						}
 
@@ -994,7 +994,7 @@ public class Shoukan extends GameInstance<Phase> {
 							trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
 							pHP = you.getHP();
 
-							if (!ally.getStats().popFlag(Flag.NO_DAMAGE)) {
+							if (!ally.popFlag(Flag.NO_DAMAGE)) {
 								you.modHP((int) -((enemyStats - ally.getActiveAttr()) * mitigation));
 							}
 
@@ -1015,7 +1015,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 								reportEvent("str/combat", ally, enemy, getLocale().get("str/combat_miss"));
 								return true;
-							} else if (!unstop && !ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
+							} else if (!unstop && !ally.popFlag(Flag.TRUE_STRIKE) && (enemy.popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
 								trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
 
 								for (Senshi s : ally.getNearby()) {
@@ -1026,7 +1026,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 								reportEvent("str/combat", ally, enemy, getLocale().get("str/combat_block", block));
 								return true;
-							} else if (!ally.getStats().popFlag(Flag.TRUE_STRIKE) && (enemy.getStats().popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
+							} else if (!ally.popFlag(Flag.TRUE_STRIKE) && (enemy.popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
 								trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
 
 								if (you.getOrigin().synergy() == Race.FABLED) {
@@ -1039,7 +1039,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 							if (unstop || ally.getActiveAttr() > eCombatStats) {
 								trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
-								if (enemy.isDefending() || enemy.getStats().popFlag(Flag.NO_DAMAGE)) {
+								if (enemy.isDefending() || enemy.popFlag(Flag.NO_DAMAGE)) {
 									dmg = 0;
 								} else {
 									dmg = Math.max(0, dmg - enemyStats);
