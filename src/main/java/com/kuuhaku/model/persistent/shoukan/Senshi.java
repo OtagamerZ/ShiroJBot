@@ -103,8 +103,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		return true;
 	}, e -> {
-		e.setEquipper(null);
 		e.executeAssert(Trigger.ON_REMOVE);
+		e.setEquipper(null);
 	});
 	private transient CardExtra stats = new CardExtra();
 	private transient SlotColumn slot = null;
@@ -967,8 +967,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			return true;
 		}, e -> {
-			e.setEquipper(null);
 			e.executeAssert(Trigger.ON_REMOVE);
+			e.setEquipper(null);
 		});
 		stats = stats.clone();
 		slot = null;
