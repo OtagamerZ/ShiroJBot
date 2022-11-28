@@ -20,6 +20,7 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.CardType;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
@@ -107,7 +108,7 @@ public class Trade {
 	}
 
 	public boolean validate() {
-		if (left.getBalance() < leftValue || right.getBalance() < rightValue) return false;
+		if (!left.hasEnough(leftValue, Currency.CR) || right.hasEnough(rightValue, Currency.CR)) return false;
 
 		@Language("PostgreSQL")
 		String query = """

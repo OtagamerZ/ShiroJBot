@@ -25,7 +25,9 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Category;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
@@ -64,6 +66,12 @@ public class MarketBuyCommand implements Executable {
 		Market m = new Market(event.user().getId());
 		if (sc.equals(m.getDailyOffer())) {
 			price *= 0.8;
+		}
+
+		Account acc = kp.getAccount();
+		if (!acc.hasEnough(price, Currency.CR)) {
+			event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
+			return;
 		}
 
 		try {

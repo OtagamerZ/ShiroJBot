@@ -25,6 +25,7 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.model.enums.Category;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Account;
@@ -71,7 +72,7 @@ public class TradeAddCommand implements Executable {
 			}
 
 			Account acc = trade.getSelf(event.user().getId());
-			if (offer > acc.getBalance()) {
+			if (!acc.hasEnough(offer, Currency.CR)) {
 				event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
 				return;
 			}
