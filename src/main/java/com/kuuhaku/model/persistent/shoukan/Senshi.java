@@ -820,16 +820,21 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				other.setHeroDefense(true);
 			}*/
 
-			if (hasEffect() && getEffect().contains(trigger.name()) && !(isStunned() && Calc.chance(25))) {
-				cachedEffect.forScript(getEffect())
-						.withConst("self", this)
-						.withConst("game", hand.getGame())
-						.withConst("data", stats.getData())
-						.withVar("ep", ep)
-						.withVar("side", hand.getSide())
-						.withVar("props", extractValues(hand.getGame().getLocale(), this))
-						.withVar("trigger", trigger)
-						.run();
+			if (hasEffect() && getEffect().contains(trigger.name())) {
+				if (isStunned() && Calc.chance(25)) {
+					Shoukan game = hand.getGame();
+					game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
+				} else {
+					cachedEffect.forScript(getEffect())
+							.withConst("self", this)
+							.withConst("game", hand.getGame())
+							.withConst("data", stats.getData())
+							.withVar("ep", ep)
+							.withVar("side", hand.getSide())
+							.withVar("props", extractValues(hand.getGame().getLocale(), this))
+							.withVar("trigger", trigger)
+							.run();
+				}
 			}
 
 			for (Evogear e : equipments) {
