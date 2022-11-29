@@ -208,6 +208,7 @@ public class Hand {
 			throw new GameReport(GameReport.INVALID_DECK, uid);
 		}
 
+		System.out.println("pass");
 		this.side = side;
 		this.origin = Utils.getOr(game.getParams().origin(), userDeck.getOrigins());
 		this.base = userDeck.getBaseValues(this);
