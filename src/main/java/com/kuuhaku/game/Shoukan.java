@@ -104,6 +104,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		this.params = Utils.getOr(params, new ShoukanParams());
 		this.arena = new Arena(this);
+		System.out.println("pass");
+
 		this.hands = Map.of(
 				Side.TOP, new Hand(p1, this, Side.TOP),
 				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)

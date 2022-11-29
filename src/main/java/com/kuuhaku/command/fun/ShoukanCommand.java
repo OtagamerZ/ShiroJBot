@@ -77,8 +77,6 @@ public class ShoukanCommand implements Executable {
 
 				try {
 					Shoukan skn = new Shoukan(locale, params, event.user(), other.getUser());
-
-					System.out.println("pass");
 					skn.start(event.guild(), event.channel())
 							.whenComplete((v, e) -> {
 								if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
