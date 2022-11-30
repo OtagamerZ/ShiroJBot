@@ -18,8 +18,9 @@
 
 package com.kuuhaku.model.common;
 
+import org.apache.commons.collections4.list.TreeList;
+
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -27,7 +28,8 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class BondedList<T> extends ArrayList<T> {
+public class BondedList<T> extends TreeList<T> {
+	private final TreeList<T> aux = new TreeList<>();
 	private final BiFunction<T, ListIterator<T>, Boolean> onAdd;
 	private final Consumer<T> onRemove;
 
@@ -84,10 +86,18 @@ public class BondedList<T> extends ArrayList<T> {
 
 	@Override
 	public void add(int index, T t) {
-		ListIterator<T> it = listIterator(index);
+		ListIterator<T> it = aux.listIterator();
 
 		if (t != null && onAdd.apply(t, it)) {
 			it.add(t);
+		}
+
+		for (T a : aux) {
+			super.add(index, a);
+		}
+
+		if (!aux.isEmpty()) {
+			aux.clear();
 		}
 	}
 
