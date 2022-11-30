@@ -94,7 +94,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				try {
 					System.out.println("Values: " + values);
 					Object obj = values.get(type);
-					if (obj != null) {
+					if (!type.isBlank() && obj != null) {
 						System.out.println("Value: " + obj);
 
 						String v;
@@ -213,7 +213,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						);
 
 						double pow = d instanceof Senshi s ? s.getPower() : 1;
-						out.compute(groups.getString("key"), (k, v) -> {
+						out.compute(groups.getString("type"), (k, v) -> {
 							int value = Calc.round(NumberUtils.toDouble(val) * pow);
 
 							if (v == null) {
