@@ -187,7 +187,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 		String desc = d.getDescription(locale);
 		for (String str : desc.split("\\s")) {
-			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}");
+			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>[^,\\s]*?\\$(?<type>\\w+)[^,\\s]*?)}|\\{(?<tag>\\w+)}");
 
 			if (!groups.isEmpty()) {
 				try {
