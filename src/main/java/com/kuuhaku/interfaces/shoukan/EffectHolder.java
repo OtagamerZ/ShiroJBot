@@ -81,12 +81,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	default Function<String, String> parseValues(Graphics2D g2d, DeckStyling style, JSONObject values) {
 		return str -> {
-			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}");
+			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}|\\{(?<tag>\\w+)}");
 
 			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
 			g2d.setColor(style.getFrame().getSecondaryColor());
 			if (!groups.isEmpty()) {
-				String type = groups.getString("type", "");
+				String type = groups.getString("type");
+				String tag = groups.getString("tag");
 				System.out.println(type);
 
 				String val;
@@ -111,13 +112,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 10));
 					g2d.setColor(COLORS.getOrDefault(type, g2d.getColor()));
 
-					if (!Utils.equalsAny(type, "", "b", "n")) {
+					if (!Utils.equalsAny(tag, "", "b", "n")) {
 						val = val + "    ";
 					}
 
-					if (type.equalsIgnoreCase("n")) {
+					if (tag.equalsIgnoreCase("n")) {
 						val += Constants.VOID;
-					} else if (!Utils.equalsAny(type, "ally", "enemy")) {
+					} else if (!Utils.equalsAny(tag, "ally", "enemy")) {
 						val = Constants.VOID + val;
 					}
 
