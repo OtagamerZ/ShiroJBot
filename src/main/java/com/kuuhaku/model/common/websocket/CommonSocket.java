@@ -86,8 +86,6 @@ public class CommonSocket extends WebSocketClient {
 					put("type", "ATTACH");
 					put("channels", List.of("eval", "shoukan"));
 				}}.toString());
-
-				exec.scheduleAtFixedRate(() -> send(""), 10, 10, TimeUnit.SECONDS);
 				return;
 			}
 
