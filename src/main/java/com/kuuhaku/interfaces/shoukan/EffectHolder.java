@@ -91,9 +91,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				String val;
 				try {
-					@Language("Groovy") String calc = groups.getString("calc").replace("$", "");
-					if (!calc.isBlank()) {
-						Object obj = values.get(type, "???");
+					System.out.println(values);
+					Object obj = values.get(type);
+					if (obj != null) {
 						System.out.println(obj);
 
 						String v;
