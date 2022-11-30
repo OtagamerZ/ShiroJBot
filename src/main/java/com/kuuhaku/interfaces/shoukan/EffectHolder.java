@@ -88,14 +88,14 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			if (!groups.isEmpty()) {
 				String type = groups.getString("type");
 				String tag = groups.getString("tag");
-				System.out.println(type);
+				System.out.println("Type: " + type);
 
 				String val;
 				try {
-					System.out.println(values);
+					System.out.println("Values: " + values);
 					Object obj = values.get(type);
 					if (obj != null) {
-						System.out.println(obj);
+						System.out.println("Value: " + obj);
 
 						String v;
 						if (obj instanceof JSONArray a) {
@@ -187,7 +187,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 		String desc = d.getDescription(locale);
 		for (String str : desc.split("\\s")) {
-			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>[^,\\s]*?\\$(?<type>\\w+)[^,\\s]*?)}|\\{(?<tag>\\w+)}");
+			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}|\\{(?<tag>\\w+)}");
 
 			if (!groups.isEmpty()) {
 				try {
