@@ -62,12 +62,12 @@ public abstract class Spawn {
 		KawaiponCard card = null;
 		if (Calc.chance(dropRate)) {
 			List<Anime> animes = DAO.queryAll(Anime.class, """
-					SELECT c.anime
-					FROM Card c
-					WHERE c.anime.visible = TRUE
-					AND (?1 = 0 OR c.anime.id NOT IN ?2)
-					AND (?3 = 0 OR c.id NOT IN ?4)
-					""",
+							SELECT c.anime
+							FROM Card c
+							WHERE c.anime.visible = TRUE
+							AND (?1 = 0 OR c.anime.id NOT IN ?2)
+							AND (?3 = 0 OR c.id NOT IN ?4)
+							""",
 					lastAnimes.size(), lastAnimes.stream().map(Anime::getId).toList(),
 					lastCards.size(), lastCards.stream().map(Card::getId).toList()
 			);
@@ -117,9 +117,8 @@ public abstract class Spawn {
 
 		Drop<?> drop = null;
 		if (Calc.chance(dropRate)) {
-			RandomList<Drop<?>> rPool = new RandomList<>(3 - rarityBonus) {{
-				add(new CreditDrop());
-			}};
+			RandomList<Drop<?>> rPool = new RandomList<>(3 - rarityBonus);
+			rPool.add(new CreditDrop());
 
 			drop = rPool.get();
 			spawnedDrops.put(

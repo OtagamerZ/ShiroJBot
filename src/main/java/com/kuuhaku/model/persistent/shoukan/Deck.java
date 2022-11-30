@@ -275,11 +275,11 @@
 		 });
 		 Graph.applyMask(bi, IO.getResourceAsImage("shoukan/mask/deck_mask.webp"), 0, true);
 
-		 List<Drawable<?>> allCards = new ArrayList<>() {{
-			 addAll(getSenshi());
-			 addAll(getEvogear());
-			 addAll(getFields());
-		 }};
+		 List<Drawable<?>> allCards = new ArrayList<>();
+		 allCards.addAll(getSenshi());
+		 allCards.addAll(getEvogear());
+		 allCards.addAll(getFields());
+
 		 AtomicInteger totalMPCost = new AtomicInteger();
 		 AtomicInteger totalHPCost = new AtomicInteger();
 		 AtomicInteger totalDmg = new AtomicInteger();

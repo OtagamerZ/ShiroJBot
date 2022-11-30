@@ -19,9 +19,6 @@
 package com.kuuhaku.model.common.gacha;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.common.RandomList;
-import com.kuuhaku.model.enums.Currency;
-import com.kuuhaku.util.Spawn;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.List;
@@ -38,12 +35,9 @@ public class BasicGacha extends Gacha<String> {
 	}
 
 	private BasicGacha(List<Object[]> pool) {
-		super(2800, Currency.CR, 3,
-				new RandomList<>(2.5 - Spawn.getRarityMult()) {{
-					for (Object[] card : pool) {
-						add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
-					}
-				}}
-		);
+		super(2800);
+		for (Object[] card : pool) {
+			this.pool.add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
+		}
 	}
 }

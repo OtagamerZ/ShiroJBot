@@ -38,6 +38,7 @@ import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.model.records.shoukan.Targeting;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONArray;
+import com.kuuhaku.util.json.JSONObject;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
@@ -465,9 +466,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					y += 11;
 				}
 
+				JSONObject values = extractValues(locale, this);
 				Graph.drawMultilineString(g1, desc,
 						7, y, 211, 3,
-						parseValues(g1, deck, this), highlightValues(g1, style.getFrame().isLegacy())
+						parseValues(g1, deck.getStyling(), values), highlightValues(g1, style.getFrame().isLegacy())
 				);
 			}
 

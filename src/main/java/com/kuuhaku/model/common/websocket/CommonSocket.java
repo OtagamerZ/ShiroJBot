@@ -62,10 +62,10 @@ public class CommonSocket extends WebSocketClient {
 
 	@Override
 	public void onOpen(ServerHandshake handshake) {
-		send(new JSONObject() {{
-			put("type", "AUTH");
-			put("token", TOKEN);
-		}}.toString());
+		send(JSONObject.of(
+			Map.entry("type", "AUTH"),
+			Map.entry("token", TOKEN)
+		).toString());
 	}
 
 	@Override
@@ -82,10 +82,10 @@ public class CommonSocket extends WebSocketClient {
 					Constants.LOGGER.info("Connected to " + getClass().getSimpleName());
 				}
 
-				send(new JSONObject() {{
-					put("type", "ATTACH");
-					put("channels", List.of("eval", "shoukan"));
-				}}.toString());
+				send(JSONObject.of(
+					Map.entry("type", "ATTACH"),
+					Map.entry("channels", List.of("eval", "shoukan"))
+				).toString());
 				return;
 			}
 
@@ -102,11 +102,11 @@ public class CommonSocket extends WebSocketClient {
 					}
 				}
 				case "shoukan" -> {
-					send(new JSONObject() {{
-						put("type", "ACKNOWLEDGE");
-						put("key", payload.getString("key"));
-						put("token", token);
-					}}.toString());
+					send(JSONObject.of(
+						Map.entry("type", "ACKNOWLEDGE"),
+						Map.entry("key", payload.getString("key")),
+						Map.entry("token", token)
+					).toString());
 
 					MessageDigest md = DigestUtils.getDigest("md5");
 					md.update(payload.getString("key").getBytes(StandardCharsets.UTF_8));
@@ -128,11 +128,11 @@ public class CommonSocket extends WebSocketClient {
 						b64 = IO.atob(d.render(payload.getEnum(I18N.class, "locale"), new Deck()), "png");
 					}
 
-					send(new JSONObject() {{
-						put("type", "DELIVERY");
-						put("key", Hex.encodeHexString(md.digest()));
-						put("content", b64);
-					}}.toString());
+					send(JSONObject.of(
+							Map.entry("type", "DELIVERY"),
+							Map.entry("key", Hex.encodeHexString(md.digest())),
+							Map.entry("content", b64)
+					).toString());
 				}
 			}
 		} catch (WebsocketNotConnectedException ignore) {

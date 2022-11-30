@@ -25,14 +25,12 @@ import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingFunction;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.PatternCache;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.StashItem;
@@ -736,33 +734,30 @@ public abstract class Utils {
 	}
 
 	public static String replaceTags(Member mb, Guild guild, String str) {
-		Map<String, String> replacements = new HashMap<>() {{
-			if (mb != null) {
-				put("%user%", mb.getAsMention());
-				put("%user.id%", mb.getId());
-				put("%user.name%", mb.getEffectiveName());
-				put("%user.tag%", mb.getUser().getAsTag());
+		Map<String, String> repls = new HashMap<>();
+		if (mb != null) {
+			repls.put("%user%", mb.getAsMention());
+			repls.put("%user.id%", mb.getId());
+			repls.put("%user.name%", mb.getEffectiveName());
+			repls.put("%user.tag%", mb.getUser().getAsTag());
+		}
+
+		if (guild != null) {
+			repls.put("%guild%", guild.getName());
+			repls.put("%guild.users%", separate(guild.getMemberCount()));
+
+			Member owner = guild.getOwner();
+			if (owner != null) {
+				repls.put("%guild.owner%", owner.getAsMention());
+				repls.put("%guild.owner.id%", owner.getId());
+				repls.put("%guild.owner.name%", owner.getEffectiveName());
+				repls.put("%guild.owner.tag%", owner.getUser().getAsTag());
 			}
+		}
 
-			if (guild != null) {
-				GuildConfig config = DAO.find(GuildConfig.class, guild.getId());
+		repls.put("%now%", Constants.TIMESTAMP.formatted(System.currentTimeMillis() / 1000));
 
-				put("%guild%", guild.getName());
-				put("%guild.users%", separate(guild.getMemberCount()));
-
-				Member owner = guild.getOwner();
-				if (owner != null) {
-					put("%guild.owner%", owner.getAsMention());
-					put("%guild.owner.id%", owner.getId());
-					put("%guild.owner.name%", owner.getEffectiveName());
-					put("%guild.owner.tag%", owner.getUser().getAsTag());
-				}
-			}
-
-			put("%now%", Constants.TIMESTAMP.formatted(System.currentTimeMillis() / 1000));
-		}};
-
-		for (Map.Entry<String, String> rep : replacements.entrySet()) {
+		for (Map.Entry<String, String> rep : repls.entrySet()) {
 			str = str.replace(rep.getKey(), rep.getValue());
 		}
 
@@ -1023,15 +1018,14 @@ public abstract class Utils {
 	public static String shorten(double number) {
 		if (number < 1000) return roundToString(number, 1);
 
-		NavigableMap<Double, String> suffixes = new TreeMap<>() {{
-			put(1_000D, "k");
-			put(1_000_000D, "m");
-			put(1_000_000_000D, "b");
-			put(1_000_000_000_000D, "t");
-			put(1_000_000_000_000_000D, "q");
-		}};
+		NavigableMap<Double, String> suf = new TreeMap<>();
+		suf.put(1_000D, "k");
+		suf.put(1_000_000D, "m");
+		suf.put(1_000_000_000D, "b");
+		suf.put(1_000_000_000_000D, "t");
+		suf.put(1_000_000_000_000_000D, "q");
 
-		Map.Entry<Double, String> entry = suffixes.floorEntry(number);
+		Map.Entry<Double, String> entry = suf.floorEntry(number);
 		return roundToString(number / entry.getKey(), 1) + entry.getValue();
 	}
 
@@ -1097,5 +1091,10 @@ public abstract class Utils {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	public static <T> T with(T t, Consumer<T> act) {
+		act.accept(t);
+		return t;
 	}
 }

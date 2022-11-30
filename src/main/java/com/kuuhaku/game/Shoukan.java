@@ -1487,176 +1487,174 @@ public class Shoukan extends GameInstance<Phase> {
 
 	private void addButtons(Message msg) {
 		Hand curr = getCurrent();
-		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>() {{
-			put(Utils.parseEmoji("▶"), w -> {
-				if (curr.selectionPending()) {
-					reportEvent("error/pending_choice");
-					return;
-				} else if (getPhase() == Phase.COMBAT || getTurn() == 1) {
-					if (curr.getLockTime(Lock.TAUNT) > 0) {
-						List<SlotColumn> yours = getSlots(curr.getSide());
-						if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
-							reportEvent("error/taunt_locked", curr.getLockTime(Lock.TAUNT));
-							return;
-						}
-					}
-
-					nextTurn();
-					return;
-				}
-
-				setPhase(Phase.COMBAT);
-				reportEvent("str/game_combat_phase");
-			});
-
-			if (getPhase() == Phase.PLAN) {
-				put(Utils.parseEmoji("⏩"), w -> {
-					if (curr.getLockTime(Lock.TAUNT) > 0) {
-						List<SlotColumn> yours = getSlots(curr.getSide());
-						if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
-							reportEvent("error/taunt_locked", curr.getLockTime(Lock.TAUNT));
-							return;
-						}
-					} else if (curr.selectionPending()) {
-						reportEvent("error/pending_choice");
+		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
+		buttons.put(Utils.parseEmoji("▶"), w -> {
+			if (curr.selectionPending()) {
+				reportEvent("error/pending_choice");
+				return;
+			} else if (getPhase() == Phase.COMBAT || getTurn() == 1) {
+				if (curr.getLockTime(Lock.TAUNT) > 0) {
+					List<SlotColumn> yours = getSlots(curr.getSide());
+					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
+						reportEvent("error/taunt_locked", curr.getLockTime(Lock.TAUNT));
 						return;
 					}
-
-					nextTurn();
-				});
-
-				if (!curr.getRealDeck().isEmpty()) {
-					int rem = curr.getRemainingDraws();
-					if (rem > 0) {
-						put(Utils.parseEmoji("📤"), w -> {
-							if (curr.selectionPending()) {
-								reportEvent("error/pending_choice");
-								return;
-							}
-
-							curr.manualDraw(1);
-							curr.showHand();
-							reportEvent("str/draw_card", curr.getName(), 1, "");
-						});
-
-						if (rem > 1) {
-							put(Utils.parseEmoji("📦"), w -> {
-								if (curr.selectionPending()) {
-									reportEvent("error/pending_choice");
-									return;
-								}
-
-								curr.manualDraw(curr.getRemainingDraws());
-								curr.showHand();
-								reportEvent("str/draw_card", curr.getName(), rem, "s");
-							});
-						}
-					}
-
-					if (curr.isCritical() && !curr.hasUsedDestiny()) {
-						put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
-							if (curr.selectionPending()) {
-								reportEvent("error/pending_choice");
-								return;
-							}
-
-							BondedList<Drawable<?>> deque = curr.getRealDeck();
-							List<Drawable<?>> cards = new ArrayList<>() {{
-								add(deque.getFirst());
-								if (deque.size() > 2) add(deque.get((deque.size() - 1) / 2));
-								if (deque.size() > 1) add(deque.getLast());
-							}};
-
-							curr.requestChoice(cards).thenAccept(d -> {
-								curr.getCards().add(d);
-								deque.remove(d);
-								curr.setUsedDestiny(true);
-
-								curr.showHand();
-								reportEvent("str/destiny_draw", curr.getName());
-							});
-						});
-					}
 				}
 
-				if (curr.getOrigin().major() == Race.SPIRIT && curr.getDiscard().size() >= 3 && curr.getOriginCooldown() == 0) {
-					put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
+				nextTurn();
+				return;
+			}
+
+			setPhase(Phase.COMBAT);
+			reportEvent("str/game_combat_phase");
+		});
+
+		if (getPhase() == Phase.PLAN) {
+			buttons.put(Utils.parseEmoji("⏩"), w -> {
+				if (curr.getLockTime(Lock.TAUNT) > 0) {
+					List<SlotColumn> yours = getSlots(curr.getSide());
+					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
+						reportEvent("error/taunt_locked", curr.getLockTime(Lock.TAUNT));
+						return;
+					}
+				} else if (curr.selectionPending()) {
+					reportEvent("error/pending_choice");
+					return;
+				}
+
+				nextTurn();
+			});
+
+			if (!curr.getRealDeck().isEmpty()) {
+				int rem = curr.getRemainingDraws();
+				if (rem > 0) {
+					buttons.put(Utils.parseEmoji("📤"), w -> {
 						if (curr.selectionPending()) {
 							reportEvent("error/pending_choice");
 							return;
 						}
 
-						List<StashedCard> cards = new ArrayList<>();
+						curr.manualDraw(1);
+						curr.showHand();
+						reportEvent("str/draw_card", curr.getName(), 1, "");
+					});
 
-						int i = 3;
-						Iterator<Drawable<?>> it = curr.getDiscard().iterator();
-						while (it.hasNext() && i-- > 0) {
-							Drawable<?> d = it.next();
-
-							CardType type;
-							if (d instanceof Senshi) {
-								type = CardType.KAWAIPON;
-							} else if (d instanceof Evogear) {
-								type = CardType.EVOGEAR;
-							} else {
-								type = CardType.FIELD;
+					if (rem > 1) {
+						buttons.put(Utils.parseEmoji("📦"), w -> {
+							if (curr.selectionPending()) {
+								reportEvent("error/pending_choice");
+								return;
 							}
 
-							cards.add(new StashedCard(null, d.getCard(), type));
-							arena.getBanned().add(d);
-							it.remove();
-							curr.getCards().remove(d);
-						}
-
-						curr.getCards().add(SynthesizeCommand.rollSynthesis(cards));
-						curr.setOriginCooldown(3);
-						curr.showHand();
-						reportEvent("str/spirit_synth", curr.getName());
-					});
+							curr.manualDraw(curr.getRemainingDraws());
+							curr.showHand();
+							reportEvent("str/draw_card", curr.getName(), rem, "s");
+						});
+					}
 				}
 
-				put(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
-					history = !history;
+				if (curr.isCritical() && !curr.hasUsedDestiny()) {
+					buttons.put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
+						if (curr.selectionPending()) {
+							reportEvent("error/pending_choice");
+							return;
+						}
 
-					if (history) {
-						reportEvent("str/game_history_enable", curr.getName());
-					} else {
-						reportEvent("str/game_history_disable", curr.getName());
-					}
-				});
+						BondedList<Drawable<?>> deque = curr.getRealDeck();
+						List<Drawable<?>> cards = new ArrayList<>();
+						cards.add(deque.getFirst());
+						if (deque.size() > 2) cards.add(deque.get((deque.size() - 1) / 2));
+						if (deque.size() > 1) cards.add(deque.getLast());
 
-				put(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
+						curr.requestChoice(cards).thenAccept(d -> {
+							curr.getCards().add(d);
+							deque.remove(d);
+							curr.setUsedDestiny(true);
+
+							curr.showHand();
+							reportEvent("str/destiny_draw", curr.getName());
+						});
+					});
+				}
+			}
+
+			if (curr.getOrigin().major() == Race.SPIRIT && curr.getDiscard().size() >= 3 && curr.getOriginCooldown() == 0) {
+				buttons.put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
 					if (curr.selectionPending()) {
-						w.getHook().setEphemeral(true)
-								.sendFile(IO.getBytes(curr.renderChoices(), "png"), "choices.png")
-								.queue();
+						reportEvent("error/pending_choice");
 						return;
 					}
 
-					w.getHook().setEphemeral(true)
-							.sendFile(IO.getBytes(curr.render(), "png"), "hand.png")
-							.queue();
-				});
+					List<StashedCard> cards = new ArrayList<>();
 
-				put(Utils.parseEmoji("\uD83D\uDD0D"),
-						w -> w.getHook().setEphemeral(true)
-								.sendFile(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")
-								.queue()
-				);
+					int i = 3;
+					Iterator<Drawable<?>> it = curr.getDiscard().iterator();
+					while (it.hasNext() && i-- > 0) {
+						Drawable<?> d = it.next();
 
-				put(Utils.parseEmoji("🏳"), w -> {
-					if (curr.isForfeit()) {
-						reportResult(GameReport.SUCCESS, "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
-						return;
+						CardType type;
+						if (d instanceof Senshi) {
+							type = CardType.KAWAIPON;
+						} else if (d instanceof Evogear) {
+							type = CardType.EVOGEAR;
+						} else {
+							type = CardType.FIELD;
+						}
+
+						cards.add(new StashedCard(null, d.getCard(), type));
+						arena.getBanned().add(d);
+						it.remove();
+						curr.getCards().remove(d);
 					}
 
-					curr.setForfeit(true);
-					w.getHook().setEphemeral(true)
-							.sendMessage(getLocale().get("str/confirm_forfeit"))
-							.queue();
+					curr.getCards().add(SynthesizeCommand.rollSynthesis(cards));
+					curr.setOriginCooldown(3);
+					curr.showHand();
+					reportEvent("str/spirit_synth", curr.getName());
 				});
 			}
-		}};
+
+			buttons.put(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
+				history = !history;
+
+				if (history) {
+					reportEvent("str/game_history_enable", curr.getName());
+				} else {
+					reportEvent("str/game_history_disable", curr.getName());
+				}
+			});
+
+			buttons.put(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
+				if (curr.selectionPending()) {
+					w.getHook().setEphemeral(true)
+							.sendFile(IO.getBytes(curr.renderChoices(), "png"), "choices.png")
+							.queue();
+					return;
+				}
+
+				w.getHook().setEphemeral(true)
+						.sendFile(IO.getBytes(curr.render(), "png"), "hand.png")
+						.queue();
+			});
+
+			buttons.put(Utils.parseEmoji("\uD83D\uDD0D"),
+					w -> w.getHook().setEphemeral(true)
+							.sendFile(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")
+							.queue()
+			);
+
+			buttons.put(Utils.parseEmoji("🏳"), w -> {
+				if (curr.isForfeit()) {
+					reportResult(GameReport.SUCCESS, "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
+					return;
+				}
+
+				curr.setForfeit(true);
+				w.getHook().setEphemeral(true)
+						.sendMessage(getLocale().get("str/confirm_forfeit"))
+						.queue();
+			});
+		}
 
 		Pages.buttonize(msg, buttons, true, false, u -> u.getId().equals(curr.getUid()));
 	}

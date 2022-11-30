@@ -36,17 +36,19 @@ public record Origin(Race major, Race[] minor) {
 	}
 
 	public List<BufferedImage> images() {
-		return new ArrayList<>() {{
-			if (major != Race.NONE) {
-				add(major.getImage());
-			}
-			for (Race r : minor) {
-				add(r.getImage());
-			}
-			if (synergy() != Race.NONE) {
-				add(synergy().getImage());
-			}
-		}};
+		List<BufferedImage> out = new ArrayList<>();
+
+		if (major != Race.NONE) {
+			out.add(major.getImage());
+		}
+		for (Race r : minor) {
+			out.add(r.getImage());
+		}
+		if (synergy() != Race.NONE) {
+			out.add(synergy().getImage());
+		}
+
+		return out;
 	}
 
 	@Override

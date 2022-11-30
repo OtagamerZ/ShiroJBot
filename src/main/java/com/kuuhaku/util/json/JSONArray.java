@@ -47,6 +47,10 @@ public class JSONArray extends ArrayList<Object> implements Cloneable {
 		this(JSONUtils.toJSON(array));
 	}
 
+	public static JSONArray of(Object... objs) {
+		return new JSONArray(Arrays.asList(objs));
+	}
+
 	public Object get(int index) {
 		return super.get(index);
 	}

@@ -85,16 +85,16 @@ public class StashCommand implements Executable {
 			return;
 		}
 
-		Map<String, String> filters = new LinkedHashMap<>() {{
-			put("n", "AND c.card.id LIKE '%%'||?%s||'%%'");
-			put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'");
-			put("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'");
-			put("c", "AND c.card.chrome = TRUE");
-			put("k", "AND c.type = 'KAWAIPON'");
-			put("e", "AND c.type = 'EVOGEAR'");
-			put("f", "AND c.type = 'FIELD'");
-			put("v", "AND c.deck IS NULL");
-		}};
+		Map<String, String> filters = Map.ofEntries(
+			Map.entry("n", "AND c.card.id LIKE '%%'||?%s||'%%'"),
+			Map.entry("r", "AND CAST(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'"),
+			Map.entry("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'"),
+			Map.entry("c", "AND c.card.chrome = TRUE"),
+			Map.entry("k", "AND c.type = 'KAWAIPON'"),
+			Map.entry("e", "AND c.type = 'EVOGEAR'"),
+			Map.entry("f", "AND c.type = 'FIELD'"),
+			Map.entry("v", "AND c.deck IS NULL")
+		);
 
 		XStringBuilder query = new XStringBuilder("""
 				SELECT c FROM StashedCard c
@@ -102,9 +102,8 @@ public class StashCommand implements Executable {
 				LEFT JOIN Evogear e ON e.card = c.card
 				WHERE c.kawaipon.uid = ?1
 				""");
-		List<Object> params = new ArrayList<>() {{
-			add(event.user().getId());
-		}};
+		List<Object> params = new ArrayList<>();
+		params.add(event.user().getId());
 
 		AtomicInteger i = new AtomicInteger(2);
 		Option[] opts = cli.getFirst().getOptions();

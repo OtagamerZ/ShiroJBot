@@ -219,14 +219,13 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		Graph.applyMask(effect, mask, 0, true);
 		g2d.drawImage(effect, 0, 0, null);
 
-		Map<String, Object> replaces = new HashMap<>() {{
-			put("waifu", Utils.getOr(() -> account.getCouple().getOther(id.getUid()).getName(), locale.get("str/none")));
-			put("guild", getGuild().getName());
-			put("g_rank", Utils.separate(account.getRanking()));
-			put("l_rank", Utils.separate(getRanking()));
-			put("xp", Utils.shorten(xp));
-			put("level", getLevel());
-		}};
+		Map<String, Object> replaces = new HashMap<>();
+		replaces.put("waifu", Utils.getOr(() -> account.getCouple().getOther(id.getUid()).getName(), locale.get("str/none")));
+		replaces.put("guild", getGuild().getName());
+		replaces.put("g_rank", Utils.separate(account.getRanking()));
+		replaces.put("l_rank", Utils.separate(getRanking()));
+		replaces.put("xp", Utils.shorten(xp));
+		replaces.put("level", getLevel());
 
 		for (AccountTitle title : account.getTitles()) {
 			Title t = title.getTitle();

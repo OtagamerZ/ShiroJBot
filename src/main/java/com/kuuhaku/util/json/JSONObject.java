@@ -46,6 +46,16 @@ public class JSONObject extends HashMap<String, Object> implements Cloneable {
 		this(JSONUtils.toJSON(bean));
 	}
 
+	@SafeVarargs
+	public static JSONObject of(Entry<String, Object>... entries) {
+		JSONObject out = new JSONObject();
+		for (Entry<String, Object> entry : entries) {
+			out.put(entry.getKey(), entry.getValue());
+		}
+
+		return out;
+	}
+
 	public Iterator<Entry<String, Object>> iterator() {
 		return entrySet().iterator();
 	}

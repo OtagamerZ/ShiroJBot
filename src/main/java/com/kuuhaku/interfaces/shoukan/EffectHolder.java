@@ -25,7 +25,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
-import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.DeckStyling;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Calc;
@@ -34,39 +34,37 @@ import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.intellij.lang.annotations.Language;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
-	Map<String, Color> COLORS = new HashMap<>() {{
-		put("php", new Color(0x85C720));
-		put("pmp", new Color(0x3F9EFF));
-		put("pdg", new Color(0x9A1313));
-		put("prg", new Color(0x7ABCFF));
+	Map<String, Color> COLORS = Map.ofEntries(
+		Map.entry("php", new Color(0x85C720)),
+		Map.entry("pmp", new Color(0x3F9EFF)),
+		Map.entry("pdg", new Color(0x9A1313)),
+		Map.entry("prg", new Color(0x7ABCFF)),
 
-		put("hp", new Color(0xFF0000));
-		put("mp", new Color(0x3F9EFE));
-		put("atk", new Color(0xFE0000));
-		put("dfs", new Color(0x00C500));
-		put("ddg", new Color(0xFFC800));
-		put("blk", new Color(0xA9A9A9));
+		Map.entry("hp", new Color(0xFF0000)),
+		Map.entry("mp", new Color(0x3F9EFE)),
+		Map.entry("atk", new Color(0xFE0000)),
+		Map.entry("dfs", new Color(0x00C500)),
+		Map.entry("ddg", new Color(0xFFC800)),
+		Map.entry("blk", new Color(0xA9A9A9)),
 
-		put("b", Color.BLACK);
-		put("n", Color.BLACK);
-		put("cd", new Color(0x48BAFF));
-		put("ally", new Color(0x000100));
-		put("enemy", new Color(0x010000));
-	}};
+		Map.entry("b", Color.BLACK),
+		Map.entry("n", Color.BLACK),
+		Map.entry("cd", new Color(0x48BAFF)),
+		Map.entry("ally", new Color(0x000100)),
+		Map.entry("enemy", new Color(0x010000))
+	);
 
 	CardAttributes getBase();
 
@@ -81,56 +79,43 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default void executeAssert(Trigger trigger) {
 	}
 
-	default Function<String, String> parseValues(Graphics2D g2d, Deck deck, Drawable<?> d) {
+	default Function<String, String> parseValues(Graphics2D g2d, DeckStyling style, JSONObject values) {
 		return str -> {
-			JSONObject groups = Utils.extractNamedGroups(str, "(?:\\{=(?<calc>(?:(?!}).)+)})?(?:\\{(?<color>\\w+)})?");
+			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}");
 
 			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
-			g2d.setColor(deck.getStyling().getFrame().getSecondaryColor());
+			g2d.setColor(style.getFrame().getSecondaryColor());
 			if (!groups.isEmpty()) {
+				String type = groups.getString("type", "");
+
 				String val;
 				try {
-					@Language("Groovy") String calc = groups.getString("calc");
+					@Language("Groovy") String calc = groups.getString("calc").replace("$", "");
 					if (!calc.isBlank()) {
-						Hand h = d.getHand();
+						Object obj = values.get(type, "???");
 
-						calc = "import static java.lang.Math.*\n\n" + calc;
-						val = String.valueOf(
-								Utils.exec(calc, new HashMap<>() {{
-									put("bhp", h == null ? 5000 : h.getBase().hp());
-									put("pmp", h == null ? 5 : h.getMP());
-									put("php", h == null ? 5000 : h.getHP());
-									put("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek()));
-									put("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek()));
-									put("mp", d.getMPCost());
-									put("hp", d.getHPCost());
-									put("atk", d.getDmg());
-									put("dfs", d.getDfs());
-									put("ddg", d.getDodge());
-									put("blk", d.getBlock());
-								}})
-						);
+						String v;
+						if (obj instanceof JSONArray a) {
+							v = String.valueOf(a.remove(0));
+						} else {
+							v = String.valueOf(obj);
+						}
 
-						double pow = d instanceof Senshi s ? s.getPower() : 1;
-						val = StringUtils.abbreviate(
-								str.replaceFirst("\\{.+}", String.valueOf(Math.round(NumberUtils.toDouble(val) * pow))),
-								Drawable.MAX_DESC_LENGTH
-						);
+						val = str.replaceFirst("\\{.+}", Utils.roundToString(NumberUtils.toDouble(v), 0));
 					} else {
 						val = str;
 					}
 
 					g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 10));
-					String color = groups.getString("color", "");
-					g2d.setColor(COLORS.getOrDefault(color, g2d.getColor()));
+					g2d.setColor(COLORS.getOrDefault(type, g2d.getColor()));
 
-					if (!Utils.equalsAny(color, "", "b", "n")) {
+					if (!Utils.equalsAny(type, "", "b", "n")) {
 						val = val + "    ";
 					}
 
-					if (color.equalsIgnoreCase("n")) {
+					if (type.equalsIgnoreCase("n")) {
 						val += Constants.VOID;
-					} else if (!Utils.equalsAny(color, "ally", "enemy")) {
+					} else if (!Utils.equalsAny(type, "ally", "enemy")) {
 						val = Constants.VOID + val;
 					}
 
@@ -199,29 +184,29 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 		String desc = d.getDescription(locale);
 		for (String str : desc.split("\\s")) {
-			JSONObject groups = Utils.extractNamedGroups(str, "(?:\\{=(?<calc>(?:(?!}).)+)})?(?:\\{(?<key>\\w+)})?");
+			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}");
 
 			if (!groups.isEmpty()) {
 				try {
-					@Language("Groovy") String calc = groups.getString("calc");
+					@Language("Groovy") String calc = groups.getString("calc").replace("$", "");
 					if (!calc.isBlank()) {
 						Hand h = d.getHand();
 
 						calc = "import static java.lang.Math.*\n\n" + calc;
 						String val = String.valueOf(
-								Utils.exec(calc, new HashMap<>() {{
-									put("bhp", h == null ? 5000 : h.getBase().hp());
-									put("pmp", h == null ? 5 : h.getMP());
-									put("php", h == null ? 5000 : h.getHP());
-									put("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek()));
-									put("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek()));
-									put("mp", d.getMPCost());
-									put("hp", d.getHPCost());
-									put("atk", d.getDmg());
-									put("dfs", d.getDfs());
-									put("ddg", d.getDodge());
-									put("blk", d.getBlock());
-								}})
+								Utils.exec(calc, Map.ofEntries(
+										Map.entry("bhp", h == null ? 5000 : h.getBase().hp()),
+										Map.entry("pmp", h == null ? 5 : h.getMP()),
+										Map.entry("php", h == null ? 5000 : h.getHP()),
+										Map.entry("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek())),
+										Map.entry("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek())),
+										Map.entry("mp", d.getMPCost()),
+										Map.entry("hp", d.getHPCost()),
+										Map.entry("atk", d.getDmg()),
+										Map.entry("dfs", d.getDfs()),
+										Map.entry("ddg", d.getDodge()),
+										Map.entry("blk", d.getBlock())
+								))
 						);
 
 						double pow = d instanceof Senshi s ? s.getPower() : 1;

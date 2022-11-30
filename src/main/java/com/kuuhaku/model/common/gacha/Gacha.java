@@ -20,6 +20,7 @@ package com.kuuhaku.model.common.gacha;
 
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.Currency;
+import com.kuuhaku.util.Spawn;
 import kotlin.Pair;
 
 import java.util.ArrayList;
@@ -28,8 +29,20 @@ import java.util.List;
 public abstract class Gacha<T> {
 	private final int price;
 	private final Currency currency;
-	private final RandomList<T> pool;
 	private final int prizeCount;
+	protected final RandomList<T> pool;
+
+	public Gacha(int price) {
+		this(price, Currency.CR);
+	}
+
+	public Gacha(int price, Currency currency) {
+		this(price, currency, 3);
+	}
+
+	public Gacha(int price, Currency currency, int prizeCount) {
+		this(price, currency, prizeCount, new RandomList<>(2.5 - Spawn.getRarityMult()));
+	}
 
 	public Gacha(int price, Currency currency, int prizeCount, RandomList<T> pool) {
 		this.price = price;

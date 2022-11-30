@@ -38,8 +38,17 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public abstract class Drop<T> {
-	private final RandomList<DropCondition> pool = new RandomList<>() {{
-		add(new DropCondition("low_cash",
+	private final long seed = ThreadLocalRandom.current().nextLong();
+	private final Rarity rarity = Utils.getRandomEntry(Rarity.getActualRarities());
+	private final List<DropCondition> conditions = Arrays.asList(new DropCondition[getConditionCount()]);
+	private final String captcha = Utils.generateRandomHash(5);
+
+	private final DropContent<T> content;
+	private final BiConsumer<Integer, Account> applier;
+
+	public Drop(Function<Integer, DropContent<T>> content, BiConsumer<Integer, Account> applier) {
+		RandomList<DropCondition> pool = new RandomList<>();
+		pool.add(new DropCondition("low_cash",
 				(rng) -> {
 					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0");
 
@@ -47,7 +56,7 @@ public abstract class Drop<T> {
 				},
 				(vals, acc) -> acc.getBalance() <= (int) vals[0]
 		), 2);
-		add(new DropCondition("high_cash",
+		pool.add(new DropCondition("high_cash",
 				(rng) -> {
 					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0");
 
@@ -55,7 +64,7 @@ public abstract class Drop<T> {
 				},
 				(vals, acc) -> acc.getBalance() >= (int) vals[0]
 		), 2);
-		add(new DropCondition("level",
+		pool.add(new DropCondition("level",
 				(rng) -> {
 					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(SQRT(xp / 100)) FROM profile WHERE xp > 100");
 
@@ -63,7 +72,7 @@ public abstract class Drop<T> {
 				},
 				(vals, acc) -> acc.getHighestLevel() >= (int) vals[0]
 		), 3);
-		add(new DropCondition("cards",
+		pool.add(new DropCondition("cards",
 				(rng) -> {
 					int avg = DAO.queryNative(Integer.class, """
 							SELECT COALESCE(GEO_MEAN(NULLIF(x.count, 0)), 1)
@@ -84,7 +93,7 @@ public abstract class Drop<T> {
 					return total.getFirst() + total.getSecond() >= (int) vals[0];
 				}
 		), 3);
-		add(new DropCondition("cards_anime",
+		pool.add(new DropCondition("cards_anime",
 				(rng) -> {
 					List<Anime> animes = DAO.queryAll(Anime.class, "SELECT a FROM Anime a WHERE visible = TRUE");
 					Anime anime = Utils.getRandomEntry(rng, animes);
@@ -110,17 +119,7 @@ public abstract class Drop<T> {
 					return total.getFirst() + total.getSecond() >= (int) vals[0];
 				}
 		), 1);
-	}};
 
-	private final long seed = ThreadLocalRandom.current().nextLong();
-	private final Rarity rarity = Utils.getRandomEntry(Rarity.getActualRarities());
-	private final List<DropCondition> conditions = Arrays.asList(new DropCondition[getConditionCount()]);
-	private final String captcha = Utils.generateRandomHash(5);
-
-	private final DropContent<T> content;
-	private final BiConsumer<Integer, Account> applier;
-
-	public Drop(Function<Integer, DropContent<T>> content, BiConsumer<Integer, Account> applier) {
 		conditions.replaceAll(c -> pool.remove());
 
 		this.content = content.apply(rarity.getIndex());

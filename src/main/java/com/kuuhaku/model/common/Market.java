@@ -30,26 +30,25 @@ import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.cli.Option;
 import org.apache.http.client.methods.HttpHead;
 
-import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Market {
-	private static final Dimension BANNER_SIZE = new Dimension(450, 100);
 	private final String uid;
-	private final Map<String, String> FILTERS = new LinkedHashMap<>() {{
-		put("n", "AND c.card.id LIKE '%%'||?%s||'%%'");
-		put("r", "AND CAST(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'");
-		put("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'");
-		put("c", "AND c.card.chrome = TRUE");
-		put("k", "AND c.type = 'KAWAIPON'");
-		put("e", "AND c.type = 'EVOGEAR'");
-		put("f", "AND c.type = 'FIELD'");
-		put("gl", "AND c.price >= ?%s");
-		put("lt", "AND c.price <= ?%s");
-		put("m", "AND c.kawaipon.uid = ?%s");
-	}};
+	private final Map<String, String> filters = Map.ofEntries(
+			Map.entry("n", "AND c.card.id LIKE '%%'||?%s||'%%'"),
+			Map.entry("r", "AND CAST(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'"),
+			Map.entry("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'"),
+			Map.entry("c", "AND c.card.chrome = TRUE"),
+			Map.entry("k", "AND c.type = 'KAWAIPON'"),
+			Map.entry("e", "AND c.type = 'EVOGEAR'"),
+			Map.entry("f", "AND c.type = 'FIELD'"),
+			Map.entry("gl", "AND c.price >= ?%s"),
+			Map.entry("lt", "AND c.price <= ?%s"),
+			Map.entry("m", "AND c.kawaipon.uid = ?%s")
+	);
 
 	public Market(String uid) {
 		this.uid = uid;
@@ -66,7 +65,7 @@ public class Market {
 
 		AtomicInteger i = new AtomicInteger(1);
 		for (Option opt : opts) {
-			String filter = FILTERS.get(opt.getOpt());
+			String filter = filters.get(opt.getOpt());
 			if (filter.contains("%s")) {
 				filter = filter.formatted(i.getAndIncrement());
 			}

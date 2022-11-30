@@ -40,6 +40,7 @@ import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Source;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
+import com.kuuhaku.util.json.JSONObject;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.hibernate.annotations.Fetch;
@@ -274,23 +275,25 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public List<Senshi> getNearby() {
-		return new ArrayList<>() {{
-			if (getLeft() != null) {
-				add(getLeft());
-			}
+		List<Senshi> out = new ArrayList<>();
 
-			if (getFrontline() != null) {
-				add(getFrontline());
-			}
+		if (getLeft() != null) {
+			out.add(getLeft());
+		}
 
-			if (getSupport() != null) {
-				add(getSupport());
-			}
+		if (getFrontline() != null) {
+			out.add(getFrontline());
+		}
 
-			if (getRight() != null) {
-				add(getRight());
-			}
-		}};
+		if (getSupport() != null) {
+			out.add(getSupport());
+		}
+
+		if (getRight() != null) {
+			out.add(getRight());
+		}
+
+		return out;
 	}
 
 	@Override
@@ -1042,9 +1045,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						y += 11;
 					}
 
+					JSONObject values = extractValues(locale, this);
 					Graph.drawMultilineString(g1, desc,
 							7, y, 211, 3,
-							card.parseValues(g1, deck, this), card.highlightValues(g1, style.getFrame().isLegacy())
+							card.parseValues(g1, deck.getStyling(), values), card.highlightValues(g1, style.getFrame().isLegacy())
 					);
 				}
 
