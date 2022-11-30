@@ -87,12 +87,14 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			g2d.setColor(style.getFrame().getSecondaryColor());
 			if (!groups.isEmpty()) {
 				String type = groups.getString("type", "");
+				System.out.println(type);
 
 				String val;
 				try {
 					@Language("Groovy") String calc = groups.getString("calc").replace("$", "");
 					if (!calc.isBlank()) {
 						Object obj = values.get(type, "???");
+						System.out.println(obj);
 
 						String v;
 						if (obj instanceof JSONArray a) {
