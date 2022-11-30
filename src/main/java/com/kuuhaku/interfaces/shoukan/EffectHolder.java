@@ -88,15 +88,11 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			if (!groups.isEmpty()) {
 				String type = groups.getString("type");
 				String tag = groups.getString("tag");
-				System.out.println("Type: " + type);
 
 				String val;
 				try {
-					System.out.println("Values: " + values);
 					Object obj = values.get(type);
 					if (!type.isBlank() && obj != null) {
-						System.out.println("Value: " + obj);
-
 						String v;
 						if (obj instanceof JSONArray a) {
 							v = String.valueOf(a.remove(0));
