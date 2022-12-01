@@ -729,16 +729,23 @@ public class Shoukan extends GameInstance<Phase> {
 		};
 
 		Senshi enemy = tgt.enemy();
-		if (enemy != null && enemy.isProtected()) {
-			curr.consumeMP(1);
-			if (!chosen.popFlag(Flag.FREE_ACTION)) {
-				chosen.setAvailable(false);
+		if (enemy != null) {
+			if (chosen.getTarget() != null && !Objects.equals(chosen.getTarget(), enemy)) {
+				getChannel().sendMessage(getLocale().get("error/card_taunted", chosen.getTarget(), chosen.getTarget().getIndex())).queue();
+				return false;
 			}
 
-			curr.getData().put("last_ability", chosen);
-			trigger(ON_ABILITY, side);
-			reportEvent("str/spell_shield");
-			return false;
+			if (enemy.isProtected()) {
+				curr.consumeMP(1);
+				if (!chosen.popFlag(Flag.FREE_ACTION)) {
+					chosen.setAvailable(false);
+				}
+
+				curr.getData().put("last_ability", chosen);
+				trigger(ON_ABILITY, side);
+				reportEvent("str/spell_shield");
+				return false;
+			}
 		} else if (!tgt.validate(type)) {
 			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + type))).queue();
 			return false;
