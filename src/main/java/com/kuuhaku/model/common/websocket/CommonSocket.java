@@ -149,7 +149,7 @@ public class CommonSocket extends WebSocketClient {
 		if (retry > 0) {
 			Constants.LOGGER.info("Failed to reconnect to " + getClass().getSimpleName() + ", retrying in " + (++retry * 5) + " seconds");
 		} else {
-			Constants.LOGGER.info("Disconnected from " + getClass().getSimpleName() + ", attempting reconnect in " + (++retry * 5) + " seconds");
+			Constants.LOGGER.info("Disconnected from " + getClass().getSimpleName() + " (" + code + "), attempting reconnect in " + (++retry * 5) + " seconds");
 		}
 
 		exec.schedule(this::reconnect, retry * 5L, TimeUnit.SECONDS);
