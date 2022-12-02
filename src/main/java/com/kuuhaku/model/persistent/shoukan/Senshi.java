@@ -828,6 +828,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					Shoukan game = hand.getGame();
 					game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
 				} else {
+					System.out.println("Entered");
 					cachedEffect.forScript(getEffect())
 							.withConst("self", this)
 							.withConst("game", hand.getGame())
