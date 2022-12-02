@@ -827,11 +827,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (hasEffect() && getEffect().contains(trigger.name())) {
 				System.out.println("Entered");
 				if (isStunned() && Calc.chance(25)) {
-					System.out.println("Stun");
 					Shoukan game = hand.getGame();
 					game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
 				} else {
-					System.out.println("Execute");
 					cachedEffect.forScript(getEffect())
 							.withConst("self", this)
 							.withConst("game", hand.getGame())
