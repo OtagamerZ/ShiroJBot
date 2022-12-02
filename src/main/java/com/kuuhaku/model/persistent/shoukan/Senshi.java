@@ -823,9 +823,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				other.setHeroDefense(true);
 			}*/
 
-			System.out.println(this + " - " + trigger.name());
 			if (hasEffect() && getEffect().contains(trigger.name())) {
-				System.out.println("Entered");
 				if (isStunned() && Calc.chance(25)) {
 					Shoukan game = hand.getGame();
 					game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
@@ -1115,7 +1113,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					g1.setFont(Drawable.FONT.deriveFont(Drawable.FONT.getSize() * 1.5f));
 					Graph.drawOutlinedString(g1, str,
 							225 / 2 - g1.getFontMetrics().stringWidth(str) / 2, 350 - g1.getFontMetrics().getHeight(),
-							3, Color.BLACK
+							4, Color.BLACK
 					);
 					break;
 				}
