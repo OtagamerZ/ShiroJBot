@@ -823,7 +823,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				other.setHeroDefense(true);
 			}*/
 
-			System.out.println(trigger.name());
+			System.out.println(this + " - " + trigger.name());
 			if (hasEffect() && getEffect().contains(trigger.name())) {
 				System.out.println("Entered");
 				if (isStunned() && Calc.chance(25)) {
