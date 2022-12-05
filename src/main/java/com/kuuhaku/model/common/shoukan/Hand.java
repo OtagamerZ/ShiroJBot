@@ -680,8 +680,11 @@ public class Hand {
 		}
 	}
 
-	public void consumeHP(int value) {
+	public boolean consumeHP(int value) {
+		if (hp < value) return false;
+
 		this.hp = Math.max(0, this.hp - Math.max(0, value));
+		return true;
 	}
 
 	public double getHPPrcnt() {
@@ -744,14 +747,14 @@ public class Hand {
 		this.mp = Utils.clamp(this.mp + value, 0, 99);
 	}
 
-	public void consumeMP(int value) {
-		if (origin.synergy() == Race.ESPER && Calc.chance(2)) return;
+	public boolean consumeMP(int value) {
+		if (origin.synergy() == Race.ESPER && Calc.chance(2)) return true;
 		else if (origin.major() == Race.DEMON) {
-			consumeHP(value * (base.hp() / 10));
-			return;
-		}
+			return consumeHP(value * (base.hp() / 10));
+		} else if (this.mp < value) return false;
 
 		this.mp = Utils.clamp(this.mp - value, 0, 99);
+		return true;
 	}
 
 	public List<Drawable<?>> consumeSC(int value) {
