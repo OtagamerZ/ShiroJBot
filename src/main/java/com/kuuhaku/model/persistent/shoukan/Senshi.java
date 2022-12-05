@@ -365,7 +365,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				mult *= 1.05;
 			}
 
-			mult *= getFieldMult(hand.getGame().getArena().getField());
+			mult *= getFieldMult();
 		}
 
 		if (isStunned()) {
@@ -385,7 +385,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				mult *= 1 + (hand.getGraveyard().size() * 0.01);
 			}
 
-			mult *= getFieldMult(hand.getGame().getArena().getField());
+			mult *= getFieldMult();
 		}
 
 		if (isStunned()) {
@@ -395,8 +395,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return (int) Math.max(0, sum * mult * getAttrMult());
 	}
 
-	public double getFieldMult(Field f) {
+	public double getFieldMult() {
 		if (hasFlag(Flag.IGNORE_FIELD)) return 1;
+		Field f = hand.getGame().getArena().getField();
 
 		double mult = 1;
 		Race[] races = getRace().split();
@@ -464,9 +465,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			mult *= 1 - Math.max(0, 0.06 * (hand.getOrigin().minor().length - 1));
 		}
-		mult *= stats.getAttrMult();
 
-		return mult;
+		return mult * stats.getAttrMult();
 	}
 
 	public double getPower() {
@@ -1076,7 +1076,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					g2d.drawImage(emp, 0, 0, null);
 				}
 
-				double mult = getFieldMult(hand.getGame().getArena().getField());
+				double mult = getFieldMult();
 				if (mult != 1) {
 					BufferedImage indicator = null;
 					if (mult > 1) {
