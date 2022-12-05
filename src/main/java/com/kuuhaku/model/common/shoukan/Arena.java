@@ -543,7 +543,7 @@ public class Arena implements Renderer {
 
 			int x;
 			int y;
-			String name = Graph.abbreviate(g2d, hand.getName(), SIZE.width - (BAR_SIZE.width + 250));
+			String name = hand.getName();
 			g.setColor(Color.WHITE);
 			g.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
 			if (game.getCurrentSide() == hand.getSide()) {
@@ -580,7 +580,7 @@ public class Arena implements Renderer {
 					g.setColor(Color.WHITE);
 				}
 
-				Graph.drawOutlinedString(g, name, x, y, 10, Color.BLACK);
+				Graph.drawOutlinedString(g, Graph.abbreviate(g2d, name, SIZE.width - (BAR_SIZE.width + 250)), x, y, 10, Color.BLACK);
 			//}
 
 			int rad = (int) (BAR_SIZE.height / 1.5);

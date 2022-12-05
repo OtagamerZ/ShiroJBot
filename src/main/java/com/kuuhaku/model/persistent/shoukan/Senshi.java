@@ -1110,10 +1110,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					String str = locale.get("str/turns", time);
 
 					g1.setColor(Graph.getColor(overlay).brighter());
-					g1.setFont(Drawable.FONT.deriveFont(Drawable.FONT.getSize() * 1.5f));
+					g1.setFont(Drawable.FONT.deriveFont(Drawable.FONT.getSize() * 2f));
 					Graph.drawOutlinedString(g1, str,
-							225 / 2 - g1.getFontMetrics().stringWidth(str) / 2, 350 - g1.getFontMetrics().getHeight(),
-							2, Color.BLACK
+							225 / 2 - g1.getFontMetrics().stringWidth(str) / 2, 365 - g1.getFontMetrics().getHeight(),
+							4, Color.BLACK
 					);
 					break;
 				}
