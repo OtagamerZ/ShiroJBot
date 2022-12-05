@@ -833,10 +833,10 @@ public class Hand {
 	}
 
 	public BufferedImage render() {
-		return render(true);
+		return render(cards);
 	}
 
-	public BufferedImage render(boolean ally) {
+	public BufferedImage render(List<Drawable<?>> cards) {
 		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * Math.max(5, cards.size()), 100 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
@@ -847,6 +847,8 @@ public class Hand {
 			int x = offset + 10 + (Drawable.SIZE.width + 10) * i;
 
 			Drawable<?> d = cards.get(i);
+			boolean ally = equals(d.getHand());
+
 			g2d.drawImage(d.render(game.getLocale(), userDeck), x, 100, null);
 			if (d.isAvailable() && ally) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
@@ -881,7 +883,7 @@ public class Hand {
 
 	public void showHand(Hand hand) {
 		getUser().openPrivateChannel()
-				.flatMap(chn -> chn.sendFile(IO.getBytes(hand.render(equals(hand)), "png"), "hand.png"))
+				.flatMap(chn -> chn.sendFile(IO.getBytes(render(hand.getCards()), "png"), "hand.png"))
 				.queue(m -> {
 					if (equals(hand)) {
 						if (lastMessage != null) {
@@ -893,6 +895,12 @@ public class Hand {
 						lastMessage = m.getId();
 					}
 				}, Utils::doNothing);
+	}
+
+	public void showCards(List<Drawable<?>> cards) {
+		getUser().openPrivateChannel()
+				.flatMap(chn -> chn.sendFile(IO.getBytes(render(cards), "png"), "cards.png"))
+				.queue(null, Utils::doNothing);
 	}
 
 	public CompletableFuture<Drawable<?>> requestChoice(List<Drawable<?>> cards) {
