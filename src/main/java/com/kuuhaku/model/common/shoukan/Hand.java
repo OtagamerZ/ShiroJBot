@@ -663,9 +663,8 @@ public class Hand {
 		this.hp = Utils.clamp(this.hp + value, 0, base.hp() * 2);
 
 		if (!pure) {
-			int delta = before - this.hp;
-			if (delta > 0) {
-				hpDelta = -delta;
+			hpDelta = this.hp - before;
+			if (hpDelta < 0) {
 				game.trigger(Trigger.ON_DAMAGE, side);
 
 				if (origin.synergy() == Race.VIRUS) {
@@ -673,8 +672,7 @@ public class Hand {
 				} else if (origin.synergy() == Race.TORMENTED) {
 					getOther().modHP((int) -(delta * 0.01));
 				}
-			} else if (delta < 0) {
-				hpDelta = delta;
+			} else if (hpDelta > 0) {
 				game.trigger(Trigger.ON_HEAL, side);
 			}
 		}
