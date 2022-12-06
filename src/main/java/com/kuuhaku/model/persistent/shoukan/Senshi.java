@@ -930,13 +930,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isProtected() {
-		if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
-			return true;
-		}
-
 		if (hand != null) {
 			Evogear shield = null;
 			hand.getGame().trigger(Trigger.ON_EFFECT_TARGET, new Source(this, Trigger.ON_EFFECT_TARGET));
+			if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
+				return true;
+			}
+
 			if (!hand.equals(hand.getGame().getCurrent())) {
 				for (Evogear e : equipments) {
 					if (e.hasCharm(Charm.SHIELD)) {
