@@ -65,7 +65,7 @@ public class Hand {
 	private final Origin origin;
 
 	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
-		if (getGame().getArena().getBanned().contains(this)) return false;
+		if (getGame().getArena().getBanned().contains(d)) return false;
 
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
@@ -87,7 +87,7 @@ public class Hand {
 		return true;
 	});
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
-		if (getGame().getArena().getBanned().contains(this)) return false;
+		if (getGame().getArena().getBanned().contains(d)) return false;
 
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
@@ -105,7 +105,7 @@ public class Hand {
 		return true;
 	});
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
-		if (getGame().getArena().getBanned().contains(this)) return false;
+		if (getGame().getArena().getBanned().contains(d)) return false;
 
 		if (d instanceof Senshi s) {
 			Evogear ward = null;
@@ -166,7 +166,7 @@ public class Hand {
 		return d.keepOnDestroy();
 	});
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
-		if (getGame().getArena().getBanned().contains(this)) return false;
+		if (getGame().getArena().getBanned().contains(d)) return false;
 
 		d.setHand(this);
 		getData().put("last_discarded", d);
