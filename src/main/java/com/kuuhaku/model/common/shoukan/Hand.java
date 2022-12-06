@@ -668,9 +668,9 @@ public class Hand {
 				game.trigger(Trigger.ON_DAMAGE, side);
 
 				if (origin.synergy() == Race.VIRUS) {
-					modMP((int) (delta * 0.0025));
+					modMP((int) -(hpDelta * 0.0025));
 				} else if (origin.synergy() == Race.TORMENTED) {
-					getOther().modHP((int) -(delta * 0.01));
+					getOther().modHP((int) (hpDelta * 0.01));
 				}
 			} else if (hpDelta > 0) {
 				game.trigger(Trigger.ON_HEAL, side);
