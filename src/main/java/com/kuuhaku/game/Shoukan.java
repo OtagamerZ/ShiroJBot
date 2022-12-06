@@ -1731,7 +1731,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@Override
-	protected void nextTurn() {
+	public void nextTurn() {
 		turns.add(Turn.from(this));
 
 		Hand curr = getCurrent();
