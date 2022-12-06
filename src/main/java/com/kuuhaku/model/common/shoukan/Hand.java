@@ -859,7 +859,7 @@ public class Hand {
 			}
 
 			if (!ally) {
-				Graph.applyTransformed(g2d, x, 100, g -> {
+				Graph.applyTransformed(g2d, x + 15, 100, g -> {
 					g.setClip(userDeck.getStyling().getFrame().getBoundary());
 					g.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 0, 0, null);
 				});
