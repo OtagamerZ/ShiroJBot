@@ -731,7 +731,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Senshi enemy = tgt.enemy();
 		if (enemy != null) {
 			if (chosen.getTarget() != null && !Objects.equals(chosen.getTarget(), enemy)) {
-				getChannel().sendMessage(getLocale().get("error/card_taunted", chosen.getTarget(), chosen.getTarget().getIndex())).queue();
+				getChannel().sendMessage(getLocale().get("error/card_taunted", chosen.getTarget(), chosen.getTarget().getIndex() + 1)).queue();
 				return false;
 			}
 
@@ -874,7 +874,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (ally.getTarget() != null && !Objects.equals(ally.getTarget(), enemy)) {
-				getChannel().sendMessage(getLocale().get("error/card_taunted", ally.getTarget(), ally.getTarget().getIndex())).queue();
+				getChannel().sendMessage(getLocale().get("error/card_taunted", ally.getTarget(), ally.getTarget().getIndex() + 1)).queue();
 				return false;
 			}
 
