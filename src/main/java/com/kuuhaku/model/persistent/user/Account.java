@@ -338,6 +338,8 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 		if (lastDaily != null && now.isBefore(lastDaily.plusDays(1))) {
 			return now.until(lastDaily.plusDays(1), ChronoUnit.MILLIS);
+		} else if (hasEnough(100000, Currency.CR)) {
+			return -1;
 		}
 
 		lastDaily = now;

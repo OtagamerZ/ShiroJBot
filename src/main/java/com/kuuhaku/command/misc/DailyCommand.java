@@ -39,6 +39,9 @@ public class DailyCommand implements Executable {
 		if (cd > 0) {
 			event.channel().sendMessage(locale.get("error/daily_collected", Utils.toStringDuration(locale, cd))).queue();
 			return;
+		} else if (cd == -1) {
+			event.channel().sendMessage(locale.get("error/daily_limit", Utils.toStringDuration(locale, cd))).queue();
+			return;
 		}
 
 		event.channel().sendMessage(locale.get("success/daily")).queue();
