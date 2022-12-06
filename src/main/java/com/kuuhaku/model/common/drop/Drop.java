@@ -66,7 +66,7 @@ public abstract class Drop<T> {
 		), 2);
 		pool.add(new DropCondition("level",
 				(rng) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(SQRT(xp / 100)) FROM profile WHERE xp > 100");
+					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(CAST(SQRT(xp / 100) AS NUMERIC)) FROM profile WHERE xp > 100");
 
 					return new Object[]{(int) Calc.rng(avg / 2d, (avg * 1.5), rng)};
 				},
@@ -83,6 +83,7 @@ public abstract class Drop<T> {
 							     WHERE sc.id IS NULL
 							     GROUP BY kc.kawaipon_uid
 							     ) AS x
+							GROUP BY x.count
 							""");
 
 					return new Object[]{(int) Calc.rng(avg / 2d, (avg * 1.5), rng)};
@@ -109,6 +110,7 @@ public abstract class Drop<T> {
 							       AND c.anime_id = ?1
 							     GROUP BY kc.kawaipon_uid
 							     ) AS x
+							GROUP BY x.count
 							""", anime.getId());
 
 					return new Object[]{(int) Calc.rng(avg / 2d, Math.min(avg * 1.5, anime.getCount()), seed), anime};
