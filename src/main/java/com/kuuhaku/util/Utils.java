@@ -534,8 +534,12 @@ public abstract class Utils {
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 				if ((u == null || event.getAuthor().equals(u)) && act.apply(event.getMessage())) {
+					if (timeout != null) {
+						timeout.cancel(true);
+						timeout = null;
+					}
+
 					result.complete(event.getMessage());
-					if (timeout != null) timeout.cancel(true);
 					close();
 				}
 			}
