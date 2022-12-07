@@ -105,18 +105,18 @@ public class PadoruEvent extends SpecialEvent {
 	@Override
 	public void onCompletion(TextChannel channel) {
 		EXEC.shutdownNow();
-		for (String id : users) {
-			Account acc = DAO.find(Account.class, id);
-			DynamicProperty dp = acc.getDynamicProperty("padoru");
-			dp.setValue(NumberUtils.toInt(dp.getValue()) + 1);
-			dp.save();
-		}
-
 		File gif = IO.getResourceAsFile("assets/padoru_padoru.gif");
 		if (gif != null) {
 			channel.sendMessage(getLocale().get("success/padoru_complete")).addFile(gif).queue();
 		} else {
 			channel.sendMessage(getLocale().get("success/padoru_complete")).queue();
+		}
+
+		for (String id : users) {
+			Account acc = DAO.find(Account.class, id);
+			DynamicProperty dp = acc.getDynamicProperty("padoru");
+			dp.setValue(NumberUtils.toInt(dp.getValue()) + 1);
+			dp.save();
 		}
 
 		DAO.apply(GuildConfig.class, channel.getGuild().getId(), gc -> {
