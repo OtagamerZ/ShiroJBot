@@ -86,7 +86,7 @@ public class PadoruEvent extends SpecialEvent {
 			default -> "PADORU PADORU";
 		};
 
-		if (content.equals(phrase) && users.add(msg.getAuthor().getId())) {
+		if (content.equalsIgnoreCase(phrase) && users.add(msg.getAuthor().getId())) {
 			stage++;
 
 			Emote e = msg.getJDA().getEmoteById("787012642501689344");
