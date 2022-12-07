@@ -104,6 +104,7 @@ public class PadoruEvent extends SpecialEvent {
 
 	@Override
 	public void onCompletion(TextChannel channel) {
+		EXEC.shutdownNow();
 		for (String id : users) {
 			Account acc = DAO.find(Account.class, id);
 			DynamicProperty dp = acc.getDynamicProperty("padoru");
