@@ -113,13 +113,13 @@ public class PadoruEvent extends SpecialEvent {
 
 		File gif = IO.getResourceAsFile("assets/padoru_padoru.gif");
 		if (gif != null) {
-			channel.sendMessage(getLocale().get("str/padoru_complete")).addFile(gif).queue();
+			channel.sendMessage(getLocale().get("success/padoru_complete")).addFile(gif).queue();
 		} else {
-			channel.sendMessage(getLocale().get("str/padoru_complete")).queue();
+			channel.sendMessage(getLocale().get("success/padoru_complete")).queue();
 		}
 
 		DAO.apply(GuildConfig.class, channel.getGuild().getId(), gc -> {
-			GuildBuff gb = new GuildBuff("padoru", 1, TimeUnit.HOURS, 0.2, 0.2, 0.2, 0.2);
+			GuildBuff gb = new GuildBuff("padoru", 1, TimeUnit.HOURS, 0.5, 0.5, 0.5, 0.5);
 
 			JSONArray buffs = gc.getBuffs();
 			buffs.remove(gb);
