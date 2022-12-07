@@ -508,34 +508,32 @@ public abstract class Utils {
 		);
 	}
 
+	public static CompletableFuture<Message> awaitMessage(TextChannel chn, Function<Message, Boolean> act) {
+		return awaitMessage(null, chn, act);
+	}
+
 	public static CompletableFuture<Message> awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act) {
-		CompletableFuture<Message> result = new CompletableFuture<>();
-
-		GuildListener.addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
-			@Override
-			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-				if (event.getAuthor().equals(u) && act.apply(event.getMessage())) {
-					result.complete(event.getMessage());
-					close();
-				}
-			}
-		});
-
-		return result;
+		return awaitMessage(u, chn, act, 0, null);
 	}
 
 	public static CompletableFuture<Message> awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit) {
 		CompletableFuture<Message> result = new CompletableFuture<>();
 
 		GuildListener.addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
-			final ScheduledFuture<?> timeout = Executors.newSingleThreadScheduledExecutor().schedule(() -> {
-				result.complete(null);
-				close();
-			}, time, unit);
+			private ScheduledFuture<?> timeout;
+
+			{
+				if (unit != null) {
+					timeout = Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+						result.complete(null);
+						close();
+					}, time, unit);
+				}
+			}
 
 			@Override
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-				if (event.getAuthor().equals(u) && act.apply(event.getMessage())) {
+				if ((u == null || event.getAuthor().equals(u)) && act.apply(event.getMessage())) {
 					result.complete(event.getMessage());
 					timeout.cancel(true);
 					close();

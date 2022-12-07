@@ -29,6 +29,8 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.PatternCache;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.common.drop.Drop;
+import com.kuuhaku.model.common.special.PadoruEvent;
+import com.kuuhaku.model.common.special.SpecialEvent;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;
@@ -377,7 +379,11 @@ public class GuildListener extends ListenerAdapter {
 	}
 
 	private void rollEvents(TextChannel channel, I18N locale) {
+		if (SpecialEvent.hasEvent(channel.getGuild()) || !channel.canTalk()) return;
 
+		if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.DECEMBER && Calc.chance(1)) {
+			new PadoruEvent(locale).start(channel);
+		}
 	}
 
 	private void processCommand(MessageData.Guild data, EventData event, String content) {

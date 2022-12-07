@@ -19,37 +19,51 @@
 package com.kuuhaku.model.common.special;
 
 import com.kuuhaku.model.enums.I18N;
+import kotlin.Pair;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public abstract class SpecialEvent {
-	public static final Map<String, SpecialEvent> EVENTS = new HashMap<>();
+	private static final Map<String, Pair<Long, SpecialEvent>> events = new HashMap<>();
 
-	private final double chance;
-	private final long timeout;
+	protected final ScheduledExecutorService EXEC = Executors.newSingleThreadScheduledExecutor();
+	private final I18N locale;
 
-	public SpecialEvent(double chance, int time, TimeUnit unit) {
-		this.chance = chance;
-		this.timeout = TimeUnit.MILLISECONDS.convert(time, unit);
+	public SpecialEvent(I18N locale) {
+		this.locale = locale;
 	}
 
-	public double getChance() {
-		return chance;
+	public I18N getLocale() {
+		return locale;
 	}
 
-	public long getTimeout() {
-		return timeout;
-	}
+	public abstract void start(TextChannel channel);
 
-	public abstract void onRun(Message msg);
+	public abstract boolean onRun(Message msg);
 
-	public abstract void onCompletion(TextChannel channel, I18N locale);
+	public abstract void onCompletion(TextChannel channel);
 
-	public abstract void onTimeout(TextChannel channel, I18N locale);
+	public abstract void onTimeout(TextChannel channel);
 
 	public abstract boolean isComplete();
+
+	public static boolean hasEvent(Guild guild) {
+		events.entrySet().removeIf(e -> e.getValue().getFirst() < System.currentTimeMillis());
+
+		return events.containsKey(guild.getId());
+	}
+
+	public static void addEvent(Guild guild, SpecialEvent event) {
+		events.put(guild.getId(), new Pair<>(
+				System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS),
+				event
+		));
+	}
 }
