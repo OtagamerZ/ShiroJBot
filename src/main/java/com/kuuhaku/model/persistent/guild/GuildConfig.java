@@ -22,11 +22,17 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.user.Profile;
+import com.kuuhaku.model.records.GuildBuff;
+import com.kuuhaku.util.json.JSONArray;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
 
-import jakarta.persistence.*;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -61,6 +67,11 @@ public class GuildConfig extends DAO<GuildConfig> {
 	@PrimaryKeyJoinColumn(name = "gid")
 	@Fetch(FetchMode.JOIN)
 	private GoodbyeSettings goodbyeSettings;
+
+	@Type(JsonBinaryType.class)
+	@Column(name = "buffs", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray buffs = new JSONArray();
 
 	@OneToMany(mappedBy = "guild", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
@@ -115,6 +126,31 @@ public class GuildConfig extends DAO<GuildConfig> {
 
 	public GoodbyeSettings getGoodbyeSettings() {
 		return goodbyeSettings;
+	}
+
+	public JSONArray getBuffs() {
+		return buffs;
+	}
+
+	public GuildBuff getCumBuffs() {
+		double card, drop, xp, rarity;
+		card = drop = xp = rarity = 0;
+
+		Iterator<Object> it = buffs.iterator();
+		while (it.hasNext()) {
+			GuildBuff gb = (GuildBuff) it.next();
+			if (gb.expired()) {
+				it.remove();
+				continue;
+			}
+
+			card += gb.card();
+			drop += gb.drop();
+			xp += gb.xp();
+			rarity += gb.rarity();
+		}
+
+		return new GuildBuff(card, drop, rarity, xp);
 	}
 
 	public Set<Profile> getProfiles() {

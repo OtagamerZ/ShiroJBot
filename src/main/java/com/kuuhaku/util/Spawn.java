@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
+import com.kuuhaku.model.records.GuildBuff;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.jodah.expiringmap.ExpiringMap;
@@ -53,11 +54,11 @@ public abstract class Spawn {
 	private static FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(3);
 	private static FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(15);
 
-	public synchronized static KawaiponCard getKawaipon(TextChannel channel) {
+	public synchronized static KawaiponCard getKawaipon(GuildBuff gb, TextChannel channel) {
 		if (spawnedCards.containsKey(channel.getId())) return null;
 
-		double dropRate = 8 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
-		double rarityBonus = 1 + getRarityMult();
+		double dropRate = 8 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount())) * (1 + gb.card());
+		double rarityBonus = 1 + getRarityMult() * (1 + gb.rarity());
 
 		KawaiponCard card = null;
 		if (Calc.chance(dropRate)) {
@@ -109,11 +110,11 @@ public abstract class Spawn {
 		return card;
 	}
 
-	public synchronized static Drop<?> getDrop(TextChannel channel) {
+	public synchronized static Drop<?> getDrop(GuildBuff gb, TextChannel channel) {
 		if (spawnedDrops.containsKey(channel.getId())) return null;
 
-		double dropRate = 10 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount()));
-		double rarityBonus = 1 + getRarityMult();
+		double dropRate = 10 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount())) * (1 + gb.drop());
+		double rarityBonus = 1 + getRarityMult() * (1 + gb.rarity());
 
 		Drop<?> drop = null;
 		if (Calc.chance(dropRate)) {

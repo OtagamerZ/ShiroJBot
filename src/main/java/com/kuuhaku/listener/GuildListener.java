@@ -24,7 +24,10 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSignatureException;
 import com.kuuhaku.interfaces.Executable;
-import com.kuuhaku.model.common.*;
+import com.kuuhaku.model.common.AutoEmbedBuilder;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.PatternCache;
+import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
@@ -32,6 +35,7 @@ import com.kuuhaku.model.persistent.guild.*;
 import com.kuuhaku.model.persistent.id.ProfileId;
 import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.EventData;
+import com.kuuhaku.model.records.GuildBuff;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.PreparedCommand;
 import com.kuuhaku.util.*;
@@ -55,7 +59,6 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -227,7 +230,8 @@ public class GuildListener extends ListenerAdapter {
 			Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
 			int lvl = profile.getLevel();
 
-			profile.addXp(15);
+			GuildBuff gb = config.getCumBuffs();
+			profile.addXp((long) (15 * (1 + gb.xp())));
 			profile.save();
 
 			Account account = profile.getAccount();
@@ -312,58 +316,68 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			List<TextChannel> channels = config.getSettings().getKawaiponChannels();
-			if (!channels.isEmpty()) {
-				TextChannel chosen = Utils.getRandomEntry(channels);
-
-				KawaiponCard kc = Spawn.getKawaipon(chosen);
-				if (kc != null) {
-					EmbedBuilder eb = new EmbedBuilder()
-							.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
-							.setTitle(kc + " (" + kc.getCard().getAnime() + ")")
-							.setColor(kc.getCard().getRarity().getColor(kc.isChrome()))
-							.setImage("attachment://card.png")
-							.setFooter(locale.get("str/card_instructions", config.getPrefix(), kc.getPrice()));
-
-					chosen.sendMessageEmbeds(eb.build())
-							.addFile(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png")
-							.delay((long) (60 - 60 * Spawn.getQuantityMult()), TimeUnit.SECONDS)
-							.flatMap(Message::delete)
-							.queue(null, Utils::doNothing);
-				}
-			}
-
-			channels = config.getSettings().getDropChannels();
-			if (!channels.isEmpty()) {
-				TextChannel chosen = Utils.getRandomEntry(channels);
-
-				Drop<?> drop = Spawn.getDrop(chosen);
-				if (drop != null) {
-					Random rng = drop.getRng();
-
-					EmbedBuilder eb = new EmbedBuilder()
-							.setAuthor(locale.get("str/drop_spawn", drop.getRarity().getIndex()))
-							.setColor(drop.getRarity().getColor(false))
-							.setDescription(drop.getContent().toString(locale))
-							.setFooter(locale.get("str/drop_instructions", config.getPrefix(), drop.getCaptcha(true)))
-							.addField(
-									locale.get("str/drop_requirements"),
-									drop.getConditions().stream()
-											.map(dc -> dc.toString(locale, rng))
-											.collect(Collectors.joining("\n")),
-									true
-							)
-							.addField("Captcha", "`" + drop.getCaptcha(true) + "`", true);
-
-					chosen.sendMessageEmbeds(eb.build())
-							.delay((long) (60 - 60 * Spawn.getQuantityMult()), TimeUnit.SECONDS)
-							.flatMap(Message::delete)
-							.queue(null, Utils::doNothing);
-				}
-			}
+			rollDrops(config, locale);
+			rollEvents(data.channel(), locale);
 		} finally {
 			locks.remove(event.getAuthor().getId());
 		}
+	}
+
+	private void rollDrops(GuildConfig config, I18N locale) {
+		GuildBuff gb = config.getCumBuffs();
+		List<TextChannel> channels = config.getSettings().getKawaiponChannels();
+		if (!channels.isEmpty()) {
+			TextChannel chosen = Utils.getRandomEntry(channels);
+
+			KawaiponCard kc = Spawn.getKawaipon(gb, chosen);
+			if (kc != null) {
+				EmbedBuilder eb = new EmbedBuilder()
+						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
+						.setTitle(kc + " (" + kc.getCard().getAnime() + ")")
+						.setColor(kc.getCard().getRarity().getColor(kc.isChrome()))
+						.setImage("attachment://card.png")
+						.setFooter(locale.get("str/card_instructions", config.getPrefix(), kc.getPrice()));
+
+				chosen.sendMessageEmbeds(eb.build())
+						.addFile(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png")
+						.delay((long) (60 - 60 * Spawn.getQuantityMult()), TimeUnit.SECONDS)
+						.flatMap(Message::delete)
+						.queue(null, Utils::doNothing);
+			}
+		}
+
+		channels = config.getSettings().getDropChannels();
+		if (!channels.isEmpty()) {
+			TextChannel chosen = Utils.getRandomEntry(channels);
+
+			Drop<?> drop = Spawn.getDrop(gb, chosen);
+			if (drop != null) {
+				Random rng = drop.getRng();
+
+				EmbedBuilder eb = new EmbedBuilder()
+						.setAuthor(locale.get("str/drop_spawn", drop.getRarity().getIndex()))
+						.setColor(drop.getRarity().getColor(false))
+						.setDescription(drop.getContent().toString(locale))
+						.setFooter(locale.get("str/drop_instructions", config.getPrefix(), drop.getCaptcha(true)))
+						.addField(
+								locale.get("str/drop_requirements"),
+								drop.getConditions().stream()
+										.map(dc -> dc.toString(locale, rng))
+										.collect(Collectors.joining("\n")),
+								true
+						)
+						.addField("Captcha", "`" + drop.getCaptcha(true) + "`", true);
+
+				chosen.sendMessageEmbeds(eb.build())
+						.delay((long) (60 - 60 * Spawn.getQuantityMult()), TimeUnit.SECONDS)
+						.flatMap(Message::delete)
+						.queue(null, Utils::doNothing);
+			}
+		}
+	}
+
+	private void rollEvents(TextChannel channel, I18N locale) {
+
 	}
 
 	private void processCommand(MessageData.Guild data, EventData event, String content) {
