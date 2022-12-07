@@ -32,7 +32,6 @@ import com.kuuhaku.model.records.GuildBuff;
 import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONArray;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -121,10 +120,7 @@ public class PadoruEvent extends SpecialEvent {
 
 		DAO.apply(GuildConfig.class, channel.getGuild().getId(), gc -> {
 			GuildBuff gb = new GuildBuff("padoru", 1, TimeUnit.HOURS, 0.5, 0.5, 0.5, 0.5);
-
-			JSONArray buffs = gc.getBuffs();
-			buffs.remove(gb);
-			buffs.add(gb);
+			gc.addBuff(gb);
 		});
 	}
 
