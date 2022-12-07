@@ -63,20 +63,17 @@ public enum FrameSkin {
 
 	GLITCH("**(Emblema \"Bug hunter\")** Ę̶̄͛Ŗ̴̓R̸̩͉͗O̴̪͉͊:̸̻̗͗ ̶̧̤̋̕P̴̘̪͑R̶̳̭̈̂Ǫ̸͒̽T̷̡̗̈́̃Ǫ̶̨̈́̐C̸̯͛̂O̴̯̓L̶̲̱̾̌Ọ̸̗͑̓ ̷̰͓̅͌\"̶̝̈͝D̶̳̯̈́Ĕ̵͍Ŕ̴ͅR̶̮̹͛Õ̶̢̾T̶͓͆A̸͚̰͆\"̶̡̌̓ ̸̬̃̈́N̶̢͉̒Ã̸͍̀Ȍ̸̘ͅ ̵̥͒̈́E̵̤̹̽̅Ṅ̷̼̆C̸̞̒O̷͚̪̎Ň̵͎Ṱ̵̨̽R̸̘̍̆Ả̴̙̞͝D̵̜͍̈́̋O̵̯͆",
 			acc -> Tag.getTags(Main.getMemberByID(acc.getUid())).contains(Tag.BUG_HUNTER)
-	),
+	),*/
 
-	PADORU("**(Emblema \"Padoru padoru\")** Hashiro sori yo, kaze no you ni, tsukimihara wo **PADORU PADORU!**",
-			acc -> Tag.getTags(Main.getMemberByID(acc.getUid())).contains(Tag.PADORU_PADORU)
-	),
+	PADORU("PADORU"),
 
-	METALLIC("**(75% das conquistas desbloqueadas)** Com estilo (e um revestimento semi-transparente), faça suas jogadas mostrando sua classe!",
+	/*METALLIC("**(75% das conquistas desbloqueadas)** Com estilo (e um revestimento semi-transparente), faça suas jogadas mostrando sua classe!",
 			acc -> (float) acc.getMedalBag().size() / Achievement.getMedalBag().size() > 0.75f
 	),
 
 	RICH("**(Emblema \"Rico\")** Uns chamam de playboy, outros de ganancioso, mas no fim todos querem um pedaço da grana!",
 			acc -> Tag.getTags(Main.getMemberByID(acc.getUid())).contains(Tag.RICO)
-	),*/
-	;
+	),*/;
 
 	private final String title;
 
@@ -100,10 +97,10 @@ public enum FrameSkin {
 			case RED, LEGACY_RED -> new Color(0xE87474);
 			case GRAY, LEGACY_GRAY -> new Color(0xBEBEBE);
 
+			case PADORU -> new Color(177, 30, 49);
 			/*case RAINBOW, GLITCH -> ImageHelper.getRandomColor();
 			case BLACK -> Color.BLACK;
 			case HALLOWEEN -> new Color(220, 89, 16);
-			case PADORU -> new Color(177, 30, 49);
 			case METALLIC -> new Color(190, 194, 203);
 			case RICH -> new Color(212, 175, 55);*/
 		};
@@ -120,12 +117,14 @@ public enum FrameSkin {
 					ORANGE,
 					RED, LEGACY_RED,
 					GRAY, LEGACY_GRAY
-					/*HALLOWEEN*/ -> Color.BLACK;
+				/*HALLOWEEN*/ -> Color.BLACK;
+
+			case PADORU -> getThemeColor().darker();
 
 			/*case BLACK -> Color.WHITE;
 			case RAINBOW -> ImageHelper.toLuma(getThemeColor().getRGB()) > 127 ? Color.BLACK : Color.WHITE;
 			case GLITCH -> ImageHelper.reverseColor(getThemeColor());
-			case PADORU, METALLIC, RICH -> getThemeColor().darker();*/
+			case METALLIC, RICH -> getThemeColor().darker();*/
 		};
 	}
 
@@ -139,8 +138,8 @@ public enum FrameSkin {
 					YELLOW, LEGACY_YELLOW,
 					ORANGE,
 					RED, LEGACY_RED,
-					GRAY, LEGACY_GRAY
-					/*HALLOWEEN, PADORU, METALLIC, RICH*/ -> Color.WHITE;
+					GRAY, LEGACY_GRAY,
+					PADORU /*HALLOWEEN, METALLIC, RICH*/ -> Color.WHITE;
 
 			/*case BLACK -> Color.BLACK;
 			case RAINBOW, GLITCH -> getThemeColor();*/
@@ -158,9 +157,10 @@ public enum FrameSkin {
 					ORANGE,
 					RED, LEGACY_RED,
 					GRAY, LEGACY_GRAY
-					/*RAINBOW, METALLIC*/ -> Color.BLACK;
+				/*RAINBOW, METALLIC*/ -> Color.BLACK;
 
-			//case BLACK, HALLOWEEN, GLITCH, PADORU, RICH -> Color.WHITE;
+			case PADORU -> Color.WHITE;
+			//case BLACK, HALLOWEEN, GLITCH, RICH -> Color.WHITE;
 		};
 	}
 
@@ -224,20 +224,4 @@ public enum FrameSkin {
 	public boolean isLegacy() {
 		return name().startsWith("LEGACY");
 	}
-
-	/*
-	@Override
-	public String toString() {
-		return switch (this) {
-			case RAINBOW -> "Arco-iris";
-			case BLACK -> "Negro";
-			case HALLOWEEN -> "Halloween";
-			case GLITCH -> "Glitch";
-
-			case PADORU -> "Padoru";
-			case METALLIC -> "Metálico";
-			case RICH -> "Rico";
-		} + " (`" + name().toLowerCase() + "`)";
-	}
-	*/
 }
