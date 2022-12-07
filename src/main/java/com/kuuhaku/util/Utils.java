@@ -535,7 +535,7 @@ public abstract class Utils {
 			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
 				if ((u == null || event.getAuthor().equals(u)) && act.apply(event.getMessage())) {
 					result.complete(event.getMessage());
-					timeout.cancel(true);
+					if (timeout != null) timeout.cancel(true);
 					close();
 				}
 			}
