@@ -31,6 +31,7 @@ import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Fonts;
+import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
@@ -233,21 +234,23 @@ public class Hand {
 						.collect(Utils.toShuffledList())
 		);
 
-		for (String card : game.getParams().cards()) {
-			card = card.toUpperCase();
-			CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card)).stream()
-					.findFirst()
-					.orElse(CardType.NONE);
+		if (DAO.find(Account.class, uid).getRole().allowed(Role.TESTER)) {
+			for (String card : game.getParams().cards()) {
+				card = card.toUpperCase();
+				CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card)).stream()
+						.findFirst()
+						.orElse(CardType.NONE);
 
-			Drawable<?> d = switch (type) {
-				case NONE -> null;
-				case KAWAIPON -> DAO.find(Senshi.class, card);
-				case EVOGEAR -> DAO.find(Evogear.class, card);
-				case FIELD -> DAO.find(Field.class, card);
-			};
-			if (d == null) continue;
+				Drawable<?> d = switch (type) {
+					case NONE -> null;
+					case KAWAIPON -> DAO.find(Senshi.class, card);
+					case EVOGEAR -> DAO.find(Evogear.class, card);
+					case FIELD -> DAO.find(Field.class, card);
+				};
+				if (d == null) continue;
 
-			cards.add(d);
+				cards.add(d);
+			}
 		}
 	}
 
