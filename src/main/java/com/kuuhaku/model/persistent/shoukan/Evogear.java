@@ -340,7 +340,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					.withConst("data", stats.getData())
 					.withVar("ep", ep)
 					.withVar("side", hand.getSide())
-					.withVar("props", extractValues(hand.getGame().getLocale(), this));
+					.withVar("props", extractValues(hand.getGame().getLocale()));
 
 			if (!isSpell()) {
 				cachedEffect
@@ -382,7 +382,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					"data", stats.getData(),
 					"ep", new EffectParameters(trigger, getSide()),
 					"side", hand.getSide(),
-					"props", extractValues(hand.getGame().getLocale(), this),
+					"props", extractValues(hand.getGame().getLocale()),
 					"self", equipper,
 					"trigger", trigger
 					));
@@ -466,7 +466,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					y += 11;
 				}
 
-				JSONObject values = extractValues(locale, this);
+				JSONObject values = extractValues(locale);
 				Graph.drawMultilineString(g1, desc,
 						7, y, 211, 3,
 						parseValues(g1, deck.getStyling(), values), highlightValues(g1, style.getFrame().isLegacy())

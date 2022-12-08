@@ -179,10 +179,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		};
 	}
 
-	default JSONObject extractValues(I18N locale, Drawable<?> d) {
+	default JSONObject extractValues(I18N locale) {
 		JSONObject out = new JSONObject();
 
-		String desc = d.getDescription(locale);
+		String desc = getDescription(locale);
 		for (String str : desc.split("\\s")) {
 			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}|\\{(?<tag>\\w+)}");
 
@@ -190,7 +190,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				try {
 					@Language("Groovy") String calc = groups.getString("calc").replace("$", "");
 					if (!calc.isBlank()) {
-						Hand h = d.getHand();
+						Hand h = getHand();
 
 						calc = "import static java.lang.Math.*\n\n" + calc;
 						String val = String.valueOf(
@@ -200,16 +200,17 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 										Map.entry("pmp", h == null ? 5 : h.getMP()),
 										Map.entry("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek())),
 										Map.entry("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek())),
-										Map.entry("mp", d.getMPCost()),
-										Map.entry("hp", d.getHPCost()),
-										Map.entry("atk", d.getDmg()),
-										Map.entry("dfs", d.getDfs()),
-										Map.entry("ddg", d.getDodge()),
-										Map.entry("blk", d.getBlock())
+										Map.entry("mp", getMPCost()),
+										Map.entry("hp", getHPCost()),
+										Map.entry("atk", getDmg()),
+										Map.entry("dfs", getDfs()),
+										Map.entry("ddg", getDodge()),
+										Map.entry("blk", getBlock()),
+										Map.entry("data", getStats().getData())
 								))
 						);
 
-						double pow = d instanceof Senshi s ? s.getPower() : 1;
+						double pow = this instanceof Senshi s ? s.getPower() : 1;
 						out.compute(groups.getString("type"), (k, v) -> {
 							int value = Calc.round(NumberUtils.toDouble(val) * pow);
 
