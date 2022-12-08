@@ -130,12 +130,6 @@ public class Arena implements Renderer {
 		if (Objects.equals(this.field, field)) return;
 		this.field = field;
 
-		for (Hand h : game.getHands().values()) {
-			if (h.getOrigin().synergy() == Race.WEREBEAST) {
-				h.draw();
-			}
-		}
-
 		game.trigger(Trigger.ON_FIELD_CHANGE);
 	}
 

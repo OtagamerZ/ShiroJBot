@@ -737,11 +737,28 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isBlinded(boolean pop) {
-		if (hand != null && hand.getGame().getArena().getField().getType() == FieldType.NIGHT) {
+		if (hand != null) {
 			return true;
 		}
 
 		return pop ? popFlag(Flag.BLIND) : hasFlag(Flag.BLIND);
+	}
+
+	public double getHitChance() {
+		double hit = 100;
+		if (isBlinded(true)) {
+			hit *= 0.75;
+		}
+
+		if (hand.getGame().getArena().getField().getType() == FieldType.NIGHT) {
+			if (hand.getOrigin().synergy() == Race.WEREBEAST) {
+				hit *= 0.9;
+			} else {
+				hit *= 0.8;
+			}
+		}
+
+		return hit;
 	}
 
 	public boolean isSupporting() {

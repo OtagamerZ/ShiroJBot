@@ -1019,7 +1019,7 @@ public class Shoukan extends GameInstance<Phase> {
 							int block = enemy.getBlock();
 							int dodge = enemy.getDodge();
 
-							if (ally.isBlinded(true) && Calc.chance(25)) {
+							if (Calc.chance(100 - ally.getHitChance())) {
 								trigger(ON_MISS, ally.asSource(ON_MISS));
 
 								reportEvent("str/combat", ally, enemy, getLocale().get("str/combat_miss"));
