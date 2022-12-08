@@ -751,10 +751,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (hand.getGame().getArena().getField().getType() == FieldType.NIGHT) {
+			hit *= 0.8;
+
 			if (hand.getOrigin().synergy() == Race.WEREBEAST) {
-				hit *= 0.9;
-			} else {
-				hit *= 0.8;
+				hit += (100 - hit) / 2;
 			}
 		}
 
