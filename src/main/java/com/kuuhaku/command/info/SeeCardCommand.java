@@ -29,6 +29,7 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Charm;
+import com.kuuhaku.model.enums.shoukan.FieldType;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
@@ -147,6 +148,8 @@ public class SeeCardCommand implements Executable {
 										.collect(Collectors.joining("\n")),
 								false
 						);
+					} else if (d instanceof Field f && f.getType() != FieldType.NONE) {
+						eb.addField(locale.get("field/" + f.getType()), locale.get("field/" + f.getType() + "_desc"), false);
 					}
 
 					if (!d.getTags().isEmpty()) {
