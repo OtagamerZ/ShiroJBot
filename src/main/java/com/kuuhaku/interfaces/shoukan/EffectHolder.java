@@ -101,7 +101,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							v = String.valueOf(obj);
 						}
 
-						val = str.replaceFirst("\\{.+}", Utils.roundToString(NumberUtils.toDouble(v), 0));
+						val = str.replaceFirst("\\{.+}", String.valueOf(Math.round(NumberUtils.toFloat(v))));
 					} else {
 						val = str;
 					}
