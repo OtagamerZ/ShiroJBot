@@ -47,23 +47,24 @@ import java.util.function.Function;
 
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	Map<String, Color> COLORS = Map.ofEntries(
-		Map.entry("php", new Color(0x85C720)),
-		Map.entry("pmp", new Color(0x3F9EFF)),
-		Map.entry("pdg", new Color(0x9A1313)),
-		Map.entry("prg", new Color(0x7ABCFF)),
+			Map.entry("php", new Color(0x85C720)),
+			Map.entry("bhp", new Color(0x85C721)),
+			Map.entry("pmp", new Color(0x3F9EFF)),
+			Map.entry("pdg", new Color(0x9A1313)),
+			Map.entry("prg", new Color(0x7ABCFF)),
 
-		Map.entry("hp", new Color(0xFF0000)),
-		Map.entry("mp", new Color(0x3F9EFE)),
-		Map.entry("atk", new Color(0xFE0000)),
-		Map.entry("dfs", new Color(0x00C500)),
-		Map.entry("ddg", new Color(0xFFC800)),
-		Map.entry("blk", new Color(0xA9A9A9)),
+			Map.entry("hp", new Color(0xFF0000)),
+			Map.entry("mp", new Color(0x3F9EFE)),
+			Map.entry("atk", new Color(0xFE0000)),
+			Map.entry("dfs", new Color(0x00C500)),
+			Map.entry("ddg", new Color(0xFFC800)),
+			Map.entry("blk", new Color(0xA9A9A9)),
 
-		Map.entry("b", Color.BLACK),
-		Map.entry("n", Color.BLACK),
-		Map.entry("cd", new Color(0x48BAFF)),
-		Map.entry("ally", new Color(0x000100)),
-		Map.entry("enemy", new Color(0x010000))
+			Map.entry("b", Color.BLACK),
+			Map.entry("n", Color.BLACK),
+			Map.entry("cd", new Color(0x48BAFF)),
+			Map.entry("ally", new Color(0x000100)),
+			Map.entry("enemy", new Color(0x010000))
 	);
 
 	CardAttributes getBase();
@@ -194,9 +195,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						calc = "import static java.lang.Math.*\n\n" + calc;
 						String val = String.valueOf(
 								Utils.exec(calc, Map.ofEntries(
+										Map.entry("php", h == null ? 5000 : h.getHP()),
 										Map.entry("bhp", h == null ? 5000 : h.getBase().hp()),
 										Map.entry("pmp", h == null ? 5 : h.getMP()),
-										Map.entry("php", h == null ? 5000 : h.getHP()),
 										Map.entry("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek())),
 										Map.entry("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek())),
 										Map.entry("mp", d.getMPCost()),
