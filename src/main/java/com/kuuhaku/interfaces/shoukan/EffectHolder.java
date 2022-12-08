@@ -48,7 +48,7 @@ import java.util.function.Function;
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	Map<String, Color> COLORS = Map.ofEntries(
 			Map.entry("php", new Color(0x85C720)),
-			Map.entry("bhp", new Color(0x85C721)),
+			Map.entry("bhp", new Color(0x85C720)),
 			Map.entry("pmp", new Color(0x3F9EFF)),
 			Map.entry("pdg", new Color(0x9A1313)),
 			Map.entry("prg", new Color(0x7ABCFF)),
