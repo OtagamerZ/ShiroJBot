@@ -87,7 +87,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Arena arena;
 	private final Map<Side, Hand> hands;
 	private final Map<String, String> messages = new HashMap<>();
-	private final Set<EffectOverTime> eots = new HashSet<>();
+	private final Set<EffectOverTime> eots = new TreeSet<>();
 	private final List<Turn> turns = new TreeList<>();
 
 	private final boolean singleplayer;
@@ -1312,6 +1312,8 @@ public class Shoukan extends GameInstance<Phase> {
 		Iterator<EffectOverTime> it = eots.iterator();
 		while (it.hasNext()) {
 			EffectOverTime effect = it.next();
+			System.out.println(ep.trigger() + " (" + ep.side() + ")" + " - " + effect.source());
+
 			if (effect.lock().get()) continue;
 			else if (effect.expired()) {
 				it.remove();
