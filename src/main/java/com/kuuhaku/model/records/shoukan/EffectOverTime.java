@@ -105,7 +105,7 @@ public record EffectOverTime(
 		if (turns != null && other.turns != null) return turns.get() - other.turns.get();
 		if (limit != null && other.limit != null) return limit.get() - other.limit.get();
 
-		return Integer.MIN_VALUE;
+		return (turns != null || limit != null) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
 	}
 
 	@Override
