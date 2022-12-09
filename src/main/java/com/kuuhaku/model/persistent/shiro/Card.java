@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.shiro;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.util.Graph;
@@ -211,18 +212,34 @@ public class Card extends DAO<Card> {
 	}
 
 	private byte[] getImageBytes() throws IOException {
+		File f = new File(System.getenv("CARDS_PATH") + anime.getId(), id + ".png");
+
 		byte[] cardBytes;
-		try {
-			cardBytes = IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png")), "png");
-		} catch (IOException e) {
-			cardBytes = new byte[0];
-		}
+		if (f.exists()) {
+			File finalF = f;
+			cardBytes = Main.getCacheManager().computeResource(id, (k, v) -> {
+				if (v != null && v.length > 0) return v;
 
-		if (cardBytes.length == 0) {
-			File f = IO.getResourceAsFile("kawaipon/not_found.png");
-			assert f != null;
+				try {
+					return FileUtils.readFileToByteArray(finalF);
+				} catch (IOException e) {
+					Constants.LOGGER.error(e, e);
+					return null;
+				}
+			});
+		} else {
+			try {
+				cardBytes = IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png")), "png");
+			} catch (IOException e) {
+				cardBytes = new byte[0];
+			}
 
-			cardBytes = FileUtils.readFileToByteArray(f);
+			if (cardBytes.length == 0) {
+				f = IO.getResourceAsFile("kawaipon/not_found.png");
+				assert f != null;
+
+				cardBytes = FileUtils.readFileToByteArray(f);
+			}
 		}
 
 		return cardBytes;
