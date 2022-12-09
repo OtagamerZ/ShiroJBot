@@ -102,10 +102,10 @@ public record EffectOverTime(
 
 	@Override
 	public int compareTo(@NotNull EffectOverTime other) {
-		if (turns != null) return turns.get() - other.turns.get();
-		if (limit != null) return limit.get() - other.limit.get();
+		if (turns != null && other.turns != null) return turns.get() - other.turns.get();
+		if (limit != null && other.limit != null) return limit.get() - other.limit.get();
 
-		return Integer.MIN_VALUE;
+		return (turns != null || limit != null) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
 	}
 
 	@Override
