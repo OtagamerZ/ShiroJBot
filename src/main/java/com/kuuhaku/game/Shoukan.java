@@ -1311,13 +1311,14 @@ public class Shoukan extends GameInstance<Phase> {
 		Iterator<EffectOverTime> it = eots.iterator();
 		while (it.hasNext()) {
 			EffectOverTime effect = it.next();
+			System.out.println(effect);
+
 			if (effect.lock().get()) continue;
 			else if (effect.expired()) {
 				it.remove();
 				continue;
 			}
 
-			System.out.println(effect);
 			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
 			if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
 				effect.decreaseTurn();
