@@ -37,5 +37,7 @@ public class ClearCacheCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Main.getCacheManager().getResourceCache().clear();
 		Main.getCacheManager().getLocaleCache().clear();
+
+		event.channel().sendMessage(locale.get("success/cache_clear")).queue();
 	}
 }
