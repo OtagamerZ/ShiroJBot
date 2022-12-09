@@ -213,6 +213,7 @@ public class Card extends DAO<Card> {
 
 	private byte[] getImageBytes() throws IOException {
 		File f = new File(System.getenv("CARDS_PATH") + anime.getId(), id + ".png");
+		System.out.println(f.getAbsolutePath());
 
 		byte[] cardBytes;
 		if (f.exists()) {
