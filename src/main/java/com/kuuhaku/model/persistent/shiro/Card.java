@@ -217,6 +217,7 @@ public class Card extends DAO<Card> {
 
 		byte[] cardBytes;
 		if (f.exists()) {
+			System.out.println("File");
 			File finalF = f;
 			cardBytes = Main.getCacheManager().computeResource(id, (k, v) -> {
 				if (v != null && v.length > 0) return v;
@@ -229,6 +230,7 @@ public class Card extends DAO<Card> {
 				}
 			});
 		} else {
+			System.out.println("API");
 			try {
 				cardBytes = IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png")), "png");
 			} catch (IOException e) {
