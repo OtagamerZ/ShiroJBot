@@ -213,11 +213,9 @@ public class Card extends DAO<Card> {
 
 	private byte[] getImageBytes() throws IOException {
 		File f = new File(System.getenv("CARDS_PATH") + anime.getId(), id + ".png");
-		System.out.println(f.getAbsolutePath());
 
 		byte[] cardBytes;
 		if (f.exists()) {
-			System.out.println("File");
 			File finalF = f;
 			cardBytes = Main.getCacheManager().computeResource(id, (k, v) -> {
 				if (v != null && v.length > 0) return v;
@@ -230,7 +228,8 @@ public class Card extends DAO<Card> {
 				}
 			});
 		} else {
-			System.out.println("API");
+			System.out.println(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png");
+
 			try {
 				cardBytes = IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png")), "png");
 			} catch (IOException e) {
