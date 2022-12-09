@@ -1317,6 +1317,7 @@ public class Shoukan extends GameInstance<Phase> {
 				continue;
 			}
 
+			System.out.println(effect);
 			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
 			if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
 				effect.decreaseTurn();
