@@ -92,7 +92,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	private final boolean singleplayer;
 	private StateSnap snapshot = null;
-	private boolean restoring = false;
+	private boolean restoring = true;
 	private boolean history = false;
 
 	public Shoukan(I18N locale, ShoukanParams params, User p1, User p2) {
@@ -102,7 +102,6 @@ public class Shoukan extends GameInstance<Phase> {
 	public Shoukan(I18N locale, ShoukanParams params, String p1, String p2) {
 		super(locale, new String[]{p1, p2});
 
-		restoring = true;
 		this.params = Utils.getOr(params, new ShoukanParams());
 		this.arena = new Arena(this);
 		this.hands = Map.of(
@@ -110,7 +109,6 @@ public class Shoukan extends GameInstance<Phase> {
 				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
 		);
 		this.singleplayer = p1.equals(p2);
-		restoring = false;
 
 		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
 	}
@@ -128,6 +126,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@Override
 	protected void begin() {
 		PLAYERS.addAll(Arrays.asList(getPlayers()));
+		restoring = false;
 
 		for (Hand h : hands.values()) {
 			h.manualDraw(5);
