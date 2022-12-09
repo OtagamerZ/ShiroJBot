@@ -724,7 +724,7 @@ public class Hand {
 
 	public int getMP() {
 		if (origin.major() == Race.DEMON) {
-			return Math.max(0, hp / (base.hp() / 10) - 1);
+			return (int) Math.max(0, hp / (base.hp() * 0.08) - 1);
 		}
 
 		return mp;
@@ -732,7 +732,7 @@ public class Hand {
 
 	public void setMP(int mp) {
 		if (origin.major() == Race.DEMON) {
-			setHP((mp + 1) * (base.hp() / 10));
+			setHP((int) ((mp + 1) * (base.hp() * 0.08)));
 			return;
 		}
 
@@ -741,7 +741,7 @@ public class Hand {
 
 	public void modMP(int value) {
 		if (origin.major() == Race.DEMON) {
-			modHP(value * (base.hp() / 10));
+			modHP((int) (value * (base.hp() * 0.08)));
 			return;
 		}
 
@@ -751,7 +751,7 @@ public class Hand {
 	public boolean consumeMP(int value) {
 		if (origin.synergy() == Race.ESPER && Calc.chance(2)) return true;
 		else if (origin.major() == Race.DEMON) {
-			return consumeHP(value * (base.hp() / 10));
+			return consumeHP((int) (value * (base.hp() * 0.08)));
 		} else if (this.mp < value) return false;
 
 		this.mp = Utils.clamp(this.mp - value, 0, 99);
