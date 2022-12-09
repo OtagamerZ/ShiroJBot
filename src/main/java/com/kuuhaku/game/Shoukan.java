@@ -1309,6 +1309,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void triggerEOTs(EffectParameters ep) {
+		System.out.println(ep.trigger() + " - " + eots);
 		Iterator<EffectOverTime> it = eots.iterator();
 		while (it.hasNext()) {
 			EffectOverTime effect = it.next();
