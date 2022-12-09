@@ -47,23 +47,24 @@ import java.util.function.Function;
 
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	Map<String, Color> COLORS = Map.ofEntries(
-		Map.entry("php", new Color(0x85C720)),
-		Map.entry("pmp", new Color(0x3F9EFF)),
-		Map.entry("pdg", new Color(0x9A1313)),
-		Map.entry("prg", new Color(0x7ABCFF)),
+			Map.entry("php", new Color(0x85C720)),
+			Map.entry("bhp", new Color(0x85C720)),
+			Map.entry("pmp", new Color(0x3F9EFF)),
+			Map.entry("pdg", new Color(0x9A1313)),
+			Map.entry("prg", new Color(0x7ABCFF)),
 
-		Map.entry("hp", new Color(0xFF0000)),
-		Map.entry("mp", new Color(0x3F9EFE)),
-		Map.entry("atk", new Color(0xFE0000)),
-		Map.entry("dfs", new Color(0x00C500)),
-		Map.entry("ddg", new Color(0xFFC800)),
-		Map.entry("blk", new Color(0xA9A9A9)),
+			Map.entry("hp", new Color(0xFF0000)),
+			Map.entry("mp", new Color(0x3F9EFE)),
+			Map.entry("atk", new Color(0xFE0000)),
+			Map.entry("dfs", new Color(0x00C500)),
+			Map.entry("ddg", new Color(0xFFC800)),
+			Map.entry("blk", new Color(0xA9A9A9)),
 
-		Map.entry("b", Color.BLACK),
-		Map.entry("n", Color.BLACK),
-		Map.entry("cd", new Color(0x48BAFF)),
-		Map.entry("ally", new Color(0x000100)),
-		Map.entry("enemy", new Color(0x010000))
+			Map.entry("b", Color.BLACK),
+			Map.entry("n", Color.BLACK),
+			Map.entry("cd", new Color(0x48BAFF)),
+			Map.entry("ally", new Color(0x000100)),
+			Map.entry("enemy", new Color(0x010000))
 	);
 
 	CardAttributes getBase();
@@ -100,7 +101,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							v = String.valueOf(obj);
 						}
 
-						val = str.replaceFirst("\\{.+}", Utils.roundToString(NumberUtils.toDouble(v), 0));
+						val = str.replaceFirst("\\{.+}", String.valueOf(Math.round(NumberUtils.toFloat(v))));
 					} else {
 						val = str;
 					}
@@ -108,7 +109,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 10));
 					g2d.setColor(COLORS.getOrDefault(Utils.getOr(tag, type), g2d.getColor()));
 
-					if (!Utils.equalsAny(tag, "b", "n")) {
+					if (COLORS.containsKey(type) && !Utils.equalsAny(tag, "b", "n")) {
 						val = val + "    ";
 					}
 
@@ -178,10 +179,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		};
 	}
 
-	default JSONObject extractValues(I18N locale, Drawable<?> d) {
+	default JSONObject extractValues(I18N locale) {
 		JSONObject out = new JSONObject();
 
-		String desc = d.getDescription(locale);
+		String desc = getDescription(locale);
 		for (String str : desc.split("\\s")) {
 			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}|\\{(?<tag>\\w+)}");
 
@@ -189,26 +190,27 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				try {
 					@Language("Groovy") String calc = groups.getString("calc").replace("$", "");
 					if (!calc.isBlank()) {
-						Hand h = d.getHand();
+						Hand h = getHand();
 
 						calc = "import static java.lang.Math.*\n\n" + calc;
 						String val = String.valueOf(
 								Utils.exec(calc, Map.ofEntries(
+										Map.entry("php", h == null ? 5000 : h.getHP()),
 										Map.entry("bhp", h == null ? 5000 : h.getBase().hp()),
 										Map.entry("pmp", h == null ? 5 : h.getMP()),
-										Map.entry("php", h == null ? 5000 : h.getHP()),
 										Map.entry("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek())),
 										Map.entry("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek())),
-										Map.entry("mp", d.getMPCost()),
-										Map.entry("hp", d.getHPCost()),
-										Map.entry("atk", d.getDmg()),
-										Map.entry("dfs", d.getDfs()),
-										Map.entry("ddg", d.getDodge()),
-										Map.entry("blk", d.getBlock())
+										Map.entry("mp", getMPCost()),
+										Map.entry("hp", getHPCost()),
+										Map.entry("atk", getDmg()),
+										Map.entry("dfs", getDfs()),
+										Map.entry("ddg", getDodge()),
+										Map.entry("blk", getBlock()),
+										Map.entry("data", getStats().getData())
 								))
 						);
 
-						double pow = d instanceof Senshi s ? s.getPower() : 1;
+						double pow = this instanceof Senshi s ? s.getPower() : 1;
 						out.compute(groups.getString("type"), (k, v) -> {
 							int value = Calc.round(NumberUtils.toDouble(val) * pow);
 

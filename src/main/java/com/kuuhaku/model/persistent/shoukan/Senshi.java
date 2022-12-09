@@ -737,11 +737,28 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isBlinded(boolean pop) {
-		if (hand != null && hand.getGame().getArena().getField().getType() == FieldType.NIGHT) {
+		if (hand != null) {
 			return true;
 		}
 
 		return pop ? popFlag(Flag.BLIND) : hasFlag(Flag.BLIND);
+	}
+
+	public double getHitChance() {
+		double hit = 100;
+		if (isBlinded(true)) {
+			hit *= 0.75;
+		}
+
+		if (hand.getGame().getArena().getField().getType() == FieldType.NIGHT) {
+			hit *= 0.8;
+
+			if (hand.getOrigin().synergy() == Race.WEREBEAST) {
+				hit += (100 - hit) / 2;
+			}
+		}
+
+		return hit;
 	}
 
 	public boolean isSupporting() {
@@ -834,7 +851,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 							.withConst("data", stats.getData())
 							.withVar("ep", ep)
 							.withVar("side", hand.getSide())
-							.withVar("props", extractValues(hand.getGame().getLocale(), this))
+							.withVar("props", extractValues(hand.getGame().getLocale()))
 							.withVar("trigger", trigger)
 							.run();
 				}
@@ -858,7 +875,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						"data", stats.getData(),
 						"ep", ep,
 						"side", hand.getSide(),
-						"props", extractValues(hand.getGame().getLocale(), this),
+						"props", extractValues(hand.getGame().getLocale()),
 						"trigger", trigger
 				));
 			}
@@ -903,7 +920,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					"data", stats.getData(),
 					"ep", new EffectParameters(trigger, getSide()),
 					"side", hand.getSide(),
-					"props", extractValues(hand.getGame().getLocale(), this),
+					"props", extractValues(hand.getGame().getLocale()),
 					"trigger", trigger
 			));
 		} catch (Exception e) {
@@ -1045,7 +1062,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						y += 11;
 					}
 
-					JSONObject values = extractValues(locale, this);
+					JSONObject values = extractValues(locale);
 					Graph.drawMultilineString(g1, desc,
 							7, y, 211, 3,
 							card.parseValues(g1, deck.getStyling(), values), card.highlightValues(g1, style.getFrame().isLegacy())

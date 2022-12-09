@@ -26,6 +26,7 @@ import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.model.records.GuildBuff;
 import com.kuuhaku.util.json.JSONObject;
+import com.kuuhaku.util.json.JSONUtils;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -142,8 +143,8 @@ public class GuildConfig extends DAO<GuildConfig> {
 
 		Iterator<Object> it = buffs.values().iterator();
 		while (it.hasNext()) {
-			GuildBuff gb = (GuildBuff) it.next();
-			if (gb.expired()) {
+			GuildBuff gb = JSONUtils.fromJSON(String.valueOf(it.next()), GuildBuff.class);
+			if (gb == null || gb.expired()) {
 				it.remove();
 				continue;
 			}
