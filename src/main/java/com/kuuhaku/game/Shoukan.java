@@ -102,6 +102,7 @@ public class Shoukan extends GameInstance<Phase> {
 	public Shoukan(I18N locale, ShoukanParams params, String p1, String p2) {
 		super(locale, new String[]{p1, p2});
 
+		restoring = true;
 		this.params = Utils.getOr(params, new ShoukanParams());
 		this.arena = new Arena(this);
 		this.hands = Map.of(
@@ -109,6 +110,7 @@ public class Shoukan extends GameInstance<Phase> {
 				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
 		);
 		this.singleplayer = p1.equals(p2);
+		restoring = false;
 
 		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
 	}
@@ -1308,8 +1310,6 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void triggerEOTs(EffectParameters ep) {
-		System.out.println(ep.trigger() + " - " + eots);
-
 		Iterator<EffectOverTime> it = eots.iterator();
 		while (it.hasNext()) {
 			EffectOverTime effect = it.next();
