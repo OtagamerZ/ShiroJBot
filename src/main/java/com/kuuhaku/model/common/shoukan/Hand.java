@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
@@ -51,7 +52,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -929,15 +929,15 @@ public class Hand {
 		});
 	}
 
-	public void requestChoice(List<Drawable<?>> cards, Consumer<Drawable<?>> act) {
+	public void requestChoice(List<Drawable<?>> cards, ThrowingConsumer<Drawable<?>> act) {
 		requestChoice(cards).thenAccept(act);
 	}
 
-	public void requestChoice(List<Drawable<?>> cards, boolean hide, Consumer<Drawable<?>> act) {
+	public void requestChoice(List<Drawable<?>> cards, boolean hide, ThrowingConsumer<Drawable<?>> act) {
 		requestChoice(cards, hide).thenAccept(act);
 	}
 
-	public void requestChoice(Predicate<Drawable<?>> cond, Consumer<Drawable<?>> act) {
+	public void requestChoice(Predicate<Drawable<?>> cond, ThrowingConsumer<Drawable<?>> act) {
 		requestChoice(cards.stream().filter(cond).toList()).thenAccept(act);
 	}
 

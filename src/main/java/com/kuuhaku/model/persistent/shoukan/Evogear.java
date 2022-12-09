@@ -340,12 +340,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					.withConst("data", stats.getData())
 					.withVar("ep", ep)
 					.withVar("side", hand.getSide())
-					.withVar("props", extractValues(hand.getGame().getLocale()));
+					.withVar("props", extractValues(hand.getGame().getLocale()))
+					.withVar("trigger", ep.trigger());
 
 			if (!isSpell()) {
-				cachedEffect
-						.withVar("self", equipper)
-						.withVar("trigger", ep.trigger());
+				cachedEffect.withVar("self", equipper);
 			}
 
 			cachedEffect.run();
