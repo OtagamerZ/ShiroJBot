@@ -1309,14 +1309,11 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void triggerEOTs(EffectParameters ep) {
-		Iterator<EffectOverTime> it = eots.iterator();
-		while (it.hasNext()) {
-			EffectOverTime effect = it.next();
-			System.out.println(ep.trigger() + " (" + ep.side() + ")" + " - " + effect.source());
-
-			if (effect.lock().get()) continue;
+		Set<EffectOverTime> effects = new TreeSet<>(eots);
+		for (EffectOverTime effect : effects) {
+			if (effect.lock().get() || effect.expired()) continue;
 			else if (effect.expired()) {
-				it.remove();
+				eots.remove(effect);
 				continue;
 			}
 
@@ -1350,7 +1347,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (effect.expired() || effect.removed()) {
 				getChannel().sendMessage(getLocale().get("str/effect_expiration", effect.source())).queue();
-				it.remove();
+				eots.remove(effect);
 			}
 		}
 	}
