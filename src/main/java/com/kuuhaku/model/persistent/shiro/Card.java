@@ -228,8 +228,6 @@ public class Card extends DAO<Card> {
 				}
 			});
 		} else {
-			System.out.println(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png");
-
 			try {
 				cardBytes = IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png")), "png");
 			} catch (IOException e) {
