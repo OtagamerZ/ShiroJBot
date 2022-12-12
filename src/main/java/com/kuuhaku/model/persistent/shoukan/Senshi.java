@@ -737,10 +737,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isBlinded(boolean pop) {
-		if (hand != null) {
-			return true;
-		}
-
 		return pop ? popFlag(Flag.BLIND) : hasFlag(Flag.BLIND);
 	}
 
