@@ -789,10 +789,22 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return slot.getTop();
 	}
 
+	public void setFrontline(Senshi card) {
+		if (slot == null || !isSupporting()) return;
+
+		slot.setTop(card);
+	}
+
 	public Senshi getSupport() {
 		if (slot == null || isSupporting()) return null;
 
 		return slot.getBottom();
+	}
+
+	public void setSupport(Senshi card) {
+		if (slot == null || isSupporting()) return;
+
+		slot.setBottom(card);
 	}
 
 	public String getEffect() {
