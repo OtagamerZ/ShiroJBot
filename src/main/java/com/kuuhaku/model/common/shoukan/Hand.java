@@ -146,9 +146,15 @@ public class Hand {
 			}
 		}
 
-		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			for (Evogear evogear : s.getEquipments()) {
-				it.add(evogear);
+		if (d instanceof Senshi s) {
+			if (s.getKiller() != null) {
+				getGame().trigger(Trigger.ON_KILL, s.getKiller().asSource(Trigger.ON_KILL));
+			}
+
+			if (!s.getEquipments().isEmpty()) {
+				for (Evogear evogear : s.getEquipments()) {
+					it.add(evogear);
+				}
 			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);

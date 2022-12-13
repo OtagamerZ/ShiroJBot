@@ -113,24 +113,6 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 		return out;
 	}
 
-	public Target[] kills() {
-		consumeShields();
-		Target[] out = Arrays.stream(targets)
-				.filter(t -> t.index() > -1 && t.type() == TargetType.ENEMY)
-				.filter(t -> {
-					Senshi tgt = t.card();
-					if (source.card() instanceof Senshi src) {
-						return tgt != null && (tgt.getActiveAttr() <= src.getActiveAttr() || src.hasFlag(Flag.UNSTOPPABLE));
-					}
-
-					return tgt != null;
-				})
-				.toArray(Target[]::new);
-
-		if (out.length == 0) throw new TargetException();
-		return out;
-	}
-
 	public Target[] slots(TargetType type) {
 		Target[] out = Arrays.stream(targets)
 				.filter(t -> t.index() > -1 && t.type() == type)
