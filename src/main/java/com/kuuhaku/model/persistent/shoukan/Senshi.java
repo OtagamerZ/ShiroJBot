@@ -861,6 +861,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (trigger == Trigger.ON_ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
+		else if (trigger == Trigger.ON_DEFER && !Utils.equalsAny(trigger, Trigger.getDeferrable())) return false;
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {

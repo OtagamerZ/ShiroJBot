@@ -18,6 +18,9 @@
 
 package com.kuuhaku.model.enums.shoukan;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public enum Trigger {
 	/** On each render **/
 	ON_TICK,
@@ -137,5 +140,13 @@ public enum Trigger {
 	ON_LEECH,
 
 	/** Nothing **/
-	NONE
+	NONE;
+
+	public static Set<Trigger> getDeferrable() {
+		return EnumSet.of(
+				ON_ATTACK, ON_HIT, ON_MISS, ON_SUICIDE,
+				ON_DEFEND, ON_DODGE, ON_BLOCK, ON_LOSE,
+				ON_CLASH
+		);
+	}
 }
