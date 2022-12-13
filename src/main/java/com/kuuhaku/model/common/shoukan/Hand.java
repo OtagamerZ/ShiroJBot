@@ -186,7 +186,7 @@ public class Hand {
 	private final Set<EffectHolder<?>> leeches = new HashSet<>();
 
 	private final BaseValues base;
-	private final RegDeg regdeg = new RegDeg();
+	private final RegDeg regdeg = new RegDeg(this);
 	private final JSONObject data = new JSONObject();
 
 	private String name;

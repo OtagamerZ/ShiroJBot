@@ -821,9 +821,9 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 			case FALLEN -> {
-				int degen = (int) Math.min(you.getRegDeg().peek() * 0.05, 0);
-				you.modHP(degen);
-				you.getRegDeg().reduce(Degen.class, degen);
+				if (you.getRegDeg().peek() < 0) {
+					you.getRegDeg().apply(0.05);
+				}
 			}
 			case SPAWN -> you.getRegDeg().add(new Degen((int) (you.getBase().hp() * 0.05), 0.2));
 		}
@@ -966,9 +966,9 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 				case FALLEN -> {
-					int degen = (int) Math.min(op.getRegDeg().peek() * 0.05, 0);
-					op.modHP(degen);
-					op.getRegDeg().reduce(Degen.class, degen);
+					if (op.getRegDeg().peek() < 0) {
+						op.getRegDeg().apply(0.05);
+					}
 				}
 				case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
 			}

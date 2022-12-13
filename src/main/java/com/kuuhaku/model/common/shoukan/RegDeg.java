@@ -23,10 +23,15 @@ import com.kuuhaku.model.common.BondedList;
 import java.util.List;
 
 public class RegDeg {
+	private final Hand parent;
 	private final BondedList<ValueOverTime> values = BondedList.withBind((v, it) -> {
 		v.setValue(reduce(v.getClass(), v.getValue()));
 		return true;
 	});
+
+	public RegDeg(Hand parent) {
+		this.parent = parent;
+	}
 
 	public List<ValueOverTime> getValues() {
 		return values;
@@ -73,6 +78,17 @@ public class RegDeg {
 		}
 
 		return val;
+	}
+
+	public void apply(double prcnt) {
+		int value = (int) (peek() * prcnt);
+		parent.modHP(value);
+
+		if (value > 0) {
+			reduce(Regen.class, value);
+		} else {
+			reduce(Degen.class, value);
+		}
 	}
 
 	public int next() {
