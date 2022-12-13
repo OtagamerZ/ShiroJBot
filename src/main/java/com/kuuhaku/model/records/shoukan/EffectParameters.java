@@ -43,32 +43,33 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 		this.source = source;
 
 		Set<Target> tgts = new HashSet<>(List.of(targets));
-		if (source.card() instanceof Senshi s && s.hasFlag(Flag.EMPOWERED)) {
-			for (Target tgt : tgts) {
-				if (tgt.trigger() == Trigger.NONE) continue;
+		if (source.card() instanceof Senshi s) {
+			if (s.hasFlag(Flag.EMPOWERED)) {
+				for (Target tgt : tgts) {
+					if (tgt.trigger() == Trigger.NONE) continue;
 
-				if (tgt.index() > 0) {
-					tgts.add(new Target(
-							tgt.card().getLeft(),
-							tgt.side(),
-							tgt.index() - 1,
-							tgt.trigger(),
-							tgt.type()
-					));
-				}
+					if (tgt.index() > 0) {
+						tgts.add(new Target(
+								tgt.card().getLeft(),
+								tgt.side(),
+								tgt.index() - 1,
+								tgt.trigger(),
+								tgt.type()
+						));
+					}
 
-				if (tgt.index() < 4) {
-					tgts.add(new Target(
-							tgt.card().getRight(),
-							tgt.side(),
-							tgt.index() + 1,
-							tgt.trigger(),
-							tgt.type()
-					));
+					if (tgt.index() < 4) {
+						tgts.add(new Target(
+								tgt.card().getRight(),
+								tgt.side(),
+								tgt.index() + 1,
+								tgt.trigger(),
+								tgt.type()
+						));
+					}
 				}
 			}
 
-			System.out.println(tgts);
 			for (Target tgt : tgts) {
 				tgt.card().setLastInteraction(s);
 			}
