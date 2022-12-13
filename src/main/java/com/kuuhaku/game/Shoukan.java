@@ -1422,6 +1422,7 @@ public class Shoukan extends GameInstance<Phase> {
 			for (SlotColumn slt : slts) {
 				Senshi s = slt.getTop();
 				if (s != null) {
+					s.setRevealed(false);
 					s.getStats().removeExpired(AttrMod::isExpired);
 					for (Evogear e : s.getEquipments()) {
 						e.getStats().removeExpired(AttrMod::isExpired);
