@@ -1256,14 +1256,12 @@ public class Shoukan extends GameInstance<Phase> {
 	public void trigger(Trigger trigger, Side side) {
 		if (restoring) return;
 
-		List<SlotColumn> slts = getSlots(side);
-		for (SlotColumn slt : slts) {
-			Senshi s = slt.getTop();
-			if (s != null) {
-				s.execute(new EffectParameters(trigger, side, s.asSource(trigger)));
-			}
+		List<Senshi> slts = getSlots(side).stream()
+				.map(SlotColumn::getCards)
+				.flatMap(List::stream)
+				.toList();
 
-			s = slt.getBottom();
+		for (Senshi s : slts) {
 			if (s != null) {
 				s.execute(new EffectParameters(trigger, side, s.asSource(trigger)));
 			}
