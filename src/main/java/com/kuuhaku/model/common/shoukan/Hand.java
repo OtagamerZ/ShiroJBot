@@ -148,6 +148,7 @@ public class Hand {
 
 		if (d instanceof Senshi s) {
 			if (s.getLastInteraction() != null) {
+				System.out.println("Enter");
 				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget(Trigger.NONE));
 				if (s.popFlag(Flag.NO_DEATH)) {
 					return false;

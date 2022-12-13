@@ -69,6 +69,7 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 			}
 
 			for (Target tgt : tgts) {
+				System.out.println("Marked " + tgt.card());
 				tgt.card().setLastInteraction(s);
 			}
 		}
