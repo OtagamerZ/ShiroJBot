@@ -1039,11 +1039,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (isFlipped()) {
 			g2d.drawImage(style.getFrame().getBack(deck), 15, 15, null);
 
-			if (hand != null) {
+			if (hand != null && isRevealed()) {
 				boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
 				String path = "kawaipon/frames/" + (legacy ? "old" : "new") + "/";
 
-				g2d.drawImage(IO.getResourceAsImage(path + "/buffed.png"), 15, 15, null);
+				g2d.drawImage(IO.getResourceAsImage(path + "/hero.png"), 15, 15, null);
 
 				BufferedImage overlay = IO.getResourceAsImage("shoukan/states/revealed.png");
 				g2d.drawImage(overlay, 15, 15, null);
