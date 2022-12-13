@@ -118,14 +118,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private int state = 0b10;
 	/*
 	0x0F FFFF FF
-	   │ ││││ └┴ 0111 1111
-	   │ ││││     │││ │││└ solid
-	   │ ││││     │││ ││└─ available
-	   │ ││││     │││ │└── defending
-	   │ ││││     │││ └─── flipped
-	   │ ││││     ││└ sealed
-	   │ ││││     │└─ switched
-	   │ ││││     └── revealed
+	   │ ││││ └┴ 0011 1111
+	   │ ││││      ││ │││└ solid
+	   │ ││││      ││ ││└─ available
+	   │ ││││      ││ │└── defending
+	   │ ││││      ││ └─── flipped
+	   │ ││││      │└ sealed
+	   │ ││││      └─ switched
 	   │ │││└─ (0 - 15) sleeping
 	   │ ││└── (0 - 15) stunned
 	   │ │└─── (0 - 15) stasis
@@ -601,14 +600,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		state = Bit.set(state, 5, sealed);
 	}
 
-	public boolean isRevealed() {
-		return Bit.on(state, 6);
-	}
-
-	public void setRevealed(boolean revealed) {
-		state = Bit.set(state, 6, revealed);
-	}
-
 	public boolean isSleeping() {
 		return !isStunned() && Bit.on(state, 3, 4);
 	}
@@ -1038,16 +1029,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		DeckStyling style = deck.getStyling();
 		if (isFlipped()) {
 			g2d.drawImage(style.getFrame().getBack(deck), 15, 15, null);
-
-			if (hand != null && isRevealed()) {
-				boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
-				String path = "kawaipon/frames/" + (legacy ? "old" : "new") + "/";
-
-				g2d.drawImage(IO.getResourceAsImage(path + "/hero.png"), 0, 0, null);
-
-				BufferedImage overlay = IO.getResourceAsImage("shoukan/states/revealed.png");
-				g2d.drawImage(overlay, 15, 15, null);
-			}
 		} else {
 			Senshi card = Utils.getOr(stats.getDisguise(), this);
 			String desc = isSealed() ? "" : card.getDescription(locale);
