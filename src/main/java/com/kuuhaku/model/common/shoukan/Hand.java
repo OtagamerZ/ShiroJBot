@@ -164,7 +164,7 @@ public class Hand {
 			return false;
 		}
 
-		return d.keepOnDestroy();
+		return true;
 	});
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(d)) return false;
@@ -174,7 +174,7 @@ public class Hand {
 		getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
 		d.setAvailable(false);
 
-		return d.keepOnDestroy();
+		return true;
 	});
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 	private final Set<EffectHolder<?>> leeches = new HashSet<>();
@@ -540,13 +540,13 @@ public class Hand {
 	}
 
 	public BondedList<Drawable<?>> getGraveyard() {
-		graveyard.removeIf(d -> !equals(d.getHand()));
+		graveyard.removeIf(d -> !equals(d.getHand()) || !d.keepOnDestroy());
 
 		return graveyard;
 	}
 
 	public BondedList<Drawable<?>> getDiscard() {
-		discard.removeIf(d -> !cards.contains(d));
+		discard.removeIf(d -> !cards.contains(d) || !d.keepOnDestroy());
 
 		return discard;
 	}

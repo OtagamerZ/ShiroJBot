@@ -89,7 +89,7 @@ public class Arena implements Renderer {
 		}
 
 		d.reset();
-		return d.keepOnDestroy();
+		return true;
 	});
 
 	private Field field = null;
@@ -119,6 +119,8 @@ public class Arena implements Renderer {
 	}
 
 	public BondedList<Drawable<?>> getBanned() {
+		banned.removeIf(d -> !d.keepOnDestroy());
+
 		return banned;
 	}
 
