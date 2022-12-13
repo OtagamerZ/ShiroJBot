@@ -118,12 +118,12 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 		Target[] out = Arrays.stream(targets)
 				.filter(t -> t.index() > -1 && t.type() == TargetType.ENEMY)
 				.filter(t -> {
-					Senshi s = t.card();
+					Senshi tgt = t.card();
 					if (source.card() instanceof Senshi src) {
-						return s != null && s.getActiveAttr() <= src.getActiveAttr();
+						return tgt != null && (tgt.getActiveAttr() <= src.getActiveAttr() || src.hasFlag(Flag.UNSTOPPABLE));
 					}
 
-					return s != null;
+					return tgt != null;
 				})
 				.toArray(Target[]::new);
 
