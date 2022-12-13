@@ -71,7 +71,10 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 			}
 
 			for (Target tgt : tgts) {
-				tgt.card().setLastInteraction(s);
+				Senshi card = tgt.card();
+				if (card != null) {
+					card.setLastInteraction(s);
+				}
 			}
 		}
 
