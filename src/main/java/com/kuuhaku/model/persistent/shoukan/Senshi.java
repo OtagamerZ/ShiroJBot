@@ -112,7 +112,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient Hand hand = null;
 	private transient Hand leech = null;
 	private transient Senshi target = null;
-	private transient Senshi killer = null;
+	private transient Senshi lastInteraction = null;
 	private transient CachedScriptManager cachedEffect = new CachedScriptManager();
 
 	@Transient
@@ -739,12 +739,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		state = Bit.set(state, 6, Math.max(0, curr - time), 4);
 	}
 
-	public Senshi getKiller() {
-		return killer;
+	public Senshi getLastInteraction() {
+		return lastInteraction;
 	}
 
-	public void setKiller(Senshi killer) {
-		this.killer = killer;
+	public void setLastInteraction(Senshi last) {
+		this.lastInteraction = last;
 	}
 
 	@Override
@@ -1059,7 +1059,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (leech != null) {
 			leech.getLeeches().remove(this);
 		}
-		killer = null;
+		lastInteraction = null;
 		cachedEffect = new CachedScriptManager();
 
 		byte base = 0b11;

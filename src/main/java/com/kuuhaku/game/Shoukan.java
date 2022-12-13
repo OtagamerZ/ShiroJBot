@@ -1278,7 +1278,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		EffectParameters ep = new EffectParameters(trigger, source.side(), source);
 		if (source.execute(ep)) {
-			triggerEOTs(new EffectParameters(trigger, source.side(), source));
+			triggerEOTs(ep);
 			return true;
 		}
 
@@ -1289,12 +1289,12 @@ public class Shoukan extends GameInstance<Phase> {
 		if (restoring) return false;
 
 		EffectParameters ep = new EffectParameters(trigger, source.side(), source, targets);
-		for (Target t : targets) {
+		for (Target t : ep.targets()) {
 			t.execute(ep);
 		}
 
 		if (source.execute(ep)) {
-			triggerEOTs(new EffectParameters(trigger, source.side(), source, targets));
+			triggerEOTs(ep);
 			return true;
 		}
 
@@ -1419,6 +1419,7 @@ public class Shoukan extends GameInstance<Phase> {
 			for (SlotColumn slt : slts) {
 				Senshi s = slt.getTop();
 				if (s != null) {
+					s.setLastInteraction(null);
 					s.getStats().removeExpired(AttrMod::isExpired);
 					for (Evogear e : s.getEquipments()) {
 						e.getStats().removeExpired(AttrMod::isExpired);
@@ -1427,21 +1428,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 				s = slt.getBottom();
 				if (s != null) {
+					s.setLastInteraction(null);
 					s.getStats().removeExpired(AttrMod::isExpired);
 				}
 			}
-
-			for (Drawable<?> d : hand.getGraveyard()) {
-				d.setAvailable(true);
-			}
-
-			for (Drawable<?> d : hand.getDeck()) {
-				d.setAvailable(true);
-			}
-		}
-
-		for (Drawable<?> d : arena.getBanned()) {
-			d.setAvailable(true);
 		}
 
 		AtomicBoolean registered = new AtomicBoolean();

@@ -147,8 +147,8 @@ public class Hand {
 		}
 
 		if (d instanceof Senshi s) {
-			if (s.getKiller() != null) {
-				getGame().trigger(Trigger.ON_KILL, s.getKiller().asSource(Trigger.ON_KILL));
+			if (s.getLastInteraction() != null) {
+				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL));
 			}
 
 			if (!s.getEquipments().isEmpty()) {
