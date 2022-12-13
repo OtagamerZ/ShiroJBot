@@ -45,6 +45,8 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 		Set<Target> tgts = new HashSet<>(List.of(targets));
 		if (source.card() instanceof Senshi s && s.hasFlag(Flag.EMPOWERED)) {
 			for (Target tgt : tgts) {
+				if (tgt.trigger() == Trigger.NONE) continue;
+
 				if (tgt.index() > 0) {
 					tgts.add(new Target(
 							tgt.card().getLeft(),
