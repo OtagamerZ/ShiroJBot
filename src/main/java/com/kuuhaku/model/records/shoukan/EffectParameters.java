@@ -65,6 +65,10 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 					));
 				}
 			}
+
+			for (Target tgt : tgts) {
+				tgt.card().setLastInteraction(s);
+			}
 		}
 
 		this.targets = tgts.toArray(Target[]::new);
