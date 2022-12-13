@@ -421,7 +421,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public double getPower() {
-		return 1 + sum(power) * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
+		return (1 + sum(power)) * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
 	}
 
 	public AttrMod getPower(Drawable<?> source) {
