@@ -263,6 +263,17 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 	}
 
+	public void setLeft(Senshi card) {
+		SlotColumn slt = getSlot().getLeft();
+		if (slt == null) return;
+
+		if (isSupporting()) {
+			slt.setBottom(card);
+		} else {
+			slt.setTop(card);
+		}
+	}
+
 	public Senshi getRight() {
 		SlotColumn slt = getSlot().getRight();
 		if (slt == null) return null;
@@ -271,6 +282,17 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			return slt.getBottom();
 		} else {
 			return slt.getTop();
+		}
+	}
+
+	public void setRight(Senshi card) {
+		SlotColumn slt = getSlot().getRight();
+		if (slt == null) return;
+
+		if (isSupporting()) {
+			slt.setBottom(card);
+		} else {
+			slt.setTop(card);
 		}
 	}
 
