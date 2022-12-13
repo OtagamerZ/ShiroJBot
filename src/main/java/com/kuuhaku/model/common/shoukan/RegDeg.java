@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.util.Utils;
 
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class RegDeg {
 	}
 
 	public void apply(double prcnt) {
-		int value = (int) (peek() * prcnt);
+		int value = (int) (peek() * Utils.clamp(prcnt, 0, 1));
 		parent.modHP(value);
 
 		if (value > 0) {
