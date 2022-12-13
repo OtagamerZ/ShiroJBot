@@ -1256,15 +1256,14 @@ public class Shoukan extends GameInstance<Phase> {
 	public void trigger(Trigger trigger, Side side) {
 		if (restoring) return;
 
-		List<Senshi> slts = getSlots(side).stream()
+		List<Senshi> cards = getSlots(side).stream()
 				.map(SlotColumn::getCards)
 				.flatMap(List::stream)
+				.filter(Objects::nonNull)
 				.toList();
 
-		for (Senshi s : slts) {
-			if (s != null) {
-				s.execute(new EffectParameters(trigger, side, s.asSource(trigger)));
-			}
+		for (Senshi s : cards) {
+			s.execute(new EffectParameters(trigger, side, s.asSource(trigger)));
 		}
 
 		for (EffectHolder<?> leech : hands.get(side).getLeeches()) {
