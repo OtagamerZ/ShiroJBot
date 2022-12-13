@@ -833,6 +833,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public boolean execute(EffectParameters ep) {
+		return execute(false, ep);
+	}
+
+	public boolean execute(boolean global, EffectParameters ep) {
 		if (base.isLocked()) return false;
 		else if (popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0) return false;
 
@@ -861,7 +865,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (trigger == Trigger.ON_ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
-		else if (ep.deferred() && !Utils.equalsAny(trigger, Trigger.getDeferrable())) return false;
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
@@ -893,7 +896,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			Senshi sup = getSupport();
-			if (sup != null) {
+			if (sup != null && !global) {
 				sup.execute(new EffectParameters(Trigger.ON_DEFER, getSide(), ep.source(), ep.targets()));
 			}
 

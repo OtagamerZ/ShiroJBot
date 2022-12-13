@@ -1263,7 +1263,7 @@ public class Shoukan extends GameInstance<Phase> {
 				.toList();
 
 		for (Senshi s : cards) {
-			s.execute(new EffectParameters(trigger, side, s.asSource(trigger)));
+			s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger)));
 		}
 
 		for (EffectHolder<?> leech : hands.get(side).getLeeches()) {
