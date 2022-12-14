@@ -298,6 +298,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public List<Senshi> getNearby() {
+		if (slot == null) return List.of();
+
 		List<Senshi> out = new ArrayList<>();
 
 		if (getLeft() != null) {
