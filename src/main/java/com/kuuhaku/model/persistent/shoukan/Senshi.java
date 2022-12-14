@@ -885,6 +885,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				other.setHeroDefense(true);
 			}*/
 
+			for (Evogear e : equipments) {
+				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
+			}
+
 			if (hasEffect() && getEffect().contains(trigger.name())) {
 				if (isStunned() && Calc.chance(25)) {
 					Shoukan game = hand.getGame();
@@ -900,10 +904,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 							.withVar("trigger", trigger)
 							.run();
 				}
-			}
-
-			for (Evogear e : equipments) {
-				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
 			}
 
 			Senshi sup = getSupport();
