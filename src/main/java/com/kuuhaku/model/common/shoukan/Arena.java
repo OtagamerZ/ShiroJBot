@@ -80,8 +80,9 @@ public class Arena implements Renderer {
 		d.getHand().getOther().addKill();
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			for (Evogear evogear : s.getEquipments()) {
-				it.add(evogear);
+			Iterator<Evogear> i = s.getEquipments().iterator();
+			while (i.hasNext()) {
+				it.add(i.next());
 			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
