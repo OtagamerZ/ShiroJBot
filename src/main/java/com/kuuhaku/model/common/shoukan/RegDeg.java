@@ -42,6 +42,10 @@ public class RegDeg {
 		values.add(vot);
 	}
 
+	public void add(Number val) {
+		leftShift(val);
+	}
+
 	public void leftShift(ValueOverTime vot) {
 		add(vot);
 	}
@@ -50,9 +54,9 @@ public class RegDeg {
 		int value = number.intValue();
 
 		if (value < 0) {
-			add(new Degen(-value, 0.1));
+			add(new Degen(-value, 0.2));
 		} else if (value > 0) {
-			add(new Regen(value, 0.1));
+			add(new Regen(value, 0.2));
 		}
 	}
 

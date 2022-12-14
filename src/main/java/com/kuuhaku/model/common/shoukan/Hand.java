@@ -643,7 +643,7 @@ public class Hand {
 			} else if (origin.synergy() == Race.PRIMAL && value < 0) {
 				int degen = Math.abs(value / 10);
 				if (degen > 0) {
-					regdeg.add(new Degen(degen, 0.1));
+					regdeg.add(degen);
 					value += degen;
 				}
 			}

@@ -801,10 +801,10 @@ public class Shoukan extends GameInstance<Phase> {
 					case PIERCING -> you.modHP((int) -(dmg * 0.5 * c.getValue(e.getTier()) / 100));
 					case WOUNDING -> {
 						int val = (int) (dmg * 0.5 * c.getValue(e.getTier()) / 100);
-						you.getRegDeg().add(new Degen(val, 0.1));
+						you.getRegDeg().add(val);
 
 						if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(2)) {
-							you.getRegDeg().add(new Degen(val, 0.1));
+							you.getRegDeg().add(val);
 						}
 					}
 				}
@@ -825,7 +825,7 @@ public class Shoukan extends GameInstance<Phase> {
 					you.getRegDeg().apply(0.05);
 				}
 			}
-			case SPAWN -> you.getRegDeg().add(new Degen((int) (you.getBase().hp() * 0.05), 0.2));
+			case SPAWN -> you.getRegDeg().add(you.getBase().hp() * 0.05);
 		}
 
 		if (ally.getSlot() != null && !ally.popFlag(Flag.FREE_ACTION)) {
@@ -925,10 +925,10 @@ public class Shoukan extends GameInstance<Phase> {
 						case PIERCING -> op.modHP((int) -(dmg * mitigation * c.getValue(e.getTier()) / 100));
 						case WOUNDING -> {
 							int val = (int) (dmg * mitigation * c.getValue(e.getTier()) / 100);
-							op.getRegDeg().add(new Degen(val, 0.1));
+							op.getRegDeg().add(val);
 
 							if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(2)) {
-								op.getRegDeg().add(new Degen(val, 0.1));
+								op.getRegDeg().add(val);
 							}
 						}
 						case DRAIN -> {
@@ -970,7 +970,7 @@ public class Shoukan extends GameInstance<Phase> {
 						op.getRegDeg().apply(0.05);
 					}
 				}
-				case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
+				case SPAWN -> op.getRegDeg().add(op.getBase().hp() * 0.05);
 			}
 
 			boolean ignore = ally.popFlag(Flag.NO_COMBAT);
