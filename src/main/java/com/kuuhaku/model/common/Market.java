@@ -73,11 +73,9 @@ public class Market {
 			query.appendNewLine(filter);
 
 			if (opt.hasArg()) {
-				if (opt.getOpt().equals("m")) {
-					params.add(uid);
-				} else {
-					params.add(opt.getValue().toUpperCase());
-				}
+				params.add(opt.getValue().toUpperCase());
+			} else if (opt.getOpt().equals("m")) {
+				params.add(uid);
 			}
 		}
 
