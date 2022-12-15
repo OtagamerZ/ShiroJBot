@@ -280,7 +280,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	public static Field getRandom() {
-		String id = DAO.queryNative(String.class, "SELECT card_id FROM field ORDER BY RANDOM()");
+		String id = DAO.queryNative(String.class, "SELECT card_id FROM field WHERE NOT effect ORDER BY RANDOM()");
 		if (id == null) return null;
 
 		return DAO.find(Field.class, id);
@@ -291,6 +291,13 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		for (String f : filters) {
 			query.appendNewLine(f);
 		}
+
+		if (filters.length == 0) {
+			query.appendNewLine("WHERE NOT effect");
+		} else {
+			query.appendNewLine("AND NOT effect");
+		}
+
 		query.appendNewLine("ORDER BY RANDOM()");
 
 		String id = DAO.queryNative(String.class, query.toString());
