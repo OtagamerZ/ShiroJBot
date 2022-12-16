@@ -801,10 +801,10 @@ public class Shoukan extends GameInstance<Phase> {
 					case PIERCING -> you.modHP((int) -(dmg * 0.5 * c.getValue(e.getTier()) / 100));
 					case WOUNDING -> {
 						int val = (int) (dmg * 0.5 * c.getValue(e.getTier()) / 100);
-						you.getRegDeg().add(new Degen(val, 0.1));
+						you.getRegDeg().add(val);
 
 						if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(2)) {
-							you.getRegDeg().add(new Degen(val, 0.1));
+							you.getRegDeg().add(val);
 						}
 					}
 				}
@@ -821,11 +821,11 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 			case FALLEN -> {
-				int degen = (int) Math.min(you.getRegDeg().peek() * 0.05, 0);
-				you.modHP(degen);
-				you.getRegDeg().reduce(Degen.class, degen);
+				if (you.getRegDeg().peek() < 0) {
+					you.getRegDeg().apply(0.05);
+				}
 			}
-			case SPAWN -> you.getRegDeg().add(new Degen((int) (you.getBase().hp() * 0.05), 0.2));
+			case SPAWN -> you.getRegDeg().add(you.getBase().hp() * 0.05);
 		}
 
 		if (ally.getSlot() != null && !ally.popFlag(Flag.FREE_ACTION)) {
@@ -925,10 +925,10 @@ public class Shoukan extends GameInstance<Phase> {
 						case PIERCING -> op.modHP((int) -(dmg * mitigation * c.getValue(e.getTier()) / 100));
 						case WOUNDING -> {
 							int val = (int) (dmg * mitigation * c.getValue(e.getTier()) / 100);
-							op.getRegDeg().add(new Degen(val, 0.1));
+							op.getRegDeg().add(val);
 
 							if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(2)) {
-								op.getRegDeg().add(new Degen(val, 0.1));
+								op.getRegDeg().leftShift(val);
 							}
 						}
 						case DRAIN -> {
@@ -966,11 +966,11 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 				case FALLEN -> {
-					int degen = (int) Math.min(op.getRegDeg().peek() * 0.05, 0);
-					op.modHP(degen);
-					op.getRegDeg().reduce(Degen.class, degen);
+					if (op.getRegDeg().peek() < 0) {
+						op.getRegDeg().apply(0.05);
+					}
 				}
-				case SPAWN -> op.getRegDeg().add(new Degen((int) (op.getBase().hp() * 0.05), 0.2));
+				case SPAWN -> op.getRegDeg().leftShift(op.getBase().hp() * 0.05);
 			}
 
 			boolean ignore = ally.popFlag(Flag.NO_COMBAT);
@@ -1256,17 +1256,14 @@ public class Shoukan extends GameInstance<Phase> {
 	public void trigger(Trigger trigger, Side side) {
 		if (restoring) return;
 
-		List<SlotColumn> slts = getSlots(side);
-		for (SlotColumn slt : slts) {
-			Senshi s = slt.getTop();
-			if (s != null) {
-				s.execute(new EffectParameters(trigger, side, s.asSource(trigger)));
-			}
+		List<Senshi> cards = getSlots(side).stream()
+				.map(SlotColumn::getCards)
+				.flatMap(List::stream)
+				.filter(Objects::nonNull)
+				.toList();
 
-			s = slt.getBottom();
-			if (s != null) {
-				s.execute(new EffectParameters(trigger, side, s.asSource(trigger)));
-			}
+		for (Senshi s : cards) {
+			s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger)));
 		}
 
 		for (EffectHolder<?> leech : hands.get(side).getLeeches()) {
@@ -1281,7 +1278,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		EffectParameters ep = new EffectParameters(trigger, source.side(), source);
 		if (source.execute(ep)) {
-			triggerEOTs(new EffectParameters(trigger, source.side(), source));
+			triggerEOTs(ep);
 			return true;
 		}
 
@@ -1292,12 +1289,12 @@ public class Shoukan extends GameInstance<Phase> {
 		if (restoring) return false;
 
 		EffectParameters ep = new EffectParameters(trigger, source.side(), source, targets);
-		for (Target t : targets) {
+		for (Target t : ep.targets()) {
 			t.execute(ep);
 		}
 
 		if (source.execute(ep)) {
-			triggerEOTs(new EffectParameters(trigger, source.side(), source, targets));
+			triggerEOTs(ep);
 			return true;
 		}
 
@@ -1422,6 +1419,7 @@ public class Shoukan extends GameInstance<Phase> {
 			for (SlotColumn slt : slts) {
 				Senshi s = slt.getTop();
 				if (s != null) {
+					s.setLastInteraction(null);
 					s.getStats().removeExpired(AttrMod::isExpired);
 					for (Evogear e : s.getEquipments()) {
 						e.getStats().removeExpired(AttrMod::isExpired);
@@ -1430,21 +1428,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 				s = slt.getBottom();
 				if (s != null) {
+					s.setLastInteraction(null);
 					s.getStats().removeExpired(AttrMod::isExpired);
 				}
 			}
-
-			for (Drawable<?> d : hand.getGraveyard()) {
-				d.setAvailable(true);
-			}
-
-			for (Drawable<?> d : hand.getDeck()) {
-				d.setAvailable(true);
-			}
-		}
-
-		for (Drawable<?> d : arena.getBanned()) {
-			d.setAvailable(true);
 		}
 
 		AtomicBoolean registered = new AtomicBoolean();

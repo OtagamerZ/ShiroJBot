@@ -148,10 +148,19 @@ public class Hand {
 			}
 		}
 
-		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			Iterator<Evogear> i = s.getEquipments().iterator();
-			while (i.hasNext()) {
-				it.add(i.next());
+		if (d instanceof Senshi s) {
+			if (s.getLastInteraction() != null) {
+				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget(Trigger.NONE));
+				if (s.popFlag(Flag.NO_DEATH)) {
+					return false;
+				}
+			}
+
+			if (!s.getEquipments().isEmpty()) {
+				Iterator<Evogear> i = s.getEquipments().iterator();
+				while (i.hasNext()) {
+					it.add(i.next());
+				}
 			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
@@ -180,7 +189,7 @@ public class Hand {
 	private final Set<EffectHolder<?>> leeches = new HashSet<>();
 
 	private final BaseValues base;
-	private final RegDeg regdeg = new RegDeg();
+	private final RegDeg regdeg = new RegDeg(this);
 	private final JSONObject data = new JSONObject();
 
 	private String name;
@@ -637,7 +646,7 @@ public class Hand {
 			} else if (origin.synergy() == Race.PRIMAL && value < 0) {
 				int degen = Math.abs(value / 10);
 				if (degen > 0) {
-					regdeg.add(new Degen(degen, 0.1));
+					regdeg.add(degen);
 					value += degen;
 				}
 			}

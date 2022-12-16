@@ -19,14 +19,20 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.util.Utils;
 
 import java.util.List;
 
 public class RegDeg {
+	private final Hand parent;
 	private final BondedList<ValueOverTime> values = BondedList.withBind((v, it) -> {
 		v.setValue(reduce(v.getClass(), v.getValue()));
 		return true;
 	});
+
+	public RegDeg(Hand parent) {
+		this.parent = parent;
+	}
 
 	public List<ValueOverTime> getValues() {
 		return values;
@@ -34,6 +40,10 @@ public class RegDeg {
 
 	public void add(ValueOverTime vot) {
 		values.add(vot);
+	}
+
+	public void add(Number val) {
+		leftShift(val);
 	}
 
 	public void leftShift(ValueOverTime vot) {
@@ -44,9 +54,9 @@ public class RegDeg {
 		int value = number.intValue();
 
 		if (value < 0) {
-			add(new Degen(-value, 0.1));
+			add(new Degen(-value, 0.2));
 		} else if (value > 0) {
-			add(new Regen(value, 0.1));
+			add(new Regen(value, 0.2));
 		}
 	}
 
@@ -73,6 +83,17 @@ public class RegDeg {
 		}
 
 		return val;
+	}
+
+	public void apply(double prcnt) {
+		int value = (int) (peek() * Utils.clamp(prcnt, 0, 1));
+		parent.modHP(value);
+
+		if (value > 0) {
+			reduce(Regen.class, value);
+		} else {
+			reduce(Degen.class, value);
+		}
 	}
 
 	public int next() {

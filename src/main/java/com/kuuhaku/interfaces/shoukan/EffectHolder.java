@@ -26,7 +26,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.DeckStyling;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
@@ -210,9 +209,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 								))
 						);
 
-						double pow = this instanceof Senshi s ? s.getPower() : 1;
 						out.compute(groups.getString("type"), (k, v) -> {
-							int value = Calc.round(NumberUtils.toDouble(val) * pow);
+							int value = Calc.round(NumberUtils.toDouble(val) * getStats().getPower());
 
 							if (v == null) {
 								return value;

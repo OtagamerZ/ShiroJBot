@@ -43,26 +43,37 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 		this.source = source;
 
 		Set<Target> tgts = new HashSet<>(List.of(targets));
-		if (source.card() instanceof Senshi s && s.hasFlag(Flag.EMPOWERED)) {
-			for (Target tgt : tgts) {
-				if (tgt.index() > 0) {
-					tgts.add(new Target(
-							tgt.card().getLeft(),
-							tgt.side(),
-							tgt.index() - 1,
-							tgt.trigger(),
-							tgt.type()
-					));
-				}
+		if (source.card() instanceof Senshi s) {
+			if (s.hasFlag(Flag.EMPOWERED)) {
+				for (Target tgt : tgts) {
+					if (tgt.trigger() == Trigger.NONE) continue;
 
-				if (tgt.index() < 4) {
-					tgts.add(new Target(
-							tgt.card().getRight(),
-							tgt.side(),
-							tgt.index() + 1,
-							tgt.trigger(),
-							tgt.type()
-					));
+					if (tgt.index() > 0) {
+						tgts.add(new Target(
+								tgt.card().getLeft(),
+								tgt.side(),
+								tgt.index() - 1,
+								tgt.trigger(),
+								tgt.type()
+						));
+					}
+
+					if (tgt.index() < 4) {
+						tgts.add(new Target(
+								tgt.card().getRight(),
+								tgt.side(),
+								tgt.index() + 1,
+								tgt.trigger(),
+								tgt.type()
+						));
+					}
+				}
+			}
+
+			for (Target tgt : tgts) {
+				Senshi card = tgt.card();
+				if (card != null) {
+					card.setLastInteraction(s);
 				}
 			}
 		}
@@ -107,24 +118,6 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 		Target[] out = Arrays.stream(targets)
 				.filter(t -> t.index() > -1 && t.type() == TargetType.ENEMY)
 				.filter(t -> t.card() != null)
-				.toArray(Target[]::new);
-
-		if (out.length == 0) throw new TargetException();
-		return out;
-	}
-
-	public Target[] kills() {
-		consumeShields();
-		Target[] out = Arrays.stream(targets)
-				.filter(t -> t.index() > -1 && t.type() == TargetType.ENEMY)
-				.filter(t -> {
-					Senshi s = t.card();
-					if (source.card() instanceof Senshi src) {
-						return s != null && s.getActiveAttr() <= src.getActiveAttr();
-					}
-
-					return s != null;
-				})
 				.toArray(Target[]::new);
 
 		if (out.length == 0) throw new TargetException();

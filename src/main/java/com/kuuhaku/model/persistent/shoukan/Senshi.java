@@ -112,6 +112,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient Hand hand = null;
 	private transient Hand leech = null;
 	private transient Senshi target = null;
+	private transient Senshi lastInteraction = null;
 	private transient CachedScriptManager cachedEffect = new CachedScriptManager();
 
 	@Transient
@@ -297,6 +298,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public List<Senshi> getNearby() {
+		if (slot == null) return List.of();
+
 		List<Senshi> out = new ArrayList<>();
 
 		if (getLeft() != null) {
@@ -738,6 +741,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		state = Bit.set(state, 6, Math.max(0, curr - time), 4);
 	}
 
+	public Senshi getLastInteraction() {
+		return lastInteraction;
+	}
+
+	public void setLastInteraction(Senshi last) {
+		this.lastInteraction = last;
+	}
+
 	@Override
 	public ListOrderedSet<String> getCurses() {
 		return stats.getCurses();
@@ -789,10 +800,22 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return slot.getTop();
 	}
 
+	public void setFrontline(Senshi card) {
+		if (slot == null || !isSupporting()) return;
+
+		slot.setTop(card);
+	}
+
 	public Senshi getSupport() {
 		if (slot == null || isSupporting()) return null;
 
 		return slot.getBottom();
+	}
+
+	public void setSupport(Senshi card) {
+		if (slot == null || isSupporting()) return;
+
+		slot.setBottom(card);
 	}
 
 	public String getEffect() {
@@ -821,6 +844,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public boolean execute(EffectParameters ep) {
+		return execute(false, ep);
+	}
+
+	public boolean execute(boolean global, EffectParameters ep) {
 		if (base.isLocked()) return false;
 		else if (popFlag(Flag.NO_EFFECT) || hand.getLockTime(Lock.EFFECT) > 0) return false;
 
@@ -848,7 +875,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 		}
 
-		if (trigger == Trigger.ON_ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
+		if ((trigger == Trigger.ON_ACTIVATE && (getCooldown() > 0 || isSupporting()))) return false;
 
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
@@ -858,10 +885,17 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				other.setHeroDefense(true);
 			}*/
 
+			for (Evogear e : equipments) {
+				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
+			}
+
 			if (hasEffect() && getEffect().contains(trigger.name())) {
 				if (isStunned() && Calc.chance(25)) {
 					Shoukan game = hand.getGame();
-					game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
+
+					if (!global) {
+						game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
+					}
 				} else {
 					cachedEffect.forScript(getEffect())
 							.withConst("self", this)
@@ -875,12 +909,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 			}
 
-			for (Evogear e : equipments) {
-				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
-			}
-
 			Senshi sup = getSupport();
-			if (sup != null) {
+			if (sup != null && !global) {
 				sup.execute(new EffectParameters(Trigger.ON_DEFER, getSide(), ep.source(), ep.targets()));
 			}
 
@@ -1034,6 +1064,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (leech != null) {
 			leech.getLeeches().remove(this);
 		}
+		lastInteraction = null;
 		cachedEffect = new CachedScriptManager();
 
 		byte base = 0b11;
@@ -1090,7 +1121,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				if (!stats.getWrite().isBlank() && getSlot().getIndex() > -1) {
 					g1.setColor(Color.ORANGE);
 					g1.setFont(Drawable.FONT.deriveFont(15f));
-					Graph.drawOutlinedString(g1, stats.getWrite(), 25, 49 + (23 + g1.getFontMetrics().getHeight()) / 2, 2, Color.BLACK);
+
+					String str = stats.getWrite();
+					FontMetrics fm = g1.getFontMetrics();
+					Graph.drawOutlinedString(g1, str,
+							225 / 2 - fm.stringWidth(str) / 2, 39 + (23 + fm.getHeight()) / 2,
+							2, Color.BLACK
+					);
 				}
 
 				if (!hasFlag(Flag.HIDE_STATS)) {

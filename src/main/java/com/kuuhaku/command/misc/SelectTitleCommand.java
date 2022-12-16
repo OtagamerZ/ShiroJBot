@@ -88,12 +88,12 @@ public class SelectTitleCommand implements Executable {
 					Title next = Utils.getNext(current, ts);
 					if (next != null) {
 						sb.append("\n").append(locale.get("str/next_tier", next.getInfo(locale).getDescription()));
-
-						int track = next.track(acc);
-						if (track >= 0) {
-							sb.append("\n").append(locale.get("str/current_tracker", track));
-						}
 					}
+				}
+
+				int track = current.track(acc);
+				if (track >= 0) {
+					sb.append("\n").append(locale.get("str/current_tracker", track));
 				}
 
 				return new FieldMimic(current.getRarity().getEmote() + info.getName(), sb.toString()).toString();
