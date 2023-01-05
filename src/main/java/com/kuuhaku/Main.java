@@ -49,7 +49,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
 
 public class Main implements Thread.UncaughtExceptionHandler {
 	private static ShiroInfo info;
@@ -81,12 +80,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
-				.setEventPool(new ForkJoinPool(
-						Runtime.getRuntime().availableProcessors(),
-						ForkJoinPool.defaultForkJoinWorkerThreadFactory,
-						INSTANCE,
-						true
-				), true)
+				.setEventPool(Executors.newFixedThreadPool(20), true)
 				.addEventListeners(ShiroInfo.getShiroEvents())
 				.build();
 
