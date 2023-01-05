@@ -24,7 +24,6 @@ import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.events.ConsoleListener;
 import com.kuuhaku.events.cron.ScheduledEvents;
 import com.kuuhaku.handlers.api.Application;
-import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.managers.CacheManager;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
@@ -117,7 +116,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		info.setStartTime(System.currentTimeMillis());
 		Helper.logger(Main.class).info("Criada pool de compilação: " + ShiroInfo.getCompilationPool().getCorePoolSize() + " espaços alocados");
 
-		info.setSockets(new WebSocketConfig());
+//		info.setSockets(new WebSocketConfig());
 		spring = SpringApplication.run(Application.class, args);
 		finishStartUp();
 	}
@@ -196,7 +195,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		exiting = true;
 
 		ScheduledEvents.shutdown();
-		info.getSockets().shutdown();
+//		info.getSockets().shutdown();
 		SpringApplication.exit(spring);
 		shiroShards.shutdown();
 

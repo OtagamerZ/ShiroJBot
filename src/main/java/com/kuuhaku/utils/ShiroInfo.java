@@ -120,7 +120,7 @@ public class ShiroInfo {
 
 	private long startTime = 0;
 	private String winner = "";
-	private WebSocketConfig sockets;
+//	private WebSocketConfig sockets;
 	private EncoderClient encoderClient;
 	private final DiscordBotListAPI dblApi = dblToken == null ? null : new DiscordBotListAPI.Builder()
 			.token(dblToken)
@@ -430,13 +430,13 @@ public class ShiroInfo {
 		return CanvasDAO.getCanvas();
 	}
 
-	public WebSocketConfig getSockets() {
-		return sockets;
-	}
+//	public WebSocketConfig getSockets() {
+//		return sockets;
+//	}
 
-	public void setSockets(WebSocketConfig server) {
-		this.sockets = server;
-	}
+//	public void setSockets(WebSocketConfig server) {
+//		this.sockets = server;
+//	}
 
 	public EncoderClient getEncoderClient() {
 		return encoderClient;
