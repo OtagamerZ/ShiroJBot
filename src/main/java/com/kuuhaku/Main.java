@@ -80,7 +80,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
-				.setEventPool(Executors.newFixedThreadPool(20), true)
+				.setEventPool(Executors.newFixedThreadPool(70), true)
 				.addEventListeners(ShiroInfo.getShiroEvents())
 				.build();
 
