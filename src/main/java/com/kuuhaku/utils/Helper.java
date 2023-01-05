@@ -723,42 +723,42 @@ public abstract class Helper {
 				} else {
 					for (ButtonMessage message : channel.getMessages()) {
 						Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
-						Message msg;
-						try {
-							msg = chn.retrieveMessageById(message.getId()).submit().get();
-						} catch (MissingAccessException | ExecutionException | InterruptedException e) {
-							GuildConfig conf = GuildDAO.getGuildById(g.getId());
-							for (ButtonChannel bc : conf.getButtonConfigs()) {
-								if (bc.removeMessage(message)) break;
-							}
 
-							GuildDAO.updateGuildSettings(gc);
-							continue;
-						}
-						resolveButton(g, message.getButtons(), buttons);
+						chn.retrieveMessageById(message.getId()).queue(
+								msg -> {
+									resolveButton(g, message.getButtons(), buttons);
 
-						if (Helper.hasPermission(g.getSelfMember(), MESSAGE_MANAGE, chn))
-							msg.clearReactions().queue();
+									if (Helper.hasPermission(g.getSelfMember(), MESSAGE_MANAGE, chn))
+										msg.clearReactions().queue();
 
-						if (message.isGatekeeper()) {
-							Role r = message.getRole(g);
+									if (message.isGatekeeper()) {
+										Role r = message.getRole(g);
 
-							gatekeep(msg, r);
-						} else {
-							buttons.put(Helper.parseEmoji(CANCEL), wrapper -> {
-								if (wrapper.getUser().getId().equals(message.getAuthor())) {
+										gatekeep(msg, r);
+									} else {
+										buttons.put(Helper.parseEmoji(CANCEL), wrapper -> {
+											if (wrapper.getUser().getId().equals(message.getAuthor())) {
+												GuildConfig conf = GuildDAO.getGuildById(g.getId());
+												for (ButtonChannel bc : conf.getButtonConfigs()) {
+													if (bc.removeMessage(message)) break;
+												}
+
+												GuildDAO.updateGuildSettings(conf);
+												wrapper.getMessage().clearReactions().queue();
+											}
+										});
+
+										Pages.buttonize(msg, buttons, ShiroInfo.USE_BUTTONS, true);
+									}
+								}, e -> {
 									GuildConfig conf = GuildDAO.getGuildById(g.getId());
 									for (ButtonChannel bc : conf.getButtonConfigs()) {
 										if (bc.removeMessage(message)) break;
 									}
 
-									GuildDAO.updateGuildSettings(conf);
-									wrapper.getMessage().clearReactions().queue();
+									GuildDAO.updateGuildSettings(gc);
 								}
-							});
-
-							Pages.buttonize(msg, buttons, ShiroInfo.USE_BUTTONS, true);
-						}
+						);
 					}
 				}
 			}
