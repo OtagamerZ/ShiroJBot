@@ -22,7 +22,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
 import com.kuuhaku.events.ShiroEvents;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
-import com.kuuhaku.handlers.api.websocket.WebSocketConfig;
 import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.common.drop.Prize;
 import com.kuuhaku.model.enums.I18n;

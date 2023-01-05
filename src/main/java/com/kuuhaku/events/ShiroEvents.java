@@ -90,16 +90,14 @@ import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ShiroEvents extends ListenerAdapter {
 	private final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
 	private final Map<String, VoiceTime> voiceTimes = new ConcurrentHashMap<>();
+	private final ExecutorService CMD_THREAD = Executors.newWorkStealingPool(Runtime.getRuntime().availableProcessors());
 
 	@Override
 	public void onReconnected(@Nonnull ReconnectedEvent event) {
@@ -149,323 +147,325 @@ public class ShiroEvents extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-		User author = event.getAuthor();
-		Member member = event.getMember();
-		Message message = event.getMessage();
-		TextChannel channel = message.getTextChannel();
-		Guild guild = message.getGuild();
-		String rawMessage = message.getContentRaw().replaceAll("\s+", " ");
-		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
-		String prefix = gc.getPrefix().toLowerCase(Locale.ROOT);
+		CMD_THREAD.submit(() -> {
+			User author = event.getAuthor();
+			Member member = event.getMember();
+			Message message = event.getMessage();
+			TextChannel channel = message.getTextChannel();
+			Guild guild = message.getGuild();
+			String rawMessage = message.getContentRaw().replaceAll("\s+", " ");
+			GuildConfig gc = GuildDAO.getGuildById(guild.getId());
+			String prefix = gc.getPrefix().toLowerCase(Locale.ROOT);
 
-		if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
-			handleExchange(author, message);
-		}
-
-		if (member == null || !channel.canTalk()) return;
-
-		if (!author.isBot()) {
-			try {
-				if (gc.getNoSpamChannels().contains(channel.getId()) && !Main.getSelfUser().getId().equals(author.getId())) {
-					channel.getHistory().retrievePast(20).queue(h -> {
-						h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
-						if (!gc.isHardAntispam())
-							h.removeIf(m -> StringUtils.containsIgnoreCase(m.getContentRaw(), rawMessage));
-
-						countSpam(member, channel, guild, h);
-					});
-				}
-			} catch (ErrorResponseException ignore) {
+			if (author.isBot() && !Main.getSelfUser().getId().equals(author.getId())) {
+				handleExchange(author, message);
 			}
-		}
 
-		boolean blacklisted = BlacklistDAO.isBlacklisted(author);
-		if (!blacklisted && !author.isBot()) {
-			MemberDAO.getMember(author.getId(), guild.getId());
-			UsernameDAO.setUsername(author.getId(), author.getName());
-		}
+			if (member == null || !channel.canTalk()) return;
 
-		if (Helper.isPureMention(rawMessage) && Helper.isPinging(message, Main.getSelfUser().getId())) {
-			channel.sendMessage("Quer saber como pode usar meus comandos? Digite `" + prefix + "ajuda` para ver todos eles ordenados por categoria!\nSe quiser me convidar, basta acessar https://shirojbot.site e clicar em \"Convide-me!\".").queue(null, Helper::doNothing);
-			return;
-		}
+			if (!author.isBot()) {
+				try {
+					if (gc.getNoSpamChannels().contains(channel.getId()) && !Main.getSelfUser().getId().equals(author.getId())) {
+						channel.getHistory().retrievePast(20).queue(h -> {
+							h.removeIf(m -> ChronoUnit.MILLIS.between(m.getTimeCreated().toLocalDateTime(), OffsetDateTime.now().atZoneSameInstant(ZoneOffset.UTC)) > 5000 || m.getAuthor() != author);
+							if (!gc.isHardAntispam())
+								h.removeIf(m -> StringUtils.containsIgnoreCase(m.getContentRaw(), rawMessage));
 
-		if (!author.isBot()) Main.getInfo().cache(guild, message);
-
-		String commandName = "";
-		String rawMsgNoCommand = "";
-		if (rawMessage.toLowerCase(Locale.ROOT).startsWith(prefix)) {
-			String rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
-			commandName = rawMsgNoPrefix.split(" ")[0].trim();
-			rawMsgNoCommand = rawMsgNoPrefix.substring(commandName.length()).trim();
-		}
-
-		CustomAnswer ca = Main.getInfo().getCustomAnswer(guild.getId(), rawMessage.toLowerCase(Locale.ROOT));
-
-		if (ca != null) {
-			Predicate<CustomAnswer> p = answer -> !Main.getSelfUser().getId().equals(author.getId());
-			if (!ca.getChannels().isEmpty())
-				p = p.and(answer -> ca.getChannels().contains(channel.getId()));
-			if (!ca.getUsers().isEmpty())
-				p = p.and(answer -> ca.getUsers().contains(author.getId()));
-			if (ca.getChance() != 100)
-				p = p.and(answer -> Helper.chance(answer.getChance()));
-
-			if (p.test(ca)) {
-				if (message.getReferencedMessage() != null)
-					Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), message.getReferencedMessage().getAuthor(), guild, message.getReferencedMessage()), message.getReferencedMessage());
-				else
-					Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild, message));
-			}
-		}
-
-		String[] args = Arrays.stream(rawMsgNoCommand.split(" "))
-				.filter(s -> !s.isBlank())
-				.toArray(String[]::new);
-
-		if (toHandle.containsKey(guild.getId())) {
-			List<SimpleMessageListener> evts = getHandler().get(guild.getId());
-			for (SimpleMessageListener evt : evts) {
-				if (evt.checkChannel(channel)) {
-					evt.onGuildMessageReceived(event);
+							countSpam(member, channel, guild, h);
+						});
+					}
+				} catch (ErrorResponseException ignore) {
 				}
 			}
-			evts.removeIf(SimpleMessageListener::isClosed);
-		}
 
-		Account acc = AccountDAO.getAccount(author.getId());
-		if (!author.isBot()) {
-			if (acc.isAfk()) {
-				if (guild.getSelfMember().hasPermission(Permission.NICKNAME_MANAGE) && member.getEffectiveName().startsWith("[AFK]")) {
-					try {
-						member.modifyNickname(member.getEffectiveName().replace("[AFK]", "")).queue(null, Helper::doNothing);
-					} catch (Exception ignore) {
+			boolean blacklisted = BlacklistDAO.isBlacklisted(author);
+			if (!blacklisted && !author.isBot()) {
+				MemberDAO.getMember(author.getId(), guild.getId());
+				UsernameDAO.setUsername(author.getId(), author.getName());
+			}
+
+			if (Helper.isPureMention(rawMessage) && Helper.isPinging(message, Main.getSelfUser().getId())) {
+				channel.sendMessage("Quer saber como pode usar meus comandos? Digite `" + prefix + "ajuda` para ver todos eles ordenados por categoria!\nSe quiser me convidar, basta acessar https://shirojbot.site e clicar em \"Convide-me!\".").queue(null, Helper::doNothing);
+				return;
+			}
+
+			if (!author.isBot()) Main.getInfo().cache(guild, message);
+
+			String commandName = "";
+			String rawMsgNoCommand = "";
+			if (rawMessage.toLowerCase(Locale.ROOT).startsWith(prefix)) {
+				String rawMsgNoPrefix = rawMessage.substring(prefix.length()).trim();
+				commandName = rawMsgNoPrefix.split(" ")[0].trim();
+				rawMsgNoCommand = rawMsgNoPrefix.substring(commandName.length()).trim();
+			}
+
+			CustomAnswer ca = Main.getInfo().getCustomAnswer(guild.getId(), rawMessage.toLowerCase(Locale.ROOT));
+
+			if (ca != null) {
+				Predicate<CustomAnswer> p = answer -> !Main.getSelfUser().getId().equals(author.getId());
+				if (!ca.getChannels().isEmpty())
+					p = p.and(answer -> ca.getChannels().contains(channel.getId()));
+				if (!ca.getUsers().isEmpty())
+					p = p.and(answer -> ca.getUsers().contains(author.getId()));
+				if (ca.getChance() != 100)
+					p = p.and(answer -> Helper.chance(answer.getChance()));
+
+				if (p.test(ca)) {
+					if (message.getReferencedMessage() != null)
+						Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), message.getReferencedMessage().getAuthor(), guild, message.getReferencedMessage()), message.getReferencedMessage());
+					else
+						Helper.typeMessage(channel, Helper.replaceTags(ca.getAnswer(), author, guild, message));
+				}
+			}
+
+			String[] args = Arrays.stream(rawMsgNoCommand.split(" "))
+					.filter(s -> !s.isBlank())
+					.toArray(String[]::new);
+
+			if (toHandle.containsKey(guild.getId())) {
+				List<SimpleMessageListener> evts = getHandler().get(guild.getId());
+				for (SimpleMessageListener evt : evts) {
+					if (evt.checkChannel(channel)) {
+						evt.onGuildMessageReceived(event);
 					}
 				}
-
-				message.reply(":sunrise_over_mountains: | Você não está mais AFK.").queue();
-				acc.setAfkMessage(null);
-				AccountDAO.saveAccount(acc);
+				evts.removeIf(SimpleMessageListener::isClosed);
 			}
 
-			for (Member m : message.getMentionedMembers()) {
-				Account tgt = AccountDAO.getAccount(m.getId());
-				if (tgt.isAfk()) {
-					message.reply(":zzz: | " + m.getEffectiveName() + " está AFK: " + Helper.replaceTags(tgt.getAfkMessage(), author, guild, message)).queue();
+			Account acc = AccountDAO.getAccount(author.getId());
+			if (!author.isBot()) {
+				if (acc.isAfk()) {
+					if (guild.getSelfMember().hasPermission(Permission.NICKNAME_MANAGE) && member.getEffectiveName().startsWith("[AFK]")) {
+						try {
+							member.modifyNickname(member.getEffectiveName().replace("[AFK]", "")).queue(null, Helper::doNothing);
+						} catch (Exception ignore) {
+						}
+					}
+
+					message.reply(":sunrise_over_mountains: | Você não está mais AFK.").queue();
+					acc.setAfkMessage(null);
+					AccountDAO.saveAccount(acc);
+				}
+
+				for (Member m : message.getMentionedMembers()) {
+					Account tgt = AccountDAO.getAccount(m.getId());
+					if (tgt.isAfk()) {
+						message.reply(":zzz: | " + m.getEffectiveName() + " está AFK: " + Helper.replaceTags(tgt.getAfkMessage(), author, guild, message)).queue();
+					}
 				}
 			}
-		}
 
-		if (author.isBot()) return;
+			if (author.isBot()) return;
 
-		PreparedCommand command = Main.getCommandManager().getCommand(commandName);
-		boolean found = false;
-		if (command != null && !Main.getInfo().getIgnore().contains(author.getId())) {
-			found = command.getCategory().isEnabled(guild, author) && !gc.getDisabledCommands().contains(command.getCommand().getClass().getName());
+			PreparedCommand command = Main.getCommandManager().getCommand(commandName);
+			boolean found = false;
+			if (command != null && !Main.getInfo().getIgnore().contains(author.getId())) {
+				found = command.getCategory().isEnabled(guild, author) && !gc.getDisabledCommands().contains(command.getCommand().getClass().getName());
 
-			if (found) {
-				if (Main.getInfo().getConfirmationPending().keySet().stream().anyMatch(s -> s.startsWith(author.getId()))) {
-					channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
-					return;
-				} else if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
-					channel.sendMessage("❌ | Comandos estão bloqueados neste canal.").queue();
-					return;
-				} else if (command.getCategory() == Category.NSFW && !channel.isNSFW()) {
+				if (found) {
+					if (Main.getInfo().getConfirmationPending().keySet().stream().anyMatch(s -> s.startsWith(author.getId()))) {
+						channel.sendMessage("❌ | Você possui um comando com confirmação pendente, por favor resolva-o antes de usar este comando novamente.").queue();
+						return;
+					} else if (gc.getNoCommandChannels().contains(channel.getId()) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
+						channel.sendMessage("❌ | Comandos estão bloqueados neste canal.").queue();
+						return;
+					} else if (command.getCategory() == Category.NSFW && !channel.isNSFW()) {
+						try {
+							channel.sendMessage(I18n.getString("err_nsfw-in-non-nsfw-channel")).queue();
+						} catch (InsufficientPermissionException ignore) {
+						}
+						return;
+					} else if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+						try {
+							channel.sendMessage(I18n.getString("err_not-enough-permission")).queue();
+						} catch (InsufficientPermissionException ignore) {
+						}
+						return;
+					} else if (blacklisted) {
+						channel.sendMessage(I18n.getString("err_user-blacklisted")).queue();
+						return;
+					} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
+						channel.sendMessage(I18n.getString("err_user-ratelimited")).queue();
+						Main.getInfo().getRatelimit().put(author.getId(), true, Helper.rng(3, 6), TimeUnit.SECONDS);
+						return;
+					} else if (command.getMissingPerms(channel).length > 0) {
+						channel.sendMessage("❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
+								Arrays.stream(command.getPermissions())
+										.map(p -> "- " + p.getName())
+										.collect(Collectors.joining("\n"))
+						)).queue();
+						return;
+					}
+
+					if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
+						Main.getInfo().getRatelimit().put(author.getId(), true, Helper.rng(2, 4), TimeUnit.SECONDS);
+
 					try {
-						channel.sendMessage(I18n.getString("err_nsfw-in-non-nsfw-channel")).queue();
+						command.execute(author, member, rawMsgNoCommand, args, message, channel, guild, prefix);
+					} catch (Exception e) {
+						Helper.logger(command.getCommand().getClass()).error("Erro ao executar comando " + command.getName(), e);
+					}
+					Helper.spawnAd(acc, channel);
+
+					LogDAO.saveLog(new Log(guild, author, rawMessage));
+					Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, rawMessage);
+				}
+			}
+
+			if (!blacklisted) {
+				if (!found) {
+					try {
+						if (gc.isCardSpawn()) Helper.spawnKawaipon(gc, channel);
+						if (gc.isDropSpawn()) Helper.spawnDrop(gc, channel);
 					} catch (InsufficientPermissionException ignore) {
 					}
-					return;
-				} else if (!Helper.hasPermission(member, command.getCategory().getPrivilegeLevel())) {
+
+					Event ev = Event.getCurrent();
+					if (ev == Event.XMAS && gc.isDropSpawn())
+						Helper.spawnPadoru(gc, channel);
+					else if (ev == Event.EASTER && gc.isDropSpawn())
+						Helper.spawnUsaTan(gc, channel);
+
 					try {
-						channel.sendMessage(I18n.getString("err_not-enough-permission")).queue();
-					} catch (InsufficientPermissionException ignore) {
-					}
-					return;
-				} else if (blacklisted) {
-					channel.sendMessage(I18n.getString("err_user-blacklisted")).queue();
-					return;
-				} else if (Main.getInfo().getRatelimit().containsKey(author.getId())) {
-					channel.sendMessage(I18n.getString("err_user-ratelimited")).queue();
-					Main.getInfo().getRatelimit().put(author.getId(), true, Helper.rng(3, 6), TimeUnit.SECONDS);
-					return;
-				} else if (command.getMissingPerms(channel).length > 0) {
-					channel.sendMessage("❌ | Não possuo permissões suficientes para executar esse comando:\n%s".formatted(
-							Arrays.stream(command.getPermissions())
-									.map(p -> "- " + p.getName())
-									.collect(Collectors.joining("\n"))
-					)).queue();
-					return;
-				}
+						if (gc.getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
+							message.delete().reason("Mensagem possui um URL").queue(null, Helper::doNothing);
+							channel.sendMessage(author.getAsMention() + ", é proibido postar links neste canal!").queue();
+							Helper.logToChannel(author, false, null, "Detectei um link no canal " + channel.getAsMention(), guild, rawMessage);
+						}
 
-				if (!TagDAO.getTagById(author.getId()).isBeta() && !Helper.hasPermission(member, PrivilegeLevel.SUPPORT))
-					Main.getInfo().getRatelimit().put(author.getId(), true, Helper.rng(2, 4), TimeUnit.SECONDS);
+						com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(member.getId(), member.getGuild().getId());
+						if (m.getUid() == null) {
+							m.setUid(author.getId());
+							m.setSid(guild.getId());
+						}
 
-				try {
-					command.execute(author, member, rawMsgNoCommand, args, message, channel, guild, prefix);
-				} catch (Exception e) {
-					Helper.logger(command.getCommand().getClass()).error("Erro ao executar comando " + command.getName(), e);
-				}
-				Helper.spawnAd(acc, channel);
-
-				LogDAO.saveLog(new Log(guild, author, rawMessage));
-				Helper.logToChannel(author, true, command, "Um comando foi usado no canal " + channel.getAsMention(), guild, rawMessage);
-			}
-		}
-
-		if (!blacklisted) {
-			if (!found) {
-				try {
-					if (gc.isCardSpawn()) Helper.spawnKawaipon(gc, channel);
-					if (gc.isDropSpawn()) Helper.spawnDrop(gc, channel);
-				} catch (InsufficientPermissionException ignore) {
-				}
-
-				Event ev = Event.getCurrent();
-				if (ev == Event.XMAS && gc.isDropSpawn())
-					Helper.spawnPadoru(gc, channel);
-				else if (ev == Event.EASTER && gc.isDropSpawn())
-					Helper.spawnUsaTan(gc, channel);
-
-				try {
-					if (gc.getNoLinkChannels().contains(channel.getId()) && Helper.findURL(rawMessage) && !Helper.hasPermission(member, PrivilegeLevel.MOD)) {
-						message.delete().reason("Mensagem possui um URL").queue(null, Helper::doNothing);
-						channel.sendMessage(author.getAsMention() + ", é proibido postar links neste canal!").queue();
-						Helper.logToChannel(author, false, null, "Detectei um link no canal " + channel.getAsMention(), guild, rawMessage);
-					}
-
-					com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(member.getId(), member.getGuild().getId());
-					if (m.getUid() == null) {
-						m.setUid(author.getId());
-						m.setSid(guild.getId());
-					}
-
-					boolean lvlUp = m.addXp(guild, Helper.getBuffMult(gc, BuffType.XP));
-					MemberDAO.saveMember(m);
-					try {
-						if (lvlUp && gc.isLevelNotif()) {
+						boolean lvlUp = m.addXp(guild, Helper.getBuffMult(gc, BuffType.XP));
+						MemberDAO.saveMember(m);
+						try {
+							if (lvlUp && gc.isLevelNotif()) {
+								if (m.getLevel() % 210 == 5 && m.getLevel() > 210)
+									Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
+											.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
+											.queue();
+								else
+									Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
+							}
+						} catch (InsufficientPermissionException e) {
 							if (m.getLevel() % 210 == 5 && m.getLevel() > 210)
-								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
+								channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
 										.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
 										.queue();
 							else
-								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
+								channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
 						}
-					} catch (InsufficientPermissionException e) {
-						if (m.getLevel() % 210 == 5 && m.getLevel() > 210)
-							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
-									.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
-									.queue();
-						else
-							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
-					}
 
-					Set<String> invalid = new HashSet<>();
-					Set<LevelRole> roles = gc.getLevelRoles()
-							.stream()
-							.filter(e -> m.getLevel() >= e.getLevel())
-							.collect(Collectors.toSet());
+						Set<String> invalid = new HashSet<>();
+						Set<LevelRole> roles = gc.getLevelRoles()
+								.stream()
+								.filter(e -> m.getLevel() >= e.getLevel())
+								.collect(Collectors.toSet());
 
-					int curr = roles.stream().mapToInt(LevelRole::getLevel).max().orElse(0);
-					if (curr > 0) {
-						List<Role> prev = new ArrayList<>();
-						List<Role> rols = new ArrayList<>();
-						for (LevelRole role : roles) {
-							Role r = guild.getRoleById(role.getId());
-							if (r == null) {
-								invalid.add(role.getId());
-								continue;
+						int curr = roles.stream().mapToInt(LevelRole::getLevel).max().orElse(0);
+						if (curr > 0) {
+							List<Role> prev = new ArrayList<>();
+							List<Role> rols = new ArrayList<>();
+							for (LevelRole role : roles) {
+								Role r = guild.getRoleById(role.getId());
+								if (r == null) {
+									invalid.add(role.getId());
+									continue;
+								}
+
+								if (role.getLevel() < curr) {
+									prev.add(r);
+								} else {
+									rols.add(r);
+								}
 							}
 
-							if (role.getLevel() < curr) {
-								prev.add(r);
-							} else {
-								rols.add(r);
+							rols.removeIf(member.getRoles()::contains);
+							if (!rols.isEmpty()) {
+								guild.modifyMemberRoles(member, rols, prev).queue(null, Helper::doNothing);
+								if (gc.isLevelNotif()) {
+									TextChannel chn = Helper.getOr(gc.getLevelChannel(), channel);
+									if (rols.size() > 1) {
+										String names = Helper.parseAndJoin(rols, rl -> "**`" + rl.getName() + "`**");
+										chn.sendMessage(author.getAsMention() + " ganhou os cargos " + names + "! :tada:").queue();
+									} else
+										chn.sendMessage(author.getAsMention() + " ganhou o cargo **`" + rols.get(0).getName() + "`**! :tada:").queue();
+								}
 							}
 						}
 
-						rols.removeIf(member.getRoles()::contains);
-						if (!rols.isEmpty()) {
-							guild.modifyMemberRoles(member, rols, prev).queue(null, Helper::doNothing);
-							if (gc.isLevelNotif()) {
-								TextChannel chn = Helper.getOr(gc.getLevelChannel(), channel);
-								if (rols.size() > 1) {
-									String names = Helper.parseAndJoin(rols, rl -> "**`" + rl.getName() + "`**");
-									chn.sendMessage(author.getAsMention() + " ganhou os cargos " + names + "! :tada:").queue();
-								} else
-									chn.sendMessage(author.getAsMention() + " ganhou o cargo **`" + rols.get(0).getName() + "`**! :tada:").queue();
+						if (!invalid.isEmpty()) {
+							for (String s : invalid) {
+								gc.removeLevelRole(s);
 							}
+
+							GuildDAO.updateGuildSettings(gc);
 						}
+					} catch (ErrorResponseException | NullPointerException e) {
+						Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+					} catch (HierarchyException | InsufficientPermissionException ignore) {
 					}
 
-					if (!invalid.isEmpty()) {
-						for (String s : invalid) {
-							gc.removeLevelRole(s);
-						}
-
-						GuildDAO.updateGuildSettings(gc);
-					}
-				} catch (ErrorResponseException | NullPointerException e) {
-					Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
-				} catch (HierarchyException | InsufficientPermissionException ignore) {
-				}
-
-				if (gc.isNQNMode() && Helper.hasEmote(message.getContentRaw()))
-					try {
-						com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
-
-						Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
-						String s = Helper.sendEmotifiedString(guild, message.getContentRaw());
-
-						WebhookMessageBuilder wmb = new WebhookMessageBuilder()
-								.setAllowedMentions(AllowedMentions.none())
-								.setContent(String.valueOf(s));
-
-						String avatar = Helper.getOr(m.getPseudoAvatar(), author.getAvatarUrl());
-						String name = Helper.getOr(m.getPseudoName(), author.getName());
-
+					if (gc.isNQNMode() && Helper.hasEmote(message.getContentRaw()))
 						try {
-							Member nii = guild.getMember(Main.getInfo().getUserByID(ShiroInfo.getNiiChan()));
-							wmb.setUsername(nii != null && name.equals(nii.getEffectiveName()) ? name + " (FAKE)" : name);
-							wmb.setAvatarUrl(avatar);
-						} catch (RuntimeException e) {
-							m.setPseudoName("");
-							m.setPseudoAvatar("");
-							MemberDAO.saveMember(m);
-						}
+							com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(author.getId(), guild.getId());
 
-						assert wh != null;
-						WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
-						message.delete().queue(d -> {
+							Webhook wh = Helper.getOrCreateWebhook(channel, "Shiro");
+							String s = Helper.sendEmotifiedString(guild, message.getContentRaw());
+
+							WebhookMessageBuilder wmb = new WebhookMessageBuilder()
+									.setAllowedMentions(AllowedMentions.none())
+									.setContent(String.valueOf(s));
+
+							String avatar = Helper.getOr(m.getPseudoAvatar(), author.getAvatarUrl());
+							String name = Helper.getOr(m.getPseudoName(), author.getName());
+
 							try {
-								wc.send(wmb.build()).get();
-							} catch (InterruptedException | ExecutionException e) {
-								Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+								Member nii = guild.getMember(Main.getInfo().getUserByID(ShiroInfo.getNiiChan()));
+								wmb.setUsername(nii != null && name.equals(nii.getEffectiveName()) ? name + " (FAKE)" : name);
+								wmb.setAvatarUrl(avatar);
+							} catch (RuntimeException e) {
+								m.setPseudoName("");
+								m.setPseudoAvatar("");
+								MemberDAO.saveMember(m);
 							}
-						}, Helper::doNothing);
-					} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException |
-							 NullPointerException | InterruptedException | ExecutionException ignore) {
+
+							assert wh != null;
+							WebhookClient wc = new WebhookClientBuilder(wh.getUrl()).build();
+							message.delete().queue(d -> {
+								try {
+									wc.send(wmb.build()).get();
+								} catch (InterruptedException | ExecutionException e) {
+									Helper.logger(this.getClass()).error(e + " | " + e.getStackTrace()[0]);
+								}
+							}, Helper::doNothing);
+						} catch (IndexOutOfBoundsException | InsufficientPermissionException | ErrorResponseException |
+								 NullPointerException | InterruptedException | ExecutionException ignore) {
+						}
+				}
+
+				if (acc.hasPendingQuest()) {
+					DailyQuest tasks = DailyQuest.getQuest(author.getIdLong());
+					Map<DailyTask, Integer> pg = acc.getDailyProgress();
+
+					if (tasks.checkTasks(pg)) {
+						acc.setLastQuest();
+
+						float mod = tasks.getDifficultyMod();
+						if (Helper.round(mod, 1) >= 3.8)
+							acc.addGem();
+						else
+							acc.addCredit(Math.round(2000 * mod), this.getClass());
+
+						AccountDAO.saveAccount(acc);
+						channel.sendMessage(author.getAsMention() + " completou todos os desafios diários, parabéns! :confetti_ball:").queue();
 					}
-			}
-
-			if (acc.hasPendingQuest()) {
-				DailyQuest tasks = DailyQuest.getQuest(author.getIdLong());
-				Map<DailyTask, Integer> pg = acc.getDailyProgress();
-
-				if (tasks.checkTasks(pg)) {
-					acc.setLastQuest();
-
-					float mod = tasks.getDifficultyMod();
-					if (Helper.round(mod, 1) >= 3.8)
-						acc.addGem();
-					else
-						acc.addCredit(Math.round(2000 * mod), this.getClass());
-
-					AccountDAO.saveAccount(acc);
-					channel.sendMessage(author.getAsMention() + " completou todos os desafios diários, parabéns! :confetti_ball:").queue();
 				}
 			}
-		}
+		});
 	}
 
 	@Override
