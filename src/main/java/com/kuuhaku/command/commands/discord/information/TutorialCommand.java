@@ -56,6 +56,11 @@ public class TutorialCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		if (true) {
+			channel.sendMessage("❌ | Comando desabilitado.").queue();
+			return;
+		}
+
 		Account acc = AccountDAO.getAccount(author.getId());
 		if (acc.hasCompletedTutorial()) {
 			channel.sendMessage("❌ | Você já completou o tutorial.").queue();
