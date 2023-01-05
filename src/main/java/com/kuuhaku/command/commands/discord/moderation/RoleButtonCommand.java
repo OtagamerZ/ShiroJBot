@@ -42,6 +42,10 @@ public class RoleButtonCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
+		if (true) {
+			channel.sendMessage("❌ | Comando desabilitado").queue();
+		}
+
 		GuildConfig gc = GuildDAO.getGuildById(guild.getId());
 
 		if (args.length == 1 && Helper.equalsAny(args[0], "reboot", "regen", "reset", "restart", "refresh")) {

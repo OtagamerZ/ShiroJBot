@@ -133,7 +133,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 
 		for (GuildConfig guildConfig : GuildDAO.getAllGuildsWithButtons()) {
 			try {
-				Helper.refreshButtons(guildConfig);
+				//Helper.refreshButtons(guildConfig);
 			} catch (RuntimeException e) {
 				Helper.logger(Main.class).error("Error loading role buttons for guild with ID " + guildConfig.getGuildId());
 			}
