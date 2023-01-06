@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 import java.util.zip.CRC32;
 
 @Entity
@@ -116,18 +115,9 @@ public class Member implements Hashable {
 		AtomicReference<Double> mult = new AtomicReference<>(buff);
 
 		boolean waifu = g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).toList().contains(com.kuuhaku.model.persistent.Member.getWaifu(uid));
-		if (waifu)
+		if (waifu) {
 			mult.updateAndGet(v -> v * WaifuDAO.getMultiplier(uid).getMult());
-
-		Kawaipon kp = KawaiponDAO.getKawaipon(uid);
-		if (kp.getCards().size() / ((float) CardDAO.getTotalCards()) * 2 >= 1) {
-			mult.updateAndGet(v -> v * 1.5f);
-		} else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.75)
-			mult.updateAndGet(v -> v * 1.37f);
-		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.5)
-			mult.updateAndGet(v -> v * 1.25f);
-		else if (kp.getCards().size() / ((float) CardDAO.getTotalCards() * 2) >= 0.25)
-			mult.updateAndGet(v -> v * 1.12f);
+		}
 
 		int level = getLevel();
 		float spamModif = Math.max(0, Math.min((System.currentTimeMillis() - lastEarntXp) / 1000f, 1));
