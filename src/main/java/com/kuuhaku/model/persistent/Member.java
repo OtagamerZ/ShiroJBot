@@ -112,7 +112,7 @@ public class Member implements Hashable {
 		return c.getHusbando().equals(id) ? c.getWaifu() : c.getHusbando();
 	}
 
-	public synchronized boolean addXp(Guild g, double buff) {
+	public synchronized boolean addXp(Guild g, Account acc, double buff) {
 		AtomicReference<Double> mult = new AtomicReference<>(buff);
 
 		boolean waifu = g.getMembers().stream().map(net.dv8tion.jda.api.entities.Member::getId).toList().contains(com.kuuhaku.model.persistent.Member.getWaifu(uid));
@@ -125,7 +125,6 @@ public class Member implements Hashable {
 		xp += 15 * mult.get() * spamModif;
 		lastEarntXp = System.currentTimeMillis();
 
-		Account acc = AccountDAO.getAccount(uid);
 		if (acc.hasPendingQuest()) {
 			Map<DailyTask, Integer> pg = acc.getDailyProgress();
 			pg.merge(DailyTask.XP_TASK, (int) Math.round(15 * mult.get() * spamModif), Integer::sum);

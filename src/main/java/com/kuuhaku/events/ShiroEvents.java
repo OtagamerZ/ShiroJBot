@@ -179,9 +179,10 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		}
 
+		com.kuuhaku.model.persistent.Member mb = null;
 		boolean blacklisted = BlacklistDAO.isBlacklisted(author);
 		if (!blacklisted && !author.isBot()) {
-			MemberDAO.getMember(author.getId(), guild.getId());
+			mb = MemberDAO.getMember(author.getId(), guild.getId());
 			UsernameDAO.setUsername(author.getId(), author.getName());
 		}
 
@@ -313,7 +314,7 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		}
 
-		if (!blacklisted) {
+		if (!blacklisted && mb != null) {
 			if (!found) {
 				try {
 					if (gc.isCardSpawn()) Helper.spawnKawaipon(gc, channel);
@@ -334,33 +335,33 @@ public class ShiroEvents extends ListenerAdapter {
 						Helper.logToChannel(author, false, null, "Detectei um link no canal " + channel.getAsMention(), guild, rawMessage);
 					}
 
-					com.kuuhaku.model.persistent.Member m = MemberDAO.getMember(member.getId(), member.getGuild().getId());
-					if (m.getUid() == null) {
-						m.setUid(author.getId());
-						m.setSid(guild.getId());
+					if (mb.getUid() == null) {
+						mb.setUid(author.getId());
+						mb.setSid(guild.getId());
 					}
 
-					boolean lvlUp = m.addXp(guild, Helper.getBuffMult(gc, BuffType.XP));
-					MemberDAO.saveMember(m);
+					boolean lvlUp = mb.addXp(guild, acc, Helper.getBuffMult(gc, BuffType.XP));
+					MemberDAO.saveMember(mb);
 					try {
 						if (lvlUp && gc.isLevelNotif()) {
-							if (m.getLevel() % 210 == 5 && m.getLevel() > 210)
-								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
-										.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
+							if (mb.getLevel() % 210 == 5 && mb.getLevel() > 210)
+								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + mb.getLevel() + ". GG WP! :tada:")
+										.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + mb.getLevel() + ".gif"), "upgrade.gif")
 										.queue();
 							else
-								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
+								Helper.getOr(gc.getLevelChannel(), channel).sendMessage(author.getAsMention() + " subiu para o nível " + mb.getLevel() + ". GG WP! :tada:").queue();
 						}
 					} catch (InsufficientPermissionException e) {
-						if (m.getLevel() % 210 == 5 && m.getLevel() > 210)
-							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:")
-									.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + m.getLevel() + ".gif"), "upgrade.gif")
+						if (mb.getLevel() % 210 == 5 && mb.getLevel() > 210)
+							channel.sendMessage(author.getAsMention() + " subiu para o nível " + mb.getLevel() + ". GG WP! :tada:")
+									.addFile(Helper.getResourceAsStream(this.getClass(), "assets/transition_" + mb.getLevel() + ".gif"), "upgrade.gif")
 									.queue();
 						else
-							channel.sendMessage(author.getAsMention() + " subiu para o nível " + m.getLevel() + ". GG WP! :tada:").queue();
+							channel.sendMessage(author.getAsMention() + " subiu para o nível " + mb.getLevel() + ". GG WP! :tada:").queue();
 					}
 
 					Set<String> invalid = new HashSet<>();
+					com.kuuhaku.model.persistent.Member m = mb;
 					Set<LevelRole> roles = gc.getLevelRoles()
 							.stream()
 							.filter(e -> m.getLevel() >= e.getLevel())
