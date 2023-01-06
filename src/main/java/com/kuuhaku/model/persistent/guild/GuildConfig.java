@@ -46,6 +46,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
+@Cacheable
 @Table(name = "guildconfig")
 public class GuildConfig {
 	@Id

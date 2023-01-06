@@ -39,6 +39,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.CRC32;
 
 @Entity
+@Cacheable
 @DynamicUpdate
 @Table(name = "member")
 @IdClass(CompositeMemberId.class)
