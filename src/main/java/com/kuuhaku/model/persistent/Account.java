@@ -49,6 +49,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 @Entity
+@Cacheable
 @DynamicUpdate
 @Table(name = "account")
 public class Account {
