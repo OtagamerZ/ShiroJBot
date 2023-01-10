@@ -19,6 +19,7 @@
 package com.kuuhaku.interfaces.shoukan;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
@@ -178,8 +179,26 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		};
 	}
 
-	default JSONObject extractValues(I18N locale) {
-		JSONObject out = new JSONObject();
+	default JSONObject extractValues(I18N locale, CachedScriptManager csm) {
+		Hand h = getHand();
+		Map<String, Object> values = Map.ofEntries(
+				Map.entry("php", h == null ? 5000 : h.getHP()),
+				Map.entry("bhp", h == null ? 5000 : h.getBase().hp()),
+				Map.entry("pmp", h == null ? 5 : h.getMP()),
+				Map.entry("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek())),
+				Map.entry("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek())),
+				Map.entry("mp", getMPCost()),
+				Map.entry("hp", getHPCost()),
+				Map.entry("atk", getDmg()),
+				Map.entry("dfs", getDfs()),
+				Map.entry("ddg", getDodge()),
+				Map.entry("blk", getBlock()),
+				Map.entry("data", getStats().getData())
+		);
+
+		if (!csm.getStoredProps().isEmpty() && csm.getPropHash().intValue() == values.hashCode()) {
+			return csm.getStoredProps();
+		}
 
 		String desc = getDescription(locale);
 		for (String str : desc.split("\\s")) {
@@ -189,27 +208,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				try {
 					@Language("Groovy") String calc = groups.getString("calc").replace("$", "");
 					if (!calc.isBlank()) {
-						Hand h = getHand();
-
 						calc = "import static java.lang.Math.*\n\n" + calc;
-						String val = String.valueOf(
-								Utils.exec(calc, Map.ofEntries(
-										Map.entry("php", h == null ? 5000 : h.getHP()),
-										Map.entry("bhp", h == null ? 5000 : h.getBase().hp()),
-										Map.entry("pmp", h == null ? 5 : h.getMP()),
-										Map.entry("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek())),
-										Map.entry("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek())),
-										Map.entry("mp", getMPCost()),
-										Map.entry("hp", getHPCost()),
-										Map.entry("atk", getDmg()),
-										Map.entry("dfs", getDfs()),
-										Map.entry("ddg", getDodge()),
-										Map.entry("blk", getBlock()),
-										Map.entry("data", getStats().getData())
-								))
-						);
+						String val = String.valueOf(Utils.exec(calc, values));
 
-						out.compute(groups.getString("type"), (k, v) -> {
+						csm.getStoredProps().compute(groups.getString("type"), (k, v) -> {
 							int value = Calc.round(NumberUtils.toDouble(val) * getStats().getPower());
 
 							if (v == null) {
@@ -227,6 +229,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			}
 		}
 
-		return out;
+		return csm.getStoredProps();
 	}
 }

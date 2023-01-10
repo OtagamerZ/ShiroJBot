@@ -30,6 +30,7 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
+import com.kuuhaku.model.common.shoukan.CardProxy;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
@@ -54,6 +55,9 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
+
+import static com.kuuhaku.model.enums.shoukan.Trigger.ON_DEFEND;
+import static com.kuuhaku.model.enums.shoukan.Trigger.ON_EFFECT_TARGET;
 
 @Entity
 @Table(name = "senshi")
@@ -132,6 +136,16 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	   │ └──── (0 - 15) taunt
 	   └ (0 - 15) cooldown
 	 */
+
+	public Senshi() {
+	}
+
+	public Senshi(String id, Card card, Race race, CardAttributes base) {
+		this.id = id;
+		this.card = card;
+		this.race = race;
+		this.base = base;
+	}
 
 	@Override
 	public String getId() {
@@ -903,7 +917,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 							.withConst("data", stats.getData())
 							.withVar("ep", ep)
 							.withVar("side", hand.getSide())
-							.withVar("props", extractValues(hand.getGame().getLocale()))
+							.withVar("props", extractValues(hand.getGame().getLocale(), cachedEffect))
 							.withVar("trigger", trigger)
 							.run();
 				}
@@ -923,9 +937,21 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						"data", stats.getData(),
 						"ep", ep,
 						"side", hand.getSide(),
-						"props", extractValues(hand.getGame().getLocale()),
+						"props", extractValues(hand.getGame().getLocale(), cachedEffect),
 						"trigger", trigger
 				));
+			}
+
+			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
+				Shoukan game = hand.getGame();
+
+				for (SlotColumn sc : game.getSlots(getSide())) {
+					for (Senshi card : sc.getCards()) {
+						if (card instanceof CardProxy) {
+							game.activateProxy(card, ep);
+						}
+					}
+				}
 			}
 
 			popFlag(Flag.EMPOWERED);
@@ -968,7 +994,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					"data", stats.getData(),
 					"ep", new EffectParameters(trigger, getSide()),
 					"side", hand.getSide(),
-					"props", extractValues(hand.getGame().getLocale()),
+					"props", extractValues(hand.getGame().getLocale(), cachedEffect),
 					"trigger", trigger
 			));
 		} catch (Exception e) {
@@ -1111,7 +1137,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						y += 11;
 					}
 
-					JSONObject values = extractValues(locale);
+					JSONObject values = extractValues(locale, cachedEffect);
 					Graph.drawMultilineString(g1, desc,
 							7, y, 211, 3,
 							card.parseValues(g1, deck.getStyling(), values), card.highlightValues(g1, style.getFrame().isLegacy())

@@ -197,11 +197,12 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 		} else {
+			if (placeProxy(curr, args)) return true;
+
 			getChannel().sendMessage(getLocale().get("error/wrong_card_type")).queue();
 			return false;
 		}
 
-		Senshi copy;
 		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
 		if (slot.isLocked()) {
 			int time = slot.getLock();
@@ -214,6 +215,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
+		Senshi copy;
 		if (args.getBoolean("notCombat")) {
 			if (slot.hasBottom()) {
 				getChannel().sendMessage(getLocale().get("error/slot_occupied")).queue();
@@ -264,6 +266,145 @@ public class Shoukan extends GameInstance<Phase> {
 				copy.isFlipped() ? getLocale().get("str/a_card") : copy,
 				copy.getState().toString(getLocale())
 		);
+		return true;
+	}
+
+	private boolean placeProxy(Hand hand, JSONObject args) {
+		if (hand.getCards().get(args.getInt("inHand") - 1) instanceof Evogear chosen && chosen.isSpell()) {
+			if (!chosen.isAvailable()) {
+				getChannel().sendMessage(getLocale().get("error/card_unavailable")).queue();
+				return false;
+			} else if (chosen.getHPCost() >= hand.getHP()) {
+				getChannel().sendMessage(getLocale().get("error/not_enough_hp")).queue();
+				return false;
+			} else if (chosen.getMPCost() > hand.getMP()) {
+				getChannel().sendMessage(getLocale().get("error/not_enough_mp")).queue();
+				return false;
+			} else if (chosen.getSCCost() > hand.getDiscard().size()) {
+				getChannel().sendMessage(getLocale().get("error/not_enough_sc")).queue();
+				return false;
+			}
+
+			int locktime = hand.getLockTime(Lock.SPELL);
+			if (locktime > 0) {
+				getChannel().sendMessage(getLocale().get("error/spell_locked", locktime)).queue();
+				return false;
+			}
+		} else {
+			getChannel().sendMessage(getLocale().get("error/wrong_card_type")).queue();
+			return false;
+		}
+
+		SlotColumn slot = arena.getSlots(hand.getSide()).get(args.getInt("inField") - 1);
+		if (slot.isLocked()) {
+			int time = slot.getLock();
+
+			if (time == -1) {
+				getChannel().sendMessage(getLocale().get("error/slot_locked_perma")).queue();
+			} else {
+				getChannel().sendMessage(getLocale().get("error/slot_locked", time)).queue();
+			}
+			return false;
+		}
+
+		if (slot.hasBottom()) {
+			getChannel().sendMessage(getLocale().get("error/slot_occupied")).queue();
+			return false;
+		}
+
+		Senshi proxy = new CardProxy(chosen);
+		switch (args.getString("mode")) {
+			case "d" -> proxy.setDefending(true);
+			case "b" -> proxy.setFlipped(true);
+		}
+
+		hand.consumeHP(chosen.getHPCost());
+		hand.consumeMP(chosen.getMPCost());
+		List<Drawable<?>> consumed = hand.consumeSC(chosen.getSCCost());
+
+		if (!consumed.isEmpty()) {
+			proxy.getStats().getData().put("consumed", consumed);
+		}
+
+		if (args.getBoolean("notCombat")) {
+			if (slot.hasBottom()) {
+				getChannel().sendMessage(getLocale().get("error/slot_occupied")).queue();
+				return false;
+			}
+
+			slot.setBottom(proxy);
+		} else {
+			if (slot.hasTop()) {
+				getChannel().sendMessage(getLocale().get("error/slot_occupied")).queue();
+				return false;
+			}
+
+			slot.setTop(proxy);
+		}
+
+		return true;
+	}
+
+	public boolean activateProxy(Senshi proxy, EffectParameters ep) {
+		if (!(proxy instanceof CardProxy p)) return false;
+
+		Evogear e = p.getOriginal();
+		Hand hand = e.getHand();
+		Targeting tgt = switch (e.getTargetType()) {
+			case NONE -> new Targeting(hand, -1, -1);
+			case ALLY -> {
+				if (ep.allies().length == 0) {
+					yield null;
+				}
+
+				yield new Targeting(hand, ep.allies()[0].index(), -1);
+			}
+			case ENEMY -> {
+				if (ep.allies().length == 0) {
+					yield null;
+				}
+
+				yield new Targeting(hand, -1, ep.enemies()[0].index());
+			}
+			case BOTH -> {
+				if (ep.allies().length == 0 || ep.enemies().length == 0) {
+					yield null;
+				}
+
+				yield new Targeting(hand, ep.allies()[0].index(), ep.enemies()[0].index());
+			}
+		};
+
+		if (tgt == null) return false;
+
+		Senshi enemy = tgt.enemy();
+		if (enemy != null && enemy.isProtected()) {
+			Evogear copy = e.copy();
+			hand.getGraveyard().add(copy);
+			p.getSlot().replace(p, null);
+
+			hand.getData().put("last_spell", copy);
+			trigger(ON_SPELL, hand.getSide());
+			reportEvent("str/spell_shield");
+			return false;
+		} else if (!tgt.validate(e.getTargetType())) {
+			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + e.getTargetType()))).queue();
+			return false;
+		}
+
+		Evogear copy = e.copy();
+		hand.getGraveyard().add(copy);
+		p.getSlot().replace(p, null);
+
+		if (!copy.execute(copy.toParameters(tgt))) {
+			hand.getGraveyard().remove(copy);
+			e.setAvailable(true);
+			return false;
+		}
+
+		hand.getData().put("last_spell", copy);
+		trigger(ON_SPELL, hand.getSide());
+		reportEvent("str/activate_card", hand.getName(), getLocale().get("str/a_spell"));
 		return true;
 	}
 
@@ -1271,18 +1412,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		triggerEOTs(new EffectParameters(trigger, side));
-	}
-
-	public boolean trigger(Trigger trigger, Source source) {
-		if (restoring) return false;
-
-		EffectParameters ep = new EffectParameters(trigger, source.side(), source);
-		if (source.execute(ep)) {
-			triggerEOTs(ep);
-			return true;
-		}
-
-		return false;
 	}
 
 	public boolean trigger(Trigger trigger, Source source, Target... targets) {

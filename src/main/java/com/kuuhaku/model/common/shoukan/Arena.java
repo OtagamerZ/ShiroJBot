@@ -76,6 +76,11 @@ public class Arena implements Renderer {
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
 	private final BondedList<Drawable<?>> banned = new BondedList<>((d, it) -> {
+		if (d instanceof CardProxy p) {
+			it.add(p.getOriginal());
+			return false;
+		}
+
 		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
 		d.getHand().getOther().addKill();
 

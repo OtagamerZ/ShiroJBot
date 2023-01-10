@@ -19,14 +19,18 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.model.records.CachedScript;
+import com.kuuhaku.util.json.JSONObject;
 import org.intellij.lang.annotations.Language;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CachedScriptManager {
 	private CachedScript cache;
 	private final Map<String, Object> context = new HashMap<>();
+	private final JSONObject storedProps = new JSONObject();
+	private final AtomicInteger propHash = new AtomicInteger();
 
 	public CachedScriptManager forScript(@Language("Groovy") String code) {
 		if (cache == null || code.hashCode() != cache.hashCode()) {
@@ -59,5 +63,13 @@ public class CachedScriptManager {
 
 	public void run() {
 		cache.run(context);
+	}
+
+	public JSONObject getStoredProps() {
+		return storedProps;
+	}
+
+	public AtomicInteger getPropHash() {
+		return propHash;
 	}
 }

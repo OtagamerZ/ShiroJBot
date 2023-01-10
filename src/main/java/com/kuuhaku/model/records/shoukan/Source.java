@@ -32,7 +32,6 @@ public record Source(Drawable<?> card, Side side, int index, Trigger trigger) {
 		this(card, card.getSide(), card.getIndex(), trigger);
 	}
 
-	@SuppressWarnings("rawtypes")
 	public boolean execute(EffectParameters ep) {
 		if (card != null && card instanceof EffectHolder eh) {
 			return eh.execute(ep);
