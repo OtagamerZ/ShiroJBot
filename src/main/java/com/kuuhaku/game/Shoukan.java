@@ -307,20 +307,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		if (slot.hasBottom()) {
-			getChannel().sendMessage(getLocale().get("error/slot_occupied")).queue();
-			return false;
-		}
-
 		Senshi proxy = new CardProxy(chosen);
-
-		hand.consumeHP(chosen.getHPCost());
-		hand.consumeMP(chosen.getMPCost());
-		List<Drawable<?>> consumed = hand.consumeSC(chosen.getSCCost());
-
-		if (!consumed.isEmpty()) {
-			proxy.getStats().getData().put("consumed", consumed);
-		}
 
 		if (args.getBoolean("notCombat")) {
 			if (slot.hasBottom()) {
@@ -328,6 +315,15 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
+			hand.consumeHP(chosen.getHPCost());
+			hand.consumeMP(chosen.getMPCost());
+			List<Drawable<?>> consumed = hand.consumeSC(chosen.getSCCost());
+
+			if (!consumed.isEmpty()) {
+				proxy.getStats().getData().put("consumed", consumed);
+			}
+
+			chosen.setAvailable(false);
 			slot.setBottom(proxy);
 		} else {
 			if (slot.hasTop()) {
@@ -335,6 +331,15 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
+			hand.consumeHP(chosen.getHPCost());
+			hand.consumeMP(chosen.getMPCost());
+			List<Drawable<?>> consumed = hand.consumeSC(chosen.getSCCost());
+
+			if (!consumed.isEmpty()) {
+				proxy.getStats().getData().put("consumed", consumed);
+			}
+
+			chosen.setAvailable(false);
 			slot.setTop(proxy);
 		}
 
