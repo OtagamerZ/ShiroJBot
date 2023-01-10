@@ -359,25 +359,19 @@ public class Shoukan extends GameInstance<Phase> {
 		Targeting tgt = switch (e.getTargetType()) {
 			case NONE -> new Targeting(hand, -1, -1);
 			case ALLY -> {
-				if (ep.allies().length == 0) {
-					yield null;
-				}
-
-				yield new Targeting(hand, ep.allies()[0].index(), -1);
-			}
-			case ENEMY -> {
 				if (ep.enemies().length == 0) {
 					yield null;
 				}
 
-				yield new Targeting(hand, -1, ep.enemies()[0].index());
+				yield new Targeting(hand, ep.enemies()[0].index(), -1);
 			}
+			case ENEMY -> new Targeting(hand, -1, ep.source().index());
 			case BOTH -> {
-				if (ep.allies().length == 0 || ep.enemies().length == 0) {
+				if (ep.enemies().length == 0) {
 					yield null;
 				}
 
-				yield new Targeting(hand, ep.allies()[0].index(), ep.enemies()[0].index());
+				yield new Targeting(hand, ep.enemies()[0].index(), ep.source().index());
 			}
 		};
 
