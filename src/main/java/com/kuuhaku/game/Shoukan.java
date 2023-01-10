@@ -197,7 +197,7 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 		} else {
-			if (placeProxy(curr, args)) return true;
+			if (args.getString("mode").equals("b") && placeProxy(curr, args)) return true;
 
 			getChannel().sendMessage(getLocale().get("error/wrong_card_type")).queue();
 			return false;
@@ -313,10 +313,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi proxy = new CardProxy(chosen);
-		switch (args.getString("mode")) {
-			case "d" -> proxy.setDefending(true);
-			case "b" -> proxy.setFlipped(true);
-		}
 
 		hand.consumeHP(chosen.getHPCost());
 		hand.consumeMP(chosen.getMPCost());

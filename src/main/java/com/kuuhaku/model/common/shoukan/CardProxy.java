@@ -32,6 +32,7 @@ public class CardProxy extends Senshi {
 		super(e.getId(), e.getCard(), Race.NONE, new CardAttributes());
 
 		original = e;
+		setFlipped(true);
 	}
 
 	public Evogear getOriginal() {
