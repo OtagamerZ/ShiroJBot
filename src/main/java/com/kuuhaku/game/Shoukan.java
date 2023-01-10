@@ -339,8 +339,8 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		reportEvent("str/place_card",
-				proxy.getName(),
-				proxy.isFlipped() ? getLocale().get("str/a_card") : copy,
+				hand.getName(),
+				proxy.isFlipped() ? getLocale().get("str/a_card") : proxy,
 				proxy.getState().toString(getLocale())
 		);
 		return true;
