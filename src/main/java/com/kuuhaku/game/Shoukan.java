@@ -338,6 +338,11 @@ public class Shoukan extends GameInstance<Phase> {
 			slot.setTop(proxy);
 		}
 
+		reportEvent("str/place_card",
+				proxy.getName(),
+				proxy.isFlipped() ? getLocale().get("str/a_card") : copy,
+				proxy.getState().toString(getLocale())
+		);
 		return true;
 	}
 
