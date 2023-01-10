@@ -68,6 +68,7 @@ public class Hand {
 	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(d)) return false;
 		else if (d instanceof CardProxy p) {
+			d.reset();
 			it.add(p.getOriginal());
 			return false;
 		}
@@ -94,6 +95,7 @@ public class Hand {
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(d)) return false;
 		else if (d instanceof CardProxy p) {
+			d.reset();
 			it.add(p.getOriginal());
 			return false;
 		}
@@ -116,6 +118,7 @@ public class Hand {
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(d)) return false;
 		else if (d instanceof CardProxy p) {
+			d.reset();
 			it.add(p.getOriginal());
 			return false;
 		}
@@ -190,6 +193,7 @@ public class Hand {
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(d)) return false;
 		else if (d instanceof CardProxy p) {
+			d.reset();
 			it.add(p.getOriginal());
 			return false;
 		}

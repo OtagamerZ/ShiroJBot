@@ -1152,7 +1152,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					String str = stats.getWrite();
 					FontMetrics fm = g1.getFontMetrics();
 					Graph.drawOutlinedString(g1, str,
-							225 / 2 - fm.stringWidth(str) / 2, 39 + (23 + fm.getHeight()) / 2,
+							225 / 2 - fm.stringWidth(str) / 2, 39 + fm.getHeight() / 2,
 							2, Color.BLACK
 					);
 				}

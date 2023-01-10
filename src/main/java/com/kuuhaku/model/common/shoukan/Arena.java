@@ -77,6 +77,7 @@ public class Arena implements Renderer {
 	private final Map<Side, List<SlotColumn>> slots;
 	private final BondedList<Drawable<?>> banned = new BondedList<>((d, it) -> {
 		if (d instanceof CardProxy p) {
+			d.reset();
 			it.add(p.getOriginal());
 			return false;
 		}
