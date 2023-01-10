@@ -944,11 +944,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
 				Shoukan game = hand.getGame();
-
-				for (SlotColumn sc : game.getSlots(getSide())) {
-					for (Senshi card : sc.getCards()) {
-						if (card instanceof CardProxy && game.activateProxy(card, ep)) {
-							game.getChannel().sendMessage(game.getLocale().get("str/trap_activation", card)).queue();
+				if (!game.getCurrent().equals(hand)) {
+					for (SlotColumn sc : game.getSlots(getSide())) {
+						for (Senshi card : sc.getCards()) {
+							if (card instanceof CardProxy && game.activateProxy(card, ep)) {
+								game.getChannel().sendMessage(game.getLocale().get("str/trap_activation", card)).queue();
+							}
 						}
 					}
 				}
