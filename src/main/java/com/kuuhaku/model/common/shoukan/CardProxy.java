@@ -40,6 +40,18 @@ public class CardProxy extends Senshi {
 	}
 
 	@Override
+	public boolean isDefending() {
+		return isFlipped();
+	}
+
+	@Override
+	public void setFlipped(boolean flipped) {
+		if (flipped) {
+			getHand().getGraveyard().add(this);
+		}
+	}
+
+	@Override
 	public boolean canAttack() {
 		return false;
 	}
