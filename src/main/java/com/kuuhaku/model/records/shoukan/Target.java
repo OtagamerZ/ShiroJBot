@@ -35,4 +35,9 @@ public record Target(Senshi card, Side side, int index, Trigger trigger, TargetT
 
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "TARGET: " + card;
+	}
 }
