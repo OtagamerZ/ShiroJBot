@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.common.shoukan;
 
+import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
@@ -47,7 +48,9 @@ public class CardProxy extends Senshi {
 
 	@Override
 	public void setFlipped(boolean flipped) {
-		if (flipped) {
+		if (!flipped) {
+			Shoukan game = getHand().getGame();
+			game.getChannel().sendMessage(game.getLocale().get("str/trap_disarm", original)).queue();
 			getHand().getGraveyard().add(this);
 		}
 	}
