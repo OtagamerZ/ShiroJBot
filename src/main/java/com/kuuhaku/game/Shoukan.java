@@ -402,6 +402,7 @@ public class Shoukan extends GameInstance<Phase> {
 		hand.getGraveyard().add(copy);
 		p.getSlot().replace(p, null);
 
+		System.out.println(ep);
 		if (!copy.execute(copy.toParameters(tgt))) {
 			hand.getGraveyard().remove(copy);
 			e.setAvailable(true);
