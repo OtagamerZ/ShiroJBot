@@ -140,4 +140,14 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 	public boolean leeched() {
 		return trigger == Trigger.ON_LEECH;
 	}
+
+	@Override
+	public String toString() {
+		return "EffectParameters[" +
+				"trigger=" + trigger +
+				", side=" + side +
+				", source=" + source +
+				", targets=" + Arrays.toString(targets) +
+				']';
+	}
 }

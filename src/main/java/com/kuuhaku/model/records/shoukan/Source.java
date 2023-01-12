@@ -43,9 +43,4 @@ public record Source(Drawable<?> card, Side side, int index, Trigger trigger) {
 	public Target toTarget() {
 		return card.asTarget(trigger);
 	}
-
-	@Override
-	public String toString() {
-		return "SOURCE: " + card;
-	}
 }
