@@ -49,6 +49,7 @@ public class CardProxy extends Senshi {
 	@Override
 	public void setFlipped(boolean flipped) {
 		super.setFlipped(flipped);
+
 		if (!flipped) {
 			Shoukan game = getHand().getGame();
 			game.getChannel().sendMessage(game.getLocale().get("str/trap_disarm", original)).queue();
