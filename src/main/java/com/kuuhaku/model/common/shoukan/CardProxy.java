@@ -42,11 +42,6 @@ public class CardProxy extends Senshi {
 	}
 
 	@Override
-	public boolean isDefending() {
-		return isFlipped();
-	}
-
-	@Override
 	public void setFlipped(boolean flipped) {
 		super.setFlipped(flipped);
 

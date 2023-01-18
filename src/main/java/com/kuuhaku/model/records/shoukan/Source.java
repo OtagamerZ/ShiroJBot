@@ -21,6 +21,7 @@ package com.kuuhaku.model.records.shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 
 public record Source(Drawable<?> card, Side side, int index, Trigger trigger) {
@@ -42,5 +43,9 @@ public record Source(Drawable<?> card, Side side, int index, Trigger trigger) {
 
 	public Target toTarget() {
 		return card.asTarget(trigger);
+	}
+
+	public Target toTarget(TargetType type) {
+		return card.asTarget(trigger, type);
 	}
 }

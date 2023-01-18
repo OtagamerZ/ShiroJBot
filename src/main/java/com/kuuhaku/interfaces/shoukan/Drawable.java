@@ -339,14 +339,12 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	}
 
 	default Target asTarget(Trigger trigger) {
+		return asTarget(trigger, getSide() == getHand().getGame().getCurrentSide() ? TargetType.ALLY : TargetType.ENEMY);
+	}
+
+	default Target asTarget(Trigger trigger, TargetType type) {
 		if (this instanceof Senshi s) {
-			return new Target(
-					s,
-					getSide(),
-					getIndex(),
-					trigger,
-					getSide() == getHand().getGame().getCurrentSide() ? TargetType.ALLY : TargetType.ENEMY
-			);
+			return new Target(s, getSide(), getIndex(), trigger, type);
 		} else {
 			return new Target();
 		}

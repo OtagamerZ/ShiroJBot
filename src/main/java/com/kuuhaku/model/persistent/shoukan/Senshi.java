@@ -950,7 +950,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				Shoukan game = hand.getGame();
 				EffectParameters params;
 				if (targeted) {
-					params = new EffectParameters(Trigger.ON_TRAP, ep.side(), asSource(trigger), ep.source().toTarget());
+					params = new EffectParameters(Trigger.ON_TRAP, ep.side(), asSource(trigger), ep.source().toTarget(TargetType.ENEMY));
 				} else {
 					params = new EffectParameters(Trigger.ON_TRAP, ep.side(), asSource(trigger));
 				}
