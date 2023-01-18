@@ -363,6 +363,7 @@ public class Shoukan extends GameInstance<Phase> {
 					yield null;
 				}
 
+				System.out.println("Ally");
 				yield new Targeting(hand, ep.allies()[0].index(), -1);
 			}
 			case ENEMY -> {
@@ -391,7 +392,6 @@ public class Shoukan extends GameInstance<Phase> {
 			reportEvent("str/spell_shield");
 			return false;
 		} else if (!tgt.validate(e.getTargetType())) {
-			System.out.println(tgt);
 			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + e.getTargetType()))).queue();
 			return false;
 		}
