@@ -412,7 +412,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		hand.getData().put("last_spell", copy);
 		trigger(ON_SPELL, hand.getSide());
-		reportEvent("str/activate_card", hand.getName(), getLocale().get("str/a_spell"));
 		return true;
 	}
 
