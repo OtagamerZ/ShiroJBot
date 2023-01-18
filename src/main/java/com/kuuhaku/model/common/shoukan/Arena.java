@@ -150,27 +150,27 @@ public class Arena implements Renderer {
 		Graph.applyTransformed(g2d, 0, BAR_SIZE.height, g1 -> {
 			g1.drawImage(getField().renderBackground(), 0, 0, null);
 
-			try (Checkpoint cp = new Checkpoint()) {
-				for (Side side : Side.values()) {
-					int xOffset = CENTER.x - ((225 + MARGIN.x) * 5 - MARGIN.x) / 2;
-					int yOffset = switch (side) {
-						case TOP -> CENTER.y - (350 + MARGIN.y) * 2 - MARGIN.y * 4;
-						case BOTTOM -> CENTER.y + MARGIN.y * 5;
-					};
 
-					Hand h = game.getHands().get(side);
-					int regdeg = h.getRegDeg().peek();
-					if (regdeg != 0) {
-						BufferedImage over = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen_" + side.name().toLowerCase() + ".webp");
-						g1.drawImage(over, 0, CENTER.y * side.ordinal(), null);
-					}
-					cp.lap();
+			for (Side side : Side.values()) {
+				int xOffset = CENTER.x - ((225 + MARGIN.x) * 5 - MARGIN.x) / 2;
+				int yOffset = switch (side) {
+					case TOP -> CENTER.y - (350 + MARGIN.y) * 2 - MARGIN.y * 4;
+					case BOTTOM -> CENTER.y + MARGIN.y * 5;
+				};
 
-					Deck deck = h.getUserDeck();
-					DeckStyling style = deck.getStyling();
+				Hand h = game.getHands().get(side);
+				int regdeg = h.getRegDeg().peek();
+				if (regdeg != 0) {
+					BufferedImage over = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen_" + side.name().toLowerCase() + ".webp");
+					g1.drawImage(over, 0, CENTER.y * side.ordinal(), null);
+				}
 
-					g1.drawImage(style.getSlot().getImage(side, style.getFrame().isLegacy()), 26, yOffset, null);
+				Deck deck = h.getUserDeck();
+				DeckStyling style = deck.getStyling();
 
+				g1.drawImage(style.getSlot().getImage(side, style.getFrame().isLegacy()), 26, yOffset, null);
+
+				try (Checkpoint cp = new Checkpoint()) {
 					Graph.applyTransformed(g1, xOffset, yOffset, g2 -> {
 						for (SlotColumn slot : slots.get(side)) {
 							int x = (225 + MARGIN.x) * slot.getIndex() - 15;
@@ -217,11 +217,9 @@ public class Arena implements Renderer {
 								}
 							}
 
-							cp.lap();
+							cp.lap(side + " - slot " + slot.getIndex() + ": " + slot.getCards());
 						}
 					});
-
-					cp.lap();
 				}
 			}
 

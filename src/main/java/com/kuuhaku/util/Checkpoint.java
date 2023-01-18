@@ -4,10 +4,12 @@ import com.kuuhaku.Constants;
 import org.apache.commons.lang3.time.StopWatch;
 
 import java.util.ArrayDeque;
+import java.util.HashMap;
 
 public class Checkpoint implements AutoCloseable {
 	private final StopWatch watch = new StopWatch();
 	private final ArrayDeque<Long> laps = new ArrayDeque<>();
+	private final HashMap<Integer, String> comments = new HashMap<>();
 
 	public Checkpoint() {
 		watch.start();
@@ -17,6 +19,16 @@ public class Checkpoint implements AutoCloseable {
 	public void lap() {
 		watch.stop();
 		laps.add(watch.getTime());
+		watch.reset();
+		watch.start();
+
+		Constants.LOGGER.info("Lap " + laps.size() + " marked at " + laps.getLast() + "ms");
+	}
+
+	public void lap(String comment) {
+		watch.stop();
+		laps.add(watch.getTime());
+		comments.put(laps.size(), comment);
 		watch.reset();
 		watch.start();
 
@@ -34,7 +46,9 @@ public class Checkpoint implements AutoCloseable {
 		int i = 0;
 		StringBuilder sb = new StringBuilder("\nTotal time: " + total + "ms");
 		for (Long lap : laps) {
-			sb.append("\n").append(++i).append(": ").append(lap).append("ms (").append(lap * 100 / total).append("%)");
+			sb.append("\n%s: %sms (%s) %s".formatted(
+					++i, lap, lap * 100 / total, comments.getOrDefault(i, "")
+			));
 		}
 
 		Constants.LOGGER.info(sb.toString());
