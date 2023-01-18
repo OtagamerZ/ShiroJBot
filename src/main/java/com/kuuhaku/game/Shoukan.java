@@ -51,7 +51,6 @@ import com.kuuhaku.model.records.shoukan.snapshot.Player;
 import com.kuuhaku.model.records.shoukan.snapshot.Slot;
 import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
 import com.kuuhaku.util.Calc;
-import com.kuuhaku.util.Checkpoint;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
@@ -392,6 +391,7 @@ public class Shoukan extends GameInstance<Phase> {
 			reportEvent("str/spell_shield");
 			return false;
 		} else if (!tgt.validate(e.getTargetType())) {
+			System.out.println(ep.toString());
 			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + e.getTargetType()))).queue();
 			return false;
 		}
@@ -1514,8 +1514,6 @@ public class Shoukan extends GameInstance<Phase> {
 		resetTimer();
 		trigger(ON_TICK);
 
-		Checkpoint cp = new Checkpoint();
-
 		List<Side> sides = List.of(getOtherSide(), getCurrentSide());
 		for (Side side : sides) {
 			Hand hand = hands.get(side);
@@ -1577,8 +1575,6 @@ public class Shoukan extends GameInstance<Phase> {
 					s.getStats().removeExpired(AttrMod::isExpired);
 				}
 			}
-
-			cp.lap();
 		}
 
 		AtomicBoolean registered = new AtomicBoolean();
@@ -1595,8 +1591,6 @@ public class Shoukan extends GameInstance<Phase> {
 						registered.set(true);
 					}
 				});
-
-		cp.close();
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
