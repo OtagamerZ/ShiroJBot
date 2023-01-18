@@ -133,6 +133,9 @@ public enum Trigger {
 	/** When targeted **/
 	ON_EFFECT_TARGET,
 
+	/** When a proxied spell is activated **/
+	ON_TRAP,
+
 	/** Triggers mirrored from supported card **/
 	ON_DEFER,
 

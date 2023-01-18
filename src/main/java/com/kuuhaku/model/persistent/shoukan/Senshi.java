@@ -867,6 +867,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		Trigger trigger = null;
 		Senshi s = this;
+		boolean targeted = false;
+
 		if (ep.trigger() == Trigger.ON_DEFER) {
 			if (ep.size() == 0) return false;
 
@@ -887,6 +889,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (trigger == null) {
 				trigger = ep.trigger();
 			}
+
+			targeted = true;
 		}
 
 		if ((trigger == Trigger.ON_ACTIVATE && (getCooldown() > 0 || isSupporting()))) return false;
@@ -944,10 +948,17 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
 				Shoukan game = hand.getGame();
+				EffectParameters params;
+				if (targeted) {
+					params = new EffectParameters(Trigger.ON_TRAP, ep.side(), asSource(trigger), ep.source().toTarget());
+				} else {
+					params = new EffectParameters(Trigger.ON_TRAP, ep.side(), asSource(trigger));
+				}
+
 				if (!game.getCurrent().equals(hand)) {
 					for (SlotColumn sc : game.getSlots(getSide())) {
 						for (Senshi card : sc.getCards()) {
-							if (card instanceof CardProxy && game.activateProxy(card, ep)) {
+							if (card instanceof CardProxy && game.activateProxy(card, params)) {
 								game.getChannel().sendMessage(game.getLocale().get("str/trap_activation", card)).queue();
 							}
 						}

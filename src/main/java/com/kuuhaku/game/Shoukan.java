@@ -359,11 +359,12 @@ public class Shoukan extends GameInstance<Phase> {
 		Targeting tgt = switch (e.getTargetType()) {
 			case NONE -> new Targeting(hand, -1, -1);
 			case ALLY -> {
-				if (ep.allies().length == 0) {
+				int src = ep.source().index();
+				if (src == -1) {
 					yield null;
 				}
 
-				yield new Targeting(hand, ep.allies()[0].index(), -1);
+				yield new Targeting(hand, src, -1);
 			}
 			case ENEMY -> {
 				if (ep.enemies().length == 0) {
@@ -373,11 +374,12 @@ public class Shoukan extends GameInstance<Phase> {
 				yield new Targeting(hand, -1, ep.enemies()[0].index());
 			}
 			case BOTH -> {
-				if (ep.allies().length == 0 || ep.enemies().length == 0) {
+				int src = ep.source().index();
+				if (src == -1 || ep.enemies().length == 0) {
 					yield null;
 				}
 
-				yield new Targeting(hand, ep.allies()[0].index(), ep.enemies()[0].index());
+				yield new Targeting(hand, src, ep.enemies()[0].index());
 			}
 		};
 
@@ -1230,6 +1232,15 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 					}
 				} else {
+					EffectParameters params = new EffectParameters(Trigger.ON_TRAP, op.getSide());
+					for (SlotColumn sc : getSlots(op.getSide())) {
+						for (Senshi card : sc.getCards()) {
+							if (card instanceof CardProxy && activateProxy(card, params)) {
+								getChannel().sendMessage(getLocale().get("str/trap_activation", card)).queue();
+							}
+						}
+					}
+
 					outcome = "str/combat_direct";
 				}
 			}
