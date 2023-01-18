@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.Renderer;
+import com.kuuhaku.interfaces.annotations.ExecTime;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.Fonts;
@@ -141,6 +142,7 @@ public class Arena implements Renderer {
 		game.trigger(Trigger.ON_FIELD_CHANGE);
 	}
 
+	@ExecTime
 	@Override
 	public BufferedImage render(I18N locale) {
 		Hand top = game.getHands().get(Side.TOP);
@@ -270,6 +272,7 @@ public class Arena implements Renderer {
 		return bi;
 	}
 
+	@ExecTime
 	@Override
 	public BufferedImage render(I18N locale, Deque<HistoryLog> history) {
 		BufferedImage source = render(locale);

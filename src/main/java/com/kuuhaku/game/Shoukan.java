@@ -391,7 +391,7 @@ public class Shoukan extends GameInstance<Phase> {
 			reportEvent("str/spell_shield");
 			return false;
 		} else if (!tgt.validate(e.getTargetType())) {
-			System.out.println(ep.toString());
+			System.out.println(tgt);
 			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + e.getTargetType()))).queue();
 			return false;
 		}
