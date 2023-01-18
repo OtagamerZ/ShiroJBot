@@ -181,6 +181,8 @@ public class SlotColumn {
 	}
 
 	public void swap(Senshi self, Senshi other) {
+		if (self == null || other == null) return;
+
 		boolean sup = other.isSupporting();
 		SlotColumn sc = other.getSlot();
 
