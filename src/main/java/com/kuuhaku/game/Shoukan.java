@@ -356,7 +356,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Evogear e = p.getOriginal();
 		Hand hand = e.getHand();
-		System.out.println(e);
 
 		Targeting tgt = switch (e.getTargetType()) {
 			case NONE -> new Targeting(hand, -1, -1);
@@ -365,7 +364,6 @@ public class Shoukan extends GameInstance<Phase> {
 					yield null;
 				}
 
-				System.out.println("Ally");
 				yield new Targeting(hand, ep.allies()[0].index(), -1);
 			}
 			case ENEMY -> {

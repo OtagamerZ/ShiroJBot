@@ -949,9 +949,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				Shoukan game = hand.getGame();
 
 				if (!game.getCurrent().equals(hand)) {
+					Set<String> triggered = new HashSet<>();
+
 					for (SlotColumn sc : game.getSlots(getSide())) {
 						for (Senshi card : sc.getCards()) {
-							if (card instanceof CardProxy) {
+							if (card instanceof CardProxy p && !triggered.contains(p.getId())) {
 								EffectParameters params;
 								if (targeted) {
 									params = new EffectParameters(
@@ -970,6 +972,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 								if (game.activateProxy(card, params)) {
 									game.getChannel().sendMessage(game.getLocale().get("str/trap_activation", card)).queue();
+									triggered.add(p.getId());
 								}
 							}
 						}
