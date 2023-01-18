@@ -147,11 +147,10 @@ public class Arena implements Renderer {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		try (Checkpoint cp = new Checkpoint()) {
-			Graph.applyTransformed(g2d, 0, BAR_SIZE.height, g1 -> {
-				g1.drawImage(getField().renderBackground(), 0, 0, null);
-				cp.lap();
+		Graph.applyTransformed(g2d, 0, BAR_SIZE.height, g1 -> {
+			g1.drawImage(getField().renderBackground(), 0, 0, null);
 
+			try (Checkpoint cp = new Checkpoint()) {
 				for (Side side : Side.values()) {
 					int xOffset = CENTER.x - ((225 + MARGIN.x) * 5 - MARGIN.x) / 2;
 					int yOffset = switch (side) {
@@ -165,6 +164,7 @@ public class Arena implements Renderer {
 						BufferedImage over = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen_" + side.name().toLowerCase() + ".webp");
 						g1.drawImage(over, 0, CENTER.y * side.ordinal(), null);
 					}
+					cp.lap();
 
 					Deck deck = h.getUserDeck();
 					DeckStyling style = deck.getStyling();
@@ -216,54 +216,56 @@ public class Arena implements Renderer {
 									g2.drawImage(slot.getBottom().render(locale, deck), x, backline, null);
 								}
 							}
+
+							cp.lap();
 						}
 					});
 
 					cp.lap();
 				}
+			}
 
-				Graph.applyTransformed(g1, MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
-					if (!top.getRealDeck().isEmpty()) {
-						Deck d = top.getUserDeck();
-						g2.drawImage(d.getStyling().getFrame().getBack(d),
-								0, 15 - (350 + MARGIN.y), null
-						);
-					}
-					if (!banned.isEmpty()) {
-						Drawable<?> d = banned.getLast();
-						g2.drawImage(d.render(locale, d.getHand().getUserDeck()),
-								-15, 0, null
-						);
-					}
-					if (!bottom.getGraveyard().isEmpty()) {
-						Drawable<?> d = bottom.getGraveyard().getLast();
-						g2.drawImage(d.render(locale, bottom.getUserDeck()),
-								-15, 350 + MARGIN.y, null
-						);
-					}
-				});
-
-				Graph.applyTransformed(g1, SIZE.width - Drawable.SIZE.width - MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
-					if (!top.getGraveyard().isEmpty()) {
-						Drawable<?> d = top.getGraveyard().getLast();
-						g2.drawImage(d.render(locale, top.getUserDeck()),
-								15, -(350 + MARGIN.y), null
-						);
-					}
-					if (!getField().getId().equals("DEFAULT")) {
-						g2.drawImage(getField().render(locale, Utils.getOr(() -> getField().getHand().getUserDeck(), Deck.INSTANCE)),
-								15, 0, null
-						);
-					}
-					if (!bottom.getRealDeck().isEmpty()) {
-						Deck d = bottom.getUserDeck();
-						g2.drawImage(d.getStyling().getFrame().getBack(d),
-								30, 15 + 350 + MARGIN.y, null
-						);
-					}
-				});
+			Graph.applyTransformed(g1, MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
+				if (!top.getRealDeck().isEmpty()) {
+					Deck d = top.getUserDeck();
+					g2.drawImage(d.getStyling().getFrame().getBack(d),
+							0, 15 - (350 + MARGIN.y), null
+					);
+				}
+				if (!banned.isEmpty()) {
+					Drawable<?> d = banned.getLast();
+					g2.drawImage(d.render(locale, d.getHand().getUserDeck()),
+							-15, 0, null
+					);
+				}
+				if (!bottom.getGraveyard().isEmpty()) {
+					Drawable<?> d = bottom.getGraveyard().getLast();
+					g2.drawImage(d.render(locale, bottom.getUserDeck()),
+							-15, 350 + MARGIN.y, null
+					);
+				}
 			});
-		}
+
+			Graph.applyTransformed(g1, SIZE.width - Drawable.SIZE.width - MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
+				if (!top.getGraveyard().isEmpty()) {
+					Drawable<?> d = top.getGraveyard().getLast();
+					g2.drawImage(d.render(locale, top.getUserDeck()),
+							15, -(350 + MARGIN.y), null
+					);
+				}
+				if (!getField().getId().equals("DEFAULT")) {
+					g2.drawImage(getField().render(locale, Utils.getOr(() -> getField().getHand().getUserDeck(), Deck.INSTANCE)),
+							15, 0, null
+					);
+				}
+				if (!bottom.getRealDeck().isEmpty()) {
+					Deck d = bottom.getUserDeck();
+					g2.drawImage(d.getStyling().getFrame().getBack(d),
+							30, 15 + 350 + MARGIN.y, null
+					);
+				}
+			});
+		});
 
 		Graph.applyTransformed(g2d, drawBar(top));
 
@@ -578,13 +580,13 @@ public class Arena implements Renderer {
 					}
 				});
 			} else {*/
-				if (game.getCurrentSide() == hand.getSide()) {
-					g.setColor(hand.getUserDeck().getStyling().getFrame().getThemeColor());
-				} else {
-					g.setColor(Color.WHITE);
-				}
+			if (game.getCurrentSide() == hand.getSide()) {
+				g.setColor(hand.getUserDeck().getStyling().getFrame().getThemeColor());
+			} else {
+				g.setColor(Color.WHITE);
+			}
 
-				Graph.drawOutlinedString(g, Graph.abbreviate(g2d, name, SIZE.width - (BAR_SIZE.width + 250)), x, y, 10, Color.BLACK);
+			Graph.drawOutlinedString(g, Graph.abbreviate(g2d, name, SIZE.width - (BAR_SIZE.width + 250)), x, y, 10, Color.BLACK);
 			//}
 
 			int rad = (int) (BAR_SIZE.height / 1.5);
