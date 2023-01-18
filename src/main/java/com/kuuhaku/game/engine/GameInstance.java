@@ -95,7 +95,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 				initialized = true;
 				timeout.start();
 
-				while (!exec.isDone()) Thread.onSpinWait();
+				exec.join();
 			} catch (GameReport e) {
 				initialized = true;
 				//noinspection MagicConstant
