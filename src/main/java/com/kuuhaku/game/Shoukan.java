@@ -1044,9 +1044,9 @@ public class Shoukan extends GameInstance<Phase> {
 		int dmg = ally.getActiveAttr();
 		int lifesteal = 0;
 		int thorns = 0;
-		float mitigation = 1;
+		float dmgMult = 1;
 		if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
-			mitigation /= 2;
+			dmgMult /= 2;
 		}
 
 		String outcome = "str/combat_skip";
@@ -1058,9 +1058,9 @@ public class Shoukan extends GameInstance<Phase> {
 					for (Object o : charms) {
 						Charm c = Charm.valueOf(String.valueOf(o));
 						switch (c) {
-							case PIERCING -> op.modHP((int) -(dmg * mitigation * c.getValue(e.getTier()) / 100));
+							case PIERCING -> op.modHP((int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100));
 							case WOUNDING -> {
-								int val = (int) (dmg * mitigation * c.getValue(e.getTier()) / 100);
+								int val = (int) (dmg * dmgMult * c.getValue(e.getTier()) / 100);
 								op.getRegDeg().add(val);
 
 								if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(2)) {
@@ -1141,7 +1141,7 @@ public class Shoukan extends GameInstance<Phase> {
 								pHP = you.getHP();
 
 								if (!ally.popFlag(Flag.NO_DAMAGE)) {
-									you.modHP((int) -((enemyStats - ally.getActiveAttr()) * mitigation));
+									you.modHP((int) -((enemyStats - ally.getActiveAttr()) * dmgMult));
 								}
 
 								for (Senshi s : ally.getNearby()) {
@@ -1176,7 +1176,7 @@ public class Shoukan extends GameInstance<Phase> {
 									trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
 
 									if (you.getOrigin().synergy() == Race.FABLED) {
-										op.modHP((int) -(ally.getActiveAttr() * mitigation * 0.02));
+										op.modHP((int) -(ally.getActiveAttr() * dmgMult * 0.02));
 									}
 
 									reportEvent("str/combat", ally, enemy, getLocale().get("str/combat_dodge", dodge));
@@ -1239,7 +1239,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				op.modHP((int) -(dmg * mitigation));
+				op.modHP((int) -(dmg * dmgMult));
 				if (thorns > 0) {
 					you.modHP(-(pHP - op.getHP()) * thorns / 100);
 				}
