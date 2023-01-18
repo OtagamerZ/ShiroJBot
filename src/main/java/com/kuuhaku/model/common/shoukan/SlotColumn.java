@@ -180,6 +180,23 @@ public class SlotColumn {
 		top = aux;
 	}
 
+	public void swap(Senshi self, Senshi other) {
+		boolean sup = other.isSupporting();
+		SlotColumn sc = other.getSlot();
+
+		if (self.isSupporting()) {
+			bottom = other;
+		} else {
+			top = other;
+		}
+
+		if (sup) {
+			sc.bottom = self;
+		} else {
+			sc.top = self;
+		}
+	}
+
 	public int getLock() {
 		if (Bit.on(state, 0)) return -1;
 

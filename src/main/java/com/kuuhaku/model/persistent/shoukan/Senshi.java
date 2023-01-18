@@ -56,8 +56,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
-import static com.kuuhaku.model.enums.shoukan.Trigger.ON_DEFEND;
-import static com.kuuhaku.model.enums.shoukan.Trigger.ON_EFFECT_TARGET;
+import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 @Entity
 @Table(name = "senshi")
@@ -948,18 +947,30 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
 				Shoukan game = hand.getGame();
-				EffectParameters params;
-				if (targeted) {
-					params = new EffectParameters(Trigger.ON_TRAP, ep.side(), asSource(trigger), ep.source().toTarget(TargetType.ENEMY));
-				} else {
-					params = new EffectParameters(Trigger.ON_TRAP, ep.side(), asSource(trigger));
-				}
 
 				if (!game.getCurrent().equals(hand)) {
 					for (SlotColumn sc : game.getSlots(getSide())) {
 						for (Senshi card : sc.getCards()) {
-							if (card instanceof CardProxy && game.activateProxy(card, params)) {
-								game.getChannel().sendMessage(game.getLocale().get("str/trap_activation", card)).queue();
+							if (card instanceof CardProxy) {
+								EffectParameters params;
+								if (targeted) {
+									params = new EffectParameters(
+											Trigger.ON_TRAP, getSide(),
+											card.asSource(ON_TRAP),
+											asTarget(trigger, TargetType.ALLY),
+											ep.source().toTarget(TargetType.ENEMY)
+									);
+								} else {
+									params = new EffectParameters(
+											Trigger.ON_TRAP, getSide(),
+											card.asSource(ON_TRAP),
+											asTarget(trigger, TargetType.ALLY)
+									);
+								}
+
+								if (game.activateProxy(card, params)) {
+									game.getChannel().sendMessage(game.getLocale().get("str/trap_activation", card)).queue();
+								}
 							}
 						}
 					}

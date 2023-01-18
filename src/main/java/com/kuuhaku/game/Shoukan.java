@@ -1231,11 +1231,18 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 					}
 				} else {
-					EffectParameters params = new EffectParameters(Trigger.ON_TRAP, op.getSide());
 					for (SlotColumn sc : getSlots(op.getSide())) {
 						for (Senshi card : sc.getCards()) {
-							if (card instanceof CardProxy && activateProxy(card, params)) {
-								getChannel().sendMessage(getLocale().get("str/trap_activation", card)).queue();
+							if (card instanceof CardProxy) {
+								EffectParameters params = new EffectParameters(
+										Trigger.ON_TRAP, op.getSide(),
+										card.asSource(ON_TRAP),
+										ally.asTarget(ON_ATTACK, TargetType.ENEMY)
+								);
+
+								if (activateProxy(card, params)) {
+									getChannel().sendMessage(getLocale().get("str/trap_activation", card)).queue();
+								}
 							}
 						}
 					}
