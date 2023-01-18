@@ -32,7 +32,7 @@ public class CardProxy extends Senshi {
 	public CardProxy(Evogear e) {
 		super(e.getId(), e.getCard(), Race.NONE, new CardAttributes());
 
-		original = e;
+		original = e.copy();
 		setHand(e.getHand());
 		setFlipped(true);
 	}

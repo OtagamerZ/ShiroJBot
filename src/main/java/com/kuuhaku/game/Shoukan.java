@@ -386,11 +386,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Senshi enemy = tgt.enemy();
 		if (enemy != null && enemy.isProtected()) {
-			Evogear copy = e.copy();
-			hand.getGraveyard().add(copy);
-			p.getSlot().replace(p, null);
-
-			hand.getData().put("last_spell", copy);
+			hand.getGraveyard().add(p);
+			hand.getData().put("last_spell", e);
 			trigger(ON_SPELL, hand.getSide());
 			reportEvent("str/spell_shield");
 			return false;
@@ -399,19 +396,14 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Evogear copy = e.copy();
-		hand.getGraveyard().add(copy);
-		p.getSlot().replace(p, null);
-
-		if (!copy.execute(ep)) {
-			hand.getGraveyard().remove(copy);
-			e.setAvailable(true);
-			return false;
+		if (e.execute(ep)) {
+			hand.getGraveyard().add(p);
+			hand.getData().put("last_spell", e);
+			trigger(ON_SPELL, hand.getSide());
+			return true;
 		}
 
-		hand.getData().put("last_spell", copy);
-		trigger(ON_SPELL, hand.getSide());
-		return true;
+		return false;
 	}
 
 	@PhaseConstraint("PLAN")
@@ -1062,7 +1054,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		String outcome = "str/combat_skip";
-		if (enemy == null || posHash == enemy.posHash() || !ally.canAttack()) {
+		if (enemy == null || (posHash == enemy.posHash() && ally.canAttack())) {
 			for (Evogear e : ally.getEquipments()) {
 				JSONArray charms = e.getCharms();
 
