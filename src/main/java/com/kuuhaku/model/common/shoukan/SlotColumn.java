@@ -186,12 +186,14 @@ public class SlotColumn {
 		boolean sup = other.isSupporting();
 		SlotColumn sc = other.getSlot();
 
+		other.setSlot(this);
 		if (self.isSupporting()) {
 			bottom = other;
 		} else {
 			top = other;
 		}
 
+		self.setSlot(sc);
 		if (sup) {
 			sc.bottom = self;
 		} else {
