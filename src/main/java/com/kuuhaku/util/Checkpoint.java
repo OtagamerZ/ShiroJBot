@@ -50,7 +50,7 @@ public class Checkpoint implements AutoCloseable {
 		int i = 0;
 		StringBuilder sb = new StringBuilder("\nTotal time: " + total + "ms");
 		for (Long lap : laps) {
-			sb.append("\n%s: %sms (%s) %s".formatted(
+			sb.append("\n%s: %sms (%s%%) %s".formatted(
 					++i, lap, lap * 100 / total, comments.getOrDefault(i, "")
 			));
 		}
