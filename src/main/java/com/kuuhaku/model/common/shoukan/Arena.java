@@ -22,7 +22,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.Renderer;
-import com.kuuhaku.interfaces.annotations.ExecTime;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.Fonts;
@@ -35,10 +34,7 @@ import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
-import com.kuuhaku.util.Calc;
-import com.kuuhaku.util.Graph;
-import com.kuuhaku.util.IO;
-import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.*;
 import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
 
@@ -142,9 +138,10 @@ public class Arena implements Renderer {
 		game.trigger(Trigger.ON_FIELD_CHANGE);
 	}
 
-	@ExecTime
 	@Override
 	public BufferedImage render(I18N locale) {
+		Checkpoint cp = new Checkpoint();
+
 		Hand top = game.getHands().get(Side.TOP);
 		Hand bottom = game.getHands().get(Side.BOTTOM);
 
@@ -152,6 +149,7 @@ public class Arena implements Renderer {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
+		cp.lap();
 		Graph.applyTransformed(g2d, 0, BAR_SIZE.height, g1 -> {
 			g1.drawImage(getField().renderBackground(), 0, 0, null);
 
@@ -265,14 +263,16 @@ public class Arena implements Renderer {
 			});
 		});
 
+		cp.lap();
 		Graph.applyTransformed(g2d, drawBar(top));
 
+		cp.lap();
 		Graph.applyTransformed(g2d, drawBar(bottom));
 
+		cp.close();
 		return bi;
 	}
 
-	@ExecTime
 	@Override
 	public BufferedImage render(I18N locale, Deque<HistoryLog> history) {
 		BufferedImage source = render(locale);
