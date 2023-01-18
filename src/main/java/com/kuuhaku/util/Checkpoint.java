@@ -42,6 +42,10 @@ public class Checkpoint implements AutoCloseable {
 
 		long total = laps.stream().mapToLong(l -> l).sum();
 		Constants.LOGGER.info("Final lap marked at " + laps.getLast() + "ms");
+		if (total == 0) {
+			Constants.LOGGER.info("All laps took 0ms to complete");
+			return;
+		}
 
 		int i = 0;
 		StringBuilder sb = new StringBuilder("\nTotal time: " + total + "ms");
