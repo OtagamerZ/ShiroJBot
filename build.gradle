@@ -89,6 +89,7 @@ dependencies {
 	//Wrappers
 	implementation group: "com.graphql-java", name: "graphql-java", version: "18.0"
 	implementation group: "club.minnced", name: "discord-webhooks", version: "0.8.2"
+	implementation group: "com.github.aeonios", name: "Shine2D", version: "6b126a0"
 
 	//Apache Commons
 	implementation group: "org.apache.commons", name: "commons-lang3", version: "3.12.0"
