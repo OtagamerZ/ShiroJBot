@@ -381,7 +381,6 @@ public class Shoukan extends GameInstance<Phase> {
 				yield new Targeting(hand, ep.allies()[0].index(), ep.enemies()[0].index());
 			}
 		};
-		System.out.println(tgt);
 
 		if (tgt == null) return false;
 
@@ -397,6 +396,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
+		System.out.println("Pass - " + e);
 		if (e.execute(ep)) {
 			hand.getGraveyard().add(p);
 			hand.getData().put("last_spell", e);
