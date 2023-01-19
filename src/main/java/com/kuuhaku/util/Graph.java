@@ -31,6 +31,7 @@ import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -343,6 +344,7 @@ public abstract class Graph {
 			int[] srcData = ((DataBufferInt) newSource.getRaster().getDataBuffer()).getData();
 			int[] mskData = ((DataBufferInt) newMask.getRaster().getDataBuffer()).getData();
 
+			System.out.println(Arrays.toString(mskData));
 			for (int i = 0; i < srcData.length; i++) {
 				int fac;
 //				if (hasAlpha) {
