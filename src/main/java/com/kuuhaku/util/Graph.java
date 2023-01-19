@@ -342,13 +342,14 @@ public abstract class Graph {
 
 			int[] srcData = ((DataBufferInt) newSource.getRaster().getDataBuffer()).getData();
 			int[] mskData = ((DataBufferInt) newMask.getRaster().getDataBuffer()).getData();
+
 			for (int i = 0; i < srcData.length; i++) {
 				int fac;
-				if (hasAlpha) {
-					fac = Math.min(srcData[0], mskData[channel]);
-				} else {
+//				if (hasAlpha) {
+//					fac = Math.min(srcData[0], mskData[channel]);
+//				} else {
 					fac = mskData[channel];
-				}
+//				}
 
 				srcData[0] = fac;
 			}
