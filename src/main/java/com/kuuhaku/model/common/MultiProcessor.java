@@ -49,7 +49,7 @@ public class MultiProcessor<In, Out> {
 		return new MultiProcessor<>(supplier, exec, threads);
 	}
 
-	public List<CompletableFuture<Out>> process(Function<In, Out> task) {
+	public List<Out> process(Function<In, Out> task) {
 		List<In> all = List.copyOf(supplier.get());
 
 		List<CompletableFuture<Out>> tasks = new ArrayList<>();
@@ -58,21 +58,20 @@ public class MultiProcessor<In, Out> {
 			tasks.add(CompletableFuture.supplyAsync(() -> task.apply(all.get(index)), exec));
 		}
 
-		return tasks;
-	}
-
-	public Out process(Function<In, Out> task, Function<List<Out>, Out> merger) {
 		try {
 			List<Out> finished = new ArrayList<>();
-			List<CompletableFuture<Out>> tasks = process(task);
 			for (CompletableFuture<Out> t : tasks) {
 				finished.add(t.get());
 			}
 
-			return merger.apply(finished);
+			return finished;
 		} catch (ExecutionException | InterruptedException e) {
 			Constants.LOGGER.error(e, e);
 			return null;
 		}
+	}
+
+	public Out process(Function<In, Out> task, Function<List<Out>, Out> merger) {
+		return merger.apply(process(task));
 	}
 }
