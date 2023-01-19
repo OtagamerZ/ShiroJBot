@@ -330,6 +330,7 @@ public abstract class Graph {
 
 			g2d.drawImage(source, 0, 0, null);
 			g2d.dispose();
+			cp.lap("Source adjust");
 
 			BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
 			g2d = newMask.createGraphics();
@@ -337,6 +338,7 @@ public abstract class Graph {
 
 			g2d.drawImage(mask, 0, 0, null);
 			g2d.dispose();
+			cp.lap("Mask adjust");
 
 			int[] srcData = ((DataBufferInt) source.getRaster().getDataBuffer()).getData();
 			int[] mskData = ((DataBufferInt) source.getRaster().getDataBuffer()).getData();
