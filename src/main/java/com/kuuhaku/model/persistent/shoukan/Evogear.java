@@ -328,9 +328,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public boolean execute(EffectParameters ep) {
 		if (base.isLocked()) return false;
-		else if (hand.getLockTime(Lock.EFFECT) > 0) return false;
-		else if (!hasEffect() || (!(ep.trigger() == ON_ACTIVATE && isSpell()) && !getEffect().contains(ep.trigger().name())))
-			return false;
+		else if (!hasEffect() || hand.getLockTime(Lock.EFFECT) > 0) return false;
+		else if (!getEffect().contains(ep.trigger().name())) {
+			if (!isSpell() || !Utils.equalsAny(ep.trigger(), ON_ACTIVATE, ON_TRAP)) {
+				return false;
+			}
+		}
 
 		try {
 			cachedEffect.forScript(getEffect())

@@ -396,7 +396,6 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		System.out.println("Pass - " + e);
 		if (e.execute(ep)) {
 			hand.getGraveyard().add(p);
 			hand.getData().put("last_spell", e);
