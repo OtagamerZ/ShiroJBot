@@ -22,6 +22,7 @@ import com.kuuhaku.exceptions.InvalidValueException;
 import com.kuuhaku.model.common.MultiProcessor;
 import com.trickl.palette.Palette;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.function.TriFunction;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import java.awt.*;
@@ -284,13 +285,14 @@ public abstract class Graph {
 		return out;
 	}
 
-	public static void forEachPixel(BufferedImage bi, TriConsumer<Integer, Integer, Integer> act) {
+	public static void forEachPixel(BufferedImage bi, TriFunction<Integer, Integer, Integer, Integer> act) {
 		forEachPixel(bi, 1, act);
 	}
 
-	public static void forEachPixel(BufferedImage bi, int chunks, TriConsumer<Integer, Integer, Integer> act) {
+	public static void forEachPixel(BufferedImage bi, int chunks, TriFunction<Integer, Integer, Integer, Integer> act) {
 		int width = bi.getWidth();
 		int size = bi.getWidth() * bi.getHeight();
+		int[] pixels = bi.getRGB(0, 0, width, bi.getHeight(), null, 0, width);
 
 		MultiProcessor<List<Integer>, Void> processor = MultiProcessor
 				.with(chunks, () -> Utils.chunkify(IntStream.range(0, size).boxed().toList(), chunks))
@@ -301,11 +303,13 @@ public abstract class Graph {
 				int x = i % width;
 				int y = i / width;
 
-				act.accept(x, y, bi.getRGB(x, y));
+				pixels[i] = act.apply(x, y, pixels[i]);
 			}
 
 			return null;
 		});
+
+		bi.setRGB(0, 0, width, bi.getHeight(), pixels, 0, width);
 	}
 
 	public static int[] unpackRGB(int rgb) {
@@ -338,7 +342,7 @@ public abstract class Graph {
 		g2d.dispose();
 
 		forEachPixel(source, 4, (x, y, rgb) -> {
-			int[] color = unpackRGB(source.getRGB(x, y));
+			int[] color = unpackRGB(rgb);
 
 			int fac;
 			if (hasAlpha) {
@@ -347,7 +351,7 @@ public abstract class Graph {
 				fac = unpackRGB(newMask.getRGB(x, y))[channel + 1];
 			}
 
-			source.setRGB(x, y, packRGB(fac, color[1], color[2], color[3]));
+			return packRGB(fac, color[1], color[2], color[3]);
 		});
 	}
 

@@ -205,7 +205,7 @@ public class Card extends DAO<Card> {
 
 			color = Graph.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
 
-			out.setRGB(x, y, Graph.packRGB(alpha, color[1], color[2], color[3]));
+			return Graph.packRGB(alpha, color[1], color[2], color[3]);
 		});
 
 		return out;
