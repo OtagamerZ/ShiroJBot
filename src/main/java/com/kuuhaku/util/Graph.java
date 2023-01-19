@@ -18,6 +18,7 @@
 
 package com.kuuhaku.util;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.exceptions.InvalidValueException;
 import com.trickl.palette.Palette;
 import org.apache.commons.lang3.StringUtils;
@@ -322,6 +323,8 @@ public abstract class Graph {
 
 		BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = newMask.createGraphics();
+		g2d.setRenderingHints(Constants.SD_HINTS);
+
 		g2d.drawImage(mask, 0, 0, newMask.getWidth(), newMask.getHeight(), null);
 		g2d.dispose();
 
