@@ -345,9 +345,9 @@ public abstract class Graph {
 			for (int i = 0; i < srcData.length; i++) {
 				int fac;
 				if (hasAlpha) {
-					fac = Math.min(srcData[0], mskData[channel + 1]);
+					fac = Math.min(srcData[0], mskData[channel]);
 				} else {
-					fac = mskData[channel + 1];
+					fac = mskData[channel];
 				}
 
 				srcData[0] = fac;
