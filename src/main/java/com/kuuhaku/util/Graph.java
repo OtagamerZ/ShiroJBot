@@ -324,23 +324,15 @@ public abstract class Graph {
 		try (Checkpoint cp = new Checkpoint()) {
 			if (source == null) return;
 
-			BufferedImage newSource = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g2d = newSource.createGraphics();
-			g2d.setRenderingHints(Constants.SD_HINTS);
-
-			g2d.drawImage(source, 0, 0, null);
-			g2d.dispose();
-			cp.lap("Source adjust");
-
 			BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
-			g2d = newMask.createGraphics();
+			Graphics2D g2d = newMask.createGraphics();
 			g2d.setRenderingHints(Constants.SD_HINTS);
 
 			g2d.drawImage(mask, 0, 0, null);
 			g2d.dispose();
 			cp.lap("Mask adjust");
 
-			int[] srcData = ((DataBufferInt) newSource.getRaster().getDataBuffer()).getData();
+			int[] srcData = ((DataBufferInt) source.getRaster().getDataBuffer()).getData();
 			int[] mskData = ((DataBufferInt) newMask.getRaster().getDataBuffer()).getData();
 			for (int i = 0; i < srcData.length; i++) {
 				int fac;
