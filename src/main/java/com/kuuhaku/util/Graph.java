@@ -341,7 +341,7 @@ public abstract class Graph {
 					fac = (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF;
 				}
 
-				srcData[0] = (srcData[0] & 0xFFFFFF) | (fac << 24);
+				srcData[i] = (srcData[i] & 0xFFFFFF) | (fac << 24);
 			}
 		}
 	}
