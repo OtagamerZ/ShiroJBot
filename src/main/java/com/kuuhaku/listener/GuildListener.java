@@ -76,7 +76,7 @@ public class GuildListener extends ListenerAdapter {
 		if (event.getUser().isBot()) return;
 
 		MessageReaction.ReactionEmote reaction = event.getReactionEmote();
-		if (reaction.isEmoji() && reaction.getEmoji().equals("\u2b50")) {
+		if (reaction.isEmoji() && reaction.getEmoji().equals("⭐")) {
 			GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
 			Message msg = Pages.subGet(event.getChannel().retrieveMessageById(event.getMessageId()));
 
@@ -84,7 +84,7 @@ public class GuildListener extends ListenerAdapter {
 			if (channel == null) return;
 
 			int stars = (int) msg.getReactions().stream()
-					.filter(r -> r.getReactionEmote().isEmoji() && r.getReactionEmote().getEmoji().equals("\u2b50"))
+					.filter(r -> r.getReactionEmote().isEmoji() && r.getReactionEmote().getEmoji().equals("⭐"))
 					.flatMap(r -> r.retrieveUsers().stream())
 					.filter(u -> !u.isBot() && !u.equals(msg.getAuthor()))
 					.count();
