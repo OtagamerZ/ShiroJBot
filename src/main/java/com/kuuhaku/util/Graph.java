@@ -30,6 +30,7 @@ import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -323,27 +324,32 @@ public abstract class Graph {
 		try (Checkpoint cp = new Checkpoint()) {
 			if (source == null) return;
 
-			BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2d = newMask.createGraphics();
+			BufferedImage newSource = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2d = newSource.createGraphics();
 			g2d.setRenderingHints(Constants.SD_HINTS);
-			cp.lap("Size adjust");
+
+			g2d.drawImage(source, 0, 0, null);
+			g2d.dispose();
+
+			BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
+			g2d = newMask.createGraphics();
+			g2d.setRenderingHints(Constants.SD_HINTS);
 
 			g2d.drawImage(mask, 0, 0, null);
 			g2d.dispose();
-			cp.lap("Mask render");
 
-			forEachPixel(source, (x, y, rgb) -> {
-				int[] color = unpackRGB(rgb);
-
+			int[] srcData = ((DataBufferInt) source.getRaster().getDataBuffer()).getData();
+			int[] mskData = ((DataBufferInt) source.getRaster().getDataBuffer()).getData();
+			for (int i = 0; i < srcData.length; i++) {
 				int fac;
 				if (hasAlpha) {
-					fac = Math.min(color[0], unpackRGB(newMask.getRGB(x, y))[channel + 1]);
+					fac = Math.min(srcData[0], mskData[channel + 1]);
 				} else {
-					fac = unpackRGB(newMask.getRGB(x, y))[channel + 1];
+					fac = mskData[channel + 1];
 				}
 
-				return packRGB(fac, color[1], color[2], color[3]);
-			});
+				srcData[0] = fac;
+			}
 		}
 	}
 
