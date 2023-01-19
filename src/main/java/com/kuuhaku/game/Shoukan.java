@@ -368,6 +368,7 @@ public class Shoukan extends GameInstance<Phase> {
 				yield new Targeting(hand, ep.allies()[0].index(), -1);
 			}
 			case ENEMY -> {
+				System.out.println(Arrays.toString(ep.enemies()));
 				if (ep.enemies().length == 0) {
 					yield null;
 				}

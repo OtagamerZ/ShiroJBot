@@ -19,28 +19,32 @@
 package com.kuuhaku.model.enums.shoukan;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.util.Checkpoint;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Locale;
 
 public enum SlotSkin {
 	DEFAULT, AHEGAO, HEX;
 
 	public BufferedImage getImage(Side side, boolean legacy) {
-		String s = side.name().toLowerCase();
+		try (Checkpoint cp = new Checkpoint()) {
+			String s = side.name().toLowerCase();
 
-		BufferedImage bi = IO.getResourceAsImage("shoukan/side/" + name().toLowerCase() + "_" + s + ".webp");
-		Graphics2D g2d = bi.createGraphics();
-		g2d.setRenderingHints(Constants.SD_HINTS);
+			BufferedImage bi = IO.getResourceAsImage("shoukan/side/" + name().toLowerCase() + "_" + s + ".webp");
+			Graphics2D g2d = bi.createGraphics();
+			g2d.setRenderingHints(Constants.SD_HINTS);
+			cp.lap();
 
-		Graph.applyMask(bi, IO.getResourceAsImage("shoukan/mask/slot_" + s + (legacy ? "_legacy" : "") + "_mask.webp"), 0, true);
-		g2d.drawImage(IO.getResourceAsImage("shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".webp"), -5, -5, null);
+			Graph.applyMask(bi, IO.getResourceAsImage("shoukan/mask/slot_" + s + (legacy ? "_legacy" : "") + "_mask.webp"), 0, true);
+			g2d.drawImage(IO.getResourceAsImage("shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".webp"), -5, -5, null);
+			cp.lap();
 
-		g2d.dispose();
+			g2d.dispose();
 
-		return bi;
+			return bi;
+		}
 	}
 }

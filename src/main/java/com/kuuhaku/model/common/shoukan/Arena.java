@@ -150,82 +150,72 @@ public class Arena implements Renderer {
 		Graph.applyTransformed(g2d, 0, BAR_SIZE.height, g1 -> {
 			g1.drawImage(getField().renderBackground(), 0, 0, null);
 
-			try (Checkpoint cp = new Checkpoint()) {
-				for (Side side : Side.values()) {
-					cp.lap("Start of " + side);
+			for (Side side : Side.values()) {
+				int xOffset = CENTER.x - ((225 + MARGIN.x) * 5 - MARGIN.x) / 2;
+				int yOffset = switch (side) {
+					case TOP -> CENTER.y - (350 + MARGIN.y) * 2 - MARGIN.y * 4;
+					case BOTTOM -> CENTER.y + MARGIN.y * 5;
+				};
 
-					int xOffset = CENTER.x - ((225 + MARGIN.x) * 5 - MARGIN.x) / 2;
-					int yOffset = switch (side) {
-						case TOP -> CENTER.y - (350 + MARGIN.y) * 2 - MARGIN.y * 4;
-						case BOTTOM -> CENTER.y + MARGIN.y * 5;
-					};
-					cp.lap("Offsets");
+				Hand h = game.getHands().get(side);
+				int regdeg = h.getRegDeg().peek();
+				if (regdeg != 0) {
+					BufferedImage over = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen_" + side.name().toLowerCase() + ".webp");
+					g1.drawImage(over, 0, CENTER.y * side.ordinal(), null);
+				}
 
-					Hand h = game.getHands().get(side);
-					int regdeg = h.getRegDeg().peek();
-					if (regdeg != 0) {
-						BufferedImage over = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen_" + side.name().toLowerCase() + ".webp");
-						g1.drawImage(over, 0, CENTER.y * side.ordinal(), null);
-					}
-					cp.lap("Overlay");
+				Deck deck = h.getUserDeck();
+				DeckStyling style = deck.getStyling();
 
-					Deck deck = h.getUserDeck();
-					DeckStyling style = deck.getStyling();
+				g1.drawImage(style.getSlot().getImage(side, style.getFrame().isLegacy()), 26, yOffset, null);
 
-					g1.drawImage(style.getSlot().getImage(side, style.getFrame().isLegacy()), 26, yOffset, null);
-					cp.lap("Slot skin");
+				Graph.applyTransformed(g1, xOffset, yOffset, g2 -> {
+					for (SlotColumn slot : slots.get(side)) {
+						int x = (225 + MARGIN.x) * slot.getIndex() - 15;
+						int equips, frontline, backline;
 
-					Graph.applyTransformed(g1, xOffset, yOffset, g2 -> {
-						for (SlotColumn slot : slots.get(side)) {
-							int x = (225 + MARGIN.x) * slot.getIndex() - 15;
-							int equips, frontline, backline;
+						if (side == Side.TOP) {
+							equips = 350 * 2 + MARGIN.y + MARGIN.y / 4 - 5;
+							frontline = 350 + MARGIN.y - 15;
+							backline = -15;
+						} else {
+							equips = -350 / 3 - MARGIN.y / 4 - 5;
+							frontline = -15;
+							backline = 350 + MARGIN.y - 15;
+						}
 
-							if (side == Side.TOP) {
-								equips = 350 * 2 + MARGIN.y + MARGIN.y / 4 - 5;
-								frontline = 350 + MARGIN.y - 15;
-								backline = -15;
-							} else {
-								equips = -350 / 3 - MARGIN.y / 4 - 5;
-								frontline = -15;
-								backline = 350 + MARGIN.y - 15;
+						if (slot.isLocked()) {
+							BufferedImage hole = IO.getResourceAsImage("shoukan/states/broken.png");
+							g2.drawImage(hole, x, frontline, null);
+							g2.drawImage(hole, x, backline, null);
+						} else {
+							if (slot.hasTop()) {
+								Senshi s = slot.getTop();
+
+								g2.drawImage(s.render(locale, deck), x, frontline, null);
+
+								if (!s.getEquipments().isEmpty()) {
+									Graph.applyTransformed(g2, x, equips, g3 -> {
+										Dimension resized = new Dimension(Drawable.SIZE.width / 3, Drawable.SIZE.height / 3);
+										int middle = 225 / 2 - resized.width / 2;
+
+										for (int i = 0; i < s.getEquipments().size(); i++) {
+											g3.drawImage(s.getEquipments().get(i).render(locale, deck),
+													15 + middle + (resized.width - 5) * (i - 1), 0,
+													resized.width, resized.height,
+													null
+											);
+										}
+									});
+								}
 							}
 
-							if (slot.isLocked()) {
-								BufferedImage hole = IO.getResourceAsImage("shoukan/states/broken.png");
-								g2.drawImage(hole, x, frontline, null);
-								g2.drawImage(hole, x, backline, null);
-							} else {
-								if (slot.hasTop()) {
-									Senshi s = slot.getTop();
-
-									g2.drawImage(s.render(locale, deck), x, frontline, null);
-
-									if (!s.getEquipments().isEmpty()) {
-										Graph.applyTransformed(g2, x, equips, g3 -> {
-											Dimension resized = new Dimension(Drawable.SIZE.width / 3, Drawable.SIZE.height / 3);
-											int middle = 225 / 2 - resized.width / 2;
-
-											for (int i = 0; i < s.getEquipments().size(); i++) {
-												g3.drawImage(s.getEquipments().get(i).render(locale, deck),
-														15 + middle + (resized.width - 5) * (i - 1), 0,
-														resized.width, resized.height,
-														null
-												);
-											}
-										});
-									}
-								}
-
-								if (slot.hasBottom()) {
-									g2.drawImage(slot.getBottom().render(locale, deck), x, backline, null);
-								}
+							if (slot.hasBottom()) {
+								g2.drawImage(slot.getBottom().render(locale, deck), x, backline, null);
 							}
 						}
-					});
-					cp.lap("Cards");
-
-					cp.lap("End of " + side);
-				}
+					}
+				});
 			}
 
 			Graph.applyTransformed(g1, MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
