@@ -357,6 +357,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Evogear e = p.getOriginal();
 		Hand hand = e.getHand();
 
+		System.out.println(e);
 		System.out.println(ep);
 		Targeting tgt = switch (e.getTargetType()) {
 			case NONE -> new Targeting(hand, -1, -1);
