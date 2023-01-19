@@ -19,7 +19,6 @@
 package com.kuuhaku.model.enums.shoukan;
 
 import com.kuuhaku.Constants;
-import com.kuuhaku.util.Checkpoint;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 
@@ -37,13 +36,8 @@ public enum SlotSkin {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		try (Checkpoint cp = new Checkpoint()) {
-			Graph.applyMask(bi, IO.getResourceAsImage("shoukan/mask/slot_" + s + (legacy ? "_legacy" : "") + "_mask.webp"), 0, true);
-			cp.lap();
-
-			g2d.drawImage(IO.getResourceAsImage("shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".webp"), -5, -5, null);
-			cp.lap();
-		}
+		Graph.applyMask(bi, IO.getResourceAsImage("shoukan/mask/slot_" + s + (legacy ? "_legacy" : "") + "_mask.webp"), 0);
+		g2d.drawImage(IO.getResourceAsImage("shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".webp"), -5, -5, null);
 
 		g2d.dispose();
 

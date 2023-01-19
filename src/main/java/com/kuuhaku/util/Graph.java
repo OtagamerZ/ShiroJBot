@@ -320,27 +320,31 @@ public abstract class Graph {
 	}
 
 	public static void applyMask(BufferedImage source, BufferedImage mask, int channel, boolean hasAlpha) {
-		if (source == null) return;
+		try (Checkpoint cp = new Checkpoint()) {
+			if (source == null) return;
 
-		BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics2D g2d = newMask.createGraphics();
-		g2d.setRenderingHints(Constants.SD_HINTS);
+			BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
+			Graphics2D g2d = newMask.createGraphics();
+			g2d.setRenderingHints(Constants.SD_HINTS);
+			cp.lap("Size adjust");
 
-		g2d.drawImage(mask, 0, 0, null);
-		g2d.dispose();
+			g2d.drawImage(mask, 0, 0, null);
+			g2d.dispose();
+			cp.lap("Mask render");
 
-		forEachPixel(source, (x, y, rgb) -> {
-			int[] color = unpackRGB(rgb);
+			forEachPixel(source, (x, y, rgb) -> {
+				int[] color = unpackRGB(rgb);
 
-			int fac;
-			if (hasAlpha) {
-				fac = Math.min(color[0], unpackRGB(newMask.getRGB(x, y))[channel + 1]);
-			} else {
-				fac = unpackRGB(newMask.getRGB(x, y))[channel + 1];
-			}
+				int fac;
+				if (hasAlpha) {
+					fac = Math.min(color[0], unpackRGB(newMask.getRGB(x, y))[channel + 1]);
+				} else {
+					fac = unpackRGB(newMask.getRGB(x, y))[channel + 1];
+				}
 
-			return packRGB(fac, color[1], color[2], color[3]);
-		});
+				return packRGB(fac, color[1], color[2], color[3]);
+			});
+		}
 	}
 
 	public static void overlay(BufferedImage source, BufferedImage overlay) {
