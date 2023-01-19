@@ -148,7 +148,6 @@ public class Arena implements Renderer {
 
 		BufferedImage bi = new BufferedImage(SIZE.width, SIZE.height + BAR_SIZE.height * 2, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
-
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
 		Graph.applyTransformed(g2d, 0, BAR_SIZE.height, g1 -> {

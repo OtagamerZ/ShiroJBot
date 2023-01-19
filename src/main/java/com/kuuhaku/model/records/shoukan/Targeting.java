@@ -29,8 +29,8 @@ import java.util.List;
 public record Targeting(Hand hand, int allyPos, int enemyPos) {
 	public Targeting(Hand hand, int allyPos, int enemyPos) {
 		this.hand = hand;
-		this.allyPos = Math.max(-1, allyPos - 1);
-		this.enemyPos = Math.max(-1, enemyPos - 1);
+		this.allyPos = Math.max(-1, allyPos);
+		this.enemyPos = Math.max(-1, enemyPos);
 	}
 
 	public Senshi ally() {

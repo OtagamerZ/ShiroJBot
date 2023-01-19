@@ -357,8 +357,6 @@ public class Shoukan extends GameInstance<Phase> {
 		Evogear e = p.getOriginal();
 		Hand hand = e.getHand();
 
-		System.out.println(e);
-		System.out.println(ep);
 		Targeting tgt = switch (e.getTargetType()) {
 			case NONE -> new Targeting(hand, -1, -1);
 			case ALLY -> {
@@ -383,7 +381,6 @@ public class Shoukan extends GameInstance<Phase> {
 				yield new Targeting(hand, ep.allies()[0].index(), ep.enemies()[0].index());
 			}
 		};
-		System.out.println(tgt);
 
 		if (tgt == null) return false;
 
@@ -747,9 +744,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Targeting tgt = switch (chosen.getTargetType()) {
 			case NONE -> new Targeting(curr, -1, -1);
-			case ALLY -> new Targeting(curr, args.getInt("target1"), -1);
-			case ENEMY -> new Targeting(curr, -1, args.getInt("target1"));
-			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
+			case ALLY -> new Targeting(curr, args.getInt("target1") - 1, -1);
+			case ENEMY -> new Targeting(curr, -1, args.getInt("target1") - 1);
+			case BOTH -> new Targeting(curr, args.getInt("target1") - 1, args.getInt("target2") - 1);
 		};
 
 		Senshi enemy = tgt.enemy();
@@ -866,9 +863,9 @@ public class Shoukan extends GameInstance<Phase> {
 		TargetType type = chosen.getStats().getData().getEnum(TargetType.class, "targeting", TargetType.NONE);
 		Targeting tgt = switch (type) {
 			case NONE -> new Targeting(curr, -1, -1);
-			case ALLY -> new Targeting(curr, args.getInt("target1"), -1);
-			case ENEMY -> new Targeting(curr, -1, args.getInt("target1"));
-			case BOTH -> new Targeting(curr, args.getInt("target1"), args.getInt("target2"));
+			case ALLY -> new Targeting(curr, args.getInt("target1") - 1, -1);
+			case ENEMY -> new Targeting(curr, -1, args.getInt("target1") - 1);
+			case BOTH -> new Targeting(curr, args.getInt("target1") - 1, args.getInt("target2") - 1);
 		};
 
 		Senshi enemy = tgt.enemy();
