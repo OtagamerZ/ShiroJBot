@@ -271,7 +271,7 @@ public class Hand {
 						.collect(Utils.toShuffledList())
 		);
 
-		if (DAO.find(Account.class, uid).getRole().allowed(Role.TESTER)) {
+		if (DAO.find(Account.class, uid).hasRole(Role.TESTER)) {
 			for (String card : game.getParams().cards()) {
 				card = card.toUpperCase();
 				CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card)).stream()

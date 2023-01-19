@@ -75,10 +75,10 @@ public abstract class Constants {
 	//public static final File COLLECTIONS_FOLDER = new File(System.getenv("COLLECTIONS_PATH"));
 	//public static final File TEMPORARY_FOLDER = new File(System.getenv("TEMPORARY_PATH"));
 
-	public static final Function<Member, Boolean> DEV_PRIVILEGE = m -> DAO.find(Account.class, m.getId()).getRole().allowed(Role.DEVELOPER);
-	public static final Function<Member, Boolean> SUP_PRIVILEGE = m -> DAO.find(Account.class, m.getId()).getRole().allowed(Role.SUPPORT);
-	public static final Function<Member, Boolean> TST_PRIVILEGE = m -> DAO.find(Account.class, m.getId()).getRole().allowed(Role.TESTER);
-	public static final Function<Member, Boolean> REV_PRIVILEGE = m -> DAO.find(Account.class, m.getId()).getRole().allowed(Role.REVIEWER);
+	public static final Function<Member, Boolean> DEV_PRIVILEGE = m -> DAO.find(Account.class, m.getId()).hasRole(Role.DEVELOPER);
+	public static final Function<Member, Boolean> SUP_PRIVILEGE = m -> DAO.find(Account.class, m.getId()).hasRole(Role.SUPPORT);
+	public static final Function<Member, Boolean> TST_PRIVILEGE = m -> DAO.find(Account.class, m.getId()).hasRole(Role.TESTER);
+	public static final Function<Member, Boolean> REV_PRIVILEGE = m -> DAO.find(Account.class, m.getId()).hasRole(Role.REVIEWER);
 	public static final Function<Member, Boolean> STF_PRIVILEGE = m -> SUP_PRIVILEGE.apply(m) || TST_PRIVILEGE.apply(m) || REV_PRIVILEGE.apply(m);
 	public static final Function<Member, Boolean> MOD_PRIVILEGE = m -> SUP_PRIVILEGE.apply(m) || m.hasPermission(Permission.KICK_MEMBERS);
 	public static final Function<Member, Boolean> USER_PRIVILEGE = m -> true;

@@ -16,19 +16,14 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.enums;
+package com.kuuhaku.model.persistent.converter;
 
-public enum Role {
-	USER,
-	REVIEWER,
-	TESTER,
-	SUPPORT,
-	DEVELOPER;
+import com.kuuhaku.model.enums.Role;
+import jakarta.persistence.Converter;
 
-	public boolean allowed(Role level) {
-		return switch (this) {
-			case REVIEWER, TESTER, SUPPORT -> this == level;
-			default -> ordinal() >= level.ordinal();
-		};
+@Converter(autoApply = true)
+public class RoleFlagConverter extends FlagConverter<Role>  {
+	public RoleFlagConverter() {
+		super(Role.class);
 	}
 }
