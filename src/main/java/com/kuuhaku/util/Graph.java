@@ -320,29 +320,26 @@ public abstract class Graph {
 	}
 
 	public static void applyMask(BufferedImage source, BufferedImage mask, int channel, boolean hasAlpha) {
-		try (Checkpoint cp = new Checkpoint()) {
-			if (source == null) return;
+		if (source == null) return;
 
-			BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2d = newMask.createGraphics();
-			g2d.setRenderingHints(Constants.SD_HINTS);
+		BufferedImage newMask = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2d = newMask.createGraphics();
+		g2d.setRenderingHints(Constants.SD_HINTS);
 
-			g2d.drawImage(mask, 0, 0, null);
-			g2d.dispose();
-			cp.lap("Mask adjust");
+		g2d.drawImage(mask, 0, 0, null);
+		g2d.dispose();
 
-			int[] srcData = ((DataBufferInt) source.getRaster().getDataBuffer()).getData();
-			int[] mskData = ((DataBufferInt) newMask.getRaster().getDataBuffer()).getData();
-			for (int i = 0; i < srcData.length; i++) {
-				int fac;
-				if (hasAlpha) {
-					fac = Math.min((srcData[i] >> 24) & 0xFF, (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF);
-				} else {
-					fac = (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF;
-				}
-
-				srcData[i] = (srcData[i] & 0xFFFFFF) | (fac << 24);
+		int[] srcData = ((DataBufferInt) source.getRaster().getDataBuffer()).getData();
+		int[] mskData = ((DataBufferInt) newMask.getRaster().getDataBuffer()).getData();
+		for (int i = 0; i < srcData.length; i++) {
+			int fac;
+			if (hasAlpha) {
+				fac = Math.min((srcData[i] >> 24) & 0xFF, (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF);
+			} else {
+				fac = (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF;
 			}
+
+			srcData[i] = (srcData[i] & 0xFFFFFF) | (fac << 24);
 		}
 	}
 

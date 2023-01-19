@@ -357,7 +357,6 @@ public class Shoukan extends GameInstance<Phase> {
 		Evogear e = p.getOriginal();
 		Hand hand = e.getHand();
 
-		System.out.println(ep);
 		Targeting tgt = switch (e.getTargetType()) {
 			case NONE -> new Targeting(hand, -1, -1);
 			case ALLY -> {
@@ -365,7 +364,6 @@ public class Shoukan extends GameInstance<Phase> {
 					yield null;
 				}
 
-				System.out.println("Pass");
 				yield new Targeting(hand, ep.allies()[0].index(), -1);
 			}
 			case ENEMY -> {
@@ -392,7 +390,7 @@ public class Shoukan extends GameInstance<Phase> {
 			hand.getGraveyard().add(p);
 			hand.getData().put("last_spell", e);
 			trigger(ON_SPELL, hand.getSide());
-			reportEvent("str/spell_shield");
+			getChannel().sendMessage(getLocale().get("str/spell_shield")).queue();
 			return false;
 		} else if (!tgt.validate(e.getTargetType())) {
 			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + e.getTargetType()))).queue();
