@@ -344,13 +344,13 @@ public abstract class Graph {
 			int[] mskData = ((DataBufferInt) newMask.getRaster().getDataBuffer()).getData();
 			for (int i = 0; i < srcData.length; i++) {
 				int fac;
-//				if (hasAlpha) {
-//					fac = Math.min(srcData[0], mskData[channel]);
-//				} else {
-					fac = Bit.get(mskData[i], 3 - channel, 8);
-//				}
+				if (hasAlpha) {
+					fac = Math.min((srcData[0] >> 24) & 0xFF, (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF);
+				} else {
+					fac = (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF;
+				}
 
-				srcData[0] = Bit.set(srcData[0], 4, fac, 8);
+				srcData[0] = (srcData[0] & 0xFFFFFF) | (fac << 24);
 			}
 		}
 	}
