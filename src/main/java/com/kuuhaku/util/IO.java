@@ -135,7 +135,7 @@ public abstract class IO {
 		if (bytes.length == 0) return null;
 
 		try (Buffer buf = new Buffer().write(bytes)) {
-			return Graph.toCompatibleImage(ImageIO.read(buf.inputStream()));
+			return ImageIO.read(buf.inputStream());
 		} catch (IOException e) {
 			return null;
 		}

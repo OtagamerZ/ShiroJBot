@@ -484,23 +484,4 @@ public abstract class Graph {
 		component.paintAll(g);
 		return bi;
 	}
-
-	public static BufferedImage toCompatibleImage(BufferedImage image) {
-		GraphicsConfiguration config = GraphicsEnvironment
-				.getLocalGraphicsEnvironment().getDefaultScreenDevice()
-				.getDefaultConfiguration();
-
-		if (image.getColorModel().equals(config.getColorModel())) {
-			return image;
-		}
-
-		BufferedImage out = config.createCompatibleImage(image.getWidth(), image.getHeight(), Transparency.TRANSLUCENT);
-		Graphics2D g2d = (Graphics2D) out.getGraphics();
-		g2d.setRenderingHints(Constants.SD_HINTS);
-
-		g2d.drawImage(image, 0, 0, null);
-		g2d.dispose();
-
-		return out;
-	}
 }
