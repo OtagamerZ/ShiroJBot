@@ -135,7 +135,16 @@ public abstract class IO {
 		if (bytes.length == 0) return null;
 
 		try (Buffer buf = new Buffer().write(bytes)) {
-			return ImageIO.read(buf.inputStream());
+			BufferedImage out = ImageIO.read(buf.inputStream());
+			boolean alpha = out.getColorModel().hasAlpha();
+
+			if (alpha && out.getType() != BufferedImage.TYPE_INT_ARGB) {
+				out = Graph.toColorSpace(out, BufferedImage.TYPE_INT_ARGB);
+			} else if (!alpha && out.getType() != BufferedImage.TYPE_INT_RGB) {
+				out = Graph.toColorSpace(out, BufferedImage.TYPE_INT_RGB);
+			}
+
+			return out;
 		} catch (IOException e) {
 			return null;
 		}
