@@ -43,8 +43,6 @@ import java.util.concurrent.*;
 )
 @Signature("<code:text:r>")
 public class CompileCommand implements Executable {
-	private static final ExecutorService exec = Executors.newSingleThreadExecutor();
-
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/compiling"))).queue(m -> {
@@ -54,7 +52,7 @@ public class CompileCommand implements Executable {
 				try {
 					@Language("Groovy") String code = args.getString("code").replaceAll("```(?:.*\n)?", "").trim();
 
-					Future<?> fut = exec.submit(() -> {
+					Future<?> fut = CompletableFuture.supplyAsync(() -> {
 						time.start();
 						Object out = Utils.exec(code, Map.of("msg", event.message()));
 						time.stop();

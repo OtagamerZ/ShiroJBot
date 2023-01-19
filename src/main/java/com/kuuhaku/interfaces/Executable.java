@@ -26,12 +26,7 @@ import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import org.apache.logging.log4j.Logger;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 public interface Executable {
-	ExecutorService POOL = Executors.newWorkStealingPool(Runtime.getRuntime().availableProcessors());
-
 	default Logger logger() {
 		return Constants.LOGGER;
 	}

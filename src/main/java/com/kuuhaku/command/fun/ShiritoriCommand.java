@@ -53,8 +53,6 @@ import java.util.stream.Stream;
 @Signature("<users:user:r>")
 @Requires(Permission.MESSAGE_ATTACH_FILES)
 public class ShiritoriCommand implements Executable {
-	private static final ScheduledExecutorService exec = Executors.newScheduledThreadPool(2);
-
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		if (GameInstance.PLAYERS.contains(event.user().getId())) {
