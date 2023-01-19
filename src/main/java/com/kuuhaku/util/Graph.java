@@ -340,8 +340,8 @@ public abstract class Graph {
 			g2d.dispose();
 			cp.lap("Mask adjust");
 
-			int[] srcData = ((DataBufferInt) source.getRaster().getDataBuffer()).getData();
-			int[] mskData = ((DataBufferInt) source.getRaster().getDataBuffer()).getData();
+			int[] srcData = ((DataBufferInt) newSource.getRaster().getDataBuffer()).getData();
+			int[] mskData = ((DataBufferInt) newMask.getRaster().getDataBuffer()).getData();
 			for (int i = 0; i < srcData.length; i++) {
 				int fac;
 				if (hasAlpha) {
