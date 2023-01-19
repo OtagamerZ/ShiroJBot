@@ -30,21 +30,23 @@ public enum SlotSkin {
 	DEFAULT, AHEGAO, HEX;
 
 	public BufferedImage getImage(Side side, boolean legacy) {
-		try (Checkpoint cp = new Checkpoint()) {
-			String s = side.name().toLowerCase();
 
-			BufferedImage bi = IO.getResourceAsImage("shoukan/side/" + name().toLowerCase() + "_" + s + ".webp");
-			Graphics2D g2d = bi.createGraphics();
-			g2d.setRenderingHints(Constants.SD_HINTS);
+		String s = side.name().toLowerCase();
+
+		BufferedImage bi = IO.getResourceAsImage("shoukan/side/" + name().toLowerCase() + "_" + s + ".webp");
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHints(Constants.SD_HINTS);
+
+		try (Checkpoint cp = new Checkpoint()) {
+			Graph.applyMask(bi, IO.getResourceAsImage("shoukan/mask/slot_" + s + (legacy ? "_legacy" : "") + "_mask.webp"), 0, true);
 			cp.lap();
 
-			Graph.applyMask(bi, IO.getResourceAsImage("shoukan/mask/slot_" + s + (legacy ? "_legacy" : "") + "_mask.webp"), 0, true);
 			g2d.drawImage(IO.getResourceAsImage("shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".webp"), -5, -5, null);
 			cp.lap();
-
-			g2d.dispose();
-
-			return bi;
 		}
+
+		g2d.dispose();
+
+		return bi;
 	}
 }
