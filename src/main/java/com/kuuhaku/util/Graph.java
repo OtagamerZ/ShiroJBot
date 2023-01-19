@@ -326,7 +326,7 @@ public abstract class Graph {
 		Graphics2D g2d = newMask.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		g2d.drawImage(mask, 0, 0, newMask.getWidth(), newMask.getHeight(), null);
+		g2d.drawImage(mask, 0, 0, null);
 		g2d.dispose();
 
 		forEachPixel(source, (x, y, rgb) -> {
