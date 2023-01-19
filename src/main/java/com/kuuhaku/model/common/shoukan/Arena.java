@@ -73,6 +73,7 @@ public class Arena implements Renderer {
               │  │ │  │ │  │ │  │ │  │
               └──┘ └──┘ └──┘ └──┘ └──┘
 	*/
+	private final GLG2DOffScreenCanvas canvas = new GLG2DOffScreenCanvas(SIZE.width, SIZE.height + BAR_SIZE.height * 2);
 
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
@@ -147,8 +148,6 @@ public class Arena implements Renderer {
 		Hand top = game.getHands().get(Side.TOP);
 		Hand bottom = game.getHands().get(Side.BOTTOM);
 
-
-		GLG2DOffScreenCanvas canvas = new GLG2DOffScreenCanvas(SIZE.width, SIZE.height + BAR_SIZE.height * 2);
 		canvas.render(g2d -> {
 			g2d.setRenderingHints(Constants.SD_HINTS);
 
