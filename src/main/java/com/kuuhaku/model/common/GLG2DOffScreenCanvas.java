@@ -18,10 +18,12 @@
 
 package com.kuuhaku.model.common;
 
-import com.jogamp.nativewindow.egl.EGLGraphicsDevice;
+import com.jogamp.opengl.DefaultGLCapabilitiesChooser;
 import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLProfile;
 import com.kuuhaku.util.Graph;
+import jogamp.opengl.egl.EGLDrawableFactory;
 import org.jogamp.glg2d.GLG2DCanvas;
 
 import java.awt.*;
@@ -32,8 +34,11 @@ public class GLG2DOffScreenCanvas extends GLG2DCanvas {
 	private Consumer<Graphics2D> renderAction = null;
 
 	public GLG2DOffScreenCanvas(int width, int height) {
-		super(new GLCapabilities(GLProfile.getGL2ES1(new EGLGraphicsDevice())));
+		super(new GLCapabilities(GLProfile.getDefault()));
 		setSize(width, height);
+
+		GLDrawableFactory factory = EGLDrawableFactory.getEGLFactory();
+		canvas = factory.createOffscreenAutoDrawable(factory.getDefaultDevice(), chosenCapabilities, new DefaultGLCapabilitiesChooser(), width, height);
 	}
 
 	public void render(Consumer<Graphics2D> act) {
