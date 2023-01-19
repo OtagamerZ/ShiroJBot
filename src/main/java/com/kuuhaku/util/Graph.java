@@ -25,7 +25,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.function.TriFunction;
 import org.apache.logging.log4j.util.TriConsumer;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
@@ -337,7 +336,7 @@ public abstract class Graph {
 			for (int i = 0; i < srcData.length; i++) {
 				int fac;
 				if (hasAlpha) {
-					fac = Math.min((srcData[0] >> 24) & 0xFF, (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF);
+					fac = Math.min((srcData[i] >> 24) & 0xFF, (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF);
 				} else {
 					fac = (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF;
 				}
@@ -478,14 +477,5 @@ public abstract class Graph {
 		}
 
 		return text;
-	}
-
-	public static BufferedImage extractImage(JComponent component) {
-		BufferedImage bi = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = bi.getGraphics();
-		g.setColor(component.getForeground());
-
-		component.paintAll(g);
-		return bi;
 	}
 }
