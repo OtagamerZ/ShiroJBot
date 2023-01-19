@@ -347,10 +347,10 @@ public abstract class Graph {
 //				if (hasAlpha) {
 //					fac = Math.min(srcData[0], mskData[channel]);
 //				} else {
-					fac = (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF;
+					fac = Bit.get(mskData[i], 3 - channel, 8);
 //				}
 
-				srcData[0] |= fac << 24;
+				srcData[0] = Bit.set(srcData[0], 4, fac, 8);
 			}
 		}
 	}
