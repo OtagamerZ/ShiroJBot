@@ -40,6 +40,12 @@ public class GLG2DOffScreenCanvas extends GLG2DCanvas {
 		renderAction = act;
 	}
 
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		renderAction.accept((Graphics2D) g);
+	}
+
 	public BufferedImage extract() {
 		if (renderAction == null) return new BufferedImage(0, 0, BufferedImage.TYPE_INT_ARGB);
 
