@@ -19,7 +19,6 @@
 package com.kuuhaku.util;
 
 import com.kuuhaku.exceptions.InvalidValueException;
-import com.kuuhaku.model.common.MultiProcessor;
 import com.trickl.palette.Palette;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.function.TriFunction;
@@ -29,12 +28,10 @@ import java.awt.*;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 
 public abstract class Graph {
 	public static Rectangle getStringBounds(Graphics2D g2d, String text) {
@@ -328,7 +325,7 @@ public abstract class Graph {
 		g2d.drawImage(mask, 0, 0, newMask.getWidth(), newMask.getHeight(), null);
 		g2d.dispose();
 
-		forEachPixel(source, 4, (x, y, rgb) -> {
+		forEachPixel(source, (x, y, rgb) -> {
 			int[] color = unpackRGB(rgb);
 
 			int fac;
