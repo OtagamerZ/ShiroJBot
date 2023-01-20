@@ -45,7 +45,7 @@ public record EffectOverTime(
 		long SERIAL,
 		AtomicBoolean closed
 ) implements Comparable<EffectOverTime>, Closeable {
-	public EffectOverTime(Senshi source, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
+	public EffectOverTime(Drawable<?> source, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
 		this(source, side != source.getSide(), side, effect, null, null, new AtomicBoolean(), EnumSet.of(Trigger.NONE, triggers), ThreadLocalRandom.current().nextLong(), new AtomicBoolean());
 	}
 
