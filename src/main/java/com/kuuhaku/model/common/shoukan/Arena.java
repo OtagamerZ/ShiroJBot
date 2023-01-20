@@ -606,7 +606,7 @@ public class Arena implements Renderer {
 					);
 
 					Graph.drawOutlinedString(g1, text,
-							(85 + fm.stringWidth("00")) * i + 85, yOffset * row,
+							(85 + fm.stringWidth("00")) * i + 85, yOffset * row + 80,
 							6, Color.BLACK
 					);
 
