@@ -174,6 +174,7 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
+	@ExecTime
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\d+),(?<mode>[adb]),(?<inField>[1-5])(?<notCombat>,nc)?")
 	private boolean placeCard(Side side, JSONObject args) {
