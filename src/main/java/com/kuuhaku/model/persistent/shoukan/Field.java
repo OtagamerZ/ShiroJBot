@@ -158,6 +158,10 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		state = (byte) Bit.set(state, 1, available);
 	}
 
+	public boolean isActive() {
+		return hand.getGame().getArena().getField().equals(this);
+	}
+
 	@Override
 	public boolean keepOnDestroy() {
 		return !isEffect();

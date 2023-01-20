@@ -138,6 +138,10 @@ public class Arena implements Renderer {
 		if (Objects.equals(this.field, field)) return;
 		this.field = field;
 
+		if (field.getHand() == null) {
+			field.setHand(game.getCurrent());
+		}
+
 		game.trigger(Trigger.ON_FIELD_CHANGE);
 	}
 
