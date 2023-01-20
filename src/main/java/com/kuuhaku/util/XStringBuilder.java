@@ -19,7 +19,6 @@
 package com.kuuhaku.util;
 
 import org.apache.commons.lang3.StringUtils;
-import org.intellij.lang.annotations.Language;
 
 public class XStringBuilder {
     private final StringBuilder sb;
@@ -28,7 +27,7 @@ public class XStringBuilder {
         sb = new StringBuilder();
     }
 
-    public XStringBuilder(@Language("TEXT") String value) {
+    public XStringBuilder(String value) {
         sb = new StringBuilder(value);
     }
 
