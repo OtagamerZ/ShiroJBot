@@ -589,40 +589,32 @@ public class Arena implements Renderer {
 			Graph.drawOutlinedString(g, Graph.abbreviate(g2d, name, SIZE.width - (BAR_SIZE.width + 250)), x, y, 10, Color.BLACK);
 			//}
 
+			Graph.applyTransformed(g, reversed ? 1855 : 5, BAR_SIZE.height + (reversed ? SIZE.height - 85 : 5), g1 -> {
+				int i = 0;
+				int yOffset = reversed ? -100 : 100;
+				for (Timed<Lock> lock : hand.getLocks()) {
+					int row = i++ % 3;
+
+					g1.setColor(Color.RED);
+					g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 80));
+					String text = String.valueOf(lock.time());
+
+					FontMetrics fm = g1.getFontMetrics();
+					g1.drawImage(lock.obj().getImage(true),
+							(85 + fm.stringWidth("WW")) * i, yOffset * row,
+							null
+					);
+
+					Graph.drawOutlinedString(g1, text,
+							(85 + fm.stringWidth("WW")) * i + 85, 80 / 2 + fm.getHeight() / 2,
+							6, Color.BLACK
+					);
+				}
+			});
+
+
 			int rad = (int) (BAR_SIZE.height / 1.5);
-			Graph.applyTransformed(g, reversed ? 1855 : 5, BAR_SIZE.height + (reversed ? SIZE.height - (rad + 5) : 5),
-					g1 -> {
-						int space = 615;
-						int spacing = 80;
-
-						Lock[] values = Lock.values();
-						for (int i = 0; i < values.length; i++) {
-							Lock lock = values[i];
-							Timed<Lock> lk = hand.getLocks().stream()
-									.filter(t -> t.obj().equals(lock))
-									.findFirst().orElse(null);
-
-							g1.drawImage(lock.getImage(lk != null),
-									space / 2 - ((rad + spacing) * values.length) / 2 + (rad + spacing) * i, 0,
-									rad, rad,
-									null
-							);
-
-							if (lk != null) {
-								g1.setColor(Color.RED);
-								g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, rad - 5));
-								String text = String.valueOf(lk.time());
-
-								Graph.drawOutlinedString(g1, text,
-										rad + 10 + space / 2 - ((rad + spacing) * values.length) / 2 + (rad + spacing) * i, (rad + rad - 5) / 2,
-										6, Color.BLACK
-								);
-							}
-						}
-					}
-			);
-
-			Graph.applyTransformed(g, reversed ? 2449 : 26, reversed ? 1526 : 168,
+			Graph.applyTransformed(g, reversed ? 2449 : 26, reversed ? 1486 : 208,
 					g1 -> {
 						Origin ori = hand.getOrigin();
 
