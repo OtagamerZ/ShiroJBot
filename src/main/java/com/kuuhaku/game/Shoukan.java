@@ -758,7 +758,7 @@ public class Shoukan extends GameInstance<Phase> {
 			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 
 			Evogear copy = chosen.copy();
-			stack.add(chosen);
+			stack.add(copy);
 			if (!consumed.isEmpty()) {
 				copy.getStats().getData().put("consumed", consumed);
 			}
@@ -781,7 +781,7 @@ public class Shoukan extends GameInstance<Phase> {
 		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 
 		Evogear copy = chosen.copy();
-		stack.add(chosen);
+		stack.add(copy);
 		if (!consumed.isEmpty()) {
 			copy.getStats().getData().put("consumed", consumed);
 		}
@@ -790,7 +790,7 @@ public class Shoukan extends GameInstance<Phase> {
 			chosen.setAvailable(false);
 		}
 
-		if (!copy.execute(copy.toParameters(tgt))) {
+		if (!chosen.execute(chosen.toParameters(tgt))) {
 			stack.remove(copy);
 			chosen.setAvailable(true);
 			return false;

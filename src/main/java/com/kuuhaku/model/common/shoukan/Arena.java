@@ -83,12 +83,14 @@ public class Arena implements Renderer {
 		}
 
 		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
-		d.getHand().getOther().addKill();
 
-		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			Iterator<Evogear> i = s.getEquipments().iterator();
-			while (i.hasNext()) {
-				it.add(i.next());
+		if (d instanceof Senshi s) {
+			d.getHand().getOther().addKill();
+			if (!s.getEquipments().isEmpty()) {
+				Iterator<Evogear> i = s.getEquipments().iterator();
+				while (i.hasNext()) {
+					it.add(i.next());
+				}
 			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
