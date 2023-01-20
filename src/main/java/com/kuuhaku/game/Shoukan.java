@@ -1529,6 +1529,7 @@ public class Shoukan extends GameInstance<Phase> {
 		};
 	}
 
+	@ExecTime
 	private void reportEvent(String message, Object... args) {
 		resetTimer();
 		trigger(ON_TICK);
