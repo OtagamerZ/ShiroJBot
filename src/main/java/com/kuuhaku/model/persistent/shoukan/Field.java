@@ -263,14 +263,12 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Field field = (Field) o;
-		return Objects.equals(id, field.id)
-				&& Objects.equals(card, field.card)
-				&& Objects.equals(modifiers, field.modifiers);
+		return Objects.equals(id, field.id) && Objects.equals(card, field.card);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, card, modifiers);
+		return Objects.hash(id, card);
 	}
 
 	@Override
