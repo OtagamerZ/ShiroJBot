@@ -139,7 +139,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				lastVal.set(y);
 			}
 
-			if (!legacy && line.get() == 6) {
+			if (!legacy && line.get() == (getTags().isEmpty() ? 7 : 6)) {
 				x += 10;
 			}
 
