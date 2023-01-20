@@ -73,7 +73,7 @@ public record EffectOverTime(
 			if (source instanceof Senshi s) {
 				return s.getIndex() == -1;
 			} else if (source instanceof Field f) {
-				return f.isActive();
+				return !f.isActive();
 			}
 		}
 
