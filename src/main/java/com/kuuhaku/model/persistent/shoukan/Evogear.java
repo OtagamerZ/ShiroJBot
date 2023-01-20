@@ -335,6 +335,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 		}
 
+		Shoukan game = hand.getGame();
 		try {
 			cachedEffect.forScript(getEffect())
 					.withConst("evo", this)
@@ -355,17 +356,16 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			return true;
 		} catch (TargetException e) {
 			if (targetType != TargetType.NONE && ep.trigger() == Trigger.ON_ACTIVATE) {
-				Shoukan game = hand.getGame();
 				game.getChannel().sendMessage(game.getLocale().get("error/target", game.getLocale().get("str/target_" + targetType))).queue();
 			}
 
 			return false;
 		} catch (ActivationException e) {
-			Shoukan game = hand.getGame();
 			game.getChannel().sendMessage(game.getLocale().get("error/spell", game.getString(e.getMessage()))).queue();
 			return false;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
+			game.getChannel().sendMessage(game.getLocale().get("error/effect")).queue();
 			return false;
 		}
 	}

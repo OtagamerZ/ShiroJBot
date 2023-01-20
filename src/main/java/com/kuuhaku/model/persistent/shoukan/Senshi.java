@@ -894,6 +894,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		if ((trigger == Trigger.ON_ACTIVATE && (getCooldown() > 0 || isSupporting()))) return false;
 
+		Shoukan game = hand.getGame();
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
 			base.lock();
@@ -908,8 +909,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (hasEffect() && getEffect().contains(trigger.name())) {
 				if (isStunned() && Calc.chance(25)) {
-					Shoukan game = hand.getGame();
-
 					if (!global) {
 						game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
 					}
@@ -946,8 +945,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
-				Shoukan game = hand.getGame();
-
 				if (!game.getCurrent().equals(hand)) {
 					Set<String> triggered = new HashSet<>();
 
@@ -985,7 +982,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		} catch (TargetException e) {
 			TargetType type = stats.getData().getEnum(TargetType.class, "targeting");
 			if (type != null && trigger == Trigger.ON_ACTIVATE) {
-				Shoukan game = hand.getGame();
 				game.getChannel().sendMessage(game.getLocale().get("error/target", game.getLocale().get("str/target_" + type))).queue();
 			}
 
@@ -993,11 +989,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		} catch (ActivationException e) {
 			if (e instanceof SelectionException && trigger != Trigger.ON_ACTIVATE) return false;
 
-			Shoukan game = hand.getGame();
 			game.getChannel().sendMessage(game.getLocale().get("error/activation", game.getString(e.getMessage()))).queue();
 			return false;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
+			game.getChannel().sendMessage(game.getLocale().get("error/effect")).queue();
 			return false;
 		} finally {
 			unlock();
