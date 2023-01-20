@@ -589,24 +589,26 @@ public class Arena implements Renderer {
 			Graph.drawOutlinedString(g, Graph.abbreviate(g2d, name, SIZE.width - (BAR_SIZE.width + 250)), x, y, 10, Color.BLACK);
 			//}
 
-			Graph.applyTransformed(g, reversed ? 1855 : 5, BAR_SIZE.height + (reversed ? SIZE.height - 85 : 5), g1 -> {
+			int rad = (int) (BAR_SIZE.height / 1.5);
+			Graph.applyTransformed(g, reversed ? 1855 : 5, BAR_SIZE.height + (reversed ? SIZE.height - rad + 5 : 5), g1 -> {
 				int i = 0;
-				int yOffset = reversed ? -100 : 100;
+				int yOffset = reversed ? -(rad + 10) : rad + 10;
 				for (Timed<Lock> lock : hand.getLocks()) {
 					int row = i / 3;
 
 					g1.setColor(Color.RED);
-					g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 80));
+					g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, rad));
 					String text = String.valueOf(lock.time());
 
 					FontMetrics fm = g1.getFontMetrics();
 					g1.drawImage(lock.obj().getImage(true),
-							(85 + fm.stringWidth("00")) * i, yOffset * row,
+							(rad + 5 + fm.stringWidth("00")) * i, yOffset * row,
+							rad, rad,
 							null
 					);
 
 					Graph.drawOutlinedString(g1, text,
-							(85 + fm.stringWidth("00")) * i + 85, yOffset * row + 80,
+							(rad + 5 + fm.stringWidth("00")) * i + rad + 5, yOffset * row + rad,
 							6, Color.BLACK
 					);
 
@@ -614,8 +616,6 @@ public class Arena implements Renderer {
 				}
 			});
 
-
-			int rad = (int) (BAR_SIZE.height / 1.5);
 			Graph.applyTransformed(g, reversed ? 2449 : 26, reversed ? 1486 : 208,
 					g1 -> {
 						Origin ori = hand.getOrigin();
