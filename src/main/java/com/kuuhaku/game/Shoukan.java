@@ -174,7 +174,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	@ExecTime
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\d+),(?<mode>[adb]),(?<inField>[1-5])(?<notCombat>,nc)?")
 	private boolean placeCard(Side side, JSONObject args) {
@@ -408,7 +407,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return false;
 	}
 
-	@ExecTime
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\d+),(?<inField>[1-5])")
 	private boolean equipCard(Side side, JSONObject args) {
@@ -464,7 +462,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	@ExecTime
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\d+)f")
 	private boolean placeField(Side side, JSONObject args) {
@@ -491,7 +488,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	@ExecTime
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inField>[1-5]),f(?<notCombat>,nc)?")
 	private boolean flipCard(Side side, JSONObject args) {
@@ -524,7 +520,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	@ExecTime
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inField>[1-5]),p")
 	private boolean promoteCard(Side side, JSONObject args) {
@@ -554,7 +549,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	@ExecTime
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inField>[1-5]),s(?<notCombat>,nc)?")
 	private boolean sacrificeCard(Side side, JSONObject args) {
@@ -590,7 +584,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	@ExecTime
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inField>\\[[1-5](,[1-5])*]),s(?<notCombat>,nc)?")
 	private boolean sacrificeBatch(Side side, JSONObject args) {
@@ -640,7 +633,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	@ExecTime
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\d+),d")
 	private boolean discardCard(Side side, JSONObject args) {
@@ -674,7 +666,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	@ExecTime
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\[\\d+(,\\d+)*]),d")
 	private boolean discardBatch(Side side, JSONObject args) {
@@ -718,7 +709,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	@ExecTime
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\d+)s(?:,(?<target1>[1-5]))?(?:,(?<target2>[1-5]))?")
 	private boolean activate(Side side, JSONObject args) {
@@ -816,7 +806,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	@ExecTime
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<choice>\\d+)")
 	private boolean select(Side side, JSONObject args) {
@@ -836,7 +825,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	@ExecTime
 	@PhaseConstraint({"PLAN", "COMBAT"})
 	@PlayerAction("(?<inField>[1-5])a(?:,(?<target1>[1-5]))?(?:,(?<target2>[1-5]))?")
 	private boolean special(Side side, JSONObject args) {
@@ -921,7 +909,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return !curr.selectionPending();
 	}
 
-	@ExecTime
 	@PhaseConstraint("COMBAT")
 	@PlayerAction("(?<inField>[1-5]),self")
 	private boolean selfDamage(Side side, JSONObject args) {
@@ -996,7 +983,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return false;
 	}
 
-	@ExecTime
 	@PhaseConstraint("COMBAT")
 	@PlayerAction("(?<inField>[1-5])(?:,(?<target>[1-5]))?")
 	private boolean attack(Side side, JSONObject args) {
@@ -1529,7 +1515,6 @@ public class Shoukan extends GameInstance<Phase> {
 		};
 	}
 
-	@ExecTime
 	private void reportEvent(String message, Object... args) {
 		resetTimer();
 		trigger(ON_TICK);
