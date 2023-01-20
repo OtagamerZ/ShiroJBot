@@ -33,7 +33,6 @@ import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.PhaseConstraint;
 import com.kuuhaku.game.engine.PlayerAction;
-import com.kuuhaku.interfaces.annotations.ExecTime;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedList;
@@ -1456,11 +1455,7 @@ public class Shoukan extends GameInstance<Phase> {
 	public void triggerEOTs(EffectParameters ep) {
 		Set<EffectOverTime> effects = new TreeSet<>(eots);
 		for (EffectOverTime effect : effects) {
-			if (effect.lock().get() || effect.expired()) continue;
-			else if (effect.expired()) {
-				eots.remove(effect);
-				continue;
-			}
+			if (effect.lock().get()) continue;
 
 			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
 			if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
