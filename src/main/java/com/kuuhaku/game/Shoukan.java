@@ -1903,6 +1903,10 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.applyVoTs();
 		curr.reduceOriginCooldown(1);
 
+		if (curr.getLockTime(Lock.BLIND) > 0) {
+			Collections.shuffle(curr.getCards());
+		}
+
 		for (SlotColumn slt : getSlots(curr.getSide())) {
 			for (Senshi s : slt.getCards()) {
 				if (s != null) {

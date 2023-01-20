@@ -890,7 +890,12 @@ public class Hand {
 			Drawable<?> d = cards.get(i);
 			boolean ally = equals(d.getHand());
 
-			g2d.drawImage(d.render(game.getLocale(), userDeck), x, 100, null);
+			if (getLockTime(Lock.BLIND) > 0 && ally) {
+				g2d.drawImage(d.render(game.getLocale(), userDeck), x, 100, null);
+			} else {
+				g2d.drawImage(userDeck.getStyling().getFrame().getBack(userDeck), x, 100, null);
+			}
+
 			if (d.isAvailable() && ally) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
 						x + (Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,

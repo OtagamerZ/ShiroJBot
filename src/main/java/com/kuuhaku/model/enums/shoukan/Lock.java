@@ -21,10 +21,9 @@ package com.kuuhaku.model.enums.shoukan;
 import com.kuuhaku.util.IO;
 
 import java.awt.image.BufferedImage;
-import java.util.Locale;
 
 public enum Lock {
-	EFFECT, SPELL, TAUNT, DECK;
+	EFFECT, SPELL, TAUNT, DECK, BLIND;
 
 	public BufferedImage getImage(boolean locked) {
 		return IO.getResourceAsImage("shoukan/icons/" + name().toLowerCase() + (locked ? "_lock" : "_unlock") + ".png");
