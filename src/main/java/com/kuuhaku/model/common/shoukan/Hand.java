@@ -891,9 +891,9 @@ public class Hand {
 			boolean ally = equals(d.getHand());
 
 			if (getLockTime(Lock.BLIND) > 0 && ally) {
-				g2d.drawImage(d.render(game.getLocale(), userDeck), x, 100, null);
-			} else {
 				g2d.drawImage(userDeck.getStyling().getFrame().getBack(userDeck), x, 100, null);
+			} else {
+				g2d.drawImage(d.render(game.getLocale(), userDeck), x, 100, null);
 			}
 
 			if (d.isAvailable() && ally) {
