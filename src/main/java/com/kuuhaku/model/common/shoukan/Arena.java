@@ -593,7 +593,7 @@ public class Arena implements Renderer {
 				int i = 0;
 				int yOffset = reversed ? -100 : 100;
 				for (Timed<Lock> lock : hand.getLocks()) {
-					int row = i % 3;
+					int row = i / 3;
 
 					g1.setColor(Color.RED);
 					g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 80));
@@ -606,7 +606,7 @@ public class Arena implements Renderer {
 					);
 
 					Graph.drawOutlinedString(g1, text,
-							(85 + fm.stringWidth("00")) * i + 85, (yOffset * row) + 80 / 2 + fm.getHeight() / 2,
+							(85 + fm.stringWidth("00")) * i + 85, yOffset * row,
 							6, Color.BLACK
 					);
 
