@@ -1051,7 +1051,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		String outcome = "str/combat_skip";
 		try {
-			if (enemy == null || (posHash == enemy.posHash() && ally.canAttack())) {
+			if ((enemy == null || posHash == enemy.posHash()) && ally.canAttack()) {
 				for (Evogear e : ally.getEquipments()) {
 					JSONArray charms = e.getCharms();
 
