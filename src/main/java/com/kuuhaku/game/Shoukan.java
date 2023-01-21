@@ -1458,9 +1458,11 @@ public class Shoukan extends GameInstance<Phase> {
 		for (EffectOverTime effect : effects) {
 			if (effect.lock().get()) continue;
 
+			boolean remove = false;
 			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
 			if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
 				effect.decreaseTurn();
+				remove = effect.expired() || effect.removed();
 			}
 
 			if (effect.triggers().contains(ep.trigger())) {
@@ -1486,9 +1488,11 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 					}
 				}
+
+				remove = effect.expired() || effect.removed();
 			}
 
-			if (effect.expired() || effect.removed()) {
+			if (remove) {
 //				if (!effect.permanent()) {
 				getChannel().sendMessage(getLocale().get("str/effect_expiration", effect.source())).queue();
 //				}
