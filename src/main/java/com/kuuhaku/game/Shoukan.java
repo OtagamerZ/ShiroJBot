@@ -51,7 +51,6 @@ import com.kuuhaku.model.records.shoukan.snapshot.Player;
 import com.kuuhaku.model.records.shoukan.snapshot.Slot;
 import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
 import com.kuuhaku.util.Calc;
-import com.kuuhaku.util.Checkpoint;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
@@ -1515,7 +1514,6 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private void reportEvent(String message, Object... args) {
-		try (Checkpoint cp = new Checkpoint()) {
 			resetTimer();
 			trigger(ON_TICK);
 
@@ -1562,7 +1560,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 					return;
 				}
-				cp.lap("Check condition " + side);
 
 				List<SlotColumn> slts = getSlots(side);
 				for (SlotColumn slt : slts) {
@@ -1581,9 +1578,7 @@ public class Shoukan extends GameInstance<Phase> {
 						s.getStats().removeExpired(AttrMod::isExpired);
 					}
 
-					cp.lap("Remove expired " + slt);
 				}
-				cp.lap("End " + side);
 			}
 
 			AtomicBoolean registered = new AtomicBoolean();
@@ -1600,7 +1595,6 @@ public class Shoukan extends GameInstance<Phase> {
 							registered.set(true);
 						}
 					});
-		}
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
