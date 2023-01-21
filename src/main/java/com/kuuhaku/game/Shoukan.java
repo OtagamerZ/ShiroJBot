@@ -51,6 +51,7 @@ import com.kuuhaku.model.records.shoukan.snapshot.Player;
 import com.kuuhaku.model.records.shoukan.snapshot.Slot;
 import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
 import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Checkpoint;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
@@ -66,6 +67,7 @@ import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.ArrayUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -1492,6 +1494,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 				eots.remove(effect);
 			}
+
+			System.out.println(effects);
 		}
 	}
 
@@ -1581,20 +1585,30 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
-			AtomicBoolean registered = new AtomicBoolean();
-			getChannel().sendMessage(getLocale().get(message, args))
-					.addFile(IO.getBytes(history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale()), "webp"), "game.webp")
-					.queue(m -> {
-						messages.compute(m.getTextChannel().getId(), replaceMessages(m));
+			try (Checkpoint cp = new Checkpoint()) {
+				BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
+				cp.lap("Render image");
 
-						if (!registered.get()) {
-							if (!message.startsWith("str/game_history")) {
-								getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+				byte[] bytes = IO.getBytes(img, "webp");
+				cp.lap("Encode image");
+
+				AtomicBoolean registered = new AtomicBoolean();
+				getChannel().sendMessage(getLocale().get(message, args))
+						.addFile(bytes, "game.webp")
+						.queue(m -> {
+							messages.compute(m.getTextChannel().getId(), replaceMessages(m));
+
+							if (!registered.get()) {
+								if (!message.startsWith("str/game_history")) {
+									getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+								}
+
+								registered.set(true);
 							}
 
-							registered.set(true);
-						}
-					});
+							cp.lap("Send image");
+						});
+			}
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
