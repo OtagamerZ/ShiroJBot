@@ -97,6 +97,11 @@ public record EffectOverTime(
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		EffectOverTime that = (EffectOverTime) o;
+
+		System.out.println("SERIAL: " + (SERIAL == that.SERIAL));
+		System.out.println("SOURCE: " + Objects.equals(source, that.source));
+		System.out.println("SIDE: " + (side == that.side));
+
 		return SERIAL == that.SERIAL && Objects.equals(source, that.source) && side == that.side;
 	}
 
