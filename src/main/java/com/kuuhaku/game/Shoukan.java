@@ -1486,18 +1486,20 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 					}
 				}
-
-				System.out.println(ep.trigger() + " - " + effects);
 			}
+		}
 
+		eots.removeIf(effect -> {
 			if (effect.expired() || effect.removed()) {
 //				if (!effect.permanent()) {
 				getChannel().sendMessage(getLocale().get("str/effect_expiration", effect.source())).queue();
 //				}
 
-				System.out.println(eots.remove(effect));
+				return true;
 			}
-		}
+
+			return false;
+		});
 	}
 
 	private BiFunction<String, String, String> replaceMessages(Message message) {
