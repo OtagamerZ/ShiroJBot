@@ -51,6 +51,7 @@ import com.kuuhaku.model.records.shoukan.snapshot.Player;
 import com.kuuhaku.model.records.shoukan.snapshot.Slot;
 import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
 import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Checkpoint;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
@@ -1514,86 +1515,92 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private void reportEvent(String message, Object... args) {
-		resetTimer();
-		trigger(ON_TICK);
+		try (Checkpoint cp = new Checkpoint()) {
+			resetTimer();
+			trigger(ON_TICK);
 
-		List<Side> sides = List.of(getOtherSide(), getCurrentSide());
-		for (Side side : sides) {
-			Hand hand = hands.get(side);
-			hand.getCards();
-			hand.getRealDeck();
-			hand.getGraveyard();
+			List<Side> sides = List.of(getOtherSide(), getCurrentSide());
+			for (Side side : sides) {
+				Hand hand = hands.get(side);
+				hand.getCards();
+				hand.getRealDeck();
+				hand.getGraveyard();
 
-			String def = hand.getDefeat();
-			if (hand.getHP() == 0 || def != null) {
-				trigger(ON_VICTORY, side.getOther());
-				trigger(ON_DEFEAT, side);
+				String def = hand.getDefeat();
+				if (hand.getHP() == 0 || def != null) {
+					trigger(ON_VICTORY, side.getOther());
+					trigger(ON_DEFEAT, side);
 
-				if (hand.getDefeat() == null) {
-					if (hand.getHP() > 0) continue;
-					else if (hand.getOrigin().major() == Race.UNDEAD && hand.getOriginCooldown() == 0) {
-						hand.setHP(1);
-						hand.setDefeat(null);
-						hand.getRegDeg().add(new Regen((int) (hand.getBase().hp() * 0.5), 1 / 3d));
-						hand.setOriginCooldown(4);
-						continue;
+					if (hand.getDefeat() == null) {
+						if (hand.getHP() > 0) continue;
+						else if (hand.getOrigin().major() == Race.UNDEAD && hand.getOriginCooldown() == 0) {
+							hand.setHP(1);
+							hand.setDefeat(null);
+							hand.getRegDeg().add(new Regen((int) (hand.getBase().hp() * 0.5), 1 / 3d));
+							hand.setOriginCooldown(4);
+							continue;
+						}
 					}
-				}
 
-				restoring = true;
-				for (List<SlotColumn> slts : arena.getSlots().values()) {
-					for (SlotColumn slt : slts) {
-						for (Senshi card : slt.getCards()) {
-							if (card != null) {
-								card.setFlipped(false);
+					restoring = true;
+					for (List<SlotColumn> slts : arena.getSlots().values()) {
+						for (SlotColumn slt : slts) {
+							for (Senshi card : slt.getCards()) {
+								if (card != null) {
+									card.setFlipped(false);
+								}
 							}
 						}
 					}
-				}
-				restoring = false;
+					restoring = false;
 
-				if (def != null) {
-					reportResult(GameReport.SUCCESS, "str/game_end_special", def, "<@" + hands.get(side.getOther()).getUid() + ">");
-				} else {
-					reportResult(GameReport.SUCCESS, "str/game_end", "<@" + hand.getUid() + ">", "<@" + hands.get(side.getOther()).getUid() + ">");
-				}
-
-				return;
-			}
-
-			List<SlotColumn> slts = getSlots(side);
-			for (SlotColumn slt : slts) {
-				Senshi s = slt.getTop();
-				if (s != null) {
-					s.setLastInteraction(null);
-					s.getStats().removeExpired(AttrMod::isExpired);
-					for (Evogear e : s.getEquipments()) {
-						e.getStats().removeExpired(AttrMod::isExpired);
+					if (def != null) {
+						reportResult(GameReport.SUCCESS, "str/game_end_special", def, "<@" + hands.get(side.getOther()).getUid() + ">");
+					} else {
+						reportResult(GameReport.SUCCESS, "str/game_end", "<@" + hand.getUid() + ">", "<@" + hands.get(side.getOther()).getUid() + ">");
 					}
+
+					return;
 				}
+				cp.lap("Check condition " + side);
 
-				s = slt.getBottom();
-				if (s != null) {
-					s.setLastInteraction(null);
-					s.getStats().removeExpired(AttrMod::isExpired);
-				}
-			}
-		}
-
-		AtomicBoolean registered = new AtomicBoolean();
-		getChannel().sendMessage(getLocale().get(message, args))
-				.addFile(IO.getBytes(history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale()), "webp"), "game.webp")
-				.queue(m -> {
-					messages.compute(m.getTextChannel().getId(), replaceMessages(m));
-
-					if (!registered.get()) {
-						if (!message.startsWith("str/game_history")) {
-							getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+				List<SlotColumn> slts = getSlots(side);
+				for (SlotColumn slt : slts) {
+					Senshi s = slt.getTop();
+					if (s != null) {
+						s.setLastInteraction(null);
+						s.getStats().removeExpired(AttrMod::isExpired);
+						for (Evogear e : s.getEquipments()) {
+							e.getStats().removeExpired(AttrMod::isExpired);
 						}
-
-						registered.set(true);
 					}
-				});
+
+					s = slt.getBottom();
+					if (s != null) {
+						s.setLastInteraction(null);
+						s.getStats().removeExpired(AttrMod::isExpired);
+					}
+
+					cp.lap("Remove expired " + slt);
+				}
+				cp.lap("End " + side);
+			}
+
+			AtomicBoolean registered = new AtomicBoolean();
+			getChannel().sendMessage(getLocale().get(message, args))
+					.addFile(IO.getBytes(history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale()), "webp"), "game.webp")
+					.queue(m -> {
+						messages.compute(m.getTextChannel().getId(), replaceMessages(m));
+
+						if (!registered.get()) {
+							if (!message.startsWith("str/game_history")) {
+								getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+							}
+
+							registered.set(true);
+						}
+					});
+		}
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
