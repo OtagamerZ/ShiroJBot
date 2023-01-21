@@ -1486,6 +1486,8 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 					}
 				}
+
+				System.out.println(ep.trigger() + " - " + effects);
 			}
 
 			if (effect.expired() || effect.removed()) {
@@ -1493,10 +1495,8 @@ public class Shoukan extends GameInstance<Phase> {
 				getChannel().sendMessage(getLocale().get("str/effect_expiration", effect.source())).queue();
 //				}
 
-				eots.remove(effect);
+				System.out.println(eots.remove(effect));
 			}
-
-			System.out.println(ep.trigger() + " - " + effects);
 		}
 	}
 
