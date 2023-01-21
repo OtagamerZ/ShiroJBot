@@ -1456,7 +1456,7 @@ public class Shoukan extends GameInstance<Phase> {
 	public void triggerEOTs(EffectParameters ep) {
 		Set<EffectOverTime> effects = new TreeSet<>(eots);
 		for (EffectOverTime effect : effects) {
-			if (effect.lock().get()) continue;
+			if (effect.lock().get() || !eots.contains(effect)) continue;
 
 			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
 			if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
@@ -1492,11 +1492,6 @@ public class Shoukan extends GameInstance<Phase> {
 //				if (!effect.permanent()) {
 				getChannel().sendMessage(getLocale().get("str/effect_expiration", effect.source())).queue();
 //				}
-
-				System.out.println(effect);
-				System.out.println(eots);
-				System.out.println(eots.contains(effect));
-				System.out.println("------------");
 
 				eots.remove(effect);
 			}
