@@ -51,7 +51,6 @@ import com.kuuhaku.model.records.shoukan.snapshot.Player;
 import com.kuuhaku.model.records.shoukan.snapshot.Slot;
 import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
 import com.kuuhaku.util.Calc;
-import com.kuuhaku.util.Checkpoint;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
@@ -1464,38 +1463,40 @@ public class Shoukan extends GameInstance<Phase> {
 				effect.decreaseTurn();
 			}
 
-			if (ep.size() == 0) {
-				if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger())) {
-					effect.decreaseLimit();
-					effect.effect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
-
-					if (effect.side() == null) {
-						effect.lock().set(true);
-					}
-				}
-			} else if (ep.source() != null) {
-				if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
-					effect.decreaseLimit();
-					effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
-				}
-
-				for (Target t : ep.targets()) {
-					if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
+			if (effect.triggers().contains(ep.trigger())) {
+				if (ep.size() == 0) {
+					if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger())) {
 						effect.decreaseLimit();
-						effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
+						effect.effect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
+
+						if (effect.side() == null) {
+							effect.lock().set(true);
+						}
+					}
+				} else if (ep.source() != null) {
+					if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
+						effect.decreaseLimit();
+						effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
+					}
+
+					for (Target t : ep.targets()) {
+						if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
+							effect.decreaseLimit();
+							effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
+						}
 					}
 				}
 			}
 
 			if (effect.expired() || effect.removed()) {
 //				if (!effect.permanent()) {
-					getChannel().sendMessage(getLocale().get("str/effect_expiration", effect.source())).queue();
+				getChannel().sendMessage(getLocale().get("str/effect_expiration", effect.source())).queue();
 //				}
 
 				eots.remove(effect);
 			}
 
-			System.out.println(effects);
+			System.out.println(ep.trigger() + " - " + effects);
 		}
 	}
 
@@ -1518,97 +1519,90 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private void reportEvent(String message, Object... args) {
-			resetTimer();
-			trigger(ON_TICK);
+		resetTimer();
+		trigger(ON_TICK);
 
-			List<Side> sides = List.of(getOtherSide(), getCurrentSide());
-			for (Side side : sides) {
-				Hand hand = hands.get(side);
-				hand.getCards();
-				hand.getRealDeck();
-				hand.getGraveyard();
+		List<Side> sides = List.of(getOtherSide(), getCurrentSide());
+		for (Side side : sides) {
+			Hand hand = hands.get(side);
+			hand.getCards();
+			hand.getRealDeck();
+			hand.getGraveyard();
 
-				String def = hand.getDefeat();
-				if (hand.getHP() == 0 || def != null) {
-					trigger(ON_VICTORY, side.getOther());
-					trigger(ON_DEFEAT, side);
+			String def = hand.getDefeat();
+			if (hand.getHP() == 0 || def != null) {
+				trigger(ON_VICTORY, side.getOther());
+				trigger(ON_DEFEAT, side);
 
-					if (hand.getDefeat() == null) {
-						if (hand.getHP() > 0) continue;
-						else if (hand.getOrigin().major() == Race.UNDEAD && hand.getOriginCooldown() == 0) {
-							hand.setHP(1);
-							hand.setDefeat(null);
-							hand.getRegDeg().add(new Regen((int) (hand.getBase().hp() * 0.5), 1 / 3d));
-							hand.setOriginCooldown(4);
-							continue;
-						}
+				if (hand.getDefeat() == null) {
+					if (hand.getHP() > 0) continue;
+					else if (hand.getOrigin().major() == Race.UNDEAD && hand.getOriginCooldown() == 0) {
+						hand.setHP(1);
+						hand.setDefeat(null);
+						hand.getRegDeg().add(new Regen((int) (hand.getBase().hp() * 0.5), 1 / 3d));
+						hand.setOriginCooldown(4);
+						continue;
 					}
+				}
 
-					restoring = true;
-					for (List<SlotColumn> slts : arena.getSlots().values()) {
-						for (SlotColumn slt : slts) {
-							for (Senshi card : slt.getCards()) {
-								if (card != null) {
-									card.setFlipped(false);
-								}
+				restoring = true;
+				for (List<SlotColumn> slts : arena.getSlots().values()) {
+					for (SlotColumn slt : slts) {
+						for (Senshi card : slt.getCards()) {
+							if (card != null) {
+								card.setFlipped(false);
 							}
 						}
 					}
-					restoring = false;
+				}
+				restoring = false;
 
-					if (def != null) {
-						reportResult(GameReport.SUCCESS, "str/game_end_special", def, "<@" + hands.get(side.getOther()).getUid() + ">");
-					} else {
-						reportResult(GameReport.SUCCESS, "str/game_end", "<@" + hand.getUid() + ">", "<@" + hands.get(side.getOther()).getUid() + ">");
-					}
-
-					return;
+				if (def != null) {
+					reportResult(GameReport.SUCCESS, "str/game_end_special", def, "<@" + hands.get(side.getOther()).getUid() + ">");
+				} else {
+					reportResult(GameReport.SUCCESS, "str/game_end", "<@" + hand.getUid() + ">", "<@" + hands.get(side.getOther()).getUid() + ">");
 				}
 
-				List<SlotColumn> slts = getSlots(side);
-				for (SlotColumn slt : slts) {
-					Senshi s = slt.getTop();
-					if (s != null) {
-						s.setLastInteraction(null);
-						s.getStats().removeExpired(AttrMod::isExpired);
-						for (Evogear e : s.getEquipments()) {
-							e.getStats().removeExpired(AttrMod::isExpired);
+				return;
+			}
+
+			List<SlotColumn> slts = getSlots(side);
+			for (SlotColumn slt : slts) {
+				Senshi s = slt.getTop();
+				if (s != null) {
+					s.setLastInteraction(null);
+					s.getStats().removeExpired(AttrMod::isExpired);
+					for (Evogear e : s.getEquipments()) {
+						e.getStats().removeExpired(AttrMod::isExpired);
+					}
+				}
+
+				s = slt.getBottom();
+				if (s != null) {
+					s.setLastInteraction(null);
+					s.getStats().removeExpired(AttrMod::isExpired);
+				}
+
+			}
+		}
+
+		BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
+		byte[] bytes = IO.getBytes(img, "webp");
+
+		AtomicBoolean registered = new AtomicBoolean();
+		getChannel().sendMessage(getLocale().get(message, args))
+				.addFile(bytes, "game.webp")
+				.queue(m -> {
+					messages.compute(m.getTextChannel().getId(), replaceMessages(m));
+
+					if (!registered.get()) {
+						if (!message.startsWith("str/game_history")) {
+							getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
 						}
+
+						registered.set(true);
 					}
-
-					s = slt.getBottom();
-					if (s != null) {
-						s.setLastInteraction(null);
-						s.getStats().removeExpired(AttrMod::isExpired);
-					}
-
-				}
-			}
-
-			try (Checkpoint cp = new Checkpoint()) {
-				BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
-				cp.lap("Render image");
-
-				byte[] bytes = IO.getBytes(img, "webp");
-				cp.lap("Encode image");
-
-				AtomicBoolean registered = new AtomicBoolean();
-				getChannel().sendMessage(getLocale().get(message, args))
-						.addFile(bytes, "game.webp")
-						.queue(m -> {
-							messages.compute(m.getTextChannel().getId(), replaceMessages(m));
-
-							if (!registered.get()) {
-								if (!message.startsWith("str/game_history")) {
-									getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
-								}
-
-								registered.set(true);
-							}
-
-							cp.lap("Send image");
-						});
-			}
+				});
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
