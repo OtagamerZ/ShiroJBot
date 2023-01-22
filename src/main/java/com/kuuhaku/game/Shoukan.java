@@ -1273,7 +1273,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public Hand getCurrent() {
-		return hands.get(getTurn() % 2 == 0 ? Side.TOP : Side.BOTTOM);
+		return hands.get(getCurrentSide());
 	}
 
 	public Side getCurrentSide() {
@@ -1281,7 +1281,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public Hand getOther() {
-		return hands.get(getTurn() % 2 == 1 ? Side.TOP : Side.BOTTOM);
+		return hands.get(getOtherSide());
 	}
 
 	public Side getOtherSide() {
