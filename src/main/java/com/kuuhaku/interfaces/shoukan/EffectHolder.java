@@ -229,6 +229,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				}
 			}
 		}
+		System.out.println(csm.getStoredProps());
 
 		return csm.getStoredProps();
 	}
