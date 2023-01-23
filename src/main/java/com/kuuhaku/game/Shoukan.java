@@ -1022,8 +1022,6 @@ public class Shoukan extends GameInstance<Phase> {
 				getChannel().sendMessage(getLocale().get("error/card_taunted", ally.getTarget(), ally.getTarget().getIndex() + 1)).queue();
 				return false;
 			}
-
-			enemy.setFlipped(false);
 		}
 
 		if (enemy == null && !arena.isFieldEmpty(op.getSide()) && !ally.popFlag(Flag.DIRECT)) {
@@ -1085,6 +1083,8 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				if (enemy != null) {
+					enemy.setFlipped(false);
+
 					for (Evogear e : enemy.getEquipments()) {
 						JSONArray charms = e.getCharms();
 
