@@ -1397,7 +1397,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public List<Evogear> getEquipments(Side side) {
 		return arena.getSlots(side).stream()
-				.flatMap(sc -> sc.getCards().stream())
+				.map(SlotColumn::getTop)
 				.filter(Objects::nonNull)
 				.flatMap(s -> s.getEquipments().stream())
 				.toList();
