@@ -204,7 +204,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		String desc = getDescription(locale);
 		for (String str : desc.split("\\s")) {
 			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}|\\{(?<tag>\\w+)}");
-			System.out.println(groups);
 
 			if (!groups.isEmpty()) {
 				try {
@@ -212,11 +211,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					if (!calc.isBlank()) {
 						calc = "import static java.lang.Math.*\n\n" + calc;
 						String val = String.valueOf(Utils.exec(calc, values));
-						System.out.println(calc);
-						System.out.println(val);
 
 						csm.getStoredProps().compute(groups.getString("type"), (k, v) -> {
 							int value = Calc.round(NumberUtils.toDouble(val) * getStats().getPower());
+							System.out.println(value);
 
 							if (v == null) {
 								return value;
