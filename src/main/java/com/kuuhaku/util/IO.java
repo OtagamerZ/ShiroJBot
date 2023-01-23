@@ -134,6 +134,9 @@ public abstract class IO {
 
 	public static BufferedImage imageFromBytes(byte[] bytes) {
 		if (bytes.length == 0) return null;
+		else if (checkMagicNumber(bytes, new byte[]{52, 49, 46, 46})) {
+			return Webp4j.decode(bytes);
+		}
 
 		try (Buffer buf = new Buffer().write(bytes)) {
 			BufferedImage out = ImageIO.read(buf.inputStream());
@@ -239,5 +242,15 @@ public abstract class IO {
 		} catch (IOException e) {
 			return 0;
 		}
+	}
+
+	public static boolean checkMagicNumber(byte[] sequence, byte[] magic) {
+		if (sequence == null || magic == null || sequence.length < magic.length) return false;
+
+		for (int i = 0; i < magic.length; i++) {
+			if (sequence[i] != magic[i]) return false;
+		}
+
+		return true;
 	}
 }
