@@ -106,8 +106,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						val = str;
 					}
 
-					g2d.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.PLAIN, 10));
-					g2d.setColor(COLORS.getOrDefault(Utils.getOr(tag, type), g2d.getColor()));
+					String key = Utils.getOr(tag, type);
+					if (COLORS.containsKey(key)) {
+						g2d.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.PLAIN, 10));
+						g2d.setColor(COLORS.getOrDefault(key, g2d.getColor()));
+					} else {
+						g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 10));
+					}
 
 					if (!type.equalsIgnoreCase("data") && !Utils.equalsAny(tag, "b", "n")) {
 						val = val + "    ";
