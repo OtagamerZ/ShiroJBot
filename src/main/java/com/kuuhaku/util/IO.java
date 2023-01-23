@@ -43,6 +43,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -135,6 +136,8 @@ public abstract class IO {
 	public static BufferedImage imageFromBytes(byte[] bytes) {
 		if (bytes.length == 0) return null;
 		else if (checkMagicNumber(bytes, new byte[]{52, 49, 46, 46})) {
+			System.out.println(Arrays.toString(Arrays.copyOf(bytes, 10)));
+
 			return Webp4j.decode(bytes);
 		}
 
