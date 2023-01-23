@@ -758,13 +758,14 @@ public class Shoukan extends GameInstance<Phase> {
 			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 
 			Evogear copy = chosen.copy();
-			stack.add(copy);
 			if (!consumed.isEmpty()) {
 				copy.getStats().getData().put("consumed", consumed);
 			}
 
 			if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
 				chosen.setAvailable(false);
+			} else {
+				stack.add(copy);
 			}
 
 			curr.getData().put("last_spell", copy);
@@ -781,13 +782,14 @@ public class Shoukan extends GameInstance<Phase> {
 		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 
 		Evogear copy = chosen.copy();
-		stack.add(copy);
 		if (!consumed.isEmpty()) {
 			copy.getStats().getData().put("consumed", consumed);
 		}
 
 		if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
 			chosen.setAvailable(false);
+		} else {
+			stack.add(copy);
 		}
 
 		if (!chosen.execute(chosen.toParameters(tgt))) {
