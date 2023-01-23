@@ -1003,6 +1003,8 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Hand op = hands.get(side.getOther());
+		int pHP = op.getHP();
+
 		Senshi enemy = null;
 		if (args.getBoolean("target")) {
 			SlotColumn opSlot = arena.getSlots(op.getSide()).get(args.getInt("target") - 1);
@@ -1043,7 +1045,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 		trigger(ON_ATTACK, ally.asSource(ON_ATTACK), t);
 
-		int pHP = op.getHP();
 		int dmg = ally.getActiveAttr();
 		int lifesteal = 0;
 		int thorns = 0;
