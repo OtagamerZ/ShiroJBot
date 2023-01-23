@@ -217,7 +217,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public BondedList<Evogear> getEquipments() {
-		equipments.removeIf(e -> !equals(e.getEquipper()) || isSupporting());
+		equipments.removeIf(e -> !equals(e.getEquipper()));
 
 		while (equipments.size() > 3) {
 			hand.getGraveyard().add(equipments.removeFirst());
@@ -238,6 +238,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean hasCharm(Charm charm) {
+		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return false;
+
 		return equipments.stream().anyMatch(e -> e.hasCharm(charm));
 	}
 
@@ -516,25 +518,25 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public int getEquipDmg() {
-		if (hasFlag(Flag.NO_EQUIP)) return 0;
+		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return 0;
 
 		return equipments.stream().mapToInt(Evogear::getDmg).sum();
 	}
 
 	public int getEquipDfs() {
-		if (hasFlag(Flag.NO_EQUIP)) return 0;
+		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return 0;
 
 		return equipments.stream().mapToInt(Evogear::getDfs).sum();
 	}
 
 	public int getEquipDodge() {
-		if (hasFlag(Flag.NO_EQUIP)) return 0;
+		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return 0;
 
 		return equipments.stream().mapToInt(Evogear::getDodge).sum();
 	}
 
 	public int getEquipBlock() {
-		if (hasFlag(Flag.NO_EQUIP)) return 0;
+		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return 0;
 
 		return equipments.stream().mapToInt(Evogear::getBlock).sum();
 	}

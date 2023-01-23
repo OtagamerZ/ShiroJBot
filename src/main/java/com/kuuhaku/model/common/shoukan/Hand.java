@@ -368,7 +368,7 @@ public class Hand {
 			}
 		}
 
-		for (int i = 0; i < value; i++) {
+		for (int i = 0; i < value && !deck.isEmpty(); i++) {
 			Drawable<?> d = deck.removeFirst();
 
 			if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
@@ -388,6 +388,8 @@ public class Hand {
 
 	public Drawable<?> draw() {
 		BondedList<Drawable<?>> deck = getDeck();
+		if (deck.isEmpty()) return null;
+
 		Drawable<?> d = deck.removeFirst();
 
 		if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {

@@ -66,6 +66,7 @@ import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.ArrayUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -87,7 +88,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Arena arena;
 	private final Map<Side, Hand> hands;
 	private final Map<String, String> messages = new HashMap<>();
-	private final Set<EffectOverTime> eots = new TreeSet<>();
+	private final Set<EffectOverTime> eots = new HashSet<>();
 	private final List<Turn> turns = new TreeList<>();
 
 	private final boolean singleplayer;
@@ -1274,7 +1275,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public Hand getCurrent() {
-		return hands.get(getTurn() % 2 == 0 ? Side.TOP : Side.BOTTOM);
+		return hands.get(getCurrentSide());
 	}
 
 	public Side getCurrentSide() {
@@ -1282,7 +1283,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public Hand getOther() {
-		return hands.get(getTurn() % 2 == 1 ? Side.TOP : Side.BOTTOM);
+		return hands.get(getOtherSide());
 	}
 
 	public Side getOtherSide() {
@@ -1398,7 +1399,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public List<Evogear> getEquipments(Side side) {
 		return arena.getSlots(side).stream()
-				.flatMap(sc -> sc.getCards().stream())
+				.map(SlotColumn::getTop)
 				.filter(Objects::nonNull)
 				.flatMap(s -> s.getEquipments().stream())
 				.toList();
@@ -1459,35 +1460,41 @@ public class Shoukan extends GameInstance<Phase> {
 		for (EffectOverTime effect : effects) {
 			if (effect.lock().get()) continue;
 
+			boolean remove = false;
 			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
 			if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
 				effect.decreaseTurn();
+				remove = effect.expired() || effect.removed();
 			}
 
-			if (ep.size() == 0) {
-				if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger())) {
-					effect.decreaseLimit();
-					effect.effect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
-
-					if (effect.side() == null) {
-						effect.lock().set(true);
-					}
-				}
-			} else if (ep.source() != null) {
-				if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
-					effect.decreaseLimit();
-					effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
-				}
-
-				for (Target t : ep.targets()) {
-					if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
+			if (effect.triggers().contains(ep.trigger())) {
+				if (ep.size() == 0) {
+					if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger())) {
 						effect.decreaseLimit();
-						effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
+						effect.effect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
+
+						if (effect.side() == null) {
+							effect.lock().set(true);
+						}
+					}
+				} else if (ep.source() != null) {
+					if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
+						effect.decreaseLimit();
+						effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
+					}
+
+					for (Target t : ep.targets()) {
+						if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
+							effect.decreaseLimit();
+							effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
+						}
 					}
 				}
+
+				remove = effect.expired() || effect.removed();
 			}
 
-			if (effect.expired() || effect.removed()) {
+			if (remove) {
 				if (!effect.permanent()) {
 					getChannel().sendMessage(getLocale().get("str/effect_expiration", effect.source())).queue();
 				}
@@ -1579,12 +1586,16 @@ public class Shoukan extends GameInstance<Phase> {
 					s.setLastInteraction(null);
 					s.getStats().removeExpired(AttrMod::isExpired);
 				}
+
 			}
 		}
 
+		BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
+		byte[] bytes = IO.getBytes(img, "webp");
+
 		AtomicBoolean registered = new AtomicBoolean();
 		getChannel().sendMessage(getLocale().get(message, args))
-				.addFile(IO.getBytes(history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale()), "webp"), "game.webp")
+				.addFile(bytes, "game.webp")
 				.queue(m -> {
 					messages.compute(m.getTextChannel().getId(), replaceMessages(m));
 
