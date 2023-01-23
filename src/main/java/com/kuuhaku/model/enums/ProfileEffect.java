@@ -21,7 +21,6 @@ package com.kuuhaku.model.enums;
 import com.kuuhaku.util.IO;
 
 import java.awt.image.BufferedImage;
-import java.util.Locale;
 
 public enum ProfileEffect {
 	NONE, HEX, SCANLINE, VIGNETTE;
