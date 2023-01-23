@@ -592,7 +592,7 @@ public class Arena implements Renderer {
 			//}
 
 			int rad = (int) (BAR_SIZE.height / 1.5);
-			Graph.applyTransformed(g, reversed ? 1855 : 5, BAR_SIZE.height + (reversed ? SIZE.height - rad + 5 : 5), g1 -> {
+			Graph.applyTransformed(g, reversed ? 1855 : 5, BAR_SIZE.height + (reversed ? SIZE.height - rad - 5 : 5), g1 -> {
 				int i = 0;
 				int yOffset = reversed ? -(rad + 10) : rad + 10;
 				for (Timed<Lock> lock : hand.getLocks()) {
@@ -610,7 +610,7 @@ public class Arena implements Renderer {
 					);
 
 					Graph.drawOutlinedString(g1, text,
-							(rad + 5 + fm.stringWidth("00")) * i + rad + 5, yOffset * row + rad,
+							(rad + 5 + fm.stringWidth("00")) * i + rad + 5, yOffset * row + rad - 5,
 							6, Color.BLACK
 					);
 
