@@ -126,7 +126,7 @@ dependencies {
 	implementation group: "com.vdurmont", name: "emoji-java", version: "5.1.1"
 	implementation group: "org.aspectj", name: "aspectjrt", version: "1.9.9.1"
 	implementation group: "org.shredzone.commons", name: "commons-suncalc", version: "3.5"
-	implementation group: 'com.github.zakgof', name: 'webp4j', version: '0.0.2'
+	implementation group: "org.sejda.imageio", name: "webp-imageio", version: "0.1.6"
 	implementation group: "org.knowm.xchart", name: "xchart", version: "3.8.1"
 	implementation group: "com.github.trickl", name: "palette", version: "0.1.1"
 	implementation group: "com.vladmihalcea", name: "hibernate-types-60", version: "2.20.0"
