@@ -20,7 +20,7 @@ package com.kuuhaku.util;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
-import com.luciad.imageio.webp.WebPWriteParam;
+import com.zakgof.webp4j.Webp4j;
 import okio.Buffer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -35,7 +35,9 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -100,6 +102,10 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding, float quality) {
+		if (encoding.equalsIgnoreCase("webp")) {
+			return Webp4j.encode(image, quality);
+		}
+
 		try (Buffer buf = new Buffer()) {
 			ImageWriter writer = ImageIO.getImageWritersByFormatName(encoding).next();
 			ImageOutputStream ios = ImageIO.createImageOutputStream(buf.outputStream());
@@ -108,12 +114,7 @@ public abstract class IO {
 			ImageWriteParam param = writer.getDefaultWriteParam();
 			if (param.canWriteCompressed()) {
 				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-				if (param instanceof WebPWriteParam webp) {
-					webp.setCompressionType(param.getCompressionTypes()[WebPWriteParam.LOSSY_COMPRESSION]);
-				} else {
-					param.setCompressionType(param.getCompressionTypes()[0]);
-				}
-
+				param.setCompressionType(param.getCompressionTypes()[0]);
 				param.setCompressionQuality(quality);
 			}
 
