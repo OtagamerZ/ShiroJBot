@@ -197,11 +197,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		);
 
 		if (!csm.getStoredProps().isEmpty() && csm.getPropHash().intValue() == values.hashCode()) {
-			System.out.println("Cached");
 			return csm.getStoredProps();
 		}
-
-		System.out.println(values);
 
 		csm.getStoredProps().clear();
 		String desc = getDescription(locale);
