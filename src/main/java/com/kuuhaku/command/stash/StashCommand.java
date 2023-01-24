@@ -109,7 +109,8 @@ public class StashCommand implements Executable {
 		Option[] opts = cli.getFirst().getOptions();
 		for (Option opt : opts) {
 			String filter = filters.get(opt.getOpt());
-			if (filter.contains("%s")) {
+			if (filter == null) continue;
+			else if (filter.contains("%s")) {
 				filter = filter.formatted(i.getAndIncrement());
 			}
 

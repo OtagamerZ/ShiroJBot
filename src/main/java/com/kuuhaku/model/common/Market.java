@@ -66,7 +66,8 @@ public class Market {
 		AtomicInteger i = new AtomicInteger(1);
 		for (Option opt : opts) {
 			String filter = filters.get(opt.getOpt());
-			if (filter.contains("%s")) {
+			if (filter == null) continue;
+			else if (filter.contains("%s")) {
 				filter = filter.formatted(i.getAndIncrement());
 			}
 
