@@ -37,7 +37,8 @@ public abstract class ImageFilters {
 	public static BufferedImage silhouette(BufferedImage in) {
 		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Graph.forEachPixel(source, (x, y, rgb) -> rgb & 0xFF000000);
+
+		Graph.forEachPixel(out, (x, y, rgb) -> source.getRGB(x, y) & 0xFF000000);
 
 		return out;
 	}
