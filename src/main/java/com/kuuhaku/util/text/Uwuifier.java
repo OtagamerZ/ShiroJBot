@@ -92,7 +92,7 @@ public class Uwuifier {
             lines[i] = out.replace("§", " ");
         }
 
-        return String.join("\n", lines);
+        return String.join("\n", lines).replaceAll(" +", " ");
     }
 
     private String replaceSpace(I18N locale) {
