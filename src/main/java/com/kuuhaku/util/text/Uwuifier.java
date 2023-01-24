@@ -72,7 +72,7 @@ public class Uwuifier {
         String[] lines = text.split("\n");
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
-            String[] words = line.split("(?<=\\S )");
+            String[] words = line.split("(?<=\\S) ");
             for (int j = 0; j < words.length; j++) {
                 String word = words[j];
                 if (UrlValidator.getInstance().isValid(word) || word.matches(":.+:|<.+>")) continue;
@@ -84,7 +84,7 @@ public class Uwuifier {
                 words[j] = word.replace("!", Utils.getRandomEntry(punctuation));
             }
 
-            String out = String.join("", words);
+            String out = String.join(" ", words);
             while (Utils.regex(out, " [A-z]").find()) {
                 out = out.replaceFirst(" ([A-z])", replaceSpace(locale));
             }
