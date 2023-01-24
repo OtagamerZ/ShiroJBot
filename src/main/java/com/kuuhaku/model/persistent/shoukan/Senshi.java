@@ -400,7 +400,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (hand.isLowLife() && hand.getOrigin().synergy() == Race.ONI) {
-				mult *= 1.02;
+				mult *= 1.1;
 			} else if (hand.getHPPrcnt() > 1 && hand.getOrigin().synergy() == Race.GHOUL) {
 				mult *= 1.05;
 			}

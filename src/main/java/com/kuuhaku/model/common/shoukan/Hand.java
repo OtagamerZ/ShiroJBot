@@ -354,7 +354,7 @@ public class Hand {
 			for (int i = 0; i < deck.size() && value > 0; i++) {
 				if (deck.get(i) instanceof Senshi) {
 					if (getOther().getOrigin().synergy() == Race.IMP) {
-						modHP(-10);
+						modHP(-25);
 					}
 
 					Drawable<?> d = deck.remove(i);
@@ -375,7 +375,7 @@ public class Hand {
 				modHP(50);
 			}
 			if (getOther().getOrigin().synergy() == Race.IMP) {
-				modHP(-10);
+				modHP(-25);
 			}
 
 			if (d != null) {
@@ -396,7 +396,7 @@ public class Hand {
 			modHP(50);
 		}
 		if (getOther().getOrigin().synergy() == Race.IMP) {
-			modHP(-10);
+			modHP(-25);
 		}
 
 		if (d != null) {
@@ -430,7 +430,7 @@ public class Hand {
 					modHP(50);
 				}
 				if (getOther().getOrigin().synergy() == Race.IMP) {
-					modHP(-10);
+					modHP(-25);
 				}
 
 				Drawable<?> out = deck.remove(i);
@@ -451,7 +451,7 @@ public class Hand {
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Senshi s && s.getRace().isRace(race)) {
 				if (getOther().getOrigin().synergy() == Race.IMP) {
-					modHP(-10);
+					modHP(-25);
 				}
 
 				Drawable<?> out = deck.remove(i);
@@ -476,7 +476,7 @@ public class Hand {
 					modHP(50);
 				}
 				if (getOther().getOrigin().synergy() == Race.IMP) {
-					modHP(-10);
+					modHP(-25);
 				}
 
 				Drawable<?> out = deck.remove(i);
@@ -497,7 +497,7 @@ public class Hand {
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Senshi s) {
 				if (getOther().getOrigin().synergy() == Race.IMP) {
-					modHP(-10);
+					modHP(-25);
 				}
 
 				Drawable<?> out = deck.remove(i);
@@ -521,7 +521,7 @@ public class Hand {
 					modHP(50);
 				}
 				if (getOther().getOrigin().synergy() == Race.IMP) {
-					modHP(-10);
+					modHP(-25);
 				}
 
 				Drawable<?> out = deck.remove(i);
@@ -563,7 +563,7 @@ public class Hand {
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Evogear e && e.isSpell()) {
 				if (getOther().getOrigin().synergy() == Race.IMP) {
-					modHP(-10);
+					modHP(-25);
 				}
 
 				Drawable<?> out = deck.remove(i);
@@ -672,7 +672,7 @@ public class Hand {
 			}
 
 			if (origin.synergy() == Race.POSSESSED && value > 0) {
-				value *= 1 + getOther().getGraveyard().size() * 0.01;
+				value *= 1 + getOther().getGraveyard().size() * 0.05;
 			} else if (origin.synergy() == Race.PRIMAL && value < 0) {
 				int degen = Math.abs(value / 10);
 				if (degen > 0) {
@@ -788,7 +788,7 @@ public class Hand {
 	}
 
 	public boolean consumeMP(int value) {
-		if (origin.synergy() == Race.ESPER && Calc.chance(2)) return true;
+		if (origin.synergy() == Race.ESPER && Calc.chance(3)) return true;
 		else if (origin.major() == Race.DEMON) {
 			return consumeHP((int) (value * (base.hp() * 0.08)));
 		} else if (this.mp < value) return false;
