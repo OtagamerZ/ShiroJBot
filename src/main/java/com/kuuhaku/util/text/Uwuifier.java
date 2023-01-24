@@ -72,7 +72,7 @@ public class Uwuifier {
         String[] lines = text.split("\n");
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
-            String[] words = line.split("(?<=\\S) ");
+            String[] words = line.split("(?<=\\S) +");
             for (int j = 0; j < words.length; j++) {
                 String word = words[j];
                 if (UrlValidator.getInstance().isValid(word) || word.matches(":.+:|<.+>")) continue;
