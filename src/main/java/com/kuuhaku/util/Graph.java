@@ -287,7 +287,31 @@ public abstract class Graph {
 		return out;
 	}
 
-	public static void forEachPixel(BufferedImage bi, TriFunction<Integer, Integer, Integer, Integer> act) {
+	public static void forEachPixel(BufferedImage bi, TriConsumer<Integer, Integer, Integer> act) {
+		int width = bi.getWidth();
+		int[] pixels = bi.getRGB(0, 0, width, bi.getHeight(), null, 0, width);
+		List<Integer> indexes = IntStream.range(0, pixels.length)
+				.boxed()
+				.toList();
+
+		MultiProcessor
+				.with(Runtime.getRuntime().availableProcessors(), t -> Utils.chunkify(indexes, t))
+				.forResult(Void.class)
+				.process(idx -> {
+					for (Integer i : idx) {
+						int x = i % width;
+						int y = i / width;
+
+						act.accept(x, y, pixels[i]);
+					}
+
+					return null;
+				});
+
+		bi.setRGB(0, 0, width, bi.getHeight(), pixels, 0, width);
+	}
+
+	public static void mapPixels(BufferedImage bi, TriFunction<Integer, Integer, Integer, Integer> act) {
 		int width = bi.getWidth();
 		int[] pixels = bi.getRGB(0, 0, width, bi.getHeight(), null, 0, width);
 		List<Integer> indexes = IntStream.range(0, pixels.length)

@@ -26,10 +26,10 @@ public abstract class ImageFilters {
 		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
-		Graph.forEachPixel(out, (x, y, rgb) -> {
-			int luma = (int) (Calc.luminance(source.getRGB(x, y)) * 255);
+		Graph.forEachPixel(source, (x, y, rgb) -> {
+			int luma = (int) (Calc.luminance(rgb) * 255);
 
-			return Graph.packRGB((rgb >> 24) & 0xFF, luma, luma, luma);
+			out.setRGB(x, y, Graph.packRGB((rgb >> 24) & 0xFF, luma, luma, luma));
 		});
 
 		return out;
@@ -38,8 +38,7 @@ public abstract class ImageFilters {
 	public static BufferedImage silhouette(BufferedImage in) {
 		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
-
-		Graph.forEachPixel(out, (x, y, rgb) -> source.getRGB(x, y) & 0xFF000000);
+		Graph.forEachPixel(source, (x, y, rgb) -> out.setRGB(x, y, rgb & 0xFF000000));
 
 		return out;
 	}
