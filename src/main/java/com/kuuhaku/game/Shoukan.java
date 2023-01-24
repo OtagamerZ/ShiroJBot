@@ -786,15 +786,15 @@ public class Shoukan extends GameInstance<Phase> {
 			copy.getStats().getData().put("consumed", consumed);
 		}
 
-		if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
-			chosen.setAvailable(false);
-			stack.add(copy);
-		}
-
 		if (!chosen.execute(chosen.toParameters(tgt))) {
 			stack.remove(copy);
 			chosen.setAvailable(true);
 			return false;
+		}
+
+		if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
+			chosen.setAvailable(false);
+			stack.add(copy);
 		}
 
 		curr.getData().put("last_spell", copy);
