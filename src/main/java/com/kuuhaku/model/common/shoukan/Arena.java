@@ -23,13 +23,11 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.Lock;
-import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.enums.shoukan.Side;
-import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.model.records.shoukan.Origin;
@@ -97,7 +95,7 @@ public class Arena implements Renderer {
 		}
 
 		d.reset();
-		return true;
+		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 
 	private Field field = null;

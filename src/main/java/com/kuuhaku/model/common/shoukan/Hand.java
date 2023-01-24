@@ -92,7 +92,7 @@ public class Hand {
 		}
 
 		d.setSlot(null);
-		return true;
+		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(d)) return false;
@@ -117,7 +117,7 @@ public class Hand {
 		}
 
 		d.reset();
-		return true;
+		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(d)) return false;
@@ -194,7 +194,7 @@ public class Hand {
 			return false;
 		}
 
-		return true;
+		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(d)) return false;
@@ -211,7 +211,7 @@ public class Hand {
 		getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
 		d.setAvailable(false);
 
-		return true;
+		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 	private final Set<EffectHolder<?>> leeches = new HashSet<>();

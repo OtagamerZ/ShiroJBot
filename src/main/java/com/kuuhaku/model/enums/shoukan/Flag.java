@@ -68,5 +68,7 @@ public enum Flag {
 	/** Can attack while defending **/
 	ALWAYS_ATTACK,
 	/** Will always defeat the target **/
-	UNSTOPPABLE
+	UNSTOPPABLE,
+	/** Cannot exist outside the field **/
+	BOUND
 }
