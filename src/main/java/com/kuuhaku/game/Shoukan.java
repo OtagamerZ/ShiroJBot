@@ -765,7 +765,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
 				chosen.setAvailable(false);
-			} else {
 				stack.add(copy);
 			}
 
@@ -789,7 +788,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
 			chosen.setAvailable(false);
-		} else {
 			stack.add(copy);
 		}
 
