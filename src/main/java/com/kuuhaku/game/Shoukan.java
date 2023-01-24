@@ -1590,11 +1590,11 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
-		byte[] bytes = IO.getBytes(img, "webp");
+		byte[] bytes = IO.getBytes(img, "png");
 
 		AtomicBoolean registered = new AtomicBoolean();
 		getChannel().sendMessage(getLocale().get(message, args))
-				.addFile(bytes, "game.webp")
+				.addFile(bytes, "game.png")
 				.queue(m -> {
 					messages.compute(m.getTextChannel().getId(), replaceMessages(m));
 
@@ -1611,9 +1611,12 @@ public class Shoukan extends GameInstance<Phase> {
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
 		if (isClosed()) return;
 
+		BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
+		byte[] bytes = IO.getBytes(img, "png");
+
 		AtomicBoolean registered = new AtomicBoolean();
 		getChannel().sendMessage(getLocale().get(message, args))
-				.addFile(IO.getBytes(history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale()), "webp"), "game.webp")
+				.addFile(bytes, "game.png")
 				.queue(m -> {
 					if (!registered.get()) {
 						getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
