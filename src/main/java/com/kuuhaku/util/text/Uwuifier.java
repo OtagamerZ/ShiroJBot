@@ -84,7 +84,7 @@ public class Uwuifier {
                 words[j] = word.replace("!", Utils.getRandomEntry(punctuation));
             }
 
-            String out = String.join(" ", words);
+            String out = String.join("", words);
             while (Utils.regex(out, " [A-z]").find()) {
                 out = out.replaceFirst(" ([A-z])", replaceSpace(locale));
             }
@@ -92,7 +92,7 @@ public class Uwuifier {
             lines[i] = out.replace("§", " ");
         }
 
-        return String.join("\n", lines).replaceAll(" +", " ");
+        return String.join("\n", lines);
     }
 
     private String replaceSpace(I18N locale) {
