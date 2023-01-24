@@ -209,6 +209,8 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public boolean hasEnough(int value, Currency currency) {
+		if (value == 0) return true;
+
 		return switch (currency) {
 			case CR -> getBalance() - getDebit() >= value;
 			case GEM -> getGems() >= value;

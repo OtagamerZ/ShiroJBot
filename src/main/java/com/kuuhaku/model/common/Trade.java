@@ -108,7 +108,7 @@ public class Trade {
 	}
 
 	public boolean validate() {
-		if (!left.hasEnough(leftValue, Currency.CR) || right.hasEnough(rightValue, Currency.CR)) return false;
+		if (!left.hasEnough(leftValue, Currency.CR) || !right.hasEnough(rightValue, Currency.CR)) return false;
 
 		@Language("PostgreSQL")
 		String query = """

@@ -20,6 +20,7 @@ package com.kuuhaku.util;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.exceptions.InvalidValueException;
+import com.kuuhaku.model.common.MultiProcessor;
 import com.trickl.palette.Palette;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.function.TriFunction;
@@ -30,10 +31,12 @@ import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 
 public abstract class Graph {
 	public static Rectangle getStringBounds(Graphics2D g2d, String text) {
@@ -287,13 +290,23 @@ public abstract class Graph {
 	public static void forEachPixel(BufferedImage bi, TriFunction<Integer, Integer, Integer, Integer> act) {
 		int width = bi.getWidth();
 		int[] pixels = bi.getRGB(0, 0, width, bi.getHeight(), null, 0, width);
+		List<Integer> indexes = IntStream.range(0, pixels.length)
+				.boxed()
+				.toList();
 
-		for (int i = 0; i < pixels.length; i++) {
-			int x = i % width;
-			int y = i / width;
+		MultiProcessor
+				.with(Runtime.getRuntime().availableProcessors(), t -> Utils.chunkify(indexes, t))
+				.forResult(Void.class)
+				.process(idx -> {
+					for (Integer i : idx) {
+						int x = i % width;
+						int y = i / width;
 
-			pixels[i] = act.apply(x, y, pixels[i]);
-		}
+						pixels[i] = act.apply(x, y, pixels[i]);
+					}
+
+					return null;
+				});
 
 		bi.setRGB(0, 0, width, bi.getHeight(), pixels, 0, width);
 	}

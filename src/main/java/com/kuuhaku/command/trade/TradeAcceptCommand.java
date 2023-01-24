@@ -68,7 +68,7 @@ public class TradeAcceptCommand implements Executable {
 					eb.build(), event.channel(),
 					w -> {
 						if (!trade.validate()) {
-							event.channel().sendMessage(locale.get("success/trade_invalid")).queue();
+							event.channel().sendMessage(locale.get("error/trade_invalid")).queue();
 						} else {
 							trade.accept();
 							event.channel().sendMessage(locale.get("success/trade_accept")).queue();
