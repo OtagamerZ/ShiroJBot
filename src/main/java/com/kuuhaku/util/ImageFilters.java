@@ -25,8 +25,9 @@ public abstract class ImageFilters {
 	public static BufferedImage grayscale(BufferedImage in) {
 		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage out = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Graph.forEachPixel(source, (x, y, rgb) -> {
-			int luma = (int) (Calc.luminance(rgb) * 255);
+
+		Graph.forEachPixel(out, (x, y, rgb) -> {
+			int luma = (int) (Calc.luminance(source.getRGB(x, y)) * 255);
 
 			return Graph.packRGB((rgb >> 24) & 0xFF, luma, luma, luma);
 		});
