@@ -197,9 +197,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 		g2d.setFont(FONT);
 		FontMetrics m = g2d.getFontMetrics();
-		boolean aug = this instanceof EffectHolder<?> eh
-				&& eh.getTags().contains("tag/augment")
-				&& !eh.getStats().getData().containsKey("original");
+		boolean aug = getTags().contains("tag/augment") && getHand() == null;
 
 		{ // LEFT
 			int y = desc ? 225 : 291;
