@@ -94,7 +94,7 @@ public class StashCommand implements Executable {
 				Map.entry("e", "AND c.type = 'EVOGEAR'"),
 				Map.entry("f", "AND c.type = 'FIELD'"),
 				Map.entry("v", "AND c.deck IS NULL"),
-				Map.entry("t", "AND c.trashbin = TRUE")
+				Map.entry("t", "AND c.trash = TRUE")
 		);
 
 		XStringBuilder query = new XStringBuilder("""
