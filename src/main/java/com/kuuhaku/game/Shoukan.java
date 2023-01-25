@@ -975,10 +975,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		you.modHP((int) -(dmg * 0.5));
-		if (you.getOrigin().synergy() == Race.LICH) {
-			you.modHP((int) ((pHP - you.getHP()) * 0.01));
-		}
-
 		reportEvent("str/combat_self", ally, pHP - you.getHP());
 		return false;
 	}
@@ -1044,7 +1040,7 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(ON_ATTACK, ally.asSource(ON_ATTACK), t);
 
 		int dmg = ally.getActiveAttr();
-		int lifesteal = 0;
+		int lifesteal = you.getBase().lifesteal();
 		int thorns = 0;
 		float dmgMult = 1;
 		if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
@@ -1066,7 +1062,7 @@ public class Shoukan extends GameInstance<Phase> {
 								op.getRegDeg().add(val);
 
 								if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(5)) {
-									op.getRegDeg().leftShift(val);
+									op.getRegDeg().add(val);
 								}
 							}
 							case DRAIN -> {
@@ -1248,11 +1244,7 @@ public class Shoukan extends GameInstance<Phase> {
 					you.modHP(-(pHP - op.getHP()) * thorns / 100);
 				}
 				if (lifesteal > 0) {
-					you.getRegDeg().add(new Regen(pHP - op.getHP() * lifesteal / 100, 0.1));
-				}
-
-				if (you.getOrigin().synergy() == Race.LICH) {
-					you.modHP((int) ((pHP - op.getHP()) * 0.01));
+					you.modHP((pHP - op.getHP()) * lifesteal / 100);
 				}
 			}
 		} finally {
@@ -1542,7 +1534,7 @@ public class Shoukan extends GameInstance<Phase> {
 					else if (hand.getOrigin().major() == Race.UNDEAD && hand.getOriginCooldown() == 0) {
 						hand.setHP(1);
 						hand.setDefeat(null);
-						hand.getRegDeg().add(new Regen((int) (hand.getBase().hp() * 0.5), 1 / 3d));
+						hand.getRegDeg().add(hand.getBase().hp() * 0.5, 1 / 3d);
 						hand.setOriginCooldown(4);
 						continue;
 					}

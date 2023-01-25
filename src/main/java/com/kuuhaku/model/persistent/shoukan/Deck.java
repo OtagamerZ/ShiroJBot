@@ -38,7 +38,6 @@
  import com.kuuhaku.util.json.JSONArray;
  import jakarta.persistence.*;
  import kotlin.Pair;
- import kotlin.Triple;
  import org.apache.commons.collections4.bag.HashBag;
  import org.apache.commons.collections4.bag.TreeBag;
  import org.hibernate.annotations.Fetch;
@@ -602,7 +601,15 @@
 					 mpGain = mpGain.accumulate((t, mp) -> mp + (t % 5 == 0 ? 1 : 0));
 				 }
 
-				 return new Triple<>(bHP, mpGain, handCap);
+				 int ls = 0;
+				 if (origin.major() == Race.DEMON) {
+					 ls += 5;
+				 }
+				 if (origin.synergy() == Race.LICH) {
+					 ls += 1;
+				 }
+
+				 return List.of(bHP, mpGain, handCap, ls);
 			 });
 		 } catch (Exception e) {
 			 return new BaseValues();

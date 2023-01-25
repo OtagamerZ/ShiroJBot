@@ -19,20 +19,27 @@
 package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.interfaces.AccFunction;
-import kotlin.Triple;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
-public record BaseValues(int hp, AccFunction<Integer, Integer> mpGain, AccFunction<Integer, Integer> handCapacity) {
+public record BaseValues(int hp, AccFunction<Integer, Integer> mpGain, AccFunction<Integer, Integer> handCapacity,
+						 int lifesteal) {
 	public BaseValues() {
-		this(5000, t -> 5, t -> 5);
+		this(5000, t -> 5, t -> 5, 0);
 	}
 
-	public BaseValues(Callable<Triple<Integer, AccFunction<Integer, Integer>, AccFunction<Integer, Integer>>> values) throws Exception {
+	public BaseValues(Callable<List<?>> values) throws Exception {
 		this(values.call());
 	}
 
-	public BaseValues(Triple<Integer, AccFunction<Integer, Integer>, AccFunction<Integer, Integer>> values) {
-		this(values.getFirst(), values.getSecond(), values.getThird());
+	@SuppressWarnings("unchecked")
+	public BaseValues(List<?> values) {
+		this(
+				(int) values.get(0),
+				(AccFunction<Integer, Integer>) values.get(1),
+				(AccFunction<Integer, Integer>) values.get(2),
+				(int) values.get(3)
+		);
 	}
 }

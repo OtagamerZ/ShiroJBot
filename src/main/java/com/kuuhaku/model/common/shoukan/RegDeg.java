@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.util.Utils;
 
 import java.util.List;
@@ -38,25 +39,30 @@ public class RegDeg {
 		return values;
 	}
 
-	public void add(ValueOverTime vot) {
-		values.add(vot);
-	}
-
 	public void add(Number val) {
 		leftShift(val);
 	}
 
-	public void leftShift(ValueOverTime vot) {
-		add(vot);
+	public void add(Number val, double mult) {
+		leftShift(List.of(val, mult));
 	}
 
 	public void leftShift(Number number) {
 		int value = number.intValue();
+		double mult = 0.2;
 
 		if (value < 0) {
-			add(new Degen(-value, 0.2));
+			if (parent.getOrigin().major() == Race.HUMAN) {
+				mult += 0.2;
+			}
+
+			values.add(new Degen(-value, mult));
 		} else if (value > 0) {
-			add(new Regen(value, 0.2));
+			if (parent.getOrigin().major() == Race.HUMAN) {
+				mult -= 0.1;
+			}
+
+			values.add(new Regen(value, mult));
 		}
 	}
 
@@ -65,9 +71,17 @@ public class RegDeg {
 		double mult = number.get(1).doubleValue();
 
 		if (value < 0) {
-			add(new Degen(-value, mult));
+			if (parent.getOrigin().major() == Race.HUMAN) {
+				mult += 0.2;
+			}
+
+			values.add(new Degen(-value, mult));
 		} else if (value > 0) {
-			add(new Regen(value, mult));
+			if (parent.getOrigin().major() == Race.HUMAN) {
+				mult -= 0.1;
+			}
+
+			values.add(new Regen(value, mult));
 		}
 	}
 
