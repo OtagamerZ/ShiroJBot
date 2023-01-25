@@ -122,6 +122,8 @@ public class StashCommand implements Executable {
 			}
 		}
 
+		System.out.println(query);
+
 		query.appendNewLine("""
 				ORDER BY c.card.anime
 						, COALESCE(
