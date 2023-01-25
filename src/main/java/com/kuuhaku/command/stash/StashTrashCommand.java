@@ -71,6 +71,8 @@ public class StashTrashCommand implements Executable {
 					}
 
 					sc.setTrash(add);
+					sc.save();
+
 					if (sc.isTrash()) {
 						event.channel().sendMessage(locale.get("success/card_trash")).queue();
 					} else {
