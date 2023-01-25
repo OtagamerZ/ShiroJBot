@@ -502,7 +502,7 @@ public class Arena implements Renderer {
 					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5) * (demon ? 2 : 1)));
 
 					int offset = 6;
-					if (demon) offset += 10;
+					if (demon) offset += 6;
 
 					Color rdColor = regdeg < 0 ? new Color(0xCD0000) : new Color(0x009DFF);
 					if (reversed) {
