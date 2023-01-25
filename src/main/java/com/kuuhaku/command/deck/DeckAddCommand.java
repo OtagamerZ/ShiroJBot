@@ -53,8 +53,8 @@ import java.util.Set;
 		category = Category.MISC
 )
 @Signature({
-		"<card:word:r> <confirm:word>[y]",
-		"<card:word:r> <amount:number>"
+		"<card:word:r> <amount:number>",
+		"<card:word:r> <confirm:word>[y]"
 })
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,

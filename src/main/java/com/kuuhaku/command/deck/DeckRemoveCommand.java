@@ -50,8 +50,8 @@ import java.util.Set;
 )
 @Signature({
 		"<action:word:r>[all]",
-		"<card:word:r> <confirm:word>[y]",
-		"<card:word:r> <amount:number>"
+		"<card:word:r> <amount:number>",
+		"<card:word:r> <confirm:word>[y]"
 })
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,
