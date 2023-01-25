@@ -873,7 +873,7 @@ public abstract class Utils {
 
 			String lOp = longOp[i];
 			String sOp = shortOp[i];
-			opt.addOption(sOp, lOp, "nragtlt".contains(sOp), locale.get("search/" + lOp));
+			opt.addOption(sOp, lOp, List.of("n", "r", "a", "gt", "lt").contains(sOp), locale.get("search/" + lOp));
 		}
 
 		DefaultParser parser = new DefaultParser(false);
