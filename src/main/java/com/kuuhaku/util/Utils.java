@@ -867,13 +867,14 @@ public abstract class Utils {
 		String[] shortOp = {"n", "r", "a", "c", "k", "e", "f", "v", "t", "gt", "lt", "m"};
 
 		Options opt = new Options();
+		List<String> hasParam = List.of("n", "r", "a", "gt", "lt");
 		for (int i = 0; i < longOp.length; i++) {
 			if (market && i == 8) continue;
 			else if (!market && i > 10) break;
 
 			String lOp = longOp[i];
 			String sOp = shortOp[i];
-			opt.addOption(sOp, lOp, List.of("n", "r", "a", "gt", "lt").contains(sOp), locale.get("search/" + lOp));
+			opt.addOption(sOp, lOp, hasParam.contains(sOp), locale.get("search/" + lOp));
 		}
 
 		DefaultParser parser = new DefaultParser(false);
