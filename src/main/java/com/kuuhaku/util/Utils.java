@@ -779,6 +779,10 @@ public abstract class Utils {
 	}
 
 	public static CompletionStage<StashedCard> selectOption(I18N locale, TextChannel channel, Collection<StashedCard> cards, Card card, User user) {
+		return selectOption(false, locale, channel, cards, card, user);
+	}
+
+	public static CompletionStage<StashedCard> selectOption(boolean skip, I18N locale, TextChannel channel, Collection<StashedCard> cards, Card card, User user) {
 		List<StashedCard> matches = cards.stream()
 				.filter(sc -> sc.getCard().equals(card))
 				.sorted(
@@ -788,7 +792,7 @@ public abstract class Utils {
 				).toList();
 
 		if (matches.isEmpty()) return CompletableFuture.failedStage(new NoResultException());
-		if (matches.size() == 1) return CompletableFuture.completedStage(matches.get(0));
+		if (matches.size() == 1 || skip) return CompletableFuture.completedStage(matches.get(0));
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/choose_option"));
@@ -859,13 +863,13 @@ public abstract class Utils {
 	}
 
 	public static Pair<CommandLine, Options> getCardCLI(I18N locale, String[] args, boolean market) {
-		String[] longOp = {"name", "rarity", "anime", "chrome", "kawaipon", "evogear", "field", "valid", "min", "max", "mine"};
-		String[] shortOp = {"n", "r", "a", "c", "k", "e", "f", "v", "gt", "lt", "m"};
+		String[] longOp = {"name", "rarity", "anime", "chrome", "kawaipon", "evogear", "field", "valid", "trash", "min", "max", "mine"};
+		String[] shortOp = {"n", "r", "a", "c", "k", "e", "f", "v", "t", "gt", "lt", "m"};
 
 		Options opt = new Options();
 		for (int i = 0; i < longOp.length; i++) {
 			if (market && i == 8) continue;
-			else if (!market && i > 8) break;
+			else if (!market && i > 10) break;
 
 			String lOp = longOp[i];
 			String sOp = shortOp[i];

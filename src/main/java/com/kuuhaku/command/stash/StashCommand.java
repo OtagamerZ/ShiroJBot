@@ -65,6 +65,9 @@ public class StashCommand implements Executable {
 			return;
 		}
 
+		// <confirm:word>[y]
+		//args.containsKey("confirm"),
+
 		String[] content = args.getString("params").split("\\s+");
 		Pair<CommandLine, Options> cli = Utils.getCardCLI(locale, content, false);
 		if (args.containsKey("action")) {
@@ -93,7 +96,8 @@ public class StashCommand implements Executable {
 				Map.entry("k", "AND c.type = 'KAWAIPON'"),
 				Map.entry("e", "AND c.type = 'EVOGEAR'"),
 				Map.entry("f", "AND c.type = 'FIELD'"),
-				Map.entry("v", "AND c.deck IS NULL")
+				Map.entry("v", "AND c.deck IS NULL"),
+				Map.entry("t", "AND c.trashbin = TRUE")
 		);
 
 		XStringBuilder query = new XStringBuilder("""

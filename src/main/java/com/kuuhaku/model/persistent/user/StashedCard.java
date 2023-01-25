@@ -66,6 +66,9 @@ public class StashedCard extends DAO<StashedCard> {
 	@Column(name = "price", nullable = false)
 	private int price = 0;
 
+	@Column(name = "trash", nullable = false)
+	private boolean trash = false;
+
 	public StashedCard() {
 
 	}
@@ -158,6 +161,14 @@ public class StashedCard extends DAO<StashedCard> {
 		}
 
 		this.price = price;
+	}
+
+	public boolean isTrash() {
+		return trash;
+	}
+
+	public void setTrash(boolean trash) {
+		this.trash = trash;
 	}
 
 	@Override

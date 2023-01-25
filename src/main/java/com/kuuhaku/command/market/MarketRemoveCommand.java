@@ -43,7 +43,7 @@ import java.util.List;
 		subname = "remove",
 		category = Category.MISC
 )
-@Signature("<card:word:r>")
+@Signature("<card:word:r> <confirm:word>[y]")
 public class MarketRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -66,7 +66,7 @@ public class MarketRemoveCommand implements Executable {
 				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.price > 0",
 				event.user().getId()
 		);
-		Utils.selectOption(locale, event.channel(), stash, card, event.user())
+		Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();

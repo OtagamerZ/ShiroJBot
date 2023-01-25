@@ -50,6 +50,7 @@ import java.util.Set;
 )
 @Signature({
 		"<action:word:r>[all]",
+		"<card:word:r> <confirm:word>[y]",
 		"<card:word:r> <amount:number>"
 })
 @Requires({
@@ -119,7 +120,7 @@ public class DeckRemoveCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(locale, event.channel(), stash, card, event.user())
+		Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();

@@ -52,7 +52,10 @@ import java.util.Set;
 		subname = "add",
 		category = Category.MISC
 )
-@Signature("<card:word:r> <amount:number>")
+@Signature({
+		"<card:word:r> <confirm:word>[y]",
+		"<card:word:r> <amount:number>"
+})
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,
 		Permission.MESSAGE_EMBED_LINKS
@@ -108,7 +111,7 @@ public class DeckAddCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(locale, event.channel(), stash, card, event.user())
+		Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					Deck dk = d.refresh();
 					if (!addToDeck(event, locale, dk, sc)) return;

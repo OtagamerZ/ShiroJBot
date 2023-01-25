@@ -32,7 +32,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "kawaipon")
@@ -179,7 +178,11 @@ public class Kawaipon extends DAO<Kawaipon> {
 	}
 
 	public List<StashedCard> getNotInUse() {
-		return DAO.queryAll(StashedCard.class, "SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL AND s.price = 0", uid);
+		return DAO.queryAll(StashedCard.class, "SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL AND s.price = 0 AND s.trash = FALSE", uid);
+	}
+
+	public List<StashedCard> getTrash() {
+		return DAO.queryAll(StashedCard.class, "SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.trash = TRUE", uid);
 	}
 
 	@Override

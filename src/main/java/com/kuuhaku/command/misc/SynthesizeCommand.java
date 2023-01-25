@@ -60,7 +60,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 		name = "synth",
 		category = Category.MISC
 )
-@Signature("<card:word:r> <card:word:r> <card:word:r>")
+@Signature("<card:word:r> <card:word:r> <card:word:r> <confirm:word>[y]")
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ATTACH_FILES
@@ -85,7 +85,7 @@ public class SynthesizeCommand implements Executable {
 				CompletableFuture<Void> select = new CompletableFuture<>();
 				List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
 				stash.removeIf(cards::contains);
-				Utils.selectOption(locale, event.channel(), stash, c, event.user())
+				Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), stash, c, event.user())
 						.thenAccept(sc -> {
 							if (sc == null) {
 								event.channel().sendMessage(locale.get("error/invalid_value")).queue();

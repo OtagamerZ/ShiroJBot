@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Calc;
@@ -40,6 +41,7 @@ import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 
+import java.util.Collection;
 import java.util.List;
 
 @Command(
@@ -47,13 +49,38 @@ import java.util.List;
 		subname = "scrap",
 		category = Category.MISC
 )
-@Signature("<card:word:r>")
+@Signature({
+		"<card:word:r> <confirm:word>[y]",
+		"<action:word:r>[trash]"
+})
 public class StashScrapCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
 		if (kp.getStash().isEmpty()) {
 			event.channel().sendMessage(locale.get("error/empty_stash")).queue();
+			return;
+		}
+
+		if (args.containsKey("action")) {
+			List<StashedCard> trash = kp.getTrash();
+			int value = getValue(trash);
+
+			try {
+				Utils.confirm(locale.get("question/scrap_trash", trash.size(), value), event.channel(), w -> {
+							event.channel().sendMessage(locale.get("success/scrap")).queue();
+							for (StashedCard sc : trash) {
+								kp.getAccount().addCR(value, sc + " scrapped");
+								sc.delete();
+							}
+
+							return true;
+						}, event.user()
+				);
+			} catch (PendingConfirmationException e) {
+				event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+			}
+
 			return;
 		}
 
@@ -66,26 +93,14 @@ public class StashScrapCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(locale, event.channel(), kp.getNotInUse(), card, event.user())
+		Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), kp.getNotInUse(), card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 						return;
 					}
 
-					int value;
-					double mult = Calc.rng(1, 1.75, sc.getId());
-					if (sc.getType() == CardType.KAWAIPON) {
-						KawaiponCard kc = sc.getKawaiponCard();
-						value = (int) (kc.getSuggestedPrice() / 3 * mult);
-					} else {
-						if (sc.getType() == CardType.EVOGEAR) {
-							Evogear e = DAO.find(Evogear.class, sc.getCard().getId());
-							value = (int) (e.getTier() * 225 * mult);
-						} else {
-							value = (int) (2500 * mult);
-						}
-					}
+					int value = getValue(sc);
 
 					try {
 						Utils.confirm(locale.get("question/scrap", value), event.channel(), w -> {
@@ -107,5 +122,29 @@ public class StashScrapCommand implements Executable {
 					event.channel().sendMessage(locale.get("error/not_owned")).queue();
 					return null;
 				});
+	}
+
+	private int getValue(StashedCard card) {
+		return getValue(List.of(card));
+	}
+
+	private int getValue(Collection<StashedCard> cards) {
+		int value = 0;
+		for (StashedCard sc : cards) {
+			double mult = Calc.rng(1, 1.75, sc.getId());
+			if (sc.getType() == CardType.KAWAIPON) {
+				KawaiponCard kc = sc.getKawaiponCard();
+				value = (int) (kc.getSuggestedPrice() / 3 * mult);
+			} else {
+				if (sc.getType() == CardType.EVOGEAR) {
+					Evogear e = DAO.find(Evogear.class, sc.getCard().getId());
+					value = (int) (e.getTier() * 225 * mult);
+				} else {
+					value = (int) (2500 * mult);
+				}
+			}
+		}
+
+		return value;
 	}
 }
