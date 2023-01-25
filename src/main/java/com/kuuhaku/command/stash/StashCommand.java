@@ -65,9 +65,6 @@ public class StashCommand implements Executable {
 			return;
 		}
 
-		// <confirm:word>[y]
-		//args.containsKey("confirm"),
-
 		String[] content = args.getString("params").split("\\s+");
 		Pair<CommandLine, Options> cli = Utils.getCardCLI(locale, content, false);
 		if (args.containsKey("action")) {
