@@ -50,8 +50,8 @@ import java.util.List;
 		category = Category.MISC
 )
 @Signature({
-		"<card:word:r> <confirm:word>[y]",
-		"<action:word:r>[trash]"
+		"<action:word:r>[trash]",
+		"<card:word:r> <confirm:word>[y]"
 })
 public class StashScrapCommand implements Executable {
 	@Override
