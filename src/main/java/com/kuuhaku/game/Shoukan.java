@@ -228,7 +228,7 @@ public class Shoukan extends GameInstance<Phase> {
 			try {
 				chosen.executeAssert(ON_SPECIAL_SUMMON);
 			} catch (SpecialSummonException e) {
-				getChannel().sendMessage(getLocale().get("error/special_summon", e.getMessage())).queue();
+				getChannel().sendMessage(getLocale().get("error/special_summon", getString(e.getMessage()))).queue();
 				return false;
 			}
 
@@ -256,7 +256,7 @@ public class Shoukan extends GameInstance<Phase> {
 			try {
 				chosen.executeAssert(ON_SPECIAL_SUMMON);
 			} catch (SpecialSummonException e) {
-				getChannel().sendMessage(getLocale().get("error/special_summon", e.getMessage())).queue();
+				getChannel().sendMessage(getLocale().get("error/special_summon", getString(e.getMessage()))).queue();
 				return false;
 			}
 
