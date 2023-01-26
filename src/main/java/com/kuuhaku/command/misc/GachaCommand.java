@@ -129,7 +129,7 @@ public class GachaCommand implements Executable {
 
 						event.channel()
 								.sendMessage(locale.get("str/gacha_result", event.user().getAsMention()))
-								.addFile(IO.getBytes(bi, "webp"), "result.webp")
+								.addFile(IO.getBytes(bi, "png"), "result.png")
 								.queue();
 
 						return true;

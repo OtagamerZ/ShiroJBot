@@ -43,7 +43,7 @@ public class ProfileCommand implements Executable {
 		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image"))).queue(m -> {
 			event.channel()
 					.sendMessage(event.user().getAsMention())
-					.addFile(IO.getBytes(data.profile().render(locale), "webp"), "profile.webp")
+					.addFile(IO.getBytes(data.profile().render(locale), "png"), "profile.png")
 					.flatMap(s -> m.delete())
 					.queue(null, Utils::doNothing);
 		});

@@ -48,7 +48,7 @@ public class DeckCommand implements Executable {
 
 		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image")))
 				.flatMap(m -> event.channel().sendMessage(event.user().getAsMention())
-						.addFile(IO.getBytes(d.render(locale), "webp"), "deck.webp")
+						.addFile(IO.getBytes(d.render(locale), "png"), "deck.png")
 						.flatMap(s -> m.delete())
 				).queue();
 	}
