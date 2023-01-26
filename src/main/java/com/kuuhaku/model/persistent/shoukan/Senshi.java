@@ -489,7 +489,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			min += 2;
 		}
 
-		return (int) Utils.clamp((min + sum) * getAttrMult(), 0, 100);
+		return (int) Utils.clamp((min + sum) * getAttrMult(), min, 100);
 	}
 
 	private double getAttrMult() {
