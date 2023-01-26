@@ -19,23 +19,19 @@
 package com.kuuhaku.command.deck;
 
 import com.kuuhaku.interfaces.Executable;
-import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
 
-@Command(
-		name = "deck",
-		subname = "list",
-		category = Category.INFO
-)
-@Requires(Permission.MESSAGE_ATTACH_FILES)
+//@Command(
+//		name = "deck",
+//		subname = "list",
+//		category = Category.INFO
+//)
+//@Requires(Permission.MESSAGE_ATTACH_FILES)
 public class DeckListCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
