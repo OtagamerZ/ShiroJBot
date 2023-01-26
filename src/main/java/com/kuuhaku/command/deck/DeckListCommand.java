@@ -69,11 +69,11 @@ public class DeckListCommand implements Executable {
 
 		Race[] minors = o.minor();
 		if (minors.length == 0) {
-			eb.appendDescription("%s\n%s".formatted(
+			eb.appendDescription("\n%s\n%s".formatted(
 					locale.get("str/minor_effect"), Race.NONE.getMinor(locale)
 			));
 		} else {
-			eb.appendDescription(locale.get("str/minor_effect"));
+			eb.appendDescription("\n" + locale.get("str/minor_effect"));
 			for (Race r : minors) {
 				eb.appendDescription("\n" + Utils.getEmoteString(Constants.EMOTE_REPO_4, r.name()) + " " + r.getMinor(locale));
 			}
@@ -81,7 +81,7 @@ public class DeckListCommand implements Executable {
 
 		Race syn = o.synergy();
 		if (syn != Race.NONE) {
-			eb.appendDescription("%s\n%s %s".formatted(
+			eb.appendDescription("\n%s\n%s %s".formatted(
 					locale.get("str/synergy_effect"),
 					Utils.getEmoteString(Constants.EMOTE_REPO_4, syn.name()),
 					syn.getSynergy(locale)
