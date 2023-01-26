@@ -50,6 +50,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -320,71 +321,12 @@ public abstract class Utils {
 		return text.replaceAll("([A-OR-XZa-or-xz])", "$1\u0332");
 	}
 
-	public static <T> List<List<T>> chunkify(Collection<T> col, int chunkSize) {
-		List<T> list = List.copyOf(col);
-		int overflow = list.size() % chunkSize;
-		List<List<T>> chunks = new ArrayList<>();
-
-		for (int i = 0; i < (list.size() - overflow) / chunkSize; i++) {
-			chunks.add(list.subList(i * chunkSize, (i * chunkSize) + chunkSize));
-		}
-
-		if (overflow > 0)
-			chunks.add(list.subList(list.size() - overflow, list.size()));
-
-		return chunks;
-	}
-
-	public static <T> List<List<T>> chunkify(List<T> list, int chunkSize) {
-		int overflow = list.size() % chunkSize;
-		List<List<T>> chunks = new ArrayList<>();
-
-		for (int i = 0; i < (list.size() - overflow) / chunkSize; i++) {
-			chunks.add(list.subList(i * chunkSize, (i * chunkSize) + chunkSize));
-		}
-
-		if (overflow > 0)
-			chunks.add(list.subList(list.size() - overflow, list.size()));
-
-		return chunks;
-	}
-
-	public static <T> List<List<T>> chunkify(Set<T> set, int chunkSize) {
-		List<T> list = List.copyOf(set);
-		int overflow = list.size() % chunkSize;
-		List<List<T>> chunks = new ArrayList<>();
-
-		for (int i = 0; i < (list.size() - overflow) / chunkSize; i++) {
-			chunks.add(list.subList(i * chunkSize, (i * chunkSize) + chunkSize));
-		}
-
-		if (overflow > 0)
-			chunks.add(list.subList(list.size() - overflow, list.size()));
-
-		return chunks;
-	}
-
-	public static <K, V> List<List<Map.Entry<K, V>>> chunkify(Map<K, V> map, int chunkSize) {
-		List<Map.Entry<K, V>> list = List.copyOf(map.entrySet());
-		int overflow = list.size() % chunkSize;
-		List<List<Map.Entry<K, V>>> chunks = new ArrayList<>();
-
-		for (int i = 0; i < (list.size() - overflow) / chunkSize; i++) {
-			chunks.add(list.subList(i * chunkSize, (i * chunkSize) + chunkSize));
-		}
-
-		if (overflow > 0)
-			chunks.add(list.subList(list.size() - overflow, list.size()));
-
-		return chunks;
-	}
-
 	public static <T> Page generatePage(EmbedBuilder eb, Collection<T> list, int itemsPerColumn, Function<T, String> mapper) {
 		if (list.isEmpty()) return null;
 		eb.clearFields();
 
 		XStringBuilder sb = new XStringBuilder();
-		List<List<T>> cols = chunkify(list, itemsPerColumn);
+		List<List<T>> cols = ListUtils.partition(List.copyOf(list), itemsPerColumn);
 		for (List<T> col : cols) {
 			sb.clear();
 
@@ -408,7 +350,7 @@ public abstract class Utils {
 
 	public static <T> List<Page> generatePages(EmbedBuilder eb, Collection<T> list, int itemsPerPage, int itemsPerColumn, Function<T, String> mapper, BiConsumer<Integer, Integer> finisher) {
 		List<Page> pages = new ArrayList<>();
-		List<List<T>> chunks = chunkify(list, itemsPerPage);
+		List<List<T>> chunks = ListUtils.partition(List.copyOf(list), itemsPerPage);
 		for (int i = 0; i < chunks.size(); i++) {
 			finisher.accept(i, chunks.size());
 			pages.add(generatePage(eb, chunks.get(i), itemsPerColumn, mapper));
@@ -1103,5 +1045,14 @@ public abstract class Utils {
 	public static <T> T with(T t, Consumer<T> act) {
 		act.accept(t);
 		return t;
+	}
+
+	public static <A, T extends Collection<A>> List<A> padList(T col, int pad) {
+		List<A> out = new ArrayList<>(col);
+		for (int i = 0; i < pad - out.size(); i++) {
+			out.add(null);
+		}
+
+		return out;
 	}
 }

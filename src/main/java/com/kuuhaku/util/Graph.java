@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.exceptions.InvalidValueException;
 import com.kuuhaku.model.common.MultiProcessor;
 import com.trickl.palette.Palette;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.function.TriFunction;
 import org.apache.logging.log4j.util.TriConsumer;
@@ -295,7 +296,7 @@ public abstract class Graph {
 				.toList();
 
 		MultiProcessor
-				.with(Runtime.getRuntime().availableProcessors(), t -> Utils.chunkify(indexes, t))
+				.with(Runtime.getRuntime().availableProcessors(), t -> ListUtils.partition(indexes, t))
 				.forResult(Void.class)
 				.process(idx -> {
 					for (Integer i : idx) {
@@ -319,7 +320,7 @@ public abstract class Graph {
 				.toList();
 
 		MultiProcessor
-				.with(Runtime.getRuntime().availableProcessors(), t -> Utils.chunkify(indexes, t))
+				.with(Runtime.getRuntime().availableProcessors(), t -> ListUtils.partition(indexes, t))
 				.forResult(Void.class)
 				.process(idx -> {
 					for (Integer i : idx) {
