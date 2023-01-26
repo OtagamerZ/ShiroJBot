@@ -965,6 +965,7 @@ public class Hand {
 
 		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFile(IO.getBytes(renderChoices(), "png"), "choices.png")));
 
+		game.getChannel().sendMessage(game.getLocale().get("str/selection_sent")).queue();
 		return selection.getThird().thenApply(d -> {
 			msg.delete().queue(null, Utils::doNothing);
 			selection = null;
