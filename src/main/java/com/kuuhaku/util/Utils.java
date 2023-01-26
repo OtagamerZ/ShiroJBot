@@ -326,7 +326,7 @@ public abstract class Utils {
 		eb.clearFields();
 
 		XStringBuilder sb = new XStringBuilder();
-		List<List<T>> cols = ListUtils.partition(List.copyOf(list), itemsPerColumn);
+		List<List<T>> cols = ListUtils.partition(new ArrayList<>(list), itemsPerColumn);
 		for (List<T> col : cols) {
 			sb.clear();
 
@@ -350,7 +350,7 @@ public abstract class Utils {
 
 	public static <T> List<Page> generatePages(EmbedBuilder eb, Collection<T> list, int itemsPerPage, int itemsPerColumn, Function<T, String> mapper, BiConsumer<Integer, Integer> finisher) {
 		List<Page> pages = new ArrayList<>();
-		List<List<T>> chunks = ListUtils.partition(List.copyOf(list), itemsPerPage);
+		List<List<T>> chunks = ListUtils.partition(new ArrayList<>(list), itemsPerPage);
 		for (int i = 0; i < chunks.size(); i++) {
 			finisher.accept(i, chunks.size());
 			pages.add(generatePage(eb, chunks.get(i), itemsPerColumn, mapper));
