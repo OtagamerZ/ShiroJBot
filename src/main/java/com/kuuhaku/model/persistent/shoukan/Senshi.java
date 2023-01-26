@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.exceptions.SelectionException;
+import com.kuuhaku.exceptions.SpecialSummonException;
 import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
@@ -86,16 +87,16 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient BondedList<Evogear> equipments = new BondedList<>((e, it) -> {
 		e.setEquipper(this);
 		e.setHand(getHand());
-		e.executeAssert(Trigger.ON_INITIALIZE);
+		e.executeAssert(ON_INITIALIZE);
 
 		Shoukan game = getHand().getGame();
-		game.trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
+		game.trigger(ON_EQUIP, asSource(ON_EQUIP));
 
 		if (e.hasCharm(Charm.TIMEWARP)) {
 			int times = Charm.TIMEWARP.getValue(e.getTier());
 			for (int i = 0; i < times; i++) {
-				game.trigger(Trigger.ON_TURN_BEGIN, asSource(Trigger.ON_TURN_BEGIN));
-				game.trigger(Trigger.ON_TURN_END, asSource(Trigger.ON_TURN_END));
+				game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
+				game.trigger(ON_TURN_END, asSource(ON_TURN_END));
 			}
 		}
 
@@ -107,7 +108,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		return true;
 	}, e -> {
-		e.executeAssert(Trigger.ON_REMOVE);
+		e.executeAssert(ON_REMOVE);
 		e.setEquipper(null);
 	});
 	private transient CardExtra stats = new CardExtra();
@@ -594,7 +595,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		state = Bit.set(state, 2, defending);
 
 		if (!isFlipped() && slot != null) {
-			hand.getGame().trigger(Trigger.ON_SWITCH, asSource(Trigger.ON_SWITCH));
+			hand.getGame().trigger(ON_SWITCH, asSource(ON_SWITCH));
 		}
 	}
 
@@ -614,9 +615,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (hand != null) {
 				if (hand.getGame().getCurrentSide() != hand.getSide()) {
-					hand.getGame().trigger(Trigger.ON_FLIP, asSource(Trigger.ON_FLIP));
+					hand.getGame().trigger(ON_FLIP, asSource(ON_FLIP));
 				} else {
-					hand.getGame().trigger(Trigger.ON_SUMMON, asSource(Trigger.ON_SUMMON));
+					hand.getGame().trigger(ON_SUMMON, asSource(ON_SUMMON));
 				}
 			}
 		}
@@ -844,12 +845,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean hasAbility() {
-		if (getEffect().contains(Trigger.ON_ACTIVATE.name())) {
+		if (getEffect().contains(ON_ACTIVATE.name())) {
 			return true;
 		}
 
 		for (Evogear e : equipments) {
-			if (e.getEffect().contains(Trigger.ON_ACTIVATE.name())) {
+			if (e.getEffect().contains(ON_ACTIVATE.name())) {
 				return true;
 			}
 		}
@@ -870,7 +871,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Senshi s = this;
 		boolean targeted = false;
 
-		if (ep.trigger() == Trigger.ON_DEFER) {
+		if (ep.trigger() == ON_DEFER) {
 			if (ep.size() == 0) return false;
 
 			s = getFrontline();
@@ -894,7 +895,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			targeted = true;
 		}
 
-		if ((trigger == Trigger.ON_ACTIVATE && (getCooldown() > 0 || isSupporting()))) return false;
+		if ((trigger == ON_ACTIVATE && (getCooldown() > 0 || isSupporting()))) return false;
 
 		Shoukan game = hand.getGame();
 		//Hand other = ep.getHands().get(ep.getOtherSide());
@@ -929,7 +930,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			Senshi sup = getSupport();
 			if (sup != null && !global) {
-				sup.execute(new EffectParameters(Trigger.ON_DEFER, getSide(), ep.source(), ep.targets()));
+				sup.execute(new EffectParameters(ON_DEFER, getSide(), ep.source(), ep.targets()));
 			}
 
 			for (@Language("Groovy") String curse : stats.getCurses()) {
@@ -956,14 +957,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 								EffectParameters params;
 								if (targeted) {
 									params = new EffectParameters(
-											Trigger.ON_TRAP, getSide(),
+											ON_TRAP, getSide(),
 											card.asSource(ON_TRAP),
 											asTarget(trigger, TargetType.ALLY),
 											ep.source().toTarget(TargetType.ENEMY)
 									);
 								} else {
 									params = new EffectParameters(
-											Trigger.ON_TRAP, getSide(),
+											ON_TRAP, getSide(),
 											card.asSource(ON_TRAP),
 											asTarget(trigger, TargetType.ALLY)
 									);
@@ -983,13 +984,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			return true;
 		} catch (TargetException e) {
 			TargetType type = stats.getData().getEnum(TargetType.class, "targeting");
-			if (type != null && trigger == Trigger.ON_ACTIVATE) {
+			if (type != null && trigger == ON_ACTIVATE) {
 				game.getChannel().sendMessage(game.getLocale().get("error/target", game.getLocale().get("str/target_" + type))).queue();
 			}
 
 			return false;
 		} catch (ActivationException e) {
-			if (e instanceof SelectionException && trigger != Trigger.ON_ACTIVATE) return false;
+			if (e instanceof SelectionException && trigger != ON_ACTIVATE) return false;
 
 			game.getChannel().sendMessage(game.getLocale().get("error/activation", game.getString(e.getMessage()))).queue();
 			return false;
@@ -1006,7 +1007,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public void executeAssert(Trigger trigger) {
 		if (base.isLocked()) return;
-		else if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return;
+		else if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE, ON_SPECIAL_SUMMON)) return;
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
@@ -1021,6 +1022,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					"props", extractValues(hand.getGame().getLocale(), cachedEffect),
 					"trigger", trigger
 			));
+		} catch (SpecialSummonException e) {
+			throw e;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
 		} finally {
@@ -1047,7 +1050,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public boolean isProtected() {
 		if (hand != null) {
 			Evogear shield = null;
-			hand.getGame().trigger(Trigger.ON_EFFECT_TARGET, new Source(this, Trigger.ON_EFFECT_TARGET));
+			hand.getGame().trigger(ON_EFFECT_TARGET, new Source(this, ON_EFFECT_TARGET));
 			if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
 				return true;
 			}
@@ -1085,16 +1088,16 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		equipments = new BondedList<>((e, it) -> {
 			e.setEquipper(this);
 			e.setHand(getHand());
-			e.executeAssert(Trigger.ON_INITIALIZE);
+			e.executeAssert(ON_INITIALIZE);
 
 			Shoukan game = getHand().getGame();
-			game.trigger(Trigger.ON_EQUIP, asSource(Trigger.ON_EQUIP));
+			game.trigger(ON_EQUIP, asSource(ON_EQUIP));
 
 			if (e.hasCharm(Charm.TIMEWARP)) {
 				int times = Charm.TIMEWARP.getValue(e.getTier());
 				for (int i = 0; i < times; i++) {
-					game.trigger(Trigger.ON_TURN_BEGIN, asSource(Trigger.ON_TURN_BEGIN));
-					game.trigger(Trigger.ON_TURN_END, asSource(Trigger.ON_TURN_END));
+					game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
+					game.trigger(ON_TURN_END, asSource(ON_TURN_END));
 				}
 			}
 
@@ -1106,7 +1109,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			return true;
 		}, e -> {
-			e.executeAssert(Trigger.ON_REMOVE);
+			e.executeAssert(ON_REMOVE);
 			e.setEquipper(null);
 		});
 		stats = stats.clone();
