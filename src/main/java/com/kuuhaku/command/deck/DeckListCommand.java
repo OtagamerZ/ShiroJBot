@@ -61,13 +61,22 @@ public class DeckListCommand implements Executable {
 		Page home;
 		Map<Emoji, Page> pages = new LinkedHashMap<>();
 		pages.put(Utils.parseEmoji("⚔️"), home = Utils.generatePage(eb, Utils.padList(d.getSenshi(), 36), 12,
-				s -> s == null ? "*" + locale.get("str/empty") + "*" : s.toString()
+				s -> {
+					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/senshi")));
+					return s == null ? "*" + locale.get("str/empty") + "*" : s.toString();
+				}
 		));
 		pages.put(Utils.parseEmoji("\uD83D\uDEE1️"), Utils.generatePage(eb, Utils.padList(d.getEvogear(), 24), 12,
-				e -> e == null ? "*" + locale.get("str/empty") + "*" : e.toString()
+				e -> {
+					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/evogear")));
+					return e == null ? "*" + locale.get("str/empty") + "*" : e.toString();
+				}
 		));
 		pages.put(Utils.parseEmoji("\uD83C\uDFD4️"), Utils.generatePage(eb, Utils.padList(d.getFields(), 3), 12,
-				f -> f == null ? "*" + locale.get("str/empty") + "*" : f.toString()
+				f -> {
+					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/field")));
+					return f == null ? "*" + locale.get("str/empty") + "*" : f.toString();
+				}
 		));
 
 		assert home != null;
