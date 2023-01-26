@@ -509,6 +509,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return mult * stats.getAttrMult();
 	}
 
+	@Override
 	public double getPower() {
 		if (isSupporting()) {
 			return stats.getPower() * 0.75;
