@@ -142,9 +142,6 @@ public enum Trigger {
 	/** Triggers mirrored from attached player **/
 	ON_LEECH,
 
-	/** Triggers when summoning a card with "SPECIAL_SUMMON" tag (Might prevent summon) **/
-	ON_SPECIAL_SUMMON,
-
 	/** Nothing **/
 	NONE
 }

@@ -22,7 +22,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.exceptions.SelectionException;
-import com.kuuhaku.exceptions.SpecialSummonException;
 import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
@@ -1007,7 +1006,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public void executeAssert(Trigger trigger) {
 		if (base.isLocked()) return;
-		else if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE, ON_SPECIAL_SUMMON)) return;
+		else if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE)) return;
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
@@ -1022,8 +1021,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					"props", extractValues(hand.getGame().getLocale(), cachedEffect),
 					"trigger", trigger
 			));
-		} catch (SpecialSummonException e) {
-			throw e;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
 		} finally {

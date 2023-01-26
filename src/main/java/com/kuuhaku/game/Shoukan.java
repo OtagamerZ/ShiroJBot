@@ -30,7 +30,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.misc.SynthesizeCommand;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
-import com.kuuhaku.exceptions.SpecialSummonException;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.PhaseConstraint;
@@ -225,13 +224,6 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
-			try {
-				chosen.executeAssert(ON_SPECIAL_SUMMON);
-			} catch (SpecialSummonException e) {
-				getChannel().sendMessage(getLocale().get("error/special_summon", getString(e.getMessage()))).queue();
-				return false;
-			}
-
 			curr.consumeHP(chosen.getHPCost());
 			curr.consumeMP(chosen.getMPCost());
 			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
@@ -250,13 +242,6 @@ public class Shoukan extends GameInstance<Phase> {
 		} else {
 			if (slot.hasTop()) {
 				getChannel().sendMessage(getLocale().get("error/slot_occupied")).queue();
-				return false;
-			}
-
-			try {
-				chosen.executeAssert(ON_SPECIAL_SUMMON);
-			} catch (SpecialSummonException e) {
-				getChannel().sendMessage(getLocale().get("error/special_summon", getString(e.getMessage()))).queue();
 				return false;
 			}
 
