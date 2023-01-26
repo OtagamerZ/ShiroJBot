@@ -29,17 +29,15 @@ import java.util.List;
 public class PremiumGacha extends Gacha<String> {
 	public PremiumGacha() {
 		this(DAO.queryAllUnmapped("""
-				SELECT c.id
-				     , CASE
-				           WHEN f.card_id IS NOT NULL THEN 0.075
-				           WHEN e.card_id IS NOT NULL THEN (5.0 - e.tier) / 1.25
-				           ELSE 6.0 - get_rarity_index(c.rarity)
-				    END
-				FROM card c
-				         LEFT JOIN evogear e ON c.id = e.card_id AND e.tier > 1
-				         LEFT JOIN field f ON c.id = f.card_id AND NOT f.effect
-				WHERE (e.card_id IS NOT NULL OR f.card_id IS NOT NULL OR get_rarity_index(c.rarity) BETWEEN 3 AND 5)
-				ORDER BY 2
+				SELECT x.id
+				     , x.weight
+				FROM (
+				     SELECT c.id
+				          , get_weight(c.id) AS weight
+				     FROM card c
+				     ) x
+				WHERE x.weight IS NOT NULL
+				ORDER BY x.weight, x.id
 				"""));
 	}
 

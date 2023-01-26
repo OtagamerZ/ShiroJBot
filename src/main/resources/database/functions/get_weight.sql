@@ -16,28 +16,24 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.gacha;
-
-import com.kuuhaku.controller.DAO;
-import org.apache.commons.lang3.math.NumberUtils;
-
-import java.util.List;
-
-public class BasicGacha extends Gacha<String> {
-	public BasicGacha() {
-		this(DAO.queryAllUnmapped("""
-				SELECT c.id
-				     , get_weight(c.id) AS weight
-				FROM card c
-				WHERE get_rarity_index(c.rarity) < 6
-				ORDER BY weight, c.id
-				"""));
-	}
-
-	private BasicGacha(List<Object[]> pool) {
-		super(2800);
-		for (Object[] card : pool) {
-			this.pool.add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
-		}
-	}
-}
+CREATE OR REPLACE FUNCTION get_weight(VARCHAR)
+    RETURNS INT
+    IMMUTABLE
+    LANGUAGE sql
+AS
+$$
+SELECT CASE type
+           WHEN 'KAWAIPON' THEN 425 * tier
+           WHEN 'EVOGEAR' THEN CAST(40 * pow(2.2, tier) AS INT)
+           WHEN 'FIELD' THEN 100
+           END AS weight
+FROM (
+     SELECT c.id
+          , 6 - coalesce(get_rarity_index(c.rarity), e.tier * 5 / 4)          AS tier
+          , iif(get_rarity_index(c.rarity) IS NOT NULL, 'KAWAIPON', c.rarity) AS type
+     FROM card c
+              LEFT JOIN evogear e ON c.id = e.card_id AND e.tier > 0
+     WHERE c.rarity <> 'ULTIMATE'
+     ) x
+WHERE x.id = $1
+$$;

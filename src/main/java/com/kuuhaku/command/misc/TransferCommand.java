@@ -52,7 +52,7 @@ import java.util.concurrent.ExecutionException;
 )
 @Signature({
 		"<user:user:r> <value:number:r>",
-		"<user:user:r> <card:text:r> <confirm:word>[y]"
+		"<user:user:r> <card:word:r> <confirm:word>[y]"
 })
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
@@ -67,7 +67,10 @@ public class TransferCommand implements Executable {
 			Account acc = data.profile().getAccount();
 
 			int value = args.getInt("value");
-			if (!acc.hasEnough(value, Currency.CR)) {
+			if (value <= 0) {
+				event.channel().sendMessage(locale.get("error/invalid_value_low", 0)).queue();
+				return;
+			} else if (!acc.hasEnough(value, Currency.CR)) {
 				event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
 				return;
 			}
