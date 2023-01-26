@@ -1434,12 +1434,11 @@ public class Shoukan extends GameInstance<Phase> {
 			t.execute(ep);
 		}
 
-		if (source.execute(ep)) {
+		try {
+			return source.execute(ep);
+		} finally {
 			triggerEOTs(ep);
-			return true;
 		}
-
-		return false;
 	}
 
 	public Set<EffectOverTime> getEOTs() {
