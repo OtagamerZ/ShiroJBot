@@ -46,6 +46,11 @@ public abstract class Constants {
 	public static final GroovyShell GROOVY = new GroovyShell();
 	public static final Scheduler SCHEDULER = new Scheduler();
 
+	public static final String EMOTE_REPO_1 = "666619034103447642";
+	public static final String EMOTE_REPO_2 = "726171298044313694";
+	public static final String EMOTE_REPO_3 = "732300321673576498";
+	public static final String EMOTE_REPO_4 = "763775306095788033";
+
 	public static final double P_HOURS_IN_DAY = 23 + (56d / 60) + (4d / 3600);
 
 	public static final long MILLIS_IN_DAY = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);

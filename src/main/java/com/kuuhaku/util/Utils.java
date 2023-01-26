@@ -1055,4 +1055,20 @@ public abstract class Utils {
 
 		return out;
 	}
+
+	public static Emote getEmote(String server, String name) {
+		Guild g = Main.getApp().getShiro().getGuildById(server);
+		if (g == null) return null;
+
+		List<Emote> emotes = g.getEmotesByName(name, true);
+		return emotes.isEmpty() ? null : emotes.get(0);
+	}
+
+	public static String getEmoteString(String server, String name) {
+		Guild g = Main.getApp().getShiro().getGuildById(server);
+		if (g == null) return null;
+
+		List<Emote> emotes = g.getEmotesByName(name, true);
+		return emotes.isEmpty() ? null : emotes.get(0).getAsMention();
+	}
 }
