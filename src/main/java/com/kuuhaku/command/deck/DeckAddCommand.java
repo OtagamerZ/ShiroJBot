@@ -139,7 +139,7 @@ public class DeckAddCommand implements Executable {
 			case KAWAIPON -> {
 				Senshi s = DAO.find(Senshi.class, sc.getCard().getId());
 
-				if (s.isFusion()) {
+				if (s.isFusion() && !s.getBase().getTags().contains("SPECIAL_SUMMON")) {
 					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
 					return false;
 				} else if (sc.getKawaiponCard().isChrome()) {
