@@ -29,6 +29,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.misc.SynthesizeCommand;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.PhaseConstraint;
@@ -1461,7 +1462,11 @@ public class Shoukan extends GameInstance<Phase> {
 				if (ep.size() == 0) {
 					if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger())) {
 						effect.decreaseLimit();
-						effect.effect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
+
+						try {
+							effect.effect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
+						} catch (ActivationException ignore) {
+						}
 
 						if (effect.side() == null) {
 							effect.lock().set(true);
@@ -1470,13 +1475,21 @@ public class Shoukan extends GameInstance<Phase> {
 				} else if (ep.source() != null) {
 					if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
 						effect.decreaseLimit();
-						effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
+
+						try {
+							effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
+						} catch (ActivationException ignore) {
+						}
 					}
 
 					for (Target t : ep.targets()) {
 						if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
 							effect.decreaseLimit();
-							effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
+
+							try {
+								effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
+							} catch (ActivationException ignore) {
+							}
 						}
 					}
 				}
