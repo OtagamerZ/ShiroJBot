@@ -502,7 +502,7 @@ public class Arena implements Renderer {
 					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5) * (demon ? 2 : 1)));
 
 					int offset = 6;
-					if (demon) offset += 6;
+					if (demon) offset += 10;
 
 					Color rdColor = regdeg < 0 ? new Color(0xCD0000) : new Color(0x009DFF);
 					if (reversed) {
@@ -511,14 +511,14 @@ public class Arena implements Renderer {
 							rdText = (regdeg > 0 ? " +" : " ") + regdeg;
 							g2.setColor(rdColor);
 							Graph.drawOutlinedString(g2, rdText,
-									-(bar.x + offset + g2.getFontMetrics().stringWidth(rdText)), -(bar.y + 6),
+									-(bar.x + offset + g2.getFontMetrics().stringWidth(rdText)), -(bar.y + offset),
 									6, Color.BLACK
 							);
 						}
 
 						g2.setColor(Color.WHITE);
 						Graph.drawOutlinedString(g2, hpText,
-								-(bar.x + offset + g2.getFontMetrics().stringWidth(hpText + rdText)), -(bar.y + 6),
+								-(bar.x + offset + g2.getFontMetrics().stringWidth(hpText + rdText)), -(bar.y + offset),
 								6, Color.BLACK
 						);
 					} else {
@@ -526,14 +526,14 @@ public class Arena implements Renderer {
 							String rdText = (regdeg > 0 ? " +" : " ") + regdeg;
 							g2.setColor(rdColor);
 							Graph.drawOutlinedString(g2, rdText,
-									bar.x + offset + g2.getFontMetrics().stringWidth(hpText), bar.y + bar.height - 6,
+									bar.x + offset + g2.getFontMetrics().stringWidth(hpText), bar.y + bar.height - offset,
 									6, Color.BLACK
 							);
 						}
 
 						g2.setColor(Color.WHITE);
 						Graph.drawOutlinedString(g2, hpText,
-								bar.x + offset, bar.y + bar.height - 6,
+								bar.x + offset, bar.y + bar.height - offset,
 								6, Color.BLACK
 						);
 					}
@@ -553,7 +553,7 @@ public class Arena implements Renderer {
 			g.setColor(Color.WHITE);
 			g.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
 			if (game.getCurrentSide() == hand.getSide()) {
-				name = "==> " + name + " <==";
+				name = "==> " + StringUtils.abbreviate(name, 20) + " <==";
 			}
 
 			if (reversed) {
@@ -586,7 +586,7 @@ public class Arena implements Renderer {
 				g.setColor(Color.WHITE);
 			}
 
-			Graph.drawOutlinedString(g, Graph.abbreviate(g2d, name, SIZE.width - (BAR_SIZE.width + 250)), x, y, 10, Color.BLACK);
+			Graph.drawOutlinedString(g, name, x, y, 10, Color.BLACK);
 			//}
 
 			int rad = (int) (BAR_SIZE.height / 1.5);
