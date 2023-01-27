@@ -50,6 +50,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -956,7 +957,13 @@ public class Hand {
 	}
 
 	public CompletableFuture<Drawable<?>> requestChoice(List<Drawable<?>> cards, boolean hide) {
-		if (selection != null) throw new SelectionException("err/pending_selection");
+		if (selection != null) {
+			try {
+				selection.getThird().get();
+			} catch (ExecutionException | InterruptedException e) {
+				throw new SelectionException("err/pending_selection");
+			}
+		}
 
 		cards = cards.stream().filter(Objects::nonNull).toList();
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
