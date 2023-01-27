@@ -32,7 +32,6 @@ import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.awt.image.Raster;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -369,23 +368,14 @@ public abstract class Graph {
 		g2d.dispose();
 
 		int[] srcData = ((DataBufferInt) source.getAlphaRaster().getDataBuffer()).getData();
-		int[] mskData = getChannel(newMask, channel);
+		int[] mskData = ((DataBufferInt) newMask.getRaster().getDataBuffer()).getData();
 		for (int i = 0; i < srcData.length; i++) {
-			int fac = hasAlpha ? Math.min(srcData[i], mskData[i]) : mskData[i];
-
-			srcData[i] = fac;
+			if (hasAlpha) {
+				srcData[i] = Math.min((srcData[i] >> 24) & 0xFF, (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF);
+			} else {
+				srcData[i] = (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF;
+			}
 		}
-	}
-
-	public static int[] getChannel(BufferedImage source, int channel) {
-		if (source.getType() != BufferedImage.TYPE_INT_ARGB) {
-			source = toColorSpace(source, BufferedImage.TYPE_INT_ARGB);
-		}
-
-		Raster raster = source.getRaster();
-		DataBufferInt buffer = (DataBufferInt) raster.createChild(0, 0, source.getWidth(), source.getHeight(), 0, 0, new int[]{channel}).getDataBuffer();
-
-		return buffer.getData();
 	}
 
 	public static void overlay(BufferedImage source, BufferedImage overlay) {
