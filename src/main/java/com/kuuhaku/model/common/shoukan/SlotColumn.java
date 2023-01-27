@@ -25,6 +25,7 @@ import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Bit;
+import com.kuuhaku.util.Utils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -163,7 +164,7 @@ public class SlotColumn {
 	}
 
 	public Senshi getUnblocked() {
-		return hasTop() ? top : bottom;
+		return Utils.getOr(top, bottom);
 	}
 
 	public void replace(Senshi self, Senshi with) {
