@@ -569,7 +569,7 @@
 				 } else {
 					 base = 5000;
 				 }
-				 int bHP = (int) Calc.clamp(base * 1.5 - base * 0.2799 * reduction, 1, base);
+				 int bHP = (int) Calc.clamp(base * 1.5 - base * 0.2799 * reduction, 10, base);
 
 				 AccFunction<Integer, Integer> mpGain = t -> {
 					 int v;
