@@ -368,12 +368,12 @@ public abstract class Graph {
 		g2d.drawImage(mask, 0, 0, null);
 		g2d.dispose();
 
-		int[] srcData = ((DataBufferInt) source.getAlphaRaster().getDataBuffer()).getData();
-		if (srcData == null) return;
-
+		int[] srcData = ((DataBufferInt) source.getRaster().getDataBuffer()).getData();
 		int[] mskData = getChannel(newMask, channel);
 		for (int i = 0; i < srcData.length; i++) {
-			srcData[i] = hasAlpha ? Math.min(srcData[i], mskData[i]) : mskData[i];
+			int fac = hasAlpha ? Math.min(srcData[i], mskData[i]) : mskData[i];
+
+			srcData[i] |= fac << 24;
 		}
 	}
 
