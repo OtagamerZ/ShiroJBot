@@ -33,7 +33,9 @@ FROM (
           , iif(get_rarity_index(c.rarity) IS NOT NULL, 'KAWAIPON', c.rarity) AS type
      FROM card c
               LEFT JOIN evogear e ON c.id = e.card_id AND e.tier > 0
-     WHERE c.rarity <> 'ULTIMATE'
+              LEFT JOIN field f ON c.id = f.card_id
+     WHERE C.rarity <> 'ULTIMATE'
+       AND NOT coalesce(f.effect, FALSE)
      ) x
 WHERE x.id = $1
 $$;
