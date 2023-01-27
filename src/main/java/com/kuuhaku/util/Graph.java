@@ -373,7 +373,7 @@ public abstract class Graph {
 		for (int i = 0; i < srcData.length; i++) {
 			int fac = hasAlpha ? Math.min(srcData[i], mskData[i]) : mskData[i];
 
-			srcData[i] |= fac << 24;
+			srcData[i] = (fac << 24) | (srcData[i] & 0xFF_FF_FF);
 		}
 	}
 
