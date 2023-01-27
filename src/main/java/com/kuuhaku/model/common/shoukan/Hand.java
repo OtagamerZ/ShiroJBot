@@ -952,11 +952,11 @@ public class Hand {
 				.queue(null, Utils::doNothing);
 	}
 
-	public CompletableFuture<Drawable<?>> requestChoice(List<Drawable<?>> cards) {
+	public Drawable<?> requestChoice(List<Drawable<?>> cards) {
 		return requestChoice(cards, false);
 	}
 
-	public CompletableFuture<Drawable<?>> requestChoice(List<Drawable<?>> cards, boolean hide) {
+	public Drawable<?> requestChoice(List<Drawable<?>> cards, boolean hide) {
 		if (selection != null) {
 			try {
 				selection.getThird().get();
@@ -973,24 +973,31 @@ public class Hand {
 		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFile(IO.getBytes(renderChoices(), "png"), "choices.png")));
 
 		game.getChannel().sendMessage(game.getLocale().get("str/selection_sent")).queue();
-		return selection.getThird().thenApply(d -> {
-			msg.delete().queue(null, Utils::doNothing);
-			selection = null;
+		try {
+			return selection.getThird().thenApply(d -> {
+				msg.delete().queue(null, Utils::doNothing);
+				selection = null;
 
-			return d;
-		});
+				return d;
+			}).get();
+		} catch (ExecutionException | InterruptedException e) {
+			throw new SelectionException("err/pending_selection");
+		}
 	}
 
 	public void requestChoice(List<Drawable<?>> cards, ThrowingConsumer<Drawable<?>> act) {
-		requestChoice(cards).thenAccept(act);
+		Drawable<?> d = requestChoice(cards);
+		act.accept(d);
 	}
 
 	public void requestChoice(List<Drawable<?>> cards, boolean hide, ThrowingConsumer<Drawable<?>> act) {
-		requestChoice(cards, hide).thenAccept(act);
+		Drawable<?> d = requestChoice(cards, hide);
+		act.accept(d);
 	}
 
 	public void requestChoice(Predicate<Drawable<?>> cond, ThrowingConsumer<Drawable<?>> act) {
-		requestChoice(cards.stream().filter(cond).toList()).thenAccept(act);
+		Drawable<?> d = requestChoice(cards.stream().filter(cond).toList());
+		act.accept(d);
 	}
 
 	public BufferedImage renderChoices() {
