@@ -1728,13 +1728,12 @@ public class Shoukan extends GameInstance<Phase> {
 						if (deque.size() > 1) cards.add(deque.getLast());
 
 						reportEvent("str/destiny_draw", curr.getName());
-						curr.requestChoice(cards).thenAccept(d -> {
-							curr.getCards().add(d);
-							deque.remove(d);
-							curr.setUsedDestiny(true);
+						Drawable<?> d = curr.requestChoice(cards);
+						curr.getCards().add(d);
+						deque.remove(d);
+						curr.setUsedDestiny(true);
 
-							curr.showHand();
-						});
+						curr.showHand();
 					});
 				}
 			}
