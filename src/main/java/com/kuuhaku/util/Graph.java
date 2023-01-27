@@ -367,14 +367,17 @@ public abstract class Graph {
 		g2d.drawImage(mask, 0, 0, null);
 		g2d.dispose();
 
-		int[] srcData = ((DataBufferInt) source.getAlphaRaster().getDataBuffer()).getData();
+		int[] srcData = ((DataBufferInt) source.getRaster().getDataBuffer()).getData();
 		int[] mskData = ((DataBufferInt) newMask.getRaster().getDataBuffer()).getData();
 		for (int i = 0; i < srcData.length; i++) {
+			int fac;
 			if (hasAlpha) {
-				srcData[i] = Math.min((srcData[i] >> 24) & 0xFF, (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF);
+				fac = Math.min((srcData[i] >> 24) & 0xFF, (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF);
 			} else {
-				srcData[i] = (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF;
+				fac = (mskData[i] >> (24 - 8 * (channel + 1))) & 0xFF;
 			}
+
+			srcData[i] = (srcData[i] & 0xFFFFFF) | (fac << 24);
 		}
 	}
 
