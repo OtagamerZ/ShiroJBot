@@ -400,7 +400,8 @@ public abstract class Utils {
 	}
 
 	public static void confirm(String text, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
-		confirm(text, null, channel, action, m -> {}, allowed);
+		confirm(text, null, channel, action, m -> {
+		}, allowed);
 	}
 
 	public static void confirm(String text, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
@@ -408,7 +409,8 @@ public abstract class Utils {
 	}
 
 	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
-		confirm(null, embed, channel, action, m -> {}, allowed);
+		confirm(null, embed, channel, action, m -> {
+		}, allowed);
 	}
 
 	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
@@ -416,7 +418,8 @@ public abstract class Utils {
 	}
 
 	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
-		confirm(text, embed, channel, action, m -> {}, allowed);
+		confirm(text, embed, channel, action, m -> {
+		}, allowed);
 	}
 
 	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
@@ -1070,5 +1073,45 @@ public abstract class Utils {
 
 		List<Emote> emotes = g.getEmotesByName(name, true);
 		return emotes.isEmpty() ? "" : emotes.get(0).getAsMention();
+	}
+
+	public static int getDigits(long n) {
+		if (n < 10_000_000_000L) {
+			if (n < 100) {
+				return n < 10 ? 1 : 2;
+			} else {
+				if (n < 10_000) {
+					return n < 1_000 ? 3 : 4;
+				} else {
+					if (n < 1_000_000) {
+						return n < 100_000 ? 5 : 6;
+					} else {
+						if (n < 100_000_000) {
+							return n < 10_000_000 ? 7 : 8;
+						}
+
+						return n < 1_000_000_000L ? 9 : 10;
+					}
+				}
+			}
+		} else {
+			if (n < 1_000_000_000_000L) {
+				return n < 100_000_000_000L ? 11 : 12;
+			} else {
+				if (n < 100_000_000_000_000L) {
+					return n < 10_000_000_000_000L ? 13 : 14;
+				} else {
+					if (n < 10_000_000_000_000_000L) {
+						return n < 1_000_000_000_000_000L ? 15 : 16;
+					} else {
+						if (n < 1_000_000_000_000_000_000L) {
+							return n < 100_000_000_000_000_000L ? 17 : 18;
+						}
+
+						return 19;
+					}
+				}
+			}
+		}
 	}
 }

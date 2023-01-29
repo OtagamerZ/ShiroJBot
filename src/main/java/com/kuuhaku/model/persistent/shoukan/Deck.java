@@ -567,7 +567,7 @@
 				 if (h != null) {
 					 base = h.getGame().getParams().hp();
 				 } else {
-					 base = 5000;
+					 base = 6000;
 				 }
 				 int bHP = (int) Calc.clamp(base * 1.5 - base * 0.2799 * reduction, 10, base);
 

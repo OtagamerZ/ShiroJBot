@@ -494,10 +494,11 @@ public class Arena implements Renderer {
 						}
 					}
 
+					int pad = Utils.getDigits(hand.getBase().hp());
 					String hpText = "HP: "
-							+ StringUtils.leftPad(String.valueOf(hand.getHP()), 4, "0")
+							+ StringUtils.leftPad(String.valueOf(hand.getHP()), pad, "0")
 							+ "/"
-							+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), 4, "0");
+							+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), pad, "0");
 					g2.setColor(Color.WHITE);
 					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5) * (demon ? 2 : 1)));
 

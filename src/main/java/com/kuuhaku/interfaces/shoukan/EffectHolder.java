@@ -187,8 +187,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default JSONObject extractValues(I18N locale, CachedScriptManager csm) {
 		Hand h = getHand();
 		Map<String, Object> values = Map.ofEntries(
-				Map.entry("php", h == null ? 5000 : h.getHP()),
-				Map.entry("bhp", h == null ? 5000 : h.getBase().hp()),
+				Map.entry("php", h == null ? 6000 : h.getHP()),
+				Map.entry("bhp", h == null ? 6000 : h.getBase().hp()),
 				Map.entry("pmp", h == null ? 5 : h.getMP()),
 				Map.entry("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek())),
 				Map.entry("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek())),

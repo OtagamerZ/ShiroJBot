@@ -24,12 +24,12 @@ import java.util.List;
 
 public record ShoukanParams(Integer hp, Integer mp, List<String> cards, Origin origin) {
 	public ShoukanParams() {
-		this(5000, 5, List.of(), null);
+		this(6000, 5, List.of(), null);
 	}
 
 	@Override
 	public Integer hp() {
-		return Utils.getOr(hp, 5000);
+		return Utils.getOr(hp, 6000);
 	}
 
 	@Override
