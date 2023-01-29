@@ -43,6 +43,7 @@ import net.dv8tion.jda.api.JDA;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "stash",
@@ -69,8 +70,8 @@ public class StashScrapCommand implements Executable {
 			try {
 				Utils.confirm(locale.get("question/scrap_trash", trash.size(), value), event.channel(), w -> {
 							event.channel().sendMessage(locale.get("success/scrap")).queue();
+							kp.getAccount().addCR(value, trash.stream().map(StashedCard::toString).collect(Collectors.joining()) + " scrapped");
 							for (StashedCard sc : trash) {
-								kp.getAccount().addCR(value, sc + " scrapped");
 								sc.delete();
 							}
 
