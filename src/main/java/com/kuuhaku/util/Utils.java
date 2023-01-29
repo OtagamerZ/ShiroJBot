@@ -1066,9 +1066,9 @@ public abstract class Utils {
 
 	public static String getEmoteString(String server, String name) {
 		Guild g = Main.getApp().getShiro().getGuildById(server);
-		if (g == null) return null;
+		if (g == null) return "";
 
 		List<Emote> emotes = g.getEmotesByName(name, true);
-		return emotes.isEmpty() ? null : emotes.get(0).getAsMention();
+		return emotes.isEmpty() ? "" : emotes.get(0).getAsMention();
 	}
 }
