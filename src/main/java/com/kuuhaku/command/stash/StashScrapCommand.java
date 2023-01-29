@@ -134,13 +134,13 @@ public class StashScrapCommand implements Executable {
 			double mult = Calc.rng(1, 1.75, sc.getId());
 			if (sc.getType() == CardType.KAWAIPON) {
 				KawaiponCard kc = sc.getKawaiponCard();
-				value = (int) (kc.getSuggestedPrice() / 3 * mult);
+				value += (int) (kc.getSuggestedPrice() / 3 * mult);
 			} else {
 				if (sc.getType() == CardType.EVOGEAR) {
 					Evogear e = DAO.find(Evogear.class, sc.getCard().getId());
-					value = (int) (e.getTier() * 225 * mult);
+					value += (int) (e.getTier() * 225 * mult);
 				} else {
-					value = (int) (2500 * mult);
+					value += (int) (2500 * mult);
 				}
 			}
 		}
