@@ -327,6 +327,9 @@ public abstract class Utils {
 
 		XStringBuilder sb = new XStringBuilder();
 		List<List<T>> cols = ListUtils.partition(new ArrayList<>(list), itemsPerColumn);
+		System.out.println(list);
+		System.out.println(cols);
+
 		for (List<T> col : cols) {
 			sb.clear();
 

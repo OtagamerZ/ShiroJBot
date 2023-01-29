@@ -108,8 +108,6 @@ public class DeckListCommand implements Executable {
 		));
 		pages.put(Utils.parseEmoji("\uD83C\uDFD4️"), Utils.generatePage(eb, Utils.padList(d.getFields(), 3), 12,
 				f -> {
-					System.out.println("Field");
-
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/field")));
 					if (f == null) return "*" + locale.get("str/empty") + "*";
 
