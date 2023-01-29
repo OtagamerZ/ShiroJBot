@@ -807,7 +807,7 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	@PhaseConstraint("PLAN")
+	@PhaseConstraint({"PLAN", "COMBAT"})
 	@PlayerAction("(?<choice>\\d+)")
 	private boolean select(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
@@ -821,8 +821,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Drawable<?> chosen = selection.getFirst().get(args.getInt("choice") - 1);
 		selection.getThird().complete(chosen);
-
-		reportEvent("str/select_card", curr.getName(), args.getInt("choice"));
 		return true;
 	}
 
@@ -1727,13 +1725,13 @@ public class Shoukan extends GameInstance<Phase> {
 						if (deque.size() > 2) cards.add(deque.get((deque.size() - 1) / 2));
 						if (deque.size() > 1) cards.add(deque.getLast());
 
-						reportEvent("str/destiny_draw", curr.getName());
 						Drawable<?> d = curr.requestChoice(cards);
 						curr.getCards().add(d);
 						deque.remove(d);
 						curr.setUsedDestiny(true);
 
 						curr.showHand();
+						reportEvent("str/destiny_draw", curr.getName());
 					});
 				}
 			}
