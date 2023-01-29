@@ -61,9 +61,9 @@ public class DeckListCommand implements Executable {
 
 		Origin o = d.getOrigins();
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setDescription("**%s**\n%s %s".formatted(
+				.setDescription("**%s**\n%s%s".formatted(
 						locale.get("str/major_effect"),
-						Utils.getEmoteString(Constants.EMOTE_REPO_4, o.major().name()),
+						Utils.getEmoteString(Constants.EMOTE_REPO_4, o.major().name()) + " ",
 						o.major().getMajor(locale)
 				));
 
@@ -81,9 +81,9 @@ public class DeckListCommand implements Executable {
 
 		Race syn = o.synergy();
 		if (syn != Race.NONE) {
-			eb.appendDescription("\n\n**%s**\n%s %s".formatted(
+			eb.appendDescription("\n\n**%s**\n%s%s".formatted(
 					locale.get("str/synergy_effect"),
-					Utils.getEmoteString(Constants.EMOTE_REPO_4, syn.name()),
+					Utils.getEmoteString(Constants.EMOTE_REPO_4, syn.name()) + " ",
 					syn.getSynergy(locale)
 			));
 		}
@@ -108,6 +108,8 @@ public class DeckListCommand implements Executable {
 		));
 		pages.put(Utils.parseEmoji("\uD83C\uDFD4️"), Utils.generatePage(eb, Utils.padList(d.getFields(), 3), 12,
 				f -> {
+					System.out.println("Field");
+
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/field")));
 					if (f == null) return "*" + locale.get("str/empty") + "*";
 
