@@ -327,9 +327,6 @@ public abstract class Utils {
 
 		XStringBuilder sb = new XStringBuilder();
 		List<List<T>> cols = ListUtils.partition(new ArrayList<>(list), itemsPerColumn);
-		System.out.println(list);
-		System.out.println(cols);
-
 		for (List<T> col : cols) {
 			sb.clear();
 
@@ -1052,7 +1049,7 @@ public abstract class Utils {
 
 	public static <A, T extends Collection<A>> List<A> padList(T col, int pad) {
 		List<A> out = new ArrayList<>(col);
-		for (int i = 0; i < pad - out.size(); i++) {
+		for (int i = 0; i < pad - col.size(); i++) {
 			out.add(null);
 		}
 
