@@ -1076,40 +1076,68 @@ public abstract class Utils {
 	}
 
 	public static int getDigits(long n) {
-		if (n < 10_000_000_000L) {
-			if (n < 100) {
-				return n < 10 ? 1 : 2;
-			} else {
-				if (n < 10_000) {
-					return n < 1_000 ? 3 : 4;
+		if (n < 1e10) {
+			if (n < 1e5) {
+				if (n < 1e3) {
+					if (n < 1e2) {
+						return n < 1e1 ? 1 : 2;
+					}
+
+					return 3;
 				} else {
-					if (n < 1_000_000) {
-						return n < 100_000 ? 5 : 6;
-					} else {
-						if (n < 100_000_000) {
-							return n < 10_000_000 ? 7 : 8;
+					if (n < 1e4) {
+						return 4;
+					}
+
+					return 5;
+				}
+			} else {
+				if (n < 1e7) {
+					if (n < 1e6) {
+						return 6;
+					}
+
+					return 7;
+				} else {
+					if (n < 1e9) {
+						if (n < 1e8) {
+							return 8;
 						}
 
-						return n < 1_000_000_000L ? 9 : 10;
+						return 9;
 					}
+
+					return 10;
 				}
 			}
 		} else {
-			if (n < 1_000_000_000_000L) {
-				return n < 100_000_000_000L ? 11 : 12;
-			} else {
-				if (n < 100_000_000_000_000L) {
-					return n < 10_000_000_000_000L ? 13 : 14;
-				} else {
-					if (n < 10_000_000_000_000_000L) {
-						return n < 1_000_000_000_000_000L ? 15 : 16;
-					} else {
-						if (n < 1_000_000_000_000_000_000L) {
-							return n < 100_000_000_000_000_000L ? 17 : 18;
-						}
-
-						return 19;
+			if (n < 1e14) {
+				if (n < 1e12) {
+					if (n < 1e11) {
+						return 11;
 					}
+
+					return 12;
+				} else {
+					if (n < 1e13) {
+						return 13;
+					}
+
+					return 14;
+				}
+			} else {
+				if (n < 1e16) {
+					if (n < 1e15) {
+						return 15;
+					}
+
+					return 16;
+				} else {
+					if (n < 1e17) {
+						return 17;
+					}
+
+					return n < 1e18 ? 18 : 19;
 				}
 			}
 		}
