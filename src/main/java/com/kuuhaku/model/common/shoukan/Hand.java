@@ -139,7 +139,7 @@ public class Hand {
 			}
 
 			if (getGame().getCurrentSide() != getSide() && Calc.chance(s.getDodge() / 2d)) {
-				getGame().getChannel().sendMessage(getGame().getLocale().get("str/avoid_destruction")).queue();
+				getGame().getChannel().sendMessage(getGame().getLocale().get("str/avoid_destruction", s)).queue();
 				return false;
 			} else if (s.popFlag(Flag.NO_DEATH)) {
 				return false;
