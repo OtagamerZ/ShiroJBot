@@ -26,7 +26,7 @@ import java.util.concurrent.Callable;
 public record BaseValues(int hp, AccFunction<Integer, Integer> mpGain, AccFunction<Integer, Integer> handCapacity,
 						 int lifesteal) {
 	public BaseValues() {
-		this(5000, t -> 5, t -> 5, 0);
+		this(6000, t -> 5, t -> 5, 0);
 	}
 
 	public BaseValues(Callable<List<?>> values) throws Exception {

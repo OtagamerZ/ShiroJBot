@@ -51,6 +51,8 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	int BORDER_WIDTH = 3;
 	Rectangle SIZE = new Rectangle(255, 380);
 
+	long getSerial();
+
 	String getId();
 
 	Card getCard();

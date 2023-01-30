@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
@@ -61,6 +62,7 @@ import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Transient
 	public final String KLASS = getClass().getName();
+	public transient long SERIAL = ThreadLocalRandom.current().nextLong();
 
 	@Id
 	@Column(name = "card_id", nullable = false)
@@ -105,6 +107,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	         │└─ available
 	         └── flipped
 	 */
+
+	@Override
+	public long getSerial() {
+		return SERIAL;
+	}
 
 	@Override
 	public String getId() {

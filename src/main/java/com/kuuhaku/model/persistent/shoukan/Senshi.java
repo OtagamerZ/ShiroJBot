@@ -147,6 +147,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
+	public long getSerial() {
+		return SERIAL;
+	}
+
+	@Override
 	public String getId() {
 		return id;
 	}

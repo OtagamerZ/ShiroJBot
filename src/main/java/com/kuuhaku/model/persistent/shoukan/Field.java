@@ -44,12 +44,14 @@ import java.awt.image.RescaleOp;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Entity
 @Table(name = "field")
 public class Field extends DAO<Field> implements Drawable<Field> {
 	@Transient
 	public final String KLASS = getClass().getName();
+	public transient long SERIAL = ThreadLocalRandom.current().nextLong();
 
 	@Id
 	@Column(name = "card_id", nullable = false)
@@ -88,6 +90,11 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	          │└ solid
 	          └─ available
 	 */
+
+	@Override
+	public long getSerial() {
+		return SERIAL;
+	}
 
 	@Override
 	public String getId() {

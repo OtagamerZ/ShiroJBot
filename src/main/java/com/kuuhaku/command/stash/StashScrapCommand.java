@@ -43,6 +43,7 @@ import net.dv8tion.jda.api.JDA;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "stash",
@@ -69,8 +70,8 @@ public class StashScrapCommand implements Executable {
 			try {
 				Utils.confirm(locale.get("question/scrap_trash", trash.size(), value), event.channel(), w -> {
 							event.channel().sendMessage(locale.get("success/scrap")).queue();
+							kp.getAccount().addCR(value, trash.stream().map(StashedCard::toString).collect(Collectors.joining()) + " scrapped");
 							for (StashedCard sc : trash) {
-								kp.getAccount().addCR(value, sc + " scrapped");
 								sc.delete();
 							}
 
@@ -134,13 +135,13 @@ public class StashScrapCommand implements Executable {
 			double mult = Calc.rng(1, 1.75, sc.getId());
 			if (sc.getType() == CardType.KAWAIPON) {
 				KawaiponCard kc = sc.getKawaiponCard();
-				value = (int) (kc.getSuggestedPrice() / 3 * mult);
+				value += (int) (kc.getSuggestedPrice() / 3 * mult);
 			} else {
 				if (sc.getType() == CardType.EVOGEAR) {
 					Evogear e = DAO.find(Evogear.class, sc.getCard().getId());
-					value = (int) (e.getTier() * 225 * mult);
+					value += (int) (e.getTier() * 225 * mult);
 				} else {
-					value = (int) (2500 * mult);
+					value += (int) (2500 * mult);
 				}
 			}
 		}
