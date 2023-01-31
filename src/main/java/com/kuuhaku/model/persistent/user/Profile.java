@@ -197,7 +197,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			}
 		}
 
-		g2d.drawImage(Utils.getOr(avatar, IO.getImage(account.getUser().getEffectiveAvatarUrl())), -24, 45, 150, 150, null);
+		g2d.drawImage(Utils.getOr(avatar, IO.getImage(account.getUser().getEffectiveAvatarUrl())), -23, 56, 150, 150, null);
 
 		Graph.applyMask(bg, mask, 0);
 		g2d.drawImage(bg, 0, 0, null);
