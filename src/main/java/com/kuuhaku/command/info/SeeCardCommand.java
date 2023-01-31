@@ -110,7 +110,11 @@ public class SeeCardCommand implements Executable {
 
 				Senshi senshi = DAO.find(Senshi.class, card.getId());
 				if (senshi != null) {
-					eb.addField(locale.get("str/shoukan_enabled"), locale.get("icon/success") + " " + locale.get("str/yes"), true);
+					if (senshi.isFusion()) {
+						eb.addField(locale.get("str/shoukan_enabled"), locale.get("icon/alert") + " " + locale.get("str/as_fusion"), true);
+					} else {
+						eb.addField(locale.get("str/shoukan_enabled"), locale.get("icon/success") + " " + locale.get("str/yes"), true);
+					}
 				} else {
 					eb.addField(locale.get("str/shoukan_enabled"), locale.get("icon/error") + " " + locale.get("str/no"), true);
 				}
