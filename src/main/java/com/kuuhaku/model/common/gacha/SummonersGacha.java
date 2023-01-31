@@ -32,7 +32,8 @@ public class SummonersGacha extends Gacha<String> {
 				     SELECT c.id
 				          , get_weight(c.id) AS weight
 				     FROM card c
-				     WHERE get_type(c.id) > 1
+				     INNER JOIN senshi s ON c.id = s.card_id
+				     WHERE NOT has(s.tags, 'FUSION')
 				     ) x
 				WHERE x.weight IS NOT NULL
 				ORDER BY x.weight, x.id
