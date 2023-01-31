@@ -49,8 +49,8 @@ import java.util.stream.Collectors;
 		category = Category.MISC
 )
 @Signature(allowEmpty = true, value = {
-		"<id:word:r>",
-		"<action:word:r>[clear]"
+		"<action:word:r>[clear]",
+		"<id:word:r>"
 })
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class SelectTitleCommand implements Executable {
