@@ -20,16 +20,19 @@ package com.kuuhaku.controller;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.util.IO;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public abstract class Manager {
@@ -57,15 +60,18 @@ public abstract class Manager {
 
 			File initDir = IO.getResourceAsFile("database");
 			if (initDir != null && initDir.isDirectory()) {
+				Set<String> scripts = new HashSet<>();
 				try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
 					ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))
 							.sorted(Comparator.comparing(Path::getNameCount))
-							.peek(p -> Constants.LOGGER.info("Applying script " + p.getFileName()))
+							.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
 							.map(IO::readString)
 							.forEach(DAO::applyNative);
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
+
+				Constants.LOGGER.info("Applied " + scripts.size() + " scripts: " + scripts);
 			}
 		}
 

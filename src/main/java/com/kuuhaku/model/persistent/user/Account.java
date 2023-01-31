@@ -37,6 +37,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.collections4.bag.HashBag;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
 
@@ -325,6 +326,23 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	public boolean addTitle(String title) {
 		return titles.add(new AccountTitle(this, DAO.find(Title.class, title)));
+	}
+
+	public JSONObject getInventory() {
+		return inventory;
+	}
+
+	public HashBag<UserItem> getItems() {
+		HashBag<UserItem> items = new HashBag<>();
+		for (Map.Entry<String, Object> e : inventory.entrySet()) {
+			UserItem ui = DAO.find(UserItem.class, e.getKey());
+			if (ui != null) {
+				JSONObject info = new JSONObject(e.getValue());
+				items.add(ui, info.getInt("count"));
+			}
+		}
+
+		return items;
 	}
 
 	@Override
