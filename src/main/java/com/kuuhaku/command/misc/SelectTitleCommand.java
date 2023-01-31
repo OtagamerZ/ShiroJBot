@@ -48,7 +48,10 @@ import java.util.stream.Collectors;
 		name = "title",
 		category = Category.MISC
 )
-@Signature(allowEmpty = true, value = "<id:word:r>")
+@Signature(allowEmpty = true, value = {
+		"<id:word:r>",
+		"<action:word:r>[clear]"
+})
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class SelectTitleCommand implements Executable {
 	@Override
@@ -100,6 +103,15 @@ public class SelectTitleCommand implements Executable {
 			});
 
 			Utils.paginate(pages, event.channel(), event.user());
+			return;
+		} else if (args.containsKey("action")) {
+			AccountTitle title = acc.getTitle();
+			if (title != null) {
+				title.setCurrent(false);
+				title.save();
+			}
+
+			event.channel().sendMessage(locale.get("success/title_clear")).queue();
 			return;
 		}
 
