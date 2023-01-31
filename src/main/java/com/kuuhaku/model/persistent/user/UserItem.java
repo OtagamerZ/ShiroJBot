@@ -39,8 +39,8 @@ public class UserItem extends DAO<UserItem> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@Column(name = "icon")
-	private String icon;
+	@Column(name = "icon", nullable = false)
+	private String icon = "";
 
 	@Column(name = "price")
 	private int price;
