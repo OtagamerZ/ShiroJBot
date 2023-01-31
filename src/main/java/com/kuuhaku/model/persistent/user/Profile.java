@@ -318,7 +318,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			}
 		});
 
-		Graph.applyMask(overlay, mask, 1);
+		Graph.applyMask(overlay, mask, 1, true);
 		g2d.drawImage(overlay, 0, 0, null);
 
 		BufferedImage emote = IO.getImage(getLevelEmote().getImageUrl());
