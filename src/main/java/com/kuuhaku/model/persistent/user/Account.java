@@ -103,7 +103,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	private Set<AccountTitle> titles = new HashSet<>();
 
 	@Type(JsonBinaryType.class)
-	@Column(name = "buffs", nullable = false, columnDefinition = "JSONB")
+	@Column(name = "inventory", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject inventory = new JSONObject();
 
