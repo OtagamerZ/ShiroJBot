@@ -36,6 +36,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
@@ -186,6 +187,17 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
+
+		BufferedImage avatar = null;
+		Guild g = Main.getApp().getShiro().getGuildById(id.getGid());
+		if (g != null) {
+			Member m = g.getMemberById(id.getUid());
+			if (m != null) {
+				avatar = IO.getImage(m.getEffectiveAvatarUrl());
+			}
+		}
+
+		g2d.drawImage(Utils.getOr(avatar, IO.getImage(account.getUser().getEffectiveAvatarUrl())), 24, 25, 150, 150, null);
 
 		Graph.applyMask(bg, mask, 0);
 		g2d.drawImage(bg, 0, 0, null);
