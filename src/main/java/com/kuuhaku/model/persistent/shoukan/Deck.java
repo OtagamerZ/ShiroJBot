@@ -351,6 +351,7 @@
 						 %s
 						 %s
 						 %s
+						 %s
 						 						
 						 %s
 						 %s-(T4:-%s)
@@ -360,6 +361,7 @@
 						 Utils.roundToString(avgMana, 1),
 						 allCards.size(), getSenshi().size(), getEvogear().size(), getFields().size(),
 						 weight, color,
+						 Utils.roundToString(getMetaDivergence() * 100, 0),
 						 Utils.roundToString((float) totalMPCost.get() / allCards.size(), 1),
 						 Utils.roundToString((float) totalHPCost.get() / allCards.size(), 1),
 						 Utils.roundToString((float) totalDmg.get() / allCards.size(), 1),
