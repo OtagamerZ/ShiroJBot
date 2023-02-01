@@ -17,6 +17,27 @@
  */
 
 CREATE OR REPLACE VIEW v_shoukan_meta AS
+WITH x AS (
+          SELECT x.id
+               , x.field
+               , jsonb_array_elements(x.slots -> 'placed') AS slots
+          FROM (
+               SELECT h.id
+                    , jsonb_array_elements(h.data -> 'turns') ->> 'field'                   AS field
+                    , jsonb_array_elements(h.data -> 'turns') -> lower(h.head ->> 'winner') AS slots
+               FROM match_history h
+               WHERE head ? 'winner'
+                 AND h.id >= (
+                             SELECT id
+                             FROM match_history
+                             WHERE head ? 'winner'
+                             ORDER BY id DESC
+                             LIMIT 1
+                             ) - 30
+               ORDER BY h.id DESC
+               ) x
+          )
+
 SELECT x.card
      , x.freq
 FROM (
@@ -29,27 +50,17 @@ FROM (
                , count(1)         AS freq
                , get_type(x.card) AS type
           FROM (
-               SELECT unnest(x.cards) AS card
+               SELECT jsonb_array_elements_text(x.cards) AS card
                FROM (
-                    SELECT array_remove(x.front || x.back || x.equips || field, NULL) AS cards
+                    SELECT x.equips || x.front || x.back || x.field AS cards
                     FROM (
-                         SELECT array_agg(DISTINCT x.slots ->> 'frontline') AS front
-                              , array_agg(DISTINCT x.slots ->> 'backline')  AS back
-                              , array_agg(DISTINCT e)                       AS equips
-                              , x.field
-                         FROM (
-                              SELECT x.id
-                                   , x.field
-                                   , jsonb_array_elements(x.slots -> 'placed') AS slots
-                              FROM (
-                                   SELECT h.id
-                                        , jsonb_array_elements(h.data -> 'turns') ->> 'field'                   AS field
-                                        , jsonb_array_elements(h.data -> 'turns') -> lower(h.head ->> 'winner') AS slots
-                                   FROM match_history h
-                                   ) x
-                              ) x
-                                  LEFT JOIN jsonb_array_elements_text(x.slots -> 'equipments') e ON TRUE
-                         GROUP BY x.id, x.field
+                         SELECT x.id
+                              , jsonb_merge(x.slots -> 'frontline')  AS front
+                              , jsonb_merge(x.slots -> 'backline')   AS back
+                              , jsonb_merge(x.slots -> 'equipments') AS equips
+                              , jsonb_agg(x.field)                   AS field
+                         FROM x
+                         GROUP BY x.id
                          ) x
                     ) x
                ) x
