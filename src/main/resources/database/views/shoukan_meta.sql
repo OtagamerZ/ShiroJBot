@@ -38,7 +38,7 @@ FROM (
                                               FROM match_history
                                               WHERE has(head, 'winner')
                                               ORDER BY id
-                                              LIMIT 50
+                                              LIMIT 30
                                               ) x
                                          WHERE x.turns > x.turn_fac
                                          )) x(card)

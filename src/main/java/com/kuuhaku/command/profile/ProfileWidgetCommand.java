@@ -75,7 +75,7 @@ public class ProfileWidgetCommand implements Executable {
 					settings.getWidgets().set(id, text);
 					event.channel().sendMessage(locale.get("success/profile_widget_set")).queue();
 				} else {
-					if (settings.getWidgets().size() >= 11) {
+					if (settings.getWidgets().size() >= 7) {
 						event.channel().sendMessage(locale.get("error/too_many_widgets")).queue();
 						return;
 					}
