@@ -46,10 +46,7 @@ import java.util.List;
 		category = Category.INFO
 )
 @Signature("<tier:number>")
-@Requires({
-		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_ATTACH_FILES
-})
+@Requires(Permission.MESSAGE_EMBED_LINKS)
 public class KawaiponEvogearCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

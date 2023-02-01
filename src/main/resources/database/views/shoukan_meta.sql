@@ -19,6 +19,7 @@
 CREATE OR REPLACE VIEW v_shoukan_meta AS
 SELECT x.card
      , x.freq
+     , x.type
 FROM (
      SELECT x.card
           , x.freq

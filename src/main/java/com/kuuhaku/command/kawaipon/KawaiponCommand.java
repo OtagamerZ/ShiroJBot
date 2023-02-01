@@ -46,10 +46,7 @@ import java.util.List;
 		name = "kawaipon",
 		category = Category.INFO
 )
-@Requires({
-		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_ATTACH_FILES
-})
+@Requires(Permission.MESSAGE_EMBED_LINKS)
 public class KawaiponCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

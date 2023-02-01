@@ -50,7 +50,10 @@ import java.util.concurrent.TimeUnit;
 		category = Category.INFO
 )
 @Signature("<command:word>")
-@Requires(Permission.MESSAGE_EMBED_LINKS)
+@Requires({
+		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_EXT_EMOJI
+})
 public class HelpCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

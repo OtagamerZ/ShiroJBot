@@ -50,10 +50,7 @@ import java.util.stream.Collectors;
 		category = Category.INFO
 )
 @Signature("<race:word>")
-@Requires({
-		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_ATTACH_FILES
-})
+@Requires(Permission.MESSAGE_EMBED_LINKS)
 public class KawaiponSenshiCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

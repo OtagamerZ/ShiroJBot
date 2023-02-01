@@ -54,10 +54,7 @@ import java.util.concurrent.ExecutionException;
 		"<user:user:r> <value:number:r>",
 		"<user:user:r> <card:word:r> <confirm:word>[y]"
 })
-@Requires({
-		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_ATTACH_FILES
-})
+@Requires(Permission.MESSAGE_EMBED_LINKS)
 public class TransferCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

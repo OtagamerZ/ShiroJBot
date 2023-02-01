@@ -40,10 +40,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 		"<action:word:r>[clear]",
 		"<channel:channel:r>"
 })
-@Requires({
-		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MESSAGE_ATTACH_FILES
-})
+@Requires(Permission.MESSAGE_EMBED_LINKS)
 public class SetKawaiponCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

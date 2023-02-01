@@ -53,10 +53,7 @@ import java.util.Set;
 		"<card:word:r> <amount:number>",
 		"<card:word:r> <confirm:word>[y]"
 })
-@Requires({
-		Permission.MESSAGE_ATTACH_FILES,
-		Permission.MESSAGE_EMBED_LINKS
-})
+@Requires(Permission.MESSAGE_EMBED_LINKS)
 public class DeckRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
