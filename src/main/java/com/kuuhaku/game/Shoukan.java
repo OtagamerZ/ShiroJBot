@@ -140,7 +140,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
 
 		curr.showHand();
-		reportEvent("str/game_start", "<@" + curr.getUid() + ">");
+		reportEvent("str/game_start", false, "<@" + curr.getUid() + ">");
 
 		takeSnapshot();
 	}
@@ -154,7 +154,7 @@ public class Shoukan extends GameInstance<Phase> {
 			for (Hand h : hands.values()) {
 				if (h.getUid().equals(user.getId()) && h.selectionPending()) {
 					if (!m.getName().equals("select")) {
-						reportEvent("error/pending_choice");
+						getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 						return;
 					}
 
@@ -171,7 +171,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@PlayerAction("reload")
 	private boolean reload(Side side, JSONObject args) {
-		reportEvent("str/game_reload", getCurrent().getName());
+		reportEvent("str/game_reload", false, getCurrent().getName());
 		return true;
 	}
 
@@ -263,7 +263,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.getData().put("last_summon", copy);
-		reportEvent("str/place_card",
+		reportEvent("str/place_card", true,
 				curr.getName(),
 				copy.isFlipped() ? getLocale().get("str/a_card") : copy,
 				copy.getState().toString(getLocale())
@@ -345,7 +345,7 @@ public class Shoukan extends GameInstance<Phase> {
 			slot.setTop(proxy);
 		}
 
-		reportEvent("str/place_card",
+		reportEvent("str/place_card", true,
 				hand.getName(),
 				proxy.isFlipped() ? getLocale().get("str/a_card") : proxy,
 				proxy.getState().toString(getLocale())
@@ -455,7 +455,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		target.getEquipments().add(copy);
 		curr.getData().put("last_equipment", copy);
-		reportEvent("str/equip_card",
+		reportEvent("str/equip_card", true,
 				curr.getName(),
 				copy.isFlipped() ? getLocale().get("str/an_equipment") : copy,
 				target.isFlipped() ? getLocale().get("str/a_card") : target
@@ -485,7 +485,7 @@ public class Shoukan extends GameInstance<Phase> {
 		chosen.setAvailable(false);
 		arena.setField(chosen.copy());
 		curr.getData().put("last_field", chosen);
-		reportEvent("str/place_field", curr.getName(), chosen);
+		reportEvent("str/place_field", true, curr.getName(), chosen);
 		return true;
 	}
 
@@ -517,7 +517,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		chosen.setSwitched(true);
-		reportEvent("str/flip_card", curr.getName(), chosen, chosen.getState().toString(getLocale()));
+		reportEvent("str/flip_card", true, curr.getName(), chosen, chosen.getState().toString(getLocale()));
 		return true;
 	}
 
@@ -543,7 +543,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		slot.swap();
 
-		reportEvent("str/promote_card",
+		reportEvent("str/promote_card", true,
 				curr.getName(),
 				chosen.isFlipped() ? getLocale().get("str/a_card") : chosen
 		);
@@ -581,7 +581,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.getGraveyard().add(chosen);
 
-		reportEvent("str/sacrifice_card", curr.getName(), chosen);
+		reportEvent("str/sacrifice_card", true, curr.getName(), chosen);
 		return true;
 	}
 
@@ -628,7 +628,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.getGraveyard().addAll(cards);
 
-		reportEvent("str/sacrifice_card", curr.getName(),
+		reportEvent("str/sacrifice_card", true, curr.getName(),
 				Utils.properlyJoin(getLocale().get("str/and")).apply(cards.stream().map(Drawable::toString).toList())
 		);
 		return true;
@@ -663,7 +663,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		reportEvent("str/discard_card", curr.getName(), chosen);
+		reportEvent("str/discard_card", true, curr.getName(), chosen);
 		return true;
 	}
 
@@ -704,7 +704,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		reportEvent("str/discard_card", curr.getName(),
+		reportEvent("str/discard_card", true, curr.getName(),
 				Utils.properlyJoin(getLocale().get("str/and")).apply(cards.stream().map(Drawable::toString).toList())
 		);
 		return true;
@@ -771,7 +771,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			curr.getData().put("last_spell", copy);
 			trigger(ON_SPELL, side);
-			reportEvent("str/spell_shield");
+			reportEvent("str/spell_shield", true);
 			return false;
 		} else if (!tgt.validate(chosen.getTargetType())) {
 			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + chosen.getTargetType()))).queue();
@@ -800,7 +800,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.getData().put("last_spell", copy);
 		trigger(ON_SPELL, side);
-		reportEvent("str/activate_card",
+		reportEvent("str/activate_card", true,
 				curr.getName(),
 				chosen.getTags().contains("tag/secret") ? getLocale().get("str/a_spell") : chosen
 		);
@@ -885,7 +885,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 				curr.getData().put("last_ability", chosen);
 				trigger(ON_ABILITY, side);
-				reportEvent("str/spell_shield");
+				reportEvent("str/spell_shield", true);
 				return false;
 			}
 		}
@@ -904,7 +904,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.getData().put("last_ability", chosen);
 		trigger(ON_ABILITY, side);
-		reportEvent("str/card_special", curr.getName(), chosen);
+		reportEvent("str/card_special", true, curr.getName(), chosen);
 		return !curr.selectionPending();
 	}
 
@@ -974,7 +974,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		you.modHP((int) -(dmg * 0.5));
-		reportEvent("str/combat_self", ally, pHP - you.getHP());
+		reportEvent("str/combat_self", true, ally, pHP - you.getHP());
 		return false;
 	}
 
@@ -1149,7 +1149,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 								you.getGraveyard().add(ally);
 
-								reportEvent("str/combat", ally, enemy, getLocale().get("str/combat_defeat", pHP - you.getHP()));
+								reportEvent("str/combat", true, ally, enemy, getLocale().get("str/combat_defeat", pHP - you.getHP()));
 								return true;
 							} else {
 								int block = enemy.getBlock();
@@ -1158,7 +1158,7 @@ public class Shoukan extends GameInstance<Phase> {
 								if (Calc.chance(100 - ally.getHitChance())) {
 									trigger(ON_MISS, ally.asSource(ON_MISS));
 
-									reportEvent("str/combat", ally, enemy, getLocale().get("str/combat_miss"));
+									reportEvent("str/combat", true, ally, enemy, getLocale().get("str/combat_miss"));
 									return true;
 								} else if (!unstop && !ally.popFlag(Flag.TRUE_STRIKE) && (enemy.popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
 									trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
@@ -1169,7 +1169,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 									you.getGraveyard().add(ally);
 
-									reportEvent("str/combat", ally, enemy, getLocale().get("str/combat_block", block));
+									reportEvent("str/combat", true, ally, enemy, getLocale().get("str/combat_block", block));
 									return true;
 								} else if (!ally.popFlag(Flag.TRUE_STRIKE) && (enemy.popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
 									trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
@@ -1178,7 +1178,7 @@ public class Shoukan extends GameInstance<Phase> {
 										op.modHP((int) -(ally.getActiveAttr() * dmgMult * 0.02));
 									}
 
-									reportEvent("str/combat", ally, enemy, getLocale().get("str/combat_dodge", dodge));
+									reportEvent("str/combat", true, ally, enemy, getLocale().get("str/combat_dodge", dodge));
 									return true;
 								}
 
@@ -1252,7 +1252,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		reportEvent("str/combat", ally, Utils.getOr(enemy, op.getName()), getLocale().get(outcome, pHP - op.getHP()));
+		reportEvent("str/combat", true, ally, Utils.getOr(enemy, op.getName()), getLocale().get(outcome, pHP - op.getHP()));
 		return false;
 	}
 
@@ -1523,9 +1523,12 @@ public class Shoukan extends GameInstance<Phase> {
 		};
 	}
 
-	private void reportEvent(String message, Object... args) {
+	private void reportEvent(String message, boolean trigger, Object... args) {
 		resetTimer();
-		trigger(ON_TICK);
+		if (trigger) {
+			trigger(ON_TICK);
+			getCurrent().setRolled(true);
+		}
 
 		List<Side> sides = List.of(getOtherSide(), getCurrentSide());
 		for (Side side : sides) {
@@ -1649,13 +1652,13 @@ public class Shoukan extends GameInstance<Phase> {
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
 		buttons.put(Utils.parseEmoji("▶"), w -> {
 			if (curr.selectionPending()) {
-				reportEvent("error/pending_choice");
+				getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 				return;
 			} else if (getPhase() == Phase.COMBAT || getTurn() == 1) {
 				if (curr.getLockTime(Lock.TAUNT) > 0) {
 					List<SlotColumn> yours = getSlots(curr.getSide());
 					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
-						reportEvent("error/taunt_locked", curr.getLockTime(Lock.TAUNT));
+						getChannel().sendMessage(getLocale().get("error/pending_choice", false, curr.getLockTime(Lock.TAUNT))).queue();
 						return;
 					}
 				}
@@ -1665,20 +1668,20 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			setPhase(Phase.COMBAT);
-			reportEvent("str/game_combat_phase");
+			reportEvent("str/game_combat_phase", true, true);
 		});
 
 		if (getPhase() == Phase.PLAN) {
 			buttons.put(Utils.parseEmoji("⏩"), w -> {
-				if (curr.getLockTime(Lock.TAUNT) > 0) {
+				if (curr.selectionPending()) {
+					getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
+					return;
+				} else if (curr.getLockTime(Lock.TAUNT) > 0) {
 					List<SlotColumn> yours = getSlots(curr.getSide());
 					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
-						reportEvent("error/taunt_locked", curr.getLockTime(Lock.TAUNT));
+						getChannel().sendMessage(getLocale().get("error/pending_choice", false, curr.getLockTime(Lock.TAUNT))).queue();
 						return;
 					}
-				} else if (curr.selectionPending()) {
-					reportEvent("error/pending_choice");
-					return;
 				}
 
 				nextTurn();
@@ -1687,9 +1690,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (getTurn() == 1 && !curr.hasRolled()) {
 				buttons.put(Utils.parseEmoji("\uD83D\uDD04"), w -> {
 					curr.rerollHand();
-					curr.setRolled(true);
-
-					reportEvent("str/hand_reroll", curr.getName());
+					reportEvent("str/hand_reroll", true, curr.getName());
 				});
 			}
 
@@ -1698,25 +1699,25 @@ public class Shoukan extends GameInstance<Phase> {
 				if (rem > 0) {
 					buttons.put(Utils.parseEmoji("📤"), w -> {
 						if (curr.selectionPending()) {
-							reportEvent("error/pending_choice");
+							getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 							return;
 						}
 
 						curr.manualDraw(1);
 						curr.showHand();
-						reportEvent("str/draw_card", curr.getName(), 1, "");
+						reportEvent("str/draw_card", true, curr.getName(), 1, "");
 					});
 
 					if (rem > 1) {
 						buttons.put(Utils.parseEmoji("📦"), w -> {
 							if (curr.selectionPending()) {
-								reportEvent("error/pending_choice");
+								getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 								return;
 							}
 
 							curr.manualDraw(curr.getRemainingDraws());
 							curr.showHand();
-							reportEvent("str/draw_card", curr.getName(), rem, "s");
+							reportEvent("str/draw_card", true, curr.getName(), rem, "s");
 						});
 					}
 				}
@@ -1724,7 +1725,7 @@ public class Shoukan extends GameInstance<Phase> {
 				if (curr.isCritical() && !curr.hasUsedDestiny()) {
 					buttons.put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
 						if (curr.selectionPending()) {
-							reportEvent("error/pending_choice");
+							getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 							return;
 						}
 
@@ -1740,7 +1741,7 @@ public class Shoukan extends GameInstance<Phase> {
 						curr.setUsedDestiny(true);
 
 						curr.showHand();
-						reportEvent("str/destiny_draw", curr.getName());
+						reportEvent("str/destiny_draw", true, curr.getName());
 					});
 				}
 			}
@@ -1748,7 +1749,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (curr.getOrigin().major() == Race.SPIRIT && curr.getDiscard().size() >= 3 && curr.getOriginCooldown() == 0) {
 				buttons.put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
 					if (curr.selectionPending()) {
-						reportEvent("error/pending_choice");
+						getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 						return;
 					}
 
@@ -1777,7 +1778,7 @@ public class Shoukan extends GameInstance<Phase> {
 					curr.getCards().add(SynthesizeCommand.rollSynthesis(cards));
 					curr.setOriginCooldown(3);
 					curr.showHand();
-					reportEvent("str/spirit_synth", curr.getName());
+					reportEvent("str/spirit_synth", true, curr.getName());
 				});
 			}
 
@@ -1785,9 +1786,9 @@ public class Shoukan extends GameInstance<Phase> {
 				history = !history;
 
 				if (history) {
-					reportEvent("str/game_history_enable", curr.getName());
+					reportEvent("str/game_history_enable", false, curr.getName());
 				} else {
-					reportEvent("str/game_history_disable", curr.getName());
+					reportEvent("str/game_history_disable", false, curr.getName());
 				}
 			});
 
@@ -1948,7 +1949,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		curr.showHand();
-		reportEvent("str/game_turn_change", "<@" + curr.getUid() + ">", (int) Math.ceil(getTurn() / 2d));
+		reportEvent("str/game_turn_change", true, "<@" + curr.getUid() + ">", (int) Math.ceil(getTurn() / 2d));
 
 		takeSnapshot();
 	}
