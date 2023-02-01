@@ -230,6 +230,7 @@ public class Hand {
 	private transient String lastMessage;
 	private transient boolean forfeit;
 	private transient boolean usedDestiny;
+	private transient boolean rolled;
 	private transient String defeat;
 	private transient int kills = 0;
 	private transient int hpDelta = 0;
@@ -579,6 +580,14 @@ public class Hand {
 		return null;
 	}
 
+	public void rerollHand() {
+		deck.addAll(cards);
+		cards.clear();
+		Collections.shuffle(deck);
+
+		manualDraw(getRemainingDraws());
+	}
+
 	public BondedList<Drawable<?>> getGraveyard() {
 		graveyard.removeIf(d -> !equals(d.getHand()) || !d.keepOnDestroy());
 
@@ -842,6 +851,14 @@ public class Hand {
 
 	public void setUsedDestiny(boolean usedDestiny) {
 		this.usedDestiny = usedDestiny;
+	}
+
+	public boolean hasRolled() {
+		return rolled;
+	}
+
+	public void setRolled(boolean rolled) {
+		this.rolled = rolled;
 	}
 
 	public boolean isDefeated() {

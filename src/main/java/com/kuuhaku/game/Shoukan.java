@@ -131,7 +131,7 @@ public class Shoukan extends GameInstance<Phase> {
 		restoring = false;
 
 		for (Hand h : hands.values()) {
-			h.manualDraw(5);
+			h.manualDraw(h.getRemainingDraws());
 		}
 
 		setPhase(Phase.PLAN);
@@ -1683,6 +1683,15 @@ public class Shoukan extends GameInstance<Phase> {
 
 				nextTurn();
 			});
+
+			if (getTurn() == 1 && !curr.hasRolled()) {
+				buttons.put(Utils.parseEmoji("\uD83D\uDD04"), w -> {
+					curr.rerollHand();
+					curr.setRolled(true);
+
+					reportEvent("str/hand_reroll", curr.getName());
+				});
+			}
 
 			if (!curr.getRealDeck().isEmpty()) {
 				int rem = curr.getRemainingDraws();
