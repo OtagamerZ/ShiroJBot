@@ -364,8 +364,8 @@
 						 Utils.roundToString(getMetaDivergence() * 100, 0),
 						 Utils.roundToString((float) totalMPCost.get() / allCards.size(), 1),
 						 Utils.roundToString((float) totalHPCost.get() / allCards.size(), 1),
-						 Utils.roundToString((float) totalDmg.get() / allCards.size(), 1),
-						 Utils.roundToString((float) totalDfs.get() / allCards.size(), 1),
+						 Utils.roundToString((float) totalDmg.get() / allCards.size(), 0),
+						 Utils.roundToString((float) totalDfs.get() / allCards.size(), 0),
 						 getMaxSenshiCopies(), getMaxEvogearCopies(1), getMaxEvogearCopies(4),
 						 3
 				 ), 1175, 45, 175, 0,
