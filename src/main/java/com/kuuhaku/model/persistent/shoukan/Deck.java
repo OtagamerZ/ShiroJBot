@@ -259,7 +259,7 @@
 
 	 public double getMetaDivergence() {
 		 return DAO.queryNative(Double.class, """
-				 SELECT round(score * 1.0 / total, 2) AS divergence
+				 SELECT 1 - round(score * 1.0 / total, 2) AS divergence
 				 FROM (
 				      SELECT count(1)                          AS total
 				           , sum(iif(m.card_id IS NULL, 0, 1)) AS score
