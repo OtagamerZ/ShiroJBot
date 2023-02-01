@@ -60,9 +60,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			Map.entry("ddg", new Color(0xFFC800)),
 			Map.entry("blk", new Color(0xA9A9A9)),
 
+			Map.entry("cd", new Color(0x48BAFF)),
+
 			Map.entry("b", Color.BLACK),
 			Map.entry("n", Color.BLACK),
-			Map.entry("cd", new Color(0x48BAFF)),
 			Map.entry("ally", new Color(0x000100)),
 			Map.entry("enemy", new Color(0x010000))
 	);
@@ -198,7 +199,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Map.entry("dfs", getDfs()),
 				Map.entry("ddg", getDodge()),
 				Map.entry("blk", getBlock()),
-				Map.entry("cd", 1),
+				Map.entry("cd", 0),
 				Map.entry("data", getStats().getData())
 		);
 
