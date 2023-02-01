@@ -60,7 +60,7 @@ public class DeckMetaCommand implements Executable {
 			return;
 		}
 
-		List<? extends Drawable<?>> cards = DAO.queryAllNative(String.class, "SELECT card FROM v_shoukan_meta ORDER BY type").stream()
+		List<? extends Drawable<?>> cards = DAO.queryAllNative(String.class, "SELECT card_id FROM v_shoukan_meta ORDER BY type").stream()
 				.map(id -> {
 							List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
 							if (types.isEmpty()) return null;
