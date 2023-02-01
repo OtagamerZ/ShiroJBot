@@ -265,9 +265,9 @@
 				           , sum(iif(m.card_id IS NULL, 0, 1)) AS score
 				      FROM stashed_card sc
 				               LEFT JOIN v_shoukan_meta m ON sc.card_id = m.card_id
-				      WHERE deck_id = :id
+				      WHERE deck_id = ?1
 				 ) x
-				 """);
+				 """, id);
 	 }
 
 	 public BufferedImage render(I18N locale) {
