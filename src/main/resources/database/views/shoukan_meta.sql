@@ -17,27 +17,6 @@
  */
 
 CREATE OR REPLACE VIEW v_shoukan_meta AS
-WITH x AS (
-          SELECT x.id
-               , x.field
-               , jsonb_array_elements(x.slots -> 'placed') AS slots
-          FROM (
-               SELECT h.id
-                    , jsonb_array_elements(h.data -> 'turns') ->> 'field'                   AS field
-                    , jsonb_array_elements(h.data -> 'turns') -> lower(h.head ->> 'winner') AS slots
-               FROM match_history h
-               WHERE head ? 'winner'
-                 AND h.id >= (
-                             SELECT id
-                             FROM match_history
-                             WHERE head ? 'winner'
-                             ORDER BY id DESC
-                             LIMIT 1
-                             ) - 30
-               ORDER BY h.id DESC
-               ) x
-          )
-
 SELECT x.card
      , x.freq
 FROM (
@@ -49,24 +28,19 @@ FROM (
           SELECT x.card
                , count(1)         AS freq
                , get_type(x.card) AS type
-          FROM (
-               SELECT jsonb_array_elements_text(x.cards) AS card
-               FROM (
-                    SELECT x.equips || x.front || x.back || x.field AS cards
-                    FROM (
-                         SELECT x.id
-                              , jsonb_merge(x.slots -> 'frontline')  AS front
-                              , jsonb_merge(x.slots -> 'backline')   AS back
-                              , jsonb_merge(x.slots -> 'equipments') AS equips
-                              , jsonb_agg(x.field)                   AS field
-                         FROM x
-                         GROUP BY x.id
-                         ) x
-                    ) x
-               ) x
+          FROM jsonb_array_elements_text((
+                                         SELECT jsonb_merge(x.deck)
+                                         FROM (
+                                              SELECT data -> 'turns' -> 0 -> lower(head ->> 'winner') -> 'deck' AS deck
+                                              FROM match_history
+                                              WHERE head ? 'winner'
+                                                AND jsonb_array_length(data -> 'turns') > 10
+                                              ORDER BY id
+                                              LIMIT 30
+                                              ) x
+                                         )) x(card)
           GROUP BY x.card
           ) x
-     WHERE x.card <> 'DEFAULT'
      ) x
 WHERE x.number <= CASE (x.type)
                       WHEN 2 THEN 20
