@@ -353,7 +353,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		offset += Graph.getStringBounds(g2d, details).getWidth();
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 12));
-		Graph.drawOutlinedString(g2d, "#", 88 + offset - (20 * Utils.getDigits(rank)), 45, 3, Color.BLACK);
+		Graph.drawOutlinedString(g2d, "#", 88 + offset - 20 * Utils.getDigits(rank), 45, 3, Color.BLACK);
 
 		AccountTitle title = account.getTitle();
 		if (title != null) {
