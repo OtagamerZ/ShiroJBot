@@ -107,9 +107,12 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					}
 
 					String key = Utils.getOr(tag, type);
-					if (COLORS.containsKey(key) && !Utils.equalsAny(key, "enemy", "ally")) {
-						g2d.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.PLAIN, 10));
+					if (COLORS.containsKey(key)) {
 						g2d.setColor(COLORS.getOrDefault(key, g2d.getColor()));
+
+						if (!Utils.equalsAny(key, "enemy", "ally")) {
+							g2d.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.PLAIN, 10));
+						}
 					}
 
 					if (!type.equalsIgnoreCase("data") && !Utils.equalsAny(tag, "b", "n")) {
