@@ -82,6 +82,13 @@ public class DeckMetaCommand implements Executable {
 		Class<?> current = Senshi.class;
 		XStringBuilder sb = new XStringBuilder();
 		for (Drawable<?> card : cards) {
+			if (current != card.getClass()) {
+				eb.addField(locale.get("type/" + current.getSimpleName()), sb.toString(), true);
+
+				sb.clear();
+				current = card.getClass();
+			}
+
 			if (card instanceof Senshi s) {
 				sb.appendNewLine(Utils.getEmoteString(Constants.EMOTE_REPO_4, s.getRace().name()) + " " + s);
 			} else if (card instanceof Evogear e) {
@@ -94,13 +101,10 @@ public class DeckMetaCommand implements Executable {
 					case DUNGEON -> ":japanese_castle: " + f;
 				});
 			}
+		}
 
-			if (current != card.getClass()) {
-				eb.addField(locale.get("type/" + current.getSimpleName()), sb.toString(), true);
-
-				sb.clear();
-				current = card.getClass();
-			}
+		if (!sb.isEmpty()) {
+			eb.addField(locale.get("type/" + current.getSimpleName()), sb.toString(), true);
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
