@@ -257,7 +257,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			g1.setClip(inner);
 			g1.setColor(bgCol);
 
-			RoundRectangle2D wids = new RoundRectangle2D.Double(-14, 260, 200, 50, 20, 20);
+			RoundRectangle2D wids = new RoundRectangle2D.Double(-14, 210, 200, 50, 20, 20);
 
 			int em = g1.getFontMetrics().getHeight();
 			g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
