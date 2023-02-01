@@ -60,7 +60,7 @@ public class DeckMetaCommand implements Executable {
 			return;
 		}
 
-		List<? extends Drawable<?>> cards = DAO.queryAllNative(String.class, "SELECT card_id FROM v_shoukan_meta ORDER BY type").stream()
+		List<? extends Drawable<?>> cards = DAO.queryAllNative(String.class, "SELECT card_id FROM v_shoukan_meta ORDER BY type, card_id").stream()
 				.map(id -> {
 							List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
 							if (types.isEmpty()) return null;
@@ -83,7 +83,7 @@ public class DeckMetaCommand implements Executable {
 		XStringBuilder sb = new XStringBuilder();
 		for (Drawable<?> card : cards) {
 			if (current != card.getClass()) {
-				eb.addField("type/" + current.getSimpleName(), sb.toString(), true);
+				eb.addField(locale.get("type/" + current.getSimpleName()), sb.toString(), true);
 
 				sb.clear();
 				current = card.getClass();
