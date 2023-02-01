@@ -34,7 +34,7 @@ FROM (
                                          FROM (
                                               SELECT data -> 'turns' -> 0 -> lower(head ->> 'winner') -> 'deck' AS deck
                                               FROM match_history
-                                              WHERE head ? 'winner'
+                                              WHERE has(head, 'winner')
                                                 AND jsonb_array_length(data -> 'turns') > 10
                                               ORDER BY id
                                               LIMIT 30

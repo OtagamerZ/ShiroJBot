@@ -258,7 +258,6 @@
 	 }
 
 	 public double getMetaDivergence() {
-		 // TODO Divergence
 		 return 1;
 	 }
 
