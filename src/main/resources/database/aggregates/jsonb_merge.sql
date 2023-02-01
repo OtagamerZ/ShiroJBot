@@ -16,9 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-DROP AGGREGATE IF EXISTS jsonb_merge(JSONB);
-CREATE AGGREGATE jsonb_merge(JSONB) (
-    SFUNC = jsonb_concat,
-    STYPE = JSONB,
-    INITCOND = '[]'
-);
+-- CREATE AGGREGATE jsonb_merge(JSONB) (
+--     SFUNC = jsonb_concat,
+--     STYPE = JSONB,
+--     INITCOND = '[]'
+-- );

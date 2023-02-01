@@ -39,18 +39,16 @@ $$
 SELECT exp($1[1] / $1[2]);
 $$;
 
-DROP AGGREGATE IF EXISTS geo_mean(NUMERIC, NUMERIC);
-CREATE AGGREGATE geo_mean(NUMERIC, NUMERIC) (
-    SFUNC = geo_mean_accum,
-    STYPE = NUMERIC[],
-    FINALFUNC = geo_mean_finalize,
-    INITCOND = '{0.0, 0.0}'
-    );
+-- CREATE AGGREGATE geo_mean(NUMERIC, NUMERIC) (
+--     SFUNC = geo_mean_accum,
+--     STYPE = NUMERIC[],
+--     FINALFUNC = geo_mean_finalize,
+--     INITCOND = '{0.0, 0.0}'
+--     );
 
-DROP AGGREGATE IF EXISTS geo_mean(NUMERIC);
-CREATE AGGREGATE geo_mean(NUMERIC) (
-    SFUNC = geo_mean_accum,
-    STYPE = NUMERIC[],
-    FINALFUNC = geo_mean_finalize,
-    INITCOND = '{0.0, 0.0}'
-    );
+-- CREATE AGGREGATE geo_mean(NUMERIC) (
+--     SFUNC = geo_mean_accum,
+--     STYPE = NUMERIC[],
+--     FINALFUNC = geo_mean_finalize,
+--     INITCOND = '{0.0, 0.0}'
+--     );
