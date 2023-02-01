@@ -387,8 +387,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
 			game.getChannel().sendMessage(game.getLocale().get("error/effect")).queue();
 			return false;
-		} finally {
-			setCooldown(cachedEffect.getStoredProps().getInt("cd"));
 		}
 	}
 

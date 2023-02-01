@@ -1004,7 +1004,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			game.getChannel().sendMessage(game.getLocale().get("error/effect")).queue();
 			return false;
 		} finally {
-			setCooldown(cachedEffect.getStoredProps().getInt("cd"));
 			unlock();
 			//other.setHeroDefense(false);
 		}
