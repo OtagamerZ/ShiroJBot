@@ -201,126 +201,140 @@ public class GuildListener extends ListenerAdapter {
 
 		try {
 			CompletableFuture.runAsync(() -> {
-				String content = event.getMessage().getContentRaw();
-				MessageData.Guild data;
-				try {
-					data = new MessageData.Guild(event);
-				} catch (NullPointerException e) {
-					return;
-				}
+				try (Checkpoint cp = new Checkpoint()) {
+					String content = event.getMessage().getContentRaw();
+					MessageData.Guild data;
+					try {
+						data = new MessageData.Guild(event);
+					} catch (NullPointerException e) {
+						return;
+					}
+					cp.lap("Initial check");
 
-				GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
-				I18N locale = config.getLocale();
-				if (!Objects.equals(config.getName(), data.guild().getName())) {
-					config.setName(data.guild().getName());
-					config.save();
-				}
+					GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
+					I18N locale = config.getLocale();
+					if (!Objects.equals(config.getName(), data.guild().getName())) {
+						config.setName(data.guild().getName());
+						config.save();
+					}
+					cp.lap("Guild config update");
 
-				if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
-					Member mb = event.getMember();
-					if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
-						String name = Unidecode.decode(mb.getEffectiveName()).trim();
-						if (!name.equals(mb.getEffectiveName())) {
-							if (name.length() < 3) {
-								name = locale.get("zalgo/name_" + Calc.rng(1, 4));
+					if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
+						Member mb = event.getMember();
+						if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
+							String name = Unidecode.decode(mb.getEffectiveName()).trim();
+							if (!name.equals(mb.getEffectiveName())) {
+								if (name.length() < 3) {
+									name = locale.get("zalgo/name_" + Calc.rng(1, 4));
+								}
+
+								mb.modifyNickname(name).queue();
 							}
-
-							mb.modifyNickname(name).queue();
 						}
 					}
-				}
+					cp.lap("Anti-zalgo");
 
-				Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
-				int lvl = profile.getLevel();
+					Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
+					int lvl = profile.getLevel();
 
-				GuildBuff gb = config.getCumBuffs();
-				profile.addXp((long) (15 * (1 + gb.xp())));
-				profile.save();
+					GuildBuff gb = config.getCumBuffs();
+					profile.addXp((long) (15 * (1 + gb.xp())));
+					profile.save();
+					cp.lap("XP");
 
-				Account account = profile.getAccount();
-				if (!Objects.equals(account.getName(), data.user().getName())) {
-					account.setName(data.user().getName());
-					account.save();
-				}
-
-				AtomicReference<TextChannel> notifs = new AtomicReference<>();
-				if (config.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
-					notifs.set(config.getSettings().getNotificationsChannel());
-					if (notifs.get() == null) {
-						notifs.set(event.getChannel());
+					Account account = profile.getAccount();
+					if (!Objects.equals(account.getName(), data.user().getName())) {
+						account.setName(data.user().getName());
+						account.save();
 					}
-				}
+					cp.lap("Account name update");
 
-				if (profile.getLevel() > lvl) {
-					int high = account.getHighestLevel();
-					int prize = 0;
-					if (profile.getLevel() > high) {
-						prize = profile.getLevel() * 150;
-						account.addCR(prize, "Level up prize");
-					}
-
-					if (notifs.get() != null) {
-						notifs.get().sendMessage(locale.get(prize > 0 ? "str/level_up_prize" : "str/level_up", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
-					}
-				}
-
-				DynamicProperty dp = account.getDynamicProperty("message_count");
-				int count = NumberUtils.toInt(dp.getValue()) + 1;
-				dp.setValue(count);
-				dp.save();
-
-				DAO.apply(Account.class, account.getUid(), acc -> {
-					Title t = acc.checkTitles();
-					if (t != null && notifs.get() != null) {
-						notifs.get().sendMessage(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName())).queue();
-					}
-				});
-
-				if (toHandle.containsKey(data.guild().getId())) {
-					List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
-					for (SimpleMessageListener evt : evts) {
-						if (!evt.isClosed() && evt.checkChannel(data.channel())) {
-							evt.onGuildMessageReceived(event);
+					AtomicReference<TextChannel> notifs = new AtomicReference<>();
+					if (config.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
+						notifs.set(config.getSettings().getNotificationsChannel());
+						if (notifs.get() == null) {
+							notifs.set(event.getChannel());
 						}
 					}
-					evts.removeIf(SimpleMessageListener::isClosed);
-				}
+					cp.lap("Notification channel");
 
-				EventData ed = new EventData(config, profile);
-				if (content.toLowerCase().startsWith(config.getPrefix())) {
-					processCommand(data, ed, content);
-				}
+					if (profile.getLevel() > lvl) {
+						int high = account.getHighestLevel();
+						int prize = 0;
+						if (profile.getLevel() > high) {
+							prize = profile.getLevel() * 150;
+							account.addCR(prize, "Level up prize");
+						}
 
-				if (PatternCache.matches(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
-					data.channel().sendMessage(locale.get("str/mentioned",
-							data.user().getAsMention(),
-							config.getPrefix(),
-							Constants.SERVER_ROOT
-					)).queue();
-				}
+						if (notifs.get() != null) {
+							notifs.get().sendMessage(locale.get(prize > 0 ? "str/level_up_prize" : "str/level_up", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
+						}
+					}
+					cp.lap("Level");
 
-				if (!event.getAuthor().equals(event.getJDA().getSelfUser()) && Utils.between(content.length(), 3, 255)) {
-					List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
-							data.guild().getId(), StringUtils.stripAccents(content)
-					);
+					DynamicProperty dp = account.getDynamicProperty("message_count");
+					int count = NumberUtils.toInt(dp.getValue()) + 1;
+					dp.setValue(count);
+					dp.save();
 
-					for (CustomAnswer ca : cas) {
-						if (ca.getChannels().isEmpty() || ca.getChannels().contains(event.getChannel().getId())) {
-							if (ca.getUsers().isEmpty() || ca.getUsers().contains(event.getAuthor().getId())) {
-								if (Calc.chance(ca.getChance() / (event.getAuthor().isBot() ? 2d : 1d))) {
-									event.getChannel().sendTyping()
-											.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
-											.flatMap(v -> event.getChannel().sendMessage(ca.getAnswer()))
-											.queue();
-									break;
+					DAO.apply(Account.class, account.getUid(), acc -> {
+						Title t = acc.checkTitles();
+						if (t != null && notifs.get() != null) {
+							notifs.get().sendMessage(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName())).queue();
+						}
+					});
+					cp.lap("Achievements");
+
+					if (toHandle.containsKey(data.guild().getId())) {
+						List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
+						for (SimpleMessageListener evt : evts) {
+							if (!evt.isClosed() && evt.checkChannel(data.channel())) {
+								evt.onGuildMessageReceived(event);
+							}
+						}
+						evts.removeIf(SimpleMessageListener::isClosed);
+					}
+					cp.lap("SML Events");
+
+					EventData ed = new EventData(config, profile);
+					if (content.toLowerCase().startsWith(config.getPrefix())) {
+						processCommand(data, ed, content);
+					}
+					cp.lap("Command");
+
+					if (PatternCache.matches(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
+						data.channel().sendMessage(locale.get("str/mentioned",
+								data.user().getAsMention(),
+								config.getPrefix(),
+								Constants.SERVER_ROOT
+						)).queue();
+					}
+					cp.lap("Self mention");
+
+					if (!event.getAuthor().equals(event.getJDA().getSelfUser()) && Utils.between(content.length(), 3, 255)) {
+						List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
+								data.guild().getId(), StringUtils.stripAccents(content)
+						);
+
+						for (CustomAnswer ca : cas) {
+							if (ca.getChannels().isEmpty() || ca.getChannels().contains(event.getChannel().getId())) {
+								if (ca.getUsers().isEmpty() || ca.getUsers().contains(event.getAuthor().getId())) {
+									if (Calc.chance(ca.getChance() / (event.getAuthor().isBot() ? 2d : 1d))) {
+										event.getChannel().sendTyping()
+												.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
+												.flatMap(v -> event.getChannel().sendMessage(ca.getAnswer()))
+												.queue();
+										break;
+									}
 								}
 							}
 						}
 					}
-				}
+					cp.lap("Custom answer");
 
-				rollDrops(config, locale);
-				rollEvents(data.channel(), locale);
+					rollDrops(config, locale);
+					rollEvents(data.channel(), locale);
+				}
 			});
 		} finally {
 			locks.remove(event.getAuthor().getId());
