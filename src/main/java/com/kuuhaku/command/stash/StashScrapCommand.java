@@ -132,7 +132,7 @@ public class StashScrapCommand implements Executable {
 	private int getValue(Collection<StashedCard> cards) {
 		int value = 0;
 		for (StashedCard sc : cards) {
-			double mult = Calc.rng(1, 1.75, sc.getId());
+			double mult = Calc.rng(0.5, 0.8, sc.getId());
 			if (sc.getType() == CardType.KAWAIPON) {
 				KawaiponCard kc = sc.getKawaiponCard();
 				value += (int) (kc.getSuggestedPrice() / 3 * mult);
