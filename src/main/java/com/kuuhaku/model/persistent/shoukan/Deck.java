@@ -258,7 +258,16 @@
 	 }
 
 	 public double getMetaDivergence() {
-		 return 1;
+		 return DAO.queryNative(Double.class, """
+				 SELECT round(score * 1.0 / total, 2) AS divergence
+				 FROM (
+				      SELECT count(1)                          AS total
+				           , sum(iif(m.card_id IS NULL, 0, 1)) AS score
+				      FROM stashed_card sc
+				               LEFT JOIN v_shoukan_meta m ON sc.card_id = m.card_id
+				      WHERE deck_id = :id
+				 ) x
+				 """);
 	 }
 
 	 public BufferedImage render(I18N locale) {
