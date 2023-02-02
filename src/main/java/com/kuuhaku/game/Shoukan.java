@@ -1247,7 +1247,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 		} finally {
-			if (ally.getSlot() != null && !ally.popFlag(Flag.FREE_ACTION)) {
+			if (ally.getSlot().getIndex() != -1 && !ally.popFlag(Flag.FREE_ACTION)) {
 				ally.setAvailable(false);
 			}
 		}

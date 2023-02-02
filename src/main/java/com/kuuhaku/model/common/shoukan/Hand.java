@@ -581,11 +581,17 @@ public class Hand {
 	}
 
 	public void rerollHand() {
-		deck.addAll(cards);
-		cards.clear();
-		Collections.shuffle(deck);
+		int i = 0;
+		Iterator<Drawable<?>> it = cards.iterator();
+		while (it.hasNext()) {
+			Drawable<?> card = it.next();
+			deck.add(card);
+			it.remove();
+			i++;
+		}
 
-		manualDraw(getRemainingDraws());
+		Collections.shuffle(deck);
+		manualDraw(i);
 	}
 
 	public BondedList<Drawable<?>> getGraveyard() {
