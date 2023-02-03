@@ -294,8 +294,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public double getPower() {
 		double mult = stats.getPower();
-		if (hand != null && spell && hand.getOrigin().hasMinor(Race.MYSTICAL)) {
-			mult *= 1.14 + (hand.getUserDeck().countRace(Race.MYSTICAL) * 0.02);
+		if (hand != null) {
+			if (spell && hand.getOrigin().hasMinor(Race.MYSTICAL)) {
+				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MYSTICAL) * 0.02);
+			}
+
+			mult *= 1 - Math.max(0, 0.06 * (hand.getOrigin().minor().length - 1));
 		}
 
 		return mult;

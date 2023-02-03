@@ -381,17 +381,32 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int getMPCost() {
-		return Math.max(0, base.getMana() + stats.getMana()) + (isFusion() ? 5 : 0);
+		double mult = 1;
+		if (hand.getOrigin().isPure() && race == hand.getOrigin().major()) {
+			mult *= 0.66;
+		}
+
+		return (int) (Math.max(0, base.getMana() + stats.getMana() + (isFusion() ? 5 : 0)) * mult);
 	}
 
 	@Override
 	public int getHPCost() {
-		return Math.max(0, base.getBlood() + stats.getBlood());
+		double mult = 1;
+		if (hand.getOrigin().isPure() && race == hand.getOrigin().major()) {
+			mult *= 0.66;
+		}
+
+		return (int) (Math.max(0, base.getBlood() + stats.getBlood()) * mult);
 	}
 
 	@Override
 	public int getSCCost() {
-		return Math.max(0, base.getSacrifices() + stats.getSacrifices());
+		double mult = 1;
+		if (hand.getOrigin().isPure() && race == hand.getOrigin().major()) {
+			mult *= 0.66;
+		}
+
+		return (int) (Math.max(0, base.getSacrifices() + stats.getSacrifices()) * mult);
 	}
 
 	@Override
@@ -500,15 +515,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private double getAttrMult() {
 		double mult = 1;
 		if (hand != null) {
-			if (hand.getOrigin().isPure()) {
-				if (race == hand.getOrigin().major()) {
-					mult *= 1.25;
-				} else {
-					mult *= 0.5;
-				}
+			if (hand.getOrigin().isPure() && race != hand.getOrigin().major()) {
+				mult *= 0.5;
 			}
-
-			mult *= 1 - Math.max(0, 0.06 * (hand.getOrigin().minor().length - 1));
 		}
 
 		return mult * stats.getAttrMult();
@@ -516,10 +525,15 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public double getPower() {
+		double mult = 1;
+		if (hand != null) {
+			mult *= 1 - Math.max(0, 0.06 * (hand.getOrigin().minor().length - 1));
+		}
+
 		if (isSupporting()) {
-			return stats.getPower() * 0.75;
+			return mult * stats.getPower() * 0.75;
 		} else {
-			return stats.getPower();
+			return mult * stats.getPower();
 		}
 	}
 
