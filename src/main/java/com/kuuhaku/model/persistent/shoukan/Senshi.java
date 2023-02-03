@@ -382,7 +382,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public int getMPCost() {
 		double mult = 1;
-		if (hand.getOrigin().isPure() && race == hand.getOrigin().major()) {
+		if (hand != null && hand.getOrigin().isPure() && race == hand.getOrigin().major()) {
 			mult *= 0.66;
 		}
 
@@ -392,7 +392,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public int getHPCost() {
 		double mult = 1;
-		if (hand.getOrigin().isPure() && race == hand.getOrigin().major()) {
+		if (hand != null && hand.getOrigin().isPure() && race == hand.getOrigin().major()) {
 			mult *= 0.66;
 		}
 
@@ -402,7 +402,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public int getSCCost() {
 		double mult = 1;
-		if (hand.getOrigin().isPure() && race == hand.getOrigin().major()) {
+		if (hand != null && hand.getOrigin().isPure() && race == hand.getOrigin().major()) {
 			mult *= 0.66;
 		}
 
