@@ -1387,6 +1387,10 @@ public class Shoukan extends GameInstance<Phase> {
 		return arena.getSlots(side);
 	}
 
+	public List<Drawable<?>> getBanned() {
+		return arena.getBanned();
+	}
+
 	public List<Evogear> getEquipments(Side side) {
 		return arena.getSlots(side).stream()
 				.map(SlotColumn::getTop)

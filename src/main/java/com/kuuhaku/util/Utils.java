@@ -1142,4 +1142,11 @@ public abstract class Utils {
 			}
 		}
 	}
+
+	@SafeVarargs
+	public static <T> void remove(T value, Collection<T>... cols) {
+		for (Collection<T> col : cols) {
+			col.removeIf(value::equals);
+		}
+	}
 }
