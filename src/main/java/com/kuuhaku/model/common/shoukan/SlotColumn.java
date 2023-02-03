@@ -221,6 +221,11 @@ public class SlotColumn {
 		state = (byte) Bit.set(state, 1, Math.max(curr, time), 4);
 	}
 
+	public void reduceLock(int time) {
+		int curr = Bit.get(state, 1, 4);
+		state = (byte) Bit.set(state, 1, Math.max(0, curr - time), 4);
+	}
+
 	public SlotColumn getLeft() {
 		if (index > 0) {
 			return game.getArena().getSlots(side).get(index - 1);

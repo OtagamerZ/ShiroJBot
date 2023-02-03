@@ -1910,6 +1910,8 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		for (SlotColumn slt : getSlots(curr.getSide())) {
+			slt.reduceLock(1);
+
 			for (Senshi s : slt.getCards()) {
 				if (s != null) {
 					s.reduceSleep(1);
