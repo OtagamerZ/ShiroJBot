@@ -113,7 +113,7 @@ public class StashedCard extends DAO<StashedCard> {
 
 			KawaiponCard kc = DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.uuid = ?1", uuid);
 			if (kc == null) {
-				kc = new KawaiponCard(uuid, card, Calc.chance(0.1 * (1 + Spawn.getRarityMult())));
+				kc = new KawaiponCard(uuid, card, Calc.chance(0.1 * Spawn.getRarityMult()));
 				kc.setKawaipon(kawaipon);
 				kc.save();
 			}

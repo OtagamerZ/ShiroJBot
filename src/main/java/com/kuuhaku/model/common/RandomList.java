@@ -9,15 +9,25 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.random.RandomGenerator;
 
+/**
+ * Curve bias:
+ * <br>
+ * <br>
+ * 0ㅤㅤㅤㅤㅤㅤㅤㅤㅤ1.0
+ * <br>
+ * <----------|---------->
+ * <br>
+ * 1/Nㅤㅤㅤ1.0ㅤㅤㅤㅤN
+ * <br>
+ * <br>
+ * Values <1 tend towards 0, values >1 tend towards 1
+ **/
 public class RandomList<T> {
 	private final NavigableMap<Double, T> map = new TreeMap<>();
 	private final List<Pair<Double, T>> pool = new TreeList<>();
 	private final RandomGenerator rng;
 	private final BiFunction<Double, Double, Double> randGen;
 	private final double fac;
-	/*
-	Curve bias, low values tend toward 1, while high values tend toward 0
-	 */
 	private double total = 0;
 
 	public RandomList() {
@@ -33,7 +43,13 @@ public class RandomList<T> {
 	}
 
 	public RandomList(RandomGenerator rng, double fac) {
-		this(rng, Math::pow, fac);
+		this(rng, (a, b) -> {
+			if (b > 1) {
+				return Math.pow(a, 1 / b);
+			}
+
+			return 1 - Math.pow(a, b);
+		}, fac);
 	}
 
 	public RandomList(BiFunction<Double, Double, Double> randGen, double fac) {

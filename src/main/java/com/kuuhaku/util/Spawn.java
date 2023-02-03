@@ -57,8 +57,8 @@ public abstract class Spawn {
 	public synchronized static KawaiponCard getKawaipon(GuildBuff gb, TextChannel channel) {
 		if (spawnedCards.containsKey(channel.getId())) return null;
 
-		double dropRate = 8 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount())) * (1 + gb.card());
-		double rarityBonus = 1 + getRarityMult() * (1 + gb.rarity());
+		double dropRate = 8 * (1.2 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount())) * (1 + gb.card()) * getQuantityMult();
+		double rarityBonus = 1 * (1 + gb.rarity()) * getRarityMult();
 
 		KawaiponCard card = null;
 		if (Calc.chance(dropRate)) {
@@ -89,7 +89,7 @@ public abstract class Spawn {
 				return null;
 			}
 
-			RandomList<Rarity> rPool = new RandomList<>(3 - rarityBonus);
+			RandomList<Rarity> rPool = new RandomList<>(1 / (3 / rarityBonus));
 			for (Rarity r : cPool.keySet()) {
 				if (r.getIndex() <= 0) continue;
 
@@ -103,7 +103,7 @@ public abstract class Spawn {
 			spawnedCards.put(
 					channel.getId(),
 					new SingleUseReference<>(card),
-					(long) (60 - 60 * getQuantityMult()), TimeUnit.SECONDS
+					(long) (60 - 60 / getQuantityMult()), TimeUnit.SECONDS
 			);
 		}
 
@@ -113,19 +113,19 @@ public abstract class Spawn {
 	public synchronized static Drop<?> getDrop(GuildBuff gb, TextChannel channel) {
 		if (spawnedDrops.containsKey(channel.getId())) return null;
 
-		double dropRate = 10 * (1 - getQuantityMult()) + (0.5 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount())) * (1 + gb.drop());
-		double rarityBonus = 1 + getRarityMult() * (1 + gb.rarity());
+		double dropRate = 10 * (1.2 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount())) * (1 + gb.drop()) * getQuantityMult();
+		double rarityBonus = 1 * (1 + gb.rarity()) * getRarityMult();
 
 		Drop<?> drop = null;
 		if (Calc.chance(dropRate)) {
-			RandomList<Drop<?>> rPool = new RandomList<>(3 - rarityBonus);
+			RandomList<Drop<?>> rPool = new RandomList<>(1 / (2.5 / rarityBonus));
 			rPool.add(new CreditDrop());
 
 			drop = rPool.get();
 			spawnedDrops.put(
 					channel.getId(),
 					new SingleUseReference<>(drop),
-					(long) (60 - 60 * getQuantityMult()), TimeUnit.SECONDS
+					(long) (60 - 60 / getQuantityMult()), TimeUnit.SECONDS
 			);
 		}
 
@@ -154,13 +154,13 @@ public abstract class Spawn {
 	NEW MOON = +50% quantity
 	 */
 	public static double getQuantityMult() {
-		return 0.5 - Math.abs(getIllumination().getSecond().getPhase()) / 360;
+		return 1 + (0.5 - Math.abs(getIllumination().getSecond().getPhase()) / 360);
 	}
 
 	/*
 	FULL MOON = +50% rarity
 	 */
 	public static double getRarityMult() {
-		return Math.abs(getIllumination().getSecond().getPhase()) / 360;
+		return 1 + Math.abs(getIllumination().getSecond().getPhase()) / 360;
 	}
 }

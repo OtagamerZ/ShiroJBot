@@ -192,7 +192,7 @@ public class SynthesizeCommand implements Executable {
 	}
 
 	public static Evogear rollSynthesis(double mult) {
-		RandomList<Evogear> pool = new RandomList<>(1.5 / mult);
+		RandomList<Evogear> pool = new RandomList<>(1 / (3 / mult));
 		List<Evogear> evos = DAO.findAll(Evogear.class);
 		for (Evogear evo : evos) {
 			if (evo.getTier() <= 0) continue;
@@ -205,7 +205,7 @@ public class SynthesizeCommand implements Executable {
 
 	private static double getMult(List<StashedCard> cards) {
 		double inc = 1;
-		double more = 1 + Spawn.getRarityMult() / 2;
+		double more = 1 * Spawn.getRarityMult() / 2;
 
 		for (StashedCard sc : cards) {
 			switch (sc.getType()) {

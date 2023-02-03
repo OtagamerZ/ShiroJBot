@@ -23,7 +23,7 @@ import com.kuuhaku.util.Calc;
 
 public class CreditDrop extends Drop<Integer> {
 	public CreditDrop() {
-		this(Calc.rng(300, 800));
+		this(Calc.rng(350, 900));
 	}
 
 	private CreditDrop(int value) {

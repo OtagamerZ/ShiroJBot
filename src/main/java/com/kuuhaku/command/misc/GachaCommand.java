@@ -162,7 +162,7 @@ public class GachaCommand implements Executable {
 
 			switch (tp) {
 				case KAWAIPON -> {
-					KawaiponCard kc = new KawaiponCard(c, Calc.chance(0.1 * (1 - Spawn.getRarityMult())));
+					KawaiponCard kc = new KawaiponCard(c, Calc.chance(0.1 * Spawn.getRarityMult()));
 					kc.setKawaipon(kp);
 					kc.save();
 

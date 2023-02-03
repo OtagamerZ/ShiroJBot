@@ -42,7 +42,7 @@ public class PremiumGacha extends Gacha<String> {
 	}
 
 	private PremiumGacha(List<Object[]> pool) {
-		super(1, Currency.GEM, 5, new RandomList<>(1.75 - Spawn.getRarityMult()));
+		super(1, Currency.GEM, 5, new RandomList<>(1 / (2 / Spawn.getRarityMult())));
 		for (Object[] card : pool) {
 			this.pool.add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
 		}

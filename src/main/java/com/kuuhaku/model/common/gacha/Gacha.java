@@ -41,7 +41,7 @@ public abstract class Gacha<T> {
 	}
 
 	public Gacha(int price, Currency currency, int prizeCount) {
-		this(price, currency, prizeCount, new RandomList<>(2.5 - Spawn.getRarityMult()));
+		this(price, currency, prizeCount, new RandomList<>(1 / (2.5 / Spawn.getRarityMult())));
 	}
 
 	public Gacha(int price, Currency currency, int prizeCount, RandomList<T> pool) {
