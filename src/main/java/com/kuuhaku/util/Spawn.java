@@ -103,7 +103,7 @@ public abstract class Spawn {
 			spawnedCards.put(
 					channel.getId(),
 					new SingleUseReference<>(card),
-					(long) (60 - 60 / getQuantityMult()), TimeUnit.SECONDS
+					(long) (60 / getQuantityMult()), TimeUnit.SECONDS
 			);
 		}
 
@@ -125,7 +125,7 @@ public abstract class Spawn {
 			spawnedDrops.put(
 					channel.getId(),
 					new SingleUseReference<>(drop),
-					(long) (60 - 60 / getQuantityMult()), TimeUnit.SECONDS
+					(long) (60 / getQuantityMult()), TimeUnit.SECONDS
 			);
 		}
 
