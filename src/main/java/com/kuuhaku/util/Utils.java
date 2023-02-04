@@ -831,7 +831,8 @@ public abstract class Utils {
 	}
 
 	public static <T> T fromNumber(Class<T> klass, Number n) {
-		if (!Number.class.isAssignableFrom(klass)) throw new ClassCastException();
+		if (n == null) return klass.cast(0);
+		else if (!Number.class.isAssignableFrom(klass)) throw new ClassCastException();
 
 		if (klass == Short.class) {
 			return klass.cast(n.shortValue());
