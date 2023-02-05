@@ -586,14 +586,9 @@ public class Hand {
 	}
 
 	public void rerollHand() {
-		int i = 0;
-		Iterator<Drawable<?>> it = cards.iterator();
-		while (it.hasNext()) {
-			Drawable<?> card = it.next();
-			deck.add(card);
-			it.remove();
-			i++;
-		}
+		int i = cards.size();
+		deck.addAll(cards);
+		i -= cards.size();
 
 		Collections.shuffle(deck);
 		manualDraw(i);
