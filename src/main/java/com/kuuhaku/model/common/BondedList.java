@@ -90,12 +90,10 @@ public class BondedList<T> extends TreeList<T> {
 			it.add(t);
 		}
 
-		for (T a : aux) {
-			super.add(index, a);
-		}
-
-		if (!aux.isEmpty()) {
-			aux.clear();
+		it = aux.listIterator();
+		while (it.hasNext()) {
+			super.add(index, it.next());
+			it.remove();
 		}
 	}
 
