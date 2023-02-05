@@ -97,7 +97,8 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
-		Utils.remove(d, getGame().getBanned(), getCards(), getGraveyard());
+		Utils.remove(d, getGame().getBanned(), getGraveyard());
+		getCards().removeIf(o -> d.equals(o) && o.isAvailable());
 
 		if (d instanceof CardProxy p) {
 			p.getOriginal().reset();
@@ -123,7 +124,8 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
-		Utils.remove(d, getGame().getBanned(), getCards(), getRealDeck());
+		Utils.remove(d, getGame().getBanned(), getRealDeck());
+		getCards().removeIf(o -> d.equals(o) && o.isAvailable());
 
 		if (d instanceof CardProxy p) {
 			p.getOriginal().reset();
