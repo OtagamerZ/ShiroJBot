@@ -588,10 +588,9 @@ public class Hand {
 	public void rerollHand() {
 		int i = cards.size();
 		deck.addAll(cards);
-		i -= cards.size();
 
 		Collections.shuffle(deck);
-		manualDraw(i);
+		manualDraw(i - cards.size());
 	}
 
 	public BondedList<Drawable<?>> getGraveyard() {
