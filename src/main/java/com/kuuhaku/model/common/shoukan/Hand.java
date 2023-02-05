@@ -67,8 +67,6 @@ public class Hand {
 	private final Origin origin;
 
 	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
-		Utils.remove(d, getGame().getBanned(), getRealDeck(), getGraveyard());
-
 		if (d instanceof CardProxy p) {
 			p.getOriginal().reset();
 			d.reset();
@@ -97,9 +95,6 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
-		Utils.remove(d, getGame().getBanned(), getGraveyard());
-		getCards().removeIf(o -> d.equals(o) && o.isAvailable());
-
 		if (d instanceof CardProxy p) {
 			p.getOriginal().reset();
 			d.reset();
@@ -124,9 +119,6 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
-		Utils.remove(d, getGame().getBanned(), getRealDeck());
-		getCards().removeIf(o -> d.equals(o) && o.isAvailable());
-
 		if (d instanceof CardProxy p) {
 			p.getOriginal().reset();
 			d.reset();
@@ -586,11 +578,19 @@ public class Hand {
 	}
 
 	public void rerollHand() {
-		int i = cards.size();
-		deck.addAll(cards);
+		int i = 0;
+		Iterator<Drawable<?>> it = cards.iterator();
+		while (it.hasNext()) {
+			Drawable<?> card = it.next();
+			if (card.isAvailable()) {
+				deck.add(card);
+				it.remove();
+				i++;
+			}
+		}
 
 		Collections.shuffle(deck);
-		manualDraw(i - cards.size());
+		manualDraw(i);
 	}
 
 	public BondedList<Drawable<?>> getGraveyard() {
