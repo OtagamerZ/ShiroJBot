@@ -100,10 +100,11 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding, float quality) {
-		try (Buffer buf = new Buffer()) {
+		try (Checkpoint cp = new Checkpoint(); Buffer buf = new Buffer()) {
 			ImageWriter writer = ImageIO.getImageWritersByFormatName(encoding).next();
 			ImageOutputStream ios = ImageIO.createImageOutputStream(buf.outputStream());
 			writer.setOutput(ios);
+			cp.lap("Init");
 
 			ImageWriteParam param = writer.getDefaultWriteParam();
 			if (param.canWriteCompressed()) {
@@ -116,6 +117,7 @@ public abstract class IO {
 
 				param.setCompressionQuality(quality);
 			}
+			cp.lap("Params");
 
 			try {
 				writer.write(null, new IIOImage(image, null, null), param);
@@ -123,6 +125,7 @@ public abstract class IO {
 				writer.dispose();
 				ios.flush();
 			}
+			cp.lap("Write");
 
 			return buf.readByteArray();
 		} catch (IOException e) {
