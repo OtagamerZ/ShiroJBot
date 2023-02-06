@@ -33,9 +33,10 @@ import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -100,11 +101,9 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding, float quality) {
-		try (Checkpoint cp = new Checkpoint(); Buffer buf = new Buffer()) {
+		try (Buffer buf = new Buffer()) {
 			ImageWriter writer = ImageIO.getImageWritersByFormatName(encoding).next();
-			ImageOutputStream ios = ImageIO.createImageOutputStream(buf.outputStream());
-			writer.setOutput(ios);
-			cp.lap("Init");
+			writer.setOutput(buf);
 
 			ImageWriteParam param = writer.getDefaultWriteParam();
 			if (param.canWriteCompressed()) {
@@ -117,15 +116,12 @@ public abstract class IO {
 
 				param.setCompressionQuality(quality);
 			}
-			cp.lap("Params");
 
 			try {
 				writer.write(null, new IIOImage(image, null, null), param);
 			} finally {
 				writer.dispose();
-				ios.flush();
 			}
-			cp.lap("Write");
 
 			return buf.readByteArray();
 		} catch (IOException e) {
