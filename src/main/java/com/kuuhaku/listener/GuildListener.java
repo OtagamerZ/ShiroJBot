@@ -199,16 +199,26 @@ public class GuildListener extends ListenerAdapter {
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 		if (event.getAuthor().isBot() || !event.getChannel().canTalk() || !locks.add(event.getAuthor().getId())) return;
 
+		String content = event.getMessage().getContentRaw();
+		MessageData.Guild data;
 		try {
-			CompletableFuture.runAsync(() -> {
-				String content = event.getMessage().getContentRaw();
-				MessageData.Guild data;
-				try {
-					data = new MessageData.Guild(event);
-				} catch (NullPointerException e) {
-					return;
-				}
+			data = new MessageData.Guild(event);
+		} catch (NullPointerException e) {
+			return;
+		}
 
+		if (toHandle.containsKey(data.guild().getId())) {
+			List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
+			for (SimpleMessageListener evt : evts) {
+				if (!evt.isClosed() && evt.checkChannel(data.channel())) {
+					evt.onGuildMessageReceived(event);
+				}
+			}
+			evts.removeIf(SimpleMessageListener::isClosed);
+		}
+
+		CompletableFuture.runAsync(() -> {
+			try {
 				GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
 				I18N locale = config.getLocale();
 				if (!Objects.equals(config.getName(), data.guild().getName())) {
@@ -241,6 +251,11 @@ public class GuildListener extends ListenerAdapter {
 				if (!Objects.equals(account.getName(), data.user().getName())) {
 					account.setName(data.user().getName());
 					account.save();
+				}
+
+				EventData ed = new EventData(config, profile);
+				if (content.toLowerCase().startsWith(config.getPrefix())) {
+					processCommand(data, ed, content);
 				}
 
 				AtomicReference<TextChannel> notifs = new AtomicReference<>();
@@ -276,21 +291,6 @@ public class GuildListener extends ListenerAdapter {
 					}
 				});
 
-				if (toHandle.containsKey(data.guild().getId())) {
-					List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
-					for (SimpleMessageListener evt : evts) {
-						if (!evt.isClosed() && evt.checkChannel(data.channel())) {
-							evt.onGuildMessageReceived(event);
-						}
-					}
-					evts.removeIf(SimpleMessageListener::isClosed);
-				}
-
-				EventData ed = new EventData(config, profile);
-				if (content.toLowerCase().startsWith(config.getPrefix())) {
-					processCommand(data, ed, content);
-				}
-
 				if (PatternCache.matches(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
 					data.channel().sendMessage(locale.get("str/mentioned",
 							data.user().getAsMention(),
@@ -321,10 +321,10 @@ public class GuildListener extends ListenerAdapter {
 
 				rollDrops(config, locale);
 				rollEvents(data.channel(), locale);
-			});
-		} finally {
-			locks.remove(event.getAuthor().getId());
-		}
+			} finally {
+				locks.remove(event.getAuthor().getId());
+			}
+		});
 	}
 
 	private void rollDrops(GuildConfig config, I18N locale) {
