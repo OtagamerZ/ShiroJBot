@@ -79,8 +79,7 @@ public class SlotColumn {
 	public void setTop(Senshi top) {
 		Senshi current = getTop();
 		if (Objects.equals(top, current)) return;
-
-		if (top != null && top.isProtected()) {
+		else if (top != null && top.getSide() == side && top.popFlag(Flag.NO_CONVERT)) {
 			return;
 		}
 
@@ -126,8 +125,7 @@ public class SlotColumn {
 	public void setBottom(Senshi bottom) {
 		Senshi current = getBottom();
 		if (Objects.equals(bottom, current)) return;
-
-		if (bottom != null && !Objects.equals(bottom.getHand(), game.getCurrent()) && bottom.popFlag(Flag.NO_CONVERT)) {
+		else if (bottom != null && bottom.getSide() == side && bottom.popFlag(Flag.NO_CONVERT)) {
 			return;
 		}
 
