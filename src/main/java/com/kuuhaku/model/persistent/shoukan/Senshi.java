@@ -1077,11 +1077,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (shield != null) {
-				int charges = shield.getStats().getData().getInt("uses", 0) + 1;
+				int charges = shield.getStats().getData().getInt("c_shield", 0) + 1;
 				if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
 					hand.getGraveyard().add(shield);
 				} else {
-					shield.getStats().getData().put("uses", charges);
+					shield.getStats().getData().put("c_shield", charges);
 				}
 
 				return true;

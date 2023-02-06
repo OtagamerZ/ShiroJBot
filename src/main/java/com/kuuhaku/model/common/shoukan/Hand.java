@@ -141,11 +141,11 @@ public class Hand {
 			} else if (s.popFlag(Flag.NO_DEATH)) {
 				return false;
 			} else if (ward != null) {
-				int charges = ward.getStats().getData().getInt("uses", 0) + 1;
+				int charges = ward.getStats().getData().getInt("c_ward", 0) + 1;
 				if (charges >= Charm.WARDING.getValue(ward.getTier())) {
 					it.add(ward);
 				} else {
-					ward.getStats().getData().put("uses", charges);
+					ward.getStats().getData().put("c_ward", charges);
 				}
 
 				return false;
