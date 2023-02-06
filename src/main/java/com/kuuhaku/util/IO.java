@@ -33,6 +33,7 @@ import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -103,7 +104,8 @@ public abstract class IO {
 	public static byte[] getBytes(BufferedImage image, String encoding, float quality) {
 		try (Buffer buf = new Buffer()) {
 			ImageWriter writer = ImageIO.getImageWritersByFormatName(encoding).next();
-			writer.setOutput(buf);
+			ImageOutputStream ios = ImageIO.createImageOutputStream(buf.outputStream());
+			writer.setOutput(ios);
 
 			ImageWriteParam param = writer.getDefaultWriteParam();
 			if (param.canWriteCompressed()) {
