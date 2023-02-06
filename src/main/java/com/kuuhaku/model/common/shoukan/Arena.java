@@ -151,9 +151,10 @@ public class Arena implements Renderer {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		try (Checkpoint cp = new Checkpoint()) {
-			Graph.applyTransformed(g2d, 0, BAR_SIZE.height, g1 -> {
+		Graph.applyTransformed(g2d, 0, BAR_SIZE.height, g1 -> {
+			try (Checkpoint cp = new Checkpoint()) {
 				g1.drawImage(getField().renderBackground(), 0, 0, null);
+				cp.lap("Background");
 
 				for (Side side : Side.values()) {
 					int xOffset = CENTER.x - ((225 + MARGIN.x) * 5 - MARGIN.x) / 2;
@@ -222,6 +223,7 @@ public class Arena implements Renderer {
 						}
 					});
 				}
+				cp.lap("Sides");
 
 				Graph.applyTransformed(g1, MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
 					if (!top.getRealDeck().isEmpty()) {
@@ -243,6 +245,7 @@ public class Arena implements Renderer {
 						);
 					}
 				});
+				cp.lap("Left");
 
 				Graph.applyTransformed(g1, SIZE.width - Drawable.SIZE.width - MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
 					if (!top.getGraveyard().isEmpty()) {
@@ -263,15 +266,13 @@ public class Arena implements Renderer {
 						);
 					}
 				});
-			});
-			cp.lap("Center");
+				cp.lap("Right");
+			}
+		});
 
-			Graph.applyTransformed(g2d, drawBar(top));
-			cp.lap("Top");
+		Graph.applyTransformed(g2d, drawBar(top));
 
-			Graph.applyTransformed(g2d, drawBar(bottom));
-			cp.lap("Bottom");
-		}
+		Graph.applyTransformed(g2d, drawBar(bottom));
 
 		return bi;
 	}
