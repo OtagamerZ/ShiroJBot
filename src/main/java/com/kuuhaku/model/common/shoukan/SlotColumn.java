@@ -77,33 +77,7 @@ public class SlotColumn {
 	}
 
 	public void setTop(Senshi top) {
-		Senshi current = getTop();
-		if (Objects.equals(top, current)) return;
-		else if (top != null && top.getSide() == side && top.popFlag(Flag.NO_CONVERT)) {
-			return;
-		}
-
-		if (current != null) {
-			current.executeAssert(Trigger.ON_REMOVE);
-			current.setSlot(null);
-		}
-
-		this.top = top;
-		if (top != null) {
-			Hand h = game.getHands().get(side);
-
-			top.setSlot(this);
-			top.setHand(h);
-			top.executeAssert(Trigger.ON_INITIALIZE);
-
-			if (!top.isFlipped()) {
-				h.getGame().trigger(Trigger.ON_SUMMON, top.asSource(Trigger.ON_SUMMON));
-			}
-
-			if (h.getOrigin().synergy() == Race.DEMIGOD && top.isFusion()) {
-				h.modMP(1);
-			}
-		}
+		placeCard(top, true);
 	}
 
 	public Senshi getBottom() {
@@ -123,9 +97,13 @@ public class SlotColumn {
 	}
 
 	public void setBottom(Senshi bottom) {
-		Senshi current = getBottom();
-		if (Objects.equals(bottom, current)) return;
-		else if (bottom != null && bottom.getSide() == side && bottom.popFlag(Flag.NO_CONVERT)) {
+		placeCard(bottom, false);
+	}
+
+	private void placeCard(Senshi card, boolean top) {
+		Senshi current = top ? getTop() : getBottom();
+		if (Objects.equals(card, current)) return;
+		else if (card != null && card.getHand() != null && card.getSide() == side && card.popFlag(Flag.NO_CONVERT)) {
 			return;
 		}
 
@@ -134,20 +112,21 @@ public class SlotColumn {
 			current.setSlot(null);
 		}
 
-		this.bottom = bottom;
-		if (bottom != null) {
+		if (top) this.top = card;
+		else this.bottom = card;
+
+		if (card != null) {
 			Hand h = game.getHands().get(side);
 
-			bottom.setSlot(this);
-			bottom.setHand(h);
-			bottom.getEquipments().clear();
-			bottom.executeAssert(Trigger.ON_INITIALIZE);
+			card.setSlot(this);
+			card.setHand(h);
+			card.executeAssert(Trigger.ON_INITIALIZE);
 
-			if (!bottom.isFlipped()) {
-				h.getGame().trigger(Trigger.ON_SUMMON, bottom.asSource(Trigger.ON_SUMMON));
+			if (!card.isFlipped()) {
+				h.getGame().trigger(Trigger.ON_SUMMON, card.asSource(Trigger.ON_SUMMON));
 			}
 
-			if (h.getOrigin().synergy() == Race.DEMIGOD && bottom.isFusion()) {
+			if (h.getOrigin().synergy() == Race.DEMIGOD && card.isFusion()) {
 				h.modMP(1);
 			}
 		}
