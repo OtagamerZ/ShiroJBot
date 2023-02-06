@@ -52,6 +52,7 @@ import com.kuuhaku.model.records.shoukan.snapshot.Player;
 import com.kuuhaku.model.records.shoukan.snapshot.Slot;
 import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
 import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Checkpoint;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
@@ -1598,23 +1599,28 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
-		byte[] bytes = IO.getBytes(img, "png");
+		try (Checkpoint cp = new Checkpoint()) {
+			BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
+			cp.lap("Render");
 
-		AtomicBoolean registered = new AtomicBoolean();
-		getChannel().sendMessage(getLocale().get(message, args))
-				.addFile(bytes, "game.png")
-				.queue(m -> {
-					messages.compute(m.getTextChannel().getId(), replaceMessages(m));
+			byte[] bytes = IO.getBytes(img, "png");
+			cp.lap("Encode");
 
-					if (!registered.get()) {
-						if (!message.startsWith("str/game_history")) {
-							getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+			AtomicBoolean registered = new AtomicBoolean();
+			getChannel().sendMessage(getLocale().get(message, args))
+					.addFile(bytes, "game.png")
+					.queue(m -> {
+						messages.compute(m.getTextChannel().getId(), replaceMessages(m));
+
+						if (!registered.get()) {
+							if (!message.startsWith("str/game_history")) {
+								getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+							}
+
+							registered.set(true);
 						}
-
-						registered.set(true);
-					}
-				});
+					});
+		}
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
