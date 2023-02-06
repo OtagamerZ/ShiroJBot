@@ -1558,18 +1558,6 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				restoring = true;
-				for (List<SlotColumn> slts : arena.getSlots().values()) {
-					for (SlotColumn slt : slts) {
-						for (Senshi card : slt.getCards()) {
-							if (card != null) {
-								card.setFlipped(false);
-							}
-						}
-					}
-				}
-				restoring = false;
-
 				if (def != null) {
 					reportResult(GameReport.SUCCESS, "str/game_end_special", def, "<@" + hands.get(side.getOther()).getUid() + ">");
 				} else {
@@ -1599,32 +1587,39 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		try (Checkpoint cp = new Checkpoint()) {
-			BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
-			cp.lap("Render");
+		BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
+		byte[] bytes = IO.getBytes(img, "png");
 
-			byte[] bytes = IO.getBytes(img, "png");
-			cp.lap("Encode");
+		AtomicBoolean registered = new AtomicBoolean();
+		getChannel().sendMessage(getLocale().get(message, args))
+				.addFile(bytes, "game.png")
+				.queue(m -> {
+					messages.compute(m.getTextChannel().getId(), replaceMessages(m));
 
-			AtomicBoolean registered = new AtomicBoolean();
-			getChannel().sendMessage(getLocale().get(message, args))
-					.addFile(bytes, "game.png")
-					.queue(m -> {
-						messages.compute(m.getTextChannel().getId(), replaceMessages(m));
-
-						if (!registered.get()) {
-							if (!message.startsWith("str/game_history")) {
-								getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
-							}
-
-							registered.set(true);
+					if (!registered.get()) {
+						if (!message.startsWith("str/game_history")) {
+							getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
 						}
-					});
-		}
+
+						registered.set(true);
+					}
+				});
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
 		if (isClosed()) return;
+
+		restoring = true;
+		for (List<SlotColumn> slts : arena.getSlots().values()) {
+			for (SlotColumn slt : slts) {
+				for (Senshi card : slt.getCards()) {
+					if (card != null) {
+						card.setFlipped(false);
+					}
+				}
+			}
+		}
+		restoring = false;
 
 		BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
 		byte[] bytes = IO.getBytes(img, "png");
