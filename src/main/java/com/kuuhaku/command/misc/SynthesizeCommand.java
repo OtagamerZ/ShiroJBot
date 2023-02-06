@@ -205,7 +205,7 @@ public class SynthesizeCommand implements Executable {
 
 	private static double getMult(List<StashedCard> cards) {
 		double inc = 1;
-		double more = 1 * Spawn.getRarityMult() / 2;
+		double more = 1 * (1 + (Spawn.getRarityMult() - 1) / 2);
 
 		for (StashedCard sc : cards) {
 			switch (sc.getType()) {

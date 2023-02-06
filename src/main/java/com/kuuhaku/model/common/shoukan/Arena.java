@@ -74,10 +74,6 @@ public class Arena implements Renderer {
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
 	private final BondedList<Drawable<?>> banned = new BondedList<>((d, it) -> {
-		for (Hand h : getGame().getHands().values()) {
-			Utils.remove(d, h.getCards(), h.getRealDeck(), h.getGraveyard());
-		}
-
 		if (d instanceof CardProxy p) {
 			d.reset();
 			it.add(p.getOriginal());
