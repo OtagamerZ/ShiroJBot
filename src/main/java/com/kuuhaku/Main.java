@@ -32,7 +32,7 @@ import java.nio.charset.Charset;
 import java.time.LocalDate;
 
 public class Main {
-	private static final OperatingSystemMXBean info = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean());
+	private static final OperatingSystemMXBean info = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 	protected static final StopWatch boot = new StopWatch();
 
 	private static final CacheManager cacheManager = new CacheManager();
@@ -43,7 +43,6 @@ public class Main {
 		ScheduleManager sm;
 		try {
 			sm = new ScheduleManager();
-
 		} catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
 			Constants.LOGGER.error("Failed to start scheduler: " + e, e);
 			sm = null;

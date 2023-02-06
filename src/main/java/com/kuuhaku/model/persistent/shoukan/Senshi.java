@@ -749,10 +749,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public int getRemainingTaunt() {
-		return Bit.get(state, 6, 4);
-	}
-
-	public int getTaunt() {
 		int taunt = Bit.get(state, 6, 4);
 		if (taunt == 0 || (target == null || target.getSide() == getSide() || target.getIndex() == -1)) {
 			state = Bit.set(state, 6, 0, 4);
