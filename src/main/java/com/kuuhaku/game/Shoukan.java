@@ -1250,10 +1250,12 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (eHP != op.getHP()) {
-			outcome += "\n" + getLocale().get(eHP > op.getHP() ? "str/combat_damage_dealt" : "str/combat_heal_op");
+			int val = eHP - op.getHP();
+			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", val);
 		}
 		if (pHP != you.getHP()) {
-			outcome += "\n" + getLocale().get(pHP > you.getHP() ? "str/combat_damage_taken" : "str/combat_heal_self");
+			int val = pHP - you.getHP();
+			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", val);
 		}
 
 		reportEvent("str/combat", true, ally, Utils.getOr(enemy, op.getName()), outcome);
