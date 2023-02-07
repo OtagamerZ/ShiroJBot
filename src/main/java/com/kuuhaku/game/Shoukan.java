@@ -1149,6 +1149,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 								you.getGraveyard().add(ally);
 
+								dmg = 0;
 								outcome = getLocale().get("str/combat_defeat");
 							} else {
 								int block = enemy.getBlock();

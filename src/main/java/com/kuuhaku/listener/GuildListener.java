@@ -197,7 +197,7 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-		if (event.getAuthor().isBot() || !event.getChannel().canTalk() || !locks.add(event.getAuthor().getId())) return;
+		if (event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
 
 		String content = event.getMessage().getContentRaw();
 		MessageData.Guild data;
@@ -216,6 +216,8 @@ public class GuildListener extends ListenerAdapter {
 			}
 			evts.removeIf(SimpleMessageListener::isClosed);
 		}
+
+		if (!locks.add(event.getAuthor().getId())) return;
 
 		CompletableFuture.runAsync(() -> {
 			try {
