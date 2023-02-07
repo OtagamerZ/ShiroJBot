@@ -20,6 +20,7 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.model.records.ChannelReference;
 import com.kuuhaku.model.records.ClusterAction;
+import com.kuuhaku.util.XStringBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
@@ -29,6 +30,7 @@ import java.util.*;
 
 public class GameChannel {
 	private final Set<ChannelReference> channels = new HashSet<>();
+	private final Map<String, XStringBuilder> buffer = new HashMap<>();
 
 	public GameChannel(TextChannel... channel) {
 		for (TextChannel chn : channel) {
@@ -72,6 +74,24 @@ public class GameChannel {
 		Map<String, MessageAction> acts = new HashMap<>();
 		for (TextChannel chn : getChannels()) {
 			acts.put(chn.getId(), chn.sendMessage(message));
+		}
+
+		return new ClusterAction(acts);
+	}
+
+	public void buffer(String message) {
+		for (TextChannel chn : getChannels()) {
+			buffer.computeIfAbsent(chn.getId(), k -> new XStringBuilder()).appendNewLine(message);
+		}
+	}
+
+	public ClusterAction flush() {
+		Map<String, MessageAction> acts = new HashMap<>();
+		for (TextChannel chn : getChannels()) {
+			String msg = buffer.remove(chn.getId()).toString();
+			if (!msg.isBlank()) {
+				acts.put(chn.getId(), chn.sendMessage(msg));
+			}
 		}
 
 		return new ClusterAction(acts);

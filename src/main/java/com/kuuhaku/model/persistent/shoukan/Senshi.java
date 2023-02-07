@@ -1060,6 +1060,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 	}
 
+	public int getDamage(Senshi target) {
+		if (target.isSupporting()) return 0;
+
+		return getActiveAttr() - target.getActiveAttr();
+	}
+
 	public boolean isProtected() {
 		if (hand != null) {
 			Evogear shield = null;

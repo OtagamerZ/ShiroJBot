@@ -52,7 +52,6 @@ import com.kuuhaku.model.records.shoukan.snapshot.Player;
 import com.kuuhaku.model.records.shoukan.snapshot.Slot;
 import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
 import com.kuuhaku.util.Calc;
-import com.kuuhaku.util.Checkpoint;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONArray;
@@ -997,7 +996,8 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Hand op = hands.get(side.getOther());
-		int pHP = op.getHP();
+		int pHP = you.getHP();
+		int eHP = op.getHP();
 
 		Senshi enemy = null;
 		if (args.getBoolean("target")) {
@@ -1047,7 +1047,7 @@ public class Shoukan extends GameInstance<Phase> {
 			dmgMult /= 2;
 		}
 
-		String outcome = "str/combat_skip";
+		String outcome = getLocale().get("str/combat_skip");
 		try {
 			if ((enemy == null || posHash == enemy.posHash()) && ally.canAttack()) {
 				for (Evogear e : ally.getEquipments()) {
@@ -1111,7 +1111,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 				boolean ignore = ally.popFlag(Flag.NO_COMBAT);
 				if (!ignore && enemy != null) {
-					ignore = enemy.getSlot() == null || enemy.popFlag(Flag.IGNORE_COMBAT);
+					ignore = enemy.getSlot().getIndex() == -1 || enemy.popFlag(Flag.IGNORE_COMBAT);
 				}
 
 				if (!ignore) {
@@ -1124,7 +1124,7 @@ public class Shoukan extends GameInstance<Phase> {
 							op.getGraveyard().add(enemy);
 
 							dmg = 0;
-							outcome = "str/combat_success";
+							outcome = getLocale().get("str/combat_success");
 						} else {
 							boolean dbl = op.getOrigin().synergy() == Race.CYBERBEAST && Calc.chance(5);
 							boolean unstop = ally.popFlag(Flag.UNSTOPPABLE);
@@ -1138,7 +1138,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 							if (!unstop && ally.getActiveAttr() < eCombatStats) {
 								trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
-								pHP = you.getHP();
 
 								if (!ally.popFlag(Flag.NO_DAMAGE)) {
 									you.modHP((int) -((enemyStats - ally.getActiveAttr()) * dmgMult));
@@ -1150,8 +1149,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 								you.getGraveyard().add(ally);
 
-								reportEvent("str/combat", true, ally, enemy, getLocale().get("str/combat_defeat", pHP - you.getHP()));
-								return true;
+								outcome = getLocale().get("str/combat_defeat");
 							} else {
 								int block = enemy.getBlock();
 								int dodge = enemy.getDodge();
@@ -1159,8 +1157,8 @@ public class Shoukan extends GameInstance<Phase> {
 								if (Calc.chance(100 - ally.getHitChance())) {
 									trigger(ON_MISS, ally.asSource(ON_MISS));
 
-									reportEvent("str/combat", true, ally, enemy, getLocale().get("str/combat_miss"));
-									return true;
+									dmg = 0;
+									outcome = getLocale().get("str/combat_miss");
 								} else if (!unstop && !ally.popFlag(Flag.TRUE_STRIKE) && (enemy.popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
 									trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
 
@@ -1170,8 +1168,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 									you.getGraveyard().add(ally);
 
-									reportEvent("str/combat", true, ally, enemy, getLocale().get("str/combat_block", block));
-									return true;
+									dmg = 0;
+									outcome = getLocale().get("str/combat_block", block);
 								} else if (!ally.popFlag(Flag.TRUE_STRIKE) && (enemy.popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
 									trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
 
@@ -1179,42 +1177,42 @@ public class Shoukan extends GameInstance<Phase> {
 										op.modHP((int) -(ally.getActiveAttr() * dmgMult * 0.02));
 									}
 
-									reportEvent("str/combat", true, ally, enemy, getLocale().get("str/combat_dodge", dodge));
-									return true;
-								}
-
-								if (unstop || ally.getActiveAttr() > eCombatStats) {
-									trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
-									if (enemy.isDefending() || enemy.popFlag(Flag.NO_DAMAGE)) {
-										dmg = 0;
-									} else {
-										dmg = Math.max(0, dmg - enemyStats);
-									}
-
-									for (Senshi s : enemy.getNearby()) {
-										s.awake();
-									}
-
-									op.getGraveyard().add(enemy);
-
-									outcome = "str/combat_success";
-								} else {
-									trigger(ON_CLASH, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_LOSE));
-
-									for (Senshi s : enemy.getNearby()) {
-										s.awake();
-									}
-
-									op.getGraveyard().add(enemy);
-
-									for (Senshi s : ally.getNearby()) {
-										s.awake();
-									}
-
-									you.getGraveyard().add(ally);
-
 									dmg = 0;
-									outcome = "str/combat_clash";
+									outcome = getLocale().get("str/combat_dodge", dodge);
+								} else {
+									if (unstop || ally.getActiveAttr() > eCombatStats) {
+										trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
+										if (enemy.isDefending() || enemy.popFlag(Flag.NO_DAMAGE)) {
+											dmg = 0;
+										} else {
+											dmg = Math.max(0, dmg - enemyStats);
+										}
+
+										for (Senshi s : enemy.getNearby()) {
+											s.awake();
+										}
+
+										op.getGraveyard().add(enemy);
+
+										outcome = getLocale().get("str/combat_success");
+									} else {
+										trigger(ON_CLASH, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_LOSE));
+
+										for (Senshi s : enemy.getNearby()) {
+											s.awake();
+										}
+
+										op.getGraveyard().add(enemy);
+
+										for (Senshi s : ally.getNearby()) {
+											s.awake();
+										}
+
+										you.getGraveyard().add(ally);
+
+										dmg = 0;
+										outcome = getLocale().get("str/combat_clash");
+									}
 								}
 							}
 						}
@@ -1234,17 +1232,15 @@ public class Shoukan extends GameInstance<Phase> {
 								}
 							}
 						}
-
-						outcome = "str/combat_direct";
 					}
 				}
 
 				op.modHP((int) -(dmg * dmgMult));
 				if (thorns > 0) {
-					you.modHP(-(pHP - op.getHP()) * thorns / 100);
+					you.modHP(-Math.max(0, eHP - op.getHP()) * thorns / 100);
 				}
 				if (lifesteal > 0) {
-					you.modHP((pHP - op.getHP()) * lifesteal / 100);
+					you.modHP(Math.max(0, eHP - op.getHP()) * lifesteal / 100);
 				}
 			}
 		} finally {
@@ -1253,7 +1249,14 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		reportEvent("str/combat", true, ally, Utils.getOr(enemy, op.getName()), getLocale().get(outcome, pHP - op.getHP()));
+		if (eHP != op.getHP()) {
+			outcome += "\n" + getLocale().get(eHP > op.getHP() ? "str/combat_damage_dealt" : "str/combat_heal_op");
+		}
+		if (pHP != you.getHP()) {
+			outcome += "\n" + getLocale().get(pHP > you.getHP() ? "str/combat_damage_taken" : "str/combat_heal_self");
+		}
+
+		reportEvent("str/combat", true, ally, Utils.getOr(enemy, op.getName()), outcome);
 		return false;
 	}
 
