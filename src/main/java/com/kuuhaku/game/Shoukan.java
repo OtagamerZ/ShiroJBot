@@ -659,7 +659,9 @@ public class Shoukan extends GameInstance<Phase> {
 						.map(d -> (EffectHolder<?>) d)
 						.toList();
 
-				Utils.getRandomEntry(available).getStats().setMana(-1);
+				if (!available.isEmpty()) {
+					Utils.getRandomEntry(available).getStats().setMana(-1);
+				}
 			}
 		}
 
