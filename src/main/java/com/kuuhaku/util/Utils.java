@@ -831,21 +831,20 @@ public abstract class Utils {
 	}
 
 	public static <T> T fromNumber(Class<T> klass, Number n) {
-		if (n == null) return klass.cast(0);
-		else if (!Number.class.isAssignableFrom(klass)) throw new ClassCastException();
+		if (!Number.class.isAssignableFrom(klass)) throw new ClassCastException();
 
 		if (klass == Short.class) {
-			return klass.cast(n.shortValue());
+			return klass.cast(Utils.getOr(n, 0).shortValue());
 		} else if (klass == Integer.class) {
-			return klass.cast(n.intValue());
+			return klass.cast(Utils.getOr(n, 0).intValue());
 		} else if (klass == Long.class) {
-			return klass.cast(n.longValue());
+			return klass.cast(Utils.getOr(n, 0).longValue());
 		} else if (klass == Float.class) {
-			return klass.cast(n.floatValue());
+			return klass.cast(Utils.getOr(n, 0).floatValue());
 		} else if (klass == Double.class) {
-			return klass.cast(n.doubleValue());
+			return klass.cast(Utils.getOr(n, 0).doubleValue());
 		} else if (klass == Byte.class) {
-			return klass.cast(n.byteValue());
+			return klass.cast(Utils.getOr(n, 0).byteValue());
 		}
 
 		throw new ClassCastException();
