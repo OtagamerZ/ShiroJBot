@@ -18,52 +18,30 @@
 
 package com.kuuhaku.model.common.gacha;
 
+import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.common.RandomList;
-import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.util.Spawn;
 import kotlin.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Gacha<T> {
-	private final int price;
-	private final Currency currency;
-	private final int prizeCount;
-	protected final RandomList<T> pool;
+public abstract class Gacha {
+	protected final RandomList<String> pool;
 
-	public Gacha(int price) {
-		this(price, Currency.CR);
+	public Gacha() {
+		this(new RandomList<>(1 / (2.5 / Spawn.getRarityMult())));
 	}
 
-	public Gacha(int price, Currency currency) {
-		this(price, currency, 3);
-	}
-
-	public Gacha(int price, Currency currency, int prizeCount) {
-		this(price, currency, prizeCount, new RandomList<>(1 / (2.5 / Spawn.getRarityMult())));
-	}
-
-	public Gacha(int price, Currency currency, int prizeCount, RandomList<T> pool) {
-		this.price = price;
-		this.currency = currency;
-		this.prizeCount = prizeCount;
+	public Gacha(RandomList<String> pool) {
 		this.pool = pool;
 	}
 
-	public int getPrice() {
-		return price;
-	}
-
-	public Currency getCurrency() {
-		return currency;
-	}
-
-	public final List<T> getPool() {
+	public final List<String> getPool() {
 		return List.copyOf(pool.values());
 	}
 
-	public final double rarityOf(T value) {
+	public final double rarityOf(String value) {
 		return pool.entries().stream()
 				.filter(e -> e.getSecond().equals(value))
 				.mapToDouble(Pair::getFirst)
@@ -71,13 +49,12 @@ public abstract class Gacha<T> {
 				.orElseThrow();
 	}
 
-	public final int getPrizeCount() {
-		return prizeCount;
-	}
+	public List<String> draw() {
+		GachaType type = getClass().getAnnotation(GachaType.class);
+		if (type == null) return List.of();
 
-	public List<T> draw() {
-		List<T> out = new ArrayList<>();
-		for (int i = 0; i < prizeCount; i++) {
+		List<String> out = new ArrayList<>();
+		for (int i = 0; i < type.prizes(); i++) {
 			out.add(pool.get());
 		}
 

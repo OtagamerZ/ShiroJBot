@@ -25,11 +25,13 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
+import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.gacha.*;
 import com.kuuhaku.model.enums.*;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
@@ -42,27 +44,34 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONObject;
+import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import org.reflections8.Reflections;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
 @Command(
 		name = "gacha",
 		category = Category.MISC
 )
-@Signature("<type:word>[basic,premium,summoner,daily]")
+@Signature(allowEmpty = true, value = "<type:word>")
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ATTACH_FILES
 })
 public class GachaCommand implements Executable {
+	private static final Reflections refl = new Reflections("com.kuuhaku.model.common.gacha");
+	private static final Set<Class<?>> gachas = refl.getTypesAnnotatedWith(GachaType.class);
+
 	@Override
+	@SuppressWarnings("unchecked")
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
 
@@ -70,42 +79,50 @@ public class GachaCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
-			for (String type : new String[]{"basic", "premium", "summoner", "daily"}) {
-				Gacha<String> gacha = switch (type) {
-					case "premium" -> new PremiumGacha();
-					case "summoner" -> new SummonersGacha();
-					case "daily" -> new DailyGacha();
-					default -> new BasicGacha();
-				};
-
-				eb.setTitle(locale.get("gacha/" + type) + " (`" + type.toUpperCase() + "` - " + locale.get("currency/" + gacha.getCurrency(), gacha.getPrice()) + ")")
+			for (Class<?> gacha : gachas) {
+				GachaType type = gacha.getAnnotation(GachaType.class);
+				eb.setTitle(locale.get("gacha/" + type.value()) + " (`" + type.value().toUpperCase() + "` - " + locale.get("currency/" + type.currency(), type.price()) + ")")
 						.setDescription(locale.get("gacha/" + type + "_desc"));
 
 				pages.add(new InteractPage(eb.build()));
 			}
 
+			pages.sort(Comparator.comparing(p -> ((MessageEmbed) p.getContent()).getTitle()));
 			Utils.paginate(pages, event.channel(), event.user());
 			return;
 		}
 
-		String type = args.getString("type");
-		Gacha<String> gacha = switch (type) {
-			case "premium" -> new PremiumGacha();
-			case "summoner" -> new SummonersGacha();
-			case "daily" -> new DailyGacha();
-			default -> new BasicGacha();
-		};
+		String id = args.getString("type");
+		Class<? extends Gacha> chosen = null;
+		Set<String> types = new HashSet<>();
+		for (Class<?> gacha : gachas) {
+			GachaType type = gacha.getAnnotation(GachaType.class);
+			if (type.value().equalsIgnoreCase(id)) {
+				chosen = (Class<? extends Gacha>) gacha;
+				break;
+			}
 
-		if (!acc.hasEnough(gacha.getPrice(), gacha.getCurrency())) {
-			event.channel().sendMessage(locale.get("error/insufficient_" + gacha.getCurrency())).queue();
+			types.add(type.value().toUpperCase());
+		}
+
+		if (chosen == null) {
+			Pair<String, Double> sug = Utils.didYouMean(id.toUpperCase(), types);
+			event.channel().sendMessage(locale.get("error/unknown_gacha", sug.getFirst())).queue();
 			return;
-		} else if (acc.getKawaipon().getCapacity() < gacha.getPrizeCount()) {
+		}
+
+		GachaType type = chosen.getAnnotation(GachaType.class);
+		if (!acc.hasEnough(type.price(), type.currency())) {
+			event.channel().sendMessage(locale.get("error/insufficient_" + type.currency())).queue();
+			return;
+		} else if (acc.getKawaipon().getCapacity() < type.prizes()) {
 			event.channel().sendMessage(locale.get("error/insufficient_space")).queue();
 			return;
 		}
 
 		try {
-			Utils.confirm(locale.get("question/gacha", locale.get("gacha/" + type).toLowerCase(), locale.get("currency/" + gacha.getCurrency(), gacha.getPrice())), event.channel(),
+			Gacha gacha = chosen.getConstructor().newInstance();
+			Utils.confirm(locale.get("question/gacha", locale.get("gacha/" + type.value()).toLowerCase(), locale.get("currency/" + type.currency(), type.price())), event.channel(),
 					w -> {
 						List<String> result = gacha.draw();
 
@@ -116,13 +133,13 @@ public class GachaCommand implements Executable {
 						g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 20));
 
 						for (String s : result) {
-							drawCard(g2d, locale, acc, s, type);
+							drawCard(g2d, locale, acc, s);
 						}
 
-						if (gacha.getCurrency() == Currency.CR) {
-							acc.consumeCR(gacha.getPrice(), "Gacha");
+						if (type.currency() == Currency.CR) {
+							acc.consumeCR(type.price(), "Gacha");
 						} else {
-							acc.consumeGems(gacha.getPrice(), "Gacha");
+							acc.consumeGems(type.price(), "Gacha");
 						}
 
 						g2d.dispose();
@@ -137,21 +154,18 @@ public class GachaCommand implements Executable {
 			);
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+		} catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
-	private void drawCard(Graphics2D g2d, I18N locale, Account acc, String card, String type) {
+	private void drawCard(Graphics2D g2d, I18N locale, Account acc, String card) {
 		Kawaipon kp = acc.getKawaipon();
 		Deck deck = acc.getCurrentDeck();
 		String hPath = deck.getStyling().getFrame().isLegacy() ? "old" : "new";
 
-		CardType tp;
-		if (type.equalsIgnoreCase("basic")) {
-			tp = CardType.KAWAIPON;
-		} else {
-			Set<CardType> types = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card));
-			tp = types.stream().findFirst().orElse(CardType.KAWAIPON);
-		}
+		Set<CardType> types = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card));
+		CardType tp = types.stream().findFirst().orElse(CardType.KAWAIPON);
 
 		Card c = DAO.find(Card.class, card);
 		try {

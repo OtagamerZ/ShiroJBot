@@ -19,11 +19,14 @@
 package com.kuuhaku.model.common.gacha;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.annotations.GachaType;
+import com.kuuhaku.model.enums.Currency;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.List;
 
-public class SummonersGacha extends Gacha<String> {
+@GachaType(value = "summoner", price = 6200, currency = Currency.CR)
+public class SummonersGacha extends Gacha {
 	public SummonersGacha() {
 		this(DAO.queryAllUnmapped("""
 				SELECT x.id
@@ -41,7 +44,6 @@ public class SummonersGacha extends Gacha<String> {
 	}
 
 	private SummonersGacha(List<Object[]> pool) {
-		super(6200);
 		for (Object[] card : pool) {
 			this.pool.add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
 		}

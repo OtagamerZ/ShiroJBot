@@ -19,13 +19,16 @@
 package com.kuuhaku.model.common.gacha;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.annotations.GachaType;
+import com.kuuhaku.model.enums.Currency;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.List;
 
-public class DailyGacha extends Gacha<String> {
+@GachaType(value = "daily", price = 3500, currency = Currency.CR)
+public class DailyGacha extends Gacha {
 	public DailyGacha() {
 		this(DAO.queryAllUnmapped("""
 				SELECT x.id
@@ -42,7 +45,6 @@ public class DailyGacha extends Gacha<String> {
 	}
 
 	private DailyGacha(List<Object[]> pool) {
-		super(3500);
 		for (Object[] card : pool) {
 			this.pool.add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
 		}

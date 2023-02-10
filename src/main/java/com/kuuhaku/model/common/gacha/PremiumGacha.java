@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.gacha;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.util.Spawn;
@@ -26,7 +27,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.List;
 
-public class PremiumGacha extends Gacha<String> {
+@GachaType(value = "premium", price = 1, prizes = 5, currency = Currency.GEM)
+public class PremiumGacha extends Gacha {
 	public PremiumGacha() {
 		this(DAO.queryAllUnmapped("""
 				SELECT x.id
@@ -42,7 +44,7 @@ public class PremiumGacha extends Gacha<String> {
 	}
 
 	private PremiumGacha(List<Object[]> pool) {
-		super(1, Currency.GEM, 5, new RandomList<>(1 / (2 / Spawn.getRarityMult())));
+		super(new RandomList<>(1 / (2 / Spawn.getRarityMult())));
 		for (Object[] card : pool) {
 			this.pool.add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
 		}
