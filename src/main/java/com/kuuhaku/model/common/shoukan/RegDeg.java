@@ -48,6 +48,7 @@ public class RegDeg {
 	}
 
 	public void leftShift(Number number) {
+		if (number == null) return;
 		int value = number.intValue();
 		double mult = 0.2;
 
