@@ -659,7 +659,9 @@ public class Shoukan extends GameInstance<Phase> {
 						.map(d -> (EffectHolder<?>) d)
 						.toList();
 
-				Utils.getRandomEntry(available).getStats().setMana(-1);
+				if (!available.isEmpty()) {
+					Utils.getRandomEntry(available).getStats().setMana(-1);
+				}
 			}
 		}
 
@@ -1535,6 +1537,15 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private void reportEvent(String message, boolean trigger, Object... args) {
+		for (TextChannel chn : getChannel().getChannels()) {
+			String msg = messages.get(chn.getId());
+			if (msg != null) {
+				chn.retrieveMessageById(msg)
+						.flatMap(Message::editMessageComponents)
+						.queue();
+			}
+		}
+
 		resetTimer();
 		if (trigger) {
 			trigger(ON_TICK);
