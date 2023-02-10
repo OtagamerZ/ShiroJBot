@@ -547,11 +547,11 @@ public class Arena implements Renderer {
 
 			int x;
 			int y;
-			String name = hand.getName();
+			String name = StringUtils.abbreviate(hand.getName(), 20);
 			g.setColor(Color.WHITE);
 			g.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
 			if (game.getCurrentSide() == hand.getSide()) {
-				name = "==> " + StringUtils.abbreviate(name, 20) + " <==";
+				name = "==> " + name + " <==";
 			}
 
 			if (reversed) {
