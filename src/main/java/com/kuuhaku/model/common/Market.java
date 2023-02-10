@@ -121,6 +121,8 @@ public class Market {
 			int sale = new JSONObject(gp.getValue()).getInt("id");
 			if (sale == sc.getId()) {
 				buyer.consumeCR((long) (price * 0.8), "Purchased " + sc + " (SALE)");
+			} else {
+				buyer.consumeCR(price, "Purchased " + sc);
 			}
 		} catch (Exception e) {
 			buyer.consumeCR(price, "Purchased " + sc);
