@@ -92,6 +92,10 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 		return quality;
 	}
 
+	public void setQuality(double quality) {
+		this.quality = quality;
+	}
+
 	public Card getCard() {
 		return card;
 	}

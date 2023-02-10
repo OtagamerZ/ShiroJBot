@@ -23,7 +23,6 @@ import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.util.Spawn;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.List;
 
@@ -44,10 +43,7 @@ public class PremiumGacha extends Gacha {
 	}
 
 	private PremiumGacha(List<Object[]> pool) {
-		super(new RandomList<>(1 / (2 / Spawn.getRarityMult())));
-		for (Object[] card : pool) {
-			this.pool.add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
-		}
+		super(new RandomList<>(1 / (2 / Spawn.getRarityMult())), pool);
 	}
 
 	@Override

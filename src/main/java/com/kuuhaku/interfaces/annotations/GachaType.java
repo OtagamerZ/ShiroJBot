@@ -16,4 +16,5 @@ public @interface GachaType {
 	Currency currency();
 	int prizes() default 3;
 	Month[] months() default {};
+	String post() default "";
 }

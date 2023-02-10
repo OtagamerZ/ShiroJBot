@@ -22,19 +22,28 @@ import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.util.Spawn;
 import kotlin.Pair;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.reflections8.Reflections;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Gacha {
+	private static final Reflections refl = new Reflections("com.kuuhaku.model.common.gacha");
+	private static final Set<Class<?>> gachas = refl.getTypesAnnotatedWith(GachaType.class);
+
 	protected final RandomList<String> pool;
 
-	public Gacha() {
-		this(new RandomList<>(1 / (2.5 / Spawn.getRarityMult())));
+	public Gacha(List<Object[]> pool) {
+		this(new RandomList<>(1 / (2.5 / Spawn.getRarityMult())), pool);
 	}
 
-	public Gacha(RandomList<String> pool) {
+	public Gacha(RandomList<String> pool, List<Object[]> data) {
 		this.pool = pool;
+		for (Object[] card : data) {
+			this.pool.add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
+		}
 	}
 
 	public final List<String> getPool() {
@@ -59,5 +68,9 @@ public abstract class Gacha {
 		}
 
 		return List.copyOf(out);
+	}
+
+	public static Set<Class<?>> getGachas() {
+		return gachas;
 	}
 }

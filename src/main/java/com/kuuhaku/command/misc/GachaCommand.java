@@ -29,9 +29,9 @@ import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.gacha.*;
-import com.kuuhaku.model.enums.*;
+import com.kuuhaku.model.common.gacha.Gacha;
 import com.kuuhaku.model.enums.Currency;
+import com.kuuhaku.model.enums.*;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
@@ -49,13 +49,12 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.reflections8.Reflections;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 @Command(
 		name = "gacha",
@@ -67,9 +66,6 @@ import java.util.List;
 		Permission.MESSAGE_ATTACH_FILES
 })
 public class GachaCommand implements Executable {
-	private static final Reflections refl = new Reflections("com.kuuhaku.model.common.gacha");
-	private static final Set<Class<?>> gachas = refl.getTypesAnnotatedWith(GachaType.class);
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -79,7 +75,7 @@ public class GachaCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
-			for (Class<?> gacha : gachas) {
+			for (Class<?> gacha : Gacha.getGachas()) {
 				GachaType type = gacha.getAnnotation(GachaType.class);
 				eb.setTitle(locale.get("gacha/" + type.value()) + " (`" + type.value().toUpperCase() + "` - " + locale.get("currency/" + type.currency(), type.price()) + ")")
 						.setDescription(locale.get("gacha/" + type.value() + "_desc"));
@@ -95,7 +91,7 @@ public class GachaCommand implements Executable {
 		String id = args.getString("type");
 		Class<? extends Gacha> chosen = null;
 		Set<String> types = new HashSet<>();
-		for (Class<?> gacha : gachas) {
+		for (Class<?> gacha : Gacha.getGachas()) {
 			GachaType type = gacha.getAnnotation(GachaType.class);
 			if (type.value().equalsIgnoreCase(id)) {
 				chosen = (Class<? extends Gacha>) gacha;
@@ -133,7 +129,7 @@ public class GachaCommand implements Executable {
 						g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 20));
 
 						for (String s : result) {
-							drawCard(g2d, locale, acc, s);
+							drawCard(g2d, locale, acc, type, s);
 						}
 
 						if (type.currency() == Currency.CR) {
@@ -154,12 +150,13 @@ public class GachaCommand implements Executable {
 			);
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
-		} catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+		} catch (InvocationTargetException | InstantiationException | IllegalAccessException |
+				 NoSuchMethodException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private void drawCard(Graphics2D g2d, I18N locale, Account acc, String card) {
+	private void drawCard(Graphics2D g2d, I18N locale, Account acc, GachaType type, String card) {
 		Kawaipon kp = acc.getKawaipon();
 		Deck deck = acc.getCurrentDeck();
 		String hPath = deck.getStyling().getFrame().isLegacy() ? "old" : "new";
@@ -177,6 +174,8 @@ public class GachaCommand implements Executable {
 			switch (tp) {
 				case KAWAIPON -> {
 					KawaiponCard kc = new KawaiponCard(c, Calc.chance(0.1 * Spawn.getRarityMult()));
+					proccess(type, kc);
+
 					kc.setKawaipon(kp);
 					kc.save();
 
@@ -186,6 +185,7 @@ public class GachaCommand implements Executable {
 				}
 				case EVOGEAR -> {
 					Evogear e = DAO.find(Evogear.class, card);
+					proccess(type, e);
 
 					g2d.drawImage(e.render(locale, deck), 5, 20, null);
 					if (e.getTier() == 4) {
@@ -196,6 +196,7 @@ public class GachaCommand implements Executable {
 				}
 				case FIELD -> {
 					Field f = DAO.find(Field.class, card);
+					proccess(type, f);
 
 					g2d.drawImage(f.render(locale, deck), 5, 20, null);
 					g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/buffed.png"), 5, 20, null);
@@ -206,6 +207,11 @@ public class GachaCommand implements Executable {
 		} finally {
 			g2d.translate(265, 0);
 		}
+	}
 
+	private void proccess(GachaType type, Object card) {
+		if (!type.post().isBlank()) {
+			Utils.exec(type.post(), Map.of("card", card));
+		}
 	}
 }

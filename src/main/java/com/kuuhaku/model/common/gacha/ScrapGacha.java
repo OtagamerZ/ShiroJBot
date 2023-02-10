@@ -22,14 +22,21 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.enums.Currency;
 
-@GachaType(value = "basic", price = 2800, currency = Currency.CR)
-public class BasicGacha extends Gacha {
-	public BasicGacha() {
+@GachaType(value = "scrap", price = 1000, prizes = 4, currency = Currency.CR, post = """
+		import com.kuuhaku.model.persistent.user.KawaiponCard
+				  
+		if (card instanceof KawaiponCard) {
+			card.setQuality(0)
+			card.setChrome(false)
+		}
+		""")
+public class ScrapGacha extends Gacha {
+	public ScrapGacha() {
 		super(DAO.queryAllUnmapped("""
 				SELECT c.id
 				     , get_weight(c.id) AS weight
 				FROM card c
-				WHERE get_rarity_index(c.rarity) < 6
+				WHERE get_rarity_index(c.rarity) = 1
 				ORDER BY weight, c.id
 				"""));
 	}
