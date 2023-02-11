@@ -119,8 +119,8 @@ public class Shoukan extends GameInstance<Phase> {
 	protected boolean validate(Message message) {
 		return ((Predicate<Message>) m -> Utils.equalsAny(m.getAuthor().getId(), getPlayers()))
 				.and(m -> singleplayer
-						|| getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), m.getAuthor().getId())
-						|| hands.values().stream().anyMatch(h -> h.getUid().equals(m.getAuthor().getId()) && h.selectionPending())
+						  || getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), m.getAuthor().getId())
+						  || hands.values().stream().anyMatch(h -> h.getUid().equals(m.getAuthor().getId()) && h.selectionPending())
 				)
 				.test(message);
 	}
@@ -1442,13 +1442,14 @@ public class Shoukan extends GameInstance<Phase> {
 		if (restoring) return false;
 
 		EffectParameters ep = new EffectParameters(trigger, source.side(), source, targets);
-		for (Target t : ep.targets()) {
-			t.execute(ep);
-		}
 
 		try {
 			return source.execute(ep);
 		} finally {
+			for (Target t : ep.targets()) {
+				t.execute(ep);
+			}
+
 			triggerEOTs(ep);
 		}
 	}
