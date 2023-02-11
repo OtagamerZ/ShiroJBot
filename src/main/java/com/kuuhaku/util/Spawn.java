@@ -89,7 +89,7 @@ public abstract class Spawn {
 				return null;
 			}
 
-			RandomList<Rarity> rPool = new RandomList<>(1 / (3 / rarityBonus));
+			RandomList<Rarity> rPool = new RandomList<>(1 / (rarityBonus / 2));
 			for (Rarity r : cPool.keySet()) {
 				if (r.getIndex() <= 0) continue;
 
@@ -118,7 +118,7 @@ public abstract class Spawn {
 
 		Drop<?> drop = null;
 		if (Calc.chance(dropRate)) {
-			RandomList<Drop<?>> rPool = new RandomList<>(1 / (2.5 / rarityBonus));
+			RandomList<Drop<?>> rPool = new RandomList<>(1 / (rarityBonus / 2.5));
 			rPool.add(new CreditDrop());
 
 			drop = rPool.get();

@@ -44,11 +44,11 @@ public class RandomList<T> {
 
 	public RandomList(RandomGenerator rng, double fac) {
 		this(rng, (a, b) -> {
-			if (b > 1) {
-				return Math.pow(a, 1 / b);
+			if (b < 1) {
+				return 1 - Math.pow(a, b);
 			}
 
-			return 1 - Math.pow(a, b);
+			return Math.pow(a, 1 / b);
 		}, fac);
 	}
 
