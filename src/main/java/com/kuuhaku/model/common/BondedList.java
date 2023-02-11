@@ -95,7 +95,7 @@ public class BondedList<T> extends TreeList<T> {
 
 		it = aux.listIterator();
 		while (it.hasNext()) {
-			super.add(index, it.next());
+			super.add(Math.min(index, size()), it.next());
 			it.remove();
 		}
 	}
