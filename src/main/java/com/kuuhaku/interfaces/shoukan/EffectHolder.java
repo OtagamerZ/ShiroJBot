@@ -151,12 +151,12 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 			if (str.startsWith(Constants.VOID)) {
 				if (Calc.luminance(g2d.getColor()) < 0.2) {
-					Graph.drawOutlinedString(g2d, str, x, y + 1, 1.5f, new Color(255, 255, 255));
+					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
 				} else {
-					Graph.drawOutlinedString(g2d, str, x, y + 1, 1.5f, new Color(0, 0, 0));
+					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
 				}
 			} else if (str.endsWith(Constants.VOID)) {
-				Graph.drawOutlinedString(g2d, str, x, y + 1, 0.25f, g2d.getColor());
+				Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
 			} else {
 				g2d.drawString(str, x, y);
 			}
@@ -164,8 +164,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			BufferedImage icon = switch (g2d.getColor().getRGB() & 0xFFFFFF) {
 				case 0x85C720 -> IO.getResourceAsImage("shoukan/icons/hp.png");
 				case 0x3F9EFF -> IO.getResourceAsImage("shoukan/icons/mp.png");
-				case 0x9A1313 -> IO.getResourceAsImage("shoukan/icons/regen.png");
-				case 0x7ABCFF -> IO.getResourceAsImage("shoukan/icons/degen.png");
+				case 0x9A1313 -> IO.getResourceAsImage("shoukan/icons/degen.png");
+				case 0x7ABCFF -> IO.getResourceAsImage("shoukan/icons/regen.png");
 				case 0xFF0000 -> IO.getResourceAsImage("shoukan/icons/blood.png");
 				case 0x3F9EFE -> IO.getResourceAsImage("shoukan/icons/mana.png");
 				case 0xFE0000 -> IO.getResourceAsImage("shoukan/icons/attack.png");
