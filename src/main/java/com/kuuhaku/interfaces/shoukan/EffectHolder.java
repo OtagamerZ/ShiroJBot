@@ -220,7 +220,12 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						String val = String.valueOf(Utils.exec(calc, values));
 
 						csm.getStoredProps().compute(groups.getString("type"), (k, v) -> {
-							int value = Calc.round(NumberUtils.toDouble(val) * getPower());
+							int value;
+							if (!k.equals("data")) {
+								value = Calc.round(NumberUtils.toDouble(val) * getPower());
+							} else {
+								value = Calc.round(NumberUtils.toDouble(val));
+							}
 
 							if (v == null) {
 								return value;
