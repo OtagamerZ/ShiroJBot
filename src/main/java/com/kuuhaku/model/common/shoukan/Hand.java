@@ -689,10 +689,10 @@ public class Hand {
 			if (origin.synergy() == Race.POSSESSED && value > 0) {
 				value *= 1 + getOther().getGraveyard().size() * 0.05;
 			} else if (origin.synergy() == Race.PRIMAL && value < 0) {
-				int degen = Math.abs(value / 10);
-				if (degen > 0) {
+				int degen = value / 10;
+				if (degen < 0) {
 					regdeg.add(degen);
-					value += degen;
+					value -= degen;
 				}
 			}
 
