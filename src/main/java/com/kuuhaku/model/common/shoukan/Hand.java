@@ -696,11 +696,11 @@ public class Hand {
 				}
 			}
 
-			int rd = regdeg.peek();
+			int dot = regdeg.peek();
 			int quart = value / 4;
-			if (rd > 0 && value < 0) {
-				value -= quart - regdeg.reduce(Degen.class, quart);
-			} else if (rd < 0 && value > 0) {
+			if (dot > 0 && value < 0) {
+				value -= quart + regdeg.reduce(Degen.class, quart);
+			} else if (dot < 0 && value > 0) {
 				value -= quart - regdeg.reduce(Regen.class, quart);
 			}
 
