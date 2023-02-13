@@ -53,6 +53,7 @@ public class CardExtra implements Cloneable {
 	private final HashSet<AttrMod> block;
 
 	private final HashSet<AttrMod> attrMult;
+	private final HashSet<AttrMod> costMult;
 	private final HashSet<AttrMod> power;
 
 	private final HashSet<AttrMod> tier;
@@ -80,7 +81,7 @@ public class CardExtra implements Cloneable {
 	public CardExtra(
 			HashSet<AttrMod> mana, HashSet<AttrMod> blood, HashSet<AttrMod> sacrifices,
 			HashSet<AttrMod> atk, HashSet<AttrMod> dfs, HashSet<AttrMod> dodge,
-			HashSet<AttrMod> block, HashSet<AttrMod> attrMult, HashSet<AttrMod> tier,
+			HashSet<AttrMod> block, HashSet<AttrMod> attrMult, HashSet<AttrMod> costMult, HashSet<AttrMod> tier,
 			HashSet<AttrMod> power, EnumSet<Flag> flags, EnumSet<Flag> tempFlags,
 			EnumSet<Flag> permFlags, JSONObject data, JSONObject perm,
 			ListOrderedSet<String> curses
@@ -93,6 +94,7 @@ public class CardExtra implements Cloneable {
 		this.dodge = dodge;
 		this.block = block;
 		this.attrMult = attrMult;
+		this.costMult = costMult;
 		this.power = power;
 		this.tier = tier;
 		this.flags = flags;
@@ -105,6 +107,7 @@ public class CardExtra implements Cloneable {
 
 	public CardExtra() {
 		this(
+				new HashSet<>(),
 				new HashSet<>(),
 				new HashSet<>(),
 				new HashSet<>(),
@@ -420,6 +423,43 @@ public class CardExtra implements Cloneable {
 		this.attrMult.add(mod);
 	}
 
+	public double getCostMult() {
+		return 1 + sum(costMult);
+	}
+
+	public AttrMod getCostMult(Drawable<?> source) {
+		for (AttrMod mod : costMult) {
+			if (Objects.equals(source, mod.getSource())) {
+				return mod;
+			}
+		}
+
+		return new AttrMod(source, 0);
+	}
+
+	public void setCostMult(double costMult) {
+		for (AttrMod mod : this.costMult) {
+			if (mod instanceof PermMod) {
+				mod.setValue(mod.getValue() + costMult);
+				return;
+			}
+		}
+
+		this.costMult.add(new PermMod(costMult));
+	}
+
+	public void setCostMult(Drawable<?> source, double costMult) {
+		AttrMod mod = new AttrMod(source, costMult);
+		this.costMult.remove(mod);
+		this.costMult.add(mod);
+	}
+
+	public void setCostMult(Drawable<?> source, double costMult, int expiration) {
+		AttrMod mod = new AttrMod(source, costMult, expiration);
+		this.costMult.remove(mod);
+		this.costMult.add(mod);
+	}
+
 	public double getPower() {
 		return (1 + sum(power)) * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
 	}
@@ -664,6 +704,7 @@ public class CardExtra implements Cloneable {
 				copier.makeCopy(dodge),
 				copier.makeCopy(block),
 				copier.makeCopy(attrMult),
+				copier.makeCopy(costMult),
 				copier.makeCopy(power),
 				copier.makeCopy(tier),
 				EnumSet.copyOf(flags),
