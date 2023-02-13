@@ -971,7 +971,11 @@ public class Shoukan extends GameInstance<Phase> {
 		return false;
 	}
 
-	private boolean attack(Senshi source, Senshi target, boolean announce) {
+	public boolean attack(Senshi source, Senshi target) {
+		return attack(source, target, false);
+	}
+
+	public boolean attack(Senshi source, Senshi target, boolean announce) {
 		if (target == null) return false;
 		else if (source == null || !source.canAttack()) {
 			if (announce) {
@@ -1225,7 +1229,11 @@ public class Shoukan extends GameInstance<Phase> {
 		return win;
 	}
 
-	private boolean attack(Senshi source, Hand op, boolean announce) {
+	public boolean attack(Senshi source, Hand op) {
+		return attack(source, op, false);
+	}
+
+	public boolean attack(Senshi source, Hand op, boolean announce) {
 		if (source == null || !source.canAttack()) {
 			if (announce) {
 				getChannel().sendMessage(getLocale().get("error/card_cannot_attack")).queue();
