@@ -478,7 +478,7 @@ public class Arena implements Renderer {
 						if (!demon) {
 							String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 							g2.setColor(Color.CYAN);
-							g2.setFont(Fonts.OPEN_SANS_COMPACT.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
+							g2.setFont(Fonts.NOTO_SANS.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
 
 							if (reversed) {
 								Graph.drawOutlinedString(g2, mpText,
