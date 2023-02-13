@@ -116,6 +116,10 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		return 0;
 	}
 
+	default double getCostMult() { return 1; }
+
+	default double getAttrMult() { return 1; }
+
 	default double getPower() { return 1; }
 
 	default int getCooldown() {

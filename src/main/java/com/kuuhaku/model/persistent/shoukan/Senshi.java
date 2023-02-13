@@ -513,7 +513,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return (int) Utils.clamp((min + sum) * getAttrMult(), min, 100);
 	}
 
-	private double getAttrMult() {
+	@Override
+	public double getCostMult() {
+		return stats.getCostMult();
+	}
+
+	@Override
+	public double getAttrMult() {
 		double mult = 1;
 		if (hand != null) {
 			if (hand.getOrigin().isPure() && race != hand.getOrigin().major()) {
