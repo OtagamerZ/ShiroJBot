@@ -474,7 +474,7 @@ public class Arena implements Renderer {
 
 				int scale = reversed ? -1 : 1;
 				Graph.applyTransformed(g1, scale, scale, g2 -> {
-					Graph.applyTransformed(g2, 2, 1, g3 -> {
+					Graph.applyTransformed(g2, 0.5, 1, g3 -> {
 						if (!demon) {
 							String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 							g2.setColor(Color.CYAN);
