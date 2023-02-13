@@ -474,31 +474,29 @@ public class Arena implements Renderer {
 
 				int scale = reversed ? -1 : 1;
 				Graph.applyTransformed(g1, scale, scale, g2 -> {
-					Graph.applyTransformed(g2, 0.5, 1, g3 -> {
-						if (!demon) {
-							String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
-							g2.setColor(Color.CYAN);
-							g2.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
+					if (!demon) {
+						String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
+						g2.setColor(Color.CYAN);
+						g2.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
 
-							if (reversed) {
-								Graph.drawOutlinedString(g2, mpText,
-										-(MARGIN.x + g2.getFontMetrics().stringWidth(mpText)), -20,
-										6, Color.BLACK
-								);
-							} else {
-								Graph.drawOutlinedString(g2, mpText,
-										MARGIN.x, BAR_SIZE.height - 20,
-										6, Color.BLACK
-								);
-							}
+						if (reversed) {
+							Graph.drawOutlinedString(g2, mpText,
+									-(MARGIN.x + g2.getFontMetrics().stringWidth(mpText)), -20,
+									6, Color.BLACK
+							);
+						} else {
+							Graph.drawOutlinedString(g2, mpText,
+									MARGIN.x, BAR_SIZE.height - 20,
+									6, Color.BLACK
+							);
 						}
-					});
+					}
 
 					int pad = Utils.getDigits(hand.getBase().hp());
 					String hpText = "HP: "
-							+ StringUtils.leftPad(String.valueOf(hand.getHP()), pad, "0")
-							+ "/"
-							+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), pad, "0");
+									+ StringUtils.leftPad(String.valueOf(hand.getHP()), pad, "0")
+									+ "/"
+									+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), pad, "0");
 					g2.setColor(Color.WHITE);
 					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5) * (demon ? 2 : 1)));
 
