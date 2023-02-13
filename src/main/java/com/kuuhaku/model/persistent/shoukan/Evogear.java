@@ -482,7 +482,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 			if (!desc.isEmpty()) {
 				g1.setColor(style.getFrame().getSecondaryColor());
-				g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
+				g1.setFont(Fonts.NOTO_SANS_BOLD.deriveFont(Font.BOLD, 11));
 
 				int y = 276;
 				String tags = processTags(locale);

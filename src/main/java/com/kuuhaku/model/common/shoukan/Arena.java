@@ -497,7 +497,7 @@ public class Arena implements Renderer {
 							+ "/"
 							+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), pad, "0");
 					g2.setColor(Color.WHITE);
-					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5) * (demon ? 2 : 1)));
+					g2.setFont(Fonts.NOTO_SANS_BOLD.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5) * (demon ? 2 : 1)));
 
 					int offset = 6;
 					if (demon) offset += 10;
@@ -549,7 +549,7 @@ public class Arena implements Renderer {
 			int y;
 			String name = StringUtils.abbreviate(hand.getName(), 20);
 			g.setColor(Color.WHITE);
-			g.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
+			g.setFont(Fonts.NOTO_SANS_BOLD.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
 			if (game.getCurrentSide() == hand.getSide()) {
 				name = "==> " + name + " <==";
 			}
