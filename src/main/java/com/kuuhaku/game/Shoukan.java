@@ -975,7 +975,15 @@ public class Shoukan extends GameInstance<Phase> {
 		return attack(source, target, false);
 	}
 
+	public boolean attack(Senshi source, Senshi target, double mult) {
+		return attack(source, target, mult, false);
+	}
+
 	public boolean attack(Senshi source, Senshi target, boolean announce) {
+		return attack(source, target, 1, announce);
+	}
+
+	private boolean attack(Senshi source, Senshi target, double mult, boolean announce) {
 		if (target == null) return false;
 		else if (source == null || !source.canAttack()) {
 			if (announce) {
@@ -1013,9 +1021,9 @@ public class Shoukan extends GameInstance<Phase> {
 		int dmg = source.getActiveAttr();
 		int lifesteal = you.getBase().lifesteal();
 		int thorns = 0;
-		double dmgMult = 1d / (1 << op.getChainReduction());
+		mult /= 1 << op.getChainReduction();
 		if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
-			dmgMult /= 2;
+			mult /= 2;
 		}
 
 		boolean win = false;
@@ -1028,9 +1036,9 @@ public class Shoukan extends GameInstance<Phase> {
 					for (Object o : charms) {
 						Charm c = Charm.valueOf(String.valueOf(o));
 						switch (c) {
-							case PIERCING -> op.modHP((int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100));
+							case PIERCING -> op.modHP((int) -(dmg * mult * c.getValue(e.getTier()) / 100));
 							case WOUNDING -> {
-								int val = (int) (dmg * dmgMult * c.getValue(e.getTier()) / 100);
+								int val = (int) (dmg * mult * c.getValue(e.getTier()) / 100);
 								op.getRegDeg().add(val);
 
 								if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(5)) {
@@ -1110,7 +1118,7 @@ public class Shoukan extends GameInstance<Phase> {
 							trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
 
 							if (!source.popFlag(Flag.NO_DAMAGE)) {
-								you.modHP((int) -((enemyStats - source.getActiveAttr()) * dmgMult));
+								you.modHP((int) -((enemyStats - source.getActiveAttr()) * mult));
 							}
 
 							for (Senshi s : source.getNearby()) {
@@ -1149,7 +1157,7 @@ public class Shoukan extends GameInstance<Phase> {
 								trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
 
 								if (you.getOrigin().synergy() == Race.FABLED) {
-									op.modHP((int) -(source.getActiveAttr() * dmgMult * 0.02));
+									op.modHP((int) -(source.getActiveAttr() * mult * 0.02));
 								}
 
 								dmg = 0;
@@ -1196,7 +1204,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				op.modHP((int) -(dmg * dmgMult));
+				op.modHP((int) -(dmg * mult));
 				op.addChain();
 
 				if (thorns > 0) {
@@ -1232,7 +1240,15 @@ public class Shoukan extends GameInstance<Phase> {
 		return attack(source, op, false);
 	}
 
+	public boolean attack(Senshi source, Hand op, double mult) {
+		return attack(source, op, mult, false);
+	}
+
 	public boolean attack(Senshi source, Hand op, boolean announce) {
+		return attack(source, op, 1, announce);
+	}
+
+	private boolean attack(Senshi source, Hand op, double mult, boolean announce) {
 		if (source == null || !source.canAttack()) {
 			if (announce) {
 				getChannel().sendMessage(getLocale().get("error/card_cannot_attack")).queue();
@@ -1257,9 +1273,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 		int dmg = source.getActiveAttr();
 		int lifesteal = you.getBase().lifesteal();
-		double dmgMult = 1d / (1 << op.getChainReduction());
+		mult /= 1 << op.getChainReduction();
 		if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
-			dmgMult /= 2;
+			mult /= 2;
 		}
 
 		Senshi enemy = null;
@@ -1271,9 +1287,9 @@ public class Shoukan extends GameInstance<Phase> {
 					for (Object o : charms) {
 						Charm c = Charm.valueOf(String.valueOf(o));
 						switch (c) {
-							case PIERCING -> op.modHP((int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100));
+							case PIERCING -> op.modHP((int) -(dmg * mult * c.getValue(e.getTier()) / 100));
 							case WOUNDING -> {
-								int val = (int) (dmg * dmgMult * c.getValue(e.getTier()) / 100);
+								int val = (int) (dmg * mult * c.getValue(e.getTier()) / 100);
 								op.getRegDeg().add(val);
 
 								if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(5)) {
@@ -1327,7 +1343,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				op.modHP((int) -(dmg * dmgMult));
+				op.modHP((int) -(dmg * mult));
 				op.addChain();
 
 				if (lifesteal > 0) {
