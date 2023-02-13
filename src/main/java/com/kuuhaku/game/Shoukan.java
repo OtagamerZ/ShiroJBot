@@ -927,56 +927,8 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi ally = yourSlot.getTop();
-		if (!ally.canAttack()) {
-			getChannel().sendMessage(getLocale().get("error/card_cannot_attack")).queue();
-			return false;
-		}
+		attack(ally, you, true);
 
-		int pHP = you.getHP();
-		int dmg = ally.getActiveAttr();
-
-		for (Evogear e : ally.getEquipments()) {
-			JSONArray charms = e.getCharms();
-
-			for (Object o : charms) {
-				Charm c = Charm.valueOf(String.valueOf(o));
-				switch (c) {
-					case PIERCING -> you.modHP((int) -(dmg * 0.5 * c.getValue(e.getTier()) / 100));
-					case WOUNDING -> {
-						int val = (int) (dmg * 0.5 * c.getValue(e.getTier()) / 100);
-						you.getRegDeg().add(val);
-
-						if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(5)) {
-							you.getRegDeg().add(val);
-						}
-					}
-				}
-			}
-		}
-
-		switch (you.getOrigin().synergy()) {
-			case SHIKIGAMI -> {
-				List<SlotColumn> slts = arena.getSlots(you.getSide());
-				for (SlotColumn slt : slts) {
-					if (slt.hasTop()) {
-						slt.getTop().getStats().setDodge(-1);
-					}
-				}
-			}
-			case FALLEN -> {
-				if (you.getRegDeg().peek() < 0) {
-					you.getRegDeg().apply(0.05);
-				}
-			}
-			case SPAWN -> you.getRegDeg().add(you.getBase().hp() * 0.05);
-		}
-
-		if (ally.getSlot() != null && !ally.popFlag(Flag.FREE_ACTION)) {
-			ally.setAvailable(false);
-		}
-
-		you.modHP((int) -(dmg * 0.5));
-		reportEvent("str/combat_self", true, ally, pHP - you.getHP());
 		return false;
 	}
 
@@ -992,17 +944,10 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi ally = yourSlot.getTop();
-		if (!ally.canAttack()) {
-			getChannel().sendMessage(getLocale().get("error/card_cannot_attack")).queue();
-			return false;
-		}
-
-		Hand op = hands.get(side.getOther());
-		int pHP = you.getHP();
-		int eHP = op.getHP();
+		Hand op = you.getOther();
 
 		Senshi enemy = null;
-		if (args.getBoolean("target")) {
+		if (args.has("target")) {
 			SlotColumn opSlot = arena.getSlots(op.getSide()).get(args.getInt("target") - 1);
 
 			if (!opSlot.hasTop()) {
@@ -1015,33 +960,53 @@ public class Shoukan extends GameInstance<Phase> {
 			} else {
 				enemy = opSlot.getTop();
 			}
-
-			if (ally.getTarget() != null && !Objects.equals(ally.getTarget(), enemy)) {
-				getChannel().sendMessage(getLocale().get("error/card_taunted", ally.getTarget(), ally.getTarget().getIndex() + 1)).queue();
-				return false;
-			}
 		}
 
-		if (enemy == null && !arena.isFieldEmpty(op.getSide()) && !ally.popFlag(Flag.DIRECT)) {
-			getChannel().sendMessage(getLocale().get("error/field_not_empty")).queue();
-			return false;
-		} else if (enemy != null && enemy.isStasis()) {
-			getChannel().sendMessage(getLocale().get("error/card_untargetable")).queue();
-			return false;
-		}
-
-		Target t;
-		int posHash;
-		if (enemy != null) {
-			t = enemy.asTarget(ON_DEFEND);
-			posHash = enemy.posHash();
+		if (enemy == null) {
+			attack(ally, op, true);
 		} else {
-			t = new Target();
-			posHash = 0;
+			attack(ally, enemy, true);
 		}
-		trigger(ON_ATTACK, ally.asSource(ON_ATTACK), t);
 
-		int dmg = ally.getActiveAttr();
+		return false;
+	}
+
+	private boolean attack(Senshi source, Senshi target, boolean announce) {
+		if (target == null) return false;
+		else if (source == null || source.canAttack()) {
+			if (announce) {
+				getChannel().sendMessage(getLocale().get("error/card_cannot_attack")).queue();
+			}
+
+			return false;
+		}
+
+		Hand you = source.getHand();
+		Hand op = target.getHand();
+		int pHP = you.getHP();
+		int eHP = op.getHP();
+
+		if (source.getTarget() != null && !Objects.equals(source.getTarget(), target)) {
+			if (announce) {
+				getChannel().sendMessage(getLocale().get("error/card_taunted", source.getTarget(), source.getTarget().getIndex() + 1)).queue();
+			}
+
+			return false;
+		}
+
+		if (target.isStasis()) {
+			if (announce) {
+				getChannel().sendMessage(getLocale().get("error/card_untargetable")).queue();
+			}
+
+			return false;
+		}
+
+		Target t = target.asTarget(ON_DEFEND);
+		int posHash = target.posHash();
+		trigger(ON_ATTACK, source.asSource(ON_ATTACK), t);
+
+		int dmg = source.getActiveAttr();
 		int lifesteal = you.getBase().lifesteal();
 		int thorns = 0;
 		float dmgMult = 1;
@@ -1049,10 +1014,11 @@ public class Shoukan extends GameInstance<Phase> {
 			dmgMult /= 2;
 		}
 
+		boolean win = false;
 		String outcome = getLocale().get("str/combat_skip");
 		try {
-			if ((enemy == null || posHash == enemy.posHash()) && ally.canAttack()) {
-				for (Evogear e : ally.getEquipments()) {
+			if (posHash == target.posHash() && source.canAttack()) {
+				for (Evogear e : source.getEquipments()) {
 					JSONArray charms = e.getCharms();
 
 					for (Object o : charms) {
@@ -1079,17 +1045,15 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				if (enemy != null) {
-					enemy.setFlipped(false);
+				target.setFlipped(false);
 
-					for (Evogear e : enemy.getEquipments()) {
-						JSONArray charms = e.getCharms();
+				for (Evogear e : target.getEquipments()) {
+					JSONArray charms = e.getCharms();
 
-						for (Object o : charms) {
-							Charm c = Charm.valueOf(String.valueOf(o));
-							if (c == Charm.THORNS) {
-								thorns += c.getValue(e.getTier());
-							}
+					for (Object o : charms) {
+						Charm c = Charm.valueOf(String.valueOf(o));
+						if (c == Charm.THORNS) {
+							thorns += c.getValue(e.getTier());
 						}
 					}
 				}
@@ -1111,127 +1075,111 @@ public class Shoukan extends GameInstance<Phase> {
 					case SPAWN -> op.getRegDeg().leftShift(op.getBase().hp() * 0.05);
 				}
 
-				boolean ignore = ally.popFlag(Flag.NO_COMBAT);
-				if (!ignore && enemy != null) {
-					ignore = enemy.getSlot().getIndex() == -1 || enemy.popFlag(Flag.IGNORE_COMBAT);
+				boolean ignore = source.popFlag(Flag.NO_COMBAT);
+				if (!ignore) {
+					ignore = target.getSlot().getIndex() == -1 || target.popFlag(Flag.IGNORE_COMBAT);
 				}
 
 				if (!ignore) {
-					if (enemy != null) {
-						if (enemy.isSupporting()) {
-							for (Senshi s : enemy.getNearby()) {
+					if (target.isSupporting()) {
+						for (Senshi s : target.getNearby()) {
+							s.awake();
+						}
+
+						op.getGraveyard().add(target);
+
+						dmg = 0;
+						win = true;
+						outcome = getLocale().get("str/combat_success");
+					} else {
+						boolean dbl = op.getOrigin().synergy() == Race.CYBERBEAST && Calc.chance(5);
+						boolean unstop = source.popFlag(Flag.UNSTOPPABLE);
+
+						int enemyStats = target.getActiveAttr(dbl);
+						int eEquipStats = target.getActiveEquips(dbl);
+						int eCombatStats = enemyStats;
+						if (source.popFlag(Flag.IGNORE_EQUIP)) {
+							eCombatStats -= eEquipStats;
+						}
+
+						if (!unstop && source.getActiveAttr() < eCombatStats) {
+							trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
+
+							if (!source.popFlag(Flag.NO_DAMAGE)) {
+								you.modHP((int) -((enemyStats - source.getActiveAttr()) * dmgMult));
+							}
+
+							for (Senshi s : source.getNearby()) {
 								s.awake();
 							}
 
-							op.getGraveyard().add(enemy);
+							you.getGraveyard().add(source);
 
 							dmg = 0;
-							outcome = getLocale().get("str/combat_success");
+							outcome = getLocale().get("str/combat_defeat");
 						} else {
-							boolean dbl = op.getOrigin().synergy() == Race.CYBERBEAST && Calc.chance(5);
-							boolean unstop = ally.popFlag(Flag.UNSTOPPABLE);
+							int block = target.getBlock();
+							int dodge = target.getDodge();
 
-							int enemyStats = enemy.getActiveAttr(dbl);
-							int eEquipStats = enemy.getActiveEquips(dbl);
-							int eCombatStats = enemyStats;
-							if (ally.popFlag(Flag.IGNORE_EQUIP)) {
-								eCombatStats -= eEquipStats;
-							}
+							if (Calc.chance(100 - source.getHitChance())) {
+								trigger(ON_MISS, source.asSource(ON_MISS));
 
-							if (!unstop && ally.getActiveAttr() < eCombatStats) {
-								trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
+								dmg = 0;
+								outcome = getLocale().get("str/combat_miss");
+							} else if (!unstop && !source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
+								trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
 
-								if (!ally.popFlag(Flag.NO_DAMAGE)) {
-									you.modHP((int) -((enemyStats - ally.getActiveAttr()) * dmgMult));
-								}
-
-								for (Senshi s : ally.getNearby()) {
+								for (Senshi s : source.getNearby()) {
 									s.awake();
 								}
 
-								you.getGraveyard().add(ally);
+								you.getGraveyard().add(source);
 
 								dmg = 0;
-								outcome = getLocale().get("str/combat_defeat");
+								outcome = getLocale().get("str/combat_block", block);
+							} else if (!source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
+								trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
+
+								if (you.getOrigin().synergy() == Race.FABLED) {
+									op.modHP((int) -(source.getActiveAttr() * dmgMult * 0.02));
+								}
+
+								dmg = 0;
+								outcome = getLocale().get("str/combat_dodge", dodge);
 							} else {
-								int block = enemy.getBlock();
-								int dodge = enemy.getDodge();
+								if (unstop || source.getActiveAttr() > eCombatStats) {
+									trigger(ON_HIT, source.asSource(ON_HIT), target.asTarget(ON_LOSE));
+									if (target.isDefending() || target.popFlag(Flag.NO_DAMAGE)) {
+										dmg = 0;
+									} else {
+										dmg = Math.max(0, dmg - enemyStats);
+									}
 
-								if (Calc.chance(100 - ally.getHitChance())) {
-									trigger(ON_MISS, ally.asSource(ON_MISS));
-
-									dmg = 0;
-									outcome = getLocale().get("str/combat_miss");
-								} else if (!unstop && !ally.popFlag(Flag.TRUE_STRIKE) && (enemy.popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
-									trigger(ON_SUICIDE, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_BLOCK));
-
-									for (Senshi s : ally.getNearby()) {
+									for (Senshi s : target.getNearby()) {
 										s.awake();
 									}
 
-									you.getGraveyard().add(ally);
+									op.getGraveyard().add(target);
 
-									dmg = 0;
-									outcome = getLocale().get("str/combat_block", block);
-								} else if (!ally.popFlag(Flag.TRUE_STRIKE) && (enemy.popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
-									trigger(ON_MISS, ally.asSource(ON_MISS), enemy.asTarget(ON_DODGE));
-
-									if (you.getOrigin().synergy() == Race.FABLED) {
-										op.modHP((int) -(ally.getActiveAttr() * dmgMult * 0.02));
-									}
-
-									dmg = 0;
-									outcome = getLocale().get("str/combat_dodge", dodge);
+									win = true;
+									outcome = getLocale().get("str/combat_success");
 								} else {
-									if (unstop || ally.getActiveAttr() > eCombatStats) {
-										trigger(ON_HIT, ally.asSource(ON_HIT), enemy.asTarget(ON_LOSE));
-										if (enemy.isDefending() || enemy.popFlag(Flag.NO_DAMAGE)) {
-											dmg = 0;
-										} else {
-											dmg = Math.max(0, dmg - enemyStats);
-										}
+									trigger(ON_CLASH, source.asSource(ON_SUICIDE), target.asTarget(ON_LOSE));
 
-										for (Senshi s : enemy.getNearby()) {
-											s.awake();
-										}
-
-										op.getGraveyard().add(enemy);
-
-										outcome = getLocale().get("str/combat_success");
-									} else {
-										trigger(ON_CLASH, ally.asSource(ON_SUICIDE), enemy.asTarget(ON_LOSE));
-
-										for (Senshi s : enemy.getNearby()) {
-											s.awake();
-										}
-
-										op.getGraveyard().add(enemy);
-
-										for (Senshi s : ally.getNearby()) {
-											s.awake();
-										}
-
-										you.getGraveyard().add(ally);
-
-										dmg = 0;
-										outcome = getLocale().get("str/combat_clash");
+									for (Senshi s : target.getNearby()) {
+										s.awake();
 									}
-								}
-							}
-						}
-					} else {
-						for (SlotColumn sc : getSlots(op.getSide())) {
-							for (Senshi card : sc.getCards()) {
-								if (card instanceof CardProxy) {
-									EffectParameters params = new EffectParameters(
-											ON_TRAP, op.getSide(),
-											card.asSource(ON_TRAP),
-											ally.asTarget(ON_ATTACK, TargetType.ENEMY)
-									);
 
-									if (activateProxy(card, params)) {
-										getChannel().sendMessage(getLocale().get("str/trap_activation", card)).queue();
+									op.getGraveyard().add(target);
+
+									for (Senshi s : source.getNearby()) {
+										s.awake();
 									}
+
+									you.getGraveyard().add(source);
+
+									dmg = 0;
+									outcome = getLocale().get("str/combat_clash");
 								}
 							}
 						}
@@ -1247,8 +1195,8 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 		} finally {
-			if (ally.getSlot().getIndex() != -1 && !ally.popFlag(Flag.FREE_ACTION)) {
-				ally.setAvailable(false);
+			if (source.getSlot().getIndex() != -1 && !source.popFlag(Flag.FREE_ACTION)) {
+				source.setAvailable(false);
 			}
 		}
 
@@ -1261,8 +1209,134 @@ public class Shoukan extends GameInstance<Phase> {
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", val);
 		}
 
-		reportEvent("str/combat", true, ally, Utils.getOr(enemy, op.getName()), outcome);
-		return false;
+		if (announce) {
+			reportEvent("str/combat", true, source, Utils.getOr(target, op.getName()), outcome.trim());
+		}
+
+		return win;
+	}
+
+	private boolean attack(Senshi source, Hand op, boolean announce) {
+		if (source == null || source.canAttack()) {
+			if (announce) {
+				getChannel().sendMessage(getLocale().get("error/card_cannot_attack")).queue();
+			}
+
+			return false;
+		}
+
+		Hand you = source.getHand();
+		int pHP = you.getHP();
+		int eHP = op.getHP();
+
+		if (!arena.isFieldEmpty(op.getSide()) && !source.popFlag(Flag.DIRECT)) {
+			if (announce) {
+				getChannel().sendMessage(getLocale().get("error/field_not_empty")).queue();
+			}
+
+			return false;
+		}
+
+		trigger(ON_ATTACK, source.asSource(ON_ATTACK));
+
+		int dmg = source.getActiveAttr();
+		int lifesteal = you.getBase().lifesteal();
+		float dmgMult = 1;
+		if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
+			dmgMult /= 2;
+		}
+
+		Senshi enemy = null;
+		try {
+			if (source.canAttack()) {
+				for (Evogear e : source.getEquipments()) {
+					JSONArray charms = e.getCharms();
+
+					for (Object o : charms) {
+						Charm c = Charm.valueOf(String.valueOf(o));
+						switch (c) {
+							case PIERCING -> op.modHP((int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100));
+							case WOUNDING -> {
+								int val = (int) (dmg * dmgMult * c.getValue(e.getTier()) / 100);
+								op.getRegDeg().add(val);
+
+								if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(5)) {
+									op.getRegDeg().add(val);
+								}
+							}
+							case DRAIN -> {
+								int toDrain = Math.min(c.getValue(e.getTier()), op.getMP());
+								if (toDrain > 0) {
+									you.modMP(toDrain);
+									op.modMP(-toDrain);
+								}
+							}
+							case LIFESTEAL -> lifesteal += c.getValue(e.getTier());
+						}
+					}
+				}
+
+				switch (you.getOrigin().synergy()) {
+					case SHIKIGAMI -> {
+						List<SlotColumn> slts = arena.getSlots(op.getSide());
+						for (SlotColumn slt : slts) {
+							if (slt.hasTop()) {
+								slt.getTop().getStats().setDodge(-1);
+							}
+						}
+					}
+					case FALLEN -> {
+						if (op.getRegDeg().peek() < 0) {
+							op.getRegDeg().apply(0.05);
+						}
+					}
+					case SPAWN -> op.getRegDeg().leftShift(op.getBase().hp() * 0.05);
+				}
+
+				if (!source.popFlag(Flag.NO_COMBAT)) {
+					for (SlotColumn sc : getSlots(op.getSide())) {
+						for (Senshi card : sc.getCards()) {
+							if (card instanceof CardProxy) {
+								EffectParameters params = new EffectParameters(
+										ON_TRAP, op.getSide(),
+										card.asSource(ON_TRAP),
+										source.asTarget(ON_ATTACK, TargetType.ENEMY)
+								);
+
+								if (activateProxy(card, params)) {
+									getChannel().sendMessage(getLocale().get("str/trap_activation", card)).queue();
+								}
+							}
+						}
+					}
+				}
+
+				op.modHP((int) -(dmg * dmgMult));
+				if (lifesteal > 0) {
+					you.modHP(Math.max(0, eHP - op.getHP()) * lifesteal / 100);
+				}
+			}
+		} finally {
+			if (source.getSlot().getIndex() != -1 && !source.popFlag(Flag.FREE_ACTION)) {
+				source.setAvailable(false);
+			}
+		}
+
+		String outcome = "";
+		if (eHP != op.getHP()) {
+			int val = eHP - op.getHP();
+			outcome = getLocale().get(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", val);
+		}
+		if (pHP != you.getHP()) {
+			int val = pHP - you.getHP();
+			outcome = getLocale().get(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", val);
+		}
+
+		if (announce) {
+			reportEvent("str/combat", true, source, Utils.getOr(enemy, op.getName()), outcome);
+		}
+
+		return true;
 	}
 
 	public ShoukanParams getParams() {
