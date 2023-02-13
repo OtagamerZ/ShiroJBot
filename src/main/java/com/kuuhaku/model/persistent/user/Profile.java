@@ -260,7 +260,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			RoundRectangle2D wids = new RoundRectangle2D.Double(-14, 210, 200, 50, 20, 20);
 
 			int em = g1.getFontMetrics().getHeight();
-			g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
+			g1.setFont(Fonts.NOTO_SANS_BOLD.deriveFont(Font.BOLD, 20));
 			for (Object o : settings.getWidgets()) {
 				String s = Utils.replaceTags(String.valueOf(o), '%', replaces);
 				Rectangle bounds;
@@ -341,21 +341,21 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		int offset = (int) (Graph.getStringBounds(g2d, String.valueOf(lvl)).getWidth() + 10);
 		g2d.setColor(Color.WHITE);
-		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 25));
+		g2d.setFont(Fonts.NOTO_SANS_BOLD.deriveFont(Font.BOLD, 25));
 		Graph.drawOutlinedString(g2d, account.getName(), 88 + offset, 25, 3, Color.BLACK);
 
 		String details = "XP: %s/%s I Rank: ".formatted(
 				Utils.shorten(xp - lvlXp), Utils.shorten(toNext - lvlXp)
 		);
-		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
+		g2d.setFont(Fonts.NOTO_SANS_BOLD.deriveFont(Font.BOLD, 20));
 		Graph.drawOutlinedString(g2d, details, 88 + offset, 51, 3, Color.BLACK);
 
 		offset += Graph.getStringBounds(g2d, details).getWidth();
-		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 12));
+		g2d.setFont(Fonts.NOTO_SANS_BOLD.deriveFont(Font.BOLD, 12));
 		Graph.drawOutlinedString(g2d, "#", 88 + offset, 45, 3, Color.BLACK);
 
 		offset += Graph.getStringBounds(g2d, "#").getWidth();
-		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
+		g2d.setFont(Fonts.NOTO_SANS_BOLD.deriveFont(Font.BOLD, 20));
 		Graph.drawOutlinedString(g2d, String.valueOf(account.getRanking()), 88 + offset, 51, 3, Color.BLACK);
 
 		AccountTitle title = account.getTitle();

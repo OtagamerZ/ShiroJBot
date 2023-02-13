@@ -286,7 +286,7 @@ public class Arena implements Renderer {
 
 			g1.setColor(new Color(0x50000000, true));
 			g1.fillRect(0, 0, w, SIZE.height);
-			g1.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
+			g1.setFont(Fonts.NOTO_SANS.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5)));
 			g1.setClip(new Rectangle(0, 0, SIZE.width, SIZE.height));
 
 			Graph.applyTransformed(g1, 0, SIZE.height, g2 -> {
@@ -329,7 +329,7 @@ public class Arena implements Renderer {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 		g2d.setStroke(new BasicStroke(2));
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 75));
+		g2d.setFont(Fonts.NOTO_SANS.deriveFont(Font.BOLD, 75));
 
 		int slotWidth = bi.getWidth() / 5;
 		int slotHeight = bi.getHeight() / 2;
@@ -472,24 +472,27 @@ public class Arena implements Renderer {
 					g1.fill(new Rectangle(bar.x, bar.y, (int) (bar.width * Math.min((double) Math.abs(regdeg) / hand.getBase().hp(), 1)), bar.height));
 				}
 
-				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
-					if (!demon) {
-						String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
-						g2.setColor(Color.CYAN);
-						g2.setFont(Fonts.OPEN_SANS_COMPACT.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
+				int scale = reversed ? -1 : 1;
+				Graph.applyTransformed(g1, scale, scale, g2 -> {
+					Graph.applyTransformed(g2, 2, 1, g3 -> {
+						if (!demon) {
+							String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
+							g2.setColor(Color.CYAN);
+							g2.setFont(Fonts.OPEN_SANS_COMPACT.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
 
-						if (reversed) {
-							Graph.drawOutlinedString(g2, mpText,
-									-(MARGIN.x + g2.getFontMetrics().stringWidth(mpText)), -20,
-									6, Color.BLACK
-							);
-						} else {
-							Graph.drawOutlinedString(g2, mpText,
-									MARGIN.x, BAR_SIZE.height - 20,
-									6, Color.BLACK
-							);
+							if (reversed) {
+								Graph.drawOutlinedString(g2, mpText,
+										-(MARGIN.x + g2.getFontMetrics().stringWidth(mpText)), -20,
+										6, Color.BLACK
+								);
+							} else {
+								Graph.drawOutlinedString(g2, mpText,
+										MARGIN.x, BAR_SIZE.height - 20,
+										6, Color.BLACK
+								);
+							}
 						}
-					}
+					});
 
 					int pad = Utils.getDigits(hand.getBase().hp());
 					String hpText = "HP: "
@@ -595,7 +598,7 @@ public class Arena implements Renderer {
 					int row = i / 3;
 
 					g1.setColor(Color.RED);
-					g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, rad));
+					g1.setFont(Fonts.NOTO_SANS_EXTRABOLD.deriveFont(Font.BOLD, rad));
 					String text = String.valueOf(lock.time());
 
 					FontMetrics fm = g1.getFontMetrics();
