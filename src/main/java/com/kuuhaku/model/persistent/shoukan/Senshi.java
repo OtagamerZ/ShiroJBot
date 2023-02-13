@@ -1179,7 +1179,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 				if (!desc.isEmpty()) {
 					g1.setColor(style.getFrame().getSecondaryColor());
-					g1.setFont(Fonts.NOTO_SANS_BOLD.deriveFont(Font.BOLD, 11));
+					g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
 
 					int y = 276;
 					String tags = card.processTags(locale);

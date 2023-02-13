@@ -84,7 +84,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		return str -> {
 			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}|\\{(?<tag>\\w+)}");
 
-			g2d.setFont(Fonts.NOTO_SANS.deriveFont(Font.BOLD, 10));
+			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
 			g2d.setColor(style.getFrame().getSecondaryColor());
 			if (!groups.isEmpty()) {
 				String type = groups.getString("type");
@@ -111,7 +111,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						g2d.setColor(COLORS.getOrDefault(key, g2d.getColor()));
 
 						if (!Utils.equalsAny(key, "enemy", "ally")) {
-							g2d.setFont(Fonts.NOTO_SANS_EXTRABOLD.deriveFont(Font.PLAIN, 10));
+							g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
 						}
 					}
 
