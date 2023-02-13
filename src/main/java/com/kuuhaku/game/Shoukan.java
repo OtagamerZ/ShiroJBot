@@ -1197,6 +1197,8 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				op.modHP((int) -(dmg * dmgMult));
+				op.addChain();
+
 				if (thorns > 0) {
 					you.modHP(-Math.max(0, eHP - op.getHP()) * thorns / 100);
 				}
@@ -1221,9 +1223,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (announce) {
 			reportEvent("str/combat", true, source, Utils.getOr(target, op.getName()), outcome.trim());
-			op.resetChain();
-		} else {
-			op.addChain();
 		}
 
 		return win;
@@ -1329,6 +1328,8 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				op.modHP((int) -(dmg * dmgMult));
+				op.addChain();
+
 				if (lifesteal > 0) {
 					you.modHP(Math.max(0, eHP - op.getHP()) * lifesteal / 100);
 				}
@@ -1351,9 +1352,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (announce) {
 			reportEvent("str/combat", true, source, Utils.getOr(enemy, op.getName()), outcome);
-			op.resetChain();
-		} else {
-			op.addChain();
 		}
 
 		return true;
@@ -1653,6 +1651,7 @@ public class Shoukan extends GameInstance<Phase> {
 			hand.getCards();
 			hand.getRealDeck();
 			hand.getGraveyard();
+			hand.resetChain();
 
 			String def = hand.getDefeat();
 			if (hand.getHP() == 0 || def != null) {
