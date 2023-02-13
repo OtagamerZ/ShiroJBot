@@ -1009,7 +1009,7 @@ public class Shoukan extends GameInstance<Phase> {
 		int dmg = source.getActiveAttr();
 		int lifesteal = you.getBase().lifesteal();
 		int thorns = 0;
-		float dmgMult = 1;
+		double dmgMult = 1d / (1 << op.getChainReduction());
 		if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
 			dmgMult /= 2;
 		}
@@ -1113,7 +1113,9 @@ public class Shoukan extends GameInstance<Phase> {
 								s.awake();
 							}
 
-							you.getGraveyard().add(source);
+							if (announce) {
+								you.getGraveyard().add(source);
+							}
 
 							dmg = 0;
 							outcome = getLocale().get("str/combat_defeat");
@@ -1133,7 +1135,9 @@ public class Shoukan extends GameInstance<Phase> {
 									s.awake();
 								}
 
-								you.getGraveyard().add(source);
+								if (announce) {
+									you.getGraveyard().add(source);
+								}
 
 								dmg = 0;
 								outcome = getLocale().get("str/combat_block", block);
@@ -1176,7 +1180,9 @@ public class Shoukan extends GameInstance<Phase> {
 										s.awake();
 									}
 
-									you.getGraveyard().add(source);
+									if (announce){
+										you.getGraveyard().add(source);
+									}
 
 									dmg = 0;
 									outcome = getLocale().get("str/combat_clash");
@@ -1211,6 +1217,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (announce) {
 			reportEvent("str/combat", true, source, Utils.getOr(target, op.getName()), outcome.trim());
+			op.resetChain();
+		} else {
+			op.addChain();
 		}
 
 		return win;
@@ -1241,7 +1250,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		int dmg = source.getActiveAttr();
 		int lifesteal = you.getBase().lifesteal();
-		float dmgMult = 1;
+		double dmgMult = 1d / (1 << op.getChainReduction());
 		if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
 			dmgMult /= 2;
 		}
@@ -1334,6 +1343,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (announce) {
 			reportEvent("str/combat", true, source, Utils.getOr(enemy, op.getName()), outcome);
+			op.resetChain();
+		} else {
+			op.addChain();
 		}
 
 		return true;
@@ -1624,7 +1636,7 @@ public class Shoukan extends GameInstance<Phase> {
 		resetTimer();
 		if (trigger) {
 			trigger(ON_TICK);
-			getCurrent().setRolled(true);
+			getCurrent().setRerolled(true);
 		}
 
 		List<Side> sides = List.of(getOtherSide(), getCurrentSide());
@@ -1784,7 +1796,7 @@ public class Shoukan extends GameInstance<Phase> {
 				nextTurn();
 			});
 
-			if (getTurn() == 1 && !curr.hasRolled()) {
+			if (getTurn() == 1 && !curr.hasRerolled()) {
 				buttons.put(Utils.parseEmoji("\uD83D\uDD04"), w -> {
 					curr.rerollHand();
 					reportEvent("str/hand_reroll", true, curr.getName());

@@ -100,9 +100,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (e.hasCharm(Charm.CLONE)) {
-			game.putAtOpenSlot(getSide(), true,
-					withCopy(s -> s.getStats().setAttrMult(-1 + (0.25 * e.getTier())))
-			);
+			game.putAtOpenSlot(getSide(), true, withCopy(s -> {
+				s.getStats().setAttrMult(-1 + (0.25 * e.getTier()));
+				s.state = this.state & 0b11111;
+			}));
 		}
 
 		return true;
@@ -1285,10 +1286,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (o == null || getClass() != o.getClass()) return false;
 		Senshi senshi = (Senshi) o;
 		return Objects.equals(id, senshi.id)
-				&& Objects.equals(card, senshi.card)
-				&& Objects.equals(slot, senshi.slot)
-				&& race == senshi.race
-				&& SERIAL == senshi.SERIAL;
+			   && Objects.equals(card, senshi.card)
+			   && Objects.equals(slot, senshi.slot)
+			   && race == senshi.race
+			   && SERIAL == senshi.SERIAL;
 	}
 
 	public int posHash() {

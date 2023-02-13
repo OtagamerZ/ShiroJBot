@@ -41,6 +41,7 @@ import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONObject;
+import jakarta.persistence.Transient;
 import kotlin.Triple;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -161,7 +162,8 @@ public class Hand {
 		if (getGame().getCurrentSide() != getSide()) {
 			Hand op = getOther();
 
-			if (++op.kills % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+			op.addKill();
+			if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
 				getGame().getArena().getBanned().add(d);
 				return false;
 			}
@@ -225,13 +227,21 @@ public class Hand {
 
 	private transient Account account;
 	private transient String lastMessage;
-	private transient boolean forfeit;
-	private transient boolean usedDestiny;
-	private transient boolean rolled;
 	private transient String defeat;
-	private transient int kills = 0;
 	private transient int hpDelta = 0;
-	private transient byte cooldown = 0;
+
+	@Transient
+	private int state = 0b100;
+	/*
+	0x000 FFFF F
+	      │└┤│ └ 0111
+	      │ ││    ││└ forfeit
+	      │ ││    │└─ destiny
+	      │ ││    └── reroll
+	      │ │└ (0 - 15) cooldown
+	      │ └─ (0 - 255) kills
+	      └─── (0 - 15) chain reduction
+	 */
 
 	private transient Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> selection = null;
 
@@ -843,27 +853,27 @@ public class Hand {
 	}
 
 	public boolean isForfeit() {
-		return forfeit;
+		return Bit.on(state, 0);
 	}
 
 	public void setForfeit(boolean forfeit) {
-		this.forfeit = forfeit;
+		state = Bit.set(state, 0, forfeit);
 	}
 
 	public boolean hasUsedDestiny() {
-		return usedDestiny;
+		return Bit.on(state, 1);
 	}
 
 	public void setUsedDestiny(boolean usedDestiny) {
-		this.usedDestiny = usedDestiny;
+		state = Bit.set(state, 1, usedDestiny);
 	}
 
-	public boolean hasRolled() {
-		return rolled;
+	public boolean hasRerolled() {
+		return Bit.on(state, 2);
 	}
 
-	public void setRolled(boolean rolled) {
-		this.rolled = rolled;
+	public void setRerolled(boolean rerolled) {
+		state = Bit.set(state, 2, rerolled);
 	}
 
 	public boolean isDefeated() {
@@ -879,23 +889,39 @@ public class Hand {
 	}
 
 	public int getOriginCooldown() {
-		return cooldown;
+		return Bit.get(state, 1, 4);
 	}
 
 	public void setOriginCooldown(int time) {
-		cooldown = (byte) Math.max(cooldown, time);
+		int curr = Bit.get(state, 1, 4);
+		state = Bit.set(state, 1, Math.max(curr, time), 4);
 	}
 
 	public void reduceOriginCooldown(int time) {
-		cooldown = (byte) Math.max(0, cooldown - time);
+		int curr = Bit.get(state, 1, 4);
+		state = Bit.set(state, 1, Math.max(0, curr - time), 4);
 	}
 
 	public int getKills() {
-		return kills;
+		return Bit.get(state, 1, 8);
 	}
 
 	public void addKill() {
-		kills++;
+		int curr = Bit.get(state, 1, 8);
+		state = Bit.set(state, 1, curr + 1, 8);
+	}
+
+	public int getChainReduction() {
+		return Bit.get(state, 4, 4);
+	}
+
+	public void addChain() {
+		int curr = Bit.get(state, 4, 4);
+		state = Bit.set(state, 4, curr + 1, 4);
+	}
+
+	public void resetChain() {
+		state = Bit.set(state, 4, 0, 4);
 	}
 
 	public BufferedImage render() {
