@@ -1028,7 +1028,7 @@ public class Shoukan extends GameInstance<Phase> {
 		boolean win = false;
 		String outcome = getLocale().get("str/combat_skip");
 		try {
-			if (posHash == target.posHash() && source.canAttack()) {
+			if (posHash == target.posHash() && ((announce && source.canAttack()) || source.isAvailable())) {
 				for (Evogear e : source.getEquipments()) {
 					JSONArray charms = e.getCharms();
 
