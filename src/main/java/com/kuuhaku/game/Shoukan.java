@@ -981,7 +981,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	private boolean attack(Senshi source, Senshi target, Integer dmg, boolean announce) {
 		if (target == null) return false;
-		else if (source == null || !source.canAttack()) {
+		else if (source == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
 			if (announce) {
 				getChannel().sendMessage(getLocale().get("error/card_cannot_attack")).queue();
 			}
@@ -1244,7 +1244,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private boolean attack(Senshi source, Hand op, Integer dmg, boolean announce) {
-		if (source == null || !source.canAttack()) {
+		else if (source == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
 			if (announce) {
 				getChannel().sendMessage(getLocale().get("error/card_cannot_attack")).queue();
 			}
