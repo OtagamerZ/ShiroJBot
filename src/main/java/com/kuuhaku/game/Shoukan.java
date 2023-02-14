@@ -1093,6 +1093,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 				if (!ignore) {
 					if (target.isSupporting()) {
+						outcome = getLocale().get("str/combat_success", source.getActiveAttr(), 0);
+
 						for (Senshi s : target.getNearby()) {
 							s.awake();
 						}
@@ -1101,7 +1103,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 						dmg = 0;
 						win = true;
-						outcome = getLocale().get("str/combat_success");
 					} else {
 						boolean dbl = op.getOrigin().synergy() == Race.CYBERBEAST && Calc.chance(5);
 						boolean unstop = source.popFlag(Flag.UNSTOPPABLE);
@@ -1114,6 +1115,7 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						if (!unstop && source.getActiveAttr() < eCombatStats) {
+							outcome = getLocale().get("str/combat_defeat", source.getActiveAttr(), eCombatStats);
 							trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
 
 							for (Senshi s : source.getNearby()) {
@@ -1129,17 +1131,17 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							dmg = 0;
-							outcome = getLocale().get("str/combat_defeat");
 						} else {
 							int block = target.getBlock();
 							int dodge = target.getDodge();
 
 							if (Calc.chance(100 - source.getHitChance())) {
+								outcome = getLocale().get("str/combat_miss");
 								trigger(ON_MISS, source.asSource(ON_MISS));
 
 								dmg = 0;
-								outcome = getLocale().get("str/combat_miss");
 							} else if (!unstop && !source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
+								outcome = getLocale().get("str/combat_block", block);
 								trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
 
 								for (Senshi s : source.getNearby()) {
@@ -1151,8 +1153,8 @@ public class Shoukan extends GameInstance<Phase> {
 								}
 
 								dmg = 0;
-								outcome = getLocale().get("str/combat_block", block);
 							} else if (!source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
+								outcome = getLocale().get("str/combat_dodge", dodge);
 								trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
 
 								if (you.getOrigin().synergy() == Race.FABLED) {
@@ -1160,10 +1162,11 @@ public class Shoukan extends GameInstance<Phase> {
 								}
 
 								dmg = 0;
-								outcome = getLocale().get("str/combat_dodge", dodge);
 							} else {
 								if (unstop || source.getActiveAttr() > eCombatStats) {
+									outcome = getLocale().get("str/combat_success", source.getActiveAttr(), eCombatStats);
 									trigger(ON_HIT, source.asSource(ON_HIT), target.asTarget(ON_LOSE));
+
 									if (target.isDefending() || target.popFlag(Flag.NO_DAMAGE)) {
 										dmg = 0;
 									} else {
@@ -1177,8 +1180,8 @@ public class Shoukan extends GameInstance<Phase> {
 									op.getGraveyard().add(target);
 
 									win = true;
-									outcome = getLocale().get("str/combat_success");
 								} else {
+									outcome = getLocale().get("str/combat_clash", source.getActiveAttr(), eCombatStats);
 									trigger(ON_CLASH, source.asSource(ON_SUICIDE), target.asTarget(ON_LOSE));
 
 									for (Senshi s : target.getNearby()) {
@@ -1196,7 +1199,6 @@ public class Shoukan extends GameInstance<Phase> {
 									}
 
 									dmg = 0;
-									outcome = getLocale().get("str/combat_clash");
 								}
 							}
 						}
