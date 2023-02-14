@@ -1214,7 +1214,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 		} finally {
-			if (source.getSlot().getIndex() != -1 && !source.popFlag(Flag.FREE_ACTION)) {
+			if (announce && source.getSlot().getIndex() != -1 && !source.popFlag(Flag.FREE_ACTION)) {
 				source.setAvailable(false);
 			}
 		}
@@ -1349,7 +1349,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 		} finally {
-			if (source.getSlot().getIndex() != -1 && !source.popFlag(Flag.FREE_ACTION)) {
+			if (announce && source.getSlot().getIndex() != -1 && !source.popFlag(Flag.FREE_ACTION)) {
 				source.setAvailable(false);
 			}
 		}

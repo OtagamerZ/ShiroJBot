@@ -472,12 +472,11 @@ public class Arena implements Renderer {
 					g1.fill(new Rectangle(bar.x, bar.y, (int) (bar.width * Math.min((double) Math.abs(regdeg) / hand.getBase().hp(), 1)), bar.height));
 				}
 
-				int scale = reversed ? -1 : 1;
-				Graph.applyTransformed(g1, scale, scale, g2 -> {
+				Graph.applyTransformed(g1, reversed ? -1 : 1, g2 -> {
 					if (!demon) {
 						String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 						g2.setColor(Color.CYAN);
-						g2.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
+						g2.setFont(Fonts.OPEN_SANS_COMPACT.deriveFont(Font.BOLD, BAR_SIZE.height - 20));
 
 						if (reversed) {
 							Graph.drawOutlinedString(g2, mpText,
@@ -494,9 +493,9 @@ public class Arena implements Renderer {
 
 					int pad = Utils.getDigits(hand.getBase().hp());
 					String hpText = "HP: "
-									+ StringUtils.leftPad(String.valueOf(hand.getHP()), pad, "0")
-									+ "/"
-									+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), pad, "0");
+							+ StringUtils.leftPad(String.valueOf(hand.getHP()), pad, "0")
+							+ "/"
+							+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), pad, "0");
 					g2.setColor(Color.WHITE);
 					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5) * (demon ? 2 : 1)));
 
@@ -550,7 +549,7 @@ public class Arena implements Renderer {
 			int y;
 			String name = StringUtils.abbreviate(hand.getName(), 20);
 			g.setColor(Color.WHITE);
-			g.setFont(Fonts.NOTO_SANS_BOLD.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
+			g.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, BAR_SIZE.height / 3f * 2));
 			if (game.getCurrentSide() == hand.getSide()) {
 				name = "==> " + name + " <==";
 			}
