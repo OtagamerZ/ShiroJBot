@@ -1221,11 +1221,11 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (eHP != op.getHP()) {
 			int val = eHP - op.getHP();
-			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", val);
+			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
 		}
 		if (pHP != you.getHP()) {
 			int val = pHP - you.getHP();
-			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", val);
+			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(val));
 		}
 
 		if (announce) {
@@ -1357,11 +1357,11 @@ public class Shoukan extends GameInstance<Phase> {
 		String outcome = "";
 		if (eHP != op.getHP()) {
 			int val = eHP - op.getHP();
-			outcome = getLocale().get(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", val);
+			outcome = getLocale().get(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
 		}
 		if (pHP != you.getHP()) {
 			int val = pHP - you.getHP();
-			outcome = getLocale().get(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", val);
+			outcome = getLocale().get(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(val));
 		}
 
 		if (announce) {
