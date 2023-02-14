@@ -382,17 +382,17 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int getMPCost() {
-		return Calc.round(Math.max(0, base.getMana() + stats.getMana() + (isFusion() ? 5 : 0)) * getCostMult());
+		return Math.max(0, Calc.round((base.getMana() + stats.getMana() + (isFusion() ? 5 : 0)) * getCostMult()));
 	}
 
 	@Override
 	public int getHPCost() {
-		return Calc.round(Math.max(0, base.getBlood() + stats.getBlood()) * getCostMult());
+		return Math.max(0, Calc.round((base.getBlood() + stats.getBlood()) * getCostMult()));
 	}
 
 	@Override
 	public int getSCCost() {
-		return Calc.round(Math.max(0, base.getSacrifices() + stats.getSacrifices()) * getCostMult());
+		return Math.max(0, Calc.round((base.getSacrifices() + stats.getSacrifices()) * getCostMult()));
 	}
 
 	@Override
@@ -418,7 +418,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			mult /= 2;
 		}
 
-		return Calc.round(Math.max(0, sum * mult * getAttrMult()));
+		return Math.max(0, Calc.round(sum * mult * getAttrMult()));
 	}
 
 	@Override
@@ -438,7 +438,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			mult /= 2;
 		}
 
-		return Calc.round(Math.max(0, sum * mult * getAttrMult()));
+		return Math.max(0, Calc.round(sum * mult * getAttrMult()));
 	}
 
 	public double getFieldMult() {
