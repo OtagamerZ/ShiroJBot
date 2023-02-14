@@ -382,17 +382,17 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int getMPCost() {
-		return (int) (Math.max(0, base.getMana() + stats.getMana() + (isFusion() ? 5 : 0)) * getCostMult());
+		return Calc.round(Math.max(0, base.getMana() + stats.getMana() + (isFusion() ? 5 : 0)) * getCostMult());
 	}
 
 	@Override
 	public int getHPCost() {
-		return (int) (Math.max(0, base.getBlood() + stats.getBlood()) * getCostMult());
+		return Calc.round(Math.max(0, base.getBlood() + stats.getBlood()) * getCostMult());
 	}
 
 	@Override
 	public int getSCCost() {
-		return (int) (Math.max(0, base.getSacrifices() + stats.getSacrifices()) * getCostMult());
+		return Calc.round(Math.max(0, base.getSacrifices() + stats.getSacrifices()) * getCostMult());
 	}
 
 	@Override
@@ -418,7 +418,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			mult /= 2;
 		}
 
-		return (int) Math.max(0, sum * mult * getAttrMult());
+		return Calc.round(Math.max(0, sum * mult * getAttrMult()));
 	}
 
 	@Override
@@ -438,7 +438,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			mult /= 2;
 		}
 
-		return (int) Math.max(0, sum * mult * getAttrMult());
+		return Calc.round(Math.max(0, sum * mult * getAttrMult()));
 	}
 
 	public double getFieldMult() {
@@ -478,7 +478,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int getDodge() {
-		int sum = (int) ((base.getDodge() + stats.getDodge() + getEquipDodge()) * getAttrMult());
+		int sum = Calc.round((base.getDodge() + stats.getDodge() + getEquipDodge()) * getAttrMult());
 		if (hand != null && hand.getGame().getArena().getField().getType() == FieldType.DUNGEON) {
 			sum = Math.min(sum, 50);
 		}
@@ -495,7 +495,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			min += 2;
 		}
 
-		return (int) Utils.clamp((min + sum) * getAttrMult(), min, 100);
+		return Utils.clamp(Calc.round((min + sum) * getAttrMult()), min, 100);
 	}
 
 	@Override

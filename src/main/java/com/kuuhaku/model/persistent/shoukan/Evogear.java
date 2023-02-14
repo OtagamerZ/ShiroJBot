@@ -223,38 +223,38 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public int getMPCost() {
-		return (int) Math.max(0, (base.getMana() + stats.getMana()) * getCostMult());
+		return Calc.round(Math.max(0, (base.getMana() + stats.getMana()) * getCostMult()));
 	}
 
 	@Override
 	public int getHPCost() {
-		return (int) Math.max(0, (base.getBlood() + stats.getBlood()) * getCostMult());
+		return Calc.round(Math.max(0, (base.getBlood() + stats.getBlood()) * getCostMult()));
 	}
 
 	@Override
 	public int getSCCost() {
-		return (int) Math.max(0, (base.getSacrifices() + stats.getSacrifices()) * getCostMult());
+		return Calc.round(Math.max(0, (base.getSacrifices() + stats.getSacrifices()) * getCostMult()));
 	}
 
 	@Override
 	public int getDmg() {
 		int sum = base.getAtk() + stats.getAtk();
 
-		return (int) (sum * getAttrMult());
+		return Calc.round(sum * getAttrMult());
 	}
 
 	@Override
 	public int getDfs() {
 		int sum = base.getDfs() + stats.getDfs();
 
-		return (int) (sum * getAttrMult());
+		return Calc.round(sum * getAttrMult());
 	}
 
 	@Override
 	public int getDodge() {
 		int sum = base.getDodge() + stats.getDodge();
 
-		return (int) Utils.clamp(sum * getAttrMult(), 0, 100);
+		return Utils.clamp(Calc.round(sum * getAttrMult()), 0, 100);
 	}
 
 	@Override
@@ -266,7 +266,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			min += 2;
 		}
 
-		return (int) Utils.clamp((min + sum) * getAttrMult(), min, 100);
+		return Utils.clamp(Calc.round((min + sum) * getAttrMult()), min, 100);
 	}
 
 	@Override
