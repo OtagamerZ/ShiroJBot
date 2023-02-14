@@ -1116,15 +1116,15 @@ public class Shoukan extends GameInstance<Phase> {
 						if (!unstop && source.getActiveAttr() < eCombatStats) {
 							trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
 
-							if (!source.popFlag(Flag.NO_DAMAGE)) {
-								you.modHP((int) -((enemyStats - source.getActiveAttr()) * dmgMult));
-							}
-
 							for (Senshi s : source.getNearby()) {
 								s.awake();
 							}
 
 							if (announce) {
+								if (!source.popFlag(Flag.NO_DAMAGE)) {
+									you.modHP((int) -((enemyStats - source.getActiveAttr()) * dmgMult));
+								}
+
 								you.getGraveyard().add(source);
 							}
 
