@@ -1278,7 +1278,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Senshi enemy = null;
 		try {
-			if (source.canAttack()) {
+			if ((announce && source.canAttack()) || source.isAvailable()) {
 				for (Evogear e : source.getEquipments()) {
 					JSONArray charms = e.getCharms();
 
