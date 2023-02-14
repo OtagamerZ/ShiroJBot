@@ -1191,7 +1191,7 @@ public class Shoukan extends GameInstance<Phase> {
 										s.awake();
 									}
 
-									if (announce){
+									if (announce) {
 										you.getGraveyard().add(source);
 									}
 
@@ -1244,7 +1244,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private boolean attack(Senshi source, Hand op, Integer dmg, boolean announce) {
-		else if (source == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
+		if (source == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
 			if (announce) {
 				getChannel().sendMessage(getLocale().get("error/card_cannot_attack")).queue();
 			}
