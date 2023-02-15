@@ -69,7 +69,7 @@ public class Hand {
 	private final Origin origin;
 
 	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
-		if (d instanceof Proxy<? extends Drawable<?>> p) {
+		if (d instanceof Proxy<?> p) {
 			p.getOriginal().reset();
 			d.reset();
 
@@ -97,7 +97,7 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
-		if (d instanceof Proxy<? extends Drawable<?>> p) {
+		if (d instanceof Proxy<?> p) {
 			p.getOriginal().reset();
 			d.reset();
 
@@ -121,7 +121,7 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
-		if (d instanceof Proxy<? extends Drawable<?>> p) {
+		if (d instanceof Proxy<?> p) {
 			p.getOriginal().reset();
 			d.reset();
 
@@ -199,7 +199,7 @@ public class Hand {
 	});
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(d)) return false;
-		else if (d instanceof Proxy<? extends Drawable<?>> p) {
+		else if (d instanceof Proxy<?> p) {
 			p.getOriginal().reset();
 			d.reset();
 

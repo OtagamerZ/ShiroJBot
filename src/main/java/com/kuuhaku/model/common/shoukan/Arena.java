@@ -72,7 +72,7 @@ public class Arena implements Renderer {
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
 	private final BondedList<Drawable<?>> banned = new BondedList<>((d, it) -> {
-		if (d instanceof Proxy<? extends Drawable<?>> p) {
+		if (d instanceof Proxy<?> p) {
 			d.reset();
 			it.add(p.getOriginal());
 			return false;
