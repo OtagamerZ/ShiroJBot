@@ -20,5 +20,5 @@ package com.kuuhaku.model.records.shoukan.history;
 
 import com.kuuhaku.model.records.shoukan.Origin;
 
-public record Player(String uid, int baseHp, double weight, double divergence, Origin origin) {
+public record Player(String uid, int hp, double weight, double divergence, Origin origin) {
 }
