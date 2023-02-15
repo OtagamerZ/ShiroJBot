@@ -68,46 +68,45 @@ public class StashScrapCommand implements Executable {
 			return;
 		}
 
-		if (args.containsKey("action")) {
-			confirm(locale, kp.getTrash(), event, kp.getAccount());
-			return;
-		}
-
 		List<StashedCard> cards = new ArrayList<>();
-		for (String id : args.getString("cards").split(" +")) {
-			Card card = verifyCard(locale, event, id.toUpperCase());
-			if (card == null) return;
+		if (args.containsKey("action")) {
+			cards = kp.getTrash();
+		} else {
+			for (String id : args.getString("cards").split(" +")) {
+				Card card = verifyCard(locale, event, id.toUpperCase());
+				if (card == null) return;
 
-			AtomicBoolean failed = new AtomicBoolean();
-			CompletableFuture<Void> select = new CompletableFuture<>();
-			Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), kp.getNotInUse(), card, event.user())
-					.thenAccept(sc -> {
-						if (sc == null) {
-							event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+				AtomicBoolean failed = new AtomicBoolean();
+				CompletableFuture<Void> select = new CompletableFuture<>();
+				Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), kp.getNotInUse(), card, event.user())
+						.thenAccept(sc -> {
+							if (sc == null) {
+								event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+								failed.set(true);
+								return;
+							}
+
+							cards.add(sc);
+							select.complete(null);
+						})
+						.exceptionally(t -> {
+							if (!(t.getCause() instanceof NoResultException)) {
+								Constants.LOGGER.error(t, t);
+							}
+
+							event.channel().sendMessage(locale.get("error/not_owned")).queue();
 							failed.set(true);
-							return;
-						}
+							select.complete(null);
+							return null;
+						});
 
-						cards.add(sc);
-						select.complete(null);
-					})
-					.exceptionally(t -> {
-						if (!(t.getCause() instanceof NoResultException)) {
-							Constants.LOGGER.error(t, t);
-						}
-
-						event.channel().sendMessage(locale.get("error/not_owned")).queue();
-						failed.set(true);
-						select.complete(null);
-						return null;
-					});
-
-			try {
-				select.get();
-				if (failed.get()) {
-					return;
+				try {
+					select.get();
+					if (failed.get()) {
+						return;
+					}
+				} catch (InterruptedException | ExecutionException ignore) {
 				}
-			} catch (InterruptedException | ExecutionException ignore) {
 			}
 		}
 
