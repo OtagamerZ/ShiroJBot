@@ -210,14 +210,14 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("set_origin,(?<major>\\w+)(?:,(?<minor>\\[[\\w,]+]))?")
+	@PlayerAction("set_origin,(?<major>\\w+)(?:,(?<minor>[\\w,]+))?")
 	private boolean debSetOrigin(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
 			Race major = args.getEnum(Race.class, "major", Race.NONE);
 
 			Set<Race> minors = new HashSet<>();
-			JSONArray races = Utils.extractGroups(args.getString("minor"), "\\w+");
+			JSONArray races = new JSONArray(Arrays.asList(args.getString("minor").split(",")));
 			for (int i = 0; i < races.size(); i++) {
 				Race minor = races.getEnum(Race.class, i);
 				if (minor != null) {
@@ -233,7 +233,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("add,(?<card>\\w+)")
+	@PlayerAction("add,(?<card>\\w+)(?:,(?<amount>\\d+))?")
 	private boolean debAddCard(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
@@ -242,17 +242,20 @@ public class Shoukan extends GameInstance<Phase> {
 					.findFirst()
 					.orElse(CardType.NONE);
 
-			Drawable<?> d = switch (type) {
-				case NONE -> null;
-				case KAWAIPON -> DAO.find(Senshi.class, id);
-				case EVOGEAR -> DAO.find(Evogear.class, id);
-				case FIELD -> DAO.find(Field.class, id);
-			};
+			int amount = args.getInt("amount", 1);
+			for (int i = 0; i < amount; i++) {
+				Drawable<?> d = switch (type) {
+					case NONE -> null;
+					case KAWAIPON -> DAO.find(Senshi.class, id);
+					case EVOGEAR -> DAO.find(Evogear.class, id);
+					case FIELD -> DAO.find(Field.class, id);
+				};
 
-			if (d != null) {
-				curr.getCards().add(d);
-				reportEvent("ADD_CARD -> " + d, false);
-				return true;
+				if (d != null) {
+					curr.getCards().add(d);
+					reportEvent("ADD_CARD -> " + amount + " x " + d, false);
+					return true;
+				}
 			}
 		}
 
