@@ -69,7 +69,6 @@ public class SynthesizeCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		List<StashedCard> cards = new ArrayList<>();
-		CompletableFuture<Void> setup = new CompletableFuture<>();
 		for (Object entry : args.getJSONArray("card")) {
 			if (entry instanceof String card) {
 				Card c = DAO.find(Card.class, card.toUpperCase());
@@ -116,16 +115,9 @@ public class SynthesizeCommand implements Executable {
 					if (failed.get()) {
 						return;
 					}
-
-					setup.complete(null);
 				} catch (InterruptedException | ExecutionException ignore) {
 				}
 			}
-		}
-
-		try {
-			setup.get();
-		} catch (InterruptedException | ExecutionException ignore) {
 		}
 
 		if (cards.size() != 3) {
