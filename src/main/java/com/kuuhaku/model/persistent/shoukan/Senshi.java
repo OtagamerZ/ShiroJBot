@@ -478,7 +478,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int getDodge() {
-		int sum = Calc.round((base.getDodge() + stats.getDodge() + getEquipDodge()) * getAttrMult());
+		int sum = base.getDodge() + stats.getDodge() + getEquipDodge();
 		if (hand != null && hand.getGame().getArena().getField().getType() == FieldType.DUNGEON) {
 			sum = Math.min(sum, 50);
 		}
@@ -495,7 +495,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			min += 2;
 		}
 
-		return Utils.clamp(Calc.round((min + sum) * getAttrMult()), min, 100);
+		return Utils.clamp(min + sum, min, 100);
 	}
 
 	@Override
