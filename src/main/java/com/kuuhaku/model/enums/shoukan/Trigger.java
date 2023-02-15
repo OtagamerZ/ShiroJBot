@@ -52,6 +52,9 @@ public enum Trigger {
 	/** On sending a card to the graveyard **/
 	ON_KILL,
 
+	/** On attacking directly **/
+	ON_DIRECT,
+
 	/** On successful block **/
 	ON_BLOCK,
 
