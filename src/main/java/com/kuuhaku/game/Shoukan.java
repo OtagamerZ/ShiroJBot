@@ -40,9 +40,11 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.id.LocalizedId;
 import com.kuuhaku.model.persistent.shoukan.*;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.model.records.shoukan.*;
@@ -51,6 +53,7 @@ import com.kuuhaku.model.records.shoukan.history.Turn;
 import com.kuuhaku.model.records.shoukan.snapshot.Player;
 import com.kuuhaku.model.records.shoukan.snapshot.Slot;
 import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
+import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -175,6 +178,88 @@ public class Shoukan extends GameInstance<Phase> {
 		reportEvent("str/game_reload", false, getCurrent().getName());
 		return true;
 	}
+
+	// DEBUG START
+
+	@PhaseConstraint({"PLAN", "COMBAT"})
+	@PlayerAction("set,hp,(?<value>\\d+)")
+	private boolean debSetHp(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
+		if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
+			int val = args.getInt("value");
+			curr.setHP(val);
+
+			reportEvent("SET_HP -> " + val, false);
+		}
+
+		return false;
+	}
+
+	@PhaseConstraint({"PLAN", "COMBAT"})
+	@PlayerAction("set,mp,(?<value>\\d+)")
+	private boolean debSetMp(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
+		if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
+			int val = args.getInt("value");
+			curr.setMP(val);
+
+			reportEvent("SET_MP -> " + val, false);
+		}
+
+		return false;
+	}
+
+	@PhaseConstraint({"PLAN", "COMBAT"})
+	@PlayerAction("set,origin,(?<major>\\w+)(?:,(?<minor>\\[[\\w,]+]))?")
+	private boolean debSetOrigin(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
+		if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
+			Race major = args.getEnum(Race.class, "major", Race.NONE);
+
+			Set<Race> minors = new HashSet<>();
+			JSONArray races = Utils.extractGroups(args.getString("minor"), "\\w+");
+			for (int i = 0; i < races.size(); i++) {
+				Race minor = races.getEnum(Race.class, i);
+				if (minor != null) {
+					minors.add(minor);
+				}
+			}
+
+			curr.setOrigin(new Origin(major, minors.toArray(Race[]::new)));
+			reportEvent("SET_ORIGIN -> " + curr.getOrigin(), false);
+		}
+
+		return false;
+	}
+
+	@PhaseConstraint({"PLAN", "COMBAT"})
+	@PlayerAction("add,(?<card>\\w+)")
+	private boolean debAddCard(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
+		if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
+			String id = args.getString("card").toUpperCase();
+			CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)).stream()
+					.findFirst()
+					.orElse(CardType.NONE);
+
+			Drawable<?> d = switch (type) {
+				case NONE -> null;
+				case KAWAIPON -> DAO.find(Senshi.class, id);
+				case EVOGEAR -> DAO.find(Evogear.class, id);
+				case FIELD -> DAO.find(Field.class, id);
+			};
+
+			if (d != null) {
+				curr.getCards().add(d);
+				reportEvent("ADD_CARD -> " + d, false);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	// DEBUG END
 
 	@PhaseConstraint("PLAN")
 	@PlayerAction("(?<inHand>\\d+),(?<mode>[adb]),(?<inField>[1-5])(?<notCombat>,nc)?")

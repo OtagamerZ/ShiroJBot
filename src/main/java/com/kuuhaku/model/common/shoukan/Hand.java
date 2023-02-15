@@ -31,9 +31,7 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
-import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Fonts;
-import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
@@ -64,9 +62,7 @@ public class Hand {
 	private final String uid;
 	private final Shoukan game;
 	private final Deck userDeck;
-
 	private final Side side;
-	private final Origin origin;
 
 	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
 		if (d instanceof Proxy<?> p) {
@@ -225,6 +221,7 @@ public class Hand {
 
 	private int hp;
 	private int mp;
+	private Origin origin;
 
 	private transient Account account;
 	private transient String lastMessage;
@@ -257,9 +254,9 @@ public class Hand {
 		}
 
 		this.side = side;
-		this.origin = Utils.getOr(game.getParams().origin(), userDeck.getOrigins());
 		this.base = userDeck.getBaseValues(this);
 		this.hp = base.hp();
+		this.origin = userDeck.getOrigins();
 
 		deck.addAll(
 				Stream.of(userDeck.getSenshi(), userDeck.getEvogear(), userDeck.getFields())
@@ -280,25 +277,6 @@ public class Hand {
 						})
 						.collect(Utils.toShuffledList())
 		);
-
-		if (DAO.find(Account.class, uid).hasRole(Role.TESTER)) {
-			for (String card : game.getParams().cards()) {
-				card = card.toUpperCase();
-				CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card)).stream()
-						.findFirst()
-						.orElse(CardType.NONE);
-
-				Drawable<?> d = switch (type) {
-					case NONE -> null;
-					case KAWAIPON -> DAO.find(Senshi.class, card);
-					case EVOGEAR -> DAO.find(Evogear.class, card);
-					case FIELD -> DAO.find(Field.class, card);
-				};
-				if (d == null) continue;
-
-				cards.add(d);
-			}
-		}
 	}
 
 	public String getUid() {
@@ -327,6 +305,10 @@ public class Hand {
 
 	public Origin getOrigin() {
 		return origin;
+	}
+
+	public void setOrigin(Origin origin) {
+		this.origin = origin;
 	}
 
 	public BondedList<Drawable<?>> getCards() {

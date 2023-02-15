@@ -20,11 +20,9 @@ package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.util.Utils;
 
-import java.util.List;
-
-public record ShoukanParams(Integer hp, Integer mp, List<String> cards, Origin origin) {
+public record ShoukanParams(Integer hp, Integer mp) {
 	public ShoukanParams() {
-		this(6000, 5, List.of(), null);
+		this(6000, 5);
 	}
 
 	@Override
@@ -35,10 +33,5 @@ public record ShoukanParams(Integer hp, Integer mp, List<String> cards, Origin o
 	@Override
 	public Integer mp() {
 		return Utils.getOr(mp, 5);
-	}
-
-	@Override
-	public List<String> cards() {
-		return Utils.getOr(cards, List.of());
 	}
 }
