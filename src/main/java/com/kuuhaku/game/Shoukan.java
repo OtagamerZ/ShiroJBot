@@ -1884,7 +1884,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (!singleplayer) {
-			new MatchHistory(new Match(this)).save();
+			new MatchHistory(new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]))).save();
 		}
 
 		close(code);

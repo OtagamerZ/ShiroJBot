@@ -18,8 +18,7 @@
 
 package com.kuuhaku.model.records.shoukan.history;
 
-import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.records.shoukan.Origin;
 
-public record Info(Player topPlayer, Player bottomPlayer, Side winner, String winCondition) {
-
+public record Player(String uid, int baseHp, double weight, double divergence, Origin origin) {
 }

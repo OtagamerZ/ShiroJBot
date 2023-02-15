@@ -20,21 +20,29 @@ package com.kuuhaku.model.records.shoukan.history;
 
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.common.shoukan.Hand;
+import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 
 import java.util.List;
 
 public record Match(Info info, List<Turn> turns) {
-	public Match(Shoukan game) {
+	public Match(Shoukan game, String winCondition) {
 		this(
 				new Info(
-						game.getPlayers()[0],
-						game.getPlayers()[1],
+						makePlayer(game.getHands().get(Side.TOP)),
+						makePlayer(game.getHands().get(Side.BOTTOM)),
 						game.getHands().values().stream()
 								.filter(h -> h.getHP() == 0)
 								.map(Hand::getSide)
-								.findFirst().orElse(null)
+								.findFirst().orElse(null),
+						winCondition
 				),
 				game.getTurns()
 		);
+	}
+
+	private static Player makePlayer(Hand h) {
+		Deck d = h.getUserDeck();
+		return new Player(h.getUid(), h.getBase().hp(), d.getEvoWeight(), d.getMetaDivergence(), h.getOrigin());
 	}
 }
