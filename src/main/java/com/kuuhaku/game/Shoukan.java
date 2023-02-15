@@ -1527,7 +1527,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 	}
 
-	public List<Drawable<?>> getBanned() {
+	public BondedList<Drawable<?>> getBanned() {
 		return arena.getBanned();
 	}
 
