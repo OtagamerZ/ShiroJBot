@@ -77,6 +77,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
@@ -1502,6 +1503,20 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public List<SlotColumn> getSlots(Side side) {
 		return arena.getSlots(side);
+	}
+
+	public void iterateSlots(Consumer<Senshi> act) {
+		for (Side side : Side.values()) {
+			iterateSlots(side, act);
+		}
+	}
+
+	public void iterateSlots(Side side, Consumer<Senshi> act) {
+		for (SlotColumn slot : arena.getSlots(side)) {
+			for (Senshi card : slot.getCards()) {
+				act.accept(card);
+			}
+		}
 	}
 
 	public List<Drawable<?>> getBanned() {
