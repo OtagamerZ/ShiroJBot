@@ -182,7 +182,7 @@ public class Shoukan extends GameInstance<Phase> {
 	// DEBUG START
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("set,hp,(?<value>\\d+)")
+	@PlayerAction("set_hp,(?<value>\\d+)")
 	private boolean debSetHp(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
@@ -196,7 +196,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("set,mp,(?<value>\\d+)")
+	@PlayerAction("set_mp,(?<value>\\d+)")
 	private boolean debSetMp(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
@@ -210,7 +210,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("set,origin,(?<major>\\w+)(?:,(?<minor>\\[[\\w,]+]))?")
+	@PlayerAction("set_origin,(?<major>\\w+)(?:,(?<minor>\\[[\\w,]+]))?")
 	private boolean debSetOrigin(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
