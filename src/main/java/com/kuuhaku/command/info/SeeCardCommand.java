@@ -65,8 +65,8 @@ public class SeeCardCommand implements Executable {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
 
 		Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
-		if (card == null) {
-			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card WHERE rarity NOT IN ('ULTIMATE', 'NONE')");
+		if (card == null || card.getAnime().getId().equals("DEBUG")) {
+			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card WHERE rarity NOT IN ('ULTIMATE', 'NONE') AND anime_id <> 'DEBUG'");
 
 			Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(), names);
 			event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
