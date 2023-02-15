@@ -18,43 +18,27 @@
 
 package com.kuuhaku.model.common.shoukan;
 
-import com.kuuhaku.game.Shoukan;
-import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.Objects;
 
-public class CardProxy extends Senshi {
-	private final Evogear original;
+public class EquippableSenshi extends Evogear implements Proxy<Senshi> {
+	private final Senshi original;
 
-	public CardProxy(Evogear e) {
-		super(e.getId(), e.getCard(), Race.NONE, new CardAttributes());
+	public EquippableSenshi(Senshi s) {
+		super(s.getId(), s.getCard(), new CardAttributes());
 
-		original = e.copy();
-		setHand(e.getHand());
+		original = s.copy();
+		setHand(s.getHand());
 		setFlipped(true);
 	}
 
-	public Evogear getOriginal() {
+	@Override
+	public Senshi getOriginal() {
 		return original;
-	}
-
-	@Override
-	public void setFlipped(boolean flipped) {
-		super.setFlipped(flipped);
-
-		if (!flipped) {
-			Shoukan game = getHand().getGame();
-			game.getChannel().sendMessage(game.getLocale().get("str/trap_disarm", original)).queue();
-			getHand().getGraveyard().add(this);
-		}
-	}
-
-	@Override
-	public boolean canAttack() {
-		return false;
 	}
 
 	@Override
@@ -62,8 +46,8 @@ public class CardProxy extends Senshi {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		if (!super.equals(o)) return false;
-		CardProxy cardProxy = (CardProxy) o;
-		return Objects.equals(original, cardProxy.original);
+		EquippableSenshi equippableSenshi = (EquippableSenshi) o;
+		return Objects.equals(original, equippableSenshi.original);
 	}
 
 	@Override

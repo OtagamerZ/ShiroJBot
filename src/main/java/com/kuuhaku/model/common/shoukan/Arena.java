@@ -24,6 +24,7 @@ import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
@@ -71,7 +72,7 @@ public class Arena implements Renderer {
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
 	private final BondedList<Drawable<?>> banned = new BondedList<>((d, it) -> {
-		if (d instanceof CardProxy p) {
+		if (d instanceof Proxy<? extends Drawable<?>> p) {
 			d.reset();
 			it.add(p.getOriginal());
 			return false;

@@ -108,6 +108,16 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	         └── flipped
 	 */
 
+	public Evogear() {
+	}
+
+	public Evogear(String id, Card card, CardAttributes base) {
+		this.id = id;
+		this.card = card;
+		this.targetType = TargetType.NONE;
+		this.base = base;
+	}
+
 	@Override
 	public long getSerial() {
 		return SERIAL;

@@ -310,7 +310,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Senshi proxy = new CardProxy(chosen);
+		Senshi proxy = new SpellProxy(chosen);
 
 		if (args.getBoolean("notCombat")) {
 			if (slot.hasBottom()) {
@@ -355,7 +355,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public boolean activateProxy(Senshi proxy, EffectParameters ep) {
-		if (!(proxy instanceof CardProxy p)) return false;
+		if (!(proxy instanceof SpellProxy p)) return false;
 
 		Evogear e = p.getOriginal();
 		Hand hand = e.getHand();
@@ -1331,7 +1331,7 @@ public class Shoukan extends GameInstance<Phase> {
 				if (!source.popFlag(Flag.NO_COMBAT)) {
 					for (SlotColumn sc : getSlots(op.getSide())) {
 						for (Senshi card : sc.getCards()) {
-							if (card instanceof CardProxy) {
+							if (card instanceof SpellProxy) {
 								EffectParameters params = new EffectParameters(
 										ON_TRAP, op.getSide(),
 										card.asSource(ON_TRAP),

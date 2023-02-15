@@ -29,6 +29,7 @@ import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Fonts;
@@ -68,7 +69,7 @@ public class Hand {
 	private final Origin origin;
 
 	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
-		if (d instanceof CardProxy p) {
+		if (d instanceof Proxy<? extends Drawable<?>> p) {
 			p.getOriginal().reset();
 			d.reset();
 
@@ -96,7 +97,7 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
-		if (d instanceof CardProxy p) {
+		if (d instanceof Proxy<? extends Drawable<?>> p) {
 			p.getOriginal().reset();
 			d.reset();
 
@@ -120,7 +121,7 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
-		if (d instanceof CardProxy p) {
+		if (d instanceof Proxy<? extends Drawable<?>> p) {
 			p.getOriginal().reset();
 			d.reset();
 
@@ -198,7 +199,7 @@ public class Hand {
 	});
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getGame().getArena().getBanned().contains(d)) return false;
-		else if (d instanceof CardProxy p) {
+		else if (d instanceof Proxy<? extends Drawable<?>> p) {
 			p.getOriginal().reset();
 			d.reset();
 
