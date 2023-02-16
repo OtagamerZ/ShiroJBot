@@ -79,6 +79,7 @@ public class DeckSkinCommand implements Executable {
 					Title paid = ss.getPaidTitle();
 					if (paid != null) {
 						eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
+								.setImage(URL.formatted(ss.name().toLowerCase()))
 								.setTitle(locale.get("str/skin_locked"))
 								.setDescription(locale.get("str/requires_purchase", locale.get("currency/" + paid.getCurrency(), paid.getPrice())));
 					} else {
