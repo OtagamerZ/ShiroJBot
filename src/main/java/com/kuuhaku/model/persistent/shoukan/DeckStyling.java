@@ -39,8 +39,8 @@ public class DeckStyling implements Serializable {
 	private FrameSkin frame = FrameSkin.PINK;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "slot", nullable = false)
-	private SlotSkin slot = SlotSkin.DEFAULT;
+	@Column(name = "skin", nullable = false)
+	private SlotSkin skin = SlotSkin.DEFAULT;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "senshi_order", nullable = false)
@@ -66,12 +66,12 @@ public class DeckStyling implements Serializable {
 		this.frame = frame;
 	}
 
-	public SlotSkin getSlot() {
-		return slot;
+	public SlotSkin getSkin() {
+		return skin;
 	}
 
-	public void setSlot(SlotSkin slot) {
-		this.slot = slot;
+	public void setSkin(SlotSkin slot) {
+		this.skin = slot;
 	}
 
 	public DeckOrder getSenshiOrder() {

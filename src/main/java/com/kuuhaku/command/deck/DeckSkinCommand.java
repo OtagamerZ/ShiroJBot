@@ -26,8 +26,8 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
-import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.SlotSkin;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Title;
@@ -40,18 +40,20 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "deck",
-		subname = "frame",
+		subname = "skin",
 		category = Category.MISC
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class DeckFrameCommand implements Executable {
-	private static final String URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/frames/front/%s.png";
+public class DeckSkinCommand implements Executable {
+	private static final String URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/side/%s.webp";
 
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -64,14 +66,14 @@ public class DeckFrameCommand implements Executable {
 
 		if (args.isEmpty()) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setAuthor(locale.get("str/all_frames"));
+					.setAuthor(locale.get("str/all_skins"));
 
-			FrameSkin[] frames = FrameSkin.values();
+			SlotSkin[] skins = SlotSkin.values();
 			List<Page> pages = new ArrayList<>();
-			for (int i = 0; i < frames.length; i++) {
-				FrameSkin fc = frames[i];
-				if (!fc.canUse(acc)) {
-					List<Title> titles = fc.getTitles();
+			for (int i = 0; i < skins.length; i++) {
+				SlotSkin ss = skins[i];
+				if (!ss.canUse(acc)) {
+					List<Title> titles = ss.getTitles();
 					String req = Utils.properlyJoin(locale.get("str/and")).apply(
 							titles.stream()
 									.map(t -> "**`" + t.getInfo(locale).getName() + "`**")
@@ -80,14 +82,14 @@ public class DeckFrameCommand implements Executable {
 
 					eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
 							.setImage(null)
-							.setTitle(locale.get("str/frame_locked"))
+							.setTitle(locale.get("str/skin_locked"))
 							.setDescription(locale.get("str/requires_titles", req));
 				} else {
-					eb.setImage(URL.formatted(fc.name().toLowerCase()))
-							.setTitle(fc.getName(locale))
-							.setDescription(fc.getDescription(locale));
+					eb.setImage(URL.formatted(ss.name().toLowerCase()))
+							.setTitle(ss.getName(locale))
+							.setDescription(ss.getDescription(locale));
 				}
-				eb.setFooter(locale.get("str/page", i + 1, frames.length));
+				eb.setFooter(locale.get("str/page", i + 1, skins.length));
 
 				pages.add(new InteractPage(eb.build()));
 			}
@@ -101,20 +103,20 @@ public class DeckFrameCommand implements Executable {
 									}
 								});
 								m.put(Utils.parseEmoji("▶️"), w -> {
-									if (i.get() < frames.length - 1) {
+									if (i.get() < skins.length - 1) {
 										s.editMessageEmbeds((MessageEmbed) pages.get(i.incrementAndGet()).getContent()).queue();
 									}
 								});
 								m.put(Utils.parseEmoji("✅"), w -> {
-									FrameSkin frame = frames[i.get()];
-									if (!frame.canUse(acc)) {
-										event.channel().sendMessage(locale.get("error/frame_locked")).queue();
+									SlotSkin skin = skins[i.get()];
+									if (!skin.canUse(acc)) {
+										event.channel().sendMessage(locale.get("error/skin_locked")).queue();
 										return;
 									}
 
-									d.getStyling().setFrame(frame);
+									d.getStyling().setSkin(skin);
 									d.save();
-									event.channel().sendMessage(locale.get("success/frame_selected", d.getName()))
+									event.channel().sendMessage(locale.get("success/skin_selected", d.getName()))
 											.flatMap(ms -> s.delete())
 											.queue();
 								});

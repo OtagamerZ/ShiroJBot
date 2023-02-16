@@ -30,7 +30,9 @@ import com.kuuhaku.util.Utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public enum FrameSkin {
 	PINK,
@@ -75,14 +77,14 @@ public enum FrameSkin {
 			acc -> Tag.getTags(Main.getMemberByID(acc.getUid())).contains(Tag.RICO)
 	),*/;
 
-	private final String title;
+	private final String[] titles;
 
 	FrameSkin() {
-		this.title = null;
+		this.titles = null;
 	}
 
-	FrameSkin(String title) {
-		this.title = title;
+	FrameSkin(String... titles) {
+		this.titles = titles;
 	}
 
 	public Color getThemeColor() {
@@ -195,14 +197,25 @@ public enum FrameSkin {
 		return locale.get("frame/" + name() + "_desc");
 	}
 
-	public Title getTitle() {
-		if (title == null) return null;
+	public List<Title> getTitles() {
+		if (titles == null) return List.of();
 
-		return DAO.find(Title.class, title);
+		List<Title> out = new ArrayList<>();
+		for (String title : titles) {
+			out.add(DAO.find(Title.class, title));
+		}
+
+		return out;
 	}
 
 	public boolean canUse(Account acc) {
-		return title == null || acc.hasTitle(title);
+		if (titles == null) return true;
+
+		for (String title : titles) {
+			if (!acc.hasTitle(title)) return false;
+		}
+
+		return true;
 	}
 
 	public static FrameSkin getByName(String name) {

@@ -19,14 +19,37 @@
 package com.kuuhaku.model.enums.shoukan;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public enum SlotSkin {
-	DEFAULT, AHEGAO, HEX, PLANK, INVISIBLE;
+	DEFAULT,
+//	AHEGAO,
+	HEX,
+	PLANK,
+	MISSING,
+	INVISIBLE;
+
+	private final String[] titles;
+
+	SlotSkin() {
+		this.titles = null;
+	}
+
+	SlotSkin(String... titles) {
+		this.titles = titles;
+	}
 
 	public BufferedImage getImage(Side side, boolean legacy) {
 		String s = side.name().toLowerCase();
@@ -41,5 +64,38 @@ public enum SlotSkin {
 		g2d.dispose();
 
 		return bi;
+	}
+
+	public String getName(I18N locale) {
+		return locale.get("skin/" + name());
+	}
+
+	public String getDescription(I18N locale) {
+		return locale.get("skin/" + name() + "_desc");
+	}
+
+	public java.util.List<Title> getTitles() {
+		if (titles == null) return List.of();
+
+		List<Title> out = new ArrayList<>();
+		for (String title : titles) {
+			out.add(DAO.find(Title.class, title));
+		}
+
+		return out;
+	}
+
+	public boolean canUse(Account acc) {
+		if (titles == null) return true;
+
+		for (String title : titles) {
+			if (!acc.hasTitle(title)) return false;
+		}
+
+		return true;
+	}
+
+	public static SlotSkin getByName(String name) {
+		return Arrays.stream(values()).filter(fc -> Utils.equalsAny(name, fc.name(), fc.toString())).findFirst().orElse(null);
 	}
 }
