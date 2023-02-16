@@ -26,10 +26,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public enum SlotSkin {
-	DEFAULT, AHEGAO, HEX;
+	DEFAULT, AHEGAO, HEX, PLANK, INVISIBLE;
 
 	public BufferedImage getImage(Side side, boolean legacy) {
-
 		String s = side.name().toLowerCase();
 
 		BufferedImage bi = IO.getResourceAsImage("shoukan/side/" + name().toLowerCase() + "_" + s + ".webp");

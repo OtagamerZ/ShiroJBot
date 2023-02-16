@@ -23,10 +23,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSignatureException;
-import com.kuuhaku.model.common.AutoEmbedBuilder;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.PatternCache;
-import com.kuuhaku.model.common.SimpleMessageListener;
+import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.common.special.PadoruEvent;
 import com.kuuhaku.model.common.special.SpecialEvent;
@@ -69,7 +66,6 @@ import java.util.stream.Collectors;
 public class GuildListener extends ListenerAdapter {
 	private static final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
 	private static final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
-	private static final Set<String> locks = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 	@Override
 	public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event) {
@@ -217,17 +213,35 @@ public class GuildListener extends ListenerAdapter {
 			evts.removeIf(SimpleMessageListener::isClosed);
 		}
 
-		if (!locks.add(event.getAuthor().getId())) return;
+		if (Mutex.isLocked(event.getAuthor().getId())) return;
 
-		CompletableFuture.runAsync(() -> {
-			try {
-				GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
-				I18N locale = config.getLocale();
-				if (!Objects.equals(config.getName(), data.guild().getName())) {
-					config.setName(data.guild().getName());
-					config.save();
-				}
+		try (Mutex<String> ignored = new Mutex<>(event.getAuthor().getId())) {
+			GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
+			I18N locale = config.getLocale();
+			if (!Objects.equals(config.getName(), data.guild().getName())) {
+				config.setName(data.guild().getName());
+				config.save();
+			}
 
+			Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
+			int lvl = profile.getLevel();
+
+			GuildBuff gb = config.getCumBuffs();
+			profile.addXp((long) (15 * (1 + gb.xp())));
+			profile.save();
+
+			Account account = profile.getAccount();
+			if (!Objects.equals(account.getName(), data.user().getName())) {
+				account.setName(data.user().getName());
+				account.save();
+			}
+
+			EventData ed = new EventData(config, profile);
+			if (content.toLowerCase().startsWith(config.getPrefix())) {
+				processCommand(data, ed, content);
+			}
+
+			CompletableFuture.runAsync(() -> {
 				if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
 					Member mb = event.getMember();
 					if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
@@ -240,24 +254,6 @@ public class GuildListener extends ListenerAdapter {
 							mb.modifyNickname(name).queue();
 						}
 					}
-				}
-
-				Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
-				int lvl = profile.getLevel();
-
-				GuildBuff gb = config.getCumBuffs();
-				profile.addXp((long) (15 * (1 + gb.xp())));
-				profile.save();
-
-				Account account = profile.getAccount();
-				if (!Objects.equals(account.getName(), data.user().getName())) {
-					account.setName(data.user().getName());
-					account.save();
-				}
-
-				EventData ed = new EventData(config, profile);
-				if (content.toLowerCase().startsWith(config.getPrefix())) {
-					processCommand(data, ed, content);
 				}
 
 				AtomicReference<TextChannel> notifs = new AtomicReference<>();
@@ -320,13 +316,11 @@ public class GuildListener extends ListenerAdapter {
 						}
 					}
 				}
+			});
 
-				rollDrops(config, locale);
-				rollEvents(data.channel(), locale);
-			} finally {
-				locks.remove(event.getAuthor().getId());
-			}
-		});
+			rollDrops(config, locale);
+			rollEvents(data.channel(), locale);
+		}
 	}
 
 	private void rollDrops(GuildConfig config, I18N locale) {
