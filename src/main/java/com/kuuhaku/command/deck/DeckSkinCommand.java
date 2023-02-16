@@ -76,14 +76,16 @@ public class DeckSkinCommand implements Executable {
 			for (int i = 0; i < skins.length; i++) {
 				SlotSkin ss = skins[i];
 				if (!ss.canUse(acc)) {
-					Title paid = ss.getPaidTitle();
-					if (paid != null) {
-						eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
-								.setImage(URL.formatted(ss.name().toLowerCase()))
-								.setTitle(locale.get("str/skin_locked"))
-								.setDescription(locale.get("str/requires_purchase", locale.get("currency/" + paid.getCurrency(), paid.getPrice())));
-					} else {
-						List<Title> titles = ss.getTitles();
+					boolean notFound = false;
+					List<Title> titles = ss.getTitles();
+					for (Title title : titles) {
+						if (!acc.hasTitle(title.getId())) {
+							notFound = true;
+							break;
+						}
+					}
+
+					if (notFound) {
 						String req = Utils.properlyJoin(locale.get("str/and")).apply(
 								titles.stream()
 										.map(t -> "**`" + t.getInfo(locale).getName() + "`**")
@@ -94,6 +96,14 @@ public class DeckSkinCommand implements Executable {
 								.setImage(null)
 								.setTitle(locale.get("str/skin_locked"))
 								.setDescription(locale.get("str/requires_titles", req));
+					} else {
+						Title paid = ss.getPaidTitle();
+						assert paid != null;
+
+						eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
+								.setImage(URL.formatted(ss.name().toLowerCase()))
+								.setTitle(locale.get("str/skin_locked"))
+								.setDescription(locale.get("str/requires_purchase", locale.get("currency/" + paid.getCurrency(), paid.getPrice())));
 					}
 				} else {
 					eb.setImage(URL.formatted(ss.name().toLowerCase()))
