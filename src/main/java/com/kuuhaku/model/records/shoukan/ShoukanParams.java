@@ -21,6 +21,8 @@ package com.kuuhaku.model.records.shoukan;
 import com.kuuhaku.util.Utils;
 
 public record ShoukanParams(Integer hp, Integer mp) {
+	public static final ShoukanParams INSTANCE = new ShoukanParams();
+
 	public ShoukanParams() {
 		this(6000, 5);
 	}

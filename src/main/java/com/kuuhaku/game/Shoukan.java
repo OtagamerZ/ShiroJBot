@@ -108,13 +108,13 @@ public class Shoukan extends GameInstance<Phase> {
 	public Shoukan(I18N locale, ShoukanParams params, String p1, String p2) {
 		super(locale, new String[]{p1, p2});
 
-		this.params = Utils.getOr(params, new ShoukanParams());
+		this.params = Utils.getOr(params, ShoukanParams.INSTANCE);
 		this.arena = new Arena(this);
 		this.hands = Map.of(
 				Side.TOP, new Hand(p1, this, Side.TOP),
 				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
 		);
-		this.singleplayer = p1.equals(p2);
+		this.singleplayer = p1.equals(p2) || !params.equals(ShoukanParams.INSTANCE);
 
 		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
 	}
