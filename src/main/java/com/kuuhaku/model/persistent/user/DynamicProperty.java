@@ -64,4 +64,11 @@ public class DynamicProperty extends DAO<DynamicProperty> {
 	public Account getAccount() {
 		return account;
 	}
+
+	public static String get(String uid, String key, String defaultValue) {
+		DynamicProperty dp = DAO.find(DynamicProperty.class, new DynamicPropertyId(uid, key));
+		if (dp == null) return defaultValue;
+
+		return dp.getValue();
+	}
 }
