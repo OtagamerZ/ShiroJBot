@@ -31,7 +31,7 @@ public class GlobalProperty extends DAO<GlobalProperty> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@Column(name = "value", nullable = false)
+	@Column(name = "value", nullable = false, columnDefinition = "TEXT")
 	private String value;
 
 	public GlobalProperty() {
