@@ -617,7 +617,7 @@
 				 };
 
 				 if (origin.major() == Race.DIVINITY) {
-					 mpGain = mpGain.accumulate((t, mp) -> mp + (int) (mp * getMetaDivergence() / 2));
+					 mpGain = mpGain.accumulate((t, mp) -> Calc.round(mp * (1 + getMetaDivergence() / 2)));
 				 }
 
 				 AccFunction<Integer, Integer> handCap = t -> 5;
