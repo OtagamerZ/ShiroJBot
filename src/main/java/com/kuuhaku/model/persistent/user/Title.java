@@ -72,7 +72,7 @@ public class Title extends DAO<Title> {
 		if (check.isBlank()) return false;
 
 		try {
-			Object out = Utils.exec(check, Map.of("acc", acc));
+			Object out = Utils.exec(check, Map.of("uid", acc.getUid()));
 
 			return (out instanceof Boolean b) && b;
 		} catch (Exception e) {
