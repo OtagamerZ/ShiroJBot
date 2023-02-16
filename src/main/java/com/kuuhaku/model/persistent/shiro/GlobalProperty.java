@@ -57,4 +57,11 @@ public class GlobalProperty extends DAO<GlobalProperty> {
 	public void setValue(Object value) {
 		this.value = String.valueOf(value);
 	}
+
+	public static String get(String key, String defaultValue) {
+		GlobalProperty gp = DAO.find(GlobalProperty.class, key);
+		if (gp == null) return defaultValue;
+
+		return gp.getValue();
+	}
 }
