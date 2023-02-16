@@ -29,12 +29,15 @@ import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.DynamicProperty;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.PreparedCommand;
 import com.kuuhaku.util.SignatureParser;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.XStringBuilder;
+import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -123,6 +126,18 @@ public class HelpCommand implements Executable {
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
+
+		Account acc = data.profile().getAccount();
+		DynamicProperty dp = acc.getDynamicProperty("viewed_commands");
+		JSONArray cmds = new JSONArray(dp.getValue());
+
+		String sn = pc.command().getClass().getSimpleName();
+		if (!cmds.contains(sn)) {
+			cmds.add(sn);
+		}
+
+		dp.setValue(cmds.toString());
+		dp.save();
 	}
 
 	private void showHomePage(JDA bot, I18N locale, MessageData.Guild event) {
