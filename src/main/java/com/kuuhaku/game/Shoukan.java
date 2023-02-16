@@ -1439,9 +1439,9 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 
 					if ((announce && source.canAttack()) || source.isAvailable()) {
-						dmg = 0;
-					} else {
 						trigger(ON_DIRECT, source.asSource(ON_DIRECT));
+					} else {
+						dmg = 0;
 					}
 				}
 
