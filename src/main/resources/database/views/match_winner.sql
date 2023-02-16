@@ -17,14 +17,14 @@
  */
 
 CREATE OR REPLACE VIEW v_match_winner AS
-SELECT x.info ->> 'uid'  AS uid
-     , x.info            AS head
+SELECT x.id
+     , x.info ->> 'uid' AS uid
+     , x.info           AS head
      , x.data
 FROM (
-     SELECT head -> lower(head ->> 'winner')          AS info
-          , jsonb_agg(it -> lower(head ->> 'winner')) AS data
+     SELECT id
+          , head -> lower(head ->> 'winner')                                                 AS info
+          , jsonb_path_query_array(data, CAST('$.' || lower(head ->> 'winner') AS JSONPATH)) AS data
      FROM match_history
-              CROSS JOIN jsonb_array_elements(data) AS dt(it)
-     GROUP BY id, info
      ) x
 WHERE x.info IS NOT NULL
