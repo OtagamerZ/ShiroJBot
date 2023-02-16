@@ -75,17 +75,25 @@ public class DeckSkinCommand implements Executable {
 			for (int i = 0; i < skins.length; i++) {
 				SlotSkin ss = skins[i];
 				if (!ss.canUse(acc)) {
-					List<Title> titles = ss.getTitles();
-					String req = Utils.properlyJoin(locale.get("str/and")).apply(
-							titles.stream()
-									.map(t -> "**`" + t.getInfo(locale).getName() + "`**")
-									.toList()
-					);
+					Title paid = ss.getPaidTitle();
+					if (paid != null) {
+						eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
+								.setImage(null)
+								.setTitle(locale.get("str/skin_locked"))
+								.setDescription(locale.get("str/requires_purchase", locale.get("currency/" + paid.getCurrency(), paid.getPrice())));
+					} else {
+						List<Title> titles = ss.getTitles();
+						String req = Utils.properlyJoin(locale.get("str/and")).apply(
+								titles.stream()
+										.map(t -> "**`" + t.getInfo(locale).getName() + "`**")
+										.toList()
+						);
 
-					eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
-							.setImage(null)
-							.setTitle(locale.get("str/skin_locked"))
-							.setDescription(locale.get("str/requires_titles", req));
+						eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
+								.setImage(null)
+								.setTitle(locale.get("str/skin_locked"))
+								.setDescription(locale.get("str/requires_titles", req));
+					}
 				} else {
 					eb.setImage(URL.formatted(ss.name().toLowerCase()))
 							.setTitle(ss.getName(locale))
@@ -111,7 +119,7 @@ public class DeckSkinCommand implements Executable {
 								});
 
 								SlotSkin skin = skins[i.get()];
-								Title paid = skin.getPaidTitles();
+								Title paid = skin.getPaidTitle();
 								if (!skin.canUse(acc) && paid != null) {
 									m.put(Utils.parseEmoji("\uD83D\uDCB5"), w -> {
 										if (!acc.hasEnough(paid.getPrice(), paid.getCurrency())) {

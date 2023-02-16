@@ -38,7 +38,7 @@ public enum SlotSkin {
 //	AHEGAO(""),
 	HEX("HOARDER_III"),
 	PLANK("METANAUT"),
-	MISSING(),
+	MISSING("SS_MISSING"),
 	INVISIBLE("DEUS_VULT", "REBELLION", "HOARDER_II"),
 	;
 
@@ -75,7 +75,7 @@ public enum SlotSkin {
 		return locale.get("skin/" + name() + "_desc");
 	}
 
-	public Title getPaidTitles() {
+	public Title getPaidTitle() {
 		if (titles == null) return null;
 
 		for (String title : titles) {
