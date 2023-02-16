@@ -213,114 +213,110 @@ public class GuildListener extends ListenerAdapter {
 			evts.removeIf(SimpleMessageListener::isClosed);
 		}
 
-		if (Mutex.isLocked(event.getAuthor().getId())) return;
+		GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
+		I18N locale = config.getLocale();
+		if (!Objects.equals(config.getName(), data.guild().getName())) {
+			config.setName(data.guild().getName());
+			config.save();
+		}
 
-		try (Mutex<String> ignored = new Mutex<>(event.getAuthor().getId())) {
-			GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
-			I18N locale = config.getLocale();
-			if (!Objects.equals(config.getName(), data.guild().getName())) {
-				config.setName(data.guild().getName());
-				config.save();
-			}
+		Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
+		int lvl = profile.getLevel();
 
-			Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
-			int lvl = profile.getLevel();
+		GuildBuff gb = config.getCumBuffs();
+		profile.addXp((long) (15 * (1 + gb.xp())));
+		profile.save();
 
-			GuildBuff gb = config.getCumBuffs();
-			profile.addXp((long) (15 * (1 + gb.xp())));
-			profile.save();
+		Account account = profile.getAccount();
+		if (!Objects.equals(account.getName(), data.user().getName())) {
+			account.setName(data.user().getName());
+			account.save();
+		}
 
-			Account account = profile.getAccount();
-			if (!Objects.equals(account.getName(), data.user().getName())) {
-				account.setName(data.user().getName());
-				account.save();
-			}
+		EventData ed = new EventData(config, profile);
+		if (content.toLowerCase().startsWith(config.getPrefix())) {
+			CompletableFuture.runAsync(() -> processCommand(data, ed, content));
+		}
 
-			EventData ed = new EventData(config, profile);
-			if (content.toLowerCase().startsWith(config.getPrefix())) {
-				processCommand(data, ed, content);
-			}
-
-			CompletableFuture.runAsync(() -> {
-				if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
-					Member mb = event.getMember();
-					if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
-						String name = Unidecode.decode(mb.getEffectiveName()).trim();
-						if (!name.equals(mb.getEffectiveName())) {
-							if (name.length() < 3) {
-								name = locale.get("zalgo/name_" + Calc.rng(1, 4));
-							}
-
-							mb.modifyNickname(name).queue();
+		CompletableFuture.runAsync(() -> {
+			if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
+				Member mb = event.getMember();
+				if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
+					String name = Unidecode.decode(mb.getEffectiveName()).trim();
+					if (!name.equals(mb.getEffectiveName())) {
+						if (name.length() < 3) {
+							name = locale.get("zalgo/name_" + Calc.rng(1, 4));
 						}
+
+						mb.modifyNickname(name).queue();
 					}
 				}
+			}
 
-				AtomicReference<TextChannel> notifs = new AtomicReference<>();
-				if (config.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
-					notifs.set(config.getSettings().getNotificationsChannel());
-					if (notifs.get() == null) {
-						notifs.set(event.getChannel());
-					}
+			AtomicReference<TextChannel> notifs = new AtomicReference<>();
+			if (config.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
+				notifs.set(config.getSettings().getNotificationsChannel());
+				if (notifs.get() == null) {
+					notifs.set(event.getChannel());
+				}
+			}
+
+			if (profile.getLevel() > lvl) {
+				int high = account.getHighestLevel();
+				int prize = 0;
+				if (profile.getLevel() > high) {
+					prize = profile.getLevel() * 150;
+					account.addCR(prize, "Level up prize");
 				}
 
-				if (profile.getLevel() > lvl) {
-					int high = account.getHighestLevel();
-					int prize = 0;
-					if (profile.getLevel() > high) {
-						prize = profile.getLevel() * 150;
-						account.addCR(prize, "Level up prize");
-					}
-
-					if (notifs.get() != null) {
-						notifs.get().sendMessage(locale.get(prize > 0 ? "str/level_up_prize" : "str/level_up", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
-					}
+				if (notifs.get() != null) {
+					notifs.get().sendMessage(locale.get(prize > 0 ? "str/level_up_prize" : "str/level_up", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
 				}
+			}
 
-				DynamicProperty dp = account.getDynamicProperty("message_count");
-				int count = NumberUtils.toInt(dp.getValue()) + 1;
-				dp.setValue(count);
-				dp.save();
+			DynamicProperty dp = account.getDynamicProperty("message_count");
+			int count = NumberUtils.toInt(dp.getValue()) + 1;
+			dp.setValue(count);
+			dp.save();
 
-				DAO.apply(Account.class, account.getUid(), acc -> {
-					Title t = acc.checkTitles();
-					if (t != null && notifs.get() != null) {
-						notifs.get().sendMessage(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName())).queue();
-					}
-				});
-
-				if (PatternCache.matches(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
-					data.channel().sendMessage(locale.get("str/mentioned",
-							data.user().getAsMention(),
-							config.getPrefix(),
-							Constants.SERVER_ROOT
-					)).queue();
-				}
-
-				if (!event.getAuthor().equals(event.getJDA().getSelfUser()) && Utils.between(content.length(), 3, 255)) {
-					List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
-							data.guild().getId(), StringUtils.stripAccents(content)
-					);
-
-					for (CustomAnswer ca : cas) {
-						if (ca.getChannels().isEmpty() || ca.getChannels().contains(event.getChannel().getId())) {
-							if (ca.getUsers().isEmpty() || ca.getUsers().contains(event.getAuthor().getId())) {
-								if (Calc.chance(ca.getChance() / (event.getAuthor().isBot() ? 2d : 1d))) {
-									event.getChannel().sendTyping()
-											.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
-											.flatMap(v -> event.getChannel().sendMessage(ca.getAnswer()))
-											.queue();
-									break;
-								}
-							}
-						}
-					}
+			DAO.apply(Account.class, account.getUid(), acc -> {
+				Title t = acc.checkTitles();
+				if (t != null && notifs.get() != null) {
+					notifs.get().sendMessage(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName())).queue();
 				}
 			});
 
-			rollDrops(config, locale);
-			rollEvents(data.channel(), locale);
-		}
+			if (PatternCache.matches(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
+				data.channel().sendMessage(locale.get("str/mentioned",
+						data.user().getAsMention(),
+						config.getPrefix(),
+						Constants.SERVER_ROOT
+				)).queue();
+			}
+
+			if (!event.getAuthor().equals(event.getJDA().getSelfUser()) && Utils.between(content.length(), 3, 255)) {
+				List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
+						data.guild().getId(), StringUtils.stripAccents(content)
+				);
+
+				for (CustomAnswer ca : cas) {
+					if (ca.getChannels().isEmpty() || ca.getChannels().contains(event.getChannel().getId())) {
+						if (ca.getUsers().isEmpty() || ca.getUsers().contains(event.getAuthor().getId())) {
+							if (Calc.chance(ca.getChance() / (event.getAuthor().isBot() ? 2d : 1d))) {
+								event.getChannel().sendTyping()
+										.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
+										.flatMap(v -> event.getChannel().sendMessage(ca.getAnswer()))
+										.queue();
+								break;
+							}
+						}
+					}
+				}
+			}
+		});
+
+		rollDrops(config, locale);
+		rollEvents(data.channel(), locale);
 	}
 
 	private void rollDrops(GuildConfig config, I18N locale) {
@@ -385,99 +381,101 @@ public class GuildListener extends ListenerAdapter {
 	}
 
 	private void processCommand(MessageData.Guild data, EventData event, String content) {
+		if (Mutex.isLocked(data.user().getId())) return;
+
 		I18N locale = event.config().getLocale();
 		String[] args = content.toLowerCase().split("\\s+");
 		String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
 
-		String[] parts = name.split("\\.");
-		JSONObject aliases = event.config().getSettings().getAliases();
-		for (int i = 0; i < parts.length; i++) {
-			String part = parts[i];
+		try (Mutex<String> ignore = new Mutex<>(data.user().getId())) {
+			String[] parts = name.split("\\.");
+			JSONObject aliases = event.config().getSettings().getAliases();
+			for (int i = 0; i < parts.length; i++) {
+				String part = parts[i];
 
-			if (aliases.has(part)) {
-				parts[i] = aliases.getString(part);
-			}
-		}
-		name = String.join(".", parts);
-
-		PreparedCommand pc = Main.getCommandManager().getCommand(name);
-		if (pc != null) {
-			Permission[] missing = pc.getMissingPerms(data.channel());
-
-			if (!Constants.MOD_PRIVILEGE.apply(data.member())) {
-				if (event.config().getSettings().getDeniedChannels().stream().anyMatch(t -> t.equals(data.channel()))) {
-					data.channel().sendMessage(locale.get("error/denied_channel")).queue();
-					return;
-				} else if (event.config().getSettings().getDisabledCategories().contains(pc.category())) {
-					data.channel().sendMessage(locale.get("error/disabled_category")).queue();
-					return;
-				} else if (event.config().getSettings().getDisabledCommands().contains(pc.command().getClass().getCanonicalName())) {
-					data.channel().sendMessage(locale.get("error/disabled_command")).queue();
-					return;
+				if (aliases.has(part)) {
+					parts[i] = aliases.getString(part);
 				}
 			}
+			name = String.join(".", parts);
 
-			if (missing.length > 0) {
-				XStringBuilder sb = new XStringBuilder(locale.get("error/missing_perms"));
-				for (Permission perm : missing) {
-					sb.appendNewLine("- " + locale.get("perm/" + perm.name()));
+			PreparedCommand pc = Main.getCommandManager().getCommand(name);
+			if (pc != null) {
+				Permission[] missing = pc.getMissingPerms(data.channel());
+
+				if (!Constants.MOD_PRIVILEGE.apply(data.member())) {
+					if (event.config().getSettings().getDeniedChannels().stream().anyMatch(t -> t.equals(data.channel()))) {
+						data.channel().sendMessage(locale.get("error/denied_channel")).queue();
+						return;
+					} else if (event.config().getSettings().getDisabledCategories().contains(pc.category())) {
+						data.channel().sendMessage(locale.get("error/disabled_category")).queue();
+						return;
+					} else if (event.config().getSettings().getDisabledCommands().contains(pc.command().getClass().getCanonicalName())) {
+						data.channel().sendMessage(locale.get("error/disabled_command")).queue();
+						return;
+					}
 				}
 
-				data.channel().sendMessage(sb.toString()).queue();
-				return;
-			}
+				if (missing.length > 0) {
+					XStringBuilder sb = new XStringBuilder(locale.get("error/missing_perms"));
+					for (Permission perm : missing) {
+						sb.appendNewLine("- " + locale.get("perm/" + perm.name()));
+					}
 
-			if (event.profile().getAccount().isBlacklisted()) {
-				data.channel().sendMessage(locale.get("error/blacklisted")).queue();
-				return;
-			} else if (!pc.category().check(data.member())) {
-				data.channel().sendMessage(locale.get("error/not_allowed")).queue();
-				return;
-			} else if (ratelimit.containsKey(data.user().getId())) {
-				data.channel().sendMessage(locale.get("error/ratelimited")).queue();
-				return;
-			}
+					data.channel().sendMessage(sb.toString()).queue();
+					return;
+				}
 
-			try {
-				JSONObject params = SignatureParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
+				if (event.profile().getAccount().isBlacklisted()) {
+					data.channel().sendMessage(locale.get("error/blacklisted")).queue();
+					return;
+				} else if (!pc.category().check(data.member())) {
+					data.channel().sendMessage(locale.get("error/not_allowed")).queue();
+					return;
+				} else if (ratelimit.containsKey(data.user().getId())) {
+					data.channel().sendMessage(locale.get("error/ratelimited")).queue();
+					return;
+				}
 
-				CompletableFuture.runAsync(() -> {
+				try {
+					JSONObject params = SignatureParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
+
 					try {
 						pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
 					} catch (Exception e) {
 						data.channel().sendMessage(locale.get("error/error", e)).queue();
 						Constants.LOGGER.error(e, e);
 					}
-				});
 
-				if (!Constants.STF_PRIVILEGE.apply(data.member())) {
-					ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
-				}
-			} catch (InvalidSignatureException e) {
-				String error;
+					if (!Constants.STF_PRIVILEGE.apply(data.member())) {
+						ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
+					}
+				} catch (InvalidSignatureException e) {
+					String error;
 
-				if (e.getOptions().length > 0) {
-					error = locale.get("error/invalid_option").formatted(
-							Utils.properlyJoin(locale.get("str/or")).apply(List.of(e.getOptions()))
-					) + "```css\n%s%s %s```".formatted(
-							event.config().getPrefix(),
-							name,
-							e.getMessage().replace("`", "'")
-					);
+					if (e.getOptions().length > 0) {
+						error = locale.get("error/invalid_option").formatted(
+								Utils.properlyJoin(locale.get("str/or")).apply(List.of(e.getOptions()))
+						) + "```css\n%s%s %s```".formatted(
+								event.config().getPrefix(),
+								name,
+								e.getMessage().replace("`", "'")
+						);
 
-					data.channel().sendMessage(error).queue();
-				} else {
-					error = locale.get("error/invalid_signature");
+						data.channel().sendMessage(error).queue();
+					} else {
+						error = locale.get("error/invalid_signature");
 
-					List<String> signatures = SignatureParser.extract(locale, pc.command());
-					EmbedBuilder eb = new ColorlessEmbedBuilder()
-							.setAuthor(locale.get("str/command_signatures"))
-							.setDescription("```css\n" + String.join("\n", signatures).formatted(
-									event.config().getPrefix(),
-									name
-							) + "\n```");
+						List<String> signatures = SignatureParser.extract(locale, pc.command());
+						EmbedBuilder eb = new ColorlessEmbedBuilder()
+								.setAuthor(locale.get("str/command_signatures"))
+								.setDescription("```css\n" + String.join("\n", signatures).formatted(
+										event.config().getPrefix(),
+										name
+								) + "\n```");
 
-					data.channel().sendMessage(error).setEmbeds(eb.build()).queue();
+						data.channel().sendMessage(error).setEmbeds(eb.build()).queue();
+					}
 				}
 			}
 		}
