@@ -241,6 +241,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		for (AccountTitle title : account.getTitles()) {
 			Title t = title.getTitle();
+			if (t.getId().startsWith("SS_")) continue;
 
 			replaces.put(
 					t.getId().toLowerCase(),
