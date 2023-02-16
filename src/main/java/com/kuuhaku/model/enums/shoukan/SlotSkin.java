@@ -93,6 +93,8 @@ public enum SlotSkin {
 
 		List<Title> out = new ArrayList<>();
 		for (String title : titles) {
+			if (title.startsWith("SS_")) continue;
+
 			out.add(DAO.find(Title.class, title));
 		}
 
