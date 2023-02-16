@@ -38,8 +38,8 @@ public enum SlotSkin {
 //	AHEGAO(""),
 	HEX("HOARDER_III"),
 	PLANK("METANAUT"),
-//	MISSING(""),
-//	INVISIBLE(""),
+	MISSING(),
+	INVISIBLE("DEUS_VULT", "REBELLION", "HOARDER_II"),
 	;
 
 	private final String[] titles;
@@ -75,7 +75,20 @@ public enum SlotSkin {
 		return locale.get("skin/" + name() + "_desc");
 	}
 
-	public java.util.List<Title> getTitles() {
+	public Title getPaidTitles() {
+		if (titles == null) return null;
+
+		for (String title : titles) {
+			Title t = DAO.find(Title.class, title);
+			if (t.getPrice() > 0) {
+				return t;
+			}
+		}
+
+		return null;
+	}
+
+	public List<Title> getTitles() {
 		if (titles == null) return List.of();
 
 		List<Title> out = new ArrayList<>();

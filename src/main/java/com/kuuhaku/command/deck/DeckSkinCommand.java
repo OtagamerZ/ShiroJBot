@@ -26,10 +26,12 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.SlotSkin;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.AccountTitle;
 import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
@@ -107,19 +109,39 @@ public class DeckSkinCommand implements Executable {
 										s.editMessageEmbeds((MessageEmbed) pages.get(i.incrementAndGet()).getContent()).queue();
 									}
 								});
-								m.put(Utils.parseEmoji("✅"), w -> {
-									SlotSkin skin = skins[i.get()];
-									if (!skin.canUse(acc)) {
-										event.channel().sendMessage(locale.get("error/skin_locked")).queue();
-										return;
-									}
 
-									d.getStyling().setSkin(skin);
-									d.save();
-									event.channel().sendMessage(locale.get("success/skin_selected", d.getName()))
-											.flatMap(ms -> s.delete())
-											.queue();
-								});
+								SlotSkin skin = skins[i.get()];
+								Title paid = skin.getPaidTitles();
+								if (!skin.canUse(acc) && paid != null) {
+									m.put(Utils.parseEmoji("\uD83D\uDCB5"), w -> {
+										if (!acc.hasEnough(paid.getPrice(), paid.getCurrency())) {
+											event.channel().sendMessage(locale.get("error/insufficient_" + paid.getCurrency())).queue();
+											return;
+										}
+
+										if (paid.getCurrency() == Currency.CR) {
+											acc.consumeCR(paid.getPrice(), "Skin " + skin);
+										} else {
+											acc.consumeGems(paid.getPrice(), "Skin " + skin);
+										}
+
+										new AccountTitle(acc, paid).save();
+
+										d.getStyling().setSkin(skin);
+										d.save();
+										event.channel().sendMessage(locale.get("success/skin_selected", d.getName()))
+												.flatMap(ms -> s.delete())
+												.queue();
+									});
+								} else {
+									m.put(Utils.parseEmoji("✅"), w -> {
+										d.getStyling().setSkin(skin);
+										d.save();
+										event.channel().sendMessage(locale.get("success/skin_selected", d.getName()))
+												.flatMap(ms -> s.delete())
+												.queue();
+									});
+								}
 							}),
 							true, true, 1, TimeUnit.MINUTES, event.user()::equals
 					)

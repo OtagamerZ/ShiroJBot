@@ -105,19 +105,17 @@ public class DeckFrameCommand implements Executable {
 										s.editMessageEmbeds((MessageEmbed) pages.get(i.incrementAndGet()).getContent()).queue();
 									}
 								});
-								m.put(Utils.parseEmoji("✅"), w -> {
-									FrameSkin frame = frames[i.get()];
-									if (!frame.canUse(acc)) {
-										event.channel().sendMessage(locale.get("error/frame_locked")).queue();
-										return;
-									}
 
-									d.getStyling().setFrame(frame);
-									d.save();
-									event.channel().sendMessage(locale.get("success/frame_selected", d.getName()))
-											.flatMap(ms -> s.delete())
-											.queue();
-								});
+								FrameSkin frame = frames[i.get()];
+								if (frame.canUse(acc)) {
+									m.put(Utils.parseEmoji("✅"), w -> {
+										d.getStyling().setFrame(frame);
+										d.save();
+										event.channel().sendMessage(locale.get("success/frame_selected", d.getName()))
+												.flatMap(ms -> s.delete())
+												.queue();
+									});
+								}
 							}),
 							true, true, 1, TimeUnit.MINUTES, event.user()::equals
 					)
