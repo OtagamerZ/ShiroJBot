@@ -25,7 +25,9 @@
  import com.kuuhaku.model.common.shoukan.Hand;
  import com.kuuhaku.model.enums.Fonts;
  import com.kuuhaku.model.enums.I18N;
+ import com.kuuhaku.model.enums.shoukan.FrameSkin;
  import com.kuuhaku.model.enums.shoukan.Race;
+ import com.kuuhaku.model.enums.shoukan.SlotSkin;
  import com.kuuhaku.model.persistent.shiro.Anime;
  import com.kuuhaku.model.persistent.shiro.Card;
  import com.kuuhaku.model.persistent.user.Account;
@@ -121,14 +123,32 @@
 		 this.current = current;
 	 }
 
+	 public FrameSkin getFrame() {
+		 if (!styling.getFrame().canUse(account)) {
+			 styling.setFrame(FrameSkin.PINK);
+			 save();
+		 }
+
+		 return styling.getFrame();
+	 }
+
+	 public SlotSkin getSkin() {
+		 if (!styling.getSkin().canUse(account)) {
+			 styling.setSkin(SlotSkin.DEFAULT);
+			 save();
+		 }
+
+		 return styling.getSkin();
+	 }
+
 	 public List<String> getSenshiRaw() {
 		 return DAO.queryAllNative(String.class, """
-				 SELECT d.card_id
-				 FROM senshi d
-				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
-				 WHERE sc.kawaipon_uid = ?1
-				   AND sc.deck_id = ?2
-				 """ + styling.getSenshiOrder(), account.getUid(), id);
+														 SELECT d.card_id
+														 FROM senshi d
+														 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
+														 WHERE sc.kawaipon_uid = ?1
+														   AND sc.deck_id = ?2
+														 """ + styling.getSenshiOrder(), account.getUid(), id);
 	 }
 
 	 public List<Senshi> getSenshi() {
@@ -166,12 +186,12 @@
 
 	 public List<String> getEvogearRaw() {
 		 return DAO.queryAllNative(String.class, """
-				 SELECT d.card_id
-				 FROM evogear d
-				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
-				 WHERE sc.kawaipon_uid = ?1
-				   AND sc.deck_id = ?2
-				 """ + styling.getEvogearOrder(), account.getUid(), id);
+														 SELECT d.card_id
+														 FROM evogear d
+														 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
+														 WHERE sc.kawaipon_uid = ?1
+														   AND sc.deck_id = ?2
+														 """ + styling.getEvogearOrder(), account.getUid(), id);
 	 }
 
 	 public List<Evogear> getEvogear() {
@@ -198,8 +218,8 @@
 		 bag.removeIf(e -> bag.getCount(e) <= getMaxEvogearCopies(e.getTier()));
 
 		 return bag.isEmpty()
-				 && Utils.between(getEvogear().size(), 0, 26)
-				 && getEvogear().stream().filter(e -> e.getTier() == 4).count() <= getMaxEvogearCopies(4);
+				&& Utils.between(getEvogear().size(), 0, 26)
+				&& getEvogear().stream().filter(e -> e.getTier() == 4).count() <= getMaxEvogearCopies(4);
 	 }
 
 	 public int getEvoWeight() {
@@ -404,8 +424,8 @@
 				 g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + ori.major().getMajor(locale)
-						 + "\n\n- " + locale.get("minor/pureblood")
-						 + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
+						   + "\n\n- " + locale.get("minor/pureblood")
+						   + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			 } else if (ori.major() == Race.MIXED) {
 				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
 				 g.setColor(Graph.mix(Arrays.stream(ori.minor()).map(Race::getColor).toArray(Color[]::new)));
@@ -416,11 +436,11 @@
 				 g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + locale.get("minor/mixed")
-						 + "\n\n" + Arrays.stream(ori.minor())
-						 .filter(r -> r != Race.DEMON)
-						 .map(o -> "- " + o.getMinor(locale))
-						 .collect(Collectors.joining("\n\n"))
-						 + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
+						   + "\n\n" + Arrays.stream(ori.minor())
+								   .filter(r -> r != Race.DEMON)
+								   .map(o -> "- " + o.getMinor(locale))
+								   .collect(Collectors.joining("\n\n"))
+						   + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			 } else {
 				 g.drawImage(ori.synergy().getBadge(), 0, 0, 150, 150, null);
 				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
@@ -439,12 +459,12 @@
 				 g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + ori.major().getMajor(locale)
-						 + "\n\n" + Arrays.stream(ori.minor())
-						 .filter(r -> r != Race.DEMON)
-						 .map(o -> "- " + o.getMinor(locale))
-						 .collect(Collectors.joining("\n\n"))
-						 + "\n\n- " + syn.getSynergy(locale)
-						 + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
+						   + "\n\n" + Arrays.stream(ori.minor())
+								   .filter(r -> r != Race.DEMON)
+								   .map(o -> "- " + o.getMinor(locale))
+								   .collect(Collectors.joining("\n\n"))
+						   + "\n\n- " + syn.getSynergy(locale)
+						   + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			 }
 
 			 Graph.drawMultilineString(g, effects,
