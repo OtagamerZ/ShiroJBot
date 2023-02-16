@@ -35,7 +35,7 @@ import java.util.List;
 
 public enum SlotSkin {
 	DEFAULT,
-//	AHEGAO,
+//	AHEGAO(""),
 	HEX("HOARDER_III"),
 	PLANK("METANAUT"),
 //	MISSING(""),

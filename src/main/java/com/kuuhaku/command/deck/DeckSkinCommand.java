@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class DeckSkinCommand implements Executable {
-	private static final String URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/side/%s.webp";
+	private static final String URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/side/%s_bottom.webp";
 
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
