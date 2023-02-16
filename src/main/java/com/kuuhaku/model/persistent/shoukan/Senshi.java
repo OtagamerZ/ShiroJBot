@@ -102,6 +102,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (e.hasCharm(Charm.CLONE)) {
 			game.putAtOpenSlot(getSide(), true, withCopy(s -> {
 				s.getStats().setAttrMult(-1 + (0.25 * e.getTier()));
+				s.getStats().getData().put("cloned", true);
 				s.state = this.state & 0b11111;
 			}));
 		}
@@ -1122,9 +1123,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (e.hasCharm(Charm.CLONE)) {
-				game.putAtOpenSlot(getSide(), true,
-						withCopy(s -> s.getStats().setAttrMult(-1 + (0.25 * e.getTier())))
-				);
+				game.putAtOpenSlot(getSide(), true, withCopy(s -> {
+					s.getStats().setAttrMult(-1 + (0.25 * e.getTier()));
+					s.getStats().getData().put("cloned", true);
+					s.state = this.state & 0b11111;
+				}));
 			}
 
 			return true;
