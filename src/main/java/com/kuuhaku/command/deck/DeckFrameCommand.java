@@ -51,7 +51,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class DeckFrameCommand implements Executable {
-	private static final String URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/master/src/main/resources/shoukan/frames/front/%s.png";
+	private static final String URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/rewrite/src/main/resources/shoukan/frames/front/%s.png";
 
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
