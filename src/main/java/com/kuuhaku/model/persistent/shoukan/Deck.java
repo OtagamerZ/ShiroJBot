@@ -424,7 +424,7 @@
 				 g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + ori.major().getMajor(locale)
-						   + "\n\n- " + locale.get("minor/pureblood")
+						   + "\n\n- " + locale.get("major/pureblood")
 						   + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			 } else if (ori.major() == Race.MIXED) {
 				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 60));
@@ -435,7 +435,7 @@
 
 				 g.setFont(Fonts.OPEN_SANS.deriveFont(Font.PLAIN, 36));
 				 g.setColor(Color.WHITE);
-				 effects = "- " + locale.get("minor/mixed")
+				 effects = "- " + locale.get("major/mixed")
 						   + "\n\n" + Arrays.stream(ori.minor())
 								   .filter(r -> r != Race.DEMON)
 								   .map(o -> "- " + o.getMinor(locale))

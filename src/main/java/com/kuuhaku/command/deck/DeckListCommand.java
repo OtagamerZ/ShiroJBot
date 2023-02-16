@@ -83,7 +83,7 @@ public class DeckListCommand implements Executable {
 		}
 
 		Race syn = o.synergy();
-		if (syn != Race.NONE) {
+		if (Integer.bitCount(syn.getFlag()) > 1) {
 			eb.appendDescription("\n\n**%s**\n%s %s".formatted(
 					locale.get("str/synergy_effect"),
 					Utils.getEmoteString(Constants.EMOTE_REPO_4, syn.name()),
