@@ -901,7 +901,7 @@ public abstract class Utils {
 
 	public static <T> T getNext(T current, boolean wrap, List<T> sequence) {
 		T out = getNext(current, sequence);
-		if (wrap) out = sequence.get(0);
+		if (out == null && wrap) out = sequence.get(0);
 
 		return out;
 	}

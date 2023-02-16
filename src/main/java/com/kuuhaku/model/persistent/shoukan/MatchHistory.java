@@ -19,8 +19,10 @@
 package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.records.shoukan.history.Match;
+import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
@@ -41,22 +43,22 @@ public class MatchHistory extends DAO<Field> {
 
 	@Type(JsonBinaryType.class)
 	@Column(name = "data", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONObjectConverter.class)
-	private JSONObject data;
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray data;
 
 	public MatchHistory() {
 	}
 
 	public MatchHistory(Match match) {
 		this.head = new JSONObject(match.info());
-		this.data = new JSONObject(match);
+		this.data = new JSONArray(match.turns());
 	}
 
 	public JSONObject getHead() {
 		return head;
 	}
 
-	public JSONObject getData() {
+	public JSONArray getData() {
 		return data;
 	}
 }

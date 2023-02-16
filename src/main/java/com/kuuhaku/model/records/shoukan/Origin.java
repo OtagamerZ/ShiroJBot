@@ -24,6 +24,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public record Origin(Race major, Race[] minor) {
@@ -83,5 +84,10 @@ public record Origin(Race major, Race[] minor) {
 
 	public boolean demon() {
 		return Utils.equalsAny(Race.DEMON, minor);
+	}
+
+	@Override
+	public String toString() {
+		return "{ major: " + major + ", minor: " + Arrays.toString(minor) + " }";
 	}
 }
