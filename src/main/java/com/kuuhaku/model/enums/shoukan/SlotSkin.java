@@ -36,10 +36,11 @@ import java.util.List;
 public enum SlotSkin {
 	DEFAULT,
 //	AHEGAO,
-	HEX,
-	PLANK,
-	MISSING,
-	INVISIBLE;
+	HEX("HOARDER_III"),
+	PLANK("METANAUT"),
+//	MISSING(""),
+//	INVISIBLE(""),
+	;
 
 	private final String[] titles;
 
