@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
@@ -103,52 +104,56 @@ public class DeckSkinCommand implements Executable {
 				pages.add(new InteractPage(eb.build()));
 			}
 
+			AtomicBoolean confirm = new AtomicBoolean();
 			AtomicInteger i = new AtomicInteger();
 			event.channel().sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
 					Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
 								m.put(Utils.parseEmoji("◀️"), w -> {
 									if (i.get() > 1) {
+										confirm.set(false);
 										s.editMessageEmbeds((MessageEmbed) pages.get(i.decrementAndGet()).getContent()).queue();
 									}
 								});
 								m.put(Utils.parseEmoji("▶️"), w -> {
 									if (i.get() < skins.length - 1) {
+										confirm.set(false);
 										s.editMessageEmbeds((MessageEmbed) pages.get(i.incrementAndGet()).getContent()).queue();
 									}
 								});
+								m.put(Utils.parseEmoji("✅"), w -> {
+									SlotSkin skin = skins[i.get()];
+									if (!skin.canUse(acc)) {
+										Title paid = skin.getPaidTitle();
+										if (paid != null) {
+											if (!acc.hasEnough(paid.getPrice(), paid.getCurrency())) {
+												event.channel().sendMessage(locale.get("error/insufficient_" + paid.getCurrency())).queue();
+												return;
+											} else if (!confirm.getAndSet(true)) {
+												w.getHook().setEphemeral(true)
+														.sendMessage(locale.get("str/press_again"))
+														.queue();
+												return;
+											}
 
-								SlotSkin skin = skins[i.get()];
-								Title paid = skin.getPaidTitle();
-								if (!skin.canUse(acc) && paid != null) {
-									m.put(Utils.parseEmoji("\uD83D\uDCB5"), w -> {
-										if (!acc.hasEnough(paid.getPrice(), paid.getCurrency())) {
-											event.channel().sendMessage(locale.get("error/insufficient_" + paid.getCurrency())).queue();
+											if (paid.getCurrency() == Currency.CR) {
+												acc.consumeCR(paid.getPrice(), "Skin " + skin);
+											} else {
+												acc.consumeGems(paid.getPrice(), "Skin " + skin);
+											}
+
+											new AccountTitle(acc, paid).save();
+										} else {
+											event.channel().sendMessage(locale.get("error/skin_locked")).queue();
 											return;
 										}
+									}
 
-										if (paid.getCurrency() == Currency.CR) {
-											acc.consumeCR(paid.getPrice(), "Skin " + skin);
-										} else {
-											acc.consumeGems(paid.getPrice(), "Skin " + skin);
-										}
-
-										new AccountTitle(acc, paid).save();
-
-										d.getStyling().setSkin(skin);
-										d.save();
-										event.channel().sendMessage(locale.get("success/skin_selected", d.getName()))
-												.flatMap(ms -> s.delete())
-												.queue();
-									});
-								} else {
-									m.put(Utils.parseEmoji("✅"), w -> {
-										d.getStyling().setSkin(skin);
-										d.save();
-										event.channel().sendMessage(locale.get("success/skin_selected", d.getName()))
-												.flatMap(ms -> s.delete())
-												.queue();
-									});
-								}
+									d.getStyling().setSkin(skin);
+									d.save();
+									event.channel().sendMessage(locale.get("success/skin_selected", d.getName()))
+											.flatMap(ms -> s.delete())
+											.queue();
+								});
 							}),
 							true, true, 1, TimeUnit.MINUTES, event.user()::equals
 					)
