@@ -288,6 +288,17 @@ public class Account extends DAO<Account> implements Blacklistable {
 				.findFirst().orElse(new DynamicProperty(this, id, ""));
 	}
 
+	public String getDynValue(String id) {
+		return getDynValue(id, "");
+	}
+
+	public String getDynValue(String id, String defaultValue) {
+		return dynamicProperties.parallelStream()
+				.filter(dp -> dp.getId().getId().equals(id))
+				.map(DynamicProperty::getValue)
+				.findFirst().orElse(defaultValue);
+	}
+
 	public AccountTitle getTitle() {
 		return titles.parallelStream()
 				.filter(AccountTitle::isCurrent)
