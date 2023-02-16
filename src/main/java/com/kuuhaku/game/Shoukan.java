@@ -233,7 +233,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("add,(?<card>\\w+)(?:,(?<amount>\\d+))?")
+	@PlayerAction("add,(?<card>[\\w\\d]+)(?:,(?<amount>\\d+))?")
 	private boolean debAddCard(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
@@ -242,6 +242,7 @@ public class Shoukan extends GameInstance<Phase> {
 					.findFirst()
 					.orElse(CardType.NONE);
 
+			boolean add = false;
 			int amount = args.getInt("amount", 1);
 			for (int i = 0; i < amount; i++) {
 				Drawable<?> d = switch (type) {
@@ -252,11 +253,15 @@ public class Shoukan extends GameInstance<Phase> {
 				};
 
 				if (d != null) {
+					add = true;
 					curr.getCards().add(d);
-					reportEvent("ADD_CARD -> " + amount + " x " + d, false);
-					return true;
 				}
 			}
+
+			if (add) {
+				reportEvent("ADD_CARD -> " + amount + " x " + d, false);
+				return true;
+			} 
 		}
 
 		return false;
