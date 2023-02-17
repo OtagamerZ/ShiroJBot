@@ -283,7 +283,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public double getCostMult() {
 		double mult = stats.getCostMult();
 		if (hand != null && ((!spell && hand.getOrigin().hasMinor(Race.MACHINE)) || (spell && hand.getOrigin().hasMinor(Race.MYSTICAL)))) {
-			mult *= 0.9;
+			mult *= 0.8;
 		}
 
 		return mult;
