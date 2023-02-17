@@ -211,15 +211,16 @@ public class Hand {
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 	private final Set<EffectHolder<?>> leeches = new HashSet<>();
 
-	private final BaseValues base;
 	private final RegDeg regdeg = new RegDeg(this);
 	private final JSONObject data = new JSONObject();
 
 	private String name;
 
+	private Origin origin;
+	private BaseValues base;
 	private int hp;
 	private int mp;
-	private Origin origin;
+	private int originHash;
 
 	private transient Account account;
 	private transient String lastMessage;
@@ -253,7 +254,7 @@ public class Hand {
 
 		this.side = side;
 		this.origin = userDeck.getOrigins();
-		this.base = userDeck.getBaseValues(this);
+		this.base = getBase();
 		this.hp = base.hp();
 
 		deck.addAll(
@@ -642,6 +643,11 @@ public class Hand {
 	}
 
 	public BaseValues getBase() {
+		if (originHash != origin.hashCode()) {
+			base = userDeck.getBaseValues(this);
+			originHash = origin.hashCode();
+		}
+
 		return base;
 	}
 
