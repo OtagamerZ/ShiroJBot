@@ -39,9 +39,9 @@ public class SupplyChain<T> implements Iterable<Function<T, T>> {
 	}
 
 	public T get() {
-		T out = null;
+		T out = initialValue;
 		for (Function<T, T> step : chain) {
-			out = step.apply(out == null ? initialValue : out);
+			out = step.apply(out);
 		}
 
 		return out;

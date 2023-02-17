@@ -643,6 +643,7 @@
 				 return List.of(bHP, mpGain, handCap, ls);
 			 });
 		 } catch (Exception e) {
+			 Constants.LOGGER.error(e, e);
 			 return new BaseValues();
 		 }
 	 }
