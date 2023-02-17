@@ -141,7 +141,7 @@ public class Shoukan extends GameInstance<Phase> {
 		setPhase(Phase.PLAN);
 
 		Hand curr = getCurrent();
-		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
+		curr.modMP(curr.getBase().mpGain().get());
 
 		curr.showHand();
 		reportEvent("str/game_start", false, "<@" + curr.getUid() + ">");
@@ -2176,7 +2176,7 @@ public class Shoukan extends GameInstance<Phase> {
 		super.nextTurn();
 		setPhase(Phase.PLAN);
 		curr = getCurrent();
-		curr.modMP(curr.getBase().mpGain().apply(getTurn() - (curr.getSide() == Side.TOP ? 1 : 0)));
+		curr.modMP(curr.getBase().mpGain().get());
 		curr.applyVoTs();
 		curr.reduceOriginCooldown(1);
 

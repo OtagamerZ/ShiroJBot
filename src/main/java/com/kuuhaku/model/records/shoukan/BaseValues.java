@@ -18,15 +18,15 @@
 
 package com.kuuhaku.model.records.shoukan;
 
-import com.kuuhaku.interfaces.AccFunction;
+import com.kuuhaku.model.common.SupplyChain;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public record BaseValues(int hp, AccFunction<Integer, Integer> mpGain, AccFunction<Integer, Integer> handCapacity,
+public record BaseValues(int hp, SupplyChain<Integer> mpGain, SupplyChain<Integer> handCapacity,
 						 int lifesteal) {
 	public BaseValues() {
-		this(6000, t -> 5, t -> 5, 0);
+		this(6000, new SupplyChain<>(5), new SupplyChain<>(5), 0);
 	}
 
 	public BaseValues(Callable<List<?>> values) throws Exception {
@@ -37,8 +37,8 @@ public record BaseValues(int hp, AccFunction<Integer, Integer> mpGain, AccFuncti
 	public BaseValues(List<?> values) {
 		this(
 				(int) values.get(0),
-				(AccFunction<Integer, Integer>) values.get(1),
-				(AccFunction<Integer, Integer>) values.get(2),
+				(SupplyChain<Integer>) values.get(1),
+				(SupplyChain<Integer>) values.get(2),
 				(int) values.get(3)
 		);
 	}

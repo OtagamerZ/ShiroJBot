@@ -20,8 +20,8 @@
 
  import com.kuuhaku.Constants;
  import com.kuuhaku.controller.DAO;
- import com.kuuhaku.interfaces.AccFunction;
  import com.kuuhaku.interfaces.shoukan.Drawable;
+ import com.kuuhaku.model.common.SupplyChain;
  import com.kuuhaku.model.common.shoukan.Hand;
  import com.kuuhaku.model.enums.Fonts;
  import com.kuuhaku.model.enums.I18N;
@@ -313,7 +313,7 @@
 		 AtomicInteger totalDfs = new AtomicInteger();
 
 		 BaseValues base = getBaseValues(null);
-		 double avgMana = Calc.average((double) base.mpGain().apply(1), base.mpGain().apply(5), base.mpGain().apply(10));
+		 double mp = base.mpGain().get();
 		 int weight = Calc.prcntToInt(getEvoWeight(), 24);
 		 String color = "FFFFFF";
 		 if (weight > 200) color = "FF0000";
@@ -329,7 +329,7 @@
 		 double[] vals = Calc.clamp(new double[]{
 				 Calc.prcnt(totalDmg.get(), (totalDmg.get() + totalDfs.get()) / 1.5),
 				 Calc.prcnt(totalDfs.get(), (totalDmg.get() + totalDfs.get()) / 1.5),
-				 ((double) totalMPCost.get() / allCards.size()) / avgMana,
+				 ((double) totalMPCost.get() / allCards.size()) / mp,
 				 Calc.prcnt(Set.copyOf(allCards).size(), allCards.size()),
 				 getMetaDivergence(),
 				 0
@@ -378,7 +378,7 @@
 						 %s
 						 """.formatted(
 						 base.hp(),
-						 Utils.roundToString(avgMana, 1),
+						 Utils.roundToString(mp, 1),
 						 allCards.size(), getSenshi().size(), getEvogear().size(), getFields().size(),
 						 weight, color,
 						 Utils.roundToString(getMetaDivergence() * 100, 0),
@@ -601,35 +601,36 @@
 				 }
 				 int bHP = (int) Calc.clamp(base * 1.5 - base * 0.2799 * reduction, 10, base);
 
-				 AccFunction<Integer, Integer> mpGain = t -> {
-					 int v;
-					 if (h != null) {
-						 v = h.getGame().getParams().mp();
-					 } else {
-						 v = 5;
-					 }
+				 int mp = h == null ? 5 : h.getGame().getParams().mp();
+				 SupplyChain<Integer> mpGain = new SupplyChain<>(mp)
+						 .add(m -> {
+							 if (origin.major() == Race.DEMON) {
+								 m /= 2;
+							 } else if (origin.major() == Race.DIVINITY) {
+								 m /= Calc.round(m * (1 + getMetaDivergence() / 2));
+							 }
 
-					 if (origin.major() == Race.DEMON) {
-						 v /= 2;
-					 }
+							 if (h != null) {
+								 if (origin.synergy() == Race.FEY) {
+									 m = mp * (Calc.chance(3) ? 2 : 1);
+								 } else if (origin.synergy() == Race.GHOST) {
+									 m = mp + (Math.ceil(h.getGame().getTurn() / 2d) % 3 == 0 ? 1 : 0);
+								 }
+							 }
 
-					 return v;
-				 };
+							 return m;
+						 });
 
-				 if (origin.major() == Race.DIVINITY) {
-					 mpGain = mpGain.accumulate((t, mp) -> Calc.round(mp * (1 + getMetaDivergence() / 2)));
-				 }
+				 SupplyChain<Integer> handCap = new SupplyChain<>(5)
+						 .add(c -> {
+							 if (h != null) {
+								 if (origin.hasMinor(Race.BEAST)) {
+									 c = c + (int) (Math.ceil(h.getGame().getTurn() / 2d) / 20);
+								 }
+							 }
 
-				 AccFunction<Integer, Integer> handCap = t -> 5;
-				 if (origin.hasMinor(Race.BEAST)) {
-					 handCap = handCap.accumulate((t, cards) -> cards + t / 20);
-				 }
-
-				 if (origin.synergy() == Race.FEY) {
-					 mpGain = mpGain.accumulate((t, mp) -> mp * (Calc.chance(3) ? 2 : 1));
-				 } else if (origin.synergy() == Race.GHOST) {
-					 mpGain = mpGain.accumulate((t, mp) -> mp + (t % 5 == 0 ? 1 : 0));
-				 }
+							 return c;
+						 });
 
 				 int ls = 0;
 				 if (origin.major() == Race.DEMON) {

@@ -320,7 +320,7 @@ public class Hand {
 	}
 
 	public int getRemainingDraws() {
-		return Math.max(0, base.handCapacity().apply(game.getTurn()) - getHandCount());
+		return Math.max(0, base.handCapacity().get() - getHandCount());
 	}
 
 	public BondedList<Drawable<?>> getRealDeck() {
