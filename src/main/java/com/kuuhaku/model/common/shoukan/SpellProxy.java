@@ -21,7 +21,6 @@ package com.kuuhaku.model.common.shoukan;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
@@ -31,7 +30,7 @@ public class SpellProxy extends Senshi implements Proxy<Evogear> {
 	private final Evogear original;
 
 	public SpellProxy(Evogear e) {
-		super(e.getId(), e.getCard(), Race.NONE, new CardAttributes());
+		super(e.getId(), e.getCard(), Race.NONE, e.getBase());
 
 		original = e.copy();
 		setHand(e.getHand());

@@ -19,7 +19,6 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Proxy;
-import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
@@ -29,11 +28,10 @@ public class EquippableSenshi extends Evogear implements Proxy<Senshi> {
 	private final Senshi original;
 
 	public EquippableSenshi(Senshi s) {
-		super(s.getId(), s.getCard(), new CardAttributes());
+		super(s.getId(), s.getCard(), s.getBase());
 
 		original = s.copy();
 		setHand(s.getHand());
-		setFlipped(true);
 	}
 
 	@Override
