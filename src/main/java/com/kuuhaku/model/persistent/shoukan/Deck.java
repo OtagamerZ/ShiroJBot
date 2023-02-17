@@ -585,13 +585,7 @@
 	 public BaseValues getBaseValues(Hand h) {
 		 try {
 			 return new BaseValues(() -> {
-				 Origin origin;
-				 if (h != null) {
-					 origin = h.getOrigin();
-				 } else {
-					 origin = getOrigins();
-				 }
-
+				 Origin origin = h == null ? getOrigins() : h.getOrigin();
 				 double reduction = Math.pow(0.999, -24 * getEvoWeight());
 				 int base;
 				 if (h != null) {
