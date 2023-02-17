@@ -145,14 +145,29 @@ public class BondedList<T> extends TreeList<T> {
 		return remove(0);
 	}
 
+	public T removeFirst(Predicate<T> cond) {
+		ListIterator<T> it = listIterator();
+		while (it.hasNext()) {
+			T t = it.next();
+			if (cond.test(t)) {
+				onRemove.accept(t);
+				it.remove();
+
+				return t;
+			}
+		}
+
+		return null;
+	}
+
 	public T removeLast() {
 		return remove(size() - 1);
 	}
 
-	public T removeFirst(Predicate<T> cond) {
-		Iterator<T> it = iterator();
-		while (it.hasNext()) {
-			T t = it.next();
+	public T removeLast(Predicate<T> cond) {
+		ListIterator<T> it = listIterator(size());
+		while (it.hasPrevious()) {
+			T t = it.previous();
 			if (cond.test(t)) {
 				onRemove.accept(t);
 				it.remove();
