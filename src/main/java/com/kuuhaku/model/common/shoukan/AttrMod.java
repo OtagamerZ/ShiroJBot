@@ -41,26 +41,18 @@ public class AttrMod implements Cloneable {
 		this.hash = -1;
 	}
 
-	public AttrMod(double value, int expiration) {
-		this.source = null;
-		this.value = value;
-		this.expiration = expiration;
-		this.side = null;
-		this.hash = -1;
-	}
-
 	public AttrMod(Drawable<?> source, double value) {
 		this.source = source;
 		this.value = value;
 		this.expiration = -1;
-		this.side = source.getSide();
+		this.side = source == null ? null : source.getSide();
 
 		if (source instanceof Evogear e) {
 			this.hash = e.getEquipper().posHash();
 		} else if (source instanceof Senshi s) {
 			this.hash = s.posHash();
 		} else {
-			this.hash = source.getSlot().hashCode();
+			this.hash = source == null ? -1 : source.getSlot().hashCode();
 		}
 	}
 
@@ -68,8 +60,8 @@ public class AttrMod implements Cloneable {
 		this.source = source;
 		this.value = value;
 		this.expiration = expiration;
-		this.side = source.getSide();
-		this.hash = source.getSlot().hashCode();
+		this.side = source == null ? null : source.getSide();
+		this.hash = source == null ? -1 : source.getSlot().hashCode();
 	}
 
 	public Drawable<?> getSource() {
