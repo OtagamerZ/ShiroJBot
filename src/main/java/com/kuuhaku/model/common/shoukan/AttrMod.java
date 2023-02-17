@@ -41,6 +41,14 @@ public class AttrMod implements Cloneable {
 		this.hash = -1;
 	}
 
+	public AttrMod(double value, int expiration) {
+		this.source = null;
+		this.value = value;
+		this.expiration = expiration;
+		this.side = null;
+		this.hash = -1;
+	}
+
 	public AttrMod(Drawable<?> source, double value) {
 		this.source = source;
 		this.value = value;
