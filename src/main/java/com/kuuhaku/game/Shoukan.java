@@ -157,7 +157,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			for (Hand h : hands.values()) {
 				if (h.getUid().equals(user.getId()) && h.selectionPending()) {
-					if (!Utils.equalsAny(m.getName(), "select", "terminate")) {
+					if (!m.getName().equals("select") && !m.getName().startsWith("deb")) {
 						getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 						return;
 					}
