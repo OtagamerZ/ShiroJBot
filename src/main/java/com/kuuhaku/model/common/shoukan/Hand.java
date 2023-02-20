@@ -252,10 +252,12 @@ public class Hand {
 		this.uid = uid;
 		this.game = game;
 		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
-		if (userDeck == null) {
-			throw new GameReport(GameReport.NO_DECK, uid);
-		} else if (!(userDeck.validateSenshi() && userDeck.validateEvogear() && userDeck.validateFields())) {
-			throw new GameReport(GameReport.INVALID_DECK, uid);
+		if (game.getParams().arcade() != Arcade.CARDMASTER) {
+			if (userDeck == null) {
+				throw new GameReport(GameReport.NO_DECK, uid);
+			} else if (!(userDeck.validateSenshi() && userDeck.validateEvogear() && userDeck.validateFields())) {
+				throw new GameReport(GameReport.INVALID_DECK, uid);
+			}
 		}
 
 		this.side = side;
