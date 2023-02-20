@@ -24,7 +24,6 @@ import com.kuuhaku.model.common.MultiProcessor;
 import com.trickl.palette.Palette;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.function.TriFunction;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import java.awt.*;
@@ -304,30 +303,6 @@ public abstract class Graph {
 						int y = i / width;
 
 						act.accept(x, y, pixels[i]);
-					}
-
-					return null;
-				});
-
-		bi.setRGB(0, 0, width, bi.getHeight(), pixels, 0, width);
-	}
-
-	public static void mapPixels(BufferedImage bi, TriFunction<Integer, Integer, Integer, Integer> act) {
-		int width = bi.getWidth();
-		int[] pixels = bi.getRGB(0, 0, width, bi.getHeight(), null, 0, width);
-		List<Integer> indexes = IntStream.range(0, pixels.length)
-				.boxed()
-				.toList();
-
-		MultiProcessor
-				.with(Runtime.getRuntime().availableProcessors(), t -> ListUtils.partition(indexes, t))
-				.forResult(Void.class)
-				.process(idx -> {
-					for (Integer i : idx) {
-						int x = i % width;
-						int y = i / width;
-
-						pixels[i] = act.apply(x, y, pixels[i]);
 					}
 
 					return null;

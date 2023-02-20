@@ -191,7 +191,7 @@ public class Card extends DAO<Card> {
 	private BufferedImage chrome(BufferedImage bi, boolean border) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
-		Graph.mapPixels(bi, (x, y, rgb) -> {
+		Graph.forEachPixel(bi, (x, y, rgb) -> {
 			int[] color = Graph.unpackRGB(bi.getRGB(x, y));
 			int alpha = color[0];
 			float[] hsv;
@@ -204,8 +204,7 @@ public class Card extends DAO<Card> {
 			}
 
 			color = Graph.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
-
-			return Graph.packRGB(alpha, color[1], color[2], color[3]);
+			out.setRGB(x, y, Graph.packRGB(alpha, color[1], color[2], color[3]));
 		});
 
 		return out;
