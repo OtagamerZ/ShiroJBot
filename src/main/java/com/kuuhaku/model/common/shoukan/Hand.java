@@ -307,6 +307,8 @@ public class Hand {
 					}
 				})
 				.forEach(deck::add);
+
+		Collections.shuffle(deck);
 	}
 
 	public String getUid() {
