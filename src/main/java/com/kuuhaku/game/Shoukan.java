@@ -103,20 +103,20 @@ public class Shoukan extends GameInstance<Phase> {
 	private boolean history = false;
 
 	public Shoukan(I18N locale, ShoukanParams params, Arcade arcade, User p1, User p2) {
-		this(locale, params, arcade, p1.getId(), p2.getId());
+		this(locale, Utils.getOr(params, ShoukanParams.INSTANCE), arcade, p1.getId(), p2.getId());
 	}
 
 	public Shoukan(I18N locale, ShoukanParams params, Arcade arcade, String p1, String p2) {
 		super(locale, new String[]{p1, p2});
 
-		this.params = Utils.getOr(params, ShoukanParams.INSTANCE);
+		this.params = params;
 		this.arcade = arcade;
 		this.arena = new Arena(this);
 		this.hands = Map.of(
 				Side.TOP, new Hand(p1, this, Side.TOP),
 				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
 		);
-		this.voided = p1.equals(p2) || !this.params.equals(ShoukanParams.INSTANCE);
+		this.voided = p1.equals(p2) || !params.equals(ShoukanParams.INSTANCE);
 
 		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
 	}
