@@ -47,7 +47,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Command(
@@ -78,18 +77,17 @@ public class StashScrapCommand implements Executable {
 			Card card = verifyCard(locale, event, id.toUpperCase());
 			if (card == null) return;
 
-			AtomicBoolean failed = new AtomicBoolean();
-			CompletableFuture<Void> select = new CompletableFuture<>();
+			CompletableFuture<Boolean> success = new CompletableFuture<>();
 			Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), kp.getNotInUse(), card, event.user())
 					.thenAccept(sc -> {
 						if (sc == null) {
 							event.channel().sendMessage(locale.get("error/invalid_value")).queue();
-							failed.set(true);
+							success.complete(false);
 							return;
 						}
 
 						cards.add(sc);
-						select.complete(null);
+						success.complete(true);
 					})
 					.exceptionally(t -> {
 						if (!(t.getCause() instanceof NoResultException)) {
@@ -97,16 +95,12 @@ public class StashScrapCommand implements Executable {
 						}
 
 						event.channel().sendMessage(locale.get("error/not_owned")).queue();
-						failed.set(true);
-						select.complete(null);
+						success.complete(false);
 						return null;
 					});
 
 			try {
-				select.get();
-				if (failed.get()) {
-					return;
-				}
+				if (!success.get()) return;
 			} catch (InterruptedException | ExecutionException ignore) {
 			}
 		}

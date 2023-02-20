@@ -54,7 +54,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Command(
 		name = "synth",
@@ -80,24 +79,24 @@ public class SynthesizeCommand implements Executable {
 					return;
 				}
 
-				AtomicBoolean failed = new AtomicBoolean();
-				CompletableFuture<Void> select = new CompletableFuture<>();
 				List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
 				stash.removeIf(cards::contains);
+
+				CompletableFuture<Boolean> success = new CompletableFuture<>();
 				Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), stash, c, event.user())
 						.thenAccept(sc -> {
 							if (sc == null) {
 								event.channel().sendMessage(locale.get("error/invalid_value")).queue();
-								failed.set(true);
+								success.complete(false);
 								return;
 							} else if (cards.contains(sc)) {
 								event.channel().sendMessage(locale.get("error/twice_added")).queue();
-								failed.set(true);
+								success.complete(false);
 								return;
 							}
 
 							cards.add(sc);
-							select.complete(null);
+							success.complete(true);
 						})
 						.exceptionally(t -> {
 							if (!(t.getCause() instanceof NoResultException)) {
@@ -105,16 +104,12 @@ public class SynthesizeCommand implements Executable {
 							}
 
 							event.channel().sendMessage(locale.get("error/not_owned")).queue();
-							failed.set(true);
-							select.complete(null);
+							success.complete(false);
 							return null;
 						});
 
 				try {
-					select.get();
-					if (failed.get()) {
-						return;
-					}
+					if (!success.get()) return;
 				} catch (InterruptedException | ExecutionException ignore) {
 				}
 			}
