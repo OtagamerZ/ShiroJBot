@@ -274,7 +274,7 @@ public class Hand {
 			deck.addAll(
 					cards.parallelStream()
 							.flatMap(List::stream)
-							.map(Drawable::copy)
+							.map(d -> d.copy())
 							.peek(d -> {
 								if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
 									Utils.shufflePairs(f.getModifiers());
@@ -292,12 +292,11 @@ public class Hand {
 			return;
 		}
 
-
 		deck.addAll(
 				Stream.of(userDeck.getSenshi(), userDeck.getEvogear(), userDeck.getFields())
 						.parallel()
 						.flatMap(List::stream)
-						.map(Drawable::copy)
+						.map(d -> d.copy())
 						.peek(d -> {
 							if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
 								Utils.shufflePairs(f.getModifiers());
