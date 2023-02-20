@@ -32,6 +32,7 @@ import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.Arcade;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.shoukan.ShoukanParams;
@@ -53,8 +54,8 @@ import java.util.concurrent.TimeUnit;
 		category = Category.FUN
 )
 @Signature(allowEmpty = true, value = {
-		"<user:user:r> <json:text>",
-		"<json:text>"
+		"<user:user:r> <arcade:word> <json:text>",
+		"<arcade:word> <json:text>"
 })
 @Requires(Permission.MESSAGE_ATTACH_FILES)
 public class ShoukanCommand implements Executable {
@@ -80,12 +81,13 @@ public class ShoukanCommand implements Executable {
 		}
 
 		try {
-			ShoukanParams params = Utils.getOr(JSONUtils.fromJSON(args.getString("json", "{}"), ShoukanParams.class), ShoukanParams.INSTANCE);
+			Arcade arcade = args.getEnum(Arcade.class, "arcade");
+			ShoukanParams params = JSONUtils.fromJSON(args.getString("json", "{}"), ShoukanParams.class);
 			ThrowingFunction<ButtonWrapper, Boolean> act = w -> {
 				Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));
 
 				try {
-					Shoukan skn = new Shoukan(locale, params, event.user(), other.getUser());
+					Shoukan skn = new Shoukan(locale, params, arcade, event.user(), other.getUser());
 					skn.start(event.guild(), event.channel())
 							.whenComplete((v, e) -> {
 								if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
@@ -126,8 +128,8 @@ public class ShoukanCommand implements Executable {
 			if (other.equals(event.member())) {
 				act.apply(null);
 			} else {
-				if (params.arcade() != null) {
-					Utils.confirm(locale.get("question/shoukan_arcade", other.getAsMention(), event.user().getAsMention(), params.arcade().toString(locale)), event.channel(), act, other.getUser());
+				if (arcade != null) {
+					Utils.confirm(locale.get("question/shoukan_arcade", other.getAsMention(), event.user().getAsMention(), arcade.toString(locale)), event.channel(), act, other.getUser());
 					return;
 				}
 

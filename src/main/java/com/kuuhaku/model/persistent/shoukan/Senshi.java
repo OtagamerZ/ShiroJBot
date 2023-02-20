@@ -517,7 +517,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				mult *= 0.5;
 			}
 
-			if (hand.getGame().getParams().arcade() == Arcade.OVERCHARGE) {
+			if (hand.getGame().getArcade() == Arcade.OVERCHARGE) {
 				mult *= 1.5;
 			}
 		}
@@ -531,7 +531,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (hand != null) {
 			mult *= 1 - Math.max(0, 0.07 * (hand.getOrigin().minor().length - 1));
 
-			if (hand.getGame().getParams().arcade() == Arcade.OVERCHARGE) {
+			if (hand.getGame().getArcade() == Arcade.OVERCHARGE) {
 				mult *= 1.75;
 			}
 		}

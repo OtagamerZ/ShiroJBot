@@ -90,6 +90,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final String GIF_PATH = "https://raw.githubusercontent.com/OtagamerZ/ShoukanAssets/master/gifs/";
 
 	private final ShoukanParams params;
+	private final Arcade arcade;
 	private final Arena arena;
 	private final Map<Side, Hand> hands;
 	private final Map<String, String> messages = new HashMap<>();
@@ -101,14 +102,15 @@ public class Shoukan extends GameInstance<Phase> {
 	private boolean restoring = true;
 	private boolean history = false;
 
-	public Shoukan(I18N locale, ShoukanParams params, User p1, User p2) {
-		this(locale, params, p1.getId(), p2.getId());
+	public Shoukan(I18N locale, ShoukanParams params, Arcade arcade, User p1, User p2) {
+		this(locale, params, arcade, p1.getId(), p2.getId());
 	}
 
-	public Shoukan(I18N locale, ShoukanParams params, String p1, String p2) {
+	public Shoukan(I18N locale, ShoukanParams params, Arcade arcade, String p1, String p2) {
 		super(locale, new String[]{p1, p2});
 
 		this.params = Utils.getOr(params, ShoukanParams.INSTANCE);
+		this.arcade = arcade;
 		this.arena = new Arena(this);
 		this.hands = Map.of(
 				Side.TOP, new Hand(p1, this, Side.TOP),
@@ -1491,6 +1493,10 @@ public class Shoukan extends GameInstance<Phase> {
 		return params;
 	}
 
+	public Arcade getArcade() {
+		return arcade;
+	}
+
 	public Map<Side, Hand> getHands() {
 		return hands;
 	}
@@ -1954,7 +1960,7 @@ public class Shoukan extends GameInstance<Phase> {
 				});
 			}
 
-			if (!curr.getRealDeck().isEmpty() && params.arcade() != Arcade.DECK_ROYALE) {
+			if (!curr.getRealDeck().isEmpty() && arcade != Arcade.DECK_ROYALE) {
 				int rem = curr.getRemainingDraws();
 				if (rem > 0) {
 					buttons.put(Utils.parseEmoji("📤"), w -> {
@@ -2157,7 +2163,7 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(ON_TURN_END, curr.getSide());
 		curr.flushDiscard();
 
-		if (params.arcade() == Arcade.DECK_ROYALE) {
+		if (arcade == Arcade.DECK_ROYALE) {
 			boolean noHand = curr.getCards().stream().noneMatch(d -> d instanceof Senshi);
 			boolean noField = getSlots(curr.getSide()).stream()
 					.flatMap(sc -> sc.getCards().stream())
@@ -2194,7 +2200,7 @@ public class Shoukan extends GameInstance<Phase> {
 						e.getStats().clearTFlags();
 					}
 
-					if (params.arcade() == Arcade.DECAY) {
+					if (arcade == Arcade.DECAY) {
 						s.getStats().setMana(-1);
 						if (s.getMPCost() == 0) {
 							s.getHand().getGraveyard().add(s);
@@ -2204,7 +2210,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		if (params.arcade() == Arcade.INSTABILITY) {
+		if (arcade == Arcade.INSTABILITY) {
 			int affected = Math.min((int) Math.ceil(getTurn() / 2d), 8);
 			List<SlotColumn> chosen = Utils.getRandomN(Utils.flatten(arena.getSlots().values()), affected, 1);
 

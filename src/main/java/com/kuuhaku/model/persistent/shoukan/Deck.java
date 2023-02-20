@@ -612,7 +612,7 @@
 									 m = mp + (Math.ceil(h.getGame().getTurn() / 2d) % 3 == 0 ? 1 : 0);
 								 }
 
-								 if (h.getGame().getParams().arcade() == Arcade.OVERCHARGE) {
+								 if (h.getGame().getArcade() == Arcade.OVERCHARGE) {
 									 m *= 2;
 								 }
 							 }

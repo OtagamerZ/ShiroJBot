@@ -173,7 +173,7 @@ public class Hand {
 				Hand other = d.getHand().getOther();
 				other.addKill();
 
-				if (getGame().getParams().arcade() == Arcade.DECK_ROYALE) {
+				if (getGame().getArcade() == Arcade.DECK_ROYALE) {
 					other.manualDraw(3);
 				}
 			}
@@ -252,7 +252,7 @@ public class Hand {
 		this.uid = uid;
 		this.game = game;
 		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
-		if (game.getParams().arcade() != Arcade.CARDMASTER) {
+		if (game.getArcade() != Arcade.CARDMASTER) {
 			if (userDeck == null) {
 				throw new GameReport(GameReport.NO_DECK, uid);
 			} else if (!(userDeck.validateSenshi() && userDeck.validateEvogear() && userDeck.validateFields())) {
@@ -265,7 +265,7 @@ public class Hand {
 		this.base = getBase();
 		this.hp = base.hp();
 
-		if (game.getParams().arcade() == Arcade.CARDMASTER) {
+		if (game.getArcade() == Arcade.CARDMASTER) {
 			List<List<? extends Drawable<?>>> cards = new ArrayList<>();
 			cards.add(DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE NOT has(s.base.tags, 'FUSION')"));
 			cards.add(DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.base.mana > 0"));
@@ -414,7 +414,7 @@ public class Hand {
 	}
 
 	public Drawable<?> draw() {
-		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
 		if (deck.isEmpty()) return null;
@@ -438,7 +438,7 @@ public class Hand {
 	}
 
 	public List<Drawable<?>> draw(int value) {
-		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return List.of();
+		if (game.getArcade() == Arcade.DECK_ROYALE) return List.of();
 
 		List<Drawable<?>> out = new ArrayList<>();
 		for (int i = 0; i < value; i++) {
@@ -452,7 +452,7 @@ public class Hand {
 	}
 
 	public Drawable<?> draw(String card) {
-		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
 
@@ -479,7 +479,7 @@ public class Hand {
 	}
 
 	public Drawable<?> draw(Race race) {
-		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
 
@@ -502,7 +502,7 @@ public class Hand {
 	}
 
 	public Drawable<?> draw(Predicate<Drawable<?>> cond) {
-		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
 
@@ -529,7 +529,7 @@ public class Hand {
 	}
 
 	public Drawable<?> drawSenshi() {
-		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
 
@@ -552,7 +552,7 @@ public class Hand {
 	}
 
 	public Drawable<?> drawEvogear() {
-		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
 
@@ -578,7 +578,7 @@ public class Hand {
 	}
 
 	public Drawable<?> drawEquipment() {
-		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
 
@@ -601,7 +601,7 @@ public class Hand {
 	}
 
 	public Drawable<?> drawSpell() {
-		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
 
@@ -727,9 +727,9 @@ public class Hand {
 
 	public void modHP(int value, boolean pure) {
 		if (value == 0) return;
-		else if (game.getParams().arcade() == Arcade.OVERCHARGE) {
+		else if (game.getArcade() == Arcade.OVERCHARGE) {
 			value *= Math.min(0.5 + 0.5 * (Math.ceil(game.getTurn() / 2d) / 10), 1);
-		} else if (game.getParams().arcade() == Arcade.DECAY) {
+		} else if (game.getArcade() == Arcade.DECAY) {
 			if (value > 0) {
 				value /= 2;
 			} else {
