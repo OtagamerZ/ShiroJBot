@@ -45,7 +45,7 @@ public class SetKawaiponCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
-		if (args.containsKey("action")) {
+		if (args.has("action")) {
 			settings.getKawaiponChannels().clear();
 			settings.save();
 
@@ -54,7 +54,7 @@ public class SetKawaiponCommand implements Executable {
 		}
 
 		TextChannel channel;
-		if (args.containsKey("channel")) {
+		if (args.has("channel")) {
 			channel = event.message().getMentionedChannels().get(0);
 		} else {
 			channel = event.channel();

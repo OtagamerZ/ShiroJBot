@@ -516,6 +516,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (hand.getOrigin().isPure() && race != hand.getOrigin().major()) {
 				mult *= 0.5;
 			}
+
+			if (hand.getGame().getParams().arcade() == Arcade.OVERCHARGE) {
+				mult *= 1.5;
+			}
 		}
 
 		return mult * stats.getAttrMult();
@@ -526,6 +530,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		double mult = 1;
 		if (hand != null) {
 			mult *= 1 - Math.max(0, 0.07 * (hand.getOrigin().minor().length - 1));
+
+			if (hand.getGame().getParams().arcade() == Arcade.OVERCHARGE) {
+				mult *= 1.75;
+			}
 		}
 
 		if (isSupporting()) {

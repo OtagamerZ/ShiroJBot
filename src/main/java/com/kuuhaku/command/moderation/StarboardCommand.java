@@ -43,14 +43,14 @@ public class StarboardCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
-		if (args.containsKey("action")) {
+		if (args.has("action")) {
 			settings.setStarboardThreshold(5);
 			settings.setStarboardChannel(null);
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/starboard_clear")).queue();
 			return;
-		} else if (args.containsKey("channel")) {
+		} else if (args.has("channel")) {
 			settings.setStarboardChannel(event.message().getMentionedChannels().get(0));
 			settings.save();
 

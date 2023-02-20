@@ -67,7 +67,7 @@ public class StashScrapCommand implements Executable {
 			return;
 		}
 
-		if (args.containsKey("action")) {
+		if (args.has("action")) {
 			confirm(locale, kp.getTrash(), event, kp.getAccount());
 			return;
 		}
@@ -78,7 +78,7 @@ public class StashScrapCommand implements Executable {
 			if (card == null) return;
 
 			CompletableFuture<Boolean> success = new CompletableFuture<>();
-			Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), kp.getNotInUse(), card, event.user())
+			Utils.selectOption(args.has("confirm"), locale, event.channel(), kp.getNotInUse(), card, event.user())
 					.thenAccept(sc -> {
 						if (sc == null) {
 							event.channel().sendMessage(locale.get("error/invalid_value")).queue();

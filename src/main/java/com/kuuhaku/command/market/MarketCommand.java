@@ -63,7 +63,7 @@ public class MarketCommand implements Executable {
 
 		String[] content = args.getString("params").split("\\s+");
 		Pair<CommandLine, Options> cli = Utils.getCardCLI(locale, content, true);
-		if (args.containsKey("action")) {
+		if (args.has("action")) {
 			XStringBuilder sb = new XStringBuilder();
 			for (Option opt : cli.getSecond().getOptions()) {
 				sb.appendNewLine("`-%s --%s` - %s".formatted(

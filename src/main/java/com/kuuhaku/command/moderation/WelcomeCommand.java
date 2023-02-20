@@ -48,14 +48,14 @@ public class WelcomeCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		WelcomeSettings settings = data.config().getWelcomeSettings();
-		if (args.containsKey("action")) {
+		if (args.has("action")) {
 			settings.setMessage(locale.get("default/welcome_message"));
 			settings.setChannel(null);
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/welcome_clear")).queue();
 			return;
-		} else if (args.containsKey("channel")) {
+		} else if (args.has("channel")) {
 			settings.setChannel(event.message().getMentionedChannels().get(0));
 			settings.save();
 

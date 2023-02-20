@@ -42,7 +42,7 @@ public class UnaliasCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		JSONObject aliases = data.config().getSettings().getAliases();
-		if (args.containsKey("action")) {
+		if (args.has("action")) {
 			aliases.clear();
 			data.config().save();
 
@@ -51,7 +51,7 @@ public class UnaliasCommand implements Executable {
 		}
 
 		String alias = args.getString("alias").toLowerCase();
-		if (!aliases.containsKey(alias)) {
+		if (!aliases.has(alias)) {
 			event.channel().sendMessage(locale.get("error/alias_not_found")).queue();
 			return;
 		}

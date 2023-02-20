@@ -25,6 +25,7 @@
  import com.kuuhaku.model.common.shoukan.Hand;
  import com.kuuhaku.model.enums.Fonts;
  import com.kuuhaku.model.enums.I18N;
+ import com.kuuhaku.model.enums.shoukan.Arcade;
  import com.kuuhaku.model.enums.shoukan.FrameSkin;
  import com.kuuhaku.model.enums.shoukan.Race;
  import com.kuuhaku.model.enums.shoukan.SlotSkin;
@@ -609,6 +610,10 @@
 									 m = mp * (Calc.chance(3) ? 2 : 1);
 								 } else if (origin.synergy() == Race.GHOST) {
 									 m = mp + (Math.ceil(h.getGame().getTurn() / 2d) % 3 == 0 ? 1 : 0);
+								 }
+
+								 if (h.getGame().getParams().arcade() == Arcade.OVERCHARGE) {
+									 m *= 2;
 								 }
 							 }
 

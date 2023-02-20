@@ -43,13 +43,13 @@ public class NotificationsCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
-		if (args.containsKey("action")) {
+		if (args.has("action")) {
 			settings.getKawaiponChannels().clear();
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/notifications_channel_clear")).queue();
 			return;
-		} else if (!args.containsKey("channel")) {
+		} else if (!args.has("channel")) {
 			if (settings.isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
 				settings.getFeatures().remove(GuildFeature.NOTIFICATIONS);
 				event.channel().sendMessage(locale.get("success/notifications_disable")).queue();

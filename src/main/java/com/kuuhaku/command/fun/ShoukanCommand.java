@@ -52,7 +52,10 @@ import java.util.concurrent.TimeUnit;
 		name = "shoukan",
 		category = Category.FUN
 )
-@Signature("<user:user:r> <json:text>")
+@Signature(allowEmpty = true, value = {
+		"<user:user:r> <json:text>",
+		"<json:text>"
+})
 @Requires(Permission.MESSAGE_ATTACH_FILES)
 public class ShoukanCommand implements Executable {
 	private static final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
@@ -64,7 +67,13 @@ public class ShoukanCommand implements Executable {
 			return;
 		}
 
-		Member other = event.message().getMentionedMembers().get(0);
+		Member other;
+		if (args.has("user")) {
+			other = event.message().getMentionedMembers().get(0);
+		} else {
+			other = event.member();
+		}
+
 		if (GameInstance.PLAYERS.contains(other.getId())) {
 			event.channel().sendMessage(locale.get("error/in_game_target", other.getEffectiveName())).queue();
 			return;

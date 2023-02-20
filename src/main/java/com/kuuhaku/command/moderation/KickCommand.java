@@ -52,7 +52,7 @@ public class KickCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		List<Member> members;
-		if (args.containsKey("users")) {
+		if (args.has("users")) {
 			members = event.message().getMentionedMembers(event.guild());
 		} else {
 			members = Arrays.stream(args.getString("ids").split(" +"))

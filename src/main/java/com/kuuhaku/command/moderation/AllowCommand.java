@@ -41,7 +41,7 @@ public class AllowCommand implements Executable {
 		GuildSettings settings = data.config().getSettings();
 
 		TextChannel channel;
-		if (args.containsKey("channel")) {
+		if (args.has("channel")) {
 			channel = event.message().getMentionedChannels().get(0);
 		} else {
 			channel = event.channel();

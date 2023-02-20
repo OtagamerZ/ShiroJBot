@@ -117,7 +117,7 @@ public class DeckRemoveCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), stash, card, event.user())
+		Utils.selectOption(args.has("confirm"), locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();

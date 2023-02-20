@@ -169,7 +169,13 @@ public class Hand {
 		if (d instanceof Senshi s) {
 			if (s.getLastInteraction() != null) {
 				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget(Trigger.NONE));
-				d.getHand().getOther().addKill();
+
+				Hand other = d.getHand().getOther();
+				other.addKill();
+
+				if (getGame().getParams().arcade() == Arcade.DECK_ROYALE) {
+					other.manualDraw(3);
+				}
 			}
 
 			if (!s.getEquipments().isEmpty()) {
@@ -257,25 +263,48 @@ public class Hand {
 		this.base = getBase();
 		this.hp = base.hp();
 
-		deck.addAll(
-				Stream.of(userDeck.getSenshi(), userDeck.getEvogear(), userDeck.getFields())
-						.parallel()
-						.flatMap(List::stream)
-						.map(d -> d.copy())
-						.peek(d -> {
-							if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
-								Utils.shufflePairs(f.getModifiers());
-							} else if (d instanceof Senshi s && origin.hasMinor(Race.DIVINITY) && !s.hasEffect()) {
-								s.getStats().setSource(
-										Senshi.getRandom(false,
-												"WHERE effect IS NOT NULL",
-												"AND mana = " + s.getBase().getMana()
-										)
-								);
-							}
-						})
-						.collect(Utils.toShuffledList())
-		);
+		if (game.getParams().arcade() == Arcade.CARDMASTER) {
+			List<List<? extends Drawable<?>>> cards = new ArrayList<>();
+			cards.add(DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE NOT has(s.base.tags, 'FUSION')"));
+			cards.add(DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.base.mana > 0"));
+			cards.add(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE NOT f.effect"));
+
+			cards.parallelStream()
+					.flatMap(List::stream)
+					.map(Drawable::copy)
+					.peek(d -> {
+						if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
+							Utils.shufflePairs(f.getModifiers());
+						} else if (d instanceof Senshi s && origin.hasMinor(Race.DIVINITY) && !s.hasEffect()) {
+							s.getStats().setSource(
+									Senshi.getRandom(false,
+											"WHERE effect IS NOT NULL",
+											"AND mana = " + s.getBase().getMana()
+									)
+							);
+						}
+					})
+					.forEach(deck::add);
+			return;
+		}
+
+		Stream.of(userDeck.getSenshi(), userDeck.getEvogear(), userDeck.getFields())
+				.parallel()
+				.flatMap(List::stream)
+				.map(Drawable::copy)
+				.peek(d -> {
+					if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
+						Utils.shufflePairs(f.getModifiers());
+					} else if (d instanceof Senshi s && origin.hasMinor(Race.DIVINITY) && !s.hasEffect()) {
+						s.getStats().setSource(
+								Senshi.getRandom(false,
+										"WHERE effect IS NOT NULL",
+										"AND mana = " + s.getBase().getMana()
+								)
+						);
+					}
+				})
+				.forEach(deck::add);
 	}
 
 	public String getUid() {
@@ -378,6 +407,8 @@ public class Hand {
 	}
 
 	public Drawable<?> draw() {
+		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+
 		BondedList<Drawable<?>> deck = getDeck();
 		if (deck.isEmpty()) return null;
 
@@ -400,6 +431,8 @@ public class Hand {
 	}
 
 	public List<Drawable<?>> draw(int value) {
+		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return List.of();
+
 		List<Drawable<?>> out = new ArrayList<>();
 		for (int i = 0; i < value; i++) {
 			Drawable<?> d = draw();
@@ -412,6 +445,8 @@ public class Hand {
 	}
 
 	public Drawable<?> draw(String card) {
+		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+
 		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
@@ -437,6 +472,8 @@ public class Hand {
 	}
 
 	public Drawable<?> draw(Race race) {
+		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+
 		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
@@ -458,6 +495,8 @@ public class Hand {
 	}
 
 	public Drawable<?> draw(Predicate<Drawable<?>> cond) {
+		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+
 		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
@@ -483,6 +522,8 @@ public class Hand {
 	}
 
 	public Drawable<?> drawSenshi() {
+		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+
 		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
@@ -504,6 +545,8 @@ public class Hand {
 	}
 
 	public Drawable<?> drawEvogear() {
+		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+
 		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
@@ -528,6 +571,8 @@ public class Hand {
 	}
 
 	public Drawable<?> drawEquipment() {
+		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+
 		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
@@ -549,6 +594,8 @@ public class Hand {
 	}
 
 	public Drawable<?> drawSpell() {
+		if (game.getParams().arcade() == Arcade.DECK_ROYALE) return null;
+
 		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
@@ -673,6 +720,15 @@ public class Hand {
 
 	public void modHP(int value, boolean pure) {
 		if (value == 0) return;
+		else if (game.getParams().arcade() == Arcade.OVERCHARGE) {
+			value *= Math.min(0.5 + 0.5 * (Math.ceil(game.getTurn() / 2d) / 10), 1);
+		} else if (game.getParams().arcade() == Arcade.DECAY) {
+			if (value > 0) {
+				value /= 2;
+			} else {
+				value *= 1.5;
+			}
+		}
 
 		int before = hp;
 

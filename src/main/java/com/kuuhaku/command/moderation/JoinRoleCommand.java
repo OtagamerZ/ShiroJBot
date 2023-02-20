@@ -44,13 +44,13 @@ public class JoinRoleCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
-		if (args.containsKey("action")) {
+		if (args.has("action")) {
 			settings.setJoinRole(null);
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/join_role_clear")).queue();
 			return;
-		} else if (args.containsKey("role")) {
+		} else if (args.has("role")) {
 			settings.setJoinRole(event.message().getMentionedRoles().get(0));
 			settings.save();
 

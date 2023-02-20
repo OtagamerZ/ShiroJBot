@@ -104,7 +104,7 @@ public class SelectTitleCommand implements Executable {
 
 			Utils.paginate(pages, event.channel(), event.user());
 			return;
-		} else if (args.containsKey("action")) {
+		} else if (args.has("action")) {
 			AccountTitle title = acc.getTitle();
 			if (title != null) {
 				title.setCurrent(false);

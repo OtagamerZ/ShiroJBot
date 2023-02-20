@@ -59,7 +59,7 @@ public class TradeRemoveCommand implements Executable {
 			return;
 		}
 
-		if (args.containsKey("value")) {
+		if (args.has("value")) {
 			int offer = args.getInt("value");
 			if (offer < 1) {
 				event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();

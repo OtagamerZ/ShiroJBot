@@ -38,7 +38,7 @@ public abstract class SignatureParser {
 				i++;
 				JSONObject groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
 				String name = groups.getString("name");
-				boolean required = groups.containsKey("required");
+				boolean required = groups.has("required");
 				String wrap = required ? "[%s]" : "%s";
 
 				Signature.Type type = Signature.Type.valueOf(groups.getString("type").toUpperCase());
@@ -179,7 +179,7 @@ public abstract class SignatureParser {
 			for (String arg : args) {
 				JSONObject groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
 				String name = groups.getString("name");
-				boolean required = groups.containsKey("required");
+				boolean required = groups.has("required");
 				String wrap = required ? "[%s]" : "%s";
 
 				supplied.add(wrap.formatted(locale.get("signature/" + name)));

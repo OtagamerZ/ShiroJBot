@@ -296,6 +296,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			if (!spell && hand.getOrigin().hasMinor(Race.MACHINE)) {
 				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MACHINE) * 0.02);
 			}
+
+			if (hand.getGame().getParams().arcade() == Arcade.OVERCHARGE) {
+				mult *= 1.5;
+			}
 		}
 
 		return mult * stats.getAttrMult();
@@ -310,6 +314,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 
 			mult *= 1 - Math.max(0, 0.07 * (hand.getOrigin().minor().length - 1));
+
+			if (hand.getGame().getParams().arcade() == Arcade.OVERCHARGE) {
+				mult *= 1.75;
+			}
 		}
 
 		return mult;

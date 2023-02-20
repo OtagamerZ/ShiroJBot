@@ -1142,4 +1142,8 @@ public abstract class Utils {
 			}
 		}
 	}
+
+	public static <T, C extends Collection<T>> List<T> flatten(Collection<C> col) {
+		return col.stream().flatMap(C::stream).collect(Collectors.toList());
+	}
 }

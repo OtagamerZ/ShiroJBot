@@ -61,7 +61,7 @@ public class MarketAddCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), kp.getNotInUse(), card, event.user())
+		Utils.selectOption(args.has("confirm"), locale, event.channel(), kp.getNotInUse(), card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();

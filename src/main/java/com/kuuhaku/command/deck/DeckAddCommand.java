@@ -111,7 +111,7 @@ public class DeckAddCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), stash, card, event.user())
+		Utils.selectOption(args.has("confirm"), locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					Deck dk = d.refresh();
 					if (!addToDeck(event, locale, dk, sc)) return;

@@ -16,49 +16,46 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.moderation;
+package com.kuuhaku.command.info;
 
+import com.github.ygimenez.model.InteractPage;
+import com.github.ygimenez.model.Page;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.guild.GuildSettings;
+import com.kuuhaku.model.enums.shoukan.Arcade;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.Permission;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Command(
-		name = "deny",
-		category = Category.MODERATION
+		name = "shoukan",
+		subname = "arcade",
+		category = Category.INFO
 )
-@Signature("<channel:channel>")
-public class DenyCommand implements Executable {
+@Requires(Permission.MESSAGE_EMBED_LINKS)
+public class ShoukanArcadeCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		GuildSettings settings = data.config().getSettings();
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setAuthor(locale.get("str/arcade_instruction", data.config().getPrefix()));
 
-		TextChannel channel;
-		if (args.has("channel")) {
-			channel = event.message().getMentionedChannels().get(0);
-		} else {
-			channel = event.channel();
+		List<Page> pages = new ArrayList<>();
+		for (Arcade arc : Arcade.values()) {
+			eb.setTitle(arc.toString(locale)).setDescription(arc.getDescription(locale));
+			pages.add(new InteractPage(eb.build()));
 		}
 
-		if (settings.getDeniedChannels().stream().anyMatch(t -> t.equals(channel))) {
-			event.channel().sendMessage(locale.get("error/denied").formatted(
-					channel == event.channel() ? "this channel" : channel.getAsMention()
-			)).queue();
-			return;
-		}
-
-		settings.getDeniedChannels().add(channel);
-		settings.save();
-
-		event.channel().sendMessage(locale.get("success/commands_denied").formatted(
-				channel == event.channel() ? "this channel" : channel.getAsMention()
-		)).queue();
+		Utils.paginate(pages, event.channel(), event.user());
 	}
 }

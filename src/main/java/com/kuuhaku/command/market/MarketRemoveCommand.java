@@ -66,7 +66,7 @@ public class MarketRemoveCommand implements Executable {
 				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.price > 0",
 				event.user().getId()
 		);
-		Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), stash, card, event.user())
+		Utils.selectOption(args.has("confirm"), locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();

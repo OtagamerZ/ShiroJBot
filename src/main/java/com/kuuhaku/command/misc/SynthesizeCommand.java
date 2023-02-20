@@ -83,7 +83,7 @@ public class SynthesizeCommand implements Executable {
 				stash.removeIf(cards::contains);
 
 				CompletableFuture<Boolean> success = new CompletableFuture<>();
-				Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), stash, c, event.user())
+				Utils.selectOption(args.has("confirm"), locale, event.channel(), stash, c, event.user())
 						.thenAccept(sc -> {
 							if (sc == null) {
 								event.channel().sendMessage(locale.get("error/invalid_value")).queue();

@@ -1814,9 +1814,9 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				if (def != null) {
-					reportResult(GameReport.SUCCESS, "str/game_end_special", def, "<@" + hands.get(side.getOther()).getUid() + ">");
+					reportResult(GameReport.SUCCESS, "str/game_end_special", def, "<@" + hand.getOther().getUid() + ">");
 				} else {
-					reportResult(GameReport.SUCCESS, "str/game_end", "<@" + hand.getUid() + ">", "<@" + hands.get(side.getOther()).getUid() + ">");
+					reportResult(GameReport.SUCCESS, "str/game_end", "<@" + hand.getUid() + ">", "<@" + hand.getOther().getUid() + ">");
 				}
 
 				return;
@@ -1954,7 +1954,7 @@ public class Shoukan extends GameInstance<Phase> {
 				});
 			}
 
-			if (!curr.getRealDeck().isEmpty()) {
+			if (!curr.getRealDeck().isEmpty() && params.arcade() != Arcade.DECK_ROYALE) {
 				int rem = curr.getRemainingDraws();
 				if (rem > 0) {
 					buttons.put(Utils.parseEmoji("📤"), w -> {
@@ -2157,6 +2157,18 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(ON_TURN_END, curr.getSide());
 		curr.flushDiscard();
 
+		if (params.arcade() == Arcade.DECK_ROYALE) {
+			boolean noHand = curr.getCards().stream().noneMatch(d -> d instanceof Senshi);
+			boolean noField = getSlots(curr.getSide()).stream()
+					.flatMap(sc -> sc.getCards().stream())
+					.noneMatch(d -> d instanceof Senshi);
+
+			if (noHand && noField) {
+				reportResult(GameReport.SUCCESS, "arcade/deck_royale_win", "<@" + curr.getUid() + ">", "<@" + curr.getOther().getUid() + ">");
+				return;
+			}
+		}
+
 		if (curr.getOrigin().synergy() == Race.ANGEL) {
 			curr.modHP(curr.getMP() * 10);
 		}
@@ -2169,7 +2181,7 @@ public class Shoukan extends GameInstance<Phase> {
 			slt.reduceLock(1);
 
 			for (Senshi s : slt.getCards()) {
-				if (s != null) {
+				if (s != null && s.getSlot().getIndex() != -1) {
 					s.reduceSleep(1);
 					s.reduceStun(1);
 					s.reduceCooldown(1);
@@ -2181,7 +2193,23 @@ public class Shoukan extends GameInstance<Phase> {
 					for (Evogear e : s.getEquipments()) {
 						e.getStats().clearTFlags();
 					}
+
+					if (params.arcade() == Arcade.DECAY) {
+						s.getStats().setMana(-1);
+						if (s.getMPCost() == 0) {
+							s.getHand().getGraveyard().add(s);
+						}
+					}
 				}
+			}
+		}
+
+		if (params.arcade() == Arcade.INSTABILITY) {
+			int affected = Math.min((int) Math.ceil(getTurn() / 2d), 8);
+			List<SlotColumn> chosen = Utils.getRandomN(Utils.flatten(arena.getSlots().values()), affected, 1);
+
+			for (SlotColumn slt : chosen) {
+				slt.setLock(1);
 			}
 		}
 

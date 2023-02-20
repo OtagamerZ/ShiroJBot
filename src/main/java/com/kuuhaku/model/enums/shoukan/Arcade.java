@@ -16,25 +16,18 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.shoukan;
+package com.kuuhaku.model.enums.shoukan;
 
-import com.kuuhaku.model.enums.shoukan.Arcade;
-import com.kuuhaku.util.Utils;
+import com.kuuhaku.model.enums.I18N;
 
-public record ShoukanParams(Integer hp, Integer mp, Arcade arcade) {
-	public static final ShoukanParams INSTANCE = new ShoukanParams();
+public enum Arcade {
+	CARDMASTER, OVERCHARGE, DECAY, INSTABILITY, DECK_ROYALE;
 
-	public ShoukanParams() {
-		this(6000, 5, null);
+	public String toString(I18N locale) {
+		return locale.get("arcade/" + name());
 	}
 
-	@Override
-	public Integer hp() {
-		return Utils.getOr(hp, 6000);
-	}
-
-	@Override
-	public Integer mp() {
-		return Utils.getOr(mp, 5);
+	public String getDescription(I18N locale) {
+		return locale.get("arcade/" + name() + "_desc");
 	}
 }

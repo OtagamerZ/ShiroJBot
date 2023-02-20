@@ -48,14 +48,14 @@ public class GoodbyeCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GoodbyeSettings settings = data.config().getGoodbyeSettings();
-		if (args.containsKey("action")) {
+		if (args.has("action")) {
 			settings.setMessage(locale.get("default/goodbye_message"));
 			settings.setChannel(null);
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/goodbye_clear")).queue();
 			return;
-		} else if (args.containsKey("channel")) {
+		} else if (args.has("channel")) {
 			settings.setChannel(event.message().getMentionedChannels().get(0));
 			settings.save();
 

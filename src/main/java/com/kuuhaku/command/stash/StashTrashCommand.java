@@ -63,7 +63,7 @@ public class StashTrashCommand implements Executable {
 
 		boolean add = args.getString("action").equals("add");
 
-		Utils.selectOption(args.containsKey("confirm"), locale, event.channel(), add ? kp.getNotInUse() : kp.getTrash(), card, event.user())
+		Utils.selectOption(args.has("confirm"), locale, event.channel(), add ? kp.getNotInUse() : kp.getTrash(), card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();

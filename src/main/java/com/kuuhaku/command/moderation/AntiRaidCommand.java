@@ -39,7 +39,7 @@ public class AntiRaidCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
         GuildSettings settings = data.config().getSettings();
-        if (args.containsKey("value")) {
+        if (args.has("value")) {
 			int thr = args.getInt("value");
 			if (thr < 5) {
 				event.channel().sendMessage(locale.get("error/invalid_value_low", 5)).queue();
