@@ -157,7 +157,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			for (Hand h : hands.values()) {
 				if (h.getUid().equals(user.getId()) && h.selectionPending()) {
-					if (!m.getName().equals("select")) {
+					if (!m.getName().equals("select") && !m.getName().startsWith("deb")) {
 						getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 						return;
 					}
@@ -262,6 +262,18 @@ public class Shoukan extends GameInstance<Phase> {
 				reportEvent("ADD_CARD -> " + amount + " x " + id, false);
 				return true;
 			} 
+		}
+
+		return false;
+	}
+
+	@PhaseConstraint({"PLAN", "COMBAT"})
+	@PlayerAction("terminate")
+	private boolean debTerminate(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
+		if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
+			reportResult(GameReport.SUCCESS, "GAME_TERMINATE");
+			return false;
 		}
 
 		return false;
