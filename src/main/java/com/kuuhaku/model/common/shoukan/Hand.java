@@ -54,7 +54,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Hand {
@@ -289,7 +288,7 @@ public class Hand {
 								}
 							})
 							.collect(Utils.toShuffledList())
-			)
+			);
 			return;
 		}
 
