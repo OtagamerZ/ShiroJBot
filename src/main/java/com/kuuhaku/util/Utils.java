@@ -98,22 +98,7 @@ public abstract class Utils {
 				hours > 0 ? hours + " " + locale.get("str/hour") + (hours != 1 ? "s" : "") : "",
 				minutes > 0 ? minutes + " " + locale.get("str/minute") + (minutes != 1 ? "s" : "") : "",
 				seconds > 0 ? seconds + " " + locale.get("str/second") + (seconds != 1 ? "s" : "") : ""
-		).filter(s -> !s.isBlank()).collect(Collectors.collectingAndThen(Collectors.toList(), humanize(" e ")));
-	}
-
-	public static <T extends Collection<String>> Function<T, String> humanize(String last) {
-		return objs -> {
-			List<String> ls = List.copyOf(objs);
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < ls.size(); i++) {
-				if (i == ls.size() - 1 && ls.size() > 1) sb.append(last);
-				else if (i > 0) sb.append(", ");
-
-				sb.append(ls.get(i));
-			}
-
-			return sb.toString();
-		};
+		).filter(s -> !s.isBlank()).collect(Collectors.collectingAndThen(Collectors.toList(), properlyJoin(" e ")));
 	}
 
 	public static <T> T getOr(T get, T or) {
