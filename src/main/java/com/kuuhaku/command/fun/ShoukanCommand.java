@@ -80,7 +80,7 @@ public class ShoukanCommand implements Executable {
 		}
 
 		try {
-			ShoukanParams params = JSONUtils.fromJSON(args.getString("json", "{}"), ShoukanParams.class);
+			ShoukanParams params = Utils.getOr(JSONUtils.fromJSON(args.getString("json", "{}"), ShoukanParams.class), ShoukanParams.INSTANCE);
 			ThrowingFunction<ButtonWrapper, Boolean> act = w -> {
 				Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));
 
@@ -126,6 +126,11 @@ public class ShoukanCommand implements Executable {
 			if (other.equals(event.member())) {
 				act.apply(null);
 			} else {
+				if (params.arcade() != null) {
+					Utils.confirm(locale.get("question/shoukan_arcade", other.getAsMention(), event.user().getAsMention(), params.arcade().toString(locale)), event.channel(), act, other.getUser());
+					return;
+				}
+
 				Utils.confirm(locale.get("question/shoukan", other.getAsMention(), event.user().getAsMention()), event.channel(), act, other.getUser());
 			}
 		} catch (PendingConfirmationException e) {

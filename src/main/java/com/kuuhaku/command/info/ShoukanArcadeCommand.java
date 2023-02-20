@@ -52,7 +52,8 @@ public class ShoukanArcadeCommand implements Executable {
 
 		List<Page> pages = new ArrayList<>();
 		for (Arcade arc : Arcade.values()) {
-			eb.setTitle(arc.toString(locale)).setDescription(arc.getDescription(locale) + " (`" + arc + "`)");
+			eb.setTitle(arc.toString(locale) + " (`" + arc + "`)")
+					.setDescription(arc.getDescription(locale));
 			pages.add(new InteractPage(eb.build()));
 		}
 
