@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.enums.shoukan.Arcade;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.util.Utils;
 
@@ -57,10 +58,18 @@ public class RegDeg {
 				mult += 0.2;
 			}
 
+			if (parent.getGame().getArcade() == Arcade.DECAY) {
+				mult *= 1.5;
+			}
+
 			values.add(new Degen(-value, mult));
 		} else if (value > 0) {
 			if (parent.getOrigin().major() == Race.HUMAN) {
 				mult -= 0.1;
+			}
+
+			if (parent.getGame().getArcade() == Arcade.DECAY) {
+				mult /= 2;
 			}
 
 			values.add(new Regen(value, mult));
