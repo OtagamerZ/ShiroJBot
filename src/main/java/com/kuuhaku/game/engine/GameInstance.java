@@ -203,7 +203,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 		if (code == GameReport.SUCCESS) {
 			exec.complete(null);
 
-			if (!(this instanceof Shoukan s && s.isSingleplayer())) {
+			if (!(this instanceof Shoukan s && s.isVoided())) {
 				int prize = (int) (500 * Calc.rng(0.75, 1.25));
 				for (String uid : getPlayers()) {
 					DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());

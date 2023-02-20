@@ -96,7 +96,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Set<EffectOverTime> eots = new HashSet<>();
 	private final List<Turn> turns = new TreeList<>();
 
-	private final boolean singleplayer;
+	private final boolean voided;
 	private StateSnap snapshot = null;
 	private boolean restoring = true;
 	private boolean history = false;
@@ -114,7 +114,7 @@ public class Shoukan extends GameInstance<Phase> {
 				Side.TOP, new Hand(p1, this, Side.TOP),
 				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
 		);
-		this.singleplayer = p1.equals(p2) || !params.equals(ShoukanParams.INSTANCE);
+		this.voided = p1.equals(p2) || !params.equals(ShoukanParams.INSTANCE);
 
 		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
 	}
@@ -122,7 +122,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@Override
 	protected boolean validate(Message message) {
 		return ((Predicate<Message>) m -> Utils.equalsAny(m.getAuthor().getId(), getPlayers()))
-				.and(m -> singleplayer
+				.and(m -> voided
 						  || getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), m.getAuthor().getId())
 						  || hands.values().stream().anyMatch(h -> h.getUid().equals(m.getAuthor().getId()) && h.selectionPending())
 				)
@@ -1519,8 +1519,8 @@ public class Shoukan extends GameInstance<Phase> {
 		return turns;
 	}
 
-	public boolean isSingleplayer() {
-		return singleplayer;
+	public boolean isVoided() {
+		return voided;
 	}
 
 	public StateSnap getSnapshot() {
@@ -1900,7 +1900,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		if (!singleplayer) {
+		if (!voided) {
 			new MatchHistory(new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]))).save();
 		}
 
@@ -2270,11 +2270,11 @@ public class Shoukan extends GameInstance<Phase> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Shoukan shoukan = (Shoukan) o;
-		return seed == shoukan.seed && singleplayer == shoukan.singleplayer;
+		return seed == shoukan.seed && voided == shoukan.voided;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(seed, singleplayer);
+		return Objects.hash(seed, voided);
 	}
 }
