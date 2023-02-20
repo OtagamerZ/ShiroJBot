@@ -116,7 +116,7 @@ public class Shoukan extends GameInstance<Phase> {
 				Side.TOP, new Hand(p1, this, Side.TOP),
 				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
 		);
-		this.voided = p1.equals(p2) || !params.equals(ShoukanParams.INSTANCE);
+		this.voided = p1.equals(p2) || !this.params.equals(ShoukanParams.INSTANCE);
 
 		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
 	}
