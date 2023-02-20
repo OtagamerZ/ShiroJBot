@@ -525,7 +525,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public double getPower() {
 		double mult = 1;
 		if (hand != null) {
-			mult *= 1 - Math.max(0, 0.06 * (hand.getOrigin().minor().length - 1));
+			mult *= 1 - Math.max(0, 0.07 * (hand.getOrigin().minor().length - 1));
 		}
 
 		if (isSupporting()) {
