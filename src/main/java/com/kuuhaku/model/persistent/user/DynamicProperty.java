@@ -71,4 +71,8 @@ public class DynamicProperty extends DAO<DynamicProperty> {
 
 		return dp.getValue();
 	}
+
+	public static void update(String uid, String key, Object value) {
+		DAO.applyNative("UPDATE dynamic_property SET value = ?3 WHERE uid = ?2 AND id = ?1", uid, key, value);
+	}
 }

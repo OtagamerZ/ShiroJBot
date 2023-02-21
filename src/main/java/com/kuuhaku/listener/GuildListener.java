@@ -31,7 +31,10 @@ import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;
 import com.kuuhaku.model.persistent.id.ProfileId;
-import com.kuuhaku.model.persistent.user.*;
+import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.KawaiponCard;
+import com.kuuhaku.model.persistent.user.Profile;
+import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.GuildBuff;
 import com.kuuhaku.model.records.MessageData;
@@ -50,7 +53,6 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -273,11 +275,6 @@ public class GuildListener extends ListenerAdapter {
 					notifs.get().sendMessage(locale.get(prize > 0 ? "str/level_up_prize" : "str/level_up", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
 				}
 			}
-
-			DynamicProperty dp = account.getDynamicProperty("message_count");
-			int count = NumberUtils.toInt(dp.getValue()) + 1;
-			dp.setValue(count);
-			dp.save();
 
 			DAO.apply(Account.class, account.getUid(), acc -> {
 				Title t = acc.checkTitles();

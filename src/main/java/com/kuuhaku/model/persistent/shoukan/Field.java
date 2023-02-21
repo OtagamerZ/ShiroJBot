@@ -246,9 +246,9 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	public BufferedImage renderBackground() {
-		BufferedImage bi =  IO.getResourceAsImage("shoukan/arenas/" + id + ".webp");
+		BufferedImage bi =  IO.getResourceAsImage("shoukan/arenas/" + id + ".jpg");
 		if (bi == null) {
-			bi = IO.getResourceAsImage("shoukan/arenas/DEFAULT.webp");
+			bi = IO.getResourceAsImage("shoukan/arenas/DEFAULT.jpg");
 		}
 
 		Graphics2D g2d = bi.createGraphics();
