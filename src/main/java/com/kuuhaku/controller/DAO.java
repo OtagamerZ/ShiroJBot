@@ -377,7 +377,15 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			}
 
 			em.getTransaction().begin();
-			em.merge(this);
+			try {
+				if (em.contains(this)) {
+					em.merge(this);
+				}
+
+				em.persist(this);
+			} catch (EntityExistsException e) {
+				em.merge(this);
+			}
 			em.getTransaction().commit();
 		} finally {
 			if (em.getTransaction().isActive()) {
