@@ -97,6 +97,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Set<EffectOverTime> eots = new HashSet<>();
 	private final List<Turn> turns = new TreeList<>();
 
+	private final boolean singleplayer;
 	private final boolean voided;
 	private StateSnap snapshot = null;
 	private boolean restoring = true;
@@ -116,7 +117,8 @@ public class Shoukan extends GameInstance<Phase> {
 				Side.TOP, new Hand(p1, this, Side.TOP),
 				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
 		);
-//		this.voided = p1.equals(p2) || !params.equals(ShoukanParams.INSTANCE);
+		this.singleplayer = p1.equals(p2);
+//		this.voided = singleplayer || !params.equals(ShoukanParams.INSTANCE);
 		this.voided = false;
 
 		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
@@ -125,7 +127,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@Override
 	protected boolean validate(Message message) {
 		return ((Predicate<Message>) m -> Utils.equalsAny(m.getAuthor().getId(), getPlayers()))
-				.and(m -> voided
+				.and(m -> singleplayer
 						  || getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), m.getAuthor().getId())
 						  || hands.values().stream().anyMatch(h -> h.getUid().equals(m.getAuthor().getId()) && h.selectionPending())
 				)

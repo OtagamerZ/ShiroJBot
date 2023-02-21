@@ -636,7 +636,7 @@
 					 ls += 5;
 				 }
 				 if (origin.synergy() == Race.LICH) {
-					 ls += 1;
+					 ls += 10;
 				 }
 
 				 return List.of(bHP, mpGain, handCap, ls);
