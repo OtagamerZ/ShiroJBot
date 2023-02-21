@@ -588,15 +588,10 @@
 			 return new BaseValues(() -> {
 				 Origin origin = h == null ? getOrigins() : h.getOrigin();
 				 double reduction = Math.pow(0.999, -24 * getEvoWeight());
-				 int base;
-				 if (h != null) {
-					 base = h.getGame().getParams().hp();
-				 } else {
-					 base = 6000;
-				 }
+				 int base = 6000;
 				 int bHP = (int) Calc.clamp(base * 1.5 - base * 0.2799 * reduction, 10, base);
 
-				 int mp = h == null ? 5 : h.getGame().getParams().mp();
+				 int mp = 5;
 				 SupplyChain<Integer> mpGain = new SupplyChain<>(mp)
 						 .add(m -> {
 							 if (origin.major() == Race.DEMON) {

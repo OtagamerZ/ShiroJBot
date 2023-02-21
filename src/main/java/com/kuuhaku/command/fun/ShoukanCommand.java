@@ -35,7 +35,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Arcade;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.model.records.shoukan.ShoukanParams;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
@@ -54,8 +53,8 @@ import java.util.concurrent.TimeUnit;
 		category = Category.FUN
 )
 @Signature(allowEmpty = true, value = {
-		"<user:user:r> <arcade:word> <json:text>",
-		"<arcade:word> <json:text>"
+		"<user:user:r> <arcade:word>",
+		"<arcade:word>"
 })
 @Requires(Permission.MESSAGE_ATTACH_FILES)
 public class ShoukanCommand implements Executable {
@@ -82,12 +81,11 @@ public class ShoukanCommand implements Executable {
 
 		try {
 			Arcade arcade = args.getEnum(Arcade.class, "arcade");
-			ShoukanParams params = JSONUtils.fromJSON(args.getString("json", "{}"), ShoukanParams.class);
 			ThrowingFunction<ButtonWrapper, Boolean> act = w -> {
 				Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));
 
 				try {
-					Shoukan skn = new Shoukan(locale, params, arcade, event.user(), other.getUser());
+					Shoukan skn = new Shoukan(locale, arcade, event.user(), other.getUser());
 					skn.start(event.guild(), event.channel())
 							.whenComplete((v, e) -> {
 								if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {

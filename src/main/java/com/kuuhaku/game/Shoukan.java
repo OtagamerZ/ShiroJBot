@@ -89,7 +89,6 @@ public class Shoukan extends GameInstance<Phase> {
 	private final long seed = ThreadLocalRandom.current().nextLong();
 	private final String GIF_PATH = "https://raw.githubusercontent.com/OtagamerZ/ShoukanAssets/master/gifs/";
 
-	private final ShoukanParams params;
 	private final Arcade arcade;
 	private final Arena arena;
 	private final Map<Side, Hand> hands;
@@ -98,19 +97,17 @@ public class Shoukan extends GameInstance<Phase> {
 	private final List<Turn> turns = new TreeList<>();
 
 	private final boolean singleplayer;
-	private final boolean voided;
 	private StateSnap snapshot = null;
 	private boolean restoring = true;
 	private boolean history = false;
 
-	public Shoukan(I18N locale, ShoukanParams params, Arcade arcade, User p1, User p2) {
-		this(locale, Utils.getOr(params, ShoukanParams.INSTANCE), arcade, p1.getId(), p2.getId());
+	public Shoukan(I18N locale, Arcade arcade, User p1, User p2) {
+		this(locale, arcade, p1.getId(), p2.getId());
 	}
 
-	public Shoukan(I18N locale, ShoukanParams params, Arcade arcade, String p1, String p2) {
+	public Shoukan(I18N locale, Arcade arcade, String p1, String p2) {
 		super(locale, new String[]{p1, p2});
 
-		this.params = params;
 		this.arcade = arcade;
 		this.arena = new Arena(this);
 		this.hands = Map.of(
@@ -118,8 +115,6 @@ public class Shoukan extends GameInstance<Phase> {
 				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
 		);
 		this.singleplayer = p1.equals(p2);
-//		this.voided = singleplayer || !params.equals(ShoukanParams.INSTANCE);
-		this.voided = false;
 
 		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
 	}
@@ -1492,10 +1487,6 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	public ShoukanParams getParams() {
-		return params;
-	}
-
 	public Arcade getArcade() {
 		return arcade;
 	}
@@ -1528,8 +1519,8 @@ public class Shoukan extends GameInstance<Phase> {
 		return turns;
 	}
 
-	public boolean isVoided() {
-		return voided;
+	public boolean isSingleplayer() {
+		return singleplayer;
 	}
 
 	public StateSnap getSnapshot() {
@@ -1909,7 +1900,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		if (!voided) {
+		if (!singleplayer) {
 			new MatchHistory(new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]))).save();
 		}
 
@@ -2279,11 +2270,11 @@ public class Shoukan extends GameInstance<Phase> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Shoukan shoukan = (Shoukan) o;
-		return seed == shoukan.seed && voided == shoukan.voided;
+		return seed == shoukan.seed && singleplayer == shoukan.singleplayer;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(seed, voided);
+		return Objects.hash(seed, singleplayer);
 	}
 }
