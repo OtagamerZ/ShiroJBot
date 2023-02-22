@@ -133,7 +133,6 @@ public class DeckSkinCommand implements Executable {
 
 										if (!remaining.isEmpty()) {
 											event.channel().sendMessage(locale.get("error/skin_locked")).queue();
-											return;
 										} else {
 											if (!acc.hasEnough(skin.getPrice(), skin.getCurrency())) {
 												event.channel().sendMessage(locale.get("error/insufficient_" + skin.getCurrency())).queue();
@@ -155,8 +154,9 @@ public class DeckSkinCommand implements Executable {
 											event.channel().sendMessage(locale.get("success/skin_bought", d.getName()))
 													.flatMap(ms -> s.delete())
 													.queue();
-											return;
 										}
+
+										return;
 									}
 
 									d.getStyling().setSkin(skin);
