@@ -419,7 +419,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	public int getStreak() {
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
-		if (lastVote != null && now.isAfter(lastVote.plus(24, ChronoUnit.HOURS))) {
+		if (lastVote != null && now.isAfter(lastVote.plus(25, ChronoUnit.HOURS))) {
 			voteStreak = 0;
 		}
 
