@@ -1,15 +1,18 @@
 package com.kuuhaku.controller;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
 import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.util.Utils;
-import jakarta.persistence.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.function.Consumer;
@@ -395,16 +398,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		beforeRefresh();
 		try {
-			Field[] fields = getClass().getDeclaredFields();
-			for (Field field : fields) {
-				if (getClass().isAnnotationPresent(Id.class)) {
-					return (T) find(getClass(), field.get(field));
-				}
-			}
-
-			return (T) this;
-		} catch (IllegalAccessException e) {
-			return (T) this;
+			Object key = Manager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+			return (T) Utils.getOr(em.find(getClass(), key), this);
 		} finally {
 			afterRefresh();
 			em.close();
@@ -421,7 +416,10 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				Object key = Manager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
 				ent = em.find(getClass(), key);
 
-				if (ent == null) return;
+				if (ent == null) {
+					Constants.LOGGER.warn("Could not delete entity of class " + getClass().getSimpleName() + " [" + key + "]");
+					return;
+				}
 			} else {
 				ent = this;
 			}
