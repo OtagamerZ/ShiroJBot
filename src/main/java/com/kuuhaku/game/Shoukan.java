@@ -922,12 +922,18 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!curr.selectionPending()) return false;
 
 		Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> selection = curr.getSelection();
-		if (!Utils.between(args.getInt("choice"), 1, selection.getFirst().size())) {
+		if (!Utils.between(args.getInt("choice"), 0, selection.getFirst().size())) {
 			getChannel().sendMessage(getLocale().get("error/invalid_selection_index")).queue();
 			return false;
 		}
 
-		Drawable<?> chosen = selection.getFirst().get(args.getInt("choice") - 1);
+		int idx = args.getInt("choice") - 1;
+		if (idx == 0) {
+			selection.getThird().complete(null);
+			return true;
+		}
+
+		Drawable<?> chosen = selection.getFirst().get(idx);
 		selection.getThird().complete(chosen);
 		return true;
 	}
@@ -1997,12 +2003,15 @@ public class Shoukan extends GameInstance<Phase> {
 						if (deque.size() > 1) cards.add(deque.getLast());
 
 						Drawable<?> d = curr.requestChoice(cards);
-						curr.getCards().add(d);
-						deque.remove(d);
-						curr.setUsedDestiny(true);
+						if (d != null) {
+							curr.getCards().add(d);
+							deque.remove(d);
 
-						curr.showHand();
-						reportEvent("str/destiny_draw", true, curr.getName());
+							curr.showHand();
+							reportEvent("str/destiny_draw", true, curr.getName());
+						}
+
+						curr.setUsedDestiny(true);
 					});
 				}
 			}

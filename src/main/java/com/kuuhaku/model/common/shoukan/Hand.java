@@ -1087,16 +1087,22 @@ public class Hand {
 
 	public void requestChoice(List<Drawable<?>> cards, ThrowingConsumer<Drawable<?>> act) {
 		Drawable<?> d = requestChoice(cards);
+		if (d == null) return;
+
 		act.accept(d);
 	}
 
 	public void requestChoice(List<Drawable<?>> cards, boolean hide, ThrowingConsumer<Drawable<?>> act) {
 		Drawable<?> d = requestChoice(cards, hide);
+		if (d == null) return;
+
 		act.accept(d);
 	}
 
 	public void requestChoice(Predicate<Drawable<?>> cond, ThrowingConsumer<Drawable<?>> act) {
 		Drawable<?> d = requestChoice(cards.stream().filter(cond).toList());
+		if (d == null) return;
+
 		act.accept(d);
 	}
 
