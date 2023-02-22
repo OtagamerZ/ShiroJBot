@@ -1,14 +1,10 @@
 package com.kuuhaku.controller;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
 import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.util.Utils;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;
@@ -417,8 +413,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				ent = em.find(getClass(), key);
 
 				if (ent == null) {
-					Constants.LOGGER.warn("Could not delete entity of class " + getClass().getSimpleName() + " [" + key + "]");
-					return;
+					throw new EntityNotFoundException("Could not delete entity of class " + getClass().getSimpleName() + " [" + key + "]");
 				}
 			}
 
