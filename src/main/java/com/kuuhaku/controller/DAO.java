@@ -411,8 +411,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		beforeDelete();
 		try {
-			DAO<?> ent;
-			if (!em.contains(this)) {
+			DAO<?> ent = this;
+			if (!em.contains(ent)) {
 				Object key = Manager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
 				ent = em.find(getClass(), key);
 
@@ -420,8 +420,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 					Constants.LOGGER.warn("Could not delete entity of class " + getClass().getSimpleName() + " [" + key + "]");
 					return;
 				}
-			} else {
-				ent = this;
 			}
 
 			em.getTransaction().begin();
