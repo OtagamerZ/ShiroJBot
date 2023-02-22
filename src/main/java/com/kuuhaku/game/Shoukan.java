@@ -1863,6 +1863,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
 		if (isClosed()) return;
+		turns.add(Turn.from(this));
 
 		restoring = true;
 		for (List<SlotColumn> slts : arena.getSlots().values()) {
