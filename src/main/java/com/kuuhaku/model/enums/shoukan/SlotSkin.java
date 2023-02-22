@@ -40,6 +40,7 @@ public enum SlotSkin {
 	PLANK("SS_PLANK", "METANAUT"),
 	MISSING("SS_MISSING"),
 	INVISIBLE("DEUS_VULT", "REBELLION", "HOARDER_II"),
+	LEGACY("VETERAN"),
 	;
 
 	private final String[] titles;
