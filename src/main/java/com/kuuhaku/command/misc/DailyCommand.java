@@ -44,6 +44,7 @@ public class DailyCommand implements Executable {
 			return;
 		}
 
+		data.profile().getAccount().addVote(); // TODO Remove
 		event.channel().sendMessage(locale.get("success/daily")).queue();
 	}
 }

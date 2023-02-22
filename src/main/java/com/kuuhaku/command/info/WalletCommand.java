@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.info;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -32,6 +33,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
+import java.time.temporal.ChronoField;
+
 @Command(
 		name = "atm",
 		category = Category.INFO
@@ -44,11 +47,15 @@ public class WalletCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/wallet", event.member().getEffectiveName()))
-				.setDescription(locale.get("str/wallet_info",
+				.addField(Constants.VOID, locale.get("str/wallet_info_1",
 						acc.getBalance(),
 						acc.getDebit(),
 						acc.getGems()
-				));
+				), true)
+				.addField(Constants.VOID, locale.get("str/wallet_info_2",
+						acc.getLastVote() == null ? locale.get("str/never") : Constants.TIMESTAMP.formatted(acc.getLastVote().get(ChronoField.INSTANT_SECONDS)),
+						acc.getStreak()
+				), true);
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
 	}

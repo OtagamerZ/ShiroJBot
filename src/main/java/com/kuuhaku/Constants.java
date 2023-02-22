@@ -59,7 +59,7 @@ public abstract class Constants {
 	public static final long MILLIS_IN_SECOND = TimeUnit.MILLISECONDS.convert(1, TimeUnit.SECONDS);
 	public static final double GOLDEN_RATIO = (1 + Math.sqrt(5)) / 2;
 
-	public static final String TIMESTAMP = "<t:%s:R>";
+	public static final String TIMESTAMP = "<t:%s>";
 	public static final String TIMESTAMP_R = "<t:%s:R>";
 	public static final String VOID = "\u200B";
 	public static final String ACCEPT = "✅";

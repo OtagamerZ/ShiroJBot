@@ -117,6 +117,12 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Column(name = "last_daily")
 	private ZonedDateTime lastDaily;
 
+	@Column(name = "last_vote")
+	private ZonedDateTime lastVote;
+
+	@Column(name = "vote_streak")
+	private int voteStreak;
+
 	public Account() {
 	}
 
@@ -369,6 +375,11 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return createdAt;
 	}
 
+	public boolean isOldUser() {
+		ZonedDateTime old = ZonedDateTime.of(LocalDateTime.of(2022, 2, 12, 0, 0), ZoneId.of("GMT-3"));
+		return createdAt.isBefore(old);
+	}
+
 	public ZonedDateTime getLastDaily() {
 		return lastDaily;
 	}
@@ -390,9 +401,29 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return 0;
 	}
 
-	public boolean isOldUser() {
-		ZonedDateTime old = ZonedDateTime.of(LocalDateTime.of(2022, 2, 12, 0, 0), ZoneId.of("GMT-3"));
-		return createdAt.isBefore(old);
+	public ZonedDateTime getLastVote() {
+		return lastVote;
+	}
+
+	public void addVote() {
+		voteStreak = getStreak() + 1;
+		lastVote = ZonedDateTime.now(ZoneId.of("GMT-3"));
+	}
+
+	public boolean voted() {
+		if (lastVote == null) return false;
+		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
+
+		return now.isBefore(lastVote.plus(12, ChronoUnit.HOURS));
+	}
+
+	public int getStreak() {
+		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
+		if (lastVote != null && now.isAfter(lastVote.plus(24, ChronoUnit.HOURS))) {
+			voteStreak = 0;
+		}
+
+		return voteStreak;
 	}
 
 	public int getRanking() {
