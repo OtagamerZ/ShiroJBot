@@ -92,7 +92,6 @@ public class Title extends DAO<Title> {
 		return DAO.queryAll(Title.class, """
 				SELECT t
 				FROM Title t
-				WHERE t.price = 0
 				ORDER BY CASE t.rarity
 					WHEN 'COMMON' THEN 1
 					WHEN 'UNCOMMON' THEN 2
