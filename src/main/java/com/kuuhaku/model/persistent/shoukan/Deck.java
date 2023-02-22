@@ -603,8 +603,8 @@
 							 if (h != null) {
 								 if (origin.synergy() == Race.FEY) {
 									 m = mp * (Calc.chance(3) ? 2 : 1);
-								 } else if (origin.synergy() == Race.GHOST) {
-									 m = mp + (Math.ceil(h.getGame().getTurn() / 2d) % 3 == 0 ? 1 : 0);
+								 } else if (origin.synergy() == Race.GHOST && h.getGame().getTurn() > 0) {
+									 m = mp + (Math.ceil(h.getGame().getTurn() / 2d) % 2 == 0 ? 1 : 0);
 								 }
 
 								 if (h.getGame().getArcade() == Arcade.OVERCHARGE) {
@@ -619,7 +619,7 @@
 						 .add(c -> {
 							 if (h != null) {
 								 if (origin.hasMinor(Race.BEAST)) {
-									 c = c + (int) (Math.ceil(h.getGame().getTurn() / 2d) / 20);
+									 c = c + (int) Math.ceil(h.getGame().getTurn() / 2d) / 10;
 								 }
 							 }
 
