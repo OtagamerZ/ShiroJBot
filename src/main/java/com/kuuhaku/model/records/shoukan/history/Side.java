@@ -20,5 +20,5 @@ package com.kuuhaku.model.records.shoukan.history;
 
 import java.util.List;
 
-public record Side(int hp, int mp, Locks locks, List<String> hand, List<String> deck, List<String> graveyard, List<Slot> placed) {
+public record Side(int hp, int mp, int regdeg, Locks locks, List<String> hand, List<String> deck, List<String> graveyard, List<Slot> placed) {
 }

@@ -39,6 +39,7 @@ public record Turn(Side top, Side bottom, List<String> banned, String field) {
 		Side topSide = new Side(
 				top.getHP(),
 				top.getMP(),
+				top.getRegDeg().peek(),
 				new Locks(
 						top.getLockTime(Lock.EFFECT),
 						top.getLockTime(Lock.SPELL),
@@ -61,6 +62,7 @@ public record Turn(Side top, Side bottom, List<String> banned, String field) {
 		Side botSide = new Side(
 				bot.getHP(),
 				bot.getMP(),
+				bot.getRegDeg().peek(),
 				new Locks(
 						bot.getLockTime(Lock.EFFECT),
 						bot.getLockTime(Lock.SPELL),
