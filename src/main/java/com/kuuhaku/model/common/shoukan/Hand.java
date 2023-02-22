@@ -986,7 +986,7 @@ public class Hand {
 		int offset = bi.getWidth() / 2 - (Drawable.SIZE.width + 20) * 5 / 2;
 		for (int i = 0; i < cards.size(); i++) {
 			int x = offset + 10 + (Drawable.SIZE.width + 10) * (i % 5);
-			int y = 100 + (100 + Drawable.SIZE.width) * (i / 5);
+			int y = 100 + (100 + Drawable.SIZE.height) * (i / 5);
 
 			Drawable<?> d = cards.get(i);
 			boolean ally = equals(d.getHand());
@@ -1116,7 +1116,7 @@ public class Hand {
 		int offset = bi.getWidth() / 2 - (Drawable.SIZE.width + 20) * 5 / 2;
 		for (int i = 0; i < cards.size(); i++) {
 			int x = offset + 10 + (Drawable.SIZE.width + 10) * (i % 5);
-			int y = 100 + (100 + Drawable.SIZE.width) * (i / 5);
+			int y = 100 + (100 + Drawable.SIZE.height) * (i / 5);
 
 			Drawable<?> d = cards.get(i);
 			Deck deck = Utils.getOr(d.getHand(), this).userDeck;
