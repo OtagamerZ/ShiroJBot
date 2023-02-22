@@ -68,6 +68,8 @@ public class SynthesizeCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		List<StashedCard> cards = new ArrayList<>();
+		List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
+
 		for (Object entry : args.getJSONArray("card")) {
 			if (entry instanceof String card) {
 				Card c = DAO.find(Card.class, card.toUpperCase());
@@ -78,9 +80,6 @@ public class SynthesizeCommand implements Executable {
 					event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
 					return;
 				}
-
-				List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
-				stash.removeIf(cards::contains);
 
 				CompletableFuture<Boolean> success = new CompletableFuture<>();
 				Utils.selectOption(args.has("confirm"), locale, event.channel(), stash, c, event.user())
@@ -96,6 +95,7 @@ public class SynthesizeCommand implements Executable {
 							}
 
 							cards.add(sc);
+							stash.remove(sc);
 							success.complete(true);
 						})
 						.exceptionally(t -> {
