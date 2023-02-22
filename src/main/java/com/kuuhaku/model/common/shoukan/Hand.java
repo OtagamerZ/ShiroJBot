@@ -978,6 +978,8 @@ public class Hand {
 	}
 
 	public BufferedImage render(List<Drawable<?>> cards) {
+		if (cards.isEmpty()) return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+
 		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
@@ -1100,6 +1102,7 @@ public class Hand {
 
 	public BufferedImage renderChoices() {
 		List<Drawable<?>> cards = selection.getFirst();
+		if (cards.isEmpty()) return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
 		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, 100 + (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
