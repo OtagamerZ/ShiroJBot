@@ -305,7 +305,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 				.findFirst().orElse(null);
 	}
 
-	public Title checkTitles() {
+	public synchronized Title checkTitles() {
 		List<Title> titles = DAO.queryAll(Title.class, """
 				SELECT t
 				FROM Title t
