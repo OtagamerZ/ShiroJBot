@@ -34,6 +34,7 @@ public record Match(Info info, List<Turn> turns) {
 						game.getHands().values().stream()
 								.filter(h -> h.getHP() == 0)
 								.map(Hand::getSide)
+								.map(Side::getOther)
 								.findFirst().orElse(null),
 						winCondition
 				),

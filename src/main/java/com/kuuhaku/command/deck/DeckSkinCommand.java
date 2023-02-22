@@ -74,20 +74,15 @@ public class DeckSkinCommand implements Executable {
 			SlotSkin[] skins = SlotSkin.values();
 			List<Page> pages = new ArrayList<>();
 			for (int i = 0; i < skins.length; i++) {
-				SlotSkin ss = skins[i];
-				if (!ss.canUse(acc)) {
-					boolean notFound = false;
-					List<Title> titles = ss.getTitles();
-					for (Title title : titles) {
-						if (!acc.hasTitle(title.getId())) {
-							notFound = true;
-							break;
-						}
-					}
+				SlotSkin skin = skins[i];
+				if (!skin.canUse(acc)) {
+					List<Title> remaining = skin.getTitles().stream()
+							.filter(t -> !acc.hasTitle(t.getId()))
+							.toList();
 
-					if (notFound) {
+					if (remaining.stream().anyMatch(t -> t.getCurrency() == null)) {
 						String req = Utils.properlyJoin(locale.get("str/and")).apply(
-								titles.stream()
+								remaining.stream()
 										.map(t -> "**`" + t.getInfo(locale).getName() + "`**")
 										.toList()
 						);
@@ -97,18 +92,20 @@ public class DeckSkinCommand implements Executable {
 								.setTitle(locale.get("str/skin_locked"))
 								.setDescription(locale.get("str/requires_titles", req));
 					} else {
-						Title paid = ss.getPaidTitle();
-						assert paid != null;
+						Title paid = remaining.stream()
+								.filter(t -> t.getCurrency() != null)
+								.findFirst().orElseThrow();
 
 						eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
-								.setImage(URL.formatted(ss.name().toLowerCase()))
+								.setImage(URL.formatted(skin.name().toLowerCase()))
 								.setTitle(locale.get("str/skin_locked"))
 								.setDescription(locale.get("str/requires_purchase", locale.get("currency/" + paid.getCurrency(), paid.getPrice())));
 					}
 				} else {
-					eb.setImage(URL.formatted(ss.name().toLowerCase()))
-							.setTitle(ss.getName(locale))
-							.setDescription(ss.getDescription(locale));
+					eb.setThumbnail(null)
+							.setImage(URL.formatted(skin.name().toLowerCase()))
+							.setTitle(skin.getName(locale))
+							.setDescription(skin.getDescription(locale));
 				}
 				eb.setFooter(locale.get("str/page", i + 1, skins.length));
 
@@ -134,8 +131,18 @@ public class DeckSkinCommand implements Executable {
 								m.put(Utils.parseEmoji("✅"), w -> {
 									SlotSkin skin = skins[i.get()];
 									if (!skin.canUse(acc)) {
-										Title paid = skin.getPaidTitle();
-										if (paid != null) {
+										List<Title> remaining = skin.getTitles().stream()
+												.filter(t -> !acc.hasTitle(t.getId()))
+												.toList();
+
+										if (remaining.stream().anyMatch(t -> t.getCurrency() == null)) {
+											event.channel().sendMessage(locale.get("error/skin_locked")).queue();
+											return;
+										} else {
+											Title paid = remaining.stream()
+													.filter(t -> t.getCurrency() != null)
+													.findFirst().orElseThrow();
+
 											if (!acc.hasEnough(paid.getPrice(), paid.getCurrency())) {
 												event.channel().sendMessage(locale.get("error/insufficient_" + paid.getCurrency())).queue();
 												return;
@@ -153,8 +160,9 @@ public class DeckSkinCommand implements Executable {
 											}
 
 											new AccountTitle(acc, paid).save();
-										} else {
-											event.channel().sendMessage(locale.get("error/skin_locked")).queue();
+											event.channel().sendMessage(locale.get("success/skin_bought", d.getName()))
+													.flatMap(ms -> s.delete())
+													.queue();
 											return;
 										}
 									}

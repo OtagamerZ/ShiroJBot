@@ -75,19 +75,6 @@ public enum SlotSkin {
 		return locale.get("skin/" + name() + "_desc");
 	}
 
-	public Title getPaidTitle() {
-		if (titles == null) return null;
-
-		for (String title : titles) {
-			Title t = DAO.find(Title.class, title);
-			if (t.getPrice() > 0) {
-				return t;
-			}
-		}
-
-		return null;
-	}
-
 	public List<Title> getTitles() {
 		if (titles == null) return List.of();
 
