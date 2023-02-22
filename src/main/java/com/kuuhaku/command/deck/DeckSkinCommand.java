@@ -31,7 +31,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.SlotSkin;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.AccountTitle;
+import com.kuuhaku.model.persistent.user.DynamicProperty;
 import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
@@ -80,10 +80,9 @@ public class DeckSkinCommand implements Executable {
 							.filter(t -> !acc.hasTitle(t.getId()))
 							.toList();
 
-					if (remaining.stream().anyMatch(t -> t.getCurrency() == null)) {
+					if (!remaining.isEmpty()) {
 						String req = Utils.properlyJoin(locale.get("str/and")).apply(
 								remaining.stream()
-										.filter(t -> t.getCurrency() == null)
 										.map(t -> "**`" + t.getInfo(locale).getName() + "`**")
 										.toList()
 						);
@@ -93,14 +92,10 @@ public class DeckSkinCommand implements Executable {
 								.setTitle(locale.get("str/skin_locked"))
 								.setDescription(locale.get("str/requires_titles", req));
 					} else {
-						Title paid = remaining.stream()
-								.filter(t -> t.getCurrency() != null)
-								.findFirst().orElseThrow();
-
 						eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
 								.setImage(URL.formatted(skin.name().toLowerCase()))
 								.setTitle(locale.get("str/skin_locked"))
-								.setDescription(locale.get("str/requires_purchase", locale.get("currency/" + paid.getCurrency(), paid.getPrice())));
+								.setDescription(locale.get("str/requires_purchase", locale.get("currency/" + skin.getCurrency(), skin.getPrice())));
 					}
 				} else {
 					eb.setThumbnail(null)
@@ -136,16 +131,12 @@ public class DeckSkinCommand implements Executable {
 												.filter(t -> !acc.hasTitle(t.getId()))
 												.toList();
 
-										if (remaining.stream().anyMatch(t -> t.getCurrency() == null)) {
+										if (!remaining.isEmpty()) {
 											event.channel().sendMessage(locale.get("error/skin_locked")).queue();
 											return;
 										} else {
-											Title paid = remaining.stream()
-													.filter(t -> t.getCurrency() != null)
-													.findFirst().orElseThrow();
-
-											if (!acc.hasEnough(paid.getPrice(), paid.getCurrency())) {
-												event.channel().sendMessage(locale.get("error/insufficient_" + paid.getCurrency())).queue();
+											if (!acc.hasEnough(skin.getPrice(), skin.getCurrency())) {
+												event.channel().sendMessage(locale.get("error/insufficient_" + skin.getCurrency())).queue();
 												return;
 											} else if (!confirm.getAndSet(true)) {
 												w.getHook().setEphemeral(true)
@@ -154,13 +145,13 @@ public class DeckSkinCommand implements Executable {
 												return;
 											}
 
-											if (paid.getCurrency() == Currency.CR) {
-												acc.consumeCR(paid.getPrice(), "Skin " + skin);
+											if (skin.getCurrency() == Currency.CR) {
+												acc.consumeCR(skin.getPrice(), "Skin " + skin);
 											} else {
-												acc.consumeGems(paid.getPrice(), "Skin " + skin);
+												acc.consumeGems(skin.getPrice(), "Skin " + skin);
 											}
 
-											new AccountTitle(acc, paid).save();
+											DynamicProperty.update(acc.getUid(), "ss_" + skin.name().toLowerCase(), true);
 											event.channel().sendMessage(locale.get("success/skin_bought", d.getName()))
 													.flatMap(ms -> s.delete())
 													.queue();

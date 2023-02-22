@@ -20,6 +20,7 @@ package com.kuuhaku.model.enums.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Title;
@@ -41,18 +42,30 @@ public enum SlotSkin {
 	MISSING("SS_MISSING"),
 	INVISIBLE("DEUS_VULT", "REBELLION", "HOARDER_II"),
 	LEGACY("VETERAN"),
-//	NEBULA(),
+	NEBULA("SS_NEBULA", "TALKER_III"),
 	GRAFITTI("SS_GRAFITTI", "REBELLION", "SURVIVOR"),
-//	RAINBOW(),
+	RAINBOW(),
 	;
 
+	private final int price;
+	private final Currency currency;
 	private final String[] titles;
 
 	SlotSkin() {
+		this.price = 0;
+		this.currency = null;
 		this.titles = null;
 	}
 
 	SlotSkin(String... titles) {
+		this.price = 0;
+		this.currency = null;
+		this.titles = titles;
+	}
+
+	SlotSkin(int price, Currency currency, String... titles) {
+		this.price = price;
+		this.currency = currency;
 		this.titles = titles;
 	}
 
@@ -90,11 +103,23 @@ public enum SlotSkin {
 		return out;
 	}
 
+	public int getPrice() {
+		return price;
+	}
+
+	public Currency getCurrency() {
+		return currency;
+	}
+
 	public boolean canUse(Account acc) {
 		if (titles == null) return true;
 
 		for (String title : titles) {
 			if (!acc.hasTitle(title)) return false;
+		}
+
+		if (price > 0) {
+			return !acc.getDynValue("ss_" + name().toLowerCase()).isBlank();
 		}
 
 		return true;
