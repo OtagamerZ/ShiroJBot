@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.util.Utils;
@@ -52,13 +51,6 @@ public class Title extends DAO<Title> {
 
 	@Column(name = "tracker")
 	private String tracker;
-
-	@Column(name = "price")
-	private int price;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "currency")
-	private Currency currency;
 
 	public String getId() {
 		return id;
@@ -95,20 +87,11 @@ public class Title extends DAO<Title> {
 		return Integer.parseInt(Utils.getOr(acc.getDynamicProperty(tracker).getValue(), "0"));
 	}
 
-	public int getPrice() {
-		return price;
-	}
-
-	public Currency getCurrency() {
-		return currency;
-	}
-
 	@SuppressWarnings("JpaQlInspection")
 	public static List<Title> getAllTitles() {
 		return DAO.queryAll(Title.class, """
 				SELECT t
 				FROM Title t
-				WHERE t.price = 0
 				ORDER BY CASE t.rarity
 					WHEN 'COMMON' THEN 1
 					WHEN 'UNCOMMON' THEN 2

@@ -9,7 +9,6 @@ import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.function.Consumer;
@@ -395,16 +394,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		beforeRefresh();
 		try {
-			Field[] fields = getClass().getDeclaredFields();
-			for (Field field : fields) {
-				if (getClass().isAnnotationPresent(Id.class)) {
-					return (T) find(getClass(), field.get(field));
-				}
-			}
-
-			return (T) this;
-		} catch (IllegalAccessException e) {
-			return (T) this;
+			Object key = Manager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+			return (T) Utils.getOr(em.find(getClass(), key), this);
 		} finally {
 			afterRefresh();
 			em.close();
@@ -416,14 +407,14 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		beforeDelete();
 		try {
-			DAO<?> ent;
-			if (!em.contains(this)) {
+			DAO<?> ent = this;
+			if (!em.contains(ent)) {
 				Object key = Manager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
 				ent = em.find(getClass(), key);
 
-				if (ent == null) return;
-			} else {
-				ent = this;
+				if (ent == null) {
+					throw new EntityNotFoundException("Could not delete entity of class " + getClass().getSimpleName() + " [" + key + "]");
+				}
 			}
 
 			em.getTransaction().begin();

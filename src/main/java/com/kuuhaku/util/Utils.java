@@ -687,7 +687,7 @@ public abstract class Utils {
 			}
 		}
 
-		repls.put("%now%", Constants.TIMESTAMP.formatted(System.currentTimeMillis() / 1000));
+		repls.put("%now%", Constants.TIMESTAMP_R.formatted(System.currentTimeMillis() / 1000));
 
 		for (Map.Entry<String, String> rep : repls.entrySet()) {
 			str = str.replace(rep.getKey(), rep.getValue());

@@ -102,7 +102,15 @@ public class DeckAddCommand implements Executable {
 			for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
 				StashedCard sc = stash.get(i);
 				if (sc.getCard().equals(card)) {
-					if (!addToDeck(event, locale, dk, sc)) break;
+					if (!addToDeck(event, locale, dk, sc)) {
+						if (j == 0) {
+							event.channel().sendMessage(locale.get("error/not_owned")).queue();
+							return;
+						}
+
+						break;
+					}
+
 					j++;
 				}
 			}

@@ -73,12 +73,14 @@ public class StashScrapCommand implements Executable {
 		}
 
 		List<StashedCard> cards = new ArrayList<>();
+		List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
+
 		for (String id : args.getString("cards").split(" +")) {
 			Card card = verifyCard(locale, event, id.toUpperCase());
 			if (card == null) return;
 
 			CompletableFuture<Boolean> success = new CompletableFuture<>();
-			Utils.selectOption(args.has("confirm"), locale, event.channel(), kp.getNotInUse(), card, event.user())
+			Utils.selectOption(args.has("confirm"), locale, event.channel(), stash, card, event.user())
 					.thenAccept(sc -> {
 						if (sc == null) {
 							event.channel().sendMessage(locale.get("error/invalid_value")).queue();
@@ -87,6 +89,7 @@ public class StashScrapCommand implements Executable {
 						}
 
 						cards.add(sc);
+						stash.remove(sc);
 						success.complete(true);
 					})
 					.exceptionally(t -> {

@@ -20,6 +20,7 @@ package com.kuuhaku.model.enums.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Title;
@@ -37,18 +38,34 @@ public enum SlotSkin {
 	DEFAULT,
 //	AHEGAO(""),
 	HEX("HOARDER_III"),
-	PLANK("SS_PLANK", "METANAUT"),
-	MISSING("SS_MISSING"),
+	PLANK(3500, Currency.CR, "METANAUT"),
+	MISSING(10000, Currency.CR),
 	INVISIBLE("DEUS_VULT", "REBELLION", "HOARDER_II"),
+	LEGACY("VETERAN"),
+	NEBULA(5, Currency.GEM, "METANAUT", "TALKER_III", "UNTOUCHABLE", "MEDIC"),
+	GRAFITTI(5000, Currency.CR, "REBELLION", "SURVIVOR", "RUTHLESS"),
+	RAINBOW(1, Currency.GEM),
 	;
 
+	private final int price;
+	private final Currency currency;
 	private final String[] titles;
 
 	SlotSkin() {
+		this.price = 0;
+		this.currency = null;
 		this.titles = null;
 	}
 
 	SlotSkin(String... titles) {
+		this.price = 0;
+		this.currency = null;
+		this.titles = titles;
+	}
+
+	SlotSkin(int price, Currency currency, String... titles) {
+		this.price = price;
+		this.currency = currency;
 		this.titles = titles;
 	}
 
@@ -80,12 +97,18 @@ public enum SlotSkin {
 
 		List<Title> out = new ArrayList<>();
 		for (String title : titles) {
-			if (title.startsWith("SS_")) continue;
-
 			out.add(DAO.find(Title.class, title));
 		}
 
 		return out;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public Currency getCurrency() {
+		return currency;
 	}
 
 	public boolean canUse(Account acc) {
@@ -93,6 +116,10 @@ public enum SlotSkin {
 
 		for (String title : titles) {
 			if (!acc.hasTitle(title)) return false;
+		}
+
+		if (price > 0) {
+			return !acc.getDynValue("ss_" + name().toLowerCase()).isBlank();
 		}
 
 		return true;

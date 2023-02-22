@@ -225,15 +225,15 @@ public class GuildListener extends ListenerAdapter {
 		Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
 		int lvl = profile.getLevel();
 
-		GuildBuff gb = config.getCumBuffs();
-		profile.addXp((long) (15 * (1 + gb.xp())));
-		profile.save();
-
 		Account account = profile.getAccount();
 		if (!Objects.equals(account.getName(), data.user().getName())) {
 			account.setName(data.user().getName());
 			account.save();
 		}
+
+		GuildBuff gb = config.getCumBuffs();
+		profile.addXp((long) (15 * (1 + gb.xp()) * (account.getStreak() / 100d)));
+		profile.save();
 
 		EventData ed = new EventData(config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {
@@ -272,7 +272,7 @@ public class GuildListener extends ListenerAdapter {
 				}
 
 				if (notifs.get() != null) {
-					notifs.get().sendMessage(locale.get(prize > 0 ? "str/level_up_prize" : "str/level_up", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
+					notifs.get().sendMessage(locale.get(prize > 0 ? "achievement/level_up_prize" : "achievement/level_up", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
 				}
 			}
 

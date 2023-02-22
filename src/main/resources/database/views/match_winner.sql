@@ -28,3 +28,4 @@ FROM (
      FROM match_history
      ) x
 WHERE x.info IS NOT NULL
+ORDER BY x.id DESC

@@ -922,12 +922,18 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!curr.selectionPending()) return false;
 
 		Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> selection = curr.getSelection();
-		if (!Utils.between(args.getInt("choice"), 1, selection.getFirst().size())) {
+		if (!Utils.between(args.getInt("choice"), 0, selection.getFirst().size())) {
 			getChannel().sendMessage(getLocale().get("error/invalid_selection_index")).queue();
 			return false;
 		}
 
-		Drawable<?> chosen = selection.getFirst().get(args.getInt("choice") - 1);
+		int idx = args.getInt("choice") - 1;
+		if (idx == 0) {
+			selection.getThird().complete(null);
+			return true;
+		}
+
+		Drawable<?> chosen = selection.getFirst().get(idx);
 		selection.getThird().complete(chosen);
 		return true;
 	}
@@ -1863,6 +1869,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
 		if (isClosed()) return;
+		turns.add(Turn.from(this));
 
 		restoring = true;
 		for (List<SlotColumn> slts : arena.getSlots().values()) {
@@ -1900,7 +1907,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		if (!singleplayer) {
+		if (!singleplayer && arcade == null) {
 			new MatchHistory(new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]))).save();
 		}
 
@@ -1996,12 +2003,15 @@ public class Shoukan extends GameInstance<Phase> {
 						if (deque.size() > 1) cards.add(deque.getLast());
 
 						Drawable<?> d = curr.requestChoice(cards);
-						curr.getCards().add(d);
-						deque.remove(d);
-						curr.setUsedDestiny(true);
+						if (d != null) {
+							curr.getCards().add(d);
+							deque.remove(d);
 
-						curr.showHand();
-						reportEvent("str/destiny_draw", true, curr.getName());
+							curr.showHand();
+							reportEvent("str/destiny_draw", true, curr.getName());
+						}
+
+						curr.setUsedDestiny(true);
 					});
 				}
 			}
@@ -2071,17 +2081,19 @@ public class Shoukan extends GameInstance<Phase> {
 							.queue()
 			);
 
-			buttons.put(Utils.parseEmoji("🏳"), w -> {
-				if (curr.isForfeit()) {
-					reportResult(GameReport.SUCCESS, "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
-					return;
-				}
+			if (getTurn() > 10) {
+				buttons.put(Utils.parseEmoji("🏳"), w -> {
+					if (curr.isForfeit()) {
+						reportResult(GameReport.SUCCESS, "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
+						return;
+					}
 
-				curr.setForfeit(true);
-				w.getHook().setEphemeral(true)
-						.sendMessage(getLocale().get("str/confirm_forfeit"))
-						.queue();
-			});
+					curr.setForfeit(true);
+					w.getHook().setEphemeral(true)
+							.sendMessage(getLocale().get("str/confirm_forfeit"))
+							.queue();
+				});
+			}
 		}
 
 		Pages.buttonize(msg, buttons, true, false, u -> u.getId().equals(curr.getUid()));
@@ -2270,11 +2282,11 @@ public class Shoukan extends GameInstance<Phase> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Shoukan shoukan = (Shoukan) o;
-		return seed == shoukan.seed && singleplayer == shoukan.singleplayer;
+		return seed == shoukan.seed && arcade == shoukan.arcade && singleplayer == shoukan.singleplayer;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(seed, singleplayer);
+		return Objects.hash(seed, arcade, singleplayer);
 	}
 }

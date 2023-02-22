@@ -44,11 +44,7 @@ public abstract class Manager {
 	private static EntityManagerFactory emf;
 
 	public static EntityManagerFactory getEntityManagerFactory() {
-		return emf;
-	}
-
-	public synchronized static EntityManager getEntityManager() {
-		if (emf == null) {
+		if (emf == null) synchronized (Manager.class) {
 			emf = Persistence.createEntityManagerFactory("main", Map.of(
 					"jakarta.persistence.jdbc.user", DB_LOGIN,
 					"jakarta.persistence.jdbc.password", DB_PASS,
@@ -75,7 +71,11 @@ public abstract class Manager {
 			}
 		}
 
-		return emf.createEntityManager();
+		return emf;
+	}
+
+	public static EntityManager getEntityManager() {
+		return getEntityManagerFactory().createEntityManager();
 	}
 
 	public static long ping() {
