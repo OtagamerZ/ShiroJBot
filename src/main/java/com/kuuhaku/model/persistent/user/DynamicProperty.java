@@ -73,6 +73,11 @@ public class DynamicProperty extends DAO<DynamicProperty> {
 	}
 
 	public static void update(String uid, String key, Object value) {
-		DAO.applyNative("UPDATE dynamic_property SET value = ?3 WHERE uid = ?2 AND id = ?1", uid, key, value);
+		DAO.applyNative("""
+				INSERT INTO dynamic_property (id, uid, value)
+				VALUES (?1, ?2, ?3)
+				ON CONFLICT DO UPDATE
+				SET value = ?3
+				""", uid, key, value);
 	}
 }
