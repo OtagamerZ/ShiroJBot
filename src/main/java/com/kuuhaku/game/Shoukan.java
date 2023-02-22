@@ -2072,17 +2072,19 @@ public class Shoukan extends GameInstance<Phase> {
 							.queue()
 			);
 
-			buttons.put(Utils.parseEmoji("🏳"), w -> {
-				if (curr.isForfeit()) {
-					reportResult(GameReport.SUCCESS, "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
-					return;
-				}
+			if (getTurn() > 10) {
+				buttons.put(Utils.parseEmoji("🏳"), w -> {
+					if (curr.isForfeit()) {
+						reportResult(GameReport.SUCCESS, "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
+						return;
+					}
 
-				curr.setForfeit(true);
-				w.getHook().setEphemeral(true)
-						.sendMessage(getLocale().get("str/confirm_forfeit"))
-						.queue();
-			});
+					curr.setForfeit(true);
+					w.getHook().setEphemeral(true)
+							.sendMessage(getLocale().get("str/confirm_forfeit"))
+							.queue();
+				});
+			}
 		}
 
 		Pages.buttonize(msg, buttons, true, false, u -> u.getId().equals(curr.getUid()));

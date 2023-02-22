@@ -41,6 +41,9 @@ public enum SlotSkin {
 	MISSING("SS_MISSING"),
 	INVISIBLE("DEUS_VULT", "REBELLION", "HOARDER_II"),
 	LEGACY("VETERAN"),
+	NEBULA(),
+	GRAFITTI("SS_GRAFITTI", "REBELLION", "SURVIVOR"),
+	RAINBOW,
 	;
 
 	private final String[] titles;
