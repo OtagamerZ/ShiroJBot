@@ -120,7 +120,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Column(name = "last_vote")
 	private ZonedDateTime lastVote;
 
-	@Column(name = "vote_streak")
+	@Column(name = "vote_streak", nullable = false)
 	private int voteStreak;
 
 	public Account() {
