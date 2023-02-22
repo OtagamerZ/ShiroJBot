@@ -978,33 +978,34 @@ public class Hand {
 	}
 
 	public BufferedImage render(List<Drawable<?>> cards) {
-		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * Math.max(5, cards.size()), 100 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
 
 		int offset = bi.getWidth() / 2 - ((Drawable.SIZE.width + 20) * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {
-			int x = offset + 10 + (Drawable.SIZE.width + 10) * i;
+			int x = offset + 10 + (Drawable.SIZE.width + 10) * (i % 5);
+			int y = 100 + (100 + Drawable.SIZE.width) * (i / 5);
 
 			Drawable<?> d = cards.get(i);
 			boolean ally = equals(d.getHand());
 
 			if (getLockTime(Lock.BLIND) > 0 && ally) {
-				g2d.drawImage(userDeck.getStyling().getFrame().getBack(userDeck), x, 100, null);
+				g2d.drawImage(userDeck.getStyling().getFrame().getBack(userDeck), x, y, null);
 			} else {
-				g2d.drawImage(d.render(game.getLocale(), userDeck), x, 100, null);
+				g2d.drawImage(d.render(game.getLocale(), userDeck), x, y, null);
 			}
 
 			if (d.isAvailable() && ally) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
-						x + (Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
+						x + (Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), y - 10,
 						6, Color.BLACK
 				);
 			}
 
 			if (!ally) {
-				Graph.applyTransformed(g2d, x + 15, 115, g -> {
+				Graph.applyTransformed(g2d, x + 15, y + 15, g -> {
 					g.setClip(userDeck.getStyling().getFrame().getBoundary());
 					g.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 0, 0, null);
 				});
@@ -1014,7 +1015,7 @@ public class Hand {
 				boolean legacy = userDeck.getStyling().getFrame().isLegacy();
 				BufferedImage emp = IO.getResourceAsImage("kawaipon/frames/" + (legacy ? "old" : "new") + "/empowered.png");
 
-				g2d.drawImage(emp, x, 100, null);
+				g2d.drawImage(emp, x, y, null);
 			}
 		}
 
@@ -1100,7 +1101,7 @@ public class Hand {
 	public BufferedImage renderChoices() {
 		List<Drawable<?>> cards = selection.getFirst();
 
-		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * Math.max(5, cards.size()), 200 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, 100 + (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
@@ -1114,21 +1115,21 @@ public class Hand {
 
 		int offset = bi.getWidth() / 2 - ((Drawable.SIZE.width + 20) * cards.size()) / 2;
 		for (int i = 0; i < cards.size(); i++) {
-			int x = offset + 10 + (Drawable.SIZE.width + 10) * i;
+			int x = offset + 10 + (Drawable.SIZE.width + 10) * (i % 5);
+			int y = 100 + (100 + Drawable.SIZE.width) * (i / 5);
 
 			Drawable<?> d = cards.get(i);
 			Deck deck = Utils.getOr(d.getHand(), this).userDeck;
 
 			if (selection.getSecond()) {
-				DeckStyling style = deck.getStyling();
-				g2d.drawImage(style.getFrame().getBack(deck), x + 15, 115, null);
+				g2d.drawImage(deck.getStyling().getFrame().getBack(deck), x, y, null);
 			} else {
-				g2d.drawImage(d.render(game.getLocale(), deck), x, 100, null);
+				g2d.drawImage(d.render(game.getLocale(), deck), x, y, null);
 			}
 
 			if (d.isAvailable()) {
 				Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
-						x + (Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), 90,
+						x + (Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), y - 10,
 						6, Color.BLACK
 				);
 			}

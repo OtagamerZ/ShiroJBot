@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,12 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE VIEW v_match_winner AS
-SELECT x.id
-     , x.info ->> 'uid' AS uid
-     , x.info           AS head
-     , x.data
-FROM (
-     SELECT id
-          , head -> lower(head ->> 'winner')                                                 AS info
-          , jsonb_path_query_array(data, CAST('$.' || lower(head ->> 'winner') AS JSONPATH)) AS data
-     FROM match_history
-     ) x
-WHERE x.info IS NOT NULL
-ORDER BY x.id DESC
+CREATE OR REPLACE FUNCTION jsonb_pair(JSONB, VARCHAR)
+    RETURNS JSONB
+    LANGUAGE sql
+AS
+$$
+SELECT jsonb_build_object(d.key, d.value)
+FROM jsonb_each($1) d
+WHERE d.key = $2;
+$$;
