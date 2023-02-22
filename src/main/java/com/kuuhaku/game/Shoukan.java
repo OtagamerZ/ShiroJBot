@@ -1901,7 +1901,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		if (!singleplayer) {
+		if (!singleplayer && arcade == null) {
 			new MatchHistory(new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]))).save();
 		}
 
@@ -2273,11 +2273,11 @@ public class Shoukan extends GameInstance<Phase> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Shoukan shoukan = (Shoukan) o;
-		return seed == shoukan.seed && singleplayer == shoukan.singleplayer;
+		return seed == shoukan.seed && arcade == shoukan.arcade && singleplayer == shoukan.singleplayer;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(seed, singleplayer);
+		return Objects.hash(seed, arcade, singleplayer);
 	}
 }
