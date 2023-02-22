@@ -31,7 +31,7 @@ FROM (
                , data
                , iif((head ->> 'winner') = 'TOP', VARCHAR 'bottom', VARCHAR 'top') AS loser
           FROM match_history
-          WHERE head \? 'winner'
+          WHERE has(head, 'winner')
           ) x
      ) x
 WHERE x.info IS NOT NULL
