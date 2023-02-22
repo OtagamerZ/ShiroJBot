@@ -83,6 +83,7 @@ public class DeckSkinCommand implements Executable {
 					if (remaining.stream().anyMatch(t -> t.getCurrency() == null)) {
 						String req = Utils.properlyJoin(locale.get("str/and")).apply(
 								remaining.stream()
+										.filter(t -> t.getCurrency() == null)
 										.map(t -> "**`" + t.getInfo(locale).getName() + "`**")
 										.toList()
 						);
