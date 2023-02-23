@@ -100,6 +100,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private StateSnap snapshot = null;
 	private boolean restoring = true;
 	private boolean history = false;
+	private Side winner;
 
 	public Shoukan(I18N locale, Arcade arcade, User p1, User p2) {
 		this(locale, arcade, p1.getId(), p2.getId());
@@ -116,7 +117,7 @@ public class Shoukan extends GameInstance<Phase> {
 		);
 		this.singleplayer = p1.equals(p2);
 
-		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
+		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, getOther().getSide(), "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
 	}
 
 	@Override
@@ -272,7 +273,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private boolean debTerminate(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
-			reportResult(GameReport.SUCCESS, "GAME_TERMINATE");
+			reportResult(GameReport.SUCCESS, null, "GAME_TERMINATE");
 			return false;
 		}
 
@@ -1826,9 +1827,9 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				if (def != null) {
-					reportResult(GameReport.SUCCESS, "str/game_end_special", def, "<@" + hand.getOther().getUid() + ">");
+					reportResult(GameReport.SUCCESS, hand.getOther().getSide(), "str/game_end_special", def, "<@" + hand.getOther().getUid() + ">");
 				} else {
-					reportResult(GameReport.SUCCESS, "str/game_end", "<@" + hand.getUid() + ">", "<@" + hand.getOther().getUid() + ">");
+					reportResult(GameReport.SUCCESS, hand.getOther().getSide(), "str/game_end", "<@" + hand.getUid() + ">", "<@" + hand.getOther().getUid() + ">");
 				}
 
 				return;
@@ -1873,7 +1874,7 @@ public class Shoukan extends GameInstance<Phase> {
 				});
 	}
 
-	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String message, Object... args) {
+	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, Side winner, String message, Object... args) {
 		if (isClosed()) return;
 		turns.add(Turn.from(this));
 
@@ -1911,6 +1912,10 @@ public class Shoukan extends GameInstance<Phase> {
 							.queue();
 				}
 			}
+		}
+
+		if (winner != null) {
+			this.winner = winner;
 		}
 
 		if (!singleplayer && arcade == null) {
@@ -2108,7 +2113,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (getTurn() > 10) {
 				buttons.put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
-						reportResult(GameReport.SUCCESS, "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
+						reportResult(GameReport.SUCCESS, getOther().getSide(), "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
 						return;
 					}
 
@@ -2197,10 +2202,10 @@ public class Shoukan extends GameInstance<Phase> {
 			boolean noHand = curr.getCards().stream().noneMatch(d -> d instanceof Senshi);
 			boolean noField = getSlots(curr.getSide()).stream()
 					.flatMap(sc -> sc.getCards().stream())
-					.noneMatch(d -> d instanceof Senshi);
+					.noneMatch(Objects::nonNull);
 
 			if (noHand && noField) {
-				reportResult(GameReport.SUCCESS, "arcade/deck_royale_win", "<@" + curr.getUid() + ">", "<@" + curr.getOther().getUid() + ">");
+				reportResult(GameReport.SUCCESS, getOther().getSide(), "arcade/deck_royale_win", "<@" + curr.getUid() + ">", "<@" + curr.getOther().getUid() + ">");
 				return;
 			}
 		}
@@ -2278,6 +2283,10 @@ public class Shoukan extends GameInstance<Phase> {
 		reportEvent("str/game_turn_change", true, "<@" + curr.getUid() + ">", (int) Math.ceil(getTurn() / 2d));
 
 		takeSnapshot();
+	}
+
+	public Side getWinner() {
+		return winner;
 	}
 
 	@Override

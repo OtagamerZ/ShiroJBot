@@ -31,11 +31,7 @@ public record Match(Info info, List<Turn> turns) {
 				new Info(
 						makePlayer(game.getHands().get(Side.TOP)),
 						makePlayer(game.getHands().get(Side.BOTTOM)),
-						game.getHands().values().stream()
-								.filter(h -> h.getHP() == 0)
-								.map(Hand::getSide)
-								.map(Side::getOther)
-								.findFirst().orElse(null),
+						game.getWinner(),
 						winCondition
 				),
 				game.getTurns()
