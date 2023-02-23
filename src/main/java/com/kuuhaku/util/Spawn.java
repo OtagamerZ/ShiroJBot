@@ -93,7 +93,7 @@ public abstract class Spawn {
 			for (Rarity r : cPool.keySet()) {
 				if (r.getIndex() <= 0) continue;
 
-				rPool.add(r, 6 - r.getIndex());
+				rPool.add(r, 425 * (6 - r.getIndex()));
 			}
 
 			Card chosen = Utils.getRandomEntry(cPool.get(rPool.get()));

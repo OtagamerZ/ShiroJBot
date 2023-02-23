@@ -21,16 +21,17 @@ package com.kuuhaku.model.common.gacha;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.enums.Currency;
+import net.dv8tion.jda.api.entities.User;
 
 @GachaType(value = "basic", price = 2800, currency = Currency.CR)
 public class BasicGacha extends Gacha {
-	public BasicGacha() {
+	public BasicGacha(User u) {
 		super(DAO.queryAllUnmapped("""
 				SELECT c.id
-				     , get_weight(c.id) AS weight
+				     , get_weight(c.id, ?1) AS weight
 				FROM card c
 				WHERE get_rarity_index(c.rarity) < 6
 				ORDER BY weight, c.id
-				"""));
+				""", u.getId()));
 	}
 }

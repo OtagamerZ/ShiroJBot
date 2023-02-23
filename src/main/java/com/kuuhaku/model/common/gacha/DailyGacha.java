@@ -21,24 +21,25 @@ package com.kuuhaku.model.common.gacha;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.enums.Currency;
+import net.dv8tion.jda.api.entities.User;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 
 @GachaType(value = "daily", price = 3500, currency = Currency.CR)
 public class DailyGacha extends Gacha {
-	public DailyGacha() {
+	public DailyGacha(User u) {
 		super(DAO.queryAllUnmapped("""
 				SELECT x.id
 				     , x.weight
 				FROM (
 				     SELECT c.id
-				          , get_weight(c.id) AS weight
+				          , get_weight(c.id, ?1) AS weight
 				     FROM card c
-				     ORDER BY hashtextextended(c.id, ?1)
+				     ORDER BY hashtextextended(c.id, ?2)
 				     LIMIT 50
 				     ) x
 				ORDER BY x.weight, x.id
-				""", LocalDate.now().get(ChronoField.DAY_OF_YEAR)));
+				""", u.getId(), LocalDate.now().get(ChronoField.DAY_OF_YEAR)));
 	}
 }

@@ -21,6 +21,7 @@ package com.kuuhaku.model.common.gacha;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.enums.Currency;
+import net.dv8tion.jda.api.entities.User;
 
 @GachaType(value = "scrap", price = 1000, prizes = 4, currency = Currency.CR, post = """
 		import com.kuuhaku.model.persistent.user.KawaiponCard
@@ -31,13 +32,13 @@ import com.kuuhaku.model.enums.Currency;
 		}
 		""")
 public class ScrapGacha extends Gacha {
-	public ScrapGacha() {
+	public ScrapGacha(User u) {
 		super(DAO.queryAllUnmapped("""
 				SELECT c.id
-				     , get_weight(c.id) AS weight
+				     , get_weight(c.id, ?1) AS weight
 				FROM card c
 				WHERE get_rarity_index(c.rarity) = 1
 				ORDER BY weight, c.id
-				"""));
+				""", u.getId()));
 	}
 }

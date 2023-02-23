@@ -21,22 +21,23 @@ package com.kuuhaku.model.common.gacha;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.enums.Currency;
+import net.dv8tion.jda.api.entities.User;
 
 @GachaType(value = "summoner", price = 6200, currency = Currency.CR)
 public class SummonersGacha extends Gacha {
-	public SummonersGacha() {
+	public SummonersGacha(User u) {
 		super(DAO.queryAllUnmapped("""
 				SELECT x.id
 				     , x.weight
 				FROM (
 				     SELECT c.id
-				          , get_weight(c.id) AS weight
+				          , get_weight(c.id, ?1) AS weight
 				     FROM card c
 				     INNER JOIN senshi s ON c.id = s.card_id
 				     WHERE NOT has(s.tags, 'FUSION')
 				     ) x
 				WHERE x.weight IS NOT NULL
 				ORDER BY x.weight, x.id
-				"""));
+				""", u.getId()));
 	}
 }

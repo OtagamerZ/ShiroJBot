@@ -23,23 +23,24 @@ import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.util.Spawn;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.List;
 
 @GachaType(value = "premium", price = 1, prizes = 5, currency = Currency.GEM)
 public class PremiumGacha extends Gacha {
-	public PremiumGacha() {
+	public PremiumGacha(User u) {
 		this(DAO.queryAllUnmapped("""
 				SELECT x.id
 				     , x.weight
 				FROM (
 				     SELECT c.id
-				          , get_weight(c.id) AS weight
+				          , get_weight(c.id, ?1) AS weight
 				     FROM card c
 				     ) x
 				WHERE x.weight IS NOT NULL
 				ORDER BY x.weight, x.id
-				"""));
+				""", u.getId()));
 	}
 
 	private PremiumGacha(List<Object[]> pool) {
