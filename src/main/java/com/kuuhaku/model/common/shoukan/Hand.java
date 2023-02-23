@@ -926,7 +926,7 @@ public class Hand {
 		state = Bit.set(state, 2, rerolled);
 	}
 
-	public boolean hasEmpowered() {
+	public boolean isEmpowered() {
 		return Bit.on(state, 3);
 	}
 

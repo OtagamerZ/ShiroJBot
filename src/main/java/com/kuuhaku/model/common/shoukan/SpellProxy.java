@@ -20,6 +20,7 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Proxy;
+import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -32,7 +33,13 @@ public class SpellProxy extends Senshi implements Proxy<Evogear> {
 	public SpellProxy(Evogear e) {
 		super(e.getId(), e.getCard(), Race.NONE, e.getBase());
 
-		original = e.copy();
+		original = e.withCopy(evo -> {
+			Hand h = evo.getHand();
+			if (h.isEmpowered() && h.getOrigin().major() == Race.MYSTICAL) {
+				evo.getStats().setFlag(Flag.EMPOWERED, true, true);
+				h.setEmpowered(false);
+			}
+		});
 		setHand(e.getHand());
 		setFlipped(true);
 	}

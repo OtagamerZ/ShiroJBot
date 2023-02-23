@@ -416,7 +416,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi proxy = new SpellProxy(chosen);
-
 		if (args.getBoolean("notCombat")) {
 			if (slot.hasBottom()) {
 				getChannel().sendMessage(getLocale().get("error/slot_occupied")).queue();
@@ -554,7 +553,12 @@ public class Shoukan extends GameInstance<Phase> {
 		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 
 		chosen.setAvailable(false);
-		Evogear copy = chosen.copy();
+		Evogear copy = chosen.withCopy(e -> {
+			if (curr.isEmpowered() && curr.getOrigin().major() == Race.MACHINE) {
+				e.getStats().setFlag(Flag.EMPOWERED, true, true);
+				curr.setEmpowered(false);
+			}
+		});
 		if (!consumed.isEmpty()) {
 			copy.getStats().getData().put("consumed", consumed);
 		}
@@ -890,7 +894,12 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.consumeMP(chosen.getMPCost());
 		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 
-		Evogear copy = chosen.copy();
+		Evogear copy = chosen.withCopy(e -> {
+			if (curr.isEmpowered() && curr.getOrigin().major() == Race.MYSTICAL) {
+				e.getStats().setFlag(Flag.EMPOWERED, true, true);
+				curr.setEmpowered(false);
+			}
+		});
 		if (!consumed.isEmpty()) {
 			copy.getStats().getData().put("consumed", consumed);
 		}
