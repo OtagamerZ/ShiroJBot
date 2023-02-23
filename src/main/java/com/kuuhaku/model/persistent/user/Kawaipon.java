@@ -57,7 +57,7 @@ public class Kawaipon extends DAO<Kawaipon> {
 	private int stashCapacity = 250;
 
 	@ManyToOne
-	@PrimaryKeyJoinColumn(name = "fav_card")
+	@JoinColumn(name = "fav_card")
 	@Fetch(FetchMode.JOIN)
 	private Card favCard;
 
