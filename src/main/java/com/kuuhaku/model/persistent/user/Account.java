@@ -394,9 +394,8 @@ public class Account extends DAO<Account> implements Blacklistable {
 		}
 
 		lastDaily = now;
-		save();
-
 		addCR(10000, "Daily");
+		save();
 
 		return 0;
 	}
@@ -406,8 +405,10 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public void addVote() {
-		voteStreak = getStreak() + 1;
-		lastVote = ZonedDateTime.now(ZoneId.of("GMT-3"));
+		apply(this.getClass(), uid, a -> {
+			a.setStreak(a.getStreak() + 1);
+			a.setLastVote(ZonedDateTime.now(ZoneId.of("GMT-3")));
+		});
 	}
 
 	public boolean voted() {
@@ -415,6 +416,14 @@ public class Account extends DAO<Account> implements Blacklistable {
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 		return now.isBefore(lastVote.plusHours(12));
+	}
+
+	protected void setLastVote(ZonedDateTime lastVote) {
+		this.lastVote = lastVote;
+	}
+
+	protected void setStreak(int voteStreak) {
+		this.voteStreak = voteStreak;
 	}
 
 	public int getStreak() {

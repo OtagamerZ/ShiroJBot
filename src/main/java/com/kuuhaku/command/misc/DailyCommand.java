@@ -61,6 +61,5 @@ public class DailyCommand implements Executable {
 				chn.sendMessage(locale.get("achievement/title", event.user().getAsMention(), gems, acc.getStreak())).queue();
 			}
 		}
-		acc.save();
 	}
 }

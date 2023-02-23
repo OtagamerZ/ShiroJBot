@@ -1990,29 +1990,47 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				if (curr.isCritical() && !curr.hasUsedDestiny()) {
-					buttons.put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
-						if (curr.selectionPending()) {
-							getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
-							return;
-						}
+					if (Utils.equalsAny(curr.getOrigin().major(), Race.MACHINE, Race.MYSTICAL)) {
+						buttons.put(Utils.parseEmoji("⚡"), w -> {
+							if (curr.selectionPending()) {
+								getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
+								return;
+							}
 
-						BondedList<Drawable<?>> deque = curr.getRealDeck();
-						List<Drawable<?>> cards = new ArrayList<>();
-						cards.add(deque.getFirst());
-						if (deque.size() > 2) cards.add(deque.get((deque.size() - 1) / 2));
-						if (deque.size() > 1) cards.add(deque.getLast());
+							curr.setEmpowered(true);
+							curr.setUsedDestiny(true);
 
-						Drawable<?> d = curr.requestChoice(cards);
-						if (d != null) {
-							curr.getCards().add(d);
-							deque.remove(d);
+							if (curr.getOrigin().major() == Race.MACHINE) {
+								reportEvent("str/martial_empower", true, curr.getName());
+							} else {
+								reportEvent("str/arcane_empower", true, curr.getName());
+							}
+						});
+					} else {
+						buttons.put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
+							if (curr.selectionPending()) {
+								getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
+								return;
+							}
 
-							curr.showHand();
-							reportEvent("str/destiny_draw", true, curr.getName());
-						}
+							BondedList<Drawable<?>> deque = curr.getRealDeck();
+							List<Drawable<?>> cards = new ArrayList<>();
+							cards.add(deque.getFirst());
+							if (deque.size() > 2) cards.add(deque.get((deque.size() - 1) / 2));
+							if (deque.size() > 1) cards.add(deque.getLast());
 
-						curr.setUsedDestiny(true);
-					});
+							Drawable<?> d = curr.requestChoice(cards);
+							if (d != null) {
+								curr.getCards().add(d);
+								deque.remove(d);
+
+								curr.showHand();
+								reportEvent("str/destiny_draw", true, curr.getName());
+							}
+
+							curr.setUsedDestiny(true);
+						});
+					}
 				}
 			}
 

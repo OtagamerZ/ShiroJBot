@@ -237,10 +237,11 @@ public class Hand {
 	private int state = 0b100;
 	/*
 	0x000 FFFF F
-	      │└┤│ └ 0111
-	      │ ││    ││└ forfeit
-	      │ ││    │└─ destiny
-	      │ ││    └── reroll
+	      │└┤│ └ 1111
+	      │ ││   │││└ forfeit
+	      │ ││   ││└─ destiny
+	      │ ││   │└── reroll
+	      │ ││   └─── empower
 	      │ │└ (0 - 15) cooldown
 	      │ └─ (0 - 255) kills
 	      └─── (0 - 15) chain reduction
@@ -923,6 +924,14 @@ public class Hand {
 
 	public void setRerolled(boolean rerolled) {
 		state = Bit.set(state, 2, rerolled);
+	}
+
+	public boolean hasEmpowered() {
+		return Bit.on(state, 3);
+	}
+
+	public void setEmpowered(boolean empowered) {
+		state = Bit.set(state, 3, empowered);
 	}
 
 	public boolean isDefeated() {
