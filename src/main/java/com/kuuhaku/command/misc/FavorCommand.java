@@ -40,7 +40,7 @@ import java.time.temporal.ChronoField;
 import java.util.List;
 
 @Command(
-		name = "favored",
+		name = "favor",
 		category = Category.MISC
 )
 @Signature("<card:word:r>")
