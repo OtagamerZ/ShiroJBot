@@ -180,7 +180,7 @@ public class SynthesizeCommand implements Executable {
 	}
 
 	public static Evogear rollSynthesis(User u, double mult) {
-		RandomList<Evogear> pool = new RandomList<>(1 / (mult / 2));
+		RandomList<Evogear> pool = new RandomList<>(2 * mult);
 		List<Evogear> evos = DAO.findAll(Evogear.class);
 		for (Evogear evo : evos) {
 			if (evo.getTier() <= 0) continue;

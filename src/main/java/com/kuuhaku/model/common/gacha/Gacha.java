@@ -36,7 +36,7 @@ public abstract class Gacha {
 	protected final RandomList<String> pool;
 
 	public Gacha(List<Object[]> pool) {
-		this(new RandomList<>(1 / (Spawn.getRarityMult() / 2.5)), pool);
+		this(new RandomList<>(1.75 * Spawn.getRarityMult()), pool);
 	}
 
 	public Gacha(RandomList<String> pool, List<Object[]> data) {

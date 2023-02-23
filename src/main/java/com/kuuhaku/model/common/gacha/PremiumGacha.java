@@ -44,7 +44,7 @@ public class PremiumGacha extends Gacha {
 	}
 
 	private PremiumGacha(List<Object[]> pool) {
-		super(new RandomList<>(1 / (Spawn.getRarityMult() / 1.75)), pool);
+		super(new RandomList<>(2.5 * Spawn.getRarityMult()), pool);
 	}
 
 	@Override

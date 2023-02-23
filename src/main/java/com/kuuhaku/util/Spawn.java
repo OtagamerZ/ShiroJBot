@@ -78,7 +78,7 @@ public abstract class Spawn {
 			}
 			lastAnimes.add(anime);
 
-			RandomList<Card> pool = new RandomList<>(1 / (rarityBonus / 2));
+			RandomList<Card> pool = new RandomList<>(2 * rarityBonus);
 			for (Card c : anime.getCards()) {
 				if (c.getRarity().getIndex() <= 0) continue;
 
@@ -107,7 +107,7 @@ public abstract class Spawn {
 
 		Drop<?> drop = null;
 		if (Calc.chance(dropRate)) {
-			RandomList<Drop<?>> rPool = new RandomList<>(1 / (rarityBonus / 2.5));
+			RandomList<Drop<?>> rPool = new RandomList<>(1.75 * rarityBonus);
 			rPool.add(new CreditDrop());
 
 			drop = rPool.get();
