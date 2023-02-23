@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.info;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -81,6 +82,10 @@ public class SeeCardCommand implements Executable {
 				.setAuthor(locale.get("str/in_stash", stored))
 				.setTitle(card.getName() + " (" + card.getAnime() + ")")
 				.setImage("attachment://card.png");
+
+		if (card.equals(kp.getFavCard())) {
+			eb.addField(locale.get("str/favored").toUpperCase(), Constants.VOID, false);
+		}
 
 		String type = args.getString("kind", "n").toLowerCase();
 		BufferedImage bi = null;
