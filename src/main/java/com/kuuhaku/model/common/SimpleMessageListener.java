@@ -20,11 +20,11 @@ package com.kuuhaku.model.common;
 
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
+import java.util.concurrent.CompletableFuture;
 
-public abstract class SimpleMessageListener extends ListenerAdapter {
+public abstract class SimpleMessageListener {
 	private final GameChannel channel;
 	public Object mutex = new Object();
 
@@ -36,8 +36,11 @@ public abstract class SimpleMessageListener extends ListenerAdapter {
 		this.channel = channel;
 	}
 
-	@Override
-	public abstract void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event);
+	public void execute(GuildMessageReceivedEvent event) {
+		CompletableFuture.runAsync(() -> onGuildMessageReceived(event));
+	}
+
+	protected abstract void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event);
 
 	public SimpleMessageListener getSelf() {
 		return this;

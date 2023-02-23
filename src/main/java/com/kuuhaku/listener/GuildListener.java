@@ -209,7 +209,7 @@ public class GuildListener extends ListenerAdapter {
 			List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
 			for (SimpleMessageListener evt : evts) {
 				if (!evt.isClosed() && evt.checkChannel(data.channel())) {
-					evt.onGuildMessageReceived(event);
+					evt.execute(event);
 				}
 			}
 			evts.removeIf(SimpleMessageListener::isClosed);
