@@ -45,6 +45,7 @@ public enum SlotSkin {
 	NEBULA(5, Currency.GEM, "METANAUT", "TALKER_III", "UNTOUCHABLE", "MEDIC"),
 	GRAFITTI(5000, Currency.CR, "REBELLION", "SURVIVOR", "RUTHLESS"),
 	RAINBOW(1, Currency.GEM),
+	DIGITAL(5000, Currency.CR, "TALKER_II"),
 	;
 
 	private final int price;
