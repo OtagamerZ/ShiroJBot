@@ -17,8 +17,12 @@
  */
 
 CREATE OR REPLACE VIEW v_unused_cards AS
-SELECT anime_id
-     , COUNT(1) AS count
-FROM card
-WHERE get_rarity_index(rarity) < 6
-GROUP BY anime_id;
+SELECT c.id, c.rarity, c.anime_id
+FROM card c
+         LEFT JOIN senshi s ON c.id = s.card_id
+         LEFT JOIN evogear e ON c.id = e.card_id
+         LEFT JOIN field f ON c.id = f.card_id
+WHERE s.card_id IS NULL
+  AND e.card_id IS NULL
+  AND f.card_id IS NULL
+  AND c.rarity <> 'ULTIMATE';

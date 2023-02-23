@@ -42,13 +42,23 @@ import java.util.List;
 		name = "favor",
 		category = Category.MISC
 )
-@Signature("<card:word:r>")
+@Signature(allowEmpty = true, value = "<card:word:r>")
 public class FavorCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
+		if (args.isEmpty()) {
+			if (kp.getFavCard() == null) {
+				event.channel().sendMessage(locale.get("error/no_favor")).queue();
+				return;
+			}
+
+			event.channel().sendMessage(locale.get("str/current_favor", kp.getFavCard(), kp.getFavExpiration().getLong(ChronoField.INSTANT_SECONDS))).queue();
+			return;
+		}
+
 		if (kp.getFavCard() != null) {
-			event.channel().sendMessage(locale.get("error/favor_remaining", kp.getFavCard(), kp.getFavExpiration().getLong(ChronoField.INSTANT_SECONDS))).queue();
+			event.channel().sendMessage(locale.get("error/favor_remaining")).queue();
 			return;
 		}
 
