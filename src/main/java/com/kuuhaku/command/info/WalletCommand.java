@@ -53,7 +53,7 @@ public class WalletCommand implements Executable {
 						acc.getGems()
 				), true)
 				.addField(Constants.VOID, locale.get("str/wallet_info_2",
-						acc.getLastVote() == null ? locale.get("str/never") : Constants.TIMESTAMP.formatted(acc.getLastVote().get(ChronoField.INSTANT_SECONDS)),
+						acc.getLastVote() == null ? locale.get("str/never") : Constants.TIMESTAMP.formatted(acc.getLastVote().getLong(ChronoField.INSTANT_SECONDS)),
 						acc.getStreak()
 				), true);
 
