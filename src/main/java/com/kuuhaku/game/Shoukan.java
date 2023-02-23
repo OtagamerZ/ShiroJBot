@@ -330,10 +330,6 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
-			curr.consumeHP(chosen.getHPCost());
-			curr.consumeMP(chosen.getMPCost());
-			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
-
 			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(5));
 			slot.setBottom(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
@@ -341,6 +337,9 @@ public class Shoukan extends GameInstance<Phase> {
 					case "b" -> s.setFlipped(true);
 				}
 
+				curr.consumeHP(s.getHPCost());
+				curr.consumeMP(s.getMPCost());
+				List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost());
 				if (!consumed.isEmpty()) {
 					s.getStats().getData().put("consumed", consumed);
 				}
@@ -351,10 +350,6 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
-			curr.consumeHP(chosen.getHPCost());
-			curr.consumeMP(chosen.getMPCost());
-			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
-
 			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(5));
 			slot.setTop(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
@@ -362,6 +357,9 @@ public class Shoukan extends GameInstance<Phase> {
 					case "b" -> s.setFlipped(true);
 				}
 
+				curr.consumeHP(s.getHPCost());
+				curr.consumeMP(s.getMPCost());
+				List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost());
 				if (!consumed.isEmpty()) {
 					s.getStats().getData().put("consumed", consumed);
 				}
@@ -415,17 +413,18 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Senshi proxy = new SpellProxy(chosen);
+		SpellProxy proxy = new SpellProxy(chosen);
+		Evogear copy = proxy.getOriginal();
+
 		if (args.getBoolean("notCombat")) {
 			if (slot.hasBottom()) {
 				getChannel().sendMessage(getLocale().get("error/slot_occupied")).queue();
 				return false;
 			}
 
-			hand.consumeHP(chosen.getHPCost());
-			hand.consumeMP(chosen.getMPCost());
-			List<Drawable<?>> consumed = hand.consumeSC(chosen.getSCCost());
-
+			hand.consumeHP(copy.getHPCost());
+			hand.consumeMP(copy.getMPCost());
+			List<Drawable<?>> consumed = hand.consumeSC(copy.getSCCost());
 			if (!consumed.isEmpty()) {
 				proxy.getStats().getData().put("consumed", consumed);
 			}
@@ -438,10 +437,9 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
-			hand.consumeHP(chosen.getHPCost());
-			hand.consumeMP(chosen.getMPCost());
-			List<Drawable<?>> consumed = hand.consumeSC(chosen.getSCCost());
-
+			hand.consumeHP(copy.getHPCost());
+			hand.consumeMP(copy.getMPCost());
+			List<Drawable<?>> consumed = hand.consumeSC(copy.getSCCost());
 			if (!consumed.isEmpty()) {
 				proxy.getStats().getData().put("consumed", consumed);
 			}
@@ -547,22 +545,22 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Senshi target = slot.getTop();
-		curr.consumeHP(chosen.getHPCost());
-		curr.consumeMP(chosen.getMPCost());
-		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
-
-		chosen.setAvailable(false);
 		Evogear copy = chosen.withCopy(e -> {
 			if (curr.isEmpowered() && curr.getOrigin().major() == Race.MACHINE) {
 				e.getStats().setFlag(Flag.EMPOWERED, true, true);
 				curr.setEmpowered(false);
 			}
 		});
+
+		Senshi target = slot.getTop();
+		curr.consumeHP(copy.getHPCost());
+		curr.consumeMP(copy.getMPCost());
+		List<Drawable<?>> consumed = curr.consumeSC(copy.getSCCost());
 		if (!consumed.isEmpty()) {
 			copy.getStats().getData().put("consumed", consumed);
 		}
 
+		chosen.setAvailable(false);
 		target.getEquipments().add(copy);
 		curr.getData().put("last_equipment", copy);
 		reportEvent("str/equip_card", true,
@@ -867,16 +865,16 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Senshi enemy = tgt.enemy();
 		if (enemy != null && enemy.isProtected()) {
-			curr.consumeHP(chosen.getHPCost());
-			curr.consumeMP(chosen.getMPCost());
-			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
-
 			Evogear copy = chosen.copy();
+
+			curr.consumeHP(copy.getHPCost());
+			curr.consumeMP(copy.getMPCost());
+			List<Drawable<?>> consumed = curr.consumeSC(copy.getSCCost());
 			if (!consumed.isEmpty()) {
 				copy.getStats().getData().put("consumed", consumed);
 			}
 
-			if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
+			if (!copy.getStats().popFlag(Flag.FREE_ACTION)) {
 				chosen.setAvailable(false);
 				stack.add(copy);
 			}
@@ -890,27 +888,27 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		curr.consumeHP(chosen.getHPCost());
-		curr.consumeMP(chosen.getMPCost());
-		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
-
 		Evogear copy = chosen.withCopy(e -> {
 			if (curr.isEmpowered() && curr.getOrigin().major() == Race.MYSTICAL) {
 				e.getStats().setFlag(Flag.EMPOWERED, true, true);
 				curr.setEmpowered(false);
 			}
 		});
+
+		curr.consumeHP(copy.getHPCost());
+		curr.consumeMP(copy.getMPCost());
+		List<Drawable<?>> consumed = curr.consumeSC(copy.getSCCost());
 		if (!consumed.isEmpty()) {
 			copy.getStats().getData().put("consumed", consumed);
 		}
 
-		if (!chosen.execute(chosen.toParameters(tgt))) {
+		if (!copy.execute(copy.toParameters(tgt))) {
 			stack.remove(copy);
 			chosen.setAvailable(true);
 			return false;
 		}
 
-		if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
+		if (!copy.getStats().popFlag(Flag.FREE_ACTION)) {
 			chosen.setAvailable(false);
 			stack.add(copy);
 		}
@@ -919,7 +917,7 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(ON_SPELL, side);
 		reportEvent("str/activate_card", true,
 				curr.getName(),
-				chosen.getTags().contains("tag/secret") ? getLocale().get("str/a_spell") : chosen
+				copy.getTags().contains("tag/secret") ? getLocale().get("str/a_spell") : copy
 		);
 		return true;
 	}
