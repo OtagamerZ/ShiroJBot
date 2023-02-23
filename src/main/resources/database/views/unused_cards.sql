@@ -25,4 +25,5 @@ FROM card c
 WHERE s.card_id IS NULL
   AND e.card_id IS NULL
   AND f.card_id IS NULL
-  AND c.rarity <> 'ULTIMATE';
+  AND c.rarity <> 'ULTIMATE'
+ORDER BY c.anime_id, c.id;
