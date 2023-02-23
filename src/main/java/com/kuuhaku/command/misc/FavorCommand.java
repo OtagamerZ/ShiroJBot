@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.misc;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
@@ -53,7 +54,7 @@ public class FavorCommand implements Executable {
 				return;
 			}
 
-			event.channel().sendMessage(locale.get("str/current_favor", kp.getFavCard(), kp.getFavExpiration().getLong(ChronoField.INSTANT_SECONDS))).queue();
+			event.channel().sendMessage(locale.get("str/current_favor", kp.getFavCard(), Constants.TIMESTAMP_R.formatted(kp.getFavExpiration().getLong(ChronoField.INSTANT_SECONDS)))).queue();
 			return;
 		}
 
