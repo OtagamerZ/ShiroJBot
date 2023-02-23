@@ -24,22 +24,19 @@ import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.SingleUseReference;
 import com.kuuhaku.model.common.drop.CreditDrop;
 import com.kuuhaku.model.common.drop.Drop;
-import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.records.GuildBuff;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.jodah.expiringmap.ExpiringMap;
 import org.shredzone.commons.suncalc.MoonIllumination;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public abstract class Spawn {
 	private static final ExpiringMap<String, SingleUseReference<KawaiponCard>> spawnedCards = ExpiringMap.builder()
@@ -54,7 +51,7 @@ public abstract class Spawn {
 	private static FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(3);
 	private static FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(15);
 
-	public synchronized static KawaiponCard getKawaipon(GuildBuff gb, TextChannel channel) {
+	public synchronized static KawaiponCard getKawaipon(GuildBuff gb, TextChannel channel, User u) {
 		if (spawnedCards.containsKey(channel.getId())) return null;
 
 		double dropRate = 8 * (1.2 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount())) * (1 + gb.card()) * getQuantityMult();
@@ -81,22 +78,14 @@ public abstract class Spawn {
 			}
 			lastAnimes.add(anime);
 
-			Map<Rarity, Set<Card>> cPool = anime.getCards().stream()
-					.filter(c -> !lastCards.contains(c))
-					.collect(Collectors.groupingBy(Card::getRarity, Collectors.toSet()));
+			RandomList<Card> pool = new RandomList<>(1 / (rarityBonus / 2));
+			for (Card c : anime.getCards()) {
+				if (c.getRarity().getIndex() <= 0) continue;
 
-			if (cPool.isEmpty()) {
-				return null;
+				pool.add(c, DAO.queryNative(Integer.class, "SELECT get_weight(?1, ?2)", c.getId(), u.getId()));
 			}
 
-			RandomList<Rarity> rPool = new RandomList<>(1 / (rarityBonus / 2));
-			for (Rarity r : cPool.keySet()) {
-				if (r.getIndex() <= 0) continue;
-
-				rPool.add(r, 425 * (6 - r.getIndex()));
-			}
-
-			Card chosen = Utils.getRandomEntry(cPool.get(rPool.get()));
+			Card chosen = pool.get();
 			lastCards.add(chosen);
 
 			card = new KawaiponCard(chosen, Calc.chance(0.1 * rarityBonus));
@@ -110,7 +99,7 @@ public abstract class Spawn {
 		return card;
 	}
 
-	public synchronized static Drop<?> getDrop(GuildBuff gb, TextChannel channel) {
+	public synchronized static Drop<?> getDrop(GuildBuff gb, TextChannel channel, User u) {
 		if (spawnedDrops.containsKey(channel.getId())) return null;
 
 		double dropRate = 10 * (1.2 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount())) * (1 + gb.drop()) * getQuantityMult();
