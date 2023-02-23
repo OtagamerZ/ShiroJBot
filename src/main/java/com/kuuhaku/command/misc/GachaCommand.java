@@ -49,6 +49,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -117,7 +118,7 @@ public class GachaCommand implements Executable {
 		}
 
 		try {
-			Gacha gacha = chosen.getConstructor().newInstance();
+			Gacha gacha = chosen.getConstructor(User.class).newInstance(event.user());
 			Utils.confirm(locale.get("question/gacha", locale.get("gacha/" + type.value()).toLowerCase(), locale.get("currency/" + type.currency(), type.price())), event.channel(),
 					w -> {
 						List<String> result = gacha.draw();
