@@ -1193,7 +1193,7 @@ public class Shoukan extends GameInstance<Phase> {
 						List<SlotColumn> slts = arena.getSlots(op.getSide());
 						for (SlotColumn slt : slts) {
 							if (slt.hasTop()) {
-								slt.getTop().getStats().setDodge(-1);
+								slt.getTop().getStats().setDodge(-2);
 							}
 						}
 					}
@@ -1399,7 +1399,6 @@ public class Shoukan extends GameInstance<Phase> {
 			dmgMult /= 2;
 		}
 
-		Senshi enemy = null;
 		try {
 			if ((announce && source.canAttack()) || source.isAvailable()) {
 				for (Evogear e : source.getEquipments()) {
@@ -1434,7 +1433,7 @@ public class Shoukan extends GameInstance<Phase> {
 						List<SlotColumn> slts = arena.getSlots(op.getSide());
 						for (SlotColumn slt : slts) {
 							if (slt.hasTop()) {
-								slt.getTop().getStats().setDodge(-1);
+								slt.getTop().getStats().setDodge(-2);
 							}
 						}
 					}
@@ -1494,7 +1493,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (announce) {
-			reportEvent("str/combat", true, source, Utils.getOr(enemy, op.getName()), outcome);
+			reportEvent("str/combat", true, source, op.getName(), outcome);
 		}
 
 		return true;
