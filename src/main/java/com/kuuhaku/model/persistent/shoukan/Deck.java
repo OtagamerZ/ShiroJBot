@@ -589,6 +589,10 @@
 				 Origin origin = h == null ? getOrigins() : h.getOrigin();
 				 double reduction = Math.pow(0.999, -24 * getEvoWeight());
 				 int base = 6000;
+				 if (origin.major() == Race.HUMAN) {
+					 base += 1000;
+				 }
+
 				 int bHP = (int) Calc.clamp(base * 1.5 - base * 0.2799 * reduction, 10, base);
 
 				 int mp = 5;
