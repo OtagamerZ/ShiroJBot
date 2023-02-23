@@ -394,8 +394,9 @@ public class Account extends DAO<Account> implements Blacklistable {
 		}
 
 		lastDaily = now;
-		addCR(10000, "Daily");
 		save();
+
+		addCR(10000, "Daily");
 
 		return 0;
 	}
