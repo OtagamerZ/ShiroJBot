@@ -55,6 +55,7 @@ public class DailyCommand implements Executable {
 		if (acc.getStreak() > 0 && acc.getStreak() % 7 == 0) {
 			int gems = Math.min((int) Calc.getFibonacci(acc.getStreak() / 7), 3);
 			acc.addGems(gems, "Vote streak " + acc.getStreak());
+			acc.save();
 
 			TextChannel chn = data.config().getSettings().getNotificationsChannel();
 			if (chn != null) {
