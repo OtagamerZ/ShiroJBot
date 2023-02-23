@@ -443,10 +443,10 @@ public abstract class Utils {
 	}
 
 	public static CompletableFuture<Message> awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act) {
-		return awaitMessage(u, chn, act, 0, null);
+		return awaitMessage(u, chn, act, 0, null, null);
 	}
 
-	public static CompletableFuture<Message> awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit) {
+	public static CompletableFuture<Message> awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit, CompletableFuture<?> lock) {
 		CompletableFuture<Message> result = new CompletableFuture<>();
 
 		GuildListener.addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
@@ -455,6 +455,10 @@ public abstract class Utils {
 			{
 				if (unit != null) {
 					timeout = Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+						if (lock != null) {
+							lock.complete(null);
+						}
+
 						result.complete(null);
 						close();
 					}, time, unit);
@@ -744,7 +748,7 @@ public abstract class Utils {
 
 					msg.delete().queue(null, Utils::doNothing);
 					return true;
-				}, 1, TimeUnit.MINUTES
+				}, 1, TimeUnit.MINUTES, out
 		);
 
 		return out;
