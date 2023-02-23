@@ -48,7 +48,7 @@ public class FavorCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
 		if (kp.getFavCard() != null) {
-			event.channel().sendMessage(locale.get("error/favor_remaining", kp.getFavExpiration().get(ChronoField.INSTANT_SECONDS))).queue();
+			event.channel().sendMessage(locale.get("error/favor_remaining", kp.getFavCard(), kp.getFavExpiration().get(ChronoField.INSTANT_SECONDS))).queue();
 			return;
 		}
 
