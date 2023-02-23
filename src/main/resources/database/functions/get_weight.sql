@@ -39,3 +39,12 @@ FROM (
      ) x
 WHERE x.id = $1
 $$;
+
+CREATE OR REPLACE FUNCTION get_weight(VARCHAR, VARCHAR)
+    RETURNS INT
+    IMMUTABLE
+    LANGUAGE sql
+AS
+$$
+SELECT cast(round(get_weight($1) * iif(is_fav($2, $1), 1.25, 1.0)) AS INT)
+$$;

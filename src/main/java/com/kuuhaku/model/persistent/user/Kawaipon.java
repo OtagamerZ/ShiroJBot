@@ -28,6 +28,8 @@ import kotlin.Pair;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -53,6 +55,15 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	@Column(name = "stash_capacity", nullable = false)
 	private int stashCapacity = 250;
+
+	@OneToOne
+	@PrimaryKeyJoinColumn(name = "fav_card")
+	@Fetch(FetchMode.JOIN)
+	@MapsId("id")
+	private Card favCard;
+
+	@Column(name = "fav_expiration")
+	private ZonedDateTime favExpiration;
 
 	public Kawaipon() {
 	}
@@ -183,6 +194,24 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	public List<StashedCard> getTrash() {
 		return DAO.queryAll(StashedCard.class, "SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.trash = TRUE", uid);
+	}
+
+	public Card getFavCard() {
+		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
+		if (favExpiration == null || now.isAfter(favExpiration)) {
+			favCard = null;
+		}
+
+		return favCard;
+	}
+
+	public ZonedDateTime getFavExpiration() {
+		return favExpiration;
+	}
+
+	public void setFavCard(Card card) {
+		favCard = card;
+		favExpiration = ZonedDateTime.now(ZoneId.of("GMT-3")).plusDays(7);
 	}
 
 	@Override

@@ -1360,7 +1360,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private boolean attack(Senshi source, Hand op, Integer dmg, boolean announce) {
-		if (source == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
+		if (source == null || op == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
 			if (announce) {
 				getChannel().sendMessage(getLocale().get("error/card_cannot_attack")).queue();
 			}
@@ -2045,7 +2045,7 @@ public class Shoukan extends GameInstance<Phase> {
 						curr.getCards().remove(d);
 					}
 
-					curr.getCards().add(SynthesizeCommand.rollSynthesis(cards));
+					curr.getCards().add(SynthesizeCommand.rollSynthesis(curr.getUser(), cards));
 					curr.setOriginCooldown(3);
 					curr.showHand();
 					reportEvent("str/spirit_synth", true, curr.getName());

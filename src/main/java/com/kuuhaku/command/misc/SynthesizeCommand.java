@@ -48,6 +48,7 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -158,7 +159,7 @@ public class SynthesizeCommand implements Executable {
 									.addFile(IO.getBytes(f.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png")
 									.queue();
 						} else {
-							Evogear e = rollSynthesis(mult);
+							Evogear e = rollSynthesis(event.user(), mult);
 							new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
 
 							event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
@@ -174,17 +175,17 @@ public class SynthesizeCommand implements Executable {
 		}
 	}
 
-	public static Evogear rollSynthesis(List<StashedCard> cards) {
-		return rollSynthesis(getMult(cards));
+	public static Evogear rollSynthesis(User u, List<StashedCard> cards) {
+		return rollSynthesis(u, getMult(cards));
 	}
 
-	public static Evogear rollSynthesis(double mult) {
+	public static Evogear rollSynthesis(User u, double mult) {
 		RandomList<Evogear> pool = new RandomList<>(1 / (mult / 2));
 		List<Evogear> evos = DAO.findAll(Evogear.class);
 		for (Evogear evo : evos) {
 			if (evo.getTier() <= 0) continue;
 
-			pool.add(evo, 5 - evo.getTier());
+			pool.add(evo, DAO.queryNative(Integer.class, "SELECT get_weight(?1, ?2)", evo.getId(), u.getId()));
 		}
 
 		return pool.get();
