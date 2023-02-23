@@ -34,7 +34,6 @@ import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.User;
 
 import java.time.temporal.ChronoField;
 import java.util.List;
