@@ -100,6 +100,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private StateSnap snapshot = null;
 	private boolean restoring = true;
 	private boolean history = false;
+	private boolean lock = false;
 	private Side winner;
 
 	public Shoukan(I18N locale, Arcade arcade, User p1, User p2) {
@@ -168,9 +169,14 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
-			synchronized (this) {
-				if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
-					getCurrent().showHand();
+			if (!lock) {
+				try {
+					lock = true;
+					if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
+						getCurrent().showHand();
+					}
+				} finally {
+					lock = false;
 				}
 			}
 		}
