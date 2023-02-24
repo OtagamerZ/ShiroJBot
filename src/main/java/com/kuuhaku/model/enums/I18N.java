@@ -72,11 +72,11 @@ public enum I18N {
 					icon = "";
 				}
 
-				return (icon.isBlank() ? message : icon + " | " + message).formatted(args);
+				return icon.isBlank() ? message : icon + " | " + message;
 			} catch (MissingResourceException e) {
 				return key;
 			}
-		});
+		}).formatted(args);
 	}
 
 	public Locale getLocale() {
