@@ -254,10 +254,10 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		BufferedImage aux = IO.getResourceAsImage("shoukan/side/middle.webp");
+		BufferedImage aux = IO.getResourceAsImage("shoukan/side/middle.png");
 		g2d.drawImage(aux, bi.getWidth() / 2 - aux.getWidth() / 2, bi.getHeight() / 2 - aux.getHeight() / 2, null);
 
-		aux = IO.getResourceAsImage("shoukan/overlay/middle.webp");
+		aux = IO.getResourceAsImage("shoukan/overlay/middle.png");
 		g2d.drawImage(aux, bi.getWidth() / 2 - aux.getWidth() / 2, bi.getHeight() / 2 - aux.getHeight() / 2, null);
 
 		g2d.dispose();

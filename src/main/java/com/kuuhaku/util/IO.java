@@ -20,7 +20,6 @@ package com.kuuhaku.util;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
-import com.luciad.imageio.webp.WebPWriteParam;
 import okio.Buffer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -118,11 +117,7 @@ public abstract class IO {
 
 			if (param.canWriteCompressed()) {
 				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-				if (param instanceof WebPWriteParam webp) {
-					webp.setCompressionType(param.getCompressionTypes()[WebPWriteParam.LOSSY_COMPRESSION]);
-				} else {
-					param.setCompressionType(param.getCompressionTypes()[0]);
-				}
+				param.setCompressionType(param.getCompressionTypes()[0]);
 
 				param.setCompressionQuality(quality);
 			}

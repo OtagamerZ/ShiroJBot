@@ -26,6 +26,6 @@ public enum ProfileEffect {
 	NONE, HEX, SCANLINE, VIGNETTE;
 
 	public BufferedImage getImage() {
-		return IO.getResourceAsImage("assets/profile_overlays/" + name().toLowerCase() + ".webp");
+		return IO.getResourceAsImage("assets/profile_overlays/" + name().toLowerCase() + ".png");
 	}
 }

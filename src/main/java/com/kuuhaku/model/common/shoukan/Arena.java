@@ -175,7 +175,7 @@ public class Arena implements Renderer {
 				Hand h = game.getHands().get(side);
 				int regdeg = h.getRegDeg().peek();
 				if (regdeg != 0) {
-					BufferedImage over = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen_" + side.name().toLowerCase() + ".webp");
+					BufferedImage over = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen_" + side.name().toLowerCase() + ".png");
 					g1.drawImage(over, 0, CENTER.y * side.ordinal(), null);
 				}
 
@@ -475,7 +475,7 @@ public class Arena implements Renderer {
 
 				int regdeg = hand.getRegDeg().peek();
 				if (regdeg != 0) {
-					BufferedImage tex = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen.webp");
+					BufferedImage tex = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen.png");
 					g1.setPaint(new TexturePaint(
 							tex,
 							new Rectangle(bar.x, bar.y + bar.height + (reversed ? 1 : 0), bar.height, bar.height * (reversed ? -1 : 1) + (reversed ? -1 : 1))

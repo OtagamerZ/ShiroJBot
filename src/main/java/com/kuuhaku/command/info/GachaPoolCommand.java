@@ -38,6 +38,7 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.User;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -77,7 +78,7 @@ public class GachaPoolCommand implements Executable {
 				.setTitle(locale.get("str/gacha_pool", locale.get("gacha/" + type.value()).toLowerCase()));
 
 		try {
-			Gacha gacha = chosen.getConstructor().newInstance();
+			Gacha gacha = chosen.getConstructor(User.class).newInstance(event.user());
 			List<Card> pool = new ArrayList<>(DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE id IN ?1", gacha.getPool()));
 			pool.sort(
 					Comparator.<Card>comparingDouble(c -> gacha.rarityOf(c.getId()))

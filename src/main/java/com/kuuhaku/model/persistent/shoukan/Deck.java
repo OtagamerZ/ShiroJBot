@@ -292,7 +292,7 @@
 	 }
 
 	 public BufferedImage render(I18N locale) {
-		 BufferedImage bi = IO.getResourceAsImage("shoukan/deck.webp");
+		 BufferedImage bi = IO.getResourceAsImage("shoukan/deck.png");
 		 Graphics2D g2d = bi.createGraphics();
 		 g2d.setRenderingHints(Constants.HD_HINTS);
 
@@ -301,7 +301,7 @@
 			 g.setComposite(BlendComposite.Color);
 			 g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		 });
-		 Graph.applyMask(bi, IO.getResourceAsImage("shoukan/mask/deck_mask.webp"), 0, true);
+		 Graph.applyMask(bi, IO.getResourceAsImage("shoukan/mask/deck_mask.png"), 0, true);
 
 		 List<Drawable<?>> allCards = new ArrayList<>();
 		 allCards.addAll(getSenshi());
