@@ -26,14 +26,18 @@ FROM (
           , x.info
           , jsonb_path_query_array(data, CAST(x.path AS JSONPATH)) AS data
      FROM (
-          SELECT id
-               , head -> lower(head ->> 'winner') AS info
-               , data
-               , format('$.%s ? (@ %% 2 == %s)',
-                        lower(head ->> 'winner'),
-                        iif((head ->> 'winner') = 'TOP', 0, 1)
-              )                                   AS path
-          FROM match_history
+          SELECT x.id
+               , x.head -> x.winner                                                     AS info
+               , x.data
+               , format('$.%s ? (@ %% 2 == %s)', x.winner, iif(x.winner = 'top', 0, 1)) AS path
+          FROM (
+               SELECT id
+                    , head
+                    , data
+                    , lower(head ->> 'winner') AS winner
+               FROM match_history
+               WHERE has(head, 'winner')
+               ) x
           ) x
      ) x
 WHERE x.info IS NOT NULL
