@@ -943,13 +943,14 @@ public abstract class Utils {
 
 	public static Object exec(@Language("Groovy") String code, Map<String, Object> variables) {
 		Binding ctx = new Binding(variables);
-		Script script = SCRIPT_CACHE.computeIfAbsent(Calc.hash(code, "sha1"), k -> Constants.GROOVY.parse(code, ctx));
+		Script script = SCRIPT_CACHE.computeIfAbsent(Calc.hash(code, "sha1"), k -> Constants.GROOVY.parse(code));
+		script.setBinding(ctx);
 
 		return script.run();
 	}
 
 	public static Script compile(@Language("Groovy") String code) {
-		return SCRIPT_CACHE.computeIfAbsent(Calc.hash(code, "sha1"), k -> Constants.GROOVY.parse(code, new Binding()));
+		return SCRIPT_CACHE.computeIfAbsent(Calc.hash(code, "sha1"), k -> Constants.GROOVY.parse(code));
 	}
 
 	public static <K, V> void shufflePairs(Map<K, V> map) {
