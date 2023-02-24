@@ -37,7 +37,6 @@ import com.kuuhaku.model.records.StashItem;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import groovy.lang.Binding;
-import groovy.lang.GroovyCodeSource;
 import groovy.lang.Script;
 import jakarta.persistence.NoResultException;
 import kotlin.Pair;
@@ -47,6 +46,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.jodah.expiringmap.ExpirationPolicy;
+import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
@@ -56,7 +57,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.text.similarity.LevenshteinDistance;
-import org.codehaus.groovy.runtime.InvokerHelper;
 import org.intellij.lang.annotations.Language;
 
 import javax.annotation.Nonnull;
@@ -84,6 +84,10 @@ import java.util.zip.CRC32;
 
 public abstract class Utils {
 	public static final Set<String> CONFIMATIONS = ConcurrentHashMap.newKeySet();
+	private static final ExpiringMap<String, Script> SCRIPT_CACHE = ExpiringMap.builder()
+			.expiration(30, TimeUnit.MINUTES)
+			.expirationPolicy(ExpirationPolicy.ACCESSED)
+			.build();
 
 	public static String toStringDuration(I18N locale, long millis) {
 		long days = millis / Constants.MILLIS_IN_DAY;
@@ -938,20 +942,14 @@ public abstract class Utils {
 	}
 
 	public static Object exec(@Language("Groovy") String code, Map<String, Object> variables) {
-		GroovyCodeSource source = new GroovyCodeSource(code, Calc.hash(code, "sha1"), "/scripts");
-		Class<?> compiled = Constants.GROOVY_CL.parseClass(source, true);
-
 		Binding ctx = new Binding(variables);
-		Script script = InvokerHelper.createScript(compiled, ctx);
+		Script script = SCRIPT_CACHE.computeIfAbsent(Calc.hash(code, "sha1"), k -> Constants.GROOVY.parse(code, ctx));
 
 		return script.run();
 	}
 
 	public static Script compile(@Language("Groovy") String code) {
-		GroovyCodeSource source = new GroovyCodeSource(code, Calc.hash(code, "sha1"), "/scripts");
-		Class<?> compiled = Constants.GROOVY_CL.parseClass(source, true);
-
-		return InvokerHelper.createScript(compiled, new Binding());
+		return SCRIPT_CACHE.computeIfAbsent(Calc.hash(code, "sha1"), k -> Constants.GROOVY.parse(code, new Binding()));
 	}
 
 	public static <K, V> void shufflePairs(Map<K, V> map) {
