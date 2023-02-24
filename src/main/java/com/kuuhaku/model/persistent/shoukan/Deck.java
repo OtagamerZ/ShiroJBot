@@ -531,7 +531,7 @@
 			 TreeBag<Race> races = new TreeBag<>();
 			 for (Senshi s : getSenshi()) {
 				 races.addAll(
-						 Arrays.stream(s.getRace().split())
+						 s.getRace().split().stream()
 								 .filter(r -> r != Race.NONE)
 								 .toList()
 				 );

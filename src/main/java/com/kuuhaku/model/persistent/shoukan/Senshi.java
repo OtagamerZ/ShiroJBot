@@ -447,14 +447,26 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Field f = hand.getGame().getArena().getField();
 
 		double mult = 1;
-		Race[] races = getRace().split();
-		for (Race r : races) {
-			double mod = f.getModifiers().getDouble(r.name()) / races.length;
-			mult += mod;
+		Set<Race> races = new HashSet<>(getRace().split());
+		races.add(race);
+
+		for (Map.Entry<String, Object> e : f.getModifiers().entrySet()) {
+			Race r = Race.valueOf(e.getKey());
+
+			double mod = 0;
+			if (race.isRace(r)) {
+				mod = (Double) e.getValue();
+
+				if (race != r) {
+					mod /= 2;
+				}
+			}
 
 			if (mod != 0 && hand.getOrigin().synergy() == Race.ELF) {
-				mult += 0.05;
+				mod += 0.05;
 			}
+
+			mult += mod;
 		}
 
 		return mult;

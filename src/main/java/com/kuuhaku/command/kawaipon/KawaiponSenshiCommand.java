@@ -99,7 +99,7 @@ public class KawaiponSenshiCommand implements Executable {
 					.addField(locale.get("str/major_effect"), race.getMajor(locale), false)
 					.addField(locale.get("str/minor_effect"), race.getMinor(locale), false);
 		} else {
-			eb.addField(locale.get("str/origins"), Arrays.stream(race.split()).map(r -> r.getName(locale)).collect(Collectors.joining(" + ")), false)
+			eb.addField(locale.get("str/origins"), race.split().stream().map(r -> r.getName(locale)).collect(Collectors.joining(" + ")), false)
 					.addField(locale.get("str/synergy_effect"), race.getSynergy(locale), false);
 		}
 

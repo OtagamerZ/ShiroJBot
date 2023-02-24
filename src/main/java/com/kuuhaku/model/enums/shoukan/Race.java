@@ -126,7 +126,7 @@ public enum Race {
 		return Race.getByFlag(flag & ~without.flag);
 	}
 
-	public Race[] split() {
+	public List<Race> split() {
 		List<Race> races = new ArrayList<>();
 
 		int bits = flag;
@@ -139,7 +139,7 @@ public enum Race {
 			bits >>= 1;
 		}
 
-		return races.toArray(Race[]::new);
+		return races;
 	}
 
 	public Race[] derivates() {
@@ -188,11 +188,11 @@ public enum Race {
 		if (Integer.bitCount(flag) == 1) {
 			g2d.setColor(Graph.getColor(bi));
 		} else {
-			Race[] subs = split();
+			List<Race> subs = split();
 
 			g2d.setPaint(new GradientPaint(
-					0, 0, subs[0].getColor(),
-					bi.getWidth(), 0, subs[1].getColor()
+					0, 0, subs.get(0).getColor(),
+					bi.getWidth(), 0, subs.get(1).getColor()
 			));
 		}
 
@@ -207,11 +207,11 @@ public enum Race {
 	}
 
 	public Color getColor() {
-		Race[] pures = split();
-		if (pures.length == 1) {
+		List<Race> pures = split();
+		if (pures.size() == 1) {
 			return Graph.getColor(getImage());
 		} else {
-			return Graph.mix(Graph.getColor(pures[0].getImage()), Graph.getColor(pures[1].getImage()));
+			return Graph.mix(Graph.getColor(pures.get(0).getImage()), Graph.getColor(pures.get(1).getImage()));
 		}
 	}
 
