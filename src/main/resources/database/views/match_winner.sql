@@ -31,7 +31,7 @@ FROM (
                , data
                , format('$.%s ? (@ %% 2 == %s)',
                         lower(head ->> 'winner'),
-                        iif((head ->> 'winner') = 'TOP', 1, 0)
+                        iif((head ->> 'winner') = 'TOP', 0, 1)
               )                                   AS path
           FROM match_history
           ) x

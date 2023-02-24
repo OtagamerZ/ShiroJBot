@@ -29,7 +29,7 @@ FROM (
           SELECT x.id
                , x.head -> x.loser                                                    AS info
                , x.data
-               , format('$.%s ? (@ %% 2 == %s)', x.loser, iif(x.loser = 'top', 1, 0)) AS path
+               , format('$.%s ? (@ %% 2 == %s)', x.loser, iif(x.loser = 'top', 0, 1)) AS path
           FROM (
                SELECT id
                     , head
