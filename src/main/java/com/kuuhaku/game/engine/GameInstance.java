@@ -78,7 +78,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 				}
 
 				@Override
-				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+				public synchronized void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 					if (checkChannel(event.getChannel()) && validate(event.getMessage())) {
 						try {
 							runtime(event.getAuthor(), event.getMessage().getContentRaw());
