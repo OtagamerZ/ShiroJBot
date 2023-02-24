@@ -168,8 +168,10 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
-			if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
-				getCurrent().showHand();
+			synchronized (this) {
+				if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
+					getCurrent().showHand();
+				}
 			}
 		}
 	}
