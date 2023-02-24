@@ -66,6 +66,6 @@ public class NotificationsCommand implements Executable {
 		settings.setNotificationsChannel(channel);
 		settings.save();
 
-		event.channel().sendMessage(locale.get("success/notifications_channel_set").formatted(channel.getAsMention())).queue();
+		event.channel().sendMessage(locale.get("success/notifications_channel_set", channel.getAsMention())).queue();
 	}
 }

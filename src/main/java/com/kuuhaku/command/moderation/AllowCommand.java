@@ -48,7 +48,7 @@ public class AllowCommand implements Executable {
 		}
 
 		if (settings.getDeniedChannels().stream().noneMatch(t -> t.equals(channel))) {
-			event.channel().sendMessage(locale.get("error/allowed").formatted(
+			event.channel().sendMessage(locale.get("error/allowed",
 					channel == event.channel() ? "this channel" : channel.getAsMention()
 			)).queue();
 			return;
@@ -57,7 +57,7 @@ public class AllowCommand implements Executable {
 		settings.getDeniedChannels().remove(channel);
 		settings.save();
 
-		event.channel().sendMessage(locale.get("success/commands_allowed").formatted(
+		event.channel().sendMessage(locale.get("success/commands_allowed",
 				channel == event.channel() ? "this channel" : channel.getAsMention()
 		)).queue();
 	}

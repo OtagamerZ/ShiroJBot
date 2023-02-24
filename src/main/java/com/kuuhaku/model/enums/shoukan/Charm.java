@@ -52,7 +52,7 @@ public enum Charm {
 			val = String.valueOf(getValue(tier));
 		}
 
-		return locale.get("charm/" + name() + "_desc").formatted(val);
+		return locale.get("charm/" + name() + "_desc", val);
 	}
 
 	public BufferedImage getIcon() {

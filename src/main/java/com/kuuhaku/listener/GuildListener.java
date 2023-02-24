@@ -451,7 +451,7 @@ public class GuildListener extends ListenerAdapter {
 					String error;
 
 					if (e.getOptions().length > 0) {
-						error = locale.get("error/invalid_option").formatted(
+						error = locale.get("error/invalid_option",
 								Utils.properlyJoin(locale.get("str/or")).apply(List.of(e.getOptions()))
 						) + "```css\n%s%s %s```".formatted(
 								event.config().getPrefix(),

@@ -60,7 +60,7 @@ public class StarboardCommand implements Executable {
 
 		int value = args.getInt("value");
 		if (!Utils.between(value, 3, 50)) {
-			event.channel().sendMessage(locale.get("error/invalid_value_range").formatted(3, 50)).queue();
+			event.channel().sendMessage(locale.get("error/invalid_value_range", 3, 50)).queue();
 			return;
 		}
 
