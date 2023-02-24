@@ -556,7 +556,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Evogear copy = chosen.withCopy(e -> {
 			if (curr.isEmpowered() && curr.getOrigin().major() == Race.MACHINE) {
-				e.getStats().setFlag(Flag.EMPOWERED, true, true);
+				e.getStats().setFlag(Flag.EMPOWERED, true);
 				curr.setEmpowered(false);
 			}
 		});
@@ -899,7 +899,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Evogear copy = chosen.withCopy(e -> {
 			if (curr.isEmpowered() && curr.getOrigin().major() == Race.MYSTICAL) {
-				e.getStats().setFlag(Flag.EMPOWERED, true, true);
+				e.getStats().setFlag(Flag.EMPOWERED, true);
 				curr.setEmpowered(false);
 			}
 		});
