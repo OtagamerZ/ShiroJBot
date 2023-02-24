@@ -46,32 +46,6 @@ public enum I18N {
 		return code.get(key, args);
 	}
 
-	public String get(String key) {
-		if (key == null) return "";
-		else if (key.contains(" ") && !key.contains("/")) return key;
-
-		String lower = key.toLowerCase();
-		if (!key.equals(lower)) return get(lower);
-
-		return Main.getCacheManager().computeLocale(name() + "-" + key, (k, v) -> {
-			if (v != null) return v;
-
-			try {
-				String message = ResourceBundle.getBundle("locale/lang", locale).getString(key);
-				String icon;
-				try {
-					icon = ResourceBundle.getBundle("locale/lang", locale).getString("icon/" + key.split("/")[0]);
-				} catch (MissingResourceException e) {
-					icon = "";
-				}
-
-				return icon.isBlank() ? message : icon + " | " + message;
-			} catch (MissingResourceException e) {
-				return key;
-			}
-		});
-	}
-
 	public String get(String key, Object... args) {
 		if (key == null) return "";
 		else if (key.contains(" ") && !key.contains("/")) return key;
