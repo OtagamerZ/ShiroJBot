@@ -36,7 +36,7 @@ public class SpellProxy extends Senshi implements Proxy<Evogear> {
 		original = e.withCopy(evo -> {
 			Hand h = evo.getHand();
 			if (h.isEmpowered() && h.getOrigin().major() == Race.MYSTICAL) {
-				evo.getStats().setFlag(Flag.EMPOWERED, true, true);
+				evo.getStats().setFlag(Flag.EMPOWERED, true);
 				h.setEmpowered(false);
 			}
 		});
