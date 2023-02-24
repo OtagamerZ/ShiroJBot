@@ -406,7 +406,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			game.getChannel().sendMessage(game.getLocale().get("error/spell", game.getString(e.getMessage()))).queue();
 			return false;
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
+			Constants.LOGGER.warn("Failed to execute " + Utils.getOr(stats.getSource(), this) + " effect", e);
 			game.getChannel().sendMessage(game.getLocale().get("error/effect")).queue();
 			return false;
 		}
@@ -431,7 +431,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					));
 		} catch (ActivationException ignored) {
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
+			Constants.LOGGER.warn("Failed to execute " + Utils.getOr(stats.getSource(), this) + " effect", e);
 		}
 	}
 

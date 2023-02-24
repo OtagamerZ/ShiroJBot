@@ -1020,7 +1020,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			game.getChannel().sendMessage(game.getLocale().get("error/activation", game.getString(e.getMessage()))).queue();
 			return false;
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
+			Constants.LOGGER.warn("Failed to execute " + Utils.getOr(stats.getSource(), this) + " effect", e);
 			game.getChannel().sendMessage(game.getLocale().get("error/effect")).queue();
 			return false;
 		} finally {
@@ -1048,7 +1048,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					"trigger", trigger
 			));
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to execute " + card.getName() + " effect", e);
+			Constants.LOGGER.warn("Failed to execute " + Utils.getOr(stats.getSource(), this) + " effect", e);
 		} finally {
 			unlock();
 		}
