@@ -31,7 +31,7 @@ import static com.kuuhaku.model.enums.shoukan.Side.TOP;
 import static com.kuuhaku.util.Utils.map;
 import static com.kuuhaku.util.Utils.safeGet;
 
-public record Turn(Side top, Side bottom, List<String> banned, String field) {
+public record Turn(int turn, Side top, Side bottom, List<String> banned, String field) {
 	public static Turn from(Shoukan game) {
 		Hand top = game.getHands().get(TOP);
 		Hand bot = top.getOther();
@@ -83,6 +83,7 @@ public record Turn(Side top, Side bottom, List<String> banned, String field) {
 		);
 
 		return new Turn(
+				game.getTurn(),
 				topSide, botSide,
 				Drawable.ids(game.getArena().getBanned()),
 				game.getArena().getField().getId()
