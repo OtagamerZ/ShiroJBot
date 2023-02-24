@@ -34,6 +34,7 @@ import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
+import kotlin.Pair;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
@@ -41,8 +42,8 @@ import org.hibernate.annotations.Type;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -217,18 +218,21 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 			g1.setFont(FONT);
 			FontMetrics m = g1.getFontMetrics();
 
+			List<Pair<Race, Double>> mods = modifiers.entrySet().stream()
+					.map(e -> new Pair<>(Race.valueOf(e.getKey()), (Double) e.getValue()))
+					.sorted(Comparator.comparing(p -> -p.getSecond()))
+					.toList();
+
 			int i = 0;
-			for (Map.Entry<String, Object> entry : modifiers.entrySet()) {
-				Race r = Race.valueOf(entry.getKey());
-				double mod = ((Number) entry.getValue()).doubleValue();
-				if (mod == 0) continue;
+			for (Pair<Race, Double> mod : mods) {
+				if (mod.getSecond() == 0) continue;
 
 				int y = 279 - 25 * i++;
 
-				BufferedImage icon = r.getIcon();
+				BufferedImage icon = mod.getFirst().getIcon();
 				g1.drawImage(icon, 23, y, null);
-				g1.setColor(r.getColor());
-				Graph.drawOutlinedString(g1, Utils.sign((int) (mod * 100)) + "%",
+				g1.setColor(mod.getFirst().getColor());
+				Graph.drawOutlinedString(g1, Utils.sign((int) (mod.getSecond() * 100)) + "%",
 						23 + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2,
 						BORDER_WIDTH, Color.BLACK
 				);
