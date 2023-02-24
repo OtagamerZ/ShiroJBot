@@ -938,7 +938,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int idx = args.getInt("choice") - 1;
-		if (idx == 0) {
+		if (idx == -1) {
 			selection.getThird().complete(null);
 			return true;
 		}
