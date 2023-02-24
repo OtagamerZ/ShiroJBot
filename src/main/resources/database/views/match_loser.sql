@@ -24,12 +24,12 @@ SELECT x.id
 FROM (
      SELECT x.id
           , x.info
-          , jsonb_path_query_array(x.data, CAST(x.path AS JSONPATH)) AS data
+          , jsonb_path_query_array(x.data, CAST('$.' || x.loser AS JSONPATH)) AS data
      FROM (
           SELECT x.id
-               , x.head -> x.loser                                                    AS info
-               , x.data
-               , format('$.%s ? (@ %% 2 == %s)', x.loser, iif(x.loser = 'top', 0, 1)) AS path
+               , x.head -> x.loser                                                                                 AS info
+               , jsonb_path_query_array(x.data,CAST('$[*] ? (@.turn % 2 == ' || iif(x.loser = 'top', 0, 1) || ')' AS JSONPATH)) AS data
+               , x.loser
           FROM (
                SELECT id
                     , head
