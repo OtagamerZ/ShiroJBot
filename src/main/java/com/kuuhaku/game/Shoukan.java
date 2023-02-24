@@ -1787,6 +1787,8 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private void reportEvent(String message, boolean trigger, Object... args) {
+		if (getChannel() == null) return;
+
 		for (TextChannel chn : getChannel().getChannels()) {
 			String msg = messages.get(chn.getId());
 			if (msg != null) {
