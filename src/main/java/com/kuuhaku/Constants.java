@@ -21,6 +21,7 @@ package com.kuuhaku;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.user.Account;
+import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyShell;
 import it.sauronsoftware.cron4j.Scheduler;
 import net.dv8tion.jda.api.Permission;
@@ -43,7 +44,7 @@ public abstract class Constants {
 	public static final String SUPPORT_SERVER = "421495229594730496";
 	public static final String DEFAULT_PREFIX = "x!"; // TODO Revert to s!
 	public static final Logger LOGGER = LogManager.getLogger("shiro");
-	public static final GroovyShell GROOVY = new GroovyShell();
+	public static final GroovyClassLoader GROOVY_CL = new GroovyClassLoader();
 	public static final Scheduler SCHEDULER = new Scheduler();
 
 	public static final String EMOTE_REPO_1 = "666619034103447642";
