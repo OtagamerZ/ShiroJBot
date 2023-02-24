@@ -23,15 +23,21 @@ SELECT x.id
      , x.data
 FROM (
      SELECT x.id
-          , x.head -> x.loser                                               AS info
-          , jsonb_path_query_array(data, CAST('$.' || x.loser AS JSONPATH)) AS data
+          , x.info
+          , jsonb_path_query_array(x.data, CAST(x.path AS JSONPATH)) AS data
      FROM (
-          SELECT id
-               , head
-               , data
-               , iif((head ->> 'winner') = 'TOP', VARCHAR 'bottom', VARCHAR 'top') AS loser
-          FROM match_history
-          WHERE has(head, 'winner')
+          SELECT x.id
+               , x.head -> x.loser                                                    AS info
+               , x.data
+               , format('$.%s ? (@ %% 2 == %s)', x.loser, iif(x.loser = 'top', 1, 0)) AS path
+          FROM (
+               SELECT id
+                    , head
+                    , data
+                    , iif((head ->> 'winner') = 'TOP', VARCHAR 'bottom', VARCHAR 'top') AS loser
+               FROM match_history
+               WHERE has(head, 'winner')
+               ) x
           ) x
      ) x
 WHERE x.info IS NOT NULL
