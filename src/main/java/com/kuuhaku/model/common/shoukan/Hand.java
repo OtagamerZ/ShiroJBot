@@ -198,8 +198,7 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
-		if (getGame().getArena().getBanned().contains(d)) return false;
-		else if (d instanceof Proxy<?> p) {
+		if (d instanceof Proxy<?> p) {
 			p.getOriginal().reset();
 			d.reset();
 
