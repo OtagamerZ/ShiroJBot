@@ -16,6 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
+DROP VIEW v_card_counter;
 CREATE OR REPLACE VIEW v_card_counter AS
 SELECT anime_id
      , COUNT(1) AS count

@@ -16,14 +16,20 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-DROP VIEW v_collection_counter;
-CREATE OR REPLACE VIEW v_collection_counter AS
-SELECT kc.kawaipon_uid                       AS uid
-     , c.anime_id
-     , COUNT(1) FILTER (WHERE NOT kc.chrome) AS normal
-     , COUNT(1) FILTER (WHERE kc.chrome)     AS chrome
-FROM kawaipon_card kc
-         INNER JOIN card c ON c.id = kc.card_id
-         LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
-WHERE sc.id IS NULL
-GROUP BY kc.kawaipon_uid, c.anime_id;
+DROP VIEW v_anime_cards;
+CREATE OR REPLACE VIEW v_anime_cards AS
+SELECT x.id
+     , x.name
+     , x.rarity
+     , x.rarity_idx
+     , x.anime_id
+FROM (
+     SELECT c.id
+          , c.name
+          , c.rarity
+          , get_rarity_index(c.rarity) AS rarity_idx
+          , c.anime_id
+     FROM card c
+     ) x
+WHERE x.rarity_idx < 6
+ORDER BY x.rarity_idx DESC, x.id
