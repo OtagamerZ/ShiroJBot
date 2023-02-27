@@ -76,7 +76,7 @@ public class DynamicProperty extends DAO<DynamicProperty> {
 		DAO.applyNative("""
 				INSERT INTO dynamic_property (id, uid, value)
 				VALUES (?1, ?2, ?3)
-				ON CONFLICT DO UPDATE
+				ON CONFLICT (id, uid) DO UPDATE
 				SET value = ?3
 				""", uid, key, value);
 	}
