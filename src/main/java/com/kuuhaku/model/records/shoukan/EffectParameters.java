@@ -105,7 +105,7 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 
 	public Target[] allies() {
 		Target[] out = Arrays.stream(targets)
-				.filter(t -> t.index() > -1 && t.type() == TargetType.ALLY)
+				.filter(t -> t.index() > -1 && t.side() == source.side())
 				.filter(t -> t.card() != null)
 				.toArray(Target[]::new);
 
@@ -116,7 +116,7 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 	public Target[] enemies() {
 		consumeShields();
 		Target[] out = Arrays.stream(targets)
-				.filter(t -> t.index() > -1 && t.type() == TargetType.ENEMY)
+				.filter(t -> t.index() > -1 && t.side() != source.side())
 				.filter(t -> t.card() != null)
 				.toArray(Target[]::new);
 
