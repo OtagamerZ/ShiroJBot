@@ -942,10 +942,15 @@ public abstract class Utils {
 	}
 
 	public static Object exec(@Language("Groovy") String code, Map<String, Object> variables) {
-		Script script = SCRIPT_CACHE.computeIfAbsent(Calc.hash(code, "sha1"), k -> Constants.GROOVY.parse(code));
-		script.setBinding(new Binding(variables));
+		try {
+			Script script = SCRIPT_CACHE.computeIfAbsent(Calc.hash(code, "sha1"), k -> Constants.GROOVY.parse(code));
+			script.setBinding(new Binding(variables));
 
-		return script.run();
+			return script.run();
+		} catch (Exception e) {
+			Constants.LOGGER.error("Error executing script\n" + code, e);
+			return null;
+		}
 	}
 
 	public static Script compile(@Language("Groovy") String code) {
