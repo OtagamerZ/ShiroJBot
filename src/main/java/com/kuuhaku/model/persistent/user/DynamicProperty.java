@@ -78,6 +78,6 @@ public class DynamicProperty extends DAO<DynamicProperty> {
 				VALUES (?1, ?2, ?3)
 				ON CONFLICT (id, uid) DO UPDATE
 				SET value = ?3
-				""", uid, key, value);
+				""", key, uid, value);
 	}
 }
