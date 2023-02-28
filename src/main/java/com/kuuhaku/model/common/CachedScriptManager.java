@@ -26,27 +26,32 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class CachedScriptManager {
+public class CachedScriptManager<T> {
 	private final Map<String, Object> context = new HashMap<>();
 	private final JSONObject storedProps = new JSONObject();
 	private final AtomicInteger propHash = new AtomicInteger();
+	private final Object parent;
 
 	@Language("Groovy")
 	private String code;
 
-	public CachedScriptManager forScript(@Language("Groovy") String code) {
+	public CachedScriptManager(T parent) {
+		this.parent = parent;
+	}
+
+	public CachedScriptManager<T> forScript(@Language("Groovy") String code) {
 		this.code = code;
 		return this;
 	}
 
-	public CachedScriptManager withConst(String key, Object value) {
+	public CachedScriptManager<T> withConst(String key, Object value) {
 		if (value == null || context.containsKey(key)) return this;
 		context.put(key, value);
 
 		return this;
 	}
 
-	public CachedScriptManager withVar(String key, Object value) {
+	public CachedScriptManager<T> withVar(String key, Object value) {
 		if (value == null) return this;
 
 		context.compute(key, (k, v) -> {
@@ -61,7 +66,7 @@ public class CachedScriptManager {
 	}
 
 	public void run() {
-		Utils.exec(code, context);
+		Utils.exec("/* " + parent + " */\n" + code, context);
 	}
 
 	public JSONObject getStoredProps() {

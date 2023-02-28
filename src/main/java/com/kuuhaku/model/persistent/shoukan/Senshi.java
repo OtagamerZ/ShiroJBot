@@ -118,7 +118,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient Hand leech = null;
 	private transient Senshi target = null;
 	private transient Senshi lastInteraction = null;
-	private transient CachedScriptManager cachedEffect = new CachedScriptManager();
+	private transient CachedScriptManager<Senshi> cachedEffect = new CachedScriptManager<>(this);
 
 	@Transient
 	private int state = 0b10;
@@ -1161,7 +1161,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			leech.getLeeches().remove(this);
 		}
 		lastInteraction = null;
-		cachedEffect = new CachedScriptManager();
+		cachedEffect = new CachedScriptManager<>(this);
 
 		byte base = 0b11;
 		base = (byte) Bit.set(base, 4, isSealed());

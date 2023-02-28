@@ -96,7 +96,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private transient CardExtra stats = new CardExtra();
 	private transient Hand hand = null;
 	private transient Hand leech = null;
-	private transient CachedScriptManager cachedEffect = new CachedScriptManager();
+	private transient CachedScriptManager<Evogear> cachedEffect = new CachedScriptManager<>(this);
 
 	@Transient
 	private byte state = 0b10;
@@ -463,7 +463,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (leech != null) {
 			leech.getLeeches().remove(this);
 		}
-		cachedEffect = new CachedScriptManager();
+		cachedEffect = new CachedScriptManager<>(this);
 
 		state = 0b11;
 	}
