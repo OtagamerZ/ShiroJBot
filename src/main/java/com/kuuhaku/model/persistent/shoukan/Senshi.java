@@ -455,7 +455,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			double mod = 0;
 			if (race.isRace(r)) {
-				mod = (Double) e.getValue();
+				mod = ((Number) e.getValue()).doubleValue();
 
 				if (race != r) {
 					mod /= 2;
