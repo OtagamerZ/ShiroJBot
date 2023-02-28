@@ -232,7 +232,7 @@ public class GuildListener extends ListenerAdapter {
 		}
 
 		GuildBuff gb = config.getCumBuffs();
-		profile.addXp((long) (15 * (1 + gb.xp()) * (account.getStreak() / 100d)));
+		profile.addXp((long) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
 		profile.save();
 
 		EventData ed = new EventData(config, profile);
