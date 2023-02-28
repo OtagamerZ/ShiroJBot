@@ -949,7 +949,7 @@ public abstract class Utils {
 			return script.run();
 		} catch (Exception e) {
 			Constants.LOGGER.error("Error executing script\n" + code, e);
-			return null;
+			throw e;
 		}
 	}
 
