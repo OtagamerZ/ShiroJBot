@@ -175,6 +175,8 @@ public class Shoukan extends GameInstance<Phase> {
 					if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
 						getCurrent().showHand();
 					}
+				} catch (Exception e) {
+					Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
 				} finally {
 					lock = false;
 				}

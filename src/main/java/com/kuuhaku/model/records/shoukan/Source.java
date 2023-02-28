@@ -24,6 +24,8 @@ import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 
+import java.util.Objects;
+
 public record Source(Drawable<?> card, Side side, int index, Trigger trigger) {
 	public Source() {
 		this(null, null, -1, null);
@@ -34,7 +36,7 @@ public record Source(Drawable<?> card, Side side, int index, Trigger trigger) {
 	}
 
 	public boolean execute(EffectParameters ep) {
-		if (card != null && card instanceof EffectHolder eh) {
+		if (card != null && card instanceof EffectHolder<?> eh) {
 			return eh.execute(ep);
 		}
 
@@ -47,5 +49,18 @@ public record Source(Drawable<?> card, Side side, int index, Trigger trigger) {
 
 	public Target toTarget(TargetType type) {
 		return card.asTarget(trigger, type);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Source source = (Source) o;
+		return index == source.index && Objects.equals(card, source.card) && side == source.side && trigger == source.trigger;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(card, side, index, trigger);
 	}
 }

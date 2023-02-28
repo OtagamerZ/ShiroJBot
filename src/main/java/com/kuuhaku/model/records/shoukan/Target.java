@@ -23,6 +23,8 @@ import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
+import java.util.Objects;
+
 public record Target(Senshi card, Side side, int index, Trigger trigger, TargetType type) {
 	public Target() {
 		this(null, null, -1, null, TargetType.NONE);
@@ -34,5 +36,18 @@ public record Target(Senshi card, Side side, int index, Trigger trigger, TargetT
 		}
 
 		return false;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Target target = (Target) o;
+		return index == target.index && Objects.equals(card, target.card) && side == target.side && trigger == target.trigger && type == target.type;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(card, side, index, trigger, type);
 	}
 }
