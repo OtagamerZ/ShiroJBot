@@ -78,7 +78,7 @@ public class Giftcode extends DAO<Giftcode> {
 
 			return true;
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to execute giftcode " + code, e);
+			Constants.LOGGER.warn("Failed to execute giftcode " + code);
 			return false;
 		}
 	}

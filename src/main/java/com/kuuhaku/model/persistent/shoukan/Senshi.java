@@ -1032,7 +1032,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			game.getChannel().sendMessage(game.getLocale().get("error/activation", game.getString(e.getMessage()))).queue();
 			return false;
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to execute " + Utils.getOr(stats.getSource(), this) + " effect", e);
 			game.getChannel().sendMessage(game.getLocale().get("error/effect")).queue();
 			return false;
 		} finally {
@@ -1059,8 +1058,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					"props", extractValues(hand.getGame().getLocale(), cachedEffect),
 					"trigger", trigger
 			));
-		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to execute " + Utils.getOr(stats.getSource(), this) + " effect", e);
+		} catch (Exception ignored) {
 		} finally {
 			unlock();
 		}
