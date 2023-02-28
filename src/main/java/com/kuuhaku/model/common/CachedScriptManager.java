@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import org.intellij.lang.annotations.Language;
@@ -66,7 +67,11 @@ public class CachedScriptManager<T> {
 	}
 
 	public void run() {
-		Utils.exec("/* " + parent + " */\n" + code, context);
+		try {
+			Utils.exec("/* " + parent + " */\n" + code, context);
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to execute " + parent + " effect", e);
+		}
 	}
 
 	public JSONObject getStoredProps() {
