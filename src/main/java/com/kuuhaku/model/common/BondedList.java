@@ -97,16 +97,17 @@ public class BondedList<T> extends TreeList<T> {
 	}
 
 	public void add(int index, T t, List<T> aux) {
+		if (t == null) return;
 		ListIterator<T> it = aux.listIterator();
 
 		int size = aux.size();
-		if (t != null && onAdd.apply(t, it)) {
-			if (aux.size() != size) {
-				addAll(index, aux);
-				aux.clear();
-			}
-
+		if (onAdd.apply(t, it)) {
 			it.add(t);
+		}
+
+		if (aux.size() != size) {
+			addAll(index, aux);
+			aux.clear();
 		}
 
 		it = aux.listIterator();
