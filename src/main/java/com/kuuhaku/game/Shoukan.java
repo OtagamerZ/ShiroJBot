@@ -1223,7 +1223,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 				if (!ignore) {
 					if (target.isSupporting()) {
-						outcome = getLocale().get("str/combat_success", source.getActiveAttr(), 0);
+						outcome = getLocale().get("str/combat_success", dmg, 0);
 
 						for (Senshi s : target.getNearby()) {
 							s.awake();
@@ -1244,8 +1244,8 @@ public class Shoukan extends GameInstance<Phase> {
 							eCombatStats -= eEquipStats;
 						}
 
-						if (!unstop && source.getActiveAttr() < eCombatStats) {
-							outcome = getLocale().get("str/combat_defeat", source.getActiveAttr(), eCombatStats);
+						if (!unstop && dmg < eCombatStats) {
+							outcome = getLocale().get("str/combat_defeat", dmg, eCombatStats);
 							trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
 
 							for (Senshi s : source.getNearby()) {
@@ -1254,7 +1254,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 							if (announce) {
 								if (!source.popFlag(Flag.NO_DAMAGE)) {
-									you.modHP((int) -((enemyStats - source.getActiveAttr()) * dmgMult));
+									you.modHP((int) -((enemyStats - dmg) * dmgMult));
 								}
 
 								you.getGraveyard().add(source);
@@ -1288,13 +1288,13 @@ public class Shoukan extends GameInstance<Phase> {
 								trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
 
 								if (you.getOrigin().synergy() == Race.FABLED) {
-									op.modHP((int) -(source.getActiveAttr() * dmgMult * 0.02));
+									op.modHP((int) -(dmg * dmgMult * 0.02));
 								}
 
 								dmg = 0;
 							} else {
-								if (unstop || source.getActiveAttr() > eCombatStats) {
-									outcome = getLocale().get("str/combat_success", source.getActiveAttr(), eCombatStats);
+								if (unstop || dmg > eCombatStats) {
+									outcome = getLocale().get("str/combat_success", dmg, eCombatStats);
 									trigger(ON_HIT, source.asSource(ON_HIT), target.asTarget(ON_LOSE));
 
 									if (target.isDefending() || target.popFlag(Flag.NO_DAMAGE)) {
@@ -1311,7 +1311,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 									win = true;
 								} else {
-									outcome = getLocale().get("str/combat_clash", source.getActiveAttr(), eCombatStats);
+									outcome = getLocale().get("str/combat_clash", dmg, eCombatStats);
 									trigger(ON_CLASH, source.asSource(ON_SUICIDE), target.asTarget(ON_LOSE));
 
 									for (Senshi s : target.getNearby()) {
