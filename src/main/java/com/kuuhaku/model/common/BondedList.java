@@ -101,13 +101,14 @@ public class BondedList<T> extends TreeList<T> {
 		ListIterator<T> it = aux.listIterator();
 
 		int size = aux.size();
-		if (onAdd.apply(t, it)) {
-			it.add(t);
-		}
-
+		boolean ok = onAdd.apply(t, it);
 		if (aux.size() != size) {
 			addAll(index, aux);
 			aux.clear();
+		}
+
+		if (ok) {
+			it.add(t);
 		}
 
 		it = aux.listIterator();
