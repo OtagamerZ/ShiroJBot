@@ -188,15 +188,7 @@ public class Hand {
 			e.getEquipper().getEquipments().remove(e);
 		}
 
-		if (d instanceof Evogear e) {
-			System.out.println(e.getEquipper());
-		}
-
 		d.reset();
-
-		if (d instanceof Evogear e) {
-			System.out.println(e.getEquipper());
-		}
 
 		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5)) {
 			cards.add(d.copy());
