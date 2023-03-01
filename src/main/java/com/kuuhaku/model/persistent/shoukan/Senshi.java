@@ -647,7 +647,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public void setFlipped(boolean flipped) {
-		if (isFlipped() && !flipped && slot != null) {
+		boolean trigger = isFlipped() && !flipped && slot != null;
+
+		state = Bit.set(state, 3, flipped);
+		if (trigger) {
 			setDefending(true);
 
 			if (hand != null) {
@@ -658,8 +661,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 			}
 		}
-
-		state = Bit.set(state, 3, flipped);
 	}
 
 	public boolean isSealed() {
