@@ -83,7 +83,7 @@ public class BondedList<T> extends TreeList<T> {
 
 	@Override
 	public void add(int index, T t) {
-		add(index, t, new BondedList<>(onAdd));
+		add(index, t, new ArrayList<>());
 	}
 
 	public void add(int index, T t, List<T> aux) {
