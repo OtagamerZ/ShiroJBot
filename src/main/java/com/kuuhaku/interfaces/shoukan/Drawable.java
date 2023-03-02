@@ -394,12 +394,12 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 			if (xray || side == getSide()) {
 				for (Senshi tgt : slt.getCards()) {
-					if (tgt == null || (side != getSide() && tgt.isProtected())) continue;
+					if (tgt == null || (side != getSide() && tgt.isProtected(this))) continue;
 
 					tgts.add(tgt);
 					if (empower) {
 						for (Senshi s : tgt.getNearby()) {
-							if (side == getSide() || !s.isProtected()) {
+							if (side == getSide() || !s.isProtected(this)) {
 								tgts.add(s);
 							}
 						}
@@ -411,12 +411,12 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				else if (top) tgt = slt.getTop();
 				else tgt = slt.getBottom();
 
-				if (tgt == null || (side != getSide() && tgt.isProtected())) continue;
+				if (tgt == null || (side != getSide() && tgt.isProtected(this))) continue;
 
 				tgts.add(tgt);
 				if (empower) {
 					for (Senshi s : tgt.getNearby()) {
-						if (side == getSide() || !s.isProtected()) {
+						if (side == getSide() || !s.isProtected(this)) {
 							tgts.add(s);
 						}
 					}

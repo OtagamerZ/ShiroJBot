@@ -501,7 +501,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (tgt == null) return false;
 
 		Senshi enemy = tgt.enemy();
-		if (enemy != null && enemy.isProtected()) {
+		if (enemy != null && enemy.isProtected(e)) {
 			hand.getGraveyard().add(p);
 			hand.getData().put("last_spell", e);
 			trigger(ON_SPELL, hand.getSide());
@@ -875,7 +875,7 @@ public class Shoukan extends GameInstance<Phase> {
 		List<Drawable<?>> stack = (chosen.getTier() > 3 ? arena.getBanned() : curr.getGraveyard());
 
 		Senshi enemy = tgt.enemy();
-		if (enemy != null && enemy.isProtected()) {
+		if (enemy != null && enemy.isProtected(chosen)) {
 			Evogear copy = chosen.copy();
 
 			curr.consumeHP(copy.getHPCost());
@@ -1009,7 +1009,7 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
-			if (enemy.isProtected()) {
+			if (enemy.isProtected(chosen)) {
 				curr.consumeMP(1);
 				if (!chosen.popFlag(Flag.FREE_ACTION)) {
 					chosen.setAvailable(false);
@@ -2266,6 +2266,7 @@ public class Shoukan extends GameInstance<Phase> {
 					s.setAvailable(true);
 					s.setSwitched(false);
 
+					s.clearBlocked();
 					s.getStats().clearTFlags();
 					for (Evogear e : s.getEquipments()) {
 						e.getStats().clearTFlags();

@@ -119,6 +119,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient Senshi target = null;
 	private transient Senshi lastInteraction = null;
 	private transient CachedScriptManager<Senshi> cachedEffect = new CachedScriptManager<>(this);
+	private transient Set<Drawable<?>> blocked = new HashSet<>();
 
 	@Transient
 	private int state = 0b10;
@@ -1149,7 +1150,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return getActiveAttr() - target.getActiveAttr();
 	}
 
-	public boolean isProtected() {
+	public boolean isProtected(Drawable<?> source) {
+		if (blocked.contains(source)) return true;
+
 		if (hand != null) {
 			hand.getGame().trigger(ON_EFFECT_TARGET, new Source(this, ON_EFFECT_TARGET));
 			if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
@@ -1157,7 +1160,16 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 		}
 
-		return hasCharm(Charm.SHIELD, true);
+		if (hasCharm(Charm.SHIELD, true)) {
+			blocked.add(source);
+			return true;
+		}
+
+		return false;
+	}
+
+	public void clearBlocked() {
+		blocked.clear();
 	}
 
 	@Override
