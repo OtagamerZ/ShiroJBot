@@ -131,4 +131,13 @@ public class CardAttributes implements Serializable {
 	public void unlock() {
 		lock = false;
 	}
+
+	@Override
+	public CardAttributes clone() throws CloneNotSupportedException {
+		CardAttributes clone = (CardAttributes) super.clone();
+		clone.tags = new JSONArray(tags);
+		clone.descriptions = new HashSet<>(descriptions);
+
+		return clone;
+	}
 }

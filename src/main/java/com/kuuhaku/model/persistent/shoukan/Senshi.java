@@ -245,9 +245,28 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean hasCharm(Charm charm) {
+		return hasCharm(charm, false);
+	}
+
+	public boolean hasCharm(Charm charm, boolean pop) {
 		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return false;
 
-		return equipments.stream().anyMatch(e -> e.hasCharm(charm));
+		for (Evogear e : equipments) {
+			if (e.hasCharm(charm)) {
+				if (pop && Utils.equalsAny(charm, Charm.SHIELD, Charm.WARDING)) {
+					int charges = e.getStats().getData().getInt("C_" + charm.name(), 0) + 1;
+					if (charges >= charm.getValue(e.getTier())) {
+						hand.getGraveyard().add(e);
+					} else {
+						e.getStats().getData().put("C_" + charm.name(), charges);
+					}
+				}
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public Evogear unequip(String id) {
@@ -1095,33 +1114,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public boolean isProtected() {
 		if (hand != null) {
-			Evogear shield = null;
 			hand.getGame().trigger(ON_EFFECT_TARGET, new Source(this, ON_EFFECT_TARGET));
 			if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
 				return true;
 			}
-
-			if (!hand.equals(hand.getGame().getCurrent())) {
-				for (Evogear e : equipments) {
-					if (e.hasCharm(Charm.SHIELD)) {
-						shield = e;
-					}
-				}
-			}
-
-			if (shield != null) {
-				int charges = shield.getStats().getData().getInt("c_shield", 0) + 1;
-				if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
-					hand.getGraveyard().add(shield);
-				} else {
-					shield.getStats().getData().put("c_shield", charges);
-				}
-
-				return true;
-			}
 		}
 
-		return false;
+		return hasCharm(Charm.SHIELD, true);
 	}
 
 	@Override
@@ -1131,42 +1130,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public void reset() {
-		equipments = new BondedList<>((e, it) -> {
-			e.setEquipper(this);
-			e.setHand(getHand());
-			e.executeAssert(ON_INITIALIZE);
-
-			Shoukan game = getHand().getGame();
-			game.trigger(ON_EQUIP, asSource(ON_EQUIP));
-
-			if (e.hasCharm(Charm.TIMEWARP)) {
-				int times = Charm.TIMEWARP.getValue(e.getTier());
-				for (int i = 0; i < times; i++) {
-					game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
-					game.trigger(ON_TURN_END, asSource(ON_TURN_END));
-				}
-			}
-
-			if (e.hasCharm(Charm.CLONE)) {
-				game.putAtOpenSlot(getSide(), true, withCopy(s -> {
-					s.getStats().setAttrMult(-1 + (0.25 * e.getTier()));
-					s.getStats().getData().put("cloned", true);
-					s.state = this.state & 0b11111;
-				}));
-			}
-
-			return true;
-		}, e -> {
-			e.executeAssert(ON_REMOVE);
-			e.setEquipper(null);
-		});
-		stats = stats.clone();
+		equipments.clear();
+		stats.clear();
 		slot = null;
 		if (leech != null) {
 			leech.getLeeches().remove(this);
 		}
 		lastInteraction = null;
-		cachedEffect = new CachedScriptManager<>(this);
 
 		byte base = 0b11;
 		base = (byte) Bit.set(base, 4, isSealed());
@@ -1327,7 +1297,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public Senshi clone() throws CloneNotSupportedException {
-		return (Senshi) super.clone();
+		Senshi clone = (Senshi) super.clone();
+		clone.equipments = new BondedList<>(equipments.getOnAdd(), equipments.getOnRemove());
+		clone.base = base.clone();
+		clone.stats = stats.clone();
+
+		return clone;
 	}
 
 	@Override

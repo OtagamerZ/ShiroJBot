@@ -30,16 +30,6 @@ public class BondedList<T> extends TreeList<T> {
 	private final BiFunction<T, ListIterator<T>, Boolean> onAdd;
 	private final Consumer<T> onRemove;
 
-	private class BondedIterator<V> {
-		private final ListIterator<V> iterator;
-
-		public BondedIterator(ListIterator<V> iterator) {
-			this.iterator = iterator;
-		}
-
-
-	}
-
 	public static <T> BondedList<T> withBind(BiFunction<T, ListIterator<T>, Boolean> onAdd) {
 		return withBind(onAdd, t -> {
 		});
@@ -81,6 +71,14 @@ public class BondedList<T> extends TreeList<T> {
 		this.onAdd = onAdd;
 		this.onRemove = onRemove;
 		addAll(c);
+	}
+
+	public BiFunction<T, ListIterator<T>, Boolean> getOnAdd() {
+		return onAdd;
+	}
+
+	public Consumer<T> getOnRemove() {
+		return onRemove;
 	}
 
 	public T getFirst() {
