@@ -372,7 +372,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			else if (top) tgt = slt.getTop();
 			else tgt = slt.getBottom();
 
-			if (tgt.isProtected()) continue;
+			if (tgt == null || tgt.isProtected()) continue;
 
 			tgts.add(tgt);
 		}
