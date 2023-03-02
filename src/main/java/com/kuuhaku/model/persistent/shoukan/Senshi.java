@@ -365,7 +365,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			SlotColumn slt = hand.getGame().getSlots(getSide().getOther()).get(idx);
 			if (slt == null) return null;
 
-			Senshi tgt = slt.getUnblocked();
+			Senshi tgt;
+			if (top == null) tgt = slt.getUnblocked();
+			else if (top) tgt = slt.getTop();
+			else tgt = slt.getBottom();
+
 			if (tgt.isProtected()) continue;
 
 			tgts.add(tgt);
