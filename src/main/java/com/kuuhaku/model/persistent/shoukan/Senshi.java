@@ -558,25 +558,31 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public int getEquipDmg() {
 		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return 0;
 
-		return equipments.stream().mapToInt(Evogear::getDmg).sum();
+		return equipments.stream().filter(Evogear::isAvailable).mapToInt(Evogear::getDmg).sum();
 	}
 
 	public int getEquipDfs() {
 		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return 0;
 
-		return equipments.stream().mapToInt(Evogear::getDfs).sum();
+		return equipments.stream()
+				.filter(Evogear::isAvailable)
+				.mapToInt(Evogear::getDfs).sum();
 	}
 
 	public int getEquipDodge() {
 		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return 0;
 
-		return equipments.stream().mapToInt(Evogear::getDodge).sum();
+		return equipments.stream()
+				.filter(Evogear::isAvailable)
+				.mapToInt(Evogear::getDodge).sum();
 	}
 
 	public int getEquipBlock() {
 		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return 0;
 
-		return equipments.stream().mapToInt(Evogear::getBlock).sum();
+		return equipments.stream()
+				.filter(Evogear::isAvailable)
+				.mapToInt(Evogear::getBlock).sum();
 	}
 
 	public int getActiveEquips() {
