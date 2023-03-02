@@ -1667,6 +1667,18 @@ public class Shoukan extends GameInstance<Phase> {
 		return null;
 	}
 
+	public Senshi findCard(Side side, Predicate<Senshi> condition) {
+		for (SlotColumn slt : getSlots(side)) {
+			for (Senshi s : slt.getCards()) {
+				if (s != null && condition.test(s)) {
+					return s;
+				}
+			}
+		}
+
+		return null;
+	}
+
 	public BondedList<Drawable<?>> getBanned() {
 		return arena.getBanned();
 	}
