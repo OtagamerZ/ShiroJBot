@@ -85,22 +85,22 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Transient
 	private transient BondedList<Evogear> equipments = new BondedList<>((e, it) -> {
 		e.setEquipper(this);
-		e.setHand(getHand());
+		e.setHand(this.getHand());
 		e.executeAssert(ON_INITIALIZE);
 
-		Shoukan game = getHand().getGame();
-		game.trigger(ON_EQUIP, asSource(ON_EQUIP));
+		Shoukan game = this.getHand().getGame();
+		game.trigger(ON_EQUIP, this.asSource(ON_EQUIP));
 
 		if (e.hasCharm(Charm.TIMEWARP)) {
 			int times = Charm.TIMEWARP.getValue(e.getTier());
 			for (int i = 0; i < times; i++) {
-				game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
-				game.trigger(ON_TURN_END, asSource(ON_TURN_END));
+				game.trigger(ON_TURN_BEGIN, this.asSource(ON_TURN_BEGIN));
+				game.trigger(ON_TURN_END, this.asSource(ON_TURN_END));
 			}
 		}
 
 		if (e.hasCharm(Charm.CLONE)) {
-			game.putAtOpenSlot(getSide(), true, withCopy(s -> {
+			game.putAtOpenSlot(this.getSide(), true, this.withCopy(s -> {
 				s.getStats().setAttrMult(-1 + (0.25 * e.getTier()));
 				s.getStats().getData().put("cloned", true);
 				s.state = this.state & 0b11111;
@@ -1303,26 +1303,26 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public Senshi clone() throws CloneNotSupportedException {
 		Senshi clone = (Senshi) super.clone();
 		clone.equipments = new BondedList<>((e, it) -> {
-			e.setEquipper(this);
-			e.setHand(getHand());
+			e.setEquipper(clone);
+			e.setHand(clone.getHand());
 			e.executeAssert(ON_INITIALIZE);
 
-			Shoukan game = getHand().getGame();
-			game.trigger(ON_EQUIP, asSource(ON_EQUIP));
+			Shoukan game = clone.getHand().getGame();
+			game.trigger(ON_EQUIP, clone.asSource(ON_EQUIP));
 
 			if (e.hasCharm(Charm.TIMEWARP)) {
 				int times = Charm.TIMEWARP.getValue(e.getTier());
 				for (int i = 0; i < times; i++) {
-					game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
-					game.trigger(ON_TURN_END, asSource(ON_TURN_END));
+					game.trigger(ON_TURN_BEGIN, clone.asSource(ON_TURN_BEGIN));
+					game.trigger(ON_TURN_END, clone.asSource(ON_TURN_END));
 				}
 			}
 
 			if (e.hasCharm(Charm.CLONE)) {
-				game.putAtOpenSlot(getSide(), true, withCopy(s -> {
+				game.putAtOpenSlot(clone.getSide(), true, clone.withCopy(s -> {
 					s.getStats().setAttrMult(-1 + (0.25 * e.getTier()));
 					s.getStats().getData().put("cloned", true);
-					s.state = this.state & 0b11111;
+					s.state = clone.state & 0b11111;
 				}));
 			}
 
