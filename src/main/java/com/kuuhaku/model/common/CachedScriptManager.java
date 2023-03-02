@@ -19,6 +19,8 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.exceptions.ActivationException;
+import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import org.intellij.lang.annotations.Language;
@@ -67,10 +69,16 @@ public class CachedScriptManager<T> {
 	}
 
 	public void run() {
+		@Language("Groovy")
+		String code = "/* " + parent + " */\n" + this.code;
+
 		try {
-			Utils.exec("/* " + parent + " */\n" + code, context);
+			Utils.exec(code, context);
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to execute " + parent + " effect", e);
+			Constants.LOGGER.warn("Failed to execute " + parent + " effect\n" + code, e);
+			if (e instanceof TargetException || e instanceof ActivationException) {
+				throw e;
+			}
 		}
 	}
 
