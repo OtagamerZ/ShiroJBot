@@ -69,6 +69,11 @@ public class AugmentSenshi extends Senshi implements Proxy<Senshi> {
 		return super.hasCharm(charm, pop) || original.hasCharm(charm, pop);
 	}
 
+	public void destroy() {
+		getHand().getGraveyard().addAll(getEquipments());
+		replace(original);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
