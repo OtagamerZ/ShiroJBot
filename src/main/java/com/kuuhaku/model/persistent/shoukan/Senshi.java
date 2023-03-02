@@ -374,11 +374,15 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public List<Senshi> getCards(Side side, Boolean top) {
-		return getCards(side, top, 0, 1, 2, 3, 4);
+		return getCards(side, top, false);
 	}
 
 	public List<Senshi> getCards(Side side, Boolean top, int... indexes) {
 		return getCards(side, top, false, indexes);
+	}
+
+	public List<Senshi> getCards(Side side, Boolean top, boolean xray) {
+		return getCards(side, top, xray, 0, 1, 2, 3, 4);
 	}
 
 	public List<Senshi> getCards(Side side, Boolean top, boolean xray, int... indexes) {
