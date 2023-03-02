@@ -378,6 +378,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public List<Senshi> getCards(Side side, Boolean top, int... indexes) {
+		return getCards(side, top, false, indexes);
+	}
+
+	public List<Senshi> getCards(Side side, Boolean top, boolean xray, int... indexes) {
 		if (getIndex() == -1) return null;
 
 		boolean empower = hasFlag(Flag.EMPOWERED);
@@ -388,18 +392,33 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			SlotColumn slt = hand.getGame().getSlots(side).get(idx);
 			if (slt == null) return null;
 
-			Senshi tgt;
-			if (top == null) tgt = slt.getUnblocked();
-			else if (top) tgt = slt.getTop();
-			else tgt = slt.getBottom();
+			if (xray) {
+				for (Senshi tgt : slt.getCards()) {
+					if (tgt == null || tgt.isProtected()) continue;
 
-			if (tgt == null || tgt.isProtected()) continue;
+					tgts.add(tgt);
+					if (empower) {
+						for (Senshi s : tgt.getNearby()) {
+							if (!s.isProtected()) {
+								tgts.add(s);
+							}
+						}
+					}
+				}
+			} else {
+				Senshi tgt;
+				if (top == null) tgt = slt.getUnblocked();
+				else if (top) tgt = slt.getTop();
+				else tgt = slt.getBottom();
 
-			tgts.add(tgt);
-			if (empower) {
-				for (Senshi s : tgt.getNearby()) {
-					if (!s.isProtected()) {
-						tgts.add(s);
+				if (tgt == null || tgt.isProtected()) continue;
+
+				tgts.add(tgt);
+				if (empower) {
+					for (Senshi s : tgt.getNearby()) {
+						if (!s.isProtected()) {
+							tgts.add(s);
+						}
 					}
 				}
 			}
