@@ -343,31 +343,51 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public Senshi getFront() {
+		List<Senshi> tgts = getFront(getIndex());
+		if (tgts.isEmpty()) return null;
+
+		return tgts.get(0);
+	}
+
+	public List<Senshi> getFront(int... indexes) {
 		if (getIndex() == -1) return null;
 
-		SlotColumn slt = hand.getGame().getSlots(getSide().getOther()).get(getIndex());
-		if (slt == null) return null;
+		List<Senshi> tgts = new ArrayList<>();
+		for (int idx : indexes) {
+			SlotColumn slt = hand.getGame().getSlots(getSide().getOther()).get(idx);
+			if (slt == null) return null;
 
-		Senshi tgt = slt.getUnblocked();
-		if (tgt.isProtected()) {
-			return null;
+			Senshi tgt = slt.getUnblocked();
+			if (tgt.isProtected()) continue;
+
+			tgts.add(tgt);
 		}
 
-		return tgt;
+		return tgts;
 	}
 
 	public Senshi getFrontSupport() {
+		List<Senshi> tgts = getFrontSupport(getIndex());
+		if (tgts.isEmpty()) return null;
+
+		return tgts.get(0);
+	}
+
+	public List<Senshi> getFrontSupport(int... indexes) {
 		if (getIndex() == -1) return null;
 
-		SlotColumn slt = hand.getGame().getSlots(getSide().getOther()).get(getIndex());
-		if (slt == null) return null;
+		List<Senshi> tgts = new ArrayList<>();
+		for (int idx : indexes) {
+			SlotColumn slt = hand.getGame().getSlots(getSide().getOther()).get(idx);
+			if (slt == null) return null;
 
-		Senshi tgt = slt.getBottom();
-		if (tgt.isProtected()) {
-			return null;
+			Senshi tgt = slt.getBottom();
+			if (tgt.isProtected()) continue;
+
+			tgts.add(tgt);
 		}
 
-		return tgt;
+		return tgts;
 	}
 
 	public List<Senshi> getNearby() {
