@@ -86,7 +86,7 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 			Target t = targets[i];
 			Senshi card = t.card();
 
-			if (card != null && t.type() != TargetType.ALLY && card.isProtected()) {
+			if (card != null && t.type() != TargetType.ALLY && card.isProtected(source.card())) {
 				targets[i] = new Target();
 			}
 		}

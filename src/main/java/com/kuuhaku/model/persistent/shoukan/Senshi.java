@@ -85,22 +85,22 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Transient
 	private transient BondedList<Evogear> equipments = new BondedList<>((e, it) -> {
 		e.setEquipper(this);
-		e.setHand(getHand());
+		e.setHand(this.getHand());
 		e.executeAssert(ON_INITIALIZE);
 
-		Shoukan game = getHand().getGame();
-		game.trigger(ON_EQUIP, asSource(ON_EQUIP));
+		Shoukan game = this.getHand().getGame();
+		game.trigger(ON_EQUIP, this.asSource(ON_EQUIP));
 
 		if (e.hasCharm(Charm.TIMEWARP)) {
 			int times = Charm.TIMEWARP.getValue(e.getTier());
 			for (int i = 0; i < times; i++) {
-				game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
-				game.trigger(ON_TURN_END, asSource(ON_TURN_END));
+				game.trigger(ON_TURN_BEGIN, this.asSource(ON_TURN_BEGIN));
+				game.trigger(ON_TURN_END, this.asSource(ON_TURN_END));
 			}
 		}
 
 		if (e.hasCharm(Charm.CLONE)) {
-			game.putAtOpenSlot(getSide(), true, withCopy(s -> {
+			game.putAtOpenSlot(this.getSide(), true, this.withCopy(s -> {
 				s.getStats().setAttrMult(-1 + (0.25 * e.getTier()));
 				s.getStats().getData().put("cloned", true);
 				s.state = this.state & 0b11111;
@@ -119,6 +119,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient Senshi target = null;
 	private transient Senshi lastInteraction = null;
 	private transient CachedScriptManager<Senshi> cachedEffect = new CachedScriptManager<>(this);
+	private transient Set<Drawable<?>> blocked = new HashSet<>();
 
 	@Transient
 	private int state = 0b10;
@@ -182,6 +183,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return stats;
 	}
 
+	@Override
 	public boolean hasFlag(Flag flag) {
 		for (Evogear e : equipments) {
 			if (e.getStats().hasFlag(flag)) return true;
@@ -244,10 +246,30 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				.orElse(null);
 	}
 
+	@Override
 	public boolean hasCharm(Charm charm) {
+		return hasCharm(charm, false);
+	}
+
+	public boolean hasCharm(Charm charm, boolean pop) {
 		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return false;
 
-		return equipments.stream().anyMatch(e -> e.hasCharm(charm));
+		for (Evogear e : equipments) {
+			if (e.hasCharm(charm)) {
+				if (pop && Utils.equalsAny(charm, Charm.SHIELD, Charm.WARDING)) {
+					int charges = e.getStats().getData().getInt("C_" + charm.name(), 0) + 1;
+					if (charges >= charm.getValue(e.getTier())) {
+						hand.getGraveyard().add(e);
+					} else {
+						e.getStats().getData().put("C_" + charm.name(), charges);
+					}
+				}
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public Evogear unequip(String id) {
@@ -273,6 +295,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public void setSlot(SlotColumn slot) {
 		this.slot = slot;
+	}
+
+	public void replace(Senshi other) {
+		getSlot().replace(this, other);
+	}
+
+	public void swap(Senshi other) {
+		getSlot().swap(this, other);
 	}
 
 	public Senshi getLeft() {
@@ -317,6 +347,33 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		} else {
 			slt.setTop(card);
 		}
+	}
+
+	public Senshi getFront() {
+		return getFront((Boolean) null);
+	}
+
+	public Senshi getFront(Boolean top) {
+		List<Senshi> tgts = getFront(top, getIndex());
+		if (tgts.isEmpty()) return null;
+
+		return tgts.get(0);
+	}
+
+	public List<Senshi> getFront(int... indexes) {
+		return getFront(null, indexes);
+	}
+
+	public List<Senshi> getFront(Boolean top, int... indexes) {
+		return getCards(getSide().getOther(), top, indexes);
+	}
+
+	public List<Senshi> getAllies(int... indexes) {
+		return getAllies(null, indexes);
+	}
+
+	public List<Senshi> getAllies(Boolean top, int... indexes) {
+		return getCards(getSide(), top, indexes);
 	}
 
 	public List<Senshi> getNearby() {
@@ -558,25 +615,31 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public int getEquipDmg() {
 		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return 0;
 
-		return equipments.stream().mapToInt(Evogear::getDmg).sum();
+		return equipments.stream().filter(Evogear::isAvailable).mapToInt(Evogear::getDmg).sum();
 	}
 
 	public int getEquipDfs() {
 		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return 0;
 
-		return equipments.stream().mapToInt(Evogear::getDfs).sum();
+		return equipments.stream()
+				.filter(Evogear::isAvailable)
+				.mapToInt(Evogear::getDfs).sum();
 	}
 
 	public int getEquipDodge() {
 		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return 0;
 
-		return equipments.stream().mapToInt(Evogear::getDodge).sum();
+		return equipments.stream()
+				.filter(Evogear::isAvailable)
+				.mapToInt(Evogear::getDodge).sum();
 	}
 
 	public int getEquipBlock() {
 		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return 0;
 
-		return equipments.stream().mapToInt(Evogear::getBlock).sum();
+		return equipments.stream()
+				.filter(Evogear::isAvailable)
+				.mapToInt(Evogear::getBlock).sum();
 	}
 
 	public int getActiveEquips() {
@@ -1087,35 +1150,26 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return getActiveAttr() - target.getActiveAttr();
 	}
 
-	public boolean isProtected() {
+	public boolean isProtected(Drawable<?> source) {
+		if (blocked.contains(source)) return true;
+
 		if (hand != null) {
-			Evogear shield = null;
 			hand.getGame().trigger(ON_EFFECT_TARGET, new Source(this, ON_EFFECT_TARGET));
 			if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
 				return true;
 			}
+		}
 
-			if (!hand.equals(hand.getGame().getCurrent())) {
-				for (Evogear e : equipments) {
-					if (e.hasCharm(Charm.SHIELD)) {
-						shield = e;
-					}
-				}
-			}
-
-			if (shield != null) {
-				int charges = shield.getStats().getData().getInt("c_shield", 0) + 1;
-				if (charges >= Charm.SHIELD.getValue(shield.getTier())) {
-					hand.getGraveyard().add(shield);
-				} else {
-					shield.getStats().getData().put("c_shield", charges);
-				}
-
-				return true;
-			}
+		if (hasCharm(Charm.SHIELD, true)) {
+			blocked.add(source);
+			return true;
 		}
 
 		return false;
+	}
+
+	public void clearBlocked() {
+		blocked.clear();
 	}
 
 	@Override
@@ -1125,42 +1179,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public void reset() {
-		equipments = new BondedList<>((e, it) -> {
-			e.setEquipper(this);
-			e.setHand(getHand());
-			e.executeAssert(ON_INITIALIZE);
-
-			Shoukan game = getHand().getGame();
-			game.trigger(ON_EQUIP, asSource(ON_EQUIP));
-
-			if (e.hasCharm(Charm.TIMEWARP)) {
-				int times = Charm.TIMEWARP.getValue(e.getTier());
-				for (int i = 0; i < times; i++) {
-					game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
-					game.trigger(ON_TURN_END, asSource(ON_TURN_END));
-				}
-			}
-
-			if (e.hasCharm(Charm.CLONE)) {
-				game.putAtOpenSlot(getSide(), true, withCopy(s -> {
-					s.getStats().setAttrMult(-1 + (0.25 * e.getTier()));
-					s.getStats().getData().put("cloned", true);
-					s.state = this.state & 0b11111;
-				}));
-			}
-
-			return true;
-		}, e -> {
-			e.executeAssert(ON_REMOVE);
-			e.setEquipper(null);
-		});
-		stats = stats.clone();
+		equipments.clear();
+		stats.clear();
 		slot = null;
 		if (leech != null) {
 			leech.getLeeches().remove(this);
 		}
 		lastInteraction = null;
-		cachedEffect = new CachedScriptManager<>(this);
 
 		byte base = 0b11;
 		base = (byte) Bit.set(base, 4, isSealed());
@@ -1321,7 +1346,40 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public Senshi clone() throws CloneNotSupportedException {
-		return (Senshi) super.clone();
+		Senshi clone = (Senshi) super.clone();
+		clone.equipments = new BondedList<>((e, it) -> {
+			e.setEquipper(clone);
+			e.setHand(clone.getHand());
+			e.executeAssert(ON_INITIALIZE);
+
+			Shoukan game = clone.getHand().getGame();
+			game.trigger(ON_EQUIP, clone.asSource(ON_EQUIP));
+
+			if (e.hasCharm(Charm.TIMEWARP)) {
+				int times = Charm.TIMEWARP.getValue(e.getTier());
+				for (int i = 0; i < times; i++) {
+					game.trigger(ON_TURN_BEGIN, clone.asSource(ON_TURN_BEGIN));
+					game.trigger(ON_TURN_END, clone.asSource(ON_TURN_END));
+				}
+			}
+
+			if (e.hasCharm(Charm.CLONE)) {
+				game.putAtOpenSlot(clone.getSide(), true, clone.withCopy(s -> {
+					s.getStats().setAttrMult(-1 + (0.25 * e.getTier()));
+					s.getStats().getData().put("cloned", true);
+					s.state = clone.state & 0b11111;
+				}));
+			}
+
+			return true;
+		}, e -> {
+			e.executeAssert(ON_REMOVE);
+			e.setEquipper(null);
+		});
+		clone.base = base.clone();
+		clone.stats = stats.clone();
+
+		return clone;
 	}
 
 	@Override

@@ -149,6 +149,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		return charms;
 	}
 
+	@Override
 	public boolean hasCharm(Charm charm) {
 		return charms.contains(charm.name());
 	}
@@ -456,7 +457,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public void reset() {
 		equipper = null;
-		stats = stats.clone();
+		stats.clear();
 		if (leech != null) {
 			leech.getLeeches().remove(this);
 		}
@@ -586,7 +587,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public Evogear clone() throws CloneNotSupportedException {
-		return (Evogear) super.clone();
+		Evogear clone = (Evogear) super.clone();
+		clone.base = base.clone();
+		clone.stats = stats.clone();
+
+		return clone;
 	}
 
 	@Override

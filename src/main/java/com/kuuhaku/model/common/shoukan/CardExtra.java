@@ -35,10 +35,7 @@ import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.lang.reflect.Field;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class CardExtra implements Cloneable {
@@ -666,7 +663,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public void removeTemporary() {
+	public void clear() {
 		if (fieldCache == null) {
 			fieldCache = this.getClass().getDeclaredFields();
 		}
@@ -715,7 +712,7 @@ public class CardExtra implements Cloneable {
 				ListOrderedSet.listOrderedSet(BondedList.withBind((s, it) -> !s.isBlank()))
 		);
 
-		clone.removeTemporary();
+		clone.clear();
 
 		clone.race = race;
 		clone.source = source;

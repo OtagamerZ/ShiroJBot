@@ -284,7 +284,11 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public Field clone() throws CloneNotSupportedException {
-		return (Field) super.clone();
+		Field clone = (Field) super.clone();
+		clone.modifiers = new JSONObject(modifiers);
+		clone.tags = new JSONArray(tags);
+
+		return clone;
 	}
 
 	@Override

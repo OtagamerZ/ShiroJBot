@@ -23,6 +23,7 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
@@ -41,7 +42,9 @@ import org.apache.commons.collections4.set.ListOrderedSet;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public interface Drawable<T extends Drawable<T>> extends Cloneable {
@@ -360,5 +363,67 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 	static List<String> ids(List<? extends Drawable<?>> cards) {
 		return Utils.map(cards, Drawable::getId);
+	}
+
+	default List<Senshi> getCards(Side side) {
+		return getCards(side, null);
+	}
+
+	default List<Senshi> getCards(Side side, Boolean top) {
+		return getCards(side, top, false);
+	}
+
+	default List<Senshi> getCards(Side side, Boolean top, int... indexes) {
+		return getCards(side, top, false, indexes);
+	}
+
+	default List<Senshi> getCards(Side side, Boolean top, boolean xray) {
+		return getCards(side, top, xray, 0, 1, 2, 3, 4);
+	}
+
+	default List<Senshi> getCards(Side side, Boolean top, boolean xray, int... indexes) {
+		if (!(this instanceof EffectHolder<?> eh) || getIndex() == -1) return null;
+
+		boolean empower = eh.hasFlag(Flag.EMPOWERED);
+		Set<Senshi> tgts = new HashSet<>();
+		for (int idx : indexes) {
+			if (idx < 0 || idx > 4) continue;
+
+			SlotColumn slt = getHand().getGame().getSlots(side).get(idx);
+			if (slt == null) return null;
+
+			if (xray || side == getSide()) {
+				for (Senshi tgt : slt.getCards()) {
+					if (tgt == null || (side != getSide() && tgt.isProtected(this))) continue;
+
+					tgts.add(tgt);
+					if (empower) {
+						for (Senshi s : tgt.getNearby()) {
+							if (side == getSide() || !s.isProtected(this)) {
+								tgts.add(s);
+							}
+						}
+					}
+				}
+			} else {
+				Senshi tgt;
+				if (top == null) tgt = slt.getUnblocked();
+				else if (top) tgt = slt.getTop();
+				else tgt = slt.getBottom();
+
+				if (tgt == null || (side != getSide() && tgt.isProtected(this))) continue;
+
+				tgts.add(tgt);
+				if (empower) {
+					for (Senshi s : tgt.getNearby()) {
+						if (side == getSide() || !s.isProtected(this)) {
+							tgts.add(s);
+						}
+					}
+				}
+			}
+		}
+
+		return List.copyOf(tgts);
 	}
 }

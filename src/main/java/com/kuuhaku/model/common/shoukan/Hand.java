@@ -126,26 +126,10 @@ public class Hand {
 		}
 
 		if (d instanceof Senshi s) {
-			Evogear ward = null;
-			for (Evogear e : s.getEquipments()) {
-				if (e.hasCharm(Charm.WARDING)) {
-					ward = e;
-				}
-			}
-
 			if (getGame().getCurrentSide() != getSide() && Calc.chance(s.getDodge() / 2d)) {
 				getGame().getChannel().sendMessage(getGame().getLocale().get("str/avoid_destruction", s)).queue();
 				return false;
-			} else if (s.popFlag(Flag.NO_DEATH)) {
-				return false;
-			} else if (ward != null) {
-				int charges = ward.getStats().getData().getInt("c_ward", 0) + 1;
-				if (charges >= Charm.WARDING.getValue(ward.getTier())) {
-					it.add(ward);
-				} else {
-					ward.getStats().getData().put("c_ward", charges);
-				}
-
+			} else if (s.popFlag(Flag.NO_DEATH) || s.hasCharm(Charm.WARDING, true)) {
 				return false;
 			}
 		}

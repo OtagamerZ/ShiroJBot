@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Embeddable
-public class CardAttributes implements Serializable {
+public class CardAttributes implements Serializable, Cloneable {
 	@Serial
 	private static final long serialVersionUID = -8535846175709738591L;
 
@@ -130,5 +130,14 @@ public class CardAttributes implements Serializable {
 
 	public void unlock() {
 		lock = false;
+	}
+
+	@Override
+	public CardAttributes clone() throws CloneNotSupportedException {
+		CardAttributes clone = (CardAttributes) super.clone();
+		clone.tags = new JSONArray(tags);
+		clone.descriptions = new HashSet<>(descriptions);
+
+		return clone;
 	}
 }
