@@ -358,6 +358,18 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public List<Senshi> getFront(Boolean top, int... indexes) {
+		return getCards(getSide().getOther(), top, indexes);
+	}
+
+	public List<Senshi> getAllies(int... indexes) {
+		return getAllies(null, indexes);
+	}
+
+	public List<Senshi> getAllies(Boolean top, int... indexes) {
+		return getCards(getSide(), top, indexes);
+	}
+
+	public List<Senshi> getCards(Side side, Boolean top, int... indexes) {
 		if (getIndex() == -1) return null;
 
 		boolean empower = hasFlag(Flag.EMPOWERED);
@@ -365,7 +377,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		for (int idx : indexes) {
 			if (idx < 0 || idx > 4) continue;
 
-			SlotColumn slt = hand.getGame().getSlots(getSide().getOther()).get(idx);
+			SlotColumn slt = hand.getGame().getSlots(side).get(idx);
 			if (slt == null) return null;
 
 			Senshi tgt;
