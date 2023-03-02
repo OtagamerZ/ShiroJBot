@@ -397,7 +397,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			tgts.add(tgt);
 			if (empower) {
-				tgts.addAll(tgt.getNearby());
+				for (Senshi s : tgt.getNearby()) {
+					if (!s.isProtected()) {
+						tgts.add(s);
+					}
+				}
 			}
 		}
 
