@@ -182,6 +182,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return stats;
 	}
 
+	@Override
 	public boolean hasFlag(Flag flag) {
 		for (Evogear e : equipments) {
 			if (e.getStats().hasFlag(flag)) return true;
@@ -244,6 +245,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				.orElse(null);
 	}
 
+	@Override
 	public boolean hasCharm(Charm charm) {
 		return hasCharm(charm, false);
 	}

@@ -77,7 +77,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	void setLeech(Hand leech);
 
-	boolean hasFlag(Flag flag);
+	default boolean hasFlag(Flag flag) {
+		return getStats().hasFlag(flag);
+	}
 
 	boolean hasCharm(Charm charm);
 
