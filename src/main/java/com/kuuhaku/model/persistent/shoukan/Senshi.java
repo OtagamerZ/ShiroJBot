@@ -398,12 +398,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (xray) {
 				for (Senshi tgt : slt.getCards()) {
-					if (tgt == null || tgt.isProtected()) continue;
+					if (tgt == null || (tgt.getSide() != getSide() && tgt.isProtected())) continue;
 
 					tgts.add(tgt);
 					if (empower) {
 						for (Senshi s : tgt.getNearby()) {
-							if (!s.isProtected()) {
+							if (tgt.getSide() == getSide() || !s.isProtected()) {
 								tgts.add(s);
 							}
 						}
@@ -415,12 +415,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				else if (top) tgt = slt.getTop();
 				else tgt = slt.getBottom();
 
-				if (tgt == null || tgt.isProtected()) continue;
+				if (tgt == null || (tgt.getSide() != getSide() && tgt.isProtected())) continue;
 
 				tgts.add(tgt);
 				if (empower) {
 					for (Senshi s : tgt.getNearby()) {
-						if (!s.isProtected()) {
+						if (tgt.getSide() == getSide() || !s.isProtected()) {
 							tgts.add(s);
 						}
 					}
