@@ -298,6 +298,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		getSlot().replace(this, other);
 	}
 
+	public void swap(Senshi other) {
+		getSlot().swap(this, other);
+	}
+
 	public Senshi getLeft() {
 		SlotColumn slt = getSlot().getLeft();
 		if (slt == null) return null;
