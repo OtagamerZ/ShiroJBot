@@ -1302,7 +1302,35 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public Senshi clone() throws CloneNotSupportedException {
 		Senshi clone = (Senshi) super.clone();
-		clone.equipments = new BondedList<>(equipments.getOnAdd(), equipments.getOnRemove());
+		clone.equipments = new BondedList<>((e, it) -> {
+			e.setEquipper(this);
+			e.setHand(getHand());
+			e.executeAssert(ON_INITIALIZE);
+
+			Shoukan game = getHand().getGame();
+			game.trigger(ON_EQUIP, asSource(ON_EQUIP));
+
+			if (e.hasCharm(Charm.TIMEWARP)) {
+				int times = Charm.TIMEWARP.getValue(e.getTier());
+				for (int i = 0; i < times; i++) {
+					game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
+					game.trigger(ON_TURN_END, asSource(ON_TURN_END));
+				}
+			}
+
+			if (e.hasCharm(Charm.CLONE)) {
+				game.putAtOpenSlot(getSide(), true, withCopy(s -> {
+					s.getStats().setAttrMult(-1 + (0.25 * e.getTier()));
+					s.getStats().getData().put("cloned", true);
+					s.state = this.state & 0b11111;
+				}));
+			}
+
+			return true;
+		}, e -> {
+			e.executeAssert(ON_REMOVE);
+			e.setEquipper(null);
+		});
 		clone.base = base.clone();
 		clone.stats = stats.clone();
 
