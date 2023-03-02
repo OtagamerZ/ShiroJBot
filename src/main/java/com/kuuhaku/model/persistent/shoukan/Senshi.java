@@ -362,6 +362,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		List<Senshi> tgts = new ArrayList<>();
 		for (int idx : indexes) {
+			if (idx < 0 || idx > 4) continue;
+
 			SlotColumn slt = hand.getGame().getSlots(getSide().getOther()).get(idx);
 			if (slt == null) return null;
 
