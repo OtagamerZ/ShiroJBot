@@ -360,7 +360,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public List<Senshi> getFront(Boolean top, int... indexes) {
 		if (getIndex() == -1) return null;
 
-		List<Senshi> tgts = new ArrayList<>();
+		boolean empower = hasFlag(Flag.EMPOWERED);
+		Set<Senshi> tgts = new HashSet<>();
 		for (int idx : indexes) {
 			if (idx < 0 || idx > 4) continue;
 
@@ -375,9 +376,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (tgt == null || tgt.isProtected()) continue;
 
 			tgts.add(tgt);
+			if (empower) {
+				tgts.addAll(tgt.getNearby());
+			}
 		}
 
-		return tgts;
+		return List.copyOf(tgts);
 	}
 
 	public List<Senshi> getNearby() {
