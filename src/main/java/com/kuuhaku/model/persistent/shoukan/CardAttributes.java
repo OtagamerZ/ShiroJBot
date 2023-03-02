@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Embeddable
-public class CardAttributes implements Serializable {
+public class CardAttributes implements Serializable, Cloneable {
 	@Serial
 	private static final long serialVersionUID = -8535846175709738591L;
 
