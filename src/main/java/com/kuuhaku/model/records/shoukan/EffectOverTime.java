@@ -28,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.Closeable;
 import java.util.EnumSet;
 import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
@@ -42,11 +41,10 @@ public record EffectOverTime(
 		AtomicInteger limit,
 		AtomicBoolean lock,
 		EnumSet<Trigger> triggers,
-		long SERIAL,
 		AtomicBoolean closed
 ) implements Comparable<EffectOverTime>, Closeable {
 	public EffectOverTime(Drawable<?> source, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
-		this(source, side != source.getSide(), side, effect, null, null, new AtomicBoolean(), EnumSet.of(Trigger.NONE, triggers), ThreadLocalRandom.current().nextLong(), new AtomicBoolean());
+		this(source, side != source.getSide(), side, effect, -1, -1, triggers);
 	}
 
 	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, int turns, int limit, Trigger... triggers) {
@@ -55,7 +53,6 @@ public record EffectOverTime(
 				limit < 0 ? null : new AtomicInteger(limit),
 				new AtomicBoolean(),
 				EnumSet.of(turns > -1 ? Trigger.ON_TURN_BEGIN : Trigger.NONE, triggers),
-				ThreadLocalRandom.current().nextLong(),
 				new AtomicBoolean()
 		);
 	}
@@ -97,12 +94,12 @@ public record EffectOverTime(
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		EffectOverTime that = (EffectOverTime) o;
-		return SERIAL == that.SERIAL && source.getSerial() == that.source.getSerial() && side == that.side;
+		return source.getSerial() == that.source.getSerial() && side == that.side;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(source.getSerial(), side, SERIAL);
+		return Objects.hash(source.getSerial(), side);
 	}
 
 	@Override
@@ -110,7 +107,7 @@ public record EffectOverTime(
 		if (turns != null && other.turns != null) return turns.get() - other.turns.get();
 		if (limit != null && other.limit != null) return limit.get() - other.limit.get();
 
-		return (turns != null || limit != null) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+		return (turns != null || limit != null) ? Integer.MAX_VALUE : -255;
 	}
 
 	@Override
