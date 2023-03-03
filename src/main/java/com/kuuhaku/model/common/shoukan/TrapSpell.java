@@ -42,6 +42,8 @@ public class TrapSpell extends Senshi implements Proxy<Evogear> {
 		});
 		setHand(e.getHand());
 		setFlipped(true);
+
+		e.getStats().setFlag(Flag.BOUND, true);
 	}
 
 	@Override

@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Proxy;
+import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
@@ -32,6 +33,8 @@ public class EquippableSenshi extends Evogear implements Proxy<Senshi> {
 
 		original = s.copy();
 		setHand(s.getHand());
+
+		s.getStats().setFlag(Flag.BOUND, true);
 	}
 
 	@Override
