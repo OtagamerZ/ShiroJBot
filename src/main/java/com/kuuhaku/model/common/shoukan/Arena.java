@@ -74,7 +74,7 @@ public class Arena implements Renderer {
 	private final BondedList<Drawable<?>> banned = new BondedList<>((d, it) -> {
 		if (d.getHand() == null) return false;
 
-		if (d instanceof Proxy<?> p) {
+		if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 			d.reset();
 			it.add(p.getOriginal());
 			return false;
@@ -103,6 +103,14 @@ public class Arena implements Renderer {
 		}
 
 		d.reset();
+
+		if (d instanceof Proxy<?> p) {
+			Senshi s = (Senshi) p;
+			d.reset();
+			it.add(p.getOriginal());
+			return !s.getStats().popFlag(Flag.BOUND);
+		}
+
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 

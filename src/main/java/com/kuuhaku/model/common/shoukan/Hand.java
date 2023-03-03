@@ -65,10 +65,8 @@ public class Hand {
 	private final Side side;
 
 	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
-		if (d instanceof Proxy<?> p) {
-			p.getOriginal().reset();
+		if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 			d.reset();
-
 			it.add(p.getOriginal());
 			return false;
 		}
@@ -90,13 +88,19 @@ public class Hand {
 		}
 
 		d.setSlot(null);
+
+		if (d instanceof Proxy<?> p) {
+			Senshi s = (Senshi) p;
+			d.reset();
+			it.add(p.getOriginal());
+			return !s.getStats().popFlag(Flag.BOUND);
+		}
+
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
-		if (d instanceof Proxy<?> p) {
-			p.getOriginal().reset();
+		if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 			d.reset();
-
 			it.add(p.getOriginal());
 			return false;
 		}
@@ -114,13 +118,19 @@ public class Hand {
 		}
 
 		d.reset();
+
+		if (d instanceof Proxy<?> p) {
+			Senshi s = (Senshi) p;
+			d.reset();
+			it.add(p.getOriginal());
+			return !s.getStats().popFlag(Flag.BOUND);
+		}
+
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
-		if (d instanceof Proxy<?> p) {
-			p.getOriginal().reset();
+		if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 			d.reset();
-
 			it.add(p.getOriginal());
 			return false;
 		}
@@ -179,13 +189,18 @@ public class Hand {
 			return false;
 		}
 
+		if (d instanceof Proxy<?> p) {
+			Senshi s = (Senshi) p;
+			d.reset();
+			it.add(p.getOriginal());
+			return !s.getStats().popFlag(Flag.BOUND);
+		}
+
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
-		if (d instanceof Proxy<?> p) {
-			p.getOriginal().reset();
+		if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 			d.reset();
-
 			it.add(p.getOriginal());
 			return false;
 		}
@@ -194,6 +209,13 @@ public class Hand {
 		getData().put("last_discarded", d);
 		getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
 		d.setAvailable(false);
+
+		if (d instanceof Proxy<?> p) {
+			Senshi s = (Senshi) p;
+			d.reset();
+			it.add(p.getOriginal());
+			return !s.getStats().popFlag(Flag.BOUND);
+		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
 	});
