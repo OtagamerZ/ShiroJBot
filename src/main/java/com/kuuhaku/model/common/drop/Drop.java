@@ -102,14 +102,14 @@ public abstract class Drop<T> {
 					int avg = DAO.queryNative(Integer.class, """
 							SELECT ROUND(GEO_MEAN(x.count))
 							FROM (
-							     SELECT COUNT(1) AS count
-							     FROM kawaipon_card kc
-							     INNER JOIN card c ON kc.card_id = c.id
-							     LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
-							     WHERE sc.id IS NULL
-							       AND c.anime_id = ?1
-							     GROUP BY kc.kawaipon_uid
-							     ) AS x
+								 SELECT COUNT(1) AS count
+								 FROM kawaipon_card kc
+										  INNER JOIN card c ON kc.card_id = c.id
+										  LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
+								 WHERE sc.id IS NULL
+								   AND c.anime_id = ?1
+								 GROUP BY kc.kawaipon_uid
+								 ) AS x
 							WHERE x.count > 0
 							""", anime.getId());
 
