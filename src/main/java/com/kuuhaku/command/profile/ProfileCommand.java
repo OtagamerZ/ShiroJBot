@@ -19,11 +19,15 @@
 package com.kuuhaku.command.profile;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.id.ProfileId;
+import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.IO;
@@ -31,19 +35,27 @@ import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.User;
 
 @Command(
 		name = "profile",
 		category = Category.MISC
 )
+@Signature(allowEmpty = true, value = "<user:user:r>")
 @Requires(Permission.MESSAGE_ATTACH_FILES)
 public class ProfileCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image"))).queue(m -> {
+			User u = event.user();
+			if (!event.message().getMentionedUsers().isEmpty()) {
+				u = event.message().getMentionedUsers().get(0);
+			}
+
+			Profile p = DAO.find(Profile.class, new ProfileId(u.getId(), event.guild().getId()));
 			event.channel()
-					.sendMessage(event.user().getAsMention())
-					.addFile(IO.getBytes(data.profile().render(locale), "png"), "profile.png")
+					.sendMessage(u.getAsMention())
+					.addFile(IO.getBytes(p.render(locale), "png"), "profile.png")
 					.flatMap(s -> m.delete())
 					.queue(null, Utils::doNothing);
 		});
