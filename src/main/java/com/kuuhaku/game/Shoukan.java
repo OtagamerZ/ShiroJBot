@@ -2146,7 +2146,7 @@ public class Shoukan extends GameInstance<Phase> {
 							.queue()
 			);
 
-			if (getTurn() > 10) {
+			if (singleplayer || getTurn() > 10) {
 				buttons.put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
 						reportResult(GameReport.SUCCESS, getOther().getSide(), "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
