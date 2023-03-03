@@ -26,11 +26,11 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.Objects;
 
-public class PlaceableSpell extends Senshi implements Proxy<Evogear> {
+public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 	private final Evogear original;
 
-	public PlaceableSpell(Evogear e) {
-		super(e.getId(), e.getCard(), Race.NONE, e.getBase());
+	public PlaceableEvogear(Evogear e) {
+		super(e.getId(), e.getCard(), e.isSpell() ? Race.MYSTICAL : Race.MACHINE, e.getBase());
 
 		original = e.withCopy(evo -> {
 			Hand h = evo.getHand();
@@ -56,7 +56,7 @@ public class PlaceableSpell extends Senshi implements Proxy<Evogear> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		if (!super.equals(o)) return false;
-		PlaceableSpell trapSpell = (PlaceableSpell) o;
+		PlaceableEvogear trapSpell = (PlaceableEvogear) o;
 		return Objects.equals(original, trapSpell.original);
 	}
 
