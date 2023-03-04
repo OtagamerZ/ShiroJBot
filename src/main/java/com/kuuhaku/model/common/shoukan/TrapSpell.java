@@ -27,10 +27,10 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.Objects;
 
-public class SpellProxy extends Senshi implements Proxy<Evogear> {
+public class TrapSpell extends Senshi implements Proxy<Evogear> {
 	private final Evogear original;
 
-	public SpellProxy(Evogear e) {
+	public TrapSpell(Evogear e) {
 		super(e.getId(), e.getCard(), Race.NONE, e.getBase());
 
 		original = e.withCopy(evo -> {
@@ -42,6 +42,8 @@ public class SpellProxy extends Senshi implements Proxy<Evogear> {
 		});
 		setHand(e.getHand());
 		setFlipped(true);
+
+		e.getStats().setFlag(Flag.BOUND, true);
 	}
 
 	@Override
@@ -70,8 +72,8 @@ public class SpellProxy extends Senshi implements Proxy<Evogear> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		if (!super.equals(o)) return false;
-		SpellProxy spellProxy = (SpellProxy) o;
-		return Objects.equals(original, spellProxy.original);
+		TrapSpell trapSpell = (TrapSpell) o;
+		return Objects.equals(original, trapSpell.original);
 	}
 
 	@Override

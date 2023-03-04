@@ -30,7 +30,7 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
-import com.kuuhaku.model.common.shoukan.SpellProxy;
+import com.kuuhaku.model.common.shoukan.TrapSpell;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
@@ -1054,7 +1054,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 					for (SlotColumn sc : game.getSlots(getSide())) {
 						for (Senshi card : sc.getCards()) {
-							if (card instanceof SpellProxy p && !triggered.contains(p.getId())) {
+							if (card instanceof TrapSpell p && !triggered.contains(p.getId())) {
 								EffectParameters params;
 								if (targeted) {
 									params = new EffectParameters(

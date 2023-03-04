@@ -20,26 +20,37 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.enums.shoukan.Flag;
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.Objects;
 
-public class EquippableSenshi extends Evogear implements Proxy<Senshi> {
-	private final Senshi original;
+public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
+	private final Evogear original;
 
-	public EquippableSenshi(Senshi s) {
-		super(s.getId(), s.getCard(), s.getBase());
+	public PlaceableEvogear(Evogear e) {
+		super(e.getId(), e.getCard(), e.isSpell() ? Race.MYSTICAL : Race.MACHINE, e.getBase());
 
-		original = s.copy();
-		setHand(s.getHand());
+		original = e.withCopy(evo -> {
+			Hand h = evo.getHand();
+			if (h.isEmpowered() && h.getOrigin().major() == Race.MYSTICAL) {
+				evo.getStats().setFlag(Flag.EMPOWERED, true);
+				h.setEmpowered(false);
+			}
+		});
 
-		s.getStats().setFlag(Flag.BOUND, true);
+		e.getStats().setFlag(Flag.BOUND, true);
 	}
 
 	@Override
-	public Senshi getOriginal() {
+	public Evogear getOriginal() {
 		return original;
+	}
+
+	@Override
+	public boolean canAttack() {
+		return false;
 	}
 
 	@Override
@@ -47,8 +58,8 @@ public class EquippableSenshi extends Evogear implements Proxy<Senshi> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		if (!super.equals(o)) return false;
-		EquippableSenshi equippableSenshi = (EquippableSenshi) o;
-		return Objects.equals(original, equippableSenshi.original);
+		PlaceableEvogear trapSpell = (PlaceableEvogear) o;
+		return Objects.equals(original, trapSpell.original);
 	}
 
 	@Override

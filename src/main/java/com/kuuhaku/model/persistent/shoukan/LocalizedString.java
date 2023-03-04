@@ -34,7 +34,7 @@ public class LocalizedString extends DAO<LocalizedString> {
 	@EmbeddedId
 	private LocalizedId id;
 
-	@Column(name = "value", nullable = false)
+	@Column(name = "value", nullable = false, columnDefinition = "TEXT")
 	private String value;
 
 	public LocalizedId getId() {
