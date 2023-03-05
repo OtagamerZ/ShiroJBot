@@ -209,8 +209,8 @@ public class Arena implements Renderer {
 
 						if (slot.isLocked()) {
 							BufferedImage hole = IO.getResourceAsImage("shoukan/states/broken.png");
-							g2.drawImage(hole, x, frontline, null);
-							g2.drawImage(hole, x, backline, null);
+							g2.drawImage(hole, x + 5, frontline + 5, null);
+							g2.drawImage(hole, x + 5, backline + 5, null);
 						} else {
 							if (slot.hasTop()) {
 								Senshi s = slot.getTop();
