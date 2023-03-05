@@ -67,7 +67,7 @@ public abstract class Gacha {
 			out.add(pool.get());
 		}
 
-		return List.copyOf(out);
+		return out;
 	}
 
 	public static Set<Class<?>> getGachas() {

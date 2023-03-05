@@ -25,6 +25,7 @@ import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.util.Spawn;
 import net.dv8tion.jda.api.entities.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @GachaType(value = "premium", price = 1, prizes = 5, currency = Currency.GEM)
@@ -49,16 +50,20 @@ public class PremiumGacha extends Gacha {
 
 	@Override
 	public List<String> draw() {
-		List<String> out = super.draw();
-		List<String> aux = super.draw();
+		GachaType type = getClass().getAnnotation(GachaType.class);
+		if (type == null) return List.of();
 
-		for (int i = 0; i < out.size(); i++) {
-			String first = out.get(i);
-			String second = aux.get(i);
-
-			if (rarityOf(second) > rarityOf(first)) {
-				out.set(i, second);
+		List<String> out = new ArrayList<>();
+		for (int i = 0; i < type.prizes(); i++) {
+			String roll = null;
+			for (int j = 0; j < 10; j++) {
+				String id = pool.get();
+				if (roll == null || rarityOf(id) > rarityOf(roll)) {
+					roll = id;
+				}
 			}
+
+			out.add(roll);
 		}
 
 		return out;
