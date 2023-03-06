@@ -20,7 +20,6 @@ package com.kuuhaku;
 
 import com.github.ygimenez.exception.InvalidHandlerException;
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.PUtilsConfig;
 import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.Manager;
@@ -108,8 +107,6 @@ public class Application implements Thread.UncaughtExceptionHandler {
 			Constants.LOGGER.error("Failed to start pagination library: " + e);
 			System.exit(1);
 		}
-
-		PUtilsConfig.setLogLevel(PUtilsConfig.LogLevel.LEVEL_4);
 
 		API.connectSocket(CommonSocket.class, Constants.SOCKET_ROOT);
 
