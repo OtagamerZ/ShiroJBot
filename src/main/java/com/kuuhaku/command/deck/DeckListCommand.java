@@ -93,7 +93,7 @@ public class DeckListCommand implements Executable {
 
 		Page home;
 		Map<Emoji, Page> pages = new LinkedHashMap<>();
-		pages.put(Emoji.fromFormatted("⚔️"), home = Utils.generatePage(eb, Utils.padList(d.getSenshi(), 36), 12,
+		pages.put(Utils.parseEmoji("⚔️"), home = Utils.generatePage(eb, Utils.padList(d.getSenshi(), 36), 12,
 				s -> {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/senshi")));
 					if (s == null) return "*" + locale.get("str/empty") + "*";
@@ -101,7 +101,7 @@ public class DeckListCommand implements Executable {
 					return Utils.getEmoteString(Constants.EMOTE_REPO_4, s.getRace().name()) + " " + s;
 				}
 		));
-		pages.put(Emoji.fromFormatted("\uD83D\uDEE1️"), Utils.generatePage(eb, Utils.padList(d.getEvogear(), 24), 12,
+		pages.put(Utils.parseEmoji("\uD83D\uDEE1️"), Utils.generatePage(eb, Utils.padList(d.getEvogear(), 24), 12,
 				e -> {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/evogear")));
 					if (e == null) return "*" + locale.get("str/empty") + "*";
@@ -109,7 +109,7 @@ public class DeckListCommand implements Executable {
 					return Utils.getEmoteString(Constants.EMOTE_REPO_4, "tier_" + e.getTier()) + " " + e;
 				}
 		));
-		pages.put(Emoji.fromFormatted("\uD83C\uDFD4️"), Utils.generatePage(eb, Utils.padList(d.getFields(), 3), 12,
+		pages.put(Utils.parseEmoji("\uD83C\uDFD4️"), Utils.generatePage(eb, Utils.padList(d.getFields(), 3), 12,
 				f -> {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/field")));
 					if (f == null) return "*" + locale.get("str/empty") + "*";

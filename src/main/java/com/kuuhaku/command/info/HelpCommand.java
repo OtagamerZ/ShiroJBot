@@ -149,7 +149,7 @@ public class HelpCommand implements Executable {
 		CustomEmoji home = bot.getEmojiById("674261700366827539");
 		if (home != null) {
 			index.setThumbnail(home.getImageUrl());
-			pages.put(Emoji.fromFormatted(home.getId()), new InteractPage(index.build()));
+			pages.put(Utils.parseEmoji(home.getId()), new InteractPage(index.build()));
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
@@ -163,7 +163,7 @@ public class HelpCommand implements Executable {
 					.appendDescription(cat.getDescription(locale) + "\n\n")
 					.appendDescription(locale.get("str/command_counter", cat.getCommands().size()));
 
-			pages.put(Emoji.fromFormatted(emt.getId()), Utils.generatePage(eb, cat.getCommands(), 10, cmd -> {
+			pages.put(Utils.parseEmoji(emt.getId()), Utils.generatePage(eb, cat.getCommands(), 10, cmd -> {
 				if (cmd.name().contains(".")) return null;
 
 				int subs = cmd.getSubCommands().size();

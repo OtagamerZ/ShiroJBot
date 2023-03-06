@@ -41,7 +41,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -113,19 +112,19 @@ public class DeckSkinCommand implements Executable {
 			AtomicInteger i = new AtomicInteger();
 			event.channel().sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
 					Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
-								m.put(Emoji.fromFormatted("◀️"), w -> {
+								m.put(Utils.parseEmoji("◀️"), w -> {
 									if (i.get() > 1) {
 										confirm.set(false);
 										s.editMessageEmbeds((MessageEmbed) pages.get(i.decrementAndGet()).getContent()).queue();
 									}
 								});
-								m.put(Emoji.fromFormatted("▶️"), w -> {
+								m.put(Utils.parseEmoji("▶️"), w -> {
 									if (i.get() < skins.length - 1) {
 										confirm.set(false);
 										s.editMessageEmbeds((MessageEmbed) pages.get(i.incrementAndGet()).getContent()).queue();
 									}
 								});
-								m.put(Emoji.fromFormatted("✅"), w -> {
+								m.put(Utils.parseEmoji("✅"), w -> {
 									SlotSkin skin = skins[i.get()];
 									if (!skin.canUse(acc)) {
 										List<Title> remaining = skin.getTitles().stream()
