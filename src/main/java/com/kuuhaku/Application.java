@@ -20,6 +20,7 @@ package com.kuuhaku;
 
 import com.github.ygimenez.exception.InvalidHandlerException;
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.PUtilsConfig;
 import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.Manager;
@@ -36,6 +37,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.StandardGuildMessageChannel;
+import net.dv8tion.jda.api.interactions.Interaction;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
@@ -103,6 +105,21 @@ public class Application implements Thread.UncaughtExceptionHandler {
 					.setHandler(shiro)
 					.shouldEventLock(true)
 					.activate();
+
+			PUtilsConfig.setOnRemove(h ->
+					h.editOriginalComponents()
+							.map(m -> {
+								Interaction i = h.getInteraction();
+								if (i.isFromGuild()) {
+									h.setEphemeral(true)
+											.sendMessage(I18N.getFromMapping(i.getGuildLocale()).get("error/event_not_mapped"))
+											.queue();
+								}
+
+								return m;
+							})
+							.queue()
+			);
 		} catch (InvalidHandlerException e) {
 			Constants.LOGGER.error("Failed to start pagination library: " + e);
 			System.exit(1);
