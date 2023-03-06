@@ -436,7 +436,7 @@ public abstract class Utils {
 
 		AtomicBoolean lock = new AtomicBoolean(false);
 		ma.queue(s -> Pages.buttonize(s,
-						Map.of(parseEmoji(Constants.ACCEPT), w -> {
+						Map.of(Emoji.fromFormatted(Constants.ACCEPT), w -> {
 							if (!lock.get() && action.apply(w)) {
 								lock.set(true);
 								w.getMessage().delete().queue(null, Utils::doNothing);
@@ -586,17 +586,6 @@ public abstract class Utils {
 		}
 
 		return out;
-	}
-
-	public static Emoji parseEmoji(String in) {
-		if (StringUtils.isNumeric(in)) {
-			Emoji e = Main.getApp().getShiro().getEmojiById(in);
-			if (e == null) return Emoji.fromFormatted("❓");
-
-			return e;
-		}
-
-		return Emoji.fromFormatted(in);
 	}
 
 	public static void doNothing(Throwable thr) {

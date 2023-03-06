@@ -1965,7 +1965,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private void addButtons(Message msg) {
 		Hand curr = getCurrent();
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
-		buttons.put(Utils.parseEmoji("▶"), w -> {
+		buttons.put(Emoji.fromFormatted("▶"), w -> {
 			if (curr.selectionPending()) {
 				getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 				return;
@@ -1987,7 +1987,7 @@ public class Shoukan extends GameInstance<Phase> {
 		});
 
 		if (getPhase() == Phase.PLAN) {
-			buttons.put(Utils.parseEmoji("⏩"), w -> {
+			buttons.put(Emoji.fromFormatted("⏩"), w -> {
 				if (curr.selectionPending()) {
 					getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 					return;
@@ -2003,7 +2003,7 @@ public class Shoukan extends GameInstance<Phase> {
 			});
 
 			if (getTurn() == 1 && !curr.hasRerolled()) {
-				buttons.put(Utils.parseEmoji("\uD83D\uDD04"), w -> {
+				buttons.put(Emoji.fromFormatted("\uD83D\uDD04"), w -> {
 					curr.rerollHand();
 					reportEvent("str/hand_reroll", true, curr.getName());
 				});
@@ -2012,7 +2012,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (!curr.getRealDeck().isEmpty() && arcade != Arcade.DECK_ROYALE) {
 				int rem = curr.getRemainingDraws();
 				if (rem > 0) {
-					buttons.put(Utils.parseEmoji("📤"), w -> {
+					buttons.put(Emoji.fromFormatted("📤"), w -> {
 						if (curr.selectionPending()) {
 							getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 							return;
@@ -2024,7 +2024,7 @@ public class Shoukan extends GameInstance<Phase> {
 					});
 
 					if (rem > 1) {
-						buttons.put(Utils.parseEmoji("📦"), w -> {
+						buttons.put(Emoji.fromFormatted("📦"), w -> {
 							if (curr.selectionPending()) {
 								getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 								return;
@@ -2039,7 +2039,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 				if (curr.isCritical() && !curr.hasUsedDestiny()) {
 					if (Utils.equalsAny(curr.getOrigin().major(), Race.MACHINE, Race.MYSTICAL)) {
-						buttons.put(Utils.parseEmoji("⚡"), w -> {
+						buttons.put(Emoji.fromFormatted("⚡"), w -> {
 							if (curr.selectionPending()) {
 								getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 								return;
@@ -2055,7 +2055,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 						});
 					} else {
-						buttons.put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
+						buttons.put(Emoji.fromFormatted("\uD83E\uDDE7"), w -> {
 							if (curr.selectionPending()) {
 								getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 								return;
@@ -2083,7 +2083,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (curr.getOrigin().major() == Race.SPIRIT && curr.getDiscard().size() >= 3 && curr.getOriginCooldown() == 0) {
-				buttons.put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
+				buttons.put(Emoji.fromFormatted("\uD83C\uDF00"), w -> {
 					if (curr.selectionPending()) {
 						getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 						return;
@@ -2118,7 +2118,7 @@ public class Shoukan extends GameInstance<Phase> {
 				});
 			}
 
-			buttons.put(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
+			buttons.put(Emoji.fromFormatted("\uD83D\uDCD1"), w -> {
 				history = !history;
 
 				if (history) {
@@ -2128,7 +2128,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			});
 
-			buttons.put(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
+			buttons.put(Emoji.fromFormatted("\uD83E\uDEAA"), w -> {
 				if (curr.selectionPending()) {
 					w.getHook().setEphemeral(true)
 							.sendFiles(FileUpload.fromData(IO.getBytes(curr.renderChoices(), "png"), "choices.png"))
@@ -2141,14 +2141,14 @@ public class Shoukan extends GameInstance<Phase> {
 						.queue();
 			});
 
-			buttons.put(Utils.parseEmoji("\uD83D\uDD0D"),
+			buttons.put(Emoji.fromFormatted("\uD83D\uDD0D"),
 					w -> w.getHook().setEphemeral(true)
 							.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png"))
 							.queue()
 			);
 
 			if (singleplayer || getTurn() > 10) {
-				buttons.put(Utils.parseEmoji("🏳"), w -> {
+				buttons.put(Emoji.fromFormatted("🏳"), w -> {
 					if (curr.isForfeit()) {
 						reportResult(GameReport.SUCCESS, getOther().getSide(), "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
 						return;

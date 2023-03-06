@@ -95,17 +95,17 @@ public class DeckFrameCommand implements Executable {
 			AtomicInteger i = new AtomicInteger();
 			event.channel().sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
 					Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
-								m.put(Utils.parseEmoji("◀️"), w -> {
+								m.put(Emoji.fromFormatted("◀️"), w -> {
 									if (i.get() > 1) {
 										s.editMessageEmbeds((MessageEmbed) pages.get(i.decrementAndGet()).getContent()).queue();
 									}
 								});
-								m.put(Utils.parseEmoji("▶️"), w -> {
+								m.put(Emoji.fromFormatted("▶️"), w -> {
 									if (i.get() < frames.length - 1) {
 										s.editMessageEmbeds((MessageEmbed) pages.get(i.incrementAndGet()).getContent()).queue();
 									}
 								});
-								m.put(Utils.parseEmoji("✅"), w -> {
+								m.put(Emoji.fromFormatted("✅"), w -> {
 									FrameSkin frame = frames[i.get()];
 									if (!frame.canUse(acc)) {
 										event.channel().sendMessage(locale.get("error/frame_locked")).queue();

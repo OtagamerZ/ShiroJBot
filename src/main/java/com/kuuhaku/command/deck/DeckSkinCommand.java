@@ -112,19 +112,19 @@ public class DeckSkinCommand implements Executable {
 			AtomicInteger i = new AtomicInteger();
 			event.channel().sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
 					Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
-								m.put(Utils.parseEmoji("◀️"), w -> {
+								m.put(Emoji.fromFormatted("◀️"), w -> {
 									if (i.get() > 1) {
 										confirm.set(false);
 										s.editMessageEmbeds((MessageEmbed) pages.get(i.decrementAndGet()).getContent()).queue();
 									}
 								});
-								m.put(Utils.parseEmoji("▶️"), w -> {
+								m.put(Emoji.fromFormatted("▶️"), w -> {
 									if (i.get() < skins.length - 1) {
 										confirm.set(false);
 										s.editMessageEmbeds((MessageEmbed) pages.get(i.incrementAndGet()).getContent()).queue();
 									}
 								});
-								m.put(Utils.parseEmoji("✅"), w -> {
+								m.put(Emoji.fromFormatted("✅"), w -> {
 									SlotSkin skin = skins[i.get()];
 									if (!skin.canUse(acc)) {
 										List<Title> remaining = skin.getTitles().stream()
