@@ -272,7 +272,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (add) {
 				reportEvent("ADD_CARD -> " + amount + " x " + id, false);
 				return true;
-			} 
+			}
 		}
 
 		return false;
@@ -1753,38 +1753,38 @@ public class Shoukan extends GameInstance<Phase> {
 				remove = effect.expired() || effect.removed();
 			}
 
-			if (effect.triggers().contains(ep.trigger())) {
-				if (ep.size() == 0) {
-					if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger())) {
+			if (ep.size() == 0) {
+				if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger())) {
+					effect.decreaseLimit();
+
+					try {
+						effect.effect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
+					} catch (ActivationException ignore) {
+					}
+
+					if (effect.side() == null) {
+						effect.lock().set(true);
+					}
+				}
+
+				remove = effect.expired() || effect.removed();
+			} else if (ep.source() != null) {
+				if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
+					effect.decreaseLimit();
+
+					try {
+						effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
+					} catch (ActivationException ignore) {
+					}
+				}
+
+				for (Target t : ep.targets()) {
+					if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
 						effect.decreaseLimit();
 
 						try {
-							effect.effect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
+							effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
 						} catch (ActivationException ignore) {
-						}
-
-						if (effect.side() == null) {
-							effect.lock().set(true);
-						}
-					}
-				} else if (ep.source() != null) {
-					if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
-						effect.decreaseLimit();
-
-						try {
-							effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
-						} catch (ActivationException ignore) {
-						}
-					}
-
-					for (Target t : ep.targets()) {
-						if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
-							effect.decreaseLimit();
-
-							try {
-								effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
-							} catch (ActivationException ignore) {
-							}
 						}
 					}
 				}
