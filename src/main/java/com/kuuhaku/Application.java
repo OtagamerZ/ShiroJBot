@@ -27,6 +27,7 @@ import com.kuuhaku.controller.Manager;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.websocket.CommonSocket;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.util.API;
 import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.JDA;
@@ -110,9 +111,11 @@ public class Application implements Thread.UncaughtExceptionHandler {
 					h.editOriginalComponents()
 							.map(m -> {
 								Interaction i = h.getInteraction();
-								if (i.isFromGuild()) {
+								if (i.isFromGuild() && i.getGuild() != null) {
+									GuildConfig gc = DAO.find(GuildConfig.class, i.getGuild().getId());
+
 									h.setEphemeral(true)
-											.sendMessage(I18N.getFromMapping(i.getGuildLocale()).get("error/event_not_mapped"))
+											.sendMessage(gc.getLocale().get("error/event_not_mapped"))
 											.queue();
 								}
 

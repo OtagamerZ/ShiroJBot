@@ -20,28 +20,22 @@ package com.kuuhaku.model.enums;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.util.Utils;
-import net.dv8tion.jda.api.interactions.DiscordLocale;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import static net.dv8tion.jda.api.interactions.DiscordLocale.*;
-
 public enum I18N {
-	PT(ZoneId.of("GMT-3"), PORTUGUESE_BRAZILIAN),
-	EN(ZoneId.of("GMT-4"), ENGLISH_UK, ENGLISH_US);
+	PT(ZoneId.of("GMT-3")),
+	EN(ZoneId.of("GMT-4"));
 
 	private final Locale locale = new Locale(name().toLowerCase());
 	private final ZoneId zone;
-	private final DiscordLocale[] discordMapping;
 
-	I18N(ZoneId zone, DiscordLocale... discordMapping) {
+	I18N(ZoneId zone) {
 		this.zone = zone;
-		this.discordMapping = discordMapping;
 	}
 
 	public static String get(I18N code, String key) {
@@ -91,15 +85,5 @@ public enum I18N {
 
 	public ZoneId getZone() {
 		return zone;
-	}
-
-	public DiscordLocale[] getDiscordMapping() {
-		return discordMapping;
-	}
-
-	public static I18N getFromMapping(DiscordLocale locale) {
-		return Arrays.stream(values())
-				.filter(i -> Utils.equalsAny(i.discordMapping, locale))
-				.findFirst().orElse(EN);
 	}
 }
