@@ -190,7 +190,7 @@ public class Arena implements Renderer {
 				Deck deck = h.getUserDeck();
 				DeckStyling style = deck.getStyling();
 
-				g1.drawImage(style.getSkin().getImage(side, style.getFrame().isLegacy()), 26, yOffset, null);
+				g1.drawImage(style.getSkin().getImage(side, style.getFrame().isLegacy()), 21, yOffset - 5, null);
 
 				Graph.applyTransformed(g1, xOffset, yOffset, g2 -> {
 					for (SlotColumn slot : slots.get(side)) {
@@ -209,8 +209,8 @@ public class Arena implements Renderer {
 
 						if (slot.isLocked()) {
 							BufferedImage hole = IO.getResourceAsImage("shoukan/states/broken.png");
-							g2.drawImage(hole, x + 5, frontline + 5, null);
-							g2.drawImage(hole, x + 5, backline + 5, null);
+							g2.drawImage(hole, x + 15, frontline + 15, null);
+							g2.drawImage(hole, x + 15, backline + 15, null);
 						} else {
 							if (slot.hasTop()) {
 								Senshi s = slot.getTop();
