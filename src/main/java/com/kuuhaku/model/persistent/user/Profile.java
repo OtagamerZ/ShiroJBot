@@ -35,9 +35,9 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
 import org.jdesktop.swingx.graphics.BlendComposite;
@@ -163,9 +163,9 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 				""", id.getUid(), id.getGid());
 	}
 
-	public Emote getLevelEmote() {
+	public RichCustomEmoji getLevelEmote() {
 		return Main.getApp().getShiro()
-				.getEmotesByName("lvl_" + (getLevel() - getLevel() % 5), false)
+				.getEmojisByName("lvl_" + (getLevel() - getLevel() % 5), false)
 				.stream()
 				.findFirst()
 				.orElseThrow();

@@ -32,7 +32,8 @@ import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 @Command(
 		name = "welcome",
@@ -56,7 +57,13 @@ public class WelcomeCommand implements Executable {
 			event.channel().sendMessage(locale.get("success/welcome_clear")).queue();
 			return;
 		} else if (args.has("channel")) {
-			settings.setChannel(event.message().getMentionedChannels().get(0));
+			GuildChannel channel = event.message().getMentions().getChannels().get(0);
+			if (!(channel instanceof GuildMessageChannel gmc)) {
+				event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
+				return;
+			}
+
+			settings.setChannel(gmc);
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/welcome_channel_save")).queue();
@@ -68,7 +75,7 @@ public class WelcomeCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setDescription(settings.getMessage());
 
-			TextChannel chn = settings.getChannel();
+			GuildMessageChannel chn = settings.getChannel();
 			event.channel().sendMessage(locale.get("str/current_welcome_message",
 					chn == null ? "`" + locale.get("str/none") + "`" : chn.getAsMention()
 			)).setEmbeds(eb.build()).queue();

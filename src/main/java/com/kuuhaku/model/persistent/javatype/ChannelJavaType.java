@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent.javatype;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.util.Utils;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
 import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
@@ -30,14 +30,14 @@ import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
 import java.io.Serial;
 import java.sql.Types;
 
-public class ChannelJavaType extends AbstractClassJavaType<TextChannel> {
+public class ChannelJavaType extends AbstractClassJavaType<GuildMessageChannel> {
 	@Serial
 	private static final long serialVersionUID = -8058769337567861762L;
 
 	public static final ChannelJavaType INSTANCE = new ChannelJavaType();
 
 	public ChannelJavaType() {
-		super(TextChannel.class, new ImmutableMutabilityPlan<>());
+		super(GuildMessageChannel.class, new ImmutableMutabilityPlan<>());
 	}
 
 	@Override
@@ -48,19 +48,19 @@ public class ChannelJavaType extends AbstractClassJavaType<TextChannel> {
 	}
 
 	@Override
-	public String toString(TextChannel value) {
+	public String toString(GuildMessageChannel value) {
 		if (value == null) return null;
 
 		return value.getId();
 	}
 
 	@Override
-	public TextChannel fromString(CharSequence id) {
-		return Main.getApp().getShiro().getTextChannelById(Utils.getOr(String.valueOf(id), "1"));
+	public GuildMessageChannel fromString(CharSequence id) {
+		return Main.getApp().getMessageChannelById(Utils.getOr(String.valueOf(id), "1"));
 	}
 
 	@Override
-	public <X> X unwrap(TextChannel value, Class<X> type, WrapperOptions options) {
+	public <X> X unwrap(GuildMessageChannel value, Class<X> type, WrapperOptions options) {
 		if (value == null) return null;
 
 		if (String.class.isAssignableFrom(type)) {
@@ -71,12 +71,12 @@ public class ChannelJavaType extends AbstractClassJavaType<TextChannel> {
 	}
 
 	@Override
-	public <X> TextChannel wrap(X value, WrapperOptions options) {
+	public <X> GuildMessageChannel wrap(X value, WrapperOptions options) {
 		if (value == null) return null;
 
 		if (value instanceof String id) {
-			return Main.getApp().getShiro().getTextChannelById(Utils.getOr(id, "1"));
-		} else if (value instanceof TextChannel c) {
+			return Main.getApp().getMessageChannelById(Utils.getOr(id, "1"));
+		} else if (value instanceof GuildMessageChannel c) {
 			return c;
 		}
 

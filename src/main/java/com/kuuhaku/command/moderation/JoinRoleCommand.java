@@ -51,7 +51,7 @@ public class JoinRoleCommand implements Executable {
 			event.channel().sendMessage(locale.get("success/join_role_clear")).queue();
 			return;
 		} else if (args.has("role")) {
-			settings.setJoinRole(event.message().getMentionedRoles().get(0));
+			settings.setJoinRole(event.message().getMentions().getRoles().get(0));
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/join_role_save")).queue();
@@ -61,6 +61,6 @@ public class JoinRoleCommand implements Executable {
 		Role role = settings.getJoinRole();
 		event.channel().sendMessage(locale.get("str/current_join_role",
 				role == null ? "`" + locale.get("str/none") + "`" : role.getAsMention()
-		)).allowedMentions(Set.of()).queue();
+		)).setAllowedMentions(Set.of()).queue();
 	}
 }

@@ -21,10 +21,9 @@ package com.kuuhaku.model.enums;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.model.records.PreparedCommand;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
 
-import java.util.Locale;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -67,8 +66,8 @@ public enum Category {
 		return cmdCache;
 	}
 
-	public Emote getEmote() {
-		return Main.getApp().getShiro().getEmoteById(emote);
+	public CustomEmoji getEmote() {
+		return Main.getApp().getShiro().getEmojiById(emote);
 	}
 
 	public boolean check(Member m) {

@@ -36,8 +36,8 @@ import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -84,7 +84,7 @@ public class CustomAnswerCommand implements Executable {
 						break;
 					}
 
-					TextChannel chn = event.guild().getTextChannelById(String.valueOf(o));
+					GuildChannel chn = event.guild().getGuildChannelById(String.valueOf(o));
 					if (chn != null) {
 						ments.add(chn.getAsMention());
 					}

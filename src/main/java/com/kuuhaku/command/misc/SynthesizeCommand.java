@@ -49,6 +49,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -156,14 +157,14 @@ public class SynthesizeCommand implements Executable {
 							new StashedCard(kp, f.getCard(), CardType.FIELD).save();
 
 							event.channel().sendMessage(locale.get("success/synth", f))
-									.addFile(IO.getBytes(f.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png")
+									.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png"))
 									.queue();
 						} else {
 							Evogear e = rollSynthesis(event.user(), mult);
 							new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
 
 							event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
-									.addFile(IO.getBytes(e.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png")
+									.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png"))
 									.queue();
 						}
 

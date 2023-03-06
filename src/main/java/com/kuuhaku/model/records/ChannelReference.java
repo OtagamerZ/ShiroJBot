@@ -19,11 +19,11 @@
 package com.kuuhaku.model.records;
 
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 import java.util.Objects;
 
-public record ChannelReference(Guild guild, TextChannel channel) {
+public record ChannelReference(Guild guild, GuildMessageChannel channel) {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

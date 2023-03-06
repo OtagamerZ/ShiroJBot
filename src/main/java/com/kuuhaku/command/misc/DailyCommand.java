@@ -29,7 +29,7 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 @Command(
 		name = "daily",
@@ -56,7 +56,7 @@ public class DailyCommand implements Executable {
 			int gems = Math.min((int) Calc.getFibonacci(acc.getStreak() / 7), 3);
 			acc.addGems(gems, "Vote streak " + acc.getStreak());
 
-			TextChannel chn = data.config().getSettings().getNotificationsChannel();
+			GuildMessageChannel chn = data.config().getSettings().getNotificationsChannel();
 			if (chn != null) {
 				chn.sendMessage(locale.get("achievement/title", event.user().getAsMention(), gems, acc.getStreak())).queue();
 			}

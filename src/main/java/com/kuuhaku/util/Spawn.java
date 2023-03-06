@@ -29,8 +29,8 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.records.GuildBuff;
 import kotlin.Pair;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.jodah.expiringmap.ExpiringMap;
 import org.shredzone.commons.suncalc.MoonIllumination;
 
@@ -51,7 +51,7 @@ public abstract class Spawn {
 	private static FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(3);
 	private static FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(15);
 
-	public synchronized static KawaiponCard getKawaipon(GuildBuff gb, TextChannel channel, User u) {
+	public synchronized static KawaiponCard getKawaipon(GuildBuff gb, GuildMessageChannel channel, User u) {
 		if (spawnedCards.containsKey(channel.getId())) return null;
 
 		double dropRate = 8 * (1.2 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount())) * (1 + gb.card()) * getQuantityMult();
@@ -99,7 +99,7 @@ public abstract class Spawn {
 		return card;
 	}
 
-	public synchronized static Drop<?> getDrop(GuildBuff gb, TextChannel channel, User u) {
+	public synchronized static Drop<?> getDrop(GuildBuff gb, GuildMessageChannel channel, User u) {
 		if (spawnedDrops.containsKey(channel.getId())) return null;
 
 		double dropRate = 10 * (1.2 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount())) * (1 + gb.drop()) * getQuantityMult();
@@ -121,11 +121,11 @@ public abstract class Spawn {
 		return drop;
 	}
 
-	public static SingleUseReference<KawaiponCard> getSpawnedCard(TextChannel channel) {
+	public static SingleUseReference<KawaiponCard> getSpawnedCard(GuildMessageChannel channel) {
 		return spawnedCards.getOrDefault(channel.getId(), new SingleUseReference<>(null));
 	}
 
-	public static SingleUseReference<Drop<?>> getSpawnedDrop(TextChannel channel) {
+	public static SingleUseReference<Drop<?>> getSpawnedDrop(GuildMessageChannel channel) {
 		return spawnedDrops.getOrDefault(channel.getId(), new SingleUseReference<>(null));
 	}
 

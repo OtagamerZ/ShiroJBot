@@ -44,6 +44,7 @@ import jakarta.persistence.Transient;
 import kotlin.Triple;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -1046,7 +1047,7 @@ public class Hand {
 
 	public void showHand(Hand hand) {
 		getUser().openPrivateChannel()
-				.flatMap(chn -> chn.sendFile(IO.getBytes(render(hand.getCards()), "png"), "hand.png"))
+				.flatMap(chn -> chn.sendFiles(FileUpload.fromData(IO.getBytes(render(hand.getCards()), "png"), "hand.png")))
 				.queue(m -> {
 					if (equals(hand)) {
 						if (lastMessage != null) {
@@ -1062,7 +1063,7 @@ public class Hand {
 
 	public void showCards(List<Drawable<?>> cards) {
 		getUser().openPrivateChannel()
-				.flatMap(chn -> chn.sendFile(IO.getBytes(render(cards), "png"), "cards.png"))
+				.flatMap(chn -> chn.sendFiles(FileUpload.fromData(IO.getBytes(render(cards), "png"), "cards.png")))
 				.queue(null, Utils::doNothing);
 	}
 
@@ -1084,7 +1085,7 @@ public class Hand {
 
 		selection = new Triple<>(cards, hide, new CompletableFuture<>());
 
-		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFile(IO.getBytes(renderChoices(), "png"), "choices.png")));
+		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFiles(FileUpload.fromData(IO.getBytes(renderChoices(), "png"), "choices.png"))));
 
 		game.getChannel().sendMessage(game.getLocale().get("str/selection_sent")).queue();
 		try {

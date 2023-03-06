@@ -22,19 +22,19 @@ import com.kuuhaku.Main;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 @Converter(autoApply = true)
-public class ChannelConverter implements AttributeConverter<TextChannel, String> {
+public class ChannelConverter implements AttributeConverter<GuildMessageChannel, String> {
 	@Override
-	public String convertToDatabaseColumn(TextChannel channel) {
+	public String convertToDatabaseColumn(GuildMessageChannel channel) {
 		if (channel == null) return null;
 
 		return channel.getId();
 	}
 
 	@Override
-	public TextChannel convertToEntityAttribute(String id) {
-		return Main.getApp().getShiro().getTextChannelById(Utils.getOr(id, "1"));
+	public GuildMessageChannel convertToEntityAttribute(String id) {
+		return Main.getApp().getMessageChannelById(Utils.getOr(id, "1"));
 	}
 }

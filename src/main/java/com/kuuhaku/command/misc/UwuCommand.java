@@ -58,7 +58,7 @@ public class UwuCommand implements Executable {
 
 				hook.send(msg);
 			} else {
-				event.channel().sendMessage(text).reference(event.message()).queue();
+				event.channel().sendMessage(text).setMessageReference(event.message()).queue();
 			}
 		}
 	}

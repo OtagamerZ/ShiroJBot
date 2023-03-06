@@ -46,6 +46,7 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -182,7 +183,7 @@ public class SeeCardCommand implements Executable {
 		}
 
 		event.channel().sendMessageEmbeds(eb.build())
-				.addFile(IO.getBytes(bi, "png"), "card.png")
+				.addFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "card.png"))
 				.queue();
 	}
 }

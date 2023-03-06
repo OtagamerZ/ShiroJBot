@@ -31,14 +31,18 @@ import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.Channel;
+import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.StandardGuildMessageChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
-import net.dv8tion.jda.api.utils.AllowedMentions;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import net.dv8tion.jda.api.utils.messages.MessageRequest;
 
-import javax.security.auth.login.LoginException;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
@@ -61,28 +65,20 @@ public class Application implements Thread.UncaughtExceptionHandler {
 			Constants.LOGGER.error("Database latency: " + latency + "ms");
 		}
 
-		ShardManager sm = null;
-		try {
-			sm = DefaultShardManagerBuilder.create(Constants.BOT_TOKEN, EnumSet.allOf(GatewayIntent.class))
-					.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
-					.setMemberCachePolicy(MemberCachePolicy.ONLINE
-							.and(MemberCachePolicy.OWNER)
-							.and(m -> !m.getUser().isBot()))
-					.addEventListeners(new GuildListener())
-					.setBulkDeleteSplittingEnabled(false)
-					.setEventPool(new ForkJoinPool(
-							Runtime.getRuntime().availableProcessors(),
-							ForkJoinPool.defaultForkJoinWorkerThreadFactory,
-							this,
-							true
-					), true)
-					.build();
-		} catch (LoginException e) {
-			Constants.LOGGER.fatal("Failed to login: " + e);
-			System.exit(1);
-		} finally {
-			shiro = sm;
-		}
+		shiro = DefaultShardManagerBuilder.create(Constants.BOT_TOKEN, EnumSet.allOf(GatewayIntent.class))
+				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
+				.setMemberCachePolicy(MemberCachePolicy.ONLINE
+						.and(MemberCachePolicy.OWNER)
+						.and(m -> !m.getUser().isBot()))
+				.addEventListeners(new GuildListener())
+				.setBulkDeleteSplittingEnabled(false)
+				.setEventPool(new ForkJoinPool(
+						Runtime.getRuntime().availableProcessors(),
+						ForkJoinPool.defaultForkJoinWorkerThreadFactory,
+						this,
+						true
+				), true)
+				.build();
 
 		Executors.newSingleThreadExecutor().execute(() ->
 				shiro.getShards().stream()
@@ -100,7 +96,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 						.forEach(this::setRandomAction)
 		);
 
-		AllowedMentions.setDefaultMentions(EnumSet.complementOf(EnumSet.of(EVERYONE, HERE)));
+		MessageRequest.setDefaultMentions(EnumSet.complementOf(EnumSet.of(EVERYONE, HERE)));
 
 		try {
 			PaginatorBuilder.createPaginator()
@@ -129,6 +125,19 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		return Utils.getOr(shiro.getUserById(id), Pages.subGet(shiro.retrieveUserById(id)));
 	}
 
+	public GuildMessageChannel getMessageChannelById(String id) {
+		List<Class<? extends Channel>> types = List.of(
+				StandardGuildMessageChannel.class, ThreadChannel.class, VoiceChannel.class
+		);
+
+		for (Class<? extends Channel> type : types) {
+			GuildMessageChannel gmc = (GuildMessageChannel) shiro.getChannelById(type, id);
+			if (gmc != null) return gmc;
+		}
+
+		return null;
+	}
+
 	public JDA getMainShard() {
 		return shiro.getShards().get(0);
 	}
@@ -148,7 +157,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 						ORDER BY RANDOM()
 						""")),
 				Activity.playing("com minhas cartas Kawaipon!"),
-				Activity.of(Activity.ActivityType.DEFAULT, "Use s!help para ver os meus comandos!")
+				Activity.of(Activity.ActivityType.LISTENING, "Use s!help para ver os meus comandos!")
 		);
 
 		jda.getPresence().setActivity(Utils.getRandomEntry(activities));

@@ -31,6 +31,7 @@ import com.kuuhaku.util.IO;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 @Command(
 		name = "deck",
@@ -48,7 +49,7 @@ public class DeckCommand implements Executable {
 
 		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image")))
 				.flatMap(m -> event.channel().sendMessage(event.user().getAsMention())
-						.addFile(IO.getBytes(d.render(locale), "png"), "deck.png")
+						.addFiles(FileUpload.fromData(IO.getBytes(d.render(locale), "png"), "deck.png"))
 						.flatMap(s -> m.delete())
 				).queue();
 	}

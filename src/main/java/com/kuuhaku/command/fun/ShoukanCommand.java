@@ -68,7 +68,7 @@ public class ShoukanCommand implements Executable {
 
 		Member other;
 		if (args.has("user")) {
-			other = event.message().getMentionedMembers().get(0);
+			other = event.message().getMentions().getMembers().get(0);
 		} else {
 			other = event.member();
 		}

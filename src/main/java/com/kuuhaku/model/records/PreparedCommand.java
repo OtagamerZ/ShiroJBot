@@ -23,8 +23,9 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
@@ -48,7 +49,13 @@ public record PreparedCommand(
 	}
 
 	public Permission[] getMissingPerms(GuildChannel gc) {
-		EnumSet<Permission> required = EnumSet.of(Permission.MESSAGE_WRITE, permissions);
+		EnumSet<Permission> required;
+		if (gc instanceof ThreadChannel) {
+			required = EnumSet.of(Permission.MESSAGE_SEND_IN_THREADS, permissions);
+		} else {
+			required = EnumSet.of(Permission.MESSAGE_SEND, permissions);
+		}
+
 		EnumSet<Permission> missing = EnumSet.noneOf(Permission.class);
 
 		Member self = gc.getGuild().getSelfMember();

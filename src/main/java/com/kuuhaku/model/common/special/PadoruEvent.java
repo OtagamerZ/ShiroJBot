@@ -32,9 +32,10 @@ import com.kuuhaku.model.records.GuildBuff;
 import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.File;
@@ -51,7 +52,7 @@ public class PadoruEvent extends SpecialEvent {
 	}
 
 	@Override
-	public void start(TextChannel channel) {
+	public void start(GuildMessageChannel channel) {
 		addEvent(channel.getGuild(), this);
 
 		PseudoUser pu = new PseudoUser("Nero Claudius", Constants.ORIGIN_RESOURCES + "avatar/nero/1.png", channel);
@@ -88,13 +89,13 @@ public class PadoruEvent extends SpecialEvent {
 		if (content.equalsIgnoreCase(phrase) && users.add(msg.getAuthor().getId())) {
 			stage++;
 
-			Emote e = msg.getJDA().getEmoteById("787012642501689344");
+			Emoji e = msg.getJDA().getEmojiById("787012642501689344");
 			if (e != null) {
 				msg.addReaction(e).queue(null, Utils::doNothing);
 			}
 
 			if (isComplete()) {
-				onCompletion(msg.getTextChannel());
+				onCompletion(msg.getGuildChannel());
 			}
 		}
 
@@ -102,11 +103,11 @@ public class PadoruEvent extends SpecialEvent {
 	}
 
 	@Override
-	public void onCompletion(TextChannel channel) {
+	public void onCompletion(GuildMessageChannel channel) {
 		EXEC.shutdownNow();
 		File gif = IO.getResourceAsFile("assets/padoru_padoru.gif");
 		if (gif != null) {
-			channel.sendMessage(getLocale().get("success/padoru_complete")).addFile(gif).queue();
+			channel.sendMessage(getLocale().get("success/padoru_complete")).addFiles(FileUpload.fromData(gif)).queue();
 		} else {
 			channel.sendMessage(getLocale().get("success/padoru_complete")).queue();
 		}
@@ -125,7 +126,7 @@ public class PadoruEvent extends SpecialEvent {
 	}
 
 	@Override
-	public void onTimeout(TextChannel channel) {
+	public void onTimeout(GuildMessageChannel channel) {
 		stage = -1;
 		channel.sendMessage(getLocale().get("str/padoru_fail")).queue();
 	}

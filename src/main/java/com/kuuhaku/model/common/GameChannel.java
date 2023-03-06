@@ -22,18 +22,18 @@ import com.kuuhaku.model.records.ChannelReference;
 import com.kuuhaku.model.records.ClusterAction;
 import com.kuuhaku.util.XStringBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
+import net.dv8tion.jda.api.utils.FileUpload;
 
-import java.io.File;
 import java.util.*;
 
 public class GameChannel {
 	private final Set<ChannelReference> channels = new HashSet<>();
 	private final Map<String, XStringBuilder> buffer = new HashMap<>();
 
-	public GameChannel(TextChannel... channel) {
-		for (TextChannel chn : channel) {
+	public GameChannel(GuildMessageChannel... channel) {
+		for (GuildMessageChannel chn : channel) {
 			channels.add(new ChannelReference(chn.getGuild(), chn));
 		}
 	}
@@ -45,34 +45,25 @@ public class GameChannel {
 				.toList();
 	}
 
-	public List<TextChannel> getChannels() {
+	public List<GuildMessageChannel> getChannels() {
 		return channels.stream()
 				.map(ChannelReference::channel)
 				.filter(Objects::nonNull)
 				.toList();
 	}
 
-	public ClusterAction sendFile(File f) {
-		Map<String, MessageAction> acts = new HashMap<>();
-		for (TextChannel chn : getChannels()) {
-			acts.put(chn.getId(), chn.sendFile(f));
-		}
-
-		return new ClusterAction(acts);
-	}
-
 	public ClusterAction sendFile(byte[] bytes, String filename) {
-		Map<String, MessageAction> acts = new HashMap<>();
-		for (TextChannel chn : getChannels()) {
-			acts.put(chn.getId(), chn.sendFile(bytes, filename));
+		Map<String, MessageCreateAction> acts = new HashMap<>();
+		for (GuildMessageChannel chn : getChannels()) {
+			acts.put(chn.getId(), chn.sendFiles(FileUpload.fromData(bytes, filename)));
 		}
 
 		return new ClusterAction(acts);
 	}
 
 	public ClusterAction sendMessage(String message) {
-		Map<String, MessageAction> acts = new HashMap<>();
-		for (TextChannel chn : getChannels()) {
+		Map<String, MessageCreateAction> acts = new HashMap<>();
+		for (GuildMessageChannel chn : getChannels()) {
 			acts.put(chn.getId(), chn.sendMessage(message));
 		}
 
@@ -80,14 +71,14 @@ public class GameChannel {
 	}
 
 	public void buffer(String message) {
-		for (TextChannel chn : getChannels()) {
+		for (GuildMessageChannel chn : getChannels()) {
 			buffer.computeIfAbsent(chn.getId(), k -> new XStringBuilder()).appendNewLine(message);
 		}
 	}
 
 	public ClusterAction flush() {
-		Map<String, MessageAction> acts = new HashMap<>();
-		for (TextChannel chn : getChannels()) {
+		Map<String, MessageCreateAction> acts = new HashMap<>();
+		for (GuildMessageChannel chn : getChannels()) {
 			String msg = buffer.remove(chn.getId()).toString();
 			if (!msg.isBlank()) {
 				acts.put(chn.getId(), chn.sendMessage(msg));

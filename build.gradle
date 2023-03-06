@@ -71,8 +71,8 @@ tasks.withType(JavaCompile) {
 
 dependencies {
 	//Core
-	implementation group: "net.dv8tion", name: "JDA", version: "4.4.0_350"
-	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "3.0.8"
+	implementation group: "net.dv8tion", name: "JDA", version: "5.0.0-beta.5"
+	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "51295bd"
 
 	//Database
 	implementation group: "org.postgresql", name: "postgresql", version: "42.3.6"

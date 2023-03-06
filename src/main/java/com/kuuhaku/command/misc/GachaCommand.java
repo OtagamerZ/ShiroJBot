@@ -50,6 +50,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -143,7 +144,7 @@ public class GachaCommand implements Executable {
 
 						event.channel()
 								.sendMessage(locale.get("str/gacha_result", event.user().getAsMention()))
-								.addFile(IO.getBytes(bi, "png"), "result.png")
+								.addFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "result.png"))
 								.queue();
 
 						return true;

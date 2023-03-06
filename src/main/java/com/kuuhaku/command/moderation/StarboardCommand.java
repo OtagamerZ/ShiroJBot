@@ -29,6 +29,8 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 @Command(
 		name = "starboard",
@@ -51,7 +53,13 @@ public class StarboardCommand implements Executable {
 			event.channel().sendMessage(locale.get("success/starboard_clear")).queue();
 			return;
 		} else if (args.has("channel")) {
-			settings.setStarboardChannel(event.message().getMentionedChannels().get(0));
+			GuildChannel channel = event.message().getMentions().getChannels().get(0);
+			if (!(channel instanceof GuildMessageChannel gmc)) {
+				event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
+				return;
+			}
+
+			settings.setStarboardChannel(gmc);
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/starboard_channel_save")).queue();

@@ -58,7 +58,7 @@ public class ShiritoriCommand implements Executable {
 			return;
 		}
 
-		List<Member> others = event.message().getMentionedMembers();
+		List<Member> others = event.message().getMentions().getMembers();
 		if (others.contains(event.member())) {
 			event.channel().sendMessage(locale.get("error/cannot_play_with_self")).queue();
 			return;

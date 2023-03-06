@@ -45,12 +45,14 @@ import me.xuender.unidecode.Unidecode;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.utils.FileUpload;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -70,19 +72,20 @@ public class GuildListener extends ListenerAdapter {
 	private static final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
 
 	@Override
-	public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event) {
-		if (event.getUser().isBot()) return;
+	public void onMessageReactionAdd(MessageReactionAddEvent event) {
+		User usr = event.getUser();
+		if (usr != null && usr.isBot()) return;
 
-		MessageReaction.ReactionEmote reaction = event.getReactionEmote();
-		if (reaction.isEmoji() && reaction.getEmoji().equals("⭐")) {
+		MessageReaction reaction = event.getReaction();
+		if (reaction.getEmoji().getFormatted().equals("⭐")) {
 			GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
 			Message msg = Pages.subGet(event.getChannel().retrieveMessageById(event.getMessageId()));
 
-			TextChannel channel = config.getSettings().getStarboardChannel();
+			GuildMessageChannel channel = config.getSettings().getStarboardChannel();
 			if (channel == null) return;
 
 			int stars = (int) msg.getReactions().stream()
-					.filter(r -> r.getReactionEmote().isEmoji() && r.getReactionEmote().getEmoji().equals("⭐"))
+					.filter(r -> r.getEmoji().getFormatted().equals("⭐"))
 					.flatMap(r -> r.retrieveUsers().stream())
 					.filter(u -> !u.isBot() && !u.equals(msg.getAuthor()))
 					.count();
@@ -136,7 +139,7 @@ public class GuildListener extends ListenerAdapter {
 		}
 
 		WelcomeSettings ws = config.getWelcomeSettings();
-		TextChannel channel = ws.getChannel();
+		GuildMessageChannel channel = ws.getChannel();
 		if (channel != null) {
 			buildAndSendJLEmbed(config, channel, mb, ws.getMessage(), ws.getHeaders(), true);
 		}
@@ -149,7 +152,7 @@ public class GuildListener extends ListenerAdapter {
 		GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
 
 		GoodbyeSettings gs = config.getGoodbyeSettings();
-		TextChannel channel = gs.getChannel();
+		GuildMessageChannel channel = gs.getChannel();
 		if (channel != null) {
 			Member mb = event.getMember();
 			if (mb != null) {
@@ -158,7 +161,7 @@ public class GuildListener extends ListenerAdapter {
 		}
 	}
 
-	private void buildAndSendJLEmbed(GuildConfig config, TextChannel channel, Member mb, String message, Set<String> headers, boolean join) {
+	private void buildAndSendJLEmbed(GuildConfig config, GuildMessageChannel channel, Member mb, String message, Set<String> headers, boolean join) {
 		GuildSettings settings = config.getSettings();
 
 		EmbedBuilder eb = new AutoEmbedBuilder(Utils.replaceTags(mb, mb.getGuild(), settings.getEmbed().toString()))
@@ -186,7 +189,7 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onMessageUpdate(@NotNull MessageUpdateEvent event) {
-		onGuildMessageReceived(new GuildMessageReceivedEvent(
+		onMessageReceived(new MessageReceivedEvent(
 				event.getJDA(),
 				event.getResponseNumber(),
 				event.getMessage()
@@ -194,7 +197,7 @@ public class GuildListener extends ListenerAdapter {
 	}
 
 	@Override
-	public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+	public void onMessageReceived(MessageReceivedEvent event) {
 		if (event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
 
 		String content = event.getMessage().getContentRaw();
@@ -255,11 +258,11 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			AtomicReference<TextChannel> notifs = new AtomicReference<>();
+			AtomicReference<GuildMessageChannel> notifs = new AtomicReference<>();
 			if (config.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
 				notifs.set(config.getSettings().getNotificationsChannel());
 				if (notifs.get() == null) {
-					notifs.set(event.getChannel());
+					notifs.set(event.getGuildChannel());
 				}
 			}
 
@@ -318,9 +321,9 @@ public class GuildListener extends ListenerAdapter {
 
 	private void rollDrops(GuildConfig config, I18N locale, User u) {
 		GuildBuff gb = config.getCumBuffs();
-		List<TextChannel> channels = config.getSettings().getKawaiponChannels();
+		List<GuildMessageChannel> channels = config.getSettings().getKawaiponChannels();
 		if (!channels.isEmpty()) {
-			TextChannel chosen = Utils.getRandomEntry(channels);
+			GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 
 			KawaiponCard kc = Spawn.getKawaipon(gb, chosen, u);
 			if (kc != null) {
@@ -332,7 +335,7 @@ public class GuildListener extends ListenerAdapter {
 						.setFooter(locale.get("str/card_instructions", config.getPrefix(), kc.getPrice()));
 
 				chosen.sendMessageEmbeds(eb.build())
-						.addFile(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png")
+						.addFiles(FileUpload.fromData(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png"))
 						.delay((long) (60 / Spawn.getQuantityMult()), TimeUnit.SECONDS)
 						.flatMap(Message::delete)
 						.queue(null, Utils::doNothing);
@@ -341,7 +344,7 @@ public class GuildListener extends ListenerAdapter {
 
 		channels = config.getSettings().getDropChannels();
 		if (!channels.isEmpty()) {
-			TextChannel chosen = Utils.getRandomEntry(channels);
+			GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 
 			Drop<?> drop = Spawn.getDrop(gb, chosen, u);
 			if (drop != null) {
@@ -369,7 +372,7 @@ public class GuildListener extends ListenerAdapter {
 		}
 	}
 
-	private void rollEvents(TextChannel channel, I18N locale) {
+	private void rollEvents(GuildMessageChannel channel, I18N locale) {
 		if (SpecialEvent.hasEvent(channel.getGuild()) || !channel.canTalk()) return;
 
 		if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.DECEMBER && Calc.chance(1)) {
