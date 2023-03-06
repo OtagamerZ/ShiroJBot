@@ -107,6 +107,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 					.shouldEventLock(true)
 					.activate();
 
+			PUtilsConfig.setLogLevel(PUtilsConfig.LogLevel.LEVEL_4);
 			PUtilsConfig.setOnRemove(h ->
 					h.editOriginalComponents()
 							.map(m -> {
