@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.kawaipon;
 
-import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.Constants;
@@ -33,23 +32,15 @@ import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Calc;
-import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.utils.AttachedFile;
-import net.dv8tion.jda.api.utils.FileUpload;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "kawaipon",
@@ -74,49 +65,14 @@ public class KawaiponCommand implements Executable {
 		List<Page> pages = new ArrayList<>();
 		int max = (int) Math.ceil(total / 50d);
 		for (int i = 1; i <= max; i++) {
-			eb.setImage("attachment://kawaipon.png");
+			String url = (Constants.API_ROOT + "kawaipon/%s/%s?v=%s&page=%s").formatted(
+					locale, kp.getUid(), System.currentTimeMillis(), i
+			);
+
+			eb.setImage(url).setDescription(locale.get("str/fallback_url", url));
 			pages.add(new InteractPage(eb.build()));
 		}
 
-		byte[] b = getPage(locale, kp, 1);
-		assert b != null;
-
-		AtomicInteger i = new AtomicInteger();
-		event.channel().sendMessageEmbeds((MessageEmbed) pages.get(0).getContent())
-				.addFiles(FileUpload.fromData(b, "kawaipon.png"))
-				.queue(s ->
-						Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
-									m.put(Utils.parseEmoji("◀️"), w -> {
-										if (i.get() > 1) {
-											byte[] img = getPage(locale, kp, i.decrementAndGet());
-											if (img != null) {
-												s.editMessageAttachments(AttachedFile.fromData(img, "kawaipon.png")).queue();
-												return;
-											}
-
-											i.incrementAndGet();
-										}
-									});
-									m.put(Utils.parseEmoji("▶️"), w -> {
-										byte[] img = getPage(locale, kp, i.getAndIncrement());
-										if (img != null) {
-											s.editMessageAttachments(AttachedFile.fromData(img, "kawaipon.png")).queue();
-											return;
-										}
-
-										i.decrementAndGet();
-									});
-								}),
-								true, true, 1, TimeUnit.MINUTES, event.user()::equals
-						)
-				);
-	}
-
-	private byte[] getPage(I18N locale, Kawaipon kp, int page) {
-		String url = Constants.API_ROOT + "kawaipon/%s/%s?v=%s&page=%s";
-		BufferedImage bi = IO.getImage(url.formatted(locale, kp.getUid(), System.currentTimeMillis(), page));
-		if (bi == null) return null;
-
-		return IO.getBytes(bi, "png");
+		Utils.paginate(pages, 1, true, event.channel(), event.user());
 	}
 }
