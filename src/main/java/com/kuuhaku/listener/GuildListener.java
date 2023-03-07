@@ -203,7 +203,7 @@ public class GuildListener extends ListenerAdapter {
 		String content = event.getMessage().getContentRaw();
 		MessageData.Guild data;
 		try {
-			data = new MessageData.Guild(event);
+			data = new MessageData.Guild(event.getMessage());
 		} catch (NullPointerException e) {
 			return;
 		}
