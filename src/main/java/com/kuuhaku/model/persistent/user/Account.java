@@ -46,6 +46,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Entity
 @DynamicUpdate
@@ -172,7 +173,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	public void addCR(long value, String reason) {
 		if (value <= 0) return;
 
-		apply(this.getClass(), uid, a -> {
+		apply(getClass(), uid, a -> {
 			a.setDebit(a.getDebit() - value);
 			if (a.getDebit() < 0) {
 				a.setBalance(-a.getDebit() + a.getBalance());
@@ -186,7 +187,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	public void consumeCR(long value, String reason) {
 		if (value <= 0) return;
 
-		apply(this.getClass(), uid, a -> {
+		apply(getClass(), uid, a -> {
 			a.setBalance(a.getBalance() - value);
 			if (a.getBalance() < 0) {
 				a.setDebit(-a.getBalance() + a.getDebit());
@@ -208,7 +209,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	public void addGems(int value, String reason) {
 		if (value <= 0) return;
 
-		apply(this.getClass(), uid, a -> {
+		apply(getClass(), uid, a -> {
 			a.setGems(a.getGems() + value);
 			a.addTransaction(value, true, reason, Currency.GEM);
 		});
@@ -217,7 +218,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	public void consumeGems(int value, String reason) {
 		if (value <= 0) return;
 
-		apply(this.getClass(), uid, a -> {
+		apply(getClass(), uid, a -> {
 			a.setGems(a.getGems() - value);
 			a.addTransaction(value, false, reason, Currency.GEM);
 		});
@@ -349,13 +350,40 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return inventory;
 	}
 
+	public int getItemCount(String id) {
+		return inventory.getInt(id);
+	}
+
+	public void addItem(UserItem item) {
+		apply(getClass(), uid, a ->
+				a.getInventory().compute(item.getId(), (k, v) -> {
+					if (v == null) return 1;
+
+					return ((Number) v).intValue() + 1;
+				})
+		);
+	}
+
+	public boolean consumeItem(UserItem item, int amount) {
+		if (amount <= 0) return false;
+
+		AtomicBoolean consumed = new AtomicBoolean();
+		apply(getClass(), uid, a -> {
+			int rem = a.getInventory().getInt(item.getId());
+			if (rem < amount) return;
+
+			a.getInventory().put(item.getId(), rem - amount);
+		});
+
+		return consumed.get();
+	}
+
 	public HashBag<UserItem> getItems() {
 		HashBag<UserItem> items = new HashBag<>();
 		for (Map.Entry<String, Object> e : inventory.entrySet()) {
 			UserItem ui = DAO.find(UserItem.class, e.getKey());
 			if (ui != null) {
-				JSONObject info = new JSONObject(e.getValue());
-				items.add(ui, info.getInt("count"));
+				items.add(ui, ((Number) e.getValue()).intValue());
 			}
 		}
 
@@ -406,7 +434,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public void addVote() {
-		apply(this.getClass(), uid, a -> {
+		apply(getClass(), uid, a -> {
 			a.setStreak(a.getStreak() + 1);
 			a.setLastVote(ZonedDateTime.now(ZoneId.of("GMT-3")));
 		});

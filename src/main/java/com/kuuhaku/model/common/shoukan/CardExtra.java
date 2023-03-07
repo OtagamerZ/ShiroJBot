@@ -649,7 +649,7 @@ public class CardExtra implements Cloneable {
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void removeExpired(Predicate<AttrMod> check) {
 		if (fieldCache == null) {
-			fieldCache = this.getClass().getDeclaredFields();
+			fieldCache = getClass().getDeclaredFields();
 		}
 
 		for (Field f : fieldCache) {
@@ -665,7 +665,7 @@ public class CardExtra implements Cloneable {
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void clear() {
 		if (fieldCache == null) {
-			fieldCache = this.getClass().getDeclaredFields();
+			fieldCache = getClass().getDeclaredFields();
 		}
 
 		for (Field f : fieldCache) {

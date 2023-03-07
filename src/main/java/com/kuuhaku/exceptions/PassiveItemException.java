@@ -20,11 +20,11 @@ package com.kuuhaku.exceptions;
 
 import java.io.Serial;
 
-public class ItemException extends RuntimeException {
+public class PassiveItemException extends RuntimeException {
 	@Serial
 	private static final long serialVersionUID = -2973727334110221661L;
 
-	public ItemException(String key) {
-		super(key, null, true, false);
+	public PassiveItemException() {
+		super(null, null, true, false);
 	}
 }

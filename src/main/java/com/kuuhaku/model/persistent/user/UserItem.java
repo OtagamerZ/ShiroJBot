@@ -19,7 +19,8 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.exceptions.ItemException;
+import com.kuuhaku.exceptions.ItemUseException;
+import com.kuuhaku.exceptions.PassiveItemException;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.id.LocalizedId;
@@ -50,7 +51,7 @@ public class UserItem extends DAO<UserItem> {
 	private Currency currency;
 
 	@Language("Groovy")
-	@Column(name = "effect", columnDefinition = "TEXT", nullable = false)
+	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
 
 	public String getId() {
@@ -69,16 +70,14 @@ public class UserItem extends DAO<UserItem> {
 		return currency;
 	}
 
-	public boolean execute(Account acc, JSONObject args) {
-		try {
-			Utils.exec(effect, Map.of(
-					"acc", acc,
-					"args", args
-			));
+	public RuntimeException execute(Account acc, JSONObject args) {
+		if (effect == null) return new PassiveItemException();
 
-			return true;
-		} catch (ItemException e) {
-			return false;
+		try {
+			Utils.exec(effect, Map.of("acc", acc, "args", args));
+			return null;
+		} catch (ItemUseException e) {
+			return e;
 		}
 	}
 
