@@ -52,7 +52,7 @@ public class DailyCommand implements Executable {
 		event.channel().sendMessage(locale.get("success/daily")).queue();
 
 		acc.addVote(); // TODO Remove
-		if (acc.getStreak() > 0 && acc.getStreak() % 7 == 0) {
+		if (acc.getStreak() > 0 && (acc.getStreak() + 1) % 7 == 0) {
 			int gems = Math.min((int) Calc.getFibonacci(acc.getStreak() / 7), 3);
 			acc.addGems(gems, "Vote streak " + acc.getStreak());
 
