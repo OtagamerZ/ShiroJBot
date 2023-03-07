@@ -78,7 +78,7 @@ public class KawaiponCommand implements Executable {
 			pages.add(new InteractPage(eb.build()));
 		}
 
-		byte[] b = getPage(locale, kp, 0);
+		byte[] b = getPage(locale, kp, 1);
 		assert b != null;
 
 		AtomicInteger i = new AtomicInteger();
