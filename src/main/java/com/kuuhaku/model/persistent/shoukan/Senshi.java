@@ -1187,9 +1187,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		equipments.clear();
 		stats.clear();
 		slot = null;
-		if (leech != null) {
-			leech.getLeeches().remove(this);
-		}
+		leech = null;
 		lastInteraction = null;
 
 		byte base = 0b11;
