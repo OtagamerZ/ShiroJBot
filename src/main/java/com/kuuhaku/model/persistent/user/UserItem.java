@@ -23,7 +23,6 @@ import com.kuuhaku.exceptions.ItemUseException;
 import com.kuuhaku.exceptions.PassiveItemException;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.id.LocalizedId;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
@@ -43,6 +42,9 @@ public class UserItem extends DAO<UserItem> {
 	@Column(name = "icon", nullable = false)
 	private String icon = "";
 
+	@Column(name = "stack_size")
+	private int stackSize;
+
 	@Column(name = "price")
 	private int price;
 
@@ -58,8 +60,16 @@ public class UserItem extends DAO<UserItem> {
 		return id;
 	}
 
+	public String getName(I18N locale) {
+		return LocalizedString.get(locale, "item/" + id, id);
+	}
+
 	public String getIcon() {
 		return icon;
+	}
+
+	public int getStackSize() {
+		return stackSize;
 	}
 
 	public int getPrice() {
@@ -82,12 +92,12 @@ public class UserItem extends DAO<UserItem> {
 	}
 
 	public String toString(I18N locale) {
-		LocalizedString ls = DAO.find(LocalizedString.class, new LocalizedId("item/" + id, locale));
-		if (ls == null) {
-			return icon + " " + id;
+		String out = icon + " " + LocalizedString.get(locale, "item/" + id, id);
+		if (price > 0 && currency != null) {
+			out += " | " + locale.get("currency/" + currency).formatted(price);
 		}
 
-		return icon + " " + ls.getValue();
+		return out;
 	}
 
 	@Override

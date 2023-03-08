@@ -354,12 +354,12 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return inventory.getInt(id);
 	}
 
-	public void addItem(UserItem item) {
+	public void addItem(UserItem item, int amount) {
 		apply(getClass(), uid, a ->
 				a.getInventory().compute(item.getId(), (k, v) -> {
-					if (v == null) return 1;
+					if (v == null) return amount;
 
-					return ((Number) v).intValue() + 1;
+					return ((Number) v).intValue() + amount;
 				})
 		);
 	}
@@ -497,6 +497,10 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	public Couple getCouple() {
 		return DAO.query(Couple.class, "SELECT c FROM Couple c WHERE ?1 = c.id.first OR ?1 = c.id.second", uid);
+	}
+
+	public String getBalanceFooter(I18N locale) {
+		return locale.get("currency/cr", balance) + " | " + locale.get("currency/gem", gems);
 	}
 
 	@Override

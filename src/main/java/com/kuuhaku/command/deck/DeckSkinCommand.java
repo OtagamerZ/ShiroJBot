@@ -67,108 +67,107 @@ public class DeckSkinCommand implements Executable {
 			return;
 		}
 
-		if (args.isEmpty()) {
-			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setAuthor(locale.get("str/all_skins"));
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setAuthor(locale.get("str/all_skins"))
+				.setFooter(acc.getBalanceFooter(locale));
 
-			SlotSkin[] skins = SlotSkin.values();
-			List<Page> pages = new ArrayList<>();
-			for (int i = 0; i < skins.length; i++) {
-				SlotSkin skin = skins[i];
-				if (!skin.canUse(acc)) {
-					List<Title> remaining = skin.getTitles().stream()
-							.filter(t -> !acc.hasTitle(t.getId()))
-							.toList();
+		SlotSkin[] skins = SlotSkin.values();
+		List<Page> pages = new ArrayList<>();
+		for (int i = 0; i < skins.length; i++) {
+			SlotSkin skin = skins[i];
+			if (!skin.canUse(acc)) {
+				List<Title> remaining = skin.getTitles().stream()
+						.filter(t -> !acc.hasTitle(t.getId()))
+						.toList();
 
-					if (!remaining.isEmpty()) {
-						String req = Utils.properlyJoin(locale.get("str/and")).apply(
-								remaining.stream()
-										.map(t -> "**`" + t.getInfo(locale).getName() + "`**")
-										.toList()
-						);
+				if (!remaining.isEmpty()) {
+					String req = Utils.properlyJoin(locale.get("str/and")).apply(
+							remaining.stream()
+									.map(t -> "**`" + t.getInfo(locale).getName() + "`**")
+									.toList()
+					);
 
-						eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
-								.setImage(null)
-								.setTitle(locale.get("str/skin_locked"))
-								.setDescription(locale.get("str/requires_titles", req));
-					} else {
-						eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
-								.setImage(URL.formatted(skin.name().toLowerCase()))
-								.setTitle(locale.get("str/skin_locked"))
-								.setDescription(locale.get("str/requires_purchase", locale.get("currency/" + skin.getCurrency(), skin.getPrice())));
-					}
+					eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
+							.setImage(null)
+							.setTitle(locale.get("str/skin_locked"))
+							.setDescription(locale.get("str/requires_titles", req));
 				} else {
-					eb.setThumbnail(null)
+					eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
 							.setImage(URL.formatted(skin.name().toLowerCase()))
-							.setTitle(skin.getName(locale))
-							.setDescription(skin.getDescription(locale));
+							.setTitle(locale.get("str/skin_locked"))
+							.setDescription(locale.get("str/requires_purchase", locale.get("currency/" + skin.getCurrency(), skin.getPrice())));
 				}
-				eb.setFooter(locale.get("str/page", i + 1, skins.length));
-
-				pages.add(new InteractPage(eb.build()));
+			} else {
+				eb.setThumbnail(null)
+						.setImage(URL.formatted(skin.name().toLowerCase()))
+						.setTitle(skin.getName(locale))
+						.setDescription(skin.getDescription(locale));
 			}
+			eb.setFooter(locale.get("str/page", i + 1, skins.length));
 
-			AtomicBoolean confirm = new AtomicBoolean();
-			AtomicInteger i = new AtomicInteger();
-			event.channel().sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-					Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
-								m.put(Utils.parseEmoji("◀️"), w -> {
-									if (i.get() > 1) {
-										confirm.set(false);
-										s.editMessageEmbeds((MessageEmbed) pages.get(i.decrementAndGet()).getContent()).queue();
-									}
-								});
-								m.put(Utils.parseEmoji("▶️"), w -> {
-									if (i.get() < skins.length - 1) {
-										confirm.set(false);
-										s.editMessageEmbeds((MessageEmbed) pages.get(i.incrementAndGet()).getContent()).queue();
-									}
-								});
-								m.put(Utils.parseEmoji("✅"), w -> {
-									SlotSkin skin = skins[i.get()];
-									if (!skin.canUse(acc)) {
-										List<Title> remaining = skin.getTitles().stream()
-												.filter(t -> !acc.hasTitle(t.getId()))
-												.toList();
+			pages.add(new InteractPage(eb.build()));
+		}
 
-										if (!remaining.isEmpty()) {
-											event.channel().sendMessage(locale.get("error/skin_locked")).queue();
-										} else {
-											if (!acc.hasEnough(skin.getPrice(), skin.getCurrency())) {
-												event.channel().sendMessage(locale.get("error/insufficient_" + skin.getCurrency())).queue();
-												return;
-											} else if (!confirm.getAndSet(true)) {
-												w.getHook().setEphemeral(true)
-														.sendMessage(locale.get("str/press_again"))
-														.queue();
-												return;
-											}
+		AtomicBoolean confirm = new AtomicBoolean();
+		AtomicInteger i = new AtomicInteger();
+		event.channel().sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
+				Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
+							m.put(Utils.parseEmoji("◀️"), w -> {
+								if (i.get() > 1) {
+									confirm.set(false);
+									s.editMessageEmbeds((MessageEmbed) pages.get(i.decrementAndGet()).getContent()).queue();
+								}
+							});
+							m.put(Utils.parseEmoji("▶️"), w -> {
+								if (i.get() < skins.length - 1) {
+									confirm.set(false);
+									s.editMessageEmbeds((MessageEmbed) pages.get(i.incrementAndGet()).getContent()).queue();
+								}
+							});
+							m.put(Utils.parseEmoji("✅"), w -> {
+								SlotSkin skin = skins[i.get()];
+								if (!skin.canUse(acc)) {
+									List<Title> remaining = skin.getTitles().stream()
+											.filter(t -> !acc.hasTitle(t.getId()))
+											.toList();
 
-											if (skin.getCurrency() == Currency.CR) {
-												acc.consumeCR(skin.getPrice(), "Skin " + skin);
-											} else {
-												acc.consumeGems(skin.getPrice(), "Skin " + skin);
-											}
-
-											DynamicProperty.update(acc.getUid(), "ss_" + skin.name().toLowerCase(), true);
-											event.channel().sendMessage(locale.get("success/skin_bought", d.getName()))
-													.flatMap(ms -> s.delete())
+									if (!remaining.isEmpty()) {
+										event.channel().sendMessage(locale.get("error/skin_locked")).queue();
+									} else {
+										if (!acc.hasEnough(skin.getPrice(), skin.getCurrency())) {
+											event.channel().sendMessage(locale.get("error/insufficient_" + skin.getCurrency())).queue();
+											return;
+										} else if (!confirm.getAndSet(true)) {
+											w.getHook().setEphemeral(true)
+													.sendMessage(locale.get("str/press_again"))
 													.queue();
+											return;
 										}
 
-										return;
+										if (skin.getCurrency() == Currency.CR) {
+											acc.consumeCR(skin.getPrice(), "Skin " + skin);
+										} else {
+											acc.consumeGems(skin.getPrice(), "Skin " + skin);
+										}
+
+										DynamicProperty.update(acc.getUid(), "ss_" + skin.name().toLowerCase(), true);
+										event.channel().sendMessage(locale.get("success/skin_bought", d.getName()))
+												.flatMap(ms -> s.delete())
+												.queue();
 									}
 
-									d.getStyling().setSkin(skin);
-									d.save();
-									event.channel().sendMessage(locale.get("success/skin_selected", d.getName()))
-											.flatMap(ms -> s.delete())
-											.queue();
-								});
-							}),
-							true, true, 1, TimeUnit.MINUTES, event.user()::equals
-					)
-			);
-		}
+									return;
+								}
+
+								d.getStyling().setSkin(skin);
+								d.save();
+								event.channel().sendMessage(locale.get("success/skin_selected", d.getName()))
+										.flatMap(ms -> s.delete())
+										.queue();
+							});
+						}),
+						true, true, 1, TimeUnit.MINUTES, event.user()::equals
+				)
+		);
 	}
 }

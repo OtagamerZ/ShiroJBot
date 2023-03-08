@@ -80,7 +80,8 @@ public class GachaCommand implements Executable {
 			for (Class<?> gacha : Gacha.getGachas()) {
 				GachaType type = gacha.getAnnotation(GachaType.class);
 				eb.setTitle(locale.get("gacha/" + type.value()) + " (`" + type.value().toUpperCase() + "` - " + locale.get("currency/" + type.currency(), type.price()) + ")")
-						.setDescription(locale.get("gacha/" + type.value() + "_desc"));
+						.setDescription(locale.get("gacha/" + type.value() + "_desc"))
+						.setFooter(acc.getBalanceFooter(locale));
 
 				pages.add(new InteractPage(eb.build()));
 			}

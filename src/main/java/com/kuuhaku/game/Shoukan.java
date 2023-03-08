@@ -42,7 +42,6 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.id.LocalizedId;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
@@ -1715,7 +1714,7 @@ public class Shoukan extends GameInstance<Phase> {
 			s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger)));
 		}
 
-		System.out.println(getTurn() + ": " + trigger + " -> " + side + " " + hands.get(side).getLeeches());
+//		System.out.println(getTurn() + ": " + trigger + " -> " + side + " " + hands.get(side).getLeeches());
 		for (EffectHolder<?> leech : hands.get(side).getLeeches()) {
 			leech.execute(new EffectParameters(ON_LEECH, side, leech.asSource(trigger)));
 		}
@@ -2190,14 +2189,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public String getString(String key, Object... params) {
-		if (key == null) return "";
-
-		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(), getLocale()));
-		if (str != null) {
-			return str.getValue().formatted(params);
-		} else {
-			return "";
-		}
+		return LocalizedString.get(getLocale(), key, "").formatted(params);
 	}
 
 	public void send(Drawable<?> source, String text) {
