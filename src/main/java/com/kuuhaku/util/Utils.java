@@ -63,6 +63,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.intellij.lang.annotations.Language;
+import org.jdesktop.swingx.graphics.ColorUtilities;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -663,11 +664,11 @@ public abstract class Utils {
 	}
 
 	public static Color getRandomColor() {
-		return Color.decode(getRandomHexColor());
+		return ColorUtilities.HSLtoRGB((float) Calc.rng(1d), 0.8f, 0.5f);
 	}
 
 	public static Color getRandomColor(long seed) {
-		return Color.decode(getRandomHexColor(seed));
+		return ColorUtilities.HSLtoRGB((float) Calc.rng(1d, seed), 0.8f, 0.5f);
 	}
 
 	public static Color textToColor(String text) {
