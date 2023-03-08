@@ -428,7 +428,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					"props", extractValues(hand.getGame().getLocale(), cachedEffect),
 					"self", equipper,
 					"trigger", trigger
-					));
+			));
 		} catch (Exception ignored) {
 		}
 	}
@@ -492,11 +492,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			if (getTier() < 5) {
 				g1.drawImage(IO.getResourceAsImage("shoukan/icons/tier_" + getTier() + ".png"), 190, 12, null);
 			} else {
-				Graph.applyTransformed(g1, 2, 1, g2 -> {
-					g2.setFont(Fonts.SHARE_TECH_MONO.deriveFont(Font.BOLD, 27));
-					g2.setColor(Utils.getRandomColor(getTier()));
-					Graph.drawOutlinedString(g2, String.valueOf(getTier()), 190/2, 34, 1.5f, Color.BLACK);
-				});
+				g1.setFont(Fonts.ORIGAMI_MONO.deriveFont(Font.PLAIN, 27));
+				g1.setColor(Utils.getRandomColor(getTier()));
+				g1.drawString(String.valueOf(getTier()), 190, 34);
 			}
 
 			g1.setFont(FONT);
@@ -584,8 +582,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (o == null || getClass() != o.getClass()) return false;
 		Evogear evogear = (Evogear) o;
 		return Objects.equals(id, evogear.id)
-				&& Objects.equals(card, evogear.card)
-				&& Objects.equals(equipper, evogear.equipper);
+			   && Objects.equals(card, evogear.card)
+			   && Objects.equals(equipper, evogear.equipper);
 	}
 
 	@Override
