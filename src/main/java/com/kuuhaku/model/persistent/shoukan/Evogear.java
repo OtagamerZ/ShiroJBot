@@ -565,7 +565,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				op.filter(out, out);
 			}
 
-			int t = getTier() + 1;
+			int t = getTier();
 			if (t != tier) {
 				String str = Utils.sign(t - tier);
 
