@@ -495,7 +495,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				Graph.applyTransformed(g1, 2, 1, g2 -> {
 					g2.setFont(Fonts.SHARE_TECH_MONO.deriveFont(Font.BOLD, 27));
 					g2.setColor(Utils.getRandomColor(getTier()));
-					Graph.drawOutlinedString(g2, String.valueOf(getTier()), 190*2, 34, 1.5f, Color.BLACK);
+					Graph.drawOutlinedString(g2, String.valueOf(getTier()), 190/2, 34, 1.5f, Color.BLACK);
 				});
 			}
 
