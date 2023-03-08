@@ -37,7 +37,6 @@ public enum Fonts {
 	NOTO_SANS_BOLD("font/NotoSansJP-Bold.otf"),
 	NOTO_SANS_EXTRABOLD("font/NotoSansJP-ExtraBold.otf"),
 	DOREKING("font/Doreking.ttf"),
-	ORIGAMI_MONO("font/Origami-Regular.ttf"),
 	DEFAULT("");
 
 	private final Font font;

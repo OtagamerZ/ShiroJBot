@@ -23,6 +23,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
@@ -489,13 +490,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			g1.setClip(null);
 
 			g1.drawImage(style.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
-			if (getTier() < 5) {
-				g1.drawImage(IO.getResourceAsImage("shoukan/icons/tier_" + getTier() + ".png"), 190, 12, null);
-			} else {
-				g1.setFont(Fonts.ORIGAMI_MONO.deriveFont(Font.PLAIN, 27));
-				g1.setColor(Utils.getRandomColor(getTier()));
-				g1.drawString(String.valueOf(getTier()), 190, 34);
-			}
+			g1.drawImage(IO.getResourceAsImage("shoukan/icons/tier_" + tier + ".png"), 190, 12, null);
 
 			g1.setFont(FONT);
 			g1.setColor(style.getFrame().getPrimaryColor());
@@ -556,20 +551,34 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				}
 			}
 
+			if (hand != null) {
+				if (stats.hasFlag(Flag.EMPOWERED)) {
+					boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
+					BufferedImage emp = IO.getResourceAsImage("kawaipon/frames/" + (legacy ? "old" : "new") + "/empowered.png");
+
+					g2d.drawImage(emp, 0, 0, null);
+				}
+			}
+
 			if (!isAvailable()) {
 				RescaleOp op = new RescaleOp(0.5f, 0, null);
 				op.filter(out, out);
 			}
-		});
 
-		if (hand != null) {
-			if (stats.hasFlag(Flag.EMPOWERED)) {
-				boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
-				BufferedImage emp = IO.getResourceAsImage("kawaipon/frames/" + (legacy ? "old" : "new") + "/empowered.png");
+			int t = getTier();
+			if (t != tier) {
+				String str = Utils.sign(t - tier);
 
-				g2d.drawImage(emp, 0, 0, null);
+				g1.setColor(Color.ORANGE);
+				g1.setFont(Drawable.FONT.deriveFont(Drawable.FONT.getSize() * 3f));
+
+				FontMetrics fm = g1.getFontMetrics();
+				Graph.drawOutlinedString(g1, str,
+						225 / 2 - fm.stringWidth(str) / 2, Drawable.SIZE.height / 2,
+						6, Color.BLACK
+				);
 			}
-		}
+		});
 
 		g2d.dispose();
 
