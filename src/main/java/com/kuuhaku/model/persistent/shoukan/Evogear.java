@@ -570,7 +570,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				String str = Utils.sign(t - tier);
 
 				g1.setColor(Color.ORANGE);
-				g1.setFont(Drawable.FONT.deriveFont(Drawable.FONT.getSize() * 3f));
+				g1.setFont(Drawable.FONT.deriveFont(Drawable.FONT.getSize() * 5f));
 
 				FontMetrics fm = g1.getFontMetrics();
 				Graph.drawOutlinedString(g1, str,
