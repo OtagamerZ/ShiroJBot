@@ -489,12 +489,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			g1.setClip(null);
 
 			g1.drawImage(style.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
-			if (getTier() < 4) {
+			if (getTier() < 5) {
 				g1.drawImage(IO.getResourceAsImage("shoukan/icons/tier_" + getTier() + ".png"), 190, 12, null);
 			} else {
-				g1.setFont(Fonts.SHARE_TECH_MONO.deriveFont(Font.BOLD, 23));
-				g1.setColor(Utils.getRandomColor(getTier()));
-				Graph.drawOutlinedString(g1, String.valueOf(getTier()), 190, 35, 1, Color.BLACK);
+				Graph.applyTransformed(g1, 2, 1, g2 -> {
+					g2.setFont(Fonts.SHARE_TECH_MONO.deriveFont(Font.BOLD, 27));
+					g2.setColor(Utils.getRandomColor(getTier()));
+					Graph.drawOutlinedString(g2, String.valueOf(getTier()), 190*2, 34, 1.5f, Color.BLACK);
+				});
 			}
 
 			g1.setFont(FONT);
