@@ -574,7 +574,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 				FontMetrics fm = g1.getFontMetrics();
 				Graph.drawOutlinedString(g1, str,
-						225 / 2 - fm.stringWidth(str) / 2, Drawable.SIZE.height / 2,
+						225 / 2 - fm.stringWidth(str) / 2, 39 + (225 / 2 + fm.getHeight() / 2),
 						6, Color.BLACK
 				);
 			}
