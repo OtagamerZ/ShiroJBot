@@ -47,6 +47,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @Entity
 @DynamicUpdate
@@ -397,18 +398,10 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public Map<UserItem, Integer> getItems() {
-		HashMap<UserItem, Integer> items = new HashMap<>();
-		for (Map.Entry<String, Object> e : inventory.entrySet()) {
-			int amount = ((Number) e.getValue()).intValue();
-			if (amount <= 0) continue;
-
-			UserItem ui = DAO.find(UserItem.class, e.getKey());
-			if (ui != null) {
-				items.put(ui, amount);
-			}
-		}
-
-		return items;
+		return inventory.entrySet().stream()
+				.filter(e -> ((Number) e.getValue()).intValue() > 0)
+				.map(e -> Map.entry(DAO.find(UserItem.class, e.getKey()), ((Number) e.getValue()).intValue()))
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 
 	@Override
