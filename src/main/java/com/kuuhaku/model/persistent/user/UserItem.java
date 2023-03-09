@@ -90,7 +90,7 @@ public class UserItem extends DAO<UserItem> {
 	}
 
 	public String toString(I18N locale) {
-		return "**" + icon + " " + getName(locale) + "**";
+		return "**" + icon + " " + getName(locale) + "**" + "(`" + id + "`)";
 	}
 
 	@Override
