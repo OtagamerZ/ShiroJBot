@@ -74,7 +74,7 @@ public class ItemShopCommand implements Executable {
 						}
 
 						if (i.isPassive()) {
-							out += "| **" + locale.get("str/passive") + "**";
+							out += " | **" + locale.get("str/passive") + "**";
 						}
 
 						out += "\n" + i.getDescription(locale);
