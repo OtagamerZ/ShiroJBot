@@ -65,6 +65,10 @@ public class InventoryCommand implements Executable {
 						out += "\n" + locale.get("str/item_has", items.getCount(i));
 					}
 
+					if (i.isPassive()) {
+						out += "| **" + locale.get("str/passive") + "**";
+					}
+
 					out += "\n" + i.getDescription(locale);
 
 					return out + "\n";

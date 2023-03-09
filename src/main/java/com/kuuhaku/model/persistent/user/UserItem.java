@@ -83,6 +83,10 @@ public class UserItem extends DAO<UserItem> {
 		return currency;
 	}
 
+	public boolean isPassive() {
+		return effect == null;
+	}
+
 	public void execute(Account acc, JSONObject args) {
 		if (effect == null) throw new PassiveItemException();
 
