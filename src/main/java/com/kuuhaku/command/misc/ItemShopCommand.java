@@ -62,15 +62,17 @@ public class ItemShopCommand implements Executable {
 
 			List<Page> pages = Utils.generatePages(eb, DAO.findAll(UserItem.class).stream().sorted().toList(), 20, 10,
 					i -> {
+						int has = items.getOrDefault(i, 0);
+
 						String out = i.toString(locale);
 						if (i.getPrice() > 0 && i.getCurrency() != null) {
 							out += "\n" + locale.get("str/price", locale.get("currency/" + i.getCurrency(), i.getPrice()));
 						}
 
 						if (i.getStackSize() > 0) {
-							out += "\n" + locale.get("str/item_has", items.get(i) + "/" + i.getStackSize());
+							out += "\n" + locale.get("str/item_has", has + "/" + i.getStackSize());
 						} else {
-							out += "\n" + locale.get("str/item_has", items.get(i));
+							out += "\n" + locale.get("str/item_has", has);
 						}
 
 						if (i.isPassive()) {
@@ -102,7 +104,7 @@ public class ItemShopCommand implements Executable {
 			Pair<String, Double> sug = Utils.didYouMean(args.getString("id").toUpperCase(), names);
 			event.channel().sendMessage(locale.get("error/unknown_item", sug.getFirst())).queue();
 			return;
-		} else if (item.getStackSize() > 0 && items.get(item) + amount > item.getStackSize()) {
+		} else if (item.getStackSize() > 0 && items.getOrDefault(item, 0) + amount > item.getStackSize()) {
 			event.channel().sendMessage(locale.get("error/stack_full")).queue();
 			return;
 		} else if (!acc.hasEnough(item.getPrice(), item.getCurrency())) {

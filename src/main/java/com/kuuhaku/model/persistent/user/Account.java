@@ -37,7 +37,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.commons.collections4.bag.HashBag;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
 

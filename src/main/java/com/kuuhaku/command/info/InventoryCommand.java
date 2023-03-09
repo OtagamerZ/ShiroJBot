@@ -58,11 +58,13 @@ public class InventoryCommand implements Executable {
 
 		List<Page> pages = Utils.generatePages(eb, items.keySet().stream().sorted().toList(), 20, 10,
 				i -> {
+					int has = items.getOrDefault(i, 0);
+
 					String out = i.toString(locale);
 					if (i.getStackSize() > 0) {
-						out += "\n" + locale.get("str/item_has", items.get(i) + "/" + i.getStackSize());
+						out += "\n" + locale.get("str/item_has", has + "/" + i.getStackSize());
 					} else {
-						out += "\n" + locale.get("str/item_has", items.get(i));
+						out += "\n" + locale.get("str/item_has", has);
 					}
 
 					if (i.isPassive()) {

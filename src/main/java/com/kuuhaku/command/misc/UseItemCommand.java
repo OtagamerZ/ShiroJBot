@@ -59,13 +59,13 @@ public class UseItemCommand implements Executable {
 			Pair<String, Double> sug = Utils.didYouMean(args.getString("id").toUpperCase(), names);
 			event.channel().sendMessage(locale.get("error/item_not_found", sug.getFirst())).queue();
 			return;
-		} else if (items.get(item) == 0) {
+		} else if (!items.containsKey(item)) {
 			event.channel().sendMessage(locale.get("error/item_not_have")).queue();
 			return;
 		}
 
 		try {
-			Utils.confirm(locale.get("question/item_use", item.getName(locale), items.get(item)), event.channel(), w -> {
+			Utils.confirm(locale.get("question/item_use", item.getName(locale), items.getOrDefault(item, 0)), event.channel(), w -> {
 						if (acc.consumeItem(item)) {
 							event.channel().sendMessage(locale.get("error/item_not_have")).queue();
 							return true;
