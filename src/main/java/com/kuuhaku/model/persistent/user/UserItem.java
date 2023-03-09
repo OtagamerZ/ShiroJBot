@@ -61,11 +61,11 @@ public class UserItem extends DAO<UserItem> {
 	}
 
 	public String getName(I18N locale) {
-		return LocalizedString.get(locale, "item/" + id, id);
+		return LocalizedString.get(locale, "item/" + id.toLowerCase(), id);
 	}
 
 	public String getDescription(I18N locale) {
-		return LocalizedString.get(locale, "item/" + id + "_desc", "");
+		return LocalizedString.get(locale, "item/" + id.toLowerCase() + "_desc", "");
 	}
 
 	public String getIcon() {
@@ -96,7 +96,7 @@ public class UserItem extends DAO<UserItem> {
 	}
 
 	public String toString(I18N locale) {
-		return "**" + icon + " " + LocalizedString.get(locale, "item/" + id, id) + "**";
+		return "**" + icon + " " + getName(locale) + "**";
 	}
 
 	@Override
