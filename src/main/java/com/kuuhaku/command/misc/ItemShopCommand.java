@@ -92,7 +92,7 @@ public class ItemShopCommand implements Executable {
 			Pair<String, Double> sug = Utils.didYouMean(args.getString("id").toUpperCase(), names);
 			event.channel().sendMessage(locale.get("error/unknown_item", sug.getFirst())).queue();
 			return;
-		} else if (items.getCount(item) + amount > item.getStackSize()) {
+		} else if (item.getStackSize() > 0 && items.getCount(item) + amount > item.getStackSize()) {
 			event.channel().sendMessage(locale.get("error/stack_full")).queue();
 			return;
 		} else if (!acc.hasEnough(item.getPrice(), item.getCurrency())) {
