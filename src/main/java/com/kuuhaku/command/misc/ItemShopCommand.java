@@ -44,7 +44,7 @@ import org.apache.commons.collections4.bag.HashBag;
 import java.util.List;
 
 @Command(
-		name = "shop",
+		name = "items.buy",
 		category = Category.MISC
 )
 @Signature(allowEmpty = true, value = "<id:number:r> <amount:number>")
