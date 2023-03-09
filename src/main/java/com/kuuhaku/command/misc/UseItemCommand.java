@@ -43,7 +43,7 @@ import java.util.List;
 		subname = "use",
 		category = Category.MISC
 )
-@Signature(allowEmpty = true, value = "<id:number:r> <args:text>")
+@Signature(allowEmpty = true, value = "<id:word:r> <args:text>")
 public class UseItemCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
