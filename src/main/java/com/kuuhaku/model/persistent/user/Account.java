@@ -372,7 +372,13 @@ public class Account extends DAO<Account> implements Blacklistable {
 			int rem = a.getInventory().getInt(item.getId());
 			if (rem < amount) return;
 
-			a.getInventory().put(item.getId(), rem - amount);
+			if (rem - amount == 0) {
+				a.getInventory().remove(item.getId());
+			} else {
+				a.getInventory().put(item.getId(), rem - amount);
+			}
+
+			consumed.set(true);
 		});
 
 		return consumed.get();
