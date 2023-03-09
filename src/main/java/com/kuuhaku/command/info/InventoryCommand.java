@@ -34,9 +34,9 @@ import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import org.apache.commons.collections4.bag.HashBag;
 
 import java.util.List;
+import java.util.Map;
 
 @Command(
 		name = "items",
@@ -47,7 +47,7 @@ public class InventoryCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
-		HashBag<UserItem> items = acc.getItems();
+		Map<UserItem, Integer> items = acc.getItems();
 		if (items.isEmpty()) {
 			event.channel().sendMessage(locale.get("error/inventory_empty")).queue();
 			return;
@@ -56,13 +56,13 @@ public class InventoryCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/items_available"));
 
-		List<Page> pages = Utils.generatePages(eb, items, 20, 10,
+		List<Page> pages = Utils.generatePages(eb, items.keySet().stream().sorted().toList(), 20, 10,
 				i -> {
 					String out = i.toString(locale);
 					if (i.getStackSize() > 0) {
-						out += "\n" + locale.get("str/item_has", items.getCount(i) + "/" + i.getStackSize());
+						out += "\n" + locale.get("str/item_has", items.get(i) + "/" + i.getStackSize());
 					} else {
-						out += "\n" + locale.get("str/item_has", items.getCount(i));
+						out += "\n" + locale.get("str/item_has", items.get(i));
 					}
 
 					if (i.isPassive()) {

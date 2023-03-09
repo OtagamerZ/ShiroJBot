@@ -34,9 +34,9 @@ import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
-import org.apache.commons.collections4.bag.HashBag;
 
 import java.util.List;
+import java.util.Map;
 
 @Command(
 		name = "items",
@@ -48,24 +48,24 @@ public class UseItemCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
-		HashBag<UserItem> items = acc.getItems();
-		UserItem item = items.stream()
+		Map<UserItem, Integer> items = acc.getItems();
+		UserItem item = items.keySet().stream()
 				.filter(i -> i.getId().equals(args.getString("id").toUpperCase()))
 				.findFirst().orElse(null);
 
 		if (item == null) {
-			List<String> names = items.stream().map(UserItem::getId).toList();
+			List<String> names = items.keySet().stream().map(UserItem::getId).toList();
 
 			Pair<String, Double> sug = Utils.didYouMean(args.getString("id").toUpperCase(), names);
 			event.channel().sendMessage(locale.get("error/item_not_found", sug.getFirst())).queue();
 			return;
-		} else if (items.getCount(item) == 0) {
+		} else if (items.get(item) == 0) {
 			event.channel().sendMessage(locale.get("error/item_not_have")).queue();
 			return;
 		}
 
 		try {
-			Utils.confirm(locale.get("question/item_use", item.getName(locale), items.getCount(item)), event.channel(), w -> {
+			Utils.confirm(locale.get("question/item_use", item.getName(locale), items.get(item)), event.channel(), w -> {
 						if (acc.consumeItem(item)) {
 							event.channel().sendMessage(locale.get("error/item_not_have")).queue();
 							return true;

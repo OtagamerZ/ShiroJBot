@@ -27,13 +27,15 @@ import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import jakarta.persistence.*;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
 
 @Entity
 @Table(name = "user_item")
-public class UserItem extends DAO<UserItem> {
+public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -95,6 +97,13 @@ public class UserItem extends DAO<UserItem> {
 
 	public String toString(I18N locale) {
 		return "**" + icon + " " + getName(locale) + "** (`" + id + "`)";
+	}
+
+	@Override
+	public int compareTo(@NotNull UserItem o) {
+		if (Objects.equals(this, o)) return 0;
+
+		return Comparator.comparing(UserItem::getId).compare(this, o);
 	}
 
 	@Override

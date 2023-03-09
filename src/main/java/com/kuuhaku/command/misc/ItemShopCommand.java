@@ -39,9 +39,9 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import org.apache.commons.collections4.bag.HashBag;
 
 import java.util.List;
+import java.util.Map;
 
 @Command(
 		name = "items",
@@ -54,13 +54,13 @@ public class ItemShopCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
-		HashBag<UserItem> items = acc.getItems();
+		Map<UserItem, Integer> items = acc.getItems();
 
 		if (!args.has("id")) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/items_available"));
 
-			List<Page> pages = Utils.generatePages(eb, DAO.findAll(UserItem.class), 20, 10,
+			List<Page> pages = Utils.generatePages(eb, DAO.findAll(UserItem.class).stream().sorted().toList(), 20, 10,
 					i -> {
 						String out = i.toString(locale);
 						if (i.getPrice() > 0 && i.getCurrency() != null) {
@@ -68,9 +68,9 @@ public class ItemShopCommand implements Executable {
 						}
 
 						if (i.getStackSize() > 0) {
-							out += "\n" + locale.get("str/item_has", items.getCount(i) + "/" + i.getStackSize());
+							out += "\n" + locale.get("str/item_has", items.get(i) + "/" + i.getStackSize());
 						} else {
-							out += "\n" + locale.get("str/item_has", items.getCount(i));
+							out += "\n" + locale.get("str/item_has", items.get(i));
 						}
 
 						if (i.isPassive()) {
@@ -102,7 +102,7 @@ public class ItemShopCommand implements Executable {
 			Pair<String, Double> sug = Utils.didYouMean(args.getString("id").toUpperCase(), names);
 			event.channel().sendMessage(locale.get("error/unknown_item", sug.getFirst())).queue();
 			return;
-		} else if (item.getStackSize() > 0 && items.getCount(item) + amount > item.getStackSize()) {
+		} else if (item.getStackSize() > 0 && items.get(item) + amount > item.getStackSize()) {
 			event.channel().sendMessage(locale.get("error/stack_full")).queue();
 			return;
 		} else if (!acc.hasEnough(item.getPrice(), item.getCurrency())) {
