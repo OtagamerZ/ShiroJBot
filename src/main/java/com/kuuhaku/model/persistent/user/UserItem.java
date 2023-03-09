@@ -96,12 +96,7 @@ public class UserItem extends DAO<UserItem> {
 	}
 
 	public String toString(I18N locale) {
-		String out = icon + " " + LocalizedString.get(locale, "item/" + id, id);
-		if (price > 0 && currency != null) {
-			out += " | " + locale.get("currency/" + currency).formatted(price);
-		}
-
-		return out;
+		return "**" + icon + " " + LocalizedString.get(locale, "item/" + id, id) + "**";
 	}
 
 	@Override

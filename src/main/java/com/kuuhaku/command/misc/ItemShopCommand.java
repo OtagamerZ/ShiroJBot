@@ -62,6 +62,10 @@ public class ItemShopCommand implements Executable {
 			List<Page> pages = Utils.generatePages(eb, DAO.findAll(UserItem.class), 20, 10,
 					i -> {
 						String out = i.toString(locale);
+						if (i.getPrice() > 0 && i.getCurrency() != null) {
+							out += " | " + locale.get("currency/" + i.getCurrency()).formatted(i.getPrice());
+						}
+
 						if (i.getStackSize() > 0) {
 							out += "\n" + locale.get("str/item_has", items.getCount(i) + "/" + i.getStackSize());
 						} else {
@@ -110,6 +114,7 @@ public class ItemShopCommand implements Executable {
 							acc.consumeGems(value, "Bought " + amount + "x" + item.getName(locale));
 						}
 
+						event.channel().sendMessage(locale.get("success/item_buy", amount, item.getName(locale))).queue();
 						return true;
 					}, event.user()
 			);

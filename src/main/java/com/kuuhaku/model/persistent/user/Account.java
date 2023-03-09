@@ -399,9 +399,12 @@ public class Account extends DAO<Account> implements Blacklistable {
 	public HashBag<UserItem> getItems() {
 		HashBag<UserItem> items = new HashBag<>();
 		for (Map.Entry<String, Object> e : inventory.entrySet()) {
+			int amount = ((Number) e.getValue()).intValue();
+			if (amount <= 0) continue;
+
 			UserItem ui = DAO.find(UserItem.class, e.getKey());
 			if (ui != null) {
-				items.add(ui, ((Number) e.getValue()).intValue());
+				items.add(ui, amount);
 			}
 		}
 
