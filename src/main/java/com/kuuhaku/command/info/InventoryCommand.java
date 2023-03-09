@@ -48,6 +48,10 @@ public class InventoryCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
 		HashBag<UserItem> items = acc.getItems();
+		if (items.isEmpty()) {
+			event.channel().sendMessage(locale.get("error/inventory_empty")).queue();
+			return;
+		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/items_available"));
