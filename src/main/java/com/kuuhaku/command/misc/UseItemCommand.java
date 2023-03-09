@@ -18,6 +18,8 @@
 
 package com.kuuhaku.command.misc;
 
+import com.kuuhaku.exceptions.ItemUseException;
+import com.kuuhaku.exceptions.PassiveItemException;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -66,6 +68,17 @@ public class UseItemCommand implements Executable {
 			Utils.confirm(locale.get("question/item_use", item.getName(locale), items.getCount(item)), event.channel(), w -> {
 						if (acc.consumeItem(item)) {
 							event.channel().sendMessage(locale.get("error/item_not_have")).queue();
+							return true;
+						}
+
+						try {
+							item.execute(acc.refresh(), args);
+						} catch (PassiveItemException e) {
+							event.channel().sendMessage(locale.get("error/item_not_usable")).queue();
+							return true;
+						} catch (ItemUseException e) {
+							event.channel().sendMessage(locale.get("error/item_invalid_args")).queue();
+							return true;
 						}
 
 						event.channel().sendMessage(locale.get("success/item_use", item.getName(locale))).queue();

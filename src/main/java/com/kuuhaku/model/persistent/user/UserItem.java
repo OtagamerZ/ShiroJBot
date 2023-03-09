@@ -19,7 +19,6 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.exceptions.ItemUseException;
 import com.kuuhaku.exceptions.PassiveItemException;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
@@ -84,15 +83,10 @@ public class UserItem extends DAO<UserItem> {
 		return currency;
 	}
 
-	public RuntimeException execute(Account acc, JSONObject args) {
-		if (effect == null) return new PassiveItemException();
+	public void execute(Account acc, JSONObject args) {
+		if (effect == null) throw new PassiveItemException();
 
-		try {
-			Utils.exec(effect, Map.of("acc", acc, "args", args));
-			return null;
-		} catch (ItemUseException e) {
-			return e;
-		}
+		Utils.exec(effect, Map.of("acc", acc, "args", args));
 	}
 
 	public String toString(I18N locale) {
