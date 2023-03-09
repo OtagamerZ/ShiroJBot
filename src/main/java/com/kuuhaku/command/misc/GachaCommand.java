@@ -123,7 +123,7 @@ public class GachaCommand implements Executable {
 			Gacha gacha = chosen.getConstructor(User.class).newInstance(event.user());
 			Utils.confirm(locale.get("question/gacha", locale.get("gacha/" + type.value()).toLowerCase(), locale.get("currency/" + type.currency(), type.price())), event.channel(),
 					w -> {
-						List<String> result = gacha.draw();
+						List<String> result = gacha.draw(acc);
 
 						BufferedImage bi = new BufferedImage(265 * result.size(), 400, BufferedImage.TYPE_INT_ARGB);
 						Graphics2D g2d = bi.createGraphics();

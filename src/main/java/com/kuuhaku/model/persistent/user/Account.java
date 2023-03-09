@@ -364,18 +364,30 @@ public class Account extends DAO<Account> implements Blacklistable {
 		);
 	}
 
+	public boolean consumeItem(UserItem item) {
+		return consumeItem(item.getId());
+	}
+
+	public boolean consumeItem(String id) {
+		return consumeItem(id, 1);
+	}
+
 	public boolean consumeItem(UserItem item, int amount) {
+		return consumeItem(item.getId(), amount);
+	}
+
+	public boolean consumeItem(String id, int amount) {
 		if (amount <= 0) return false;
 
 		AtomicBoolean consumed = new AtomicBoolean();
 		apply(getClass(), uid, a -> {
-			int rem = a.getInventory().getInt(item.getId());
+			int rem = a.getInventory().getInt(id);
 			if (rem < amount) return;
 
 			if (rem - amount == 0) {
-				a.getInventory().remove(item.getId());
+				a.getInventory().remove(id);
 			} else {
-				a.getInventory().put(item.getId(), rem - amount);
+				a.getInventory().put(id, rem - amount);
 			}
 
 			consumed.set(true);
