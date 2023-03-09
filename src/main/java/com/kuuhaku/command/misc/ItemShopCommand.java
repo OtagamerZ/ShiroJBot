@@ -61,12 +61,14 @@ public class ItemShopCommand implements Executable {
 
 			List<Page> pages = Utils.generatePages(eb, DAO.findAll(UserItem.class), 20, 10,
 					i -> {
-						String out = i.toString(locale) + "\n";
+						String out = i.toString(locale);
 						if (i.getStackSize() > 0) {
-							out += locale.get("str/item_has", items.getCount(i) + "/" + i.getStackSize());
+							out += "\n" + locale.get("str/item_has", items.getCount(i) + "/" + i.getStackSize());
 						} else {
-							out += locale.get("str/item_has", items.getCount(i));
+							out += "\n" + locale.get("str/item_has", items.getCount(i));
 						}
+
+						out += "\n" + i.getDescription(locale);
 
 						return out;
 					},

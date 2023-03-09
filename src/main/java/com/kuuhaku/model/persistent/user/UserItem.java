@@ -64,6 +64,10 @@ public class UserItem extends DAO<UserItem> {
 		return LocalizedString.get(locale, "item/" + id, id);
 	}
 
+	public String getDescription(I18N locale) {
+		return LocalizedString.get(locale, "item/" + id + "_desc", "");
+	}
+
 	public String getIcon() {
 		return icon;
 	}
