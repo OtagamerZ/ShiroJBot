@@ -79,6 +79,11 @@ public class ItemShopCommand implements Executable {
 					(p, t) -> eb.setFooter(acc.getBalanceFooter(locale) + "\n" + locale.get("str/page", p + 1, t))
 			);
 
+			if (pages.isEmpty()) {
+				event.channel().sendMessage(locale.get("error/shop_empty")).queue();
+				return;
+			}
+
 			Utils.paginate(pages, 1, true, event.channel(), event.user());
 			return;
 		}
