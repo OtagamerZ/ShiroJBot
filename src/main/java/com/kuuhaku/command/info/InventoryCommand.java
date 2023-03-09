@@ -67,7 +67,7 @@ public class InventoryCommand implements Executable {
 
 					out += "\n" + i.getDescription(locale);
 
-					return out;
+					return out + "\n";
 				},
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 		);
