@@ -351,7 +351,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public int getItemCount(String id) {
-		return inventory.getInt(id);
+		return inventory.getInt(id.toUpperCase());
 	}
 
 	public void addItem(UserItem item, int amount) {
@@ -381,13 +381,13 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 		AtomicBoolean consumed = new AtomicBoolean();
 		apply(getClass(), uid, a -> {
-			int rem = a.getInventory().getInt(id);
+			int rem = a.getInventory().getInt(id.toUpperCase());
 			if (rem < amount) return;
 
 			if (rem - amount == 0) {
-				a.getInventory().remove(id);
+				a.getInventory().remove(id.toUpperCase());
 			} else {
-				a.getInventory().put(id, rem - amount);
+				a.getInventory().put(id.toUpperCase(), rem - amount);
 			}
 
 			consumed.set(true);
