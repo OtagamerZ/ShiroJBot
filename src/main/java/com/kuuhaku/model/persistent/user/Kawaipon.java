@@ -96,7 +96,7 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	public int getMaxCapacity() {
 		int mult = 3 + account.getItemCount("cap_boost");
-		int add = account.getItemCount("extra_cap");
+		int add = account.getItemCount("extra_cap") * 10;
 
 		return stashCapacity + add + account.getHighestLevel() * mult;
 	}
