@@ -63,7 +63,7 @@ public class ItemShopCommand implements Executable {
 					i -> {
 						String out = i.toString(locale);
 						if (i.getPrice() > 0 && i.getCurrency() != null) {
-							out += " | " + locale.get("currency/" + i.getCurrency(), i.getPrice());
+							out += "\n" + locale.get("str/price", locale.get("currency/" + i.getCurrency(), i.getPrice()));
 						}
 
 						if (i.getStackSize() > 0) {

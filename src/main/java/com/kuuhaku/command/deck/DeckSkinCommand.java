@@ -95,7 +95,7 @@ public class DeckSkinCommand implements Executable {
 					eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
 							.setImage(URL.formatted(skin.name().toLowerCase()))
 							.setTitle(locale.get("str/skin_locked"))
-							.setDescription(locale.get("str/requires_purchase", locale.get("currency/" + skin.getCurrency(), skin.getPrice())));
+							.setDescription(locale.get("str/price", locale.get("currency/" + skin.getCurrency(), skin.getPrice())));
 				}
 			} else {
 				eb.setThumbnail(null)
