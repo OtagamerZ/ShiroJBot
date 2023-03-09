@@ -44,10 +44,11 @@ import org.apache.commons.collections4.bag.HashBag;
 import java.util.List;
 
 @Command(
-		name = "items.buy",
+		name = "items",
+		subname = "buy",
 		category = Category.MISC
 )
-@Signature(allowEmpty = true, value = "<id:number:r> <amount:number>")
+@Signature(allowEmpty = true, value = "<id:word:r> <amount:number>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class ItemShopCommand implements Executable {
 	@Override
