@@ -61,6 +61,9 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	@Column(name = "xp", nullable = false)
 	private long xp;
 
+	@Column(name = "last_xp", nullable = false)
+	private long lastXp;
+
 	@OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<VoiceData> voiceData = new ArrayList<>();
@@ -114,7 +117,10 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	}
 
 	public void addXp(long value) {
-		xp += value;
+		if (System.currentTimeMillis() - lastXp >= 1000) {
+			xp += value;
+			lastXp = System.currentTimeMillis();
+		}
 	}
 
 	public int getLevel() {
