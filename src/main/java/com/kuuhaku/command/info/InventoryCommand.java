@@ -57,7 +57,7 @@ public class InventoryCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/items_available"));
 
-		List<Page> pages = Utils.generatePages(eb, items.keySet().stream().sorted().toList(), 20, 10,
+		List<Page> pages = Utils.generatePages(eb, items.keySet().stream().sorted().toList(), 20, 5,
 				i -> {
 					int has = items.getOrDefault(i, 0);
 
