@@ -24,7 +24,6 @@ import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
 import jakarta.persistence.*;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
@@ -89,7 +88,7 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 		return effect == null;
 	}
 
-	public void execute(Account acc, JSONObject args) {
+	public void execute(Account acc, String[] args) {
 		if (effect == null) throw new PassiveItemException();
 
 		Utils.exec(effect, Map.of("acc", acc, "args", args));
