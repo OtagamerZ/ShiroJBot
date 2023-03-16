@@ -442,9 +442,8 @@ public class GuildListener extends ListenerAdapter {
 					return;
 				}
 
+				Signature annot = pc.getClass().getDeclaredAnnotation(Signature.class);
 				try {
-					Signature annot = pc.getClass().getDeclaredAnnotation(Signature.class);
-
 					JSONObject params;
 					if (annot == null) params = new JSONObject();
 					else {
@@ -477,7 +476,13 @@ public class GuildListener extends ListenerAdapter {
 					} else {
 						error = locale.get("error/invalid_signature");
 
-						List<String> signatures = SignatureParser.extract(locale, pc.command());
+						List<String> signatures;
+						if (annot == null) {
+							signatures = SignatureParser.extract(locale, null, false);
+						} else {
+							signatures = SignatureParser.extract(locale, annot.value(), annot.allowEmpty());
+						}
+
 						EmbedBuilder eb = new ColorlessEmbedBuilder()
 								.setAuthor(locale.get("str/command_signatures"))
 								.setDescription("```css\n" + String.join("\n", signatures).formatted(

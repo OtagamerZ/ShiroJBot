@@ -96,7 +96,15 @@ public class HelpCommand implements Executable {
 			eb.addField("Alias", "`" + data.config().getPrefix() + alias + "`", true);
 		}
 
-		List<String> sigs = SignatureParser.extract(locale, pc.command());
+		Signature annot = pc.getClass().getDeclaredAnnotation(Signature.class);
+
+		List<String> sigs;
+		if (annot == null) {
+			sigs = SignatureParser.extract(locale, null, false);
+		} else {
+			sigs = SignatureParser.extract(locale, annot.value(), annot.allowEmpty());
+		}
+
 		if (!sigs.isEmpty()) {
 			eb.addField(
 					locale.get("str/command_signatures"),

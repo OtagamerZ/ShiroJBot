@@ -1,7 +1,6 @@
 package com.kuuhaku.util;
 
 import com.kuuhaku.exceptions.InvalidSignatureException;
-import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.FailedSignature;
@@ -9,7 +8,10 @@ import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -150,13 +152,11 @@ public abstract class SignatureParser {
 		}
 	}
 
-	public static List<String> extract(I18N locale, Executable exec) {
+	public static List<String> extract(I18N locale, String[] signatures, boolean allowEmpty) {
 		List<String> out = new ArrayList<>();
-		Signature annot = exec.getClass().getDeclaredAnnotation(Signature.class);
-		if (annot == null) return List.of("%1$s%2$s");
+		if (signatures == null) return List.of("%1$s%2$s");
 
-		String[] signatures = annot.value();
-		if (annot.allowEmpty()) {
+		if (allowEmpty) {
 			out.add("%1$s%2$s");
 		} else {
 			for (String sig : signatures) {
