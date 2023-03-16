@@ -33,7 +33,6 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.SignatureParser;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
@@ -82,11 +81,8 @@ public class ItemShopCommand implements Executable {
 
 						out += "\n" + i.getDescription(locale);
 
-						String sig = i.getSignature();
-						sig = SignatureParser.extract(locale, sig == null ? null : new String[]{sig}, false).get(0);
-
 						Command cmd = getClass().getDeclaredAnnotation(Command.class);
-						out += "\n`" + sig.formatted(data.config().getPrefix(), cmd.name() + "." + cmd.subname() + " " + i.getId()) + "`";
+						out += "\n`" + "%s%s".formatted(data.config().getPrefix(), cmd.name() + "." + cmd.subname() + " " + i.getId()) + "`";
 
 						return out + "\n";
 					},
