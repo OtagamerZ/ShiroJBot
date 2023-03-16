@@ -68,11 +68,6 @@ public class UseItemCommand implements Executable {
 
 		try {
 			Utils.confirm(locale.get("question/item_use", item.getName(locale), items.getOrDefault(item, 0)), event.channel(), w -> {
-						if (acc.consumeItem(item)) {
-							event.channel().sendMessage(locale.get("error/item_not_have")).queue();
-							return true;
-						}
-
 						try {
 							JSONObject params;
 							if (item.getSignature() == null) params = new JSONObject();
@@ -89,6 +84,11 @@ public class UseItemCommand implements Executable {
 							return true;
 						} catch (Exception e) {
 							event.channel().sendMessage(locale.get("error/item_invalid_args")).queue();
+							return true;
+						}
+
+						if (acc.consumeItem(item)) {
+							event.channel().sendMessage(locale.get("error/item_not_have")).queue();
 							return true;
 						}
 
