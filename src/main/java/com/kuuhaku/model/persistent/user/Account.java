@@ -35,6 +35,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
+import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.Cache;
@@ -399,8 +400,9 @@ public class Account extends DAO<Account> implements Blacklistable {
 	public Map<UserItem, Integer> getItems() {
 		return inventory.entrySet().stream()
 				.filter(e -> ((Number) e.getValue()).intValue() > 0)
-				.map(e -> Map.entry(DAO.find(UserItem.class, e.getKey()), ((Number) e.getValue()).intValue()))
-				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+				.map(e -> new Pair<>(DAO.find(UserItem.class, e.getKey()), ((Number) e.getValue()).intValue()))
+				.filter(p -> p.getFirst() != null)
+				.collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
 	}
 
 	@Override
