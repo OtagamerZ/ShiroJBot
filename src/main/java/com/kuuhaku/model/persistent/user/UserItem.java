@@ -25,6 +25,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
@@ -88,11 +89,12 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 		return effect == null;
 	}
 
-	public void execute(I18N locale, Account acc, String[] params) {
+	public void execute(I18N locale, GuildMessageChannel channel, Account acc, String[] params) {
 		if (effect == null) throw new PassiveItemException();
 
 		Utils.exec(effect, Map.of(
 				"locale", locale,
+				"channel", channel,
 				"acc", acc,
 				"params", params
 		));
