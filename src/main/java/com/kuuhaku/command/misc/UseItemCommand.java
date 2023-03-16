@@ -87,7 +87,7 @@ public class UseItemCommand implements Executable {
 							return true;
 						}
 
-						if (acc.consumeItem(item)) {
+						if (!acc.consumeItem(item)) {
 							event.channel().sendMessage(locale.get("error/item_not_have")).queue();
 							return true;
 						}
