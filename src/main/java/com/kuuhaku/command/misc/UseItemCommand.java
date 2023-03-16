@@ -26,6 +26,7 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
@@ -77,7 +78,7 @@ public class UseItemCommand implements Executable {
 							event.channel().sendMessage(locale.get("error/item_not_usable")).queue();
 							return true;
 						} catch (ItemUseException e) {
-							event.channel().sendMessage(locale.get("error/item_invalid_args")).queue();
+							event.channel().sendMessage(LocalizedString.get(locale, e.getMessage(), locale.get("error/item_invalid_args"))).queue();
 							return true;
 						}
 

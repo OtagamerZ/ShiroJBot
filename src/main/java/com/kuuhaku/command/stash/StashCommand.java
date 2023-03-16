@@ -122,22 +122,7 @@ public class StashCommand implements Executable {
 			}
 		}
 
-		query.appendNewLine("""
-				ORDER BY c.card.anime
-						, COALESCE(
-							e.tier,
-					   		CASE c.card.rarity
-					      		WHEN 'COMMON' THEN 1
-					      		WHEN 'UNCOMMON' THEN 1.5
-					      		WHEN 'RARE' THEN 2
-					      		WHEN 'ULTRA_RARE' THEN 2.5
-					      		WHEN 'LEGENDARY' THEN 3
-				    	  		ELSE 1
-				       		END
-				       	) DESC
-				       	, c.type
-					   	, c.card.id
-				""");
+		query.appendNewLine("ORDER BY c.id DESC");
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
