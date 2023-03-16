@@ -442,7 +442,7 @@ public class GuildListener extends ListenerAdapter {
 					return;
 				}
 
-				Signature annot = pc.getClass().getDeclaredAnnotation(Signature.class);
+				Signature annot = pc.command().getClass().getDeclaredAnnotation(Signature.class);
 				try {
 					JSONObject params;
 					if (annot == null) params = new JSONObject();
