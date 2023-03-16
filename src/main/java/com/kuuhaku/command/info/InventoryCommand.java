@@ -79,9 +79,7 @@ public class InventoryCommand implements Executable {
 
 						Command cmd = getClass().getDeclaredAnnotation(Command.class);
 						out += "\n" + locale.get("str/params",
-								data.config().getPrefix(),
-								cmd.name() + "." + cmd.subname(),
-								i.getId(), sig
+								sig.formatted(data.config().getPrefix(), cmd.name() + "." + cmd.subname() + " " + i.getId())
 						);
 					}
 
