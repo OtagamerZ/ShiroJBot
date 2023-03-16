@@ -78,7 +78,10 @@ public class UseItemCommand implements Executable {
 							event.channel().sendMessage(locale.get("error/item_not_usable")).queue();
 							return true;
 						} catch (ItemUseException e) {
-							event.channel().sendMessage(LocalizedString.get(locale, e.getMessage(), locale.get("error/item_invalid_args"))).queue();
+							event.channel().sendMessage(LocalizedString.get(locale, e.getMessage())).queue();
+							return true;
+						} catch (Exception e) {
+							event.channel().sendMessage(locale.get("error/item_invalid_args")).queue();
 							return true;
 						}
 
