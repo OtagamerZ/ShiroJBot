@@ -130,7 +130,15 @@ public class StashScrapCommand implements Executable {
 			Utils.confirm(locale.get(cards.size() == 1 ? "question/scrap" : "question/scraps", value, cards.size()), event.channel(), w -> {
 						event.channel().sendMessage(locale.get("success/scrap")).queue();
 						acc.addCR(value, cards.stream().map(StashedCard::toString).collect(Collectors.joining()) + " scrapped");
+
 						for (StashedCard sc : cards) {
+							if (sc.getType() == CardType.KAWAIPON) {
+								KawaiponCard kc = sc.getKawaiponCard(false);
+								if (kc != null) {
+									kc.delete();
+								}
+							}
+
 							sc.delete();
 						}
 
