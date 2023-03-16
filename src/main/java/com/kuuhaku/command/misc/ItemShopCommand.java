@@ -81,8 +81,7 @@ public class ItemShopCommand implements Executable {
 
 						out += "\n" + i.getDescription(locale);
 
-						Command cmd = getClass().getDeclaredAnnotation(Command.class);
-						out += "\n`" + "%s%s".formatted(data.config().getPrefix(), cmd.name() + "." + cmd.subname() + " " + i.getId()) + "`";
+						out += "\n`" + "%s%s".formatted(data.config().getPrefix(), "items.buy " + i.getId()) + "`";
 
 						return out + "\n";
 					},

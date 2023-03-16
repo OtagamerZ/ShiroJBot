@@ -78,7 +78,7 @@ public class InventoryCommand implements Executable {
 					sig = SignatureParser.extract(locale, sig == null ? null : new String[]{sig}, false).get(0);
 
 					Command cmd = getClass().getDeclaredAnnotation(Command.class);
-					out += "\n`" + sig.formatted(data.config().getPrefix(), cmd.name() + "." + cmd.subname() + " " + i.getId()) + "`";
+					out += "\n`" + sig.formatted(data.config().getPrefix(), "items.use " + i.getId()) + "`";
 
 					return out + "\n";
 				},
