@@ -88,10 +88,14 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 		return effect == null;
 	}
 
-	public void execute(Account acc, String[] params) {
+	public void execute(I18N locale, Account acc, String[] params) {
 		if (effect == null) throw new PassiveItemException();
 
-		Utils.exec(effect, Map.of("acc", acc, "params", params));
+		Utils.exec(effect, Map.of(
+				"locale", locale,
+				"acc", acc,
+				"params", params
+		));
 	}
 
 	public String toString(I18N locale) {

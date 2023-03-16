@@ -73,7 +73,7 @@ public class UseItemCommand implements Executable {
 						}
 
 						try {
-							item.execute(acc.refresh(), args.getString("args").split("\\s+"));
+							item.execute(locale, acc.refresh(), args.getString("args").split("\\s+"));
 						} catch (PassiveItemException e) {
 							event.channel().sendMessage(locale.get("error/item_not_usable")).queue();
 							return true;
