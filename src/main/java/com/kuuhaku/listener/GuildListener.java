@@ -23,6 +23,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSignatureException;
+import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.common.special.PadoruEvent;
@@ -442,7 +443,13 @@ public class GuildListener extends ListenerAdapter {
 				}
 
 				try {
-					JSONObject params = SignatureParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
+					Signature annot = pc.getClass().getDeclaredAnnotation(Signature.class);
+
+					JSONObject params;
+					if (annot == null) params = new JSONObject();
+					else {
+						params = SignatureParser.parse(locale, annot.value(), annot.allowEmpty(), content.substring(args[0].length()).trim());
+					}
 
 					try {
 						pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);

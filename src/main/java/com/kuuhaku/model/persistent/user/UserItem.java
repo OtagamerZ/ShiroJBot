@@ -24,6 +24,7 @@ import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.json.JSONObject;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.intellij.lang.annotations.Language;
@@ -52,6 +53,10 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "currency")
 	private Currency currency;
+
+	@Language("ShiroSig")
+	@Column(name = "signature")
+	private String signature;
 
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
@@ -89,7 +94,11 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 		return effect == null;
 	}
 
-	public void execute(I18N locale, GuildMessageChannel channel, Account acc, String[] params) {
+	public String getSignature() {
+		return signature;
+	}
+
+	public void execute(I18N locale, GuildMessageChannel channel, Account acc, JSONObject params) {
 		if (effect == null) throw new PassiveItemException();
 
 		Utils.exec(effect, Map.of(

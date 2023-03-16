@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.SignatureParser;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
@@ -73,7 +74,13 @@ public class UseItemCommand implements Executable {
 						}
 
 						try {
-							item.execute(locale, event.channel(), acc.refresh(), args.getString("args").split("\\s+"));
+							JSONObject params;
+							if (item.getSignature() == null) params = new JSONObject();
+							else {
+								params = SignatureParser.parse(locale, new String[]{item.getSignature()}, false, args.getString("args"));
+							}
+
+							item.execute(locale, event.channel(), acc.refresh(), params);
 						} catch (PassiveItemException e) {
 							event.channel().sendMessage(locale.get("error/item_not_usable")).queue();
 							return true;

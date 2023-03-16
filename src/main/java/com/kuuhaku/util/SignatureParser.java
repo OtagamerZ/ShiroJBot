@@ -16,13 +16,9 @@ import java.util.stream.Collectors;
 public abstract class SignatureParser {
 	private static final Pattern ARGUMENT_PATTERN = Pattern.compile("^<(?<name>[A-Za-z]\\w*):(?<type>[A-Za-z]+)(?<required>:[Rr])?>(?:\\[(?<options>[\\w\\-;,]+)+])?$");
 
-	public static JSONObject parse(I18N locale, Executable exec, String input) throws InvalidSignatureException {
+	public static JSONObject parse(I18N locale, String[] signatures, boolean allowEmpty, String input) throws InvalidSignatureException {
 		JSONObject out = new JSONObject();
 		List<FailedSignature> failed = new ArrayList<>();
-		Signature annot = exec.getClass().getDeclaredAnnotation(Signature.class);
-		if (annot == null) return out;
-
-		String[] signatures = annot.value();
 
 		boolean fail;
 		List<String> supplied = new ArrayList<>();
@@ -143,7 +139,7 @@ public abstract class SignatureParser {
 			} else return out;
 		}
 
-		if (annot.allowEmpty()) return new JSONObject();
+		if (allowEmpty) return new JSONObject();
 		else {
 			int argLength = input.split(" +").length;
 			FailedSignature first = failed.stream().max(
