@@ -61,7 +61,7 @@ public class ItemShopCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/items_available"));
 
-			List<Page> pages = Utils.generatePages(eb, DAO.findAll(UserItem.class).stream().sorted().toList(), 20, 5,
+			List<Page> pages = Utils.generatePages(eb, DAO.findAll(UserItem.class).stream().sorted().toList(), 10, 5,
 					i -> {
 						int has = items.getOrDefault(i, 0);
 
@@ -82,14 +82,15 @@ public class ItemShopCommand implements Executable {
 
 						out += "\n" + i.getDescription(locale);
 
+						String sig;
 						if (i.getSignature() != null) {
-							String sig = SignatureParser.extract(locale, new String[]{i.getSignature()}, false).get(0);
-
-							Command cmd = getClass().getDeclaredAnnotation(Command.class);
-							out += "\n" + locale.get("str/params",
-									sig.formatted(data.config().getPrefix(), cmd.name() + "." + cmd.subname() + " " + i.getId())
-							);
+							sig = SignatureParser.extract(locale, null, false).get(0);
+						} else {
+							sig = SignatureParser.extract(locale, new String[]{i.getSignature()}, false).get(0);
 						}
+
+						Command cmd = getClass().getDeclaredAnnotation(Command.class);
+						out += "\n`" + sig.formatted(data.config().getPrefix(), cmd.name() + "." + cmd.subname() + " " + i.getId()) + "`";
 
 						return out + "\n";
 					},
