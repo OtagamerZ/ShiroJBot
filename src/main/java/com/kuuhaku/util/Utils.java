@@ -812,7 +812,7 @@ public abstract class Utils {
 		List<String> hasParam = List.of("n", "r", "a", "gt", "lt");
 		for (int i = 0; i < longOp.length; i++) {
 			if (market && i == 8) continue;
-			else if (!market && i > 10) break;
+			else if (!market && i >= shortOp.length - 3) break;
 
 			String lOp = longOp[i];
 			String sOp = shortOp[i];
