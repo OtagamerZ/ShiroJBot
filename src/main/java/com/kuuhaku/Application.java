@@ -177,7 +177,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 						ORDER BY RANDOM()
 						""")),
 				Activity.playing("com minhas cartas Kawaipon!"),
-				Activity.of(Activity.ActivityType.LISTENING, "Use s!help para ver os meus comandos!")
+				Activity.of(Activity.ActivityType.LISTENING, "Use " + Constants.DEFAULT_PREFIX + "help para ver os meus comandos!")
 		);
 
 		jda.getPresence().setActivity(Utils.getRandomEntry(activities));

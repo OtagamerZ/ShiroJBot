@@ -96,7 +96,7 @@ public class HelpCommand implements Executable {
 			eb.addField("Alias", "`" + data.config().getPrefix() + alias + "`", true);
 		}
 
-		Signature annot = pc.getClass().getDeclaredAnnotation(Signature.class);
+		Signature annot = pc.command().getClass().getDeclaredAnnotation(Signature.class);
 
 		List<String> sigs;
 		if (annot == null) {
