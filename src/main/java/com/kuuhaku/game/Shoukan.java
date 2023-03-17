@@ -1272,15 +1272,9 @@ public class Shoukan extends GameInstance<Phase> {
 								dmg = 0;
 							} else if (!unstop && !source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
 								outcome = getLocale().get("str/combat_block", block);
-								trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
+								trigger(NONE, source.asSource(NONE), target.asTarget(ON_BLOCK));
 
-								for (Senshi s : source.getNearby()) {
-									s.awake();
-								}
-
-								if (announce) {
-									you.getGraveyard().add(source);
-								}
+								source.setStun(1);
 
 								dmg = 0;
 							} else if (!source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
