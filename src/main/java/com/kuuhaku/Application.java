@@ -42,7 +42,7 @@ import javax.security.auth.login.LoginException;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.Executors;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 
 import static net.dv8tion.jda.api.entities.Message.MentionType.EVERYONE;
@@ -84,7 +84,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 			shiro = sm;
 		}
 
-		Executors.newSingleThreadExecutor().execute(() ->
+		CompletableFuture.runAsync(() ->
 				shiro.getShards().stream()
 						.sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId()))
 						.peek(s -> {
