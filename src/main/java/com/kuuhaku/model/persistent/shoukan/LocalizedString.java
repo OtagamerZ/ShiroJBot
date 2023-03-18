@@ -49,6 +49,19 @@ public class LocalizedString extends DAO<LocalizedString> {
 		return value;
 	}
 
+	public static String get(I18N locale, String key) {
+		return get(locale, key, key);
+	}
+
+	public static String get(I18N locale, String key, String def) {
+		if (key == null) return def;
+
+		LocalizedString ls = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(), locale));
+		if (ls == null) return def;
+
+		return ls.getValue();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

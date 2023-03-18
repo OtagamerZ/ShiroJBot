@@ -22,7 +22,7 @@ import com.kuuhaku.model.enums.I18N;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,13 +44,13 @@ public abstract class SpecialEvent {
 		return locale;
 	}
 
-	public abstract void start(TextChannel channel);
+	public abstract void start(GuildMessageChannel channel);
 
 	public abstract boolean onRun(Message msg);
 
-	public abstract void onCompletion(TextChannel channel);
+	public abstract void onCompletion(GuildMessageChannel channel);
 
-	public abstract void onTimeout(TextChannel channel);
+	public abstract void onTimeout(GuildMessageChannel channel);
 
 	public abstract boolean isComplete();
 

@@ -38,6 +38,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Command(
 		name = "ban",
@@ -53,7 +54,7 @@ public class BanCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		List<Member> members;
 		if (args.has("users")) {
-			members = event.message().getMentionedMembers(event.guild());
+			members = event.message().getMentions().getMembers();
 		} else {
 			members = Arrays.stream(args.getString("ids").split(" +"))
 					.filter(StringUtils::isNumeric)
@@ -77,7 +78,7 @@ public class BanCommand implements Executable {
 							members.size() == 1 ? locale.get("str/that_m") : locale.get("str/those_m"),
 							members.size() == 1 ? locale.get("str/user") : locale.get("str/users")
 					), event.channel(), w -> {
-						RestAction.allOf(members.stream().map(m -> m.ban(7, args.getString("reason"))).toList())
+						RestAction.allOf(members.stream().map(m -> m.ban(7, TimeUnit.DAYS).reason(args.getString("reason"))).toList())
 								.flatMap(s -> event.channel().sendMessage(locale.get("success/ban",
 												s.size(),
 												members.size() == 1 ? locale.get("str/user") : locale.get("str/users"),

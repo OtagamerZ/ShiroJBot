@@ -29,7 +29,8 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 @Command(
 		name = "notifications",
@@ -62,8 +63,13 @@ public class NotificationsCommand implements Executable {
 			return;
 		}
 
-		TextChannel channel = event.message().getMentionedChannels().get(0);
-		settings.setNotificationsChannel(channel);
+		GuildChannel channel = event.message().getMentions().getChannels().get(0);
+		if (!(channel instanceof GuildMessageChannel gmc)) {
+			event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
+			return;
+		}
+
+		settings.setNotificationsChannel(gmc);
 		settings.save();
 
 		event.channel().sendMessage(locale.get("success/notifications_channel_set", channel.getAsMention())).queue();

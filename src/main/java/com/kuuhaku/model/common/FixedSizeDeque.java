@@ -20,8 +20,8 @@ package com.kuuhaku.model.common;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Collection;
 
 public class FixedSizeDeque<T> extends ArrayDeque<T> {
 	private final int size;
@@ -30,7 +30,7 @@ public class FixedSizeDeque<T> extends ArrayDeque<T> {
 		this.size = size;
 	}
 
-	public FixedSizeDeque(@Nonnull Collection<? extends T> c, int size) {
+	public FixedSizeDeque(@NotNull Collection<? extends T> c, int size) {
 		this.size = size;
 		addAll(c);
 	}

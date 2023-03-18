@@ -29,7 +29,7 @@ import com.kuuhaku.util.json.JSONObject;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
@@ -40,7 +40,7 @@ import java.util.*;
 @Entity
 @Table(name = "guild_settings")
 @JavaTypeRegistration(javaType = Role.class, descriptorClass = RoleJavaType.class)
-@JavaTypeRegistration(javaType = TextChannel.class, descriptorClass = ChannelJavaType.class)
+@JavaTypeRegistration(javaType = GuildMessageChannel.class, descriptorClass = ChannelJavaType.class)
 public class GuildSettings extends DAO<GuildSettings> {
 	@Id
 	@Column(name = "gid", nullable = false)
@@ -52,21 +52,21 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@ElementCollection
 	@Column(name = "kawaipon_channels")
 	@CollectionTable(name = "guild_settings_kawaiponChannels", joinColumns = @JoinColumn(name = "gid"))
-	private List<TextChannel> kawaiponChannels = new ArrayList<>();
+	private List<GuildMessageChannel> kawaiponChannels = new ArrayList<>();
 
 	@ElementCollection
 	@Column(name = "drop_channels")
 	@CollectionTable(name = "guild_settings_dropChannels", joinColumns = @JoinColumn(name = "gid"))
-	private List<TextChannel> dropChannels = new ArrayList<>();
+	private List<GuildMessageChannel> dropChannels = new ArrayList<>();
 
 	@ElementCollection
 	@Column(name = "denied_channels")
 	@CollectionTable(name = "guild_settings_deniedChannels", joinColumns = @JoinColumn(name = "gid"))
-	private List<TextChannel> deniedChannels = new ArrayList<>();
+	private List<GuildMessageChannel> deniedChannels = new ArrayList<>();
 
 	@Column(name = "notificationsChannel")
 	@Convert(converter = ChannelConverter.class)
-	private TextChannel notificationsChannel;
+	private GuildMessageChannel notificationsChannel;
 
 	@Column(name = "embed", nullable = false)
 	@Convert(converter = EmbedConverter.class)
@@ -107,7 +107,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@Column(name = "starboard_channel")
 	@Convert(converter = ChannelConverter.class)
-	private TextChannel starboardChannel;
+	private GuildMessageChannel starboardChannel;
 
 	@Column(name = "feature_flags", nullable = false)
 	@Convert(converter = GuildFeatureConverter.class)
@@ -137,23 +137,23 @@ public class GuildSettings extends DAO<GuildSettings> {
 		this.antiRaidThreshold = antiRaidThreshold;
 	}
 
-	public List<TextChannel> getKawaiponChannels() {
+	public List<GuildMessageChannel> getKawaiponChannels() {
 		return kawaiponChannels;
 	}
 
-	public List<TextChannel> getDropChannels() {
+	public List<GuildMessageChannel> getDropChannels() {
 		return dropChannels;
 	}
 
-	public List<TextChannel> getDeniedChannels() {
+	public List<GuildMessageChannel> getDeniedChannels() {
 		return deniedChannels;
 	}
 
-	public TextChannel getNotificationsChannel() {
+	public GuildMessageChannel getNotificationsChannel() {
 		return notificationsChannel;
 	}
 
-	public void setNotificationsChannel(TextChannel notificationsChannel) {
+	public void setNotificationsChannel(GuildMessageChannel notificationsChannel) {
 		this.notificationsChannel = notificationsChannel;
 	}
 
@@ -209,11 +209,11 @@ public class GuildSettings extends DAO<GuildSettings> {
 		this.starboardThreshold = starboardThreshold;
 	}
 
-	public TextChannel getStarboardChannel() {
+	public GuildMessageChannel getStarboardChannel() {
 		return starboardChannel;
 	}
 
-	public void setStarboardChannel(TextChannel starboardChannel) {
+	public void setStarboardChannel(GuildMessageChannel starboardChannel) {
 		this.starboardChannel = starboardChannel;
 	}
 

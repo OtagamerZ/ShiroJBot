@@ -30,7 +30,8 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 @Command(
 		name = "setkawaipon",
@@ -53,9 +54,9 @@ public class SetKawaiponCommand implements Executable {
 			return;
 		}
 
-		TextChannel channel;
+		GuildChannel channel;
 		if (args.has("channel")) {
-			channel = event.message().getMentionedChannels().get(0);
+			channel = event.message().getMentions().getChannels().get(0);
 		} else {
 			channel = event.channel();
 		}
@@ -64,7 +65,12 @@ public class SetKawaiponCommand implements Executable {
 			settings.getKawaiponChannels().removeIf(t -> t.equals(channel));
 			event.channel().sendMessage(locale.get("success/kawaipon_channel_remove", channel.getAsMention())).queue();
 		} else {
-			settings.getKawaiponChannels().add(channel);
+			if (!(channel instanceof GuildMessageChannel gmc)) {
+				event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
+				return;
+			}
+
+			settings.getKawaiponChannels().add(gmc);
 			event.channel().sendMessage(locale.get("success/kawaipon_channel_add", channel.getAsMention())).queue();
 		}
 

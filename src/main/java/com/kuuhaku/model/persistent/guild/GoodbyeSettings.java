@@ -22,7 +22,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.ChannelConverter;
 import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import jakarta.persistence.*;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.hibernate.annotations.JavaTypeRegistration;
 
 import java.util.LinkedHashSet;
@@ -30,7 +30,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "goodbye_settings")
-@JavaTypeRegistration(javaType = TextChannel.class, descriptorClass = ChannelJavaType.class)
+@JavaTypeRegistration(javaType = GuildMessageChannel.class, descriptorClass = ChannelJavaType.class)
 public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 	@Id
 	@Column(name = "gid", nullable = false)
@@ -46,7 +46,7 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 
 	@Column(name = "channel")
 	@Convert(converter = ChannelConverter.class)
-	private TextChannel channel;
+	private GuildMessageChannel channel;
 
 	public GoodbyeSettings() {
 	}
@@ -79,11 +79,11 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 		this.message = message;
 	}
 
-	public TextChannel getChannel() {
+	public GuildMessageChannel getChannel() {
 		return channel;
 	}
 
-	public void setChannel(TextChannel channel) {
+	public void setChannel(GuildMessageChannel channel) {
 		this.channel = channel;
 	}
 }

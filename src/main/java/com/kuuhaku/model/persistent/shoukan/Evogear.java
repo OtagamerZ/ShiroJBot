@@ -23,6 +23,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
@@ -428,7 +429,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					"props", extractValues(hand.getGame().getLocale(), cachedEffect),
 					"self", equipper,
 					"trigger", trigger
-					));
+			));
 		} catch (Exception ignored) {
 		}
 	}
@@ -473,97 +474,108 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
 		DeckStyling style = deck.getStyling();
-		if (isFlipped()) {
-			g2d.drawImage(style.getFrame().getBack(deck), 15, 15, null);
-			g2d.dispose();
-
-			return out;
-		}
-
-		String desc = getDescription(locale);
-		BufferedImage img = card.drawCardNoBorder(style.isUsingChrome());
-
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
-			g1.setClip(style.getFrame().getBoundary());
-			g1.drawImage(img, 0, 0, null);
-			g1.setClip(null);
+			if (isFlipped()) {
+				g1.drawImage(style.getFrame().getBack(deck), 15, 15, null);
+			} else {
+				String desc = getDescription(locale);
+				BufferedImage img = card.drawCardNoBorder(style.isUsingChrome());
 
-			g1.drawImage(style.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
-			g1.drawImage(IO.getResourceAsImage("shoukan/icons/tier_" + getTier() + ".png"), 190, 12, null);
+				g1.setClip(style.getFrame().getBoundary());
+				g1.drawImage(img, 0, 0, null);
+				g1.setClip(null);
 
-			g1.setFont(FONT);
-			g1.setColor(style.getFrame().getPrimaryColor());
-			String name = Graph.abbreviate(g1, getVanity().getName(), MAX_NAME_WIDTH);
-			Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
+				g1.drawImage(style.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
+				g1.drawImage(IO.getResourceAsImage("shoukan/icons/tier_" + tier + ".png"), 190, 12, null);
 
-			if (!desc.isEmpty()) {
-				g1.setColor(style.getFrame().getSecondaryColor());
-				g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
+				g1.setFont(FONT);
+				g1.setColor(style.getFrame().getPrimaryColor());
+				String name = Graph.abbreviate(g1, getVanity().getName(), MAX_NAME_WIDTH);
+				Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
-				int y = 276;
-				String tags = processTags(locale);
-				if (tags != null) {
-					g1.drawString(tags, 7, 275);
-					y += 11;
+				if (!desc.isEmpty()) {
+					g1.setColor(style.getFrame().getSecondaryColor());
+					g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
+
+					int y = 276;
+					String tags = processTags(locale);
+					if (tags != null) {
+						g1.drawString(tags, 7, 275);
+						y += 11;
+					}
+
+					JSONObject values = extractValues(locale, cachedEffect);
+					Graph.drawMultilineString(g1, desc,
+							7, y, 211, 3,
+							parseValues(g1, deck.getStyling(), values), highlightValues(g1, style.getFrame().isLegacy())
+					);
 				}
 
-				JSONObject values = extractValues(locale, cachedEffect);
-				Graph.drawMultilineString(g1, desc,
-						7, y, 211, 3,
-						parseValues(g1, deck.getStyling(), values), highlightValues(g1, style.getFrame().isLegacy())
-				);
-			}
+				drawCosts(g1);
+				drawAttributes(g1, !desc.isEmpty());
 
-			drawCosts(g1);
-			drawAttributes(g1, !desc.isEmpty());
+				if (!getCharms().isEmpty()) {
+					List<BufferedImage> icons = charms.stream()
+							.map(String::valueOf)
+							.map(Charm::valueOf)
+							.map(Charm::getIcon)
+							.filter(Objects::nonNull)
+							.limit(2)
+							.toList();
 
-			if (!getCharms().isEmpty()) {
-				List<BufferedImage> icons = charms.stream()
-						.map(String::valueOf)
-						.map(Charm::valueOf)
-						.map(Charm::getIcon)
-						.filter(Objects::nonNull)
-						.limit(2)
-						.toList();
+					if (!icons.isEmpty()) {
+						int y = !desc.isBlank() ? 253 : 319;
+						if (getDmg() != 0) y -= 28;
+						if (getDfs() != 0) y -= 28;
+						if (getCooldown() != 0) y -= 28;
 
-				if (!icons.isEmpty()) {
-					int y = !desc.isBlank() ? 253 : 319;
-					if (getDmg() != 0) y -= 28;
-					if (getDfs() != 0) y -= 28;
-					if (getCooldown() != 0) y -= 28;
+						Graph.applyTransformed(g1, 25, y - 64, g -> {
+							if (icons.size() == 1) {
+								g.drawImage(icons.get(0), 0, 0, null);
+							} else {
+								BufferedImage mask = IO.getResourceAsImage("shoukan/charm/mask.png");
+								assert mask != null;
 
-					Graph.applyTransformed(g1, 25, y - 64, g -> {
-						if (icons.size() == 1) {
-							g.drawImage(icons.get(0), 0, 0, null);
-						} else {
-							BufferedImage mask = IO.getResourceAsImage("shoukan/charm/mask.png");
-							assert mask != null;
-
-							for (int i = 0; i < icons.size(); i++) {
-								BufferedImage icon = icons.get(i);
-								Graph.applyMask(icon, mask, i, true);
-								g.drawImage(icon, 0, 0, null);
+								for (int i = 0; i < icons.size(); i++) {
+									BufferedImage icon = icons.get(i);
+									Graph.applyMask(icon, mask, i, true);
+									g.drawImage(icon, 0, 0, null);
+								}
+								g.drawImage(IO.getResourceAsImage("shoukan/charm/div.png"), 0, 0, null);
 							}
-							g.drawImage(IO.getResourceAsImage("shoukan/charm/div.png"), 0, 0, null);
-						}
-					});
+						});
+					}
 				}
-			}
 
-			if (!isAvailable()) {
-				RescaleOp op = new RescaleOp(0.5f, 0, null);
-				op.filter(out, out);
+				if (hand != null) {
+					if (stats.hasFlag(Flag.EMPOWERED)) {
+						boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
+						BufferedImage emp = IO.getResourceAsImage("kawaipon/frames/" + (legacy ? "old" : "new") + "/empowered.png");
+
+						g2d.drawImage(emp, 0, 0, null);
+					}
+				}
+
+				if (!isAvailable()) {
+					RescaleOp op = new RescaleOp(0.5f, 0, null);
+					op.filter(out, out);
+				}
+
+				int t = getTier();
+				if (t != tier) {
+					String str = Utils.sign(t - tier);
+
+					g1.setColor(Color.ORANGE);
+					g1.setFont(Drawable.FONT.deriveFont(Font.PLAIN, Drawable.FONT.getSize() * 5f));
+
+					FontMetrics fm = g1.getFontMetrics();
+					Graph.drawOutlinedString(g1, str,
+							225 / 2 - fm.stringWidth(str) / 2, (225 / 2 + fm.getHeight() / 2),
+							6, Color.BLACK
+					);
+				}
 			}
 		});
-
-		if (hand != null) {
-			if (stats.hasFlag(Flag.EMPOWERED)) {
-				boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
-				BufferedImage emp = IO.getResourceAsImage("kawaipon/frames/" + (legacy ? "old" : "new") + "/empowered.png");
-
-				g2d.drawImage(emp, 0, 0, null);
-			}
-		}
 
 		g2d.dispose();
 
@@ -576,8 +588,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (o == null || getClass() != o.getClass()) return false;
 		Evogear evogear = (Evogear) o;
 		return Objects.equals(id, evogear.id)
-				&& Objects.equals(card, evogear.card)
-				&& Objects.equals(equipper, evogear.equipper);
+			   && Objects.equals(card, evogear.card)
+			   && Objects.equals(equipper, evogear.equipper);
 	}
 
 	@Override

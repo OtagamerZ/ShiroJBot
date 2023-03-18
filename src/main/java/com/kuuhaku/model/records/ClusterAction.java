@@ -20,55 +20,50 @@ package com.kuuhaku.model.records;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
+import net.dv8tion.jda.api.utils.FileUpload;
 
-import java.io.File;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-public record ClusterAction(Map<String, MessageAction> actions) {
+public record ClusterAction(Map<String, MessageCreateAction> actions) {
 	public ClusterAction embed(MessageEmbed eb) {
 		actions.replaceAll((k, msg) -> msg.setEmbeds(eb));
 		return this;
 	}
 
-	public ClusterAction addFile(File f) {
-		actions.replaceAll((k, msg) -> msg.addFile(f));
-		return this;
-	}
-
 	public ClusterAction addFile(byte[] bytes, String filename) {
-		actions.replaceAll((k, msg) -> msg.addFile(bytes, filename));
+		actions.replaceAll((k, msg) -> msg.addFiles(FileUpload.fromData(bytes, filename)));
 		return this;
 	}
 
 	public void queue() {
-		for (MessageAction act : actions.values()) {
+		for (MessageCreateAction act : actions.values()) {
 			act.queue();
 		}
 	}
 
 	public void queue(Consumer<? super Message> message) {
-		for (MessageAction act : actions.values()) {
+		for (MessageCreateAction act : actions.values()) {
 			act.queue(message);
 		}
 	}
 
 	public void queue(Consumer<? super Message> message, Consumer<? super Throwable> failure) {
-		for (MessageAction act : actions.values()) {
+		for (MessageCreateAction act : actions.values()) {
 			act.queue(message, failure);
 		}
 	}
 
 	public void queueAfter(long delay, TimeUnit unit, Consumer<? super Message> message) {
-		for (MessageAction act : actions.values()) {
+		for (MessageCreateAction act : actions.values()) {
 			act.queueAfter(delay, unit, message);
 		}
 	}
 
 	public void queueAfter(long delay, TimeUnit unit, Consumer<? super Message> message, Consumer<? super Throwable> failure) {
-		for (MessageAction act : actions.values()) {
+		for (MessageCreateAction act : actions.values()) {
 			act.queueAfter(delay, unit, message, failure);
 		}
 	}

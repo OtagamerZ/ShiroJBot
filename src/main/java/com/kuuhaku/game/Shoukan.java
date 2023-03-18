@@ -42,7 +42,6 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.id.LocalizedId;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
@@ -62,10 +61,11 @@ import com.kuuhaku.util.json.JSONObject;
 import com.kuuhaku.util.json.JSONUtils;
 import kotlin.Pair;
 import kotlin.Triple;
-import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.ArrayUtils;
 import org.intellij.lang.annotations.MagicConstant;
@@ -1272,15 +1272,9 @@ public class Shoukan extends GameInstance<Phase> {
 								dmg = 0;
 							} else if (!unstop && !source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
 								outcome = getLocale().get("str/combat_block", block);
-								trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
+								trigger(NONE, source.asSource(NONE), target.asTarget(ON_BLOCK));
 
-								for (Senshi s : source.getNearby()) {
-									s.awake();
-								}
-
-								if (announce) {
-									you.getGraveyard().add(source);
-								}
+								source.setStun(1);
 
 								dmg = 0;
 							} else if (!source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
@@ -1714,6 +1708,7 @@ public class Shoukan extends GameInstance<Phase> {
 			s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger)));
 		}
 
+//		System.out.println(getTurn() + ": " + trigger + " -> " + side + " " + hands.get(side).getLeeches());
 		for (EffectHolder<?> leech : hands.get(side).getLeeches()) {
 			leech.execute(new EffectParameters(ON_LEECH, side, leech.asSource(trigger)));
 		}
@@ -1808,7 +1803,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		return (chn, msg) -> {
 			if (msg != null) {
-				TextChannel channel = Main.getApp().getShiro().getTextChannelById(chn);
+				GuildMessageChannel channel = Main.getApp().getMessageChannelById(chn);
 				if (channel != null) {
 					channel.retrieveMessageById(msg)
 							.flatMap(Objects::nonNull, Message::delete)
@@ -1823,7 +1818,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private void reportEvent(String message, boolean trigger, Object... args) {
 		if (getChannel() == null) return;
 
-		for (TextChannel chn : getChannel().getChannels()) {
+		for (GuildMessageChannel chn : getChannel().getChannels()) {
 			String msg = messages.get(chn.getId());
 			if (msg != null) {
 				chn.retrieveMessageById(msg)
@@ -1898,7 +1893,7 @@ public class Shoukan extends GameInstance<Phase> {
 		getChannel().sendMessage(getLocale().get(message, args))
 				.addFile(bytes, "game.png")
 				.queue(m -> {
-					messages.compute(m.getTextChannel().getId(), replaceMessages(m));
+					messages.compute(m.getChannel().getId(), replaceMessages(m));
 
 					if (!registered.get()) {
 						if (!message.startsWith("str/game_history")) {
@@ -1941,7 +1936,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		for (Map.Entry<String, String> tuple : messages.entrySet()) {
 			if (tuple != null) {
-				TextChannel channel = Main.getApp().getShiro().getTextChannelById(tuple.getKey());
+				GuildMessageChannel channel = Main.getApp().getMessageChannelById(tuple.getKey());
 				if (channel != null) {
 					channel.retrieveMessageById(tuple.getValue())
 							.flatMap(Objects::nonNull, Message::delete)
@@ -2130,19 +2125,19 @@ public class Shoukan extends GameInstance<Phase> {
 			buttons.put(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
 				if (curr.selectionPending()) {
 					w.getHook().setEphemeral(true)
-							.sendFile(IO.getBytes(curr.renderChoices(), "png"), "choices.png")
+							.sendFiles(FileUpload.fromData(IO.getBytes(curr.renderChoices(), "png"), "choices.png"))
 							.queue();
 					return;
 				}
 
 				w.getHook().setEphemeral(true)
-						.sendFile(IO.getBytes(curr.render(), "png"), "hand.png")
+						.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "hand.png"))
 						.queue();
 			});
 
 			buttons.put(Utils.parseEmoji("\uD83D\uDD0D"),
 					w -> w.getHook().setEphemeral(true)
-							.sendFile(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")
+							.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png"))
 							.queue()
 			);
 
@@ -2188,14 +2183,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public String getString(String key, Object... params) {
-		if (key == null) return "";
-
-		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(), getLocale()));
-		if (str != null) {
-			return str.getValue().formatted(params);
-		} else {
-			return "";
-		}
+		return LocalizedString.get(getLocale(), key, "").formatted(params);
 	}
 
 	public void send(Drawable<?> source, String text) {
@@ -2203,7 +2191,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void send(Drawable<?> source, String text, String gif) {
-		for (TextChannel chn : getChannel().getChannels()) {
+		for (GuildMessageChannel chn : getChannel().getChannels()) {
 			PseudoUser pu = new PseudoUser(source.toString(), Constants.API_ROOT + "card/" + source.getCard().getId(), chn);
 
 			try (WebhookClient hook = pu.webhook()) {

@@ -30,8 +30,8 @@ import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
@@ -174,7 +174,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 		getChannel().sendMessage(getLocale().get(msg, args))
 				.queue(m -> {
 					if (message != null) {
-						TextChannel channel = Main.getApp().getShiro().getTextChannelById(message.getFirst());
+						GuildMessageChannel channel = Main.getApp().getMessageChannelById(message.getFirst());
 						if (channel != null) {
 							channel.retrieveMessageById(message.getSecond())
 									.flatMap(Objects::nonNull, Message::delete)
@@ -182,7 +182,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 						}
 					}
 
-					message = new Pair<>(m.getTextChannel().getId(), m.getId());
+					message = new Pair<>(m.getChannel().getId(), m.getId());
 				});
 	}
 
@@ -190,7 +190,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 		getChannel().sendMessage(getLocale().get(msg, args))
 				.queue(m -> {
 					if (message != null) {
-						TextChannel channel = Main.getApp().getShiro().getTextChannelById(message.getFirst());
+						GuildMessageChannel channel = Main.getApp().getMessageChannelById(message.getFirst());
 						if (channel != null) {
 							channel.retrieveMessageById(message.getSecond())
 									.flatMap(Objects::nonNull, Message::delete)

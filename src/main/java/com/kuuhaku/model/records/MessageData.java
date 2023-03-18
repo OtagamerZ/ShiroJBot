@@ -19,10 +19,13 @@
 package com.kuuhaku.model.records;
 
 import com.github.ygimenez.method.Pages;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.message.GenericMessageEvent;
-import net.dv8tion.jda.api.events.message.guild.GenericGuildMessageEvent;
-import net.dv8tion.jda.api.events.message.priv.GenericPrivateMessageEvent;
 
 public record MessageData(net.dv8tion.jda.api.entities.Guild guild, MessageChannel channel, String messageId) {
 	public MessageData(GenericMessageEvent event) {
@@ -33,13 +36,9 @@ public record MessageData(net.dv8tion.jda.api.entities.Guild guild, MessageChann
 		);
 	}
 
-	public record Guild(net.dv8tion.jda.api.entities.Guild guild, TextChannel channel, Message message, Member member) {
-		public Guild(GenericGuildMessageEvent event) {
-			this(Pages.subGet(event.getChannel().retrieveMessageById(event.getMessageIdLong())));
-		}
-
+	public record Guild(net.dv8tion.jda.api.entities.Guild guild, GuildMessageChannel channel, Message message, Member member) {
 		public Guild(Message message) {
-			this(message.getGuild(), message.getTextChannel(), message, message.getMember());
+			this(message.getGuild(), message.getGuildChannel(), message, message.getMember());
 		}
 
 		public User user() {
@@ -47,17 +46,9 @@ public record MessageData(net.dv8tion.jda.api.entities.Guild guild, MessageChann
 		}
 	}
 
-	public record Private(PrivateChannel channel, Message message, Member member) {
-		public Private(GenericPrivateMessageEvent event) {
-			this(Pages.subGet(event.getChannel().retrieveMessageById(event.getMessageIdLong())));
-		}
-
+	public record Private(PrivateChannel channel, Message message, User user) {
 		public Private(Message message) {
-			this(message.getPrivateChannel(), message, message.getMember());
-		}
-
-		public User user() {
-			return member.getUser();
+			this(message.getChannel().asPrivateChannel(), message, message.getAuthor());
 		}
 	}
 }

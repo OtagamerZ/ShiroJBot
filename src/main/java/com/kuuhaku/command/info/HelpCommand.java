@@ -39,8 +39,8 @@ import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Emoji;
-import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -96,7 +96,15 @@ public class HelpCommand implements Executable {
 			eb.addField("Alias", "`" + data.config().getPrefix() + alias + "`", true);
 		}
 
-		List<String> sigs = SignatureParser.extract(locale, pc.command());
+		Signature annot = pc.command().getClass().getDeclaredAnnotation(Signature.class);
+
+		List<String> sigs;
+		if (annot == null) {
+			sigs = SignatureParser.extract(locale, null, false);
+		} else {
+			sigs = SignatureParser.extract(locale, annot.value(), annot.allowEmpty());
+		}
+
 		if (!sigs.isEmpty()) {
 			eb.addField(
 					locale.get("str/command_signatures"),
@@ -140,21 +148,21 @@ public class HelpCommand implements Executable {
 
 		Map<Emoji, Page> pages = new LinkedHashMap<>();
 		for (Category cat : categories) {
-			Emote emt = cat.getEmote();
+			CustomEmoji emt = cat.getEmote();
 			if (emt == null) continue;
 
 			index.addField(emt.getAsMention() + " " + cat.getName(locale), cat.getDescription(locale), true);
 		}
 
-		Emote home = bot.getEmoteById("674261700366827539");
+		CustomEmoji home = bot.getEmojiById("674261700366827539");
 		if (home != null) {
 			index.setThumbnail(home.getImageUrl());
-			pages.put(Utils.parseEmoji(home), new InteractPage(index.build()));
+			pages.put(Utils.parseEmoji(home.getId()), new InteractPage(index.build()));
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		for (Category cat : categories) {
-			Emote emt = cat.getEmote();
+			CustomEmoji emt = cat.getEmote();
 			if (emt == null) continue;
 
 			eb.clear()
@@ -163,7 +171,7 @@ public class HelpCommand implements Executable {
 					.appendDescription(cat.getDescription(locale) + "\n\n")
 					.appendDescription(locale.get("str/command_counter", cat.getCommands().size()));
 
-			pages.put(Utils.parseEmoji(emt), Utils.generatePage(eb, cat.getCommands(), 10, cmd -> {
+			pages.put(Utils.parseEmoji(emt.getId()), Utils.generatePage(eb, cat.getCommands(), 10, cmd -> {
 				if (cmd.name().contains(".")) return null;
 
 				int subs = cmd.getSubCommands().size();

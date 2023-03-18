@@ -20,19 +20,25 @@ package com.kuuhaku.model.records;
 
 import club.minnced.discord.webhook.WebhookClient;
 import com.kuuhaku.util.Utils;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.Webhook;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.StandardGuildMessageChannel;
 
-public record PseudoUser(String name, String avatar, TextChannel channel) {
-	public PseudoUser(User user, TextChannel channel) {
+public record PseudoUser(String name, String avatar, GuildMessageChannel channel) {
+	public PseudoUser(User user, GuildMessageChannel channel) {
 		this(user.getName(), user.getEffectiveAvatarUrl(), channel);
 	}
 
-	public PseudoUser(Member member, TextChannel channel) {
+	public PseudoUser(Member member, GuildMessageChannel channel) {
 		this(member.getEffectiveName(), member.getEffectiveAvatarUrl(), channel);
 	}
 
 	public WebhookClient webhook() {
-		Webhook hook = Utils.getWebhook(channel);
+		if (!(channel instanceof StandardGuildMessageChannel chn)) return null;
+
+		Webhook hook = Utils.getWebhook(chn);
 		if (hook == null) return null;
 
 		return WebhookClient.withUrl(hook.getUrl());

@@ -16,25 +16,15 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records;
+package com.kuuhaku.exceptions;
 
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import java.io.Serial;
 
-import java.util.Objects;
+public class ItemUseException extends RuntimeException {
+	@Serial
+	private static final long serialVersionUID = -5447658789385700637L;
 
-public record ChannelReference(Guild guild, GuildMessageChannel channel) {
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		ChannelReference that = (ChannelReference) o;
-		return Objects.equals(guild.getId(), that.guild.getId())
-			   && Objects.equals(channel.getId(), that.channel.getId());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(guild.getId(), channel.getId());
+	public ItemUseException(String key) {
+		super(key, null, true, false);
 	}
 }

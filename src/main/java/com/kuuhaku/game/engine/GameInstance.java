@@ -34,9 +34,9 @@ import com.kuuhaku.util.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
@@ -69,7 +69,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 		this.players = players;
 	}
 
-	public final CompletableFuture<Void> start(Guild guild, TextChannel... channels) {
+	public final CompletableFuture<Void> start(Guild guild, GuildMessageChannel... channels) {
 		return exec = CompletableFuture.runAsync(() -> {
 			SimpleMessageListener sml = new SimpleMessageListener(channels) {
 				{
@@ -78,8 +78,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 				}
 
 				@Override
-				public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-					if (checkChannel(event.getChannel()) && validate(event.getMessage())) {
+				protected void onMessageReceived(@NotNull MessageReceivedEvent event) {
+					if (checkChannel(event.getGuildChannel()) && validate(event.getMessage())) {
 						try {
 							runtime(event.getAuthor(), event.getMessage().getContentRaw());
 						} catch (InvocationTargetException | IllegalAccessException e) {

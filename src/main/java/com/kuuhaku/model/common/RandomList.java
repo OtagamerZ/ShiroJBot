@@ -3,8 +3,8 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.Constants;
 import kotlin.Pair;
 import org.apache.commons.collections4.list.TreeList;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.random.RandomGenerator;
@@ -62,11 +62,11 @@ public class RandomList<T> {
 		this.fac = fac;
 	}
 
-	public void add(@Nonnull T item) {
+	public void add(@NotNull T item) {
 		add(item, 1);
 	}
 
-	public void add(@Nonnull T item, double weight) {
+	public void add(@NotNull T item, double weight) {
 		if (weight <= 0) return;
 
 		total += weight;
@@ -88,7 +88,7 @@ public class RandomList<T> {
 		return t;
 	}
 
-	public void remove(@Nonnull T item) {
+	public void remove(@NotNull T item) {
 		Iterator<Map.Entry<Double, T>> it = map.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<Double, T> entry = it.next();

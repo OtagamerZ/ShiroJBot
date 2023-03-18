@@ -19,9 +19,12 @@
 package com.kuuhaku.model.common;
 
 import org.apache.commons.collections4.list.TreeList;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -62,12 +65,12 @@ public class BondedList<T> extends TreeList<T> {
 		this.onRemove = onRemove;
 	}
 
-	public BondedList(@Nonnull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> onAdd) {
+	public BondedList(@NotNull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> onAdd) {
 		this(c, onAdd, t -> {
 		});
 	}
 
-	public BondedList(@Nonnull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> onAdd, Consumer<T> onRemove) {
+	public BondedList(@NotNull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> onAdd, Consumer<T> onRemove) {
 		this.onAdd = onAdd;
 		this.onRemove = onRemove;
 		addAll(c);

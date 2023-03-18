@@ -294,12 +294,8 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	}
 
 	default String getString(I18N locale, String key, Object... params) {
-		LocalizedString str = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(), locale));
-		if (str != null) {
-			return str.getValue().formatted(params);
-		} else {
-			return "";
-		}
+		if (key == null) return "";
+		return LocalizedString.get(locale, key, "").formatted(params);
 	}
 
 	default String processTags(I18N locale) {

@@ -1187,9 +1187,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		equipments.clear();
 		stats.clear();
 		slot = null;
-		if (leech != null) {
-			leech.getLeeches().remove(this);
-		}
+		leech = null;
 		lastInteraction = null;
 
 		byte base = 0b11;
@@ -1205,14 +1203,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
 		DeckStyling style = deck.getStyling();
-		if (isFlipped()) {
-			g2d.drawImage(style.getFrame().getBack(deck), 15, 15, null);
-		} else {
-			Senshi card = Utils.getOr(stats.getDisguise(), this);
-			String desc = isSealed() ? "" : card.getDescription(locale);
-			BufferedImage img = card.getVanity().drawCardNoBorder(style.isUsingChrome());
+		Graph.applyTransformed(g2d, 15, 15, g1 -> {
+			if (isFlipped()) {
+				g1.drawImage(style.getFrame().getBack(deck), 0, 0, null);
+			} else {
+				Senshi card = Utils.getOr(stats.getDisguise(), this);
+				String desc = isSealed() ? "" : card.getDescription(locale);
+				BufferedImage img = card.getVanity().drawCardNoBorder(style.isUsingChrome());
 
-			Graph.applyTransformed(g2d, 15, 15, g1 -> {
 				g1.setClip(style.getFrame().getBoundary());
 				g1.drawImage(img, 0, 0, null);
 				g1.setClip(null);
@@ -1261,33 +1259,31 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						card.drawAttributes(g1, !desc.isEmpty());
 					}
 				}
-			});
 
-			if (hand != null) {
-				boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
-				String path = "kawaipon/frames/" + (legacy ? "old" : "new") + "/";
+				if (hand != null) {
+					boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
+					String path = "kawaipon/frames/" + (legacy ? "old" : "new") + "/";
 
-				if (hasFlag(Flag.EMPOWERED)) {
-					BufferedImage emp = IO.getResourceAsImage(path + "empowered.png");
+					if (hasFlag(Flag.EMPOWERED)) {
+						BufferedImage emp = IO.getResourceAsImage(path + "empowered.png");
 
-					g2d.drawImage(emp, 0, 0, null);
-				}
-
-				double mult = getFieldMult();
-				if (mult != 1) {
-					BufferedImage indicator = null;
-					if (mult > 1) {
-						indicator = IO.getResourceAsImage(path + "/buffed.png");
-					} else if (mult < 1) {
-						indicator = IO.getResourceAsImage(path + "/nerfed.png");
+						g2d.drawImage(emp, 0, 0, null);
 					}
 
-					g2d.drawImage(indicator, 0, 0, null);
+					double mult = getFieldMult();
+					if (mult != 1) {
+						BufferedImage indicator = null;
+						if (mult > 1) {
+							indicator = IO.getResourceAsImage(path + "/buffed.png");
+						} else if (mult < 1) {
+							indicator = IO.getResourceAsImage(path + "/nerfed.png");
+						}
+
+						g2d.drawImage(indicator, 0, 0, null);
+					}
 				}
 			}
-		}
 
-		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			if (!isAvailable()) {
 				RescaleOp op = new RescaleOp(0.5f, 0, null);
 				op.filter(out, out);
@@ -1311,7 +1307,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 					FontMetrics fm = g1.getFontMetrics();
 					Graph.drawOutlinedString(g1, str,
-							225 / 2 - fm.stringWidth(str) / 2, overlay.getHeight() / 2,
+							225 / 2 - fm.stringWidth(str) / 2, 9 + (225 / 2 + fm.getHeight() / 2),
 							6, Color.BLACK
 					);
 					break;

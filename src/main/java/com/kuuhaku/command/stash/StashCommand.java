@@ -91,6 +91,7 @@ public class StashCommand implements Executable {
 				Map.entry("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'"),
 				Map.entry("c", "AND kc.chrome = TRUE"),
 				Map.entry("k", "AND c.type = 'KAWAIPON'"),
+				Map.entry("s", "AND s.card.id IS NOT NULL"),
 				Map.entry("e", "AND c.type = 'EVOGEAR'"),
 				Map.entry("f", "AND c.type = 'FIELD'"),
 				Map.entry("v", "AND c.deck IS NULL"),
@@ -101,6 +102,7 @@ public class StashCommand implements Executable {
 				SELECT c FROM StashedCard c
 				LEFT JOIN KawaiponCard kc ON kc.uuid = c.uuid
 				LEFT JOIN Evogear e ON e.card = c.card
+				LEFT JOIN Senshi s ON s.card = c.card
 				WHERE c.kawaipon.uid = ?1
 				""");
 		List<Object> params = new ArrayList<>();
@@ -122,22 +124,7 @@ public class StashCommand implements Executable {
 			}
 		}
 
-		query.appendNewLine("""
-				ORDER BY c.card.anime
-						, COALESCE(
-							e.tier,
-					   		CASE c.card.rarity
-					      		WHEN 'COMMON' THEN 1
-					      		WHEN 'UNCOMMON' THEN 1.5
-					      		WHEN 'RARE' THEN 2
-					      		WHEN 'ULTRA_RARE' THEN 2.5
-					      		WHEN 'LEGENDARY' THEN 3
-				    	  		ELSE 1
-				       		END
-				       	) DESC
-				       	, c.type
-					   	, c.card.id
-				""");
+		query.appendNewLine("ORDER BY c.id DESC");
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 

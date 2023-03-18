@@ -84,4 +84,10 @@ public enum Rarity {
 				.filter(r -> r.getIndex() > 0)
 				.toArray(Rarity[]::new);
 	}
+
+	public static Rarity fromIndex(int i) {
+		return Arrays.stream(values())
+				.filter(r -> r.getIndex() == i)
+				.findFirst().orElse(null);
+	}
 }

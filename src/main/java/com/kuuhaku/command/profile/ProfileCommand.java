@@ -36,6 +36,7 @@ import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 @Command(
 		name = "profile",
@@ -48,14 +49,14 @@ public class ProfileCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image"))).queue(m -> {
 			User u = event.user();
-			if (!event.message().getMentionedUsers().isEmpty()) {
-				u = event.message().getMentionedUsers().get(0);
+			if (!event.message().getMentions().getUsers().isEmpty()) {
+				u = event.message().getMentions().getUsers().get(0);
 			}
 
 			Profile p = DAO.find(Profile.class, new ProfileId(u.getId(), event.guild().getId()));
 			event.channel()
 					.sendMessage(u.getAsMention())
-					.addFile(IO.getBytes(p.render(locale), "png"), "profile.png")
+					.addFiles(FileUpload.fromData(IO.getBytes(p.render(locale), "png"), "profile.png"))
 					.flatMap(s -> m.delete())
 					.queue(null, Utils::doNothing);
 		});

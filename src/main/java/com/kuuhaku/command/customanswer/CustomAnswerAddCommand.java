@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.customanswer;
 
+import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
@@ -58,8 +59,8 @@ public class CustomAnswerAddCommand implements Executable {
 		for (Object chn : struct.getJSONArray("channels")) {
 			String id = String.valueOf(chn);
 
-			if (!StringUtils.isNumeric(id) || event.guild().getTextChannelById(id) == null) {
-				event.channel().sendMessage(locale.get("error/invalid_channel", id)).queue();
+			if ( !StringUtils.isNumeric(id) || Main.getApp().getMessageChannelById(id) == null) {
+				event.channel().sendMessage(locale.get("error/invalid_channel_id", id)).queue();
 				return;
 			}
 		}

@@ -51,7 +51,7 @@ public class WelcomerRoleCommand implements Executable {
 			event.channel().sendMessage(locale.get("success/welcomer_role_clear")).queue();
 			return;
 		} else if (args.has("role")) {
-			settings.setWelcomer(event.message().getMentionedRoles().get(0));
+			settings.setWelcomer(event.message().getMentions().getRoles().get(0));
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/welcomer_role_save")).queue();
@@ -61,6 +61,6 @@ public class WelcomerRoleCommand implements Executable {
 		Role role = settings.getWelcomer();
 		event.channel().sendMessage(locale.get("str/current_welcomer_role",
 				role == null ? "`" + locale.get("str/none") + "`" : role.getAsMention()
-		)).allowedMentions(Set.of()).queue();
+		)).setAllowedMentions(Set.of()).queue();
 	}
 }

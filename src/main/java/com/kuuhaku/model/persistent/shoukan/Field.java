@@ -187,60 +187,57 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
 		DeckStyling style = deck.getStyling();
-		if (isFlipped()) {
-			g2d.drawImage(style.getFrame().getBack(deck), 15, 15, null);
-			g2d.dispose();
-
-			return out;
-		}
-
-		BufferedImage img = getVanity().drawCardNoBorder(false);
-
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
-			g1.setClip(style.getFrame().getBoundary());
-			g1.drawImage(img, 0, 0, null);
-			g1.setClip(null);
+			if (isFlipped()) {
+				g1.drawImage(style.getFrame().getBack(deck), 15, 15, null);
+			} else {
+				BufferedImage img = getVanity().drawCardNoBorder(false);
 
-			g1.drawImage(style.getFrame().getFront(false), 0, 0, null);
+				g1.setClip(style.getFrame().getBoundary());
+				g1.drawImage(img, 0, 0, null);
+				g1.setClip(null);
 
-			g1.setFont(FONT);
-			g1.setColor(style.getFrame().getPrimaryColor());
-			String name = Graph.abbreviate(g1, getVanity().getName(), MAX_NAME_WIDTH);
-			Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
+				g1.drawImage(style.getFrame().getFront(false), 0, 0, null);
 
-			if (type != FieldType.NONE) {
-				BufferedImage icon = type.getIcon();
-				assert icon != null;
+				g1.setFont(FONT);
+				g1.setColor(style.getFrame().getPrimaryColor());
+				String name = Graph.abbreviate(g1, getVanity().getName(), MAX_NAME_WIDTH);
+				Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
-				g1.drawImage(icon, 200 - icon.getWidth(), 55, null);
-			}
+				if (type != FieldType.NONE) {
+					BufferedImage icon = type.getIcon();
+					assert icon != null;
 
-			g1.setFont(FONT);
-			FontMetrics m = g1.getFontMetrics();
+					g1.drawImage(icon, 200 - icon.getWidth(), 55, null);
+				}
 
-			List<Pair<Race, Double>> mods = modifiers.entrySet().stream()
-					.map(e -> new Pair<>(Race.valueOf(e.getKey()), ((Number) e.getValue()).doubleValue()))
-					.sorted(Comparator.comparing(p -> -p.getSecond()))
-					.toList();
+				g1.setFont(FONT);
+				FontMetrics m = g1.getFontMetrics();
 
-			int i = 0;
-			for (Pair<Race, Double> mod : mods) {
-				if (mod.getSecond() == 0) continue;
+				List<Pair<Race, Double>> mods = modifiers.entrySet().stream()
+						.map(e -> new Pair<>(Race.valueOf(e.getKey()), ((Number) e.getValue()).doubleValue()))
+						.sorted(Comparator.comparing(p -> -p.getSecond()))
+						.toList();
 
-				int y = 279 - 25 * i++;
+				int i = 0;
+				for (Pair<Race, Double> mod : mods) {
+					if (mod.getSecond() == 0) continue;
 
-				BufferedImage icon = mod.getFirst().getIcon();
-				g1.drawImage(icon, 23, y, null);
-				g1.setColor(mod.getFirst().getColor());
-				Graph.drawOutlinedString(g1, Utils.sign((int) (mod.getSecond() * 100)) + "%",
-						23 + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2,
-						BORDER_WIDTH, Color.BLACK
-				);
-			}
+					int y = 279 - 25 * i++;
 
-			if (!isAvailable()) {
-				RescaleOp op = new RescaleOp(0.5f, 0, null);
-				op.filter(out, out);
+					BufferedImage icon = mod.getFirst().getIcon();
+					g1.drawImage(icon, 23, y, null);
+					g1.setColor(mod.getFirst().getColor());
+					Graph.drawOutlinedString(g1, Utils.sign((int) (mod.getSecond() * 100)) + "%",
+							23 + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2,
+							BORDER_WIDTH, Color.BLACK
+					);
+				}
+
+				if (!isAvailable()) {
+					RescaleOp op = new RescaleOp(0.5f, 0, null);
+					op.filter(out, out);
+				}
 			}
 		});
 

@@ -45,7 +45,7 @@ application {
 			"-Djava.awt.headless=true",
 			"-Dsun.java2d.opengl=True",
 			"-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector"
-			//,"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+//			,"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:55000"
 	]
 }
 
@@ -65,14 +65,14 @@ run {
 	standardInput = System.in
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
 	options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
 
 dependencies {
 	//Core
-	implementation group: "net.dv8tion", name: "JDA", version: "4.4.0_350"
-	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "3.0.8"
+	implementation group: "net.dv8tion", name: "JDA", version: "5.0.0-beta.5"
+	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "4.0.1"
 
 	//Database
 	implementation group: "org.postgresql", name: "postgresql", version: "42.3.6"

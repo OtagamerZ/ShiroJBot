@@ -22,6 +22,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.Currency;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.Spawn;
 import net.dv8tion.jda.api.entities.User;
 
@@ -49,12 +50,13 @@ public class PremiumGacha extends Gacha {
 	}
 
 	@Override
-	public List<String> draw() {
+	public List<String> draw(Account acc) {
 		GachaType type = getClass().getAnnotation(GachaType.class);
 		if (type == null) return List.of();
 
 		List<String> out = new ArrayList<>();
-		for (int i = 0; i < type.prizes(); i++) {
+		int extra = acc.consumeItem("extra_draw") ? 1 : 0;
+		for (int i = 0; i < type.prizes() + extra; i++) {
 			String roll = null;
 			for (int j = 0; j < 10; j++) {
 				String id = pool.get();

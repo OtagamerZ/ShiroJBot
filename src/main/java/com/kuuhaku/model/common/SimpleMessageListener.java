@@ -18,17 +18,17 @@
 
 package com.kuuhaku.model.common;
 
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class SimpleMessageListener {
 	private final GameChannel channel;
 	public Object mutex = new Object();
 
-	public SimpleMessageListener(TextChannel... channels) {
+	public SimpleMessageListener(GuildMessageChannel... channels) {
 		this.channel = new GameChannel(channels);
 	}
 
@@ -36,11 +36,11 @@ public abstract class SimpleMessageListener {
 		this.channel = channel;
 	}
 
-	public void execute(GuildMessageReceivedEvent event) {
-		CompletableFuture.runAsync(() -> onGuildMessageReceived(event));
+	public void execute(MessageReceivedEvent event) {
+		CompletableFuture.runAsync(() -> onMessageReceived(event));
 	}
 
-	protected abstract void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event);
+	protected abstract void onMessageReceived(@NotNull MessageReceivedEvent event);
 
 	public SimpleMessageListener getSelf() {
 		return this;
@@ -50,7 +50,7 @@ public abstract class SimpleMessageListener {
 		return channel;
 	}
 
-	public boolean checkChannel(TextChannel channel) {
+	public boolean checkChannel(GuildMessageChannel channel) {
 		return this.channel.getChannels().stream().anyMatch(tc -> tc.equals(channel));
 	}
 

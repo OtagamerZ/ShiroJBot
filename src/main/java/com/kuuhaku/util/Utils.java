@@ -42,10 +42,15 @@ import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.StandardGuildMessageChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.PermissionException;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.jodah.expiringmap.ExpirationPolicy;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.cli.CommandLine;
@@ -58,8 +63,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.intellij.lang.annotations.Language;
+import org.jdesktop.swingx.graphics.ColorUtilities;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -350,15 +356,15 @@ public abstract class Utils {
 		return pages;
 	}
 
-	public static Message paginate(List<Page> pages, TextChannel channel, User... allowed) {
+	public static Message paginate(List<Page> pages, MessageChannel channel, User... allowed) {
 		return paginate(pages, 1, false, channel, allowed);
 	}
 
-	public static Message paginate(List<Page> pages, int skip, TextChannel channel, User... allowed) {
+	public static Message paginate(List<Page> pages, int skip, MessageChannel channel, User... allowed) {
 		return paginate(pages, skip, false, channel, allowed);
 	}
 
-	public static Message paginate(List<Page> pages, int skip, boolean fast, TextChannel channel, User... allowed) {
+	public static Message paginate(List<Page> pages, int skip, boolean fast, MessageChannel channel, User... allowed) {
 		Message msg = Pages.subGet(channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()));
 
 		Pages.paginate(msg, pages, true, 1, TimeUnit.MINUTES, skip, fast, u ->
@@ -368,7 +374,7 @@ public abstract class Utils {
 		return msg;
 	}
 
-	public static Message paginate(ThrowingFunction<Integer, Page> loader, TextChannel channel, User... allowed) {
+	public static Message paginate(ThrowingFunction<Integer, Page> loader, MessageChannel channel, User... allowed) {
 		Message msg = Pages.subGet(channel.sendMessageEmbeds((MessageEmbed) loader.apply(0).getContent()));
 
 		Pages.lazyPaginate(msg, loader, true, 1, TimeUnit.MINUTES, u ->
@@ -390,36 +396,36 @@ public abstract class Utils {
 		}
 	}
 
-	public static void confirm(String text, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
+	public static void confirm(String text, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
 		confirm(text, null, channel, action, m -> {
 		}, allowed);
 	}
 
-	public static void confirm(String text, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
+	public static void confirm(String text, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
 		confirm(text, null, channel, action, onCancel, allowed);
 	}
 
-	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
+	public static void confirm(MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
 		confirm(null, embed, channel, action, m -> {
 		}, allowed);
 	}
 
-	public static void confirm(MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
+	public static void confirm(MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
 		confirm(null, embed, channel, action, onCancel, allowed);
 	}
 
-	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
+	public static void confirm(String text, MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
 		confirm(text, embed, channel, action, m -> {
 		}, allowed);
 	}
 
-	public static void confirm(String text, MessageEmbed embed, TextChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
+	public static void confirm(String text, MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
 		for (User user : allowed) {
 			if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
 		}
 
 		lock(allowed);
-		MessageAction ma;
+		MessageCreateAction ma;
 		if (text == null) {
 			ma = channel.sendMessageEmbeds(embed);
 		} else {
@@ -431,7 +437,7 @@ public abstract class Utils {
 
 		AtomicBoolean lock = new AtomicBoolean(false);
 		ma.queue(s -> Pages.buttonize(s,
-						Map.of(parseEmoji(Constants.ACCEPT), w -> {
+						Map.of(Utils.parseEmoji(Constants.ACCEPT), w -> {
 							if (!lock.get() && action.apply(w)) {
 								lock.set(true);
 								w.getMessage().delete().queue(null, Utils::doNothing);
@@ -444,15 +450,15 @@ public abstract class Utils {
 		);
 	}
 
-	public static CompletableFuture<Message> awaitMessage(TextChannel chn, Function<Message, Boolean> act) {
+	public static CompletableFuture<Message> awaitMessage(GuildMessageChannel chn, Function<Message, Boolean> act) {
 		return awaitMessage(null, chn, act);
 	}
 
-	public static CompletableFuture<Message> awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act) {
+	public static CompletableFuture<Message> awaitMessage(User u, GuildMessageChannel chn, Function<Message, Boolean> act) {
 		return awaitMessage(u, chn, act, 0, null, null);
 	}
 
-	public static CompletableFuture<Message> awaitMessage(User u, TextChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit, CompletableFuture<?> lock) {
+	public static CompletableFuture<Message> awaitMessage(User u, GuildMessageChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit, CompletableFuture<?> lock) {
 		CompletableFuture<Message> result = new CompletableFuture<>();
 
 		GuildListener.addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
@@ -472,7 +478,7 @@ public abstract class Utils {
 			}
 
 			@Override
-			public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+			protected void onMessageReceived(@NotNull MessageReceivedEvent event) {
 				if ((u == null || event.getAuthor().equals(u)) && act.apply(event.getMessage())) {
 					if (timeout != null) {
 						timeout.cancel(true);
@@ -583,19 +589,15 @@ public abstract class Utils {
 		return out;
 	}
 
-	public static Emoji parseEmoji(Emote in) {
-		return Emoji.fromEmote(in);
-	}
-
 	public static Emoji parseEmoji(String in) {
 		if (StringUtils.isNumeric(in)) {
-			Emote e = Main.getApp().getShiro().getEmoteById(in);
-			if (e == null) return Emoji.fromMarkdown("❓");
+			Emoji e = Main.getApp().getShiro().getEmojiById(in);
+			if (e == null) return Utils.parseEmoji("❓");
 
-			return Emoji.fromEmote(e);
+			return e;
 		}
 
-		return Emoji.fromMarkdown(in);
+		return Emoji.fromFormatted(in);
 	}
 
 	public static void doNothing(Throwable thr) {
@@ -662,11 +664,11 @@ public abstract class Utils {
 	}
 
 	public static Color getRandomColor() {
-		return Color.decode(getRandomHexColor());
+		return ColorUtilities.HSLtoRGB((float) Calc.rng(1d), 0.8f, 0.5f);
 	}
 
 	public static Color getRandomColor(long seed) {
-		return Color.decode(getRandomHexColor(seed));
+		return ColorUtilities.HSLtoRGB((float) Calc.rng(1d, seed), 0.8f, 0.5f);
 	}
 
 	public static Color textToColor(String text) {
@@ -718,11 +720,11 @@ public abstract class Utils {
 		}
 	}
 
-	public static CompletionStage<StashedCard> selectOption(I18N locale, TextChannel channel, Collection<StashedCard> cards, Card card, User user) {
+	public static CompletionStage<StashedCard> selectOption(I18N locale, GuildMessageChannel channel, Collection<StashedCard> cards, Card card, User user) {
 		return selectOption(false, locale, channel, cards, card, user);
 	}
 
-	public static CompletionStage<StashedCard> selectOption(boolean skip, I18N locale, TextChannel channel, Collection<StashedCard> cards, Card card, User user) {
+	public static CompletionStage<StashedCard> selectOption(boolean skip, I18N locale, GuildMessageChannel channel, Collection<StashedCard> cards, Card card, User user) {
 		List<StashedCard> matches = cards.stream()
 				.filter(sc -> sc.getCard().equals(card))
 				.sorted(
@@ -803,14 +805,14 @@ public abstract class Utils {
 	}
 
 	public static Pair<CommandLine, Options> getCardCLI(I18N locale, String[] args, boolean market) {
-		String[] longOp = {"name", "rarity", "anime", "chrome", "kawaipon", "evogear", "field", "valid", "trash", "min", "max", "mine"};
-		String[] shortOp = {"n", "r", "a", "c", "k", "e", "f", "v", "t", "gt", "lt", "m"};
+		String[] longOp = {"name", "rarity", "anime", "chrome", "kawaipon", "senshi", "evogear", "field", "valid", "trash", "min", "max", "mine"};
+		String[] shortOp = {"n", "r", "a", "c", "k", "s", "e", "f", "v", "t", "gt", "lt", "m"};
 
 		Options opt = new Options();
 		List<String> hasParam = List.of("n", "r", "a", "gt", "lt");
 		for (int i = 0; i < longOp.length; i++) {
 			if (market && i == 8) continue;
-			else if (!market && i > 10) break;
+			else if (!market && i >= shortOp.length - 3) break;
 
 			String lOp = longOp[i];
 			String sOp = shortOp[i];
@@ -984,7 +986,7 @@ public abstract class Utils {
 		return text;
 	}
 
-	public static Webhook getWebhook(TextChannel channel) {
+	public static Webhook getWebhook(StandardGuildMessageChannel channel) {
 		List<Webhook> hooks = Pages.subGet(channel.retrieveWebhooks());
 		for (Webhook hook : hooks) {
 			if (Objects.equals(hook.getOwnerAsUser(), channel.getGuild().getSelfMember().getUser())) {
@@ -1054,11 +1056,11 @@ public abstract class Utils {
 		return out;
 	}
 
-	public static Emote getEmote(String server, String name) {
+	public static Emoji getEmote(String server, String name) {
 		Guild g = Main.getApp().getShiro().getGuildById(server);
 		if (g == null) return null;
 
-		List<Emote> emotes = g.getEmotesByName(name, true);
+		List<RichCustomEmoji> emotes = g.getEmojisByName(name, true);
 		return emotes.isEmpty() ? null : emotes.get(0);
 	}
 
@@ -1066,7 +1068,7 @@ public abstract class Utils {
 		Guild g = Main.getApp().getShiro().getGuildById(server);
 		if (g == null) return "";
 
-		List<Emote> emotes = g.getEmotesByName(name, true);
+		List<RichCustomEmoji> emotes = g.getEmojisByName(name, true);
 		return emotes.isEmpty() ? "" : emotes.get(0).getAsMention();
 	}
 

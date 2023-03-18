@@ -6,8 +6,8 @@ import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public abstract class DAO<T extends DAO<T>> implements DAOListener {
-	public static <T extends DAO<T>, ID> T find(@Nonnull Class<T> klass, @Nonnull ID id) {
+	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -50,7 +50,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static <T extends DAO<T>> T query(@Nonnull Class<T> klass, @Nonnull @Language("JPAQL") String query, @Nonnull Object... params) {
+	public static <T extends DAO<T>> T query(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -78,7 +78,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static <T> T queryNative(@Nonnull Class<T> klass, @Nonnull @Language("PostgreSQL") String query, @Nonnull Object... params) {
+	public static <T> T queryNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -110,7 +110,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static Object[] queryUnmapped(@Nonnull @Language("PostgreSQL") String query, @Nonnull Object... params) {
+	public static Object[] queryUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -135,7 +135,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static <T extends DAO<T>> List<T> findAll(@Nonnull Class<T> klass) {
+	public static <T extends DAO<T>> List<T> findAll(@NotNull Class<T> klass) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -153,7 +153,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static <T extends DAO<T>> List<T> queryAll(@Nonnull Class<T> klass, @Nonnull @Language("JPAQL") String query, @Nonnull Object... params) {
+	public static <T extends DAO<T>> List<T> queryAll(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -174,7 +174,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static <T> List<T> queryAllNative(@Nonnull Class<T> klass, @Nonnull @Language("PostgreSQL") String query, @Nonnull Object... params) {
+	public static <T> List<T> queryAllNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -203,7 +203,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static List<Object[]> queryAllUnmapped(@Nonnull @Language("PostgreSQL") String query, @Nonnull Object... params) {
+	public static List<Object[]> queryAllUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -225,7 +225,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static <T extends DAO<?>, ID> void apply(@Nonnull Class<T> klass, @Nonnull ID id, @Nonnull Consumer<T> consumer) {
+	public static <T extends DAO<?>, ID> void apply(@NotNull Class<T> klass, @NotNull ID id, @NotNull Consumer<T> consumer) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -250,7 +250,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static void apply(@Nonnull @Language("JPAQL") String query, @Nonnull Object... params) {
+	public static void apply(@NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -272,7 +272,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static void applyNative(@Nonnull @Language("PostgreSQL") String query, @Nonnull Object... params) {
+	public static void applyNative(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -294,7 +294,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static <T extends DAO<T>> List<T> queryBuilder(@Nonnull Class<T> klass, @Nonnull @Language("JPAQL") String query, Function<TypedQuery<T>, List<T>> processor, @Nonnull Object... params) {
+	public static <T extends DAO<T>> List<T> queryBuilder(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, Function<TypedQuery<T>, List<T>> processor, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -315,7 +315,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static <T> List<T> nativeQueryBuilder(@Nonnull Class<T> klass, @Nonnull @Language("PostgreSQL") String query, Function<Query, List<T>> processor, @Nonnull Object... params) {
+	public static <T> List<T> nativeQueryBuilder(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, Function<Query, List<T>> processor, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
@@ -344,7 +344,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static List<Object[]> unmappedQueryBuilder(@Nonnull @Language("PostgreSQL") String query, Function<Query, List<Object>> processor, @Nonnull Object... params) {
+	public static List<Object[]> unmappedQueryBuilder(@NotNull @Language("PostgreSQL") String query, Function<Query, List<Object>> processor, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {

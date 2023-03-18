@@ -30,6 +30,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MarketItem;
@@ -59,6 +60,7 @@ import java.util.List;
 public class MarketCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		Account acc = data.profile().getAccount();
 		Market m = new Market(event.user().getId());
 
 		String[] content = args.getString("params").split("\\s+");
@@ -83,7 +85,8 @@ public class MarketCommand implements Executable {
 
 		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card c WHERE c.price > 0");
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setImage(Constants.API_ROOT + "market/offer/" + locale.name() + "?hide=true&v=" + System.currentTimeMillis());
+				.setImage(Constants.API_ROOT + "market/offer/" + locale.name() + "?hide=true&v=" + System.currentTimeMillis())
+				.setFooter(acc.getBalanceFooter(locale));
 
 		ThrowingFunction<Integer, Page> loader = p -> {
 			List<StashedCard> results = m.getOffers(cli.getFirst().getOptions(), p);
