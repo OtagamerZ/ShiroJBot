@@ -1,6 +1,7 @@
 package com.kuuhaku.util;
 
 import com.kuuhaku.exceptions.InvalidSignatureException;
+import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.FailedSignature;
@@ -17,6 +18,13 @@ import java.util.stream.Collectors;
 
 public abstract class SignatureParser {
 	private static final Pattern ARGUMENT_PATTERN = Pattern.compile("^<(?<name>[A-Za-z]\\w*):(?<type>[A-Za-z]+)(?<required>:[Rr])?>(?:\\[(?<options>[\\w\\-;,]+)+])?$");
+
+	public static JSONObject parse(I18N locale, Executable command, String input) throws InvalidSignatureException {
+		Signature annot = command.getClass().getDeclaredAnnotation(Signature.class);
+		if (annot == null) return new JSONObject();
+
+		return parse(locale, annot.value(), annot.allowEmpty(), input);
+	}
 
 	public static JSONObject parse(I18N locale, String[] signatures, boolean allowEmpty, String input) throws InvalidSignatureException {
 		JSONObject out = new JSONObject();
@@ -150,6 +158,13 @@ public abstract class SignatureParser {
 			).orElseThrow();
 			throw new InvalidSignatureException(first.line(), first.options());
 		}
+	}
+
+	public static List<String> extract(I18N locale, Executable command) {
+		Signature annot = command.getClass().getDeclaredAnnotation(Signature.class);
+		if (annot == null) return List.of();
+
+		return extract(locale, annot.value(), annot.allowEmpty());
 	}
 
 	public static List<String> extract(I18N locale, String[] signatures, boolean allowEmpty) {

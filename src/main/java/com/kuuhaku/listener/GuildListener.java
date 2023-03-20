@@ -23,7 +23,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSignatureException;
-import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.common.special.PadoruEvent;
@@ -442,13 +441,8 @@ public class GuildListener extends ListenerAdapter {
 					return;
 				}
 
-				Signature annot = pc.command().getClass().getDeclaredAnnotation(Signature.class);
 				try {
-					JSONObject params;
-					if (annot == null) params = new JSONObject();
-					else {
-						params = SignatureParser.parse(locale, annot.value(), annot.allowEmpty(), content.substring(args[0].length()).trim());
-					}
+					JSONObject params = SignatureParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
 
 					try {
 						pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
@@ -476,13 +470,7 @@ public class GuildListener extends ListenerAdapter {
 					} else {
 						error = locale.get("error/invalid_signature");
 
-						List<String> signatures;
-						if (annot == null) {
-							signatures = SignatureParser.extract(locale, null, false);
-						} else {
-							signatures = SignatureParser.extract(locale, annot.value(), annot.allowEmpty());
-						}
-
+						List<String> signatures = SignatureParser.extract(locale, pc.command());
 						EmbedBuilder eb = new ColorlessEmbedBuilder()
 								.setAuthor(locale.get("str/command_signatures"))
 								.setDescription("```css\n" + String.join("\n", signatures).formatted(
