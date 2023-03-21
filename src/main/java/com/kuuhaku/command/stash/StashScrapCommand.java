@@ -163,7 +163,7 @@ public class StashScrapCommand implements Executable {
 				value += (int) (kc.getSuggestedPrice() / 3 * mult);
 			} else {
 				if (sc.getType() == CardType.EVOGEAR) {
-					Evogear e = DAO.find(Evogear.class, sc.getCard().getId());
+					Evogear e = sc.getCard().asEvogear();
 					value += (int) (e.getTier() * 225 * mult);
 				} else {
 					value += (int) (2500 * mult);

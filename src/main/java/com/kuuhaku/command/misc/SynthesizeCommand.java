@@ -211,7 +211,7 @@ public class SynthesizeCommand implements Executable {
 					}
 				}
 				case EVOGEAR -> {
-					Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
+					Evogear ev = sc.getCard().asEvogear();
 					inc += ev.getTier() / 6d;
 				}
 				case FIELD -> more *= 1.25;

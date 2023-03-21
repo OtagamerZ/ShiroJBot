@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.records;
 
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
@@ -36,10 +35,10 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 	public String toString() {
 		String rarity = locale.get("type/" + sc.getType());
 		if (sc.getType() == CardType.EVOGEAR) {
-			Evogear ev = DAO.find(Evogear.class, sc.getCard().getId());
+			Evogear ev = sc.getCard().asEvogear();
 			rarity += " " + StringUtils.repeat("★", ev.getTier());
 		} else if (sc.getType() == CardType.FIELD) {
-			Field fd = DAO.find(Field.class, sc.getCard().getId());
+			Field fd = sc.getCard().asField();
 			rarity += switch (fd.getType()) {
 				case NONE -> "";
 				case DAY -> ":sunny:";
@@ -69,7 +68,7 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 				: locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)");
 
 		return "** `ID: " + sc.getId() + "` " + sc + "**" +
-				"\n" + sc.getCard().getRarity().getEmote() + rarity + quality +
+				"\n" + sc.getCard().getRarity().getEmote(sc.getCard()) + rarity + quality +
 				"\n" + sc.getCard().getAnime().toString() +
 				"\n" + price +
 				"\n";

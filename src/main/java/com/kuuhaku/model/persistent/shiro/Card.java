@@ -22,6 +22,9 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Rarity;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.ImageFilters;
@@ -242,6 +245,18 @@ public class Card extends DAO<Card> {
 		}
 
 		return cardBytes;
+	}
+
+	public Senshi asSenshi() {
+		return DAO.find(Senshi.class, id);
+	}
+
+	public Evogear asEvogear() {
+		return DAO.find(Evogear.class, id);
+	}
+
+	public Field asField() {
+		return DAO.find(Field.class, id);
 	}
 
 	@Override

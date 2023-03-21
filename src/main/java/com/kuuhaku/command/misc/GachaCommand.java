@@ -159,35 +159,35 @@ public class GachaCommand implements Executable {
 		}
 	}
 
-	private void drawCard(Graphics2D g2d, I18N locale, Account acc, GachaType type, String card) {
+	private void drawCard(Graphics2D g2d, I18N locale, Account acc, GachaType type, String id) {
 		Kawaipon kp = acc.getKawaipon();
 		Deck deck = acc.getCurrentDeck();
 		String hPath = deck.getStyling().getFrame().isLegacy() ? "old" : "new";
 
-		Set<CardType> types = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card));
+		Set<CardType> types = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id));
 		CardType tp = types.stream().findFirst().orElse(CardType.KAWAIPON);
 
-		Card c = DAO.find(Card.class, card);
+		Card card = DAO.find(Card.class, id);
 		try {
-			Graph.drawOutlinedString(g2d, c.getName(),
-					265 / 2 - g2d.getFontMetrics().stringWidth(c.getName()) / 2, 20,
+			Graph.drawOutlinedString(g2d, card.getName(),
+					265 / 2 - g2d.getFontMetrics().stringWidth(card.getName()) / 2, 20,
 					6, Color.BLACK
 			);
 
 			switch (tp) {
 				case KAWAIPON -> {
-					KawaiponCard kc = new KawaiponCard(c, Calc.chance(0.1 * Spawn.getRarityMult()));
+					KawaiponCard kc = new KawaiponCard(card, Calc.chance(0.1 * Spawn.getRarityMult()));
 					proccess(type, kc);
 
 					kc.setKawaipon(kp);
 					kc.save();
 
-					g2d.drawImage(c.drawCard(kc.isChrome()), 5, 20, null);
+					g2d.drawImage(card.drawCard(kc.isChrome()), 5, 20, null);
 
 					new StashedCard(kp, kc).save();
 				}
 				case EVOGEAR -> {
-					Evogear e = DAO.find(Evogear.class, card);
+					Evogear e = card.asEvogear();
 					proccess(type, e);
 
 					g2d.drawImage(e.render(locale, deck), 5, 20, null);
@@ -195,16 +195,16 @@ public class GachaCommand implements Executable {
 						g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/hero.png"), 5, 20, null);
 					}
 
-					new StashedCard(kp, c, tp).save();
+					new StashedCard(kp, card, tp).save();
 				}
 				case FIELD -> {
-					Field f = DAO.find(Field.class, card);
+					Field f = card.asField();
 					proccess(type, f);
 
 					g2d.drawImage(f.render(locale, deck), 5, 20, null);
 					g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/buffed.png"), 5, 20, null);
 
-					new StashedCard(kp, c, tp).save();
+					new StashedCard(kp, card, tp).save();
 				}
 			}
 		} finally {

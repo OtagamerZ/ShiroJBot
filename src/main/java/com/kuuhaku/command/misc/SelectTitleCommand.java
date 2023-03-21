@@ -99,7 +99,7 @@ public class SelectTitleCommand implements Executable {
 					sb.append("\n").append(locale.get("str/current_tracker", track));
 				}
 
-				return new FieldMimic(current.getRarity().getEmote() + info.getName(), sb.toString()).toString();
+				return new FieldMimic(current.getRarity().getEmote(null) + info.getName(), sb.toString()).toString();
 			});
 
 			Utils.paginate(pages, event.channel(), event.user());

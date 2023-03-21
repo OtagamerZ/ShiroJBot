@@ -114,7 +114,7 @@ public class SeeCardCommand implements Executable {
 					eb.addField(locale.get("str/information"), sb.toString(), true);
 				}
 
-				Senshi senshi = DAO.find(Senshi.class, card.getId());
+				Senshi senshi = card.asSenshi();
 				if (senshi != null) {
 					if (senshi.isFusion()) {
 						eb.addField(locale.get("str/shoukan_enabled"), locale.get("icon/alert") + " " + locale.get("str/as_fusion"), true);
@@ -140,9 +140,9 @@ public class SeeCardCommand implements Executable {
 
 				Drawable<?> d = switch (types.get(0)) {
 					case NONE -> null;
-					case KAWAIPON -> DAO.find(Senshi.class, card.getId());
-					case EVOGEAR -> DAO.find(Evogear.class, card.getId());
-					case FIELD -> DAO.find(Field.class, card.getId());
+					case KAWAIPON -> card.asSenshi();
+					case EVOGEAR -> card.asEvogear();
+					case FIELD -> card.asField();
 				};
 
 				if (d != null) {

@@ -40,7 +40,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
-import java.util.Locale;
 
 @Command(
 		name = "remaining",
@@ -86,9 +85,9 @@ public class RemainingCommand implements Executable {
 					}
 
 					if (!suffix.isBlank()) {
-						return "||" + c.getRarity().getEmote() + name + " **(" + suffix + ")**" + "||";
+						return "||" + c.getRarity().getEmote(c) + name + " **(" + suffix + ")**" + "||";
 					} else {
-						return c.getRarity().getEmote() + name;
+						return c.getRarity().getEmote(c) + name;
 					}
 				},
 				(p, t) -> eb.setFooter(footer + "\n" + locale.get("str/page", p + 1, t))

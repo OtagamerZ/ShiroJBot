@@ -145,7 +145,7 @@ public class DeckAddCommand implements Executable {
 
 		switch (sc.getType()) {
 			case KAWAIPON -> {
-				Senshi s = DAO.find(Senshi.class, sc.getCard().getId());
+				Senshi s = sc.getCard().asSenshi();
 
 				if (s.isFusion()) {
 					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
@@ -159,7 +159,7 @@ public class DeckAddCommand implements Executable {
 				}
 			}
 			case EVOGEAR -> {
-				Evogear e = DAO.find(Evogear.class, sc.getCard().getId());
+				Evogear e = sc.getCard().asEvogear();
 
 				if (e.getTier() < 1) {
 					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
@@ -170,7 +170,7 @@ public class DeckAddCommand implements Executable {
 				}
 			}
 			case FIELD -> {
-				Field f = DAO.find(Field.class, sc.getCard().getId());
+				Field f = sc.getCard().asField();
 
 				if (f.isEffect()) {
 					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();

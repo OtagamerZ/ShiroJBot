@@ -19,6 +19,7 @@
 package com.kuuhaku.model.enums;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.Graph;
 
 import java.awt.*;
@@ -31,7 +32,7 @@ public enum Rarity {
 	ULTRA_RARE(4, 0x9966CC, "<:ultra_rare:726171819786240091>"),
 	LEGENDARY(5, 0xDC9018, "<:legendary:726171819945623682>"),
 	ULTIMATE(-1, 0xD400AA, "<:ultimate:1002748864643743774>"),
-	EVOGEAR("\uD83E\uDDE7 "),
+	EVOGEAR,
 	FIELD("\uD83C\uDFD4️ "),
 	FUSION,
 	NONE;
@@ -71,7 +72,18 @@ public enum Rarity {
 		return color;
 	}
 
-	public String getEmote() {
+	public String getEmote(Card card) {
+		if (card != null && this == EVOGEAR) {
+			int tier = card.asEvogear().getTier();
+			return switch (tier) {
+				case 1 -> "<:tier_1:1087709790899294260>";
+				case 2 -> "<:tier_2:1087709792291782666>";
+				case 3 -> "<:tier_3:1087709793407488021>";
+				case 4 -> "<:tier_4:1087709788865048626>";
+				default -> "\uD83E\uDDE7 ";
+			};
+		}
+
 		return emote;
 	}
 

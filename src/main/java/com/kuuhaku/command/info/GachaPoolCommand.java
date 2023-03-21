@@ -90,7 +90,7 @@ public class GachaPoolCommand implements Executable {
 					c -> {
 						String name = c.getName();
 
-						return c.getRarity().getEmote() + name;
+						return c.getRarity().getEmote(c) + name;
 					},
 					(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 			);
