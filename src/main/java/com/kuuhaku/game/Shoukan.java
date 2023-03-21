@@ -100,7 +100,6 @@ public class Shoukan extends GameInstance<Phase> {
 	private StateSnap snapshot = null;
 	private boolean restoring = true;
 	private boolean history = false;
-	private boolean lock = false;
 	private Side winner;
 
 	public Shoukan(I18N locale, Arcade arcade, User p1, User p2) {
@@ -169,17 +168,12 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
-			if (!lock) {
-				try {
-					lock = true;
-					if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
-						getCurrent().showHand();
-					}
-				} catch (Exception e) {
-					Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
-				} finally {
-					lock = false;
+			try {
+				if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
+					getCurrent().showHand();
 				}
+			} catch (Exception e) {
+				Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
 			}
 		}
 	}
