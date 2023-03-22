@@ -236,7 +236,7 @@
 		 }
 
 		 if (getOrigins().major() == Race.BEAST) {
-			 penalty /= 2;
+			 penalty *= 2 / 3d;
 		 }
 
 		 return (int) (weight + penalty);
