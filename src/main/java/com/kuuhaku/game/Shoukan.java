@@ -1087,6 +1087,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (enemy == null) {
+			System.out.println("direct");
 			attack(ally, op, null, true);
 		} else {
 			attack(ally, enemy, null, true);
