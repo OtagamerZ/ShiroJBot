@@ -235,6 +235,10 @@
 			 penalty += e.getCharms().size() * 0.75;
 		 }
 
+		 if (getOrigins().major() == Race.BEAST) {
+			 penalty /= 2;
+		 }
+
 		 return (int) (weight + penalty);
 	 }
 
