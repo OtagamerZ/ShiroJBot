@@ -97,6 +97,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final List<Turn> turns = new TreeList<>();
 
 	private final boolean singleplayer;
+	private boolean cheats = false;
 	private StateSnap snapshot = null;
 	private boolean restoring = true;
 	private boolean history = false;
@@ -161,6 +162,10 @@ public class Shoukan extends GameInstance<Phase> {
 					if (!m.getName().equals("select") && !m.getName().startsWith("deb")) {
 						getChannel().sendMessage(getLocale().get("error/pending_choice")).queue();
 						return;
+					}
+
+					if (m.getName().startsWith("deb")) {
+						cheats = true;
 					}
 
 					m.invoke(this, h.getSide(), action.getSecond());
@@ -1532,6 +1537,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public boolean isSingleplayer() {
 		return singleplayer;
+	}
+
+	public boolean hasCheated() {
+		return singleplayer || cheats;
 	}
 
 	public StateSnap getSnapshot() {
