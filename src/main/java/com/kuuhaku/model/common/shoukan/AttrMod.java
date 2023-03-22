@@ -34,17 +34,17 @@ public class AttrMod implements Cloneable {
 	private final int hash;
 
 	protected AttrMod(double value) {
-		this.source = null;
-		this.value = value;
-		this.expiration = -1;
-		this.side = null;
-		this.hash = -1;
+		this(null, value);
 	}
 
 	public AttrMod(Drawable<?> source, double value) {
+		this(source, value, -1);
+	}
+
+	public AttrMod(Drawable<?> source, double value, int expiration) {
 		this.source = source;
 		this.value = value;
-		this.expiration = -1;
+		this.expiration = expiration;
 		this.side = source == null ? null : source.getSide();
 
 		if (source instanceof Evogear e) {
@@ -54,14 +54,6 @@ public class AttrMod implements Cloneable {
 		} else {
 			this.hash = source == null ? -1 : source.getSlot().hashCode();
 		}
-	}
-
-	public AttrMod(Drawable<?> source, double value, int expiration) {
-		this.source = source;
-		this.value = value;
-		this.expiration = expiration;
-		this.side = source == null ? null : source.getSide();
-		this.hash = source == null ? -1 : source.getSlot().hashCode();
 	}
 
 	public Drawable<?> getSource() {
