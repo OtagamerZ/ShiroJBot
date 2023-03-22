@@ -1952,7 +1952,7 @@ public class Shoukan extends GameInstance<Phase> {
 			this.winner = winner;
 		}
 
-		if (!singleplayer && arcade == null) {
+		if (!singleplayer && arcade == null && !cheats) {
 			new MatchHistory(new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]))).save();
 		}
 
