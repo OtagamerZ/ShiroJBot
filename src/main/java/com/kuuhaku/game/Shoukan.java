@@ -936,7 +936,9 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("(?<choice>\\d+)")
 	private boolean select(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
+		System.out.println("enter");
 		if (!curr.selectionPending()) return false;
+		System.out.println("pass");
 
 		Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> selection = curr.getSelection();
 		if (!Utils.between(args.getInt("choice"), 0, selection.getFirst().size())) {
