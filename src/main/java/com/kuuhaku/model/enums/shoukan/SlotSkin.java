@@ -46,6 +46,7 @@ public enum SlotSkin {
 	GRAFITTI(5000, Currency.CR, "REBELLION", "SURVIVOR", "RUTHLESS"),
 	RAINBOW(1, Currency.GEM),
 	DIGITAL(5000, Currency.CR, "TALKER_II"),
+	SYNTHWAVE("PARADOX", "FROM_ABYSS", "MONKE", "ONE_GOD"),
 	;
 
 	private final int price;
