@@ -30,15 +30,19 @@ public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 	private final Evogear original;
 
 	public PlaceableEvogear(Evogear e) {
+		this(e.copy(), null);
+	}
+
+	private PlaceableEvogear(Evogear e, Void ignored) {
 		super(e.getId(), e.getCard(), e.isSpell() ? Race.MYSTICAL : Race.MACHINE, e.getBase());
 
-		original = e.withCopy(evo -> {
-			Hand h = evo.getHand();
-			if (h.isEmpowered() && h.getOrigin().major() == Race.MYSTICAL) {
-				evo.getStats().setFlag(Flag.EMPOWERED, true, true);
-				h.setEmpowered(false);
-			}
-		});
+		original = e;
+
+		Hand h = e.getHand();
+		if (h.isEmpowered() && h.getOrigin().major() == Race.MYSTICAL) {
+			e.getStats().setFlag(Flag.EMPOWERED, true, true);
+			h.setEmpowered(false);
+		}
 
 		e.getStats().setFlag(Flag.BOUND, true);
 	}

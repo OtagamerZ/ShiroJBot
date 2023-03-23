@@ -31,17 +31,21 @@ public class TrapSpell extends Senshi implements Proxy<Evogear> {
 	private final Evogear original;
 
 	public TrapSpell(Evogear e) {
+		this(e.copy(), null);
+	}
+
+	private TrapSpell(Evogear e, Void ignored) {
 		super(e.getId(), e.getCard(), Race.NONE, e.getBase());
 
-		original = e.withCopy(evo -> {
-			Hand h = evo.getHand();
-			if (h.isEmpowered() && h.getOrigin().major() == Race.MYSTICAL) {
-				evo.getStats().setFlag(Flag.EMPOWERED, true, true);
-				h.setEmpowered(false);
-			}
-		});
+		original = e;
 		setHand(e.getHand());
 		setFlipped(true);
+
+		Hand h = e.getHand();
+		if (h.isEmpowered() && h.getOrigin().major() == Race.MYSTICAL) {
+			e.getStats().setFlag(Flag.EMPOWERED, true, true);
+			h.setEmpowered(false);
+		}
 
 		e.getStats().setFlag(Flag.BOUND, true);
 	}
