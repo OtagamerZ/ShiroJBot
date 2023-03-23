@@ -243,7 +243,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("add,(?<card>[\\w\\d]+)(?:,(?<amount>\\d+))?")
+	@PlayerAction("add,(?<card>[\\w-]+)(?:,(?<amount>\\d+))?")
 	private boolean debAddCard(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
