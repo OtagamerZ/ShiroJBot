@@ -835,7 +835,7 @@ public class Hand {
 			val /= 2;
 		}
 
-		modHP(val, true);
+		modHP(val);
 	}
 
 	public JSONObject getData() {
