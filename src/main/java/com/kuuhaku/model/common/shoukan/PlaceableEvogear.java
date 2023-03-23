@@ -45,7 +45,6 @@ public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 		}
 
 		e.getStats().setFlag(Flag.BOUND, true);
-		System.out.println(getEffect());
 	}
 
 	@Override
