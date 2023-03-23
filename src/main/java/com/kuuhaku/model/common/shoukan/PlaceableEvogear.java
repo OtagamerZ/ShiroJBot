@@ -62,8 +62,8 @@ public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		if (!super.equals(o)) return false;
-		PlaceableEvogear trapSpell = (PlaceableEvogear) o;
-		return Objects.equals(original, trapSpell.original);
+		PlaceableEvogear placeableEvo = (PlaceableEvogear) o;
+		return Objects.equals(original, placeableEvo.original);
 	}
 
 	@Override

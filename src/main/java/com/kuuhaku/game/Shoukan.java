@@ -1647,7 +1647,9 @@ public class Shoukan extends GameInstance<Phase> {
 	public void iterateSlots(Side side, Consumer<Senshi> act) {
 		for (SlotColumn slot : arena.getSlots(side)) {
 			for (Senshi card : slot.getCards()) {
-				act.accept(card);
+				if (card != null) {
+					act.accept(card);
+				}
 			}
 		}
 	}
@@ -1701,15 +1703,7 @@ public class Shoukan extends GameInstance<Phase> {
 	public void trigger(Trigger trigger, Side side) {
 		if (restoring) return;
 
-		List<Senshi> cards = getSlots(side).stream()
-				.map(SlotColumn::getCards)
-				.flatMap(List::stream)
-				.filter(Objects::nonNull)
-				.toList();
-
-		for (Senshi s : cards) {
-			s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger)));
-		}
+		iterateSlots(side, s -> s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger))));
 
 //		System.out.println(getTurn() + ": " + trigger + " -> " + side + " " + hands.get(side).getLeeches());
 		for (EffectHolder<?> leech : hands.get(side).getLeeches()) {
