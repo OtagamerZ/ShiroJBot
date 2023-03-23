@@ -48,7 +48,7 @@ public class AttrMod implements Cloneable {
 		this.side = source == null ? null : source.getSide();
 
 		if (source instanceof Evogear e) {
-			this.hash = e.getEquipper().posHash();
+			this.hash = e.posHash();
 		} else if (source instanceof Senshi s) {
 			this.hash = s.posHash();
 		} else {
@@ -78,7 +78,7 @@ public class AttrMod implements Cloneable {
 
 	public boolean isExpired() {
 		if (side != null) {
-			if (source instanceof Evogear e && (e.getEquipper() == null || e.getEquipper().posHash() != hash)) {
+			if (source instanceof Evogear e && (e.getEquipper() == null || e.posHash() != hash)) {
 				return true;
 			} else if (source instanceof Senshi s && s.posHash() != hash) {
 				return true;

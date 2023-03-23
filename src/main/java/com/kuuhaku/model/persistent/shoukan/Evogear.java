@@ -592,6 +592,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			   && Objects.equals(equipper, evogear.equipper);
 	}
 
+	public int posHash() {
+		return Objects.hash(id, equipper);
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, card);
