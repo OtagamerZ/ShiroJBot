@@ -26,6 +26,7 @@ import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
@@ -407,6 +408,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public void setHand(Hand hand) {
 		this.hand = hand;
+
+		if (this instanceof Proxy<?> p) {
+			p.getOriginal().setHand(hand);
+		}
 	}
 
 	@Override

@@ -25,6 +25,7 @@ import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
@@ -203,6 +204,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public void setHand(Hand hand) {
 		this.hand = hand;
+
+		if (this instanceof Proxy<?> p) {
+			p.getOriginal().setHand(hand);
+		}
 	}
 
 	@Override
