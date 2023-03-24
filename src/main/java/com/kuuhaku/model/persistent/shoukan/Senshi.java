@@ -1076,8 +1076,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 								}
 
 								if (game.activateProxy(card, params)) {
-									if (lastInteraction != null) {
-										lastInteraction.setAvailable(false);
+									if (ep.source() != null) {
+										ep.source().card().setAvailable(false);
 									}
 
 									triggered.add(p.getId());
