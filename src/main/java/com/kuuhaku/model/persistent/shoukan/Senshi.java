@@ -1076,8 +1076,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 								}
 
 								if (game.activateProxy(card, params)) {
-									game.getChannel().sendMessage(game.getLocale().get("str/trap_activation", card)).queue();
+									if (lastInteraction != null) {
+										lastInteraction.setAvailable(false);
+									}
+
 									triggered.add(p.getId());
+									game.getChannel().sendMessage(game.getLocale().get("str/trap_activation", card)).queue();
 								}
 							}
 						}

@@ -905,8 +905,13 @@ public class Shoukan extends GameInstance<Phase> {
 			reportEvent("str/spell_shield", true);
 			return false;
 		} else if (!tgt.validate(chosen.getTargetType())) {
-			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + chosen.getTargetType()))).queue();
-			return false;
+			if (!chosen.isAvailable()) {
+				reportEvent("str/effect_interrupted", true, chosen);
+				return true;
+			} else {
+				getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + chosen.getTargetType()))).queue();
+				return false;
+			}
 		}
 
 		Evogear copy = chosen.withCopy(e -> {
@@ -1033,8 +1038,13 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (!tgt.validate(type)) {
-			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + type))).queue();
-			return false;
+			if (!chosen.isAvailable()) {
+				reportEvent("str/effect_interrupted", true, chosen);
+				return true;
+			} else {
+				getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + type))).queue();
+				return false;
+			}
 		} else if (!trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
 			return false;
 		}
@@ -1471,6 +1481,7 @@ public class Shoukan extends GameInstance<Phase> {
 								);
 
 								if (activateProxy(card, params)) {
+									source.setAvailable(false);
 									getChannel().sendMessage(getLocale().get("str/trap_activation", card)).queue();
 								}
 							}
