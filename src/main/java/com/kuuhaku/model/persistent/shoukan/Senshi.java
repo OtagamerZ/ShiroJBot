@@ -103,7 +103,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			game.putAtOpenSlot(this.getSide(), true, this.withCopy(s -> {
 				s.getStats().setAttrMult(-1 + (0.25 * e.getTier()));
 				s.getStats().getData().put("cloned", true);
-				s.state = this.state & 0b11111;
 			}));
 		}
 
@@ -1368,7 +1367,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				game.putAtOpenSlot(clone.getSide(), true, clone.withCopy(s -> {
 					s.getStats().setAttrMult(-1 + (0.25 * e.getTier()));
 					s.getStats().getData().put("cloned", true);
-					s.state = clone.state & 0b11111;
 				}));
 			}
 
@@ -1379,6 +1377,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		});
 		clone.base = base.clone();
 		clone.stats = stats.clone();
+		clone.slot = null;
+		clone.hand = null;
+		clone.leech = null;
+		clone.target = null;
+		clone.lastInteraction = null;
+		clone.cachedEffect = new CachedScriptManager<>(this);
+		clone.blocked = new HashSet<>();
+		clone.state = state & 0b11111;
 
 		return clone;
 	}

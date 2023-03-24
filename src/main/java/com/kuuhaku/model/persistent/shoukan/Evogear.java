@@ -606,6 +606,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		Evogear clone = (Evogear) super.clone();
 		clone.base = base.clone();
 		clone.stats = stats.clone();
+		clone.equipper = null;
+		clone.stats = new CardExtra();
+		clone.hand = null;
+		clone.leech = null;
+		clone.cachedEffect = new CachedScriptManager<>(this);
 
 		return clone;
 	}
