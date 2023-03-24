@@ -18,6 +18,12 @@
 
 package com.kuuhaku.interfaces.shoukan;
 
+import com.kuuhaku.model.common.shoukan.Hand;
+
 public interface Proxy<T extends Drawable<T>> {
 	T getOriginal();
+
+	default void setHand(Hand hand) {
+		getOriginal().setHand(hand);
+	}
 }
