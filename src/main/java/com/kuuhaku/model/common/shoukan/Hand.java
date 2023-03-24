@@ -1128,7 +1128,7 @@ public class Hand {
 		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, 100 + (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 80));
+		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 70));
 		g2d.translate(0, 100);
 
 		String str = game.getLocale().get("str/select_a_card");
