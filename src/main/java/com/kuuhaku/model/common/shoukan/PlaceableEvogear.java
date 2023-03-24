@@ -39,7 +39,7 @@ public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 		original = e;
 
 		Hand h = e.getHand();
-		if (h.isEmpowered() && e.isSpell() && h.getOrigin().major() == Race.MYSTICAL) {
+		if (h != null && h.isEmpowered() && e.isSpell() && h.getOrigin().major() == Race.MYSTICAL) {
 			e.getStats().setFlag(Flag.EMPOWERED, true, true);
 			h.setEmpowered(false);
 		}
