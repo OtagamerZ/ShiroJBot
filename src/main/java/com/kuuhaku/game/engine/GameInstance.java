@@ -59,7 +59,6 @@ public abstract class GameInstance<T extends Enum<T>> {
 	private int turn = 1;
 	private T phase;
 	private boolean initialized;
-	private boolean lock;
 
 	private final I18N locale;
 	private final String[] players;
@@ -80,15 +79,11 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 				@Override
 				protected void onMessageReceived(@NotNull MessageReceivedEvent event) {
-					if (!lock && checkChannel(event.getGuildChannel()) && validate(event.getMessage())) {
-						lock = true;
-
+					if (checkChannel(event.getGuildChannel()) && validate(event.getMessage())) {
 						try {
 							runtime(event.getAuthor(), event.getMessage().getContentRaw());
 						} catch (InvocationTargetException | IllegalAccessException e) {
 							Constants.LOGGER.error(e, e);
-						} finally {
-							lock = false;
 						}
 					}
 				}

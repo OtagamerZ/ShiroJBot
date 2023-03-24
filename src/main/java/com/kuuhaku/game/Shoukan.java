@@ -101,6 +101,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private StateSnap snapshot = null;
 	private boolean restoring = true;
 	private boolean history = false;
+	private boolean lock = false;
 	private Side winner;
 
 	public Shoukan(I18N locale, Arcade arcade, User p1, User p2) {
@@ -173,12 +174,22 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
-			try {
-				if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
-					getCurrent().showHand();
+			if (!lock) {
+				lock = true;
+
+				try {
+					if (m.getName().startsWith("deb")) {
+						cheats = true;
+					}
+
+					if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
+						getCurrent().showHand();
+					}
+				} catch (Exception e) {
+					Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
+				} finally {
+					lock = false;
 				}
-			} catch (Exception e) {
-				Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
 			}
 		}
 	}
@@ -936,9 +947,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("(?<choice>\\d+)")
 	private boolean select(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		System.out.println("enter");
 		if (!curr.selectionPending()) return false;
-		System.out.println("pass");
 
 		Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> selection = curr.getSelection();
 		if (!Utils.between(args.getInt("choice"), 0, selection.getFirst().size())) {
