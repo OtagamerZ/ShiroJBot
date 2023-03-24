@@ -97,7 +97,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private transient CardExtra stats = new CardExtra();
 	private transient Hand hand = null;
 	private transient Hand leech = null;
-	private transient CachedScriptManager<Evogear> cachedEffect = new CachedScriptManager<>(this);
+	private transient CachedScriptManager<Evogear> cachedEffect = new CachedScriptManager<>();
 
 	@Transient
 	private byte state = 0b10;
@@ -408,7 +408,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			game.getChannel().sendMessage(game.getLocale().get("error/spell", game.getString(e.getMessage()))).queue();
 			return false;
 		} catch (Exception e) {
+			Drawable<?> source = Utils.getOr(stats.getSource(), this);
+
 			game.getChannel().sendMessage(game.getLocale().get("error/effect")).queue();
+			Constants.LOGGER.warn("Failed to execute " + this + " effect\n" + ("/* " + source + " */\n" + getEffect()), e);
 			return false;
 		}
 	}
@@ -462,7 +465,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (leech != null) {
 			leech.getLeeches().remove(this);
 		}
-		cachedEffect = new CachedScriptManager<>(this);
+		cachedEffect = new CachedScriptManager<>();
 
 		state = 0b11;
 	}
@@ -610,7 +613,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		clone.stats = new CardExtra();
 		clone.hand = null;
 		clone.leech = null;
-		clone.cachedEffect = new CachedScriptManager<>(this);
+		clone.cachedEffect = new CachedScriptManager<>();
 
 		return clone;
 	}

@@ -18,9 +18,6 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.Constants;
-import com.kuuhaku.exceptions.ActivationException;
-import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import org.intellij.lang.annotations.Language;
@@ -33,14 +30,9 @@ public class CachedScriptManager<T> {
 	private final Map<String, Object> context = new HashMap<>();
 	private final JSONObject storedProps = new JSONObject();
 	private final AtomicInteger propHash = new AtomicInteger();
-	private final Object parent;
 
 	@Language("Groovy")
 	private String code;
-
-	public CachedScriptManager(T parent) {
-		this.parent = parent;
-	}
 
 	public CachedScriptManager<T> forScript(@Language("Groovy") String code) {
 		this.code = code;
@@ -69,18 +61,7 @@ public class CachedScriptManager<T> {
 	}
 
 	public void run() {
-		@Language("Groovy")
-		String code = "/* " + parent + " */\n" + this.code;
-
-		try {
-			Utils.exec(code, context);
-		} catch (Exception e) {
-			if (!(e instanceof TargetException || e instanceof ActivationException)) {
-				Constants.LOGGER.warn("Failed to execute " + parent + " effect\n" + code, e);
-			}
-
-			throw e;
-		}
+		Utils.exec(code, context);
 	}
 
 	public JSONObject getStoredProps() {

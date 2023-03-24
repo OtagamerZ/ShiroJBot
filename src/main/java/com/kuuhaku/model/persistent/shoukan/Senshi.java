@@ -117,7 +117,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient Hand leech = null;
 	private transient Senshi target = null;
 	private transient Senshi lastInteraction = null;
-	private transient CachedScriptManager<Senshi> cachedEffect = new CachedScriptManager<>(this);
+	private transient CachedScriptManager<Senshi> cachedEffect = new CachedScriptManager<>();
 	private transient Set<Drawable<?>> blocked = new HashSet<>();
 
 	@Transient
@@ -1095,7 +1095,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			game.getChannel().sendMessage(game.getLocale().get("error/activation", game.getString(e.getMessage()))).queue();
 			return false;
 		} catch (Exception e) {
+			Drawable<?> source = Utils.getOr(stats.getSource(), this);
+
 			game.getChannel().sendMessage(game.getLocale().get("error/effect")).queue();
+			Constants.LOGGER.warn("Failed to execute " + this + " effect\n" + ("/* " + source + " */\n" + getEffect()), e);
 			return false;
 		} finally {
 			unlock();
@@ -1382,7 +1385,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		clone.leech = null;
 		clone.target = null;
 		clone.lastInteraction = null;
-		clone.cachedEffect = new CachedScriptManager<>(this);
+		clone.cachedEffect = new CachedScriptManager<>();
 		clone.blocked = new HashSet<>();
 		clone.state = state & 0b11111;
 
