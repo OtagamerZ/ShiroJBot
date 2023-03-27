@@ -20,8 +20,10 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.enums.shoukan.Flag;
+import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.util.json.JSONArray;
 
 import java.util.Objects;
 
@@ -33,7 +35,7 @@ public class EquippableSenshi extends Evogear implements Proxy<Senshi> {
 	}
 
 	private EquippableSenshi(Senshi s, Void ignored) {
-		super(s.getId(), s.getCard(), s.getBase());
+		super(s.getId(), s.getCard(), 0, false, TargetType.NONE, new JSONArray(), s.getBase());
 
 		original = s;
 		setHand(s.getHand());

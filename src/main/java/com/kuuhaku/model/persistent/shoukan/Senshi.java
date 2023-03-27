@@ -1357,45 +1357,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
+	@SuppressWarnings("MethodDoesntCallSuperMethod")
 	public Senshi clone() throws CloneNotSupportedException {
-		Senshi clone = (Senshi) super.clone();
-		clone.equipments = new BondedList<>((e, it) -> {
-			e.setEquipper(clone);
-			e.setHand(clone.getHand());
-			e.executeAssert(ON_INITIALIZE);
-
-			Shoukan game = clone.getHand().getGame();
-			game.trigger(ON_EQUIP, clone.asSource(ON_EQUIP));
-
-			if (e.hasCharm(Charm.TIMEWARP)) {
-				int times = Charm.TIMEWARP.getValue(e.getTier());
-				for (int i = 0; i < times; i++) {
-					game.trigger(ON_TURN_BEGIN, clone.asSource(ON_TURN_BEGIN));
-					game.trigger(ON_TURN_END, clone.asSource(ON_TURN_END));
-				}
-			}
-
-			if (e.hasCharm(Charm.CLONE)) {
-				game.putAtOpenSlot(clone.getSide(), true, clone.withCopy(s -> {
-					s.getStats().setAttrMult(-1 + (0.25 * e.getTier()));
-					s.getStats().getData().put("cloned", true);
-				}));
-			}
-
-			return true;
-		}, e -> {
-			e.executeAssert(ON_REMOVE);
-			e.setEquipper(null);
-		});
-		clone.base = base.clone();
+		Senshi clone = new Senshi(id, card, race, base.clone());
 		clone.stats = stats.clone();
-		clone.slot = null;
-		clone.hand = null;
-		clone.leech = null;
-		clone.target = null;
-		clone.lastInteraction = null;
-		clone.cachedEffect = new CachedScriptManager<>();
-		clone.blocked = new HashSet<>();
 		clone.state = state & 0b11111;
 
 		return clone;

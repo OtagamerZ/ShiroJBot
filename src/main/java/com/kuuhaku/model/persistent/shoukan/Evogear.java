@@ -113,10 +113,13 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public Evogear() {
 	}
 
-	public Evogear(String id, Card card, CardAttributes base) {
+	public Evogear(String id, Card card, int tier, boolean spell, TargetType type, JSONArray charms, CardAttributes base) {
 		this.id = id;
 		this.card = card;
-		this.targetType = TargetType.NONE;
+		this.tier = tier;
+		this.spell = spell;
+		this.targetType = type;
+		this.charms = charms;
 		this.base = base;
 	}
 
@@ -610,15 +613,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
+	@SuppressWarnings("MethodDoesntCallSuperMethod")
 	public Evogear clone() throws CloneNotSupportedException {
-		Evogear clone = (Evogear) super.clone();
-		clone.base = base.clone();
+		Evogear clone = new Evogear(id, card, tier, spell, targetType, charms.clone(), base.clone());
 		clone.stats = stats.clone();
-		clone.equipper = null;
-		clone.stats = new CardExtra();
-		clone.hand = null;
-		clone.leech = null;
-		clone.cachedEffect = new CachedScriptManager<>();
 
 		return clone;
 	}

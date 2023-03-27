@@ -92,6 +92,15 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	          └─ available
 	 */
 
+	public Field(String id, Card card, JSONObject modifiers, FieldType type, boolean effect, JSONArray tags) {
+		this.id = id;
+		this.card = card;
+		this.modifiers = modifiers;
+		this.type = type;
+		this.effect = effect;
+		this.tags = tags;
+	}
+
 	@Override
 	public long getSerial() {
 		return SERIAL;
@@ -280,12 +289,9 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	@Override
+	@SuppressWarnings("MethodDoesntCallSuperMethod")
 	public Field clone() throws CloneNotSupportedException {
-		Field clone = (Field) super.clone();
-		clone.modifiers = new JSONObject(modifiers);
-		clone.tags = new JSONArray(tags);
-
-		return clone;
+		return new Field(id, card, modifiers.clone(), type, effect, tags.clone());
 	}
 
 	@Override
