@@ -19,40 +19,12 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.game.Shoukan;
-import com.kuuhaku.interfaces.shoukan.Proxy;
-import com.kuuhaku.model.enums.shoukan.Flag;
-import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 
-import java.util.Objects;
-
-public class TrapSpell extends Senshi implements Proxy<Evogear> {
-	private final Evogear original;
-
+public class TrapSpell extends PlaceableEvogear {
 	public TrapSpell(Evogear e) {
-		this(e.copy(), null);
-	}
-
-	private TrapSpell(Evogear e, Void ignored) {
-		super(e.getId(), e.getCard(), Race.NONE, e.getBase());
-
-		original = e;
-		setHand(e.getHand());
+		super(e.copy());
 		setFlipped(true);
-
-		Hand h = e.getHand();
-		if (h != null && h.isEmpowered() && e.isSpell() && h.getOrigin().major() == Race.MYSTICAL) {
-			e.getStats().setFlag(Flag.EMPOWERED, true, true);
-			h.setEmpowered(false);
-		}
-
-		e.getStats().setFlag(Flag.BOUND, true);
-	}
-
-	@Override
-	public Evogear getOriginal() {
-		return original;
 	}
 
 	@Override
@@ -61,7 +33,7 @@ public class TrapSpell extends Senshi implements Proxy<Evogear> {
 
 		if (!flipped) {
 			Shoukan game = getHand().getGame();
-			game.getChannel().sendMessage(game.getLocale().get("str/trap_disarm", original)).queue();
+			game.getChannel().sendMessage(game.getLocale().get("str/trap_disarm", getOriginal())).queue();
 			getHand().getGraveyard().add(this);
 		}
 	}
@@ -69,19 +41,5 @@ public class TrapSpell extends Senshi implements Proxy<Evogear> {
 	@Override
 	public boolean canAttack() {
 		return false;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		if (!super.equals(o)) return false;
-		TrapSpell trapSpell = (TrapSpell) o;
-		return Objects.equals(original, trapSpell.original);
-	}
-
-	@Override
-	public int hashCode() {
-		return original.hashCode();
 	}
 }
