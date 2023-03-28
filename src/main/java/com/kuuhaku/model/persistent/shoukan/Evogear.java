@@ -51,10 +51,8 @@ import org.hibernate.annotations.Type;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
@@ -407,7 +405,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			stats.popFlag(Flag.EMPOWERED);
 			return true;
 		} catch (TargetException e) {
-			if (targetType != TargetType.NONE && ep.trigger() == Trigger.ON_ACTIVATE) {
+			if (ep.hash() != Objects.hash((Object[]) ep.targets()) || Arrays.stream(ep.enemies()).allMatch(t -> t.skip().get())) {
+				setAvailable(false);
+			} else if (targetType != TargetType.NONE && ep.trigger() == Trigger.ON_ACTIVATE) {
 				game.getChannel().sendMessage(game.getLocale().get("error/target", game.getLocale().get("str/target_" + targetType))).queue();
 			}
 

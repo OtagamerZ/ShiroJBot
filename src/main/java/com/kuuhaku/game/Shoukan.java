@@ -30,7 +30,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.misc.SynthesizeCommand;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
-import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.PhaseConstraint;
@@ -1743,14 +1742,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		try {
 			return source.execute(ep);
-		} catch (TargetException e) {
-			System.out.println("Exception");
-			if (ep.hash() != Objects.hash((Object[]) ep.targets()) || Arrays.stream(ep.enemies()).allMatch(t -> t.skip().get())) {
-				source.card().setAvailable(false);
-				return false;
-			}
-
-			throw e;
 		} finally {
 			for (Target t : ep.targets()) {
 				t.execute(ep);
