@@ -118,6 +118,10 @@ public class SlotColumn {
 		if (card != null) {
 			Hand h = game.getHands().get(side);
 
+			if (card.getSlot().index != -1) {
+				card.getStats().setTFlag(Flag.MOVED, true);
+			}
+
 			card.setSlot(this);
 			card.setHand(h);
 			card.executeAssert(Trigger.ON_INITIALIZE);

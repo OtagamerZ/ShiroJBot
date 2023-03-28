@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.records.shoukan;
 
+import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
@@ -32,7 +33,7 @@ public record Target(Senshi card, Side side, int index, Trigger trigger, TargetT
 	}
 
 	public Target(Senshi card, Side side, int index, Trigger trigger, TargetType type) {
-		this(card, side, index, trigger, type, new AtomicBoolean());
+		this(card, side, index, trigger, type, new AtomicBoolean(card.hasFlag(Flag.MOVED)));
 	}
 
 	public boolean execute(EffectParameters ep) {

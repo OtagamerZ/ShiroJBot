@@ -70,5 +70,7 @@ public enum Flag {
 	/** Will always defeat the target **/
 	UNSTOPPABLE,
 	/** Cannot exist outside the field **/
-	BOUND
+	BOUND,
+	/** Was moved during an effect **/
+	MOVED,
 }
