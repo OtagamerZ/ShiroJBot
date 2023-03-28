@@ -406,7 +406,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			return true;
 		} catch (TargetException e) {
 			if (targetType != TargetType.NONE && ep.trigger() == Trigger.ON_ACTIVATE) {
-				if (ep.hash() != ep.targetHash() || Arrays.stream(ep.targets()).allMatch(t -> t.skip().get())) {
+				if (Arrays.stream(ep.targets()).allMatch(t -> t.skip().get())) {
 					setAvailable(false);
 					return false;
 				}

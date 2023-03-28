@@ -29,9 +29,9 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.*;
 
-public record EffectParameters(Trigger trigger, Side side, Source source, int hash, Target... targets) {
+public record EffectParameters(Trigger trigger, Side side, Source source, Target... targets) {
 	public EffectParameters(Trigger trigger, Side side) {
-		this(trigger, side, new Source(), 0);
+		this(trigger, side, new Source());
 	}
 
 	public EffectParameters(Trigger trigger, Side side, Target... targets) {
@@ -39,10 +39,6 @@ public record EffectParameters(Trigger trigger, Side side, Source source, int ha
 	}
 
 	public EffectParameters(Trigger trigger, Side side, Source source, Target... targets) {
-		this(trigger, side, source, 0, targets);
-	}
-
-	public EffectParameters(Trigger trigger, Side side, Source source, int hash, Target... targets) {
 		this.trigger = trigger;
 		this.side = side;
 		this.source = source;
@@ -84,7 +80,6 @@ public record EffectParameters(Trigger trigger, Side side, Source source, int ha
 		}
 
 		this.targets = tgts.toArray(Target[]::new);
-		this.hash = targetHash();
 	}
 
 	public void consumeShields() {
@@ -108,6 +103,16 @@ public record EffectParameters(Trigger trigger, Side side, Source source, int ha
 
 	public boolean isTarget(Drawable<?> card) {
 		return Arrays.stream(targets).anyMatch(t -> Objects.equals(t.card(), card));
+	}
+
+	public Target[] targets() {
+		for (Target t : targets) {
+			if (t.card() != null && t.card().getIndex() != t.index()) {
+				t.skip().set(true);
+			}
+		}
+
+		return targets;
 	}
 
 	public Target[] allies() {
@@ -153,15 +158,6 @@ public record EffectParameters(Trigger trigger, Side side, Source source, int ha
 
 	public boolean leeched() {
 		return trigger == Trigger.ON_LEECH;
-	}
-
-	public int targetHash() {
-		int h = 0;
-		for (Target t : targets) {
-			h += t.hashCode();
-		}
-
-		return h;
 	}
 
 	@Override
