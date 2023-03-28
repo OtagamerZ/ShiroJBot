@@ -1090,7 +1090,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		} catch (TargetException e) {
 			TargetType type = stats.getData().getEnum(TargetType.class, "targeting");
 			if (type != null && trigger == ON_ACTIVATE) {
-				if (ep.hash() != Objects.hash((Object[]) ep.targets()) || Arrays.stream(ep.enemies()).allMatch(t -> t.skip().get())) {
+				if (ep.hash() != Objects.hash((Object[]) ep.targets()) || Arrays.stream(ep.targets()).allMatch(t -> t.skip().get())) {
 					setAvailable(false);
 					return false;
 				}
