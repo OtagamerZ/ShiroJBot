@@ -29,9 +29,9 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.*;
 
-public record EffectParameters(Trigger trigger, Side side, Source source, Target... targets) {
+public record EffectParameters(Trigger trigger, Side side, Source source, int hash, Target... targets) {
 	public EffectParameters(Trigger trigger, Side side) {
-		this(trigger, side, new Source());
+		this(trigger, side, new Source(), 0);
 	}
 
 	public EffectParameters(Trigger trigger, Side side, Target... targets) {
@@ -39,9 +39,14 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 	}
 
 	public EffectParameters(Trigger trigger, Side side, Source source, Target... targets) {
+		this(trigger, side, source, Objects.hash((Object[]) targets), targets);
+	}
+
+	public EffectParameters(Trigger trigger, Side side, Source source, int hash, Target... targets) {
 		this.trigger = trigger;
 		this.side = side;
 		this.source = source;
+		this.hash = hash;
 
 		Set<Target> tgts = new HashSet<>(List.of(targets));
 		if (source.card() instanceof Senshi s) {

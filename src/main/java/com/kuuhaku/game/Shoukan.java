@@ -1744,7 +1744,7 @@ public class Shoukan extends GameInstance<Phase> {
 		try {
 			return source.execute(ep);
 		} catch (TargetException e) {
-			if (Arrays.stream(ep.targets()).allMatch(t -> t.skip().get())) {
+			if (ep.hash() != Objects.hash((Object[]) ep.targets()) && Arrays.stream(ep.enemies()).allMatch(t -> t.skip().get())) {
 				source.card().setAvailable(false);
 			}
 
