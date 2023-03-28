@@ -1744,11 +1744,13 @@ public class Shoukan extends GameInstance<Phase> {
 		try {
 			return source.execute(ep);
 		} catch (TargetException e) {
+			System.out.println("Exception");
 			if (ep.hash() != Objects.hash((Object[]) ep.targets()) || Arrays.stream(ep.enemies()).allMatch(t -> t.skip().get())) {
 				source.card().setAvailable(false);
+				return false;
 			}
 
-			return false;
+			throw e;
 		} finally {
 			for (Target t : ep.targets()) {
 				t.execute(ep);
