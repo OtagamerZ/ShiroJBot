@@ -82,12 +82,11 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 	}
 
 	public void consumeShields() {
-		for (int i = 0; i < targets.length; i++) {
-			Target t = targets[i];
+		for (Target t : targets) {
 			Senshi card = t.card();
 
 			if (card != null && t.type() != TargetType.ALLY && card.isProtected(source.card())) {
-				targets[i] = new Target();
+				t.skip().set(true);
 			}
 		}
 	}
@@ -121,6 +120,7 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 		consumeShields();
 		Target[] out = Arrays.stream(targets)
 				.filter(t -> t.index() > -1 && t.side() != source.side())
+				.filter(t -> !t.skip().get())
 				.filter(t -> t.card() != null)
 				.toArray(Target[]::new);
 

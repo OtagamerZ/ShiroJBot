@@ -24,10 +24,15 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public record Target(Senshi card, Side side, int index, Trigger trigger, TargetType type) {
+public record Target(Senshi card, Side side, int index, Trigger trigger, TargetType type, AtomicBoolean skip) {
 	public Target() {
 		this(null, null, -1, null, TargetType.NONE);
+	}
+
+	public Target(Senshi card, Side side, int index, Trigger trigger, TargetType type) {
+		this(card, side, index, trigger, type, new AtomicBoolean());
 	}
 
 	public boolean execute(EffectParameters ep) {

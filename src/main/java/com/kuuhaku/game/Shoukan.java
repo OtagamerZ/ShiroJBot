@@ -30,6 +30,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.command.misc.SynthesizeCommand;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
+import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.PhaseConstraint;
@@ -1038,14 +1039,14 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (!tgt.validate(type)) {
+			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + type))).queue();
+			return false;
+		} else if (!trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
 			if (!chosen.isAvailable()) {
 				reportEvent("str/effect_interrupted", true, chosen);
 				return true;
-			} else {
-				getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + type))).queue();
-				return false;
 			}
-		} else if (!trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
+
 			return false;
 		}
 
@@ -1742,6 +1743,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 		try {
 			return source.execute(ep);
+		} catch (TargetException e) {
+			if (Arrays.stream(ep.targets()).allMatch(t -> t.skip().get())) {
+				source.card().setAvailable(false);
+			}
+
+			return false;
 		} finally {
 			for (Target t : ep.targets()) {
 				t.execute(ep);
