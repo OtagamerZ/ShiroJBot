@@ -118,7 +118,7 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 	public Target[] allies() {
 		if (targets.length == 0) return new Target[0];
 
-		Target[] out = Arrays.stream(targets)
+		Target[] out = Arrays.stream(targets())
 				.filter(t -> t.index() > -1 && t.side() == source.side())
 				.filter(t -> t.card() != null)
 				.toArray(Target[]::new);
@@ -131,7 +131,7 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 		if (targets.length == 0) return new Target[0];
 
 		consumeShields();
-		Target[] out = Arrays.stream(targets)
+		Target[] out = Arrays.stream(targets())
 				.filter(t -> t.index() > -1 && t.side() != source.side())
 				.filter(t -> !t.skip().get())
 				.filter(t -> t.card() != null)
@@ -144,7 +144,7 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 	public Target[] slots(TargetType type) {
 		if (targets.length == 0) return new Target[0];
 
-		Target[] out = Arrays.stream(targets)
+		Target[] out = Arrays.stream(targets())
 				.filter(t -> t.index() > -1 && t.type() == type)
 				.toArray(Target[]::new);
 
