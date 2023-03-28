@@ -116,9 +116,10 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 	}
 
 	public Target[] allies() {
-		if (targets.length == 0) return new Target[0];
+		if (targets.length == 0) throw new TargetException();
 
 		Target[] out = Arrays.stream(targets())
+				.filter(t -> !t.skip().get())
 				.filter(t -> t.index() > -1 && t.side() == source.side())
 				.filter(t -> t.card() != null)
 				.toArray(Target[]::new);
@@ -128,21 +129,23 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 	}
 
 	public Target[] enemies() {
-		if (targets.length == 0) return new Target[0];
+		if (targets.length == 0) throw new TargetException();
 
 		consumeShields();
 		Target[] out = Arrays.stream(targets())
-				.filter(t -> t.index() > -1 && t.side() != source.side())
 				.filter(t -> !t.skip().get())
+				.filter(t -> t.index() > -1 && t.side() != source.side())
 				.filter(t -> t.card() != null)
 				.toArray(Target[]::new);
+
+		System.out.println(Arrays.toString(out));
 
 		if (out.length == 0) throw new TargetException();
 		return out;
 	}
 
 	public Target[] slots(TargetType type) {
-		if (targets.length == 0) return new Target[0];
+		if (targets.length == 0) throw new TargetException();
 
 		Target[] out = Arrays.stream(targets())
 				.filter(t -> t.index() > -1 && t.type() == type)

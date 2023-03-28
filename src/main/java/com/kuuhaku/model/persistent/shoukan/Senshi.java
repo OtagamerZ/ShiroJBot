@@ -1091,7 +1091,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			TargetType type = stats.getData().getEnum(TargetType.class, "targeting");
 			if (type != null && trigger == ON_ACTIVATE) {
 				if (Arrays.stream(ep.targets()).allMatch(t -> t.skip().get())) {
-					System.out.println("Enter");
 					setAvailable(false);
 					return false;
 				}
