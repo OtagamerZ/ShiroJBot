@@ -405,9 +405,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			stats.popFlag(Flag.EMPOWERED);
 			return true;
 		} catch (TargetException e) {
-			if (ep.hash() != Objects.hash((Object[]) ep.targets()) || Arrays.stream(ep.enemies()).allMatch(t -> t.skip().get())) {
-				setAvailable(false);
-			} else if (targetType != TargetType.NONE && ep.trigger() == Trigger.ON_ACTIVATE) {
+			if (targetType != TargetType.NONE && ep.trigger() == Trigger.ON_ACTIVATE) {
+				if (ep.hash() != Objects.hash((Object[]) ep.targets()) || Arrays.stream(ep.enemies()).allMatch(t -> t.skip().get())) {
+					setAvailable(false);
+					return false;
+				}
+
 				game.getChannel().sendMessage(game.getLocale().get("error/target", game.getLocale().get("str/target_" + targetType))).queue();
 			}
 
