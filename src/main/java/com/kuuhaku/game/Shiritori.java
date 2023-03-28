@@ -237,6 +237,6 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(seed);
+		return Objects.hashCode(seed);
 	}
 }

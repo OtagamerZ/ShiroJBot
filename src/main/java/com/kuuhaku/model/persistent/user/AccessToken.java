@@ -85,6 +85,6 @@ public class AccessToken extends DAO<AccessToken> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(token);
+		return Objects.hashCode(token);
 	}
 }

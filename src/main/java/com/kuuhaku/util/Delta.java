@@ -47,6 +47,6 @@ public class Delta<T> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(current);
+		return Objects.hashCode(current);
 	}
 }

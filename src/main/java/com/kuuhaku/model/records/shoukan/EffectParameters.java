@@ -39,14 +39,13 @@ public record EffectParameters(Trigger trigger, Side side, Source source, int ha
 	}
 
 	public EffectParameters(Trigger trigger, Side side, Source source, Target... targets) {
-		this(trigger, side, source, Objects.hash((Object[]) targets), targets);
+		this(trigger, side, source, 0, targets);
 	}
 
 	public EffectParameters(Trigger trigger, Side side, Source source, int hash, Target... targets) {
 		this.trigger = trigger;
 		this.side = side;
 		this.source = source;
-		this.hash = hash;
 
 		Set<Target> tgts = new HashSet<>(List.of(targets));
 		if (source.card() instanceof Senshi s) {
@@ -85,6 +84,7 @@ public record EffectParameters(Trigger trigger, Side side, Source source, int ha
 		}
 
 		this.targets = tgts.toArray(Target[]::new);
+		this.hash = targetHash();
 	}
 
 	public void consumeShields() {
@@ -153,6 +153,15 @@ public record EffectParameters(Trigger trigger, Side side, Source source, int ha
 
 	public boolean leeched() {
 		return trigger == Trigger.ON_LEECH;
+	}
+
+	public int targetHash() {
+		int h = 0;
+		for (Target t : targets) {
+			h += t.hashCode();
+		}
+
+		return h;
 	}
 
 	@Override

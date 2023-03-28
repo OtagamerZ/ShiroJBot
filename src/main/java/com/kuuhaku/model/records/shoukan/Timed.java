@@ -36,6 +36,6 @@ public record Timed<T>(T obj, AtomicInteger time) {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(obj);
+		return Objects.hashCode(obj);
 	}
 }

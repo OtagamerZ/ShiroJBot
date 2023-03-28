@@ -44,6 +44,6 @@ public record GuildBuff(String id, long expiration, double card, double drop, do
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hashCode(id);
 	}
 }

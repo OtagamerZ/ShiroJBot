@@ -110,6 +110,6 @@ public class AutoEmbedBuilder extends EmbedBuilder {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(e);
+		return Objects.hashCode(e);
 	}
 }

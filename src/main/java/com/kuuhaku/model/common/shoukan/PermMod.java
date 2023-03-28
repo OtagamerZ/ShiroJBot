@@ -37,6 +37,6 @@ public class PermMod extends AttrMod {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(seed);
+		return Objects.hashCode(seed);
 	}
 }

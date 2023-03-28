@@ -528,6 +528,6 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(uid);
+		return Objects.hashCode(uid);
 	}
 }

@@ -274,6 +274,6 @@ public class Card extends DAO<Card> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hashCode(id);
 	}
 }
