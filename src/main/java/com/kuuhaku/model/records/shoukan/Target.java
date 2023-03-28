@@ -33,7 +33,7 @@ public record Target(Senshi card, Side side, int index, Trigger trigger, TargetT
 	}
 
 	public Target(Senshi card, Side side, int index, Trigger trigger, TargetType type) {
-		this(card, side, index, trigger, type, new AtomicBoolean(card.hasFlag(Flag.MOVED)));
+		this(card, side, index, trigger, type, new AtomicBoolean(card != null && card.hasFlag(Flag.MOVED)));
 	}
 
 	public boolean execute(EffectParameters ep) {
