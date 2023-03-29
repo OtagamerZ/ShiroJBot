@@ -23,7 +23,7 @@ import com.kuuhaku.model.persistent.shoukan.Evogear;
 
 public class TrapSpell extends PlaceableEvogear {
 	public TrapSpell(Evogear e) {
-		super(e.copy());
+		super(e);
 		setFlipped(true);
 	}
 

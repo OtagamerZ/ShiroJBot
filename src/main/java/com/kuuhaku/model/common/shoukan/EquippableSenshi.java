@@ -39,8 +39,6 @@ public class EquippableSenshi extends Evogear implements Proxy<Senshi> {
 
 		original = s;
 		setHand(s.getHand());
-
-		s.getStats().setFlag(Flag.BOUND, true);
 	}
 
 	@Override

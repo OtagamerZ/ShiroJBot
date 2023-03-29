@@ -91,10 +91,9 @@ public class Hand {
 		d.setSlot(null);
 
 		if (d instanceof Proxy<?> p) {
-			Senshi s = (Senshi) p;
 			d.reset();
 			it.add(p.getOriginal());
-			return !s.getStats().popFlag(Flag.BOUND);
+			return false;
 		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
@@ -121,10 +120,9 @@ public class Hand {
 		d.reset();
 
 		if (d instanceof Proxy<?> p) {
-			Senshi s = (Senshi) p;
 			d.reset();
 			it.add(p.getOriginal());
-			return !s.getStats().popFlag(Flag.BOUND);
+			return false;
 		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
@@ -191,10 +189,9 @@ public class Hand {
 		}
 
 		if (d instanceof Proxy<?> p) {
-			Senshi s = (Senshi) p;
 			d.reset();
 			it.add(p.getOriginal());
-			return !s.getStats().popFlag(Flag.BOUND);
+			return false;
 		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
@@ -212,10 +209,9 @@ public class Hand {
 		d.setAvailable(false);
 
 		if (d instanceof Proxy<?> p) {
-			Senshi s = (Senshi) p;
 			d.reset();
 			it.add(p.getOriginal());
-			return !s.getStats().popFlag(Flag.BOUND);
+			return false;
 		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);

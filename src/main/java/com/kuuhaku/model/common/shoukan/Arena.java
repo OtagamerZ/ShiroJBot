@@ -105,10 +105,9 @@ public class Arena implements Renderer {
 		d.reset();
 
 		if (d instanceof Proxy<?> p) {
-			Senshi s = (Senshi) p;
 			d.reset();
 			it.add(p.getOriginal());
-			return !s.getStats().popFlag(Flag.BOUND);
+			return false;
 		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.getStats().popFlag(Flag.BOUND);
