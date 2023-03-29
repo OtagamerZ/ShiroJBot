@@ -39,7 +39,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
-import com.kuuhaku.model.records.shoukan.Source;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.json.JSONObject;
@@ -1090,7 +1089,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		} catch (TargetException e) {
 			TargetType type = stats.getData().getEnum(TargetType.class, "targeting");
 			if (type != null && trigger == ON_ACTIVATE) {
-				System.out.println(Arrays.toString(ep.targets()));
 				if (Arrays.stream(ep.targets()).allMatch(t -> t.skip().get())) {
 					setAvailable(false);
 					return false;
@@ -1167,7 +1165,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (blocked.contains(source)) return true;
 
 		if (hand != null) {
-			hand.getGame().trigger(ON_EFFECT_TARGET, new Source(this, ON_EFFECT_TARGET));
+			hand.getGame().trigger(ON_EFFECT_TARGET, asSource(ON_EFFECT_TARGET));
 			if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
 				return true;
 			}

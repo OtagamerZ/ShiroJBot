@@ -1894,15 +1894,12 @@ public class Shoukan extends GameInstance<Phase> {
 					for (Evogear e : s.getEquipments()) {
 						e.getStats().removeExpired(AttrMod::isExpired);
 					}
-
-					s.getStats().popFlag(Flag.MOVED);
 				}
 
 				s = slt.getBottom();
 				if (s != null) {
 					s.setLastInteraction(null);
 					s.getStats().removeExpired(AttrMod::isExpired);
-					s.getStats().popFlag(Flag.MOVED);
 				}
 			}
 		}

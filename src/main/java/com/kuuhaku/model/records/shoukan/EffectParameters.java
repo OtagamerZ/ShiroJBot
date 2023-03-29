@@ -138,8 +138,6 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 				.filter(t -> t.card() != null)
 				.toArray(Target[]::new);
 
-		System.out.println(Arrays.toString(out));
-
 		if (out.length == 0) throw new TargetException();
 		return out;
 	}

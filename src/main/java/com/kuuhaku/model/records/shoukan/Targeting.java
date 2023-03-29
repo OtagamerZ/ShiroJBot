@@ -25,26 +25,33 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
-public record Targeting(Hand hand, int allyPos, int enemyPos) {
+public record Targeting(Hand hand, int allyPos, int enemyPos, AtomicReference<Senshi> allyRef, AtomicReference<Senshi> enemyRef) {
 	public Targeting(Hand hand, int allyPos, int enemyPos) {
-		this.hand = hand;
-		this.allyPos = Math.max(-1, allyPos);
-		this.enemyPos = Math.max(-1, enemyPos);
+		this(hand, Math.max(-1, allyPos), Math.max(-1, enemyPos), new AtomicReference<>(), new AtomicReference<>());
 	}
 
 	public Senshi ally() {
-		return allyPos == -1 ? null : hand.getGame()
-				.getSlots(hand.getSide())
-				.get(allyPos)
-				.getUnblocked();
+		if (allyRef.get() == null) {
+			allyRef.set(allyPos == -1 ? null : hand.getGame()
+					.getSlots(hand.getSide())
+					.get(allyPos)
+					.getUnblocked());
+		}
+
+		return allyRef.get();
 	}
 
 	public Senshi enemy() {
-		return enemyPos == -1 ? null : hand.getGame()
-				.getSlots(hand.getSide().getOther())
-				.get(enemyPos)
-				.getUnblocked();
+		if (enemyRef.get() == null) {
+			enemyRef.set(enemyPos == -1 ? null : hand.getGame()
+					.getSlots(hand.getSide().getOther())
+					.get(enemyPos)
+					.getUnblocked());
+		}
+
+		return enemyRef.get();
 	}
 
 	public boolean validate(TargetType type) {
@@ -60,21 +67,11 @@ public record Targeting(Hand hand, int allyPos, int enemyPos) {
 		List<Target> targets = new ArrayList<>();
 
 		if (allyPos > -1) {
-			Senshi ally = ally();
-			if (ally != null) {
-				targets.add(ally.asTarget(trigger));
-			} else {
-				targets.add(new Target(null, hand.getSide(), allyPos, trigger, TargetType.ALLY));
-			}
+			targets.add(new Target(ally(), hand.getSide(), allyPos, trigger, TargetType.ALLY));
 		}
 
 		if (enemyPos > -1) {
-			Senshi enemy = enemy();
-			if (enemy != null) {
-				targets.add(enemy.asTarget(trigger));
-			} else {
-				targets.add(new Target(null, hand.getSide().getOther(), enemyPos, trigger, TargetType.ENEMY));
-			}
+			targets.add(new Target(enemy(), hand.getSide().getOther(), enemyPos, trigger, TargetType.ENEMY));
 		}
 
 		return targets.toArray(Target[]::new);

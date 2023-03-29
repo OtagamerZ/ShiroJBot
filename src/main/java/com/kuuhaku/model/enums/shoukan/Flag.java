@@ -71,6 +71,4 @@ public enum Flag {
 	UNSTOPPABLE,
 	/** Cannot exist outside the field **/
 	BOUND,
-	/** Was moved during an effect **/
-	MOVED,
 }
