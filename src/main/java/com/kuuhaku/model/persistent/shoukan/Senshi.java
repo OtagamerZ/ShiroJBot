@@ -1112,6 +1112,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			Constants.LOGGER.warn("Failed to execute " + this + " effect\n" + ("/* " + source + " */\n" + getEffect()), e);
 			return false;
 		} finally {
+			unlock();
 			//other.setHeroDefense(false);
 		}
 	}
@@ -1135,6 +1136,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					"trigger", trigger
 			));
 		} catch (Exception ignored) {
+		} finally {
+			unlock();
 		}
 	}
 

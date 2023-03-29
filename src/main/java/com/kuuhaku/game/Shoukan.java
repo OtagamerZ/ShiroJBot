@@ -1895,7 +1895,6 @@ public class Shoukan extends GameInstance<Phase> {
 						e.getStats().removeExpired(AttrMod::isExpired);
 					}
 
-					s.unlock();
 					s.getStats().popFlag(Flag.MOVED);
 				}
 
@@ -1903,8 +1902,6 @@ public class Shoukan extends GameInstance<Phase> {
 				if (s != null) {
 					s.setLastInteraction(null);
 					s.getStats().removeExpired(AttrMod::isExpired);
-
-					s.unlock();
 					s.getStats().popFlag(Flag.MOVED);
 				}
 			}

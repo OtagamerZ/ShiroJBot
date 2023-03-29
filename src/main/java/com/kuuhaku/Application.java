@@ -142,7 +142,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 	}
 
 	public User getUserById(String id) {
-		return Utils.getOr(shiro.getUserById(id), Pages.subGet(shiro.retrieveUserById(id)));
+		return Pages.subGet(shiro.retrieveUserById(id));
 	}
 
 	public GuildMessageChannel getMessageChannelById(String id) {
