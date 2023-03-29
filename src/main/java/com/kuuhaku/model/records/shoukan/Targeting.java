@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.records.shoukan;
 
+import com.kuuhaku.model.common.LazyReference;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
@@ -25,33 +26,33 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
-public record Targeting(Hand hand, int allyPos, int enemyPos, AtomicReference<Senshi> allyRef, AtomicReference<Senshi> enemyRef) {
+public record Targeting(Hand hand, int allyPos, int enemyPos, LazyReference<Senshi> allyRef, LazyReference<Senshi> enemyRef) {
 	public Targeting(Hand hand, int allyPos, int enemyPos) {
-		this(hand, Math.max(-1, allyPos), Math.max(-1, enemyPos), new AtomicReference<>(), new AtomicReference<>());
+		this(hand,
+				Math.max(-1, allyPos),
+				Math.max(-1, enemyPos),
+				new LazyReference<>(() ->
+						allyPos == -1 ? null : hand.getGame()
+								.getSlots(hand.getSide())
+								.get(allyPos)
+								.getUnblocked()
+				),
+				new LazyReference<>(() ->
+						allyPos == -1 ? null : hand.getGame()
+								.getSlots(hand.getSide().getOther())
+								.get(allyPos)
+								.getUnblocked()
+				)
+		);
 	}
 
 	public Senshi ally() {
-		if (allyRef.get() == null) {
-			allyRef.set(allyPos == -1 ? null : hand.getGame()
-					.getSlots(hand.getSide())
-					.get(allyPos)
-					.getUnblocked());
-		}
-
-		return allyRef.get();
+		return allyRef.load();
 	}
 
 	public Senshi enemy() {
-		if (enemyRef.get() == null) {
-			enemyRef.set(enemyPos == -1 ? null : hand.getGame()
-					.getSlots(hand.getSide().getOther())
-					.get(enemyPos)
-					.getUnblocked());
-		}
-
-		return enemyRef.get();
+		return enemyRef.load();
 	}
 
 	public boolean validate(TargetType type) {
