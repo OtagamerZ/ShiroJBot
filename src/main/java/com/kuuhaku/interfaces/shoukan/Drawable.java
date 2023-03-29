@@ -18,7 +18,6 @@
 
 package com.kuuhaku.interfaces.shoukan;
 
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
@@ -27,7 +26,6 @@ import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
-import com.kuuhaku.model.persistent.id.LocalizedId;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
@@ -119,11 +117,17 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		return 0;
 	}
 
-	default double getCostMult() { return 1; }
+	default double getCostMult() {
+		return 1;
+	}
 
-	default double getAttrMult() { return 1; }
+	default double getAttrMult() {
+		return 1;
+	}
 
-	default double getPower() { return 1; }
+	default double getPower() {
+		return 1;
+	}
 
 	default int getCooldown() {
 		return 0;
@@ -386,17 +390,20 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			if (idx < 0 || idx > 4) continue;
 
 			SlotColumn slt = getHand().getGame().getSlots(side).get(idx);
-			if (slt == null) return null;
-
 			if (xray || side == getSide()) {
 				for (Senshi tgt : slt.getCards()) {
 					if (tgt == null || (side != getSide() && tgt.isProtected(this))) continue;
 
-					tgts.add(tgt);
+					if (tgt.getIndex() == idx) {
+						tgts.add(tgt);
+					}
+
 					if (empower) {
 						for (Senshi s : tgt.getNearby()) {
 							if (side == getSide() || !s.isProtected(this)) {
-								tgts.add(s);
+								if (s.getIndex() == idx) {
+									tgts.add(s);
+								}
 							}
 						}
 					}
@@ -409,11 +416,16 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 				if (tgt == null || (side != getSide() && tgt.isProtected(this))) continue;
 
-				tgts.add(tgt);
+				if (tgt.getIndex() == idx) {
+					tgts.add(tgt);
+				}
+
 				if (empower) {
 					for (Senshi s : tgt.getNearby()) {
 						if (side == getSide() || !s.isProtected(this)) {
-							tgts.add(s);
+							if (s.getIndex() == idx) {
+								tgts.add(s);
+							}
 						}
 					}
 				}
