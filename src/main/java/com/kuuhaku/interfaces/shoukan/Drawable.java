@@ -400,10 +400,8 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 					if (empower) {
 						for (Senshi s : tgt.getNearby()) {
-							if (side == getSide() || !s.isProtected(this)) {
-								if (s.getIndex() == idx) {
-									tgts.add(s);
-								}
+							if ((side == getSide() || !s.isProtected(this)) && s.getIndex() == idx) {
+								tgts.add(s);
 							}
 						}
 					}
@@ -422,10 +420,8 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 				if (empower) {
 					for (Senshi s : tgt.getNearby()) {
-						if (side == getSide() || !s.isProtected(this)) {
-							if (s.getIndex() == idx) {
-								tgts.add(s);
-							}
+						if ((side == getSide() || !s.isProtected(this)) && s.getIndex() == idx) {
+							tgts.add(s);
 						}
 					}
 				}
