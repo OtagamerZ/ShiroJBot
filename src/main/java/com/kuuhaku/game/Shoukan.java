@@ -275,7 +275,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 				if (d != null) {
 					add = true;
-					curr.getCards().add(d);
+					curr.getCards().add(d.copy());
 				}
 			}
 
