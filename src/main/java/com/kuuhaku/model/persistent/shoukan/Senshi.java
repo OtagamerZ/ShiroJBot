@@ -1006,6 +1006,39 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		try {
 			base.lock();
 
+			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
+				if (!game.getCurrent().equals(hand)) {
+					Set<String> triggered = new HashSet<>();
+
+					for (SlotColumn sc : game.getSlots(getSide())) {
+						for (Senshi card : sc.getCards()) {
+							if (card instanceof TrapSpell p && !triggered.contains(p.getId())) {
+								EffectParameters params;
+								if (targeted) {
+									params = new EffectParameters(
+											ON_TRAP, getSide(),
+											card.asSource(ON_TRAP),
+											asTarget(trigger, TargetType.ALLY),
+											ep.source().toTarget(TargetType.ENEMY)
+									);
+								} else {
+									params = new EffectParameters(
+											ON_TRAP, getSide(),
+											card.asSource(ON_TRAP),
+											asTarget(trigger, TargetType.ALLY)
+									);
+								}
+
+								if (game.activateProxy(card, params)) {
+									triggered.add(p.getId());
+									game.getChannel().sendMessage(game.getLocale().get("str/trap_activation", card)).queue();
+								}
+							}
+						}
+					}
+				}
+			}
+
 			/*if (hero != null) {
 				other.setHeroDefense(true);
 			}*/
@@ -1049,39 +1082,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						"props", extractValues(hand.getGame().getLocale(), cachedEffect),
 						"trigger", trigger
 				));
-			}
-
-			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
-				if (!game.getCurrent().equals(hand)) {
-					Set<String> triggered = new HashSet<>();
-
-					for (SlotColumn sc : game.getSlots(getSide())) {
-						for (Senshi card : sc.getCards()) {
-							if (card instanceof TrapSpell p && !triggered.contains(p.getId())) {
-								EffectParameters params;
-								if (targeted) {
-									params = new EffectParameters(
-											ON_TRAP, getSide(),
-											card.asSource(ON_TRAP),
-											asTarget(trigger, TargetType.ALLY),
-											ep.source().toTarget(TargetType.ENEMY)
-									);
-								} else {
-									params = new EffectParameters(
-											ON_TRAP, getSide(),
-											card.asSource(ON_TRAP),
-											asTarget(trigger, TargetType.ALLY)
-									);
-								}
-
-								if (game.activateProxy(card, params)) {
-									triggered.add(p.getId());
-									game.getChannel().sendMessage(game.getLocale().get("str/trap_activation", card)).queue();
-								}
-							}
-						}
-					}
-				}
 			}
 
 			popFlag(Flag.EMPOWERED);
