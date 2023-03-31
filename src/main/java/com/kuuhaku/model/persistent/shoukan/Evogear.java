@@ -603,7 +603,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		Evogear evogear = (Evogear) o;
 		return Objects.equals(id, evogear.id)
 			   && Objects.equals(card, evogear.card)
-			   && Objects.equals(equipper, evogear.equipper);
+			   && Objects.equals(equipper, evogear.equipper)
+			   && SERIAL == evogear.SERIAL;
 	}
 
 	public int posHash() {
