@@ -39,9 +39,9 @@ public record Targeting(Hand hand, int allyPos, int enemyPos, LazyReference<Sens
 								.getUnblocked()
 				),
 				new LazyReference<>(() ->
-						allyPos == -1 ? null : hand.getGame()
+						enemyPos == -1 ? null : hand.getGame()
 								.getSlots(hand.getSide().getOther())
-								.get(allyPos)
+								.get(enemyPos)
 								.getUnblocked()
 				)
 		);
