@@ -924,7 +924,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (!copy.execute(copy.toParameters(tgt))) {
-			if (!chosen.isAvailable()) {
+			if (!copy.isAvailable()) {
 				reportEvent("str/effect_interrupted", true, chosen);
 				return true;
 			}
