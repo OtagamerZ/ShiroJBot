@@ -905,13 +905,8 @@ public class Shoukan extends GameInstance<Phase> {
 			reportEvent("str/spell_shield", true);
 			return false;
 		} else if (!tgt.validate(chosen.getTargetType())) {
-			if (!chosen.isAvailable()) {
-				reportEvent("str/effect_interrupted", true, chosen);
-				return true;
-			} else {
-				getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + chosen.getTargetType()))).queue();
-				return false;
-			}
+			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + chosen.getTargetType()))).queue();
+			return false;
 		}
 
 		Evogear copy = chosen.withCopy(e -> {
@@ -929,6 +924,11 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (!copy.execute(copy.toParameters(tgt))) {
+			if (!chosen.isAvailable()) {
+				reportEvent("str/effect_interrupted", true, chosen);
+				return true;
+			}
+
 			stack.remove(copy);
 			chosen.setAvailable(true);
 			return false;
