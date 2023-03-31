@@ -2353,6 +2353,10 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(trigger, getCurrentSide());
 	}
 
+	public boolean isRestoring() {
+		return restoring;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

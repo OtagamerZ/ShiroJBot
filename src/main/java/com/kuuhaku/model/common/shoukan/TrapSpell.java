@@ -31,8 +31,8 @@ public class TrapSpell extends PlaceableEvogear {
 	public void setFlipped(boolean flipped) {
 		super.setFlipped(flipped);
 
-		if (!flipped) {
-			Shoukan game = getHand().getGame();
+		Shoukan game = getHand().getGame();
+		if (!flipped && !game.isRestoring()) {
 			game.getChannel().sendMessage(game.getLocale().get("str/trap_disarm", getOriginal())).queue();
 			getHand().getGraveyard().add(this);
 		}
