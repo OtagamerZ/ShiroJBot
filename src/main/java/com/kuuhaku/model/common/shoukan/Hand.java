@@ -390,7 +390,7 @@ public class Hand {
 					d.setSolid(true);
 
 					cards.add(d);
-					getGame().trigger(Trigger.ON_DRAW);
+					getGame().trigger(Trigger.ON_DRAW, side);
 					value--;
 					break;
 				}
@@ -410,7 +410,7 @@ public class Hand {
 			if (d != null) {
 				d.setSolid(true);
 				cards.add(d);
-				getGame().trigger(Trigger.ON_DRAW);
+				getGame().trigger(Trigger.ON_DRAW, side);
 			}
 		}
 	}
@@ -433,7 +433,7 @@ public class Hand {
 		if (d != null) {
 			d.setSolid(true);
 			cards.add(d);
-			getGame().trigger(Trigger.ON_DRAW);
+			getGame().trigger(Trigger.ON_DRAW, side);
 		}
 
 		return d;
@@ -472,7 +472,7 @@ public class Hand {
 				out.setSolid(true);
 
 				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW);
+				getGame().trigger(Trigger.ON_DRAW, side);
 				return out;
 			}
 		}
@@ -495,7 +495,7 @@ public class Hand {
 				out.setSolid(true);
 
 				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW);
+				getGame().trigger(Trigger.ON_DRAW, side);
 				return out;
 			}
 		}
@@ -522,7 +522,7 @@ public class Hand {
 				out.setSolid(true);
 
 				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW);
+				getGame().trigger(Trigger.ON_DRAW, side);
 				return out;
 			}
 		}
@@ -545,7 +545,7 @@ public class Hand {
 				out.setSolid(true);
 
 				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW);
+				getGame().trigger(Trigger.ON_DRAW, side);
 				return out;
 			}
 		}
@@ -571,7 +571,7 @@ public class Hand {
 				out.setSolid(true);
 
 				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW);
+				getGame().trigger(Trigger.ON_DRAW, side);
 				return out;
 			}
 		}
@@ -594,7 +594,7 @@ public class Hand {
 				out.setSolid(true);
 
 				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW);
+				getGame().trigger(Trigger.ON_DRAW, side);
 				return out;
 			}
 		}
@@ -617,7 +617,7 @@ public class Hand {
 				out.setSolid(true);
 
 				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW);
+				getGame().trigger(Trigger.ON_DRAW, side);
 				return out;
 			}
 		}
