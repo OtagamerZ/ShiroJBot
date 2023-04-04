@@ -58,7 +58,7 @@ public class DailyCommand implements Executable {
 
 			GuildMessageChannel chn = data.config().getSettings().getNotificationsChannel();
 			if (chn != null) {
-				chn.sendMessage(locale.get("achievement/title", event.user().getAsMention(), gems, acc.getStreak())).queue();
+				chn.sendMessage(locale.get("achievement/gem", event.user().getAsMention(), gems, acc.getStreak())).queue();
 			}
 		}
 	}
