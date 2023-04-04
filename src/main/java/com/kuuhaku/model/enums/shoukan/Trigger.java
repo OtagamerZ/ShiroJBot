@@ -22,7 +22,7 @@ public enum Trigger {
 	/** On each render **/
 	ON_TICK,
 
-	/** When turn begins (also expired turn-based effects) **/
+	/** When turn begins (also expires turn-based effects) **/
 	ON_TURN_BEGIN,
 
 	/** When turn ends **/

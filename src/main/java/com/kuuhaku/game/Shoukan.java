@@ -886,21 +886,19 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Senshi enemy = tgt.enemy();
 		if (enemy != null && enemy.isProtected(chosen)) {
-			Evogear copy = chosen.copy();
-
-			curr.consumeHP(copy.getHPCost());
-			curr.consumeMP(copy.getMPCost());
-			List<Drawable<?>> consumed = curr.consumeSC(copy.getSCCost());
+			curr.consumeHP(chosen.getHPCost());
+			curr.consumeMP(chosen.getMPCost());
+			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 			if (!consumed.isEmpty()) {
-				copy.getStats().getData().put("consumed", consumed);
+				chosen.getStats().getData().put("consumed", consumed);
 			}
 
-			if (!copy.getStats().popFlag(Flag.FREE_ACTION)) {
+			if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
 				chosen.setAvailable(false);
-				stack.add(copy);
+				stack.add(chosen.copy());
 			}
 
-			curr.getData().put("last_spell", copy);
+			curr.getData().put("last_spell", chosen);
 			trigger(ON_SPELL, side);
 			reportEvent("str/spell_shield", true);
 			return false;
@@ -909,22 +907,20 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Evogear copy = chosen.withCopy(e -> {
-			if (curr.isEmpowered() && curr.getOrigin().major() == Race.MYSTICAL) {
-				e.getStats().setFlag(Flag.EMPOWERED, true, true);
-				curr.setEmpowered(false);
-			}
-		});
-
-		curr.consumeHP(copy.getHPCost());
-		curr.consumeMP(copy.getMPCost());
-		List<Drawable<?>> consumed = curr.consumeSC(copy.getSCCost());
-		if (!consumed.isEmpty()) {
-			copy.getStats().getData().put("consumed", consumed);
+		if (curr.isEmpowered() && curr.getOrigin().major() == Race.MYSTICAL) {
+			chosen.getStats().setFlag(Flag.EMPOWERED, true, true);
+			curr.setEmpowered(false);
 		}
 
-		if (!copy.execute(copy.toParameters(tgt))) {
-			if (!copy.isAvailable()) {
+		curr.consumeHP(chosen.getHPCost());
+		curr.consumeMP(chosen.getMPCost());
+		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
+		if (!consumed.isEmpty()) {
+			chosen.getStats().getData().put("consumed", consumed);
+		}
+
+		if (!chosen.execute(chosen.toParameters(tgt))) {
+			if (!chosen.isAvailable()) {
 				chosen.setAvailable(false);
 				reportEvent("str/effect_interrupted", true, chosen);
 				return true;
@@ -933,16 +929,16 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		if (!copy.getStats().popFlag(Flag.FREE_ACTION)) {
+		if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
 			chosen.setAvailable(false);
-			stack.add(copy);
+			stack.add(chosen.copy());
 		}
 
-		curr.getData().put("last_spell", copy);
+		curr.getData().put("last_spell", chosen);
 		trigger(ON_SPELL, side);
 		reportEvent("str/activate_card", true,
 				curr.getName(),
-				copy.getTags().contains("tag/secret") ? getLocale().get("str/a_spell") : copy
+				chosen.getTags().contains("tag/secret") ? getLocale().get("str/a_spell") : chosen
 		);
 		return true;
 	}
