@@ -19,7 +19,6 @@
 package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.exceptions.TargetException;
-import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Side;
@@ -101,7 +100,7 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 		return i;
 	}
 
-	public boolean isTarget(Drawable<?> card) {
+	public boolean isTarget(Senshi card) {
 		return Arrays.stream(targets).anyMatch(t -> Objects.equals(t.card(), card));
 	}
 
@@ -153,8 +152,12 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 		return out;
 	}
 
-	public boolean deferred() {
-		return trigger == Trigger.ON_DEFER;
+	public boolean supportDefer() {
+		return trigger == Trigger.ON_DEFER_SUPPORT;
+	}
+
+	public boolean nearbyDefer() {
+		return trigger == Trigger.ON_DEFER_NEARBY;
 	}
 
 	public boolean leeched() {

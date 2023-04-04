@@ -140,7 +140,10 @@ public enum Trigger {
 	ON_TRAP,
 
 	/** Triggers mirrored from supported card **/
-	ON_DEFER,
+	ON_DEFER_SUPPORT,
+
+	/** Triggers mirrored from adjacent cards **/
+	ON_DEFER_NEARBY,
 
 	/** Triggers mirrored from attached player **/
 	ON_LEECH,

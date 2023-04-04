@@ -975,11 +975,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Senshi s = this;
 		boolean targeted = false;
 
-		if (ep.trigger() == ON_DEFER) {
+		if (ep.supportDefer() || ep.nearbyDefer()) {
 			if (ep.size() == 0) return false;
 
-			s = getFrontline();
-			if (s == null) return false;
+			if (ep.supportDefer()) {
+				s = getFrontline();
+				if (s == null) return false;
+			}
 		}
 
 		if (s.equals(ep.source().card())) {
@@ -1067,7 +1069,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			Senshi sup = getSupport();
 			if (sup != null && !global) {
-				sup.execute(new EffectParameters(ON_DEFER, getSide(), ep.source(), ep.targets()));
+				sup.execute(new EffectParameters(ON_DEFER_SUPPORT, getSide(), ep.source(), ep.targets()));
+			}
+
+			for (Senshi adj : getNearby()) {
+				adj.execute(new EffectParameters(ON_DEFER_NEARBY, getSide(), ep.source(), ep.targets()));
 			}
 
 			for (@Language("Groovy") String curse : stats.getCurses()) {
