@@ -1793,6 +1793,9 @@ public class Shoukan extends GameInstance<Phase> {
 						try {
 							effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
 						} catch (ActivationException ignore) {
+						} catch (Exception e) {
+							getChannel().sendMessage(getLocale().get("error/effect")).queue();
+							Constants.LOGGER.warn("Failed to execute " + effect.source() + " persistent effect", e);
 						}
 					}
 				}
