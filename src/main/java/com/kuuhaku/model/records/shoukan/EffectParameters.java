@@ -27,8 +27,9 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
-public record EffectParameters(Trigger trigger, Side side, Source source, Target... targets) {
+public record EffectParameters(Trigger trigger, Side side, AtomicReference<Senshi> referee, Source source, Target... targets) {
 	public EffectParameters(Trigger trigger, Side side) {
 		this(trigger, side, new Source());
 	}
@@ -38,8 +39,17 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 	}
 
 	public EffectParameters(Trigger trigger, Side side, Source source, Target... targets) {
+		this(trigger, side, new AtomicReference<>(), source, targets);
+	}
+
+	public EffectParameters(Trigger trigger, Side side, Senshi referee, Source source, Target... targets) {
+		this(trigger, side, new AtomicReference<>(referee), source, targets);
+	}
+
+	public EffectParameters(Trigger trigger, Side side, AtomicReference<Senshi> referee, Source source, Target... targets) {
 		this.trigger = trigger;
 		this.side = side;
+		this.referee = referee;
 		this.source = source;
 
 		Set<Target> tgts = new HashSet<>(List.of(targets));
