@@ -1047,21 +1047,24 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
 			}
 
-			if (hasEffect() && getEffect().contains(trigger.name())) {
-				if (isStunned() && Calc.chance(25)) {
-					if (!global) {
-						game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
+			String eff = getEffect();
+			if (hasEffect() && eff.contains(trigger.name())) {
+				if (!ep.nearbyDefer() || eff.contains("nearbyDefer")) {
+					if (isStunned() && Calc.chance(25)) {
+						if (!global) {
+							game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
+						}
+					} else {
+						cachedEffect.forScript(getEffect())
+								.withConst("self", this)
+								.withConst("game", hand.getGame())
+								.withConst("data", stats.getData())
+								.withVar("ep", ep)
+								.withVar("side", hand.getSide())
+								.withVar("props", extractValues(hand.getGame().getLocale(), cachedEffect))
+								.withVar("trigger", trigger)
+								.run();
 					}
-				} else {
-					cachedEffect.forScript(getEffect())
-							.withConst("self", this)
-							.withConst("game", hand.getGame())
-							.withConst("data", stats.getData())
-							.withVar("ep", ep)
-							.withVar("side", hand.getSide())
-							.withVar("props", extractValues(hand.getGame().getLocale(), cachedEffect))
-							.withVar("trigger", trigger)
-							.run();
 				}
 			}
 
