@@ -21,5 +21,5 @@ package com.kuuhaku.model.records.shoukan;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
-public record DeferredTrigger(Senshi referee, Trigger trigger) {
+public record DeferredTrigger(Senshi card, Trigger trigger) {
 }
