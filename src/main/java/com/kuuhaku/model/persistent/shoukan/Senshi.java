@@ -1047,24 +1047,21 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
 			}
 
-			String eff = getEffect();
-			if (hasEffect() && eff.contains(trigger.name())) {
-				if (!ep.nearbyDefer() || eff.contains("nearbyDefer")) {
-					if (isStunned() && Calc.chance(25)) {
-						if (!global) {
-							game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
-						}
-					} else {
-						cachedEffect.forScript(getEffect())
-								.withConst("self", this)
-								.withConst("game", hand.getGame())
-								.withConst("data", stats.getData())
-								.withVar("ep", ep)
-								.withVar("side", hand.getSide())
-								.withVar("props", extractValues(hand.getGame().getLocale(), cachedEffect))
-								.withVar("trigger", trigger)
-								.run();
+			if (hasEffect() && getEffect().contains(trigger.name())) {
+				if (isStunned() && Calc.chance(25)) {
+					if (!global) {
+						game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
 					}
+				} else {
+					cachedEffect.forScript(getEffect())
+							.withConst("self", this)
+							.withConst("game", hand.getGame())
+							.withConst("data", stats.getData())
+							.withVar("ep", ep)
+							.withVar("side", hand.getSide())
+							.withVar("props", extractValues(hand.getGame().getLocale(), cachedEffect))
+							.withVar("trigger", trigger)
+							.run();
 				}
 			}
 
@@ -1074,7 +1071,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			for (Senshi adj : getNearby()) {
-				adj.execute(new EffectParameters(ON_DEFER_NEARBY, getSide(), this, ep.source(), ep.targets()));
+				if (adj.getEffect().contains("nearbyDefer")) {
+					adj.execute(new EffectParameters(ON_DEFER_NEARBY, getSide(), this, ep.source(), ep.targets()));
+				}
 			}
 
 			for (@Language("Groovy") String curse : stats.getCurses()) {
