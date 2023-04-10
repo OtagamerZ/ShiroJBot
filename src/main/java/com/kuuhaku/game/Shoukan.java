@@ -2305,6 +2305,7 @@ public class Shoukan extends GameInstance<Phase> {
 			Collections.shuffle(curr.getCards());
 		}
 
+		trigger(ON_TURN_BEGIN, curr.getSide());
 		for (SlotColumn slt : getSlots(curr.getSide())) {
 			for (Senshi s : slt.getCards()) {
 				if (s != null) {
@@ -2318,7 +2319,6 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		trigger(ON_TURN_BEGIN, curr.getSide());
 		curr.showHand();
 		reportEvent("str/game_turn_change", true, "<@" + curr.getUid() + ">", (int) Math.ceil(getTurn() / 2d));
 
