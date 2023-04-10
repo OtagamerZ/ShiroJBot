@@ -38,6 +38,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.records.shoukan.DeferredTrigger;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
@@ -975,13 +976,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Senshi s = this;
 		boolean targeted = false;
 
-		if (ep.supportDefer() || ep.nearbyDefer()) {
-			if (ep.size() == 0) return false;
-
-			s = ep.referee().get();
-			if (s == null) return false;
-		}
-
 		if (s.equals(ep.source().card())) {
 			trigger = ep.source().trigger();
 		} else {
@@ -1067,13 +1061,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			Senshi sup = getSupport();
 			if (sup != null && !global) {
-				sup.execute(new EffectParameters(ON_DEFER_SUPPORT, getSide(), this, ep.source(), ep.targets()));
+				sup.execute(new EffectParameters(ON_DEFER_SUPPORT, getSide(), new DeferredTrigger(this, trigger), ep.source(), ep.targets()));
 			}
 
 			for (Senshi adj : getNearby()) {
-				if (adj.getEffect().contains("nearbyDefer")) {
-					adj.execute(new EffectParameters(ON_DEFER_NEARBY, getSide(), this, ep.source(), ep.targets()));
-				}
+				adj.execute(new EffectParameters(ON_DEFER_NEARBY, getSide(), new DeferredTrigger(this, trigger), ep.source(), ep.targets()));
 			}
 
 			for (@Language("Groovy") String curse : stats.getCurses()) {

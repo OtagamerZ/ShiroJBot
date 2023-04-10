@@ -27,9 +27,8 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
-public record EffectParameters(Trigger trigger, Side side, AtomicReference<Senshi> referee, Source source, Target... targets) {
+public record EffectParameters(Trigger trigger, Side side, DeferredTrigger referee, Source source, Target... targets) {
 	public EffectParameters(Trigger trigger, Side side) {
 		this(trigger, side, new Source());
 	}
@@ -39,14 +38,10 @@ public record EffectParameters(Trigger trigger, Side side, AtomicReference<Sensh
 	}
 
 	public EffectParameters(Trigger trigger, Side side, Source source, Target... targets) {
-		this(trigger, side, new AtomicReference<>(), source, targets);
+		this(trigger, side, null, source, targets);
 	}
 
-	public EffectParameters(Trigger trigger, Side side, Senshi referee, Source source, Target... targets) {
-		this(trigger, side, new AtomicReference<>(referee), source, targets);
-	}
-
-	public EffectParameters(Trigger trigger, Side side, AtomicReference<Senshi> referee, Source source, Target... targets) {
+	public EffectParameters(Trigger trigger, Side side, DeferredTrigger referee, Source source, Target... targets) {
 		this.trigger = trigger;
 		this.side = side;
 		this.referee = referee;
@@ -162,12 +157,8 @@ public record EffectParameters(Trigger trigger, Side side, AtomicReference<Sensh
 		return out;
 	}
 
-	public boolean supportDefer() {
-		return trigger == Trigger.ON_DEFER_SUPPORT;
-	}
-
-	public boolean nearbyDefer() {
-		return trigger == Trigger.ON_DEFER_NEARBY;
+	public boolean isDeferred(Trigger trigger) {
+		return referee != null && referee.trigger() == trigger;
 	}
 
 	public boolean leeched() {
