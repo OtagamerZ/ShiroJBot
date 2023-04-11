@@ -434,6 +434,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
+			System.out.println(this + " - " + trigger);
 			Utils.exec(getEffect(), Map.of(
 					"evo", this,
 					"game", hand.getGame(),
