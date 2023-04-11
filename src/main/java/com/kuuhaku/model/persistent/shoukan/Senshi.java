@@ -960,6 +960,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
+	public CachedScriptManager<Senshi> getCSM() {
+		return cachedEffect;
+	}
+
+	@Override
 	public boolean execute(EffectParameters ep) {
 		return execute(false, ep);
 	}

@@ -376,6 +376,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
+	public CachedScriptManager<Evogear> getCSM() {
+		return cachedEffect;
+	}
+
+	@Override
 	public boolean execute(EffectParameters ep) {
 		if (base.isLocked()) return false;
 		else if (!hasEffect() || hand.getLockTime(Lock.EFFECT) > 0) return false;

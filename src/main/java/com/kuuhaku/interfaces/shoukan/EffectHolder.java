@@ -88,6 +88,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default void executeAssert(Trigger trigger) {
 	}
 
+	CachedScriptManager<T> getCSM();
+
 	default Function<String, String> parseValues(Graphics2D g2d, DeckStyling style, JSONObject values) {
 		return str -> {
 			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}|\\{(?<tag>\\w+)}");
@@ -193,7 +195,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		};
 	}
 
-	default JSONObject extractValues(I18N locale, CachedScriptManager csm) {
+	default JSONObject extractValues(I18N locale, CachedScriptManager<? extends EffectHolder<?>> csm) {
 		Hand h = getHand();
 		Map<String, Object> values = Map.ofEntries(
 				Map.entry("php", h == null ? 6000 : h.getHP()),
@@ -207,7 +209,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Map.entry("dfs", getDfs()),
 				Map.entry("ddg", getDodge()),
 				Map.entry("blk", getBlock()),
-				Map.entry("cd", 0),
 				Map.entry("data", getStats().getData())
 		);
 
