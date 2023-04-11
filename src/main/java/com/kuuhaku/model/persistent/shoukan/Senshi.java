@@ -1171,11 +1171,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		if (Calc.chance(getDodge())) {
 			blocked.add(source);
-			Shoukan game = hand.getGame();
-			game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect", this)).queue();
 			return true;
 		} else if (hasCharm(Charm.SHIELD, true)) {
 			blocked.add(source);
+			Shoukan game = hand.getGame();
+			game.getChannel().sendMessage(game.getLocale().get("str/spell_shield", this)).queue();
 			return true;
 		}
 
