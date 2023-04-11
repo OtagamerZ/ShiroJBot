@@ -429,12 +429,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void executeAssert(Trigger trigger) {
-		if (base.isLocked() || isSpell()) return;
+		if (base.isLocked()) return;
 		else if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return;
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
-			System.out.println(this + " - " + trigger);
 			Utils.exec(getEffect(), Map.of(
 					"evo", this,
 					"game", hand.getGame(),
