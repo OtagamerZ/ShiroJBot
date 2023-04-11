@@ -408,6 +408,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			cachedEffect.run();
 
 			stats.popFlag(Flag.EMPOWERED);
+			game.trigger(ON_EFFECT, hand.getSide());
 			return true;
 		} catch (TargetException e) {
 			if (targetType != TargetType.NONE && ep.trigger() == Trigger.ON_ACTIVATE) {

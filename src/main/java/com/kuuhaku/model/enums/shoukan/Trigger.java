@@ -124,6 +124,9 @@ public enum Trigger {
 	/** On using a card's active effect **/
 	ON_ACTIVATE,
 
+	/** On triggering any effect **/
+	ON_EFFECT,
+
 	/** On using a spell **/
 	ON_SPELL,
 
