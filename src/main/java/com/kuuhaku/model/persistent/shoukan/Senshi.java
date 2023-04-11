@@ -1088,7 +1088,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			popFlag(Flag.EMPOWERED);
-			game.trigger(ON_EFFECT, hand.getSide());
+			if (trigger != ON_TICK) {
+				game.trigger(ON_EFFECT, hand.getSide());
+			}
+
 			return true;
 		} catch (TargetException e) {
 			TargetType type = stats.getData().getEnum(TargetType.class, "targeting");
