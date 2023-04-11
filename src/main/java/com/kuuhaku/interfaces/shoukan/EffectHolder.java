@@ -195,7 +195,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		};
 	}
 
-	default JSONObject extractValues(I18N locale, CachedScriptManager<? extends EffectHolder<?>> csm) {
+	default JSONObject extractValues(I18N locale) {
 		Hand h = getHand();
 		Map<String, Object> values = Map.ofEntries(
 				Map.entry("php", h == null ? 6000 : h.getHP()),
@@ -212,6 +212,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Map.entry("data", getStats().getData())
 		);
 
+		CachedScriptManager<T> csm = getCSM();
 		if (!csm.getStoredProps().isEmpty() && csm.getPropHash().intValue() == values.hashCode()) {
 			return csm.getStoredProps();
 		}
@@ -219,7 +220,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		csm.getStoredProps().clear();
 		String desc = getDescription(locale);
 		for (String str : desc.split("\\s")) {
-			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}|\\{(?<tag>\\w+)}");
+			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}");
 
 			if (!groups.isEmpty()) {
 				try {
