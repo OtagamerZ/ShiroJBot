@@ -967,7 +967,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean execute(boolean global, EffectParameters ep) {
-		if (base.isLocked()) return false;
+		if (base.isLocked() && !global) return false;
 		else if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 		else if (popFlag(Flag.NO_EFFECT)) {
 			base.lock();
