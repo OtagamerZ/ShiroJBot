@@ -1123,13 +1123,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public void executeAssert(Trigger trigger) {
-		if (base.isLocked()) return;
-		else if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE)) return;
+		if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE)) return;
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
-			base.lock();
-
 			Utils.exec(getEffect(), Map.of(
 					"self", this,
 					"game", hand.getGame(),
@@ -1140,8 +1137,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					"trigger", trigger
 			));
 		} catch (Exception ignored) {
-		} finally {
-			unlock();
 		}
 	}
 

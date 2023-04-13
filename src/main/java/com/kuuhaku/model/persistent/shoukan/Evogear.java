@@ -382,8 +382,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public boolean execute(EffectParameters ep) {
-		if (base.isLocked()) return false;
-		else if (!hasEffect() || hand.getLockTime(Lock.EFFECT) > 0) return false;
+		if (!hasEffect() || hand.getLockTime(Lock.EFFECT) > 0) return false;
 		else if (!getEffect().contains(ep.trigger().name())) {
 			if (!isSpell() || !Utils.equalsAny(ep.trigger(), ON_ACTIVATE, ON_TRAP)) {
 				return false;
@@ -438,8 +437,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void executeAssert(Trigger trigger) {
-		if (base.isLocked()) return;
-		else if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return;
+		if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return;
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
