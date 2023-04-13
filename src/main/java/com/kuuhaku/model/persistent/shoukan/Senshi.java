@@ -30,10 +30,7 @@ import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
-import com.kuuhaku.model.common.shoukan.CardExtra;
-import com.kuuhaku.model.common.shoukan.Hand;
-import com.kuuhaku.model.common.shoukan.SlotColumn;
-import com.kuuhaku.model.common.shoukan.TrapSpell;
+import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -1144,6 +1141,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		base.unlock();
 		for (Evogear e : equipments) {
 			e.getBase().unlock();
+		}
+
+		if (this instanceof AugmentSenshi s) {
+			s.getOriginal().unlock();
 		}
 	}
 

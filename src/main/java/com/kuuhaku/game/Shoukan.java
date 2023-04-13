@@ -1882,25 +1882,14 @@ public class Shoukan extends GameInstance<Phase> {
 				return;
 			}
 
-			List<SlotColumn> slts = getSlots(side);
-			for (SlotColumn slt : slts) {
-				Senshi s = slt.getTop();
-				if (s != null) {
-					s.unlock();
-					s.setLastInteraction(null);
-					s.getStats().removeExpired(AttrMod::isExpired);
-					for (Evogear e : s.getEquipments()) {
-						e.getStats().removeExpired(AttrMod::isExpired);
-					}
+			iterateSlots(side, s -> {
+				s.unlock();
+				s.setLastInteraction(null);
+				s.getStats().removeExpired(AttrMod::isExpired);
+				for (Evogear e : s.getEquipments()) {
+					e.getStats().removeExpired(AttrMod::isExpired);
 				}
-
-				s = slt.getBottom();
-				if (s != null) {
-					s.unlock();
-					s.setLastInteraction(null);
-					s.getStats().removeExpired(AttrMod::isExpired);
-				}
-			}
+			});
 		}
 
 		BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
