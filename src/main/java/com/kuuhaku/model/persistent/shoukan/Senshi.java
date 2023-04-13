@@ -1206,6 +1206,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		slot = null;
 		leech = null;
 		lastInteraction = null;
+		cachedEffect = new CachedScriptManager<>();
+		base.unlock();
 
 		byte base = 0b11;
 		base = (byte) Bit.set(base, 4, isSealed());
