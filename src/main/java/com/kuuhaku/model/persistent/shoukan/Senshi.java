@@ -1148,12 +1148,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void noEffect(Consumer<Senshi> c) {
-		try {
-			base.lock();
-			c.accept(this);
-		} finally {
-			base.unlock();
-		}
+		base.lock();
+		c.accept(this);
 	}
 
 	public int getDamage(Senshi target) {
@@ -1330,6 +1326,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (!over && !isFlipped() && isDefending()) {
 				g1.drawImage(IO.getResourceAsImage("shoukan/states/defense.png"), 0, 0, null);
+			}
+
+			if (base.isLocked()) {
+				g1.setColor(new Color(255, 0, 0, 100));
+				g1.fillRect(0, 0, 225, 350);
 			}
 		});
 
