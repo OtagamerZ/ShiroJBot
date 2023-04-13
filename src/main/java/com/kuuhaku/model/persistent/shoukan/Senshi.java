@@ -30,7 +30,10 @@ import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
-import com.kuuhaku.model.common.shoukan.*;
+import com.kuuhaku.model.common.shoukan.CardExtra;
+import com.kuuhaku.model.common.shoukan.Hand;
+import com.kuuhaku.model.common.shoukan.SlotColumn;
+import com.kuuhaku.model.common.shoukan.TrapSpell;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -967,7 +970,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean execute(boolean global, EffectParameters ep) {
-		if (base.isLocked() && !global) return false;
+		if (base.isLocked()) return false;
 		else if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 		else if (popFlag(Flag.NO_EFFECT)) {
 			base.lock();
@@ -1000,9 +1003,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Shoukan game = hand.getGame();
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
-			if (!global) {
-				base.lock();
-			}
+			base.lock();
 
 			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
 				if (!game.getCurrent().equals(hand)) {
@@ -1060,6 +1061,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 							.withVar("props", extractValues(hand.getGame().getLocale()))
 							.withVar("trigger", trigger)
 							.run();
+
+					popFlag(Flag.EMPOWERED);
+					if (trigger != ON_TICK) {
+						game.trigger(ON_EFFECT, hand.getSide());
+					}
 				}
 			}
 
@@ -1084,11 +1090,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						"props", extractValues(hand.getGame().getLocale()),
 						"trigger", trigger
 				));
-			}
-
-			popFlag(Flag.EMPOWERED);
-			if (trigger != ON_TICK) {
-				game.trigger(ON_EFFECT, hand.getSide());
 			}
 
 			return true;
@@ -1116,16 +1117,20 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			Constants.LOGGER.warn("Failed to execute " + this + " effect\n" + ("/* " + source + " */\n" + getEffect()), e);
 			return false;
 		} finally {
+			unlock();
 			//other.setHeroDefense(false);
 		}
 	}
 
 	@Override
 	public void executeAssert(Trigger trigger) {
-		if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE)) return;
+		if (base.isLocked()) return;
+		else if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE)) return;
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
+			base.lock();
+
 			Utils.exec(getEffect(), Map.of(
 					"self", this,
 					"game", hand.getGame(),
@@ -1136,6 +1141,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					"trigger", trigger
 			));
 		} catch (Exception ignored) {
+		} finally {
+			unlock();
 		}
 	}
 
@@ -1144,15 +1151,15 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		for (Evogear e : equipments) {
 			e.getBase().unlock();
 		}
-
-		if (this instanceof AugmentSenshi s) {
-			s.getOriginal().unlock();
-		}
 	}
 
 	public void noEffect(Consumer<Senshi> c) {
-		base.lock();
-		c.accept(this);
+		try {
+			base.lock();
+			c.accept(this);
+		} finally {
+			base.unlock();
+		}
 	}
 
 	public int getDamage(Senshi target) {
@@ -1200,8 +1207,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		slot = null;
 		leech = null;
 		lastInteraction = null;
-		cachedEffect = new CachedScriptManager<>();
-		base.unlock();
 
 		byte base = 0b11;
 		base = (byte) Bit.set(base, 4, isSealed());
@@ -1329,11 +1334,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (!over && !isFlipped() && isDefending()) {
 				g1.drawImage(IO.getResourceAsImage("shoukan/states/defense.png"), 0, 0, null);
-			}
-
-			if (base.isLocked()) {
-				g1.setColor(new Color(255, 0, 0, 100));
-				g1.fillRect(0, 0, 225, 350);
 			}
 		});
 

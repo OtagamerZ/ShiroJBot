@@ -1883,7 +1883,6 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			iterateSlots(side, s -> {
-				s.unlock();
 				s.setLastInteraction(null);
 				s.getStats().removeExpired(AttrMod::isExpired);
 				for (Evogear e : s.getEquipments()) {
