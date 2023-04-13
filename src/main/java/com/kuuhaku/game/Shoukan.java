@@ -926,10 +926,9 @@ public class Shoukan extends GameInstance<Phase> {
 				return true;
 			}
 
+			System.out.println("fail");
 			return false;
 		}
-
-		System.out.println("pass");
 
 		if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
 			chosen.setAvailable(false);
