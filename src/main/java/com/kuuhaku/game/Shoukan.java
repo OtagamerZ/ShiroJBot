@@ -1754,60 +1754,53 @@ public class Shoukan extends GameInstance<Phase> {
 		for (EffectOverTime effect : effects) {
 			if (effect.lock().get()) continue;
 
-			boolean keepLock = false;
 			boolean remove = false;
-			try {
-				effect.lock().set(true);
+			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
+			if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
+				effect.decreaseTurn();
+				remove = effect.expired() || effect.removed();
+			}
 
-				Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
-				if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
-					effect.decreaseTurn();
-					remove = effect.expired() || effect.removed();
+			if (ep.size() == 0) {
+				if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger())) {
+					effect.decreaseLimit();
+
+					try {
+						effect.effect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
+					} catch (ActivationException ignore) {
+					}
+
+					if (effect.side() == null) {
+						effect.lock().set(true);
+					}
 				}
 
-				if (ep.size() == 0) {
-					if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger())) {
+				remove = effect.expired() || effect.removed();
+			} else if (ep.source() != null) {
+				if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
+					effect.decreaseLimit();
+
+					try {
+						effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
+					} catch (ActivationException ignore) {
+					}
+				}
+
+				for (Target t : ep.targets()) {
+					if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
 						effect.decreaseLimit();
 
 						try {
-							effect.effect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
+							effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
 						} catch (ActivationException ignore) {
-						}
-
-						if (effect.side() == null) {
-							keepLock = true;
-						}
-					}
-
-					remove = effect.expired() || effect.removed();
-				} else if (ep.source() != null) {
-					if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
-						effect.decreaseLimit();
-
-						try {
-							effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
-						} catch (ActivationException ignore) {
+						} catch (Exception e) {
+							getChannel().sendMessage(getLocale().get("error/effect")).queue();
+							Constants.LOGGER.warn("Failed to execute " + effect.source() + " persistent effect", e);
 						}
 					}
-
-					for (Target t : ep.targets()) {
-						if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
-							effect.decreaseLimit();
-
-							try {
-								effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
-							} catch (ActivationException ignore) {
-							} catch (Exception e) {
-								getChannel().sendMessage(getLocale().get("error/effect")).queue();
-								Constants.LOGGER.warn("Failed to execute " + effect.source() + " persistent effect", e);
-							}
-						}
-					}
-
-					remove = effect.expired() || effect.removed();
 				}
-			} finally {
-				effect.lock().set(keepLock);
+
+				remove = effect.expired() || effect.removed();
 			}
 
 			if (remove) {

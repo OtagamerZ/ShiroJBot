@@ -154,6 +154,6 @@ public enum Trigger {
 	/** Nothing **/
 	NONE,
 
-	/** Placeholder **/
+	/** Placeholder <b>(DO NOT USE)</b> **/
 	VOID
 }
