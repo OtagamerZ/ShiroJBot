@@ -94,12 +94,17 @@ public record EffectOverTime(
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		EffectOverTime that = (EffectOverTime) o;
-		return source.getSerial() == that.source.getSerial() && side == that.side;
+
+		if (permanent()) {
+			return source.getId().equals(that.source.getId()) && side == that.side;
+		} else {
+			return source.getSerial() == that.source.getSerial() && side == that.side;
+		}
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(source.getSerial(), side);
+		return Objects.hash(permanent() ? source.getId() : source.getSerial(), side);
 	}
 
 	@Override
