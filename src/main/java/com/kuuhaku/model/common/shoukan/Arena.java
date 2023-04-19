@@ -84,7 +84,7 @@ public class Arena implements Renderer {
 
 		if (d instanceof Senshi s) {
 			if (s.getLastInteraction() != null) {
-				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget(Trigger.NONE));
+				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget());
 				if (s.popFlag(Flag.NO_DEATH)) {
 					return false;
 				}

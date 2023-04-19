@@ -1287,7 +1287,7 @@ public class Shoukan extends GameInstance<Phase> {
 								dmg = 0;
 							} else if (!unstop && !source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
 								outcome = getLocale().get("str/combat_block", block);
-								trigger(NONE, source.asSource(NONE), target.asTarget(ON_BLOCK));
+								trigger(NONE, source.asSource(), target.asTarget(ON_BLOCK));
 
 								source.setStun(1);
 

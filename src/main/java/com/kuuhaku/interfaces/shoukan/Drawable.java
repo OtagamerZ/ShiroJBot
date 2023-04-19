@@ -345,8 +345,16 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		return t;
 	}
 
+	default Source asSource() {
+		return asSource(Trigger.NONE);
+	}
+
 	default Source asSource(Trigger trigger) {
 		return new Source(this, trigger);
+	}
+
+	default Target asTarget() {
+		return asTarget(Trigger.NONE);
 	}
 
 	default Target asTarget(Trigger trigger) {

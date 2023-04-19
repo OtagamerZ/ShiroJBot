@@ -161,7 +161,7 @@ public class Hand {
 
 		if (d instanceof Senshi s) {
 			if (s.getLastInteraction() != null) {
-				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget(Trigger.NONE));
+				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget());
 
 				Hand other = d.getHand().getOther();
 				other.addKill();

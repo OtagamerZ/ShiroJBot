@@ -1172,7 +1172,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (blocked.contains(source)) return true;
 
 		if (hand != null) {
-			hand.getGame().trigger(ON_EFFECT_TARGET, source.asSource(NONE), asTarget(ON_EFFECT_TARGET));
+			hand.getGame().trigger(ON_EFFECT_TARGET, source.asSource(), asTarget(ON_EFFECT_TARGET));
 			if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
 				return true;
 			}
