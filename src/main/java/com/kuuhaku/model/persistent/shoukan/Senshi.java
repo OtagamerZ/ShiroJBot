@@ -125,13 +125,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private int state = 0b10;
 	/*
 	0x0F FFFF FF
-	   │ ││││ └┴ 0011 1111
-	   │ ││││      ││ │││└ solid
-	   │ ││││      ││ ││└─ available
-	   │ ││││      ││ │└── defending
-	   │ ││││      ││ └─── flipped
-	   │ ││││      │└ sealed
-	   │ ││││      └─ switched
+	   │ ││││ └┴ 0111 1111
+	   │ ││││     │││ │││└ solid
+	   │ ││││     │││ ││└─ available
+	   │ ││││     │││ │└── defending
+	   │ ││││     │││ └─── flipped
+	   │ ││││     ││└ sealed
+	   │ ││││     │└─ switched
+	   │ ││││     └── cannot be targeted
 	   │ │││└─ (0 - 15) sleeping
 	   │ ││└── (0 - 15) stunned
 	   │ │└─── (0 - 15) stasis
@@ -746,6 +747,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		state = Bit.set(state, 5, sealed);
 	}
 
+	public boolean canBeTargeted() {
+		return Bit.on(state, 6);
+	}
+
+	public void setAllowTarget(boolean allow) {
+		state = Bit.set(state, 6, allow);
+	}
+
 	public boolean isSleeping() {
 		return !isStunned() && Bit.on(state, 3, 4);
 	}
@@ -1169,19 +1178,21 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isProtected(Drawable<?> source) {
-		if (blocked.contains(source)) return true;
+		if (!canBeTargeted() || blocked.contains(source)) return true;
 
 		if (hand != null) {
 			hand.getGame().trigger(ON_EFFECT_TARGET, source.asSource(NONE), asTarget(ON_EFFECT_TARGET));
 			if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
+				setAllowTarget(false);
 				return true;
 			}
 		}
 
 		if (Calc.chance(getDodge())) {
-			blocked.add(source);
+			setAllowTarget(false);
 			return true;
 		} else if (hasCharm(Charm.SHIELD, true)) {
+			setAllowTarget(false);
 			blocked.add(source);
 			Shoukan game = hand.getGame();
 			game.getChannel().sendMessage(game.getLocale().get("str/spell_shield", this)).queue();
