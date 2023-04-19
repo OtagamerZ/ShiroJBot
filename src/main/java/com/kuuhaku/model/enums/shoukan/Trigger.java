@@ -152,5 +152,8 @@ public enum Trigger {
 	ON_LEECH,
 
 	/** Nothing **/
-	NONE
+	NONE,
+
+	/** Placeholder **/
+	VOID
 }

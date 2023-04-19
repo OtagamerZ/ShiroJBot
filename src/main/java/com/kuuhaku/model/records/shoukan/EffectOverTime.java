@@ -52,7 +52,7 @@ public record EffectOverTime(
 				turns < 0 ? null : new AtomicInteger(turns),
 				limit < 0 ? null : new AtomicInteger(limit),
 				new AtomicBoolean(),
-				EnumSet.of(turns > -1 ? Trigger.ON_TURN_BEGIN : Trigger.NONE, triggers),
+				EnumSet.of(turns > -1 ? Trigger.ON_TURN_BEGIN : Trigger.VOID, triggers),
 				new AtomicBoolean()
 		);
 	}
