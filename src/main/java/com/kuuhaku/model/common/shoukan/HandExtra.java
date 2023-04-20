@@ -35,7 +35,7 @@ public class HandExtra {
 		return 1 + sum(healMult);
 	}
 
-	public void setHealing(int mult) {
+	public void setHealing(double mult) {
 		for (ValueMod mod : this.healMult) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + mult);
@@ -46,13 +46,13 @@ public class HandExtra {
 		this.healMult.add(new PermMod(mult));
 	}
 
-	public void setHealing(Drawable<?> source, int mult) {
+	public void setHealing(Drawable<?> source, double mult) {
 		ValueMod mod = new ValueMod(source, mult);
 		this.healMult.remove(mod);
 		this.healMult.add(mod);
 	}
 
-	public void setHealing(Drawable<?> source, int mult, int expiration) {
+	public void setHealing(Drawable<?> source, double mult, int expiration) {
 		ValueMod mod = new ValueMod(source, mult, expiration);
 		this.healMult.remove(mod);
 		this.healMult.add(mod);
@@ -62,7 +62,7 @@ public class HandExtra {
 		return 1 + sum(damageMult);
 	}
 
-	public void getDamageMult(int mult) {
+	public void setDamageMult(double mult) {
 		for (ValueMod mod : this.damageMult) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + mult);
@@ -73,13 +73,13 @@ public class HandExtra {
 		this.damageMult.add(new PermMod(mult));
 	}
 
-	public void getDamageMult(Drawable<?> source, int mult) {
+	public void setDamageMult(Drawable<?> source, double mult) {
 		ValueMod mod = new ValueMod(source, mult);
 		this.damageMult.remove(mod);
 		this.damageMult.add(mod);
 	}
 
-	public void getDamageMult(Drawable<?> source, int mult, int expiration) {
+	public void setDamageMult(Drawable<?> source, double mult, int expiration) {
 		ValueMod mod = new ValueMod(source, mult, expiration);
 		this.damageMult.remove(mod);
 		this.damageMult.add(mod);
