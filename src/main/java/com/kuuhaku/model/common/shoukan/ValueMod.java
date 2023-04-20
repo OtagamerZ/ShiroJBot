@@ -25,7 +25,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.Objects;
 
-public class AttrMod implements Cloneable {
+public class ValueMod implements Cloneable {
 	private final Drawable<?> source;
 	private double value;
 	private int expiration;
@@ -33,15 +33,15 @@ public class AttrMod implements Cloneable {
 	private final Side side;
 	private final int hash;
 
-	protected AttrMod(double value) {
+	protected ValueMod(double value) {
 		this(null, value);
 	}
 
-	public AttrMod(Drawable<?> source, double value) {
+	public ValueMod(Drawable<?> source, double value) {
 		this(source, value, -1);
 	}
 
-	public AttrMod(Drawable<?> source, double value, int expiration) {
+	public ValueMod(Drawable<?> source, double value, int expiration) {
 		this.source = source;
 		this.value = value;
 		this.expiration = expiration;
@@ -93,8 +93,8 @@ public class AttrMod implements Cloneable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
-		AttrMod attrMod = (AttrMod) o;
-		return hash == attrMod.hash && Objects.equals(source, attrMod.source);
+		ValueMod valueMod = (ValueMod) o;
+		return hash == valueMod.hash && Objects.equals(source, valueMod.source);
 	}
 
 	@Override
@@ -103,9 +103,9 @@ public class AttrMod implements Cloneable {
 	}
 
 	@Override
-	public AttrMod clone() {
+	public ValueMod clone() {
 		try {
-			return (AttrMod) super.clone();
+			return (ValueMod) super.clone();
 		} catch (CloneNotSupportedException e) {
 			throw new AssertionError();
 		}

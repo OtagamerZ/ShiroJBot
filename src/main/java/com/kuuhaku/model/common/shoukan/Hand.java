@@ -64,6 +64,7 @@ public class Hand {
 	private final Shoukan game;
 	private final Deck userDeck;
 	private final Side side;
+	private final HandExtra stats = new HandExtra();
 
 	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
 		if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
@@ -766,6 +767,12 @@ public class Hand {
 				value -= quart - regdeg.reduce(Regen.class, quart);
 			}
 
+			if (value < 0) {
+				value *= stats.getDamageMult();
+			} else {
+				value *= stats.getHealMult();
+			}
+
 			double prcnt = getHPPrcnt();
 			if (origin.demon()) {
 				prcnt = Math.min(prcnt, 0.5);
@@ -982,6 +989,10 @@ public class Hand {
 
 	public void resetChain() {
 		state = Bit.set(state, 4, 0, 4);
+	}
+
+	public HandExtra getStats() {
+		return stats;
 	}
 
 	public BufferedImage render() {

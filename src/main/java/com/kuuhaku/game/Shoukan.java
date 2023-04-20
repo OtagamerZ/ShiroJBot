@@ -1856,6 +1856,7 @@ public class Shoukan extends GameInstance<Phase> {
 			hand.getRealDeck();
 			hand.getGraveyard();
 			hand.resetChain();
+			hand.getStats().removeExpired(ValueMod::isExpired);
 
 			String def = hand.getDefeat();
 			if (hand.getHP() == 0 || def != null) {
@@ -1884,9 +1885,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 			iterateSlots(side, s -> {
 				s.setLastInteraction(null);
-				s.getStats().removeExpired(AttrMod::isExpired);
+				s.getStats().removeExpired(ValueMod::isExpired);
 				for (Evogear e : s.getEquipments()) {
-					e.getStats().removeExpired(AttrMod::isExpired);
+					e.getStats().removeExpired(ValueMod::isExpired);
 				}
 			});
 		}
@@ -2290,6 +2291,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.modMP(curr.getBase().mpGain().get());
 		curr.applyVoTs();
 		curr.reduceOriginCooldown(1);
+		curr.getStats().expireMods();
 
 		if (curr.getLockTime(Lock.BLIND) > 0) {
 			Collections.shuffle(curr.getCards());

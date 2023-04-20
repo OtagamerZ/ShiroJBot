@@ -39,21 +39,21 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public class CardExtra implements Cloneable {
-	private final HashSet<AttrMod> mana;
-	private final HashSet<AttrMod> blood;
-	private final HashSet<AttrMod> sacrifices;
+	private final HashSet<ValueMod> mana;
+	private final HashSet<ValueMod> blood;
+	private final HashSet<ValueMod> sacrifices;
 
-	private final HashSet<AttrMod> atk;
-	private final HashSet<AttrMod> dfs;
+	private final HashSet<ValueMod> atk;
+	private final HashSet<ValueMod> dfs;
 
-	private final HashSet<AttrMod> dodge;
-	private final HashSet<AttrMod> block;
+	private final HashSet<ValueMod> dodge;
+	private final HashSet<ValueMod> block;
 
-	private final HashSet<AttrMod> costMult;
-	private final HashSet<AttrMod> attrMult;
-	private final HashSet<AttrMod> power;
+	private final HashSet<ValueMod> costMult;
+	private final HashSet<ValueMod> attrMult;
+	private final HashSet<ValueMod> power;
 
-	private final HashSet<AttrMod> tier;
+	private final HashSet<ValueMod> tier;
 
 	private final EnumSet<Flag> flags;
 	private final EnumSet<Flag> tempFlags;
@@ -76,10 +76,10 @@ public class CardExtra implements Cloneable {
 	private transient Field[] fieldCache = null;
 
 	public CardExtra(
-			HashSet<AttrMod> mana, HashSet<AttrMod> blood, HashSet<AttrMod> sacrifices,
-			HashSet<AttrMod> atk, HashSet<AttrMod> dfs, HashSet<AttrMod> dodge,
-			HashSet<AttrMod> block, HashSet<AttrMod> costMult, HashSet<AttrMod> attrMult, HashSet<AttrMod> tier,
-			HashSet<AttrMod> power, EnumSet<Flag> flags, EnumSet<Flag> tempFlags,
+			HashSet<ValueMod> mana, HashSet<ValueMod> blood, HashSet<ValueMod> sacrifices,
+			HashSet<ValueMod> atk, HashSet<ValueMod> dfs, HashSet<ValueMod> dodge,
+			HashSet<ValueMod> block, HashSet<ValueMod> costMult, HashSet<ValueMod> attrMult, HashSet<ValueMod> tier,
+			HashSet<ValueMod> power, EnumSet<Flag> flags, EnumSet<Flag> tempFlags,
 			EnumSet<Flag> permFlags, JSONObject data, JSONObject perm,
 			ListOrderedSet<String> curses
 	) {
@@ -128,18 +128,18 @@ public class CardExtra implements Cloneable {
 		return Calc.round(sum(mana));
 	}
 
-	public AttrMod getMana(Drawable<?> source) {
-		for (AttrMod mod : mana) {
+	public ValueMod getMana(Drawable<?> source) {
+		for (ValueMod mod : mana) {
 			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
 
-		return new AttrMod(source, 0);
+		return new ValueMod(source, 0);
 	}
 
 	public void setMana(int mana) {
-		for (AttrMod mod : this.mana) {
+		for (ValueMod mod : this.mana) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + mana);
 				return;
@@ -150,13 +150,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setMana(Drawable<?> source, int mana) {
-		AttrMod mod = new AttrMod(source, mana);
+		ValueMod mod = new ValueMod(source, mana);
 		this.mana.remove(mod);
 		this.mana.add(mod);
 	}
 
 	public void setMana(Drawable<?> source, int mana, int expiration) {
-		AttrMod mod = new AttrMod(source, mana, expiration);
+		ValueMod mod = new ValueMod(source, mana, expiration);
 		this.mana.remove(mod);
 		this.mana.add(mod);
 	}
@@ -165,18 +165,18 @@ public class CardExtra implements Cloneable {
 		return Calc.round(sum(blood));
 	}
 
-	public AttrMod getBlood(Drawable<?> source) {
-		for (AttrMod mod : blood) {
+	public ValueMod getBlood(Drawable<?> source) {
+		for (ValueMod mod : blood) {
 			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
 
-		return new AttrMod(source, 0);
+		return new ValueMod(source, 0);
 	}
 
 	public void setBlood(int blood) {
-		for (AttrMod mod : this.blood) {
+		for (ValueMod mod : this.blood) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + blood);
 				return;
@@ -187,13 +187,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setBlood(Drawable<?> source, int blood) {
-		AttrMod mod = new AttrMod(source, blood);
+		ValueMod mod = new ValueMod(source, blood);
 		this.blood.remove(mod);
 		this.blood.add(mod);
 	}
 
 	public void setBlood(Drawable<?> source, int blood, int expiration) {
-		AttrMod mod = new AttrMod(source, blood, expiration);
+		ValueMod mod = new ValueMod(source, blood, expiration);
 		this.blood.remove(mod);
 		this.blood.add(mod);
 	}
@@ -202,18 +202,18 @@ public class CardExtra implements Cloneable {
 		return Calc.round(sum(sacrifices));
 	}
 
-	public AttrMod getSacrifices(Drawable<?> source) {
-		for (AttrMod mod : sacrifices) {
+	public ValueMod getSacrifices(Drawable<?> source) {
+		for (ValueMod mod : sacrifices) {
 			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
 
-		return new AttrMod(source, 0);
+		return new ValueMod(source, 0);
 	}
 
 	public void setSacrifices(int sacrifices) {
-		for (AttrMod mod : this.sacrifices) {
+		for (ValueMod mod : this.sacrifices) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + sacrifices);
 				return;
@@ -224,13 +224,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setSacrifices(Drawable<?> source, int sacrifices) {
-		AttrMod mod = new AttrMod(source, sacrifices);
+		ValueMod mod = new ValueMod(source, sacrifices);
 		this.sacrifices.remove(mod);
 		this.sacrifices.add(mod);
 	}
 
 	public void setSacrifices(Drawable<?> source, int sacrifices, int expiration) {
-		AttrMod mod = new AttrMod(source, sacrifices, expiration);
+		ValueMod mod = new ValueMod(source, sacrifices, expiration);
 		this.sacrifices.remove(mod);
 		this.sacrifices.add(mod);
 	}
@@ -239,18 +239,18 @@ public class CardExtra implements Cloneable {
 		return Calc.round(sum(atk));
 	}
 
-	public AttrMod getAtk(Drawable<?> source) {
-		for (AttrMod mod : atk) {
+	public ValueMod getAtk(Drawable<?> source) {
+		for (ValueMod mod : atk) {
 			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
 
-		return new AttrMod(source, 0);
+		return new ValueMod(source, 0);
 	}
 
 	public void setAtk(int atk) {
-		for (AttrMod mod : this.atk) {
+		for (ValueMod mod : this.atk) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + atk);
 				return;
@@ -261,13 +261,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setAtk(Drawable<?> source, int atk) {
-		AttrMod mod = new AttrMod(source, atk);
+		ValueMod mod = new ValueMod(source, atk);
 		this.atk.remove(mod);
 		this.atk.add(mod);
 	}
 
 	public void setAtk(Drawable<?> source, int atk, int expiration) {
-		AttrMod mod = new AttrMod(source, atk, expiration);
+		ValueMod mod = new ValueMod(source, atk, expiration);
 		this.atk.remove(mod);
 		this.atk.add(mod);
 	}
@@ -276,18 +276,18 @@ public class CardExtra implements Cloneable {
 		return Calc.round(sum(dfs));
 	}
 
-	public AttrMod getDfs(Drawable<?> source) {
-		for (AttrMod mod : dfs) {
+	public ValueMod getDfs(Drawable<?> source) {
+		for (ValueMod mod : dfs) {
 			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
 
-		return new AttrMod(source, 0);
+		return new ValueMod(source, 0);
 	}
 
 	public void setDfs(int dfs) {
-		for (AttrMod mod : this.dfs) {
+		for (ValueMod mod : this.dfs) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + dfs);
 				return;
@@ -298,13 +298,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setDfs(Drawable<?> source, int dfs) {
-		AttrMod mod = new AttrMod(source, dfs);
+		ValueMod mod = new ValueMod(source, dfs);
 		this.dfs.remove(mod);
 		this.dfs.add(mod);
 	}
 
 	public void setDfs(Drawable<?> source, int dfs, int expiration) {
-		AttrMod mod = new AttrMod(source, dfs, expiration);
+		ValueMod mod = new ValueMod(source, dfs, expiration);
 		this.dfs.remove(mod);
 		this.dfs.add(mod);
 	}
@@ -313,18 +313,18 @@ public class CardExtra implements Cloneable {
 		return Calc.round(sum(dodge));
 	}
 
-	public AttrMod getDodge(Drawable<?> source) {
-		for (AttrMod mod : dodge) {
+	public ValueMod getDodge(Drawable<?> source) {
+		for (ValueMod mod : dodge) {
 			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
 
-		return new AttrMod(source, 0);
+		return new ValueMod(source, 0);
 	}
 
 	public void setDodge(int dodge) {
-		for (AttrMod mod : this.dodge) {
+		for (ValueMod mod : this.dodge) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + dodge);
 				return;
@@ -335,13 +335,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setDodge(Drawable<?> source, int dodge) {
-		AttrMod mod = new AttrMod(source, dodge);
+		ValueMod mod = new ValueMod(source, dodge);
 		this.dodge.remove(mod);
 		this.dodge.add(mod);
 	}
 
 	public void setDodge(Drawable<?> source, int dodge, int expiration) {
-		AttrMod mod = new AttrMod(source, dodge, expiration);
+		ValueMod mod = new ValueMod(source, dodge, expiration);
 		this.dodge.remove(mod);
 		this.dodge.add(mod);
 	}
@@ -350,18 +350,18 @@ public class CardExtra implements Cloneable {
 		return Calc.round(sum(block));
 	}
 
-	public AttrMod getBlock(Drawable<?> source) {
-		for (AttrMod mod : block) {
+	public ValueMod getBlock(Drawable<?> source) {
+		for (ValueMod mod : block) {
 			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
 
-		return new AttrMod(source, 0);
+		return new ValueMod(source, 0);
 	}
 
 	public void setBlock(int block) {
-		for (AttrMod mod : this.block) {
+		for (ValueMod mod : this.block) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + block);
 				return;
@@ -372,13 +372,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setBlock(Drawable<?> source, int block) {
-		AttrMod mod = new AttrMod(source, block);
+		ValueMod mod = new ValueMod(source, block);
 		this.block.remove(mod);
 		this.block.add(mod);
 	}
 
 	public void setBlock(Drawable<?> source, int block, int expiration) {
-		AttrMod mod = new AttrMod(source, block, expiration);
+		ValueMod mod = new ValueMod(source, block, expiration);
 		this.block.remove(mod);
 		this.block.add(mod);
 	}
@@ -387,18 +387,18 @@ public class CardExtra implements Cloneable {
 		return 1 + sum(costMult);
 	}
 
-	public AttrMod getCostMult(Drawable<?> source) {
-		for (AttrMod mod : costMult) {
+	public ValueMod getCostMult(Drawable<?> source) {
+		for (ValueMod mod : costMult) {
 			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
 
-		return new AttrMod(source, 0);
+		return new ValueMod(source, 0);
 	}
 
 	public void setCostMult(double costMult) {
-		for (AttrMod mod : this.costMult) {
+		for (ValueMod mod : this.costMult) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + costMult);
 				return;
@@ -409,13 +409,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setCostMult(Drawable<?> source, double costMult) {
-		AttrMod mod = new AttrMod(source, costMult);
+		ValueMod mod = new ValueMod(source, costMult);
 		this.costMult.remove(mod);
 		this.costMult.add(mod);
 	}
 
 	public void setCostMult(Drawable<?> source, double costMult, int expiration) {
-		AttrMod mod = new AttrMod(source, costMult, expiration);
+		ValueMod mod = new ValueMod(source, costMult, expiration);
 		this.costMult.remove(mod);
 		this.costMult.add(mod);
 	}
@@ -424,18 +424,18 @@ public class CardExtra implements Cloneable {
 		return 1 + sum(attrMult);
 	}
 
-	public AttrMod getAttrMult(Drawable<?> source) {
-		for (AttrMod mod : attrMult) {
+	public ValueMod getAttrMult(Drawable<?> source) {
+		for (ValueMod mod : attrMult) {
 			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
 
-		return new AttrMod(source, 0);
+		return new ValueMod(source, 0);
 	}
 
 	public void setAttrMult(double attrMult) {
-		for (AttrMod mod : this.attrMult) {
+		for (ValueMod mod : this.attrMult) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + attrMult);
 				return;
@@ -446,13 +446,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setAttrMult(Drawable<?> source, double attrMult) {
-		AttrMod mod = new AttrMod(source, attrMult);
+		ValueMod mod = new ValueMod(source, attrMult);
 		this.attrMult.remove(mod);
 		this.attrMult.add(mod);
 	}
 
 	public void setAttrMult(Drawable<?> source, double attrMult, int expiration) {
-		AttrMod mod = new AttrMod(source, attrMult, expiration);
+		ValueMod mod = new ValueMod(source, attrMult, expiration);
 		this.attrMult.remove(mod);
 		this.attrMult.add(mod);
 	}
@@ -461,18 +461,18 @@ public class CardExtra implements Cloneable {
 		return (1 + sum(power)) * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
 	}
 
-	public AttrMod getPower(Drawable<?> source) {
-		for (AttrMod mod : power) {
+	public ValueMod getPower(Drawable<?> source) {
+		for (ValueMod mod : power) {
 			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
 
-		return new AttrMod(source, 0);
+		return new ValueMod(source, 0);
 	}
 
 	public void setPower(double power) {
-		for (AttrMod mod : this.power) {
+		for (ValueMod mod : this.power) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + power);
 				return;
@@ -483,13 +483,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setPower(Drawable<?> source, double power) {
-		AttrMod mod = new AttrMod(source, power);
+		ValueMod mod = new ValueMod(source, power);
 		this.power.remove(mod);
 		this.power.add(mod);
 	}
 
 	public void setPower(Drawable<?> source, double power, int expiration) {
-		AttrMod mod = new AttrMod(source, power, expiration);
+		ValueMod mod = new ValueMod(source, power, expiration);
 		this.power.remove(mod);
 		this.power.add(mod);
 	}
@@ -498,18 +498,18 @@ public class CardExtra implements Cloneable {
 		return Calc.round(sum(tier));
 	}
 
-	public AttrMod getTier(Drawable<?> source) {
-		for (AttrMod mod : tier) {
+	public ValueMod getTier(Drawable<?> source) {
+		for (ValueMod mod : tier) {
 			if (Objects.equals(source, mod.getSource())) {
 				return mod;
 			}
 		}
 
-		return new AttrMod(source, 0);
+		return new ValueMod(source, 0);
 	}
 
 	public void setTier(int tier) {
-		for (AttrMod mod : this.tier) {
+		for (ValueMod mod : this.tier) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + tier);
 				return;
@@ -520,13 +520,13 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setTier(Drawable<?> source, int tier) {
-		AttrMod mod = new AttrMod(source, tier);
+		ValueMod mod = new ValueMod(source, tier);
 		this.tier.remove(mod);
 		this.tier.add(mod);
 	}
 
 	public void setTier(Drawable<?> source, int tier, int expiration) {
-		AttrMod mod = new AttrMod(source, tier, expiration);
+		ValueMod mod = new ValueMod(source, tier, expiration);
 		this.tier.remove(mod);
 		this.tier.add(mod);
 	}
@@ -635,7 +635,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void expireMods() {
-		Predicate<AttrMod> check = mod -> {
+		Predicate<ValueMod> check = mod -> {
 			if (mod.getExpiration() > 0) {
 				mod.decExpiration();
 			}
@@ -647,7 +647,7 @@ public class CardExtra implements Cloneable {
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public void removeExpired(Predicate<AttrMod> check) {
+	public void removeExpired(Predicate<ValueMod> check) {
 		if (fieldCache == null) {
 			fieldCache = getClass().getDeclaredFields();
 		}
@@ -678,9 +678,9 @@ public class CardExtra implements Cloneable {
 		}
 	}
 
-	private double sum(Set<AttrMod> mods) {
+	private double sum(Set<ValueMod> mods) {
 		double out = 0;
-		for (AttrMod mod : mods) {
+		for (ValueMod mod : mods) {
 			out += mod.getValue();
 		}
 
@@ -690,7 +690,7 @@ public class CardExtra implements Cloneable {
 	@Override
 	@SuppressWarnings("rawtypes")
 	public CardExtra clone() {
-		Copier<HashSet, AttrMod> copier = new Copier<>(HashSet.class, AttrMod.class);
+		Copier<HashSet, ValueMod> copier = new Copier<>(HashSet.class, ValueMod.class);
 
 		CardExtra clone = new CardExtra(
 				copier.makeCopy(mana),

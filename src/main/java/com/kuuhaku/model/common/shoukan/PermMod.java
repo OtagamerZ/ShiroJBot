@@ -18,12 +18,10 @@
 
 package com.kuuhaku.model.common.shoukan;
 
-import com.kuuhaku.Constants;
-
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class PermMod extends AttrMod {
+public class PermMod extends ValueMod {
 	private final long seed = ThreadLocalRandom.current().nextLong();
 
 	public PermMod(double value) {
