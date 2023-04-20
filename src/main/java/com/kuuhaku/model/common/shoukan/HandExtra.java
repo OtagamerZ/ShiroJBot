@@ -31,7 +31,7 @@ public class HandExtra {
 
 	private transient Field[] fieldCache = null;
 
-	public int getHealMult() {
+	public double getHealMult() {
 		return 1 + sum(healMult);
 	}
 
@@ -58,7 +58,7 @@ public class HandExtra {
 		this.healMult.add(mod);
 	}
 
-	public int getDamageMult() {
+	public double getDamageMult() {
 		return 1 + sum(damageMult);
 	}
 
