@@ -51,7 +51,7 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 		if (source.card() instanceof Senshi s) {
 			if (s.hasFlag(Flag.EMPOWERED)) {
 				for (Target tgt : tgts) {
-					if (tgt.trigger() == Trigger.NONE) continue;
+					if (tgt.trigger() == null) continue;
 
 					if (tgt.index() > 0) {
 						tgts.add(new Target(

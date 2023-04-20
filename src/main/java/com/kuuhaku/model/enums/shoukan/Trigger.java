@@ -151,9 +151,6 @@ public enum Trigger {
 	/** Triggers mirrored from attached player **/
 	ON_LEECH,
 
-	/** Nothing **/
-	NONE,
-
-	/** Placeholder <b>(DO NOT USE)</b> **/
-	VOID
+	/** Nothing <b>(DO NOT USE)</b> **/
+	NONE
 }
