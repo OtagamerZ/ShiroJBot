@@ -768,7 +768,7 @@ public class Hand {
 			}
 
 			if (value < 0) {
-				value *= stats.getDamageMult();
+				value *= Math.max(0.1, stats.getDamageMult());
 			} else {
 				value *= stats.getHealMult();
 			}
