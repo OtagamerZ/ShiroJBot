@@ -35,7 +35,7 @@ public class HandExtra {
 		return 1 + sum(healMult);
 	}
 
-	public void setHealing(double mult) {
+	public void setHealMult(double mult) {
 		for (ValueMod mod : this.healMult) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + mult);
@@ -46,13 +46,13 @@ public class HandExtra {
 		this.healMult.add(new PermMod(mult));
 	}
 
-	public void setHealing(Drawable<?> source, double mult) {
+	public void setHealMult(Drawable<?> source, double mult) {
 		ValueMod mod = new ValueMod(source, mult);
 		this.healMult.remove(mod);
 		this.healMult.add(mod);
 	}
 
-	public void setHealing(Drawable<?> source, double mult, int expiration) {
+	public void setHealMult(Drawable<?> source, double mult, int expiration) {
 		ValueMod mod = new ValueMod(source, mult, expiration);
 		this.healMult.remove(mod);
 		this.healMult.add(mod);
