@@ -40,6 +40,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -139,7 +140,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 	}
 
 	private boolean scanWord(String word) throws FileNotFoundException {
-		try (Scanner s = new Scanner(new FileInputStream(dict))) {
+		try (Scanner s = new Scanner(new FileInputStream(dict), StandardCharsets.UTF_8)) {
 			char c = word.charAt(0);
 
 			int idx = 0;

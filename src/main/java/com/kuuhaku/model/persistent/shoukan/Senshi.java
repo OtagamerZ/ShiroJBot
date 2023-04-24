@@ -1363,8 +1363,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	@SuppressWarnings("MethodDoesntCallSuperMethod")
-	public Senshi clone() throws CloneNotSupportedException {
+	public Senshi fork() throws CloneNotSupportedException {
 		Senshi clone = new Senshi(id, card, race, base.clone());
 		clone.stats = stats.clone();
 		clone.hand = hand;

@@ -74,7 +74,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 			SimpleMessageListener sml = new SimpleMessageListener(channels) {
 				{
 					turn = 1;
-					channel = getChannel();
+					channel = GameInstance.this.getChannel();
 				}
 
 				@Override

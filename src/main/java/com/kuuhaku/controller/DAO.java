@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -31,7 +32,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				for (Constructor<?> method : klass.getConstructors()) {
 					if (method.isAnnotationPresent(WhenNull.class)) {
 						Class<?>[] params = method.getParameterTypes();
-						if (params.length > 0 && params[0] == id.getClass()) {
+						if (Objects.requireNonNull(params).length > 0 && params[0] == id.getClass()) {
 							try {
 								t = klass.cast(method.newInstance(id));
 								t.save();
@@ -56,7 +57,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			TypedQuery<T> q = em.createQuery(query, klass);
 			q.setMaxResults(1);
-			for (int i = 0; i < params.length; i++) {
+			int paramSize = Objects.requireNonNull(params).length;
+			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
 			}
 
@@ -84,7 +86,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			Query q = em.createNativeQuery(query);
 			q.setMaxResults(1);
-			for (int i = 0; i < params.length; i++) {
+			int paramSize = Objects.requireNonNull(params).length;
+			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
 			}
 
@@ -116,7 +119,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			Query q = em.createNativeQuery(query);
 			q.setMaxResults(1);
-			for (int i = 0; i < params.length; i++) {
+			int paramSize = Objects.requireNonNull(params).length;
+			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
 			}
 
@@ -158,7 +162,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		try {
 			TypedQuery<T> q = em.createQuery(query, klass);
-			for (int i = 0; i < params.length; i++) {
+			int paramSize = Objects.requireNonNull(params).length;
+			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
 			}
 
@@ -179,7 +184,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		try {
 			Query q = em.createNativeQuery(query);
-			for (int i = 0; i < params.length; i++) {
+			int paramSize = Objects.requireNonNull(params).length;
+			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
 			}
 
@@ -208,7 +214,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		try {
 			Query q = em.createNativeQuery(query);
-			for (int i = 0; i < params.length; i++) {
+
+			int paramSize = Objects.requireNonNull(params).length;
+			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
 			}
 
@@ -257,7 +265,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			em.getTransaction().begin();
 
 			Query q = em.createQuery(query);
-			for (int i = 0; i < params.length; i++) {
+			int paramSize = Objects.requireNonNull(params).length;
+			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
 			}
 			q.executeUpdate();
@@ -279,7 +288,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			em.getTransaction().begin();
 
 			Query q = em.createNativeQuery(query);
-			for (int i = 0; i < params.length; i++) {
+			int paramSize = Objects.requireNonNull(params).length;
+			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
 			}
 			q.executeUpdate();
@@ -299,7 +309,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		try {
 			TypedQuery<T> q = em.createQuery(query, klass);
-			for (int i = 0; i < params.length; i++) {
+			int paramSize = Objects.requireNonNull(params).length;
+			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
 			}
 
@@ -320,7 +331,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		try {
 			Query q = em.createNativeQuery(query);
-			for (int i = 0; i < params.length; i++) {
+			int paramSize = Objects.requireNonNull(params).length;
+			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
 			}
 
@@ -349,7 +361,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		try {
 			Query q = em.createNativeQuery(query);
-			for (int i = 0; i < params.length; i++) {
+			int paramSize = Objects.requireNonNull(params).length;
+			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
 			}
 

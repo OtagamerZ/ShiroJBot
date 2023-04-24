@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public interface Drawable<T extends Drawable<T>> extends Cloneable {
+public interface Drawable<T extends Drawable<T>> {
 	int MAX_NAME_WIDTH = 175;
 	int MAX_DESC_LENGTH = 210;
 	Font FONT = Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 20);
@@ -325,16 +325,16 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		return out.stream().filter(s -> !s.isBlank()).toList().toString();
 	}
 
-	T clone() throws CloneNotSupportedException;
+	T fork() throws CloneNotSupportedException;
 
 	@SuppressWarnings("unchecked")
 	default T copy() {
 		try {
-			T clone = clone();
+			T clone = fork();
 			clone.reset();
 
 			return clone;
-		} catch (CloneNotSupportedException e) {
+		} catch (Exception e) {
 			return (T) this;
 		}
 	}

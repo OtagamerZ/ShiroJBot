@@ -26,11 +26,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "card_descriptions")
-public class LocalizedDescription extends DAO<LocalizedDescription> {
+public class LocalizedDescription extends DAO<LocalizedDescription> implements Serializable {
 	@EmbeddedId
 	private LocalizedId id;
 

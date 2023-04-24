@@ -23,7 +23,6 @@ import com.kuuhaku.manager.CommandManager;
 import com.kuuhaku.manager.ScheduleManager;
 import com.sun.management.OperatingSystemMXBean;
 import org.apache.commons.lang3.time.StopWatch;
-import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import java.lang.management.ManagementFactory;
@@ -98,7 +97,6 @@ public class Main {
 		return commandManager;
 	}
 
-	@NotNull
 	public static Application getApp() {
 		return app;
 	}

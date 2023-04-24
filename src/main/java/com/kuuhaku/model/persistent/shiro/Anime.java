@@ -25,12 +25,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "anime")
-public class Anime extends DAO<Anime> {
+public class Anime extends DAO<Anime> implements Serializable {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;

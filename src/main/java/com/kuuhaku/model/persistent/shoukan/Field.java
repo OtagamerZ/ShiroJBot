@@ -294,8 +294,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	@Override
-	@SuppressWarnings("MethodDoesntCallSuperMethod")
-	public Field clone() throws CloneNotSupportedException {
+	public Field fork() {
 		Field clone = new Field(id, card, modifiers.clone(), type, effect, tags.clone());
 		clone.hand = hand;
 

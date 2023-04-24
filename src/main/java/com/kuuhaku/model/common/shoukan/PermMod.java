@@ -30,11 +30,15 @@ public class PermMod extends ValueMod {
 
 	@Override
 	public boolean equals(Object o) {
-		return false;
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		PermMod permMod = (PermMod) o;
+		return seed == permMod.seed;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(seed);
+		return Objects.hash(super.hashCode(), seed);
 	}
 }

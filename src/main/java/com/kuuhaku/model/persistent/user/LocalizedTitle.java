@@ -26,11 +26,12 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "title_info")
-public class LocalizedTitle extends DAO<LocalizedTitle> {
+public class LocalizedTitle extends DAO<LocalizedTitle> implements Serializable {
 	@EmbeddedId
 	private LocalizedId id;
 

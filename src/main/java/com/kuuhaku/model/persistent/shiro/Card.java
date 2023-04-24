@@ -39,12 +39,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.Objects;
 
 @Entity
 @Table(name = "card")
-public class Card extends DAO<Card> {
+public class Card extends DAO<Card> implements Serializable {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;

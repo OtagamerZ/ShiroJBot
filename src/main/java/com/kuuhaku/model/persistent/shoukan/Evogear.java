@@ -624,8 +624,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	@SuppressWarnings("MethodDoesntCallSuperMethod")
-	public Evogear clone() throws CloneNotSupportedException {
+	public Evogear fork() throws CloneNotSupportedException {
 		Evogear clone = new Evogear(id, card, tier, spell, targetType, charms.clone(), base.clone());
 		clone.stats = stats.clone();
 		clone.hand = hand;
