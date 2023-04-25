@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.util.Calc;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -113,12 +114,12 @@ public class HandExtra {
 		}
 	}
 
-	private int sum(Set<ValueMod> mods) {
+	private double sum(Set<ValueMod> mods) {
 		double out = 0;
 		for (ValueMod mod : mods) {
 			out += mod.getValue();
 		}
 
-		return (int) Math.round(out);
+		return Calc.round(out, 2);
 	}
 }
