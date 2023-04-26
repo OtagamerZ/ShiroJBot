@@ -1053,8 +1053,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
 					}
 				} else {
-					System.out.println(" --> EXEC");
-
 					cachedEffect.forScript(getEffect())
 							.withConst("self", this)
 							.withConst("game", hand.getGame())
@@ -1072,7 +1070,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 			}
 
-			if (!global) {
+			if (!global && ep.referee() == null) {
 				Senshi sup = getSupport();
 				if (sup != null) {
 					sup.execute(new EffectParameters(ON_DEFER_SUPPORT, getSide(), new DeferredTrigger(this, trigger), ep.source(), ep.targets()));
