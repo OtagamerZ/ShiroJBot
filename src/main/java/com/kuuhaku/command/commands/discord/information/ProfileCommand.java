@@ -52,7 +52,7 @@ public class ProfileCommand implements Executable {
 
 		channel.sendMessage(I18n.getString("str_generating-profile")).queue(m -> {
 			try {
-				channel.sendMessage(I18n.getString("str_profile", mb.getEffectiveName()))
+				channel.sendMessage(I18n.getString("str_profile", Helper.unmention(mb.getEffectiveName())))
 						.addFile(Helper.writeAndGet(Profile.makeProfile(mb, mb.getGuild()), "perfil", "png"))
 						.flatMap(s -> m.delete())
 						.queue(null, t -> m.editMessage(I18n.getString("err_profile-too-big")).queue());
