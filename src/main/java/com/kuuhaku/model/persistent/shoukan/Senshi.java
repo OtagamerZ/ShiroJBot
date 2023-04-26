@@ -970,22 +970,20 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean execute(boolean global, EffectParameters ep) {
-		if (base.isLocked()) return false;
-		else if (hand.getLockTime(Lock.EFFECT) > 0) return false;
+		if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 		else if (popFlag(Flag.NO_EFFECT)) {
-			base.lock();
+			base.lockAll();
 			return false;
 		}
 
 		Trigger trigger = null;
-		Senshi s = this;
 		boolean targeted = false;
 
-		if (s.equals(ep.source().card())) {
+		if (equals(ep.source().card())) {
 			trigger = ep.source().trigger();
 		} else {
 			for (Target target : ep.targets()) {
-				if (s.equals(target.card())) {
+				if (equals(target.card())) {
 					trigger = target.trigger();
 					break;
 				}
@@ -1004,7 +1002,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Shoukan game = hand.getGame();
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
-			base.lock();
+			if (base.isLocked(trigger)) return false;
+			base.lock(trigger);
 
 			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
 				if (!game.getCurrent().equals(hand)) {
@@ -1127,12 +1126,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public void executeAssert(Trigger trigger) {
-		if (base.isLocked()) return;
-		else if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE)) return;
+		if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE)) return;
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
-			base.lock();
+			base.lock(trigger);
 
 			Utils.exec(getEffect(), Map.of(
 					"self", this,
@@ -1150,18 +1148,20 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void unlock() {
-		base.unlock();
+		base.unlockAll();
 		for (Evogear e : equipments) {
-			e.getBase().unlock();
+			e.getBase().unlockAll();
 		}
 	}
 
 	public void noEffect(Consumer<Senshi> c) {
+		Set<Trigger> complement = EnumSet.complementOf(base.getLocks());
+
 		try {
-			base.lock();
+			base.lock(complement);
 			c.accept(this);
 		} finally {
-			base.unlock();
+			base.unlock(complement);
 		}
 	}
 
