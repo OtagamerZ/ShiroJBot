@@ -1063,20 +1063,22 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 							.withVar("trigger", trigger)
 							.run();
 
-					popFlag(Flag.EMPOWERED);
 					if (trigger != ON_TICK) {
+						popFlag(Flag.EMPOWERED);
 						game.trigger(ON_EFFECT, hand.getSide());
 					}
 				}
 			}
 
-			Senshi sup = getSupport();
-			if (sup != null && !global) {
-				sup.execute(new EffectParameters(ON_DEFER_SUPPORT, getSide(), new DeferredTrigger(this, trigger), ep.source(), ep.targets()));
-			}
+			if (!global) {
+				Senshi sup = getSupport();
+				if (sup != null) {
+					sup.execute(new EffectParameters(ON_DEFER_SUPPORT, getSide(), new DeferredTrigger(this, trigger), ep.source(), ep.targets()));
+				}
 
-			for (Senshi adj : getNearby()) {
-				adj.execute(new EffectParameters(ON_DEFER_NEARBY, getSide(), new DeferredTrigger(this, trigger), ep.source(), ep.targets()));
+				for (Senshi adj : getNearby()) {
+					adj.execute(new EffectParameters(ON_DEFER_NEARBY, getSide(), new DeferredTrigger(this, trigger), ep.source(), ep.targets()));
+				}
 			}
 
 			for (@Language("Groovy") String curse : stats.getCurses()) {
