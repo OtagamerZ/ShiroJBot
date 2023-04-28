@@ -115,8 +115,6 @@ public abstract class Utils {
 
 	public static long stringToDuration(String input) {
 		JSONObject groups = extractNamedGroups(input, "(?<days>\\d+)[dD]|(?<hours>\\d+)[hH]|(?<minutes>\\d+)[mM]|(?<seconds>\\d+)[sS]");
-		System.out.println(input);
-		System.out.println(groups);
 
 		long millis = 0;
 		for (Map.Entry<String, Object> e : groups.entrySet()) {
