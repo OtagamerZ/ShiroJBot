@@ -75,7 +75,7 @@ public class MuteCommand implements Executable {
 
         long duration = Utils.stringToDuration(args.getString("duration"));
         if (duration < 5000) {
-            event.channel().sendMessage(locale.get("error/invalid_value_low", 5 + locale.get("str/second") + "s")).queue();
+            event.channel().sendMessage(locale.get("error/invalid_value_low", 5 + " " + locale.get("str/second") + "s")).queue();
             return;
         }
 
