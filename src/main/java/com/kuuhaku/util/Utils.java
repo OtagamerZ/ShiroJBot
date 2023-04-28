@@ -113,6 +113,22 @@ public abstract class Utils {
 		).filter(s -> !s.isBlank()).collect(Collectors.collectingAndThen(Collectors.toList(), properlyJoin(" e ")));
 	}
 
+	public static long stringToDuration(String input) {
+		JSONObject groups = extractNamedGroups(input, "(?<days>\\d+)[dD]|(?<hours>\\d+)[hH]|(?<minutes>\\d+)[mM]|(?<seconds>\\d+)[sS]");
+
+		long millis = 0;
+		for (Map.Entry<String, Object> e : groups.entrySet()) {
+			switch (e.getKey().toLowerCase()) {
+				case "d" -> millis += Integer.parseInt(String.valueOf(e.getValue())) * Constants.MILLIS_IN_DAY;
+				case "h" -> millis += Integer.parseInt(String.valueOf(e.getValue())) * Constants.MILLIS_IN_HOUR;
+				case "m" -> millis += Integer.parseInt(String.valueOf(e.getValue())) * Constants.MILLIS_IN_MINUTE;
+				case "s" -> millis += Integer.parseInt(String.valueOf(e.getValue())) * Constants.MILLIS_IN_SECOND;
+			}
+		}
+
+		return millis;
+	}
+
 	public static <T> T getOr(T get, T or) {
 		if (get instanceof String s && s.isBlank()) return or;
 		else return get == null ? or : get;

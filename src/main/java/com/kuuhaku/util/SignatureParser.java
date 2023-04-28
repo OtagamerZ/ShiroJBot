@@ -190,8 +190,17 @@ public abstract class SignatureParser {
 			for (String arg : args) {
 				JSONObject groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
 				String name = groups.getString("name");
+				String type = groups.getString("type");
 				boolean required = groups.has("required");
-				String wrap = required ? "[%s]" : "%s";
+				String wrap = "%s";
+
+				if (type.equalsIgnoreCase(Signature.Type.TEXT.name())) {
+					wrap = "\"" + wrap + "\"";
+				}
+
+				if (required) {
+					wrap = "[" + wrap + "]";
+				}
 
 				supplied.add(wrap.formatted(locale.get("signature/" + name)));
 			}
