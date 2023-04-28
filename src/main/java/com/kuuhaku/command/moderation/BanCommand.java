@@ -45,8 +45,8 @@ import java.util.concurrent.TimeUnit;
 		category = Category.MODERATION
 )
 @Signature({
-		"<users:user:r> <reason:text:r>",
-		"<ids:text:r> <reason:text:r>"
+		"<reason:text:r> <users:user:r>",
+		"<reason:text:r> <ids:text:r>"
 })
 @Requires(Permission.BAN_MEMBERS)
 public class BanCommand implements Executable {

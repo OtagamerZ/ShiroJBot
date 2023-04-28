@@ -84,11 +84,11 @@ public abstract class SignatureParser {
 								Object curr = out.get(name);
 								arr.add(curr);
 							}
-							arr.add(Utils.extract(str, type.getPattern(), "text"));
+							arr.add(Utils.extract(str, type.getPattern(), 1));
 
 							out.put(name, arr);
 						} else {
-							out.put(name, Utils.extract(str, type.getPattern(), "text"));
+							out.put(name, Utils.extract(str, type.getPattern(), 1));
 						}
 
 						str = str.replaceFirst(type.getRegex(), "").trim();

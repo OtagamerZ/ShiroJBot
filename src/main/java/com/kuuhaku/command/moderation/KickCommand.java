@@ -44,8 +44,8 @@ import java.util.Objects;
 		category = Category.MODERATION
 )
 @Signature({
-		"<users:user:r> <reason:text:r>",
-		"<ids:text:r> <reason:text:r>"
+		"<reason:text:r> <users:user:r>",
+		"<reason:text:r> <ids:text:r>"
 })
 @Requires(Permission.KICK_MEMBERS)
 public class KickCommand implements Executable {

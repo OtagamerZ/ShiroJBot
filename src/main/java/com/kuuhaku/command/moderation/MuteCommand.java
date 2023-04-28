@@ -45,8 +45,8 @@ import java.util.concurrent.TimeUnit;
         category = Category.MODERATION
 )
 @Signature({
-        "<users:user:r> <duration:text:r> <reason:text:r>",
-        "<ids:text:r> <duration:text:r> <reason:text:r>"
+        "<duration:text:r> <reason:text:r> <users:user:r>",
+        "<duration:text:r> <reason:text:r> <ids:text:r>"
 })
 @Requires(Permission.MODERATE_MEMBERS)
 public class MuteCommand implements Executable {
