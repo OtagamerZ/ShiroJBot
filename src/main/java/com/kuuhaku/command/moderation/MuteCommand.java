@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
         "<users:user:r> <duration:text:r> <reason:text:r>",
         "<ids:text:r> <duration:text:r> <reason:text:r>"
 })
-@Requires(Permission.KICK_MEMBERS)
+@Requires(Permission.MODERATE_MEMBERS)
 public class MuteCommand implements Executable {
     @Override
     public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
