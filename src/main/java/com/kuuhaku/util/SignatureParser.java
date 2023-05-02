@@ -41,7 +41,7 @@ public abstract class SignatureParser {
             String[] args = sig.split(" +");
             String[] failOpts = new String[0];
 
-            System.out.println(sig);
+            System.out.println(Arrays.toString(args));
 
             int i = 0;
             int matches = 0;
