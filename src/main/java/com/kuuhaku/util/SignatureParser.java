@@ -52,7 +52,7 @@ public abstract class SignatureParser {
                 String wrap = required ? "[%s]" : "%s";
 
                 System.out.println("before");
-                Signature.Type type = Signature.Type.valueOf(groups.getString("type").toUpperCase());
+                Signature.Type type = groups.getEnum(Signature.Type.class, "type");
                 System.out.println("after");
 
                 if (type == Signature.Type.TEXT) {
