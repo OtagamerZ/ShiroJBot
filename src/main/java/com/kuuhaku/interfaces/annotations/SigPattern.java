@@ -20,10 +20,6 @@ package com.kuuhaku.interfaces.annotations;
 
 import org.intellij.lang.annotations.Language;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-@Retention(RetentionPolicy.RUNTIME)
 public @interface SigPattern {
     String id();
     @Language("RegExp")
