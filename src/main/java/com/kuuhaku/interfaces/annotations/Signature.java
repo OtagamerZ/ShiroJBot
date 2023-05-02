@@ -43,7 +43,9 @@ public @interface Signature {
 		USER(Message.MentionType.USER.getPattern().pattern()),
 		ROLE(Message.MentionType.ROLE.getPattern().pattern()),
 		CHANNEL(Message.MentionType.CHANNEL.getPattern().pattern()),
-		EMOTE(Message.MentionType.EMOJI.getPattern().pattern());
+		EMOTE(Message.MentionType.EMOJI.getPattern().pattern()),
+
+		CUSTOM(null);
 
 		private final Pattern regex;
 
