@@ -46,6 +46,8 @@ public abstract class SignatureParser {
             for (String arg : args) {
                 i++;
                 JSONObject groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
+                System.out.println(groups);
+
                 String name = groups.getString("name");
                 boolean required = groups.has("required");
                 String wrap = required ? "[%s]" : "%s";
