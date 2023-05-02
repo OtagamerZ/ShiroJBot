@@ -51,6 +51,7 @@ public abstract class SignatureParser {
                 String wrap = required ? "[%s]" : "%s";
 
                 Signature.Type type = Signature.Type.valueOf(groups.getString("type").toUpperCase());
+                System.out.println(type);
 
                 if (type == Signature.Type.TEXT) {
                     if (str.isBlank() && required) {
