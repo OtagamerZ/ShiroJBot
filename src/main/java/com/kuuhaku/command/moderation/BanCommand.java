@@ -22,6 +22,7 @@ import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.SigPattern;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -44,10 +45,16 @@ import java.util.concurrent.TimeUnit;
 		name = "ban",
 		category = Category.MODERATION
 )
-@Signature({
-		"<users:user:r> <reason:text:r>",
-		"<ids:text:r> <reason:text:r>"
-})
+@Signature(
+		patterns = {
+				@SigPattern(id = "users", value = "(<@!?(\\d+)>\\s*)+"),
+				@SigPattern(id = "ids", value = "(\\d+\\s*)+")
+		},
+		value = {
+				"<users:custom:r>[users] <reason:text:r>",
+				"<ids:custom:r>[ids] <reason:text:r>"
+		}
+)
 @Requires(Permission.BAN_MEMBERS)
 public class BanCommand implements Executable {
 	@Override

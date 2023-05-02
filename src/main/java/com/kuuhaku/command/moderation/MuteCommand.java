@@ -47,11 +47,13 @@ import java.util.concurrent.TimeUnit;
 )
 @Signature(
         patterns = {
-                @SigPattern(id = "duration", value = "(\\d+([dhmsDHMS])\\s*)+")
+                @SigPattern(id = "duration", value = "(\\d+([dhmsDHMS])\\s*)+"),
+                @SigPattern(id = "users", value = "(<@!?(\\d+)>\\s*)+"),
+                @SigPattern(id = "ids", value = "(\\d+\\s*)+")
         },
         value = {
-                "<users:custom:r>[(<@!?(\\d+)>\\s*)+] <duration:custom:r>[duration] <reason:text:r>",
-                "<ids:custom:r>[(\\d+\\s*)+] <duration:custom:r>[duration] <reason:text:r>"
+                "<users:custom:r>[users] <duration:custom:r>[duration] <reason:text:r>",
+                "<ids:custom:r>[ids] <duration:custom:r>[duration] <reason:text:r>"
         }
 )
 @Requires(Permission.MODERATE_MEMBERS)

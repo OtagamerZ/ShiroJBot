@@ -132,8 +132,11 @@ public class CardAttributes implements Serializable, Cloneable {
 
 	public void lock(Trigger... triggers) {
 		if (triggers.length == 0) throw new IllegalArgumentException("Triggers cannot be empty");
+		for (Trigger trigger : triggers) {
+			if (lock == null) continue;
 
-		lock(Set.of(triggers));
+			lock(trigger);
+		}
 	}
 
 	public void lock(Set<Trigger> triggers) {
@@ -146,8 +149,11 @@ public class CardAttributes implements Serializable, Cloneable {
 
 	public void unlock(Trigger... triggers) {
 		if (triggers.length == 0) throw new IllegalArgumentException("Triggers cannot be empty");
+		for (Trigger trigger : triggers) {
+			if (lock == null) continue;
 
-		unlock(Set.of(triggers));
+			unlock(trigger);
+		}
 	}
 
 	public void unlock(Set<Trigger> triggers) {
