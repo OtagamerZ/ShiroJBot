@@ -122,7 +122,7 @@ public abstract class Utils {
 
 			switch (e.getKey().toLowerCase()) {
 				case "days" -> millis += val * Constants.MILLIS_IN_DAY;
-				case "houts" -> millis += val * Constants.MILLIS_IN_HOUR;
+				case "hours" -> millis += val * Constants.MILLIS_IN_HOUR;
 				case "minutes" -> millis += val * Constants.MILLIS_IN_MINUTE;
 				case "seconds" -> millis += val * Constants.MILLIS_IN_SECOND;
 			}
