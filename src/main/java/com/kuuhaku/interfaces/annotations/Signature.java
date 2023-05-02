@@ -44,7 +44,9 @@ public @interface Signature {
 		USER(Message.MentionType.USER.getPattern().pattern()),
 		ROLE(Message.MentionType.ROLE.getPattern().pattern()),
 		CHANNEL(Message.MentionType.CHANNEL.getPattern().pattern()),
-		EMOTE(Message.MentionType.EMOJI.getPattern().pattern());
+		EMOTE(Message.MentionType.EMOJI.getPattern().pattern()),
+
+		CUSTOM("");
 
 		private final Pattern regex;
 
@@ -53,7 +55,7 @@ public @interface Signature {
 		}
 
 		public boolean validate(String value) {
-			return !value.isBlank() && (regex == null || regex.matcher(value).matches());
+			return !value.isBlank() && regex.matcher(value).matches();
 		}
 
 		public String getRegex() {
