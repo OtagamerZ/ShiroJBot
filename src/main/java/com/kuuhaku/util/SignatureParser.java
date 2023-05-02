@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public abstract class SignatureParser {
-    private static final Pattern ARGUMENT_PATTERN = Pattern.compile("^<(?<name>[A-Za-z]\\w*):(?<type>[A-Za-z]+)(?<required>:[Rr])?>(?:\\[(?<options>[\\w\\-;,]+)+])?$");
+    private static final Pattern ARGUMENT_PATTERN = Pattern.compile("^<(?<name>[A-Za-z]\\w*):(?<type>[A-Za-z]+)(?<required>:[Rr])?>(?:\\[(?<options>[^\\[\\]]+)+])?$");
 
     public static JSONObject parse(I18N locale, Executable command, String input) throws InvalidSignatureException {
         Signature annot = command.getClass().getDeclaredAnnotation(Signature.class);
@@ -41,6 +41,8 @@ public abstract class SignatureParser {
             String[] args = sig.split(" +");
             String[] failOpts = new String[0];
 
+            System.out.println(sig);
+
             int i = 0;
             int matches = 0;
             for (String arg : args) {
@@ -51,7 +53,6 @@ public abstract class SignatureParser {
                 String wrap = required ? "[%s]" : "%s";
 
                 Signature.Type type = Signature.Type.valueOf(groups.getString("type").toUpperCase());
-                System.out.println(type);
 
                 if (type == Signature.Type.TEXT) {
                     if (str.isBlank() && required) {
