@@ -9,13 +9,11 @@ import com.kuuhaku.model.records.FailedSignature;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
-import org.intellij.lang.annotations.Language;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -101,7 +99,7 @@ public abstract class SignatureParser {
                     }
 
                     matches++;
-                } else if (type == Signature.Type.CUSTOM) {
+                } /*else if (type == Signature.Type.CUSTOM) {
                     @Language("RegExp") String opt = groups.getString("options", "");
                     @Language("RegExp") String pattern = opt;
                     if (patterns != null) {
@@ -141,7 +139,7 @@ public abstract class SignatureParser {
                         fail = true;
                         supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
                     }
-                } else {
+                }*/ else {
                     List<String> opts = Arrays.stream(groups.getString("options", "").split(","))
                             .filter(s -> !s.isBlank())
                             .map(String::toLowerCase)
