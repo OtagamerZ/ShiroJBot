@@ -253,6 +253,7 @@ public class Hand {
 	private transient Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> selection = null;
 
 	public Hand(String uid, Shoukan game, Side side) {
+		System.out.println("begin");
 		this.uid = uid;
 		this.game = game;
 		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
@@ -315,6 +316,7 @@ public class Hand {
 						})
 						.collect(Utils.toShuffledList())
 		);
+		System.out.println("end");
 	}
 
 	public String getUid() {
