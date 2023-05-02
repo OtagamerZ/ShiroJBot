@@ -37,141 +37,139 @@ import java.util.Set;
 
 @Embeddable
 public class CardAttributes implements Serializable, Cloneable {
-    @Serial
-    private static final long serialVersionUID = -8535846175709738591L;
+	@Serial
+	private static final long serialVersionUID = -8535846175709738591L;
 
-    @Column(name = "mana", nullable = false)
-    private int mana = 0;
+	@Column(name = "mana", nullable = false)
+	private int mana = 0;
 
-    @Column(name = "blood", nullable = false)
-    private int blood = 0;
+	@Column(name = "blood", nullable = false)
+	private int blood = 0;
 
-    @Column(name = "sacrifices", nullable = false)
-    private int sacrifices = 0;
+	@Column(name = "sacrifices", nullable = false)
+	private int sacrifices = 0;
 
-    @Column(name = "atk", nullable = false)
-    private int atk = 0;
+	@Column(name = "atk", nullable = false)
+	private int atk = 0;
 
-    @Column(name = "dfs", nullable = false)
-    private int dfs = 0;
+	@Column(name = "dfs", nullable = false)
+	private int dfs = 0;
 
-    @Column(name = "dodge", nullable = false)
-    private int dodge = 0;
+	@Column(name = "dodge", nullable = false)
+	private int dodge = 0;
 
-    @Column(name = "block", nullable = false)
-    private int block = 0;
+	@Column(name = "block", nullable = false)
+	private int block = 0;
 
-    @Type(JsonBinaryType.class)
-    @Column(name = "tags", nullable = false, columnDefinition = "JSONB")
-    @Convert(converter = JSONArrayConverter.class)
-    private JSONArray tags = new JSONArray();
+	@Type(JsonBinaryType.class)
+	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray tags = new JSONArray();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id", referencedColumnName = "card_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    @Fetch(FetchMode.SUBSELECT)
-    private Set<LocalizedDescription> descriptions = new HashSet<>();
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "id", referencedColumnName = "card_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<LocalizedDescription> descriptions = new HashSet<>();
 
-    @Column(name = "effect", columnDefinition = "TEXT")
-    private String effect;
+	@Column(name = "effect", columnDefinition = "TEXT")
+	private String effect;
 
-    private transient EnumSet<Trigger> lock = EnumSet.noneOf(Trigger.class);
+	private transient EnumSet<Trigger> lock = EnumSet.noneOf(Trigger.class);
 
-    public int getMana() {
-        return mana;
-    }
+	public int getMana() {
+		return mana;
+	}
 
-    public int getBlood() {
-        return blood;
-    }
+	public int getBlood() {
+		return blood;
+	}
 
-    public int getSacrifices() {
-        return sacrifices;
-    }
+	public int getSacrifices() {
+		return sacrifices;
+	}
 
-    public int getAtk() {
-        return atk;
-    }
+	public int getAtk() {
+		return atk;
+	}
 
-    public int getDfs() {
-        return dfs;
-    }
+	public int getDfs() {
+		return dfs;
+	}
 
-    public int getDodge() {
-        return dodge;
-    }
+	public int getDodge() {
+		return dodge;
+	}
 
-    public int getBlock() {
-        return block;
-    }
+	public int getBlock() {
+		return block;
+	}
 
-    public JSONArray getTags() {
-        return tags;
-    }
+	public JSONArray getTags() {
+		return tags;
+	}
 
-    public String getDescription(I18N locale) {
-        for (LocalizedDescription ld : descriptions) {
-            if (ld.getLocale() == locale) {
-                return ld.getDescription();
-            }
-        }
+	public String getDescription(I18N locale) {
+		for (LocalizedDescription ld : descriptions) {
+			if (ld.getLocale() == locale) {
+				return ld.getDescription();
+			}
+		}
 
-        return "";
-    }
+		return "";
+	}
 
-    public String getEffect() {
-        return Utils.getOr(effect, "");
-    }
+	public String getEffect() {
+		return Utils.getOr(effect, "");
+	}
 
-    public EnumSet<Trigger> getLocks() {
-        return lock;
-    }
+	public EnumSet<Trigger> getLocks() {
+		return lock;
+	}
 
-    public boolean isLocked(Trigger trigger) {
-        return lock.contains(trigger);
-    }
+	public boolean isLocked(Trigger trigger) {
+		return lock.contains(trigger);
+	}
 
-    public void lock(Trigger... triggers) {
-        if (triggers.length == 0) throw new IllegalArgumentException("Triggers cannot be empty");
-        lock(Set.of(triggers));
-//		for (Trigger trigger : triggers) {
-//			if (trigger == null) continue;
-//
-//			lock(trigger);
-//		}
-    }
+	public void lock(Trigger... triggers) {
+		if (triggers.length == 0) throw new IllegalArgumentException("Triggers cannot be empty");
+		for (Trigger trigger : triggers) {
+			if (trigger == null) continue;
 
-    public void lock(Set<Trigger> triggers) {
-        lock.addAll(triggers);
-    }
+			lock.add(trigger);
+		}
+	}
 
-    public void lockAll() {
-        lock.addAll(EnumSet.allOf(Trigger.class));
-    }
+	public void lock(Set<Trigger> triggers) {
+		lock.addAll(triggers);
+	}
 
-    public void unlock(Trigger... triggers) {
-        if (triggers.length == 0) throw new IllegalArgumentException("Triggers cannot be empty");
-        unlock(Set.of(triggers));
-//		for (Trigger trigger : triggers) {
-//			if (trigger == null) continue;
-//
-//			unlock(trigger);
-//		}
-    }
+	public void lockAll() {
+		lock.addAll(EnumSet.allOf(Trigger.class));
+	}
 
-    public void unlock(Set<Trigger> triggers) {
-        lock.removeAll(triggers);
-    }
+	public void unlock(Trigger... triggers) {
+		if (triggers.length == 0) throw new IllegalArgumentException("Triggers cannot be empty");
+		for (Trigger trigger : triggers) {
+			if (trigger == null) continue;
 
-    public void unlockAll() {
-        lock.clear();
-    }
+			lock.remove(trigger);
+		}
+	}
 
-    @Override
-    public CardAttributes clone() throws CloneNotSupportedException {
-        CardAttributes clone = (CardAttributes) super.clone();
-        clone.tags = new JSONArray(tags);
-        clone.descriptions = new HashSet<>(descriptions);
+	public void unlock(Set<Trigger> triggers) {
+		lock.removeAll(triggers);
+	}
 
-        return clone;
-    }
+	public void unlockAll() {
+		lock.clear();
+	}
+
+	@Override
+	public CardAttributes clone() throws CloneNotSupportedException {
+		CardAttributes clone = (CardAttributes) super.clone();
+		clone.tags = new JSONArray(tags);
+		clone.descriptions = new HashSet<>(descriptions);
+
+		return clone;
+	}
 }
