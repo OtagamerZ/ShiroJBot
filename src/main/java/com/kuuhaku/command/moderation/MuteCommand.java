@@ -22,6 +22,7 @@ import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.SigPattern;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -44,10 +45,15 @@ import java.util.concurrent.TimeUnit;
         name = "mute",
         category = Category.MODERATION
 )
-@Signature({
-        "<users:custom:r>[(<@!?(\\d+)>\\s*)+] <duration:custom:r>[(\\d+(d|h|m|s|D|H|M|S)\\s*)+] <reason:text:r>",
-        "<ids:custom:r>[(\\d+\\s*)+] <duration:custom:r>[(\\d+(d|h|m|s|D|H|M|S)\\s*)+] <reason:text:r>"
-})
+@Signature(
+        patterns = {
+                @SigPattern(id = "duration", value = "(\\d+([dhmsDHMS])\\s*)+")
+        },
+        value = {
+                "<users:custom:r>[(<@!?(\\d+)>\\s*)+] <duration:custom:r>[duration] <reason:text:r>",
+                "<ids:custom:r>[(\\d+\\s*)+] <duration:custom:r>[duration] <reason:text:r>"
+        }
+)
 @Requires(Permission.MODERATE_MEMBERS)
 public class MuteCommand implements Executable {
     @Override

@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 public @interface Signature {
 	@Language("ShiroSig")
 	String[] value();
+	SigPattern[] patterns() default {};
 	boolean allowEmpty() default false;
 
 	enum Type {
@@ -54,7 +55,7 @@ public @interface Signature {
 		}
 
 		public boolean validate(String value) {
-			return !value.isBlank() && regex.matcher(value).matches();
+			return !value.isBlank() && (regex == null || regex.matcher(value).matches());
 		}
 
 		public String getRegex() {

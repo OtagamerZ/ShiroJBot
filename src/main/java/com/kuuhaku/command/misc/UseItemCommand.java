@@ -73,7 +73,7 @@ public class UseItemCommand implements Executable {
 							JSONObject params;
 							if (item.getSignature() == null) params = new JSONObject();
 							else {
-								params = SignatureParser.parse(locale, new String[]{item.getSignature()}, false, args.getString("args"));
+								params = SignatureParser.parse(locale, new String[]{item.getSignature()}, null, false, args.getString("args"));
 							}
 
 							item.execute(locale, event.channel(), acc.refresh(), params);
