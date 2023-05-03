@@ -346,7 +346,7 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default Source asSource() {
-		return asSource(null);
+		return asSource(Trigger.NONE);
 	}
 
 	default Source asSource(Trigger trigger) {
@@ -354,7 +354,7 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default Target asTarget() {
-		return asTarget(null);
+		return asTarget(Trigger.NONE);
 	}
 
 	default Target asTarget(Trigger trigger) {

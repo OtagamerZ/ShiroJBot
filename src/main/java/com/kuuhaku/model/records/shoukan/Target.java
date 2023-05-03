@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public record Target(Senshi card, Side side, int index, Trigger trigger, TargetType type, AtomicBoolean skip) {
 	public Target() {
-		this(null, null, -1, null, TargetType.NONE);
+		this(null, null, -1, Trigger.NONE, TargetType.NONE);
 	}
 
 	public Target(Senshi card, Side side, int index, Trigger trigger, TargetType type) {

@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public record Source(Drawable<?> card, Side side, int index, Trigger trigger) {
 	public Source() {
-		this(null, null, -1, null);
+		this(null, null, -1, Trigger.NONE);
 	}
 
 	public Source(Drawable<?> card, Trigger trigger) {
