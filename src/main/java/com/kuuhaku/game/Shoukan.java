@@ -1762,12 +1762,15 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (ep.size() == 0) {
-				if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger())) {
+				if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger()) && ep.trigger() != NONE) {
 					effect.decreaseLimit();
 
 					try {
 						effect.effect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
 					} catch (ActivationException ignore) {
+					} catch (Exception e) {
+						getChannel().sendMessage(getLocale().get("error/effect")).queue();
+						Constants.LOGGER.warn("Failed to execute " + effect.source() + " persistent effect", e);
 					}
 
 					if (effect.side() == null) {
@@ -1777,17 +1780,20 @@ public class Shoukan extends GameInstance<Phase> {
 
 				remove = effect.expired() || effect.removed();
 			} else if (ep.source() != null) {
-				if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
+				if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger()) && ep.source().trigger() != NONE) {
 					effect.decreaseLimit();
 
 					try {
 						effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
 					} catch (ActivationException ignore) {
+					} catch (Exception e) {
+						getChannel().sendMessage(getLocale().get("error/effect")).queue();
+						Constants.LOGGER.warn("Failed to execute " + effect.source() + " persistent effect", e);
 					}
 				}
 
 				for (Target t : ep.targets()) {
-					if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
+					if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger()) && t.trigger() != NONE) {
 						effect.decreaseLimit();
 
 						try {
