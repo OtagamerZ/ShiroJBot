@@ -57,6 +57,20 @@ public record EffectOverTime(
 		);
 	}
 
+	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, AtomicInteger turns, AtomicInteger limit, AtomicBoolean lock, EnumSet<Trigger> triggers, AtomicBoolean closed) {
+		this.source = source;
+		this.debuff = debuff;
+		this.side = side;
+		this.effect = effect;
+		this.turns = turns;
+		this.limit = limit;
+		this.lock = lock;
+		this.triggers = triggers;
+		this.closed = closed;
+
+		this.triggers.remove(Trigger.NONE);
+	}
+
 	public void decreaseTurn() {
 		if (turns != null && turns.get() > 0) turns.getAndDecrement();
 	}

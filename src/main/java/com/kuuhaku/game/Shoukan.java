@@ -1762,7 +1762,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (ep.size() == 0) {
-				if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger()) && ep.trigger() != NONE) {
+				if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger())) {
 					effect.decreaseLimit();
 
 					try {
@@ -1780,7 +1780,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 				remove = effect.expired() || effect.removed();
 			} else if (ep.source() != null) {
-				if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger()) && ep.source().trigger() != NONE) {
+				if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
 					effect.decreaseLimit();
 
 					try {
@@ -1793,7 +1793,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				for (Target t : ep.targets()) {
-					if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger()) && t.trigger() != NONE) {
+					if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
 						effect.decreaseLimit();
 
 						try {
