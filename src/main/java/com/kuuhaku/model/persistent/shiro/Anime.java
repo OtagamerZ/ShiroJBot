@@ -53,12 +53,12 @@ public class Anime extends DAO<Anime> implements Serializable {
 				SELECT c
 				FROM Card c
 				WHERE c.anime.id = ?1
-				AND c.rarity IN ('COMMON', 'UNCOMMON', 'RARE', 'ULTRA_RARE', 'LEGENDARY')
+				AND c.rarity IN ('COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY')
 				ORDER BY CASE c.rarity
 					WHEN 'COMMON' THEN 1
 					WHEN 'UNCOMMON' THEN 2
 					WHEN 'RARE' THEN 3
-					WHEN 'ULTRA_RARE' THEN 4
+					WHEN 'EPIC' THEN 4
 					WHEN 'LEGENDARY' THEN 5
 				END DESC
 				, c.id

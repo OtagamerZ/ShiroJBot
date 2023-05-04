@@ -89,7 +89,7 @@ public class Market {
 					   		WHEN 'COMMON' THEN 1
 				      		WHEN 'UNCOMMON' THEN 1.5
 				      		WHEN 'RARE' THEN 2
-				      		WHEN 'ULTRA_RARE' THEN 2.5
+				      		WHEN 'EPIC' THEN 2.5
 				      		WHEN 'LEGENDARY' THEN 3
 				      		ELSE 1
 				       	END)
