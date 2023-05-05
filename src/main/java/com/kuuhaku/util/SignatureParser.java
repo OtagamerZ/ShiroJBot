@@ -239,7 +239,7 @@ public abstract class SignatureParser {
                 boolean required = groups.has("required");
                 String wrap = "%s";
 
-                if (type.equalsIgnoreCase(Signature.Type.TEXT.name())) {
+                if (type.equalsIgnoreCase(Signature.Type.TEXT.name()) && supplied.size() < args.length - 1) {
                     wrap = "\"" + wrap + "\"";
                 }
 
