@@ -74,11 +74,11 @@ public class InventoryCommand implements Executable {
 
 					out += "\n" + i.getDescription(locale);
 
-					String sig = i.getSignature();
-					sig = SignatureParser.extract(locale, sig == null ? null : new String[]{sig}, false).get(0);
-
-					Command cmd = getClass().getDeclaredAnnotation(Command.class);
-					out += "\n`" + sig.formatted(data.config().getPrefix(), "items.use " + i.getId()) + "`";
+					if (!i.isPassive()) {
+						String sig = i.getSignature();
+						sig = SignatureParser.extract(locale, sig == null ? null : new String[]{sig}, false).get(0);
+						out += "\n`" + sig.formatted(data.config().getPrefix(), "items.use " + i.getId()) + "`";
+					}
 
 					return out + "\n";
 				},
