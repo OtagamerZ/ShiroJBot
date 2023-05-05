@@ -27,12 +27,10 @@ import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
-import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Calc;
@@ -136,6 +134,21 @@ public class StashScrapCommand implements Executable {
 								KawaiponCard kc = sc.getKawaiponCard(false);
 								if (kc != null) {
 									kc.delete();
+
+									Rarity rarity = kc.getCard().getRarity();
+									if (Calc.chance(Math.pow(2.15, 7 - rarity.getIndex()))) {
+										UserItem item = DAO.find(UserItem.class, rarity.name() + "_SHARD");
+										if (item != null) {
+											acc.addItem(item, Calc.rng(1, 3));
+										}
+									}
+
+									if (kc.isChrome() && Calc.chance(33)) {
+										UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
+										if (item != null) {
+											acc.addItem(item, Calc.rng(1, 3));
+										}
+									}
 								}
 							}
 

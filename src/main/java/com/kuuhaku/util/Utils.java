@@ -19,10 +19,7 @@
 package com.kuuhaku.util;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.ButtonWrapper;
-import com.github.ygimenez.model.InteractPage;
-import com.github.ygimenez.model.Page;
-import com.github.ygimenez.model.ThrowingFunction;
+import com.github.ygimenez.model.*;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.exceptions.PendingConfirmationException;
@@ -433,8 +430,7 @@ public abstract class Utils {
 	}
 
 	public static void confirm(String text, MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
-		confirm(text, embed, channel, action, m -> {
-		}, allowed);
+		confirm(text, embed, channel, action, m -> {}, allowed);
 	}
 
 	public static void confirm(String text, MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
