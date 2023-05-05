@@ -173,6 +173,11 @@ public class SynthesizeCommand implements Executable {
                                     String id = btn.getId();
                                     assert id != null;
 
+                                    if (acc.getItemCount("CHROMATIC_ESSENCE") == 0) {
+                                        event.channel().sendMessage(locale.get("error/no_chromatic")).queue();
+                                        return;
+                                    }
+
                                     lucky.set(true);
                                     Page p = new InteractPage(new ColorlessEmbedBuilder()
                                             .setDescription(locale.get("str/synthesis_info",
