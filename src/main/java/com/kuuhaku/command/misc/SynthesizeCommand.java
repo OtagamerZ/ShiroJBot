@@ -82,7 +82,7 @@ public class SynthesizeCommand implements Executable {
         List<StashedCard> cards = new ArrayList<>();
         List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
 
-        String[] ids = args.getString("card").split(" ");
+        String[] ids = args.getString("cards").split(" ");
         for (String id : ids) {
             Card c = DAO.find(Card.class, id.toUpperCase());
             if (c == null) {
