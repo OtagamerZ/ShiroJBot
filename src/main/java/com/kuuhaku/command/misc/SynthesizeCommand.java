@@ -255,9 +255,9 @@ public class SynthesizeCommand implements Executable {
 
                     if (kc != null) {
                         if (kc.isChrome()) {
-                            more *= 1 + rarity * kc.getQuality() / 200;
+                            more *= 1 + rarity * (1 + kc.getQuality()) / 200;
                         } else {
-                            inc += rarity * kc.getQuality() / 200;
+                            inc += rarity * (1 + kc.getQuality()) / 200;
                         }
                     }
                 }
@@ -267,8 +267,6 @@ public class SynthesizeCommand implements Executable {
                 }
                 case FIELD -> more *= 1.25;
             }
-
-            System.out.println(inc);
         }
 
         return 1 * inc * more;
