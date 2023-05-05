@@ -64,7 +64,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
         category = Category.MISC
 )
 @Signature({
-        "<cards:word:r>",
+        "<cards:text:r>",
         "<material:word:r>[common_shard,uncommon_shard,rare_shard,epic_shard,legendary_shard]"
 })
 @Requires({
