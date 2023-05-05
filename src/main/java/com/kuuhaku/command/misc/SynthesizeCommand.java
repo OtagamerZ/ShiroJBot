@@ -255,9 +255,9 @@ public class SynthesizeCommand implements Executable {
 
                     if (kc != null) {
                         if (kc.isChrome()) {
-                            more *= 1 + rarity * (1 + kc.getQuality()) / 200;
+                            more *= 1 + rarity * (1 + kc.getQuality()) / 150;
                         } else {
-                            inc += rarity * (1 + kc.getQuality()) / 200;
+                            inc += rarity * (1 + kc.getQuality()) / 150;
                         }
                     }
                 }
