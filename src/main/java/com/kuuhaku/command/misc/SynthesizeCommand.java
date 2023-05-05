@@ -267,6 +267,8 @@ public class SynthesizeCommand implements Executable {
                 }
                 case FIELD -> more *= 1.25;
             }
+
+            System.out.println(inc);
         }
 
         return 1 * inc * more;
