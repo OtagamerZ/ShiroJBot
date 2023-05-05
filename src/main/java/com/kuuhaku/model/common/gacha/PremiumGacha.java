@@ -24,6 +24,7 @@ import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.Spawn;
+import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
@@ -57,15 +58,7 @@ public class PremiumGacha extends Gacha {
 		List<String> out = new ArrayList<>();
 		int extra = acc.consumeItem("extra_draw") ? 1 : 0;
 		for (int i = 0; i < type.prizes() + extra; i++) {
-			String roll = null;
-			for (int j = 0; j < 10; j++) {
-				String id = pool.get();
-				if (roll == null || rarityOf(id) > rarityOf(roll)) {
-					roll = id;
-				}
-			}
-
-			out.add(roll);
+			out.add(Utils.luckyRoll(pool::get, (a, b) -> rarityOf(b) > rarityOf(a)));
 		}
 
 		return out;

@@ -19,7 +19,10 @@
 package com.kuuhaku.util;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.*;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.InteractPage;
+import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.ThrowingFunction;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.exceptions.PendingConfirmationException;
@@ -74,9 +77,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.*;
 import java.util.random.RandomGenerator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1156,5 +1157,17 @@ public abstract class Utils {
 
 	public static <T, C extends Collection<T>> List<T> flatten(Collection<C> col) {
 		return col.stream().flatMap(C::stream).collect(Collectors.toList());
+	}
+
+	public static <T> T luckyRoll(Supplier<T> supplier, BiFunction<T, T, Boolean> comparator) {
+		T out = null;
+		for (int i = 0; i < 10; i++) {
+			T roll = supplier.get();
+			if (out == null || comparator.apply(out, roll)) {
+				out = roll;
+			}
+		}
+
+		return out;
 	}
 }

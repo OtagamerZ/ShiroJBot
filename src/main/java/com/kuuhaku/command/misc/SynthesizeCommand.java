@@ -19,6 +19,8 @@
 package com.kuuhaku.command.misc;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.InteractPage;
+import com.github.ygimenez.model.Page;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
@@ -49,6 +51,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
@@ -75,7 +78,12 @@ public class SynthesizeCommand implements Executable {
     @Override
     public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
         if (args.has("material")) {
-            synthShards(data.profile().getAccount(), DAO.find(UserItem.class, args.getString("material")));
+            synthShards(
+                    locale,
+                    event.channel(),
+                    data.profile().getAccount(),
+                    DAO.find(UserItem.class, args.getString("material"))
+            );
             return;
         }
 
@@ -133,6 +141,7 @@ public class SynthesizeCommand implements Executable {
 
         try {
             double mult = getMult(cards);
+            AtomicBoolean lucky = new AtomicBoolean();
             int field = (int) Math.round(
                     cards.stream()
                             .mapToDouble(sc -> {
@@ -146,8 +155,7 @@ public class SynthesizeCommand implements Executable {
 
             Account acc = data.profile().getAccount();
             EmbedBuilder eb = new ColorlessEmbedBuilder()
-                    .setDescription(locale.get("str/synthesis_info", Utils.roundToString(mult, 2), field))
-                    .setFooter("<:chromatic_essence:1103779997317087364> x" + acc.getItemCount("CHROMATIC_ESSENCE"));
+                    .setDescription(locale.get("str/synthesis_info", Utils.roundToString(mult, 2) + "x", field));
 
             User usr = event.user();
             if (Utils.CONFIMATIONS.contains(usr.getId())) throw new PendingConfirmationException();
@@ -165,7 +173,14 @@ public class SynthesizeCommand implements Executable {
                                     String id = btn.getId();
                                     assert id != null;
 
-                                    Pages.modifyButtons(w.getMessage(), null, Map.of(
+                                    lucky.set(true);
+                                    Page p = new InteractPage(new ColorlessEmbedBuilder()
+                                            .setDescription(locale.get("str/synthesis_info",
+                                                    Utils.roundToString(mult, 2) + "x <:chromatic_essence:1103779997317087364>",
+                                                    field
+                                            )));
+
+                                    Pages.modifyButtons(w.getMessage(), p, Map.of(
                                             btn.getId(), Button::asDisabled
                                     ));
                                 });
@@ -193,6 +208,10 @@ public class SynthesizeCommand implements Executable {
                                             }
                                         }
 
+                                        if (lucky.get()) {
+                                            acc.consumeItem("CHROMATIC_ESSENCE");
+                                        }
+
                                         if (Calc.chance(field)) {
                                             Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
                                             new StashedCard(kp, f.getCard(), CardType.FIELD).save();
@@ -201,7 +220,7 @@ public class SynthesizeCommand implements Executable {
                                                     .addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png"))
                                                     .queue();
                                         } else {
-                                            Evogear e = rollSynthesis(event.user(), mult);
+                                            Evogear e = rollSynthesis(event.user(), mult, lucky.get());
                                             new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
 
                                             event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
@@ -223,11 +242,42 @@ public class SynthesizeCommand implements Executable {
         }
     }
 
-    public static Evogear rollSynthesis(User u, List<StashedCard> cards) {
-        return rollSynthesis(u, getMult(cards));
+    private static void synthShards(I18N locale, MessageChannel channel, Account acc, UserItem shard) {
+        if (acc.getItemCount(shard.getId()) < 10) {
+            channel.sendMessage(locale.get("error/pending_confirmation")).queue();
+            return;
+        }
+
+        try {
+            Rarity r = Rarity.valueOf(shard.getId().split("_")[0]);
+
+            Utils.confirm(locale.get("question/synth_shards", shard.getName(locale), locale.get("rarity/" + r)), channel, w -> {
+                        Kawaipon kp = acc.getKawaipon();
+                        acc.consumeItem(shard, 10);
+
+                        List<Card> pool = DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE c.rarity = ?1", r);
+                        KawaiponCard kc = new KawaiponCard(Utils.getRandomEntry(pool), false);
+                        kc.setKawaipon(kp);
+                        kc.save();
+                        new StashedCard(kp, kc).save();
+
+                        channel.sendMessage(locale.get("success/synth", kp))
+                                .addFiles(FileUpload.fromData(IO.getBytes(kc.getCard().drawCard(kc.isChrome())), "synth.png"))
+                                .queue();
+
+                        return true;
+                    }, acc.getUser()
+            );
+        } catch (PendingConfirmationException e) {
+            channel.sendMessage(locale.get("error/pending_confirmation")).queue();
+        }
     }
 
-    public static Evogear rollSynthesis(User u, double mult) {
+    public static Evogear rollSynthesis(User u, List<StashedCard> cards) {
+        return rollSynthesis(u, getMult(cards), false);
+    }
+
+    public static Evogear rollSynthesis(User u, double mult, boolean lucky) {
         RandomList<Evogear> pool = new RandomList<>(2 * mult);
         List<Evogear> evos = DAO.findAll(Evogear.class);
         for (Evogear evo : evos) {
@@ -236,11 +286,7 @@ public class SynthesizeCommand implements Executable {
             pool.add(evo, DAO.queryNative(Integer.class, "SELECT get_weight(?1, ?2)", evo.getId(), u.getId()));
         }
 
-        return pool.get();
-    }
-
-    private static void synthShards(Account acc, UserItem shard) {
-
+        return lucky ? Utils.luckyRoll(pool::get, (a, b) -> b.getTier() > a.getTier()) : pool.get();
     }
 
     private static double getMult(List<StashedCard> cards) {
