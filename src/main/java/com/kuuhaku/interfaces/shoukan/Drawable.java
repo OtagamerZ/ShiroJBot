@@ -237,12 +237,21 @@ public interface Drawable<T extends Drawable<T>> {
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.RED);
 				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
-				if (this instanceof Senshi s && s.isBlinded()) {
-					g2d.setColor(Color.LIGHT_GRAY);
-					Graph.drawOutlinedString(g2d, "*", x + icon.getWidth() + 6 + m.stringWidth(val), y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
-				}
-
 				y -= icon.getHeight() + 5;
+			}
+
+			if (this instanceof Senshi s) {
+				if (s.getHitChance() < 100) {
+					icon = IO.getResourceAsImage("shoukan/icons/blind.png");
+					assert icon != null;
+					int x = 25;
+
+					String val = (int) s.getHitChance() + "%";
+					g2d.drawImage(icon, x, y, null);
+					g2d.setColor(Color.GRAY);
+					Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
+					y -= icon.getHeight() + 5;
+				}
 			}
 
 			if (getCooldown() > 0) {
