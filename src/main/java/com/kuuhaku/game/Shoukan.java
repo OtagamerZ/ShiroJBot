@@ -2213,6 +2213,8 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void send(Drawable<?> source, String text, String gif) {
+		if (text.isBlank() && gif == null) return;
+
 		for (GuildMessageChannel chn : getChannel().getChannels()) {
 			PseudoUser pu = new PseudoUser(source.toString(), Constants.API_ROOT + "card/" + source.getCard().getId(), chn);
 
