@@ -141,7 +141,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public boolean isSpell() {
-		return spell;
+		return spell && equipper == null;
 	}
 
 	public boolean isPassive() {

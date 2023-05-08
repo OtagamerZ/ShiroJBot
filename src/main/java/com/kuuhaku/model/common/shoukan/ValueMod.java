@@ -78,7 +78,7 @@ public class ValueMod implements Cloneable {
 
 	public boolean isExpired() {
 		if (side != null) {
-			if (source instanceof Evogear e && (e.getEquipper() == null || e.posHash() != hash)) {
+			if (source instanceof Evogear e && !e.isSpell() && (e.getEquipper() == null || e.posHash() != hash)) {
 				return true;
 			} else if (source instanceof Senshi s && s.posHash() != hash) {
 				return true;
