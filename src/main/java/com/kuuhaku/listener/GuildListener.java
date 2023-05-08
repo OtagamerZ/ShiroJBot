@@ -64,7 +64,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class GuildListener extends ListenerAdapter {
@@ -238,7 +237,7 @@ public class GuildListener extends ListenerAdapter {
 		profile.addXp((long) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
 		profile.save();
 
-		EventData ed = new EventData(config, profile);
+		EventData ed = new EventData(event.getChannel(), config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {
 			CompletableFuture.runAsync(() -> processCommand(data, ed, content));
 		}
@@ -258,14 +257,6 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			AtomicReference<GuildMessageChannel> notifs = new AtomicReference<>();
-			if (config.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
-				notifs.set(config.getSettings().getNotificationsChannel());
-				if (notifs.get() == null) {
-					notifs.set(event.getGuildChannel());
-				}
-			}
-
 			if (profile.getLevel() > lvl) {
 				int high = account.getHighestLevel();
 				int prize = 0;
@@ -274,15 +265,13 @@ public class GuildListener extends ListenerAdapter {
 					account.addCR(prize, "Level up prize");
 				}
 
-				if (notifs.get() != null) {
-					notifs.get().sendMessage(locale.get(prize > 0 ? "achievement/level_up_prize" : "achievement/level_up", data.user().getAsMention(), profile.getLevel(), prize)).queue(null, Utils::doNothing);
-				}
+				ed.notify(locale.get(prize > 0 ? "achievement/level_up_prize" : "achievement/level_up", data.user().getAsMention(), profile.getLevel(), prize));
 			}
 
 			DAO.apply(Account.class, account.getUid(), acc -> {
 				Title t = acc.checkTitles();
-				if (t != null && notifs.get() != null) {
-					notifs.get().sendMessage(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName())).queue();
+				if (t != null) {
+					ed.notify(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName()));
 				}
 			});
 
