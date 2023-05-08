@@ -398,7 +398,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	private boolean placeProxy(Hand hand, JSONObject args) {
 		if (hand.getCards().get(args.getInt("inHand") - 1) instanceof Evogear chosen && chosen.isSpell()) {
-			if (!chosen.isAvailable()) {
+			if (!chosen.isAvailable() || chosen.isPassive()) {
 				getChannel().sendMessage(getLocale().get("error/card_unavailable")).queue();
 				return false;
 			} else if (chosen.getHPCost() >= hand.getHP()) {
@@ -851,7 +851,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (curr.getCards().get(args.getInt("inHand") - 1) instanceof Evogear chosen && chosen.isSpell()) {
-			if (!chosen.isAvailable()) {
+			if (!chosen.isAvailable() || chosen.isPassive()) {
 				getChannel().sendMessage(getLocale().get("error/card_unavailable")).queue();
 				return false;
 			} else if (chosen.getHPCost() >= curr.getHP()) {

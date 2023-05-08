@@ -144,6 +144,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		return spell;
 	}
 
+	public boolean isPassive() {
+		return base.getTags().contains("PASSIVE");
+	}
+
 	public TargetType getTargetType() {
 		return targetType;
 	}
