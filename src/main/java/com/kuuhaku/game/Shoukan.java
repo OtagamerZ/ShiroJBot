@@ -1722,11 +1722,21 @@ public class Shoukan extends GameInstance<Phase> {
 
 		iterateSlots(side, s -> s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger))));
 
-		for (EffectHolder<?> leech : hands.get(side).getLeeches()) {
+		Hand h = hands.get(side);
+		for (EffectHolder<?> leech : h.getLeeches()) {
 			leech.execute(new EffectParameters(ON_LEECH, side, leech.asSource(trigger)));
 		}
 
-		triggerEOTs(new EffectParameters(trigger, side));
+		EffectParameters ep = new EffectParameters(trigger, side);
+		if (Utils.equalsAny(trigger, ON_VICTORY, ON_DEFEAT)) {
+			for (Drawable<?> card : h.getCards()) {
+				if (card instanceof EffectHolder<?> eh) {
+					eh.execute(ep);
+				}
+			}
+		}
+
+		triggerEOTs(ep);
 	}
 
 	public boolean trigger(Trigger trigger, Source source, Target... targets) {
