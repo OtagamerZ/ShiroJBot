@@ -210,6 +210,7 @@ public class SynthesizeCommand implements Executable {
                                             UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
                                             if (item != null) {
                                                 acc.addItem(item, 1);
+                                                event.channel().sendMessage(locale.get("str/received_item", 1, item.toString(locale))).queue();
                                             }
                                         }
 
