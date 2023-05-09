@@ -83,6 +83,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	boolean hasCharm(Charm charm);
 
+	default boolean isPassive() {
+		return getBase().getTags().contains("PASSIVE");
+	}
+
 	boolean execute(EffectParameters ep);
 
 	default void executeAssert(Trigger trigger) {
