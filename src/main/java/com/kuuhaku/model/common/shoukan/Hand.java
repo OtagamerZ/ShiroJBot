@@ -1092,8 +1092,12 @@ public class Hand {
 
 		try {
 			act.accept(d);
-		} catch (ActivationException e) {
-			game.getChannel().sendMessage(game.getLocale().get("error/activation", game.getString(e.getMessage()))).queue();
+		} catch (RuntimeException e) {
+            if (e.getCause() instanceof ActivationException ex) {
+                throw ex;
+            }
+
+            throw e;
 		}
 	}
 
