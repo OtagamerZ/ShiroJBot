@@ -226,6 +226,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		for (String str : desc.split("\\s")) {
 			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}");
 
+			System.out.println(groups);
 			if (!groups.isEmpty()) {
 				try {
 					@Language("Groovy") String calc = groups.getString("calc").replace("$", "");
@@ -233,9 +234,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						calc = "import static java.lang.Math.*\n\n" + calc;
 						String val = String.valueOf(Utils.exec(calc, values));
 
-						System.out.println("\n\n\n\n\n\n\n\n\n\n");
-						System.out.println(groups.getString("type"));
-						System.out.println(calc);
 						csm.getStoredProps().compute(groups.getString("type"), (k, v) -> {
 							int value;
 							if (!k.equals("data")) {
@@ -253,8 +251,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 							return new JSONArray(List.of(v, value));
 						});
-						System.out.println(csm.getStoredProps());
-						System.out.println("\n\n\n\n\n\n\n\n\n\n");
 					}
 				} catch (Exception ignore) {
 				}
