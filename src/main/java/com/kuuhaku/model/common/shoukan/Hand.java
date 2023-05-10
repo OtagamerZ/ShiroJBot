@@ -1078,6 +1078,25 @@ public class Hand {
 		return requestChoice(cards, false);
 	}
 
+	public void requestChoice(List<Drawable<?>> cards, ThrowingConsumer<Drawable<?>> act) {
+		requestChoice(cards, false, act);
+	}
+
+	public void requestChoice(Predicate<Drawable<?>> cond, ThrowingConsumer<Drawable<?>> act) {
+		requestChoice(cards.stream().filter(cond).toList(), act);
+	}
+
+	public void requestChoice(List<Drawable<?>> cards, boolean hide, ThrowingConsumer<Drawable<?>> act) {
+		Drawable<?> d = requestChoice(cards, hide);
+		if (d == null) return;
+
+		try {
+			act.accept(d);
+		} catch (ActivationException e) {
+			game.getChannel().sendMessage(game.getLocale().get("error/activation", game.getString(e.getMessage()))).queue();
+		}
+	}
+
 	public Drawable<?> requestChoice(List<Drawable<?>> cards, boolean hide) {
 		if (selection != null) {
 			try {
@@ -1105,27 +1124,6 @@ public class Hand {
 		} catch (ExecutionException | InterruptedException e) {
 			throw new SelectionException("err/pending_selection");
 		}
-	}
-
-	public void requestChoice(List<Drawable<?>> cards, ThrowingConsumer<Drawable<?>> act) {
-		Drawable<?> d = requestChoice(cards);
-		if (d == null) return;
-
-		act.accept(d);
-	}
-
-	public void requestChoice(List<Drawable<?>> cards, boolean hide, ThrowingConsumer<Drawable<?>> act) {
-		Drawable<?> d = requestChoice(cards, hide);
-		if (d == null) return;
-
-		act.accept(d);
-	}
-
-	public void requestChoice(Predicate<Drawable<?>> cond, ThrowingConsumer<Drawable<?>> act) {
-		Drawable<?> d = requestChoice(cards.stream().filter(cond).toList());
-		if (d == null) return;
-
-		act.accept(d);
 	}
 
 	public BufferedImage renderChoices() {
