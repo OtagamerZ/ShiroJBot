@@ -252,7 +252,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							return new JSONArray(List.of(v, value));
 						});
 					}
-				} catch (Exception ignore) {
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
