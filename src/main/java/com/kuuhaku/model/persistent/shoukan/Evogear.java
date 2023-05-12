@@ -54,6 +54,7 @@ import java.awt.image.RescaleOp;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
@@ -637,14 +638,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		return card.getName();
 	}
 
-	public static Evogear getRandom() {
-		String id = DAO.queryNative(String.class, "SELECT card_id FROM evogear WHERE tier > 0 ORDER BY RANDOM()");
-		if (id == null) return null;
+	public static Evogear getRandom(RandomGenerator rng) {
+		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM evogear WHERE tier > 0 ORDER BY RANDOM()");
+		if (ids.isEmpty()) return null;
 
-		return DAO.find(Evogear.class, id);
+		return DAO.find(Evogear.class, Utils.getRandomEntry(rng, ids));
 	}
 
-	public static Evogear getRandom(String... filters) {
+	public static Evogear getRandom(RandomGenerator rng, String... filters) {
 		XStringBuilder query = new XStringBuilder("SELECT card_id FROM evogear");
 		for (String f : filters) {
 			query.appendNewLine(f);
@@ -658,15 +659,15 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 		query.appendNewLine("ORDER BY RANDOM()");
 
-		String id = DAO.queryNative(String.class, query.toString());
-		if (id == null) return null;
+		List<String> ids = DAO.queryAllNative(String.class, query.toString());
+		if (ids.isEmpty()) return null;
 
-		return DAO.find(Evogear.class, id);
+		return DAO.find(Evogear.class, Utils.getRandomEntry(rng, ids));
 	}
 
-	public static XList<Evogear> getByTag(String... tags) {
+	public static XList<Evogear> getByTag(RandomGenerator rng, String... tags) {
 		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('evogear', ?1)", (Object[]) tags);
 
-		return new XList<>(DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.card.id IN ?1", ids));
+		return new XList<>(DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.card.id IN ?1", ids), rng);
 	}
 }

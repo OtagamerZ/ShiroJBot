@@ -24,17 +24,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.random.RandomGenerator;
 
 public class XList<T> extends ArrayList<T> {
-	public XList(int initialCapacity) {
+	private final RandomGenerator rng;
+
+	public XList(int initialCapacity, RandomGenerator rng) {
 		super(initialCapacity);
+		this.rng = rng;
 	}
 
-	public XList() {
+	public XList(RandomGenerator rng) {
+		this.rng = rng;
 	}
 
-	public XList(@NotNull Collection<? extends T> c) {
+	public XList(@NotNull Collection<? extends T> c, RandomGenerator rng) {
 		super(c);
+		this.rng = rng;
 	}
 
 	public T getRandom() {

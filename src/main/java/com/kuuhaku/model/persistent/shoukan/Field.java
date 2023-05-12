@@ -46,6 +46,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.random.RandomGenerator;
 
 @Entity
 @Table(name = "field")
@@ -306,14 +307,14 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		return card.getName();
 	}
 
-	public static Field getRandom() {
-		String id = DAO.queryNative(String.class, "SELECT card_id FROM field WHERE NOT effect ORDER BY RANDOM()");
-		if (id == null) return null;
+	public static Field getRandom(RandomGenerator rng) {
+		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM field WHERE NOT effect ORDER BY RANDOM()");
+		if (ids.isEmpty()) return null;
 
-		return DAO.find(Field.class, id);
+		return DAO.find(Field.class, Utils.getRandomEntry(rng, ids));
 	}
 
-	public static Field getRandom(String... filters) {
+	public static Field getRandom(RandomGenerator rng, String... filters) {
 		XStringBuilder query = new XStringBuilder("SELECT card_id FROM field");
 		for (String f : filters) {
 			query.appendNewLine(f);
@@ -327,15 +328,15 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 		query.appendNewLine("ORDER BY RANDOM()");
 
-		String id = DAO.queryNative(String.class, query.toString());
-		if (id == null) return null;
+		List<String> ids = DAO.queryAllNative(String.class, query.toString());
+		if (ids.isEmpty()) return null;
 
-		return DAO.find(Field.class, id);
+		return DAO.find(Field.class, Utils.getRandomEntry(rng, ids));
 	}
 
-	public static XList<Field> getByTag(String... tags) {
+	public static XList<Field> getByTag(RandomGenerator rng, String... tags) {
 		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('field', ?1)", (Object[]) tags);
 
-		return new XList<>(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.card.id IN ?1", ids));
+		return new XList<>(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.card.id IN ?1", ids), rng);
 	}
 }

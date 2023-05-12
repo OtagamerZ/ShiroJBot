@@ -56,6 +56,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
+import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
@@ -1417,14 +1418,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
         return getVanity().getName();
     }
 
-    public static Senshi getRandom() {
-        String id = DAO.queryNative(String.class, "SELECT card_id FROM senshi WHERE NOT has(tags, 'FUSION') ORDER BY RANDOM()");
-        if (id == null) return null;
+    public static Senshi getRandom(RandomGenerator rng) {
+        List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM senshi WHERE NOT has(tags, 'FUSION')");
+        if (ids.isEmpty()) return null;
 
-        return DAO.find(Senshi.class, id);
+        return DAO.find(Senshi.class, Utils.getRandomEntry(rng, ids));
     }
 
-    public static Senshi getRandom(boolean allowFusion, String... filters) {
+    public static Senshi getRandom(RandomGenerator rng, boolean allowFusion, String... filters) {
         XStringBuilder query = new XStringBuilder("SELECT card_id FROM senshi");
         for (String f : filters) {
             query.appendNewLine(f);
@@ -1440,15 +1441,15 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
         query.appendNewLine("ORDER BY RANDOM()");
 
-        String id = DAO.queryNative(String.class, query.toString());
-        if (id == null) return null;
+        List<String> ids = DAO.queryAllNative(String.class, query.toString());
+        if (ids.isEmpty()) return null;
 
-        return DAO.find(Senshi.class, id);
+        return DAO.find(Senshi.class, Utils.getRandomEntry(rng, ids));
     }
 
-    public static XList<Senshi> getByTag(String... tags) {
+    public static XList<Senshi> getByTag(RandomGenerator rng, String... tags) {
         List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('senshi', ?1)", (Object[]) tags);
 
-        return new XList<>(DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE s.card.id IN ?1", ids));
+        return new XList<>(DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE s.card.id IN ?1", ids), rng);
     }
 }
