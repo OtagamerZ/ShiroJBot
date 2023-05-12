@@ -32,7 +32,8 @@ public record Match(Info info, List<Turn> turns) {
 						makePlayer(game.getHands().get(Side.TOP)),
 						makePlayer(game.getHands().get(Side.BOTTOM)),
 						game.getWinner(),
-						winCondition
+						winCondition,
+						game.getSeed()
 				),
 				game.getTurns()
 		);

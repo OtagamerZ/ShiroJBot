@@ -21,12 +21,18 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
+import com.kuuhaku.model.records.shoukan.history.Info;
 import com.kuuhaku.model.records.shoukan.history.Match;
+import com.kuuhaku.model.records.shoukan.history.Turn;
 import com.kuuhaku.util.json.JSONArray;
 import com.kuuhaku.util.json.JSONObject;
+import com.kuuhaku.util.json.JSONUtils;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "match_history")
@@ -54,11 +60,16 @@ public class MatchHistory extends DAO<Field> {
 		this.data = new JSONArray(match.turns());
 	}
 
-	public JSONObject getHead() {
-		return head;
+	public Info getHead() {
+		return JSONUtils.fromJSON(head.toString(), Info.class);
 	}
 
-	public JSONArray getData() {
-		return data;
+	public List<Turn> getData() {
+		List<Turn> out = new ArrayList<>();
+		for (Object turn : data) {
+			out.add(JSONUtils.fromJSON(String.valueOf(turn), Turn.class));
+		}
+
+		return out;
 	}
 }
