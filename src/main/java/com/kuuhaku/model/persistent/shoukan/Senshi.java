@@ -1439,8 +1439,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
             }
         }
 
-        query.appendNewLine("ORDER BY RANDOM()");
-
         List<String> ids = DAO.queryAllNative(String.class, query.toString());
         if (ids.isEmpty()) return null;
 

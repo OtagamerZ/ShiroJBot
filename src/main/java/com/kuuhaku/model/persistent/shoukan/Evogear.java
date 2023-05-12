@@ -639,7 +639,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public static Evogear getRandom(RandomGenerator rng) {
-		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM evogear WHERE tier > 0 ORDER BY RANDOM()");
+		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM evogear WHERE tier > 0");
 		if (ids.isEmpty()) return null;
 
 		return DAO.find(Evogear.class, Utils.getRandomEntry(rng, ids));
@@ -656,8 +656,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		} else {
 			query.appendNewLine("AND tier > 0");
 		}
-
-		query.appendNewLine("ORDER BY RANDOM()");
 
 		List<String> ids = DAO.queryAllNative(String.class, query.toString());
 		if (ids.isEmpty()) return null;

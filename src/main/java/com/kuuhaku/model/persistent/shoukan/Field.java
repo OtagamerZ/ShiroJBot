@@ -308,7 +308,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	public static Field getRandom(RandomGenerator rng) {
-		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM field WHERE NOT effect ORDER BY RANDOM()");
+		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM field WHERE NOT effect");
 		if (ids.isEmpty()) return null;
 
 		return DAO.find(Field.class, Utils.getRandomEntry(rng, ids));
@@ -325,8 +325,6 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		} else {
 			query.appendNewLine("AND NOT effect");
 		}
-
-		query.appendNewLine("ORDER BY RANDOM()");
 
 		List<String> ids = DAO.queryAllNative(String.class, query.toString());
 		if (ids.isEmpty()) return null;
