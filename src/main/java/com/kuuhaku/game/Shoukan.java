@@ -76,7 +76,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
@@ -86,8 +85,8 @@ import java.util.function.Predicate;
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 public class Shoukan extends GameInstance<Phase> {
-    private final long seed = ThreadLocalRandom.current().nextLong();
-    private final String GIF_PATH = "https://raw.githubusercontent.com/OtagamerZ/ShoukanAssets/master/gifs/";
+    private static final String GIF_PATH = "https://raw.githubusercontent.com/OtagamerZ/ShoukanAssets/master/gifs/";
+    private final SplittableRandom rng = new SplittableRandom(getSeed());
 
     private final Arcade arcade;
     private final Arena arena;
@@ -283,6 +282,18 @@ public class Shoukan extends GameInstance<Phase> {
                 reportEvent("ADD_CARD -> " + amount + " x " + id, false);
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    @PhaseConstraint({"PLAN", "COMBAT"})
+    @PlayerAction("next_tick")
+    private boolean debApplyTick(Side side, JSONObject args) {
+        Hand curr = hands.get(side);
+        if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+            reportEvent("NEXT_TICK", true);
+            return true;
         }
 
         return false;
@@ -1520,6 +1531,10 @@ public class Shoukan extends GameInstance<Phase> {
         return true;
     }
 
+    public SplittableRandom getRng() {
+        return rng;
+    }
+
     public Arcade getArcade() {
         return arcade;
     }
@@ -2285,7 +2300,6 @@ public class Shoukan extends GameInstance<Phase> {
             curr.modLockTime(lock, -1);
         }
 
-        List<Senshi> allCards = getCards();
         for (SlotColumn slt : getSlots(curr.getSide())) {
             slt.reduceLock(1);
 
@@ -2309,14 +2323,6 @@ public class Shoukan extends GameInstance<Phase> {
                         s.getStats().setMana(-1);
                         if (s.getMPCost() == 0) {
                             s.getHand().getGraveyard().add(s);
-                        }
-                    }
-
-                    if (s.isBerserk()) {
-                        List<Senshi> valid = allCards.stream().filter(d -> !d.equals(s)).toList();
-                        if (!valid.isEmpty()) {
-                            attack(s, Utils.getRandomEntry(valid), null, true);
-                            s.setAvailable(false);
                         }
                     }
                 }
@@ -2344,14 +2350,23 @@ public class Shoukan extends GameInstance<Phase> {
             Collections.shuffle(curr.getCards());
         }
 
+        List<Senshi> allCards = getCards();
         for (SlotColumn slt : getSlots(curr.getSide())) {
             for (Senshi s : slt.getCards()) {
-                if (s != null) {
+                if (s != null && s.getSlot().getIndex() != -1) {
                     s.reduceStasis(1);
 
                     s.getStats().expireMods();
                     for (Evogear e : s.getEquipments()) {
                         e.getStats().expireMods();
+                    }
+
+                    if (s.isBerserk()) {
+                        List<Senshi> valid = allCards.stream().filter(d -> !d.equals(s)).toList();
+                        if (!valid.isEmpty()) {
+                            attack(s, Utils.getRandomEntry(valid), null, true);
+                            s.setAvailable(false);
+                        }
                     }
                 }
             }
@@ -2398,11 +2413,11 @@ public class Shoukan extends GameInstance<Phase> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Shoukan shoukan = (Shoukan) o;
-        return seed == shoukan.seed && arcade == shoukan.arcade && singleplayer == shoukan.singleplayer;
+        return getSeed() == shoukan.getSeed() && arcade == shoukan.arcade && singleplayer == shoukan.singleplayer;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(seed, arcade, singleplayer);
+        return Objects.hash(getSeed(), arcade, singleplayer);
     }
 }

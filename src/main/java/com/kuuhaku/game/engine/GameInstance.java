@@ -52,6 +52,7 @@ import java.util.regex.Pattern;
 public abstract class GameInstance<T extends Enum<T>> {
 	public static final Set<String> PLAYERS = ConcurrentHashMap.newKeySet();
 	private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+	private final long seed = ThreadLocalRandom.current().nextLong();
 
 	private CompletableFuture<Void> exec;
 	private DelayedAction timeout;
@@ -67,6 +68,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 	public GameInstance(I18N locale, String[] players) {
 		this.locale = locale;
 		this.players = players;
+	}
+
+	public long getSeed() {
+		return seed;
 	}
 
 	public final CompletableFuture<Void> start(Guild guild, GuildMessageChannel... channels) {

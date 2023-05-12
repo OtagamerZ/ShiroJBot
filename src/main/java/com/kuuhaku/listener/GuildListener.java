@@ -64,6 +64,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
 public class GuildListener extends ListenerAdapter {
@@ -341,7 +342,7 @@ public class GuildListener extends ListenerAdapter {
 
 			Drop<?> drop = Spawn.getDrop(gb, chosen, acc.getUser());
 			if (drop != null) {
-				Random rng = drop.getRng();
+				RandomGenerator rng = drop.getRng();
 
 				EmbedBuilder eb = new EmbedBuilder()
 						.setAuthor(locale.get("str/drop_spawn", drop.getRarity().getIndex()))
