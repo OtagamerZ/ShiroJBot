@@ -863,6 +863,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
     }
 
     public void setBerserk(int time) {
+        if (popFlag(Flag.NO_BERSERK)) return;
+
         int curr = Bit.get(state, 7, 4);
         state = Bit.set(state, 7, Math.max(curr, time), 4);
     }

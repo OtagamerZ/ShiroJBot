@@ -37,6 +37,8 @@ public enum Flag {
 	NO_STUN,
 	/** Cannot enter stasis **/
 	NO_STASIS,
+	/** Cannot berserk **/
+	NO_BERSERK,
 	/** Cannot be taunted **/
 	NO_TAUNT,
 
