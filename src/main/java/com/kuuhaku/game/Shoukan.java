@@ -95,8 +95,8 @@ public class Shoukan extends GameInstance<Phase> {
     private final Map<String, String> messages = new HashMap<>();
     private final Set<EffectOverTime> eots = new HashSet<>();
     private final List<Turn> turns = new TreeList<>();
-
     private final boolean singleplayer;
+
     private boolean cheats = false;
     private StateSnap snapshot = null;
     private boolean restoring = true;
@@ -113,11 +113,11 @@ public class Shoukan extends GameInstance<Phase> {
 
         this.arcade = arcade;
         this.arena = new Arena(this);
+        this.singleplayer = p1.equals(p2);
         this.hands = Map.of(
                 Side.TOP, new Hand(p1, this, Side.TOP),
                 Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
         );
-        this.singleplayer = p1.equals(p2);
 
         setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, getOther().getSide(), "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
     }
