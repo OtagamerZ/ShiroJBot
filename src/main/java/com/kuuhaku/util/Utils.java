@@ -556,21 +556,21 @@ public abstract class Utils {
 			int index = Calc.rng(aux.size() - 1, random);
 
 			out.add(aux.get(index));
-			Collections.shuffle(aux);
+			Utils.shuffle(aux);
 		}
 
 		return out;
 	}
 
 	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances) {
-		return getRandomN(list, elements, maxInstances, new Random());
+		return getRandomN(list, elements, maxInstances, new SplittableRandom());
 	}
 
 	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances, long seed) {
-		return getRandomN(list, elements, maxInstances, new Random(seed));
+		return getRandomN(list, elements, maxInstances, new SplittableRandom(seed));
 	}
 
-	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances, Random rng) {
+	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances, RandomGenerator rng) {
 		List<T> aux = new ArrayList<>(list);
 		List<T> out = new ArrayList<>();
 
@@ -585,7 +585,7 @@ public abstract class Utils {
 				i--;
 			}
 
-			Collections.shuffle(aux, rng);
+			Utils.shuffle(aux, rng);
 		}
 
 		return out;
@@ -869,14 +869,14 @@ public abstract class Utils {
 	}
 
 	public static <T> Collector<T, ?, List<T>> toShuffledList() {
-		return toShuffledList(new Random());
+		return toShuffledList(new SplittableRandom());
 	}
 
-	public static <T> Collector<T, ?, List<T>> toShuffledList(Random rng) {
+	public static <T> Collector<T, ?, List<T>> toShuffledList(RandomGenerator rng) {
 		return Collectors.collectingAndThen(
 				Collectors.toList(),
 				l -> {
-					Collections.shuffle(l, rng);
+					Utils.shuffle(l, rng);
 					return l;
 				}
 		);
@@ -961,12 +961,12 @@ public abstract class Utils {
 	}
 
 	public static <K, V> void shufflePairs(Map<K, V> map) {
-		shufflePairs(map, new Random());
+		shufflePairs(map, new SplittableRandom());
 	}
 
-	public static <K, V> void shufflePairs(Map<K, V> map, Random rng) {
+	public static <K, V> void shufflePairs(Map<K, V> map, RandomGenerator rng) {
 		List<V> valueList = new ArrayList<>(map.values());
-		Collections.shuffle(valueList, rng);
+		Utils.shuffle(valueList, rng);
 		Iterator<V> valueIt = valueList.iterator();
 
 		for (Map.Entry<K, V> e : map.entrySet()) {
@@ -1164,5 +1164,31 @@ public abstract class Utils {
 		}
 
 		return out;
+	}
+
+	public static <T> void shuffle(List<T> col) {
+		shuffle(col, Constants.DEFAULT_RNG.get());
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> void shuffle(List<T> list, RandomGenerator rng) {
+		int size = list.size();
+		if (size < 5 || list instanceof RandomAccess) {
+			for (int i=size; i>1; i--) {
+				Collections.swap(list, i - 1, rng.nextInt(i));
+			}
+		} else {
+			Object[] arr = list.toArray();
+
+			for (int i=size; i>1; i--) {
+				ArrayUtils.swap(arr, i - 1, rng.nextInt(i));
+			}
+
+			ListIterator<T> it = list.listIterator();
+			for (Object e : arr) {
+				it.next();
+				it.set((T) e);
+			}
+		}
 	}
 }

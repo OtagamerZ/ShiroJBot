@@ -87,7 +87,7 @@ import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 public class Shoukan extends GameInstance<Phase> {
     private static final String GIF_PATH = "https://raw.githubusercontent.com/OtagamerZ/ShoukanAssets/master/gifs/";
-    private final RandomGenerator rng = new Random(getSeed());
+    private final RandomGenerator rng = new SplittableRandom(getSeed());
 
     private final Arcade arcade;
     private final Arena arena;
@@ -2332,7 +2332,7 @@ public class Shoukan extends GameInstance<Phase> {
 
         if (arcade == Arcade.INSTABILITY) {
             int affected = Math.min((int) Math.ceil(getTurn() / 2d), 8);
-            List<SlotColumn> chosen = Utils.getRandomN(Utils.flatten(arena.getSlots().values()), affected, 1, (Random) rng);
+            List<SlotColumn> chosen = Utils.getRandomN(Utils.flatten(arena.getSlots().values()), affected, 1, rng);
 
             for (SlotColumn slt : chosen) {
                 slt.setLock(1);
@@ -2348,7 +2348,7 @@ public class Shoukan extends GameInstance<Phase> {
         curr.getStats().expireMods();
 
         if (curr.getLockTime(Lock.BLIND) > 0) {
-            Collections.shuffle(curr.getCards(), (Random) rng);
+            Utils.shuffle(curr.getCards(), rng);
         }
 
         List<Senshi> allCards = getCards();

@@ -285,7 +285,7 @@ public class Hand {
 							.map(d -> d.copy())
 							.peek(d -> {
 								if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
-									Utils.shufflePairs(f.getModifiers(), (Random) game.getRng());
+									Utils.shufflePairs(f.getModifiers(), game.getRng());
 								} else if (d instanceof Senshi s && origin.hasMinor(Race.DIVINITY) && !s.hasEffect()) {
 									s.getStats().setSource(
 											Senshi.getRandom(game.getRng(), false,
@@ -295,7 +295,7 @@ public class Hand {
 									);
 								}
 							})
-							.collect(Utils.toShuffledList((Random) game.getRng()))
+							.collect(Utils.toShuffledList(game.getRng()))
 			);
 			return;
 		}
@@ -307,7 +307,7 @@ public class Hand {
 						.map(d -> d.copy())
 						.peek(d -> {
 							if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
-								Utils.shufflePairs(f.getModifiers(), (Random) game.getRng());
+								Utils.shufflePairs(f.getModifiers(), game.getRng());
 							} else if (d instanceof Senshi s && origin.hasMinor(Race.DIVINITY) && !s.hasEffect()) {
 								s.getStats().setSource(
 										Senshi.getRandom(game.getRng(), false,
@@ -317,7 +317,7 @@ public class Hand {
 								);
 							}
 						})
-						.collect(Utils.toShuffledList((Random) game.getRng()))
+						.collect(Utils.toShuffledList(game.getRng()))
 		);
 	}
 
@@ -642,7 +642,7 @@ public class Hand {
 			}
 		}
 
-		Collections.shuffle(deck, (Random) game.getRng());
+		Utils.shuffle(deck, game.getRng());
 		manualDraw(i);
 	}
 
