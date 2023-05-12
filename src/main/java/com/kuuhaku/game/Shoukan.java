@@ -1651,6 +1651,27 @@ public class Shoukan extends GameInstance<Phase> {
         }
     }
 
+    public List<Senshi> getCards() {
+        return Arrays.stream(Side.values())
+                .flatMap(s -> getCards(s).stream())
+                .toList();
+
+    }
+
+    public List<Senshi> getCards(Side side) {
+        return getSlots(side).stream()
+                .flatMap(slt -> slt.getCards().stream())
+                .filter(Objects::nonNull)
+                .toList();
+
+    }
+
+    public List<SlotColumn> getSlots() {
+        return Arrays.stream(Side.values())
+                .flatMap(s -> getSlots(s).stream())
+                .toList();
+    }
+
     public List<SlotColumn> getSlots(Side side) {
         return arena.getSlots(side);
     }
@@ -2264,6 +2285,7 @@ public class Shoukan extends GameInstance<Phase> {
             curr.modLockTime(lock, -1);
         }
 
+        List<Senshi> allCards = getCards();
         for (SlotColumn slt : getSlots(curr.getSide())) {
             slt.reduceLock(1);
 
@@ -2272,6 +2294,7 @@ public class Shoukan extends GameInstance<Phase> {
                     s.reduceSleep(1);
                     s.reduceStun(1);
                     s.reduceCooldown(1);
+                    s.reduceBerserk(1);
                     s.reduceTaunt(1);
                     s.setAvailable(true);
                     s.setSwitched(false);
@@ -2286,6 +2309,14 @@ public class Shoukan extends GameInstance<Phase> {
                         s.getStats().setMana(-1);
                         if (s.getMPCost() == 0) {
                             s.getHand().getGraveyard().add(s);
+                        }
+                    }
+
+                    if (s.isBerserk()) {
+                        List<Senshi> valid = allCards.stream().filter(d -> !d.equals(s)).toList();
+                        if (!valid.isEmpty()) {
+                            attack(s, Utils.getRandomEntry(valid), null, true);
+                            s.setAvailable(false);
                         }
                     }
                 }

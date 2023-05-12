@@ -27,10 +27,13 @@ import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class GameChannel {
 	private final Set<ChannelReference> channels = new HashSet<>();
 	private final Map<String, XStringBuilder> buffer = new HashMap<>();
+	private long lastAction = 0;
+	private long cooldown = 0;
 
 	public GameChannel(GuildMessageChannel... channel) {
 		for (GuildMessageChannel chn : channel) {
@@ -52,22 +55,33 @@ public class GameChannel {
 				.toList();
 	}
 
+	public GameChannel setCooldown(long time, TimeUnit unit) {
+		cooldown = unit.toMillis(time);
+		return this;
+	}
+
 	public ClusterAction sendFile(byte[] bytes, String filename) {
+		long delay = Math.max(0, (lastAction + cooldown) - System.currentTimeMillis());
+
 		Map<String, MessageCreateAction> acts = new HashMap<>();
 		for (GuildMessageChannel chn : getChannels()) {
 			acts.put(chn.getId(), chn.sendFiles(FileUpload.fromData(bytes, filename)));
 		}
 
-		return new ClusterAction(acts);
+		lastAction = System.currentTimeMillis();
+		return new ClusterAction(delay, acts);
 	}
 
 	public ClusterAction sendMessage(String message) {
+		long delay = Math.max(0, (lastAction + cooldown) - System.currentTimeMillis());
+
 		Map<String, MessageCreateAction> acts = new HashMap<>();
 		for (GuildMessageChannel chn : getChannels()) {
 			acts.put(chn.getId(), chn.sendMessage(message));
 		}
 
-		return new ClusterAction(acts);
+		lastAction = System.currentTimeMillis();
+		return new ClusterAction(delay, acts);
 	}
 
 	public void buffer(String message) {
@@ -77,6 +91,8 @@ public class GameChannel {
 	}
 
 	public ClusterAction flush() {
+		long delay = Math.max(0, (lastAction + cooldown) - System.currentTimeMillis());
+
 		Map<String, MessageCreateAction> acts = new HashMap<>();
 		for (GuildMessageChannel chn : getChannels()) {
 			String msg = buffer.remove(chn.getId()).toString();
@@ -85,6 +101,7 @@ public class GameChannel {
 			}
 		}
 
-		return new ClusterAction(acts);
+		lastAction = System.currentTimeMillis();
+		return new ClusterAction(delay, acts);
 	}
 }

@@ -62,7 +62,7 @@ public abstract class SpecialEvent {
 
 	public static void addEvent(Guild guild, SpecialEvent event) {
 		events.put(guild.getId(), new Pair<>(
-				System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS),
+				System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1),
 				event
 		));
 	}

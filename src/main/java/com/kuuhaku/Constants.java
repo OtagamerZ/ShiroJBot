@@ -52,10 +52,10 @@ public abstract class Constants {
 
     public static final double P_HOURS_IN_DAY = 23 + (56d / 60) + (4d / 3600);
 
-    public static final long MILLIS_IN_DAY = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
-    public static final long MILLIS_IN_HOUR = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS);
-    public static final long MILLIS_IN_MINUTE = TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES);
-    public static final long MILLIS_IN_SECOND = TimeUnit.MILLISECONDS.convert(1, TimeUnit.SECONDS);
+    public static final long MILLIS_IN_DAY = TimeUnit.DAYS.toMillis(1);
+    public static final long MILLIS_IN_HOUR = TimeUnit.HOURS.toMillis(1);
+    public static final long MILLIS_IN_MINUTE = TimeUnit.MINUTES.toMillis(1);
+    public static final long MILLIS_IN_SECOND = TimeUnit.SECONDS.toMillis(1);
     public static final double GOLDEN_RATIO = (1 + Math.sqrt(5)) / 2;
 
     public static final String TIMESTAMP = "<t:%s:f>";

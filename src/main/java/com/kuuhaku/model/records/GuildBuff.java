@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 public record GuildBuff(String id, long expiration, double card, double drop, double rarity, double xp) {
 	public GuildBuff(String id, int time, TimeUnit unit, double card, double drop, double rarity, double xp) {
-		this(id, System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(time, unit), card, drop, rarity, xp);
+		this(id, System.currentTimeMillis() + unit.toMillis(time), card, drop, rarity, xp);
 	}
 
 	public GuildBuff(double card, double drop, double rarity, double xp) {

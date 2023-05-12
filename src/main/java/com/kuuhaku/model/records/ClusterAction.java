@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-public record ClusterAction(Map<String, MessageCreateAction> actions) {
+public record ClusterAction(long delay, Map<String, MessageCreateAction> actions) {
 	public ClusterAction embed(MessageEmbed eb) {
 		actions.replaceAll((k, msg) -> msg.setEmbeds(eb));
 		return this;
@@ -39,32 +39,30 @@ public record ClusterAction(Map<String, MessageCreateAction> actions) {
 	}
 
 	public void queue() {
-		for (MessageCreateAction act : actions.values()) {
-			act.queue();
-		}
+		queue(null, null);
 	}
 
 	public void queue(Consumer<? super Message> message) {
-		for (MessageCreateAction act : actions.values()) {
-			act.queue(message);
-		}
+		queue(message, null);
 	}
 
 	public void queue(Consumer<? super Message> message, Consumer<? super Throwable> failure) {
 		for (MessageCreateAction act : actions.values()) {
-			act.queue(message, failure);
+			act.delay(delay, TimeUnit.MILLISECONDS).queue(message, failure);
 		}
 	}
 
+	public void queueAfter(long delay, TimeUnit unit) {
+		queueAfter(delay, unit, null, null);
+	}
+
 	public void queueAfter(long delay, TimeUnit unit, Consumer<? super Message> message) {
-		for (MessageCreateAction act : actions.values()) {
-			act.queueAfter(delay, unit, message);
-		}
+		queueAfter(delay, unit, message, null);
 	}
 
 	public void queueAfter(long delay, TimeUnit unit, Consumer<? super Message> message, Consumer<? super Throwable> failure) {
 		for (MessageCreateAction act : actions.values()) {
-			act.queueAfter(delay, unit, message, failure);
+			act.delay(delay, TimeUnit.MILLISECONDS).queueAfter(delay, unit, message, failure);
 		}
 	}
 }
