@@ -196,10 +196,14 @@ public abstract class Calc {
 	}
 
 	public static boolean chance(double percentage) {
+		return chance(percentage, Constants.DEFAULT_RNG.get());
+	}
+
+	public static boolean chance(double percentage, RandomGenerator rng) {
 		if (percentage >= 100) return true;
 		else if (percentage <= 0) return false;
 
-		return rng(100d) < percentage;
+		return rng(100d, rng) < percentage;
 	}
 
 	public static <T> T getRandom(List<Pair<T, Double>> values) {

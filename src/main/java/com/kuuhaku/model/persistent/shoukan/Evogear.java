@@ -305,7 +305,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MACHINE) * 0.02);
 			}
 
-			if (hand.getGame().getArcade() == Arcade.OVERCHARGE) {
+			if (getGame().getArcade() == Arcade.OVERCHARGE) {
 				mult *= 1.5;
 			}
 		}
@@ -323,7 +323,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 			mult *= 1 - Math.max(0, 0.07 * (hand.getOrigin().minor().length - 1));
 
-			if (hand.getGame().getArcade() == Arcade.OVERCHARGE) {
+			if (getGame().getArcade() == Arcade.OVERCHARGE) {
 				mult *= 1.75;
 			}
 		}
@@ -389,15 +389,15 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 		}
 
-		Shoukan game = hand.getGame();
+		Shoukan game = getGame();
 		try {
 			cachedEffect.forScript(getEffect())
 					.withConst("evo", this)
-					.withConst("game", hand.getGame())
+					.withConst("game", getGame())
 					.withConst("data", stats.getData())
 					.withVar("ep", ep)
 					.withVar("side", hand.getSide())
-					.withVar("props", extractValues(hand.getGame().getLocale()))
+					.withVar("props", extractValues(getGame().getLocale()))
 					.withVar("trigger", ep.trigger());
 
 			if (!isSpell()) {
@@ -443,11 +443,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		try {
 			Utils.exec(getEffect(), Map.of(
 					"evo", this,
-					"game", hand.getGame(),
+					"game", getGame(),
 					"data", stats.getData(),
 					"ep", new EffectParameters(trigger, getSide()),
 					"side", hand.getSide(),
-					"props", extractValues(hand.getGame().getLocale()),
+					"props", extractValues(getGame().getLocale()),
 					"self", equipper,
 					"trigger", trigger
 			));

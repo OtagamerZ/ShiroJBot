@@ -179,7 +179,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	public boolean isActive() {
-		return hand.getGame().getArena().getField().equals(this);
+		return getGame().getArena().getField().equals(this);
 	}
 
 	@Override

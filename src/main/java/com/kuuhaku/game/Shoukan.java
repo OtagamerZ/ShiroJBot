@@ -362,7 +362,7 @@ public class Shoukan extends GameInstance<Phase> {
                 return false;
             }
 
-            chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(5));
+            chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(5, rng));
             slot.setBottom(copy = chosen.withCopy(s -> {
                 switch (args.getString("mode")) {
                     case "d" -> s.setDefending(true);
@@ -382,7 +382,7 @@ public class Shoukan extends GameInstance<Phase> {
                 return false;
             }
 
-            chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(5));
+            chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(5, rng));
             slot.setTop(copy = chosen.withCopy(s -> {
                 switch (args.getString("mode")) {
                     case "d" -> s.setDefending(true);
@@ -792,7 +792,7 @@ public class Shoukan extends GameInstance<Phase> {
         curr.getDiscard().add(chosen);
 
         if (curr.getOrigin().synergy() == Race.FAMILIAR) {
-            if (Calc.chance(25)) {
+            if (Calc.chance(25, rng)) {
                 List<? extends EffectHolder<?>> available = curr.getCards().stream()
                         .filter(d -> d instanceof EffectHolder<?>)
                         .filter(Drawable::isAvailable)
@@ -835,7 +835,7 @@ public class Shoukan extends GameInstance<Phase> {
         curr.getDiscard().addAll(cards);
 
         if (curr.getOrigin().synergy() == Race.FAMILIAR) {
-            if (Calc.chance(25)) {
+            if (Calc.chance(25, rng)) {
                 List<? extends EffectHolder<?>> available = curr.getCards().stream()
                         .filter(d -> d instanceof EffectHolder<?>)
                         .filter(Drawable::isAvailable)
@@ -1196,7 +1196,7 @@ public class Shoukan extends GameInstance<Phase> {
                                 int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
                                 op.getRegDeg().add(val);
 
-                                if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(5)) {
+                                if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(5, rng)) {
                                     op.getRegDeg().add(val);
                                 }
                             }
@@ -1260,7 +1260,7 @@ public class Shoukan extends GameInstance<Phase> {
                         dmg = 0;
                         win = true;
                     } else {
-                        boolean dbl = op.getOrigin().synergy() == Race.CYBERBEAST && Calc.chance(5);
+                        boolean dbl = op.getOrigin().synergy() == Race.CYBERBEAST && Calc.chance(5, rng);
                         boolean unstop = source.popFlag(Flag.UNSTOPPABLE);
 
                         int enemyStats = target.getActiveAttr(dbl);
@@ -1291,19 +1291,19 @@ public class Shoukan extends GameInstance<Phase> {
                             int block = target.getBlock();
                             int dodge = target.getDodge();
 
-                            if (Calc.chance(100 - source.getHitChance())) {
+                            if (Calc.chance(100 - source.getHitChance(), rng)) {
                                 outcome = getLocale().get("str/combat_miss");
                                 trigger(ON_MISS, source.asSource(ON_MISS));
 
                                 dmg = 0;
-                            } else if (!unstop && !source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_BLOCK) || Calc.chance(block))) {
+                            } else if (!unstop && !source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_BLOCK) || Calc.chance(block, rng))) {
                                 outcome = getLocale().get("str/combat_block", block);
                                 trigger(null, source.asSource(), target.asTarget(ON_BLOCK));
 
                                 source.setStun(1);
 
                                 dmg = 0;
-                            } else if (!source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge))) {
+                            } else if (!source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge, rng))) {
                                 outcome = getLocale().get("str/combat_dodge", dodge);
                                 trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
 
@@ -1443,7 +1443,7 @@ public class Shoukan extends GameInstance<Phase> {
                                 int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
                                 op.getRegDeg().add(val);
 
-                                if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(5)) {
+                                if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(5, rng)) {
                                     op.getRegDeg().add(val);
                                 }
                             }

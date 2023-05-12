@@ -89,7 +89,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
         e.setHand(this.getHand());
         e.executeAssert(ON_INITIALIZE);
 
-        Shoukan game = this.getHand().getGame();
+        Shoukan game = this.getGame();
         game.trigger(ON_EQUIP, this.asSource(ON_EQUIP));
 
         if (e.hasCharm(Charm.TIMEWARP)) {
@@ -301,7 +301,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
     @Override
     public SlotColumn getSlot() {
-        return Utils.getOr(slot, new SlotColumn(hand.getGame(), hand.getSide(), -1));
+        return Utils.getOr(slot, new SlotColumn(getGame(), hand.getSide(), -1));
     }
 
     @Override
@@ -517,7 +517,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
     public double getFieldMult() {
         if (hasFlag(Flag.IGNORE_FIELD)) return 1;
-        Field f = hand.getGame().getArena().getField();
+        Field f = getGame().getArena().getField();
 
         double mult = 1;
         Set<Race> races = new HashSet<>(getRace().split());
@@ -565,7 +565,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
     @Override
     public int getDodge() {
         int sum = base.getDodge() + stats.getDodge() + getEquipDodge();
-        if (hand != null && hand.getGame().getArena().getField().getType() == FieldType.DUNGEON) {
+        if (hand != null && getGame().getArena().getField().getType() == FieldType.DUNGEON) {
             sum = Math.min(sum, 50);
         }
 
@@ -602,7 +602,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
                 mult *= 0.5;
             }
 
-            if (hand.getGame().getArcade() == Arcade.OVERCHARGE) {
+            if (getGame().getArcade() == Arcade.OVERCHARGE) {
                 mult *= 1.5;
             }
         }
@@ -616,7 +616,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
         if (hand != null) {
             mult *= 1 - Math.max(0, 0.07 * (hand.getOrigin().minor().length - 1));
 
-            if (hand.getGame().getArcade() == Arcade.OVERCHARGE) {
+            if (getGame().getArcade() == Arcade.OVERCHARGE) {
                 mult *= 1.75;
             }
         }
@@ -711,7 +711,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
         state = Bit.set(state, 2, defending);
 
         if (!isFlipped() && slot != null) {
-            hand.getGame().trigger(ON_SWITCH, asSource(ON_SWITCH));
+            getGame().trigger(ON_SWITCH, asSource(ON_SWITCH));
         }
     }
 
@@ -733,10 +733,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
             setDefending(true);
 
             if (hand != null) {
-                if (hand.getGame().getCurrentSide() != hand.getSide()) {
-                    hand.getGame().trigger(ON_FLIP, asSource(ON_FLIP));
+                if (getGame().getCurrentSide() != hand.getSide()) {
+                    getGame().trigger(ON_FLIP, asSource(ON_FLIP));
                 } else {
-                    hand.getGame().trigger(ON_SUMMON, asSource(ON_SUMMON));
+                    getGame().trigger(ON_SUMMON, asSource(ON_SUMMON));
                 }
             }
         }
@@ -769,7 +769,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
     public void awake() {
         int curr = Bit.get(state, 2, 4);
 
-        if (Calc.chance(100d / (curr + 1))) {
+        if (Calc.chance(100d / (curr + 1), getGame().getRng())) {
             state = Bit.set(state, 2, 0, 4);
         }
     }
@@ -928,7 +928,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
             hit *= 0.75;
         }
 
-        if (hand != null && hand.getGame().getArena().getField().getType() == FieldType.NIGHT) {
+        if (hand != null && getGame().getArena().getField().getType() == FieldType.NIGHT) {
             hit *= 0.8;
 
             if (hand.getOrigin().synergy() == Race.WEREBEAST) {
@@ -1030,7 +1030,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
         if (trigger == ON_ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
 
-        Shoukan game = hand.getGame();
+        Shoukan game = getGame();
         //Hand other = ep.getHands().get(ep.getOtherSide());
         try {
             if (base.isLocked(trigger) || trigger == NONE) return false;
@@ -1078,18 +1078,18 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
             }
 
             if (hasEffect() && getEffect().contains(trigger.name())) {
-                if (isStunned() && Calc.chance(25)) {
+                if (isStunned() && Calc.chance(25, getGame().getRng())) {
                     if (!global) {
                         game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
                     }
                 } else {
                     cachedEffect.forScript(getEffect())
                             .withConst("self", this)
-                            .withConst("game", hand.getGame())
+                            .withConst("game", getGame())
                             .withConst("data", stats.getData())
                             .withVar("ep", ep)
                             .withVar("side", hand.getSide())
-                            .withVar("props", extractValues(hand.getGame().getLocale()))
+                            .withVar("props", extractValues(getGame().getLocale()))
                             .withVar("trigger", trigger)
                             .run();
 
@@ -1116,11 +1116,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
                 Utils.exec(curse, Map.of(
                         "self", this,
-                        "game", hand.getGame(),
+                        "game", getGame(),
                         "data", stats.getData(),
                         "ep", ep,
                         "side", hand.getSide(),
-                        "props", extractValues(hand.getGame().getLocale()),
+                        "props", extractValues(getGame().getLocale()),
                         "trigger", trigger
                 ));
             }
@@ -1165,11 +1165,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
             Utils.exec(getEffect(), Map.of(
                     "self", this,
-                    "game", hand.getGame(),
+                    "game", getGame(),
                     "data", stats.getData(),
                     "ep", new EffectParameters(trigger, getSide()),
                     "side", hand.getSide(),
-                    "props", extractValues(hand.getGame().getLocale()),
+                    "props", extractValues(getGame().getLocale()),
                     "trigger", trigger
             ));
         } catch (Exception ignored) {
@@ -1206,17 +1206,17 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
         if (blocked.contains(source)) return true;
 
         if (hand != null) {
-            hand.getGame().trigger(ON_EFFECT_TARGET, source.asSource(), asTarget(ON_EFFECT_TARGET));
+            getGame().trigger(ON_EFFECT_TARGET, source.asSource(), asTarget(ON_EFFECT_TARGET));
             if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
                 return true;
             }
         }
 
-        if (Calc.chance(getDodge())) {
+        if (Calc.chance(getDodge(), getGame().getRng())) {
             return true;
         } else if (hasCharm(Charm.SHIELD, true)) {
             blocked.add(source);
-            Shoukan game = hand.getGame();
+            Shoukan game = getGame();
             game.getChannel().sendMessage(game.getLocale().get("str/spell_shield", this)).queue();
             return true;
         }

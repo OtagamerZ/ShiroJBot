@@ -208,8 +208,13 @@ public abstract class GameInstance<T extends Enum<T>> {
 		if (code == GameReport.SUCCESS) {
 			exec.complete(null);
 
-			if (!(this instanceof Shoukan s && s.isSingleplayer() && s.getArcade() == null)) {
-				int prize = (int) (500 * Calc.rng(0.75, 1.25));
+			if (this instanceof Shoukan s && !s.hasCheated() && s.getArcade() == null) {
+				int prize = (int) (500 * Calc.rng(0.75, 1.25, s.getRng()));
+				for (String uid : getPlayers()) {
+					DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
+				}
+			} else if (!(this instanceof Shoukan)) {
+				int prize = (int) (350 * Calc.rng(0.75, 1.25));
 				for (String uid : getPlayers()) {
 					DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
 				}

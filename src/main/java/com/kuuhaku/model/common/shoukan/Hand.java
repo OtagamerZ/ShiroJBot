@@ -140,7 +140,7 @@ public class Hand {
 		}
 
 		if (d instanceof Senshi s) {
-			if (getGame().getCurrentSide() != getSide() && Calc.chance(s.getDodge() / 2d)) {
+			if (getGame().getCurrentSide() != getSide() && Calc.chance(s.getDodge() / 2d, getGame().getRng())) {
 				getGame().getChannel().sendMessage(getGame().getLocale().get("str/avoid_destruction", s)).queue();
 				return false;
 			} else if (s.popFlag(Flag.NO_DEATH) || s.hasCharm(Charm.WARDING, true)) {
@@ -188,7 +188,7 @@ public class Hand {
 
 		d.reset();
 
-		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5)) {
+		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5, getGame().getRng())) {
 			cards.add(d.copy());
 			return false;
 		}
@@ -783,7 +783,7 @@ public class Hand {
 			}
 
 			if (this.hp + value <= 0 && prcnt > 1 / 3d) {
-				if (prcnt > 2 / 3d || Calc.chance(prcnt * 100)) {
+				if (prcnt > 2 / 3d || Calc.chance(prcnt * 100, getGame().getRng())) {
 					this.hp = 1;
 					return;
 				}
@@ -876,7 +876,7 @@ public class Hand {
 	}
 
 	public boolean consumeMP(int value) {
-		if (origin.synergy() == Race.ESPER && Calc.chance(3)) return true;
+		if (origin.synergy() == Race.ESPER && Calc.chance(3, getGame().getRng())) return true;
 		else if (origin.major() == Race.DEMON) {
 			return consumeHP((int) (value * (base.hp() * 0.08)));
 		} else if (this.mp < value) return false;

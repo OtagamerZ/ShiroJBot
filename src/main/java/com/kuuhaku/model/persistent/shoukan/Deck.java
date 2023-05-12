@@ -610,7 +610,7 @@
 
 							 if (h != null) {
 								 if (origin.synergy() == Race.FEY) {
-									 m = mp * (Calc.chance(3) ? 2 : 1);
+									 m = mp * (Calc.chance(3, h.getGame().getRng()) ? 2 : 1);
 								 } else if (origin.synergy() == Race.GHOST && h.getGame().getTurn() > 0) {
 									 m = mp + (Math.ceil(h.getGame().getTurn() / 2d) % 2 == 0 ? 1 : 0);
 								 }

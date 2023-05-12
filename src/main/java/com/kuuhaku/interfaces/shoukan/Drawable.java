@@ -18,6 +18,7 @@
 
 package com.kuuhaku.interfaces.shoukan;
 
+import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
@@ -76,6 +77,10 @@ public interface Drawable<T extends Drawable<T>> {
 	Hand getHand();
 
 	void setHand(Hand hand);
+
+	default Shoukan getGame() {
+		return getHand().getGame();
+	}
 
 	default Side getSide() {
 		return getHand().getSide();
