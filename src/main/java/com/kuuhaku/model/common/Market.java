@@ -43,9 +43,9 @@ public class Market {
 			Map.entry("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'"),
 			Map.entry("c", "AND kc.chrome = TRUE"),
 			Map.entry("k", "AND c.type = 'KAWAIPON'"),
-			Map.entry("s", "AND s.card.id IS NOT NULL"),
-			Map.entry("e", "AND c.type = 'EVOGEAR'"),
-			Map.entry("f", "AND c.type = 'FIELD'"),
+			Map.entry("s", "AND s.id IS NOT NULL"),
+			Map.entry("e", "AND e.id IS NOT NULL"),
+			Map.entry("f", "AND f.id IS NOT NULL"),
 			Map.entry("gl", "AND c.price >= ?%s"),
 			Map.entry("lt", "AND c.price <= ?%s"),
 			Map.entry("m", "AND c.kawaipon.uid = ?%s")
@@ -60,8 +60,9 @@ public class Market {
 		XStringBuilder query = new XStringBuilder("""
 				SELECT c FROM StashedCard c
 				LEFT JOIN KawaiponCard kc ON kc.uuid = c.uuid
-				LEFT JOIN Evogear e ON e.card = c.card
 				LEFT JOIN Senshi s ON s.card = c.card
+				LEFT JOIN Evogear e ON e.card = c.card
+				LEFT JOIN Field f ON f.card = c.card
 				WHERE c.price > 0
 				""");
 

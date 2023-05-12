@@ -639,7 +639,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public static Evogear getRandom(RandomGenerator rng) {
-		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM evogear WHERE tier > 0");
+		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM evogear WHERE tier > 0 ORDER BY card_id");
 		if (ids.isEmpty()) return null;
 
 		return DAO.find(Evogear.class, Utils.getRandomEntry(rng, ids));
@@ -657,6 +657,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			query.appendNewLine("AND tier > 0");
 		}
 
+		query.appendNewLine("ORDER BY card_id");
+
 		List<String> ids = DAO.queryAllNative(String.class, query.toString());
 		if (ids.isEmpty()) return null;
 
@@ -666,6 +668,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public static XList<Evogear> getByTag(RandomGenerator rng, String... tags) {
 		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('evogear', ?1)", (Object[]) tags);
 
-		return new XList<>(DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.card.id IN ?1", ids), rng);
+		return new XList<>(DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.id IN ?1 ORDER BY e.id", ids), rng);
 	}
 }

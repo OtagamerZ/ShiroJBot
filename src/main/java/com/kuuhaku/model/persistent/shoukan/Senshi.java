@@ -1419,7 +1419,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
     }
 
     public static Senshi getRandom(RandomGenerator rng) {
-        List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM senshi WHERE NOT has(tags, 'FUSION')");
+        List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM senshi WHERE NOT has(tags, 'FUSION') ORDER BY card_id");
         if (ids.isEmpty()) return null;
 
         return DAO.find(Senshi.class, Utils.getRandomEntry(rng, ids));
@@ -1439,6 +1439,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
             }
         }
 
+        query.appendNewLine(" ORDER BY card_id");
+
         List<String> ids = DAO.queryAllNative(String.class, query.toString());
         if (ids.isEmpty()) return null;
 
@@ -1448,6 +1450,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
     public static XList<Senshi> getByTag(RandomGenerator rng, String... tags) {
         List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('senshi', ?1)", (Object[]) tags);
 
-        return new XList<>(DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE s.card.id IN ?1", ids), rng);
+        return new XList<>(DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE s.id IN ?1 ORDER BY s.id", ids), rng);
     }
 }

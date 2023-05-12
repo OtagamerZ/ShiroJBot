@@ -308,7 +308,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	public static Field getRandom(RandomGenerator rng) {
-		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM field WHERE NOT effect");
+		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM field WHERE NOT effect ORDER BY card_id");
 		if (ids.isEmpty()) return null;
 
 		return DAO.find(Field.class, Utils.getRandomEntry(rng, ids));
@@ -326,6 +326,8 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 			query.appendNewLine("AND NOT effect");
 		}
 
+		query.appendNewLine("ORDER BY card_id");
+
 		List<String> ids = DAO.queryAllNative(String.class, query.toString());
 		if (ids.isEmpty()) return null;
 
@@ -335,6 +337,6 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	public static XList<Field> getByTag(RandomGenerator rng, String... tags) {
 		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('field', ?1)", (Object[]) tags);
 
-		return new XList<>(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.card.id IN ?1", ids), rng);
+		return new XList<>(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.id IN ?1 ORDER BY f.id", ids), rng);
 	}
 }
