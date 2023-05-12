@@ -759,71 +759,71 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
     }
 
     public boolean isSleeping() {
-        return !isStunned() && Bit.on(state, 3, 4);
+        return !isStunned() && Bit.on(state, 2, 4);
     }
 
     public int getRemainingSleep() {
-        return Bit.get(state, 3, 4);
+        return Bit.get(state, 2, 4);
     }
 
     public void awake() {
-        int curr = Bit.get(state, 3, 4);
+        int curr = Bit.get(state, 2, 4);
 
         if (Calc.chance(100d / (curr + 1))) {
-            state = Bit.set(state, 3, 0, 4);
+            state = Bit.set(state, 2, 0, 4);
         }
     }
 
     public void setSleep(int time) {
         if (popFlag(Flag.NO_SLEEP)) return;
 
-        int curr = Bit.get(state, 3, 4);
-        state = Bit.set(state, 3, Math.max(curr, time), 4);
+        int curr = Bit.get(state, 2, 4);
+        state = Bit.set(state, 2, Math.max(curr, time), 4);
     }
 
     public void reduceSleep(int time) {
-        int curr = Bit.get(state, 3, 4);
-        state = Bit.set(state, 3, Math.max(0, curr - time), 4);
+        int curr = Bit.get(state, 2, 4);
+        state = Bit.set(state, 2, Math.max(0, curr - time), 4);
     }
 
     public boolean isStunned() {
-        return !isStasis() && Bit.on(state, 4, 4);
+        return !isStasis() && Bit.on(state, 3, 4);
     }
 
     public int getRemainingStun() {
-        return Bit.get(state, 4, 4);
+        return Bit.get(state, 3, 4);
     }
 
     public void setStun(int time) {
         if (popFlag(Flag.NO_STUN)) return;
 
-        int curr = Bit.get(state, 4, 4);
-        state = Bit.set(state, 4, Math.max(curr, time), 4);
+        int curr = Bit.get(state, 3, 4);
+        state = Bit.set(state, 3, Math.max(curr, time), 4);
     }
 
     public void reduceStun(int time) {
-        int curr = Bit.get(state, 4, 4);
-        state = Bit.set(state, 4, Math.max(0, curr - time), 4);
+        int curr = Bit.get(state, 3, 4);
+        state = Bit.set(state, 3, Math.max(0, curr - time), 4);
     }
 
     public boolean isStasis() {
-        return Bit.on(state, 5, 4);
+        return Bit.on(state, 4, 4);
     }
 
     public int getRemainingStasis() {
-        return Bit.get(state, 5, 4);
+        return Bit.get(state, 4, 4);
     }
 
     public void setStasis(int time) {
         if (popFlag(Flag.NO_STASIS)) return;
 
-        int curr = Bit.get(state, 5, 4);
-        state = Bit.set(state, 5, Math.max(curr, time), 4);
+        int curr = Bit.get(state, 4, 4);
+        state = Bit.set(state, 4, Math.max(curr, time), 4);
     }
 
     public void reduceStasis(int time) {
-        int curr = Bit.get(state, 5, 4);
-        state = Bit.set(state, 5, Math.max(0, curr - time), 4);
+        int curr = Bit.get(state, 4, 4);
+        state = Bit.set(state, 4, Math.max(0, curr - time), 4);
     }
 
     public Senshi getTarget() {
@@ -831,9 +831,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
     }
 
     public int getRemainingTaunt() {
-        int taunt = Bit.get(state, 6, 4);
+        int taunt = Bit.get(state, 5, 4);
         if (taunt == 0 || (target == null || target.getSide() == getSide() || target.getIndex() == -1)) {
-            state = Bit.set(state, 6, 0, 4);
+            state = Bit.set(state, 5, 0, 4);
             target = null;
             taunt = 0;
         }
@@ -845,49 +845,49 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
         if (target == null || popFlag(Flag.NO_TAUNT)) return;
 
         this.target = target;
-        int curr = Bit.get(state, 6, 4);
-        state = Bit.set(state, 6, Math.max(curr, time), 4);
+        int curr = Bit.get(state, 5, 4);
+        state = Bit.set(state, 5, Math.max(curr, time), 4);
     }
 
     public void reduceTaunt(int time) {
-        int curr = Bit.get(state, 6, 4);
-        state = Bit.set(state, 6, Math.max(0, curr - time), 4);
+        int curr = Bit.get(state, 5, 4);
+        state = Bit.set(state, 5, Math.max(0, curr - time), 4);
     }
 
     public boolean isBerserk() {
-        return Bit.on(state, 7, 4);
+        return Bit.on(state, 6, 4);
     }
 
     public int getRemainingBerserk() {
-        return Bit.get(state, 7, 4);
+        return Bit.get(state, 6, 4);
     }
 
     public void setBerserk(int time) {
         if (popFlag(Flag.NO_BERSERK)) return;
 
-        int curr = Bit.get(state, 7, 4);
-        state = Bit.set(state, 7, Math.max(curr, time), 4);
+        int curr = Bit.get(state, 6, 4);
+        state = Bit.set(state, 6, Math.max(curr, time), 4);
     }
 
     public void reduceBerserk(int time) {
-        int curr = Bit.get(state, 7, 4);
-        state = Bit.set(state, 7, Math.max(0, curr - time), 4);
+        int curr = Bit.get(state, 6, 4);
+        state = Bit.set(state, 6, Math.max(0, curr - time), 4);
     }
 
     @Override
     public int getCooldown() {
-        return Bit.get(state, 8, 4);
+        return Bit.get(state, 7, 4);
     }
 
     @Override
     public void setCooldown(int time) {
-        int curr = Bit.get(state, 8, 4);
-        state = Bit.set(state, 8, Math.max(curr, time), 4);
+        int curr = Bit.get(state, 7, 4);
+        state = Bit.set(state, 7, Math.max(curr, time), 4);
     }
 
     public void reduceCooldown(int time) {
-        int curr = Bit.get(state, 8, 4);
-        state = Bit.set(state, 8, Math.max(0, curr - time), 4);
+        int curr = Bit.get(state, 7, 4);
+        state = Bit.set(state, 7, Math.max(0, curr - time), 4);
     }
 
     public Senshi getLastInteraction() {
