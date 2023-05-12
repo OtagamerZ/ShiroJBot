@@ -228,8 +228,19 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public BondedList<Evogear> getEquipments() {
 		equipments.removeIf(e -> !equals(e.getEquipper()));
 
-		while (equipments.size() > 3) {
-			hand.getGraveyard().add(equipments.removeFirst());
+		int size = equipments.size();
+		if (size > 3) {
+			int i = 0;
+			Iterator<Evogear> it = equipments.iterator();
+			while (it.hasNext()) {
+				Evogear e = it.next();
+				if (!e.getBase().getTags().contains("FIXED") || i > 2) {
+					hand.getGraveyard().add(e);
+					it.remove();
+				}
+
+				i++;
+			}
 		}
 
 		return equipments;

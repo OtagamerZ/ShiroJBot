@@ -692,7 +692,7 @@ public class Shoukan extends GameInstance<Phase> {
         }
 
         Senshi chosen = nc ? slot.getBottom() : slot.getTop();
-        if (chosen.getTags().contains("tag/fixed")) {
+        if (chosen.getBase().getTags().contains("FIXED")) {
             getChannel().sendMessage(getLocale().get("error/card_fixed")).queue();
             return false;
         } else if (chosen.getHPCost() / 2 >= curr.getHP()) {
@@ -938,7 +938,7 @@ public class Shoukan extends GameInstance<Phase> {
         trigger(ON_SPELL, side);
         reportEvent("str/activate_card", true,
                 curr.getName(),
-                chosen.getTags().contains("tag/secret") ? getLocale().get("str/a_spell") : chosen
+                chosen.getBase().getTags().contains("SECRET") ? getLocale().get("str/a_spell") : chosen
         );
         return true;
     }
