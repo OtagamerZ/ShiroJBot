@@ -32,8 +32,12 @@ import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.Fonts;
+import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.shoukan.*;
+import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
@@ -256,12 +260,12 @@ public class Hand {
 		this.uid = uid;
 		this.game = game;
 		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
-		if (game.getArcade() != Arcade.CARDMASTER) {
-			if (userDeck == null) {
-				throw new GameReport(GameReport.NO_DECK, uid);
-			} else if (!(userDeck.validateSenshi() && userDeck.validateEvogear() && userDeck.validateFields())) {
-				throw new GameReport(GameReport.INVALID_DECK, uid);
-			}
+		if (game.getArcade() != Arcade.CARDMASTER && (!game.isSingleplayer() || !Account.hasRole(uid, false, Role.TESTER))) {
+				if (userDeck == null) {
+					throw new GameReport(GameReport.NO_DECK, uid);
+				} else if (!(userDeck.validateSenshi() && userDeck.validateEvogear() && userDeck.validateFields())) {
+					throw new GameReport(GameReport.INVALID_DECK, uid);
+				}
 		}
 
 		this.side = side;

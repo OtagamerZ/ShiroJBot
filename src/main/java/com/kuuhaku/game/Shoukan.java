@@ -206,7 +206,7 @@ public class Shoukan extends GameInstance<Phase> {
     @PlayerAction("set_hp,(?<value>\\d+)")
     private boolean debSetHp(Side side, JSONObject args) {
         Hand curr = hands.get(side);
-        if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
+        if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
             int val = args.getInt("value");
             curr.setHP(val);
 
@@ -220,7 +220,7 @@ public class Shoukan extends GameInstance<Phase> {
     @PlayerAction("set_mp,(?<value>\\d+)")
     private boolean debSetMp(Side side, JSONObject args) {
         Hand curr = hands.get(side);
-        if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
+        if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
             int val = args.getInt("value");
             curr.setMP(val);
 
@@ -234,7 +234,7 @@ public class Shoukan extends GameInstance<Phase> {
     @PlayerAction("set_origin,(?<major>\\w+)(?:,(?<minor>[\\w,]+))?")
     private boolean debSetOrigin(Side side, JSONObject args) {
         Hand curr = hands.get(side);
-        if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
+        if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
             Race major = args.getEnum(Race.class, "major", Race.NONE);
 
             Set<Race> minors = new HashSet<>();
@@ -257,7 +257,7 @@ public class Shoukan extends GameInstance<Phase> {
     @PlayerAction("add,(?<card>[\\w-]+)(?:,(?<amount>\\d+))?")
     private boolean debAddCard(Side side, JSONObject args) {
         Hand curr = hands.get(side);
-        if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
+        if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
             String id = args.getString("card").toUpperCase();
             CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)).stream()
                     .findFirst()
@@ -292,7 +292,7 @@ public class Shoukan extends GameInstance<Phase> {
     @PlayerAction("terminate")
     private boolean debTerminate(Side side, JSONObject args) {
         Hand curr = hands.get(side);
-        if (DAO.find(Account.class, curr.getUid()).hasRole(Role.TESTER)) {
+        if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
             reportResult(GameReport.SUCCESS, null, "GAME_TERMINATE");
             return false;
         }

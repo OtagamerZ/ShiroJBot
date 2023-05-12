@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
@@ -152,7 +153,24 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public boolean hasRole(Role role) {
-		return Utils.containsAny(roles, Role.DEVELOPER, role);
+		return hasRole(uid, false, role);
+	}
+
+	public static boolean hasRole(String uid, boolean and, Role... role) {
+		int flags = 0;
+		for (Role r : role) {
+			flags |= Bit.set(flags, r.ordinal(), true);
+		}
+
+		if (and) {
+			return DAO.queryNative(Boolean.class, "SELECT bool(role & 8) OR (role & ?2) = ?2 FROM account WHERE uid = ?1",
+					uid, flags
+			);
+		} else {
+			return DAO.queryNative(Boolean.class, "SELECT bool(role & (8 | ?2)) FROM account WHERE uid = ?1",
+					uid, flags
+			);
+		}
 	}
 
 	public long getBalance() {
