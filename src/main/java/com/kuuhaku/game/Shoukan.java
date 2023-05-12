@@ -81,12 +81,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 public class Shoukan extends GameInstance<Phase> {
     private static final String GIF_PATH = "https://raw.githubusercontent.com/OtagamerZ/ShoukanAssets/master/gifs/";
-    private final SplittableRandom rng = new SplittableRandom(getSeed());
+    private final RandomGenerator rng = new Random(getSeed());
 
     private final Arcade arcade;
     private final Arena arena;
@@ -800,7 +801,7 @@ public class Shoukan extends GameInstance<Phase> {
                         .toList();
 
                 if (!available.isEmpty()) {
-                    Utils.getRandomEntry(available).getStats().setMana(-1);
+                    Utils.getRandomEntry(rng, available).getStats().setMana(-1);
                 }
             }
         }
@@ -842,7 +843,7 @@ public class Shoukan extends GameInstance<Phase> {
                         .map(d -> (EffectHolder<?>) d)
                         .toList();
 
-                Utils.getRandomEntry(available).getStats().setMana(-1);
+                Utils.getRandomEntry(rng, available).getStats().setMana(-1);
             }
         }
 
@@ -1531,7 +1532,7 @@ public class Shoukan extends GameInstance<Phase> {
         return true;
     }
 
-    public SplittableRandom getRng() {
+    public RandomGenerator getRng() {
         return rng;
     }
 
@@ -2331,7 +2332,7 @@ public class Shoukan extends GameInstance<Phase> {
 
         if (arcade == Arcade.INSTABILITY) {
             int affected = Math.min((int) Math.ceil(getTurn() / 2d), 8);
-            List<SlotColumn> chosen = Utils.getRandomN(Utils.flatten(arena.getSlots().values()), affected, 1);
+            List<SlotColumn> chosen = Utils.getRandomN(Utils.flatten(arena.getSlots().values()), affected, 1, (Random) rng);
 
             for (SlotColumn slt : chosen) {
                 slt.setLock(1);
@@ -2347,7 +2348,7 @@ public class Shoukan extends GameInstance<Phase> {
         curr.getStats().expireMods();
 
         if (curr.getLockTime(Lock.BLIND) > 0) {
-            Collections.shuffle(curr.getCards());
+            Collections.shuffle(curr.getCards(), (Random) rng);
         }
 
         List<Senshi> allCards = getCards();
@@ -2364,7 +2365,7 @@ public class Shoukan extends GameInstance<Phase> {
                     if (s.isBerserk()) {
                         List<Senshi> valid = allCards.stream().filter(d -> !d.equals(s)).toList();
                         if (!valid.isEmpty()) {
-                            attack(s, Utils.getRandomEntry(valid), null, true);
+                            attack(s, Utils.getRandomEntry(rng, valid), null, true);
                             s.setAvailable(false);
                         }
                     }

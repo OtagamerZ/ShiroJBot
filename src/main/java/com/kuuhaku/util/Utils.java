@@ -563,42 +563,29 @@ public abstract class Utils {
 	}
 
 	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances) {
-		List<T> aux = new ArrayList<>(list);
-		List<T> out = new ArrayList<>();
-		RandomGenerator random = Constants.DEFAULT_RNG.get();
-
-		for (int i = 0; i < elements && aux.size() > 0; i++) {
-			int index = Calc.rng(aux.size() - 1, random);
-
-			T inst = aux.get(index);
-			if (Collections.frequency(out, inst) < maxInstances)
-				out.add(inst);
-			else {
-				aux.remove(index);
-				Collections.shuffle(aux);
-				i--;
-			}
-		}
-
-		return out;
+		return getRandomN(list, elements, maxInstances, new Random());
 	}
 
 	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances, long seed) {
+		return getRandomN(list, elements, maxInstances, new Random(seed));
+	}
+
+	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances, Random rng) {
 		List<T> aux = new ArrayList<>(list);
 		List<T> out = new ArrayList<>();
-		Random random = new Random(seed);
 
 		for (int i = 0; i < elements && aux.size() > 0; i++) {
-			int index = Calc.rng(aux.size() - 1, random);
+			int index = Calc.rng(aux.size() - 1, rng);
 
 			T inst = aux.get(index);
-			if (Collections.frequency(out, inst) < maxInstances)
+			if (Collections.frequency(out, inst) < maxInstances) {
 				out.add(inst);
-			else {
+			} else {
 				aux.remove(index);
-				Collections.shuffle(aux, random);
 				i--;
 			}
+
+			Collections.shuffle(aux, rng);
 		}
 
 		return out;
@@ -882,10 +869,14 @@ public abstract class Utils {
 	}
 
 	public static <T> Collector<T, ?, List<T>> toShuffledList() {
+		return toShuffledList(new Random());
+	}
+
+	public static <T> Collector<T, ?, List<T>> toShuffledList(Random rng) {
 		return Collectors.collectingAndThen(
 				Collectors.toList(),
 				l -> {
-					Collections.shuffle(l);
+					Collections.shuffle(l, rng);
 					return l;
 				}
 		);
@@ -970,8 +961,12 @@ public abstract class Utils {
 	}
 
 	public static <K, V> void shufflePairs(Map<K, V> map) {
-		List<V> valueList = new ArrayList<V>(map.values());
-		Collections.shuffle(valueList);
+		shufflePairs(map, new Random());
+	}
+
+	public static <K, V> void shufflePairs(Map<K, V> map, Random rng) {
+		List<V> valueList = new ArrayList<>(map.values());
+		Collections.shuffle(valueList, rng);
 		Iterator<V> valueIt = valueList.iterator();
 
 		for (Map.Entry<K, V> e : map.entrySet()) {
