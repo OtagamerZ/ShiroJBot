@@ -159,7 +159,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	public static boolean hasRole(String uid, boolean and, Role... role) {
 		int flags = 0;
 		for (Role r : role) {
-			flags |= Bit.set(flags, r.ordinal(), true);
+			flags = Bit.set(flags, r.ordinal(), true);
 		}
 
 		if (and) {
