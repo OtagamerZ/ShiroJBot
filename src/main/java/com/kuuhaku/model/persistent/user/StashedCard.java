@@ -69,6 +69,9 @@ public class StashedCard extends DAO<StashedCard> {
 	@Column(name = "trash", nullable = false)
 	private boolean trash = false;
 
+	@Column(name = "account_bound", nullable = false)
+	private boolean accountBound = false;
+
 	public StashedCard() {
 
 	}
@@ -169,6 +172,10 @@ public class StashedCard extends DAO<StashedCard> {
 
 	public void setTrash(boolean trash) {
 		this.trash = trash;
+	}
+
+	public boolean isAccountBound() {
+		return accountBound;
 	}
 
 	@Override
