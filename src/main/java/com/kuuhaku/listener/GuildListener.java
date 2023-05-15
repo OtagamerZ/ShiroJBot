@@ -292,8 +292,6 @@ public class GuildListener extends ListenerAdapter {
 
                     for (String s : content.split(" ")) {
                         JSONObject jo = Utils.extractNamedGroups(s, "^:(?<name>[\\w-]+):$|^<a?:[\\w-]+:(?<id>\\d+)>$");
-                        System.out.println(jo);
-
                         if (!jo.isEmpty()) {
                             RichCustomEmoji emj = null;
 
@@ -302,6 +300,8 @@ public class GuildListener extends ListenerAdapter {
                             } else {
                                 List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(jo.getString("name"), true);
                                 if (!valid.isEmpty()) {
+                                    System.out.println(valid);
+
                                     for (RichCustomEmoji e : valid) {
                                         if (e.getGuild().equals(event.getGuild())) {
                                             emj = e;
