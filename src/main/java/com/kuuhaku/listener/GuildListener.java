@@ -308,7 +308,7 @@ public class GuildListener extends ListenerAdapter {
 
                                 if (emj == null) {
                                     emj = valid.stream()
-                                            .filter(e -> e.canInteract(mb))
+                                            .filter(e -> e.getGuild().isMember(mb))
                                             .findFirst()
                                             .orElse(valid.get(0));
                                 }
