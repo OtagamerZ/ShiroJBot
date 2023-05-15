@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.records;
 
-import com.github.ygimenez.method.Pages;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;

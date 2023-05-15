@@ -75,7 +75,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.*;
 import java.util.random.RandomGenerator;
@@ -365,8 +364,7 @@ public abstract class Utils {
     }
 
     public static <T> List<Page> generatePages(EmbedBuilder eb, Collection<T> list, int itemsPerPage, int itemsPerColumn, Function<T, String> mapper) {
-        return generatePages(eb, list, itemsPerPage, itemsPerColumn, mapper, (p, t) -> {
-        });
+        return generatePages(eb, list, itemsPerPage, itemsPerColumn, mapper, Utils::doNothing);
     }
 
     public static <T> List<Page> generatePages(EmbedBuilder eb, Collection<T> list, int itemsPerPage, int itemsPerColumn, Function<T, String> mapper, BiConsumer<Integer, Integer> finisher) {
@@ -420,30 +418,27 @@ public abstract class Utils {
         }
     }
 
-    public static void confirm(String text, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
-        confirm(text, null, channel, action, m -> {
-        }, allowed);
+    public static CompletableFuture<Boolean> confirm(String text, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
+        return confirm(text, null, channel, action, Utils::doNothing, allowed);
     }
 
-    public static void confirm(String text, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
-        confirm(text, null, channel, action, onCancel, allowed);
+    public static CompletableFuture<Boolean> confirm(String text, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
+        return confirm(text, null, channel, action, onCancel, allowed);
     }
 
-    public static void confirm(MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
-        confirm(null, embed, channel, action, m -> {
-        }, allowed);
+    public static CompletableFuture<Boolean> confirm(MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
+        return confirm(null, embed, channel, action, Utils::doNothing, allowed);
     }
 
-    public static void confirm(MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
-        confirm(null, embed, channel, action, onCancel, allowed);
+    public static CompletableFuture<Boolean> confirm(MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
+        return confirm(null, embed, channel, action, onCancel, allowed);
     }
 
-    public static void confirm(String text, MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
-        confirm(text, embed, channel, action, m -> {
-        }, allowed);
+    public static CompletableFuture<Boolean> confirm(String text, MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, User... allowed) throws PendingConfirmationException {
+        return confirm(text, embed, channel, action, Utils::doNothing, allowed);
     }
 
-    public static void confirm(String text, MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
+    public static CompletableFuture<Boolean> confirm(String text, MessageEmbed embed, MessageChannel channel, ThrowingFunction<ButtonWrapper, Boolean> action, Consumer<Message> onCancel, User... allowed) throws PendingConfirmationException {
         for (User user : allowed) {
             if (CONFIMATIONS.contains(user.getId())) throw new PendingConfirmationException();
         }
@@ -459,19 +454,23 @@ public abstract class Utils {
             }
         }
 
-        AtomicBoolean lock = new AtomicBoolean(false);
+        CompletableFuture<Boolean> lock = new CompletableFuture<>();
         ma.queue(s -> Pages.buttonize(s,
-                        Map.of(Utils.parseEmoji(Constants.ACCEPT), w -> {
-                            if (!lock.get() && action.apply(w)) {
-                                lock.set(true);
-                                w.getMessage().delete().queue(null, Utils::doNothing);
-                                unlock(allowed);
-                            }
-                        }), true, true, 1, TimeUnit.MINUTES,
-                        u -> Arrays.asList(allowed).contains(u),
-                        c -> onCancel.andThen(m -> unlock(allowed)).accept(c)
-                )
-        );
+                Map.of(Utils.parseEmoji(Constants.ACCEPT), w -> {
+                    if (!lock.isDone() && action.apply(w)) {
+                        lock.complete(true);
+                        w.getMessage().delete().queue(null, Utils::doNothing);
+                        unlock(allowed);
+                    }
+                }), true, true, 1, TimeUnit.MINUTES,
+                u -> Arrays.asList(allowed).contains(u),
+                c -> onCancel.andThen(m -> {
+                    lock.complete(false);
+                    unlock(allowed);
+                }).accept(c)
+        ));
+
+        return lock;
     }
 
     public static CompletableFuture<Message> awaitMessage(GuildMessageChannel chn, Function<Message, Boolean> act) {
@@ -611,7 +610,7 @@ public abstract class Utils {
         return Emoji.fromFormatted(in);
     }
 
-    public static void doNothing(Throwable thr) {
+    public static void doNothing(Object... ignored) {
 
     }
 
