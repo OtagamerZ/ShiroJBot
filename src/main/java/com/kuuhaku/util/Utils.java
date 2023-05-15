@@ -228,6 +228,14 @@ public abstract class Utils {
         return pattern.matcher(text);
     }
 
+    public static boolean match(String text, @Language("RegExp") String regex) {
+        return regex(text, regex).matches();
+    }
+
+    public static boolean match(String text, Pattern pattern) {
+        return regex(text, pattern).matches();
+    }
+
     public static String extract(String text, @Language("RegExp") String regex) {
         Matcher m = regex(text, regex);
         if (m.find()) return m.group();

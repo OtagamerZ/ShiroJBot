@@ -48,7 +48,7 @@ public class ProfileColorCommand implements Executable {
 			settings.setColor(Color.BLACK);
 			event.channel().sendMessage(locale.get("success/profile_color_clear")).queue();
 		} else {
-			if (!Utils.regex(text, "#[\\da-fA-F]{6}").matches()) {
+			if (!Utils.match(text, "#[\\da-fA-F]{6}")) {
 				event.channel().sendMessage(locale.get("error/invalid_color")).queue();
 				return;
 			}

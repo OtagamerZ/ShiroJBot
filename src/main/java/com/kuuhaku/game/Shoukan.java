@@ -18,10 +18,7 @@
 
 package com.kuuhaku.game;
 
-import club.minnced.discord.webhook.WebhookClient;
-import club.minnced.discord.webhook.send.AllowedMentions;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
-import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
@@ -2252,23 +2249,14 @@ public class Shoukan extends GameInstance<Phase> {
 
         for (GuildMessageChannel chn : getChannel().getChannels()) {
             PseudoUser pu = new PseudoUser(source.toString(), Constants.API_ROOT + "card/" + source.getCard().getId(), chn);
-
-            try (WebhookClient hook = pu.webhook()) {
-                if (hook == null) continue;
-
-                WebhookMessageBuilder msg = new WebhookMessageBuilder()
-                        .setUsername(pu.name())
-                        .setAvatarUrl(pu.avatar())
-                        .setAllowedMentions(AllowedMentions.none())
-                        .setContent(text);
-
-                if (gif != null) {
-                    msg.addEmbeds(new WebhookEmbedBuilder()
-                            .setImageUrl(GIF_PATH + gif + ".gif")
-                            .build());
-                }
-
-                hook.send(msg.build());
+            if (gif != null) {
+                pu.send(null, text,
+                        new WebhookEmbedBuilder()
+                                .setImageUrl(GIF_PATH + gif + ".gif")
+                                .build()
+                );
+            } else {
+                pu.send(null, text);
             }
         }
     }

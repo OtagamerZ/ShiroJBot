@@ -190,7 +190,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 				}
 
 				Pattern pat = PatternCache.compile(pa.value());
-				if (Utils.regex(args, pat).matches()) {
+				if (Utils.match(args, pat)) {
 					return new Pair<>(meth, Utils.extractNamedGroups(args, pat));
 				}
 			}

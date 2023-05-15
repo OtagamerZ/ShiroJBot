@@ -30,8 +30,4 @@ public class PatternCache {
     public static Pattern compile(@Language("RegExp") String regex) {
         return cache.computeIfAbsent(regex, k -> Pattern.compile(regex));
     }
-
-    public static boolean matches(String in, @Language("RegExp") String regex) {
-        return compile(regex).matcher(in).matches();
-    }
 }

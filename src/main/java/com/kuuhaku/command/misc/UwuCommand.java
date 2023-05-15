@@ -18,10 +18,6 @@
 
 package com.kuuhaku.command.misc;
 
-import club.minnced.discord.webhook.WebhookClient;
-import club.minnced.discord.webhook.send.AllowedMentions;
-import club.minnced.discord.webhook.send.WebhookMessage;
-import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
@@ -30,9 +26,8 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.PseudoUser;
-import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.text.Uwuifier;
 import com.kuuhaku.util.json.JSONObject;
+import com.kuuhaku.util.text.Uwuifier;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
@@ -46,20 +41,6 @@ public class UwuCommand implements Executable {
 		PseudoUser pu = new PseudoUser(event.member(), event.channel());
 
 		String text = Uwuifier.INSTANCE.uwu(locale, args.getString("text"));
-		try (WebhookClient hook = pu.webhook()) {
-			if (hook != null) {
-				event.message().delete().queue(null, Utils::doNothing);
-				WebhookMessage msg = new WebhookMessageBuilder()
-						.setUsername(pu.name())
-						.setAvatarUrl(pu.avatar())
-						.setAllowedMentions(AllowedMentions.none())
-						.setContent(text)
-						.build();
-
-				hook.send(msg);
-			} else {
-				event.channel().sendMessage(text).setMessageReference(event.message()).queue();
-			}
-		}
+		pu.send(event.message(), text);
 	}
 }

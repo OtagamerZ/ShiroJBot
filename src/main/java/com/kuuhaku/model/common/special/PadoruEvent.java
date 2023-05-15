@@ -18,10 +18,6 @@
 
 package com.kuuhaku.model.common.special;
 
-import club.minnced.discord.webhook.WebhookClient;
-import club.minnced.discord.webhook.send.AllowedMentions;
-import club.minnced.discord.webhook.send.WebhookMessage;
-import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
@@ -56,20 +52,7 @@ public class PadoruEvent extends SpecialEvent {
 		addEvent(channel.getGuild(), this);
 
 		PseudoUser pu = new PseudoUser("Nero Claudius", Constants.ORIGIN_RESOURCES + "avatar/nero/1.png", channel);
-		try (WebhookClient hook = pu.webhook()) {
-			if (hook != null) {
-				WebhookMessage msg = new WebhookMessageBuilder()
-						.setUsername(pu.name())
-						.setAvatarUrl(pu.avatar())
-						.setAllowedMentions(AllowedMentions.none())
-						.setContent("***Hashire sori yo***")
-						.build();
-
-				hook.send(msg);
-			} else {
-				channel.sendMessage("***Hashire sori yo***").queue();
-			}
-		}
+		pu.send(null, "***Hashire sori yo***");
 
 		Utils.awaitMessage(channel, this::onRun);
 		EXEC.schedule(() -> onTimeout(channel), 3, TimeUnit.MINUTES);
