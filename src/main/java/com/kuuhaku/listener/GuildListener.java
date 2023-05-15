@@ -292,6 +292,8 @@ public class GuildListener extends ListenerAdapter {
 
                     StringBuilder sb = new StringBuilder();
                     for (String s : content.split(" ")) {
+                        sb.append(" ");
+
                         String name = Utils.extract(s, "^:([\\w-]+):$", 1);
                         if (name != null) {
                             RichCustomEmoji emj = null;
@@ -313,14 +315,14 @@ public class GuildListener extends ListenerAdapter {
                                 }
                             }
 
-                            sb.append(" ");
                             if (emj != null) {
                                 sb.append(emj.getAsMention());
                                 proxy = true;
-                            } else {
-                                sb.append(s);
+                                continue;
                             }
                         }
+
+                        sb.append(s);
                     }
 
                     if (proxy) {
