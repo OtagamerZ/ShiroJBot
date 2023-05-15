@@ -117,20 +117,14 @@ public class PruneCommand implements Executable {
                         ids.add(m.getId());
                     }
 
-                    return ids.size() <= amount;
+                    return ids.size() < amount;
                 })
                 .thenApply(v -> event.channel().purgeMessagesById(ids))
                 .thenAccept(act -> {
-                    int total = act.size();
-                    try {
-                        CompletableFuture.allOf(act.toArray(CompletableFuture[]::new)).get();
-
-                        queue.remove(event.guild().getId());
-                        event.channel().sendMessage(locale.get("success/prune",
-                                total == 1 ? locale.get("str/message") : locale.get("str/messages")
-                        )).queue();
-                    } catch (InterruptedException | ExecutionException ignore) {
-                    }
+                    queue.remove(event.guild().getId());
+                    event.channel().sendMessage(locale.get("success/prune",
+                            ids.size() == 1 ? locale.get("str/message") : locale.get("str/messages")
+                    )).queue();
                 });
     }
 }
