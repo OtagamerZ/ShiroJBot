@@ -290,6 +290,7 @@ public class GuildListener extends ListenerAdapter {
                 if (mb != null) {
                     boolean proxy = false;
 
+                    StringBuilder sb = new StringBuilder();
                     for (String s : content.split(" ")) {
                         String name = Utils.extract(s, "^:([\\w-]+):$", 1);
                         if (name != null) {
@@ -297,8 +298,6 @@ public class GuildListener extends ListenerAdapter {
 
                             List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(name, true);
                             if (!valid.isEmpty()) {
-                                System.out.println(valid);
-
                                 for (RichCustomEmoji e : valid) {
                                     if (e.getGuild().equals(event.getGuild())) {
                                         emj = e;
@@ -314,16 +313,20 @@ public class GuildListener extends ListenerAdapter {
                                 }
                             }
 
+                            sb.append(" ");
                             if (emj != null) {
+                                sb.append(emj.getAsMention());
                                 proxy = true;
                                 break;
+                            } else {
+                                sb.append(s);
                             }
                         }
                     }
 
                     if (proxy) {
                         PseudoUser pu = new PseudoUser(mb, event.getGuildChannel());
-                        pu.send(data.message(), content);
+                        pu.send(data.message(), sb.toString());
                     }
                 }
             }
