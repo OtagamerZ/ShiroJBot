@@ -317,7 +317,6 @@ public class GuildListener extends ListenerAdapter {
                             if (emj != null) {
                                 sb.append(emj.getAsMention());
                                 proxy = true;
-                                break;
                             } else {
                                 sb.append(s);
                             }
