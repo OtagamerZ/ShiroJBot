@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
+import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -30,6 +31,7 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.StandardGuildMessageChannel;
@@ -48,6 +50,7 @@ import java.util.concurrent.ExecutionException;
         "<user:user:r> <amount:number>",
         "<action:word:r>[all]"
 })
+@Requires(Permission.MANAGE_CHANNEL)
 public class PruneCommand implements Executable {
     private static final Set<String> queue = new HashSet<>();
 
