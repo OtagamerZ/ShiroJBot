@@ -302,6 +302,7 @@ public class GuildListener extends ListenerAdapter {
                                 for (RichCustomEmoji e : valid) {
                                     System.out.println(e);
                                     if (e.getGuild().equals(event.getGuild())) {
+                                        System.out.println("found");
                                         emj = e;
                                         break;
                                     }
