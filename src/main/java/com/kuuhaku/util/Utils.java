@@ -458,15 +458,15 @@ public abstract class Utils {
         ma.queue(s -> Pages.buttonize(s,
                 Map.of(Utils.parseEmoji(Constants.ACCEPT), w -> {
                     if (!lock.isDone() && action.apply(w)) {
+                        unlock(allowed);
                         lock.complete(true);
                         w.getMessage().delete().queue(null, Utils::doNothing);
-                        unlock(allowed);
                     }
                 }), true, true, 1, TimeUnit.MINUTES,
                 u -> Arrays.asList(allowed).contains(u),
                 c -> onCancel.andThen(m -> {
-                    lock.complete(false);
                     unlock(allowed);
+                    lock.complete(false);
                 }).accept(c)
         ));
 
