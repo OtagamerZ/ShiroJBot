@@ -291,7 +291,9 @@ public class GuildListener extends ListenerAdapter {
                     boolean proxy = false;
 
                     for (String s : content.split(" ")) {
-                        JSONObject jo = Utils.extractNamedGroups(s, ":(?<name>[\\w-]+):|<a?:[\\w-]+:(?<id>\\d+)>");
+                        JSONObject jo = Utils.extractNamedGroups(s, "^:(?<name>[\\w-]+):$|^<a?:[\\w-]+:(?<id>\\d+)>$");
+                        System.out.println(jo);
+
                         if (!jo.isEmpty()) {
                             RichCustomEmoji emj = null;
 
