@@ -35,6 +35,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.StandardGuildMessageChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -76,6 +77,8 @@ public class PruneCommand implements Executable {
                                 .flatMap(c -> mc.sendMessage(locale.get("success/prune_all")))
                                 .submit().get();
                     } catch (ExecutionException | InterruptedException ignore) {
+                    } catch (InsufficientPermissionException e) {
+                        event.channel().sendMessage(locale.get("error/missing_perms") + " " + locale.get("perm/" + e.getPermission().name())).queue();
                     } finally {
                         queue.remove(event.guild().getId());
                     }
