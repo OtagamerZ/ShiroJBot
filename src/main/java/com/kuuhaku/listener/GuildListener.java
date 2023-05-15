@@ -294,31 +294,33 @@ public class GuildListener extends ListenerAdapter {
                     for (String s : content.split(" ")) {
                         sb.append(" ");
 
-                        String name = Utils.extract(s, "^:([\\w-]+):$", 1);
-                        if (name != null) {
-                            RichCustomEmoji emj = null;
+                        if (!s.isBlank()) {
+                            String name = Utils.extract(s, "^:([\\w-]+):$", 1);
+                            if (name != null) {
+                                RichCustomEmoji emj = null;
 
-                            List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(name, true);
-                            if (!valid.isEmpty()) {
-                                for (RichCustomEmoji e : valid) {
-                                    if (e.getGuild().equals(event.getGuild())) {
-                                        emj = e;
-                                        break;
+                                List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(name, true);
+                                if (!valid.isEmpty()) {
+                                    for (RichCustomEmoji e : valid) {
+                                        if (e.getGuild().equals(event.getGuild())) {
+                                            emj = e;
+                                            break;
+                                        }
+                                    }
+
+                                    if (emj == null) {
+                                        emj = valid.stream()
+                                                .filter(e -> e.getGuild().isMember(mb))
+                                                .findFirst()
+                                                .orElse(valid.get(0));
                                     }
                                 }
 
-                                if (emj == null) {
-                                    emj = valid.stream()
-                                            .filter(e -> e.getGuild().isMember(mb))
-                                            .findFirst()
-                                            .orElse(valid.get(0));
+                                if (emj != null) {
+                                    sb.append(emj.getAsMention());
+                                    proxy = true;
+                                    continue;
                                 }
-                            }
-
-                            if (emj != null) {
-                                sb.append(emj.getAsMention());
-                                proxy = true;
-                                continue;
                             }
                         }
 
