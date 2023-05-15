@@ -314,6 +314,7 @@ public class GuildListener extends ListenerAdapter {
                                 }
                             }
 
+                            System.out.println(emj);
                             sb.append(" ");
                             if (emj != null) {
                                 sb.append(emj.getAsMention());
