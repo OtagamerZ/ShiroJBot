@@ -291,34 +291,30 @@ public class GuildListener extends ListenerAdapter {
                     boolean proxy = false;
 
                     for (String s : content.split(" ")) {
-                        JSONObject jo = Utils.extractNamedGroups(s, "^:(?<name>[\\w-]+):$|^<a?:[\\w-]+:(?<id>\\d+)>$");
-                        if (!jo.isEmpty()) {
+                        String name = Utils.extract(s, "^:([\\w-]+):$", 1);
+                        if (name != null) {
                             RichCustomEmoji emj = null;
 
-                            if (jo.has("id")) {
-                                emj = Main.getApp().getShiro().getEmojiById(jo.getString("id"));
-                            } else {
-                                List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(jo.getString("name"), true);
-                                if (!valid.isEmpty()) {
-                                    System.out.println(valid);
+                            List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(name, true);
+                            if (!valid.isEmpty()) {
+                                System.out.println(valid);
 
-                                    for (RichCustomEmoji e : valid) {
-                                        if (e.getGuild().equals(event.getGuild())) {
-                                            emj = e;
-                                            break;
-                                        }
+                                for (RichCustomEmoji e : valid) {
+                                    if (e.getGuild().equals(event.getGuild())) {
+                                        emj = e;
+                                        break;
                                     }
+                                }
 
-                                    if (emj == null) {
-                                        emj = valid.stream()
-                                                .filter(mb::canInteract)
-                                                .findFirst()
-                                                .orElse(valid.get(0));
-                                    }
+                                if (emj == null) {
+                                    emj = valid.stream()
+                                            .filter(mb::canInteract)
+                                            .findFirst()
+                                            .orElse(valid.get(0));
                                 }
                             }
 
-                            if (emj != null && !mb.canInteract(emj)) {
+                            if (emj != null) {
                                 proxy = true;
                                 break;
                             }
