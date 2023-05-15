@@ -123,9 +123,8 @@ public class PruneCommand implements Executable {
                 .thenAccept(act -> CompletableFuture.allOf(act.toArray(CompletableFuture[]::new))
                         .thenRun(() -> {
                             queue.remove(event.guild().getId());
-                            event.channel().sendMessage(locale.get("success/prune",
-                                    act.size() == 1 ? locale.get("str/message") : locale.get("str/messages")
-                            )).queue();
+                            event.channel().sendMessage(locale.get("success/prune", act.size())).queue();
+                            System.out.println("deleted");
                         })
                 );
     }
