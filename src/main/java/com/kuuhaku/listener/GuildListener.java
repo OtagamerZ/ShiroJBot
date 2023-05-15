@@ -53,6 +53,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.StringUtils;
@@ -363,6 +364,10 @@ public class GuildListener extends ListenerAdapter {
                         PseudoUser pu = new PseudoUser(mb, event.getGuildChannel());
                         pu.send(data.message(), sb.toString());
                     }
+
+                    RestAction.allOf(emojis.stream().map(RichCustomEmoji::delete).toList())
+                            .mapToResult()
+                            .queue(null, Utils::doNothing);
                 }
             }
 
