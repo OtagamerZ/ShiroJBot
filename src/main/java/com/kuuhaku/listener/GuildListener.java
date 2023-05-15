@@ -300,9 +300,7 @@ public class GuildListener extends ListenerAdapter {
                             List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(name, true);
                             if (!valid.isEmpty()) {
                                 for (RichCustomEmoji e : valid) {
-                                    System.out.println(e);
                                     if (e.getGuild().equals(event.getGuild())) {
-                                        System.out.println("found");
                                         emj = e;
                                         break;
                                     }
@@ -310,7 +308,7 @@ public class GuildListener extends ListenerAdapter {
 
                                 if (emj == null) {
                                     emj = valid.stream()
-                                            .filter(mb::canInteract)
+                                            .filter(e -> e.canInteract(mb))
                                             .findFirst()
                                             .orElse(valid.get(0));
                                 }
