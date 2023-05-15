@@ -290,7 +290,6 @@ public class GuildListener extends ListenerAdapter {
                 if (mb != null) {
                     boolean proxy = false;
 
-                    System.out.println(content);
                     StringBuilder sb = new StringBuilder();
                     for (String s : content.split(" ")) {
                         String name = Utils.extract(s, "^:([\\w-]+):$", 1);
@@ -314,7 +313,6 @@ public class GuildListener extends ListenerAdapter {
                                 }
                             }
 
-                            System.out.println(emj);
                             sb.append(" ");
                             if (emj != null) {
                                 sb.append(emj.getAsMention());
