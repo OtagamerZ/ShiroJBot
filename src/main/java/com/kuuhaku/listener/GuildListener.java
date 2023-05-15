@@ -53,15 +53,12 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -289,85 +286,47 @@ public class GuildListener extends ListenerAdapter {
             }
 
             if (config.getSettings().isFeatureEnabled(GuildFeature.NQN_MODE)) {
-                List<RichCustomEmoji> emojis = new ArrayList<>();
-                int slots = (int) (event.getGuild().getMaxEmojis() - event.getGuild().getEmojiCache().size());
+                Member mb = event.getMember();
+                if (mb != null) {
+                    boolean proxy = false;
 
-                StringBuilder sb = new StringBuilder();
-                for (String s : content.split(" ")) {
-                    if (slots <= 0) {
-                        if (emojis.isEmpty()) break;
+                    for (String s : content.split(" ")) {
+                        JSONObject jo = Utils.extractNamedGroups(s, "^:(?<name>[\\w-]+):$|^<a?:[\\w-]+:(?<id>\\d+)>$");
+                        if (!jo.isEmpty()) {
+                            RichCustomEmoji emj = null;
 
-                        sb.append(" ").append(s);
-                        continue;
-                    }
+                            if (jo.has("id")) {
+                                emj = Main.getApp().getShiro().getEmojiById(jo.getString("id"));
+                            } else {
+                                List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(jo.getString("name"), true);
+                                if (!valid.isEmpty()) {
+                                    for (RichCustomEmoji e : valid) {
+                                        if (e.getGuild().equals(event.getGuild())) {
+                                            emj = e;
+                                            break;
+                                        }
+                                    }
 
-                    JSONObject jo = Utils.extractNamedGroups(s, "^:(?<name>[\\w-]+):$|^<a?:[\\w-]+:(?<id>\\d+)>$");
-                    if (!jo.isEmpty()) {
-                        RichCustomEmoji emj = null;
-
-                        if (jo.has("id")) {
-                            emj = Main.getApp().getShiro().getEmojiById(jo.getString("id"));
-                            if (emj != null) {
-                                if (!emj.getGuild().equals(event.getGuild())) {
-                                    try (InputStream is = emj.getImage().download().getNow(null)) {
-                                        if (is == null) continue;
-
-                                        emj = Pages.subGet(event.getGuild().createEmoji("TEMP_" + emj.getName(), Icon.from(is)));
-                                        emojis.add(emj);
-                                        slots--;
-                                    } catch (IOException ignore) {
-                                        emj = null;
+                                    if (emj == null) {
+                                        emj = valid.stream()
+                                                .filter(mb::canInteract)
+                                                .findFirst()
+                                                .orElse(valid.get(0));
                                     }
                                 }
                             }
-                        } else {
-                            List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(jo.getString("name"), true);
-                            if (!valid.isEmpty()) {
-                                for (RichCustomEmoji e : valid) {
-                                    if (e.getGuild().equals(event.getGuild())) {
-                                        emj = e;
-                                        break;
-                                    }
-                                }
 
-                                if (emj == null) {
-                                    emj = valid.get(0);
-
-                                    try (InputStream is = emj.getImage().download().getNow(null)) {
-                                        if (is == null) continue;
-
-                                        emj = Pages.subGet(event.getGuild().createEmoji("TEMP_" + emj.getName(), Icon.from(is)));
-                                        emojis.add(emj);
-                                        slots--;
-                                    } catch (IOException ignore) {
-                                        emj = null;
-                                    }
-                                }
+                            if (emj != null && !mb.canInteract(emj)) {
+                                proxy = true;
+                                break;
                             }
                         }
-
-                        if (emj != null) {
-                            sb.append(" ").append(emj.getAsMention());
-                        } else {
-                            sb.append(" ").append(s);
-                        }
-
-                        continue;
                     }
 
-                    sb.append(" ").append(s);
-                }
-
-                if (!emojis.isEmpty()) {
-                    Member mb = event.getMember();
-                    if (mb != null) {
+                    if (proxy) {
                         PseudoUser pu = new PseudoUser(mb, event.getGuildChannel());
-                        pu.send(data.message(), sb.toString());
+                        pu.send(data.message(), content);
                     }
-
-                    RestAction.allOf(emojis.stream().map(RichCustomEmoji::delete).toList())
-                            .mapToResult()
-                            .queue(null, Utils::doNothing);
                 }
             }
 
