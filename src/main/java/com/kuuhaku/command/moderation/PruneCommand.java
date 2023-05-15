@@ -37,7 +37,9 @@ import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.StandardGuildMessageChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -106,14 +108,22 @@ public class PruneCommand implements Executable {
             return;
         }
 
+        List<String> ids = new ArrayList<>();
+
         queue.add(event.guild().getId());
         event.channel().getIterableHistory()
-                .takeWhileAsync(amount, m -> target == null || m.getAuthor().equals(target))
-                .thenApply(msgs -> event.channel().purgeMessages(msgs))
-                .thenAccept(msgs -> {
-                    int total = msgs.size();
+                .forEachAsync(m -> {
+                    if (!m.equals(event.message()) && (target == null || m.getAuthor().equals(target))) {
+                        ids.add(m.getId());
+                    }
+
+                    return ids.size() <= amount;
+                })
+                .thenApply(v -> event.channel().purgeMessagesById(ids))
+                .thenAccept(act -> {
+                    int total = act.size();
                     try {
-                        CompletableFuture.allOf(msgs.toArray(CompletableFuture[]::new)).get();
+                        CompletableFuture.allOf(act.toArray(CompletableFuture[]::new)).get();
 
                         queue.remove(event.guild().getId());
                         event.channel().sendMessage(locale.get("success/prune",
