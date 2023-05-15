@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.moderation;
 
-import com.github.ygimenez.method.Pages;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -33,7 +32,6 @@ import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.StandardGuildMessageChannel;
 
 import java.util.HashSet;
@@ -70,9 +68,9 @@ public class PruneCommand implements Executable {
                     StandardGuildMessageChannel chn = (StandardGuildMessageChannel) event.message().getChannel();
 
                     queue.add(event.guild().getId());
-                    MessageChannel mc = Pages.subGet(chn.createCopy());
-                    event.channel().delete()
-                            .flatMap(c -> mc.sendMessage(locale.get("success/prune_all")))
+                    chn.createCopy()
+                            .flatMap(c -> c.sendMessage(locale.get("success/prune_all")))
+                            .flatMap(c -> event.channel().delete())
                             .mapToResult()
                             .queue(s -> queue.remove(event.guild().getId()));
 
