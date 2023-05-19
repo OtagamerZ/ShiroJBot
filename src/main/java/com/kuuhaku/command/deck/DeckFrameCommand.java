@@ -103,7 +103,7 @@ public class DeckFrameCommand implements Executable {
             }
 
             AtomicInteger i = new AtomicInteger();
-            event.channel().sendMessageEmbeds(((EmbedCluster) pages.get(0).getContent()).getEmbeds()).queue(s ->
+            Utils.sendPage(event.channel(), pages.get(0)).queue(s ->
                     Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
                                 m.put(Utils.parseEmoji("◀️"), w -> {
                                     if (i.get() > 1) {

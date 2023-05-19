@@ -38,7 +38,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -124,7 +123,7 @@ public class DeckListCommand implements Executable {
 		));
 
 		assert home != null;
-		event.channel().sendMessageEmbeds((MessageEmbed) home.getContent()).queue(s ->
+		Utils.sendPage(event.channel(), home).queue(s ->
 				Pages.categorize(s, pages, true, 1, TimeUnit.MINUTES, u -> u.equals(event.user()))
 		);
 	}

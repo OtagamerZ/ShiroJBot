@@ -19,10 +19,7 @@
 package com.kuuhaku.util;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.ButtonWrapper;
-import com.github.ygimenez.model.InteractPage;
-import com.github.ygimenez.model.Page;
-import com.github.ygimenez.model.ThrowingFunction;
+import com.github.ygimenez.model.*;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.exceptions.PendingConfirmationException;
@@ -387,7 +384,7 @@ public abstract class Utils {
     }
 
     public static Message paginate(List<Page> pages, int skip, boolean fast, MessageChannel channel, User... allowed) {
-        Message msg = Pages.subGet(channel.sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()));
+        Message msg = Pages.subGet(sendPage(channel, pages.get(0)));
 
         Pages.paginate(msg, pages, true, 1, TimeUnit.MINUTES, skip, fast, u ->
                 Arrays.asList(allowed).contains(u)
@@ -397,7 +394,7 @@ public abstract class Utils {
     }
 
     public static Message paginate(ThrowingFunction<Integer, Page> loader, MessageChannel channel, User... allowed) {
-        Message msg = Pages.subGet(channel.sendMessageEmbeds((MessageEmbed) loader.apply(0).getContent()));
+        Message msg = Pages.subGet(sendPage(channel, loader.apply(0)));
 
         Pages.lazyPaginate(msg, loader, true, 1, TimeUnit.MINUTES, u ->
                 Arrays.asList(allowed).contains(u)
@@ -1198,5 +1195,17 @@ public abstract class Utils {
                 it.set((T) e);
             }
         }
+    }
+
+    public static MessageCreateAction sendPage(MessageChannel channel, Page p) {
+        if (p.getContent() instanceof String s) {
+            return channel.sendMessage(s);
+        } else if (p.getContent() instanceof MessageEmbed e) {
+            return channel.sendMessageEmbeds(e);
+        } else if (p.getContent() instanceof EmbedCluster c) {
+            return channel.sendMessageEmbeds(c.getEmbeds());
+        }
+
+        throw new IllegalArgumentException();
     }
 }
