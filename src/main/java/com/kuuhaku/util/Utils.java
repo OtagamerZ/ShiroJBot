@@ -1208,4 +1208,14 @@ public abstract class Utils {
 
         throw new IllegalArgumentException();
     }
+
+    public static List<MessageEmbed> getEmbeds(Page p) {
+        if (p.getContent() instanceof MessageEmbed e) {
+            return List.of(e);
+        } else if (p.getContent() instanceof EmbedCluster c) {
+            return c.getEmbeds();
+        }
+
+        return List.of();
+    }
 }

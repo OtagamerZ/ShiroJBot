@@ -40,7 +40,6 @@ import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -115,13 +114,13 @@ public class DeckSkinCommand implements Executable {
 							m.put(Utils.parseEmoji("◀️"), w -> {
 								if (i.get() > 1) {
 									confirm.set(false);
-									s.editMessageEmbeds((MessageEmbed) pages.get(i.decrementAndGet()).getContent()).queue();
+									s.editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
 								}
 							});
 							m.put(Utils.parseEmoji("▶️"), w -> {
 								if (i.get() < skins.length - 1) {
 									confirm.set(false);
-									s.editMessageEmbeds((MessageEmbed) pages.get(i.incrementAndGet()).getContent()).queue();
+									s.editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
 								}
 							});
 							m.put(Utils.parseEmoji("✅"), w -> {

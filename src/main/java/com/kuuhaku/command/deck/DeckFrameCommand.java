@@ -107,12 +107,12 @@ public class DeckFrameCommand implements Executable {
                     Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
                                 m.put(Utils.parseEmoji("◀️"), w -> {
                                     if (i.get() > 1) {
-                                        s.editMessageEmbeds((MessageEmbed) pages.get(i.decrementAndGet()).getContent()).queue();
+                                        s.editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
                                     }
                                 });
                                 m.put(Utils.parseEmoji("▶️"), w -> {
                                     if (i.get() < frames.length - 1) {
-                                        s.editMessageEmbeds((MessageEmbed) pages.get(i.incrementAndGet()).getContent()).queue();
+                                        s.editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
                                     }
                                 });
                                 m.put(Utils.parseEmoji("✅"), w -> {
