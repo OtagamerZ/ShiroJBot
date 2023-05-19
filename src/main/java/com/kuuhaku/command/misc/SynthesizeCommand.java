@@ -183,7 +183,8 @@ public class SynthesizeCommand implements Executable {
                                             .setDescription(locale.get("str/synthesis_info",
                                                     Utils.roundToString(mult, 2) + "x <:chromatic_essence:1103779997317087364>",
                                                     field
-                                            )));
+                                            )).build()
+                                    );
 
                                     Pages.modifyButtons(w.getMessage(), p, Map.of(
                                             btn.getId(), Button::asDisabled
