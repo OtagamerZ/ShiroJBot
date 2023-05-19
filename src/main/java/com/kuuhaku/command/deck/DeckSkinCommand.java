@@ -105,7 +105,7 @@ public class DeckSkinCommand implements Executable {
 			}
 			eb.setFooter(locale.get("str/page", i + 1, skins.length));
 
-			pages.add(new InteractPage(eb.build()));
+			pages.add(InteractPage.of(eb.build()));
 		}
 
 		AtomicBoolean confirm = new AtomicBoolean();

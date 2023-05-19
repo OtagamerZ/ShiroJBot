@@ -360,7 +360,7 @@ public abstract class Utils {
             eb.addField(new MessageEmbed.Field(Constants.VOID, sb.toString(), true));
         }
 
-        return new InteractPage(eb.build());
+        return InteractPage.of(eb.build());
     }
 
     public static <T> List<Page> generatePages(EmbedBuilder eb, Collection<T> list, int itemsPerPage, int itemsPerColumn, Function<T, String> mapper) {

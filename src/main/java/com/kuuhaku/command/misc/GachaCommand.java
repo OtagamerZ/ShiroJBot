@@ -83,7 +83,7 @@ public class GachaCommand implements Executable {
 						.setDescription(locale.get("gacha/" + type.value() + "_desc"))
 						.setFooter(acc.getBalanceFooter(locale));
 
-				pages.add(new InteractPage(eb.build()));
+				pages.add(InteractPage.of(eb.build()));
 			}
 
 			pages.sort(Comparator.comparing(p -> ((MessageEmbed) p.getContent()).getTitle()));

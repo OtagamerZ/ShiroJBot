@@ -179,7 +179,7 @@ public class SynthesizeCommand implements Executable {
                                     }
 
                                     lucky.set(true);
-                                    Page p = new InteractPage(new ColorlessEmbedBuilder()
+                                    Page p = InteractPage.of(new ColorlessEmbedBuilder()
                                             .setDescription(locale.get("str/synthesis_info",
                                                     Utils.roundToString(mult, 2) + "x <:chromatic_essence:1103779997317087364>",
                                                     field

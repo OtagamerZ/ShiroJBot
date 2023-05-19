@@ -65,7 +65,7 @@ public class KawaiponEvogearCommand implements Executable {
 				);
 
 				eb.setImage(url).setDescription(locale.get("str/fallback_url", url));
-				pages.add(new InteractPage(eb.build()));
+				pages.add(InteractPage.of(eb.build()));
 			}
 
 			Utils.paginate(pages, 1, true, event.channel(), event.user());
@@ -91,7 +91,7 @@ public class KawaiponEvogearCommand implements Executable {
 			);
 
 			eb.setImage(url).setDescription(locale.get("str/fallback_url", url));
-			pages.add(new InteractPage(eb.build()));
+			pages.add(InteractPage.of(eb.build()));
 		}
 
 		Utils.paginate(pages, 1, true, event.channel(), event.user());

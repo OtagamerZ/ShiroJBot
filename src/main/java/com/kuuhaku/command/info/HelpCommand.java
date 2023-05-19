@@ -149,7 +149,7 @@ public class HelpCommand implements Executable {
 		CustomEmoji home = bot.getEmojiById("674261700366827539");
 		if (home != null) {
 			index.setThumbnail(home.getImageUrl());
-			pages.put(Utils.parseEmoji(home.getId()), new InteractPage(index.build()));
+			pages.put(Utils.parseEmoji(home.getId()), InteractPage.of(index.build()));
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
