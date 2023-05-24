@@ -277,7 +277,7 @@ public class Shoukan extends GameInstance<Phase> {
             }
 
             if (add) {
-                reportEvent("ADD_CARD -> " + amount + " x " + id, false);
+                reportEvent("ADD_CARD -> " + amount + "x " + id, false);
                 return true;
             }
         }

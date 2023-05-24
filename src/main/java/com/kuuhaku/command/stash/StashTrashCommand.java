@@ -42,7 +42,7 @@ import java.util.List;
 		path = "trash",
 		category = Category.MISC
 )
-@Signature("<action:word:r>[add,remove] <card:word:r> <confirm:word>[y]")
+@Signature("<action:word:r>[add,remove] <card:word:r> <confirm:word>[confirm]")
 public class StashTrashCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

@@ -54,7 +54,7 @@ import java.util.Set;
 )
 @Signature({
 		"<card:word:r> <amount:number>",
-		"<card:word:r> <confirm:word>[y]"
+		"<card:word:r> <confirm:word>[confirm]"
 })
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,

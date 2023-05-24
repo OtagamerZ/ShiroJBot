@@ -373,6 +373,14 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return inventory.getInt(id.toUpperCase());
 	}
 
+	public UserItem getItem(String id) {
+		if (getItemCount(id) > 0) {
+			return DAO.find(UserItem.class, id.toUpperCase());
+		}
+
+		return null;
+	}
+
 	public void addItem(UserItem item, int amount) {
 		apply(getClass(), uid, a ->
 				a.getInventory().compute(item.getId(), (k, v) -> {

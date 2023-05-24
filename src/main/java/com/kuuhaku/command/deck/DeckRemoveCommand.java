@@ -51,7 +51,7 @@ import java.util.Set;
 @Signature({
 		"<action:word:r>[all]",
 		"<card:word:r> <amount:number>",
-		"<card:word:r> <confirm:word>[y]"
+		"<card:word:r> <confirm:word>[confirm]"
 })
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class DeckRemoveCommand implements Executable {

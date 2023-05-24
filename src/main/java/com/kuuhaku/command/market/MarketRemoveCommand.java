@@ -43,7 +43,7 @@ import java.util.List;
 		path = "remove",
 		category = Category.MISC
 )
-@Signature("<card:word:r> <confirm:word>[y]")
+@Signature("<card:word:r> <confirm:word>[confirm]")
 public class MarketRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

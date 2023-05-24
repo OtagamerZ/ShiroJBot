@@ -52,7 +52,7 @@ import java.util.concurrent.ExecutionException;
 )
 @Signature({
 		"<user:user:r> <value:number:r>",
-		"<user:user:r> <card:word:r> <confirm:word>[y]"
+		"<user:user:r> <card:word:r> <confirm:word>[confirm]"
 })
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class TransferCommand implements Executable {
