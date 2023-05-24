@@ -27,6 +27,7 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.StringTree;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
@@ -34,14 +35,12 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.PreparedCommand;
 import com.kuuhaku.util.SignatureParser;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.XStringBuilder;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -108,28 +107,16 @@ public class HelpCommand implements Executable {
 
 		Set<PreparedCommand> subCmds = pc.getSubCommands();
 		if (!subCmds.isEmpty()) {
-			XStringBuilder sb = new XStringBuilder(data.config().getPrefix() + pc.name());
+			StringTree tree = new StringTree();
+			tree.addElement(data.config().getPrefix() + pc.name());
 
-			int i = 0;
 			for (PreparedCommand sub : subCmds) {
 				String[] path = sub.name().split("\\.");
 
-				i++;
-				for (int depth = 1; depth < path.length; depth++) {
-					String name = path[depth];
-
-					String prefix;
-					if (i == subCmds.size() || (depth > 1 && depth == path.length - 1)) {
-						prefix = "  └";
-					} else {
-						prefix = "  ├";
-					}
-
-					sb.appendNewLine(StringUtils.repeat("  │", depth - 1) + prefix + " ." + name);
-				}
+				tree.addElement("." + path[path.length - 1], path);
 			}
 
-			eb.addField(locale.get("str/subcommands"), "```" + sb + "```", false);
+			eb.addField(locale.get("str/subcommands"), "```" + tree + "```", false);
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
