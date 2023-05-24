@@ -123,7 +123,7 @@ public class HelpCommand implements Executable {
 						prefix = "  ├";
 					}
 
-					sb.appendNewLine(StringUtils.repeat(prefix, depth) + " `." + name + "`");
+					sb.appendNewLine(StringUtils.repeat("  │", depth - 1) + prefix + " `." + name + "`");
 				}
 			}
 
