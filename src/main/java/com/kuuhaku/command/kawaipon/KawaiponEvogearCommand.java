@@ -42,7 +42,7 @@ import java.util.List;
 
 @Command(
 		name = "kawaipon",
-		subname = "evogear",
+		path = "evogear",
 		category = Category.INFO
 )
 @Signature("<tier:number>")

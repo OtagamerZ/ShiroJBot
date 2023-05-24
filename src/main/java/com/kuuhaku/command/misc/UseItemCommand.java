@@ -43,7 +43,7 @@ import java.util.Map;
 
 @Command(
 		name = "items",
-		subname = "use",
+		path = "use",
 		category = Category.MISC
 )
 @Signature(allowEmpty = true, value = "<id:word:r> <args:text>")

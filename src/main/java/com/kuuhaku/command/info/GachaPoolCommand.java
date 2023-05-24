@@ -45,7 +45,7 @@ import java.util.*;
 
 @Command(
 		name = "gacha",
-		subname = "pool",
+		path = "pool",
 		category = Category.INFO
 )
 @Signature("<type:word:r>")

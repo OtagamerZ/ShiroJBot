@@ -35,7 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 
 @Command(
 		name = "custom",
-		subname = "add",
+		path = "add",
 		category = Category.MODERATION
 )
 @Signature("<json:text:r>")

@@ -39,7 +39,7 @@ import java.util.List;
 
 @Command(
 		name = "market",
-		subname = "add",
+		path = "add",
 		category = Category.MISC
 )
 @Signature("<card:word:r> <price:number:r> <confirm:word>[y]")

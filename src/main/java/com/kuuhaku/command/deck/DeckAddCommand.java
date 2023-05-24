@@ -49,7 +49,7 @@ import java.util.Set;
 
 @Command(
 		name = "deck",
-		subname = "add",
+		path = "add",
 		category = Category.MISC
 )
 @Signature({

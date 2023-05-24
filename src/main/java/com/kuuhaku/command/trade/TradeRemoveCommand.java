@@ -40,7 +40,7 @@ import java.util.List;
 
 @Command(
 		name = "trade",
-		subname = "remove",
+		path = "remove",
 		category = Category.MISC
 )
 @Signature({

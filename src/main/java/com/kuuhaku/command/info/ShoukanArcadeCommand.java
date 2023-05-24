@@ -40,7 +40,7 @@ import java.util.List;
 
 @Command(
 		name = "shoukan",
-		subname = "arcade",
+		path = "arcade",
 		category = Category.INFO
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)

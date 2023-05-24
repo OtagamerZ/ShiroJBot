@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 
 @Command(
 		name = "kawaipon",
-		subname = "senshi",
+		path = "senshi",
 		category = Category.INFO
 )
 @Signature("<race:word>")

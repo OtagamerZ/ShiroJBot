@@ -39,7 +39,7 @@ import java.util.List;
 
 @Command(
 		name = "deck",
-		subname = "cover",
+		path = "cover",
 		category = Category.MISC
 )
 @Signature("<anime:word:r>")

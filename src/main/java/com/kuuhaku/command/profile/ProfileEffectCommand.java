@@ -32,7 +32,7 @@ import net.dv8tion.jda.api.JDA;
 
 @Command(
 		name = "profile",
-		subname = "effect",
+		path = "effect",
 		category = Category.MISC
 )
 @Signature("<type:word:r>[none,hex,scanline,vignette]")

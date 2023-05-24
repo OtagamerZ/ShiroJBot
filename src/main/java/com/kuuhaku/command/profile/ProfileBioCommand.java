@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 
 @Command(
 		name = "profile",
-		subname = "bio",
+		path = "bio",
 		category = Category.MISC
 )
 @Signature(allowEmpty = true, value = "<text:text:r>")

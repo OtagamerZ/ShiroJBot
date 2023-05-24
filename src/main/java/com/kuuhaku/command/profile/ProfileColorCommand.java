@@ -34,7 +34,7 @@ import java.awt.*;
 
 @Command(
 		name = "profile",
-		subname = "color",
+		path = "color",
 		category = Category.MISC
 )
 @Signature(allowEmpty = true, value = "<text:text:r>")

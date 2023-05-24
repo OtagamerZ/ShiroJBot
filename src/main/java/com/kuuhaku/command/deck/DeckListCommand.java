@@ -45,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 
 @Command(
 		name = "deck",
-		subname = "list",
+		path = "list",
 		category = Category.INFO
 )
 @Requires({

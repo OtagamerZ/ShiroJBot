@@ -39,7 +39,7 @@ import java.util.List;
 
 @Command(
 		name = "stash",
-		subname = "trash",
+		path = "trash",
 		category = Category.MISC
 )
 @Signature("<action:word:r>[add,remove] <card:word:r> <confirm:word>[y]")

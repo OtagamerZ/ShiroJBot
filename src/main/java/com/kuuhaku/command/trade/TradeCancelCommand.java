@@ -30,7 +30,7 @@ import net.dv8tion.jda.api.JDA;
 
 @Command(
 		name = "trade",
-		subname = "cancel",
+		path = "cancel",
 		category = Category.MISC
 )
 public class TradeCancelCommand implements Executable {

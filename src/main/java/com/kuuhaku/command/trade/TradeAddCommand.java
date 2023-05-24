@@ -42,12 +42,13 @@ import java.util.List;
 
 @Command(
 		name = "trade",
-		subname = "add",
+		path = {"add", "test"},
 		category = Category.MISC
 )
 @Signature({
 		"<value:number:r>",
-		"<card:word:r>"
+		"card <card:word:r>",
+		"item <item:word:r>"
 })
 public class TradeAddCommand implements Executable {
 	@Override
@@ -62,57 +63,65 @@ public class TradeAddCommand implements Executable {
 		}
 
 		if (args.has("value")) {
-			int offer = args.getInt("value");
-			if (offer < 1) {
-				event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
-				return;
-			} else if (!Utils.between(offer + trade.getSelfValue(event.user().getId()), 0, 10_000_000)) {
-				event.channel().sendMessage(locale.get("error/invalid_value_range", 0, 10_000_000)).queue();
-				return;
-			}
-
-			Account acc = trade.getSelf(event.user().getId());
-			if (!acc.hasEnough(offer, Currency.CR)) {
-				event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
-				return;
-			}
-
-			trade.addSelfValue(event.user().getId(), offer);
-			event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), Utils.separate(offer) + " ₵R")).queue();
+			addCurrency(locale, event, args, trade);
 		} else {
-			Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
-			if (kp.getStash().isEmpty()) {
-				event.channel().sendMessage(locale.get("error/empty_stash")).queue();
-				return;
-			}
-
-			Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
-			if (card == null) {
-				List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card WHERE rarity NOT IN ('ULTIMATE', 'NONE')");
-
-				Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(), names);
-				event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
-				return;
-			}
-
-			Utils.selectOption(locale, event.channel(), kp.getStash(), card, event.user())
-					.thenAccept(sc -> {
-						if (sc == null) {
-							event.channel().sendMessage(locale.get("error/invalid_value")).queue();
-							return;
-						}
-
-						trade.getSelfOffers(event.user().getId()).add(sc.getId());
-						event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), sc)).queue();
-					})
-					.exceptionally(t -> {
-						if (!(t.getCause() instanceof NoResultException)) {
-							Constants.LOGGER.error(t, t);
-						}
-
-						event.channel().sendMessage(locale.get("error/not_owned")).queue();
-						return null;
-					});
+			addCard(locale, event, args, trade);
 		}
+	}
+
+	private static void addCard(I18N locale, MessageData.Guild event, JSONObject args, Trade trade) {
+		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
+		if (kp.getStash().isEmpty()) {
+			event.channel().sendMessage(locale.get("error/empty_stash")).queue();
+			return;
+		}
+
+		Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
+		if (card == null) {
+			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card WHERE rarity NOT IN ('ULTIMATE', 'NONE')");
+
+			Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(), names);
+			event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
+			return;
+		}
+
+		Utils.selectOption(locale, event.channel(), kp.getStash(), card, event.user())
+				.thenAccept(sc -> {
+					if (sc == null) {
+						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+						return;
+					}
+
+					trade.getSelfOffers(event.user().getId()).add(sc.getId());
+					event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), sc)).queue();
+				})
+				.exceptionally(t -> {
+					if (!(t.getCause() instanceof NoResultException)) {
+						Constants.LOGGER.error(t, t);
+					}
+
+					event.channel().sendMessage(locale.get("error/not_owned")).queue();
+					return null;
+				});
+	}
+
+	private static void addCurrency(I18N locale, MessageData.Guild event, JSONObject args, Trade trade) {
+		int offer = args.getInt("value");
+		if (offer < 1) {
+			event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
+			return;
+		} else if (!Utils.between(offer + trade.getSelfValue(event.user().getId()), 0, 10_000_000)) {
+			event.channel().sendMessage(locale.get("error/invalid_value_range", 0, 10_000_000)).queue();
+			return;
+		}
+
+		Account acc = trade.getSelf(event.user().getId());
+		if (!acc.hasEnough(offer, Currency.CR)) {
+			event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
+			return;
+		}
+
+		trade.addSelfValue(event.user().getId(), offer);
+		event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), Utils.separate(offer) + " ₵R")).queue();
 	}
 }

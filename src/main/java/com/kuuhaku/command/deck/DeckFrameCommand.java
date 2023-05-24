@@ -49,7 +49,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
         name = "deck",
-        subname = "frame",
+        path = "frame",
         category = Category.MISC
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)

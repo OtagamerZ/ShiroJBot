@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 
 @Command(
 		name = "stash",
-		subname = "scrap",
+		path = "scrap",
 		category = Category.MISC
 )
 @Signature({

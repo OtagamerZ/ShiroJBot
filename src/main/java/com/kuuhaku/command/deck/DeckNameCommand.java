@@ -33,7 +33,7 @@ import net.dv8tion.jda.api.Permission;
 
 @Command(
 		name = "deck",
-		subname = "name",
+		path = "name",
 		category = Category.INFO
 )
 @Signature("<name:word>")

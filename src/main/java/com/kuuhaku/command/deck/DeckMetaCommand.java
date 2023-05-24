@@ -47,7 +47,7 @@ import java.util.Objects;
 
 @Command(
 		name = "deck",
-		subname = "meta",
+		path = "meta",
 		category = Category.INFO
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)

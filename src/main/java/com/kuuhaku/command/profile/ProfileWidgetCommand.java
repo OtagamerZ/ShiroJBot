@@ -37,7 +37,7 @@ import java.awt.image.BufferedImage;
 
 @Command(
 		name = "profile",
-		subname = "widget",
+		path = "widget",
 		category = Category.MISC
 )
 @Signature({

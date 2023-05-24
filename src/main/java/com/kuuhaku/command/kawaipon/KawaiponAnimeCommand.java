@@ -46,7 +46,7 @@ import java.util.List;
 
 @Command(
 		name = "kawaipon",
-		subname = "anime",
+		path = "anime",
 		category = Category.INFO
 )
 @Signature("<anime:word:r> <kind:word>[n,c]")

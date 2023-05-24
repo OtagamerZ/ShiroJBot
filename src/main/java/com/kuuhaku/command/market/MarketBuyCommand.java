@@ -38,7 +38,7 @@ import net.dv8tion.jda.api.JDA;
 
 @Command(
 		name = "market",
-		subname = "buy",
+		path = "buy",
 		category = Category.MISC
 )
 @Signature("<id:number:r>")

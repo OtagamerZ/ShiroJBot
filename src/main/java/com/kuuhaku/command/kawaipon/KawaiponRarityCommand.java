@@ -43,11 +43,10 @@ import net.dv8tion.jda.api.Permission;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 @Command(
 		name = "kawaipon",
-		subname = "rarity",
+		path = "rarity",
 		category = Category.INFO
 )
 @Signature("<rarity:word:r> <kind:word>[n,c]")

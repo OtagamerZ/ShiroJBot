@@ -34,7 +34,7 @@ import net.dv8tion.jda.api.Permission;
 
 @Command(
 		name = "deck",
-		subname = "order",
+		path = "order",
 		category = Category.INFO
 )
 @Signature("<order:word:r>[name,atk,def,attr,cost,tier] <kind:word>[s,e]")

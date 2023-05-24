@@ -45,7 +45,7 @@ import java.util.Map;
 
 @Command(
 		name = "items",
-		subname = "buy",
+		path = "buy",
 		category = Category.MISC
 )
 @Signature(allowEmpty = true, value = "<id:word:r> <amount:number>")

@@ -33,7 +33,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 
 @Command(
 		name = "profile",
-		subname = "background",
+		path = "background",
 		category = Category.MISC
 )
 @Signature(allowEmpty = true, value = "<text:text:r>")

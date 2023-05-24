@@ -34,7 +34,7 @@ import net.dv8tion.jda.api.Permission;
 
 @Command(
 		name = "trade",
-		subname = "see",
+		path = "see",
 		category = Category.MISC
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)

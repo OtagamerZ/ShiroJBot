@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "deck",
-		subname = "use",
+		path = "use",
 		category = Category.INFO
 )
 @Signature(allowEmpty = true, value = {

@@ -36,7 +36,7 @@ import java.util.Iterator;
 
 @Command(
 		name = "custom",
-		subname = "remove",
+		path = "remove",
 		category = Category.MODERATION
 )
 @Signature("<id:number:r>")

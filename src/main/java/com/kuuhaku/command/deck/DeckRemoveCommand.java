@@ -45,7 +45,7 @@ import java.util.Set;
 
 @Command(
 		name = "deck",
-		subname = "remove",
+		path = "remove",
 		category = Category.MISC
 )
 @Signature({

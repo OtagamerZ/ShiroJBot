@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public abstract class SignatureParser {
-    private static final Pattern ARGUMENT_PATTERN = Pattern.compile("^<(?<name>[A-Za-z]\\w*):(?<type>[A-Za-z]+)(?<required>:[Rr])?>(?:\\[(?<options>[^\\[\\]]+)+])?$");
+    private static final Pattern ARGUMENT_PATTERN = Pattern.compile("^<(?<name>[a-z]\\w*):(?<type>[a-z]+)(?<required>:[r])?>(?:\\[(?<options>[^\\[\\]]+)+])?$", Pattern.CASE_INSENSITIVE);
 
     public static JSONObject parse(I18N locale, Executable command, String input) throws InvalidSignatureException {
         Signature annot = command.getClass().getDeclaredAnnotation(Signature.class);
@@ -64,6 +64,20 @@ public abstract class SignatureParser {
             for (String arg : args) {
                 i++;
                 JSONObject groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
+                if (groups.isEmpty()) {
+                    String s = str.split("\\s+")[0].trim();
+                    str = str.replaceFirst(Pattern.quote(s), "").trim();
+                    s = StringUtils.stripAccents(s);
+
+                    if (s.equalsIgnoreCase(arg)) {
+                        supplied.add(s);
+                        matches++;
+                    } else {
+                        fail = true;
+                        supplied.add(arg);
+                    }
+                    continue;
+                }
 
                 String name = groups.getString("name");
                 boolean required = groups.has("required");
@@ -252,6 +266,11 @@ public abstract class SignatureParser {
             supplied.add("%1$s%2$s");
             for (String arg : args) {
                 JSONObject groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
+                if (groups.isEmpty()) {
+                    supplied.add(arg);
+                    continue;
+                }
+
                 String name = groups.getString("name");
                 String type = groups.getString("type");
                 boolean required = groups.has("required");

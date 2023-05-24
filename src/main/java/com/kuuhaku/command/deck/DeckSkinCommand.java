@@ -50,7 +50,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "deck",
-		subname = "skin",
+		path = "skin",
 		category = Category.MISC
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)

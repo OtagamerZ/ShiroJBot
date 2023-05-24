@@ -41,7 +41,7 @@ import java.util.List;
 
 @Command(
 		name = "kawaipon",
-		subname = "field",
+		path = "field",
 		category = Category.INFO
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
