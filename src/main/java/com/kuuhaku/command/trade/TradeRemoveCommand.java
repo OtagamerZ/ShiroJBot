@@ -35,6 +35,7 @@ import com.kuuhaku.util.json.JSONObject;
 import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
+import org.apache.commons.collections4.Bag;
 
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class TradeRemoveCommand implements Executable {
 			trade.addSelfValue(event.user().getId(), -offer);
 			event.channel().sendMessage(locale.get("success/offer_remove", event.user().getAsMention(), offer + " ₵R")).queue();
 		} else {
-			List<Integer> selfOffer = trade.getSelfOffers(event.user().getId());
+			Bag<Integer> selfOffer = trade.getSelfOffers(event.user().getId());
 			List<StashedCard> stash = DAO.queryAll(StashedCard.class,
 					"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck IS NULL AND s.price = 0 AND s.id IN ?2",
 					event.user().getId(), selfOffer
