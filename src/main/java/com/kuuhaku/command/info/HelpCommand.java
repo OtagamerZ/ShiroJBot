@@ -113,11 +113,13 @@ public class HelpCommand implements Executable {
 			int i = 0;
 			for (PreparedCommand sub : subCmds) {
 				String[] path = sub.name().split("\\.");
+
+				i++;
 				for (int depth = 1; depth < path.length; depth++) {
 					String name = path[depth];
 
 					String prefix;
-					if (i++ == subCmds.size() || (depth > 1 && depth == path.length - 1)) {
+					if (i == subCmds.size() || (depth > 1 && depth == path.length - 1)) {
 						prefix = "  └";
 					} else {
 						prefix = "  ├";
