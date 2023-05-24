@@ -117,7 +117,7 @@ public class HelpCommand implements Executable {
 					String name = path[depth];
 
 					String prefix;
-					if (++i == subCmds.size()) {
+					if (++i == subCmds.size() || (depth > 1 && depth == path.length - 1)) {
 						prefix = "  └";
 					} else {
 						prefix = "  ├";
