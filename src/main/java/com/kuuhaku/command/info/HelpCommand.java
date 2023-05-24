@@ -108,7 +108,7 @@ public class HelpCommand implements Executable {
 
 		Set<PreparedCommand> subCmds = pc.getSubCommands();
 		if (!subCmds.isEmpty()) {
-			XStringBuilder sb = new XStringBuilder("`" + data.config().getPrefix() + pc.name() + "`");
+			XStringBuilder sb = new XStringBuilder(data.config().getPrefix() + pc.name());
 
 			int i = 0;
 			for (PreparedCommand sub : subCmds) {
