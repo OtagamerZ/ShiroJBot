@@ -25,6 +25,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.persistent.user.UserItem;
+import com.kuuhaku.model.records.ItemAmount;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.XStringBuilder;
 import org.apache.commons.collections4.Bag;
@@ -40,12 +41,12 @@ public class Trade {
 
     private Account left;
     private int leftValue;
-    private Bag<Integer> leftOffers = new HashBag<>();
+    private Bag<Integer> leftOffer = new HashBag<>();
     private Bag<String> leftItems = new HashBag<>();
 
     private Account right;
     private int rightValue;
-    private Bag<Integer> rightOffers = new HashBag<>();
+    private Bag<Integer> rightOffer = new HashBag<>();
     private Bag<String> rightItems = new HashBag<>();
 
     private boolean finalizing = false;
@@ -71,8 +72,8 @@ public class Trade {
         leftValue += value;
     }
 
-    public Bag<Integer> getLeftOffers() {
-        return leftOffers;
+    public Bag<Integer> getLeftOffer() {
+        return leftOffer;
     }
 
     public Bag<String> getLeftItems() {
@@ -91,8 +92,8 @@ public class Trade {
         rightValue += value;
     }
 
-    public Bag<Integer> getRightOffers() {
-        return rightOffers;
+    public Bag<Integer> getRightOffer() {
+        return rightOffer;
     }
 
     public Bag<String> getRightItems() {
@@ -116,7 +117,7 @@ public class Trade {
     }
 
     public Bag<Integer> getSelfOffers(String id) {
-        return left.getUid().equals(id) ? leftOffers : rightOffers;
+        return left.getUid().equals(id) ? leftOffer : rightOffer;
     }
 
     public Bag<String> getSelfItems(String id) {
@@ -131,16 +132,45 @@ public class Trade {
                 SELECT COUNT(1)
                 FROM stashed_card sc
                 WHERE sc.kawaipon_uid = ?1
-                AND sc.id IN ?2
-                AND sc.deck_id IS NULL
-                AND sc.price = 0
+                  AND sc.id IN ?2
+                  AND sc.deck_id IS NULL
+                  AND sc.price = 0
+                  AND NOT sc.account_bound
                 """;
 
-        if (DAO.queryNative(Integer.class, query, left.getUid(), leftOffers) != leftOffers.size()) {
+        boolean check = DAO.queryNative(Integer.class, query, left.getUid(), leftOffer) != leftOffer.size();
+        check = check && DAO.queryNative(Integer.class, query, right.getUid(), rightOffer) != rightOffer.size();
+
+        if (!check) {
             return false;
         }
 
-        return DAO.queryNative(Integer.class, query, right.getUid(), rightOffers) == rightOffers.size();
+        query = """
+                SELECT i.id
+                     , SUM(CAST(i.amount AS INT)) AS amount
+                FROM account a
+                         CROSS JOIN jsonb_each(a.inventory) as i(id, amount)
+                WHERE a.uid = ?1
+                GROUP BY i.id
+                """;
+
+        List<ItemAmount> rows = Utils.map(
+                DAO.queryAllUnmapped(query, left.getUid()),
+                o -> new ItemAmount(String.valueOf(o[0]), ((Number) o[1]).intValue())
+        );
+        for (ItemAmount ia : rows) {
+            if (leftItems.getCount(ia.id()) > ia.amount()) return false;
+        }
+
+        rows = Utils.map(
+                DAO.queryAllUnmapped(query, right.getUid()),
+                o -> new ItemAmount(String.valueOf(o[0]), ((Number) o[1]).intValue())
+        );
+        for (ItemAmount ia : rows) {
+            if (rightItems.getCount(ia.id()) > ia.amount()) return false;
+        }
+
+        return true;
     }
 
     public void accept() {
@@ -150,7 +180,7 @@ public class Trade {
                 UPDATE StashedCard sc
                 SET kawaipon = ?1
                 WHERE sc.id IN ?2
-                """, left.getKawaipon(), rightOffers);
+                """, left.getKawaipon(), rightOffer);
 
         right.addCR(leftValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
         right.consumeCR(rightValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
@@ -158,12 +188,26 @@ public class Trade {
                 UPDATE StashedCard sc
                 SET kawaipon = ?1
                 WHERE sc.id IN ?2
-                """, right.getKawaipon(), leftOffers);
+                """, right.getKawaipon(), leftOffer);
+
+        for (String i : rightItems) {
+            int amount = rightItems.getCount(i);
+
+            left.addItem(i, amount);
+            right.consumeItem(i, amount, true);
+        }
+
+        for (String i : leftItems) {
+            int amount = leftItems.getCount(i);
+
+            right.addItem(i, amount);
+            left.consumeItem(i, amount, true);
+        }
     }
 
     public String toString(I18N locale, boolean left) {
         int value = left ? leftValue : rightValue;
-        List<StashedCard> offers = (left ? leftOffers : rightOffers).stream()
+        List<StashedCard> offers = (left ? leftOffer : rightOffer).stream()
                 .distinct()
                 .map(id -> DAO.find(StashedCard.class, id))
                 .sorted(Comparator.comparing(StashedCard::getType))
@@ -183,7 +227,7 @@ public class Trade {
                 sb.appendNewLine("\n[" + locale.get("type/" + type.name()) + "]");
             }
 
-            int count = (left ? leftOffers : rightOffers).getCount(card.getId());
+            int count = (left ? leftOffer : rightOffer).getCount(card.getId());
             if (count > 1) {
                 sb.appendNewLine("- " + count + "x " + card);
             } else {
