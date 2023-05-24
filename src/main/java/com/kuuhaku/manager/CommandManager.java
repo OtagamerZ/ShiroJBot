@@ -40,7 +40,7 @@ public class CommandManager {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			String full = params.name();
-			if (params.path().length == 0) {
+			if (params.path().length > 0) {
 				full += "." + String.join(".", params.path());
 			}
 
@@ -79,7 +79,7 @@ public class CommandManager {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			String full = params.name();
-			if (params.path().length == 0) {
+			if (params.path().length > 0) {
 				full += "." + String.join(".", params.path());
 			}
 
@@ -126,7 +126,7 @@ public class CommandManager {
 
 	private void extractCommand(Set<PreparedCommand> commands, Class<?> cmd, Command params) {
 		String full = params.name();
-		if (params.path().length == 0) {
+		if (params.path().length > 0) {
 			full += "." + String.join(".", params.path());
 		}
 
