@@ -123,11 +123,11 @@ public class HelpCommand implements Executable {
 						prefix = "  ├";
 					}
 
-					sb.appendNewLine(StringUtils.repeat("  │", depth - 1) + prefix + " `." + name + "`");
+					sb.appendNewLine(StringUtils.repeat("  │", depth - 1) + prefix + " ." + name);
 				}
 			}
 
-			eb.addField(locale.get("str/subcommands"), sb.toString(), false);
+			eb.addField(locale.get("str/subcommands"), "```" + sb + "```", false);
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
