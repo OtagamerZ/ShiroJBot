@@ -43,7 +43,7 @@ public class StringTree {
             Iterator<Node> it = children.values().iterator();
             while (it.hasNext()) {
                 Node next = it.next();
-                if (next == null) break;
+                if (next == null) continue;
 
                 if (it.hasNext()) {
                     next.print(buffer, childrenPrefix + "  ├ ", childrenPrefix + "  │ ");
@@ -71,6 +71,8 @@ public class StringTree {
         XStringBuilder buffer = new XStringBuilder();
 
         for (Node next : root.values()) {
+            if (next == null) continue;
+
             next.print(buffer, "", "");
         }
 
