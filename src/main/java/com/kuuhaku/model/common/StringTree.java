@@ -21,46 +21,25 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.XStringBuilder;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class StringTree {
-    private record Node(String name, Map<String, Node> children) {
-        public Node(String name) {
-            this(name, new HashMap<>());
-        }
+    /*
+    root
+      ├ level 1
+      │  ├ level 2
+      │  └ level 2
+      ├ level 1
+      └ level 1
+     */
 
-        public String toString() {
-            XStringBuilder buffer = new XStringBuilder();
-            print(buffer, "", "");
-            return buffer.toString();
-        }
-
-        private void print(XStringBuilder buffer, String prefix, String childrenPrefix) {
-            buffer.appendNewLine(prefix + name);
-
-            Iterator<Node> it = children.values().iterator();
-            while (it.hasNext()) {
-                Node next = it.next();
-                if (next == null) continue;
-
-                if (it.hasNext()) {
-                    next.print(buffer, childrenPrefix + "  ├ ", childrenPrefix + "  │ ");
-                } else {
-                    next.print(buffer, childrenPrefix + "  └ ", childrenPrefix + "    ");
-                }
-            }
-        }
-    }
-
-    private final Map<String, Node> root = new HashMap<>();
+    private final Root root = new Root();
 
     public void addElement(Object elem, String... path) {
-        Map<String, Node> node = root;
+        Map<String, NamedNode> node = root;
         for (int i = 0; i < path.length - 1; i++) {
             String p = path[i];
-            node = node.compute(p, (k, v) -> Utils.getOr(v, new Node(k))).children;
+            node = node.compute(p, (k, v) -> Utils.getOr(v, new NamedNode(k))).children;
         }
 
         node.put(String.valueOf(elem), null);
@@ -69,13 +48,46 @@ public class StringTree {
     @Override
     public String toString() {
         XStringBuilder buffer = new XStringBuilder();
-
-        for (Node next : root.values()) {
-            if (next == null) continue;
-
-            next.print(buffer, "", "");
-        }
+        root.print(buffer, 0, true);
 
         return buffer.toString();
+    }
+
+    public static class Root extends TreeNode {
+        @Override
+        public void print(XStringBuilder buffer, int level, boolean hasNext) {
+            Iterator<TreeNode> iterator = children.iterator();
+            while (iterator.hasNext()) {
+                TreeNode child = iterator.next();
+                child.print(buffer, 0, iterator.hasNext());
+            }
+        }
+    }
+
+    public static class NamedNode extends TreeNode {
+        private final String name;
+
+        public NamedNode(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public void print(XStringBuilder buffer, int level, boolean hasNext) {
+            buffer.nextLine();
+            for (int i = 0; i < level; i++) {
+                if (i < level - 1) {
+                    buffer.append("  │");
+                } else {
+                    buffer.append(hasNext ? "  ├" : "  └");
+                }
+            }
+
+            buffer.append(" " + name);
+            Iterator<TreeNode> iterator = children.iterator();
+            while (iterator.hasNext()) {
+                TreeNode child = iterator.next();
+                child.print(buffer, level + 1, iterator.hasNext());
+            }
+        }
     }
 }

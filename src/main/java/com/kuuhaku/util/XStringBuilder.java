@@ -54,6 +54,11 @@ public class XStringBuilder {
         return this;
     }
 
+    public XStringBuilder nextLine() {
+        sb.append("\n");
+        return this;
+    }
+
     public boolean isEmpty() {
         return sb.toString().isEmpty();
     }
