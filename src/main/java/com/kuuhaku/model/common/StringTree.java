@@ -43,6 +43,7 @@ public class StringTree {
             Iterator<Node> it = children.values().iterator();
             while (it.hasNext()) {
                 Node next = it.next();
+                if (next == null) break;
 
                 if (it.hasNext()) {
                     next.print(buffer, childrenPrefix + "  ├ ", childrenPrefix + "  │ ");
