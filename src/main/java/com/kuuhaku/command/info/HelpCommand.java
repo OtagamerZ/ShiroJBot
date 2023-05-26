@@ -111,6 +111,7 @@ public class HelpCommand implements Executable {
 			tree.addElement(data.config().getPrefix() + pc.name());
 
 			for (PreparedCommand sub : subCmds) {
+				System.out.println(sub.name());
 				String[] path = sub.name().split("\\.");
 				tree.addElement("." + path[path.length - 1], path);
 			}
