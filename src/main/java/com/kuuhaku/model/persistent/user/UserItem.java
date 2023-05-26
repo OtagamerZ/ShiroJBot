@@ -62,6 +62,9 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
 
+	@Column(name = "account_bound", nullable = false)
+	private boolean accountBound = false;
+
 	public String getId() {
 		return id;
 	}
@@ -107,6 +110,10 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 				"acc", acc,
 				"params", params
 		));
+	}
+
+	public boolean isAccountBound() {
+		return accountBound;
 	}
 
 	public String toString(I18N locale) {

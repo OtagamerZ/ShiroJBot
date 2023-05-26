@@ -75,6 +75,9 @@ public class TradeAddItemCommand implements Executable {
 		} else if (!items.containsKey(item)) {
 			event.channel().sendMessage(locale.get("error/item_not_have")).queue();
 			return;
+		} else if (item.isAccountBound()) {
+			event.channel().sendMessage(locale.get("error/item_account_bound")).queue();
+			return;
 		}
 
 		int amount = args.getInt("amount", 1);
