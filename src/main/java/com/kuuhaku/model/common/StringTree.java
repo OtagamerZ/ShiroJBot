@@ -36,13 +36,13 @@ public class StringTree {
     private final Root root = new Root();
 
     public void addElement(Object elem, String... path) {
-        Map<String, NamedNode> node = root;
+        TreeNode node = root;
         for (int i = 0; i < path.length - 1; i++) {
             String p = path[i];
-            node = node.compute(p, (k, v) -> Utils.getOr(v, new NamedNode(k))).children;
+            node = node.getChildren().compute(p, (k, v) -> Utils.getOr(v, new NamedNode(k)));
         }
 
-        node.put(String.valueOf(elem), null);
+        node.addNode(new NamedNode(String.valueOf(elem)));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class StringTree {
     public static class Root extends TreeNode {
         @Override
         public void print(XStringBuilder buffer, int level, boolean hasNext) {
-            Iterator<TreeNode> iterator = children.iterator();
+            Iterator<TreeNode> iterator = children.values().iterator();
             while (iterator.hasNext()) {
                 TreeNode child = iterator.next();
                 child.print(buffer, 0, iterator.hasNext());
@@ -71,6 +71,10 @@ public class StringTree {
             this.name = name;
         }
 
+        public String getName() {
+            return name;
+        }
+
         @Override
         public void print(XStringBuilder buffer, int level, boolean hasNext) {
             buffer.nextLine();
@@ -83,7 +87,7 @@ public class StringTree {
             }
 
             buffer.append(" " + name);
-            Iterator<TreeNode> iterator = children.iterator();
+            Iterator<TreeNode> iterator = children.values().iterator();
             while (iterator.hasNext()) {
                 TreeNode child = iterator.next();
                 child.print(buffer, level + 1, iterator.hasNext());

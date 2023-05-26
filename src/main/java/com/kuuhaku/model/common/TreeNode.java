@@ -20,18 +20,18 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.util.XStringBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public abstract class TreeNode {
-    protected final List<TreeNode> children = new ArrayList<>();
+    protected final Map<String, TreeNode> children = new TreeMap<>();
 
-    public List<TreeNode> getChildren() {
+    public Map<String, TreeNode> getChildren() {
         return children;
     }
 
     public TreeNode addNode(StringTree.NamedNode node) {
-        children.add(node);
+        children.put(node.getName(), node);
         return this;
     }
 
