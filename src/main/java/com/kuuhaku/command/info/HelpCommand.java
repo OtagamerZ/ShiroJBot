@@ -110,7 +110,6 @@ public class HelpCommand implements Executable {
 			StringTree tree = new StringTree();
 
 			for (PreparedCommand sub : subCmds) {
-				System.out.println(sub.name());
 				String[] path = sub.name().split("(?=\\.)");
 				path[0] = data.config().getPrefix() + path[0];
 
