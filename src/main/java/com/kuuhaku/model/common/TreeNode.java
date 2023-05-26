@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public abstract class TreeNode {
-    protected final Map<String, TreeNode> children = new TreeMap<>();
+    protected final Map<String, TreeNode> children = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
     public Map<String, TreeNode> getChildren() {
         return children;
