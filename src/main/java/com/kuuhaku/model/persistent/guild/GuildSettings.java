@@ -47,7 +47,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	private String gid;
 
 	@Column(name = "anti_raid_threshold", nullable = false)
-	private int antiRaidThreshold = 0;
+	private int antiRaidThreshold = 200;
 
 	@ElementCollection
 	@Column(name = "kawaipon_channels")
