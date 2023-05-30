@@ -18,6 +18,7 @@
 
 package com.kuuhaku;
 
+import com.kuuhaku.interfaces.SafeCallable;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.Account;
@@ -45,7 +46,7 @@ public abstract class Constants {
     public static final GroovyShell GROOVY = new GroovyShell();
     public static final Scheduler SCHEDULER = new Scheduler();
     public static final String BOT_NAME = "Shiro J. Bot";
-    public static final String BOT_VERSION = "v4." + GlobalProperty.get("build_number", "0");
+    public static final SafeCallable<String> BOT_VERSION = () -> "v4." + GlobalProperty.get("build_number", "0");
 
     public static final String EMOTE_REPO_1 = "666619034103447642";
     public static final String EMOTE_REPO_2 = "726171298044313694";

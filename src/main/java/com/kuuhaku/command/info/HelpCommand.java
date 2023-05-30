@@ -92,7 +92,7 @@ public class HelpCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/command", pc.name()))
 				.addField(locale.get("str/category"), pc.category().getName(locale), true)
-				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION);
+				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.call());
 
 		if (alias != null) {
 			eb.addField("Alias", "`" + data.config().getPrefix() + alias + "`", true);
@@ -136,7 +136,7 @@ public class HelpCommand implements Executable {
 				.setTitle(locale.get("str/all_commands"))
 				.appendDescription(locale.get("str/category_counter", categories.size()) + "\n")
 				.appendDescription(locale.get("str/command_counter", categories.stream().map(Category::getCommands).mapToInt(Set::size).sum()))
-				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION);
+				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.call());
 
 		Map<Emoji, Page> pages = new LinkedHashMap<>();
 		for (Category cat : categories) {
@@ -153,7 +153,7 @@ public class HelpCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION);
+				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.call());
 
 		for (Category cat : categories) {
 			CustomEmoji emt = cat.getEmote();

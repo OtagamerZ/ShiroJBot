@@ -163,7 +163,7 @@ public class RaidRegistry extends DAO<RaidRegistry> {
         sb.separator('-', "RSA FINGERPRINT");
         sb.appendNewLine(print);
         sb.nextLine();
-        sb.appendNewLine(Constants.BOT_NAME + " " + Constants.BOT_VERSION);
+        sb.appendNewLine(Constants.BOT_NAME + " " + Constants.BOT_VERSION.call());
 
         return sb.toString();
     }
