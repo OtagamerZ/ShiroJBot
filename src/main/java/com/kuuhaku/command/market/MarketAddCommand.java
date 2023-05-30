@@ -66,6 +66,9 @@ public class MarketAddCommand implements Executable {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 						return;
+					} else if (sc.isAccountBound()) {
+						event.channel().sendMessage(locale.get("error/card_account_bound")).queue();
+						return;
 					}
 
 					int price = args.getInt("price");
