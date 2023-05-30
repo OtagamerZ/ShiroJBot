@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
@@ -44,8 +45,8 @@ public class AntiRaidCommand implements Executable {
         GuildSettings settings = data.config().getSettings();
         if (args.has("value")) {
 			int thr = args.getInt("value");
-			if (thr < 5) {
-				event.channel().sendMessage(locale.get("error/invalid_value_low", 5)).queue();
+			if (!Utils.between(thr, 100, 2000)) {
+				event.channel().sendMessage(locale.get("error/invalid_value_range", 100, 2000)).queue();
 				return;
 			}
 
