@@ -25,7 +25,6 @@ import groovy.lang.GroovyShell;
 import it.sauronsoftware.cron4j.Scheduler;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
@@ -42,7 +41,7 @@ public abstract class Constants {
     public static final String OWNER = "350836145921327115";
     public static final String SUPPORT_SERVER = "421495229594730496";
     public static final String DEFAULT_PREFIX = "x!"; // TODO Revert to s!
-    public static final Logger LOGGER = LogManager.getLogger("shiro");
+    public static final Logger LOGGER = Main.LOGGER;
     public static final GroovyShell GROOVY = new GroovyShell();
     public static final Scheduler SCHEDULER = new Scheduler();
     public static final String BOT_NAME = "Shiro J. Bot";

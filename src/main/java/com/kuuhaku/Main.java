@@ -23,6 +23,8 @@ import com.kuuhaku.manager.CommandManager;
 import com.kuuhaku.manager.ScheduleManager;
 import com.sun.management.OperatingSystemMXBean;
 import org.apache.commons.lang3.time.StopWatch;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.lang.management.ManagementFactory;
@@ -37,6 +39,8 @@ public class Main {
 	private static final CacheManager cacheManager = new CacheManager();
 	private static final CommandManager commandManager = new CommandManager();
 	private static final ScheduleManager scheduleManager;
+
+	public static final Logger LOGGER = LogManager.getLogger("shiro");
 
 	static {
 		ScheduleManager sm;
@@ -53,7 +57,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		boot.start();
-		Constants.LOGGER.info("""
+		LOGGER.info("""
 
 				----------------------------------------------------------
 				Shiro J. Bot  Copyright (C) 2019-%s Yago Gimenez (KuuHaKu)
