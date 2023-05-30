@@ -39,14 +39,14 @@ import java.util.random.RandomGenerator;
 
 public abstract class Constants {
     protected static final String BOT_TOKEN = System.getenv("BOT_TOKEN");
-    public static final String BOT_NAME = "Shiro J. Bot";
-    public static final String BOT_VERSION = "v4." + GlobalProperty.get("build_number", "0");
     public static final String OWNER = "350836145921327115";
     public static final String SUPPORT_SERVER = "421495229594730496";
     public static final String DEFAULT_PREFIX = "x!"; // TODO Revert to s!
     public static final Logger LOGGER = LogManager.getLogger("shiro");
     public static final GroovyShell GROOVY = new GroovyShell();
     public static final Scheduler SCHEDULER = new Scheduler();
+    public static final String BOT_NAME = "Shiro J. Bot";
+    public static final String BOT_VERSION = "v4." + GlobalProperty.get("build_number", "0");
 
     public static final String EMOTE_REPO_1 = "666619034103447642";
     public static final String EMOTE_REPO_2 = "726171298044313694";
