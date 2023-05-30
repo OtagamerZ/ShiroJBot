@@ -39,20 +39,6 @@ public class Main {
 	private static final ScheduleManager scheduleManager;
 
 	static {
-		ScheduleManager sm;
-		try {
-			sm = new ScheduleManager();
-		} catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-			Constants.LOGGER.error("Failed to start scheduler: " + e, e);
-			sm = null;
-		}
-		scheduleManager = sm;
-	}
-
-	private static Application app;
-
-	public static void main(String[] args) {
-		boot.start();
 		Constants.LOGGER.info("""
 
 				----------------------------------------------------------
@@ -84,6 +70,21 @@ public class Main {
 						Charset.defaultCharset()
 				)
 		);
+
+		ScheduleManager sm;
+		try {
+			sm = new ScheduleManager();
+		} catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+			Constants.LOGGER.error("Failed to start scheduler: " + e, e);
+			sm = null;
+		}
+		scheduleManager = sm;
+	}
+
+	private static Application app;
+
+	public static void main(String[] args) {
+		boot.start();
 
 		ImageIO.setUseCache(false);
 		Thread.setDefaultUncaughtExceptionHandler(app = new Application());
