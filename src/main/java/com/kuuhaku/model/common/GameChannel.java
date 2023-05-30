@@ -20,7 +20,6 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.model.records.ChannelReference;
 import com.kuuhaku.model.records.ClusterAction;
-import com.kuuhaku.util.XStringBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;

@@ -19,6 +19,7 @@
 package com.kuuhaku;
 
 import com.kuuhaku.model.enums.Role;
+import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.Account;
 import groovy.lang.GroovyShell;
 import it.sauronsoftware.cron4j.Scheduler;
@@ -38,6 +39,8 @@ import java.util.random.RandomGenerator;
 
 public abstract class Constants {
     protected static final String BOT_TOKEN = System.getenv("BOT_TOKEN");
+    public static final String BOT_NAME = "Shiro J. Bot";
+    public static final String BOT_VERSION = "v4." + GlobalProperty.get("build_number", "0");
     public static final String OWNER = "350836145921327115";
     public static final String SUPPORT_SERVER = "421495229594730496";
     public static final String DEFAULT_PREFIX = "x!"; // TODO Revert to s!

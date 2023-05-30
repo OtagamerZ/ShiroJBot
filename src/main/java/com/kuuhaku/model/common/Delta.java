@@ -18,20 +18,35 @@
 
 package com.kuuhaku.model.common;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Objects;
 
-public abstract class TreeNode {
-    protected final Map<String, TreeNode> children = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+public class Delta<T> {
+	private T current;
+	private T previous;
 
-    public Map<String, TreeNode> getChildren() {
-        return children;
-    }
+	public T get() {
+		return current;
+	}
 
-    public TreeNode addNode(StringTree.NamedNode node) {
-        children.put(node.getName(), node);
-        return this;
-    }
+	public T previous() {
+		return previous;
+	}
 
-    public abstract void print(XStringBuilder buffer, int level, boolean hasNext);
+	public void set(T value) {
+		previous = current;
+		current = value;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Delta<?> delta = (Delta<?>) o;
+		return Objects.equals(current, delta.current);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(current);
+	}
 }

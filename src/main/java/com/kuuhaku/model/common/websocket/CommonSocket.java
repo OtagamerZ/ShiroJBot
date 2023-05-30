@@ -95,7 +95,7 @@ public class CommonSocket extends WebSocketClient {
 			switch (payload.getString("channel")) {
 				case "eval" -> {
 					@Language("Groovy")
-					String code = new String(IO.btoc(payload.getString("code")), StandardCharsets.UTF_8);
+					String code = new String(IO.btoa(payload.getString("code")), StandardCharsets.UTF_8);
 
 					if (payload.getString("checksum").equals(DigestUtils.md5Hex(code))) {
 						Utils.exec(code, Map.of("bot", Main.getApp().getMainShard()));
@@ -123,9 +123,9 @@ public class CommonSocket extends WebSocketClient {
 					String b64;
 					if (DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM account WHERE uid = ?1", payload.getString("uid")) > 0) {
 						Account acc = DAO.find(Account.class, payload.getString("uid"));
-						b64 = IO.atob(d.render(payload.getEnum(I18N.class, "locale"), acc.getCurrentDeck()), "png");
+						b64 = IO.ctob(d.render(payload.getEnum(I18N.class, "locale"), acc.getCurrentDeck()), "png");
 					} else {
-						b64 = IO.atob(d.render(payload.getEnum(I18N.class, "locale"), new Deck()), "png");
+						b64 = IO.ctob(d.render(payload.getEnum(I18N.class, "locale"), new Deck()), "png");
 					}
 
 					send(JSONObject.of(

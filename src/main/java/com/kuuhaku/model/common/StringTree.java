@@ -19,7 +19,6 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.XStringBuilder;
 
 import java.util.*;
 

@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.util;
+package com.kuuhaku.model.common;
 
 import com.kuuhaku.Constants;
 import org.apache.commons.lang3.time.StopWatch;

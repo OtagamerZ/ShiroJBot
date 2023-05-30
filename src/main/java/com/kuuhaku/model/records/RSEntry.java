@@ -16,37 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.util;
+package com.kuuhaku.model.records;
 
-import java.util.Objects;
-
-public class Delta<T> {
-	private T current;
-	private T previous;
-
-	public T get() {
-		return current;
-	}
-
-	public T previous() {
-		return previous;
-	}
-
-	public void set(T value) {
-		previous = current;
-		current = value;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Delta<?> delta = (Delta<?>) o;
-		return Objects.equals(current, delta.current);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(current);
-	}
+public record RSEntry(String uid, long timestamp) {
 }

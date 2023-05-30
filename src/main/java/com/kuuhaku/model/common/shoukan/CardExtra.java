@@ -29,7 +29,7 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.LocalizedDescription;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
-import com.kuuhaku.util.Copier;
+import com.kuuhaku.model.common.Copier;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.collections4.set.ListOrderedSet;

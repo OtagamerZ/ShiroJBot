@@ -27,7 +27,6 @@ import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.ItemAmount;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.XStringBuilder;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.HashBag;
 import org.intellij.lang.annotations.Language;

@@ -64,9 +64,13 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@CollectionTable(name = "guild_settings_deniedChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<GuildMessageChannel> deniedChannels = new ArrayList<>();
 
-	@Column(name = "notificationsChannel")
+	@Column(name = "notifications_channel")
 	@Convert(converter = ChannelConverter.class)
 	private GuildMessageChannel notificationsChannel;
+
+	@Column(name = "general_channel")
+	@Convert(converter = ChannelConverter.class)
+	private GuildMessageChannel generalChannel;
 
 	@Column(name = "embed", nullable = false)
 	@Convert(converter = EmbedConverter.class)
@@ -155,6 +159,14 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public void setNotificationsChannel(GuildMessageChannel notificationsChannel) {
 		this.notificationsChannel = notificationsChannel;
+	}
+
+	public GuildMessageChannel getGeneralChannel() {
+		return generalChannel;
+	}
+
+	public void setGeneralChannel(GuildMessageChannel generalChannel) {
+		this.generalChannel = generalChannel;
 	}
 
 	public AutoEmbedBuilder getEmbed() {

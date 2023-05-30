@@ -16,12 +16,14 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.util;
+package com.kuuhaku.model.common;
 
 import org.apache.commons.lang3.StringUtils;
 
 public class XStringBuilder {
     private final StringBuilder sb;
+    private int longest = 0;
+    private boolean separated = false;
 
     public XStringBuilder() {
         sb = new StringBuilder();
@@ -33,6 +35,10 @@ public class XStringBuilder {
 
     public XStringBuilder append(Object value) {
         sb.append(value);
+        if (!separated) {
+            longest = Math.max(longest, String.valueOf(value).length());
+        }
+
         return this;
     }
 
@@ -41,21 +47,51 @@ public class XStringBuilder {
             sb.append("\n").append(value);
         else
             sb.append(value);
+
+        if (!separated) {
+            longest = Math.max(longest, String.valueOf(value).length());
+        }
+
         return this;
     }
 
     public XStringBuilder appendIndent(Object value, int indent) {
         sb.append(StringUtils.repeat("\t", indent)).append(value);
+        if (!separated) {
+            longest = Math.max(longest, String.valueOf(value).length());
+        }
+
         return this;
     }
 
     public XStringBuilder appendIndentNewLine(Object value, int indent) {
         sb.append("\n").append(StringUtils.repeat("\t", indent)).append(value);
+        if (!separated) {
+            longest = Math.max(longest, String.valueOf(value).length());
+        }
+
         return this;
     }
 
     public XStringBuilder nextLine() {
         sb.append("\n");
+        return this;
+    }
+
+    public XStringBuilder separator(char character) {
+        return separator(character, "");
+    }
+
+    public XStringBuilder separator(char character, String label) {
+        String sep;
+        if (label != null && !label.isBlank()) {
+            sep = StringUtils.center(" " + label + " ", longest, character);
+        } else {
+            sep = StringUtils.repeat(character, longest);
+        }
+
+        sb.append(sep);
+        separated = true;
         return this;
     }
 

@@ -25,7 +25,6 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.util.API;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.XStringBuilder;
 import com.kuuhaku.util.json.JSONObject;
 import org.apache.commons.cli.Option;
 import org.apache.http.client.methods.HttpHead;

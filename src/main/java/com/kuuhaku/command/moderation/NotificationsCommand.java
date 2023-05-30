@@ -45,7 +45,7 @@ public class NotificationsCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
 		if (args.has("action")) {
-			settings.getKawaiponChannels().clear();
+			settings.setGeneralChannel(null);
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/notifications_channel_clear")).queue();

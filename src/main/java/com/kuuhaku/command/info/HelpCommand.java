@@ -21,6 +21,7 @@ package com.kuuhaku.command.info;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -90,7 +91,8 @@ public class HelpCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/command", pc.name()))
-				.addField(locale.get("str/category"), pc.category().getName(locale), true);
+				.addField(locale.get("str/category"), pc.category().getName(locale), true)
+				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION);
 
 		if (alias != null) {
 			eb.addField("Alias", "`" + data.config().getPrefix() + alias + "`", true);
@@ -133,7 +135,8 @@ public class HelpCommand implements Executable {
 		EmbedBuilder index = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/all_commands"))
 				.appendDescription(locale.get("str/category_counter", categories.size()) + "\n")
-				.appendDescription(locale.get("str/command_counter", categories.stream().map(Category::getCommands).mapToInt(Set::size).sum()));
+				.appendDescription(locale.get("str/command_counter", categories.stream().map(Category::getCommands).mapToInt(Set::size).sum()))
+				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION);
 
 		Map<Emoji, Page> pages = new LinkedHashMap<>();
 		for (Category cat : categories) {
@@ -149,7 +152,9 @@ public class HelpCommand implements Executable {
 			pages.put(Utils.parseEmoji(home.getId()), InteractPage.of(index.build()));
 		}
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION);
+
 		for (Category cat : categories) {
 			CustomEmoji emt = cat.getEmote();
 			if (emt == null) continue;

@@ -154,24 +154,24 @@ public abstract class IO {
 		}
 	}
 
-	public static String atob(BufferedImage bi, String encoding) {
-		return atob(getBytes(bi, encoding));
-	}
-
 	public static String atob(byte[] bytes) {
 		return Base64.getEncoder().encodeToString(bytes);
 	}
 
-	public static BufferedImage btoa(String b64) {
+	public static byte[] btoa(String b64) {
+		return Base64.getDecoder().decode(b64.getBytes(StandardCharsets.UTF_8));
+	}
+
+	public static String ctob(BufferedImage bi, String encoding) {
+		return atob(getBytes(bi, encoding));
+	}
+
+	public static BufferedImage btoc(String b64) {
 		try (Buffer buf = new Buffer().write(Base64.getDecoder().decode(b64.getBytes(StandardCharsets.UTF_8)))) {
 			return ImageIO.read(buf.inputStream());
 		} catch (IOException | NullPointerException e) {
 			return null;
 		}
-	}
-
-	public static byte[] btoc(String b64) {
-		return Base64.getDecoder().decode(b64.getBytes(StandardCharsets.UTF_8));
 	}
 
 	public static String readString(Path path) {

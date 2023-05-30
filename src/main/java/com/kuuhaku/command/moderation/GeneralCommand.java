@@ -20,53 +20,46 @@ package com.kuuhaku.command.moderation;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
-import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 @Command(
-		name = "antiraid",
+		name = "general",
 		category = Category.MODERATION
 )
-@Signature("<threshold:number>")
-@Requires({Permission.BAN_MEMBERS, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL})
-public class AntiRaidCommand implements Executable {
+@Signature(allowEmpty = true, value = {
+		"<action:word:r>[clear]",
+		"<channel:channel:r>"
+})
+public class GeneralCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-        GuildSettings settings = data.config().getSettings();
-        if (args.has("value")) {
-			int thr = args.getInt("value");
-			if (thr < 5) {
-				event.channel().sendMessage(locale.get("error/invalid_value_low", 5)).queue();
-				return;
-			}
+		GuildSettings settings = data.config().getSettings();
+		if (args.has("action")) {
+			settings.setGeneralChannel(null);
+			settings.save();
 
-			settings.setAntiRaidThreshold(thr);
-
-			String msg = locale.get("success/anti_raid_threshold", thr);
-			if (!settings.isFeatureEnabled(GuildFeature.ANTI_RAID)) {
-				msg += "\n" + locale.get("success/anti_raid_enable");
-			}
-
-			event.channel().sendMessage(msg).queue();
-		} else {
-			if (settings.isFeatureEnabled(GuildFeature.ANTI_RAID)) {
-				settings.getFeatures().remove(GuildFeature.ANTI_RAID);
-				event.channel().sendMessage(locale.get("success/anti_raid_disable")).queue();
-			} else {
-				settings.getFeatures().add(GuildFeature.ANTI_RAID);
-				event.channel().sendMessage(locale.get("success/anti_raid_enable")).queue();
-			}
+			event.channel().sendMessage(locale.get("success/general_channel_clear")).queue();
+			return;
 		}
 
-        settings.save();
+		GuildChannel channel = event.message().getMentions().getChannels().get(0);
+		if (!(channel instanceof GuildMessageChannel gmc)) {
+			event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
+			return;
+		}
+
+		settings.setGeneralChannel(gmc);
+		settings.save();
+
+		event.channel().sendMessage(locale.get("success/general_channel_set", channel.getAsMention())).queue();
 	}
 }
