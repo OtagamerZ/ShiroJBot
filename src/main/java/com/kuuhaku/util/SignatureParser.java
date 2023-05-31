@@ -24,8 +24,8 @@ import com.kuuhaku.interfaces.annotations.SigPattern;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.FailedSignature;
-import com.kuuhaku.util.json.JSONArray;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.Language;
 

@@ -22,7 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.model.records.embed.Embed;
 import com.kuuhaku.model.records.embed.Field;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONUtils;
+import com.ygimenez.json.JSONUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.apache.commons.lang3.StringUtils;

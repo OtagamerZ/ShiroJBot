@@ -27,7 +27,7 @@ import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.IO;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import org.apache.commons.validator.routines.UrlValidator;
 

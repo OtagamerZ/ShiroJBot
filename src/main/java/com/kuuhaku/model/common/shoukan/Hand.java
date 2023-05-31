@@ -43,7 +43,7 @@ import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.*;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.Transient;
 import kotlin.Triple;
 import net.dv8tion.jda.api.entities.Message;

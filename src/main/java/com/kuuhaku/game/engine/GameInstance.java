@@ -30,7 +30,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;

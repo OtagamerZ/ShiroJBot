@@ -21,7 +21,7 @@ package com.kuuhaku.model.persistent.guild;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.id.CustomAnswerId;
-import com.kuuhaku.util.json.JSONArray;
+import com.ygimenez.json.JSONArray;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;

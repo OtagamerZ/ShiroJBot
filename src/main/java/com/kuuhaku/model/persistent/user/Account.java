@@ -30,7 +30,7 @@ import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Index;

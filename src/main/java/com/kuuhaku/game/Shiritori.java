@@ -27,7 +27,7 @@ import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;

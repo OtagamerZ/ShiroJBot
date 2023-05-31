@@ -26,7 +26,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.PseudoUser;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import com.kuuhaku.util.text.Uwuifier;
 import net.dv8tion.jda.api.JDA;
 

@@ -22,7 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import org.apache.logging.log4j.Logger;
 

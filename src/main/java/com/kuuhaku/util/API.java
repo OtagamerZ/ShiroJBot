@@ -19,7 +19,7 @@
 package com.kuuhaku.util;
 
 import com.kuuhaku.Constants;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;

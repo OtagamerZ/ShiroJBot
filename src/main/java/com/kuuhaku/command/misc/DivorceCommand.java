@@ -27,7 +27,7 @@ import com.kuuhaku.model.persistent.user.Couple;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
 @Command(

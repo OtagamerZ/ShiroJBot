@@ -19,7 +19,7 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import org.intellij.lang.annotations.Language;
 
 import java.util.HashMap;

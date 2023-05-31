@@ -26,7 +26,7 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Spawn;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 

@@ -73,6 +73,7 @@ dependencies {
 	//Core
 	implementation group: "net.dv8tion", name: "JDA", version: "5.0.0-beta.9"
 	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "4.0.3"
+	implementation group: "com.github.ygimenez", name: "Simple-Moshi", version: "1.0.0"
 
 	//Database
 	implementation group: "org.postgresql", name: "postgresql", version: '42.5.4'
@@ -114,8 +115,6 @@ dependencies {
 	implementation group: "it.sauronsoftware.cron4j", name: "cron4j", version: "2.2.5"
 	implementation group: "org.swinglabs.swingx", name: "swingx-graphics", version: "1.6.5-1"
 	implementation group: "net.oneandone.reflections8", name: "reflections8", version: "0.11.7"
-	implementation group: "com.squareup.moshi", name: "moshi", version: '1.14.0'
-	implementation group: "com.squareup.moshi", name: "moshi-adapters", version: '1.14.0'
 	implementation group: "com.squareup.okio", name: "okio", version: '3.3.0'
 	implementation group: "io.github.furstenheim", name: "copy_down", version: '1.1'
 	implementation group: "net.jodah", name: "expiringmap", version: "0.5.10"

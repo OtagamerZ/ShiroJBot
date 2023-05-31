@@ -38,7 +38,7 @@
  import com.kuuhaku.util.Graph;
  import com.kuuhaku.util.IO;
  import com.kuuhaku.util.Utils;
- import com.kuuhaku.util.json.JSONArray;
+ import com.ygimenez.json.JSONArray;
  import jakarta.persistence.*;
  import kotlin.Pair;
  import org.apache.commons.collections4.bag.HashBag;

@@ -25,7 +25,7 @@ import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.persistent.converter.*;
 import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import com.kuuhaku.model.persistent.javatype.RoleJavaType;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;

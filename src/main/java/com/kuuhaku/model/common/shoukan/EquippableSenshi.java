@@ -23,7 +23,7 @@ import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
-import com.kuuhaku.util.json.JSONArray;
+import com.ygimenez.json.JSONArray;
 
 import java.util.Objects;
 

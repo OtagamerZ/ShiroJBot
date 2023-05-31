@@ -20,7 +20,7 @@ package com.kuuhaku.model.records.shoukan.snapshot;
 
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.util.IO;
-import com.kuuhaku.util.json.JSONUtils;
+import com.ygimenez.json.JSONUtils;
 
 import java.io.IOException;
 import java.util.stream.Collectors;

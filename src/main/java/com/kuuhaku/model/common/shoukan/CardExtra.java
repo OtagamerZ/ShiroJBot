@@ -31,7 +31,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.model.common.Copier;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.lang.reflect.Field;

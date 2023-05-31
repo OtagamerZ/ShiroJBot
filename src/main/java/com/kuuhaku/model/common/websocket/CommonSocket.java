@@ -32,7 +32,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.HttpStatus;
