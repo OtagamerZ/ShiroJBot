@@ -151,6 +151,9 @@ public abstract class SignatureParser {
                         } else {
                             token = null;
                         }
+
+                        System.out.println(pattern);
+                        System.out.println(token);
                     } else {
                         opts = Arrays.stream(groups.getString("options", "").split(","))
                                 .filter(s -> !s.isBlank())
