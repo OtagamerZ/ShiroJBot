@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent;
+package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
