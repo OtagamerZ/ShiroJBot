@@ -110,18 +110,21 @@ public class RaidSentry {
             return State.STANDBY;
         }
 
-        long avgTime = 0;
-        long lastTime = 0;
-        for (RSEntry e : entries) {
-            if (lastTime > 0) {
-                avgTime = ((e.timestamp() - lastTime) + avgTime) / 2;
+        int avgInterval = 0;
+        int avgDelta = 0;
+        for (int i = 0; i < entries.size() - 1; i++) {
+            int interval = (int) (entries.get(i + 1).timestamp() - entries.get(i).timestamp());
+            if (i == 0) {
+                avgInterval = interval;
+            } else {
+                int prev = avgInterval;
+                avgInterval = (avgInterval + interval) / 2;
+                avgDelta = (avgDelta + Math.abs(prev - avgInterval)) / 2;
             }
-
-            lastTime = e.timestamp();
         }
 
-        int interval = config.getSettings().getAntiRaidThreshold();
-        if (avgTime <= interval) {
+        int threshold = config.getSettings().getAntiRaidThreshold();
+        if (avgDelta <= threshold) {
             try {
                 return State.ENGAGED;
             } finally {
