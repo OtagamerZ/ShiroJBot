@@ -46,16 +46,20 @@ public @interface Signature {
 		CHANNEL(Message.MentionType.CHANNEL.getPattern().pattern()),
 		EMOTE(Message.MentionType.EMOJI.getPattern().pattern()),
 
-		CUSTOM("");
+		CUSTOM;
 
 		private final Pattern regex;
 
+		Type() {
+			this.regex =  null;
+		}
+
 		Type(@Language("RegExp") String regex) {
-			this.regex = Pattern.compile(regex);
+			this.regex =  Pattern.compile(regex);
 		}
 
 		public boolean validate(String value) {
-			return value.isBlank() || regex.matcher(value).matches();
+			return regex == null || (!value.isBlank() && regex.matcher(value).matches());
 		}
 
 		public String getRegex() {
