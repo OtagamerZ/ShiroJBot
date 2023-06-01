@@ -74,7 +74,7 @@ public class RaidSentry {
                                     }
                                 }
 
-                                v.setEnd(ZonedDateTime.now(ZoneId.of("GMT-3")));
+                                v.setEndTimestamp(ZonedDateTime.now(ZoneId.of("GMT-3")));
                                 v.save();
                             });
 

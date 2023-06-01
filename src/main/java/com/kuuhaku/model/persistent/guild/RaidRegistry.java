@@ -58,11 +58,11 @@ public class RaidRegistry extends DAO<RaidRegistry> {
     @CollectionTable(name = "raid_users")
     private Set<String> users = new HashSet<>();
 
-    @Column(name = "start", nullable = false)
-    private ZonedDateTime start = ZonedDateTime.now(ZoneId.of("GMT-3"));
+    @Column(name = "start_timestamp", nullable = false)
+    private ZonedDateTime startTimestamp = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
-    @Column(name = "end", nullable = false)
-    private ZonedDateTime end;
+    @Column(name = "end_timestamp", nullable = false)
+    private ZonedDateTime endTimestamp;
 
     @Transient
     private transient final Map<String, Invite> initInvites = new HashMap<>();
@@ -97,22 +97,22 @@ public class RaidRegistry extends DAO<RaidRegistry> {
         return users;
     }
 
-    public ZonedDateTime getStart() {
-        return start;
+    public ZonedDateTime getStartTimestamp() {
+        return startTimestamp;
     }
 
-    public ZonedDateTime getEnd() {
-        return end;
+    public ZonedDateTime getEndTimestamp() {
+        return endTimestamp;
     }
 
-    public void setEnd(ZonedDateTime end) {
-        this.end = end;
+    public void setEndTimestamp(ZonedDateTime endTimestamp) {
+        this.endTimestamp = endTimestamp;
     }
 
     public long getDuration() {
-        if (end == null) return System.currentTimeMillis() / 1000 - start.getLong(ChronoField.INSTANT_SECONDS);
+        if (endTimestamp == null) return System.currentTimeMillis() / 1000 - startTimestamp.getLong(ChronoField.INSTANT_SECONDS);
 
-        return start.until(end, ChronoUnit.SECONDS);
+        return startTimestamp.until(endTimestamp, ChronoUnit.SECONDS);
     }
 
     public Map<String, Invite> getInitInvites() {
@@ -128,12 +128,12 @@ public class RaidRegistry extends DAO<RaidRegistry> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RaidRegistry that = (RaidRegistry) o;
-        return id == that.id && Objects.equals(guild, that.guild) && Objects.equals(start, that.start);
+        return id == that.id && Objects.equals(guild, that.guild) && Objects.equals(startTimestamp, that.startTimestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, guild, start);
+        return Objects.hash(id, guild, startTimestamp);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class RaidRegistry extends DAO<RaidRegistry> {
 
         sb.appendNewLine("R.A.ID REPORT Nº " + guild + "-" + Utils.separate(id));
         sb.appendNewLine("GUILD: " + g.getName());
-        sb.appendNewLine("DURATION: " + format.format(start) + " - " + format.format(end));
+        sb.appendNewLine("DURATION: " + format.format(startTimestamp) + " - " + format.format(endTimestamp));
         if (targetedInvite != null) {
             sb.appendNewLine("INVITE USED: " + targetedInvite);
         }
