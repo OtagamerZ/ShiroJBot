@@ -55,7 +55,7 @@ public @interface Signature {
 		}
 
 		public boolean validate(String value) {
-			return !value.isBlank() && regex.matcher(value).matches();
+			return value.isBlank() || regex.matcher(value).matches();
 		}
 
 		public String getRegex() {
