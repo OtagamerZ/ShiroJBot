@@ -29,6 +29,8 @@ import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Invite;
 import net.dv8tion.jda.api.entities.User;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -47,8 +49,11 @@ public class RaidRegistry extends DAO<RaidRegistry> {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "guild", nullable = false)
-    private String guild;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "gid", nullable = false)
+    @Fetch(FetchMode.JOIN)
+    @MapsId("gid")
+    private GuildConfig guild;
 
     @Column(name = "targeted_invite")
     private String targetedInvite;
@@ -74,14 +79,14 @@ public class RaidRegistry extends DAO<RaidRegistry> {
     }
 
     public RaidRegistry(String guild) {
-        this.guild = guild;
+        this.guild = DAO.find(GuildConfig.class, guild);
     }
 
     public int getId() {
         return id;
     }
 
-    public String getGuild() {
+    public GuildConfig getGuild() {
         return guild;
     }
 
@@ -140,7 +145,7 @@ public class RaidRegistry extends DAO<RaidRegistry> {
     public String toString() {
         XStringBuilder sb = new XStringBuilder();
 
-        Guild g = Main.getApp().getShiro().getGuildById(guild);
+        Guild g = Main.getApp().getShiro().getGuildById(guild.getGid());
         if (g == null) return "UNAVAILABLE";
 
         sb.appendNewLine("R.A.ID REPORT Nº " + guild + "-" + Utils.separate(id));
