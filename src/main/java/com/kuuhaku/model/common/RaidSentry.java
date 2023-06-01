@@ -123,6 +123,8 @@ public class RaidSentry {
             }
         }
 
+        System.out.println(avgDelta);
+
         int threshold = config.getSettings().getAntiRaidThreshold();
         if (avgDelta <= threshold) {
             try {
