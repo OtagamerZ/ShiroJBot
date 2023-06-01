@@ -123,6 +123,7 @@ public class RaidSentry {
             }
         }
 
+        System.out.println(avgInterval);
         System.out.println(avgDelta);
 
         int threshold = config.getSettings().getAntiRaidThreshold();
