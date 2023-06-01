@@ -20,7 +20,7 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.model.enums.GuildFeature;
-import com.kuuhaku.model.persistent.RaidRegistry;
+import com.kuuhaku.model.persistent.guild.RaidRegistry;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.records.RSEntry;
 import net.dv8tion.jda.api.Permission;
