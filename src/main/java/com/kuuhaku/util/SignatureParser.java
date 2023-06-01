@@ -139,7 +139,7 @@ public abstract class SignatureParser {
                         @Language("RegExp") String opt = groups.getString("options", "");
                         @Language("RegExp") String pattern = opt;
                         if (patterns != null) {
-                            pattern = Arrays.stream(patterns)
+                            pattern = "^" + Arrays.stream(patterns)
                                     .filter(p -> p.id().equals(opt))
                                     .map(SigPattern::value)
                                     .findFirst().orElse(opt);
@@ -163,7 +163,6 @@ public abstract class SignatureParser {
                         }
                     }
 
-                    System.out.println(token);
                     if (token != null) {
                         str = str.replaceFirst(Pattern.quote(token), "").trim();
                         token = StringUtils.stripAccents(token);
