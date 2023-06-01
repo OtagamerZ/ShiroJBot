@@ -83,9 +83,6 @@ public class KickCommand implements Executable {
 			}
 		}
 
-		System.out.println(members);
-		System.out.println(args);
-
 		try {
 			Utils.confirm(locale.get("question/kick",
 							members.size() == 1 ? locale.get("str/that_m") : locale.get("str/those_m"),
