@@ -106,6 +106,8 @@ public class RaidSentry {
         entries.add(new RSEntry(user.getId(), System.currentTimeMillis()));
         if (entries.size() > 10) {
             entries.remove(0);
+        } else if (entries.size() < 5) {
+            return State.STANDBY;
         }
 
         long avgTime = 0;
