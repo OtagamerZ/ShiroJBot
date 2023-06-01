@@ -81,10 +81,6 @@ public class KickCommand implements Executable {
 
 		System.out.println(members);
 		System.out.println(args);
-		if (args.getString("reason").isBlank()) {
-			event.channel().sendMessage(locale.get("error/reason_required")).queue();
-			return;
-		}
 
 		try {
 			Utils.confirm(locale.get("question/kick",

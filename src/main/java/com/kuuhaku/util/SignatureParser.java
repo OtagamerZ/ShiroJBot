@@ -131,90 +131,80 @@ public abstract class SignatureParser {
                     }
 
                     matches++;
-                } else if (type == Signature.Type.CUSTOM) {
-                    @Language("RegExp") String opt = groups.getString("options", "");
-                    @Language("RegExp") String pattern = opt;
-                    if (patterns != null) {
-                        pattern = Arrays.stream(patterns)
-                                .filter(p -> p.id().equals(opt))
-                                .map(SigPattern::value)
-                                .findFirst().orElse(opt);
-                    }
+                } else {
+                    String token;
+                    List<String> opts = List.of();
 
-                    Matcher match = Utils.regex(str, pattern);
-                    if (match.find()) {
-                        String s = match.group();
-                        str = str.replaceFirst(Pattern.quote(s), "").trim();
-                        s = StringUtils.stripAccents(s);
-
-                        if (!fail) {
-                            if (out.has(name)) {
-                                JSONArray arr;
-                                if (out.get(name) instanceof List<?> ls) {
-                                    arr = new JSONArray(ls);
-                                } else {
-                                    arr = new JSONArray();
-                                    Object curr = out.get(name);
-                                    arr.add(curr);
-                                }
-                                arr.add(s);
-
-                                out.put(name, arr);
-                            } else {
-                                out.put(name, s);
-                            }
+                    if (type == Signature.Type.CUSTOM) {
+                        @Language("RegExp") String opt = groups.getString("options", "");
+                        @Language("RegExp") String pattern = opt;
+                        if (patterns != null) {
+                            pattern = Arrays.stream(patterns)
+                                    .filter(p -> p.id().equals(opt))
+                                    .map(SigPattern::value)
+                                    .findFirst().orElse(opt);
                         }
 
-                        supplied.add(s);
-                        matches++;
+                        Matcher match = Utils.regex(str, pattern);
+                        if (match.find()) {
+                            token = match.group();
+                        } else {
+                            token = null;
+                        }
+                    } else {
+                        opts = Arrays.stream(groups.getString("options", "").split(","))
+                                .filter(s -> !s.isBlank())
+                                .map(String::toLowerCase)
+                                .toList();
+
+                        token = str.split("\\s+")[0].trim();
+                        if (!opts.isEmpty() && !opts.contains(token.toLowerCase())) {
+                            token = null;
+                        }
+                    }
+
+                    if (token != null) {
+                        str = str.replaceFirst(Pattern.quote(token), "").trim();
+                        token = StringUtils.stripAccents(token);
+
+                        if (type.validate(token)) {
+                            switch (type) {
+                                case CHANNEL -> token = token.replaceAll("[<#>]", "");
+                                case USER, ROLE -> token = token.replaceAll("[<@!>]", "");
+                            }
+
+                            if (!fail) {
+                                if (out.has(name)) {
+                                    JSONArray arr;
+                                    if (out.get(name) instanceof List<?> ls) {
+                                        arr = new JSONArray(ls);
+                                    } else {
+                                        arr = new JSONArray();
+                                        Object curr = out.get(name);
+                                        arr.add(curr);
+                                    }
+                                    arr.add(token);
+
+                                    out.put(name, arr);
+                                } else {
+                                    out.put(name, token);
+                                }
+                            }
+
+                            supplied.add(token);
+                            matches++;
+                        } else if (required) {
+                            fail = true;
+                            if (opts.isEmpty()) {
+                                supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
+                            } else {
+                                supplied.add(wrap.formatted(opts.stream().map(Utils::underline).collect(Collectors.joining("|"))));
+                                failOpts = opts.stream().map(o -> "`" + o + "`").toArray(String[]::new);
+                            }
+                        }
                     } else {
                         fail = true;
                         supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
-                    }
-                } else {
-                    List<String> opts = Arrays.stream(groups.getString("options", "").split(","))
-                            .filter(s -> !s.isBlank())
-                            .map(String::toLowerCase)
-                            .toList();
-
-                    String s = str.split("\\s+")[0].trim();
-                    str = str.replaceFirst(Pattern.quote(s), "").trim();
-                    s = StringUtils.stripAccents(s);
-
-                    if (type.validate(s) && (opts.isEmpty() || opts.contains(s.toLowerCase()))) {
-                        switch (type) {
-                            case CHANNEL -> s = s.replaceAll("[<#>]", "");
-                            case USER, ROLE -> s = s.replaceAll("[<@!>]", "");
-                        }
-
-                        if (!fail) {
-                            if (out.has(name)) {
-                                JSONArray arr;
-                                if (out.get(name) instanceof List<?> ls) {
-                                    arr = new JSONArray(ls);
-                                } else {
-                                    arr = new JSONArray();
-                                    Object curr = out.get(name);
-                                    arr.add(curr);
-                                }
-                                arr.add(s);
-
-                                out.put(name, arr);
-                            } else {
-                                out.put(name, s);
-                            }
-                        }
-
-                        supplied.add(s);
-                        matches++;
-                    } else if (required) {
-                        fail = true;
-                        if (opts.isEmpty()) {
-                            supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
-                        } else {
-                            supplied.add(wrap.formatted(opts.stream().map(Utils::underline).collect(Collectors.joining("|"))));
-                            failOpts = opts.stream().map(o -> "`" + o + "`").toArray(String[]::new);
-                        }
                     }
                 }
             }
