@@ -72,12 +72,14 @@ public class UnmuteCommand implements Executable {
             if (mb.equals(event.member())) {
                 event.channel().sendMessage(locale.get("error/cant_unmute_yourself")).queue();
                 return;
-            } else if (!event.member().canInteract(mb) || !self.canInteract(mb)) {
+            } else if (!event.member().canInteract(mb)) {
                 event.channel().sendMessage(locale.get("error/cant_unmute_user")).queue();
+                return;
+            } else if (!self.canInteract(mb)) {
+                event.channel().sendMessage(locale.get("error/higher_hierarchy")).queue();
                 return;
             }
         }
-
 
         RestAction.allOf(members.stream().map(Member::removeTimeout).toList())
                 .flatMap(s -> event.channel().sendMessage(locale.get("success/unmute",

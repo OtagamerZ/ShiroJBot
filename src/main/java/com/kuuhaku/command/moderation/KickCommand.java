@@ -74,8 +74,11 @@ public class KickCommand implements Executable {
 			if (mb.equals(event.member())) {
 				event.channel().sendMessage(locale.get("error/cant_kick_yourself")).queue();
 				return;
-			} else if (!event.member().canInteract(mb) || !self.canInteract(mb)) {
+			} else if (!event.member().canInteract(mb)) {
 				event.channel().sendMessage(locale.get("error/cant_kick_user")).queue();
+				return;
+			} else if (!self.canInteract(mb)) {
+				event.channel().sendMessage(locale.get("error/higher_hierarchy")).queue();
 				return;
 			}
 		}
