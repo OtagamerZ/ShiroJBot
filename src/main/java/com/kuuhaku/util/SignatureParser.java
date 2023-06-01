@@ -51,7 +51,6 @@ public abstract class SignatureParser {
         JSONObject out = new JSONObject();
         List<FailedSignature> failed = new ArrayList<>();
 
-        System.out.println(input);
         boolean fail;
         List<String> supplied = new ArrayList<>();
         for (String sig : signatures) {
@@ -164,6 +163,7 @@ public abstract class SignatureParser {
                         }
                     }
 
+                    System.out.println(token);
                     if (token != null) {
                         str = str.replaceFirst(Pattern.quote(token), "").trim();
                         token = StringUtils.stripAccents(token);

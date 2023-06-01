@@ -26,6 +26,7 @@ import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.SigPattern;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -48,7 +49,10 @@ import java.util.stream.Stream;
 		name = "shiritori",
 		category = Category.FUN
 )
-@Signature("<users:user:r>")
+@Signature(
+		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>\\s*)+"),
+		value = "<users:custom:r>[users]"
+)
 @Requires(Permission.MESSAGE_ATTACH_FILES)
 public class ShiritoriCommand implements Executable {
 	@Override
