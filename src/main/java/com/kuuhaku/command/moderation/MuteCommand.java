@@ -71,11 +71,12 @@ public class MuteCommand implements Executable {
                     .toList();
         }
 
+        Member self = event.guild().getSelfMember();
         for (Member mb : members) {
             if (mb.equals(event.member())) {
                 event.channel().sendMessage(locale.get("error/cant_mute_yourself")).queue();
                 return;
-            } else if (!event.member().canInteract(mb)) {
+            } else if (!event.member().canInteract(mb) || !self.canInteract(mb)) {
                 event.channel().sendMessage(locale.get("error/cant_mute_user")).queue();
                 return;
             }
