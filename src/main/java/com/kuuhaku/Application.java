@@ -24,6 +24,7 @@ import com.github.ygimenez.model.PUtilsConfig;
 import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.Manager;
+import com.kuuhaku.listener.AutoModListener;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.websocket.CommonSocket;
 import com.kuuhaku.model.enums.I18N;
@@ -73,7 +74,10 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				.setMemberCachePolicy(MemberCachePolicy.ONLINE
 						.and(MemberCachePolicy.OWNER)
 						.and(m -> !m.getUser().isBot()))
-				.addEventListeners(new GuildListener())
+				.addEventListeners(
+						new GuildListener(),
+						new AutoModListener()
+				)
 				.setBulkDeleteSplittingEnabled(false)
 				.setEventPool(new ForkJoinPool(
 						Runtime.getRuntime().availableProcessors(),
