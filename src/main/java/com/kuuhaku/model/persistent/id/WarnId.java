@@ -37,7 +37,7 @@ public class WarnId implements Serializable {
 	@Column(name = "id", nullable = false)
 	private int id;
 
-	@Column(name = "gid", nullable = false)
+	@Column(name = "uid", nullable = false)
 	private String uid;
 
 	@Column(name = "gid", nullable = false)
