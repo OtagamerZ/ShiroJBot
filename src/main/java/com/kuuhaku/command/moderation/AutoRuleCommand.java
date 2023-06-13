@@ -51,7 +51,7 @@ public class AutoRuleCommand implements Executable {
 				.setTitle(locale.get("str/autorule"));
 
 		List<Page> pages = Utils.generatePages(eb, settings.getAutoRules(), 20, 10,
-				e -> "`ID: " + e.getId() + "` " + locale.get("str/autorule_desc",
+				e -> "`ID: " + e.getId().getId() + "` " + locale.get("str/autorule_desc",
 						locale.get("str/autorule_" + e.getAction()),
 						e.getThreshold()
 				),
