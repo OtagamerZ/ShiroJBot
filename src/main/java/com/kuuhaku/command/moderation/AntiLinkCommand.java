@@ -56,13 +56,16 @@ public class AntiLinkCommand implements Executable {
 			event.channel().sendMessage(locale.get("success/anti_link_enable")).queue();
 
 			settings.getAutoModEntries().computeIfAbsent(AutoModType.LINK, t -> {
-				AutoModRule rule = Pages.subGet(event.guild().createAutoModRule(
-						AutoModRuleData.onMessage("Shiro anti-link", TriggerConfig.patternFilter(
+				AutoModRuleData amrd = AutoModRuleData.onMessage("Shiro anti-link",
+								TriggerConfig.patternFilter(
 										"https?://(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)",
 										"[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
-								))
-								.putResponses(AutoModResponse.blockMessage())
-				));
+								)
+						)
+						.putResponses(AutoModResponse.blockMessage());
+
+				System.out.println(amrd.getRequiredPermissions());
+				AutoModRule rule = Pages.subGet(event.guild().createAutoModRule(amrd));
 
 				return rule.getId();
 			});
