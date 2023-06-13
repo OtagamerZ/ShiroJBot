@@ -48,9 +48,11 @@ public class Warn extends DAO<Warn> {
 	private ZonedDateTime occurence = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "uid", nullable = false)
+	@PrimaryKeyJoinColumns({
+			@PrimaryKeyJoinColumn(name = "profile_uid", referencedColumnName = "uid"),
+			@PrimaryKeyJoinColumn(name = "profile_gid", referencedColumnName = "gid")
+	})
 	@Fetch(FetchMode.JOIN)
-	@MapsId("uid")
 	private Profile profile;
 
 	public Warn() {
