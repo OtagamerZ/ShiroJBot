@@ -58,7 +58,7 @@ public class AntiLinkCommand implements Executable {
 			settings.getAutoModEntries().computeIfAbsent(AutoModType.LINK, t -> {
 				AutoModRule rule = Pages.subGet(event.guild().createAutoModRule(
 						AutoModRuleData.onMessage("Shiro anti-link", TriggerConfig.patternFilter(
-										"https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)",
+										"https?://(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)",
 										"[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
 								))
 								.putResponses(AutoModResponse.blockMessage())
