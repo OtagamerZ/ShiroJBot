@@ -88,7 +88,7 @@ public class WarnCommand implements Executable {
 		}
 
 		for (Member mb : members) {
-			Profile p = DAO.find(Profile.class, new ProfileId(event.guild().getId(), mb.getId()));
+			Profile p = DAO.find(Profile.class, new ProfileId(mb.getId(), event.guild().getId()));
 			p.warn(event.user(), args.getString("reason"));
 		}
 

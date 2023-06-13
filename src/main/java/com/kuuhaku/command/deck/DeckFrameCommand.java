@@ -39,7 +39,6 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -89,16 +88,16 @@ public class DeckFrameCommand implements Executable {
 
                     pages.add(InteractPage.of(eb.build()));
                 } else {
-                    List<MessageEmbed> embeds = new ArrayList<>();
+                    EmbedCluster embeds = new EmbedCluster();
 
                     eb.setTitle(fc.getName(locale), URL.formatted("front", fc.name().toLowerCase()))
                             .setDescription(fc.getDescription(locale))
                             .setFooter(locale.get("str/page", i + 1, frames.length));
 
-                    embeds.add(eb.setImage(URL.formatted("front", fc.name().toLowerCase())).build());
-                    embeds.add(eb.setImage(URL.formatted("back", fc.name().toLowerCase())).build());
+                    embeds.getEmbeds().add(eb.setImage(URL.formatted("front", fc.name().toLowerCase())).build());
+                    embeds.getEmbeds().add(eb.setImage(URL.formatted("back", fc.name().toLowerCase())).build());
 
-                    pages.add(InteractPage.of(new EmbedCluster(embeds)));
+                    pages.add(InteractPage.of(embeds));
                 }
             }
 
