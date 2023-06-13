@@ -158,7 +158,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 		AutoRule rule = null;
 		int mult = 0;
-		int total = getWarnCount() + 1;
+		int total = getWarnCount();
 		for (AutoRule r : guild.getSettings().getAutoRules()) {
 			if (r.getThreshold() <= total) {
 				if (r.getAction() != RuleAction.AGGRAVATE) {
