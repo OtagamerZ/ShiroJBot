@@ -53,9 +53,11 @@ public class PardonCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Member member;
+		boolean useId = false;
 		if (args.has("user")) {
 			member = event.message().getMentions().getMembers().get(0);
 		} else {
+			useId = true;
 			member = event.guild().getMemberById(args.getJSONArray("id").getString(0));
 			if (member == null) {
 				event.channel().sendMessage(locale.get("error/invalid_user")).queue();
@@ -63,7 +65,7 @@ public class PardonCommand implements Executable {
 			}
 		}
 
-		if (args.getJSONArray("id").size() < 2) {
+		if (!useId || args.getJSONArray("id").size() < 2) {
 			Profile profile = DAO.find(Profile.class, new ProfileId(event.guild().getId(), member.getId()));
 			if (profile.getWarns().isEmpty()) {
 				event.channel().sendMessage(locale.get("error/no_warns")).queue();
@@ -105,7 +107,7 @@ public class PardonCommand implements Executable {
 		}
 
 		Warn w = DAO.find(Warn.class, new WarnId(
-				args.getJSONArray("id").getInt(1),
+				useId ? args.getJSONArray("id").getInt(1) : args.getInt("id"),
 				event.guild().getId(),
 				member.getId())
 		);
