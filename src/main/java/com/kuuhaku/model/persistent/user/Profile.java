@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.user;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
@@ -220,7 +221,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		Guild guild = Main.getApp().getShiro().getGuildById(getId().getGid());
 		assert guild != null;
 
-		return Objects.requireNonNull(guild.getMemberById(getId().getUid()));
+		return Pages.subGet(guild.retrieveMemberById(getId().getUid()));
 	}
 
 	@Override
