@@ -64,8 +64,7 @@ public class AntiLinkCommand implements Executable {
 										TriggerConfig.patternFilter(
 												"^(ht|f)tps?://",
 												"(\\w+\\.)+(\\w+/?)+"
-										)
-								)
+										))
 								.putResponses(AutoModResponse.blockMessage())
 				));
 
