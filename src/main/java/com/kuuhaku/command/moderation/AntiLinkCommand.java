@@ -18,9 +18,9 @@
 
 package com.kuuhaku.command.moderation;
 
-import com.github.ygimenez.method.Pages;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
+import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.enums.AutoModType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.GuildFeature;
@@ -30,6 +30,7 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.automod.AutoModResponse;
 import net.dv8tion.jda.api.entities.automod.AutoModRule;
 import net.dv8tion.jda.api.entities.automod.build.AutoModRuleData;
@@ -39,6 +40,7 @@ import net.dv8tion.jda.api.entities.automod.build.TriggerConfig;
 		name = "antilink",
 		category = Category.MODERATION
 )
+@Requires(Permission.MANAGE_SERVER)
 public class AntiLinkCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -64,8 +66,7 @@ public class AntiLinkCommand implements Executable {
 						)
 						.putResponses(AutoModResponse.blockMessage());
 
-				System.out.println(amrd.getRequiredPermissions());
-				AutoModRule rule = Pages.subGet(event.guild().createAutoModRule(amrd));
+				AutoModRule rule = event.guild().createAutoModRule(amrd).complete();
 
 				return rule.getId();
 			});
