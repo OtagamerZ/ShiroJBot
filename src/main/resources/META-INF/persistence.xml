@@ -55,6 +55,7 @@
         <class>com.kuuhaku.model.persistent.user.Title</class>
         <class>com.kuuhaku.model.persistent.user.AccountTitle</class>
         <class>com.kuuhaku.model.persistent.user.LocalizedTitle</class>
+        <class>com.kuuhaku.model.persistent.user.Warn</class>
 
         <!-- SHOUKAN -->
         <class>com.kuuhaku.model.persistent.shoukan.Deck</class>

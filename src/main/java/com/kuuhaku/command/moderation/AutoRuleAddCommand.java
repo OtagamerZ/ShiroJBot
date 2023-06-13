@@ -20,54 +20,49 @@ package com.kuuhaku.command.moderation;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
-import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.RuleAction;
+import com.kuuhaku.model.persistent.guild.AutoRule;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
+
+import java.util.List;
 
 @Command(
-		name = "antiraid",
+		name = "autorule",
+		path = "add",
 		category = Category.MODERATION
 )
-@Signature("<threshold:number>")
-@Requires({Permission.BAN_MEMBERS, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL})
-public class AntiRaidCommand implements Executable {
+@Signature("<threshold:number:r> <action:word:r>[mute,aggravate,lose_xp,delevel,kick,ban]")
+public class AutoRuleAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-        GuildSettings settings = data.config().getSettings();
-        if (args.has("value")) {
-			int thr = args.getInt("value");
-			if (!Utils.between(thr, 100, 2000)) {
-				event.channel().sendMessage(locale.get("error/invalid_value_range", 100, 2000)).queue();
-				return;
-			}
+		GuildSettings settings = data.config().getSettings();
 
-			settings.setAntiRaidThreshold(thr);
+		AutoRule rule = new AutoRule(settings,
+				args.getInt("threshold"),
+				args.getEnum(RuleAction.class, "action")
+		);
 
-			String msg = locale.get("success/anti_raid_threshold", thr);
-			if (!settings.isFeatureEnabled(GuildFeature.ANTI_RAID)) {
-				msg += "\n" + locale.get("success/anti_raid_enable");
-			}
-
-			event.channel().sendMessage(msg).queue();
-		} else {
-			if (settings.isFeatureEnabled(GuildFeature.ANTI_RAID)) {
-				settings.getFeatures().remove(GuildFeature.ANTI_RAID);
-				event.channel().sendMessage(locale.get("success/anti_raid_disable")).queue();
-			} else {
-				settings.getFeatures().add(GuildFeature.ANTI_RAID);
-				event.channel().sendMessage(locale.get("success/anti_raid_enable")).queue();
-			}
+		List<AutoRule> rules = settings.getAutoRules();
+		if (rules.parallelStream().anyMatch(r -> r.getThreshold() == rule.getThreshold() && r.getAction() == rule.getAction())) {
+			event.channel().sendMessage(locale.get("error/autorule_exists")).queue();
+			return;
 		}
 
-        settings.save();
+		rules.add(rule);
+		settings.save();
+
+		event.channel().sendMessage(locale.get("success/autorule_add",
+				locale.get("str/autorule_desc",
+						locale.get("str/autorule_" + rule.getAction()),
+						rule.getThreshold()
+				)
+		)).queue();
 	}
 }

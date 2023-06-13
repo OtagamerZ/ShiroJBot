@@ -19,25 +19,26 @@
 package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.persistent.converter.RoleConverter;
-import com.kuuhaku.model.persistent.id.ColorRoleId;
-import com.kuuhaku.model.persistent.javatype.RoleJavaType;
+import com.kuuhaku.model.enums.RuleAction;
+import com.kuuhaku.model.persistent.id.AutoRuleId;
 import jakarta.persistence.*;
-import net.dv8tion.jda.api.entities.Role;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.JavaTypeRegistration;
+
+import java.util.Objects;
 
 @Entity
-@Table(name = "color_role")
-@JavaTypeRegistration(javaType = Role.class, descriptorClass = RoleJavaType.class)
-public class ColorRole extends DAO<ColorRole> {
+@Table(name = "auto_rule")
+public class AutoRule extends DAO<AutoRule> {
 	@EmbeddedId
-	private ColorRoleId id;
+	private AutoRuleId id;
 
-	@Column(name = "role", nullable = false)
-	@Convert(converter = RoleConverter.class)
-	private Role role;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "action", nullable = false)
+	private RuleAction action;
+
+	@Column(name = "threshold", nullable = false)
+	private int threshold;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "gid", nullable = false)
@@ -45,24 +46,38 @@ public class ColorRole extends DAO<ColorRole> {
 	@MapsId("gid")
 	private GuildSettings settings;
 
-	public ColorRole() {
+	public AutoRule() {
 	}
 
-	public ColorRole(GuildSettings settings, String name, Role role) {
-		this.id = new ColorRoleId(name, role.getGuild().getId());
-		this.role = role;
+	public AutoRule(GuildSettings settings, int threshold, RuleAction action) {
+		this.id = new AutoRuleId(settings.getGid());
+		this.threshold = threshold;
+		this.action = action;
 		this.settings = settings;
 	}
 
-	public ColorRoleId getId() {
+	public AutoRuleId getId() {
 		return id;
 	}
 
-	public Role getRole() {
-		return role;
+	public int getThreshold() {
+		return threshold;
 	}
 
-	public GuildSettings getSettings() {
-		return settings;
+	public RuleAction getAction() {
+		return action;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AutoRule autoRule = (AutoRule) o;
+		return Objects.equals(id, autoRule.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }
