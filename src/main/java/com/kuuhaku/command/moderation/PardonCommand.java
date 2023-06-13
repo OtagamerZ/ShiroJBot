@@ -65,7 +65,7 @@ public class PardonCommand implements Executable {
 			}
 		}
 
-		if (!useId || args.getJSONArray("id").size() < 2) {
+		if ((useId && args.getJSONArray("id").size() < 2) || (!useId && !args.has("id"))) {
 			Profile profile = DAO.find(Profile.class, new ProfileId(event.guild().getId(), member.getId()));
 			if (profile.getWarns().isEmpty()) {
 				event.channel().sendMessage(locale.get("error/no_warns")).queue();
