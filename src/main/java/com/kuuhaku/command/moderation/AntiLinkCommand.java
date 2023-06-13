@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.moderation;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -40,7 +41,7 @@ import net.dv8tion.jda.api.entities.automod.build.TriggerConfig;
 		name = "antilink",
 		category = Category.MODERATION
 )
-@Requires(Permission.MANAGE_SERVER)
+@Requires(Permission.MESSAGE_EMBED_LINKS)
 public class AntiLinkCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -58,15 +59,12 @@ public class AntiLinkCommand implements Executable {
 			event.channel().sendMessage(locale.get("success/anti_link_enable")).queue();
 
 			settings.getAutoModEntries().computeIfAbsent(AutoModType.LINK, t -> {
-				AutoModRuleData amrd = AutoModRuleData.onMessage("Shiro anti-link",
-								TriggerConfig.patternFilter(
-										"https?://(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)",
-										"[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
+				AutoModRule rule = Pages.subGet(event.guild().createAutoModRule(
+						AutoModRuleData.onMessage("Shiro anti-link",
+										TriggerConfig.patternFilter("((ht|f)tps?://)?(\\w\\.)+\\w{1,3}")
 								)
-						)
-						.putResponses(AutoModResponse.blockMessage());
-
-				AutoModRule rule = event.guild().createAutoModRule(amrd).complete();
+								.putResponses(AutoModResponse.blockMessage())
+				));
 
 				return rule.getId();
 			});
