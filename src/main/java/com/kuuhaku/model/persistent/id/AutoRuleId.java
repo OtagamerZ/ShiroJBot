@@ -16,67 +16,66 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.shiro;
+package com.kuuhaku.model.persistent.id;
 
 import com.kuuhaku.controller.DAO;
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
-@Entity
-@Table(name = "global_property")
-public class GlobalProperty extends DAO<GlobalProperty> {
-	@Id
+@Embeddable
+public class AutoRuleId implements Serializable {
+	@Serial
+	private static final long serialVersionUID = 6005514400095891734L;
+
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
-	private String id;
+	private int id;
 
-	@Column(name = "value", nullable = false, columnDefinition = "TEXT")
-	private String value;
+	@Column(name = "gid", nullable = false)
+	private String gid;
 
-	public GlobalProperty() {
+	public AutoRuleId() {
 	}
 
-	public GlobalProperty(String id, Object value) {
-		this.id = id;
-		this.value = String.valueOf(value);
+	public AutoRuleId(String gid) {
+		DAO.applyNative("CREATE SEQUENCE IF NOT EXISTS auto_rule_id_seq");
+
+		this.id = DAO.queryNative(Integer.class, "SELECT nextval('auto_rule_id_seq')");
+		this.gid = gid;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public String getValue() {
-		return value;
+	public String getGid() {
+		return gid;
 	}
 
-	public void setValue(Object value) {
-		this.value = String.valueOf(value);
-	}
-
-	public static String get(String key, String defaultValue) {
-		GlobalProperty gp = DAO.find(GlobalProperty.class, key);
-		if (gp == null) return defaultValue;
-
-		return gp.getValue();
+	public void setGid(String gid) {
+		this.gid = gid;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		GlobalProperty that = (GlobalProperty) o;
-		return Objects.equals(id, that.id);
+		AutoRuleId that = (AutoRuleId) o;
+		return id == that.id && Objects.equals(gid, that.gid);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(id, gid);
 	}
 }

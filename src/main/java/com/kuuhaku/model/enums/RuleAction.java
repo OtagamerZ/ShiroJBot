@@ -18,12 +18,6 @@
 
 package com.kuuhaku.model.enums;
 
-public enum GuildFeature {
-	ANTI_RAID,     //0x1 UNUSED - Feature integrated into discord
-	ANTI_LINK,     //0x2
-	ANTI_SPAM,     //0x4
-	ANTI_ZALGO,    //0x8
-
-	NQN_MODE,      //0x10
-	NOTIFICATIONS, //0x20
+public enum RuleAction {
+	MUTE, AGGRAVATE, LOSE_XP, DELEVEL, KICK, BAN
 }

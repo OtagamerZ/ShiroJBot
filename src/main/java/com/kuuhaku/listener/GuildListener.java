@@ -42,7 +42,6 @@ import me.xuender.unidecode.Unidecode;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -69,7 +68,6 @@ import java.util.stream.Collectors;
 public class GuildListener extends ListenerAdapter {
     private static final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
     private static final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
-    private static final RaidSentry sentry = new RaidSentry();
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
@@ -131,53 +129,6 @@ public class GuildListener extends ListenerAdapter {
         if (event.getUser().isBot()) return;
 
         GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
-        RaidSentry.State state = sentry.watch(config, event.getGuild(), event.getUser());
-        switch (state) {
-            case ENGAGED -> {
-                I18N locale = config.getLocale();
-                GuildMessageChannel chn = config.getSettings().getNotificationsChannel();
-                if (chn != null) {
-                    EmbedBuilder eb = new EmbedBuilder()
-                            .setTitle(locale.get("str/raid_detected_title"))
-                            .setColor(Color.RED)
-                            .setDescription(locale.get("str/raid_detected_start"));
-
-                    chn.sendMessageEmbeds(eb.build()).queue();
-                }
-
-                Role everyone = event.getGuild().getPublicRole();
-                List<TextChannel> locked = event.getGuild().getChannels(false).stream()
-                        .filter(c -> c instanceof TextChannel)
-                        .map(c -> (TextChannel) c)
-                        .filter(c -> everyone.hasPermission(c, Permission.MESSAGE_SEND))
-                        .toList();
-
-                for (TextChannel c : locked) {
-                    c.getManager().setSlowmode(30).queue();
-                }
-
-                sentry.setFinishTask(event.getGuild().getId(), r -> {
-                    if (chn != null) {
-                        EmbedBuilder eb = new EmbedBuilder()
-                                .setTitle(locale.get("str/raid_detected_title"))
-                                .setColor(Color.RED)
-                                .setDescription(locale.get("str/raid_detected_end",
-                                        Utils.toStringDuration(locale, r.getDuration() * 1000),
-                                        r.getUsers().size()
-                                ));
-
-                        chn.sendMessageEmbeds(eb.build()).queue();
-                    }
-                });
-                return;
-            }
-            case ACTIVE -> {
-                event.getGuild().ban(event.getUser(), 7, TimeUnit.DAYS)
-                        .reason(config.getLocale().get("str/raid_ban_reason"))
-                        .queue();
-                return;
-            }
-        }
 
         Member mb = event.getMember();
         Role join = config.getSettings().getJoinRole();

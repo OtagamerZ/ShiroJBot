@@ -106,8 +106,8 @@ public class CustomAnswer extends DAO<CustomAnswer> {
 		return users;
 	}
 
-	public void setSettings(GuildSettings settings) {
-		this.settings = settings;
+	public GuildSettings getSettings() {
+		return settings;
 	}
 
 	@Override

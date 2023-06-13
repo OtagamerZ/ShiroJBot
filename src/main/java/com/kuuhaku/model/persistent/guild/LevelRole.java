@@ -28,6 +28,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "color_role")
 @JavaTypeRegistration(javaType = Role.class, descriptorClass = RoleJavaType.class)
@@ -72,5 +74,18 @@ public class LevelRole extends DAO<LevelRole> {
 
 	public GuildSettings getSettings() {
 		return settings;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		LevelRole levelRole = (LevelRole) o;
+		return Objects.equals(id, levelRole.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }

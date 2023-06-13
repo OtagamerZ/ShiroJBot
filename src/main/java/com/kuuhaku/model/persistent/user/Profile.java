@@ -25,6 +25,8 @@ import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.RuleAction;
+import com.kuuhaku.model.persistent.guild.AutoRule;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.id.ProfileId;
 import com.kuuhaku.util.Calc;
@@ -37,6 +39,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
@@ -47,6 +50,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 @DynamicUpdate
@@ -68,10 +72,9 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	@Fetch(FetchMode.SUBSELECT)
 	private List<VoiceData> voiceData = new ArrayList<>();
 
-	@ElementCollection
-	@Column(name = "warn")
-	@CollectionTable(name = "profile_warns")
-	private List<String> warns = new ArrayList<>();
+	@OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
+	private List<Warn> warns = new ArrayList<>();
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "uid", nullable = false)
@@ -131,12 +134,74 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		return (int) (Math.pow(level - 1, 2) * 100);
 	}
 
+	public long getXpToLevel(int from, int to) {
+		return Math.max(0, getXpToLevel(to) - getXpToLevel(from));
+	}
+
 	public List<VoiceData> getVoiceData() {
 		return voiceData;
 	}
 
-	public List<String> getWarns() {
+	public List<Warn> getWarns() {
 		return warns;
+	}
+
+	public int getWarnCount() {
+		return (int) warns.parallelStream()
+				.filter(w -> w.getPardoner() == null)
+				.count();
+	}
+
+	public void warn(User issuer, String reason) {
+		apply(Profile.class, id, p -> p.getWarns().add(new Warn(p, issuer, reason)));
+
+		AutoRule rule = null;
+		int mult = 0;
+		int total = getWarnCount() + 1;
+		for (AutoRule r : guild.getSettings().getAutoRules()) {
+			if (r.getThreshold() <= total) {
+				if (r.getAction() != RuleAction.AGGRAVATE) {
+					rule = r;
+					mult = 0;
+				} else {
+					mult = Math.min(mult + 1, 4);
+				}
+			}
+		}
+
+		if (rule != null) {
+			I18N locale = guild.getLocale();
+			String cause = locale.get("str/autorule_desc",
+					locale.get("str/autorule_" + rule.getAction()),
+					rule.getThreshold()
+			);
+
+			Member m = getMember();
+			int finalMult = mult;
+			m.getUser().openPrivateChannel()
+					.flatMap(c -> c.sendMessage(locale.get("alert/autorule_trigger", cause, finalMult + 1)))
+					.queue(null, Utils::doNothing);
+
+			switch (rule.getAction()) {
+				case MUTE -> m.timeoutFor((long) (1 * Math.pow(2, mult)), TimeUnit.MINUTES)
+						.reason(cause + " (A" + (mult + 1) + ")")
+						.queue(null, Utils::doNothing);
+				case LOSE_XP -> {
+					long range = getXpToLevel(getLevel(), getLevel() + 1);
+					xp -= range * (0.05 * Math.pow(2, mult));
+				}
+				case DELEVEL -> {
+					long range = getXpToLevel((int) (getLevel() - Math.pow(2, mult)), getLevel());
+					xp = Math.max(0, xp - range);
+				}
+				case KICK -> m.kick()
+						.reason(cause + " (x" + (mult + 1) + ")")
+						.queue(null, Utils::doNothing);
+				case BAN -> m.ban(7, TimeUnit.DAYS)
+						.reason(cause + " (x" + (mult + 1) + ")")
+						.queue(null, Utils::doNothing);
+			}
+		}
 	}
 
 	public Account getAccount() {
@@ -149,6 +214,13 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 	public ProfileSettings getSettings() {
 		return Utils.getOr(settings, DAO.find(ProfileSettings.class, id));
+	}
+
+	public Member getMember() {
+		Guild guild = Main.getApp().getShiro().getGuildById(getId().getGid());
+		assert guild != null;
+
+		return Objects.requireNonNull(guild.getMemberById(getId().getUid()));
 	}
 
 	@Override

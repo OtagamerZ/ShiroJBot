@@ -76,11 +76,8 @@ public class GuildConfig extends DAO<GuildConfig> {
 
 	@OneToMany(mappedBy = "guild", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy("xp DESC")
 	private Set<Profile> profiles = new LinkedHashSet<>();
-
-	@OneToMany(mappedBy = "guild", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<RaidRegistry> raids = new LinkedHashSet<>();
 
 	public GuildConfig() {
 	}
@@ -164,9 +161,5 @@ public class GuildConfig extends DAO<GuildConfig> {
 
 	public Set<Profile> getProfiles() {
 		return profiles;
-	}
-
-	public Set<RaidRegistry> getRaids() {
-		return raids;
 	}
 }

@@ -19,76 +19,84 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.persistent.id.DynamicPropertyId;
+import com.kuuhaku.model.persistent.id.WarnId;
+import jakarta.persistence.*;
+import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import jakarta.persistence.*;
-
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "dynamic_property")
-public class DynamicProperty extends DAO<DynamicProperty> {
+@Table(name = "user_warn")
+public class Warn extends DAO<Warn> {
 	@EmbeddedId
-	private DynamicPropertyId id;
+	private WarnId id;
 
-	@Column(name = "value", nullable = false, columnDefinition = "TEXT")
-	private String value;
+	@Column(name = "reason", nullable = false, columnDefinition = "TEXT")
+	private String reason;
+
+	@Column(name = "issuer", nullable = false)
+	private String issuer;
+
+	@Column(name = "pardoner")
+	private String pardoner;
+
+	@Column(name = "occurence", nullable = false)
+	private ZonedDateTime occurence = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "uid", nullable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("uid")
-	private Account account;
+	private Profile profile;
 
-	public DynamicProperty() {
+	public Warn() {
 	}
 
-	public DynamicProperty(Account account, String id, Object value) {
-		this.id = new DynamicPropertyId(account.getUid(), id);
-		this.value = String.valueOf(value);
-		this.account = account;
+	public Warn(Profile profile, User issuer, String reason) {
+		this.id = new WarnId(profile.getId().getGid(), profile.getId().getUid());
+		this.reason = reason;
+		this.issuer = issuer.getId();
+		this.profile = profile;
 	}
 
-	public DynamicPropertyId getId() {
+	public WarnId getId() {
 		return id;
 	}
 
-	public String getValue() {
-		return value;
+	public String getReason() {
+		return reason;
 	}
 
-	public void setValue(Object value) {
-		this.value = String.valueOf(value);
+	public String getIssuer() {
+		return issuer;
 	}
 
-	public Account getAccount() {
-		return account;
+	public String getPardoner() {
+		return pardoner;
 	}
 
-	public static String get(String uid, String key, String defaultValue) {
-		DynamicProperty dp = DAO.find(DynamicProperty.class, new DynamicPropertyId(uid, key));
-		if (dp == null) return defaultValue;
-
-		return dp.getValue();
+	public void setPardoner(User pardoner) {
+		this.pardoner = pardoner.getId();
 	}
 
-	public static void update(String uid, String key, Object value) {
-		DAO.applyNative("""
-				INSERT INTO dynamic_property (id, uid, value)
-				VALUES (?1, ?2, ?3)
-				ON CONFLICT (id, uid) DO UPDATE
-				SET value = ?3
-				""", key, uid, value);
+	public ZonedDateTime getOccurence() {
+		return occurence;
+	}
+
+	public Profile getProfile() {
+		return profile;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		DynamicProperty that = (DynamicProperty) o;
-		return Objects.equals(id, that.id);
+		Warn warn = (Warn) o;
+		return Objects.equals(id, warn.id);
 	}
 
 	@Override

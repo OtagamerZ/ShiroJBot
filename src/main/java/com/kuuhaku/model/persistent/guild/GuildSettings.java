@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
+import com.kuuhaku.model.enums.AutoModType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.persistent.converter.*;
@@ -45,9 +46,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Id
 	@Column(name = "gid", nullable = false)
 	private String gid;
-
-	@Column(name = "anti_raid_threshold", nullable = false)
-	private int antiRaidThreshold = 200;
 
 	@ElementCollection
 	@Column(name = "kawaipon_channels")
@@ -86,10 +84,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<ColorRole> colorRoles = new ArrayList<>();
-
-	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy("level")
 	private List<LevelRole> levelRoles = new ArrayList<>();
 
 	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -122,6 +117,21 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject aliases = new JSONObject();
 
+	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy("threshold")
+	private List<AutoRule> autoRules = new ArrayList<>();
+
+	@Enumerated(EnumType.STRING)
+	@ElementCollection
+	@CollectionTable(
+			name = "automod_entries",
+			joinColumns = @JoinColumn(name = "gid", referencedColumnName = "gid")
+	)
+	@Column(name = "type")
+	@MapKeyColumn(name = "id")
+	private Map<AutoModType, String> automodEntries = new HashMap<>();
+
 	public GuildSettings() {
 	}
 
@@ -131,14 +141,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public String getGid() {
 		return gid;
-	}
-
-	public int getAntiRaidThreshold() {
-		return antiRaidThreshold;
-	}
-
-	public void setAntiRaidThreshold(int antiRaidThreshold) {
-		this.antiRaidThreshold = antiRaidThreshold;
 	}
 
 	public List<GuildMessageChannel> getKawaiponChannels() {
@@ -193,10 +195,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 		this.welcomer = welcomer;
 	}
 
-	public List<ColorRole> getColorRoles() {
-		return colorRoles;
-	}
-
 	public List<LevelRole> getLevelRoles() {
 		return levelRoles;
 	}
@@ -239,5 +237,13 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public JSONObject getAliases() {
 		return aliases;
+	}
+
+	public List<AutoRule> getAutoRules() {
+		return autoRules;
+	}
+
+	public Map<AutoModType, String> getAutoModEntries() {
+		return automodEntries;
 	}
 }
