@@ -109,8 +109,9 @@ public class PardonCommand implements Executable {
 		Warn w = DAO.find(Warn.class, new WarnId(
 				useId ? args.getJSONArray("id").getInt(1) : args.getInt("id"),
 				event.guild().getId(),
-				member.getId())
-		);
+				member.getId()
+		));
+		System.out.println(new JSONObject(w));
 
 		if (w == null) {
 			event.channel().sendMessage(locale.get("error/warn_not_found")).queue();
