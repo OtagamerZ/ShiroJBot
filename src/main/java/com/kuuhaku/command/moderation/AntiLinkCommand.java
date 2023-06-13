@@ -63,7 +63,7 @@ public class AntiLinkCommand implements Executable {
 						AutoModRuleData.onMessage("Shiro anti-link",
 										TriggerConfig.patternFilter(
 												"^(ht|f)tps?:",
-												"(\\w+\\.)+"
+												"(\\w+\\.\\w+)+"
 										))
 								.putResponses(AutoModResponse.blockMessage())
 				));
