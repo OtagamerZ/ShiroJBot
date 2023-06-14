@@ -32,7 +32,6 @@ import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.automod.AutoModResponse;
 import net.dv8tion.jda.api.entities.automod.AutoModRule;
 import net.dv8tion.jda.api.entities.automod.build.AutoModRuleData;
 import net.dv8tion.jda.api.entities.automod.build.TriggerConfig;
@@ -61,11 +60,8 @@ public class AntiLinkCommand implements Executable {
 			settings.getAutoModEntries().computeIfAbsent(AutoModType.LINK, t -> {
 				AutoModRule rule = Pages.subGet(event.guild().createAutoModRule(
 						AutoModRuleData.onMessage("Shiro anti-link",
-										TriggerConfig.patternFilter(
-												"^(ht|f)tps?:",
-												"(\\w+\\.\\w+)+"
-										))
-								.putResponses(AutoModResponse.blockMessage())
+								TriggerConfig.patternFilter("^(ht|f)tps?:", "(\\w+\\.\\w+)+")
+						)
 				));
 
 				return rule.getId();
