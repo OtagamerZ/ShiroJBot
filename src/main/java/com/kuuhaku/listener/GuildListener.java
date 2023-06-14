@@ -385,7 +385,7 @@ public class GuildListener extends ListenerAdapter {
                         .setFooter(locale.get("str/card_instructions", config.getPrefix(), kc.getPrice()));
 
                 chosen.sendMessageEmbeds(eb.build())
-                        .addFiles(FileUpload.fromData(IO.getBytes(kc.getCard().drawCard(kc.isChrome()), "png"), "card.png"))
+                        .addFiles(FileUpload.fromData(IO.getBytes(kc.render(), "png"), "card.png"))
                         .delay((long) (60 / Spawn.getQuantityMult()), TimeUnit.SECONDS)
                         .flatMap(Message::delete)
                         .queue(null, Utils::doNothing);

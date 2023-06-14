@@ -269,7 +269,7 @@ public class SynthesizeCommand implements Executable {
                         new StashedCard(kp, kc).save();
 
                         channel.sendMessage(locale.get("success/synth", kp))
-                                .addFiles(FileUpload.fromData(IO.getBytes(kc.getCard().drawCard(kc.isChrome())), "synth.png"))
+                                .addFiles(FileUpload.fromData(IO.getBytes(kc.render()), "synth.png"))
                                 .queue();
 
                         return true;

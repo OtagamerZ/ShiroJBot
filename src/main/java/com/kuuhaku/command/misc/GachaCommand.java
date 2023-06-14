@@ -182,7 +182,7 @@ public class GachaCommand implements Executable {
 					kc.setKawaipon(kp);
 					kc.save();
 
-					g2d.drawImage(card.drawCard(kc.isChrome()), 5, 20, null);
+					g2d.drawImage(kc.render(), 5, 20, null);
 
 					new StashedCard(kp, kc).save();
 				}

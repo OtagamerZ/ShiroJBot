@@ -18,13 +18,17 @@
 
 package com.kuuhaku.model.persistent.user;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.Quality;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.Calc;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -126,6 +130,18 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 		}
 
 		return stashEntry;
+	}
+
+	public BufferedImage render() {
+		BufferedImage bi = card.drawCard(chrome);
+
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHints(Constants.HD_HINTS);
+
+		g2d.drawImage(Quality.get(quality).getOverlay(), 0, 0, null);
+		g2d.dispose();
+
+		return bi;
 	}
 
 	@Override

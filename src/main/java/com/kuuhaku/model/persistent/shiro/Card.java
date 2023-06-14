@@ -87,12 +87,13 @@ public class Card extends DAO<Card> implements Serializable {
 				buf.write(cardBytes);
 				BufferedImage card = ImageIO.read(buf.inputStream());
 
-				BufferedImage frame = IO.getResourceAsImage("kawaipon/frames/new/" + rarity.name().toLowerCase() + ".png");
+				BufferedImage frame = IO.getResourceAsImage("kawaipon/frames/" + rarity.name().toLowerCase() + ".png");
 				assert frame != null;
 				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
-				Graphics2D g2d = canvas.createGraphics();
 
-				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+				Graphics2D g2d = canvas.createGraphics();
+				g2d.setRenderingHints(Constants.HD_HINTS);
+
 				g2d.drawImage(chrome ? chrome(card, false) : card, 15, 15, null);
 				g2d.drawImage(chrome ? chrome(frame, true) : frame, 0, 0, null);
 
@@ -115,14 +116,14 @@ public class Card extends DAO<Card> implements Serializable {
 				buf.write(cardBytes);
 				BufferedImage card = ImageIO.read(buf.inputStream());
 
-				BufferedImage frame = IO.getResourceAsImage("kawaipon/frames/new/ultimate.png");
-				BufferedImage nBar = IO.getResourceAsImage("kawaipon/frames/new/normal_bar.png");
-				BufferedImage fBar = IO.getResourceAsImage("kawaipon/frames/new/chrome_bar.png");
+				BufferedImage frame = IO.getResourceAsImage("kawaipon/frames/ultimate.png");
+				BufferedImage nBar = IO.getResourceAsImage("kawaipon/frames/normal_bar.png");
+				BufferedImage fBar = IO.getResourceAsImage("kawaipon/frames/chrome_bar.png");
 				assert frame != null;
 				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
-				Graphics2D g2d = canvas.createGraphics();
 
-				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+				Graphics2D g2d = canvas.createGraphics();
+				g2d.setRenderingHints(Constants.HD_HINTS);
 
 				double nProg = 1; //Card.queryNative(Number.class, "SELECT cs FROM \"GetNormalCompletionState\"(:id, :anime) cs", uid, id).doubleValue();
 				double fProg = 1; //Card.queryNative(Number.class, "SELECT cs FROM \"GetFoilCompletionState\"(:id, :anime) cs", uid, id).doubleValue();

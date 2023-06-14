@@ -101,10 +101,10 @@ public class SeeCardCommand implements Executable {
 				boolean chrome = type.equals("c");
 				KawaiponCard kc = kp.getCard(card, chrome);
 				if (kc == null) {
-					bi = ImageFilters.silhouette(card.drawCard(chrome));
+					bi = ImageFilters.silhouette(card.drawCard(false));
 					Graph.overlay(bi, IO.getResourceAsImage("kawaipon/missing.png"));
 				} else {
-					bi = card.drawCard(chrome);
+					bi = kc.render();
 				}
 
 				if (kc != null) {

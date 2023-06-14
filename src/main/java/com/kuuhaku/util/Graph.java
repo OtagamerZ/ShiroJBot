@@ -435,7 +435,8 @@ public abstract class Graph {
 
 		BufferedImage newImage = new BufferedImage(w, h, image.getType());
 		Graphics2D g2d = newImage.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		g2d.setRenderingHints(Constants.HD_HINTS);
+
 		g2d.drawImage(image, 0, 0, w, h, null);
 		g2d.dispose();
 
@@ -448,7 +449,8 @@ public abstract class Graph {
 
 		BufferedImage newImage = new BufferedImage(w, h, image.getType());
 		Graphics2D g2d = newImage.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		g2d.setRenderingHints(Constants.HD_HINTS);
+
 		g2d.drawImage(image, 0, 0, w, h, null);
 		g2d.dispose();
 
@@ -463,7 +465,8 @@ public abstract class Graph {
 
 		BufferedImage newImage = new BufferedImage(w, h, image.getType());
 		Graphics2D g2d = newImage.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		g2d.setRenderingHints(Constants.HD_HINTS);
+
 		g2d.drawImage(image, offX, offY, null);
 		g2d.dispose();
 
