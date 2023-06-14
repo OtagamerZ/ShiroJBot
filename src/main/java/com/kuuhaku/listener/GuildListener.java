@@ -63,6 +63,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.random.RandomGenerator;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 public class GuildListener extends ListenerAdapter {
@@ -221,6 +222,14 @@ public class GuildListener extends ListenerAdapter {
         if (!Objects.equals(config.getName(), data.guild().getName())) {
             config.setName(data.guild().getName());
             config.save();
+        }
+
+        if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_LINK)) {
+            Matcher m = Utils.regex(content, "(ht|f)tps?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*");
+            if (m.find()) {
+                event.getMessage().delete().queue(null, Utils::doNothing);
+                return;
+            }
         }
 
         Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));

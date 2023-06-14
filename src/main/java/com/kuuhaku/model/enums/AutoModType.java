@@ -19,5 +19,5 @@
 package com.kuuhaku.model.enums;
 
 public enum AutoModType {
-	SPAM, LINK
+	SPAM
 }
