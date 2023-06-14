@@ -193,7 +193,7 @@ public class Card extends DAO<Card> implements Serializable {
 		}
 	}
 
-	private BufferedImage chrome(BufferedImage bi, boolean border) {
+	public BufferedImage chrome(BufferedImage bi, boolean border) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		Graph.forEachPixel(bi, (x, y, rgb) -> {
