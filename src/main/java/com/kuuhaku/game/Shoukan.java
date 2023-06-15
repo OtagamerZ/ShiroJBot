@@ -166,7 +166,6 @@ public class Shoukan extends GameInstance<Phase> {
                         cheats = true;
                     }
 
-                    System.out.println(action.getSecond());
                     m.invoke(this, h.getSide(), action.getSecond());
                     return;
                 }
@@ -180,6 +179,7 @@ public class Shoukan extends GameInstance<Phase> {
                         cheats = true;
                     }
 
+                    System.out.println(action.getSecond());
                     if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
                         getCurrent().showHand();
                     }
