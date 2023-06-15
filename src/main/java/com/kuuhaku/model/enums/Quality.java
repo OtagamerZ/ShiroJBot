@@ -32,6 +32,6 @@ public enum Quality {
 	}
 
 	public static Quality get(double quality) {
-		return values()[(int) Math.min(quality / 20, 1)];
+		return values()[(int) Math.min(quality * values().length / 20, 1)];
 	}
 }
