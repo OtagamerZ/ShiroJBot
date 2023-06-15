@@ -163,4 +163,14 @@ public class CommandManager {
 	public Set<String> getReservedNames() {
 		return names;
 	}
+
+	public Set<Permission> getAllPermissions() {
+		Set<Permission> perms = EnumSet.noneOf(Permission.class);
+		for (Class<?> cmd : cmds) {
+			Requires req = cmd.getDeclaredAnnotation(Requires.class);
+			perms.addAll(Set.of(req.value()));
+		}
+
+		return perms;
+	}
 }
