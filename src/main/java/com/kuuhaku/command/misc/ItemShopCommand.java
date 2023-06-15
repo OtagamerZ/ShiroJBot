@@ -60,7 +60,12 @@ public class ItemShopCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/items_available"));
 
-			List<Page> pages = Utils.generatePages(eb, DAO.findAll(UserItem.class).stream().sorted().toList(), 10, 5,
+			List<UserItem> catalogue = DAO.findAll(UserItem.class).stream()
+					.filter(i -> i.getCurrency() != null)
+					.sorted()
+					.toList();
+
+			List<Page> pages = Utils.generatePages(eb, catalogue, 10, 5,
 					i -> {
 						int has = items.getOrDefault(i, 0);
 
@@ -100,8 +105,8 @@ public class ItemShopCommand implements Executable {
 		UserItem item = DAO.find(UserItem.class, args.getString("id").toUpperCase());
 		int amount = args.getInt("amount", 1);
 
-		if (item == null) {
-			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM user_item");
+		if (item == null || item.getCurrency() == null) {
+			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM user_item WHERE currency IS NOT NULL");
 
 			Pair<String, Double> sug = Utils.didYouMean(args.getString("id").toUpperCase(), names);
 			event.channel().sendMessage(locale.get("error/unknown_item", sug.getFirst())).queue();
