@@ -646,13 +646,16 @@ public abstract class Utils {
 
     public static <T extends Collection<String>> Function<T, String> properlyJoin(String connector) {
         return objs -> {
-            List<String> ls = List.copyOf(objs);
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < ls.size(); i++) {
-                if (i == ls.size() - 1 && ls.size() > 1) sb.append(" ").append(connector).append(" ");
+
+            int i = 0;
+            int size = objs.size();
+            for (String obj : objs) {
+                if (i == size - 1 && size > 1) sb.append(" ").append(connector).append(" ");
                 else if (i > 0) sb.append(", ");
 
-                sb.append(ls.get(i));
+                sb.append(obj);
+                i++;
             }
 
             return sb.toString();
