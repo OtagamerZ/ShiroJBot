@@ -151,7 +151,14 @@ public class Shoukan extends GameInstance<Phase> {
 
     @Override
     protected void runtime(User user, String value) throws InvocationTargetException, IllegalAccessException {
-        Pair<Method, JSONObject> action = toAction(value.toLowerCase().replace(" ", ""));
+        Hand hand = hands.values().stream()
+                .filter(h -> h.getUid().equals(user.getId()))
+                .findFirst().orElseThrow();
+
+        Pair<Method, JSONObject> action = toAction(
+                value.toLowerCase().replace(" ", ""),
+                m -> m.getName().startsWith("deb") || hand.selectionPending() == m.getName().equals("select")
+        );
         if (action != null) {
             Method m = action.getFirst();
 
@@ -162,32 +169,32 @@ public class Shoukan extends GameInstance<Phase> {
                         return;
                     }
 
-                    if (m.getName().startsWith("deb")) {
-                        cheats = true;
-                    }
-
-                    m.invoke(this, h.getSide(), action.getSecond());
+                    execAction(h.getSide(), action);
                     return;
                 }
             }
 
-            if (!lock) {
-                lock = true;
+            execAction(getCurrentSide(), action);
+        }
+    }
 
-                try {
-                    if (m.getName().startsWith("deb")) {
-                        cheats = true;
-                    }
+    private void execAction(Side side, Pair<Method, JSONObject> action) {
+        Method m = action.getFirst();
+        if (!lock) {
+            lock = true;
 
-                    System.out.println(action.getSecond());
-                    if ((boolean) m.invoke(this, getCurrentSide(), action.getSecond())) {
-                        getCurrent().showHand();
-                    }
-                } catch (Exception e) {
-                    Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
-                } finally {
-                    lock = false;
+            try {
+                if (m.getName().startsWith("deb")) {
+                    cheats = true;
                 }
+
+                if ((boolean) m.invoke(this, side, action.getSecond())) {
+                    getCurrent().showHand();
+                }
+            } catch (Exception e) {
+                Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
+            } finally {
+                lock = false;
             }
         }
     }

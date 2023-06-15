@@ -47,6 +47,7 @@ import java.util.Deque;
 import java.util.Set;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public abstract class GameInstance<T extends Enum<T>> {
@@ -180,6 +181,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 	}
 
 	protected Pair<Method, JSONObject> toAction(String args) {
+		return toAction(args, m -> true);
+	}
+
+	protected Pair<Method, JSONObject> toAction(String args, Predicate<Method> condition) {
 		Method[] meths = getClass().getDeclaredMethods();
 		for (Method meth : meths) {
 			PlayerAction pa = meth.getAnnotation(PlayerAction.class);
@@ -190,7 +195,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 				}
 
 				Pattern pat = PatternCache.compile(pa.value());
-				if (Utils.match(args, pat)) {
+				if (Utils.match(args, pat) && condition.test(meth)) {
 					return new Pair<>(meth, Utils.extractNamedGroups(args, pat));
 				}
 			}
