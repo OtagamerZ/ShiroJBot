@@ -166,6 +166,7 @@ public class Shoukan extends GameInstance<Phase> {
                         cheats = true;
                     }
 
+                    System.out.println(action.getSecond());
                     m.invoke(this, h.getSide(), action.getSecond());
                     return;
                 }
@@ -732,7 +733,7 @@ public class Shoukan extends GameInstance<Phase> {
         int mp = 0;
 
         List<Drawable<?>> cards = new ArrayList<>();
-        JSONArray batch = args.getJSONArray("inField");
+        JSONArray batch = new JSONArray(args.getString("inField"));
         for (Object o : batch) {
             int idx = ((Number) o).intValue();
             SlotColumn slot = arena.getSlots(curr.getSide()).get(idx - 1);
@@ -813,7 +814,7 @@ public class Shoukan extends GameInstance<Phase> {
         Hand curr = hands.get(side);
 
         List<Drawable<?>> cards = new ArrayList<>();
-        JSONArray batch = args.getJSONArray("inHand");
+        JSONArray batch = new JSONArray(args.getString("inHand"));
         for (Object o : batch) {
             int idx = ((Number) o).intValue();
             if (!Utils.between(idx, 1, curr.getCards().size())) {
