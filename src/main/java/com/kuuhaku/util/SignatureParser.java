@@ -193,18 +193,16 @@ public abstract class SignatureParser {
 
                             supplied.add(token);
                             matches++;
-                        } else if (required) {
-                            fail = true;
-                            if (opts.isEmpty()) {
-                                supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
-                            } else {
-                                supplied.add(wrap.formatted(opts.stream().map(Utils::underline).collect(Collectors.joining("|"))));
-                                failOpts = opts.stream().map(o -> "`" + o + "`").toArray(String[]::new);
-                            }
                         }
-                    } else {
-                        fail = true;
-                        supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
+                    }
+
+                    if ((token == null || fail) && required) {
+                        if (opts.isEmpty()) {
+                            supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
+                        } else {
+                            supplied.add(wrap.formatted(opts.stream().map(Utils::underline).collect(Collectors.joining("|"))));
+                            failOpts = opts.stream().map(o -> "`" + o + "`").toArray(String[]::new);
+                        }
                     }
                 }
             }
