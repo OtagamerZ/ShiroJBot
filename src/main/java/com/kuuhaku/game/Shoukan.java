@@ -1320,7 +1320,12 @@ public class Shoukan extends GameInstance<Phase> {
 										s.awake();
 									}
 
-									op.getGraveyard().add(target);
+									if (source.isDefending() && !source.popFlag(Flag.ALWAYS_ATTACK)) {
+										target.setStun(1);
+										dmg = 0;
+									} else {
+										op.getGraveyard().add(target);
+									}
 
 									win = true;
 								} else {
@@ -1369,10 +1374,18 @@ public class Shoukan extends GameInstance<Phase> {
 		if (eHP != op.getHP()) {
 			int val = eHP - op.getHP();
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
+
+			if (val > 0 && op.getStats().getDamageMult() != 1) {
+				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2))+ ")";
+			}
 		}
 		if (pHP != you.getHP()) {
 			int val = pHP - you.getHP();
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(val));
+
+			if (val > 0 && you.getStats().getDamageMult() != 1) {
+				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2))+ ")";
+			}
 		}
 
 		if (announce) {
@@ -1414,7 +1427,11 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(ON_ATTACK, source.asSource(ON_ATTACK));
 
 		if (dmg == null) {
-			dmg = source.getActiveAttr();
+			if (source.isDefending() && !source.popFlag(Flag.ALWAYS_ATTACK)) {
+				dmg = 0;
+			} else {
+				dmg = source.getActiveAttr();
+			}
 		}
 
 		int lifesteal = you.getBase().lifesteal();
@@ -1511,10 +1528,18 @@ public class Shoukan extends GameInstance<Phase> {
 		if (eHP != op.getHP()) {
 			int val = eHP - op.getHP();
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
+
+			if (val > 0 && op.getStats().getDamageMult() != 1) {
+				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2))+ ")";
+			}
 		}
 		if (pHP != you.getHP()) {
 			int val = pHP - you.getHP();
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(val));
+
+			if (val > 0 && you.getStats().getDamageMult() != 1) {
+				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2))+ ")";
+			}
 		}
 
 		if (announce) {
