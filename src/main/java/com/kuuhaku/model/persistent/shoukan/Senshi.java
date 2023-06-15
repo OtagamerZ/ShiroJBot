@@ -718,7 +718,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
     }
 
     public boolean canAttack() {
-        return slot != null && isAvailable() && !isFlipped();
+        return slot != null && isAvailable() && !isFlipped() && !stats.popFlag(Flag.NO_ATTACK);
     }
 
     @Override

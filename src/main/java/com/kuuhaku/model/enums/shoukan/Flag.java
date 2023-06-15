@@ -41,6 +41,8 @@ public enum Flag {
 	NO_BERSERK,
 	/** Cannot be taunted **/
 	NO_TAUNT,
+	/** Cannot attack **/
+	NO_ATTACK,
 
 	/** Ignores target equipment stats **/
 	IGNORE_EQUIP,
