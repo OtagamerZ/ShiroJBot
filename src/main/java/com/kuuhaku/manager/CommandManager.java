@@ -168,7 +168,9 @@ public class CommandManager {
 		Set<Permission> perms = EnumSet.noneOf(Permission.class);
 		for (Class<?> cmd : cmds) {
 			Requires req = cmd.getDeclaredAnnotation(Requires.class);
-			perms.addAll(Set.of(req.value()));
+			if (req != null) {
+				perms.addAll(Set.of(req.value()));
+			}
 		}
 
 		return perms;
