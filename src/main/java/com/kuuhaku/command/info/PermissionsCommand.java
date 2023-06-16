@@ -44,7 +44,7 @@ public class PermissionsCommand implements Executable {
 		XStringBuilder sb = new XStringBuilder(locale.get("str/permissions"));
 		for (Permission perm : perms) {
 			boolean has = event.guild().getSelfMember().hasPermission(event.channel(), perm);
-			sb.appendNewLine("- `" + (has ? "✅" : "❌") + "` " + locale.get("perm/" + perm.name()));
+			sb.appendNewLine("- " + (has ? "\\✅" : "\\❌") + " " + locale.get("perm/" + perm.name()));
 		}
 
 		data.channel().sendMessage(sb.toString()).queue();
