@@ -31,7 +31,7 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 
 @Command(
 		name = "marry",
@@ -47,7 +47,7 @@ public class MarryCommand implements Executable {
 			return;
 		}
 
-		Member other = event.message().getMentions().getMembers().get(0);
+		User other = event.message().getMentions().getUsers().get(0);
 		if (DAO.query(Couple.class, "SELECT c FROM Couple c WHERE ?1 = c.id.first OR ?1 = c.id.second", other.getId()) != null) {
 			event.channel().sendMessage(locale.get("error/already_married_target", other.getEffectiveName())).queue();
 			return;
@@ -58,7 +58,7 @@ public class MarryCommand implements Executable {
 						new Couple(event.user().getId(), other.getId()).save();
 						event.channel().sendMessage(locale.get("success/marry")).queue();
 						return true;
-					}, other.getUser()
+					}, other
 			);
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();

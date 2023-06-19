@@ -18,17 +18,28 @@
 
 package com.kuuhaku.model.enums;
 
+import com.kuuhaku.Constants;
+import com.kuuhaku.Main;
 import com.kuuhaku.util.IO;
 
-import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.net.URL;
 
 public enum Quality {
 	NORMAL, FINE, POLISHED, FLAWLESS;
 
-	public BufferedImage getOverlay() {
-		if (ordinal() == 0) return null;
+	public byte[] getOverlayBytes() {
+		return Main.getCacheManager().computeResource("quality_" + name(), (k, v) -> {
+			if (v != null && v.length > 0) return v;
 
-		return IO.getResourceAsImage("kawaipon/quality/" + name().toLowerCase() + ".png");
+			try {
+				return IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "quality/" + name() + ".png")), "png");
+			} catch (IOException e) {
+				Constants.LOGGER.error(e, e);
+				return null;
+			}
+		});
 	}
 
 	public static Quality get(double quality) {

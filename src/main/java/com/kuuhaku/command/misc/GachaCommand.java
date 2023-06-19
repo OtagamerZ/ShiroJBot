@@ -192,7 +192,7 @@ public class GachaCommand implements Executable {
 
 					g2d.drawImage(e.render(locale, deck), 5, 20, null);
 					if (e.getTier() == 4) {
-						g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/hero.png"), 5, 20, null);
+						g2d.drawImage(IO.getResourceAsImage("shoukan/frames/" + hPath + "/hero.png"), 5, 20, null);
 					}
 
 					new StashedCard(kp, card, tp).save();
@@ -202,7 +202,7 @@ public class GachaCommand implements Executable {
 					proccess(type, f);
 
 					g2d.drawImage(f.render(locale, deck), 5, 20, null);
-					g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/buffed.png"), 5, 20, null);
+					g2d.drawImage(IO.getResourceAsImage("shoukan/frames/" + hPath + "/buffed.png"), 5, 20, null);
 
 					new StashedCard(kp, card, tp).save();
 				}

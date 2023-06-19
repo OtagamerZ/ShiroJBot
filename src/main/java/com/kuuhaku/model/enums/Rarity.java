@@ -18,11 +18,17 @@
 
 package com.kuuhaku.model.enums;
 
+import com.kuuhaku.Constants;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.IO;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 
 public enum Rarity {
@@ -89,6 +95,19 @@ public enum Rarity {
 
 	public int getCount() {
 		return DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM card WHERE rarity = ?1", name());
+	}
+
+	public byte[] getFrameBytes() {
+		return Main.getCacheManager().computeResource("frame_" + name(), (k, v) -> {
+			if (v != null && v.length > 0) return v;
+
+			try {
+				return IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "frame/" + name() + ".png")), "png");
+			} catch (IOException e) {
+				Constants.LOGGER.error(e, e);
+				return null;
+			}
+		});
 	}
 
 	public static Rarity[] getActualRarities() {

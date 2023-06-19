@@ -1041,7 +1041,7 @@ public class Hand {
 
 			if ((d instanceof Senshi s && s.hasFlag(Flag.EMPOWERED)) || (d instanceof Evogear e && e.getStats().hasFlag(Flag.EMPOWERED))) {
 				boolean legacy = userDeck.getStyling().getFrame().isLegacy();
-				BufferedImage emp = IO.getResourceAsImage("kawaipon/frames/" + (legacy ? "old" : "new") + "/empowered.png");
+				BufferedImage emp = IO.getResourceAsImage("shoukan/frames/" + (legacy ? "old" : "new") + "/empowered.png");
 
 				g2d.drawImage(emp, x, y, null);
 			}

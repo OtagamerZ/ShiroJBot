@@ -1315,7 +1315,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
                 if (hand != null) {
                     boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
-                    String path = "kawaipon/frames/" + (legacy ? "old" : "new") + "/";
+                    String path = "shoukan/frames/state/" + (legacy ? "old" : "new") + "/";
 
                     if (hasFlag(Flag.EMPOWERED)) {
                         BufferedImage emp = IO.getResourceAsImage(path + "empowered.png");

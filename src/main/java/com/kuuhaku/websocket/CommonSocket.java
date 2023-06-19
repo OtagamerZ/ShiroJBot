@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.websocket;
+package com.kuuhaku.websocket;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
@@ -84,7 +84,7 @@ public class CommonSocket extends WebSocketClient {
 
 				send(JSONObject.of(
 					Map.entry("type", "ATTACH"),
-					Map.entry("channels", List.of("eval", "shoukan"))
+					Map.entry("channels", List.of("eval", "shoukan", "i18n"))
 				).toString());
 				return;
 			}
@@ -132,6 +132,36 @@ public class CommonSocket extends WebSocketClient {
 							Map.entry("type", "DELIVERY"),
 							Map.entry("key", Hex.encodeHexString(md.digest())),
 							Map.entry("content", b64)
+					).toString());
+				}
+				case "i18n" -> {
+					send(JSONObject.of(
+							Map.entry("type", "ACKNOWLEDGE"),
+							Map.entry("key", payload.getString("key")),
+							Map.entry("token", token)
+					).toString());
+
+					MessageDigest md = DigestUtils.getDigest("md5");
+					md.update(payload.getString("key").getBytes(StandardCharsets.UTF_8));
+					md.update(token.getBytes(StandardCharsets.UTF_8));
+
+					I18N locale = payload.getEnum(I18N.class, "locale");
+					if (locale == null) {
+						send(JSONObject.of(
+								Map.entry("type", "DELIVERY"),
+								Map.entry("key", Hex.encodeHexString(md.digest())),
+								Map.entry("content", payload.getString("key"))
+						).toString());
+						return;
+					}
+
+					send(JSONObject.of(
+							Map.entry("type", "DELIVERY"),
+							Map.entry("key", Hex.encodeHexString(md.digest())),
+							Map.entry("content", locale.get(
+									payload.getString("str"),
+									(Object[]) payload.getString("params").split(",")
+							))
 					).toString());
 				}
 			}

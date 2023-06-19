@@ -573,7 +573,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				if (hand != null) {
 					if (stats.hasFlag(Flag.EMPOWERED)) {
 						boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
-						BufferedImage emp = IO.getResourceAsImage("kawaipon/frames/" + (legacy ? "old" : "new") + "/empowered.png");
+						BufferedImage emp = IO.getResourceAsImage("shoukan/frames/" + (legacy ? "old" : "new") + "/empowered.png");
 
 						g2d.drawImage(emp, 0, 0, null);
 					}

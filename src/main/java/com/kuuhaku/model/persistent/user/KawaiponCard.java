@@ -24,11 +24,14 @@ import com.kuuhaku.model.enums.Quality;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.Calc;
 import jakarta.persistence.*;
+import okio.Buffer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -137,14 +140,21 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 		Quality q = Quality.get(quality);
 
 		if (q.ordinal() > 0) {
-			Graphics2D g2d = bi.createGraphics();
-			g2d.setRenderingHints(Constants.HD_HINTS);
+			try {
+				try (Buffer buf = new Buffer()) {
+					buf.write(q.getOverlayBytes());
+					BufferedImage overlay = ImageIO.read(buf.inputStream());
 
-			BufferedImage overlay = q.getOverlay();
-			assert overlay != null;
+					Graphics2D g2d = bi.createGraphics();
+					g2d.setRenderingHints(Constants.HD_HINTS);
 
-			g2d.drawImage(chrome ? card.chrome(overlay, true) : overlay, 0, 0, null);
-			g2d.dispose();
+					g2d.drawImage(chrome ? card.chrome(overlay, true) : overlay, 0, 0, null);
+					g2d.dispose();
+				}
+			} catch (IOException e) {
+				Constants.LOGGER.error(e, e);
+				return null;
+			}
 		}
 
 		return bi;
