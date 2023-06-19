@@ -54,7 +54,7 @@ public abstract class Spawn {
 	public synchronized static KawaiponCard getKawaipon(GuildBuff gb, GuildMessageChannel channel, User u) {
 		if (spawnedCards.containsKey(channel.getId())) return null;
 
-		double dropRate = 8 * (1.2 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount())) * (1 + gb.card()) * getQuantityMult();
+		double dropRate = 8 * (1.2 * Math.pow(Math.E, -0.001 * Math.min(channel.getGuild().getMemberCount(), 1000))) * (1 + gb.card()) * getQuantityMult();
 		double rarityBonus = 1 * (1 + gb.rarity()) * getRarityMult();
 
 		KawaiponCard card = null;
