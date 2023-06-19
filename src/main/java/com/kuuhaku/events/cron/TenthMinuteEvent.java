@@ -96,7 +96,10 @@ public class TenthMinuteEvent implements Job {
 					Member m = guild.getMemberById(s);
 					if (m == null) continue;
 
-					acts.add(guild.addRoleToMember(m, r));
+					try {
+						acts.add(guild.addRoleToMember(m, r));
+					} catch (Exception ignore) {
+					}
 				}
 
 				if (acts.isEmpty()) continue;
