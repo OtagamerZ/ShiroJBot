@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,12 +33,11 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -46,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 
 @Command(
 		name = "deck",
-		subname = "list",
+		path = "list",
 		category = Category.INFO
 )
 @Requires({
@@ -124,7 +123,7 @@ public class DeckListCommand implements Executable {
 		));
 
 		assert home != null;
-		event.channel().sendMessageEmbeds((MessageEmbed) home.getContent()).queue(s ->
+		Utils.sendPage(event.channel(), home).queue(s ->
 				Pages.categorize(s, pages, true, 1, TimeUnit.MINUTES, u -> u.equals(event.user()))
 		);
 	}

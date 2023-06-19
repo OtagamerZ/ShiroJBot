@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 public record GuildBuff(String id, long expiration, double card, double drop, double rarity, double xp) {
 	public GuildBuff(String id, int time, TimeUnit unit, double card, double drop, double rarity, double xp) {
-		this(id, System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(time, unit), card, drop, rarity, xp);
+		this(id, System.currentTimeMillis() + unit.toMillis(time), card, drop, rarity, xp);
 	}
 
 	public GuildBuff(double card, double drop, double rarity, double xp) {

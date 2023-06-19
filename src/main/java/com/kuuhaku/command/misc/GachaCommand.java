@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.*;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -83,7 +83,7 @@ public class GachaCommand implements Executable {
 						.setDescription(locale.get("gacha/" + type.value() + "_desc"))
 						.setFooter(acc.getBalanceFooter(locale));
 
-				pages.add(new InteractPage(eb.build()));
+				pages.add(InteractPage.of(eb.build()));
 			}
 
 			pages.sort(Comparator.comparing(p -> ((MessageEmbed) p.getContent()).getTitle()));
@@ -182,7 +182,7 @@ public class GachaCommand implements Executable {
 					kc.setKawaipon(kp);
 					kc.save();
 
-					g2d.drawImage(card.drawCard(kc.isChrome()), 5, 20, null);
+					g2d.drawImage(kc.render(), 5, 20, null);
 
 					new StashedCard(kp, kc).save();
 				}
@@ -192,7 +192,7 @@ public class GachaCommand implements Executable {
 
 					g2d.drawImage(e.render(locale, deck), 5, 20, null);
 					if (e.getTier() == 4) {
-						g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/hero.png"), 5, 20, null);
+						g2d.drawImage(IO.getResourceAsImage("shoukan/frames/" + hPath + "/hero.png"), 5, 20, null);
 					}
 
 					new StashedCard(kp, card, tp).save();
@@ -202,7 +202,7 @@ public class GachaCommand implements Executable {
 					proccess(type, f);
 
 					g2d.drawImage(f.render(locale, deck), 5, 20, null);
-					g2d.drawImage(IO.getResourceAsImage("kawaipon/frames/" + hPath + "/buffed.png"), 5, 20, null);
+					g2d.drawImage(IO.getResourceAsImage("shoukan/frames/" + hPath + "/buffed.png"), 5, 20, null);
 
 					new StashedCard(kp, card, tp).save();
 				}

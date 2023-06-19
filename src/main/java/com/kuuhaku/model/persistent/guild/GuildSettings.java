@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,13 @@ package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
+import com.kuuhaku.model.enums.AutoModType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.persistent.converter.*;
 import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import com.kuuhaku.model.persistent.javatype.RoleJavaType;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
@@ -46,9 +47,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Column(name = "gid", nullable = false)
 	private String gid;
 
-	@Column(name = "anti_raid_threshold", nullable = false)
-	private int antiRaidThreshold = 0;
-
 	@ElementCollection
 	@Column(name = "kawaipon_channels")
 	@CollectionTable(name = "guild_settings_kawaiponChannels", joinColumns = @JoinColumn(name = "gid"))
@@ -64,9 +62,13 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@CollectionTable(name = "guild_settings_deniedChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<GuildMessageChannel> deniedChannels = new ArrayList<>();
 
-	@Column(name = "notificationsChannel")
+	@Column(name = "notifications_channel")
 	@Convert(converter = ChannelConverter.class)
 	private GuildMessageChannel notificationsChannel;
+
+	@Column(name = "general_channel")
+	@Convert(converter = ChannelConverter.class)
+	private GuildMessageChannel generalChannel;
 
 	@Column(name = "embed", nullable = false)
 	@Convert(converter = EmbedConverter.class)
@@ -82,10 +84,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<ColorRole> colorRoles = new ArrayList<>();
-
-	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy("level")
 	private List<LevelRole> levelRoles = new ArrayList<>();
 
 	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -118,6 +117,21 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject aliases = new JSONObject();
 
+	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy("threshold")
+	private List<AutoRule> autoRules = new ArrayList<>();
+
+	@Enumerated(EnumType.STRING)
+	@ElementCollection
+	@CollectionTable(
+			name = "automod_entries",
+			joinColumns = @JoinColumn(name = "gid", referencedColumnName = "gid")
+	)
+	@Column(name = "type")
+	@MapKeyColumn(name = "id")
+	private Map<AutoModType, String> automodEntries = new HashMap<>();
+
 	public GuildSettings() {
 	}
 
@@ -127,14 +141,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public String getGid() {
 		return gid;
-	}
-
-	public int getAntiRaidThreshold() {
-		return antiRaidThreshold;
-	}
-
-	public void setAntiRaidThreshold(int antiRaidThreshold) {
-		this.antiRaidThreshold = antiRaidThreshold;
 	}
 
 	public List<GuildMessageChannel> getKawaiponChannels() {
@@ -155,6 +161,14 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public void setNotificationsChannel(GuildMessageChannel notificationsChannel) {
 		this.notificationsChannel = notificationsChannel;
+	}
+
+	public GuildMessageChannel getGeneralChannel() {
+		return generalChannel;
+	}
+
+	public void setGeneralChannel(GuildMessageChannel generalChannel) {
+		this.generalChannel = generalChannel;
 	}
 
 	public AutoEmbedBuilder getEmbed() {
@@ -179,10 +193,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public void setWelcomer(Role welcomer) {
 		this.welcomer = welcomer;
-	}
-
-	public List<ColorRole> getColorRoles() {
-		return colorRoles;
 	}
 
 	public List<LevelRole> getLevelRoles() {
@@ -227,5 +237,13 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public JSONObject getAliases() {
 		return aliases;
+	}
+
+	public List<AutoRule> getAutoRules() {
+		return autoRules;
+	}
+
+	public Map<AutoModType, String> getAutoModEntries() {
+		return automodEntries;
 	}
 }

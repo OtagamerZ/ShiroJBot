@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,10 +30,8 @@ import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
@@ -118,7 +116,7 @@ public abstract class Calc {
 	}
 
 	public static int rng(int max, long seed) {
-		return rng(0, max, new Random(seed));
+		return rng(0, max, new SplittableRandom(seed));
 	}
 
 	public static int rng(int max, RandomGenerator random) {
@@ -130,7 +128,7 @@ public abstract class Calc {
 	}
 
 	public static int rng(int min, int max, long seed) {
-		return rng(min, max, new Random(seed));
+		return rng(min, max, new SplittableRandom(seed));
 	}
 
 	public static int rng(int min, int max, RandomGenerator random) {
@@ -142,7 +140,7 @@ public abstract class Calc {
 	}
 
 	public static double rng(double max, long seed) {
-		return rng(0, max, new Random(seed));
+		return rng(0, max, new SplittableRandom(seed));
 	}
 
 	public static double rng(double max, RandomGenerator random) {
@@ -154,7 +152,7 @@ public abstract class Calc {
 	}
 
 	public static double rng(double min, double max, long seed) {
-		return rng(min, max, new Random(seed));
+		return rng(min, max, new SplittableRandom(seed));
 	}
 
 	public static double rng(double min, double max, RandomGenerator random) {
@@ -198,10 +196,14 @@ public abstract class Calc {
 	}
 
 	public static boolean chance(double percentage) {
+		return chance(percentage, Constants.DEFAULT_RNG.get());
+	}
+
+	public static boolean chance(double percentage, RandomGenerator rng) {
 		if (percentage >= 100) return true;
 		else if (percentage <= 0) return false;
 
-		return rng(100d) < percentage;
+		return rng(100d, rng) < percentage;
 	}
 
 	public static <T> T getRandom(List<Pair<T, Double>> values) {

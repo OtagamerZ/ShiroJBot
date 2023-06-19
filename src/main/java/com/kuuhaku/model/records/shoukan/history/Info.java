@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,6 @@ package com.kuuhaku.model.records.shoukan.history;
 
 import com.kuuhaku.model.enums.shoukan.Side;
 
-public record Info(Player top, Player bottom, Side winner, String winCondition) {
+public record Info(Player top, Player bottom, Side winner, String winCondition, long seed) {
 
 }

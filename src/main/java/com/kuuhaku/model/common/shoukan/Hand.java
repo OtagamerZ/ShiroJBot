@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,14 +32,18 @@ import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.Fonts;
+import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.shoukan.*;
+import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.*;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.Transient;
 import kotlin.Triple;
 import net.dv8tion.jda.api.entities.Message;
@@ -64,6 +68,7 @@ public class Hand {
 	private final Shoukan game;
 	private final Deck userDeck;
 	private final Side side;
+	private final HandExtra stats = new HandExtra();
 
 	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
 		if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
@@ -135,7 +140,7 @@ public class Hand {
 		}
 
 		if (d instanceof Senshi s) {
-			if (getGame().getCurrentSide() != getSide() && Calc.chance(s.getDodge() / 2d)) {
+			if (getGame().getCurrentSide() != getSide() && Calc.chance(s.getDodge() / 2d, getGame().getRng())) {
 				getGame().getChannel().sendMessage(getGame().getLocale().get("str/avoid_destruction", s)).queue();
 				return false;
 			} else if (s.popFlag(Flag.NO_DEATH) || s.hasCharm(Charm.WARDING, true)) {
@@ -161,7 +166,7 @@ public class Hand {
 
 		if (d instanceof Senshi s) {
 			if (s.getLastInteraction() != null) {
-				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget(Trigger.NONE));
+				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget());
 
 				Hand other = d.getHand().getOther();
 				other.addKill();
@@ -183,7 +188,7 @@ public class Hand {
 
 		d.reset();
 
-		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5)) {
+		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(5, getGame().getRng())) {
 			cards.add(d.copy());
 			return false;
 		}
@@ -255,12 +260,12 @@ public class Hand {
 		this.uid = uid;
 		this.game = game;
 		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
-		if (game.getArcade() != Arcade.CARDMASTER) {
-			if (userDeck == null) {
-				throw new GameReport(GameReport.NO_DECK, uid);
-			} else if (!(userDeck.validateSenshi() && userDeck.validateEvogear() && userDeck.validateFields())) {
-				throw new GameReport(GameReport.INVALID_DECK, uid);
-			}
+		if (game.getArcade() != Arcade.CARDMASTER && (!game.isSingleplayer() || !Account.hasRole(uid, false, Role.TESTER))) {
+				if (userDeck == null) {
+					throw new GameReport(GameReport.NO_DECK, uid);
+				} else if (!(userDeck.validateSenshi() && userDeck.validateEvogear() && userDeck.validateFields())) {
+					throw new GameReport(GameReport.INVALID_DECK, uid);
+				}
 		}
 
 		this.side = side;
@@ -280,17 +285,17 @@ public class Hand {
 							.map(d -> d.copy())
 							.peek(d -> {
 								if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
-									Utils.shufflePairs(f.getModifiers());
+									Utils.shufflePairs(f.getModifiers(), game.getRng());
 								} else if (d instanceof Senshi s && origin.hasMinor(Race.DIVINITY) && !s.hasEffect()) {
 									s.getStats().setSource(
-											Senshi.getRandom(false,
+											Senshi.getRandom(game.getRng(), false,
 													"WHERE effect IS NOT NULL",
 													"AND mana = " + s.getBase().getMana()
 											)
 									);
 								}
 							})
-							.collect(Utils.toShuffledList())
+							.collect(Utils.toShuffledList(game.getRng()))
 			);
 			return;
 		}
@@ -302,17 +307,17 @@ public class Hand {
 						.map(d -> d.copy())
 						.peek(d -> {
 							if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
-								Utils.shufflePairs(f.getModifiers());
+								Utils.shufflePairs(f.getModifiers(), game.getRng());
 							} else if (d instanceof Senshi s && origin.hasMinor(Race.DIVINITY) && !s.hasEffect()) {
 								s.getStats().setSource(
-										Senshi.getRandom(false,
+										Senshi.getRandom(game.getRng(), false,
 												"WHERE effect IS NOT NULL",
 												"AND mana = " + s.getBase().getMana()
 										)
 								);
 							}
 						})
-						.collect(Utils.toShuffledList())
+						.collect(Utils.toShuffledList(game.getRng()))
 		);
 	}
 
@@ -637,7 +642,7 @@ public class Hand {
 			}
 		}
 
-		Collections.shuffle(deck);
+		Utils.shuffle(deck, game.getRng());
 		manualDraw(i);
 	}
 
@@ -766,13 +771,19 @@ public class Hand {
 				value -= quart - regdeg.reduce(Regen.class, quart);
 			}
 
+			if (value < 0) {
+				value *= Math.max(0.1, stats.getDamageMult());
+			} else {
+				value *= stats.getHealMult();
+			}
+
 			double prcnt = getHPPrcnt();
 			if (origin.demon()) {
 				prcnt = Math.min(prcnt, 0.5);
 			}
 
 			if (this.hp + value <= 0 && prcnt > 1 / 3d) {
-				if (prcnt > 2 / 3d || Calc.chance(prcnt * 100)) {
+				if (prcnt > 2 / 3d || Calc.chance(prcnt * 100, getGame().getRng())) {
 					this.hp = 1;
 					return;
 				}
@@ -865,7 +876,7 @@ public class Hand {
 	}
 
 	public boolean consumeMP(int value) {
-		if (origin.synergy() == Race.ESPER && Calc.chance(3)) return true;
+		if (origin.synergy() == Race.ESPER && Calc.chance(3, getGame().getRng())) return true;
 		else if (origin.major() == Race.DEMON) {
 			return consumeHP((int) (value * (base.hp() * 0.08)));
 		} else if (this.mp < value) return false;
@@ -984,6 +995,10 @@ public class Hand {
 		state = Bit.set(state, 4, 0, 4);
 	}
 
+	public HandExtra getStats() {
+		return stats;
+	}
+
 	public BufferedImage render() {
 		return render(cards);
 	}
@@ -1026,7 +1041,7 @@ public class Hand {
 
 			if ((d instanceof Senshi s && s.hasFlag(Flag.EMPOWERED)) || (d instanceof Evogear e && e.getStats().hasFlag(Flag.EMPOWERED))) {
 				boolean legacy = userDeck.getStyling().getFrame().isLegacy();
-				BufferedImage emp = IO.getResourceAsImage("kawaipon/frames/" + (legacy ? "old" : "new") + "/empowered.png");
+				BufferedImage emp = IO.getResourceAsImage("shoukan/frames/" + (legacy ? "old" : "new") + "/empowered.png");
 
 				g2d.drawImage(emp, x, y, null);
 			}
@@ -1067,6 +1082,29 @@ public class Hand {
 		return requestChoice(cards, false);
 	}
 
+	public void requestChoice(List<Drawable<?>> cards, ThrowingConsumer<Drawable<?>> act) {
+		requestChoice(cards, false, act);
+	}
+
+	public void requestChoice(Predicate<Drawable<?>> cond, ThrowingConsumer<Drawable<?>> act) {
+		requestChoice(cards.stream().filter(cond).toList(), act);
+	}
+
+	public void requestChoice(List<Drawable<?>> cards, boolean hide, ThrowingConsumer<Drawable<?>> act) {
+		Drawable<?> d = requestChoice(cards, hide);
+		if (d == null) return;
+
+		try {
+			act.accept(d);
+		} catch (RuntimeException e) {
+            if (e.getCause() instanceof ActivationException ex) {
+                throw ex;
+            }
+
+            throw e;
+		}
+	}
+
 	public Drawable<?> requestChoice(List<Drawable<?>> cards, boolean hide) {
 		if (selection != null) {
 			try {
@@ -1094,27 +1132,6 @@ public class Hand {
 		} catch (ExecutionException | InterruptedException e) {
 			throw new SelectionException("err/pending_selection");
 		}
-	}
-
-	public void requestChoice(List<Drawable<?>> cards, ThrowingConsumer<Drawable<?>> act) {
-		Drawable<?> d = requestChoice(cards);
-		if (d == null) return;
-
-		act.accept(d);
-	}
-
-	public void requestChoice(List<Drawable<?>> cards, boolean hide, ThrowingConsumer<Drawable<?>> act) {
-		Drawable<?> d = requestChoice(cards, hide);
-		if (d == null) return;
-
-		act.accept(d);
-	}
-
-	public void requestChoice(Predicate<Drawable<?>> cond, ThrowingConsumer<Drawable<?>> act) {
-		Drawable<?> d = requestChoice(cards.stream().filter(cond).toList());
-		if (d == null) return;
-
-		act.accept(d);
 	}
 
 	public BufferedImage renderChoices() {

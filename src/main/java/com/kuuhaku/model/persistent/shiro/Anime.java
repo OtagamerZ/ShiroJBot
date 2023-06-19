@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,12 +25,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "anime")
-public class Anime extends DAO<Anime> {
+public class Anime extends DAO<Anime> implements Serializable {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -52,12 +53,12 @@ public class Anime extends DAO<Anime> {
 				SELECT c
 				FROM Card c
 				WHERE c.anime.id = ?1
-				AND c.rarity IN ('COMMON', 'UNCOMMON', 'RARE', 'ULTRA_RARE', 'LEGENDARY')
+				AND c.rarity IN ('COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY')
 				ORDER BY CASE c.rarity
 					WHEN 'COMMON' THEN 1
 					WHEN 'UNCOMMON' THEN 2
 					WHEN 'RARE' THEN 3
-					WHEN 'ULTRA_RARE' THEN 4
+					WHEN 'EPIC' THEN 4
 					WHEN 'LEGENDARY' THEN 5
 				END DESC
 				, c.id

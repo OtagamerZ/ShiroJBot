@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 package com.kuuhaku.model.enums;
 
 public enum GuildFeature {
-	ANTI_RAID,     //0x1
+	ANTI_RAID,     //0x1 UNUSED - Feature integrated into discord
 	ANTI_LINK,     //0x2
 	ANTI_SPAM,     //0x4
 	ANTI_ZALGO,    //0x8

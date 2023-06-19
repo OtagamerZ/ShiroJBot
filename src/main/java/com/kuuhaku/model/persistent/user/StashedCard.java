@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Spawn;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -68,6 +68,9 @@ public class StashedCard extends DAO<StashedCard> {
 
 	@Column(name = "trash", nullable = false)
 	private boolean trash = false;
+
+	@Column(name = "account_bound", nullable = false)
+	private boolean accountBound = false;
 
 	public StashedCard() {
 
@@ -169,6 +172,10 @@ public class StashedCard extends DAO<StashedCard> {
 
 	public void setTrash(boolean trash) {
 		this.trash = trash;
+	}
+
+	public boolean isAccountBound() {
+		return accountBound;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -45,7 +45,7 @@ import java.util.Map;
 
 @Command(
 		name = "items",
-		subname = "buy",
+		path = "buy",
 		category = Category.MISC
 )
 @Signature(allowEmpty = true, value = "<id:word:r> <amount:number>")
@@ -60,7 +60,12 @@ public class ItemShopCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/items_available"));
 
-			List<Page> pages = Utils.generatePages(eb, DAO.findAll(UserItem.class).stream().sorted().toList(), 10, 5,
+			List<UserItem> catalogue = DAO.findAll(UserItem.class).stream()
+					.filter(i -> i.getCurrency() != null)
+					.sorted()
+					.toList();
+
+			List<Page> pages = Utils.generatePages(eb, catalogue, 10, 5,
 					i -> {
 						int has = items.getOrDefault(i, 0);
 
@@ -100,8 +105,8 @@ public class ItemShopCommand implements Executable {
 		UserItem item = DAO.find(UserItem.class, args.getString("id").toUpperCase());
 		int amount = args.getInt("amount", 1);
 
-		if (item == null) {
-			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM user_item");
+		if (item == null || item.getCurrency() == null) {
+			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM user_item WHERE currency IS NOT NULL");
 
 			Pair<String, Double> sug = Utils.didYouMean(args.getString("id").toUpperCase(), names);
 			event.channel().sendMessage(locale.get("error/unknown_item", sug.getFirst())).queue();

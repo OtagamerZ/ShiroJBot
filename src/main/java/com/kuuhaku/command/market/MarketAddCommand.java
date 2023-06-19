@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
@@ -39,10 +39,10 @@ import java.util.List;
 
 @Command(
 		name = "market",
-		subname = "add",
+		path = "add",
 		category = Category.MISC
 )
-@Signature("<card:word:r> <price:number:r> <confirm:word>[y]")
+@Signature("<card:word:r> <price:number:r> <confirm:word>[confirm]")
 public class MarketAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -65,6 +65,9 @@ public class MarketAddCommand implements Executable {
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+						return;
+					} else if (sc.isAccountBound()) {
+						event.channel().sendMessage(locale.get("error/card_account_bound")).queue();
 						return;
 					}
 

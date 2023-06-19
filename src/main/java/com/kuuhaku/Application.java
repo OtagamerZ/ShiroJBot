@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,9 @@ import com.github.ygimenez.model.PUtilsConfig;
 import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.Manager;
+import com.kuuhaku.listener.AutoModListener;
 import com.kuuhaku.listener.GuildListener;
-import com.kuuhaku.model.common.websocket.CommonSocket;
+import com.kuuhaku.websocket.CommonSocket;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.util.API;
@@ -73,7 +74,10 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				.setMemberCachePolicy(MemberCachePolicy.ONLINE
 						.and(MemberCachePolicy.OWNER)
 						.and(m -> !m.getUser().isBot()))
-				.addEventListeners(new GuildListener())
+				.addEventListeners(
+						new GuildListener(),
+						new AutoModListener()
+				)
 				.setBulkDeleteSplittingEnabled(false)
 				.setEventPool(new ForkJoinPool(
 						Runtime.getRuntime().availableProcessors(),

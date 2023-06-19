@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,13 +18,20 @@
 
 package com.kuuhaku.model.persistent.user;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.Quality;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.Calc;
 import jakarta.persistence.*;
+import okio.Buffer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -126,6 +133,31 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 		}
 
 		return stashEntry;
+	}
+
+	public BufferedImage render() {
+		BufferedImage bi = card.drawCard(chrome);
+		Quality q = Quality.get(quality);
+
+		if (q.ordinal() > 0) {
+			try {
+				try (Buffer buf = new Buffer()) {
+					buf.write(q.getOverlayBytes());
+					BufferedImage overlay = ImageIO.read(buf.inputStream());
+
+					Graphics2D g2d = bi.createGraphics();
+					g2d.setRenderingHints(Constants.HD_HINTS);
+
+					g2d.drawImage(chrome ? card.chrome(overlay, true) : overlay, 0, 0, null);
+					g2d.dispose();
+				}
+			} catch (IOException e) {
+				Constants.LOGGER.error(e, e);
+				return null;
+			}
+		}
+
+		return bi;
 	}
 
 	@Override

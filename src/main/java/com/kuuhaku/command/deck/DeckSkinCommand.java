@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,11 +36,10 @@ import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -51,7 +50,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "deck",
-		subname = "skin",
+		path = "skin",
 		category = Category.MISC
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
@@ -105,23 +104,23 @@ public class DeckSkinCommand implements Executable {
 			}
 			eb.setFooter(locale.get("str/page", i + 1, skins.length));
 
-			pages.add(new InteractPage(eb.build()));
+			pages.add(InteractPage.of(eb.build()));
 		}
 
 		AtomicBoolean confirm = new AtomicBoolean();
 		AtomicInteger i = new AtomicInteger();
-		event.channel().sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
+		Utils.sendPage(event.channel(), pages.get(0)).queue(s ->
 				Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
 							m.put(Utils.parseEmoji("◀️"), w -> {
 								if (i.get() > 1) {
 									confirm.set(false);
-									s.editMessageEmbeds((MessageEmbed) pages.get(i.decrementAndGet()).getContent()).queue();
+									s.editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
 								}
 							});
 							m.put(Utils.parseEmoji("▶️"), w -> {
 								if (i.get() < skins.length - 1) {
 									confirm.set(false);
-									s.editMessageEmbeds((MessageEmbed) pages.get(i.incrementAndGet()).getContent()).queue();
+									s.editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
 								}
 							});
 							m.put(Utils.parseEmoji("✅"), w -> {

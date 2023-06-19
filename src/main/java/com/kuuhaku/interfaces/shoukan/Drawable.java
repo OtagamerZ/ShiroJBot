@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 
 package com.kuuhaku.interfaces.shoukan;
 
+import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
@@ -45,7 +46,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public interface Drawable<T extends Drawable<T>> extends Cloneable {
+public interface Drawable<T extends Drawable<T>> {
 	int MAX_NAME_WIDTH = 175;
 	int MAX_DESC_LENGTH = 210;
 	Font FONT = Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 20);
@@ -76,6 +77,10 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 	Hand getHand();
 
 	void setHand(Hand hand);
+
+	default Shoukan getGame() {
+		return getHand().getGame();
+	}
 
 	default Side getSide() {
 		return getHand().getSide();
@@ -237,12 +242,21 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.RED);
 				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
-				if (this instanceof Senshi s && s.isBlinded()) {
-					g2d.setColor(Color.LIGHT_GRAY);
-					Graph.drawOutlinedString(g2d, "*", x + icon.getWidth() + 6 + m.stringWidth(val), y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
-				}
-
 				y -= icon.getHeight() + 5;
+			}
+
+			if (this instanceof Senshi s) {
+				if (s.getHitChance() < 100) {
+					icon = IO.getResourceAsImage("shoukan/icons/blind.png");
+					assert icon != null;
+					int x = 25;
+
+					String val = (int) s.getHitChance() + "%";
+					g2d.drawImage(icon, x, y, null);
+					g2d.setColor(Color.GRAY);
+					Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
+					y -= icon.getHeight() + 5;
+				}
 			}
 
 			if (getCooldown() > 0) {
@@ -325,16 +339,16 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		return out.stream().filter(s -> !s.isBlank()).toList().toString();
 	}
 
-	T clone() throws CloneNotSupportedException;
+	T fork() throws CloneNotSupportedException;
 
 	@SuppressWarnings("unchecked")
 	default T copy() {
 		try {
-			T clone = clone();
+			T clone = fork();
 			clone.reset();
 
 			return clone;
-		} catch (CloneNotSupportedException e) {
+		} catch (Exception e) {
 			return (T) this;
 		}
 	}
@@ -345,8 +359,16 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 		return t;
 	}
 
+	default Source asSource() {
+		return asSource(Trigger.NONE);
+	}
+
 	default Source asSource(Trigger trigger) {
 		return new Source(this, trigger);
+	}
+
+	default Target asTarget() {
+		return asTarget(Trigger.NONE);
 	}
 
 	default Target asTarget(Trigger trigger) {
@@ -392,7 +414,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 			SlotColumn slt = getHand().getGame().getSlots(side).get(idx);
 			if (xray || side == getSide()) {
 				for (Senshi tgt : slt.getCards()) {
-					if (tgt == null || (side != getSide() && tgt.isProtected(this))) continue;
+					if (tgt == null || (side != getSide() && !xray && tgt.isProtected(this))) continue;
 
 					if (tgt.getIndex() == idx) {
 						tgts.add(tgt);
@@ -400,7 +422,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 
 					if (empower) {
 						for (Senshi s : tgt.getNearby()) {
-							if ((side == getSide() || !s.isProtected(this)) && s.getIndex() == idx) {
+							if ((side == getSide() && !xray || !s.isProtected(this)) && s.getIndex() == idx) {
 								tgts.add(s);
 							}
 						}
@@ -412,7 +434,7 @@ public interface Drawable<T extends Drawable<T>> extends Cloneable {
 				else if (top) tgt = slt.getTop();
 				else tgt = slt.getBottom();
 
-				if (tgt == null || (side != getSide() && tgt.isProtected(this))) continue;
+				if (tgt == null || side != getSide() && tgt.isProtected(this)) continue;
 
 				if (tgt.getIndex() == idx) {
 					tgts.add(tgt);

@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,12 +18,10 @@
 
 package com.kuuhaku.model.common.shoukan;
 
-import com.kuuhaku.Constants;
-
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class PermMod extends AttrMod {
+public class PermMod extends ValueMod {
 	private final long seed = ThreadLocalRandom.current().nextLong();
 
 	public PermMod(double value) {
@@ -32,11 +30,15 @@ public class PermMod extends AttrMod {
 
 	@Override
 	public boolean equals(Object o) {
-		return false;
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		PermMod permMod = (PermMod) o;
+		return seed == permMod.seed;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(seed);
+		return Objects.hash(super.hashCode(), seed);
 	}
 }

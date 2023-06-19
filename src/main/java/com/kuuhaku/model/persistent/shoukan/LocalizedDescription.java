@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,11 +26,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "card_descriptions")
-public class LocalizedDescription extends DAO<LocalizedDescription> {
+public class LocalizedDescription extends DAO<LocalizedDescription> implements Serializable {
 	@EmbeddedId
 	private LocalizedId id;
 

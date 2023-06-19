@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.XList;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.FieldType;
@@ -30,8 +31,8 @@ import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.*;
-import com.kuuhaku.util.json.JSONArray;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import kotlin.Pair;
@@ -46,6 +47,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.random.RandomGenerator;
 
 @Entity
 @Table(name = "field")
@@ -179,7 +181,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	public boolean isActive() {
-		return hand.getGame().getArena().getField().equals(this);
+		return getGame().getArena().getField().equals(this);
 	}
 
 	@Override
@@ -294,8 +296,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	@Override
-	@SuppressWarnings("MethodDoesntCallSuperMethod")
-	public Field clone() throws CloneNotSupportedException {
+	public Field fork() {
 		Field clone = new Field(id, card, modifiers.clone(), type, effect, tags.clone());
 		clone.hand = hand;
 
@@ -307,14 +308,14 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		return card.getName();
 	}
 
-	public static Field getRandom() {
-		String id = DAO.queryNative(String.class, "SELECT card_id FROM field WHERE NOT effect ORDER BY RANDOM()");
-		if (id == null) return null;
+	public static Field getRandom(RandomGenerator rng) {
+		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM field WHERE NOT effect ORDER BY card_id");
+		if (ids.isEmpty()) return null;
 
-		return DAO.find(Field.class, id);
+		return DAO.find(Field.class, Utils.getRandomEntry(rng, ids));
 	}
 
-	public static Field getRandom(String... filters) {
+	public static Field getRandom(RandomGenerator rng, String... filters) {
 		XStringBuilder query = new XStringBuilder("SELECT card_id FROM field");
 		for (String f : filters) {
 			query.appendNewLine(f);
@@ -326,17 +327,17 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 			query.appendNewLine("AND NOT effect");
 		}
 
-		query.appendNewLine("ORDER BY RANDOM()");
+		query.appendNewLine("ORDER BY card_id");
 
-		String id = DAO.queryNative(String.class, query.toString());
-		if (id == null) return null;
+		List<String> ids = DAO.queryAllNative(String.class, query.toString());
+		if (ids.isEmpty()) return null;
 
-		return DAO.find(Field.class, id);
+		return DAO.find(Field.class, Utils.getRandomEntry(rng, ids));
 	}
 
-	public static XList<Field> getByTag(String... tags) {
+	public static XList<Field> getByTag(RandomGenerator rng, String... tags) {
 		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('field', ?1)", (Object[]) tags);
 
-		return new XList<>(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.card.id IN ?1", ids));
+		return new XList<>(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.id IN ?1 ORDER BY f.id", ids), rng);
 	}
 }

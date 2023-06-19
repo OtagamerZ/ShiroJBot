@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ public class Arena implements Renderer {
 
 		if (d instanceof Senshi s) {
 			if (s.getLastInteraction() != null) {
-				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget(Trigger.NONE));
+				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget());
 				if (s.popFlag(Flag.NO_DEATH)) {
 					return false;
 				}
@@ -584,18 +584,6 @@ public class Arena implements Renderer {
 				y = (BAR_SIZE.height + BAR_SIZE.height / 3) / 2 + 10;
 			}
 
-			/*if (hand.getUserDeck().getStyling().getFrame() == FrameSkin.BLUE) { //TODO Glitch
-				Graph.drawProcessedString(g, name, x, y, (str, px, py) -> {
-					Color color = Graph.getRandomColor();
-					g.setColor(color);
-
-					if (Calc.luminance(color) < 0.2) {
-						Graph.drawOutlinedString(g, str, px, py, 10, Color.WHITE);
-					} else {
-						Graph.drawOutlinedString(g, str, px, py, 10, Color.BLACK);
-					}
-				});
-			} else {*/
 			if (game.getCurrentSide() == hand.getSide()) {
 				g.setColor(hand.getUserDeck().getStyling().getFrame().getThemeColor());
 			} else {
@@ -603,7 +591,6 @@ public class Arena implements Renderer {
 			}
 
 			Graph.drawOutlinedString(g, name, x, y, 10, Color.BLACK);
-			//}
 
 			int rad = (int) (BAR_SIZE.height / 1.5);
 			Graph.applyTransformed(g, reversed ? 1860 : 5, BAR_SIZE.height + (reversed ? SIZE.height - rad - 10 : 5), g1 -> {

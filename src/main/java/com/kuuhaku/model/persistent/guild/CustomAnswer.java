@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ package com.kuuhaku.model.persistent.guild;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.id.CustomAnswerId;
-import com.kuuhaku.util.json.JSONArray;
+import com.ygimenez.json.JSONArray;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -106,8 +106,8 @@ public class CustomAnswer extends DAO<CustomAnswer> {
 		return users;
 	}
 
-	public void setSettings(GuildSettings settings) {
-		this.settings = settings;
+	public GuildSettings getSettings() {
+		return settings;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.util.API;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.XStringBuilder;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import org.apache.commons.cli.Option;
 import org.apache.http.client.methods.HttpHead;
 
@@ -43,9 +42,9 @@ public class Market {
 			Map.entry("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'"),
 			Map.entry("c", "AND kc.chrome = TRUE"),
 			Map.entry("k", "AND c.type = 'KAWAIPON'"),
-			Map.entry("s", "AND s.card.id IS NOT NULL"),
-			Map.entry("e", "AND c.type = 'EVOGEAR'"),
-			Map.entry("f", "AND c.type = 'FIELD'"),
+			Map.entry("s", "AND s.id IS NOT NULL"),
+			Map.entry("e", "AND e.id IS NOT NULL"),
+			Map.entry("f", "AND f.id IS NOT NULL"),
 			Map.entry("gl", "AND c.price >= ?%s"),
 			Map.entry("lt", "AND c.price <= ?%s"),
 			Map.entry("m", "AND c.kawaipon.uid = ?%s")
@@ -60,8 +59,9 @@ public class Market {
 		XStringBuilder query = new XStringBuilder("""
 				SELECT c FROM StashedCard c
 				LEFT JOIN KawaiponCard kc ON kc.uuid = c.uuid
-				LEFT JOIN Evogear e ON e.card = c.card
 				LEFT JOIN Senshi s ON s.card = c.card
+				LEFT JOIN Evogear e ON e.card = c.card
+				LEFT JOIN Field f ON f.card = c.card
 				WHERE c.price > 0
 				""");
 
@@ -89,7 +89,7 @@ public class Market {
 					   		WHEN 'COMMON' THEN 1
 				      		WHEN 'UNCOMMON' THEN 1.5
 				      		WHEN 'RARE' THEN 2
-				      		WHEN 'ULTRA_RARE' THEN 2.5
+				      		WHEN 'EPIC' THEN 2.5
 				      		WHEN 'LEGENDARY' THEN 3
 				      		ELSE 1
 				       	END)

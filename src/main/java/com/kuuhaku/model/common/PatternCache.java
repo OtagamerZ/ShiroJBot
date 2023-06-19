@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,5 @@ public class PatternCache {
 
     public static Pattern compile(@Language("RegExp") String regex) {
         return cache.computeIfAbsent(regex, k -> Pattern.compile(regex));
-    }
-
-    public static boolean matches(String in, @Language("RegExp") String regex) {
-        return compile(regex).matcher(in).matches();
     }
 }

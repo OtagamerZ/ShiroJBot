@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ public enum Trigger {
 	/** On each render **/
 	ON_TICK,
 
-	/** When turn begins (also expired turn-based effects) **/
+	/** When turn begins (also expires turn-based effects) **/
 	ON_TURN_BEGIN,
 
 	/** When turn ends **/
@@ -124,6 +124,9 @@ public enum Trigger {
 	/** On using a card's active effect **/
 	ON_ACTIVATE,
 
+	/** On triggering any effect **/
+	ON_EFFECT,
+
 	/** On using a spell **/
 	ON_SPELL,
 
@@ -140,11 +143,14 @@ public enum Trigger {
 	ON_TRAP,
 
 	/** Triggers mirrored from supported card **/
-	ON_DEFER,
+	ON_DEFER_SUPPORT,
+
+	/** Triggers mirrored from adjacent cards **/
+	ON_DEFER_NEARBY,
 
 	/** Triggers mirrored from attached player **/
 	ON_LEECH,
 
-	/** Nothing **/
+	/** Nothing <b>(DO NOT USE)</b> **/
 	NONE
 }

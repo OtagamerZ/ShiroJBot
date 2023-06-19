@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 package com.kuuhaku.command.deck;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.EmbedCluster;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.interfaces.Executable;
@@ -34,11 +35,10 @@ import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -47,83 +47,90 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
-		name = "deck",
-		subname = "frame",
-		category = Category.MISC
+        name = "deck",
+        path = "frame",
+        category = Category.MISC
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class DeckFrameCommand implements Executable {
-	private static final String URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/rewrite/src/main/resources/shoukan/frames/front/%s.png";
+    private static final String URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/rewrite/src/main/resources/shoukan/frames/%s/%s.png";
 
-	@Override
-	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Account acc = data.profile().getAccount();
-		Deck d = data.profile().getAccount().getCurrentDeck();
-		if (d == null) {
-			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-			return;
-		}
+    @Override
+    public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+        Account acc = data.profile().getAccount();
+        Deck d = data.profile().getAccount().getCurrentDeck();
+        if (d == null) {
+            event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
+            return;
+        }
 
-		if (args.isEmpty()) {
-			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setAuthor(locale.get("str/all_frames"));
+        if (args.isEmpty()) {
+            EmbedBuilder eb = new ColorlessEmbedBuilder()
+                    .setAuthor(locale.get("str/all_frames"));
 
-			FrameSkin[] frames = FrameSkin.values();
-			List<Page> pages = new ArrayList<>();
-			for (int i = 0; i < frames.length; i++) {
-				FrameSkin fc = frames[i];
-				if (!fc.canUse(acc)) {
-					List<Title> titles = fc.getTitles();
-					String req = Utils.properlyJoin(locale.get("str/and")).apply(
-							titles.stream()
-									.map(t -> "**`" + t.getInfo(locale).getName() + "`**")
-									.toList()
-					);
+            FrameSkin[] frames = FrameSkin.values();
+            List<Page> pages = new ArrayList<>();
+            for (int i = 0; i < frames.length; i++) {
+                FrameSkin fc = frames[i];
+                if (!fc.canUse(acc)) {
+                    List<Title> titles = fc.getTitles();
+                    String req = Utils.properlyJoin(locale.get("str/and")).apply(
+                            titles.stream()
+                                    .map(t -> "**`" + t.getInfo(locale).getName() + "`**")
+                                    .toList()
+                    );
 
-					eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
-							.setImage(null)
-							.setTitle(locale.get("str/frame_locked"))
-							.setDescription(locale.get("str/requires_titles", req));
-				} else {
-					eb.setImage(URL.formatted(fc.name().toLowerCase()))
-							.setTitle(fc.getName(locale))
-							.setDescription(fc.getDescription(locale));
-				}
-				eb.setFooter(locale.get("str/page", i + 1, frames.length));
+                    eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
+                            .setImage(null)
+                            .setTitle(locale.get("str/frame_locked"))
+                            .setDescription(locale.get("str/requires_titles", req))
+                            .setFooter(locale.get("str/page", i + 1, frames.length));
 
-				pages.add(new InteractPage(eb.build()));
-			}
+                    pages.add(InteractPage.of(eb.build()));
+                } else {
+                    EmbedCluster embeds = new EmbedCluster();
 
-			AtomicInteger i = new AtomicInteger();
-			event.channel().sendMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
-					Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
-								m.put(Utils.parseEmoji("◀️"), w -> {
-									if (i.get() > 1) {
-										s.editMessageEmbeds((MessageEmbed) pages.get(i.decrementAndGet()).getContent()).queue();
-									}
-								});
-								m.put(Utils.parseEmoji("▶️"), w -> {
-									if (i.get() < frames.length - 1) {
-										s.editMessageEmbeds((MessageEmbed) pages.get(i.incrementAndGet()).getContent()).queue();
-									}
-								});
-								m.put(Utils.parseEmoji("✅"), w -> {
-									FrameSkin frame = frames[i.get()];
-									if (!frame.canUse(acc)) {
-										event.channel().sendMessage(locale.get("error/frame_locked")).queue();
-										return;
-									}
+                    eb.setTitle(fc.getName(locale), URL.formatted("front", fc.name().toLowerCase()))
+                            .setDescription(fc.getDescription(locale))
+                            .setFooter(locale.get("str/page", i + 1, frames.length));
 
-									d.getStyling().setFrame(frame);
-									d.save();
-									event.channel().sendMessage(locale.get("success/frame_selected", d.getName()))
-											.flatMap(ms -> s.delete())
-											.queue();
-								});
-							}),
-							true, true, 1, TimeUnit.MINUTES, event.user()::equals
-					)
-			);
-		}
-	}
+                    embeds.getEmbeds().add(eb.setImage(URL.formatted("front", fc.name().toLowerCase())).build());
+                    embeds.getEmbeds().add(eb.setImage(URL.formatted("back", fc.name().toLowerCase())).build());
+
+                    pages.add(InteractPage.of(embeds));
+                }
+            }
+
+            AtomicInteger i = new AtomicInteger();
+            Utils.sendPage(event.channel(), pages.get(0)).queue(s ->
+                    Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
+                                m.put(Utils.parseEmoji("◀️"), w -> {
+                                    if (i.get() > 1) {
+                                        s.editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
+                                    }
+                                });
+                                m.put(Utils.parseEmoji("▶️"), w -> {
+                                    if (i.get() < frames.length - 1) {
+                                        s.editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
+                                    }
+                                });
+                                m.put(Utils.parseEmoji("✅"), w -> {
+                                    FrameSkin frame = frames[i.get()];
+                                    if (!frame.canUse(acc)) {
+                                        event.channel().sendMessage(locale.get("error/frame_locked")).queue();
+                                        return;
+                                    }
+
+                                    d.getStyling().setFrame(frame);
+                                    d.save();
+                                    event.channel().sendMessage(locale.get("success/frame_selected", d.getName()))
+                                            .flatMap(ms -> s.delete())
+                                            .queue();
+                                });
+                            }),
+                            true, true, 1, TimeUnit.MINUTES, event.user()::equals
+                    )
+            );
+        }
+    }
 }

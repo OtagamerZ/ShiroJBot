@@ -71,8 +71,9 @@ tasks.withType(JavaCompile).configureEach {
 
 dependencies {
 	//Core
-	implementation group: "net.dv8tion", name: "JDA", version: "5.0.0-beta.5"
-	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "4.0.1"
+	implementation group: "net.dv8tion", name: "JDA", version: "5.0.0-beta.10"
+	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "4.0.4"
+	implementation group: "com.github.ygimenez", name: "Simple-Moshi", version: "1.0.0"
 
 	//Database
 	implementation group: "org.postgresql", name: "postgresql", version: '42.5.4'
@@ -103,7 +104,7 @@ dependencies {
 	implementation group: "commons-io", name: "commons-io", version: "2.11.0"
 
 	//Logger
-	implementation group: "org.slf4j", name: "slf4j-api", version: '2.0.5'
+	implementation group: "org.slf4j", name: "slf4j-api", version: '1.7.25'
 	implementation group: "org.apache.logging.log4j", name: "log4j-api", version: '2.20.0'
 	implementation group: "org.apache.logging.log4j", name: "log4j-core", version: '2.20.0'
 	implementation group: "org.apache.logging.log4j", name: "log4j-slf4j-impl", version: '2.20.0'
@@ -114,8 +115,6 @@ dependencies {
 	implementation group: "it.sauronsoftware.cron4j", name: "cron4j", version: "2.2.5"
 	implementation group: "org.swinglabs.swingx", name: "swingx-graphics", version: "1.6.5-1"
 	implementation group: "net.oneandone.reflections8", name: "reflections8", version: "0.11.7"
-	implementation group: "com.squareup.moshi", name: "moshi", version: '1.14.0'
-	implementation group: "com.squareup.moshi", name: "moshi-adapters", version: '1.14.0'
 	implementation group: "com.squareup.okio", name: "okio", version: '3.3.0'
 	implementation group: "io.github.furstenheim", name: "copy_down", version: '1.1'
 	implementation group: "net.jodah", name: "expiringmap", version: "0.5.10"

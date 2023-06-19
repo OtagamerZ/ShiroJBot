@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,12 +21,19 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
+import com.kuuhaku.model.records.shoukan.history.Info;
 import com.kuuhaku.model.records.shoukan.history.Match;
-import com.kuuhaku.util.json.JSONArray;
-import com.kuuhaku.util.json.JSONObject;
+import com.kuuhaku.model.records.shoukan.history.Turn;
+import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
+import com.ygimenez.json.JSONUtils;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "match_history")
@@ -54,11 +61,29 @@ public class MatchHistory extends DAO<Field> {
 		this.data = new JSONArray(match.turns());
 	}
 
-	public JSONObject getHead() {
-		return head;
+	public Info getHead() {
+		return JSONUtils.fromJSON(head.toString(), Info.class);
 	}
 
-	public JSONArray getData() {
-		return data;
+	public List<Turn> getData() {
+		List<Turn> out = new ArrayList<>();
+		for (Object turn : data) {
+			out.add(JSONUtils.fromJSON(String.valueOf(turn), Turn.class));
+		}
+
+		return out;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		MatchHistory that = (MatchHistory) o;
+		return id == that.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }

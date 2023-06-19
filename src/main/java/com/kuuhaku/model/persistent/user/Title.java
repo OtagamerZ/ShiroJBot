@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,7 +96,7 @@ public class Title extends DAO<Title> {
 					WHEN 'COMMON' THEN 1
 					WHEN 'UNCOMMON' THEN 2
 					WHEN 'RARE' THEN 3
-					WHEN 'ULTRA_RARE' THEN 4
+					WHEN 'EPIC' THEN 4
 					WHEN 'LEGENDARY' THEN 5
 					WHEN 'ULTIMATE' THEN 6
 				END DESC

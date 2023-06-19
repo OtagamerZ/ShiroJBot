@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ public abstract class SpecialEvent {
 
 	public static void addEvent(Guild guild, SpecialEvent event) {
 		events.put(guild.getId(), new Pair<>(
-				System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS),
+				System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1),
 				event
 		));
 	}

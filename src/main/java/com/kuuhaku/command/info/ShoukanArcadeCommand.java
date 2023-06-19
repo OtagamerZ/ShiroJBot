@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ import com.kuuhaku.model.enums.shoukan.Arcade;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
@@ -40,7 +40,7 @@ import java.util.List;
 
 @Command(
 		name = "shoukan",
-		subname = "arcade",
+		path = "arcade",
 		category = Category.INFO
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
@@ -54,7 +54,7 @@ public class ShoukanArcadeCommand implements Executable {
 		for (Arcade arc : Arcade.values()) {
 			eb.setTitle(arc.toString(locale) + " (`" + arc + "`)")
 					.setDescription(arc.getDescription(locale));
-			pages.add(new InteractPage(eb.build()));
+			pages.add(InteractPage.of(eb.build()));
 		}
 
 		Utils.paginate(pages, event.channel(), event.user());

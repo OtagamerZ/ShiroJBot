@@ -34,7 +34,7 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.SignatureParser;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 
@@ -43,7 +43,7 @@ import java.util.Map;
 
 @Command(
 		name = "items",
-		subname = "use",
+		path = "use",
 		category = Category.MISC
 )
 @Signature(allowEmpty = true, value = "<id:word:r> <args:text>")
@@ -73,7 +73,7 @@ public class UseItemCommand implements Executable {
 							JSONObject params;
 							if (item.getSignature() == null) params = new JSONObject();
 							else {
-								params = SignatureParser.parse(locale, new String[]{item.getSignature()}, false, args.getString("args"));
+								params = SignatureParser.parse(locale, new String[]{item.getSignature()}, null, false, args.getString("args"));
 							}
 
 							item.execute(locale, event.channel(), acc.refresh(), params);

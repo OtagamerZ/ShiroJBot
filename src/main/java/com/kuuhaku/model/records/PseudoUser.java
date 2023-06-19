@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +19,13 @@
 package com.kuuhaku.model.records;
 
 import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.send.AllowedMentions;
+import club.minnced.discord.webhook.send.WebhookEmbed;
+import club.minnced.discord.webhook.send.WebhookMessage;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
@@ -42,5 +47,27 @@ public record PseudoUser(String name, String avatar, GuildMessageChannel channel
 		if (hook == null) return null;
 
 		return WebhookClient.withUrl(hook.getUrl());
+	}
+
+	public void send(Message source, String text, WebhookEmbed... embeds) {
+		try (WebhookClient hook = webhook()) {
+			if (hook != null) {
+				if (source != null) {
+					source.delete().queue(null, Utils::doNothing);
+				}
+
+				WebhookMessage msg = new WebhookMessageBuilder()
+						.setUsername(name)
+						.setAvatarUrl(avatar)
+						.setAllowedMentions(AllowedMentions.none())
+						.setContent(text)
+						.addEmbeds(embeds)
+						.build();
+
+				hook.send(msg);
+			} else {
+				channel.sendMessage(text).setMessageReference(source).queue();
+			}
+		}
 	}
 }

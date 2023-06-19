@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,9 @@ import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Index;
@@ -152,7 +153,24 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public boolean hasRole(Role role) {
-		return Utils.containsAny(roles, Role.DEVELOPER, role);
+		return hasRole(uid, false, role);
+	}
+
+	public static boolean hasRole(String uid, boolean and, Role... role) {
+		int flags = 0;
+		for (Role r : role) {
+			flags = Bit.set(flags, r.ordinal(), true);
+		}
+
+		if (and) {
+			return DAO.queryNative(Boolean.class, "SELECT bool(role & 8) OR (role & ?2) = ?2 FROM account WHERE uid = ?1",
+					uid, flags
+			);
+		} else {
+			return DAO.queryNative(Boolean.class, "SELECT bool(role & (8 | ?2)) FROM account WHERE uid = ?1",
+					uid, flags
+			);
+		}
 	}
 
 	public long getBalance() {
@@ -355,9 +373,21 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return inventory.getInt(id.toUpperCase());
 	}
 
+	public UserItem getItem(String id) {
+		if (getItemCount(id) > 0) {
+			return DAO.find(UserItem.class, id.toUpperCase());
+		}
+
+		return null;
+	}
+
 	public void addItem(UserItem item, int amount) {
+		addItem(item.getId(), amount);
+	}
+
+	public void addItem(String id, int amount) {
 		apply(getClass(), uid, a ->
-				a.getInventory().compute(item.getId(), (k, v) -> {
+				a.getInventory().compute(id, (k, v) -> {
 					if (v == null) return amount;
 
 					return ((Number) v).intValue() + amount;
@@ -378,12 +408,16 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public boolean consumeItem(String id, int amount) {
+		return consumeItem(id, amount, false);
+	}
+
+	public boolean consumeItem(String id, int amount, boolean force) {
 		if (amount <= 0) return false;
 
 		AtomicBoolean consumed = new AtomicBoolean();
 		apply(getClass(), uid, a -> {
 			int rem = a.getInventory().getInt(id.toUpperCase());
-			if (rem < amount) return;
+			if (rem < amount && !force) return;
 
 			if (rem - amount == 0) {
 				a.getInventory().remove(id.toUpperCase());

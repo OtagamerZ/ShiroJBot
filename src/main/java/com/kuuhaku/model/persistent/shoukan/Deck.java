@@ -1,20 +1,20 @@
  /*
-  * This file is part of Shiro J Bot.
-  * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
-  *
-  * Shiro J Bot is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * Shiro J Bot is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
-  */
+ * This file is part of Shiro J Bot.
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
+ *
+ * Shiro J Bot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Shiro J Bot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+ */
 
  package com.kuuhaku.model.persistent.shoukan;
 
@@ -38,7 +38,7 @@
  import com.kuuhaku.util.Graph;
  import com.kuuhaku.util.IO;
  import com.kuuhaku.util.Utils;
- import com.kuuhaku.util.json.JSONArray;
+ import com.ygimenez.json.JSONArray;
  import jakarta.persistence.*;
  import kotlin.Pair;
  import org.apache.commons.collections4.bag.HashBag;
@@ -610,7 +610,7 @@
 
 							 if (h != null) {
 								 if (origin.synergy() == Race.FEY) {
-									 m = mp * (Calc.chance(3) ? 2 : 1);
+									 m = mp * (Calc.chance(3, h.getGame().getRng()) ? 2 : 1);
 								 } else if (origin.synergy() == Race.GHOST && h.getGame().getTurn() > 0) {
 									 m = mp + (Math.ceil(h.getGame().getTurn() / 2d) % 2 == 0 ? 1 : 0);
 								 }

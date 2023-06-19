@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@ import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
-import com.kuuhaku.util.ImageFilters;
 import jakarta.persistence.*;
 import okio.Buffer;
 import org.apache.commons.io.FileUtils;
@@ -39,12 +38,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.Objects;
 
 @Entity
-@Table(name = "card")
-public class Card extends DAO<Card> {
+@Table(name = "card", indexes = @Index(columnList = "anime_id, id"))
+public class Card extends DAO<Card> implements Serializable {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -79,79 +79,20 @@ public class Card extends DAO<Card> {
 
 	public BufferedImage drawCard(boolean chrome) {
 		try {
-			byte[] cardBytes = getImageBytes();
-			assert cardBytes != null;
-
 			try (Buffer buf = new Buffer()) {
-				buf.write(cardBytes);
+				buf.write(getImageBytes());
 				BufferedImage card = ImageIO.read(buf.inputStream());
 
-				BufferedImage frame = IO.getResourceAsImage("kawaipon/frames/new/" + rarity.name().toLowerCase() + ".png");
-				assert frame != null;
+				buf.clear();
+				buf.write(rarity.getFrameBytes());
+				BufferedImage frame = ImageIO.read(buf.inputStream());
+
 				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();
+				g2d.setRenderingHints(Constants.HD_HINTS);
 
-				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 				g2d.drawImage(chrome ? chrome(card, false) : card, 15, 15, null);
 				g2d.drawImage(chrome ? chrome(frame, true) : frame, 0, 0, null);
-
-				g2d.dispose();
-
-				return canvas;
-			}
-		} catch (IOException e) {
-			Constants.LOGGER.error(e, e);
-			return null;
-		}
-	}
-
-	public BufferedImage drawUltimate(String uid) {
-		try {
-			byte[] cardBytes = getImageBytes();
-			assert cardBytes != null;
-
-			try (Buffer buf = new Buffer()) {
-				buf.write(cardBytes);
-				BufferedImage card = ImageIO.read(buf.inputStream());
-
-				BufferedImage frame = IO.getResourceAsImage("kawaipon/frames/new/ultimate.png");
-				BufferedImage nBar = IO.getResourceAsImage("kawaipon/frames/new/normal_bar.png");
-				BufferedImage fBar = IO.getResourceAsImage("kawaipon/frames/new/chrome_bar.png");
-				assert frame != null;
-				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
-				Graphics2D g2d = canvas.createGraphics();
-
-				g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-
-				double nProg = 1; //Card.queryNative(Number.class, "SELECT cs FROM \"GetNormalCompletionState\"(:id, :anime) cs", uid, id).doubleValue();
-				double fProg = 1; //Card.queryNative(Number.class, "SELECT cs FROM \"GetFoilCompletionState\"(:id, :anime) cs", uid, id).doubleValue();
-
-				double prcnt = Math.max(nProg, fProg);
-				g2d.setClip(new Rectangle(15, (int) (15 + 350 * (1 - prcnt)), 225, (int) (350 * prcnt)));
-				g2d.drawImage(prcnt >= 1 ? card : ImageFilters.grayscale(card), 15, 15, null);
-				g2d.setClip(null);
-
-				g2d.drawImage(frame, 0, 0, null);
-
-				if (nProg > 0) {
-					if (nProg >= 1) {
-						g2d.drawImage(nBar, 0, 0, null);
-					} else {
-						g2d.setClip(new Rectangle(0, (int) (82 + 295 * (1 - nProg)), frame.getWidth(), (int) (85 + 213 * nProg)));
-						g2d.drawImage(nBar, 0, 0, null);
-						g2d.setClip(null);
-					}
-				}
-
-				if (fProg > 0) {
-					if (fProg >= 1) {
-						g2d.drawImage(fBar, 0, 0, null);
-					} else {
-						g2d.setClip(new Rectangle(0, (int) (82 + 295 * (1 - fProg)), frame.getWidth(), (int) (85 + 213 * fProg)));
-						g2d.drawImage(fBar, 0, 0, null);
-						g2d.setClip(null);
-					}
-				}
 
 				g2d.dispose();
 
@@ -191,7 +132,7 @@ public class Card extends DAO<Card> {
 		}
 	}
 
-	private BufferedImage chrome(BufferedImage bi, boolean border) {
+	public BufferedImage chrome(BufferedImage bi, boolean border) {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		Graph.forEachPixel(bi, (x, y, rgb) -> {
@@ -214,34 +155,24 @@ public class Card extends DAO<Card> {
 	}
 
 	private byte[] getImageBytes() throws IOException {
-		File f = new File(System.getenv("CARDS_PATH") + anime.getId(), id + ".png");
+		byte[] cardBytes = Main.getCacheManager().computeResource(id, (k, v) -> {
+			if (v != null && v.length > 0) return v;
 
-		byte[] cardBytes;
-		if (f.exists()) {
-			File finalF = f;
-			cardBytes = Main.getCacheManager().computeResource(id, (k, v) -> {
-				if (v != null && v.length > 0) return v;
-
-				try {
-					return FileUtils.readFileToByteArray(finalF);
-				} catch (IOException e) {
-					Constants.LOGGER.error(e, e);
-					return null;
-				}
-			});
-		} else {
 			try {
-				cardBytes = IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png")), "png");
+				File f = new File(System.getenv("CARDS_PATH") + anime.getId(), id + ".png");
+				if (f.exists()) {
+					return FileUtils.readFileToByteArray(f);
+				} else {
+					return IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png")), "png");
+				}
 			} catch (IOException e) {
-				cardBytes = new byte[0];
+				Constants.LOGGER.error(e, e);
+				return null;
 			}
+		});
 
-			if (cardBytes.length == 0) {
-				f = IO.getResourceAsFile("kawaipon/not_found.png");
-				assert f != null;
-
-				cardBytes = FileUtils.readFileToByteArray(f);
-			}
+		if (cardBytes.length == 0) {
+			cardBytes = IO.getBytes(IO.getResourceAsImage("kawaipon/not_found.png"), "png");
 		}
 
 		return cardBytes;

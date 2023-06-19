@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,17 +24,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.random.RandomGenerator;
 
 public class XList<T> extends ArrayList<T> {
-	public XList(int initialCapacity) {
+	private final RandomGenerator rng;
+
+	public XList(int initialCapacity, RandomGenerator rng) {
 		super(initialCapacity);
+		this.rng = rng;
 	}
 
-	public XList() {
+	public XList(RandomGenerator rng) {
+		this.rng = rng;
 	}
 
-	public XList(@NotNull Collection<? extends T> c) {
+	public XList(@NotNull Collection<? extends T> c, RandomGenerator rng) {
 		super(c);
+		this.rng = rng;
 	}
 
 	public T getRandom() {

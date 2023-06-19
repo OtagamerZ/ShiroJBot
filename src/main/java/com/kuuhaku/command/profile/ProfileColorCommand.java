@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,14 +27,14 @@ import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
 import java.awt.*;
 
 @Command(
 		name = "profile",
-		subname = "color",
+		path = "color",
 		category = Category.MISC
 )
 @Signature(allowEmpty = true, value = "<text:text:r>")
@@ -48,7 +48,7 @@ public class ProfileColorCommand implements Executable {
 			settings.setColor(Color.BLACK);
 			event.channel().sendMessage(locale.get("success/profile_color_clear")).queue();
 		} else {
-			if (!Utils.regex(text, "#[\\da-fA-F]{6}").matches()) {
+			if (!Utils.match(text, "#[\\da-fA-F]{6}")) {
 				event.channel().sendMessage(locale.get("error/invalid_color")).queue();
 				return;
 			}

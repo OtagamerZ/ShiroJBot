@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -40,6 +40,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -139,7 +140,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 	}
 
 	private boolean scanWord(String word) throws FileNotFoundException {
-		try (Scanner s = new Scanner(new FileInputStream(dict))) {
+		try (Scanner s = new Scanner(new FileInputStream(dict), StandardCharsets.UTF_8)) {
 			char c = word.charAt(0);
 
 			int idx = 0;

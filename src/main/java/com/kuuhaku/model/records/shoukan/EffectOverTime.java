@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,6 +57,20 @@ public record EffectOverTime(
 		);
 	}
 
+	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, AtomicInteger turns, AtomicInteger limit, AtomicBoolean lock, EnumSet<Trigger> triggers, AtomicBoolean closed) {
+		this.source = source;
+		this.debuff = debuff;
+		this.side = side;
+		this.effect = effect;
+		this.turns = turns;
+		this.limit = limit;
+		this.lock = lock;
+		this.triggers = triggers;
+		this.closed = closed;
+
+		this.triggers.remove(Trigger.NONE);
+	}
+
 	public void decreaseTurn() {
 		if (turns != null && turns.get() > 0) turns.getAndDecrement();
 	}
@@ -94,12 +108,17 @@ public record EffectOverTime(
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		EffectOverTime that = (EffectOverTime) o;
-		return source.getSerial() == that.source.getSerial() && side == that.side;
+
+		if (permanent()) {
+			return source.getId().equals(that.source.getId()) && side == that.side;
+		} else {
+			return source.getSerial() == that.source.getSerial() && side == that.side;
+		}
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(source.getSerial(), side);
+		return Objects.hash(permanent() ? source.getId() : source.getSerial(), side);
 	}
 
 	@Override

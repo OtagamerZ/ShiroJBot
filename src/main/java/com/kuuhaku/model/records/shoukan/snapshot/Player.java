@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ package com.kuuhaku.model.records.shoukan.snapshot;
 
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.util.IO;
-import com.kuuhaku.util.json.JSONUtils;
+import com.ygimenez.json.JSONUtils;
 
 import java.io.IOException;
 import java.util.stream.Collectors;

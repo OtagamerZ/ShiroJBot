@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2021  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.util.IO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -69,6 +70,14 @@ public abstract class Manager {
 
 				Constants.LOGGER.info("Applied " + scripts.size() + " scripts: " + scripts);
 			}
+
+			GlobalProperty ver = DAO.find(GlobalProperty.class, "build_number");
+			if (ver == null) {
+				ver = new GlobalProperty("build_number", "0");
+			}
+
+			ver.setValue(Integer.parseInt(ver.getValue()) + 1);
+			ver.save();
 		}
 
 		return emf;

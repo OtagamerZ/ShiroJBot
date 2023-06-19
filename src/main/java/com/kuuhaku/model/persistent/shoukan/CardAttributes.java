@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,10 @@
 package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONArray;
+import com.ygimenez.json.JSONArray;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -30,6 +31,7 @@ import org.hibernate.annotations.Type;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -72,7 +74,7 @@ public class CardAttributes implements Serializable, Cloneable {
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
 
-	private transient boolean lock = false;
+	private transient EnumSet<Trigger> lock = EnumSet.noneOf(Trigger.class);
 
 	public int getMana() {
 		return mana;
@@ -120,16 +122,46 @@ public class CardAttributes implements Serializable, Cloneable {
 		return Utils.getOr(effect, "");
 	}
 
-	public boolean isLocked() {
+	public EnumSet<Trigger> getLocks() {
 		return lock;
 	}
 
-	public void lock() {
-		lock = true;
+	public boolean isLocked(Trigger trigger) {
+		return lock.contains(trigger);
 	}
 
-	public void unlock() {
-		lock = false;
+	public void lock(Trigger... triggers) {
+		if (triggers.length == 0) throw new IllegalArgumentException("Triggers cannot be empty");
+		for (Trigger trigger : triggers) {
+			if (trigger == null) continue;
+
+			lock.add(trigger);
+		}
+	}
+
+	public void lock(Set<Trigger> triggers) {
+		lock.addAll(triggers);
+	}
+
+	public void lockAll() {
+		lock.addAll(EnumSet.allOf(Trigger.class));
+	}
+
+	public void unlock(Trigger... triggers) {
+		if (triggers.length == 0) throw new IllegalArgumentException("Triggers cannot be empty");
+		for (Trigger trigger : triggers) {
+			if (trigger == null) continue;
+
+			lock.remove(trigger);
+		}
+	}
+
+	public void unlock(Set<Trigger> triggers) {
+		lock.removeAll(triggers);
+	}
+
+	public void unlockAll() {
+		lock.clear();
 	}
 
 	@Override

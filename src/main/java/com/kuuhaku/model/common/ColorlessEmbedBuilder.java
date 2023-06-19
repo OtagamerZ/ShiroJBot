@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2021  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,18 +19,13 @@
 package com.kuuhaku.model.common;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
 public class ColorlessEmbedBuilder extends EmbedBuilder {
 	private static final Color color = Color.decode("#2f3136");
 
-	@NotNull
-	@Override
-	public MessageEmbed build() {
-		super.setColor(color);
-		return super.build();
+	public ColorlessEmbedBuilder() {
+		setColor(color);
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,12 +21,14 @@ package com.kuuhaku.command.info;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.StringTree;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
@@ -34,8 +36,7 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.PreparedCommand;
 import com.kuuhaku.util.SignatureParser;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.XStringBuilder;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
@@ -90,7 +91,8 @@ public class HelpCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/command", pc.name()))
-				.addField(locale.get("str/category"), pc.category().getName(locale), true);
+				.addField(locale.get("str/category"), pc.category().getName(locale), true)
+				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.call());
 
 		if (alias != null) {
 			eb.addField("Alias", "`" + data.config().getPrefix() + alias + "`", true);
@@ -107,19 +109,16 @@ public class HelpCommand implements Executable {
 
 		Set<PreparedCommand> subCmds = pc.getSubCommands();
 		if (!subCmds.isEmpty()) {
-			XStringBuilder sb = new XStringBuilder("`" + data.config().getPrefix() + pc.name() + "`");
+			StringTree tree = new StringTree();
 
-			int i = 0;
 			for (PreparedCommand sub : subCmds) {
-				String name = sub.name().split("\\.")[1];
-				if (++i == subCmds.size()) {
-					sb.appendNewLine("⠀⠀└ `." + name + "`");
-				} else {
-					sb.appendNewLine("⠀⠀├ `." + name + "`");
-				}
+				String[] path = sub.name().split("(?=\\.)");
+				path[0] = data.config().getPrefix() + path[0];
+
+				tree.addElement(path[path.length - 1], path);
 			}
 
-			eb.addField(locale.get("str/subcommands"), sb.toString(), false);
+			eb.addField(locale.get("str/subcommands"), "```" + tree + "```", false);
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
@@ -136,7 +135,8 @@ public class HelpCommand implements Executable {
 		EmbedBuilder index = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/all_commands"))
 				.appendDescription(locale.get("str/category_counter", categories.size()) + "\n")
-				.appendDescription(locale.get("str/command_counter", categories.stream().map(Category::getCommands).mapToInt(Set::size).sum()));
+				.appendDescription(locale.get("str/command_counter", categories.stream().map(Category::getCommands).mapToInt(Set::size).sum()))
+				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.call());
 
 		Map<Emoji, Page> pages = new LinkedHashMap<>();
 		for (Category cat : categories) {
@@ -149,10 +149,12 @@ public class HelpCommand implements Executable {
 		CustomEmoji home = bot.getEmojiById("674261700366827539");
 		if (home != null) {
 			index.setThumbnail(home.getImageUrl());
-			pages.put(Utils.parseEmoji(home.getId()), new InteractPage(index.build()));
+			pages.put(Utils.parseEmoji(home.getId()), InteractPage.of(index.build()));
 		}
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.call());
+
 		for (Category cat : categories) {
 			CustomEmoji emt = cat.getEmote();
 			if (emt == null) continue;
@@ -161,7 +163,8 @@ public class HelpCommand implements Executable {
 					.setTitle(cat.getName(locale))
 					.setThumbnail(emt.getImageUrl())
 					.appendDescription(cat.getDescription(locale) + "\n\n")
-					.appendDescription(locale.get("str/command_counter", cat.getCommands().size()));
+					.appendDescription(locale.get("str/command_counter", cat.getCommands().size()))
+					.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.call());;
 
 			pages.put(Utils.parseEmoji(emt.getId()), Utils.generatePage(eb, cat.getCommands(), 10, cmd -> {
 				if (cmd.name().contains(".")) return null;

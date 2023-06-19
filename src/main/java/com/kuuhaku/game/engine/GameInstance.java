@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
@@ -47,11 +47,13 @@ import java.util.Deque;
 import java.util.Set;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public abstract class GameInstance<T extends Enum<T>> {
 	public static final Set<String> PLAYERS = ConcurrentHashMap.newKeySet();
 	private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+	private final long seed = ThreadLocalRandom.current().nextLong();
 
 	private CompletableFuture<Void> exec;
 	private DelayedAction timeout;
@@ -69,12 +71,16 @@ public abstract class GameInstance<T extends Enum<T>> {
 		this.players = players;
 	}
 
+	public long getSeed() {
+		return seed;
+	}
+
 	public final CompletableFuture<Void> start(Guild guild, GuildMessageChannel... channels) {
 		return exec = CompletableFuture.runAsync(() -> {
 			SimpleMessageListener sml = new SimpleMessageListener(channels) {
 				{
 					turn = 1;
-					channel = getChannel();
+					channel = this.getChannel().setCooldown(1, TimeUnit.SECONDS);
 				}
 
 				@Override
@@ -175,6 +181,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 	}
 
 	protected Pair<Method, JSONObject> toAction(String args) {
+		return toAction(args, m -> true);
+	}
+
+	protected Pair<Method, JSONObject> toAction(String args, Predicate<Method> condition) {
 		Method[] meths = getClass().getDeclaredMethods();
 		for (Method meth : meths) {
 			PlayerAction pa = meth.getAnnotation(PlayerAction.class);
@@ -185,7 +195,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 				}
 
 				Pattern pat = PatternCache.compile(pa.value());
-				if (Utils.regex(args, pat).matches()) {
+				if (Utils.match(args, pat) && condition.test(meth)) {
 					return new Pair<>(meth, Utils.extractNamedGroups(args, pat));
 				}
 			}
@@ -203,8 +213,13 @@ public abstract class GameInstance<T extends Enum<T>> {
 		if (code == GameReport.SUCCESS) {
 			exec.complete(null);
 
-			if (!(this instanceof Shoukan s && s.isSingleplayer() && s.getArcade() == null)) {
-				int prize = (int) (500 * Calc.rng(0.75, 1.25));
+			if (this instanceof Shoukan s && !s.hasCheated() && s.getArcade() == null) {
+				int prize = (int) (500 * Calc.rng(0.75, 1.25, s.getRng()));
+				for (String uid : getPlayers()) {
+					DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
+				}
+			} else if (!(this instanceof Shoukan)) {
+				int prize = (int) (350 * Calc.rng(0.75, 1.25));
 				for (String uid : getPlayers()) {
 					DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
 				}

@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -41,7 +42,7 @@ import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.*;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -100,10 +101,10 @@ public class SeeCardCommand implements Executable {
 				boolean chrome = type.equals("c");
 				KawaiponCard kc = kp.getCard(card, chrome);
 				if (kc == null) {
-					bi = ImageFilters.silhouette(card.drawCard(chrome));
+					bi = ImageFilters.silhouette(card.drawCard(false));
 					Graph.overlay(bi, IO.getResourceAsImage("kawaipon/missing.png"));
 				} else {
-					bi = card.drawCard(chrome);
+					bi = kc.render();
 				}
 
 				if (kc != null) {

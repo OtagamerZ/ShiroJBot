@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@ import com.kuuhaku.manager.CommandManager;
 import com.kuuhaku.manager.ScheduleManager;
 import com.sun.management.OperatingSystemMXBean;
 import org.apache.commons.lang3.time.StopWatch;
-import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import java.lang.management.ManagementFactory;
@@ -98,7 +97,6 @@ public class Main {
 		return commandManager;
 	}
 
-	@NotNull
 	public static Application getApp() {
 		return app;
 	}

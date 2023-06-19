@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.StashItem;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.XStringBuilder;
-import com.kuuhaku.util.json.JSONObject;
+import com.kuuhaku.model.common.XStringBuilder;
+import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -91,9 +91,9 @@ public class StashCommand implements Executable {
 				Map.entry("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'"),
 				Map.entry("c", "AND kc.chrome = TRUE"),
 				Map.entry("k", "AND c.type = 'KAWAIPON'"),
-				Map.entry("s", "AND s.card.id IS NOT NULL"),
-				Map.entry("e", "AND c.type = 'EVOGEAR'"),
-				Map.entry("f", "AND c.type = 'FIELD'"),
+				Map.entry("s", "AND s.id IS NOT NULL"),
+				Map.entry("e", "AND e.id IS NOT NULL"),
+				Map.entry("f", "AND f.id IS NOT NULL"),
 				Map.entry("v", "AND c.deck IS NULL"),
 				Map.entry("t", "AND c.trash = TRUE")
 		);
@@ -101,8 +101,9 @@ public class StashCommand implements Executable {
 		XStringBuilder query = new XStringBuilder("""
 				SELECT c FROM StashedCard c
 				LEFT JOIN KawaiponCard kc ON kc.uuid = c.uuid
-				LEFT JOIN Evogear e ON e.card = c.card
 				LEFT JOIN Senshi s ON s.card = c.card
+				LEFT JOIN Evogear e ON e.card = c.card
+				LEFT JOIN Field f ON f.card = c.card
 				WHERE c.kawaipon.uid = ?1
 				""");
 		List<Object> params = new ArrayList<>();

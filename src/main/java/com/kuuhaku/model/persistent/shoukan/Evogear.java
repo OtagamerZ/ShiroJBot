@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
@@ -39,8 +40,8 @@ import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.model.records.shoukan.Targeting;
 import com.kuuhaku.util.*;
-import com.kuuhaku.util.json.JSONArray;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
@@ -54,6 +55,7 @@ import java.awt.image.RescaleOp;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
@@ -141,7 +143,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public boolean isSpell() {
-		return spell;
+		return spell && equipper == null;
 	}
 
 	public TargetType getTargetType() {
@@ -305,7 +307,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MACHINE) * 0.02);
 			}
 
-			if (hand.getGame().getArcade() == Arcade.OVERCHARGE) {
+			if (getGame().getArcade() == Arcade.OVERCHARGE) {
 				mult *= 1.5;
 			}
 		}
@@ -323,7 +325,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 			mult *= 1 - Math.max(0, 0.07 * (hand.getOrigin().minor().length - 1));
 
-			if (hand.getGame().getArcade() == Arcade.OVERCHARGE) {
+			if (getGame().getArcade() == Arcade.OVERCHARGE) {
 				mult *= 1.75;
 			}
 		}
@@ -376,24 +378,28 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
+	public CachedScriptManager<Evogear> getCSM() {
+		return cachedEffect;
+	}
+
+	@Override
 	public boolean execute(EffectParameters ep) {
-		if (base.isLocked()) return false;
-		else if (!hasEffect() || hand.getLockTime(Lock.EFFECT) > 0) return false;
+		if (ep.trigger() == NONE || !hasEffect() || hand.getLockTime(Lock.EFFECT) > 0) return false;
 		else if (!getEffect().contains(ep.trigger().name())) {
 			if (!isSpell() || !Utils.equalsAny(ep.trigger(), ON_ACTIVATE, ON_TRAP)) {
 				return false;
 			}
 		}
 
-		Shoukan game = hand.getGame();
+		Shoukan game = getGame();
 		try {
 			cachedEffect.forScript(getEffect())
 					.withConst("evo", this)
-					.withConst("game", hand.getGame())
+					.withConst("game", getGame())
 					.withConst("data", stats.getData())
 					.withVar("ep", ep)
 					.withVar("side", hand.getSide())
-					.withVar("props", extractValues(hand.getGame().getLocale(), cachedEffect))
+					.withVar("props", extractValues(getGame().getLocale()))
 					.withVar("trigger", ep.trigger());
 
 			if (!isSpell()) {
@@ -403,6 +409,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			cachedEffect.run();
 
 			stats.popFlag(Flag.EMPOWERED);
+			if (ep.trigger() != ON_TICK) {
+				game.trigger(ON_EFFECT, hand.getSide());
+			}
+
 			return true;
 		} catch (TargetException e) {
 			if (targetType != TargetType.NONE && ep.trigger() == Trigger.ON_ACTIVATE) {
@@ -429,18 +439,17 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void executeAssert(Trigger trigger) {
-		if (base.isLocked() || isSpell()) return;
-		else if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return;
+		if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return;
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
 			Utils.exec(getEffect(), Map.of(
 					"evo", this,
-					"game", hand.getGame(),
+					"game", getGame(),
 					"data", stats.getData(),
 					"ep", new EffectParameters(trigger, getSide()),
 					"side", hand.getSide(),
-					"props", extractValues(hand.getGame().getLocale(), cachedEffect),
+					"props", extractValues(getGame().getLocale()),
 					"self", equipper,
 					"trigger", trigger
 			));
@@ -518,7 +527,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 						y += 11;
 					}
 
-					JSONObject values = extractValues(locale, cachedEffect);
+					JSONObject values = extractValues(locale);
 					Graph.drawMultilineString(g1, desc,
 							7, y, 211, 3,
 							parseValues(g1, deck.getStyling(), values), highlightValues(g1, style.getFrame().isLegacy())
@@ -564,7 +573,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				if (hand != null) {
 					if (stats.hasFlag(Flag.EMPOWERED)) {
 						boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
-						BufferedImage emp = IO.getResourceAsImage("kawaipon/frames/" + (legacy ? "old" : "new") + "/empowered.png");
+						BufferedImage emp = IO.getResourceAsImage("shoukan/frames/" + (legacy ? "old" : "new") + "/empowered.png");
 
 						g2d.drawImage(emp, 0, 0, null);
 					}
@@ -617,8 +626,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	@SuppressWarnings("MethodDoesntCallSuperMethod")
-	public Evogear clone() throws CloneNotSupportedException {
+	public Evogear fork() throws CloneNotSupportedException {
 		Evogear clone = new Evogear(id, card, tier, spell, targetType, charms.clone(), base.clone());
 		clone.stats = stats.clone();
 		clone.hand = hand;
@@ -631,14 +639,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		return card.getName();
 	}
 
-	public static Evogear getRandom() {
-		String id = DAO.queryNative(String.class, "SELECT card_id FROM evogear WHERE tier > 0 ORDER BY RANDOM()");
-		if (id == null) return null;
+	public static Evogear getRandom(RandomGenerator rng) {
+		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM evogear WHERE tier > 0 ORDER BY card_id");
+		if (ids.isEmpty()) return null;
 
-		return DAO.find(Evogear.class, id);
+		return DAO.find(Evogear.class, Utils.getRandomEntry(rng, ids));
 	}
 
-	public static Evogear getRandom(String... filters) {
+	public static Evogear getRandom(RandomGenerator rng, String... filters) {
 		XStringBuilder query = new XStringBuilder("SELECT card_id FROM evogear");
 		for (String f : filters) {
 			query.appendNewLine(f);
@@ -650,17 +658,17 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			query.appendNewLine("AND tier > 0");
 		}
 
-		query.appendNewLine("ORDER BY RANDOM()");
+		query.appendNewLine("ORDER BY card_id");
 
-		String id = DAO.queryNative(String.class, query.toString());
-		if (id == null) return null;
+		List<String> ids = DAO.queryAllNative(String.class, query.toString());
+		if (ids.isEmpty()) return null;
 
-		return DAO.find(Evogear.class, id);
+		return DAO.find(Evogear.class, Utils.getRandomEntry(rng, ids));
 	}
 
-	public static XList<Evogear> getByTag(String... tags) {
+	public static XList<Evogear> getByTag(RandomGenerator rng, String... tags) {
 		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('evogear', ?1)", (Object[]) tags);
 
-		return new XList<>(DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.card.id IN ?1", ids));
+		return new XList<>(DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.id IN ?1 ORDER BY e.id", ids), rng);
 	}
 }

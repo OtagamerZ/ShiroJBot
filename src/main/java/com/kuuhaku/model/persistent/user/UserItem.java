@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.intellij.lang.annotations.Language;
@@ -61,6 +61,9 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
+
+	@Column(name = "account_bound", nullable = false)
+	private boolean accountBound = false;
 
 	public String getId() {
 		return id;
@@ -107,6 +110,10 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 				"acc", acc,
 				"params", params
 		));
+	}
+
+	public boolean isAccountBound() {
+		return accountBound;
 	}
 
 	public String toString(I18N locale) {

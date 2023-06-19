@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2021  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,8 +40,8 @@ public class CommandManager {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			String full = params.name();
-			if (!params.subname().isBlank()) {
-				full += "." + params.subname();
+			if (params.path().length > 0) {
+				full += "." + String.join(".", params.path());
 			}
 
 			if (!names.add(full)) {
@@ -79,8 +79,8 @@ public class CommandManager {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			String full = params.name();
-			if (!params.subname().isBlank()) {
-				full += "." + params.subname();
+			if (params.path().length > 0) {
+				full += "." + String.join(".", params.path());
 			}
 
 			if (name.equalsIgnoreCase(full)) {
@@ -106,11 +106,11 @@ public class CommandManager {
 
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
-			if (params.subname().isBlank() || !params.name().equalsIgnoreCase(parent)) continue;
+			if (params.path().length == 0 || !params.name().equalsIgnoreCase(parent)) continue;
 
 			Requires req = cmd.getDeclaredAnnotation(Requires.class);
 			out.add(new PreparedCommand(
-					params.name() + "." + params.subname(),
+					params.name() + "." + String.join(".", params.path()),
 					"cmd/" + cmd.getSimpleName()
 							.replaceFirst("(Command|Reaction)$", "")
 							.replaceAll("[a-z](?=[A-Z])", "$0-")
@@ -126,8 +126,8 @@ public class CommandManager {
 
 	private void extractCommand(Set<PreparedCommand> commands, Class<?> cmd, Command params) {
 		String full = params.name();
-		if (!params.subname().isBlank()) {
-			full += "." + params.subname();
+		if (params.path().length > 0) {
+			full += "." + String.join(".", params.path());
 		}
 
 		Requires req = cmd.getDeclaredAnnotation(Requires.class);
@@ -162,5 +162,17 @@ public class CommandManager {
 
 	public Set<String> getReservedNames() {
 		return names;
+	}
+
+	public Set<Permission> getAllPermissions() {
+		Set<Permission> perms = EnumSet.noneOf(Permission.class);
+		for (Class<?> cmd : cmds) {
+			Requires req = cmd.getDeclaredAnnotation(Requires.class);
+			if (req != null) {
+				perms.addAll(Set.of(req.value()));
+			}
+		}
+
+		return perms;
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,8 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.model.records.GuildBuff;
-import com.kuuhaku.util.json.JSONObject;
-import com.kuuhaku.util.json.JSONUtils;
+import com.ygimenez.json.JSONObject;
+import com.ygimenez.json.JSONUtils;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -76,6 +76,7 @@ public class GuildConfig extends DAO<GuildConfig> {
 
 	@OneToMany(mappedBy = "guild", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy("xp DESC")
 	private Set<Profile> profiles = new LinkedHashSet<>();
 
 	public GuildConfig() {

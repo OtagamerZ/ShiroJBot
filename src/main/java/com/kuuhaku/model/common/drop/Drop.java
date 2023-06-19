@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,10 +32,11 @@ import kotlin.Pair;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.SplittableRandom;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.random.RandomGenerator;
 
 public abstract class Drop<T> {
 	private final long seed = ThreadLocalRandom.current().nextLong();
@@ -157,7 +158,7 @@ public abstract class Drop<T> {
 	}
 
 	public final boolean check(Account acc) {
-		Random rng = getRng();
+		RandomGenerator rng = getRng();
 
 		for (DropCondition dc : conditions) {
 			if (!dc.condition().apply(dc.extractor().apply(rng), acc)) {
@@ -168,8 +169,8 @@ public abstract class Drop<T> {
 		return true;
 	}
 
-	public final Random getRng() {
-		return new Random(seed);
+	public final RandomGenerator getRng() {
+		return new SplittableRandom(seed);
 	}
 
 	public final void award(Account acc) {

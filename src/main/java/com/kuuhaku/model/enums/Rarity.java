@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,18 +18,24 @@
 
 package com.kuuhaku.model.enums;
 
+import com.kuuhaku.Constants;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.IO;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 
 public enum Rarity {
 	COMMON(1, 0xFFFFFF, "<:common:726171819664736268> "),
 	UNCOMMON(2, 0x03BB85, "<:uncommon:726171819400232962> "),
 	RARE(3, 0x70D1F4, "<:rare:726171819853480007> "),
-	ULTRA_RARE(4, 0x9966CC, "<:ultra_rare:726171819786240091> "),
+	EPIC(4, 0x9966CC, "<:epic:1103772898407223348> "),
 	LEGENDARY(5, 0xDC9018, "<:legendary:726171819945623682> "),
 	ULTIMATE(-1, 0xD400AA, "<:ultimate:1002748864643743774> "),
 	EVOGEAR,
@@ -89,6 +95,19 @@ public enum Rarity {
 
 	public int getCount() {
 		return DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM card WHERE rarity = ?1", name());
+	}
+
+	public byte[] getFrameBytes() {
+		return Main.getCacheManager().computeResource("frame_" + name(), (k, v) -> {
+			if (v != null && v.length > 0) return v;
+
+			try {
+				return IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "frame/" + name() + ".png")), "png");
+			} catch (IOException e) {
+				Constants.LOGGER.error(e, e);
+				return null;
+			}
+		});
 	}
 
 	public static Rarity[] getActualRarities() {

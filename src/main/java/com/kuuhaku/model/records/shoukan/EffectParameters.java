@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.exceptions.TargetException;
-import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Side;
@@ -29,7 +28,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.*;
 
-public record EffectParameters(Trigger trigger, Side side, Source source, Target... targets) {
+public record EffectParameters(Trigger trigger, Side side, DeferredTrigger referee, Source source, Target... targets) {
 	public EffectParameters(Trigger trigger, Side side) {
 		this(trigger, side, new Source());
 	}
@@ -39,15 +38,20 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 	}
 
 	public EffectParameters(Trigger trigger, Side side, Source source, Target... targets) {
+		this(trigger, side, null, source, targets);
+	}
+
+	public EffectParameters(Trigger trigger, Side side, DeferredTrigger referee, Source source, Target... targets) {
 		this.trigger = trigger;
 		this.side = side;
+		this.referee = referee;
 		this.source = source;
 
 		Set<Target> tgts = new HashSet<>(List.of(targets));
 		if (source.card() instanceof Senshi s) {
 			if (s.hasFlag(Flag.EMPOWERED)) {
 				for (Target tgt : tgts) {
-					if (tgt.trigger() == Trigger.NONE) continue;
+					if (tgt.trigger() == null) continue;
 
 					if (tgt.index() > 0) {
 						tgts.add(new Target(
@@ -101,7 +105,7 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 		return i;
 	}
 
-	public boolean isTarget(Drawable<?> card) {
+	public boolean isTarget(Senshi card) {
 		return Arrays.stream(targets).anyMatch(t -> Objects.equals(t.card(), card));
 	}
 
@@ -153,8 +157,8 @@ public record EffectParameters(Trigger trigger, Side side, Source source, Target
 		return out;
 	}
 
-	public boolean deferred() {
-		return trigger == Trigger.ON_DEFER;
+	public boolean isDeferred(Trigger trigger) {
+		return referee != null && referee.trigger() == trigger;
 	}
 
 	public boolean leeched() {

@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2022  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,9 +27,8 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.json.JSONObject;
+import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 @Command(
 		name = "daily",
@@ -52,14 +51,10 @@ public class DailyCommand implements Executable {
 		event.channel().sendMessage(locale.get("success/daily")).queue();
 
 		acc.addVote(); // TODO Remove
-		if (acc.getStreak() > 0 && (acc.getStreak() + 1) % 7 == 0) {
+		if (acc.getStreak() > 0 && acc.getStreak() % 7 == 0) {
 			int gems = Math.min((int) Calc.getFibonacci(acc.getStreak() / 7), 3);
 			acc.addGems(gems, "Vote streak " + acc.getStreak());
-
-			GuildMessageChannel chn = data.config().getSettings().getNotificationsChannel();
-			if (chn != null) {
-				chn.sendMessage(locale.get("achievement/gem", event.user().getAsMention(), gems, acc.getStreak())).queue();
-			}
+			data.notify(locale.get("achievement/gem", event.user().getAsMention(), gems, acc.getStreak()));
 		}
 	}
 }
