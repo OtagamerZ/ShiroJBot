@@ -262,7 +262,7 @@ public class SynthesizeCommand implements Executable {
                         Kawaipon kp = acc.getKawaipon();
                         acc.consumeItem(shard, 10);
 
-                        List<Card> pool = DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE c.rarity = ?1", r);
+                        List<Card> pool = DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE c.anime.visible = TRUE AND c.rarity = ?1", r);
                         KawaiponCard kc = new KawaiponCard(Utils.getRandomEntry(pool), false);
                         kc.setKawaipon(kp);
                         kc.save();

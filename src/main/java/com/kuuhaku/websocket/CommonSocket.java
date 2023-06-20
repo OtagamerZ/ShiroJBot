@@ -91,27 +91,28 @@ public class CommonSocket extends WebSocketClient {
 
 			String token = DigestUtils.sha256Hex(TOKEN);
 			if (!payload.getString("auth").equals(DigestUtils.sha256Hex(TOKEN))) return;
+			else if (payload.getString("channel").equals("eval")) {
+				@Language("Groovy")
+				String code = new String(IO.btoa(payload.getString("code")), StandardCharsets.UTF_8);
+
+				if (payload.getString("checksum").equals(DigestUtils.md5Hex(code))) {
+					Utils.exec(code, Map.of("bot", Main.getApp().getMainShard()));
+				}
+				return;
+			}
+
+			send(JSONObject.of(
+					Map.entry("type", "ACKNOWLEDGE"),
+					Map.entry("key", payload.getString("key")),
+					Map.entry("token", token)
+			).toString());
+
+			MessageDigest md = DigestUtils.getDigest("md5");
+			md.update(payload.getString("key").getBytes(StandardCharsets.UTF_8));
+			md.update(token.getBytes(StandardCharsets.UTF_8));
 
 			switch (payload.getString("channel")) {
-				case "eval" -> {
-					@Language("Groovy")
-					String code = new String(IO.btoa(payload.getString("code")), StandardCharsets.UTF_8);
-
-					if (payload.getString("checksum").equals(DigestUtils.md5Hex(code))) {
-						Utils.exec(code, Map.of("bot", Main.getApp().getMainShard()));
-					}
-				}
 				case "shoukan" -> {
-					send(JSONObject.of(
-						Map.entry("type", "ACKNOWLEDGE"),
-						Map.entry("key", payload.getString("key")),
-						Map.entry("token", token)
-					).toString());
-
-					MessageDigest md = DigestUtils.getDigest("md5");
-					md.update(payload.getString("key").getBytes(StandardCharsets.UTF_8));
-					md.update(token.getBytes(StandardCharsets.UTF_8));
-
 					String id = payload.getString("card");
 					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
 					Drawable<?> d = switch (types.get(0)) {
@@ -135,16 +136,6 @@ public class CommonSocket extends WebSocketClient {
 					).toString());
 				}
 				case "i18n" -> {
-					send(JSONObject.of(
-							Map.entry("type", "ACKNOWLEDGE"),
-							Map.entry("key", payload.getString("key")),
-							Map.entry("token", token)
-					).toString());
-
-					MessageDigest md = DigestUtils.getDigest("md5");
-					md.update(payload.getString("key").getBytes(StandardCharsets.UTF_8));
-					md.update(token.getBytes(StandardCharsets.UTF_8));
-
 					I18N locale = payload.getEnum(I18N.class, "locale");
 					if (locale == null) {
 						send(JSONObject.of(

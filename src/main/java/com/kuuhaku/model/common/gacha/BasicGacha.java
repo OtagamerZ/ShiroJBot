@@ -30,7 +30,9 @@ public class BasicGacha extends Gacha {
 				SELECT c.id
 				     , get_weight(c.id, ?1) AS weight
 				FROM card c
-				WHERE get_rarity_index(c.rarity) < 6
+				INNER JOIN anime a on a.id = c.anime_id
+				WHERE a.visible
+				AND get_rarity_index(c.rarity) < 6
 				ORDER BY weight, c.id
 				""", u.getId()));
 	}

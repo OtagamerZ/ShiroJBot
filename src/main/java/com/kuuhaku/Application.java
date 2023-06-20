@@ -177,7 +177,9 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				Activity.watching(DAO.queryNative(String.class, """
 						SELECT c.name||' pela '||(SELECT COUNT(1) FROM card x WHERE x.anime_id = c.anime_id)||'ª vez!'
 						FROM card c
-						WHERE c.rarity = 'ULTIMATE'
+						INNER JOIN anime a on a.id = c.anime_id
+						WHERE a.visible
+						AND c.rarity = 'ULTIMATE'
 						ORDER BY RANDOM()
 						""")),
 				Activity.playing("com minhas cartas Kawaipon!"),
