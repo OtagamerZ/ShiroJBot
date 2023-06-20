@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-DROP VIEW v_match_loser;
+DROP VIEW IF EXISTS v_match_loser;
 CREATE OR REPLACE VIEW v_match_loser AS
 SELECT x.id
      , x.info ->> 'uid' AS uid

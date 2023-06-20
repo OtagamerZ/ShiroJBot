@@ -16,20 +16,11 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-DROP VIEW IF EXISTS v_anime_cards;
-CREATE OR REPLACE VIEW v_anime_cards AS
-SELECT x.id
-     , x.name
-     , x.rarity
-     , x.rarity_idx
-     , x.anime_id
-FROM (
-     SELECT c.id
-          , c.name
-          , c.rarity
-          , get_rarity_index(c.rarity) AS rarity_idx
-          , c.anime_id
-     FROM card c
-     ) x
-WHERE x.rarity_idx < 6
-ORDER BY x.rarity_idx DESC, x.id
+DROP VIEW IF EXISTS v_card_names;
+CREATE OR REPLACE VIEW v_card_names AS
+SELECT c.id
+FROM card c
+INNER JOIN anime a on a.id = c.anime_id
+WHERE a.visible
+  AND c.rarity NOT IN ('ULTIMATE', 'NONE')
+ORDER BY c.id;

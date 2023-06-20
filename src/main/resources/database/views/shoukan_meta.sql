@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-DROP VIEW v_shoukan_meta;
+DROP VIEW IF EXISTS v_shoukan_meta;
 CREATE OR REPLACE VIEW v_shoukan_meta AS
 SELECT x.card AS card_id
      , x.freq

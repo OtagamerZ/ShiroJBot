@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-DROP VIEW v_collection_counter;
+DROP VIEW IF EXISTS v_collection_counter;
 CREATE OR REPLACE VIEW v_collection_counter AS
 SELECT kc.kawaipon_uid                       AS uid
      , c.anime_id

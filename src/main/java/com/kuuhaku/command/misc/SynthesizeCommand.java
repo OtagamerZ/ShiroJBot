@@ -94,7 +94,7 @@ public class SynthesizeCommand implements Executable {
         for (String id : ids) {
             Card c = DAO.find(Card.class, id.toUpperCase());
             if (c == null) {
-                List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card WHERE rarity NOT IN ('ULTIMATE', 'NONE')");
+                List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM v_card_names");
 
                 Pair<String, Double> sug = Utils.didYouMean(id.toUpperCase(), names);
                 event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();

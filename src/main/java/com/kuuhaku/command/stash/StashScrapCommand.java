@@ -112,7 +112,7 @@ public class StashScrapCommand implements Executable {
 	private Card verifyCard(I18N locale, MessageData.Guild event, String id) {
 		Card card = DAO.find(Card.class, id);
 		if (card == null) {
-			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM card WHERE rarity NOT IN ('ULTIMATE', 'NONE')");
+			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM v_card_names");
 
 			Pair<String, Double> sug = Utils.didYouMean(id, names);
 			event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();

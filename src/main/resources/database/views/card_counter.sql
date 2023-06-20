@@ -16,10 +16,10 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-DROP VIEW v_card_counter;
+DROP VIEW IF EXISTS v_card_counter;
 CREATE OR REPLACE VIEW v_card_counter AS
-SELECT anime_id
+SELECT c.anime_id
      , COUNT(1) AS count
-FROM card
-WHERE get_rarity_index(rarity) < 6
-GROUP BY anime_id;
+FROM card c
+WHERE get_rarity_index(c.rarity) < 6
+GROUP BY c.anime_id;
