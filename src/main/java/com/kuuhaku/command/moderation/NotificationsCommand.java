@@ -71,6 +71,7 @@ public class NotificationsCommand implements Executable {
 			return;
 		}
 
+		settings.getFeatures().add(GuildFeature.NOTIFICATIONS);
 		settings.setNotificationsChannel(gmc);
 		settings.save();
 
