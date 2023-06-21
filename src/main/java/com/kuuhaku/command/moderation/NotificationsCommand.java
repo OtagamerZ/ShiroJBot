@@ -44,6 +44,8 @@ public class NotificationsCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
+
+		System.out.println(args);
 		if (args.has("action")) {
 			settings.setGeneralChannel(null);
 			settings.save();
