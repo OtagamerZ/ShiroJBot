@@ -31,10 +31,7 @@ import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;
 import com.kuuhaku.model.persistent.id.ProfileId;
-import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
-import com.kuuhaku.model.persistent.user.Profile;
-import com.kuuhaku.model.persistent.user.Title;
+import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.*;
 import com.kuuhaku.util.*;
 import com.ygimenez.json.JSONObject;
@@ -268,12 +265,22 @@ public class GuildListener extends ListenerAdapter {
             if (profile.getLevel() > lvl) {
                 int high = account.getHighestLevel();
                 int prize = 0;
+
                 if (profile.getLevel() > high) {
                     prize = profile.getLevel() * 150;
                     account.addCR(prize, "Level up prize");
-                }
 
-                ed.notify(locale.get(prize > 0 ? "achievement/level_up_prize" : "achievement/level_up", data.user().getAsMention(), profile.getLevel(), prize));
+                    ed.notify(locale.get("achievement/level_up_prize", data.user().getAsMention(), profile.getLevel(), prize));
+
+                    if (high <= 18) {
+                        UserItem item = DAO.find(UserItem.class, "STARTER_TOKEN");
+
+                        account.addItem(item, 2);
+                        ed.notify(locale.get("str/received_item", 2, item.toString(locale)));
+                    }
+                } else {
+                    ed.notify(locale.get("achievement/level_up", data.user().getAsMention(), profile.getLevel(), prize));
+                }
             }
 
             DAO.apply(Account.class, account.getUid(), acc -> {
