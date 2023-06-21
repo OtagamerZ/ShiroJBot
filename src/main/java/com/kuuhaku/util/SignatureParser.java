@@ -53,10 +53,10 @@ public abstract class SignatureParser {
 
         List<String> supplied = new ArrayList<>();
         for (String sig : signatures) {
-            boolean fail = false;
             String str = input;
             String[] args = sig.split(" +");
-            String[] failOpts = new String[0];
+            String[] failOpts = {};
+            boolean fail = args.length == 0;
 
             System.out.println(sig);
 
@@ -210,7 +210,7 @@ public abstract class SignatureParser {
                 }
             }
 
-            if (fail || args.length == 0) {
+            if (fail) {
                 out.clear();
                 failed.add(new FailedSignature(String.join(" ", supplied), failOpts, matches, args.length));
                 supplied.clear();
