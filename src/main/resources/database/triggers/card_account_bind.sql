@@ -31,5 +31,5 @@ CREATE TRIGGER card_account_bind
     BEFORE UPDATE
     ON stashed_card
     FOR EACH ROW
-    WHEN ( NEW.kawaipon_uid <> OLD.kawaipon_uid )
+    WHEN ( OLD.account_bound AND NEW.kawaipon_uid <> OLD.kawaipon_uid )
 EXECUTE PROCEDURE t_card_account_bind();

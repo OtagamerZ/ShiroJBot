@@ -28,7 +28,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "transaction")
+@Table(name = "transaction", indexes = @Index(columnList = "id DESC"))
 public class Transaction extends DAO<Transaction> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
