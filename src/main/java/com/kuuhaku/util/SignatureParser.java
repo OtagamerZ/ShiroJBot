@@ -58,8 +58,6 @@ public abstract class SignatureParser {
             String[] args = sig.split(" +");
             String[] failOpts = new String[0];
 
-            System.out.println(sig);
-
             int i = 0;
             int matches = 0;
             for (String arg : args) {
@@ -216,8 +214,6 @@ public abstract class SignatureParser {
                 supplied.clear();
             } else return out;
         }
-
-        System.out.println("none");
 
         if (allowEmpty) return new JSONObject();
         else {
