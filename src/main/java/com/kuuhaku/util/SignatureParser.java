@@ -57,11 +57,9 @@ public abstract class SignatureParser {
             String[] args = sig.split(" +");
             String[] failOpts = {};
 
-            System.out.println(sig);
-
             int i = 0;
             int matches = 0;
-            boolean fail = args.length == 0;
+            boolean fail = false;
             for (String arg : args) {
                 i++;
                 JSONObject groups = Utils.extractNamedGroups(arg, ARGUMENT_PATTERN);
@@ -133,6 +131,12 @@ public abstract class SignatureParser {
 
                     matches++;
                 } else {
+                    if (str.isBlank() && required) {
+                        fail = true;
+                        supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
+                        continue;
+                    }
+
                     String token;
                     List<String> opts = List.of();
 
@@ -211,12 +215,10 @@ public abstract class SignatureParser {
             }
 
             if (fail) {
-                System.out.println("fail");
                 out.clear();
                 failed.add(new FailedSignature(String.join(" ", supplied), failOpts, matches, args.length));
                 supplied.clear();
             } else {
-                System.out.println("success");
                 return out;
             }
         }
