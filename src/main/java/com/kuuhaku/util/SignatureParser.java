@@ -57,8 +57,6 @@ public abstract class SignatureParser {
             String[] args = sig.split(" +");
             String[] failOpts = {};
 
-            System.out.println(sig);
-
             int i = 0;
             int matches = 0;
             boolean fail = false;
@@ -91,9 +89,6 @@ public abstract class SignatureParser {
                 }
 
                 Signature.Type type = groups.getEnum(Signature.Type.class, "type");
-
-                System.out.println(arg);
-                System.out.println(str);
                 if (type == Signature.Type.TEXT) {
                     if (i == args.length) {
                         if (out.has(name)) {
@@ -160,8 +155,13 @@ public abstract class SignatureParser {
                                 .map(String::toLowerCase)
                                 .toList();
 
-                        token = str.split("\\s+")[0].trim();
-                        if (!opts.isEmpty() && !opts.contains(token.toLowerCase())) {
+                        Matcher match = Utils.regex(str, type.getPattern());
+                        if (match.find()) {
+                            token = match.group();
+                            if (!opts.isEmpty() && !opts.contains(token.toLowerCase())) {
+                                token = null;
+                            }
+                        } else {
                             token = null;
                         }
                     }
@@ -202,7 +202,6 @@ public abstract class SignatureParser {
                     if ((token == null || fail) && required) {
                         fail = true;
 
-                        System.out.println("fail");
                         if (opts.isEmpty()) {
                             supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
                         } else {
