@@ -51,10 +51,9 @@ public abstract class SignatureParser {
         JSONObject out = new JSONObject();
         List<FailedSignature> failed = new ArrayList<>();
 
-        boolean fail;
         List<String> supplied = new ArrayList<>();
         for (String sig : signatures) {
-            fail = false;
+            boolean fail = false;
             String str = input;
             String[] args = sig.split(" +");
             String[] failOpts = new String[0];
