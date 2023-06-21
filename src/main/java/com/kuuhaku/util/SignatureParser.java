@@ -58,6 +58,8 @@ public abstract class SignatureParser {
             String[] args = sig.split(" +");
             String[] failOpts = new String[0];
 
+            System.out.println(sig);
+
             int i = 0;
             int matches = 0;
             for (String arg : args) {
@@ -162,6 +164,7 @@ public abstract class SignatureParser {
                         }
                     }
 
+                    System.out.println(token);
                     if (token != null) {
                         str = str.replaceFirst(Pattern.quote(token), "").trim();
                         token = StringUtils.stripAccents(token);
