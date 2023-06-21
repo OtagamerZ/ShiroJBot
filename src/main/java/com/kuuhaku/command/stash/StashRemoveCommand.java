@@ -68,6 +68,9 @@ public class StashRemoveCommand implements Executable {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 						return;
+					} else if (sc.isAccountBound()) {
+						event.channel().sendMessage(locale.get("error/cannot_collect_bound")).queue();
+						return;
 					}
 
 					if (sc.getType() == CardType.KAWAIPON) {
