@@ -91,6 +91,8 @@ public class TransferCommand implements Executable {
 				return;
 			}
 
+			System.out.println(args);
+
 			Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
 			if (card == null) {
 				List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM v_card_names");
