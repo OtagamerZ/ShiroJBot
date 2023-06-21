@@ -198,6 +198,8 @@ public abstract class SignatureParser {
                     }
 
                     if ((token == null || fail) && required) {
+                        fail = true;
+
                         if (opts.isEmpty()) {
                             supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
                         } else {
