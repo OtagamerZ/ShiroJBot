@@ -82,15 +82,15 @@ public abstract class SignatureParser {
                 boolean required = groups.has("required");
                 String wrap = required ? "[%s]" : "%s";
 
+                if (str.isBlank() && required) {
+                    fail = true;
+                    supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
+                    continue;
+                }
+
                 Signature.Type type = groups.getEnum(Signature.Type.class, "type");
 
                 if (type == Signature.Type.TEXT) {
-                    if (str.isBlank() && required) {
-                        fail = true;
-                        supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
-                        continue;
-                    }
-
                     if (i == args.length) {
                         if (out.has(name)) {
                             JSONArray arr;
@@ -131,12 +131,6 @@ public abstract class SignatureParser {
 
                     matches++;
                 } else {
-                    if (str.isBlank() && required) {
-                        fail = true;
-                        supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
-                        continue;
-                    }
-
                     String token;
                     List<String> opts = List.of();
 
