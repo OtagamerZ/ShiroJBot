@@ -272,7 +272,7 @@ public class GuildListener extends ListenerAdapter {
 
                     ed.notify(locale.get("achievement/level_up_prize", data.user().getAsMention(), profile.getLevel(), prize));
 
-                    if (high <= 18) {
+                    if (profile.getLevel() <= 19) {
                         UserItem item = DAO.find(UserItem.class, "STARTER_TOKEN");
 
                         account.addItem(item, 2);
