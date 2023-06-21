@@ -215,6 +215,8 @@ public abstract class SignatureParser {
             } else return out;
         }
 
+        System.out.println("none");
+
         if (allowEmpty) return new JSONObject();
         else {
             int argLength = input.split(" +").length;
