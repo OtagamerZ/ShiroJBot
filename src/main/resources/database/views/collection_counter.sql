@@ -20,8 +20,8 @@ DROP VIEW IF EXISTS v_collection_counter;
 CREATE OR REPLACE VIEW v_collection_counter AS
 SELECT kc.kawaipon_uid                       AS uid
      , c.anime_id
-     , COUNT(1) FILTER (WHERE NOT kc.chrome) AS normal
-     , COUNT(1) FILTER (WHERE kc.chrome)     AS chrome
+     , count(1) FILTER (WHERE NOT kc.chrome) AS normal
+     , count(1) FILTER (WHERE kc.chrome)     AS chrome
 FROM kawaipon_card kc
          INNER JOIN card c ON c.id = kc.card_id
          LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid

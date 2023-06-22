@@ -48,7 +48,7 @@ import java.util.List;
 public class KawaiponFieldCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM field");
+		int total = DAO.queryNative(Integer.class, "SELECT count(1) FROM field");
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/available_cards", locale.get("type/field")))

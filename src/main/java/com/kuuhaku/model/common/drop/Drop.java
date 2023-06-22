@@ -51,7 +51,7 @@ public abstract class Drop<T> {
 		RandomList<DropCondition> pool = new RandomList<>();
 		pool.add(new DropCondition("low_cash",
 				(rng) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0");
+					int avg = DAO.queryNative(Integer.class, "SELECT geo_mean(balance) FROM account WHERE balance > 0");
 
 					return new Object[]{(int) Calc.rng(avg, avg * 1.9, rng)};
 				},
@@ -59,7 +59,7 @@ public abstract class Drop<T> {
 		), 2);
 		pool.add(new DropCondition("high_cash",
 				(rng) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(balance) FROM account WHERE balance > 0");
+					int avg = DAO.queryNative(Integer.class, "SELECT geo_mean(balance) FROM account WHERE balance > 0");
 
 					return new Object[]{(int) Calc.rng(avg * 0.1, avg, rng)};
 				},
@@ -67,7 +67,7 @@ public abstract class Drop<T> {
 		), 2);
 		pool.add(new DropCondition("level",
 				(rng) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT GEO_MEAN(CAST(SQRT(xp / 100) AS NUMERIC)) FROM profile WHERE xp > 100");
+					int avg = DAO.queryNative(Integer.class, "SELECT geo_mean(cast(sqrt(xp / 100) AS NUMERIC)) FROM profile WHERE xp > 100");
 
 					return new Object[]{(int) Calc.rng(avg / 2d, (avg * 1.5), rng)};
 				},
@@ -76,9 +76,9 @@ public abstract class Drop<T> {
 		pool.add(new DropCondition("cards",
 				(rng) -> {
 					int avg = DAO.queryNative(Integer.class, """
-							SELECT ROUND(GEO_MEAN(x.count))
+							SELECT round(geo_mean(x.count))
 							FROM (
-							     SELECT COUNT(1) AS count
+							     SELECT count(1) AS count
 							     FROM kawaipon_card kc
 							              LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
 							     WHERE sc.id IS NULL
@@ -101,9 +101,9 @@ public abstract class Drop<T> {
 					Anime anime = Utils.getRandomEntry(rng, animes);
 
 					int avg = DAO.queryNative(Integer.class, """
-							SELECT ROUND(GEO_MEAN(x.count))
+							SELECT round(geo_mean(x.count))
 							FROM (
-								 SELECT COUNT(1) AS count
+								 SELECT count(1) AS count
 								 FROM kawaipon_card kc
 										  INNER JOIN card c ON kc.card_id = c.id
 										  LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid

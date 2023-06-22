@@ -24,7 +24,7 @@ AS
 $$
 SELECT CASE type
            WHEN 'KAWAIPON' THEN 425 * tier
-           WHEN 'EVOGEAR' THEN CAST(40 * pow(2.2, tier) AS INT)
+           WHEN 'EVOGEAR' THEN cast(40 * pow(2.2, tier) AS INT)
            WHEN 'FIELD' THEN 100
            END AS weight
 FROM (

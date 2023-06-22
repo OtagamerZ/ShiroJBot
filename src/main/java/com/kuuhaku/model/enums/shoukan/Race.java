@@ -220,7 +220,7 @@ public enum Race {
 	}
 
 	public int getCount() {
-		return DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM senshi WHERE race = ?1 OR race IN ?2",
+		return DAO.queryNative(Integer.class, "SELECT count(1) FROM senshi WHERE race = ?1 OR race IN ?2",
 				name(), Arrays.stream(derivates()).map(Race::name).toList()
 		);
 	}

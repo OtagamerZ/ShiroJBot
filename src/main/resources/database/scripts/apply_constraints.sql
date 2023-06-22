@@ -31,7 +31,7 @@ BEGIN
              , m[2] AS ref
         FROM (
              SELECT r.conname                              AS name
-                  , CAST(r.conrelid AS regclass)           AS "table"
+                  , cast(r.conrelid AS regclass)           AS "table"
                   , pg_catalog.pg_get_constraintdef(r.oid) AS def
              FROM pg_catalog.pg_constraint r
              WHERE r.contype = 'f'

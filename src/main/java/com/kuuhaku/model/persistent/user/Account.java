@@ -526,7 +526,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public int getHighestLevel() {
-		return DAO.queryNative(Integer.class, "SELECT CAST(SQRT(MAX(xp) / 100) AS INT) FROM profile WHERE uid = ?1", uid);
+		return DAO.queryNative(Integer.class, "SELECT cast(sqrt(max(xp) / 100) AS INT) FROM profile WHERE uid = ?1", uid);
 	}
 
 	public I18N getEstimateLocale() {
@@ -538,7 +538,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 								INNER JOIN profile p ON gc.gid = p.gid
 								WHERE p.uid = ?1
 								GROUP BY gc.locale
-								ORDER BY COUNT(gc.locale) DESC
+								ORDER BY count(gc.locale) DESC
 								""", uid
 				), "PT"
 		));

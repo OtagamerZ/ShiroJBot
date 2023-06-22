@@ -175,7 +175,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				Activity.watching(Utils.separate(shiro.getGuildCache().size()) + " servidores, e estou apenas começando!"),
 				Activity.competing("Shoukan ranqueado!"),
 				Activity.watching(DAO.queryNative(String.class, """
-						SELECT c.name||' pela '||(SELECT COUNT(1) FROM card x WHERE x.anime_id = c.anime_id)||'ª vez!'
+						SELECT c.name||' pela '||(SELECT count(1) FROM card x WHERE x.anime_id = c.anime_id)||'ª vez!'
 						FROM card c
 						INNER JOIN anime a on a.id = c.anime_id
 						WHERE a.visible

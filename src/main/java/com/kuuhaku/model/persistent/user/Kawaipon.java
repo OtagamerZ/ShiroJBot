@@ -102,7 +102,7 @@ public class Kawaipon extends DAO<Kawaipon> {
 	}
 
 	public int getStashUsage() {
-		return DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card WHERE kawaipon_uid = ?1", uid);
+		return DAO.queryNative(Integer.class, "SELECT count(1) FROM stashed_card WHERE kawaipon_uid = ?1", uid);
 	}
 
 	public int getCapacity() {
@@ -137,8 +137,8 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	public Pair<Integer, Integer> countCards() {
 		Object[] vals = DAO.queryUnmapped("""
-				SELECT COUNT(1) FILTER (WHERE NOT kc.chrome)
-				     , COUNT(1) FILTER (WHERE kc.chrome)
+				SELECT count(1) FILTER (WHERE NOT kc.chrome)
+				     , count(1) FILTER (WHERE kc.chrome)
 				FROM kawaipon_card kc
 				LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
 				WHERE sc.id IS NULL
@@ -154,8 +154,8 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	public Pair<Integer, Integer> countCards(Anime anime) {
 		Object[] vals = DAO.queryUnmapped("""
-				SELECT COUNT(1) FILTER (WHERE NOT kc.chrome)
-				     , COUNT(1) FILTER (WHERE kc.chrome)
+				SELECT count(1) FILTER (WHERE NOT kc.chrome)
+				     , count(1) FILTER (WHERE kc.chrome)
 				FROM kawaipon_card kc
 				INNER JOIN card c ON kc.card_id = c.id
 				LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
@@ -173,8 +173,8 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	public Pair<Integer, Integer> countCards(Rarity rarity) {
 		Object[] vals = DAO.queryUnmapped("""
-				SELECT COUNT(1) FILTER (WHERE NOT kc.chrome)
-				     , COUNT(1) FILTER (WHERE kc.chrome)
+				SELECT count(1) FILTER (WHERE NOT kc.chrome)
+				     , count(1) FILTER (WHERE kc.chrome)
 				FROM kawaipon_card kc
 				INNER JOIN card c ON kc.card_id = c.id
 				LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid

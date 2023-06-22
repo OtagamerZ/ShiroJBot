@@ -21,8 +21,9 @@ CREATE OR REPLACE FUNCTION get_type(VARCHAR)
     LANGUAGE sql
 AS
 $$
-SELECT CAST((COUNT(f) << 3) | (COUNT(e) << 2) | (COUNT(s) << 1) AS INT)
+SELECT cast((count(f) << 3) | (count(e) << 2) | ((count(s) | count(k)) << 1) AS INT)
 FROM card c
+         LEFT JOIN card k ON k.id = c.id AND get_rarity_index(k.rarity) BETWEEN 1 AND 5
          LEFT JOIN senshi s ON c.id = s.card_id
          LEFT JOIN evogear e ON c.id = e.card_id
          LEFT JOIN field f ON c.id = f.card_id

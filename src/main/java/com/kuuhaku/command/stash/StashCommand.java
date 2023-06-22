@@ -87,7 +87,7 @@ public class StashCommand implements Executable {
 
 		Map<String, String> filters = Map.ofEntries(
 				Map.entry("n", "AND c.card.id LIKE '%%'||?%s||'%%'"),
-				Map.entry("r", "AND CAST(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'"),
+				Map.entry("r", "AND cast(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'"),
 				Map.entry("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'"),
 				Map.entry("c", "AND kc.chrome = TRUE"),
 				Map.entry("k", "AND c.type = 'KAWAIPON'"),

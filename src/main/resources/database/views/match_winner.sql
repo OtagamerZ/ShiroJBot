@@ -25,11 +25,11 @@ SELECT x.id
 FROM (
      SELECT x.id
           , x.info
-          , jsonb_path_query_array(x.data, CAST('$.' || x.winner AS JSONPATH)) AS data
+          , jsonb_path_query_array(x.data, cast('$.' || x.winner AS JSONPATH)) AS data
      FROM (
           SELECT x.id
                , x.head -> x.winner                                                                                 AS info
-               , jsonb_path_query_array(x.data,CAST('$[*] ? (@.turn % 2 == ' || iif(x.winner = 'top', 0, 1) || ')' AS JSONPATH)) AS data
+               , jsonb_path_query_array(x.data,cast('$[*] ? (@.turn % 2 == ' || iif(x.winner = 'top', 0, 1) || ')' AS JSONPATH)) AS data
                , x.winner
           FROM (
                SELECT id

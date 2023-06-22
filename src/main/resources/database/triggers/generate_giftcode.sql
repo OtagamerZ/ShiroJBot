@@ -23,7 +23,7 @@ AS
 $$
 BEGIN
     NEW.code = md5(cast(current_date AS TEXT) || random());
-    NEW.gift = '//' || lpad(CAST((SELECT COUNT(1) + 1 FROM giftcode) AS TEXT), 4, '0') || E'\n';
+    NEW.gift = '//' || lpad(cast((SELECT count(1) + 1 FROM giftcode) AS TEXT), 4, '0') || E'\n';
 
     RETURN NEW;
 END;

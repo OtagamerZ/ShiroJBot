@@ -55,7 +55,7 @@ public class KawaiponSenshiCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		if (!args.has("race")) {
-			int total = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM senshi");
+			int total = DAO.queryNative(Integer.class, "SELECT count(1) FROM senshi");
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/available_cards", locale.get("type/senshi")))

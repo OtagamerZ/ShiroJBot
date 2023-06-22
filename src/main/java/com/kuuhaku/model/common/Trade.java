@@ -128,7 +128,7 @@ public class Trade {
 
         @Language("PostgreSQL")
         String query = """
-                SELECT COUNT(1)
+                SELECT count(1)
                 FROM stashed_card sc
                 WHERE sc.kawaipon_uid = ?1
                   AND sc.id IN ?2
@@ -146,7 +146,7 @@ public class Trade {
 
         query = """
                 SELECT i.id
-                     , SUM(CAST(i.amount AS INT)) AS amount
+                     , sum(cast(i.amount AS INT)) AS amount
                 FROM account a
                          CROSS JOIN jsonb_each(a.inventory) as i(id, amount)
                 WHERE a.uid = ?1

@@ -95,7 +95,7 @@ public enum Rarity {
 
 	public int getCount() {
 		return DAO.queryNative(Integer.class, """
-				SELECT COUNT(1) 
+				SELECT count(1) 
 				FROM card c 
 				INNER JOIN anime a ON a.id = c.anime_id 
 				WHERE a.visible

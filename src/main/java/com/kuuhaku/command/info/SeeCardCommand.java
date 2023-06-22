@@ -76,7 +76,7 @@ public class SeeCardCommand implements Executable {
 			return;
 		}
 
-		int stored = DAO.queryNative(Integer.class, "SELECT COUNT(1) FROM stashed_card WHERE kawaipon_uid = ?1 AND card_id = ?2",
+		int stored = DAO.queryNative(Integer.class, "SELECT count(1) FROM stashed_card WHERE kawaipon_uid = ?1 AND card_id = ?2",
 				event.user().getId(),
 				card.getId()
 		);
