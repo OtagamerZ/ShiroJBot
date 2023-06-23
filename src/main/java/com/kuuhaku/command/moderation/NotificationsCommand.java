@@ -46,7 +46,7 @@ public class NotificationsCommand implements Executable {
 		GuildSettings settings = data.config().getSettings();
 
 		if (args.has("action")) {
-			settings.setGeneralChannel(null);
+			settings.setNotificationsChannel(null);
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/notifications_channel_clear")).queue();
