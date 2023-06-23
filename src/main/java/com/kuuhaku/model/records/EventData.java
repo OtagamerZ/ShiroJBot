@@ -22,14 +22,15 @@ import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.util.Utils;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 
 public record EventData(MessageChannel channel, GuildConfig config, Profile profile) {
     public void notify(String message) {
         if (config.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
-            GuildMessageChannel chn = config.getSettings().getNotificationsChannel();
-            Utils.getOr(chn, channel).sendMessage(message).queue();
+            MessageChannel chn = Utils.getOr(config.getSettings().getNotificationsChannel(), channel);
+            if (chn.canTalk()) {
+                chn.sendMessage(message).queue();
+            }
         }
     }
 }
