@@ -147,39 +147,42 @@ public class SeeCardCommand implements Executable {
 					case FIELD -> card.asField();
 				};
 
-				if (d != null) {
-					bi = d.render(locale, dk);
+				if (d == null) {
+					event.channel().sendMessage(locale.get("error/not_in_shoukan")).queue();
+					return;
+				}
 
-					if (d instanceof Senshi s && s.isFusion()) {
-						eb.setAuthor(null);
-					} else if (d instanceof Evogear e && !e.getCharms().isEmpty()) {
-						eb.addField(locale.get("str/charms"),
-								e.getCharms().stream()
-										.map(c -> Charm.valueOf(String.valueOf(c)))
-										.map(c -> "**" + c.getName(locale) + ":** " + c.getDescription(locale, e.getTier()))
-										.collect(Collectors.joining("\n")),
-								false
-						);
-					} else if (d instanceof Field f && f.getType() != FieldType.NONE) {
-						eb.addField(locale.get("field/" + f.getType()), locale.get("field/" + f.getType() + "_desc"), false);
-					}
+				bi = d.render(locale, dk);
 
-					if (!d.getTags().isEmpty()) {
-						eb.addField(locale.get("str/tags"),
-								d.getTags().stream()
-										.map(s -> {
-											if (s.startsWith("race/")) {
-												return locale.get(s);
-											}
+				if (d instanceof Senshi s && s.isFusion()) {
+					eb.setAuthor(null);
+				} else if (d instanceof Evogear e && !e.getCharms().isEmpty()) {
+					eb.addField(locale.get("str/charms"),
+							e.getCharms().stream()
+									.map(c -> Charm.valueOf(String.valueOf(c)))
+									.map(c -> "**" + c.getName(locale) + ":** " + c.getDescription(locale, e.getTier()))
+									.collect(Collectors.joining("\n")),
+							false
+					);
+				} else if (d instanceof Field f && f.getType() != FieldType.NONE) {
+					eb.addField(locale.get("field/" + f.getType()), locale.get("field/" + f.getType() + "_desc"), false);
+				}
 
-											return d.getString(locale, s);
-										})
-										.filter(s -> !s.isBlank())
-										.map(s -> "`" + s + "`")
-										.collect(Collectors.joining(" ")),
-								false
-						);
-					}
+				if (!d.getTags().isEmpty()) {
+					eb.addField(locale.get("str/tags"),
+							d.getTags().stream()
+									.map(s -> {
+										if (s.startsWith("race/")) {
+											return locale.get(s);
+										}
+
+										return d.getString(locale, s);
+									})
+									.filter(s -> !s.isBlank())
+									.map(s -> "`" + s + "`")
+									.collect(Collectors.joining(" ")),
+							false
+					);
 				}
 			}
 		}
