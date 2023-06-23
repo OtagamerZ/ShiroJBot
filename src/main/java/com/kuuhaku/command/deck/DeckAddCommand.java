@@ -84,12 +84,6 @@ public class DeckAddCommand implements Executable {
 			return;
 		}
 
-		Set<CardType> types = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card.getId()));
-		if (types.isEmpty()) {
-			event.channel().sendMessage(locale.get("error/not_in_shoukan")).queue();
-			return;
-		}
-
 		List<StashedCard> stash = kp.getNotInUse();
 		if (args.has("amount")) {
 			int qtd = args.getInt("amount");

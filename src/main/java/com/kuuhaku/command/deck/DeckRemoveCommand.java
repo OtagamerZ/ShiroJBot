@@ -81,12 +81,6 @@ public class DeckRemoveCommand implements Executable {
 			return;
 		}
 
-		Set<CardType> types = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card.getId()));
-		if (types.isEmpty()) {
-			event.channel().sendMessage(locale.get("error/not_in_shoukan")).queue();
-			return;
-		}
-
 		List<StashedCard> stash = DAO.queryAll(StashedCard.class,
 				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id = ?2 AND s.card.id = ?3",
 				event.user().getId(), d.getId(), card.getId()
