@@ -65,10 +65,7 @@ public class SelectTitleCommand implements Executable {
 					.collect(Collectors.groupingBy(t -> Utils.getOr(Utils.extract(t.getId(), ".+(?=_(?:I|II|III|IV|V))|.+"), "")))
 					.values().stream()
 					.map(ts -> ts.stream()
-							.sorted(Comparator
-									.<Title, Boolean>comparing(t -> acc.hasTitle(t.getId()), Boolean::compareTo)
-									.thenComparing(t -> t.getRarity().ordinal(), Comparator.reverseOrder())
-							)
+							.sorted(Comparator.comparing(t -> t.getRarity().ordinal(), Comparator.reverseOrder()))
 							.collect(ArrayList<Title>::new, (lst, t) -> {
 								if (acc.hasTitle(t.getId())) {
 									if (lst.isEmpty()) {
