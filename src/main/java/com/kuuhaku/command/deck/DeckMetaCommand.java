@@ -65,7 +65,7 @@ public class DeckMetaCommand implements Executable {
 							List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
 							if (types.isEmpty()) return null;
 
-							return switch (types.get(0)) {
+							return switch (types.get(types.size() - 1)) {
 								case KAWAIPON -> null;
 								case SENSHI -> DAO.find(Senshi.class, id);
 								case EVOGEAR -> DAO.find(Evogear.class, id);

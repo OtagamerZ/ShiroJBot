@@ -115,7 +115,7 @@ public class CommonSocket extends WebSocketClient {
 				case "shoukan" -> {
 					String id = payload.getString("card");
 					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
-					Drawable<?> d = switch (types.get(0)) {
+					Drawable<?> d = switch (types.get(types.size() - 1)) {
 						case EVOGEAR -> DAO.find(Evogear.class, id);
 						case FIELD -> DAO.find(Field.class, id);
 						default -> DAO.find(Senshi.class, id);

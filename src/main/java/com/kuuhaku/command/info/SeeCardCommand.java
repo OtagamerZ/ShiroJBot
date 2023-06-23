@@ -134,7 +134,7 @@ public class SeeCardCommand implements Executable {
 				}
 
 				List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card.getId())));
-				Drawable<?> d = switch (types.get(0)) {
+				Drawable<?> d = switch (types.get(types.size() - 1)) {
 					case KAWAIPON -> null;
 					case SENSHI -> card.asSenshi();
 					case EVOGEAR -> card.asEvogear();
