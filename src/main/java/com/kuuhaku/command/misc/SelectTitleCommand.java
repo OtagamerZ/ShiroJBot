@@ -61,23 +61,31 @@ public class SelectTitleCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(locale.get("str/all_titles"));
 
-			List<List<Title>> titles = Title.getAllTitles().stream()
+			List<ArrayList<Title>> titles = Title.getAllTitles().stream()
 					.collect(Collectors.groupingBy(t -> Utils.getOr(Utils.extract(t.getId(), ".+(?=_(?:I|II|III|IV|V))|.+"), "")))
 					.values().stream()
-					.sorted(Comparator.comparing(ts -> ts.get(0).getId()))
+					.map(ts -> ts.stream()
+							.sorted(Comparator.comparing(t -> acc.hasTitle(t.getId())))
+							.collect(ArrayList<Title>::new, (lst, t) -> {
+								if (acc.hasTitle(t.getId())) {
+									if (lst.isEmpty()) {
+										lst.add(t);
+									} else {
+										lst.set(0, t);
+									}
+								} else {
+									lst.add(t);
+								}
+							}, ArrayList::addAll)
+					)
+					.sorted(Comparator.comparing(t -> t.get(0).getRarity().getIndex(), Comparator.reverseOrder()))
 					.toList();
 
 			List<Page> pages = Utils.generatePages(eb, titles, 10, 5, ts -> {
-				ts.sort(Comparator.comparingInt(t -> t.getRarity().getIndex()));
-
-				Title current = ts.stream()
-						.filter(t -> acc.hasTitle(t.getId()))
-						.reduce((f, s) -> s)
-						.orElse(ts.get(0));
-
 				StringBuilder sb = new StringBuilder();
-				LocalizedTitle info = current.getInfo(locale);
 
+				Title current = ts.get(0);
+				LocalizedTitle info = current.getInfo(locale);
 				boolean has = acc.hasTitle(current.getId());
 				sb.append("`ID: ");
 				if (has) {
