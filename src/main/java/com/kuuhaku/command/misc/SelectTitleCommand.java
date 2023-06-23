@@ -78,7 +78,7 @@ public class SelectTitleCommand implements Executable {
 								}
 							}, ArrayList::addAll)
 					)
-					.sorted(Comparator.comparing(t -> t.get(0).getRarity().getIndex(), Comparator.reverseOrder()))
+					.sorted(Comparator.comparing(t -> t.get(0).getRarity().ordinal(), Comparator.reverseOrder()))
 					.toList();
 
 			List<Page> pages = Utils.generatePages(eb, titles, 10, 5, ts -> {
