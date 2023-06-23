@@ -30,6 +30,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 
 public enum Rarity {
 	COMMON(1, 0xFFFFFF, "<:common:726171819664736268> "),
@@ -115,6 +116,10 @@ public enum Rarity {
 				return null;
 			}
 		});
+	}
+
+	public List<Card> getCard() {
+		return DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE c.anime.visible = TRUE AND c.rarity = ?1", this);
 	}
 
 	public static Rarity[] getActualRarities() {

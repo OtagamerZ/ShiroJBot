@@ -24,6 +24,7 @@ import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.SingleUseReference;
 import com.kuuhaku.model.common.drop.CreditDrop;
 import com.kuuhaku.model.common.drop.Drop;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
@@ -59,15 +60,23 @@ public abstract class Spawn {
 
 		KawaiponCard card = null;
 		if (Calc.chance(dropRate)) {
+			RandomList<Rarity> rarities = new RandomList<>(2 * rarityBonus);
+			for (Rarity r : Rarity.getActualRarities()) {
+				rarities.add(r, DAO.queryNative(Integer.class, "SELECT get_weight('KAWAIPON', ?1)", 6 - r.getIndex()));
+			}
+
+			Rarity rarity = rarities.get();
 			List<Anime> animes = DAO.queryAll(Anime.class, """
 							SELECT c.anime
 							FROM Card c
 							WHERE c.anime.visible = TRUE
 							AND (?1 = 0 OR c.anime.id NOT IN ?2)
 							AND (?3 = 0 OR c.id NOT IN ?4)
+							AND c.rarity = ?5
 							""",
 					lastAnimes.size(), lastAnimes.stream().map(Anime::getId).toList(),
-					lastCards.size(), lastCards.stream().map(Card::getId).toList()
+					lastCards.size(), lastCards.stream().map(Card::getId).toList(),
+					rarity
 			);
 
 			Anime anime;
@@ -78,14 +87,14 @@ public abstract class Spawn {
 			}
 			lastAnimes.add(anime);
 
-			RandomList<Card> pool = new RandomList<>(2 * rarityBonus);
+			RandomList<Card> cards = new RandomList<>(2 * rarityBonus);
 			for (Card c : anime.getCards()) {
 				if (c.getRarity().getIndex() <= 0) continue;
 
-				pool.add(c, DAO.queryNative(Integer.class, "SELECT get_weight(?1, ?2)", c.getId(), u.getId()));
+				cards.add(c, DAO.queryNative(Integer.class, "SELECT get_weight(?1, ?2)", c.getId(), u.getId()));
 			}
 
-			Card chosen = pool.get();
+			Card chosen = cards.get();
 			lastCards.add(chosen);
 
 			card = new KawaiponCard(chosen, Calc.chance(0.1 * rarityBonus));
