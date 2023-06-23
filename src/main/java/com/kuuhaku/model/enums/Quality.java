@@ -43,6 +43,6 @@ public enum Quality {
 	}
 
 	public static Quality get(double quality) {
-		return values()[(int) Math.min(quality * (values().length - 1) / 18, 1)];
+		return values()[(int) Math.min(quality * (values().length - 1) / 18, values().length - 1)];
 	}
 }
