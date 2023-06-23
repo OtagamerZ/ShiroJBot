@@ -253,14 +253,14 @@ public class Shoukan extends GameInstance<Phase> {
 			String id = args.getString("card").toUpperCase();
 			CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)).stream()
 					.findFirst()
-					.orElse(CardType.NONE);
+					.orElse(CardType.KAWAIPON);
 
 			boolean add = false;
 			int amount = args.getInt("amount", 1);
 			for (int i = 0; i < amount; i++) {
 				Drawable<?> d = switch (type) {
-					case NONE -> null;
-					case KAWAIPON -> DAO.find(Senshi.class, id);
+					case KAWAIPON -> null;
+					case SENSHI -> DAO.find(Senshi.class, id);
 					case EVOGEAR -> DAO.find(Evogear.class, id);
 					case FIELD -> DAO.find(Field.class, id);
 				};
@@ -2166,7 +2166,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						CardType type;
 						if (d instanceof Senshi) {
-							type = CardType.KAWAIPON;
+							type = CardType.SENSHI;
 						} else if (d instanceof Evogear) {
 							type = CardType.EVOGEAR;
 						} else {

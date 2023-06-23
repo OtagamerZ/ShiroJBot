@@ -166,7 +166,7 @@ public class GachaCommand implements Executable {
 
 		CardType tp = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)).stream()
 				.findFirst()
-				.orElse(CardType.NONE);
+				.orElse(CardType.KAWAIPON);
 
 		Card card = DAO.find(Card.class, id);
 		try {
@@ -176,7 +176,7 @@ public class GachaCommand implements Executable {
 			);
 
 			switch (tp) {
-				case KAWAIPON -> {
+				case KAWAIPON, SENSHI -> {
 					KawaiponCard kc = new KawaiponCard(card, Calc.chance(0.1 * Spawn.getRarityMult()));
 					proccess(type, kc);
 

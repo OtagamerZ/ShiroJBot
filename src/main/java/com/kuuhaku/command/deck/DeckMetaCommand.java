@@ -66,8 +66,8 @@ public class DeckMetaCommand implements Executable {
 							if (types.isEmpty()) return null;
 
 							return switch (types.get(0)) {
-								case NONE -> null;
-								case KAWAIPON -> DAO.find(Senshi.class, id);
+								case KAWAIPON -> null;
+								case SENSHI -> DAO.find(Senshi.class, id);
 								case EVOGEAR -> DAO.find(Evogear.class, id);
 								case FIELD -> DAO.find(Field.class, id);
 							};
