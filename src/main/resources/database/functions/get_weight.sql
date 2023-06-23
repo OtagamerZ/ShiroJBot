@@ -48,3 +48,16 @@ AS
 $$
 SELECT cast(round(get_weight($1) * iif(is_fav($2, $1), 1.33, 1.0)) AS INT)
 $$;
+
+CREATE OR REPLACE FUNCTION get_weight(VARCHAR, INT)
+    RETURNS INT
+    IMMUTABLE
+    LANGUAGE sql
+AS
+$$
+SELECT CASE $1
+           WHEN 'KAWAIPON' THEN 425 * $2
+           WHEN 'EVOGEAR' THEN cast(40 * pow(2.2, $2) AS INT)
+           WHEN 'FIELD' THEN 100
+           END AS weight
+$$;
