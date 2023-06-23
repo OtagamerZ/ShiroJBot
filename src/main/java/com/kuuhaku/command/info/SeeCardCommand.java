@@ -139,6 +139,7 @@ public class SeeCardCommand implements Executable {
 					return;
 				}
 
+				System.out.println(types);
 				Drawable<?> d = switch (types.get(0)) {
 					case NONE -> null;
 					case KAWAIPON -> card.asSenshi();
