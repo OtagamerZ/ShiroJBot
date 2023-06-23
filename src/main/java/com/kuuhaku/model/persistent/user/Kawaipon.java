@@ -137,12 +137,14 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	public Pair<Integer, Integer> countCards() {
 		Object[] vals = DAO.queryUnmapped("""
-				SELECT count(1) FILTER (WHERE NOT kc.chrome)
-				     , count(1) FILTER (WHERE kc.chrome)
-				FROM kawaipon_card kc
-				LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
-				WHERE sc.id IS NULL
-				  AND kc.kawaipon_uid = ?1
+				SELECT count(1) FILTER (WHERE NOT x.chrome)
+				     , count(1) FILTER (WHERE x.chrome)
+								FROM (
+				         SELECT kc.chrome
+				         FROM kawaipon_card kc
+				         WHERE kc.kawaipon_uid = ?1
+				         GROUP BY kc.card_id, kc.chrome
+				     ) x
 				""", account.getUid());
 
 		if (vals == null) {
@@ -154,14 +156,16 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	public Pair<Integer, Integer> countCards(Anime anime) {
 		Object[] vals = DAO.queryUnmapped("""
-				SELECT count(1) FILTER (WHERE NOT kc.chrome)
-				     , count(1) FILTER (WHERE kc.chrome)
-				FROM kawaipon_card kc
-				INNER JOIN card c ON kc.card_id = c.id
-				LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
-				WHERE sc.id IS NULL
-				  AND kc.kawaipon_uid = ?1
-				  AND c.anime_id = ?2
+				SELECT count(1) FILTER (WHERE NOT x.chrome)
+				     , count(1) FILTER (WHERE x.chrome)
+								FROM (
+				         SELECT kc.chrome
+				         FROM kawaipon_card kc
+				         INNER JOIN card c ON c.id = kc.card_id
+				         WHERE kc.kawaipon_uid = ?1
+				         AND c.anime_id = ?2
+				         GROUP BY kc.card_id, kc.chrome
+				     ) x
 				""", account.getUid(), anime.getId());
 
 		if (vals == null) {
@@ -173,14 +177,16 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	public Pair<Integer, Integer> countCards(Rarity rarity) {
 		Object[] vals = DAO.queryUnmapped("""
-				SELECT count(1) FILTER (WHERE NOT kc.chrome)
-				     , count(1) FILTER (WHERE kc.chrome)
-				FROM kawaipon_card kc
-				INNER JOIN card c ON kc.card_id = c.id
-				LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
-				WHERE sc.id IS NULL
-				  AND kc.kawaipon_uid = ?1
-				  AND c.rarity = ?2
+				SELECT count(1) FILTER (WHERE NOT x.chrome)
+				     , count(1) FILTER (WHERE x.chrome)
+								FROM (
+				         SELECT kc.chrome
+				         FROM kawaipon_card kc
+				         INNER JOIN card c ON c.id = kc.card_id
+				         WHERE kc.kawaipon_uid = ?1
+				         AND c.rarity = ?2
+				         GROUP BY kc.card_id, kc.chrome
+				     ) x
 				""", account.getUid(), rarity.name());
 
 		if (vals == null) {
