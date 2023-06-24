@@ -82,7 +82,7 @@ public class SynthesizeCommand implements Executable {
                     locale,
                     event.channel(),
                     data.profile().getAccount(),
-                    DAO.find(UserItem.class, args.getString("material"))
+                    DAO.find(UserItem.class, args.getString("material").toUpperCase())
             );
             return;
         }
