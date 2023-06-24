@@ -24,6 +24,7 @@ import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -39,12 +40,16 @@ import com.ygimenez.json.JSONObject;
 import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
+import org.apache.commons.collections4.Bag;
+import org.apache.commons.collections4.bag.HashBag;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Command(
@@ -129,6 +134,7 @@ public class StashScrapCommand implements Executable {
 						event.channel().sendMessage(locale.get("success/scrap")).queue();
 						acc.addCR(value, cards.stream().map(StashedCard::toString).collect(Collectors.joining()) + " scrapped");
 
+						Bag<UserItem> items = new HashBag<>();
 						for (StashedCard sc : cards) {
 							if (sc.getType() == CardType.KAWAIPON) {
 								KawaiponCard kc = sc.getKawaiponCard(false);
@@ -140,8 +146,7 @@ public class StashScrapCommand implements Executable {
 										UserItem item = DAO.find(UserItem.class, rarity.name() + "_SHARD");
 										if (item != null) {
 											int amount = Calc.rng(1, 3);
-											acc.addItem(item, amount);
-											event.channel().sendMessage(locale.get("str/received_item", amount, item.toString(locale))).queue();
+											items.add(item, amount);
 										}
 									}
 
@@ -150,7 +155,7 @@ public class StashScrapCommand implements Executable {
 										if (item != null) {
 											int amount = Calc.rng(1, 3);
 											acc.addItem(item, amount);
-											event.channel().sendMessage(locale.get("str/received_item", amount, item.toString(locale))).queue();
+											items.add(item, amount);
 										}
 									}
 								}
@@ -159,6 +164,23 @@ public class StashScrapCommand implements Executable {
 							sc.delete();
 						}
 
+						if (!items.isEmpty()) {
+							AtomicInteger dist = new AtomicInteger();
+							XStringBuilder sb = new XStringBuilder();
+							items.stream().distinct()
+									.sorted(Comparator.comparing(items::getCount, Comparator.reverseOrder()))
+									.forEach(i -> {
+										dist.getAndIncrement();
+										sb.appendNewLine("- " + items.getCount(i) + "x " + i.toString(locale));
+									});
+
+							if (dist.get() == 1) {
+								UserItem item = items.stream().findFirst().orElseThrow();
+								event.channel().sendMessage(locale.get("str/received_item", items.getCount(item), item.toString(locale))).queue();
+							} else {
+								event.channel().sendMessage(locale.get("str/received_items", sb.toString())).queue();
+							}
+						}
 						return true;
 					}, event.user()
 			);
