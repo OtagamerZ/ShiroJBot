@@ -111,7 +111,7 @@ public abstract class Spawn {
 	public synchronized static Drop<?> getDrop(GuildBuff gb, GuildMessageChannel channel, User u) {
 		if (spawnedDrops.containsKey(channel.getId())) return null;
 
-		double dropRate = 10 * (1.2 * Math.pow(Math.E, -0.001 * channel.getGuild().getMemberCount())) * (1 + gb.drop()) * getQuantityMult();
+		double dropRate = 10 * (1.2 * Math.pow(Math.E, -0.001 * Math.min(channel.getGuild().getMemberCount(), 1000))) * (1 + gb.drop()) * getQuantityMult();
 		double rarityBonus = 1 * (1 + gb.rarity()) * getRarityMult();
 
 		Drop<?> drop = null;
