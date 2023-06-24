@@ -23,7 +23,7 @@ AS
 $$
 SELECT cast((count(f) << 3) | (count(e) << 2) | (count(s) << 1) | count(k) AS INT)
 FROM card c
-         LEFT JOIN card k ON k.id = c.id AND get_rarity_index(k.rarity) BETWEEN 1 AND 5
+         LEFT JOIN card k ON k.id = c.id AND get_rarity_index(k.rarity) < 6
          LEFT JOIN senshi s ON c.id = s.card_id
          LEFT JOIN evogear e ON c.id = e.card_id
          LEFT JOIN field f ON c.id = f.card_id
