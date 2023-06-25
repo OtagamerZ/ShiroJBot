@@ -251,7 +251,7 @@ public class SynthesizeCommand implements Executable {
 
     private static void synthShards(I18N locale, MessageChannel channel, Account acc, UserItem shard) {
         if (acc.getItemCount(shard.getId()) < 10) {
-            channel.sendMessage(locale.get("error/pending_confirmation")).queue();
+            channel.sendMessage(locale.get("error/not_enough_shards")).queue();
             return;
         }
 
