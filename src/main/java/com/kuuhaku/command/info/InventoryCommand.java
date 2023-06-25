@@ -61,7 +61,7 @@ public class InventoryCommand implements Executable {
 				i -> {
 					int has = items.getOrDefault(i, 0);
 
-					String out = i.toString(locale);
+					String out = i.toString(locale) + " (`" + i.getId() + "`)";
 					if (i.getStackSize() > 0) {
 						out += "\n" + locale.get("str/item_has", has + "/" + i.getStackSize());
 					} else {
@@ -78,8 +78,6 @@ public class InventoryCommand implements Executable {
 						String sig = i.getSignature();
 						sig = SignatureParser.extract(locale, sig == null ? null : new String[]{sig}, false).get(0);
 						out += "\n`" + sig.formatted(data.config().getPrefix(), "items.use " + i.getId()) + "`";
-					} else {
-						out += "\n ID: `" + i.getId() + "`";
 					}
 
 					return out + "\n";
