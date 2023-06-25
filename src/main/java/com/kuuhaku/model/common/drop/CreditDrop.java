@@ -23,12 +23,12 @@ import com.kuuhaku.util.Calc;
 
 public class CreditDrop extends Drop<Integer> {
 	public CreditDrop() {
-		this(Calc.rng(350, 900));
+		this(Calc.rng(350, 500));
 	}
 
 	private CreditDrop(int value) {
 		super(
-				r -> new DropContent<>("currency/cr", value * r),
+				r -> new DropContent<>("currency/cr", (500 * (r - 1)) + value * r),
 				(r, acc) -> acc.addCR((long) value * r, "Credit drop")
 		);
 	}
