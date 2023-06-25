@@ -16,12 +16,29 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records;
+package com.kuuhaku.model.common.drop;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Rarity;
+import com.kuuhaku.model.persistent.user.UserItem;
+import com.kuuhaku.util.Calc;
 
-public record DropContent<T>(String key, T value) {
-	public String toString(I18N locale) {
-		return locale.get("str/drop_content", locale.get(key, value));
+public class FragmentDrop extends Drop<String> {
+	public FragmentDrop(I18N locale) {
+		this(locale, 2 + Calc.rng(2, 13));
+	}
+
+	private FragmentDrop(I18N locale, int value) {
+		super(
+				r -> {
+					UserItem i = DAO.find(UserItem.class, Rarity.values()[r - 1]);
+					return Math.min(value, 18 - r * 3) + "x " + i.toString(locale);
+				},
+				(r, acc) -> {
+					UserItem i = DAO.find(UserItem.class, Rarity.values()[r - 1]);
+					acc.addItem(i, Math.min(value, 18 - r * 3));
+				}
+		);
 	}
 }

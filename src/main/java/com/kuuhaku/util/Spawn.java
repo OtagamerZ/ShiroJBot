@@ -24,6 +24,8 @@ import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.SingleUseReference;
 import com.kuuhaku.model.common.drop.CreditDrop;
 import com.kuuhaku.model.common.drop.Drop;
+import com.kuuhaku.model.common.drop.FragmentDrop;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -52,7 +54,7 @@ public abstract class Spawn {
 	private static FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(3);
 	private static FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(15);
 
-	public synchronized static KawaiponCard getKawaipon(GuildBuff gb, GuildMessageChannel channel, User u) {
+	public synchronized static KawaiponCard getKawaipon(I18N locale, GuildBuff gb, GuildMessageChannel channel, User u) {
 		if (spawnedCards.containsKey(channel.getId())) return null;
 
 		double dropRate = 8 * (1.2 * Math.pow(Math.E, -0.001 * Math.min(channel.getGuild().getMemberCount(), 1000))) * (1 + gb.card()) * getQuantityMult();
@@ -108,7 +110,7 @@ public abstract class Spawn {
 		return card;
 	}
 
-	public synchronized static Drop<?> getDrop(GuildBuff gb, GuildMessageChannel channel, User u) {
+	public synchronized static Drop<?> getDrop(I18N locale, GuildBuff gb, GuildMessageChannel channel, User u) {
 		if (spawnedDrops.containsKey(channel.getId())) return null;
 
 		double dropRate = 10 * (1.2 * Math.pow(Math.E, -0.001 * Math.min(channel.getGuild().getMemberCount(), 1000))) * (1 + gb.drop()) * getQuantityMult();
@@ -117,7 +119,8 @@ public abstract class Spawn {
 		Drop<?> drop = null;
 		if (Calc.chance(dropRate)) {
 			RandomList<Drop<?>> rPool = new RandomList<>(1.75 * rarityBonus);
-			rPool.add(new CreditDrop());
+			rPool.add(new CreditDrop(locale), 4000);
+			rPool.add(new FragmentDrop(locale), 2125);
 
 			drop = rPool.get();
 			spawnedDrops.put(

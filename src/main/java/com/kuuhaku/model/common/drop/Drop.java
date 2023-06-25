@@ -25,7 +25,6 @@ import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.DropCondition;
-import com.kuuhaku.model.records.DropContent;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import kotlin.Pair;
@@ -44,10 +43,10 @@ public abstract class Drop<T> {
 	private final List<DropCondition> conditions = Arrays.asList(new DropCondition[getConditionCount()]);
 	private final String captcha = Utils.generateRandomHash(5);
 
-	private final DropContent<T> content;
+	private final String content;
 	private final BiConsumer<Integer, Account> applier;
 
-	public Drop(Function<Integer, DropContent<T>> content, BiConsumer<Integer, Account> applier) {
+	public Drop(Function<Integer, String> content, BiConsumer<Integer, Account> applier) {
 		RandomList<DropCondition> pool = new RandomList<>();
 		pool.add(new DropCondition("low_cash",
 				(rng) -> {
@@ -137,7 +136,7 @@ public abstract class Drop<T> {
 		return (int) Math.ceil(rarity.getIndex() / 2f);
 	}
 
-	public DropContent<T> getContent() {
+	public String getContent() {
 		return content;
 	}
 

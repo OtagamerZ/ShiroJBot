@@ -18,17 +18,17 @@
 
 package com.kuuhaku.model.common.drop;
 
-import com.kuuhaku.model.records.DropContent;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.util.Calc;
 
 public class CreditDrop extends Drop<Integer> {
-	public CreditDrop() {
-		this(Calc.rng(350, 500));
+	public CreditDrop(I18N locale) {
+		this(locale, Calc.rng(350, 500));
 	}
 
-	private CreditDrop(int value) {
+	private CreditDrop(I18N locale, int value) {
 		super(
-				r -> new DropContent<>("currency/cr", (500 * (r - 1)) + value * r),
+				r -> locale.get("currency/cr", (500 * (r - 1)) + value * r),
 				(r, acc) -> acc.addCR((500L * (r - 1)) + (long) value * r, "Credit drop")
 		);
 	}

@@ -378,7 +378,7 @@ public class GuildListener extends ListenerAdapter {
         if (!channels.isEmpty()) {
             GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 
-            KawaiponCard kc = Spawn.getKawaipon(gb, chosen, acc.getUser());
+            KawaiponCard kc = Spawn.getKawaipon(locale, gb, chosen, acc.getUser());
             if (kc != null) {
                 if (acc.consumeItem("special_spice")) {
                     kc.setChrome(true);
@@ -403,14 +403,14 @@ public class GuildListener extends ListenerAdapter {
         if (!channels.isEmpty()) {
             GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 
-            Drop<?> drop = Spawn.getDrop(gb, chosen, acc.getUser());
+            Drop<?> drop = Spawn.getDrop(locale, gb, chosen, acc.getUser());
             if (drop != null) {
                 RandomGenerator rng = drop.getRng();
 
                 EmbedBuilder eb = new EmbedBuilder()
                         .setAuthor(locale.get("str/drop_spawn", drop.getRarity().getIndex()))
                         .setColor(drop.getRarity().getColor(false))
-                        .setDescription(drop.getContent().toString(locale))
+                        .setDescription(drop.getContent())
                         .setFooter(locale.get("str/drop_instructions", config.getPrefix(), drop.getCaptcha(true)))
                         .addField(
                                 locale.get("str/drop_requirements"),
