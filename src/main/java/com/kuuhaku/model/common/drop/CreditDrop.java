@@ -28,7 +28,7 @@ public class CreditDrop extends Drop<Integer> {
 
 	private CreditDrop(I18N locale, int value) {
 		super(
-				r -> locale.get("currency/cr", (500 * (r - 1)) + value * r),
+				r -> locale.get("str/drop_content", locale.get("currency/cr", (500 * (r - 1)) + value * r)),
 				(r, acc) -> acc.addCR((500L * (r - 1)) + (long) value * r, "Credit drop")
 		);
 	}
