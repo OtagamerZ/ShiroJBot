@@ -18,18 +18,19 @@
 
 package com.kuuhaku.model.common.drop;
 
+import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.DropContent;
 import com.kuuhaku.util.Calc;
 
-public class CreditDrop extends Drop<Integer> {
-	public CreditDrop() {
-		this(Calc.rng(350, 500));
+public class FragmentDrop extends Drop<UserItem> {
+	public FragmentDrop() {
+		this(Calc.rng(2, 10));
 	}
 
-	private CreditDrop(int value) {
+	private FragmentDrop(int item) {
 		super(
 				r -> new DropContent<>("currency/cr", (500 * (r - 1)) + value * r),
-				(r, acc) -> acc.addCR((500L * (r - 1)) + (long) value * r, "Credit drop")
+				(r, acc) -> acc.addCR((long) value * r, "Credit drop")
 		);
 	}
 }
