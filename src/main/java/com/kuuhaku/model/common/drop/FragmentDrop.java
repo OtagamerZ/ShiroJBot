@@ -24,13 +24,13 @@ import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.util.Calc;
 
-public class FragmentDrop extends Drop<String> {
-	public FragmentDrop(I18N locale) {
-		this(locale, 2 + Calc.rng(2, 13));
+public class FragmentDrop extends Drop {
+	public FragmentDrop(I18N locale, Rarity rarity) {
+		this(locale, rarity, 2 + Calc.rng(2, 13));
 	}
 
-	private FragmentDrop(I18N locale, int value) {
-		super(
+	private FragmentDrop(I18N locale, Rarity rarity, int value) {
+		super(rarity,
 				r -> {
 					UserItem i = DAO.find(UserItem.class, Rarity.values()[r - 1] + "_SHARD");
 					return locale.get("str/drop_content", Math.min(value, 18 - r * 3) + "x " + i.toString(locale));

@@ -45,7 +45,7 @@ public abstract class Spawn {
 	private static final ExpiringMap<String, SingleUseReference<KawaiponCard>> spawnedCards = ExpiringMap.builder()
 			.variableExpiration()
 			.build();
-	private static final ExpiringMap<String, SingleUseReference<Drop<?>>> spawnedDrops = ExpiringMap.builder()
+	private static final ExpiringMap<String, SingleUseReference<Drop>> spawnedDrops = ExpiringMap.builder()
 			.variableExpiration()
 			.build();
 
@@ -110,19 +110,25 @@ public abstract class Spawn {
 		return card;
 	}
 
-	public synchronized static Drop<?> getDrop(I18N locale, GuildBuff gb, GuildMessageChannel channel, User u) {
+	public synchronized static Drop getDrop(I18N locale, GuildBuff gb, GuildMessageChannel channel, User u) {
 		if (spawnedDrops.containsKey(channel.getId())) return null;
 
 		double dropRate = 10 * (1.2 * Math.pow(Math.E, -0.001 * Math.min(channel.getGuild().getMemberCount(), 1000))) * (1 + gb.drop()) * getQuantityMult();
 		double rarityBonus = 1 * (1 + gb.rarity()) * getRarityMult();
 
-		Drop<?> drop = null;
+		Drop drop = null;
 		if (Calc.chance(dropRate)) {
-			RandomList<Drop<?>> rPool = new RandomList<>(1.75 * rarityBonus);
-			rPool.add(new CreditDrop(locale), 4000);
-			rPool.add(new FragmentDrop(locale), 1125);
+			RandomList<Rarity> rarities = new RandomList<>(2 * rarityBonus);
+			for (Rarity r : Rarity.getActualRarities()) {
+				rarities.add(r, DAO.queryNative(Integer.class, "SELECT get_weight('KAWAIPON', ?1)", 6 - r.getIndex()));
+			}
 
-			drop = rPool.get();
+			Rarity rarity = rarities.get();
+			RandomList<Drop> drops = new RandomList<>(1.75 * rarityBonus);
+			drops.add(new CreditDrop(locale, rarity), 4000);
+			drops.add(new FragmentDrop(locale, rarity), 875);
+
+			drop = drops.get();
 			spawnedDrops.put(
 					channel.getId(),
 					new SingleUseReference<>(drop),
@@ -137,7 +143,7 @@ public abstract class Spawn {
 		return spawnedCards.getOrDefault(channel.getId(), new SingleUseReference<>(null));
 	}
 
-	public static SingleUseReference<Drop<?>> getSpawnedDrop(GuildMessageChannel channel) {
+	public static SingleUseReference<Drop> getSpawnedDrop(GuildMessageChannel channel) {
 		return spawnedDrops.getOrDefault(channel.getId(), new SingleUseReference<>(null));
 	}
 

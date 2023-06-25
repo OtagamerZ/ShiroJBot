@@ -403,7 +403,7 @@ public class GuildListener extends ListenerAdapter {
         if (!channels.isEmpty()) {
             GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 
-            Drop<?> drop = Spawn.getDrop(locale, gb, chosen, acc.getUser());
+            Drop drop = Spawn.getDrop(locale, gb, chosen, acc.getUser());
             if (drop != null) {
                 RandomGenerator rng = drop.getRng();
 

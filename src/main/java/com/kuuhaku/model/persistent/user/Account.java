@@ -291,7 +291,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public Deck getCurrentDeck() {
-		return getDecks().parallelStream()
+		return getDecks().stream()
 				.filter(Deck::isCurrent)
 				.findFirst().orElse(null);
 	}
@@ -309,7 +309,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public DynamicProperty getDynamicProperty(String id) {
-		return dynamicProperties.parallelStream()
+		return dynamicProperties.stream()
 				.filter(dp -> dp.getId().getId().equals(id))
 				.findFirst().orElse(new DynamicProperty(this, id, ""));
 	}
@@ -319,14 +319,14 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public String getDynValue(String id, String defaultValue) {
-		return dynamicProperties.parallelStream()
+		return dynamicProperties.stream()
 				.filter(dp -> dp.getId().getId().equals(id))
 				.map(DynamicProperty::getValue)
 				.findFirst().orElse(defaultValue);
 	}
 
 	public AccountTitle getTitle() {
-		return titles.parallelStream()
+		return titles.stream()
 				.filter(AccountTitle::isCurrent)
 				.findFirst().orElse(null);
 	}
@@ -356,7 +356,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public boolean hasTitle(String title) {
-		return titles.parallelStream()
+		return titles.stream()
 				.map(AccountTitle::getTitle)
 				.anyMatch(t -> t.getId().equals(title));
 	}

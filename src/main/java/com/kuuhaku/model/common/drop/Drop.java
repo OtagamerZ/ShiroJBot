@@ -37,16 +37,16 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.random.RandomGenerator;
 
-public abstract class Drop<T> {
+public abstract class Drop {
 	private final long seed = ThreadLocalRandom.current().nextLong();
-	private final Rarity rarity = Utils.getRandomEntry(Rarity.getActualRarities());
 	private final List<DropCondition> conditions = Arrays.asList(new DropCondition[getConditionCount()]);
 	private final String captcha = Utils.generateRandomHash(5);
 
+	private final Rarity rarity;
 	private final String content;
 	private final BiConsumer<Integer, Account> applier;
 
-	public Drop(Function<Integer, String> content, BiConsumer<Integer, Account> applier) {
+	public Drop(Rarity rarity, Function<Integer, String> content, BiConsumer<Integer, Account> applier) {
 		RandomList<DropCondition> pool = new RandomList<>();
 		pool.add(new DropCondition("low_cash",
 				(rng) -> {
@@ -124,7 +124,8 @@ public abstract class Drop<T> {
 
 		conditions.replaceAll(c -> pool.remove());
 
-		this.content = content.apply(rarity.getIndex());
+		this.rarity = rarity;
+		this.content = content.apply(this.rarity.getIndex());
 		this.applier = applier;
 	}
 

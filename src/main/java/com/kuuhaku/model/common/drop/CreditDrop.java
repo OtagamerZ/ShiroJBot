@@ -19,15 +19,16 @@
 package com.kuuhaku.model.common.drop;
 
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.util.Calc;
 
-public class CreditDrop extends Drop<Integer> {
-	public CreditDrop(I18N locale) {
-		this(locale, Calc.rng(350, 500));
+public class CreditDrop extends Drop {
+	public CreditDrop(I18N locale, Rarity rarity) {
+		this(locale, rarity, Calc.rng(350, 500));
 	}
 
-	private CreditDrop(I18N locale, int value) {
-		super(
+	private CreditDrop(I18N locale, Rarity rarity, int value) {
+		super(rarity,
 				r -> locale.get("str/drop_content", locale.get("currency/cr", (500 * (r - 1)) + value * r)),
 				(r, acc) -> acc.addCR((500L * (r - 1)) + (long) value * r, "Credit drop")
 		);

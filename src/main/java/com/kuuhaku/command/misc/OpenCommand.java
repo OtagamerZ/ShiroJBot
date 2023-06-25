@@ -44,7 +44,7 @@ public class OpenCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
 
-		SingleUseReference<Drop<?>> drop = Spawn.getSpawnedDrop(event.channel());
+		SingleUseReference<Drop> drop = Spawn.getSpawnedDrop(event.channel());
 		try {
 			if (!drop.isValid()) {
 				event.channel().sendMessage(locale.get("error/no_drop")).queue();
@@ -64,7 +64,7 @@ public class OpenCommand implements Executable {
 			return;
 		}
 
-		Drop<?> dp = drop.get();
+		Drop dp = drop.get();
 		dp.award(acc);
 
 		event.channel().sendMessage(locale.get("success/claimed", event.user().getAsMention()))
