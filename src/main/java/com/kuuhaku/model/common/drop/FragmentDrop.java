@@ -33,7 +33,7 @@ public class FragmentDrop extends Drop<String> {
 		super(
 				r -> {
 					UserItem i = DAO.find(UserItem.class, Rarity.values()[r - 1] + "_SHARD");
-					return Math.min(value, 18 - r * 3) + "x " + i.toString(locale);
+					return locale.get("str/drop_content", Math.min(value, 18 - r * 3) + "x " + i.toString(locale));
 				},
 				(r, acc) -> {
 					UserItem i = DAO.find(UserItem.class, Rarity.values()[r - 1] + "_SHARD");
