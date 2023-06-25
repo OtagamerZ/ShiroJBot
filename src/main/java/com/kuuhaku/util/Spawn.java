@@ -120,7 +120,7 @@ public abstract class Spawn {
 		if (Calc.chance(dropRate)) {
 			RandomList<Drop<?>> rPool = new RandomList<>(1.75 * rarityBonus);
 			rPool.add(new CreditDrop(locale), 4000);
-			rPool.add(new FragmentDrop(locale), 2125);
+			rPool.add(new FragmentDrop(locale), 1125);
 
 			drop = rPool.get();
 			spawnedDrops.put(
