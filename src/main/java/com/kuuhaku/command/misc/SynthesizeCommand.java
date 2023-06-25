@@ -268,8 +268,8 @@ public class SynthesizeCommand implements Executable {
                         kc.save();
                         new StashedCard(kp, kc).save();
 
-                        channel.sendMessage(locale.get("success/synth", kp))
-                                .addFiles(FileUpload.fromData(IO.getBytes(kc.render()), "synth.png"))
+                        channel.sendMessage(locale.get("success/synth", kc))
+                                .addFiles(FileUpload.fromData(IO.getBytes(kc.render(), "png"), "synth.png"))
                                 .queue();
 
                         return true;
