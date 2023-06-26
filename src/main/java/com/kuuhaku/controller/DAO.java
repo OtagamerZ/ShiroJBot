@@ -251,7 +251,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public static <T extends DAO<?>, ID> void apply(@NotNull Class<T> klass, @NotNull ID id, @NotNull Consumer<T> consumer) {
+	public static <T extends DAO<T>, ID> void apply(@NotNull Class<T> klass, @NotNull ID id, @NotNull Consumer<T> consumer) {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
