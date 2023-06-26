@@ -39,14 +39,18 @@ import java.util.random.RandomGenerator;
 
 public abstract class Drop {
 	private final long seed = ThreadLocalRandom.current().nextLong();
-	private final List<DropCondition> conditions = Arrays.asList(new DropCondition[getConditionCount()]);
 	private final String captcha = Utils.generateRandomHash(5);
 
 	private final Rarity rarity;
 	private final String content;
 	private final BiConsumer<Integer, Account> applier;
+	private final List<DropCondition> conditions;
 
 	public Drop(Rarity rarity, Function<Integer, String> content, BiConsumer<Integer, Account> applier) {
+		this.rarity = rarity;
+		this.content = content.apply(rarity.getIndex());
+		this.applier = applier;
+
 		RandomList<DropCondition> pool = new RandomList<>();
 		pool.add(new DropCondition("low_cash",
 				(rng) -> {
@@ -122,11 +126,8 @@ public abstract class Drop {
 				}
 		), 1);
 
+		this.conditions = Arrays.asList(new DropCondition[getConditionCount()]);
 		conditions.replaceAll(c -> pool.remove());
-
-		this.rarity = rarity;
-		this.content = content.apply(this.rarity.getIndex());
-		this.applier = applier;
 	}
 
 	public final Rarity getRarity() {
