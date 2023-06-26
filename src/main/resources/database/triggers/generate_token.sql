@@ -37,7 +37,7 @@ BEGIN
 
         NEW.token = encode(cast(NEW.bearer AS bytea), 'base64')
             ||'.'||
-            encode(cast(cast(extract(MILLISECONDS FROM now()) AS text) AS bytea), 'base64')
+            encode(cast(cast(extract(SECONDS FROM now()) AS text) AS bytea), 'base64')
             ||'.'||
             encode(hmac(NEW.bearer, NEW.salt, 'sha1'), 'base64');
     END IF;
