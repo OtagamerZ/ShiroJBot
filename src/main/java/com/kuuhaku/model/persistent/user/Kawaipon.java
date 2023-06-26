@@ -139,7 +139,7 @@ public class Kawaipon extends DAO<Kawaipon> {
 		Object[] vals = DAO.queryUnmapped("""
 				SELECT count(1) FILTER (WHERE NOT x.chrome)
 				     , count(1) FILTER (WHERE x.chrome)
-								FROM (
+				FROM (
 				         SELECT kc.chrome
 				         FROM kawaipon_card kc
 				         WHERE kc.kawaipon_uid = ?1
