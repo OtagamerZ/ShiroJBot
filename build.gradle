@@ -66,7 +66,9 @@ run {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+	options.compilerArgs
+			<< "-Xlint:unchecked"
+			<< "-Xlint:deprecation"
 }
 
 dependencies {
