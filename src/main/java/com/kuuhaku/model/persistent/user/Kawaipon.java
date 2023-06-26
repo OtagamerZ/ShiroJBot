@@ -163,9 +163,11 @@ public class Kawaipon extends DAO<Kawaipon> {
 								FROM (
 				         SELECT kc.chrome
 				         FROM kawaipon_card kc
-				         INNER JOIN card c ON c.id = kc.card_id
+				                  INNER JOIN card c on c.id = kc.card_id
+				                  LEFT JOIN stashed_card sc on kc.card_id = sc.card_id
 				         WHERE kc.kawaipon_uid = ?1
-				         AND c.anime_id = ?2
+				           AND c.anime_id = ?2
+				           AND sc.id IS NULL
 				         GROUP BY kc.card_id, kc.chrome
 				     ) x
 				""", account.getUid(), anime.getId());
@@ -184,9 +186,11 @@ public class Kawaipon extends DAO<Kawaipon> {
 								FROM (
 				         SELECT kc.chrome
 				         FROM kawaipon_card kc
-				         INNER JOIN card c ON c.id = kc.card_id
+				                  INNER JOIN card c on c.id = kc.card_id
+				                  LEFT JOIN stashed_card sc on kc.card_id = sc.card_id
 				         WHERE kc.kawaipon_uid = ?1
-				         AND c.rarity = ?2
+				           AND c.rarity = ?2
+				           AND sc.id IS NULL
 				         GROUP BY kc.card_id, kc.chrome
 				     ) x
 				""", account.getUid(), rarity.name());
