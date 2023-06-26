@@ -139,10 +139,12 @@ public class Kawaipon extends DAO<Kawaipon> {
 		Object[] vals = DAO.queryUnmapped("""
 				SELECT count(1) FILTER (WHERE NOT x.chrome)
 				     , count(1) FILTER (WHERE x.chrome)
-				FROM (
+								FROM (
 				         SELECT kc.chrome
 				         FROM kawaipon_card kc
+				                  LEFT JOIN stashed_card sc on kc.card_id = sc.card_id
 				         WHERE kc.kawaipon_uid = ?1
+				           AND sc.id IS NULL
 				         GROUP BY kc.card_id, kc.chrome
 				     ) x
 				""", account.getUid());
