@@ -160,8 +160,6 @@ public class Shoukan extends GameInstance<Phase> {
 				m -> m.getName().startsWith("deb") || hand.selectionPending() == m.getName().equals("select")
 		);
 
-		System.out.println(action);
-
 		execAction(getCurrentSide(), action);
 	}
 
@@ -169,7 +167,9 @@ public class Shoukan extends GameInstance<Phase> {
 		if (action == null) return;
 
 		Method m = action.getFirst();
+		System.out.println("before");
 		if (!lock) {
+			System.out.println("inside");
 			lock = true;
 
 			try {
@@ -177,6 +177,7 @@ public class Shoukan extends GameInstance<Phase> {
 					cheats = true;
 				}
 
+				System.out.println("invoke");
 				if ((boolean) m.invoke(this, side, action.getSecond())) {
 					getCurrent().showHand();
 				}
