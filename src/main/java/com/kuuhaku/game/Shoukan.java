@@ -160,6 +160,8 @@ public class Shoukan extends GameInstance<Phase> {
 				m -> m.getName().startsWith("deb") || hand.selectionPending() == m.getName().equals("select")
 		);
 
+		System.out.println(action);
+
 		execAction(getCurrentSide(), action);
 	}
 

@@ -63,7 +63,7 @@ public class KawaiponCommand implements Executable {
 				));
 
 		List<Page> pages = new ArrayList<>();
-		int max = (int) Math.ceil(total / 50d);
+		int max = (int) Math.ceil(total / (12 * 4d));
 		for (int i = 1; i <= max; i++) {
 			String url = (Constants.API_ROOT + "kawaipon/%s/%s?v=%s&page=%s").formatted(
 					locale, kp.getUid(), System.currentTimeMillis(), i
