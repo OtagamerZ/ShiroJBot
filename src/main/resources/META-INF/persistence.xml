@@ -34,6 +34,7 @@
         <class>com.kuuhaku.model.persistent.guild.GuildConfig</class>
         <class>com.kuuhaku.model.persistent.guild.GuildSettings</class>
         <class>com.kuuhaku.model.persistent.guild.LevelRole</class>
+        <class>com.kuuhaku.model.persistent.guild.PaidRole</class>
         <class>com.kuuhaku.model.persistent.guild.WelcomeSettings</class>
         <class>com.kuuhaku.model.persistent.guild.StarredMessage</class>
         <class>com.kuuhaku.model.persistent.guild.CustomAnswer</class>
