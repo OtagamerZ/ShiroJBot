@@ -89,6 +89,11 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy("price")
+	private List<PaidRole> paidRoles = new ArrayList<>();
+
+	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<CustomAnswer> customAnswers = new ArrayList<>();
 
 	@ElementCollection
@@ -197,6 +202,10 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public List<LevelRole> getLevelRoles() {
 		return levelRoles;
+	}
+
+	public List<PaidRole> getPaidRoles() {
+		return paidRoles;
 	}
 
 	public List<CustomAnswer> getCustomAnswers() {

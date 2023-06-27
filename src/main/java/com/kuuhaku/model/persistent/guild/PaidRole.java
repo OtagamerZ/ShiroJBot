@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.RoleConverter;
-import com.kuuhaku.model.persistent.id.LevelRoleId;
+import com.kuuhaku.model.persistent.id.PaidRoleId;
 import com.kuuhaku.model.persistent.javatype.RoleJavaType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
@@ -31,14 +31,14 @@ import org.hibernate.annotations.JavaTypeRegistration;
 import java.util.Objects;
 
 @Entity
-@Table(name = "level_role")
+@Table(name = "paid_role")
 @JavaTypeRegistration(javaType = Role.class, descriptorClass = RoleJavaType.class)
-public class LevelRole extends DAO<LevelRole> {
+public class PaidRole extends DAO<PaidRole> {
 	@EmbeddedId
-	private LevelRoleId id;
+	private PaidRoleId id;
 
-	@Column(name = "level", nullable = false)
-	private int level;
+	@Column(name = "price", nullable = false)
+	private int price;
 
 	@Column(name = "role", nullable = false)
 	@Convert(converter = RoleConverter.class)
@@ -50,22 +50,22 @@ public class LevelRole extends DAO<LevelRole> {
 	@MapsId("gid")
 	private GuildSettings settings;
 
-	public LevelRole() {
+	public PaidRole() {
 	}
 
-	public LevelRole(GuildSettings settings, int level, Role role) {
-		this.id = new LevelRoleId(role.getGuild().getId());
-		this.level = level;
+	public PaidRole(GuildSettings settings, int level, Role role) {
+		this.id = new PaidRoleId(role.getGuild().getId());
+		this.price = level;
 		this.role = role;
 		this.settings = settings;
 	}
 
-	public LevelRoleId getId() {
+	public PaidRoleId getId() {
 		return id;
 	}
 
-	public int getLevel() {
-		return level;
+	public int getPrice() {
+		return price;
 	}
 
 	public Role getRole() {
@@ -80,7 +80,7 @@ public class LevelRole extends DAO<LevelRole> {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		LevelRole levelRole = (LevelRole) o;
+		PaidRole levelRole = (PaidRole) o;
 		return Objects.equals(id, levelRole.id);
 	}
 

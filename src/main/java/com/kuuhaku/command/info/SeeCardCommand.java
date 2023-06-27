@@ -134,6 +134,11 @@ public class SeeCardCommand implements Executable {
 				}
 
 				List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card.getId())));
+				if (types.isEmpty()) {
+					event.channel().sendMessage(locale.get("error/not_in_shoukan")).queue();
+					return;
+				}
+
 				Drawable<?> d = switch (types.get(types.size() - 1)) {
 					case KAWAIPON -> null;
 					case SENSHI -> card.asSenshi();

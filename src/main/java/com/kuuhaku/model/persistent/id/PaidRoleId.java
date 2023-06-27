@@ -18,37 +18,44 @@
 
 package com.kuuhaku.model.persistent.id;
 
+import com.kuuhaku.controller.DAO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class ColorRoleId implements Serializable {
+public class PaidRoleId implements Serializable {
 	@Serial
-	private static final long serialVersionUID = -1696717434982919336L;
+	private static final long serialVersionUID = 4589944239933026831L;
 
-	@Column(name = "color", nullable = false)
-	private String color;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private int id;
 
 	@Column(name = "gid", nullable = false)
 	private String gid;
 
-	public ColorRoleId() {
+	public PaidRoleId() {
 	}
 
-	public ColorRoleId(String color, String gid) {
-		this.color = color;
+	public PaidRoleId(String gid) {
+		DAO.applyNative("CREATE SEQUENCE IF NOT EXISTS paid_role_id_seq");
+
+		this.id = DAO.queryNative(Integer.class, "SELECT nextval('paid_role_id_seq')");
 		this.gid = gid;
 	}
 
-	public String getColor() {
-		return color;
+	public int getId() {
+		return id;
 	}
 
-	public void setColor(String color) {
-		this.color = color;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getGid() {
@@ -63,12 +70,12 @@ public class ColorRoleId implements Serializable {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		ColorRoleId that = (ColorRoleId) o;
-		return Objects.equals(color, that.color) && Objects.equals(gid, that.gid);
+		PaidRoleId that = (PaidRoleId) o;
+		return id == that.id && Objects.equals(gid, that.gid);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(color, gid);
+		return Objects.hash(id, gid);
 	}
 }
