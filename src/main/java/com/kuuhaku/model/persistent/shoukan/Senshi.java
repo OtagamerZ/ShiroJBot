@@ -876,6 +876,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
         state = Bit.set(state, 6, Math.max(0, curr - time), 4);
     }
 
+    public void reduceDebuffs(int time) {
+        reduceStun(time);
+        reduceSleep(time);
+        reduceStasis(time);
+        reduceTaunt(time);
+        reduceBerserk(time);
+    }
+
     @Override
     public int getCooldown() {
         return Bit.get(state, 7, 4);
