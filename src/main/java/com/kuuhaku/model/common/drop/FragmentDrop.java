@@ -26,7 +26,7 @@ import com.kuuhaku.util.Calc;
 
 public class FragmentDrop extends Drop {
 	public FragmentDrop(I18N locale, Rarity rarity) {
-		this(locale, rarity, 2 + Calc.rng(2, 13));
+		this(locale, rarity,  6 - rarity.getIndex() + Calc.rng(0, 10 / rarity.getIndex()));
 	}
 
 	private FragmentDrop(I18N locale, Rarity rarity, int value) {
