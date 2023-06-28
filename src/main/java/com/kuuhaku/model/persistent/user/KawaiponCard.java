@@ -51,7 +51,7 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	private boolean chrome;
 
 	@Column(name = "quality", nullable = false)
-	private double quality = Calc.round(Math.max(0, Math.pow(ThreadLocalRandom.current().nextDouble(), 5) * 30 - 10), 1);
+	private double quality = Calc.round(Math.max(0, Math.pow(ThreadLocalRandom.current().nextDouble(), 5) * 40 - 20), 1);
 
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "card_id")
