@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 		path = "senshi",
 		category = Category.INFO
 )
-@Signature("<race:word>")
+@Signature("<race:word> <pure:word>[pure]")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class KawaiponSenshiCommand implements Executable {
 	@Override
@@ -83,12 +83,6 @@ public class KawaiponSenshiCommand implements Executable {
 			return;
 		}
 
-		int total = race.getCount();
-		if (total == 0) {
-			event.channel().sendMessage(locale.get("error/empty_race")).queue();
-			return;
-		}
-
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/available_cards", locale.get("type/senshi")))
 				.setThumbnail(Constants.ORIGIN_RESOURCES + "shoukan/race/full/" + race + ".png")
@@ -103,17 +97,22 @@ public class KawaiponSenshiCommand implements Executable {
 					.addField(locale.get("str/synergy_effect"), race.getSynergy(locale), false);
 		}
 
-		List<Page> pages = new ArrayList<>();
-		int max = (int) Math.ceil(total / 50d);
-		for (int i = 1; i <= max; i++) {
-			String url = (Constants.API_ROOT + "shoukan/%s/senshi?race=%s&uid=%s&v=%s&page=%s").formatted(
-					locale, race.getFlag(), event.user().getId(), System.currentTimeMillis(), i
-			);
+		int total = race.getCount();
+		if (total > 0) {
+			List<Page> pages = new ArrayList<>();
+			int max = (int) Math.ceil(total / 50d);
+			for (int i = 1; i <= max; i++) {
+				String url = (Constants.API_ROOT + "shoukan/%s/senshi?race=%s&pure=%s&uid=%s&v=%s&page=%s").formatted(
+						locale, race.getFlag(), args.has("pure") ? 1 : 0, event.user().getId(), System.currentTimeMillis(), i
+				);
 
-			eb.setImage(url).setDescription(race.getDescription(locale) + "\n\n" + locale.get("str/fallback_url", url));
-			pages.add(InteractPage.of(eb.build()));
+				eb.setImage(url).setDescription(race.getDescription(locale) + "\n\n" + locale.get("str/fallback_url", url));
+				pages.add(InteractPage.of(eb.build()));
+			}
+
+			Utils.paginate(pages, 1, true, event.channel(), event.user());
+		} else {
+			event.channel().sendMessageEmbeds(eb.build()).queue();
 		}
-
-		Utils.paginate(pages, 1, true, event.channel(), event.user());
 	}
 }

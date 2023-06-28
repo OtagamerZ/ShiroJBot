@@ -171,7 +171,10 @@ public class StashScrapCommand implements Executable {
 									.sorted(Comparator.comparing(items::getCount, Comparator.reverseOrder()))
 									.forEach(i -> {
 										dist.getAndIncrement();
-										sb.appendNewLine("- " + items.getCount(i) + "x " + i.toString(locale));
+
+										int amount = items.getCount(i);
+										sb.appendNewLine("- " + amount + "x " + i.toString(locale));
+										acc.addItem(i, amount);
 									});
 
 							if (dist.get() == 1) {
