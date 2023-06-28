@@ -160,28 +160,29 @@ public class Shoukan extends GameInstance<Phase> {
 				m -> m.getName().startsWith("deb") || hand.selectionPending() == m.getName().equals("select")
 		);
 
-		execAction(getCurrentSide(), action);
+		execAction(hand, action);
 	}
 
-	private void execAction(Side side, Pair<Method, JSONObject> action) {
+	private void execAction(Hand hand, Pair<Method, JSONObject> action) {
 		if (action == null) return;
 
 		Method m = action.getFirst();
-		if (!lock) {
-			lock = true;
+		boolean bypass = m.getName().startsWith("deb") || hand.selectionPending() == m.getName().equals("select");
+		if (!lock || bypass) {
+			if (!bypass) lock = true;
 
 			try {
 				if (m.getName().startsWith("deb")) {
 					cheats = true;
 				}
 
-				if ((boolean) m.invoke(this, side, action.getSecond())) {
+				if ((boolean) m.invoke(this, hand.getSide(), action.getSecond())) {
 					getCurrent().showHand();
 				}
 			} catch (Exception e) {
 				Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
 			} finally {
-				lock = false;
+				if (!bypass) lock = false;
 			}
 		}
 	}
