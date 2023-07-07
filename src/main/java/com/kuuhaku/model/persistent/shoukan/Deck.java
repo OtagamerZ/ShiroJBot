@@ -470,17 +470,22 @@
 								   .map(o -> "- " + o.getMinor(locale))
 								   .collect(Collectors.joining("\n\n"))
 						   + "\n\n- " + syn.getSynergy(locale)
-						   + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
+						   + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
+			 }
+
+			 Archetype arch = getArchetype();
+			 if (arch.getId() != null) {
+				 effects += "\n\n&(#FFAA00)- " + arch.getDescription(locale);
 			 }
 
 			 Graph.drawMultilineString(g, effects,
 					 0, 210, 1100, 10, -20,
 					 s -> {
-						 String str = Utils.extract(s, "&(.+)", 1);
+						 JSONArray args = Utils.extractGroups(s, "&\\(#[0-9A-F]{6}\\)(.+)");
 
-						 if (str != null) {
-							 g.setColor(new Color(0xD72929));
-							 return str;
+						 if (!args.isEmpty()) {
+							 g.setColor(Color.decode(args.getString(0)));
+							 return args.getString(1);
 						 }
 
 						 return s;
