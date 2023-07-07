@@ -144,6 +144,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = getCurrent();
 		curr.modMP(curr.getBase().mpGain().get());
 
+		trigger(ON_TURN_BEGIN, curr.getSide());
 		curr.showHand();
 		reportEvent("str/game_start", false, "<@" + curr.getUid() + ">");
 
