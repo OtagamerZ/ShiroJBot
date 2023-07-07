@@ -24,6 +24,7 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Closeable;
 import java.util.EnumSet;
@@ -33,7 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
 public record EffectOverTime(
-		Drawable<?> source,
+		@Nullable Drawable<?> source,
 		boolean debuff,
 		Side side,
 		BiConsumer<EffectOverTime, EffectParameters> effect,
@@ -109,16 +110,24 @@ public record EffectOverTime(
 		if (o == null || getClass() != o.getClass()) return false;
 		EffectOverTime that = (EffectOverTime) o;
 
-		if (permanent()) {
-			return source.getId().equals(that.source.getId()) && side == that.side;
+		if (source != null && that.source != null) {
+			if (permanent()) {
+				return source.getId().equals(that.source.getId()) && side == that.side;
+			} else {
+				return source.getSerial() == that.source.getSerial() && side == that.side;
+			}
 		} else {
-			return source.getSerial() == that.source.getSerial() && side == that.side;
+			return side == that.side;
 		}
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(permanent() ? source.getId() : source.getSerial(), side);
+		if (source != null) {
+			return Objects.hash(permanent() ? source.getId() : source.getSerial(), side);
+		} else {
+			return Objects.hash(side);
+		}
 	}
 
 	@Override
