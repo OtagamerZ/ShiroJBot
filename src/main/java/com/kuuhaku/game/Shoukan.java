@@ -1875,7 +1875,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (remove) {
-				if (!effect.permanent()) {
+				if (!effect.permanent() && effect.source() != null) {
 					getChannel().sendMessage(getLocale().get("str/effect_expiration", effect.source())).queue();
 				}
 
