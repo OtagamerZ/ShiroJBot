@@ -40,12 +40,12 @@ BEGIN
         WHERE def SIMILAR TO '% card\(id\)|%\(card_id\)'
         LOOP
             EXECUTE format($$
-            ALTER TABLE %1$I
-                DROP CONSTRAINT %2$I;
+            ALTER TABLE "%1$I"
+                DROP CONSTRAINT "%2$I";
 
-            ALTER TABLE %1$I
-                ADD CONSTRAINT %2$I
-                    FOREIGN KEY (%3$I) REFERENCES %4$I
+            ALTER TABLE "%1$I"
+                ADD CONSTRAINT "%2$I"
+                    FOREIGN KEY ("%3$I") REFERENCES "%4$I"
                         ON UPDATE CASCADE;
             $$, _match.table, _match.name, _match.col, _match.ref);
         END LOOP;
