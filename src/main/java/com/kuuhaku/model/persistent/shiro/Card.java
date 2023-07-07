@@ -44,7 +44,7 @@ import java.net.URL;
 import java.util.Objects;
 
 @Entity
-@Table(name = "card", indexes = @Index(columnList = "id"))
+@Table(name = "card")
 public class Card extends DAO<Card> implements Serializable {
 	@Id
 	@Column(name = "id", nullable = false)
