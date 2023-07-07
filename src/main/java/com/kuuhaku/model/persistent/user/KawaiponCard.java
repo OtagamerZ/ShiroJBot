@@ -32,6 +32,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -141,9 +142,9 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 
 		if (q.ordinal() > 0) {
 			try {
-				try (Buffer buf = new Buffer()) {
+				try (Buffer buf = new Buffer(); InputStream is = buf.inputStream()) {
 					buf.write(q.getOverlayBytes());
-					BufferedImage overlay = ImageIO.read(buf.inputStream());
+					BufferedImage overlay = ImageIO.read(is);
 
 					Graphics2D g2d = bi.createGraphics();
 					g2d.setRenderingHints(Constants.HD_HINTS);

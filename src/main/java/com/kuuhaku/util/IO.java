@@ -37,6 +37,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -97,8 +98,8 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding) {
-		try (Buffer buf = new Buffer()) {
-			ImageIO.write(image, encoding, buf.outputStream());
+		try (Buffer buf = new Buffer(); OutputStream os = buf.outputStream()) {
+			ImageIO.write(image, encoding, os);
 
 			return buf.readByteArray();
 		} catch (IOException e) {
@@ -108,9 +109,9 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding, float quality) {
-		try (Buffer buf = new Buffer()) {
+		try (Buffer buf = new Buffer(); OutputStream os = buf.outputStream()) {
 			ImageWriter writer = ImageIO.getImageWritersByFormatName(encoding).next();
-			ImageOutputStream ios = ImageIO.createImageOutputStream(buf.outputStream());
+			ImageOutputStream ios = ImageIO.createImageOutputStream(os);
 			writer.setOutput(ios);
 
 			ImageWriteParam param = writer.getDefaultWriteParam();
@@ -138,8 +139,9 @@ public abstract class IO {
 	public static BufferedImage imageFromBytes(byte[] bytes) {
 		if (bytes.length == 0) return null;
 
-		try (Buffer buf = new Buffer().write(bytes)) {
-			BufferedImage out = ImageIO.read(buf.inputStream());
+		try (Buffer buf = new Buffer(); InputStream is = buf.inputStream()) {
+			buf.write(bytes);
+			BufferedImage out = ImageIO.read(is);
 			boolean alpha = out.getColorModel().hasAlpha();
 
 			if (alpha && out.getType() != BufferedImage.TYPE_INT_ARGB) {
@@ -167,8 +169,9 @@ public abstract class IO {
 	}
 
 	public static BufferedImage btoc(String b64) {
-		try (Buffer buf = new Buffer().write(Base64.getDecoder().decode(b64.getBytes(StandardCharsets.UTF_8)))) {
-			return ImageIO.read(buf.inputStream());
+		try (Buffer buf = new Buffer(); InputStream is = buf.inputStream()) {
+			buf.write(Base64.getDecoder().decode(b64.getBytes(StandardCharsets.UTF_8)));
+			return ImageIO.read(is);
 		} catch (IOException | NullPointerException e) {
 			return null;
 		}
@@ -188,9 +191,10 @@ public abstract class IO {
 
 	public static byte[] compress(byte[] bytes) throws IOException {
 		Buffer buf = new Buffer();
-		GZIPOutputStream gzip = new GZIPOutputStream(buf.outputStream());
+		OutputStream os = buf.outputStream();
+		GZIPOutputStream gzip = new GZIPOutputStream(os);
 
-		try (gzip; buf) {
+		try (gzip; buf; os) {
 			gzip.write(bytes);
 			gzip.finish();
 
@@ -200,9 +204,10 @@ public abstract class IO {
 
 	public static String uncompress(byte[] compressed) throws IOException {
 		Buffer buf = new Buffer().write(compressed);
-		GZIPInputStream gzip = new GZIPInputStream(buf.inputStream());
+		InputStream is = buf.inputStream();
+		GZIPInputStream gzip = new GZIPInputStream(is);
 
-		try (gzip; buf) {
+		try (gzip; buf; is) {
 			return new String(IOUtils.toByteArray(gzip), StandardCharsets.UTF_8);
 		}
 	}

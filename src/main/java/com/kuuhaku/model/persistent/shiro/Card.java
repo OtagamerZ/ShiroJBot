@@ -38,6 +38,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.Objects;
@@ -79,13 +80,13 @@ public class Card extends DAO<Card> implements Serializable {
 
 	public BufferedImage drawCard(boolean chrome) {
 		try {
-			try (Buffer buf = new Buffer()) {
+			try (Buffer buf = new Buffer(); InputStream is = buf.inputStream()) {
 				buf.write(getImageBytes());
-				BufferedImage card = ImageIO.read(buf.inputStream());
+				BufferedImage card = ImageIO.read(is);
 
 				buf.clear();
 				buf.write(rarity.getFrameBytes());
-				BufferedImage frame = ImageIO.read(buf.inputStream());
+				BufferedImage frame = ImageIO.read(is);
 
 				BufferedImage canvas = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = canvas.createGraphics();
@@ -109,9 +110,9 @@ public class Card extends DAO<Card> implements Serializable {
 			byte[] cardBytes = getImageBytes();
 			assert cardBytes != null;
 
-			try (Buffer buf = new Buffer()) {
+			try (Buffer buf = new Buffer(); InputStream is = buf.inputStream()) {
 				buf.write(cardBytes);
-				return ImageIO.read(buf.inputStream());
+				return ImageIO.read(is);
 			}
 		} catch (IOException e) {
 			return null;
@@ -123,9 +124,9 @@ public class Card extends DAO<Card> implements Serializable {
 			byte[] cardBytes = getImageBytes();
 			assert cardBytes != null;
 
-			try (Buffer buf = new Buffer()) {
+			try (Buffer buf = new Buffer(); InputStream is = buf.inputStream()) {
 				buf.write(cardBytes);
-				return chrome ? chrome(ImageIO.read(buf.inputStream()), false) : ImageIO.read(buf.inputStream());
+				return chrome ? chrome(ImageIO.read(is), false) : ImageIO.read(is);
 			}
 		} catch (IOException e) {
 			return null;

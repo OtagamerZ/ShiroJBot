@@ -12,8 +12,8 @@
 - **KuuHaKu**: Criador inicial da Shiro e da equipe OtagamerZ;
 - **Banco de dados**: Local onde os dados ficam armazenados, podendo ser tanto local quanto remoto;
 - **Avatar**: Imagem ou ícone usado para representar usuários;
-- **Cargos**: Conjuntos de permissões dados à usuários pela equipe administrativa do servidor em questão;
-- **VPS**: Serviço digital de computação em núvem privado, equivalente a um computador físico;
+- **Cargos**: Conjuntos de permissões dados a usuários pela equipe administrativa do servidor em questão;
+- **VPS**: Serviço digital de computação em nuvem privado, equivalente a um computador físico;
 - ***Backup***: Arquivo contendo dados que podem ser posteriormente restaurados;
 - ***Open-source***: Projeto que possui seu código-fonte público e disponível para implementações pela comunidade;
 
