@@ -61,10 +61,10 @@ public class StashAddCommand implements Executable {
 			return;
 		}
 
-		KawaiponCard kc = kp.getCollection().stream()
+		KawaiponCard kc = kp.getCollection().parallelStream()
 				.filter(c -> c.getCard().equals(card))
 				.filter(c -> c.isChrome() == args.getString("kind", "n").equalsIgnoreCase("c"))
-				.findFirst().orElse(null);
+				.findAny().orElse(null);
 
 		if (kc == null) {
 			event.channel().sendMessage(locale.get("error/not_owned")).queue();

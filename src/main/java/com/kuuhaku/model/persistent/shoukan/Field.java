@@ -30,10 +30,13 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.util.*;
+import com.kuuhaku.util.Bit;
+import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import kotlin.Pair;
 import org.hibernate.annotations.Fetch;
@@ -60,7 +63,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@Column(name = "card_id", nullable = false)
 	private String id;
 
-	@OneToOne(optional = false, orphanRemoval = true)
+	@OneToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "card_id")
 	@Fetch(FetchMode.JOIN)
 	@MapsId("id")

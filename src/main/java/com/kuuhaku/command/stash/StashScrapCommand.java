@@ -178,7 +178,7 @@ public class StashScrapCommand implements Executable {
 									});
 
 							if (dist.get() == 1) {
-								UserItem item = items.stream().findFirst().orElseThrow();
+								UserItem item = items.stream().findAny().orElseThrow();
 								event.channel().sendMessage(locale.get("str/received_item", items.getCount(item), item.toString(locale))).queue();
 							} else {
 								event.channel().sendMessage(locale.get("str/received_items", sb.toString())).queue();

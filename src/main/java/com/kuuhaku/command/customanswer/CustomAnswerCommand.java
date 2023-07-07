@@ -56,9 +56,9 @@ public class CustomAnswerCommand implements Executable {
 
 		int id = args.getInt("id");
 		if (id > 0) {
-			CustomAnswer ca = settings.getCustomAnswers().stream()
+			CustomAnswer ca = settings.getCustomAnswers().parallelStream()
 					.filter(c -> c.getId().getId() == id)
-					.findFirst().orElse(null);
+					.findAny().orElse(null);
 
 			if (ca == null) {
 				event.channel().sendMessage(locale.get("error/id_not_found")).queue();

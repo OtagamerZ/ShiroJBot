@@ -57,10 +57,9 @@ public class Title extends DAO<Title> {
 	}
 
 	public LocalizedTitle getInfo(I18N locale) {
-		return infos.stream()
+		return infos.parallelStream()
 				.filter(ld -> ld.getLocale() == locale)
-				.findFirst()
-				.orElseThrow();
+				.findAny().orElseThrow();
 	}
 
 	public Rarity getRarity() {

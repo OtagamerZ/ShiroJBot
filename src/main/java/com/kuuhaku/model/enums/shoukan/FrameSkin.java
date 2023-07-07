@@ -219,7 +219,9 @@ public enum FrameSkin {
 	}
 
 	public static FrameSkin getByName(String name) {
-		return Arrays.stream(values()).filter(fc -> Utils.equalsAny(name, fc.name(), fc.toString())).findFirst().orElse(null);
+		return Arrays.stream(values()).parallel()
+				.filter(fc -> Utils.equalsAny(name, fc.name(), fc.toString()))
+				.findAny().orElse(null);
 	}
 
 	public Shape getBoundary() {

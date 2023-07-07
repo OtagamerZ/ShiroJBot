@@ -33,7 +33,7 @@ import java.util.Objects;
 @Table(name = "anime")
 public class Anime extends DAO<Anime> implements Serializable {
 	@Id
-	@Column(name = "id", nullable = false)
+	@Column(name = "anime_id", nullable = false)
 	private String id;
 
 	@Column(name = "visible", nullable = false)

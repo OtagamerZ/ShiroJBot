@@ -34,10 +34,7 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
@@ -343,6 +340,14 @@ public class Hand {
 
 	public Hand getOther() {
 		return game.getHands().get(side.getOther());
+	}
+
+	public Archetype getArchetype() {
+		return userDeck.getArchetype();
+	}
+
+	public void loadArchetype() {
+		userDeck.getArchetype().execute(this);
 	}
 
 	public Origin getOrigin() {

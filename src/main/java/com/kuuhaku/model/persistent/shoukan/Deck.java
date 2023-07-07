@@ -1,20 +1,20 @@
  /*
- * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
- *
- * Shiro J Bot is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Shiro J Bot is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
- */
+  * This file is part of Shiro J Bot.
+  * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
+  *
+  * Shiro J Bot is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * Shiro J Bot is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
+  */
 
  package com.kuuhaku.model.persistent.shoukan;
 
@@ -87,6 +87,7 @@
 	 private transient List<Senshi> senshi = null;
 	 private transient List<Evogear> evogear = null;
 	 private transient List<Field> field = null;
+	 private transient Archetype archetype = null;
 	 private transient Origin origin = null;
 
 	 public Deck() {
@@ -530,6 +531,25 @@
 		 return bi;
 	 }
 
+	 public Archetype getArchetype() {
+		 if (archetype == null) {
+			 HashBag<Anime> anime = new HashBag<>();
+			 for (Senshi s : getSenshi()) {
+				 anime.add(s.getCard().getAnime());
+			 }
+
+			 Archetype a = anime.parallelStream()
+					 .filter(an -> an.getCount() > 20)
+					 .findAny()
+					 .map(an -> DAO.find(Archetype.class, an.getId()))
+					 .orElse(null);
+
+			 archetype = Utils.getOr(a, new Archetype());
+		 }
+
+		 return archetype;
+	 }
+
 	 public Origin getOrigins() {
 		 if (origin == null) {
 			 TreeBag<Race> races = new TreeBag<>();
@@ -542,7 +562,7 @@
 			 }
 
 			 if (races.stream().distinct().count() == 1) {
-				 return origin = Origin.of(races.first());
+				 return origin = new Origin(races.first());
 			 }
 
 			 List<Race> ori = new ArrayList<>();
@@ -577,9 +597,9 @@
 				 origin = new Origin(Race.MIXED, ori.toArray(Race[]::new));
 			 } else {
 				 if (!ori.isEmpty()) {
-					 origin = Origin.of(ori.get(0), ori.get(1));
+					 origin = new Origin(ori.get(0), ori.get(1));
 				 } else {
-					 origin = Origin.of(Race.NONE);
+					 origin = new Origin(Race.NONE);
 				 }
 			 }
 		 }

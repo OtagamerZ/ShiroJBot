@@ -136,6 +136,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		for (Hand h : hands.values()) {
 			h.manualDraw(h.getRemainingDraws());
+			h.loadArchetype();
 		}
 
 		setPhase(Phase.PLAN);
@@ -151,9 +152,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected void runtime(User user, String value) throws InvocationTargetException, IllegalAccessException {
-		Hand hand = hands.values().stream()
+		Hand hand = hands.values().parallelStream()
 				.filter(h -> h.getUid().equals(user.getId()))
-				.findFirst().orElseThrow();
+				.findAny().orElseThrow();
 
 		Pair<Method, JSONObject> action = toAction(
 				value.toLowerCase().replace(" ", ""),

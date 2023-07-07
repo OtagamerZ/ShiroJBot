@@ -245,9 +245,8 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	public RichCustomEmoji getLevelEmote() {
 		return Main.getApp().getShiro()
 				.getEmojisByName("lvl_" + (getLevel() - getLevel() % 5), false)
-				.stream()
-				.findFirst()
-				.orElseThrow();
+				.parallelStream()
+				.findAny().orElseThrow();
 	}
 
 	public BufferedImage render(I18N locale) {

@@ -28,6 +28,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
+import org.intellij.lang.annotations.Language;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -71,6 +72,7 @@ public class CardAttributes implements Serializable, Cloneable {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedDescription> descriptions = new HashSet<>();
 
+	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
 

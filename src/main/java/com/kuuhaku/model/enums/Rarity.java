@@ -129,8 +129,8 @@ public enum Rarity {
 	}
 
 	public static Rarity fromIndex(int i) {
-		return Arrays.stream(values())
+		return Arrays.stream(values()).parallel()
 				.filter(r -> r.getIndex() == i)
-				.findFirst().orElse(null);
+				.findAny().orElse(null);
 	}
 }

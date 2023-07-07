@@ -72,7 +72,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
     @Column(name = "card_id", nullable = false)
     private String id;
 
-    @OneToOne(optional = false, orphanRemoval = true)
+    @OneToOne(optional = false)
     @PrimaryKeyJoinColumn(name = "card_id")
     @Fetch(FetchMode.JOIN)
     @MapsId("id")

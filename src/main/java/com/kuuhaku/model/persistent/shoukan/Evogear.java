@@ -70,7 +70,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Column(name = "card_id", nullable = false)
 	private String id;
 
-	@OneToOne(optional = false, orphanRemoval = true)
+	@OneToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "card_id")
 	@Fetch(FetchMode.JOIN)
 	@MapsId("id")

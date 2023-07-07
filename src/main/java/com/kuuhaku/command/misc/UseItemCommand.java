@@ -52,9 +52,9 @@ public class UseItemCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
 		Map<UserItem, Integer> items = acc.getItems();
-		UserItem item = items.keySet().stream()
+		UserItem item = items.keySet().parallelStream()
 				.filter(i -> i.getId().equals(args.getString("id").toUpperCase()))
-				.findFirst().orElse(null);
+				.findAny().orElse(null);
 
 		if (item == null) {
 			List<String> names = items.keySet().stream().map(UserItem::getId).toList();

@@ -137,10 +137,10 @@ public abstract class SignatureParser {
                         @Language("RegExp") String opt = groups.getString("options", "");
                         @Language("RegExp") String pattern = opt;
                         if (patterns != null) {
-                            pattern = "^" + Arrays.stream(patterns)
+                            pattern = "^" + Arrays.stream(patterns).parallel()
                                     .filter(p -> p.id().equals(opt))
                                     .map(SigPattern::value)
-                                    .findFirst().orElse(opt);
+                                    .findAny().orElse(opt);
                         }
 
                         Matcher match = Utils.regex(str, pattern);

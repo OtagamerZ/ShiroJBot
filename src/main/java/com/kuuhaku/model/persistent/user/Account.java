@@ -259,7 +259,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	public Profile getProfile(Member member) {
 		return profiles.parallelStream()
 				.filter(p -> p.getId().getGid().equals(member.getGuild().getId()))
-				.findFirst().orElse(new Profile(member));
+				.findAny().orElse(new Profile(member));
 	}
 
 	public void addProfile(Member member) {
@@ -293,7 +293,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	public Deck getCurrentDeck() {
 		return getDecks().parallelStream()
 				.filter(Deck::isCurrent)
-				.findFirst().orElse(null);
+				.findAny().orElse(null);
 	}
 
 	public List<Transaction> getTransactions() {
@@ -311,7 +311,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	public DynamicProperty getDynamicProperty(String id) {
 		return dynamicProperties.parallelStream()
 				.filter(dp -> dp.getId().getId().equals(id))
-				.findFirst().orElse(new DynamicProperty(this, id, ""));
+				.findAny().orElse(new DynamicProperty(this, id, ""));
 	}
 
 	public String getDynValue(String id) {
@@ -325,7 +325,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	public AccountTitle getTitle() {
 		return titles.parallelStream()
 				.filter(AccountTitle::isCurrent)
-				.findFirst().orElse(null);
+				.findAny().orElse(null);
 	}
 
 	public synchronized Title checkTitles() {

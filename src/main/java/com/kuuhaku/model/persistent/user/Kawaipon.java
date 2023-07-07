@@ -42,7 +42,7 @@ public class Kawaipon extends DAO<Kawaipon> {
 	@Column(name = "uid", nullable = false)
 	private String uid;
 
-	@OneToOne(mappedBy = "kawaipon", orphanRemoval = true)
+	@OneToOne(mappedBy = "kawaipon")
 	private Account account;
 
 	@OneToMany(mappedBy = "kawaipon", cascade = CascadeType.ALL, orphanRemoval = true)

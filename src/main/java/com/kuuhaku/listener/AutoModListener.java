@@ -37,7 +37,7 @@ public class AutoModListener extends ListenerAdapter {
 		AutoModType type = config.getSettings().getAutoModEntries().entrySet().parallelStream()
 				.filter(e -> e.getValue().equals(event.getRuleId()))
 				.map(Map.Entry::getKey)
-				.findFirst().orElse(null);
+				.findAny().orElse(null);
 
 		if (type == AutoModType.SPAM) {
 			Profile p = DAO.find(Profile.class, new ProfileId(event.getUserId(), config.getGid()));
