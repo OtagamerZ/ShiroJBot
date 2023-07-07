@@ -52,19 +52,26 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class CommonSocket extends WebSocketClient {
-	private static final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+	private static final ScheduledExecutorService exec = Executors.newScheduledThreadPool(2);
 	private static final String TOKEN = DAO.queryNative(String.class, "SELECT token FROM access_token WHERE bearer = 'Shiro'");
 	private int retry = 0;
 
 	public CommonSocket(String address) throws URISyntaxException {
 		super(new URI(address));
+		exec.scheduleAtFixedRate(this::ping, 0, 2, TimeUnit.SECONDS);
+	}
+
+	private void ping() {
+		if (isOpen()) {
+			sendPing();
+		}
 	}
 
 	@Override
 	public void onOpen(ServerHandshake handshake) {
 		send(JSONObject.of(
-			Map.entry("type", "AUTH"),
-			Map.entry("token", TOKEN)
+				Map.entry("type", "AUTH"),
+				Map.entry("token", TOKEN)
 		).toString());
 	}
 
@@ -83,8 +90,8 @@ public class CommonSocket extends WebSocketClient {
 				}
 
 				send(JSONObject.of(
-					Map.entry("type", "ATTACH"),
-					Map.entry("channels", List.of("eval", "shoukan", "i18n"))
+						Map.entry("type", "ATTACH"),
+						Map.entry("channels", List.of("eval", "shoukan", "i18n"))
 				).toString());
 				return;
 			}
