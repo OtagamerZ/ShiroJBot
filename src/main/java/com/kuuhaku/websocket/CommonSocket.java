@@ -58,7 +58,7 @@ public class CommonSocket extends WebSocketClient {
 
 	public CommonSocket(String address) throws URISyntaxException {
 		super(new URI(address));
-		exec.scheduleAtFixedRate(this::ping, 0, 2, TimeUnit.SECONDS);
+		exec.scheduleAtFixedRate(this::ping, 0, 30, TimeUnit.SECONDS);
 	}
 
 	private void ping() {
