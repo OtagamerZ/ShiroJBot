@@ -68,6 +68,7 @@
         <class>com.kuuhaku.model.persistent.shoukan.LocalizedString</class>
         <class>com.kuuhaku.model.persistent.shoukan.MatchHistory</class>
         <class>com.kuuhaku.model.persistent.shoukan.Archetype</class>
+        <class>com.kuuhaku.model.persistent.shoukan.LocalizedArch</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
