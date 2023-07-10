@@ -1325,7 +1325,7 @@ public class Shoukan extends GameInstance<Phase> {
 									}
 
 									if (source.isDefending() && !source.popFlag(Flag.ALWAYS_ATTACK)) {
-										target.setStun(1);
+										target.setStun(eCombatStats / dmg);
 										dmg = 0;
 									} else {
 										op.getGraveyard().add(target);
