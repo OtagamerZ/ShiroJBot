@@ -18,24 +18,18 @@
 
 package com.kuuhaku.command.moderation;
 
-import com.github.ygimenez.model.Page;
-import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-
-import java.util.List;
 
 @Command(
 		name = "levelrole",
@@ -49,42 +43,12 @@ import java.util.List;
 public class LevelRoleCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		JSONObject aliases = data.config().getSettings().getAliases();
-		if (args.isEmpty()) {
-			if (aliases.isEmpty()) {
-				event.channel().sendMessage(locale.get("error/no_aliases")).queue();
+		GuildSettings settings = data.config().getSettings();
+		if (!args.has("role")) {
+			if (settings.getLevelRoles().isEmpty()) {
+				event.channel().sendMessage(locale.get("error/no_level_roles")).queue();
 				return;
 			}
-
-			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setTitle(locale.get("str/alias"));
-
-			List<Page> pages = Utils.generatePages(eb, aliases.entrySet(), 20, 10,
-					e -> "`" + e.getKey() + "` -> `" + e.getValue() + "`",
-					(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
-			);
-
-			Utils.paginate(pages, 1, true, event.channel(), event.user());
-			return;
 		}
-
-		String cmd = args.getString("command").toLowerCase();
-		String alias = args.getString("alias").toLowerCase();
-		if (!Main.getCommandManager().getReservedNames().contains(cmd)) {
-			event.channel().sendMessage(locale.get("error/command_not_found")).queue();
-			return;
-		} else if (Main.getCommandManager().getReservedNames().contains(alias)) {
-			event.channel().sendMessage(locale.get("error/reserved_name")).queue();
-			return;
-		} else if (aliases.containsValue(cmd)) {
-			event.channel().sendMessage(locale.get("error/aliased_command")).queue();
-			return;
-		}
-
-		aliases.values().remove(cmd);
-		aliases.put(alias, cmd);
-		data.config().save();
-
-		event.channel().sendMessage(locale.get("success/alias_add")).queue();
 	}
 }

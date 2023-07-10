@@ -171,7 +171,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Method m = action.getFirst();
 		boolean bypass = m.getName().startsWith("deb") || hand.selectionPending() == m.getName().equals("select");
 		if (!lock || bypass) {
-			if (!bypass) lock = true;
+			lock = true;
 
 			try {
 				if (m.getName().startsWith("deb")) {
@@ -184,7 +184,7 @@ public class Shoukan extends GameInstance<Phase> {
 			} catch (Exception e) {
 				Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
 			} finally {
-				if (!bypass) lock = false;
+				lock = false;
 			}
 		}
 	}
@@ -262,8 +262,7 @@ public class Shoukan extends GameInstance<Phase> {
 			int amount = args.getInt("amount", 1);
 			for (int i = 0; i < amount; i++) {
 				Drawable<?> d = switch (type) {
-					case KAWAIPON -> null;
-					case SENSHI -> DAO.find(Senshi.class, id);
+					case KAWAIPON, SENSHI -> DAO.find(Senshi.class, id);
 					case EVOGEAR -> DAO.find(Evogear.class, id);
 					case FIELD -> DAO.find(Field.class, id);
 				};
