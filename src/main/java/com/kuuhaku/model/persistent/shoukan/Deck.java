@@ -544,7 +544,7 @@
 			 }
 
 			 Archetype a = anime.parallelStream()
-					 .filter(an -> an.getCount() > 20)
+					 .filter(an -> anime.getCount(an) > 20)
 					 .findAny()
 					 .map(an -> DAO.find(Archetype.class, an.getId()))
 					 .orElse(null);
