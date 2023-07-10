@@ -28,21 +28,25 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "archetype")
 public class Archetype extends DAO<Archetype> {
-	@Transient
-	public static final Archetype NONE = new Archetype();
-
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
 
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "id", referencedColumnName = "id")
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<LocalizedArch> infos = new HashSet<>();
+
 	@OneToOne(optional = false)
-	@PrimaryKeyJoinColumn(name = "anime_id")
+	@PrimaryKeyJoinColumn(name = "id")
 	@Fetch(FetchMode.JOIN)
 	@MapsId("id")
 	private Anime anime;
@@ -55,16 +59,14 @@ public class Archetype extends DAO<Archetype> {
 		return id;
 	}
 
+	public LocalizedArch getInfo(I18N locale) {
+		return infos.parallelStream()
+				.filter(ld -> ld.getLocale() == locale)
+				.findAny().orElseThrow();
+	}
+
 	public Anime getAnime() {
 		return anime;
-	}
-
-	public String getDescription(I18N locale) {
-		return LocalizedString.get(locale, "archetype/" + id.toLowerCase(), "");
-	}
-
-	public String getEffect() {
-		return effect;
 	}
 
 	public void execute(Hand hand) {
@@ -77,12 +79,12 @@ public class Archetype extends DAO<Archetype> {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Archetype archetype = (Archetype) o;
-		return Objects.equals(id, archetype.id);
+		Archetype title = (Archetype) o;
+		return Objects.equals(id, title.id);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hashCode(id);
 	}
 }

@@ -79,7 +79,7 @@ public class KawaiponAnimeCommand implements Executable {
 
 		Archetype arch = DAO.find(Archetype.class, anime.getId());
 		if (arch != null) {
-			eb.addField(locale.get("str/archetype_effect"), arch.getDescription(locale), false);
+			eb.addField(locale.get("str/archetype_effect"), arch.getInfo(locale).getDescription(), false);
 		}
 
 		List<Page> pages = new ArrayList<>();
