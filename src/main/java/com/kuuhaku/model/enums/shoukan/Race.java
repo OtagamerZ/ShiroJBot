@@ -109,7 +109,7 @@ public enum Race {
 	}
 
 	public Race fuse(Race with) {
-		if (Integer.bitCount(flag) > 1 || Integer.bitCount(with.flag) > 1) return this;
+		if (Integer.bitCount(flag | with.flag) > 2) return this;
 
 		return getByFlag(flag | with.flag);
 	}
