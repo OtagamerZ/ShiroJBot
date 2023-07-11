@@ -20,12 +20,12 @@ DROP VIEW IF EXISTS v_match_loser;
 CREATE OR REPLACE VIEW v_match_loser AS
 SELECT x.id
      , x.info ->> 'uid' AS uid
-     , x.info           AS head
-     , x.data
+     , x.info
+     , x.turns
 FROM (
      SELECT x.id
           , x.info
-          , jsonb_path_query_array(x.data, cast('$.' || x.loser AS JSONPATH)) AS data
+          , jsonb_path_query_array(x.data, cast('$.' || x.loser AS JSONPATH)) AS turns
      FROM (
           SELECT x.id
                , x.info -> x.loser                                                                                 AS info

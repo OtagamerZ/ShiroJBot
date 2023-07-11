@@ -20,12 +20,12 @@ DROP VIEW IF EXISTS v_match_winner;
 CREATE OR REPLACE VIEW v_match_winner AS
 SELECT x.id
      , x.info ->> 'uid' AS uid
-     , x.info           AS head
-     , x.data
+     , x.info
+     , x.turns
 FROM (
      SELECT x.id
           , x.info
-          , jsonb_path_query_array(x.data, cast('$.' || x.winner AS JSONPATH)) AS data
+          , jsonb_path_query_array(x.data, cast('$.' || x.winner AS JSONPATH)) AS turns
      FROM (
           SELECT x.id
                , x.info -> x.winner                                                                                 AS info
