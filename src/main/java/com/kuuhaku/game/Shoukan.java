@@ -297,6 +297,21 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
+	@PlayerAction("save_history")
+	private boolean debSaveHistory(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
+		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+			Match m = new Match(this, "default");
+			new MatchHistory(m).save();
+
+			reportEvent("SAVE_HISTORY", true);
+			return true;
+		}
+
+		return false;
+	}
+
+	@PhaseConstraint({"PLAN", "COMBAT"})
 	@PlayerAction("terminate")
 	private boolean debTerminate(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
