@@ -43,11 +43,11 @@ public class MatchHistory extends DAO<Field> {
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "head", nullable = false, columnDefinition = "JSONB")
-	private JSONObject head;
+	private JSONObject head = new JSONObject();
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "data", nullable = false, columnDefinition = "JSONB")
-	private JSONArray data;
+	private JSONArray data = new JSONArray();
 
 	public MatchHistory() {
 	}
@@ -57,11 +57,11 @@ public class MatchHistory extends DAO<Field> {
 		this.data = new JSONArray(match.turns());
 	}
 
-	public Info getHead() {
+	public Info getInfo() {
 		return JSONUtils.fromJSON(head.toString(), Info.class);
 	}
 
-	public List<Turn> getData() {
+	public List<Turn> getTurns() {
 		List<Turn> out = new ArrayList<>();
 		for (Object turn : data) {
 			out.add(JSONUtils.fromJSON(String.valueOf(turn), Turn.class));
