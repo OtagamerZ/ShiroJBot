@@ -130,39 +130,37 @@ public abstract class SignatureParser {
 
                     matches++;
                 } else {
-                    String token;
+                    String token = null;
                     List<String> opts = List.of();
 
-                    if (type == Signature.Type.CUSTOM) {
-                        @Language("RegExp") String opt = groups.getString("options", "");
-                        @Language("RegExp") String pattern = opt;
-                        if (patterns != null) {
-                            pattern = "^" + Arrays.stream(patterns).parallel()
-                                    .filter(p -> p.id().equals(opt))
-                                    .map(SigPattern::value)
-                                    .findAny().orElse(opt);
-                        }
+                    if (!fail) {
+                        if (type == Signature.Type.CUSTOM) {
+                            @Language("RegExp") String opt = groups.getString("options", "");
+                            @Language("RegExp") String pattern = opt;
+                            if (patterns != null) {
+                                pattern = "^" + Arrays.stream(patterns).parallel()
+                                        .filter(p -> p.id().equals(opt))
+                                        .map(SigPattern::value)
+                                        .findAny().orElse(opt);
+                            }
 
-                        Matcher match = Utils.regex(str, pattern);
-                        if (match.find()) {
-                            token = match.group();
-                        } else {
-                            token = null;
-                        }
-                    } else {
-                        opts = Arrays.stream(groups.getString("options", "").split(","))
-                                .filter(s -> !s.isBlank())
-                                .map(String::toLowerCase)
-                                .toList();
-
-                        Matcher match = Utils.regex(str, type.getPattern());
-                        if (match.find()) {
-                            token = match.group();
-                            if (!opts.isEmpty() && !opts.contains(token.toLowerCase())) {
-                                token = null;
+                            Matcher match = Utils.regex(str, pattern);
+                            if (match.find()) {
+                                token = match.group();
                             }
                         } else {
-                            token = null;
+                            opts = Arrays.stream(groups.getString("options", "").split(","))
+                                    .filter(s -> !s.isBlank())
+                                    .map(String::toLowerCase)
+                                    .toList();
+
+                            Matcher match = Utils.regex(str, type.getPattern());
+                            if (match.find()) {
+                                token = match.group();
+                                if (!opts.isEmpty() && !opts.contains(token.toLowerCase())) {
+                                    token = null;
+                                }
+                            }
                         }
                     }
 
@@ -176,22 +174,20 @@ public abstract class SignatureParser {
                                 case USER, ROLE -> token = token.replaceAll("[<@!>]", "");
                             }
 
-                            if (!fail) {
-                                if (out.has(name)) {
-                                    JSONArray arr;
-                                    if (out.get(name) instanceof List<?> ls) {
-                                        arr = new JSONArray(ls);
-                                    } else {
-                                        arr = new JSONArray();
-                                        Object curr = out.get(name);
-                                        arr.add(curr);
-                                    }
-                                    arr.add(token);
-
-                                    out.put(name, arr);
+                            if (out.has(name)) {
+                                JSONArray arr;
+                                if (out.get(name) instanceof List<?> ls) {
+                                    arr = new JSONArray(ls);
                                 } else {
-                                    out.put(name, token);
+                                    arr = new JSONArray();
+                                    Object curr = out.get(name);
+                                    arr.add(curr);
                                 }
+                                arr.add(token);
+
+                                out.put(name, arr);
+                            } else {
+                                out.put(name, token);
                             }
 
                             supplied.add(token);
@@ -199,7 +195,7 @@ public abstract class SignatureParser {
                         }
                     }
 
-                    if ((token == null || fail) && required) {
+                    if (token == null && required) {
                         fail = true;
 
                         if (opts.isEmpty()) {
