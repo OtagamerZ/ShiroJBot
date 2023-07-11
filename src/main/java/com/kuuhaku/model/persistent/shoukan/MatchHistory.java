@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.records.shoukan.history.Info;
 import com.kuuhaku.model.records.shoukan.history.Match;
 import com.kuuhaku.model.records.shoukan.history.Turn;
 import com.ygimenez.json.JSONArray;
@@ -48,16 +49,16 @@ public class MatchHistory extends DAO<Field> {
 	@Column(name = "data", nullable = false, columnDefinition = "JSONB")
 	private JSONArray data;
 
-	public JSONObject getHead() {
-		return head;
-	}
-
 	public MatchHistory() {
 	}
 
 	public MatchHistory(Match match) {
 		this.head = new JSONObject(match.info());
 		this.data = new JSONArray(match.turns());
+	}
+
+	public Info getHead() {
+		return JSONUtils.fromJSON(head.toString(), Info.class);
 	}
 
 	public List<Turn> getData() {

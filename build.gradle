@@ -129,7 +129,6 @@ dependencies {
 	implementation group: "org.shredzone.commons", name: "commons-suncalc", version: "3.5"
 	implementation group: "org.knowm.xchart", name: "xchart", version: '3.8.3'
 	implementation group: "com.github.trickl", name: "palette", version: "0.1.1"
-	implementation group: "com.vladmihalcea", name: "hibernate-types-60", version: '2.21.1'
 
 	//Unit test
 	testImplementation group: "org.junit.jupiter", name: "junit-jupiter", version: '5.9.2'

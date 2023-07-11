@@ -301,7 +301,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private boolean debSaveHistory(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
-			Match m = new Match(this, "default");
+			Match m = new Match(this, "none");
 			new MatchHistory(m).save();
 
 			reportEvent("SAVE_HISTORY", true);
