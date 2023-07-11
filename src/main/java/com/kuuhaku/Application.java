@@ -125,7 +125,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 
 								return m;
 							})
-							.queue()
+							.queue(null, Utils::doNothing)
 			);
 		} catch (InvalidHandlerException e) {
 			Constants.LOGGER.error("Failed to start pagination library: " + e);
