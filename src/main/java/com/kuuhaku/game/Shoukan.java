@@ -353,7 +353,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi copy;
-		if (args.getBoolean("notCombat")) {
+		if (args.has("notCombat")) {
 			if (slot.hasBottom()) {
 				getChannel().sendMessage(getLocale().get("error/slot_occupied")).queue();
 				return false;
@@ -445,7 +445,7 @@ public class Shoukan extends GameInstance<Phase> {
 		TrapSpell proxy = new TrapSpell(chosen);
 		Evogear copy = proxy.getOriginal();
 
-		if (args.getBoolean("notCombat")) {
+		if (args.has("notCombat")) {
 			if (slot.hasBottom()) {
 				getChannel().sendMessage(getLocale().get("error/slot_occupied")).queue();
 				return false;
@@ -632,7 +632,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
 
-		boolean nc = args.getBoolean("notCombat");
+		boolean nc = args.has("notCombat");
 		if ((nc && !slot.hasBottom()) || (!nc && !slot.hasTop())) {
 			getChannel().sendMessage(getLocale().get("error/missing_card", slot.getIndex() + 1)).queue();
 			return false;
@@ -693,7 +693,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
 
-		boolean nc = args.getBoolean("notCombat");
+		boolean nc = args.has("notCombat");
 		if ((nc && !slot.hasBottom()) || (!nc && !slot.hasTop())) {
 			getChannel().sendMessage(getLocale().get("error/missing_card", slot.getIndex() + 1)).queue();
 			return false;
@@ -736,7 +736,7 @@ public class Shoukan extends GameInstance<Phase> {
 			int idx = ((Number) o).intValue();
 			SlotColumn slot = arena.getSlots(curr.getSide()).get(idx - 1);
 
-			boolean nc = args.getBoolean("notCombat");
+			boolean nc = args.has("notCombat");
 			if ((nc && !slot.hasBottom()) || (!nc && !slot.hasTop())) {
 				getChannel().sendMessage(getLocale().get("error/missing_card", slot.getIndex() + 1)).queue();
 				return false;
