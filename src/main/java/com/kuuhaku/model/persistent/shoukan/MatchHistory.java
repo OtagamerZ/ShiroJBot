@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
+import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.records.shoukan.history.Info;
 import com.kuuhaku.model.records.shoukan.history.Match;
 import com.kuuhaku.model.records.shoukan.history.Turn;
@@ -41,7 +42,7 @@ public class MatchHistory extends DAO<MatchHistory> {
 	private int id;
 
 	@Column(name = "info", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONObject.class)
+	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject info = new JSONObject();
 
 	@Column(name = "turns", nullable = false, columnDefinition = "JSONB")
