@@ -59,28 +59,6 @@
         <class>com.kuuhaku.model.persistent.user.LocalizedTitle</class>
         <class>com.kuuhaku.model.persistent.user.Warn</class>
 
-        <!-- SHOUKAN -->
-        <class>com.kuuhaku.model.persistent.shoukan.Deck</class>
-        <class>com.kuuhaku.model.persistent.shoukan.Evogear</class>
-        <class>com.kuuhaku.model.persistent.shoukan.Field</class>
-        <class>com.kuuhaku.model.persistent.shoukan.Senshi</class>
-        <class>com.kuuhaku.model.persistent.shoukan.LocalizedDescription</class>
-        <class>com.kuuhaku.model.persistent.shoukan.LocalizedString</class>
-        <class>com.kuuhaku.model.persistent.shoukan.MatchHistory</class>
-        <class>com.kuuhaku.model.persistent.shoukan.Archetype</class>
-        <class>com.kuuhaku.model.persistent.shoukan.LocalizedArch</class>
-
-        <!-- MAPPINGS -->
-        <class>com.kuuhaku.model.persistent.converter.ChannelConverter</class>
-        <class>com.kuuhaku.model.persistent.converter.ColorConverter</class>
-        <class>com.kuuhaku.model.persistent.converter.EmbedConverter</class>
-        <class>com.kuuhaku.model.persistent.converter.FlagConverter</class>
-        <class>com.kuuhaku.model.persistent.converter.GuildFeatureConverter</class>
-        <class>com.kuuhaku.model.persistent.converter.JSONArrayConverter</class>
-        <class>com.kuuhaku.model.persistent.converter.JSONObjectConverter</class>
-        <class>com.kuuhaku.model.persistent.converter.RoleConverter</class>
-        <class>com.kuuhaku.model.persistent.converter.RoleFlagConverter</class>
-
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 

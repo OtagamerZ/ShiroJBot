@@ -26,9 +26,10 @@ import org.intellij.lang.annotations.Language;
 
 @Converter(autoApply = true)
 public class JSONArrayConverter implements AttributeConverter<JSONArray, String> {
-
 	@Override
 	public String convertToDatabaseColumn(JSONArray json) {
+		System.out.println("convert");
+
 		return json.toString();
 	}
 

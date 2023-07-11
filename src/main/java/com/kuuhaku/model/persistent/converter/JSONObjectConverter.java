@@ -26,7 +26,6 @@ import org.intellij.lang.annotations.Language;
 
 @Converter(autoApply = true)
 public class JSONObjectConverter implements AttributeConverter<JSONObject, String> {
-
 	@Override
 	public String convertToDatabaseColumn(JSONObject json) {
 		return json.toString();
