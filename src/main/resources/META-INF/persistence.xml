@@ -70,6 +70,17 @@
         <class>com.kuuhaku.model.persistent.shoukan.Archetype</class>
         <class>com.kuuhaku.model.persistent.shoukan.LocalizedArch</class>
 
+        <!-- MAPPINGS -->
+        <class>com.kuuhaku.model.persistent.converter.ChannelConverter</class>
+        <class>com.kuuhaku.model.persistent.converter.ColorConverter</class>
+        <class>com.kuuhaku.model.persistent.converter.EmbedConverter</class>
+        <class>com.kuuhaku.model.persistent.converter.FlagConverter</class>
+        <class>com.kuuhaku.model.persistent.converter.GuildFeatureConverter</class>
+        <class>com.kuuhaku.model.persistent.converter.JSONArrayConverter</class>
+        <class>com.kuuhaku.model.persistent.converter.JSONObjectConverter</class>
+        <class>com.kuuhaku.model.persistent.converter.RoleConverter</class>
+        <class>com.kuuhaku.model.persistent.converter.RoleFlagConverter</class>
+
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 
