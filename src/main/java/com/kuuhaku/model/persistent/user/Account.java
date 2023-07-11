@@ -25,6 +25,7 @@ import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
+import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.util.Bit;
@@ -39,7 +40,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
-import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -105,8 +105,8 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<AccountTitle> titles = new HashSet<>();
 
-	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "inventory", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject inventory = new JSONObject();
 
 	@Column(name = "blacklisted", nullable = false)

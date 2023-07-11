@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.shoukan.history.Info;
 import com.kuuhaku.model.records.shoukan.history.Match;
 import com.kuuhaku.model.records.shoukan.history.Turn;
@@ -26,8 +27,6 @@ import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +40,12 @@ public class MatchHistory extends DAO<MatchHistory> {
 	@Column(name = "id", nullable = false)
 	private int id;
 
-	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "info", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONObject.class)
 	private JSONObject info = new JSONObject();
 
-	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "turns", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray turns = new JSONArray();
 
 	public MatchHistory() {
