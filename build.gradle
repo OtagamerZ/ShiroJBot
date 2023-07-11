@@ -75,7 +75,7 @@ dependencies {
 	//Core
 	implementation group: "net.dv8tion", name: "JDA", version: "5.0.0-beta.10"
 	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "4.0.4"
-	implementation group: "com.github.ygimenez", name: "Simple-Moshi", version: "8231a2e6"
+	implementation group: "com.github.ygimenez", name: "Simple-Moshi", version: "6234d0d"
 
 	//Database
 	implementation group: "org.postgresql", name: "postgresql", version: '42.5.4'
