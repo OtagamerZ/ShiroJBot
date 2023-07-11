@@ -106,7 +106,6 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<AccountTitle> titles = new HashSet<>();
 
-	@Type(JsonBinaryType.class)
 	@Column(name = "inventory", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject inventory = new JSONObject();

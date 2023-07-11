@@ -69,7 +69,6 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@MapsId("id")
 	private Card card;
 
-	@Type(JsonBinaryType.class)
 	@Column(name = "modifiers", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject modifiers = new JSONObject();
@@ -81,7 +80,6 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@Column(name = "effect", nullable = false)
 	private boolean effect = false;
 
-	@Type(JsonBinaryType.class)
 	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();

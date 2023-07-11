@@ -62,7 +62,6 @@ public class CardAttributes implements Serializable, Cloneable {
 	@Column(name = "block", nullable = false)
 	private int block = 0;
 
-	@Type(JsonBinaryType.class)
 	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();

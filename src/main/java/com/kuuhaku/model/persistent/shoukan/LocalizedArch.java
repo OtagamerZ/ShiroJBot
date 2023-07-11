@@ -21,10 +21,10 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.id.LocalizedId;
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.kuuhaku.model.persistent.shiro.Anime;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -38,6 +38,12 @@ public class LocalizedArch extends DAO<LocalizedArch> implements Serializable {
 	@Column(name = "description", nullable = false)
 	private String description;
 
+	@OneToOne(optional = false)
+	@PrimaryKeyJoinColumn(name = "id")
+	@Fetch(FetchMode.JOIN)
+	@MapsId("id")
+	private Anime anime;
+
 	public LocalizedId getId() {
 		return id;
 	}
@@ -48,6 +54,10 @@ public class LocalizedArch extends DAO<LocalizedArch> implements Serializable {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public Anime getAnime() {
+		return anime;
 	}
 
 	@Override

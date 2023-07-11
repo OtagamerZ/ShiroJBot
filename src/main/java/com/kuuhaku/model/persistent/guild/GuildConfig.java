@@ -69,7 +69,6 @@ public class GuildConfig extends DAO<GuildConfig> {
 	@Fetch(FetchMode.JOIN)
 	private GoodbyeSettings goodbyeSettings;
 
-	@Type(JsonBinaryType.class)
 	@Column(name = "buffs", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject buffs = new JSONObject();

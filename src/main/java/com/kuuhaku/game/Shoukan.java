@@ -123,8 +123,8 @@ public class Shoukan extends GameInstance<Phase> {
 	protected boolean validate(Message message) {
 		return ((Predicate<Message>) m -> Utils.equalsAny(m.getAuthor().getId(), getPlayers()))
 				.and(m -> singleplayer
-						|| getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), m.getAuthor().getId())
-						|| hands.values().stream().anyMatch(h -> h.getUid().equals(m.getAuthor().getId()) && h.selectionPending())
+						  || getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), m.getAuthor().getId())
+						  || hands.values().stream().anyMatch(h -> h.getUid().equals(m.getAuthor().getId()) && h.selectionPending())
 				)
 				.test(message);
 	}
@@ -1035,7 +1035,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 				curr.getData().put("last_ability", chosen);
 				trigger(ON_ABILITY, side);
-				reportEvent("str/avoid_effect", true);
+				reportEvent("str/avoid_effect", true, enemy);
 				return false;
 			}
 		}
@@ -1325,7 +1325,12 @@ public class Shoukan extends GameInstance<Phase> {
 									}
 
 									if (source.isDefending() && !source.popFlag(Flag.ALWAYS_ATTACK)) {
-										target.setStun(eCombatStats / dmg);
+										if (eCombatStats == 0) {
+											target.setStun(5);
+										} else {
+											target.setStun(Utils.clamp(dmg / eCombatStats, 1, 5));
+										}
+
 										dmg = 0;
 									} else {
 										op.getGraveyard().add(target);
@@ -1380,7 +1385,7 @@ public class Shoukan extends GameInstance<Phase> {
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
 
 			if (val > 0 && op.getStats().getDamageMult() != 1) {
-				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2))+ ")";
+				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2)) + ")";
 			}
 		}
 		if (pHP != you.getHP()) {
@@ -1388,7 +1393,7 @@ public class Shoukan extends GameInstance<Phase> {
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(val));
 
 			if (val > 0 && you.getStats().getDamageMult() != 1) {
-				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2))+ ")";
+				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2)) + ")";
 			}
 		}
 
@@ -1534,7 +1539,7 @@ public class Shoukan extends GameInstance<Phase> {
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
 
 			if (val > 0 && op.getStats().getDamageMult() != 1) {
-				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2))+ ")";
+				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2)) + ")";
 			}
 		}
 		if (pHP != you.getHP()) {
@@ -1542,7 +1547,7 @@ public class Shoukan extends GameInstance<Phase> {
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(val));
 
 			if (val > 0 && you.getStats().getDamageMult() != 1) {
-				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2))+ ")";
+				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2)) + ")";
 			}
 		}
 
@@ -2028,7 +2033,8 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (!singleplayer && arcade == null && !cheats) {
-			new MatchHistory(new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]))).save();
+			Match m = new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]));
+			new MatchHistory(m).save();
 		}
 
 		close(code);

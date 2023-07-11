@@ -43,12 +43,10 @@ public class MatchHistory extends DAO<Field> {
 	@Column(name = "id", nullable = false)
 	private int id;
 
-	@Type(JsonBinaryType.class)
 	@Column(name = "head", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject head;
 
-	@Type(JsonBinaryType.class)
 	@Column(name = "data", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray data;

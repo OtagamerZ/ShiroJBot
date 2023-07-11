@@ -48,12 +48,10 @@ public class CustomAnswer extends DAO<CustomAnswer> {
 	@Column(name = "chance", nullable = false)
 	private int chance = 100;
 
-	@Type(JsonBinaryType.class)
 	@Column(name = "channels", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray channels = new JSONArray();
 
-	@Type(JsonBinaryType.class)
 	@Column(name = "users", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray users = new JSONArray();
