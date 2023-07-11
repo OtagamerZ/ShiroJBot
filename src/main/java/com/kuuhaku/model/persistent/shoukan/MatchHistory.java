@@ -49,7 +49,7 @@ public class MatchHistory extends DAO<MatchHistory> {
 
 	public MatchHistory(Match match) {
 		this.info = new JSONObject(match.info());
-		this.turns = new JSONArray(match.turns());
+		this.turns = new JSONArray((Object) match.turns());
 	}
 
 //	public Info getInfo() {
