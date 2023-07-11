@@ -27,9 +27,7 @@ import com.kuuhaku.model.records.shoukan.history.Turn;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import com.ygimenez.json.JSONUtils;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Type;
 
 import java.util.ArrayList;
 import java.util.List;
