@@ -42,18 +42,18 @@ import com.kuuhaku.model.records.shoukan.Targeting;
 import com.kuuhaku.util.*;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
@@ -86,6 +86,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Column(name = "target_type", nullable = false)
 	private TargetType targetType = TargetType.NONE;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "charms", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray charms = new JSONArray();

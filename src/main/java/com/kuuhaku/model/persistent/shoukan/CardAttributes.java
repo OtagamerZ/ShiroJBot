@@ -23,11 +23,11 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
 import java.io.Serial;
@@ -62,6 +62,7 @@ public class CardAttributes implements Serializable, Cloneable {
 	@Column(name = "block", nullable = false)
 	private int block = 0;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();

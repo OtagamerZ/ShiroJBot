@@ -34,14 +34,14 @@ import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import kotlin.Pair;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -69,6 +69,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@MapsId("id")
 	private Card card;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "modifiers", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject modifiers = new JSONObject();
@@ -80,6 +81,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@Column(name = "effect", nullable = false)
 	private boolean effect = false;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();

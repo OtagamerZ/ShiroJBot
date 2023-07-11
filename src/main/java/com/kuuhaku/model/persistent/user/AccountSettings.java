@@ -24,9 +24,9 @@ import com.kuuhaku.model.persistent.converter.ColorConverter;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.awt.*;
 
@@ -53,6 +53,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Column(name = "bio")
 	private String bio;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "widgets", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray widgets = new JSONArray();

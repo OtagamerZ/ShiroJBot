@@ -28,6 +28,8 @@ import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +43,12 @@ public class MatchHistory extends DAO<Field> {
 	@Column(name = "id", nullable = false)
 	private int id;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "head", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject head;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "data", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray data;
