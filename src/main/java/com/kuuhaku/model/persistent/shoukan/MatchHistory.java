@@ -21,16 +21,11 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
-import com.kuuhaku.model.records.shoukan.history.Info;
 import com.kuuhaku.model.records.shoukan.history.Match;
-import com.kuuhaku.model.records.shoukan.history.Turn;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
-import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -57,18 +52,18 @@ public class MatchHistory extends DAO<MatchHistory> {
 		this.turns = new JSONArray(match.turns());
 	}
 
-	public Info getInfo() {
-		return JSONUtils.fromJSON(info.toString(), Info.class);
-	}
-
-	public List<Turn> getTurns() {
-		List<Turn> out = new ArrayList<>();
-		for (Object turn : turns) {
-			out.add(JSONUtils.fromJSON(String.valueOf(turn), Turn.class));
-		}
-
-		return out;
-	}
+//	public Info getInfo() {
+//		return JSONUtils.fromJSON(info.toString(), Info.class);
+//	}
+//
+//	public List<Turn> getTurns() {
+//		List<Turn> out = new ArrayList<>();
+//		for (Object turn : turns) {
+//			out.add(JSONUtils.fromJSON(String.valueOf(turn), Turn.class));
+//		}
+//
+//		return out;
+//	}
 
 	@Override
 	public boolean equals(Object o) {
