@@ -34,7 +34,7 @@ BEGIN
                    , jsonb_path_query_array(x.placed, '$[*].backline')  AS back
               FROM (
                    SELECT w.id
-                        , jsonb_path_query_array(w.data, '$.placed') AS placed
+                        , jsonb_path_query_array(w.turns, '$.placed') AS placed
                    FROM v_match_winner w
                    WHERE uid = $1
                    ) x
