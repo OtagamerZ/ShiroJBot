@@ -28,15 +28,11 @@ import org.intellij.lang.annotations.Language;
 public class JSONArrayConverter implements AttributeConverter<JSONArray, String> {
 	@Override
 	public String convertToDatabaseColumn(JSONArray json) {
-		System.out.println("convert ARR");
-
 		return json.toString();
 	}
 
 	@Override
 	public JSONArray convertToEntityAttribute(@Language("JSON5") String json) {
-		System.out.println("revert ARR");
-
 		return new JSONArray(json);
 	}
 }
