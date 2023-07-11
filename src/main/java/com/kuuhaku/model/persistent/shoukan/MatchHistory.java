@@ -19,18 +19,23 @@
 package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.records.shoukan.history.Info;
 import com.kuuhaku.model.records.shoukan.history.Match;
+import com.kuuhaku.model.records.shoukan.history.Turn;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
+import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "match_history")
-public class MatchHistory extends DAO<Field> {
+public class MatchHistory extends DAO<MatchHistory> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
@@ -52,18 +57,18 @@ public class MatchHistory extends DAO<Field> {
 		this.data = new JSONArray(match.turns());
 	}
 
-//	public Info getInfo() {
-//		return JSONUtils.fromJSON(head.toString(), Info.class);
-//	}
-//
-//	public List<Turn> getTurns() {
-//		List<Turn> out = new ArrayList<>();
-//		for (Object turn : data) {
-//			out.add(JSONUtils.fromJSON(String.valueOf(turn), Turn.class));
-//		}
-//
-//		return out;
-//	}
+	public Info getInfo() {
+		return JSONUtils.fromJSON(head.toString(), Info.class);
+	}
+
+	public List<Turn> getTurns() {
+		List<Turn> out = new ArrayList<>();
+		for (Object turn : data) {
+			out.add(JSONUtils.fromJSON(String.valueOf(turn), Turn.class));
+		}
+
+		return out;
+	}
 
 	@Override
 	public boolean equals(Object o) {
