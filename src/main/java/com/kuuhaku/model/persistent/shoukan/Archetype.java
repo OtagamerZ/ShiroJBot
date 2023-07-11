@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -44,6 +45,12 @@ public class Archetype extends DAO<Archetype> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedArch> infos = new HashSet<>();
 
+	@OneToOne(optional = false)
+	@PrimaryKeyJoinColumn(name = "id")
+	@Fetch(FetchMode.JOIN)
+	@MapsId("id")
+	private Anime anime;
+
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
@@ -56,6 +63,10 @@ public class Archetype extends DAO<Archetype> {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale() == locale)
 				.findAny().orElseThrow();
+	}
+
+	public Anime getAnime() {
+		return anime;
 	}
 
 	public void execute(Hand hand) {
