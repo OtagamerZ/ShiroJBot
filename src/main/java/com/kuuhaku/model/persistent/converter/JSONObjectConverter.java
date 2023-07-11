@@ -28,11 +28,15 @@ import org.intellij.lang.annotations.Language;
 public class JSONObjectConverter implements AttributeConverter<JSONObject, String> {
 	@Override
 	public String convertToDatabaseColumn(JSONObject json) {
+		System.out.println("convert OBJ");
+
 		return json.toString();
 	}
 
 	@Override
 	public JSONObject convertToEntityAttribute(@Language("JSON5") String json) {
+		System.out.println("revert OBJ");
+
 		return new JSONObject(json);
 	}
 }
