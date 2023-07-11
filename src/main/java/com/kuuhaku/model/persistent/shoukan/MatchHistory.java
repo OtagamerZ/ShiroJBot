@@ -42,28 +42,28 @@ public class MatchHistory extends DAO<MatchHistory> {
 	private int id;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "head", nullable = false, columnDefinition = "JSONB")
-	private JSONObject head = new JSONObject();
+	@Column(name = "info", nullable = false, columnDefinition = "JSONB")
+	private JSONObject info = new JSONObject();
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "data", nullable = false, columnDefinition = "JSONB")
-	private JSONArray data = new JSONArray();
+	@Column(name = "turns", nullable = false, columnDefinition = "JSONB")
+	private JSONArray turns = new JSONArray();
 
 	public MatchHistory() {
 	}
 
 	public MatchHistory(Match match) {
-		this.head = new JSONObject(match.info());
-		this.data = new JSONArray(match.turns());
+		this.info = new JSONObject(match.info());
+		this.turns = new JSONArray(match.turns());
 	}
 
 	public Info getInfo() {
-		return JSONUtils.fromJSON(head.toString(), Info.class);
+		return JSONUtils.fromJSON(info.toString(), Info.class);
 	}
 
 	public List<Turn> getTurns() {
 		List<Turn> out = new ArrayList<>();
-		for (Object turn : data) {
+		for (Object turn : turns) {
 			out.add(JSONUtils.fromJSON(String.valueOf(turn), Turn.class));
 		}
 
