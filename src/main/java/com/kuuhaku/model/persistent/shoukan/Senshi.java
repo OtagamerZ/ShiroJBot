@@ -87,6 +87,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
     @Transient
     private transient BondedList<Evogear> equipments = new BondedList<>((e, it) -> {
+        if (getEquipments().contains(e)) return false;
+
         e.setEquipper(this);
         e.setHand(this.getHand());
         e.executeAssert(ON_INITIALIZE);
