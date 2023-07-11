@@ -19,12 +19,13 @@
 package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.id.CustomAnswerId;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.Objects;
 
@@ -46,9 +47,11 @@ public class CustomAnswer extends DAO<CustomAnswer> {
 	@Column(name = "chance", nullable = false)
 	private int chance = 100;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "channels", nullable = false, columnDefinition = "JSONB")
 	private JSONArray channels = new JSONArray();
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "users", nullable = false, columnDefinition = "JSONB")
 	private JSONArray users = new JSONArray();
 

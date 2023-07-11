@@ -23,10 +23,12 @@ import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.enums.AutoModType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.GuildFeature;
-import com.kuuhaku.model.persistent.converter.*;
+import com.kuuhaku.model.persistent.converter.ChannelConverter;
+import com.kuuhaku.model.persistent.converter.EmbedConverter;
+import com.kuuhaku.model.persistent.converter.GuildFeatureConverter;
+import com.kuuhaku.model.persistent.converter.RoleConverter;
 import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import com.kuuhaku.model.persistent.javatype.RoleJavaType;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
@@ -34,7 +36,8 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.*;
 
@@ -117,6 +120,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = GuildFeatureConverter.class)
 	private EnumSet<GuildFeature> featureFlags = EnumSet.noneOf(GuildFeature.class);
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "aliases", nullable = false, columnDefinition = "JSONB")
 	private JSONObject aliases = new JSONObject();
 
