@@ -46,6 +46,8 @@ import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -84,6 +86,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Column(name = "target_type", nullable = false)
 	private TargetType targetType = TargetType.NONE;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "charms", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray charms = new JSONArray();

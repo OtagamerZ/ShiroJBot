@@ -30,6 +30,8 @@ import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -67,6 +69,7 @@ public class GuildConfig extends DAO<GuildConfig> {
 	@Fetch(FetchMode.JOIN)
 	private GoodbyeSettings goodbyeSettings;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "buffs", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject buffs = new JSONObject();

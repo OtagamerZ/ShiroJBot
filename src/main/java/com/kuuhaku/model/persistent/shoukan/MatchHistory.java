@@ -21,11 +21,18 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
+import com.kuuhaku.model.records.shoukan.history.Info;
 import com.kuuhaku.model.records.shoukan.history.Match;
+import com.kuuhaku.model.records.shoukan.history.Turn;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
+import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -36,10 +43,12 @@ public class MatchHistory extends DAO<MatchHistory> {
 	@Column(name = "id", nullable = false)
 	private int id;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "info", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject info = new JSONObject();
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "turns", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray turns = new JSONArray();
@@ -49,21 +58,21 @@ public class MatchHistory extends DAO<MatchHistory> {
 
 	public MatchHistory(Match match) {
 		this.info = new JSONObject(match.info());
-		this.turns = new JSONArray((Object) match.turns());
+		this.turns = new JSONArray(match.turns());
 	}
 
-//	public Info getInfo() {
-//		return JSONUtils.fromJSON(info.toString(), Info.class);
-//	}
-//
-//	public List<Turn> getTurns() {
-//		List<Turn> out = new ArrayList<>();
-//		for (Object turn : turns) {
-//			out.add(JSONUtils.fromJSON(String.valueOf(turn), Turn.class));
-//		}
-//
-//		return out;
-//	}
+	public Info getInfo() {
+		return JSONUtils.fromJSON(info.toString(), Info.class);
+	}
+
+	public List<Turn> getTurns() {
+		List<Turn> out = new ArrayList<>();
+		for (Object turn : turns) {
+			out.add(JSONUtils.fromJSON(String.valueOf(turn), Turn.class));
+		}
+
+		return out;
+	}
 
 	@Override
 	public boolean equals(Object o) {

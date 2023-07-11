@@ -33,6 +33,8 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.*;
 
@@ -115,6 +117,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = GuildFeatureConverter.class)
 	private EnumSet<GuildFeature> featureFlags = EnumSet.noneOf(GuildFeature.class);
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "aliases", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject aliases = new JSONObject();
