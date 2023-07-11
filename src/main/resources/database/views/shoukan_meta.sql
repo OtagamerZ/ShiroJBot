@@ -33,11 +33,11 @@ FROM (
           FROM jsonb_array_elements_text((
                                          SELECT jsonb_merge(x.deck)
                                          FROM (
-                                              SELECT data -> 0 -> lower(head ->> 'winner') -> 'deck'   AS deck
-                                                   , jsonb_array_length(data)                          AS turns
-                                                   , round(geo_mean(jsonb_array_length(data)) OVER ()) AS turn_fac
+                                              SELECT turns -> 0 -> lower(info ->> 'winner') -> 'deck'   AS deck
+                                                   , jsonb_array_length(turns)                          AS turns
+                                                   , round(geo_mean(jsonb_array_length(turns)) OVER ()) AS turn_fac
                                               FROM match_history
-                                              WHERE has(head, 'winner')
+                                              WHERE has(info, 'winner')
                                               ORDER BY id
                                               LIMIT 30
                                               ) x

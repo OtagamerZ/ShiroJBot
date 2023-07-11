@@ -28,16 +28,16 @@ FROM (
           , jsonb_path_query_array(x.data, cast('$.' || x.winner AS JSONPATH)) AS data
      FROM (
           SELECT x.id
-               , x.head -> x.winner                                                                                 AS info
-               , jsonb_path_query_array(x.data,cast('$[*] ? (@.turn % 2 == ' || iif(x.winner = 'top', 0, 1) || ')' AS JSONPATH)) AS data
+               , x.info -> x.winner                                                                                 AS info
+               , jsonb_path_query_array(x.turns,cast('$[*] ? (@.turn % 2 == ' || iif(x.winner = 'top', 0, 1) || ')' AS JSONPATH)) AS data
                , x.winner
           FROM (
                SELECT id
-                    , head
-                    , data
-                    , lower(head ->> 'winner') AS winner
+                    , info
+                    , turns
+                    , lower(info ->> 'winner') AS winner
                FROM match_history
-               WHERE has(head, 'winner')
+               WHERE has(info, 'winner')
                ) x
           ) x
      ) x
