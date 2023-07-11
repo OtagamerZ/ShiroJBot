@@ -23,10 +23,10 @@ import com.kuuhaku.model.enums.ProfileEffect;
 import com.kuuhaku.model.persistent.converter.ColorConverter;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.util.Utils;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.Type;
 
 import java.awt.*;
 
@@ -53,9 +53,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Column(name = "bio")
 	private String bio;
 
-	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "widgets", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray widgets = new JSONArray();
 
 	@Column(name = "deck_capacity", nullable = false)

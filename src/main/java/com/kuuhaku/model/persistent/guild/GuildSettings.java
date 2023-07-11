@@ -26,6 +26,7 @@ import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.persistent.converter.*;
 import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import com.kuuhaku.model.persistent.javatype.RoleJavaType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
@@ -33,8 +34,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.Type;
 
 import java.util.*;
 
@@ -117,9 +117,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = GuildFeatureConverter.class)
 	private EnumSet<GuildFeature> featureFlags = EnumSet.noneOf(GuildFeature.class);
 
-	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "aliases", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject aliases = new JSONObject();
 
 	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
