@@ -116,6 +116,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
 			g2d.setColor(style.getFrame().getSecondaryColor());
+
 			if (!groups.isEmpty()) {
 				JSONArray types = new JSONArray();
 				if (groups.has("calc")) {
@@ -140,6 +141,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						val = str;
 					}
 
+					boolean mono = false;
 					List<Color> colors = new ArrayList<>();
 					for (Object type : types) {
 						if (COLORS.containsKey(type)) {
@@ -147,8 +149,11 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 							if (e.getSecond() != null) {
 								colors.add(e.getSecond());
+
 								if (!Utils.equalsAny(type, "data", "b", "n")) {
 									val += "!" + Integer.toString(e.getFirst(), 16) + " ";
+									g2d.setFont(Fonts.UBUNTU_MONO.deriveFont(Font.PLAIN, 10));
+									mono = true;
 								}
 							}
 						}
@@ -156,7 +161,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 					if (!colors.isEmpty()) {
 						g2d.setColor(Graph.mix(colors));
-						if (!Utils.containsAny(types, "enemy", "ally")) {
+						if (!mono && !Utils.containsAny(types, "enemy", "ally")) {
 							g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
 						}
 					}
