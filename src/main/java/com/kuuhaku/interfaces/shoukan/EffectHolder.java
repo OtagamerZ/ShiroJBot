@@ -192,31 +192,31 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				x += 10;
 			}
 
-			if (str.startsWith(Constants.VOID)) {
-				if (Calc.luminance(g2d.getColor()) < 0.2) {
-					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
-				} else {
-					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
-				}
-			} else if (str.endsWith(Constants.VOID)) {
-				Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
-			} else {
-				g2d.drawString(str, x, y);
-			}
-
 			int offset = 0;
 			FontMetrics fm = g2d.getFontMetrics();
 			for (String s : str.split("(?=!)")) {
-				if (s.startsWith("!")) {
-					String path = "shoukan/icons/" + ICONS[Integer.parseInt(s.substring(1))];
-
-					BufferedImage icon = IO.getResourceAsImage(path);
-					if (icon != null) {
-						int size = g2d.getFont().getSize();
-						g2d.drawImage(icon, x + offset, y - size + 1, size, size, null);
+				if (s.startsWith(Constants.VOID)) {
+					if (Calc.luminance(g2d.getColor()) < 0.2) {
+						Graph.drawOutlinedString(g2d, s, x, y, 1.5f, new Color(255, 255, 255));
+					} else {
+						Graph.drawOutlinedString(g2d, s, x, y, 1.5f, new Color(0, 0, 0));
 					}
+				} else if (s.endsWith(Constants.VOID)) {
+					Graph.drawOutlinedString(g2d, s, x, y, 0.125f, g2d.getColor());
+				} else {
+					if (s.startsWith("!")) {
+						String path = "shoukan/icons/" + ICONS[Integer.parseInt(s.substring(1))];
 
-					offset += fm.stringWidth(s + " ");
+						BufferedImage icon = IO.getResourceAsImage(path);
+						if (icon != null) {
+							int size = g2d.getFont().getSize();
+							g2d.drawImage(icon, x + offset, y - size + 1, size, size, null);
+						}
+
+						offset += fm.stringWidth(s + " ");
+					} else {
+						g2d.drawString(s, x, y);
+					}
 				}
 			}
 		};
