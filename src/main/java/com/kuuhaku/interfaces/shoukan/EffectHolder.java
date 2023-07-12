@@ -51,7 +51,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
-	Pair<Color, String> EMPTY = new Pair<>(null, null);
+	Pair<Color, String> EMPTY = new Pair<>(Color.BLACK, null);
 
 	Map<String, Pair<Color, String>> COLORS = Map.ofEntries(
 			Map.entry("php", new Pair<>(new Color(0x85C720), "shoukan/icons/hp.png")),
@@ -185,9 +185,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 			if (str.startsWith(Constants.VOID)) {
 				if (Calc.luminance(g2d.getColor()) < 0.2) {
-					Graph.drawOutlinedString(g2d, str, x, y, 1f, new Color(255, 255, 255));
+					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
 				} else {
-					Graph.drawOutlinedString(g2d, str, x, y, 1f, new Color(0, 0, 0));
+					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
 				}
 			} else if (str.endsWith(Constants.VOID)) {
 				Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
