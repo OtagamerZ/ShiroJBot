@@ -67,17 +67,18 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			Map.entry("blk", new Pair<>(10, new Color(0xA9A9A9))),
 			Map.entry("cd", new Pair<>(11, new Color(0x48BAFF))),
 
+			Map.entry("ally", new Pair<>(12, Color.BLACK)),
+			Map.entry("enemy", new Pair<>(13, Color.BLACK)),
 			Map.entry("b", EMPTY),
-			Map.entry("n", EMPTY),
-			Map.entry("ally", EMPTY),
-			Map.entry("enemy", EMPTY)
+			Map.entry("n", EMPTY)
 	);
 
 	String[] ICONS = {
 			"hp.png", "hp.png", "mp.png",
 			"degen.png", "regen.png", "blood.png",
 			"mana.png", "attack.png", "defense.png",
-			"dodge.png", "block.png", "cooldown.png"
+			"dodge.png", "block.png", "cooldown.png",
+			"ally.png", "enemy.png"
 	};
 
 	CardAttributes getBase();
@@ -147,7 +148,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							if (e.getSecond() != null) {
 								colors.add(e.getSecond());
 								if (!Utils.equalsAny(type, "data", "b", "n")) {
-									val += " :%2s: ".formatted(e.getFirst());
+									val += ":%1$2s: ".formatted(e.getFirst());
 								}
 							}
 						}
@@ -200,7 +201,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
 			} else {
 				if (str.startsWith(":") && str.endsWith(":")) {
-					String path = "shoukan/icons/" + ICONS[Integer.parseInt(str.substring(2, 5))];
+					String path = "shoukan/icons/" + ICONS[Integer.parseInt(str.substring(1, 4))];
 
 					BufferedImage icon = IO.getResourceAsImage(path);
 					if (icon != null) {
