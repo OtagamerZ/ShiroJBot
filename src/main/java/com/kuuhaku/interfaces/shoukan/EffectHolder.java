@@ -157,15 +157,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						val = Constants.VOID + val;
 					}
 
-					System.out.println("parse");
 					return val.replaceAll("\\{.+}", "");
 				} catch (Exception e) {
-					System.out.println("ex");
+					e.printStackTrace();
 					return str;
 				}
 			}
 
-			System.out.println("not");
 			return str;
 		};
 	}
