@@ -111,7 +111,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			if (!groups.isEmpty()) {
 				JSONArray types = new JSONArray();
 				if (groups.has("calc")) {
-					types.addAll(Utils.extractGroups(groups.getString("calc"), "(\\$\\w+)"));
+					types.addAll(Utils.extractGroups(groups.getString("calc"), "\\$(\\w+)"));
 				} else {
 					types.add(groups.getString("tag"));
 				}
