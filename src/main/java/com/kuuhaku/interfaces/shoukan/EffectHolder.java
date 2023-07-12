@@ -192,7 +192,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				x += 10;
 			}
 
-			int offset = 0;
 			FontMetrics fm = g2d.getFontMetrics();
 			for (String s : str.split("(?=!)")) {
 				if (s.startsWith(Constants.VOID)) {
@@ -210,14 +209,14 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						BufferedImage icon = IO.getResourceAsImage(path);
 						if (icon != null) {
 							int size = g2d.getFont().getSize();
-							g2d.drawImage(icon, x + offset, y - size + 1, size, size, null);
+							g2d.drawImage(icon, x, y - size + 1, size, size, null);
 						}
 					} else {
 						g2d.drawString(s, x, y);
 					}
 				}
 
-				offset += fm.stringWidth(s + " ");
+				x += fm.stringWidth(s + " ");
 			}
 		};
 	}
