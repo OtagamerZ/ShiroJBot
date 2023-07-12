@@ -37,7 +37,6 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.intellij.lang.annotations.Language;
@@ -54,22 +53,22 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	Pair<Integer, Color> EMPTY = new Pair<>(-1, Color.BLACK);
 
 	Map<String, Pair<Integer, Color>> COLORS = Map.ofEntries(
-			Map.entry("php", new Pair<>(0, new Color(0x85C720))),
-			Map.entry("bhp", new Pair<>(1, new Color(0x85C720))),
-			Map.entry("pmp", new Pair<>(2, new Color(0x3F9EFF))),
-			Map.entry("pdg", new Pair<>(3, new Color(0x9A1313))),
-			Map.entry("prg", new Pair<>(4, new Color(0x7ABCFF))),
+			Map.entry("php", new Pair<>(0x0, new Color(0x85C720))),
+			Map.entry("bhp", new Pair<>(0x1, new Color(0x85C720))),
+			Map.entry("pmp", new Pair<>(0x2, new Color(0x3F9EFF))),
+			Map.entry("pdg", new Pair<>(0x3, new Color(0x9A1313))),
+			Map.entry("prg", new Pair<>(0x4, new Color(0x7ABCFF))),
 
-			Map.entry("hp", new Pair<>(5, new Color(0xFF0000))),
-			Map.entry("mp", new Pair<>(6, new Color(0x3F9EFE))),
-			Map.entry("atk", new Pair<>(7, new Color(0xFF0000))),
-			Map.entry("dfs", new Pair<>(8, new Color(0x00C500))),
-			Map.entry("ddg", new Pair<>(9, new Color(0xFFC800))),
-			Map.entry("blk", new Pair<>(10, new Color(0xA9A9A9))),
-			Map.entry("cd", new Pair<>(11, new Color(0x48BAFF))),
+			Map.entry("hp", new Pair<>(0x5, new Color(0xFF0000))),
+			Map.entry("mp", new Pair<>(0x6, new Color(0x3F9EFE))),
+			Map.entry("atk", new Pair<>(0x7, new Color(0xFF0000))),
+			Map.entry("dfs", new Pair<>(0x8, new Color(0x00C500))),
+			Map.entry("ddg", new Pair<>(0x9, new Color(0xFFC800))),
+			Map.entry("blk", new Pair<>(0xA, new Color(0xA9A9A9))),
+			Map.entry("cd", new Pair<>(0xB, new Color(0x48BAFF))),
 
-			Map.entry("ally", new Pair<>(12, Color.BLACK)),
-			Map.entry("enemy", new Pair<>(13, Color.BLACK)),
+			Map.entry("ally", new Pair<>(0xC, Color.BLACK)),
+			Map.entry("enemy", new Pair<>(0xD, Color.BLACK)),
 			Map.entry("b", EMPTY),
 			Map.entry("n", EMPTY)
 	);
@@ -149,7 +148,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							if (e.getSecond() != null) {
 								colors.add(e.getSecond());
 								if (!Utils.equalsAny(type, "data", "b", "n")) {
-									val += "!" + StringUtils.leftPad(String.valueOf(e.getFirst()), 2, '0');
+									val += "!" + Integer.toHexString(e.getFirst());
 								}
 							}
 						}
@@ -204,7 +203,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					Graph.drawOutlinedString(g2d, s, x, y, 0.125f, g2d.getColor());
 				} else {
 					if (s.startsWith("!")) {
-						String path = "shoukan/icons/" + ICONS[Integer.parseInt(s.substring(1))];
+						String path = "shoukan/icons/" + ICONS[Integer.parseInt(s.substring(1), 16)];
 
 						BufferedImage icon = IO.getResourceAsImage(path);
 						if (icon != null) {
