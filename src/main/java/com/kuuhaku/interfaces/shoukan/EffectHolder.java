@@ -204,8 +204,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				int offset = 0;
 				FontMetrics fm = g2d.getFontMetrics();
 
-				for (String s : str.split("@")) {
-					if (s.startsWith(":") && s.endsWith(":")) {
+				for (String s : str.split(" ")) {
+					if (s.startsWith("@")) {
 						String path = "shoukan/icons/" + ICONS[Integer.parseInt(s.substring(1))];
 
 						BufferedImage icon = IO.getResourceAsImage(path);
