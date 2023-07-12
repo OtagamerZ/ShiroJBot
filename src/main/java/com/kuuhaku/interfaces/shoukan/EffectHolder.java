@@ -148,7 +148,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							if (e.getSecond() != null) {
 								colors.add(e.getSecond());
 								if (!Utils.equalsAny(type, "data", "b", "n")) {
-									val += "!" + Integer.toHexString(e.getFirst());
+									val += "!" + Integer.toString(e.getFirst(), 16) + " ";
 								}
 							}
 						}
@@ -203,15 +203,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					Graph.drawOutlinedString(g2d, s, x, y, 0.125f, g2d.getColor());
 				} else {
 					if (s.startsWith("!")) {
-						String path = "shoukan/icons/" + ICONS[Integer.parseInt(s.substring(1), 16)];
+						String path = "shoukan/icons/" + ICONS[Integer.parseInt(s.substring(1).trim(), 16)];
 
 						BufferedImage icon = IO.getResourceAsImage(path);
 						if (icon != null) {
 							int size = g2d.getFont().getSize();
 							g2d.drawImage(icon, x, y - size + 1, size, size, null);
 						}
-
-						x -= 3;
 					} else {
 						g2d.drawString(s, x, y);
 					}
