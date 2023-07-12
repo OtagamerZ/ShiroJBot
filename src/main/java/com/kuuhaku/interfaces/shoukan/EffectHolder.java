@@ -202,7 +202,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
 			} else {
 				if (str.startsWith(":") && str.endsWith(": ")) {
-					String path = "shoukan/icons/" + ICONS[Integer.parseInt(str.substring(1, 4))];
+					String path = "shoukan/icons/" + ICONS[Integer.parseInt(str.substring(1, 3))];
 
 					BufferedImage icon = IO.getResourceAsImage(path);
 					if (icon != null) {
