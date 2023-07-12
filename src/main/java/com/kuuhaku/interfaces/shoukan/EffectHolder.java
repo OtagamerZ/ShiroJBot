@@ -140,7 +140,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							if (c != null) {
 								colors.add(c);
 								if (!Utils.equalsAny(type, "data", "b", "n")) {
-									val += StringUtils.rightPad(":" + type + ":", 6);
+									val += StringUtils.center(":" + type + ":", 7);
 								}
 							}
 						}
