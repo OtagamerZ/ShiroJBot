@@ -39,6 +39,7 @@ import com.kuuhaku.util.Utils;
 import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.awt.*;
+import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
@@ -216,6 +217,7 @@ public interface Drawable<T extends Drawable<T>> {
 		g2d.setFont(FONT);
 		FontMetrics m = g2d.getFontMetrics();
 		boolean aug = getTags().contains("tag/augment") && getHand() == null;
+		boolean def = this instanceof Senshi s && s.isDefending();
 
 		{ // LEFT
 			int y = desc ? 225 : 291;
@@ -227,7 +229,17 @@ public interface Drawable<T extends Drawable<T>> {
 				String val = aug ? Utils.sign(getDfs()) : String.valueOf(getDfs());
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.GREEN);
-				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
+				if (def) {
+					g2d.setFont(FONT.deriveFont(Map.of(
+							TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON
+					)));
+
+					Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
+					g2d.setFont(FONT);
+				} else {
+					Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
+				}
+
 				y -= icon.getHeight() + 5;
 			}
 
@@ -239,7 +251,17 @@ public interface Drawable<T extends Drawable<T>> {
 				String val = aug ? Utils.sign(getDmg()) : String.valueOf(getDmg());
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.RED);
-				Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
+				if (!def) {
+					g2d.setFont(FONT.deriveFont(Map.of(
+							TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON
+					)));
+
+					Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
+					g2d.setFont(FONT);
+				} else {
+					Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
+				}
+
 				y -= icon.getHeight() + 5;
 			}
 
