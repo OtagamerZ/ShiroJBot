@@ -525,7 +525,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
     }
 
     public double getFieldMult() {
-        if (hasFlag(Flag.IGNORE_FIELD)) return 1;
+        if (hand.getGame() == null || hasFlag(Flag.IGNORE_FIELD)) return 1;
         Field f = getGame().getArena().getField();
 
         double mult = 1;
