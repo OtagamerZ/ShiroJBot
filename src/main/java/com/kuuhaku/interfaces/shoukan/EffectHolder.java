@@ -201,17 +201,23 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			} else if (str.endsWith(Constants.VOID)) {
 				Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
 			} else {
-				System.out.println(str);
-				if (str.startsWith(":") && str.endsWith(": ")) {
-					String path = "shoukan/icons/" + ICONS[Integer.parseInt(str.substring(1, 3))];
+				int offset = 0;
+				FontMetrics fm = g2d.getFontMetrics();
 
-					BufferedImage icon = IO.getResourceAsImage(path);
-					if (icon != null) {
-						int size = g2d.getFont().getSize();
-						g2d.drawImage(icon, x, y - size + 1, size, size, null);
+				for (String s : str.split(" ")) {
+					if (str.startsWith(":") && str.endsWith(": ")) {
+						String path = "shoukan/icons/" + ICONS[Integer.parseInt(str.substring(1, 3))];
+
+						BufferedImage icon = IO.getResourceAsImage(path);
+						if (icon != null) {
+							int size = g2d.getFont().getSize();
+							g2d.drawImage(icon, x, y - size + 1, size, size, null);
+						}
+					} else {
+						g2d.drawString(str, x, y);
 					}
-				} else {
-					g2d.drawString(str, x, y);
+
+					offset += fm.stringWidth(str + " ");
 				}
 			}
 		};
