@@ -127,10 +127,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				String val;
 				try {
-					System.out.println(values);
-					System.out.println(types);
 					Object obj = values.get(types.getString(0));
-					System.out.println(obj);
 					if (obj != null) {
 						String v;
 						if (obj instanceof JSONArray a) {
@@ -254,7 +251,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					calc = "import static java.lang.Math.*\n\n" + calc;
 					String val = String.valueOf(Utils.exec(calc, values));
 
-					for (Object type : Utils.extractGroups(groups.getString("calc"), "(\\$\\w+)")) {
+					for (Object type : Utils.extractGroups(groups.getString("calc"), "\\$(\\w+)")) {
 						csm.getStoredProps().compute(String.valueOf(type), (k, v) -> {
 							int value;
 							if (!k.equals("data")) {
