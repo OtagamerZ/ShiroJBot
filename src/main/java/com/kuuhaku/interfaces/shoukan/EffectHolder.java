@@ -110,6 +110,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
 			g2d.setColor(style.getFrame().getSecondaryColor());
 			if (!groups.isEmpty()) {
+				System.out.println(groups);
+
 				JSONArray types = new JSONArray();
 				if (groups.has("calc")) {
 					types.addAll(Utils.extractGroups(groups.getString("calc"), "\\$(\\w+)"));
@@ -159,7 +161,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 					return val.replaceAll("\\{.+}", "");
 				} catch (Exception e) {
-					e.printStackTrace();
 					return str;
 				}
 			}
