@@ -37,6 +37,7 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.intellij.lang.annotations.Language;
@@ -127,9 +128,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							v = String.valueOf(obj);
 						}
 
-						val = str.replaceFirst("\\{.+}", String.valueOf(Math.round(NumberUtils.toFloat(v))));
+						val = str.replaceFirst("\\{.+}", String.valueOf(Calc.round(NumberUtils.toFloat(v))));
 					} else {
-						val = str;
+						val = str.replaceFirst("\\{.+}", "");
 					}
 
 					List<Color> colors = new ArrayList<>();
@@ -138,7 +139,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							colors.add(COLORS.get(type).getFirst());
 
 							if (!Utils.equalsAny(type, "data", "b", "n")) {
-								val += " :" + type + ": ";
+								val += StringUtils.rightPad(":" + type + ":", 6);
 							}
 						}
 					}
