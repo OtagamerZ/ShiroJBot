@@ -136,6 +136,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					for (Object type : types) {
 						if (COLORS.containsKey(type)) {
 							colors.add(COLORS.get(type).getFirst());
+							System.out.println(type);
 
 							if (!Utils.equalsAny(type, "data", "b", "n")) {
 								val += " :" + type + ":";
