@@ -149,7 +149,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							if (e.getSecond() != null) {
 								colors.add(e.getSecond());
 								if (!Utils.equalsAny(type, "data", "b", "n")) {
-									val += "§" + StringUtils.leftPad(String.valueOf(e.getFirst()), 2, '0') + " ";
+									val += "@" + StringUtils.leftPad(String.valueOf(e.getFirst()), 2, '0') + " ";
 								}
 							}
 						}
@@ -201,7 +201,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			} else if (str.endsWith(Constants.VOID)) {
 				Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
 			} else {
-				if (str.startsWith("§")) {
+				if (str.startsWith("@")) {
 					String path = "shoukan/icons/" + ICONS[Integer.parseInt(str.substring(1, 3))];
 
 					BufferedImage icon = IO.getResourceAsImage(path);
