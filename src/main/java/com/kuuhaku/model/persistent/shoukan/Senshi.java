@@ -1313,7 +1313,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
                     JSONObject values = extractValues(locale);
                     Graph.drawMultilineString(g1, desc,
                             7, y, 211, 3,
-                            card.parseValues(g1, deck.getStyling(), values), card.highlightValues(g1, style.getFrame().isLegacy())
+                            card.parseValues(g1, deck.getStyling(), values),
+                            card.highlightValues(g1, style.getFrame().isLegacy())
                     );
                 }
 

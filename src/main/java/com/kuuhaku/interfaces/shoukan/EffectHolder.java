@@ -159,7 +159,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						val = Constants.VOID + val;
 					}
 
-					return val.replaceAll("\\{.+}", "").replaceFirst(":", " :");
+					return val.replaceAll("\\{.+}", "");
 				} catch (Exception e) {
 					return str;
 				}

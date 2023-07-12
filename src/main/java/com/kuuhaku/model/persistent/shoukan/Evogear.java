@@ -532,7 +532,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					JSONObject values = extractValues(locale);
 					Graph.drawMultilineString(g1, desc,
 							7, y, 211, 3,
-							parseValues(g1, deck.getStyling(), values), highlightValues(g1, style.getFrame().isLegacy())
+							parseValues(g1, deck.getStyling(), values),
+							highlightValues(g1, style.getFrame().isLegacy())
 					);
 				}
 
