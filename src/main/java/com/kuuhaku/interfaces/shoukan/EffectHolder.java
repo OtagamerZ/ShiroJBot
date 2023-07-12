@@ -149,7 +149,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							if (e.getSecond() != null) {
 								colors.add(e.getSecond());
 								if (!Utils.equalsAny(type, "data", "b", "n")) {
-									val += ":" + StringUtils.leftPad(String.valueOf(e.getFirst()), 2, '0') + ": ";
+									val += ":" + StringUtils.leftPad(String.valueOf(e.getFirst()), 2, '0') + ":";
 								}
 							}
 						}
@@ -205,8 +205,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				FontMetrics fm = g2d.getFontMetrics();
 
 				for (String s : str.split(" ")) {
-					if (str.startsWith(":") && str.endsWith(": ")) {
-						String path = "shoukan/icons/" + ICONS[Integer.parseInt(str.substring(1, 3))];
+					if (s.startsWith(":") && s.endsWith(":")) {
+						String path = "shoukan/icons/" + ICONS[Integer.parseInt(s.substring(1, 3))];
 
 						BufferedImage icon = IO.getResourceAsImage(path);
 						if (icon != null) {
@@ -214,10 +214,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							g2d.drawImage(icon, x + offset, y - size + 1, size, size, null);
 						}
 					} else {
-						g2d.drawString(str, x + offset, y);
+						g2d.drawString(s, x + offset, y);
 					}
 
-					offset += fm.stringWidth(str + " ");
+					offset += fm.stringWidth(s + " ");
 				}
 			}
 		};
