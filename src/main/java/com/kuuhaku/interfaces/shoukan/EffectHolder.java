@@ -36,227 +36,230 @@ import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
+import kotlin.Pair;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.intellij.lang.annotations.Language;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
-    Map<String, Color> COLORS = Map.ofEntries(
-            Map.entry("php", new Color(0x85C720)),
-            Map.entry("bhp", new Color(0x85C720)),
-            Map.entry("pmp", new Color(0x3F9EFF)),
-            Map.entry("pdg", new Color(0x9A1313)),
-            Map.entry("prg", new Color(0x7ABCFF)),
+	Pair<Color, String> EMPTY = new Pair<>(null, null);
 
-            Map.entry("hp", new Color(0xFF0000)),
-            Map.entry("mp", new Color(0x3F9EFE)),
-            Map.entry("atk", new Color(0xFE0000)),
-            Map.entry("dfs", new Color(0x00C500)),
-            Map.entry("ddg", new Color(0xFFC800)),
-            Map.entry("blk", new Color(0xA9A9A9)),
+	Map<String, Pair<Color, String>> COLORS = Map.ofEntries(
+			Map.entry("php", new Pair<>(new Color(0x85C720), "shoukan/icons/hp.png")),
+			Map.entry("bhp", new Pair<>(new Color(0x85C720), "shoukan/icons/hp.png")),
+			Map.entry("pmp", new Pair<>(new Color(0x3F9EFF), "shoukan/icons/mp.png")),
+			Map.entry("pdg", new Pair<>(new Color(0x9A1313), "shoukan/icons/degen.png")),
+			Map.entry("prg", new Pair<>(new Color(0x7ABCFF), "shoukan/icons/regen.png")),
 
-            Map.entry("b", Color.BLACK),
-            Map.entry("n", Color.BLACK),
-            Map.entry("cd", new Color(0x48BAFF)),
-            Map.entry("ally", new Color(0x000100)),
-            Map.entry("enemy", new Color(0x010000))
-    );
+			Map.entry("hp", new Pair<>(new Color(0xFF0000), "shoukan/icons/blood.png")),
+			Map.entry("mp", new Pair<>(new Color(0x3F9EFE), "shoukan/icons/mana.png")),
+			Map.entry("atk", new Pair<>(new Color(0xFE0000), "shoukan/icons/attack.png")),
+			Map.entry("dfs", new Pair<>(new Color(0x00C500), "shoukan/icons/defense.png")),
+			Map.entry("ddg", new Pair<>(new Color(0xFFC800), "shoukan/icons/dodge.png")),
+			Map.entry("blk", new Pair<>(new Color(0xA9A9A9), "shoukan/icons/block.png")),
+			Map.entry("cd", new Pair<>(new Color(0x48BAFF), "shoukan/icons/cooldown.png")),
 
-    CardAttributes getBase();
+			Map.entry("b", EMPTY),
+			Map.entry("n", EMPTY),
+			Map.entry("ally", EMPTY),
+			Map.entry("enemy", EMPTY)
+	);
 
-    CardExtra getStats();
+	CardAttributes getBase();
 
-    Hand getLeech();
+	CardExtra getStats();
 
-    void setLeech(Hand leech);
+	Hand getLeech();
 
-    default boolean hasFlag(Flag flag) {
-        return getStats().hasFlag(flag);
-    }
+	void setLeech(Hand leech);
 
-    boolean hasCharm(Charm charm);
+	default boolean hasFlag(Flag flag) {
+		return getStats().hasFlag(flag);
+	}
 
-    default boolean isPassive() {
-        return getBase().getTags().contains("PASSIVE");
-    }
+	boolean hasCharm(Charm charm);
 
-    default boolean isFixed() {
-        return getBase().getTags().contains("FIXED");
-    }
+	default boolean isPassive() {
+		return getBase().getTags().contains("PASSIVE");
+	}
 
-    boolean execute(EffectParameters ep);
+	default boolean isFixed() {
+		return getBase().getTags().contains("FIXED");
+	}
 
-    default void executeAssert(Trigger trigger) {
-    }
+	boolean execute(EffectParameters ep);
 
-    CachedScriptManager<T> getCSM();
+	default void executeAssert(Trigger trigger) {
+	}
 
-    default Function<String, String> parseValues(Graphics2D g2d, DeckStyling style, JSONObject values) {
-        return str -> {
-            JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}|\\{(?<tag>\\w+)}");
+	CachedScriptManager<T> getCSM();
 
-            g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
-            g2d.setColor(style.getFrame().getSecondaryColor());
-            if (!groups.isEmpty()) {
-                String type = groups.getString("type");
-                String tag = groups.getString("tag");
+	default Function<String, String> parseValues(Graphics2D g2d, DeckStyling style, JSONObject values) {
+		return str -> {
+			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?)}|\\{(?<tag>\\w+)}");
 
-                String val;
-                try {
-                    Object obj = values.get(type);
-                    if (!type.isBlank() && obj != null) {
-                        String v;
-                        if (obj instanceof JSONArray a) {
-                            v = String.valueOf(a.remove(0));
-                        } else {
-                            v = String.valueOf(obj);
-                        }
+			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
+			g2d.setColor(style.getFrame().getSecondaryColor());
+			if (!groups.isEmpty()) {
+				JSONArray types = new JSONArray();
+				if (groups.has("calc")) {
+					types.addAll(Utils.extractGroups(groups.getString("calc"), "(\\$\\w+)"));
+				} else {
+					types.add(groups.getString("tag"));
+				}
 
-                        val = str.replaceFirst("\\{.+}", String.valueOf(Math.round(NumberUtils.toFloat(v))));
-                    } else {
-                        val = str;
-                    }
+				String val;
+				try {
+					Object obj = values.get(types.getString(0));
+					if (obj != null) {
+						String v;
+						if (obj instanceof JSONArray a) {
+							v = String.valueOf(a.remove(0));
+						} else {
+							v = String.valueOf(obj);
+						}
 
-                    String key = Utils.getOr(tag, type);
-                    if (COLORS.containsKey(key)) {
-                        g2d.setColor(COLORS.getOrDefault(key, g2d.getColor()));
+						val = str.replaceFirst("\\{.+}", String.valueOf(Math.round(NumberUtils.toFloat(v))));
+					} else {
+						val = str;
+					}
 
-                        if (!Utils.equalsAny(key, "enemy", "ally")) {
-                            g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
-                        }
-                    }
+					List<Color> colors = new ArrayList<>();
+					for (Object type : types) {
+						if (COLORS.containsKey(type)) {
+							colors.add(COLORS.get(type).getFirst());
 
-                    if (!type.equalsIgnoreCase("data") && !Utils.equalsAny(tag, "b", "n")) {
-                        val = val + "    ";
-                    }
+							if (!Utils.equalsAny(type, "data", "b", "n")) {
+								val += " :" + type + ":";
+							}
+						}
+					}
 
-                    if (tag.equalsIgnoreCase("n")) {
-                        val += Constants.VOID;
-                    } else if (!Utils.equalsAny(tag, "ally", "enemy")) {
-                        val = Constants.VOID + val;
-                    }
+					if (!colors.isEmpty()) {
+						g2d.setColor(Graph.mix(colors));
+						if (!Utils.containsAny(types, "enemy", "ally")) {
+							g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
+						}
+					}
 
-                    return val.replaceAll("\\{.+}", "");
-                } catch (Exception e) {
-                    return str;
-                }
-            }
+					if (types.contains("n")) {
+						val += Constants.VOID;
+					} else if (!Utils.equalsAny(types, "enemy", "ally")) {
+						val = Constants.VOID + val;
+					}
 
-            return str;
-        };
-    }
+					return val.replaceAll("\\{.+}", "");
+				} catch (Exception e) {
+					return str;
+				}
+			}
 
-    default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d, boolean legacy) {
-        AtomicInteger lastVal = new AtomicInteger();
-        AtomicInteger line = new AtomicInteger();
+			return str;
+		};
+	}
 
-        return (str, x, y) -> {
-            if (lastVal.get() != y) {
-                line.getAndIncrement();
-                lastVal.set(y);
-            }
+	default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d, boolean legacy) {
+		AtomicInteger lastVal = new AtomicInteger();
+		AtomicInteger line = new AtomicInteger();
 
-            if (!legacy && line.get() == (getTags().isEmpty() ? 7 : 6)) {
-                x += 10;
-            }
+		return (str, x, y) -> {
+			if (lastVal.get() != y) {
+				line.getAndIncrement();
+				lastVal.set(y);
+			}
 
-            if (str.startsWith(Constants.VOID)) {
-                if (Calc.luminance(g2d.getColor()) < 0.2) {
-                    Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
-                } else {
-                    Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
-                }
-            } else if (str.endsWith(Constants.VOID)) {
-                Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
-            } else {
-                g2d.drawString(str, x, y);
-            }
+			if (!legacy && line.get() == (getTags().isEmpty() ? 7 : 6)) {
+				x += 10;
+			}
 
-            BufferedImage icon = switch (g2d.getColor().getRGB() & 0xFFFFFF) {
-                case 0x85C720 -> IO.getResourceAsImage("shoukan/icons/hp.png");
-                case 0x3F9EFF -> IO.getResourceAsImage("shoukan/icons/mp.png");
-                case 0x9A1313 -> IO.getResourceAsImage("shoukan/icons/degen.png");
-                case 0x7ABCFF -> IO.getResourceAsImage("shoukan/icons/regen.png");
-                case 0xFF0000 -> IO.getResourceAsImage("shoukan/icons/blood.png");
-                case 0x3F9EFE -> IO.getResourceAsImage("shoukan/icons/mana.png");
-                case 0xFE0000 -> IO.getResourceAsImage("shoukan/icons/attack.png");
-                case 0x00C500 -> IO.getResourceAsImage("shoukan/icons/defense.png");
-                case 0xFFC800 -> IO.getResourceAsImage("shoukan/icons/dodge.png");
-                case 0xA9A9A9 -> IO.getResourceAsImage("shoukan/icons/block.png");
-                case 0x48BAFF -> IO.getResourceAsImage("shoukan/icons/cooldown.png");
-                case 0x000100 -> IO.getResourceAsImage("shoukan/icons/ally_target.png");
-                case 0x010000 -> IO.getResourceAsImage("shoukan/icons/enemy_target.png");
-                default -> null;
-            };
+			if (str.startsWith(Constants.VOID)) {
+				if (Calc.luminance(g2d.getColor()) < 0.2) {
+					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
+				} else {
+					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
+				}
+			} else if (str.endsWith(Constants.VOID)) {
+				Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
+			} else {
+				if (str.startsWith(":") && str.endsWith(":")) {
+					BufferedImage icon = IO.getResourceAsImage(COLORS.get(str.substring(1, str.length() - 2)).getSecond());
+					if (icon != null) {
+						int size = g2d.getFont().getSize();
+						g2d.drawImage(icon, x, y - size + 1, size, size, null);
+					}
 
-            if (icon != null) {
-                int size = g2d.getFont().getSize();
-                g2d.drawImage(icon, x + g2d.getFontMetrics().stringWidth(str.replace(" ", "")) + 1, y - size + 1, size, size, null);
-            }
-        };
-    }
+					return;
+				}
 
-    default JSONObject extractValues(I18N locale) {
-        Hand h = getHand();
-        Map<String, Object> values = Map.ofEntries(
-                Map.entry("php", h == null ? 6000 : h.getHP()),
-                Map.entry("bhp", h == null ? 6000 : h.getBase().hp()),
-                Map.entry("pmp", h == null ? 5 : h.getMP()),
-                Map.entry("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek())),
-                Map.entry("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek())),
-                Map.entry("mp", getMPCost()),
-                Map.entry("hp", getHPCost()),
-                Map.entry("atk", getDmg()),
-                Map.entry("dfs", getDfs()),
-                Map.entry("ddg", getDodge()),
-                Map.entry("blk", getBlock()),
-                Map.entry("data", getStats().getData())
-        );
+				g2d.drawString(str, x, y);
+			}
+		};
+	}
 
-        CachedScriptManager<T> csm = getCSM();
-        if (!csm.getStoredProps().isEmpty() && csm.getPropHash().intValue() == values.hashCode()) {
-            return csm.getStoredProps();
-        }
+	default JSONObject extractValues(I18N locale) {
+		Hand h = getHand();
+		Map<String, Object> values = Map.ofEntries(
+				Map.entry("php", h == null ? 6000 : h.getHP()),
+				Map.entry("bhp", h == null ? 6000 : h.getBase().hp()),
+				Map.entry("pmp", h == null ? 5 : h.getMP()),
+				Map.entry("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek())),
+				Map.entry("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek())),
+				Map.entry("mp", getMPCost()),
+				Map.entry("hp", getHPCost()),
+				Map.entry("atk", getDmg()),
+				Map.entry("dfs", getDfs()),
+				Map.entry("ddg", getDodge()),
+				Map.entry("blk", getBlock()),
+				Map.entry("data", getStats().getData())
+		);
 
-        csm.getStoredProps().clear();
-        String desc = getDescription(locale);
-        for (String str : desc.split("\\s")) {
-            JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?\\$(?<type>\\w+).*?)}");
+		CachedScriptManager<T> csm = getCSM();
+		if (!csm.getStoredProps().isEmpty() && csm.getPropHash().intValue() == values.hashCode()) {
+			return csm.getStoredProps();
+		}
 
-            if (!groups.isEmpty()) {
-                @Language("Groovy") String calc = groups.getString("calc").replace("$", "");
-                if (!calc.isBlank()) {
-                    calc = "import static java.lang.Math.*\n\n" + calc;
-                    String val = String.valueOf(Utils.exec(calc, values));
+		csm.getStoredProps().clear();
+		String desc = getDescription(locale);
+		for (String str : desc.split("\\s")) {
+			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?)}");
 
-                    csm.getStoredProps().compute(groups.getString("type"), (k, v) -> {
-                        int value;
-                        if (!k.equals("data")) {
-                            value = Calc.round(NumberUtils.toDouble(val) * getPower());
-                        } else {
-                            value = Calc.round(NumberUtils.toDouble(val));
-                        }
+			if (!groups.isEmpty()) {
+				@Language("Groovy") String calc = groups.getString("calc").replace("$", "");
+				if (!calc.isBlank()) {
+					calc = "import static java.lang.Math.*\n\n" + calc;
+					String val = String.valueOf(Utils.exec(calc, values));
 
-                        if (v == null) {
-                            return value;
-                        } else if (v instanceof JSONArray a) {
-                            a.add(value);
-                            return a;
-                        }
+					for (Object type : Utils.extractGroups(groups.getString("calc"), "(\\$\\w+)")) {
+						csm.getStoredProps().compute(String.valueOf(type), (k, v) -> {
+							int value;
+							if (!k.equals("data")) {
+								value = Calc.round(NumberUtils.toDouble(val) * getPower());
+							} else {
+								value = Calc.round(NumberUtils.toDouble(val));
+							}
 
-                        return new JSONArray(List.of(v, value));
-                    });
-                }
-            }
-        }
+							if (v == null) {
+								return value;
+							} else if (v instanceof JSONArray a) {
+								a.add(value);
+								return a;
+							}
 
-        return csm.getStoredProps();
-    }
+							return new JSONArray(List.of(v, value));
+						});
+					}
+				}
+			}
+		}
+
+		return csm.getStoredProps();
+	}
 }

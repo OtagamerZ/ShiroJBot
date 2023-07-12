@@ -31,6 +31,7 @@ import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -408,6 +409,10 @@ public abstract class Graph {
 	}
 
 	public static Color mix(Color... colors) {
+		return mix(List.of(colors));
+	}
+
+	public static Color mix(Collection<Color> colors) {
 		int r = 0;
 		int g = 0;
 		int b = 0;
@@ -418,7 +423,7 @@ public abstract class Graph {
 			b += c.getBlue();
 		}
 
-		return new Color(r / colors.length, g / colors.length, b / colors.length);
+		return new Color(r / colors.size(), g / colors.size(), b / colors.size());
 	}
 
 	public static BufferedImage scaleImage(BufferedImage image, int w, int h) {

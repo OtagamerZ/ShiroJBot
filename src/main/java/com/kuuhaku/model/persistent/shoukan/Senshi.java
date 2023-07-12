@@ -525,7 +525,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
     }
 
     public double getFieldMult() {
-        if (hand.getGame() == null || hasFlag(Flag.IGNORE_FIELD)) return 1;
+        if (getGame() == null || hasFlag(Flag.IGNORE_FIELD)) return 1;
         Field f = getGame().getArena().getField();
 
         double mult = 1;
@@ -574,7 +574,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
     @Override
     public int getDodge() {
         int sum = base.getDodge() + stats.getDodge() + getEquipDodge();
-        if (hand != null && hand.getGame() != null && getGame().getArena().getField().getType() == FieldType.DUNGEON) {
+        if (hand != null && getGame() != null && getGame().getArena().getField().getType() == FieldType.DUNGEON) {
             sum = Math.min(sum, 50);
         }
 
@@ -611,7 +611,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
                 mult *= 0.5;
             }
 
-            if (hand.getGame() != null && getGame().getArcade() == Arcade.OVERCHARGE) {
+            if (getGame() != null && getGame().getArcade() == Arcade.OVERCHARGE) {
                 mult *= 1.5;
             }
         }
@@ -625,7 +625,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
         if (hand != null) {
             mult *= 1 - Math.max(0, 0.07 * (hand.getOrigin().minor().length - 1));
 
-            if (hand.getGame() != null && getGame().getArcade() == Arcade.OVERCHARGE) {
+            if (getGame() != null && getGame().getArcade() == Arcade.OVERCHARGE) {
                 mult *= 1.75;
             }
         }
@@ -741,7 +741,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
         if (trigger) {
             setDefending(true);
 
-            if (hand != null && hand.getGame() != null) {
+            if (hand != null && getGame() != null) {
                 if (getGame().getCurrentSide() != hand.getSide()) {
                     getGame().trigger(ON_FLIP, asSource(ON_FLIP));
                 } else {
@@ -945,7 +945,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
             hit *= 0.75;
         }
 
-        if (hand != null && hand.getGame() != null && getGame().getArena().getField().getType() == FieldType.NIGHT) {
+        if (hand != null && getGame() != null && getGame().getArena().getField().getType() == FieldType.NIGHT) {
             hit *= 0.8;
 
             if (hand.getOrigin().synergy() == Race.WEREBEAST) {
@@ -1227,7 +1227,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
                 return false;
             }
 
-            if (hand.getGame() != null) {
+            if (getGame() != null) {
                 getGame().trigger(ON_EFFECT_TARGET, source.asSource(), asTarget(ON_EFFECT_TARGET));
                 if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
                     return true;
@@ -1334,7 +1334,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
                     }
                 }
 
-                if (hand != null && hand.getGame() != null) {
+                if (hand != null && getGame() != null) {
                     boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
                     String path = "shoukan/frames/state/" + (legacy ? "old" : "new") + "/";
 
