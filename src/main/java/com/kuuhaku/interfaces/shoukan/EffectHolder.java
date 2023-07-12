@@ -149,7 +149,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							if (e.getSecond() != null) {
 								colors.add(e.getSecond());
 								if (!Utils.equalsAny(type, "data", "b", "n")) {
-									val += "@" + StringUtils.leftPad(String.valueOf(e.getFirst()), 2, '0') + " ";
+									val += "!" + StringUtils.leftPad(String.valueOf(e.getFirst()), 2, '0');
 								}
 							}
 						}
@@ -204,8 +204,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				int offset = 0;
 				FontMetrics fm = g2d.getFontMetrics();
 
-				for (String s : str.split(" ")) {
-					if (s.startsWith("@")) {
+				for (String s : str.split("(?=!)")) {
+					if (s.startsWith("!")) {
 						String path = "shoukan/icons/" + ICONS[Integer.parseInt(s.substring(1))];
 
 						BufferedImage icon = IO.getResourceAsImage(path);
