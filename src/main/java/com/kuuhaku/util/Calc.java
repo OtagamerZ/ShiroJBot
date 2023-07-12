@@ -44,7 +44,7 @@ public abstract class Calc {
 	public static double round(double value, int places) {
 		if (places < 0) throw new IllegalArgumentException();
 
-		return Precision.round(value, places);
+		return Precision.round(value, places, RoundingMode.HALF_EVEN.ordinal());
 	}
 
 	public static double clamp(double val, double min, double max) {

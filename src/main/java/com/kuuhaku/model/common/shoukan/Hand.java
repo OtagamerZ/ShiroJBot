@@ -236,16 +236,26 @@ public class Hand {
 
 	private transient Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> selection = null;
 
+	public Hand(String uid, Deck deck) {
+		this.uid = uid;
+		this.game = null;
+		this.userDeck = deck;
+		this.side = Side.BOTTOM;
+		this.origin = userDeck.getOrigins();
+		this.base = getBase();
+		this.hp = base.hp();
+	}
+
 	public Hand(String uid, Shoukan game, Side side) {
 		this.uid = uid;
 		this.game = game;
 		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
 		if (game.getArcade() != Arcade.CARDMASTER && (!game.isSingleplayer() || !Account.hasRole(uid, false, Role.TESTER))) {
-				if (userDeck == null) {
-					throw new GameReport(GameReport.NO_DECK, uid);
-				} else if (!(userDeck.validateSenshi() && userDeck.validateEvogear() && userDeck.validateFields())) {
-					throw new GameReport(GameReport.INVALID_DECK, uid);
-				}
+			if (userDeck == null) {
+				throw new GameReport(GameReport.NO_DECK, uid);
+			} else if (!(userDeck.validateSenshi() && userDeck.validateEvogear() && userDeck.validateFields())) {
+				throw new GameReport(GameReport.INVALID_DECK, uid);
+			}
 		}
 
 		this.side = side;
@@ -1096,11 +1106,11 @@ public class Hand {
 		try {
 			act.accept(d);
 		} catch (RuntimeException e) {
-            if (e.getCause() instanceof ActivationException ex) {
-                throw ex;
-            }
+			if (e.getCause() instanceof ActivationException ex) {
+				throw ex;
+			}
 
-            throw e;
+			throw e;
 		}
 	}
 
