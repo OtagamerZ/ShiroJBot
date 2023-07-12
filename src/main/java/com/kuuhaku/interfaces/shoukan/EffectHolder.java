@@ -149,7 +149,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							if (e.getSecond() != null) {
 								colors.add(e.getSecond());
 								if (!Utils.equalsAny(type, "data", "b", "n")) {
-									val += "@" + StringUtils.leftPad(String.valueOf(e.getFirst()), 2, '0');
+									val += "@" + StringUtils.leftPad(String.valueOf(e.getFirst()), 2, '0') + " ";
 								}
 							}
 						}
