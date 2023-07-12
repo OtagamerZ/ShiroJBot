@@ -92,7 +92,7 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 		for (Target t : targets) {
 			Senshi card = t.card();
 
-			if (card != null && t.type() != TargetType.ALLY && card.isProtected(source.card())) {
+			if (card != null && card.isProtected(source.card())) {
 				t.skip().set(true);
 			}
 		}

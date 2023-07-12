@@ -40,10 +40,8 @@ import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 
 public interface Drawable<T extends Drawable<T>> {
@@ -412,44 +410,43 @@ public interface Drawable<T extends Drawable<T>> {
 			if (idx < 0 || idx > 4) continue;
 
 			SlotColumn slt = getHand().getGame().getSlots(side).get(idx);
-			if (xray || side == getSide()) {
-				for (Senshi tgt : slt.getCards()) {
-					if (tgt == null || (side != getSide() && !xray && tgt.isProtected(this))) continue;
 
-					if (tgt.getIndex() == idx) {
-						tgts.add(tgt);
+			Senshi tgt;
+			if (top == null) {
+				if (xray) {
+					for (Senshi s : slt.getCards()) {
+						addTarget(s, tgts, empower);
 					}
 
-					if (empower) {
-						for (Senshi s : tgt.getNearby()) {
-							if ((side == getSide() && !xray || !s.isProtected(this)) && s.getIndex() == idx) {
-								tgts.add(s);
-							}
-						}
-					}
+					continue;
+				} else {
+					tgt = slt.getUnblocked();
 				}
+			} else if (!top) {
+				if (slt.hasTop() && !xray) continue;
+
+				tgt = slt.getBottom();
 			} else {
-				Senshi tgt;
-				if (top == null) tgt = slt.getUnblocked();
-				else if (top) tgt = slt.getTop();
-				else tgt = slt.getBottom();
+				tgt = slt.getTop();
+			}
 
-				if (tgt == null || side != getSide() && tgt.isProtected(this)) continue;
+			addTarget(tgt, tgts, empower);
+		}
 
-				if (tgt.getIndex() == idx) {
-					tgts.add(tgt);
-				}
+		return tgts.stream().sorted(Comparator.comparingInt(Senshi::getIndex)).toList();
+	}
 
-				if (empower) {
-					for (Senshi s : tgt.getNearby()) {
-						if ((side == getSide() || !s.isProtected(this)) && s.getIndex() == idx) {
-							tgts.add(s);
-						}
-					}
+	private void addTarget(Senshi tgt, Set<Senshi> targets, boolean empower) {
+		if (tgt == null || tgt.isProtected(this)) return;
+
+		targets.add(tgt);
+
+		if (empower) {
+			for (Senshi s : tgt.getNearby()) {
+				if (!s.isProtected(this)) {
+					targets.add(s);
 				}
 			}
 		}
-
-		return List.copyOf(tgts);
 	}
 }

@@ -715,7 +715,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi chosen = nc ? slot.getBottom() : slot.getTop();
-		if (chosen.getBase().getTags().contains("FIXED")) {
+		if (chosen.isFixed()) {
 			getChannel().sendMessage(getLocale().get("error/card_fixed")).queue();
 			return false;
 		} else if (chosen.getHPCost() / 2 >= curr.getHP()) {
@@ -1267,7 +1267,9 @@ public class Shoukan extends GameInstance<Phase> {
 							s.awake();
 						}
 
-						op.getGraveyard().add(target);
+						if (op.getGraveyard().add(target)) {
+							you.addKill(target);
+						}
 
 						dmg = 0;
 						win = true;
@@ -1295,7 +1297,9 @@ public class Shoukan extends GameInstance<Phase> {
 									you.modHP((int) -((enemyStats - dmg) * dmgMult));
 								}
 
-								you.getGraveyard().add(source);
+								if (you.getGraveyard().add(source)) {
+									op.addKill(source);
+								}
 							}
 
 							dmg = 0;
@@ -1347,8 +1351,8 @@ public class Shoukan extends GameInstance<Phase> {
 										}
 
 										dmg = 0;
-									} else {
-										op.getGraveyard().add(target);
+									} else if (op.getGraveyard().add(target)) {
+										you.addKill(target);
 									}
 
 									win = true;
@@ -1360,14 +1364,16 @@ public class Shoukan extends GameInstance<Phase> {
 										s.awake();
 									}
 
-									op.getGraveyard().add(target);
+									if (op.getGraveyard().add(target)) {
+										you.addKill(target);
+									}
 
 									for (Senshi s : source.getNearby()) {
 										s.awake();
 									}
 
-									if (announce) {
-										you.getGraveyard().add(source);
+									if (announce && you.getGraveyard().add(source)) {
+										op.addKill(source);
 									}
 
 									dmg = 0;

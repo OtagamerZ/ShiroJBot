@@ -84,17 +84,6 @@ public class Arena implements Renderer {
 		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
 
 		if (d instanceof Senshi s) {
-			if (s.getLastInteraction() != null) {
-				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget());
-
-				Hand other = d.getHand().getOther();
-				other.addKill();
-
-				if (getGame().getArcade() == Arcade.DECK_ROYALE) {
-					other.manualDraw(3);
-				}
-			}
-
 			if (!s.getEquipments().isEmpty()) {
 				Iterator<Evogear> i = s.getEquipments().iterator();
 				while (i.hasNext()) {

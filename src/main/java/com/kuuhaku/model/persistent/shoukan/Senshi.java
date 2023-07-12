@@ -233,19 +233,24 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
     public BondedList<Evogear> getEquipments() {
         equipments.removeIf(e -> !equals(e.getEquipper()));
 
-        int size = equipments.size();
-        if (size > 3) {
-            int i = 0;
-            Iterator<Evogear> it = equipments.iterator();
-            while (it.hasNext()) {
-                Evogear e = it.next();
-                if (!e.getBase().getTags().contains("FIXED")) {
-                    hand.getGraveyard().add(e);
-                    it.remove();
-                }
+        if (equipments.size() > 3) {
+            int fixs = (int) equipments.stream().filter(EffectHolder::isFixed).count();
 
-                i++;
+            List<Evogear> removed = new ArrayList<>();
+            Iterator<Evogear> it = equipments.iterator();
+            while (equipments.size() > 3 && it.hasNext()) {
+                Evogear e = it.next();
+                if (!e.isFixed() || fixs > 3) {
+                    removed.add(e);
+                    it.remove();
+
+                    if (e.isFixed()) {
+                        fixs--;
+                    }
+                }
             }
+
+            hand.getGraveyard().addAll(removed);
         }
 
         return equipments;
@@ -1218,6 +1223,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
         if (blocked.contains(source)) return true;
 
         if (hand != null) {
+            if (hand.equals(source.getHand())) {
+                return false;
+            }
+
             getGame().trigger(ON_EFFECT_TARGET, source.asSource(), asTarget(ON_EFFECT_TARGET));
             if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
                 return true;

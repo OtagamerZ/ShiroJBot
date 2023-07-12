@@ -87,6 +87,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
         return getBase().getTags().contains("PASSIVE");
     }
 
+    default boolean isFixed() {
+        return getBase().getTags().contains("FIXED");
+    }
+
     boolean execute(EffectParameters ep);
 
     default void executeAssert(Trigger trigger) {

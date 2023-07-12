@@ -93,12 +93,17 @@ public class BondedList<T> extends TreeList<T> {
 	}
 
 	@Override
+	public boolean add(T t) {
+		return add(size(), t, new ArrayList<>());
+	}
+
+	@Override
 	public void add(int index, T t) {
 		add(index, t, new ArrayList<>());
 	}
 
-	public void add(int index, T t, List<T> aux) {
-		if (t == null) return;
+	public boolean add(int index, T t, List<T> aux) {
+		if (t == null) return false;
 		ListIterator<T> it = aux.listIterator();
 
 		int size = aux.size();
@@ -119,6 +124,8 @@ public class BondedList<T> extends TreeList<T> {
 			super.add(Math.min(index, size()), it.next());
 			it.remove();
 		}
+
+		return ok;
 	}
 
 	public void addFirst(T t) {
