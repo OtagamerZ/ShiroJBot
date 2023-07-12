@@ -127,7 +127,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				String val;
 				try {
+					System.out.println(types);
 					Object obj = values.get(types.getString(0));
+					System.out.println(obj);
 					if (obj != null) {
 						String v;
 						if (obj instanceof JSONArray a) {
