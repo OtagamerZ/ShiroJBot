@@ -538,7 +538,7 @@ public class Shoukan extends GameInstance<Phase> {
 			hand.getGraveyard().add(p);
 			hand.getData().put("last_spell", e);
 			trigger(ON_SPELL, hand.getSide());
-			getChannel().sendMessage(getLocale().get("str/str/avoid_effect")).queue();
+			getChannel().sendMessage(getLocale().get("str/str/avoid_effect", enemy)).queue();
 			return false;
 		} else if (!tgt.validate(e.getTargetType())) {
 			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + e.getTargetType()))).queue();
@@ -923,7 +923,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			curr.getData().put("last_spell", chosen);
 			trigger(ON_SPELL, side);
-			reportEvent("str/avoid_effect", true);
+			reportEvent("str/avoid_effect", true, enemy);
 			return false;
 		} else if (!tgt.validate(chosen.getTargetType())) {
 			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + chosen.getTargetType()))).queue();
