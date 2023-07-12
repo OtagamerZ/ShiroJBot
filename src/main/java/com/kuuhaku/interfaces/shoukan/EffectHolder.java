@@ -216,7 +216,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					}
 				}
 
-				x += fm.stringWidth(s + " ");
+				x += fm.stringWidth(s);
 			}
 		};
 	}
