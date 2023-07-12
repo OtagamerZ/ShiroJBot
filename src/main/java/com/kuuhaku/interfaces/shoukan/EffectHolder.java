@@ -136,10 +136,12 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					List<Color> colors = new ArrayList<>();
 					for (Object type : types) {
 						if (COLORS.containsKey(type)) {
-							colors.add(COLORS.get(type).getFirst());
-
-							if (!Utils.equalsAny(type, "data", "b", "n")) {
-								val += StringUtils.rightPad(":" + type + ":", 6);
+							Color c = COLORS.get(type).getFirst();
+							if (c != null) {
+								colors.add(c);
+								if (!Utils.equalsAny(type, "data", "b", "n")) {
+									val += StringUtils.rightPad(":" + type + ":", 6);
+								}
 							}
 						}
 					}
@@ -159,7 +161,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 					return val.replaceAll("\\{.+}", "");
 				} catch (Exception e) {
-					e.printStackTrace();
 					return str;
 				}
 			}
