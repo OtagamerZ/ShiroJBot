@@ -130,7 +130,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 						val = str.replaceFirst("\\{.+}", String.valueOf(Calc.round(NumberUtils.toFloat(v))));
 					} else {
-						val = str.replaceFirst("\\{.+}", "");
+						val = str;
 					}
 
 					List<Color> colors = new ArrayList<>();
@@ -159,6 +159,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 					return val.replaceAll("\\{.+}", "");
 				} catch (Exception e) {
+					e.printStackTrace();
 					return str;
 				}
 			}
