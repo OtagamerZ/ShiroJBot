@@ -211,10 +211,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						BufferedImage icon = IO.getResourceAsImage(path);
 						if (icon != null) {
 							int size = g2d.getFont().getSize();
-							g2d.drawImage(icon, x, y - size + 1, size, size, null);
+							g2d.drawImage(icon, x + offset, y - size + 1, size, size, null);
 						}
 					} else {
-						g2d.drawString(str, x, y);
+						g2d.drawString(str, x + offset, y);
 					}
 
 					offset += fm.stringWidth(str + " ");
