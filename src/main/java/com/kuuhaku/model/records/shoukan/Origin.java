@@ -71,7 +71,7 @@ public record Origin(Race major, Race... minor) {
 	}
 
 	public boolean hasMinor(Race race) {
-		for (Race r : minor) {
+		for (Race r : minor()) {
 			if (r.isRace(race)) return true;
 		}
 
