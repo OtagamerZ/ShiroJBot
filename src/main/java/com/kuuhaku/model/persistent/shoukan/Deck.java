@@ -182,7 +182,7 @@
 
 	 public int countRace(Race race) {
 		 return (int) getSenshi().stream()
-				 .filter(s -> s.getRace() == race)
+				 .filter(s -> s.getRace().isRace(race))
 				 .count();
 	 }
 

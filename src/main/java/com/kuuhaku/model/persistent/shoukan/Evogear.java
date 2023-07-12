@@ -301,7 +301,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public double getAttrMult() {
-		double mult = 1;
+		double mult = stats.getAttrMult();
 		if (hand != null) {
 			if (!spell && hand.getOrigin().hasMinor(Race.MACHINE)) {
 				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MACHINE) * 0.02);
@@ -312,7 +312,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 		}
 
-		return mult * stats.getAttrMult();
+		return mult;
 	}
 
 	@Override
