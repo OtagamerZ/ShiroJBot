@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.misc;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.exceptions.ItemUseException;
 import com.kuuhaku.exceptions.PassiveItemException;
 import com.kuuhaku.exceptions.PendingConfirmationException;
@@ -84,7 +83,6 @@ public class UseItemCommand implements Executable {
 							event.channel().sendMessage(LocalizedString.get(locale, e.getMessage(), locale.get(e.getMessage()))).queue();
 							return true;
 						} catch (Exception e) {
-							Constants.LOGGER.warn(e, e);
 							event.channel().sendMessage(locale.get("error/item_invalid_args")).queue();
 							return true;
 						}
