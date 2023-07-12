@@ -205,6 +205,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				FontMetrics fm = g2d.getFontMetrics();
 
 				for (String s : str.split("(?=!)")) {
+					System.out.println(s);
 					if (s.startsWith("!")) {
 						String path = "shoukan/icons/" + ICONS[Integer.parseInt(s.substring(1))];
 
