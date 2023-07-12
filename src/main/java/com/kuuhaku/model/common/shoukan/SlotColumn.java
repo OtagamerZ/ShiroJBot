@@ -77,7 +77,7 @@ public class SlotColumn {
 	}
 
 	public void setTop(Senshi top) {
-		placeCard(top, true);
+		placeCard(top, true, true);
 	}
 
 	public Senshi getBottom() {
@@ -97,10 +97,18 @@ public class SlotColumn {
 	}
 
 	public void setBottom(Senshi bottom) {
-		placeCard(bottom, false);
+		placeCard(bottom, false, true);
 	}
 
-	private void placeCard(Senshi card, boolean top) {
+	public Senshi getUnblocked() {
+		return Utils.getOr(top, bottom);
+	}
+
+	public void setUnblocked(Senshi card) {
+		placeCard(card, top != null, false);
+	}
+
+	private void placeCard(Senshi card, boolean top, boolean replace) {
 		Senshi current = top ? getTop() : getBottom();
 		if (Objects.equals(card, current)) return;
 		else if (card != null && card.getHand() != null && card.getSide() == side && card.popFlag(Flag.NO_CONVERT)) {
@@ -112,8 +120,11 @@ public class SlotColumn {
 			current.setSlot(null);
 		}
 
-		if (top) this.top = card;
-		else this.bottom = card;
+		if (top && (replace || this.top == null)) {
+			this.top = card;
+		} else if (replace || this.bottom == null) {
+			this.bottom = card;
+		}
 
 		if (card != null) {
 			Hand h = game.getHands().get(side);
@@ -138,10 +149,6 @@ public class SlotColumn {
 
 	public Senshi getAtRole(boolean support) {
 		return support ? bottom : top;
-	}
-
-	public Senshi getUnblocked() {
-		return Utils.getOr(top, bottom);
 	}
 
 	public void replace(Senshi self, Senshi with) {
