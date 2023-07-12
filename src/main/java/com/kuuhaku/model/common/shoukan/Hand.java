@@ -46,8 +46,6 @@ import kotlin.Triple;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.utils.FileUpload;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -246,6 +244,7 @@ public class Hand {
 		this.origin = userDeck.getOrigins();
 		this.base = getBase();
 		this.hp = base.hp();
+		this.mp = base.mpGain().get();
 	}
 
 	public Hand(String uid, Shoukan game, Side side) {

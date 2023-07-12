@@ -633,7 +633,7 @@
 								 m = Calc.round(m * (1 + getMetaDivergence() / 2));
 							 }
 
-							 if (h != null) {
+							 if (h != null && h.getGame() != null) {
 								 if (origin.synergy() == Race.FEY) {
 									 m = mp * (Calc.chance(3, h.getGame().getRng()) ? 2 : 1);
 								 } else if (origin.synergy() == Race.GHOST && h.getGame().getTurn() > 0) {
@@ -650,7 +650,7 @@
 
 				 SupplyChain<Integer> handCap = new SupplyChain<>(5)
 						 .add(c -> {
-							 if (h != null) {
+							 if (h != null && h.getGame() != null) {
 								 if (origin.hasMinor(Race.BEAST)) {
 									 c = c + (int) Math.ceil(h.getGame().getTurn() / 2d) / 10;
 								 }
