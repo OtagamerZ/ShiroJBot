@@ -217,7 +217,6 @@ public interface Drawable<T extends Drawable<T>> {
 		g2d.setFont(FONT);
 		FontMetrics m = g2d.getFontMetrics();
 		boolean aug = getTags().contains("tag/augment") && getHand() == null;
-		boolean def = this instanceof Senshi s && s.isDefending();
 
 		{ // LEFT
 			int y = desc ? 225 : 291;
@@ -229,7 +228,7 @@ public interface Drawable<T extends Drawable<T>> {
 				String val = aug ? Utils.sign(getDfs()) : String.valueOf(getDfs());
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.GREEN);
-				if (def) {
+				if (this instanceof Senshi s && s.isDefending()) {
 					g2d.setFont(FONT.deriveFont(Map.of(
 							TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON
 					)));
@@ -251,7 +250,7 @@ public interface Drawable<T extends Drawable<T>> {
 				String val = aug ? Utils.sign(getDmg()) : String.valueOf(getDmg());
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.RED);
-				if (!def) {
+				if (this instanceof Senshi s && !s.isDefending()) {
 					g2d.setFont(FONT.deriveFont(Map.of(
 							TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON
 					)));
