@@ -53,25 +53,49 @@ public enum Flag {
 	/** Cannot be targeted by effects **/
 	IGNORE_EFFECT,
 
-	/** Stats are hidden (NO AUTO) **/
+	/**
+	 * Stats are hidden (NO AUTO)
+	 **/
 	HIDE_STATS,
-	/** Hit chance is reduced by 25% **/
+	/**
+	 * Hit chance is reduced by 25%
+	 **/
 	BLIND,
-	/** Will hit **/
+	/**
+	 * Will hit
+	 **/
 	TRUE_STRIKE,
-	/** Will dodge **/
+	/**
+	 * Will dodge
+	 **/
 	TRUE_DODGE,
-	/** Will block **/
+	/**
+	 * Will block
+	 **/
 	TRUE_BLOCK,
-	/** Can attack directly regardless of remaining cards **/
+	/**
+	 * Effect cannot be prevented
+	 **/
+	TRUE_EFFECT,
+	/**
+	 * Can attack directly regardless of remaining cards
+	 **/
 	DIRECT,
-	/** Effect has 50% more power and targets nearby cards **/
+	/**
+	 * Effect has 50% more power and targets nearby cards
+	 **/
 	EMPOWERED,
-	/** Does not consume an action **/
+	/**
+	 * Does not consume an action
+	 **/
 	FREE_ACTION,
-	/** Can attack while defending **/
+	/**
+	 * Can attack while defending
+	 **/
 	ALWAYS_ATTACK,
-	/** Will always defeat the target **/
+	/**
+	 * Will always defeat the target
+	 **/
 	UNSTOPPABLE,
 	/** Cannot exist outside the field **/
 	BOUND,
