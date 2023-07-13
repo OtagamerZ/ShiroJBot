@@ -43,9 +43,8 @@ import org.intellij.lang.annotations.Language;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
@@ -141,7 +140,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						val = str;
 					}
 
-					List<Color> colors = new ArrayList<>();
+					Set<Color> colors = new LinkedHashSet<>();
 					for (Object type : types) {
 						if (COLORS.containsKey(type)) {
 							Pair<Integer, Color> e = COLORS.get(type);
