@@ -50,27 +50,14 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 		Set<Target> tgts = new HashSet<>(List.of(targets));
 		if (source.card() instanceof Senshi s) {
 			if (s.hasFlag(Flag.EMPOWERED)) {
-				for (Target tgt : tgts) {
+				for (Target tgt : targets) {
 					if (tgt.trigger() == null) continue;
 
-					if (tgt.index() > 0) {
-						tgts.add(new Target(
-								tgt.card().getLeft(),
-								tgt.side(),
-								tgt.index() - 1,
-								tgt.trigger(),
-								tgt.type()
-						));
-					}
-
-					if (tgt.index() < 4) {
-						tgts.add(new Target(
-								tgt.card().getRight(),
-								tgt.side(),
-								tgt.index() + 1,
-								tgt.trigger(),
-								tgt.type()
-						));
+					Senshi t = tgt.card();
+					if (t != null) {
+						for (Senshi n : t.getNearby()) {
+							tgts.add(new Target(n, tgt.trigger(), tgt.type()));
+						}
 					}
 				}
 			}

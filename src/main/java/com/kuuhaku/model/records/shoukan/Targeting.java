@@ -68,11 +68,11 @@ public record Targeting(Hand hand, int allyPos, int enemyPos, LazyReference<Sens
 		List<Target> targets = new ArrayList<>();
 
 		if (allyPos > -1) {
-			targets.add(new Target(ally(), hand.getSide(), allyPos, trigger, TargetType.ALLY));
+			targets.add(new Target(ally(), trigger, TargetType.ALLY));
 		}
 
 		if (enemyPos > -1) {
-			targets.add(new Target(enemy(), hand.getSide().getOther(), enemyPos, trigger, TargetType.ENEMY));
+			targets.add(new Target(enemy(), trigger, TargetType.ENEMY));
 		}
 
 		return targets.toArray(Target[]::new);
