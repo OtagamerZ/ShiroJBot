@@ -1111,7 +1111,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 							.withVar("trigger", trigger)
 							.run();
 
-					if (trigger != ON_TICK) {
+					if (!Utils.equalsAny(ep.trigger(), ON_TICK, ON_EFFECT)) {
 						popFlag(Flag.EMPOWERED);
 						game.trigger(ON_EFFECT, hand.getSide());
 					}
