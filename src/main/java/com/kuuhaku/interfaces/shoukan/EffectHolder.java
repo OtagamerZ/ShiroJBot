@@ -181,7 +181,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				out += types.stream()
 						.map(t -> "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
-						.collect(Collectors.joining("¬"));
+						.collect(Collectors.joining());
 			} else {
 				Pair<Integer, Color> idx = COLORS.get(str);
 
@@ -252,7 +252,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						.filter(Objects::nonNull)
 						.toList();
 
-				for (String s : str.split("§(?=[⠁-⣿])|¬§?|(?<=[⠁-⣿])")) {
+				for (String s : str.split("§(?=[⠁-⣿])|(?<=[⠁-⣿])")) {
 					if (s.length() == 0) continue;
 
 					char code = s.charAt(0);
