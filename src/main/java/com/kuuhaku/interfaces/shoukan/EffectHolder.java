@@ -310,7 +310,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			}
 
 			if (str.contains("!")) {
-				for (String s : str.split("!(?=[⠁-⣿])|(?<=[⠁-⣿])")) {
+				for (String s : str.split("!(?=[⠁-⣿])|¬!?|(?<=[⠁-⣿])")) {
 					if (s.length() == 0) continue;
 
 					char code = s.charAt(0);
