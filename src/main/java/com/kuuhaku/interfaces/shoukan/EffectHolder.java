@@ -221,19 +221,23 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			g2d.setColor(style.getFrame().getSecondaryColor());
 
 			FontMetrics fm = g2d.getFontMetrics();
-			if (str.contains(DC1)) {
-				g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
+			try {
+				if (str.contains(DC1)) {
+					g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
 
-				if (Calc.luminance(g2d.getColor()) < 0.2) {
-					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, Color.WHITE);
-				} else {
-					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, Color.BLACK);
+					if (Calc.luminance(g2d.getColor()) < 0.2) {
+						Graph.drawOutlinedString(g2d, str, x, y, 1.5f, Color.WHITE);
+					} else {
+						Graph.drawOutlinedString(g2d, str, x, y, 1.5f, Color.BLACK);
+					}
+
+					return;
+				} else if (str.contains(DC2)) {
+					Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
+					return;
 				}
-
-				return;
-			} else if (str.contains(DC2)) {
-				Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
-				return;
+			} finally {
+				g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
 			}
 
 			if (str.contains("§")) {
