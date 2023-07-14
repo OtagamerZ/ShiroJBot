@@ -27,6 +27,7 @@ buildscript {
 plugins {
 	id "java"
 	id "idea"
+	id "antlr"
 	id "application"
 	id "io.freefair.aspectj" version "6.4.1"
 }
@@ -69,6 +70,11 @@ tasks.withType(JavaCompile).configureEach {
 	options.compilerArgs
 			<< "-Xlint:unchecked"
 			<< "-Xlint:deprecation"
+}
+
+configurations.configureEach {
+	resolutionStrategy.force "org.antlr:antlr4-tool:4.12.0"
+	resolutionStrategy.force "org.antlr:antlr4-runtime:4.12.0"
 }
 
 dependencies {
@@ -130,6 +136,9 @@ dependencies {
 	implementation group: "org.knowm.xchart", name: "xchart", version: "3.8.3"
 	implementation group: "com.github.trickl", name: "palette", version: "0.1.1"
 	implementation group: "org.antlr", name: "antlr4-runtime", version: "4.12.0"
+
+	// ANTLR
+	antlr group: "org.antlr", name: "antlr4", version: "4.12.0"
 
 	//Unit test
 	testImplementation group: "org.junit.jupiter", name: "junit-jupiter", version: "5.9.2"
