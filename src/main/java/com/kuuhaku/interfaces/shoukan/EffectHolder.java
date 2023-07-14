@@ -262,10 +262,11 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							x += size + 2;
 						}
 					} else {
-						g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
 						g2d.setColor(Graph.mix(types));
+						if (!g2d.getColor().equals(Color.BLACK)) {
+							Graph.drawOutlinedString(g2d, s, x, y, 1.5f, Color.BLACK);
+						}
 
-						Graph.drawOutlinedString(g2d, s, x, y, 1.5f, Color.BLACK);
 						g2d.drawString(s, x, y);
 						x += fm.stringWidth(s);
 					}
