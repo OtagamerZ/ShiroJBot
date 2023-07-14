@@ -129,47 +129,47 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						types.add(groups.getString("tag"));
 					}
 
-					String val;
+					String val = frag;
 					try {
-						Object obj = values.get(types.getString(0));
-						if (obj != null) {
-							String v;
-							if (obj instanceof JSONArray a) {
-								v = String.valueOf(a.remove(0));
-							} else {
-								v = String.valueOf(obj);
+						if (!types.isEmpty()) {
+							Object obj = values.get(types.getString(0));
+							if (obj != null) {
+								String v;
+								if (obj instanceof JSONArray a) {
+									v = String.valueOf(a.remove(0));
+								} else {
+									v = String.valueOf(obj);
+								}
+
+								val = frag.replaceFirst("\\{.+}", String.valueOf(Calc.round(NumberUtils.toFloat(v))));
 							}
 
-							val = frag.replaceFirst("\\{.+}", String.valueOf(Calc.round(NumberUtils.toFloat(v))));
-						} else {
-							val = frag;
-						}
+							Set<Color> colors = new LinkedHashSet<>();
+							for (Object type : types) {
+								if (COLORS.containsKey(type)) {
+									Pair<Integer, Color> e = COLORS.get(type);
 
-						Set<Color> colors = new LinkedHashSet<>();
-						for (Object type : types) {
-							if (COLORS.containsKey(type)) {
-								Pair<Integer, Color> e = COLORS.get(type);
-
-								if (e.getSecond() != null) {
-									colors.add(e.getSecond());
-									if (!Utils.equalsAny(type, "data", "b", "n")) {
-										val += "!" + Character.toString(0x2801 + e.getFirst()) + " ";
+									if (e.getSecond() != null) {
+										colors.add(e.getSecond());
+										if (!Utils.equalsAny(type, "data", "b", "n")) {
+											val += "!" + Character.toString(0x2801 + e.getFirst()) + " ";
+										}
 									}
 								}
 							}
-						}
 
-						if (!colors.isEmpty()) {
-							g2d.setColor(Graph.mix(colors));
-							if (!Utils.containsAny(types, "enemy", "ally")) {
-								g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
+							if (!colors.isEmpty()) {
+								g2d.setColor(Graph.mix(colors));
+								if (!Utils.containsAny(types, "enemy", "ally")) {
+									g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
+								}
 							}
-						}
 
-						if (types.contains("n")) {
-							val = DC1 + val;
-						} else if (!Utils.containsAny(types, "enemy", "ally")) {
-							val = DC2 + val;
+							if (types.contains("n")) {
+								val = DC1 + val;
+							} else if (!Utils.containsAny(types, "enemy", "ally")) {
+								val = DC2 + val;
+							}
 						}
 
 						out += val.replaceAll("\\{.+}", "");
