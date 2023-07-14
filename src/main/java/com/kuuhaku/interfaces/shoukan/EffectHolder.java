@@ -129,11 +129,12 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						types.add(groups.getString("tag"));
 					}
 
+					boolean tag = groups.has("tag");
 					String val = frag;
 					try {
 						if (!types.isEmpty()) {
 							Object obj = values.get(types.getString(0));
-							if (obj != null && groups.has("calc")) {
+							if (obj != null && !tag) {
 								String v;
 								if (obj instanceof JSONArray a) {
 									v = String.valueOf(a.remove(0));
@@ -141,9 +142,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 									v = String.valueOf(obj);
 								}
 
-								val = frag.replaceFirst("\\{.+}", String.valueOf(Calc.round(NumberUtils.toFloat(v)))).trim();
+								val = frag.replaceFirst("\\{.+}", String.valueOf(Calc.round(NumberUtils.toFloat(v))));
 							} else {
-								val = frag.replaceFirst("\\{.+}", "").trim();
+								val = frag.replaceFirst("\\{.+}", "");
 							}
 
 							System.out.println("-> " + val);
@@ -155,7 +156,11 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 									if (e.getSecond() != null) {
 										colors.add(e.getSecond());
 										if (!Utils.equalsAny(type, "data", "b", "n")) {
-											val += "!" + Character.toString(0x2801 + e.getFirst()) + " ";
+											if (tag) {
+												val = "!" + Character.toString(0x2801 + e.getFirst()) + val;
+											} else {
+												val += "!" + Character.toString(0x2801 + e.getFirst()) + " ";
+											}
 										}
 									}
 								}
