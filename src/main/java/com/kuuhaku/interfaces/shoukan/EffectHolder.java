@@ -185,17 +185,18 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						.map(t -> "!" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
 						.collect(Collectors.joining("¬"));
 			} else {
-				if (COLORS.containsKey(str)) {
-					int idx = COLORS.get(str).getFirst();
-					if (idx != -1) {
-						out = "!" + Character.toString(0x2801 + idx);
+				Pair<Integer, Color> idx = COLORS.get(str);
+
+				if (idx != null) {
+					if (idx.getFirst() != -1) {
+						out = "!" + Character.toString(0x2801 + idx.getFirst());
+					} else {
+						out = switch (str) {
+							case "b" -> DC1;
+							case "n" -> DC2;
+							default -> "";
+						};
 					}
-				} else {
-					out = switch (str) {
-						case "b" -> DC1;
-						case "n" -> DC2;
-						default -> "";
-					};
 				}
 			}
 
