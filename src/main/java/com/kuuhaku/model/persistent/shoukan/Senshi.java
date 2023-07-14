@@ -43,7 +43,6 @@ import com.kuuhaku.model.records.shoukan.DeferredTrigger;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
-import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.hibernate.annotations.Fetch;
@@ -1107,7 +1106,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 							.withConst("data", stats.getData())
 							.withVar("ep", ep)
 							.withVar("side", hand.getSide())
-							.withVar("props", extractValues(getGame().getLocale()))
+							.withVar("props", getCSM().getStoredProps())
 							.withVar("trigger", trigger)
 							.run();
 
@@ -1138,7 +1137,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						"data", stats.getData(),
 						"ep", ep,
 						"side", hand.getSide(),
-						"props", extractValues(getGame().getLocale()),
+						"props", getCSM().getStoredProps(),
 						"trigger", trigger
 				));
 			}
@@ -1187,7 +1186,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					"data", stats.getData(),
 					"ep", new EffectParameters(trigger, getSide()),
 					"side", hand.getSide(),
-					"props", extractValues(getGame().getLocale()),
+					"props", getCSM().getStoredProps(),
 					"trigger", trigger
 			));
 		} catch (Exception ignored) {
@@ -1310,10 +1309,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						y += 11;
 					}
 
-					JSONObject values = extractValues(locale);
-					Graph.drawMultilineString(g1, desc,
+					Graph.drawMultilineString(g1, parseDescription(locale),
 							7, y, 211, 3,
-							card.parseValues(g1, deck.getStyling(), values),
 							card.highlightValues(g1, style.getFrame().isLegacy())
 					);
 				}

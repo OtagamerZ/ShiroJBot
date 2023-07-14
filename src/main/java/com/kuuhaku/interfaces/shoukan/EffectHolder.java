@@ -38,7 +38,6 @@ import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.util.TriConsumer;
-import org.intellij.lang.annotations.Language;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -48,6 +47,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	Pair<Integer, Color> EMPTY = new Pair<>(-1, Color.BLACK);
@@ -111,6 +112,98 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	CachedScriptManager<T> getCSM();
+
+	default String parseDescription(I18N locale) {
+		Hand h = getHand();
+		Map<String, Object> values = Map.ofEntries(
+				Map.entry("php", h == null ? 6000 : h.getHP()),
+				Map.entry("bhp", h == null ? 6000 : h.getBase().hp()),
+				Map.entry("pmp", h == null ? 5 : h.getMP()),
+				Map.entry("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek())),
+				Map.entry("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek())),
+				Map.entry("mp", getMPCost()),
+				Map.entry("hp", getHPCost()),
+				Map.entry("atk", getDmg()),
+				Map.entry("dfs", getDfs()),
+				Map.entry("ddg", getDodge()),
+				Map.entry("blk", getBlock()),
+				Map.entry("pow", getPower()),
+				Map.entry("data", getStats().getData())
+		);
+
+		CachedScriptManager<T> csm = getCSM();
+		if (csm.getPropHash().intValue() != values.hashCode()) {
+			csm.getStoredProps().clear();
+		}
+
+		String desc = getDescription(locale);
+		Matcher pat = Utils.regex(desc, "\\{=(.*?)}|\\{(\\w+)}");
+
+		return pat.replaceAll(m -> {
+			boolean tag = m.group(2) != null;
+			String str = tag ? m.group(2) : m.group(1);
+
+			String out = "";
+			if (!tag) {
+				JSONArray types = Utils.extractGroups(str, "\\$(\\w+)");
+
+				Object prop = csm.getStoredProps().get(types.getString(0), "");
+				if (prop instanceof JSONArray a) {
+					out = String.valueOf(a.remove(0));
+				} else {
+					out = String.valueOf(prop);
+				}
+
+				if (out.isBlank()) {
+					out = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str, values));
+
+					if (csm.getStoredProps().isEmpty()) {
+						String val = out;
+						for (Object type : types) {
+							csm.getStoredProps().compute(String.valueOf(type), (k, v) -> {
+								int value;
+								if (!k.equals("data")) {
+									value = Calc.round(NumberUtils.toDouble(val) * getPower());
+								} else {
+									value = Calc.round(NumberUtils.toDouble(val));
+								}
+
+								if (v == null) {
+									return value;
+								} else if (v instanceof JSONArray a) {
+									a.add(value);
+									return a;
+								}
+
+								return new JSONArray(List.of(v, value));
+							});
+						}
+					}
+				}
+
+				out += types.stream()
+						.map(t -> "!" + Character.toString(0x2801 + COLORS.get(t).getFirst()) + "!")
+						.collect(Collectors.joining());
+			} else {
+				if (COLORS.containsKey(str)) {
+					int idx = COLORS.get(str).getFirst();
+					if (idx != -1) {
+						out = "!" + Character.toString(0x2801 + idx) + "!";
+					}
+				} else {
+					out = String.valueOf(
+							switch (str) {
+								case "b" -> DC1;
+								case "n" -> DC2;
+								default -> "";
+							}
+					);
+				}
+			}
+
+			return Matcher.quoteReplacement(out);
+		});
+	}
 
 	default Function<String, String> parseValues(Graphics2D g2d, DeckStyling style, JSONObject values) {
 		return str -> {
@@ -231,64 +324,5 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				x += fm.stringWidth(s);
 			}
 		};
-	}
-
-	default JSONObject extractValues(I18N locale) {
-		Hand h = getHand();
-		Map<String, Object> values = Map.ofEntries(
-				Map.entry("php", h == null ? 6000 : h.getHP()),
-				Map.entry("bhp", h == null ? 6000 : h.getBase().hp()),
-				Map.entry("pmp", h == null ? 5 : h.getMP()),
-				Map.entry("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek())),
-				Map.entry("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek())),
-				Map.entry("mp", getMPCost()),
-				Map.entry("hp", getHPCost()),
-				Map.entry("atk", getDmg()),
-				Map.entry("dfs", getDfs()),
-				Map.entry("ddg", getDodge()),
-				Map.entry("blk", getBlock()),
-				Map.entry("data", getStats().getData())
-		);
-
-		CachedScriptManager<T> csm = getCSM();
-		if (!csm.getStoredProps().isEmpty() && csm.getPropHash().intValue() == values.hashCode()) {
-			return csm.getStoredProps();
-		}
-
-		csm.getStoredProps().clear();
-		String desc = getDescription(locale);
-		for (String str : desc.split("\\s")) {
-			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?)}");
-
-			if (!groups.isEmpty()) {
-				@Language("Groovy") String calc = groups.getString("calc").replace("$", "");
-				if (!calc.isBlank()) {
-					calc = "import static java.lang.Math.*\n\n" + calc;
-					String val = String.valueOf(Utils.exec(calc, values));
-
-					for (Object type : Utils.extractGroups(groups.getString("calc"), "\\$(\\w+)")) {
-						csm.getStoredProps().compute(String.valueOf(type), (k, v) -> {
-							int value;
-							if (!k.equals("data")) {
-								value = Calc.round(NumberUtils.toDouble(val) * getPower());
-							} else {
-								value = Calc.round(NumberUtils.toDouble(val));
-							}
-
-							if (v == null) {
-								return value;
-							} else if (v instanceof JSONArray a) {
-								a.add(value);
-								return a;
-							}
-
-							return new JSONArray(List.of(v, value));
-						});
-					}
-				}
-			}
-		}
-
-		return csm.getStoredProps();
 	}
 }

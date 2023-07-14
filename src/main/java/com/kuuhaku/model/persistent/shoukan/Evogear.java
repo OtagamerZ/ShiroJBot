@@ -41,7 +41,6 @@ import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.model.records.shoukan.Targeting;
 import com.kuuhaku.util.*;
 import com.ygimenez.json.JSONArray;
-import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.hibernate.annotations.Fetch;
@@ -389,7 +388,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (ep.trigger() == NONE || !hasEffect()) return false;
 		else if (!stats.popFlag(Flag.TRUE_EFFECT)) {
 			if (!isSpell() && hand.getLockTime(Lock.EFFECT) > 0) return false;
-		} else if (!getEffect().contains(ep.trigger().name())) {
+		}
+
+		if (!getEffect().contains(ep.trigger().name())) {
 			if (!isSpell() || !Utils.equalsAny(ep.trigger(), ON_ACTIVATE, ON_TRAP)) {
 				return false;
 			}
@@ -403,7 +404,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					.withConst("data", stats.getData())
 					.withVar("ep", ep)
 					.withVar("side", hand.getSide())
-					.withVar("props", extractValues(getGame().getLocale()))
+					.withVar("props", getCSM().getStoredProps())
 					.withVar("trigger", ep.trigger());
 
 			if (!isSpell()) {
@@ -453,7 +454,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					"data", stats.getData(),
 					"ep", new EffectParameters(trigger, getSide()),
 					"side", hand.getSide(),
-					"props", extractValues(getGame().getLocale()),
+					"props", getCSM().getStoredProps(),
 					"self", equipper,
 					"trigger", trigger
 			));
@@ -531,10 +532,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 						y += 11;
 					}
 
-					JSONObject values = extractValues(locale);
-					Graph.drawMultilineString(g1, desc,
+					Graph.drawMultilineString(g1, parseDescription(locale),
 							7, y, 211, 3,
-							parseValues(g1, deck.getStyling(), values),
 							highlightValues(g1, style.getFrame().isLegacy())
 					);
 				}

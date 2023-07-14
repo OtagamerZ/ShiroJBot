@@ -3,20 +3,20 @@ grammar ShoukanExpr;
 expr: sumsub;
 
 sumsub
-    : muldiv ' '? '+' ' '? sumsub # Addition
-    | muldiv ' '? '-' ' '? sumsub # Subtraction
-    | muldiv # Operation
+    : muldiv ' '? '+' ' '? sumsub   # Addition
+    | muldiv ' '? '-' ' '? sumsub   # Subtraction
+    | muldiv                        # Operation
     ;
 
 muldiv
-    : group ' '? '*' ' '? muldiv # Product
-    | group ' '? '/' ' '? muldiv # Division
-    | group # Brackets
+    : group ' '? '*' ' '? muldiv    # Product
+    | group ' '? '/' ' '? muldiv    # Division
+    | group                         # Brackets
     ;
 
 group
-    : WORD? '(' sumsub ')' # Function
-    | var # Variable
+    : WORD? '(' sumsub ')'          # Function
+    | var                           # Variable
     ;
 
 var

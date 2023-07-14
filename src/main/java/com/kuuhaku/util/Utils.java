@@ -217,7 +217,7 @@ public abstract class Utils {
         return new DecimalFormat("#,##0" + (places > 0 ? "." : "") + StringUtils.repeat("#", places)).format(value);
     }
 
-    public static Matcher regex(String text, @Language("RegExp") String regex) {
+    public static Matcher regex(String text, String regex) {
         return PatternCache.compile(regex).matcher(text);
     }
 
