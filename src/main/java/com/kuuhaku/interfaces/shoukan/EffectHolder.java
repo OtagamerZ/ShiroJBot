@@ -178,6 +178,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				}
 			}
 
+			System.out.println(Utils.getOr(out, str));
 			return Utils.getOr(out, str);
 		};
 	}
@@ -196,7 +197,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				x += 10;
 			}
 
-			System.out.println(str);
+//			System.out.println(str);
 			FontMetrics fm = g2d.getFontMetrics();
 			for (String s : str.split("(?=!)")) {
 				if (s.startsWith(Constants.VOID)) {
