@@ -133,7 +133,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					try {
 						if (!types.isEmpty()) {
 							Object obj = values.get(types.getString(0));
-							if (obj != null) {
+							if (obj != null && groups.has("calc")) {
 								String v;
 								if (obj instanceof JSONArray a) {
 									v = String.valueOf(a.remove(0));
