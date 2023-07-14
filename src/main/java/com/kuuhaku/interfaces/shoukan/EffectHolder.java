@@ -182,13 +182,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				}
 
 				out += types.stream()
-						.map(t -> "!" + Character.toString(0x2801 + COLORS.get(t).getFirst()) + "¬")
-						.collect(Collectors.joining());
+						.map(t -> "!" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
+						.collect(Collectors.joining("¬"));
 			} else {
 				if (COLORS.containsKey(str)) {
 					int idx = COLORS.get(str).getFirst();
 					if (idx != -1) {
-						out = "!" + Character.toString(0x2801 + idx) + "¬";
+						out = "!" + Character.toString(0x2801 + idx);
 					}
 				} else {
 					out = switch (str) {
@@ -310,7 +310,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			}
 
 			if (str.contains("!")) {
-				for (String s : str.split("!")) {
+				for (String s : str.split("!(?=[⠁-⣿])|(?<=[⠁-⣿])")) {
 					if (s.length() == 0) continue;
 
 					char code = s.charAt(0);
