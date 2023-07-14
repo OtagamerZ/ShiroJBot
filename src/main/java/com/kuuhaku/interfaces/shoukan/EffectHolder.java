@@ -43,8 +43,10 @@ import org.intellij.lang.annotations.Language;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
@@ -111,69 +113,72 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	default Function<String, String> parseValues(Graphics2D g2d, DeckStyling style, JSONObject values) {
 		return str -> {
-			JSONObject groups = Utils.extractNamedGroups(str, "\\{=(?<calc>.*?)}|\\{(?<tag>\\w+)}");
+			String out = "";
+			for (String frag : str.split("(?<=})(?=\\{)")) {
+				JSONObject groups = Utils.extractNamedGroups(frag, "\\{=(?<calc>.*?)}|\\{(?<tag>\\w+)}");
 
-			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
-			g2d.setColor(style.getFrame().getSecondaryColor());
+				g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
+				g2d.setColor(style.getFrame().getSecondaryColor());
 
-			if (!groups.isEmpty()) {
-				JSONArray types = new JSONArray();
-				if (groups.has("calc")) {
-					types.addAll(Utils.extractGroups(groups.getString("calc"), "\\$(\\w+)"));
-				} else {
-					types.add(groups.getString("tag"));
-				}
-
-				String val;
-				try {
-					Object obj = values.get(types.getString(0));
-					if (obj != null) {
-						String v;
-						if (obj instanceof JSONArray a) {
-							v = String.valueOf(a.remove(0));
-						} else {
-							v = String.valueOf(obj);
-						}
-
-						val = str.replaceFirst("\\{.+}", String.valueOf(Calc.round(NumberUtils.toFloat(v))));
+				if (!groups.isEmpty()) {
+					JSONArray types = new JSONArray();
+					if (groups.has("calc")) {
+						types.addAll(Utils.extractGroups(groups.getString("calc"), "\\$(\\w+)"));
 					} else {
-						val = str;
+						types.add(groups.getString("tag"));
 					}
 
-					Set<Color> colors = new LinkedHashSet<>();
-					for (Object type : types) {
-						if (COLORS.containsKey(type)) {
-							Pair<Integer, Color> e = COLORS.get(type);
+					String val;
+					try {
+						Object obj = values.get(types.getString(0));
+						if (obj != null) {
+							String v;
+							if (obj instanceof JSONArray a) {
+								v = String.valueOf(a.remove(0));
+							} else {
+								v = String.valueOf(obj);
+							}
 
-							if (e.getSecond() != null) {
-								colors.add(e.getSecond());
-								if (!Utils.equalsAny(type, "data", "b", "n")) {
-									val += "!" + Character.toString(0x2801 + e.getFirst()) + " ";
+							val = frag.replaceFirst("\\{.+}", String.valueOf(Calc.round(NumberUtils.toFloat(v))));
+						} else {
+							val = frag;
+						}
+
+						Set<Color> colors = new LinkedHashSet<>();
+						for (Object type : types) {
+							if (COLORS.containsKey(type)) {
+								Pair<Integer, Color> e = COLORS.get(type);
+
+								if (e.getSecond() != null) {
+									colors.add(e.getSecond());
+									if (!Utils.equalsAny(type, "data", "b", "n")) {
+										val += "!" + Character.toString(0x2801 + e.getFirst()) + " ";
+									}
 								}
 							}
 						}
-					}
 
-					if (!colors.isEmpty()) {
-						g2d.setColor(Graph.mix(colors));
-						if (!Utils.containsAny(types, "enemy", "ally")) {
-							g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
+						if (!colors.isEmpty()) {
+							g2d.setColor(Graph.mix(colors));
+							if (!Utils.containsAny(types, "enemy", "ally")) {
+								g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
+							}
 						}
-					}
 
-					if (types.contains("n")) {
-						val += Constants.VOID;
-					} else if (!Utils.containsAny(types, "enemy", "ally")) {
-						val = Constants.VOID + val;
-					}
+						if (types.contains("n")) {
+							val += Constants.VOID;
+						} else if (!Utils.containsAny(types, "enemy", "ally")) {
+							val = Constants.VOID + val;
+						}
 
-					return val.replaceAll("\\{.+}", "");
-				} catch (Exception e) {
-					return str;
+						out += val.replaceAll("\\{.+}", "");
+					} catch (Exception e) {
+						out += frag;
+					}
 				}
 			}
 
-			return str;
+			return out;
 		};
 	}
 
