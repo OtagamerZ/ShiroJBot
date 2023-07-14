@@ -18,7 +18,6 @@
 
 package com.kuuhaku.interfaces.shoukan;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
@@ -74,6 +73,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			Map.entry("n", EMPTY)
 	);
 
+	char DC1 = '\u200B';
+	char DC2 = '\u200C';
 	String[] ICONS = {
 			"hp.png", "hp.png", "mp.png",
 			"degen.png", "regen.png", "blood.png",
@@ -166,9 +167,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						}
 
 						if (types.contains("n")) {
-							val += Constants.VOID;
+							val = DC1 + val;
 						} else if (!Utils.containsAny(types, "enemy", "ally")) {
-							val = Constants.VOID + val;
+							val = DC2 + val;
 						}
 
 						out += val.replaceAll("\\{.+}", "");
@@ -200,14 +201,14 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 //			System.out.println(str);
 			FontMetrics fm = g2d.getFontMetrics();
 			for (String s : str.split("(?=!)")) {
-				if (s.startsWith(Constants.VOID)) {
+				if (s.charAt(0) == DC1) {
+					Graph.drawOutlinedString(g2d, s, x, y, 0.125f, g2d.getColor());
+				} else if (s.charAt(0) == DC2) {
 					if (Calc.luminance(g2d.getColor()) < 0.2) {
 						Graph.drawOutlinedString(g2d, s, x, y, 1.5f, new Color(255, 255, 255));
 					} else {
 						Graph.drawOutlinedString(g2d, s, x, y, 1.5f, new Color(0, 0, 0));
 					}
-				} else if (s.endsWith(Constants.VOID)) {
-					Graph.drawOutlinedString(g2d, s, x, y, 0.125f, g2d.getColor());
 				} else {
 					if (s.startsWith("!")) {
 						String path = "shoukan/icons/" + ICONS[s.charAt(1) - 0x2801];
