@@ -300,6 +300,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 			FontMetrics fm = g2d.getFontMetrics();
 			if (str.contains(DC1)) {
+				System.out.println("shade");
 				if (Calc.luminance(g2d.getColor()) < 0.2) {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
 				} else {
