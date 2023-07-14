@@ -182,13 +182,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				}
 
 				out += types.stream()
-						.map(t -> "!" + Character.toString(0x2801 + COLORS.get(t).getFirst()) + "!")
+						.map(t -> "!" + Character.toString(0x2801 + COLORS.get(t).getFirst()) + "¬")
 						.collect(Collectors.joining());
 			} else {
 				if (COLORS.containsKey(str)) {
 					int idx = COLORS.get(str).getFirst();
 					if (idx != -1) {
-						out = "!" + Character.toString(0x2801 + idx) + "!";
+						out = "!" + Character.toString(0x2801 + idx) + "¬";
 					}
 				} else {
 					out = switch (str) {
@@ -322,11 +322,15 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							int size = g2d.getFont().getSize();
 							g2d.drawImage(icon, x + 2, y - size + 1, size, size, null);
 						}
+					} else {
+						g2d.drawString(str, x, y);
 					}
-				}
-			}
 
-			g2d.drawString(str, x, y);
+					x += fm.stringWidth(str);
+				}
+			} else {
+				g2d.drawString(str, x, y);
+			}
 		};
 	}
 }
