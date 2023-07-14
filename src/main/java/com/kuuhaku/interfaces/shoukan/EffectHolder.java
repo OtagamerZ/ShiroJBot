@@ -74,8 +74,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			Map.entry("n", EMPTY)
 	);
 
-	char DC1 = '\u200B';
-	char DC2 = '\u200C';
+	String DC1 = "\u200B";
+	String DC2 = "\u200C";
 	String[] ICONS = {
 			"hp.png", "hp.png", "mp.png",
 			"degen.png", "regen.png", "blood.png",
@@ -191,13 +191,11 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						out = "!" + Character.toString(0x2801 + idx) + "!";
 					}
 				} else {
-					out = String.valueOf(
-							switch (str) {
-								case "b" -> DC1;
-								case "n" -> DC2;
-								default -> "";
-							}
-					);
+					out = switch (str) {
+						case "b" -> DC1;
+						case "n" -> DC2;
+						default -> "";
+					};
 				}
 			}
 
@@ -296,19 +294,26 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				x += 10;
 			}
 
-//			System.out.println(str);
+			DeckStyling style = getHand().getUserDeck().getStyling();
+			g2d.setColor(style.getFrame().getSecondaryColor());
+
 			FontMetrics fm = g2d.getFontMetrics();
-			for (String s : str.split("(?=!)")) {
-				if (s.charAt(0) == DC1) {
-					Graph.drawOutlinedString(g2d, s, x, y, 0.125f, g2d.getColor());
-				} else if (s.charAt(0) == DC2) {
-					if (Calc.luminance(g2d.getColor()) < 0.2) {
-						Graph.drawOutlinedString(g2d, s, x, y, 1.5f, new Color(255, 255, 255));
-					} else {
-						Graph.drawOutlinedString(g2d, s, x, y, 1.5f, new Color(0, 0, 0));
-					}
+			if (str.endsWith(DC1)) {
+				if (Calc.luminance(g2d.getColor()) < 0.2) {
+					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
 				} else {
-					if (s.startsWith("!")) {
+					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
+				}
+			} else if (str.endsWith(DC2)) {
+				Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
+			}
+
+			if (str.contains("!")) {
+				for (String s : str.split("!")) {
+					if (s.length() == 0) continue;
+
+					char code = s.charAt(0);
+					if (Utils.between(code, 0x2801, 0x2900)) {
 						String path = "shoukan/icons/" + ICONS[s.charAt(1) - 0x2801];
 
 						BufferedImage icon = IO.getResourceAsImage(path);
@@ -319,9 +324,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					} else {
 						g2d.drawString(s, x, y);
 					}
-				}
 
-				x += fm.stringWidth(s);
+					x += fm.stringWidth(s);
+				}
 			}
 		};
 	}
