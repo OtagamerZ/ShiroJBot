@@ -141,9 +141,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 									v = String.valueOf(obj);
 								}
 
-								val = frag.replaceFirst("\\{.+}", String.valueOf(Calc.round(NumberUtils.toFloat(v))));
+								val = frag.replaceFirst("\\{.+}", String.valueOf(Calc.round(NumberUtils.toFloat(v)))).trim();
 							} else {
-								val = frag.replaceFirst("\\{.+}", "");
+								val = frag.replaceFirst("\\{.+}", "").trim();
 							}
 
 							System.out.println("-> " + val);
