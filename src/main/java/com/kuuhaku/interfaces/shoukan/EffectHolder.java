@@ -321,13 +321,11 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							int size = g2d.getFont().getSize();
 							g2d.drawImage(icon, x + 2, y - size + 1, size, size, null);
 						}
-					} else {
-						g2d.drawString(s, x, y);
 					}
-
-					x += fm.stringWidth(s);
 				}
 			}
+
+			g2d.drawString(str, x, y);
 		};
 	}
 }
