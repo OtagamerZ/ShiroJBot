@@ -241,7 +241,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				List<Color> types = Utils.extractGroups(str, "([⠁-⣿])").parallelStream()
 						.map(o -> String.valueOf(o).charAt(0))
 						.map(c -> cols.parallelStream()
-								.filter(p -> p.getFirst() == c.charValue())
+								.filter(p -> p.getFirst() == c - 0x2801)
 								.map(Pair::getSecond)
 								.findAny().orElse(null)
 						)
