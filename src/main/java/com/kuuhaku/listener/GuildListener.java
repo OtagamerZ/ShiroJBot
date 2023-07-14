@@ -375,7 +375,7 @@ public class GuildListener extends ListenerAdapter {
     private void rollSpawns(GuildConfig config, I18N locale, Account acc) {
         GuildBuff gb = config.getCumBuffs();
         List<GuildMessageChannel> channels = config.getSettings().getKawaiponChannels();
-        if (!channels.isEmpty()) {
+        if (!channels.isEmpty() && Calc.chance(100d / channels.size())) {
             GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 
             KawaiponCard kc = Spawn.getKawaipon(locale, gb, chosen, acc.getUser());
@@ -400,7 +400,7 @@ public class GuildListener extends ListenerAdapter {
         }
 
         channels = config.getSettings().getDropChannels();
-        if (!channels.isEmpty()) {
+        if (!channels.isEmpty() && Calc.chance(100d / channels.size())) {
             GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 
             Drop drop = Spawn.getDrop(locale, gb, chosen, acc.getUser());
