@@ -144,8 +144,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 								val = frag.replaceFirst("\\{.+}", String.valueOf(Calc.round(NumberUtils.toFloat(v))));
 							}
 
-							System.out.println("-> " + str);
-							System.out.println("-< " + val);
+							System.out.println("-> " + val);
 							Set<Color> colors = new LinkedHashSet<>();
 							for (Object type : types) {
 								if (COLORS.containsKey(type)) {
@@ -159,6 +158,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 									}
 								}
 							}
+							System.out.println("-< " + val);
 
 							if (!colors.isEmpty()) {
 								g2d.setColor(Graph.mix(colors));
