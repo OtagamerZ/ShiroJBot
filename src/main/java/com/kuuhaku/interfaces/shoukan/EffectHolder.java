@@ -294,7 +294,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				x += 10;
 			}
 
-			DeckStyling style = getHand().getUserDeck().getStyling();
+			DeckStyling style = getHand() == null ? new DeckStyling() : getHand().getUserDeck().getStyling();
 			g2d.setColor(style.getFrame().getSecondaryColor());
 
 			FontMetrics fm = g2d.getFontMetrics();
