@@ -129,12 +129,11 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						types.add(groups.getString("tag"));
 					}
 
-					boolean tag = groups.has("tag");
 					String val = frag;
 					try {
 						if (!types.isEmpty()) {
 							Object obj = values.get(types.getString(0));
-							if (obj != null && !tag) {
+							if (obj != null && !groups.has("calc")) {
 								String v;
 								if (obj instanceof JSONArray a) {
 									v = String.valueOf(a.remove(0));
@@ -156,8 +155,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 									if (e.getSecond() != null) {
 										colors.add(e.getSecond());
 										if (!Utils.equalsAny(type, "data", "b", "n")) {
-											if (tag) {
-												val = "!" + Character.toString(0x2801 + e.getFirst()) + val + " ";
+											if (val.isBlank()) {
+												val = "!" + Character.toString(0x2801 + e.getFirst()) + " ";
 											} else {
 												val += "!" + Character.toString(0x2801 + e.getFirst()) + " ";
 											}
