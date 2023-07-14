@@ -178,7 +178,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				}
 			}
 
-			System.out.println(Utils.getOr(out, str));
+			System.out.print(Utils.getOr(out, str));
 			return Utils.getOr(out, str);
 		};
 	}
