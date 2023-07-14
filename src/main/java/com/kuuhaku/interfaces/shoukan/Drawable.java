@@ -216,7 +216,7 @@ public interface Drawable<T extends Drawable<T>> {
 
 		g2d.setFont(FONT);
 		FontMetrics m = g2d.getFontMetrics();
-		boolean aug = getTags().contains("tag/augment") && getHand() == null;
+		boolean aug = getTags().contains("tag/augment") && getSlot().getIndex() == -1;
 
 		{ // LEFT
 			int y = desc ? 225 : 291;
