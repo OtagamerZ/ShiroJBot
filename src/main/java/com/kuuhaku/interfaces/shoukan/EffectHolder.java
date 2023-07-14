@@ -159,7 +159,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 											if (tag) {
 												val = "!" + Character.toString(0x2801 + e.getFirst()) + val + " ";
 											} else {
-												val += " !" + Character.toString(0x2801 + e.getFirst());
+												val += "!" + Character.toString(0x2801 + e.getFirst()) + " ";
 											}
 										}
 									}
@@ -224,7 +224,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						BufferedImage icon = IO.getResourceAsImage(path);
 						if (icon != null) {
 							int size = g2d.getFont().getSize();
-							g2d.drawImage(icon, x, y - size + 1, size, size, null);
+							g2d.drawImage(icon, x + 2, y - size + 1, size, size, null);
 						}
 					} else {
 						g2d.drawString(s, x, y);
