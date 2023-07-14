@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class CachedScriptManager<T> {
+public class CachedScriptManager {
 	private final Map<String, Object> context = new HashMap<>();
 	private final JSONObject storedProps = new JSONObject();
 	private final AtomicInteger propHash = new AtomicInteger();
@@ -34,19 +34,19 @@ public class CachedScriptManager<T> {
 	@Language("Groovy")
 	private String code;
 
-	public CachedScriptManager<T> forScript(@Language("Groovy") String code) {
+	public CachedScriptManager forScript(@Language("Groovy") String code) {
 		this.code = code;
 		return this;
 	}
 
-	public CachedScriptManager<T> withConst(String key, Object value) {
+	public CachedScriptManager withConst(String key, Object value) {
 		if (value == null || context.containsKey(key)) return this;
 		context.put(key, value);
 
 		return this;
 	}
 
-	public CachedScriptManager<T> withVar(String key, Object value) {
+	public CachedScriptManager withVar(String key, Object value) {
 		if (value == null) return this;
 
 		context.compute(key, (k, v) -> {

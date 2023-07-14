@@ -97,7 +97,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private transient CardExtra stats = new CardExtra();
 	private transient Hand hand = null;
 	private transient Hand leech = null;
-	private transient CachedScriptManager<Evogear> cachedEffect = new CachedScriptManager<>();
+	private transient CachedScriptManager cachedEffect = new CachedScriptManager();
 
 	@Transient
 	private byte state = 0b10;
@@ -379,7 +379,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public CachedScriptManager<Evogear> getCSM() {
+	public CachedScriptManager getCSM() {
+		if (cachedEffect.getStoredProps().isEmpty()) {
+			parseDescription(getGame().getLocale());
+		}
+
 		return cachedEffect;
 	}
 
@@ -398,7 +402,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 		Shoukan game = getGame();
 		try {
-			cachedEffect.forScript(getEffect())
+			CachedScriptManager csm = getCSM();
+
+			csm.forScript(getEffect())
 					.withConst("evo", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
@@ -408,10 +414,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					.withVar("trigger", ep.trigger());
 
 			if (!isSpell()) {
-				cachedEffect.withVar("self", equipper);
+				csm.withVar("self", equipper);
 			}
 
-			cachedEffect.run();
+			csm.run();
 
 			stats.popFlag(Flag.EMPOWERED);
 			if (!Utils.equalsAny(ep.trigger(), ON_TICK, ON_EFFECT)) {
@@ -490,7 +496,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (leech != null) {
 			leech.getLeeches().remove(this);
 		}
-		cachedEffect = new CachedScriptManager<>();
 
 		state = 0b11;
 	}

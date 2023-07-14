@@ -121,7 +121,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient Hand leech = null;
 	private transient Senshi target = null;
 	private transient Senshi lastInteraction = null;
-	private transient CachedScriptManager<Senshi> cachedEffect = new CachedScriptManager<>();
+	private transient CachedScriptManager cachedEffect = new CachedScriptManager();
 	private transient Set<Drawable<?>> blocked = new HashSet<>();
 
 	@Transient
@@ -1007,7 +1007,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public CachedScriptManager<Senshi> getCSM() {
+	public CachedScriptManager getCSM() {
+		if (cachedEffect.getStoredProps().isEmpty()) {
+			parseDescription(getGame().getLocale());
+		}
+
 		return cachedEffect;
 	}
 
@@ -1100,7 +1104,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
 					}
 				} else {
-					cachedEffect.forScript(getEffect())
+					getCSM().forScript(getEffect())
 							.withConst("self", this)
 							.withConst("game", getGame())
 							.withConst("data", stats.getData())

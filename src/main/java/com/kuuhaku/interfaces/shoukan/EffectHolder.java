@@ -109,7 +109,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default void executeAssert(Trigger trigger) {
 	}
 
-	CachedScriptManager<T> getCSM();
+	CachedScriptManager getCSM();
 
 	default String parseDescription(I18N locale) {
 		Hand h = getHand();
@@ -129,7 +129,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Map.entry("data", getStats().getData())
 		);
 
-		CachedScriptManager<T> csm = getCSM();
+		CachedScriptManager csm = getCSM();
 		if (csm.getPropHash().intValue() != values.hashCode()) {
 			csm.getStoredProps().clear();
 		}
