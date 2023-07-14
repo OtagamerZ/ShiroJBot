@@ -155,7 +155,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				}
 
 				if (out.isBlank()) {
-					out = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str, values));
+					out = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
 
 					if (csm.getStoredProps().isEmpty()) {
 						String val = out;
