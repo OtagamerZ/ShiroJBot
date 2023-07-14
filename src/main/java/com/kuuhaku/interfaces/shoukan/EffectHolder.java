@@ -225,9 +225,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
 
 				if (Calc.luminance(g2d.getColor()) < 0.2) {
-					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
+					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, Color.WHITE);
 				} else {
-					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
+					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, Color.BLACK);
 				}
 
 				return;
@@ -265,7 +265,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
 						g2d.setColor(Graph.mix(types));
 
-						Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
+						Graph.drawOutlinedString(g2d, s, x, y, 1.5f, Color.BLACK);
 						g2d.drawString(s, x, y);
 						x += fm.stringWidth(s);
 					}
