@@ -694,7 +694,6 @@ public abstract class Utils {
             repls.put("%user%", mb.getAsMention());
             repls.put("%user.id%", mb.getId());
             repls.put("%user.name%", mb.getEffectiveName());
-            repls.put("%user.tag%", mb.getUser().getAsTag());
         }
 
         if (guild != null) {
@@ -706,7 +705,6 @@ public abstract class Utils {
                 repls.put("%guild.owner%", owner.getAsMention());
                 repls.put("%guild.owner.id%", owner.getId());
                 repls.put("%guild.owner.name%", owner.getEffectiveName());
-                repls.put("%guild.owner.tag%", owner.getUser().getAsTag());
             }
         }
 
