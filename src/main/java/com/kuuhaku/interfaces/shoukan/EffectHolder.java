@@ -299,13 +299,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			g2d.setColor(style.getFrame().getSecondaryColor());
 
 			FontMetrics fm = g2d.getFontMetrics();
-			if (str.endsWith(DC1)) {
+			if (str.contains(DC1)) {
 				if (Calc.luminance(g2d.getColor()) < 0.2) {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
 				} else {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
 				}
-			} else if (str.endsWith(DC2)) {
+			} else if (str.contains(DC2)) {
 				Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
 			}
 

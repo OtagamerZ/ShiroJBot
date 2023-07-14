@@ -532,6 +532,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 						y += 11;
 					}
 
+					g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
+					g2d.setColor(style.getFrame().getSecondaryColor());
+
 					Graph.drawMultilineString(g1, parseDescription(locale),
 							7, y, 211, 3,
 							highlightValues(g1, style.getFrame().isLegacy())
