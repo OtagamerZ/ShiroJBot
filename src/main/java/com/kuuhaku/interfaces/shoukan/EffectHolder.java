@@ -157,9 +157,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 										colors.add(e.getSecond());
 										if (!Utils.equalsAny(type, "data", "b", "n")) {
 											if (tag) {
-												val = "!" + Character.toString(0x2801 + e.getFirst()) + val;
+												val = "!" + Character.toString(0x2801 + e.getFirst()) + val + " ";
 											} else {
-												val += " !" + Character.toString(0x2801 + e.getFirst()) + " ";
+												val += " !" + Character.toString(0x2801 + e.getFirst());
 											}
 										}
 									}
