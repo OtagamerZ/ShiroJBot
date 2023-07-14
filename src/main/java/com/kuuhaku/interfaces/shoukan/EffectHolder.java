@@ -295,6 +295,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				x += 10;
 			}
 
+			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
 			g2d.setColor(style.getFrame().getSecondaryColor());
 
 			FontMetrics fm = g2d.getFontMetrics();
