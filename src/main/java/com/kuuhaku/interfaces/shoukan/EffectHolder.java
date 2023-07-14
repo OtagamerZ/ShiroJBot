@@ -113,12 +113,14 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	default String parseDescription(I18N locale) {
 		Hand h = getHand();
+		boolean inGame = h.getGame() != null;
+
 		Map<String, Object> values = Map.ofEntries(
-				Map.entry("php", h == null ? 6000 : h.getHP()),
-				Map.entry("bhp", h == null ? 6000 : h.getBase().hp()),
-				Map.entry("pmp", h == null ? 5 : h.getMP()),
-				Map.entry("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek())),
-				Map.entry("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek())),
+				Map.entry("php", inGame ? h.getHP() : 6000),
+				Map.entry("bhp", inGame ? h.getBase().hp() : 6000),
+				Map.entry("pmp", inGame ? h.getMP() : 5),
+				Map.entry("pdg", inGame ? Math.max(0, -h.getRegDeg().peek()) : 0),
+				Map.entry("prg", inGame ? Math.max(0, h.getRegDeg().peek()) : 0),
 				Map.entry("mp", getMPCost()),
 				Map.entry("hp", getHPCost()),
 				Map.entry("atk", getDmg()),

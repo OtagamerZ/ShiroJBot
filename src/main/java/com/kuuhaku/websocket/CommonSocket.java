@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -128,14 +129,16 @@ public class CommonSocket extends WebSocketClient {
 						default -> DAO.find(Senshi.class, id);
 					};
 
-					String b64;
+					Deck dk;
 					if (DAO.queryNative(Integer.class, "SELECT count(1) FROM account WHERE uid = ?1", payload.getString("uid")) > 0) {
 						Account acc = DAO.find(Account.class, payload.getString("uid"));
-						b64 = IO.ctob(d.render(payload.getEnum(I18N.class, "locale"), acc.getCurrentDeck()), "png");
+						dk = acc.getCurrentDeck();
 					} else {
-						b64 = IO.ctob(d.render(payload.getEnum(I18N.class, "locale"), new Deck()), "png");
+						dk = new Deck();
 					}
 
+					d.setHand(new Hand(payload.getString("uid"), dk));
+					String b64 = IO.ctob(d.render(payload.getEnum(I18N.class, "locale"), dk), "png");
 					send(JSONObject.of(
 							Map.entry("type", "DELIVERY"),
 							Map.entry("key", Hex.encodeHexString(md.digest())),
