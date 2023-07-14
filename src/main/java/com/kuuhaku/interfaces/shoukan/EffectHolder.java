@@ -159,7 +159,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 											if (tag) {
 												val = "!" + Character.toString(0x2801 + e.getFirst()) + val;
 											} else {
-												val += "!" + Character.toString(0x2801 + e.getFirst()) + " ";
+												val += " !" + Character.toString(0x2801 + e.getFirst()) + " ";
 											}
 										}
 									}
