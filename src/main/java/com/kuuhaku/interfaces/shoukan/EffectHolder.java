@@ -323,10 +323,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							g2d.drawImage(icon, x + 2, y - size + 1, size, size, null);
 						}
 					} else {
-						g2d.drawString(str, x, y);
+						g2d.drawString(s, x, y);
 					}
 
-					x += fm.stringWidth(str);
+					x += fm.stringWidth(s);
 				}
 			} else {
 				g2d.drawString(str, x, y);
