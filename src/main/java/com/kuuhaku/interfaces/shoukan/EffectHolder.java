@@ -314,7 +314,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 					char code = s.charAt(0);
 					if (Utils.between(code, 0x2801, 0x2900)) {
-						String path = "shoukan/icons/" + ICONS[s.charAt(1) - 0x2801];
+						String path = "shoukan/icons/" + ICONS[s.charAt(0) - 0x2801];
 
 						BufferedImage icon = IO.getResourceAsImage(path);
 						if (icon != null) {
