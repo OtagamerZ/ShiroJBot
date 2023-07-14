@@ -34,19 +34,17 @@ import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
-import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.LinkedHashSet;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
@@ -182,14 +180,14 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				}
 
 				out += types.stream()
-						.map(t -> "!" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
+						.map(t -> "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
 						.collect(Collectors.joining("¬"));
 			} else {
 				Pair<Integer, Color> idx = COLORS.get(str);
 
 				if (idx != null) {
 					if (idx.getFirst() != -1) {
-						out = "!" + Character.toString(0x2801 + idx.getFirst());
+						out = "§" + Character.toString(0x2801 + idx.getFirst());
 					} else {
 						out = switch (str) {
 							case "b" -> DC1;
@@ -202,83 +200,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 			return Matcher.quoteReplacement(out);
 		});
-	}
-
-	default Function<String, String> parseValues(Graphics2D g2d, DeckStyling style, JSONObject values) {
-		return str -> {
-			String out = "";
-			for (String frag : str.split("(?<=})(?=\\{)")) {
-				JSONObject groups = Utils.extractNamedGroups(frag, "\\{=(?<calc>.*?)}|\\{(?<tag>\\w+)}");
-
-				g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
-				g2d.setColor(style.getFrame().getSecondaryColor());
-
-				if (!groups.isEmpty()) {
-					JSONArray types = new JSONArray();
-					if (groups.has("calc")) {
-						types.addAll(Utils.extractGroups(groups.getString("calc"), "\\$(\\w+)"));
-					} else {
-						types.add(groups.getString("tag"));
-					}
-
-					String val = frag;
-					try {
-						if (!types.isEmpty()) {
-							Object obj = values.get(types.getString(0));
-							if (obj != null && groups.has("calc")) {
-								String v;
-								if (obj instanceof JSONArray a) {
-									v = String.valueOf(a.remove(0));
-								} else {
-									v = String.valueOf(obj);
-								}
-
-								val = frag.replaceFirst("\\{.+}", String.valueOf(Calc.round(NumberUtils.toFloat(v))));
-							} else {
-								val = frag.replaceFirst("\\{.+}", "");
-							}
-
-							Set<Color> colors = new LinkedHashSet<>();
-							for (Object type : types) {
-								if (COLORS.containsKey(type)) {
-									Pair<Integer, Color> e = COLORS.get(type);
-
-									if (e.getSecond() != null) {
-										colors.add(e.getSecond());
-										if (!Utils.equalsAny(type, "data", "b", "n")) {
-											if (val.isBlank()) {
-												val = "!" + Character.toString(0x2801 + e.getFirst()) + " ";
-											} else {
-												val += "!" + Character.toString(0x2801 + e.getFirst()) + " ";
-											}
-										}
-									}
-								}
-							}
-
-							if (!colors.isEmpty()) {
-								g2d.setColor(Graph.mix(colors));
-								if (!Utils.containsAny(types, "enemy", "ally")) {
-									g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
-								}
-							}
-
-							if (types.contains("n")) {
-								val = DC1 + val;
-							} else if (!Utils.containsAny(types, "enemy", "ally")) {
-								val = DC2 + val;
-							}
-						}
-
-						out += val.replaceAll("\\{.+}", "");
-					} catch (Exception e) {
-						out += frag;
-					}
-				}
-			}
-
-			return Utils.getOr(out, str);
-		};
 	}
 
 	default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d, boolean legacy) {
@@ -301,7 +222,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 			FontMetrics fm = g2d.getFontMetrics();
 			if (str.contains(DC1)) {
-				System.out.println("shade");
+				g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
+
 				if (Calc.luminance(g2d.getColor()) < 0.2) {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
 				} else {
@@ -314,8 +236,19 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				return;
 			}
 
-			if (str.contains("!")) {
-				for (String s : str.split("!(?=[⠁-⣿])|¬!?|(?<=[⠁-⣿])")) {
+			if (str.contains("§")) {
+				Collection<Pair<Integer, Color>> cols = COLORS.values();
+				List<Color> types = Utils.extractGroups(str, "([⠁-⣿])").parallelStream()
+						.map(o -> String.valueOf(o).charAt(0))
+						.map(c -> cols.parallelStream()
+								.filter(p -> p.getFirst() == c.charValue())
+								.map(Pair::getSecond)
+								.findAny().orElse(null)
+						)
+						.filter(Objects::nonNull)
+						.toList();
+
+				for (String s : str.split("§(?=[⠁-⣿])|¬§?|(?<=[⠁-⣿])")) {
 					if (s.length() == 0) continue;
 
 					char code = s.charAt(0);
@@ -329,6 +262,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							x += size + 2;
 						}
 					} else {
+						g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
+						g2d.setColor(Graph.mix(types));
+
+						Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(255, 255, 255));
 						g2d.drawString(s, x, y);
 						x += fm.stringWidth(s);
 					}
