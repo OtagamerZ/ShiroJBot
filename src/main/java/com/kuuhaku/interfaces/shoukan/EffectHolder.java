@@ -307,8 +307,11 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				} else {
 					Graph.drawOutlinedString(g2d, str, x, y, 1.5f, new Color(0, 0, 0));
 				}
+
+				return;
 			} else if (str.contains(DC2)) {
 				Graph.drawOutlinedString(g2d, str, x, y, 0.125f, g2d.getColor());
+				return;
 			}
 
 			if (str.contains("!")) {
