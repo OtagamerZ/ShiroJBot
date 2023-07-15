@@ -41,10 +41,8 @@ import org.apache.logging.log4j.util.TriConsumer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
@@ -147,32 +145,31 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 			String out = "";
 			if (!tag) {
-				JSONArray types = Utils.extractGroups(str, "\\$(\\w+)");
+				LinkedHashSet<Object> types = new LinkedHashSet<>(Utils.extractGroups(str, "\\$(\\w+)"));
+				String main = types.stream().map(String::valueOf).findFirst().orElse(null);
 
 				JSONObject props = csm.getStoredProps();
-				if (!Utils.equalsAny(types.getString(0), props.keySet())) {
+				if (!Utils.equalsAny(main, props.keySet())) {
 					String val = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
 
-					if (props.isEmpty()) {
-						for (Object type : types) {
-							props.compute(String.valueOf(type), (k, v) -> {
-								int value = Calc.round(NumberUtils.toDouble(val) * getPower());
+					for (Object type : types) {
+						props.compute(String.valueOf(type), (k, v) -> {
+							int value = Calc.round(NumberUtils.toDouble(val) * getPower());
 
-								if (v == null) {
-									return value;
-								} else if (v instanceof JSONArray a) {
-									a.add(value);
-									return a;
-								}
+							if (v == null) {
+								return value;
+							} else if (v instanceof JSONArray a) {
+								a.add(value);
+								return a;
+							}
 
-								return new JSONArray(List.of(v, value));
-							});
-						}
+							return new JSONArray(List.of(v, value));
+						});
 					}
 				}
 
 				Number val;
-				Object prop = props.get(types.getString(0), "");
+				Object prop = props.get(main, "");
 				if (prop instanceof JSONArray a) {
 					val = NumberUtils.toDouble(String.valueOf(a.remove(0)));
 				} else {
