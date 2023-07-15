@@ -137,10 +137,11 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		}
 
 		String desc = getDescription(locale);
-		Matcher pat = Utils.regex(desc, "\\{=(.*?)}|\\{(\\w+)}");
+		Matcher pat = Utils.regex(desc, "(?:\\{=(.*?)}|\\{(\\w+)})(%)?");
 
 		return pat.replaceAll(m -> {
 			boolean tag = m.group(2) != null;
+			boolean prcnt = m.group(3) != null;
 			String str = tag ? m.group(2) : m.group(1);
 
 			String out = "";
@@ -179,6 +180,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							});
 						}
 					}
+				}
+
+				if (prcnt) {
+					out += "%";
 				}
 
 				out += types.stream()
