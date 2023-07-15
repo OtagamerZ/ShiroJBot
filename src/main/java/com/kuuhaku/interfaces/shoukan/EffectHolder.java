@@ -34,6 +34,7 @@ import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.util.TriConsumer;
@@ -148,26 +149,14 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			if (!tag) {
 				JSONArray types = Utils.extractGroups(str, "\\$(\\w+)");
 
-				Object prop = csm.getStoredProps().get(types.getString(0), "");
-				if (prop instanceof JSONArray a) {
-					out = String.valueOf(a.remove(0));
-				} else {
-					out = String.valueOf(prop);
-				}
+				JSONObject props = csm.getStoredProps();
+				if (!Utils.equalsAny(types.getString(0), props.keySet())) {
+					String val = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
 
-				if (out.isBlank()) {
-					out = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
-
-					if (csm.getStoredProps().isEmpty()) {
-						String val = out;
+					if (props.isEmpty()) {
 						for (Object type : types) {
-							csm.getStoredProps().compute(String.valueOf(type), (k, v) -> {
-								int value;
-								if (!k.equals("data")) {
-									value = Calc.round(NumberUtils.toDouble(val) * getPower());
-								} else {
-									value = Calc.round(NumberUtils.toDouble(val));
-								}
+							props.compute(String.valueOf(type), (k, v) -> {
+								int value = Calc.round(NumberUtils.toDouble(val) * getPower());
 
 								if (v == null) {
 									return value;
@@ -182,6 +171,15 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					}
 				}
 
+				Number val;
+				Object prop = props.get(types.getString(0), "");
+				if (prop instanceof JSONArray a) {
+					val = (Number) a.remove(0);
+				} else {
+					val = (Number) prop;
+				}
+
+				out = String.valueOf(Calc.round(val.doubleValue() * getPower()));
 				if (prcnt) {
 					out += "%";
 				}
