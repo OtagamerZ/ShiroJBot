@@ -174,9 +174,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Number val;
 				Object prop = props.get(types.getString(0), "");
 				if (prop instanceof JSONArray a) {
-					val = (Number) a.remove(0);
+					val = NumberUtils.toDouble(String.valueOf(a.remove(0)));
 				} else {
-					val = (Number) prop;
+					val = NumberUtils.toDouble(String.valueOf(prop));
 				}
 
 				out = String.valueOf(Calc.round(val.doubleValue() * getPower()));
