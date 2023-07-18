@@ -197,7 +197,7 @@ public class SynthesizeCommand implements Executable {
                                         Set<Rarity> rarities = EnumSet.noneOf(Rarity.class);
                                         for (StashedCard sc : cards) {
                                             if (sc.getType() == CardType.KAWAIPON) {
-                                                KawaiponCard kc = sc.getKawaiponCard(false);
+                                                KawaiponCard kc = sc.getKawaiponCard();
                                                 if (kc != null) {
                                                     kc.delete();
                                                     rarities.add(kc.getCard().getRarity());

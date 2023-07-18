@@ -137,7 +137,7 @@ public class StashScrapCommand implements Executable {
 						Bag<UserItem> items = new HashBag<>();
 						for (StashedCard sc : cards) {
 							if (sc.getType() == CardType.KAWAIPON) {
-								KawaiponCard kc = sc.getKawaiponCard(false);
+								KawaiponCard kc = sc.getKawaiponCard();
 								if (kc != null) {
 									kc.delete();
 

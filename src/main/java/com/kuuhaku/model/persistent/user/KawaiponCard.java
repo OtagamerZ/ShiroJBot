@@ -64,7 +64,9 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	private transient StashedCard stashEntry;
+	@OneToOne(mappedBy = "kawaiponCard")
+	@Fetch(FetchMode.JOIN)
+	private StashedCard stashEntry;
 
 	public KawaiponCard() {
 	}
@@ -133,10 +135,6 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	}
 
 	public StashedCard getStashEntry() {
-		if (stashEntry == null) {
-			stashEntry = DAO.query(StashedCard.class, "SELECT sc FROM StashedCard sc WHERE sc.uuid = ?1", uuid);
-		}
-
 		return stashEntry;
 	}
 
