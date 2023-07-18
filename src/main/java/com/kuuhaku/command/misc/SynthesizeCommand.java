@@ -63,265 +63,265 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Command(
-        name = "synth",
-        category = Category.MISC
+		name = "synth",
+		category = Category.MISC
 )
 @Signature({
-        "<material:word:r>[common_shard,uncommon_shard,rare_shard,epic_shard,legendary_shard]",
-        "<cards:text:r>"
+		"<material:word:r>[common_shard,uncommon_shard,rare_shard,epic_shard,legendary_shard]",
+		"<cards:text:r>"
 })
 @Requires({
-        Permission.MESSAGE_EMBED_LINKS,
-        Permission.MESSAGE_ATTACH_FILES
+		Permission.MESSAGE_EMBED_LINKS,
+		Permission.MESSAGE_ATTACH_FILES
 })
 public class SynthesizeCommand implements Executable {
-    @Override
-    public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-        if (args.has("material")) {
-            synthShards(
-                    locale,
-                    event.channel(),
-                    data.profile().getAccount(),
-                    DAO.find(UserItem.class, args.getString("material").toUpperCase())
-            );
-            return;
-        }
+	@Override
+	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		if (args.has("material")) {
+			synthShards(
+					locale,
+					event.channel(),
+					data.profile().getAccount(),
+					DAO.find(UserItem.class, args.getString("material").toUpperCase())
+			);
+			return;
+		}
 
-        List<StashedCard> cards = new ArrayList<>();
-        List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
+		List<StashedCard> cards = new ArrayList<>();
+		List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
 
-        String[] ids = args.getString("cards").split(" ");
-        for (String id : ids) {
-            Card c = DAO.find(Card.class, id.toUpperCase());
-            if (c == null) {
-                List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM v_card_names");
+		String[] ids = args.getString("cards").split(" ");
+		for (String id : ids) {
+			Card c = DAO.find(Card.class, id.toUpperCase());
+			if (c == null) {
+				List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM v_card_names");
 
-                Pair<String, Double> sug = Utils.didYouMean(id.toUpperCase(), names);
-                event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
-                return;
-            }
+				Pair<String, Double> sug = Utils.didYouMean(id.toUpperCase(), names);
+				event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
+				return;
+			}
 
-            CompletableFuture<Boolean> success = new CompletableFuture<>();
-            Utils.selectOption(locale, event.channel(), stash, c, event.user())
-                    .thenAccept(sc -> {
-                        if (sc == null) {
-                            event.channel().sendMessage(locale.get("error/invalid_value")).queue();
-                            success.complete(false);
-                            return;
-                        } else if (cards.contains(sc)) {
-                            event.channel().sendMessage(locale.get("error/twice_added")).queue();
-                            success.complete(false);
-                            return;
-                        }
+			CompletableFuture<Boolean> success = new CompletableFuture<>();
+			Utils.selectOption(locale, event.channel(), stash, c, event.user())
+					.thenAccept(sc -> {
+						if (sc == null) {
+							event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+							success.complete(false);
+							return;
+						} else if (cards.contains(sc)) {
+							event.channel().sendMessage(locale.get("error/twice_added")).queue();
+							success.complete(false);
+							return;
+						}
 
-                        cards.add(sc);
-                        stash.remove(sc);
-                        success.complete(true);
-                    })
-                    .exceptionally(t -> {
-                        if (!(t.getCause() instanceof NoResultException)) {
-                            Constants.LOGGER.error(t, t);
-                        }
+						cards.add(sc);
+						stash.remove(sc);
+						success.complete(true);
+					})
+					.exceptionally(t -> {
+						if (!(t.getCause() instanceof NoResultException)) {
+							Constants.LOGGER.error(t, t);
+						}
 
-                        event.channel().sendMessage(locale.get("error/not_owned")).queue();
-                        success.complete(false);
-                        return null;
-                    });
+						event.channel().sendMessage(locale.get("error/not_owned")).queue();
+						success.complete(false);
+						return null;
+					});
 
-            try {
-                if (!success.get()) return;
-            } catch (InterruptedException | ExecutionException ignore) {
-            }
-        }
+			try {
+				if (!success.get()) return;
+			} catch (InterruptedException | ExecutionException ignore) {
+			}
+		}
 
-        if (cards.size() < 3) {
-            event.channel().sendMessage(locale.get("error/invalid_synth_material")).queue();
-            return;
-        }
+		if (cards.size() < 3) {
+			event.channel().sendMessage(locale.get("error/invalid_synth_material")).queue();
+			return;
+		}
 
-        try {
-            double mult = getMult(cards);
-            AtomicBoolean lucky = new AtomicBoolean();
-            int field = (int) Math.round(
-                    cards.stream()
-                            .mapToDouble(sc -> {
-                                if (sc.getKawaiponCard() != null && sc.getKawaiponCard().isChrome()) {
-                                    return 100 / 3d;
-                                }
+		try {
+			double mult = getMult(cards);
+			AtomicBoolean lucky = new AtomicBoolean();
+			int field = (int) Math.round(
+					cards.stream()
+							.mapToDouble(sc -> {
+								if (sc.getKawaiponCard() != null && sc.getKawaiponCard().isChrome()) {
+									return 100 / 3d;
+								}
 
-                                return 0;
-                            }).sum()
-            );
+								return 0;
+							}).sum()
+			);
 
-            Account acc = data.profile().getAccount();
-            EmbedBuilder eb = new ColorlessEmbedBuilder()
-                    .setDescription(locale.get("str/synthesis_info", Utils.roundToString(mult, 2) + "x", field));
+			Account acc = data.profile().getAccount();
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.setDescription(locale.get("str/synthesis_info", Utils.roundToString(mult, 2) + "x", field));
 
-            User usr = event.user();
-            if (Utils.CONFIMATIONS.contains(usr.getId())) throw new PendingConfirmationException();
+			User usr = event.user();
+			if (Utils.CONFIMATIONS.contains(usr.getId())) throw new PendingConfirmationException();
 
-            Utils.lock(usr);
+			Utils.lock(usr);
 
-            AtomicBoolean lock = new AtomicBoolean(false);
-            event.channel().sendMessage(locale.get("question/synth"))
-                    .setEmbeds(eb.build())
-                    .queue(s -> Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
-                                m.put(Utils.parseEmoji("1103779997317087364"), w -> {
-                                    Button btn = w.getButton();
-                                    assert btn != null;
+			AtomicBoolean lock = new AtomicBoolean(false);
+			event.channel().sendMessage(locale.get("question/synth"))
+					.setEmbeds(eb.build())
+					.queue(s -> Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
+								m.put(Utils.parseEmoji("1103779997317087364"), w -> {
+									Button btn = w.getButton();
+									assert btn != null;
 
-                                    String id = btn.getId();
-                                    assert id != null;
+									String id = btn.getId();
+									assert id != null;
 
-                                    if (acc.getItemCount("CHROMATIC_ESSENCE") == 0) {
-                                        event.channel().sendMessage(locale.get("error/no_chromatic")).queue();
-                                        return;
-                                    }
+									if (acc.getItemCount("CHROMATIC_ESSENCE") == 0) {
+										event.channel().sendMessage(locale.get("error/no_chromatic")).queue();
+										return;
+									}
 
-                                    lucky.set(true);
-                                    Page p = InteractPage.of(new ColorlessEmbedBuilder()
-                                            .setDescription(locale.get("str/synthesis_info",
-                                                    Utils.roundToString(mult, 2) + "x <:chromatic_essence:1103779997317087364>",
-                                                    field
-                                            )).build()
-                                    );
+									lucky.set(true);
+									Page p = InteractPage.of(new ColorlessEmbedBuilder()
+											.setDescription(locale.get("str/synthesis_info",
+													Utils.roundToString(mult, 2) + "x <:chromatic_essence:1103779997317087364>",
+													field
+											)).build()
+									);
 
-                                    Pages.modifyButtons(w.getMessage(), p, Map.of(
-                                            btn.getId(), Button::asDisabled
-                                    ));
-                                });
-                                m.put(Utils.parseEmoji(Constants.ACCEPT), w -> {
-                                    if (!lock.get()) {
-                                        Kawaipon kp = data.profile().getAccount().getKawaipon();
+									Pages.modifyButtons(w.getMessage(), p, Map.of(
+											btn.getId(), Button::asDisabled
+									));
+								});
+								m.put(Utils.parseEmoji(Constants.ACCEPT), w -> {
+									if (!lock.get()) {
+										Kawaipon kp = data.profile().getAccount().getKawaipon();
 
-                                        Set<Rarity> rarities = EnumSet.noneOf(Rarity.class);
-                                        for (StashedCard sc : cards) {
-                                            if (sc.getType() == CardType.KAWAIPON) {
-                                                KawaiponCard kc = sc.getKawaiponCard();
-                                                if (kc != null) {
-                                                    kc.delete();
-                                                    rarities.add(kc.getCard().getRarity());
-                                                }
-                                            }
+										Set<Rarity> rarities = EnumSet.noneOf(Rarity.class);
+										for (StashedCard sc : cards) {
+											if (sc.getType() == CardType.KAWAIPON) {
+												KawaiponCard kc = sc.getKawaiponCard();
+												if (kc != null) {
+													kc.delete();
+													rarities.add(kc.getCard().getRarity());
+												}
+											}
 
-                                            sc.delete();
-                                        }
+											sc.delete();
+										}
 
-                                        if (rarities.size() >= 5) {
-                                            UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
-                                            if (item != null) {
-                                                acc.addItem(item, 1);
-                                                event.channel().sendMessage(locale.get("str/received_item", 1, item.toString(locale))).queue();
-                                            }
-                                        }
+										if (rarities.size() >= 5) {
+											UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
+											if (item != null) {
+												acc.addItem(item, 1);
+												event.channel().sendMessage(locale.get("str/received_item", 1, item.toString(locale))).queue();
+											}
+										}
 
-                                        if (lucky.get()) {
-                                            acc.consumeItem("CHROMATIC_ESSENCE");
-                                        }
+										if (lucky.get()) {
+											acc.consumeItem("CHROMATIC_ESSENCE");
+										}
 
-                                        if (Calc.chance(field)) {
-                                            Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
-                                            new StashedCard(kp, f.getCard(), CardType.FIELD).save();
+										if (Calc.chance(field)) {
+											Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
+											new StashedCard(kp, f).save();
 
-                                            event.channel().sendMessage(locale.get("success/synth", f))
-                                                    .addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png"))
-                                                    .queue();
-                                        } else {
-                                            Evogear e = rollSynthesis(event.user(), mult, lucky.get());
-                                            new StashedCard(kp, e.getCard(), CardType.EVOGEAR).save();
+											event.channel().sendMessage(locale.get("success/synth", f))
+													.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png"))
+													.queue();
+										} else {
+											Evogear e = rollSynthesis(event.user(), mult, lucky.get());
+											new StashedCard(kp, e).save();
 
-                                            event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
-                                                    .addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png"))
-                                                    .queue();
-                                        }
+											event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
+													.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png"))
+													.queue();
+										}
 
-                                        lock.set(true);
-                                        w.getMessage().delete().queue(null, Utils::doNothing);
-                                        Utils.unlock(usr);
-                                    }
-                                });
-                            }), true, true, 1, TimeUnit.MINUTES,
-                            u -> u.equals(usr),
-                            c -> Utils.unlock(usr)
-                    ));
-        } catch (PendingConfirmationException e) {
-            event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
-        }
-    }
+										lock.set(true);
+										w.getMessage().delete().queue(null, Utils::doNothing);
+										Utils.unlock(usr);
+									}
+								});
+							}), true, true, 1, TimeUnit.MINUTES,
+							u -> u.equals(usr),
+							c -> Utils.unlock(usr)
+					));
+		} catch (PendingConfirmationException e) {
+			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+		}
+	}
 
-    private static void synthShards(I18N locale, MessageChannel channel, Account acc, UserItem shard) {
-        if (acc.getItemCount(shard.getId()) < 10) {
-            channel.sendMessage(locale.get("error/not_enough_shards")).queue();
-            return;
-        }
+	private static void synthShards(I18N locale, MessageChannel channel, Account acc, UserItem shard) {
+		if (acc.getItemCount(shard.getId()) < 10) {
+			channel.sendMessage(locale.get("error/not_enough_shards")).queue();
+			return;
+		}
 
-        try {
-            Rarity r = Rarity.valueOf(shard.getId().split("_")[0]);
+		try {
+			Rarity r = Rarity.valueOf(shard.getId().split("_")[0]);
 
-            Utils.confirm(locale.get("question/synth_shards", shard.getName(locale), locale.get("rarity/" + r)), channel, w -> {
-                        Kawaipon kp = acc.getKawaipon();
-                        acc.consumeItem(shard, 10);
+			Utils.confirm(locale.get("question/synth_shards", shard.getName(locale), locale.get("rarity/" + r)), channel, w -> {
+						Kawaipon kp = acc.getKawaipon();
+						acc.consumeItem(shard, 10);
 
-                        List<Card> pool = DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE c.anime.visible = TRUE AND c.rarity = ?1", r);
-                        KawaiponCard kc = new KawaiponCard(Utils.getRandomEntry(pool), false);
-                        kc.setKawaipon(kp);
-                        kc.save();
-                        new StashedCard(kp, kc).save();
+						List<Card> pool = DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE c.anime.visible = TRUE AND c.rarity = ?1", r);
+						KawaiponCard kc = new KawaiponCard(Utils.getRandomEntry(pool), false);
+						kc.setKawaipon(kp);
+						kc.save();
 
-                        channel.sendMessage(locale.get("success/synth", kc))
-                                .addFiles(FileUpload.fromData(IO.getBytes(kc.render(), "png"), "synth.png"))
-                                .queue();
+						new StashedCard(kp, kc).save();
+						channel.sendMessage(locale.get("success/synth", kc))
+								.addFiles(FileUpload.fromData(IO.getBytes(kc.render(), "png"), "synth.png"))
+								.queue();
 
-                        return true;
-                    }, acc.getUser()
-            );
-        } catch (PendingConfirmationException e) {
-            channel.sendMessage(locale.get("error/pending_confirmation")).queue();
-        }
-    }
+						return true;
+					}, acc.getUser()
+			);
+		} catch (PendingConfirmationException e) {
+			channel.sendMessage(locale.get("error/pending_confirmation")).queue();
+		}
+	}
 
-    public static Evogear rollSynthesis(User u, List<StashedCard> cards) {
-        return rollSynthesis(u, getMult(cards), false);
-    }
+	public static Evogear rollSynthesis(User u, List<StashedCard> cards) {
+		return rollSynthesis(u, getMult(cards), false);
+	}
 
-    public static Evogear rollSynthesis(User u, double mult, boolean lucky) {
-        RandomList<Evogear> pool = new RandomList<>(2 * mult);
-        List<Evogear> evos = DAO.findAll(Evogear.class);
-        for (Evogear evo : evos) {
-            if (evo.getTier() <= 0) continue;
+	public static Evogear rollSynthesis(User u, double mult, boolean lucky) {
+		RandomList<Evogear> pool = new RandomList<>(2 * mult);
+		List<Evogear> evos = DAO.findAll(Evogear.class);
+		for (Evogear evo : evos) {
+			if (evo.getTier() <= 0) continue;
 
-            pool.add(evo, DAO.queryNative(Integer.class, "SELECT get_weight(?1, ?2)", evo.getId(), u.getId()));
-        }
+			pool.add(evo, DAO.queryNative(Integer.class, "SELECT get_weight(?1, ?2)", evo.getId(), u.getId()));
+		}
 
-        return lucky ? Utils.luckyRoll(pool::get, (a, b) -> b.getTier() > a.getTier()) : pool.get();
-    }
+		return lucky ? Utils.luckyRoll(pool::get, (a, b) -> b.getTier() > a.getTier()) : pool.get();
+	}
 
-    private static double getMult(List<StashedCard> cards) {
-        double inc = 1;
-        double more = 1 * (1 + (Spawn.getRarityMult() - 1) / 2);
+	private static double getMult(List<StashedCard> cards) {
+		double inc = 1;
+		double more = 1 * (1 + (Spawn.getRarityMult() - 1) / 2);
 
-        for (StashedCard sc : cards) {
-            switch (sc.getType()) {
-                case KAWAIPON -> {
-                    KawaiponCard kc = sc.getKawaiponCard();
-                    int rarity = sc.getCard().getRarity().getIndex();
+		for (StashedCard sc : cards) {
+			switch (sc.getType()) {
+				case KAWAIPON -> {
+					KawaiponCard kc = sc.getKawaiponCard();
+					int rarity = sc.getCard().getRarity().getIndex();
 
-                    if (kc != null) {
-                        if (kc.isChrome()) {
-                            more *= 1 + rarity * (1 + kc.getQuality()) / 150;
-                        } else {
-                            inc += rarity * (1 + kc.getQuality()) / 150;
-                        }
-                    }
-                }
-                case EVOGEAR -> {
-                    Evogear ev = sc.getCard().asEvogear();
-                    inc += ev.getTier() / 6d;
-                }
-                case FIELD -> more *= 1.25;
-            }
-        }
+					if (kc != null) {
+						if (kc.isChrome()) {
+							more *= 1 + rarity * (1 + kc.getQuality()) / 150;
+						} else {
+							inc += rarity * (1 + kc.getQuality()) / 150;
+						}
+					}
+				}
+				case EVOGEAR -> {
+					Evogear ev = sc.getCard().asEvogear();
+					inc += ev.getTier() / 6d;
+				}
+				case FIELD -> more *= 1.25;
+			}
+		}
 
-        return 1 * inc * more;
-    }
+		return 1 * inc * more;
+	}
 }

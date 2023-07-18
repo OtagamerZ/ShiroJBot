@@ -19,10 +19,13 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -70,21 +73,12 @@ public class StashedCard extends DAO<StashedCard> {
 	@Column(name = "account_bound", nullable = false)
 	private boolean accountBound = false;
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "uuid", referencedColumnName = "uuid", insertable = false, updatable = false)
+	@OneToOne(mappedBy = "stashEntry")
 	@Fetch(FetchMode.JOIN)
 	private KawaiponCard kawaiponCard;
 
 	public StashedCard() {
 
-	}
-
-	public StashedCard(Kawaipon kawaipon, Card card, CardType type) {
-		if (type == CardType.KAWAIPON) throw new IllegalArgumentException("Type cannot be KAWAIPON");
-
-		this.card = card;
-		this.type = type;
-		this.kawaipon = kawaipon;
 	}
 
 	public StashedCard(Kawaipon kawaipon, KawaiponCard card) {
@@ -93,6 +87,18 @@ public class StashedCard extends DAO<StashedCard> {
 		this.type = CardType.KAWAIPON;
 		this.kawaipon = kawaipon;
 		this.kawaiponCard = card;
+	}
+
+	public StashedCard(Kawaipon kawaipon, Drawable<?> card) {
+		this.card = card.getCard();
+		this.kawaipon = kawaipon;
+		if (card instanceof Senshi) {
+			this.type = CardType.SENSHI;
+		} else if (card instanceof Evogear) {
+			this.type = CardType.EVOGEAR;
+		} else {
+			this.type = CardType.FIELD;
+		}
 	}
 
 	public int getId() {

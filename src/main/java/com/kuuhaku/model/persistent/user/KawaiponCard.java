@@ -64,7 +64,8 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	@OneToOne(mappedBy = "kawaiponCard")
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "uuid", referencedColumnName = "uuid", insertable = false, updatable = false)
 	@Fetch(FetchMode.JOIN)
 	private StashedCard stashEntry;
 
