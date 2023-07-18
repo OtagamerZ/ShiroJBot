@@ -34,16 +34,15 @@ import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
@@ -113,12 +112,14 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	default String parseDescription(I18N locale) {
 		Hand h = getHand();
+		boolean inGame = h.getGame() != null;
+
 		Map<String, Object> values = Map.ofEntries(
-				Map.entry("php", h == null ? 6000 : h.getHP()),
-				Map.entry("bhp", h == null ? 6000 : h.getBase().hp()),
-				Map.entry("pmp", h == null ? 5 : h.getMP()),
-				Map.entry("pdg", h == null ? 0 : Math.max(0, -h.getRegDeg().peek())),
-				Map.entry("prg", h == null ? 0 : Math.max(0, h.getRegDeg().peek())),
+				Map.entry("php", inGame ? h.getHP() : 6000),
+				Map.entry("bhp", inGame ? h.getBase().hp() : 6000),
+				Map.entry("pmp", inGame ? h.getMP() : 5),
+				Map.entry("pdg", inGame ? Math.max(0, -h.getRegDeg().peek()) : 0),
+				Map.entry("prg", inGame ? Math.max(0, h.getRegDeg().peek()) : 0),
 				Map.entry("mp", getMPCost()),
 				Map.entry("hp", getHPCost()),
 				Map.entry("atk", getDmg()),
@@ -135,48 +136,49 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		}
 
 		String desc = getDescription(locale);
-		Matcher pat = Utils.regex(desc, "\\{=(.*?)}|\\{(\\w+)}");
+		Matcher pat = Utils.regex(desc, "(?:\\{=(.*?)}|\\{(\\w+)})(%)?");
 
 		return pat.replaceAll(m -> {
 			boolean tag = m.group(2) != null;
+			boolean prcnt = m.group(3) != null;
 			String str = tag ? m.group(2) : m.group(1);
 
 			String out = "";
 			if (!tag) {
-				JSONArray types = Utils.extractGroups(str, "\\$(\\w+)");
+				LinkedHashSet<Object> types = new LinkedHashSet<>(Utils.extractGroups(str, "\\$(\\w+)"));
+				String main = types.stream().map(String::valueOf).findFirst().orElse(null);
 
-				Object prop = csm.getStoredProps().get(types.getString(0), "");
-				if (prop instanceof JSONArray a) {
-					out = String.valueOf(a.remove(0));
-				} else {
-					out = String.valueOf(prop);
+				JSONObject props = csm.getStoredProps();
+				if (!Utils.equalsAny(main, props.keySet())) {
+					String val = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
+
+					for (Object type : types) {
+						props.compute(String.valueOf(type), (k, v) -> {
+							int value = Calc.round(NumberUtils.toDouble(val) * getPower());
+
+							if (v == null) {
+								return value;
+							} else if (v instanceof JSONArray a) {
+								a.add(value);
+								return a;
+							}
+
+							return new JSONArray(List.of(v, value));
+						});
+					}
 				}
 
-				if (out.isBlank()) {
-					out = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
+				Number val;
+				Object prop = props.get(main, "");
+				if (prop instanceof JSONArray a) {
+					val = NumberUtils.toDouble(String.valueOf(a.remove(0)));
+				} else {
+					val = NumberUtils.toDouble(String.valueOf(prop));
+				}
 
-					if (csm.getStoredProps().isEmpty()) {
-						String val = out;
-						for (Object type : types) {
-							csm.getStoredProps().compute(String.valueOf(type), (k, v) -> {
-								int value;
-								if (!k.equals("data")) {
-									value = Calc.round(NumberUtils.toDouble(val) * getPower());
-								} else {
-									value = Calc.round(NumberUtils.toDouble(val));
-								}
-
-								if (v == null) {
-									return value;
-								} else if (v instanceof JSONArray a) {
-									a.add(value);
-									return a;
-								}
-
-								return new JSONArray(List.of(v, value));
-							});
-						}
-					}
+				out = String.valueOf(Calc.round(val.doubleValue() * getPower()));
+				if (prcnt) {
+					out += "%";
 				}
 
 				out += types.stream()

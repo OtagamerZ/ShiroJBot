@@ -1008,7 +1008,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public CachedScriptManager getCSM() {
-		if (cachedEffect.getStoredProps().isEmpty()) {
+		if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
 			parseDescription(getGame().getLocale());
 		}
 
