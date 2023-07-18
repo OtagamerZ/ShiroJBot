@@ -158,6 +158,8 @@ public class StashScrapCommand implements Executable {
 											items.add(item, amount);
 										}
 									}
+
+									continue;
 								}
 							}
 

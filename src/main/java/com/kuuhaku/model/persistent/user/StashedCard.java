@@ -73,10 +73,6 @@ public class StashedCard extends DAO<StashedCard> {
 	@Column(name = "account_bound", nullable = false)
 	private boolean accountBound = false;
 
-	@OneToOne(mappedBy = "stashEntry")
-	@Fetch(FetchMode.JOIN)
-	private KawaiponCard kawaiponCard;
-
 	public StashedCard() {
 
 	}
@@ -86,7 +82,6 @@ public class StashedCard extends DAO<StashedCard> {
 		this.card = card.getCard();
 		this.type = CardType.KAWAIPON;
 		this.kawaipon = kawaipon;
-		this.kawaiponCard = card;
 	}
 
 	public StashedCard(Kawaipon kawaipon, Drawable<?> card) {
@@ -114,7 +109,7 @@ public class StashedCard extends DAO<StashedCard> {
 	}
 
 	public KawaiponCard getKawaiponCard() {
-		return kawaiponCard;
+		return DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.uuid = ?1", uuid);
 	}
 
 	public CardType getType() {

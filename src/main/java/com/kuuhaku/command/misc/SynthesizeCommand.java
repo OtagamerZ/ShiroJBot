@@ -201,6 +201,7 @@ public class SynthesizeCommand implements Executable {
 												if (kc != null) {
 													kc.delete();
 													rarities.add(kc.getCard().getRarity());
+													continue;
 												}
 											}
 

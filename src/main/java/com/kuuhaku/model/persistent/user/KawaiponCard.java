@@ -64,11 +64,6 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "uuid", referencedColumnName = "uuid", insertable = false, updatable = false)
-	@Fetch(FetchMode.JOIN)
-	private StashedCard stashEntry;
-
 	public KawaiponCard() {
 	}
 
@@ -136,7 +131,7 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	}
 
 	public StashedCard getStashEntry() {
-		return stashEntry;
+		return DAO.query(StashedCard.class, "SELECT sc FROM StashedCard sc WHERE sc.uuid = ?1", uuid);
 	}
 
 	public BufferedImage render() {
@@ -162,6 +157,14 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 		}
 
 		return bi;
+	}
+
+	@Override
+	public void beforeDelete() {
+		StashedCard sc = getStashEntry();
+		if (sc != null) {
+			sc.delete();
+		}
 	}
 
 	@Override
