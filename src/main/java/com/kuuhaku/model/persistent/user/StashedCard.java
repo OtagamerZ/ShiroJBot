@@ -71,7 +71,7 @@ public class StashedCard extends DAO<StashedCard> {
 	private boolean accountBound = false;
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "uuid", referencedColumnName = "uuid")
+	@JoinColumn(name = "uuid", referencedColumnName = "uuid", insertable = false, updatable = false)
 	@Fetch(FetchMode.JOIN)
 	private KawaiponCard kawaiponCard;
 
