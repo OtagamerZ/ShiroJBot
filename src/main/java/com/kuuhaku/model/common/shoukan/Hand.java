@@ -236,8 +236,8 @@ public class Hand {
 
 	private transient Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> selection = null;
 
-	public Hand(String uid, Deck deck) {
-		this.uid = uid;
+	public Hand(Deck deck) {
+		this.uid = deck.getAccount().getUid();
 		this.game = null;
 		this.userDeck = deck;
 		this.side = Side.BOTTOM;

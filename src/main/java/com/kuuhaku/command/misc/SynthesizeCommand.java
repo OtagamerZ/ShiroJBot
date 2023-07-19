@@ -87,7 +87,7 @@ public class SynthesizeCommand implements Executable {
 			return;
 		}
 
-		Set<StashedCard> cards = new HashSet<>();
+		List<StashedCard> cards = new ArrayList<>();
 		List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
 
 		String[] ids = args.getString("cards").split(" ");
