@@ -745,15 +745,24 @@ public abstract class Utils {
         if (matches.isEmpty()) return CompletableFuture.failedStage(new NoResultException());
         if (matches.size() == 1 || skip) return CompletableFuture.completedStage(matches.get(0));
 
+        AtomicInteger i = new AtomicInteger();
+        return selectOption(locale, channel, cards, sc -> new StashItem(locale, sc).toString(i.getAndIncrement()), user);
+    }
+
+    public static <T> CompletionStage<T> selectOption(I18N locale, GuildMessageChannel channel, Collection<T> items, Function<T, String> generator, User user) {
+        List<T> matches = List.copyOf(items);
+
+        if (matches.isEmpty()) return CompletableFuture.failedStage(new NoResultException());
+        if (matches.size() == 1) return CompletableFuture.completedStage(matches.get(0));
+
         EmbedBuilder eb = new ColorlessEmbedBuilder()
                 .setTitle(locale.get("str/choose_option"));
 
-        AtomicInteger i = new AtomicInteger();
-        List<Page> pages = generatePages(eb, matches, 10, 5, sc -> new StashItem(locale, sc).toString(i.getAndIncrement()));
+        List<Page> pages = generatePages(eb, matches, 10, 5, generator);
 
         Message msg = paginate(pages, channel, user);
 
-        CompletableFuture<StashedCard> out = new CompletableFuture<>();
+        CompletableFuture<T> out = new CompletableFuture<>();
         awaitMessage(user, channel,
                 m -> {
                     try {
