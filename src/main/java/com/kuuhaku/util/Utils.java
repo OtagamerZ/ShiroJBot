@@ -746,7 +746,7 @@ public abstract class Utils {
         if (matches.size() == 1 || skip) return CompletableFuture.completedStage(matches.get(0));
 
         AtomicInteger i = new AtomicInteger();
-        return selectOption(locale, channel, cards, sc -> new StashItem(locale, sc).toString(i.getAndIncrement()), user);
+        return selectOption(locale, channel, matches, sc -> new StashItem(locale, sc).toString(i.getAndIncrement()), user);
     }
 
     public static <T> CompletionStage<T> selectOption(I18N locale, GuildMessageChannel channel, Collection<T> items, Function<T, String> generator, User user) {
