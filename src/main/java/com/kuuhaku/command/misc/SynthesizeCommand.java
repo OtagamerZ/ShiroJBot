@@ -87,7 +87,7 @@ public class SynthesizeCommand implements Executable {
 			return;
 		}
 
-		List<StashedCard> cards = new ArrayList<>();
+		Set<StashedCard> cards = new HashSet<>();
 		List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
 
 		String[] ids = args.getString("cards").split(" ");
@@ -297,7 +297,7 @@ public class SynthesizeCommand implements Executable {
 		return lucky ? Utils.luckyRoll(pool::get, (a, b) -> b.getTier() > a.getTier()) : pool.get();
 	}
 
-	private static double getMult(List<StashedCard> cards) {
+	private static double getMult(Collection<StashedCard> cards) {
 		double inc = 1;
 		double more = 1 * (1 + (Spawn.getRarityMult() - 1) / 2);
 
