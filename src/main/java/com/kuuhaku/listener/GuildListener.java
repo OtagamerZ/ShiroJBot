@@ -294,12 +294,14 @@ public class GuildListener extends ListenerAdapter {
 						.orElse(List.of())
 						.parallelStream()
 						.map(LevelRole::getRole)
+						.filter(data.me()::canInteract)
 						.toList();
 
 				List<Role> toRemove = roles.values().parallelStream()
 						.flatMap(List::parallelStream)
 						.map(LevelRole::getRole)
 						.filter(r -> !toAdd.contains(r))
+						.filter(data.me()::canInteract)
 						.toList();
 
 				data.guild().modifyMemberRoles(data.member(), toAdd, toRemove).queue(null, Utils::doNothing);
@@ -375,7 +377,7 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			if (!event.getAuthor().equals(event.getJDA().getSelfUser()) && Utils.between(content.length(), 3, 255)) {
+			if (!event.getAuthor().equals(data.me().getUser()) && Utils.between(content.length(), 3, 255)) {
 				List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
 						data.guild().getId(), StringUtils.stripAccents(content)
 				);

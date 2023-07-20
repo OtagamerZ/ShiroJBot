@@ -18,7 +18,6 @@
 
 package com.kuuhaku.listener;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.AutoModType;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
@@ -41,7 +40,7 @@ public class AutoModListener extends ListenerAdapter {
 
 		if (type == AutoModType.SPAM) {
 			Profile p = DAO.find(Profile.class, new ProfileId(event.getUserId(), config.getGid()));
-			p.warn(Main.getApp().getMainShard().getSelfUser(), "SPAM");
+			p.warn(event.getGuild().getSelfMember().getUser(), "SPAM");
 			p.save();
 		}
 	}
