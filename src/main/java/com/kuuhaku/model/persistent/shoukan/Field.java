@@ -199,6 +199,10 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public BufferedImage render(I18N locale, Deck deck) {
+		if (hand == null) {
+			hand = new Hand(deck);
+		}
+
 		BufferedImage out = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
