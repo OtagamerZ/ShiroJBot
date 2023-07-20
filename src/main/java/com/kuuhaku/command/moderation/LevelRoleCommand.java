@@ -64,9 +64,8 @@ public class LevelRoleCommand implements Executable {
 				.collect(Collectors.groupingBy(LevelRole::getLevel))
 				.entrySet().stream()
 				.sorted(Map.Entry.comparingByKey())
-				.map(e -> locale.get("str/level", e.getKey()) + ": " + e.getValue().stream()
-						.map(lr -> lr.getRole().getAsMention())
-						.collect(Collectors.collectingAndThen(Collectors.toList(), Utils.properlyJoin(locale.get("str/and"))))
+				.map(e -> locale.get("str/level", e.getKey()) + ": " + Utils.properlyJoin(locale.get("str/and"))
+						.apply(e.getValue().stream().map(lr -> lr.getRole().getAsMention()).toList())
 				).toList();
 
 		List<Page> pages = Utils.generatePages(eb, roles, 20, 10, Function.identity(),

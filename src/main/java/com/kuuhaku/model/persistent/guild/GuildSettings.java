@@ -204,12 +204,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 		return levelRoles;
 	}
 
-	public List<LevelRole> getRolesForLevel(int level) {
-		return levelRoles.stream()
-				.filter(r -> r.getLevel() == level)
-				.toList();
-	}
-
 	public List<PaidRole> getPaidRoles() {
 		return paidRoles;
 	}
