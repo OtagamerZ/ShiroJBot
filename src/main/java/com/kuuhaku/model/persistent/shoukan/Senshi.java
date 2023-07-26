@@ -1157,6 +1157,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 
 				game.getChannel().sendMessage(game.getLocale().get("error/target", game.getLocale().get("str/target_" + type))).queue();
+				Constants.LOGGER.warn(e, e);
 			}
 
 			return false;
