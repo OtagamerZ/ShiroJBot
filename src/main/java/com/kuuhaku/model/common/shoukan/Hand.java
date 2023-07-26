@@ -219,6 +219,7 @@ public class Hand {
 	private transient String lastMessage;
 	private transient String defeat;
 	private transient int hpDelta = 0;
+	private transient int mpDelta = 0;
 
 	@Transient
 	private int state = 0b100;
@@ -814,6 +815,22 @@ public class Hand {
 		return true;
 	}
 
+	public int getHpDelta() {
+		return hpDelta;
+	}
+
+	public double getHPPrcnt() {
+		return hp / (double) base.hp();
+	}
+
+	public boolean isLowLife() {
+		return origin.demon() || getHPPrcnt() < 0.5;
+	}
+
+	public boolean isCritical() {
+		return getHPPrcnt() < 0.25;
+	}
+
 	public int getMP() {
 		if (origin.major() == Race.DEMON) {
 			return (int) Math.max(0, hp / (base.hp() * 0.08) - 1);
@@ -837,7 +854,10 @@ public class Hand {
 			return;
 		}
 
+		int before = this.mp;
+
 		this.mp = Utils.clamp(this.mp + value, 0, 99);
+		mpDelta = this.mp - before;
 
 		if (value > 0) {
 			game.trigger(Trigger.ON_MP, side);
@@ -854,20 +874,8 @@ public class Hand {
 		return true;
 	}
 
-	public double getHPPrcnt() {
-		return hp / (double) base.hp();
-	}
-
-	public int getHpDelta() {
-		return hpDelta;
-	}
-
-	public boolean isLowLife() {
-		return origin.demon() || getHPPrcnt() < 0.5;
-	}
-
-	public boolean isCritical() {
-		return getHPPrcnt() < 0.25;
+	public int getMpDelta() {
+		return mpDelta;
 	}
 
 	public RegDeg getRegDeg() {
