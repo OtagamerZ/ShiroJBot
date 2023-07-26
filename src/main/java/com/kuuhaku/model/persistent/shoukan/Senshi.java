@@ -1008,10 +1008,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public CachedScriptManager getCSM() {
-		if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
-			parseDescription(getGame().getLocale());
-		}
-
 		return cachedEffect;
 	}
 
@@ -1104,7 +1100,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
 					}
 				} else {
-					getCSM().forScript(getEffect())
+					CachedScriptManager csm = getCSM();
+					if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
+						parseDescription(getGame().getLocale());
+					}
+
+					csm.forScript(getEffect())
 							.withConst("self", this)
 							.withConst("game", getGame())
 							.withConst("data", stats.getData())

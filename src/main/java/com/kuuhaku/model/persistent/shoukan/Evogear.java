@@ -380,10 +380,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public CachedScriptManager getCSM() {
-		if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
-			parseDescription(getGame().getLocale());
-		}
-
 		return cachedEffect;
 	}
 
@@ -403,6 +399,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		Shoukan game = getGame();
 		try {
 			CachedScriptManager csm = getCSM();
+			if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
+				parseDescription(getGame().getLocale());
+			}
 
 			csm.forScript(getEffect())
 					.withConst("evo", this)
