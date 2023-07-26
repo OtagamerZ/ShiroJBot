@@ -814,6 +814,46 @@ public class Hand {
 		return true;
 	}
 
+	public int getMP() {
+		if (origin.major() == Race.DEMON) {
+			return (int) Math.max(0, hp / (base.hp() * 0.08) - 1);
+		}
+
+		return mp;
+	}
+
+	public void setMP(int mp) {
+		if (origin.major() == Race.DEMON) {
+			setHP((int) ((mp + 1) * (base.hp() * 0.08)));
+			return;
+		}
+
+		this.mp = Utils.clamp(mp, 0, 99);
+	}
+
+	public void modMP(int value) {
+		if (origin.major() == Race.DEMON) {
+			modHP((int) (value * (base.hp() * 0.08)));
+			return;
+		}
+
+		this.mp = Utils.clamp(this.mp + value, 0, 99);
+
+		if (value > 0) {
+			game.trigger(Trigger.ON_MP, side);
+		}
+	}
+
+	public boolean consumeMP(int value) {
+		if (origin.synergy() == Race.ESPER && Calc.chance(3, getGame().getRng())) return true;
+		else if (origin.major() == Race.DEMON) {
+			return consumeHP((int) (value * (base.hp() * 0.08)));
+		} else if (this.mp < value) return false;
+
+		this.mp = Utils.clamp(this.mp - value, 0, 99);
+		return true;
+	}
+
 	public double getHPPrcnt() {
 		return hp / (double) base.hp();
 	}
@@ -846,42 +886,6 @@ public class Hand {
 
 	public JSONObject getData() {
 		return data;
-	}
-
-	public int getMP() {
-		if (origin.major() == Race.DEMON) {
-			return (int) Math.max(0, hp / (base.hp() * 0.08) - 1);
-		}
-
-		return mp;
-	}
-
-	public void setMP(int mp) {
-		if (origin.major() == Race.DEMON) {
-			setHP((int) ((mp + 1) * (base.hp() * 0.08)));
-			return;
-		}
-
-		this.mp = Utils.clamp(mp, 0, 99);
-	}
-
-	public void modMP(int value) {
-		if (origin.major() == Race.DEMON) {
-			modHP((int) (value * (base.hp() * 0.08)));
-			return;
-		}
-
-		this.mp = Utils.clamp(this.mp + value, 0, 99);
-	}
-
-	public boolean consumeMP(int value) {
-		if (origin.synergy() == Race.ESPER && Calc.chance(3, getGame().getRng())) return true;
-		else if (origin.major() == Race.DEMON) {
-			return consumeHP((int) (value * (base.hp() * 0.08)));
-		} else if (this.mp < value) return false;
-
-		this.mp = Utils.clamp(this.mp - value, 0, 99);
-		return true;
 	}
 
 	public List<Drawable<?>> consumeSC(int value) {

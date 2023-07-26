@@ -103,40 +103,69 @@ public enum Trigger {
 	/** On discarding a card **/
 	ON_DISCARD,
 
-	/** On summoning a card **/
+	/**
+	 * On summoning a card
+	 **/
 	ON_SUMMON,
 
-	/** On equipping a card **/
+	/**
+	 * On equipping a card
+	 **/
 	ON_EQUIP,
 
-	/** On changing card mode (Flip -> Defense -> Attack -> Defense) **/
+	/**
+	 * On changing card mode (Flip -> Defense -> Attack -> Defense)
+	 **/
 	ON_SWITCH,
 
-	/** On flipping a card **/
+	/**
+	 * On flipping a card
+	 **/
 	ON_FLIP,
 
-	/** On receiving HP **/
+	/**
+	 * On receiving HP
+	 **/
 	ON_HEAL,
 
-	/** On losing HP **/
+	/**
+	 * On losing HP
+	 **/
 	ON_DAMAGE,
 
-	/** On using a card's active effect **/
+	/**
+	 * On receiving MP
+	 **/
+	ON_MP,
+
+	/**
+	 * On using a card's active effect
+	 **/
 	ON_ACTIVATE,
 
-	/** On triggering any effect **/
+	/**
+	 * On triggering any effect
+	 **/
 	ON_EFFECT,
 
-	/** On using a spell **/
+	/**
+	 * On using a spell
+	 **/
 	ON_SPELL,
 
-	/** On using an ability **/
+	/**
+	 * On using an ability
+	 **/
 	ON_ABILITY,
 
-	/** When targeted by a spell **/
+	/**
+	 * When targeted by a spell
+	 **/
 	ON_SPELL_TARGET,
 
-	/** When targeted **/
+	/**
+	 * When targeted
+	 **/
 	ON_EFFECT_TARGET,
 
 	/** When a proxied spell is activated **/
