@@ -19,7 +19,6 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.Constants;
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
@@ -33,7 +32,10 @@ import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
-import com.kuuhaku.util.*;
+import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,7 +47,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Arena implements Renderer {
-	private final Field DEFAULT = DAO.find(Field.class, "DEFAULT");
 	private final Point MARGIN = new Point(25, 25);
 	public final Dimension SIZE = new Dimension(
 			(225 + MARGIN.x * 2) * 5 /* slots */ + (225 + MARGIN.x * 2) * 4 /* side stacks */,
@@ -138,7 +139,7 @@ public class Arena implements Renderer {
 	}
 
 	public Field getField() {
-		return Utils.getOr(field, DEFAULT);
+		return Utils.getOr(field, Field.DEFAULT);
 	}
 
 	public void setField(Field field) {

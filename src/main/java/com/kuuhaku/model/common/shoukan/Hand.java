@@ -189,9 +189,9 @@ public class Hand {
 		}
 
 		d.setHand(this);
+		d.setAvailable(false);
 		getData().put("last_discarded", d);
 		getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
-		d.setAvailable(false);
 
 		if (d instanceof Proxy<?> p) {
 			d.reset();

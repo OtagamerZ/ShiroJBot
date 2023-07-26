@@ -56,6 +56,9 @@ import java.util.random.RandomGenerator;
 @Table(name = "field")
 public class Field extends DAO<Field> implements Drawable<Field> {
 	@Transient
+	public static final Field DEFAULT = DAO.find(Field.class, "DEFAULT");
+
+	@Transient
 	public final String KLASS = getClass().getName();
 	public transient long SERIAL = ThreadLocalRandom.current().nextLong();
 
