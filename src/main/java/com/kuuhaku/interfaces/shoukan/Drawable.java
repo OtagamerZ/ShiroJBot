@@ -396,7 +396,7 @@ public interface Drawable<T extends Drawable<T>> {
 
 	default Target asTarget(Trigger trigger, TargetType type) {
 		if (this instanceof Senshi s) {
-			return new Target(s, trigger, type);
+			return new Target(s, s.getIndex(), trigger, type);
 		} else {
 			return new Target();
 		}

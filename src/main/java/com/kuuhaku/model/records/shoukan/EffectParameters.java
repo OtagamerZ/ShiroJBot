@@ -56,7 +56,7 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 					Senshi t = tgt.card();
 					if (t != null) {
 						for (Senshi n : t.getNearby()) {
-							tgts.add(new Target(n, tgt.trigger(), tgt.type()));
+							tgts.add(new Target(n, n.getIndex(), tgt.trigger(), tgt.type()));
 						}
 					}
 				}
