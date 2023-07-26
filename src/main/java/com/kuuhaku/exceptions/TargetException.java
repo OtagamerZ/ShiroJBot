@@ -24,7 +24,7 @@ public class TargetException extends RuntimeException {
 	@Serial
 	private static final long serialVersionUID = -2385402288802605709L;
 
-//	public TargetException() {
-//		super("", null, true, false);
-//	}
+	public TargetException() {
+		super("", null, true, false);
+	}
 }
