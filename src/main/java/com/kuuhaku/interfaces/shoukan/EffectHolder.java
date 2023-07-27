@@ -242,6 +242,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				x += 10;
 			}
 
+			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
+			g2d.setColor(style.getFrame().getSecondaryColor());
+
 			FontMetrics fm = g2d.getFontMetrics();
 			try {
 				if (str.contains(DC1)) {
@@ -307,6 +310,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		DeckStyling style = getHand() == null ? new DeckStyling() : getHand().getUserDeck().getStyling();
 
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
+		g2d.setColor(style.getFrame().getSecondaryColor());
 
 		int y = 276;
 		String tags = processTags(locale);
@@ -316,8 +320,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		}
 
 		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
-		g2d.setColor(style.getFrame().getSecondaryColor());
-
 		Graph.drawMultilineString(g2d, parseDescription(locale),
 				7, y, 211, 3,
 				highlightValues(g2d, style.getFrame().isLegacy())
