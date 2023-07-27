@@ -196,7 +196,7 @@ public class GachaCommand implements Executable {
 						g2d.drawImage(IO.getResourceAsImage("shoukan/frames/" + hPath + "/hero.png"), 5, 20, null);
 					}
 
-					new StashedCard(kp, card, tp).save();
+					new StashedCard(kp, e).save();
 				}
 				case FIELD -> {
 					Field f = card.asField();
@@ -205,7 +205,7 @@ public class GachaCommand implements Executable {
 					g2d.drawImage(f.render(locale, deck), 5, 20, null);
 					g2d.drawImage(IO.getResourceAsImage("shoukan/frames/" + hPath + "/buffed.png"), 5, 20, null);
 
-					new StashedCard(kp, card, tp).save();
+					new StashedCard(kp, f).save();
 				}
 			}
 		} finally {

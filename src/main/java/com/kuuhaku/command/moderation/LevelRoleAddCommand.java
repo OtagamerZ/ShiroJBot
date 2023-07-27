@@ -18,60 +18,51 @@
 
 package com.kuuhaku.command.moderation;
 
-import com.github.ygimenez.model.Page;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.persistent.guild.LevelRole;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import net.dv8tion.jda.api.entities.Role;
 
 @Command(
 		name = "levelrole",
+		path = "add",
 		category = Category.MODERATION
 )
-@Requires({
-		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MANAGE_ROLES
-})
-public class LevelRoleCommand implements Executable {
+@Signature("<role:role:r> <level:number:r>")
+@Requires(Permission.MANAGE_ROLES)
+public class LevelRoleAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
-		if (settings.getLevelRoles().isEmpty()) {
-			event.channel().sendMessage(locale.get("error/no_level_roles")).queue();
+
+		Role r = event.message().getMentions().getRoles().get(0);
+		if (event.guild().getSelfMember().canInteract(r)) {
+			event.channel().sendMessage(locale.get("error/higher_role")).queue();
+			return;
+		} else if (settings.getLevelRoles().stream().anyMatch(lr -> lr.getRole().equals(r))) {
+			event.channel().sendMessage(locale.get("error/role_already_added")).queue();
 			return;
 		}
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/level_roles"));
+		int lvl = args.getInt("level");
+		if (settings.getRolesForLevel(lvl).size() >= 5) {
+			event.channel().sendMessage(locale.get("error/too_many_roles")).queue();
+			return;
+		}
 
-		List<String> roles = settings.getLevelRoles().stream()
-				.collect(Collectors.groupingBy(LevelRole::getLevel))
-				.entrySet().stream()
-				.sorted(Map.Entry.comparingByKey())
-				.map(e -> locale.get("str/level", e.getKey()) + ": " + Utils.properlyJoin(locale.get("str/and"))
-						.apply(e.getValue().stream().map(lr -> lr.getRole().getAsMention()).toList())
-				).toList();
+		settings.getLevelRoles().add(new LevelRole(settings, lvl, r));
+		settings.save();
 
-		List<Page> pages = Utils.generatePages(eb, roles, 20, 10, Function.identity(),
-				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
-		);
-
-		Utils.paginate(pages, 1, true, event.channel(), event.user());
+		event.channel().sendMessage(locale.get("success/level_role_add")).queue();
 	}
 }

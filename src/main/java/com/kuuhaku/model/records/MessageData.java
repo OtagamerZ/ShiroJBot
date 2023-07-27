@@ -35,13 +35,18 @@ public record MessageData(net.dv8tion.jda.api.entities.Guild guild, MessageChann
 		);
 	}
 
-	public record Guild(net.dv8tion.jda.api.entities.Guild guild, GuildMessageChannel channel, Message message, Member member) {
+	public record Guild(net.dv8tion.jda.api.entities.Guild guild, GuildMessageChannel channel, Message message,
+						Member member) {
 		public Guild(Message message) {
 			this(message.getGuild(), message.getGuildChannel(), message, message.getMember());
 		}
 
 		public User user() {
 			return member.getUser();
+		}
+
+		public Member me() {
+			return guild.getSelfMember();
 		}
 	}
 

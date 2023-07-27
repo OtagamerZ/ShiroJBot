@@ -56,6 +56,9 @@ import java.util.random.RandomGenerator;
 @Table(name = "field")
 public class Field extends DAO<Field> implements Drawable<Field> {
 	@Transient
+	public static final Field DEFAULT = DAO.find(Field.class, "DEFAULT");
+
+	@Transient
 	public final String KLASS = getClass().getName();
 	public transient long SERIAL = ThreadLocalRandom.current().nextLong();
 
@@ -199,6 +202,10 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public BufferedImage render(I18N locale, Deck deck) {
+		if (hand == null) {
+			hand = new Hand(deck);
+		}
+
 		BufferedImage out = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);

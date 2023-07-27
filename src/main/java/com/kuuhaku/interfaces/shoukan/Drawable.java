@@ -41,8 +41,8 @@ import org.apache.commons.collections4.set.ListOrderedSet;
 import java.awt.*;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public interface Drawable<T extends Drawable<T>> {
@@ -396,7 +396,7 @@ public interface Drawable<T extends Drawable<T>> {
 
 	default Target asTarget(Trigger trigger, TargetType type) {
 		if (this instanceof Senshi s) {
-			return new Target(s, trigger, type);
+			return new Target(s, s.getIndex(), trigger, type);
 		} else {
 			return new Target();
 		}

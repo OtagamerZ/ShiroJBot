@@ -19,18 +19,19 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.util.Calc;
-import com.kuuhaku.util.Spawn;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import jakarta.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -76,20 +77,23 @@ public class StashedCard extends DAO<StashedCard> {
 
 	}
 
-	public StashedCard(Kawaipon kawaipon, Card card, CardType type) {
-		this.card = card;
-		this.type = type;
-		this.kawaipon = kawaipon;
-		if (type == CardType.KAWAIPON) {
-			this.uuid = getKawaiponCard().getUUID();
-		}
-	}
-
 	public StashedCard(Kawaipon kawaipon, KawaiponCard card) {
 		this.uuid = card.getUUID();
 		this.card = card.getCard();
 		this.type = CardType.KAWAIPON;
 		this.kawaipon = kawaipon;
+	}
+
+	public StashedCard(Kawaipon kawaipon, Drawable<?> card) {
+		this.card = card.getCard();
+		this.kawaipon = kawaipon;
+		if (card instanceof Senshi) {
+			this.type = CardType.SENSHI;
+		} else if (card instanceof Evogear) {
+			this.type = CardType.EVOGEAR;
+		} else {
+			this.type = CardType.FIELD;
+		}
 	}
 
 	public int getId() {
@@ -105,26 +109,7 @@ public class StashedCard extends DAO<StashedCard> {
 	}
 
 	public KawaiponCard getKawaiponCard() {
-		return getKawaiponCard(true);
-	}
-
-	public KawaiponCard getKawaiponCard(boolean createOnNull) {
-		if (type == CardType.KAWAIPON) {
-			if (kawaipon == null) {
-				return new KawaiponCard(uuid, card, false);
-			}
-
-			KawaiponCard kc = DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.uuid = ?1", uuid);
-			if (createOnNull && kc == null) {
-				kc = new KawaiponCard(uuid, card, Calc.chance(0.1 * Spawn.getRarityMult()));
-				kc.setKawaipon(kawaipon);
-				kc.save();
-			}
-
-			return kc;
-		}
-
-		return null;
+		return DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.uuid = ?1", uuid);
 	}
 
 	public CardType getType() {

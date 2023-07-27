@@ -189,9 +189,9 @@ public class Hand {
 		}
 
 		d.setHand(this);
+		d.setAvailable(false);
 		getData().put("last_discarded", d);
 		getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
-		d.setAvailable(false);
 
 		if (d instanceof Proxy<?> p) {
 			d.reset();
@@ -219,6 +219,7 @@ public class Hand {
 	private transient String lastMessage;
 	private transient String defeat;
 	private transient int hpDelta = 0;
+	private transient int mpDelta = 0;
 
 	@Transient
 	private int state = 0b100;
@@ -236,8 +237,8 @@ public class Hand {
 
 	private transient Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> selection = null;
 
-	public Hand(String uid, Deck deck) {
-		this.uid = uid;
+	public Hand(Deck deck) {
+		this.uid = deck.getAccount().getUid();
 		this.game = null;
 		this.userDeck = deck;
 		this.side = Side.BOTTOM;
@@ -814,12 +815,12 @@ public class Hand {
 		return true;
 	}
 
-	public double getHPPrcnt() {
-		return hp / (double) base.hp();
-	}
-
 	public int getHpDelta() {
 		return hpDelta;
+	}
+
+	public double getHPPrcnt() {
+		return hp / (double) base.hp();
 	}
 
 	public boolean isLowLife() {
@@ -828,24 +829,6 @@ public class Hand {
 
 	public boolean isCritical() {
 		return getHPPrcnt() < 0.25;
-	}
-
-	public RegDeg getRegDeg() {
-		return regdeg;
-	}
-
-	public void applyVoTs() {
-		int val = regdeg.next();
-
-		if (val < 0 && origin.major() == Race.HUMAN) {
-			val /= 2;
-		}
-
-		modHP(val);
-	}
-
-	public JSONObject getData() {
-		return data;
 	}
 
 	public int getMP() {
@@ -871,7 +854,14 @@ public class Hand {
 			return;
 		}
 
+		int before = this.mp;
+
 		this.mp = Utils.clamp(this.mp + value, 0, 99);
+		mpDelta = this.mp - before;
+
+		if (value > 0) {
+			game.trigger(Trigger.ON_MP, side);
+		}
 	}
 
 	public boolean consumeMP(int value) {
@@ -882,6 +872,28 @@ public class Hand {
 
 		this.mp = Utils.clamp(this.mp - value, 0, 99);
 		return true;
+	}
+
+	public int getMpDelta() {
+		return mpDelta;
+	}
+
+	public RegDeg getRegDeg() {
+		return regdeg;
+	}
+
+	public void applyVoTs() {
+		int val = regdeg.next();
+
+		if (val < 0 && origin.major() == Race.HUMAN) {
+			val /= 2;
+		}
+
+		modHP(val);
+	}
+
+	public JSONObject getData() {
+		return data;
 	}
 
 	public List<Drawable<?>> consumeSC(int value) {

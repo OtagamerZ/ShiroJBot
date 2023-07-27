@@ -380,10 +380,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public CachedScriptManager getCSM() {
-		if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
-			parseDescription(getGame().getLocale());
-		}
-
 		return cachedEffect;
 	}
 
@@ -403,6 +399,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		Shoukan game = getGame();
 		try {
 			CachedScriptManager csm = getCSM();
+			if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
+				parseDescription(getGame().getLocale());
+			}
 
 			csm.forScript(getEffect())
 					.withConst("evo", this)
@@ -472,14 +471,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		return switch (targetType) {
 			case NONE -> new EffectParameters(ON_ACTIVATE, getSide());
 			case ALLY -> new EffectParameters(ON_ACTIVATE, getSide(), asSource(ON_ACTIVATE),
-					new Target(tgt.ally(), ON_SPELL_TARGET, TargetType.ALLY)
+					new Target(tgt.ally(), tgt.allyPos(), ON_SPELL_TARGET, TargetType.ALLY)
 			);
 			case ENEMY -> new EffectParameters(ON_ACTIVATE, getSide(), asSource(ON_ACTIVATE),
-					new Target(tgt.enemy(), ON_SPELL_TARGET, TargetType.ENEMY)
+					new Target(tgt.enemy(), tgt.enemyPos(), ON_SPELL_TARGET, TargetType.ENEMY)
 			);
 			case BOTH -> new EffectParameters(ON_ACTIVATE, getSide(), asSource(ON_ACTIVATE),
-					new Target(tgt.ally(), ON_SPELL_TARGET, TargetType.ALLY),
-					new Target(tgt.enemy(), ON_SPELL_TARGET, TargetType.ENEMY)
+					new Target(tgt.ally(), tgt.allyPos(), ON_SPELL_TARGET, TargetType.ALLY),
+					new Target(tgt.enemy(), tgt.enemyPos(), ON_SPELL_TARGET, TargetType.ENEMY)
 			);
 		};
 	}
@@ -502,6 +501,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public BufferedImage render(I18N locale, Deck deck) {
+		if (hand == null) {
+			hand = new Hand(deck);
+		}
+
 		BufferedImage out = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);

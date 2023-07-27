@@ -18,11 +18,11 @@
 
 package com.kuuhaku.command.moderation;
 
-import com.github.ygimenez.model.Page;
+import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
@@ -31,47 +31,66 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import net.dv8tion.jda.api.EmbedBuilder;
+import jakarta.persistence.NoResultException;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "levelrole",
+		path = "remove",
 		category = Category.MODERATION
 )
-@Requires({
-		Permission.MESSAGE_EMBED_LINKS,
-		Permission.MANAGE_ROLES
+@Signature({
+		"<role:role:r>",
+		"<level:number:r>"
 })
-public class LevelRoleCommand implements Executable {
+@Requires(Permission.MANAGE_ROLES)
+public class LevelRoleRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
-		if (settings.getLevelRoles().isEmpty()) {
-			event.channel().sendMessage(locale.get("error/no_level_roles")).queue();
+
+		List<LevelRole> matches;
+		if (args.has("role")) {
+			Role r = event.message().getMentions().getRoles().get(0);
+			matches = settings.getLevelRoles().stream()
+					.filter(l -> l.getRole().equals(r))
+					.toList();
+		} else {
+			int lvl = args.getInt("level");
+			matches = settings.getLevelRoles().stream()
+					.filter(l -> l.getLevel() == lvl)
+					.toList();
+		}
+
+		if (matches.isEmpty()) {
+			event.channel().sendMessage(locale.get("error/role_not_found")).queue();
 			return;
 		}
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/level_roles"));
+		Utils.selectOption(locale, event.channel(), matches,
+						lr -> locale.get("str/level", lr.getLevel()) + ": " + lr.getRole().getAsMention(),
+						event.user()
+				).thenAccept(lr -> {
+					if (lr == null) {
+						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+						return;
+					}
 
-		List<String> roles = settings.getLevelRoles().stream()
-				.collect(Collectors.groupingBy(LevelRole::getLevel))
-				.entrySet().stream()
-				.sorted(Map.Entry.comparingByKey())
-				.map(e -> locale.get("str/level", e.getKey()) + ": " + Utils.properlyJoin(locale.get("str/and"))
-						.apply(e.getValue().stream().map(lr -> lr.getRole().getAsMention()).toList())
-				).toList();
+					settings.getLevelRoles().remove(lr);
+					settings.save();
 
-		List<Page> pages = Utils.generatePages(eb, roles, 20, 10, Function.identity(),
-				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
-		);
+					event.channel().sendMessage(locale.get("success/level_role_remove")).queue();
+				})
+				.exceptionally(t -> {
+					if (!(t.getCause() instanceof NoResultException)) {
+						Constants.LOGGER.error(t, t);
+					}
 
-		Utils.paginate(pages, 1, true, event.channel(), event.user());
+					return null;
+				});
 	}
 }

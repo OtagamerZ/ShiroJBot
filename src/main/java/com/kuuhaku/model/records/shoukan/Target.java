@@ -35,10 +35,10 @@ public record Target(Senshi card, Side side, int index, Trigger trigger, TargetT
 		this(card, side, index, trigger, type, new AtomicBoolean());
 	}
 
-	public Target(Senshi card, Trigger trigger, TargetType type) {
+	public Target(Senshi card, int index, Trigger trigger, TargetType type) {
 		this(card,
 				card == null ? null : card.getSide(),
-				card == null ? -1 : card.getIndex(),
+				card == null ? index : card.getIndex(),
 				trigger, type, new AtomicBoolean()
 		);
 	}

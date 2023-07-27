@@ -1008,10 +1008,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public CachedScriptManager getCSM() {
-		if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
-			parseDescription(getGame().getLocale());
-		}
-
 		return cachedEffect;
 	}
 
@@ -1104,7 +1100,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
 					}
 				} else {
-					getCSM().forScript(getEffect())
+					CachedScriptManager csm = getCSM();
+					if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
+						parseDescription(getGame().getLocale());
+					}
+
+					csm.forScript(getEffect())
 							.withConst("self", this)
 							.withConst("game", getGame())
 							.withConst("data", stats.getData())
@@ -1277,6 +1278,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public BufferedImage render(I18N locale, Deck deck) {
+		if (hand == null) {
+			hand = new Hand(deck);
+		}
+
 		BufferedImage out = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);

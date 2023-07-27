@@ -137,7 +137,6 @@ public class CommonSocket extends WebSocketClient {
 						dk = new Deck();
 					}
 
-					d.setHand(new Hand(payload.getString("uid"), dk));
 					String b64 = IO.ctob(d.render(payload.getEnum(I18N.class, "locale"), dk), "png");
 					send(JSONObject.of(
 							Map.entry("type", "DELIVERY"),

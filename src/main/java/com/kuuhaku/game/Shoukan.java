@@ -2195,16 +2195,7 @@ public class Shoukan extends GameInstance<Phase> {
 					while (it.hasNext() && i-- > 0) {
 						Drawable<?> d = it.next();
 
-						CardType type;
-						if (d instanceof Senshi) {
-							type = CardType.SENSHI;
-						} else if (d instanceof Evogear) {
-							type = CardType.EVOGEAR;
-						} else {
-							type = CardType.FIELD;
-						}
-
-						cards.add(new StashedCard(null, d.getCard(), type));
+						cards.add(new StashedCard(null, d));
 						arena.getBanned().add(d);
 						it.remove();
 						curr.getCards().remove(d);
