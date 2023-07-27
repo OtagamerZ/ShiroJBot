@@ -196,9 +196,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return stats.hasFlag(flag);
 	}
 
+	@Override
 	public boolean popFlag(Flag flag) {
 		for (Evogear e : equipments) {
-			if (e.getStats().popFlag(flag)) return true;
+			if (e.popFlag(flag)) return true;
 		}
 
 		return stats.popFlag(flag);
@@ -1307,26 +1308,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				String name = Graph.abbreviate(g1, card.getVanity().getName(), MAX_NAME_WIDTH);
 				Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
-				if (!desc.isEmpty()) {
-					g1.setColor(style.getFrame().getSecondaryColor());
-					g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
-
-					int y = 276;
-					String tags = card.processTags(locale);
-					if (tags != null) {
-						g1.drawString(tags, 7, 275);
-						y += 11;
-					}
-
-					g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
-					g2d.setColor(style.getFrame().getSecondaryColor());
-
-					Graph.drawMultilineString(g1, parseDescription(locale),
-							7, y, 211, 3,
-							card.highlightValues(g1, style.getFrame().isLegacy())
-					);
-				}
-
 				if (!stats.getWrite().isBlank() && getSlot().getIndex() > -1) {
 					g1.setColor(Color.ORANGE);
 					g1.setFont(Fonts.NOTO_SANS_EXTRABOLD.deriveFont(Font.BOLD, 15f));
@@ -1343,6 +1324,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					card.drawCosts(g1);
 					if (!isSupporting()) {
 						card.drawAttributes(g1, !desc.isEmpty());
+					}
+
+					if (!desc.isEmpty()) {
+						drawDescription(g1, locale);
 					}
 				}
 

@@ -108,39 +108,25 @@ public enum Trigger {
 	 **/
 	ON_SUMMON,
 
-	/**
-	 * On equipping a card
-	 **/
+	/** On equipping a card **/
 	ON_EQUIP,
 
-	/**
-	 * On changing card mode (Flip -> Defense -> Attack -> Defense)
-	 **/
+	/** On changing card mode (Flip -> Defense -> Attack -> Defense) **/
 	ON_SWITCH,
 
-	/**
-	 * On flipping a card
-	 **/
+	/** On flipping a card **/
 	ON_FLIP,
 
-	/**
-	 * On receiving HP
-	 **/
+	/** On receiving HP **/
 	ON_HEAL,
 
-	/**
-	 * On losing HP
-	 **/
+	/** On losing HP **/
 	ON_DAMAGE,
 
-	/**
-	 * On receiving MP
-	 **/
+	/** On receiving MP **/
 	ON_MP,
 
-	/**
-	 * On using a card's active effect
-	 **/
+	/** On using a card's active effect **/
 	ON_ACTIVATE,
 
 	/**
@@ -159,6 +145,11 @@ public enum Trigger {
 	ON_ABILITY,
 
 	/**
+	 * On being empowered
+	 **/
+	ON_EMPOWER,
+
+	/**
 	 * When targeted by a spell
 	 **/
 	ON_SPELL_TARGET,
@@ -168,10 +159,14 @@ public enum Trigger {
 	 **/
 	ON_EFFECT_TARGET,
 
-	/** When a proxied spell is activated **/
+	/**
+	 * When a proxied spell is activated
+	 **/
 	ON_TRAP,
 
-	/** Triggers mirrored from supported card **/
+	/**
+	 * Triggers mirrored from supported card
+	 **/
 	ON_DEFER_SUPPORT,
 
 	/** Triggers mirrored from adjacent cards **/

@@ -31,7 +31,6 @@ import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
-import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -529,28 +528,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				String name = Graph.abbreviate(g1, getVanity().getName(), MAX_NAME_WIDTH);
 				Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
-				if (!desc.isEmpty()) {
-					g1.setColor(style.getFrame().getSecondaryColor());
-					g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
-
-					int y = 276;
-					String tags = processTags(locale);
-					if (tags != null) {
-						g1.drawString(tags, 7, 275);
-						y += 11;
-					}
-
-					g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
-					g2d.setColor(style.getFrame().getSecondaryColor());
-
-					Graph.drawMultilineString(g1, parseDescription(locale),
-							7, y, 211, 3,
-							highlightValues(g1, style.getFrame().isLegacy())
-					);
-				}
-
 				drawCosts(g1);
 				drawAttributes(g1, !desc.isEmpty());
+				drawDescription(g1, locale);
 
 				if (!getCharms().isEmpty()) {
 					List<BufferedImage> icons = charms.stream()

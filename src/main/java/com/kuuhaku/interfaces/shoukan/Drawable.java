@@ -159,7 +159,6 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default void setFlipped(boolean flipped) {
-
 	}
 
 	default boolean keepOnDestroy() {

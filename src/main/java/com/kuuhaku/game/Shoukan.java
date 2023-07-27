@@ -591,7 +591,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Evogear copy = chosen.withCopy(e -> {
 			if (curr.isEmpowered() && curr.getOrigin().major() == Race.MACHINE) {
-				e.getStats().setFlag(Flag.EMPOWERED, true, true);
+				e.setFlag(Flag.EMPOWERED, true, true);
 				curr.setEmpowered(false);
 			}
 		});
@@ -916,7 +916,7 @@ public class Shoukan extends GameInstance<Phase> {
 				chosen.getStats().getData().put("consumed", consumed);
 			}
 
-			if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
+			if (!chosen.popFlag(Flag.FREE_ACTION)) {
 				chosen.setAvailable(false);
 				stack.add(chosen.copy());
 			}
@@ -931,7 +931,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (curr.isEmpowered() && curr.getOrigin().major() == Race.MYSTICAL) {
-			chosen.getStats().setFlag(Flag.EMPOWERED, true, true);
+			chosen.setFlag(Flag.EMPOWERED, true, true);
 			curr.setEmpowered(false);
 		}
 
@@ -952,7 +952,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		if (!chosen.getStats().popFlag(Flag.FREE_ACTION)) {
+		if (!chosen.popFlag(Flag.FREE_ACTION)) {
 			chosen.setAvailable(false);
 			stack.add(chosen.copy());
 		}

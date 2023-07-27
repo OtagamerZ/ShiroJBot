@@ -47,6 +47,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
+import static com.kuuhaku.model.enums.shoukan.Trigger.ON_EMPOWER;
+
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	Pair<Integer, Color> EMPTY = new Pair<>(-1, Color.BLACK);
 
@@ -84,6 +86,18 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	CardAttributes getBase();
 
 	CardExtra getStats();
+
+	default void setFlag(Flag flag, boolean value, boolean permanent) {
+		if (flag == Flag.EMPOWERED && value) {
+			getGame().trigger(ON_EMPOWER, asSource(ON_EMPOWER));
+		}
+
+		getStats().setFlag(flag, value, permanent);
+	}
+
+	default boolean popFlag(Flag flag) {
+		return getStats().popFlag(flag);
+	}
 
 	Hand getLeech();
 
@@ -282,5 +296,24 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				g2d.drawString(str, x, y);
 			}
 		};
+	}
+
+	default void drawDescription(Graphics2D g2d, I18N locale) {
+		DeckStyling style = getHand() == null ? new DeckStyling() : getHand().getUserDeck().getStyling();
+
+		g2d.setColor(style.getFrame().getSecondaryColor());
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
+
+		int y = 276;
+		String tags = processTags(locale);
+		if (tags != null) {
+			g2d.drawString(tags, 7, 275);
+			y += 11;
+		}
+
+		Graph.drawMultilineString(g2d, parseDescription(locale),
+				7, y, 211, 3,
+				highlightValues(g2d, style.getFrame().isLegacy())
+		);
 	}
 }
