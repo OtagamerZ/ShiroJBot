@@ -319,7 +319,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			y += 11;
 		}
 
-		Graph.drawMultilineString(g2d, parseDescription(locale),
+		String str = parseDescription(locale);
+		System.out.println(str);
+
+		Graph.drawMultilineString(g2d, str,
 				7, y, 211, 3,
 				highlightValues(g2d, style.getFrame().isLegacy())
 		);
