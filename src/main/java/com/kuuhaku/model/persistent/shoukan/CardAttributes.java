@@ -113,7 +113,7 @@ public class CardAttributes implements Serializable, Cloneable {
 	public String getDescription(I18N locale) {
 		for (LocalizedDescription ld : descriptions) {
 			if (ld.getLocale() == locale) {
-				return ld.getDescription();
+				return ld.toString();
 			}
 		}
 

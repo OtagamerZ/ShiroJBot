@@ -475,7 +475,7 @@
 
 			 Archetype arch = getArchetype();
 			 if (arch.getId() != null) {
-				 effects += "\n\n&(#FFAA00)- " + arch.getInfo(locale).getDescription();
+				 effects += "\n\n&(#FFAA00)- " + arch.getInfo(locale);
 			 }
 
 			 Graph.drawMultilineString(g, effects,

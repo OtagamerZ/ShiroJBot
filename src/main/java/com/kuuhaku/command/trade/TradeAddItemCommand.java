@@ -82,6 +82,6 @@ public class TradeAddItemCommand implements Executable {
 
 		int amount = args.getInt("amount", 1);
 		trade.getSelfItems(event.user().getId()).addAll(Collections.nCopies(amount, item.getId()));
-		event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), amount + "x " + item.toString(locale))).queue();
+		event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), amount + "x " + item.getInfo(locale))).queue();
 	}
 }

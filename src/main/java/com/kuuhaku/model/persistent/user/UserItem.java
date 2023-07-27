@@ -27,12 +27,12 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "user_item")
@@ -64,6 +64,11 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 
 	@Column(name = "account_bound", nullable = false)
 	private boolean accountBound = false;
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "id", referencedColumnName = "id")
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<LocalizedItem> infos = new HashSet<>();
 
 	public String getId() {
 		return id;
@@ -116,8 +121,10 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 		return accountBound;
 	}
 
-	public String toString(I18N locale) {
-		return icon + " " + getName(locale);
+	public LocalizedItem getInfo(I18N locale) {
+		return infos.parallelStream()
+				.filter(ld -> ld.getLocale() == locale)
+				.findAny().orElseThrow();
 	}
 
 	@Override

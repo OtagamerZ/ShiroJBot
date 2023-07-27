@@ -40,11 +40,6 @@ public class Archetype extends DAO<Archetype> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id", referencedColumnName = "id")
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<LocalizedArch> infos = new HashSet<>();
-
 	@OneToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "id")
 	@Fetch(FetchMode.JOIN)
@@ -55,14 +50,13 @@ public class Archetype extends DAO<Archetype> {
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
 
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "id", referencedColumnName = "id")
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<LocalizedArch> infos = new HashSet<>();
+
 	public String getId() {
 		return id;
-	}
-
-	public LocalizedArch getInfo(I18N locale) {
-		return infos.parallelStream()
-				.filter(ld -> ld.getLocale() == locale)
-				.findAny().orElseThrow();
 	}
 
 	public Anime getAnime() {
@@ -73,6 +67,12 @@ public class Archetype extends DAO<Archetype> {
 		if (effect == null) return;
 
 		Utils.exec(effect, Map.of("hand", hand));
+	}
+
+	public LocalizedArch getInfo(I18N locale) {
+		return infos.parallelStream()
+				.filter(ld -> ld.getLocale() == locale)
+				.findAny().orElseThrow();
 	}
 
 	@Override

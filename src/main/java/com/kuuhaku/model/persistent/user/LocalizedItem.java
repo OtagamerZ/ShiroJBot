@@ -30,13 +30,10 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "title_info")
-public class LocalizedTitle extends DAO<LocalizedTitle> implements Serializable {
+@Table(name = "item_info")
+public class LocalizedItem extends DAO<LocalizedItem> implements Serializable {
 	@EmbeddedId
 	private LocalizedId id;
-
-	@Column(name = "name", nullable = false)
-	private String name;
 
 	@Column(name = "description", nullable = false)
 	private String description;
@@ -47,10 +44,6 @@ public class LocalizedTitle extends DAO<LocalizedTitle> implements Serializable 
 
 	public I18N getLocale() {
 		return id.getLocale();
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	public String getDescription() {
@@ -66,7 +59,7 @@ public class LocalizedTitle extends DAO<LocalizedTitle> implements Serializable 
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		LocalizedTitle that = (LocalizedTitle) o;
+		LocalizedItem that = (LocalizedItem) o;
 		return Objects.equals(id, that.id);
 	}
 

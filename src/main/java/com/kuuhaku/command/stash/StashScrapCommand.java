@@ -175,13 +175,13 @@ public class StashScrapCommand implements Executable {
 										dist.getAndIncrement();
 
 										int amount = items.getCount(i);
-										sb.appendNewLine("- " + amount + "x " + i.toString(locale));
+										sb.appendNewLine("- " + amount + "x " + i.getInfo(locale));
 										acc.addItem(i, amount);
 									});
 
 							if (dist.get() == 1) {
 								UserItem item = items.stream().findAny().orElseThrow();
-								event.channel().sendMessage(locale.get("str/received_item", items.getCount(item), item.toString(locale))).queue();
+								event.channel().sendMessage(locale.get("str/received_item", items.getCount(item), item.getInfo(locale))).queue();
 							} else {
 								event.channel().sendMessage(locale.get("str/received_items", sb.toString())).queue();
 							}

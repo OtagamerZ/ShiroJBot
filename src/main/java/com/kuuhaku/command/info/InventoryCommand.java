@@ -61,7 +61,7 @@ public class InventoryCommand implements Executable {
 				i -> {
 					int has = items.getOrDefault(i, 0);
 
-					String out = i.toString(locale) + " (`" + i.getId() + "`)";
+					String out = i.getInfo(locale) + " (`" + i.getId() + "`)";
 					if (i.getStackSize() > 0) {
 						out += "\n" + locale.get("str/item_has", has + "/" + i.getStackSize());
 					} else {
