@@ -286,7 +286,7 @@ public class SynthesizeCommand implements Executable {
 	}
 
 	public static Evogear rollSynthesis(User u, double mult, boolean lucky) {
-		RandomList<Evogear> pool = new RandomList<>(2 * mult);
+		RandomList<Evogear> pool = new RandomList<>(2 * mult * (lucky ? 1.5 : 1));
 		List<Evogear> evos = DAO.findAll(Evogear.class);
 		for (Evogear evo : evos) {
 			if (evo.getTier() <= 0) continue;
