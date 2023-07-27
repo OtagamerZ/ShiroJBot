@@ -82,6 +82,8 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default Side getSide() {
+		if (getHand() == null) return null;
+
 		return getHand().getSide();
 	}
 
