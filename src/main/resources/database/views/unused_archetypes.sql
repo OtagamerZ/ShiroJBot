@@ -28,6 +28,6 @@ FROM (
                   LEFT JOIN archetype a ON a.id = c.anime_id
          WHERE a.id IS NULL
      ) x
-WHERE x.cards > 20 / 3
+WHERE x.cards >= 20 / 3
 GROUP BY x.anime_id, x.cards
 ORDER BY x.anime_id
