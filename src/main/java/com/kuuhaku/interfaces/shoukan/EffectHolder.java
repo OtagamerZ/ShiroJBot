@@ -87,6 +87,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	CardExtra getStats();
 
+	default void setFlag(Flag flag, boolean value) {
+		setFlag(flag, value, false);
+	}
+
 	default void setFlag(Flag flag, boolean value, boolean permanent) {
 		if (flag == Flag.EMPOWERED && value) {
 			getGame().trigger(ON_EMPOWER, asSource(ON_EMPOWER));
