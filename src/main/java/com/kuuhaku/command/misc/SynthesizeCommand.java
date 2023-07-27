@@ -155,7 +155,7 @@ public class SynthesizeCommand implements Executable {
 
 			Account acc = data.profile().getAccount();
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setDescription(locale.get("str/synthesis_info", Utils.roundToString(mult, 2) + "x", field));
+					.setDescription(locale.get("str/synthesis_info", Utils.roundToString(mult * (lucky.get() ? 1.5 : 1), 2) + "x", field));
 
 			User usr = event.user();
 			if (Utils.CONFIMATIONS.contains(usr.getId())) throw new PendingConfirmationException();
