@@ -35,6 +35,9 @@ public class LocalizedItem extends DAO<LocalizedItem> implements Serializable {
 	@EmbeddedId
 	private LocalizedId id;
 
+	@Column(name = "name", nullable = false)
+	private String name;
+
 	@Column(name = "description", nullable = false)
 	private String description;
 
@@ -46,13 +49,17 @@ public class LocalizedItem extends DAO<LocalizedItem> implements Serializable {
 		return id.getLocale();
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	public String getDescription() {
 		return description;
 	}
 
 	@Override
 	public String toString() {
-		return description;
+		return name;
 	}
 
 	@Override

@@ -243,9 +243,9 @@ public class Trade {
 
             int count = (left ? leftItems : rightItems).getCount(item.getId());
             if (count > 1) {
-                sb.appendNewLine("- " + count + "x " + item.getInfo(locale));
+                sb.appendNewLine("- " + count + "x " + item.getName(locale));
             } else {
-                sb.appendNewLine("- " + item.getInfo(locale));
+                sb.appendNewLine("- " + item.getName(locale));
             }
         }
 

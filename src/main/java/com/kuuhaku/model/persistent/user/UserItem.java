@@ -22,7 +22,6 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PassiveItemException;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -75,11 +74,11 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	}
 
 	public String getName(I18N locale) {
-		return LocalizedString.get(locale, "item/" + id.toLowerCase(), id);
+		return getInfo(locale).getName();
 	}
 
 	public String getDescription(I18N locale) {
-		return LocalizedString.get(locale, "item/" + id.toLowerCase() + "_desc", "");
+		return getInfo(locale).getDescription();
 	}
 
 	public String getIcon() {

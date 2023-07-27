@@ -276,7 +276,7 @@ public class GuildListener extends ListenerAdapter {
 						UserItem item = DAO.find(UserItem.class, "STARTER_TOKEN");
 
 						account.addItem(item, 2);
-						ed.notify(locale.get("str/received_item", 2, item.getInfo(locale)));
+						ed.notify(locale.get("str/received_item", 2, item.getName(locale)));
 					}
 				} else {
 					ed.notify(locale.get("achievement/level_up", data.user().getAsMention(), profile.getLevel(), prize));
