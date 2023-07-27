@@ -181,7 +181,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					out += "%";
 				}
 
-				System.out.println(types);
 				out += types.stream()
 						.filter(COLORS::containsKey)
 						.map(t -> "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
