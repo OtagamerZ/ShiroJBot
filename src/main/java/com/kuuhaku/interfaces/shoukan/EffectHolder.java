@@ -193,9 +193,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				Object prop = props.get(main, "");
 				if (prop instanceof JSONArray a) {
-					out = a.getString(it);
+					out = String.valueOf(a.getInt(it));
 				} else {
-					out = String.valueOf(prop);
+					out = String.valueOf(((Number) prop).intValue());
 				}
 
 				if (prcnt) {
