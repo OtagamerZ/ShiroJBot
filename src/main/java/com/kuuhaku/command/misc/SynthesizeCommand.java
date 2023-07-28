@@ -285,7 +285,7 @@ public class SynthesizeCommand implements Executable {
 	}
 
 	public static Evogear rollSynthesis(User u, double mult, boolean lucky) {
-		RandomList<Evogear> pool = new RandomList<>(2 / (mult * (lucky ? 1.5 : 1)));
+		RandomList<Evogear> pool = new RandomList<>(2 * (mult * (lucky ? 1.5 : 1)));
 		List<Evogear> evos = DAO.findAll(Evogear.class);
 		for (Evogear evo : evos) {
 			if (evo.getTier() <= 0) continue;
@@ -299,6 +299,7 @@ public class SynthesizeCommand implements Executable {
 	private static double getMult(Collection<StashedCard> cards) {
 		double inc = 1;
 		double more = 1 * (1 + (Spawn.getRarityMult() - 1) / 2);
+		int fac = 150 + (cards.size() - 3) * 5;
 
 		for (StashedCard sc : cards) {
 			switch (sc.getType()) {
@@ -308,17 +309,17 @@ public class SynthesizeCommand implements Executable {
 
 					if (kc != null) {
 						if (kc.isChrome()) {
-							more *= 1 + rarity * (1 + kc.getQuality()) / 150;
+							more *= 1 + rarity * (1 + kc.getQuality()) / fac;
 						} else {
-							inc += rarity * (1 + kc.getQuality()) / 150;
+							inc += rarity * (1 + kc.getQuality()) / fac;
 						}
 					}
 				}
 				case EVOGEAR -> {
 					Evogear ev = sc.getCard().asEvogear();
-					inc += ev.getTier() / 6d;
+					inc += ev.getTier() / 6d * (150d / fac);
 				}
-				case FIELD -> more *= 1.25;
+				case FIELD -> more *= 1.25 * (150d / fac);
 			}
 		}
 

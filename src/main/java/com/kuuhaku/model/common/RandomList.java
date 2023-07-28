@@ -38,7 +38,7 @@ import java.util.random.RandomGenerator;
  * 1/Nㅤㅤㅤ1.0ㅤㅤㅤㅤN
  * <br>
  * <br>
- * Values >1 tend towards higher weights, values <1 tend towards lower weights
+ * Values <1 tend towards higher weights, values ></1>1 tend towards lower weights
  **/
 public class RandomList<T> {
 	private final NavigableMap<Double, T> map = new TreeMap<>();

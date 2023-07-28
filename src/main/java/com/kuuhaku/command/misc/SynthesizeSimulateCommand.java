@@ -54,7 +54,7 @@ public class SynthesizeSimulateCommand implements Executable {
 			return;
 		}
 
-		RandomList<Byte> pool = new RandomList<>(2 / mult);
+		RandomList<Byte> pool = new RandomList<>(2 * mult);
 		for (byte i = 0; i < 4; i++) {
 			pool.add(i, DAO.queryNative(Integer.class, "SELECT get_weight('EVOGEAR', ?1)", i + 1));
 		}

@@ -62,7 +62,7 @@ public abstract class Spawn {
 
 		KawaiponCard card = null;
 		if (Calc.chance(dropRate)) {
-			RandomList<Rarity> rarities = new RandomList<>(2 / rarityBonus);
+			RandomList<Rarity> rarities = new RandomList<>(2 * rarityBonus);
 			for (Rarity r : Rarity.getActualRarities()) {
 				rarities.add(r, DAO.queryNative(Integer.class, "SELECT get_weight('KAWAIPON', ?1)", r.getIndex()));
 			}
@@ -89,7 +89,7 @@ public abstract class Spawn {
 			}
 			lastAnimes.add(anime);
 
-			RandomList<Card> cards = new RandomList<>(2 / rarityBonus);
+			RandomList<Card> cards = new RandomList<>(2 * rarityBonus);
 			for (Card c : anime.getCards()) {
 				if (c.getRarity().getIndex() <= 0) continue;
 
@@ -118,13 +118,13 @@ public abstract class Spawn {
 
 		Drop drop = null;
 		if (Calc.chance(dropRate)) {
-			RandomList<Rarity> rarities = new RandomList<>(2 / rarityBonus);
+			RandomList<Rarity> rarities = new RandomList<>(2 * rarityBonus);
 			for (Rarity r : Rarity.getActualRarities()) {
 				rarities.add(r, DAO.queryNative(Integer.class, "SELECT get_weight('KAWAIPON', ?1)", r.getIndex()));
 			}
 
 			Rarity rarity = rarities.get();
-			RandomList<Drop> drops = new RandomList<>(1.75 / rarityBonus);
+			RandomList<Drop> drops = new RandomList<>(1.75 * rarityBonus);
 			drops.add(new CreditDrop(locale, rarity), 5000);
 			drops.add(new FragmentDrop(locale, rarity), 575);
 
