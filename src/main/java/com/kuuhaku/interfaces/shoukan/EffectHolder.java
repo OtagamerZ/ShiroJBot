@@ -171,34 +171,32 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				String main = types.stream().map(String::valueOf).findFirst().orElse(null);
 
 				JSONObject props = csm.getStoredProps();
-				if (!Utils.equalsAny(main, props.keySet())) {
-					String val = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
+				String val = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
 
-					for (Object type : types) {
-						props.compute(String.valueOf(type), (k, v) -> {
-							int value = Calc.round(NumberUtils.toDouble(val) * getPower());
+				for (Object type : types) {
+					props.compute(String.valueOf(type), (k, v) -> {
+						int value = Calc.round(NumberUtils.toDouble(val) * getPower());
 
-							if (v == null) {
-								return value;
-							} else if (v instanceof JSONArray a) {
-								a.add(value);
-								return a;
-							}
+						if (v == null) {
+							return value;
+						} else if (v instanceof JSONArray a) {
+							a.add(value);
+							return a;
+						}
 
-							return new JSONArray(List.of(v, value));
-						});
-					}
+						return new JSONArray(List.of(v, value));
+					});
 				}
 
-				Number val;
+				Number v;
 				Object prop = props.get(main, "");
 				if (prop instanceof JSONArray a) {
-					val = NumberUtils.toDouble(String.valueOf(a.remove(0)));
+					v = NumberUtils.toDouble(String.valueOf(a.remove(0)));
 				} else {
-					val = NumberUtils.toDouble(String.valueOf(prop));
+					v = NumberUtils.toDouble(String.valueOf(prop));
 				}
 
-				out = String.valueOf(Calc.round(val.doubleValue() * getPower()));
+				out = String.valueOf(Calc.round(v.doubleValue() * getPower()));
 				if (prcnt) {
 					out += "%";
 				}
