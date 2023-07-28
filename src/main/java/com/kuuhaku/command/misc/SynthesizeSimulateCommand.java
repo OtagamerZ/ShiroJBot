@@ -83,7 +83,7 @@ public class SynthesizeSimulateCommand implements Executable {
 			double avg = DoubleStream.of(results).average().orElseThrow();
 			double var = DoubleStream.of(results).max().orElseThrow();
 
-			eb.appendDescription("**%s:** %s%% `± %s%%`\n".formatted(
+			eb.appendDescription("\n**%s:** %s%% `± %s%%`".formatted(
 					locale.get("str/tier", i + 1),
 					Calc.round(avg * 100, 2),
 					Calc.round((var - avg) * 100, 2)
