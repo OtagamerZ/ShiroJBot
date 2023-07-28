@@ -48,9 +48,15 @@ import java.util.stream.DoubleStream;
 public class SynthesizeSimulateCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		RandomList<Byte> pool = new RandomList<>(2 / args.getDouble("mult"));
+		double mult = args.getDouble("mult");
+		if (mult <= 0) {
+			event.channel().sendMessage(locale.get("error/invalid_value_low", 0)).queue();
+			return;
+		}
+
+		RandomList<Byte> pool = new RandomList<>(2 / mult);
 		for (byte i = 0; i < 4; i++) {
-			pool.add(i, DAO.queryNative(Integer.class, "SELECT get_weight('EVOGEAR', ?1)", i + 1));
+			pool.add(i, DAO.queryNative(Integer.class, "SELECT get_weight('EVOGEAR', ?1)", 5 - (i + 1)));
 		}
 
 		double[][] odds = new double[4][5];
@@ -76,7 +82,7 @@ public class SynthesizeSimulateCommand implements Executable {
 			double avg = DoubleStream.of(results).average().orElseThrow();
 			double var = DoubleStream.of(results).max().orElseThrow();
 
-			eb.appendDescription("%s: ~%s%% (± ~%s%%)\n".formatted(
+			eb.appendDescription("**%s:** %s%% `± %s%%`\n".formatted(
 					locale.get("str/tier", i + 1),
 					Calc.round(avg * 100, 2),
 					Calc.round((var - avg) * 100, 2)
