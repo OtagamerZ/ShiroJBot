@@ -189,13 +189,12 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					});
 				}
 
-				System.out.println(props);
+				int it = counter.computeIfAbsent(main, k -> new AtomicInteger()).getAndIncrement();
 
 				Number v;
-				AtomicInteger it = counter.computeIfAbsent(main, k -> new AtomicInteger());
 				Object prop = props.get(main, "");
 				if (prop instanceof JSONArray a) {
-					v = NumberUtils.toDouble(a.getString(it.getAndIncrement()));
+					v = NumberUtils.toDouble(a.getString(it));
 				} else {
 					v = NumberUtils.toDouble(String.valueOf(prop));
 				}
