@@ -159,6 +159,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 		String desc = getDescription(locale);
 		Matcher pat = Utils.regex(desc, "(?:\\{=(.*?)}|\\{(\\w+)})(%)?");
+		Map<String, AtomicInteger> counter = new HashMap<>();
 
 		return pat.replaceAll(m -> {
 			boolean tag = m.group(2) != null;
@@ -189,9 +190,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				}
 
 				Number v;
+				AtomicInteger it = counter.computeIfAbsent(main, k -> new AtomicInteger());
 				Object prop = props.get(main, "");
 				if (prop instanceof JSONArray a) {
-					v = NumberUtils.toDouble(String.valueOf(a.remove(0)));
+					v = NumberUtils.toDouble(a.getString(it.getAndIncrement()));
 				} else {
 					v = NumberUtils.toDouble(String.valueOf(prop));
 				}
