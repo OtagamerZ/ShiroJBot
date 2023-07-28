@@ -276,6 +276,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						.filter(Objects::nonNull)
 						.toList();
 
+				boolean after = false;
 				for (String s : str.split("§(?=[⠁-⣿])|(?<=[⠁-⣿])")) {
 					if (s.isEmpty()) continue;
 
@@ -289,10 +290,16 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							g2d.drawImage(icon, x + 2, y - size + 1, size, size, null);
 							x += size + 2;
 						}
+
+						after = true;
 					} else {
-						g2d.setColor(Graph.mix(types));
-						if (!g2d.getColor().equals(Color.BLACK)) {
-							Graph.drawOutlinedString(g2d, s, x, y, 1.5f, Color.BLACK);
+						if (!after) {
+							g2d.setColor(Graph.mix(types));
+							if (!g2d.getColor().equals(Color.BLACK)) {
+								Graph.drawOutlinedString(g2d, s, x, y, 1.5f, Color.BLACK);
+							}
+						} else {
+							g2d.setColor(style.getFrame().getSecondaryColor());
 						}
 
 						g2d.drawString(s, x, y);
