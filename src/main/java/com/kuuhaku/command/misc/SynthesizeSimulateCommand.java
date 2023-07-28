@@ -75,7 +75,8 @@ public class SynthesizeSimulateCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/simulated_odds"));
+				.setTitle(locale.get("str/simulated_odds"))
+				.setDescription(locale.get("str/multiplier", mult));
 
 		for (int i = 0; i < odds.length; i++) {
 			double[] results = odds[i];
