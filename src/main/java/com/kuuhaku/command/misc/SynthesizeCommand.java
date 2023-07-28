@@ -305,7 +305,7 @@ public class SynthesizeCommand implements Executable {
 	private static double getMult(Collection<StashedCard> cards) {
 		double inc = 1;
 		double more = 1 * (1 + (Spawn.getRarityMult() - 1) / 2);
-		int fac = 150 + (cards.size() - 3) * 5;
+		int fac = 150 + (cards.size() - 3) * 15;
 
 		for (StashedCard sc : cards) {
 			switch (sc.getType()) {
