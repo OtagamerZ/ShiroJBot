@@ -64,7 +64,7 @@ public abstract class Spawn {
 		if (Calc.chance(dropRate)) {
 			RandomList<Rarity> rarities = new RandomList<>(2 / rarityBonus);
 			for (Rarity r : Rarity.getActualRarities()) {
-				rarities.add(r, DAO.queryNative(Integer.class, "SELECT get_weight('KAWAIPON', ?1)", 6 - r.getIndex()));
+				rarities.add(r, DAO.queryNative(Integer.class, "SELECT get_weight('KAWAIPON', ?1)", r.getIndex()));
 			}
 
 			Rarity rarity = rarities.get();
@@ -120,7 +120,7 @@ public abstract class Spawn {
 		if (Calc.chance(dropRate)) {
 			RandomList<Rarity> rarities = new RandomList<>(2 / rarityBonus);
 			for (Rarity r : Rarity.getActualRarities()) {
-				rarities.add(r, DAO.queryNative(Integer.class, "SELECT get_weight('KAWAIPON', ?1)", 6 - r.getIndex()));
+				rarities.add(r, DAO.queryNative(Integer.class, "SELECT get_weight('KAWAIPON', ?1)", r.getIndex()));
 			}
 
 			Rarity rarity = rarities.get();

@@ -56,7 +56,7 @@ public class SynthesizeSimulateCommand implements Executable {
 
 		RandomList<Byte> pool = new RandomList<>(2 / mult);
 		for (byte i = 0; i < 4; i++) {
-			pool.add(i, DAO.queryNative(Integer.class, "SELECT get_weight('EVOGEAR', ?1)", 5 - (i + 1)));
+			pool.add(i, DAO.queryNative(Integer.class, "SELECT get_weight('EVOGEAR', ?1)", i + 1));
 		}
 
 		double[][] odds = new double[4][5];
