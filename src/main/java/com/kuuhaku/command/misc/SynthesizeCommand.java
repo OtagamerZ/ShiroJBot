@@ -40,6 +40,7 @@ import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.SynthResult;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Spawn;
@@ -285,15 +286,17 @@ public class SynthesizeCommand implements Executable {
 	}
 
 	public static Evogear rollSynthesis(User u, double mult, boolean lucky) {
-		RandomList<Evogear> pool = new RandomList<>(2 * (mult * (lucky ? 1.5 : 1)));
-		List<Evogear> evos = DAO.findAll(Evogear.class);
-		for (Evogear evo : evos) {
-			if (evo.getTier() <= 0) continue;
-
-			pool.add(evo, DAO.queryNative(Integer.class, "SELECT get_weight(?1, ?2)", evo.getId(), u.getId()));
+		RandomList<SynthResult> pool = new RandomList<>(2 * (mult * (lucky ? 1.5 : 1)));
+		List<SynthResult> evos = DAO.queryAllNative(SynthResult.class, "SELECT card_id, get_weight(card_id) FROM evogear WHERE tier > 0");
+		for (SynthResult evo : evos) {
+			pool.add(evo, evo.weight());
 		}
 
-		return lucky ? Utils.luckyRoll(pool::get, (a, b) -> b.getTier() > a.getTier()) : pool.get();
+		if (lucky) {
+			return Utils.luckyRoll(pool::get, (a, b) -> b.weight() < a.weight()).evogear();
+		} else {
+			return pool.get().evogear();
+		}
 	}
 
 	private static double getMult(Collection<StashedCard> cards) {
