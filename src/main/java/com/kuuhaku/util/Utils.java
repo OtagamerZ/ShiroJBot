@@ -67,6 +67,8 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
@@ -1228,5 +1230,34 @@ public abstract class Utils {
         }
 
         return List.of();
+    }
+
+    public static <T> T map(Class<T> target, Object... args) {
+        for (Constructor<?> ctr : target.getConstructors()) {
+            if (ctr.getParameterCount() != args.length) continue;
+
+            try {
+                AtomicInteger i = new AtomicInteger();
+                Class<?>[] types = ctr.getParameterTypes();
+                return target.cast(ctr.newInstance(
+                        Arrays.stream(args)
+                                .map(o -> {
+                                    if (o instanceof Number n) {
+                                        if (n.doubleValue() - n.intValue() != 0) {
+                                            n.floatValue();
+                                        }
+
+                                        return n.intValue();
+                                    }
+
+                                    return types[i.getAndIncrement()].cast(o);
+                                })
+                                .toArray()
+                ));
+            } catch (InvocationTargetException | InstantiationException | IllegalAccessException ignore) {
+            }
+        }
+
+        return null;
     }
 }
