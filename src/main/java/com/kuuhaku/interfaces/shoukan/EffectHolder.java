@@ -318,17 +318,20 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
 		g2d.setColor(style.getFrame().getSecondaryColor());
 
-		int y = 276;
-		String tags = processTags(locale);
-		if (tags != null) {
-			g2d.drawString(tags, 7, 275);
-			y += 11;
-		}
+		String desc = parseDescription(locale);
+		if (!desc.isBlank()) {
+			int y = 276;
+			String tags = processTags(locale);
+			if (tags != null) {
+				g2d.drawString(tags, 7, 275);
+				y += 11;
+			}
 
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
-		Graph.drawMultilineString(g2d, parseDescription(locale),
-				7, y, 211, 3,
-				highlightValues(g2d, style.getFrame().isLegacy())
-		);
+			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
+			Graph.drawMultilineString(g2d, desc,
+					7, y, 211, 3,
+					highlightValues(g2d, style.getFrame().isLegacy())
+			);
+		}
 	}
 }

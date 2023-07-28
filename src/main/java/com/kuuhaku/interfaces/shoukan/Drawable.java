@@ -318,7 +318,7 @@ public interface Drawable<T extends Drawable<T>> {
 				y -= icon.getHeight() + 5;
 			}
 
-			if (getCurses().size() > 0) {
+			if (!getCurses().isEmpty()) {
 				icon = IO.getResourceAsImage("shoukan/icons/curse.png");
 				assert icon != null;
 				int x = 200 - icon.getWidth();
