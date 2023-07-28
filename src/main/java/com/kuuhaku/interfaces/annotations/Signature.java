@@ -38,7 +38,7 @@ public @interface Signature {
 	enum Type {
 		ANY("\\S+"),
 		WORD("[\\w-.]+"),
-		NUMBER("-?\\d+"),
+		NUMBER("-?[\\d.]+"),
 		TEXT("\"[^\"]+\""),
 
 		USER(Message.MentionType.USER.getPattern().pattern()),
