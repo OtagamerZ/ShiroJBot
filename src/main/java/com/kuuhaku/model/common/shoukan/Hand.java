@@ -732,7 +732,7 @@ public class Hand {
 		modHP(value, false);
 	}
 
-	public void modHP(int value, boolean pure) {
+	public void modHP(double value, boolean pure) {
 		if (value == 0) return;
 		else if (game.getArcade() == Arcade.OVERCHARGE) {
 			value *= Math.min(0.5 + 0.5 * (Math.ceil(game.getTurn() / 2d) / 10), 1);
@@ -756,7 +756,7 @@ public class Hand {
 			if (origin.synergy() == Race.POSSESSED && value > 0) {
 				value *= 1 + getOther().getGraveyard().size() * 0.05;
 			} else if (origin.synergy() == Race.PRIMAL && value < 0) {
-				int degen = value / 10;
+				int degen = (int) (value / 10);
 				if (degen < 0) {
 					regdeg.add(degen);
 					value -= degen;
@@ -764,7 +764,7 @@ public class Hand {
 			}
 
 			int dot = regdeg.peek();
-			int quart = value / 4;
+			int quart = (int) (value / 4);
 			if (dot > 0 && value < 0) {
 				value -= quart + regdeg.reduce(Degen.class, quart);
 			} else if (dot < 0 && value > 0) {
@@ -772,9 +772,9 @@ public class Hand {
 			}
 
 			if (value < 0) {
-				value *= Math.max(0.1, stats.getDamageMult());
+				value *= Math.max(0, stats.getDamageMult());
 			} else {
-				value *= stats.getHealMult();
+				value *= Math.max(0, stats.getHealMult());
 			}
 
 			double prcnt = getHPPrcnt();
@@ -790,7 +790,7 @@ public class Hand {
 			}
 		}
 
-		this.hp = Utils.clamp(this.hp + value, 0, base.hp() * 2);
+		this.hp = (int) Utils.clamp(this.hp + value, 0, base.hp() * 2);
 
 		if (!pure) {
 			hpDelta = this.hp - before;
