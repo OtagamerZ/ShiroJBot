@@ -189,6 +189,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					});
 				}
 
+				System.out.println(props);
+
 				Number v;
 				AtomicInteger it = counter.computeIfAbsent(main, k -> new AtomicInteger());
 				Object prop = props.get(main, "");
@@ -278,7 +280,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						.toList();
 
 				for (String s : str.split("§(?=[⠁-⣿])|(?<=[⠁-⣿])")) {
-					if (s.length() == 0) continue;
+					if (s.isEmpty()) continue;
 
 					char code = s.charAt(0);
 					if (Utils.between(code, 0x2801, 0x2900)) {
