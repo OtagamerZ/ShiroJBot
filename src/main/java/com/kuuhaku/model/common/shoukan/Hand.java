@@ -794,7 +794,7 @@ public class Hand {
 
 		if (!pure) {
 			hpDelta = this.hp - before;
-			if (hpDelta < 0) {
+			if (hpDelta <= 0) {
 				game.trigger(Trigger.ON_DAMAGE, side);
 
 				if (origin.synergy() == Race.VIRUS) {
