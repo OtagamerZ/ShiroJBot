@@ -176,7 +176,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				for (Object type : types) {
 					props.compute(String.valueOf(type), (k, v) -> {
+						System.out.println(NumberUtils.toDouble(val));
+						System.out.println(getPower());
 						int value = Calc.round(NumberUtils.toDouble(val) * getPower());
+						System.out.println(value);
 
 						if (v == null) {
 							return value;
