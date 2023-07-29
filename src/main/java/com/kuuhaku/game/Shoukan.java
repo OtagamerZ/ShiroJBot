@@ -1755,7 +1755,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		for (Map.Entry<Senshi, Integer> e : cards.entrySet()) {
 			Senshi card = e.getKey();
-
 			if (card.getSlot().hashCode() == e.getValue()) {
 				act.accept(card);
 			}
