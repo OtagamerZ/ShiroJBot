@@ -216,12 +216,13 @@
 	 }
 
 	 public boolean validateEvogear() {
-		 HashBag<Evogear> bag = new HashBag<>(getEvogear());
-		 bag.removeIf(e -> bag.getCount(e) <= getMaxEvogearCopies(e.getTier()));
+		 HashBag<Pair<String, Integer>> bag = new HashBag<>();
+		 for (Evogear e : getEvogear()) {
+			 bag.add(new Pair<>(e.getId(), e.getTier()));
+		 }
 
-		 return bag.isEmpty()
-				&& Utils.between(getEvogear().size(), 0, 26)
-				&& getEvogear().stream().filter(e -> e.getTier() == 4).count() <= getMaxEvogearCopies(4);
+		 bag.removeIf(p -> bag.getCount(p) <= getMaxEvogearCopies(p.getSecond()));
+		 return bag.isEmpty() && Utils.between(getEvogear().size(), 0, 26);
 	 }
 
 	 public int getEvoWeight() {
