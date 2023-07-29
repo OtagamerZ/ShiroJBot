@@ -174,9 +174,12 @@
 
 	 public boolean validateSenshi() {
 		 int allowed = getMaxSenshiCopies();
-		 HashBag<Senshi> bag = new HashBag<>(getSenshi());
-		 bag.removeIf(s -> bag.getCount(s) <= allowed);
+		 HashBag<String> bag = new HashBag<>();
+		 for (Senshi s : getSenshi()) {
+			 bag.add(s.getId());
+		 }
 
+		 bag.removeIf(s -> bag.getCount(s) <= allowed);
 		 return bag.isEmpty() && Utils.between(getSenshi().size(), 30, 36);
 	 }
 
