@@ -1746,11 +1746,15 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void iterateSlots(Side side, Consumer<Senshi> act) {
-		for (SlotColumn slot : arena.getSlots(side)) {
-			for (Senshi card : slot.getCards()) {
-				if (card != null) {
-					act.accept(card);
-				}
+		List<Senshi> cards = arena.getSlots(side).stream()
+				.flatMap(slt -> slt.getCards().stream())
+				.filter(Objects::nonNull)
+				.toList();
+
+
+		for (Senshi card : cards) {
+			if (card.getIndex() > -1) {
+				act.accept(card);
 			}
 		}
 	}
