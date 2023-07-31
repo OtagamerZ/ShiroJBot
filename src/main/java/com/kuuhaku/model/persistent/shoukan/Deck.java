@@ -174,9 +174,12 @@
 
 	 public boolean validateSenshi() {
 		 int allowed = getMaxSenshiCopies();
-		 HashBag<Senshi> bag = new HashBag<>(getSenshi());
-		 bag.removeIf(s -> bag.getCount(s) <= allowed);
+		 HashBag<String> bag = new HashBag<>();
+		 for (Senshi s : getSenshi()) {
+			 bag.add(s.getId());
+		 }
 
+		 bag.removeIf(s -> bag.getCount(s) <= allowed);
 		 return bag.isEmpty() && Utils.between(getSenshi().size(), 30, 36);
 	 }
 
@@ -216,12 +219,13 @@
 	 }
 
 	 public boolean validateEvogear() {
-		 HashBag<Evogear> bag = new HashBag<>(getEvogear());
-		 bag.removeIf(e -> bag.getCount(e) <= getMaxEvogearCopies(e.getTier()));
+		 HashBag<Pair<String, Integer>> bag = new HashBag<>();
+		 for (Evogear e : getEvogear()) {
+			 bag.add(new Pair<>(e.getId(), e.getTier()));
+		 }
 
-		 return bag.isEmpty()
-				&& Utils.between(getEvogear().size(), 0, 26)
-				&& getEvogear().stream().filter(e -> e.getTier() == 4).count() <= getMaxEvogearCopies(4);
+		 bag.removeIf(p -> bag.getCount(p) <= getMaxEvogearCopies(p.getSecond()));
+		 return bag.isEmpty() && Utils.between(getEvogear().size(), 0, 26);
 	 }
 
 	 public int getEvoWeight() {

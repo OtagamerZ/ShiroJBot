@@ -77,8 +77,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.random.RandomGenerator;
+import java.util.stream.Collectors;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
@@ -1746,11 +1748,15 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void iterateSlots(Side side, Consumer<Senshi> act) {
-		for (SlotColumn slot : arena.getSlots(side)) {
-			for (Senshi card : slot.getCards()) {
-				if (card != null) {
-					act.accept(card);
-				}
+		Map<Senshi, Integer> cards = arena.getSlots(side).stream()
+				.flatMap(slt -> slt.getCards().stream())
+				.filter(Objects::nonNull)
+				.collect(Collectors.toMap(Function.identity(), s -> s.getSlot().hashCode()));
+
+		for (Map.Entry<Senshi, Integer> e : cards.entrySet()) {
+			Senshi card = e.getKey();
+			if (card.getSlot().hashCode() == e.getValue()) {
+				act.accept(card);
 			}
 		}
 	}
