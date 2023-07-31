@@ -1846,6 +1846,9 @@ public class Shoukan extends GameInstance<Phase> {
 		for (EffectOverTime effect : effects) {
 			if (effect.lock().get()) continue;
 
+			Hand h = hands.get(effect.side());
+			if (h.getLockTime(Lock.EFFECT) > 0 && !effect.debuff()) continue;
+
 			boolean remove = false;
 			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
 			if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
@@ -1961,7 +1964,7 @@ public class Shoukan extends GameInstance<Phase> {
 				trigger(ON_VICTORY, side.getOther());
 				trigger(ON_DEFEAT, side);
 
-				if (hand.getDefeat() == null) {
+				if (def == null) {
 					if (hand.getHP() > 0) continue;
 					else if (hand.getOrigin().major() == Race.UNDEAD && hand.getOriginCooldown() == 0) {
 						hand.setHP(1);
@@ -2036,7 +2039,7 @@ public class Shoukan extends GameInstance<Phase> {
 						getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
 						registered.set(true);
 					}
-				});
+				}, Utils::doNothing);
 
 		for (Map.Entry<String, String> tuple : messages.entrySet()) {
 			if (tuple != null) {

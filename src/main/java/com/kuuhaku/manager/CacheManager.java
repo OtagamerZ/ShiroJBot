@@ -68,8 +68,9 @@ public class CacheManager {
 
 	public byte[] computeResource(String key, BiFunction<String, byte[], byte[]> mapper) {
 		byte[] bytes = mapper.apply(key, resource.get(key));
-		resource.put(key, bytes);
+		if (bytes == null) return null;
 
+		resource.put(key, bytes);
 		return bytes;
 	}
 
@@ -79,8 +80,9 @@ public class CacheManager {
 
 	public String computeLocale(String key, BiFunction<String, String, String> mapper) {
 		String value = mapper.apply(key, locale.get(key));
-		locale.put(key, value);
+		if (value == null) return null;
 
+		locale.put(key, value);
 		return value;
 	}
 }
