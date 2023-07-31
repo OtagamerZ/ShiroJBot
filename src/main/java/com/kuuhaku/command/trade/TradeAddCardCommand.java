@@ -97,6 +97,7 @@ public class TradeAddCardCommand implements Executable {
                         }
 
                         event.channel().sendMessage(locale.get("error/not_owned")).queue();
+                        success.complete(false);
                         return null;
                     });
 
