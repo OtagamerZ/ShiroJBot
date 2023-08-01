@@ -185,6 +185,10 @@ public class Shoukan extends GameInstance<Phase> {
 				if ((boolean) m.invoke(this, hand.getSide(), action.getSecond())) {
 					getCurrent().showHand();
 				}
+			} catch (StackOverflowError e) {
+				reportResult(GameReport.STACK_OVERFLOW, null, "error/match_termination", GameReport.STACK_OVERFLOW);
+				close(GameReport.STACK_OVERFLOW);
+				Constants.LOGGER.error(e, e);
 			} catch (Exception e) {
 				Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
 			} finally {
@@ -2064,7 +2068,7 @@ public class Shoukan extends GameInstance<Phase> {
 			this.winner = winner;
 		}
 
-		if (!singleplayer && arcade == null && !cheats) {
+		if (!singleplayer && arcade == null && !cheats && code == GameReport.SUCCESS) {
 			Match m = new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]));
 			new MatchHistory(m).save();
 		}
