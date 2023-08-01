@@ -88,7 +88,7 @@ public class StashedCard extends DAO<StashedCard> {
 		this.card = card.getCard();
 		this.kawaipon = kawaipon;
 		if (card instanceof Senshi) {
-			this.type = CardType.SENSHI;
+			this.type = CardType.KAWAIPON;
 		} else if (card instanceof Evogear) {
 			this.type = CardType.EVOGEAR;
 		} else {
