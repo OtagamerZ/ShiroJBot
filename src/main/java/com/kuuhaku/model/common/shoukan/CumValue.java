@@ -102,8 +102,8 @@ public class CumValue implements Iterable<ValueMod>, Cloneable {
 		this.values.add(mod);
 	}
 
-	public void leftShift(double mult) {
-		set(mult);
+	public void leftShift(Number mult) {
+		set(mult.doubleValue());
 	}
 
 	public Set<ValueMod> values() {

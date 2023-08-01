@@ -1253,7 +1253,7 @@ public class Shoukan extends GameInstance<Phase> {
 							op.getRegDeg().apply(0.05);
 						}
 					}
-					case SPAWN -> op.getRegDeg().leftShift(-op.getBase().hp() * 0.05);
+					case SPAWN -> op.getRegDeg().add(-op.getBase().hp() * 0.05);
 				}
 
 				boolean ignore = source.popFlag(Flag.NO_COMBAT);
@@ -1515,7 +1515,7 @@ public class Shoukan extends GameInstance<Phase> {
 							op.getRegDeg().apply(0.05);
 						}
 					}
-					case SPAWN -> op.getRegDeg().leftShift(-op.getBase().hp() * 0.05);
+					case SPAWN -> op.getRegDeg().add(-op.getBase().hp() * 0.05);
 				}
 
 				if (!source.popFlag(Flag.NO_COMBAT)) {
