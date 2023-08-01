@@ -29,31 +29,31 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.LocalizedDescription;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
-import com.kuuhaku.model.common.Copier;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.EnumSet;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class CardExtra implements Cloneable {
-	private final HashSet<ValueMod> mana;
-	private final HashSet<ValueMod> blood;
-	private final HashSet<ValueMod> sacrifices;
+	private final CumValue mana;
+	private final CumValue blood;
+	private final CumValue sacrifices;
 
-	private final HashSet<ValueMod> atk;
-	private final HashSet<ValueMod> dfs;
+	private final CumValue atk;
+	private final CumValue dfs;
 
-	private final HashSet<ValueMod> dodge;
-	private final HashSet<ValueMod> block;
+	private final CumValue dodge;
+	private final CumValue block;
 
-	private final HashSet<ValueMod> costMult;
-	private final HashSet<ValueMod> attrMult;
-	private final HashSet<ValueMod> power;
+	private final CumValue costMult;
+	private final CumValue attrMult;
+	private final CumValue power;
 
-	private final HashSet<ValueMod> tier;
+	private final CumValue tier;
 
 	private final EnumSet<Flag> flags;
 	private final EnumSet<Flag> tempFlags;
@@ -76,12 +76,12 @@ public class CardExtra implements Cloneable {
 	private transient Field[] fieldCache = null;
 
 	public CardExtra(
-			HashSet<ValueMod> mana, HashSet<ValueMod> blood, HashSet<ValueMod> sacrifices,
-			HashSet<ValueMod> atk, HashSet<ValueMod> dfs, HashSet<ValueMod> dodge,
-			HashSet<ValueMod> block, HashSet<ValueMod> costMult, HashSet<ValueMod> attrMult, HashSet<ValueMod> tier,
-			HashSet<ValueMod> power, EnumSet<Flag> flags, EnumSet<Flag> tempFlags,
-			EnumSet<Flag> permFlags, JSONObject data, JSONObject perm,
-			ListOrderedSet<String> curses
+			CumValue mana, CumValue blood, CumValue sacrifices,
+			CumValue atk, CumValue dfs, CumValue dodge,
+			CumValue block, CumValue costMult, CumValue attrMult,
+			CumValue tier, CumValue power, EnumSet<Flag> flags,
+			EnumSet<Flag> tempFlags, EnumSet<Flag> permFlags, JSONObject data,
+			JSONObject perm, ListOrderedSet<String> curses
 	) {
 		this.mana = mana;
 		this.blood = blood;
@@ -104,17 +104,17 @@ public class CardExtra implements Cloneable {
 
 	public CardExtra() {
 		this(
-				new HashSet<>(),
-				new HashSet<>(),
-				new HashSet<>(),
-				new HashSet<>(),
-				new HashSet<>(),
-				new HashSet<>(),
-				new HashSet<>(),
-				new HashSet<>(),
-				new HashSet<>(),
-				new HashSet<>(),
-				new HashSet<>(),
+				CumValue.flat(),
+				CumValue.flat(),
+				CumValue.flat(),
+				CumValue.flat(),
+				CumValue.flat(),
+				CumValue.flat(),
+				CumValue.flat(),
+				CumValue.mult(),
+				CumValue.mult(),
+				CumValue.flat(),
+				CumValue.mult(),
 				EnumSet.noneOf(Flag.class),
 				EnumSet.noneOf(Flag.class),
 				EnumSet.noneOf(Flag.class),
@@ -124,411 +124,48 @@ public class CardExtra implements Cloneable {
 		);
 	}
 
-	public int getMana() {
-		return Calc.round(sum(mana));
+	public CumValue getMana() {
+		return mana;
 	}
 
-	public ValueMod getMana(Drawable<?> source) {
-		for (ValueMod mod : mana) {
-			if (Objects.equals(source, mod.getSource())) {
-				return mod;
-			}
-		}
-
-		return new ValueMod(source, 0);
+	public CumValue getBlood() {
+		return blood;
 	}
 
-	public void setMana(int mana) {
-		for (ValueMod mod : this.mana) {
-			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + mana);
-				return;
-			}
-		}
-
-		this.mana.add(new PermMod(mana));
+	public CumValue getSacrifices() {
+		return sacrifices;
 	}
 
-	public void setMana(Drawable<?> source, int mana) {
-		ValueMod mod = new ValueMod(source, mana);
-		this.mana.remove(mod);
-		this.mana.add(mod);
+	public CumValue getAtk() {
+		return atk;
 	}
 
-	public void setMana(Drawable<?> source, int mana, int expiration) {
-		ValueMod mod = new ValueMod(source, mana, expiration);
-		this.mana.remove(mod);
-		this.mana.add(mod);
+	public CumValue getDfs() {
+		return dfs;
 	}
 
-	public int getBlood() {
-		return Calc.round(sum(blood));
+	public CumValue getDodge() {
+		return dodge;
 	}
 
-	public ValueMod getBlood(Drawable<?> source) {
-		for (ValueMod mod : blood) {
-			if (Objects.equals(source, mod.getSource())) {
-				return mod;
-			}
-		}
-
-		return new ValueMod(source, 0);
+	public CumValue getBlock() {
+		return block;
 	}
 
-	public void setBlood(int blood) {
-		for (ValueMod mod : this.blood) {
-			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + blood);
-				return;
-			}
-		}
-
-		this.blood.add(new PermMod(blood));
+	public CumValue getCostMult() {
+		return costMult;
 	}
 
-	public void setBlood(Drawable<?> source, int blood) {
-		ValueMod mod = new ValueMod(source, blood);
-		this.blood.remove(mod);
-		this.blood.add(mod);
+	public CumValue getAttrMult() {
+		return attrMult;
 	}
 
-	public void setBlood(Drawable<?> source, int blood, int expiration) {
-		ValueMod mod = new ValueMod(source, blood, expiration);
-		this.blood.remove(mod);
-		this.blood.add(mod);
+	public CumValue getPower() {
+		return power;
 	}
 
-	public int getSacrifices() {
-		return Calc.round(sum(sacrifices));
-	}
-
-	public ValueMod getSacrifices(Drawable<?> source) {
-		for (ValueMod mod : sacrifices) {
-			if (Objects.equals(source, mod.getSource())) {
-				return mod;
-			}
-		}
-
-		return new ValueMod(source, 0);
-	}
-
-	public void setSacrifices(int sacrifices) {
-		for (ValueMod mod : this.sacrifices) {
-			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + sacrifices);
-				return;
-			}
-		}
-
-		this.sacrifices.add(new PermMod(sacrifices));
-	}
-
-	public void setSacrifices(Drawable<?> source, int sacrifices) {
-		ValueMod mod = new ValueMod(source, sacrifices);
-		this.sacrifices.remove(mod);
-		this.sacrifices.add(mod);
-	}
-
-	public void setSacrifices(Drawable<?> source, int sacrifices, int expiration) {
-		ValueMod mod = new ValueMod(source, sacrifices, expiration);
-		this.sacrifices.remove(mod);
-		this.sacrifices.add(mod);
-	}
-
-	public int getAtk() {
-		return Calc.round(sum(atk));
-	}
-
-	public ValueMod getAtk(Drawable<?> source) {
-		for (ValueMod mod : atk) {
-			if (Objects.equals(source, mod.getSource())) {
-				return mod;
-			}
-		}
-
-		return new ValueMod(source, 0);
-	}
-
-	public void setAtk(int atk) {
-		for (ValueMod mod : this.atk) {
-			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + atk);
-				return;
-			}
-		}
-
-		this.atk.add(new PermMod(atk));
-	}
-
-	public void setAtk(Drawable<?> source, int atk) {
-		ValueMod mod = new ValueMod(source, atk);
-		this.atk.remove(mod);
-		this.atk.add(mod);
-	}
-
-	public void setAtk(Drawable<?> source, int atk, int expiration) {
-		ValueMod mod = new ValueMod(source, atk, expiration);
-		this.atk.remove(mod);
-		this.atk.add(mod);
-	}
-
-	public int getDfs() {
-		return Calc.round(sum(dfs));
-	}
-
-	public ValueMod getDfs(Drawable<?> source) {
-		for (ValueMod mod : dfs) {
-			if (Objects.equals(source, mod.getSource())) {
-				return mod;
-			}
-		}
-
-		return new ValueMod(source, 0);
-	}
-
-	public void setDfs(int dfs) {
-		for (ValueMod mod : this.dfs) {
-			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + dfs);
-				return;
-			}
-		}
-
-		this.dfs.add(new PermMod(dfs));
-	}
-
-	public void setDfs(Drawable<?> source, int dfs) {
-		ValueMod mod = new ValueMod(source, dfs);
-		this.dfs.remove(mod);
-		this.dfs.add(mod);
-	}
-
-	public void setDfs(Drawable<?> source, int dfs, int expiration) {
-		ValueMod mod = new ValueMod(source, dfs, expiration);
-		this.dfs.remove(mod);
-		this.dfs.add(mod);
-	}
-
-	public int getDodge() {
-		return Calc.round(sum(dodge));
-	}
-
-	public ValueMod getDodge(Drawable<?> source) {
-		for (ValueMod mod : dodge) {
-			if (Objects.equals(source, mod.getSource())) {
-				return mod;
-			}
-		}
-
-		return new ValueMod(source, 0);
-	}
-
-	public void setDodge(int dodge) {
-		for (ValueMod mod : this.dodge) {
-			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + dodge);
-				return;
-			}
-		}
-
-		this.dodge.add(new PermMod(dodge));
-	}
-
-	public void setDodge(Drawable<?> source, int dodge) {
-		ValueMod mod = new ValueMod(source, dodge);
-		this.dodge.remove(mod);
-		this.dodge.add(mod);
-	}
-
-	public void setDodge(Drawable<?> source, int dodge, int expiration) {
-		ValueMod mod = new ValueMod(source, dodge, expiration);
-		this.dodge.remove(mod);
-		this.dodge.add(mod);
-	}
-
-	public int getBlock() {
-		return Calc.round(sum(block));
-	}
-
-	public ValueMod getBlock(Drawable<?> source) {
-		for (ValueMod mod : block) {
-			if (Objects.equals(source, mod.getSource())) {
-				return mod;
-			}
-		}
-
-		return new ValueMod(source, 0);
-	}
-
-	public void setBlock(int block) {
-		for (ValueMod mod : this.block) {
-			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + block);
-				return;
-			}
-		}
-
-		this.block.add(new PermMod(block));
-	}
-
-	public void setBlock(Drawable<?> source, int block) {
-		ValueMod mod = new ValueMod(source, block);
-		this.block.remove(mod);
-		this.block.add(mod);
-	}
-
-	public void setBlock(Drawable<?> source, int block, int expiration) {
-		ValueMod mod = new ValueMod(source, block, expiration);
-		this.block.remove(mod);
-		this.block.add(mod);
-	}
-
-	public double getCostMult() {
-		return 1 + sum(costMult);
-	}
-
-	public ValueMod getCostMult(Drawable<?> source) {
-		for (ValueMod mod : costMult) {
-			if (Objects.equals(source, mod.getSource())) {
-				return mod;
-			}
-		}
-
-		return new ValueMod(source, 0);
-	}
-
-	public void setCostMult(double costMult) {
-		for (ValueMod mod : this.costMult) {
-			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + costMult);
-				return;
-			}
-		}
-
-		this.costMult.add(new PermMod(costMult));
-	}
-
-	public void setCostMult(Drawable<?> source, double costMult) {
-		ValueMod mod = new ValueMod(source, costMult);
-		this.costMult.remove(mod);
-		this.costMult.add(mod);
-	}
-
-	public void setCostMult(Drawable<?> source, double costMult, int expiration) {
-		ValueMod mod = new ValueMod(source, costMult, expiration);
-		this.costMult.remove(mod);
-		this.costMult.add(mod);
-	}
-
-	public double getAttrMult() {
-		return 1 + sum(attrMult);
-	}
-
-	public ValueMod getAttrMult(Drawable<?> source) {
-		for (ValueMod mod : attrMult) {
-			if (Objects.equals(source, mod.getSource())) {
-				return mod;
-			}
-		}
-
-		return new ValueMod(source, 0);
-	}
-
-	public void setAttrMult(double attrMult) {
-		for (ValueMod mod : this.attrMult) {
-			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + attrMult);
-				return;
-			}
-		}
-
-		this.attrMult.add(new PermMod(attrMult));
-	}
-
-	public void setAttrMult(Drawable<?> source, double attrMult) {
-		ValueMod mod = new ValueMod(source, attrMult);
-		this.attrMult.remove(mod);
-		this.attrMult.add(mod);
-	}
-
-	public void setAttrMult(Drawable<?> source, double attrMult, int expiration) {
-		ValueMod mod = new ValueMod(source, attrMult, expiration);
-		this.attrMult.remove(mod);
-		this.attrMult.add(mod);
-	}
-
-	public double getPower() {
-		return (1 + sum(power)) * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
-	}
-
-	public ValueMod getPower(Drawable<?> source) {
-		for (ValueMod mod : power) {
-			if (Objects.equals(source, mod.getSource())) {
-				return mod;
-			}
-		}
-
-		return new ValueMod(source, 0);
-	}
-
-	public void setPower(double power) {
-		for (ValueMod mod : this.power) {
-			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + power);
-				return;
-			}
-		}
-
-		this.power.add(new PermMod(power));
-	}
-
-	public void setPower(Drawable<?> source, double power) {
-		ValueMod mod = new ValueMod(source, power);
-		this.power.remove(mod);
-		this.power.add(mod);
-	}
-
-	public void setPower(Drawable<?> source, double power, int expiration) {
-		ValueMod mod = new ValueMod(source, power, expiration);
-		this.power.remove(mod);
-		this.power.add(mod);
-	}
-
-	public int getTier() {
-		return Calc.round(sum(tier));
-	}
-
-	public ValueMod getTier(Drawable<?> source) {
-		for (ValueMod mod : tier) {
-			if (Objects.equals(source, mod.getSource())) {
-				return mod;
-			}
-		}
-
-		return new ValueMod(source, 0);
-	}
-
-	public void setTier(int tier) {
-		for (ValueMod mod : this.tier) {
-			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + tier);
-				return;
-			}
-		}
-
-		this.tier.add(new PermMod(tier));
-	}
-
-	public void setTier(Drawable<?> source, int tier) {
-		ValueMod mod = new ValueMod(source, tier);
-		this.tier.remove(mod);
-		this.tier.add(mod);
-	}
-
-	public void setTier(Drawable<?> source, int tier, int expiration) {
-		ValueMod mod = new ValueMod(source, tier, expiration);
-		this.tier.remove(mod);
-		this.tier.add(mod);
+	public CumValue getTier() {
+		return tier;
 	}
 
 	public void setTFlag(Flag flag, boolean value) {
@@ -646,7 +283,10 @@ public class CardExtra implements Cloneable {
 		removeExpired(check);
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	public void clear() {
+		removeExpired(o -> !(o instanceof PermMod));
+	}
+
 	public void removeExpired(Predicate<ValueMod> check) {
 		if (fieldCache == null) {
 			fieldCache = getClass().getDeclaredFields();
@@ -654,24 +294,8 @@ public class CardExtra implements Cloneable {
 
 		for (Field f : fieldCache) {
 			try {
-				if (f.get(this) instanceof HashSet s) {
-					s.removeIf(check);
-				}
-			} catch (IllegalAccessException ignore) {
-			}
-		}
-	}
-
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	public void clear() {
-		if (fieldCache == null) {
-			fieldCache = getClass().getDeclaredFields();
-		}
-
-		for (Field f : fieldCache) {
-			try {
-				if (f.get(this) instanceof HashSet s) {
-					s.removeIf(o -> !(o instanceof PermMod));
+				if (f.get(this) instanceof CumValue cv) {
+					cv.values().removeIf(check);
 				}
 			} catch (IllegalAccessException ignore) {
 			}
@@ -688,22 +312,19 @@ public class CardExtra implements Cloneable {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
 	public CardExtra clone() {
-		Copier<HashSet, ValueMod> copier = new Copier<>(HashSet.class, ValueMod.class);
-
 		CardExtra clone = new CardExtra(
-				copier.makeCopy(mana),
-				copier.makeCopy(blood),
-				copier.makeCopy(sacrifices),
-				copier.makeCopy(atk),
-				copier.makeCopy(dfs),
-				copier.makeCopy(dodge),
-				copier.makeCopy(block),
-				copier.makeCopy(attrMult),
-				copier.makeCopy(costMult),
-				copier.makeCopy(power),
-				copier.makeCopy(tier),
+				mana.clone(),
+				blood.clone(),
+				sacrifices.clone(),
+				atk.clone(),
+				dfs.clone(),
+				dodge.clone(),
+				block.clone(),
+				attrMult.clone(),
+				costMult.clone(),
+				power.clone(),
+				tier.clone(),
 				EnumSet.noneOf(Flag.class),
 				EnumSet.noneOf(Flag.class),
 				EnumSet.copyOf(permFlags),

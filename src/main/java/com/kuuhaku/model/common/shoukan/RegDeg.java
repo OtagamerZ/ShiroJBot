@@ -41,17 +41,12 @@ public class RegDeg {
 	}
 
 	public void add(Number val) {
-		leftShift(val);
+		add(val, 0.2);
 	}
 
 	public void add(Number val, double mult) {
-		leftShift(List.of(val, mult));
-	}
-
-	public void leftShift(Number number) {
-		if (number == null) return;
-		int value = number.intValue();
-		double mult = 0.2;
+		if (val == null) return;
+		int value = val.intValue();
 
 		if (value < 0) {
 			if (parent.getOrigin().major() == Race.HUMAN) {
@@ -62,7 +57,7 @@ public class RegDeg {
 				mult *= 1.5;
 			}
 
-			values.add(new Degen(-value, mult));
+			values.add(new Degen(-value, mult * parent.getStats().getDegenMult().get()));
 		} else if (value > 0) {
 			if (parent.getOrigin().major() == Race.HUMAN) {
 				mult -= 0.1;
@@ -72,27 +67,16 @@ public class RegDeg {
 				mult /= 2;
 			}
 
-			values.add(new Regen(value, mult));
+			values.add(new Regen(value, mult * parent.getStats().getRegenMult().get()));
 		}
 	}
 
-	public void leftShift(List<Number> number) {
-		int value = number.get(0).intValue();
-		double mult = number.get(1).doubleValue();
+	public void leftShift(Number val) {
+		add(val);
+	}
 
-		if (value < 0) {
-			if (parent.getOrigin().major() == Race.HUMAN) {
-				mult += 0.2;
-			}
-
-			values.add(new Degen(-value, mult));
-		} else if (value > 0) {
-			if (parent.getOrigin().major() == Race.HUMAN) {
-				mult -= 0.1;
-			}
-
-			values.add(new Regen(value, mult));
-		}
+	public void leftShift(List<Number> val) {
+		add(val.get(0), val.get(1).doubleValue());
 	}
 
 	public <T extends ValueOverTime> int reduce(Class<T> klass, int val) {

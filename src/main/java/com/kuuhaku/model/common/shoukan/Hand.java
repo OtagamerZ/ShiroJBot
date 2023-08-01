@@ -747,9 +747,7 @@ public class Hand {
 		int before = hp;
 
 		if (!pure) {
-			if (origin.major() == Race.HUMAN && value > 0) {
-				value *= 1.25;
-			} else if (origin.hasMinor(Race.HUMAN) && value < 0) {
+			if (origin.hasMinor(Race.HUMAN) && value < 0) {
 				value *= 1 - Math.min(game.getTurn() * 0.01, 0.75);
 			}
 
@@ -772,9 +770,9 @@ public class Hand {
 			}
 
 			if (value < 0) {
-				value *= Math.max(0, stats.getDamageMult());
+				value *= Math.max(0, stats.getDamageMult().get());
 			} else {
-				value *= Math.max(0, stats.getHealMult());
+				value *= Math.max(0, stats.getHealMult().get());
 			}
 
 			double prcnt = getHPPrcnt();
@@ -883,13 +881,7 @@ public class Hand {
 	}
 
 	public void applyVoTs() {
-		int val = regdeg.next();
-
-		if (val < 0 && origin.major() == Race.HUMAN) {
-			val /= 2;
-		}
-
-		modHP(val);
+		modHP(regdeg.next());
 	}
 
 	public JSONObject getData() {

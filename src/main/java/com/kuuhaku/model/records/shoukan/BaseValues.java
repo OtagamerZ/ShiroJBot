@@ -23,8 +23,7 @@ import com.kuuhaku.model.common.SupplyChain;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public record BaseValues(int hp, SupplyChain<Integer> mpGain, SupplyChain<Integer> handCapacity,
-						 int lifesteal) {
+public record BaseValues(int hp, SupplyChain<Integer> mpGain, SupplyChain<Integer> handCapacity, int lifesteal) {
 	public BaseValues() {
 		this(6000, new SupplyChain<>(5), new SupplyChain<>(5), 0);
 	}

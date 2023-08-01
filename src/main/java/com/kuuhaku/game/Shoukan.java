@@ -814,7 +814,7 @@ public class Shoukan extends GameInstance<Phase> {
 						.toList();
 
 				if (!available.isEmpty()) {
-					Utils.getRandomEntry(rng, available).getStats().setMana(-1);
+					Utils.getRandomEntry(rng, available).getStats().getMana().set(-1);
 				}
 			}
 		}
@@ -856,7 +856,7 @@ public class Shoukan extends GameInstance<Phase> {
 						.map(d -> (EffectHolder<?>) d)
 						.toList();
 
-				Utils.getRandomEntry(rng, available).getStats().setMana(-1);
+				Utils.getRandomEntry(rng, available).getStats().getMana().set(-1);
 			}
 		}
 
@@ -1244,7 +1244,7 @@ public class Shoukan extends GameInstance<Phase> {
 						List<SlotColumn> slts = arena.getSlots(op.getSide());
 						for (SlotColumn slt : slts) {
 							if (slt.hasTop()) {
-								slt.getTop().getStats().setDodge(-2);
+								slt.getTop().getStats().getDodge().set(-2);
 							}
 						}
 					}
@@ -1407,7 +1407,7 @@ public class Shoukan extends GameInstance<Phase> {
 			int val = eHP - op.getHP();
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
 
-			if (val > 0 && op.getStats().getDamageMult() != 1) {
+			if (val > 0 && op.getStats().getDamageMult().get() != 1) {
 				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2)) + ")";
 			}
 		}
@@ -1415,7 +1415,7 @@ public class Shoukan extends GameInstance<Phase> {
 			int val = pHP - you.getHP();
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(val));
 
-			if (val > 0 && you.getStats().getDamageMult() != 1) {
+			if (val > 0 && you.getStats().getDamageMult().get() != 1) {
 				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2)) + ")";
 			}
 		}
@@ -1506,7 +1506,7 @@ public class Shoukan extends GameInstance<Phase> {
 						List<SlotColumn> slts = arena.getSlots(op.getSide());
 						for (SlotColumn slt : slts) {
 							if (slt.hasTop()) {
-								slt.getTop().getStats().setDodge(-2);
+								slt.getTop().getStats().getDodge().set(-2);
 							}
 						}
 					}
@@ -1561,7 +1561,7 @@ public class Shoukan extends GameInstance<Phase> {
 			int val = eHP - op.getHP();
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
 
-			if (val > 0 && op.getStats().getDamageMult() != 1) {
+			if (val > 0 && op.getStats().getDamageMult().get() != 1) {
 				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2)) + ")";
 			}
 		}
@@ -1569,7 +1569,7 @@ public class Shoukan extends GameInstance<Phase> {
 			int val = pHP - you.getHP();
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(val));
 
-			if (val > 0 && you.getStats().getDamageMult() != 1) {
+			if (val > 0 && you.getStats().getDamageMult().get() != 1) {
 				outcome += " (" + getLocale().get("str/damage_reduction", Utils.roundToString((1 - dmgMult) * 100, 2)) + ")";
 			}
 		}
@@ -2360,7 +2360,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 
 					if (arcade == Arcade.DECAY) {
-						s.getStats().setMana(-1);
+						s.getStats().getMana().set(-1);
 						if (s.getMPCost() == 0) {
 							s.getHand().getGraveyard().add(s);
 						}

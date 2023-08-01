@@ -18,72 +18,40 @@
 
 package com.kuuhaku.model.common.shoukan;
 
-import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.util.Calc;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
 public class HandExtra {
-	private final Set<ValueMod> healMult = new HashSet<>();
-	private final Set<ValueMod> damageMult = new HashSet<>();
+	private final CumValue weight = CumValue.flat();
+
+	private final CumValue healMult = CumValue.mult();
+	private final CumValue damageMult = CumValue.mult();
+	private final CumValue regenMult = CumValue.mult();
+	private final CumValue degenMult = CumValue.mult();
 
 	private transient Field[] fieldCache = null;
 
-	public double getHealMult() {
-		return 1 + sum(healMult);
+	public CumValue getWeight() {
+		return weight;
 	}
 
-	public void setHealMult(double mult) {
-		for (ValueMod mod : this.healMult) {
-			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + mult);
-				return;
-			}
-		}
-
-		this.healMult.add(new PermMod(mult));
+	public CumValue getHealMult() {
+		return healMult;
 	}
 
-	public void setHealMult(Drawable<?> source, double mult) {
-		ValueMod mod = new ValueMod(source, mult);
-		this.healMult.remove(mod);
-		this.healMult.add(mod);
+	public CumValue getDamageMult() {
+		return damageMult;
 	}
 
-	public void setHealMult(Drawable<?> source, double mult, int expiration) {
-		ValueMod mod = new ValueMod(source, mult, expiration);
-		this.healMult.remove(mod);
-		this.healMult.add(mod);
+	public CumValue getRegenMult() {
+		return regenMult;
 	}
 
-	public double getDamageMult() {
-		return 1 + sum(damageMult);
-	}
-
-	public void setDamageMult(double mult) {
-		for (ValueMod mod : this.damageMult) {
-			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + mult);
-				return;
-			}
-		}
-
-		this.damageMult.add(new PermMod(mult));
-	}
-
-	public void setDamageMult(Drawable<?> source, double mult) {
-		ValueMod mod = new ValueMod(source, mult);
-		this.damageMult.remove(mod);
-		this.damageMult.add(mod);
-	}
-
-	public void setDamageMult(Drawable<?> source, double mult, int expiration) {
-		ValueMod mod = new ValueMod(source, mult, expiration);
-		this.damageMult.remove(mod);
-		this.damageMult.add(mod);
+	public CumValue getDegenMult() {
+		return degenMult;
 	}
 
 	public void expireMods() {
@@ -98,7 +66,6 @@ public class HandExtra {
 		removeExpired(check);
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void removeExpired(Predicate<ValueMod> check) {
 		if (fieldCache == null) {
 			fieldCache = getClass().getDeclaredFields();
@@ -106,8 +73,8 @@ public class HandExtra {
 
 		for (Field f : fieldCache) {
 			try {
-				if (f.get(this) instanceof HashSet s) {
-					s.removeIf(check);
+				if (f.get(this) instanceof CumValue cv) {
+					cv.values().removeIf(check);
 				}
 			} catch (IllegalAccessException ignore) {
 			}
