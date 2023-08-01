@@ -45,7 +45,6 @@ public class CardExtra implements Cloneable {
 
 	private final CumValue atk;
 	private final CumValue dfs;
-
 	private final CumValue dodge;
 	private final CumValue block;
 
@@ -78,8 +77,8 @@ public class CardExtra implements Cloneable {
 	public CardExtra(
 			CumValue mana, CumValue blood, CumValue sacrifices,
 			CumValue atk, CumValue dfs, CumValue dodge,
-			CumValue block, CumValue costMult, CumValue attrMult,
-			CumValue tier, CumValue power, EnumSet<Flag> flags,
+			CumValue block, CumValue tier, CumValue costMult,
+			CumValue attrMult, CumValue power, EnumSet<Flag> flags,
 			EnumSet<Flag> tempFlags, EnumSet<Flag> permFlags, JSONObject data,
 			JSONObject perm, ListOrderedSet<String> curses
 	) {
@@ -90,10 +89,10 @@ public class CardExtra implements Cloneable {
 		this.dfs = dfs;
 		this.dodge = dodge;
 		this.block = block;
+		this.tier = tier;
 		this.costMult = costMult;
 		this.attrMult = attrMult;
 		this.power = power;
-		this.tier = tier;
 		this.flags = flags;
 		this.tempFlags = tempFlags;
 		this.permFlags = permFlags;
@@ -111,9 +110,9 @@ public class CardExtra implements Cloneable {
 				CumValue.flat(),
 				CumValue.flat(),
 				CumValue.flat(),
-				CumValue.mult(),
-				CumValue.mult(),
 				CumValue.flat(),
+				CumValue.mult(),
+				CumValue.mult(),
 				CumValue.mult(),
 				EnumSet.noneOf(Flag.class),
 				EnumSet.noneOf(Flag.class),
@@ -321,10 +320,10 @@ public class CardExtra implements Cloneable {
 				dfs.clone(),
 				dodge.clone(),
 				block.clone(),
+				tier.clone(),
 				attrMult.clone(),
 				costMult.clone(),
 				power.clone(),
-				tier.clone(),
 				EnumSet.noneOf(Flag.class),
 				EnumSet.noneOf(Flag.class),
 				EnumSet.copyOf(permFlags),
