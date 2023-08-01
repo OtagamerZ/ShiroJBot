@@ -234,7 +234,7 @@
 		 Archetype arch = getArchetype();
 
 		 for (Evogear e : getEvogear()) {
-			 if (arch.getId().equals("MADE_IN_ABYSS") && e.getBase().getTags().contains("FOOD")) {
+			 if (arch != null && arch.getId().equals("MADE_IN_ABYSS") && e.getBase().getTags().contains("FOOD")) {
 				 continue;
 			 }
 
