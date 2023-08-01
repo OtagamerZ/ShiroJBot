@@ -839,7 +839,7 @@ public class Hand {
 
 	public void setMP(int mp) {
 		if (origin.major() == Race.DEMON) {
-			setHP((int) ((mp + 1) * (base.hp() * 0.08)));
+			setHP((int) (Math.max(1, mp) * (base.hp() * 0.08)));
 			return;
 		}
 
@@ -848,6 +848,8 @@ public class Hand {
 
 	public void modMP(int value) {
 		if (origin.major() == Race.DEMON) {
+			int allowed = Math.max(0, hp - (int) (base.hp() * 0.08));
+			value = Math.min(value, allowed);
 			modHP((int) (value * (base.hp() * 0.08)));
 			return;
 		}
