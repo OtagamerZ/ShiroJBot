@@ -64,6 +64,24 @@ public class ValueMod implements Cloneable {
 		return value;
 	}
 
+	public <T extends Number> T asType(Class<T> klass) {
+		if (klass == Short.class) {
+			return klass.cast((short) value);
+		} else if (klass == Integer.class) {
+			return klass.cast((int) value);
+		} else if (klass == Long.class) {
+			return klass.cast((long) value);
+		} else if (klass == Float.class) {
+			return klass.cast((float) value);
+		} else if (klass == Double.class) {
+			return klass.cast(value);
+		} else if (klass == Byte.class) {
+			return klass.cast((byte) value);
+		}
+
+		throw new ClassCastException();
+	}
+
 	public void setValue(double value) {
 		this.value = value;
 	}
