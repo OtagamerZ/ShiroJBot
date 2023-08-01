@@ -106,14 +106,6 @@ public class CumValue implements Iterable<ValueMod>, Cloneable {
 		set(mult);
 	}
 
-	public void leftShift(Drawable<?> source, double mult) {
-		set(source, mult);
-	}
-
-	public void leftShift(Drawable<?> source, double mult, int expiration) {
-		set(source, mult, expiration);
-	}
-
 	public Set<ValueMod> values() {
 		return values;
 	}
