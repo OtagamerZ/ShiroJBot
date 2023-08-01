@@ -1852,8 +1852,10 @@ public class Shoukan extends GameInstance<Phase> {
 		for (EffectOverTime effect : effects) {
 			if (effect.lock().get()) continue;
 
-			Hand h = hands.get(effect.side());
-			if (h.getLockTime(Lock.EFFECT) > 0 && !effect.debuff()) continue;
+			if (effect.side() != null) {
+				Hand h = hands.get(effect.side());
+				if (h.getLockTime(Lock.EFFECT) > 0 && !effect.debuff()) continue;
+			}
 
 			boolean remove = false;
 			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
