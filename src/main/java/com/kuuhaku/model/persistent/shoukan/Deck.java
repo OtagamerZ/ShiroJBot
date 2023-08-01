@@ -231,7 +231,13 @@
 	 public int getEvoWeight() {
 		 int weight = 0;
 		 double penalty = 0;
+		 Archetype arch = getArchetype();
+
 		 for (Evogear e : getEvogear()) {
+			 if (arch.getId().equals("MADE_IN_ABYSS") && e.getBase().getTags().contains("FOOD")) {
+				 continue;
+			 }
+
 			 weight += e.getTier();
 			 if ((!e.isSpell() && getOrigins().major() == Race.MACHINE) || (e.isSpell() && getOrigins().major() == Race.MYSTICAL)) {
 				 weight -= 1;
@@ -620,12 +626,7 @@
 		 try {
 			 return new BaseValues(() -> {
 				 Origin origin = h == null ? getOrigins() : h.getOrigin();
-				 int weight = getEvoWeight();
-				 if (h != null) {
-					 weight += h.getStats().getWeight().get();
-				 }
-
-				 double reduction = Math.pow(0.999, -24 * weight);
+				 double reduction = Math.pow(0.999, -24 * getEvoWeight());
 				 int base = 6000;
 				 if (origin.major() == Race.HUMAN) {
 					 base += 1000;

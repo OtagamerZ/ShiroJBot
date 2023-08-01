@@ -25,18 +25,12 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class HandExtra {
-	private final CumValue weight = CumValue.flat();
-
 	private final CumValue healMult = CumValue.mult();
 	private final CumValue damageMult = CumValue.mult();
 	private final CumValue regenMult = CumValue.mult();
 	private final CumValue degenMult = CumValue.mult();
 
 	private transient Field[] fieldCache = null;
-
-	public CumValue getWeight() {
-		return weight;
-	}
 
 	public CumValue getHealMult() {
 		return healMult;
