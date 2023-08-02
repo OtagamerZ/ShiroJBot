@@ -73,13 +73,13 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	private List<Warn> warns = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "uid", nullable = false)
+	@JoinColumn(name = "uid", nullable = false, updatable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("uid")
 	private Account account;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "gid", nullable = false)
+	@JoinColumn(name = "gid", nullable = false, updatable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("gid")
 	private GuildConfig guild;

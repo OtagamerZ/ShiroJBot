@@ -41,7 +41,7 @@ public class AutoRule extends DAO<AutoRule> {
 	private int threshold;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "gid", nullable = false)
+	@JoinColumn(name = "gid", nullable = false, updatable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("gid")
 	private GuildSettings settings;

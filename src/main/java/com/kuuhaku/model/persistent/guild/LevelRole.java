@@ -45,7 +45,7 @@ public class LevelRole extends DAO<LevelRole> {
 	private Role role;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "gid", nullable = false)
+	@JoinColumn(name = "gid", nullable = false, updatable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("gid")
 	private GuildSettings settings;
