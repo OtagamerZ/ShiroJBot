@@ -144,9 +144,7 @@
 	 }
 
 	 public List<String> getSenshiRaw() {
-		 if (account == null) {
-			 return DAO.queryAllNative(String.class, "SELECT card_id FROM senshi");
-		 }
+		 if (account == null) return List.of();
 
 		 return DAO.queryAllNative(String.class, """
 				 SELECT d.card_id
@@ -195,9 +193,7 @@
 	 }
 
 	 public List<String> getEvogearRaw() {
-		 if (account == null) {
-			 return DAO.queryAllNative(String.class, "SELECT card_id FROM evogear");
-		 }
+		 if (account == null) return List.of();
 
 		 return DAO.queryAllNative(String.class, """
 				 SELECT d.card_id
@@ -264,9 +260,7 @@
 	 }
 
 	 public List<String> getFieldsRaw() {
-		 if (account == null) {
-			 return DAO.queryAllNative(String.class, "SELECT card_id FROM field");
-		 }
+		 if (account == null) return List.of();
 
 		 return DAO.queryAllNative(String.class, """
 				 SELECT d.card_id
