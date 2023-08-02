@@ -241,9 +241,9 @@ public class GuildListener extends ListenerAdapter {
 
 		try (Checkpoint cp = new Checkpoint()) {
 			GuildBuff gb = config.getCumBuffs();
-			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap("Load buffs");
+			cp.lap("Load buffs");
 			profile.addXp((long) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
-			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap("Add xp");
+			cp.lap("Add xp");
 			profile.save();
 		}
 
