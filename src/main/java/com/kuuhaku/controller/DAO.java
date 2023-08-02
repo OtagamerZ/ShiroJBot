@@ -21,6 +21,7 @@ package com.kuuhaku.controller;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
 import com.kuuhaku.interfaces.annotations.WhenNull;
+import com.kuuhaku.model.common.Checkpoint;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.intellij.lang.annotations.Language;
@@ -398,24 +399,32 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public final void save() {
-		EntityManager em = Manager.getEntityManager();
+		try (var cp = new Checkpoint()) {
+			EntityManager em = Manager.getEntityManager();
+			cp.lap();
 
-		beforeSave();
-		try {
-			if (this instanceof Blacklistable lock) {
-				if (lock.isBlacklisted()) return;
+			beforeSave();
+			cp.lap();
+			try {
+				if (this instanceof Blacklistable lock) {
+					if (lock.isBlacklisted()) return;
+				}
+				cp.lap();
+
+				em.getTransaction().begin();
+				em.merge(this);
+				em.getTransaction().commit();
+				cp.lap();
+			} finally {
+				if (em.getTransaction().isActive()) {
+					em.getTransaction().rollback();
+				}
+				cp.lap();
+
+				afterSave();
+				cp.lap();
+				em.close();
 			}
-
-			em.getTransaction().begin();
-			em.merge(this);
-			em.getTransaction().commit();
-		} finally {
-			if (em.getTransaction().isActive()) {
-				em.getTransaction().rollback();
-			}
-
-			afterSave();
-			em.close();
 		}
 	}
 

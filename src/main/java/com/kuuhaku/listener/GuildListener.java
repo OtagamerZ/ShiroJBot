@@ -239,13 +239,9 @@ public class GuildListener extends ListenerAdapter {
 			account.save();
 		}
 
-		try (Checkpoint cp = new Checkpoint()) {
-			GuildBuff gb = config.getCumBuffs();
-			cp.lap("Load buffs");
-			profile.addXp((long) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
-			cp.lap("Add xp");
-			profile.save();
-		}
+		GuildBuff gb = config.getCumBuffs();
+		profile.addXp((long) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
+		profile.save();
 
 		EventData ed = new EventData(event.getChannel(), config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {
