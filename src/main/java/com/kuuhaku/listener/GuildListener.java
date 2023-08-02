@@ -194,6 +194,7 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
+		if (!event.getAuthor().getId().equals("668253663189270528")) return;
 		if (!event.isFromGuild() || event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
 
 		String content = event.getMessage().getContentRaw();
@@ -238,9 +239,14 @@ public class GuildListener extends ListenerAdapter {
 			account.save();
 		}
 
-		GuildBuff gb = config.getCumBuffs();
-		profile.addXp((long) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
-		profile.save();
+
+		try (var cp = new Checkpoint()) {
+			GuildBuff gb = config.getCumBuffs();
+			cp.lap();
+			profile.addXp((long) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
+			cp.lap();
+			profile.save();
+		}
 
 		EventData ed = new EventData(event.getChannel(), config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {
