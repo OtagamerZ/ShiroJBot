@@ -33,13 +33,13 @@ public class DailyGacha extends Gacha {
 				SELECT x.id
 				     , x.weight
 				FROM (
-				     SELECT c.id
-				          , get_weight(c.id, ?1) AS weight
-				     FROM card c
-				     LEFT JOIN anime a on a.id = c.anime_id
-				     WHERE coalesce(a.visible, TRUE) = TRUE
-				     ORDER BY hashtextextended(c.id, ?2)
-				     LIMIT 50
+				         SELECT c.id
+				              , get_weight(c.id, ?1) AS weight
+				         FROM card c
+				                  LEFT JOIN anime a on a.id = c.anime_id
+				         WHERE coalesce(a.visible, TRUE) = TRUE
+				         ORDER BY hashtextextended(c.id, ?2)
+				         LIMIT 50
 				     ) x
 				ORDER BY x.weight, x.id
 				""", u.getId(), LocalDate.now().get(ChronoField.DAY_OF_YEAR)));

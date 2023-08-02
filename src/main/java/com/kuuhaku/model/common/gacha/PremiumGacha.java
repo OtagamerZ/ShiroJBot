@@ -37,11 +37,11 @@ public class PremiumGacha extends Gacha {
 				SELECT x.id
 				     , x.weight
 				FROM (
-				     SELECT c.id
-				          , get_weight(c.id, ?1) AS weight
-				     FROM card c
-				     LEFT JOIN anime a on a.id = c.anime_id
-				     WHERE coalesce(a.visible, TRUE) = TRUE
+				         SELECT c.id
+				              , get_weight(c.id, ?1) AS weight
+				         FROM card c
+				                  LEFT JOIN anime a on a.id = c.anime_id
+				         WHERE coalesce(a.visible, TRUE) = TRUE
 				     ) x
 				WHERE x.weight IS NOT NULL
 				ORDER BY x.weight, x.id

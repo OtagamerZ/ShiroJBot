@@ -33,5 +33,5 @@ FROM (
               INNER JOIN anime a on a.id = c.anime_id
      WHERE a.visible
      ) x
-WHERE x.rarity_idx < 6
+WHERE x.rarity_idx BETWEEN 1 AND 5
 ORDER BY x.rarity_idx DESC, x.id

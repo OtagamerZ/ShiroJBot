@@ -37,9 +37,9 @@ public class ScrapGacha extends Gacha {
 				SELECT c.id
 				     , get_weight(c.id, ?1) AS weight
 				FROM card c
-				INNER JOIN anime a on a.id = c.anime_id
+				         INNER JOIN anime a on a.id = c.anime_id
 				WHERE a.visible
-				AND get_rarity_index(c.rarity) = 1
+				  AND get_rarity_index(c.rarity) = 1
 				ORDER BY weight, c.id
 				""", u.getId()));
 	}

@@ -129,12 +129,10 @@ public class CommonSocket extends WebSocketClient {
 						default -> DAO.find(Senshi.class, id);
 					};
 
-					Deck dk;
-					if (DAO.queryNative(Integer.class, "SELECT count(1) FROM account WHERE uid = ?1", payload.getString("uid")) > 0) {
-						Account acc = DAO.find(Account.class, payload.getString("uid"));
+					Deck dk = new Deck();
+					Account acc = DAO.query(Account.class, "SELECT a FROM Account a WHERE a.uid = ?1", payload.getString("uid"));
+					if (acc != null) {
 						dk = acc.getCurrentDeck();
-					} else {
-						dk = new Deck();
 					}
 
 					deliver(md, IO.getBytes(d.render(payload.getEnum(I18N.class, "locale"), dk), "png"));

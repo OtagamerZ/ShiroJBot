@@ -30,13 +30,13 @@ public class SummonersGacha extends Gacha {
 				SELECT x.id
 				     , x.weight
 				FROM (
-				     SELECT c.id
-				          , get_weight(c.id, ?1) AS weight
-				     FROM card c
-				     INNER JOIN senshi s ON c.id = s.card_id
-				     LEFT JOIN anime a on a.id = c.anime_id
-				     WHERE coalesce(a.visible, TRUE) = TRUE
-				     AND NOT has(s.tags, 'FUSION')
+				         SELECT c.id
+				              , get_weight(c.id, ?1) AS weight
+				         FROM card c
+				                  INNER JOIN senshi s ON c.id = s.card_id
+				                  LEFT JOIN anime a on a.id = c.anime_id
+				         WHERE coalesce(a.visible, TRUE) = TRUE
+				           AND NOT has(s.tags, 'FUSION')
 				     ) x
 				WHERE x.weight IS NOT NULL
 				ORDER BY x.weight, x.id
