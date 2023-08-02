@@ -38,7 +38,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
 		EntityManager em = Manager.getEntityManager();
 
-		System.out.println(id);
 		try {
 			T t = em.find(klass, id);
 			if (t instanceof Blacklistable lock) {
@@ -57,6 +56,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 								t.save();
 								break;
 							} catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
+								System.out.println(klass + " - " + id);
 								throw new IllegalStateException("Failed to instantiate class", e);
 							}
 						}
