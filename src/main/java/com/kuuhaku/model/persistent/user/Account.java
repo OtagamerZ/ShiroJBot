@@ -51,7 +51,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "account", indexes = @Index(columnList = "balance DESC"))
 public class Account extends DAO<Account> implements Blacklistable {
 	@Id
@@ -151,13 +150,13 @@ public class Account extends DAO<Account> implements Blacklistable {
 		this.name = name;
 	}
 
-	public boolean hasRole(Role role) {
-		return hasRole(uid, false, role);
+	public boolean hasRole(Role... roles) {
+		return Utils.containsAny(this.roles, roles);
 	}
 
-	public static boolean hasRole(String uid, boolean and, Role... role) {
+	public static boolean hasRole(String uid, boolean and, Role... roles) {
 		int flags = 0;
-		for (Role r : role) {
+		for (Role r : roles) {
 			flags = Bit.set(flags, r.ordinal(), true);
 		}
 
