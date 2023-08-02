@@ -71,4 +71,9 @@ public class ProfileId implements Serializable {
 	public int hashCode() {
 		return Objects.hash(uid, gid);
 	}
+
+	@Override
+	public String toString() {
+		return "UID: " + uid + ", GID: " + gid;
+	}
 }
