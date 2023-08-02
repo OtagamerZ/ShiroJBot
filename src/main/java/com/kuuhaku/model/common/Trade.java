@@ -137,8 +137,8 @@ public class Trade {
                   AND NOT sc.account_bound
                 """;
 
-        boolean check = DAO.queryNative(Integer.class, query, left.getUid(), leftOffer) != leftOffer.size();
-        check = check && DAO.queryNative(Integer.class, query, right.getUid(), rightOffer) != rightOffer.size();
+        boolean check = DAO.queryNative(Integer.class, query, left.getUid(), leftOffer) == leftOffer.size();
+        check &= DAO.queryNative(Integer.class, query, right.getUid(), rightOffer) == rightOffer.size();
 
         if (!check) {
             return false;
