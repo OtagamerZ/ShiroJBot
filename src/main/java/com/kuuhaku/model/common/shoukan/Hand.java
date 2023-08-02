@@ -61,7 +61,6 @@ import java.util.stream.Stream;
 public class Hand {
 	private final long SERIAL = ThreadLocalRandom.current().nextLong();
 
-	private final String uid;
 	private final Shoukan game;
 	private final Deck userDeck;
 	private final Side side;
@@ -238,7 +237,6 @@ public class Hand {
 	private transient Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> selection = null;
 
 	public Hand(Deck deck) {
-		this.uid = "";
 		this.game = null;
 		this.userDeck = deck;
 		this.side = Side.BOTTOM;
@@ -249,7 +247,6 @@ public class Hand {
 	}
 
 	public Hand(String uid, Shoukan game, Side side) {
-		this.uid = uid;
 		this.game = game;
 		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
 		if (game.getArcade() != Arcade.CARDMASTER && (!game.isSingleplayer() || !Account.hasRole(uid, false, Role.TESTER))) {
@@ -314,11 +311,11 @@ public class Hand {
 	}
 
 	public String getUid() {
-		return uid;
+		return userDeck.getAccount().getUid();
 	}
 
 	public User getUser() {
-		return Main.getApp().getUserById(uid);
+		return Main.getApp().getUserById(getUid());
 	}
 
 	public Shoukan getGame() {
@@ -714,7 +711,7 @@ public class Hand {
 
 	public String getName() {
 		if (name == null) {
-			name = Utils.getOr(DAO.find(Account.class, uid).getName(), "???");
+			name = Utils.getOr(DAO.find(Account.class, getUid()).getName(), "???");
 		}
 
 		return name;
@@ -906,7 +903,7 @@ public class Hand {
 
 	public Account getAccount() {
 		if (account == null) {
-			account = DAO.find(Account.class, uid);
+			account = DAO.find(Account.class, getUid());
 		}
 
 		return account;
@@ -1206,11 +1203,11 @@ public class Hand {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Hand hand = (Hand) o;
-		return SERIAL == hand.SERIAL && Objects.equals(uid, hand.uid) && side == hand.side && Objects.equals(origin, hand.origin);
+		return SERIAL == hand.SERIAL && game == hand.game && side == hand.side;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(SERIAL, uid, side, origin);
+		return Objects.hash(SERIAL, game, side);
 	}
 }
