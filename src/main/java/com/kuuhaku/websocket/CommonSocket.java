@@ -22,7 +22,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
-import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -42,6 +41,7 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ServerHandshake;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -137,32 +137,19 @@ public class CommonSocket extends WebSocketClient {
 						dk = new Deck();
 					}
 
-					String b64 = IO.ctob(d.render(payload.getEnum(I18N.class, "locale"), dk), "png");
-					send(JSONObject.of(
-							Map.entry("type", "DELIVERY"),
-							Map.entry("key", Hex.encodeHexString(md.digest())),
-							Map.entry("content", b64)
-					).toString());
+					deliver(md, IO.getBytes(d.render(payload.getEnum(I18N.class, "locale"), dk), "png"));
 				}
 				case "i18n" -> {
 					I18N locale = payload.getEnum(I18N.class, "locale");
 					if (locale == null) {
-						send(JSONObject.of(
-								Map.entry("type", "DELIVERY"),
-								Map.entry("key", Hex.encodeHexString(md.digest())),
-								Map.entry("content", payload.getString("key"))
-						).toString());
+						deliver(md, payload.getString("key"));
 						return;
 					}
 
-					send(JSONObject.of(
-							Map.entry("type", "DELIVERY"),
-							Map.entry("key", Hex.encodeHexString(md.digest())),
-							Map.entry("content", locale.get(
-									payload.getString("str"),
-									(Object[]) payload.getString("params").split(",")
-							))
-					).toString());
+					deliver(md, locale.get(
+							payload.getString("str"),
+							(Object[]) payload.getString("params").split(",")
+					));
 				}
 			}
 		} catch (WebsocketNotConnectedException ignore) {
@@ -188,5 +175,21 @@ public class CommonSocket extends WebSocketClient {
 	@Override
 	public void onError(Exception e) {
 		Constants.LOGGER.error(e, e);
+	}
+
+	private void deliver(MessageDigest key, String content) {
+		deliver(key, content.getBytes(StandardCharsets.UTF_8));
+	}
+
+	private void deliver(MessageDigest key, byte[] content) {
+		try {
+			send(JSONObject.of(
+					Map.entry("type", "DELIVERY"),
+					Map.entry("key", Hex.encodeHexString(key.digest())),
+					Map.entry("content", IO.atob(IO.compress(content)))
+			).toString());
+		} catch (IOException e) {
+			Constants.LOGGER.error(e, e);
+		}
 	}
 }
