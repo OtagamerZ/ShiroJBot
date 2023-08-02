@@ -36,6 +36,9 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.DETACH;
+
 @Embeddable
 public class CardAttributes implements Serializable, Cloneable {
 	@Serial
@@ -67,7 +70,10 @@ public class CardAttributes implements Serializable, Cloneable {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@JoinColumn(name = "id", referencedColumnName = "card_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedDescription> descriptions = new HashSet<>();

@@ -30,6 +30,9 @@ import org.intellij.lang.annotations.Language;
 
 import java.util.*;
 
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.DETACH;
+
 @Entity
 @Table(name = "title")
 public class Title extends DAO<Title> {
@@ -37,7 +40,10 @@ public class Title extends DAO<Title> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedTitle> infos = new HashSet<>();

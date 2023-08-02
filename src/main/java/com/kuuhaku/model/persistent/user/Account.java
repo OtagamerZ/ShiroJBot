@@ -49,6 +49,9 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.DETACH;
+
 @Entity
 @DynamicUpdate
 @Table(name = "account", indexes = @Index(columnList = "balance DESC"))
@@ -73,34 +76,62 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Column(name = "gems", nullable = false)
 	private int gems;
 
-	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "account",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Profile> profiles = new ArrayList<>();
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(
+			fetch = FetchType.LAZY,
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@PrimaryKeyJoinColumn(name = "uid")
 	@Fetch(FetchMode.JOIN)
 	private AccountSettings settings;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(
+			fetch = FetchType.LAZY,
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@PrimaryKeyJoinColumn(name = "uid")
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "account",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@OrderColumn(name = "index")
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Deck> decks = new ArrayList<>();
 
-	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "account",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Transaction> transactions = new ArrayList<>();
 
-	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "account",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
 
-	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "account",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<AccountTitle> titles = new HashSet<>();
 

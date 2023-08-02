@@ -51,6 +51,9 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.DETACH;
+
 @Entity
 @DynamicUpdate
 @Table(name = "profile", indexes = @Index(columnList = "xp DESC"))
@@ -66,11 +69,19 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	@Column(name = "last_xp", nullable = false)
 	private long lastXp;
 
-	@OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "profile",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<VoiceData> voiceData = new ArrayList<>();
 
-	@OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "profile",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Warn> warns = new ArrayList<>();
 
@@ -86,7 +97,11 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	@MapsId("gid")
 	private GuildConfig guild;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(
+			fetch = FetchType.LAZY,
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@PrimaryKeyJoinColumns({
 			@PrimaryKeyJoinColumn(name = "uid"),
 			@PrimaryKeyJoinColumn(name = "gid")

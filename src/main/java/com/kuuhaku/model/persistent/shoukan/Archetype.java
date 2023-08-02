@@ -33,6 +33,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.DETACH;
+
 @Entity
 @Table(name = "archetype")
 public class Archetype extends DAO<Archetype> {
@@ -50,7 +53,10 @@ public class Archetype extends DAO<Archetype> {
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedArch> infos = new HashSet<>();

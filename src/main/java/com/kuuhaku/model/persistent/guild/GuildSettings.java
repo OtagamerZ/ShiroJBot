@@ -38,6 +38,8 @@ import org.hibernate.type.SqlTypes;
 
 import java.util.*;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "guild_settings")
 @JavaTypeRegistration(javaType = Role.class, descriptorClass = RoleJavaType.class)
@@ -82,17 +84,29 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = RoleConverter.class)
 	private Role welcomer;
 
-	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "settings",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("level")
 	private List<LevelRole> levelRoles = new ArrayList<>();
 
-	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "settings",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("price")
 	private List<PaidRole> paidRoles = new ArrayList<>();
 
-	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "settings",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<CustomAnswer> customAnswers = new ArrayList<>();
 
@@ -122,7 +136,11 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject aliases = new JSONObject();
 
-	@OneToMany(mappedBy = "settings", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "settings",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("threshold")
 	private List<AutoRule> autoRules = new ArrayList<>();

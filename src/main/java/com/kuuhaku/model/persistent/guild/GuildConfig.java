@@ -37,6 +37,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "guild_config")
 public class GuildConfig extends DAO<GuildConfig> {
@@ -54,17 +56,31 @@ public class GuildConfig extends DAO<GuildConfig> {
 	@Column(name = "locale", nullable = false)
 	private I18N locale = I18N.EN;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(
+			fetch = FetchType.LAZY,
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@PrimaryKeyJoinColumn(name = "gid")
 	@Fetch(FetchMode.JOIN)
 	private GuildSettings settings;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+	@OneToOne(
+			fetch = FetchType.LAZY,
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			optional = false,
+			orphanRemoval = true
+	)
 	@PrimaryKeyJoinColumn(name = "gid")
 	@Fetch(FetchMode.JOIN)
 	private WelcomeSettings welcomeSettings;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+	@OneToOne(
+			fetch = FetchType.LAZY,
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			optional = false,
+			orphanRemoval = true
+	)
 	@PrimaryKeyJoinColumn(name = "gid")
 	@Fetch(FetchMode.JOIN)
 	private GoodbyeSettings goodbyeSettings;
@@ -74,7 +90,11 @@ public class GuildConfig extends DAO<GuildConfig> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject buffs = new JSONObject();
 
-	@OneToMany(mappedBy = "guild", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "guild",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("xp DESC")
 	private Set<Profile> profiles = new LinkedHashSet<>();

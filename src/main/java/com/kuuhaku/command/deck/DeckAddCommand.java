@@ -24,7 +24,6 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
-import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -36,7 +35,6 @@ import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.NoResultException;
@@ -45,7 +43,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
-import java.util.Set;
 
 @Command(
 		name = "deck",
@@ -92,11 +89,11 @@ public class DeckAddCommand implements Executable {
 				return;
 			}
 
-			Deck dk = d.refresh();
+			d.refresh();
 			for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
 				StashedCard sc = stash.get(i);
 				if (sc.getCard().equals(card)) {
-					if (!addToDeck(event, locale, dk, sc)) {
+					if (!addToDeck(event, locale, d, sc)) {
 						if (j == 0) {
 							event.channel().sendMessage(locale.get("error/not_owned")).queue();
 							return;
@@ -115,9 +112,9 @@ public class DeckAddCommand implements Executable {
 
 		Utils.selectOption(args.has("confirm"), locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
-					Deck dk = d.refresh();
-					if (!addToDeck(event, locale, dk, sc)) return;
-					dk.save();
+					d.refresh();
+					if (!addToDeck(event, locale, d, sc)) return;
+					d.save();
 
 					event.channel().sendMessage(locale.get("success/deck_add")).queue();
 				})

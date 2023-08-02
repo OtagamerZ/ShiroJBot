@@ -33,6 +33,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.DETACH;
+
 @Entity
 @Table(name = "user_item")
 public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
@@ -64,7 +67,10 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Column(name = "account_bound", nullable = false)
 	private boolean accountBound = false;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedItem> infos = new HashSet<>();

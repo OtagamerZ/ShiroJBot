@@ -23,6 +23,7 @@ import com.kuuhaku.interfaces.DAOListener;
 import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
+import org.hibernate.Session;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
@@ -419,14 +420,12 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public final T refresh() {
+	public final void refresh() {
 		EntityManager em = Manager.getEntityManager();
 
 		beforeRefresh();
 		try {
-			Object key = Manager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-			return (T) Utils.getOr(em.find(getClass(), key), this);
+			em.refresh(this);
 		} finally {
 			afterRefresh();
 			em.close();

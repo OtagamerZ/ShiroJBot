@@ -35,6 +35,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.DETACH;
+
 @Entity
 @Table(name = "kawaipon")
 public class Kawaipon extends DAO<Kawaipon> {
@@ -45,11 +48,19 @@ public class Kawaipon extends DAO<Kawaipon> {
 	@OneToOne(mappedBy = "kawaipon")
 	private Account account;
 
-	@OneToMany(mappedBy = "kawaipon", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "kawaipon",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<KawaiponCard> cards = new LinkedHashSet<>();
 
-	@OneToMany(mappedBy = "kawaipon", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(
+			mappedBy = "kawaipon",
+			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
+			orphanRemoval = true
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<StashedCard> stash = new LinkedHashSet<>();
 
