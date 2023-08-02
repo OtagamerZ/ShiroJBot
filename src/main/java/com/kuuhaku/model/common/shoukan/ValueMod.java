@@ -51,8 +51,10 @@ public class ValueMod implements Cloneable {
 			this.hash = e.posHash();
 		} else if (source instanceof Senshi s) {
 			this.hash = s.posHash();
+		} else if (source != null && source.getHand() != null) {
+			this.hash = source.getSlot().hashCode();
 		} else {
-			this.hash = source == null ? -1 : source.getSlot().hashCode();
+			this.hash = -1;
 		}
 	}
 
