@@ -259,7 +259,7 @@ public class GuildListener extends ListenerAdapter {
 			profile.addXp((long) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
 			profile.save();
 
-			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap();
+			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap("Profile");
 
 			EventData ed = new EventData(event.getChannel(), config, profile);
 			if (content.toLowerCase().startsWith(config.getPrefix())) {
