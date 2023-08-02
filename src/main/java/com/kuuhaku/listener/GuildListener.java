@@ -408,6 +408,7 @@ public class GuildListener extends ListenerAdapter {
 		List<GuildMessageChannel> channels = config.getSettings().getKawaiponChannels();
 		if (!channels.isEmpty() && Calc.chance(100d / channels.size())) {
 			GuildMessageChannel chosen = Utils.getRandomEntry(channels);
+			if (!chosen.canTalk()) return;
 
 			KawaiponCard kc = Spawn.getKawaipon(locale, gb, chosen, acc.getUser());
 			if (kc != null) {
@@ -433,6 +434,7 @@ public class GuildListener extends ListenerAdapter {
 		channels = config.getSettings().getDropChannels();
 		if (!channels.isEmpty() && Calc.chance(100d / channels.size())) {
 			GuildMessageChannel chosen = Utils.getRandomEntry(channels);
+			if (!chosen.canTalk()) return;
 
 			Drop drop = Spawn.getDrop(locale, gb, chosen, acc.getUser());
 			if (drop != null) {

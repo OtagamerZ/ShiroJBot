@@ -23,7 +23,6 @@ import com.kuuhaku.interfaces.DAOListener;
 import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
-import org.hibernate.Session;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,6 +38,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
 		EntityManager em = Manager.getEntityManager();
 
+		System.out.println(id);
 		try {
 			T t = em.find(klass, id);
 			if (t instanceof Blacklistable lock) {
