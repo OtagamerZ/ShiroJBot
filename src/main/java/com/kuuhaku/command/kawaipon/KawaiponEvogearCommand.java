@@ -29,6 +29,7 @@ import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -50,6 +51,7 @@ import java.util.List;
 public class KawaiponEvogearCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		Deck dk = data.profile().getAccount().getCurrentDeck();
 		if (!args.has("tier")) {
 			int total = DAO.queryNative(Integer.class, "SELECT count(1) FROM evogear WHERE tier > 0");
 
@@ -60,8 +62,8 @@ public class KawaiponEvogearCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 			int max = (int) Math.ceil(total / 50d);
 			for (int i = 1; i <= max; i++) {
-				String url = (Constants.API_ROOT + "shoukan/%s/evogear?uid=%s&v=%s&page=%s").formatted(
-						locale, event.user().getId(), System.currentTimeMillis(), i
+				String url = (Constants.API_ROOT + "shoukan/%s/evogear?uid=%s&frame=%s&v=%s&page=%s").formatted(
+						locale, event.user().getId(), dk.getStyling().getFrame().name(), System.currentTimeMillis(), i
 				);
 
 				eb.setImage(url).setDescription(locale.get("str/fallback_url", url));
@@ -86,8 +88,8 @@ public class KawaiponEvogearCommand implements Executable {
 		List<Page> pages = new ArrayList<>();
 		int max = (int) Math.ceil(total / 50d);
 		for (int i = 1; i <= max; i++) {
-			String url = (Constants.API_ROOT + "shoukan/%s/evogear?tier=%s&uid=%s&v=%s&page=%s").formatted(
-					locale, tier, event.user().getId(), System.currentTimeMillis(), i
+			String url = (Constants.API_ROOT + "shoukan/%s/evogear?tier=%s&uid=%s&frame=%s&v=%s&page=%s").formatted(
+					locale, tier, event.user().getId(), dk.getStyling().getFrame().name(), System.currentTimeMillis(), i
 			);
 
 			eb.setImage(url).setDescription(locale.get("str/fallback_url", url));

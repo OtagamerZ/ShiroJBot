@@ -28,6 +28,7 @@ import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -48,6 +49,7 @@ import java.util.List;
 public class KawaiponFieldCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		Deck dk = data.profile().getAccount().getCurrentDeck();
 		int total = DAO.queryNative(Integer.class, "SELECT count(1) FROM field");
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -58,8 +60,8 @@ public class KawaiponFieldCommand implements Executable {
 		List<Page> pages = new ArrayList<>();
 		int max = (int) Math.ceil(total / 50d);
 		for (int i = 1; i <= max; i++) {
-			String url = (Constants.API_ROOT + "shoukan/%s/field?uid=%s&v=%s&page=%s").formatted(
-					locale, event.user().getId(), System.currentTimeMillis(), i
+			String url = (Constants.API_ROOT + "shoukan/%s/field?uid=%s&frame=%s&v=%s&page=%s").formatted(
+					locale, event.user().getId(), dk.getStyling().getFrame().name(), System.currentTimeMillis(), i
 			);
 
 			eb.setImage(url).setDescription(locale.get("str/fallback_url", url));

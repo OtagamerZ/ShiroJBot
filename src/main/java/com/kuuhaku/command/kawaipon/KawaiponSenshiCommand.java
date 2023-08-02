@@ -30,6 +30,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -54,6 +55,7 @@ import java.util.stream.Collectors;
 public class KawaiponSenshiCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		Deck dk = data.profile().getAccount().getCurrentDeck();
 		if (!args.has("race")) {
 			int total = DAO.queryNative(Integer.class, "SELECT count(1) FROM senshi");
 
@@ -64,8 +66,8 @@ public class KawaiponSenshiCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 			int max = (int) Math.ceil(total / 50d);
 			for (int i = 1; i <= max; i++) {
-				String url = (Constants.API_ROOT + "shoukan/%s/senshi?uid=%s&v=%s&page=%s").formatted(
-						locale, event.user().getId(), System.currentTimeMillis(), i
+				String url = (Constants.API_ROOT + "shoukan/%s/senshi?uid=%s&frame=%s&v=%s&page=%s").formatted(
+						locale, event.user().getId(), dk.getStyling().getFrame().name(), System.currentTimeMillis(), i
 				);
 
 				eb.setImage(url).setDescription(locale.get("str/fallback_url", url));
@@ -102,8 +104,8 @@ public class KawaiponSenshiCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 			int max = (int) Math.ceil(total / 50d);
 			for (int i = 1; i <= max; i++) {
-				String url = (Constants.API_ROOT + "shoukan/%s/senshi?race=%s&pure=%s&uid=%s&v=%s&page=%s").formatted(
-						locale, race.getFlag(), args.has("pure") ? 1 : 0, event.user().getId(), System.currentTimeMillis(), i
+				String url = (Constants.API_ROOT + "shoukan/%s/senshi?race=%s&pure=%s&uid=%s&frame=%s&v=%s&page=%s").formatted(
+						locale, race.getFlag(), args.has("pure") ? 1 : 0, event.user().getId(), dk.getStyling().getFrame().name(), System.currentTimeMillis(), i
 				);
 
 				eb.setImage(url).setDescription(race.getDescription(locale) + "\n\n" + locale.get("str/fallback_url", url));

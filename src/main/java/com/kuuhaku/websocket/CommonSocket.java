@@ -24,8 +24,11 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.shoukan.*;
-import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.enums.shoukan.FrameSkin;
+import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -127,13 +130,7 @@ public class CommonSocket extends WebSocketClient {
 					};
 
 					Deck dk = new Deck();
-					Account acc = DAO.query(Account.class, "SELECT a FROM Account a WHERE a.uid = ?1", payload.getString("uid"));
-					if (acc != null) {
-						Deck userDeck = acc.getCurrentDeck();
-
-						DeckStyling ds = dk.getStyling();
-						ds.setFrame(userDeck.getFrame());
-					}
+					dk.getStyling().setFrame(payload.getEnum(FrameSkin.class, "frame"));
 
 					deliver(md, IO.getBytes(d.render(payload.getEnum(I18N.class, "locale"), dk), "png"));
 				}
