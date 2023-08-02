@@ -21,7 +21,6 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Blacklistable;
-import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
@@ -50,7 +49,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.CascadeType.DETACH;
 
 @Entity
 @DynamicUpdate
@@ -158,7 +156,6 @@ public class Account extends DAO<Account> implements Blacklistable {
 	public Account() {
 	}
 
-	@WhenNull
 	public Account(String uid) {
 		this.uid = uid;
 		this.settings = new AccountSettings(uid);

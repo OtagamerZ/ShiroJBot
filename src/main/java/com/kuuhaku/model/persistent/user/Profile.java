@@ -119,7 +119,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	@WhenNull
 	public Profile(ProfileId id) {
 		this.id = id;
-		this.account = DAO.find(Account.class, id.getUid());
+		this.account = Utils.getOr(DAO.find(Account.class, id.getUid()), new Account(id.getUid()));
 		this.guild = DAO.find(GuildConfig.class, id.getGid());
 		this.settings = new ProfileSettings(id);
 	}

@@ -50,7 +50,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				for (Constructor<?> method : klass.getConstructors()) {
 					if (method.isAnnotationPresent(WhenNull.class)) {
 						Class<?>[] params = method.getParameterTypes();
-						if (Objects.requireNonNull(params).length > 0 && params[0].isAssignableFrom(id.getClass())) {
+						if (Objects.requireNonNull(params).length > 0 && params[0] == id.getClass()) {
 							try {
 								t = klass.cast(method.newInstance(id));
 								t.save();
