@@ -30,6 +30,8 @@ FROM (
           , get_rarity_index(c.rarity) AS rarity_idx
           , c.anime_id
      FROM card c
+              INNER JOIN anime a on a.id = c.anime_id
+     WHERE a.visible
      ) x
 WHERE x.rarity_idx < 6
 ORDER BY x.rarity_idx DESC, x.id

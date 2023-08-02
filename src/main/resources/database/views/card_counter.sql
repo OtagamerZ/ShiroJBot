@@ -18,8 +18,10 @@
 
 DROP VIEW IF EXISTS v_card_counter;
 CREATE OR REPLACE VIEW v_card_counter AS
-SELECT c.anime_id
-     , count(1) AS count
+SELECT c.anime_id,
+       count(1) AS count
 FROM card c
-WHERE get_rarity_index(c.rarity) < 6
+         INNER JOIN anime a on a.id = c.anime_id
+WHERE a.visible
+  AND get_rarity_index(c.rarity) BETWEEN 1 AND 5
 GROUP BY c.anime_id;
