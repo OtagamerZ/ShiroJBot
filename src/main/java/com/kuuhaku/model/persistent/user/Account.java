@@ -76,11 +76,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Column(name = "gems", nullable = false)
 	private int gems;
 
-	@OneToMany(
-			mappedBy = "account",
-			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
-			orphanRemoval = true
-	)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Profile> profiles = new ArrayList<>();
 
@@ -94,36 +90,20 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	@OneToMany(
-			mappedBy = "account",
-			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
-			orphanRemoval = true
-	)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@OrderColumn(name = "index")
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Deck> decks = new ArrayList<>();
 
-	@OneToMany(
-			mappedBy = "account",
-			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
-			orphanRemoval = true
-	)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Transaction> transactions = new ArrayList<>();
 
-	@OneToMany(
-			mappedBy = "account",
-			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
-			orphanRemoval = true
-	)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
 
-	@OneToMany(
-			mappedBy = "account",
-			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
-			orphanRemoval = true
-	)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<AccountTitle> titles = new HashSet<>();
 

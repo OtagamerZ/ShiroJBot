@@ -76,11 +76,7 @@ public class GuildConfig extends DAO<GuildConfig> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject buffs = new JSONObject();
 
-	@OneToMany(
-			mappedBy = "guild",
-			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
-			orphanRemoval = true
-	)
+	@OneToMany(mappedBy = "guild", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("xp DESC")
 	private Set<Profile> profiles = new LinkedHashSet<>();

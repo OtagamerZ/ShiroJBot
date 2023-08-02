@@ -69,19 +69,11 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	@Column(name = "last_xp", nullable = false)
 	private long lastXp;
 
-	@OneToMany(
-			mappedBy = "profile",
-			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
-			orphanRemoval = true
-	)
+	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<VoiceData> voiceData = new ArrayList<>();
 
-	@OneToMany(
-			mappedBy = "profile",
-			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
-			orphanRemoval = true
-	)
+	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Warn> warns = new ArrayList<>();
 
