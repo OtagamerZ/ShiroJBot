@@ -97,11 +97,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	@MapsId("gid")
 	private GuildConfig guild;
 
-	@OneToOne(
-			fetch = FetchType.LAZY,
-			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
-			orphanRemoval = true
-	)
+	@OneToOne(fetch = FetchType.LAZY, cascade = ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumns({
 			@PrimaryKeyJoinColumn(name = "uid"),
 			@PrimaryKeyJoinColumn(name = "gid")
@@ -119,13 +115,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	@WhenNull
 	public Profile(ProfileId id) {
 		this.id = id;
-
 		this.account = DAO.find(Account.class, id.getUid());
-		if (this.account == null) {
-			this.account = new Account(id.getUid());
-			this.account.save();
-		}
-
 		this.guild = DAO.find(GuildConfig.class, id.getGid());
 		this.settings = new ProfileSettings(id);
 	}

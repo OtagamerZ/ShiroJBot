@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -35,6 +36,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.DETACH;
 
 @Entity
 @Table(name = "kawaipon")
@@ -79,6 +81,12 @@ public class Kawaipon extends DAO<Kawaipon> {
 	public Kawaipon(Account account) {
 		this.uid = account.getUid();
 		this.account = account;
+	}
+
+	@WhenNull
+	public Kawaipon(String uid) {
+		this.uid = uid;
+		this.account = DAO.find(Account.class, uid);
 	}
 
 	public String getUid() {

@@ -56,31 +56,17 @@ public class GuildConfig extends DAO<GuildConfig> {
 	@Column(name = "locale", nullable = false)
 	private I18N locale = I18N.EN;
 
-	@OneToOne(
-			fetch = FetchType.LAZY,
-			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
-			orphanRemoval = true
-	)
+	@OneToOne(fetch = FetchType.LAZY, cascade = ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumn(name = "gid")
 	@Fetch(FetchMode.JOIN)
 	private GuildSettings settings;
 
-	@OneToOne(
-			fetch = FetchType.LAZY,
-			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
-			optional = false,
-			orphanRemoval = true
-	)
+	@OneToOne(fetch = FetchType.LAZY, cascade = ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumn(name = "gid")
 	@Fetch(FetchMode.JOIN)
 	private WelcomeSettings welcomeSettings;
 
-	@OneToOne(
-			fetch = FetchType.LAZY,
-			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
-			optional = false,
-			orphanRemoval = true
-	)
+	@OneToOne(fetch = FetchType.LAZY, cascade = ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumn(name = "gid")
 	@Fetch(FetchMode.JOIN)
 	private GoodbyeSettings goodbyeSettings;

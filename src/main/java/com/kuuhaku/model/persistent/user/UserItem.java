@@ -33,8 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.CascadeType.DETACH;
+import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "user_item")
@@ -67,10 +66,7 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Column(name = "account_bound", nullable = false)
 	private boolean accountBound = false;
 
-	@OneToMany(
-			cascade = {PERSIST, REFRESH, REMOVE, DETACH},
-			orphanRemoval = true
-	)
+	@OneToMany(cascade = ALL, orphanRemoval = true)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedItem> infos = new HashSet<>();
