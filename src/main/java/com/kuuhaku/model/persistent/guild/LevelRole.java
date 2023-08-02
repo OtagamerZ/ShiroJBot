@@ -44,7 +44,7 @@ public class LevelRole extends DAO<LevelRole> {
 	@Convert(converter = RoleConverter.class)
 	private Role role;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "gid", nullable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("gid")

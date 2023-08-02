@@ -41,7 +41,7 @@ public class AccountTitle extends DAO<AccountTitle> {
 	@Column(name = "current", nullable = false)
 	private boolean current;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@PrimaryKeyJoinColumn(name = "account_uid")
 	@Fetch(FetchMode.JOIN)
 	private Account account;

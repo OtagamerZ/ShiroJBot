@@ -54,7 +54,6 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Entity
-@DynamicUpdate
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "profile", indexes = @Index(columnList = "xp DESC"))
 public class Profile extends DAO<Profile> implements Blacklistable {

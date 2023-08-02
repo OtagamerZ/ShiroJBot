@@ -51,7 +51,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Entity
-@DynamicUpdate
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "account", indexes = @Index(columnList = "balance DESC"))
 public class Account extends DAO<Account> implements Blacklistable {

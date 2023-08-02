@@ -36,7 +36,7 @@ public class DynamicProperty extends DAO<DynamicProperty> {
 	@Column(name = "value", nullable = false, columnDefinition = "TEXT")
 	private String value;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "uid", nullable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("uid")

@@ -40,7 +40,7 @@ public class AutoRule extends DAO<AutoRule> {
 	@Column(name = "threshold", nullable = false)
 	private int threshold;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "gid", nullable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("gid")
@@ -60,12 +60,16 @@ public class AutoRule extends DAO<AutoRule> {
 		return id;
 	}
 
+	public RuleAction getAction() {
+		return action;
+	}
+
 	public int getThreshold() {
 		return threshold;
 	}
 
-	public RuleAction getAction() {
-		return action;
+	public GuildSettings getSettings() {
+		return settings;
 	}
 
 	@Override
