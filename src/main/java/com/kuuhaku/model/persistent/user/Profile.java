@@ -39,6 +39,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.jdesktop.swingx.graphics.BlendComposite;
@@ -51,6 +52,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Entity
+@DynamicUpdate
 @Table(name = "profile", indexes = @Index(columnList = "xp DESC"))
 public class Profile extends DAO<Profile> implements Blacklistable {
 	private static final Dimension SIZE = new Dimension(950, 600);
