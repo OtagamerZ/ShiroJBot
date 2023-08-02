@@ -131,6 +131,10 @@ public class Kawaipon extends DAO<Kawaipon> {
 				""", account.getUid(), card, chrome);
 	}
 
+	public boolean hasCard(KawaiponCard card) {
+		return getCard(card.getCard(), card.isChrome()) != null;
+	}
+
 	public boolean hasCard(Card card, boolean chrome) {
 		return getCard(card, chrome) != null;
 	}
