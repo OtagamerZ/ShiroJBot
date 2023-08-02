@@ -51,7 +51,7 @@ public class Transaction extends DAO<Transaction> {
 	@Column(name = "date", nullable = false)
 	private ZonedDateTime date;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@PrimaryKeyJoinColumn(name = "account_uid")
 	@Fetch(FetchMode.JOIN)
 	private Account account;

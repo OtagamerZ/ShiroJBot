@@ -34,16 +34,13 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.jdesktop.swingx.graphics.BlendComposite;
 
 import java.awt.*;
@@ -75,19 +72,19 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Warn> warns = new ArrayList<>();
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "uid", nullable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("uid")
 	private Account account;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "gid", nullable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("gid")
 	private GuildConfig guild;
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumns({
 			@PrimaryKeyJoinColumn(name = "uid"),
 			@PrimaryKeyJoinColumn(name = "gid")

@@ -59,7 +59,7 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	@Fetch(FetchMode.JOIN)
 	private Card card;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@PrimaryKeyJoinColumn(name = "kawaipon_uid")
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;

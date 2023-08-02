@@ -31,15 +31,13 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
@@ -77,12 +75,12 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Profile> profiles = new ArrayList<>();
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumn(name = "uid")
 	@Fetch(FetchMode.JOIN)
 	private AccountSettings settings;
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumn(name = "uid")
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;

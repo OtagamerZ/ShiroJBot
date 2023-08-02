@@ -39,7 +39,7 @@ public class VoiceData {
 	@Column(name = "date", nullable = false)
 	private ZonedDateTime date;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@PrimaryKeyJoinColumns({
 			@PrimaryKeyJoinColumn(name = "profile_uid", referencedColumnName = "uid"),
 			@PrimaryKeyJoinColumn(name = "profile_gid", referencedColumnName = "gid")

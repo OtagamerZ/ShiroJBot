@@ -40,7 +40,7 @@ public class AutoRule extends DAO<AutoRule> {
 	@Column(name = "threshold", nullable = false)
 	private int threshold;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "gid", nullable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("gid")
