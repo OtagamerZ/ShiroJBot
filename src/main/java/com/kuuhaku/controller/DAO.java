@@ -39,13 +39,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
-			T t;
-			try {
-				t = em.find(klass, id);
-			} catch (EntityNotFoundException e) {
-				t = null;
-			}
-
+			T t = em.find(klass, id);
 			if (t instanceof Blacklistable lock) {
 				if (lock.isBlacklisted()) {
 					t = null;
