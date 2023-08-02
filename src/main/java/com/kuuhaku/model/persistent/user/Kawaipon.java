@@ -206,12 +206,36 @@ public class Kawaipon extends DAO<Kawaipon> {
 		return new Pair<>(((Number) vals[0]).intValue(), ((Number) vals[1]).intValue());
 	}
 
-	public List<StashedCard> getNotInUse() {
-		return DAO.queryAll(StashedCard.class, "SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id IS NULL AND s.price = 0 AND s.trash = FALSE", uid);
+	public List<StashedCard> getTrash() {
+		return DAO.queryAll(StashedCard.class, """
+				SELECT s 
+				FROM StashedCard s 
+				WHERE s.kawaipon.uid = ?1 
+				  AND s.trash = TRUE
+				""", uid);
 	}
 
-	public List<StashedCard> getTrash() {
-		return DAO.queryAll(StashedCard.class, "SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.trash = TRUE", uid);
+	public List<StashedCard> getNotInUse() {
+		return DAO.queryAll(StashedCard.class, """
+				SELECT s 
+				FROM StashedCard s 
+				WHERE s.kawaipon.uid = ?1 
+				  AND s.deck.id IS NULL 
+				  AND s.price = 0 
+				  AND s.trash = FALSE
+				""", uid);
+	}
+
+	public List<StashedCard> getTradeable() {
+		return DAO.queryAll(StashedCard.class, """
+				SELECT s 
+				FROM StashedCard s 
+				WHERE s.kawaipon.uid = ?1 
+				  AND s.deck.id IS NULL 
+				  AND s.price = 0 
+				  AND s.trash = FALSE
+				  AND s.accountBound = FALSE
+				""", uid);
 	}
 
 	public Card getFavCard() {

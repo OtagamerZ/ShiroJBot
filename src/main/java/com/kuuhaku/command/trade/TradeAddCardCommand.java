@@ -78,7 +78,7 @@ public class TradeAddCardCommand implements Executable {
         List<Integer> cards = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             CompletableFuture<Boolean> success = new CompletableFuture<>();
-            Utils.selectOption(locale, event.channel(), kp.getStash(), card, event.user())
+            Utils.selectOption(locale, event.channel(), kp.getTradeable(), card, event.user())
                     .thenAccept(sc -> {
                         if (sc == null) {
                             event.channel().sendMessage(locale.get("error/invalid_value")).queue();
