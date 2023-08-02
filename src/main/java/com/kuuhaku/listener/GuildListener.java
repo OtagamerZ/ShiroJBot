@@ -194,212 +194,237 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
-		if (!event.isFromGuild() || event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
+		try (Checkpoint cp = new Checkpoint()) {
+			if (!event.isFromGuild() || event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
 
-		String content = event.getMessage().getContentRaw();
-		MessageData.Guild data;
-		try {
-			data = new MessageData.Guild(event.getMessage());
-		} catch (NullPointerException e) {
-			return;
-		}
+			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap();
 
-		if (toHandle.containsKey(data.guild().getId())) {
-			List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
-			for (SimpleMessageListener evt : evts) {
-				if (!evt.isClosed() && evt.checkChannel(data.channel())) {
-					evt.execute(event);
-				}
-			}
-			evts.removeIf(SimpleMessageListener::isClosed);
-		}
-
-		GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
-		I18N locale = config.getLocale();
-		if (!Objects.equals(config.getName(), data.guild().getName())) {
-			config.setName(data.guild().getName());
-			config.save();
-		}
-
-		if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_LINK)) {
-			Matcher m = Utils.regex(content, "(ht|f)tps?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*");
-			if (m.find()) {
-				event.getMessage().delete().queue(null, Utils::doNothing);
+			String content = event.getMessage().getContentRaw();
+			MessageData.Guild data;
+			try {
+				data = new MessageData.Guild(event.getMessage());
+			} catch (NullPointerException e) {
 				return;
 			}
-		}
 
-		Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
-		int lvl = profile.getLevel();
+			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap();
 
-		Account account = profile.getAccount();
-		if (!Objects.equals(account.getName(), data.user().getName())) {
-			account.setName(data.user().getName());
-			account.save();
-		}
+			if (toHandle.containsKey(data.guild().getId())) {
+				List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
+				for (SimpleMessageListener evt : evts) {
+					if (!evt.isClosed() && evt.checkChannel(data.channel())) {
+						evt.execute(event);
+					}
+				}
+				evts.removeIf(SimpleMessageListener::isClosed);
+			}
 
-		GuildBuff gb = config.getCumBuffs();
-		profile.addXp((long) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
-		profile.save();
+			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap();
 
-		EventData ed = new EventData(event.getChannel(), config, profile);
-		if (content.toLowerCase().startsWith(config.getPrefix())) {
-			CompletableFuture.runAsync(() -> processCommand(data, ed, content));
-		}
+			GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
+			I18N locale = config.getLocale();
+			if (!Objects.equals(config.getName(), data.guild().getName())) {
+				config.setName(data.guild().getName());
+				config.save();
+			}
 
-		CompletableFuture.runAsync(() -> {
-			if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
-				Member mb = event.getMember();
-				if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
-					String name = Unidecode.decode(mb.getEffectiveName()).trim();
-					if (!name.equals(mb.getEffectiveName())) {
-						if (name.length() < 3) {
-							name = locale.get("zalgo/name_" + Calc.rng(1, 4));
+			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap();
+
+			if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_LINK)) {
+				Matcher m = Utils.regex(content, "(ht|f)tps?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*");
+				if (m.find()) {
+					event.getMessage().delete().queue(null, Utils::doNothing);
+					return;
+				}
+			}
+
+			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap();
+
+			Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
+			int lvl = profile.getLevel();
+
+			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap();
+
+			Account account = profile.getAccount();
+			if (!Objects.equals(account.getName(), data.user().getName())) {
+				account.setName(data.user().getName());
+				account.save();
+			}
+
+			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap();
+
+			GuildBuff gb = config.getCumBuffs();
+			profile.addXp((long) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
+			profile.save();
+
+			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap();
+
+			EventData ed = new EventData(event.getChannel(), config, profile);
+			if (content.toLowerCase().startsWith(config.getPrefix())) {
+				CompletableFuture.runAsync(() -> processCommand(data, ed, content));
+			}
+
+			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap();
+
+			CompletableFuture.runAsync(() -> {
+				if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
+					Member mb = event.getMember();
+					if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
+						String name = Unidecode.decode(mb.getEffectiveName()).trim();
+						if (!name.equals(mb.getEffectiveName())) {
+							if (name.length() < 3) {
+								name = locale.get("zalgo/name_" + Calc.rng(1, 4));
+							}
+
+							mb.modifyNickname(name).queue();
 						}
-
-						mb.modifyNickname(name).queue();
 					}
 				}
-			}
 
-			if (profile.getLevel() > lvl) {
-				int high = account.getHighestLevel();
-				int prize = 0;
+				if (profile.getLevel() > lvl) {
+					int high = account.getHighestLevel();
+					int prize = 0;
 
-				if (profile.getLevel() > high) {
-					prize = profile.getLevel() * 150;
-					account.addCR(prize, "Level up prize");
+					if (profile.getLevel() > high) {
+						prize = profile.getLevel() * 150;
+						account.addCR(prize, "Level up prize");
 
-					ed.notify(locale.get("achievement/level_up_prize", data.user().getAsMention(), profile.getLevel(), prize));
+						ed.notify(locale.get("achievement/level_up_prize", data.user().getAsMention(), profile.getLevel(), prize));
 
-					if (profile.getLevel() <= 19) {
-						UserItem item = DAO.find(UserItem.class, "STARTER_TOKEN");
+						if (profile.getLevel() <= 19) {
+							UserItem item = DAO.find(UserItem.class, "STARTER_TOKEN");
 
-						account.addItem(item, 2);
-						ed.notify(locale.get("str/received_item", 2, item.getName(locale)));
+							account.addItem(item, 2);
+							ed.notify(locale.get("str/received_item", 2, item.getName(locale)));
+						}
+					} else {
+						ed.notify(locale.get("achievement/level_up", data.user().getAsMention(), profile.getLevel(), prize));
 					}
-				} else {
-					ed.notify(locale.get("achievement/level_up", data.user().getAsMention(), profile.getLevel(), prize));
 				}
-			}
 
-			Map<Integer, List<LevelRole>> roles = config.getSettings().getLevelRoles().parallelStream()
-					.filter(lr -> lr.getLevel() <= profile.getLevel())
-					.collect(Collectors.groupingBy(LevelRole::getLevel));
+				Map<Integer, List<LevelRole>> roles = config.getSettings().getLevelRoles().parallelStream()
+						.filter(lr -> lr.getLevel() <= profile.getLevel())
+						.collect(Collectors.groupingBy(LevelRole::getLevel));
 
-			if (!roles.isEmpty()) {
-				List<Role> toAdd = roles.entrySet().parallelStream()
-						.max(Map.Entry.comparingByKey())
-						.map(Map.Entry::getValue)
-						.orElse(List.of())
-						.parallelStream()
-						.map(LevelRole::getRole)
-						.filter(data.me()::canInteract)
-						.toList();
+				if (!roles.isEmpty()) {
+					List<Role> toAdd = roles.entrySet().parallelStream()
+							.max(Map.Entry.comparingByKey())
+							.map(Map.Entry::getValue)
+							.orElse(List.of())
+							.parallelStream()
+							.map(LevelRole::getRole)
+							.filter(data.me()::canInteract)
+							.toList();
 
-				List<Role> toRemove = roles.values().parallelStream()
-						.flatMap(List::parallelStream)
-						.map(LevelRole::getRole)
-						.filter(r -> !toAdd.contains(r))
-						.filter(data.me()::canInteract)
-						.toList();
+					List<Role> toRemove = roles.values().parallelStream()
+							.flatMap(List::parallelStream)
+							.map(LevelRole::getRole)
+							.filter(r -> !toAdd.contains(r))
+							.filter(data.me()::canInteract)
+							.toList();
 
-				data.guild().modifyMemberRoles(data.member(), toAdd, toRemove).queue(null, Utils::doNothing);
+					data.guild().modifyMemberRoles(data.member(), toAdd, toRemove).queue(null, Utils::doNothing);
 
-				if (!toAdd.isEmpty() && profile.getLevel() > lvl) {
-					ed.notify(locale.get("str/level_role_earn",
-							Utils.properlyJoin(locale.get("str/and")).apply(toAdd.stream().map(Role::getAsMention).toList()))
-					);
+					if (!toAdd.isEmpty() && profile.getLevel() > lvl) {
+						ed.notify(locale.get("str/level_role_earn",
+								Utils.properlyJoin(locale.get("str/and")).apply(toAdd.stream().map(Role::getAsMention).toList()))
+						);
+					}
 				}
-			}
 
-			DAO.apply(Account.class, account.getUid(), acc -> {
-				Title t = acc.checkTitles();
-				if (t != null) {
-					ed.notify(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName()));
+				DAO.apply(Account.class, account.getUid(), acc -> {
+					Title t = acc.checkTitles();
+					if (t != null) {
+						ed.notify(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName()));
+					}
+				});
+
+				if (Utils.match(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
+					data.channel().sendMessage(locale.get("str/mentioned",
+							data.user().getAsMention(),
+							config.getPrefix(),
+							Constants.SERVER_ROOT
+					)).queue();
 				}
-			});
 
-			if (Utils.match(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
-				data.channel().sendMessage(locale.get("str/mentioned",
-						data.user().getAsMention(),
-						config.getPrefix(),
-						Constants.SERVER_ROOT
-				)).queue();
-			}
+				if (config.getSettings().isFeatureEnabled(GuildFeature.NQN_MODE)) {
+					Member mb = event.getMember();
+					if (mb != null) {
+						boolean proxy = false;
 
-			if (config.getSettings().isFeatureEnabled(GuildFeature.NQN_MODE)) {
-				Member mb = event.getMember();
-				if (mb != null) {
-					boolean proxy = false;
+						StringBuilder sb = new StringBuilder();
+						for (String s : content.split(" ")) {
+							sb.append(" ");
 
-					StringBuilder sb = new StringBuilder();
-					for (String s : content.split(" ")) {
-						sb.append(" ");
+							if (!s.isBlank()) {
+								String name = Utils.extract(s, "^:([\\w-]+):$", 1);
+								if (name != null) {
+									RichCustomEmoji emj = null;
 
-						if (!s.isBlank()) {
-							String name = Utils.extract(s, "^:([\\w-]+):$", 1);
-							if (name != null) {
-								RichCustomEmoji emj = null;
+									List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(name, true);
+									if (!valid.isEmpty()) {
+										for (RichCustomEmoji e : valid) {
+											if (e.getGuild().equals(event.getGuild())) {
+												emj = e;
+												break;
+											}
+										}
 
-								List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(name, true);
-								if (!valid.isEmpty()) {
-									for (RichCustomEmoji e : valid) {
-										if (e.getGuild().equals(event.getGuild())) {
-											emj = e;
-											break;
+										if (emj == null) {
+											emj = valid.parallelStream()
+													.filter(e -> e.getGuild().isMember(mb))
+													.findAny()
+													.orElse(valid.get(0));
 										}
 									}
 
-									if (emj == null) {
-										emj = valid.parallelStream()
-												.filter(e -> e.getGuild().isMember(mb))
-												.findAny()
-												.orElse(valid.get(0));
+									if (emj != null) {
+										sb.append(emj.getAsMention());
+										proxy = true;
+										continue;
 									}
 								}
+							}
 
-								if (emj != null) {
-									sb.append(emj.getAsMention());
-									proxy = true;
-									continue;
+							sb.append(s);
+						}
+
+						if (proxy) {
+							PseudoUser pu = new PseudoUser(mb, event.getGuildChannel());
+							pu.send(data.message(), sb.toString());
+						}
+					}
+				}
+
+				if (!event.getAuthor().equals(data.me().getUser()) && Utils.between(content.length(), 3, 255)) {
+					List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
+							data.guild().getId(), StringUtils.stripAccents(content)
+					);
+
+					for (CustomAnswer ca : cas) {
+						if (ca.getChannels().isEmpty() || ca.getChannels().contains(event.getChannel().getId())) {
+							if (ca.getUsers().isEmpty() || ca.getUsers().contains(event.getAuthor().getId())) {
+								if (Calc.chance(ca.getChance() / (event.getAuthor().isBot() ? 2d : 1d))) {
+									event.getChannel().sendTyping()
+											.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
+											.flatMap(v -> event.getChannel().sendMessage(ca.getAnswer()))
+											.queue();
+									break;
 								}
 							}
 						}
-
-						sb.append(s);
-					}
-
-					if (proxy) {
-						PseudoUser pu = new PseudoUser(mb, event.getGuildChannel());
-						pu.send(data.message(), sb.toString());
 					}
 				}
-			}
+			});
 
-			if (!event.getAuthor().equals(data.me().getUser()) && Utils.between(content.length(), 3, 255)) {
-				List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
-						data.guild().getId(), StringUtils.stripAccents(content)
-				);
+			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap();
 
-				for (CustomAnswer ca : cas) {
-					if (ca.getChannels().isEmpty() || ca.getChannels().contains(event.getChannel().getId())) {
-						if (ca.getUsers().isEmpty() || ca.getUsers().contains(event.getAuthor().getId())) {
-							if (Calc.chance(ca.getChance() / (event.getAuthor().isBot() ? 2d : 1d))) {
-								event.getChannel().sendTyping()
-										.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
-										.flatMap(v -> event.getChannel().sendMessage(ca.getAnswer()))
-										.queue();
-								break;
-							}
-						}
-					}
-				}
-			}
-		});
+			rollSpawns(config, locale, account);
 
-		rollSpawns(config, locale, account);
-		rollEvents(data.channel(), locale);
+			if (event.getAuthor().getId().equals("919391049074475068")) cp.lap();
+
+			rollEvents(data.channel(), locale);
+		}
 	}
 
 	private void rollSpawns(GuildConfig config, I18N locale, Account acc) {
