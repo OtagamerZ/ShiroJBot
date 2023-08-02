@@ -800,7 +800,7 @@ public class Hand {
 				} else if (origin.synergy() == Race.TORMENTED) {
 					getOther().modHP((int) (hpDelta * 0.01));
 				}
-			} else if (hpDelta > 0) {
+			} else {
 				game.trigger(Trigger.ON_HEAL, side);
 			}
 		}
