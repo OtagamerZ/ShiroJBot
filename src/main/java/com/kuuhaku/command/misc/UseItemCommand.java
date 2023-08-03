@@ -75,8 +75,7 @@ public class UseItemCommand implements Executable {
 								params = SignatureParser.parse(locale, new String[]{item.getSignature()}, null, false, args.getString("args"));
 							}
 
-							acc.refresh();
-							item.execute(locale, event.channel(), acc, params);
+							item.execute(locale, event.channel(), acc.refresh(), params);
 						} catch (PassiveItemException e) {
 							event.channel().sendMessage(locale.get("error/item_not_usable")).queue();
 							return true;

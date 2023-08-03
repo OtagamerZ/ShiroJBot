@@ -419,12 +419,14 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public final void refresh() {
+	@SuppressWarnings("unchecked")
+	public final T refresh() {
 		EntityManager em = Manager.getEntityManager();
 
 		beforeRefresh();
 		try {
-			em.refresh(this);
+			Object key = Manager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+			return (T) Utils.getOr(em.find(getClass(), key), this);
 		} finally {
 			afterRefresh();
 			em.close();

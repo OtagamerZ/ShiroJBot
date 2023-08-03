@@ -286,7 +286,7 @@ public class SynthesizeCommand implements Executable {
 	}
 
 	public static Evogear rollSynthesis(User u, double mult, boolean lucky) {
-		RandomList<SynthResult> pool = new RandomList<>(2 * (mult * (lucky ? 1.5 : 1)));
+		RandomList<SynthResult> pool = new RandomList<>(mult * (lucky ? 1.5 : 1));
 		List<SynthResult> evos = DAO.queryAllUnmapped("SELECT card_id, get_weight(card_id, ?1) FROM evogear WHERE tier > 0", u.getId()).stream()
 				.map(o -> Utils.map(SynthResult.class, o))
 				.toList();

@@ -19,65 +19,61 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Utils;
 import kotlin.Pair;
 import org.apache.commons.collections4.list.TreeList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.BiFunction;
+import java.util.function.Supplier;
 import java.util.random.RandomGenerator;
 
 /**
  * Curve bias:
  * <br>
  * <br>
- * 0ㅤㅤㅤㅤㅤㅤㅤㅤㅤ1.0
+ * lowㅤㅤㅤㅤㅤㅤㅤhigh
  * <br>
  * <----------|---------->
  * <br>
- * 1/Nㅤㅤㅤ1.0ㅤㅤㅤㅤN
+ * -Nㅤㅤㅤㅤ0ㅤㅤㅤㅤN
  * <br>
  * <br>
- * Values <1 tend towards higher weights, values ></1>1 tend towards lower weights
+ * Values <0 tend towards higher weights, values >0 tend towards lower weights
  **/
 public class RandomList<T> {
 	private final NavigableMap<Double, T> map = new TreeMap<>();
 	private final List<Pair<Double, T>> pool = new TreeList<>();
-	private final RandomGenerator rng;
-	private final BiFunction<Double, Double, Double> randGen;
-	private final double fac;
+	private final Supplier<Double> randGen;
+	private final double mult;
+	private double skew = 0.5;
 	private double total = 0;
 
 	public RandomList() {
-		this(Constants.DEFAULT_RNG.get(), 1);
+		this(0);
 	}
 
 	public RandomList(RandomGenerator rng) {
-		this(rng, 1);
+		this(rng, 0);
 	}
 
-	public RandomList(double fac) {
-		this(Constants.DEFAULT_RNG.get(), fac);
+	public RandomList(double mult) {
+		this(Constants.DEFAULT_RNG.get(), mult);
 	}
 
-	public RandomList(RandomGenerator rng, double fac) {
-		this(rng, (a, b) -> {
-			if (b < 1) {
-				return 1 - Math.pow(a, b);
-			}
-
-			return Math.pow(a, 1 / b);
-		}, fac);
+	public RandomList(Supplier<Double> randGen) {
+		this(randGen, 0);
 	}
 
-	public RandomList(BiFunction<Double, Double, Double> randGen, double fac) {
-		this(Constants.DEFAULT_RNG.get(), randGen, fac);
+	public RandomList(RandomGenerator rng, double mult) {
+		this.mult = mult;
+		this.randGen = () -> Calc.clamp(rng.nextGaussian(skew, 0.15), 0, 1);
 	}
 
-	public RandomList(RandomGenerator rng, BiFunction<Double, Double, Double> randGen, double fac) {
-		this.rng = rng;
+	public RandomList(Supplier<Double> randGen, double mult) {
+		this.mult = mult;
 		this.randGen = randGen;
-		this.fac = fac;
 	}
 
 	public void add(@NotNull T item) {
@@ -87,15 +83,29 @@ public class RandomList<T> {
 	public void add(@NotNull T item, double weight) {
 		if (weight <= 0) return;
 
-		total += weight;
-		map.put(total, item);
+		total = 0;
+		map.clear();
 		pool.add(new Pair<>(weight, item));
 	}
 
 	public T get() {
-		if (map.isEmpty()) return null;
+		if (pool.isEmpty()) return null;
+		else if (map.isEmpty()) {
+			pool.sort(Comparator.<Pair<Double, T>>comparingDouble(Pair::getFirst).reversed());
+			double min = pool.get(pool.size() - 1).getFirst();
+			double max = pool.get(0).getFirst();
 
-		return map.higherEntry(randGen.apply(rng.nextDouble(), fac) * total).getValue();
+			for (Pair<Double, T> p : pool) {
+				double weight = p.getFirst();
+				double fac = 1 - Calc.offsetPrcnt(weight, max, min);
+				double mult = Math.pow(1 + fac / 2, this.mult);
+
+				System.out.println(weight * mult);
+				map.put(total += (weight * mult), p.getSecond());
+			}
+		}
+
+		return map.ceilingEntry(randGen.get() * total).getValue();
 	}
 
 	public T remove() {
@@ -124,5 +134,11 @@ public class RandomList<T> {
 
 	public List<Pair<Double, T>> entries() {
 		return pool;
+	}
+
+	public void skew(double skew) {
+		if (!Utils.between(skew, 0, 1)) throw new IllegalArgumentException();
+
+		this.skew = skew;
 	}
 }
