@@ -53,7 +53,6 @@ import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.CascadeType.DETACH;
 
 @Entity
-@DynamicUpdate
 @Table(name = "account", indexes = @Index(columnList = "balance DESC"))
 public class Account extends DAO<Account> implements Blacklistable {
 	@Id

@@ -296,7 +296,9 @@ public class SynthesizeCommand implements Executable {
 		}
 
 		if (lucky) {
-			return Utils.luckyRoll(pool::get, (a, b) -> b.weight() < a.weight()).evogear();
+			Kawaipon kp = DAO.find(Kawaipon.class, u.getId());
+			String fav = kp.getFavCardId();
+			return Utils.luckyRoll(pool::get, (a, b) -> b.id().equals(fav) || b.weight() < a.weight()).evogear();
 		} else {
 			return pool.get().evogear();
 		}

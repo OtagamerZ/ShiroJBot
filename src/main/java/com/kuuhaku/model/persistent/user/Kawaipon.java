@@ -249,6 +249,13 @@ public class Kawaipon extends DAO<Kawaipon> {
 		return favCard;
 	}
 
+	public String getFavCardId() {
+		Card fav = getFavCard();
+		if (fav != null) return fav.getId();
+
+		return null;
+	}
+
 	public ZonedDateTime getFavExpiration() {
 		return favExpiration;
 	}

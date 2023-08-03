@@ -34,10 +34,9 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
-import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "guild_config")
@@ -75,11 +74,6 @@ public class GuildConfig extends DAO<GuildConfig> {
 	@Column(name = "buffs", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject buffs = new JSONObject();
-
-	@OneToMany(mappedBy = "guild", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
-	@OrderBy("xp DESC")
-	private Set<Profile> profiles = new LinkedHashSet<>();
 
 	public GuildConfig() {
 	}
@@ -161,7 +155,7 @@ public class GuildConfig extends DAO<GuildConfig> {
 		return new GuildBuff(card, drop, rarity, xp);
 	}
 
-	public Set<Profile> getProfiles() {
-		return profiles;
+	public List<Profile> getProfiles() {
+		return DAO.queryAll(Profile.class, "SELECT p FROM Profile p WHERE p.guild.gid = ?1 ORDER BY p.xp DESC", gid);
 	}
 }
