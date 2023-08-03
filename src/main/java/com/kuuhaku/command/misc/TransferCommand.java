@@ -86,7 +86,7 @@ public class TransferCommand implements Executable {
 			}
 		} else {
 			Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
-			if (kp.getStash().isEmpty()) {
+			if (kp.getStashUsage() == 0) {
 				event.channel().sendMessage(locale.get("error/empty_stash")).queue();
 				return;
 			}

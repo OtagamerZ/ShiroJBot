@@ -88,12 +88,12 @@ public class Kawaipon extends DAO<Kawaipon> {
 		return account;
 	}
 
-	public Set<KawaiponCard> getCards() {
-		return cards;
+	public List<KawaiponCard> getCards() {
+		return DAO.queryAll(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.kawaipon.uid = ?1", uid);
 	}
 
-	public Set<StashedCard> getStash() {
-		return stash;
+	public List<StashedCard> getStash() {
+		return DAO.queryAll(StashedCard.class, "SELECT sc FROM StashedCard sc WHERE sc.kawaipon.uid = ?1", uid);
 	}
 
 	public int getMaxCapacity() {
