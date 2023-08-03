@@ -584,10 +584,6 @@
 				 );
 			 }
 
-			 if (races.stream().distinct().count() == 1) {
-				 return origin = new Origin(races.first());
-			 }
-
 			 List<Race> ori = new ArrayList<>();
 			 Iterator<Race> it = races.stream()
 					 .distinct()
@@ -599,31 +595,28 @@
 			 while (it.hasNext()) {
 				 Race r = it.next();
 				 int count = races.getCount(r);
-
-				 ori.add(r);
-
 				 if (high == 0) high = count;
-				 else if (count != high) {
-					 if (ori.size() == 2) {
-						 allSame = false;
 
-						 if (races.getCount(ori.get(1)) == races.getCount(r)) {
-							 origin = new Origin(Race.MIXED, ori.toArray(Race[]::new));
-						 }
+				 if (count == high) {
+					 ori.add(r);
+				 } else {
+					 if (ori.size() < 2) {
+						 allSame = false;
+						 ori.add(r);
 					 }
 
 					 break;
 				 }
 			 }
 
-			 if (allSame && ori.size() >= 2) {
+			 if (ori.isEmpty()) {
+				 return origin = new Origin(Race.NONE);
+			 } else if (ori.size() == 1) {
+				 origin = new Origin(ori.get(0));
+			 } else if (allSame) {
 				 origin = new Origin(Race.MIXED, ori.toArray(Race[]::new));
 			 } else {
-				 if (!ori.isEmpty()) {
-					 origin = new Origin(ori.get(0), ori.get(1));
-				 } else {
-					 origin = new Origin(Race.NONE);
-				 }
+				 origin = new Origin(ori.get(0), ori.get(1));
 			 }
 		 }
 
