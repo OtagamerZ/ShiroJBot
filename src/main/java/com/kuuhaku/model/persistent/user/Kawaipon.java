@@ -30,12 +30,9 @@ import org.hibernate.annotations.FetchMode;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "kawaipon")
@@ -46,14 +43,6 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	@OneToOne(mappedBy = "kawaipon")
 	private Account account;
-
-	@OneToMany(mappedBy = "kawaipon", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<KawaiponCard> cards = new LinkedHashSet<>();
-
-	@OneToMany(mappedBy = "kawaipon", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<StashedCard> stash = new LinkedHashSet<>();
 
 	@Column(name = "stash_capacity", nullable = false)
 	private int stashCapacity = 250;

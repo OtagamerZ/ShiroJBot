@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
+import com.kuuhaku.model.persistent.id.ProfileId;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Utils;
@@ -35,7 +36,6 @@ import jakarta.persistence.*;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -49,8 +49,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.CascadeType.DETACH;
+import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "account", indexes = @Index(columnList = "balance DESC"))
@@ -74,10 +73,6 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	@Column(name = "gems", nullable = false)
 	private int gems;
-
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
-	private List<Profile> profiles = new ArrayList<>();
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumn(name = "uid")
@@ -253,17 +248,11 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public List<Profile> getProfiles() {
-		return profiles;
+		return DAO.queryAll(Profile.class, "SELECT p FROM Profile p WHERE p.id.uid = ?1 ORDER BY p.xp DESC", uid);
 	}
 
 	public Profile getProfile(Member member) {
-		return profiles.parallelStream()
-				.filter(p -> p.getId().getGid().equals(member.getGuild().getId()))
-				.findAny().orElse(new Profile(member));
-	}
-
-	public void addProfile(Member member) {
-		profiles.add(new Profile(member));
+		return DAO.find(Profile.class, new ProfileId(uid, member.getGuild().getId()));
 	}
 
 	public AccountSettings getSettings() {

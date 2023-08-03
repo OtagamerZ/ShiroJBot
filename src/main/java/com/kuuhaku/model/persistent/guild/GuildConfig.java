@@ -156,6 +156,6 @@ public class GuildConfig extends DAO<GuildConfig> {
 	}
 
 	public List<Profile> getProfiles() {
-		return DAO.queryAll(Profile.class, "SELECT p FROM Profile p WHERE p.guild.gid = ?1 ORDER BY p.xp DESC", gid);
+		return DAO.queryAll(Profile.class, "SELECT p FROM Profile p WHERE p.id.gid = ?1 ORDER BY p.xp DESC", gid);
 	}
 }

@@ -98,6 +98,11 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Fetch(FetchMode.SUBSELECT)
 	private List<CustomAnswer> customAnswers = new ArrayList<>();
 
+	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy("threshold")
+	private List<AutoRule> autoRules = new ArrayList<>();
+
 	@ElementCollection
 	@Column(name = "disabled_categories")
 	@CollectionTable(name = "guild_settings_disabledcategories", joinColumns = @JoinColumn(name = "gid"))
@@ -123,11 +128,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Column(name = "aliases", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject aliases = new JSONObject();
-
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
-	@OrderBy("threshold")
-	private List<AutoRule> autoRules = new ArrayList<>();
 
 	@Enumerated(EnumType.STRING)
 	@ElementCollection
@@ -220,6 +220,10 @@ public class GuildSettings extends DAO<GuildSettings> {
 		return customAnswers;
 	}
 
+	public List<AutoRule> getAutoRules() {
+		return autoRules;
+	}
+
 	public Set<Category> getDisabledCategories() {
 		return disabledCategories;
 	}
@@ -254,10 +258,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public JSONObject getAliases() {
 		return aliases;
-	}
-
-	public List<AutoRule> getAutoRules() {
-		return autoRules;
 	}
 
 	public Map<AutoModType, String> getAutoModEntries() {
