@@ -610,7 +610,7 @@
 			 }
 
 			 if (ori.isEmpty()) {
-				 return origin = new Origin(Race.NONE);
+				 origin = new Origin(Race.NONE);
 			 } else if (ori.size() == 1) {
 				 origin = new Origin(ori.get(0));
 			 } else if (allSame) {
