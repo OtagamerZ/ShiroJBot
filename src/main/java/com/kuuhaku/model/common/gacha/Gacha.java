@@ -52,7 +52,7 @@ public abstract class Gacha {
 		return List.copyOf(pool.values());
 	}
 
-	public final double rarityOf(String value) {
+	public final double weightOf(String value) {
 		return pool.entries().parallelStream()
 				.filter(e -> e.getSecond().equals(value))
 				.mapToDouble(Pair::getFirst)
@@ -70,7 +70,7 @@ public abstract class Gacha {
 		boolean lucky = acc.consumeItem("lucky_lodestone");
 		for (int i = 0; i < type.prizes() + extra; i++) {
 			if (lucky) {
-				out.add(Utils.luckyRoll(pool::get, (a, b) -> b.equals(fav) || rarityOf(b) > rarityOf(a)));
+				out.add(Utils.luckyRoll(pool::get, (a, b) -> b.equals(fav) || weightOf(b) < weightOf(a)));
 			} else {
 				out.add(pool.get());
 			}

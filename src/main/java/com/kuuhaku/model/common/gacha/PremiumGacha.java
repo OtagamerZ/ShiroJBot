@@ -61,7 +61,7 @@ public class PremiumGacha extends Gacha {
 		String fav = acc.getKawaipon().getFavCardId();
 		int extra = acc.consumeItem("extra_draw") ? 1 : 0;
 		for (int i = 0; i < type.prizes() + extra; i++) {
-			out.add(Utils.luckyRoll(pool::get, (a, b) -> b.equals(fav) || rarityOf(b) > rarityOf(a)));
+			out.add(Utils.luckyRoll(pool::get, (a, b) -> b.equals(fav) || weightOf(b) < weightOf(a)));
 		}
 
 		return out;
