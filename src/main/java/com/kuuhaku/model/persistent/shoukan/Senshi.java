@@ -620,8 +620,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public double getPower() {
 		double mult = stats.getPower().get() * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
 		if (hand != null) {
-			if (hand.getOrigin().major() == Race.NONE) {
-				mult *= 1 - Math.max(0, 0.07 * (hand.getOrigin().minor().length - 1));
+			if (hand.getOrigin().major() == Race.MIXED) {
+				mult *= 1 - 0.07 * hand.getOrigin().minor().length;
 			}
 
 			if (getGame() != null && getGame().getArcade() == Arcade.OVERCHARGE) {

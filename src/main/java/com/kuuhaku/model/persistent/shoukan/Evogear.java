@@ -321,8 +321,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MYSTICAL) * 0.02);
 			}
 
-			if (hand.getOrigin().major() == Race.NONE) {
-				mult *= 1 - Math.max(0, 0.07 * (hand.getOrigin().minor().length - 1));
+			if (hand.getOrigin().major() == Race.MIXED) {
+				mult *= 1 - 0.07 * hand.getOrigin().minor().length;
 			}
 
 			if (getGame() != null && getGame().getArcade() == Arcade.OVERCHARGE) {
