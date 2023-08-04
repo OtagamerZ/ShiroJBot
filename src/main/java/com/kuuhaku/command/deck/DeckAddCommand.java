@@ -147,6 +147,9 @@ public class DeckAddCommand implements Executable {
 				} else if (d.getSenshiRaw().size() >= 36) {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
 					return false;
+				} else if (d.countCard(s) >= d.getMaxSenshiCopies()) {
+					event.channel().sendMessage(locale.get("error/card_copy_limit")).queue();
+					return false;
 				}
 			}
 			case EVOGEAR -> {
@@ -157,6 +160,9 @@ public class DeckAddCommand implements Executable {
 					return false;
 				} else if (d.getEvogearRaw().size() >= 24) {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
+					return false;
+				} else if (d.countCard(e) >= d.getMaxEvogearCopies(e.getTier())) {
+					event.channel().sendMessage(locale.get("error/card_copy_limit")).queue();
 					return false;
 				}
 			}

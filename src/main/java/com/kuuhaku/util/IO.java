@@ -218,9 +218,7 @@ public abstract class IO {
 
 			try (CloseableHttpResponse res = API.HTTP.execute(req)) {
 				Header h = res.getLastHeader(HttpHeaders.CONTENT_TYPE);
-
-
-				if (h != null) {
+				if (h != null && h.getValue().startsWith("image")) {
 					return h.getValue().substring(h.getValue().indexOf("/") + 1);
 				} else {
 					return null;
@@ -236,8 +234,12 @@ public abstract class IO {
 			HttpHead req = new HttpHead(url);
 
 			try (CloseableHttpResponse res = API.HTTP.execute(req)) {
-				Header h = res.getLastHeader(HttpHeaders.CONTENT_LENGTH);
+				Header h = res.getLastHeader(HttpHeaders.CONTENT_TYPE);
+				if (h == null || !h.getValue().startsWith("image")) {
+					return 0;
+				}
 
+				h = res.getLastHeader(HttpHeaders.CONTENT_LENGTH);
 				if (h != null) {
 					return NumberUtils.toLong(h.getValue(), 0);
 				} else {
