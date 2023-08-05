@@ -108,8 +108,6 @@ public class RandomList<T> {
 				}
 
 				double mult = Math.pow(1 + fac / 2, this.mult);
-
-				System.out.println(weight * mult);
 				map.put(total += (weight * mult), p.getSecond());
 			}
 		}
