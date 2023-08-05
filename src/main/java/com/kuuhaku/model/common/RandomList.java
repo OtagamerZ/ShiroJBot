@@ -107,6 +107,7 @@ public class RandomList<T> {
 			}
 		}
 
+		System.out.println(map);
 		return map.ceilingEntry(randGen.apply(rng) * total).getValue();
 	}
 
@@ -119,15 +120,9 @@ public class RandomList<T> {
 	}
 
 	public void remove(@NotNull T item) {
-		Iterator<Map.Entry<Double, T>> it = map.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry<Double, T> entry = it.next();
-			if (entry.getValue().equals(item)) {
-				total -= entry.getKey();
-				it.remove();
-				break;
-			}
-		}
+		total = 0;
+		map.clear();
+		pool.removeIf(p -> p.getSecond().equals(item));
 	}
 
 	public Collection<T> values() {

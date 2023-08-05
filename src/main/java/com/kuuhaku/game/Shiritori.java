@@ -199,6 +199,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 						}
 					}
 				});
+
 		close(code);
 	}
 
