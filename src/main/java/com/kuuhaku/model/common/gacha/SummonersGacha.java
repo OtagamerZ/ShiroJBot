@@ -27,19 +27,20 @@ import net.dv8tion.jda.api.entities.User;
 public class SummonersGacha extends Gacha {
 	public SummonersGacha(User u) {
 		super(DAO.queryAllUnmapped("""
-				SELECT x.id
-				     , x.weight
-				FROM (
-				         SELECT c.id
-				              , get_weight(c.id, ?1) AS weight
-				         FROM card c
-				                  INNER JOIN senshi s ON c.id = s.card_id
-				                  LEFT JOIN anime a on a.id = c.anime_id
-				         WHERE coalesce(a.visible, TRUE) = TRUE
-				           AND NOT has(s.tags, 'FUSION')
-				     ) x
-				WHERE x.weight IS NOT NULL
-				ORDER BY x.weight, x.id
+				SELECT c.id
+				     , get_weight(c.id, ?1) AS weight
+				FROM card c
+				         LEFT JOIN anime a ON a.id = c.anime_id
+				         LEFT JOIN senshi s ON c.id = s.card_id
+				         LEFT JOIN evogear e ON c.id = e.card_id
+				         LEFT JOIN field f ON c.id = f.card_id
+				WHERE coalesce(a.visible, TRUE) = TRUE
+				  AND (
+				        (get_rarity_index(c.rarity) BETWEEN 3 AND 5)
+				        OR e.tier > 2
+				        OR NOT f.effect
+				    )
+				ORDER BY weight, c.id
 				""", u.getId()));
 	}
 }

@@ -1112,7 +1112,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 							.withConst("data", stats.getData())
 							.withVar("ep", ep)
 							.withVar("side", hand.getSide())
-							.withVar("props", getCSM().getStoredProps())
+							.withVar("props", csm.getStoredProps())
 							.withVar("trigger", trigger)
 							.run();
 
@@ -1186,15 +1186,20 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		try {
 			base.lock(trigger);
 
-			Utils.exec(getEffect(), Map.of(
-					"self", this,
-					"game", getGame(),
-					"data", stats.getData(),
-					"ep", new EffectParameters(trigger, getSide()),
-					"side", hand.getSide(),
-					"props", getCSM().getStoredProps(),
-					"trigger", trigger
-			));
+			CachedScriptManager csm = getCSM();
+			if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
+				parseDescription(getGame().getLocale());
+			}
+
+			csm.forScript(getEffect())
+					.withConst("self", this)
+					.withConst("game", getGame())
+					.withConst("data", stats.getData())
+					.withVar("ep", new EffectParameters(trigger, getSide()))
+					.withVar("side", hand.getSide())
+					.withVar("props", csm.getStoredProps())
+					.withVar("trigger", trigger)
+					.run();
 		} catch (Exception ignored) {
 		} finally {
 			unlock();

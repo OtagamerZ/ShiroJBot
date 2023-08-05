@@ -408,7 +408,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					.withConst("data", stats.getData())
 					.withVar("ep", ep)
 					.withVar("side", hand.getSide())
-					.withVar("props", getCSM().getStoredProps())
+					.withVar("props", csm.getStoredProps())
 					.withVar("trigger", ep.trigger());
 
 			if (!isSpell()) {
@@ -452,16 +452,21 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
-			Utils.exec(getEffect(), Map.of(
-					"evo", this,
-					"game", getGame(),
-					"data", stats.getData(),
-					"ep", new EffectParameters(trigger, getSide()),
-					"side", hand.getSide(),
-					"props", getCSM().getStoredProps(),
-					"self", equipper,
-					"trigger", trigger
-			));
+			CachedScriptManager csm = getCSM();
+			if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
+				parseDescription(getGame().getLocale());
+			}
+
+			csm.forScript(getEffect())
+					.withConst("evo", this)
+					.withConst("game", getGame())
+					.withConst("data", stats.getData())
+					.withVar("ep", new EffectParameters(trigger, getSide()))
+					.withVar("side", hand.getSide())
+					.withVar("props", csm.getStoredProps())
+					.withVar("self", equipper)
+					.withVar("trigger", trigger)
+					.run();
 		} catch (Exception ignored) {
 		}
 	}
