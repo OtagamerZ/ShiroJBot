@@ -27,7 +27,6 @@ import kotlin.Pair;
 import org.reflections8.Reflections;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -45,7 +44,6 @@ public abstract class Gacha {
 		this.pool = pool;
 		for (Object[] card : data) {
 			this.pool.add((String) card[0], ((Number) card[1]).doubleValue());
-			System.out.println(Arrays.toString(card));
 		}
 	}
 

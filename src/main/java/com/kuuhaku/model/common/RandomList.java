@@ -103,6 +103,7 @@ public class RandomList<T> {
 				double fac = 1 - Calc.offsetPrcnt(weight, max, min);
 				double mult = Math.pow(1 + fac / 2, this.mult);
 
+				System.out.println(weight * mult);
 				map.put(total += (weight * mult), p.getSecond());
 			}
 		}
