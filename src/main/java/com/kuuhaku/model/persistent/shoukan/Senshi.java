@@ -990,7 +990,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean hasEffect() {
-		return !isSealed() && !getEffect().isBlank();
+		return !isSealed() && !getEffect().isBlank() && !hasFlag(Flag.NO_EFFECT);
 	}
 
 	public boolean hasAbility() {

@@ -374,7 +374,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public boolean hasEffect() {
-		return !getEffect().isEmpty();
+		return !getEffect().isEmpty() && !hasFlag(Flag.NO_EFFECT);
 	}
 
 	@Override

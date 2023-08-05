@@ -285,6 +285,22 @@
 		 return Utils.between(getFields().size(), 0, 3);
 	 }
 
+	 public int countCard(Drawable<?> card) {
+		 List<String> cards;
+
+		 if (card instanceof Senshi) {
+			 cards = getSenshiRaw();
+		 } else if (card instanceof Evogear) {
+			 cards = getEvogearRaw();
+		 } else {
+			 cards = getFieldsRaw();
+		 }
+
+		 return (int) cards.parallelStream()
+				 .filter(id -> id.equals(card.getId()))
+				 .count();
+	 }
+
 	 public DeckStyling getStyling() {
 		 return styling;
 	 }

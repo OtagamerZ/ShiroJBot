@@ -47,7 +47,10 @@ public class ProfileBackgroundCommand implements Executable {
 			settings.setBackground(null);
 			event.channel().sendMessage(locale.get("success/profile_background_clear")).queue();
 		} else {
-			if (!UrlValidator.getInstance().isValid(text)) {
+			if (text.length() > 255) {
+				event.channel().sendMessage(locale.get("error/url_too_long")).queue();
+				return;
+			} else if (!UrlValidator.getInstance().isValid(text)) {
 				event.channel().sendMessage(locale.get("error/invalid_url")).queue();
 				return;
 			}

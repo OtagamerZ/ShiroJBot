@@ -86,11 +86,7 @@ public class GachaPoolCommand implements Executable {
 			);
 
 			List<Page> pages = Utils.generatePages(eb, pool, 20, 10,
-					c -> {
-						String name = c.getName();
-
-						return c.getRarity().getEmote(c) + name;
-					},
+					c -> c.getRarity().getEmote(c) + c.getName(),
 					(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 			);
 

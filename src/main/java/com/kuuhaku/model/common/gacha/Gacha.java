@@ -49,7 +49,7 @@ public abstract class Gacha {
 	}
 
 	public final List<String> getPool() {
-		return List.copyOf(pool.values());
+		return pool.entries().stream().map(Pair::getSecond).toList();
 	}
 
 	public final double weightOf(String value) {

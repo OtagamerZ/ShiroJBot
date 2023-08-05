@@ -26,7 +26,7 @@ import org.apache.commons.collections4.list.TreeList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.Function;
 import java.util.random.RandomGenerator;
 
 /**
@@ -45,7 +45,8 @@ import java.util.random.RandomGenerator;
 public class RandomList<T> {
 	private final NavigableMap<Double, T> map = new TreeMap<>();
 	private final List<Pair<Double, T>> pool = new TreeList<>();
-	private final Supplier<Double> randGen;
+	private final Function<RandomGenerator, Double> randGen;
+	private final RandomGenerator rng;
 	private final double mult;
 	private double skew = 0.5;
 	private double total = 0;
@@ -62,16 +63,18 @@ public class RandomList<T> {
 		this(Constants.DEFAULT_RNG.get(), mult);
 	}
 
-	public RandomList(Supplier<Double> randGen) {
+	public RandomList(Function<RandomGenerator, Double> randGen) {
 		this(randGen, 0);
 	}
 
 	public RandomList(RandomGenerator rng, double mult) {
+		this.rng = rng;
 		this.mult = mult;
-		this.randGen = () -> Calc.clamp(rng.nextGaussian(skew, 0.15), 0, 1);
+		this.randGen = r -> Calc.clamp(r.nextGaussian(skew, 0.15), 0, 1);
 	}
 
-	public RandomList(Supplier<Double> randGen, double mult) {
+	public RandomList(Function<RandomGenerator, Double> randGen, double mult) {
+		this.rng = Constants.DEFAULT_RNG.get();
 		this.mult = mult;
 		this.randGen = randGen;
 	}
@@ -104,7 +107,7 @@ public class RandomList<T> {
 			}
 		}
 
-		return map.ceilingEntry(randGen.get() * total).getValue();
+		return map.ceilingEntry(randGen.apply(rng) * total).getValue();
 	}
 
 	public T remove() {
