@@ -24,10 +24,10 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.Spawn;
 import com.kuuhaku.util.Utils;
 import kotlin.Pair;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.reflections8.Reflections;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -44,7 +44,8 @@ public abstract class Gacha {
 	public Gacha(RandomList<String> pool, List<Object[]> data) {
 		this.pool = pool;
 		for (Object[] card : data) {
-			this.pool.add((String) card[0], NumberUtils.toDouble(String.valueOf(card[1])));
+			this.pool.add((String) card[0], ((Number) card[1]).doubleValue());
+			System.out.println(Arrays.toString(card));
 		}
 	}
 

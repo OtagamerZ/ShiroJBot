@@ -107,7 +107,6 @@ public class RandomList<T> {
 			}
 		}
 
-		System.out.println(map);
 		return map.ceilingEntry(randGen.apply(rng) * total).getValue();
 	}
 
