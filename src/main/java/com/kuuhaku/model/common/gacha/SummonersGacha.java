@@ -36,8 +36,8 @@ public class SummonersGacha extends Gacha {
 				         LEFT JOIN field f ON c.id = f.card_id
 				WHERE coalesce(a.visible, TRUE) = TRUE
 				  AND (
-				        (get_rarity_index(c.rarity) BETWEEN 3 AND 5)
-				        OR e.tier > 2
+				        NOT has(s.tags, 'FUSION')
+				        OR e.tier > 0
 				        OR NOT f.effect
 				    )
 				ORDER BY weight, c.id
