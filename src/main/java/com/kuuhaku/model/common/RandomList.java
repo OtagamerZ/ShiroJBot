@@ -102,7 +102,7 @@ public class RandomList<T> {
 				double weight = p.getFirst();
 				double fac;
 				if (min == max) {
-					fac = 1;
+					fac = 0;
 				} else {
 					fac = 1 - Calc.offsetPrcnt(weight, max, min);
 				}
