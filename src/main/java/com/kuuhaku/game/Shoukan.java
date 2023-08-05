@@ -1275,7 +1275,7 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						if (op.getGraveyard().add(target)) {
-							you.addKill(target);
+							you.addKill();
 						}
 
 						dmg = 0;
@@ -1305,7 +1305,7 @@ public class Shoukan extends GameInstance<Phase> {
 								}
 
 								if (you.getGraveyard().add(source)) {
-									op.addKill(source);
+									op.addKill();
 								}
 							}
 
@@ -1359,7 +1359,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 										dmg = 0;
 									} else if (op.getGraveyard().add(target)) {
-										you.addKill(target);
+										you.addKill();
 									}
 
 									win = true;
@@ -1372,7 +1372,7 @@ public class Shoukan extends GameInstance<Phase> {
 									}
 
 									if (op.getGraveyard().add(target)) {
-										you.addKill(target);
+										you.addKill();
 									}
 
 									for (Senshi s : source.getNearby()) {
@@ -1380,7 +1380,7 @@ public class Shoukan extends GameInstance<Phase> {
 									}
 
 									if (announce && you.getGraveyard().add(source)) {
-										op.addKill(source);
+										op.addKill();
 									}
 
 									dmg = 0;

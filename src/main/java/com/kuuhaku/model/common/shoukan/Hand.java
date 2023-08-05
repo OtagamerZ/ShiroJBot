@@ -149,17 +149,34 @@ public class Hand {
 
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
-		if (d instanceof Senshi s && s.popFlag(Flag.NO_DEATH)) {
-			return false;
-		}
-
 		if (d instanceof Senshi s) {
+			if (s.popFlag(Flag.NO_DEATH)) {
+				return false;
+			}
+
+			if (s.getLastInteraction() != null) {
+				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget());
+				if (getKills() % 7 == 0 && getOrigin().synergy() == Race.SHINIGAMI) {
+					getGame().getArena().getBanned().add(s);
+				}
+
+				if (getGame().getArcade() == Arcade.DECK_ROYALE) {
+					manualDraw(3);
+				}
+			}
+
 			if (!s.getEquipments().isEmpty()) {
 				Iterator<Evogear> i = s.getEquipments().iterator();
 				while (i.hasNext()) {
 					it.add(i.next());
 				}
 			}
+
+			if (s.popFlag(Flag.NO_DEATH)) {
+				return false;
+			}
+
+			getOther().addKill();
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
 		}
@@ -979,20 +996,9 @@ public class Hand {
 		return Bit.get(state, 1, 8);
 	}
 
-	public void addKill(Senshi s) {
+	public void addKill() {
 		int curr = Bit.get(state, 1, 8);
 		state = Bit.set(state, 1, curr + 1, 8);
-
-		if (s != null && s.getLastInteraction() != null) {
-			getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget());
-			if (getKills() % 7 == 0 && origin.synergy() == Race.SHINIGAMI) {
-				getGame().getArena().getBanned().add(s);
-			}
-
-			if (getGame().getArcade() == Arcade.DECK_ROYALE) {
-				manualDraw(3);
-			}
-		}
 	}
 
 	public int getChainReduction() {
