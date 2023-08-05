@@ -100,7 +100,13 @@ public class RandomList<T> {
 
 			for (Pair<Double, T> p : pool) {
 				double weight = p.getFirst();
-				double fac = 1 - Calc.offsetPrcnt(weight, max, min);
+				double fac;
+				if (min == max) {
+					fac = 1;
+				} else {
+					fac = 1 - Calc.offsetPrcnt(weight, max, min);
+				}
+
 				double mult = Math.pow(1 + fac / 2, this.mult);
 
 				System.out.println(weight * mult);
