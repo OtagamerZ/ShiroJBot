@@ -65,7 +65,7 @@ public class SlotColumn {
 			top.executeAssert(Trigger.ON_REMOVE);
 
 			if (isLocked() || !equals(top.getSlot())) {
-				top = null;
+				setTop(null);
 			}
 		}
 
@@ -85,7 +85,7 @@ public class SlotColumn {
 			bottom.executeAssert(Trigger.ON_REMOVE);
 
 			if (isLocked() || !equals(bottom.getSlot())) {
-				bottom = null;
+				setBottom(null);
 			}
 		}
 
