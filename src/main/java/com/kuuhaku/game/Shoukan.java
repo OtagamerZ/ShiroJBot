@@ -1859,7 +1859,11 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (effect.side() != null) {
 				Hand h = hands.get(effect.side());
-				if (h.getLockTime(Lock.EFFECT) > 0 && !effect.debuff()) continue;
+				if (h.getLockTime(Lock.EFFECT) > 0 && !effect.debuff()) {
+					if (!(effect.source() instanceof EffectHolder<?> e) || !e.hasFlag(Flag.TRUE_EFFECT)) {
+						continue;
+					}
+				}
 			}
 
 			boolean remove = false;
