@@ -67,7 +67,7 @@ public record Origin(Race major, Race... minor) {
 	}
 
 	public boolean isPure() {
-		return minor.length == 0;
+		return major != Race.NONE && minor.length == 0;
 	}
 
 	public boolean hasMinor(Race race) {
