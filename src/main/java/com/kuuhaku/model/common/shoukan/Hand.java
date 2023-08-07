@@ -765,13 +765,6 @@ public class Hand {
 		}
 
 		int before = hp;
-		if (origin.major() == Race.UNDEAD) {
-			if (value > 0) return;
-			else {
-				regdeg.add(value);
-				value = 0;
-			}
-		}
 
 		if (!pure) {
 			if (origin.hasMinor(Race.HUMAN) && value < 0) {
@@ -812,6 +805,14 @@ public class Hand {
 					this.hp = 1;
 					return;
 				}
+			}
+		}
+
+		if (origin.major() == Race.UNDEAD) {
+			if (value > 0) return;
+			else {
+				regdeg.add(value);
+				value = 0;
 			}
 		}
 
