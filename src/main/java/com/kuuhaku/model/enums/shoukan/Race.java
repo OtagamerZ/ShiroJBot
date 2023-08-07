@@ -83,7 +83,7 @@ public enum Race {
 //		ALIEN(BEAST.flag | SPIRIT.flag),
 //		SLIME(BEAST.flag | UNDEAD.flag),
 //		DRAGON(BEAST.flag | MYSTICAL.flag),
-//		HELLHOUND(BEAST.flag | DEMON.flag),
+//	//	FIEND(BEAST.flag | DEMON.flag),
 //	//	EX_MACHINA(MACHINE.flag | DIVINITY.flag),
 //		GEIST(MACHINE.flag | SPIRIT.flag),
 //	//	VIRUS(MACHINE.flag | UNDEAD.flag),
