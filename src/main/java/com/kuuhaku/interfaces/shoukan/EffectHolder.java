@@ -125,6 +125,16 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		return getBase().getTags().contains("FIXED");
 	}
 
+	boolean hasEffect();
+
+	default boolean hasTrueEffect() {
+		return hasTrueEffect(false);
+	}
+
+	default boolean hasTrueEffect(boolean pop) {
+		return hasEffect() && (getBase().getTags().contains("TRUE_EFFECT") || (pop ? popFlag(Flag.TRUE_EFFECT) : hasFlag(Flag.TRUE_EFFECT)));
+	}
+
 	boolean execute(EffectParameters ep);
 
 	default void executeAssert(Trigger trigger) {

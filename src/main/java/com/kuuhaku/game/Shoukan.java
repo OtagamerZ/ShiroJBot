@@ -443,7 +443,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			int locktime = hand.getLockTime(Lock.SPELL);
-			if (locktime > 0 && !chosen.hasFlag(Flag.TRUE_EFFECT)) {
+			if (locktime > 0 && !chosen.hasTrueEffect()) {
 				getChannel().sendMessage(getLocale().get("error/spell_locked", locktime)).queue();
 				return false;
 			}
@@ -896,7 +896,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			int locktime = curr.getLockTime(Lock.SPELL);
-			if (locktime > 0 && !chosen.hasFlag(Flag.TRUE_EFFECT)) {
+			if (locktime > 0 && !chosen.hasTrueEffect()) {
 				getChannel().sendMessage(getLocale().get("error/spell_locked", locktime)).queue();
 				return false;
 			}
@@ -1029,7 +1029,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int locktime = curr.getLockTime(Lock.EFFECT);
-		if (locktime > 0 && !chosen.hasFlag(Flag.TRUE_EFFECT)) {
+		if (locktime > 0 && !chosen.hasTrueEffect()) {
 			getChannel().sendMessage(getLocale().get("error/effect_locked", locktime)).queue();
 			return false;
 		}
@@ -1860,7 +1860,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (effect.side() != null) {
 				Hand h = hands.get(effect.side());
 				if (h.getLockTime(Lock.EFFECT) > 0 && !effect.debuff()) {
-					if (!(effect.source() instanceof EffectHolder<?> e) || !e.hasFlag(Flag.TRUE_EFFECT)) {
+					if (!(effect.source() instanceof EffectHolder<?> e) || !e.hasTrueEffect()) {
 						continue;
 					}
 				}

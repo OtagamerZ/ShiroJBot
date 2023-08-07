@@ -373,6 +373,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		return Utils.getOr(source.getStats().getEffect(), source.getBase().getEffect());
 	}
 
+	@Override
 	public boolean hasEffect() {
 		return !getEffect().isEmpty() && !hasFlag(Flag.NO_EFFECT);
 	}
@@ -385,7 +386,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public boolean execute(EffectParameters ep) {
 		if (ep.trigger() == NONE || !hasEffect()) return false;
-		else if (!stats.popFlag(Flag.TRUE_EFFECT)) {
+		else if (!hasTrueEffect()) {
 			if (!isSpell() && hand.getLockTime(Lock.EFFECT) > 0) return false;
 		}
 

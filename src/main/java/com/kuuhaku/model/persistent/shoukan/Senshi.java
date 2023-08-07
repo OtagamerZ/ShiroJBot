@@ -989,6 +989,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return Utils.getOr(source.getStats().getEffect(), source.getBase().getEffect());
 	}
 
+	@Override
 	public boolean hasEffect() {
 		return !isSealed() && !getEffect().isBlank() && !hasFlag(Flag.NO_EFFECT);
 	}
@@ -1018,7 +1019,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean execute(boolean global, EffectParameters ep) {
-		if (!popFlag(Flag.TRUE_EFFECT)) {
+		if (!hasTrueEffect()) {
 			if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 			else if (popFlag(Flag.NO_EFFECT)) {
 				base.lockAll();
@@ -1230,8 +1231,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return getActiveAttr() - target.getActiveAttr();
 	}
 
-	public boolean isProtected(Drawable<?> source) {
-		if (source instanceof Senshi s && s.popFlag(Flag.TRUE_EFFECT)) return false;
+	public boolean isProtected(EffectHolder<?> source) {
+		if (source.hasTrueEffect()) return false;
 		else if (blocked.contains(source)) return true;
 
 		if (hand != null) {
