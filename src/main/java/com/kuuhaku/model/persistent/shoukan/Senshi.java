@@ -221,10 +221,15 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			out.add("tag/sealed");
 		}
 
-		for (Object tag : base.getTags()) {
+		List<String> tags = base.getTags().stream()
+				.map(String::valueOf)
+				.sorted()
+				.toList();
+
+		for (String tag : tags) {
 			if (out.contains("tag/base") && tag.equals("MATERIAL")) continue;
 
-			out.add("tag/" + ((String) tag).toLowerCase());
+			out.add("tag/" + tag.toLowerCase());
 		}
 
 		return out;
