@@ -132,7 +132,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default boolean hasTrueEffect(boolean pop) {
-		return hasEffect() && (getBase().getTags().contains("TRUE_EFFECT") || (pop ? popFlag(Flag.TRUE_EFFECT) : hasFlag(Flag.TRUE_EFFECT)));
+		return hasEffect() && (getBase().getTags().contains("TRUE_EFFECT")
+							   || hasFlag(Flag.EMPOWERED)
+							   || (pop ? popFlag(Flag.TRUE_EFFECT) : hasFlag(Flag.TRUE_EFFECT)));
 	}
 
 	boolean execute(EffectParameters ep);
