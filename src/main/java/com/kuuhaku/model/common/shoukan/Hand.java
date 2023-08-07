@@ -156,12 +156,20 @@ public class Hand {
 
 			if (s.getLastInteraction() != null) {
 				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget());
-				if (getKills() % 7 == 0 && getOrigin().synergy() == Race.SHINIGAMI) {
+				if (s.popFlag(Flag.NO_DEATH)) {
+					return false;
+				}
+
+				Hand op = getOther();
+
+				op.addKill();
+				if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+					op.modMP(s.getMPCost());
 					getGame().getArena().getBanned().add(s);
 				}
 
 				if (getGame().getArcade() == Arcade.DECK_ROYALE) {
-					manualDraw(3);
+					op.manualDraw(3);
 				}
 			}
 
@@ -171,12 +179,6 @@ public class Hand {
 					it.add(i.next());
 				}
 			}
-
-			if (s.popFlag(Flag.NO_DEATH)) {
-				return false;
-			}
-
-			getOther().addKill();
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
 		}
@@ -278,6 +280,10 @@ public class Hand {
 		this.origin = userDeck.getOrigins();
 		this.base = getBase();
 		this.hp = base.hp();
+
+		if (origin.major() == Race.UNDEAD) {
+			regdeg.add(base.hp() / 2);
+		}
 
 		if (game.getArcade() == Arcade.CARDMASTER) {
 			List<List<? extends Drawable<?>>> cards = new ArrayList<>();
@@ -759,6 +765,13 @@ public class Hand {
 		}
 
 		int before = hp;
+		if (origin.major() == Race.UNDEAD) {
+			if (value > 0) return;
+			else {
+				regdeg.add(value);
+				value = 0;
+			}
+		}
 
 		if (!pure) {
 			if (origin.hasMinor(Race.HUMAN) && value < 0) {

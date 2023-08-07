@@ -1977,15 +1977,8 @@ public class Shoukan extends GameInstance<Phase> {
 				trigger(ON_VICTORY, side.getOther());
 				trigger(ON_DEFEAT, side);
 
-				if (def == null) {
-					if (hand.getHP() > 0) continue;
-					else if (hand.getOrigin().major() == Race.UNDEAD && hand.getOriginCooldown() == 0) {
-						hand.setHP(1);
-						hand.setDefeat(null);
-						hand.getRegDeg().add(hand.getBase().hp() * 0.5, 1 / 3d);
-						hand.setOriginCooldown(4);
-						continue;
-					}
+				if (def == null && hand.getHP() > 0) {
+					continue;
 				}
 
 				if (def != null) {
