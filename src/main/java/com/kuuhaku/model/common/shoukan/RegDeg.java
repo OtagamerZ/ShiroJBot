@@ -116,4 +116,12 @@ public class RegDeg {
 	public int peek() {
 		return values.stream().mapToInt(ValueOverTime::peek).sum();
 	}
+
+	public <T extends ValueOverTime> void clear() {
+		values.clear();
+	}
+
+	public <T extends ValueOverTime> void clear(Class<T> klass) {
+		values.removeIf(vot -> vot.getClass() == klass);
+	}
 }
