@@ -712,7 +712,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isDefending() {
-		return isFlipped() || Bit.on(state, 2);
+		return isFlipped() || Bit.on(state, 2) || hasFlag(Flag.ALWAYS_DEFENSE);
 	}
 
 	public void setDefending(boolean defending) {

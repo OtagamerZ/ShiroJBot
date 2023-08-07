@@ -443,7 +443,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			int locktime = hand.getLockTime(Lock.SPELL);
-			if (locktime > 0) {
+			if (locktime > 0 && !chosen.hasFlag(Flag.TRUE_EFFECT)) {
 				getChannel().sendMessage(getLocale().get("error/spell_locked", locktime)).queue();
 				return false;
 			}
@@ -896,7 +896,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			int locktime = curr.getLockTime(Lock.SPELL);
-			if (locktime > 0) {
+			if (locktime > 0 && !chosen.hasFlag(Flag.TRUE_EFFECT)) {
 				getChannel().sendMessage(getLocale().get("error/spell_locked", locktime)).queue();
 				return false;
 			}
@@ -1007,12 +1007,6 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		int locktime = curr.getLockTime(Lock.EFFECT);
-		if (locktime > 0) {
-			getChannel().sendMessage(getLocale().get("error/effect_locked", locktime)).queue();
-			return false;
-		}
-
 		Senshi chosen = slot.getTop();
 		if (!chosen.isAvailable()) {
 			getChannel().sendMessage(getLocale().get("error/card_unavailable")).queue();
@@ -1031,6 +1025,12 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		} else if (chosen.isSealed()) {
 			getChannel().sendMessage(getLocale().get("error/card_sealed")).queue();
+			return false;
+		}
+
+		int locktime = curr.getLockTime(Lock.EFFECT);
+		if (locktime > 0 && !chosen.hasFlag(Flag.TRUE_EFFECT)) {
+			getChannel().sendMessage(getLocale().get("error/effect_locked", locktime)).queue();
 			return false;
 		}
 

@@ -94,6 +94,10 @@ public enum Flag {
 	 **/
 	ALWAYS_ATTACK,
 	/**
+	 * Locked to defending state
+	 **/
+	ALWAYS_DEFENSE,
+	/**
 	 * Will always defeat the target
 	 **/
 	UNSTOPPABLE,
