@@ -425,6 +425,7 @@ public interface Drawable<T extends Drawable<T>> {
 
 	default List<Senshi> getCards(Side side, Boolean top, boolean xray, int... indexes) {
 		if (!(this instanceof EffectHolder<?> eh) || getIndex() == -1) return null;
+		xray |= side == getSide();
 
 		boolean empower = eh.hasFlag(Flag.EMPOWERED);
 		Set<Senshi> tgts = new HashSet<>();
