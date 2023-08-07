@@ -187,7 +187,8 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			} catch (Exception e) {
 				if (e.getCause() instanceof StackOverflowError) {
-					reportResult(GameReport.STACK_OVERFLOW, null, "error/match_termination", GameReport.STACK_OVERFLOW);
+					getChannel().sendMessage(getLocale().get("error/match_termination", GameReport.STACK_OVERFLOW)).queue();
+					close(GameReport.STACK_OVERFLOW);
 				}
 
 				Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
