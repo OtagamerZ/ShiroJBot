@@ -598,13 +598,13 @@ public class Arena implements Renderer {
 
 					FontMetrics fm = g1.getFontMetrics();
 					g1.drawImage(lock.obj().getImage(true),
-							(rad + 5 + fm.stringWidth("00")) * i, yOffset * row,
+							(rad + 5 + fm.stringWidth("00")) * (i % 3), yOffset * row,
 							rad, rad,
 							null
 					);
 
 					Graph.drawOutlinedString(g1, text,
-							(rad + 5 + fm.stringWidth("00")) * i + rad + 5, yOffset * row + rad - 5,
+							(rad + 5 + fm.stringWidth("00")) * (i % 3) + rad + 5, yOffset * row + rad - 5,
 							6, Color.BLACK
 					);
 
