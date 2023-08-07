@@ -1046,6 +1046,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			targeted = true;
 		}
 
+		System.out.println(trigger);
+		System.out.println(ep);
 		if (trigger == ON_ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
 
 		Shoukan game = getGame();
