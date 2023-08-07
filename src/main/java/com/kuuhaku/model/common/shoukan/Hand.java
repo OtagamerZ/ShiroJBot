@@ -164,7 +164,7 @@ public class Hand {
 
 				op.addKill();
 				if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
-					op.modMP(s.getMPCost());
+					op.modMP(s.getMPCost() / 2);
 					getGame().getArena().getBanned().add(s);
 				}
 
