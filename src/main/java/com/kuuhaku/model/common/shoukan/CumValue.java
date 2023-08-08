@@ -46,7 +46,7 @@ public class CumValue implements Iterable<ValueMod>, Cloneable {
 	}
 
 	public double get() {
-		return flat ? accumulate(values) : 1 + accumulate(values);
+		return accumulate(values);
 	}
 
 	public ValueMod get(Drawable<?> source) {
