@@ -113,7 +113,7 @@ public class CumValue implements Iterable<ValueMod>, Cloneable {
 	}
 
 	private double accumulate(Set<ValueMod> mods) {
-		double out = 0;
+		double out = flat ? 0 : 1;
 		for (ValueMod mod : mods) {
 			if (mod.getSource() instanceof EffectHolder<?> eh) {
 				if (!eh.hasEffect() || eh.getHand().getLockTime(Lock.EFFECT) > 0) {
