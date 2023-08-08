@@ -58,7 +58,10 @@ public record MessageData(net.dv8tion.jda.api.entities.Guild guild, MessageChann
 		}
 
 		public User users(int idx) {
-			return (User) mentions(Message.MentionType.USER, idx);
+			UserSnowflake usr = (UserSnowflake) mentions(Message.MentionType.USER, idx);
+			if (usr instanceof Member m) return m.getUser();
+
+			return (User) usr;
 		}
 
 		public Member members(int idx) {
