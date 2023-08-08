@@ -19,6 +19,8 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.util.Calc;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +46,7 @@ public class CumValue implements Iterable<ValueMod>, Cloneable {
 	}
 
 	public double get() {
-		return flat ? sum(values) : 1 + sum(values);
+		return flat ? accumulate(values) : 1 + accumulate(values);
 	}
 
 	public ValueMod get(Drawable<?> source) {
@@ -110,10 +112,17 @@ public class CumValue implements Iterable<ValueMod>, Cloneable {
 		return values;
 	}
 
-	private double sum(Set<ValueMod> mods) {
+	private double accumulate(Set<ValueMod> mods) {
 		double out = 0;
 		for (ValueMod mod : mods) {
-			out += mod.getValue();
+			if (mod.getSource() instanceof EffectHolder<?> eh) {
+				if (!eh.hasEffect() || eh.getHand().getLockTime(Lock.EFFECT) > 0) {
+					continue;
+				}
+			}
+
+			if (flat) out += mod.getValue();
+			else out *= mod.getValue();
 		}
 
 		return Calc.round(out, 2);
