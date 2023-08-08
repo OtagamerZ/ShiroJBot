@@ -294,7 +294,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 					char code = s.charAt(0);
 					if (Utils.between(code, 0x2801, 0x2900)) {
-						String path = "shoukan/icons/" + ICONS[s.charAt(0) - 0x2801];
+						String path = "shoukan/icons/" + ICONS[code - 0x2801];
 
 						BufferedImage icon = IO.getResourceAsImage(path);
 						if (icon != null) {
@@ -306,6 +306,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						after = true;
 					} else {
 						if (!after) {
+							if (hasFlag(Flag.HIDE_STATS)) {
+								s = s.replaceAll("\\d", "?");
+							}
+
 							g2d.setColor(Graph.mix(types));
 							if (!g2d.getColor().equals(Color.BLACK)) {
 								Graph.drawOutlinedString(g2d, s, x, y, 1.5f, Color.BLACK);

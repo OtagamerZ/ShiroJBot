@@ -1302,6 +1302,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			if (isFlipped()) {
 				g1.drawImage(style.getFrame().getBack(deck), 0, 0, null);
+				parseDescription(getGame().getLocale());
 			} else {
 				Senshi card = Utils.getOr(stats.getDisguise(), this);
 				String desc = isSealed() ? "" : card.getDescription(locale);
@@ -1336,10 +1337,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					if (!isSupporting()) {
 						card.drawAttributes(g1, !desc.isEmpty());
 					}
+				}
 
-					if (!desc.isEmpty()) {
-						drawDescription(g1, locale);
-					}
+				if (!desc.isEmpty()) {
+					drawDescription(g1, locale);
 				}
 
 				if (hand != null && getGame() != null) {

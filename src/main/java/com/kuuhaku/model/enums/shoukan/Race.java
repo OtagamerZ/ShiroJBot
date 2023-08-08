@@ -98,7 +98,7 @@ public enum Race {
 //		NIGHTMARE(SPIRIT.flag | DEMON.flag),
 //	//	REBORN(UNDEAD.flag | MYSTICAL.flag),
 //		DULLAHAN(UNDEAD.flag | DEMON.flag),
-//	//	IMP(MYSTICAL.flag | DEMON.flag),
+//		SUCCUBUS(MYSTICAL.flag | DEMON.flag),
 
 	MIXED(0),
 	NONE(0);
