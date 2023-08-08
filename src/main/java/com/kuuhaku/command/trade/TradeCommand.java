@@ -57,8 +57,11 @@ public class TradeCommand implements Executable {
 			return;
 		}
 
-		User other = event.message().getMentions().getUsers().get(0);
-		if (other.equals(event.user())) {
+		User other = event.users(0);
+		if (other == null) {
+			event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+			return;
+		} else if (other.equals(event.user())) {
 			event.channel().sendMessage(locale.get("error/self_not_allowed")).queue();
 			return;
 		} else if (Trade.getPending().get(other.getId()) != null) {

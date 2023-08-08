@@ -18,13 +18,14 @@
 
 package com.kuuhaku.model.records;
 
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.message.GenericMessageEvent;
+
+import java.util.List;
 
 public record MessageData(net.dv8tion.jda.api.entities.Guild guild, MessageChannel channel, String messageId) {
 	public MessageData(GenericMessageEvent event) {
@@ -48,11 +49,56 @@ public record MessageData(net.dv8tion.jda.api.entities.Guild guild, MessageChann
 		public Member me() {
 			return guild.getSelfMember();
 		}
+
+		public IMentionable mentions(Message.MentionType type, int idx) {
+			List<IMentionable> mentions = message.getMentions().getMentions(type);
+			if (mentions.size() <= idx) return null;
+
+			return mentions.get(idx);
+		}
+
+		public User users(int idx) {
+			return (User) mentions(Message.MentionType.USER, idx);
+		}
+
+		public Member members(int idx) {
+			UserSnowflake usr = (UserSnowflake) mentions(Message.MentionType.USER, idx);
+			if (usr instanceof Member m) return m;
+
+			return null;
+		}
+
+		public Role roles(int idx) {
+			return (Role) mentions(Message.MentionType.ROLE, idx);
+		}
+
+		public GuildChannel channels(int idx) {
+			return (GuildChannel) mentions(Message.MentionType.CHANNEL, idx);
+		}
 	}
 
 	public record Private(PrivateChannel channel, Message message, User user) {
 		public Private(Message message) {
 			this(message.getChannel().asPrivateChannel(), message, message.getAuthor());
+		}
+
+		public IMentionable mentions(Message.MentionType type, int idx) {
+			List<IMentionable> mentions = message.getMentions().getMentions(type);
+			if (mentions.size() <= idx) return null;
+
+			return mentions.get(idx);
+		}
+
+		public User users(int idx) {
+			return (User) mentions(Message.MentionType.USER, idx);
+		}
+
+		public Role roles(int idx) {
+			return (Role) mentions(Message.MentionType.ROLE, idx);
+		}
+
+		public GuildChannel channels(int idx) {
+			return (GuildChannel) mentions(Message.MentionType.CHANNEL, idx);
 		}
 	}
 }

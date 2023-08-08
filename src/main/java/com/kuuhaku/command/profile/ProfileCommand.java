@@ -48,14 +48,10 @@ public class ProfileCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image"))).queue(m -> {
-			User u = event.user();
-			if (!event.message().getMentions().getUsers().isEmpty()) {
-				u = event.message().getMentions().getUsers().get(0);
-			}
-
-			Profile p = DAO.find(Profile.class, new ProfileId(u.getId(), event.guild().getId()));
+			User usr = Utils.getOr(event.users(0), event.user());
+			Profile p = DAO.find(Profile.class, new ProfileId(usr.getId(), event.guild().getId()));
 			event.channel()
-					.sendMessage(u.getAsMention())
+					.sendMessage(usr.getAsMention())
 					.addFiles(FileUpload.fromData(IO.getBytes(p.render(locale), "png"), "profile.png"))
 					.flatMap(s -> m.delete())
 					.queue(null, Utils::doNothing);

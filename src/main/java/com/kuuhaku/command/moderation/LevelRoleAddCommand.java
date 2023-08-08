@@ -45,11 +45,16 @@ public class LevelRoleAddCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
 
-		Role r = event.message().getMentions().getRoles().get(0);
-		if (event.guild().getSelfMember().canInteract(r)) {
+		Role role = event.roles(0);
+		if (role == null) {
+			event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+			return;
+		}
+
+		if (event.guild().getSelfMember().canInteract(role)) {
 			event.channel().sendMessage(locale.get("error/higher_role")).queue();
 			return;
-		} else if (settings.getLevelRoles().stream().anyMatch(lr -> lr.getRole().equals(r))) {
+		} else if (settings.getLevelRoles().stream().anyMatch(lr -> lr.getRole().equals(role))) {
 			event.channel().sendMessage(locale.get("error/role_already_added")).queue();
 			return;
 		}
@@ -60,7 +65,7 @@ public class LevelRoleAddCommand implements Executable {
 			return;
 		}
 
-		settings.getLevelRoles().add(new LevelRole(settings, lvl, r));
+		settings.getLevelRoles().add(new LevelRole(settings, lvl, role));
 		settings.save();
 
 		event.channel().sendMessage(locale.get("success/level_role_add")).queue();

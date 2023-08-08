@@ -57,7 +57,12 @@ public class GoodbyeCommand implements Executable {
 			event.channel().sendMessage(locale.get("success/goodbye_clear")).queue();
 			return;
 		} else if (args.has("channel")) {
-			GuildChannel channel = event.message().getMentions().getChannels().get(0);
+			GuildChannel channel = event.channels(0);
+			if (channel == null) {
+				event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+				return;
+			}
+
 			if (!(channel instanceof GuildMessageChannel gmc)) {
 				event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
 				return;

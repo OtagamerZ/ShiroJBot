@@ -97,7 +97,11 @@ public class PruneCommand implements Executable {
 
         User target;
         if (args.has("user")) {
-            target = event.message().getMentions().getUsers().get(0);
+            target = event.users(0);
+            if (target == null) {
+                event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+                return;
+            }
         } else {
             target = null;
         }

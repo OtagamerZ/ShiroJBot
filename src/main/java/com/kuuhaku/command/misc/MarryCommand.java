@@ -47,8 +47,11 @@ public class MarryCommand implements Executable {
 			return;
 		}
 
-		User other = event.message().getMentions().getUsers().get(0);
-		if (DAO.query(Couple.class, "SELECT c FROM Couple c WHERE ?1 = c.id.first OR ?1 = c.id.second", other.getId()) != null) {
+		User other = event.users(0);
+		if (other == null) {
+			event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+			return;
+		} else if (DAO.query(Couple.class, "SELECT c FROM Couple c WHERE ?1 = c.id.first OR ?1 = c.id.second", other.getId()) != null) {
 			event.channel().sendMessage(locale.get("error/already_married_target", other.getEffectiveName())).queue();
 			return;
 		}

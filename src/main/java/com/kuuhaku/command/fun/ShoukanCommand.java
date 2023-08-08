@@ -40,8 +40,8 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -66,11 +66,15 @@ public class ShoukanCommand implements Executable {
 			return;
 		}
 
-		Member other;
+		User other;
 		if (args.has("user")) {
-			other = event.message().getMentions().getMembers().get(0);
+			other = event.users(0);
+			if (other == null) {
+				event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+				return;
+			}
 		} else {
-			other = event.member();
+			other = event.user();
 		}
 
 		if (GameInstance.PLAYERS.contains(other.getId())) {
@@ -84,7 +88,7 @@ public class ShoukanCommand implements Executable {
 				Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));
 
 				try {
-					Shoukan skn = new Shoukan(locale, arcade, event.user(), other.getUser());
+					Shoukan skn = new Shoukan(locale, arcade, event.user(), other);
 					skn.start(event.guild(), event.channel())
 							.whenComplete((v, e) -> {
 								if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
@@ -126,11 +130,11 @@ public class ShoukanCommand implements Executable {
 				act.apply(null);
 			} else {
 				if (arcade != null) {
-					Utils.confirm(locale.get("question/shoukan_arcade", other.getAsMention(), event.user().getAsMention(), arcade.toString(locale)), event.channel(), act, other.getUser());
+					Utils.confirm(locale.get("question/shoukan_arcade", other.getAsMention(), event.user().getAsMention(), arcade.toString(locale)), event.channel(), act, other);
 					return;
 				}
 
-				Utils.confirm(locale.get("question/shoukan", other.getAsMention(), event.user().getAsMention()), event.channel(), act, other.getUser());
+				Utils.confirm(locale.get("question/shoukan", other.getAsMention(), event.user().getAsMention()), event.channel(), act, other);
 			}
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();

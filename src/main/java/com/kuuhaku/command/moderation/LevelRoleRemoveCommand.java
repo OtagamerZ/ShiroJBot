@@ -55,9 +55,14 @@ public class LevelRoleRemoveCommand implements Executable {
 
 		List<LevelRole> matches;
 		if (args.has("role")) {
-			Role r = event.message().getMentions().getRoles().get(0);
+			Role role = event.roles(0);
+			if (role == null) {
+				event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+				return;
+			}
+
 			matches = settings.getLevelRoles().stream()
-					.filter(l -> l.getRole().equals(r))
+					.filter(l -> l.getRole().equals(role))
 					.toList();
 		} else {
 			int lvl = args.getInt("level");

@@ -55,7 +55,11 @@ public class PardonCommand implements Executable {
 		Member member;
 		boolean useId = false;
 		if (args.has("user")) {
-			member = event.message().getMentions().getMembers().get(0);
+			member = event.members(0);
+			if (member == null) {
+				event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+				return;
+			}
 		} else {
 			useId = true;
 			member = event.guild().getMemberById(args.getJSONArray("id").getString(0));

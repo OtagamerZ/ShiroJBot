@@ -56,7 +56,11 @@ public class SetDropCommand implements Executable {
 
 		GuildChannel channel;
 		if (args.has("channel")) {
-			channel = event.message().getMentions().getChannels().get(0);
+			channel = event.channels(0);
+			if (channel == null) {
+				event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+				return;
+			}
 		} else {
 			channel = event.channel();
 		}
