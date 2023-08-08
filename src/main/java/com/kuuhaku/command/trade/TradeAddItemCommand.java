@@ -63,13 +63,13 @@ public class TradeAddItemCommand implements Executable {
 
 		Map<UserItem, Integer> items = acc.getItems();
 		UserItem item = items.keySet().parallelStream()
-				.filter(i -> i.getId().equals(args.getString("id").toUpperCase()))
+				.filter(i -> i.getId().equals(args.getString("item").toUpperCase()))
 				.findAny().orElse(null);
 
 		if (item == null) {
 			List<String> names = items.keySet().stream().map(UserItem::getId).toList();
 
-			Pair<String, Double> sug = Utils.didYouMean(args.getString("id").toUpperCase(), names);
+			Pair<String, Double> sug = Utils.didYouMean(args.getString("item").toUpperCase(), names);
 			event.channel().sendMessage(locale.get("error/item_not_found", sug.getFirst())).queue();
 			return;
 		} else if (!items.containsKey(item)) {
