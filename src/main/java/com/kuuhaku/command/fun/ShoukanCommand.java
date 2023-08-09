@@ -126,7 +126,7 @@ public class ShoukanCommand implements Executable {
 				return true;
 			};
 
-			if (other.equals(event.member())) {
+			if (other.equals(event.user())) {
 				act.apply(null);
 			} else {
 				if (arcade != null) {
