@@ -341,7 +341,8 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		if (curr.getCards().get(args.getInt("inHand") - 1) instanceof Senshi chosen) {
+		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
+		if (d instanceof Senshi chosen) {
 			if (!chosen.isAvailable()) {
 				getChannel().sendMessage(getLocale().get("error/card_unavailable")).queue();
 				return false;
@@ -357,6 +358,22 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		} else {
 			if (args.getString("mode").equals("b") && placeProxy(curr, args)) return true;
+			else if (curr.getLockTime(Lock.BLIND) > 0) {
+				d.setAvailable(false);
+				curr.getGraveyard().add(d.copy());
+				curr.modLockTime(Lock.BLIND, Calc.chance(50) ? -1 : 0);
+
+				CardState state = switch (args.getString("mode")) {
+					case "d" -> CardState.DEFENSE;
+					case "b" -> CardState.FLIPPED;
+					default -> CardState.ATTACK;
+				};
+
+				reportEvent("str/place_card_fail", true,
+						curr.getName(), d, state.toString(getLocale())
+				);
+				return true;
+			}
 
 			getChannel().sendMessage(getLocale().get("error/wrong_card_type")).queue();
 			return false;
@@ -427,7 +444,8 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private boolean placeProxy(Hand hand, JSONObject args) {
-		if (hand.getCards().get(args.getInt("inHand") - 1) instanceof Evogear chosen && chosen.isSpell()) {
+		Drawable<?> d = hand.getCards().get(args.getInt("inHand") - 1);
+		if (d instanceof Evogear chosen && chosen.isSpell()) {
 			if (!chosen.isAvailable() || chosen.isPassive()) {
 				getChannel().sendMessage(getLocale().get("error/card_unavailable")).queue();
 				return false;
@@ -448,6 +466,23 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 		} else {
+			if (hand.getLockTime(Lock.BLIND) > 0) {
+				d.setAvailable(false);
+				hand.getGraveyard().add(d.copy());
+				hand.modLockTime(Lock.BLIND, Calc.chance(50) ? -1 : 0);
+
+				CardState state = switch (args.getString("mode")) {
+					case "d" -> CardState.DEFENSE;
+					case "b" -> CardState.FLIPPED;
+					default -> CardState.ATTACK;
+				};
+
+				reportEvent("str/place_card_fail", true,
+						hand.getName(), d, state.toString(getLocale())
+				);
+				return true;
+			}
+
 			getChannel().sendMessage(getLocale().get("error/wrong_card_type")).queue();
 			return false;
 		}
@@ -571,7 +606,8 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		if (curr.getCards().get(args.getInt("inHand") - 1) instanceof Evogear chosen && !chosen.isSpell()) {
+		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
+		if (d instanceof Evogear chosen && !chosen.isSpell()) {
 			if (!chosen.isAvailable()) {
 				getChannel().sendMessage(getLocale().get("error/card_unavailable")).queue();
 				return false;
@@ -586,6 +622,24 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 		} else {
+			if (curr.getLockTime(Lock.BLIND) > 0) {
+				d.setAvailable(false);
+				curr.getGraveyard().add(d.copy());
+				curr.modLockTime(Lock.BLIND, Calc.chance(50) ? -1 : 0);
+
+				SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
+				if (!slot.hasTop()) {
+					getChannel().sendMessage(getLocale().get("error/missing_card", slot.getIndex() + 1)).queue();
+					return false;
+				}
+
+				Senshi target = slot.getTop();
+				reportEvent("str/equip_card_fail", true,
+						curr.getName(), d, target.isFlipped() ? getLocale().get("str/a_card") : target
+				);
+				return true;
+			}
+
 			getChannel().sendMessage(getLocale().get("error/wrong_card_type")).queue();
 			return false;
 		}
@@ -631,12 +685,21 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		if (curr.getCards().get(args.getInt("inHand") - 1) instanceof Field chosen) {
+		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
+		if (d instanceof Field chosen) {
 			if (!chosen.isAvailable()) {
 				getChannel().sendMessage(getLocale().get("error/card_unavailable")).queue();
 				return false;
 			}
 		} else {
+			if (curr.getLockTime(Lock.BLIND) > 0) {
+				d.setAvailable(false);
+				curr.getGraveyard().add(d.copy());
+				curr.modLockTime(Lock.BLIND, Calc.chance(50) ? -1 : 0);
+				reportEvent("str/equip_card_fail", true, curr.getName(), d);
+				return true;
+			}
+
 			getChannel().sendMessage(getLocale().get("error/wrong_card_type")).queue();
 			return false;
 		}
@@ -880,7 +943,8 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		if (curr.getCards().get(args.getInt("inHand") - 1) instanceof Evogear chosen && chosen.isSpell()) {
+		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
+		if (d instanceof Evogear chosen && chosen.isSpell()) {
 			if (!chosen.isAvailable() || chosen.isPassive()) {
 				getChannel().sendMessage(getLocale().get("error/card_unavailable")).queue();
 				return false;
@@ -901,6 +965,15 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 		} else {
+			if (curr.getLockTime(Lock.BLIND) > 0) {
+				d.setAvailable(false);
+				curr.getGraveyard().add(d.copy());
+				curr.modLockTime(Lock.BLIND, Calc.chance(50) ? -1 : 0);
+
+				reportEvent("str/activate_card_fail", true, curr.getName(), d);
+				return true;
+			}
+
 			getChannel().sendMessage(getLocale().get("error/wrong_card_type")).queue();
 			return false;
 		}
