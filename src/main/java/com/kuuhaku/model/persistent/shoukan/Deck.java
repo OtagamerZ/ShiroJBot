@@ -230,7 +230,7 @@
 			 bag.add(new Pair<>(e.getId(), e.getTier()));
 		 }
 
-		 bag.removeIf(p -> bag.getCount(p) <= getMaxEvogearCopies(p.getSecond()));
+		 bag.removeIf(p -> bag.getCount(p.getFirst()) <= getMaxEvogearCopies(p.getSecond()));
 		 return bag.isEmpty() && Utils.between(getEvogear().size(), 0, 26);
 	 }
 
