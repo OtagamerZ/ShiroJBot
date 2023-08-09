@@ -93,18 +93,21 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		e.executeAssert(ON_INITIALIZE);
 
 		Shoukan game = this.getGame();
-		game.trigger(ON_EQUIP, this.asSource(ON_EQUIP));
+		game.trigger(ON_EQUIP, asSource(ON_EQUIP));
 
 		if (e.hasCharm(Charm.TIMEWARP)) {
 			int times = Charm.TIMEWARP.getValue(e.getTier());
 			for (int i = 0; i < times; i++) {
-				game.trigger(ON_TURN_BEGIN, this.asSource(ON_TURN_BEGIN));
-				game.trigger(ON_TURN_END, this.asSource(ON_TURN_END));
+				getStats().getPower().set(e, -0.1);
+				game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
+				game.trigger(ON_TURN_END, asSource(ON_TURN_END));
 			}
+
+			getStats().getPower().set(e, 0);
 		}
 
 		if (e.hasCharm(Charm.CLONE)) {
-			game.putAtOpenSlot(this.getSide(), true, this.withCopy(s -> {
+			game.putAtOpenSlot(this.getSide(), true, withCopy(s -> {
 				s.getStats().getAttrMult().set(-1 + (0.25 * e.getTier()));
 				s.getStats().getData().put("cloned", true);
 			}));
