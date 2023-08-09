@@ -199,7 +199,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public Hand getHand() {
-		System.out.println(this + " - " + hand);
 		return hand;
 	}
 
