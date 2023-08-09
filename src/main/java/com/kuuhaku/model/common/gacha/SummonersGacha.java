@@ -34,12 +34,11 @@ public class SummonersGacha extends Gacha {
 				         LEFT JOIN senshi s ON c.id = s.card_id
 				         LEFT JOIN evogear e ON c.id = e.card_id
 				         LEFT JOIN field f ON c.id = f.card_id
-				WHERE coalesce(a.visible, TRUE) = TRUE
-				  AND (
-				        (get_rarity_index(c.rarity) BETWEEN 1 AND 5 AND NOT has(s.tags, 'FUSION'))
-				        OR e.tier > 0
-				        OR NOT f.effect
-				    )
+				WHERE (
+				              (get_rarity_index(c.rarity) BETWEEN 1 AND 5 AND NOT has(s.tags, 'FUSION'))
+				              OR e.tier > 0
+				              OR NOT f.effect
+				          )
 				ORDER BY weight, c.id
 				""", u.getId()));
 	}

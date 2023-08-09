@@ -24,7 +24,6 @@ import com.kuuhaku.model.enums.Currency;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 
 @GachaType(value = "daily", price = 3500, currency = Currency.CR)
 public class DailyGacha extends Gacha {
@@ -33,23 +32,23 @@ public class DailyGacha extends Gacha {
 				SELECT x.id
 				     , x.weight
 				FROM (
-				     SELECT c.id
-				          , get_weight(c.id, ?1) AS weight
-				     FROM card c
-				              LEFT JOIN anime a ON a.id = c.anime_id
-				              LEFT JOIN senshi s ON c.id = s.card_id
-				              LEFT JOIN evogear e ON c.id = e.card_id
-				              LEFT JOIN field f ON c.id = f.card_id
-				     WHERE coalesce(a.visible, TRUE) = TRUE
-				       AND (
-				             get_rarity_index(c.rarity) BETWEEN 1 AND 5
-				             OR e.tier > 0
-				             OR NOT f.effect
-				         )
-				     ORDER BY hashtextextended(c.id, ?2)
-				     LIMIT 50
+				         SELECT c.id
+				              , get_weight(c.id, ?1) AS weight
+				         FROM card c
+				                  LEFT JOIN anime a ON a.id = c.anime_id
+				                  LEFT JOIN senshi s ON c.id = s.card_id
+				                  LEFT JOIN evogear e ON c.id = e.card_id
+				                  LEFT JOIN field f ON c.id = f.card_id
+				         WHERE (
+				                       (coalesce(a.visible, TRUE) = TRUE AND get_rarity_index(c.rarity) BETWEEN 1 AND 5)
+				                       OR NOT has(s.tags, 'FUSION')
+				                       OR e.tier > 0
+				                       OR NOT f.effect
+				                   )
+				         ORDER BY hashtextextended(c.id, ?2)
+				         LIMIT 50
 				     ) x
 				ORDER BY x.weight, x.id
-				""", u.getId(), LocalDate.now().get(ChronoField.DAY_OF_YEAR)));
+				""", u.getId(), LocalDate.now().getDayOfYear()));
 	}
 }

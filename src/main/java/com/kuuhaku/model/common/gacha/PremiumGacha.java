@@ -34,19 +34,19 @@ import java.util.List;
 public class PremiumGacha extends Gacha {
 	public PremiumGacha(User u) {
 		this(DAO.queryAllUnmapped("""
-    			SELECT c.id
+				SELECT c.id
 				     , get_weight(c.id, ?1) AS weight
 				FROM card c
 				         LEFT JOIN anime a ON a.id = c.anime_id
 				         LEFT JOIN senshi s ON c.id = s.card_id
 				         LEFT JOIN evogear e ON c.id = e.card_id
 				         LEFT JOIN field f ON c.id = f.card_id
-				WHERE coalesce(a.visible, TRUE) = TRUE
-				  AND (
-				        (get_rarity_index(c.rarity) BETWEEN 3 AND 5)
-				        OR e.tier > 2
-				        OR NOT f.effect
-				    )
+				WHERE (
+				              (coalesce(a.visible, TRUE) = TRUE AND get_rarity_index(c.rarity) BETWEEN 3 AND 5)
+				              OR NOT has(s.tags, 'FUSION')
+				              OR e.tier > 2
+				              OR NOT f.effect
+				          )
 				ORDER BY weight, c.id
 				""", u.getId()));
 	}
