@@ -199,6 +199,13 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public Hand getHand() {
+		System.out.println(hand);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+
 		return hand;
 	}
 

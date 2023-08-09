@@ -74,7 +74,6 @@ public class Hand {
 			return false;
 		}
 
-		System.out.println("hand");
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
 
