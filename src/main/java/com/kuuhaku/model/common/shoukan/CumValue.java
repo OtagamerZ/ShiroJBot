@@ -122,14 +122,7 @@ public class CumValue implements Iterable<ValueMod>, Cloneable {
 			}
 
 			if (flat) out += mod.getValue();
-			else {
-				double val = mod.getValue();
-				if (val < 0) {
-					out *= 1 + val;
-				} else {
-					out *= val;
-				}
-			}
+			else out *= 1 + mod.getValue();
 		}
 
 		return Calc.round(out, 2);
