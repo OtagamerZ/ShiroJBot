@@ -199,31 +199,31 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	public List<StashedCard> getTrash() {
 		return DAO.queryAll(StashedCard.class, """
-				SELECT s 
-				FROM StashedCard s 
-				WHERE s.kawaipon.uid = ?1 
+				SELECT s
+				FROM StashedCard s
+				WHERE s.kawaipon.uid = ?1
 				  AND s.trash = TRUE
 				""", uid);
 	}
 
 	public List<StashedCard> getNotInUse() {
 		return DAO.queryAll(StashedCard.class, """
-				SELECT s 
-				FROM StashedCard s 
-				WHERE s.kawaipon.uid = ?1 
-				  AND s.deck.id IS NULL 
-				  AND s.price = 0 
+				SELECT s
+				FROM StashedCard s
+				WHERE s.kawaipon.uid = ?1
+				  AND s.deck.id IS NULL
+				  AND s.price = 0
 				  AND s.trash = FALSE
 				""", uid);
 	}
 
 	public List<StashedCard> getTradeable() {
 		return DAO.queryAll(StashedCard.class, """
-				SELECT s 
-				FROM StashedCard s 
-				WHERE s.kawaipon.uid = ?1 
-				  AND s.deck.id IS NULL 
-				  AND s.price = 0 
+				SELECT s
+				FROM StashedCard s
+				WHERE s.kawaipon.uid = ?1
+				  AND s.deck.id IS NULL
+				  AND s.price = 0
 				  AND s.trash = FALSE
 				  AND s.accountBound = FALSE
 				""", uid);
@@ -233,6 +233,7 @@ public class Kawaipon extends DAO<Kawaipon> {
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		if (favExpiration == null || now.isAfter(favExpiration)) {
 			favCard = null;
+			favExpiration = null;
 		}
 
 		return favCard;
