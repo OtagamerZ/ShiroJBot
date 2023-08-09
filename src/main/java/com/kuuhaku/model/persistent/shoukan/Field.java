@@ -302,7 +302,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, card);
+		return Objects.hash(id, card, SERIAL);
 	}
 
 	@Override

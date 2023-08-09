@@ -1431,7 +1431,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, card, slot, race);
+		return Objects.hash(id, card, slot, race, SERIAL);
 	}
 
 	@Override

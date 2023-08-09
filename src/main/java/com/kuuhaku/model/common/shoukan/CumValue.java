@@ -138,11 +138,7 @@ public class CumValue implements Iterable<ValueMod>, Cloneable {
 	public CumValue clone() {
 		CumValue clone = new CumValue(flat);
 		for (ValueMod v : this) {
-			if (v instanceof PermMod p) {
-				clone.values.add(new PermMod(p.getValue()));
-			} else {
-				clone.values.add(new ValueMod(v.getSource(), v.getValue(), v.getExpiration()));
-			}
+			clone.values.add(v.clone());
 		}
 
 		return clone;

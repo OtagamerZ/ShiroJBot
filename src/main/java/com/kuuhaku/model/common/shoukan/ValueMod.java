@@ -112,7 +112,6 @@ public class ValueMod implements Cloneable {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-
 		ValueMod valueMod = (ValueMod) o;
 		return hash == valueMod.hash && Objects.equals(source, valueMod.source);
 	}

@@ -624,7 +624,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, card);
+		return Objects.hash(id, card, equipper, SERIAL);
 	}
 
 	@Override
