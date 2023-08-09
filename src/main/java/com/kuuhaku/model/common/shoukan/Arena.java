@@ -335,7 +335,7 @@ public class Arena implements Renderer {
 	}
 
 	public BufferedImage renderEvogears() {
-		BufferedImage bi = new BufferedImage(Drawable.SIZE.width * 3 * 5, Drawable.SIZE.height * 2 + 100, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage((20 + Drawable.SIZE.width * 3) * 5, Drawable.SIZE.height * 2 + 100, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
@@ -353,16 +353,14 @@ public class Arena implements Renderer {
 			for (int x = 0; x < slts.size(); x++) {
 				Senshi s = slts.get(x).getTop();
 				if (s != null) {
-					List<Evogear> equips = s.getEquipments();
-					for (int i = 0; i < 3; i++) {
-						if (i < equips.size()) {
+					Graph.applyTransformed(g2d, slotWidth * x, (Drawable.SIZE.height + 100) * y, g1 -> {
+						List<Evogear> equips = s.getEquipments();
+						for (int i = 0; i < Math.min(equips.size(), 3); i++) {
 							g2d.drawImage(equips.get(i).render(game.getLocale(), s.getHand().getUserDeck()),
-									Drawable.SIZE.width * (x + i),
-									(Drawable.SIZE.height + 100) * y,
-									null
+									10 + Drawable.SIZE.width * i, 0, null
 							);
 						}
-					}
+					});
 				}
 
 				if (y == 0) {
@@ -504,9 +502,9 @@ public class Arena implements Renderer {
 
 					int pad = Utils.getDigits(hand.getBase().hp());
 					String hpText = "HP: "
-							+ StringUtils.leftPad(String.valueOf(hand.getHP()), pad, "0")
-							+ "/"
-							+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), pad, "0");
+									+ StringUtils.leftPad(String.valueOf(hand.getHP()), pad, "0")
+									+ "/"
+									+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), pad, "0");
 					g2.setColor(Color.WHITE);
 					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, (int) (BAR_SIZE.height / 2.5) * (demon ? 2 : 1)));
 
@@ -517,7 +515,7 @@ public class Arena implements Renderer {
 					if (reversed) {
 						String rdText = "";
 						if (regdeg != 0) {
-							rdText = (regdeg > 0 ? " +" : " ") + regdeg;
+							rdText = " " + Utils.sign(regdeg);
 							g2.setColor(rdColor);
 							Graph.drawOutlinedString(g2, rdText,
 									-(bar.x + offset + g2.getFontMetrics().stringWidth(rdText)), -(bar.y + offset),
@@ -532,7 +530,7 @@ public class Arena implements Renderer {
 						);
 					} else {
 						if (regdeg != 0) {
-							String rdText = (regdeg > 0 ? " +" : " ") + regdeg;
+							String rdText = " " + Utils.sign(regdeg);
 							g2.setColor(rdColor);
 							Graph.drawOutlinedString(g2, rdText,
 									bar.x + offset + g2.getFontMetrics().stringWidth(hpText), bar.y + bar.height - offset,
