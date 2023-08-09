@@ -40,23 +40,12 @@ public class CachedScriptManager {
 	}
 
 	public CachedScriptManager withConst(String key, Object value) {
-		if (value == null || context.containsKey(key)) return this;
-		context.put(key, value);
-
+		context.putIfAbsent(key, value);
 		return this;
 	}
 
 	public CachedScriptManager withVar(String key, Object value) {
-		if (value == null) return this;
-
-		context.compute(key, (k, v) -> {
-			if (v == null || v.hashCode() != value.hashCode()) {
-				return value;
-			}
-
-			return v;
-		});
-
+		context.put(key, value);
 		return this;
 	}
 
