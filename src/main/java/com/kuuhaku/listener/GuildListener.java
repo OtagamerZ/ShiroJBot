@@ -412,10 +412,6 @@ public class GuildListener extends ListenerAdapter {
 
 			KawaiponCard kc = Spawn.getKawaipon(locale, gb, chosen, acc.getUser());
 			if (kc != null) {
-				if (acc.consumeItem("special_spice")) {
-					kc.setChrome(true);
-				}
-
 				EmbedBuilder eb = new EmbedBuilder()
 						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
 						.setTitle(kc + " (" + kc.getCard().getAnime() + ")")

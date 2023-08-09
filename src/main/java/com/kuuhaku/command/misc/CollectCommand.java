@@ -62,10 +62,13 @@ public class CollectCommand implements Executable {
 
 		KawaiponCard kc = card.get();
 		kc.setKawaipon(kp);
+		if (acc.consumeItem("special_spice")) {
+			kc.setChrome(true);
+		}
+
 		kc.save();
 
 		acc.consumeCR(kc.getPrice(), "Collected " + kc);
-
 		event.channel().sendMessage(locale.get("success/collected", event.user().getAsMention(), kc)).queue();
 	}
 }
