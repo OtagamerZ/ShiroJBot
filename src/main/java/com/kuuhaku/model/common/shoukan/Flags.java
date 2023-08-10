@@ -20,44 +20,58 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Flag;
+import com.kuuhaku.util.Utils;
 
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Flags implements Cloneable {
-	private final EnumSet<Flag> permanent = EnumSet.noneOf(Flag.class);
+	private final Map<Drawable<?>, EnumSet<Flag>> permanent = new HashMap<>();
 	private final Map<Drawable<?>, EnumSet<Flag>> flags = new HashMap<>();
 
-	public void fixed(Flag flag) {
-		permanent.add(flag);
-	}
-
 	public void set(Drawable<?> source, Flag flag) {
-		flags.computeIfAbsent(source, k -> EnumSet.noneOf(Flag.class)).add(flag);
+		set(source, flag, false);
 	}
 
 	public void unset(Drawable<?> source, Flag flag) {
-		flags.computeIfAbsent(source, k -> EnumSet.noneOf(Flag.class)).remove(flag);
-		flags.entrySet().removeIf(e -> e.getValue().isEmpty());
+		unset(source, flag, false);
+	}
+
+	public void set(Drawable<?> source, Flag flag, boolean permanent) {
+		Map<Drawable<?>, EnumSet<Flag>> target = permanent ? this.permanent : flags;
+		target.computeIfAbsent(source, k -> EnumSet.noneOf(Flag.class)).add(flag);
+	}
+
+	public void unset(Drawable<?> source, Flag flag, boolean permanent) {
+		Map<Drawable<?>, EnumSet<Flag>> target = permanent ? this.permanent : flags;
+		target.computeIfAbsent(source, k -> EnumSet.noneOf(Flag.class)).remove(flag);
+		target.entrySet().removeIf(e -> e.getValue().isEmpty());
+	}
+
+	public boolean has(Flag flag) {
+		return Utils.equalsAny(permanent, flag) || Utils.equalsAny(flags, flag);
+	}
+
+	public boolean pop(Flag flag) {
+		return Utils.equalsAny(permanent, flag) || flags.values().stream().anyMatch(e -> e.remove(flag));
 	}
 
 	public void clearTemp() {
 		flags.remove(null);
 	}
 
-	public boolean has(Flag flag) {
-		return permanent.contains(flag) || flags.values().stream().anyMatch(e -> e.contains(flag));
-	}
-
-	public boolean pop(Flag flag) {
-		return permanent.contains(flag) || flags.values().stream().anyMatch(e -> e.remove(flag));
+	public void clear(Drawable<?> source) {
+		permanent.remove(source);
+		flags.remove(source);
 	}
 
 	@Override
 	protected Flags clone() {
 		Flags clone = new Flags();
-		clone.permanent.addAll(permanent);
+		for (Map.Entry<Drawable<?>, EnumSet<Flag>> e : permanent.entrySet()) {
+			clone.permanent.put(e.getKey(), EnumSet.copyOf(e.getValue()));
+		}
 
 		return clone;
 	}

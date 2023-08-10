@@ -103,15 +103,19 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default void setFlag(Flag flag) {
-		getStats().permFlag(flag);
+		setFlag(null, flag);
+	}
+
+	default void setFlag(Drawable<?> source, Flag flag) {
+		getStats().setFlag(source, flag, true, true);
 	}
 
 	default void setFlag(Flag flag, boolean value) {
-		getStats().setFlag(flag, value);
+		setFlag(null, flag, value);
 	}
 
 	default void setFlag(Drawable<?> source, Flag flag, boolean value) {
-		getStats().setFlag(source, flag, value);
+		getStats().setFlag(source, flag, value, false);
 	}
 
 	Hand getLeech();

@@ -163,18 +163,14 @@ public class CardExtra implements Cloneable {
 		return flags;
 	}
 
-	public void setFlag(Flag flag, boolean value) {
-		if (value) flags.set(null, flag);
-		else flags.unset(null, flag);
+	public void setFlag(Flag flag, boolean value, boolean permanent) {
+		if (value) flags.set(null, flag, permanent);
+		else flags.unset(null, flag, permanent);
 	}
 
-	public void setFlag(Drawable<?> source, Flag flag, boolean value) {
-		if (value) flags.set(source, flag);
-		else flags.unset(source, flag);
-	}
-
-	public void permFlag(Flag flag) {
-		flags.fixed(flag);
+	public void setFlag(Drawable<?> source, Flag flag, boolean value, boolean permanent) {
+		if (value) flags.set(source, flag, permanent);
+		else flags.unset(source, flag, permanent);
 	}
 
 	public JSONObject getData() {
