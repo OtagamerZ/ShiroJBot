@@ -197,8 +197,8 @@ public class CardExtra implements Cloneable {
 		}
 	}
 
-	public void setCFlag(EnumSet<Flag> flag, BooleanSupplier condition) {
-		condFlags.add(new Pair<>(flag, condition));
+	public void setCFlag(BooleanSupplier condition, Flag... flag) {
+		condFlags.add(new Pair<>(EnumSet.of(Flag.NONE, flag), condition));
 	}
 
 	public boolean hasFlag(Flag flag) {

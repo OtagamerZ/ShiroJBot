@@ -19,38 +19,70 @@
 package com.kuuhaku.model.enums.shoukan;
 
 public enum Flag {
-	/** Cannot die **/
+	/**
+	 * Cannot die
+	 **/
 	NO_DEATH,
-	/** Cannot receive equipment stats **/
+	/**
+	 * Cannot receive equipment stats
+	 **/
 	NO_EQUIP,
-	/** Cannot be converted **/
+	/**
+	 * Cannot be converted
+	 **/
 	NO_CONVERT,
-	/** Cannot attack **/
+	/**
+	 * Cannot attack
+	 **/
 	NO_COMBAT,
-	/** Cannot activate effect **/
+	/**
+	 * Cannot activate effect
+	 **/
 	NO_EFFECT,
-	/** Does not take damage from combat **/
+	/**
+	 * Does not take damage from combat
+	 **/
 	NO_DAMAGE,
-	/** Cannot sleep **/
+	/**
+	 * Cannot sleep
+	 **/
 	NO_SLEEP,
-	/** Cannot be stunned **/
+	/**
+	 * Cannot be stunned
+	 **/
 	NO_STUN,
-	/** Cannot enter stasis **/
+	/**
+	 * Cannot enter stasis
+	 **/
 	NO_STASIS,
-	/** Cannot berserk **/
+	/**
+	 * Cannot berserk
+	 **/
 	NO_BERSERK,
-	/** Cannot be taunted **/
+	/**
+	 * Cannot be taunted
+	 **/
 	NO_TAUNT,
-	/** Cannot attack **/
+	/**
+	 * Cannot attack
+	 **/
 	NO_ATTACK,
 
-	/** Ignores target equipment stats **/
+	/**
+	 * Ignores target equipment stats
+	 **/
 	IGNORE_EQUIP,
-	/** Ignores field modifiers (NO AUTO) **/
+	/**
+	 * Ignores field modifiers (NO AUTO)
+	 **/
 	IGNORE_FIELD,
-	/** Cannot be attacked **/
+	/**
+	 * Cannot be attacked
+	 **/
 	IGNORE_COMBAT,
-	/** Cannot be targeted by effects **/
+	/**
+	 * Cannot be targeted by effects
+	 **/
 	IGNORE_EFFECT,
 
 	/**
@@ -101,6 +133,12 @@ public enum Flag {
 	 * Will always defeat the target
 	 **/
 	UNSTOPPABLE,
-	/** Cannot exist outside the field **/
+	/**
+	 * Cannot exist outside the field
+	 **/
 	BOUND,
+	/**
+	 * Nothing
+	 **/
+	NONE
 }
