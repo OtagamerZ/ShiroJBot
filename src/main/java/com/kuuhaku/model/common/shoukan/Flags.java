@@ -20,11 +20,12 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Flag;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Flags implements Cloneable, Iterable<Flag> {
+public class Flags implements Cloneable {
 	private final EnumSet<Flag> permanent = EnumSet.noneOf(Flag.class);
 	private final Map<Drawable<?>, EnumSet<Flag>> flags = new HashMap<>();
 
@@ -51,15 +52,6 @@ public class Flags implements Cloneable, Iterable<Flag> {
 
 	public boolean pop(Flag flag) {
 		return permanent.contains(flag) || flags.values().stream().anyMatch(e -> e.remove(flag));
-	}
-
-	@NotNull
-	@Override
-	public Iterator<Flag> iterator() {
-		EnumSet<Flag> flags = EnumSet.copyOf(permanent);
-		flags.addAll(this.flags.values().stream().flatMap(Collection::stream).toList());
-
-		return flags.iterator();
 	}
 
 	@Override
