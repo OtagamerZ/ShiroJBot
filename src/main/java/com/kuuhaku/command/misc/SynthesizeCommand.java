@@ -146,7 +146,8 @@ public class SynthesizeCommand implements Executable {
 			int field = (int) Math.round(
 					cards.stream()
 							.mapToDouble(sc -> {
-								if (sc.getKawaiponCard() != null && sc.getKawaiponCard().isChrome()) {
+								KawaiponCard kc = sc.getKawaiponCard();
+								if (sc.getType() == CardType.FIELD || (kc != null && kc.isChrome())) {
 									return 100 / 3d;
 								}
 
