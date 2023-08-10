@@ -200,7 +200,10 @@ public class CardExtra implements Cloneable {
 	}
 
 	public boolean hasFlag(Flag flag) {
-		return tempFlags.contains(flag) || flags.contains(flag) || permFlags.contains(flag);
+		return tempFlags.contains(flag)
+			   || flags.contains(flag)
+			   || permFlags.contains(flag)
+			   || condFlags.stream().anyMatch(p -> p.getFirst() == flag && p.getSecond().getAsBoolean());
 	}
 
 	public boolean popFlag(Flag flag) {
@@ -307,6 +310,8 @@ public class CardExtra implements Cloneable {
 			} catch (IllegalAccessException ignore) {
 			}
 		}
+
+		condFlags.removeIf(p -> !p.getSecond().getAsBoolean());
 	}
 
 	private double sum(Set<ValueMod> mods) {
