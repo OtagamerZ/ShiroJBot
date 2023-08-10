@@ -1299,6 +1299,13 @@ public class Shoukan extends GameInstance<Phase> {
 								}
 							}
 							case LIFESTEAL -> lifesteal += c.getValue(e.getTier());
+							case BARRAGE -> {
+								if (announce) {
+									for (int i = 0; i < c.getValue(e.getTier()); i++) {
+										attack(source, target, dmg / 10, false);
+									}
+								}
+							}
 						}
 					}
 				}
@@ -1510,16 +1517,16 @@ public class Shoukan extends GameInstance<Phase> {
 		return win;
 	}
 
-	public boolean attack(Senshi source, Hand op) {
-		return attack(source, op, null, false);
+	public boolean attack(Senshi source, Hand target) {
+		return attack(source, target, null, false);
 	}
 
-	public boolean attack(Senshi source, Hand op, int dmg) {
-		return attack(source, op, dmg, false);
+	public boolean attack(Senshi source, Hand target, int dmg) {
+		return attack(source, target, dmg, false);
 	}
 
-	private boolean attack(Senshi source, Hand op, Integer dmg, boolean announce) {
-		if (source == null || op == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
+	private boolean attack(Senshi source, Hand target, Integer dmg, boolean announce) {
+		if (source == null || target == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
 			if (announce) {
 				getChannel().sendMessage(getLocale().get("error/card_cannot_attack")).queue();
 			}
@@ -1529,9 +1536,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Hand you = source.getHand();
 		int pHP = you.getHP();
-		int eHP = op.getHP();
+		int eHP = target.getHP();
 
-		if (!arena.isFieldEmpty(op.getSide()) && !source.hasFlag(Flag.DIRECT, true)) {
+		if (!arena.isFieldEmpty(target.getSide()) && !source.hasFlag(Flag.DIRECT, true)) {
 			if (announce) {
 				getChannel().sendMessage(getLocale().get("error/field_not_empty")).queue();
 			}
@@ -1550,7 +1557,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int lifesteal = you.getBase().lifesteal();
-		double dmgMult = 1d / (1 << op.getChainReduction());
+		double dmgMult = 1d / (1 << target.getChainReduction());
 		if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
 			dmgMult /= 2;
 		}
@@ -1563,30 +1570,37 @@ public class Shoukan extends GameInstance<Phase> {
 					for (Object o : charms) {
 						Charm c = Charm.valueOf(String.valueOf(o));
 						switch (c) {
-							case PIERCING -> op.modHP((int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100));
+							case PIERCING -> target.modHP((int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100));
 							case WOUNDING -> {
 								int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
-								op.getRegDeg().add(val);
+								target.getRegDeg().add(val);
 
 								if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(5, rng)) {
-									op.getRegDeg().add(val);
+									target.getRegDeg().add(val);
 								}
 							}
 							case DRAIN -> {
-								int toDrain = Math.min(c.getValue(e.getTier()), op.getMP());
+								int toDrain = Math.min(c.getValue(e.getTier()), target.getMP());
 								if (toDrain > 0) {
 									you.modMP(toDrain);
-									op.modMP(-toDrain);
+									target.modMP(-toDrain);
 								}
 							}
 							case LIFESTEAL -> lifesteal += c.getValue(e.getTier());
+							case BARRAGE -> {
+								if (announce) {
+									for (int i = 0; i < c.getValue(e.getTier()); i++) {
+										attack(source, target, dmg / 10, false);
+									}
+								}
+							}
 						}
 					}
 				}
 
 				switch (you.getOrigin().synergy()) {
 					case SHIKIGAMI -> {
-						List<SlotColumn> slts = arena.getSlots(op.getSide());
+						List<SlotColumn> slts = arena.getSlots(target.getSide());
 						for (SlotColumn slt : slts) {
 							if (slt.hasTop()) {
 								slt.getTop().getStats().getDodge().set(-2);
@@ -1594,19 +1608,19 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 					}
 					case FALLEN -> {
-						if (op.getRegDeg().peek() < 0) {
-							op.getRegDeg().apply(0.05);
+						if (target.getRegDeg().peek() < 0) {
+							target.getRegDeg().apply(0.05);
 						}
 					}
-					case SPAWN -> op.getRegDeg().add(-op.getBase().hp() * 0.05);
+					case SPAWN -> target.getRegDeg().add(-target.getBase().hp() * 0.05);
 				}
 
 				if (!source.hasFlag(Flag.NO_COMBAT, true)) {
-					for (SlotColumn sc : getSlots(op.getSide())) {
+					for (SlotColumn sc : getSlots(target.getSide())) {
 						for (Senshi card : sc.getCards()) {
 							if (card instanceof TrapSpell) {
 								EffectParameters params = new EffectParameters(
-										ON_TRAP, op.getSide(),
+										ON_TRAP, target.getSide(),
 										card.asSource(ON_TRAP),
 										source.asTarget(ON_ATTACK, TargetType.ENEMY)
 								);
@@ -1626,11 +1640,11 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				op.modHP((int) -(dmg * dmgMult));
-				op.addChain();
+				target.modHP((int) -(dmg * dmgMult));
+				target.addChain();
 
 				if (lifesteal > 0) {
-					you.modHP(Math.max(0, eHP - op.getHP()) * lifesteal / 100);
+					you.modHP(Math.max(0, eHP - target.getHP()) * lifesteal / 100);
 				}
 			}
 		} finally {
@@ -1640,11 +1654,11 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		String outcome = "";
-		if (eHP != op.getHP()) {
-			int val = eHP - op.getHP();
+		if (eHP != target.getHP()) {
+			int val = eHP - target.getHP();
 			outcome += "\n" + getLocale().get(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
 
-			double mult = (val > 0 ? op.getStats().getDamageMult() : op.getStats().getHealMult()).get();
+			double mult = (val > 0 ? target.getStats().getDamageMult() : target.getStats().getHealMult()).get();
 			if (mult != 1) {
 				outcome += " (" + getLocale().get("str/value_" + (mult > 0 ? "reduction" : "increase"),
 						Utils.roundToString((1 - mult) * 100, 2)
@@ -1664,7 +1678,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (announce) {
-			reportEvent("str/combat", true, source, op.getName(), outcome);
+			reportEvent("str/combat", true, source, target.getName(), outcome);
 		}
 
 		return true;

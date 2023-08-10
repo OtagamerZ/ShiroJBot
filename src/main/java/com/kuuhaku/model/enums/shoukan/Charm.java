@@ -34,7 +34,8 @@ public enum Charm {
 	WARDING,
 	TIMEWARP,
 	THORNS,
-	LIFESTEAL;
+	LIFESTEAL,
+	BARRAGE;
 
 	public String getName(I18N locale) {
 		return locale.get("charm/" + name());
@@ -66,6 +67,7 @@ public enum Charm {
 			case SHIELD -> (int) Calc.getFibonacci(tier) + 1;
 			case PIERCING, WOUNDING, THORNS, LIFESTEAL -> tier * 4;
 			case CLONE -> tier * 25;
+			case BARRAGE -> tier * 3;
 		};
 	}
 }
