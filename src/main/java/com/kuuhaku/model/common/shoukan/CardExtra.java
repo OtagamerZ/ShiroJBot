@@ -33,10 +33,11 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import org.apache.commons.collections4.set.ListOrderedSet;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 
@@ -59,7 +60,7 @@ public class CardExtra implements Cloneable {
 	private final EnumSet<Flag> flags;
 	private final EnumSet<Flag> tempFlags;
 	private final EnumSet<Flag> permFlags;
-	private final Set<Pair<Flag[], BooleanSupplier>> condFlags;
+	private final Set<Pair<EnumSet<Flag>, BooleanSupplier>> condFlags;
 
 	private final JSONObject data;
 	private final JSONObject perm;
@@ -82,7 +83,7 @@ public class CardExtra implements Cloneable {
 			CumValue atk, CumValue dfs, CumValue dodge,
 			CumValue block, CumValue tier, CumValue costMult,
 			CumValue attrMult, CumValue power, EnumSet<Flag> flags,
-			EnumSet<Flag> tempFlags, EnumSet<Flag> permFlags, Set<Pair<Flag[], BooleanSupplier>> condFlags,
+			EnumSet<Flag> tempFlags, EnumSet<Flag> permFlags, Set<Pair<EnumSet<Flag>, BooleanSupplier>> condFlags,
 			JSONObject data, JSONObject perm, ListOrderedSet<String> curses
 	) {
 		this.mana = mana;
@@ -196,7 +197,7 @@ public class CardExtra implements Cloneable {
 		}
 	}
 
-	public void setCFlag(Flag[] flag, BooleanSupplier condition) {
+	public void setCFlag(EnumSet<Flag> flag, BooleanSupplier condition) {
 		condFlags.add(new Pair<>(flag, condition));
 	}
 
@@ -204,7 +205,7 @@ public class CardExtra implements Cloneable {
 		return tempFlags.contains(flag)
 			   || flags.contains(flag)
 			   || permFlags.contains(flag)
-			   || condFlags.stream().anyMatch(p -> ArrayUtils.contains(p.getFirst(), flag) && p.getSecond().getAsBoolean());
+			   || condFlags.stream().anyMatch(p -> p.getFirst().contains(flag) && p.getSecond().getAsBoolean());
 	}
 
 	public boolean popFlag(Flag flag) {
