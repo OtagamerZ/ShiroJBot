@@ -31,11 +31,12 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
+import kotlin.Pair;
 import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.lang.reflect.Field;
-import java.util.EnumSet;
-import java.util.Set;
+import java.util.*;
+import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 
 public class CardExtra implements Cloneable {
@@ -57,6 +58,7 @@ public class CardExtra implements Cloneable {
 	private final EnumSet<Flag> flags;
 	private final EnumSet<Flag> tempFlags;
 	private final EnumSet<Flag> permFlags;
+	private final Set<Pair<Flag, BooleanSupplier>> condFlags;
 
 	private final JSONObject data;
 	private final JSONObject perm;
@@ -79,8 +81,8 @@ public class CardExtra implements Cloneable {
 			CumValue atk, CumValue dfs, CumValue dodge,
 			CumValue block, CumValue tier, CumValue costMult,
 			CumValue attrMult, CumValue power, EnumSet<Flag> flags,
-			EnumSet<Flag> tempFlags, EnumSet<Flag> permFlags, JSONObject data,
-			JSONObject perm, ListOrderedSet<String> curses
+			EnumSet<Flag> tempFlags, EnumSet<Flag> permFlags, Set<Pair<Flag, BooleanSupplier>> condFlags,
+			JSONObject data, JSONObject perm, ListOrderedSet<String> curses
 	) {
 		this.mana = mana;
 		this.blood = blood;
@@ -96,6 +98,7 @@ public class CardExtra implements Cloneable {
 		this.flags = flags;
 		this.tempFlags = tempFlags;
 		this.permFlags = permFlags;
+		this.condFlags = condFlags;
 		this.data = data;
 		this.perm = perm;
 		this.curses = curses;
@@ -117,6 +120,7 @@ public class CardExtra implements Cloneable {
 				EnumSet.noneOf(Flag.class),
 				EnumSet.noneOf(Flag.class),
 				EnumSet.noneOf(Flag.class),
+				new HashSet<>(),
 				new JSONObject(),
 				new JSONObject(),
 				ListOrderedSet.listOrderedSet(BondedList.withBind((s, it) -> !s.isBlank()))
@@ -189,6 +193,10 @@ public class CardExtra implements Cloneable {
 		} else {
 			(permanent ? permFlags : flags).remove(flag);
 		}
+	}
+
+	public void setCFlag(Flag flag, BooleanSupplier condition) {
+		condFlags.add(new Pair<>(flag, condition));
 	}
 
 	public boolean hasFlag(Flag flag) {
@@ -327,6 +335,7 @@ public class CardExtra implements Cloneable {
 				EnumSet.noneOf(Flag.class),
 				EnumSet.noneOf(Flag.class),
 				EnumSet.copyOf(permFlags),
+				new HashSet<>(),
 				data.clone(),
 				perm.clone(),
 				ListOrderedSet.listOrderedSet(BondedList.withBind((s, it) -> !s.isBlank()))
