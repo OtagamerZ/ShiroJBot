@@ -119,7 +119,7 @@ public class SlotColumn {
 	private void placeCard(Senshi card, boolean top, boolean replace) {
 		Senshi current = top ? getTop() : getBottom();
 		if (Objects.equals(card, current)) return;
-		else if (card != null && card.getHand() != null && card.getSide() == side && card.popFlag(Flag.NO_CONVERT)) {
+		else if (card != null && card.getHand() != null && card.getSide() == side && card.hasFlag(Flag.NO_CONVERT, true)) {
 			return;
 		}
 

@@ -651,7 +651,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Evogear copy = chosen.withCopy(e -> {
 			if (curr.isEmpowered() && curr.getOrigin().major() == Race.MACHINE) {
-				e.setFlag(Flag.EMPOWERED, true, true);
+				e.setFlag(Flag.EMPOWERED);
 				curr.setEmpowered(false);
 			}
 		});
@@ -995,7 +995,7 @@ public class Shoukan extends GameInstance<Phase> {
 				chosen.getStats().getData().put("consumed", consumed);
 			}
 
-			if (!chosen.popFlag(Flag.FREE_ACTION)) {
+			if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
 				chosen.setAvailable(false);
 				stack.add(chosen.copy());
 			}
@@ -1010,7 +1010,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (curr.isEmpowered() && curr.getOrigin().major() == Race.MYSTICAL) {
-			chosen.setFlag(Flag.EMPOWERED, true, true);
+			chosen.setFlag(Flag.EMPOWERED);
 			curr.setEmpowered(false);
 		}
 
@@ -1031,7 +1031,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		if (!chosen.popFlag(Flag.FREE_ACTION)) {
+		if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
 			chosen.setAvailable(false);
 			stack.add(chosen.copy());
 		}
@@ -1123,7 +1123,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (enemy.isProtected(chosen)) {
 				curr.consumeMP(1);
-				if (!chosen.popFlag(Flag.FREE_ACTION)) {
+				if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
 					chosen.setAvailable(false);
 				}
 
@@ -1147,7 +1147,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.consumeMP(1);
-		if (getPhase() != Phase.PLAN && !chosen.popFlag(Flag.FREE_ACTION)) {
+		if (getPhase() != Phase.PLAN && !chosen.hasFlag(Flag.FREE_ACTION, true)) {
 			chosen.setAvailable(false);
 		}
 
@@ -1333,9 +1333,9 @@ public class Shoukan extends GameInstance<Phase> {
 					case SPAWN -> op.getRegDeg().add(-op.getBase().hp() * 0.05);
 				}
 
-				boolean ignore = source.popFlag(Flag.NO_COMBAT);
+				boolean ignore = source.hasFlag(Flag.NO_COMBAT, true);
 				if (!ignore) {
-					ignore = target.getSlot().getIndex() == -1 || target.popFlag(Flag.IGNORE_COMBAT);
+					ignore = target.getSlot().getIndex() == -1 || target.hasFlag(Flag.IGNORE_COMBAT, true);
 				}
 
 				if (!ignore) {
@@ -1354,12 +1354,12 @@ public class Shoukan extends GameInstance<Phase> {
 						win = true;
 					} else {
 						boolean dbl = op.getOrigin().synergy() == Race.CYBERBEAST && Calc.chance(5, rng);
-						boolean unstop = source.popFlag(Flag.UNSTOPPABLE);
+						boolean unstop = source.hasFlag(Flag.UNSTOPPABLE, true);
 
 						int enemyStats = target.getActiveAttr(dbl);
 						int eEquipStats = target.getActiveEquips(dbl);
 						int eCombatStats = enemyStats;
-						if (source.popFlag(Flag.IGNORE_EQUIP)) {
+						if (source.hasFlag(Flag.IGNORE_EQUIP, true)) {
 							eCombatStats -= eEquipStats;
 						}
 
@@ -1372,7 +1372,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							if (announce) {
-								if (!source.popFlag(Flag.NO_DAMAGE)) {
+								if (!source.hasFlag(Flag.NO_DAMAGE, true)) {
 									you.modHP((int) -((enemyStats - dmg) * dmgMult));
 								}
 
@@ -1391,14 +1391,14 @@ public class Shoukan extends GameInstance<Phase> {
 								trigger(ON_MISS, source.asSource(ON_MISS));
 
 								dmg = 0;
-							} else if (!unstop && !source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_BLOCK) || Calc.chance(block, rng))) {
+							} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_BLOCK, true) || Calc.chance(block, rng))) {
 								outcome = getLocale().get("str/combat_block", block);
 								trigger(null, source.asSource(), target.asTarget(ON_BLOCK));
 
 								source.setStun(1);
 
 								dmg = 0;
-							} else if (!source.popFlag(Flag.TRUE_STRIKE) && (target.popFlag(Flag.TRUE_DODGE) || Calc.chance(dodge, rng))) {
+							} else if (!source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_DODGE, true) || Calc.chance(dodge, rng))) {
 								outcome = getLocale().get("str/combat_dodge", dodge);
 								trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
 
@@ -1412,7 +1412,7 @@ public class Shoukan extends GameInstance<Phase> {
 									outcome = getLocale().get("str/combat_success", dmg, eCombatStats);
 									trigger(ON_HIT, source.asSource(ON_HIT), target.asTarget(ON_LOSE));
 
-									if (target.isDefending() || target.popFlag(Flag.NO_DAMAGE)) {
+									if (target.isDefending() || target.hasFlag(Flag.NO_DAMAGE, true)) {
 										dmg = 0;
 									} else {
 										dmg = Math.max(0, dmg - enemyStats);
@@ -1422,7 +1422,7 @@ public class Shoukan extends GameInstance<Phase> {
 										s.awake();
 									}
 
-									if (source.isDefending() && !source.popFlag(Flag.ALWAYS_ATTACK)) {
+									if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
 										if (eCombatStats == 0) {
 											target.setStun(5);
 										} else {
@@ -1475,7 +1475,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 		} finally {
-			if (announce && source.getSlot().getIndex() != -1 && !source.popFlag(Flag.FREE_ACTION)) {
+			if (announce && source.getSlot().getIndex() != -1 && !source.hasFlag(Flag.FREE_ACTION, true)) {
 				source.setAvailable(false);
 			}
 		}
@@ -1531,7 +1531,7 @@ public class Shoukan extends GameInstance<Phase> {
 		int pHP = you.getHP();
 		int eHP = op.getHP();
 
-		if (!arena.isFieldEmpty(op.getSide()) && !source.popFlag(Flag.DIRECT)) {
+		if (!arena.isFieldEmpty(op.getSide()) && !source.hasFlag(Flag.DIRECT, true)) {
 			if (announce) {
 				getChannel().sendMessage(getLocale().get("error/field_not_empty")).queue();
 			}
@@ -1542,7 +1542,7 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(ON_ATTACK, source.asSource(ON_ATTACK));
 
 		if (dmg == null) {
-			if (source.isDefending() && !source.popFlag(Flag.ALWAYS_ATTACK)) {
+			if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
 				dmg = 0;
 			} else {
 				dmg = source.getActiveAttr();
@@ -1601,7 +1601,7 @@ public class Shoukan extends GameInstance<Phase> {
 					case SPAWN -> op.getRegDeg().add(-op.getBase().hp() * 0.05);
 				}
 
-				if (!source.popFlag(Flag.NO_COMBAT)) {
+				if (!source.hasFlag(Flag.NO_COMBAT, true)) {
 					for (SlotColumn sc : getSlots(op.getSide())) {
 						for (Senshi card : sc.getCards()) {
 							if (card instanceof TrapSpell) {
@@ -1634,7 +1634,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 		} finally {
-			if (announce && source.getSlot().getIndex() != -1 && !source.popFlag(Flag.FREE_ACTION)) {
+			if (announce && source.getSlot().getIndex() != -1 && !source.hasFlag(Flag.FREE_ACTION, true)) {
 				source.setAvailable(false);
 			}
 		}
@@ -2442,9 +2442,9 @@ public class Shoukan extends GameInstance<Phase> {
 					s.setSwitched(false);
 
 					s.clearBlocked();
-					s.getStats().clearTFlags();
+					s.getStats().getFlags().clearTemp();
 					for (Evogear e : s.getEquipments()) {
-						e.getStats().clearTFlags();
+						e.getStats().getFlags().clearTemp();
 					}
 
 					if (arcade == Arcade.DECAY) {

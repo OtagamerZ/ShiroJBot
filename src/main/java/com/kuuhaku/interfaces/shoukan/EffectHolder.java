@@ -20,6 +20,7 @@ package com.kuuhaku.interfaces.shoukan;
 
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.shoukan.CardExtra;
+import com.kuuhaku.model.common.shoukan.Flags;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
@@ -46,8 +47,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
-
-import static com.kuuhaku.model.enums.shoukan.Trigger.ON_EMPOWER;
 
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	Pair<Integer, Color> EMPTY = new Pair<>(-1, Color.BLACK);
@@ -87,33 +86,37 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	CardExtra getStats();
 
-	default void setTFlag(Flag flag, boolean value) {
-		getStats().setTFlag(flag, value);
+	default Flags getFlags() {
+		return getStats().getFlags();
+	}
+
+	default boolean hasFlag(Flag flag) {
+		return hasFlag(flag, false);
+	}
+
+	default boolean hasFlag(Flag flag, boolean pop) {
+		if (pop) {
+			return getFlags().pop(flag);
+		} else {
+			return getFlags().has(flag);
+		}
+	}
+
+	default void setFlag(Flag flag) {
+		getStats().permFlag(flag);
 	}
 
 	default void setFlag(Flag flag, boolean value) {
-		setFlag(flag, value, false);
+		getStats().setFlag(flag, value);
 	}
 
-	default void setFlag(Flag flag, boolean value, boolean permanent) {
-		if (flag == Flag.EMPOWERED && value) {
-			getGame().trigger(ON_EMPOWER, asSource(ON_EMPOWER));
-		}
-
-		getStats().setFlag(flag, value, permanent);
-	}
-
-	default boolean popFlag(Flag flag) {
-		return getStats().popFlag(flag);
+	default void setFlag(Drawable<?> source, Flag flag, boolean value) {
+		getStats().setFlag(source, flag, value);
 	}
 
 	Hand getLeech();
 
 	void setLeech(Hand leech);
-
-	default boolean hasFlag(Flag flag) {
-		return getStats().hasFlag(flag);
-	}
 
 	boolean hasCharm(Charm charm);
 
@@ -134,7 +137,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default boolean hasTrueEffect(boolean pop) {
 		return hasEffect() && (getBase().getTags().contains("TRUE_EFFECT")
 							   || hasFlag(Flag.EMPOWERED)
-							   || (pop ? popFlag(Flag.TRUE_EFFECT) : hasFlag(Flag.TRUE_EFFECT)));
+							   || hasFlag(Flag.TRUE_EFFECT, pop));
 	}
 
 	boolean execute(EffectParameters ep);
@@ -306,7 +309,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						after = true;
 					} else {
 						if (!after) {
-							if (hasFlag(Flag.HIDE_STATS)) {
+							if (getFlags().has(Flag.HIDE_STATS)) {
 								s = s.replaceAll("\\d", "?");
 							}
 

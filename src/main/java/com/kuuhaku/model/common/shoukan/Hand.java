@@ -98,7 +98,7 @@ public class Hand {
 			return false;
 		}
 
-		return !(d instanceof EffectHolder<?> eh) || !eh.popFlag(Flag.BOUND);
+		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	});
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
 		if (getRealDeck().contains(d)) return false;
@@ -128,7 +128,7 @@ public class Hand {
 			return false;
 		}
 
-		return !(d instanceof EffectHolder<?> eh) || !eh.popFlag(Flag.BOUND);
+		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	});
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
 		if (getGraveyard().contains(d)) return false;
@@ -142,7 +142,7 @@ public class Hand {
 			if (getGame().getCurrentSide() != getSide() && Calc.chance(s.getDodge() / 2d, getGame().getRng())) {
 				getGame().getChannel().sendMessage(getGame().getLocale().get("str/avoid_destruction", s)).queue();
 				return false;
-			} else if (s.popFlag(Flag.NO_DEATH) || s.hasCharm(Charm.WARDING, true)) {
+			} else if (s.hasFlag(Flag.NO_DEATH, true) || s.hasCharm(Charm.WARDING, true)) {
 				return false;
 			}
 		}
@@ -150,13 +150,13 @@ public class Hand {
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
 		if (d instanceof Senshi s) {
-			if (s.popFlag(Flag.NO_DEATH)) {
+			if (s.hasFlag(Flag.NO_DEATH, true)) {
 				return false;
 			}
 
 			if (s.getLastInteraction() != null) {
 				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget());
-				if (s.popFlag(Flag.NO_DEATH)) {
+				if (s.hasFlag(Flag.NO_DEATH, true)) {
 					return false;
 				}
 
@@ -196,7 +196,7 @@ public class Hand {
 			return false;
 		}
 
-		return !(d instanceof EffectHolder<?> eh) || !eh.popFlag(Flag.BOUND);
+		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	});
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getDiscard().contains(d)) return false;
@@ -217,7 +217,7 @@ public class Hand {
 			return false;
 		}
 
-		return !(d instanceof EffectHolder<?> eh) || !eh.popFlag(Flag.BOUND);
+		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	});
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 	private final Set<EffectHolder<?>> leeches = new HashSet<>();

@@ -103,7 +103,7 @@ public class Arena implements Renderer {
 			return false;
 		}
 
-		return !(d instanceof EffectHolder<?> eh) || !eh.popFlag(Flag.BOUND);
+		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	});
 
 	private Field field = null;

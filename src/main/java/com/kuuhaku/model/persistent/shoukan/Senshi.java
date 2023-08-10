@@ -191,21 +191,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public boolean hasFlag(Flag flag) {
+	public boolean hasFlag(Flag flag, boolean pop) {
 		for (Evogear e : equipments) {
-			if (e.getStats().hasFlag(flag)) return true;
+			if (e.hasFlag(flag, pop)) return true;
 		}
 
-		return stats.hasFlag(flag);
-	}
-
-	@Override
-	public boolean popFlag(Flag flag) {
-		for (Evogear e : equipments) {
-			if (e.popFlag(flag)) return true;
-		}
-
-		return stats.popFlag(flag);
+		if (pop) return stats.getFlags().pop(flag);
+		else return stats.getFlags().has(flag);
 	}
 
 	@Override
@@ -679,7 +671,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (isDefending()) return getEquipDfs();
 			return getEquipDmg();
 		} finally {
-			popFlag(Flag.NO_EQUIP);
+			hasFlag(Flag.NO_EQUIP, true);
 		}
 	}
 
@@ -695,7 +687,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			return getEquipDmg();
 		} finally {
-			popFlag(Flag.NO_EQUIP);
+			hasFlag(Flag.NO_EQUIP, true);
 		}
 	}
 
@@ -732,7 +724,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean canAttack() {
-		return slot != null && isAvailable() && !isFlipped() && !stats.popFlag(Flag.NO_ATTACK);
+		return slot != null && isAvailable() && !isFlipped() && !hasFlag(Flag.NO_ATTACK, true);
 	}
 
 	@Override
@@ -791,7 +783,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setSleep(int time) {
-		if (popFlag(Flag.NO_SLEEP)) return;
+		if (hasFlag(Flag.NO_SLEEP, true)) return;
 
 		int curr = Bit.get(state, 2, 4);
 		state = Bit.set(state, 2, Math.max(curr, time), 4);
@@ -811,7 +803,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setStun(int time) {
-		if (popFlag(Flag.NO_STUN)) return;
+		if (hasFlag(Flag.NO_STUN, true)) return;
 
 		int curr = Bit.get(state, 3, 4);
 		state = Bit.set(state, 3, Math.max(curr, time), 4);
@@ -831,7 +823,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setStasis(int time) {
-		if (popFlag(Flag.NO_STASIS)) return;
+		if (hasFlag(Flag.NO_STASIS, true)) return;
 
 		int curr = Bit.get(state, 4, 4);
 		state = Bit.set(state, 4, Math.max(curr, time), 4);
@@ -858,7 +850,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setTaunt(Senshi target, int time) {
-		if (target == null || popFlag(Flag.NO_TAUNT)) return;
+		if (target == null || hasFlag(Flag.NO_TAUNT, true)) return;
 
 		this.target = target;
 		int curr = Bit.get(state, 5, 4);
@@ -879,7 +871,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void setBerserk(int time) {
-		if (popFlag(Flag.NO_BERSERK)) return;
+		if (hasFlag(Flag.NO_BERSERK, true)) return;
 
 		int curr = Bit.get(state, 6, 4);
 		state = Bit.set(state, 6, Math.max(curr, time), 4);
@@ -943,7 +935,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isBlinded(boolean pop) {
-		return pop ? popFlag(Flag.BLIND) : hasFlag(Flag.BLIND);
+		return hasFlag(Flag.BLIND, pop);
 	}
 
 	public double getHitChance() {
@@ -1029,7 +1021,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public boolean execute(boolean global, EffectParameters ep) {
 		if (!hasTrueEffect(true)) {
 			if (hand.getLockTime(Lock.EFFECT) > 0) return false;
-			else if (popFlag(Flag.NO_EFFECT)) {
+			else if (hasFlag(Flag.NO_EFFECT, true)) {
 				base.lockAll();
 				return false;
 			}
@@ -1126,7 +1118,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 							.run();
 
 					if (!Utils.equalsAny(ep.trigger(), ON_TICK, ON_EFFECT)) {
-						popFlag(Flag.EMPOWERED);
+						hasFlag(Flag.EMPOWERED, true);
 						game.trigger(ON_EFFECT, hand.getSide());
 					}
 				}
@@ -1250,7 +1242,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (getGame() != null) {
 				getGame().trigger(ON_EFFECT_TARGET, source.asSource(), asTarget(ON_EFFECT_TARGET));
-				if (isStasis() || popFlag(Flag.IGNORE_EFFECT)) {
+				if (isStasis() || hasFlag(Flag.IGNORE_EFFECT, true)) {
 					return true;
 				}
 			}
