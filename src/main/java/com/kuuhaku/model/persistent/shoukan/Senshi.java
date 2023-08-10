@@ -1119,8 +1119,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 							.withConst("self", this)
 							.withConst("game", getGame())
 							.withConst("data", stats.getData())
-							.withVar("ep", ep)
-							.withVar("side", hand.getSide())
+							.withVar("ep", ep.forSide(getSide()))
+							.withVar("side", getSide())
 							.withVar("props", csm.getStoredProps())
 							.withVar("trigger", trigger)
 							.run();
@@ -1205,7 +1205,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
 					.withVar("ep", new EffectParameters(trigger, getSide()))
-					.withVar("side", hand.getSide())
+					.withVar("side", getSide())
 					.withVar("props", csm.getStoredProps())
 					.withVar("trigger", trigger)
 					.run();

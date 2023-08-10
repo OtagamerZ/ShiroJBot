@@ -407,8 +407,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					.withConst("evo", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
-					.withVar("ep", ep)
-					.withVar("side", hand.getSide())
+					.withVar("ep", ep.forSide(getSide()))
+					.withVar("side", getSide())
 					.withVar("props", csm.getStoredProps())
 					.withVar("trigger", ep.trigger());
 
@@ -463,7 +463,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
 					.withVar("ep", new EffectParameters(trigger, getSide()))
-					.withVar("side", hand.getSide())
+					.withVar("side", getSide())
 					.withVar("props", csm.getStoredProps())
 					.withVar("self", equipper)
 					.withVar("trigger", trigger)
