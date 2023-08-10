@@ -127,9 +127,9 @@ public class ItemShopCommand implements Executable {
 			Utils.confirm(locale.get("question/item_buy", amount, item.getName(locale), price), event.channel(), w -> {
 						acc.addItem(item, amount);
 						if (item.getCurrency() == Currency.CR) {
-							acc.consumeCR(value, "Bought " + amount + "x" + item.getName(locale));
+							acc.consumeCR(value, "Bought " + amount + "x " + item.getName(locale));
 						} else {
-							acc.consumeGems(value, "Bought " + amount + "x" + item.getName(locale));
+							acc.consumeGems(value, "Bought " + amount + "x " + item.getName(locale));
 						}
 
 						event.channel().sendMessage(locale.get("success/item_buy", amount, item.getName(locale))).queue();
