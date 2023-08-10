@@ -43,8 +43,9 @@ public class PremiumGacha extends Gacha {
 				         LEFT JOIN field f ON c.id = f.card_id
 				WHERE is_valid_rarity(c.rarity)
 				  AND (
-				        (coalesce(a.visible, TRUE) = TRUE AND get_rarity_index(c.rarity) BETWEEN 3 AND 5)
-				        OR NOT has(s.tags, 'FUSION')
+				        (coalesce(a.visible, TRUE) = TRUE
+				            AND get_rarity_index(c.rarity) BETWEEN 3 AND 5
+				            AND NOT has(s.tags, 'FUSION'))
 				        OR e.tier > 2
 				        OR NOT f.effect
 				    )
