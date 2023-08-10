@@ -67,7 +67,7 @@ public enum Charm {
 			case SHIELD -> (int) Calc.getFibonacci(tier) + 1;
 			case PIERCING, WOUNDING, THORNS, LIFESTEAL -> tier * 4;
 			case CLONE -> tier * 25;
-			case BARRAGE -> tier * 3;
+			case BARRAGE -> tier * 2;
 		};
 	}
 }
