@@ -41,12 +41,13 @@ public class PremiumGacha extends Gacha {
 				         LEFT JOIN senshi s ON c.id = s.card_id
 				         LEFT JOIN evogear e ON c.id = e.card_id
 				         LEFT JOIN field f ON c.id = f.card_id
-				WHERE (
-				              (coalesce(a.visible, TRUE) = TRUE AND get_rarity_index(c.rarity) BETWEEN 3 AND 5)
-				              OR NOT has(s.tags, 'FUSION')
-				              OR e.tier > 2
-				              OR NOT f.effect
-				          )
+				WHERE is_valid_rarity(c.rarity)
+				  AND (
+				        (coalesce(a.visible, TRUE) = TRUE AND get_rarity_index(c.rarity) BETWEEN 3 AND 5)
+				        OR NOT has(s.tags, 'FUSION')
+				        OR e.tier > 2
+				        OR NOT f.effect
+				    )
 				ORDER BY weight, c.id
 				""", u.getId()));
 	}
