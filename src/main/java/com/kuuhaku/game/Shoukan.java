@@ -575,13 +575,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (tgt == null) return false;
 
 		Senshi enemy = tgt.enemy();
-		if (enemy != null && enemy.isProtected(e)) {
-			hand.getGraveyard().add(p);
-			hand.getData().put("last_spell", e);
-			trigger(ON_SPELL, hand.getSide());
-			getChannel().sendMessage(getLocale().get("str/str/avoid_effect", enemy)).queue();
-			return false;
-		} else if (!tgt.validate(e.getTargetType())) {
+		if (!tgt.validate(e.getTargetType())) {
 			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + e.getTargetType()))).queue();
 			return false;
 		}
@@ -985,26 +979,7 @@ public class Shoukan extends GameInstance<Phase> {
 		};
 
 		List<Drawable<?>> stack = (chosen.getTier() > 3 ? arena.getBanned() : curr.getGraveyard());
-
-		Senshi enemy = tgt.enemy();
-		if (enemy != null && enemy.isProtected(chosen)) {
-			curr.consumeHP(chosen.getHPCost());
-			curr.consumeMP(chosen.getMPCost());
-			List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
-			if (!consumed.isEmpty()) {
-				chosen.getStats().getData().put("consumed", consumed);
-			}
-
-			if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
-				chosen.setAvailable(false);
-				stack.add(chosen.copy());
-			}
-
-			curr.getData().put("last_spell", chosen);
-			trigger(ON_SPELL, side);
-			reportEvent("str/avoid_effect", true, enemy);
-			return false;
-		} else if (!tgt.validate(chosen.getTargetType())) {
+		if (!tgt.validate(chosen.getTargetType())) {
 			getChannel().sendMessage(getLocale().get("error/target", getLocale().get("str/target_" + chosen.getTargetType()))).queue();
 			return false;
 		}
@@ -1118,18 +1093,6 @@ public class Shoukan extends GameInstance<Phase> {
 		if (enemy != null) {
 			if (chosen.getTarget() != null && !Objects.equals(chosen.getTarget(), enemy)) {
 				getChannel().sendMessage(getLocale().get("error/card_taunted", chosen.getTarget(), chosen.getTarget().getIndex() + 1)).queue();
-				return false;
-			}
-
-			if (enemy.isProtected(chosen)) {
-				curr.consumeMP(1);
-				if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
-					chosen.setAvailable(false);
-				}
-
-				curr.getData().put("last_ability", chosen);
-				trigger(ON_ABILITY, side);
-				reportEvent("str/avoid_effect", true, enemy);
 				return false;
 			}
 		}
