@@ -469,6 +469,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public void addVote() {
+		voteStreak++;
 		apply(getClass(), uid, a -> {
 			a.setStreak(a.getStreak() + 1);
 			a.setLastVote(ZonedDateTime.now(ZoneId.of("GMT-3")));
