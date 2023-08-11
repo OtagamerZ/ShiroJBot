@@ -24,6 +24,7 @@ import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.*;
@@ -141,6 +142,20 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 				.toArray(Target[]::new);
 
 		if (out.length == 0) throw new TargetException();
+		return out;
+	}
+
+	public List<Evogear> equipments(Side side) {
+		if (targets.length == 0) throw new TargetException();
+
+		List<Evogear> out = Arrays.stream(targets())
+				.filter(t -> !t.skip().get())
+				.filter(t -> t.index() > -1 && t.side() == side)
+				.filter(t -> t.card() != null)
+				.flatMap(t -> t.card().getEquipments().stream())
+				.toList();
+
+		if (out.isEmpty()) throw new TargetException();
 		return out;
 	}
 
