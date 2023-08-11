@@ -1391,7 +1391,7 @@ public class Shoukan extends GameInstance<Phase> {
 							dmg = 0;
 						} else {
 							int block = target.getBlock();
-							int dodge = target.isSleeping() ? 0 : target.getDodge();
+							int dodge = target.getDodge();
 
 							if (Calc.chance(100 - source.getHitChance(), rng)) {
 								outcome = getLocale().get("str/combat_miss");

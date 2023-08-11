@@ -230,6 +230,10 @@
 			 bag.add(new Pair<>(e.getId(), e.getTier()));
 		 }
 
+		 if (bag.stream().filter(p -> p.getSecond() == 4).count() > getMaxEvogearCopies(4)) {
+			 return false;
+		 }
+
 		 bag.removeIf(p -> bag.getCount(p.getFirst()) <= getMaxEvogearCopies(p.getSecond()));
 		 return bag.isEmpty() && Utils.between(getEvogear().size(), 0, 26);
 	 }

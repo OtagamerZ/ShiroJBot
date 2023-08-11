@@ -570,6 +570,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int getDodge() {
+		if (isSleeping() || isStunned()) return 0;
+
 		int sum = base.getDodge() + (int) stats.getDodge().get() + getEquipDodge();
 		if (hand != null && getGame() != null && getGame().getArena().getField().getType() == FieldType.DUNGEON) {
 			sum = Math.min(sum, 50);
