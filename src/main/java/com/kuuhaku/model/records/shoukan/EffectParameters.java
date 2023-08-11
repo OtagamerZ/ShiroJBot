@@ -145,12 +145,12 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 		return out;
 	}
 
-	public List<Evogear> equipments(Side side) {
+	public List<Evogear> equipments(TargetType type) {
 		if (targets.length == 0) throw new TargetException();
 
 		List<Evogear> out = Arrays.stream(targets())
 				.filter(t -> !t.skip().get())
-				.filter(t -> t.index() > -1 && t.side() == side)
+				.filter(t -> t.index() > -1 && t.type() == type)
 				.filter(t -> t.card() != null)
 				.flatMap(t -> t.card().getEquipments().stream())
 				.toList();
