@@ -29,6 +29,7 @@ import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.shoukan.Source;
@@ -457,6 +458,29 @@ public interface Drawable<T extends Drawable<T>> {
 		}
 
 		return tgts.stream().sorted(Comparator.comparingInt(Senshi::getIndex)).toList();
+	}
+
+	default List<Evogear> getEquipments(Side side) {
+		return getEquipments(side, 0, 1, 2, 3, 4);
+	}
+
+	default List<Evogear> getEquipments(Side side, int... indexes) {
+		if (!(this instanceof EffectHolder<?> eh) || getIndex() == -1) return null;
+
+		boolean empower = eh.hasFlag(Flag.EMPOWERED);
+		List<Evogear> tgts = new ArrayList<>();
+		for (int idx : indexes) {
+			if (idx < 0 || idx > 4) continue;
+
+			SlotColumn slt = getHand().getGame().getSlots(side).get(idx);
+			Senshi tgt = slt.getTop();
+
+			if (tgt != null) {
+				tgts.addAll(tgt.getEquipments());
+			}
+		}
+
+		return List.copyOf(tgts);
 	}
 
 	private void addTarget(Senshi tgt, Set<Senshi> targets, boolean empower) {
