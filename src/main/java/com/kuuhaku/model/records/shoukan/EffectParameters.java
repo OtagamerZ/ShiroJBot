@@ -154,6 +154,7 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 				.filter(t -> t.index() > -1 && t.type() == type)
 				.filter(t -> t.card() != null)
 				.map(t -> t.card().getEquipments())
+				.filter(e -> !e.isEmpty())
 				.toList();
 
 		if (out.isEmpty()) throw new TargetException();
