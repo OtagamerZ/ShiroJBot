@@ -20,6 +20,7 @@ package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.TargetType;
@@ -145,14 +146,14 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 		return out;
 	}
 
-	public List<Evogear> equipments(TargetType type) {
+	public List<BondedList<Evogear>> equipments(TargetType type) {
 		if (targets.length == 0) throw new TargetException();
 
-		List<Evogear> out = Arrays.stream(targets())
+		List<BondedList<Evogear>> out = Arrays.stream(targets())
 				.filter(t -> !t.skip().get())
 				.filter(t -> t.index() > -1 && t.type() == type)
 				.filter(t -> t.card() != null)
-				.flatMap(t -> t.card().getEquipments().stream())
+				.map(t -> t.card().getEquipments())
 				.toList();
 
 		if (out.isEmpty()) throw new TargetException();
