@@ -30,7 +30,7 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS transfer_kawaipon ON account;
+DROP TRIGGER IF EXISTS transfer_kawaipon ON stashed_card;
 CREATE TRIGGER transfer_kawaipon
     BEFORE UPDATE
     ON stashed_card
