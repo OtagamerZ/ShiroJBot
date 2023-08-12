@@ -307,7 +307,6 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		g2d.drawImage(effect, 0, 0, null);
 
 		Map<String, Object> replaces = new HashMap<>();
-		replaces.put("waifu", Utils.getOr(() -> account.getCouple().getOther(id.getUid()).getName(), locale.get("str/none")));
 		replaces.put("guild", getGuild().getName());
 		replaces.put("g_rank", Utils.separate(account.getRanking()));
 		replaces.put("l_rank", Utils.separate(getRanking()));
