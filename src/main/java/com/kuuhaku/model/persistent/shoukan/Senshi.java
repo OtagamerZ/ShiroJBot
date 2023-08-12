@@ -484,10 +484,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		double mult = 1;
 		if (hand != null) {
-			if (hand.getOrigin().hasMinor(Race.UNDEAD)) {
-				mult *= 1 + (hand.getGraveyard().size() * 0.005);
-			}
-
 			if (hand.isLowLife() && hand.getOrigin().synergy() == Race.ONI) {
 				mult *= 1.1;
 			} else if (hand.getHPPrcnt() > 1 && hand.getOrigin().synergy() == Race.GHOUL) {
@@ -510,10 +506,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		double mult = 1;
 		if (hand != null) {
-			if (hand.getOrigin().hasMinor(Race.SPIRIT)) {
-				mult *= 1 + (hand.getGraveyard().size() * 0.01);
-			}
-
 			mult *= getFieldMult();
 		}
 
@@ -632,6 +624,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (isSupporting()) {
 				mult *= 0.75;
+			}
+
+			if (hand.getOrigin().hasMinor(Race.SPIRIT)) {
+				mult *= getFieldMult();
 			}
 		}
 

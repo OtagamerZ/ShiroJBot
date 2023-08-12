@@ -167,12 +167,7 @@
 	 }
 
 	 public int getMaxSenshiCopies() {
-		 int allowed = 3;
-		 if (getOrigins().hasMinor(Race.BEAST)) {
-			 allowed++;
-		 }
-
-		 return allowed;
+		 return 3;
 	 }
 
 	 public boolean validateSenshi() {
@@ -679,16 +674,7 @@
 							 return m;
 						 });
 
-				 SupplyChain<Integer> handCap = new SupplyChain<>(5)
-						 .add(c -> {
-							 if (h != null && h.getGame() != null) {
-								 if (origin.hasMinor(Race.BEAST)) {
-									 c = c + (int) Math.ceil(h.getGame().getTurn() / 2d) / 10;
-								 }
-							 }
-
-							 return c;
-						 });
+				 SupplyChain<Integer> handCap = new SupplyChain<>(5);
 
 				 int ls = 0;
 				 if (origin.major() == Race.DEMON) {

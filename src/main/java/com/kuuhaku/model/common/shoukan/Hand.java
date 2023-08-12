@@ -768,7 +768,7 @@ public class Hand {
 
 		if (!pure) {
 			if (origin.hasMinor(Race.HUMAN) && value < 0) {
-				value *= 1 - Math.min(game.getTurn() * 0.01, 0.75);
+				value *= 1 - Math.min(game.getTurn() * 0.02, 0.75);
 			}
 
 			if (origin.synergy() == Race.POSSESSED && value > 0) {
@@ -813,6 +813,18 @@ public class Hand {
 					regdeg.add(value);
 					value = 0;
 				}
+			}
+
+			if (value >= base.hp() / 5d && origin.hasMinor(Race.BEAST)) {
+				regdeg.add(value, 1);
+				value = 0;
+			}
+
+			Hand op = getOther();
+			if (op.getOrigin().hasMinor(Race.UNDEAD)) {
+				value += op.getGraveyard().parallelStream()
+						.mapToInt(d -> (d.getDmg() + d.getDfs()) / 100)
+						.sum();
 			}
 		}
 
