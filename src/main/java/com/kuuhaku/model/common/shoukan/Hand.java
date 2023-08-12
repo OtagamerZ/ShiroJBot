@@ -806,13 +806,13 @@ public class Hand {
 					return;
 				}
 			}
-		}
 
-		if (origin.major() == Race.UNDEAD) {
-			if (value > 0) return;
-			else {
-				regdeg.add(value);
-				value = 0;
+			if (origin.major() == Race.UNDEAD) {
+				if (value > 0) return;
+				else {
+					regdeg.add(value);
+					value = 0;
+				}
 			}
 		}
 
@@ -911,7 +911,7 @@ public class Hand {
 	}
 
 	public void applyVoTs() {
-		modHP(regdeg.next());
+		modHP(regdeg.next(), true);
 	}
 
 	public JSONObject getData() {
