@@ -62,12 +62,12 @@ public class OpenCommand implements Executable {
 			} else if (!drop.peekProperty(dp -> args.getString("captcha").equalsIgnoreCase(dp.getCaptcha(false)))) {
 				event.channel().sendMessage(locale.get("error/wrong_captcha")).queue();
 				return;
-			} else if (now.isBefore(acc.getLastTransfer().plusMinutes(1))) {
+			} else if (acc.getLastTransfer() != null && now.isBefore(acc.getLastTransfer().plusMinutes(1))) {
 				event.channel().sendMessage(locale.get("error/drop_lock")).queue();
 				return;
 			}
 		} catch (NullPointerException e) {
-			event.channel().sendMessage(locale.get("error/no_card")).queue();
+			event.channel().sendMessage(locale.get("error/no_drop")).queue();
 			return;
 		}
 
