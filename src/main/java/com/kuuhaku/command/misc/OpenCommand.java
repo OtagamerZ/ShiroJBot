@@ -34,6 +34,9 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 @Command(
 		name = "open",
 		category = Category.MISC
@@ -44,6 +47,7 @@ public class OpenCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
 
+		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		SingleUseReference<Drop> drop = Spawn.getSpawnedDrop(event.channel());
 		try {
 			if (!drop.isValid()) {
@@ -57,6 +61,9 @@ public class OpenCommand implements Executable {
 				return;
 			} else if (!drop.peekProperty(dp -> args.getString("captcha").equalsIgnoreCase(dp.getCaptcha(false)))) {
 				event.channel().sendMessage(locale.get("error/wrong_captcha")).queue();
+				return;
+			} else if (now.isBefore(acc.getLastTransfer().plusMinutes(1))) {
+				event.channel().sendMessage(locale.get("error/drop_lock")).queue();
 				return;
 			}
 		} catch (NullPointerException e) {

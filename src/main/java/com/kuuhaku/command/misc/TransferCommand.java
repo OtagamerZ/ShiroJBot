@@ -78,7 +78,7 @@ public class TransferCommand implements Executable {
 
 			try {
 				Utils.confirm(locale.get("question/transfer", Utils.separate(value) + " ₵R", target.getName()), event.channel(), w -> {
-							acc.consumeCR(value, "Transferred to " + target.getName());
+							acc.transfer(value, target.getId());
 							DAO.find(Account.class, target.getId()).addCR(value, "Received from " + event.user().getName());
 
 							event.channel().sendMessage(locale.get("success/transfer")).queue();
@@ -137,7 +137,7 @@ public class TransferCommand implements Executable {
 							selected.save();
 
 							event.channel().sendMessage(locale.get("success/transfer")).queue();
-					return true;
+							return true;
 						}, event.user()
 				);
 			} catch (InterruptedException | ExecutionException ignore) {

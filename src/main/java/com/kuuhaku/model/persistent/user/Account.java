@@ -118,6 +118,9 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Column(name = "last_vote")
 	private ZonedDateTime lastVote;
 
+	@Column(name = "last_transfer")
+	private ZonedDateTime lastTransfer;
+
 	@Column(name = "vote_streak", nullable = false)
 	private int voteStreak;
 
@@ -209,6 +212,23 @@ public class Account extends DAO<Account> implements Blacklistable {
 			}
 
 			a.addTransaction(value, false, reason, Currency.CR);
+		});
+	}
+
+	public void transfer(long value, String uid) {
+		if (value <= 0) return;
+
+		Account target = DAO.find(Account.class, uid);
+		apply(getClass(), uid, a -> {
+			a.setLastTransfer(ZonedDateTime.now(ZoneId.of("GMT-3")));
+			a.setBalance(a.getBalance() - value);
+			if (a.getBalance() < 0) {
+				a.setDebit(-a.getBalance() + a.getDebit());
+				a.setBalance(0);
+			}
+
+			target.addCR(value, "Received from " + target.getName());
+			a.addTransaction(value, false, "Transferred to " + target.getName(), Currency.CR);
 		});
 	}
 
@@ -498,6 +518,14 @@ public class Account extends DAO<Account> implements Blacklistable {
 		}
 
 		return voteStreak;
+	}
+
+	public ZonedDateTime getLastTransfer() {
+		return lastTransfer;
+	}
+
+	public void setLastTransfer(ZonedDateTime lastTransfer) {
+		this.lastTransfer = lastTransfer;
 	}
 
 	public int getRanking() {
