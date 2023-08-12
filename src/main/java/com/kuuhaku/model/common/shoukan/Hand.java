@@ -300,7 +300,7 @@ public class Hand {
 									Utils.shufflePairs(f.getModifiers(), game.getRng());
 								} else if (d instanceof Senshi s && origin.hasMinor(Race.DIVINITY) && !s.hasEffect()) {
 									s.getStats().setSource(
-											Senshi.getRandom(game.getRng(), false,
+											Senshi.getRandom(game.getRng(),
 													"WHERE effect IS NOT NULL",
 													"AND mana = " + s.getBase().getMana()
 											)
@@ -322,7 +322,7 @@ public class Hand {
 								Utils.shufflePairs(f.getModifiers(), game.getRng());
 							} else if (d instanceof Senshi s && origin.hasMinor(Race.DIVINITY) && !s.hasEffect()) {
 								s.getStats().setSource(
-										Senshi.getRandom(game.getRng(), false,
+										Senshi.getRandom(game.getRng(),
 												"WHERE effect IS NOT NULL",
 												"AND mana = " + s.getBase().getMana()
 										)
