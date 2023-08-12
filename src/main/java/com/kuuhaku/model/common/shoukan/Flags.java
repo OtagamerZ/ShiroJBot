@@ -50,11 +50,11 @@ public class Flags implements Cloneable {
 	}
 
 	public boolean has(Flag flag) {
-		return Utils.equalsAny(permanent, flag) || Utils.equalsAny(flags, flag);
+		return Utils.equalsAny(flag, permanent) || Utils.equalsAny(flag, flags);
 	}
 
 	public boolean pop(Flag flag) {
-		return Utils.equalsAny(permanent, flag) || flags.values().stream().anyMatch(e -> e.remove(flag));
+		return Utils.equalsAny(flag, permanent) || flags.values().stream().anyMatch(e -> e.remove(flag));
 	}
 
 	public void clearTemp() {
