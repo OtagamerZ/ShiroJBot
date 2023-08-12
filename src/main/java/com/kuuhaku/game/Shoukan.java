@@ -1235,6 +1235,10 @@ public class Shoukan extends GameInstance<Phase> {
 			dmgMult /= 2;
 		}
 
+		if (target.isSleeping()) {
+			dmgMult *= 1.1;
+		}
+
 		boolean win = false;
 		String outcome = getLocale().get("str/combat_skip");
 		try {
