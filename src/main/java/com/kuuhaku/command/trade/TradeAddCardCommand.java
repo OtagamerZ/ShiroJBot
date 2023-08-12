@@ -82,9 +82,11 @@ public class TradeAddCardCommand implements Executable {
                     .thenAccept(sc -> {
                         if (sc == null) {
                             event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+                            success.complete(false);
                             return;
                         } else if (sc.isAccountBound()) {
                             event.channel().sendMessage(locale.get("error/card_account_bound")).queue();
+                            success.complete(false);
                             return;
                         }
 
