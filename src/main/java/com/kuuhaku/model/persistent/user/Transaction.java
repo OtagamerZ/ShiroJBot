@@ -41,7 +41,7 @@ public class Transaction extends DAO<Transaction> {
 	@Column(name = "input", nullable = false)
 	private boolean input;
 
-	@Column(name = "reason", nullable = false)
+	@Column(name = "reason", nullable = false, columnDefinition = "TEXT")
 	private String reason;
 
 	@Enumerated(EnumType.STRING)

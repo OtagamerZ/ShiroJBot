@@ -1457,18 +1457,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return DAO.find(Senshi.class, Utils.getRandomEntry(rng, ids));
 	}
 
-	public static Senshi getRandom(RandomGenerator rng, boolean allowFusion, String... filters) {
+	public static Senshi getRandom(RandomGenerator rng, String... filters) {
 		XStringBuilder query = new XStringBuilder("SELECT card_id FROM senshi");
 		for (String f : filters) {
 			query.appendNewLine(f);
-		}
-
-		if (!allowFusion) {
-			if (filters.length == 0) {
-				query.appendNewLine("WHERE NOT has(tags, 'FUSION')");
-			} else {
-				query.appendNewLine("AND NOT has(tags, 'FUSION')");
-			}
 		}
 
 		query.appendNewLine(" ORDER BY card_id");

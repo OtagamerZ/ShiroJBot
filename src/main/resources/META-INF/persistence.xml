@@ -54,7 +54,6 @@
         <class>com.kuuhaku.model.persistent.user.VoiceData</class>
         <class>com.kuuhaku.model.persistent.user.StashedCard</class>
         <class>com.kuuhaku.model.persistent.user.AccessToken</class>
-        <class>com.kuuhaku.model.persistent.user.Couple</class>
         <class>com.kuuhaku.model.persistent.user.Title</class>
         <class>com.kuuhaku.model.persistent.user.AccountTitle</class>
         <class>com.kuuhaku.model.persistent.user.LocalizedTitle</class>
