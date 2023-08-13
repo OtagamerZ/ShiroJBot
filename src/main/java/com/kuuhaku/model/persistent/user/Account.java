@@ -219,7 +219,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 		if (value <= 0) return;
 
 		Account target = DAO.find(Account.class, uid);
-		apply(getClass(), uid, a -> {
+		apply(getClass(), this.uid, a -> {
 			a.setLastTransfer(ZonedDateTime.now(ZoneId.of("GMT-3")));
 			a.setBalance(a.getBalance() - value);
 			if (a.getBalance() < 0) {
