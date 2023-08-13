@@ -1084,7 +1084,7 @@ public class Hand {
 
 			if (d instanceof EffectHolder<?> e && e.hasFlag(Flag.EMPOWERED)) {
 				boolean legacy = userDeck.getStyling().getFrame().isLegacy();
-				BufferedImage emp = IO.getResourceAsImage("shoukan/frames/" + (legacy ? "old" : "new") + "/empowered.png");
+				BufferedImage emp = IO.getResourceAsImage("shoukan/frames/state/" + (legacy ? "old" : "new") + "/empowered.png");
 
 				g2d.drawImage(emp, x, y, null);
 			}
