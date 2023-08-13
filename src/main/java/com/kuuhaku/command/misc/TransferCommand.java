@@ -60,10 +60,10 @@ public class TransferCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		User target = event.users(0);
 		if (target == null) {
-			event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+			event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
 			return;
 		} else if (target.equals(event.user())) {
-			event.channel().sendMessage(locale.get("error/self_not_allowed", 0)).queue();
+			event.channel().sendMessage(locale.get("error/self_not_allowed")).queue();
 			return;
 		}
 

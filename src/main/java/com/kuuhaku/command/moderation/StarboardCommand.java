@@ -55,7 +55,7 @@ public class StarboardCommand implements Executable {
 		} else if (args.has("channel")) {
 			GuildChannel channel = event.channels(0);
 			if (channel == null) {
-				event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+				event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
 				return;
 			}
 

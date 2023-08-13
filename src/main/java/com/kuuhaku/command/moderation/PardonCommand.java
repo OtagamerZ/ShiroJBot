@@ -57,7 +57,7 @@ public class PardonCommand implements Executable {
 		if (args.has("user")) {
 			member = event.members(0);
 			if (member == null) {
-				event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+				event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
 				return;
 			}
 		} else {

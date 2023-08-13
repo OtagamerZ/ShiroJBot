@@ -58,7 +58,7 @@ public class SetKawaiponCommand implements Executable {
 		if (args.has("channel")) {
 			channel = event.channels(0);
 			if (channel == null) {
-				event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+				event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
 				return;
 			}
 		} else {

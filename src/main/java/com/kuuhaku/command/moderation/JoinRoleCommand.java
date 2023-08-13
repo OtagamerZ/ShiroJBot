@@ -53,7 +53,7 @@ public class JoinRoleCommand implements Executable {
 		} else if (args.has("role")) {
 			Role role = event.roles(0);
 			if (role == null) {
-				event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
+				event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
 				return;
 			}
 
