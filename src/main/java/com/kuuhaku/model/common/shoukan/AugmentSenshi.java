@@ -32,6 +32,9 @@ public class AugmentSenshi extends Senshi implements Proxy<Senshi> {
 		super(self.getId(), self.getCard(), self.getRace(), self.getBase());
 
 		this.original = s;
+		while (!self.getEquipments().isEmpty()) {
+			getEquipments().add(self.getEquipments().removeFirst());
+		}
 	}
 
 	@Override
