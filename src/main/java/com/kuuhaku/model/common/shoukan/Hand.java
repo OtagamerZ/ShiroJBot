@@ -813,7 +813,7 @@ public class Hand {
 				value = 0;
 			}
 
-			if (value >= base.hp() / 5d && origin.hasMinor(Race.BEAST)) {
+			if (value <= -base.hp() / 5d && origin.hasMinor(Race.BEAST)) {
 				regdeg.add(value, 1);
 				value = 0;
 			}
