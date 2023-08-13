@@ -62,6 +62,9 @@ public class TransferCommand implements Executable {
 		if (target == null) {
 			event.channel().sendMessage(locale.get("error/invalid_mention", 0)).queue();
 			return;
+		} else if (target.equals(event.user())) {
+			event.channel().sendMessage(locale.get("error/self_not_allowed", 0)).queue();
+			return;
 		}
 
 		if (args.has("value")) {
