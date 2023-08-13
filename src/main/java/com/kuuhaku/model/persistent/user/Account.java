@@ -228,6 +228,8 @@ public class Account extends DAO<Account> implements Blacklistable {
 			}
 
 			target.addCR(value, "Received from " + target.getName());
+			target.save();
+
 			a.addTransaction(value, false, "Transferred to " + target.getName(), Currency.CR);
 		});
 	}
