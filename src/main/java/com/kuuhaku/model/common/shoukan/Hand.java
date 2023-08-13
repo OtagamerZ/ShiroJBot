@@ -1082,7 +1082,7 @@ public class Hand {
 				});
 			}
 
-			if ((d instanceof Senshi s && s.hasFlag(Flag.EMPOWERED)) || (d instanceof Evogear e && e.hasFlag(Flag.EMPOWERED))) {
+			if (d instanceof EffectHolder<?> e && e.hasFlag(Flag.EMPOWERED)) {
 				boolean legacy = userDeck.getStyling().getFrame().isLegacy();
 				BufferedImage emp = IO.getResourceAsImage("shoukan/frames/" + (legacy ? "old" : "new") + "/empowered.png");
 
