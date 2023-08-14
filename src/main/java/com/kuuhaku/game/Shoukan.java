@@ -2337,7 +2337,7 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						if (cards.getOptions().isEmpty()) {
-							getChannel().sendMessage(getString("error/pending_choice")).queue();
+							getChannel().sendMessage(getString("error/no_valid_cards")).queue();
 							return;
 						}
 
