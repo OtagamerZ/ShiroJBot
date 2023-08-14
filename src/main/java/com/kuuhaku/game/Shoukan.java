@@ -2387,6 +2387,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Hand curr = getCurrent();
 		trigger(ON_TURN_END, curr.getSide());
+		curr.applyVoTs();
 		curr.flushDiscard();
 
 		if (arcade == Arcade.DECK_ROYALE) {
@@ -2451,7 +2452,6 @@ public class Shoukan extends GameInstance<Phase> {
 		setPhase(Phase.PLAN);
 		curr = getCurrent();
 		curr.modMP(curr.getBase().mpGain().get());
-		curr.applyVoTs();
 		curr.reduceOriginCooldown(1);
 		curr.getStats().expireMods();
 
