@@ -74,7 +74,7 @@ tasks.withType(JavaCompile).configureEach {
 dependencies {
 	//Core
 	implementation group: "net.dv8tion", name: "JDA", version: "5.0.0-beta.10"
-	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "ca0e5580f2"
+	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "59d0d0501c"
 	implementation group: "com.github.ygimenez", name: "Simple-Moshi", version: "1.1.0"
 
 	//Database
