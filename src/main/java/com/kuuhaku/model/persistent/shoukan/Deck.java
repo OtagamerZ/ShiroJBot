@@ -655,8 +655,6 @@
 						 .add(m -> {
 							 if (origin.major() == Race.DEMON) {
 								 m /= 2;
-							 } else if (origin.major() == Race.DIVINITY) {
-								 m = Calc.round(m * (1 + getMetaDivergence() / 2));
 							 }
 
 							 if (h != null && h.getGame() != null) {
