@@ -2353,6 +2353,7 @@ public class Shoukan extends GameInstance<Phase> {
 									if (tVals.isEmpty() || sVals.isEmpty()) return;
 
 									Evogear chosen = (Evogear) curr.getCards().removeFirst(d -> d instanceof Evogear e && e.SERIAL == Long.parseLong((String) sVals.get(0)));
+									if (chosen == null) return;
 
 									curr.consumeMP(chosen.getMPCost());
 									curr.consumeHP(chosen.getHPCost());
