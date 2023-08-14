@@ -2345,7 +2345,7 @@ public class Shoukan extends GameInstance<Phase> {
 								.setEphemeral(true)
 								.sendMessage(getString("str/prepare_contingency"));
 
-						new ButtonizeHelper(true)
+						ButtonizeHelper bh = new ButtonizeHelper(true)
 								.setCanInteract(u -> u.getId().equals(curr.getUid()))
 								.addAction(Utils.parseEmoji(Constants.ACCEPT), bw -> {
 									List<?> tVals = bw.getDropdownValues().get("condition");
@@ -2366,12 +2366,11 @@ public class Shoukan extends GameInstance<Phase> {
 
 									reportEvent("str/used_contingency", true, curr.getName());
 								})
-								.setOnFinalization(m -> curr.allowAction())
-								.apply(mcr)
-								.addComponents(
-										ActionRow.of(conditions),
-										ActionRow.of(cards.build())
-								).queue();
+								.setOnFinalization(m -> curr.allowAction());
+
+						bh.apply(mcr).addComponents(ActionRow.of(conditions), ActionRow.of(cards.build())).queue(
+								s -> Pages.buttonize(s, bh)
+						);
 
 						curr.preventAction();
 					});
