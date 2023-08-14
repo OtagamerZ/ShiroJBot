@@ -62,14 +62,14 @@ $$;
 
 DROP TRIGGER IF EXISTS prevent_duplicate ON kawaipon_card;
 CREATE TRIGGER prevent_duplicate
-    BEFORE INSERT OR UPDATE
+    AFTER INSERT OR UPDATE
     ON kawaipon_card
     FOR EACH ROW
 EXECUTE PROCEDURE t_prevent_duplicate();
 
 DROP TRIGGER IF EXISTS prevent_duplicate ON stashed_card;
 CREATE TRIGGER prevent_duplicate
-    BEFORE DELETE
+    AFTER DELETE
     ON stashed_card
     FOR EACH ROW
 EXECUTE PROCEDURE t_prevent_duplicate();

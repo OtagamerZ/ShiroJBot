@@ -128,10 +128,7 @@ public class TransferCommand implements Executable {
 
 			try {
 				StashedCard selected = select.get();
-				if (selected == null) {
-					event.channel().sendMessage(locale.get("error/invalid_value")).queue();
-					return;
-				}
+				if (selected == null) return;
 
 				Utils.confirm(locale.get("question/transfer", selected, target.getName()), event.channel(), w -> {
 							selected.setKawaipon(DAO.find(Kawaipon.class, target.getId()));
