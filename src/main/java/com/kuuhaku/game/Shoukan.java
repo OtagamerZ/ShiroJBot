@@ -2449,7 +2449,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public String getString(String key, Object... args) {
 		String out = super.getString(key, args);
-		if (out.equals(key)) {
+		if (out.isBlank() || out.equals(key)) {
 			return LocalizedString.get(getLocale(), key, "").formatted(args);
 		}
 
