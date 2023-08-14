@@ -2450,10 +2450,10 @@ public class Shoukan extends GameInstance<Phase> {
 	public String getString(String key, Object... args) {
 		String out = super.getString(key, args);
 		if (out.isBlank() || out.equals(key)) {
-			return LocalizedString.get(getLocale(), key, "").formatted(args);
+			out = LocalizedString.get(getLocale(), key, "").formatted(args);
 		}
 
-		return out;
+		return Utils.getOr(out, key);
 	}
 
 	public void send(Drawable<?> source, String text) {
