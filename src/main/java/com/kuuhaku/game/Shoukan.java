@@ -2347,12 +2347,18 @@ public class Shoukan extends GameInstance<Phase> {
 									List<?> sVals = bw.getDropdownValues().get("spells");
 									if (tVals.isEmpty() || sVals.isEmpty()) return;
 
+									Evogear chosen = (Evogear) curr.getCards().removeFirst(d -> d instanceof Evogear e && e.SERIAL == Long.parseLong((String) sVals.get(0)));
+
+									curr.consumeMP(chosen.getMPCost());
+									curr.consumeHP(chosen.getHPCost());
+									curr.consumeSC(chosen.getSCCost());
+									curr.setOriginCooldown(5);
+
 									curr.setContingency(new Contingency(
-											(Evogear) curr.getCards().removeFirst(d -> d instanceof Evogear e && e.SERIAL == Long.parseLong((String) sVals.get(0))),
+											chosen,
 											ContingencyTrigger.valueOf((String) tVals.get(0))
 									));
 
-									curr.setOriginCooldown(5);
 									reportEvent("str/used_contingency", true, curr.getName());
 								})
 								.setOnFinalization(m -> curr.allowAction())
