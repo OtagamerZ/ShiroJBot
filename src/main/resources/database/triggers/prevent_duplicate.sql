@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION t_prevent_duplicate_kc()
+CREATE OR REPLACE FUNCTION t_prevent_duplicate()
     RETURNS TRIGGER
     LANGUAGE plpgsql
 AS
@@ -60,16 +60,16 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS prevent_duplicate_kc ON kawaipon_card;
-CREATE TRIGGER prevent_duplicate_kc
+DROP TRIGGER IF EXISTS prevent_duplicate ON kawaipon_card;
+CREATE TRIGGER prevent_duplicate
     BEFORE INSERT OR UPDATE
     ON kawaipon_card
     FOR EACH ROW
-EXECUTE PROCEDURE t_prevent_duplicate_kc();
+EXECUTE PROCEDURE t_prevent_duplicate();
 
-DROP TRIGGER IF EXISTS prevent_duplicate_kc ON stashed_card;
-CREATE TRIGGER prevent_duplicate_kc
+DROP TRIGGER IF EXISTS prevent_duplicate ON stashed_card;
+CREATE TRIGGER prevent_duplicate
     BEFORE DELETE
     ON stashed_card
     FOR EACH ROW
-EXECUTE PROCEDURE t_prevent_duplicate_kc();
+EXECUTE PROCEDURE t_prevent_duplicate();

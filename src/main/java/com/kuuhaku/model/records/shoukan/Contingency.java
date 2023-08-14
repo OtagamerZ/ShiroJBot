@@ -16,30 +16,24 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.shoukan;
+package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.model.common.shoukan.Hand;
+import com.kuuhaku.model.enums.shoukan.ContingencyTrigger;
+import com.kuuhaku.model.enums.shoukan.Phase;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 
-public class TrapSpell extends PlaceableEvogear {
-	public TrapSpell(Evogear e) {
-		super(e);
-		setFlipped(true);
-	}
+public record Contingency(Evogear card, ContingencyTrigger trigger) {
+	public boolean check() {
+		Hand h = card.getHand();
+		Shoukan game = h.getGame();
 
-	@Override
-	public void setFlipped(boolean flipped) {
-		super.setFlipped(flipped);
-
-		Shoukan game = getHand().getGame();
-		if (!flipped && !game.isRestoring()) {
-			game.getChannel().sendMessage(game.getString("str/trap_disarm", getOriginal())).queue();
-			getHand().getGraveyard().add(this);
-		}
-	}
-
-	@Override
-	public boolean canAttack() {
-		return false;
+		return switch (trigger) {
+			case HP_LOW -> h.isLowLife();
+			case HP_CRITICAL -> h.isCritical();
+			case COMBAT_PHASE -> game.getCurrentSide() != h.getSide() && game.getPhase() == Phase.COMBAT;
+			case DEFEATED -> h.getHP() == 0;
+		};
 	}
 }

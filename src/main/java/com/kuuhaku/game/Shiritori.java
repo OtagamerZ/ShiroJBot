@@ -107,7 +107,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 		try {
 			if (scanWord(word)) {
 				if (used.contains(word)) {
-					getChannel().sendMessage(getLocale().get("str/game_out_shiritori", "<@" + inGame.get() + ">")).queue();
+					getChannel().sendMessage(getString("str/game_out_shiritori", "<@" + inGame.get() + ">")).queue();
 					inGame.remove();
 
 					if (inGame.size() == 1) {
@@ -122,10 +122,10 @@ public class Shiritori extends GameInstance<NullPhase> {
 				if (current != null) {
 					String end = current.substring(current.length() - 2);
 					if (Utils.equalsAny(end, blacklisted)) {
-						getChannel().sendMessage(getLocale().get("error/blacklisted_ending")).queue();
+						getChannel().sendMessage(getString("error/blacklisted_ending")).queue();
 						return;
 					} else if (!end.equals(word.substring(0, 2))) {
-						getChannel().sendMessage(getLocale().get("error/invalid_word")).queue();
+						getChannel().sendMessage(getString("error/invalid_word")).queue();
 						return;
 					}
 				}
@@ -134,7 +134,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 				nextTurn();
 			}
 		} catch (FileNotFoundException e) {
-			getChannel().sendMessage(getLocale().get("error/dict_not_found")).queue();
+			getChannel().sendMessage(getString("error/dict_not_found")).queue();
 			close(GameReport.DICT_NOT_FOUND);
 		}
 	}
@@ -172,7 +172,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 	}
 
 	private void reportEvent(String msg, Object... args) {
-		getChannel().sendMessage(getLocale().get(msg, args))
+		getChannel().sendMessage(getString(msg, args))
 				.queue(m -> {
 					if (message != null) {
 						GuildMessageChannel channel = Main.getApp().getMessageChannelById(message.getFirst());
@@ -188,7 +188,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
-		getChannel().sendMessage(getLocale().get(msg, args))
+		getChannel().sendMessage(getString(msg, args))
 				.queue(m -> {
 					if (message != null) {
 						GuildMessageChannel channel = Main.getApp().getMessageChannelById(message.getFirst());
@@ -209,9 +209,9 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 		if (getTurn() >= 50) {
 			if (getTurn() == 50) {
-				getChannel().sendMessage(getLocale().get("alert/shiritori_sudden_death")).queue();
+				getChannel().sendMessage(getString("alert/shiritori_sudden_death")).queue();
 				setTimeout(turn -> {
-					getChannel().sendMessage(getLocale().get("str/game_wo_alt", "<@" + inGame.get() + ">", "<@" + inGame.peekNext() + ">")).queue();
+					getChannel().sendMessage(getString("str/game_wo_alt", "<@" + inGame.get() + ">", "<@" + inGame.peekNext() + ">")).queue();
 					inGame.remove();
 
 					if (inGame.size() == 1) {

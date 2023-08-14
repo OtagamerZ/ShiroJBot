@@ -1078,7 +1078,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 								if (game.activateProxy(card, params)) {
 									triggered.add(p.getId());
-									game.getChannel().sendMessage(game.getLocale().get("str/trap_activation", card)).queue();
+									game.getChannel().sendMessage(game.getString("str/trap_activation", card)).queue();
 								}
 							}
 						}
@@ -1097,7 +1097,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (hasEffect() && getEffect().contains(trigger.name())) {
 				if (isStunned() && Calc.chance(25, getGame().getRng())) {
 					if (!global) {
-						game.getChannel().sendMessage(game.getLocale().get("str/effect_stunned", this)).queue();
+						game.getChannel().sendMessage(game.getString("str/effect_stunned", this)).queue();
 					}
 				} else {
 					CachedScriptManager csm = getCSM();
@@ -1156,19 +1156,19 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					return false;
 				}
 
-				game.getChannel().sendMessage(game.getLocale().get("error/target", game.getLocale().get("str/target_" + type))).queue();
+				game.getChannel().sendMessage(game.getString("error/target", game.getString("str/target_" + type))).queue();
 			}
 
 			return false;
 		} catch (ActivationException e) {
 			if (e instanceof SelectionException && trigger != ON_ACTIVATE) return false;
 
-			game.getChannel().sendMessage(game.getLocale().get("error/activation", game.getString(e.getMessage()))).queue();
+			game.getChannel().sendMessage(game.getString("error/activation", game.getString(e.getMessage()))).queue();
 			return false;
 		} catch (Exception e) {
 			Drawable<?> source = Utils.getOr(stats.getSource(), this);
 
-			game.getChannel().sendMessage(game.getLocale().get("error/effect")).queue();
+			game.getChannel().sendMessage(game.getString("error/effect")).queue();
 			Constants.LOGGER.warn("Failed to execute " + this + " effect\n" + ("/* " + source + " */\n" + getEffect()), e);
 			return false;
 		} finally {
@@ -1255,7 +1255,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		} else if (hasCharm(Charm.SHIELD, true)) {
 			blocked.add(source);
 			Shoukan game = getGame();
-			game.getChannel().sendMessage(game.getLocale().get("str/spell_shield", this)).queue();
+			game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
 			return true;
 		}
 

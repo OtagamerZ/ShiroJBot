@@ -129,6 +129,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 		return locale;
 	}
 
+	public String getString(String key, Object... args) {
+		return locale.get(key, args);
+	}
+
 	public String[] getPlayers() {
 		return players;
 	}

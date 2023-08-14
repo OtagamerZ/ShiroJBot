@@ -37,6 +37,7 @@ import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.BaseValues;
+import com.kuuhaku.model.records.shoukan.Contingency;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.*;
@@ -140,7 +141,7 @@ public class Hand {
 
 		if (d instanceof Senshi s) {
 			if (getGame().getCurrentSide() != getSide() && Calc.chance(s.getDodge() / 2d, getGame().getRng())) {
-				getGame().getChannel().sendMessage(getGame().getLocale().get("str/avoid_destruction", s)).queue();
+				getGame().getChannel().sendMessage(getGame().getString("str/avoid_destruction", s)).queue();
 				return false;
 			} else if (s.hasFlag(Flag.NO_DEATH, true) || s.hasCharm(Charm.WARDING, true)) {
 				return false;
@@ -229,6 +230,7 @@ public class Hand {
 
 	private Origin origin;
 	private BaseValues base;
+	private Contingency contingency;
 	private int hp;
 	private int mp;
 	private int originHash;
@@ -238,6 +240,7 @@ public class Hand {
 	private transient String defeat;
 	private transient int hpDelta = 0;
 	private transient int mpDelta = 0;
+	private transient boolean preventAction = false;
 
 	@Transient
 	private int state = 0b100;
@@ -732,6 +735,14 @@ public class Hand {
 		return base;
 	}
 
+	public Contingency getContingency() {
+		return contingency;
+	}
+
+	public void setContingency(Contingency contingency) {
+		this.contingency = contingency;
+	}
+
 	public String getName() {
 		if (name == null) {
 			name = Utils.getOr(DAO.find(Account.class, getUid()).getName(), "???");
@@ -754,7 +765,6 @@ public class Hand {
 
 	public void modHP(double value, boolean pure) {
 		if (value == 0) return;
-		else if (origin.major() == Race.UNDEAD && value > 0) return;
 		else if (game.getArcade() == Arcade.OVERCHARGE) {
 			value *= Math.min(0.5 + 0.5 * (Math.ceil(game.getTurn() / 2d) / 10), 1);
 		} else if (game.getArcade() == Arcade.DECAY) {
@@ -769,7 +779,7 @@ public class Hand {
 
 		if (!pure) {
 			if (origin.hasMinor(Race.HUMAN) && value < 0) {
-				value *= 1 - Math.min(game.getTurn() * 0.02, 0.75);
+				value *= 1 - Math.min(game.getTurn() * 0.01, 0.75);
 			}
 
 			if (origin.synergy() == Race.POSSESSED && value > 0) {
@@ -807,22 +817,13 @@ public class Hand {
 					return;
 				}
 			}
+		}
 
-			if (origin.major() == Race.UNDEAD) {
+		if (origin.major() == Race.UNDEAD) {
+			if (value > 0) return;
+			else {
 				regdeg.add(value);
 				value = 0;
-			}
-
-			if (value <= -base.hp() / 5d && origin.hasMinor(Race.BEAST)) {
-				regdeg.add(value, 1);
-				value = 0;
-			}
-
-			Hand op = getOther();
-			if (op.getOrigin().hasMinor(Race.UNDEAD)) {
-				value += op.getGraveyard().parallelStream()
-						.mapToInt(d -> (d.getDmg() + d.getDfs()) / 100)
-						.sum();
 			}
 		}
 
@@ -916,18 +917,6 @@ public class Hand {
 		return mpDelta;
 	}
 
-	public RegDeg getRegDeg() {
-		return regdeg;
-	}
-
-	public void applyVoTs() {
-		modHP(regdeg.next(), true);
-	}
-
-	public JSONObject getData() {
-		return data;
-	}
-
 	public List<Drawable<?>> consumeSC(int value) {
 		List<Drawable<?>> consumed = new ArrayList<>();
 
@@ -940,6 +929,24 @@ public class Hand {
 		}
 
 		return consumed;
+	}
+
+	public boolean canPay(Drawable<?> card) {
+		return getMP() >= card.getMPCost()
+			   && getHP() >= card.getHPCost()
+			   && discard.size() >= card.getSCCost();
+	}
+
+	public RegDeg getRegDeg() {
+		return regdeg;
+	}
+
+	public void applyVoTs() {
+		modHP(regdeg.next(), true);
+	}
+
+	public JSONObject getData() {
+		return data;
 	}
 
 	public Account getAccount() {
@@ -1082,9 +1089,9 @@ public class Hand {
 				});
 			}
 
-			if (d instanceof EffectHolder<?> e && e.hasFlag(Flag.EMPOWERED)) {
+			if ((d instanceof Senshi s && s.hasFlag(Flag.EMPOWERED)) || (d instanceof Evogear e && e.hasFlag(Flag.EMPOWERED))) {
 				boolean legacy = userDeck.getStyling().getFrame().isLegacy();
-				BufferedImage emp = IO.getResourceAsImage("shoukan/frames/state/" + (legacy ? "old" : "new") + "/empowered.png");
+				BufferedImage emp = IO.getResourceAsImage("shoukan/frames/" + (legacy ? "old" : "new") + "/empowered.png");
 
 				g2d.drawImage(emp, x, y, null);
 			}
@@ -1164,7 +1171,7 @@ public class Hand {
 
 		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFiles(FileUpload.fromData(IO.getBytes(renderChoices(), "png"), "choices.png"))));
 
-		game.getChannel().sendMessage(game.getLocale().get("str/selection_sent")).queue();
+		game.getChannel().sendMessage(game.getString("str/selection_sent")).queue();
 		try {
 			return selection.getThird().thenApply(d -> {
 				msg.delete().queue(null, Utils::doNothing);
@@ -1187,7 +1194,7 @@ public class Hand {
 		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 60));
 		g2d.translate(0, 100);
 
-		String str = game.getLocale().get("str/select_a_card");
+		String str = game.getString("str/select_a_card");
 		Graph.drawOutlinedString(g2d, str,
 				bi.getWidth() / 2 - g2d.getFontMetrics().stringWidth(str) / 2, -10,
 				6, Color.BLACK
@@ -1225,7 +1232,15 @@ public class Hand {
 	}
 
 	public boolean selectionPending() {
-		return selection != null;
+		return selection != null || preventAction;
+	}
+
+	public void preventAction() {
+		preventAction = true;
+	}
+
+	public void allowAction() {
+		preventAction = false;
 	}
 
 	@Override
