@@ -2308,7 +2308,7 @@ public class Shoukan extends GameInstance<Phase> {
 						reportEvent("str/spirit_synth", true, curr.getName());
 					});
 				} else if (curr.getOrigin().major() == Race.DIVINITY) {
-					buttons.put(Utils.parseEmoji("�"), w -> {
+					buttons.put(Utils.parseEmoji("\uFFFD"), w -> {
 						if (curr.selectionPending()) {
 							getChannel().sendMessage(getString("error/pending_choice")).queue();
 							return;
