@@ -175,19 +175,19 @@ public class Trade {
     public void accept() {
         left.addCR(rightValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
         left.consumeCR(leftValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
-        DAO.apply("""
-                UPDATE StashedCard sc
-                SET kawaipon = ?1
+        DAO.applyNative("""
+                UPDATE stashed_card sc
+                SET kawaipon_uid = ?1
                 WHERE sc.id IN ?2
-                """, left.getKawaipon(), rightOffer);
+                """, left.getUid(), rightOffer);
 
         right.addCR(leftValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
         right.consumeCR(rightValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
-        DAO.apply("""    
-                UPDATE StashedCard sc
-                SET kawaipon = ?1
+        DAO.applyNative("""    
+                UPDATE stashed_card sc
+                SET kawaipon_uid = ?1
                 WHERE sc.id IN ?2
-                """, right.getKawaipon(), leftOffer);
+                """, right.getUid(), leftOffer);
 
         for (String i : rightItems) {
             int amount = rightItems.getCount(i);

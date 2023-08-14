@@ -62,7 +62,7 @@ $$;
 
 DROP TRIGGER IF EXISTS prevent_duplicate ON kawaipon_card;
 CREATE TRIGGER prevent_duplicate
-    AFTER INSERT OR UPDATE
+    AFTER UPDATE
     ON kawaipon_card
     FOR EACH ROW
 EXECUTE PROCEDURE t_prevent_duplicate();
