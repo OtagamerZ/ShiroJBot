@@ -2308,68 +2308,68 @@ public class Shoukan extends GameInstance<Phase> {
 						reportEvent("str/spirit_synth", true, curr.getName());
 					});
 				} else if (curr.getOrigin().major() == Race.DIVINITY) {
-					buttons.put(Utils.parseEmoji("\uFFFD"), w -> {
-						if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_choice")).queue();
-							return;
-						}
-
-						StringSelectMenu conditions = StringSelectMenu.create("condition")
-								.setPlaceholder(getString("str/select_trigger"))
-								.setRequiredRange(1, 1)
-								.addOptions(
-										SelectOption.of(getString("condition/hp_low"), HP_LOW.name()),
-										SelectOption.of(getString("condition/hp_critical"), HP_CRITICAL.name()),
-										SelectOption.of(getString("condition/combat_phase"), COMBAT_PHASE.name()),
-										SelectOption.of(getString("condition/defeated"), DEFEATED.name())
-								).build();
-
-						StringSelectMenu.Builder cards = StringSelectMenu.create("spells")
-								.setPlaceholder(getString("str/select_spell"))
-								.setRequiredRange(1, 1);
-
-						for (Drawable<?> d : curr.getCards()) {
-							if (d.isAvailable() && d instanceof Evogear e && !e.isPassive()) {
-								if (e.isSpell() && e.getTargetType() == TargetType.NONE && curr.canPay(e)) {
-									cards.addOption((curr.getCards().indexOf(e) + 1) + " - " + e, String.valueOf(e.SERIAL));
-								}
-							}
-						}
-
-						WebhookMessageCreateAction<Message> mcr = Objects.requireNonNull(w.getHook())
-								.setEphemeral(true)
-								.sendMessage(getString("str/prepare_contingency"));
-
-						new ButtonizeHelper(true)
-								.setCanInteract(u -> u.getId().equals(curr.getUid()))
-								.addAction(Utils.parseEmoji(Constants.ACCEPT), bw -> {
-									List<?> tVals = bw.getDropdownValues().get("condition");
-									List<?> sVals = bw.getDropdownValues().get("spells");
-									if (tVals.isEmpty() || sVals.isEmpty()) return;
-
-									Evogear chosen = (Evogear) curr.getCards().removeFirst(d -> d instanceof Evogear e && e.SERIAL == Long.parseLong((String) sVals.get(0)));
-
-									curr.consumeMP(chosen.getMPCost());
-									curr.consumeHP(chosen.getHPCost());
-									curr.consumeSC(chosen.getSCCost());
-									curr.setOriginCooldown(5);
-
-									curr.setContingency(new Contingency(
-											chosen,
-											ContingencyTrigger.valueOf((String) tVals.get(0))
-									));
-
-									reportEvent("str/used_contingency", true, curr.getName());
-								})
-								.setOnFinalization(m -> curr.allowAction())
-								.apply(mcr)
-								.addComponents(
-										ActionRow.of(conditions),
-										ActionRow.of(cards.build())
-								);
-
-						curr.preventAction();
-					});
+//					buttons.put(Utils.parseEmoji("\uFFFD"), w -> {
+//						if (curr.selectionPending()) {
+//							getChannel().sendMessage(getString("error/pending_choice")).queue();
+//							return;
+//						}
+//
+//						StringSelectMenu conditions = StringSelectMenu.create("condition")
+//								.setPlaceholder(getString("str/select_trigger"))
+//								.setRequiredRange(1, 1)
+//								.addOptions(
+//										SelectOption.of(getString("condition/hp_low"), HP_LOW.name()),
+//										SelectOption.of(getString("condition/hp_critical"), HP_CRITICAL.name()),
+//										SelectOption.of(getString("condition/combat_phase"), COMBAT_PHASE.name()),
+//										SelectOption.of(getString("condition/defeated"), DEFEATED.name())
+//								).build();
+//
+//						StringSelectMenu.Builder cards = StringSelectMenu.create("spells")
+//								.setPlaceholder(getString("str/select_spell"))
+//								.setRequiredRange(1, 1);
+//
+//						for (Drawable<?> d : curr.getCards()) {
+//							if (d.isAvailable() && d instanceof Evogear e && !e.isPassive()) {
+//								if (e.isSpell() && e.getTargetType() == TargetType.NONE && curr.canPay(e)) {
+//									cards.addOption((curr.getCards().indexOf(e) + 1) + " - " + e, String.valueOf(e.SERIAL));
+//								}
+//							}
+//						}
+//
+//						WebhookMessageCreateAction<Message> mcr = Objects.requireNonNull(w.getHook())
+//								.setEphemeral(true)
+//								.sendMessage(getString("str/prepare_contingency"));
+//
+//						new ButtonizeHelper(true)
+//								.setCanInteract(u -> u.getId().equals(curr.getUid()))
+//								.addAction(Utils.parseEmoji(Constants.ACCEPT), bw -> {
+//									List<?> tVals = bw.getDropdownValues().get("condition");
+//									List<?> sVals = bw.getDropdownValues().get("spells");
+//									if (tVals.isEmpty() || sVals.isEmpty()) return;
+//
+//									Evogear chosen = (Evogear) curr.getCards().removeFirst(d -> d instanceof Evogear e && e.SERIAL == Long.parseLong((String) sVals.get(0)));
+//
+//									curr.consumeMP(chosen.getMPCost());
+//									curr.consumeHP(chosen.getHPCost());
+//									curr.consumeSC(chosen.getSCCost());
+//									curr.setOriginCooldown(5);
+//
+//									curr.setContingency(new Contingency(
+//											chosen,
+//											ContingencyTrigger.valueOf((String) tVals.get(0))
+//									));
+//
+//									reportEvent("str/used_contingency", true, curr.getName());
+//								})
+//								.setOnFinalization(m -> curr.allowAction())
+//								.apply(mcr)
+//								.addComponents(
+//										ActionRow.of(conditions),
+//										ActionRow.of(cards.build())
+//								);
+//
+//						curr.preventAction();
+//					});
 				}
 			}
 
