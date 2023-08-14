@@ -2366,7 +2366,15 @@ public class Shoukan extends GameInstance<Phase> {
 
 									reportEvent("str/used_contingency", true, curr.getName());
 								})
-								.setOnFinalization(m -> curr.allowAction());
+								.setTimeout(30, TimeUnit.SECONDS)
+								.setOnFinalization(m -> {
+									if (curr.getContingency() == null) {
+										getChannel().sendMessage(getString("error/action_cancelled")).queue();
+										return;
+									}
+
+									curr.allowAction();
+								});
 
 						bh.apply(mcr).addComponents(ActionRow.of(conditions), ActionRow.of(cards.build())).queue(
 								s -> Pages.buttonize(s, bh)
