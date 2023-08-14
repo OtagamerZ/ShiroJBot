@@ -2318,10 +2318,10 @@ public class Shoukan extends GameInstance<Phase> {
 								.setPlaceholder(getString("str/select_trigger"))
 								.setRequiredRange(1, 1)
 								.addOptions(
-										SelectOption.of(getString("condition/hp_low"), HP_LOW.name()),
-										SelectOption.of(getString("condition/hp_critical"), HP_CRITICAL.name()),
-										SelectOption.of(getString("condition/combat_phase"), COMBAT_PHASE.name()),
-										SelectOption.of(getString("condition/defeated"), DEFEATED.name())
+										SelectOption.of(getString("trigger/hp_low"), HP_LOW.name()),
+										SelectOption.of(getString("trigger/hp_critical"), HP_CRITICAL.name()),
+										SelectOption.of(getString("trigger/combat_phase"), COMBAT_PHASE.name()),
+										SelectOption.of(getString("trigger/defeated"), DEFEATED.name())
 								).build();
 
 						StringSelectMenu.Builder cards = StringSelectMenu.create("spells")
