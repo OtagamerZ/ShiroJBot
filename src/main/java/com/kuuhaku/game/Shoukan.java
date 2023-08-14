@@ -2336,6 +2336,11 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 						}
 
+						if (cards.getOptions().isEmpty()) {
+							getChannel().sendMessage(getString("error/pending_choice")).queue();
+							return;
+						}
+
 						WebhookMessageCreateAction<Message> mcr = Objects.requireNonNull(w.getHook())
 								.setEphemeral(true)
 								.sendMessage(getString("str/prepare_contingency"));
@@ -2366,7 +2371,7 @@ public class Shoukan extends GameInstance<Phase> {
 								.addComponents(
 										ActionRow.of(conditions),
 										ActionRow.of(cards.build())
-								);
+								).queue();
 
 						curr.preventAction();
 					});
