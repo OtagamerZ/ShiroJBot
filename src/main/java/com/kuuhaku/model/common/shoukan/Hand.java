@@ -659,8 +659,11 @@ public class Hand {
 		while (it.hasNext()) {
 			Drawable<?> card = it.next();
 			if (card.isAvailable()) {
-				deck.add(card);
+				discard.add(card);
 				it.remove();
+
+				discard.remove(card);
+				deck.add(card);
 				i++;
 			}
 		}
