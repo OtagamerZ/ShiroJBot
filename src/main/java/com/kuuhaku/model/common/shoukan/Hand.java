@@ -271,6 +271,8 @@ public class Hand {
 	public Hand(String uid, Shoukan game, Side side) {
 		this.game = game;
 		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
+
+		System.out.println(game.isSingleplayer());
 		if (game.getArcade() != Arcade.CARDMASTER && (!game.isSingleplayer() || !Account.hasRole(uid, false, Role.TESTER))) {
 			if (userDeck == null) {
 				throw new GameReport(GameReport.NO_DECK, uid);
