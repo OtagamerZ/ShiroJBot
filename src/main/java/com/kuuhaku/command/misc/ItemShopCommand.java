@@ -113,7 +113,7 @@ public class ItemShopCommand implements Executable {
 		} else if (item.getStackSize() > 0 && items.getOrDefault(item, 0) + amount > item.getStackSize()) {
 			event.channel().sendMessage(locale.get("error/stack_full")).queue();
 			return;
-		} else if (!acc.hasEnough(item.getPrice(), item.getCurrency())) {
+		} else if (!acc.hasEnough(amount * item.getPrice(), item.getCurrency())) {
 			event.channel().sendMessage(locale.get("error/insufficient_" + item.getCurrency())).queue();
 			return;
 		} else if (amount <= 0) {

@@ -62,14 +62,12 @@ public class SlotColumn {
 
 	public Senshi getTop() {
 		if (top != null && (isLocked() || !equals(top.getSlot()))) {
-			top.executeAssert(Trigger.ON_REMOVE);
+			Senshi rem = top;
+			top = null;
 
+			rem.executeAssert(Trigger.ON_REMOVE);
 			if (isLocked()) {
-				top.executeAssert(Trigger.ON_REMOVE);
-				top.setSlot(null);
-				top = null;
-			} else if (!equals(top.getSlot())) {
-				top = null;
+				rem.setSlot(null);
 			}
 		}
 
@@ -86,14 +84,12 @@ public class SlotColumn {
 
 	public Senshi getBottom() {
 		if (bottom != null && (isLocked() || !equals(bottom.getSlot()))) {
-			bottom.executeAssert(Trigger.ON_REMOVE);
+			Senshi rem = bottom;
+			bottom = null;
 
+			rem.executeAssert(Trigger.ON_REMOVE);
 			if (isLocked()) {
-				bottom.executeAssert(Trigger.ON_REMOVE);
-				bottom.setSlot(null);
-				bottom = null;
-			} else if (!equals(bottom.getSlot())) {
-				bottom = null;
+				rem.setSlot(null);
 			}
 		}
 

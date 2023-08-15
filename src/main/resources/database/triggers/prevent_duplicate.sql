@@ -24,39 +24,24 @@ $$
 DECLARE
     card_id VARCHAR;
 BEGIN
-    IF (tg_op = 'DELETE') THEN
-        SELECT kc.card_id
-        FROM kawaipon_card kc
-                 LEFT JOIN stashed_card sc ON sc.uuid = kc.uuid
-        WHERE kc.kawaipon_uid = OLD.kawaipon_uid
-          AND sc.id IS NULL
-          AND kc.card_id = OLD.card_id
-          AND kc.chrome = (
-                              SELECT ikc.chrome
-                              FROM kawaipon_card ikc
-                              WHERE ikc.uuid = OLD.uuid
-                          )
-        INTO card_id;
-    ELSE
-        SELECT kc.card_id
-        FROM kawaipon_card kc
-                 LEFT JOIN stashed_card sc ON sc.uuid = kc.uuid
-        WHERE kc.kawaipon_uid = NEW.kawaipon_uid
-          AND sc.id IS NULL
-          AND kc.card_id = NEW.card_id
-          AND kc.chrome = (
-                              SELECT ikc.chrome
-                              FROM kawaipon_card ikc
-                              WHERE ikc.uuid = NEW.uuid
-                          )
-        INTO card_id;
-    END IF;
+    SELECT kc.card_id
+    FROM kawaipon_card kc
+             LEFT JOIN stashed_card sc ON sc.uuid = kc.uuid
+    WHERE kc.kawaipon_uid = OLD.kawaipon_uid
+      AND sc.id IS NULL
+      AND kc.card_id = OLD.card_id
+      AND kc.chrome = (
+                          SELECT ikc.chrome
+                          FROM kawaipon_card ikc
+                          WHERE ikc.uuid = OLD.uuid
+                      )
+    INTO card_id;
 
     IF (card_id IS NOT NULL) THEN
         RAISE EXCEPTION 'Attempt to insert duplicate card';
     END IF;
 
-    RETURN iif(tg_op = 'DELETE', OLD, NEW);
+    RETURN OLD;
 END;
 $$;
 

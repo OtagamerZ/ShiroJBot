@@ -64,7 +64,6 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.requests.restaction.WebhookMessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
@@ -87,7 +86,6 @@ import java.util.function.Predicate;
 import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
-import static com.kuuhaku.model.enums.shoukan.ContingencyTrigger.*;
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 public class Shoukan extends GameInstance<Phase> {
@@ -99,6 +97,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Map<Side, Hand> hands;
 	private final Map<String, String> messages = new HashMap<>();
 	private final Set<EffectOverTime> eots = new HashSet<>();
+	private final Set<EffectHolder<?>> effectLocks = new HashSet<>();
 	private final List<Turn> turns = new TreeList<>();
 	private final boolean singleplayer;
 
@@ -191,11 +190,14 @@ public class Shoukan extends GameInstance<Phase> {
 				if ((boolean) m.invoke(this, hand.getSide(), action.getSecond())) {
 					getCurrent().showHand();
 				}
-			} catch (StackOverflowError e) {
-				Constants.LOGGER.error("Fatal error at " + m.getName(), e);
-				getChannel().sendMessage(getString("error/match_termination", GameReport.STACK_OVERFLOW)).queue();
-				close(GameReport.STACK_OVERFLOW);
 			} catch (Exception e) {
+				if (e.getCause() instanceof StackOverflowError) {
+					Constants.LOGGER.error("Fatal error at " + m.getName(), e);
+					getChannel().sendMessage(getString("error/match_termination", GameReport.STACK_OVERFLOW)).queue();
+					close(GameReport.STACK_OVERFLOW);
+					return;
+				}
+
 				Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
 			} finally {
 				lock = false;
@@ -1893,21 +1895,30 @@ public class Shoukan extends GameInstance<Phase> {
 	public void trigger(Trigger trigger, Side side) {
 		if (restoring) return;
 
-		iterateSlots(side, s -> s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger))));
-
-		Hand h = hands.get(side);
-		for (EffectHolder<?> leech : h.getLeeches()) {
-			leech.execute(new EffectParameters(ON_LEECH, side, leech.asSource(trigger)));
-		}
-
 		EffectParameters ep = new EffectParameters(trigger, side);
-		for (Drawable<?> card : h.getCards()) {
-			if (card instanceof EffectHolder<?> eh && eh.isPassive()) {
-				eh.execute(ep);
-			}
-		}
 
-		triggerEOTs(ep);
+		try {
+			iterateSlots(side, s -> {
+				s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger)));
+				effectLocks.add(s);
+			});
+
+			Hand h = hands.get(side);
+			for (EffectHolder<?> leech : h.getLeeches()) {
+				leech.execute(new EffectParameters(ON_LEECH, side, leech.asSource(trigger)));
+				effectLocks.add(leech);
+			}
+
+			for (Drawable<?> card : h.getCards()) {
+				if (card instanceof EffectHolder<?> eh && eh.isPassive()) {
+					eh.execute(ep);
+					effectLocks.add(eh);
+				}
+			}
+		} finally {
+			effectLocks.clear();
+			triggerEOTs(ep);
+		}
 	}
 
 	public boolean trigger(Trigger trigger, Source source, Target... targets) {
@@ -1916,12 +1927,19 @@ public class Shoukan extends GameInstance<Phase> {
 		EffectParameters ep = new EffectParameters(trigger, source.side(), source, targets);
 
 		try {
-			return source.execute(ep);
-		} finally {
-			for (Target t : ep.targets()) {
-				t.execute(ep);
+			boolean executed = source.execute(ep);
+			if (source.card() instanceof EffectHolder<?> eh) {
+				effectLocks.add(eh);
 			}
 
+			for (Target t : ep.targets()) {
+				t.execute(ep);
+				effectLocks.add(t.card());
+			}
+
+			return executed;
+		} finally {
+			effectLocks.clear();
 			triggerEOTs(ep);
 		}
 	}
@@ -2168,6 +2186,9 @@ public class Shoukan extends GameInstance<Phase> {
 			if (curr.selectionPending()) {
 				getChannel().sendMessage(getString("error/pending_choice")).queue();
 				return;
+			} else if (curr.selectionPending()) {
+				getChannel().sendMessage(getString("error/pending_action")).queue();
+				return;
 			} else if (getPhase() == Phase.COMBAT || getTurn() == 1) {
 				if (curr.getLockTime(Lock.TAUNT) > 0) {
 					List<SlotColumn> yours = getSlots(curr.getSide());
@@ -2189,6 +2210,9 @@ public class Shoukan extends GameInstance<Phase> {
 			buttons.put(Utils.parseEmoji("⏩"), w -> {
 				if (curr.selectionPending()) {
 					getChannel().sendMessage(getString("error/pending_choice")).queue();
+					return;
+				} else if (curr.selectionPending()) {
+					getChannel().sendMessage(getString("error/pending_action")).queue();
 					return;
 				} else if (curr.getLockTime(Lock.TAUNT) > 0) {
 					List<SlotColumn> yours = getSlots(curr.getSide());
@@ -2215,6 +2239,9 @@ public class Shoukan extends GameInstance<Phase> {
 						if (curr.selectionPending()) {
 							getChannel().sendMessage(getString("error/pending_choice")).queue();
 							return;
+						} else if (curr.selectionPending()) {
+							getChannel().sendMessage(getString("error/pending_action")).queue();
+							return;
 						}
 
 						curr.manualDraw(1);
@@ -2226,6 +2253,9 @@ public class Shoukan extends GameInstance<Phase> {
 						buttons.put(Utils.parseEmoji("📦"), w -> {
 							if (curr.selectionPending()) {
 								getChannel().sendMessage(getString("error/pending_choice")).queue();
+								return;
+							} else if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_action")).queue();
 								return;
 							}
 
@@ -2242,6 +2272,9 @@ public class Shoukan extends GameInstance<Phase> {
 							if (curr.selectionPending()) {
 								getChannel().sendMessage(getString("error/pending_choice")).queue();
 								return;
+							} else if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_action")).queue();
+								return;
 							}
 
 							curr.setEmpowered(true);
@@ -2257,6 +2290,9 @@ public class Shoukan extends GameInstance<Phase> {
 						buttons.put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
 							if (curr.selectionPending()) {
 								getChannel().sendMessage(getString("error/pending_choice")).queue();
+								return;
+							} else if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_action")).queue();
 								return;
 							}
 
@@ -2287,6 +2323,9 @@ public class Shoukan extends GameInstance<Phase> {
 						if (curr.selectionPending()) {
 							getChannel().sendMessage(getString("error/pending_choice")).queue();
 							return;
+						} else if (curr.selectionPending()) {
+							getChannel().sendMessage(getString("error/pending_action")).queue();
+							return;
 						}
 
 						List<StashedCard> cards = new ArrayList<>();
@@ -2312,17 +2351,18 @@ public class Shoukan extends GameInstance<Phase> {
 						if (curr.selectionPending()) {
 							getChannel().sendMessage(getString("error/pending_choice")).queue();
 							return;
+						} else if (curr.selectionPending()) {
+							getChannel().sendMessage(getString("error/pending_action")).queue();
+							return;
 						}
 
-						StringSelectMenu conditions = StringSelectMenu.create("condition")
+						StringSelectMenu.Builder conditions = StringSelectMenu.create("condition")
 								.setPlaceholder(getString("str/select_trigger"))
-								.setRequiredRange(1, 1)
-								.addOptions(
-										SelectOption.of(getString("trigger/hp_low"), HP_LOW.name()),
-										SelectOption.of(getString("trigger/hp_critical"), HP_CRITICAL.name()),
-										SelectOption.of(getString("trigger/combat_phase"), COMBAT_PHASE.name()),
-										SelectOption.of(getString("trigger/defeated"), DEFEATED.name())
-								).build();
+								.setRequiredRange(1, 1);
+
+						for (ContingencyTrigger ct : ContingencyTrigger.values()) {
+							conditions.addOption(getString("trigger/" + ct.name()), ct.name());
+						}
 
 						StringSelectMenu.Builder cards = StringSelectMenu.create("spells")
 								.setPlaceholder(getString("str/select_spell"))
@@ -2377,9 +2417,11 @@ public class Shoukan extends GameInstance<Phase> {
 									curr.allowAction();
 								});
 
-						bh.apply(mcr).addComponents(ActionRow.of(conditions), ActionRow.of(cards.build())).queue(
-								s -> Pages.buttonize(s, bh)
-						);
+						bh.apply(mcr)
+								.addComponents(ActionRow.of(conditions.build()), ActionRow.of(cards.build()))
+								.queue(
+										s -> Pages.buttonize(s, bh)
+								);
 
 						curr.preventAction();
 					});
@@ -2627,6 +2669,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public boolean isRestoring() {
 		return restoring;
+	}
+
+	public Set<EffectHolder<?>> getEffectLocks() {
+		return effectLocks;
 	}
 
 	@Override

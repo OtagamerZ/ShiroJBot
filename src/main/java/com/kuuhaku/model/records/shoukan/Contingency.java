@@ -32,7 +32,9 @@ public record Contingency(Evogear card, ContingencyTrigger trigger) {
 		return switch (trigger) {
 			case HP_LOW -> h.isLowLife();
 			case HP_CRITICAL -> h.isCritical();
+			case PLAN_PHASE -> game.getCurrentSide() != h.getSide() && game.getPhase() == Phase.PLAN;
 			case COMBAT_PHASE -> game.getCurrentSide() != h.getSide() && game.getPhase() == Phase.COMBAT;
+			case OUT_OF_MANA -> h.getMP() == 0;
 			case DEFEATED -> h.getHP() == 0;
 		};
 	}

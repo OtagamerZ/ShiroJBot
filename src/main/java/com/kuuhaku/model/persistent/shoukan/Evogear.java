@@ -385,7 +385,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public boolean execute(EffectParameters ep) {
-		if (ep.trigger() == NONE || !hasEffect()) return false;
+		if (getGame().getEffectLocks().contains(this)) return false;
+		else if (ep.trigger() == NONE || !hasEffect()) return false;
 		else if (!hasTrueEffect()) {
 			if (!isSpell() && hand.getLockTime(Lock.EFFECT) > 0) return false;
 		}

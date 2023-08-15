@@ -659,8 +659,11 @@ public class Hand {
 		while (it.hasNext()) {
 			Drawable<?> card = it.next();
 			if (card.isAvailable()) {
-				deck.add(card);
+				discard.add(card);
 				it.remove();
+
+				discard.remove(card);
+				deck.add(card);
 				i++;
 			}
 		}
@@ -1232,7 +1235,11 @@ public class Hand {
 	}
 
 	public boolean selectionPending() {
-		return selection != null || preventAction;
+		return selection != null;
+	}
+
+	public boolean actionPrevented() {
+		return preventAction;
 	}
 
 	public void preventAction() {
