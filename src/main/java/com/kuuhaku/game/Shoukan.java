@@ -64,7 +64,6 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.requests.restaction.WebhookMessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
@@ -87,7 +86,6 @@ import java.util.function.Predicate;
 import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
-import static com.kuuhaku.model.enums.shoukan.ContingencyTrigger.*;
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 public class Shoukan extends GameInstance<Phase> {
@@ -2358,15 +2356,13 @@ public class Shoukan extends GameInstance<Phase> {
 							return;
 						}
 
-						StringSelectMenu conditions = StringSelectMenu.create("condition")
+						StringSelectMenu.Builder conditions = StringSelectMenu.create("condition")
 								.setPlaceholder(getString("str/select_trigger"))
-								.setRequiredRange(1, 1)
-								.addOptions(
-										SelectOption.of(getString("trigger/hp_low"), HP_LOW.name()),
-										SelectOption.of(getString("trigger/hp_critical"), HP_CRITICAL.name()),
-										SelectOption.of(getString("trigger/combat_phase"), COMBAT_PHASE.name()),
-										SelectOption.of(getString("trigger/defeated"), DEFEATED.name())
-								).build();
+								.setRequiredRange(1, 1);
+
+						for (ContingencyTrigger ct : ContingencyTrigger.values()) {
+							conditions.addOption(getString("trigger/" + ct.name()), ct.name());
+						}
 
 						StringSelectMenu.Builder cards = StringSelectMenu.create("spells")
 								.setPlaceholder(getString("str/select_spell"))
@@ -2421,9 +2417,11 @@ public class Shoukan extends GameInstance<Phase> {
 									curr.allowAction();
 								});
 
-						bh.apply(mcr).addComponents(ActionRow.of(conditions), ActionRow.of(cards.build())).queue(
-								s -> Pages.buttonize(s, bh)
-						);
+						bh.apply(mcr)
+								.addComponents(ActionRow.of(conditions.build()), ActionRow.of(cards.build()))
+								.queue(
+										s -> Pages.buttonize(s, bh)
+								);
 
 						curr.preventAction();
 					});
