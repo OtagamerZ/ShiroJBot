@@ -40,13 +40,17 @@ public class Flags implements Cloneable {
 
 	public void set(Drawable<?> source, Flag flag, boolean permanent) {
 		Map<Drawable<?>, EnumSet<Flag>> target = permanent ? this.permanent : flags;
+
 		target.computeIfAbsent(source, k -> EnumSet.noneOf(Flag.class)).add(flag);
 	}
 
 	public void unset(Drawable<?> source, Flag flag, boolean permanent) {
 		Map<Drawable<?>, EnumSet<Flag>> target = permanent ? this.permanent : flags;
+
 		target.computeIfAbsent(source, k -> EnumSet.noneOf(Flag.class)).remove(flag);
 		target.entrySet().removeIf(e -> e.getValue().isEmpty());
+
+		System.out.println(target);
 	}
 
 	public boolean has(Flag flag) {
