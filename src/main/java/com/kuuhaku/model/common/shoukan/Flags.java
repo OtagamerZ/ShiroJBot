@@ -20,7 +20,6 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Flag;
-import com.kuuhaku.util.Utils;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -49,16 +48,16 @@ public class Flags implements Cloneable {
 
 		target.computeIfAbsent(source, k -> EnumSet.noneOf(Flag.class)).remove(flag);
 		target.entrySet().removeIf(e -> e.getValue().isEmpty());
-
-		System.out.println(target);
 	}
 
 	public boolean has(Flag flag) {
-		return Utils.equalsAny(flag, permanent) || Utils.equalsAny(flag, flags);
+		return permanent.values().stream().anyMatch(e -> e.contains(flag))
+			   || flags.values().stream().anyMatch(e -> e.contains(flag));
 	}
 
 	public boolean pop(Flag flag) {
-		return Utils.equalsAny(flag, permanent) || flags.values().stream().anyMatch(e -> e.remove(flag));
+		return permanent.values().stream().anyMatch(e -> e.contains(flag))
+			   || flags.values().stream().anyMatch(e -> e.remove(flag));
 	}
 
 	public void clearTemp() {
