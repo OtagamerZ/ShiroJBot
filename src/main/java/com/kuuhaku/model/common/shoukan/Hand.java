@@ -1232,7 +1232,11 @@ public class Hand {
 	}
 
 	public boolean selectionPending() {
-		return selection != null || preventAction;
+		return selection != null;
+	}
+
+	public boolean actionPrevented() {
+		return preventAction;
 	}
 
 	public void preventAction() {

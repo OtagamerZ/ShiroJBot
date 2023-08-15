@@ -76,10 +76,10 @@ public enum Race {
 //		HERO(HUMAN.flag | DIVINITY.flag),
 //		DRYAD(HUMAN.flag | SPIRIT.flag),
 //		VAMPIRE(HUMAN.flag | UNDEAD.flag),
-//		DROW(HUMAN.flag | MYSTICAL.flag),
+//		DARK_ELF(HUMAN.flag | MYSTICAL.flag),
 //		TIEFLING(HUMAN.flag | DEMON.flag),
 //		GARGOYLE(BEAST.flag | MACHINE.flag),
-//		PATRON(BEAST.flag | DIVINITY.flag),
+//		ANCIENT(BEAST.flag | DIVINITY.flag),
 //		ALIEN(BEAST.flag | SPIRIT.flag),
 //		SLIME(BEAST.flag | UNDEAD.flag),
 //		DRAGON(BEAST.flag | MYSTICAL.flag),
@@ -174,7 +174,7 @@ public enum Race {
 	public Race[] derivates() {
 		List<Race> races = new ArrayList<>();
 
-		for (Race r : values()) {
+		for (Race r : validValues()) {
 			if (r != this && r.isRace(this)) {
 				races.add(r);
 			}
@@ -255,10 +255,16 @@ public enum Race {
 	}
 
 	public static Race getByFlag(int flag) {
-		for (Race r : values()) {
+		for (Race r : validValues()) {
 			if (r.flag == flag) return r;
 		}
 
 		return NONE;
+	}
+
+	public static Race[] validValues() {
+		return Arrays.stream(values())
+				.filter(r -> Integer.bitCount(r.flag) <= 2)
+				.toArray(Race[]::new);
 	}
 }

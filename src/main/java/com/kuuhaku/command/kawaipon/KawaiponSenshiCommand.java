@@ -80,7 +80,7 @@ public class KawaiponSenshiCommand implements Executable {
 
 		Race race = args.getEnum(Race.class, "race");
 		if (race == null) {
-			Pair<String, Double> sug = Utils.didYouMean(args.getString("race"), Arrays.stream(Race.values()).map(Race::name).toList());
+			Pair<String, Double> sug = Utils.didYouMean(args.getString("race"), Arrays.stream(Race.validValues()).map(Race::name).toList());
 			event.channel().sendMessage(locale.get("error/unknown_race", sug.getFirst())).queue();
 			return;
 		}

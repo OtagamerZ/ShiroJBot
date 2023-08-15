@@ -2188,6 +2188,9 @@ public class Shoukan extends GameInstance<Phase> {
 			if (curr.selectionPending()) {
 				getChannel().sendMessage(getString("error/pending_choice")).queue();
 				return;
+			} else if (curr.selectionPending()) {
+				getChannel().sendMessage(getString("error/pending_action")).queue();
+				return;
 			} else if (getPhase() == Phase.COMBAT || getTurn() == 1) {
 				if (curr.getLockTime(Lock.TAUNT) > 0) {
 					List<SlotColumn> yours = getSlots(curr.getSide());
@@ -2209,6 +2212,9 @@ public class Shoukan extends GameInstance<Phase> {
 			buttons.put(Utils.parseEmoji("⏩"), w -> {
 				if (curr.selectionPending()) {
 					getChannel().sendMessage(getString("error/pending_choice")).queue();
+					return;
+				} else if (curr.selectionPending()) {
+					getChannel().sendMessage(getString("error/pending_action")).queue();
 					return;
 				} else if (curr.getLockTime(Lock.TAUNT) > 0) {
 					List<SlotColumn> yours = getSlots(curr.getSide());
@@ -2235,6 +2241,9 @@ public class Shoukan extends GameInstance<Phase> {
 						if (curr.selectionPending()) {
 							getChannel().sendMessage(getString("error/pending_choice")).queue();
 							return;
+						} else if (curr.selectionPending()) {
+							getChannel().sendMessage(getString("error/pending_action")).queue();
+							return;
 						}
 
 						curr.manualDraw(1);
@@ -2246,6 +2255,9 @@ public class Shoukan extends GameInstance<Phase> {
 						buttons.put(Utils.parseEmoji("📦"), w -> {
 							if (curr.selectionPending()) {
 								getChannel().sendMessage(getString("error/pending_choice")).queue();
+								return;
+							} else if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_action")).queue();
 								return;
 							}
 
@@ -2262,6 +2274,9 @@ public class Shoukan extends GameInstance<Phase> {
 							if (curr.selectionPending()) {
 								getChannel().sendMessage(getString("error/pending_choice")).queue();
 								return;
+							} else if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_action")).queue();
+								return;
 							}
 
 							curr.setEmpowered(true);
@@ -2277,6 +2292,9 @@ public class Shoukan extends GameInstance<Phase> {
 						buttons.put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
 							if (curr.selectionPending()) {
 								getChannel().sendMessage(getString("error/pending_choice")).queue();
+								return;
+							} else if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_action")).queue();
 								return;
 							}
 
@@ -2307,6 +2325,9 @@ public class Shoukan extends GameInstance<Phase> {
 						if (curr.selectionPending()) {
 							getChannel().sendMessage(getString("error/pending_choice")).queue();
 							return;
+						} else if (curr.selectionPending()) {
+							getChannel().sendMessage(getString("error/pending_action")).queue();
+							return;
 						}
 
 						List<StashedCard> cards = new ArrayList<>();
@@ -2331,6 +2352,9 @@ public class Shoukan extends GameInstance<Phase> {
 					buttons.put(Utils.parseEmoji("🛡"), w -> {
 						if (curr.selectionPending()) {
 							getChannel().sendMessage(getString("error/pending_choice")).queue();
+							return;
+						} else if (curr.selectionPending()) {
+							getChannel().sendMessage(getString("error/pending_action")).queue();
 							return;
 						}
 
