@@ -264,7 +264,7 @@ public enum Race {
 
 	public static Race[] validValues() {
 		return Arrays.stream(values())
-				.filter(r -> Integer.bitCount(r.flag) <= 2)
+				.filter(r -> r.ordinal() < MIXED.ordinal())
 				.toArray(Race[]::new);
 	}
 }
