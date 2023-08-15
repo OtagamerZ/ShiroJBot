@@ -1017,7 +1017,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean execute(boolean global, EffectParameters ep) {
-		if (!hasTrueEffect(true)) {
+		if (getGame().getEffectLocks().contains(this)) return false;
+		else if (!hasTrueEffect(true)) {
 			if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 			else if (hasFlag(Flag.NO_EFFECT, true)) {
 				base.lockAll();
@@ -1415,11 +1416,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Senshi senshi = (Senshi) o;
-		return Objects.equals(id, senshi.id)
-			   && Objects.equals(card, senshi.card)
-			   && Objects.equals(slot, senshi.slot)
-			   && race == senshi.race
-			   && SERIAL == senshi.SERIAL;
+		return Objects.equals(id, senshi.id) && Objects.equals(card, senshi.card) && SERIAL == senshi.SERIAL;
 	}
 
 	public int posHash() {
@@ -1428,7 +1425,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, card, slot, race, SERIAL);
+		return Objects.hash(id, card, SERIAL);
 	}
 
 	@Override

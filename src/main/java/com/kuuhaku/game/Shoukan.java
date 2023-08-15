@@ -99,6 +99,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Map<Side, Hand> hands;
 	private final Map<String, String> messages = new HashMap<>();
 	private final Set<EffectOverTime> eots = new HashSet<>();
+	private final Set<EffectHolder<?>> effectLocks = new HashSet<>();
 	private final List<Turn> turns = new TreeList<>();
 	private final boolean singleplayer;
 
@@ -191,11 +192,14 @@ public class Shoukan extends GameInstance<Phase> {
 				if ((boolean) m.invoke(this, hand.getSide(), action.getSecond())) {
 					getCurrent().showHand();
 				}
-			} catch (StackOverflowError e) {
-				Constants.LOGGER.error("Fatal error at " + m.getName(), e);
-				getChannel().sendMessage(getString("error/match_termination", GameReport.STACK_OVERFLOW)).queue();
-				close(GameReport.STACK_OVERFLOW);
 			} catch (Exception e) {
+				if (e.getCause() instanceof StackOverflowError) {
+					Constants.LOGGER.error("Fatal error at " + m.getName(), e);
+					getChannel().sendMessage(getString("error/match_termination", GameReport.STACK_OVERFLOW)).queue();
+					close(GameReport.STACK_OVERFLOW);
+					return;
+				}
+
 				Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
 			} finally {
 				lock = false;
@@ -1893,21 +1897,30 @@ public class Shoukan extends GameInstance<Phase> {
 	public void trigger(Trigger trigger, Side side) {
 		if (restoring) return;
 
-		iterateSlots(side, s -> s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger))));
-
-		Hand h = hands.get(side);
-		for (EffectHolder<?> leech : h.getLeeches()) {
-			leech.execute(new EffectParameters(ON_LEECH, side, leech.asSource(trigger)));
-		}
-
 		EffectParameters ep = new EffectParameters(trigger, side);
-		for (Drawable<?> card : h.getCards()) {
-			if (card instanceof EffectHolder<?> eh && eh.isPassive()) {
-				eh.execute(ep);
-			}
-		}
 
-		triggerEOTs(ep);
+		try {
+			iterateSlots(side, s -> {
+				s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger)));
+				effectLocks.add(s);
+			});
+
+			Hand h = hands.get(side);
+			for (EffectHolder<?> leech : h.getLeeches()) {
+				leech.execute(new EffectParameters(ON_LEECH, side, leech.asSource(trigger)));
+				effectLocks.add(leech);
+			}
+
+			for (Drawable<?> card : h.getCards()) {
+				if (card instanceof EffectHolder<?> eh && eh.isPassive()) {
+					eh.execute(ep);
+					effectLocks.add(eh);
+				}
+			}
+		} finally {
+			effectLocks.clear();
+			triggerEOTs(ep);
+		}
 	}
 
 	public boolean trigger(Trigger trigger, Source source, Target... targets) {
@@ -1916,12 +1929,19 @@ public class Shoukan extends GameInstance<Phase> {
 		EffectParameters ep = new EffectParameters(trigger, source.side(), source, targets);
 
 		try {
-			return source.execute(ep);
-		} finally {
-			for (Target t : ep.targets()) {
-				t.execute(ep);
+			boolean executed = source.execute(ep);
+			if (source.card() instanceof EffectHolder<?> eh) {
+				effectLocks.add(eh);
 			}
 
+			for (Target t : ep.targets()) {
+				t.execute(ep);
+				effectLocks.add(t.card());
+			}
+
+			return executed;
+		} finally {
+			effectLocks.clear();
 			triggerEOTs(ep);
 		}
 	}
@@ -2627,6 +2647,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public boolean isRestoring() {
 		return restoring;
+	}
+
+	public Set<EffectHolder<?>> getEffectLocks() {
+		return effectLocks;
 	}
 
 	@Override
