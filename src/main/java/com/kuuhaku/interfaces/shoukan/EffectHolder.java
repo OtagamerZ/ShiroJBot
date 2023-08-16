@@ -86,6 +86,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	CardExtra getStats();
 
+	default EffectHolder<?> getSource() {
+		return (EffectHolder<?>) Utils.getOr(getStats().getSource(), this);
+	}
+
 	default Flags getFlags() {
 		return getStats().getFlags();
 	}

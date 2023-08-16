@@ -458,8 +458,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public String getDescription(I18N locale) {
-		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
-
+		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
 	}
 
@@ -982,8 +981,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public String getEffect() {
-		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
-
+		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getEffect(), source.getBase().getEffect());
 	}
 
@@ -1102,17 +1100,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					}
 				} else {
 					CachedScriptManager csm = getCSM();
-					if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
-						parseDescription(getGame().getLocale());
-					}
-
-					csm.forScript(getEffect())
+					csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
+							.forScript(getEffect())
 							.withConst("self", this)
 							.withConst("game", getGame())
 							.withConst("data", stats.getData())
 							.withVar("ep", ep.forSide(getSide()))
 							.withVar("side", getSide())
-							.withVar("props", csm.getStoredProps())
 							.withVar("trigger", trigger)
 							.run();
 
@@ -1187,17 +1181,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			base.lock(trigger);
 
 			CachedScriptManager csm = getCSM();
-			if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
-				parseDescription(getGame().getLocale());
-			}
-
-			csm.forScript(getEffect())
+			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
+					.forScript(getEffect())
 					.withConst("self", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
 					.withVar("ep", new EffectParameters(trigger, getSide()))
 					.withVar("side", getSide())
-					.withVar("props", csm.getStoredProps())
 					.withVar("trigger", trigger)
 					.run();
 		} catch (Exception ignored) {

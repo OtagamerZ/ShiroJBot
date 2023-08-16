@@ -234,8 +234,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public String getDescription(I18N locale) {
-		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
-
+		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
 	}
 
@@ -368,8 +367,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public String getEffect() {
-		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
-
+		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getEffect(), source.getBase().getEffect());
 	}
 
@@ -400,17 +398,13 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		Shoukan game = getGame();
 		try {
 			CachedScriptManager csm = getCSM();
-			if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
-				parseDescription(getGame().getLocale());
-			}
-
-			csm.forScript(getEffect())
+			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
+					.forScript(getEffect())
 					.withConst("evo", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
 					.withVar("ep", ep.forSide(getSide()))
 					.withVar("side", getSide())
-					.withVar("props", csm.getStoredProps())
 					.withVar("trigger", ep.trigger());
 
 			if (!isSpell()) {
@@ -455,17 +449,13 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 		try {
 			CachedScriptManager csm = getCSM();
-			if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
-				parseDescription(getGame().getLocale());
-			}
-
-			csm.forScript(getEffect())
+			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
+					.forScript(getEffect())
 					.withConst("evo", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
 					.withVar("ep", new EffectParameters(trigger, getSide()))
 					.withVar("side", getSide())
-					.withVar("props", csm.getStoredProps())
 					.withVar("self", equipper)
 					.withVar("trigger", trigger)
 					.run();
