@@ -168,7 +168,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Pair<Method, JSONObject> action = toAction(
 				value.toLowerCase().replace(" ", ""),
-				m -> m.getName().startsWith("deb") || hand.selectionPending() == m.getName().equals("select")
+				m -> !lock && (m.getName().startsWith("deb") || hand.selectionPending() == m.getName().equals("select"))
 		);
 
 		execAction(hand, action);
@@ -178,30 +178,26 @@ public class Shoukan extends GameInstance<Phase> {
 		if (action == null) return;
 
 		Method m = action.getFirst();
-		boolean bypass = m.getName().startsWith("deb") || hand.selectionPending() == m.getName().equals("select");
-		if (!lock || bypass) {
+		try {
 			lock = true;
-
-			try {
-				if (m.getName().startsWith("deb")) {
-					cheats = true;
-				}
-
-				if ((boolean) m.invoke(this, hand.getSide(), action.getSecond())) {
-					getCurrent().showHand();
-				}
-			} catch (Exception e) {
-				if (e.getCause() instanceof StackOverflowError) {
-					Constants.LOGGER.error("Fatal error at " + m.getName(), e);
-					getChannel().sendMessage(getString("error/match_termination", GameReport.STACK_OVERFLOW)).queue();
-					close(GameReport.STACK_OVERFLOW);
-					return;
-				}
-
-				Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
-			} finally {
-				lock = false;
+			if (m.getName().startsWith("deb")) {
+				cheats = true;
 			}
+
+			if ((boolean) m.invoke(this, hand.getSide(), action.getSecond())) {
+				getCurrent().showHand();
+			}
+		} catch (Exception e) {
+			if (e.getCause() instanceof StackOverflowError) {
+				Constants.LOGGER.error("Fatal error at " + m.getName(), e);
+				getChannel().sendMessage(getString("error/match_termination", GameReport.STACK_OVERFLOW)).queue();
+				close(GameReport.STACK_OVERFLOW);
+				return;
+			}
+
+			Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
+		} finally {
+			lock = false;
 		}
 	}
 
