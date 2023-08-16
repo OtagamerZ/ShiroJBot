@@ -1117,15 +1117,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 			}
 
-			if (slot != null && ep.referee() == null) {
-				System.out.println("Deferred " + trigger);
-
+			if (ep.referee() == null) {
 				Senshi sup = getSupport();
 				if (sup != null) {
 					sup.execute(new EffectParameters(ON_DEFER_SUPPORT, getSide(), new DeferredTrigger(this, trigger), ep.source(), ep.targets()));
 				}
 
 				for (Senshi adj : getNearby()) {
+					System.out.println("Deferred " + trigger);
 					adj.execute(new EffectParameters(ON_DEFER_NEARBY, getSide(), new DeferredTrigger(this, trigger), ep.source(), ep.targets()));
 				}
 			}
