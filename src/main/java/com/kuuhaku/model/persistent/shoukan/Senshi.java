@@ -1110,7 +1110,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 							.withVar("trigger", trigger)
 							.run();
 
-					if (!Utils.equalsAny(ep.trigger(), ON_TICK, ON_EFFECT)) {
+					if (!Utils.equalsAny(trigger, ON_TICK, ON_EFFECT)) {
 						hasFlag(Flag.EMPOWERED, true);
 						game.trigger(ON_EFFECT, hand.getSide());
 					}
