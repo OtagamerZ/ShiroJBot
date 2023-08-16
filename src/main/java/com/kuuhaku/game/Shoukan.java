@@ -2347,84 +2347,81 @@ public class Shoukan extends GameInstance<Phase> {
 						reportEvent("str/spirit_synth", true, curr.getName());
 					});
 				} else if (curr.getOrigin().major() == Race.DIVINITY) {
-					buttons.put(Utils.parseEmoji("🛡"), w -> {
-						if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_choice")).queue();
-							return;
-						} else if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_action")).queue();
-							return;
-						}
+					StringSelectMenu.Builder cards = StringSelectMenu.create("spells")
+							.setPlaceholder(getString("str/select_spell"))
+							.setRequiredRange(1, 1);
 
-						StringSelectMenu.Builder conditions = StringSelectMenu.create("condition")
-								.setPlaceholder(getString("str/select_trigger"))
-								.setRequiredRange(1, 1);
-
-						for (ContingencyTrigger ct : ContingencyTrigger.values()) {
-							conditions.addOption(getString("trigger/" + ct.name()), ct.name());
-						}
-
-						StringSelectMenu.Builder cards = StringSelectMenu.create("spells")
-								.setPlaceholder(getString("str/select_spell"))
-								.setRequiredRange(1, 1);
-
-						for (Drawable<?> d : curr.getCards()) {
-							if (d.isAvailable() && d instanceof Evogear e && !e.isPassive()) {
-								if (e.isSpell() && e.getTargetType() == TargetType.NONE && curr.canPay(e)) {
-									cards.addOption((curr.getCards().indexOf(e) + 1) + " - " + e, String.valueOf(e.SERIAL));
-								}
+					for (Drawable<?> d : curr.getCards()) {
+						if (d.isAvailable() && d instanceof Evogear e && !e.isPassive()) {
+							if (e.isSpell() && e.getTargetType() == TargetType.NONE && curr.canPay(e)) {
+								cards.addOption((curr.getCards().indexOf(e) + 1) + " - " + e, String.valueOf(e.SERIAL));
 							}
 						}
+					}
 
-						if (cards.getOptions().isEmpty()) {
-							getChannel().sendMessage(getString("error/no_valid_cards")).queue();
-							return;
-						}
+					if (!cards.getOptions().isEmpty()) {
+						buttons.put(Utils.parseEmoji("🛡"), w -> {
+							if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_choice")).queue();
+								return;
+							} else if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_action")).queue();
+								return;
+							}
 
-						WebhookMessageCreateAction<Message> mcr = Objects.requireNonNull(w.getHook())
-								.setEphemeral(true)
-								.sendMessage(getString("str/prepare_contingency"));
+							StringSelectMenu.Builder conditions = StringSelectMenu.create("condition")
+									.setPlaceholder(getString("str/select_trigger"))
+									.setRequiredRange(1, 1);
 
-						ButtonizeHelper bh = new ButtonizeHelper(true)
-								.setCanInteract(u -> u.getId().equals(curr.getUid()))
-								.addAction(Utils.parseEmoji(Constants.ACCEPT), bw -> {
-									List<?> tVals = bw.getDropdownValues().get("condition");
-									List<?> sVals = bw.getDropdownValues().get("spells");
-									if (tVals.isEmpty() || sVals.isEmpty()) return;
+							for (ContingencyTrigger ct : ContingencyTrigger.values()) {
+								conditions.addOption(getString("trigger/" + ct.name()), ct.name());
+							}
 
-									Evogear chosen = (Evogear) curr.getCards().removeFirst(d -> d instanceof Evogear e && e.SERIAL == Long.parseLong((String) sVals.get(0)));
-									if (chosen == null) return;
+							WebhookMessageCreateAction<Message> mcr = Objects.requireNonNull(w.getHook())
+									.setEphemeral(true)
+									.sendMessage(getString("str/prepare_contingency"));
 
-									curr.consumeMP(chosen.getMPCost());
-									curr.consumeHP(chosen.getHPCost());
-									curr.consumeSC(chosen.getSCCost());
-									curr.setOriginCooldown(5);
+							ButtonizeHelper bh = new ButtonizeHelper(true)
+									.setCanInteract(u -> u.getId().equals(curr.getUid()))
+									.addAction(Utils.parseEmoji(Constants.ACCEPT), bw -> {
+										List<?> tVals = bw.getDropdownValues().get("condition");
+										List<?> sVals = bw.getDropdownValues().get("spells");
+										if (tVals.isEmpty() || sVals.isEmpty()) return;
 
-									curr.setContingency(new Contingency(
-											chosen,
-											ContingencyTrigger.valueOf((String) tVals.get(0))
-									));
+										Evogear chosen = (Evogear) curr.getCards().removeFirst(d -> d instanceof Evogear e && e.SERIAL == Long.parseLong((String) sVals.get(0)));
+										if (chosen == null) return;
 
-									reportEvent("str/used_contingency", true, curr.getName());
-								})
-								.setTimeout(30, TimeUnit.SECONDS)
-								.setOnFinalization(m -> {
-									if (curr.getContingency() == null) {
-										getChannel().sendMessage(getString("error/action_cancelled")).queue();
-										return;
-									}
+										curr.consumeMP(chosen.getMPCost());
+										curr.consumeHP(chosen.getHPCost());
+										curr.consumeSC(chosen.getSCCost());
+										curr.setOriginCooldown(4);
 
-									curr.allowAction();
-								});
+										curr.setContingency(new Contingency(
+												chosen,
+												ContingencyTrigger.valueOf((String) tVals.get(0))
+										));
 
-						bh.apply(mcr)
-								.addComponents(ActionRow.of(conditions.build()), ActionRow.of(cards.build()))
-								.queue(
-										s -> Pages.buttonize(s, bh)
-								);
+										reportEvent("str/used_contingency", true, curr.getName());
+									})
+									.setTimeout(30, TimeUnit.SECONDS)
+									.setOnFinalization(m -> {
+										if (curr.getContingency() == null) {
+											getChannel().sendMessage(getString("error/action_cancelled")).queue();
+											return;
+										}
 
-						curr.preventAction();
-					});
+										curr.allowAction();
+									});
+
+							bh.apply(mcr)
+									.addComponents(ActionRow.of(conditions.build()), ActionRow.of(cards.build()))
+									.queue(
+											s -> Pages.buttonize(s, bh)
+									);
+
+							curr.preventAction();
+						});
+					}
 				}
 			}
 
