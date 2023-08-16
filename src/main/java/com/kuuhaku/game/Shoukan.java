@@ -2396,6 +2396,7 @@ public class Shoukan extends GameInstance<Phase> {
 										curr.consumeSC(chosen.getSCCost());
 										curr.setOriginCooldown(4);
 
+										chosen.setFlag(Flag.EMPOWERED);
 										curr.setContingency(new Contingency(
 												chosen,
 												ContingencyTrigger.valueOf((String) tVals.get(0))
