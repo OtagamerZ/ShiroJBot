@@ -168,7 +168,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Pair<Method, JSONObject> action = toAction(
 				value.toLowerCase().replace(" ", ""),
-				m -> !lock && (m.getName().startsWith("deb") || hand.selectionPending() == m.getName().equals("select"))
+				m -> (!lock || (hand.selectionPending() && m.getName().equals("select")))
+					 && hand.selectionPending() == m.getName().equals("select")
 		);
 
 		execAction(hand, action);
