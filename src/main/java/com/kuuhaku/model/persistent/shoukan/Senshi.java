@@ -1276,6 +1276,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public void reset() {
 		equipments.clear();
 		stats.clear();
+		base.unlockAll();
 		slot = null;
 		leech = null;
 		lastInteraction = null;
