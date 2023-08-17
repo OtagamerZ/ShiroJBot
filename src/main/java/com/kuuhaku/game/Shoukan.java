@@ -1098,18 +1098,6 @@ public class Shoukan extends GameInstance<Phase> {
 				getChannel().sendMessage(getString("error/card_taunted", chosen.getTarget(), chosen.getTarget().getIndex() + 1)).queue();
 				return false;
 			}
-
-			if (enemy.isProtected(chosen)) {
-				curr.consumeMP(1);
-				if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
-					chosen.setAvailable(false);
-				}
-
-				curr.getData().put("last_ability", chosen);
-				trigger(ON_ABILITY, side);
-				reportEvent("str/avoid_effect", true, enemy);
-				return false;
-			}
 		}
 
 		if (!tgt.validate(type)) {
