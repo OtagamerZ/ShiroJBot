@@ -400,7 +400,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		}
 
 		try {
-			base.lock(ep.trigger());
+			if (!spell) {
+				base.lock(ep.trigger());
+			}
 
 			CachedScriptManager csm = getCSM();
 			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
@@ -443,6 +445,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			game.getChannel().sendMessage(game.getString("error/effect")).queue();
 			Constants.LOGGER.warn("Failed to execute " + this + " effect\n" + ("/* " + source + " */\n" + getEffect()), e);
 			return false;
+		} finally {
+			base.unlock(ep.trigger());
 		}
 	}
 
