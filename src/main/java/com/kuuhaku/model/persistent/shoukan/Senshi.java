@@ -1048,11 +1048,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		Shoukan game = getGame();
 		//Hand other = ep.getHands().get(ep.getOtherSide());
-		try {
-			System.out.println(this + " " + base.getLocks());
-			if (base.isLocked(trigger) || trigger == NONE) return false;
-			base.lock(trigger);
+		if (base.isLocked(trigger) || trigger == NONE) return false;
+		base.lock(trigger);
 
+		try {
 			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
 				if (!game.getCurrent().equals(hand)) {
 					Set<String> triggered = new HashSet<>();
@@ -1167,7 +1166,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			Constants.LOGGER.warn("Failed to execute " + this + " effect\n" + ("/* " + source + " */\n" + getEffect()), e);
 			return false;
 		} finally {
-			System.out.println("unlock");
 			unlock();
 			//other.setHeroDefense(false);
 		}
