@@ -383,8 +383,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public boolean execute(EffectParameters ep) {
-		if (getGame().getEffectLocks().contains(this)) return false;
-		else if (ep.trigger() == NONE || !hasEffect()) return false;
+		if (!hasEffect()) return false;
 		else if (!hasTrueEffect()) {
 			if (!isSpell() && hand.getLockTime(Lock.EFFECT) > 0) return false;
 		}
@@ -396,7 +395,13 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		}
 
 		Shoukan game = getGame();
+		if (base.isLocked(ep.trigger()) || ep.trigger() == NONE) {
+			return false;
+		}
+
 		try {
+			base.lock(ep.trigger());
+
 			CachedScriptManager csm = getCSM();
 			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
 					.forScript(getEffect())

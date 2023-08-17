@@ -1015,8 +1015,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean execute(boolean global, EffectParameters ep) {
-		if (getGame().getEffectLocks().contains(this)) return false;
-		else if (!hasTrueEffect(true)) {
+		if (!hasTrueEffect(true)) {
 			if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 			else if (hasFlag(Flag.NO_EFFECT, true)) {
 				base.lockAll();
@@ -1047,11 +1046,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (trigger == ON_ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
 
 		Shoukan game = getGame();
-		//Hand other = ep.getHands().get(ep.getOtherSide());
-
-		System.out.println(this + " " + base.getLocks() + " << " + trigger);
 		if (base.isLocked(trigger) || trigger == NONE) {
-			System.out.println("skipped");
 			return false;
 		}
 
@@ -1089,10 +1084,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					}
 				}
 			}
-
-			/*if (hero != null) {
-				other.setHeroDefense(true);
-			}*/
 
 			for (Evogear e : equipments) {
 				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
@@ -1171,9 +1162,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			Constants.LOGGER.warn("Failed to execute " + this + " effect\n" + ("/* " + source + " */\n" + getEffect()), e);
 			return false;
 		} finally {
-			System.out.println("unlocked");
-			unlock();
-			//other.setHeroDefense(false);
+			unlock(trigger);
 		}
 	}
 
@@ -1183,8 +1172,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
-			base.lock(trigger);
-
 			CachedScriptManager csm = getCSM();
 			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
 					.forScript(getEffect())
@@ -1196,8 +1183,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					.withVar("trigger", trigger)
 					.run();
 		} catch (Exception ignored) {
-		} finally {
-			unlock();
+		}
+	}
+
+	public void unlock(Trigger trigger) {
+		base.unlock(trigger);
+		for (Evogear e : equipments) {
+			e.getBase().unlock(trigger);
 		}
 	}
 

@@ -97,7 +97,6 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Map<Side, Hand> hands;
 	private final Map<String, String> messages = new HashMap<>();
 	private final Set<EffectOverTime> eots = new HashSet<>();
-	private final Set<EffectHolder<?>> effectLocks = new HashSet<>();
 	private final List<Turn> turns = new TreeList<>();
 	private final boolean singleplayer;
 
@@ -1895,25 +1894,19 @@ public class Shoukan extends GameInstance<Phase> {
 		EffectParameters ep = new EffectParameters(trigger, side);
 
 		try {
-			iterateSlots(side, s -> {
-				s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger)));
-				effectLocks.add(s);
-			});
+			iterateSlots(side, s -> s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger))));
 
 			Hand h = hands.get(side);
 			for (EffectHolder<?> leech : h.getLeeches()) {
 				leech.execute(new EffectParameters(ON_LEECH, side, leech.asSource(trigger)));
-				effectLocks.add(leech);
 			}
 
 			for (Drawable<?> card : h.getCards()) {
 				if (card instanceof EffectHolder<?> eh && eh.isPassive()) {
 					eh.execute(ep);
-					effectLocks.add(eh);
 				}
 			}
 		} finally {
-			effectLocks.clear();
 			triggerEOTs(ep);
 		}
 	}
@@ -1925,18 +1918,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 		try {
 			boolean executed = source.execute(ep);
-			if (source.card() instanceof EffectHolder<?> eh) {
-				effectLocks.add(eh);
-			}
-
 			for (Target t : ep.targets()) {
 				t.execute(ep);
-				effectLocks.add(t.card());
 			}
 
 			return executed;
 		} finally {
-			effectLocks.clear();
 			triggerEOTs(ep);
 		}
 	}
@@ -2097,6 +2084,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			iterateSlots(side, s -> {
+				s.unlock();
 				s.setLastInteraction(null);
 				s.getStats().removeExpired(ValueMod::isExpired);
 				for (Evogear e : s.getEquipments()) {
@@ -2664,10 +2652,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public boolean isRestoring() {
 		return restoring;
-	}
-
-	public Set<EffectHolder<?>> getEffectLocks() {
-		return effectLocks;
 	}
 
 	@Override
