@@ -1049,6 +1049,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Shoukan game = getGame();
 		//Hand other = ep.getHands().get(ep.getOtherSide());
 		try {
+			System.out.println(base.getLocks());
 			if (base.isLocked(trigger) || trigger == NONE) return false;
 			base.lock(trigger);
 
