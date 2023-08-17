@@ -234,8 +234,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public String getDescription(I18N locale) {
-		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
-
+		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
 	}
 
@@ -368,8 +367,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public String getEffect() {
-		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
-
+		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getEffect(), source.getBase().getEffect());
 	}
 
@@ -385,8 +383,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public boolean execute(EffectParameters ep) {
-		if (getGame().getEffectLocks().contains(this)) return false;
-		else if (ep.trigger() == NONE || !hasEffect()) return false;
+		if (!hasEffect()) return false;
 		else if (!hasTrueEffect()) {
 			if (!isSpell() && hand.getLockTime(Lock.EFFECT) > 0) return false;
 		}
@@ -398,19 +395,21 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		}
 
 		Shoukan game = getGame();
-		try {
-			CachedScriptManager csm = getCSM();
-			if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
-				parseDescription(getGame().getLocale());
-			}
+		if (base.isLocked(ep.trigger()) || ep.trigger() == NONE) {
+			return false;
+		}
 
-			csm.forScript(getEffect())
+		try {
+			base.lock(ep.trigger());
+
+			CachedScriptManager csm = getCSM();
+			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
+					.forScript(getEffect())
 					.withConst("evo", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
 					.withVar("ep", ep.forSide(getSide()))
 					.withVar("side", getSide())
-					.withVar("props", csm.getStoredProps())
 					.withVar("trigger", ep.trigger());
 
 			if (!isSpell()) {
@@ -419,9 +418,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 			csm.run();
 
-			hasFlag(Flag.EMPOWERED, true);
-			if (!Utils.equalsAny(ep.trigger(), ON_TICK, ON_EFFECT)) {
-				game.trigger(ON_EFFECT, hand.getSide());
+			if (ep.trigger() != ON_TICK) {
+				hasFlag(Flag.EMPOWERED, true);
 			}
 
 			return true;
@@ -455,17 +453,13 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 		try {
 			CachedScriptManager csm = getCSM();
-			if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
-				parseDescription(getGame().getLocale());
-			}
-
-			csm.forScript(getEffect())
+			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
+					.forScript(getEffect())
 					.withConst("evo", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
 					.withVar("ep", new EffectParameters(trigger, getSide()))
 					.withVar("side", getSide())
-					.withVar("props", csm.getStoredProps())
 					.withVar("self", equipper)
 					.withVar("trigger", trigger)
 					.run();
@@ -614,10 +608,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Evogear evogear = (Evogear) o;
-		return Objects.equals(id, evogear.id)
-			   && Objects.equals(card, evogear.card)
-			   && Objects.equals(equipper, evogear.equipper)
-			   && SERIAL == evogear.SERIAL;
+		return Objects.equals(id, evogear.id) && Objects.equals(card, evogear.card) && SERIAL == evogear.SERIAL;
 	}
 
 	public int posHash() {
@@ -626,7 +617,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, card, equipper, SERIAL);
+		return Objects.hash(id, card, SERIAL);
 	}
 
 	@Override

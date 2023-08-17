@@ -130,11 +130,6 @@ public enum Trigger {
 	ON_ACTIVATE,
 
 	/**
-	 * On triggering any effect
-	 **/
-	ON_EFFECT,
-
-	/**
 	 * On using a spell
 	 **/
 	ON_SPELL,

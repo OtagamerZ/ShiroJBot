@@ -24,6 +24,7 @@ import org.intellij.lang.annotations.Language;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CachedScriptManager {
@@ -33,6 +34,11 @@ public class CachedScriptManager {
 
 	@Language("Groovy")
 	private String code;
+	private Object owner;
+
+	public CachedScriptManager() {
+		context.put("props", storedProps);
+	}
 
 	public CachedScriptManager forScript(@Language("Groovy") String code) {
 		this.code = code;
@@ -46,6 +52,16 @@ public class CachedScriptManager {
 
 	public CachedScriptManager withVar(String key, Object value) {
 		context.put(key, value);
+		return this;
+	}
+
+	public CachedScriptManager assertOwner(Object owner, Runnable elseDo) {
+		if (!Objects.equals(this.owner, owner)) {
+			storedProps.clear();
+			this.owner = owner;
+			elseDo.run();
+		}
+
 		return this;
 	}
 

@@ -97,7 +97,6 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Map<Side, Hand> hands;
 	private final Map<String, String> messages = new HashMap<>();
 	private final Set<EffectOverTime> eots = new HashSet<>();
-	private final Set<EffectHolder<?>> effectLocks = new HashSet<>();
 	private final List<Turn> turns = new TreeList<>();
 	private final boolean singleplayer;
 
@@ -168,7 +167,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Pair<Method, JSONObject> action = toAction(
 				value.toLowerCase().replace(" ", ""),
-				m -> m.getName().startsWith("deb") || hand.selectionPending() == m.getName().equals("select")
+				m -> (!lock || (hand.selectionPending() && m.getName().equals("select")))
+					 && hand.selectionPending() == m.getName().equals("select")
 		);
 
 		execAction(hand, action);
@@ -178,30 +178,26 @@ public class Shoukan extends GameInstance<Phase> {
 		if (action == null) return;
 
 		Method m = action.getFirst();
-		boolean bypass = m.getName().startsWith("deb") || hand.selectionPending() == m.getName().equals("select");
-		if (!lock || bypass) {
+		try {
 			lock = true;
-
-			try {
-				if (m.getName().startsWith("deb")) {
-					cheats = true;
-				}
-
-				if ((boolean) m.invoke(this, hand.getSide(), action.getSecond())) {
-					getCurrent().showHand();
-				}
-			} catch (Exception e) {
-				if (e.getCause() instanceof StackOverflowError) {
-					Constants.LOGGER.error("Fatal error at " + m.getName(), e);
-					getChannel().sendMessage(getString("error/match_termination", GameReport.STACK_OVERFLOW)).queue();
-					close(GameReport.STACK_OVERFLOW);
-					return;
-				}
-
-				Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
-			} finally {
-				lock = false;
+			if (m.getName().startsWith("deb")) {
+				cheats = true;
 			}
+
+			if ((boolean) m.invoke(this, hand.getSide(), action.getSecond())) {
+				getCurrent().showHand();
+			}
+		} catch (Exception e) {
+			if (e.getCause() instanceof StackOverflowError) {
+				Constants.LOGGER.error("Fatal error at " + m.getName(), e);
+				getChannel().sendMessage(getString("error/match_termination", GameReport.STACK_OVERFLOW)).queue();
+				close(GameReport.STACK_OVERFLOW);
+				return;
+			}
+
+			Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
+		} finally {
+			lock = false;
 		}
 	}
 
@@ -1102,18 +1098,6 @@ public class Shoukan extends GameInstance<Phase> {
 				getChannel().sendMessage(getString("error/card_taunted", chosen.getTarget(), chosen.getTarget().getIndex() + 1)).queue();
 				return false;
 			}
-
-			if (enemy.isProtected(chosen)) {
-				curr.consumeMP(1);
-				if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
-					chosen.setAvailable(false);
-				}
-
-				curr.getData().put("last_ability", chosen);
-				trigger(ON_ABILITY, side);
-				reportEvent("str/avoid_effect", true, enemy);
-				return false;
-			}
 		}
 
 		if (!tgt.validate(type)) {
@@ -1898,25 +1882,19 @@ public class Shoukan extends GameInstance<Phase> {
 		EffectParameters ep = new EffectParameters(trigger, side);
 
 		try {
-			iterateSlots(side, s -> {
-				s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger)));
-				effectLocks.add(s);
-			});
+			iterateSlots(side, s -> s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger))));
 
 			Hand h = hands.get(side);
 			for (EffectHolder<?> leech : h.getLeeches()) {
 				leech.execute(new EffectParameters(ON_LEECH, side, leech.asSource(trigger)));
-				effectLocks.add(leech);
 			}
 
 			for (Drawable<?> card : h.getCards()) {
 				if (card instanceof EffectHolder<?> eh && eh.isPassive()) {
 					eh.execute(ep);
-					effectLocks.add(eh);
 				}
 			}
 		} finally {
-			effectLocks.clear();
 			triggerEOTs(ep);
 		}
 	}
@@ -1928,18 +1906,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 		try {
 			boolean executed = source.execute(ep);
-			if (source.card() instanceof EffectHolder<?> eh) {
-				effectLocks.add(eh);
-			}
-
 			for (Target t : ep.targets()) {
 				t.execute(ep);
-				effectLocks.add(t.card());
 			}
 
 			return executed;
 		} finally {
-			effectLocks.clear();
 			triggerEOTs(ep);
 		}
 	}
@@ -2100,6 +2072,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			iterateSlots(side, s -> {
+				s.unlock();
 				s.setLastInteraction(null);
 				s.getStats().removeExpired(ValueMod::isExpired);
 				for (Evogear e : s.getEquipments()) {
@@ -2347,84 +2320,82 @@ public class Shoukan extends GameInstance<Phase> {
 						reportEvent("str/spirit_synth", true, curr.getName());
 					});
 				} else if (curr.getOrigin().major() == Race.DIVINITY) {
-					buttons.put(Utils.parseEmoji("🛡"), w -> {
-						if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_choice")).queue();
-							return;
-						} else if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_action")).queue();
-							return;
-						}
+					StringSelectMenu.Builder cards = StringSelectMenu.create("spells")
+							.setPlaceholder(getString("str/select_spell"))
+							.setRequiredRange(1, 1);
 
-						StringSelectMenu.Builder conditions = StringSelectMenu.create("condition")
-								.setPlaceholder(getString("str/select_trigger"))
-								.setRequiredRange(1, 1);
-
-						for (ContingencyTrigger ct : ContingencyTrigger.values()) {
-							conditions.addOption(getString("trigger/" + ct.name()), ct.name());
-						}
-
-						StringSelectMenu.Builder cards = StringSelectMenu.create("spells")
-								.setPlaceholder(getString("str/select_spell"))
-								.setRequiredRange(1, 1);
-
-						for (Drawable<?> d : curr.getCards()) {
-							if (d.isAvailable() && d instanceof Evogear e && !e.isPassive()) {
-								if (e.isSpell() && e.getTargetType() == TargetType.NONE && curr.canPay(e)) {
-									cards.addOption((curr.getCards().indexOf(e) + 1) + " - " + e, String.valueOf(e.SERIAL));
-								}
+					for (Drawable<?> d : curr.getCards()) {
+						if (d.isAvailable() && d instanceof Evogear e && !e.isPassive()) {
+							if (e.isSpell() && e.getTargetType() == TargetType.NONE && curr.canPay(e)) {
+								cards.addOption((curr.getCards().indexOf(e) + 1) + " - " + e, String.valueOf(e.SERIAL));
 							}
 						}
+					}
 
-						if (cards.getOptions().isEmpty()) {
-							getChannel().sendMessage(getString("error/no_valid_cards")).queue();
-							return;
-						}
+					if (!cards.getOptions().isEmpty()) {
+						buttons.put(Utils.parseEmoji("🛡"), w -> {
+							if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_choice")).queue();
+								return;
+							} else if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_action")).queue();
+								return;
+							}
 
-						WebhookMessageCreateAction<Message> mcr = Objects.requireNonNull(w.getHook())
-								.setEphemeral(true)
-								.sendMessage(getString("str/prepare_contingency"));
+							StringSelectMenu.Builder conditions = StringSelectMenu.create("condition")
+									.setPlaceholder(getString("str/select_trigger"))
+									.setRequiredRange(1, 1);
 
-						ButtonizeHelper bh = new ButtonizeHelper(true)
-								.setCanInteract(u -> u.getId().equals(curr.getUid()))
-								.addAction(Utils.parseEmoji(Constants.ACCEPT), bw -> {
-									List<?> tVals = bw.getDropdownValues().get("condition");
-									List<?> sVals = bw.getDropdownValues().get("spells");
-									if (tVals.isEmpty() || sVals.isEmpty()) return;
+							for (ContingencyTrigger ct : ContingencyTrigger.values()) {
+								conditions.addOption(getString("trigger/" + ct.name()), ct.name());
+							}
 
-									Evogear chosen = (Evogear) curr.getCards().removeFirst(d -> d instanceof Evogear e && e.SERIAL == Long.parseLong((String) sVals.get(0)));
-									if (chosen == null) return;
+							WebhookMessageCreateAction<Message> mcr = Objects.requireNonNull(w.getHook())
+									.setEphemeral(true)
+									.sendMessage(getString("str/prepare_contingency"));
 
-									curr.consumeMP(chosen.getMPCost());
-									curr.consumeHP(chosen.getHPCost());
-									curr.consumeSC(chosen.getSCCost());
-									curr.setOriginCooldown(5);
+							ButtonizeHelper bh = new ButtonizeHelper(true)
+									.setCanInteract(u -> u.getId().equals(curr.getUid()))
+									.addAction(Utils.parseEmoji(Constants.ACCEPT), bw -> {
+										List<?> tVals = bw.getDropdownValues().get("condition");
+										List<?> sVals = bw.getDropdownValues().get("spells");
+										if (tVals.isEmpty() || sVals.isEmpty()) return;
 
-									curr.setContingency(new Contingency(
-											chosen,
-											ContingencyTrigger.valueOf((String) tVals.get(0))
-									));
+										Evogear chosen = (Evogear) curr.getCards().removeFirst(d -> d instanceof Evogear e && e.SERIAL == Long.parseLong((String) sVals.get(0)));
+										if (chosen == null) return;
 
-									reportEvent("str/used_contingency", true, curr.getName());
-								})
-								.setTimeout(30, TimeUnit.SECONDS)
-								.setOnFinalization(m -> {
-									if (curr.getContingency() == null) {
-										getChannel().sendMessage(getString("error/action_cancelled")).queue();
-										return;
-									}
+										curr.consumeMP(chosen.getMPCost());
+										curr.consumeHP(chosen.getHPCost());
+										curr.consumeSC(chosen.getSCCost());
+										curr.setOriginCooldown(4);
 
-									curr.allowAction();
-								});
+										chosen.setFlag(Flag.TRUE_EFFECT);
+										curr.setContingency(new Contingency(
+												chosen,
+												ContingencyTrigger.valueOf((String) tVals.get(0))
+										));
 
-						bh.apply(mcr)
-								.addComponents(ActionRow.of(conditions.build()), ActionRow.of(cards.build()))
-								.queue(
-										s -> Pages.buttonize(s, bh)
-								);
+										reportEvent("str/used_contingency", true, curr.getName());
+									})
+									.setTimeout(30, TimeUnit.SECONDS)
+									.setOnFinalization(m -> {
+										if (curr.getContingency() == null) {
+											getChannel().sendMessage(getString("error/action_cancelled")).queue();
+											return;
+										}
 
-						curr.preventAction();
-					});
+										curr.allowAction();
+									});
+
+							bh.apply(mcr)
+									.addComponents(ActionRow.of(conditions.build()), ActionRow.of(cards.build()))
+									.queue(
+											s -> Pages.buttonize(s, bh)
+									);
+
+							curr.preventAction();
+						});
+					}
 				}
 			}
 
@@ -2669,10 +2640,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public boolean isRestoring() {
 		return restoring;
-	}
-
-	public Set<EffectHolder<?>> getEffectLocks() {
-		return effectLocks;
 	}
 
 	@Override

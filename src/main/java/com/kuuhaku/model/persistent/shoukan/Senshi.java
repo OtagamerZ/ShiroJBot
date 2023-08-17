@@ -458,8 +458,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public String getDescription(I18N locale) {
-		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
-
+		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
 	}
 
@@ -982,8 +981,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public String getEffect() {
-		EffectHolder<?> source = (EffectHolder<?>) Utils.getOr(stats.getSource(), this);
-
+		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getEffect(), source.getBase().getEffect());
 	}
 
@@ -1017,8 +1015,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean execute(boolean global, EffectParameters ep) {
-		if (getGame().getEffectLocks().contains(this)) return false;
-		else if (!hasTrueEffect(true)) {
+		if (!hasTrueEffect(true)) {
 			if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 			else if (hasFlag(Flag.NO_EFFECT, true)) {
 				base.lockAll();
@@ -1049,11 +1046,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (trigger == ON_ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
 
 		Shoukan game = getGame();
-		//Hand other = ep.getHands().get(ep.getOtherSide());
-		try {
-			if (base.isLocked(trigger) || trigger == NONE) return false;
-			base.lock(trigger);
+		if (base.isLocked(trigger) || trigger == NONE) {
+			return false;
+		}
 
+		try {
+			base.lock(trigger);
 			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
 				if (!game.getCurrent().equals(hand)) {
 					Set<String> triggered = new HashSet<>();
@@ -1087,10 +1085,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 			}
 
-			/*if (hero != null) {
-				other.setHeroDefense(true);
-			}*/
-
 			for (Evogear e : equipments) {
 				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
 			}
@@ -1102,28 +1096,23 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					}
 				} else {
 					CachedScriptManager csm = getCSM();
-					if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
-						parseDescription(getGame().getLocale());
-					}
-
-					csm.forScript(getEffect())
+					csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
+							.forScript(getEffect())
 							.withConst("self", this)
 							.withConst("game", getGame())
 							.withConst("data", stats.getData())
 							.withVar("ep", ep.forSide(getSide()))
 							.withVar("side", getSide())
-							.withVar("props", csm.getStoredProps())
 							.withVar("trigger", trigger)
 							.run();
 
-					if (!Utils.equalsAny(ep.trigger(), ON_TICK, ON_EFFECT)) {
+					if (trigger != ON_TICK) {
 						hasFlag(Flag.EMPOWERED, true);
-						game.trigger(ON_EFFECT, hand.getSide());
 					}
 				}
 			}
 
-			if (!global && ep.referee() == null) {
+			if (ep.referee() == null) {
 				Senshi sup = getSupport();
 				if (sup != null) {
 					sup.execute(new EffectParameters(ON_DEFER_SUPPORT, getSide(), new DeferredTrigger(this, trigger), ep.source(), ep.targets()));
@@ -1173,8 +1162,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			Constants.LOGGER.warn("Failed to execute " + this + " effect\n" + ("/* " + source + " */\n" + getEffect()), e);
 			return false;
 		} finally {
-			unlock();
-			//other.setHeroDefense(false);
+			unlock(trigger);
 		}
 	}
 
@@ -1184,25 +1172,24 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
 		try {
-			base.lock(trigger);
-
 			CachedScriptManager csm = getCSM();
-			if (getGame() != null && cachedEffect.getStoredProps().isEmpty()) {
-				parseDescription(getGame().getLocale());
-			}
-
-			csm.forScript(getEffect())
+			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
+					.forScript(getEffect())
 					.withConst("self", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
 					.withVar("ep", new EffectParameters(trigger, getSide()))
 					.withVar("side", getSide())
-					.withVar("props", csm.getStoredProps())
 					.withVar("trigger", trigger)
 					.run();
 		} catch (Exception ignored) {
-		} finally {
-			unlock();
+		}
+	}
+
+	public void unlock(Trigger trigger) {
+		base.unlock(trigger);
+		for (Evogear e : equipments) {
+			e.getBase().unlock(trigger);
 		}
 	}
 
