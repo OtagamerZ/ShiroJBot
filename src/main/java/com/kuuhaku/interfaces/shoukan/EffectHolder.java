@@ -379,12 +379,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		String raw = getBase().getDescription(locale);
 		if (raw != null) {
 			String desc = getDescription(locale);
-			Matcher pat = Utils.regex(desc, "\\{=(.+?)\\}|([A-Za-z]+?)?\\{(.+?)\\}|\\(\\w{2}\\)");
+			Matcher pat = Utils.regex(desc, "\\{=(.+?)\\}|([A-Za-z]+?)?\\{(.+?)\\}|\\(\\w{2}\\)()()()");
 
 			return pat.replaceAll(m -> {
-				System.out.println(m);
-
-				if (m.group(1) != null) {
+				if (m.groupCount() == 1) {
 					ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
 
 					CommonTokenStream cts = new CommonTokenStream(lex);
@@ -397,7 +395,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					walker.walk(listener, tree);
 
 					return "**($listener.output)**";
-				} else if (m.group(3) != null) {
+				} else if (m.groupCount() > 2) {
 					if (m.group(2) != null) {
 						return "__" + m.group(2) + "__" + Tag.valueOf(m.group(3).toUpperCase());
 					}
