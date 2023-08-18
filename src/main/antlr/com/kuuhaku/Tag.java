@@ -19,7 +19,7 @@
 package com.kuuhaku;
 
 public enum Tag {
-	B, CD, ALLY, ENEMY;
+	B, N, CD, ALLY, ENEMY;
 
 	@Override
 	public String toString() {
