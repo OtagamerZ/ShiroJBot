@@ -401,7 +401,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						yield "**($listener.output)**";
 					}
 					case 'B' -> {
-						if (m.group(2) != null) {
+						if (m.group(1) != null) {
 							yield "__" + m.group(1) + "__" + Tag.valueOf(m.group(2).toUpperCase());
 						}
 
