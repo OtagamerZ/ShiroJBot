@@ -22,17 +22,17 @@ import java.util.Map;
 
 public class VariableValue extends Value {
 	private static final Map<String, String> EMOJIS = Map.ofEntries(
-			Map.entry("php", "<:hp:1142148435454197771>"),
-			Map.entry("bhp", "<:base_hp:1142150678962241577>"),
-			Map.entry("pmp", "<:mp:1142148440302825585>"),
-			Map.entry("pdg", "<:degen:1142148428227416116>"),
-			Map.entry("prg", "<:regen:1142148442068623430>"),
-			Map.entry("mp", "<:mana:1142148437408747690>"),
-			Map.entry("hp", "<:blood:1142148421902405662>"),
-			Map.entry("atk", "<:attack:1142148417506770954>"),
-			Map.entry("dfs", "<:defense:1142148426402902030>"),
-			Map.entry("ddg", "<:dodge:1142148430844678296>"),
-			Map.entry("blk", "<:block:1142148419364864161> ")
+			Map.entry("php", "<:hp:1142172799264366703>"),
+			Map.entry("bhp", "<:base_hp:1142172785049862237>"),
+			Map.entry("pmp", "<:mp:1142172839412252742>"),
+			Map.entry("pdg", "<:degen:1142172793811775578>"),
+			Map.entry("prg", "<:regen:1142172841668780092>"),
+			Map.entry("mp", "<:mana:1142172802594635827>"),
+			Map.entry("hp", "<:blood:1142172788703113257>"),
+			Map.entry("atk", "<:attack:1142172783825145876>"),
+			Map.entry("dfs", "<:defense:1142172792448614450>"),
+			Map.entry("ddg", "<:dodge:1142172795242037361>"),
+			Map.entry("blk", "<:block:1142172786605961226>")
 	);
 
 	private String name;

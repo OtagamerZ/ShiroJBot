@@ -24,9 +24,9 @@ public enum Tag {
 	@Override
 	public String toString() {
 		return switch (this) {
-			case CD -> "<:cooldown:1142148423525605486>";
-			case ALLY -> "<:ally_target:1142148414885335090>";
-			case ENEMY -> "<:enemy_target:1142148432350425171>";
+			case CD -> "<:cooldown:1142172789982363691>";
+			case ALLY -> "<:ally_target:1142172781308551188>";
+			case ENEMY -> "<:enemy_target:1142172797796356146>";
 			default -> "";
 		};
 	}
