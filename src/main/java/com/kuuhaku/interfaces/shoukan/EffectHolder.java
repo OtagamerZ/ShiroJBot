@@ -157,9 +157,12 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default String parseDescription(I18N locale) {
 		Hand h = getHand();
 		boolean inGame = h.getGame() != null;
+
+		int equips = 1;
 		EffectHolder<?> source = this;
 		if (this instanceof Evogear e && e.getEquipper() != null) {
 			source = e.getEquipper();
+			equips = e.getEquipper().getEquipments().size();
 		}
 
 		Map<String, Object> values = Map.ofEntries(
@@ -174,7 +177,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Map.entry("dfs", source.getDfs()),
 				Map.entry("ddg", source.getDodge()),
 				Map.entry("blk", source.getBlock()),
-				Map.entry("pow", source.getPower()),
+				Map.entry("pow", source.getPower() / equips),
 				Map.entry("data", getStats().getData())
 		);
 
