@@ -379,38 +379,34 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		String raw = getBase().getDescription(locale);
 		if (raw != null) {
 			String desc = getDescription(locale);
+			Matcher pat = Utils.regex(desc, "\\{=(.+?)\\}|([A-Za-z]+?)?\\{(.+?)\\}|\\(\\w{2}\\)");
 
-			String[] patterns = {"A\\{=(.+?)\\}", "B([A-Za-z]+?)?\\{(.+?)\\}", "C\\(\\w{2}\\)"};
-			for (String pattern : patterns) {
-				Matcher pat = Utils.regex(desc, pattern.substring(1));
+			return pat.replaceAll(m -> {
+				System.out.println(m);
 
-				char type = pattern.charAt(0);
-				System.out.println(pat);
-				desc = pat.replaceAll(m -> switch (type) {
-					case 'A' -> {
-						ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
+				if (m.group(1) != null) {
+					ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
 
-						CommonTokenStream cts = new CommonTokenStream(lex);
-						ShoukanExprParser parser = new ShoukanExprParser(cts);
-						ShoukanExprParser.LineContext tree = parser.line();
+					CommonTokenStream cts = new CommonTokenStream(lex);
+					ShoukanExprParser parser = new ShoukanExprParser(cts);
+					ShoukanExprParser.LineContext tree = parser.line();
 
-						ParseTreeWalker walker = new ParseTreeWalker();
-						ExpressionListener listener = new ExpressionListener();
+					ParseTreeWalker walker = new ParseTreeWalker();
+					ExpressionListener listener = new ExpressionListener();
 
-						walker.walk(listener, tree);
+					walker.walk(listener, tree);
 
-						yield "**($listener.output)**";
+					return Matcher.quoteReplacement(listener.getOutput().toString());
+				} else if (m.group(3) != null) {
+					if (m.group(2) != null) {
+						return Matcher.quoteReplacement("__" + m.group(2) + "__" + Tag.valueOf(m.group(3).toUpperCase()));
 					}
-					case 'B' -> {
-						if (m.group(1) != null) {
-							yield "__" + m.group(1) + "__" + Tag.valueOf(m.group(2).toUpperCase());
-						}
 
-						yield Tag.valueOf(m.group(2).toUpperCase()).toString();
-					}
-					default -> "**" + m.group(0) + "**";
-				});
-			}
+					return Matcher.quoteReplacement(Tag.valueOf(m.group(3).toUpperCase()).toString());
+				}
+
+				return Matcher.quoteReplacement("**" + m.group(0) + "**");
+			});
 		}
 
 		return "";
