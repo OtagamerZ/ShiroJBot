@@ -379,32 +379,37 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		String raw = getBase().getDescription(locale);
 		if (raw != null) {
 			String desc = getDescription(locale);
-			Matcher pat = Utils.regex(desc, "\\{=(.+?)\\}|([A-Za-z]+?)?\\{(.+?)\\}|\\(\\w{2}\\)()()()");
 
-			return pat.replaceAll(m -> {
-				if (m.groupCount() == 1) {
-					ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
+			String[] patterns = {"A\\(\\w{2}\\)", "B([A-Za-z]+?)?\\{(.+?)\\}", "C\\{=(.+?)\\}"};
+			for (String pattern : patterns) {
+				Matcher pat = Utils.regex(desc, pattern.substring(1));
 
-					CommonTokenStream cts = new CommonTokenStream(lex);
-					ShoukanExprParser parser = new ShoukanExprParser(cts);
-					ShoukanExprParser.LineContext tree = parser.line();
+				char type = pattern.charAt(0);
+				desc = pat.replaceAll(m -> switch (type) {
+					case 'A' -> {
+						ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
 
-					ParseTreeWalker walker = new ParseTreeWalker();
-					ExpressionListener listener = new ExpressionListener();
+						CommonTokenStream cts = new CommonTokenStream(lex);
+						ShoukanExprParser parser = new ShoukanExprParser(cts);
+						ShoukanExprParser.LineContext tree = parser.line();
 
-					walker.walk(listener, tree);
+						ParseTreeWalker walker = new ParseTreeWalker();
+						ExpressionListener listener = new ExpressionListener();
 
-					return "**($listener.output)**";
-				} else if (m.groupCount() > 2) {
-					if (m.group(2) != null) {
-						return "__" + m.group(2) + "__" + Tag.valueOf(m.group(3).toUpperCase());
+						walker.walk(listener, tree);
+
+						yield "**($listener.output)**";
 					}
+					case 'B' -> {
+						if (m.group(2) != null) {
+							yield "__" + m.group(2) + "__" + Tag.valueOf(m.group(3).toUpperCase());
+						}
 
-					return Tag.valueOf(m.group(3).toUpperCase()).toString();
-				}
-
-				return "**" + m.group(0) + "**";
-			});
+						yield Tag.valueOf(m.group(3).toUpperCase()).toString();
+					}
+					default -> "**" + m.group(0) + "**";
+				});
+			}
 		}
 
 		return "";
