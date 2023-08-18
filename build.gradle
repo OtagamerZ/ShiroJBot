@@ -141,6 +141,7 @@ dependencies {
 }
 
 configurations.configureEach {
+	resolutionStrategy.force group: "org.antlr", name: "antlr4", version: "4.12.0"
 	resolutionStrategy.force group: "org.antlr", name: "antlr4-runtime", version: "4.12.0"
 }
 
