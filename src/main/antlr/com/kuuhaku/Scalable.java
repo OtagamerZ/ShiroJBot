@@ -68,7 +68,9 @@ public class Scalable extends Value {
 
 	@Override
 	public String toString() {
-		StringBuilder delimiter = new StringBuilder(this.delimiter);
+		StringBuilder delimiter = new StringBuilder();
+		delimiter.append(this.delimiter);
+
 		if (isScalingVar()) {
 			return values[1] + "" + values[0];
 		} else {

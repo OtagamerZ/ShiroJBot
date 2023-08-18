@@ -379,7 +379,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		String raw = getBase().getDescription(locale);
 		if (raw != null) {
 			String desc = getDescription(locale);
-			Matcher pat = Utils.regex(desc, "\\{=(.+?)\\}|([A-Za-z]+?)?\\{(.+?)\\}|\\(\\w{2}\\)");
+			Matcher pat = Utils.regex(desc, "\\{=(.+?)\\}|([A-Za-z]+?)?\\{(.+?)\\}|\\([^:]+?\\)");
 
 			return pat.replaceAll(m -> {
 				if (m.group(1) != null) {

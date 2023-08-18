@@ -43,6 +43,6 @@ public class VariableValue extends Value {
 
 	@Override
 	public String toString() {
-		return EMOJIS.getOrDefault(name.substring(1), name);
+		return EMOJIS.getOrDefault(name.substring(1), " 🔗");
 	}
 }
