@@ -385,6 +385,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Matcher pat = Utils.regex(desc, pattern.substring(1));
 
 				char type = pattern.charAt(0);
+				System.out.println(pat);
 				desc = pat.replaceAll(m -> switch (type) {
 					case 'A' -> {
 						ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
