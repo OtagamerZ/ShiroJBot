@@ -769,6 +769,7 @@ public class Hand {
 
 	public void modHP(double value, boolean pure) {
 		if (value == 0) return;
+		else if (value > 0 && origin.major() == Race.UNDEAD) return;
 		else if (game.getArcade() == Arcade.OVERCHARGE) {
 			value *= Math.min(0.5 + 0.5 * (Math.ceil(game.getTurn() / 2d) / 10), 1);
 		} else if (game.getArcade() == Arcade.DECAY) {
@@ -821,11 +822,8 @@ public class Hand {
 					return;
 				}
 			}
-		}
 
-		if (origin.major() == Race.UNDEAD) {
-			if (value > 0) return;
-			else {
+			if (origin.major() == Race.UNDEAD) {
 				regdeg.add(value);
 				value = 0;
 			}
