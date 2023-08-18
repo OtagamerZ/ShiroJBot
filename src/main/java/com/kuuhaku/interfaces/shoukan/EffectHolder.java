@@ -29,6 +29,7 @@ import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.DeckStyling;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
@@ -156,6 +157,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default String parseDescription(I18N locale) {
 		Hand h = getHand();
 		boolean inGame = h.getGame() != null;
+		EffectHolder<?> source = this;
+		if (this instanceof Evogear e && e.getEquipper() != null) {
+			source = e.getEquipper();
+		}
 
 		Map<String, Object> values = Map.ofEntries(
 				Map.entry("php", inGame ? h.getHP() : 6000),
@@ -163,13 +168,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Map.entry("pmp", inGame ? h.getMP() : 5),
 				Map.entry("pdg", inGame ? Math.max(0, -h.getRegDeg().peek()) : 0),
 				Map.entry("prg", inGame ? Math.max(0, h.getRegDeg().peek()) : 0),
-				Map.entry("mp", getMPCost()),
-				Map.entry("hp", getHPCost()),
-				Map.entry("atk", getDmg()),
-				Map.entry("dfs", getDfs()),
-				Map.entry("ddg", getDodge()),
-				Map.entry("blk", getBlock()),
-				Map.entry("pow", getPower()),
+				Map.entry("mp", source.getMPCost()),
+				Map.entry("hp", source.getHPCost()),
+				Map.entry("atk", source.getDmg()),
+				Map.entry("dfs", source.getDfs()),
+				Map.entry("ddg", source.getDodge()),
+				Map.entry("blk", source.getBlock()),
+				Map.entry("pow", source.getPower()),
 				Map.entry("data", getStats().getData())
 		);
 
