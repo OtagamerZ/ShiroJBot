@@ -380,7 +380,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		if (raw != null) {
 			String desc = getDescription(locale);
 
-			String[] patterns = {"A\\(\\w{2}\\)", "B([A-Za-z]+?)?\\{(.+?)\\}", "C\\{=(.+?)\\}"};
+			String[] patterns = {"A\\{=(.+?)\\}", "B([A-Za-z]+?)?\\{(.+?)\\}", "C\\(\\w{2}\\)"};
 			for (String pattern : patterns) {
 				Matcher pat = Utils.regex(desc, pattern.substring(1));
 
@@ -402,10 +402,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					}
 					case 'B' -> {
 						if (m.group(2) != null) {
-							yield "__" + m.group(2) + "__" + Tag.valueOf(m.group(3).toUpperCase());
+							yield "__" + m.group(1) + "__" + Tag.valueOf(m.group(2).toUpperCase());
 						}
 
-						yield Tag.valueOf(m.group(3).toUpperCase()).toString();
+						yield Tag.valueOf(m.group(2).toUpperCase()).toString();
 					}
 					default -> "**" + m.group(0) + "**";
 				});
