@@ -394,7 +394,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 					walker.walk(listener, tree);
 
-					return Matcher.quoteReplacement(listener.getOutput().toString());
+					return Matcher.quoteReplacement("**(" + listener.getOutput().toString() + ")**");
 				} else if (m.group(3) != null) {
 					if (m.group(2) != null) {
 						return Matcher.quoteReplacement("__" + m.group(2) + "__" + Tag.valueOf(m.group(3).toUpperCase()));

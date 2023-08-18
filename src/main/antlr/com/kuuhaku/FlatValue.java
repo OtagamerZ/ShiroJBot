@@ -18,6 +18,8 @@
 
 package com.kuuhaku;
 
+import com.kuuhaku.util.Utils;
+
 public class FlatValue extends Value implements Invertable {
 	private double value;
 
@@ -32,6 +34,6 @@ public class FlatValue extends Value implements Invertable {
 
 	@Override
 	public String toString() {
-		return String.valueOf(value);
+		return Utils.roundToString(value, 2);
 	}
 }

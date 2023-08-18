@@ -18,6 +18,8 @@
 
 package com.kuuhaku;
 
+import com.kuuhaku.util.Utils;
+
 public class PercentageValue extends Value implements Invertable {
 	private double value;
 
@@ -32,6 +34,6 @@ public class PercentageValue extends Value implements Invertable {
 
 	@Override
 	public String toString() {
-		return (int) (value * 100) + "%";
+		return Utils.roundToString(value * 100, 2) + "%";
 	}
 }
