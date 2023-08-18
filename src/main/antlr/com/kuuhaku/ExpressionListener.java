@@ -24,7 +24,6 @@ import static com.kuuhaku.ShoukanExprParser.*;
 
 public class ExpressionListener extends ShoukanExprBaseListener {
 	private Scalable current;
-	private Double[] minMax = new Double[2];
 
 	private Scalable output;
 
@@ -104,10 +103,8 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 			sumSub(ss);
 		} else if (ctx instanceof FunctionContext fc) {
 			if (fc.func.getType() == MAX) {
-				minMax[0] = Double.parseDouble(fc.left.getText());
 				flatten(fc.right);
 			} else {
-				minMax[1] = Double.parseDouble(fc.right.getText());
 				flatten(fc.left);
 			}
 		} else if (ctx instanceof GroupContext g) {
@@ -117,9 +114,5 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 
 	public Scalable getOutput() {
 		return output;
-	}
-
-	public Double[] getMinMax() {
-		return minMax;
 	}
 }
