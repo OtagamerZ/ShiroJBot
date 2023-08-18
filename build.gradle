@@ -136,15 +136,8 @@ dependencies {
 	testImplementation group: "org.junit.jupiter", name: "junit-jupiter", version: "5.9.2"
 
 	//Antlr
-	antlr group: "org.antlr", name: "antlr4", version: "4.12.0"
-	implementation group: "org.antlr", name: "antlr4-runtime", version: "4.12.0"
-}
-
-configurations.configureEach {
-	resolutionStrategy {
-		force group: "org.antlr", name: "antlr4", version: "4.12.0"
-		force group: "org.antlr", name: "antlr4-runtime", version: "4.12.0"
-	}
+	antlr group: "org.antlr", name: "antlr4", version: "4.10.1"
+	implementation group: "org.antlr", name: "antlr4-runtime", version: "4.10.1"
 }
 
 idea {
