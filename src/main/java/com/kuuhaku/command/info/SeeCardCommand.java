@@ -25,6 +25,7 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.CardType;
@@ -152,6 +153,10 @@ public class SeeCardCommand implements Executable {
 				}
 
 				bi = d.render(locale, dk);
+
+				if (d instanceof EffectHolder<?> eh) {
+					eb.setDescription(eh.getReadableDescription(locale));
+				}
 
 				if (d instanceof Senshi s && s.isFusion()) {
 					eb.setAuthor(null);

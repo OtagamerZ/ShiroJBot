@@ -18,6 +18,10 @@
 
 package com.kuuhaku.interfaces.shoukan;
 
+import com.kuuhaku.ExpressionListener;
+import com.kuuhaku.ShoukanExprLexer;
+import com.kuuhaku.ShoukanExprParser;
+import com.kuuhaku.Tag;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Flags;
@@ -38,6 +42,9 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.util.TriConsumer;
 
@@ -54,7 +61,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	Map<String, Pair<Integer, Color>> COLORS = Map.ofEntries(
 			Map.entry("php", new Pair<>(0, new Color(0x85C720))),
-			Map.entry("bhp", new Pair<>(1, new Color(0x85C720))),
+			Map.entry("bhp", new Pair<>(1, new Color(0xC78C20))),
 			Map.entry("pmp", new Pair<>(2, new Color(0x3F9EFF))),
 			Map.entry("pdg", new Pair<>(3, new Color(0x9A1313))),
 			Map.entry("prg", new Pair<>(4, new Color(0x7ABCFF))),
@@ -76,7 +83,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	String DC1 = "\u200B";
 	String DC2 = "\u200C";
 	String[] ICONS = {
-			"hp.png", "hp.png", "mp.png",
+			"hp.png", "base_hp.png", "mp.png",
 			"degen.png", "regen.png", "blood.png",
 			"mana.png", "attack.png", "defense.png",
 			"dodge.png", "block.png", "cooldown.png",
@@ -366,5 +373,40 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					highlightValues(g2d, style.getFrame().isLegacy())
 			);
 		}
+	}
+
+	default String getReadableDescription(I18N locale) {
+		String raw = getBase().getDescription(locale);
+		if (raw != null) {
+			String desc = getDescription(locale);
+			Matcher pat = Utils.regex(desc, "\\{=(.+?)\\}|([A-Za-z]+?)?\\{(.+?)\\}|\\(\\w{2}\\)");
+
+			return pat.replaceAll(m -> {
+				if (m.group(1) != null) {
+					ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
+
+					CommonTokenStream cts = new CommonTokenStream(lex);
+					ShoukanExprParser parser = new ShoukanExprParser(cts);
+					ShoukanExprParser.LineContext tree = parser.line();
+
+					ParseTreeWalker walker = new ParseTreeWalker();
+					ExpressionListener listener = new ExpressionListener();
+
+					walker.walk(listener, tree);
+
+					return "**($listener.output)**";
+				} else if (m.group(3) != null) {
+					if (m.group(2) != null) {
+						return "__" + m.group(2) + "__" + Tag.valueOf(m.group(3).toUpperCase());
+					}
+
+					return Tag.valueOf(m.group(3).toUpperCase()).toString();
+				}
+
+				return "**" + m.group(0) + "**";
+			});
+		}
+
+		return "";
 	}
 }
