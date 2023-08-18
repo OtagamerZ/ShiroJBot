@@ -382,8 +382,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			Matcher pat = Utils.regex(desc, "\\{=(.+?)\\}|([A-Za-z]+?)?\\{(.+?)\\}|\\(\\w{2}\\)");
 
 			return pat.replaceAll(m -> {
-				System.out.println(m);
-
 				if (m.group(1) != null) {
 					ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
 
