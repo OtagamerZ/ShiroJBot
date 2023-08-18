@@ -89,7 +89,16 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 			current.invert();
 		}
 
-		if (ctx instanceof MulDivContext md) {
+		if (ctx instanceof ValueContext value) {
+			Value v;
+			if (value.element.getType() == VAR) {
+				v = new VariableValue(value.getText());
+			} else {
+				v = new FlatValue(Double.parseDouble(value.getText()));
+			}
+
+			current.setLeft(v);
+		} else if (ctx instanceof MulDivContext md) {
 			mulDiv(md);
 		} else if (ctx instanceof SumSubContext ss) {
 			sumSub(ss);

@@ -66,8 +66,21 @@ public class Scalable extends Value {
 		return vars == 1 && scales == 1;
 	}
 
+	public boolean isPure() {
+		int vals = 0;
+		for (Value v : values) {
+			if (v != null) vals++;
+		}
+
+		return vals <= 1;
+	}
+
 	@Override
 	public String toString() {
+		if (isPure()) {
+			return String.valueOf(values[0]);
+		}
+
 		StringBuilder delimiter = new StringBuilder();
 		delimiter.append(this.delimiter);
 
