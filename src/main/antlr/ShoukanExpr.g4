@@ -6,7 +6,7 @@ expr: left=expr op=(MUL|DIV) right=expr               #MulDiv
     | left=expr op=(SUM|SUB) right=expr               #SumSub
     | func=(MIN|MAX) '(' left=expr ',' right=expr ')' #Function
     | SUB? '(' expr ')'                               #Group
-    | SUB? element=(VAR|NUM)                          #Value
+    | SUB? element=(VAR|NUM) ntype=('d'|'f')?         #Value
     ;
 
 MUL: '*';
