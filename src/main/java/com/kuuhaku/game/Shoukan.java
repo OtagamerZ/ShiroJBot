@@ -1239,9 +1239,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 		int lifesteal = you.getBase().lifesteal();
 		int thorns = 0;
-		double dmgMult = 1d / (1 << op.getChainReduction());
-		if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
-			dmgMult /= 2;
+		double dmgMult = 1;
+		if (dmg < 0) {
+			dmgMult = op.getStats().getDamageMult().get() / (1 << op.getChainReduction());
+			if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
+				dmgMult /= 2;
+			}
 		}
 
 		boolean win = false;
@@ -1463,7 +1466,7 @@ public class Shoukan extends GameInstance<Phase> {
 			int val = eHP - op.getHP();
 			outcome += "\n" + getString(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
 
-			double mult = (val > 0 ? op.getStats().getDamageMult() : op.getStats().getHealMult()).get();
+			double mult = (val > 0 ? dmgMult : op.getStats().getHealMult().get());
 			if (mult != 1) {
 				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"),
 						Utils.roundToString((1 - mult) * 100, 2)
@@ -1529,9 +1532,12 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int lifesteal = you.getBase().lifesteal();
-		double dmgMult = 1d / (1 << target.getChainReduction());
-		if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
-			dmgMult /= 2;
+		double dmgMult = 1;
+		if (dmg < 0) {
+			dmgMult = target.getStats().getDamageMult().get() / (1 << target.getChainReduction());
+			if (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0) {
+				dmgMult /= 2;
+			}
 		}
 
 		try {
@@ -1630,13 +1636,14 @@ public class Shoukan extends GameInstance<Phase> {
 			int val = eHP - target.getHP();
 			outcome += "\n" + getString(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
 
-			double mult = (val > 0 ? target.getStats().getDamageMult() : target.getStats().getHealMult()).get();
+			double mult = (val > 0 ? dmgMult : target.getStats().getHealMult().get());
 			if (mult != 1) {
 				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"),
 						Utils.roundToString((1 - mult) * 100, 2)
 				) + ")";
 			}
 		}
+
 		if (pHP != you.getHP()) {
 			int val = pHP - you.getHP();
 			outcome += "\n" + getString(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(val));
