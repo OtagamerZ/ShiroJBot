@@ -21,20 +21,25 @@ package com.kuuhaku.model.records.shoukan;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.ContingencyTrigger;
-import com.kuuhaku.model.enums.shoukan.Phase;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 public record Contingency(Evogear card, ContingencyTrigger trigger) {
 	public boolean check() {
 		Hand h = card.getHand();
-		Shoukan game = h.getGame();
 
 		return switch (trigger) {
-			case HP_LOW -> h.isLowLife();
-			case HP_CRITICAL -> h.isCritical();
-			case PLAN_PHASE -> game.getCurrentSide() != h.getSide() && game.getPhase() == Phase.PLAN;
-			case COMBAT_PHASE -> game.getCurrentSide() != h.getSide() && game.getPhase() == Phase.COMBAT;
-			case OUT_OF_MANA -> h.getMP() == 0;
+			case HP_LOW -> h.getHPPrcnt() <= 0.5;
+			case HP_CRITICAL -> h.getHPPrcnt() <= 0.25;
+			case ON_T4 -> {
+				Evogear e = h.getOther().getData().get(Evogear.class, "last_spell");
+				yield e != null && e.getTier() >= 4;
+			}
+			case ON_FUSION -> {
+				Senshi s = h.getOther().getData().get(Senshi.class, "last_summon");
+				yield s != null && s.getBase().getTags().contains("FUSION");
+			}
+			case ON_HIGH_MANA -> h.getOther().getMP() >= 10;
 			case DEFEATED -> h.getHP() == 0;
 		};
 	}

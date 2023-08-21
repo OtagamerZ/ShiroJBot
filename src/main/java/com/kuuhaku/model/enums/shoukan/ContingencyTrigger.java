@@ -19,5 +19,5 @@
 package com.kuuhaku.model.enums.shoukan;
 
 public enum ContingencyTrigger {
-	HP_LOW, HP_CRITICAL, PLAN_PHASE, COMBAT_PHASE, OUT_OF_MANA, DEFEATED
+	HP_LOW, HP_CRITICAL, ON_T4, ON_FUSION, ON_HIGH_MANA, DEFEATED
 }

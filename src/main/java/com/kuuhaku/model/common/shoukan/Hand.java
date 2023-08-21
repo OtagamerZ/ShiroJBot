@@ -1033,6 +1033,8 @@ public class Hand {
 	}
 
 	public void reduceOriginCooldown(int time) {
+		if (contingency != null) return;
+
 		int curr = Bit.get(state, 1, 4);
 		state = Bit.set(state, 1, Math.max(0, curr - time), 4);
 	}

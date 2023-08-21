@@ -2573,9 +2573,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr = getCurrent();
 		curr.modMP(curr.getBase().mpGain().get());
 		curr.applyVoTs();
-		if (curr.getContingency() == null) {
-			curr.reduceOriginCooldown(1);
-		}
+		curr.reduceOriginCooldown(1);
 
 		curr.getStats().expireMods();
 
