@@ -657,6 +657,13 @@
 								 m /= 2;
 							 }
 
+							 if (origin.hasMinor(Race.DIVINITY)) {
+								 m += getSenshi().parallelStream()
+										 .map(Senshi::getMPCost)
+										 .min(Integer::compareTo)
+										 .orElse(0);
+							 }
+
 							 if (h != null && h.getGame() != null) {
 								 if (origin.synergy() == Race.FEY) {
 									 m = mp * (Calc.chance(3, h.getGame().getRng()) ? 2 : 1);

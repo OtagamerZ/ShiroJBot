@@ -29,3 +29,17 @@ BEGIN
     $$, $1, $2);
 END;
 $body$;
+
+CREATE OR REPLACE FUNCTION by_tag(VARCHAR, VARIADIC VARCHAR[])
+    RETURNS SETOF VARCHAR
+    LANGUAGE plpgsql
+AS
+$body$
+BEGIN
+    RETURN QUERY EXECUTE format($$
+    SELECT card_id
+    FROM %1$s
+    WHERE tags \?& '%2$s'
+    $$, $1, $2);
+END;
+$body$;

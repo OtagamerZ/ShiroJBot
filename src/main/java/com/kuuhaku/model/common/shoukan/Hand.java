@@ -302,13 +302,6 @@ public class Hand {
 							.peek(d -> {
 								if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
 									Utils.shufflePairs(f.getModifiers(), game.getRng());
-								} else if (d instanceof Senshi s && origin.hasMinor(Race.DIVINITY) && !s.hasEffect()) {
-									s.getStats().setSource(
-											Senshi.getRandom(game.getRng(),
-													"WHERE effect IS NOT NULL",
-													"AND mana = " + s.getBase().getMana()
-											)
-									);
 								}
 							})
 							.collect(Utils.toShuffledList(game.getRng()))
@@ -324,13 +317,6 @@ public class Hand {
 						.peek(d -> {
 							if (d instanceof Field f && origin.synergy() == Race.PIXIE) {
 								Utils.shufflePairs(f.getModifiers(), game.getRng());
-							} else if (d instanceof Senshi s && origin.hasMinor(Race.DIVINITY) && !s.hasEffect()) {
-								s.getStats().setSource(
-										Senshi.getRandom(game.getRng(),
-												"WHERE effect IS NOT NULL",
-												"AND mana = " + s.getBase().getMana()
-										)
-								);
 							}
 						})
 						.collect(Utils.toShuffledList(game.getRng()))
@@ -780,6 +766,10 @@ public class Hand {
 			}
 		}
 
+		if (value < 0 && origin.hasMinor(Race.BEAST)) {
+			value = Math.max(base.hp() / 4d, value);
+		}
+
 		int before = hp;
 
 		if (!pure) {
@@ -825,11 +815,6 @@ public class Hand {
 
 			if (origin.major() == Race.UNDEAD) {
 				regdeg.add(value);
-				value = 0;
-			}
-
-			if (value <= -base.hp() / 5d && origin.hasMinor(Race.BEAST)) {
-				regdeg.add(value, 1);
 				value = 0;
 			}
 
