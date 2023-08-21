@@ -48,40 +48,31 @@ END;
 $body$;
 
 CREATE OR REPLACE FUNCTION usage_by_tag(VARCHAR, VARIADIC VARCHAR[])
-    RETURNS TABLE
-            (
-                id    INT,
-                total BIGINT
-            )
+    RETURNS TABLE(id INT, total BIGINT)
     LANGUAGE plpgsql
 AS
 $body$
 BEGIN
     RETURN QUERY
-        SELECT x.id
-             , count(1) AS used
-        FROM (
-                 SELECT x.id
-                      , x.front || x.back AS cards
-                 FROM (
-                          SELECT x.id
-                               , jsonb_path_query_array(x.placed, '$[*].frontline') AS front
-                               , jsonb_path_query_array(x.placed, '$[*].backline')  AS back
-                          FROM (
-                                   SELECT w.id
-                                        , jsonb_path_query_array(w.turns, '$.placed') AS placed
-                                   FROM v_match_winner w
-                                   WHERE uid = $1
-                               ) x
-                      ) x
-             ) x
-                 CROSS JOIN jsonb_array_elements_text(x.cards) e(card)
-        WHERE e.card IN (
-                            SELECT card_id
-                            FROM senshi
-                            WHERE tags
-    \
-    ?& $2)
+    SELECT x.id
+         , count(1) AS used
+    FROM (
+         SELECT x.id
+              , x.front || x.back AS cards
+         FROM (
+              SELECT x.id
+                   , jsonb_path_query_array(x.placed, '$[*].frontline') AS front
+                   , jsonb_path_query_array(x.placed, '$[*].backline')  AS back
+              FROM (
+                   SELECT w.id
+                        , jsonb_path_query_array(w.turns, '$.placed') AS placed
+                   FROM v_match_winner w
+                   WHERE uid = $1
+                   ) x
+              ) x
+         ) x
+             CROSS JOIN jsonb_array_elements_text(x.cards) e(card)
+    WHERE e.card IN (SELECT card_id FROM senshi WHERE tags \?& $2)
     GROUP BY x.id
     ORDER BY used DESC;
 END;
