@@ -1237,6 +1237,7 @@ public class Shoukan extends GameInstance<Phase> {
 			dmg = source.getActiveAttr();
 		}
 
+		int direct = 0;
 		int lifesteal = you.getBase().lifesteal();
 		int thorns = 0;
 		double dmgMult = 1;
@@ -1257,7 +1258,7 @@ public class Shoukan extends GameInstance<Phase> {
 					for (Object o : charms) {
 						Charm c = Charm.valueOf(String.valueOf(o));
 						switch (c) {
-							case PIERCING -> op.modHP((int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100));
+							case PIERCING -> direct += (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
 							case WOUNDING -> {
 								int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
 								op.getRegDeg().add(val);
@@ -1446,7 +1447,7 @@ public class Shoukan extends GameInstance<Phase> {
 					dmg = 0;
 				}
 
-				op.modHP((int) -(dmg * dmgMult));
+				op.modHP((int) -((dmg + direct) * dmgMult));
 				op.addChain();
 
 				if (thorns > 0) {
@@ -1531,6 +1532,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
+		int direct = 0;
 		int lifesteal = you.getBase().lifesteal();
 		double dmgMult = 1;
 		if (dmg < 0) {
@@ -1548,7 +1550,7 @@ public class Shoukan extends GameInstance<Phase> {
 					for (Object o : charms) {
 						Charm c = Charm.valueOf(String.valueOf(o));
 						switch (c) {
-							case PIERCING -> target.modHP((int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100));
+							case PIERCING -> direct += (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
 							case WOUNDING -> {
 								int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
 								target.getRegDeg().add(val);
@@ -1618,7 +1620,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				target.modHP((int) -(dmg * dmgMult));
+				target.modHP((int) -((dmg + direct) * dmgMult));
 				target.addChain();
 
 				if (lifesteal > 0) {
