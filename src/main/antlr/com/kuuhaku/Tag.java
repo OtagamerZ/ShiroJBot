@@ -19,15 +19,35 @@
 package com.kuuhaku;
 
 public enum Tag {
-	B, N, CD, ALLY, ENEMY;
+	B,
+	N,
+	PHP("<:hp:1142172799264366703>"),
+	BHP("<:base_hp:1142172785049862237>"),
+	PMP("<:mp:1142172839412252742>"),
+	PDG("<:degen:1142172793811775578>"),
+	PRG("<:regen:1142172841668780092>"),
+	MP("<:mana:1142172802594635827>"),
+	HP("<:blood:1142172788703113257>"),
+	ATK("<:attack:1142172783825145876>"),
+	DFS("<:defense:1142172792448614450>"),
+	DDG("<:dodge:1142172795242037361>"),
+	BLK("<:block:1142172786605961226>"),
+	CD("<:cooldown:1142172789982363691>"),
+	ALLY("<:ally_target:1142172781308551188>"),
+	ENEMY("<:enemy_target:1142172797796356146>");
+
+	private final String emote;
+
+	Tag() {
+		this.emote = "";
+	}
+
+	Tag(String emote) {
+		this.emote = emote;
+	}
 
 	@Override
 	public String toString() {
-		return switch (this) {
-			case CD -> "<:cooldown:1142172789982363691>";
-			case ALLY -> "<:ally_target:1142172781308551188>";
-			case ENEMY -> "<:enemy_target:1142172797796356146>";
-			default -> "";
-		};
+		return emote;
 	}
 }
