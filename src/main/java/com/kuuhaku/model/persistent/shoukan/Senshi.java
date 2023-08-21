@@ -1439,7 +1439,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public static XList<Senshi> getByTag(RandomGenerator rng, String... tags) {
-		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('senshi', ?1)", List.of(tags));
+		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('senshi', ?1)", (Object) tags);
 
 		return new XList<>(DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE s.id IN ?1 ORDER BY s.id", ids), rng);
 	}
