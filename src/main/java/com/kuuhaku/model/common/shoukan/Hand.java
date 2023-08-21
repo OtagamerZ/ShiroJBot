@@ -767,7 +767,7 @@ public class Hand {
 		}
 
 		if (value < 0 && origin.hasMinor(Race.BEAST)) {
-			value = Math.max(base.hp() / 4d, value);
+			value = Math.max(-base.hp() / 4d, value);
 		}
 
 		int before = hp;
