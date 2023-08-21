@@ -77,7 +77,7 @@ public enum Race {
 //		DRYAD(HUMAN.flag | SPIRIT.flag),
 //		VAMPIRE(HUMAN.flag | UNDEAD.flag),
 //		DARK_ELF(HUMAN.flag | MYSTICAL.flag),
-//		TIEFLING(HUMAN.flag | DEMON.flag),
+//		CONDEMNED(HUMAN.flag | DEMON.flag),
 //		GARGOYLE(BEAST.flag | MACHINE.flag),
 //		CELESTIAL(BEAST.flag | DIVINITY.flag),
 //		ALIEN(BEAST.flag | SPIRIT.flag),
