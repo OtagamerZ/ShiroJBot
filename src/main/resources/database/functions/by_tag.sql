@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION by_tag(VARCHAR, VARIADIC VARCHAR[])
+CREATE OR REPLACE FUNCTION by_tag(VARCHAR, VARCHAR[])
     RETURNS SETOF VARCHAR
     LANGUAGE plpgsql
 AS
