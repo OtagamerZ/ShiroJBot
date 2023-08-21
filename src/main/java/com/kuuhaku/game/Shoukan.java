@@ -1458,10 +1458,8 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 		} finally {
-			if (announce && source.getSlot().getIndex() != -1) {
-				if (target.getSlot().getIndex() == -1 && !source.hasFlag(Flag.FREE_ACTION, true)) {
-					source.setAvailable(false);
-				}
+			if (announce && source.getSlot().getIndex() != -1 && !source.hasFlag(Flag.FREE_ACTION, true)) {
+				source.setAvailable(false);
 			}
 		}
 
