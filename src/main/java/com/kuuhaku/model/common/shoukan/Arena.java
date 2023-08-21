@@ -623,7 +623,7 @@ public class Arena implements Renderer {
 
 							int maxCd = switch (hand.getOrigin().major()) {
 								case SPIRIT -> 3;
-								case UNDEAD -> 4;
+								case DIVINITY -> 4;
 								default -> 1;
 							};
 
