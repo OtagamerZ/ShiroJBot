@@ -1078,7 +1078,13 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		int locktime = curr.getLockTime(Lock.EFFECT);
+		int locktime = curr.getLockTime(Lock.ABILITY);
+		if (locktime > 0 && !chosen.hasTrueEffect()) {
+			getChannel().sendMessage(getString("error/ability_locked", locktime)).queue();
+			return false;
+		}
+
+		locktime = curr.getLockTime(Lock.EFFECT);
 		if (locktime > 0 && !chosen.hasTrueEffect()) {
 			getChannel().sendMessage(getString("error/effect_locked", locktime)).queue();
 			return false;

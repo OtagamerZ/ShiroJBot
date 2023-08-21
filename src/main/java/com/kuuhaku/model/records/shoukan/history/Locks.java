@@ -18,5 +18,5 @@
 
 package com.kuuhaku.model.records.shoukan.history;
 
-public record Locks(int effect, int spell, int taunt, int deck) {
+public record Locks(int effect, int spell, int ability, int taunt, int deck) {
 }

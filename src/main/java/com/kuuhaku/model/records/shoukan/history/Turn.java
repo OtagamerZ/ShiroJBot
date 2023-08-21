@@ -43,6 +43,7 @@ public record Turn(int turn, Side top, Side bottom, List<String> banned, String 
 				new Locks(
 						top.getLockTime(Lock.EFFECT),
 						top.getLockTime(Lock.SPELL),
+						top.getLockTime(Lock.ABILITY),
 						top.getLockTime(Lock.TAUNT),
 						top.getLockTime(Lock.DECK)
 				),
@@ -66,6 +67,7 @@ public record Turn(int turn, Side top, Side bottom, List<String> banned, String 
 				new Locks(
 						bot.getLockTime(Lock.EFFECT),
 						bot.getLockTime(Lock.SPELL),
+						bot.getLockTime(Lock.ABILITY),
 						bot.getLockTime(Lock.TAUNT),
 						bot.getLockTime(Lock.DECK)
 				),
