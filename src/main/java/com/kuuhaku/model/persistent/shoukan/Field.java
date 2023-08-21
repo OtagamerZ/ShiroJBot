@@ -346,7 +346,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	public static XList<Field> getByTag(RandomGenerator rng, String... tags) {
-		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('field', ?1)", (Object[]) tags);
+		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('field', ?1)", List.of(tags));
 
 		return new XList<>(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.id IN ?1 ORDER BY f.id", ids), rng);
 	}
