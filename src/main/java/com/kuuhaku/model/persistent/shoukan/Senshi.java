@@ -1085,7 +1085,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 			}
 
-			for (Evogear e : equipments) {
+			for (Evogear e : List.copyOf(equipments)) {
 				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
 			}
 
