@@ -661,7 +661,7 @@
 								 m += getSenshi().parallelStream()
 										 .map(Senshi::getMPCost)
 										 .min(Integer::compareTo)
-										 .orElse(0);
+										 .orElse(0) / 2;
 							 }
 
 							 if (h != null && h.getGame() != null) {
