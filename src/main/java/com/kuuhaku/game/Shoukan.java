@@ -1258,7 +1258,7 @@ public class Shoukan extends GameInstance<Phase> {
 					for (Object o : charms) {
 						Charm c = Charm.valueOf(String.valueOf(o));
 						switch (c) {
-							case PIERCING -> direct += (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
+							case PIERCING -> direct -= dmg * c.getValue(e.getTier()) / 100;
 							case WOUNDING -> {
 								int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
 								op.getRegDeg().add(val);
@@ -1550,7 +1550,7 @@ public class Shoukan extends GameInstance<Phase> {
 					for (Object o : charms) {
 						Charm c = Charm.valueOf(String.valueOf(o));
 						switch (c) {
-							case PIERCING -> direct += (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
+							case PIERCING -> direct -= dmg * c.getValue(e.getTier()) / 100;
 							case WOUNDING -> {
 								int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
 								target.getRegDeg().add(val);
