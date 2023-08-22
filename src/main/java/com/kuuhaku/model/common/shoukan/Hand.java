@@ -1073,7 +1073,21 @@ public class Hand {
 			if (getLockTime(Lock.BLIND) > 0 && ally) {
 				g2d.drawImage(userDeck.getStyling().getFrame().getBack(userDeck), x, y, null);
 			} else {
-				g2d.drawImage(d.render(game.getLocale(), userDeck), x, y, null);
+				g2d.drawImage(d.render(game.getLocale(), userDeck), x + 15, y + 15, null);
+
+				if (!ally) {
+					Graph.applyTransformed(g2d, x + 15, y + 15, g -> {
+						g.setClip(userDeck.getStyling().getFrame().getBoundary());
+						g.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 0, 0, null);
+					});
+				}
+
+				if (d instanceof EffectHolder<?> e && e.hasFlag(Flag.EMPOWERED)) {
+					boolean legacy = userDeck.getStyling().getFrame().isLegacy();
+					BufferedImage emp = IO.getResourceAsImage("shoukan/frames/state/" + (legacy ? "old" : "new") + "/empowered.png");
+
+					g2d.drawImage(emp, x, y, null);
+				}
 			}
 
 			if (d.isAvailable() && ally) {
@@ -1081,20 +1095,6 @@ public class Hand {
 						x + (Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), y - 10,
 						6, Color.BLACK
 				);
-			}
-
-			if (!ally) {
-				Graph.applyTransformed(g2d, x + 15, y + 15, g -> {
-					g.setClip(userDeck.getStyling().getFrame().getBoundary());
-					g.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 0, 0, null);
-				});
-			}
-
-			if (d instanceof EffectHolder<?> e && e.hasFlag(Flag.EMPOWERED)) {
-				boolean legacy = userDeck.getStyling().getFrame().isLegacy();
-				BufferedImage emp = IO.getResourceAsImage("shoukan/frames/state/" + (legacy ? "old" : "new") + "/empowered.png");
-
-				g2d.drawImage(emp, x, y, null);
 			}
 		}
 

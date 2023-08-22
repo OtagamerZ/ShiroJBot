@@ -213,7 +213,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		DeckStyling style = deck.getStyling();
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			if (isFlipped()) {
-				g1.drawImage(style.getFrame().getBack(deck), 15, 15, null);
+				g1.drawImage(style.getFrame().getBack(deck), 0, 0, null);
 			} else {
 				BufferedImage img = getVanity().drawCardNoBorder(false);
 

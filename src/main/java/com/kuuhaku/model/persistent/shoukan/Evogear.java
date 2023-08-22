@@ -517,7 +517,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		DeckStyling style = deck.getStyling();
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			if (isFlipped()) {
-				g1.drawImage(style.getFrame().getBack(deck), 15, 15, null);
+				g1.drawImage(style.getFrame().getBack(deck), 0, 0, null);
 				parseDescription(getGame().getLocale());
 			} else {
 				String desc = getDescription(locale);
