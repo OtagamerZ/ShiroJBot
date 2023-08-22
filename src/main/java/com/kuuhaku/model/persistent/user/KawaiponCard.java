@@ -119,7 +119,7 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	}
 
 	public int getSuggestedPrice() {
-		return (int) (Math.max(0, card.getRarity().getIndex() * 200) * 1.2 * Math.pow(1.0025, Math.pow(quality, 2)));
+		return (int) (Math.max(1, card.getRarity().getIndex() * 500) * Math.pow(1.0025, Math.pow(quality, 2)));
 	}
 
 	public Kawaipon getKawaipon() {
