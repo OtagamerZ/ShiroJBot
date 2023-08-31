@@ -52,6 +52,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
@@ -376,37 +377,49 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default String getReadableDescription(I18N locale) {
-		String raw = getBase().getDescription(locale);
-		if (raw != null) {
-			String desc = getDescription(locale);
-			Matcher pat = Utils.regex(desc, "\\{=(.+?)\\}|([A-Za-z]+?)?\\{(.+?)\\}|\\([^:]+?\\)");
+		String desc = getDescription(locale);
+		if (desc != null) {
+			Matcher pat = Utils.regex(desc, "\\{=(\\S+?)}|([A-Za-z]+?)?\\{([a-z]+?)}|(?<!\\*\\*)\\([^:]+?\\)(?!\\*\\*)");
 
-			return pat.replaceAll(m -> {
-				if (m.group(1) != null) {
-					ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
-
-					CommonTokenStream cts = new CommonTokenStream(lex);
-					ShoukanExprParser parser = new ShoukanExprParser(cts);
-					ShoukanExprParser.LineContext tree = parser.line();
-
-					ParseTreeWalker walker = new ParseTreeWalker();
-					ExpressionListener listener = new ExpressionListener();
-
-					walker.walk(listener, tree);
-
-					return Matcher.quoteReplacement("**(" + listener.getOutput().toString() + ")**");
-				} else if (m.group(3) != null) {
-					if (m.group(2) != null) {
-						return Matcher.quoteReplacement("__" + m.group(2) + "__" + Tag.valueOf(m.group(3).toUpperCase()));
-					}
-
-					return Matcher.quoteReplacement(Tag.valueOf(m.group(3).toUpperCase()).toString());
-				}
-
-				return Matcher.quoteReplacement("**" + m.group(0) + "**");
-			});
+			return parse(pat);
 		}
 
 		return "";
+	}
+
+	private static String parse(Matcher matcher) {
+		AtomicBoolean retry = new AtomicBoolean();
+		String out = matcher.replaceAll(m -> {
+			retry.set(true);
+
+			if (m.group(1) != null) {
+				ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
+
+				CommonTokenStream cts = new CommonTokenStream(lex);
+				ShoukanExprParser parser = new ShoukanExprParser(cts);
+				ShoukanExprParser.LineContext tree = parser.line();
+
+				ParseTreeWalker walker = new ParseTreeWalker();
+				ExpressionListener listener = new ExpressionListener();
+
+				walker.walk(listener, tree);
+
+				return Matcher.quoteReplacement("**(" + listener.getOutput().toString() + ")**");
+			} else if (m.group(3) != null) {
+				if (m.group(2) != null) {
+					return Matcher.quoteReplacement("__" + m.group(2) + "__" + Tag.valueOf(m.group(3).toUpperCase()));
+				}
+
+				return Matcher.quoteReplacement(Tag.valueOf(m.group(3).toUpperCase()).toString());
+			}
+
+			return Matcher.quoteReplacement("**" + m.group(0) + "**");
+		});
+
+		if (retry.get()) {
+			return parse(matcher.reset(out));
+		}
+
+		return out;
 	}
 }
