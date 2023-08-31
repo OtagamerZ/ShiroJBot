@@ -405,7 +405,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				walker.walk(listener, tree);
 
 				if (m.group(1) != null && m.group(3) != null) {
-					return Matcher.quoteReplacement("(" + listener.getOutput().toString() + ")");
+					return Matcher.quoteReplacement(m.group(1) + "(" + listener.getOutput().toString() + ")" + m.group(3));
 				}
 
 				return Matcher.quoteReplacement("**(" + listener.getOutput().toString() + ")**");
