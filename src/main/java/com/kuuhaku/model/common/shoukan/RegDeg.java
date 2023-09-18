@@ -46,6 +46,7 @@ public class RegDeg {
 
 	public void add(Number val, double mult) {
 		if (val == null) return;
+		else if (parent.getOrigin().synergy() == Race.CONDEMNED) return;
 		int value = val.intValue();
 
 		if (value < 0) {
@@ -107,14 +108,24 @@ public class RegDeg {
 
 	public int next() {
 		try {
-			return values.stream().mapToInt(ValueOverTime::next).sum();
+			int virus = 0;
+			if (parent.getOrigin().synergy() == Race.VIRUS) {
+				virus = -Math.min(parent.getOther().getRegDeg().peek(), 0);
+			}
+
+			return values.stream().mapToInt(ValueOverTime::next).sum() + virus;
 		} finally {
 			values.removeIf(v -> v.getValue() <= 0);
 		}
 	}
 
 	public int peek() {
-		return values.stream().mapToInt(ValueOverTime::peek).sum();
+		int virus = 0;
+		if (parent.getOrigin().synergy() == Race.VIRUS) {
+			virus = -Math.min(parent.getOther().getRegDeg().peek(), 0);
+		}
+
+		return values.stream().mapToInt(ValueOverTime::peek).sum() + virus;
 	}
 
 	public <T extends ValueOverTime> void clear() {

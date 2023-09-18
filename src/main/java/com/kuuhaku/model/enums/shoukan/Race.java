@@ -71,34 +71,34 @@ public enum Race {
 	SPAWN(UNDEAD.flag | DEMON.flag),
 	IMP(MYSTICAL.flag | DEMON.flag),
 
-//		DOPPELGANGER(HUMAN.flag | BEAST.flag),
-//		HOMUNCULUS(HUMAN.flag | MACHINE.flag),
-//		ORACLE(HUMAN.flag | DIVINITY.flag),
-//		DRYAD(HUMAN.flag | SPIRIT.flag),
-//		VAMPIRE(HUMAN.flag | UNDEAD.flag),
-//		DARK_ELF(HUMAN.flag | MYSTICAL.flag),
-//		CONDEMNED(HUMAN.flag | DEMON.flag),
-//		GARGOYLE(BEAST.flag | MACHINE.flag),
-//		CELESTIAL(BEAST.flag | DIVINITY.flag),
-//		ALIEN(BEAST.flag | SPIRIT.flag),
-//		SLIME(BEAST.flag | UNDEAD.flag),
-//		DRAGON(BEAST.flag | MYSTICAL.flag),
-//		INFERNAL(BEAST.flag | DEMON.flag),
-//		SENTINEL(MACHINE.flag | DIVINITY.flag),
-//		GEIST(MACHINE.flag | SPIRIT.flag),
-//		REVENANT(MACHINE.flag | UNDEAD.flag),
-//		GOLEM(MACHINE.flag | MYSTICAL.flag),
-//		DAEMON(MACHINE.flag | DEMON.flag),
-//		DJINN(DIVINITY.flag | SPIRIT.flag),
-//		REAPER(DIVINITY.flag | UNDEAD.flag),
-//		ELEMENTAL(DIVINITY.flag | MYSTICAL.flag),
-//		ELDRITCH(DIVINITY.flag | DEMON.flag),
-//		WRAITH(SPIRIT.flag | UNDEAD.flag),
-//		FAERIE(SPIRIT.flag | MYSTICAL.flag),
-//		NIGHTMARE(SPIRIT.flag | DEMON.flag),
-//		MUMMY(UNDEAD.flag | MYSTICAL.flag),
-//		DULLAHAN(UNDEAD.flag | DEMON.flag),
-//		SUCCUBUS(MYSTICAL.flag | DEMON.flag),
+	DOPPELGANGER(HUMAN.flag | BEAST.flag),
+	HOMUNCULUS(HUMAN.flag | MACHINE.flag),
+	ORACLE(HUMAN.flag | DIVINITY.flag),
+	DRYAD(HUMAN.flag | SPIRIT.flag),
+	VAMPIRE(HUMAN.flag | UNDEAD.flag),
+	DARK_ELF(HUMAN.flag | MYSTICAL.flag),
+	CONDEMNED(HUMAN.flag | DEMON.flag),
+	GARGOYLE(BEAST.flag | MACHINE.flag),
+	CELESTIAL(BEAST.flag | DIVINITY.flag),
+	ALIEN(BEAST.flag | SPIRIT.flag),
+	SLIME(BEAST.flag | UNDEAD.flag),
+	DRAGON(BEAST.flag | MYSTICAL.flag),
+	INFERNAL(BEAST.flag | DEMON.flag),
+	SENTINEL(MACHINE.flag | DIVINITY.flag),
+	GEIST(MACHINE.flag | SPIRIT.flag),
+	REVENANT(MACHINE.flag | UNDEAD.flag),
+	GOLEM(MACHINE.flag | MYSTICAL.flag),
+	DAEMON(MACHINE.flag | DEMON.flag),
+	DJINN(DIVINITY.flag | SPIRIT.flag),
+	REAPER(DIVINITY.flag | UNDEAD.flag),
+	ELEMENTAL(DIVINITY.flag | MYSTICAL.flag),
+	ELDRITCH(DIVINITY.flag | DEMON.flag),
+	WRAITH(SPIRIT.flag | UNDEAD.flag),
+	FAERIE(SPIRIT.flag | MYSTICAL.flag),
+	NIGHTMARE(SPIRIT.flag | DEMON.flag),
+	MUMMY(UNDEAD.flag | MYSTICAL.flag),
+	DULLAHAN(UNDEAD.flag | DEMON.flag),
+	SUCCUBUS(MYSTICAL.flag | DEMON.flag),
 
 	MIXED(Integer.MAX_VALUE),
 	NONE(0);
@@ -254,9 +254,17 @@ public enum Race {
 		);
 	}
 
+	public Race getVariant() {
+		for (Race race : validValues()) {
+			if (race != this && race.flag == flag) return race;
+		}
+
+		return this;
+	}
+
 	public static Race getByFlag(int flag) {
-		for (Race r : validValues()) {
-			if (r.flag == flag) return r;
+		for (Race race : validValues()) {
+			if (race.flag == flag) return race;
 		}
 
 		return NONE;

@@ -56,6 +56,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
+import static com.kuuhaku.model.enums.shoukan.Trigger.NONE;
 
 @Entity
 @Table(name = "evogear")
@@ -234,6 +235,15 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public String getDescription(I18N locale) {
+		if (hand != null && hand.getOrigin().synergy() == Race.DJINN) {
+			return locale.get("str/djinn_spell") + switch (targetType) {
+				case NONE -> "";
+				case ALLY -> " ( {ally} )";
+				case ENEMY -> " ( {enemy} )";
+				case BOTH -> " ( {ally} {enemy} )";
+			};
+		}
+
 		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
 	}
@@ -271,7 +281,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public int getDodge() {
 		int sum = base.getDodge() + (int) stats.getDodge().get();
 
-		return Utils.clamp(sum, 0, 100);
+		int min = 0;
+		if (hand != null && hand.getOrigin().synergy() == Race.GEIST) {
+			min += 10;
+		}
+
+		return Utils.clamp(min + sum, min, 100);
 	}
 
 	@Override
@@ -280,7 +295,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 		int min = 0;
 		if (hand != null && hand.getOrigin().synergy() == Race.CYBORG) {
-			min += 2;
+			min += 10;
 		}
 
 		return Utils.clamp(min + sum, min, 100);
@@ -367,6 +382,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public String getEffect() {
+		if (hand != null && hand.getOrigin().synergy() == Race.DJINN) {
+			return DAO.queryNative(String.class, "SELECT e.effect FROM evogear e WHERE e.spell AND e.target_type = ?1", targetType);
+		}
+
 		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getEffect(), source.getBase().getEffect());
 	}

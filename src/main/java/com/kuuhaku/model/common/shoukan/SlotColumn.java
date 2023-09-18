@@ -140,10 +140,6 @@ public class SlotColumn {
 			if (!card.isFlipped()) {
 				h.getGame().trigger(Trigger.ON_SUMMON, card.asSource(Trigger.ON_SUMMON));
 			}
-
-			if (h.getOrigin().synergy() == Race.DEMIGOD && card.isFusion()) {
-				h.modMP(1);
-			}
 		}
 	}
 

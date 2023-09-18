@@ -81,6 +81,9 @@
 	 @Column(name = "current", nullable = false)
 	 private boolean current;
 
+	 @Column(name = "variant", nullable = false)
+	 private boolean variant = false;
+
 	 @Embedded
 	 private DeckStyling styling = new DeckStyling();
 
@@ -89,6 +92,10 @@
 	 private transient List<Field> field = null;
 	 private transient Archetype archetype = null;
 	 private transient Origin origin = null;
+	 private transient AtomicInteger totalMPCost = new AtomicInteger();
+	 private transient AtomicInteger totalHPCost = new AtomicInteger();
+	 private transient AtomicInteger totalDmg = new AtomicInteger();
+	 private transient AtomicInteger totalDfs = new AtomicInteger();
 
 	 public Deck() {
 	 }
@@ -123,6 +130,14 @@
 
 	 public void setCurrent(boolean current) {
 		 this.current = current;
+	 }
+
+	 public boolean isVariant() {
+		 return variant;
+	 }
+
+	 public void setVariant(boolean variant) {
+		 this.variant = variant;
 	 }
 
 	 public FrameSkin getFrame() {
@@ -329,6 +344,22 @@
 				 """, id);
 	 }
 
+	 public void calcStats() {
+		 totalMPCost.set(0);
+		 totalHPCost.set(0);
+		 totalDmg.set(0);
+		 totalDfs.set(0);
+
+		 Stream.of(getSenshi(), getEvogear(), getFields())
+				 .flatMap(List::stream)
+				 .forEach(d -> {
+					 totalMPCost.addAndGet(d.getMPCost());
+					 totalHPCost.addAndGet(d.getHPCost());
+					 totalDmg.addAndGet(d.getDmg());
+					 totalDfs.addAndGet(d.getDfs());
+				 });
+	 }
+
 	 public BufferedImage render(I18N locale) {
 		 BufferedImage bi = IO.getResourceAsImage("shoukan/deck.png");
 		 Graphics2D g2d = bi.createGraphics();
@@ -346,11 +377,6 @@
 		 allCards.addAll(getEvogear());
 		 allCards.addAll(getFields());
 
-		 AtomicInteger totalMPCost = new AtomicInteger();
-		 AtomicInteger totalHPCost = new AtomicInteger();
-		 AtomicInteger totalDmg = new AtomicInteger();
-		 AtomicInteger totalDfs = new AtomicInteger();
-
 		 BaseValues base = getBaseValues(null);
 		 double mp = base.mpGain().get();
 		 int weight = Calc.prcntToInt(getEvoWeight(), 24);
@@ -358,17 +384,11 @@
 		 if (weight > 200) color = "FF0000";
 		 else if (weight > 100) color = "FFFF00";
 
-		 for (Drawable<?> d : allCards) {
-			 totalMPCost.addAndGet(d.getMPCost());
-			 totalHPCost.addAndGet(d.getHPCost());
-			 totalDmg.addAndGet(d.getDmg());
-			 totalDfs.addAndGet(d.getDfs());
-		 }
-
+		 calcStats();
 		 double[] vals = Calc.clamp(new double[]{
 				 Calc.prcnt(totalDmg.get(), (totalDmg.get() + totalDfs.get()) / 1.5),
 				 Calc.prcnt(totalDfs.get(), (totalDmg.get() + totalDfs.get()) / 1.5),
-				 ((double) totalMPCost.get() / allCards.size()) / mp,
+				 getAverageMPCost() / mp,
 				 Calc.prcnt(Set.copyOf(allCards).size(), allCards.size()),
 				 getMetaDivergence(),
 				 0
@@ -421,8 +441,8 @@
 						 allCards.size(), getSenshi().size(), getEvogear().size(), getFields().size(),
 						 weight, color,
 						 Utils.roundToString(getMetaDivergence() * 100, 0),
-						 Utils.roundToString((float) totalMPCost.get() / allCards.size(), 1),
-						 Utils.roundToString((float) totalHPCost.get() / allCards.size(), 1),
+						 Utils.roundToString((float) getAverageMPCost(), 1),
+						 Utils.roundToString((float) getAverageHPCost(), 1),
 						 Utils.roundToString((float) totalDmg.get() / allCards.size(), 0),
 						 Utils.roundToString((float) totalDfs.get() / allCards.size(), 0),
 						 getMaxSenshiCopies(), getMaxEvogearCopies(1), getMaxEvogearCopies(4),
@@ -625,13 +645,13 @@
 			 }
 
 			 if (ori.isEmpty()) {
-				 origin = new Origin(Race.NONE);
+				 origin = new Origin(this, Race.NONE);
 			 } else if (ori.size() == 1) {
-				 origin = new Origin(ori.get(0));
+				 origin = new Origin(this, ori.get(0));
 			 } else if (allSame) {
-				 origin = new Origin(Race.MIXED, ori.toArray(Race[]::new));
+				 origin = new Origin(this, Race.MIXED, ori.toArray(Race[]::new));
 			 } else {
-				 origin = new Origin(ori.get(0), ori.get(1));
+				 origin = new Origin(this, ori.get(0), ori.get(1));
 			 }
 		 }
 
@@ -648,6 +668,10 @@
 					 base += 1000;
 				 }
 
+				 if (origin.synergy() == Race.DRAGON) {
+					 base += 1000;
+				 }
+
 				 int bHP = (int) Calc.clamp(base * 1.5 - base * 0.2799 * reduction, 10, base);
 
 				 int mp = 5;
@@ -659,16 +683,20 @@
 
 							 if (origin.hasMinor(Race.DIVINITY)) {
 								 m += getSenshi().parallelStream()
-										 .map(Senshi::getMPCost)
-										 .min(Integer::compareTo)
-										 .orElse(0) / 2;
+											  .map(Senshi::getMPCost)
+											  .min(Integer::compareTo)
+											  .orElse(0) / 2;
 							 }
 
 							 if (h != null && h.getGame() != null) {
-								 if (origin.synergy() == Race.FEY) {
-									 m = mp * (Calc.chance(3, h.getGame().getRng()) ? 2 : 1);
-								 } else if (origin.synergy() == Race.GHOST && h.getGame().getTurn() > 0) {
-									 m = mp + (Math.ceil(h.getGame().getTurn() / 2d) % 2 == 0 ? 1 : 0);
+								 if (origin.synergy() == Race.DEMIGOD) {
+									 m += (int) h.getGame().getCards(h.getSide()).parallelStream()
+											 .filter(Senshi::isFusion)
+											 .count();
+								 } else if (origin.synergy() == Race.FEY) {
+									 m = (int) (mp * (Calc.chance(20, h.getGame().getRng()) ? 1.5 : 1));
+								 } else if (origin.synergy() == Race.GHOST && h.getGame().getTurn() % 2 == 1) {
+									 m += 1;
 								 }
 
 								 if (h.getGame().getArcade() == Arcade.OVERCHARGE) {
@@ -679,14 +707,22 @@
 							 return m;
 						 });
 
-				 SupplyChain<Integer> handCap = new SupplyChain<>(5);
+				 SupplyChain<Integer> handCap = new SupplyChain<>(5)
+						 .add(c -> {
+							 if (origin.synergy() == Race.DRAGON) {
+								 c += 1;
+							 }
+
+							 return c;
+						 });
 
 				 int ls = 0;
 				 if (origin.major() == Race.DEMON) {
-					 ls += 5;
-				 }
-				 if (origin.synergy() == Race.LICH) {
 					 ls += 10;
+				 }
+
+				 if (origin.synergy() == Race.VAMPIRE) {
+					 ls += 5;
 				 }
 
 				 return List.of(bHP, mpGain, handCap, ls);
@@ -695,6 +731,22 @@
 			 Constants.LOGGER.error(e, e);
 			 return new BaseValues();
 		 }
+	 }
+
+	 public int getAverageMPCost() {
+		 return Calc.round((double) totalMPCost.get() / (getSenshi().size() + getEvogear().size()));
+	 }
+
+	 public int getAverageHPCost() {
+		 return Calc.round((double) totalHPCost.get() / (getSenshi().size() + getEvogear().size()));
+	 }
+
+	 public int getAverageDmg() {
+		 return Calc.round((double) totalDmg.get() / (getSenshi().size() + getEvogear().size()));
+	 }
+
+	 public int getAverageDfs() {
+		 return Calc.round((double) totalDfs.get() / (getSenshi().size() + getEvogear().size()));
 	 }
 
 	 public String toString(I18N locale) {

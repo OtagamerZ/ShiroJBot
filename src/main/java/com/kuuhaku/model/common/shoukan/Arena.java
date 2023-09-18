@@ -129,7 +129,8 @@ public class Arena implements Renderer {
 	}
 
 	public boolean isFieldEmpty(Side side) {
-		return slots.get(side).stream().allMatch(sc -> sc.getTop() == null);
+		boolean sentinel = game.getHands().get(side).getOrigin().synergy() == Race.SENTINEL;
+		return slots.get(side).stream().allMatch(sc -> sc.getTop() == null && (!sentinel || sc.getBottom() == null));
 	}
 
 	public BondedList<Drawable<?>> getBanned() {

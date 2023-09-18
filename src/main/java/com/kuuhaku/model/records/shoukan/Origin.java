@@ -19,6 +19,7 @@
 package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.util.Utils;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -27,9 +28,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public record Origin(Race major, Race... minor) {
-	public Origin(Race major) {
-		this(major, new Race[0]);
+public record Origin(Deck deck, Race major, Race... minor) {
+	public Origin(Deck deck, Race major) {
+		this(deck, major, new Race[0]);
 	}
 
 	public List<BufferedImage> images() {
@@ -63,7 +64,8 @@ public record Origin(Race major, Race... minor) {
 	public Race synergy() {
 		if (major == Race.NONE || minor.length == 0) return Race.NONE;
 
-		return major.fuse(minor[0]);
+		Race r = major.fuse(minor[0]);
+		return deck.isVariant() ? r.getVariant() : r;
 	}
 
 	public boolean isPure() {

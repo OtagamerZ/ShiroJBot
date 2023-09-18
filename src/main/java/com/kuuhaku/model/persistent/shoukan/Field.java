@@ -30,10 +30,7 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.util.Bit;
-import com.kuuhaku.util.Graph;
-import com.kuuhaku.util.IO;
-import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.*;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -95,9 +92,10 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	private byte state = 0b10;
 	/*
 	0xF
-	  └ 000 0011
-	          │└ solid
-	          └─ available
+	  └ 000 0111
+	         ││└ solid
+	         │└─ available
+	         └── bamboozled
 	 */
 
 	public Field() {
@@ -128,6 +126,22 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	public JSONObject getModifiers() {
+		if (hand != null && !wasBamboozled()) {
+			if (Utils.equalsAny(Race.PIXIE, hand.getOrigin().synergy(), hand.getOther().getOrigin().synergy())) {
+				int mods = modifiers.size();
+				modifiers.clear();
+
+				for (int i = 0; i < mods; i++) {
+					Race r = Utils.getRandomEntry(hand.getGame().getRng(), Race.validValues());
+					double mod = Calc.rng(-50d, 50d, hand.getGame().getRng());
+
+					modifiers.put(r.name(), mod);
+				}
+
+				setBamboozled(true);
+			}
+		}
+
 		return modifiers;
 	}
 
@@ -184,6 +198,14 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@Override
 	public void setAvailable(boolean available) {
 		state = (byte) Bit.set(state, 1, available);
+	}
+
+	public boolean wasBamboozled() {
+		return Bit.on(state, 2);
+	}
+
+	public void setBamboozled(boolean available) {
+		state = (byte) Bit.set(state, 2, available);
 	}
 
 	public boolean isActive() {

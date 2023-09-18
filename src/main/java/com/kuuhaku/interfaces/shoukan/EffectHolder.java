@@ -30,6 +30,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Charm;
 import com.kuuhaku.model.enums.shoukan.Flag;
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.DeckStyling;
@@ -108,6 +109,12 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default boolean hasFlag(Flag flag, boolean pop) {
+		if (getHand() != null) {
+			if (Utils.equalsAny(flag, Flag.NO_EQUIP, Flag.IGNORE_EQUIP) && getHand().getOrigin().synergy() == Race.SLIME) {
+				return true;
+			}
+		}
+
 		if (pop) {
 			return getFlags().pop(flag);
 		} else {
