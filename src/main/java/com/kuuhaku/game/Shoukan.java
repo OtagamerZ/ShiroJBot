@@ -1250,6 +1250,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (you.getOrigin().synergy() == Race.DOPPELGANGER && source.getId().equals(target.getId())) {
 			dmg *= 2;
+		} else if (you.getOrigin().synergy() == Race.ELEMENTAL) {
+			if (source.getElement().getStrong() == target.getElement()) {
+				dmg *= 2;
+			} else if (source.getElement().getWeak() == target.getElement()) {
+				dmg /= 2;
+			}
 		}
 
 		int direct = 0;
@@ -1447,6 +1453,10 @@ public class Shoukan extends GameInstance<Phase> {
 				op.modHP((int) -((dmg + direct) * dmgMult));
 				op.addChain();
 
+				if (op.getOrigin().synergy() == Race.SUCCUBUS) {
+					you.modLockTime(Lock.CHARM, 1);
+				}
+
 				int damage = Math.max(0, eHP - op.getHP());
 
 				if (thorns > 0) {
@@ -1626,6 +1636,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 				target.modHP((int) -((dmg + direct) * dmgMult));
 				target.addChain();
+
+				if (target.getOrigin().synergy() == Race.SUCCUBUS) {
+					you.modLockTime(Lock.CHARM, 1);
+				}
 
 				int damage = Math.max(0, eHP - target.getHP());
 
