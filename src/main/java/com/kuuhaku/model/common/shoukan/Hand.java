@@ -434,7 +434,12 @@ public class Hand {
 		}
 
 		for (int i = 0; i < value && !deck.isEmpty(); i++) {
-			Drawable<?> d = deck.removeFirst();
+			Drawable<?> d;
+			if (origin.synergy() == Race.MUMMY) {
+				d = deck.removeLast();
+			} else {
+				d = deck.removeFirst();
+			}
 
 			if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
 				regdeg.add(200);
@@ -457,7 +462,12 @@ public class Hand {
 		BondedList<Drawable<?>> deck = getDeck();
 		if (deck.isEmpty()) return null;
 
-		Drawable<?> d = deck.removeFirst();
+		Drawable<?> d;
+		if (origin.synergy() == Race.MUMMY) {
+			d = deck.removeLast();
+		} else {
+			d = deck.removeFirst();
+		}
 
 		if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
 			regdeg.add(200);

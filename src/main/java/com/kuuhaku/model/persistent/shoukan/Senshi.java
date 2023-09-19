@@ -126,7 +126,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient Senshi lastInteraction = null;
 	private transient CachedScriptManager cachedEffect = new CachedScriptManager();
 	private transient Set<Drawable<?>> blocked = new HashSet<>();
-	// TODO Elemental
+	private transient ElementType element = null;
 
 	@Transient
 	private int state = 0b10;
@@ -1274,6 +1274,16 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		blocked.clear();
 	}
 
+	public ElementType getElement() {
+		if (hand != null && element == null) {
+			if (Utils.equalsAny(Race.ELEMENTAL, hand.getOrigin().synergy(), hand.getOther().getOrigin().synergy())) {
+				element = Utils.getRandomEntry(ElementType.values());
+			}
+		}
+
+		return element;
+	}
+
 	@Override
 	public boolean keepOnDestroy() {
 		return !isFusion();
@@ -1324,6 +1334,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				g1.setFont(FONT);
 				g1.setColor(style.getFrame().getPrimaryColor());
 				String name = Graph.abbreviate(g1, card.getVanity().getName(), MAX_NAME_WIDTH);
+				if (element != null) {
+					name = element + " " + name;
+				}
+
 				Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
 				if (!stats.getWrite().isBlank() && getSlot().getIndex() > -1) {
