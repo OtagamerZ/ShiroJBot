@@ -23,9 +23,10 @@ import com.kuuhaku.util.Bit;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import java.util.EnumSet;
+import java.util.Set;
 
 @Converter(autoApply = true)
-abstract class FlagConverter<T extends Enum<T>> implements AttributeConverter<EnumSet<T>, Integer> {
+abstract class FlagConverter<T extends Enum<T>> implements AttributeConverter<Set<T>, Integer> {
 	private final Class<T> klass;
 
 	public FlagConverter(Class<T> klass) {
@@ -33,7 +34,7 @@ abstract class FlagConverter<T extends Enum<T>> implements AttributeConverter<En
 	}
 
 	@Override
-	public Integer convertToDatabaseColumn(EnumSet<T> enums) {
+	public Integer convertToDatabaseColumn(Set<T> enums) {
 		int i = 0;
 		for (T flag : enums) {
 			i = Bit.set(i, flag.ordinal(), true);
@@ -43,7 +44,7 @@ abstract class FlagConverter<T extends Enum<T>> implements AttributeConverter<En
 	}
 
 	@Override
-	public EnumSet<T> convertToEntityAttribute(Integer flags) {
+	public Set<T> convertToEntityAttribute(Integer flags) {
 		EnumSet<T> out = EnumSet.noneOf(klass);
 		for (T flag : klass.getEnumConstants()) {
 			if (Bit.on(flags, flag.ordinal())) {
