@@ -376,10 +376,29 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			}
 
 			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
-			Graph.drawMultilineString(g2d, desc,
-					7, y, 211, 3,
-					highlightValues(g2d, style.getFrame().isLegacy())
-			);
+			renderText(g2d, desc, y, highlightValues(g2d, style.getFrame().isLegacy()));
+		}
+	}
+
+	private static void renderText(Graphics2D g2d, String text, int y, TriConsumer<String, Integer, Integer> renderer) {
+		String[] lines = text.split("\n");
+		for (String line : lines) {
+			String[] words = line.split("(?<=\\S )|(?=\\{=|\\))|(?<=}%?)(?=[^%{ ])|(?<=[}(])");
+			int offset = 0;
+			for (String s : words) {
+				FontMetrics m = g2d.getFontMetrics();
+
+				if (offset + m.stringWidth(s) <= 211) {
+					renderer.accept(s, 7 + offset, y);
+					offset += m.stringWidth(s);
+				} else {
+					y += m.getHeight() - 3;
+					renderer.accept(s, 7, y);
+					offset = m.stringWidth(s);
+				}
+			}
+
+			y += g2d.getFontMetrics().getHeight() - 3;
 		}
 	}
 
