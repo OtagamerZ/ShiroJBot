@@ -130,6 +130,10 @@ public class Hand {
 		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
+	}, d -> {
+		if (getOrigin().synergy() == Race.MUMMY && getRealDeck().indexOf(d) == 0) {
+			modMP(2);
+		}
 	});
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
 		if (getGraveyard().contains(d)) return false;
@@ -196,7 +200,7 @@ public class Hand {
 		d.reset();
 
 		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(33, getGame().getRng())) {
-			cards.add(d.copy());
+			deck.add(d.copy());
 			return false;
 		}
 
@@ -442,7 +446,7 @@ public class Hand {
 			}
 
 			if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
-				regdeg.add(200);
+				regdeg.add(500);
 			}
 			if (getOther().getOrigin().synergy() == Race.IMP) {
 				modHP(-50);
@@ -470,7 +474,7 @@ public class Hand {
 		}
 
 		if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
-			regdeg.add(200);
+			regdeg.add(500);
 		}
 		if (getOther().getOrigin().synergy() == Race.IMP) {
 			modHP(-50);
@@ -508,7 +512,7 @@ public class Hand {
 			Drawable<?> d = deck.get(i);
 			if (d.getCard().getId().equalsIgnoreCase(card)) {
 				if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
-					regdeg.add(200);
+					regdeg.add(500);
 				}
 				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-50);
@@ -558,7 +562,7 @@ public class Hand {
 			Drawable<?> d = deck.get(i);
 			if (cond.test(d)) {
 				if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
-					regdeg.add(200);
+					regdeg.add(500);
 				}
 				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-50);
@@ -607,7 +611,7 @@ public class Hand {
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Evogear e) {
 				if (origin.synergy() == Race.EX_MACHINA && !e.isSpell()) {
-					regdeg.add(200);
+					regdeg.add(500);
 				}
 				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-50);
@@ -633,7 +637,7 @@ public class Hand {
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Evogear e && !e.isSpell()) {
 				if (origin.synergy() == Race.EX_MACHINA) {
-					regdeg.add(200);
+					regdeg.add(500);
 				}
 
 				Drawable<?> out = deck.remove(i);
