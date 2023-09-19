@@ -19,7 +19,6 @@
 package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.util.Utils;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -29,10 +28,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public record Origin(boolean variant, Race major, Race... minor) {
-	public Origin(Deck deck, Race major) {
-		this(deck.isVariant(), major);
-	}
-
 	public List<BufferedImage> images() {
 		List<BufferedImage> out = new ArrayList<>();
 
