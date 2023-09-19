@@ -122,7 +122,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@Column(name = "feature_flags", nullable = false)
 	@Convert(converter = GuildFeatureConverter.class)
-	private Set<GuildFeature> featureFlags = EnumSet.noneOf(GuildFeature.class);
+	private EnumSet<GuildFeature> featureFlags = EnumSet.noneOf(GuildFeature.class);
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "aliases", nullable = false, columnDefinition = "JSONB")
@@ -252,7 +252,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 		return featureFlags.contains(feature);
 	}
 
-	public Set<GuildFeature> getFeatures() {
+	public EnumSet<GuildFeature> getFeatures() {
 		return featureFlags;
 	}
 

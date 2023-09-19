@@ -63,7 +63,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	@Column(name = "role", nullable = false)
 	@Convert(converter = RoleFlagConverter.class)
-	private Set<Role> roles = EnumSet.noneOf(Role.class);
+	private EnumSet<Role> roles = EnumSet.noneOf(Role.class);
 
 	@Column(name = "balance", nullable = false)
 	private long balance;

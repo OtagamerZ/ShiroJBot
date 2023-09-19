@@ -21,6 +21,7 @@ package com.kuuhaku.model.records.shoukan;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.util.Utils;
+import kotlin.jvm.Transient;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.image.BufferedImage;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public record Origin(Deck deck, Race major, Race... minor) {
+public record Origin(@Transient Deck deck, Race major, Race... minor) {
 	public Origin(Deck deck, Race major) {
 		this(deck, major, new Race[0]);
 	}
