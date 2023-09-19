@@ -85,7 +85,7 @@ public class KawaiponSenshiCommand implements Executable {
 			return;
 		}
 
-		boolean variant = race != race.getVariant();
+		boolean variant = race != Race.getByFlag(race.getFlag());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/available_cards", locale.get("type/senshi")))
 				.setThumbnail(Constants.ORIGIN_RESOURCES + "shoukan/race/full/" + race + ".png")
