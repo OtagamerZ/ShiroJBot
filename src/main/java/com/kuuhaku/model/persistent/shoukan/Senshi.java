@@ -659,7 +659,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (hand.getOrigin().synergy() == Race.DRYAD) {
-				mult *= Math.max(0, hand.getRegDeg().peek() / hand.getBase().hp());
+				mult *= 1 + Math.max(0, hand.getRegDeg().peek() / hand.getBase().hp());
 			} else if (hand.getOrigin().synergy() == Race.ALIEN) {
 				mult *= Calc.prcnt(hand.getUserDeck().getEvoWeight(), 24) / 2;
 			}
