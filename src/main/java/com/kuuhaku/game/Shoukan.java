@@ -1350,6 +1350,8 @@ public class Shoukan extends GameInstance<Phase> {
 							s.awake();
 						}
 
+						op.getGraveyard().add(target);
+
 						dmg = 0;
 						win = true;
 					} else {
@@ -1375,6 +1377,8 @@ public class Shoukan extends GameInstance<Phase> {
 								if (!source.hasFlag(Flag.NO_DAMAGE, true)) {
 									you.modHP((int) -((enemyStats - dmg) * dmgMult));
 								}
+
+								you.getGraveyard().add(source);
 							}
 
 							dmg = 0;
@@ -1428,6 +1432,8 @@ public class Shoukan extends GameInstance<Phase> {
 										dmg = 0;
 									}
 
+									op.getGraveyard().add(target);
+
 									win = true;
 								} else {
 									outcome = getString("str/combat_clash", dmg, eCombatStats);
@@ -1437,9 +1443,13 @@ public class Shoukan extends GameInstance<Phase> {
 										s.awake();
 									}
 
+									op.getGraveyard().add(target);
+
 									for (Senshi s : source.getNearby()) {
 										s.awake();
 									}
+
+									you.getGraveyard().add(source);
 
 									dmg = 0;
 								}
