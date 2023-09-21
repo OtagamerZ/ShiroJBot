@@ -130,6 +130,10 @@ public enum Race {
 	}
 
 	public boolean isRace(Race race) {
+		if (Integer.bitCount(race.flag) > 1) {
+			return this == race;
+		}
+
 		return (flag & race.flag) == race.flag;
 	}
 
