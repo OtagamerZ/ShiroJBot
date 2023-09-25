@@ -29,7 +29,7 @@ public enum Fonts {
 	OPEN_SANS("font/OpenSansEmoji.ttf"),
 	OPEN_SANS_BOLD("font/OpenSansEmoji-Bold.ttf"),
 	OPEN_SANS_EXTRABOLD("font/OpenSansEmoji-ExtraBold.ttf"),
-	OPEN_SANS_COMPACT("font/OpenSans-Compact.ttf"),
+	OPEN_SANS_COMPACT("font/OpenSansEmoji-Compact.ttf"),
 	NOTO_SANS("font/NotoSansJP.otf"),
 	NOTO_SANS_BOLD("font/NotoSansJP-Bold.otf"),
 	NOTO_SANS_EXTRABOLD("font/NotoSansJP-ExtraBold.otf"),
