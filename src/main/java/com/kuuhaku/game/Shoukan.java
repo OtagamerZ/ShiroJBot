@@ -2542,12 +2542,16 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public String getString(String key, Object... args) {
-		String out = super.getString(key, args);
-		if (out.isBlank() || out.equalsIgnoreCase(key)) {
-			out = LocalizedString.get(getLocale(), key, "").formatted(args);
-		}
+		try {
+			String out = super.getString(key, args);
+			if (out.isBlank() || out.equalsIgnoreCase(key)) {
+				out = LocalizedString.get(getLocale(), key, "").formatted(args);
+			}
 
-		return Utils.getOr(out, key);
+			return Utils.getOr(out, key);
+		} catch (MissingFormatArgumentException e) {
+			return "";
+		}
 	}
 
 	public void send(Drawable<?> source, String text) {
