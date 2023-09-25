@@ -345,7 +345,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int extraMp = 0;
-		if (curr.getOrigin().synergy() != Race.HOMUNCULUS) {
+		if (curr.getOrigin().synergy() == Race.HOMUNCULUS) {
 			extraMp = curr.getDiscard().size();
 		}
 
@@ -415,7 +415,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				curr.consumeHP(s.getHPCost());
-				curr.consumeMP(s.getMPCost());
+				curr.consumeMP(s.getMPCost() - usedExtra);
 				List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost() + usedExtra);
 				if (!consumed.isEmpty()) {
 					s.getStats().getData().put("consumed", consumed);
@@ -435,7 +435,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				curr.consumeHP(s.getHPCost());
-				curr.consumeMP(s.getMPCost());
+				curr.consumeMP(s.getMPCost() - usedExtra);
 				List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost() + usedExtra);
 				if (!consumed.isEmpty()) {
 					s.getStats().getData().put("consumed", consumed);
