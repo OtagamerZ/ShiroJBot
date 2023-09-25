@@ -1430,9 +1430,9 @@ public class Shoukan extends GameInstance<Phase> {
 										}
 
 										dmg = 0;
+									} else {
+										op.getGraveyard().add(target);
 									}
-
-									op.getGraveyard().add(target);
 
 									win = true;
 								} else {
@@ -2456,6 +2456,17 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
+			if (curr.getOrigin().synergy() == Race.ORACLE) {
+				buttons.put(Utils.parseEmoji("\uD83D\uDD2E"), w -> {
+					BufferedImage cards = curr.render(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
+
+					Objects.requireNonNull(w.getHook())
+							.setEphemeral(true)
+							.sendFiles(FileUpload.fromData(IO.getBytes(cards, "png"), "hand.png"))
+							.queue();
+				});
+			}
+
 			buttons.put(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
 				history = !history;
 
@@ -2666,10 +2677,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		curr.showHand();
-
-		if (curr.getOrigin().synergy() == Race.ORACLE) {
-			curr.showCards(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
-		}
 
 		reportEvent("str/game_turn_change", true, "<@" + curr.getUid() + ">", (int) Math.ceil(getTurn() / 2d));
 
