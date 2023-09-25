@@ -66,7 +66,7 @@ public enum Fonts {
 	public Font deriveFont(float size, float weight, boolean italic) {
 		return font.deriveFont(Map.of(
 				SIZE, size,
-				WEIGHT, weight * size,
+				WEIGHT, weight,
 				POSTURE, italic ? POSTURE_OBLIQUE : POSTURE_REGULAR
 		));
 	}
