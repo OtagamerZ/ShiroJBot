@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-import static java.text.AttributedCharacterIterator.Attribute;
+import static java.awt.font.TextAttribute.*;
 
 public enum Fonts {
 	UBUNTU_MONO("font/UbuntuMono.ttf"),
@@ -60,10 +60,14 @@ public enum Fonts {
 	}
 
 	public Font deriveFont(int style, float size) {
-		return font.deriveFont(style, size);
+		return deriveFont(style, size, 1);
 	}
 
-	public Font deriveFont(int style, float size, Map<? extends Attribute, ?> attributes) {
-		return deriveFont(style, size).deriveFont(attributes);
+	public Font deriveFont(int style, float size, float weight) {
+		return font.deriveFont(Map.of(
+				SIZE, size,
+				WEIGHT, weight,
+				POSTURE, (style & Font.ITALIC) == 2 ? POSTURE_OBLIQUE : POSTURE_REGULAR
+		));
 	}
 }
