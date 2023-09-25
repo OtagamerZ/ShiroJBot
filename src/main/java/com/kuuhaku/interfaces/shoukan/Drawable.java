@@ -49,7 +49,7 @@ import java.util.function.Consumer;
 public interface Drawable<T extends Drawable<T>> {
 	int MAX_NAME_WIDTH = 175;
 	int MAX_DESC_LENGTH = 210;
-	Font FONT = Fonts.OPEN_SANS.deriveFont(20, TextAttribute.WEIGHT_EXTRABOLD, false);
+	Font FONT = Fonts.OPEN_SANS.deriveFont(20, 9, false);
 	int BORDER_WIDTH = 3;
 	Rectangle SIZE = new Rectangle(255, 380);
 
