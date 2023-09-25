@@ -26,9 +26,9 @@ import java.io.InputStream;
 
 public enum Fonts {
 	UBUNTU_MONO("font/UbuntuMono.ttf"),
-	OPEN_SANS("font/OpenSans.ttf"),
-	OPEN_SANS_BOLD("font/OpenSans-Bold.ttf"),
-	OPEN_SANS_EXTRABOLD("font/OpenSans-ExtraBold.ttf"),
+	OPEN_SANS("font/OpenSansEmoji.ttf"),
+	OPEN_SANS_BOLD("font/OpenSansEmoji-Bold.ttf"),
+	OPEN_SANS_EXTRABOLD("font/OpenSansEmoji-ExtraBold.ttf"),
 	OPEN_SANS_COMPACT("font/OpenSans-Compact.ttf"),
 	NOTO_SANS("font/NotoSansJP.otf"),
 	NOTO_SANS_BOLD("font/NotoSansJP-Bold.otf"),
