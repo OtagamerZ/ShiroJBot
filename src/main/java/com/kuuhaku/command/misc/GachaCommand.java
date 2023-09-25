@@ -129,7 +129,7 @@ public class GachaCommand implements Executable {
 						Graphics2D g2d = bi.createGraphics();
 						g2d.setRenderingHints(Constants.HD_HINTS);
 
-						g2d.setFont(Fonts.OPEN_SANS.deriveFont(20));
+						g2d.setFont(Fonts.OPEN_SANS.deriveBold(20));
 
 						for (String s : result) {
 							drawCard(g2d, locale, acc, type, s);

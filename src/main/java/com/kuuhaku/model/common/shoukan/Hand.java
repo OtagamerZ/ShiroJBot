@@ -1114,7 +1114,7 @@ public class Hand {
 		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(90));
+		g2d.setFont(Fonts.OPEN_SANS.deriveBold(90));
 
 		for (int i = 0; i < cards.size(); i++) {
 			int offset = bi.getWidth() / 2 - (Drawable.SIZE.width + 20) * Math.min(cards.size() - (i / 5) * 5, 5) / 2;
@@ -1246,7 +1246,7 @@ public class Hand {
 		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, 100 + (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(60));
+		g2d.setFont(Fonts.OPEN_SANS.deriveBold(60));
 		g2d.translate(0, 100);
 
 		String str = game.getString("str/select_a_card");

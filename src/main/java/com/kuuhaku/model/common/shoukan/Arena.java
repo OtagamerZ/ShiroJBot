@@ -298,7 +298,7 @@ public class Arena implements Renderer {
 
 			g1.setColor(new Color(0x50000000, true));
 			g1.fillRect(0, 0, w, SIZE.height);
-			g1.setFont(Fonts.OPEN_SANS.deriveFont((int) (BAR_SIZE.height / 2.5)));
+			g1.setFont(Fonts.OPEN_SANS.deriveBold((int) (BAR_SIZE.height / 2.5)));
 			g1.setClip(new Rectangle(0, 0, SIZE.width, SIZE.height));
 
 			Graph.applyTransformed(g1, 0, SIZE.height, g2 -> {
@@ -341,7 +341,7 @@ public class Arena implements Renderer {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 		g2d.setStroke(new BasicStroke(2));
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(75));
+		g2d.setFont(Fonts.OPEN_SANS.deriveBold(75));
 
 		int slotWidth = bi.getWidth() / 5;
 		int slotHeight = bi.getHeight() / 2;
@@ -486,7 +486,7 @@ public class Arena implements Renderer {
 					if (!demon) {
 						String mpText = "MP: " + StringUtils.leftPad(String.valueOf(hand.getMP()), 2, "0");
 						g2.setColor(Color.CYAN);
-						g2.setFont(Fonts.OPEN_SANS_COMPACT.deriveFont(BAR_SIZE.height - 20));
+						g2.setFont(Fonts.OPEN_SANS_COMPACT.deriveBold(BAR_SIZE.height - 20));
 
 						if (reversed) {
 							Graph.drawOutlinedString(g2, mpText,
@@ -507,7 +507,7 @@ public class Arena implements Renderer {
 									+ "/"
 									+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), pad, "0");
 					g2.setColor(Color.WHITE);
-					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveFont((int) (BAR_SIZE.height / 2.5) * (demon ? 2 : 1)));
+					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveBold((int) (BAR_SIZE.height / 2.5) * (demon ? 2 : 1)));
 
 					int offset = 6;
 					if (demon) offset += 10;
@@ -559,7 +559,7 @@ public class Arena implements Renderer {
 			int y;
 			String name = StringUtils.abbreviate(hand.getName(), 20);
 			g.setColor(Color.WHITE);
-			g.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(BAR_SIZE.height / 3f * 2));
+			g.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(BAR_SIZE.height / 3f * 2));
 			if (game.getCurrentSide() == hand.getSide()) {
 				name = "==> " + name + " <==";
 			}
@@ -592,7 +592,7 @@ public class Arena implements Renderer {
 					int row = i / 3;
 
 					g1.setColor(Color.RED);
-					g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(rad));
+					g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(rad));
 					String text = String.valueOf(lock.time());
 
 					FontMetrics fm = g1.getFontMetrics();
@@ -679,7 +679,7 @@ public class Arena implements Renderer {
 						count.addAll(hand.getGraveyard().stream().map(Drawable::getClass).toList());
 
 						g1.setColor(Color.WHITE);
-						g1.setFont(Fonts.UBUNTU_MONO.deriveFont(rad - 5));
+						g1.setFont(Fonts.UBUNTU_MONO.deriveBold(rad - 5));
 						String text = "S: %2s\nE: %2s\nF: %2s\nD: %2s".formatted(
 								count.getCount(Senshi.class),
 								count.getCount(Evogear.class),

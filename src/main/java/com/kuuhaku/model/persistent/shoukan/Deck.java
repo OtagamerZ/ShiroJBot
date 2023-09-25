@@ -418,7 +418,7 @@
 
 		 rc.paint(g2d, rc.getWidth(), rc.getHeight());
 
-		 g2d.setFont(Fonts.OPEN_SANS.deriveFont(30));
+		 g2d.setFont(Fonts.OPEN_SANS.derivePlain(30));
 		 g2d.setColor(Color.WHITE);
 		 Graph.drawMultilineString(g2d, locale.get("str/deck_analysis"), 600, 45, 400);
 		 Graph.drawMultilineString(g2d, """
@@ -474,25 +474,25 @@
 			 String effects;
 			 if (ori.isPure()) {
 				 g.drawImage(ori.major().getImage(), 0, 0, 150, 150, null);
-				 g.setFont(Fonts.OPEN_SANS.deriveFont(60));
+				 g.setFont(Fonts.OPEN_SANS.deriveBold(60));
 				 g.setColor(ori.major().getColor());
 
 				 String text = locale.get("str/deck_origin_pure", ori.major().getName(locale));
 				 Graph.drawOutlinedString(g, text, 175, (150 + 75) / 2, 2, Color.BLACK);
 
-				 g.setFont(Fonts.OPEN_SANS.deriveFont(36));
+				 g.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + ori.major().getMajor(locale)
 						   + "\n\n- " + locale.get("major/pureblood")
 						   + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			 } else if (ori.major() == Race.MIXED) {
-				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(60));
+				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
 				 g.setColor(Graph.mix(Arrays.stream(ori.minor()).map(Race::getColor).toArray(Color[]::new)));
 
 				 String text = locale.get("str/deck_origin_mixed");
 				 Graph.drawOutlinedString(g, text, 0, (150 + 75) / 2, 2, Color.BLACK);
 
-				 g.setFont(Fonts.OPEN_SANS.deriveFont(36));
+				 g.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + locale.get("major/mixed")
 						   + "\n\n" + Arrays.stream(ori.minor())
@@ -502,7 +502,7 @@
 						   + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			 } else {
 				 g.drawImage(ori.synergy().getBadge(), 0, 0, 150, 150, null);
-				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveFont(60));
+				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
 				 g.setColor(ori.synergy().getColor());
 
 				 String text = locale.get("str/deck_origin", syn.getName(locale));
@@ -515,7 +515,7 @@
 					 g1.drawImage(icons.get(1), minOffset + 5, 10, 75, 75, null);
 				 });
 
-				 g.setFont(Fonts.OPEN_SANS.deriveFont(36));
+				 g.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + ori.major().getMajor(locale)
 						   + "\n\n" + Arrays.stream(ori.minor())

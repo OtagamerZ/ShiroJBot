@@ -51,14 +51,18 @@ public enum Fonts {
 			}
 		}
 
-		this.font = temp.deriveFont(Font.BOLD);
+		this.font = temp;
 	}
 
 	public Font getFont() {
 		return font;
 	}
 
-	public Font deriveFont(float size) {
-		return font.deriveFont(size);
+	public Font derivePlain(float size) {
+		return font.deriveFont(Font.PLAIN, size);
+	}
+
+	public Font deriveBold(float size) {
+		return font.deriveFont(Font.BOLD, size);
 	}
 }
