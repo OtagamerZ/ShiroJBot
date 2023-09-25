@@ -42,12 +42,12 @@ public enum Fonts {
 		Font temp;
 
 		if (path.isBlank()) {
-			temp = new Font(Font.SANS_SERIF, Font.PLAIN, 11);
+			temp = new Font(Font.SANS_SERIF, Font.BOLD, 11);
 		} else {
 			try (InputStream is = IO.getResourceAsStream(path)) {
 				temp = Font.createFont(Font.TRUETYPE_FONT, is);
 			} catch (FontFormatException | IOException e) {
-				temp = new Font(Font.SANS_SERIF, Font.PLAIN, 11);
+				temp = new Font(Font.SANS_SERIF, Font.BOLD, 11);
 			}
 		}
 
