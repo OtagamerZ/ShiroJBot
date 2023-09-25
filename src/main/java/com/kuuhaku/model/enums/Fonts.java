@@ -23,9 +23,6 @@ import com.kuuhaku.util.IO;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
-
-import static java.awt.font.TextAttribute.*;
 
 public enum Fonts {
 	UBUNTU_MONO("font/UbuntuMono.ttf"),
@@ -34,6 +31,8 @@ public enum Fonts {
 	OPEN_SANS_EXTRABOLD("font/OpenSans-ExtraBold.ttf"),
 	OPEN_SANS_COMPACT("font/OpenSans-Compact.ttf"),
 	NOTO_SANS("font/NotoSansJP.otf"),
+	NOTO_SANS_BOLD("font/NotoSansJP-Bold.otf"),
+	NOTO_SANS_EXTRABOLD("font/NotoSansJP-ExtraBold.otf"),
 	DOREKING("font/Doreking.ttf"),
 	DEFAULT("");
 
@@ -59,15 +58,7 @@ public enum Fonts {
 		return font;
 	}
 
-	public Font deriveFont(int style, float size) {
-		return deriveFont(size, 1, false);
-	}
-
-	public Font deriveFont(float size, float weight, boolean italic) {
-		return font.deriveFont(Map.of(
-				SIZE, size,
-				WEIGHT, weight,
-				POSTURE, italic ? POSTURE_OBLIQUE : POSTURE_REGULAR
-		));
+	public Font deriveFont(float size) {
+		return font.deriveFont(size);
 	}
 }

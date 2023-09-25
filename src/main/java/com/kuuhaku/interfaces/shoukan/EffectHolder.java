@@ -285,13 +285,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				x += 10;
 			}
 
-			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
+			g2d.setFont(Fonts.OPEN_SANS.deriveFont(10));
 			g2d.setColor(style.getFrame().getSecondaryColor());
 
 			FontMetrics fm = g2d.getFontMetrics();
 			try {
 				if (str.contains(DC1)) {
-					g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
+					g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(10));
 
 					if (Calc.luminance(g2d.getColor()) < 0.2) {
 						Graph.drawOutlinedString(g2d, str, x, y, 1.5f, Color.WHITE);
@@ -305,7 +305,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					return;
 				}
 			} finally {
-				g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
+				g2d.setFont(Fonts.OPEN_SANS.deriveFont(10));
 			}
 
 			if (str.contains("§")) {
@@ -363,7 +363,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default void drawDescription(Graphics2D g2d, I18N locale) {
 		DeckStyling style = getHand() == null ? new DeckStyling() : getHand().getUserDeck().getStyling();
 
-		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(11));
 		g2d.setColor(style.getFrame().getSecondaryColor());
 
 		String desc = parseDescription(locale);
@@ -375,7 +375,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				y += 11;
 			}
 
-			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
+			g2d.setFont(Fonts.OPEN_SANS.deriveFont(10));
 			renderText(g2d, desc, y, highlightValues(g2d, style.getFrame().isLegacy()));
 		}
 	}
