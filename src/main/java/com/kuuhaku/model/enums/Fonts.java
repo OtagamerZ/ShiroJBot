@@ -60,14 +60,14 @@ public enum Fonts {
 	}
 
 	public Font deriveFont(int style, float size) {
-		return deriveFont(style, size, 1);
+		return deriveFont(size, 1, false);
 	}
 
-	public Font deriveFont(int style, float size, float weight) {
+	public Font deriveFont(float size, float weight, boolean italic) {
 		return font.deriveFont(Map.of(
 				SIZE, size,
-				WEIGHT, weight,
-				POSTURE, (style & Font.ITALIC) == 2 ? POSTURE_OBLIQUE : POSTURE_REGULAR
+				WEIGHT, weight * size,
+				POSTURE, italic ? POSTURE_OBLIQUE : POSTURE_REGULAR
 		));
 	}
 }
