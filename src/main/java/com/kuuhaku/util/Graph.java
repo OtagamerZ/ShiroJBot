@@ -40,6 +40,10 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 public abstract class Graph {
+	public static final Stroke PLAIN = new BasicStroke(1);
+	public static final Stroke BOLD = new BasicStroke(2);
+	public static final Stroke EXTRABOLD = new BasicStroke(3);
+
 	public static Rectangle getStringBounds(Graphics2D g2d, String text) {
 		return new TextLayout(text, g2d.getFont(), g2d.getFontRenderContext()).getBounds().getBounds();
 	}
