@@ -81,31 +81,31 @@ public class CumValue implements Iterable<ValueMod>, Cloneable {
 		return get(source);
 	}
 
-	public void set(double mult) {
+	public void set(double value) {
 		for (ValueMod mod : this.values) {
 			if (mod instanceof PermMod) {
-				mod.setValue(mod.getValue() + mult);
+				mod.setValue(mod.getValue() + value);
 				return;
 			}
 		}
 
-		this.values.add(new PermMod(mult));
+		this.values.add(new PermMod(value));
 	}
 
-	public void set(Drawable<?> source, double mult) {
-		ValueMod mod = new ValueMod(source, mult);
+	public void set(Drawable<?> source, double value) {
+		ValueMod mod = new ValueMod(source, value);
 		this.values.remove(mod);
 		this.values.add(mod);
 	}
 
-	public void set(Drawable<?> source, double mult, int expiration) {
-		ValueMod mod = new ValueMod(source, mult, expiration);
+	public void set(Drawable<?> source, double value, int expiration) {
+		ValueMod mod = new ValueMod(source, value, expiration);
 		this.values.remove(mod);
 		this.values.add(mod);
 	}
 
-	public void leftShift(Number mult) {
-		set(mult.doubleValue());
+	public void leftShift(Number value) {
+		set(value.doubleValue());
 	}
 
 	public Set<ValueMod> values() {

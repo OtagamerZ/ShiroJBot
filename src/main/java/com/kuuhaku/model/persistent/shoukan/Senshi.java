@@ -391,6 +391,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return getCards(getSide().getOther(), top, indexes);
 	}
 
+	public List<Senshi> getAllies() {
+		return getCards(getSide());
+	}
+
 	public List<Senshi> getAllies(int... indexes) {
 		return getAllies(null, indexes);
 	}
