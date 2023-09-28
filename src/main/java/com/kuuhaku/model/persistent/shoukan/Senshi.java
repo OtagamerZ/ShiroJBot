@@ -218,6 +218,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			out.add("tag/sealed");
 		}
 
+		out.add("tag/" + getElement().name().toLowerCase());
+
 		List<String> tags = base.getTags().stream()
 				.map(String::valueOf)
 				.sorted()
@@ -1338,9 +1340,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				g1.setFont(FONT);
 				g1.setColor(style.getFrame().getPrimaryColor());
 				String name = Graph.abbreviate(g1, card.getVanity().getName(), MAX_NAME_WIDTH);
-				if (getElement() != null) {
-					name = element + " " + name;
-				}
 
 				Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
