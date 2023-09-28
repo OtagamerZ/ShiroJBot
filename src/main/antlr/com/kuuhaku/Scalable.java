@@ -94,10 +94,12 @@ public class Scalable extends Value {
 			return values[1] + "" + values[0];
 		} else {
 			for (int i = 0; i < values.length; i++) {
-				if (i == 0) {
-					delimiter.insert(0, " ");
-				} else {
-					delimiter.append(" ");
+				if (!(values[i] instanceof VariableValue)) {
+					if (i == 0) {
+						delimiter.insert(0, " ");
+					} else {
+						delimiter.append(" ");
+					}
 				}
 			}
 
