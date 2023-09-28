@@ -18,6 +18,9 @@
 
 package com.kuuhaku;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class Scalable extends Value {
 	private Value[] values = new Value[2];
 	private String delimiter;
@@ -36,15 +39,6 @@ public class Scalable extends Value {
 
 	public Value setRight(Value right) {
 		return values[1] = right;
-	}
-
-	public void fill() {
-		for (int i = 0; i < values.length; i++) {
-			if (values[i] == null) {
-				values[i] = new PercentageValue(1);
-				setDelimiter("*");
-			}
-		}
 	}
 
 	public void setDelimiter(String delimiter) {
@@ -67,7 +61,7 @@ public class Scalable extends Value {
 		for (Value v : values) {
 			if (v instanceof VariableValue) {
 				vars++;
-			} else {
+			} else if (v instanceof PercentageValue) {
 				scales++;
 			}
 		}
@@ -75,22 +69,35 @@ public class Scalable extends Value {
 		return vars == 1 && scales == 1;
 	}
 
+	public boolean isPure() {
+		int vals = 0;
+		for (Value v : values) {
+			if (v != null) vals++;
+		}
+
+		return vals <= 1;
+	}
+
 	@Override
 	public String toString() {
+		if (isPure()) {
+			for (Value v : values) {
+				if (v != null) return String.valueOf(v);
+			}
+		}
+
 		StringBuilder delimiter = new StringBuilder();
 		delimiter.append(this.delimiter);
 
-		fill();
 		if (isScalingVar()) {
+			Arrays.sort(values, Comparator.comparing(v -> !(v instanceof VariableValue)));
 			return values[1] + "" + values[0];
 		} else {
 			for (int i = 0; i < values.length; i++) {
-				if (!(values[i] instanceof VariableValue)) {
-					if (i == 0) {
-						delimiter.insert(0, " ");
-					} else {
-						delimiter.append(" ");
-					}
+				if (i == 0) {
+					delimiter.insert(0, " ");
+				} else {
+					delimiter.append(" ");
 				}
 			}
 
