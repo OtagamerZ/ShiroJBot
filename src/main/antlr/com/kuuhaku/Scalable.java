@@ -38,6 +38,15 @@ public class Scalable extends Value {
 		return values[1] = right;
 	}
 
+	public void fill() {
+		for (int i = 0; i < values.length; i++) {
+			if (values[i] == null) {
+				values[i] = new PercentageValue(1);
+				setDelimiter("*");
+			}
+		}
+	}
+
 	public void setDelimiter(String delimiter) {
 		this.delimiter = delimiter;
 	}
@@ -66,24 +75,12 @@ public class Scalable extends Value {
 		return vars == 1 && scales == 1;
 	}
 
-	public boolean isPure() {
-		int vals = 0;
-		for (Value v : values) {
-			if (v != null) vals++;
-		}
-
-		return vals <= 1;
-	}
-
 	@Override
 	public String toString() {
-		if (isPure()) {
-			setRight(new PercentageValue(1));
-		}
-
 		StringBuilder delimiter = new StringBuilder();
 		delimiter.append(this.delimiter);
 
+		fill();
 		if (isScalingVar()) {
 			return values[1] + "" + values[0];
 		} else {
