@@ -78,7 +78,7 @@ public class Scalable extends Value {
 	@Override
 	public String toString() {
 		if (isPure()) {
-			return String.valueOf(values[0]);
+			setRight(new PercentageValue(1));
 		}
 
 		StringBuilder delimiter = new StringBuilder();
