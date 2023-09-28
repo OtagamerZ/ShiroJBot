@@ -344,9 +344,9 @@ public interface Drawable<T extends Drawable<T>> {
 		List<String> out = new ArrayList<>();
 
 		for (String tag : tags) {
-			if (tag.startsWith("race/") || tag.startsWith("element/")) {
+			if (!tag.startsWith("tag/")) {
 				out.add(locale.get(tag).toUpperCase());
-			} else if (tag.startsWith("tag/")) {
+			} else {
 				out.add(getString(locale, tag).toUpperCase());
 			}
 
