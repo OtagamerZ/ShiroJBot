@@ -60,6 +60,8 @@ public record Origin(boolean variant, Race major, Race... minor) {
 		if (major == Race.NONE || minor.length == 0) return Race.NONE;
 
 		Race r = major.fuse(minor[0]);
+		if (r == Race.MIXED) return Race.NONE;
+
 		return variant ? r.getVariant() : r;
 	}
 
