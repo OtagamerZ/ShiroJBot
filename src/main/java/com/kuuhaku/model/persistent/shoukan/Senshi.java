@@ -1280,10 +1280,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public ElementType getElement() {
-		if (hand != null && hand.getOther() != null && element == null) {
-			if (Utils.equalsAny(Race.ELEMENTAL, hand.getOrigin().synergy(), hand.getOther().getOrigin().synergy())) {
-				element = Utils.getRandomEntry(ElementType.values());
-			}
+		if (element == null) {
+			ElementType[] elems = ElementType.values();
+			element = elems[Calc.rng(0, elems.length - 1, id.hashCode())];
 		}
 
 		return element;
