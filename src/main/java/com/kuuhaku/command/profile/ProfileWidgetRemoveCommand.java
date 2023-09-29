@@ -43,7 +43,7 @@ public class ProfileWidgetRemoveCommand implements Executable {
 
 		int id = args.getInt("id", 0) - 1;
 		if (!Utils.between(id, 0, settings.getWidgets().size() - 1)) {
-			event.channel().sendMessage(locale.get("error/invalid_value_range", 1, settings.getWidgets().size() - 1)).queue();
+			event.channel().sendMessage(locale.get("error/invalid_value_range", 1, settings.getWidgets().size())).queue();
 			return;
 		}
 
