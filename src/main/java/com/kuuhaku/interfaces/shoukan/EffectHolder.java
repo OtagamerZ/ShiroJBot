@@ -419,7 +419,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			retry.set(true);
 
 			if (m.group(1) != null) {
-				ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(2)));
+				ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
 
 				CommonTokenStream cts = new CommonTokenStream(lex);
 				ShoukanExprParser parser = new ShoukanExprParser(cts);
@@ -439,7 +439,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				return Matcher.quoteReplacement(Tag.valueOf(m.group(3).toUpperCase()).toString());
 			}
 
-			return Matcher.quoteReplacement(m.group(0));
+			return null;
 		});
 
 		if (retry.get()) {
