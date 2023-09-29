@@ -47,7 +47,7 @@ public class StringTree {
     @Override
     public String toString() {
         XStringBuilder buffer = new XStringBuilder();
-        root.print(buffer, 0, true);
+        root.print(buffer, 0, true, true);
 
         return buffer.toString();
     }
