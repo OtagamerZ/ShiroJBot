@@ -16,38 +16,39 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.deck;
+package com.kuuhaku.command.profile;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
 
 @Command(
-		name = "deck",
-		path = "variant",
-		category = Category.INFO
+		name = "profile",
+		path = {"widget", "remove"},
+		category = Category.MISC
 )
-@Requires(Permission.MESSAGE_EMBED_LINKS)
-public class DeckVariantCommand implements Executable {
+@Signature("<id:number:r>")
+public class ProfileWidgetRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck d = data.profile().getAccount().getCurrentDeck();
-		if (d == null) {
-			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
+		AccountSettings settings = data.profile().getAccount().getSettings();
+
+		int id = args.getInt("id", 0) - 1;
+		if (!Utils.between(id, 0, settings.getWidgets().size() - 1)) {
+			event.channel().sendMessage(locale.get("error/invalid_value_range", 1, settings.getWidgets().size() - 1)).queue();
 			return;
 		}
 
-		d.setVariant(!d.isVariant());
-		d.save();
-
-		event.channel().sendMessage(locale.get("success/deck_variant")).queue();
+		event.channel().sendMessage(locale.get("success/profile_widget_remove")).queue();
+		settings.getWidgets().remove(id);
+		settings.save();
 	}
 }

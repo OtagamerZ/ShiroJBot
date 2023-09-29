@@ -16,38 +16,30 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.deck;
+package com.kuuhaku.command.profile;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
 
 @Command(
-		name = "deck",
-		path = "variant",
-		category = Category.INFO
+		name = "profile",
+		path = {"widget", "clear"},
+		category = Category.MISC
 )
-@Requires(Permission.MESSAGE_EMBED_LINKS)
-public class DeckVariantCommand implements Executable {
+public class ProfileWidgetClearCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck d = data.profile().getAccount().getCurrentDeck();
-		if (d == null) {
-			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-			return;
-		}
+		AccountSettings settings = data.profile().getAccount().getSettings();
 
-		d.setVariant(!d.isVariant());
-		d.save();
-
-		event.channel().sendMessage(locale.get("success/deck_variant")).queue();
+		event.channel().sendMessage(locale.get("success/profile_widget_clear")).queue();
+		settings.getWidgets().clear();
+		settings.save();
 	}
 }
