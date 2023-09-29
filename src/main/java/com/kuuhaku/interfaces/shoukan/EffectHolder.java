@@ -405,9 +405,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default String getReadableDescription(I18N locale) {
 		String desc = getDescription(locale);
 		if (desc != null) {
-			Matcher pat = Utils.regex(desc, "(\\*\\*\\(.*)?\\{=(\\S+?)}(.*\\)\\*\\*)?|([A-Za-z]+?)?\\{([a-z]+?)}|(?<!\\*\\*)\\([^:]+?\\)(?!\\*\\*)");
+			Matcher pat = Utils.regex(desc, "\\{=(\\S+?)}|([A-Za-z]+?)?\\{([a-z]+?)}");
 
-			return parse(pat);
+			return parse(pat).replaceAll("(\\(.+?\\))", "**$1**");
 		}
 
 		return "";
@@ -418,7 +418,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		String out = matcher.replaceAll(m -> {
 			retry.set(true);
 
-			if (m.group(2) != null) {
+			if (m.group(1) != null) {
 				ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(2)));
 
 				CommonTokenStream cts = new CommonTokenStream(lex);
@@ -430,20 +430,16 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				walker.walk(listener, tree);
 
-				if (m.group(1) != null && m.group(3) != null) {
-					return Matcher.quoteReplacement(m.group(1) + "(" + listener.getOutput().toString() + ")" + m.group(3));
+				return Matcher.quoteReplacement("(" + listener.getOutput().toString() + ")");
+			} else if (m.group(3) != null) {
+				if (m.group(2) != null) {
+					return Matcher.quoteReplacement("__" + m.group(2) + "__" + Tag.valueOf(m.group(3).toUpperCase()));
 				}
 
-				return Matcher.quoteReplacement("**(" + listener.getOutput().toString() + ")**");
-			} else if (m.group(5) != null) {
-				if (m.group(4) != null) {
-					return Matcher.quoteReplacement("__" + m.group(4) + "__" + Tag.valueOf(m.group(5).toUpperCase()));
-				}
-
-				return Matcher.quoteReplacement(Tag.valueOf(m.group(5).toUpperCase()).toString());
+				return Matcher.quoteReplacement(Tag.valueOf(m.group(3).toUpperCase()).toString());
 			}
 
-			return Matcher.quoteReplacement("**" + m.group(0) + "**");
+			return null;
 		});
 
 		if (retry.get()) {
