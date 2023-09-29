@@ -53,7 +53,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
@@ -406,18 +405,14 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		String desc = getDescription(locale);
 		if (desc != null) {
 			Matcher pat = Utils.regex(desc, "\\{=(\\S+?)}|([A-Za-z]+?)?\\{([a-z]+?)}");
-
-			return parse(pat).replaceAll("(\\(.+?\\))", "**$1**");
+			return parse(pat).replaceAll("\\((?:[^()]*+|\\((?:[^()]*+)*\\))*\\)", "**$0**");
 		}
 
 		return "";
 	}
 
 	private static String parse(Matcher matcher) {
-		AtomicBoolean retry = new AtomicBoolean();
-		String out = matcher.replaceAll(m -> {
-			retry.set(true);
-
+		return matcher.replaceAll(m -> {
 			if (m.group(1) != null) {
 				ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
 
@@ -441,11 +436,5 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 			return null;
 		});
-
-		if (retry.get()) {
-			return parse(matcher.reset(out));
-		}
-
-		return out;
 	}
 }
