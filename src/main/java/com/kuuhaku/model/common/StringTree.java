@@ -79,7 +79,7 @@ public class StringTree {
             buffer.nextLine();
             for (int i = 0; i < level; i++) {
                 if (i < level - 1) {
-                    buffer.append("  │ ");
+                    buffer.append(hasNext ? "  │ " : "    ");
                 } else {
                     buffer.append(hasNext ? "  ├─" : "  └─");
                 }
