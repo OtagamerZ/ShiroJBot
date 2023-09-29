@@ -439,7 +439,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				return Matcher.quoteReplacement(Tag.valueOf(m.group(3).toUpperCase()).toString());
 			}
 
-			return null;
+			return Matcher.quoteReplacement(m.group(0));
 		});
 
 		if (retry.get()) {
