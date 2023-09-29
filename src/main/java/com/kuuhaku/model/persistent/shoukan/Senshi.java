@@ -1345,7 +1345,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 				if (!stats.getWrite().isBlank() && getSlot().getIndex() > -1) {
 					g1.setColor(Color.ORANGE);
-					g1.setFont(Fonts.NOTO_SANS.derivePlain(15f));
+					g1.setFont(Fonts.NOTO_SANS_EXTRABOLD.deriveBold(15f));
 
 					String str = stats.getWrite();
 					FontMetrics fm = g1.getFontMetrics();
