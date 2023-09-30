@@ -47,18 +47,18 @@ public class StringTree {
     @Override
     public String toString() {
         XStringBuilder buffer = new XStringBuilder();
-        root.print(buffer, 0, true);
+        root.print(buffer, 0, true, true);
 
         return buffer.toString();
     }
 
     public static class Root extends TreeNode {
         @Override
-        public void print(XStringBuilder buffer, int level, boolean hasNext) {
+        public void print(XStringBuilder buffer, int level, boolean parentHasNext, boolean hasNext) {
             Iterator<TreeNode> iterator = children.values().iterator();
             while (iterator.hasNext()) {
                 TreeNode child = iterator.next();
-                child.print(buffer, 0, iterator.hasNext());
+                child.print(buffer, 0, hasNext, iterator.hasNext());
             }
         }
     }
@@ -75,11 +75,11 @@ public class StringTree {
         }
 
         @Override
-        public void print(XStringBuilder buffer, int level, boolean hasNext) {
+        public void print(XStringBuilder buffer, int level, boolean parentHasNext, boolean hasNext) {
             buffer.nextLine();
             for (int i = 0; i < level; i++) {
                 if (i < level - 1) {
-                    buffer.append("  │ ");
+                    buffer.append(parentHasNext ? "  │ " : "    ");
                 } else {
                     buffer.append(hasNext ? "  ├─" : "  └─");
                 }
@@ -89,7 +89,7 @@ public class StringTree {
             Iterator<TreeNode> iterator = children.values().iterator();
             while (iterator.hasNext()) {
                 TreeNode child = iterator.next();
-                child.print(buffer, level + 1, iterator.hasNext());
+                child.print(buffer, level + 1, hasNext, iterator.hasNext());
             }
         }
     }

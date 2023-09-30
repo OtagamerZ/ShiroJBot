@@ -42,10 +42,10 @@ public enum ElementType {
 	@Override
 	public String toString() {
 		return switch (this) {
-			case WATER -> "🧊";
-			case EARTH -> "🗻";
+			case WATER -> "💦";
+			case EARTH -> "⛰";
 			case FIRE -> "🔥";
-			case WIND -> "🍃";
+			case WIND -> "☁";
 		};
 	}
 }

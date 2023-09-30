@@ -48,6 +48,6 @@ public class DeckVariantCommand implements Executable {
 		d.setVariant(!d.isVariant());
 		d.save();
 
-		event.channel().sendMessage(locale.get("success/deck_reorder")).queue();
+		event.channel().sendMessage(locale.get("success/deck_variant")).queue();
 	}
 }

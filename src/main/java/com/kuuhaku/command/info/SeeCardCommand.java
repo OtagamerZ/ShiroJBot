@@ -176,7 +176,7 @@ public class SeeCardCommand implements Executable {
 					eb.addField(locale.get("str/tags"),
 							d.getTags().stream()
 									.map(s -> {
-										if (s.startsWith("race/")) {
+										if (!s.startsWith("tag/")) {
 											return locale.get(s);
 										}
 

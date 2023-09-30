@@ -23,16 +23,13 @@ import com.kuuhaku.util.IO;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
-
-import static java.text.AttributedCharacterIterator.Attribute;
 
 public enum Fonts {
 	UBUNTU_MONO("font/UbuntuMono.ttf"),
-	OPEN_SANS("font/OpenSans.ttf"),
-	OPEN_SANS_BOLD("font/OpenSans-Bold.ttf"),
-	OPEN_SANS_EXTRABOLD("font/OpenSans-ExtraBold.ttf"),
-	OPEN_SANS_COMPACT("font/OpenSans-Compact.ttf"),
+	OPEN_SANS("font/OpenSansEmoji.ttf"),
+	OPEN_SANS_BOLD("font/OpenSansEmoji-Bold.ttf"),
+	OPEN_SANS_EXTRABOLD("font/OpenSansEmoji-ExtraBold.ttf"),
+	OPEN_SANS_COMPACT("font/OpenSansEmoji-Compact.ttf"),
 	NOTO_SANS("font/NotoSansJP.otf"),
 	NOTO_SANS_BOLD("font/NotoSansJP-Bold.otf"),
 	NOTO_SANS_EXTRABOLD("font/NotoSansJP-ExtraBold.otf"),
@@ -61,11 +58,11 @@ public enum Fonts {
 		return font;
 	}
 
-	public Font deriveFont(int style, float size) {
-		return font.deriveFont(style, size);
+	public Font derivePlain(float size) {
+		return font.deriveFont(Font.PLAIN, size);
 	}
 
-	public Font deriveFont(int style, float size, Map<? extends Attribute, ?> attributes) {
-		return deriveFont(style, size).deriveFont(attributes);
+	public Font deriveBold(float size) {
+		return font.deriveFont(Font.BOLD, size);
 	}
 }

@@ -253,7 +253,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
-			curr.setOrigin(new Origin(curr.getUserDeck(), major, minors.toArray(Race[]::new)));
+			curr.setOrigin(new Origin(curr.getUserDeck().isVariant(), major, minors.toArray(Race[]::new)));
 			reportEvent("SET_ORIGIN -> " + curr.getOrigin(), false);
 		}
 
@@ -345,7 +345,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int extraMp = 0;
-		if (curr.getOrigin().synergy() != Race.HOMUNCULUS) {
+		if (curr.getOrigin().synergy() == Race.HOMUNCULUS) {
 			extraMp = curr.getDiscard().size();
 		}
 
@@ -415,7 +415,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				curr.consumeHP(s.getHPCost());
-				curr.consumeMP(s.getMPCost());
+				curr.consumeMP(s.getMPCost() - usedExtra);
 				List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost() + usedExtra);
 				if (!consumed.isEmpty()) {
 					s.getStats().getData().put("consumed", consumed);
@@ -435,7 +435,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				curr.consumeHP(s.getHPCost());
-				curr.consumeMP(s.getMPCost());
+				curr.consumeMP(s.getMPCost() - usedExtra);
 				List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost() + usedExtra);
 				if (!consumed.isEmpty()) {
 					s.getStats().getData().put("consumed", consumed);
@@ -1350,6 +1350,8 @@ public class Shoukan extends GameInstance<Phase> {
 							s.awake();
 						}
 
+						op.getGraveyard().add(target);
+
 						dmg = 0;
 						win = true;
 					} else {
@@ -1375,6 +1377,8 @@ public class Shoukan extends GameInstance<Phase> {
 								if (!source.hasFlag(Flag.NO_DAMAGE, true)) {
 									you.modHP((int) -((enemyStats - dmg) * dmgMult));
 								}
+
+								you.getGraveyard().add(source);
 							}
 
 							dmg = 0;
@@ -1426,6 +1430,8 @@ public class Shoukan extends GameInstance<Phase> {
 										}
 
 										dmg = 0;
+									} else {
+										op.getGraveyard().add(target);
 									}
 
 									win = true;
@@ -1437,9 +1443,13 @@ public class Shoukan extends GameInstance<Phase> {
 										s.awake();
 									}
 
+									op.getGraveyard().add(target);
+
 									for (Senshi s : source.getNearby()) {
 										s.awake();
 									}
+
+									you.getGraveyard().add(source);
 
 									dmg = 0;
 								}
@@ -2446,6 +2456,17 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
+			if (curr.getOrigin().synergy() == Race.ORACLE) {
+				buttons.put(Utils.parseEmoji("\uD83D\uDD2E"), w -> {
+					BufferedImage cards = curr.render(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
+
+					Objects.requireNonNull(w.getHook())
+							.setEphemeral(true)
+							.sendFiles(FileUpload.fromData(IO.getBytes(cards, "png"), "hand.png"))
+							.queue();
+				});
+			}
+
 			buttons.put(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
 				history = !history;
 
@@ -2521,12 +2542,16 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public String getString(String key, Object... args) {
-		String out = super.getString(key, args);
-		if (out.isBlank() || out.equalsIgnoreCase(key)) {
-			out = LocalizedString.get(getLocale(), key, "").formatted(args);
-		}
+		try {
+			String out = super.getString(key, args);
+			if (out.isBlank() || out.equalsIgnoreCase(key)) {
+				out = LocalizedString.get(getLocale(), key, "").formatted(args);
+			}
 
-		return Utils.getOr(out, key);
+			return Utils.getOr(out, key);
+		} catch (MissingFormatArgumentException e) {
+			return "";
+		}
 	}
 
 	public void send(Drawable<?> source, String text) {
@@ -2656,10 +2681,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		curr.showHand();
-
-		if (curr.getOrigin().synergy() == Race.ORACLE) {
-			curr.showCards(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
-		}
 
 		reportEvent("str/game_turn_change", true, "<@" + curr.getUid() + ">", (int) Math.ceil(getTurn() / 2d));
 

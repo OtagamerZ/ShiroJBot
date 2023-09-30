@@ -130,6 +130,10 @@ public enum Race {
 	}
 
 	public boolean isRace(Race race) {
+		if (Integer.bitCount(race.flag) > 1) {
+			return this == race;
+		}
+
 		return (flag & race.flag) == race.flag;
 	}
 
@@ -184,20 +188,10 @@ public enum Race {
 	}
 
 	public BufferedImage getImage() {
-		Race byFlag = getByFlag(flag);
-		if (byFlag != this) {
-			return byFlag.getImage();
-		}
-
 		return IO.getResourceAsImage("shoukan/race/full/" + name() + ".png");
 	}
 
 	public BufferedImage getIcon() {
-		Race byFlag = getByFlag(flag);
-		if (byFlag != this) {
-			return byFlag.getIcon();
-		}
-
 		return IO.getResourceAsImage("shoukan/race/icon/" + name() + ".png");
 	}
 

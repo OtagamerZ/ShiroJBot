@@ -33,5 +33,5 @@ public abstract class TreeNode {
         return this;
     }
 
-    public abstract void print(XStringBuilder buffer, int level, boolean hasNext);
+    public abstract void print(XStringBuilder buffer, int level, boolean parentHasNext, boolean hasNext);
 }

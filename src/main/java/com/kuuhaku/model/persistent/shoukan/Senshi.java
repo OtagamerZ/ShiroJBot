@@ -207,6 +207,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (race != Race.NONE) {
 			out.add("race/" + getRace().name());
 		}
+
 		if (hasEffect()) {
 			if (base.getTags().contains("MATERIAL")) {
 				out.add("tag/base");
@@ -216,6 +217,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		} else if (isSealed()) {
 			out.add("tag/sealed");
 		}
+
+		out.add("element/" + getElement().name().toLowerCase());
 
 		List<String> tags = base.getTags().stream()
 				.map(String::valueOf)
@@ -388,6 +391,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public List<Senshi> getFront(Boolean top, int... indexes) {
 		return getCards(getSide().getOther(), top, indexes);
+	}
+
+	public List<Senshi> getAllies() {
+		return getCards(getSide());
 	}
 
 	public List<Senshi> getAllies(int... indexes) {
@@ -659,9 +666,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (hand.getOrigin().synergy() == Race.DRYAD) {
-				mult *= Math.max(0, hand.getRegDeg().peek() / hand.getBase().hp());
+				mult *= 1 + Math.max(0, hand.getRegDeg().peek() / hand.getBase().hp());
 			} else if (hand.getOrigin().synergy() == Race.ALIEN) {
-				mult *= Calc.prcnt(hand.getUserDeck().getEvoWeight(), 24) / 2;
+				mult *= 1 + Calc.prcnt(hand.getUserDeck().getEvoWeight(), 24) / 2;
 			}
 		}
 
@@ -1275,10 +1282,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public ElementType getElement() {
-		if (hand != null && element == null) {
-			if (Utils.equalsAny(Race.ELEMENTAL, hand.getOrigin().synergy(), hand.getOther().getOrigin().synergy())) {
-				element = Utils.getRandomEntry(ElementType.values());
-			}
+		if (element == null) {
+			ElementType[] elems = ElementType.values();
+			element = elems[Calc.rng(0, elems.length - 1, id.hashCode())];
 		}
 
 		return element;
@@ -1334,15 +1340,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				g1.setFont(FONT);
 				g1.setColor(style.getFrame().getPrimaryColor());
 				String name = Graph.abbreviate(g1, card.getVanity().getName(), MAX_NAME_WIDTH);
-				if (element != null) {
-					name = element + " " + name;
-				}
 
 				Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
 				if (!stats.getWrite().isBlank() && getSlot().getIndex() > -1) {
 					g1.setColor(Color.ORANGE);
-					g1.setFont(Fonts.NOTO_SANS_EXTRABOLD.deriveFont(Font.BOLD, 15f));
+					g1.setFont(Fonts.NOTO_SANS_EXTRABOLD.deriveBold(15f));
 
 					String str = stats.getWrite();
 					FontMetrics fm = g1.getFontMetrics();

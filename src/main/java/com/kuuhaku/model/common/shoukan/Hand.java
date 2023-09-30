@@ -130,6 +130,10 @@ public class Hand {
 		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
+	}, d -> {
+		if (getOrigin().synergy() == Race.MUMMY && getRealDeck().indexOf(d) == 0) {
+			modMP(2);
+		}
 	});
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
 		if (getGraveyard().contains(d)) return false;
@@ -196,7 +200,7 @@ public class Hand {
 		d.reset();
 
 		if (d.getHand().getOrigin().synergy() == Race.REBORN && Calc.chance(33, getGame().getRng())) {
-			cards.add(d.copy());
+			deck.add(d.copy());
 			return false;
 		}
 
@@ -365,6 +369,7 @@ public class Hand {
 	}
 
 	public Hand getOther() {
+		if (game == null) return null;
 		return game.getHands().get(side.getOther());
 	}
 
@@ -442,7 +447,7 @@ public class Hand {
 			}
 
 			if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
-				regdeg.add(200);
+				regdeg.add(500);
 			}
 			if (getOther().getOrigin().synergy() == Race.IMP) {
 				modHP(-50);
@@ -470,7 +475,7 @@ public class Hand {
 		}
 
 		if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
-			regdeg.add(200);
+			regdeg.add(500);
 		}
 		if (getOther().getOrigin().synergy() == Race.IMP) {
 			modHP(-50);
@@ -508,7 +513,7 @@ public class Hand {
 			Drawable<?> d = deck.get(i);
 			if (d.getCard().getId().equalsIgnoreCase(card)) {
 				if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
-					regdeg.add(200);
+					regdeg.add(500);
 				}
 				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-50);
@@ -558,7 +563,7 @@ public class Hand {
 			Drawable<?> d = deck.get(i);
 			if (cond.test(d)) {
 				if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
-					regdeg.add(200);
+					regdeg.add(500);
 				}
 				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-50);
@@ -607,7 +612,7 @@ public class Hand {
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Evogear e) {
 				if (origin.synergy() == Race.EX_MACHINA && !e.isSpell()) {
-					regdeg.add(200);
+					regdeg.add(500);
 				}
 				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-50);
@@ -633,7 +638,7 @@ public class Hand {
 		for (int i = 0; i < deck.size(); i++) {
 			if (deck.get(i) instanceof Evogear e && !e.isSpell()) {
 				if (origin.synergy() == Race.EX_MACHINA) {
-					regdeg.add(200);
+					regdeg.add(500);
 				}
 
 				Drawable<?> out = deck.remove(i);
@@ -877,7 +882,7 @@ public class Hand {
 			}
 		}
 
-		if (isCritical()) {
+		if (origin.synergy() == Race.GARGOYLE && isCritical()) {
 			stats.getDamageMult().set(Field.DEFAULT, -1, 1);
 			gargoyled = true;
 		} else {
@@ -1109,7 +1114,7 @@ public class Hand {
 		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 90));
+		g2d.setFont(Fonts.OPEN_SANS.deriveBold(90));
 
 		for (int i = 0; i < cards.size(); i++) {
 			int offset = bi.getWidth() / 2 - (Drawable.SIZE.width + 20) * Math.min(cards.size() - (i / 5) * 5, 5) / 2;
@@ -1241,7 +1246,7 @@ public class Hand {
 		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, 100 + (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
-		g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 60));
+		g2d.setFont(Fonts.OPEN_SANS.deriveBold(60));
 		g2d.translate(0, 100);
 
 		String str = game.getString("str/select_a_card");

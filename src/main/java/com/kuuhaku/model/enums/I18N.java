@@ -48,6 +48,7 @@ public enum I18N {
 
 	public String get(String key, Object... args) {
 		if (key == null) return "";
+		else if (args == null) return get(key);
 		else if (key.contains(" ") && !key.contains("/")) return key;
 
 		String lower = key.toLowerCase();

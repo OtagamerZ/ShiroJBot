@@ -335,7 +335,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 			RoundRectangle2D wids = new RoundRectangle2D.Double(-14, 210, 200, 50, 20, 20);
 
 			int em = g1.getFontMetrics().getHeight();
-			g1.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
+			g1.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(20));
 			for (Object o : settings.getWidgets()) {
 				String s = Utils.replaceTags(String.valueOf(o), '%', replaces);
 				Rectangle bounds;
@@ -411,32 +411,32 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		g2d.setColor(new Color(colors[Math.max(0, (lvl % 215 - 1) / 30)]));
 		g2d.fillRect(88 + pad / 2, 59 + pad / 2, (int) ((384 - pad) * prcnt), 10 - pad);
 
-		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 55));
+		g2d.setFont(Fonts.DOREKING.derivePlain(55));
 		Graph.drawOutlinedString(g2d, String.valueOf(lvl), 88, 51, 3, Color.BLACK);
 
 		int offset = (int) (Graph.getStringBounds(g2d, String.valueOf(lvl)).getWidth() + 10);
 		g2d.setColor(Color.WHITE);
-		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 25));
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(25));
 		Graph.drawOutlinedString(g2d, account.getName(), 88 + offset, 25, 3, Color.BLACK);
 
 		String details = "XP: %s/%s I Rank: ".formatted(
 				Utils.shorten(xp - lvlXp), Utils.shorten(toNext - lvlXp)
 		);
-		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(20));
 		Graph.drawOutlinedString(g2d, details, 88 + offset, 51, 3, Color.BLACK);
 
 		offset += Graph.getStringBounds(g2d, details).getWidth();
-		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 12));
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(12));
 		Graph.drawOutlinedString(g2d, "#", 88 + offset, 45, 3, Color.BLACK);
 
 		offset += Graph.getStringBounds(g2d, "#").getWidth();
-		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 20));
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(20));
 		Graph.drawOutlinedString(g2d, String.valueOf(account.getRanking()), 88 + offset, 51, 3, Color.BLACK);
 
 		AccountTitle title = account.getTitle();
 		if (title != null) {
 			g2d.setColor(title.getTitle().getRarity().getColor(false));
-			g2d.setFont(Fonts.DOREKING.deriveFont(Font.BOLD, 35));
+			g2d.setFont(Fonts.DOREKING.deriveBold(35));
 
 			String str = title.getTitle().getInfo(locale).getName();
 			Graph.drawShadowedString(g2d, str, 524 + (374 - g2d.getFontMetrics().stringWidth(str)) / 2, 70, 15, 2, Color.BLACK);

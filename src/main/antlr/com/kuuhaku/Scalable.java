@@ -18,6 +18,9 @@
 
 package com.kuuhaku;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class Scalable extends Value {
 	private Value[] values = new Value[2];
 	private String delimiter;
@@ -58,7 +61,7 @@ public class Scalable extends Value {
 		for (Value v : values) {
 			if (v instanceof VariableValue) {
 				vars++;
-			} else {
+			} else if (v instanceof PercentageValue) {
 				scales++;
 			}
 		}
@@ -78,13 +81,16 @@ public class Scalable extends Value {
 	@Override
 	public String toString() {
 		if (isPure()) {
-			return String.valueOf(values[0]);
+			for (Value v : values) {
+				if (v != null) return String.valueOf(v);
+			}
 		}
 
 		StringBuilder delimiter = new StringBuilder();
 		delimiter.append(this.delimiter);
 
 		if (isScalingVar()) {
+			Arrays.sort(values, Comparator.comparing(v -> !(v instanceof VariableValue)));
 			return values[1] + "" + values[0];
 		} else {
 			for (int i = 0; i < values.length; i++) {

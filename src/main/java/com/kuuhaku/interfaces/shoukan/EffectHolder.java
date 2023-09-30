@@ -53,7 +53,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
@@ -285,13 +284,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				x += 10;
 			}
 
-			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
+			g2d.setFont(Fonts.OPEN_SANS.deriveBold(10));
 			g2d.setColor(style.getFrame().getSecondaryColor());
 
 			FontMetrics fm = g2d.getFontMetrics();
 			try {
 				if (str.contains(DC1)) {
-					g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.PLAIN, 10));
+					g2d.setFont(Fonts.OPEN_SANS_BOLD.derivePlain(10));
 
 					if (Calc.luminance(g2d.getColor()) < 0.2) {
 						Graph.drawOutlinedString(g2d, str, x, y, 1.5f, Color.WHITE);
@@ -305,7 +304,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					return;
 				}
 			} finally {
-				g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
+				g2d.setFont(Fonts.OPEN_SANS.deriveBold(10));
 			}
 
 			if (str.contains("§")) {
@@ -363,7 +362,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default void drawDescription(Graphics2D g2d, I18N locale) {
 		DeckStyling style = getHand() == null ? new DeckStyling() : getHand().getUserDeck().getStyling();
 
-		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveFont(Font.BOLD, 11));
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(11));
 		g2d.setColor(style.getFrame().getSecondaryColor());
 
 		String desc = parseDescription(locale);
@@ -375,32 +374,47 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				y += 11;
 			}
 
-			g2d.setFont(Fonts.OPEN_SANS.deriveFont(Font.BOLD, 10));
-			Graph.drawMultilineString(g2d, desc,
-					7, y, 211, 3,
-					highlightValues(g2d, style.getFrame().isLegacy())
-			);
+			g2d.setFont(Fonts.OPEN_SANS.deriveBold(10));
+			renderText(g2d, desc, y, highlightValues(g2d, style.getFrame().isLegacy()));
+		}
+	}
+
+	private static void renderText(Graphics2D g2d, String text, int y, TriConsumer<String, Integer, Integer> renderer) {
+		String[] lines = text.split("\n");
+		for (String line : lines) {
+			String[] words = line.split("(?<=\\S )|(?=\\{=)|(?<=}%?)(?=[^%{ ])|(?<=})");
+			int offset = 0;
+			for (String s : words) {
+				FontMetrics m = g2d.getFontMetrics();
+
+				if (offset + m.stringWidth(s) <= 211) {
+					renderer.accept(s, 7 + offset, y);
+					offset += m.stringWidth(s);
+				} else {
+					y += m.getHeight() - 3;
+					renderer.accept(s, 7, y);
+					offset = m.stringWidth(s);
+				}
+			}
+
+			y += g2d.getFontMetrics().getHeight() - 3;
 		}
 	}
 
 	default String getReadableDescription(I18N locale) {
 		String desc = getDescription(locale);
 		if (desc != null) {
-			Matcher pat = Utils.regex(desc, "(\\*\\*\\(.*)?\\{=(\\S+?)}(.*\\)\\*\\*)?|([A-Za-z]+?)?\\{([a-z]+?)}|(?<!\\*\\*)\\([^:]+?\\)(?!\\*\\*)");
-
-			return parse(pat);
+			Matcher pat = Utils.regex(desc, "\\{=(\\S+?)}|([A-Za-z]+?)?\\{([a-z]+?)}");
+			return parse(pat).replaceAll("\\((?:[^()]*+|\\((?:[^()]*+)*\\))*\\)", "**$0**");
 		}
 
 		return "";
 	}
 
 	private static String parse(Matcher matcher) {
-		AtomicBoolean retry = new AtomicBoolean();
-		String out = matcher.replaceAll(m -> {
-			retry.set(true);
-
-			if (m.group(2) != null) {
-				ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(2)));
+		return matcher.replaceAll(m -> {
+			if (m.group(1) != null) {
+				ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
 
 				CommonTokenStream cts = new CommonTokenStream(lex);
 				ShoukanExprParser parser = new ShoukanExprParser(cts);
@@ -411,26 +425,16 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				walker.walk(listener, tree);
 
-				if (m.group(1) != null && m.group(3) != null) {
-					return Matcher.quoteReplacement(m.group(1) + "(" + listener.getOutput().toString() + ")" + m.group(3));
+				return Matcher.quoteReplacement("(" + listener.getOutput().toString() + ")");
+			} else if (m.group(3) != null) {
+				if (m.group(2) != null) {
+					return Matcher.quoteReplacement("__" + m.group(2) + "__" + Tag.valueOf(m.group(3).toUpperCase()));
 				}
 
-				return Matcher.quoteReplacement("**(" + listener.getOutput().toString() + ")**");
-			} else if (m.group(5) != null) {
-				if (m.group(4) != null) {
-					return Matcher.quoteReplacement("__" + m.group(4) + "__" + Tag.valueOf(m.group(5).toUpperCase()));
-				}
-
-				return Matcher.quoteReplacement(Tag.valueOf(m.group(5).toUpperCase()).toString());
+				return Matcher.quoteReplacement(Tag.valueOf(m.group(3).toUpperCase()).toString());
 			}
 
-			return Matcher.quoteReplacement("**" + m.group(0) + "**");
+			return null;
 		});
-
-		if (retry.get()) {
-			return parse(matcher.reset(out));
-		}
-
-		return out;
 	}
 }

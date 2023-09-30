@@ -85,6 +85,7 @@ public class KawaiponSenshiCommand implements Executable {
 			return;
 		}
 
+		boolean variant = race != Race.getByFlag(race.getFlag());
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/available_cards", locale.get("type/senshi")))
 				.setThumbnail(Constants.ORIGIN_RESOURCES + "shoukan/race/full/" + race + ".png")
@@ -104,8 +105,8 @@ public class KawaiponSenshiCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 			int max = (int) Math.ceil(total / 50d);
 			for (int i = 1; i <= max; i++) {
-				String url = (Constants.API_ROOT + "shoukan/%s/senshi?race=%s&pure=%s&uid=%s&frame=%s&v=%s&page=%s").formatted(
-						locale, race.getFlag(), args.has("pure") ? 1 : 0, event.user().getId(), dk.getStyling().getFrame().name(), System.currentTimeMillis(), i
+				String url = (Constants.API_ROOT + "shoukan/%s/senshi?race=%s&pure=%s&variant=%s&uid=%s&frame=%s&v=%s&page=%s").formatted(
+						locale, race.getFlag(), args.has("pure") ? 1 : 0, variant ? 1 : 0, event.user().getId(), dk.getStyling().getFrame().name(), System.currentTimeMillis(), i
 				);
 
 				eb.setImage(url).setDescription(race.getDescription(locale) + "\n\n" + locale.get("str/fallback_url", url));

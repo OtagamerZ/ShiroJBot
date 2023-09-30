@@ -49,7 +49,7 @@ import java.util.function.Consumer;
 public interface Drawable<T extends Drawable<T>> {
 	int MAX_NAME_WIDTH = 175;
 	int MAX_DESC_LENGTH = 210;
-	Font FONT = Fonts.OPEN_SANS_EXTRABOLD.deriveFont(Font.BOLD, 20);
+	Font FONT = Fonts.OPEN_SANS_EXTRABOLD.deriveBold(20);
 	int BORDER_WIDTH = 3;
 	Rectangle SIZE = new Rectangle(255, 380);
 
@@ -344,9 +344,9 @@ public interface Drawable<T extends Drawable<T>> {
 		List<String> out = new ArrayList<>();
 
 		for (String tag : tags) {
-			if (tag.startsWith("race/")) {
+			if (!tag.startsWith("tag/")) {
 				out.add(locale.get(tag).toUpperCase());
-			} else if (tag.startsWith("tag/")) {
+			} else {
 				out.add(getString(locale, tag).toUpperCase());
 			}
 
