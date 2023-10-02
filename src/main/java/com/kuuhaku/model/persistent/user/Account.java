@@ -332,6 +332,10 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return DynamicProperty.get(uid, id, defaultValue);
 	}
 
+	public void setDynValue(String id, Object value) {
+		DynamicProperty.update(uid, id, value);
+	}
+
 	public AccountTitle getTitle() {
 		return titles.parallelStream()
 				.filter(AccountTitle::isCurrent)
