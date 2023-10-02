@@ -36,6 +36,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -80,6 +81,7 @@ public class Main implements Thread.UncaughtExceptionHandler {
 				.disableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS)
 				.setMemberCachePolicy(m -> !m.getUser().isBot())
 				.setBulkDeleteSplittingEnabled(false)
+				.setCompression(Compression.NONE)
 				.setEventPool(new ForkJoinPool(
 						Runtime.getRuntime().availableProcessors(),
 						ForkJoinPool.defaultForkJoinWorkerThreadFactory,
