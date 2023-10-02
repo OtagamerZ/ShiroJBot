@@ -2647,7 +2647,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (curr.getOrigin().synergy() == Race.GHOST && getTurn() % 2 == 0) {
 			curr.modHP(200);
 		} else if (curr.getOrigin().synergy() == Race.WRAITH) {
-			curr.getOther().modHP((int) (curr.getGraveyard().size() * Math.ceil(getTurn() / 2d)));
+			curr.getOther().modHP((int) -(curr.getGraveyard().size() * Math.ceil(getTurn() / 2d)));
 		}
 
 		curr.getStats().expireMods();
