@@ -315,7 +315,7 @@ public class GuildListener extends ListenerAdapter {
 			}
 
 			DAO.apply(Account.class, account.getUid(), acc -> {
-				Title t = acc.checkTitles();
+				Title t = acc.checkTitles(locale);
 				if (t != null) {
 					ed.notify(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName()));
 				}

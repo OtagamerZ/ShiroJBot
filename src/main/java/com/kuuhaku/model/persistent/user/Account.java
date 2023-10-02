@@ -338,7 +338,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 				.findAny().orElse(null);
 	}
 
-	public synchronized Title checkTitles() {
+	public synchronized Title checkTitles(I18N locale) {
 		List<Title> titles = DAO.queryAll(Title.class, """
 				SELECT t
 				FROM Title t
@@ -349,7 +349,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 		);
 
 		for (Title title : titles) {
-			if (title.check(this)) {
+			if (title.check(this, locale)) {
 				this.titles.add(new AccountTitle(this, title));
 				return title;
 			}

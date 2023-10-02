@@ -68,12 +68,15 @@ public class Title extends DAO<Title> {
 		return rarity;
 	}
 
-	public boolean check(Account acc) {
+	public boolean check(Account acc, I18N locale) {
 		@Language("Groovy") String check = Utils.getOr(condition, "");
 		if (check.isBlank()) return false;
 
 		try {
-			Object out = Utils.exec(check, Map.of("acc", acc));
+			Object out = Utils.exec(check, Map.of(
+					"acc", acc,
+					"locale", locale
+			));
 
 			return (out instanceof Boolean b) && b;
 		} catch (Exception e) {
