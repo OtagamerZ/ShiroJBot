@@ -102,8 +102,8 @@ public class SelectTitleCommand implements Executable {
 					}
 				}
 
-				int track = current.track(acc);
-				if (track >= 0) {
+				String track = current.track(acc);
+				if (track != null) {
 					sb.append("\n").append(locale.get("str/current_tracker", track));
 				}
 
