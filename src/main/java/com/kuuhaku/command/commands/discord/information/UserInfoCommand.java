@@ -123,7 +123,7 @@ public class UserInfoCommand implements Executable, Slashed {
         }
 
         EmbedBuilder eb = new ColorlessEmbedBuilder();
-        eb.setTitle(":dividers: | Dados sobre " + m.getEffectiveName() + type)
+        eb.setTitle(":dividers: | Dados sobre " + m.getUser().getName() + type)
                 .setThumbnail(m.getUser().getEffectiveAvatarUrl())
                 .addField(":man_detective: | Nome real", "`" + m.getUser().getAsTag() + "`", true)
                 .addField(":medal: | Emblemas", sb.toString(), true)

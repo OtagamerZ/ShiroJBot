@@ -71,7 +71,7 @@ public class UwuCommand implements Executable {
 
 			try {
 				Member nii = guild.getMember(Main.getInfo().getUserByID(ShiroInfo.getNiiChan()));
-				wmb.setUsername(nii != null && name.equals(nii.getEffectiveName()) ? name + " (FAKE)" : name);
+				wmb.setUsername(nii != null && name.equals(nii.getUser().getName()) ? name + " (FAKE)" : name);
 				wmb.setAvatarUrl(avatar);
 			} catch (RuntimeException e) {
 				m.setPseudoName("");

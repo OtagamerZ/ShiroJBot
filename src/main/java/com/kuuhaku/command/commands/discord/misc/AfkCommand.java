@@ -44,9 +44,9 @@ public class AfkCommand implements Executable {
 			return;
 		}
 
-		if (guild.getSelfMember().hasPermission(Permission.NICKNAME_MANAGE) && !member.getEffectiveName().startsWith("[AFK]")) {
+		if (guild.getSelfMember().hasPermission(Permission.NICKNAME_MANAGE) && !member.getUser().getName().startsWith("[AFK]")) {
 			try {
-				member.modifyNickname("[AFK] " + member.getEffectiveName()).queue(null, Helper::doNothing);
+				member.modifyNickname("[AFK] " + member.getUser().getName()).queue(null, Helper::doNothing);
 			} catch (Exception ignore) {
 			}
 		}

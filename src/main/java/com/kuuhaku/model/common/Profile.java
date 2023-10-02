@@ -140,7 +140,7 @@ public class Profile {
 		g2d.setFont(Fonts.DOREKING.deriveFont(Font.PLAIN, 50));
 		g2d.setColor(Color.WHITE);
 		printCenteredString("LEVEL", 196, 52, 440, g2d);
-		String name = Unidecode.decode(m.getEffectiveName());
+		String name = Unidecode.decode(m.getUser().getName());
 		if (g2d.getFontMetrics().stringWidth(name) >= 678)
 			StringUtils.abbreviate(name, 20);
 		drawOutlinedText(name, 270, 342, g2d);

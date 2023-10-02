@@ -78,7 +78,7 @@ public class PardonMemberCommand implements Executable {
 
 			List<Page> pages = new ArrayList<>();
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setTitle(":tickets: | Alertas de " + mb.getEffectiveName());
+					.setTitle(":tickets: | Alertas de " + mb.getUser().getName());
 			int i = 0;
 			for (List<String> chunk : chunks) {
 				eb.clearFields();

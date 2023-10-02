@@ -228,9 +228,9 @@ public class ShiroEvents extends ListenerAdapter {
 		Account acc = AccountDAO.getAccount(author.getId());
 		if (!author.isBot()) {
 			if (acc.isAfk()) {
-				if (guild.getSelfMember().hasPermission(Permission.NICKNAME_MANAGE) && member.getEffectiveName().startsWith("[AFK]")) {
+				if (guild.getSelfMember().hasPermission(Permission.NICKNAME_MANAGE) && member.getUser().getName().startsWith("[AFK]")) {
 					try {
-						member.modifyNickname(member.getEffectiveName().replace("[AFK]", "")).queue(null, Helper::doNothing);
+						member.modifyNickname(member.getUser().getName().replace("[AFK]", "")).queue(null, Helper::doNothing);
 					} catch (Exception ignore) {
 					}
 				}
@@ -243,7 +243,7 @@ public class ShiroEvents extends ListenerAdapter {
 			for (Member m : message.getMentionedMembers()) {
 				Account tgt = AccountDAO.getAccount(m.getId());
 				if (tgt.isAfk()) {
-					message.reply(":zzz: | " + m.getEffectiveName() + " está AFK: " + Helper.replaceTags(tgt.getAfkMessage(), author, guild, message)).queue();
+					message.reply(":zzz: | " + m.getUser().getName() + " está AFK: " + Helper.replaceTags(tgt.getAfkMessage(), author, guild, message)).queue();
 				}
 			}
 		}
@@ -426,7 +426,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 							try {
 								Member nii = guild.getMember(Main.getInfo().getUserByID(ShiroInfo.getNiiChan()));
-								wmb.setUsername(nii != null && name.equals(nii.getEffectiveName()) ? name + " (FAKE)" : name);
+								wmb.setUsername(nii != null && name.equals(nii.getUser().getName()) ? name + " (FAKE)" : name);
 								wmb.setAvatarUrl(avatar);
 							} catch (RuntimeException e) {
 								m.setPseudoName("");
@@ -771,7 +771,7 @@ public class ShiroEvents extends ListenerAdapter {
 
 		if (BlacklistDAO.isBlacklisted(author)) return;
 
-		String name = member.getEffectiveName();
+		String name = member.getUser().getName();
 		if (gc.isMakeMentionable() && !Helper.regex(name, "[A-z0-9]{4}").find()) {
 			name = Unidecode.decode(name);
 		}
@@ -782,7 +782,7 @@ public class ShiroEvents extends ListenerAdapter {
 			}
 		}
 
-		if (!name.equals(member.getEffectiveName())) {
+		if (!name.equals(member.getUser().getName())) {
 			if (name.length() < 2) {
 				String[] names = {"Mencionável", "Unicode", "Texto", "Ilegível", "Símbolos", "Digite um nome"};
 				name = Helper.getRandomEntry(names);

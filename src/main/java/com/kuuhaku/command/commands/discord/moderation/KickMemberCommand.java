@@ -120,7 +120,7 @@ public class KickMemberCommand implements Executable {
 			Member mm = m.stream().findFirst().orElseThrow();
 
 			if (argsAsText.isBlank()) {
-				channel.sendMessage("Você está prestes a expulsar " + mm.getEffectiveName() + ", deseja confirmar?").queue(
+				channel.sendMessage("Você está prestes a expulsar " + mm.getUser().getName() + ", deseja confirmar?").queue(
 						s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper ->
 										mm.kick()
 												.flatMap(r -> channel.sendMessage("✅ | Membro expulso com sucesso!"))
@@ -131,7 +131,7 @@ public class KickMemberCommand implements Executable {
 						), Helper::doNothing
 				);
 			} else {
-				channel.sendMessage("Você está prestes a expulsar " + mm.getEffectiveName() + ", deseja confirmar?").queue(
+				channel.sendMessage("Você está prestes a expulsar " + mm.getUser().getName() + ", deseja confirmar?").queue(
 						s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper ->
 										mm.kick(finalArgsAsText)
 												.flatMap(r -> channel.sendMessage("✅ | Membro expulso com sucesso!\nRazão: `" + finalArgsAsText + "`"))

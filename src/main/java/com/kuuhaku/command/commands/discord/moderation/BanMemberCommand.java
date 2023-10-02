@@ -120,7 +120,7 @@ public class BanMemberCommand implements Executable {
 			Member mm = m.stream().findFirst().orElseThrow();
 
 			if (argsAsText.isBlank()) {
-				channel.sendMessage("Você está prestes a banir " + mm.getEffectiveName() + ", deseja confirmar?").queue(
+				channel.sendMessage("Você está prestes a banir " + mm.getUser().getName() + ", deseja confirmar?").queue(
 						s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper ->
 										mm.ban(7)
 												.flatMap(r -> channel.sendMessage("✅ | Membro banido com sucesso!"))
@@ -131,7 +131,7 @@ public class BanMemberCommand implements Executable {
 						), Helper::doNothing
 				);
 			} else {
-				channel.sendMessage("Você está prestes a banir " + mm.getEffectiveName() + ", deseja confirmar?").queue(
+				channel.sendMessage("Você está prestes a banir " + mm.getUser().getName() + ", deseja confirmar?").queue(
 						s -> Pages.buttonize(s, Map.of(Helper.parseEmoji(Helper.ACCEPT), wrapper ->
 										mm.ban(7, finalArgsAsText)
 												.flatMap(r -> channel.sendMessage("✅ | Membro banido com sucesso!\nRazão: `" + finalArgsAsText + "`"))

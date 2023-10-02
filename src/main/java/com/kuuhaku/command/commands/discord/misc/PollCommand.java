@@ -86,7 +86,7 @@ public class PollCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setTitle(":notepad_spiral: Enquete criada por " + member.getEffectiveName());
+		eb.setTitle(":notepad_spiral: Enquete criada por " + member.getUser().getName());
 		eb.setDescription("Apenas 1 clique já contabiliza o voto (a quantidade de reações __**NÃO**__ ficará maior que 1).");
 		eb.setThumbnail("https://www.kalkoken.org/apps/easypoll/resources/poll-logo.png");
 		eb.setDescription(text);
@@ -195,7 +195,7 @@ public class PollCommand implements Executable {
 		ShiroInfo.getPolls().remove(msg.getId());
 		boolean NOVOTE = pos == 0 && neg == 0;
 
-		eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
+		eb.setAuthor("A enquete feita por " + member.getUser().getName() + " foi encerrada!");
 		eb.setTitle("Enquete: (" + (NOVOTE ? "nenhum voto" : (pos + neg) + " votos") + ")");
 		eb.addField("Aprovação: ", NOVOTE ? "0.0%" : Helper.round(Helper.prcntToInt(pos, (pos + neg)), 1) + "%", true);
 		eb.addField("Reprovação: ", NOVOTE ? "0.0%" : Helper.round(Helper.prcntToInt(neg, (pos + neg)), 1) + "%", true);
@@ -224,7 +224,7 @@ public class PollCommand implements Executable {
 			NOVOTE = true;
 		}
 
-		eb.setAuthor("A enquete feita por " + member.getEffectiveName() + " foi encerrada!");
+		eb.setAuthor("A enquete feita por " + member.getUser().getName() + " foi encerrada!");
 		eb.setTitle("Enquete: (" + (NOVOTE ? "nenhum voto" : totalVotes + " votos") + ")");
 		eb.setFooter(null);
 		eb.addBlankField(false);
