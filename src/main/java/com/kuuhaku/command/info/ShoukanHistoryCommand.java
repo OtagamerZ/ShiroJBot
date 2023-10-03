@@ -64,7 +64,11 @@ public class ShoukanHistoryCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/history_title", data.config().getPrefix()))
-				.setDescription(locale.get("str/history_body", acc.getWinrate(), matches.size()));
+				.setDescription(locale.get("str/history_body",
+						acc.getShoukanRanking(),
+						acc.getWinrate(),
+						matches.size()
+				));
 
 		List<Page> pages = Utils.generatePages(eb, matches, 10, 5,
 				m -> {

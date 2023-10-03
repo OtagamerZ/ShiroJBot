@@ -455,6 +455,10 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return DAO.queryNative(Double.class, "SELECT user_winrate(?1)", uid);
 	}
 
+	public double getShoukanRanking() {
+		return DAO.queryNative(Integer.class, "SELECT user_shoukan_ranking(?1)", uid);
+	}
+
 	public List<Match> getMatches() {
 		return DAO.queryAllUnmapped("SELECT info, turns FROM v_matches WHERE has(players, ?1)", uid).stream()
 				.map(o -> Utils.map(Match.class, o))
