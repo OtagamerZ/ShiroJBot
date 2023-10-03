@@ -462,7 +462,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	public List<Match> getMatches() {
 		return DAO.queryAllNative(String.class, """
-						SELECT jsonb_build_object('info', info, 'turns', turns)
+						SELECT cast(jsonb_build_object('info', info, 'turns', turns) AS VARCHAR)
 						FROM v_matches
 						WHERE has(players, ?1)
 						""", uid
