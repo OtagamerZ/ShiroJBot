@@ -22,6 +22,15 @@ CREATE OR REPLACE FUNCTION card_winrate(VARCHAR)
     LANGUAGE sql
 AS
 $$
-SELECT round(sum(iif(has(w.turns -> 0 -> 'deck', $1), 1.0, 0.0)) / count(1) * 100, 2)
-FROM v_match_winner w
+SELECT round(sum(iif(has(x.w_cards, $1), 1.0, 0.0)) / count(1) * 100, 2)
+FROM (
+         SELECT ((x.start -> 'top' -> 'deck') || (x.start -> 'bottom' -> 'deck')) AS cards
+              , x.start -> x.winner -> 'deck'                                     AS w_cards
+         FROM (
+                  SELECT lower(h.info ->> 'winner') AS winner
+                       , h.turns -> 0               AS start
+                  FROM match_history h
+              ) x
+     ) x
+WHERE has(x.cards, $1)
 $$;
