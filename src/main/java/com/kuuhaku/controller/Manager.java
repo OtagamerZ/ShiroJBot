@@ -42,7 +42,6 @@ public abstract class Manager {
 	private static final String DB_NAME = System.getenv("DB_NAME");
 	private static final String DB_LOGIN = System.getenv("DB_LOGIN");
 	private static final String DB_PASS = System.getenv("DB_PASS");
-	private static final Semaphore lock = new Semaphore(1);
 
 	private static EntityManagerFactory emf;
 
