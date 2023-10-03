@@ -467,7 +467,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 						WHERE has(players, ?1)
 						""", uid
 				).stream()
-				.map(o -> JSONUtils.fromJSON(String.valueOf(o), Match.class))
+				.map(o -> JSONUtils.fromJSON(String.valueOf(o[0]), Match.class))
 				.toList();
 	}
 
