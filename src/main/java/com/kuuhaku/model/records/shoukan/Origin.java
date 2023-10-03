@@ -27,7 +27,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public record Origin(boolean variant, Race major, Race... minor) {
+public record Origin(boolean variant, Race major, Race[] minor) {
+	public static Origin from(boolean variant, Race major, Race... minor) {
+		return new Origin(variant, major, minor);
+	}
+
 	public List<BufferedImage> images() {
 		List<BufferedImage> out = new ArrayList<>();
 

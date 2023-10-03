@@ -645,13 +645,13 @@
 			 }
 
 			 if (ori.isEmpty()) {
-				 origin = new Origin(variant, Race.NONE);
+				 origin = Origin.from(variant, Race.NONE);
 			 } else if (ori.size() == 1) {
-				 origin = new Origin(variant, ori.get(0));
+				 origin = Origin.from(variant, ori.get(0));
 			 } else if (allSame) {
-				 origin = new Origin(variant, Race.MIXED, ori.toArray(Race[]::new));
+				 origin = Origin.from(variant, Race.MIXED, ori.toArray(Race[]::new));
 			 } else {
-				 origin = new Origin(variant, ori.get(0), ori.get(1));
+				 origin = Origin.from(variant, ori.get(0), ori.get(1));
 			 }
 		 }
 

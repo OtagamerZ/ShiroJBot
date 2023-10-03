@@ -253,7 +253,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
-			curr.setOrigin(new Origin(curr.getUserDeck().isVariant(), major, minors.toArray(Race[]::new)));
+			curr.setOrigin(Origin.from(curr.getUserDeck().isVariant(), major, minors.toArray(Race[]::new)));
 			reportEvent("SET_ORIGIN -> " + curr.getOrigin(), false);
 		}
 
