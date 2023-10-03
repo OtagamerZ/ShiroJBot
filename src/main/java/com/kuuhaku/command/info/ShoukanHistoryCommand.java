@@ -87,8 +87,6 @@ public class ShoukanHistoryCommand implements Executable {
 						fm.appendLine(locale.get("str/lose"));
 					}
 
-
-
 					fm.appendLine(locale.get("race/"));
 					fm.appendLine(Constants.TIMESTAMP_R.formatted(m.info().timestamp()));
 					return fm.toString();
