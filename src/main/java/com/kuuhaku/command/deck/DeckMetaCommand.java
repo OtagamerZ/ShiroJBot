@@ -88,16 +88,19 @@ public class DeckMetaCommand implements Executable {
 				current = card.getClass();
 			}
 
+			String name = card.toString();
+			name += " `(" + DAO.queryNative(String.class, "SELECT card_winrate(?1)", card.getId()) + "% WR)`";
+
 			if (card instanceof Senshi s) {
-				sb.appendNewLine(Utils.getEmoteString(Constants.EMOTE_REPO_4, s.getRace().name()) + " " + s);
+				sb.appendNewLine(Utils.getEmoteString(Constants.EMOTE_REPO_4, s.getRace().name()) + " " + name);
 			} else if (card instanceof Evogear e) {
-				sb.appendNewLine(Utils.getEmoteString(Constants.EMOTE_REPO_4, "tier_" + e.getTier()) + " " + e);
+				sb.appendNewLine(Utils.getEmoteString(Constants.EMOTE_REPO_4, "tier_" + e.getTier()) + " " + name);
 			} else if (card instanceof Field f) {
 				sb.appendNewLine(switch (f.getType()) {
 					case NONE -> f.toString();
-					case DAY -> ":sunny: " + f;
-					case NIGHT -> ":crescent_moon: " + f;
-					case DUNGEON -> ":japanese_castle: " + f;
+					case DAY -> ":sunny: " + name;
+					case NIGHT -> ":crescent_moon: " + name;
+					case DUNGEON -> ":japanese_castle: " + name;
 				});
 			}
 		}
