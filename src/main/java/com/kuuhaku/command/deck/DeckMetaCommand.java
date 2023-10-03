@@ -18,13 +18,13 @@
 
 package com.kuuhaku.command.deck;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -34,13 +34,13 @@ import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.shoukan.CardRanking;
 import com.kuuhaku.util.Bit;
-import com.kuuhaku.util.Utils;
-import com.kuuhaku.model.common.XStringBuilder;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -60,19 +60,22 @@ public class DeckMetaCommand implements Executable {
 			return;
 		}
 
-		List<? extends Drawable<?>> cards = DAO.queryAllNative(String.class, "SELECT card_id FROM v_shoukan_meta ORDER BY type, card_id").stream()
-				.map(id -> {
-							List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
+		List<CardRanking> cards = DAO.queryAllUnmapped("SELECT card_id, get_type(card_id), card_winrate(card_id) FROM v_shoukan_meta").stream()
+				.map(o -> {
+							List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, NumberUtils.toInt(String.valueOf(o[1]))));
 							if (types.isEmpty()) return null;
 
-							return switch (types.get(types.size() - 1)) {
-								case KAWAIPON, SENSHI -> DAO.find(Senshi.class, id);
-								case EVOGEAR -> DAO.find(Evogear.class, id);
-								case FIELD -> DAO.find(Field.class, id);
+							Drawable<?> card = switch (types.get(types.size() - 1)) {
+								case KAWAIPON, SENSHI -> DAO.find(Senshi.class, String.valueOf(o[0]));
+								case EVOGEAR -> DAO.find(Evogear.class, String.valueOf(o[0]));
+								case FIELD -> DAO.find(Field.class, String.valueOf(o[0]));
 							};
+
+							return new CardRanking(NumberUtils.toDouble(String.valueOf(o[2])), card);
 						}
 				)
 				.filter(Objects::nonNull)
+				.sorted()
 				.toList();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -80,29 +83,15 @@ public class DeckMetaCommand implements Executable {
 
 		Class<?> current = Senshi.class;
 		XStringBuilder sb = new XStringBuilder();
-		for (Drawable<?> card : cards) {
-			if (current != card.getClass()) {
+		for (CardRanking cr : cards) {
+			if (current != cr.card().getClass()) {
 				eb.addField(locale.get("type/" + current.getSimpleName()), sb.toString(), true);
 
 				sb.clear();
-				current = card.getClass();
+				current = cr.card().getClass();
 			}
 
-			String name = card.toString();
-			name += " `(" + DAO.queryNative(String.class, "SELECT card_winrate(?1)", card.getId()) + "% WR)`";
-
-			if (card instanceof Senshi s) {
-				sb.appendNewLine(Utils.getEmoteString(Constants.EMOTE_REPO_4, s.getRace().name()) + " " + name);
-			} else if (card instanceof Evogear e) {
-				sb.appendNewLine(Utils.getEmoteString(Constants.EMOTE_REPO_4, "tier_" + e.getTier()) + " " + name);
-			} else if (card instanceof Field f) {
-				sb.appendNewLine(switch (f.getType()) {
-					case NONE -> f.toString();
-					case DAY -> ":sunny: " + name;
-					case NIGHT -> ":crescent_moon: " + name;
-					case DUNGEON -> ":japanese_castle: " + name;
-				});
-			}
+			sb.appendNewLine(cr);
 		}
 
 		if (!sb.isEmpty()) {
