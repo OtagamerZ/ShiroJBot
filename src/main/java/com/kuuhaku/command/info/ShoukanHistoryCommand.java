@@ -39,8 +39,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -87,11 +85,7 @@ public class ShoukanHistoryCommand implements Executable {
 						fm.appendLine(locale.get("str/lose"));
 					}
 
-					ZonedDateTime when = m.info().timestamp();
-					if (when != null) {
-						fm.appendLine(Constants.TIMESTAMP_R.formatted(when.getLong(ChronoField.INSTANT_SECONDS)));
-					}
-
+					fm.appendLine(Constants.TIMESTAMP_R.formatted(m.info().timestamp()));
 					return fm.toString();
 				},
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
