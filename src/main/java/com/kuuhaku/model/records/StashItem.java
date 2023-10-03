@@ -21,12 +21,10 @@ package com.kuuhaku.model.records;
 import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.util.Utils;
-import org.apache.commons.lang3.StringUtils;
 
 public record StashItem(I18N locale, StashedCard sc) {
 
@@ -47,9 +45,8 @@ public record StashItem(I18N locale, StashedCard sc) {
 		}
 
 		String rarity = locale.get("type/" + sc.getType());
-		if (sc.getType() == CardType.EVOGEAR) {
-			Evogear ev = sc.getCard().asEvogear();
-			rarity += " " + StringUtils.repeat("★", ev.getTier());
+		if (Utils.equalsAny(sc.getType(), CardType.KAWAIPON, CardType.SENSHI)) {
+			rarity += " " + locale.get("rarity/" + sc.getCard().getRarity());
 		} else if (sc.getType() == CardType.FIELD) {
 			Field fd = sc.getCard().asField();
 			rarity += switch (fd.getType()) {
@@ -58,8 +55,6 @@ public record StashItem(I18N locale, StashedCard sc) {
 				case NIGHT -> ":crescent_moon:";
 				case DUNGEON -> ":japanese_castle:";
 			};
-		} else {
-			rarity += " " + locale.get("rarity/" + sc.getCard().getRarity());
 		}
 
 		String quality = "";
