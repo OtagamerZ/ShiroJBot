@@ -405,7 +405,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		String desc = getDescription(locale);
 		if (desc != null) {
 			Matcher pat = Utils.regex(desc, "\\{=(\\S+?)}|([A-Za-z]+?)?\\{([a-z]+?)}");
-			return parse(pat).replaceAll("\\((?:[^()]*+|\\((?:[^()]*+)*\\))*\\)", "**$0**");
+
+			// Original: \(([^()]|(?R))*\)
+			return parse(pat).replaceAll("\\(([^()]|\\(([^()]|\\(([^()]|\\(([^()])*\\))*\\))*\\))*\\)", "**$0**");
 		}
 
 		return "";
