@@ -33,7 +33,7 @@ public record CardRanking(double winrate, int type, Drawable<?> card) implements
 
 	@Override
 	public String toString() {
-		String name = "`(" + winrate + "% WR)`";
+		String name = "`" + winrate + "%`";
 
 		if (card instanceof Senshi s) {
 			return Utils.getEmoteString(s.getRace().name()) + " " + name + " " + card;
