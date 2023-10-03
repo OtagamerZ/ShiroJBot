@@ -31,6 +31,7 @@ import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -558,6 +559,18 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				g1.setColor(style.getFrame().getPrimaryColor());
 				String name = Graph.abbreviate(g1, getVanity().getName(), MAX_NAME_WIDTH);
 				Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
+
+				if (!stats.getWrite().isBlank() && getSlot().getIndex() > -1) {
+					g1.setColor(Color.ORANGE);
+					g1.setFont(Fonts.NOTO_SANS_EXTRABOLD.deriveBold(15f));
+
+					String str = stats.getWrite();
+					FontMetrics fm = g1.getFontMetrics();
+					Graph.drawOutlinedString(g1, str,
+							225 / 2 - fm.stringWidth(str) / 2, 39 + fm.getHeight() / 2,
+							2, Color.BLACK
+					);
+				}
 
 				drawCosts(g1);
 				drawAttributes(g1, !desc.isEmpty());
