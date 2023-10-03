@@ -1463,10 +1463,6 @@ public class Shoukan extends GameInstance<Phase> {
 				op.modHP((int) -((dmg + direct) * dmgMult));
 				op.addChain();
 
-				if (op.getOrigin().synergy() == Race.SUCCUBUS) {
-					you.modLockTime(Lock.CHARM, 1);
-				}
-
 				int damage = Math.max(0, eHP - op.getHP());
 
 				if (thorns > 0) {

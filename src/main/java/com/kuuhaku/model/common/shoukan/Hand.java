@@ -882,11 +882,15 @@ public class Hand {
 			}
 		}
 
-		if (origin.synergy() == Race.GARGOYLE && isCritical()) {
-			stats.getDamageMult().set(Field.DEFAULT, -1, 1);
-			gargoyled = true;
-		} else {
-			gargoyled = false;
+		if (origin.synergy() == Race.GARGOYLE) {
+			if (isCritical()) {
+				stats.getDamageMult().set(Field.DEFAULT, -1, 1);
+				gargoyled = true;
+			} else {
+				gargoyled = false;
+			}
+		} else if (origin.synergy() == Race.SUCCUBUS) {
+			getOther().modLockTime(Lock.CHARM, 3);
 		}
 	}
 
