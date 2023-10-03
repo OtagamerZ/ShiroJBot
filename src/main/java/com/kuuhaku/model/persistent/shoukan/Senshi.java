@@ -1343,7 +1343,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 				Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
 
-				if (!stats.getWrite().isBlank() && getSlot().getIndex() > -1) {
+				if (!stats.getWrite().isBlank()) {
 					g1.setColor(Color.ORANGE);
 					g1.setFont(Fonts.NOTO_SANS_EXTRABOLD.deriveBold(15f));
 
