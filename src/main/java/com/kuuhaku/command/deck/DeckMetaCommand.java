@@ -42,6 +42,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,7 +63,8 @@ public class DeckMetaCommand implements Executable {
 
 		List<CardRanking> cards = DAO.queryAllUnmapped("SELECT card_id, get_type(card_id), card_winrate(card_id) FROM v_shoukan_meta").stream()
 				.map(o -> {
-							List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, NumberUtils.toInt(String.valueOf(o[1]))));
+							int type = NumberUtils.toInt(String.valueOf(o[1]));
+							List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, type));
 							if (types.isEmpty()) return null;
 
 							Drawable<?> card = switch (types.get(types.size() - 1)) {
@@ -71,11 +73,11 @@ public class DeckMetaCommand implements Executable {
 								case FIELD -> DAO.find(Field.class, String.valueOf(o[0]));
 							};
 
-							return new CardRanking(NumberUtils.toDouble(String.valueOf(o[2])), card);
+							return new CardRanking(NumberUtils.toDouble(String.valueOf(o[2])), type, card);
 						}
 				)
 				.filter(Objects::nonNull)
-				.sorted()
+				.sorted(Comparator.comparingInt(CardRanking::type).thenComparing(CardRanking::compareTo))
 				.toList();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()

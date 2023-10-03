@@ -26,7 +26,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Utils;
 import org.jetbrains.annotations.NotNull;
 
-public record CardRanking(double winrate, Drawable<?> card) implements Comparable<CardRanking> {
+public record CardRanking(double winrate, int type, Drawable<?> card) implements Comparable<CardRanking> {
 	@Override
 	public int compareTo(@NotNull CardRanking other) {
 		return Double.compare(other.winrate, winrate);
@@ -48,5 +48,7 @@ public record CardRanking(double winrate, Drawable<?> card) implements Comparabl
 				case DUNGEON -> ":japanese_castle: " + name;
 			};
 		}
+
+		return name;
 	}
 }
