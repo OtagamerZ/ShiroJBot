@@ -101,6 +101,7 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 		} else if (ctx instanceof SumSubContext ss) {
 			sumSub(ss);
 		} else if (ctx instanceof FunctionContext fc) {
+			current.setGrouped(true);
 			if (fc.func.getType() == MAX) {
 				flatten(fc.right);
 			} else {
