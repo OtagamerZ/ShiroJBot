@@ -884,7 +884,7 @@ public class Hand {
 
 		if (origin.synergy() == Race.GARGOYLE) {
 			if (isCritical()) {
-				stats.getDamageMult().set(Field.DEFAULT, -1, 1);
+				stats.getDamageMult().set(Field.getDEFAULT(), -1, 1);
 				gargoyled = true;
 			} else {
 				gargoyled = false;
