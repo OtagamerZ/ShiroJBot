@@ -87,7 +87,6 @@ public class DeckMetaCommand implements Executable {
 		XStringBuilder sb = new XStringBuilder();
 		for (CardRanking cr : cards) {
 			if (current != cr.card().getClass()) {
-				System.out.println(sb);
 				eb.addField(locale.get("type/" + current.getSimpleName()), sb.toString(), true);
 
 				sb.clear();
@@ -98,7 +97,6 @@ public class DeckMetaCommand implements Executable {
 		}
 
 		if (!sb.isEmpty()) {
-			System.out.println(sb);
 			eb.addField(locale.get("type/" + current.getSimpleName()), sb.toString(), true);
 		}
 
