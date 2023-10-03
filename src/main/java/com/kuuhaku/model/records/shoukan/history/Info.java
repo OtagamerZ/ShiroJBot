@@ -20,9 +20,7 @@ package com.kuuhaku.model.records.shoukan.history;
 
 import com.kuuhaku.model.enums.shoukan.Side;
 
-import java.time.ZonedDateTime;
-
-public record Info(Player top, Player bottom, Side winner, String winCondition, ZonedDateTime timestamp, long seed) {
+public record Info(Player top, Player bottom, Side winner, String winCondition, long timestamp, long seed) {
 	public Player winnerPlayer() {
 		return switch (winner) {
 			case TOP -> top;

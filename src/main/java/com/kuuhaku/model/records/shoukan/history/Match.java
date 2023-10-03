@@ -25,6 +25,7 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
 import java.util.List;
 
 public record Match(Info info, List<Turn> turns) {
@@ -35,7 +36,7 @@ public record Match(Info info, List<Turn> turns) {
 						makePlayer(game.getHands().get(Side.BOTTOM)),
 						game.getWinner(),
 						winCondition,
-						ZonedDateTime.now(ZoneId.of("GMT-3")),
+						ZonedDateTime.now(ZoneId.of("GMT-3")).getLong(ChronoField.INSTANT_SECONDS),
 						game.getSeed()
 				),
 				game.getTurns()
