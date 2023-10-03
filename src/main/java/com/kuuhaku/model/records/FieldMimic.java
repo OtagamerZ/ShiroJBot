@@ -28,6 +28,11 @@ public record FieldMimic(String title, StringBuilder sb) {
 	}
 
 	public void appendLine(String line) {
+		if (sb.isEmpty()) {
+			append(line);
+			return;
+		}
+
 		sb.append("\n").append(line);
 	}
 
