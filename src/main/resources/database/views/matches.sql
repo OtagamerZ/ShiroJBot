@@ -16,22 +16,10 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION card_winrate(VARCHAR)
-    RETURNS NUMERIC
-    IMMUTABLE
-    LANGUAGE sql
-AS
-$$
-SELECT round(sum(iif(has(x.w_cards, $1), 1.0, 0.0)) / count(1) * 100, 2)
-FROM (
-         SELECT ((x.start -> 'top' -> 'deck') || (x.start -> 'bottom' -> 'deck')) AS cards
-              , x.start -> x.winner -> 'deck'                                     AS w_cards
-         FROM (
-                  SELECT lower(h.info ->> 'winner') AS winner
-                       , h.turns -> 0               AS start
-                  FROM match_history h
-                  WHERE h.info -> 'winner' IS NOT NULL
-              ) x
-     ) x
-WHERE has(x.cards, $1)
-$$;
+DROP VIEW IF EXISTS v_matches;
+CREATE OR REPLACE VIEW v_matches AS
+SELECT *
+     , jsonb_path_query_array(h.info, '$.*.uid') AS players
+     , h.info -> lower(h.info ->> 'winner') ->> 'uid' AS winner
+FROM match_history h
+ORDER BY h.id

@@ -68,10 +68,11 @@ public record StashItem(I18N locale, StashedCard sc) {
 			quality = " (Q: " + Utils.roundToString(kc.getQuality(), 1) + "%)";
 		}
 
-		return "**" + sc + location + "**" + (sc.isAccountBound() ? " \uD83D\uDD12" : "") +
-				"\n" + sc.getCard().getRarity().getEmote(sc.getCard()) + rarity + quality +
-				"\n" + sc.getCard().getAnime().toString() +
-				"\n";
+		return new FieldMimic(
+				sc + location + (sc.isAccountBound() ? " \uD83D\uDD12" : ""),
+				sc.getCard().getRarity().getEmote(sc.getCard()) + rarity + quality +
+				"\n" + sc.getCard().getAnime().toString()
+		).toString();
 	}
 
 	public String toString(int id) {

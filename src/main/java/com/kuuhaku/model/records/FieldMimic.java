@@ -18,9 +18,21 @@
 
 package com.kuuhaku.model.records;
 
-public record FieldMimic(String title, String value) {
+public record FieldMimic(String title, StringBuilder sb) {
+	public FieldMimic(String title, String value) {
+		this(title, new StringBuilder(value));
+	}
+
+	public void append(String line) {
+		sb.append(line);
+	}
+
+	public void appendLine(String line) {
+		sb.append("\n").append(line);
+	}
+
 	@Override
 	public String toString() {
-		return "**" + title + "**\n" + value + "\n";
+		return "### " + title + "\n" + sb + "\n";
 	}
 }

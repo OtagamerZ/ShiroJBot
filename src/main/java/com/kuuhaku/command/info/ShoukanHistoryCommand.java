@@ -19,6 +19,8 @@
 package com.kuuhaku.command.info;
 
 import com.github.ygimenez.model.Page;
+import com.kuuhaku.Constants;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -26,59 +28,59 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.SignatureParser;
+import com.kuuhaku.model.records.shoukan.history.Match;
+import com.kuuhaku.model.records.shoukan.history.Player;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Command(
-		name = "items",
+		name = "shoukan",
+		path = "history",
 		category = Category.INFO
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class InventoryCommand implements Executable {
+public class ShoukanHistoryCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
-		Map<UserItem, Integer> items = acc.getItems();
-		if (items.isEmpty()) {
-			event.channel().sendMessage(locale.get("error/inventory_empty")).queue();
-			return;
-		}
+		List<Match> matches = acc.getMatches();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/items_available"));
+				.setAuthor(locale.get("str/history_title", data.config().getPrefix()))
+				.setDescription(locale.get("str/history_body", acc.getWinrate(), matches.size()));
 
-		List<Page> pages = Utils.generatePages(eb, items.keySet().stream().sorted().toList(), 10, 5,
-				i -> {
-					int has = items.getOrDefault(i, 0);
+		List<Page> pages = Utils.generatePages(eb, matches, 10, 5,
+				m -> {
+					String out = Stream.of(m.info().bottom(), m.info().top())
+							.map(p -> DAO.find(Account.class, p.uid()))
+							.map(Account::getName)
+							.collect(Collectors.joining(" VS "));
 
-					FieldMimic fm = new FieldMimic("### " + i.getName(locale) + " (`" + i.getId() + "`)", "");
-					if (i.getStackSize() > 0) {
-						fm.appendLine(locale.get("str/item_has", has + "/" + i.getStackSize()));
+					FieldMimic fm = new FieldMimic(out, "");
+					Player winner = m.info().winnerPlayer();
+					if (winner == null) {
+						fm.appendLine(locale.get("str/draw"));
+					} else if (winner.uid().equals(acc.getUid())) {
+						fm.appendLine(locale.get("str/win"));
 					} else {
-						fm.appendLine(locale.get("str/item_has", has));
+						fm.appendLine(locale.get("str/lose"));
 					}
 
-					if (i.isPassive()) {
-						fm.append(" | **" + locale.get("str/passive") + "**");
-					}
-
-					fm.appendLine(i.getDescription(locale));
-
-					if (!i.isPassive()) {
-						String sig = i.getSignature();
-						sig = SignatureParser.extract(locale, sig == null ? null : new String[]{sig}, false).get(0);
-						fm.appendLine("`" + sig.formatted(data.config().getPrefix(), "items.use " + i.getId()) + "`");
+					ZonedDateTime when = m.info().timestamp();
+					if (when != null) {
+						fm.appendLine(Constants.TIMESTAMP_R.formatted(when.getLong(ChronoField.INSTANT_SECONDS)));
 					}
 
 					return fm.toString();

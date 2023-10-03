@@ -23,6 +23,8 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public record Match(Info info, List<Turn> turns) {
@@ -33,6 +35,7 @@ public record Match(Info info, List<Turn> turns) {
 						makePlayer(game.getHands().get(Side.BOTTOM)),
 						game.getWinner(),
 						winCondition,
+						ZonedDateTime.now(ZoneId.of("GMT-3")),
 						game.getSeed()
 				),
 				game.getTurns()

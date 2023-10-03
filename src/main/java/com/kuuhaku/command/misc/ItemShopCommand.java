@@ -32,6 +32,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
+import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
@@ -69,25 +70,25 @@ public class ItemShopCommand implements Executable {
 					i -> {
 						int has = items.getOrDefault(i, 0);
 
-						String out = "**" + i.getName(locale) + "**";
+						FieldMimic fm = new FieldMimic("### " + i.getName(locale), "");
 						if (i.getPrice() > 0 && i.getCurrency() != null) {
-							out += "\n" + locale.get("str/price", locale.get("currency/" + i.getCurrency(), i.getPrice()));
+							fm.appendLine(locale.get("str/price", locale.get("currency/" + i.getCurrency(), i.getPrice())));
 						}
 
 						if (i.getStackSize() > 0) {
-							out += "\n" + locale.get("str/item_has", has + "/" + i.getStackSize());
+							fm.appendLine(locale.get("str/item_has", has + "/" + i.getStackSize()));
 						} else {
-							out += "\n" + locale.get("str/item_has", has);
+							fm.appendLine(locale.get("str/item_has", has));
 						}
 
 						if (i.isPassive()) {
-							out += " | **" + locale.get("str/passive") + "**";
+							fm.append(" | **" + locale.get("str/passive") + "**");
 						}
 
-						out += "\n" + i.getDescription(locale);
-						out += "\n`" + "%s%s".formatted(data.config().getPrefix(), "items.buy " + i.getId()) + "`";
+						fm.appendLine(i.getDescription(locale));
+						fm.appendLine("%s%s".formatted(data.config().getPrefix(), "items.buy " + i.getId()) + "`");
 
-						return out + "\n";
+						return fm.toString();
 					},
 					(p, t) -> eb.setFooter(acc.getBalanceFooter(locale) + "\n" + locale.get("str/page", p + 1, t))
 			);

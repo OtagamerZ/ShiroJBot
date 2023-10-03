@@ -29,6 +29,7 @@ import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
 import com.kuuhaku.model.persistent.id.ProfileId;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.records.shoukan.history.Match;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
@@ -448,6 +449,16 @@ public class Account extends DAO<Account> implements Blacklistable {
 				.map(e -> new Pair<>(DAO.find(UserItem.class, e.getKey()), ((Number) e.getValue()).intValue()))
 				.filter(p -> p.getFirst() != null)
 				.collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
+	}
+
+	public double getWinrate() {
+		return DAO.queryNative(Double.class, "SELECT user_winrate(?1)", uid);
+	}
+
+	public List<Match> getMatches() {
+		return DAO.queryAllUnmapped("SELECT info, turns FROM v_matches WHERE has(players, ?1)", uid).stream()
+				.map(o -> Utils.map(Match.class, o))
+				.toList();
 	}
 
 	@Override
