@@ -44,8 +44,8 @@ public abstract class Manager {
 
 	private static EntityManagerFactory emf;
 
-	public static EntityManagerFactory getEntityManagerFactory() {
-		if (emf == null) synchronized (Manager.class) {
+	public static synchronized EntityManagerFactory getEntityManagerFactory() {
+		if (emf == null) {
 			emf = Persistence.createEntityManagerFactory("main", Map.of(
 					"jakarta.persistence.jdbc.user", DB_LOGIN,
 					"jakarta.persistence.jdbc.password", DB_PASS,
