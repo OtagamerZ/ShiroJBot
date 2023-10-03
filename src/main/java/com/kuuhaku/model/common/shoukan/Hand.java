@@ -254,7 +254,7 @@ public class Hand {
 	private transient int hpDelta = 0;
 	private transient int mpDelta = 0;
 	private transient boolean preventAction = false;
-	private transient boolean gargoyled = false;
+	private transient boolean reached = false;
 
 	@Transient
 	private int state = 0b100;
@@ -885,12 +885,17 @@ public class Hand {
 		if (origin.synergy() == Race.GARGOYLE) {
 			if (isCritical()) {
 				stats.getDamageMult().set(Field.getDEFAULT(), -1, 1);
-				gargoyled = true;
+				reached = true;
 			} else {
-				gargoyled = false;
+				reached = false;
 			}
 		} else if (origin.synergy() == Race.SUCCUBUS) {
-			getOther().modLockTime(Lock.CHARM, 3);
+			if (isLowLife()) {
+				getOther().modLockTime(Lock.CHARM, 3);
+				reached = true;
+			} else {
+				reached = false;
+			}
 		}
 	}
 
