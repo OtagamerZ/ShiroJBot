@@ -71,8 +71,10 @@ public class ShoukanHistoryCommand implements Executable {
 		List<Page> pages = Utils.generatePages(eb, matches, 10, 5,
 				m -> {
 					String out = Stream.of(m.info().bottom(), m.info().top())
-							.map(p -> DAO.find(Account.class, p.uid()))
-							.map(Account::getName)
+							.map(p -> {
+								Account a = DAO.find(Account.class, p.uid());
+								return Utils.getEmoteString(p.origin().synergy().name()) + a.getName();
+							})
 							.collect(Collectors.joining(" VS "));
 
 					FieldMimic fm = new FieldMimic(out, "");
@@ -85,6 +87,9 @@ public class ShoukanHistoryCommand implements Executable {
 						fm.appendLine(locale.get("str/lose"));
 					}
 
+
+
+					fm.appendLine(locale.get("race/"));
 					fm.appendLine(Constants.TIMESTAMP_R.formatted(m.info().timestamp()));
 					return fm.toString();
 				},
