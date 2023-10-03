@@ -24,7 +24,6 @@ import static com.kuuhaku.ShoukanExprParser.*;
 
 public class ExpressionListener extends ShoukanExprBaseListener {
 	private Scalable current;
-
 	private Scalable output;
 
 	@Override
@@ -54,7 +53,7 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 
 				curr.set(i, v);
 			} else {
-				current = (Scalable) curr.set(e.getRuleIndex(), new Scalable());
+				current = (Scalable) curr.set(i, new Scalable());
 				flatten(e);
 			}
 		}
@@ -77,7 +76,7 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 
 				curr.set(i, v);
 			} else {
-				current = (Scalable) curr.set(e.getRuleIndex(), new Scalable());
+				current = (Scalable) curr.set(i, new Scalable());
 				flatten(e);
 			}
 		}
@@ -108,6 +107,7 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 				flatten(fc.left);
 			}
 		} else if (ctx instanceof GroupContext g) {
+			current.setGrouped(true);
 			flatten(g.expr());
 		}
 	}

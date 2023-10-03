@@ -24,6 +24,7 @@ import java.util.Comparator;
 public class Scalable extends Value {
 	private Value[] values = new Value[2];
 	private String delimiter;
+	private boolean grouped;
 
 	public Value set(int pos, Value value) {
 		if (pos == 0) {
@@ -43,6 +44,10 @@ public class Scalable extends Value {
 
 	public void setDelimiter(String delimiter) {
 		this.delimiter = delimiter;
+	}
+
+	public void setGrouped(boolean grouped) {
+		this.grouped = grouped;
 	}
 
 	public void invert() {
@@ -80,30 +85,43 @@ public class Scalable extends Value {
 
 	@Override
 	public String toString() {
-		if (isPure()) {
-			for (Value v : values) {
-				if (v != null) return String.valueOf(v);
-			}
-		}
+//		if (isPure()) {
+//			for (Value v : values) {
+//				if (v != null) return String.valueOf(v);
+//			}
+//		}
 
 		StringBuilder delimiter = new StringBuilder();
 		delimiter.append(this.delimiter);
 
+		String out;
 		if (isScalingVar()) {
 			Arrays.sort(values, Comparator.comparing(v -> !(v instanceof VariableValue)));
-			return values[1] + "" + values[0];
+			out = values[1] + "" + values[0];
 		} else {
 			for (int i = 0; i < values.length; i++) {
-				if (!(values[i] instanceof VariableValue)) {
+				Value v = values[i];
+
+				if (!(v instanceof VariableValue)) {
 					if (i == 0) {
 						delimiter.insert(0, " ");
 					} else {
 						delimiter.append(" ");
 					}
+
+					if (v instanceof PercentageValue p) {
+						p.setFlat(true);
+					}
 				}
 			}
 
-			return String.join(delimiter.toString(), String.valueOf(values[0]), String.valueOf(values[1]));
+			out = String.join(delimiter.toString(), String.valueOf(values[0]), String.valueOf(values[1]));
 		}
+
+		if (grouped) {
+			out = "(" + out + ")";
+		}
+
+		return out;
 	}
 }

@@ -22,9 +22,14 @@ import com.kuuhaku.util.Utils;
 
 public class PercentageValue extends Value implements Invertable {
 	private double value;
+	private boolean flat;
 
 	public PercentageValue(double value) {
 		this.value = value;
+	}
+
+	public void setFlat(boolean flat) {
+		this.flat = flat;
 	}
 
 	@Override
@@ -34,6 +39,10 @@ public class PercentageValue extends Value implements Invertable {
 
 	@Override
 	public String toString() {
+		if (flat) {
+			return Utils.roundToString(value, 2);
+		}
+
 		return Utils.roundToString(value * 100, 2) + "%";
 	}
 }
