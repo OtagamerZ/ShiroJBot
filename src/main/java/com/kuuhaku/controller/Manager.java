@@ -34,7 +34,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Semaphore;
 import java.util.stream.Stream;
 
 public abstract class Manager {
@@ -55,6 +54,8 @@ public abstract class Manager {
 					)
 			));
 			Constants.LOGGER.info("Connected to database successfully");
+
+			new Exception().printStackTrace();
 
 			File initDir = IO.getResourceAsFile("database");
 			if (initDir != null && initDir.isDirectory()) {
