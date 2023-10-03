@@ -55,8 +55,6 @@ public abstract class Manager {
 			));
 			Constants.LOGGER.info("Connected to database successfully");
 
-			new Exception().printStackTrace();
-
 			File initDir = IO.getResourceAsFile("database");
 			if (initDir != null && initDir.isDirectory()) {
 				Set<String> scripts = new HashSet<>();
