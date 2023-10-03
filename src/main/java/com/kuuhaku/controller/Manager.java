@@ -47,50 +47,42 @@ public abstract class Manager {
 	private static EntityManagerFactory emf;
 
 	public static EntityManagerFactory getEntityManagerFactory() {
-		try {
-			lock.acquire();
+		if (emf == null) synchronized (Manager.class) {
+			emf = Persistence.createEntityManagerFactory("main", Map.of(
+					"jakarta.persistence.jdbc.user", DB_LOGIN,
+					"jakarta.persistence.jdbc.password", DB_PASS,
+					"jakarta.persistence.jdbc.url", "jdbc:postgresql://%s/%s?sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
+							SERVER_IP, DB_NAME
+					)
+			));
+			Constants.LOGGER.info("Connected to database successfully");
 
-			if (emf == null) synchronized (Manager.class) {
-				emf = Persistence.createEntityManagerFactory("main", Map.of(
-						"jakarta.persistence.jdbc.user", DB_LOGIN,
-						"jakarta.persistence.jdbc.password", DB_PASS,
-						"jakarta.persistence.jdbc.url", "jdbc:postgresql://%s/%s?sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
-								SERVER_IP, DB_NAME
-						)
-				));
-				Constants.LOGGER.info("Connected to database successfully");
-
-				File initDir = IO.getResourceAsFile("database");
-				if (initDir != null && initDir.isDirectory()) {
-					Set<String> scripts = new HashSet<>();
-					try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
-						ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))
-								.sorted(Comparator.comparing(Path::getNameCount))
-								.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
-								.map(IO::readString)
-								.forEach(DAO::applyNative);
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					}
-
-					Constants.LOGGER.info("Applied " + scripts.size() + " scripts: " + scripts);
+			File initDir = IO.getResourceAsFile("database");
+			if (initDir != null && initDir.isDirectory()) {
+				Set<String> scripts = new HashSet<>();
+				try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
+					ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))
+							.sorted(Comparator.comparing(Path::getNameCount))
+							.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
+							.map(IO::readString)
+							.forEach(DAO::applyNative);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
 				}
 
-				GlobalProperty ver = DAO.find(GlobalProperty.class, "build_number");
-				if (ver == null) {
-					ver = new GlobalProperty("build_number", "0");
-				}
-
-				ver.setValue(Integer.parseInt(ver.getValue()) + 1);
-				ver.save();
+				Constants.LOGGER.info("Applied " + scripts.size() + " scripts: " + scripts);
 			}
 
-			return emf;
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		} finally {
-			lock.release();
+			GlobalProperty ver = DAO.find(GlobalProperty.class, "build_number");
+			if (ver == null) {
+				ver = new GlobalProperty("build_number", "0");
+			}
+
+			ver.setValue(Integer.parseInt(ver.getValue()) + 1);
+			ver.save();
 		}
+
+		return emf;
 	}
 
 	public static EntityManager getEntityManager() {
