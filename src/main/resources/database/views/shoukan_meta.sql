@@ -47,7 +47,7 @@ FROM (
           ) x
      ) x
 WHERE x.number <= CASE (x.type)
-                      WHEN 3 THEN 20
+                      WHEN 3 THEN 15
                       WHEN 4 THEN 6
                       WHEN 8 THEN 2
     END
