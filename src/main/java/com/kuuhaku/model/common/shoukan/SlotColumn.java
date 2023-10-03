@@ -20,7 +20,6 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.enums.shoukan.Flag;
-import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -133,9 +132,13 @@ public class SlotColumn {
 		if (card != null) {
 			Hand h = game.getHands().get(side);
 
+			boolean init = card.getSlot().getIndex() == -1;
 			card.setSlot(this);
 			card.setHand(h);
-			card.executeAssert(Trigger.ON_INITIALIZE);
+
+			if (init) {
+				card.executeAssert(Trigger.ON_INITIALIZE);
+			}
 
 			if (!card.isFlipped()) {
 				h.getGame().trigger(Trigger.ON_SUMMON, card.asSource(Trigger.ON_SUMMON));
