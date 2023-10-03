@@ -140,7 +140,7 @@ public class Arena implements Renderer {
 	}
 
 	public Field getField() {
-		return Utils.getOr(field, Field.DEFAULT);
+		return Utils.getOr(field, Field.getDEFAULT());
 	}
 
 	public void setField(Field field) {

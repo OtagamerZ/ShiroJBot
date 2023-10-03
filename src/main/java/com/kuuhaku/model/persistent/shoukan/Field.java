@@ -52,8 +52,6 @@ import java.util.random.RandomGenerator;
 @Entity
 @Table(name = "field")
 public class Field extends DAO<Field> implements Drawable<Field> {
-	@Transient
-	public static final Field DEFAULT = DAO.find(Field.class, "DEFAULT");
 
 	@Transient
 	public final String KLASS = getClass().getName();
@@ -371,5 +369,9 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		List<String> ids = DAO.queryAllNative(String.class, "SELECT by_tag('field', ?1)", (Object) tags);
 
 		return new XList<>(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.id IN ?1 ORDER BY f.id", ids), rng);
+	}
+
+	public static Field getDEFAULT() {
+		return DAO.find(Field.class, "DEFAULT");
 	}
 }

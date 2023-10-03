@@ -171,8 +171,8 @@ public class Hand {
 				if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
 					for (Drawable<?> r : op.getDeck()) {
 						if (r instanceof EffectHolder<?> eh) {
-							ValueMod vm = eh.getStats().getCostMult().get(Field.DEFAULT);
-							eh.getStats().getCostMult().set(Field.DEFAULT, Math.max(vm.getValue() - 0.1, -0.5));
+							ValueMod vm = eh.getStats().getCostMult().get(Field.getDEFAULT());
+							eh.getStats().getCostMult().set(Field.getDEFAULT(), Math.max(vm.getValue() - 0.1, -0.5));
 						}
 					}
 
