@@ -88,6 +88,8 @@ public abstract class Manager {
 			return emf;
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
+		} finally {
+			lock.release();
 		}
 	}
 
