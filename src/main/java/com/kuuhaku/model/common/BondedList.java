@@ -21,10 +21,7 @@ package com.kuuhaku.model.common;
 import org.apache.commons.collections4.list.TreeList;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -170,6 +167,7 @@ public class BondedList<T> extends TreeList<T> {
 	}
 
 	public T removeFirst() {
+		if (isEmpty()) return null;
 		return remove(0);
 	}
 
@@ -189,6 +187,7 @@ public class BondedList<T> extends TreeList<T> {
 	}
 
 	public T removeLast() {
+		if (isEmpty()) return null;
 		return remove(size() - 1);
 	}
 

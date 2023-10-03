@@ -39,6 +39,11 @@ public class TrapSpell extends PlaceableEvogear {
 	}
 
 	@Override
+	public boolean hasEffect() {
+		return false;
+	}
+
+	@Override
 	public boolean canAttack() {
 		return false;
 	}
