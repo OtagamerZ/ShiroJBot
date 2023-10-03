@@ -93,7 +93,7 @@ public class DeckMetaCommand implements Executable {
 				current = cr.card().getClass();
 			}
 
-			sb.appendNewLine(cr);
+			sb.appendNewLine(cr.toString());
 		}
 
 		if (!sb.isEmpty()) {
