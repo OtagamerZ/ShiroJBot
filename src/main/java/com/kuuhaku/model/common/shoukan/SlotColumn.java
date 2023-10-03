@@ -111,6 +111,14 @@ public class SlotColumn {
 		placeCard(card, top != null, false);
 	}
 
+	public void setFirst(Senshi card) {
+		placeCard(card, top == null, false);
+	}
+
+	public void setLast(Senshi card) {
+		placeCard(card, bottom != null, false);
+	}
+
 	private void placeCard(Senshi card, boolean top, boolean replace) {
 		Senshi current = top ? getTop() : getBottom();
 		if (Objects.equals(card, current)) return;
