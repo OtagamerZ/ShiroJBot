@@ -33,6 +33,7 @@ import com.kuuhaku.model.records.shoukan.history.Match;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
+import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Member;
@@ -460,8 +461,13 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public List<Match> getMatches() {
-		return DAO.queryAllUnmapped("SELECT info, turns FROM v_matches WHERE has(players, ?1)", uid).stream()
-				.map(o -> Utils.map(Match.class, o))
+		return DAO.queryAllNative(String.class, """
+						SELECT jsonb_build_object('info', info, 'turns', turns)
+						FROM v_matches
+						WHERE has(players, ?1)
+						""", uid
+				).stream()
+				.map(o -> JSONUtils.fromJSON(o, Match.class))
 				.toList();
 	}
 
