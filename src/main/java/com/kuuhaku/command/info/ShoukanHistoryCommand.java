@@ -55,7 +55,12 @@ public class ShoukanHistoryCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
+
 		List<Match> matches = acc.getMatches();
+		if (matches.isEmpty()) {
+			event.channel().sendMessage(locale.get("error/no_matches")).queue();
+			return;
+		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/history_title", data.config().getPrefix()))
