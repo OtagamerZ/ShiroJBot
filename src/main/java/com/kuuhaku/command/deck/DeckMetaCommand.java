@@ -88,16 +88,18 @@ public class DeckMetaCommand implements Executable {
 		for (CardRanking cr : cards) {
 			if (current != cr.card().getClass()) {
 				eb.addField(locale.get("type/" + current.getSimpleName()), sb.toString(), true);
+				System.out.println(sb);
 
 				sb.clear();
 				current = cr.card().getClass();
 			}
 
-			sb.appendNewLine(cr.toString());
+			sb.appendNewLine(cr);
 		}
 
 		if (!sb.isEmpty()) {
 			eb.addField(locale.get("type/" + current.getSimpleName()), sb.toString(), true);
+			System.out.println(sb);
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
