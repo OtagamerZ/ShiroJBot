@@ -132,10 +132,10 @@ public class SlotColumn {
 		if (card != null) {
 			Hand h = game.getHands().get(side);
 
-			boolean init = card.getSlot().getIndex() == -1;
-			card.setSlot(this);
 			card.setHand(h);
+			boolean init = card.getSlot().getIndex() == -1;
 
+			card.setSlot(this);
 			if (init) {
 				card.executeAssert(Trigger.ON_INITIALIZE);
 			}
