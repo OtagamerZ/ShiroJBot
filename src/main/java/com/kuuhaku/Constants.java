@@ -53,6 +53,7 @@ public abstract class Constants {
     public static final String EMOTE_REPO_2 = "726171298044313694";
     public static final String EMOTE_REPO_3 = "732300321673576498";
     public static final String EMOTE_REPO_4 = "763775306095788033";
+    public static final String EMOTE_REPO_5 = "1158801007015383060";
 
     public static final double P_HOURS_IN_DAY = 23 + (56d / 60) + (4d / 3600);
 

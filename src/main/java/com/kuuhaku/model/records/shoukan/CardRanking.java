@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.records.shoukan;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
@@ -34,18 +33,18 @@ public record CardRanking(double winrate, int type, Drawable<?> card) implements
 
 	@Override
 	public String toString() {
-		String name = "`(\" + winrate + \"% WR)` " + card;
+		String name = "`(" + winrate + "% WR)`";
 
 		if (card instanceof Senshi s) {
-			return Utils.getEmoteString(Constants.EMOTE_REPO_4, s.getRace().name()) + " " + name;
+			return Utils.getEmoteString(s.getRace().name()) + " " + name + " " + card;
 		} else if (card instanceof Evogear e) {
-			return Utils.getEmoteString(Constants.EMOTE_REPO_4, "tier_" + e.getTier()) + " " + name;
+			return Utils.getEmoteString("tier_" + e.getTier()) + " " + name + " " + card;
 		} else if (card instanceof Field f) {
 			return switch (f.getType()) {
-				case NONE -> f.toString();
-				case DAY -> ":sunny: " + name;
-				case NIGHT -> ":crescent_moon: " + name;
-				case DUNGEON -> ":japanese_castle: " + name;
+				case NONE -> name + " " + card;
+				case DAY -> ":sunny: " + name + " " + card;
+				case NIGHT -> ":crescent_moon: " + name + " " + card;
+				case DUNGEON -> ":japanese_castle: " + name + " " + card;
 			};
 		}
 

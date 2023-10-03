@@ -20,7 +20,6 @@ package com.kuuhaku.command.deck;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
-import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -65,7 +64,7 @@ public class DeckListCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setDescription("**%s**\n%s %s".formatted(
 						locale.get("str/major_effect"),
-						Utils.getEmoteString(Constants.EMOTE_REPO_4, o.major().name()),
+						Utils.getEmoteString(o.major().name()),
 						o.major().getMajor(locale)
 				));
 
@@ -77,7 +76,7 @@ public class DeckListCommand implements Executable {
 		} else {
 			eb.appendDescription("\n\n**" + locale.get("str/minor_effect") + "**");
 			for (Race r : minors) {
-				eb.appendDescription("\n" + Utils.getEmoteString(Constants.EMOTE_REPO_4, r.name()) + " " + r.getMinor(locale));
+				eb.appendDescription("\n" + Utils.getEmoteString(r.name()) + " " + r.getMinor(locale));
 			}
 		}
 
@@ -85,7 +84,7 @@ public class DeckListCommand implements Executable {
 		if (Integer.bitCount(syn.getFlag()) > 1) {
 			eb.appendDescription("\n\n**%s**\n%s %s".formatted(
 					locale.get("str/synergy_effect"),
-					Utils.getEmoteString(Constants.EMOTE_REPO_4, syn.name()),
+					Utils.getEmoteString(syn.name()),
 					syn.getSynergy(locale)
 			));
 		}
@@ -97,7 +96,7 @@ public class DeckListCommand implements Executable {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/senshi")));
 					if (s == null) return "*" + locale.get("str/empty") + "*";
 
-					return Utils.getEmoteString(Constants.EMOTE_REPO_4, s.getRace().name()) + " " + s;
+					return Utils.getEmoteString(s.getRace().name()) + " " + s;
 				}
 		));
 		pages.put(Utils.parseEmoji("\uD83D\uDEE1️"), Utils.generatePage(eb, Utils.padList(d.getEvogear(), 24), 12,
@@ -105,7 +104,7 @@ public class DeckListCommand implements Executable {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/evogear")));
 					if (e == null) return "*" + locale.get("str/empty") + "*";
 
-					return Utils.getEmoteString(Constants.EMOTE_REPO_4, "tier_" + e.getTier()) + " " + e;
+					return Utils.getEmoteString("tier_" + e.getTier()) + " " + e;
 				}
 		));
 		pages.put(Utils.parseEmoji("\uD83C\uDFD4️"), Utils.generatePage(eb, Utils.padList(d.getFields(), 3), 12,
