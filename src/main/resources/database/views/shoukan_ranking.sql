@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-DROP VIEW IF EXISTS v_shoukan_ranking;
+-- DROP VIEW IF EXISTS v_shoukan_ranking;
 CREATE OR REPLACE VIEW v_shoukan_ranking AS
 SELECT rank() OVER (ORDER BY x.winrate * x.match_count DESC) AS pos
      , x.uid

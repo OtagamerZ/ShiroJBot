@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-DROP VIEW IF EXISTS v_unused_cards;
+-- DROP VIEW IF EXISTS v_unused_cards;
 CREATE OR REPLACE VIEW v_unused_cards AS
 SELECT c.id, c.rarity, c.anime_id
 FROM card c

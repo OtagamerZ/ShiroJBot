@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-DROP VIEW IF EXISTS v_unused_archetypes;
+-- DROP VIEW IF EXISTS v_unused_archetypes;
 CREATE OR REPLACE VIEW v_unused_archetypes AS
 SELECT x.anime_id
      , x.cards

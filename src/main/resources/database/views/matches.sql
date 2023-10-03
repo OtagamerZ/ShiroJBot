@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-DROP VIEW IF EXISTS v_matches;
+-- DROP VIEW IF EXISTS v_matches;
 CREATE OR REPLACE VIEW v_matches AS
 SELECT *
      , jsonb_path_query_array(h.info, '$.*.uid') AS players

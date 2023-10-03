@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-DROP VIEW IF EXISTS v_card_names;
+-- DROP VIEW IF EXISTS v_card_names;
 CREATE OR REPLACE VIEW v_card_names AS
 SELECT c.id
 FROM card c
