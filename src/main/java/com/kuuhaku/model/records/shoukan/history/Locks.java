@@ -18,5 +18,10 @@
 
 package com.kuuhaku.model.records.shoukan.history;
 
-public record Locks(int effect, int spell, int ability, int taunt, int deck) {
+import com.kuuhaku.model.enums.shoukan.Lock;
+
+import java.util.Map;
+
+public record Locks(Map<Lock, Integer> time) {
+
 }

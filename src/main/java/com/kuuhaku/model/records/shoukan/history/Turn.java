@@ -24,7 +24,10 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.kuuhaku.model.enums.shoukan.Side.BOTTOM;
 import static com.kuuhaku.model.enums.shoukan.Side.TOP;
@@ -36,45 +39,27 @@ public record Turn(int turn, Side top, Side bottom, List<String> banned, String 
 		Hand top = game.getHands().get(TOP);
 		Hand bot = top.getOther();
 
-		Side topSide = new Side(
-				top.getHP(),
-				top.getMP(),
-				top.getRegDeg().peek(),
-				new Locks(
-						top.getLockTime(Lock.EFFECT),
-						top.getLockTime(Lock.SPELL),
-						top.getLockTime(Lock.ABILITY),
-						top.getLockTime(Lock.TAUNT),
-						top.getLockTime(Lock.DECK)
-				),
-				Drawable.ids(top.getCards()),
-				Drawable.ids(top.getDeck()),
-				Drawable.ids(top.getGraveyard()),
-				map(game.getSlots(TOP), sc ->
-						new Slot(
-								safeGet(sc.getTop(), Senshi::getId),
-								safeGet(sc.getTop(), s -> Drawable.ids(s.getEquipments())),
-								safeGet(sc.getBottom(), Senshi::getId),
-								sc.getLock()
-						)
-				)
+		return new Turn(
+				game.getTurn(),
+				makeSide(game, top, TOP),
+				makeSide(game, bot, BOTTOM),
+				Drawable.ids(game.getArena().getBanned()),
+				game.getArena().getField().getId()
 		);
+	}
 
-		Side botSide = new Side(
+	private static Side makeSide(Shoukan game, Hand bot, com.kuuhaku.model.enums.shoukan.Side side) {
+		return new Side(
 				bot.getHP(),
 				bot.getMP(),
 				bot.getRegDeg().peek(),
-				new Locks(
-						bot.getLockTime(Lock.EFFECT),
-						bot.getLockTime(Lock.SPELL),
-						bot.getLockTime(Lock.ABILITY),
-						bot.getLockTime(Lock.TAUNT),
-						bot.getLockTime(Lock.DECK)
-				),
+				new Locks(Arrays.stream(Lock.values()).collect(Collectors.toMap(
+						Function.identity(), l -> bot.getLockTime(Lock.EFFECT)
+				))),
 				Drawable.ids(bot.getCards()),
 				Drawable.ids(bot.getDeck()),
 				Drawable.ids(bot.getGraveyard()),
-				map(game.getSlots(BOTTOM), sc ->
+				map(game.getSlots(side), sc ->
 						new Slot(
 								safeGet(sc.getTop(), Senshi::getId),
 								safeGet(sc.getTop(), s -> Drawable.ids(s.getEquipments())),
@@ -82,13 +67,6 @@ public record Turn(int turn, Side top, Side bottom, List<String> banned, String 
 								sc.getLock()
 						)
 				)
-		);
-
-		return new Turn(
-				game.getTurn(),
-				topSide, botSide,
-				Drawable.ids(game.getArena().getBanned()),
-				game.getArena().getField().getId()
 		);
 	}
 }
