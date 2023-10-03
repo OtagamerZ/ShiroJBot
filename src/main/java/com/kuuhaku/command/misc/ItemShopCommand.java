@@ -70,7 +70,7 @@ public class ItemShopCommand implements Executable {
 					i -> {
 						int has = items.getOrDefault(i, 0);
 
-						FieldMimic fm = new FieldMimic("### " + i.getName(locale), "");
+						FieldMimic fm = new FieldMimic(i.getName(locale), "");
 						if (i.getPrice() > 0 && i.getCurrency() != null) {
 							fm.appendLine(locale.get("str/price", locale.get("currency/" + i.getCurrency(), i.getPrice())));
 						}

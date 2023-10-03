@@ -33,6 +33,6 @@ public record FieldMimic(String title, StringBuilder sb) {
 
 	@Override
 	public String toString() {
-		return "### " + title + "\n" + sb + "\n";
+		return "**" + title + "**\n" + sb + "\n";
 	}
 }
