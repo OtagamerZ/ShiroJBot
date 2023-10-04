@@ -77,7 +77,7 @@ public class ShoukanHistoryCommand implements Executable {
 							})
 							.collect(Collectors.joining(" _VS_ "));
 
-					FieldMimic fm = new FieldMimic(out, "\n");
+					FieldMimic fm = new FieldMimic(out, "");
 					Player winner = m.info().winnerPlayer();
 					if (winner == null) {
 						fm.appendLine(locale.get("str/draw"));
@@ -87,7 +87,7 @@ public class ShoukanHistoryCommand implements Executable {
 						fm.appendLine(locale.get("str/lose"));
 					}
 
-					fm.append(" | " + locale.get("str/turns_inline", m.turns()));
+					fm.append(" | " + locale.get("str/turns_inline", m.turns().size()));
 					fm.appendLine(Constants.TIMESTAMP_R.formatted(m.info().timestamp()));
 					return fm.toString();
 				},
