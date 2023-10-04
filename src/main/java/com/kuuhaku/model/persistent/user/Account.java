@@ -462,12 +462,11 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	public List<Match> getMatches() {
 		return DAO.queryAllUnmapped("""
-						SELECT jsonb_build_object('info', info, 'turns', turns)
+						SELECT cast(jsonb_build_object('info', info, 'turns', turns) AS TEXT)
 						FROM v_matches
 						WHERE has(players, ?1)
 						""", uid
 				).stream()
-				.peek(o -> System.out.println(o[0].getClass()))
 				.map(o -> JSONUtils.fromJSON(String.valueOf(o[0]), Match.class))
 				.toList();
 	}
