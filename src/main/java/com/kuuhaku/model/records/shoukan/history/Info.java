@@ -22,6 +22,8 @@ import com.kuuhaku.model.enums.shoukan.Side;
 
 public record Info(Player top, Player bottom, Side winner, String winCondition, long timestamp, long seed) {
 	public Player winnerPlayer() {
+		if (winner == null) return null;
+
 		return switch (winner) {
 			case TOP -> top;
 			case BOTTOM -> bottom;
