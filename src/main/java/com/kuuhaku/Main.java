@@ -86,7 +86,6 @@ public class Main {
 				)
 		);
 
-		JSONUtils.showErrors(true);
 		ImageIO.setUseCache(false);
 		Thread.setDefaultUncaughtExceptionHandler(app = new Application());
 	}
