@@ -26,7 +26,6 @@ SELECT round(sum(iif(x.uid = $1, 1.0, 0.0)) / count(1) * 100, 2)
 FROM (
          SELECT h.info -> lower(h.info ->> 'winner') ->> 'uid' AS uid
          FROM match_history h
-         WHERE h.info -> 'winner' IS NOT NULL
-           AND $1 IN (h.info -> 'top' ->> 'uid', h.info -> 'bottom' ->> 'uid')
+         WHERE $1 IN (h.info -> 'top' ->> 'uid', h.info -> 'bottom' ->> 'uid')
      ) x
 $$;
