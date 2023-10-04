@@ -456,7 +456,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return DAO.queryNative(Double.class, "SELECT user_winrate(?1)", uid);
 	}
 
-	public double getShoukanRanking() {
+	public int getShoukanRanking() {
 		return DAO.queryNative(Integer.class, "SELECT user_shoukan_ranking(?1)", uid);
 	}
 

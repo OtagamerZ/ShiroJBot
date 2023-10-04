@@ -61,23 +61,23 @@ public class ShoukanHistoryCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/history_title", data.config().getPrefix()))
+				.setAuthor(locale.get("str/history_title", acc.getName()))
 				.setDescription(locale.get("str/history_body",
 						acc.getShoukanRanking(),
-						acc.getWinrate(),
+						Utils.roundToString(acc.getWinrate(), 2) + "%",
 						matches.size()
 				));
 
 		List<Page> pages = Utils.generatePages(eb, matches, 10, 5,
 				m -> {
-					String out = Stream.of(m.info().bottom(), m.info().top())
+					String out = Stream.of(m.info().top(), m.info().bottom())
 							.map(p -> {
 								Account a = DAO.find(Account.class, p.uid());
 								return Utils.getEmoteString(p.origin().synergy().name()) + a.getName();
 							})
-							.collect(Collectors.joining(" VS "));
+							.collect(Collectors.joining(" _VS_ "));
 
-					FieldMimic fm = new FieldMimic(out, "");
+					FieldMimic fm = new FieldMimic(out, "\n");
 					Player winner = m.info().winnerPlayer();
 					if (winner == null) {
 						fm.appendLine(locale.get("str/draw"));
@@ -87,7 +87,7 @@ public class ShoukanHistoryCommand implements Executable {
 						fm.appendLine(locale.get("str/lose"));
 					}
 
-					fm.appendLine(locale.get("race/"));
+					fm.append(" | " + locale.get("str/turns_inline", m.turns()));
 					fm.appendLine(Constants.TIMESTAMP_R.formatted(m.info().timestamp()));
 					return fm.toString();
 				},
