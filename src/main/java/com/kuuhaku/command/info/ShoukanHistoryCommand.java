@@ -73,7 +73,10 @@ public class ShoukanHistoryCommand implements Executable {
 					String out = Stream.of(m.info().top(), m.info().bottom())
 							.map(p -> {
 								Account a = DAO.find(Account.class, p.uid());
-								return Utils.getEmoteString(p.origin().synergy().name()) + a.getName();
+								String icon = Utils.getEmoteString(p.origin().synergy().name());
+
+								if (icon.isBlank()) return a.getName();
+								else return icon + " " + a.getName();
 							})
 							.collect(Collectors.joining(" _VS_ "));
 
