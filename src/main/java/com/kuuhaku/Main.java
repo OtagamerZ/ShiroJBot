@@ -22,6 +22,7 @@ import com.kuuhaku.manager.CacheManager;
 import com.kuuhaku.manager.CommandManager;
 import com.kuuhaku.manager.ScheduleManager;
 import com.sun.management.OperatingSystemMXBean;
+import com.ygimenez.json.JSONUtils;
 import org.apache.commons.lang3.time.StopWatch;
 
 import javax.imageio.ImageIO;
@@ -85,6 +86,7 @@ public class Main {
 				)
 		);
 
+		JSONUtils.showErrors(true);
 		ImageIO.setUseCache(false);
 		Thread.setDefaultUncaughtExceptionHandler(app = new Application());
 	}
