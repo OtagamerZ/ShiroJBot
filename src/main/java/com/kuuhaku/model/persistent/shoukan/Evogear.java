@@ -388,8 +388,16 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public String getEffect() {
-		if (hand != null && hand.getOrigin().synergy() == Race.DJINN) {
-			return DAO.queryNative(String.class, "SELECT e.effect FROM evogear e WHERE e.spell AND e.target_type = ?1", targetType);
+		if (hand != null && getGame() != null && hand.getOrigin().synergy() == Race.DJINN) {
+			return DAO.queryNative(String.class, """
+					SELECT e.effect
+					FROM evogear e
+					WHERE e.spell
+					 AND e.mana > 0
+					 AND e.effect IS NOT NULL
+					 AND e.target_type = ?1
+					""", targetType
+			);
 		}
 
 		EffectHolder<?> source = getSource();
