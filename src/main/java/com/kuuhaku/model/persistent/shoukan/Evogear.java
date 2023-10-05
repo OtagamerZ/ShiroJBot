@@ -31,7 +31,6 @@ import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
-import com.kuuhaku.model.common.shoukan.VoidSenshi;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -52,13 +51,14 @@ import org.hibernate.type.SqlTypes;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.*;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
-import static com.kuuhaku.model.enums.shoukan.Trigger.NONE;
 
 @Entity
 @Table(name = "evogear")
@@ -449,7 +449,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					.withVar("trigger", ep.trigger());
 
 			if (!isSpell()) {
-				csm.withVar("self", Utils.getOr(equipper, new VoidSenshi(this)));
+				if (stats.getSource() instanceof Senshi s && equipper == null) {
+					csm.withVar("self", s);
+				} else {
+					csm.withVar("self", equipper);
+				}
 			}
 
 			csm.run();
