@@ -85,11 +85,11 @@ public class Scalable extends Value {
 
 	@Override
 	public String toString() {
-//		if (isPure()) {
-//			for (Value v : values) {
-//				if (v != null) return String.valueOf(v);
-//			}
-//		}
+		if (isPure()) {
+			for (Value v : values) {
+				if (v != null) return String.valueOf(v);
+			}
+		}
 
 		StringBuilder delimiter = new StringBuilder();
 		delimiter.append(this.delimiter);
