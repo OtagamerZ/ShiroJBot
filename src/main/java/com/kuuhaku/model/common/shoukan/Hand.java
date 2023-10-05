@@ -900,7 +900,7 @@ public class Hand {
 	}
 
 	public boolean consumeHP(int value) {
-		if (hp < value) return false;
+		if (hp <= value) return false;
 
 		this.hp = Math.max(0, this.hp - Math.max(0, value));
 		return true;
