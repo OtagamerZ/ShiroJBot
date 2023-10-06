@@ -165,7 +165,7 @@ public class SeeCardCommand implements Executable {
 							eb.appendDescription("\n\n");
 						}
 
-						eb.appendDescription(locale.get("str/effect_only"));
+						eb.appendDescription("**" + locale.get("str/effect_only") + "**");
 					}
 
 					if (s.isFusion()) {
@@ -177,7 +177,7 @@ public class SeeCardCommand implements Executable {
 							eb.appendDescription("\n\n");
 						}
 
-						eb.appendDescription(locale.get("str/effect_only"));
+						eb.appendDescription("**" + locale.get("str/effect_only") + "**");
 					}
 
 					eb.addField(locale.get("str/charms"),
@@ -193,7 +193,7 @@ public class SeeCardCommand implements Executable {
 							eb.appendDescription("\n\n");
 						}
 
-						eb.appendDescription(locale.get("str/effect_only"));
+						eb.appendDescription("**" + locale.get("str/effect_only") + "**");
 					}
 
 					if (f.getType() != FieldType.NONE) {
