@@ -31,6 +31,7 @@ import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.shoukan.Charm;
 import com.kuuhaku.model.enums.shoukan.FieldType;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -158,8 +159,18 @@ public class SeeCardCommand implements Executable {
 					eb.setDescription(eh.getReadableDescription(locale));
 				}
 
-				if (d instanceof Senshi s && s.isFusion()) {
-					eb.setAuthor(null);
+				if (d instanceof Senshi s) {
+					if (s.getCard().getRarity() == Rarity.NONE) {
+						if (!eb.getDescriptionBuilder().isEmpty()) {
+							eb.appendDescription("\n\n");
+						}
+
+						eb.appendDescription(locale.get("str/effect_only"));
+					}
+
+					if (s.isFusion()) {
+						eb.setAuthor(null);
+					}
 				} else if (d instanceof Evogear e && !e.getCharms().isEmpty()) {
 					if (e.getTier() < 0) {
 						if (!eb.getDescriptionBuilder().isEmpty()) {
