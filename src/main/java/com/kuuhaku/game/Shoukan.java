@@ -652,20 +652,21 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
+		Evogear copy = chosen.copy();
 		Senshi target = slot.getTop();
-		curr.consumeHP(chosen.getHPCost());
-		curr.consumeMP(chosen.getMPCost());
-		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
+		curr.consumeHP(copy.getHPCost());
+		curr.consumeMP(copy.getMPCost());
+		List<Drawable<?>> consumed = curr.consumeSC(copy.getSCCost());
 		if (!consumed.isEmpty()) {
-			chosen.getStats().getData().put("consumed", consumed);
+			copy.getStats().getData().put("consumed", consumed);
 		}
 
 		chosen.setAvailable(false);
-		target.getEquipments().add(chosen);
-		curr.getData().put("last_equipment", chosen);
+		target.getEquipments().add(copy);
+		curr.getData().put("last_equipment", copy);
 		reportEvent("str/equip_card", true,
 				curr.getName(),
-				chosen.isFlipped() ? getString("str/an_equipment") : chosen,
+				copy.isFlipped() ? getString("str/an_equipment") : copy,
 				target.isFlipped() ? getString("str/a_card") : target
 		);
 		return true;
