@@ -166,7 +166,7 @@ public class StashedCard extends DAO<StashedCard> {
 	@Override
 	public void beforeSave() {
 		if (type == CardType.KAWAIPON && getKawaiponCard() == null) {
-			KawaiponCard kc = new KawaiponCard(this.card, false);
+			KawaiponCard kc = new KawaiponCard(this.uuid, this.card, false);
 			kc.setKawaipon(kawaipon);
 			kc.save();
 		}
