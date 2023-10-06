@@ -19,7 +19,6 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Proxy;
-import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -38,12 +37,6 @@ public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 
 		original = e;
 		setHand(e.getHand());
-
-		Hand h = e.getHand();
-		if (h.isEmpowered() && e.isSpell() && h.getOrigin().major() == Race.MYSTICAL) {
-			e.setFlag(Flag.EMPOWERED);
-			h.setEmpowered(false);
-		}
 	}
 
 	@Override

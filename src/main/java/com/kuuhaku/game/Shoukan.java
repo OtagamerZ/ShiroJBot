@@ -652,27 +652,20 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Evogear copy = chosen.withCopy(e -> {
-			if (curr.isEmpowered() && curr.getOrigin().major() == Race.MACHINE) {
-				e.setFlag(Flag.EMPOWERED);
-				curr.setEmpowered(false);
-			}
-		});
-
 		Senshi target = slot.getTop();
-		curr.consumeHP(copy.getHPCost());
-		curr.consumeMP(copy.getMPCost());
-		List<Drawable<?>> consumed = curr.consumeSC(copy.getSCCost());
+		curr.consumeHP(chosen.getHPCost());
+		curr.consumeMP(chosen.getMPCost());
+		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 		if (!consumed.isEmpty()) {
-			copy.getStats().getData().put("consumed", consumed);
+			chosen.getStats().getData().put("consumed", consumed);
 		}
 
 		chosen.setAvailable(false);
-		target.getEquipments().add(copy);
-		curr.getData().put("last_equipment", copy);
+		target.getEquipments().add(chosen);
+		curr.getData().put("last_equipment", chosen);
 		reportEvent("str/equip_card", true,
 				curr.getName(),
-				copy.isFlipped() ? getString("str/an_equipment") : copy,
+				chosen.isFlipped() ? getString("str/an_equipment") : chosen,
 				target.isFlipped() ? getString("str/a_card") : target
 		);
 		return true;
@@ -996,11 +989,6 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!tgt.validate(chosen.getTargetType())) {
 			getChannel().sendMessage(getString("error/target", getString("str/target_" + chosen.getTargetType()))).queue();
 			return false;
-		}
-
-		if (curr.isEmpowered() && curr.getOrigin().major() == Race.MYSTICAL) {
-			chosen.setFlag(Flag.EMPOWERED);
-			curr.setEmpowered(false);
 		}
 
 		curr.consumeHP(chosen.getHPCost());
