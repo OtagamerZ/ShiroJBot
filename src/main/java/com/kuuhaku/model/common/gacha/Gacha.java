@@ -59,6 +59,12 @@ public abstract class Gacha {
 				.orElseThrow();
 	}
 
+	public final boolean rollOutput(String a, String b, String favor) {
+		if (a.equals(favor)) return false;
+		else if (b.equals(favor)) return true;
+		else return weightOf(b) < weightOf(a);
+	}
+
 	public List<String> draw(Account acc) {
 		GachaType type = getClass().getAnnotation(GachaType.class);
 		if (type == null) return List.of();
@@ -69,7 +75,7 @@ public abstract class Gacha {
 		boolean lucky = acc.consumeItem("lucky_lodestone");
 		for (int i = 0; i < type.prizes() + extra; i++) {
 			if (lucky) {
-				out.add(Utils.luckyRoll(pool::get, (a, b) -> b.equals(fav) || weightOf(b) < weightOf(a)));
+				out.add(Utils.luckyRoll(pool::get, (a, b) -> rollOutput(a, b, fav)));
 			} else {
 				out.add(pool.get());
 			}

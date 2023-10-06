@@ -23,7 +23,7 @@ CREATE OR REPLACE FUNCTION get_weight(VARCHAR)
 AS
 $$
 SELECT CASE type
-           WHEN 'KAWAIPON' THEN cast(425 * pow(1.3, tier) AS INT)
+           WHEN 'KAWAIPON' THEN cast(425 * pow(1.4, tier) AS INT)
            WHEN 'EVOGEAR' THEN cast(45 * pow(2, tier) AS INT)
            WHEN 'FIELD' THEN 100
            END AS weight
@@ -56,7 +56,7 @@ CREATE OR REPLACE FUNCTION get_weight(VARCHAR, INT)
 AS
 $$
 SELECT CASE type
-           WHEN 'KAWAIPON' THEN cast(425 * pow(1.3, tier) AS INT)
+           WHEN 'KAWAIPON' THEN cast(425 * pow(1.4, tier) AS INT)
            WHEN 'EVOGEAR' THEN cast(45 * pow(2, tier) AS INT)
            WHEN 'FIELD' THEN 100
            END AS weight
