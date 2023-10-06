@@ -48,7 +48,7 @@ public class DailyGacha extends Gacha {
 				                 OR NOT f.effect
 				             )
 				         ORDER BY hashtextextended(c.id, ?2)
-				         LIMIT 75
+				         LIMIT 50
 				     ) x
 				ORDER BY x.weight, x.id
 				""", u.getId(), LocalDate.now().getDayOfYear()));
