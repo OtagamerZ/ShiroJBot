@@ -86,7 +86,7 @@ public class ItemShopCommand implements Executable {
 						}
 
 						fm.appendLine(i.getDescription(locale));
-						fm.appendLine("%s%s".formatted(data.config().getPrefix(), "items.buy " + i.getId()) + "`");
+						fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "items.buy " + i.getId()));
 
 						return fm.toString();
 					},
