@@ -45,8 +45,8 @@ public record EffectOverTime(
 		EnumSet<Trigger> triggers,
 		AtomicBoolean closed
 ) implements Comparable<EffectOverTime>, Closeable {
-	public EffectOverTime(Drawable<?> source, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
-		this(source, false, source::getSide, effect,
+	public EffectOverTime(Drawable<?> source, boolean debuff, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
+		this(source, debuff, debuff ? source.getSide()::getOther : source::getSide, effect,
 				new AtomicInteger(),
 				new AtomicInteger(),
 				new AtomicBoolean(),
