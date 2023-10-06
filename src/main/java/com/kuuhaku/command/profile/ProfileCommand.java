@@ -49,6 +49,11 @@ public class ProfileCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image"))).queue(m -> {
 			User usr = Utils.getOr(event.users(0), event.user());
+			if (usr.isBot()) {
+				m.editMessage(locale.get("error/no_profile")).queue();
+				return;
+			}
+
 			Profile p = DAO.find(Profile.class, new ProfileId(usr.getId(), event.guild().getId()));
 			event.channel()
 					.sendMessage(usr.getAsMention())
