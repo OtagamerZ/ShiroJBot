@@ -465,6 +465,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 						SELECT cast(jsonb_build_object('info', info, 'turns', turns) AS TEXT)
 						FROM v_matches
 						WHERE has(players, ?1)
+						ORDER BY id DESC
 						""", uid
 				).stream()
 				.map(o -> JSONUtils.fromJSON(String.valueOf(o[0]), Match.class))
