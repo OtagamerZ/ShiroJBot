@@ -46,7 +46,7 @@ CREATE OR REPLACE FUNCTION get_weight(VARCHAR, VARCHAR)
     LANGUAGE sql
 AS
 $$
-SELECT cast(round(get_weight($1) * iif(is_fav($2, $1), 1.33, 1.0)) AS INT)
+SELECT cast(round(get_weight($1) * iif(is_fav($2, $1), 1.5, 1.0)) AS INT)
 $$;
 
 CREATE OR REPLACE FUNCTION get_weight(VARCHAR, INT)
