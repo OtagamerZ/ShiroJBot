@@ -29,6 +29,8 @@ import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.records.EventData;
@@ -72,6 +74,29 @@ public class FavorCommand implements Executable {
 			Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(), names);
 			event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
 			return;
+		} else {
+			switch (card.getRarity()) {
+				case FIELD -> {
+					Field f = card.asField();
+
+					if (f.isEffect()) {
+						event.channel().sendMessage(locale.get("error/cannot_favor")).queue();
+						return;
+					}
+				}
+				case EVOGEAR -> {
+					Evogear e = card.asEvogear();
+
+					if (e.getTier() < 1) {
+						event.channel().sendMessage(locale.get("error/cannot_favor")).queue();
+						return;
+					}
+				}
+				case NONE, ULTIMATE -> {
+					event.channel().sendMessage(locale.get("error/cannot_favor")).queue();
+					return;
+				}
+			}
 		}
 
 		int price;
