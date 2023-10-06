@@ -161,6 +161,14 @@ public class SeeCardCommand implements Executable {
 				if (d instanceof Senshi s && s.isFusion()) {
 					eb.setAuthor(null);
 				} else if (d instanceof Evogear e && !e.getCharms().isEmpty()) {
+					if (e.getTier() < 0) {
+						if (!eb.getDescriptionBuilder().isEmpty()) {
+							eb.appendDescription("\n\n");
+						}
+
+						eb.appendDescription(locale.get("str/effect_only"));
+					}
+
 					eb.addField(locale.get("str/charms"),
 							e.getCharms().stream()
 									.map(c -> Charm.valueOf(String.valueOf(c)))
@@ -168,8 +176,18 @@ public class SeeCardCommand implements Executable {
 									.collect(Collectors.joining("\n")),
 							false
 					);
-				} else if (d instanceof Field f && f.getType() != FieldType.NONE) {
-					eb.addField(locale.get("field/" + f.getType()), locale.get("field/" + f.getType() + "_desc"), false);
+				} else if (d instanceof Field f) {
+					if (f.isEffect()) {
+						if (!eb.getDescriptionBuilder().isEmpty()) {
+							eb.appendDescription("\n\n");
+						}
+
+						eb.appendDescription(locale.get("str/effect_only"));
+					}
+
+					if (f.getType() != FieldType.NONE) {
+						eb.addField(locale.get("field/" + f.getType()), locale.get("field/" + f.getType() + "_desc"), false);
+					}
 				}
 
 				if (!d.getTags().isEmpty()) {
