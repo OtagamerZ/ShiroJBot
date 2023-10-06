@@ -883,15 +883,19 @@ public class Hand {
 
 		if (origin.synergy() == Race.GARGOYLE) {
 			if (isCritical()) {
-				stats.getDamageMult().set(Field.getDEFAULT(), -1, 1);
-				reached = true;
+				if (!reached) {
+					stats.getDamageMult().set(Field.getDEFAULT(), -1, 1);
+					reached = true;
+				}
 			} else {
 				reached = false;
 			}
 		} else if (origin.synergy() == Race.SUCCUBUS) {
 			if (isLowLife()) {
-				getOther().modLockTime(Lock.CHARM, 3);
-				reached = true;
+				if (!reached) {
+					getOther().modLockTime(Lock.CHARM, 3);
+					reached = true;
+				}
 			} else {
 				reached = false;
 			}
