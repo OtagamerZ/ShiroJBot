@@ -26,10 +26,11 @@ import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.gacha.*;
+import com.kuuhaku.model.common.gacha.Gacha;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -78,6 +79,8 @@ public class GachaPoolCommand implements Executable {
 				.setTitle(locale.get("str/gacha_pool", locale.get("gacha/" + type.value()).toLowerCase()));
 
 		try {
+			Kawaipon kp = data.profile().getAccount().getKawaipon();
+
 			Gacha gacha = chosen.getConstructor(User.class).newInstance(event.user());
 			List<Card> pool = new ArrayList<>(DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE id IN ?1", gacha.getPool()));
 			pool.sort(
@@ -86,12 +89,19 @@ public class GachaPoolCommand implements Executable {
 			);
 
 			List<Page> pages = Utils.generatePages(eb, pool, 20, 10,
-					c -> c.getRarity().getEmote(c) + c.getName(),
+					c -> {
+						if (c.getId().equals(kp.getFavCardId())) {
+							return c.getRarity().getEmote(c) + "**" + c.getName() + "**";
+						} else {
+							return c.getRarity().getEmote(c) + c.getName();
+						}
+					},
 					(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 			);
 
 			Utils.paginate(pages, 1, true, event.channel(), event.user());
-		} catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+		} catch (InvocationTargetException | InstantiationException | IllegalAccessException |
+				 NoSuchMethodException e) {
 			throw new RuntimeException(e);
 		}
 	}
