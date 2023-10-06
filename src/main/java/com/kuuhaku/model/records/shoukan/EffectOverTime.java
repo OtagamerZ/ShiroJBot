@@ -32,11 +32,12 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 public record EffectOverTime(
 		@Nullable Drawable<?> source,
 		boolean debuff,
-		Side side,
+		Supplier<Side> sideSupplier,
 		BiConsumer<EffectOverTime, EffectParameters> effect,
 		AtomicInteger turns,
 		AtomicInteger limit,
@@ -44,12 +45,18 @@ public record EffectOverTime(
 		EnumSet<Trigger> triggers,
 		AtomicBoolean closed
 ) implements Comparable<EffectOverTime>, Closeable {
-	public EffectOverTime(Drawable<?> source, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
-		this(source, side != source.getSide(), side, effect, -1, -1, triggers);
+	public EffectOverTime(Drawable<?> source, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
+		this(source, false, source::getSide, effect,
+				new AtomicInteger(),
+				new AtomicInteger(),
+				new AtomicBoolean(),
+				EnumSet.of(Trigger.NONE, triggers),
+				new AtomicBoolean()
+		);
 	}
 
 	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, int turns, int limit, Trigger... triggers) {
-		this(source, debuff, side, effect,
+		this(source, debuff, () -> side, effect,
 				turns < 0 ? null : new AtomicInteger(turns),
 				limit < 0 ? null : new AtomicInteger(limit),
 				new AtomicBoolean(),
@@ -58,10 +65,10 @@ public record EffectOverTime(
 		);
 	}
 
-	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, AtomicInteger turns, AtomicInteger limit, AtomicBoolean lock, EnumSet<Trigger> triggers, AtomicBoolean closed) {
+	public EffectOverTime(@Nullable Drawable<?> source, boolean debuff, Supplier<Side> sideSupplier, BiConsumer<EffectOverTime, EffectParameters> effect, AtomicInteger turns, AtomicInteger limit, AtomicBoolean lock, EnumSet<Trigger> triggers, AtomicBoolean closed) {
 		this.source = source;
 		this.debuff = debuff;
-		this.side = side;
+		this.sideSupplier = sideSupplier;
 		this.effect = effect;
 		this.turns = turns;
 		this.limit = limit;
@@ -78,6 +85,10 @@ public record EffectOverTime(
 
 	public void decreaseLimit() {
 		if (limit != null && limit.get() > 0) limit.getAndDecrement();
+	}
+
+	public Side side() {
+		return sideSupplier.get();
 	}
 
 	public boolean expired() {
@@ -110,19 +121,22 @@ public record EffectOverTime(
 		if (o == null || getClass() != o.getClass()) return false;
 		EffectOverTime that = (EffectOverTime) o;
 
+		Side side = side();
+		Side oSide = that.side();
 		if (source != null && that.source != null) {
 			if (permanent()) {
-				return source.getId().equals(that.source.getId()) && side == that.side;
+				return source.getId().equals(that.source.getId()) && side == oSide;
 			} else {
-				return source.getSerial() == that.source.getSerial() && side == that.side;
+				return source.getSerial() == that.source.getSerial() && side == oSide;
 			}
 		} else {
-			return side == that.side;
+			return side == oSide;
 		}
 	}
 
 	@Override
 	public int hashCode() {
+		Side side = side();
 		if (source != null) {
 			return Objects.hash(permanent() ? source.getId() : source.getSerial(), side);
 		} else {
