@@ -2303,7 +2303,15 @@ public class Shoukan extends GameInstance<Phase> {
 								return;
 							}
 
-							curr.setEmpowered(true);
+							Evogear chosen = (Evogear) curr.requestChoice(d -> {
+								if (d instanceof Evogear e && e.isAvailable()) {
+									return e.isSpell() == (curr.getOrigin().major() == Race.MYSTICAL);
+								}
+
+								return false;
+							});
+
+							chosen.setFlag(Flag.EMPOWERED);
 							curr.setUsedDestiny(true);
 
 							if (curr.getOrigin().major() == Race.MACHINE) {

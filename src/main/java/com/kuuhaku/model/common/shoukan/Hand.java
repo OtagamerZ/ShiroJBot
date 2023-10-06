@@ -1196,6 +1196,10 @@ public class Hand {
 		return requestChoice(cards, false);
 	}
 
+	public Drawable<?> requestChoice(Predicate<Drawable<?>> cond) {
+		return requestChoice(cards.stream().filter(cond).toList(), false);
+	}
+
 	public void requestChoice(List<Drawable<?>> cards, ThrowingConsumer<Drawable<?>> act) {
 		requestChoice(cards, false, act);
 	}
