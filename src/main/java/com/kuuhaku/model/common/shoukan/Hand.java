@@ -1144,7 +1144,7 @@ public class Hand {
 					boolean legacy = userDeck.getStyling().getFrame().isLegacy();
 					BufferedImage emp = IO.getResourceAsImage("shoukan/frames/state/" + (legacy ? "old" : "new") + "/empowered.png");
 
-					g2d.drawImage(emp, x, y, null);
+					g2d.drawImage(emp, x + 15, y + 15, null);
 				}
 			}
 
