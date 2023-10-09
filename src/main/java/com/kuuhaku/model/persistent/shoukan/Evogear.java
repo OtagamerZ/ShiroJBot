@@ -148,6 +148,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public TargetType getTargetType() {
+		if (stats.getSource() instanceof Senshi s) {
+			return s.getTargetType();
+		}
+
 		return targetType;
 	}
 
@@ -450,7 +454,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 			if (!isSpell()) {
 				if (stats.getSource() instanceof Senshi) {
-					csm.withVar("me", this);
+					csm.withVar("me", stats.getSource());
 				}
 
 				if (stats.getSource() instanceof Senshi s && equipper == null) {
