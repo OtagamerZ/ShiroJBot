@@ -131,7 +131,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 				for (int i = 0; i < mods; i++) {
 					Race r = Utils.getRandomEntry(hand.getGame().getRng(), Race.validValues());
-					double mod = Calc.rng(-50d, 50d, hand.getGame().getRng());
+					double mod = Calc.rng(-0.5, 0.5, hand.getGame().getRng());
 
 					modifiers.put(r.name(), mod);
 				}
