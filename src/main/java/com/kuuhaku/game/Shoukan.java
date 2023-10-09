@@ -1115,8 +1115,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		TargetType type = chosen.getTargetType();
-		System.out.println(type);
-
 		Targeting tgt = switch (type) {
 			case NONE -> new Targeting(curr, -1, -1);
 			case ALLY -> new Targeting(curr, args.getInt("target1") - 1, -1);
@@ -1966,7 +1964,6 @@ public class Shoukan extends GameInstance<Phase> {
 		if (restoring) return false;
 
 		EffectParameters ep = new EffectParameters(trigger, source.side(), source, targets);
-		System.out.println(Arrays.toString(targets));
 
 		try {
 			boolean executed = source.execute(ep);
