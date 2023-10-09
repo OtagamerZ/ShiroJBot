@@ -16,82 +16,105 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.shoukan;
+package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.records.shoukan.EffectParameters;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Closeable;
 import java.util.EnumSet;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-public record EffectOverTime(
-		@Nullable Drawable<?> source,
-		boolean debuff,
-		Supplier<Side> sideSupplier,
-		BiConsumer<EffectOverTime, EffectParameters> effect,
-		AtomicInteger turns,
-		AtomicInteger limit,
-		AtomicBoolean lock,
-		EnumSet<Trigger> triggers,
-		AtomicBoolean closed
-) implements Comparable<EffectOverTime>, Closeable {
+public final class EffectOverTime implements Comparable<EffectOverTime>, Closeable {
+	private final @Nullable Drawable<?> source;
+	private final Supplier<Side> sideSupplier;
+	private final boolean debuff;
+	private final BiConsumer<EffectOverTime, EffectParameters> effect;
+	private final EnumSet<Trigger> triggers;
+	private Integer turns;
+	private Integer limit;
+	private boolean lock;
+	private boolean closed;
+
 	public EffectOverTime(Drawable<?> source, boolean debuff, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
-		this(source, debuff, debuff ? source.getSide()::getOther : source::getSide, effect,
+		this(
+				source, debuff, debuff ? source.getSide()::getOther : source::getSide, effect,
 				null, null,
-				new AtomicBoolean(),
-				EnumSet.of(Trigger.NONE, triggers),
-				new AtomicBoolean()
+				EnumSet.of(Trigger.NONE, triggers)
 		);
 	}
 
 	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, int turns, int limit, Trigger... triggers) {
-		this(source, debuff, () -> side, effect,
-				turns < 0 ? null : new AtomicInteger(turns),
-				limit < 0 ? null : new AtomicInteger(limit),
-				new AtomicBoolean(),
-				EnumSet.of(turns > -1 ? Trigger.ON_TURN_BEGIN : Trigger.NONE, triggers),
-				new AtomicBoolean()
+		this(
+				source, debuff, () -> side, effect,
+				turns < 0 ? null : turns,
+				limit < 0 ? null : limit,
+				EnumSet.of(turns > -1 ? Trigger.ON_TURN_BEGIN : Trigger.NONE, triggers)
 		);
 	}
 
-	public EffectOverTime(@Nullable Drawable<?> source, boolean debuff, Supplier<Side> sideSupplier, BiConsumer<EffectOverTime, EffectParameters> effect, AtomicInteger turns, AtomicInteger limit, AtomicBoolean lock, EnumSet<Trigger> triggers, AtomicBoolean closed) {
+	public EffectOverTime(@Nullable Drawable<?> source, boolean debuff, Supplier<Side> sideSupplier, BiConsumer<EffectOverTime, EffectParameters> effect, Integer turns, Integer limit, EnumSet<Trigger> triggers) {
 		this.source = source;
 		this.debuff = debuff;
 		this.sideSupplier = sideSupplier;
 		this.effect = effect;
 		this.turns = turns;
 		this.limit = limit;
-		this.lock = lock;
 		this.triggers = triggers;
-		this.closed = closed;
 
 		this.triggers.remove(Trigger.NONE);
 	}
 
 	public void decreaseTurn() {
-		if (turns != null && turns.get() > 0) turns.getAndDecrement();
+		if (turns != null && turns > 0) turns--;
 	}
 
 	public void decreaseLimit() {
-		if (limit != null && limit.get() > 0) limit.getAndDecrement();
+		if (limit != null && limit > 0) limit--;
 	}
 
-	public Side side() {
+	public Drawable<?> getSource() {
+		return source;
+	}
+
+	public Side getSide() {
 		return sideSupplier.get();
 	}
 
-	public boolean expired() {
-		if (permanent()) {
+	public boolean isDebuff() {
+		return debuff;
+	}
+
+	public BiConsumer<EffectOverTime, EffectParameters> getEffect() {
+		return effect;
+	}
+
+	public EnumSet<Trigger> getTriggers() {
+		return triggers;
+	}
+
+	public boolean hasTrigger(Trigger trigger) {
+		return triggers.contains(trigger);
+	}
+
+	public Integer getTurns() {
+		return turns;
+	}
+
+	public Integer getLimit() {
+		return limit;
+	}
+
+	public boolean isExpired() {
+		if (isPermanent()) {
 			if (source instanceof Senshi s) {
 				return s.getIndex() == -1;
 			} else if (source instanceof Field f) {
@@ -100,18 +123,30 @@ public record EffectOverTime(
 		}
 
 		boolean expired = false;
-		if (turns != null) expired = turns.get() <= 0;
-		if (limit != null) expired |= limit.get() <= 0;
+		if (turns != null) expired = turns <= 0;
+		if (limit != null) expired |= limit <= 0;
 
 		return expired;
 	}
 
-	public boolean permanent() {
+	public boolean isLocked() {
+		return lock;
+	}
+
+	public void lock() {
+		lock = true;
+	}
+
+	public void unlock() {
+		lock = false;
+	}
+
+	public boolean isPermanent() {
 		return turns == null && limit == null;
 	}
 
-	public boolean removed() {
-		return closed.get();
+	public boolean isRemoved() {
+		return closed;
 	}
 
 	@Override
@@ -120,10 +155,10 @@ public record EffectOverTime(
 		if (o == null || getClass() != o.getClass()) return false;
 		EffectOverTime that = (EffectOverTime) o;
 
-		Side side = side();
-		Side oSide = that.side();
+		Side side = getSide();
+		Side oSide = that.getSide();
 		if (source != null && that.source != null) {
-			if (permanent()) {
+			if (isPermanent()) {
 				return source.getId().equals(that.source.getId()) && side == oSide;
 			} else {
 				return source.getSerial() == that.source.getSerial() && side == oSide;
@@ -135,9 +170,9 @@ public record EffectOverTime(
 
 	@Override
 	public int hashCode() {
-		Side side = side();
+		Side side = getSide();
 		if (source != null) {
-			return Objects.hash(permanent() ? source.getId() : source.getSerial(), side);
+			return Objects.hash(isPermanent() ? source.getId() : source.getSerial(), side);
 		} else {
 			return Objects.hash(side);
 		}
@@ -145,14 +180,14 @@ public record EffectOverTime(
 
 	@Override
 	public int compareTo(@NotNull EffectOverTime other) {
-		if (turns != null && other.turns != null) return turns.get() - other.turns.get();
-		if (limit != null && other.limit != null) return limit.get() - other.limit.get();
+		if (turns != null && other.turns != null) return turns - other.turns;
+		if (limit != null && other.limit != null) return limit - other.limit;
 
 		return (turns != null || limit != null) ? Integer.MAX_VALUE : -255;
 	}
 
 	@Override
 	public void close() {
-		closed.set(true);
+		closed = true;
 	}
 }

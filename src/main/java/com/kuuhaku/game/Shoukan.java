@@ -1980,75 +1980,75 @@ public class Shoukan extends GameInstance<Phase> {
 	public void triggerEOTs(EffectParameters ep) {
 		Set<EffectOverTime> effects = new TreeSet<>(eots);
 		for (EffectOverTime effect : effects) {
-			if (effect.lock().get()) continue;
+			if (effect.isLocked()) continue;
 
-			if (effect.side() != null) {
-				Hand h = hands.get(effect.side());
-				if (h.getLockTime(Lock.EFFECT) > 0 && !effect.debuff()) {
-					if (!(effect.source() instanceof EffectHolder<?> e) || !e.hasTrueEffect()) {
+			if (effect.getSide() != null) {
+				Hand h = hands.get(effect.getSide());
+				if (h.getLockTime(Lock.EFFECT) > 0 && !effect.isDebuff()) {
+					if (!(effect.getSource() instanceof EffectHolder<?> e) || !e.hasTrueEffect()) {
 						continue;
 					}
 				}
 			}
 
 			boolean remove = false;
-			Predicate<Side> checkSide = s -> effect.side() == null || effect.side() == s;
+			Predicate<Side> checkSide = s -> effect.getSide() == null || effect.getSide() == s;
 			if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
 				effect.decreaseTurn();
-				remove = effect.expired() || effect.removed();
+				remove = effect.isExpired() || effect.isRemoved();
 			}
 
 			if (ep.size() == 0) {
-				if (checkSide.test(ep.side()) && effect.triggers().contains(ep.trigger())) {
+				if (checkSide.test(ep.side()) && effect.hasTrigger(ep.trigger())) {
 					effect.decreaseLimit();
 
 					try {
-						effect.effect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
+						effect.getEffect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
 					} catch (ActivationException ignore) {
 					} catch (Exception e) {
 						getChannel().sendMessage(getString("error/effect")).queue();
-						Constants.LOGGER.warn("Failed to execute " + effect.source() + " persistent effect", e);
+						Constants.LOGGER.warn("Failed to execute " + effect.getSource() + " persistent effect", e);
 					}
 
-					if (effect.side() == null) {
-						effect.lock().set(true);
+					if (effect.getSide() == null) {
+						effect.lock();
 					}
 				}
 
-				remove = effect.expired() || effect.removed();
+				remove = effect.isExpired() || effect.isRemoved();
 			} else if (ep.source() != null) {
-				if (checkSide.test(ep.source().side()) && effect.triggers().contains(ep.source().trigger())) {
+				if (checkSide.test(ep.source().side()) && effect.hasTrigger(ep.source().trigger())) {
 					effect.decreaseLimit();
 
 					try {
-						effect.effect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
+						effect.getEffect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
 					} catch (ActivationException ignore) {
 					} catch (Exception e) {
 						getChannel().sendMessage(getString("error/effect")).queue();
-						Constants.LOGGER.warn("Failed to execute " + effect.source() + " persistent effect", e);
+						Constants.LOGGER.warn("Failed to execute " + effect.getSource() + " persistent effect", e);
 					}
 				}
 
 				for (Target t : ep.targets()) {
-					if (checkSide.test(t.side()) && effect.triggers().contains(t.trigger())) {
+					if (checkSide.test(t.side()) && effect.hasTrigger(t.trigger())) {
 						effect.decreaseLimit();
 
 						try {
-							effect.effect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
+							effect.getEffect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
 						} catch (ActivationException ignore) {
 						} catch (Exception e) {
 							getChannel().sendMessage(getString("error/effect")).queue();
-							Constants.LOGGER.warn("Failed to execute " + effect.source() + " persistent effect", e);
+							Constants.LOGGER.warn("Failed to execute " + effect.getSource() + " persistent effect", e);
 						}
 					}
 				}
 
-				remove = effect.expired() || effect.removed();
+				remove = effect.isExpired() || effect.isRemoved();
 			}
 
 			if (remove) {
-				if (!effect.permanent() && effect.source() != null) {
-					getChannel().sendMessage(getString("str/effect_expiration", effect.source())).queue();
+				if (!effect.isPermanent() && effect.getSource() != null) {
+					getChannel().sendMessage(getString("str/effect_expiration", effect.getSource())).queue();
 				}
 
 				eots.remove(effect);
@@ -2717,7 +2717,7 @@ public class Shoukan extends GameInstance<Phase> {
 		getCurrent().setForfeit(false);
 
 		for (EffectOverTime eot : eots) {
-			eot.lock().set(false);
+			eot.unlock();
 		}
 	}
 
