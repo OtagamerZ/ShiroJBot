@@ -284,12 +284,13 @@ public class Hand {
 	public Hand(String uid, Shoukan game, Side side) {
 		this.game = game;
 		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
+		if (userDeck == null) {
+			throw new GameReport(GameReport.NO_DECK, uid);
+		}
 		this.userDeck.calcStats();
 
 		if (game.getArcade() != Arcade.CARDMASTER && !game.isSingleplayer() && !Account.hasRole(uid, false, Role.TESTER)) {
-			if (userDeck == null) {
-				throw new GameReport(GameReport.NO_DECK, uid);
-			} else if (!(userDeck.validateSenshi() && userDeck.validateEvogear() && userDeck.validateFields())) {
+			if (!(userDeck.validateSenshi() && userDeck.validateEvogear() && userDeck.validateFields())) {
 				throw new GameReport(GameReport.INVALID_DECK, uid);
 			}
 		}
