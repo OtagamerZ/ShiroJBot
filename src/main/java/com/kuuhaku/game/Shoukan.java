@@ -1110,7 +1110,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		TargetType type = chosen.getStats().getData().getEnum(TargetType.class, "targeting", TargetType.NONE);
+		TargetType type = chosen.getTargetType();
 		Targeting tgt = switch (type) {
 			case NONE -> new Targeting(curr, -1, -1);
 			case ALLY -> new Targeting(curr, args.getInt("target1") - 1, -1);

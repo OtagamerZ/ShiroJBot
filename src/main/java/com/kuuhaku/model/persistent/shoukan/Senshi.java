@@ -1189,14 +1189,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			return true;
 		} catch (TargetException e) {
-			TargetType type = stats.getData().getEnum(TargetType.class, "targeting");
-			if (type != null && trigger == ON_ACTIVATE) {
+			if (targetType != TargetType.NONE && trigger == ON_ACTIVATE) {
 				if (Arrays.stream(ep.targets()).allMatch(t -> t.skip().get())) {
 					setAvailable(false);
 					return false;
 				}
 
-				game.getChannel().sendMessage(game.getString("error/target", game.getString("str/target_" + type))).queue();
+				game.getChannel().sendMessage(game.getString("error/target", game.getString("str/target_" + targetType))).queue();
 			}
 
 			return false;
