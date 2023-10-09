@@ -126,6 +126,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient Senshi lastInteraction = null;
 	private transient CachedScriptManager cachedEffect = new CachedScriptManager();
 	private transient Set<Drawable<?>> blocked = new HashSet<>();
+	private transient TargetType targetType = TargetType.NONE;
 	private transient ElementType element = null;
 
 	@Transient
@@ -1041,6 +1042,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		return false;
+	}
+
+	public TargetType getTargetType() {
+		return targetType;
+	}
+
+	public void setTargetType(TargetType type) {
+		targetType = type;
 	}
 
 	@Override
