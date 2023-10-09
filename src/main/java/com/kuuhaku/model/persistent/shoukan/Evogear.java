@@ -153,7 +153,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	public JSONArray getCharms() {
 		if (hand != null && hand.getOrigin().synergy() == Race.DULLAHAN) {
-			stats.getAttrMult().set(1 + charms.size() * 0.2);
+			stats.getAttrMult().set(charms.size() * 0.2);
 			charms.clear();
 		}
 
