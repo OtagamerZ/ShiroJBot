@@ -308,6 +308,7 @@ public class Shoukan extends GameInstance<Phase> {
 				curr.getRealDeck().add(curr.getCards().removeLast(Drawable::isAvailable));
 			}
 
+			reportEvent("UNDRAW -> " + amount, false);
 			return true;
 		}
 
