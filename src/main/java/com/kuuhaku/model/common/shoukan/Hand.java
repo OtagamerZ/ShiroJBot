@@ -1046,6 +1046,10 @@ public class Hand {
 		state = Bit.set(state, 1, usedDestiny);
 	}
 
+	public boolean canUseDestiny() {
+		return (origin.synergy() == Race.LICH ? isLowLife() : isCritical()) && !hasUsedDestiny();
+	}
+
 	public boolean hasRerolled() {
 		return Bit.on(state, 2);
 	}

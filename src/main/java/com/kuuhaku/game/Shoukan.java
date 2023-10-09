@@ -2281,7 +2281,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				if ((curr.getOrigin().synergy() == Race.LICH ? curr.isLowLife() : curr.isCritical()) && !curr.hasUsedDestiny()) {
+				if (curr.canUseDestiny()) {
 					if (Utils.equalsAny(curr.getOrigin().major(), Race.MACHINE, Race.MYSTICAL)) {
 						buttons.put(Utils.parseEmoji("⚡"), w -> {
 							if (curr.selectionPending()) {
@@ -2292,15 +2292,22 @@ public class Shoukan extends GameInstance<Phase> {
 								return;
 							}
 
-							Evogear chosen = (Evogear) curr.requestChoice(d -> {
-								if (d instanceof Evogear e && e.isAvailable()) {
-									return e.isSpell() == (curr.getOrigin().major() == Race.MYSTICAL);
-								}
+							List<Drawable<?>> valid = curr.getCards().stream()
+									.filter(d -> {
+										if (d instanceof Evogear e && e.isAvailable()) {
+											return e.isSpell() == (curr.getOrigin().major() == Race.MYSTICAL);
+										}
 
-								return false;
-							});
+										return false;
+									})
+									.toList();
 
-							chosen.setFlag(Flag.EMPOWERED);
+							if (valid.isEmpty()) {
+								getChannel().sendMessage(getString("err/empty_selection")).queue();
+								return;
+							}
+
+							((Evogear) curr.requestChoice(valid)).setFlag(Flag.EMPOWERED);
 							curr.setUsedDestiny(true);
 
 							if (curr.getOrigin().major() == Race.MACHINE) {
