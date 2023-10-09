@@ -510,9 +510,21 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					.withConst("data", stats.getData())
 					.withVar("ep", new EffectParameters(trigger, getSide()))
 					.withVar("side", getSide())
-					.withVar("self", equipper)
-					.withVar("trigger", trigger)
-					.run();
+					.withVar("trigger", trigger);
+
+			if (!isSpell()) {
+				if (stats.getSource() instanceof Senshi) {
+					csm.withVar("me", stats.getSource());
+				}
+
+				if (stats.getSource() instanceof Senshi s && equipper == null) {
+					csm.withVar("self", s);
+				} else {
+					csm.withVar("self", equipper);
+				}
+			}
+
+			csm.run();
 		} catch (Exception ignored) {
 		}
 	}

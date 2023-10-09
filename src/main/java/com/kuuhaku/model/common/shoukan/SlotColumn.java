@@ -142,7 +142,6 @@ public class SlotColumn {
 
 			card.setHand(h);
 			boolean init = card.getSlot().getIndex() == -1;
-			System.out.println(card.getSlot().getIndex());
 
 			card.setSlot(this);
 			if (init) {

@@ -1225,6 +1225,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			CachedScriptManager csm = getCSM();
 			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
 					.forScript(getEffect())
+					.withConst("me", this)
 					.withConst("self", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
