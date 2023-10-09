@@ -295,7 +295,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("undraw,(?:,(?<amount>\\d+))?")
+	@PlayerAction("undraw(?:,(?<amount>\\d+))?")
 	private boolean debUndraw(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
@@ -348,7 +348,6 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			reportResult(GameReport.SUCCESS, null, "GAME_TERMINATE");
-			return false;
 		}
 
 		return false;
