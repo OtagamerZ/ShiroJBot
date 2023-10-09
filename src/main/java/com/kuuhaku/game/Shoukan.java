@@ -295,6 +295,22 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
+	@PlayerAction("undraw,(?:,(?<amount>\\d+))?")
+	private boolean debUndraw(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
+		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+			int amount = Math.min(args.getInt("amount", 1), curr.getCards().size());
+			for (int i = 0; i < amount; i++) {
+				curr.getRealDeck().add(curr.getCards().removeLast());
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	@PhaseConstraint({"PLAN", "COMBAT"})
 	@PlayerAction("next_tick")
 	private boolean debApplyTick(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
