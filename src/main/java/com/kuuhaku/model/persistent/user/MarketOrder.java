@@ -45,7 +45,10 @@ public class MarketOrder extends DAO<MarketOrder> {
 	private Kawaipon kawaipon;
 
 	@Column(name = "buyout_price", nullable = false)
-	private int buyout = 0;
+	private int buyout;
+
+	public MarketOrder() {
+	}
 
 	public MarketOrder(Kawaipon kawaipon, Card card, int buyout) {
 		this.kawaipon = kawaipon;
