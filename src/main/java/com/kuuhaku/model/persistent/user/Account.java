@@ -189,7 +189,9 @@ public class Account extends DAO<Account> implements Blacklistable {
 		this.debit = debit;
 	}
 
-
+	public long getReserve() {
+		return DAO.queryNative(Long.class, "SELECT sum(buyout_price) FROM market_order WHERE kawaipon_uid = ?1", uid);
+	}
 
 	public void addCR(long value, String reason) {
 		if (value <= 0) return;
