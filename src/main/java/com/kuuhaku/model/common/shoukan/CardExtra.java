@@ -47,6 +47,9 @@ public class CardExtra implements Cloneable {
 	private final CumValue dodge;
 	private final CumValue block;
 
+	private final CumValue lifesteal;
+	private final CumValue thorns;
+
 	private final CumValue costMult;
 	private final CumValue attrMult;
 	private final CumValue power;
@@ -75,8 +78,9 @@ public class CardExtra implements Cloneable {
 			CumValue mana, CumValue blood, CumValue sacrifices,
 			CumValue atk, CumValue dfs, CumValue dodge,
 			CumValue block, CumValue tier, CumValue costMult,
-			CumValue attrMult, CumValue power, Flags flags,
-			JSONObject data, JSONObject perm, ListOrderedSet<String> curses
+			CumValue lifesteal, CumValue thorns, CumValue attrMult,
+			CumValue power, Flags flags, JSONObject data, JSONObject perm,
+			ListOrderedSet<String> curses
 	) {
 		this.mana = mana;
 		this.blood = blood;
@@ -85,6 +89,8 @@ public class CardExtra implements Cloneable {
 		this.dfs = dfs;
 		this.dodge = dodge;
 		this.block = block;
+		this.lifesteal = lifesteal;
+		this.thorns = thorns;
 		this.tier = tier;
 		this.costMult = costMult;
 		this.attrMult = attrMult;
@@ -97,6 +103,8 @@ public class CardExtra implements Cloneable {
 
 	public CardExtra() {
 		this(
+				CumValue.flat(),
+				CumValue.flat(),
 				CumValue.flat(),
 				CumValue.flat(),
 				CumValue.flat(),
@@ -141,6 +149,14 @@ public class CardExtra implements Cloneable {
 
 	public CumValue getBlock() {
 		return block;
+	}
+
+	public CumValue getLifesteal() {
+		return lifesteal;
+	}
+
+	public CumValue getThorns() {
+		return thorns;
 	}
 
 	public CumValue getCostMult() {
@@ -294,6 +310,8 @@ public class CardExtra implements Cloneable {
 				dfs.clone(),
 				dodge.clone(),
 				block.clone(),
+				lifesteal.clone(),
+				thorns.clone(),
 				tier.clone(),
 				attrMult.clone(),
 				costMult.clone(),
