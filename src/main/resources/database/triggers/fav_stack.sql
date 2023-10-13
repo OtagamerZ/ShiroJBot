@@ -39,6 +39,8 @@ BEGIN
             WHERE uid = NEW.kawaipon_uid;
         END IF;
     END IF;
+
+    RETURN NEW;
 END;
 $$;
 
