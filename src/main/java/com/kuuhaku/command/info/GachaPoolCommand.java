@@ -90,7 +90,7 @@ public class GachaPoolCommand implements Executable {
 
 			Card fav = kp.getFavCard();
 			if (pool.contains(fav)) {
-				eb.setDescription("## " + fav.getRarity().getEmote(fav) + fav.getName());
+				eb.setDescription("### " + fav.getRarity().getEmote(fav) + fav.getName());
 			}
 
 			List<Page> pages = Utils.generatePages(eb, pool, 20, 10,
