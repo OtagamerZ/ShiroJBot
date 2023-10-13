@@ -55,8 +55,8 @@ public class Kawaipon extends DAO<Kawaipon> {
 	@Column(name = "fav_expiration")
 	private ZonedDateTime favExpiration;
 
-	@Column(name = "fav_stacks")
-	private int favStacks;
+	@Column(name = "fav_stacks", nullable = false)
+	private int favStacks = 0;
 
 	public Kawaipon() {
 	}
