@@ -107,7 +107,7 @@ public class HelpCommand implements Executable {
 			);
 		}
 
-		Set<PreparedCommand> subCmds = pc.getSubCommands();
+		Set<PreparedCommand> subCmds = Main.getCommandManager().getSubCommands(pc.name().split("\\.")[0]);
 		if (!subCmds.isEmpty()) {
 			StringTree tree = new StringTree();
 
