@@ -337,23 +337,19 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 						after = true;
 					} else {
-						try {
-							if (!after && !tag) {
-								if (getFlags().has(Flag.HIDE_STATS)) {
-									s = s.replaceAll("\\d", "?");
-								}
-
-								g2d.setColor(color);
-								Graph.drawOutlinedString(g2d, s, x, y, 1.5f, Color.BLACK);
-								continue;
-							} else {
-								g2d.setColor(style.getFrame().getSecondaryColor());
+						if (!after && !tag) {
+							if (getFlags().has(Flag.HIDE_STATS)) {
+								s = s.replaceAll("\\d", "?");
 							}
 
-							g2d.drawString(s, x, y);
-						} finally {
-							x += fm.stringWidth(s);
+							g2d.setColor(color);
+							Graph.drawOutlinedString(g2d, s, x, y, 1.5f, Color.BLACK);
+						} else {
+							g2d.setColor(style.getFrame().getSecondaryColor());
 						}
+
+						g2d.drawString(s, x, y);
+						x += fm.stringWidth(s);
 					}
 				}
 			} else {
