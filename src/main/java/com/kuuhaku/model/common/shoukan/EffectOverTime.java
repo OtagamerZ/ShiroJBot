@@ -44,6 +44,14 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 	private boolean lock;
 	private boolean closed;
 
+	public EffectOverTime(Drawable<?> source, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
+		this(
+				source, false, () -> null, effect,
+				null, null,
+				EnumSet.of(Trigger.NONE, triggers)
+		);
+	}
+
 	public EffectOverTime(Drawable<?> source, boolean debuff, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
 		this(
 				source, debuff, debuff ? source.getSide()::getOther : source::getSide, effect,
