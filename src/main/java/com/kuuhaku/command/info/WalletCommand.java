@@ -48,7 +48,7 @@ public class WalletCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/wallet", event.member().getEffectiveName()))
 				.addField(Constants.VOID, locale.get("str/wallet_info_1",
-						acc.getBalance(),
+						acc.getBalance() - acc.getReserved(),
 						acc.getReserved(),
 						acc.getDebit(),
 						acc.getGems()
