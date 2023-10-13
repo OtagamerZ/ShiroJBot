@@ -21,6 +21,7 @@ package com.kuuhaku.model.common.shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
@@ -125,6 +126,10 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 		if (isPermanent()) {
 			if (source instanceof Senshi s) {
 				return s.getIndex() == -1;
+			} else if (source instanceof Evogear e) {
+				if (e.isSpell()) return false;
+
+				return e.getEquipper() == null || e.getEquipper().getIndex() == -1;
 			} else if (source instanceof Field f) {
 				return !f.isActive();
 			}
@@ -154,7 +159,7 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 	}
 
 	public boolean isRemoved() {
-		return closed;
+		return !isPermanent() && closed;
 	}
 
 	@Override
