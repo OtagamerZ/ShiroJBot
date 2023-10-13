@@ -298,6 +298,21 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return false;
 	}
 
+	public Evogear unequip(Evogear evo) {
+		Iterator<Evogear> it = equipments.iterator();
+		while (it.hasNext()) {
+			Evogear e = it.next();
+
+			if (e.equals(evo)) {
+				it.remove();
+				hand.getGraveyard().add(e);
+				return e;
+			}
+		}
+
+		return null;
+	}
+
 	public Evogear unequip(String id) {
 		Iterator<Evogear> it = equipments.iterator();
 		while (it.hasNext()) {
