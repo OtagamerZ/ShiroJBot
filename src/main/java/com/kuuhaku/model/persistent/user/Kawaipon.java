@@ -55,6 +55,9 @@ public class Kawaipon extends DAO<Kawaipon> {
 	@Column(name = "fav_expiration")
 	private ZonedDateTime favExpiration;
 
+	@Column(name = "fav_stacks")
+	private int favStacks;
+
 	public Kawaipon() {
 	}
 
@@ -252,7 +255,7 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	public void setFavCard(Card card) {
 		favCard = card;
-		favExpiration = ZonedDateTime.now(ZoneId.of("GMT-3")).plusDays(7);
+		favExpiration = ZonedDateTime.now(ZoneId.of("GMT-3")).plusDays(3);
 	}
 
 	@Override
