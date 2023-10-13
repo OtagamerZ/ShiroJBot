@@ -76,7 +76,7 @@ public class MarketOrder extends DAO<MarketOrder> {
 				WHERE sc.card = ?2
 				  AND sc.kawaipon.uid <> ?1
 				  AND sc.price IS NOT NULL
-				  AND sc.price <= ?3
+				  AND sc.price BETWEEN 1 AND ?3
 				ORDER BY sc.price
 				""", kawaipon.getUid(), card, buyout);
 	}
