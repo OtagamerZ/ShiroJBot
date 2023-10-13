@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
@@ -169,6 +170,17 @@ public class StashedCard extends DAO<StashedCard> {
 			KawaiponCard kc = new KawaiponCard(this.uuid, this.card, false);
 			kc.setKawaipon(kawaipon);
 			kc.save();
+		}
+	}
+
+	@Override
+	public void afterSave() {
+		if (price > 0) {
+			MarketOrder mo = MarketOrder.search(this);
+			if (mo != null) {
+				Market m = new Market(mo.getKawaipon().getUid());
+				m.buy(mo, id);
+			}
 		}
 	}
 

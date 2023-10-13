@@ -18,20 +18,24 @@
 
 package com.kuuhaku.command.market;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Category;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Kawaipon;
+import com.kuuhaku.model.persistent.user.MarketOrder;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 
@@ -39,16 +43,16 @@ import java.util.List;
 
 @Command(
 		name = "market",
-		path = "add",
+		path = {"order", "place"},
 		category = Category.MISC
 )
-@Signature("<card:word:r> <price:number:r> <confirm:word>[confirm]")
-public class MarketAddCommand implements Executable {
+@Signature("<card:word:r> <price:number:r>")
+public class MarketOrderPlaceCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
-		if (kp.getStashUsage() == 0) {
-			event.channel().sendMessage(locale.get("error/empty_stash")).queue();
+		if (kp.getCapacity() <= 0) {
+			event.channel().sendMessage(locale.get("error/insufficient_space")).queue();
 			return;
 		}
 
@@ -67,28 +71,28 @@ public class MarketAddCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(args.has("confirm"), locale, event.channel(), kp.getTradeable(), card, event.user())
-				.thenAccept(sc -> {
-					if (sc == null) {
-						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
-						return;
-					} else if (sc.isAccountBound()) {
-						event.channel().sendMessage(locale.get("error/card_account_bound")).queue();
-						return;
-					}
+		Account acc = kp.getAccount();
+		if (!acc.hasEnough(price, Currency.CR)) {
+			event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
+			return;
+		}
 
-					sc.setPrice(price);
-					sc.save();
+		try {
+			Utils.confirm(locale.get("question/market_order", card, price), event.channel(), w -> {
+						MarketOrder order = new MarketOrder(kp, card, price);
 
-					event.channel().sendMessage(locale.get("success/market_add")).queue();
-				})
-				.exceptionally(t -> {
-					if (!(t.getCause() instanceof NoResultException)) {
-						Constants.LOGGER.error(t, t);
-					}
+						StashedCard offer = order.search();
+						if (offer != null) {
+							Market m = new Market(event.user().getId());
+							m.buy(order, offer.getId());
+						}
 
-					event.channel().sendMessage(locale.get("error/not_owned")).queue();
-					return null;
-				});
+						event.channel().sendMessage(locale.get("success/order_placed")).queue();
+						return true;
+					}, event.user()
+			);
+		} catch (PendingConfirmationException e) {
+			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+		}
 	}
 }

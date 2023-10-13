@@ -69,6 +69,18 @@ public class MarketOrder extends DAO<MarketOrder> {
 		return buyout;
 	}
 
+	public StashedCard search() {
+		return DAO.query(StashedCard.class, """
+				SELECT sc
+				FROM StashedCard sc
+				WHERE sc.card = ?2
+				  AND sc.kawaipon.uid <> ?1
+				  AND sc.price IS NOT NULL
+				  AND sc.price <= ?3
+				ORDER BY sc.price
+				""", kawaipon.getUid(), card, buyout);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -80,5 +92,15 @@ public class MarketOrder extends DAO<MarketOrder> {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+
+	public static MarketOrder search(StashedCard sc) {
+		return DAO.query(MarketOrder.class, """
+				SELECT mo
+				FROM MarketOrder mo
+				WHERE mo.card = ?2
+				  AND mo.kawaipon.uid <> ?1
+				  AND mo.buyout >= ?3
+				""", sc.getKawaipon().getUid(), sc.getCard(), sc.getPrice());
 	}
 }

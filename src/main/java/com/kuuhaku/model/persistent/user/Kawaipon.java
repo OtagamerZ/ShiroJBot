@@ -44,9 +44,6 @@ public class Kawaipon extends DAO<Kawaipon> {
 	@OneToOne(mappedBy = "kawaipon")
 	private Account account;
 
-	@Column(name = "stash_capacity", nullable = false)
-	private int stashCapacity = 250;
-
 	@ManyToOne
 	@JoinColumn(name = "fav_card")
 	@Fetch(FetchMode.JOIN)
@@ -88,15 +85,22 @@ public class Kawaipon extends DAO<Kawaipon> {
 		return DAO.queryAll(StashedCard.class, "SELECT sc FROM StashedCard sc WHERE sc.kawaipon.uid = ?1", uid);
 	}
 
+	public List<MarketOrder> getOrders() {
+		return DAO.queryAll(MarketOrder.class, "SELECT mo FROM MarketOrder mo WHERE mo.kawaipon.uid = ?1", uid);
+	}
+
 	public int getMaxCapacity() {
 		int mult = 3 + account.getItemCount("cap_boost");
 		int add = account.getItemCount("extra_cap") * 10;
 
-		return stashCapacity + add + account.getHighestLevel() * mult;
+		return 250 + add + account.getHighestLevel() * mult;
 	}
 
 	public int getStashUsage() {
-		return DAO.queryNative(Integer.class, "SELECT count(1) FROM stashed_card WHERE kawaipon_uid = ?1", uid);
+		return DAO.queryNative(Integer.class, """
+				SELECT count((SELECT 1 FROM stashed_card WHERE kawaipon_uid = ?1))
+				     + count((SELECT 1 FROM market_order WHERE kawaipon_uid = ?1))
+				""", uid);
 	}
 
 	public int getCapacity() {
