@@ -49,6 +49,7 @@ public class WalletCommand implements Executable {
 				.setTitle(locale.get("str/wallet", event.member().getEffectiveName()))
 				.addField(Constants.VOID, locale.get("str/wallet_info_1",
 						acc.getBalance(),
+						acc.getReserved(),
 						acc.getDebit(),
 						acc.getGems()
 				), true)

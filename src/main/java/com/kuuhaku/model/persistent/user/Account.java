@@ -189,7 +189,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 		this.debit = debit;
 	}
 
-	public long getReserve() {
+	public long getReserved() {
 		return DAO.queryNative(Long.class, "SELECT sum(buyout_price) FROM market_order WHERE kawaipon_uid = ?1", uid);
 	}
 
@@ -269,7 +269,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 		else if (value < 0) return false;
 
 		return switch (currency) {
-			case CR -> getBalance() - getDebit() >= value;
+			case CR -> getBalance() - getReserved() - getDebit() >= value;
 			case GEM -> getGems() >= value;
 		};
 	}
