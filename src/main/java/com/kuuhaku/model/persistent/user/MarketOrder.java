@@ -101,6 +101,7 @@ public class MarketOrder extends DAO<MarketOrder> {
 				WHERE mo.card = ?2
 				  AND mo.kawaipon.uid <> ?1
 				  AND mo.buyout >= ?3
+				ORDER BY mo.buyout DESC
 				""", sc.getKawaipon().getUid(), sc.getCard(), sc.getPrice());
 	}
 }
