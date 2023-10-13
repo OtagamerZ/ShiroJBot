@@ -189,6 +189,8 @@ public class Account extends DAO<Account> implements Blacklistable {
 		this.debit = debit;
 	}
 
+
+
 	public void addCR(long value, String reason) {
 		if (value <= 0) return;
 
