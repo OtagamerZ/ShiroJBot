@@ -381,7 +381,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	private static void renderText(Graphics2D g2d, String text, int y, TriConsumer<String, Integer, Integer> renderer) {
 		String[] lines = text.split("\n");
 		for (String line : lines) {
-			String[] words = line.split("(?<=\\S )|(?=\\{=)|(?<=}%?)(?=[^%{ ])|(?<=[(}])");
+			String[] words = line.split("(?<=\\S )|(?=\\{=)|(?<=}%?)(?=[^%{ ])|(?<=[}])|(?<=\\(\\d)");
 			int offset = 0;
 			for (String s : words) {
 				FontMetrics m = g2d.getFontMetrics();
