@@ -327,8 +327,6 @@ public class CardExtra implements Cloneable {
 				ListOrderedSet.listOrderedSet(BondedList.withBind((s, it) -> !s.isBlank()))
 		);
 
-		clone.clear();
-
 		clone.race = race;
 		clone.source = source;
 		clone.description = description;
