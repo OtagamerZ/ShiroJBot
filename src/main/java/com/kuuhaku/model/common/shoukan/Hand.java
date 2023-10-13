@@ -432,6 +432,7 @@ public class Hand {
 
 					cards.add(d);
 					getGame().trigger(Trigger.ON_DRAW, side);
+					getGame().trigger(Trigger.ON_MANUAL_DRAW, d.asSource(Trigger.ON_MANUAL_DRAW));
 					value--;
 					break;
 				}
@@ -457,6 +458,7 @@ public class Hand {
 				d.setSolid(true);
 				cards.add(d);
 				getGame().trigger(Trigger.ON_DRAW, side);
+				getGame().trigger(Trigger.ON_MANUAL_DRAW, d.asSource(Trigger.ON_MANUAL_DRAW));
 			}
 		}
 	}
@@ -485,6 +487,7 @@ public class Hand {
 			d.setSolid(true);
 			cards.add(d);
 			getGame().trigger(Trigger.ON_DRAW, side);
+			getGame().trigger(Trigger.ON_MAGIC_DRAW, d.asSource(Trigger.ON_MAGIC_DRAW));
 		}
 
 		return d;
@@ -524,6 +527,7 @@ public class Hand {
 
 				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW, side);
+				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
 				return out;
 			}
 		}
@@ -547,6 +551,7 @@ public class Hand {
 
 				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW, side);
+				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
 				return out;
 			}
 		}
@@ -574,6 +579,7 @@ public class Hand {
 
 				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW, side);
+				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
 				return out;
 			}
 		}
@@ -587,7 +593,7 @@ public class Hand {
 		BondedList<Drawable<?>> deck = getDeck();
 
 		for (int i = 0; i < deck.size(); i++) {
-			if (deck.get(i) instanceof Senshi s) {
+			if (deck.get(i) instanceof Senshi) {
 				if (getOther().getOrigin().synergy() == Race.IMP) {
 					modHP(-50);
 				}
@@ -597,6 +603,7 @@ public class Hand {
 
 				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW, side);
+				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
 				return out;
 			}
 		}
@@ -623,6 +630,7 @@ public class Hand {
 
 				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW, side);
+				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
 				return out;
 			}
 		}
@@ -646,6 +654,7 @@ public class Hand {
 
 				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW, side);
+				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
 				return out;
 			}
 		}
@@ -669,6 +678,7 @@ public class Hand {
 
 				cards.add(out);
 				getGame().trigger(Trigger.ON_DRAW, side);
+				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
 				return out;
 			}
 		}

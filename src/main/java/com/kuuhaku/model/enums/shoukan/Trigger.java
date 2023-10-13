@@ -100,6 +100,12 @@ public enum Trigger {
 	/** On drawing a card **/
 	ON_DRAW,
 
+	/** On drawing a card manually **/
+	ON_MANUAL_DRAW,
+
+	/** On drawing a card through effects **/
+	ON_MAGIC_DRAW,
+
 	/** On discarding a card **/
 	ON_DISCARD,
 
