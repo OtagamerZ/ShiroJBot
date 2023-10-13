@@ -254,7 +254,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				if (idx != null) {
 					if (idx.getFirst() != -1) {
-						out = "§" + Character.toString(0x2801 + idx.getFirst());
+						out = "£" + Character.toString(0x2801 + idx.getFirst());
 					} else {
 						out = switch (str) {
 							case "b" -> DC1;
@@ -307,9 +307,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				g2d.setFont(Fonts.OPEN_SANS.deriveBold(10));
 			}
 
-			if (str.contains("§")) {
+			if (str.contains("§") || str.contains("£")) {
 				Collection<Pair<Integer, Color>> cols = COLORS.values();
-				List<Color> types = Utils.extractGroups(str, "([⠁-⣿])").parallelStream()
+				Color color = Utils.extractGroups(str, "([⠁-⣿])").parallelStream()
 						.map(o -> String.valueOf(o).charAt(0))
 						.map(c -> cols.parallelStream()
 								.filter(p -> p.getFirst() == c - 0x2801)
@@ -317,8 +317,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 								.findAny().orElse(null)
 						)
 						.filter(Objects::nonNull)
-						.toList();
+						.collect(Collectors.collectingAndThen(Collectors.toList(), Graph::mix));
 
+				boolean tag = str.contains("£");
 				boolean after = false;
 				for (String s : str.split("§(?=[⠁-⣿])|(?<=[⠁-⣿])")) {
 					if (s.isEmpty()) continue;
@@ -336,21 +337,23 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 						after = true;
 					} else {
-						if (!after) {
-							if (getFlags().has(Flag.HIDE_STATS)) {
-								s = s.replaceAll("\\d", "?");
-							}
+						try {
+							if (!after && !tag) {
+								if (getFlags().has(Flag.HIDE_STATS)) {
+									s = s.replaceAll("\\d", "?");
+								}
 
-							g2d.setColor(Graph.mix(types));
-							if (!g2d.getColor().equals(Color.BLACK)) {
+								g2d.setColor(color);
 								Graph.drawOutlinedString(g2d, s, x, y, 1.5f, Color.BLACK);
+								continue;
+							} else {
+								g2d.setColor(style.getFrame().getSecondaryColor());
 							}
-						} else {
-							g2d.setColor(style.getFrame().getSecondaryColor());
-						}
 
-						g2d.drawString(s, x, y);
-						x += fm.stringWidth(s);
+							g2d.drawString(s, x, y);
+						} finally {
+							x += fm.stringWidth(s);
+						}
 					}
 				}
 			} else {
