@@ -34,6 +34,7 @@ import com.ygimenez.json.JSONObject;
 import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -77,8 +78,8 @@ public class CardExtra implements Cloneable {
 	public CardExtra(
 			CumValue mana, CumValue blood, CumValue sacrifices,
 			CumValue atk, CumValue dfs, CumValue dodge,
-			CumValue block, CumValue tier, CumValue costMult,
-			CumValue lifesteal, CumValue thorns, CumValue attrMult,
+			CumValue block, CumValue tier, CumValue lifesteal,
+			CumValue thorns, CumValue costMult, CumValue attrMult,
 			CumValue power, Flags flags, JSONObject data, JSONObject perm,
 			ListOrderedSet<String> curses
 	) {
@@ -274,6 +275,10 @@ public class CardExtra implements Cloneable {
 
 	public void clear() {
 		removeExpired(o -> !(o instanceof PermMod));
+	}
+
+	public void clear(Drawable<?> source) {
+		removeExpired(o -> !(o instanceof PermMod) && Objects.equals(o.getSource(), source));
 	}
 
 	public void removeExpired(Predicate<ValueMod> check) {
