@@ -321,7 +321,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				boolean tag = str.contains("£");
 				boolean after = false;
-				for (String s : str.split("§(?=[⠁-⣿])|(?<=[⠁-⣿])")) {
+				for (String s : str.split("[§£](?=[⠁-⣿])|(?<=[⠁-⣿])")) {
 					if (s.isEmpty()) continue;
 
 					char code = s.charAt(0);
