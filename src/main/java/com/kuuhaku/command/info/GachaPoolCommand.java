@@ -88,13 +88,15 @@ public class GachaPoolCommand implements Executable {
 							.thenComparing(Card::getId)
 			);
 
+			Card fav = kp.getFavCard();
+			if (pool.contains(fav)) {
+				eb.setDescription("## " + fav.getRarity().getEmote(fav) + fav.getName());
+			}
+
 			List<Page> pages = Utils.generatePages(eb, pool, 20, 10,
 					c -> {
-						if (c.getId().equals(kp.getFavCardId())) {
-							return c.getRarity().getEmote(c) + "**" + c.getName() + "**";
-						} else {
-							return c.getRarity().getEmote(c) + c.getName();
-						}
+						if (c.equals(fav)) return null;
+						return c.getRarity().getEmote(c) + c.getName();
 					},
 					(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 			);
