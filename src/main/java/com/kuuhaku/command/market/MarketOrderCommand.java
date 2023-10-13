@@ -21,17 +21,20 @@ package com.kuuhaku.command.market;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
-import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.MarketOrder;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
+import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
+
+import java.util.List;
 
 /*
 @Command(
@@ -50,21 +53,19 @@ public class MarketOrderCommand implements Executable {
 			return;
 		}
 
-		StashedCard sc = DAO.query(StashedCard.class, "SELECT s FROM StashedCard s WHERE s.price > 0 AND s.id = ?1", args.getInt("id"));
-		if (sc == null) {
-			event.channel().sendMessage(locale.get("error/not_announced")).queue();
-			return;
-		} else if (sc.getKawaipon().equals(kp)) {
-			event.channel().sendMessage(locale.get("error/cannot_buy_own")).queue();
+		Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
+		if (card == null) {
+			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM v_card_names");
+
+			Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(), names);
+			event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
 			return;
 		}
 
-		int id = args.getInt("id");
-		int price = sc.getPrice();
-
-		Market m = new Market(event.user().getId());
-		if (sc.equals(m.getDailyOffer())) {
-			price *= 0.8;
+		int price = args.getInt("price");
+		if (!Utils.between(price, 1, 10_000_000)) {
+			event.channel().sendMessage(locale.get("error/invalid_value_range", 1, 10_000_000)).queue();
+			return;
 		}
 
 		Account acc = kp.getAccount();
@@ -74,12 +75,9 @@ public class MarketOrderCommand implements Executable {
 		}
 
 		try {
-			Utils.confirm(locale.get("question/purchase", sc, price), event.channel(), w -> {
-						if (m.buy(id)) {
-							event.channel().sendMessage(locale.get("success/market_purchase", sc)).queue();
-						} else {
-							event.channel().sendMessage(locale.get("error/not_announced")).queue();
-						}
+			Utils.confirm(locale.get("question/order", card, price), event.channel(), w -> {
+						new MarketOrder(kp, card, price).save();
+						event.channel().sendMessage(locale.get("success/order_placed")).queue();
 
 						return true;
 					}, event.user()
