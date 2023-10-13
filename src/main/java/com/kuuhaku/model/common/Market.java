@@ -140,7 +140,9 @@ public class Market {
 					.flatMap(c -> c.sendMessage(seller.getEstimateLocale().get("success/market_order_filled", sc, price)))
 					.queue(null, Utils::doNothing);
 
-			order.delete();
+			if (order.getId() > 0) {
+				order.delete();
+			}
 		}
 
 		sc.setKawaipon(buyer.getKawaipon());

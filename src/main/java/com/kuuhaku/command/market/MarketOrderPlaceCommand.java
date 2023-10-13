@@ -85,6 +85,8 @@ public class MarketOrderPlaceCommand implements Executable {
 						if (offer != null) {
 							Market m = new Market(event.user().getId());
 							m.buy(order, offer.getId());
+						} else {
+							order.save();
 						}
 
 						event.channel().sendMessage(locale.get("success/order_placed")).queue();
