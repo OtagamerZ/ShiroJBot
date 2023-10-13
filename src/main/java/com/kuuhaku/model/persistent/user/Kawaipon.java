@@ -98,8 +98,8 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	public int getStashUsage() {
 		return DAO.queryNative(Integer.class, """
-				SELECT count((SELECT 1 FROM stashed_card WHERE kawaipon_uid = ?1))
-				     + count((SELECT 1 FROM market_order WHERE kawaipon_uid = ?1))
+				SELECT (SELECT count(1) FROM stashed_card WHERE kawaipon_uid = ?1)
+				     + (SELECT count(1) FROM market_order WHERE kawaipon_uid = ?1)
 				""", uid);
 	}
 
