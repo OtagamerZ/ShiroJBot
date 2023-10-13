@@ -19,94 +19,154 @@
 package com.kuuhaku.model.enums.shoukan;
 
 public enum Trigger {
-	/** On each render **/
+	/**
+	 * On each render
+	 **/
 	ON_TICK,
 
-	/** When turn begins (also expires turn-based effects) **/
+	/**
+	 * When turn begins (also expires turn-based effects)
+	 **/
 	ON_TURN_BEGIN,
 
-	/** When turn ends **/
+	/**
+	 * When turn ends
+	 **/
 	ON_TURN_END,
 
-	/** When PLAN phase begins **/
+	/**
+	 * When PLAN phase begins
+	 **/
 	ON_PLAN,
 
-	/** When COMBAT phase begins **/
+	/**
+	 * When COMBAT phase begins
+	 **/
 	ON_COMBAT,
 
-	/** When victory is imminent **/
+	/**
+	 * When victory is imminent
+	 **/
 	ON_VICTORY,
 
-	/** When defeat is imminent **/
+	/**
+	 * When defeat is imminent
+	 **/
 	ON_DEFEAT,
 
-	/** Before attack calculations **/
+	/**
+	 * Before attack calculations
+	 **/
 	ON_ATTACK,
 
-	/** Before defense calculations **/
+	/**
+	 * Before defense calculations
+	 **/
 	ON_DEFEND,
 
-	/** On defeating a card **/
+	/**
+	 * On defeating a card
+	 **/
 	ON_HIT,
 
-	/** On sending a card to the graveyard **/
+	/**
+	 * On sending a card to the graveyard
+	 **/
 	ON_KILL,
 
-	/** On attacking directly **/
+	/**
+	 * On attacking directly
+	 **/
 	ON_DIRECT,
 
-	/** On successful block **/
+	/**
+	 * On successful block
+	 **/
 	ON_BLOCK,
 
-	/** On successful dodge **/
+	/**
+	 * On successful dodge
+	 **/
 	ON_DODGE,
 
-	/** When both sides have equal attributes **/
+	/**
+	 * When both sides have equal attributes
+	 **/
 	ON_CLASH,
 
-	/** On losing the combat **/
+	/**
+	 * On losing the combat
+	 **/
 	ON_LOSE,
 
-	/** On failing an attack **/
+	/**
+	 * On failing an attack
+	 **/
 	ON_SUICIDE,
 
-	/** On missing an attack **/
+	/**
+	 * On missing an attack
+	 **/
 	ON_MISS,
 
-	/** On sending a placed card to graveyard **/
+	/**
+	 * On sending a placed card to graveyard
+	 **/
 	ON_SACRIFICE,
 
-	/** On being added to the graveyard pile **/
+	/**
+	 * On being added to the graveyard pile
+	 **/
 	ON_GRAVEYARD,
 
-	/** On being added to the ban pile **/
+	/**
+	 * On being added to the ban pile
+	 **/
 	ON_BAN,
 
-	/** On being added to the hand pile **/
+	/**
+	 * On being added to the hand pile
+	 **/
 	ON_HAND,
 
-	/** On being added to the deck pile **/
+	/**
+	 * On being added to the deck pile
+	 **/
 	ON_DECK,
 
-	/** On changing the field **/
+	/**
+	 * On changing the field
+	 **/
 	ON_FIELD_CHANGE,
 
-	/** On being placed <b>(Asserted)</b> **/
+	/**
+	 * On being placed <b>(Asserted)</b>
+	 **/
 	ON_INITIALIZE,
 
-	/** On being removed <b>(Asserted)</b> **/
+	/**
+	 * On being removed <b>(Asserted)</b>
+	 **/
 	ON_REMOVE,
 
-	/** On drawing a card **/
+	/**
+	 * On drawing a card
+	 **/
 	ON_DRAW,
 
-	/** On drawing a card manually **/
+	/**
+	 * On drawing a card manually
+	 **/
 	ON_MANUAL_DRAW,
 
-	/** On drawing a card through effects **/
+	/**
+	 * On drawing a card through effects
+	 **/
 	ON_MAGIC_DRAW,
 
-	/** On discarding a card **/
+	/**
+	 * On discarding a card
+	 **/
 	ON_DISCARD,
 
 	/**
@@ -114,25 +174,39 @@ public enum Trigger {
 	 **/
 	ON_SUMMON,
 
-	/** On equipping a card **/
+	/**
+	 * On equipping a card
+	 **/
 	ON_EQUIP,
 
-	/** On changing card mode (Flip -> Defense -> Attack -> Defense) **/
+	/**
+	 * On changing card mode (Flip -> Defense -> Attack -> Defense)
+	 **/
 	ON_SWITCH,
 
-	/** On flipping a card **/
+	/**
+	 * On flipping a card
+	 **/
 	ON_FLIP,
 
-	/** On receiving HP **/
+	/**
+	 * On receiving HP
+	 **/
 	ON_HEAL,
 
-	/** On losing HP **/
+	/**
+	 * On losing HP
+	 **/
 	ON_DAMAGE,
 
-	/** On receiving MP **/
+	/**
+	 * On receiving MP
+	 **/
 	ON_MP,
 
-	/** On using a card's active effect **/
+	/**
+	 * On using a card's active effect
+	 **/
 	ON_ACTIVATE,
 
 	/**
@@ -170,12 +244,18 @@ public enum Trigger {
 	 **/
 	ON_DEFER_SUPPORT,
 
-	/** Triggers mirrored from adjacent cards **/
+	/**
+	 * Triggers mirrored from adjacent cards
+	 **/
 	ON_DEFER_NEARBY,
 
-	/** Triggers mirrored from attached player **/
+	/**
+	 * Triggers mirrored from attached player
+	 **/
 	ON_LEECH,
 
-	/** Nothing <b>(DO NOT USE)</b> **/
+	/**
+	 * Nothing <b>(DO NOT USE)</b>
+	 **/
 	NONE
 }
