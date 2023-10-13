@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Kawaipon;
+import com.kuuhaku.model.persistent.user.MarketOrder;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
@@ -46,11 +47,16 @@ public class MarketOrderCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
+		List<MarketOrder> orders = kp.getOrders();
+		if (orders.isEmpty()) {
+			event.channel().sendMessage(locale.get("error/no_orders")).queue();
+			return;
+		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/market_orders", event.member().getEffectiveName()));
 
-		List<Page> pages = Utils.generatePages(eb, kp.getOrders(), 20, 10,
+		List<Page> pages = Utils.generatePages(eb, orders, 20, 10,
 				o -> {
 					Card c = o.getCard();
 					return new FieldMimic(
