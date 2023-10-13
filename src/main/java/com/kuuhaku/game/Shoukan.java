@@ -1988,7 +1988,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (effect.getSide() != null) {
 				Hand h = hands.get(effect.getSide());
-				if (h.getLockTime(Lock.EFFECT) > 0 && !effect.isDebuff()) {
+				if (h.getLockTime(Lock.EFFECT) > 0) {
 					if (!(effect.getSource() instanceof EffectHolder<?> e) || !e.hasTrueEffect()) {
 						continue;
 					}

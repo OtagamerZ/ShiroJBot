@@ -37,7 +37,6 @@ import java.util.function.Supplier;
 public final class EffectOverTime implements Comparable<EffectOverTime>, Closeable {
 	private final @Nullable Drawable<?> source;
 	private final Supplier<Side> sideSupplier;
-	private final boolean debuff;
 	private final BiConsumer<EffectOverTime, EffectParameters> effect;
 	private final EnumSet<Trigger> triggers;
 	private Integer turns;
@@ -46,33 +45,24 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 	private boolean closed;
 
 	public EffectOverTime(Drawable<?> source, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
-		this(
-				source, false, () -> null, effect,
-				null, null,
-				EnumSet.of(Trigger.NONE, triggers)
-		);
+		this(source, null, effect, triggers);
 	}
 
-	public EffectOverTime(Drawable<?> source, boolean debuff, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
-		this(
-				source, debuff, debuff ? source.getSide()::getOther : source::getSide, effect,
-				null, null,
-				EnumSet.of(Trigger.NONE, triggers)
-		);
+	public EffectOverTime(Drawable<?> source, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
+		this(source, side, effect, -1, -1, triggers);
 	}
 
-	public EffectOverTime(Drawable<?> source, boolean debuff, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, int turns, int limit, Trigger... triggers) {
+	public EffectOverTime(Drawable<?> source, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, int turns, int limit, Trigger... triggers) {
 		this(
-				source, debuff, () -> side, effect,
+				source, () -> side, effect,
 				turns < 0 ? null : turns,
 				limit < 0 ? null : limit,
 				EnumSet.of(turns > -1 ? Trigger.ON_TURN_BEGIN : Trigger.NONE, triggers)
 		);
 	}
 
-	public EffectOverTime(@Nullable Drawable<?> source, boolean debuff, Supplier<Side> sideSupplier, BiConsumer<EffectOverTime, EffectParameters> effect, Integer turns, Integer limit, EnumSet<Trigger> triggers) {
+	public EffectOverTime(@Nullable Drawable<?> source, Supplier<Side> sideSupplier, BiConsumer<EffectOverTime, EffectParameters> effect, Integer turns, Integer limit, EnumSet<Trigger> triggers) {
 		this.source = source;
-		this.debuff = debuff;
 		this.sideSupplier = sideSupplier;
 		this.effect = effect;
 		this.turns = turns;
@@ -96,10 +86,6 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 
 	public Side getSide() {
 		return sideSupplier.get();
-	}
-
-	public boolean isDebuff() {
-		return debuff;
 	}
 
 	public BiConsumer<EffectOverTime, EffectParameters> getEffect() {
