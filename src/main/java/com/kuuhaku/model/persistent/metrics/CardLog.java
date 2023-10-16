@@ -16,69 +16,82 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.shiro;
+package com.kuuhaku.model.persistent.metrics;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.user.Kawaipon;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "analytics")
-public class Analytics extends DAO<Analytics> {
+@Table(name = "card_log")
+public class CardLog extends DAO<CardLog> {
+	public enum Source {
+		SPAWN, GACHA, OTHER
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private int id;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "source", nullable = false)
-	private String source;
+	private Source source;
 
-	@Column(name = "label", nullable = false)
-	private String label;
+	@ManyToOne(optional = false)
+	@PrimaryKeyJoinColumn(name = "card_id")
+	@Fetch(FetchMode.JOIN)
+	private Card card;
 
-	@Column(name = "value", nullable = false)
-	private int value;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@PrimaryKeyJoinColumn(name = "kawaipon_uid")
+	@Fetch(FetchMode.JOIN)
+	private Kawaipon kawaipon;
 
-	@Column(name = "moment", nullable = false)
-	private ZonedDateTime moment = ZonedDateTime.now(ZoneId.of("GMT-3"));
+	@Column(name = "date", nullable = false)
+	private ZonedDateTime date;
+
+	public CardLog() {
+	}
+
+	public CardLog(Kawaipon kawaipon, Card card, Source source) {
+		this.kawaipon = kawaipon;
+		this.card = card;
+		this.source = source;
+	}
 
 	public int getId() {
 		return id;
 	}
 
-	public String getLabel() {
-		return label;
+	public Source getSource() {
+		return source;
 	}
 
-	public double getValue() {
-		return value;
+	public Card getCard() {
+		return card;
 	}
 
-	public ZonedDateTime getMoment() {
-		return moment;
+	public Kawaipon getKawaipon() {
+		return kawaipon;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Analytics analytics = (Analytics) o;
-		return id == analytics.id;
+		CardLog cardLog = (CardLog) o;
+		return id == cardLog.id;
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
-	}
-
-	public static void register(String source, String label, int value) {
-		Analytics a = new Analytics();
-		a.source = source;
-		a.label = label;
-		a.value = value;
-		a.save();
 	}
 }

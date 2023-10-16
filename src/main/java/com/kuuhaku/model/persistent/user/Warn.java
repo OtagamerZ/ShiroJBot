@@ -44,8 +44,8 @@ public class Warn extends DAO<Warn> {
 	@Column(name = "pardoner")
 	private String pardoner;
 
-	@Column(name = "occurence", nullable = false)
-	private ZonedDateTime occurence = ZonedDateTime.now(ZoneId.of("GMT-3"));
+	@Column(name = "date", nullable = false)
+	private ZonedDateTime date = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@PrimaryKeyJoinColumns({
@@ -85,8 +85,8 @@ public class Warn extends DAO<Warn> {
 		this.pardoner = pardoner.getId();
 	}
 
-	public ZonedDateTime getOccurence() {
-		return occurence;
+	public ZonedDateTime getDate() {
+		return date;
 	}
 
 	public Profile getProfile() {
