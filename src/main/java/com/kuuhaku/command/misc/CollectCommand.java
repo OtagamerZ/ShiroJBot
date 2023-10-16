@@ -18,14 +18,12 @@
 
 package com.kuuhaku.command.misc;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.common.SingleUseReference;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.metrics.CardLog;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
@@ -72,11 +70,5 @@ public class CollectCommand implements Executable {
 
 		acc.consumeCR(kc.getPrice(), "Collected " + kc);
 		event.channel().sendMessage(locale.get("success/collected", event.user().getAsMention(), kc)).queue();
-
-		try {
-			new CardLog(kp, kc.getCard(), CardLog.Source.SPAWN).save();
-		} catch (Exception e) {
-			Constants.LOGGER.warn(e, e);
-		}
 	}
 }
