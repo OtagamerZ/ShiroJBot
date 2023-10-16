@@ -32,6 +32,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.gacha.Gacha;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.*;
+import com.kuuhaku.model.persistent.metrics.CardLog;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
@@ -210,6 +211,12 @@ public class GachaCommand implements Executable {
 			}
 		} finally {
 			g2d.translate(265, 0);
+		}
+
+		try {
+			new CardLog(kp, card, CardLog.Source.GACHA).save();
+		} catch (Exception e) {
+			Constants.LOGGER.warn(e, e);
 		}
 	}
 
