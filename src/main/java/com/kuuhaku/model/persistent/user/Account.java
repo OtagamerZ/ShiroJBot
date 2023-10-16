@@ -181,6 +181,10 @@ public class Account extends DAO<Account> implements Blacklistable {
 		this.balance = balance;
 	}
 
+	public long getUsable() {
+		return getBalance() - getReserved();
+	}
+
 	public long getDebit() {
 		return debit;
 	}

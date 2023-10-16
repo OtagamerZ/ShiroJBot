@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.MarketOrder;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.util.API;
 import com.kuuhaku.util.Utils;
@@ -106,6 +107,10 @@ public class Market {
 	}
 
 	public boolean buy(int id) {
+		return buy(null, id);
+	}
+
+	public boolean buy(MarketOrder order, int id) {
 		StashedCard sc = DAO.find(StashedCard.class, id);
 		if (sc == null) return false;
 
@@ -128,6 +133,16 @@ public class Market {
 			}
 		} catch (Exception e) {
 			buyer.consumeCR(price, "Purchased " + sc);
+		}
+
+		if (order != null) {
+			buyer.getUser().openPrivateChannel()
+					.flatMap(c -> c.sendMessage(seller.getEstimateLocale().get("success/market_order_filled", sc, price)))
+					.queue(null, Utils::doNothing);
+
+			if (order.getId() > 0) {
+				order.delete();
+			}
 		}
 
 		sc.setKawaipon(buyer.getKawaipon());

@@ -45,7 +45,10 @@ public class MarketOrder extends DAO<MarketOrder> {
 	private Kawaipon kawaipon;
 
 	@Column(name = "buyout_price", nullable = false)
-	private int buyout = 0;
+	private int buyout;
+
+	public MarketOrder() {
+	}
 
 	public MarketOrder(Kawaipon kawaipon, Card card, int buyout) {
 		this.kawaipon = kawaipon;
@@ -69,6 +72,18 @@ public class MarketOrder extends DAO<MarketOrder> {
 		return buyout;
 	}
 
+	public StashedCard search() {
+		return DAO.query(StashedCard.class, """
+				SELECT sc
+				FROM StashedCard sc
+				WHERE sc.card = ?2
+				  AND sc.kawaipon.uid <> ?1
+				  AND sc.price IS NOT NULL
+				  AND sc.price BETWEEN 1 AND ?3
+				ORDER BY sc.price
+				""", kawaipon.getUid(), card, buyout);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -80,5 +95,16 @@ public class MarketOrder extends DAO<MarketOrder> {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+
+	public static MarketOrder search(StashedCard sc) {
+		return DAO.query(MarketOrder.class, """
+				SELECT mo
+				FROM MarketOrder mo
+				WHERE mo.card = ?2
+				  AND mo.kawaipon.uid <> ?1
+				  AND mo.buyout >= ?3
+				ORDER BY mo.buyout DESC
+				""", sc.getKawaipon().getUid(), sc.getCard(), sc.getPrice());
 	}
 }
