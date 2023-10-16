@@ -408,7 +408,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			// Original: \(([^()]|(?R))*\)
 			return parse(pat)
 					.replaceAll("\\(([^()]|\\(([^()]|\\(([^()]|\\(([^()])*\\))*\\))*\\))*\\)", "**$0**")
-					.replaceAll("[(]{2}(.+)[)]{2}", "($1)");
+					.replaceAll("[(]{2}(.+?)[)]{2}", "($1)");
 		}
 
 		return "";
