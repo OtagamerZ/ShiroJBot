@@ -71,9 +71,6 @@
         <class>com.kuuhaku.model.persistent.shoukan.Archetype</class>
         <class>com.kuuhaku.model.persistent.shoukan.LocalizedArch</class>
 
-        <!-- METRICS -->
-        <class>com.kuuhaku.model.persistent.metrics.CardLog</class>
-
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 
