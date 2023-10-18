@@ -111,6 +111,7 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 	public Target[] targets(Trigger trigger) {
 		if (targets.length == 0) throw new TargetException();
 
+		consumeShields();
 		Target[] out = Arrays.stream(targets())
 				.filter(t -> !t.skip().get())
 				.filter(t -> t.index() > -1 && t.trigger() == trigger)
