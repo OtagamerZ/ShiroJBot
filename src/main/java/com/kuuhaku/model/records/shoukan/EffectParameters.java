@@ -161,6 +161,19 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 		return out;
 	}
 
+	public Target[] withTrigger(Trigger trigger) {
+		if (targets.length == 0) throw new TargetException();
+
+		Target[] out = Arrays.stream(targets())
+				.filter(t -> !t.skip().get())
+				.filter(t -> t.index() > -1 && t.trigger() == trigger)
+				.filter(t -> t.card() != null)
+				.toArray(Target[]::new);
+
+		if (out.length == 0) throw new TargetException();
+		return out;
+	}
+
 	public boolean isDeferred(Trigger trigger) {
 		return referee != null && referee.trigger() == trigger;
 	}
