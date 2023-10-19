@@ -151,6 +151,11 @@ public class SlotColumn {
 			if (!card.isFlipped()) {
 				h.getGame().trigger(Trigger.ON_SUMMON, card.asSource(Trigger.ON_SUMMON));
 			}
+
+			h.getCards().remove(card);
+			h.getGraveyard().remove(card);
+			h.getRealDeck().remove(card);
+			game.getBanned().remove(card);
 		}
 	}
 

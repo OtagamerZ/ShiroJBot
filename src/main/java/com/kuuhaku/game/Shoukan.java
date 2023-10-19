@@ -2558,12 +2558,6 @@ public class Shoukan extends GameInstance<Phase> {
 			slts.get(0).setBottom(card);
 		}
 
-		Hand h = getHands().get(side);
-		h.getCards().remove(card);
-		h.getGraveyard().remove(card);
-		h.getRealDeck().remove(card);
-		getBanned().remove(card);
-
 		return true;
 	}
 
