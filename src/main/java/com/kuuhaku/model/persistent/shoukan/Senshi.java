@@ -31,10 +31,7 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
-import com.kuuhaku.model.common.shoukan.CardExtra;
-import com.kuuhaku.model.common.shoukan.Hand;
-import com.kuuhaku.model.common.shoukan.SlotColumn;
-import com.kuuhaku.model.common.shoukan.TrapSpell;
+import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -1235,6 +1232,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public void executeAssert(Trigger trigger) {
 		if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE)) return;
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
+
+		if (trigger == ON_INITIALIZE) {
+			if (getBase().getTags().contains("AUGMENT") && !(this instanceof AugmentSenshi)) {
+				replace(new AugmentSenshi(this, Senshi.getRandom(getGame().getRng())));
+				return;
+			}
+		}
 
 		try {
 			CachedScriptManager csm = getCSM();

@@ -28,12 +28,12 @@ import java.util.Objects;
 public class AugmentSenshi extends Senshi implements Proxy<Senshi> {
 	private final Senshi original;
 
-	public AugmentSenshi(Senshi self, Senshi s) {
-		super(self.getId(), self.getCard(), self.getRace(), self.getBase());
+	public AugmentSenshi(Senshi aug, Senshi original) {
+		super(aug.getId(), aug.getCard(), aug.getRace(), aug.getBase());
 
-		this.original = s;
-		while (!self.getEquipments().isEmpty()) {
-			getEquipments().add(self.getEquipments().removeFirst());
+		this.original = original;
+		while (!aug.getEquipments().isEmpty()) {
+			getEquipments().add(aug.getEquipments().removeFirst());
 		}
 	}
 
