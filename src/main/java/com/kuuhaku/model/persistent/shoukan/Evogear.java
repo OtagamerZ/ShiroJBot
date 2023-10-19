@@ -559,7 +559,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			leech.getLeeches().remove(this);
 		}
 
-		state = 0b11;
+		state = 0b10;
 	}
 
 	@Override

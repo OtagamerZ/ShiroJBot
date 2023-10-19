@@ -1008,6 +1008,12 @@ public class Hand {
 			   && discard.size() >= card.getSCCost();
 	}
 
+	public boolean canPay(int mp, int hp, int sc) {
+		return getMP() >= mp
+			   && getHP() >= hp
+			   && discard.size() >= sc;
+	}
+
 	public RegDeg getRegDeg() {
 		return regdeg;
 	}

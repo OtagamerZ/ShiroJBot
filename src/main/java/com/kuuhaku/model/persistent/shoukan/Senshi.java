@@ -1329,7 +1329,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		leech = null;
 		lastInteraction = null;
 
-		byte base = 0b11;
+		byte base = 0b10;
 		base = (byte) Bit.set(base, 4, isSealed());
 
 		state = base;

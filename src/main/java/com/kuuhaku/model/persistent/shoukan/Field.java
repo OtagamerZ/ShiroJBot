@@ -217,7 +217,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public void reset() {
-		state = 0b11;
+		state = 0b10;
 	}
 
 	@Override
