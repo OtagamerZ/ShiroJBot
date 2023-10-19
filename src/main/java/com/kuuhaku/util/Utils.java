@@ -560,7 +560,7 @@ public abstract class Utils {
 		List<T> out = new ArrayList<>();
 		RandomGenerator random = Constants.DEFAULT_RNG.get();
 
-		for (int i = 0; i < elements && aux.size() > 0; i++) {
+		for (int i = 0; i < elements && !aux.isEmpty(); i++) {
 			int index = Calc.rng(aux.size() - 1, random);
 
 			out.add(aux.get(index));
@@ -582,7 +582,7 @@ public abstract class Utils {
 		List<T> aux = new ArrayList<>(list);
 		List<T> out = new ArrayList<>();
 
-		for (int i = 0; i < elements && aux.size() > 0; i++) {
+		for (int i = 0; i < elements && !aux.isEmpty(); i++) {
 			int index = Calc.rng(aux.size() - 1, rng);
 
 			T inst = aux.get(index);
