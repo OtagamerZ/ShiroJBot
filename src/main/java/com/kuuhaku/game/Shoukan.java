@@ -2667,6 +2667,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.modMP(curr.getBase().mpGain().get());
 		curr.applyVoTs();
 		curr.reduceOriginCooldown(1);
+		curr.allowAttack(true);
 
 		if (curr.getOrigin().synergy() == Race.GHOST && getTurn() % 2 == 0) {
 			curr.modHP(200);
