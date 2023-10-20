@@ -2228,7 +2228,7 @@ public class Shoukan extends GameInstance<Phase> {
 			} else if (curr.selectionPending()) {
 				getChannel().sendMessage(getString("error/pending_action")).queue();
 				return;
-			} else if (getPhase() == Phase.COMBAT || getTurn() == 1) {
+			} else if (getPhase() == Phase.COMBAT || !curr.canAttack()) {
 				if (curr.getLockTime(Lock.TAUNT) > 0) {
 					List<SlotColumn> yours = getSlots(curr.getSide());
 					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
