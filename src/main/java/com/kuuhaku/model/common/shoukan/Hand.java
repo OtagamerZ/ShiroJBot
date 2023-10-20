@@ -1080,7 +1080,7 @@ public class Hand {
 		return Bit.on(state, 3);
 	}
 
-	public void allowAttack(boolean canAttack) {
+	public void setCanAttack(boolean canAttack) {
 		state = Bit.set(state, 3, canAttack);
 	}
 
