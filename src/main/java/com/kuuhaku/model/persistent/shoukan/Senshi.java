@@ -275,7 +275,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean hasCharm(Charm charm, boolean pop) {
-		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return false;
+		if (isSupporting()) return false;
 
 		for (Evogear e : equipments) {
 			if (e.hasCharm(charm)) {
