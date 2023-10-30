@@ -1372,14 +1372,12 @@ public class Shoukan extends GameInstance<Phase> {
 						boolean unstop = source.hasFlag(Flag.UNSTOPPABLE, true);
 
 						int enemyStats = target.getActiveAttr(dbl);
-						int eEquipStats = target.getActiveEquips(dbl);
-						int eCombatStats = enemyStats;
 						if (source.hasFlag(Flag.IGNORE_EQUIP, true)) {
-							eCombatStats -= eEquipStats;
+							enemyStats -= target.getActiveEquips(dbl);
 						}
 
-						if (!unstop && dmg < eCombatStats) {
-							outcome = getString("str/combat_defeat", dmg, eCombatStats);
+						if (!unstop && dmg < enemyStats) {
+							outcome = getString("str/combat_defeat", dmg, enemyStats);
 							trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
 
 							for (Senshi s : source.getNearby()) {
@@ -1421,8 +1419,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 								dmg = 0;
 							} else {
-								if (unstop || dmg > eCombatStats) {
-									outcome = getString("str/combat_success", dmg, eCombatStats);
+								if (unstop || dmg > enemyStats) {
+									outcome = getString("str/combat_success", dmg, enemyStats);
 									trigger(ON_HIT, source.asSource(ON_HIT), target.asTarget(ON_LOSE));
 
 									if (target.isDefending() || target.hasFlag(Flag.NO_DAMAGE, true)) {
@@ -1436,10 +1434,10 @@ public class Shoukan extends GameInstance<Phase> {
 									}
 
 									if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
-										if (eCombatStats == 0) {
+										if (enemyStats == 0) {
 											target.setStun(5);
 										} else {
-											target.setStun(Utils.clamp(dmg / eCombatStats, 1, 5));
+											target.setStun(Utils.clamp(dmg / enemyStats, 1, 5));
 										}
 
 										dmg = 0;
@@ -1449,7 +1447,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 									win = true;
 								} else {
-									outcome = getString("str/combat_clash", dmg, eCombatStats);
+									outcome = getString("str/combat_clash", dmg, enemyStats);
 									trigger(ON_CLASH, source.asSource(ON_SUICIDE), target.asTarget(ON_LOSE));
 
 									for (Senshi s : target.getNearby()) {
