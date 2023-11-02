@@ -401,7 +401,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					 AND e.mana > 0
 					 AND e.effect IS NOT NULL
 					 AND e.target_type = ?1
-					""", targetType.name()
+					ORDER BY hashtextextended(e.card_id, ?2)
+					""", targetType.name(), SERIAL
 			);
 		}
 
