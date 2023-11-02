@@ -1238,7 +1238,7 @@ public class Hand {
 		if (d == null) return;
 
 		try {
-			act.accept(d);
+			act.acceptThrows(d);
 		} catch (RuntimeException e) {
 			if (e.getCause() instanceof ActivationException ex) {
 				throw ex;

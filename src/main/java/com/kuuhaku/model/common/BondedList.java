@@ -143,7 +143,7 @@ public class BondedList<T> extends TreeList<T> {
 		List<T> aux = new ArrayList<>();
 
 		int before = size();
-		for (T t : c) {
+		for (T t : List.copyOf(c)) {
 			add(index++, t, aux);
 		}
 

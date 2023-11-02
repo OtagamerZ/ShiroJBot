@@ -275,7 +275,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean hasCharm(Charm charm, boolean pop) {
-		if (hasFlag(Flag.NO_EQUIP) || isSupporting()) return false;
+		if (isSupporting()) return false;
 
 		for (Evogear e : equipments) {
 			if (e.hasCharm(charm)) {
@@ -1105,7 +1105,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			targeted = true;
 		}
 
-		if (trigger == ON_ACTIVATE && (getCooldown() > 0 || isSupporting())) return false;
+		if (trigger == ON_ACTIVATE && getCooldown() > 0) return false;
 
 		Shoukan game = getGame();
 		if (base.isLocked(trigger) || trigger == NONE) {
