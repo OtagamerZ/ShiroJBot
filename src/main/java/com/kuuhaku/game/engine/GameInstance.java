@@ -45,15 +45,18 @@ import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Set;
+import java.util.SplittableRandom;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.random.RandomGenerator;
 import java.util.regex.Pattern;
 
 public abstract class GameInstance<T extends Enum<T>> {
 	public static final Set<String> PLAYERS = ConcurrentHashMap.newKeySet();
 	private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 	private final long seed = ThreadLocalRandom.current().nextLong();
+	private final RandomGenerator rng = new SplittableRandom(seed);
 
 	private CompletableFuture<Void> exec;
 	private DelayedAction timeout;
@@ -206,6 +209,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 		}
 
 		return null;
+	}
+
+	public RandomGenerator getRng() {
+		return rng;
 	}
 
 	public final boolean isClosed() {

@@ -83,14 +83,12 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 public class Shoukan extends GameInstance<Phase> {
 	private static final String GIF_PATH = "https://raw.githubusercontent.com/OtagamerZ/ShoukanAssets/master/gifs/";
-	private final RandomGenerator rng = new SplittableRandom(getSeed());
 
 	private final Arcade arcade;
 	private final Arena arena;
@@ -393,7 +391,7 @@ public class Shoukan extends GameInstance<Phase> {
 			else if (curr.getLockTime(Lock.BLIND) > 0) {
 				d.setAvailable(false);
 				curr.getGraveyard().add(d.copy());
-				curr.modLockTime(Lock.BLIND, Calc.chance(50) ? -1 : 0);
+				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
 				CardState state = switch (args.getString("mode")) {
 					case "d" -> CardState.DEFENSE;
@@ -431,7 +429,7 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
-			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(20, rng));
+			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && chance(20));
 			slot.setBottom(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
 					case "d" -> s.setDefending(true);
@@ -451,7 +449,7 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
-			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && Calc.chance(20, rng));
+			chosen.setAvailable(curr.getOrigin().synergy() == Race.HERALD && chance(20));
 			slot.setTop(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
 					case "d" -> s.setDefending(true);
@@ -502,7 +500,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (hand.getLockTime(Lock.BLIND) > 0) {
 				d.setAvailable(false);
 				hand.getGraveyard().add(d.copy());
-				hand.modLockTime(Lock.BLIND, Calc.chance(50) ? -1 : 0);
+				hand.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
 				CardState state = switch (args.getString("mode")) {
 					case "d" -> CardState.DEFENSE;
@@ -651,7 +649,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
 				d.setAvailable(false);
 				curr.getGraveyard().add(d.copy());
-				curr.modLockTime(Lock.BLIND, Calc.chance(50) ? -1 : 0);
+				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
 				SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
 				if (!slot.hasTop()) {
@@ -715,7 +713,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
 				d.setAvailable(false);
 				curr.getGraveyard().add(d.copy());
-				curr.modLockTime(Lock.BLIND, Calc.chance(50) ? -1 : 0);
+				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 				reportEvent("str/equip_card_fail", true, curr.getName(), d);
 				return true;
 			}
@@ -899,7 +897,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.getDiscard().add(chosen);
 
 		if (curr.getOrigin().synergy() == Race.FAMILIAR) {
-			if (Calc.chance(33, rng)) {
+			if (chance(33)) {
 				List<? extends EffectHolder<?>> available = curr.getCards().stream()
 						.filter(d -> d instanceof EffectHolder<?>)
 						.filter(Drawable::isAvailable)
@@ -907,7 +905,7 @@ public class Shoukan extends GameInstance<Phase> {
 						.toList();
 
 				if (!available.isEmpty()) {
-					Utils.getRandomEntry(rng, available).getStats().getMana().set(-1);
+					Utils.getRandomEntry(getRng(), available).getStats().getMana().set(-1);
 				}
 			}
 		}
@@ -942,14 +940,14 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.getDiscard().addAll(cards);
 
 		if (curr.getOrigin().synergy() == Race.FAMILIAR) {
-			if (Calc.chance(25, rng)) {
+			if (chance(25)) {
 				List<? extends EffectHolder<?>> available = curr.getCards().stream()
 						.filter(d -> d instanceof EffectHolder<?>)
 						.filter(Drawable::isAvailable)
 						.map(d -> (EffectHolder<?>) d)
 						.toList();
 
-				Utils.getRandomEntry(rng, available).getStats().getMana().set(-1);
+				Utils.getRandomEntry(getRng(), available).getStats().getMana().set(-1);
 			}
 		}
 
@@ -993,7 +991,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
 				d.setAvailable(false);
 				curr.getGraveyard().add(d.copy());
-				curr.modLockTime(Lock.BLIND, Calc.chance(50) ? -1 : 0);
+				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
 				reportEvent("str/activate_card_fail", true, curr.getName(), d);
 				return true;
@@ -1298,7 +1296,7 @@ public class Shoukan extends GameInstance<Phase> {
 								int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
 								op.getRegDeg().add(val);
 
-								if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(20, rng)) {
+								if (you.getOrigin().synergy() == Race.FIEND && chance(20)) {
 									op.getRegDeg().add(val);
 								}
 							}
@@ -1368,7 +1366,7 @@ public class Shoukan extends GameInstance<Phase> {
 						dmg = 0;
 						win = true;
 					} else {
-						boolean dbl = op.getOrigin().synergy() == Race.CYBERBEAST && Calc.chance(20, rng);
+						boolean dbl = op.getOrigin().synergy() == Race.CYBERBEAST && chance(20);
 						boolean unstop = source.hasFlag(Flag.UNSTOPPABLE, true);
 
 						int enemyStats = target.getActiveAttr(dbl);
@@ -1397,19 +1395,19 @@ public class Shoukan extends GameInstance<Phase> {
 							int block = target.getBlock();
 							int dodge = target.getDodge();
 
-							if (Calc.chance(100 - source.getHitChance(), rng)) {
+							if (chance(100 - source.getHitChance())) {
 								outcome = getString("str/combat_miss");
 								trigger(ON_MISS, source.asSource(ON_MISS));
 
 								dmg = 0;
-							} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_BLOCK, true) || Calc.chance(block, rng))) {
+							} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_BLOCK, true) || chance(block))) {
 								outcome = getString("str/combat_block", block);
 								trigger(null, source.asSource(), target.asTarget(ON_BLOCK));
 
 								source.setStun(1);
 
 								dmg = 0;
-							} else if (!source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_DODGE, true) || Calc.chance(dodge, rng))) {
+							} else if (!source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_DODGE, true) || chance(dodge))) {
 								outcome = getString("str/combat_dodge", dodge);
 								trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
 
@@ -1587,7 +1585,7 @@ public class Shoukan extends GameInstance<Phase> {
 								int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
 								target.getRegDeg().add(val);
 
-								if (you.getOrigin().synergy() == Race.FIEND && Calc.chance(20, rng)) {
+								if (you.getOrigin().synergy() == Race.FIEND && chance(20)) {
 									target.getRegDeg().add(val);
 								}
 							}
@@ -1709,8 +1707,12 @@ public class Shoukan extends GameInstance<Phase> {
 		return true;
 	}
 
-	public RandomGenerator getRng() {
-		return rng;
+	public boolean chance(double percentage) {
+		if (getCurrent().getOrigin().synergy() == Race.DJINN) {
+			return Calc.chance(percentage, 2, getRng());	
+		}
+
+		return Calc.chance(percentage, 1, getRng());
 	}
 
 	public Arcade getArcade() {
@@ -2652,7 +2654,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (arcade == Arcade.INSTABILITY) {
 			int affected = Math.min((int) Math.ceil(getTurn() / 2d), 8);
-			List<SlotColumn> chosen = Utils.getRandomN(Utils.flatten(arena.getSlots().values()), affected, 1, rng);
+			List<SlotColumn> chosen = Utils.getRandomN(Utils.flatten(arena.getSlots().values()), affected, 1);
 
 			for (SlotColumn slt : chosen) {
 				slt.setLock(1);
@@ -2676,7 +2678,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.getStats().expireMods();
 
 		if (curr.getLockTime(Lock.BLIND) > 0) {
-			Utils.shuffle(curr.getCards(), rng);
+			Utils.shuffle(curr.getCards());
 		}
 
 		List<Senshi> allCards = getCards();
@@ -2694,7 +2696,7 @@ public class Shoukan extends GameInstance<Phase> {
 					if (s.isBerserk()) {
 						List<Senshi> valid = allCards.stream().filter(d -> !d.equals(s)).toList();
 						if (!valid.isEmpty()) {
-							attack(s, Utils.getRandomEntry(rng, valid), null, true);
+							attack(s, Utils.getRandomEntry(getRng(), valid), null, true);
 							s.setAvailable(false);
 						}
 					}

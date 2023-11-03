@@ -829,7 +829,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public void awake() {
 		int curr = Bit.get(state, 2, 4);
 
-		if (Calc.chance(100d / (curr + 1), getGame().getRng())) {
+		if (getGame().chance(100d / (curr + 1))) {
 			state = Bit.set(state, 2, 0, 4);
 		}
 	}
@@ -1152,7 +1152,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (hasEffect() && getEffect().contains(trigger.name())) {
-				if (isStunned() && Calc.chance(25, getGame().getRng())) {
+				if (isStunned() && getGame().chance(25)) {
 					if (!global) {
 						game.getChannel().sendMessage(game.getString("str/effect_stunned", this)).queue();
 					}
@@ -1290,7 +1290,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 		}
 
-		if (Calc.chance(getDodge(), getGame().getRng())) {
+		if (getGame().chance(getDodge())) {
 			Shoukan game = getGame();
 			game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
 					this.isFlipped() ? game.getLocale().get("str/a_card") : this

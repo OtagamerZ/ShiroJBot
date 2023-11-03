@@ -246,15 +246,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public String getDescription(I18N locale) {
-		if (hand != null && hand.getOrigin().synergy() == Race.DJINN) {
-			return locale.get("str/djinn_spell") + switch (targetType) {
-				case NONE -> "";
-				case ALLY -> " ( {ally} )";
-				case ENEMY -> " ( {enemy} )";
-				case BOTH -> " ( {ally} {enemy} )";
-			};
-		}
-
 		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
 	}
@@ -393,18 +384,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public String getEffect() {
-		if (hand != null && getGame() != null && hand.getOrigin().synergy() == Race.DJINN) {
-			return DAO.queryNative(String.class, """
-					SELECT e.effect
-					FROM evogear e
-					WHERE e.spell
-					 AND e.mana > 0
-					 AND e.effect IS NOT NULL
-					 AND e.target_type = ?1
-					""", targetType.name()
-			);
-		}
-
 		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getEffect(), source.getBase().getEffect());
 	}

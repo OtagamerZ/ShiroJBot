@@ -69,6 +69,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
@@ -1270,5 +1271,9 @@ public abstract class Utils {
 		}
 
 		return null;
+	}
+
+	public static int digits(double number) {
+		return BigDecimal.valueOf(number - (int) number).precision();
 	}
 }

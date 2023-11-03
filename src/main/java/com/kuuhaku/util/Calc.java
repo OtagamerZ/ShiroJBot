@@ -200,10 +200,19 @@ public abstract class Calc {
 	}
 
 	public static boolean chance(double percentage, RandomGenerator rng) {
+		return chance(percentage, 1, rng);
+	}
+
+	public static boolean chance(double percentage, int rolls, RandomGenerator rng) {
 		if (percentage >= 100) return true;
 		else if (percentage <= 0) return false;
 
-		return rng(100d, rng) < percentage;
+		double out = 100;
+		for (int i = 0; i < rolls; i++) {
+			out = Math.min(out, rng(100d, rng));
+		}
+
+		return round(out, 2) < round(percentage, 2);
 	}
 
 	public static <T> T getRandom(List<Pair<T, Double>> values) {

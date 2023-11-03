@@ -694,7 +694,7 @@
 											 .filter(Senshi::isFusion)
 											 .count();
 								 } else if (origin.synergy() == Race.FEY) {
-									 m = (int) (mp * (Calc.chance(20, h.getGame().getRng()) ? 1.5 : 1));
+									 m = (int) (mp * (h.getGame().chance(20) ? 1.5 : 1));
 								 } else if (origin.synergy() == Race.GHOST && h.getGame().getTurn() % 2 == 1) {
 									 m += 1;
 								 }
