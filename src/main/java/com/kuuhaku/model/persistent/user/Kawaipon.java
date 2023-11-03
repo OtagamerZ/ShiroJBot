@@ -204,12 +204,28 @@ public class Kawaipon extends DAO<Kawaipon> {
 		return new Pair<>(((Number) vals[0]).intValue(), ((Number) vals[1]).intValue());
 	}
 
-	public List<StashedCard> getTrash() {
+	public List<StashedCard> getLocked() {
 		return DAO.queryAll(StashedCard.class, """
 				SELECT s
 				FROM StashedCard s
 				WHERE s.kawaipon.uid = ?1
-				  AND s.trash = TRUE
+				  AND s.locked = TRUE
+				""", uid);
+	}
+
+	public List<StashedCard> getExtras() {
+		return DAO.queryAll(StashedCard.class, """
+				SELECT x.sc
+				FROM (
+				         SELECT sc AS sc
+				              , row_number() OVER (PARTITION BY sc.card.id ORDER BY kc.quality DESC) AS copy
+				         FROM StashedCard sc
+				                  LEFT JOIN KawaiponCard kc ON kc.uuid = sc.uuid
+				         WHERE sc.kawaipon.uid = ?1
+				           AND sc.deck.id IS NULL
+				           and sc.price = 0
+				     ) x
+				WHERE x.copy > 3
 				""", uid);
 	}
 
@@ -220,7 +236,6 @@ public class Kawaipon extends DAO<Kawaipon> {
 				WHERE s.kawaipon.uid = ?1
 				  AND s.deck.id IS NULL
 				  AND s.price = 0
-				  AND s.trash = FALSE
 				""", uid);
 	}
 
@@ -231,7 +246,7 @@ public class Kawaipon extends DAO<Kawaipon> {
 				WHERE s.kawaipon.uid = ?1
 				  AND s.deck.id IS NULL
 				  AND s.price = 0
-				  AND s.trash = FALSE
+				  AND s.locked = FALSE
 				  AND s.accountBound = FALSE
 				""", uid);
 	}

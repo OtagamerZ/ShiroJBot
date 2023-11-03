@@ -44,7 +44,7 @@ import java.util.List;
 		path = "remove",
 		category = Category.MISC
 )
-@Signature("<card:word:r> <confirm:word>[confirm]")
+@Signature("<card:word:r>")
 public class StashRemoveCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -63,7 +63,7 @@ public class StashRemoveCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(args.has("confirm"), locale, event.channel(), kp.getNotInUse(), card, event.user())
+		Utils.selectOption(locale, event.channel(), kp.getNotInUse(), card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();

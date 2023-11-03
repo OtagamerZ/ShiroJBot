@@ -733,10 +733,6 @@ public abstract class Utils {
 	}
 
 	public static CompletionStage<StashedCard> selectOption(I18N locale, GuildMessageChannel channel, Collection<StashedCard> cards, Card card, User user) {
-		return selectOption(false, locale, channel, cards, card, user);
-	}
-
-	public static CompletionStage<StashedCard> selectOption(boolean skip, I18N locale, GuildMessageChannel channel, Collection<StashedCard> cards, Card card, User user) {
 		List<StashedCard> matches = cards.stream()
 				.filter(sc -> sc.getCard().equals(card))
 				.sorted(
@@ -746,7 +742,7 @@ public abstract class Utils {
 				).toList();
 
 		if (matches.isEmpty()) return CompletableFuture.failedStage(new NoResultException());
-		if (matches.size() == 1 || skip) return CompletableFuture.completedStage(matches.get(0));
+		if (matches.size() == 1) return CompletableFuture.completedStage(matches.get(0));
 
 		AtomicInteger i = new AtomicInteger();
 		return selectOption(locale, channel, matches, sc -> new StashItem(locale, sc).toString(i.getAndIncrement()), user);
@@ -826,8 +822,8 @@ public abstract class Utils {
 	}
 
 	public static Pair<CommandLine, Options> getCardCLI(I18N locale, String[] args, boolean market) {
-		String[] longOp = {"name", "rarity", "anime", "chrome", "kawaipon", "senshi", "evogear", "field", "valid", "trash", "min", "max", "mine"};
-		String[] shortOp = {"n", "r", "a", "c", "k", "s", "e", "f", "v", "t", "gt", "lt", "m"};
+		String[] longOp = {"name", "rarity", "anime", "chrome", "kawaipon", "senshi", "evogear", "field", "valid", "locked", "min", "max", "mine"};
+		String[] shortOp = {"n", "r", "a", "c", "k", "s", "e", "f", "v", "l", "gt", "lt", "m"};
 
 		Options opt = new Options();
 		List<String> hasParam = List.of("n", "r", "a", "gt", "lt");

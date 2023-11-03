@@ -42,7 +42,7 @@ import java.util.List;
 		path = "add",
 		category = Category.MISC
 )
-@Signature("<card:word:r> <price:number:r> <confirm:word>[confirm]")
+@Signature("<card:word:r> <price:number:r>")
 public class MarketAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -67,7 +67,7 @@ public class MarketAddCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(args.has("confirm"), locale, event.channel(), kp.getTradeable(), card, event.user())
+		Utils.selectOption(locale, event.channel(), kp.getTradeable(), card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();

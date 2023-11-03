@@ -39,11 +39,11 @@ import java.util.List;
 
 @Command(
 		name = "stash",
-		path = "trash",
+		path = "unlock",
 		category = Category.MISC
 )
-@Signature("<action:word:r>[add,remove] <card:word:r> <confirm:word>[confirm]")
-public class StashTrashCommand implements Executable {
+@Signature("<card:word:r>")
+public class StashUnlockCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
@@ -61,23 +61,17 @@ public class StashTrashCommand implements Executable {
 			return;
 		}
 
-		boolean add = args.getString("action").equals("add");
-
-		Utils.selectOption(args.has("confirm"), locale, event.channel(), add ? kp.getNotInUse() : kp.getTrash(), card, event.user())
+		Utils.selectOption(locale, event.channel(), kp.getLocked(), card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 						return;
 					}
 
-					sc.setTrash(add);
+					sc.unlock();
 					sc.save();
 
-					if (sc.isTrash()) {
-						event.channel().sendMessage(locale.get("success/card_trash")).queue();
-					} else {
-						event.channel().sendMessage(locale.get("success/card_untrash")).queue();
-					}
+					event.channel().sendMessage(locale.get("success/card_unlock")).queue();
 				})
 				.exceptionally(t -> {
 					if (!(t.getCause() instanceof NoResultException)) {

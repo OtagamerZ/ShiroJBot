@@ -69,7 +69,7 @@ public class StashedCard extends DAO<StashedCard> {
 	private int price = 0;
 
 	@Column(name = "trash", nullable = false)
-	private boolean trash = false;
+	private boolean locked = false;
 
 	@Column(name = "account_bound", nullable = false)
 	private boolean accountBound = false;
@@ -152,12 +152,20 @@ public class StashedCard extends DAO<StashedCard> {
 		this.price = price;
 	}
 
-	public boolean isTrash() {
-		return trash;
+	public boolean isLocked() {
+		return locked;
 	}
 
-	public void setTrash(boolean trash) {
-		this.trash = trash;
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
+	public void lock() {
+		this.locked = true;
+	}
+
+	public void unlock() {
+		this.locked = false;
 	}
 
 	public boolean isAccountBound() {

@@ -52,7 +52,7 @@ import java.util.concurrent.ExecutionException;
 )
 @Signature({
 		"<user:user:r> <value:number:r>",
-		"<user:user:r> <card:word:r> <confirm:word>[confirm]"
+		"<user:user:r> <card:word:r>"
 })
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class TransferCommand implements Executable {
@@ -106,7 +106,7 @@ public class TransferCommand implements Executable {
 			}
 
 			CompletableFuture<StashedCard> select = new CompletableFuture<>();
-			Utils.selectOption(args.has("confirm"), locale, event.channel(), kp.getTradeable(), card, event.user())
+			Utils.selectOption(locale, event.channel(), kp.getTradeable(), card, event.user())
 					.thenAccept(sc -> {
 						if (sc == null) {
 							event.channel().sendMessage(locale.get("error/invalid_value")).queue();

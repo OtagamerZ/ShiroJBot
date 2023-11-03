@@ -16,19 +16,17 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.deck;
+package com.kuuhaku.command.stash;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -36,36 +34,21 @@ import com.ygimenez.json.JSONObject;
 import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
 
 @Command(
-		name = "deck",
-		path = "remove",
+		name = "stash",
+		path = "lock",
 		category = Category.MISC
 )
-@Signature({
-		"<action:word:r>[all]",
-		"<card:word:r> <amount:number>",
-		"<card:word:r>"
-})
-@Requires(Permission.MESSAGE_EMBED_LINKS)
-public class DeckRemoveCommand implements Executable {
+@Signature("<card:word:r>")
+public class StashLockCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck d = data.profile().getAccount().getCurrentDeck();
-		if (d == null) {
-			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-			return;
-		}
-
-		if (args.has("action")) {
-			DAO.applyNative("UPDATE stashed_card SET deck_id = NULL WHERE kawaipon_uid = ?1 AND deck_id = ?2",
-					event.user().getId(), d.getId()
-			);
-
-			event.channel().sendMessage(locale.get("success/deck_clear")).queue();
+		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
+		if (kp.getStashUsage() == 0) {
+			event.channel().sendMessage(locale.get("error/empty_stash")).queue();
 			return;
 		}
 
@@ -78,47 +61,17 @@ public class DeckRemoveCommand implements Executable {
 			return;
 		}
 
-		List<StashedCard> stash = DAO.queryAll(StashedCard.class,
-				"SELECT s FROM StashedCard s WHERE s.kawaipon.uid = ?1 AND s.deck.id = ?2 AND s.card.id = ?3",
-				event.user().getId(), d.getId(), card.getId()
-		);
-		if (stash.isEmpty()) {
-			event.channel().sendMessage(locale.get("error/not_in_deck")).queue();
-			return;
-		}
-
-		if (args.has("amount")) {
-			int qtd = args.getInt("amount");
-			if (qtd < 1) {
-				event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
-				return;
-			}
-
-			for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
-				StashedCard sc = stash.get(i);
-				if (sc.getCard().equals(card)) {
-					sc.setDeck(null);
-					sc.save();
-
-					j++;
-				}
-			}
-
-			event.channel().sendMessage(locale.get("success/deck_remove")).queue();
-			return;
-		}
-
-		Utils.selectOption(locale, event.channel(), stash, card, event.user())
+		Utils.selectOption(locale, event.channel(), kp.getNotInUse(), card, event.user())
 				.thenAccept(sc -> {
 					if (sc == null) {
 						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 						return;
 					}
 
-					sc.setDeck(null);
+					sc.lock();
 					sc.save();
 
-					event.channel().sendMessage(locale.get("success/deck_remove")).queue();
+					event.channel().sendMessage(locale.get("success/card_lock")).queue();
 				})
 				.exceptionally(t -> {
 					if (!(t.getCause() instanceof NoResultException)) {

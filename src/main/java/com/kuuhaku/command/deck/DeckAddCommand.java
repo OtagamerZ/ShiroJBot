@@ -51,7 +51,7 @@ import java.util.List;
 )
 @Signature({
 		"<card:word:r> <amount:number>",
-		"<card:word:r> <confirm:word>[confirm]"
+		"<card:word:r>"
 })
 @Requires({
 		Permission.MESSAGE_ATTACH_FILES,
@@ -110,7 +110,7 @@ public class DeckAddCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(args.has("confirm"), locale, event.channel(), stash, card, event.user())
+		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					Deck dk = d.refresh();
 					if (!addToDeck(event, locale, dk, sc)) return;

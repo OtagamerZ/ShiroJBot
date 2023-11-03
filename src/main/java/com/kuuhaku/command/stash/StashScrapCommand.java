@@ -58,7 +58,7 @@ import java.util.stream.Collectors;
 		category = Category.MISC
 )
 @Signature({
-		"<action:word:r>[trash]",
+		"<action:word:r>[all]",
 		"<cards:text:r>"
 })
 public class StashScrapCommand implements Executable {
@@ -71,7 +71,7 @@ public class StashScrapCommand implements Executable {
 		}
 
 		if (args.has("action")) {
-			confirm(locale, kp.getTrash(), event, kp.getAccount());
+			confirm(locale, kp.getExtras(), event, kp.getAccount());
 			return;
 		}
 
@@ -83,7 +83,7 @@ public class StashScrapCommand implements Executable {
 			if (card == null) return;
 
 			CompletableFuture<Boolean> success = new CompletableFuture<>();
-			Utils.selectOption(args.has("confirm"), locale, event.channel(), stash, card, event.user())
+			Utils.selectOption(locale, event.channel(), stash, card, event.user())
 					.thenAccept(sc -> {
 						if (sc == null) {
 							event.channel().sendMessage(locale.get("error/invalid_value")).queue();
