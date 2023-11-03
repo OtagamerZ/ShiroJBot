@@ -68,7 +68,7 @@ public class StashedCard extends DAO<StashedCard> {
 	@Column(name = "price", nullable = false)
 	private int price = 0;
 
-	@Column(name = "trash", nullable = false)
+	@Column(name = "locked", nullable = false)
 	private boolean locked = false;
 
 	@Column(name = "account_bound", nullable = false)
