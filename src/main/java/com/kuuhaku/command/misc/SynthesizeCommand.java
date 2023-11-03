@@ -91,7 +91,12 @@ public class SynthesizeCommand implements Executable {
 		List<StashedCard> cards = new ArrayList<>();
 		List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
 
-		String[] ids = args.getString("cards").split(" ");
+		String[] ids = args.getString("cards").split(" +");
+		if (ids.length > 10) {
+			event.channel().sendMessage(locale.get("error/too_many_items", 10)).queue();
+			return;
+		}
+
 		for (String id : ids) {
 			Card c = DAO.find(Card.class, id.toUpperCase());
 			if (c == null) {
