@@ -215,17 +215,14 @@ public class Kawaipon extends DAO<Kawaipon> {
 
 	public List<StashedCard> getExtras() {
 		return DAO.queryAll(StashedCard.class, """
-				SELECT x.sc
-				FROM (
-				         SELECT sc AS sc
-				              , row_number() OVER (PARTITION BY sc.card.id ORDER BY kc.quality DESC) AS copy
-				         FROM StashedCard sc
-				                  LEFT JOIN KawaiponCard kc ON kc.uuid = sc.uuid
-				         WHERE sc.kawaipon.uid = ?1
-				           AND sc.deck.id IS NULL
-				           and sc.price = 0
-				     ) x
-				WHERE x.copy > 3
+				SELECT sc
+				     , row_number() OVER (PARTITION BY sc.card.id ORDER BY kc.quality DESC) AS copy
+				FROM StashedCard sc
+				         LEFT JOIN KawaiponCard kc ON kc.uuid = sc.uuid
+				WHERE sc.kawaipon.uid = ?1
+				  AND sc.deck.id IS NULL
+				  AND sc.price = 0
+				  AND copy > 3
 				""", uid);
 	}
 
