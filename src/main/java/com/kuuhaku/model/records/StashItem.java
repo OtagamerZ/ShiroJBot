@@ -40,8 +40,8 @@ public record StashItem(I18N locale, StashedCard sc) {
 			location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
 		} else if (sc.getPrice() > 0) {
 			location = " (" + locale.get("str/market", sc.getPrice()) + ")";
-		} else if (sc.isLock()) {
-			location = " \uD83D\uDDD1️";
+		} else if (sc.isLocked()) {
+			location = " \uD83D\uDCCC";
 		}
 
 		String rarity = locale.get("type/" + sc.getType());
