@@ -20,7 +20,7 @@ CREATE OR REPLACE PROCEDURE fix_card_duplicates()
     LANGUAGE sql
 AS
 $$
-INSERT INTO stashed_card (type, card_id, deck_id, kawaipon_uid, price, uuid, trash, account_bound)
+INSERT INTO stashed_card (type, card_id, deck_id, kawaipon_uid, price, uuid, locked, account_bound)
 SELECT 'KAWAIPON',
        x.card_id,
        null,
