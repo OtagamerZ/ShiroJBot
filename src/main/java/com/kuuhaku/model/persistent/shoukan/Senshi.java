@@ -1384,15 +1384,15 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					);
 				}
 
+				if (!desc.isEmpty()) {
+					drawDescription(g1, locale);
+				}
+
 				if (!hasFlag(Flag.HIDE_STATS)) {
 					card.drawCosts(g1);
 					if (!isSupporting()) {
 						card.drawAttributes(g1, !desc.isEmpty());
 					}
-				}
-
-				if (!desc.isEmpty()) {
-					drawDescription(g1, locale);
 				}
 
 				if (hand != null && getGame() != null) {
