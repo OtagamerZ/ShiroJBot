@@ -172,11 +172,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		Hand h = getHand();
 		boolean inGame = h.getGame() != null;
 
-		int equips = 1;
+		int equips;
 		EffectHolder<?> source = this;
 		if (this instanceof Evogear e && e.getEquipper() != null) {
 			source = e.getEquipper();
 			equips = e.getEquipper().getEquipments().size();
+		} else {
+			equips = 1;
 		}
 
 		Map<String, Object> values = Map.ofEntries(
@@ -191,7 +193,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Map.entry("dfs", source.getDfs()),
 				Map.entry("ddg", source.getDodge()),
 				Map.entry("blk", source.getBlock()),
-				Map.entry("pow", source.getPower() / equips),
+				Map.entry("pow", source.getPower()),
 				Map.entry("data", getStats().getData())
 		);
 
@@ -219,7 +221,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				for (Object type : types) {
 					props.compute(String.valueOf(type), (k, v) -> {
-						int value = Calc.round(NumberUtils.toDouble(val) * getPower());
+						int value = Calc.round(NumberUtils.toDouble(val) * getPower() / equips);
 
 						if (v == null) {
 							return value;

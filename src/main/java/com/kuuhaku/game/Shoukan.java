@@ -1308,13 +1308,6 @@ public class Shoukan extends GameInstance<Phase> {
 								}
 							}
 							case LIFESTEAL -> lifesteal += c.getValue(e.getTier());
-							case BARRAGE -> {
-								if (announce) {
-									for (int i = 0; i < c.getValue(e.getTier()); i++) {
-										attack(source, target, dmg / 10, false);
-									}
-								}
-							}
 						}
 					}
 				}
@@ -1484,6 +1477,21 @@ public class Shoukan extends GameInstance<Phase> {
 				if (you.getOrigin().synergy() == Race.DAEMON) {
 					you.modMP((int) (damage / op.getBase().hp() * 0.05));
 				}
+
+				for (Evogear e : source.getEquipments()) {
+					JSONArray charms = e.getCharms();
+
+					for (Object o : charms) {
+						Charm c = Charm.valueOf(String.valueOf(o));
+						if (c == Charm.BARRAGE) {
+							if (announce) {
+								for (int i = 0; i < c.getValue(e.getTier()); i++) {
+									attack(source, target, dmg / 10, false);
+								}
+							}
+						}
+					}
+				}
 			}
 		} finally {
 			if (announce && source.getSlot().getIndex() != -1 && !source.hasFlag(Flag.FREE_ACTION, true)) {
@@ -1597,13 +1605,6 @@ public class Shoukan extends GameInstance<Phase> {
 								}
 							}
 							case LIFESTEAL -> lifesteal += c.getValue(e.getTier());
-							case BARRAGE -> {
-								if (announce) {
-									for (int i = 0; i < c.getValue(e.getTier()); i++) {
-										attack(source, target, dmg / 10, false);
-									}
-								}
-							}
 						}
 					}
 				}
@@ -1668,6 +1669,21 @@ public class Shoukan extends GameInstance<Phase> {
 				if (you.getOrigin().synergy() == Race.DAEMON) {
 					you.modMP((int) (damage / target.getBase().hp() * 0.05));
 				}
+
+				for (Evogear e : source.getEquipments()) {
+					JSONArray charms = e.getCharms();
+
+					for (Object o : charms) {
+						Charm c = Charm.valueOf(String.valueOf(o));
+						if (c == Charm.BARRAGE) {
+							if (announce) {
+								for (int i = 0; i < c.getValue(e.getTier()); i++) {
+									attack(source, target, dmg / 10, false);
+								}
+							}
+						}
+					}
+				}
 			}
 		} finally {
 			if (announce && source.getSlot().getIndex() != -1 && !source.hasFlag(Flag.FREE_ACTION, true)) {
@@ -1709,7 +1725,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public boolean chance(double percentage) {
 		if (getCurrent().getOrigin().synergy() == Race.DJINN) {
-			return Calc.chance(percentage, 2, getRng());	
+			return Calc.chance(percentage, 2, getRng());
 		}
 
 		return Calc.chance(percentage, 1, getRng());
