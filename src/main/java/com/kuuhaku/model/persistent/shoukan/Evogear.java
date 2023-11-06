@@ -584,9 +584,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					);
 				}
 
+				drawDescription(g1, locale);
 				drawCosts(g1);
 				drawAttributes(g1, !desc.isEmpty());
-				drawDescription(g1, locale);
 
 				if (!getCharms().isEmpty()) {
 					List<BufferedImage> icons = charms.stream()
