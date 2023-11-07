@@ -23,7 +23,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import java.awt.*;
 
 public class ColorlessEmbedBuilder extends EmbedBuilder {
-	private static final Color color = Color.decode("#2f3136");
+	private static final Color color = new Color(0x2F3136);
 
 	public ColorlessEmbedBuilder() {
 		setColor(color);
