@@ -36,6 +36,8 @@ public class AutoEmbedBuilder extends EmbedBuilder {
 	private final Embed e;
 
 	public AutoEmbedBuilder(Embed embed) {
+		if (embed == null) throw new IllegalArgumentException();
+
 		e = embed;
 
 		if (e.title() != null) {
