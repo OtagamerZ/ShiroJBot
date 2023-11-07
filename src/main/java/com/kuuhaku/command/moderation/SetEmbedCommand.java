@@ -24,6 +24,7 @@ import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
@@ -38,10 +39,14 @@ import net.dv8tion.jda.api.JDA;
 public class SetEmbedCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		GuildSettings settings = data.config().getSettings();
+
 		try {
 			AutoEmbedBuilder embed = new AutoEmbedBuilder(args.getString("json"));
 
-			data.config().getSettings().setEmbed(embed);
+			settings.setEmbed(embed);
+			settings.save();
+
 			event.channel().sendMessage(locale.get("success/set_embed")).queue();
 		} catch (IllegalArgumentException e) {
 			event.channel().sendMessage(locale.get("error/invalid_json")).queue();
