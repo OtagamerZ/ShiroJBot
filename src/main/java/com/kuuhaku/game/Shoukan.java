@@ -2523,6 +2523,7 @@ public class Shoukan extends GameInstance<Phase> {
 							.setEphemeral(true)
 							.sendFiles(FileUpload.fromData(IO.getBytes(curr.renderChoices(), "png"), "choices.png"))
 							.queue();
+
 					return;
 				}
 
