@@ -214,10 +214,10 @@ public class Kawaipon extends DAO<Kawaipon> {
 	}
 
 	public List<StashedCard> getExtras() {
-		List<String> ids = DAO.queryAllNative(String.class, """
-				SELECT x.card_id
+		List<Integer> ids = DAO.queryAllNative(Integer.class, """
+				SELECT x.id
 				FROM (
-				         SELECT sc.card_id
+				         SELECT sc.id
 				              , row_number() OVER (PARTITION BY sc.card_id ORDER BY kc.quality DESC) AS copy
 				         FROM stashed_card sc
 				                  LEFT JOIN kawaipon_card kc ON kc.uuid = sc.uuid
