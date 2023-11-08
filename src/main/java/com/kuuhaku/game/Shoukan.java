@@ -2321,70 +2321,70 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				if (curr.canUseDestiny()) {
-					if (Utils.equalsAny(curr.getOrigin().major(), Race.MACHINE, Race.MYSTICAL)) {
-						buttons.put(Utils.parseEmoji("⚡"), w -> {
-							if (curr.selectionPending()) {
-								getChannel().sendMessage(getString("error/pending_choice")).queue();
-								return;
-							} else if (curr.selectionPending()) {
-								getChannel().sendMessage(getString("error/pending_action")).queue();
-								return;
-							}
+				if (curr.canUseDestiny() && !Utils.equalsAny(curr.getOrigin().major(), Race.MACHINE, Race.MYSTICAL, Race.DIVINITY)) {
+					buttons.put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
+						if (curr.selectionPending()) {
+							getChannel().sendMessage(getString("error/pending_choice")).queue();
+							return;
+						} else if (curr.selectionPending()) {
+							getChannel().sendMessage(getString("error/pending_action")).queue();
+							return;
+						}
 
-							List<Drawable<?>> valid = curr.getCards().stream()
-									.filter(d -> {
-										if (d instanceof Evogear e && e.isAvailable()) {
-											return e.isSpell() == (curr.getOrigin().major() == Race.MYSTICAL);
-										}
+						BondedList<Drawable<?>> deque = curr.getRealDeck();
+						List<Drawable<?>> cards = new ArrayList<>();
+						cards.add(deque.getFirst());
+						if (deque.size() > 2) cards.add(deque.get((deque.size() - 1) / 2));
+						if (deque.size() > 1) cards.add(deque.getLast());
 
-										return false;
-									})
-									.toList();
+						Drawable<?> d = curr.requestChoice(cards);
+						if (d != null) {
+							curr.getCards().add(d);
+							deque.remove(d);
 
-							if (valid.isEmpty()) {
-								getChannel().sendMessage(getString("err/empty_selection")).queue();
-								return;
-							}
+							curr.showHand();
+							reportEvent("str/destiny_draw", true, curr.getName());
+						}
 
-							((Evogear) curr.requestChoice(valid)).setFlag(Flag.EMPOWERED);
-							curr.setUsedDestiny(true);
-
-							if (curr.getOrigin().major() == Race.MACHINE) {
-								reportEvent("str/martial_empower", true, curr.getName());
-							} else {
-								reportEvent("str/arcane_empower", true, curr.getName());
-							}
-						});
-					} else if (curr.getOrigin().major() != Race.DIVINITY) {
-						buttons.put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
-							if (curr.selectionPending()) {
-								getChannel().sendMessage(getString("error/pending_choice")).queue();
-								return;
-							} else if (curr.selectionPending()) {
-								getChannel().sendMessage(getString("error/pending_action")).queue();
-								return;
-							}
-
-							BondedList<Drawable<?>> deque = curr.getRealDeck();
-							List<Drawable<?>> cards = new ArrayList<>();
-							cards.add(deque.getFirst());
-							if (deque.size() > 2) cards.add(deque.get((deque.size() - 1) / 2));
-							if (deque.size() > 1) cards.add(deque.getLast());
-
-							Drawable<?> d = curr.requestChoice(cards);
-							if (d != null) {
-								curr.getCards().add(d);
-								deque.remove(d);
-
-								curr.showHand();
-								reportEvent("str/destiny_draw", true, curr.getName());
-							}
-
-							curr.setUsedDestiny(true);
-						});
-					}
+						curr.setUsedDestiny(true);
+					});
 				}
+			}
+
+			if (curr.canUseDestiny() && Utils.equalsAny(curr.getOrigin().major(), Race.MACHINE, Race.MYSTICAL)) {
+				buttons.put(Utils.parseEmoji("⚡"), w -> {
+					if (curr.selectionPending()) {
+						getChannel().sendMessage(getString("error/pending_choice")).queue();
+						return;
+					} else if (curr.selectionPending()) {
+						getChannel().sendMessage(getString("error/pending_action")).queue();
+						return;
+					}
+
+					List<Drawable<?>> valid = curr.getCards().stream()
+							.filter(d -> {
+								if (d instanceof Evogear e && e.isAvailable()) {
+									return e.isSpell() == (curr.getOrigin().major() == Race.MYSTICAL);
+								}
+
+								return false;
+							})
+							.toList();
+
+					if (valid.isEmpty()) {
+						getChannel().sendMessage(getString("err/empty_selection")).queue();
+						return;
+					}
+
+					((Evogear) curr.requestChoice(valid)).setFlag(Flag.EMPOWERED);
+					curr.setUsedDestiny(true);
+
+					if (curr.getOrigin().major() == Race.MACHINE) {
+						reportEvent("str/martial_empower", true, curr.getName());
+					} else {
+						reportEvent("str/arcane_empower", true, curr.getName());
+					}
+				});
 			}
 
 			if (curr.getOriginCooldown() == 0) {
