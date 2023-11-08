@@ -220,9 +220,9 @@ public enum Trigger {
 	ON_ABILITY,
 
 	/**
-	 * On being empowered
+	 * On having flags altered
 	 **/
-	ON_EMPOWER,
+	ON_FLAG_ALTER,
 
 	/**
 	 * When targeted by a spell

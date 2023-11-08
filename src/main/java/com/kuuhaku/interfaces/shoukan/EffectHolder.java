@@ -127,6 +127,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	default void setFlag(Drawable<?> source, Flag flag) {
 		getStats().setFlag(source, flag, true, true);
+		getGame().trigger(Trigger.ON_FLAG_ALTER, asSource(Trigger.ON_FLAG_ALTER));
 	}
 
 	default void setFlag(Flag flag, boolean value) {
@@ -135,6 +136,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	default void setFlag(Drawable<?> source, Flag flag, boolean value) {
 		getStats().setFlag(source, flag, value, false);
+		getGame().trigger(Trigger.ON_FLAG_ALTER, asSource(Trigger.ON_FLAG_ALTER));
 	}
 
 	Hand getLeech();
