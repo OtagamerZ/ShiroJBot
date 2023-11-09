@@ -23,7 +23,7 @@ import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.enums.Currency;
 import net.dv8tion.jda.api.entities.User;
 
-@GachaType(value = "uncommon", price = 10, currency = Currency.ITEM, itemCostId = "UNCOMMON_SHARD")
+@GachaType(value = "uncommon", price = 10, prizes = 1, currency = Currency.ITEM, itemCostId = "UNCOMMON_SHARD")
 public class UncommonGacha extends Gacha {
 	public UncommonGacha(User u) {
 		super(DAO.queryAllUnmapped("""

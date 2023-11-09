@@ -23,7 +23,7 @@ import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.enums.Currency;
 import net.dv8tion.jda.api.entities.User;
 
-@GachaType(value = "legendary", price = 10, currency = Currency.ITEM, itemCostId = "LEGENDARY_SHARD")
+@GachaType(value = "legendary", price = 10, prizes = 1, currency = Currency.ITEM, itemCostId = "LEGENDARY_SHARD")
 public class LegendaryGacha extends Gacha {
 	public LegendaryGacha(User u) {
 		super(DAO.queryAllUnmapped("""

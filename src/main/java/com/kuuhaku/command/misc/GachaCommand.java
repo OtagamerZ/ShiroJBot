@@ -76,7 +76,16 @@ public class GachaCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			for (Class<?> gacha : Gacha.getGachas()) {
 				GachaType type = gacha.getAnnotation(GachaType.class);
-				eb.setTitle(locale.get("gacha/" + type.value()) + " (`" + type.value().toUpperCase() + "` - " + locale.get("currency/" + type.currency(), type.price()) + ")")
+
+				String price;
+				if (type.currency() == Currency.ITEM) {
+					UserItem item = DAO.find(UserItem.class, type.itemCostId());
+					price = type.price() + " " + item.getName(locale);
+				} else {
+					price = locale.get("currency/" + type.currency(), type.price());
+				}
+
+				eb.setTitle(locale.get("gacha/" + type.value()) + " (`" + type.value().toUpperCase() + "` - " + price + ")")
 						.setDescription(locale.get("gacha/" + type.value() + "_desc"))
 						.setFooter(acc.getBalanceFooter(locale));
 
