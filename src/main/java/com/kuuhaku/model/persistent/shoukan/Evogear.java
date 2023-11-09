@@ -157,8 +157,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	public JSONArray getCharms() {
 		if (hand != null && hand.getOrigin().synergy() == Race.DULLAHAN) {
-			stats.getAttrMult().set(charms.size() * 0.2);
-			charms.clear();
+			return new JSONArray();
 		}
 
 		return charms;
@@ -166,7 +165,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public boolean hasCharm(Charm charm) {
-		return charms.contains(charm.name());
+		return getCharms().contains(charm.name());
 	}
 
 	@Override
@@ -317,6 +316,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public double getAttrMult() {
 		double mult = stats.getAttrMult().get();
 		if (hand != null) {
+			if (hand.getOrigin().synergy() == Race.DULLAHAN) {
+				mult *= 1 + (0.2 * charms.size());
+			}
+
 			if (!spell && hand.getOrigin().hasMinor(Race.MACHINE)) {
 				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MACHINE) * 0.02);
 			}
@@ -589,7 +592,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				drawAttributes(g1, !desc.isEmpty());
 
 				if (!getCharms().isEmpty()) {
-					List<BufferedImage> icons = charms.stream()
+					List<BufferedImage> icons = getCharms().stream()
 							.map(String::valueOf)
 							.map(Charm::valueOf)
 							.map(Charm::getIcon)
