@@ -55,7 +55,6 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Column(name = "currency")
 	private Currency currency;
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "item_cost_id")
 	private String itemCostId;
 
