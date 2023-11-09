@@ -89,6 +89,10 @@ public class ItemShopCommand implements Executable {
 							fm.append(" | **" + locale.get("str/passive") + "**");
 						}
 
+						if (i.isAccountBound()) {
+							fm.append(" :lock:");
+						}
+
 						fm.appendLine(i.getDescription(locale));
 						fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "items.buy " + i.getId()));
 
