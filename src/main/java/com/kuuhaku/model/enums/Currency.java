@@ -19,5 +19,5 @@
 package com.kuuhaku.model.enums;
 
 public enum Currency {
-	CR, GEM
+	CR, GEM, ITEM
 }

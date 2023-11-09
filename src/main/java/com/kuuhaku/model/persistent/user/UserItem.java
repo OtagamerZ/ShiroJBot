@@ -55,6 +55,10 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Column(name = "currency")
 	private Currency currency;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "item_cost_id")
+	private String itemCostId;
+
 	@Language("ShiroSig")
 	@Column(name = "signature")
 	private String signature;
@@ -97,6 +101,14 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 
 	public Currency getCurrency() {
 		return currency;
+	}
+
+	public String getItemCostId() {
+		return itemCostId;
+	}
+
+	public UserItem getItemCost() {
+		return DAO.find(UserItem.class, itemCostId);
 	}
 
 	public boolean isPassive() {

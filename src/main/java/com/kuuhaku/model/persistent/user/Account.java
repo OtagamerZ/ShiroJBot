@@ -268,6 +268,14 @@ public class Account extends DAO<Account> implements Blacklistable {
 		});
 	}
 
+	public boolean hasEnough(int value, Currency currency, String item) {
+		if (currency == Currency.ITEM) {
+			return hasEnough(value, item);
+		} else {
+			return hasEnough(value, currency);
+		}
+	}
+
 	public boolean hasEnough(int value, Currency currency) {
 		if (value == 0) return true;
 		else if (value < 0) return false;
@@ -275,7 +283,15 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return switch (currency) {
 			case CR -> getBalance() - getReserved() - getDebit() >= value;
 			case GEM -> getGems() >= value;
+			case ITEM -> false;
 		};
+	}
+
+	public boolean hasEnough(int value, String item) {
+		if (value == 0) return true;
+		else if (value < 0) return false;
+
+		return getItemCount(item) >= value;
 	}
 
 	public List<Profile> getProfiles() {

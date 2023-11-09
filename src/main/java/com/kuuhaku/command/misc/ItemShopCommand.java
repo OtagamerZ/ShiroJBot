@@ -72,7 +72,11 @@ public class ItemShopCommand implements Executable {
 
 						FieldMimic fm = new FieldMimic(i.getName(locale), "");
 						if (i.getPrice() > 0 && i.getCurrency() != null) {
-							fm.appendLine(locale.get("str/price", locale.get("currency/" + i.getCurrency(), i.getPrice())));
+							if (i.getCurrency() == Currency.ITEM) {
+								fm.appendLine(locale.get("str/price", i.getPrice() + " " + i.getItemCost().getName(locale)));
+							} else {
+								fm.appendLine(locale.get("str/price", locale.get("currency/" + i.getCurrency(), i.getPrice())));
+							}
 						}
 
 						if (i.getStackSize() > 0) {
@@ -114,7 +118,7 @@ public class ItemShopCommand implements Executable {
 		} else if (item.getStackSize() > 0 && items.getOrDefault(item, 0) + amount > item.getStackSize()) {
 			event.channel().sendMessage(locale.get("error/stack_full")).queue();
 			return;
-		} else if (!acc.hasEnough(amount * item.getPrice(), item.getCurrency())) {
+		} else if (!acc.hasEnough(amount * item.getPrice(), item.getCurrency(), item.getItemCostId())) {
 			event.channel().sendMessage(locale.get("error/insufficient_" + item.getCurrency())).queue();
 			return;
 		} else if (amount <= 0) {
@@ -124,13 +128,19 @@ public class ItemShopCommand implements Executable {
 
 		try {
 			int value = amount * item.getPrice();
-			String price = locale.get("currency/" + item.getCurrency(), value);
+			String price;
+			if (item.getCurrency() == Currency.ITEM) {
+				price = locale.get("str/price", item.getPrice() + " " + item.getItemCost().getName(locale));
+			} else {
+				price = locale.get("currency/" + item.getCurrency(), value);
+			}
+
 			Utils.confirm(locale.get("question/item_buy", amount, item.getName(locale), price), event.channel(), w -> {
 						acc.addItem(item, amount);
-						if (item.getCurrency() == Currency.CR) {
-							acc.consumeCR(value, "Bought " + amount + "x " + item.getName(locale));
-						} else {
-							acc.consumeGems(value, "Bought " + amount + "x " + item.getName(locale));
+						switch (item.getCurrency()) {
+							case CR -> acc.consumeCR(value, "Bought " + amount + "x " + item.getName(locale));
+							case GEM -> acc.consumeGems(value, "Bought " + amount + "x " + item.getName(locale));
+							case ITEM -> acc.consumeItem(item.getItemCostId(), item.getPrice());
 						}
 
 						event.channel().sendMessage(locale.get("success/item_buy", amount, item.getName(locale))).queue();
