@@ -111,7 +111,7 @@ public class GachaCommand implements Executable {
 		}
 
 		GachaType type = chosen.getAnnotation(GachaType.class);
-		if (!acc.hasEnough(type.price(), type.currency())) {
+		if (!acc.hasEnough(type.price(), type.currency(), type.itemCostId())) {
 			event.channel().sendMessage(locale.get("error/insufficient_" + type.currency())).queue();
 			return;
 		} else if (acc.getKawaipon().getCapacity() < type.prizes()) {
@@ -135,10 +135,10 @@ public class GachaCommand implements Executable {
 							drawCard(g2d, locale, acc, type, s);
 						}
 
-						if (type.currency() == Currency.CR) {
-							acc.consumeCR(type.price(), "Gacha");
-						} else {
-							acc.consumeGems(type.price(), "Gacha");
+						switch (type.currency()) {
+							case CR -> acc.consumeCR(type.price(), "Gacha");
+							case GEM -> acc.consumeGems(type.price(), "Gacha");
+							case ITEM -> acc.consumeItem(type.itemCostId(), type.price());
 						}
 
 						g2d.dispose();

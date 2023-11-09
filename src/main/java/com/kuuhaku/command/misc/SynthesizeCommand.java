@@ -67,10 +67,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 		name = "synth",
 		category = Category.MISC
 )
-@Signature({
-		"<material:word:r>[common_shard,uncommon_shard,rare_shard,epic_shard,legendary_shard]",
-		"<cards:text:r>"
-})
+@Signature("<cards:text:r>")
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ATTACH_FILES
@@ -78,16 +75,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class SynthesizeCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		if (args.has("material")) {
-			synthShards(
-					locale,
-					event.channel(),
-					data.profile().getAccount(),
-					DAO.find(UserItem.class, args.getString("material").toUpperCase())
-			);
-			return;
-		}
-
 		List<StashedCard> cards = new ArrayList<>();
 		List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
 
@@ -253,37 +240,6 @@ public class SynthesizeCommand implements Executable {
 					));
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
-		}
-	}
-
-	private static void synthShards(I18N locale, MessageChannel channel, Account acc, UserItem shard) {
-		if (acc.getItemCount(shard.getId()) < 10) {
-			channel.sendMessage(locale.get("error/not_enough_shards")).queue();
-			return;
-		}
-
-		try {
-			Rarity r = Rarity.valueOf(shard.getId().split("_")[0]);
-
-			Utils.confirm(locale.get("question/synth_shards", shard.getName(locale), locale.get("rarity/" + r)), channel, w -> {
-						Kawaipon kp = acc.getKawaipon();
-						acc.consumeItem(shard, 10);
-
-						List<Card> pool = DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE c.anime.visible = TRUE AND c.rarity = ?1", r);
-						KawaiponCard kc = new KawaiponCard(Utils.getRandomEntry(pool), false);
-						kc.setKawaipon(kp);
-						kc.save();
-
-						new StashedCard(kp, kc).save();
-						channel.sendMessage(locale.get("success/synth", kc))
-								.addFiles(FileUpload.fromData(IO.getBytes(kc.render(), "png"), "synth.png"))
-								.queue();
-
-						return true;
-					}, acc.getUser()
-			);
-		} catch (PendingConfirmationException e) {
-			channel.sendMessage(locale.get("error/pending_confirmation")).queue();
 		}
 	}
 

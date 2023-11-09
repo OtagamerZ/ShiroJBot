@@ -16,24 +16,24 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.interfaces.annotations;
+package com.kuuhaku.model.common.gacha;
 
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.enums.Currency;
+import net.dv8tion.jda.api.entities.User;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.time.Month;
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface GachaType {
-	String value();
-	int price();
-	Currency currency();
-	String itemCostId() default "";
-	int prizes() default 3;
-	Month[] months() default {};
-	String post() default "";
+@GachaType(value = "common", price = 10, prizes = 1, currency = Currency.ITEM, itemCostId = "RARE_SHARD")
+public class RareGacha extends Gacha {
+	public RareGacha(User u) {
+		super(DAO.queryAllUnmapped("""
+				SELECT c.id
+				     , get_weight(c.id, ?1) AS weight
+				FROM card c
+				         INNER JOIN anime a on a.id = c.anime_id
+				WHERE a.visible
+				  AND get_rarity_index(c.rarity) = 3
+				ORDER BY weight, c.id
+				""", u.getId()));
+	}
 }
