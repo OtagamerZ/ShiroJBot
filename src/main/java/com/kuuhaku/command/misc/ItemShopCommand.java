@@ -144,7 +144,7 @@ public class ItemShopCommand implements Executable {
 						switch (item.getCurrency()) {
 							case CR -> acc.consumeCR(value, "Bought " + amount + "x " + item.getName(locale));
 							case GEM -> acc.consumeGems(value, "Bought " + amount + "x " + item.getName(locale));
-							case ITEM -> acc.consumeItem(item.getItemCostId(), item.getPrice());
+							case ITEM -> acc.consumeItem(item.getItemCostId(), amount);
 						}
 
 						event.channel().sendMessage(locale.get("success/item_buy", amount, item.getName(locale))).queue();
