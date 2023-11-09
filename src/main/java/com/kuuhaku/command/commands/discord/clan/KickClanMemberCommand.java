@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 @Command(
 		name = "remover",
 		aliases = {"remove"},
-		usage = "req_mention-id",
+		usage = "req_id",
 		category = Category.CLAN
 )
 @Requires({Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION})
