@@ -68,7 +68,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 		name = "synth",
 		category = Category.MISC
 )
-@Signature("<cards:text:r>")
+@Signature({
+		"<cards:text:r>",
+		"<anime:word:r>"
+})
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ATTACH_FILES
