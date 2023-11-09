@@ -289,7 +289,7 @@ public class SynthesizeCommand implements Executable {
 	private static void synthCollection(I18N locale, MessageChannel channel, Account acc, Anime anime) {
 		try {
 			Kawaipon kp = acc.getKawaipon();
-			Set<KawaiponCard> collection = kp.getCollection();
+			Set<KawaiponCard> collection = kp.getCollection(anime);
 
 			Utils.confirm(locale.get("question/synth_collection", anime.toString(), collection.size()), channel, w -> {
 						UserItem item = DAO.find(UserItem.class, "MASTERY_TOKEN");
