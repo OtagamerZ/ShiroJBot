@@ -34,6 +34,7 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
+import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
@@ -67,10 +68,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 		name = "synth",
 		category = Category.MISC
 )
-@Signature({
-		"<material:word:r>[common_shard,uncommon_shard,rare_shard,epic_shard,legendary_shard]",
-		"<cards:text:r>"
-})
+@Signature("<cards:text:r>")
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ATTACH_FILES
@@ -78,24 +76,22 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class SynthesizeCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		if (args.has("material")) {
-			synthShards(
-					locale,
-					event.channel(),
-					data.profile().getAccount(),
-					DAO.find(UserItem.class, args.getString("material").toUpperCase())
-			);
-			return;
-		}
-
-		List<StashedCard> cards = new ArrayList<>();
-		List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
+		Kawaipon kp = data.profile().getAccount().getKawaipon();
 
 		String[] ids = args.getString("cards").split(" +");
 		if (ids.length > 10) {
 			event.channel().sendMessage(locale.get("error/too_many_items", 10)).queue();
 			return;
+		} else if (ids.length == 1) {
+			Card c = DAO.find(Card.class, ids[0].toUpperCase());
+			if (c != null && c.getRarity() == Rarity.ULTIMATE && kp.isCollectionComplete(c.getAnime())) {
+				synthCollection(locale, event.channel(), kp.getAccount(), c.getAnime());
+				return;
+			}
 		}
+
+		List<StashedCard> cards = new ArrayList<>();
+		List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
 
 		for (String id : ids) {
 			Card c = DAO.find(Card.class, id.toUpperCase());
@@ -199,7 +195,7 @@ public class SynthesizeCommand implements Executable {
 								});
 								m.put(Utils.parseEmoji(Constants.ACCEPT), w -> {
 									if (!lock.get()) {
-										Kawaipon kp = data.profile().getAccount().getKawaipon();
+										Kawaipon k = kp.refresh();
 
 										Set<Rarity> rarities = EnumSet.noneOf(Rarity.class);
 										for (StashedCard sc : cards) {
@@ -228,17 +224,17 @@ public class SynthesizeCommand implements Executable {
 
 										if (Calc.chance(field)) {
 											Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
-											new StashedCard(kp, f).save();
+											new StashedCard(k, f).save();
 
 											event.channel().sendMessage(locale.get("success/synth", f))
-													.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png"))
+													.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, k.getAccount().getCurrentDeck()), "png"), "synth.png"))
 													.queue();
 										} else {
 											Evogear e = rollSynthesis(event.user(), mult, lucky.get());
-											new StashedCard(kp, e).save();
+											new StashedCard(k, e).save();
 
 											event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
-													.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png"))
+													.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, k.getAccount().getCurrentDeck()), "png"), "synth.png"))
 													.queue();
 										}
 
@@ -278,6 +274,29 @@ public class SynthesizeCommand implements Executable {
 						channel.sendMessage(locale.get("success/synth", kc))
 								.addFiles(FileUpload.fromData(IO.getBytes(kc.render(), "png"), "synth.png"))
 								.queue();
+
+						return true;
+					}, acc.getUser()
+			);
+		} catch (PendingConfirmationException e) {
+			channel.sendMessage(locale.get("error/pending_confirmation")).queue();
+		}
+	}
+
+	private static void synthCollection(I18N locale, MessageChannel channel, Account acc, Anime anime) {
+		try {
+			Kawaipon kp = acc.getKawaipon();
+			Set<KawaiponCard> collection = kp.getCollection();
+
+			Utils.confirm(locale.get("question/synth_collection", anime.toString(), collection.size()), channel, w -> {
+						UserItem item = DAO.find(UserItem.class, "MASTERY_TOKEN");
+						acc.addItem(item, collection.size());
+
+						for (KawaiponCard kc : collection) {
+							kc.delete();
+						}
+
+						channel.sendMessage(locale.get("str/received_item", collection.size(), item.getName(locale))).queue();
 
 						return true;
 					}, acc.getUser()

@@ -117,6 +117,17 @@ public class Kawaipon extends DAO<Kawaipon> {
 				""", account.getUid()));
 	}
 
+	public Set<KawaiponCard> getCollection(Anime a) {
+		return Set.copyOf(DAO.queryAll(KawaiponCard.class, """
+				SELECT kc
+				FROM KawaiponCard kc
+				LEFT JOIN StashedCard sc ON kc.uuid = sc.uuid
+				WHERE sc.id IS NULL
+				  AND kc.kawaipon.uid = ?1
+				  AND kc.card.anime.id = ?2
+				""", account.getUid(), a.getId()));
+	}
+
 	public KawaiponCard getCard(Card card, boolean chrome) {
 		return DAO.query(KawaiponCard.class, """
 				SELECT kc
@@ -202,6 +213,11 @@ public class Kawaipon extends DAO<Kawaipon> {
 		}
 
 		return new Pair<>(((Number) vals[0]).intValue(), ((Number) vals[1]).intValue());
+	}
+
+	public boolean isCollectionComplete(Anime anime) {
+		Pair<Integer, Integer> count = countCards(anime);
+		return Math.max(count.getFirst(), count.getSecond()) >= anime.getCount();
 	}
 
 	public List<StashedCard> getLocked() {

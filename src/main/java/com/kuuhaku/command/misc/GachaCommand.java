@@ -36,10 +36,7 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
-import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.*;
@@ -111,7 +108,7 @@ public class GachaCommand implements Executable {
 		}
 
 		GachaType type = chosen.getAnnotation(GachaType.class);
-		if (!acc.hasEnough(type.price(), type.currency())) {
+		if (!acc.hasEnough(type.price(), type.currency(), type.itemCostId())) {
 			event.channel().sendMessage(locale.get("error/insufficient_" + type.currency())).queue();
 			return;
 		} else if (acc.getKawaipon().getCapacity() < type.prizes()) {
@@ -121,7 +118,15 @@ public class GachaCommand implements Executable {
 
 		try {
 			Gacha gacha = chosen.getConstructor(User.class).newInstance(event.user());
-			Utils.confirm(locale.get("question/gacha", locale.get("gacha/" + type.value()).toLowerCase(), locale.get("currency/" + type.currency(), type.price())), event.channel(),
+			String price;
+			if (type.currency() == Currency.ITEM) {
+				UserItem item = DAO.find(UserItem.class, type.itemCostId());
+				price = type.price() + " " + item.getName(locale);
+			} else {
+				price = locale.get("currency/" + type.currency(), type.price());
+			}
+
+			Utils.confirm(locale.get("question/gacha", locale.get("gacha/" + type.value()).toLowerCase(), price), event.channel(),
 					w -> {
 						List<String> result = gacha.draw(acc);
 
@@ -135,10 +140,10 @@ public class GachaCommand implements Executable {
 							drawCard(g2d, locale, acc, type, s);
 						}
 
-						if (type.currency() == Currency.CR) {
-							acc.consumeCR(type.price(), "Gacha");
-						} else {
-							acc.consumeGems(type.price(), "Gacha");
+						switch (type.currency()) {
+							case CR -> acc.consumeCR(type.price(), "Gacha");
+							case GEM -> acc.consumeGems(type.price(), "Gacha");
+							case ITEM -> acc.consumeItem(type.itemCostId(), type.price());
 						}
 
 						g2d.dispose();

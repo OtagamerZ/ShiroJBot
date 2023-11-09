@@ -23,23 +23,16 @@ import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.enums.Currency;
 import net.dv8tion.jda.api.entities.User;
 
-@GachaType(value = "scrap", price = 1000, prizes = 4, currency = Currency.CR, post = """
-		import com.kuuhaku.model.persistent.user.KawaiponCard
-				  
-		if (card instanceof KawaiponCard) {
-			card.setQuality(0)
-			card.setChrome(false)
-		}
-		""")
-public class ScrapGacha extends Gacha {
-	public ScrapGacha(User u) {
+@GachaType(value = "rare", price = 10, currency = Currency.ITEM, itemCostId = "RARE_SHARD")
+public class RareGacha extends Gacha {
+	public RareGacha(User u) {
 		super(DAO.queryAllUnmapped("""
 				SELECT c.id
 				     , get_weight(c.id, ?1) AS weight
 				FROM card c
 				         INNER JOIN anime a on a.id = c.anime_id
 				WHERE a.visible
-				  AND get_rarity_index(c.rarity) = 1
+				  AND get_rarity_index(c.rarity) = 3
 				ORDER BY weight, c.id
 				""", u.getId()));
 	}
