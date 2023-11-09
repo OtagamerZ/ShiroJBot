@@ -33,7 +33,11 @@ import org.intellij.lang.annotations.Language;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Trade {
     private static final MultiMap<String, Trade> pending = new MultiMap<>(ConcurrentHashMap::new);
@@ -153,20 +157,24 @@ public class Trade {
                 GROUP BY i.id
                 """;
 
-        List<ItemAmount> rows = Utils.map(
+        Map<String, ItemAmount> rows = Utils.map(
                 DAO.queryAllUnmapped(query, left.getUid()),
                 o -> new ItemAmount(String.valueOf(o[0]), ((Number) o[1]).intValue())
-        );
-        for (ItemAmount ia : rows) {
-            if (leftItems.getCount(ia.id()) > ia.amount()) return false;
+        ).stream().collect(Collectors.toMap(ItemAmount::id, Function.identity()));
+
+        Set<String> items = Set.copyOf(leftItems);
+        for (String i : items) {
+            if (leftItems.getCount(i) > rows.get(i).amount()) return false;
         }
 
         rows = Utils.map(
                 DAO.queryAllUnmapped(query, right.getUid()),
                 o -> new ItemAmount(String.valueOf(o[0]), ((Number) o[1]).intValue())
-        );
-        for (ItemAmount ia : rows) {
-            if (rightItems.getCount(ia.id()) > ia.amount()) return false;
+        ).stream().collect(Collectors.toMap(ItemAmount::id, Function.identity()));
+
+        items = Set.copyOf(rightItems);
+        for (String i : items) {
+            if (rightItems.getCount(i) > rows.get(i).amount()) return false;
         }
 
         return true;
@@ -189,14 +197,16 @@ public class Trade {
                 WHERE sc.id IN ?2
                 """, right.getUid(), leftOffer);
 
-        for (String i : rightItems) {
+        Set<String> items = Set.copyOf(rightItems);
+        for (String i : items) {
             int amount = rightItems.getCount(i);
 
             left.addItem(i, amount);
             right.consumeItem(i, amount, true);
         }
 
-        for (String i : leftItems) {
+        items = Set.copyOf(leftItems);
+        for (String i : items) {
             int amount = leftItems.getCount(i);
 
             right.addItem(i, amount);
