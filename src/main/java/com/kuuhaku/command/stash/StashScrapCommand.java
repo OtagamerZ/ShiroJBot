@@ -148,17 +148,18 @@ public class StashScrapCommand implements Executable {
 									kc.delete();
 
 									Rarity rarity = kc.getCard().getRarity();
-									if (Calc.chance(100d / (rarity.getIndex() + 1))) {
+									if (Calc.chance(Math.pow(2.15, 7 - rarity.getIndex()))) {
 										UserItem item = DAO.find(UserItem.class, rarity.name() + "_SHARD");
 										if (item != null) {
-											items.add(item, 1);
+											int amount = Calc.rng(1, 3);
+											items.add(item, amount);
 										}
 									}
 
 									if (kc.isChrome() && Calc.chance(33)) {
 										UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
 										if (item != null) {
-											int amount = Calc.rng(3, 5);
+											int amount = Calc.rng(1, 3);
 											acc.addItem(item, amount);
 											items.add(item, amount);
 										}

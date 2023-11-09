@@ -32,7 +32,6 @@ public @interface GachaType {
 	String value();
 	int price();
 	Currency currency();
-	String itemCostId() default "";
 	int prizes() default 3;
 	Month[] months() default {};
 	String post() default "";

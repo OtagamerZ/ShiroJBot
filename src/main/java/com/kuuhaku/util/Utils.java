@@ -1072,10 +1072,6 @@ public abstract class Utils {
 		return t;
 	}
 
-	public static <T, R> R with(T t, Function<T, R> act) {
-		return act.apply(t);
-	}
-
 	public static <A, T extends Collection<A>> List<A> padList(T col, int pad) {
 		List<A> out = new ArrayList<>(col);
 		for (int i = 0; i < pad - col.size(); i++) {
