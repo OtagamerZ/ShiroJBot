@@ -62,7 +62,7 @@ public class InventoryCommand implements Executable {
 				i -> {
 					int has = items.getOrDefault(i, 0);
 
-					FieldMimic fm = new FieldMimic(i.getName(locale) + " (`" + i.getId() + "`)", "");
+					FieldMimic fm = new FieldMimic(i.getIcon() + i.getName(locale) + " (`" + i.getId() + "`)", "");
 					if (i.getStackSize() > 0) {
 						fm.appendLine(locale.get("str/item_has", has + "/" + i.getStackSize()));
 					} else {
