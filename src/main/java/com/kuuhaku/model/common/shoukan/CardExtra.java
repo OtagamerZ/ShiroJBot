@@ -270,18 +270,18 @@ public class CardExtra implements Cloneable {
 			return mod.isExpired();
 		};
 
-		removeExpired(check);
+		removeIf(check);
 	}
 
 	public void clear() {
-		removeExpired(o -> !(o instanceof PermMod));
+		removeIf(o -> !(o instanceof PermMod));
 	}
 
 	public void clear(Drawable<?> source) {
-		removeExpired(o -> !(o instanceof PermMod) && Objects.equals(o.getSource(), source));
+		removeIf(o -> !(o instanceof PermMod) && Objects.equals(o.getSource(), source));
 	}
 
-	public void removeExpired(Predicate<ValueMod> check) {
+	public void removeIf(Predicate<ValueMod> check) {
 		if (fieldCache == null) {
 			fieldCache = getClass().getDeclaredFields();
 		}
@@ -294,6 +294,8 @@ public class CardExtra implements Cloneable {
 			} catch (IllegalAccessException ignore) {
 			}
 		}
+
+		flags.clearExpired();
 	}
 
 	private double sum(Set<ValueMod> mods) {

@@ -25,26 +25,14 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.Objects;
 
-public class ValueMod implements Cloneable {
+public class FlagSource {
 	private final Drawable<?> source;
-	private double value;
-	private int expiration;
 
 	private final Side side;
 	private final int hash;
 
-	protected ValueMod(double value) {
-		this(null, value);
-	}
-
-	public ValueMod(Drawable<?> source, double value) {
-		this(source, value, -1);
-	}
-
-	public ValueMod(Drawable<?> source, double value, int expiration) {
+	public FlagSource(Drawable<?> source) {
 		this.source = source;
-		this.value = value;
-		this.expiration = expiration;
 		this.side = source == null ? null : source.getSide();
 
 		if (source instanceof Evogear e) {
@@ -58,75 +46,28 @@ public class ValueMod implements Cloneable {
 		}
 	}
 
-	public Drawable<?> getSource() {
-		return source;
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public <T extends Number> T asType(Class<T> klass) {
-		if (klass == Short.class) {
-			return klass.cast((short) value);
-		} else if (klass == Integer.class) {
-			return klass.cast((int) value);
-		} else if (klass == Long.class) {
-			return klass.cast((long) value);
-		} else if (klass == Float.class) {
-			return klass.cast((float) value);
-		} else if (klass == Double.class) {
-			return klass.cast(value);
-		} else if (klass == Byte.class) {
-			return klass.cast((byte) value);
-		}
-
-		throw new ClassCastException();
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
-
-	public int getExpiration() {
-		return expiration;
-	}
-
-	public void decExpiration() {
-		this.expiration--;
-	}
-
 	public boolean isExpired() {
 		if (side != null) {
 			if (source instanceof Evogear e && !e.isSpell() && (e.getEquipper() == null || e.posHash() != hash)) {
 				return true;
-			} else if (source instanceof Senshi s && s.posHash() != hash) {
-				return true;
 			}
+
+			return source instanceof Senshi s && s.posHash() != hash;
 		}
 
-		return value == 0 || expiration == 0;
+		return false;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		ValueMod valueMod = (ValueMod) o;
-		return hash == valueMod.hash && Objects.equals(source, valueMod.source) && side == valueMod.side;
+		FlagSource that = (FlagSource) o;
+		return hash == that.hash && Objects.equals(source, that.source) && side == that.side;
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(source, side, hash);
-	}
-
-	@Override
-	public ValueMod clone() {
-		try {
-			return (ValueMod) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new AssertionError();
-		}
 	}
 }
