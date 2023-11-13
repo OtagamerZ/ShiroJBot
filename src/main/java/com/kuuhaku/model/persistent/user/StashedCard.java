@@ -110,7 +110,14 @@ public class StashedCard extends DAO<StashedCard> {
 	}
 
 	public KawaiponCard getKawaiponCard() {
-		return DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.uuid = ?1", uuid);
+		KawaiponCard kc = DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.uuid = ?1", uuid);
+		if (kc == null && type == CardType.KAWAIPON) {
+			kc = new KawaiponCard(this.uuid, this.card, false);
+			kc.setKawaipon(kawaipon);
+			kc.save();
+		}
+
+		return kc;
 	}
 
 	public CardType getType() {
@@ -174,11 +181,7 @@ public class StashedCard extends DAO<StashedCard> {
 
 	@Override
 	public void beforeSave() {
-		if (type == CardType.KAWAIPON && getKawaiponCard() == null) {
-			KawaiponCard kc = new KawaiponCard(this.uuid, this.card, false);
-			kc.setKawaipon(kawaipon);
-			kc.save();
-		}
+		getKawaiponCard();
 	}
 
 	@Override
