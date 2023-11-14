@@ -26,6 +26,8 @@ BEGIN
         INSERT INTO kawaipon_card (chrome, quality, uuid, card_id, kawaipon_uid)
         VALUES (false, 0, NEW.uuid, NEW.card_id, NEW.kawaipon_uid);
     END IF;
+
+    RETURN NEW;
 END;
 $$;
 
