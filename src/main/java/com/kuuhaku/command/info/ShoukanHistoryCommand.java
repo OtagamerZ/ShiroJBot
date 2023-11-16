@@ -134,23 +134,30 @@ public class ShoukanHistoryCommand implements Executable {
 
 	private void viewRaces(I18N locale, Message msg, Account acc) {
 		List<RaceStats> races = DAO.queryAllUnmapped("""
-						SELECT cast(x.flag AS INT) 		   AS flag
-						     , cast(x.variant AS BOOLEAN)  AS variant
-						     , count(1)                    AS played
-						     , count(nullif(x.won, FALSE)) AS won
+						SELECT x.flag
+						     , x.variant
+						     , x.played
+						     , x.won
 						FROM (
-						         SELECT race_flag(x.major) | race_flag(x.minor) AS flag
-						              , x.variant
-						              , x.won
+						         SELECT cast(x.flag AS INT)         AS flag
+						              , cast(x.variant AS BOOLEAN)  AS variant
+						              , count(1)                    AS played
+						              , count(nullif(x.won, FALSE)) AS won
 						         FROM (
-						                  SELECT um.info -> um.side -> 'origin' ->> 'major'      AS major
-						                       , um.info -> um.side -> 'origin' -> 'minor' ->> 0 AS minor
-						                       , um.info -> um.side -> 'origin' ->> 'variant'    AS variant
-						                       , (um.info ->> 'winner') = upper(um.side)         AS won
-						                  FROM user_matches(?1) um
+						                  SELECT race_flag(x.major) | race_flag(x.minor) AS flag
+						                       , x.variant
+						                       , x.won
+						                  FROM (
+						                           SELECT um.info -> um.side -> 'origin' ->> 'major'      AS major
+						                                , um.info -> um.side -> 'origin' -> 'minor' ->> 0 AS minor
+						                                , um.info -> um.side -> 'origin' ->> 'variant'    AS variant
+						                                , (um.info ->> 'winner') = upper(um.side)         AS won
+						                           FROM user_matches(?1) um
+						                       ) x
 						              ) x
+						         GROUP BY flag, x.variant
 						     ) x
-						GROUP BY flag, x.variant
+						ORDER BY cast(x.won AS NUMERIC) / x.played DESC
 						""", acc.getUid()).stream()
 				.map(o -> Utils.map(RaceStats.class, o))
 				.toList();
