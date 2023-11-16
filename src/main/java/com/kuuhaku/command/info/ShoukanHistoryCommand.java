@@ -135,12 +135,12 @@ public class ShoukanHistoryCommand implements Executable {
 	private void viewRaces(I18N locale, Message msg, Account acc) {
 		List<RaceStats> races = DAO.queryAllUnmapped("""
 						SELECT cast(x.flag AS INT) 		   AS flag
-						     , x.variant
+						     , cast(x.variant AS BOOLEAN)  AS variant
 						     , count(1)                    AS played
-						     , count(nullif(x.won, false)) AS won
+						     , count(nullif(x.won, FALSE)) AS won
 						FROM (
 						         SELECT race_flag(x.major) | race_flag(x.minor) AS flag
-						              , cast(x.variant AS BOOLEAN)
+						              , x.variant
 						              , x.won
 						         FROM (
 						                  SELECT um.info -> um.side -> 'origin' ->> 'major'      AS major

@@ -1259,6 +1259,7 @@ public abstract class Utils {
 											n.floatValue();
 										}
 
+										i.getAndIncrement();
 										return n.intValue();
 									}
 
