@@ -59,6 +59,7 @@ import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.intellij.lang.annotations.Language;
 import org.jdesktop.swingx.graphics.ColorUtilities;
@@ -1254,16 +1255,19 @@ public abstract class Utils {
 				return target.cast(ctr.newInstance(
 						Arrays.stream(args)
 								.map(o -> {
+									int idx = i.getAndIncrement();
+
 									if (o instanceof Number n) {
 										if (n.doubleValue() - n.intValue() != 0) {
-											n.floatValue();
+											return n.floatValue();
 										}
 
-										i.getAndIncrement();
 										return n.intValue();
+									} else if (o instanceof Boolean b) {
+										return b;
 									}
 
-									return types[i.getAndIncrement()].cast(o);
+									return types[idx].cast(o);
 								})
 								.toArray()
 				));
