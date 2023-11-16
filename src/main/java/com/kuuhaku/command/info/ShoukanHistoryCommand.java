@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.info;
 
+import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
@@ -27,19 +28,29 @@ import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.FrameSkin;
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.shoukan.RaceStats;
 import com.kuuhaku.model.records.shoukan.history.Match;
 import com.kuuhaku.model.records.shoukan.history.Player;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,15 +65,29 @@ public class ShoukanHistoryCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
 
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setAuthor(locale.get("str/history_title", acc.getName()))
+				.setDescription(locale.get("str/history_index"));
+
+		event.channel().sendMessageEmbeds(eb.build()).queue(s ->
+				Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
+							m.put(Utils.parseEmoji("📔"), w -> viewMatches(locale, s, acc));
+							m.put(Utils.parseEmoji("📊"), w -> viewRaces(locale, s, acc));
+						}),
+						true, true, 1, TimeUnit.MINUTES, u -> u.equals(event.user()))
+		);
+	}
+
+	private void viewMatches(I18N locale, Message msg, Account acc) {
 		List<Match> matches = acc.getMatches();
 		if (matches.isEmpty()) {
-			event.channel().sendMessage(locale.get("error/no_matches")).queue();
+			msg.editMessage(locale.get("error/no_matches")).queue();
 			return;
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/history_title", acc.getName()))
-				.setDescription(locale.get("str/history_body",
+				.setDescription(locale.get("str/history_matches",
 						acc.getShoukanRanking(),
 						Utils.roundToString(acc.getWinrate(), 2) + "%",
 						matches.size()
@@ -102,6 +127,69 @@ public class ShoukanHistoryCommand implements Executable {
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 		);
 
-		Utils.paginate(pages, 1, true, event.channel(), event.user());
+		msg.editMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
+				Pages.paginate(s, pages, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(acc.getUid()))
+		);
+	}
+
+	private void viewRaces(I18N locale, Message msg, Account acc) {
+		List<RaceStats> races = DAO.queryAllUnmapped("""
+						SELECT cast(x.flag AS INT)
+						     , x.variant
+						     , count(1)                    AS played
+						     , count(nullif(x.won, false)) AS won
+						FROM (
+						         SELECT race_flag(x.major) | race_flag(x.minor) AS flag
+						              , cast(x.variant AS BOOLEAN)
+						              , x.won
+						         FROM (
+						                  SELECT um.info -> um.side -> 'origin' ->> 'major'      AS major
+						                       , um.info -> um.side -> 'origin' -> 'minor' ->> 0 AS minor
+						                       , um.info -> um.side -> 'origin' ->> 'variant'    AS variant
+						                       , (um.info ->> 'winner') = upper(um.side)         AS won
+						                  FROM user_matches(?1) um
+						              ) x
+						     ) x
+						GROUP BY flag, x.variant
+						""", acc.getUid()).stream()
+				.map(o -> Utils.map(RaceStats.class, o))
+				.toList();
+
+		if (races.isEmpty()) {
+			msg.editMessage(locale.get("error/no_matches")).queue();
+			return;
+		}
+
+		Race favorite = races.stream()
+				.max(Comparator.comparingInt(RaceStats::played).thenComparingInt(RaceStats::won))
+				.map(RaceStats::race)
+				.orElse(Race.NONE);
+
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setAuthor(locale.get("str/history_title", acc.getName()))
+				.setDescription(locale.get("str/history_races",
+						Utils.getEmoteString(favorite.name()) + " " + favorite.getName(locale))
+				);
+
+		List<Page> pages = Utils.generatePages(eb, races, 10, 5,
+				rs -> {
+					Race r = rs.race();
+
+					FieldMimic fm = new FieldMimic(
+							Utils.getEmoteString(r.name()) + " " + r.getName(locale),
+							locale.get("str/history_races_matches",
+									Calc.prcnt(rs.won(), rs.played(), 2) + "%",
+									rs.played()
+							)
+					);
+
+					return fm.toString();
+				},
+				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
+		);
+
+		msg.editMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
+				Pages.paginate(s, pages, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(acc.getUid()))
+		);
 	}
 }
