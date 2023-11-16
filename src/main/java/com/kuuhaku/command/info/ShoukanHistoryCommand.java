@@ -157,7 +157,7 @@ public class ShoukanHistoryCommand implements Executable {
 						              ) x
 						         GROUP BY flag, x.variant
 						     ) x
-						ORDER BY cast(x.won AS NUMERIC) / x.played DESC
+						ORDER BY x.won DESC, x.played DESC
 						""", acc.getUid()).stream()
 				.map(o -> Utils.map(RaceStats.class, o))
 				.toList();
@@ -185,7 +185,7 @@ public class ShoukanHistoryCommand implements Executable {
 					FieldMimic fm = new FieldMimic(
 							Utils.getEmoteString(r.name()) + " " + r.getName(locale),
 							locale.get("str/history_races_matches",
-									Utils.roundToString(Calc.prcnt(rs.won(), rs.played()), 2) + "%",
+									Utils.roundToString(rs.won() * 100d / rs.played(), 2) + "%",
 									rs.played()
 							)
 					);
