@@ -157,7 +157,7 @@ public class ShoukanHistoryCommand implements Executable {
 						              ) x
 						         GROUP BY flag, x.variant
 						     ) x
-						ORDER BY x.won DESC, x.played DESC
+						ORDER BY cast(x.won AS NUMERIC) / x.played DESC, x.played DESC
 						""", acc.getUid()).stream()
 				.map(o -> Utils.map(RaceStats.class, o))
 				.toList();
