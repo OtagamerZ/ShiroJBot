@@ -178,7 +178,7 @@ public class ShoukanHistoryCommand implements Executable {
 					FieldMimic fm = new FieldMimic(
 							Utils.getEmoteString(r.name()) + " " + r.getName(locale),
 							locale.get("str/history_races_matches",
-									Calc.prcnt(rs.won(), rs.played(), 2) + "%",
+									Utils.roundToString(Calc.prcnt(rs.won(), rs.played()), 2) + "%",
 									rs.played()
 							)
 					);
