@@ -134,7 +134,7 @@ public class ShoukanHistoryCommand implements Executable {
 
 	private void viewRaces(I18N locale, Message msg, Account acc) {
 		List<RaceStats> races = DAO.queryAllUnmapped("""
-						SELECT cast(x.flag AS INT)
+						SELECT cast(x.flag AS INT) 		   AS flag
 						     , x.variant
 						     , count(1)                    AS played
 						     , count(nullif(x.won, false)) AS won
