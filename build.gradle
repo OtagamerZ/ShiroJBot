@@ -52,6 +52,10 @@ application {
 group "com.kuuhaku"
 version "STANDALONE"
 
+def javaVersion = JavaVersion.VERSION_20
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
+
 repositories {
 	mavenCentral()
 	maven { url "https://jitpack.io" }
@@ -64,11 +68,18 @@ run {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	sourceCompatibility = JavaVersion.VERSION_20
-	targetCompatibility = JavaVersion.VERSION_20
 	options.compilerArgs
 			<< "-Xlint:unchecked"
 			<< "-Xlint:deprecation"
+
+	dependsOn "enforceVersion"
+}
+
+tasks.register("enforceVersion") {
+	def foundVersion = JavaVersion.current()
+	if (foundVersion != javaVersion) {
+		throw new IllegalStateException("Wrong Java version; required is $javaVersion, but found $foundVersion")
+	}
 }
 
 dependencies {
