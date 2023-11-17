@@ -65,7 +65,6 @@ repositories {
 
 run {
 	standardInput = System.in
-	dependsOn generateGrammarSource
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -74,6 +73,10 @@ tasks.withType(JavaCompile).configureEach {
 			<< "-Xlint:deprecation"
 
 	dependsOn enforceVersion
+}
+
+tasks.matching { it.name != "generateGrammarSource" }.configureEach {
+	it.dependsOn generateGrammarSource
 }
 
 tasks.register("enforceVersion") {
