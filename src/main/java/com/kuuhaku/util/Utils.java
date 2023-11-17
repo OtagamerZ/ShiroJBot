@@ -71,6 +71,7 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
@@ -667,7 +668,7 @@ public abstract class Utils {
 	}
 
 	public static InputStream getImage(String link) throws IOException {
-		return new URL(link).openStream();
+		return URI.create(link).toURL().openStream();
 	}
 
 	public static String getRandomHexColor() {

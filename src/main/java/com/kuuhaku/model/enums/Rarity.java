@@ -28,6 +28,7 @@ import com.kuuhaku.util.IO;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -109,12 +110,7 @@ public enum Rarity {
 		return Main.getCacheManager().computeResource("frame_" + name(), (k, v) -> {
 			if (v != null && v.length > 0) return v;
 
-			try {
-				return IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "frame/" + name() + ".png")), "png");
-			} catch (IOException e) {
-				Constants.LOGGER.error(e, e);
-				return null;
-			}
+			return IO.getBytes(IO.getImage(Constants.API_ROOT + "frame/" + name() + ".png"), "png");
 		});
 	}
 

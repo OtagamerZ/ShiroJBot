@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URI;
 import java.net.URL;
 import java.util.Objects;
 
@@ -164,7 +165,7 @@ public class Card extends DAO<Card> implements Serializable {
 				if (f.exists()) {
 					return FileUtils.readFileToByteArray(f);
 				} else {
-					return IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png")), "png");
+					return IO.getBytes(IO.getImage(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png"), "png");
 				}
 			} catch (IOException e) {
 				Constants.LOGGER.error(e, e);

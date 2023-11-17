@@ -24,6 +24,7 @@ import com.kuuhaku.util.IO;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 
 public enum Quality {
@@ -33,12 +34,7 @@ public enum Quality {
 		return Main.getCacheManager().computeResource("quality_" + name(), (k, v) -> {
 			if (v != null && v.length > 0) return v;
 
-			try {
-				return IO.getBytes(ImageIO.read(new URL(Constants.API_ROOT + "quality/" + name() + ".png")), "png");
-			} catch (IOException e) {
-				Constants.LOGGER.error(e, e);
-				return null;
-			}
+			return IO.getBytes(IO.getImage(Constants.API_ROOT + "quality/" + name() + ".png"), "png");
 		});
 	}
 

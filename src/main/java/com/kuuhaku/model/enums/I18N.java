@@ -31,7 +31,7 @@ public enum I18N {
 	PT(ZoneId.of("GMT-3")),
 	EN(ZoneId.of("GMT-4"));
 
-	private final Locale locale = new Locale(name().toLowerCase());
+	private final Locale locale = Locale.forLanguageTag(name().toLowerCase());
 	private final ZoneId zone;
 
 	I18N(ZoneId zone) {

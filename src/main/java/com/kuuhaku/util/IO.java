@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -84,7 +85,7 @@ public abstract class IO {
 			if (v != null && v.length > 0) return v;
 
 			try {
-				return getBytes(ImageIO.read(new URL(url)), getImageType(url));
+				return getBytes(ImageIO.read(URI.create(url).toURL()), getImageType(url));
 			} catch (IllegalArgumentException | IOException e) {
 				return new byte[0];
 			}

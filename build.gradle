@@ -29,7 +29,6 @@ plugins {
 	id "idea"
 	id "antlr"
 	id "application"
-	id "io.freefair.aspectj" version "6.4.1"
 }
 
 application {
@@ -126,7 +125,6 @@ dependencies {
 	implementation group: "org.tukaani", name: "xz", version: "1.9"
 	implementation group: "org.ehcache", name: "ehcache", version: "3.10.6"
 	implementation group: "com.vdurmont", name: "emoji-java", version: "5.1.1"
-	implementation group: "org.aspectj", name: "aspectjrt", version: "1.9.19"
 	implementation group: "org.shredzone.commons", name: "commons-suncalc", version: "3.5"
 	implementation group: "org.knowm.xchart", name: "xchart", version: "3.8.3"
 	implementation group: "com.github.trickl", name: "palette", version: "0.1.1"
@@ -148,7 +146,6 @@ idea {
 }
 
 sourceSets.main {
-	aspectj.srcDir "src/main/java"
 	java.srcDirs = files(
 			"src/main/java",
 			"src/main/antlr"
