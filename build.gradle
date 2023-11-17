@@ -65,6 +65,9 @@ repositories {
 
 run {
 	standardInput = System.in
+}
+
+build {
 	dependsOn "generateGrammarSource"
 }
 
