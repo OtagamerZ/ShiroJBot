@@ -70,6 +70,7 @@ public class Main {
 				CPU: %s cores
 				Memory: %s GiB (Allocated: %s GiB)
 				Charset: %s
+				Java runtime: JDK %s %s
 				----------------------------------------------------------
 				END OF SUMMARY
 				----------------------------------------------------------
@@ -82,7 +83,9 @@ public class Main {
 						Runtime.getRuntime().availableProcessors(),
 						Math.round(info.getTotalMemorySize() / Math.pow(1024, 3)),
 						Math.round(Runtime.getRuntime().maxMemory() / Math.pow(1024, 3)),
-						Charset.defaultCharset()
+						Charset.defaultCharset(),
+						System.getProperty("java.version"),
+						System.getProperty("java.vm.name")
 				)
 		);
 
