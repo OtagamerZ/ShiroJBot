@@ -67,16 +67,16 @@ run {
 	standardInput = System.in
 }
 
-build {
-	dependsOn "generateGrammarSource"
-}
-
 tasks.withType(JavaCompile).configureEach {
 	options.compilerArgs
 			<< "-Xlint:unchecked"
 			<< "-Xlint:deprecation"
 
 	dependsOn "enforceVersion"
+}
+
+tasks.matching { it.name != "generateGrammarSource" }.configureEach {
+	it.dependsOn "generateGrammarSource"
 }
 
 tasks.register("enforceVersion") {
