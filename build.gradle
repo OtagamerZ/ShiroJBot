@@ -51,8 +51,6 @@ application {
 
 group "com.kuuhaku"
 version "STANDALONE"
-sourceCompatibility = JavaVersion.VERSION_20
-targetCompatibility = JavaVersion.VERSION_20
 
 repositories {
 	mavenCentral()
@@ -66,6 +64,8 @@ run {
 }
 
 tasks.withType(JavaCompile).configureEach {
+	sourceCompatibility = JavaVersion.VERSION_20
+	targetCompatibility = JavaVersion.VERSION_20
 	options.compilerArgs
 			<< "-Xlint:unchecked"
 			<< "-Xlint:deprecation"
