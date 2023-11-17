@@ -1,4 +1,5 @@
 grammar ShoukanExpr;
+@header { package com.kuuhaku.generated; }
 
 line: expr;
 

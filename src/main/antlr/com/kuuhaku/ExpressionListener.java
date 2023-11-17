@@ -18,9 +18,12 @@
 
 package com.kuuhaku;
 
+import com.kuuhaku.generated.ShoukanExprBaseListener;
+import com.kuuhaku.generated.ShoukanExprParser;
+
 import java.util.List;
 
-import static com.kuuhaku.ShoukanExprParser.*;
+import static com.kuuhaku.generated.ShoukanExprParser.*;
 
 public class ExpressionListener extends ShoukanExprBaseListener {
 	private Scalable current;
@@ -39,7 +42,7 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 		List<ExprContext> exprs = ctx.expr();
 		for (int i = 0; i < exprs.size(); i++) {
 			ExprContext e = exprs.get(i);
-			if (e instanceof ValueContext value) {
+			if (e instanceof ShoukanExprParser.ValueContext value) {
 				Value v;
 				if (value.element.getType() == VAR) {
 					v = new VariableValue(value.getText());

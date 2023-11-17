@@ -73,6 +73,7 @@ tasks.withType(JavaCompile).configureEach {
 			<< "-Xlint:deprecation"
 
 	dependsOn "enforceVersion"
+	dependsOn "generateGrammarSource"
 }
 
 tasks.register("enforceVersion") {
@@ -169,4 +170,8 @@ jar {
 
 test {
 	useJUnitPlatform()
+}
+
+generateGrammarSource {
+	outputDirectory = file("src/main/antlr/com/kuuhaku/generated")
 }
