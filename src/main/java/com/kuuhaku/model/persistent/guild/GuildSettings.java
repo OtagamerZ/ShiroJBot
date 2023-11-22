@@ -91,11 +91,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
-	@OrderBy("price")
-	private List<PaidRole> paidRoles = new ArrayList<>();
-
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
 	private List<CustomAnswer> customAnswers = new ArrayList<>();
 
 	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
@@ -210,10 +205,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 		return levelRoles.stream()
 				.filter(r -> r.getLevel() == level)
 				.toList();
-	}
-
-	public List<PaidRole> getPaidRoles() {
-		return paidRoles;
 	}
 
 	public List<CustomAnswer> getCustomAnswers() {
