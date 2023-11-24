@@ -36,6 +36,8 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
+import java.util.Calendar;
+
 @Command(
 		name = "market",
 		path = "buy",
@@ -62,8 +64,13 @@ public class MarketBuyCommand implements Executable {
 
 		int id = args.getInt("id");
 		int price = sc.getPrice();
-
+		Calendar cal = Calendar.getInstance();
 		Market m = new Market(event.user().getId());
+
+		if (cal.get(Calendar.MONTH) == Calendar.NOVEMBER && cal.get(Calendar.WEEK_OF_MONTH) == 4) {
+			price *= 0.66;
+		}
+
 		if (sc.equals(m.getDailyOffer())) {
 			price *= 0.8;
 		}
