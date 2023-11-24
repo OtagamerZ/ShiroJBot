@@ -27,6 +27,8 @@ import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.util.Utils;
 
+import java.util.Calendar;
+
 public record MarketItem(I18N locale, Market market, StashedCard sc) {
 
 	@Override
@@ -57,9 +59,21 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 		} else {
 			sale = -1;
 		}
+
+		double mult = 1;
+		Calendar cal = Calendar.getInstance();
+
+		if (cal.get(Calendar.MONTH) == Calendar.NOVEMBER && cal.get(Calendar.WEEK_OF_MONTH) == 4) {
+			mult *= 0.66;
+		}
+
+		if (sale == sc.getId()) {
+			mult *= 0.8;
+		}
+
 		Account seller = sc.getKawaipon().getAccount();
-		String price = sale == sc.getId()
-				? locale.get("str/offer_sale", sc.getPrice(), (int) (sc.getPrice() * 0.8), seller.getName() + " (<@" + seller.getUid() + ">)")
+		String price = mult != 1
+				? locale.get("str/offer_sale", sc.getPrice(), (int) (sc.getPrice() * mult), seller.getName() + " (<@" + seller.getUid() + ">)")
 				: locale.get("str/offer", sc.getPrice(), seller.getName() + " (<@" + seller.getUid() + ">)");
 
 		return new FieldMimic(
