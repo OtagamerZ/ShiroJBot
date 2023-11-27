@@ -69,7 +69,7 @@ public class RandomList<T> {
 	public RandomList(RandomGenerator rng, double mult) {
 		this.rng = rng;
 		this.mult = mult;
-		this.randGen = RandomGenerator::nextDouble;
+		this.randGen = r -> r.nextDouble(total);
 	}
 
 	public RandomList(Function<RandomGenerator, Double> randGen, double mult) {
@@ -111,7 +111,7 @@ public class RandomList<T> {
 			}
 		}
 
-		return map.ceilingEntry(randGen.apply(rng) * total).getValue();
+		return map.ceilingEntry(randGen.apply(rng)).getValue();
 	}
 
 	public T remove() {
