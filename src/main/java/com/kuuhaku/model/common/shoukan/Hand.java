@@ -47,6 +47,7 @@ import kotlin.Triple;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.utils.FileUpload;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -512,25 +513,9 @@ public class Hand {
 		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
-
-		for (int i = 0; i < deck.size(); i++) {
-			Drawable<?> d = deck.get(i);
-			if (d.getCard().getId().equalsIgnoreCase(card)) {
-				if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
-					regdeg.add(500);
-				}
-				if (getOther().getOrigin().synergy() == Race.IMP) {
-					modHP(-50);
-				}
-
-				Drawable<?> out = deck.remove(i);
-				out.setSolid(true);
-
-				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW, side);
-				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
-				return out;
-			}
+		Drawable<?> out = deck.removeFirst(d -> d.getCard().getId().equalsIgnoreCase(card));
+		if (out != null) {
+			return addToHand(out);
 		}
 
 		return null;
@@ -540,21 +525,9 @@ public class Hand {
 		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
-
-		for (int i = 0; i < deck.size(); i++) {
-			if (deck.get(i) instanceof Senshi s && s.getRace().isRace(race)) {
-				if (getOther().getOrigin().synergy() == Race.IMP) {
-					modHP(-50);
-				}
-
-				Drawable<?> out = deck.remove(i);
-				out.setSolid(true);
-
-				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW, side);
-				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
-				return out;
-			}
+		Drawable<?> out = deck.removeFirst(d -> d instanceof Senshi s && s.getRace() == race);
+		if (out != null) {
+			return addToHand(out);
 		}
 
 		return null;
@@ -564,25 +537,20 @@ public class Hand {
 		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
+		Drawable<?> out = deck.removeFirst(cond);
+		if (out != null) {
+			return addToHand(out);
+		}
 
-		for (int i = 0; i < deck.size(); i++) {
-			Drawable<?> d = deck.get(i);
-			if (cond.test(d)) {
-				if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
-					regdeg.add(500);
-				}
-				if (getOther().getOrigin().synergy() == Race.IMP) {
-					modHP(-50);
-				}
+		return null;
+	}
 
-				Drawable<?> out = deck.remove(i);
-				out.setSolid(true);
+	public Drawable<?> draw(Drawable<?> card) {
+		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
-				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW, side);
-				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
-				return out;
-			}
+		BondedList<Drawable<?>> deck = getDeck();
+		if (deck.remove(card)) {
+			return addToHand(card);
 		}
 
 		return null;
@@ -592,21 +560,9 @@ public class Hand {
 		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
-
-		for (int i = 0; i < deck.size(); i++) {
-			if (deck.get(i) instanceof Senshi) {
-				if (getOther().getOrigin().synergy() == Race.IMP) {
-					modHP(-50);
-				}
-
-				Drawable<?> out = deck.remove(i);
-				out.setSolid(true);
-
-				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW, side);
-				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
-				return out;
-			}
+		Senshi out = (Senshi) deck.removeFirst(d -> d instanceof Senshi);
+		if (out != null) {
+			return addToHand(out);
 		}
 
 		return null;
@@ -616,24 +572,9 @@ public class Hand {
 		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
-
-		for (int i = 0; i < deck.size(); i++) {
-			if (deck.get(i) instanceof Evogear e) {
-				if (origin.synergy() == Race.EX_MACHINA && !e.isSpell()) {
-					regdeg.add(500);
-				}
-				if (getOther().getOrigin().synergy() == Race.IMP) {
-					modHP(-50);
-				}
-
-				Drawable<?> out = deck.remove(i);
-				out.setSolid(true);
-
-				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW, side);
-				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
-				return out;
-			}
+		Evogear out = (Evogear) deck.removeFirst(d -> d instanceof Evogear);
+		if (out != null) {
+			return addToHand(out);
 		}
 
 		return null;
@@ -643,21 +584,9 @@ public class Hand {
 		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
-
-		for (int i = 0; i < deck.size(); i++) {
-			if (deck.get(i) instanceof Evogear e && !e.isSpell()) {
-				if (origin.synergy() == Race.EX_MACHINA) {
-					regdeg.add(500);
-				}
-
-				Drawable<?> out = deck.remove(i);
-				out.setSolid(true);
-
-				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW, side);
-				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
-				return out;
-			}
+		Evogear out = (Evogear) deck.removeFirst(d -> d instanceof Evogear e && !e.isSpell());
+		if (out != null) {
+			return addToHand(out);
 		}
 
 		return null;
@@ -667,24 +596,28 @@ public class Hand {
 		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
-
-		for (int i = 0; i < deck.size(); i++) {
-			if (deck.get(i) instanceof Evogear e && e.isSpell()) {
-				if (getOther().getOrigin().synergy() == Race.IMP) {
-					modHP(-50);
-				}
-
-				Drawable<?> out = deck.remove(i);
-				out.setSolid(true);
-
-				cards.add(out);
-				getGame().trigger(Trigger.ON_DRAW, side);
-				getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
-				return out;
-			}
+		Evogear out = (Evogear) deck.removeFirst(d -> d instanceof Evogear e && e.isSpell());
+		if (out != null) {
+			return addToHand(out);
 		}
 
 		return null;
+	}
+
+	private Drawable<?> addToHand(Drawable<?> out) {
+		if (origin.synergy() == Race.EX_MACHINA && out instanceof Evogear e && !e.isSpell()) {
+			regdeg.add(500);
+		}
+		if (getOther().getOrigin().synergy() == Race.IMP) {
+			modHP(-50);
+		}
+
+		out.setSolid(true);
+		cards.add(out);
+
+		getGame().trigger(Trigger.ON_DRAW, side);
+		getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
+		return out;
 	}
 
 	public void rerollHand() {
