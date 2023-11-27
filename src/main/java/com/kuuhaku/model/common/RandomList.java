@@ -48,7 +48,6 @@ public class RandomList<T> {
 	private final Function<RandomGenerator, Double> randGen;
 	private final RandomGenerator rng;
 	private final double mult;
-	private double skew = 0.5;
 	private double total = 0;
 
 	public RandomList() {
@@ -70,7 +69,7 @@ public class RandomList<T> {
 	public RandomList(RandomGenerator rng, double mult) {
 		this.rng = rng;
 		this.mult = mult;
-		this.randGen = r -> Calc.clamp(r.nextGaussian(skew, 0.15), 0, 1);
+		this.randGen = RandomGenerator::nextDouble;
 	}
 
 	public RandomList(Function<RandomGenerator, Double> randGen, double mult) {
@@ -135,11 +134,5 @@ public class RandomList<T> {
 
 	public List<Pair<Double, T>> entries() {
 		return pool;
-	}
-
-	public void skew(double skew) {
-		if (!Utils.between(skew, 0, 1)) throw new IllegalArgumentException();
-
-		this.skew = skew;
 	}
 }
