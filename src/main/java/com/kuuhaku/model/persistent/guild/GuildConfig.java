@@ -139,6 +139,7 @@ public class GuildConfig extends DAO<GuildConfig> {
 		card = drop = xp = rarity = 0;
 
 		for (String id : buffs.keySet()) {
+			System.out.println(buffs.getString(id));
 			GuildBuff gb = JSONUtils.fromJSON(buffs.getString(id), GuildBuff.class);
 			if (gb == null || gb.expired()) {
 				buffs.remove(id);
