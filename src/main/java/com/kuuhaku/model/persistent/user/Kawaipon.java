@@ -239,7 +239,8 @@ public class Kawaipon extends DAO<Kawaipon> {
 				                  LEFT JOIN kawaipon_card kc ON kc.uuid = sc.uuid
 				         WHERE sc.kawaipon_uid = ?1
 				           AND sc.deck_id IS NULL
-				           and sc.price = 0
+				           AND sc.price = 0
+				           AND sc.locked = FALSE
 				     ) x
 				WHERE x.copy > 3
 				""", uid);
