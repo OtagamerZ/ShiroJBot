@@ -43,11 +43,11 @@ public class MultiMap<K, V> {
 	public int size() {
 		return (int) map.values().parallelStream().distinct().count();
 	}
-	
+
 	public V get(K key) {
 		return Utils.getOr(map.get(key), DEFAULT_RETURN).getSecond();
 	}
-	
+
 	@SafeVarargs
 	public final V put(V value, K... keys) {
 		V prev = null;
@@ -65,9 +65,11 @@ public class MultiMap<K, V> {
 
 		return prev;
 	}
-	
+
 	public V remove(Object key) {
 		Pair<K[], V> prev = map.get(key);
+		if (prev == null) return DEFAULT_RETURN.getSecond();
+
 		for (K k : prev.getFirst()) {
 			map.remove(k);
 		}
@@ -79,6 +81,8 @@ public class MultiMap<K, V> {
 		boolean out = false;
 
 		Pair<K[], V> prev = map.get(key);
+		if (prev == null) return false;
+
 		for (K k : prev.getFirst()) {
 			out |= map.remove(k, value);
 		}
@@ -89,17 +93,17 @@ public class MultiMap<K, V> {
 	public Set<K> keySet() {
 		return map.keySet();
 	}
-	
+
 	public List<V> values() {
 		return map.values().parallelStream().map(Pair::getSecond).toList();
 	}
-	
+
 	public Set<Map.Entry<K, V>> entrySet() {
 		return map.entrySet().parallelStream()
 				.map(e -> Map.entry(e.getKey(), e.getValue().getSecond()))
 				.collect(Collectors.toSet());
 	}
-	
+
 	public V getOrDefault(K key, V defaultValue) {
 		return Utils.getOr(get(key), defaultValue);
 	}
