@@ -138,18 +138,17 @@ public class GuildConfig extends DAO<GuildConfig> {
 		double card, drop, xp, rarity;
 		card = drop = xp = rarity = 0;
 
-		Iterator<Object> it = buffs.values().iterator();
-		while (it.hasNext()) {
-			JSONObject item = (JSONObject) it.next();
-			if (item.getBoolean("expired")) {
-				it.remove();
+		for (String id : buffs.keySet()) {
+			GuildBuff gb = JSONUtils.fromJSON(buffs.getString(id), GuildBuff.class);
+			if (gb == null || gb.expired()) {
+				buffs.remove(id);
 				continue;
 			}
 
-			card += item.getDouble("card");
-			drop += item.getDouble("drop");
-			xp += item.getDouble("xp");
-			rarity += item.getDouble("rarity");
+			card += gb.card();
+			drop += gb.drop();
+			xp += gb.xp();
+			rarity += gb.rarity();
 		}
 
 		return new GuildBuff(card, drop, rarity, xp);
