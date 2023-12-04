@@ -156,7 +156,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public JSONArray getCharms() {
-		if (hand != null && hand.getOrigin().synergy() == Race.DULLAHAN) {
+		if (hand != null && hand.getOrigins().synergy() == Race.DULLAHAN) {
 			return new JSONArray();
 		}
 
@@ -283,7 +283,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		int sum = base.getDodge() + (int) stats.getDodge().get();
 
 		int min = 0;
-		if (hand != null && hand.getOrigin().synergy() == Race.GEIST) {
+		if (hand != null && hand.getOrigins().synergy() == Race.GEIST) {
 			min += 10;
 		}
 
@@ -295,7 +295,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		int sum = base.getBlock() + (int) stats.getBlock().get();
 
 		int min = 0;
-		if (hand != null && hand.getOrigin().synergy() == Race.CYBORG) {
+		if (hand != null && hand.getOrigins().synergy() == Race.CYBORG) {
 			min += 10;
 		}
 
@@ -305,7 +305,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public double getCostMult() {
 		double mult = stats.getCostMult().get();
-		if (hand != null && ((!spell && hand.getOrigin().hasMinor(Race.MACHINE)) || (spell && hand.getOrigin().hasMinor(Race.MYSTICAL)))) {
+		if (hand != null && ((!spell && hand.getOrigins().hasMinor(Race.MACHINE)) || (spell && hand.getOrigins().hasMinor(Race.MYSTICAL)))) {
 			mult *= 0.8;
 		}
 
@@ -316,11 +316,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public double getAttrMult() {
 		double mult = stats.getAttrMult().get();
 		if (hand != null) {
-			if (hand.getOrigin().synergy() == Race.DULLAHAN) {
+			if (hand.getOrigins().synergy() == Race.DULLAHAN) {
 				mult *= 1 + (0.2 * charms.size());
 			}
 
-			if (!spell && hand.getOrigin().hasMinor(Race.MACHINE)) {
+			if (!spell && hand.getOrigins().hasMinor(Race.MACHINE)) {
 				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MACHINE) * 0.02);
 			}
 
@@ -336,12 +336,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public double getPower() {
 		double mult = stats.getPower().get() * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
 		if (hand != null) {
-			if (spell && hand.getOrigin().hasMinor(Race.MYSTICAL)) {
+			if (spell && hand.getOrigins().hasMinor(Race.MYSTICAL)) {
 				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MYSTICAL) * 0.02);
 			}
 
-			if (hand.getOrigin().major() == Race.MIXED) {
-				mult *= 1 - 0.07 * hand.getOrigin().minor().length;
+			if (hand.getOrigins().major() == Race.MIXED) {
+				mult *= 1 - 0.07 * hand.getOrigins().minor().length;
 			}
 
 			if (getGame() != null && getGame().getArcade() == Arcade.OVERCHARGE) {

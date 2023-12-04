@@ -657,7 +657,7 @@
 	 public BaseValues getBaseValues(Hand h) {
 		 try {
 			 return new BaseValues(() -> {
-				 Origin origin = h == null ? getOrigins() : h.getOrigin();
+				 Origin origin = h == null ? getOrigins() : h.getOrigins();
 				 double reduction = Math.pow(0.999, -24 * getEvoWeight());
 				 if (getOrigins().major() == Race.BEAST) {
 					 reduction *= 0.66;

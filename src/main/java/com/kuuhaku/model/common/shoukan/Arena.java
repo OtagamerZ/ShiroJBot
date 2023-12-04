@@ -129,7 +129,7 @@ public class Arena implements Renderer {
 	}
 
 	public boolean isFieldEmpty(Side side) {
-		boolean sentinel = game.getHands().get(side).getOrigin().synergy() == Race.SENTINEL;
+		boolean sentinel = game.getHands().get(side).getOrigins().synergy() == Race.SENTINEL;
 		return slots.get(side).stream().allMatch(sc -> sc.getTop() == null && (!sentinel || sc.getBottom() == null));
 	}
 
@@ -388,7 +388,7 @@ public class Arena implements Renderer {
 	private Consumer<Graphics2D> drawBar(Hand hand) {
 		return g -> {
 			boolean reversed = hand.getSide() != Side.TOP;
-			boolean demon = hand.getOrigin().major() == Race.DEMON;
+			boolean demon = hand.getOrigins().major() == Race.DEMON;
 
 			int leftOffset = 250;
 			double lOffPercent = (double) leftOffset / BAR_SIZE.width;
@@ -456,7 +456,7 @@ public class Arena implements Renderer {
 				g1.fill(bar);
 
 				double fac = hand.getHPPrcnt();
-				if (fac >= 0.5 && !hand.getOrigin().demon()) {
+				if (fac >= 0.5 && !hand.getOrigins().demon()) {
 					g1.setColor(new Color(69, 173, 28));
 				} else if (fac >= 0.25) {
 					g1.setColor(new Color(197, 158, 0));
@@ -613,7 +613,7 @@ public class Arena implements Renderer {
 
 			Graph.applyTransformed(g, reversed ? 2449 : 26, reversed ? 1486 : 208,
 					g1 -> {
-						Origin ori = hand.getOrigin();
+						Origin ori = hand.getOrigins();
 
 						Rectangle rect = new Rectangle(rad * 2, rad * 2);
 
@@ -622,7 +622,7 @@ public class Arena implements Renderer {
 						if (ori.major() != Race.MIXED) {
 							rect.translate(reversed ? -rect.width : 0, centerY - rect.height / 2);
 
-							int maxCd = switch (hand.getOrigin().major()) {
+							int maxCd = switch (hand.getOrigins().major()) {
 								case SPIRIT -> 3;
 								case DIVINITY -> 4;
 								default -> 1;

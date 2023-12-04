@@ -47,7 +47,6 @@ import kotlin.Triple;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.utils.FileUpload;
-import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -132,7 +131,7 @@ public class Hand {
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	}, d -> {
-		if (getOrigin().synergy() == Race.MUMMY && getRealDeck().indexOf(d) == 0) {
+		if (getOrigins().synergy() == Race.MUMMY && getRealDeck().indexOf(d) == 0) {
 			modMP(2);
 		}
 	});
@@ -169,7 +168,7 @@ public class Hand {
 				Hand op = getOther();
 
 				op.addKill();
-				if (op.getKills() % 7 == 0 && op.getOrigin().synergy() == Race.SHINIGAMI) {
+				if (op.getKills() % 7 == 0 && op.getOrigins().synergy() == Race.SHINIGAMI) {
 					for (Drawable<?> r : op.getDeck()) {
 						if (r instanceof EffectHolder<?> eh) {
 							ValueMod vm = eh.getStats().getCostMult().get(Field.getDEFAULT());
@@ -179,7 +178,7 @@ public class Hand {
 
 
 					getGame().getArena().getBanned().add(s);
-				} else if (op.getOrigin().synergy() == Race.REAPER) {
+				} else if (op.getOrigins().synergy() == Race.REAPER) {
 					op.getDiscard().add(d.copy());
 				}
 
@@ -200,7 +199,7 @@ public class Hand {
 
 		d.reset();
 
-		if (d.getHand().getOrigin().synergy() == Race.REBORN && getGame().chance(33)) {
+		if (d.getHand().getOrigins().synergy() == Race.REBORN && getGame().chance(33)) {
 			deck.add(d.copy());
 			return false;
 		}
@@ -383,7 +382,7 @@ public class Hand {
 		userDeck.getArchetype().execute(this);
 	}
 
-	public Origin getOrigin() {
+	public Origin getOrigins() {
 		return origin;
 	}
 
@@ -425,7 +424,7 @@ public class Hand {
 		if (cards.stream().noneMatch(d -> d instanceof Senshi)) {
 			for (int i = 0; i < deck.size() && value > 0; i++) {
 				if (deck.get(i) instanceof Senshi) {
-					if (getOther().getOrigin().synergy() == Race.IMP) {
+					if (getOther().getOrigins().synergy() == Race.IMP) {
 						modHP(-50);
 					}
 
@@ -452,7 +451,7 @@ public class Hand {
 			if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
 				regdeg.add(500);
 			}
-			if (getOther().getOrigin().synergy() == Race.IMP) {
+			if (getOther().getOrigins().synergy() == Race.IMP) {
 				modHP(-50);
 			}
 
@@ -481,7 +480,7 @@ public class Hand {
 		if (origin.synergy() == Race.EX_MACHINA && d instanceof Evogear e && !e.isSpell()) {
 			regdeg.add(500);
 		}
-		if (getOther().getOrigin().synergy() == Race.IMP) {
+		if (getOther().getOrigins().synergy() == Race.IMP) {
 			modHP(-50);
 		}
 
@@ -608,7 +607,7 @@ public class Hand {
 		if (origin.synergy() == Race.EX_MACHINA && out instanceof Evogear e && !e.isSpell()) {
 			regdeg.add(500);
 		}
-		if (getOther().getOrigin().synergy() == Race.IMP) {
+		if (getOther().getOrigins().synergy() == Race.IMP) {
 			modHP(-50);
 		}
 
@@ -770,7 +769,7 @@ public class Hand {
 			int dot = regdeg.peek();
 			int quart = (int) (value / 4);
 			if (dot > 0 && value < 0) {
-				if (getOther().getOrigin().synergy() == Race.SPAWN) {
+				if (getOther().getOrigins().synergy() == Race.SPAWN) {
 					regdeg.reduce(Degen.class, quart);
 				}
 
@@ -804,7 +803,7 @@ public class Hand {
 			}
 
 			Hand op = getOther();
-			if (op.getOrigin().hasMinor(Race.UNDEAD) && value < 0) {
+			if (op.getOrigins().hasMinor(Race.UNDEAD) && value < 0) {
 				value -= op.getGraveyard().parallelStream()
 						.mapToInt(d -> (d.getDmg() + d.getDfs()) / 100)
 						.sum();

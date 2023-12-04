@@ -45,6 +45,6 @@ public record Match(Info info, List<Turn> turns) {
 
 	private static Player makePlayer(Hand h) {
 		Deck d = h.getUserDeck();
-		return new Player(h.getUid(), h.getBase().hp(), d.getEvoWeight(), d.getMetaDivergence(), h.getOrigin());
+		return new Player(h.getUid(), h.getBase().hp(), d.getEvoWeight(), d.getMetaDivergence(), d.getOrigins());
 	}
 }

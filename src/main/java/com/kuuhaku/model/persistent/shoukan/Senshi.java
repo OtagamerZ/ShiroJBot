@@ -485,7 +485,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int getMPCost() {
-		if (hand != null && hand.getOrigin().synergy() == Race.CELESTIAL) {
+		if (hand != null && hand.getOrigins().synergy() == Race.CELESTIAL) {
 			return hand.getUserDeck().getAverageMPCost();
 		}
 
@@ -508,9 +508,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		double mult = 1;
 		if (hand != null) {
-			if (hand.isLowLife() && hand.getOrigin().synergy() == Race.ONI) {
+			if (hand.isLowLife() && hand.getOrigins().synergy() == Race.ONI) {
 				mult *= 1.2;
-			} else if (hand.getHPPrcnt() > 1 && hand.getOrigin().synergy() == Race.GHOUL) {
+			} else if (hand.getHPPrcnt() > 1 && hand.getOrigins().synergy() == Race.GHOUL) {
 				mult *= 1 + Math.max(0, (hand.getHPPrcnt() - 1) / 2);
 			}
 
@@ -557,11 +557,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 			}
 
-			if (mod != 0 && hand.getOrigin().synergy() == Race.ELF) {
+			if (mod != 0 && hand.getOrigins().synergy() == Race.ELF) {
 				mod += 0.1;
 			}
 
-			if (mod != 0 && hand.getOther().getOrigin().synergy() == Race.DARK_ELF) {
+			if (mod != 0 && hand.getOther().getOrigins().synergy() == Race.DARK_ELF) {
 				mod -= 0.15;
 			}
 
@@ -595,7 +595,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		int sum = base.getDodge() + (int) stats.getDodge().get() + getEquipDodge();
 
 		int min = 0;
-		if (hand != null && hand.getOrigin().synergy() == Race.GEIST) {
+		if (hand != null && hand.getOrigins().synergy() == Race.GEIST) {
 			min += 10;
 		}
 
@@ -611,7 +611,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		int sum = base.getBlock() + (int) stats.getBlock().get() + getEquipBlock();
 
 		int min = 0;
-		if (hand != null && hand.getOrigin().synergy() == Race.CYBORG) {
+		if (hand != null && hand.getOrigins().synergy() == Race.CYBORG) {
 			min += 10;
 		}
 
@@ -622,11 +622,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public double getCostMult() {
 		double mult = stats.getCostMult().get();
 		if (hand != null) {
-			if (hand.getOrigin().isPure() && race == hand.getOrigin().major()) {
+			if (hand.getOrigins().isPure() && race == hand.getOrigins().major()) {
 				mult *= 0.66;
 			}
 
-			if (hand.getOrigin().synergy() == Race.PIXIE) {
+			if (hand.getOrigins().synergy() == Race.PIXIE) {
 				mult *= getFieldMult();
 			}
 		}
@@ -638,7 +638,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public double getAttrMult() {
 		double mult = stats.getAttrMult().get();
 		if (hand != null) {
-			if (hand.getOrigin().isPure() && race != hand.getOrigin().major()) {
+			if (hand.getOrigins().isPure() && race != hand.getOrigins().major()) {
 				mult *= 0.5;
 			}
 
@@ -646,7 +646,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				mult *= 1.5;
 			}
 
-			if (hand.getOrigin().synergy() == Race.REVENANT && !hasEffect()) {
+			if (hand.getOrigins().synergy() == Race.REVENANT && !hasEffect()) {
 				mult *= 1.2;
 			}
 		}
@@ -658,8 +658,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public double getPower() {
 		double mult = stats.getPower().get() * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
 		if (hand != null) {
-			if (hand.getOrigin().major() == Race.MIXED) {
-				mult *= 1 - 0.07 * hand.getOrigin().minor().length;
+			if (hand.getOrigins().major() == Race.MIXED) {
+				mult *= 1 - 0.07 * hand.getOrigins().minor().length;
 			}
 
 			if (getGame() != null && getGame().getArcade() == Arcade.OVERCHARGE) {
@@ -667,20 +667,20 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (isSupporting()) {
-				if (hand.getOrigin().synergy() == Race.FAERIE) {
+				if (hand.getOrigins().synergy() == Race.FAERIE) {
 					mult *= 1.25;
 				} else {
 					mult *= 0.75;
 				}
 			}
 
-			if (hand.getOrigin().hasMinor(Race.SPIRIT)) {
+			if (hand.getOrigins().hasMinor(Race.SPIRIT)) {
 				mult *= getFieldMult();
 			}
 
-			if (hand.getOrigin().synergy() == Race.DRYAD) {
+			if (hand.getOrigins().synergy() == Race.DRYAD) {
 				mult *= 1 + Math.max(0, hand.getRegDeg().peek() / hand.getBase().hp());
-			} else if (hand.getOrigin().synergy() == Race.ALIEN) {
+			} else if (hand.getOrigins().synergy() == Race.ALIEN) {
 				mult *= 1 + Calc.prcnt(hand.getUserDeck().getEvoWeight(), 24) / 2;
 			}
 		}
@@ -996,7 +996,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (hand != null && getGame() != null && getGame().getArena().getField().getType() == FieldType.NIGHT) {
-			if (hand.getOrigin().synergy() != Race.WEREBEAST) {
+			if (hand.getOrigins().synergy() != Race.WEREBEAST) {
 				hit *= 0.8;
 			}
 		}
@@ -1081,7 +1081,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				base.lockAll();
 				return false;
 			}
-		} else if (hand.getOther().getOrigin().synergy() == Race.NIGHTMARE && isSleeping()) {
+		} else if (hand.getOther().getOrigins().synergy() == Race.NIGHTMARE && isSleeping()) {
 			return false;
 		}
 

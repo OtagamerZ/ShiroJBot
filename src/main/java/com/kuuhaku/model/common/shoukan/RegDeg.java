@@ -46,11 +46,11 @@ public class RegDeg {
 
 	public void add(Number val, double mult) {
 		if (val == null) return;
-		else if (parent.getOrigin().synergy() == Race.CONDEMNED) return;
+		else if (parent.getOrigins().synergy() == Race.CONDEMNED) return;
 		int value = val.intValue();
 
 		if (value < 0) {
-			if (parent.getOrigin().major() == Race.HUMAN) {
+			if (parent.getOrigins().major() == Race.HUMAN) {
 				mult += 0.2;
 			}
 
@@ -60,7 +60,7 @@ public class RegDeg {
 
 			values.add(new Degen(-value, mult * parent.getStats().getDegenMult().get()));
 		} else if (value > 0) {
-			if (parent.getOrigin().major() == Race.HUMAN) {
+			if (parent.getOrigins().major() == Race.HUMAN) {
 				mult -= 0.1;
 			}
 
@@ -109,7 +109,7 @@ public class RegDeg {
 	public int next() {
 		try {
 			int virus = 0;
-			if (parent.getOrigin().synergy() == Race.VIRUS) {
+			if (parent.getOrigins().synergy() == Race.VIRUS) {
 				virus = -Math.min(parent.getOther().getRegDeg().peek(), 0);
 			}
 
@@ -121,7 +121,7 @@ public class RegDeg {
 
 	public int peek() {
 		int virus = 0;
-		if (parent.getOrigin().synergy() == Race.VIRUS) {
+		if (parent.getOrigins().synergy() == Race.VIRUS) {
 			virus = -Math.min(parent.getOther().getRegDeg().peek(), 0);
 		}
 
