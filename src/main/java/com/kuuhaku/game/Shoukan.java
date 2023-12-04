@@ -1999,9 +1999,17 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void triggerEOTs(EffectParameters ep) {
-		for (TriggerBind binding : bindings) {
+		Iterator<TriggerBind> it = Set.copyOf(bindings).iterator();
+		while (it.hasNext()) {
+			TriggerBind binding = it.next();
 			if (binding.isBound(ep)) {
-				binding.getHolder().execute(new EffectParameters(
+				EffectHolder<?> holder = binding.getHolder();
+				if (holder.getIndex() == -1) {
+					it.remove();
+					continue;
+				}
+
+				holder.execute(new EffectParameters(
 						ON_DEFER_BINDING,
 						ep.side(),
 						new DeferredTrigger(null, ep.trigger()),
