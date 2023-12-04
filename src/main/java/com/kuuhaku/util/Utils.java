@@ -39,6 +39,7 @@ import groovy.lang.Script;
 import jakarta.persistence.NoResultException;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
@@ -1014,6 +1015,8 @@ public abstract class Utils {
 	}
 
 	public static Webhook getWebhook(StandardGuildMessageChannel channel) {
+		if (!channel.getGuild().getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS)) return null;
+
 		List<Webhook> hooks = Pages.subGet(channel.retrieveWebhooks());
 		for (Webhook hook : hooks) {
 			if (Objects.equals(hook.getOwnerAsUser(), channel.getGuild().getSelfMember().getUser())) {
