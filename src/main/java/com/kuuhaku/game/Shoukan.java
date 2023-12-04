@@ -2001,7 +2001,13 @@ public class Shoukan extends GameInstance<Phase> {
 	public void triggerEOTs(EffectParameters ep) {
 		for (TriggerBind binding : bindings) {
 			if (binding.isBound(ep)) {
-				binding.getHolder().execute(new EffectParameters(ON_DEFER_BINDING, ep.side(), ep.source(), ep.targets()));
+				binding.getHolder().execute(new EffectParameters(
+						ON_DEFER_BINDING,
+						ep.side(),
+						new DeferredTrigger(null, ep.trigger()),
+						ep.source(),
+						ep.targets()
+				));
 			}
 		}
 
