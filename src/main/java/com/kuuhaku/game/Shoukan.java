@@ -2099,6 +2099,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public void bind(EffectHolder<?> self, EnumMap<Side, EnumSet<Trigger>> binds) {
 		bindings.add(new TriggerBind(self, binds));
+		System.out.println(bindings);
 	}
 
 	private BiFunction<String, String, String> replaceMessages(Message message) {
