@@ -30,7 +30,7 @@ import net.dv8tion.jda.api.entities.User;
 import java.util.ArrayList;
 import java.util.List;
 
-@GachaType(value = "premium", price = 1, prizes = 5, currency = Currency.GEM)
+@GachaType(value = "premium", price = 3, prizes = 5, currency = Currency.GEM)
 public class PremiumGacha extends Gacha {
 	public PremiumGacha(User u) {
 		this(DAO.queryAllUnmapped("""
