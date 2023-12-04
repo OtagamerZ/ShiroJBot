@@ -41,8 +41,6 @@ public class TriggerBind {
 	}
 
 	public boolean isBound(EffectParameters ep) {
-		System.out.println(ep);
-		System.out.println(binds);
 		return binds.containsKey(ep.side()) && binds.get(ep.side()).contains(ep.trigger());
 	}
 

@@ -1256,7 +1256,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					.withVar("side", getSide())
 					.withVar("trigger", trigger)
 					.run();
-		} catch (Exception ignored) {
+		} catch (Exception e) {
+			Drawable<?> source = Utils.getOr(stats.getSource(), this);
+			Constants.LOGGER.warn("Failed to initialize " + this + "\n" + ("/* " + source + " */\n" + getEffect()), e);
 		}
 	}
 
