@@ -1088,21 +1088,25 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Trigger trigger = null;
 		boolean targeted = false;
 
-		if (equals(ep.source().card())) {
-			trigger = ep.source().trigger();
+		if (ep.trigger() == ON_DEFER_BINDING) {
+			trigger = ep.trigger();
 		} else {
-			for (Target target : ep.targets()) {
-				if (equals(target.card())) {
-					trigger = target.trigger();
-					break;
+			if (equals(ep.source().card())) {
+				trigger = ep.source().trigger();
+			} else {
+				for (Target target : ep.targets()) {
+					if (equals(target.card())) {
+						trigger = target.trigger();
+						break;
+					}
 				}
-			}
 
-			if (trigger == null) {
-				trigger = ep.trigger();
-			}
+				if (trigger == null) {
+					trigger = ep.trigger();
+				}
 
-			targeted = true;
+				targeted = true;
+			}
 		}
 
 		if (trigger == ON_ACTIVATE && getCooldown() > 0) return false;
@@ -1151,7 +1155,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
 			}
 
-			if (hasEffect() && getEffect().contains(trigger.name())) {
+			if (hasEffect() && (getEffect().contains(trigger.name()) || trigger == ON_DEFER_BINDING)) {
 				if (isStunned() && getGame().chance(25)) {
 					if (!global) {
 						game.getChannel().sendMessage(game.getString("str/effect_stunned", this)).queue();

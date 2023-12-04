@@ -95,6 +95,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Map<Side, Hand> hands;
 	private final Map<String, String> messages = new HashMap<>();
 	private final Set<EffectOverTime> eots = new HashSet<>();
+	private final Set<TriggerBind> bindings = new HashSet<>();
 	private final List<Turn> turns = new TreeList<>();
 	private final boolean singleplayer;
 
@@ -1998,6 +1999,12 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void triggerEOTs(EffectParameters ep) {
+		for (TriggerBind binding : bindings) {
+			if (binding.isBound(ep)) {
+				binding.getHolder().execute(new EffectParameters(ON_DEFER_BINDING, ep.side(), ep.source(), ep.targets()));
+			}
+		}
+
 		Set<EffectOverTime> effects = new TreeSet<>(eots);
 		for (EffectOverTime effect : effects) {
 			if (effect.isLocked()) continue;
@@ -2074,6 +2081,10 @@ public class Shoukan extends GameInstance<Phase> {
 				eots.remove(effect);
 			}
 		}
+	}
+
+	public void bind(EffectHolder<?> self, EnumMap<Side, EnumSet<Trigger>> binds) {
+		bindings.add(new TriggerBind(self, binds));
 	}
 
 	private BiFunction<String, String, String> replaceMessages(Message message) {

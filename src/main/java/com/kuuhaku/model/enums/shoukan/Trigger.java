@@ -250,6 +250,11 @@ public enum Trigger {
 	ON_DEFER_NEARBY,
 
 	/**
+	 * Triggers forwarded from binding
+	 */
+	ON_DEFER_BINDING,
+
+	/**
 	 * Triggers mirrored from attached player
 	 **/
 	ON_LEECH,
