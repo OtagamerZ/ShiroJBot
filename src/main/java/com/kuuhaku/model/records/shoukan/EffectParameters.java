@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.util.Utils;
 
 import java.util.*;
 
@@ -175,8 +176,8 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 		return out;
 	}
 
-	public boolean isDeferred(Trigger trigger) {
-		return referee != null && referee.trigger() == trigger;
+	public boolean isDeferred(Trigger... trigger) {
+		return referee != null && Utils.equalsAny(referee.trigger(), trigger);
 	}
 
 	public boolean leeched() {
