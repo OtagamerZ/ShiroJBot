@@ -2101,6 +2101,10 @@ public class Shoukan extends GameInstance<Phase> {
 		bindings.add(new TriggerBind(self, binds));
 	}
 
+	public void bind(EffectHolder<?> self, EnumSet<Trigger> binds) {
+		bindings.add(new TriggerBind(self, binds));
+	}
+
 	private BiFunction<String, String, String> replaceMessages(Message message) {
 		resetTimer();
 		addButtons(message);

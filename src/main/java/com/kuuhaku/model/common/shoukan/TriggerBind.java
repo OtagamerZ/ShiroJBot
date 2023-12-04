@@ -25,6 +25,7 @@ import com.kuuhaku.model.records.shoukan.EffectParameters;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Objects;
 
 public class TriggerBind {
@@ -34,6 +35,14 @@ public class TriggerBind {
 	public TriggerBind(EffectHolder<?> holder, EnumMap<Side, EnumSet<Trigger>> binds) {
 		this.holder = holder;
 		this.binds = binds;
+	}
+
+	public TriggerBind(EffectHolder<?> holder, EnumSet<Trigger> binds) {
+		this.holder = holder;
+		this.binds = new EnumMap<>(Map.of(
+				Side.TOP, binds,
+				Side.BOTTOM, binds
+		));
 	}
 
 	public EffectHolder<?> getHolder() {
