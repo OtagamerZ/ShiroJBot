@@ -50,6 +50,8 @@ public record PseudoUser(String name, String avatar, GuildMessageChannel channel
 	}
 
 	public void send(Message source, String text, WebhookEmbed... embeds) {
+		if (!channel.canTalk()) return;
+
 		try (WebhookClient hook = webhook()) {
 			if (hook != null) {
 				if (source != null) {

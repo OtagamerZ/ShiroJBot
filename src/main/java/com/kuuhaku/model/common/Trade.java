@@ -31,10 +31,7 @@ import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.HashBag;
 import org.intellij.lang.annotations.Language;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -219,11 +216,13 @@ public class Trade {
         List<StashedCard> offers = (left ? leftOffer : rightOffer).stream()
                 .distinct()
                 .map(id -> DAO.find(StashedCard.class, id))
+                .filter(Objects::nonNull)
                 .sorted(Comparator.comparing(StashedCard::getType))
                 .toList();
         List<UserItem> items = (left ? leftItems : rightItems).stream()
                 .distinct()
                 .map(id -> DAO.find(UserItem.class, id))
+                .filter(Objects::nonNull)
                 .toList();
 
         XStringBuilder sb = new XStringBuilder("```asciidoc");
