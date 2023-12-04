@@ -1188,7 +1188,7 @@ public abstract class Utils {
 
 	public static <T> T luckyRoll(Supplier<T> supplier, BiFunction<T, T, Boolean> comparator) {
 		T out = null;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 2; i++) {
 			T roll = supplier.get();
 			if (out == null || comparator.apply(out, roll)) {
 				out = roll;
