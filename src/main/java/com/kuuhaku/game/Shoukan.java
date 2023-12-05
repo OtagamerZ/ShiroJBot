@@ -1999,13 +1999,11 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void triggerEOTs(EffectParameters ep) {
-		Iterator<TriggerBind> it = Set.copyOf(bindings).iterator();
-		while (it.hasNext()) {
-			TriggerBind binding = it.next();
+		for (TriggerBind binding : Set.copyOf(bindings)) {
 			if (binding.isBound(ep)) {
 				EffectHolder<?> holder = binding.getHolder();
 				if (holder.getIndex() == -1) {
-					it.remove();
+					bindings.remove(binding);
 					continue;
 				}
 
@@ -2019,8 +2017,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		Set<EffectOverTime> effects = new TreeSet<>(eots);
-		for (EffectOverTime effect : effects) {
+		for (EffectOverTime effect : Set.copyOf(eots)) {
 			if (effect.isLocked()) continue;
 
 			if (effect.getSide() != null) {
