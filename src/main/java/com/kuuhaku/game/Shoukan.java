@@ -1276,7 +1276,7 @@ public class Shoukan extends GameInstance<Phase> {
 			lifesteal += 5;
 		}
 
-		int thorns = (op.getLockTime(Lock.CHARM) > 0 ? 50 : 0) + (int) target.getStats().getThorns().get();
+		int thorns = (op.getLockTime(Lock.CHARM) > 0 ? 20 : 0) + (int) target.getStats().getThorns().get();
 		double dmgMult = 1;
 		if (dmg < 0 && (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0)) {
 			dmgMult /= 2;
@@ -1575,7 +1575,7 @@ public class Shoukan extends GameInstance<Phase> {
 			lifesteal += 5;
 		}
 
-		int thorns = target.getLockTime(Lock.CHARM) > 0 ? 50 : 0;
+		int thorns = target.getLockTime(Lock.CHARM) > 0 ? 20 : 0;
 		double dmgMult = 1;
 		if (dmg < 0 && (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0)) {
 			dmgMult /= 2;
@@ -2156,6 +2156,10 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
+			if (hand.getOrigins().synergy() == Race.SUCCUBUS && hand.isLowLife()) {
+				getOther().modLockTime(Lock.CHARM, 1);
+			}
+
 			String def = hand.getDefeat();
 			if (hand.getHP() == 0 || def != null) {
 				trigger(ON_VICTORY, side.getOther());
@@ -2647,8 +2651,8 @@ public class Shoukan extends GameInstance<Phase> {
 		turns.add(Turn.from(this));
 
 		Hand curr = getCurrent();
-		trigger(ON_TURN_END, curr.getSide());
 		curr.flushDiscard();
+		trigger(ON_TURN_END, curr.getSide());
 
 		if (arcade == Arcade.DECK_ROYALE) {
 			boolean noHand = curr.getCards().stream().noneMatch(d -> d instanceof Senshi);
@@ -2711,6 +2715,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.applyVoTs();
 		curr.reduceOriginCooldown(1);
 		curr.setCanAttack(true);
+		curr.flushDiscard();
 
 		if (curr.getOrigins().synergy() == Race.GHOST && getTurn() % 2 == 0) {
 			curr.modHP(200);
