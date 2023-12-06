@@ -19,5 +19,8 @@
 package com.kuuhaku.model.enums.shoukan;
 
 public enum ContingencyTrigger {
-	HP_LOW, HP_CRITICAL, ON_T4, ON_FUSION, ON_HIGH_MANA, DEFEATED
+	HP_LOW, HP_CRITICAL, DEFEATED,
+	ON_TIER_1, ON_TIER_2, ON_TIER_3, ON_TIER_4,
+	ON_EFFECT, ON_SPELL, ON_ABILITY, ON_TAUNT, ON_DECK, ON_BLIND, ON_CHARM,
+	ON_HIGH_MANA
 }

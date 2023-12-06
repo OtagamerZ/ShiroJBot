@@ -23,7 +23,7 @@ import com.kuuhaku.util.IO;
 import java.awt.image.BufferedImage;
 
 public enum Lock {
-	EFFECT, SPELL, ABILITY, TAUNT, DECK, BLIND, CHARM;
+	EFFECT, SPELL, ABILITY, DECK, TAUNT, BLIND, CHARM;
 
 	public BufferedImage getImage(boolean locked) {
 		return IO.getResourceAsImage("shoukan/icons/" + name().toLowerCase() + (locked ? "_lock" : "_unlock") + ".png");

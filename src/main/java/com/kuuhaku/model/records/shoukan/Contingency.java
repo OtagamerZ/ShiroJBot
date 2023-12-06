@@ -18,9 +18,9 @@
 
 package com.kuuhaku.model.records.shoukan;
 
-import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.ContingencyTrigger;
+import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
@@ -31,16 +31,25 @@ public record Contingency(Evogear card, ContingencyTrigger trigger) {
 		return switch (trigger) {
 			case HP_LOW -> h.getHPPrcnt() <= 0.5;
 			case HP_CRITICAL -> h.getHPPrcnt() <= 0.25;
-			case ON_T4 -> {
-				Evogear e = h.getOther().getData().get(Evogear.class, "last_spell");
-				yield e != null && e.getTier() >= 4;
-			}
-			case ON_FUSION -> {
-				Senshi s = h.getOther().getData().get(Senshi.class, "last_summon");
-				yield s != null && s.getBase().getTags().contains("FUSION");
-			}
-			case ON_HIGH_MANA -> h.getOther().getMP() >= 10;
 			case DEFEATED -> h.getHP() == 0;
+			case ON_TIER_1, ON_TIER_2, ON_TIER_3, ON_TIER_4 -> {
+				Evogear e = h.getOther().getData().get(Evogear.class, "last_spell");
+				yield e != null && e.getTier() >= switch (trigger) {
+					case ON_TIER_1 -> 1;
+					case ON_TIER_2 -> 2;
+					case ON_TIER_3 -> 3;
+					case ON_TIER_4 -> 4;
+					default -> Integer.MAX_VALUE;
+				};
+			}
+			case ON_EFFECT -> h.getLockTime(Lock.EFFECT) > 0;
+			case ON_SPELL -> h.getLockTime(Lock.SPELL) > 0;
+			case ON_ABILITY -> h.getLockTime(Lock.ABILITY) > 0;
+			case ON_TAUNT -> h.getLockTime(Lock.TAUNT) > 0;
+			case ON_DECK -> h.getLockTime(Lock.DECK) > 0;
+			case ON_BLIND -> h.getLockTime(Lock.BLIND) > 0;
+			case ON_CHARM -> h.getLockTime(Lock.CHARM) > 0;
+			case ON_HIGH_MANA -> h.getOther().getMP() >= 10;
 		};
 	}
 }
