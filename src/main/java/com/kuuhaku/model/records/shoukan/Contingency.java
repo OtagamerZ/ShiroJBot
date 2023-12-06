@@ -52,7 +52,19 @@ public record Contingency(Evogear card, ContingencyTrigger trigger) {
 			case ON_DECK -> h.getLockTime(Lock.DECK) > 0;
 			case ON_BLIND -> h.getLockTime(Lock.BLIND) > 0;
 			case ON_CHARM -> h.getLockTime(Lock.CHARM) > 0;
-			case ON_HIGH_MANA -> h.getOther().getMP() >= 10;
+			case ON_LOW_MANA, ON_HIGH_MANA -> {
+				Hand op = h.getOther();
+
+				if (h.getGame().getCurrentSide() == op.getSide()) {
+					if (trigger == ContingencyTrigger.ON_LOW_MANA) {
+						yield h.getOther().getMP() == 0;
+					} else {
+						yield h.getOther().getMP() >= 10;
+					}
+				}
+
+				yield false;
+			}
 		};
 	}
 }
