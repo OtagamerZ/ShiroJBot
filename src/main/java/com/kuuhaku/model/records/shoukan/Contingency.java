@@ -24,6 +24,8 @@ import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
+import java.util.function.Predicate;
+
 public record Contingency(Evogear card, ContingencyTrigger trigger) {
 	public boolean check() {
 		Hand h = card.getHand();
@@ -33,7 +35,8 @@ public record Contingency(Evogear card, ContingencyTrigger trigger) {
 			case HP_CRITICAL -> h.getHPPrcnt() <= 0.25;
 			case DEFEATED -> h.getHP() == 0;
 			case ON_TIER_1, ON_TIER_2, ON_TIER_3, ON_TIER_4 -> {
-				Evogear e = h.getOther().getData().get(Evogear.class, "last_spell");
+				Evogear e = h.getOther().getData().get(Evogear.class, "last_evogear");
+
 				yield e != null && e.getTier() >= switch (trigger) {
 					case ON_TIER_1 -> 1;
 					case ON_TIER_2 -> 2;

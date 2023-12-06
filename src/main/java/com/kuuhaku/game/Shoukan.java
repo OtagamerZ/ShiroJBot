@@ -615,6 +615,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (e.execute(ep)) {
 			hand.getGraveyard().add(p);
 			hand.getData().put("last_spell", e);
+			hand.getData().put("last_evogear", e);
 			trigger(ON_SPELL, hand.getSide());
 			return true;
 		}
@@ -687,6 +688,7 @@ public class Shoukan extends GameInstance<Phase> {
 		chosen.setAvailable(false);
 		target.getEquipments().add(copy);
 		curr.getData().put("last_equipment", copy);
+		curr.getData().put("last_evogear", copy);
 		reportEvent("str/equip_card", true,
 				curr.getName(),
 				copy.isFlipped() ? getString("str/an_equipment") : copy,
@@ -1038,6 +1040,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.getData().put("last_spell", chosen);
+		curr.getData().put("last_evogear", chosen);
 		trigger(ON_SPELL, side);
 		reportEvent("str/activate_card", true,
 				curr.getName(),
