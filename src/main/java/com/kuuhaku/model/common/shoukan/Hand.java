@@ -834,15 +834,6 @@ public class Hand {
 			} else {
 				reached = false;
 			}
-		} else if (origin.synergy() == Race.SUCCUBUS) {
-			if (isLowLife()) {
-				if (!reached) {
-					getOther().modLockTime(Lock.CHARM, 3);
-					reached = true;
-				}
-			} else {
-				reached = false;
-			}
 		}
 	}
 
@@ -888,9 +879,11 @@ public class Hand {
 
 	public void modMP(int value) {
 		if (origin.major() == Race.DEMON) {
-			int allowed = Math.max(0, hp - (int) (base.hp() * 0.08));
-			value = Math.min(value, allowed);
-			modHP((int) (value * (base.hp() * 0.08)));
+			int unit = (int) (base.hp() * 0.08);
+			int allowed = Math.max(0, hp - unit);
+
+			value = Math.max(-allowed, value);
+			modHP(value * unit);
 			return;
 		}
 

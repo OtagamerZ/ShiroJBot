@@ -1276,7 +1276,7 @@ public class Shoukan extends GameInstance<Phase> {
 			lifesteal += 5;
 		}
 
-		int thorns = (op.getLockTime(Lock.CHARM) > 0 ? 50 : 0) + (int) target.getStats().getThorns().get();
+		int thorns = (op.getLockTime(Lock.CHARM) > 0 ? 20 : 0) + (int) target.getStats().getThorns().get();
 		double dmgMult = 1;
 		if (dmg < 0 && (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0)) {
 			dmgMult /= 2;
@@ -1575,7 +1575,7 @@ public class Shoukan extends GameInstance<Phase> {
 			lifesteal += 5;
 		}
 
-		int thorns = target.getLockTime(Lock.CHARM) > 0 ? 50 : 0;
+		int thorns = target.getLockTime(Lock.CHARM) > 0 ? 20 : 0;
 		double dmgMult = 1;
 		if (dmg < 0 && (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0)) {
 			dmgMult /= 2;
@@ -2154,6 +2154,10 @@ public class Shoukan extends GameInstance<Phase> {
 					getChannel().sendMessage(getString("str/contingency_trigger", hand.getName(), spell)).queue();
 					hand.setContingency(null);
 				}
+			}
+
+			if (hand.getOrigins().synergy() == Race.SUCCUBUS && hand.isLowLife()) {
+				getOther().modLockTime(Lock.CHARM, 1);
 			}
 
 			String def = hand.getDefeat();
