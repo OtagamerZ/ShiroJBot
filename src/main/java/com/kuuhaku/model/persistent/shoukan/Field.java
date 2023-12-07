@@ -370,8 +370,4 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 		return new XList<>(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.id IN ?1 ORDER BY f.id", ids), rng);
 	}
-
-	public static Field getDEFAULT() {
-		return DAO.find(Field.class, "DEFAULT");
-	}
 }

@@ -171,8 +171,8 @@ public class Hand {
 				if (op.getKills() % 7 == 0 && op.getOrigins().synergy() == Race.SHINIGAMI) {
 					for (Drawable<?> r : op.getDeck()) {
 						if (r instanceof EffectHolder<?> eh) {
-							ValueMod vm = eh.getStats().getCostMult().get(Field.getDEFAULT());
-							eh.getStats().getCostMult().set(Field.getDEFAULT(), Math.max(vm.getValue() - 0.1, -0.5));
+							ValueMod vm = eh.getStats().getCostMult().get(getGame().getArena().DEFAULT_FIELD);
+							eh.getStats().getCostMult().set(getGame().getArena().DEFAULT_FIELD, Math.max(vm.getValue() - 0.1, -0.5));
 						}
 					}
 
@@ -828,7 +828,7 @@ public class Hand {
 		if (origin.synergy() == Race.GARGOYLE) {
 			if (isCritical()) {
 				if (!reached) {
-					stats.getDamageMult().set(Field.getDEFAULT(), -1, 1);
+					stats.getDamageMult().set(game.getArena().DEFAULT_FIELD, -1, 1);
 					reached = true;
 				}
 			} else {

@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
@@ -106,6 +107,7 @@ public class Arena implements Renderer {
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	});
 
+	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
 	private Field field = null;
 
 	public Arena(Shoukan game) {
@@ -140,7 +142,7 @@ public class Arena implements Renderer {
 	}
 
 	public Field getField() {
-		return Utils.getOr(field, Field.getDEFAULT());
+		return Utils.getOr(field, DEFAULT_FIELD);
 	}
 
 	public void setField(Field field) {

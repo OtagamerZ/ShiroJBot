@@ -21,7 +21,6 @@ package com.kuuhaku.model.common.shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.Objects;
@@ -52,8 +51,8 @@ public class ValueMod implements Cloneable {
 			this.hash = e.posHash();
 		} else if (source instanceof Senshi s) {
 			this.hash = s.posHash();
-		} else if (source instanceof Field f) {
-			this.hash = f.hashCode();
+		} else if (source != null && source.getHand() != null) {
+			this.hash = source.getSlot().hashCode();
 		} else {
 			this.hash = -1;
 		}
