@@ -2160,7 +2160,10 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (hand.getOrigins().synergy() == Race.SUCCUBUS && hand.isLowLife()) {
-				getOther().modLockTime(Lock.CHARM, 1);
+				Hand op = hand.getOther();
+				if (op.getLockTime(Lock.CHARM) == 0) {
+					op.modLockTime(Lock.CHARM, 1);
+				}
 			}
 
 			String def = hand.getDefeat();
