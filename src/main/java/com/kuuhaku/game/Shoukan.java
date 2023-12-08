@@ -2375,10 +2375,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 						Drawable<?> d = curr.requestChoice(cards);
 						if (d != null) {
-							curr.getCards().add(d);
-							deque.remove(d);
-
+							curr.draw(d);
 							curr.showHand();
+
 							reportEvent("str/destiny_draw", true, curr.getName());
 						}
 
