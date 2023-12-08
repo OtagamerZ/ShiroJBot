@@ -307,7 +307,7 @@ public class Hand {
 
 		if (game.getArcade() == Arcade.CARDMASTER) {
 			List<List<? extends Drawable<?>>> cards = new ArrayList<>();
-			cards.add(DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE has(s.base.tags, 'FUSION') = FALSE"));
+			cards.add(DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE get_rarity_index(s.card.rarity) BETWEEN 1 AND 5 AND has(s.base.tags, 'FUSION') = FALSE"));
 			cards.add(DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.base.mana > 0"));
 			cards.add(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE NOT f.effect"));
 
