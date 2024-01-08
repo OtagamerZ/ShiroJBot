@@ -28,28 +28,27 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class MultiProcessor<In, Out> {
-	private final Function<Integer, Collection<In>> supplier;
+	private final Supplier<Collection<In>> supplier;
 	private final ExecutorService exec;
-	private final int threads;
 
-	private MultiProcessor(Function<Integer, Collection<In>> supplier, int threads) {
+	private MultiProcessor(Supplier<Collection<In>> supplier) {
 		this.supplier = supplier;
-		this.exec = Executors.newWorkStealingPool(threads);
-		this.threads = threads;
+		this.exec = Executors.newVirtualThreadPerTaskExecutor();
 	}
 
-	public static <In> MultiProcessor<In, ?> with(int threads, Function<Integer, Collection<In>> supplier) {
-		return new MultiProcessor<>(supplier, threads);
+	public static <In> MultiProcessor<In, ?> with(Supplier<Collection<In>> supplier) {
+		return new MultiProcessor<>(supplier);
 	}
 
 	public <R> MultiProcessor<In, R> forResult(Class<R> klass) {
-		return new MultiProcessor<>(supplier, threads);
+		return new MultiProcessor<>(supplier);
 	}
 
 	public List<Out> process(Function<In, Out> task) {
-		List<In> all = List.copyOf(supplier.apply(threads));
+		List<In> all = List.copyOf(supplier.get());
 
 		List<CompletableFuture<Out>> tasks = new ArrayList<>();
 		for (int i = 0; i < all.size(); i++) {

@@ -300,7 +300,7 @@ public abstract class Graph {
 				.toList();
 
 		MultiProcessor
-				.with(Runtime.getRuntime().availableProcessors(), t -> ListUtils.partition(indexes, t))
+				.with(() -> ListUtils.partition(indexes, 8))
 				.forResult(Void.class)
 				.process(idx -> {
 					for (Integer i : idx) {
