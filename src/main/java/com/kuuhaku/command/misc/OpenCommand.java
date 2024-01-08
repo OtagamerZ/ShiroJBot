@@ -66,20 +66,19 @@ public class OpenCommand implements Executable {
 				event.channel().sendMessage(locale.get("error/drop_lock")).queue();
 				return;
 			}
+
+			Drop dp = drop.get();
+			dp.award(acc);
+
+			event.channel().sendMessage(locale.get("success/claimed", event.user().getAsMention()))
+					.setEmbeds(
+							new EmbedBuilder()
+									.setDescription(dp.getContent())
+									.build()
+					)
+					.queue();
 		} catch (NullPointerException e) {
 			event.channel().sendMessage(locale.get("error/no_drop")).queue();
-			return;
 		}
-
-		Drop dp = drop.get();
-		dp.award(acc);
-
-		event.channel().sendMessage(locale.get("success/claimed", event.user().getAsMention()))
-				.setEmbeds(
-						new EmbedBuilder()
-								.setDescription(dp.getContent())
-								.build()
-				)
-				.queue();
 	}
 }
