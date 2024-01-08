@@ -17,6 +17,7 @@
  */
 //file:noinspection DifferentStdlibGradleVersion
 //file:noinspection GroovyUnusedAssignment
+//file:noinspection GroovyAssignabilityCheck
 
 buildscript {
 	repositories {
@@ -52,7 +53,7 @@ application {
 group "com.kuuhaku"
 version "STANDALONE"
 
-def javaVersion = JavaVersion.VERSION_20
+def javaVersion = JavaVersion.VERSION_21
 sourceCompatibility = javaVersion
 targetCompatibility = javaVersion
 
@@ -85,7 +86,7 @@ tasks.register("enforceVersion") {
 
 dependencies {
 	//Core
-	implementation group: "net.dv8tion", name: "JDA", version: "5.0.0-beta.17"
+	implementation group: "net.dv8tion", name: "JDA", version: "5.0.0-beta.19"
 	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "4.0.5b"
 	implementation group: "com.github.ygimenez", name: "Simple-Moshi", version: "9a75a36"
 
@@ -118,7 +119,7 @@ dependencies {
 	implementation group: "commons-io", name: "commons-io", version: "2.11.0"
 
 	//Logger
-	implementation group: "org.slf4j", name: "slf4j-api", version: "1.7.25"
+	implementation group: "org.slf4j", name: "slf4j-api", version: "2.0.5"
 	implementation group: "org.apache.logging.log4j", name: "log4j-api", version: "2.20.0"
 	implementation group: "org.apache.logging.log4j", name: "log4j-core", version: "2.20.0"
 	implementation group: "org.apache.logging.log4j", name: "log4j-slf4j-impl", version: "2.20.0"
