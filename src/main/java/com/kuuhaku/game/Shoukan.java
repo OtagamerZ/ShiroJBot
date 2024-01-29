@@ -1399,7 +1399,7 @@ public class Shoukan extends GameInstance<Phase> {
 								dmg = 0;
 							} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_BLOCK, true) || chance(block))) {
 								outcome = getString("str/combat_block", block);
-								trigger(null, source.asSource(), target.asTarget(ON_BLOCK));
+								trigger(NONE, source.asSource(), target.asTarget(ON_BLOCK));
 
 								source.setStun(1);
 

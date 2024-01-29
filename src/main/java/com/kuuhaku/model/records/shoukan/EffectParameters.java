@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Utils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
