@@ -24,6 +24,7 @@ import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.kuuhaku.util.Utils;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -54,7 +55,7 @@ public record PseudoUser(String name, String avatar, GuildMessageChannel channel
 
 		try (WebhookClient hook = webhook()) {
 			if (hook != null) {
-				if (source != null) {
+				if (source != null && channel.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
 					source.delete().queue(null, Utils::doNothing);
 				}
 
