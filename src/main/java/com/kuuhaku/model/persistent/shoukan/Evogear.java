@@ -269,7 +269,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public int getDmg() {
 		int sum = base.getAtk() + (int) stats.getAtk().get();
 
-		if (hand.getOrigins().synergy() == Race.CYBERBEAST) {
+		if (hand != null && hand.getOrigins().synergy() == Race.CYBERBEAST) {
 			sum += getGame().getCards(getSide()).stream().mapToInt(Senshi::getBlock).sum();
 		}
 
