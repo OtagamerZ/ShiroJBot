@@ -105,10 +105,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private byte state = 0b10;
 	/*
 	0xF
-	  └ 000 0111
-	         ││└ solid
-	         │└─ available
-	         └── flipped
+	  └ 000 1111
+	        │││└ solid
+	        ││└─ available
+	        │└── flipped
+	        └─── ethereal
 	 */
 
 	public Evogear() {
@@ -268,6 +269,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public int getDmg() {
 		int sum = base.getAtk() + (int) stats.getAtk().get();
 
+		if (hand.getOrigins().synergy() == Race.CYBERBEAST) {
+			sum += getGame().getCards(getSide()).stream().mapToInt(Senshi::getBlock).sum();
+		}
+
 		return Calc.round(sum * getAttrMult());
 	}
 
@@ -384,6 +389,16 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public void setFlipped(boolean flipped) {
 		state = (byte) Bit.set(state, 2, flipped);
+	}
+
+	@Override
+	public boolean isEthereal() {
+		return Bit.on(state, 3);
+	}
+
+	@Override
+	public void setEthereal(boolean ethereal) {
+		state = (byte) Bit.set(state, 3, ethereal);
 	}
 
 	public String getEffect() {
@@ -625,10 +640,16 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				}
 
 				if (hand != null) {
-					if (hasFlag(Flag.EMPOWERED)) {
-						boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
-						BufferedImage emp = IO.getResourceAsImage("shoukan/frames/state/" + (legacy ? "old" : "new") + "/empowered.png");
+					boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
+					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
 
+					if (hasFlag(Flag.EMPOWERED)) {
+						BufferedImage emp = IO.getResourceAsImage(path + "/empowered.png");
+						g2d.drawImage(emp, 0, 0, null);
+					}
+
+					if (isEthereal()) {
+						BufferedImage emp = IO.getResourceAsImage(path + "/ethereal.png");
 						g2d.drawImage(emp, 0, 0, null);
 					}
 				}

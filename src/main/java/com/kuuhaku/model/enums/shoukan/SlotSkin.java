@@ -73,7 +73,7 @@ public enum SlotSkin {
 
 	public BufferedImage getImage(Side side, boolean legacy) {
 		String s = side.name().toLowerCase();
-		BufferedImage overlay = IO.getResourceAsImage("shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".png");;
+		BufferedImage overlay = IO.getResourceAsImage("shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".png");
 		if (this == INVISIBLE) return overlay;
 
 		BufferedImage bi = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);

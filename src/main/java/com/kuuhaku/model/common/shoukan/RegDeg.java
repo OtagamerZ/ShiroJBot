@@ -58,6 +58,10 @@ public class RegDeg {
 				mult *= 1.5;
 			}
 
+			if (parent.getGame().getCurrent().getOrigins().synergy() == Race.FIEND) {
+				mult /= 4;
+			}
+
 			values.add(new Degen(-value, mult * parent.getStats().getDegenMult().get()));
 		} else if (value > 0) {
 			if (parent.getOrigins().major() == Race.HUMAN) {

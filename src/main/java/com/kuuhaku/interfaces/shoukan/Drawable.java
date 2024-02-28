@@ -162,6 +162,13 @@ public interface Drawable<T extends Drawable<T>> {
 	default void setFlipped(boolean flipped) {
 	}
 
+	default boolean isEthereal() {
+		return false;
+	}
+
+	default void setEthereal(boolean ethereal) {
+	}
+
 	default boolean keepOnDestroy() {
 		return true;
 	}
@@ -267,15 +274,12 @@ public interface Drawable<T extends Drawable<T>> {
 			}
 
 			if (this instanceof Senshi s) {
-				if (s.getHitChance() < 100) {
+				if (s.isBlinded()) {
 					icon = IO.getResourceAsImage("shoukan/icons/blind.png");
 					assert icon != null;
 					int x = 25;
 
-					String val = (int) s.getHitChance() + "%";
 					g2d.drawImage(icon, x, y, null);
-					g2d.setColor(Color.GRAY);
-					Graph.drawOutlinedString(g2d, val, x + icon.getWidth() + 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
 					y -= icon.getHeight() + 5;
 				}
 			}

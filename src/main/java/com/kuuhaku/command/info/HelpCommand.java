@@ -164,7 +164,7 @@ public class HelpCommand implements Executable {
 					.setThumbnail(emt.getImageUrl())
 					.appendDescription(cat.getDescription(locale) + "\n\n")
 					.appendDescription(locale.get("str/command_counter", cat.getCommands().size()))
-					.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.call());;
+					.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.call());
 
 			pages.put(Utils.parseEmoji(emt.getId()), Utils.generatePage(eb, cat.getCommands(), 10, cmd -> {
 				if (cmd.name().contains(".")) return null;

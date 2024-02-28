@@ -130,13 +130,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private int state = 0b10;
 	/*
 	0xF FFFFF FF
-	  │ │││││ └┴ 0011 1111
-	  │ │││││      ││ │││└ solid
-	  │ │││││      ││ ││└─ available
-	  │ │││││      ││ │└── defending
-	  │ │││││      ││ └─── flipped
-	  │ │││││      │└ sealed
-	  │ │││││      └─ switched
+	  │ │││││ └┴ 0111 1111
+	  │ │││││     │││ │││└ solid
+	  │ │││││     │││ ││└─ available
+	  │ │││││     │││ │└── defending
+	  │ │││││     │││ └─── flipped
+	  │ │││││     ││└ sealed
+	  │ │││││     │└─ switched
+	  │ │││││     └── ethereal
 	  │ ││││└─ (0 - 15) sleeping
 	  │ │││└── (0 - 15) stunned
 	  │ ││└─── (0 - 15) stasis
@@ -508,10 +509,18 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		double mult = 1;
 		if (hand != null) {
-			if (hand.isLowLife() && hand.getOrigins().synergy() == Race.ONI) {
-				mult *= 1.2;
-			} else if (hand.getHPPrcnt() > 1 && hand.getOrigins().synergy() == Race.GHOUL) {
-				mult *= 1 + Math.max(0, (hand.getHPPrcnt() - 1) / 2);
+			switch (hand.getOrigins().synergy()) {
+				case ONI -> {
+					if (hand.isLowLife()) {
+						mult *= 1.2;
+					}
+				}
+				case GHOUL -> {
+					if (hand.getHPPrcnt() > 1) {
+						mult *= 1 + Math.max(0, (hand.getHPPrcnt() - 1) / 2);
+					}
+				}
+				case CYBERBEAST -> sum += getGame().getCards(getSide()).stream().mapToInt(Senshi::getBlock).sum();
 			}
 
 			mult *= getFieldMult();
@@ -599,6 +608,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			min += 10;
 		}
 
+		if (isBlinded()) {
+			sum /= 2;
+		}
+
 		if (hand != null && getGame() != null && getGame().getArena().getField().getType() == FieldType.DUNGEON) {
 			return Utils.clamp(sum, min, 50);
 		}
@@ -611,8 +624,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		int sum = base.getBlock() + (int) stats.getBlock().get() + getEquipBlock();
 
 		int min = 0;
-		if (hand != null && hand.getOrigins().synergy() == Race.CYBORG) {
-			min += 10;
+		if (hand != null) {
+			if (hand.getOrigins().synergy() == Race.WEREBEAST && isSleeping()) {
+				sum += 50;
+			} else if (hand.getOrigins().synergy() == Race.CYBORG) {
+				min += 10;
+			}
 		}
 
 		return Utils.clamp(min + sum, min, 100);
@@ -814,8 +831,18 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return Bit.on(state, 5);
 	}
 
-	public void setSwitched(boolean sealed) {
-		state = Bit.set(state, 5, sealed);
+	public void setSwitched(boolean switched) {
+		state = Bit.set(state, 5, switched);
+	}
+
+	@Override
+	public boolean isEthereal() {
+		return Bit.on(state, 6);
+	}
+
+	@Override
+	public void setEthereal(boolean ethereal) {
+		state = Bit.set(state, 6, ethereal);
 	}
 
 	public boolean isSleeping() {
@@ -826,10 +853,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return Bit.get(state, 2, 4);
 	}
 
-	public void awake() {
+	public void awaken() {
 		int curr = Bit.get(state, 2, 4);
 
-		if (getGame().chance(100d / (curr + 1))) {
+		if (getGame().getArena().getField().getType() != FieldType.NIGHT && getGame().chance(100d / (curr + 1))) {
 			state = Bit.set(state, 2, 0, 4);
 		}
 	}
@@ -987,21 +1014,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public boolean isBlinded(boolean pop) {
 		return hasFlag(Flag.BLIND, pop);
-	}
-
-	public double getHitChance() {
-		double hit = 100;
-		if (isBlinded(true)) {
-			hit *= 0.75;
-		}
-
-		if (hand != null && getGame() != null && getGame().getArena().getField().getType() == FieldType.NIGHT) {
-			if (hand.getOrigins().synergy() != Race.WEREBEAST) {
-				hit *= 0.8;
-			}
-		}
-
-		return hit;
 	}
 
 	public boolean isSupporting() {
@@ -1403,13 +1415,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 				if (hand != null && getGame() != null) {
 					boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
-					String path = "shoukan/frames/state/" + (legacy ? "old" : "new") + "/";
-
-					if (hasFlag(Flag.EMPOWERED)) {
-						BufferedImage emp = IO.getResourceAsImage(path + "empowered.png");
-
-						g2d.drawImage(emp, 0, 0, null);
-					}
+					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
 
 					double mult = getFieldMult();
 					if (mult != 1) {
@@ -1421,6 +1427,16 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						}
 
 						g2d.drawImage(indicator, 0, 0, null);
+					}
+
+					if (hasFlag(Flag.EMPOWERED)) {
+						BufferedImage emp = IO.getResourceAsImage(path + "/empowered.png");
+						g2d.drawImage(emp, 0, 0, null);
+					}
+
+					if (isEthereal()) {
+						BufferedImage emp = IO.getResourceAsImage(path + "/ethereal.png");
+						g2d.drawImage(emp, 0, 0, null);
 					}
 				}
 			}

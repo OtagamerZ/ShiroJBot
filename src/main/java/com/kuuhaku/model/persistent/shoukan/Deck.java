@@ -25,10 +25,7 @@
  import com.kuuhaku.model.common.shoukan.Hand;
  import com.kuuhaku.model.enums.Fonts;
  import com.kuuhaku.model.enums.I18N;
- import com.kuuhaku.model.enums.shoukan.Arcade;
- import com.kuuhaku.model.enums.shoukan.FrameSkin;
- import com.kuuhaku.model.enums.shoukan.Race;
- import com.kuuhaku.model.enums.shoukan.SlotSkin;
+ import com.kuuhaku.model.enums.shoukan.*;
  import com.kuuhaku.model.persistent.shiro.Anime;
  import com.kuuhaku.model.persistent.shiro.Card;
  import com.kuuhaku.model.persistent.user.Account;
@@ -693,10 +690,14 @@
 									 m += (int) h.getGame().getCards(h.getSide()).parallelStream()
 											 .filter(Senshi::isFusion)
 											 .count();
-								 } else if (origin.synergy() == Race.FEY) {
-									 m = (int) (mp * (h.getGame().chance(20) ? 1.5 : 1));
-								 } else if (origin.synergy() == Race.GHOST && h.getGame().getTurn() % 2 == 1) {
+								 }
+
+								 if (h.getGame().getArena().getField().getType() == FieldType.DAY) {
 									 m += 1;
+								 }
+
+								 if (origin.synergy() == Race.FEY) {
+									 m = (int) (m * h.getGame().getTurn() % 2 == 0 ? 1.5 : 0.5);
 								 }
 
 								 if (h.getGame().getArcade() == Arcade.OVERCHARGE) {
@@ -722,7 +723,7 @@
 				 }
 
 				 if (origin.synergy() == Race.VAMPIRE) {
-					 ls += 5;
+					 ls += 7;
 				 }
 
 				 return List.of(bHP, mpGain, handCap, ls);

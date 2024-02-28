@@ -22,7 +22,6 @@ import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingConsumer;
-import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.misc.SynthesizeCommand;
@@ -63,9 +62,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
-import net.dv8tion.jda.api.requests.restaction.WebhookMessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.ArrayUtils;
@@ -430,15 +426,18 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
-			chosen.setAvailable(curr.getOrigins().synergy() == Race.HERALD && chance(20));
+			chosen.setAvailable(false);
 			slot.setBottom(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
 					case "d" -> s.setDefending(true);
 					case "b" -> s.setFlipped(true);
 				}
 
-				curr.consumeHP(s.getHPCost());
-				curr.consumeMP(s.getMPCost() - usedExtra);
+				if (curr.getOrigins().synergy() != Race.HERALD || curr.hasSummoned()) {
+					curr.consumeHP(s.getHPCost());
+					curr.consumeMP(s.getMPCost() - usedExtra);
+				}
+
 				List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost() + usedExtra);
 				if (!consumed.isEmpty()) {
 					s.getStats().getData().put("consumed", consumed);
@@ -450,15 +449,18 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
-			chosen.setAvailable(curr.getOrigins().synergy() == Race.HERALD && chance(20));
+			chosen.setAvailable(false);
 			slot.setTop(copy = chosen.withCopy(s -> {
 				switch (args.getString("mode")) {
 					case "d" -> s.setDefending(true);
 					case "b" -> s.setFlipped(true);
 				}
 
-				curr.consumeHP(s.getHPCost());
-				curr.consumeMP(s.getMPCost() - usedExtra);
+				if (curr.getOrigins().synergy() != Race.HERALD || curr.hasSummoned()) {
+					curr.consumeHP(s.getHPCost());
+					curr.consumeMP(s.getMPCost() - usedExtra);
+				}
+
 				List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost() + usedExtra);
 				if (!consumed.isEmpty()) {
 					s.getStats().getData().put("consumed", consumed);
@@ -466,6 +468,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}));
 		}
 
+		curr.setSummoned(true);
 		curr.getData().put("last_summon", copy);
 		reportEvent("str/place_card", true,
 				curr.getName(),
@@ -477,6 +480,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 	private boolean placeProxy(Hand hand, JSONObject args) {
 		Drawable<?> d = hand.getCards().get(args.getInt("inHand") - 1);
+
+		int extraMp = 0;
+		if (hand.getOrigins().synergy() == Race.HOMUNCULUS) {
+			extraMp = hand.getDiscard().size();
+		}
+
 		if (d instanceof Evogear chosen && chosen.isSpell()) {
 			if (!chosen.isAvailable() || chosen.isPassive()) {
 				getChannel().sendMessage(getString("error/card_unavailable")).queue();
@@ -532,17 +541,19 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		TrapSpell proxy = new TrapSpell(chosen);
-		Evogear copy = proxy.getOriginal();
-
+		int usedExtra = Calc.clamp(chosen.getMPCost() - hand.getMP(), 0, extraMp);
 		if (args.has("notCombat")) {
 			if (slot.hasBottom()) {
 				getChannel().sendMessage(getString("error/slot_occupied")).queue();
 				return false;
 			}
 
-			hand.consumeHP(copy.getHPCost());
-			hand.consumeMP(copy.getMPCost());
-			List<Drawable<?>> consumed = hand.consumeSC(copy.getSCCost());
+			if (hand.getOrigins().synergy() != Race.HERALD || hand.hasSummoned()) {
+				hand.consumeHP(chosen.getHPCost());
+				hand.consumeMP(chosen.getMPCost() - usedExtra);
+			}
+
+			List<Drawable<?>> consumed = hand.consumeSC(chosen.getSCCost());
 			if (!consumed.isEmpty()) {
 				proxy.getStats().getData().put("consumed", consumed);
 			}
@@ -555,9 +566,12 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
-			hand.consumeHP(copy.getHPCost());
-			hand.consumeMP(copy.getMPCost());
-			List<Drawable<?>> consumed = hand.consumeSC(copy.getSCCost());
+			if (hand.getOrigins().synergy() != Race.HERALD || hand.hasSummoned()) {
+				hand.consumeHP(chosen.getHPCost());
+				hand.consumeMP(chosen.getMPCost() - usedExtra);
+			}
+
+			List<Drawable<?>> consumed = hand.consumeSC(chosen.getSCCost());
 			if (!consumed.isEmpty()) {
 				proxy.getStats().getData().put("consumed", consumed);
 			}
@@ -566,6 +580,7 @@ public class Shoukan extends GameInstance<Phase> {
 			slot.setTop(proxy);
 		}
 
+		hand.setSummoned(true);
 		reportEvent("str/place_card", true,
 				hand.getName(),
 				proxy.isFlipped() ? getString("str/a_card") : proxy,
@@ -899,16 +914,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.getDiscard().add(chosen);
 
-		if (curr.getOrigins().synergy() == Race.FAMILIAR) {
-			if (chance(33)) {
-				List<? extends EffectHolder<?>> available = curr.getCards().stream()
-						.filter(d -> d instanceof EffectHolder<?>)
-						.filter(Drawable::isAvailable)
-						.map(d -> (EffectHolder<?>) d)
-						.toList();
-
-				if (!available.isEmpty()) {
-					Utils.getRandomEntry(getRng(), available).getStats().getMana().set(-1);
+		if (curr.getOrigins().synergy() == Race.FAMILIAR && chosen instanceof Senshi s) {
+			for (Drawable<?> d : curr.getCards()) {
+				if (d.isAvailable() && d instanceof Senshi it && it.getElement() == s.getElement()) {
+					it.getStats().getMana().set(-1);
 				}
 			}
 		}
@@ -943,14 +952,14 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.getDiscard().addAll(cards);
 
 		if (curr.getOrigins().synergy() == Race.FAMILIAR) {
-			if (chance(25)) {
-				List<? extends EffectHolder<?>> available = curr.getCards().stream()
-						.filter(d -> d instanceof EffectHolder<?>)
-						.filter(Drawable::isAvailable)
-						.map(d -> (EffectHolder<?>) d)
-						.toList();
-
-				Utils.getRandomEntry(getRng(), available).getStats().getMana().set(-1);
+			for (Drawable<?> c : cards) {
+				if (c instanceof Senshi s) {
+					for (Drawable<?> d : curr.getCards()) {
+						if (d.isAvailable() && d instanceof Senshi it && it.getElement() == s.getElement()) {
+							it.getStats().getMana().set(-1);
+						}
+					}
+				}
 			}
 		}
 
@@ -1276,7 +1285,7 @@ public class Shoukan extends GameInstance<Phase> {
 		int direct = 0;
 		int lifesteal = you.getBase().lifesteal() + (int) source.getStats().getLifesteal().get();
 		if (you.getOrigins().synergy() == Race.VAMPIRE && you.isLowLife()) {
-			lifesteal += 5;
+			lifesteal += 7;
 		}
 
 		int thorns = (op.getLockTime(Lock.CHARM) > 0 ? 20 : 0) + (int) target.getStats().getThorns().get();
@@ -1299,10 +1308,6 @@ public class Shoukan extends GameInstance<Phase> {
 							case WOUNDING -> {
 								int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
 								op.getRegDeg().add(val);
-
-								if (you.getOrigins().synergy() == Race.FIEND && chance(20)) {
-									op.getRegDeg().add(val);
-								}
 							}
 							case DRAIN -> {
 								int toDrain = Math.min(c.getValue(e.getTier()), op.getMP());
@@ -1355,7 +1360,7 @@ public class Shoukan extends GameInstance<Phase> {
 						outcome = getString("str/combat_success", dmg, 0);
 
 						for (Senshi s : target.getNearby()) {
-							s.awake();
+							s.awaken();
 						}
 
 						op.getGraveyard().add(target);
@@ -1376,7 +1381,7 @@ public class Shoukan extends GameInstance<Phase> {
 							trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
 
 							for (Senshi s : source.getNearby()) {
-								s.awake();
+								s.awaken();
 							}
 
 							if (announce) {
@@ -1392,7 +1397,7 @@ public class Shoukan extends GameInstance<Phase> {
 							int block = target.getBlock();
 							int dodge = target.getDodge();
 
-							if (chance(100 - source.getHitChance())) {
+							if (source.isBlinded(true)) {
 								outcome = getString("str/combat_miss");
 								trigger(ON_MISS, source.asSource(ON_MISS));
 
@@ -1425,7 +1430,7 @@ public class Shoukan extends GameInstance<Phase> {
 									}
 
 									for (Senshi s : target.getNearby()) {
-										s.awake();
+										s.awaken();
 									}
 
 									if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
@@ -1446,13 +1451,13 @@ public class Shoukan extends GameInstance<Phase> {
 									trigger(ON_CLASH, source.asSource(ON_SUICIDE), target.asTarget(ON_LOSE));
 
 									for (Senshi s : target.getNearby()) {
-										s.awake();
+										s.awaken();
 									}
 
 									op.getGraveyard().add(target);
 
 									for (Senshi s : source.getNearby()) {
-										s.awake();
+										s.awaken();
 									}
 
 									you.getGraveyard().add(source);
@@ -1575,7 +1580,7 @@ public class Shoukan extends GameInstance<Phase> {
 		int direct = 0;
 		int lifesteal = you.getBase().lifesteal() + (int) source.getStats().getLifesteal().get();
 		if (you.getOrigins().synergy() == Race.VAMPIRE && you.isLowLife()) {
-			lifesteal += 5;
+			lifesteal += 7;
 		}
 
 		int thorns = target.getLockTime(Lock.CHARM) > 0 ? 20 : 0;
@@ -1596,10 +1601,6 @@ public class Shoukan extends GameInstance<Phase> {
 							case WOUNDING -> {
 								int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
 								target.getRegDeg().add(val);
-
-								if (you.getOrigins().synergy() == Race.FIEND && chance(20)) {
-									target.getRegDeg().add(val);
-								}
 							}
 							case DRAIN -> {
 								int toDrain = Math.min(c.getValue(e.getTier()), target.getMP());
@@ -1728,10 +1729,6 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public boolean chance(double percentage) {
-		if (getCurrent().getOrigins().synergy() == Race.DJINN) {
-			return Calc.chance(percentage, 2, getRng());
-		}
-
 		return Calc.chance(percentage, 1, getRng());
 	}
 
@@ -2150,15 +2147,6 @@ public class Shoukan extends GameInstance<Phase> {
 			hand.resetChain();
 			hand.getStats().removeExpired(ValueMod::isExpired);
 
-			Contingency cont = hand.getContingency();
-			if (cont != null && cont.check()) {
-				Evogear spell = cont.card();
-				if (spell.execute(spell.toParameters(new Targeting(hand, -1, -1)))) {
-					getChannel().sendMessage(getString("str/contingency_trigger", hand.getName(), spell)).queue();
-					hand.setContingency(null);
-				}
-			}
-
 			if (hand.getOrigins().synergy() == Race.SUCCUBUS && hand.isLowLife()) {
 				Hand op = hand.getOther();
 				if (op.getLockTime(Lock.CHARM) == 0) {
@@ -2316,7 +2304,7 @@ public class Shoukan extends GameInstance<Phase> {
 				nextTurn();
 			});
 
-			if (getTurn() == 1 && !curr.hasRerolled()) {
+			if (!curr.getCards().isEmpty() && (getTurn() == 1 && !curr.hasRerolled()) || curr.getOrigins().synergy() == Race.DJINN) {
 				buttons.put(Utils.parseEmoji("\uD83D\uDD04"), w -> {
 					curr.rerollHand();
 					reportEvent("str/hand_reroll", true, curr.getName());
@@ -2355,9 +2343,26 @@ public class Shoukan extends GameInstance<Phase> {
 							reportEvent("str/draw_card", true, curr.getName(), rem, "s");
 						});
 					}
+				} else if (curr.getOrigins().major() == Race.DIVINITY) {
+					buttons.put(Utils.parseEmoji("1212407741046325308"), w -> {
+						if (curr.selectionPending()) {
+							getChannel().sendMessage(getString("error/pending_choice")).queue();
+							return;
+						} else if (curr.selectionPending()) {
+							getChannel().sendMessage(getString("error/pending_action")).queue();
+							return;
+						}
+
+						for (Drawable<?> d : curr.manualDraw(1)) {
+							d.setEthereal(true);
+						}
+
+						curr.showHand();
+						reportEvent("str/draw_card", true, curr.getName(), 1, "");
+					});
 				}
 
-				if (curr.canUseDestiny() && !Utils.equalsAny(curr.getOrigins().major(), Race.MACHINE, Race.MYSTICAL, Race.DIVINITY)) {
+				if (curr.canUseDestiny() && !Utils.equalsAny(curr.getOrigins().major(), Race.MACHINE, Race.MYSTICAL)) {
 					buttons.put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
 						if (curr.selectionPending()) {
 							getChannel().sendMessage(getString("error/pending_choice")).queue();
@@ -2423,7 +2428,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (curr.getOriginCooldown() == 0) {
-				if (curr.getOrigins().major() == Race.SPIRIT && curr.getDiscard().size() >= 3) {
+				if (curr.getOrigins().major() == Race.SPIRIT && curr.getDiscard().size() >= 5) {
 					buttons.put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
 						if (curr.selectionPending()) {
 							getChannel().sendMessage(getString("error/pending_choice")).queue();
@@ -2435,7 +2440,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						List<StashedCard> cards = new ArrayList<>();
 
-						int i = 3;
+						int i = 5;
 						Iterator<Drawable<?>> it = curr.getDiscard().iterator();
 						while (it.hasNext() && i-- > 0) {
 							Drawable<?> d = it.next();
@@ -2446,88 +2451,16 @@ public class Shoukan extends GameInstance<Phase> {
 							curr.getCards().remove(d);
 						}
 
-						curr.getCards().add(SynthesizeCommand.rollSynthesis(curr.getUser(), cards));
+						List<Drawable<?>> pool = new ArrayList<>();
+						for (int j = 0; j < 3; j++) {
+							pool.add(SynthesizeCommand.rollSynthesis(curr.getUser(), cards));
+						}
+
+						curr.getCards().add(curr.requestChoice(pool));
 						curr.setOriginCooldown(3);
 						curr.showHand();
 						reportEvent("str/spirit_synth", true, curr.getName());
 					});
-				} else if (curr.getOrigins().major() == Race.DIVINITY) {
-					StringSelectMenu.Builder cards = StringSelectMenu.create("spells")
-							.setPlaceholder(getString("str/select_spell"))
-							.setRequiredRange(1, 1);
-
-					for (Drawable<?> d : curr.getCards()) {
-						if (d.isAvailable() && d instanceof Evogear e && !e.isPassive()) {
-							if (e.isSpell() && e.getTargetType() == TargetType.NONE && curr.canPay(e)) {
-								cards.addOption((curr.getCards().indexOf(e) + 1) + " - " + e, String.valueOf(e.SERIAL));
-							}
-						}
-					}
-
-					if (!cards.getOptions().isEmpty()) {
-						buttons.put(Utils.parseEmoji("🛡"), w -> {
-							if (curr.selectionPending()) {
-								getChannel().sendMessage(getString("error/pending_choice")).queue();
-								return;
-							} else if (curr.selectionPending()) {
-								getChannel().sendMessage(getString("error/pending_action")).queue();
-								return;
-							}
-
-							StringSelectMenu.Builder conditions = StringSelectMenu.create("condition")
-									.setPlaceholder(getString("str/select_trigger"))
-									.setRequiredRange(1, 1);
-
-							for (ContingencyTrigger ct : ContingencyTrigger.values()) {
-								conditions.addOption(getString("trigger/" + ct.name()), ct.name());
-							}
-
-							WebhookMessageCreateAction<Message> mcr = Objects.requireNonNull(w.getHook())
-									.setEphemeral(true)
-									.sendMessage(getString("str/prepare_contingency"));
-
-							ButtonizeHelper bh = new ButtonizeHelper(true)
-									.setCanInteract(u -> u.getId().equals(curr.getUid()))
-									.addAction(Utils.parseEmoji(Constants.ACCEPT), bw -> {
-										List<?> tVals = bw.getDropdownValues().get("condition");
-										List<?> sVals = bw.getDropdownValues().get("spells");
-										if (tVals.isEmpty() || sVals.isEmpty()) return;
-
-										Evogear chosen = (Evogear) curr.getCards().removeFirst(d -> d instanceof Evogear e && e.SERIAL == Long.parseLong((String) sVals.get(0)));
-										if (chosen == null) return;
-
-										curr.consumeMP(chosen.getMPCost());
-										curr.consumeHP(chosen.getHPCost());
-										curr.consumeSC(chosen.getSCCost());
-										curr.setOriginCooldown(4);
-
-										chosen.setFlag(Flag.TRUE_EFFECT);
-										curr.setContingency(new Contingency(
-												chosen,
-												ContingencyTrigger.valueOf((String) tVals.get(0))
-										));
-
-										reportEvent("str/used_contingency", true, curr.getName());
-									})
-									.setTimeout(30, TimeUnit.SECONDS)
-									.setOnFinalization(m -> {
-										if (curr.getContingency() == null) {
-											getChannel().sendMessage(getString("error/action_cancelled")).queue();
-											return;
-										}
-
-										curr.allowAction();
-									});
-
-							bh.apply(mcr)
-									.addComponents(ActionRow.of(conditions.build()), ActionRow.of(cards.build()))
-									.queue(
-											s -> Pages.buttonize(s, bh)
-									);
-
-							curr.preventAction();
-						});
-					}
 				}
 			}
 
@@ -2721,10 +2654,9 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.reduceOriginCooldown(1);
 		curr.setCanAttack(true);
 		curr.flushDiscard();
+		curr.setSummoned(false);
 
-		if (curr.getOrigins().synergy() == Race.GHOST && getTurn() % 2 == 0) {
-			curr.modHP(200);
-		} else if (curr.getOrigins().synergy() == Race.WRAITH) {
+		if (curr.getOrigins().synergy() == Race.WRAITH) {
 			curr.getOther().modHP((int) -(curr.getGraveyard().size() * Math.ceil(getTurn() / 2d)));
 		}
 

@@ -26,6 +26,7 @@ import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.FieldType;
+import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
@@ -90,10 +91,11 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	private byte state = 0b10;
 	/*
 	0xF
-	  └ 000 0111
-	         ││└ solid
-	         │└─ available
-	         └── bamboozled
+	  └ 000 1111
+	        │││└ solid
+	        ││└─ available
+	        │└── bamboozled
+	        └─── ethereal
 	 */
 
 	public Field() {
@@ -206,6 +208,14 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		state = (byte) Bit.set(state, 2, available);
 	}
 
+	public boolean isEthereal() {
+		return Bit.on(state, 3);
+	}
+
+	public void setEthereal(boolean ethereal) {
+		state = (byte) Bit.set(state, 3, ethereal);
+	}
+
 	public boolean isActive() {
 		return getGame().getArena().getField().equals(this);
 	}
@@ -276,6 +286,16 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 							23 + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2,
 							BORDER_WIDTH, Color.BLACK
 					);
+				}
+
+				if (hand != null) {
+					boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
+					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
+
+					if (isEthereal()) {
+						BufferedImage emp = IO.getResourceAsImage(path + "/ethereal.png");
+						g2d.drawImage(emp, 0, 0, null);
+					}
 				}
 
 				if (!isAvailable()) {
