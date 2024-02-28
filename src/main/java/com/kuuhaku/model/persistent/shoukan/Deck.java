@@ -697,7 +697,7 @@
 								 }
 
 								 if (origin.synergy() == Race.FEY) {
-									 m = (int) (m * h.getGame().getTurn() % 2 == 0 ? 1.5 : 0.5);
+									 m = (int) (m * ((h.getGame().getTurn() / 2) % 2 == 0 ? 1.5 : 0.5));
 								 }
 
 								 if (h.getGame().getArcade() == Arcade.OVERCHARGE) {
