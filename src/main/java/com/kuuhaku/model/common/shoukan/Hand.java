@@ -687,6 +687,7 @@ public class Hand {
 		if (cards.size() > 20) {
 			try {
 				requestChoice(
+						"str/destroy_cards",
 						cards.stream().map(c -> new SelectionCard(c, false)).toList(),
 						cards.size() - 20,
 						ds -> {
