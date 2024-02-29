@@ -47,6 +47,14 @@ public class SupplyChain<T> implements Iterable<Function<T, T>> {
 		return out;
 	}
 
+	public T process(T value) {
+		for (Function<T, T> step : chain) {
+			value = step.apply(value);
+		}
+
+		return value;
+	}
+
 	@NotNull
 	@Override
 	public Iterator<Function<T, T>> iterator() {

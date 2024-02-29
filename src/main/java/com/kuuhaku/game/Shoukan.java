@@ -1075,14 +1075,16 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int tick = this.tick;
-		curr.getSelection().result().thenApply(t -> {
-			System.out.println("report");
-			if (tick == this.tick) {
-				reportEvent(Constants.VOID, true);
-			}
+		curr.getSelection().result()
+				.add(t -> {
+					System.out.println("report");
+					if (tick == this.tick) {
+						reportEvent(Constants.VOID, true);
+					}
 
-			return t;
-		}).complete(cards);
+					return t;
+				})
+				.process(cards);
 		return true;
 	}
 

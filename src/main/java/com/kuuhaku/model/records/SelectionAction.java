@@ -19,15 +19,15 @@
 package com.kuuhaku.model.records;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.common.SupplyChain;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public record SelectionAction(
 		String caption,
 		List<SelectionCard> cards,
 		int required,
 		List<Integer> indexes,
-		CompletableFuture<List<Drawable<?>>> result
+		SupplyChain<List<Drawable<?>>> result
 ) {
 }

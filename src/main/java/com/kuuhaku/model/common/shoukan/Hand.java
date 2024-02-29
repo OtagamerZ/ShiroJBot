@@ -30,6 +30,7 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.common.SupplyChain;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -46,7 +47,6 @@ import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.Transient;
-import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.utils.FileUpload;
@@ -56,7 +56,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -1114,19 +1113,19 @@ public class Hand {
 		send(render(cards));
 	}
 
-	public CompletableFuture<Void> requestChoice(List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
-		return requestChoice("str/select_a_card", cards, 1, action);
+	public void requestChoice(List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+		requestChoice("str/select_a_card", cards, 1, action);
 	}
 
-	public CompletableFuture<Void> requestChoice(String caption, List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
-		return requestChoice(caption, cards, 1, action);
+	public void requestChoice(String caption, List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+		requestChoice(caption, cards, 1, action);
 	}
 
-	public CompletableFuture<Void> requestChoice(List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
-		return requestChoice("str/select_a_card", cards, required, action);
+	public void requestChoice(List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+		requestChoice("str/select_a_card", cards, required, action);
 	}
 
-	public CompletableFuture<Void> requestChoice(String caption, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public void requestChoice(String caption, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		if (selection != null) {
 			throw new SelectionException("err/pending_selection");
 		}
@@ -1137,14 +1136,14 @@ public class Hand {
 		selection = new SelectionAction(
 				caption, cards, required,
 				new ArrayList<>(),
-				new CompletableFuture<List<Drawable<?>>>()
-						.thenApply(cs -> {
+				new SupplyChain<List<Drawable<?>>>(null)
+						.add(cs -> {
 							selection = null;
 							System.out.println("clear");
 
 							return cs;
 						})
-						.thenApply(cs -> {
+						.add(cs -> {
 							System.out.println("run");
 							action.accept(cs);
 							return cs;
@@ -1153,8 +1152,6 @@ public class Hand {
 
 		showChoices();
 		game.getChannel().sendMessage(game.getString("str/selection_sent")).queue();
-
-		return selection.result().thenRun(Utils::doNothing);
 	}
 
 	public BufferedImage renderChoices() {
