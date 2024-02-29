@@ -1109,6 +1109,9 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		selection.result().complete(cards);
+		reportEvent("str/discard_card", true, curr.getName(),
+				Utils.properlyJoin(getString("str/and")).apply(cards.stream().map(Drawable::toString).toList())
+		);
 		return true;
 	}
 
