@@ -46,6 +46,7 @@ import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.Transient;
+import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.utils.FileUpload;
@@ -266,7 +267,7 @@ public class Hand {
 	      └─── (0 - 15) chain reduction
 	 */
 
-	private transient SelectionAction selection = null;
+	private transient Pair<SelectionAction, CompletableFuture<List<Drawable<?>>>> selection = null;
 
 	public Hand(Deck deck) {
 		this.game = null;
@@ -1114,19 +1115,19 @@ public class Hand {
 		send(render(cards));
 	}
 
-	public CompletableFuture<Void> requestChoice(List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public CompletableFuture<List<Drawable<?>>> requestChoice(List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		return requestChoice("str/select_a_card", cards, 1, action);
 	}
 
-	public CompletableFuture<Void> requestChoice(String caption, List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public CompletableFuture<List<Drawable<?>>> requestChoice(String caption, List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		return requestChoice(caption, cards, 1, action);
 	}
 
-	public CompletableFuture<Void> requestChoice(List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public CompletableFuture<List<Drawable<?>>> requestChoice(List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		return requestChoice("str/select_a_card", cards, required, action);
 	}
 
-	public CompletableFuture<Void> requestChoice(String caption, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public CompletableFuture<List<Drawable<?>>> requestChoice(String caption, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		if (selection != null) {
 			throw new SelectionException("err/pending_selection");
 		}
@@ -1134,34 +1135,27 @@ public class Hand {
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
 		else if (cards.size() < required) throw new ActivationException("err/insufficient_selection");
 
-		selection = new SelectionAction(caption, cards, required, new ArrayList<>(), new CompletableFuture<>());
-		if (cards.size() == required) {
-			try {
-				return selection.result().thenApply(cs -> {
-					selection = null;
-					return cs;
-				}).thenAccept(action);
-			} finally {
-				List<Drawable<?>> out = new ArrayList<>();
-				for (SelectionCard sc : cards) {
-					out.add(sc.card());
-				}
-
-				selection.result().complete(out);
-			}
-		}
+		SelectionAction act = new SelectionAction(caption, cards, required, new ArrayList<>(), new CompletableFuture<>());
 
 		showChoices();
 		game.getChannel().sendMessage(game.getString("str/selection_sent")).queue();
+		selection = new Pair<>(
+				act,
+				act.result().thenApply(cs -> {
+					selection = null;
+					return cs;
+				}).thenApply(cs -> {
+					action.accept(cs);
+					return cs;
+				})
+		);
 
-		return selection.result().thenApply(cs -> {
-			selection = null;
-			return cs;
-		}).thenAccept(action);
+		return selection.getSecond();
 	}
 
 	public BufferedImage renderChoices() {
-		List<SelectionCard> cards = selection.cards();
+		SelectionAction act = selection.getFirst();
+		List<SelectionCard> cards = act.cards();
 		if (cards.isEmpty()) return null;
 
 		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, 100 + (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
@@ -1170,7 +1164,7 @@ public class Hand {
 		g2d.setFont(Fonts.OPEN_SANS.deriveBold(60));
 		g2d.translate(0, 100);
 
-		String str = game.getString(selection.caption(), selection.required());
+		String str = game.getString(act.caption(), act.required());
 		Graph.drawOutlinedString(g2d, str, bi.getWidth() / 2 - g2d.getFontMetrics().stringWidth(str) / 2, -10, 6, Color.BLACK);
 
 		for (int i = 0; i < cards.size(); i++) {
@@ -1188,7 +1182,7 @@ public class Hand {
 				img = d.card().render(game.getLocale(), deck);
 			}
 
-			if (selection.indexes().contains(i)) {
+			if (act.indexes().contains(i)) {
 				RescaleOp op = new RescaleOp(0.5f, 0, null);
 				op.filter(img, img);
 
@@ -1214,7 +1208,7 @@ public class Hand {
 		send(renderChoices());
 	}
 
-	public SelectionAction getSelection() {
+	public Pair<SelectionAction, CompletableFuture<List<Drawable<?>>>> getSelection() {
 		return selection;
 	}
 

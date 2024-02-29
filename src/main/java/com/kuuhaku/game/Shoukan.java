@@ -1026,7 +1026,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 		if (!curr.selectionPending()) return false;
 
-		SelectionAction selection = curr.getSelection();
+		SelectionAction selection = curr.getSelection().getFirst();
 		String[] choices = args.getString("choices").split(",");
 
 		List<Integer> indexes = new ArrayList<>();
@@ -1063,7 +1063,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 		if (!curr.selectionPending()) return false;
 
-		SelectionAction selection = curr.getSelection();
+		SelectionAction selection = curr.getSelection().getFirst();
 		if (selection.indexes().size() != selection.required()) {
 			getChannel().sendMessage(getString("error/wrong_selection_amount", selection.required())).queue();
 			return false;
@@ -1075,7 +1075,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int tick = this.tick;
-		selection.result().thenApply(t -> {
+		curr.getSelection().getSecond().thenApply(t -> {
 			if (tick == this.tick) {
 				reportEvent(Constants.VOID, true);
 			}
