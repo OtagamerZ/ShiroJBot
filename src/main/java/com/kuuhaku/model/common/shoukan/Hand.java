@@ -57,7 +57,6 @@ import java.awt.image.RescaleOp;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -612,19 +611,15 @@ public class Hand {
 
 	public void verifyCap() {
 		if (cards.size() > 20) {
-			try {
-				requestChoice(
-						"str/destroy_cards",
-						cards.stream().map(c -> new SelectionCard(c, false)).toList(),
-						cards.size() - 20,
-						ds -> {
-							graveyard.addAll(ds);
-							cards.removeAll(ds);
-						}
-				).get();
-			} catch (InterruptedException | ExecutionException e) {
-				throw new RuntimeException("Failed to request selection", e);
-			}
+			requestChoice(
+					"str/destroy_cards",
+					cards.stream().map(c -> new SelectionCard(c, false)).toList(),
+					cards.size() - 20,
+					ds -> {
+						graveyard.addAll(ds);
+						cards.removeAll(ds);
+					}
+			);
 		}
 	}
 
