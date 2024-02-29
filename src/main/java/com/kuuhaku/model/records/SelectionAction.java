@@ -21,14 +21,13 @@ package com.kuuhaku.model.records;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public record SelectionAction(
 		String caption,
 		List<SelectionCard> cards,
 		int required,
-		Set<Integer> indexes,
+		List<Integer> indexes,
 		CompletableFuture<List<Drawable<?>>> result
 ) {
 }

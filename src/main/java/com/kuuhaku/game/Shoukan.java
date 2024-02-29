@@ -100,6 +100,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private boolean restoring = true;
 	private boolean history = false;
 	private boolean lock = false;
+	private boolean sending = false;
 	private Side winner;
 
 	public Shoukan(I18N locale, Arcade arcade, User p1, User p2) {
@@ -112,22 +113,14 @@ public class Shoukan extends GameInstance<Phase> {
 		this.arcade = arcade;
 		this.arena = new Arena(this);
 		this.singleplayer = p1.equals(p2);
-		this.hands = Map.of(
-				Side.TOP, new Hand(p1, this, Side.TOP),
-				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
-		);
+		this.hands = Map.of(Side.TOP, new Hand(p1, this, Side.TOP), Side.BOTTOM, new Hand(p2, this, Side.BOTTOM));
 
 		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, getOther().getSide(), "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
 	}
 
 	@Override
 	protected boolean validate(Message message) {
-		return ((Predicate<Message>) m -> Utils.equalsAny(m.getAuthor().getId(), getPlayers()))
-				.and(m -> singleplayer
-						  || getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), m.getAuthor().getId())
-						  || hands.values().stream().anyMatch(h -> h.getUid().equals(m.getAuthor().getId()) && h.selectionPending())
-				)
-				.test(message);
+		return ((Predicate<Message>) m -> Utils.equalsAny(m.getAuthor().getId(), getPlayers())).and(m -> singleplayer || getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), m.getAuthor().getId()) || hands.values().stream().anyMatch(h -> h.getUid().equals(m.getAuthor().getId()) && h.selectionPending())).test(message);
 	}
 
 	@Override
@@ -159,17 +152,9 @@ public class Shoukan extends GameInstance<Phase> {
 	@Override
 	protected void runtime(User user, String value) throws InvocationTargetException, IllegalAccessException {
 		Side current = getCurrentSide();
-		Hand hand = hands.values().stream()
-				.sorted(Comparator.comparing(h -> h.getSide() == current, Comparator.reverseOrder()))
-				.filter(h -> h.getUid().equals(user.getId()))
-				.findFirst().orElseThrow();
+		Hand hand = hands.values().stream().sorted(Comparator.comparing(h -> h.getSide() == current, Comparator.reverseOrder())).filter(h -> h.getUid().equals(user.getId())).findFirst().orElseThrow();
 
-		Pair<Method, JSONObject> action = toAction(
-				value.toLowerCase().replace(" ", ""),
-				m -> (!lock || (hand.selectionPending() && m.getName().startsWith("sel")))
-					 && hand.selectionPending() == m.getName().startsWith("sel")
-					 || m.getName().startsWith("deb")
-		);
+		Pair<Method, JSONObject> action = toAction(value.toLowerCase().replace(" ", ""), m -> (!lock || (hand.selectionPending() && m.getName().startsWith("sel"))) && hand.selectionPending() == m.getName().startsWith("sel") || m.getName().startsWith("deb"));
 
 		execAction(hand, action);
 	}
@@ -266,9 +251,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			String id = args.getString("card").toUpperCase();
-			CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)).stream()
-					.findFirst()
-					.orElse(CardType.KAWAIPON);
+			CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)).stream().findFirst().orElse(CardType.KAWAIPON);
 
 			boolean add = false;
 			int amount = args.getInt("amount", 1);
@@ -299,9 +282,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private boolean debUndraw(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
-			int valid = (int) curr.getCards().parallelStream()
-					.filter(Drawable::isAvailable)
-					.count();
+			int valid = (int) curr.getCards().parallelStream().filter(Drawable::isAvailable).count();
 
 			int amount = Math.min(args.getInt("amount", 1), valid);
 			for (int i = 0; i < amount; i++) {
@@ -397,9 +378,7 @@ public class Shoukan extends GameInstance<Phase> {
 					default -> CardState.ATTACK;
 				};
 
-				reportEvent("str/place_card_fail", true,
-						curr.getName(), d, state.toString(getLocale())
-				);
+				reportEvent("str/place_card_fail", true, curr.getName(), d, state.toString(getLocale()));
 				return true;
 			}
 
@@ -471,11 +450,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.setSummoned(true);
 		curr.getData().put("last_summon", copy);
-		reportEvent("str/place_card", true,
-				curr.getName(),
-				copy.isFlipped() ? getString("str/a_card") : copy,
-				copy.getState().toString(getLocale())
-		);
+		reportEvent("str/place_card", true, curr.getName(), copy.isFlipped() ? getString("str/a_card") : copy, copy.getState().toString(getLocale()));
 		return true;
 	}
 
@@ -519,9 +494,7 @@ public class Shoukan extends GameInstance<Phase> {
 					default -> CardState.ATTACK;
 				};
 
-				reportEvent("str/place_card_fail", true,
-						hand.getName(), d, state.toString(getLocale())
-				);
+				reportEvent("str/place_card_fail", true, hand.getName(), d, state.toString(getLocale()));
 				return true;
 			}
 
@@ -582,11 +555,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		hand.setSummoned(true);
-		reportEvent("str/place_card", true,
-				hand.getName(),
-				proxy.isFlipped() ? getString("str/a_card") : proxy,
-				proxy.getState().toString(getLocale())
-		);
+		reportEvent("str/place_card", true, hand.getName(), proxy.isFlipped() ? getString("str/a_card") : proxy, proxy.getState().toString(getLocale()));
 		return true;
 	}
 
@@ -676,9 +645,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				Senshi target = slot.getTop();
-				reportEvent("str/equip_card_fail", true,
-						curr.getName(), d, target.isFlipped() ? getString("str/a_card") : target
-				);
+				reportEvent("str/equip_card_fail", true, curr.getName(), d, target.isFlipped() ? getString("str/a_card") : target);
 				return true;
 			}
 
@@ -705,11 +672,7 @@ public class Shoukan extends GameInstance<Phase> {
 		target.getEquipments().add(copy);
 		curr.getData().put("last_equipment", copy);
 		curr.getData().put("last_evogear", copy);
-		reportEvent("str/equip_card", true,
-				curr.getName(),
-				copy.isFlipped() ? getString("str/an_equipment") : copy,
-				target.isFlipped() ? getString("str/a_card") : target
-		);
+		reportEvent("str/equip_card", true, curr.getName(), copy.isFlipped() ? getString("str/an_equipment") : copy, target.isFlipped() ? getString("str/a_card") : target);
 		return true;
 	}
 
@@ -802,10 +765,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		slot.swap();
 
-		reportEvent("str/promote_card", true,
-				curr.getName(),
-				chosen.isFlipped() ? getString("str/a_card") : chosen
-		);
+		reportEvent("str/promote_card", true, curr.getName(), chosen.isFlipped() ? getString("str/a_card") : chosen);
 		return true;
 	}
 
@@ -892,9 +852,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.getGraveyard().addAll(cards);
 
-		reportEvent("str/sacrifice_card", true, curr.getName(),
-				Utils.properlyJoin(getString("str/and")).apply(cards.stream().map(Drawable::toString).toList())
-		);
+		reportEvent("str/sacrifice_card", true, curr.getName(), Utils.properlyJoin(getString("str/and")).apply(cards.stream().map(Drawable::toString).toList()));
 		return true;
 	}
 
@@ -964,9 +922,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		reportEvent("str/discard_card", true, curr.getName(),
-				Utils.properlyJoin(getString("str/and")).apply(cards.stream().map(Drawable::toString).toList())
-		);
+		reportEvent("str/discard_card", true, curr.getName(), Utils.properlyJoin(getString("str/and")).apply(cards.stream().map(Drawable::toString).toList()));
 		return true;
 	}
 
@@ -1052,10 +1008,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.getData().put("last_spell", chosen);
 		curr.getData().put("last_evogear", chosen);
 		trigger(ON_SPELL, side);
-		reportEvent("str/activate_card", true,
-				curr.getName(),
-				chosen.getBase().getTags().contains("SECRET") ? getString("str/a_spell") : chosen
-		);
+		reportEvent("str/activate_card", true, curr.getName(), chosen.getBase().getTags().contains("SECRET") ? getString("str/a_spell") : chosen);
 		return true;
 	}
 
@@ -1080,10 +1033,15 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		for (Integer idx : indexes) {
-			if (selection.indexes().contains(idx)) {
-				selection.indexes().remove(idx);
+			List<Integer> selIdxs = selection.indexes();
+			if (selIdxs.contains(idx)) {
+				selIdxs.remove(idx);
 			} else {
-				selection.indexes().add(idx);
+				selIdxs.add(idx);
+			}
+
+			if (selIdxs.size() > selection.required()) {
+				selIdxs.removeFirst();
 			}
 		}
 
@@ -1108,7 +1066,10 @@ public class Shoukan extends GameInstance<Phase> {
 			cards.add(selection.cards().get(i).card());
 		}
 
-		selection.result().complete(cards);
+		selection.result().thenApply(t -> {
+			reportEvent(Constants.VOID, true);
+			return t;
+		}).complete(cards);
 		return true;
 	}
 
@@ -1545,9 +1506,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			double mult = (val > 0 ? dmgMult : op.getStats().getHealMult().get());
 			if (mult != 1) {
-				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"),
-						Utils.roundToString((1 - mult) * 100, 2)
-				) + ")";
+				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString((1 - mult) * 100, 2)) + ")";
 			}
 		}
 		if (pHP != you.getHP()) {
@@ -1556,9 +1515,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			double mult = (val > 0 ? you.getStats().getDamageMult() : you.getStats().getHealMult()).get();
 			if (mult != 1) {
-				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"),
-						Utils.roundToString((1 - mult) * 100, 2)
-				) + ")";
+				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString((1 - mult) * 100, 2)) + ")";
 			}
 		}
 
@@ -1665,11 +1622,7 @@ public class Shoukan extends GameInstance<Phase> {
 					for (SlotColumn sc : getSlots(target.getSide())) {
 						for (Senshi card : sc.getCards()) {
 							if (card instanceof TrapSpell) {
-								EffectParameters params = new EffectParameters(
-										ON_TRAP, target.getSide(),
-										card.asSource(ON_TRAP),
-										source.asTarget(ON_ATTACK, TargetType.ENEMY)
-								);
+								EffectParameters params = new EffectParameters(ON_TRAP, target.getSide(), card.asSource(ON_TRAP), source.asTarget(ON_ATTACK, TargetType.ENEMY));
 
 								if (activateProxy(card, params)) {
 									source.setAvailable(false);
@@ -1734,9 +1687,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			double mult = (val > 0 ? dmgMult : target.getStats().getHealMult().get());
 			if (mult != 1) {
-				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"),
-						Utils.roundToString((1 - mult) * 100, 2)
-				) + ")";
+				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString((1 - mult) * 100, 2)) + ")";
 			}
 		}
 
@@ -1746,9 +1697,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			double mult = (val > 0 ? you.getStats().getDamageMult() : you.getStats().getHealMult()).get();
 			if (mult != 1) {
-				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"),
-						Utils.roundToString((1 - mult) * 100, 2)
-				) + ")";
+				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString((1 - mult) * 100, 2)) + ")";
 			}
 		}
 
@@ -1895,24 +1844,17 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public List<Senshi> getCards() {
-		return Arrays.stream(Side.values())
-				.flatMap(s -> getCards(s).stream())
-				.toList();
+		return Arrays.stream(Side.values()).flatMap(s -> getCards(s).stream()).toList();
 
 	}
 
 	public List<Senshi> getCards(Side side) {
-		return getSlots(side).stream()
-				.flatMap(slt -> slt.getCards().stream())
-				.filter(Objects::nonNull)
-				.toList();
+		return getSlots(side).stream().flatMap(slt -> slt.getCards().stream()).filter(Objects::nonNull).toList();
 
 	}
 
 	public List<SlotColumn> getSlots() {
-		return Arrays.stream(Side.values())
-				.flatMap(s -> getSlots(s).stream())
-				.toList();
+		return Arrays.stream(Side.values()).flatMap(s -> getSlots(s).stream()).toList();
 	}
 
 	public List<SlotColumn> getSlots(Side side) {
@@ -1926,10 +1868,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void iterateSlots(Side side, Consumer<Senshi> act) {
-		Map<Senshi, Integer> cards = arena.getSlots(side).stream()
-				.flatMap(slt -> slt.getCards().stream())
-				.filter(Objects::nonNull)
-				.collect(Collectors.toMap(Function.identity(), s -> s.getSlot().hashCode()));
+		Map<Senshi, Integer> cards = arena.getSlots(side).stream().flatMap(slt -> slt.getCards().stream()).filter(Objects::nonNull).collect(Collectors.toMap(Function.identity(), s -> s.getSlot().hashCode()));
 
 		for (Map.Entry<Senshi, Integer> e : cards.entrySet()) {
 			Senshi card = e.getKey();
@@ -1968,11 +1907,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public List<Evogear> getEquipments(Side side) {
-		return arena.getSlots(side).stream()
-				.map(SlotColumn::getTop)
-				.filter(Objects::nonNull)
-				.flatMap(s -> s.getEquipments().stream())
-				.toList();
+		return arena.getSlots(side).stream().map(SlotColumn::getTop).filter(Objects::nonNull).flatMap(s -> s.getEquipments().stream()).toList();
 	}
 
 	public void trigger(Trigger trigger) {
@@ -2038,13 +1973,7 @@ public class Shoukan extends GameInstance<Phase> {
 					continue;
 				}
 
-				holder.execute(new EffectParameters(
-						ON_DEFER_BINDING,
-						ep.side(),
-						new DeferredTrigger(null, ep.trigger()),
-						ep.source(),
-						ep.targets()
-				));
+				holder.execute(new EffectParameters(ON_DEFER_BINDING, ep.side(), new DeferredTrigger(null, ep.trigger()), ep.source(), ep.targets()));
 			}
 		}
 
@@ -2141,9 +2070,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (msg != null) {
 				GuildMessageChannel channel = Main.getApp().getMessageChannelById(chn);
 				if (channel != null) {
-					channel.retrieveMessageById(msg)
-							.flatMap(Objects::nonNull, Message::delete)
-							.queue(null, Utils::doNothing);
+					channel.retrieveMessageById(msg).flatMap(Objects::nonNull, Message::delete).queue(null, Utils::doNothing);
 				}
 			}
 
@@ -2152,142 +2079,145 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void reportEvent(String message, boolean trigger, Object... args) {
-		if (getChannel() == null) return;
+		if (sending || getChannel() == null) return;
 
-		for (GuildMessageChannel chn : getChannel().getChannels()) {
-			String msg = messages.get(chn.getId());
-			if (msg != null) {
-				chn.retrieveMessageById(msg)
-						.flatMap(Message::editMessageComponents)
-						.queue(null, Utils::doNothing);
-			}
-		}
-
-		resetTimer();
-		if (trigger) {
-			trigger(ON_TICK);
-			getCurrent().setRerolled(true);
-			getCurrent().verifyCap();
-		}
-
-		List<Side> sides = List.of(getOtherSide(), getCurrentSide());
-		for (Side side : sides) {
-			Hand hand = hands.get(side);
-			hand.getCards();
-			hand.getRealDeck();
-			hand.getGraveyard();
-			hand.resetChain();
-			hand.getStats().removeExpired(ValueMod::isExpired);
-
-			if (hand.getOrigins().synergy() == Race.SUCCUBUS && hand.isLowLife()) {
-				Hand op = hand.getOther();
-				if (op.getLockTime(Lock.CHARM) == 0) {
-					op.modLockTime(Lock.CHARM, 1);
+		try {
+			sending = true;
+			for (GuildMessageChannel chn : getChannel().getChannels()) {
+				String msg = messages.get(chn.getId());
+				if (msg != null) {
+					chn.retrieveMessageById(msg).flatMap(Message::editMessageComponents).queue(null, Utils::doNothing);
 				}
 			}
 
-			String def = hand.getDefeat();
-			if (hand.getHP() == 0 || def != null) {
-				trigger(ON_VICTORY, side.getOther());
-				trigger(ON_DEFEAT, side);
-
-				if (hand.getOrigins().synergy() == Race.GOLEM) {
-					hand.modHP(hand.getMP() * hand.getBase().hp() / 10);
-					hand.consumeMP(hand.getMP());
-				}
-
-				if (def == null && hand.getHP() > 0) {
-					continue;
-				}
-
-				if (def != null) {
-					reportResult(GameReport.SUCCESS, hand.getOther().getSide(), "str/game_end_special", def, "<@" + hand.getOther().getUid() + ">");
-				} else {
-					reportResult(GameReport.SUCCESS, hand.getOther().getSide(), "str/game_end", "<@" + hand.getUid() + ">", "<@" + hand.getOther().getUid() + ">");
-				}
-
-				return;
+			resetTimer();
+			if (trigger) {
+				trigger(ON_TICK);
+				getCurrent().setRerolled(true);
+				getCurrent().verifyCap();
 			}
 
-			iterateSlots(side, s -> {
-				s.getBase().unlockAll();
-				s.setLastInteraction(null);
-				s.getStats().removeIf(ValueMod::isExpired);
-				for (Evogear e : s.getEquipments()) {
-					e.getStats().removeIf(ValueMod::isExpired);
+			List<Side> sides = List.of(getOtherSide(), getCurrentSide());
+			for (Side side : sides) {
+				Hand hand = hands.get(side);
+				hand.getCards();
+				hand.getRealDeck();
+				hand.getGraveyard();
+				hand.resetChain();
+				hand.getStats().removeExpired(ValueMod::isExpired);
+
+				if (hand.getOrigins().synergy() == Race.SUCCUBUS && hand.isLowLife()) {
+					Hand op = hand.getOther();
+					if (op.getLockTime(Lock.CHARM) == 0) {
+						op.modLockTime(Lock.CHARM, 1);
+					}
 				}
-			});
-		}
 
-		BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
-		byte[] bytes = IO.getBytes(img, "png", 0.5f);
+				String def = hand.getDefeat();
+				if (hand.getHP() == 0 || def != null) {
+					trigger(ON_VICTORY, side.getOther());
+					trigger(ON_DEFEAT, side);
 
-		AtomicBoolean registered = new AtomicBoolean();
-		getChannel().sendMessage(getString(message, args))
-				.addFile(bytes, "game.png")
-				.queue(m -> {
-					messages.compute(m.getChannel().getId(), replaceMessages(m));
+					if (hand.getOrigins().synergy() == Race.GOLEM) {
+						hand.modHP(hand.getMP() * hand.getBase().hp() / 10);
+						hand.consumeMP(hand.getMP());
+					}
 
-					if (!registered.get()) {
-						if (!message.startsWith("str/game_history")) {
-							getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
-						}
+					if (def == null && hand.getHP() > 0) {
+						continue;
+					}
 
-						registered.set(true);
+					if (def != null) {
+						reportResult(GameReport.SUCCESS, hand.getOther().getSide(), "str/game_end_special", def, "<@" + hand.getOther().getUid() + ">");
+					} else {
+						reportResult(GameReport.SUCCESS, hand.getOther().getSide(), "str/game_end", "<@" + hand.getUid() + ">", "<@" + hand.getOther().getUid() + ">");
+					}
+
+					return;
+				}
+
+				iterateSlots(side, s -> {
+					s.getBase().unlockAll();
+					s.setLastInteraction(null);
+					s.getStats().removeIf(ValueMod::isExpired);
+					for (Evogear e : s.getEquipments()) {
+						e.getStats().removeIf(ValueMod::isExpired);
 					}
 				});
+			}
+
+			BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
+			byte[] bytes = IO.getBytes(img, "png", 0.5f);
+
+			AtomicBoolean registered = new AtomicBoolean();
+			getChannel().sendMessage(getString(message, args)).addFile(bytes, "game.png").queue(m -> {
+				messages.compute(m.getChannel().getId(), replaceMessages(m));
+
+				if (!registered.get()) {
+					if (!message.startsWith("str/game_history")) {
+						getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+					}
+
+					registered.set(true);
+				}
+			});
+		} finally {
+			sending = false;
+		}
 	}
 
 	public void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, Side winner, String message, Object... args) {
-		if (isClosed()) return;
-		turns.add(Turn.from(this));
+		if (sending || isClosed()) return;
 
-		restoring = true;
-		for (List<SlotColumn> slts : arena.getSlots().values()) {
-			for (SlotColumn slt : slts) {
-				for (Senshi card : slt.getCards()) {
-					if (card != null) {
-						card.setFlipped(false);
+		try {
+			sending = true;
+			turns.add(Turn.from(this));
+
+			restoring = true;
+			for (List<SlotColumn> slts : arena.getSlots().values()) {
+				for (SlotColumn slt : slts) {
+					for (Senshi card : slt.getCards()) {
+						if (card != null) {
+							card.setFlipped(false);
+						}
 					}
 				}
 			}
-		}
-		restoring = false;
+			restoring = false;
 
-		BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
-		byte[] bytes = IO.getBytes(img, "png");
+			BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
+			byte[] bytes = IO.getBytes(img, "png");
 
-		AtomicBoolean registered = new AtomicBoolean();
-		getChannel().sendMessage(getString(message, args))
-				.addFile(bytes, "game.png")
-				.queue(m -> {
-					if (!registered.get()) {
-						getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
-						registered.set(true);
+			AtomicBoolean registered = new AtomicBoolean();
+			getChannel().sendMessage(getString(message, args)).addFile(bytes, "game.png").queue(m -> {
+				if (!registered.get()) {
+					getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+					registered.set(true);
+				}
+			}, Utils::doNothing);
+
+			for (Map.Entry<String, String> tuple : messages.entrySet()) {
+				if (tuple != null) {
+					GuildMessageChannel channel = Main.getApp().getMessageChannelById(tuple.getKey());
+					if (channel != null) {
+						channel.retrieveMessageById(tuple.getValue()).flatMap(Objects::nonNull, Message::delete).queue(null, Utils::doNothing);
 					}
-				}, Utils::doNothing);
-
-		for (Map.Entry<String, String> tuple : messages.entrySet()) {
-			if (tuple != null) {
-				GuildMessageChannel channel = Main.getApp().getMessageChannelById(tuple.getKey());
-				if (channel != null) {
-					channel.retrieveMessageById(tuple.getValue())
-							.flatMap(Objects::nonNull, Message::delete)
-							.queue(null, Utils::doNothing);
 				}
 			}
-		}
 
-		if (winner != null) {
-			this.winner = winner;
-		}
+			if (winner != null) {
+				this.winner = winner;
+			}
 
-		if (!singleplayer && arcade == null && !cheats && code == GameReport.SUCCESS) {
-			Match m = new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]));
-			new MatchHistory(m).save();
-		}
+			if (!singleplayer && arcade == null && !cheats && code == GameReport.SUCCESS) {
+				Match m = new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]));
+				new MatchHistory(m).save();
+			}
 
-		close(code);
+			close(code);
+		} finally {
+			sending = false;
+		}
 	}
 
 	private void addButtons(Message msg) {
@@ -2435,16 +2365,13 @@ public class Shoukan extends GameInstance<Phase> {
 						return;
 					}
 
-					List<SelectionCard> valid = curr.getCards().stream()
-							.filter(d -> {
-								if (d instanceof Evogear e && e.isAvailable()) {
-									return e.isSpell() == (curr.getOrigins().major() == Race.MYSTICAL);
-								}
+					List<SelectionCard> valid = curr.getCards().stream().filter(d -> {
+						if (d instanceof Evogear e && e.isAvailable()) {
+							return e.isSpell() == (curr.getOrigins().major() == Race.MYSTICAL);
+						}
 
-								return false;
-							})
-							.map(d -> new SelectionCard(d, false))
-							.toList();
+						return false;
+					}).map(d -> new SelectionCard(d, false)).toList();
 
 					if (valid.isEmpty()) {
 						getChannel().sendMessage(getString("err/empty_selection")).queue();
@@ -2475,15 +2402,10 @@ public class Shoukan extends GameInstance<Phase> {
 							return;
 						}
 
-						List<SelectionCard> valid = curr.getCards().stream()
-								.filter(Drawable::isAvailable)
-								.map(d -> new SelectionCard(d, false))
-								.toList();
+						List<SelectionCard> valid = curr.getCards().stream().filter(Drawable::isAvailable).map(d -> new SelectionCard(d, false)).toList();
 
 						curr.requestChoice(valid, 5, ds -> {
-							List<StashedCard> material = ds.stream()
-									.map(d -> new StashedCard(null, d))
-									.toList();
+							List<StashedCard> material = ds.stream().map(d -> new StashedCard(null, d)).toList();
 
 							List<SelectionCard> pool = new ArrayList<>();
 							for (int j = 0; j < 3; j++) {
@@ -2509,10 +2431,7 @@ public class Shoukan extends GameInstance<Phase> {
 				buttons.put(Utils.parseEmoji("\uD83D\uDD2E"), w -> {
 					BufferedImage cards = curr.render(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
 
-					Objects.requireNonNull(w.getHook())
-							.setEphemeral(true)
-							.sendFiles(FileUpload.fromData(IO.getBytes(cards, "png"), "hand.png"))
-							.queue();
+					Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(cards, "png"), "hand.png")).queue();
 				});
 			}
 
@@ -2531,26 +2450,15 @@ public class Shoukan extends GameInstance<Phase> {
 					BufferedImage bi = curr.renderChoices();
 					if (bi == null) return;
 
-					Objects.requireNonNull(w.getHook())
-							.setEphemeral(true)
-							.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png"))
-							.queue();
+					Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
 
 					return;
 				}
 
-				Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "hand.png"))
-						.queue();
+				Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "hand.png")).queue();
 			});
 
-			buttons.put(Utils.parseEmoji("\uD83D\uDD0D"),
-					w -> Objects.requireNonNull(w.getHook())
-							.setEphemeral(true)
-							.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png"))
-							.queue()
-			);
+			buttons.put(Utils.parseEmoji("\uD83D\uDD0D"), w -> Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")).queue());
 
 			if (singleplayer || getTurn() > 10) {
 				buttons.put(Utils.parseEmoji("🏳"), w -> {
@@ -2560,10 +2468,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 
 					curr.setForfeit(true);
-					Objects.requireNonNull(w.getHook())
-							.setEphemeral(true)
-							.sendMessage(getString("str/confirm_forfeit"))
-							.queue();
+					Objects.requireNonNull(w.getHook()).setEphemeral(true).sendMessage(getString("str/confirm_forfeit")).queue();
 				});
 			}
 		}
@@ -2572,9 +2477,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public List<SlotColumn> getOpenSlots(Side side, boolean top) {
-		return getSlots(side).stream()
-				.filter(sc -> !sc.isLocked() && !(top ? sc.hasTop() : sc.hasBottom()))
-				.toList();
+		return getSlots(side).stream().filter(sc -> !sc.isLocked() && !(top ? sc.hasTop() : sc.hasBottom())).toList();
 	}
 
 	public boolean putAtOpenSlot(Side side, boolean top, Senshi card) {
@@ -2617,11 +2520,7 @@ public class Shoukan extends GameInstance<Phase> {
 		for (GuildMessageChannel chn : getChannel().getChannels()) {
 			PseudoUser pu = new PseudoUser(source.toString(), Constants.API_ROOT + "card/" + source.getCard().getId(), chn);
 			if (gif != null) {
-				pu.send(null, text,
-						new WebhookEmbedBuilder()
-								.setImageUrl(GIF_PATH + gif + ".gif")
-								.build()
-				);
+				pu.send(null, text, new WebhookEmbedBuilder().setImageUrl(GIF_PATH + gif + ".gif").build());
 			} else {
 				pu.send(null, text);
 			}
@@ -2638,9 +2537,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (arcade == Arcade.DECK_ROYALE) {
 			boolean noHand = curr.getCards().stream().noneMatch(d -> d instanceof Senshi);
-			boolean noField = getSlots(curr.getSide()).stream()
-					.flatMap(sc -> sc.getCards().stream())
-					.noneMatch(Objects::nonNull);
+			boolean noField = getSlots(curr.getSide()).stream().flatMap(sc -> sc.getCards().stream()).noneMatch(Objects::nonNull);
 
 			if (noHand && noField) {
 				reportResult(GameReport.SUCCESS, getOther().getSide(), "arcade/deck_royale_win", "<@" + curr.getUid() + ">", "<@" + curr.getOther().getUid() + ">");
