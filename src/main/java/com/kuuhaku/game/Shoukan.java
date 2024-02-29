@@ -1081,9 +1081,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 		for (Integer idx : indexes) {
 			if (selection.indexes().contains(idx)) {
-				selection.indexes().add(idx);
-			} else {
 				selection.indexes().remove(idx);
+			} else {
+				selection.indexes().add(idx);
 			}
 		}
 
