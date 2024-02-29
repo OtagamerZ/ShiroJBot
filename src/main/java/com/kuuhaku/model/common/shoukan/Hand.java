@@ -1270,6 +1270,11 @@ public class Hand {
 				g.dispose();
 			}
 
+			Graph.drawOutlinedString(g2d, String.valueOf(i + 1),
+					x + (Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth(String.valueOf(i + 1)) / 2), y - 10,
+					6, Color.BLACK
+			);
+
 			g2d.drawImage(img, x, y, null);
 		}
 
