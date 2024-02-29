@@ -75,6 +75,11 @@ public enum Trigger {
 	ON_KILL,
 
 	/**
+	 * After sending a card to the graveyard
+	 **/
+	ON_CONFIRMED_KILL,
+
+	/**
 	 * On attacking directly
 	 **/
 	ON_DIRECT,

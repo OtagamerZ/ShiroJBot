@@ -165,6 +165,7 @@ public class Hand {
 
 				Hand op = getOther();
 				op.addKill();
+				getGame().trigger(Trigger.ON_CONFIRMED_KILL, s.getLastInteraction().asSource(Trigger.ON_CONFIRMED_KILL), s.asTarget());
 
 				if (op.getKills() % 7 == 0 && op.getOrigins().synergy() == Race.SHINIGAMI) {
 					for (Drawable<?> r : op.getDeck()) {
