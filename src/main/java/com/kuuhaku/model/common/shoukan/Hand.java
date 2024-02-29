@@ -1141,12 +1141,9 @@ public class Hand {
 				new SupplyChain<List<Drawable<?>>>(null)
 						.add(cs -> {
 							selection = null;
-							System.out.println("clear");
-
 							return cs;
 						})
 						.add(cs -> {
-							System.out.println("run");
 							action.accept(cs);
 							task.complete(cs);
 							return cs;
