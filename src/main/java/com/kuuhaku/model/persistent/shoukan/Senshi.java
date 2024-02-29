@@ -396,7 +396,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		List<Senshi> tgts = getFront(top, getIndex());
 		if (tgts.isEmpty()) return null;
 
-		return tgts.get(0);
+		return tgts.getFirst();
 	}
 
 	public List<Senshi> getFront(int... indexes) {

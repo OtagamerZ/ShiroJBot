@@ -43,6 +43,8 @@ import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.PseudoUser;
+import com.kuuhaku.model.records.SelectionCard;
+import com.kuuhaku.model.records.SelectionAction;
 import com.kuuhaku.model.records.shoukan.*;
 import com.kuuhaku.model.records.shoukan.history.Match;
 import com.kuuhaku.model.records.shoukan.history.Turn;
@@ -57,7 +59,6 @@ import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import com.ygimenez.json.JSONUtils;
 import kotlin.Pair;
-import kotlin.Triple;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
@@ -72,7 +73,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
@@ -1064,20 +1065,36 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 		if (!curr.selectionPending()) return false;
 
-		Triple<List<Drawable<?>>, Boolean, CompletableFuture<Drawable<?>>> selection = curr.getSelection();
-		if (!Utils.between(args.getInt("choice"), 0, selection.getFirst().size())) {
+		SelectionAction selection = curr.getSelection();
+		int idx = args.getInt("choice") - 1;
+
+		if (!Utils.between(idx, 0, selection.cards().size() - 1)) {
 			getChannel().sendMessage(getString("error/invalid_selection_index")).queue();
 			return false;
 		}
 
-		int idx = args.getInt("choice") - 1;
-		if (idx == -1) {
-			selection.getThird().complete(null);
-			return true;
+		selection.indexes().add(idx);
+		return false;
+	}
+
+	@PhaseConstraint({"PLAN", "COMBAT"})
+	@PlayerAction("ok")
+	private boolean confirm(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
+		if (!curr.selectionPending()) return false;
+
+		SelectionAction selection = curr.getSelection();
+		if (selection.indexes().size() != selection.required()) {
+			getChannel().sendMessage(getString("error/wrong_selection_amount")).queue();
+			return false;
 		}
 
-		Drawable<?> chosen = selection.getFirst().get(idx);
-		selection.getThird().complete(chosen);
+		List<Drawable<?>> cards = new ArrayList<>();
+		for (int i : selection.indexes()) {
+			cards.add(selection.cards().get(i).card());
+		}
+
+		selection.result().complete(cards);
 		return true;
 	}
 
@@ -2136,6 +2153,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (trigger) {
 			trigger(ON_TICK);
 			getCurrent().setRerolled(true);
+			getCurrent().verifyCap();
 		}
 
 		List<Side> sides = List.of(getOtherSide(), getCurrentSide());
@@ -2373,20 +2391,25 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						BondedList<Drawable<?>> deque = curr.getRealDeck();
-						List<Drawable<?>> cards = new ArrayList<>();
-						cards.add(deque.getFirst());
-						if (deque.size() > 2) cards.add(deque.get((deque.size() - 1) / 2));
-						if (deque.size() > 1) cards.add(deque.getLast());
+						List<SelectionCard> cards = new ArrayList<>();
+						cards.add(new SelectionCard(deque.getFirst(), false));
+						if (deque.size() > 2) {
+							cards.add(new SelectionCard(deque.get((deque.size() - 1) / 2), false));
+						}
+						if (deque.size() > 1) {
+							cards.add(new SelectionCard(deque.getLast(), false));
+						}
 
-						Drawable<?> d = curr.requestChoice(cards);
-						if (d != null) {
-							curr.draw(d);
-							curr.showHand();
-
-							reportEvent("str/destiny_draw", true, curr.getName());
+						try {
+							curr.requestChoice(cards, ds -> curr.draw(ds.getFirst())).get();
+						} catch (InterruptedException | ExecutionException e) {
+							throw new RuntimeException("Failed to request selection", e);
 						}
 
 						curr.setUsedDestiny(true);
+						curr.showHand();
+
+						reportEvent("str/destiny_draw", true, curr.getName());
 					});
 				}
 			}
@@ -2401,7 +2424,7 @@ public class Shoukan extends GameInstance<Phase> {
 						return;
 					}
 
-					List<Drawable<?>> valid = curr.getCards().stream()
+					List<SelectionCard> valid = curr.getCards().stream()
 							.filter(d -> {
 								if (d instanceof Evogear e && e.isAvailable()) {
 									return e.isSpell() == (curr.getOrigins().major() == Race.MYSTICAL);
@@ -2409,6 +2432,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 								return false;
 							})
+							.map(d -> new SelectionCard(d, false))
 							.toList();
 
 					if (valid.isEmpty()) {
@@ -2416,7 +2440,12 @@ public class Shoukan extends GameInstance<Phase> {
 						return;
 					}
 
-					((Evogear) curr.requestChoice(valid)).setFlag(Flag.EMPOWERED);
+					try {
+						curr.requestChoice(valid, ds -> ((Evogear) ds.getFirst()).setFlag(Flag.EMPOWERED)).get();
+					} catch (InterruptedException | ExecutionException e) {
+						throw new RuntimeException("Failed to request selection", e);
+					}
+
 					curr.setUsedDestiny(true);
 
 					if (curr.getOrigins().major() == Race.MACHINE) {
@@ -2438,27 +2467,38 @@ public class Shoukan extends GameInstance<Phase> {
 							return;
 						}
 
-						List<StashedCard> cards = new ArrayList<>();
+						List<SelectionCard> valid = curr.getCards().stream()
+								.filter(Drawable::isAvailable)
+								.map(d -> new SelectionCard(d, false))
+								.toList();
 
-						int i = 5;
-						Iterator<Drawable<?>> it = curr.getDiscard().iterator();
-						while (it.hasNext() && i-- > 0) {
-							Drawable<?> d = it.next();
+						try {
+							curr.requestChoice(valid, 5, ds -> {
+								List<StashedCard> material = ds.stream()
+										.map(d -> new StashedCard(null, d))
+										.toList();
 
-							cards.add(new StashedCard(null, d));
-							arena.getBanned().add(d);
-							it.remove();
-							curr.getCards().remove(d);
+								List<SelectionCard> pool = new ArrayList<>();
+								for (int j = 0; j < 3; j++) {
+									pool.add(new SelectionCard(SynthesizeCommand.rollSynthesis(curr.getUser(), material), false));
+								}
+
+								try {
+									curr.requestChoice(pool, curr.getCards()::addAll).get();
+								} catch (InterruptedException | ExecutionException e) {
+									throw new RuntimeException("Failed to request selection", e);
+								}
+
+								arena.getBanned().addAll(ds);
+								curr.getCards().removeAll(ds);
+							}).get();
+						} catch (InterruptedException | ExecutionException e) {
+							throw new RuntimeException("Failed to request selection", e);
 						}
 
-						List<Drawable<?>> pool = new ArrayList<>();
-						for (int j = 0; j < 3; j++) {
-							pool.add(SynthesizeCommand.rollSynthesis(curr.getUser(), cards));
-						}
-
-						curr.getCards().add(curr.requestChoice(pool));
 						curr.setOriginCooldown(3);
 						curr.showHand();
+
 						reportEvent("str/spirit_synth", true, curr.getName());
 					});
 				}
@@ -2538,9 +2578,9 @@ public class Shoukan extends GameInstance<Phase> {
 		if (slts.isEmpty()) return false;
 
 		if (top) {
-			slts.get(0).setTop(card);
+			slts.getFirst().setTop(card);
 		} else {
-			slts.get(0).setBottom(card);
+			slts.getFirst().setBottom(card);
 		}
 
 		return true;

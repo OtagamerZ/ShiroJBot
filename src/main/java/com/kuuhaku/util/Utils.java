@@ -391,7 +391,7 @@ public abstract class Utils {
 	}
 
 	public static Message paginate(List<Page> pages, int skip, boolean fast, MessageChannel channel, User... allowed) {
-		Message msg = Pages.subGet(sendPage(channel, pages.get(0)));
+		Message msg = Pages.subGet(sendPage(channel, pages.getFirst()));
 
 		Pages.paginate(msg, pages, true, 1, TimeUnit.MINUTES, skip, fast, u ->
 				Arrays.asList(allowed).contains(u)
@@ -525,7 +525,7 @@ public abstract class Utils {
 		if (col.isEmpty()) throw new IllegalArgumentException("Collection must not be empty");
 
 		List<T> list = List.copyOf(col);
-		if (list.size() == 1) return list.get(0);
+		if (list.size() == 1) return list.getFirst();
 
 		return list.get(Calc.rng(list.size() - 1));
 	}
@@ -544,7 +544,7 @@ public abstract class Utils {
 		if (col.isEmpty()) throw new IllegalArgumentException("Collection must not be empty");
 
 		List<T> list = List.copyOf(col);
-		if (list.size() == 1) return list.get(0);
+		if (list.size() == 1) return list.getFirst();
 
 		return list.get(Calc.rng(list.size() - 1, random));
 	}
@@ -745,7 +745,7 @@ public abstract class Utils {
 				).toList();
 
 		if (matches.isEmpty()) return CompletableFuture.failedStage(new NoResultException());
-		if (matches.size() == 1) return CompletableFuture.completedStage(matches.get(0));
+		if (matches.size() == 1) return CompletableFuture.completedStage(matches.getFirst());
 
 		AtomicInteger i = new AtomicInteger();
 		return selectOption(locale, channel, matches, sc -> new StashItem(locale, sc).toString(i.getAndIncrement()), user);
@@ -755,7 +755,7 @@ public abstract class Utils {
 		List<T> matches = List.copyOf(items);
 
 		if (matches.isEmpty()) return CompletableFuture.failedStage(new NoResultException());
-		if (matches.size() == 1) return CompletableFuture.completedStage(matches.get(0));
+		if (matches.size() == 1) return CompletableFuture.completedStage(matches.getFirst());
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/choose_option"));
@@ -922,7 +922,7 @@ public abstract class Utils {
 
 	public static <T> T getNext(T current, boolean wrap, List<T> sequence) {
 		T out = getNext(current, sequence);
-		if (out == null && wrap) out = sequence.get(0);
+		if (out == null && wrap) out = sequence.getFirst();
 
 		return out;
 	}
@@ -1106,7 +1106,7 @@ public abstract class Utils {
 			List<RichCustomEmoji> emotes = g.getEmojisByName(name, true);
 			if (emotes.isEmpty()) continue;
 
-			return emotes.get(0);
+			return emotes.getFirst();
 		}
 
 		return null;

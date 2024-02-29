@@ -224,7 +224,7 @@ public enum Race {
 			List<Race> subs = split();
 
 			g2d.setPaint(new GradientPaint(
-					0, 0, subs.get(0).getColor(),
+					0, 0, subs.getFirst().getColor(),
 					bi.getWidth(), 0, subs.get(1).getColor()
 			));
 		}

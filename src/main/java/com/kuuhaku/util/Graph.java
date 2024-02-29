@@ -399,7 +399,7 @@ public abstract class Graph {
 			if (image != null) {
 				Palette p = Palette.from(image).generate();
 
-				return p.getDominantColor(p.getSwatches().get(0).getColor());
+				return p.getDominantColor(p.getSwatches().getFirst().getColor());
 			}
 
 			return getRandomColor();

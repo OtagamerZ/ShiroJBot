@@ -94,8 +94,8 @@ public class RandomList<T> {
 		if (pool.isEmpty()) return null;
 		else if (map.isEmpty()) {
 			pool.sort(Comparator.<Pair<Double, T>>comparingDouble(Pair::getFirst).reversed());
-			double min = pool.get(pool.size() - 1).getFirst();
-			double max = pool.get(0).getFirst();
+			double min = pool.getLast().getFirst();
+			double max = pool.getFirst().getFirst();
 
 			for (Pair<Double, T> p : pool) {
 				double weight = p.getFirst();

@@ -356,7 +356,7 @@ public class GuildListener extends ListenerAdapter {
 										emj = valid.parallelStream()
 												.filter(e -> e.getGuild().isMember(mb))
 												.findAny()
-												.orElse(valid.get(0));
+												.orElse(valid.getFirst());
 									}
 								}
 

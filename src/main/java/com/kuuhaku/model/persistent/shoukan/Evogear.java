@@ -623,7 +623,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 						Graph.applyTransformed(g1, 25, y - 64, g -> {
 							if (icons.size() == 1) {
-								g.drawImage(icons.get(0), 0, 0, null);
+								g.drawImage(icons.getFirst(), 0, 0, null);
 							} else {
 								BufferedImage mask = IO.getResourceAsImage("shoukan/charm/mask.png");
 								assert mask != null;

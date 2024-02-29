@@ -78,13 +78,13 @@ public class SelectTitleCommand implements Executable {
 								}
 							}, ArrayList::addAll)
 					)
-					.sorted(Comparator.comparing(t -> t.get(0).getRarity().ordinal(), Comparator.reverseOrder()))
+					.sorted(Comparator.comparing(t -> t.getFirst().getRarity().ordinal(), Comparator.reverseOrder()))
 					.toList();
 
 			List<Page> pages = Utils.generatePages(eb, titles, 10, 5, ts -> {
 				StringBuilder sb = new StringBuilder();
 
-				Title current = ts.get(0);
+				Title current = ts.getFirst();
 				LocalizedTitle info = current.getInfo(locale);
 				boolean has = acc.hasTitle(current.getId());
 				sb.append("`ID: ");

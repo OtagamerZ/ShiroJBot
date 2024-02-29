@@ -161,7 +161,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 	}
 
 	public JDA getMainShard() {
-		return shiro.getShards().get(0);
+		return shiro.getShards().getFirst();
 	}
 
 	public String getId() {

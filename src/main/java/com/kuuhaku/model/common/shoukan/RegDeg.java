@@ -81,7 +81,7 @@ public class RegDeg {
 	}
 
 	public void leftShift(List<Number> val) {
-		add(val.get(0), val.get(1).doubleValue());
+		add(val.getFirst(), val.getLast().doubleValue());
 	}
 
 	public <T extends ValueOverTime> int reduce(Class<T> klass, int val) {

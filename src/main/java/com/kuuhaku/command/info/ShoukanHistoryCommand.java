@@ -127,7 +127,7 @@ public class ShoukanHistoryCommand implements Executable {
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 		);
 
-		msg.editMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
+		msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent()).queue(s ->
 				Pages.paginate(s, pages, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(acc.getUid()))
 		);
 	}
@@ -195,7 +195,7 @@ public class ShoukanHistoryCommand implements Executable {
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 		);
 
-		msg.editMessageEmbeds((MessageEmbed) pages.get(0).getContent()).queue(s ->
+		msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent()).queue(s ->
 				Pages.paginate(s, pages, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(acc.getUid()))
 		);
 	}

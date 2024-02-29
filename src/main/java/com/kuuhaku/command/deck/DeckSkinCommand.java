@@ -109,7 +109,7 @@ public class DeckSkinCommand implements Executable {
 
 		AtomicBoolean confirm = new AtomicBoolean();
 		AtomicInteger i = new AtomicInteger();
-		Utils.sendPage(event.channel(), pages.get(0)).queue(s ->
+		Utils.sendPage(event.channel(), pages.getFirst()).queue(s ->
 				Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
 							m.put(Utils.parseEmoji("◀️"), w -> {
 								if (i.get() > 1) {

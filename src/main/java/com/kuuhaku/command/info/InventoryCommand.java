@@ -81,7 +81,7 @@ public class InventoryCommand implements Executable {
 
 					if (!i.isPassive()) {
 						String sig = i.getSignature();
-						sig = SignatureParser.extract(locale, sig == null ? null : new String[]{sig}, false).get(0);
+						sig = SignatureParser.extract(locale, sig == null ? null : new String[]{sig}, false).getFirst();
 						fm.appendLine("`" + sig.formatted(data.config().getPrefix(), "items.use " + i.getId()) + "`");
 					}
 

@@ -504,8 +504,8 @@
 				 int majOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 12));
 				 int minOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 6));
 				 Graph.applyTransformed(g, 175, 150 / 2 - 75 / 2, g1 -> {
-					 g1.drawImage(icons.get(0), majOffset + 5, 10, 75, 75, null);
-					 g1.drawImage(icons.get(1), minOffset + 5, 10, 75, 75, null);
+					 g1.drawImage(icons.getFirst(), majOffset + 5, 10, 75, 75, null);
+					 g1.drawImage(icons.getLast(), minOffset + 5, 10, 75, 75, null);
 				 });
 
 				 g.setFont(Fonts.OPEN_SANS.derivePlain(36));
@@ -640,7 +640,7 @@
 			 if (ori.isEmpty()) {
 				 origin = Origin.from(variant, Race.NONE);
 			 } else if (ori.size() == 1) {
-				 origin = Origin.from(variant, ori.get(0));
+				 origin = Origin.from(variant, ori.getFirst());
 			 } else if (allSame) {
 				 origin = Origin.from(variant, Race.MIXED, ori.toArray(Race[]::new));
 			 } else {
