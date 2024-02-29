@@ -1060,20 +1060,26 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("(?<choice>\\d+)")
+	@PlayerAction("(?<choices>\\d+(,\\d+)*)")
 	private boolean select(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (!curr.selectionPending()) return false;
 
 		SelectionAction selection = curr.getSelection();
-		int idx = args.getInt("choice") - 1;
+		String[] choices = args.getString("choices").split(",");
 
-		if (!Utils.between(idx, 0, selection.cards().size() - 1)) {
-			getChannel().sendMessage(getString("error/invalid_selection_index")).queue();
-			return false;
+		List<Integer> indexes = new ArrayList<>();
+		for (String choice : choices) {
+			int idx = Integer.parseInt(choice);
+			if (!Utils.between(idx, 0, selection.cards().size() - 1)) {
+				getChannel().sendMessage(getString("error/invalid_selection_index")).queue();
+				return false;
+			}
+
+			indexes.add(idx);
 		}
 
-		selection.indexes().add(idx);
+		selection.indexes().addAll(indexes);
 		return false;
 	}
 
