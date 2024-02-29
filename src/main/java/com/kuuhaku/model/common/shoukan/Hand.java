@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.common.shoukan;
 
-import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ThrowingConsumer;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
@@ -1087,24 +1086,28 @@ public class Hand {
 		return bi;
 	}
 
+	public void send(BufferedImage bi) {
+		if (bi == null) return;
+
+		getUser().openPrivateChannel().flatMap(chn -> chn.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "hand.png"))).queue(m -> {
+			if (lastMessage != null) {
+				m.getChannel().retrieveMessageById(lastMessage).flatMap(Objects::nonNull, Message::delete).queue(null, Utils::doNothing);
+			}
+
+			lastMessage = m.getId();
+		}, Utils::doNothing);
+	}
+
 	public void showHand() {
 		showHand(this);
 	}
 
 	public void showHand(Hand hand) {
-		getUser().openPrivateChannel().flatMap(chn -> chn.sendFiles(FileUpload.fromData(IO.getBytes(render(hand.getCards()), "png"), "hand.png"))).queue(m -> {
-			if (equals(hand)) {
-				if (lastMessage != null) {
-					m.getChannel().retrieveMessageById(lastMessage).flatMap(Objects::nonNull, Message::delete).queue(null, Utils::doNothing);
-				}
-
-				lastMessage = m.getId();
-			}
-		}, Utils::doNothing);
+		send(render(hand.getCards()));
 	}
 
 	public void showCards(List<Drawable<?>> cards) {
-		getUser().openPrivateChannel().flatMap(chn -> chn.sendFiles(FileUpload.fromData(IO.getBytes(render(cards), "png"), "cards.png"))).queue(null, Utils::doNothing);
+		send(render(cards));
 	}
 
 	public CompletableFuture<Void> requestChoice(List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
@@ -1144,20 +1147,18 @@ public class Hand {
 			}
 		}
 
-		Message msg = Pages.subGet(getUser().openPrivateChannel().flatMap(chn -> chn.sendFiles(FileUpload.fromData(IO.getBytes(renderChoices(), "png"), "choices.png"))));
-
+		showChoices();
 		game.getChannel().sendMessage(game.getString("str/selection_sent")).queue();
-		return selection.result().thenApply(cs -> {
-			msg.delete().queue(null, Utils::doNothing);
-			selection = null;
 
+		return selection.result().thenApply(cs -> {
+			selection = null;
 			return cs;
 		}).thenAccept(action);
 	}
 
 	public BufferedImage renderChoices() {
 		List<SelectionCard> cards = selection.cards();
-		if (cards.isEmpty()) return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		if (cards.isEmpty()) return null;
 
 		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, 100 + (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
@@ -1203,6 +1204,10 @@ public class Hand {
 		g2d.dispose();
 
 		return bi;
+	}
+
+	public void showChoices() {
+		send(renderChoices());
 	}
 
 	public SelectionAction getSelection() {

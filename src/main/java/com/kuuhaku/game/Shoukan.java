@@ -1079,6 +1079,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		selection.indexes().addAll(indexes);
+		curr.showChoices();
 		return false;
 	}
 
@@ -2519,9 +2520,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 			buttons.put(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
 				if (curr.selectionPending()) {
+					BufferedImage bi = curr.renderChoices();
+					if (bi == null) return;
+
 					Objects.requireNonNull(w.getHook())
 							.setEphemeral(true)
-							.sendFiles(FileUpload.fromData(IO.getBytes(curr.renderChoices(), "png"), "choices.png"))
+							.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png"))
 							.queue();
 
 					return;
