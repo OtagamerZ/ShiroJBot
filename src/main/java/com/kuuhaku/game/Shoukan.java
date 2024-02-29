@@ -1109,9 +1109,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		selection.result().complete(cards);
-		reportEvent("str/discard_card", true, curr.getName(),
-				Utils.properlyJoin(getString("str/and")).apply(cards.stream().map(Drawable::toString).toList())
-		);
 		return true;
 	}
 
@@ -2154,7 +2151,7 @@ public class Shoukan extends GameInstance<Phase> {
 		};
 	}
 
-	private void reportEvent(String message, boolean trigger, Object... args) {
+	public void reportEvent(String message, boolean trigger, Object... args) {
 		if (getChannel() == null) return;
 
 		for (GuildMessageChannel chn : getChannel().getChannels()) {
@@ -2241,7 +2238,7 @@ public class Shoukan extends GameInstance<Phase> {
 				});
 	}
 
-	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, Side winner, String message, Object... args) {
+	public void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, Side winner, String message, Object... args) {
 		if (isClosed()) return;
 		turns.add(Turn.from(this));
 

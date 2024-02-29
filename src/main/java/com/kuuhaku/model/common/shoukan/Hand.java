@@ -617,6 +617,10 @@ public class Hand {
 					ds -> {
 						graveyard.addAll(ds);
 						cards.removeAll(ds);
+
+						game.reportEvent("str/discard_card", true, getName(),
+								Utils.properlyJoin(game.getString("str/and")).apply(cards.stream().map(Drawable::toString).toList())
+						);
 					}
 			);
 		}
