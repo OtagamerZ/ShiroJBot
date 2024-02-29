@@ -166,8 +166,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Pair<Method, JSONObject> action = toAction(
 				value.toLowerCase().replace(" ", ""),
-				m -> (!lock || (hand.selectionPending() && m.getName().equals("select")))
-					 && hand.selectionPending() == m.getName().equals("select")
+				m -> (!lock || (hand.selectionPending() && m.getName().startsWith("sel")))
+					 && hand.selectionPending() == m.getName().startsWith("sel")
+					 || m.getName().startsWith("deb")
 		);
 
 		execAction(hand, action);
@@ -1060,7 +1061,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
 	@PlayerAction("(?<choices>\\d+(,\\d+)*)")
-	private boolean select(Side side, JSONObject args) {
+	private boolean selSelect(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (!curr.selectionPending()) return false;
 
@@ -1069,7 +1070,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		List<Integer> indexes = new ArrayList<>();
 		for (String choice : choices) {
-			int idx = Integer.parseInt(choice);
+			int idx = Integer.parseInt(choice) - 1;
 			if (!Utils.between(idx, 0, selection.cards().size() - 1)) {
 				getChannel().sendMessage(getString("error/invalid_selection_index")).queue();
 				return false;
@@ -1078,14 +1079,21 @@ public class Shoukan extends GameInstance<Phase> {
 			indexes.add(idx);
 		}
 
-		selection.indexes().addAll(indexes);
+		for (Integer idx : indexes) {
+			if (selection.indexes().contains(idx)) {
+				selection.indexes().add(idx);
+			} else {
+				selection.indexes().remove(idx);
+			}
+		}
+
 		curr.showChoices();
 		return false;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
 	@PlayerAction("ok")
-	private boolean confirm(Side side, JSONObject args) {
+	private boolean selConfirm(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (!curr.selectionPending()) return false;
 
