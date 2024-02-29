@@ -36,12 +36,15 @@ import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.records.SelectionCard;
 import com.kuuhaku.model.records.SelectionAction;
+import com.kuuhaku.model.records.SelectionCard;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
-import com.kuuhaku.util.*;
+import com.kuuhaku.util.Bit;
+import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.Transient;
 import net.dv8tion.jda.api.entities.Message;
@@ -57,7 +60,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -398,66 +400,22 @@ public class Hand {
 	}
 
 	public List<Drawable<?>> manualDraw(int value) {
-		if (deck.isEmpty()) return List.of();
+		if (deck.isEmpty() || value <= 0) return List.of();
 
 		if (cards.stream().noneMatch(d -> d instanceof Senshi)) {
-			for (int i = 0; i < deck.size() && value > 0; i++) {
-				if (deck.get(i) instanceof Senshi) {
-					if (getOther().getOrigins().synergy() == Race.IMP) {
-						modHP(-75);
-					}
-
-					Drawable<?> d = deck.remove(i);
-					d.setSolid(true);
-
-					cards.add(d);
-					getGame().trigger(Trigger.ON_DRAW, side);
-					getGame().trigger(Trigger.ON_MANUAL_DRAW, d.asSource(Trigger.ON_MANUAL_DRAW));
-					value--;
-					break;
-				}
+			Senshi out = (Senshi) deck.removeFirst(d -> d instanceof Senshi);
+			if (out != null) {
+				addToHand(out, true);
+				value--;
 			}
 		}
 
 		List<Drawable<?>> out = new ArrayList<>();
-		for (int i = 0; i < value && !deck.isEmpty(); i++) {
+		for (int i = 0; i < Math.min(value, deck.size()); i++) {
 			Drawable<?> d = deck.removeFirst();
-			if (d instanceof Evogear e && !e.isSpell()) {
-				if (origin.synergy() == Race.EX_MACHINA) {
-					regdeg.add(500);
-				} else if (origin.synergy() == Race.MUMMY) {
-					Evogear curse = Evogear.getByTag(game.getRng(), "MUMMY_CURSE").getRandom();
-
-					try {
-						AtomicReference<Drawable<?>> choice = new AtomicReference<>();
-						requestChoice(
-								List.of(
-										new SelectionCard(d, false),
-										new SelectionCard(d.withCopy(c -> {
-											((Evogear) c).getStats().getAttrMult().set(0.5);
-											c.getCurses().add(curse.getEffect());
-										}), false)
-								),
-								ds -> choice.set(ds.getFirst())
-						).get();
-
-						d = choice.get();
-					} catch (InterruptedException | ExecutionException ex) {
-						throw new RuntimeException("Failed to request selection", ex);
-					}
-				}
-			}
-
-			if (getOther().getOrigins().synergy() == Race.IMP) {
-				modHP(-75);
-			}
-
 			if (d != null) {
-				d.setSolid(true);
-				cards.add(d);
-				getGame().trigger(Trigger.ON_DRAW, side);
-				getGame().trigger(Trigger.ON_MANUAL_DRAW, d.asSource(Trigger.ON_MANUAL_DRAW));
-				out.add(d);
+				out.add(addToHand(d, true));
+				value--;
 			}
 		}
 
@@ -468,47 +426,12 @@ public class Hand {
 		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
-		if (deck.isEmpty()) return null;
-
-		Drawable<?> d = deck.removeFirst();
-		if (d instanceof Evogear e && !e.isSpell()) {
-			if (origin.synergy() == Race.EX_MACHINA) {
-				regdeg.add(500);
-			} else if (origin.synergy() == Race.MUMMY) {
-				Evogear curse = Evogear.getByTag(game.getRng(), "MUMMY_CURSE").getRandom();
-
-				try {
-					AtomicReference<Drawable<?>> choice = new AtomicReference<>();
-					requestChoice(
-							List.of(
-									new SelectionCard(d, false),
-									new SelectionCard(d.withCopy(c -> {
-										((Evogear) c).getStats().getAttrMult().set(0.5);
-										c.getCurses().add(curse.getEffect());
-									}), false)
-							),
-							ds -> choice.set(ds.getFirst())
-					).get();
-
-					d = choice.get();
-				} catch (InterruptedException | ExecutionException ex) {
-					throw new RuntimeException("Failed to request selection", ex);
-				}
-			}
+		Drawable<?> out = deck.removeFirst();
+		if (out != null) {
+			return addToHand(out, false);
 		}
 
-		if (getOther().getOrigins().synergy() == Race.IMP) {
-			modHP(-75);
-		}
-
-		if (d != null) {
-			d.setSolid(true);
-			cards.add(d);
-			getGame().trigger(Trigger.ON_DRAW, side);
-			getGame().trigger(Trigger.ON_MAGIC_DRAW, d.asSource(Trigger.ON_MAGIC_DRAW));
-		}
-
-		return d;
+		return null;
 	}
 
 	public List<Drawable<?>> draw(int value) {
@@ -531,7 +454,7 @@ public class Hand {
 		BondedList<Drawable<?>> deck = getDeck();
 		Drawable<?> out = deck.removeFirst(d -> d.getCard().getId().equalsIgnoreCase(card));
 		if (out != null) {
-			return addToHand(out);
+			return addToHand(out, false);
 		}
 
 		return null;
@@ -543,7 +466,7 @@ public class Hand {
 		BondedList<Drawable<?>> deck = getDeck();
 		Drawable<?> out = deck.removeFirst(d -> d instanceof Senshi s && s.getRace() == race);
 		if (out != null) {
-			return addToHand(out);
+			return addToHand(out, false);
 		}
 
 		return null;
@@ -555,7 +478,7 @@ public class Hand {
 		BondedList<Drawable<?>> deck = getDeck();
 		Drawable<?> out = deck.removeFirst(cond);
 		if (out != null) {
-			return addToHand(out);
+			return addToHand(out, false);
 		}
 
 		return null;
@@ -566,7 +489,7 @@ public class Hand {
 
 		BondedList<Drawable<?>> deck = getDeck();
 		if (deck.remove(card)) {
-			return addToHand(card);
+			return addToHand(card, false);
 		}
 
 		return null;
@@ -578,7 +501,7 @@ public class Hand {
 		BondedList<Drawable<?>> deck = getDeck();
 		Senshi out = (Senshi) deck.removeFirst(d -> d instanceof Senshi);
 		if (out != null) {
-			return addToHand(out);
+			return addToHand(out, false);
 		}
 
 		return null;
@@ -590,7 +513,7 @@ public class Hand {
 		BondedList<Drawable<?>> deck = getDeck();
 		Evogear out = (Evogear) deck.removeFirst(d -> d instanceof Evogear);
 		if (out != null) {
-			return addToHand(out);
+			return addToHand(out, false);
 		}
 
 		return null;
@@ -602,7 +525,7 @@ public class Hand {
 		BondedList<Drawable<?>> deck = getDeck();
 		Evogear out = (Evogear) deck.removeFirst(d -> d instanceof Evogear e && !e.isSpell());
 		if (out != null) {
-			return addToHand(out);
+			return addToHand(out, false);
 		}
 
 		return null;
@@ -614,21 +537,24 @@ public class Hand {
 		BondedList<Drawable<?>> deck = getDeck();
 		Evogear out = (Evogear) deck.removeFirst(d -> d instanceof Evogear e && e.isSpell());
 		if (out != null) {
-			return addToHand(out);
+			return addToHand(out, false);
 		}
 
 		return null;
 	}
 
-	private Drawable<?> addToHand(Drawable<?> out) {
-		if (out instanceof Evogear e && !e.isSpell()) {
-			if (origin.synergy() == Race.EX_MACHINA) {
-				regdeg.add(500);
-			} else if (origin.synergy() == Race.MUMMY) {
-				Evogear curse = Evogear.getByTag(game.getRng(), "MUMMY_CURSE").getRandom();
+	private Drawable<?> addToHand(Drawable<?> out, boolean manual) {
+		return addToHand(out, manual, false);
+	}
 
-				try {
-					AtomicReference<Drawable<?>> choice = new AtomicReference<>();
+	private Drawable<?> addToHand(Drawable<?> out, boolean manual, boolean oriSkip) {
+		if (!oriSkip) {
+			if (out instanceof Evogear e && !e.isSpell()) {
+				if (origin.synergy() == Race.EX_MACHINA) {
+					regdeg.add(500);
+				} else if (origin.synergy() == Race.MUMMY && out.getCurses().isEmpty()) {
+					Evogear curse = Evogear.getByTag(game.getRng(), "MUMMY_CURSE").getRandom();
+
 					requestChoice(
 							List.of(
 									new SelectionCard(out, false),
@@ -637,25 +563,26 @@ public class Hand {
 										c.getCurses().add(curse.getEffect());
 									}), false)
 							),
-							ds -> choice.set(ds.getFirst())
-					).get();
-
-					out = choice.get();
-				} catch (InterruptedException | ExecutionException ex) {
-					throw new RuntimeException("Failed to request selection", ex);
+							ds -> addToHand(ds.getFirst(), false, true)
+					);
 				}
 			}
-		}
 
-		if (getOther().getOrigins().synergy() == Race.IMP) {
-			modHP(-75);
+			if (getOther().getOrigins().synergy() == Race.IMP) {
+				modHP(-75);
+			}
 		}
 
 		out.setSolid(true);
 		cards.add(out);
 
 		getGame().trigger(Trigger.ON_DRAW, side);
-		getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
+		if (manual) {
+			getGame().trigger(Trigger.ON_MANUAL_DRAW, out.asSource(Trigger.ON_MANUAL_DRAW));
+		} else {
+			getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
+		}
+
 		return out;
 	}
 

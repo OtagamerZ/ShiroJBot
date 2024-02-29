@@ -43,8 +43,8 @@ import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.PseudoUser;
-import com.kuuhaku.model.records.SelectionCard;
 import com.kuuhaku.model.records.SelectionAction;
+import com.kuuhaku.model.records.SelectionCard;
 import com.kuuhaku.model.records.shoukan.*;
 import com.kuuhaku.model.records.shoukan.history.Match;
 import com.kuuhaku.model.records.shoukan.history.Turn;
@@ -73,7 +73,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
@@ -2406,16 +2405,13 @@ public class Shoukan extends GameInstance<Phase> {
 							cards.add(new SelectionCard(deque.getLast(), false));
 						}
 
-						try {
-							curr.requestChoice(cards, ds -> curr.draw(ds.getFirst())).get();
-						} catch (InterruptedException | ExecutionException e) {
-							throw new RuntimeException("Failed to request selection", e);
-						}
+						curr.requestChoice(cards, ds -> {
+							curr.draw(ds.getFirst());
+							curr.setUsedDestiny(true);
+							curr.showHand();
 
-						curr.setUsedDestiny(true);
-						curr.showHand();
-
-						reportEvent("str/destiny_draw", true, curr.getName());
+							reportEvent("str/destiny_draw", true, curr.getName());
+						});
 					});
 				}
 			}
@@ -2446,19 +2442,16 @@ public class Shoukan extends GameInstance<Phase> {
 						return;
 					}
 
-					try {
-						curr.requestChoice(valid, ds -> ((Evogear) ds.getFirst()).setFlag(Flag.EMPOWERED)).get();
-					} catch (InterruptedException | ExecutionException e) {
-						throw new RuntimeException("Failed to request selection", e);
-					}
+					curr.requestChoice(valid, ds -> {
+						((Evogear) ds.getFirst()).setFlag(Flag.EMPOWERED);
+						curr.setUsedDestiny(true);
 
-					curr.setUsedDestiny(true);
-
-					if (curr.getOrigins().major() == Race.MACHINE) {
-						reportEvent("str/martial_empower", true, curr.getName());
-					} else {
-						reportEvent("str/arcane_empower", true, curr.getName());
-					}
+						if (curr.getOrigins().major() == Race.MACHINE) {
+							reportEvent("str/martial_empower", true, curr.getName());
+						} else {
+							reportEvent("str/arcane_empower", true, curr.getName());
+						}
+					});
 				});
 			}
 
@@ -2478,34 +2471,27 @@ public class Shoukan extends GameInstance<Phase> {
 								.map(d -> new SelectionCard(d, false))
 								.toList();
 
-						try {
-							curr.requestChoice(valid, 5, ds -> {
-								List<StashedCard> material = ds.stream()
-										.map(d -> new StashedCard(null, d))
-										.toList();
+						curr.requestChoice(valid, 5, ds -> {
+							List<StashedCard> material = ds.stream()
+									.map(d -> new StashedCard(null, d))
+									.toList();
 
-								List<SelectionCard> pool = new ArrayList<>();
-								for (int j = 0; j < 3; j++) {
-									pool.add(new SelectionCard(SynthesizeCommand.rollSynthesis(curr.getUser(), material), false));
-								}
+							List<SelectionCard> pool = new ArrayList<>();
+							for (int j = 0; j < 3; j++) {
+								pool.add(new SelectionCard(SynthesizeCommand.rollSynthesis(curr.getUser(), material), false));
+							}
 
-								try {
-									curr.requestChoice(pool, curr.getCards()::addAll).get();
-								} catch (InterruptedException | ExecutionException e) {
-									throw new RuntimeException("Failed to request selection", e);
-								}
-
+							curr.requestChoice(pool, chosen -> {
 								arena.getBanned().addAll(ds);
 								curr.getCards().removeAll(ds);
-							}).get();
-						} catch (InterruptedException | ExecutionException e) {
-							throw new RuntimeException("Failed to request selection", e);
-						}
 
-						curr.setOriginCooldown(3);
-						curr.showHand();
+								curr.getCards().add(chosen.getFirst());
+								curr.setOriginCooldown(3);
+								curr.showHand();
 
-						reportEvent("str/spirit_synth", true, curr.getName());
+								reportEvent("str/spirit_synth", true, curr.getName());
+							});
+						});
 					});
 				}
 			}
