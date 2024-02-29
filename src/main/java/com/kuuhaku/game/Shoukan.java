@@ -1079,12 +1079,13 @@ public class Shoukan extends GameInstance<Phase> {
 				.add(t -> {
 					if (tick == this.tick) {
 						reportEvent(Constants.VOID, true);
+						curr.showHand();
 					}
 
 					return t;
 				})
 				.process(cards);
-		return true;
+		return false;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
