@@ -1773,7 +1773,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public boolean isRestoring() {
-		return isSingleplayer() || Bit.on(state, 2);
+		return Bit.on(state, 2);
 	}
 
 	public void setRestoring(boolean restoring) {
@@ -1781,7 +1781,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public boolean hasHistory() {
-		return isSingleplayer() || Bit.on(state, 3);
+		return Bit.on(state, 3);
 	}
 
 	public void setHistory(boolean history) {
@@ -1789,7 +1789,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public boolean isLocked() {
-		return isSingleplayer() || Bit.on(state, 4);
+		return Bit.on(state, 4);
 	}
 
 	public void setLocked(boolean locked) {
@@ -1797,7 +1797,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public boolean isSending() {
-		return isSingleplayer() || Bit.on(state, 5);
+		return Bit.on(state, 5);
 	}
 
 	public void setSending(boolean sending) {
