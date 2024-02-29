@@ -1136,9 +1136,6 @@ public class Hand {
 		else if (cards.size() < required) throw new ActivationException("err/insufficient_selection");
 
 		SelectionAction act = new SelectionAction(caption, cards, required, new ArrayList<>(), new CompletableFuture<>());
-
-		showChoices();
-		game.getChannel().sendMessage(game.getString("str/selection_sent")).queue();
 		selection = new Pair<>(
 				act,
 				act.result().thenApply(cs -> {
@@ -1149,6 +1146,9 @@ public class Hand {
 					return cs;
 				})
 		);
+
+		showChoices();
+		game.getChannel().sendMessage(game.getString("str/selection_sent")).queue();
 
 		return selection.getSecond();
 	}
