@@ -1076,6 +1076,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		int tick = this.tick;
 		curr.getSelection().getSecond().thenApply(t -> {
+			System.out.println("report");
 			if (tick == this.tick) {
 				reportEvent(Constants.VOID, true);
 			}

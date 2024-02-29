@@ -640,8 +640,7 @@ public class Hand {
 	}
 
 	public void flushDiscard() {
-		cards.removeAll(discard);
-		cards.removeIf(Drawable::isEthereal);
+		cards.removeIf(d -> d.isEthereal() || !d.isAvailable());
 		graveyard.addAll(discard);
 		discard.clear();
 	}
@@ -1115,19 +1114,19 @@ public class Hand {
 		send(render(cards));
 	}
 
-	public CompletableFuture<List<Drawable<?>>> requestChoice(List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public CompletableFuture<Void> requestChoice(List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		return requestChoice("str/select_a_card", cards, 1, action);
 	}
 
-	public CompletableFuture<List<Drawable<?>>> requestChoice(String caption, List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public CompletableFuture<Void> requestChoice(String caption, List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		return requestChoice(caption, cards, 1, action);
 	}
 
-	public CompletableFuture<List<Drawable<?>>> requestChoice(List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public CompletableFuture<Void> requestChoice(List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		return requestChoice("str/select_a_card", cards, required, action);
 	}
 
-	public CompletableFuture<List<Drawable<?>>> requestChoice(String caption, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public CompletableFuture<Void> requestChoice(String caption, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		if (selection != null) {
 			throw new SelectionException("err/pending_selection");
 		}
@@ -1140,8 +1139,11 @@ public class Hand {
 				act,
 				act.result().thenApply(cs -> {
 					selection = null;
+					System.out.println("clear");
+
 					return cs;
 				}).thenApply(cs -> {
+					System.out.println("run");
 					action.accept(cs);
 					return cs;
 				})
@@ -1150,7 +1152,7 @@ public class Hand {
 		showChoices();
 		game.getChannel().sendMessage(game.getString("str/selection_sent")).queue();
 
-		return selection.getSecond();
+		return selection.getSecond().thenRun(Utils::doNothing);
 	}
 
 	public BufferedImage renderChoices() {
