@@ -56,6 +56,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -1113,19 +1114,19 @@ public class Hand {
 		send(render(cards));
 	}
 
-	public void requestChoice(List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
-		requestChoice("str/select_a_card", cards, 1, action);
+	public CompletableFuture<List<Drawable<?>>> requestChoice(List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+		return requestChoice("str/select_a_card", cards, 1, action);
 	}
 
-	public void requestChoice(String caption, List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
-		requestChoice(caption, cards, 1, action);
+	public CompletableFuture<List<Drawable<?>>> requestChoice(String caption, List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+		return requestChoice(caption, cards, 1, action);
 	}
 
-	public void requestChoice(List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
-		requestChoice("str/select_a_card", cards, required, action);
+	public CompletableFuture<List<Drawable<?>>> requestChoice(List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+		return requestChoice("str/select_a_card", cards, required, action);
 	}
 
-	public void requestChoice(String caption, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public CompletableFuture<List<Drawable<?>>> requestChoice(String caption, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		if (selection != null) {
 			throw new SelectionException("err/pending_selection");
 		}
@@ -1133,6 +1134,7 @@ public class Hand {
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
 		else if (cards.size() < required) throw new ActivationException("err/insufficient_selection");
 
+		CompletableFuture<List<Drawable<?>>> task = new CompletableFuture<>();
 		selection = new SelectionAction(
 				caption, cards, required,
 				new ArrayList<>(),
@@ -1146,12 +1148,14 @@ public class Hand {
 						.add(cs -> {
 							System.out.println("run");
 							action.accept(cs);
+							task.complete(cs);
 							return cs;
 						})
 		);
 
 		showChoices();
 		game.getChannel().sendMessage(game.getString("str/selection_sent")).queue();
+		return task;
 	}
 
 	public BufferedImage renderChoices() {
