@@ -1134,7 +1134,7 @@ public class Hand {
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
 		else if (cards.size() < required) throw new ActivationException("err/insufficient_selection");
 
-		selection = new SelectionAction(caption, cards, required, new HashSet<>(), new CompletableFuture<>());
+		selection = new SelectionAction(caption, cards, required, new ArrayList<>(), new CompletableFuture<>());
 		if (cards.size() == required) {
 			try {
 				return selection.result().thenApply(cs -> {

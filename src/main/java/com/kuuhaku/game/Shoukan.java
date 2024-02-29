@@ -93,15 +93,22 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Set<EffectOverTime> eots = new HashSet<>();
 	private final Set<TriggerBind> bindings = new HashSet<>();
 	private final List<Turn> turns = new TreeList<>();
-	private final boolean singleplayer;
 
-	private boolean cheats = false;
 	private StateSnap snapshot = null;
-	private boolean restoring = true;
-	private boolean history = false;
-	private boolean lock = false;
-	private boolean sending = false;
+	private int tick;
 	private Side winner;
+
+	private byte state = 0b100;
+	/*
+	0xF
+	  └ 0 111111
+	      │││││└ singleplayer
+	      ││││└─ cheats
+	      │││└── restoring
+	      ││└─── history
+	      │└──── lock
+	      └───── sending
+	 */
 
 	public Shoukan(I18N locale, Arcade arcade, User p1, User p2) {
 		this(locale, arcade, p1.getId(), p2.getId());
@@ -112,7 +119,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		this.arcade = arcade;
 		this.arena = new Arena(this);
-		this.singleplayer = p1.equals(p2);
+
+		setSingleplayer(p1.equals(p2));
 		this.hands = Map.of(Side.TOP, new Hand(p1, this, Side.TOP), Side.BOTTOM, new Hand(p2, this, Side.BOTTOM));
 
 		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, getOther().getSide(), "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
@@ -120,13 +128,13 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected boolean validate(Message message) {
-		return ((Predicate<Message>) m -> Utils.equalsAny(m.getAuthor().getId(), getPlayers())).and(m -> singleplayer || getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), m.getAuthor().getId()) || hands.values().stream().anyMatch(h -> h.getUid().equals(m.getAuthor().getId()) && h.selectionPending())).test(message);
+		return ((Predicate<Message>) m -> Utils.equalsAny(m.getAuthor().getId(), getPlayers())).and(m -> isSingleplayer() || getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), m.getAuthor().getId()) || hands.values().stream().anyMatch(h -> h.getUid().equals(m.getAuthor().getId()) && h.selectionPending())).test(message);
 	}
 
 	@Override
 	protected void begin() {
 		PLAYERS.addAll(Arrays.asList(getPlayers()));
-		restoring = false;
+		setRestoring(false);
 
 		for (Hand h : hands.values()) {
 			for (Drawable<?> d : h.getRealDeck()) {
@@ -154,7 +162,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Side current = getCurrentSide();
 		Hand hand = hands.values().stream().sorted(Comparator.comparing(h -> h.getSide() == current, Comparator.reverseOrder())).filter(h -> h.getUid().equals(user.getId())).findFirst().orElseThrow();
 
-		Pair<Method, JSONObject> action = toAction(value.toLowerCase().replace(" ", ""), m -> (!lock || (hand.selectionPending() && m.getName().startsWith("sel"))) && hand.selectionPending() == m.getName().startsWith("sel") || m.getName().startsWith("deb"));
+		Pair<Method, JSONObject> action = toAction(value.toLowerCase().replace(" ", ""), m -> (!isLocked() || (hand.selectionPending() && m.getName().startsWith("sel"))) && hand.selectionPending() == m.getName().startsWith("sel") || m.getName().startsWith("deb"));
 
 		execAction(hand, action);
 	}
@@ -164,9 +172,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Method m = action.getFirst();
 		try {
-			lock = true;
+			setLocked(true);
 			if (m.getName().startsWith("deb")) {
-				cheats = true;
+				setCheated(true);
 			}
 
 			if ((boolean) m.invoke(this, hand.getSide(), action.getSecond())) {
@@ -182,7 +190,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
 		} finally {
-			lock = false;
+			setLocked(false);
 		}
 	}
 
@@ -1066,8 +1074,12 @@ public class Shoukan extends GameInstance<Phase> {
 			cards.add(selection.cards().get(i).card());
 		}
 
+		int tick = this.tick;
 		selection.result().thenApply(t -> {
-			reportEvent(Constants.VOID, true);
+			if (tick == this.tick) {
+				reportEvent(Constants.VOID, true);
+			}
+
 			return t;
 		}).complete(cards);
 		return true;
@@ -1745,11 +1757,51 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public boolean isSingleplayer() {
-		return singleplayer;
+		return Bit.on(state, 0);
+	}
+
+	public void setSingleplayer(boolean sp) {
+		state = (byte) Bit.set(state, 0, sp);
 	}
 
 	public boolean hasCheated() {
-		return singleplayer || cheats;
+		return isSingleplayer() || Bit.on(state, 1);
+	}
+
+	public void setCheated(boolean cheated) {
+		state = (byte) Bit.set(state, 1, cheated);
+	}
+
+	public boolean isRestoring() {
+		return isSingleplayer() || Bit.on(state, 2);
+	}
+
+	public void setRestoring(boolean restoring) {
+		state = (byte) Bit.set(state, 2, restoring);
+	}
+
+	public boolean hasHistory() {
+		return isSingleplayer() || Bit.on(state, 3);
+	}
+
+	public void setHistory(boolean history) {
+		state = (byte) Bit.set(state, 3, history);
+	}
+
+	public boolean isLocked() {
+		return isSingleplayer() || Bit.on(state, 4);
+	}
+
+	public void setLocked(boolean locked) {
+		state = (byte) Bit.set(state, 4, locked);
+	}
+
+	public boolean isSending() {
+		return isSingleplayer() || Bit.on(state, 5);
+	}
+
+	public void setSending(boolean sending) {
+		state = (byte) Bit.set(state, 5, sending);
 	}
 
 	public StateSnap getSnapshot() {
@@ -1768,7 +1820,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@SuppressWarnings("unchecked")
 	public void restoreSnapshot(StateSnap snap) {
-		restoring = true;
+		setRestoring(true);
 
 		try {
 			arena.getBanned().clear();
@@ -1839,7 +1891,7 @@ public class Shoukan extends GameInstance<Phase> {
 		} catch (IOException | ClassNotFoundException e) {
 			Constants.LOGGER.warn("Failed to restore snapshot", e);
 		} finally {
-			restoring = false;
+			setRestoring(false);
 		}
 	}
 
@@ -1911,17 +1963,21 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void trigger(Trigger trigger) {
-		if (restoring) return;
+		if (isRestoring()) return;
 
 		List<Side> sides = List.of(getCurrentSide(), getOtherSide());
 
 		for (Side side : sides) {
 			trigger(trigger, side);
 		}
+
+		if (trigger == ON_TICK) {
+			tick++;
+		}
 	}
 
 	public void trigger(Trigger trigger, Side side) {
-		if (restoring) return;
+		if (isRestoring()) return;
 
 		EffectParameters ep = new EffectParameters(trigger, side);
 
@@ -1944,7 +2000,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public boolean trigger(Trigger trigger, Source source, Target... targets) {
-		if (restoring) return false;
+		if (isRestoring()) return false;
 
 		EffectParameters ep = new EffectParameters(trigger, source.side(), source, targets);
 
@@ -2079,10 +2135,10 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void reportEvent(String message, boolean trigger, Object... args) {
-		if (sending || getChannel() == null) return;
+		if (isSending() || getChannel() == null) return;
 
 		try {
-			sending = true;
+			setSending(true);
 			for (GuildMessageChannel chn : getChannel().getChannels()) {
 				String msg = messages.get(chn.getId());
 				if (msg != null) {
@@ -2146,7 +2202,7 @@ public class Shoukan extends GameInstance<Phase> {
 				});
 			}
 
-			BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
+			BufferedImage img = hasHistory() ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
 			byte[] bytes = IO.getBytes(img, "png", 0.5f);
 
 			AtomicBoolean registered = new AtomicBoolean();
@@ -2162,18 +2218,18 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			});
 		} finally {
-			sending = false;
+			setSending(false);
 		}
 	}
 
 	public void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, Side winner, String message, Object... args) {
-		if (sending || isClosed()) return;
+		if (isSending() || isClosed()) return;
 
 		try {
-			sending = true;
+			setSending(true);
 			turns.add(Turn.from(this));
 
-			restoring = true;
+			setRestoring(true);
 			for (List<SlotColumn> slts : arena.getSlots().values()) {
 				for (SlotColumn slt : slts) {
 					for (Senshi card : slt.getCards()) {
@@ -2183,9 +2239,9 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 			}
-			restoring = false;
+			setRestoring(false);
 
-			BufferedImage img = history ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
+			BufferedImage img = hasHistory() ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
 			byte[] bytes = IO.getBytes(img, "png");
 
 			AtomicBoolean registered = new AtomicBoolean();
@@ -2209,14 +2265,14 @@ public class Shoukan extends GameInstance<Phase> {
 				this.winner = winner;
 			}
 
-			if (!singleplayer && arcade == null && !cheats && code == GameReport.SUCCESS) {
+			if (!isSingleplayer() && arcade == null && !hasCheated() && code == GameReport.SUCCESS) {
 				Match m = new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]));
 				new MatchHistory(m).save();
 			}
 
 			close(code);
 		} finally {
-			sending = false;
+			setSending(false);
 		}
 	}
 
@@ -2436,9 +2492,9 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			buttons.put(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
-				history = !history;
+				setHistory(!hasHistory());
 
-				if (history) {
+				if (hasHistory()) {
 					reportEvent("str/game_history_enable", false, curr.getName());
 				} else {
 					reportEvent("str/game_history_disable", false, curr.getName());
@@ -2460,7 +2516,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			buttons.put(Utils.parseEmoji("\uD83D\uDD0D"), w -> Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")).queue());
 
-			if (singleplayer || getTurn() > 10) {
+			if (isSingleplayer() || getTurn() > 10) {
 				buttons.put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
 						reportResult(GameReport.SUCCESS, getOther().getSide(), "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
@@ -2663,20 +2719,16 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(trigger, getCurrentSide());
 	}
 
-	public boolean isRestoring() {
-		return restoring;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Shoukan shoukan = (Shoukan) o;
-		return getSeed() == shoukan.getSeed() && arcade == shoukan.arcade && singleplayer == shoukan.singleplayer;
+		return getSeed() == shoukan.getSeed() && arcade == shoukan.arcade && isSingleplayer() == shoukan.isSingleplayer();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getSeed(), arcade, singleplayer);
+		return Objects.hash(getSeed(), arcade, isSingleplayer());
 	}
 }
