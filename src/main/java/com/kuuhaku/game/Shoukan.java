@@ -1099,7 +1099,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		SelectionAction selection = curr.getSelection();
 		if (selection.indexes().size() != selection.required()) {
-			getChannel().sendMessage(getString("error/wrong_selection_amount")).queue();
+			getChannel().sendMessage(getString("error/wrong_selection_amount", selection.required())).queue();
 			return false;
 		}
 
