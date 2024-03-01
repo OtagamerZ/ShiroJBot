@@ -2451,38 +2451,42 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (curr.getOriginCooldown() == 0) {
-				if (curr.getOrigins().major() == Race.SPIRIT && curr.getDiscard().size() >= 5) {
-					buttons.put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
-						if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_choice")).queue();
-							return;
-						} else if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_action")).queue();
-							return;
-						}
+				if (curr.getOrigins().major() == Race.SPIRIT) {
+					List<SelectionCard> valid = curr.getCards().stream()
+							.filter(Drawable::isAvailable).map(d -> new SelectionCard(d, false))
+							.toList();
 
-						List<SelectionCard> valid = curr.getCards().stream().filter(Drawable::isAvailable).map(d -> new SelectionCard(d, false)).toList();
-
-						curr.requestChoice(valid, 5, ds -> {
-							List<StashedCard> material = ds.stream().map(d -> new StashedCard(null, d)).toList();
-
-							List<SelectionCard> pool = new ArrayList<>();
-							for (int j = 0; j < 3; j++) {
-								pool.add(new SelectionCard(SynthesizeCommand.rollSynthesis(curr.getUser(), material), false));
+					if (valid.size() >= 5) {
+						buttons.put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
+							if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_choice")).queue();
+								return;
+							} else if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_action")).queue();
+								return;
 							}
 
-							curr.requestChoice(pool, chosen -> {
-								arena.getBanned().addAll(ds);
-								curr.getCards().removeAll(ds);
+							curr.requestChoice(valid, 5, ds -> {
+								List<StashedCard> material = ds.stream().map(d -> new StashedCard(null, d)).toList();
 
-								curr.getCards().add(chosen.getFirst());
-								curr.setOriginCooldown(3);
-								curr.showHand();
+								List<SelectionCard> pool = new ArrayList<>();
+								for (int j = 0; j < 3; j++) {
+									pool.add(new SelectionCard(SynthesizeCommand.rollSynthesis(curr.getUser(), material), false));
+								}
 
-								reportEvent("str/spirit_synth", true, curr.getName());
+								curr.requestChoice(pool, chosen -> {
+									arena.getBanned().addAll(ds);
+									curr.getCards().removeAll(ds);
+
+									curr.getCards().add(chosen.getFirst());
+									curr.setOriginCooldown(3);
+									curr.showHand();
+
+									reportEvent("str/spirit_synth", true, curr.getName());
+								});
 							});
 						});
-					});
+					}
 				}
 			}
 
