@@ -566,7 +566,7 @@ public class Hand {
 							ds -> addToHand(ds.getFirst(), false, true)
 					);
 
-					return out;
+					return null;
 				}
 			}
 
