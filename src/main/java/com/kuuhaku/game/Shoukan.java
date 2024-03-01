@@ -2403,13 +2403,17 @@ public class Shoukan extends GameInstance<Phase> {
 							cards.add(new SelectionCard(deque.getLast(), false));
 						}
 
-						curr.requestChoice(cards, ds -> {
-							curr.draw(ds.getFirst());
-							curr.setUsedDestiny(true);
-							curr.showHand();
+						try {
+							curr.requestChoice(cards, ds -> {
+								curr.draw(ds.getFirst());
+								curr.setUsedDestiny(true);
+								curr.showHand();
 
-							reportEvent("str/destiny_draw", true, curr.getName());
-						});
+								reportEvent("str/destiny_draw", true, curr.getName());
+							});
+						} catch (ActivationException e) {
+							getChannel().sendMessage(getString(e.getMessage())).queue();
+						}
 					});
 				}
 			}
@@ -2437,16 +2441,20 @@ public class Shoukan extends GameInstance<Phase> {
 						return;
 					}
 
-					curr.requestChoice(valid, ds -> {
-						((Evogear) ds.getFirst()).setFlag(Flag.EMPOWERED);
-						curr.setUsedDestiny(true);
+					try {
+						curr.requestChoice(valid, ds -> {
+							((Evogear) ds.getFirst()).setFlag(Flag.EMPOWERED);
+							curr.setUsedDestiny(true);
 
-						if (curr.getOrigins().major() == Race.MACHINE) {
-							reportEvent("str/martial_empower", true, curr.getName());
-						} else {
-							reportEvent("str/arcane_empower", true, curr.getName());
-						}
-					});
+							if (curr.getOrigins().major() == Race.MACHINE) {
+								reportEvent("str/martial_empower", true, curr.getName());
+							} else {
+								reportEvent("str/arcane_empower", true, curr.getName());
+							}
+						});
+					} catch (ActivationException e) {
+						getChannel().sendMessage(getString(e.getMessage())).queue();
+					}
 				});
 			}
 
@@ -2466,25 +2474,33 @@ public class Shoukan extends GameInstance<Phase> {
 								return;
 							}
 
-							curr.requestChoice(valid, 5, ds -> {
-								List<StashedCard> material = ds.stream().map(d -> new StashedCard(null, d)).toList();
+							try {
+								curr.requestChoice(valid, 5, ds -> {
+									List<StashedCard> material = ds.stream().map(d -> new StashedCard(null, d)).toList();
 
-								List<SelectionCard> pool = new ArrayList<>();
-								for (int j = 0; j < 3; j++) {
-									pool.add(new SelectionCard(SynthesizeCommand.rollSynthesis(curr.getUser(), material), false));
-								}
+									List<SelectionCard> pool = new ArrayList<>();
+									for (int j = 0; j < 3; j++) {
+										pool.add(new SelectionCard(SynthesizeCommand.rollSynthesis(curr.getUser(), material), false));
+									}
 
-								curr.requestChoice(pool, chosen -> {
-									arena.getBanned().addAll(ds);
-									curr.getCards().removeAll(ds);
+									try {
+										curr.requestChoice(pool, chosen -> {
+											arena.getBanned().addAll(ds);
+											curr.getCards().removeAll(ds);
 
-									curr.getCards().add(chosen.getFirst());
-									curr.setOriginCooldown(3);
-									curr.showHand();
+											curr.getCards().add(chosen.getFirst());
+											curr.setOriginCooldown(3);
+											curr.showHand();
 
-									reportEvent("str/spirit_synth", true, curr.getName());
+											reportEvent("str/spirit_synth", true, curr.getName());
+										});
+									} catch (ActivationException e) {
+										getChannel().sendMessage(getString(e.getMessage())).queue();
+									}
 								});
-							});
+							} catch (ActivationException e) {
+								getChannel().sendMessage(getString(e.getMessage())).queue();
+							}
 						});
 					}
 				}
