@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-    <component name="JpaPluginProjectSettings">
-        <option name="lastSelectedLanguage" value="Java"/>
-    </component>
-    <component name="PersistenceUnitSettings">
-        <persistence-units>
-            <persistence-unit name="Default"
-                              persistenceXmlPath="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\META-INF\persistence.xml">
-                <packages>
-                    <package value="com.kuuhaku"/>
-                </packages>
-            </persistence-unit>
-        </persistence-units>
-    </component>
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit name="Default" persistenceXmlPath="C:\Users\DEV202\IdeaProjects\ShiroJBot\src\main\resources\META-INF\persistence.xml">
+        <packages>
+          <package value="com.kuuhaku" />
+        </packages>
+      </persistence-unit>
+    </persistence-units>
+  </component>
 </project>

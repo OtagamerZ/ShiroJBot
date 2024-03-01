@@ -2408,13 +2408,17 @@ public class Shoukan extends GameInstance<Phase> {
 							cards.add(new SelectionCard(deque.getLast(), false));
 						}
 
-						curr.requestChoice(null, cards, ds -> {
-							curr.draw(ds.getFirst());
-							curr.setUsedDestiny(true);
-							curr.showHand();
+						try {
+							curr.requestChoice(null, cards, ds -> {
+								curr.draw(ds.getFirst());
+								curr.setUsedDestiny(true);
+								curr.showHand();
 
-							reportEvent("str/destiny_draw", true, curr.getName());
-						});
+								reportEvent("str/destiny_draw", true, curr.getName());
+							});
+						} catch (ActivationException e) {
+							getChannel().sendMessage(getString(e.getMessage())).queue();
+						}
 					});
 				}
 			}
@@ -2442,52 +2446,68 @@ public class Shoukan extends GameInstance<Phase> {
 						return;
 					}
 
-					curr.requestChoice(null, valid, ds -> {
-						((Evogear) ds.getFirst()).setFlag(Flag.EMPOWERED);
-						curr.setUsedDestiny(true);
+					try {
+						curr.requestChoice(null, valid, ds -> {
+							((Evogear) ds.getFirst()).setFlag(Flag.EMPOWERED);
+							curr.setUsedDestiny(true);
 
-						if (curr.getOrigins().major() == Race.MACHINE) {
-							reportEvent("str/martial_empower", true, curr.getName());
-						} else {
-							reportEvent("str/arcane_empower", true, curr.getName());
-						}
-					});
+							if (curr.getOrigins().major() == Race.MACHINE) {
+								reportEvent("str/martial_empower", true, curr.getName());
+							} else {
+								reportEvent("str/arcane_empower", true, curr.getName());
+							}
+						});
+					} catch (ActivationException e) {
+						getChannel().sendMessage(getString(e.getMessage())).queue();
+					}
 				});
 			}
 
 			if (curr.getOriginCooldown() == 0) {
-				if (curr.getOrigins().major() == Race.SPIRIT && curr.getDiscard().size() >= 5) {
-					buttons.put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
-						if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_choice")).queue();
-							return;
-						} else if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_action")).queue();
-							return;
-						}
+				if (curr.getOrigins().major() == Race.SPIRIT) {
+					List<SelectionCard> valid = curr.getCards().stream()
+							.filter(Drawable::isAvailable).map(d -> new SelectionCard(d, false))
+							.toList();
 
-						List<SelectionCard> valid = curr.getCards().stream().filter(Drawable::isAvailable).map(d -> new SelectionCard(d, false)).toList();
-
-						curr.requestChoice(null, valid, 5, ds -> {
-							List<StashedCard> material = ds.stream().map(d -> new StashedCard(null, d)).toList();
-
-							List<SelectionCard> pool = new ArrayList<>();
-							for (int j = 0; j < 3; j++) {
-								pool.add(new SelectionCard(SynthesizeCommand.rollSynthesis(curr.getUser(), material), false));
+					if (valid.size() >= 5) {
+						buttons.put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
+							if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_choice")).queue();
+								return;
+							} else if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_action")).queue();
+								return;
 							}
 
-							curr.requestChoice(null, pool, chosen -> {
-								arena.getBanned().addAll(ds);
-								curr.getCards().removeAll(ds);
+							try {
+								curr.requestChoice(null, valid, 5, ds -> {
+									List<StashedCard> material = ds.stream().map(d -> new StashedCard(null, d)).toList();
 
-								curr.getCards().add(chosen.getFirst());
-								curr.setOriginCooldown(3);
-								curr.showHand();
+									List<SelectionCard> pool = new ArrayList<>();
+									for (int j = 0; j < 3; j++) {
+										pool.add(new SelectionCard(SynthesizeCommand.rollSynthesis(curr.getUser(), material), false));
+									}
 
-								reportEvent("str/spirit_synth", true, curr.getName());
-							});
+									try {
+										curr.requestChoice(null, pool, chosen -> {
+											arena.getBanned().addAll(ds);
+											curr.getCards().removeAll(ds);
+
+											curr.getCards().add(chosen.getFirst());
+											curr.setOriginCooldown(3);
+											curr.showHand();
+
+											reportEvent("str/spirit_synth", true, curr.getName());
+										});
+									} catch (ActivationException e) {
+										getChannel().sendMessage(getString(e.getMessage())).queue();
+									}
+								});
+							} catch (ActivationException e) {
+								getChannel().sendMessage(getString(e.getMessage())).queue();
+							}
 						});
-					});
+					}
 				}
 			}
 
