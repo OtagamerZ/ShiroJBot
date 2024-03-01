@@ -556,6 +556,7 @@ public class Hand {
 					Evogear curse = Evogear.getByTag(game.getRng(), "MUMMY_CURSE").getRandom();
 
 					requestChoice(
+							null,
 							List.of(
 									new SelectionCard(out, false),
 									new SelectionCard(out.withCopy(c -> {
@@ -613,6 +614,7 @@ public class Hand {
 	public void verifyCap() {
 		if (cards.size() > 20) {
 			requestChoice(
+					null,
 					"str/destroy_cards",
 					cards.stream().map(c -> new SelectionCard(c, false)).toList(),
 					cards.size() - 20,
@@ -1115,19 +1117,19 @@ public class Hand {
 		send(render(cards));
 	}
 
-	public CompletableFuture<List<Drawable<?>>> requestChoice(List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
-		return requestChoice("str/select_a_card", cards, 1, action);
+	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+		return requestChoice(source, "str/select_a_card", cards, 1, action);
 	}
 
-	public CompletableFuture<List<Drawable<?>>> requestChoice(String caption, List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
-		return requestChoice(caption, cards, 1, action);
+	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, String caption, List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+		return requestChoice(source, caption, cards, 1, action);
 	}
 
-	public CompletableFuture<List<Drawable<?>>> requestChoice(List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
-		return requestChoice("str/select_a_card", cards, required, action);
+	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+		return requestChoice(source, "str/select_a_card", cards, required, action);
 	}
 
-	public CompletableFuture<List<Drawable<?>>> requestChoice(String caption, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, String caption, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		if (selection != null) {
 			throw new SelectionException("err/pending_selection");
 		}
@@ -1137,7 +1139,7 @@ public class Hand {
 
 		CompletableFuture<List<Drawable<?>>> task = new CompletableFuture<>();
 		selection = new SelectionAction(
-				caption, cards, required,
+				source, caption, cards, required,
 				new ArrayList<>(),
 				new SupplyChain<List<Drawable<?>>>(null)
 						.add(cs -> {

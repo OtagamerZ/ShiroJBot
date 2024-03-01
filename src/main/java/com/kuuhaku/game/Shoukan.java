@@ -1063,22 +1063,27 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 		if (!curr.selectionPending()) return false;
 
-		SelectionAction selection = curr.getSelection();
-		if (selection.indexes().size() != selection.required()) {
-			getChannel().sendMessage(getString("error/wrong_selection_amount", selection.required())).queue();
+		SelectionAction sel = curr.getSelection();
+		if (sel.indexes().size() != sel.required()) {
+			getChannel().sendMessage(getString("error/wrong_selection_amount", sel.required())).queue();
 			return false;
 		}
 
 		List<Drawable<?>> cards = new ArrayList<>();
-		for (int i : selection.indexes()) {
-			cards.add(selection.cards().get(i).card());
+		for (int i : sel.indexes()) {
+			cards.add(sel.cards().get(i).card());
 		}
 
 		int tick = this.tick;
 		curr.getSelection().result()
 				.add(t -> {
 					if (tick == this.tick) {
-						reportEvent(Constants.VOID, true);
+						if (sel.source() != null) {
+							reportEvent(getString("str/effect_choice", curr.getName(), sel.required(), sel.source()), true);
+						} else {
+							reportEvent(getString("str/effect_choice_ns", curr.getName(), sel.required()), true);
+						}
+
 						curr.showHand();
 					}
 
@@ -2403,7 +2408,7 @@ public class Shoukan extends GameInstance<Phase> {
 							cards.add(new SelectionCard(deque.getLast(), false));
 						}
 
-						curr.requestChoice(cards, ds -> {
+						curr.requestChoice(null, cards, ds -> {
 							curr.draw(ds.getFirst());
 							curr.setUsedDestiny(true);
 							curr.showHand();
@@ -2437,7 +2442,7 @@ public class Shoukan extends GameInstance<Phase> {
 						return;
 					}
 
-					curr.requestChoice(valid, ds -> {
+					curr.requestChoice(null, valid, ds -> {
 						((Evogear) ds.getFirst()).setFlag(Flag.EMPOWERED);
 						curr.setUsedDestiny(true);
 
@@ -2463,7 +2468,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						List<SelectionCard> valid = curr.getCards().stream().filter(Drawable::isAvailable).map(d -> new SelectionCard(d, false)).toList();
 
-						curr.requestChoice(valid, 5, ds -> {
+						curr.requestChoice(null, valid, 5, ds -> {
 							List<StashedCard> material = ds.stream().map(d -> new StashedCard(null, d)).toList();
 
 							List<SelectionCard> pool = new ArrayList<>();
@@ -2471,7 +2476,7 @@ public class Shoukan extends GameInstance<Phase> {
 								pool.add(new SelectionCard(SynthesizeCommand.rollSynthesis(curr.getUser(), material), false));
 							}
 
-							curr.requestChoice(pool, chosen -> {
+							curr.requestChoice(null, pool, chosen -> {
 								arena.getBanned().addAll(ds);
 								curr.getCards().removeAll(ds);
 

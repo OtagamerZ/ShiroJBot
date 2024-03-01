@@ -24,6 +24,7 @@ import com.kuuhaku.model.common.SupplyChain;
 import java.util.List;
 
 public record SelectionAction(
+		Drawable<?> source,
 		String caption,
 		List<SelectionCard> cards,
 		int required,
