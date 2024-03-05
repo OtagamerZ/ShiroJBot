@@ -33,7 +33,6 @@ import com.kuuhaku.websocket.CommonSocket;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
@@ -145,12 +144,13 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		return Pages.subGet(shiro.retrieveUserById(id));
 	}
 
+	@SuppressWarnings("unchecked")
 	public GuildMessageChannel getMessageChannelById(String id) {
-		List<Class<? extends Channel>> types = List.of(
+		List<Class<? extends GuildMessageChannel>> types = List.of(
 				StandardGuildMessageChannel.class, ThreadChannel.class, VoiceChannel.class
 		);
 
-		for (Class<? extends Channel> type : types) {
+		for (Class<? extends GuildMessageChannel> type : types) {
 			GuildMessageChannel gmc = (GuildMessageChannel) shiro.getChannelById(type, id);
 			if (gmc != null) return gmc;
 		}
