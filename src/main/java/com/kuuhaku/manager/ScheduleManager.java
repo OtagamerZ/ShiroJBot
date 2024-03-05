@@ -20,7 +20,7 @@ package com.kuuhaku.manager;
 
 import com.kuuhaku.interfaces.annotations.Schedule;
 import it.sauronsoftware.cron4j.Scheduler;
-import org.reflections8.Reflections;
+import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;

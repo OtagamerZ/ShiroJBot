@@ -26,10 +26,13 @@ import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.records.PreparedCommand;
 import net.dv8tion.jda.api.Permission;
-import org.reflections8.Reflections;
+import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class CommandManager {
 	private final Reflections refl = new Reflections("com.kuuhaku.command");

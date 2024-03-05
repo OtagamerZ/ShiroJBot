@@ -24,7 +24,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.Spawn;
 import com.kuuhaku.util.Utils;
 import kotlin.Pair;
-import org.reflections8.Reflections;
+import org.reflections.Reflections;
 
 import java.util.ArrayList;
 import java.util.List;
