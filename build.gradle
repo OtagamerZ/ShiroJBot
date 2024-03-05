@@ -46,7 +46,8 @@ application {
 			"-Duser.timezone=America/Sao_Paulo",
 			"-Djava.awt.headless=true",
 			"-Dsun.java2d.opengl=True",
-			"-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector"
+			"-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector",
+			"-Djdk.attach.allowAttachSelf=true"
 //			,"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:55000"
 	]
 }
