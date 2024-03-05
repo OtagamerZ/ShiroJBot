@@ -20,7 +20,7 @@ package com.kuuhaku.manager;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.openjdk.jol.info.ClassLayout;
+import org.openjdk.jol.vm.VM;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
@@ -29,7 +29,7 @@ public class CacheManager {
 	private final Cache<String, byte[]> resource = Caffeine.newBuilder()
 			.expireAfterAccess(30, TimeUnit.MINUTES)
 			.maximumWeight(512 * 1024 * 1024)
-			.weigher((k, v) -> (int) Math.max(ClassLayout.parseInstance(v).instanceSize(), Integer.MAX_VALUE))
+			.weigher((k, v) -> (int) Math.max(VM.current().sizeOf(v), Integer.MAX_VALUE))
 			.build();
 
 	private final Cache<String, String> locale = Caffeine.newBuilder()
