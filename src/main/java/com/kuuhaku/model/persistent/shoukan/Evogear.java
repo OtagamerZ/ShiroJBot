@@ -359,7 +359,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public boolean isSolid() {
-		return Bit.on(state, 0);
+		return !isEthereal() && Bit.on(state, 0);
 	}
 
 	@Override

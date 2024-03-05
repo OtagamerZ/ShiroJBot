@@ -762,7 +762,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public boolean isSolid() {
-		return Bit.on(state, 0) && !base.getTags().contains("FUSION");
+		return !isEthereal() && Bit.on(state, 0) && !base.getTags().contains("FUSION");
 	}
 
 	@Override

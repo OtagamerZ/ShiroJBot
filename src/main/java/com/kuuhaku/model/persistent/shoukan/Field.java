@@ -182,7 +182,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public boolean isSolid() {
-		return Bit.on(state, 0);
+		return !isEthereal() && Bit.on(state, 0);
 	}
 
 	@Override
