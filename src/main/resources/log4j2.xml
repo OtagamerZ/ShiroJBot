@@ -54,6 +54,10 @@
     </Appenders>
 
     <Loggers>
+        <Logger name="org.ehcache.core.spi.ServiceLocator" level="debug">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
         <Root level="info" includeLocation="true">
             <AppenderRef ref="Console"/>
 
@@ -61,7 +65,5 @@
             <AppenderRef ref="ErrorLog" level="error"/>
             <AppenderRef ref="CrashLog" level="fatal"/>
         </Root>
-
-        <Logger name="org.ehcache.core.spi.ServiceLocator" level="debug"/>
     </Loggers>
 </Configuration>
