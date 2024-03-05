@@ -62,6 +62,6 @@
             <AppenderRef ref="CrashLog" level="fatal"/>
         </Root>
 
-        <Logger name="org.ehcache.core.spi" level="debug"/>
+        <Logger name="org.ehcache.core.spi.ServiceLocator" level="debug"/>
     </Loggers>
 </Configuration>

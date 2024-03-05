@@ -23,6 +23,7 @@ import com.kuuhaku.manager.CommandManager;
 import com.kuuhaku.manager.ScheduleManager;
 import com.sun.management.OperatingSystemMXBean;
 import org.apache.commons.lang3.time.StopWatch;
+import org.ehcache.core.spi.ServiceLocator;
 
 import javax.imageio.ImageIO;
 import java.lang.management.ManagementFactory;
