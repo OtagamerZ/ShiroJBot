@@ -26,7 +26,6 @@ import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.FieldType;
-import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
@@ -349,6 +348,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	public Field fork() {
 		Field clone = new Field(id, card, modifiers.clone(), type, effect, tags.clone());
 		clone.hand = hand;
+		clone.state = (byte) (state & 0b1110);
 
 		return clone;
 	}

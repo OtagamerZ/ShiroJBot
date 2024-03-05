@@ -702,6 +702,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		Evogear clone = new Evogear(id, card, tier, spell, targetType, charms.clone(), base.clone());
 		clone.stats = stats.clone();
 		clone.hand = hand;
+		clone.state = (byte) (state & 0b1110);
 
 		return clone;
 	}
