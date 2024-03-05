@@ -1051,7 +1051,7 @@ public class Hand {
 	public BufferedImage render(List<Drawable<?>> cards) {
 		if (cards.isEmpty()) return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
-		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, (150 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveBold(90));
@@ -1067,10 +1067,10 @@ public class Hand {
 			if (getLockTime(Lock.BLIND) > 0 && ally) {
 				g2d.drawImage(userDeck.getStyling().getFrame().getBack(userDeck), x, y, null);
 			} else {
-				g2d.drawImage(d.render(game.getLocale(), userDeck), x + 15, y + 15, null);
+				g2d.drawImage(d.render(game.getLocale(), userDeck), x, y, null);
 
 				if (!ally) {
-					Graph.applyTransformed(g2d, x + 15, y + 15, g -> {
+					Graph.applyTransformed(g2d, x, y, g -> {
 						g.setClip(userDeck.getStyling().getFrame().getBoundary());
 						g.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 0, 0, null);
 					});
@@ -1080,7 +1080,7 @@ public class Hand {
 					boolean legacy = userDeck.getStyling().getFrame().isLegacy();
 					BufferedImage emp = IO.getResourceAsImage("shoukan/frames/state/" + (legacy ? "old" : "new") + "/empowered.png");
 
-					g2d.drawImage(emp, x + 15, y + 15, null);
+					g2d.drawImage(emp, x, y, null);
 				}
 			}
 
