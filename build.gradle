@@ -127,7 +127,7 @@ dependencies {
 
 	//Logger
 	implementation group: "org.slf4j", name: "slf4j-api", version: "2.0.12"
-	implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '2.0.12'
+	implementation group: "org.slf4j", name: "slf4j-log4j12", version: "2.0.12"
 	implementation group: "org.apache.logging.log4j", name: "log4j-api", version: "2.23.0"
 	implementation group: "org.apache.logging.log4j", name: "log4j-core", version: "2.23.0"
 	implementation group: "org.apache.logging.log4j", name: "log4j-slf4j-impl", version: "2.23.0"
@@ -143,12 +143,13 @@ dependencies {
 	implementation group: "me.xuender", name: "unidecode", version: "0.0.7"
 	implementation group: "com.github.sbesada", name: "java.math.expression.parser", version: "3.3.0"
 	implementation group: "org.tukaani", name: "xz", version: "1.9"
-	implementation group: "org.ehcache", name: "ehcache", version: "3.10.8"
+	implementation group: "com.github.ben-manes.caffeine", name: "caffeine", version: "3.1.8"
 	implementation group: "com.vdurmont", name: "emoji-java", version: "5.1.1"
 	implementation group: "org.shredzone.commons", name: "commons-suncalc", version: "3.10"
 	implementation group: "org.knowm.xchart", name: "xchart", version: "3.8.7"
 	implementation group: "com.github.trickl", name: "palette", version: "0.1.1"
 	implementation group: "org.jetbrains", name: "annotations", version: "24.1.0"
+	implementation group: "org.openjdk.jol", name: "jol-core", version: "0.17"
 
 	//Unit test
 	testImplementation group: "org.junit.jupiter", name: "junit-jupiter", version: "5.10.2"

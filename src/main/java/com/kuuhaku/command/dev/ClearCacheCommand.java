@@ -35,8 +35,8 @@ import net.dv8tion.jda.api.JDA;
 public class ClearCacheCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Main.getCacheManager().getResourceCache().clear();
-		Main.getCacheManager().getLocaleCache().clear();
+		Main.getCacheManager().getResourceCache().cleanUp();
+		Main.getCacheManager().getLocaleCache().cleanUp();
 
 		event.channel().sendMessage(locale.get("success/cache_clear")).queue();
 	}
