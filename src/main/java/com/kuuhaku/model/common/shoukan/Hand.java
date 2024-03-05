@@ -415,7 +415,6 @@ public class Hand {
 			Drawable<?> d = deck.removeFirst();
 			if (d != null) {
 				out.add(addToHand(d, true));
-				value--;
 			}
 		}
 
@@ -1052,7 +1051,7 @@ public class Hand {
 	public BufferedImage render(List<Drawable<?>> cards) {
 		if (cards.isEmpty()) return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
-		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, (150 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveBold(90));
