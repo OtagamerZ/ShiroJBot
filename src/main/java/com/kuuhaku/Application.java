@@ -20,17 +20,16 @@ package com.kuuhaku;
 
 import com.github.ygimenez.exception.InvalidHandlerException;
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.PUtilsConfig;
 import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.Manager;
 import com.kuuhaku.listener.AutoModListener;
 import com.kuuhaku.listener.GuildListener;
-import com.kuuhaku.websocket.CommonSocket;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.util.API;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.websocket.CommonSocket;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.User;
@@ -109,24 +108,23 @@ public class Application implements Thread.UncaughtExceptionHandler {
 			PaginatorBuilder.createPaginator()
 					.setHandler(shiro)
 					.shouldEventLock(true)
+					.setOnRemove(h ->
+							h.editOriginalComponents()
+									.map(m -> {
+										Interaction i = h.getInteraction();
+										if (i.isFromGuild() && i.getGuild() != null) {
+											GuildConfig gc = DAO.find(GuildConfig.class, i.getGuild().getId());
+
+											h.setEphemeral(true)
+													.sendMessage(gc.getLocale().get("error/event_not_mapped"))
+													.queue();
+										}
+
+										return m;
+									})
+									.queue(null, Utils::doNothing)
+					)
 					.activate();
-
-			PUtilsConfig.setOnRemove(h ->
-					h.editOriginalComponents()
-							.map(m -> {
-								Interaction i = h.getInteraction();
-								if (i.isFromGuild() && i.getGuild() != null) {
-									GuildConfig gc = DAO.find(GuildConfig.class, i.getGuild().getId());
-
-									h.setEphemeral(true)
-											.sendMessage(gc.getLocale().get("error/event_not_mapped"))
-											.queue();
-								}
-
-								return m;
-							})
-							.queue(null, Utils::doNothing)
-			);
 		} catch (InvalidHandlerException e) {
 			Constants.LOGGER.error("Failed to start pagination library: " + e);
 			System.exit(1);
