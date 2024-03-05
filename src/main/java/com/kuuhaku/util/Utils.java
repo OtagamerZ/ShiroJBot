@@ -25,7 +25,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.PatternCache;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.I18N;
@@ -216,7 +215,8 @@ public abstract class Utils {
 	}
 
 	public static Matcher regex(String text, @Language("RegExp") String regex) {
-		return PatternCache.compile(regex).matcher(text);
+		Pattern pat = Main.getCacheManager().computePattern(regex, (k, v) -> Utils.getOr(v, Pattern.compile(regex)));
+		return pat.matcher(text);
 	}
 
 	public static Matcher regex(String text, Pattern pattern) {

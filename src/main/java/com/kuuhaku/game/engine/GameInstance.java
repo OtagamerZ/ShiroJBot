@@ -19,11 +19,11 @@
 package com.kuuhaku.game.engine;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.GameChannel;
-import com.kuuhaku.model.common.PatternCache;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
@@ -201,7 +201,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 					continue;
 				}
 
-				Pattern pat = PatternCache.compile(pa.value());
+				Pattern pat = Main.getCacheManager().computePattern(pa.value(), (k, v) -> Utils.getOr(v, Pattern.compile(pa.value())));
 				if (Utils.match(args, pat) && condition.test(meth)) {
 					return new Pair<>(meth, Utils.extractNamedGroups(args, pat));
 				}

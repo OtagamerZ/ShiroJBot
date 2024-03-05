@@ -25,6 +25,7 @@ import org.openjdk.jol.vm.VM;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
+import java.util.regex.Pattern;
 
 public class CacheManager {
 	private final Cache<String, byte[]> resource = Caffeine.newBuilder()
@@ -40,6 +41,11 @@ public class CacheManager {
 
 	private final Cache<String, Script> script = Caffeine.newBuilder()
 			.expireAfterAccess(30, TimeUnit.MINUTES)
+			.maximumSize(128)
+			.build();
+
+	private final Cache<String, Pattern> pattern = Caffeine.newBuilder()
+			.expireAfterAccess(1, TimeUnit.HOURS)
 			.maximumSize(128)
 			.build();
 
@@ -76,6 +82,18 @@ public class CacheManager {
 		if (value == null) return null;
 
 		script.put(key, value);
+		return value;
+	}
+
+	public Cache<String, Pattern> getPatternCache() {
+		return pattern;
+	}
+
+	public Pattern computePattern(String key, BiFunction<String, Pattern, Pattern> mapper) {
+		Pattern value = mapper.apply(key, pattern.getIfPresent(key));
+		if (value == null) return null;
+
+		pattern.put(key, value);
 		return value;
 	}
 }
