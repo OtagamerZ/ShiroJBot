@@ -2231,57 +2231,52 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, Side winner, String message, Object... args) {
-		if (isSending() || isClosed()) return;
+		if (isClosed()) return;
 
-		try {
-			setSending(true);
-			turns.add(Turn.from(this));
+		turns.add(Turn.from(this));
 
-			setRestoring(true);
-			for (List<SlotColumn> slts : arena.getSlots().values()) {
-				for (SlotColumn slt : slts) {
-					for (Senshi card : slt.getCards()) {
-						if (card != null) {
-							card.setFlipped(false);
-						}
+		setRestoring(true);
+		for (List<SlotColumn> slts : arena.getSlots().values()) {
+			for (SlotColumn slt : slts) {
+				for (Senshi card : slt.getCards()) {
+					if (card != null) {
+						card.setFlipped(false);
 					}
 				}
 			}
-			setRestoring(false);
-
-			BufferedImage img = hasHistory() ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
-			byte[] bytes = IO.getBytes(img, "png");
-
-			AtomicBoolean registered = new AtomicBoolean();
-			getChannel().sendMessage(getString(message, args)).addFile(bytes, "game.png").queue(m -> {
-				if (!registered.get()) {
-					getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
-					registered.set(true);
-				}
-			}, Utils::doNothing);
-
-			for (Map.Entry<String, String> tuple : messages.entrySet()) {
-				if (tuple != null) {
-					GuildMessageChannel channel = Main.getApp().getMessageChannelById(tuple.getKey());
-					if (channel != null) {
-						channel.retrieveMessageById(tuple.getValue()).flatMap(Objects::nonNull, Message::delete).queue(null, Utils::doNothing);
-					}
-				}
-			}
-
-			if (winner != null) {
-				this.winner = winner;
-			}
-
-			if (!isSingleplayer() && arcade == null && !hasCheated() && code == GameReport.SUCCESS) {
-				Match m = new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]));
-				new MatchHistory(m).save();
-			}
-
-			close(code);
-		} finally {
-			setSending(false);
 		}
+		setRestoring(false);
+
+		BufferedImage img = hasHistory() ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
+		byte[] bytes = IO.getBytes(img, "png");
+
+		AtomicBoolean registered = new AtomicBoolean();
+		getChannel().sendMessage(getString(message, args)).addFile(bytes, "game.png").queue(m -> {
+			if (!registered.get()) {
+				getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+				registered.set(true);
+			}
+		}, Utils::doNothing);
+
+		for (Map.Entry<String, String> tuple : messages.entrySet()) {
+			if (tuple != null) {
+				GuildMessageChannel channel = Main.getApp().getMessageChannelById(tuple.getKey());
+				if (channel != null) {
+					channel.retrieveMessageById(tuple.getValue()).flatMap(Objects::nonNull, Message::delete).queue(null, Utils::doNothing);
+				}
+			}
+		}
+
+		if (winner != null) {
+			this.winner = winner;
+		}
+
+		if (!isSingleplayer() && arcade == null && !hasCheated() && code == GameReport.SUCCESS) {
+			Match m = new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]));
+			new MatchHistory(m).save();
+		}
+
+		close(code);
 	}
 
 	private void addButtons(Message msg) {
