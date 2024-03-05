@@ -54,10 +54,6 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="org.ehcache.core.spi.ServiceLocator" level="debug">
-            <AppenderRef ref="Console"/>
-        </Logger>
-
         <Root level="info" includeLocation="true">
             <AppenderRef ref="Console"/>
 
