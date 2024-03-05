@@ -61,5 +61,7 @@
             <AppenderRef ref="ErrorLog" level="error"/>
             <AppenderRef ref="CrashLog" level="fatal"/>
         </Root>
+
+        <Root name="org.ehcache.core.spi" level="debug"/>
     </Loggers>
 </Configuration>
