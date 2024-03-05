@@ -20,6 +20,7 @@ package com.kuuhaku.manager;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import groovy.lang.Script;
 import org.openjdk.jol.vm.VM;
 
 import java.util.concurrent.TimeUnit;
@@ -33,6 +34,11 @@ public class CacheManager {
 			.build();
 
 	private final Cache<String, String> locale = Caffeine.newBuilder()
+			.expireAfterAccess(30, TimeUnit.MINUTES)
+			.maximumSize(128)
+			.build();
+
+	private final Cache<String, Script> script = Caffeine.newBuilder()
 			.expireAfterAccess(30, TimeUnit.MINUTES)
 			.maximumSize(128)
 			.build();
@@ -58,6 +64,18 @@ public class CacheManager {
 		if (value == null) return null;
 
 		locale.put(key, value);
+		return value;
+	}
+
+	public Cache<String, Script> getScriptCache() {
+		return script;
+	}
+
+	public Script computeScript(String key, BiFunction<String, Script, Script> mapper) {
+		Script value = mapper.apply(key, script.getIfPresent(key));
+		if (value == null) return null;
+
+		script.put(key, value);
 		return value;
 	}
 }

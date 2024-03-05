@@ -50,8 +50,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
-import net.jodah.expiringmap.ExpirationPolicy;
-import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
@@ -60,7 +58,6 @@ import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.intellij.lang.annotations.Language;
 import org.jdesktop.swingx.graphics.ColorUtilities;
@@ -73,7 +70,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.net.URI;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -91,10 +87,6 @@ import java.util.zip.CRC32;
 
 public abstract class Utils {
 	public static final Set<String> CONFIMATIONS = ConcurrentHashMap.newKeySet();
-	private static final ExpiringMap<String, Script> SCRIPT_CACHE = ExpiringMap.builder()
-			.expiration(30, TimeUnit.MINUTES)
-			.expirationPolicy(ExpirationPolicy.ACCESSED)
-			.build();
 
 	public static String toStringDuration(I18N locale, long millis) {
 		long days = millis / Constants.MILLIS_IN_DAY;
@@ -968,14 +960,20 @@ public abstract class Utils {
 	}
 
 	public static Object exec(@Language("Groovy") String code, Map<String, Object> variables) {
-		Script script = SCRIPT_CACHE.computeIfAbsent(Calc.hash(code, "sha1"), k -> Constants.GROOVY.parse(code));
+		Script script = Main.getCacheManager().computeScript(
+				Calc.hash(code, "sha1"),
+				(k, v) -> getOr(v, Constants.GROOVY.parse(code))
+		);
 		script.setBinding(new Binding(variables));
 
 		return script.run();
 	}
 
 	public static Script compile(@Language("Groovy") String code) {
-		return SCRIPT_CACHE.computeIfAbsent(Calc.hash(code, "sha1"), k -> Constants.GROOVY.parse(code));
+		return Main.getCacheManager().computeScript(
+				Calc.hash(code, "sha1"),
+				(k, v) -> getOr(v, Constants.GROOVY.parse(code))
+		);
 	}
 
 	public static <K, V> void shufflePairs(Map<K, V> map) {
