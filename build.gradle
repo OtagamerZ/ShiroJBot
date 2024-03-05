@@ -80,6 +80,10 @@ tasks.withType(JavaCompile).configureEach {
 	dependsOn enforceVersion
 }
 
+tasks.withType(GroovyCompile).configureEach {
+	groovyOptions.optimizationOptions.indy = true
+}
+
 tasks.register("enforceVersion") {
 	def foundVersion = JavaVersion.current()
 	if (foundVersion != javaVersion) {
