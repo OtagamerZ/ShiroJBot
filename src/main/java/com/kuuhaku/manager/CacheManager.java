@@ -31,7 +31,7 @@ public class CacheManager {
 	private final Cache<String, byte[]> resource = Caffeine.newBuilder()
 			.expireAfterAccess(30, TimeUnit.MINUTES)
 			.maximumWeight(512 * 1024 * 1024)
-			.weigher((k, v) -> (int) Math.max(VM.current().sizeOf(v), Integer.MAX_VALUE))
+			.weigher((k, v) -> (int) Math.min(VM.current().sizeOf(v), Integer.MAX_VALUE))
 			.build();
 
 	private final Cache<String, String> locale = Caffeine.newBuilder()
