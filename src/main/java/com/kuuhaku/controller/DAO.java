@@ -268,7 +268,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 			em.getTransaction().commit();
 		} finally {
-			if (em.getTransaction().isActive()) {
+			if (em.isOpen() && em.getTransaction().isActive()) {
 				em.getTransaction().rollback();
 			}
 
@@ -291,7 +291,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 			em.getTransaction().commit();
 		} finally {
-			if (em.getTransaction().isActive()) {
+			if (em.isOpen() && em.getTransaction().isActive()) {
 				em.getTransaction().rollback();
 			}
 
@@ -314,7 +314,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 			em.getTransaction().commit();
 		} finally {
-			if (em.getTransaction().isActive()) {
+			if (em.isOpen() && em.getTransaction().isActive()) {
 				em.getTransaction().rollback();
 			}
 
@@ -410,7 +410,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			em.merge(this);
 			em.getTransaction().commit();
 		} finally {
-			if (em.getTransaction().isActive()) {
+			if (em.isOpen() && em.getTransaction().isActive()) {
 				em.getTransaction().rollback();
 			}
 
@@ -452,7 +452,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			em.remove(ent);
 			em.getTransaction().commit();
 		} finally {
-			if (em.getTransaction().isActive()) {
+			if (em.isOpen() && em.getTransaction().isActive()) {
 				em.getTransaction().rollback();
 			}
 

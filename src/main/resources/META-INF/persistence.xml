@@ -34,7 +34,6 @@
         <class>com.kuuhaku.model.persistent.guild.GuildConfig</class>
         <class>com.kuuhaku.model.persistent.guild.GuildSettings</class>
         <class>com.kuuhaku.model.persistent.guild.LevelRole</class>
-        <class>com.kuuhaku.model.persistent.guild.PaidRole</class>
         <class>com.kuuhaku.model.persistent.guild.WelcomeSettings</class>
         <class>com.kuuhaku.model.persistent.guild.StarredMessage</class>
         <class>com.kuuhaku.model.persistent.guild.CustomAnswer</class>
@@ -80,13 +79,10 @@
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
 
-            <property name="hibernate.c3p0.min_size" value="3"/>
-            <property name="hibernate.c3p0.max_size" value="15"/>
-            <property name="hibernate.c3p0.timeout" value="300"/>
-            <property name="hibernate.c3p0.max_statements" value="50"/>
-            <property name="hibernate.c3p0.idle_test_period" value="3000"/>
-            <property name="hibernate.c3p0.co" value="SELECT 1"/>
-            <property name="hibernate.c3p0.testConnectionOnCheckout" value="true"/>
+            <property name="hibernate.hikari.minimumIdle" value="5"/>
+            <property name="hibernate.hikari.maximumPoolSize" value="10"/>
+            <property name="hibernate.hikari.idleTimeout" value="30000"/>
+            <property name="hibernate.connection.provider_class" value="com.zaxxer.hikari.hibernate.HikariConnectionProvider"/>
             <property name="unreturnedConnectionTimeout" value="30"/>
             <property name="debugUnreturnedConnectionStackTraces" value="true"/>
 

@@ -151,8 +151,7 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 					g2d.dispose();
 				}
 			} catch (IOException e) {
-				Constants.LOGGER.error(e, e);
-				return null;
+				throw new RuntimeException("Error when generating card", e);
 			}
 		}
 
