@@ -960,20 +960,23 @@ public abstract class Utils {
 	}
 
 	public static Object exec(@Language("Groovy") String code, Map<String, Object> variables) {
-		Script script = Main.getCacheManager().computeScript(
-				Calc.hash(code, "sha1"),
-				(k, v) -> getOr(v, Constants.GROOVY.parse(code))
-		);
+		Script script = compile(code);
 		script.setBinding(new Binding(variables));
 
 		return script.run();
 	}
 
 	public static Script compile(@Language("Groovy") String code) {
-		return Main.getCacheManager().computeScript(
+		Class<? extends Script> cached = Main.getCacheManager().computeScript(
 				Calc.hash(code, "sha1"),
-				(k, v) -> getOr(v, Constants.GROOVY.parse(code))
+				(k, v) -> getOr(v, Constants.GROOVY.parse(code).getClass())
 		);
+
+		try {
+			return cached.getConstructor().newInstance();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static <K, V> void shufflePairs(Map<K, V> map) {

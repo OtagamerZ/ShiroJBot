@@ -39,7 +39,7 @@ public class CacheManager {
 			.maximumSize(128)
 			.build();
 
-	private final Cache<String, Script> script = Caffeine.newBuilder()
+	private final Cache<String, Class<? extends Script>> script = Caffeine.newBuilder()
 			.expireAfterAccess(30, TimeUnit.MINUTES)
 			.maximumSize(128)
 			.build();
@@ -73,12 +73,12 @@ public class CacheManager {
 		return value;
 	}
 
-	public Cache<String, Script> getScriptCache() {
+	public Cache<String, Class<? extends Script>> getScriptCache() {
 		return script;
 	}
 
-	public Script computeScript(String key, BiFunction<String, Script, Script> mapper) {
-		Script value = mapper.apply(key, script.getIfPresent(key));
+	public Class<? extends Script> computeScript(String key, BiFunction<String, Class<? extends Script>, Class<? extends Script>> mapper) {
+		Class<? extends Script> value = mapper.apply(key, script.getIfPresent(key));
 		if (value == null) return null;
 
 		script.put(key, value);
