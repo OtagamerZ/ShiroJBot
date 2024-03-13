@@ -18,6 +18,7 @@
 
 package com.kuuhaku.manager;
 
+import com.kuuhaku.Application;
 import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
 import it.sauronsoftware.cron4j.Scheduler;
@@ -30,21 +31,27 @@ public class ScheduleManager extends Scheduler {
 	private final Reflections refl = new Reflections("com.kuuhaku.schedule");
 	private final Set<Class<?>> scheds = refl.getTypesAnnotatedWith(Schedule.class);
 
-	public ScheduleManager() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-		for (Class<?> sched : scheds) {
-			if (Runnable.class.isAssignableFrom(sched)) {
-				Schedule info = sched.getDeclaredAnnotation(Schedule.class);
+	public ScheduleManager() {
+		Application.READY.thenRun(() -> {
+			try {
+				for (Class<?> sched : scheds) {
+					if (Runnable.class.isAssignableFrom(sched)) {
+						Schedule info = sched.getDeclaredAnnotation(Schedule.class);
 
-				Runnable task = (Runnable) sched.getConstructor().newInstance();
-				schedule(info.value(), task);
+						Runnable task = (Runnable) sched.getConstructor().newInstance();
+						schedule(info.value(), task);
 
-				if (task instanceof PreInitialize) {
-					task.run();
+						if (task instanceof PreInitialize) {
+							task.run();
+						}
+					}
 				}
-			}
-		}
 
-		start();
+				start();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
 	}
 
 	public Set<Class<?>> getSchedules() {

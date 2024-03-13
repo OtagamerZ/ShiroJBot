@@ -55,6 +55,7 @@ import static net.dv8tion.jda.api.entities.Message.MentionType.EVERYONE;
 import static net.dv8tion.jda.api.entities.Message.MentionType.HERE;
 
 public class Application implements Thread.UncaughtExceptionHandler {
+	public static final CompletableFuture<Void> READY = new CompletableFuture<>();
 	private final ShardManager shiro;
 
 	public Application() {
@@ -134,6 +135,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 
 		Main.boot.stop();
 		Constants.LOGGER.info("Finished in " + Utils.toStringDuration(I18N.EN, Main.boot.getTime()));
+		READY.complete(null);
 	}
 
 	public ShardManager getShiro() {

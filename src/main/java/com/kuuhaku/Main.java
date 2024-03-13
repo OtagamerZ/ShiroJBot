@@ -26,7 +26,6 @@ import org.apache.commons.lang3.time.StopWatch;
 
 import javax.imageio.ImageIO;
 import java.lang.management.ManagementFactory;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 
@@ -36,18 +35,7 @@ public class Main {
 
 	private static final CacheManager cacheManager = new CacheManager();
 	private static final CommandManager commandManager = new CommandManager();
-	private static final ScheduleManager scheduleManager;
-
-	static {
-		ScheduleManager sm;
-		try {
-			sm = new ScheduleManager();
-		} catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-			Constants.LOGGER.error("Failed to start scheduler: " + e, e);
-			sm = null;
-		}
-		scheduleManager = sm;
-	}
+	private static final ScheduleManager scheduleManager = new ScheduleManager();
 
 	private static Application app;
 
@@ -98,6 +86,10 @@ public class Main {
 
 	public static CommandManager getCommandManager() {
 		return commandManager;
+	}
+
+	public static ScheduleManager getScheduleManager() {
+		return scheduleManager;
 	}
 
 	public static Application getApp() {
