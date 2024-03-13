@@ -966,12 +966,16 @@ public abstract class Utils {
 		Script script = compile(code);
 		script.setBinding(new Binding(variables));
 
-		Instant start = Instant.now();
-		try {
+		if (issuer == null) {
 			return script.run();
-		} finally {
-			int runtime = Math.toIntExact(Duration.between(start, Instant.now()).toMillis());
-			new ScriptMetrics(issuer, code, runtime).save();
+		} else {
+			Instant start = Instant.now();
+			try {
+				return script.run();
+			} finally {
+				int runtime = Math.toIntExact(Duration.between(start, Instant.now()).toMillis());
+				new ScriptMetrics(issuer, code, runtime).save();
+			}
 		}
 	}
 
