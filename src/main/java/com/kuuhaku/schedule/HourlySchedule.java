@@ -25,6 +25,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Reminder;
 import com.kuuhaku.util.Utils;
+import net.dv8tion.jda.api.entities.User;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -57,13 +58,13 @@ public class HourlySchedule implements Runnable, PreInitialize {
 			try {
 				Account acc = r.getAccount();
 				I18N locale = acc.getEstimateLocale();
+				User u = acc.getUser();
 
 				if (r.getChannel().canTalk()) {
-					r.getChannel().sendMessage(locale.get("str/reminder", r.getMessage())).queue();
+					r.getChannel().sendMessage(locale.get("str/reminder", u.getAsMention(), r.getMessage())).queue();
 				} else {
-					acc.getUser()
-							.openPrivateChannel()
-							.flatMap(c -> c.sendMessage(locale.get("str/reminder", r.getMessage())))
+					u.openPrivateChannel()
+							.flatMap(c -> c.sendMessage(locale.get("str/reminder", u.getAsMention(), r.getMessage())))
 							.queue(null, Utils::doNothing);
 				}
 			} finally {
