@@ -58,6 +58,7 @@
         <class>com.kuuhaku.model.persistent.user.LocalizedTitle</class>
         <class>com.kuuhaku.model.persistent.user.Warn</class>
         <class>com.kuuhaku.model.persistent.user.MarketOrder</class>
+        <class>com.kuuhaku.model.persistent.user.Reminder</class>
 
         <!-- SHOUKAN -->
         <class>com.kuuhaku.model.persistent.shoukan.Deck</class>
