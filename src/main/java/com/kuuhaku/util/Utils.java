@@ -958,6 +958,14 @@ public abstract class Utils {
 		return StringUtils.leftPad(String.valueOf(o), pad, padChar);
 	}
 
+	public static Object exec(@Language("Groovy") String code) {
+		return exec(code, Map.of());
+	}
+
+	public static Object exec(@Language("Groovy") String code, Map<String, Object> variables) {
+		return exec(null, code, variables);
+	}
+
 	public static Object exec(String issuer, @Language("Groovy") String code) {
 		return exec(issuer, code, Map.of());
 	}
