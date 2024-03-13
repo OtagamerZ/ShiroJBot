@@ -18,6 +18,7 @@
 
 package com.kuuhaku.manager;
 
+import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
 import it.sauronsoftware.cron4j.Scheduler;
 import org.reflections.Reflections;
@@ -36,6 +37,10 @@ public class ScheduleManager extends Scheduler {
 
 				Runnable task = (Runnable) sched.getConstructor().newInstance();
 				schedule(info.value(), task);
+
+				if (task instanceof PreInitialize) {
+					task.run();
+				}
 			}
 		}
 

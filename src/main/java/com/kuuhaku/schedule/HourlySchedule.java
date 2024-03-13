@@ -19,6 +19,7 @@
 package com.kuuhaku.schedule;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
@@ -36,7 +37,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Schedule("0 * * * *")
-public class HourlySchedule implements Runnable {
+public class HourlySchedule implements Runnable, PreInitialize {
 	public static final Set<Integer> SCHED_REMINDERS = new HashSet<>();
 	private static final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 
