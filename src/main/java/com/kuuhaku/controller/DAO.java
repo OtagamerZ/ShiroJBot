@@ -397,18 +397,21 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 	}
 
-	public final void save() {
+	@SuppressWarnings("unchecked")
+	public final T save() {
 		EntityManager em = Manager.getEntityManager();
 
 		beforeSave();
 		try {
 			if (this instanceof Blacklistable lock) {
-				if (lock.isBlacklisted()) return;
+				if (lock.isBlacklisted()) return (T) this;
 			}
 
 			em.getTransaction().begin();
-			em.merge(this);
+			T out = (T) em.merge(this);
 			em.getTransaction().commit();
+
+			return out;
 		} finally {
 			if (em.isOpen() && em.getTransaction().isActive()) {
 				em.getTransaction().rollback();

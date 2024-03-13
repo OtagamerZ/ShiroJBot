@@ -55,23 +55,22 @@ public class HourlySchedule implements Runnable, PreInitialize {
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		SCHED_REMINDERS.add(r.getId());
 		exec.schedule(() -> {
-			Reminder rem = r.refresh();
 			try {
-				Account acc = rem.getAccount();
+				Account acc = r.getAccount();
 				I18N locale = acc.getEstimateLocale();
 				User u = acc.getUser();
 
-				if (rem.getChannel().canTalk()) {
-					rem.getChannel().sendMessage(locale.get("str/reminder", u.getAsMention(), rem.getMessage())).queue();
+				if (r.getChannel().canTalk()) {
+					r.getChannel().sendMessage(locale.get("str/reminder", u.getAsMention(), r.getMessage())).queue();
 				} else {
 					u.openPrivateChannel()
-							.flatMap(c -> c.sendMessage(locale.get("str/reminder", u.getAsMention(), rem.getMessage())))
+							.flatMap(c -> c.sendMessage(locale.get("str/reminder", u.getAsMention(), r.getMessage())))
 							.queue(null, Utils::doNothing);
 				}
 			} finally {
-				SCHED_REMINDERS.remove(rem.getId());
-				rem.setReminded(true);
-				rem.save();
+				SCHED_REMINDERS.remove(r.getId());
+				r.setReminded(true);
+				r.save();
 			}
 		}, now.until(r.getDue(), ChronoUnit.MILLIS), TimeUnit.MILLISECONDS);
 	}
