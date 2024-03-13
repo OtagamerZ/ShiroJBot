@@ -68,10 +68,6 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<VoiceData> voiceData = new ArrayList<>();
-
-	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
 	private List<Warn> warns = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -134,10 +130,6 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 	public long getXpToLevel(int from, int to) {
 		return Math.max(0, getXpToLevel(to) - getXpToLevel(from));
-	}
-
-	public List<VoiceData> getVoiceData() {
-		return voiceData;
 	}
 
 	public List<Warn> getWarns() {

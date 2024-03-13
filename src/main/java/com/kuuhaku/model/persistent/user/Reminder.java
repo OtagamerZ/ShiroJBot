@@ -19,94 +19,87 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.enums.Currency;
+import com.kuuhaku.model.persistent.converter.ChannelConverter;
+import jakarta.persistence.*;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import jakarta.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 @Entity
-@Table(name = "transaction", indexes = @Index(columnList = "id DESC"))
-public class Transaction extends DAO<Transaction> {
+@Table(name = "reminder")
+public class Reminder extends DAO<Reminder> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private int id;
 
-	@Column(name = "value", nullable = false)
-	private long value;
+	@Column(name = "message", nullable = false, columnDefinition = "TEXT")
+	private String message;
 
-	@Column(name = "input", nullable = false)
-	private boolean input;
-
-	@Column(name = "reason", nullable = false, columnDefinition = "TEXT")
-	private String reason;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "currency", nullable = false)
-	private Currency currency;
-
-	@Column(name = "date", nullable = false)
-	private ZonedDateTime date;
+	@Column(name = "due", nullable = false)
+	private ZonedDateTime due;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@PrimaryKeyJoinColumn(name = "account_uid")
 	@Fetch(FetchMode.JOIN)
 	private Account account;
 
-	public Transaction() {
+	@Column(name = "channel")
+	@Convert(converter = ChannelConverter.class)
+	private GuildMessageChannel channel;
+
+	@Column(name = "reminded", nullable = false)
+	private boolean reminded;
+
+	public Reminder() {
 	}
 
-	protected Transaction(Account account, long value, boolean input, String reason, Currency currency) {
-		this.value = value;
-		this.input = input;
-		this.reason = reason;
-		this.currency = currency;
-		this.date = ZonedDateTime.now(ZoneId.of("GMT-3"));
+	public Reminder(Account account, GuildMessageChannel channel, String message, long offset) {
+		this.message = message;
+		this.due = ZonedDateTime.now(ZoneId.of("GMT-3")).plus(offset, ChronoUnit.MILLIS);
 		this.account = account;
+		this.channel = channel;
 	}
 
 	public int getId() {
 		return id;
 	}
 
-	public long getValue() {
-		return value;
+	public String getMessage() {
+		return message;
 	}
 
-	public boolean isInput() {
-		return input;
-	}
-
-	public String getReason() {
-		return reason;
-	}
-
-	public Currency getCurrency() {
-		return currency;
-	}
-
-	public ZonedDateTime getDate() {
-		return date;
+	public ZonedDateTime getDue() {
+		return due;
 	}
 
 	public Account getAccount() {
 		return account;
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+	public GuildMessageChannel getChannel() {
+		return channel;
+	}
+
+	public boolean wasReminded() {
+		return reminded;
+	}
+
+	public void setReminded(boolean reminded) {
+		this.reminded = reminded;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Transaction that = (Transaction) o;
-		return id == that.id;
+		Reminder reminder = (Reminder) o;
+		return id == reminder.id;
 	}
 
 	@Override

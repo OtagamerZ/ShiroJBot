@@ -51,7 +51,6 @@
         <class>com.kuuhaku.model.persistent.user.Profile</class>
         <class>com.kuuhaku.model.persistent.user.ProfileSettings</class>
         <class>com.kuuhaku.model.persistent.user.Transaction</class>
-        <class>com.kuuhaku.model.persistent.user.VoiceData</class>
         <class>com.kuuhaku.model.persistent.user.StashedCard</class>
         <class>com.kuuhaku.model.persistent.user.AccessToken</class>
         <class>com.kuuhaku.model.persistent.user.Title</class>

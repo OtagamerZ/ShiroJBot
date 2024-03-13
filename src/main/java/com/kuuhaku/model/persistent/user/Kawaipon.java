@@ -240,7 +240,7 @@ public class Kawaipon extends DAO<Kawaipon> {
 				         WHERE sc.kawaipon_uid = ?1
 				           AND sc.deck_id IS NULL
 				           AND sc.price = 0
-				           AND sc.locked = FALSE
+				           AND NOT sc.locked
 				     ) x
 				WHERE x.copy > 3
 				""", uid);
@@ -265,8 +265,8 @@ public class Kawaipon extends DAO<Kawaipon> {
 				WHERE s.kawaipon.uid = ?1
 				  AND s.deck.id IS NULL
 				  AND s.price = 0
-				  AND s.locked = FALSE
-				  AND s.accountBound = FALSE
+				  AND NOT s.locked
+				  AND NOT s.accountBound
 				""", uid);
 	}
 
