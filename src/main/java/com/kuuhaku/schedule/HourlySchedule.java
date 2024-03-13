@@ -43,29 +43,34 @@ public class HourlySchedule implements Runnable, PreInitialize {
 
 	@Override
 	public void run() {
-		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
-		List<Reminder> rems = DAO.queryAll(Reminder.class, "SELECT r FROM Reminder r WHERE NOT r.reminded AND r.due <= ?1", now.plusHours(1).truncatedTo(ChronoUnit.HOURS));
+		ZonedDateTime limit = ZonedDateTime.now(ZoneId.of("GMT-3")).plusHours(1).truncatedTo(ChronoUnit.HOURS);
+		List<Reminder> rems = DAO.queryAll(Reminder.class, "SELECT r FROM Reminder r WHERE NOT r.reminded AND r.due <= ?1", limit);
 		for (Reminder r : rems) {
-			SCHED_REMINDERS.add(r.getId());
-			exec.schedule(() -> {
-				try {
-					Account acc = r.getAccount();
-					I18N locale = acc.getEstimateLocale();
-
-					if (r.getChannel().canTalk()) {
-						r.getChannel().sendMessage(locale.get("str/reminder", r.getMessage())).queue();
-					} else {
-						acc.getUser()
-								.openPrivateChannel()
-								.flatMap(c -> c.sendMessage(locale.get("str/reminder", r.getMessage())))
-								.queue(null, Utils::doNothing);
-					}
-				} finally {
-					SCHED_REMINDERS.remove(r.getId());
-					r.setReminded(true);
-					r.save();
-				}
-			}, now.until(r.getDue(), ChronoUnit.MILLIS), TimeUnit.MILLISECONDS);
+			scheduleReminder(r);
 		}
+	}
+
+	public static void scheduleReminder(Reminder r) {
+		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
+		SCHED_REMINDERS.add(r.getId());
+		exec.schedule(() -> {
+			try {
+				Account acc = r.getAccount();
+				I18N locale = acc.getEstimateLocale();
+
+				if (r.getChannel().canTalk()) {
+					r.getChannel().sendMessage(locale.get("str/reminder", r.getMessage())).queue();
+				} else {
+					acc.getUser()
+							.openPrivateChannel()
+							.flatMap(c -> c.sendMessage(locale.get("str/reminder", r.getMessage())))
+							.queue(null, Utils::doNothing);
+				}
+			} finally {
+				SCHED_REMINDERS.remove(r.getId());
+				r.setReminded(true);
+				r.save();
+			}
+		}, now.until(r.getDue(), ChronoUnit.MILLIS), TimeUnit.MILLISECONDS);
 	}
 }

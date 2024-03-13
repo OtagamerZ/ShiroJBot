@@ -29,6 +29,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Reminder;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.schedule.HourlySchedule;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
@@ -62,6 +63,7 @@ public class RemindMeCommand implements Executable {
 						r.save();
 						event.channel().sendMessage(locale.get("success/reminder")).queue();
 
+						HourlySchedule.scheduleReminder(r);
 						return true;
 					}, event.user()
 			);
