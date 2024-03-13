@@ -32,7 +32,7 @@ public class ScheduleManager extends Scheduler {
 	private final Set<Class<?>> scheds = refl.getTypesAnnotatedWith(Schedule.class);
 
 	public ScheduleManager() {
-		Application.READY.thenRun(() -> {
+		Application.READY.add(() -> {
 			try {
 				for (Class<?> sched : scheds) {
 					if (Runnable.class.isAssignableFrom(sched)) {
