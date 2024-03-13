@@ -21,6 +21,7 @@ package com.kuuhaku;
 import com.kuuhaku.manager.CacheManager;
 import com.kuuhaku.manager.CommandManager;
 import com.kuuhaku.manager.ScheduleManager;
+import com.kuuhaku.model.common.ExecChain;
 import com.sun.management.OperatingSystemMXBean;
 import org.apache.commons.lang3.time.StopWatch;
 
@@ -30,6 +31,7 @@ import java.nio.charset.Charset;
 import java.time.LocalDate;
 
 public class Main {
+	public static final ExecChain READY = new ExecChain();
 	private static final OperatingSystemMXBean info = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 	protected static final StopWatch boot = new StopWatch();
 
@@ -78,6 +80,7 @@ public class Main {
 
 		ImageIO.setUseCache(false);
 		Thread.setDefaultUncaughtExceptionHandler(app = new Application());
+		READY.run();
 	}
 
 	public static CacheManager getCacheManager() {

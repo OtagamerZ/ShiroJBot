@@ -18,13 +18,12 @@
 
 package com.kuuhaku.manager;
 
-import com.kuuhaku.Application;
+import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
 import it.sauronsoftware.cron4j.Scheduler;
 import org.reflections.Reflections;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 public class ScheduleManager extends Scheduler {
@@ -32,7 +31,7 @@ public class ScheduleManager extends Scheduler {
 	private final Set<Class<?>> scheds = refl.getTypesAnnotatedWith(Schedule.class);
 
 	public ScheduleManager() {
-		Application.READY.add(() -> {
+		Main.READY.add(() -> {
 			try {
 				for (Class<?> sched : scheds) {
 					if (Runnable.class.isAssignableFrom(sched)) {

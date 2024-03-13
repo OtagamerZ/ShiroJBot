@@ -25,7 +25,6 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.Manager;
 import com.kuuhaku.listener.AutoModListener;
 import com.kuuhaku.listener.GuildListener;
-import com.kuuhaku.model.common.ExecChain;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.util.API;
@@ -56,7 +55,6 @@ import static net.dv8tion.jda.api.entities.Message.MentionType.EVERYONE;
 import static net.dv8tion.jda.api.entities.Message.MentionType.HERE;
 
 public class Application implements Thread.UncaughtExceptionHandler {
-	public static final ExecChain READY = new ExecChain();
 	private final ShardManager shiro;
 
 	public Application() {
@@ -136,7 +134,6 @@ public class Application implements Thread.UncaughtExceptionHandler {
 
 		Main.boot.stop();
 		Constants.LOGGER.info("Finished in " + Utils.toStringDuration(I18N.EN, Main.boot.getTime()));
-		READY.run();
 	}
 
 	public ShardManager getShiro() {
