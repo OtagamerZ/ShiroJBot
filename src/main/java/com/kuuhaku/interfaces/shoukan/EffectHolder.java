@@ -219,7 +219,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				String main = types.stream().map(String::valueOf).findFirst().orElse(null);
 
 				JSONObject props = csm.getStoredProps();
-				String val = String.valueOf(Utils.exec(null, "import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
+				String val = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
 
 				for (Object type : types) {
 					props.compute(String.valueOf(type), (k, v) -> {

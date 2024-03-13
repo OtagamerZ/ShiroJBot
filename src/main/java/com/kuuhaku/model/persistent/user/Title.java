@@ -73,7 +73,7 @@ public class Title extends DAO<Title> {
 		if (check.isBlank()) return false;
 
 		try {
-			Object out = Utils.exec(null, check, Map.of(
+			Object out = Utils.exec(check, Map.of(
 					"acc", acc,
 					"locale", locale
 			));
