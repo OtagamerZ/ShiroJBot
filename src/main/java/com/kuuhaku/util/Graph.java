@@ -145,7 +145,7 @@ public abstract class Graph {
 	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, int kerning, int blankOffset, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
 		String[] lines = text.split("\n");
 		for (String line : lines) {
-			String[] words = line.split("(?<=\\S)(?= )");
+			String[] words = line.split("(?<=\\S )");
 			int offset = 0;
 			for (String s : words) {
 				String word = processor.apply(s);
@@ -155,8 +155,7 @@ public abstract class Graph {
 					renderer.accept(word, x + offset, y);
 					offset += m.stringWidth(word);
 				} else {
-					y += m.getHeight() - kerning;
-					renderer.accept(word, x, y);
+					renderer.accept(word, x, y += m.getHeight() - kerning);
 					offset = m.stringWidth(word);
 				}
 			}
