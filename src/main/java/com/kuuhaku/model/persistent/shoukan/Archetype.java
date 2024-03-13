@@ -68,7 +68,7 @@ public class Archetype extends DAO<Archetype> {
 	public void execute(Hand hand) {
 		if (effect == null) return;
 
-		Utils.exec(effect, Map.of("hand", hand));
+		Utils.exec(getClass().getSimpleName(), effect, Map.of("hand", hand));
 	}
 
 	public LocalizedArch getInfo(I18N locale) {

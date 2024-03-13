@@ -54,7 +54,7 @@ public class CompileCommand implements Executable {
 
 					Future<?> fut = CompletableFuture.supplyAsync(() -> {
 						time.start();
-						Object out = Utils.exec(code, Map.of("msg", event.message()));
+						Object out = Utils.exec(getClass().getSimpleName(), code, Map.of("msg", event.message()));
 						time.stop();
 
 						return out;

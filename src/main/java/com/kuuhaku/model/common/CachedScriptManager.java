@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import org.intellij.lang.annotations.Language;
@@ -34,7 +35,7 @@ public class CachedScriptManager {
 
 	@Language("Groovy")
 	private String code;
-	private Object owner;
+	private EffectHolder<?> owner;
 
 	public CachedScriptManager() {
 		context.put("props", storedProps);
@@ -55,7 +56,7 @@ public class CachedScriptManager {
 		return this;
 	}
 
-	public CachedScriptManager assertOwner(Object owner, Runnable elseDo) {
+	public CachedScriptManager assertOwner(EffectHolder<?> owner, Runnable elseDo) {
 		if (!Objects.equals(this.owner, owner)) {
 			storedProps.clear();
 			this.owner = owner;
@@ -66,7 +67,7 @@ public class CachedScriptManager {
 	}
 
 	public void run() {
-		Utils.exec(code, context);
+		Utils.exec(owner.toString(), code, context);
 	}
 
 	public JSONObject getStoredProps() {

@@ -71,7 +71,7 @@ public class Giftcode extends DAO<Giftcode> {
 
 	public boolean redeem(Account acc) {
 		try {
-			Utils.exec(gift, Map.of("acc", acc));
+			Utils.exec(getClass().getSimpleName(), gift, Map.of("acc", acc));
 			redeemer = acc.getUid();
 			usedAt = ZonedDateTime.now(ZoneId.of("GMT-3"));
 			save();

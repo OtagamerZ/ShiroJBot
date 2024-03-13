@@ -29,6 +29,7 @@ import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.shiro.ScriptMetrics;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.StashItem;
 import com.ygimenez.json.JSONArray;
@@ -71,6 +72,8 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
@@ -955,15 +958,21 @@ public abstract class Utils {
 		return StringUtils.leftPad(String.valueOf(o), pad, padChar);
 	}
 
-	public static Object exec(@Language("Groovy") String code) {
-		return exec(code, Map.of());
+	public static Object exec(String issuer, @Language("Groovy") String code) {
+		return exec(issuer, code, Map.of());
 	}
 
-	public static Object exec(@Language("Groovy") String code, Map<String, Object> variables) {
+	public static Object exec(String issuer, @Language("Groovy") String code, Map<String, Object> variables) {
 		Script script = compile(code);
 		script.setBinding(new Binding(variables));
 
-		return script.run();
+		Instant start = Instant.now();
+		try {
+			return script.run();
+		} finally {
+			int runtime = Math.toIntExact(Duration.between(start, Instant.now()).toMillis());
+			new ScriptMetrics(issuer, code, runtime).save();
+		}
 	}
 
 	public static Script compile(@Language("Groovy") String code) {

@@ -1205,7 +1205,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			for (@Language("Groovy") String curse : stats.getCurses()) {
 				if (curse.isBlank() || !curse.contains(trigger.name())) continue;
 
-				Utils.exec(curse, Map.of(
+				Utils.exec(toString(), curse, Map.of(
 						"self", this,
 						"game", getGame(),
 						"data", stats.getData(),

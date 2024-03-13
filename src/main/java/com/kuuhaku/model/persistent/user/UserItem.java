@@ -121,7 +121,7 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	public void execute(I18N locale, GuildMessageChannel channel, Account acc, JSONObject params) {
 		if (effect == null) throw new PassiveItemException();
 
-		Utils.exec(effect, Map.of(
+		Utils.exec(getClass().getSimpleName(), effect, Map.of(
 				"locale", locale,
 				"channel", channel,
 				"acc", acc,
