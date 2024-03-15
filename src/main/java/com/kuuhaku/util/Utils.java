@@ -997,6 +997,8 @@ public abstract class Utils {
 			return cached.getConstructor().newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		} finally {
+			Constants.GROOVY.getClassLoader().clearCache();
 		}
 	}
 
