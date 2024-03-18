@@ -142,7 +142,7 @@ public abstract class Graph {
 		drawMultilineString(g2d, text, x, y, width, kerning, 0, processor, renderer);
 	}
 
-	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, int kerning, int blankOffset, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
+	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, int spacing, int blankOffset, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
 		String[] lines = text.split("\n");
 		for (String line : lines) {
 			String[] words = line.split("(?<=\\S )");
@@ -155,15 +155,15 @@ public abstract class Graph {
 					renderer.accept(word, x + offset, y);
 					offset += m.stringWidth(word);
 				} else {
-					renderer.accept(word, x, y += m.getHeight() - kerning);
+					renderer.accept(word, x, y += m.getHeight() - spacing);
 					offset = m.stringWidth(word);
 				}
 			}
 
 			if (line.isBlank()) {
-				y += g2d.getFontMetrics().getHeight() - kerning + blankOffset;
+				y += g2d.getFontMetrics().getHeight() - spacing + blankOffset;
 			} else {
-				y += g2d.getFontMetrics().getHeight() - kerning;
+				y += g2d.getFontMetrics().getHeight() - spacing;
 			}
 		}
 	}
