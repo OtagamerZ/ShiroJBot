@@ -994,7 +994,6 @@ public abstract class Utils {
 		);
 
 		try {
-			System.out.println(cached.getCanonicalName());
 			return cached.getConstructor().newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
