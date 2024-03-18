@@ -45,7 +45,7 @@ public abstract class Constants {
     public static final String SUPPORT_SERVER = "421495229594730496";
     public static final String DEFAULT_PREFIX = "x!"; // TODO Revert to s!
     public static final Logger LOGGER = LogManager.getLogger("shiro");
-    public static final LazyReference<GroovyShell> GROOVY = new LazyReference<>(GroovyShell::new, 10, TimeUnit.MINUTES);
+    public static final LazyReference<GroovyShell> GROOVY = new LazyReference<>(GroovyShell::new, 1, TimeUnit.SECONDS);
     public static final Scheduler SCHEDULER = new Scheduler();
     public static final String BOT_NAME = "Shiro J. Bot";
     public static final SafeCallable<String> BOT_VERSION = () -> "v4." + GlobalProperty.get("build_number", "0");
