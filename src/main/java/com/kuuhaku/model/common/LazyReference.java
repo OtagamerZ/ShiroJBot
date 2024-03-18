@@ -62,6 +62,7 @@ public class LazyReference<T> {
 					@Override
 					public void run() {
 						ref = null;
+						loaded = false;
 					}
 				}, ttl);
 			}
