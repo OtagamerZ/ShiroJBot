@@ -218,7 +218,7 @@ public abstract class Utils {
 	}
 
 	public static Matcher regex(String text, @Language("RegExp") String regex) {
-		Pattern pat = Main.getCacheManager().computePattern(regex, (k, v) -> Utils.getOr(v, Pattern.compile(regex)));
+		Pattern pat = Main.getCacheManager().computePattern(regex, (k, v) -> v == null ? Pattern.compile(regex) : v);
 		return pat.matcher(text);
 	}
 
@@ -990,7 +990,7 @@ public abstract class Utils {
 	public static Script compile(@Language("Groovy") String code) {
 		Class<? extends Script> cached = Main.getCacheManager().computeScript(
 				Calc.hash(code, "sha1"),
-				(k, v) -> getOr(v, Constants.GROOVY.load().parse(code).getClass())
+				(k, v) -> v == null ? Constants.GROOVY.load().parse(code).getClass() : v
 		);
 
 		try {

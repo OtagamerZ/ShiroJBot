@@ -38,7 +38,7 @@ public class StringTree {
         TreeNode node = root;
         for (int i = 0; i < path.length - 1; i++) {
             String p = path[i];
-            node = node.getChildren().compute(p, (k, v) -> Utils.getOr(v, new NamedNode(k)));
+            node = node.getChildren().compute(p, (k, v) -> v == null ? new NamedNode(k) : v);
         }
 
         node.addNode(new NamedNode(String.valueOf(elem)));

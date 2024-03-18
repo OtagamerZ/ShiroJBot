@@ -201,7 +201,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 					continue;
 				}
 
-				Pattern pat = Main.getCacheManager().computePattern(pa.value(), (k, v) -> Utils.getOr(v, Pattern.compile(pa.value())));
+				Pattern pat = Main.getCacheManager().computePattern(pa.value(), (k, v) -> v == null ? Pattern.compile(pa.value()) : v);
 				if (Utils.match(args, pat) && condition.test(meth)) {
 					return new Pair<>(meth, Utils.extractNamedGroups(args, pat));
 				}
