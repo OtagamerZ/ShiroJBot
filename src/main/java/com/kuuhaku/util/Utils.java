@@ -990,15 +990,13 @@ public abstract class Utils {
 	public static Script compile(@Language("Groovy") String code) {
 		Class<? extends Script> cached = Main.getCacheManager().computeScript(
 				Calc.hash(code, "sha1"),
-				(k, v) -> getOr(v, Constants.GROOVY.parse(code).getClass())
+				(k, v) -> getOr(v, Constants.GROOVY.load().parse(code).getClass())
 		);
 
 		try {
 			return cached.getConstructor().newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		} finally {
-			Constants.GROOVY.getClassLoader().clearCache();
 		}
 	}
 

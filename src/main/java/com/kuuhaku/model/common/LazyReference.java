@@ -19,23 +19,53 @@
 package com.kuuhaku.model.common;
 
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 public class LazyReference<T> {
+	private final Timer timer = new Timer(true);
 	private final Supplier<T> loader;
+	private final long ttl;
+	private TimerTask cleanTask;
 	private boolean loaded = false;
 	private T ref = null;
 
 	public LazyReference(Supplier<T> loader) {
+		this(loader, -1, null);
+	}
+
+	public LazyReference(Supplier<T> loader, int time, TimeUnit unit) {
 		this.loader = loader;
+		if (time == -1 && unit == null) {
+			this.ttl = -1;
+		} else {
+			this.ttl = TimeUnit.MILLISECONDS.convert(time, unit);
+		}
 	}
 
 	public T load() {
-		if (loaded) return ref;
+		try {
+			if (loaded) return ref;
 
-		ref = loader.get();
-		loaded = true;
-		return ref;
+			ref = loader.get();
+			loaded = true;
+			return ref;
+		} finally {
+			if (ttl > -1) {
+				if (cleanTask != null) {
+					cleanTask.cancel();
+				}
+
+				timer.schedule(cleanTask = new TimerTask() {
+					@Override
+					public void run() {
+						ref = null;
+					}
+				}, ttl);
+			}
+		}
 	}
 
 	@Override
@@ -48,7 +78,7 @@ public class LazyReference<T> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(ref);
+		return Objects.hashCode(ref);
 	}
 
 	@Override
