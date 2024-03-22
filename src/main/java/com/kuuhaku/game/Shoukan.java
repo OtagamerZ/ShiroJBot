@@ -2376,6 +2376,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						for (Drawable<?> d : curr.manualDraw(1)) {
 							d.setEthereal(true);
+							curr.getRegDeg().add(-curr.getBase().hp() / 10);
 						}
 
 						curr.showHand();
