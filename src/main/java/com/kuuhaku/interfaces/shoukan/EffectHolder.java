@@ -250,6 +250,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				}
 
 				out += types.stream()
+						.map(o -> (String) o)
 						.filter(COLORS::containsKey)
 						.map(t -> "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
 						.collect(Collectors.joining());

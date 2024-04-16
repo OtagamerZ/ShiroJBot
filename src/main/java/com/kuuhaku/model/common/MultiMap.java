@@ -66,7 +66,7 @@ public class MultiMap<K, V> {
 		return prev;
 	}
 
-	public V remove(Object key) {
+	public V remove(K key) {
 		Pair<K[], V> prev = map.get(key);
 		if (prev == null) return DEFAULT_RETURN.getSecond();
 
@@ -77,7 +77,7 @@ public class MultiMap<K, V> {
 		return Utils.getOr(prev, DEFAULT_RETURN).getSecond();
 	}
 
-	public boolean remove(Object key, Object value) {
+	public boolean remove(K key, Pair<K[], V> value) {
 		boolean out = false;
 
 		Pair<K[], V> prev = map.get(key);

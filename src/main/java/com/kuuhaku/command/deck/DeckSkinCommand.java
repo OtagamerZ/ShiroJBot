@@ -44,6 +44,7 @@ import net.dv8tion.jda.api.Permission;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -137,7 +138,8 @@ public class DeckSkinCommand implements Executable {
 											event.channel().sendMessage(locale.get("error/insufficient_" + skin.getCurrency())).queue();
 											return;
 										} else if (!confirm.getAndSet(true)) {
-											w.getHook().setEphemeral(true)
+											Objects.requireNonNull(w.getHook())
+													.setEphemeral(true)
 													.sendMessage(locale.get("str/press_again"))
 													.queue();
 											return;

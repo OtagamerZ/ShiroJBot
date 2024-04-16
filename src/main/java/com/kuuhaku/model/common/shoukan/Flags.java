@@ -61,8 +61,10 @@ public class Flags implements Cloneable {
 	}
 
 	public void clear(Drawable<?> source) {
-		permanent.remove(source);
-		flags.remove(source);
+		FlagSource fs = new FlagSource(source);
+
+		permanent.remove(fs);
+		flags.remove(fs);
 	}
 
 	public void clearTemp() {

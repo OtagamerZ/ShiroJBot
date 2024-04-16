@@ -178,7 +178,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 						.queue(null, Utils::doNothing);
 				case LOSE_XP -> {
 					long range = getXpToLevel(getLevel(), getLevel() + 1);
-					xp -= range * (0.05 * Math.pow(2, mult));
+					xp = (long) (xp - (range * (0.05 * Math.pow(2, mult))));
 				}
 				case DELEVEL -> {
 					long range = getXpToLevel((int) (getLevel() - Math.pow(2, mult)), getLevel());

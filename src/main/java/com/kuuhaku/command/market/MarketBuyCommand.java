@@ -68,11 +68,11 @@ public class MarketBuyCommand implements Executable {
 		Market m = new Market(event.user().getId());
 
 		if (cal.get(Calendar.MONTH) == Calendar.NOVEMBER && cal.get(Calendar.WEEK_OF_MONTH) == 4) {
-			price *= 0.66;
+			price = (int) (price * 0.66);
 		}
 
 		if (sc.equals(m.getDailyOffer())) {
-			price *= 0.8;
+			price = (int) (price * 0.8);
 		}
 
 		Account acc = kp.getAccount();

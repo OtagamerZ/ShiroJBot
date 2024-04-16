@@ -145,7 +145,6 @@ public class SeeCardCommand implements Executable {
 					case KAWAIPON, SENSHI -> card.asSenshi();
 					case EVOGEAR -> card.asEvogear();
 					case FIELD -> card.asField();
-					default -> null;
 				};
 
 				if (d == null) {

@@ -3,7 +3,7 @@ name: Sugestão
 about: Sugira uma ideia para a Shiro!
 title: "[SUGESTÃO]"
 labels: melhoria
-assignees: Ncheater
+assignees: Ygimenez
 
 ---
 

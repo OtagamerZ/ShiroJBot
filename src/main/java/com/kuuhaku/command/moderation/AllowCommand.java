@@ -29,6 +29,7 @@ import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 @Command(
 		name = "allow",
@@ -58,7 +59,7 @@ public class AllowCommand implements Executable {
 			return;
 		}
 
-		settings.getDeniedChannels().remove(channel);
+		settings.getDeniedChannels().remove((GuildMessageChannel) channel);
 		settings.save();
 
 		event.channel().sendMessage(locale.get("success/commands_allowed",

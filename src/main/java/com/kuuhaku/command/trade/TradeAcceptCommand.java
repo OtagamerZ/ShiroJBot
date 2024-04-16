@@ -74,7 +74,7 @@ public class TradeAcceptCommand implements Executable {
 							event.channel().sendMessage(locale.get("success/trade_accept")).queue();
 						}
 
-						Trade.getPending().remove(other);
+						Trade.getPending().remove(other.getId());
 						return true;
 					}, m -> trade.setFinalizing(false), other
 			);

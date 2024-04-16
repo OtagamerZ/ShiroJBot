@@ -93,4 +93,8 @@ public abstract class API {
 			Constants.LOGGER.error("Failed to connect to socket at " + address, e);
 		}
 	}
+
+	public static WebSocketClient getSocket(Class<? extends WebSocketClient> client) {
+		return SOCKET_CLIENTS.get(client);
+	}
 }

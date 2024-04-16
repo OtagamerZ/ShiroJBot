@@ -80,7 +80,7 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 		if (limit != null && limit > 0) limit--;
 	}
 
-	public Drawable<?> getSource() {
+	public @Nullable Drawable<?> getSource() {
 		return source;
 	}
 

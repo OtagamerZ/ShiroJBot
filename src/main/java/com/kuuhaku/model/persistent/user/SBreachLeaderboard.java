@@ -18,11 +18,8 @@
 
 package com.kuuhaku.model.persistent.user;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import jakarta.persistence.*;
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;

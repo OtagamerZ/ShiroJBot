@@ -386,6 +386,7 @@ public class Arena implements Renderer {
 		return bi;
 	}
 
+	@SuppressWarnings("SuspiciousNameCombination")
 	private Consumer<Graphics2D> drawBar(Hand hand) {
 		return g -> {
 			boolean reversed = hand.getSide() != Side.TOP;

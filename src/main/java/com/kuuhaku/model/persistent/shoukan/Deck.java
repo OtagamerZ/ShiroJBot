@@ -163,7 +163,7 @@
 				 FROM senshi d
 				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
 				 WHERE sc.kawaipon_uid = ?1
-				   AND sc.deck_id = ?2
+				 		AND sc.deck_id = ?2
 				 %s
 				 """.formatted(styling.getSenshiOrder()), account.getUid(), id);
 	 }
@@ -476,8 +476,8 @@
 				 g.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + ori.major().getMajor(locale)
-						   + "\n\n- " + locale.get("major/pureblood")
-						   + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
+						 + "\n\n- " + locale.get("major/pureblood")
+						 + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			 } else if (ori.major() == Race.MIXED) {
 				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
 				 g.setColor(Graph.mix(Arrays.stream(ori.minor()).map(Race::getColor).toArray(Color[]::new)));
@@ -488,11 +488,11 @@
 				 g.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + locale.get("major/mixed")
-						   + "\n\n" + Arrays.stream(ori.minor())
-								   .filter(r -> r != Race.DEMON)
-								   .map(o -> "- " + o.getMinor(locale))
-								   .collect(Collectors.joining("\n\n"))
-						   + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
+						 + "\n\n" + Arrays.stream(ori.minor())
+						 .filter(r -> r != Race.DEMON)
+						 .map(o -> "- " + o.getMinor(locale))
+						 .collect(Collectors.joining("\n\n"))
+						 + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			 } else {
 				 g.drawImage(ori.synergy().getBadge(), 0, 0, 150, 150, null);
 				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
@@ -511,12 +511,12 @@
 				 g.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + ori.major().getMajor(locale)
-						   + "\n\n" + Arrays.stream(ori.minor())
-								   .filter(r -> r != Race.DEMON)
-								   .map(o -> "- " + o.getMinor(locale))
-								   .collect(Collectors.joining("\n\n"))
-						   + "\n\n- " + syn.getSynergy(locale)
-						   + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
+						 + "\n\n" + Arrays.stream(ori.minor())
+						 .filter(r -> r != Race.DEMON)
+						 .map(o -> "- " + o.getMinor(locale))
+						 .collect(Collectors.joining("\n\n"))
+						 + "\n\n- " + syn.getSynergy(locale)
+						 + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
 			 }
 
 			 Archetype arch = getArchetype();
@@ -680,9 +680,9 @@
 
 							 if (origin.hasMinor(Race.DIVINITY)) {
 								 m += getSenshi().parallelStream()
-											  .map(Senshi::getMPCost)
-											  .min(Integer::compareTo)
-											  .orElse(0) / 2;
+										 .map(Senshi::getMPCost)
+										 .min(Integer::compareTo)
+										 .orElse(0) / 2;
 							 }
 
 							 if (h != null && h.getGame() != null) {
