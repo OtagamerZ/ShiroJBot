@@ -99,7 +99,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private transient CardExtra stats = new CardExtra();
 	private transient Hand hand = null;
 	private transient Hand leech = null;
-	private transient CachedScriptManager cachedEffect = new CachedScriptManager();
+	private final transient CachedScriptManager cachedEffect = new CachedScriptManager();
 
 	@Transient
 	private byte state = 0b10;

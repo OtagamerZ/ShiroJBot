@@ -89,19 +89,19 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@OrderColumn(name = "index")
 	@Fetch(FetchMode.SUBSELECT)
-	private List<Deck> decks = new ArrayList<>();
+	private final List<Deck> decks = new ArrayList<>();
 
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<Transaction> transactions = new ArrayList<>();
+	private final List<Transaction> transactions = new ArrayList<>();
 
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
+	private final Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
 
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<AccountTitle> titles = new HashSet<>();
+	private final Set<AccountTitle> titles = new HashSet<>();
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "inventory", nullable = false, columnDefinition = "JSONB")

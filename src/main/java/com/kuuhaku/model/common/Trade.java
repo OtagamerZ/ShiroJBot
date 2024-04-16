@@ -39,15 +39,15 @@ import java.util.stream.Collectors;
 public class Trade {
     private static final MultiMap<String, Trade> pending = new MultiMap<>(ConcurrentHashMap::new);
 
-    private Account left;
+    private final Account left;
     private int leftValue;
-    private Bag<Integer> leftOffer = new HashBag<>();
-    private Bag<String> leftItems = new HashBag<>();
+    private final Bag<Integer> leftOffer = new HashBag<>();
+    private final Bag<String> leftItems = new HashBag<>();
 
-    private Account right;
+    private final Account right;
     private int rightValue;
-    private Bag<Integer> rightOffer = new HashBag<>();
-    private Bag<String> rightItems = new HashBag<>();
+    private final Bag<Integer> rightOffer = new HashBag<>();
+    private final Bag<String> rightItems = new HashBag<>();
 
     private boolean finalizing = false;
 

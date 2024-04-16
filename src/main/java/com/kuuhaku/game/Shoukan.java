@@ -158,9 +158,12 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@Override
-	protected void runtime(User user, String value) throws InvocationTargetException, IllegalAccessException {
+	protected void runtime(User user, String value) {
 		Side current = getCurrentSide();
-		Hand hand = hands.values().stream().sorted(Comparator.comparing(h -> h.getSide() == current, Comparator.reverseOrder())).filter(h -> h.getUid().equals(user.getId())).findFirst().orElseThrow();
+		Hand hand = hands.values().stream()
+				.sorted(Comparator.comparing(h -> h.getSide() == current, Comparator.reverseOrder()))
+				.filter(h -> h.getUid().equals(user.getId()))
+				.findFirst().orElseThrow();
 
 		Pair<Method, JSONObject> action = toAction(value.toLowerCase().replace(" ", ""), m -> (!isLocked() || (hand.selectionPending() && m.getName().startsWith("sel"))) && hand.selectionPending() == m.getName().startsWith("sel") || m.getName().startsWith("deb"));
 

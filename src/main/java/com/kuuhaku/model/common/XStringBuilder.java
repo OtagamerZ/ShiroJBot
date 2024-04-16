@@ -43,7 +43,7 @@ public class XStringBuilder {
     }
 
     public XStringBuilder appendNewLine(Object value) {
-        if (sb.length() > 0)
+        if (!sb.isEmpty())
             sb.append("\n").append(value);
         else
             sb.append(value);

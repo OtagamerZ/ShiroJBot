@@ -55,7 +55,7 @@ public class FixedSizeDeque<T> extends ArrayDeque<T> {
 			addLast(t);
 		}
 
-		return c.size() > 0;
+		return !c.isEmpty();
 	}
 
 	@Override

@@ -19,7 +19,7 @@
 package com.kuuhaku;
 
 public class VariableValue extends Value {
-	private String name;
+	private final String name;
 
 	public VariableValue(String name) {
 		this.name = name;

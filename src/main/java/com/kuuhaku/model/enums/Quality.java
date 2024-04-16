@@ -22,11 +22,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.util.IO;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-
 public enum Quality {
 	NORMAL, FINE, POLISHED, FLAWLESS;
 

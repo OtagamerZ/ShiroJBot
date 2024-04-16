@@ -24,7 +24,6 @@ import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.entities.User;
 
-import java.time.LocalDate;
 import java.util.Calendar;
 
 @GachaType(value = "anime", price = 10, prizes = 5, currency = Currency.ITEM, itemCostId = "MASTERY_TOKEN")

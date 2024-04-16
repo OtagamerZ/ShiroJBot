@@ -68,7 +68,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 
 	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<Warn> warns = new ArrayList<>();
+	private final List<Warn> warns = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "uid", nullable = false, updatable = false)

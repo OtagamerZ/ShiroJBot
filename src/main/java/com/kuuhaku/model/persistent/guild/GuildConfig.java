@@ -26,14 +26,12 @@ import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.model.records.GuildBuff;
 import com.ygimenez.json.JSONObject;
-import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.Iterator;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;

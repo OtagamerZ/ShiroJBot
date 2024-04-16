@@ -20,15 +20,10 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Flag;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 
-import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public class Flags implements Cloneable {
 	private final Map<FlagSource, EnumSet<Flag>> permanent = new HashMap<>();

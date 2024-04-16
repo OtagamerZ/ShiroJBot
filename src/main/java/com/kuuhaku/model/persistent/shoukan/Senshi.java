@@ -82,7 +82,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private CardAttributes base = new CardAttributes();
 
 	@Transient
-	private transient BondedList<Evogear> equipments = new BondedList<>((e, it) -> {
+	private final transient BondedList<Evogear> equipments = new BondedList<>((e, it) -> {
 		if (getEquipments().contains(e)) return false;
 
 		e.setEquipper(this);
@@ -121,8 +121,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient Hand leech = null;
 	private transient Senshi target = null;
 	private transient Senshi lastInteraction = null;
-	private transient CachedScriptManager cachedEffect = new CachedScriptManager();
-	private transient Set<Drawable<?>> blocked = new HashSet<>();
+	private final transient CachedScriptManager cachedEffect = new CachedScriptManager();
+	private final transient Set<Drawable<?>> blocked = new HashSet<>();
 	private transient TargetType targetType = TargetType.NONE;
 	private transient ElementType element = null;
 

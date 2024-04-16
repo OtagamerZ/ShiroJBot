@@ -82,9 +82,6 @@ public abstract class Constants {
     public static final Supplier<RandomGenerator> DEFAULT_RNG = SOURCE_RNG::split;
     public static final SecureRandom DEFAULT_SECURE_RNG = new SecureRandom();
 
-    //public static final File COLLECTIONS_FOLDER = new File(System.getenv("COLLECTIONS_PATH"));
-    //public static final File TEMPORARY_FOLDER = new File(System.getenv("TEMPORARY_PATH"));
-
     public static final Function<Member, Boolean> DEV_PRIVILEGE = m -> Account.hasRole(m.getId(), false, Role.DEVELOPER);
     public static final Function<Member, Boolean> SUP_PRIVILEGE = m -> Account.hasRole(m.getId(), false, Role.SUPPORT);
     public static final Function<Member, Boolean> TST_PRIVILEGE = m -> Account.hasRole(m.getId(), false, Role.TESTER);

@@ -22,9 +22,6 @@ import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.ContingencyTrigger;
 import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
-
-import java.util.function.Predicate;
 
 public record Contingency(Evogear card, ContingencyTrigger trigger) {
 	public boolean check() {

@@ -78,6 +78,7 @@ public class CardAttributes implements Serializable, Cloneable {
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
 
+	@Transient
 	private transient EnumSet<Trigger> lock = EnumSet.noneOf(Trigger.class);
 
 	public int getMana() {

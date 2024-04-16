@@ -51,8 +51,8 @@ public abstract class Spawn {
 
 	private static Pair<Integer, MoonIllumination> illum = null;
 
-	private static FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(3);
-	private static FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(15);
+	private static final FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(3);
+	private static final FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(15);
 
 	public synchronized static KawaiponCard getKawaipon(I18N locale, GuildBuff gb, GuildMessageChannel channel, User u) {
 		if (u == null || spawnedCards.containsKey(channel.getId())) return null;

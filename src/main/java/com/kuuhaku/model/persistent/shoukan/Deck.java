@@ -82,17 +82,17 @@
 	 private boolean variant = false;
 
 	 @Embedded
-	 private DeckStyling styling = new DeckStyling();
+	 private final DeckStyling styling = new DeckStyling();
 
 	 private transient List<Senshi> senshi = null;
 	 private transient List<Evogear> evogear = null;
 	 private transient List<Field> field = null;
 	 private transient Archetype archetype = null;
 	 private transient Origin origin = null;
-	 private transient AtomicInteger totalMPCost = new AtomicInteger();
-	 private transient AtomicInteger totalHPCost = new AtomicInteger();
-	 private transient AtomicInteger totalDmg = new AtomicInteger();
-	 private transient AtomicInteger totalDfs = new AtomicInteger();
+	 private final transient AtomicInteger totalMPCost = new AtomicInteger();
+	 private final transient AtomicInteger totalHPCost = new AtomicInteger();
+	 private final transient AtomicInteger totalDmg = new AtomicInteger();
+	 private final transient AtomicInteger totalDfs = new AtomicInteger();
 
 	 public Deck() {
 	 }

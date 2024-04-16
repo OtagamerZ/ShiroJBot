@@ -36,9 +36,7 @@ import java.util.stream.Stream;
 
 public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
+		try (EntityManager em = Manager.getEntityManager()) {
 			T t = em.find(klass, id);
 			if (t instanceof Blacklistable lock) {
 				if (lock.isBlacklisted()) {
@@ -64,15 +62,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			}
 
 			return t;
-		} finally {
-			em.close();
 		}
 	}
 
 	public static <T extends DAO<T>> T query(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
+		try (EntityManager em = Manager.getEntityManager()) {
 			TypedQuery<T> q = em.createQuery(query, klass);
 			q.setMaxResults(1);
 			int paramSize = Objects.requireNonNull(params).length;
@@ -93,15 +87,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			}
 
 			return t;
-		} finally {
-			em.close();
 		}
 	}
 
 	public static <T> T queryNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
+		try (EntityManager em = Manager.getEntityManager()) {
 			Query q = em.createNativeQuery(query);
 			q.setMaxResults(1);
 			int paramSize = Objects.requireNonNull(params).length;
@@ -126,15 +116,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			}
 
 			return t;
-		} finally {
-			em.close();
 		}
 	}
 
 	public static Object[] queryUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
+		try (EntityManager em = Manager.getEntityManager()) {
 			Query q = em.createNativeQuery(query);
 			q.setMaxResults(1);
 			int paramSize = Objects.requireNonNull(params).length;
@@ -152,15 +138,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			} catch (NoResultException e) {
 				return null;
 			}
-		} finally {
-			em.close();
 		}
 	}
 
 	public static <T extends DAO<T>> List<T> findAll(@NotNull Class<T> klass) {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
+		try (EntityManager em = Manager.getEntityManager()) {
 			TypedQuery<T> q = em.createQuery("SELECT o FROM " + klass.getSimpleName() + " o", klass);
 
 			if (klass.isInstance(Blacklistable.class)) {
@@ -170,15 +152,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			} else {
 				return q.getResultList();
 			}
-		} finally {
-			em.close();
 		}
 	}
 
 	public static <T extends DAO<T>> List<T> queryAll(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
+		try (EntityManager em = Manager.getEntityManager()) {
 			TypedQuery<T> q = em.createQuery(query, klass);
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -192,15 +170,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			} else {
 				return q.getResultList();
 			}
-		} finally {
-			em.close();
 		}
 	}
 
 	public static <T> List<T> queryAllNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
+		try (EntityManager em = Manager.getEntityManager()) {
 			Query q = em.createNativeQuery(query);
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -222,15 +196,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 						.map(klass::cast)
 						.toList();
 			}
-		} finally {
-			em.close();
 		}
 	}
 
 	public static List<Object[]> queryAllUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
+		try (EntityManager em = Manager.getEntityManager()) {
 			Query q = em.createNativeQuery(query);
 
 			int paramSize = Objects.requireNonNull(params).length;
@@ -246,8 +216,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 							return new Object[]{o};
 						}
 					}).toList();
-		} finally {
-			em.close();
 		}
 	}
 
@@ -323,9 +291,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static <T extends DAO<T>> List<T> queryBuilder(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, Function<TypedQuery<T>, List<T>> processor, @NotNull Object... params) {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
+		try (EntityManager em = Manager.getEntityManager()) {
 			TypedQuery<T> q = em.createQuery(query, klass);
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -339,15 +305,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			} else {
 				return processor.apply(q);
 			}
-		} finally {
-			em.close();
 		}
 	}
 
 	public static <T> List<T> nativeQueryBuilder(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, Function<Query, List<T>> processor, @NotNull Object... params) {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
+		try (EntityManager em = Manager.getEntityManager()) {
 			Query q = em.createNativeQuery(query);
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -369,15 +331,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 						.map(klass::cast)
 						.toList();
 			}
-		} finally {
-			em.close();
 		}
 	}
 
 	public static List<Object[]> unmappedQueryBuilder(@NotNull @Language("PostgreSQL") String query, Function<Query, List<Object>> processor, @NotNull Object... params) {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
+		try (EntityManager em = Manager.getEntityManager()) {
 			Query q = em.createNativeQuery(query);
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -392,8 +350,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 							return new Object[]{o};
 						}
 					}).toList();
-		} finally {
-			em.close();
 		}
 	}
 
@@ -424,15 +380,12 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	@SuppressWarnings("unchecked")
 	public final T refresh() {
-		EntityManager em = Manager.getEntityManager();
-
-		beforeRefresh();
-		try {
+		try (EntityManager em = Manager.getEntityManager()) {
+			beforeRefresh();
 			Object key = Manager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
 			return (T) Utils.getOr(em.find(getClass(), key), this);
 		} finally {
 			afterRefresh();
-			em.close();
 		}
 	}
 

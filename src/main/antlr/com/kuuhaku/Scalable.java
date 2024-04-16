@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class Scalable extends Value {
-	private Value[] values = new Value[2];
+	private final Value[] values = new Value[2];
 	private String delimiter;
 	private boolean grouped;
 

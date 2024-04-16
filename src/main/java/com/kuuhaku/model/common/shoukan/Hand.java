@@ -81,9 +81,8 @@ public class Hand {
 		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			Iterator<Evogear> i = s.getEquipments().iterator();
-			while (i.hasNext()) {
-				it.add(i.next());
+			for (Evogear evogear : s.getEquipments()) {
+				it.add(evogear);
 			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
@@ -115,9 +114,8 @@ public class Hand {
 		getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
 
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			Iterator<Evogear> i = s.getEquipments().iterator();
-			while (i.hasNext()) {
-				it.add(i.next());
+			for (Evogear evogear : s.getEquipments()) {
+				it.add(evogear);
 			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
@@ -191,9 +189,8 @@ public class Hand {
 			}
 
 			if (!s.getEquipments().isEmpty()) {
-				Iterator<Evogear> i = s.getEquipments().iterator();
-				while (i.hasNext()) {
-					it.add(i.next());
+				for (Evogear evogear : s.getEquipments()) {
+					it.add(evogear);
 				}
 			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
@@ -321,7 +318,7 @@ public class Hand {
 			toAdd = Stream.of(userDeck.getSenshi(), userDeck.getEvogear(), userDeck.getFields());
 		}
 
-		deck.addAll(toAdd.parallel().flatMap(List::stream).map(d -> d.copy()).peek(d -> {
+		deck.addAll(toAdd.parallel().flatMap(List::stream).map(Drawable::copy).peek(d -> {
 			if (d instanceof Senshi s && origin.synergy() == Race.ELDRITCH && !s.hasEffect()) {
 				s.getStats().setSource(Senshi.getRandom(game.getRng(), "WHERE effect IS NOT NULL", "AND mana = " + s.getBase().getMana()));
 			}

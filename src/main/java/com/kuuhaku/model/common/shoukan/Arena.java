@@ -87,9 +87,8 @@ public class Arena implements Renderer {
 
 		if (d instanceof Senshi s) {
 			if (!s.getEquipments().isEmpty()) {
-				Iterator<Evogear> i = s.getEquipments().iterator();
-				while (i.hasNext()) {
-					it.add(i.next());
+				for (Evogear evogear : s.getEquipments()) {
+					it.add(evogear);
 				}
 			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {

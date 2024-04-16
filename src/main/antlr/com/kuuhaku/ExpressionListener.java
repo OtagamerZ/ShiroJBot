@@ -90,29 +90,33 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 			current.invert();
 		}
 
-		if (ctx instanceof ValueContext value) {
-			Value v;
-			if (value.element.getType() == VAR) {
-				v = new VariableValue(value.getText());
-			} else {
-				v = new FlatValue(Double.parseDouble(value.getText()));
-			}
+		switch (ctx) {
+			case ValueContext value -> {
+				Value v;
+				if (value.element.getType() == VAR) {
+					v = new VariableValue(value.getText());
+				} else {
+					v = new FlatValue(Double.parseDouble(value.getText()));
+				}
 
-			current.setLeft(v);
-		} else if (ctx instanceof MulDivContext md) {
-			mulDiv(md);
-		} else if (ctx instanceof SumSubContext ss) {
-			sumSub(ss);
-		} else if (ctx instanceof FunctionContext fc) {
-			current.setGrouped(true);
-			if (fc.func.getType() == MAX) {
-				flatten(fc.right);
-			} else {
-				flatten(fc.left);
+				current.setLeft(v);
 			}
-		} else if (ctx instanceof GroupContext g) {
-			current.setGrouped(true);
-			flatten(g.expr());
+			case MulDivContext md -> mulDiv(md);
+			case SumSubContext ss -> sumSub(ss);
+			case FunctionContext fc -> {
+				current.setGrouped(true);
+				if (fc.func.getType() == MAX) {
+					flatten(fc.right);
+				} else {
+					flatten(fc.left);
+				}
+			}
+			case GroupContext g -> {
+				current.setGrouped(true);
+				flatten(g.expr());
+			}
+			default -> {
+			}
 		}
 	}
 

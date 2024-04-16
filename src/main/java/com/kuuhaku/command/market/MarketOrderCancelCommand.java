@@ -24,7 +24,6 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.MarketOrder;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;

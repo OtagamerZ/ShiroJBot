@@ -40,8 +40,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.net.URI;
-import java.net.URL;
 import java.util.Objects;
 
 @Entity
@@ -156,7 +154,7 @@ public class Card extends DAO<Card> implements Serializable {
 		return out;
 	}
 
-	private byte[] getImageBytes() throws IOException {
+	private byte[] getImageBytes() {
 		byte[] cardBytes = Main.getCacheManager().computeResource(id, (k, v) -> {
 			if (v != null && v.length > 0) return v;
 

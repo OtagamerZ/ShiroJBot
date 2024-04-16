@@ -28,8 +28,6 @@ import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
-import java.util.Locale;
-
 @Command(
 		name = "locale",
 		category = Category.MODERATION

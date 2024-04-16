@@ -87,16 +87,16 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("level")
-	private List<LevelRole> levelRoles = new ArrayList<>();
+	private final List<LevelRole> levelRoles = new ArrayList<>();
 
 	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<CustomAnswer> customAnswers = new ArrayList<>();
+	private final List<CustomAnswer> customAnswers = new ArrayList<>();
 
 	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("threshold")
-	private List<AutoRule> autoRules = new ArrayList<>();
+	private final List<AutoRule> autoRules = new ArrayList<>();
 
 	@ElementCollection
 	@Column(name = "disabled_categories")

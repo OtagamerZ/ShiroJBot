@@ -20,7 +20,6 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.util.Calc;
-import com.kuuhaku.util.Utils;
 import kotlin.Pair;
 import org.apache.commons.collections4.list.TreeList;
 import org.jetbrains.annotations.NotNull;

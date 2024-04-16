@@ -25,11 +25,7 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -97,7 +93,7 @@ public enum Rarity {
 
 	public int getCount() {
 		return DAO.queryNative(Integer.class, """
-				SELECT count(1) 
+				SELECT count(1)
 				FROM card c 
 				INNER JOIN anime a ON a.id = c.anime_id 
 				WHERE a.visible

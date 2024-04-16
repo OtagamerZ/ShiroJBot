@@ -337,7 +337,7 @@ public abstract class Utils {
 	}
 
 	public static String underline(String text) {
-		return text.replaceAll("([A-OR-XZa-or-xz])", "$1\u0332");
+		return text.replaceAll("([A-OR-XZa-or-xz])", "$1̲");
 	}
 
 	public static <T> Page generatePage(EmbedBuilder eb, Collection<T> list, int itemsPerColumn, Function<T, String> mapper) {
@@ -488,14 +488,16 @@ public abstract class Utils {
 
 			{
 				if (unit != null) {
-					timeout = Executors.newSingleThreadScheduledExecutor().schedule(() -> {
-						if (lock != null) {
-							lock.complete(null);
-						}
+					try (ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor()) {
+						timeout = exec.schedule(() -> {
+							if (lock != null) {
+								lock.complete(null);
+							}
 
-						result.complete(null);
-						close();
-					}, time, unit);
+							result.complete(null);
+							close();
+						}, time, unit);
+					}
 				}
 			}
 
