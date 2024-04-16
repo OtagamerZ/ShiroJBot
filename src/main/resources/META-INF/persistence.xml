@@ -59,6 +59,7 @@
         <class>com.kuuhaku.model.persistent.user.Warn</class>
         <class>com.kuuhaku.model.persistent.user.MarketOrder</class>
         <class>com.kuuhaku.model.persistent.user.Reminder</class>
+        <class>com.kuuhaku.model.persistent.user.SBreachLeaderboard</class>
 
         <!-- SHOUKAN -->
         <class>com.kuuhaku.model.persistent.shoukan.Deck</class>
