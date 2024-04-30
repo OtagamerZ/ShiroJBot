@@ -16,8 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION refresh_all_views(TEXT DEFAULT 'public')
-    RETURNS INT
+CREATE OR REPLACE PROCEDURE refresh_all_views(TEXT DEFAULT 'public')
     LANGUAGE plpgsql
 AS
 $$
@@ -28,7 +27,5 @@ BEGIN
         LOOP
             EXECUTE 'REFRESH MATERIALIZED VIEW "' || $1 || '"."' || r.matviewname || '"';
         END LOOP;
-
-    RETURN 1;
 END
 $$;
