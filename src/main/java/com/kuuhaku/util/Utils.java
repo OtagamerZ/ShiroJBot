@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.*;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -779,14 +780,14 @@ public abstract class Utils {
 		return out;
 	}
 
-	public static String didYouMean(String word, String... options) {
+	public static String didYouMean(String word, Collection<String> options) {
 		String match = "";
-		int threshold = 999;
+		int threshold = Integer.MAX_VALUE;
 		LevenshteinDistance checker = new LevenshteinDistance();
 
 		for (String w : options) {
 			if (word.equalsIgnoreCase(w)) {
-				return word;
+				return w;
 			} else {
 				int diff = checker.apply(word.toLowerCase(), w.toLowerCase());
 				if (diff < threshold) {
@@ -799,26 +800,16 @@ public abstract class Utils {
 		return match;
 	}
 
-	public static Pair<String, Double> didYouMean(String word, Collection<String> options) {
-		String match = "";
-		int threshold = Integer.MAX_VALUE;
-		LevenshteinDistance checker = new LevenshteinDistance();
-
-		for (String w : options) {
-			if (word.equalsIgnoreCase(w)) {
-				return new Pair<>(w, 100d);
-			} else {
-				int diff = checker.apply(word.toLowerCase(), w.toLowerCase());
-				if (diff < threshold) {
-					match = w;
-					threshold = diff;
-				}
-			}
-		}
-
-		int size = Math.max(word.length(), match.length());
-		if (size == 0) return new Pair<>(match, 0d);
-		else return new Pair<>(match, (size - threshold) * 100d / size);
+	public static String didYouMean(String word, @Language("PostgreSQL") String query, Object... params) {
+		return DAO.queryNative(String.class, """
+				SELECT x."value"
+				FROM (
+				     SELECT x."value", levenshtein_less_equal(id, '%1$s', 5) AS dist
+				     FROM (%2$s) x
+				     ) x
+				WHERE x.dist <= 5
+				ORDER BY x.dist
+				""".formatted(word, query), params);
 	}
 
 	public static Pair<CommandLine, Options> getCardCLI(I18N locale, String[] args, boolean market) {

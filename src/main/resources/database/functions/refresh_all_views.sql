@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2024  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,15 +16,19 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_card_names;
-CREATE MATERIALIZED VIEW IF NOT EXISTS v_card_names AS
-SELECT c.id
-FROM card c
-INNER JOIN anime a on a.id = c.anime_id
-WHERE a.visible
-  AND c.rarity NOT IN ('ULTIMATE', 'NONE')
-ORDER BY c.id;
+CREATE OR REPLACE FUNCTION refresh_all_views(TEXT DEFAULT 'public')
+    RETURNS INT
+    LANGUAGE plpgsql
+AS
+$$
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN SELECT matviewname FROM pg_matviews WHERE schemaname = $1
+        LOOP
+            EXECUTE 'REFRESH MATERIALIZED VIEW "' || $1 || '"."' || r.matviewname || '"';
+        END LOOP;
 
-CREATE INDEX IF NOT EXISTS wrd_trgm ON v_card_names USING gin (id gin_trgm_ops);
-
-REFRESH MATERIALIZED VIEW v_card_names;
+    RETURN 1;
+END
+$$;

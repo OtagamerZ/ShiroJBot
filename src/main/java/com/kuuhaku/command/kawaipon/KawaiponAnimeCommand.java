@@ -59,10 +59,8 @@ public class KawaiponAnimeCommand implements Executable {
 
 		Anime anime = DAO.find(Anime.class, args.getString("anime").toUpperCase());
 		if (anime == null || !anime.isVisible()) {
-			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM anime WHERE visible");
-
-			Pair<String, Double> sug = Utils.didYouMean(args.getString("anime").toUpperCase(), names);
-			event.channel().sendMessage(locale.get("error/unknown_anime", sug.getFirst())).queue();
+			String sug = Utils.didYouMean(args.getString("anime").toUpperCase(), "SELECT id AS value FROM anime WHERE visible");
+			event.channel().sendMessage(locale.get("error/unknown_anime", sug)).queue();
 			return;
 		}
 

@@ -111,8 +111,8 @@ public class GachaCommand implements Executable {
 		}
 
 		if (chosen == null) {
-			Pair<String, Double> sug = Utils.didYouMean(id.toUpperCase(), types);
-			event.channel().sendMessage(locale.get("error/unknown_gacha", sug.getFirst())).queue();
+			String sug = Utils.didYouMean(id.toUpperCase(), types);
+			event.channel().sendMessage(locale.get("error/unknown_gacha", sug)).queue();
 			return;
 		}
 

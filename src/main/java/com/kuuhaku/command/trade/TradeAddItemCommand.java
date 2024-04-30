@@ -30,7 +30,6 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 
 import java.util.Collections;
@@ -69,8 +68,8 @@ public class TradeAddItemCommand implements Executable {
 		if (item == null) {
 			List<String> names = items.keySet().stream().map(UserItem::getId).toList();
 
-			Pair<String, Double> sug = Utils.didYouMean(args.getString("item").toUpperCase(), names);
-			event.channel().sendMessage(locale.get("error/item_not_found", sug.getFirst())).queue();
+			String sug = Utils.didYouMean(args.getString("item").toUpperCase(), names);
+			event.channel().sendMessage(locale.get("error/item_not_found", sug)).queue();
 			return;
 		} else if (!items.containsKey(item)) {
 			event.channel().sendMessage(locale.get("error/item_not_have")).queue();

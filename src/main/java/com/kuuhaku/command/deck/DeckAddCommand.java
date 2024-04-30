@@ -38,7 +38,6 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.NoResultException;
-import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
@@ -74,10 +73,8 @@ public class DeckAddCommand implements Executable {
 
 		Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
 		if (card == null) {
-			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM v_card_names");
-
-			Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(), names);
-			event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
+			String sug = Utils.didYouMean(args.getString("card").toUpperCase(), "SELECT id AS value FROM v_card_names");
+			event.channel().sendMessage(locale.get("error/unknown_card", sug)).queue();
 			return;
 		}
 

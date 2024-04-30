@@ -54,10 +54,8 @@ public class StashLockCommand implements Executable {
 
 		Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
 		if (card == null) {
-			List<String> names = DAO.queryAllNative(String.class, "SELECT id FROM v_card_names");
-
-			Pair<String, Double> sug = Utils.didYouMean(args.getString("card").toUpperCase(), names);
-			event.channel().sendMessage(locale.get("error/unknown_card", sug.getFirst())).queue();
+			String sug = Utils.didYouMean(args.getString("card").toUpperCase(), "SELECT id AS value FROM v_card_names");
+			event.channel().sendMessage(locale.get("error/unknown_card", sug)).queue();
 			return;
 		}
 

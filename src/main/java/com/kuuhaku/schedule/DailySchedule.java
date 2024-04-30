@@ -16,15 +16,16 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_card_names;
-CREATE MATERIALIZED VIEW IF NOT EXISTS v_card_names AS
-SELECT c.id
-FROM card c
-INNER JOIN anime a on a.id = c.anime_id
-WHERE a.visible
-  AND c.rarity NOT IN ('ULTIMATE', 'NONE')
-ORDER BY c.id;
+package com.kuuhaku.schedule;
 
-CREATE INDEX IF NOT EXISTS wrd_trgm ON v_card_names USING gin (id gin_trgm_ops);
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.PreInitialize;
+import com.kuuhaku.interfaces.annotations.Schedule;
 
-REFRESH MATERIALIZED VIEW v_card_names;
+@Schedule("0 0 * * *")
+public class DailySchedule implements Runnable, PreInitialize {
+	@Override
+	public void run() {
+		DAO.applyNative("CALL refresh_all_views('shiro')");
+	}
+}
