@@ -49,7 +49,7 @@ public abstract class Manager {
 			emf = Persistence.createEntityManagerFactory("main", Map.of(
 					"jakarta.persistence.jdbc.user", DB_LOGIN,
 					"jakarta.persistence.jdbc.password", DB_PASS,
-					"jakarta.persistence.jdbc.url", "jdbc:postgresql://%s/%s?sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
+					"jakarta.persistence.jdbc.url", "jdbc:postgresql://%s/%s?currentSchema=shiro&sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
 							SERVER_IP, DB_NAME
 					)
 			));
