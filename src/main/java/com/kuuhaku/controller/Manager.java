@@ -60,7 +60,7 @@ public abstract class Manager {
 				Set<String> scripts = new HashSet<>();
 				try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
 					ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))
-							.sorted(Comparator.comparing(Path::getNameCount))
+							.sorted(Comparator.comparing(Path::toString).thenComparing(Path::getNameCount))
 							.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
 							.map(IO::readString)
 							.forEach(DAO::applyNative);
