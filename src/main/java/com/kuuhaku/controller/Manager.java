@@ -55,7 +55,9 @@ public abstract class Manager {
 			));
 
 			try (EntityManager em = emf.createEntityManager()) {
-				Constants.LOGGER.info("Connected to database " + em.createNativeQuery("SELECT current_database()").getSingleResult() +" successfully");
+				String db = (String) em.createNativeQuery("SELECT current_database()").getSingleResult();
+				String schema = (String) em.createNativeQuery("SELECT current_schema()").getSingleResult();
+				Constants.LOGGER.info("Connected to database " + db + ", schema " + schema + " successfully");
 			}
 
 			File initDir = IO.getResourceAsFile("database");
