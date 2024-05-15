@@ -88,8 +88,7 @@ public class Hand {
 			e.getEquipper().getEquipments().remove(e);
 		}
 
-		if (d.getSlot() == null && d.isSolid()) {
-			System.out.println("added " + d);
+		if (d.getSlot().getIndex() == -1 && d.isSolid()) {
 			getData().put("last_drawn", d);
 			getData().put("last_drawn_" + d.getClass().getSimpleName().toLowerCase(), d);
 		}
