@@ -29,5 +29,6 @@ SELECT CASE $1
            WHEN 'EPIC' THEN 4
            WHEN 'LEGENDARY' THEN 5
            WHEN 'ULTIMATE' THEN 6
+           ELSE 0
            END;
 $$;
