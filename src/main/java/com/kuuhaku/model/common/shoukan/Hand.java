@@ -63,6 +63,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.ON_DRAW_MULTIPLE;
+import static com.kuuhaku.model.enums.shoukan.Trigger.ON_DRAW_SINGLE;
 
 public class Hand {
 	private final long SERIAL = ThreadLocalRandom.current().nextLong();
@@ -188,7 +189,6 @@ public class Hand {
 
 				if (getGame().getArcade() == Arcade.DECK_ROYALE) {
 					op.manualDraw(3);
-					op.getGame().trigger(ON_DRAW_MULTIPLE, op.getSide());
 				}
 			}
 
@@ -401,15 +401,27 @@ public class Hand {
 	}
 
 	public Drawable<?> manualDraw() {
+		return manualDraw(true);
+	}
+
+	public Drawable<?> manualDraw(boolean trigger) {
 		if (cards.stream().noneMatch(d -> d instanceof Senshi)) {
 			Senshi out = (Senshi) deck.removeFirst(d -> d instanceof Senshi);
 			if (out != null) {
+				if (trigger) {
+					getGame().trigger(ON_DRAW_SINGLE, getSide());
+				}
+
 				return addToHand(out, true);
 			}
 		}
 
 		Drawable<?> d = deck.removeFirst();
 		if (d != null) {
+			if (trigger) {
+				getGame().trigger(ON_DRAW_SINGLE, getSide());
+			}
+
 			return addToHand(d, true);
 		}
 
@@ -421,22 +433,31 @@ public class Hand {
 
 		List<Drawable<?>> out = new ArrayList<>();
 		for (int i = 0; i < Math.min(value, deck.size()); i++) {
-			Drawable<?> d = manualDraw();
+			Drawable<?> d = manualDraw(false);
 			if (d != null) {
 				out.add(d);
 			}
 		}
 
+		getGame().trigger(ON_DRAW_MULTIPLE, getSide());
 		getData().put("last_drawn_batch", List.copyOf(out));
 		return out;
 	}
 
 	public Drawable<?> draw() {
+		return draw(true);
+	}
+
+	public Drawable<?> draw(boolean trigger) {
 		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
 		Drawable<?> out = deck.removeFirst();
 		if (out != null) {
+			if (trigger) {
+				getGame().trigger(ON_DRAW_SINGLE, getSide());
+			}
+
 			return addToHand(out, false);
 		}
 
@@ -448,12 +469,14 @@ public class Hand {
 
 		List<Drawable<?>> out = new ArrayList<>();
 		for (int i = 0; i < value; i++) {
-			Drawable<?> d = draw();
+			Drawable<?> d = draw(false);
 			if (d == null) return out;
 
 			out.add(d);
 		}
 
+		getGame().trigger(ON_DRAW_MULTIPLE, getSide());
+		getData().put("last_drawn_batch", List.copyOf(out));
 		return out;
 	}
 
@@ -620,8 +643,6 @@ public class Hand {
 		} else {
 			manualDraw(i);
 		}
-
-		getGame().trigger(ON_DRAW_MULTIPLE, getSide());
 	}
 
 	public void verifyCap() {
