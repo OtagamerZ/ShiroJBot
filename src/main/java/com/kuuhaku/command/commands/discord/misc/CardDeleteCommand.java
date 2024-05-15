@@ -20,11 +20,9 @@ package com.kuuhaku.command.commands.discord.misc;
 
 import com.kuuhaku.command.Category;
 import com.kuuhaku.command.Executable;
-import com.kuuhaku.controller.postgresql.AccountDAO;
 import com.kuuhaku.controller.postgresql.KawaiponDAO;
 import com.kuuhaku.controller.postgresql.StashDAO;
 import com.kuuhaku.model.annotations.Command;
-import com.kuuhaku.model.persistent.Account;
 import com.kuuhaku.model.persistent.Deck;
 import com.kuuhaku.model.persistent.Kawaipon;
 import com.kuuhaku.model.persistent.Stash;
@@ -41,34 +39,31 @@ public class CardDeleteCommand implements Executable {
 
 	@Override
 	public void execute(User author, Member member, String argsAsText, String[] args, Message message, TextChannel channel, Guild guild, String prefix) {
-		Account acc = AccountDAO.getAccount(author.getId());
 		if (args.length < 1) {
 			channel.sendMessage("❌ | Você deve informar ao menos 1 ID.").queue();
 			return;
 		}
 
 		int deleted = 0;
-		for (String id : args[0].split(" ")) {
+		for (String id : args) {
 			if (!StringUtils.isNumeric(id)) {
-				channel.sendMessage("❌ | ID inválido ou a carta não existe.").queue();
-				return;
+				continue;
 			}
 
 			Stash s = StashDAO.getCard(Integer.parseInt(id));
 			if (s == null || !s.getOwner().equals(author.getId())) {
-				channel.sendMessage("❌ | ID inválido ou a carta já foi retirada.").queue();
-				return;
+				continue;
 			}
 
 			Kawaipon kp = KawaiponDAO.getKawaipon(author.getId());
 			switch (s.getType()) {
 				case EVOGEAR -> {
 					Deck dk = kp.getDeck();
-					if (dk.checkEquipment(s.getCard(), channel)) return;
+					if (dk.checkEquipment(s.getCard(), channel)) continue;
 				}
 				case FIELD -> {
 					Deck dk = kp.getDeck();
-					if (dk.checkField(s.getCard(), channel)) return;
+					if (dk.checkField(s.getCard(), channel)) continue;
 				}
 			}
 			KawaiponDAO.saveKawaipon(kp);
