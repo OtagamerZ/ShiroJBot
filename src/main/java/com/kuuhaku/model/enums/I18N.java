@@ -28,14 +28,16 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public enum I18N {
-	PT(ZoneId.of("GMT-3")),
-	EN(ZoneId.of("GMT-4"));
+	PT(ZoneId.of("GMT-3"), "🇧🇷"),
+	EN(ZoneId.of("GMT-4"), "🇺🇸");
 
 	private final Locale locale = Locale.forLanguageTag(name().toLowerCase());
 	private final ZoneId zone;
+	private final String emoji;
 
-	I18N(ZoneId zone) {
+	I18N(ZoneId zone, String emoji) {
 		this.zone = zone;
+		this.emoji = emoji;
 	}
 
 	public static String get(I18N code, String key) {
@@ -86,5 +88,9 @@ public enum I18N {
 
 	public ZoneId getZone() {
 		return zone;
+	}
+
+	public String getEmoji() {
+		return emoji;
 	}
 }

@@ -38,6 +38,7 @@ import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -52,7 +53,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -148,16 +149,23 @@ public class CommonSocket extends WebSocketClient {
 					String id = payload.getString("user");
 					if (!StringUtils.isNumeric(id)) return;
 
-					List<Page> pages = new ArrayList<>();
 					EmbedBuilder eb = new ColorlessEmbedBuilder();
+					Map<Emoji, Page> cats = new LinkedHashMap<>();
+					MessageEmbed first = null;
+
 					for (I18N loc : I18N.values()) {
 						eb.setDescription(loc.get("welcome/message", Constants.DEFAULT_PREFIX));
-						pages.add(InteractPage.of(eb.build()));
+						cats.put(Emoji.fromFormatted(loc.getEmoji()), InteractPage.of(eb.build()));
+
+						if (first == null) {
+							first = eb.build();
+						}
 					}
 
+					MessageEmbed toSend = first;
 					Main.getApp().getUserById(id).openPrivateChannel()
-							.flatMap(c -> c.sendMessageEmbeds((MessageEmbed) pages.getFirst().getContent()))
-							.queue(s -> Pages.paginate(s, pages, true, 1, TimeUnit.MINUTES));
+							.flatMap(c -> c.sendMessageEmbeds(toSend))
+							.queue(s -> Pages.categorize(s, cats, true, 1, TimeUnit.MINUTES));
 				}
 			}
 		} catch (WebsocketNotConnectedException ignore) {
