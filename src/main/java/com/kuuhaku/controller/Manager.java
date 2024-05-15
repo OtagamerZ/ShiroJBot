@@ -49,18 +49,23 @@ public abstract class Manager {
 			emf = Persistence.createEntityManagerFactory("main", Map.of(
 					"jakarta.persistence.jdbc.user", DB_LOGIN,
 					"jakarta.persistence.jdbc.password", DB_PASS,
-					"jakarta.persistence.jdbc.url", "jdbc:postgresql://%s/%s?sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
+					"jakarta.persistence.jdbc.url", "jdbc:postgresql://%s/%s?currentSchema=shiro&sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
 							SERVER_IP, DB_NAME
 					)
 			));
-			Constants.LOGGER.info("Connected to database successfully");
+
+			try (EntityManager em = emf.createEntityManager()) {
+				String db = (String) em.createNativeQuery("SELECT current_database()").getSingleResult();
+				String schema = (String) em.createNativeQuery("SELECT current_schema()").getSingleResult();
+				Constants.LOGGER.info("Connected to database " + db + ", schema " + schema + " successfully");
+			}
 
 			File initDir = IO.getResourceAsFile("database");
 			if (initDir != null && initDir.isDirectory()) {
 				Set<String> scripts = new HashSet<>();
 				try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
 					ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))
-							.sorted(Comparator.comparing(Path::getNameCount))
+							.sorted(Comparator.comparing(Path::toString).thenComparing(Path::getNameCount))
 							.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
 							.map(IO::readString)
 							.forEach(DAO::applyNative);
