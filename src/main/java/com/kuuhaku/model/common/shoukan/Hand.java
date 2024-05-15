@@ -408,21 +408,25 @@ public class Hand {
 		if (cards.stream().noneMatch(d -> d instanceof Senshi)) {
 			Senshi out = (Senshi) deck.removeFirst(d -> d instanceof Senshi);
 			if (out != null) {
-				if (trigger) {
-					getGame().trigger(ON_DRAW_SINGLE, getSide());
+				try {
+					return addToHand(out, true);
+				} finally {
+					if (trigger) {
+						getGame().trigger(ON_DRAW_SINGLE, getSide());
+					}
 				}
-
-				return addToHand(out, true);
 			}
 		}
 
 		Drawable<?> d = deck.removeFirst();
 		if (d != null) {
-			if (trigger) {
-				getGame().trigger(ON_DRAW_SINGLE, getSide());
+			try {
+				return addToHand(d, true);
+			} finally {
+				if (trigger) {
+					getGame().trigger(ON_DRAW_SINGLE, getSide());
+				}
 			}
-
-			return addToHand(d, true);
 		}
 
 		return null;
@@ -439,8 +443,8 @@ public class Hand {
 			}
 		}
 
-		getGame().trigger(ON_DRAW_MULTIPLE, getSide());
 		getData().put("last_drawn_batch", List.copyOf(out));
+		getGame().trigger(ON_DRAW_MULTIPLE, getSide());
 		return out;
 	}
 
@@ -454,11 +458,13 @@ public class Hand {
 		BondedList<Drawable<?>> deck = getDeck();
 		Drawable<?> out = deck.removeFirst();
 		if (out != null) {
-			if (trigger) {
-				getGame().trigger(ON_DRAW_SINGLE, getSide());
+			try {
+				return addToHand(out, false);
+			} finally {
+				if (trigger) {
+					getGame().trigger(ON_DRAW_SINGLE, getSide());
+				}
 			}
-
-			return addToHand(out, false);
 		}
 
 		return null;
@@ -475,8 +481,8 @@ public class Hand {
 			out.add(d);
 		}
 
-		getGame().trigger(ON_DRAW_MULTIPLE, getSide());
 		getData().put("last_drawn_batch", List.copyOf(out));
+		getGame().trigger(ON_DRAW_MULTIPLE, getSide());
 		return out;
 	}
 
