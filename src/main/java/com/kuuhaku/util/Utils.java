@@ -804,7 +804,7 @@ public abstract class Utils {
 		return DAO.queryNative(String.class, """
 				SELECT x."value"
 				FROM (
-				     SELECT x."value", levenshtein_less_equal(x."value", cast('%1$s' AS VARCHAR), 5) AS dist
+				     SELECT x."value", levenshtein_less_equal(cast(x."value" AS TEXT), cast('%1$s' AS TEXT), 5) AS dist
 				     FROM (%2$s) x
 				     ) x
 				WHERE x.dist <= 5
