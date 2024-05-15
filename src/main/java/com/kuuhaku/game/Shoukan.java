@@ -184,13 +184,13 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		} catch (Exception e) {
 			if (e.getCause() instanceof StackOverflowError) {
-				Constants.LOGGER.error("Fatal error at " + m.getName(), e);
+				Constants.LOGGER.error("Fatal error at {}", m.getName(), e);
 				getChannel().sendMessage(getString("error/match_termination", GameReport.STACK_OVERFLOW)).queue();
 				close(GameReport.STACK_OVERFLOW);
 				return;
 			}
 
-			Constants.LOGGER.error("Failed to execute method " + m.getName(), e);
+			Constants.LOGGER.error("Failed to execute method {}", m.getName(), e);
 		} finally {
 			setLocked(false);
 		}
@@ -2071,7 +2071,7 @@ public class Shoukan extends GameInstance<Phase> {
 					} catch (ActivationException ignore) {
 					} catch (Exception e) {
 						getChannel().sendMessage(getString("error/effect")).queue();
-						Constants.LOGGER.warn("Failed to execute " + effect.getSource() + " persistent effect", e);
+						Constants.LOGGER.warn("Failed to execute {} persistent effect", effect.getSource(), e);
 					}
 
 					if (effect.getSide() == null) {
@@ -2089,7 +2089,7 @@ public class Shoukan extends GameInstance<Phase> {
 					} catch (ActivationException ignore) {
 					} catch (Exception e) {
 						getChannel().sendMessage(getString("error/effect")).queue();
-						Constants.LOGGER.warn("Failed to execute " + effect.getSource() + " persistent effect", e);
+						Constants.LOGGER.warn("Failed to execute {} persistent effect", effect.getSource(), e);
 					}
 				}
 
@@ -2102,7 +2102,7 @@ public class Shoukan extends GameInstance<Phase> {
 						} catch (ActivationException ignore) {
 						} catch (Exception e) {
 							getChannel().sendMessage(getString("error/effect")).queue();
-							Constants.LOGGER.warn("Failed to execute " + effect.getSource() + " persistent effect", e);
+							Constants.LOGGER.warn("Failed to execute {} persistent effect", effect.getSource(), e);
 						}
 					}
 				}

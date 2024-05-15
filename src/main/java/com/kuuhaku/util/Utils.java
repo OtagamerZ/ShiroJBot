@@ -938,7 +938,7 @@ public abstract class Utils {
 
 	public static <T> T getPrevious(T current, boolean wrap, List<T> sequence) {
 		T out = getPrevious(current, sequence);
-		if (wrap) out = sequence.get(sequence.size() - 1);
+		if (wrap) out = sequence.getLast();
 
 		return out;
 	}

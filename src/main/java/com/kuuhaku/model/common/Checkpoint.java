@@ -35,22 +35,19 @@ public class Checkpoint implements AutoCloseable {
 	}
 
 	public void lap() {
-		watch.stop();
-		laps.add(watch.getTime());
-		watch.reset();
-		watch.start();
-
-		Constants.LOGGER.info("Lap " + laps.size() + " marked at " + laps.getLast() + "ms");
+		lap(null);
 	}
 
 	public void lap(String comment) {
 		watch.stop();
 		laps.add(watch.getTime());
-		comments.put(laps.size(), comment);
+		if (comment != null) {
+			comments.put(laps.size(), comment);
+		}
 		watch.reset();
 		watch.start();
 
-		Constants.LOGGER.info("Lap " + laps.size() + " marked at " + laps.getLast() + "ms");
+		Constants.LOGGER.info("Lap {} marked at {}ms", laps.size(), laps.getLast());
 	}
 
 	@Override
@@ -59,7 +56,7 @@ public class Checkpoint implements AutoCloseable {
 		laps.add(watch.getTime());
 
 		long total = laps.stream().mapToLong(l -> l).sum();
-		Constants.LOGGER.info("Final lap marked at " + laps.getLast() + "ms");
+		Constants.LOGGER.info("Final lap marked at {}ms", laps.getLast());
 		if (total == 0) {
 			Constants.LOGGER.info("All laps took 0ms to complete");
 			return;

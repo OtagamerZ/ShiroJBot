@@ -39,7 +39,7 @@ public record Contingency(Evogear card, ContingencyTrigger trigger) {
 					case ON_TIER_2 -> 2;
 					case ON_TIER_3 -> 3;
 					case ON_TIER_4 -> 4;
-					default -> Integer.MAX_VALUE;
+					default -> 0;
 				};
 			}
 			case ON_EFFECT -> h.getLockTime(Lock.EFFECT) > 0;

@@ -72,14 +72,12 @@ public class RoleJavaType extends AbstractClassJavaType<Role> {
 
 	@Override
 	public <X> Role wrap(X value, WrapperOptions options) {
-		if (value == null) return null;
+		return switch (value) {
+			case null -> null;
+			case String id -> Main.getApp().getShiro().getRoleById(Utils.getOr(id, "1"));
+			case Role r -> r;
+			default -> throw unknownWrap(value.getClass());
+		};
 
-		if (value instanceof String id) {
-			return Main.getApp().getShiro().getRoleById(Utils.getOr(id, "1"));
-		} else if (value instanceof Role r) {
-			return r;
-		}
-
-		throw unknownWrap(value.getClass());
 	}
 }

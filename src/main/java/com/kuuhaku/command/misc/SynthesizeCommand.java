@@ -48,7 +48,6 @@ import com.kuuhaku.util.Spawn;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.NoResultException;
-import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;

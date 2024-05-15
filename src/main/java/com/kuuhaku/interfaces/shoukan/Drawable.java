@@ -355,7 +355,7 @@ public interface Drawable<T extends Drawable<T>> {
 			}
 
 			if (out.toString().length() > 32) {
-				out.remove(out.size() - 1);
+				out.removeLast();
 				out.add("...");
 				break;
 			}

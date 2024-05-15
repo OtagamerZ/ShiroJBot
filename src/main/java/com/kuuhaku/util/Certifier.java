@@ -45,7 +45,7 @@ public abstract class Certifier {
                 keys = new KeyPair(pubKey, privKey);
             } catch (NoSuchAlgorithmException | IOException | KeyStoreException | CertificateException |
                      UnrecoverableEntryException e) {
-                Constants.LOGGER.error("Failed to retrieve certification keys: " + e, e);
+				Constants.LOGGER.error("Failed to retrieve certification keys: {}", e, e);
             }
         }
 
@@ -60,7 +60,7 @@ public abstract class Certifier {
 
             return IO.atob(sig.sign());
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
-            Constants.LOGGER.error("Failed to sign data: " + e, e);
+			Constants.LOGGER.error("Failed to sign data: {}", e, e);
             return null;
         }
     }
@@ -73,7 +73,7 @@ public abstract class Certifier {
 
             return sig.verify(IO.btoa(data));
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
-            Constants.LOGGER.error("Failed to verify data: " + e, e);
+			Constants.LOGGER.error("Failed to verify data: {}", e, e);
             return false;
         }
     }

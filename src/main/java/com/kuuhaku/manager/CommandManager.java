@@ -48,7 +48,7 @@ public class CommandManager {
 			}
 
 			if (!names.add(full)) {
-				Constants.LOGGER.fatal("Detected commands with the same name: " + full);
+				Constants.LOGGER.fatal("Detected commands with the same name: {}", full);
 				System.exit(1);
 			}
 		}

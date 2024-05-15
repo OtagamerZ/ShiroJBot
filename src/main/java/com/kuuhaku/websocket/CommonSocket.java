@@ -93,9 +93,9 @@ public class CommonSocket extends WebSocketClient {
 			if (payload.getString("type").equals("AUTH") && payload.getInt("code") == HttpStatus.SC_ACCEPTED) {
 				if (retry > 0) {
 					retry = 0;
-					Constants.LOGGER.info("Reconnected to " + getClass().getSimpleName());
+					Constants.LOGGER.info("Reconnected to {}", getClass().getSimpleName());
 				} else {
-					Constants.LOGGER.info("Connected to " + getClass().getSimpleName());
+					Constants.LOGGER.info("Connected to {}", getClass().getSimpleName());
 				}
 
 				send(JSONObject.of(
@@ -122,7 +122,7 @@ public class CommonSocket extends WebSocketClient {
 				case "shoukan" -> {
 					String id = payload.getString("card");
 					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
-					Drawable<?> d = switch (types.get(types.size() - 1)) {
+					Drawable<?> d = switch (types.getLast()) {
 						case EVOGEAR -> DAO.find(Evogear.class, id);
 						case FIELD -> DAO.find(Field.class, id);
 						default -> DAO.find(Senshi.class, id);
@@ -175,14 +175,14 @@ public class CommonSocket extends WebSocketClient {
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		if (retry > 4) {
-			Constants.LOGGER.info("Failed to reconnect to " + getClass().getSimpleName() + " in 5 retries, aborting");
+			Constants.LOGGER.info("Failed to reconnect to {} in 5 retries, aborting", getClass().getSimpleName());
 			return;
 		}
 
 		if (retry > 0) {
-			Constants.LOGGER.info("Failed to reconnect to " + getClass().getSimpleName() + ", retrying in " + (++retry * 5) + " seconds");
+			Constants.LOGGER.info("Failed to reconnect to {}, retrying in {} seconds", getClass().getSimpleName(), ++retry * 5);
 		} else {
-			Constants.LOGGER.info("Disconnected from " + getClass().getSimpleName() + " (" + code + "), attempting reconnect in " + (++retry * 5) + " seconds");
+			Constants.LOGGER.info("Disconnected from {} ({}), attempting reconnect in {} seconds", getClass().getSimpleName(), code, ++retry * 5);
 		}
 
 		exec.schedule(this::reconnect, retry * 5L, TimeUnit.SECONDS);

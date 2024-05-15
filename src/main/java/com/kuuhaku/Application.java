@@ -60,11 +60,11 @@ public class Application implements Thread.UncaughtExceptionHandler {
 	public Application() {
 		long latency = Manager.ping();
 		if (latency <= 100) {
-			Constants.LOGGER.info("Database latency: " + latency + "ms");
+			Constants.LOGGER.info("Database latency: {}ms", latency);
 		} else if (latency <= 250) {
-			Constants.LOGGER.warn("Database latency: " + latency + "ms");
+			Constants.LOGGER.warn("Database latency: {}ms", latency);
 		} else {
-			Constants.LOGGER.error("Database latency: " + latency + "ms");
+			Constants.LOGGER.error("Database latency: {}ms", latency);
 		}
 
 		shiro = DefaultShardManagerBuilder.create(Constants.BOT_TOKEN, EnumSet.allOf(GatewayIntent.class))
@@ -93,9 +93,9 @@ public class Application implements Thread.UncaughtExceptionHandler {
 
 							try {
 								s.awaitReady();
-								Constants.LOGGER.info("Shard " + id + " ready");
+								Constants.LOGGER.info("Shard {} ready", id);
 							} catch (InterruptedException e) {
-								Constants.LOGGER.error("Failed to initialize shard " + id + ": " + e);
+								Constants.LOGGER.error("Failed to initialize shard {}: {}", id, e);
 							}
 						})
 						.forEach(this::setRandomAction)
@@ -125,7 +125,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 					)
 					.activate();
 		} catch (InvalidHandlerException e) {
-			Constants.LOGGER.error("Failed to start pagination library: " + e);
+			Constants.LOGGER.error("Failed to start pagination library: {}", e.toString());
 			System.exit(1);
 		}
 
@@ -133,7 +133,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		Constants.LOGGER.info("<----------END OF BOOT---------->");
 
 		Main.boot.stop();
-		Constants.LOGGER.info("Finished in " + Utils.toStringDuration(I18N.EN, Main.boot.getTime()));
+		Constants.LOGGER.info("Finished in {}", Utils.toStringDuration(I18N.EN, Main.boot.getTime()));
 	}
 
 	public ShardManager getShiro() {
@@ -144,7 +144,6 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		return Pages.subGet(shiro.retrieveUserById(id));
 	}
 
-	@SuppressWarnings("unchecked")
 	public GuildMessageChannel getMessageChannelById(String id) {
 		List<Class<? extends GuildMessageChannel>> types = List.of(
 				StandardGuildMessageChannel.class, ThreadChannel.class, VoiceChannel.class

@@ -894,7 +894,7 @@ public class Hand {
 		List<Drawable<?>> consumed = new ArrayList<>();
 
 		for (int i = 0; i < value && !discard.isEmpty(); i++) {
-			Drawable<?> card = discard.remove(0);
+			Drawable<?> card = discard.removeFirst();
 
 			consumed.add(card);
 			game.getArena().getBanned().add(card);

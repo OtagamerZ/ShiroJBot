@@ -80,7 +80,7 @@ public class Title extends DAO<Title> {
 
 			return (out instanceof Boolean b) && b;
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to check title " + id, e);
+			Constants.LOGGER.warn("Failed to check title {}", id, e);
 			return false;
 		}
 	}

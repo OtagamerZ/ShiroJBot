@@ -36,8 +36,6 @@ import com.ygimenez.json.JSONObject;
 import jakarta.persistence.NoResultException;
 import net.dv8tion.jda.api.JDA;
 
-import java.util.List;
-
 @Command(
 		name = "stash",
 		path = "remove",

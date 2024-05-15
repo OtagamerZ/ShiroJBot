@@ -57,7 +57,7 @@ public abstract class Manager {
 			try (EntityManager em = emf.createEntityManager()) {
 				String db = (String) em.createNativeQuery("SELECT current_database()").getSingleResult();
 				String schema = (String) em.createNativeQuery("SELECT current_schema()").getSingleResult();
-				Constants.LOGGER.info("Connected to database " + db + ", schema " + schema + " successfully");
+				Constants.LOGGER.info("Connected to database {}, schema {} successfully", db, schema);
 			}
 
 			File initDir = IO.getResourceAsFile("database");
@@ -73,7 +73,7 @@ public abstract class Manager {
 					throw new RuntimeException(e);
 				}
 
-				Constants.LOGGER.info("Applied " + scripts.size() + " scripts: " + scripts);
+				Constants.LOGGER.info("Applied {} scripts: {}", scripts.size(), scripts);
 			}
 
 			GlobalProperty ver = DAO.find(GlobalProperty.class, "build_number");

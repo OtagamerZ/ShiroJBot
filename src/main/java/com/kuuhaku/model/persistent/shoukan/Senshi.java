@@ -1237,7 +1237,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			Drawable<?> source = Utils.getOr(stats.getSource(), this);
 
 			game.getChannel().sendMessage(game.getString("error/effect")).queue();
-			Constants.LOGGER.warn("Failed to execute " + this + " effect\n" + ("/* " + source + " */\n" + getEffect()), e);
+			Constants.LOGGER.warn("Failed to execute {} effect\n{}", this, "/* " + source + " */\n" + getEffect(), e);
 			return false;
 		} finally {
 			base.unlock(trigger);
@@ -1270,7 +1270,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					.run();
 		} catch (Exception e) {
 			Drawable<?> source = Utils.getOr(stats.getSource(), this);
-			Constants.LOGGER.warn("Failed to initialize " + this + "\n" + ("/* " + source + " */\n" + getEffect()), e);
+			Constants.LOGGER.warn("Failed to initialize {}\n{}", this, "/* " + source + " */\n" + getEffect(), e);
 		}
 	}
 

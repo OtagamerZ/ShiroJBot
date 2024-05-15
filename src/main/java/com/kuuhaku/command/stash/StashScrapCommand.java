@@ -38,7 +38,6 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.NoResultException;
-import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.HashBag;

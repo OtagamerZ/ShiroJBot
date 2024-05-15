@@ -34,8 +34,6 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
-import java.util.List;
-
 @Command(
 		name = "deck",
 		path = "cover",

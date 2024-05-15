@@ -72,14 +72,12 @@ public class ChannelJavaType extends AbstractClassJavaType<GuildMessageChannel> 
 
 	@Override
 	public <X> GuildMessageChannel wrap(X value, WrapperOptions options) {
-		if (value == null) return null;
+		return switch (value) {
+			case null -> null;
+			case String id -> Main.getApp().getMessageChannelById(Utils.getOr(id, "1"));
+			case GuildMessageChannel c -> c;
+			default -> throw unknownWrap(value.getClass());
+		};
 
-		if (value instanceof String id) {
-			return Main.getApp().getMessageChannelById(Utils.getOr(id, "1"));
-		} else if (value instanceof GuildMessageChannel c) {
-			return c;
-		}
-
-		throw unknownWrap(value.getClass());
 	}
 }

@@ -36,7 +36,6 @@ import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;

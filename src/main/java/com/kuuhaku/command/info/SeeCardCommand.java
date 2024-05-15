@@ -45,7 +45,6 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.*;
 import com.ygimenez.json.JSONObject;
-import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
@@ -139,7 +138,7 @@ public class SeeCardCommand implements Executable {
 					return;
 				}
 
-				Drawable<?> d = switch (types.get(types.size() - 1)) {
+				Drawable<?> d = switch (types.getLast()) {
 					case KAWAIPON, SENSHI -> card.asSenshi();
 					case EVOGEAR -> card.asEvogear();
 					case FIELD -> card.asField();
