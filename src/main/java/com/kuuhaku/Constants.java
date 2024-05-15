@@ -56,8 +56,6 @@ public abstract class Constants {
     public static final String EMOTE_REPO_4 = "763775306095788033";
     public static final String EMOTE_REPO_5 = "1158801007015383060";
 
-    public static final double P_HOURS_IN_DAY = 23 + (56d / 60) + (4d / 3600);
-
     public static final long MILLIS_IN_DAY = TimeUnit.DAYS.toMillis(1);
     public static final long MILLIS_IN_HOUR = TimeUnit.HOURS.toMillis(1);
     public static final long MILLIS_IN_MINUTE = TimeUnit.MINUTES.toMillis(1);

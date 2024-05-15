@@ -18,10 +18,14 @@
 
 package com.kuuhaku.websocket;
 
+import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.InteractPage;
+import com.github.ygimenez.model.Page;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
@@ -31,10 +35,12 @@ import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.IO;
-import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.intellij.lang.annotations.Language;
 import org.java_websocket.client.WebSocketClient;
@@ -46,6 +52,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -99,15 +106,6 @@ public class CommonSocket extends WebSocketClient {
 
 			String token = DigestUtils.sha256Hex(TOKEN);
 			if (!payload.getString("auth").equals(DigestUtils.sha256Hex(TOKEN))) return;
-			else if (payload.getString("channel").equals("eval")) {
-				@Language("Groovy")
-				String code = new String(IO.btoa(payload.getString("code")), StandardCharsets.UTF_8);
-
-				if (payload.getString("checksum").equals(DigestUtils.md5Hex(code))) {
-					Utils.exec(getClass().getSimpleName(), code, Map.of("bot", Main.getApp().getMainShard()));
-				}
-				return;
-			}
 
 			send(JSONObject.of(
 					Map.entry("type", "ACKNOWLEDGE"),
@@ -145,6 +143,21 @@ public class CommonSocket extends WebSocketClient {
 							payload.getString("str"),
 							(Object[]) payload.getString("params").split(",")
 					));
+				}
+				case "invite" -> {
+					String id = payload.getString("user");
+					if (!StringUtils.isNumeric(id)) return;
+
+					List<Page> pages = new ArrayList<>();
+					EmbedBuilder eb = new ColorlessEmbedBuilder();
+					for (I18N loc : I18N.values()) {
+						eb.setDescription(loc.get("welcome/message", Constants.DEFAULT_PREFIX));
+						pages.add(InteractPage.of(eb.build()));
+					}
+
+					Main.getApp().getUserById(id).openPrivateChannel()
+							.flatMap(c -> c.sendMessageEmbeds((MessageEmbed) pages.getFirst().getContent()))
+							.queue(s -> Pages.paginate(s, pages, true, 1, TimeUnit.MINUTES));
 				}
 			}
 		} catch (WebsocketNotConnectedException ignore) {

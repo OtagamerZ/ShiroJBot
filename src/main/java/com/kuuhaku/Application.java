@@ -151,7 +151,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		);
 
 		for (Class<? extends GuildMessageChannel> type : types) {
-			GuildMessageChannel gmc = (GuildMessageChannel) shiro.getChannelById(type, id);
+			GuildMessageChannel gmc = shiro.getChannelById(type, id);
 			if (gmc != null) return gmc;
 		}
 
