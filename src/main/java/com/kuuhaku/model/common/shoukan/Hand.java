@@ -77,11 +77,6 @@ public class Hand {
 			return false;
 		}
 
-		if (d.getSlot() == null && d.getHand() != null) {
-			getData().put("last_drawn", d);
-			getData().put("last_drawn_" + d.getClass().getSimpleName().toLowerCase(), d);
-		}
-
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
 
@@ -91,6 +86,12 @@ public class Hand {
 			}
 		} else if (d instanceof Evogear e && e.getEquipper() != null) {
 			e.getEquipper().getEquipments().remove(e);
+		}
+
+		if (d.getSlot() == null && d.isSolid()) {
+			System.out.println("added " + d);
+			getData().put("last_drawn", d);
+			getData().put("last_drawn_" + d.getClass().getSimpleName().toLowerCase(), d);
 		}
 
 		d.setSlot(null);
