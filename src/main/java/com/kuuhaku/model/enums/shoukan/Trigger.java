@@ -170,6 +170,16 @@ public enum Trigger {
 	ON_MAGIC_DRAW,
 
 	/**
+	 * After drawing a card
+	 **/
+	ON_DRAW_SINGLE,
+
+	/**
+	 * After drawing many cards
+	 **/
+	ON_DRAW_MULTIPLE,
+
+	/**
 	 * On discarding a card
 	 **/
 	ON_DISCARD,

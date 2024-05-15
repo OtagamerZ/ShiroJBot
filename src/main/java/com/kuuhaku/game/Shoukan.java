@@ -2359,7 +2359,9 @@ public class Shoukan extends GameInstance<Phase> {
 							return;
 						}
 
-						curr.manualDraw(1);
+						curr.manualDraw();
+						trigger(ON_DRAW_SINGLE, curr.getSide());
+
 						curr.showHand();
 						reportEvent("str/draw_card", true, curr.getName(), 1, "");
 					});
@@ -2375,6 +2377,8 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							curr.manualDraw(curr.getRemainingDraws());
+							trigger(ON_DRAW_MULTIPLE, curr.getSide());
+
 							curr.showHand();
 							reportEvent("str/draw_card", true, curr.getName(), rem, "s");
 						});
@@ -2389,10 +2393,10 @@ public class Shoukan extends GameInstance<Phase> {
 							return;
 						}
 
-						for (Drawable<?> d : curr.manualDraw(1)) {
-							d.setEthereal(true);
-							curr.getRegDeg().add(-curr.getBase().hp() / 10);
-						}
+						Drawable<?> d = curr.manualDraw();
+						d.setEthereal(true);
+						curr.getRegDeg().add(-curr.getBase().hp() / 10);
+						trigger(ON_DRAW_SINGLE, curr.getSide());
 
 						curr.showHand();
 						reportEvent("str/draw_card", true, curr.getName(), 1, "");

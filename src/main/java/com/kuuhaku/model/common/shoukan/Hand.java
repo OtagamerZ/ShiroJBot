@@ -62,6 +62,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static com.kuuhaku.model.enums.shoukan.Trigger.ON_DRAW_MULTIPLE;
+
 public class Hand {
 	private final long SERIAL = ThreadLocalRandom.current().nextLong();
 
@@ -186,6 +188,7 @@ public class Hand {
 
 				if (getGame().getArcade() == Arcade.DECK_ROYALE) {
 					op.manualDraw(3);
+					op.getGame().trigger(ON_DRAW_MULTIPLE, op.getSide());
 				}
 			}
 
@@ -424,6 +427,7 @@ public class Hand {
 			}
 		}
 
+		getData().put("last_drawn_batch", List.copyOf(out));
 		return out;
 	}
 
@@ -616,6 +620,8 @@ public class Hand {
 		} else {
 			manualDraw(i);
 		}
+
+		getGame().trigger(ON_DRAW_MULTIPLE, getSide());
 	}
 
 	public void verifyCap() {
