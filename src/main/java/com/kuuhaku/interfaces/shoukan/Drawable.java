@@ -176,6 +176,15 @@ public interface Drawable<T extends Drawable<T>> {
 	default void setManipulated(boolean manipulated) {
 	}
 
+	default void manipulate(Consumer<Drawable<T>> action) {
+		try {
+			setManipulated(true);
+			action.accept(this);
+		} finally {
+			setManipulated(false);
+		}
+	}
+
 	default boolean keepOnDestroy() {
 		return true;
 	}
