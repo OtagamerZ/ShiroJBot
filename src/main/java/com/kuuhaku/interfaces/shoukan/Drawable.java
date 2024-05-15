@@ -169,6 +169,13 @@ public interface Drawable<T extends Drawable<T>> {
 	default void setEthereal(boolean ethereal) {
 	}
 
+	default boolean isManipulated() {
+		return false;
+	}
+
+	default void setManipulated(boolean manipulated) {
+	}
+
 	default boolean keepOnDestroy() {
 		return true;
 	}

@@ -90,11 +90,12 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	private byte state = 0b10;
 	/*
 	0xF
-	  └ 000 1111
-	        │││└ solid
-	        ││└─ available
-	        │└── bamboozled
-	        └─── ethereal
+	  └ 00 11111
+	       ││││└ solid
+	       │││└─ available
+	       ││└── bamboozled
+	       │└─── ethereal
+	       └──── manipulated
 	 */
 
 	public Field() {
@@ -215,6 +216,16 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		state = (byte) Bit.set(state, 3, ethereal);
 	}
 
+	@Override
+	public boolean isManipulated() {
+		return Bit.on(state, 3);
+	}
+
+	@Override
+	public void setManipulated(boolean manipulated) {
+		state = (byte) Bit.set(state, 3, manipulated);
+	}
+
 	public boolean isActive() {
 		return getGame().getArena().getField().equals(this);
 	}
@@ -243,6 +254,11 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			if (isFlipped()) {
 				g1.drawImage(style.getFrame().getBack(deck), 0, 0, null);
+
+				if (!isAvailable() || isManipulated()) {
+					RescaleOp op = new RescaleOp(0.5f, 0, null);
+					op.filter(out, out);
+				}
 			} else {
 				BufferedImage img = getVanity().drawCardNoBorder(false);
 
@@ -287,6 +303,11 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 					);
 				}
 
+				if (!isAvailable() || isManipulated()) {
+					RescaleOp op = new RescaleOp(0.5f, 0, null);
+					op.filter(out, out);
+				}
+
 				if (hand != null) {
 					boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
@@ -295,11 +316,11 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 						BufferedImage emp = IO.getResourceAsImage(path + "/ethereal.png");
 						g2d.drawImage(emp, 0, 0, null);
 					}
-				}
 
-				if (!isAvailable()) {
-					RescaleOp op = new RescaleOp(0.5f, 0, null);
-					op.filter(out, out);
+					if (isManipulated()) {
+						BufferedImage emp = IO.getResourceAsImage(path + "/locked.png");
+						g2d.drawImage(emp, 0, 0, null);
+					}
 				}
 			}
 		});

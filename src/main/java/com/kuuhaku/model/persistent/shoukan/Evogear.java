@@ -105,11 +105,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private byte state = 0b10;
 	/*
 	0xF
-	  └ 000 1111
-	        │││└ solid
-	        ││└─ available
-	        │└── flipped
-	        └─── ethereal
+	  └ 00 11111
+	       ││││└ solid
+	       │││└─ available
+	       ││└── flipped
+	       │└─── ethereal
+	       └──── manipulated
 	 */
 
 	public Evogear() {
@@ -401,6 +402,16 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		state = (byte) Bit.set(state, 3, ethereal);
 	}
 
+	@Override
+	public boolean isManipulated() {
+		return Bit.on(state, 4);
+	}
+
+	@Override
+	public void setManipulated(boolean manipulated) {
+		state = (byte) Bit.set(state, 4, manipulated);
+	}
+
 	public String getEffect() {
 		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getEffect(), source.getBase().getEffect());
@@ -574,6 +585,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			if (isFlipped()) {
 				g1.drawImage(style.getFrame().getBack(deck), 0, 0, null);
 				parseDescription(getGame().getLocale());
+
+				if (!isAvailable() || isManipulated()) {
+					RescaleOp op = new RescaleOp(0.5f, 0, null);
+					op.filter(out, out);
+				}
 			} else {
 				String desc = getDescription(locale);
 				BufferedImage img = card.drawCardNoBorder(style.isUsingChrome());
@@ -639,6 +655,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					}
 				}
 
+				if (!isAvailable() || isManipulated()) {
+					RescaleOp op = new RescaleOp(0.5f, 0, null);
+					op.filter(out, out);
+				}
+
 				if (hand != null) {
 					boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
@@ -652,11 +673,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 						BufferedImage emp = IO.getResourceAsImage(path + "/ethereal.png");
 						g2d.drawImage(emp, 0, 0, null);
 					}
-				}
 
-				if (!isAvailable()) {
-					RescaleOp op = new RescaleOp(0.5f, 0, null);
-					op.filter(out, out);
+					if (isManipulated()) {
+						BufferedImage emp = IO.getResourceAsImage(path + "/locked.png");
+						g2d.drawImage(emp, 0, 0, null);
+					}
 				}
 
 				int t = getTier();

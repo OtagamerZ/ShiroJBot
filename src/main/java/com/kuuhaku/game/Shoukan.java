@@ -361,11 +361,13 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
+		if (!d.isAvailable() || d.isManipulated()) {
+			getChannel().sendMessage(getString("error/card_unavailable")).queue();
+			return false;
+		}
+
 		if (d instanceof Senshi chosen) {
-			if (!chosen.isAvailable()) {
-				getChannel().sendMessage(getString("error/card_unavailable")).queue();
-				return false;
-			} else if (chosen.getHPCost() >= curr.getHP()) {
+			if (chosen.getHPCost() >= curr.getHP()) {
 				getChannel().sendMessage(getString("error/not_enough_hp")).queue();
 				return false;
 			} else if (chosen.getMPCost() > curr.getMP() + extraMp) {
@@ -465,16 +467,20 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private boolean placeProxy(Hand hand, JSONObject args) {
-		Drawable<?> d = hand.getCards().get(args.getInt("inHand") - 1);
-
 		int extraMp = 0;
 		if (hand.getOrigins().synergy() == Race.HOMUNCULUS) {
 			extraMp = hand.getDiscard().size();
 		}
 
+		Drawable<?> d = hand.getCards().get(args.getInt("inHand") - 1);
+		if (!d.isAvailable() || d.isManipulated()) {
+			getChannel().sendMessage(getString("error/card_unavailable")).queue();
+			return false;
+		}
+
 		if (d instanceof Evogear chosen && chosen.isSpell()) {
-			if (!chosen.isAvailable() || chosen.isPassive()) {
-				getChannel().sendMessage(getString("error/card_unavailable")).queue();
+			if (chosen.isPassive()) {
+				getChannel().sendMessage(getString("error/card_passive")).queue();
 				return false;
 			} else if (chosen.getHPCost() >= hand.getHP()) {
 				getChannel().sendMessage(getString("error/not_enough_hp")).queue();
@@ -628,11 +634,13 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
+		if (!d.isAvailable() || d.isManipulated()) {
+			getChannel().sendMessage(getString("error/card_unavailable")).queue();
+			return false;
+		}
+
 		if (d instanceof Evogear chosen && !chosen.isSpell()) {
-			if (!chosen.isAvailable()) {
-				getChannel().sendMessage(getString("error/card_unavailable")).queue();
-				return false;
-			} else if (chosen.getHPCost() >= curr.getHP()) {
+			if (chosen.getHPCost() >= curr.getHP()) {
 				getChannel().sendMessage(getString("error/not_enough_hp")).queue();
 				return false;
 			} else if (chosen.getMPCost() > curr.getMP()) {
@@ -696,12 +704,12 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
-		if (d instanceof Field chosen) {
-			if (!chosen.isAvailable()) {
-				getChannel().sendMessage(getString("error/card_unavailable")).queue();
-				return false;
-			}
-		} else {
+		if (!d.isAvailable() || d.isManipulated()) {
+			getChannel().sendMessage(getString("error/card_unavailable")).queue();
+			return false;
+		}
+
+		if (!(d instanceof Field chosen)) {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
 				d.setAvailable(false);
 				curr.getGraveyard().add(d.copy());
@@ -733,23 +741,23 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Senshi chosen = nc ? slot.getBottom() : slot.getTop();
-		if (!chosen.isAvailable()) {
+		Senshi d = nc ? slot.getBottom() : slot.getTop();
+		if (!d.isAvailable() || d.isManipulated()) {
 			getChannel().sendMessage(getString("error/card_unavailable")).queue();
 			return false;
-		} else if (chosen.hasSwitched()) {
+		} else if (d.hasSwitched()) {
 			getChannel().sendMessage(getString("error/card_switched")).queue();
 			return false;
 		}
 
-		if (chosen.isFlipped()) {
-			chosen.setFlipped(false);
+		if (d.isFlipped()) {
+			d.setFlipped(false);
 		} else {
-			chosen.setDefending(!chosen.isDefending());
+			d.setDefending(!d.isDefending());
 		}
 
-		chosen.setSwitched(true);
-		reportEvent("str/flip_card", true, curr.getName(), chosen, chosen.getState().toString(getLocale()));
+		d.setSwitched(true);
+		reportEvent("str/flip_card", true, curr.getName(), d, d.getState().toString(getLocale()));
 		return true;
 	}
 
@@ -767,15 +775,15 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Senshi chosen = slot.getBottom();
-		if (!chosen.isAvailable()) {
+		Senshi d = slot.getBottom();
+		if (!d.isAvailable() || d.isManipulated()) {
 			getChannel().sendMessage(getString("error/card_unavailable")).queue();
 			return false;
 		}
 
 		slot.swap();
 
-		reportEvent("str/promote_card", true, curr.getName(), chosen.isFlipped() ? getString("str/a_card") : chosen);
+		reportEvent("str/promote_card", true, curr.getName(), d.isFlipped() ? getString("str/a_card") : d);
 		return true;
 	}
 
@@ -875,15 +883,15 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Drawable<?> chosen = curr.getCards().get(args.getInt("inHand") - 1);
-		if (!chosen.isAvailable()) {
+		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
+		if (!d.isAvailable() || d.isManipulated()) {
 			getChannel().sendMessage(getString("error/card_unavailable")).queue();
 			return false;
 		}
 
-		curr.getDiscard().add(chosen);
+		curr.getDiscard().add(d);
 
-		if (curr.getOrigins().synergy() == Race.FAMILIAR && chosen instanceof Senshi s) {
+		if (curr.getOrigins().synergy() == Race.FAMILIAR && d instanceof Senshi s) {
 			for (Drawable<?> d : curr.getCards()) {
 				if (d.isAvailable() && d instanceof Senshi it && it.getElement() == s.getElement()) {
 					it.getStats().getMana().set(-1);
@@ -891,7 +899,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		reportEvent("str/discard_card", true, curr.getName(), chosen);
+		reportEvent("str/discard_card", true, curr.getName(), d);
 		return true;
 	}
 
@@ -909,13 +917,13 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
-			Drawable<?> chosen = curr.getCards().get(idx - 1);
-			if (!chosen.isAvailable()) {
+			Drawable<?> d = curr.getCards().get(idx - 1);
+			if (!d.isAvailable() || d.isManipulated()) {
 				getChannel().sendMessage(getString("error/card_unavailable")).queue();
 				return false;
 			}
 
-			cards.add(chosen);
+			cards.add(d);
 		}
 
 		curr.getDiscard().addAll(cards);
@@ -946,9 +954,14 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
+		if (!d.isAvailable() || d.isManipulated()) {
+			getChannel().sendMessage(getString("error/card_unavailable")).queue();
+			return false;
+		}
+
 		if (d instanceof Evogear chosen && chosen.isSpell()) {
-			if (!chosen.isAvailable() || chosen.isPassive()) {
-				getChannel().sendMessage(getString("error/card_unavailable")).queue();
+			if (chosen.isPassive()) {
+				getChannel().sendMessage(getString("error/card_passive")).queue();
 				return false;
 			} else if (chosen.getHPCost() >= curr.getHP()) {
 				getChannel().sendMessage(getString("error/not_enough_hp")).queue();
@@ -1106,40 +1119,40 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Senshi chosen = slot.getTop();
-		if (!chosen.isAvailable()) {
+		Senshi d = slot.getTop();
+		if (!d.isAvailable() || d.isManipulated()) {
 			getChannel().sendMessage(getString("error/card_unavailable")).queue();
 			return false;
-		} else if (chosen.isFlipped()) {
+		} else if (d.isFlipped()) {
 			getChannel().sendMessage(getString("error/card_flipped")).queue();
 			return false;
-		} else if (chosen.getCooldown() > 0) {
-			getChannel().sendMessage(getString("error/card_cooldown", chosen.getCooldown())).queue();
+		} else if (d.getCooldown() > 0) {
+			getChannel().sendMessage(getString("error/card_cooldown", d.getCooldown())).queue();
 			return false;
 		} else if (curr.getMP() < 1) {
 			getChannel().sendMessage(getString("error/not_enough_mp")).queue();
 			return false;
-		} else if (!chosen.hasAbility()) {
+		} else if (!d.hasAbility()) {
 			getChannel().sendMessage(getString("error/card_no_special")).queue();
 			return false;
-		} else if (chosen.isSealed()) {
+		} else if (d.isSealed()) {
 			getChannel().sendMessage(getString("error/card_sealed")).queue();
 			return false;
 		}
 
 		int locktime = curr.getLockTime(Lock.ABILITY);
-		if (locktime > 0 && !chosen.hasTrueEffect()) {
+		if (locktime > 0 && !d.hasTrueEffect()) {
 			getChannel().sendMessage(getString("error/ability_locked", locktime)).queue();
 			return false;
 		}
 
 		locktime = curr.getLockTime(Lock.EFFECT);
-		if (locktime > 0 && !chosen.hasTrueEffect()) {
+		if (locktime > 0 && !d.hasTrueEffect()) {
 			getChannel().sendMessage(getString("error/effect_locked", locktime)).queue();
 			return false;
 		}
 
-		TargetType type = chosen.getTargetType();
+		TargetType type = d.getTargetType();
 		Targeting tgt = switch (type) {
 			case NONE -> new Targeting(curr, -1, -1);
 			case ALLY -> new Targeting(curr, args.getInt("target1") - 1, -1);
@@ -1149,8 +1162,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Senshi enemy = tgt.enemy();
 		if (enemy != null) {
-			if (chosen.getTarget() != null && !Objects.equals(chosen.getTarget(), enemy)) {
-				getChannel().sendMessage(getString("error/card_taunted", chosen.getTarget(), chosen.getTarget().getIndex() + 1)).queue();
+			if (d.getTarget() != null && !Objects.equals(d.getTarget(), enemy)) {
+				getChannel().sendMessage(getString("error/card_taunted", d.getTarget(), d.getTarget().getIndex() + 1)).queue();
 				return false;
 			}
 		}
@@ -1158,9 +1171,9 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!tgt.validate(type)) {
 			getChannel().sendMessage(getString("error/target", getString("str/target_" + type))).queue();
 			return false;
-		} else if (!trigger(ON_ACTIVATE, chosen.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
-			if (!chosen.isAvailable()) {
-				reportEvent("str/effect_interrupted", true, chosen);
+		} else if (!trigger(ON_ACTIVATE, d.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
+			if (!d.isAvailable()) {
+				reportEvent("str/effect_interrupted", true, d);
 				return true;
 			}
 
@@ -1168,13 +1181,13 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.consumeMP(1);
-		if (getPhase() != Phase.PLAN && !chosen.hasFlag(Flag.FREE_ACTION, true)) {
-			chosen.setAvailable(false);
+		if (getPhase() != Phase.PLAN && !d.hasFlag(Flag.FREE_ACTION, true)) {
+			d.setAvailable(false);
 		}
 
-		curr.getData().put("last_ability", chosen);
+		curr.getData().put("last_ability", d);
 		trigger(ON_ABILITY, side);
-		reportEvent("str/card_special", true, curr.getName(), chosen);
+		reportEvent("str/card_special", true, curr.getName(), d);
 		return !curr.selectionPending();
 	}
 

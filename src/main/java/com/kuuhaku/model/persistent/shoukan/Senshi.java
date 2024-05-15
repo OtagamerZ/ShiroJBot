@@ -130,14 +130,15 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private int state = 0b10;
 	/*
 	0xF FFFFF FF
-	  │ │││││ └┴ 0111 1111
-	  │ │││││     │││ │││└ solid
-	  │ │││││     │││ ││└─ available
-	  │ │││││     │││ │└── defending
-	  │ │││││     │││ └─── flipped
-	  │ │││││     ││└ sealed
-	  │ │││││     │└─ switched
-	  │ │││││     └── ethereal
+	  │ │││││ └┴ 1111 1111
+	  │ │││││    ││││ │││└ solid
+	  │ │││││    ││││ ││└─ available
+	  │ │││││    ││││ │└── defending
+	  │ │││││    ││││ └─── flipped
+	  │ │││││    │││└ sealed
+	  │ │││││    ││└─ switched
+	  │ │││││    │└── ethereal
+	  │ │││││    └─── manipulated
 	  │ ││││└─ (0 - 15) sleeping
 	  │ │││└── (0 - 15) stunned
 	  │ ││└─── (0 - 15) stasis
@@ -845,6 +846,16 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		state = Bit.set(state, 6, ethereal);
 	}
 
+	@Override
+	public boolean isManipulated() {
+		return Bit.on(state, 7);
+	}
+
+	@Override
+	public void setManipulated(boolean manipulated) {
+		state = Bit.set(state, 7, manipulated);
+	}
+
 	public boolean isSleeping() {
 		return !isStunned() && Bit.on(state, 2, 4);
 	}
@@ -1372,6 +1383,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (isFlipped()) {
 				g1.drawImage(style.getFrame().getBack(deck), 0, 0, null);
 				parseDescription(getGame().getLocale());
+
+				if (!isAvailable() || isManipulated()) {
+					RescaleOp op = new RescaleOp(0.5f, 0, null);
+					op.filter(out, out);
+				}
 			} else {
 				Senshi card = Utils.getOr(stats.getDisguise(), this);
 				String desc = isSealed() ? "" : card.getDescription(locale);
@@ -1413,6 +1429,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					}
 				}
 
+				if (!isAvailable() || isManipulated()) {
+					RescaleOp op = new RescaleOp(0.5f, 0, null);
+					op.filter(out, out);
+				}
+
 				if (hand != null && getGame() != null) {
 					boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
@@ -1438,12 +1459,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						BufferedImage emp = IO.getResourceAsImage(path + "/ethereal.png");
 						g2d.drawImage(emp, 0, 0, null);
 					}
-				}
-			}
 
-			if (!isAvailable()) {
-				RescaleOp op = new RescaleOp(0.5f, 0, null);
-				op.filter(out, out);
+					if (isManipulated()) {
+						BufferedImage emp = IO.getResourceAsImage(path + "/locked.png");
+						g2d.drawImage(emp, 0, 0, null);
+					}
+				}
 			}
 
 			boolean over = false;
