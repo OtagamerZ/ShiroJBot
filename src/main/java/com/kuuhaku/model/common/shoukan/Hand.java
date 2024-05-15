@@ -397,22 +397,30 @@ public class Hand {
 		return getRealDeck();
 	}
 
-	public List<Drawable<?>> manualDraw(int value) {
-		if (deck.isEmpty() || value <= 0) return List.of();
-
+	public Drawable<?> manualDraw() {
 		if (cards.stream().noneMatch(d -> d instanceof Senshi)) {
 			Senshi out = (Senshi) deck.removeFirst(d -> d instanceof Senshi);
 			if (out != null) {
-				addToHand(out, true);
-				value--;
+				return addToHand(out, true);
 			}
 		}
 
+		Drawable<?> d = deck.removeFirst();
+		if (d != null) {
+			return addToHand(d, true);
+		}
+
+		return null;
+	}
+
+	public List<Drawable<?>> manualDraw(int value) {
+		if (value <= 0) return List.of();
+
 		List<Drawable<?>> out = new ArrayList<>();
 		for (int i = 0; i < Math.min(value, deck.size()); i++) {
-			Drawable<?> d = deck.removeFirst();
+			Drawable<?> d = manualDraw();
 			if (d != null) {
-				out.add(addToHand(d, true));
+				out.add(d);
 			}
 		}
 
