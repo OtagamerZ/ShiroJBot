@@ -197,6 +197,7 @@ public class SynthesizeCommand implements Executable {
 									if (!lock.get()) {
 										Kawaipon k = kp.refresh();
 
+										double totalQ = 1;
 										Set<Rarity> rarities = EnumSet.noneOf(Rarity.class);
 										for (StashedCard sc : cards) {
 											if (sc.getType() == CardType.KAWAIPON) {
@@ -204,6 +205,7 @@ public class SynthesizeCommand implements Executable {
 												if (kc != null) {
 													kc.delete();
 													rarities.add(kc.getCard().getRarity());
+													totalQ += kc.getQuality();
 												}
 											} else {
 												sc.delete();
@@ -213,8 +215,9 @@ public class SynthesizeCommand implements Executable {
 										if (rarities.size() >= 5) {
 											UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
 											if (item != null) {
-												acc.addItem(item, 1);
-												event.channel().sendMessage(locale.get("str/received_item", 1, item.getName(locale))).queue();
+												int gained = Calc.round(totalQ);
+												acc.addItem(item, gained);
+												event.channel().sendMessage(locale.get("str/received_item", gained, item.getName(locale))).queue();
 											}
 										}
 
@@ -332,7 +335,7 @@ public class SynthesizeCommand implements Executable {
 	private static double getMult(Collection<StashedCard> cards) {
 		double inc = 1;
 		double more = 1 * (1 + (Spawn.getRarityMult() - 1) / 2);
-		int fac = 150 + (cards.size() - 3) * 10;
+		double fac = 150 + (cards.size() - 3) * 10;
 
 		for (StashedCard sc : cards) {
 			switch (sc.getType()) {

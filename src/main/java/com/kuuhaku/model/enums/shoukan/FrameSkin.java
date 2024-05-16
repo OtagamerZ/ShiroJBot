@@ -87,6 +87,7 @@ public enum FrameSkin {
 		this.titles = titles;
 	}
 
+	/** Main color of the frame **/
 	public Color getThemeColor() {
 		return switch (this) {
 			case PINK, LEGACY_PINK -> new Color(0xE874BC);
@@ -108,6 +109,7 @@ public enum FrameSkin {
 		};
 	}
 
+	/** Background color for title **/
 	public Color getBackgroundColor() {
 		return switch (this) {
 			case PINK, LEGACY_PINK,
@@ -130,6 +132,7 @@ public enum FrameSkin {
 		};
 	}
 
+	/** Foreground color for title **/
 	public Color getPrimaryColor() {
 		return switch (this) {
 			case PINK, LEGACY_PINK,
@@ -148,6 +151,7 @@ public enum FrameSkin {
 		};
 	}
 
+	/** Foreground color for description **/
 	public Color getSecondaryColor() {
 		return switch (this) {
 			case PINK, LEGACY_PINK,
