@@ -1985,7 +1985,7 @@ public class Shoukan extends GameInstance<Phase> {
 		return arena.getSlots(side).stream().map(SlotColumn::getTop).filter(Objects::nonNull).flatMap(s -> s.getEquipments().stream()).toList();
 	}
 
-	public void trigger(Trigger trigger) {
+	public synchronized void trigger(Trigger trigger) {
 		if (isRestoring()) return;
 
 		List<Side> sides = List.of(getCurrentSide(), getOtherSide());
@@ -1999,7 +1999,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 	}
 
-	public void trigger(Trigger trigger, Side side) {
+	public synchronized void trigger(Trigger trigger, Side side) {
 		if (isRestoring()) return;
 
 		EffectParameters ep = new EffectParameters(trigger, side);
@@ -2022,7 +2022,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 	}
 
-	public boolean trigger(Trigger trigger, Source source, Target... targets) {
+	public synchronized boolean trigger(Trigger trigger, Source source, Target... targets) {
 		if (isRestoring()) return false;
 
 		EffectParameters ep = new EffectParameters(trigger, source.side(), source, targets);
