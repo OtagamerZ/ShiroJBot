@@ -2043,7 +2043,7 @@ public class Shoukan extends GameInstance<Phase> {
 		return eots;
 	}
 
-	public void triggerEOTs(EffectParameters ep) {
+	public synchronized void triggerEOTs(EffectParameters ep) {
 		for (TriggerBind binding : Set.copyOf(bindings)) {
 			if (binding.isBound(ep)) {
 				EffectHolder<?> holder = binding.getHolder();
@@ -2327,23 +2327,25 @@ public class Shoukan extends GameInstance<Phase> {
 		});
 
 		if (getPhase() == Phase.PLAN) {
-			buttons.put(Utils.parseEmoji("⏩"), w -> {
-				if (curr.selectionPending()) {
-					getChannel().sendMessage(getString("error/pending_choice")).queue();
-					return;
-				} else if (curr.selectionPending()) {
-					getChannel().sendMessage(getString("error/pending_action")).queue();
-					return;
-				} else if (curr.getLockTime(Lock.TAUNT) > 0) {
-					List<SlotColumn> yours = getSlots(curr.getSide());
-					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
-						getChannel().sendMessage(getString("error/taunt_locked", false, curr.getLockTime(Lock.TAUNT))).queue();
+			if (getTurn() > 1) {
+				buttons.put(Utils.parseEmoji("⏩"), w -> {
+					if (curr.selectionPending()) {
+						getChannel().sendMessage(getString("error/pending_choice")).queue();
 						return;
+					} else if (curr.selectionPending()) {
+						getChannel().sendMessage(getString("error/pending_action")).queue();
+						return;
+					} else if (curr.getLockTime(Lock.TAUNT) > 0) {
+						List<SlotColumn> yours = getSlots(curr.getSide());
+						if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
+							getChannel().sendMessage(getString("error/taunt_locked", false, curr.getLockTime(Lock.TAUNT))).queue();
+							return;
+						}
 					}
-				}
 
-				nextTurn();
-			});
+					nextTurn();
+				});
+			}
 
 			if (!curr.getCards().isEmpty() && (getTurn() == 1 && !curr.hasRerolled()) || curr.getOrigins().synergy() == Race.DJINN) {
 				buttons.put(Utils.parseEmoji("\uD83D\uDD04"), w -> {
