@@ -144,8 +144,8 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 		return turns == null && limit == null;
 	}
 
-	public boolean isRemoved() {
-		return !isPermanent() && closed;
+	public boolean isClosed() {
+		return closed;
 	}
 
 	@Override

@@ -2058,6 +2058,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 		for (EffectOverTime effect : Set.copyOf(eots)) {
 			if (effect.isLocked()) continue;
+			else if (effect.isClosed()) {
+				eots.remove(effect);
+				continue;
+			}
 
 			if (effect.getSide() != null) {
 				Hand h = hands.get(effect.getSide());
@@ -2072,7 +2076,7 @@ public class Shoukan extends GameInstance<Phase> {
 			Predicate<Side> checkSide = s -> effect.getSide() == null || effect.getSide() == s;
 			if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
 				effect.decreaseTurn();
-				remove = effect.isExpired() || effect.isRemoved();
+				remove = effect.isExpired() || effect.isClosed();
 			}
 
 			if (ep.size() == 0) {
@@ -2092,7 +2096,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				remove = effect.isExpired() || effect.isRemoved();
+				remove = effect.isExpired() || effect.isClosed();
 			} else if (ep.source() != null) {
 				if (checkSide.test(ep.source().side()) && effect.hasTrigger(ep.source().trigger())) {
 					effect.decreaseLimit();
@@ -2120,15 +2124,16 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				remove = effect.isExpired() || effect.isRemoved();
+				remove = effect.isExpired() || effect.isClosed();
 			}
 
 			if (remove) {
-				if (!effect.isPermanent() && effect.getSource() != null) {
+				effect.close();
+				eots.remove(effect);
+
+				if (!isClosed() && !effect.isPermanent() && effect.getSource() != null) {
 					getChannel().sendMessage(getString("str/effect_expiration", effect.getSource())).queue();
 				}
-
-				eots.remove(effect);
 			}
 		}
 	}
