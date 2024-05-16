@@ -1985,7 +1985,7 @@ public class Shoukan extends GameInstance<Phase> {
 		return arena.getSlots(side).stream().map(SlotColumn::getTop).filter(Objects::nonNull).flatMap(s -> s.getEquipments().stream()).toList();
 	}
 
-	public synchronized void trigger(Trigger trigger) {
+	public void trigger(Trigger trigger) {
 		if (isRestoring()) return;
 
 		List<Side> sides = List.of(getCurrentSide(), getOtherSide());
@@ -1999,7 +1999,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 	}
 
-	public synchronized void trigger(Trigger trigger, Side side) {
+	public void trigger(Trigger trigger, Side side) {
 		if (isRestoring()) return;
 
 		EffectParameters ep = new EffectParameters(trigger, side);
@@ -2022,7 +2022,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 	}
 
-	public synchronized boolean trigger(Trigger trigger, Source source, Target... targets) {
+	public boolean trigger(Trigger trigger, Source source, Target... targets) {
 		if (isRestoring()) return false;
 
 		EffectParameters ep = new EffectParameters(trigger, source.side(), source, targets);
@@ -2043,7 +2043,7 @@ public class Shoukan extends GameInstance<Phase> {
 		return eots;
 	}
 
-	public synchronized void triggerEOTs(EffectParameters ep) {
+	public void triggerEOTs(EffectParameters ep) {
 		for (TriggerBind binding : Set.copyOf(bindings)) {
 			if (binding.isBound(ep)) {
 				EffectHolder<?> holder = binding.getHolder();
@@ -2072,11 +2072,9 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
-			boolean remove = false;
 			Predicate<Side> checkSide = s -> effect.getSide() == null || effect.getSide() == s;
 			if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
 				effect.decreaseTurn();
-				remove = effect.isExpired() || effect.isClosed();
 			}
 
 			if (ep.size() == 0) {
@@ -2095,8 +2093,6 @@ public class Shoukan extends GameInstance<Phase> {
 						effect.lock();
 					}
 				}
-
-				remove = effect.isExpired() || effect.isClosed();
 			} else if (ep.source() != null) {
 				if (checkSide.test(ep.source().side()) && effect.hasTrigger(ep.source().trigger())) {
 					effect.decreaseLimit();
@@ -2123,11 +2119,9 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 					}
 				}
-
-				remove = effect.isExpired() || effect.isClosed();
 			}
 
-			if (remove) {
+			if (effect.isExpired() || isClosed()) {
 				effect.close();
 				eots.remove(effect);
 
