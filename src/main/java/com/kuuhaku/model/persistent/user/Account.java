@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.user;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Blacklistable;
@@ -30,23 +31,30 @@ import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
 import com.kuuhaku.model.persistent.id.ProfileId;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.shoukan.history.Match;
+import com.kuuhaku.util.API;
 import com.kuuhaku.util.Bit;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
 import kotlin.Pair;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.http.HttpHeaders;
+import org.apache.http.client.methods.HttpHead;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -539,19 +547,59 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return lastVote;
 	}
 
-	public void addVote() {
-		voteStreak++;
-		apply(getClass(), uid, a -> {
-			a.setStreak(a.getStreak() + 1);
-			a.setLastVote(ZonedDateTime.now(ZoneId.of("GMT-3")));
-		});
+	public void addVote(boolean weekend) {
+		Account acc = refresh();
+
+		int streak = acc.getStreak() + 1;
+		acc.setStreak(streak);
+		acc.setLastVote(ZonedDateTime.now(ZoneId.of("GMT-3")));
+		acc.save();
+
+		int cr = (weekend ? 1500 : 1000) * streak;
+		acc.addCR(cr, "Daily");
+
+		int gems = 0;
+		if (streak > 0 && streak % 7 == 0) {
+			gems = Math.min((int) Calc.getFibonacci(acc.getStreak() / 7), 3);
+			acc.addGems(gems, "Vote streak " + acc.getStreak());
+		}
+
+		EmbedBuilder eb = new EmbedBuilder()
+				.setColor(gems > 0 ? Color.orange : Color.red)
+				.setThumbnail(Constants.ORIGIN_RESOURCES + "assets/" + (gems > 0 ? "gem_icon.png" : "cr_icon.png"))
+				.setDescription(getEstimateLocale().get("str/daily_message", cr, gems, streak))
+				.setTimestamp(acc.getLastVote());
+
+		getUser().openPrivateChannel()
+				.flatMap(c -> c.sendMessageEmbeds(eb.build()))
+				.queue(null, Utils::doNothing);
 	}
 
-	public boolean voted() {
-		if (lastVote == null) return false;
+	public boolean hasVoted() {
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
-		return now.isBefore(lastVote.plusHours(12));
+		boolean voted = false;
+		if (lastVote != null) {
+			voted = now.isBefore(lastVote.plusHours(12));
+		}
+
+		if (!voted) {
+			JSONObject res = API.call(new HttpHead("https://top.gg/api/bots/" + Main.getApp().getId() + "/check"),
+					new JSONObject(Map.of(
+							"userId", uid
+					)),
+					new JSONObject(Map.of(
+							HttpHeaders.AUTHORIZATION, Constants.TOPGG_TOKEN
+					)), null
+			);
+
+			if (res.getInt("voted") == 1) {
+				lastVote = now;
+				voted = true;
+			}
+		}
+
+		return voted;
 	}
 
 	protected void setLastVote(ZonedDateTime lastVote) {

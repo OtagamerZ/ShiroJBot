@@ -25,8 +25,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.Calc;
-import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
@@ -38,23 +36,12 @@ public class DailyCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
-		long cd = acc.collectDaily();
 
-		if (cd > 0) {
-			event.channel().sendMessage(locale.get("error/daily_collected", Utils.toStringDuration(locale, cd))).queue();
-			return;
-		} else if (cd == -1) {
-			event.channel().sendMessage(locale.get("error/daily_limit", Utils.toStringDuration(locale, cd))).queue();
+		if (acc.hasVoted()) {
+			event.channel().sendMessage(locale.get("error/daily_collected")).queue();
 			return;
 		}
 
-		event.channel().sendMessage(locale.get("success/daily")).queue();
-
-		acc.addVote(); // TODO Remove
-		if (acc.getStreak() > 0 && acc.getStreak() % 7 == 0) {
-			int gems = Math.min((int) Calc.getFibonacci(acc.getStreak() / 7), 3);
-			acc.addGems(gems, "Vote streak " + acc.getStreak());
-			data.notify(locale.get("achievement/gem", event.user().getAsMention(), gems, acc.getStreak()));
-		}
+		event.channel().sendMessage(locale.get("str/daily_available")).queue();
 	}
 }

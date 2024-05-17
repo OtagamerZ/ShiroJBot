@@ -24,7 +24,6 @@ import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.Account;
 import groovy.lang.GroovyShell;
-import it.sauronsoftware.cron4j.Scheduler;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import org.apache.logging.log4j.LogManager;
@@ -41,12 +40,13 @@ import java.util.random.RandomGenerator;
 
 public abstract class Constants {
     protected static final String BOT_TOKEN = System.getenv("BOT_TOKEN");
+    public static final String TOPGG_TOKEN = System.getenv("TOPGG_TOKEN");
+
     public static final String OWNER = "350836145921327115";
     public static final String SUPPORT_SERVER = "421495229594730496";
     public static final String DEFAULT_PREFIX = "s!";
     public static final Logger LOGGER = LogManager.getLogger("shiro");
     public static final LazyReference<GroovyShell> GROOVY = new LazyReference<>(GroovyShell::new, 10, TimeUnit.MINUTES);
-    public static final Scheduler SCHEDULER = new Scheduler();
     public static final String BOT_NAME = "Shiro J. Bot";
     public static final SafeCallable<String> BOT_VERSION = () -> "v4." + GlobalProperty.get("build_number", "0");
 

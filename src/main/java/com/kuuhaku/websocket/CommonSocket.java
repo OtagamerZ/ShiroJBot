@@ -33,6 +33,7 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONObject;
@@ -166,6 +167,13 @@ public class CommonSocket extends WebSocketClient {
 					Main.getApp().getUserById(id).openPrivateChannel()
 							.flatMap(c -> c.sendMessageEmbeds(toSend))
 							.queue(s -> Pages.categorize(s, cats, true, 1, TimeUnit.MINUTES));
+				}
+				case "vote" -> {
+					String id = payload.getString("user");
+					Account acc = DAO.find(Account.class, id);
+					if (acc == null) return;
+
+					acc.addVote(payload.getBoolean("isWeekend"));
 				}
 			}
 		} catch (WebsocketNotConnectedException ignore) {
