@@ -20,7 +20,7 @@ package com.kuuhaku.utils;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.postgresql.*;
-import com.kuuhaku.events.ShiroEvents;
+import com.kuuhaku.events.PlaceholderEvents;
 import com.kuuhaku.handlers.api.websocket.EncoderClient;
 import com.kuuhaku.model.common.MatchMaking;
 import com.kuuhaku.model.common.drop.Prize;
@@ -104,7 +104,7 @@ public class ShiroInfo {
 			, "806892045327007794" //Top level emotes
 	);
 	private static final Map<String, Map<String, String>> polls = new HashMap<>();
-	private static final ShiroEvents shiroEvents = new ShiroEvents();
+	private static final PlaceholderEvents shiroEvents = new PlaceholderEvents();
 	private static final CloseableHttpClient http = HttpClients.custom().setDefaultHeaders(List.of(
 			new BasicHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0")
 	)).build();
@@ -254,7 +254,7 @@ public class ShiroInfo {
 		return http;
 	}
 
-	public static ShiroEvents getShiroEvents() {
+	public static PlaceholderEvents getShiroEvents() {
 		return shiroEvents;
 	}
 

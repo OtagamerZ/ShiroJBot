@@ -22,8 +22,6 @@ import com.github.ygimenez.exception.InvalidHandlerException;
 import com.github.ygimenez.model.PaginatorBuilder;
 import com.kuuhaku.controller.postgresql.GuildDAO;
 import com.kuuhaku.events.ConsoleListener;
-import com.kuuhaku.events.cron.ScheduledEvents;
-import com.kuuhaku.handlers.api.Application;
 import com.kuuhaku.managers.CacheManager;
 import com.kuuhaku.managers.CommandManager;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
@@ -38,7 +36,6 @@ import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import javax.imageio.ImageIO;
@@ -46,9 +43,6 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 
 public class Main implements Thread.UncaughtExceptionHandler {
@@ -119,7 +113,6 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		Helper.logger(Main.class).info("Criada pool de compilação: " + ShiroInfo.getCompilationPool().getCorePoolSize() + " espaços alocados");
 
 //		info.setSockets(new WebSocketConfig());
-		spring = SpringApplication.run(Application.class, args);
 		finishStartUp();
 	}
 
@@ -140,25 +133,22 @@ public class Main implements Thread.UncaughtExceptionHandler {
 			}
 		}
 
-		CompletableFuture<Void> lst = new CompletableFuture<>();
-		Executors.newSingleThreadExecutor().execute(() -> {
-			new ScheduledEvents();
-			lst.complete(null);
-		});
+//		CompletableFuture<Void> lst = new CompletableFuture<>();
+//		Executors.newSingleThreadExecutor().execute(() -> {
+//			new ScheduledEvents();
+//			lst.complete(null);
+//		});
 
 		List<JDA> shards = shiroShards.getShards();
 		for (JDA shard : shards) {
 			shard.getPresence().setActivity(getRandomActivity());
 		}
 
-		try {
-			lst.get();
-			System.runFinalization();
+//		lst.get();
+		System.runFinalization();
 
-			Helper.logger(Main.class).info("<----------END OF BOOT---------->");
-			Helper.logger(Main.class).info("Estou pronta!");
-		} catch (ExecutionException | InterruptedException ignore) {
-		}
+		Helper.logger(Main.class).info("<----------END OF BOOT---------->");
+		Helper.logger(Main.class).info("Estou pronta!");
 	}
 
 	public static Activity getRandomActivity() {
@@ -196,9 +186,9 @@ public class Main implements Thread.UncaughtExceptionHandler {
 		if (exiting) return;
 		exiting = true;
 
-		ScheduledEvents.shutdown();
+//		ScheduledEvents.shutdown();
 //		info.getSockets().shutdown();
-		SpringApplication.exit(spring);
+//		SpringApplication.exit(spring);
 		shiroShards.shutdown();
 
 		System.exit(0);

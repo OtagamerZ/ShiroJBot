@@ -27,12 +27,6 @@ public class ScheduledEvents implements JobListener {
 
 	public ScheduledEvents() {
 		Thread.currentThread().setName("crontab");
-		schedFifthSecond();
-		schedHourly();
-		schedDaily();
-		schedMinute();
-		schedTenthMinute();
-		schedMonthly();
 	}
 
 	private void schedTenthMinute() {
