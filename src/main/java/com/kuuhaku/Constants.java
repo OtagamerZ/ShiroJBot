@@ -43,7 +43,7 @@ public abstract class Constants {
     protected static final String BOT_TOKEN = System.getenv("BOT_TOKEN");
     public static final String OWNER = "350836145921327115";
     public static final String SUPPORT_SERVER = "421495229594730496";
-    public static final String DEFAULT_PREFIX = "x!"; // TODO Revert to s!
+    public static final String DEFAULT_PREFIX = "s!";
     public static final Logger LOGGER = LogManager.getLogger("shiro");
     public static final LazyReference<GroovyShell> GROOVY = new LazyReference<>(GroovyShell::new, 10, TimeUnit.MINUTES);
     public static final Scheduler SCHEDULER = new Scheduler();

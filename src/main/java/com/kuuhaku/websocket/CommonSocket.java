@@ -100,7 +100,7 @@ public class CommonSocket extends WebSocketClient {
 
 				send(JSONObject.of(
 						Map.entry("type", "ATTACH"),
-						Map.entry("channels", List.of("shoukan", "i18n", "invite"))
+						Map.entry("channels", List.of("shoukan", "i18n", "invite", "vote"))
 				).toString());
 				return;
 			}
