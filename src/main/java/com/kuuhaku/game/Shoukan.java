@@ -63,6 +63,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.ArrayUtils;
@@ -2160,12 +2161,15 @@ public class Shoukan extends GameInstance<Phase> {
 
 		try {
 			setSending(true);
+
+			List<RestAction<?>> acts = new ArrayList<>();
 			for (GuildMessageChannel chn : getChannel().getChannels()) {
 				String msg = messages.get(chn.getId());
 				if (msg != null) {
-//					chn.retrieveMessageById(msg).flatMap(Message::editMessageComponents).queue(null, Utils::doNothing);
+					acts.add(chn.retrieveMessageById(msg).flatMap(Objects::nonNull, Message::editMessageComponents));
 				}
 			}
+			Pages.subGet(RestAction.allOf(acts));
 
 			if (trigger) {
 				resetTimer();
@@ -2272,14 +2276,16 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}, Utils::doNothing);
 
+		List<RestAction<?>> acts = new ArrayList<>();
 		for (Map.Entry<String, String> tuple : messages.entrySet()) {
 			if (tuple != null) {
 				GuildMessageChannel channel = Main.getApp().getMessageChannelById(tuple.getKey());
 				if (channel != null) {
-					channel.retrieveMessageById(tuple.getValue()).flatMap(Objects::nonNull, Message::delete).queue(null, Utils::doNothing);
+					acts.add(channel.retrieveMessageById(tuple.getValue()).flatMap(Objects::nonNull, Message::delete));
 				}
 			}
 		}
+		Pages.subGet(RestAction.allOf(acts));
 
 		if (winner != null) {
 			this.winner = winner;
