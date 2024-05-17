@@ -21,6 +21,7 @@ package com.kuuhaku.events;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.commands.PreparedCommand;
 import com.kuuhaku.controller.postgresql.GuildDAO;
+import com.kuuhaku.model.persistent.VoiceTime;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.utils.Helper;
 import net.dv8tion.jda.api.entities.Guild;
@@ -124,5 +125,9 @@ public class PlaceholderEvents extends ListenerAdapter {
 
 	public void addHandler(Guild guild, SimpleMessageListener sml) {
 
+	}
+
+	public Map<String, VoiceTime> getVoiceTimes() {
+		return Map.of();
 	}
 }
