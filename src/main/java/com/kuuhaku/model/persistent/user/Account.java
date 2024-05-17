@@ -171,7 +171,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 		}
 
 		if (and) {
-			return DAO.queryNative(Boolean.class, "SELECT bool(role & 8) OR (role & ?2) = ?2 FROM account WHERE uid = ?1",
+			return DAO.queryNative(Boolean.class, "SELECT bool(role & 8) OR bool(role & ?2) = ?2 FROM account WHERE uid = ?1",
 					uid, flags
 			);
 		} else {
