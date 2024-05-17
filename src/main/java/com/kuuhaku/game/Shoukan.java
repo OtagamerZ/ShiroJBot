@@ -2141,7 +2141,6 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private BiFunction<String, String, String> replaceMessages(Message message) {
-		resetTimer();
 		addButtons(message);
 
 		return (chn, msg) -> {
@@ -2164,12 +2163,13 @@ public class Shoukan extends GameInstance<Phase> {
 			for (GuildMessageChannel chn : getChannel().getChannels()) {
 				String msg = messages.get(chn.getId());
 				if (msg != null) {
-					chn.retrieveMessageById(msg).flatMap(Message::editMessageComponents).queue(null, Utils::doNothing);
+//					chn.retrieveMessageById(msg).flatMap(Message::editMessageComponents).queue(null, Utils::doNothing);
 				}
 			}
 
-			resetTimer();
 			if (trigger) {
+				resetTimer();
+
 				trigger(ON_TICK);
 				getCurrent().setRerolled(true);
 				getCurrent().verifyCap();
