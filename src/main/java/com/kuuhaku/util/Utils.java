@@ -489,7 +489,7 @@ public abstract class Utils {
 			private ScheduledFuture<?> timeout;
 
 			{
-				if (unit != null) {
+				if (false && unit != null) {
 					try (ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor()) {
 						timeout = exec.schedule(() -> {
 							if (lock != null) {
