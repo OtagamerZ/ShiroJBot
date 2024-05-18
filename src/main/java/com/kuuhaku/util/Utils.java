@@ -516,8 +516,6 @@ public abstract class Utils {
 			}
 		});
 
-		System.out.println(GuildListener.getHandler().keySet());
-
 		return result;
 	}
 

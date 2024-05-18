@@ -65,7 +65,7 @@ import java.util.stream.Collectors;
 
 public class GuildListener extends ListenerAdapter {
 	private static final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
-	private static final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
+	private static final Map<String, List<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
 
 	@Override
 	public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
@@ -202,11 +202,6 @@ public class GuildListener extends ListenerAdapter {
 			data = new MessageData.Guild(event.getMessage());
 		} catch (NullPointerException e) {
 			return;
-		}
-
-		if (data.user().getId().equals("350836145921327115")) {
-			System.out.println(toHandle.keySet());
-			System.out.println(data.guild().getId());
 		}
 
 		if (toHandle.containsKey(data.guild().getId())) {
@@ -572,11 +567,11 @@ public class GuildListener extends ListenerAdapter {
 		}
 	}
 
-	public static Map<String, CopyOnWriteArrayList<SimpleMessageListener>> getHandler() {
+	public static Map<String, List<SimpleMessageListener>> getHandler() {
 		return Collections.unmodifiableMap(toHandle);
 	}
 
 	public static void addHandler(Guild guild, SimpleMessageListener sml) {
-		toHandle.computeIfAbsent(guild.getId(), k -> new CopyOnWriteArrayList<>()).add(sml);
+		toHandle.computeIfAbsent(guild.getId(), k -> Collections.synchronizedList(new ArrayList<>())).add(sml);
 	}
 }
