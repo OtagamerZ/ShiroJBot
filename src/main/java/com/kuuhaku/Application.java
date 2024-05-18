@@ -88,7 +88,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				), true)
 				.build();
 
-		CompletableFuture.runAsync(() -> {
+		CompletableFuture<Void> shardInit = CompletableFuture.runAsync(() -> {
 					shiro.getShards().stream()
 							.sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId()))
 							.peek(s -> {
@@ -135,11 +135,13 @@ public class Application implements Thread.UncaughtExceptionHandler {
 			System.exit(1);
 		}
 
-		API.connectSocket(CommonSocket.class, Constants.SOCKET_ROOT);
-		Constants.LOGGER.info("<----------END OF BOOT---------->");
+		shardInit.thenRun(() -> {
+			API.connectSocket(CommonSocket.class, Constants.SOCKET_ROOT);
+			Constants.LOGGER.info("<----------END OF BOOT---------->");
 
-		Main.boot.stop();
-		Constants.LOGGER.info("Finished in {}", Utils.toStringDuration(I18N.EN, Main.boot.getTime()));
+			Main.boot.stop();
+			Constants.LOGGER.info("Finished in {}", Utils.toStringDuration(I18N.EN, Main.boot.getTime()));
+		});
 	}
 
 	public ShardManager getShiro() {
