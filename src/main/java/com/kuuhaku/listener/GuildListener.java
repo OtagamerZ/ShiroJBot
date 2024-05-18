@@ -321,13 +321,6 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			DAO.apply(Account.class, account.getUid(), acc -> {
-				Title t = acc.checkTitles(locale);
-				if (t != null) {
-					ed.notify(locale.get("achievement/title", event.getAuthor().getAsMention(), t.getInfo(locale).getName()));
-				}
-			});
-
 			if (Utils.match(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
 				data.channel().sendMessage(locale.get("str/mentioned",
 						data.user().getAsMention(),
@@ -479,6 +472,13 @@ public class GuildListener extends ListenerAdapter {
 		I18N locale = event.config().getLocale();
 		String[] args = content.toLowerCase().split("\\s+");
 		String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
+
+		DAO.apply(Account.class, data.user().getId(), acc -> {
+			Title t = acc.checkTitles(locale);
+			if (t != null) {
+				event.notify(locale.get("achievement/title", data.user().getAsMention(), t.getInfo(locale).getName()));
+			}
+		});
 
 		try (Mutex<String> ignore = new Mutex<>(data.user().getId())) {
 			String[] parts = name.split("\\.");

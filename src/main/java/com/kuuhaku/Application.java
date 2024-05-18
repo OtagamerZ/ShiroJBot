@@ -88,6 +88,9 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				), true)
 				.build();
 
+		shiro.login();
+		setRandomAction();
+
 		CompletableFuture<Void> shardInit = CompletableFuture.runAsync(() -> {
 					List<JDA> shards = shiro.getShards().stream().sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId())).toList();
 					for (JDA shard : shards) {
@@ -101,7 +104,6 @@ public class Application implements Thread.UncaughtExceptionHandler {
 						}
 					}
 
-					shards.forEach(this::setRandomAction);
 					initialized = true;
 				}
 		);
@@ -172,7 +174,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		return getMainShard().getSelfUser().getId();
 	}
 
-	public void setRandomAction(JDA jda) {
+	public void setRandomAction() {
 		final List<Activity> activities = List.of(
 				Activity.watching(Utils.separate(shiro.getGuildCache().size()) + " servidores, e estou apenas começando!"),
 				Activity.competing("Shoukan ranqueado!"),
@@ -188,7 +190,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				Activity.of(Activity.ActivityType.LISTENING, "Use " + Constants.DEFAULT_PREFIX + "help para ver os meus comandos!")
 		);
 
-		jda.getPresence().setActivity(Utils.getRandomEntry(activities));
+		shiro.setActivity(Utils.getRandomEntry(activities));
 	}
 
 	@Override
