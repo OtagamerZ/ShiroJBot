@@ -206,7 +206,7 @@ public class GuildListener extends ListenerAdapter {
 
 		if (toHandle.containsKey(data.guild().getId())) {
 			List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
-			for (SimpleMessageListener evt : evts) {
+			for (SimpleMessageListener evt : List.copyOf(evts)) {
 				if (!evt.isClosed() && evt.checkChannel(data.channel())) {
 					evt.execute(event);
 				}
@@ -572,6 +572,6 @@ public class GuildListener extends ListenerAdapter {
 	}
 
 	public static void addHandler(Guild guild, SimpleMessageListener sml) {
-		toHandle.computeIfAbsent(guild.getId(), k -> Collections.synchronizedList(new ArrayList<>())).add(sml);
+		toHandle.computeIfAbsent(guild.getId(), k -> new ArrayList<>()).add(sml);
 	}
 }
