@@ -117,7 +117,7 @@ public class Kawaipon extends DAO<Kawaipon> {
 				""", account.getUid()));
 	}
 
-	public Set<KawaiponCard> getCollection(Anime a) {
+	public Set<KawaiponCard> getCollection(Anime a, boolean chrome) {
 		return Set.copyOf(DAO.queryAll(KawaiponCard.class, """
 				SELECT kc
 				FROM KawaiponCard kc
@@ -125,7 +125,8 @@ public class Kawaipon extends DAO<Kawaipon> {
 				WHERE sc.id IS NULL
 				  AND kc.kawaipon.uid = ?1
 				  AND kc.card.anime.id = ?2
-				""", account.getUid(), a.getId()));
+  				  AND kc.chrome = ?3
+				""", account.getUid(), a.getId(), chrome));
 	}
 
 	public KawaiponCard getCard(Card card, boolean chrome) {
