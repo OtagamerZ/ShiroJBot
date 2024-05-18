@@ -170,6 +170,8 @@ public class CommonSocket extends WebSocketClient {
 				}
 				case "vote" -> {
 					String id = payload.getString("user");
+					System.out.println(id + " voted");
+
 					Account acc = DAO.find(Account.class, id);
 					if (acc == null) return;
 
