@@ -80,8 +80,6 @@ public class GuildConfig extends DAO<GuildConfig> {
 	public GuildConfig(String gid) {
 		this.gid = gid;
 		this.settings = new GuildSettings(gid);
-		this.welcomeSettings = new WelcomeSettings(this);
-		this.goodbyeSettings = new GoodbyeSettings(this);
 	}
 
 	public String getGid() {
@@ -117,10 +115,18 @@ public class GuildConfig extends DAO<GuildConfig> {
 	}
 
 	public WelcomeSettings getWelcomeSettings() {
+		if (welcomeSettings == null) {
+			this.welcomeSettings = new WelcomeSettings(this);
+		}
+
 		return welcomeSettings;
 	}
 
 	public GoodbyeSettings getGoodbyeSettings() {
+		if (goodbyeSettings == null) {
+			this.goodbyeSettings = new GoodbyeSettings(this);
+		}
+
 		return goodbyeSettings;
 	}
 
