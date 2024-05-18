@@ -2169,7 +2169,10 @@ public class Shoukan extends GameInstance<Phase> {
 					acts.add(chn.retrieveMessageById(msg).flatMap(Objects::nonNull, Message::editMessageComponents));
 				}
 			}
-			Pages.subGet(RestAction.allOf(acts));
+
+			if (!acts.isEmpty()) {
+				Pages.subGet(RestAction.allOf(acts));
+			}
 
 			if (trigger) {
 				resetTimer();
@@ -2285,7 +2288,10 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 		}
-		Pages.subGet(RestAction.allOf(acts));
+
+		if (!acts.isEmpty()) {
+			Pages.subGet(RestAction.allOf(acts));
+		}
 
 		if (winner != null) {
 			this.winner = winner;
