@@ -89,20 +89,19 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				.build();
 
 		CompletableFuture<Void> shardInit = CompletableFuture.runAsync(() -> {
-					shiro.getShards().stream()
-							.sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId()))
-							.peek(s -> {
-								int id = s.getShardInfo().getShardId();
+					List<JDA> shards = shiro.getShards().stream().sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId())).toList();
+					for (JDA shard : shards) {
+						int id = shard.getShardInfo().getShardId();
 
-								try {
-									s.awaitReady();
-									Constants.LOGGER.info("Shard {} ready", id);
-								} catch (InterruptedException e) {
-									Constants.LOGGER.error("Failed to initialize shard {}: {}", id, e);
-								}
-							})
-							.forEach(this::setRandomAction);
+						try {
+							shard.awaitReady();
+							Constants.LOGGER.info("Shard {} ready", id);
+						} catch (InterruptedException e) {
+							Constants.LOGGER.error("Failed to initialize shard {}: {}", id, e);
+						}
+					}
 
+					shards.forEach(this::setRandomAction);
 					initialized = true;
 				}
 		);
