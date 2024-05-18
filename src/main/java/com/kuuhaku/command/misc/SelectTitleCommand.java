@@ -131,7 +131,11 @@ public class SelectTitleCommand implements Executable {
 					"SELECT t.title_id FROM account_title t WHERE t.account_uid = ?1",
 					acc.getUid()
 			);
-			event.channel().sendMessage(locale.get("error/unknown_title", sug)).queue();
+			if (sug.equalsIgnoreCase("NULL")) {
+				event.channel().sendMessage(locale.get("error/unknown_title_none")).queue();
+			} else {
+				event.channel().sendMessage(locale.get("error/unknown_title", sug)).queue();
+			}
 			return;
 		}
 

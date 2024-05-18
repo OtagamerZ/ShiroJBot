@@ -52,7 +52,11 @@ public class MarketAddCommand implements Executable {
 		Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
 		if (card == null) {
 			String sug = Utils.didYouMean(args.getString("card").toUpperCase(), "SELECT id AS value FROM v_card_names");
-			event.channel().sendMessage(locale.get("error/unknown_card", sug)).queue();
+			if (sug.equalsIgnoreCase("NULL")) {
+				event.channel().sendMessage(locale.get("error/unknown_card_none")).queue();
+			} else {
+				event.channel().sendMessage(locale.get("error/unknown_card", sug)).queue();
+			}
 			return;
 		}
 

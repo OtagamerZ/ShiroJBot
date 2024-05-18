@@ -66,7 +66,11 @@ public class KawaiponRarityCommand implements Executable {
 
 		if (rarity == null) {
 			String sug = Utils.didYouMean(str, Arrays.stream(Rarity.values()).map(Rarity::name).toList());
-			event.channel().sendMessage(locale.get("error/unknown_rarity", sug)).queue();
+			if (sug.equalsIgnoreCase("NULL")) {
+				event.channel().sendMessage(locale.get("error/unknown_rarity_none")).queue();
+			} else {
+				event.channel().sendMessage(locale.get("error/unknown_rarity", sug)).queue();
+			}
 			return;
 		}
 
