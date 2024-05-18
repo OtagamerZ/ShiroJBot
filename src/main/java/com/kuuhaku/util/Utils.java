@@ -484,6 +484,7 @@ public abstract class Utils {
 	public static CompletableFuture<Message> awaitMessage(User u, GuildMessageChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit, CompletableFuture<?> lock) {
 		CompletableFuture<Message> result = new CompletableFuture<>();
 
+		System.out.println("before: " + GuildListener.getHandler().keySet());
 		GuildListener.addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
 			private ScheduledFuture<?> timeout;
 
@@ -515,6 +516,7 @@ public abstract class Utils {
 				}
 			}
 		});
+		System.out.println("after: " + GuildListener.getHandler().keySet());
 
 		return result;
 	}
