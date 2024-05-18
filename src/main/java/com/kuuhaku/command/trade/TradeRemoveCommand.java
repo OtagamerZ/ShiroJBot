@@ -85,7 +85,7 @@ public class TradeRemoveCommand implements Executable {
 			Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
 			if (card == null) {
 				String sug = Utils.didYouMean(args.getString("card").toUpperCase(), "SELECT id AS value FROM v_card_names");
-				if (sug.equalsIgnoreCase("NULL")) {
+				if (sug == null) {
 					event.channel().sendMessage(locale.get("error/unknown_card_none")).queue();
 				} else {
 					event.channel().sendMessage(locale.get("error/unknown_card", sug)).queue();

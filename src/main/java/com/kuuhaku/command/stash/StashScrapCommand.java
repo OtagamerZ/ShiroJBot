@@ -123,7 +123,7 @@ public class StashScrapCommand implements Executable {
 		Card card = DAO.find(Card.class, id);
 		if (card == null) {
 			String sug = Utils.didYouMean(id.toUpperCase(), "SELECT id AS value FROM v_card_names");
-			if (sug.equalsIgnoreCase("NULL")) {
+			if (sug == null) {
 				event.channel().sendMessage(locale.get("error/unknown_card_none")).queue();
 			} else {
 				event.channel().sendMessage(locale.get("error/unknown_card", sug)).queue();

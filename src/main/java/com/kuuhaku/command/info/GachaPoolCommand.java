@@ -69,7 +69,7 @@ public class GachaPoolCommand implements Executable {
 
 		if (chosen == null) {
 			String sug = Utils.didYouMean(id.toUpperCase(), types);
-			if (sug.equalsIgnoreCase("NULL")) {
+			if (sug == null) {
 				event.channel().sendMessage(locale.get("error/unknown_gacha_none")).queue();
 			} else {
 				event.channel().sendMessage(locale.get("error/unknown_gacha", sug)).queue();
