@@ -504,9 +504,6 @@ public abstract class Utils {
 
 			@Override
 			protected void onMessageReceived(@NotNull MessageReceivedEvent event) {
-				System.out.println((u == null || event.getAuthor().equals(u)));
-				System.out.println(act.apply(event.getMessage()));
-
 				if ((u == null || event.getAuthor().equals(u)) && act.apply(event.getMessage())) {
 					if (timeout != null) {
 						timeout.cancel(true);

@@ -37,6 +37,7 @@ public abstract class SimpleMessageListener {
 	}
 
 	public void execute(MessageReceivedEvent event) {
+		System.out.println(event.getMessage().getContentRaw());
 		CompletableFuture.runAsync(() -> onMessageReceived(event));
 	}
 
