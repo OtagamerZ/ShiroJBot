@@ -26,6 +26,7 @@ import jakarta.persistence.*;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
+import javax.validation.ConstraintViolationException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -55,6 +56,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 								break;
 							} catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
 								throw new IllegalStateException("Failed to instantiate class", e);
+							} catch (ConstraintViolationException e) {
+								return find(klass, id);
 							}
 						}
 					}
