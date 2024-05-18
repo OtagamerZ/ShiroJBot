@@ -485,21 +485,19 @@ public abstract class Utils {
 		CompletableFuture<Message> result = new CompletableFuture<>();
 
 		GuildListener.addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
-			private ScheduledFuture<?> timeout;
+			private CompletableFuture<?> timeout;
 
 			{
 				if (unit != null) {
-					try (ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor()) {
-						timeout = exec.schedule(() -> {
-							System.out.println("mogus");
-//							if (lock != null) {
-//								lock.complete(null);
-//							}
-//
-//							result.complete(null);
-//							close();
-						}, time, unit);
-					}
+					Executor exec = CompletableFuture.delayedExecutor(time, unit);
+					timeout = CompletableFuture.runAsync(() -> {
+						if (lock != null) {
+							lock.complete(null);
+						}
+
+						result.complete(null);
+						close();
+					}, exec);
 				}
 			}
 
