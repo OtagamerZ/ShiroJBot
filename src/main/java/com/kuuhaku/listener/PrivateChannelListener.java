@@ -37,7 +37,7 @@ public class PrivateChannelListener extends ListenerAdapter {
 			Account acc = DAO.find(Account.class, dev);
 			if (acc != null) {
 				acc.getUser().openPrivateChannel()
-						.flatMap(c -> c.sendMessage("Joined server: " + event.getGuild().getName() + "(" + event.getGuild().getMemberCount() + " members)"))
+						.flatMap(c -> c.sendMessage("Joined server: " + event.getGuild().getName() + " (" + event.getGuild().getMemberCount() + " members)"))
 						.queue(null, Utils::doNothing);
 			}
 		}
@@ -50,7 +50,7 @@ public class PrivateChannelListener extends ListenerAdapter {
 			Account acc = DAO.find(Account.class, dev);
 			if (acc != null) {
 				acc.getUser().openPrivateChannel()
-						.flatMap(c -> c.sendMessage("Left server: " + event.getGuild().getName() + "(" + event.getGuild().getMemberCount() + " members)"))
+						.flatMap(c -> c.sendMessage("Left server: " + event.getGuild().getName() + " (" + event.getGuild().getMemberCount() + " members)"))
 						.queue(null, Utils::doNothing);
 			}
 		}
