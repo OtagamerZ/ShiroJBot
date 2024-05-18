@@ -88,7 +88,6 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				), true)
 				.build();
 
-		shiro.login();
 		setRandomAction();
 
 		CompletableFuture<Void> shardInit = CompletableFuture.runAsync(() -> {
