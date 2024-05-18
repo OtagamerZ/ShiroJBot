@@ -504,6 +504,9 @@ public abstract class Utils {
 
 			@Override
 			protected void onMessageReceived(@NotNull MessageReceivedEvent event) {
+				System.out.println((u == null || event.getAuthor().equals(u)));
+				System.out.println(act.apply(event.getMessage()));
+
 				if ((u == null || event.getAuthor().equals(u)) && act.apply(event.getMessage())) {
 					if (timeout != null) {
 						timeout.cancel(true);
@@ -765,6 +768,8 @@ public abstract class Utils {
 		CompletableFuture<T> out = new CompletableFuture<>();
 		awaitMessage(user, channel,
 				m -> {
+					if (!StringUtils.isNumeric(m.getContentRaw())) return false;
+
 					try {
 						int indx = Integer.parseInt(m.getContentRaw());
 						out.complete(matches.get(indx));
