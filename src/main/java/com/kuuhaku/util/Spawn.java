@@ -97,8 +97,9 @@ public abstract class Spawn {
 			}
 
 			Card chosen = cards.get();
-			lastCards.add(chosen);
+			if (chosen == null) return null;
 
+			lastCards.add(chosen);
 			card = new KawaiponCard(chosen, Calc.chance(0.1 * rarityBonus));
 			spawnedCards.put(
 					channel.getId(),
