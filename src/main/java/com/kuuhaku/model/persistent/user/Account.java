@@ -586,22 +586,6 @@ public class Account extends DAO<Account> implements Blacklistable {
 			voted = now.isBefore(lastVote.plusHours(12));
 		}
 
-		if (!voted) {
-			JSONObject res = API.call(new HttpHead("https://top.gg/api/bots/" + Main.getApp().getId() + "/check"),
-					new JSONObject(Map.of(
-							"userId", uid
-					)),
-					new JSONObject(Map.of(
-							HttpHeaders.AUTHORIZATION, Constants.TOPGG_TOKEN
-					)), null
-			);
-
-			if (res.getInt("voted") == 1) {
-				lastVote = now;
-				voted = true;
-			}
-		}
-
 		return voted;
 	}
 
