@@ -57,7 +57,6 @@ import static net.dv8tion.jda.api.entities.Message.MentionType.HERE;
 
 public class Application implements Thread.UncaughtExceptionHandler {
 	private final ShardManager shiro;
-	public boolean initialized = false;
 
 	public Application() {
 		long latency = Manager.ping();
@@ -74,11 +73,6 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				.setMemberCachePolicy(MemberCachePolicy.ONLINE
 						.and(MemberCachePolicy.OWNER)
 						.and(m -> !m.getUser().isBot()))
-				.addEventListeners(
-						new GuildListener(),
-						new AutoModListener(),
-						new PrivateChannelListener()
-				)
 				.setBulkDeleteSplittingEnabled(false)
 				.setEventPool(new ForkJoinPool(
 						Runtime.getRuntime().availableProcessors(),
@@ -87,8 +81,6 @@ public class Application implements Thread.UncaughtExceptionHandler {
 						true
 				), true)
 				.build();
-
-		setRandomAction();
 
 		CompletableFuture<Void> shardInit = CompletableFuture.runAsync(() -> {
 					List<JDA> shards = shiro.getShards().stream().sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId())).toList();
@@ -103,7 +95,12 @@ public class Application implements Thread.UncaughtExceptionHandler {
 						}
 					}
 
-					initialized = true;
+					setRandomAction();
+					shiro.addEventListener(
+							new GuildListener(),
+							new AutoModListener(),
+							new PrivateChannelListener()
+					);
 				}
 		);
 

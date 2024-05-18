@@ -33,8 +33,6 @@ import java.util.Map;
 public class AutoModListener extends ListenerAdapter {
 	@Override
 	public void onAutoModExecution(@NotNull AutoModExecutionEvent event) {
-		if (!Main.getApp().initialized) return;
-
 		GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
 		AutoModType type = config.getSettings().getAutoModEntries().entrySet().parallelStream()
 				.filter(e -> e.getValue().equals(event.getRuleId()))

@@ -32,8 +32,6 @@ import java.util.List;
 public class PrivateChannelListener extends ListenerAdapter {
 	@Override
 	public void onGuildJoin(@NotNull GuildJoinEvent event) {
-		if (!Main.getApp().initialized) return;
-
 		List<String> devs = DAO.queryAllNative(String.class, "SELECT uid FROM account WHERE bool(role & 8)");
 		for (String dev : devs) {
 			Account acc = DAO.find(Account.class, dev);
@@ -47,8 +45,6 @@ public class PrivateChannelListener extends ListenerAdapter {
 
 	@Override
 	public void onGuildLeave(@NotNull GuildLeaveEvent event) {
-		if (!Main.getApp().initialized) return;
-
 		List<String> devs = DAO.queryAllNative(String.class, "SELECT uid FROM account WHERE bool(role & 8)");
 		for (String dev : devs) {
 			Account acc = DAO.find(Account.class, dev);
