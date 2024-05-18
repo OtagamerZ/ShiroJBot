@@ -72,7 +72,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = ChannelConverter.class)
 	private GuildMessageChannel generalChannel;
 
-	@Column(name = "embed", nullable = false)
+	@Column(name = "embed", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = EmbedConverter.class)
 	private AutoEmbedBuilder embed = new AutoEmbedBuilder();
 
