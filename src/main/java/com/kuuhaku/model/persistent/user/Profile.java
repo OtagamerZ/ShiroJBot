@@ -102,7 +102,6 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		this.id = id;
 		this.account = DAO.find(Account.class, id.getUid());
 		this.guild = DAO.find(GuildConfig.class, id.getGid());
-		this.settings = new ProfileSettings(id);
 	}
 
 	public ProfileId getId() {
@@ -203,7 +202,11 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	}
 
 	public ProfileSettings getSettings() {
-		return Utils.getOr(settings, DAO.find(ProfileSettings.class, id));
+		if (settings == null) {
+			this.settings = new ProfileSettings(id);
+		}
+
+		return settings;
 	}
 
 	public Member getMember() {

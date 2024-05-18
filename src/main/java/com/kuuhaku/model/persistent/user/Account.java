@@ -140,7 +140,6 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@WhenNull
 	public Account(String uid) {
 		this.uid = uid;
-		this.settings = new AccountSettings(uid);
 		this.kawaipon = new Kawaipon(this);
 	}
 
@@ -311,7 +310,11 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public AccountSettings getSettings() {
-		return Utils.getOr(settings, DAO.find(AccountSettings.class, uid));
+		if (settings == null) {
+			this.settings = new AccountSettings(uid);
+		}
+
+		return settings;
 	}
 
 	public Kawaipon getKawaipon() {
