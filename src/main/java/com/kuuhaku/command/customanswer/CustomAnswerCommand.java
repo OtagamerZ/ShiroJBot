@@ -115,10 +115,16 @@ public class CustomAnswerCommand implements Executable {
 			return;
 		}
 
+		List<CustomAnswer> cas = settings.getCustomAnswers();
+		if (cas.isEmpty()) {
+			event.channel().sendMessage(locale.get("error/no_custom_answers")).queue();
+			return;
+		}
+
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/custom_answers"));
 
-		List<Page> pages = Utils.generatePages(eb, settings.getCustomAnswers(), 20, 10,
+		List<Page> pages = Utils.generatePages(eb, cas, 20, 10,
 				ca -> "`ID: " + ca.getId().getId() + "`\n" +
 						locale.get("str/ca_trigger", StringUtils.abbreviate(ca.getTrigger().replace("`", "'"), 20)) +
 						"\n" +
