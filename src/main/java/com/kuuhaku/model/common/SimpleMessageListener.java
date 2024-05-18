@@ -59,7 +59,7 @@ public abstract class SimpleMessageListener {
 	}
 
 	public boolean isClosed() {
-		return mutex == null;
+		return false;//mutex == null;
 	}
 
 	public void close() {
