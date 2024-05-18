@@ -484,20 +484,20 @@ public abstract class Utils {
 	public static CompletableFuture<Message> awaitMessage(User u, GuildMessageChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit, CompletableFuture<?> lock) {
 		CompletableFuture<Message> result = new CompletableFuture<>();
 
-		System.out.println("before: " + GuildListener.getHandler().keySet());
 		GuildListener.addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
 			private ScheduledFuture<?> timeout;
 
 			{
-				if (false && unit != null) {
+				if (unit != null) {
 					try (ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor()) {
 						timeout = exec.schedule(() -> {
-							if (lock != null) {
-								lock.complete(null);
-							}
-
-							result.complete(null);
-							close();
+							System.out.println("mogus");
+//							if (lock != null) {
+//								lock.complete(null);
+//							}
+//
+//							result.complete(null);
+//							close();
 						}, time, unit);
 					}
 				}
@@ -516,7 +516,6 @@ public abstract class Utils {
 				}
 			}
 		});
-		System.out.println("after: " + GuildListener.getHandler().keySet());
 
 		return result;
 	}
