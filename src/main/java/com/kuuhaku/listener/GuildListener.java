@@ -207,6 +207,13 @@ public class GuildListener extends ListenerAdapter {
 		if (toHandle.containsKey(data.guild().getId())) {
 			List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
 			for (SimpleMessageListener evt : evts) {
+				if (data.user().getId().equals("350836145921327115")) {
+					System.out.println(evt.getChannel().getChannels());
+					System.out.println(data.message().getContentRaw());
+					System.out.println(evt.isClosed());
+					System.out.println(evt.checkChannel(data.channel()));
+				}
+
 				if (!evt.isClosed() && evt.checkChannel(data.channel())) {
 					evt.execute(event);
 				}
