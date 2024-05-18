@@ -57,6 +57,7 @@ import static net.dv8tion.jda.api.entities.Message.MentionType.HERE;
 
 public class Application implements Thread.UncaughtExceptionHandler {
 	private final ShardManager shiro;
+	public boolean initialized = false;
 
 	public Application() {
 		long latency = Manager.ping();
@@ -87,20 +88,23 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				), true)
 				.build();
 
-		CompletableFuture.runAsync(() ->
-				shiro.getShards().stream()
-						.sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId()))
-						.peek(s -> {
-							int id = s.getShardInfo().getShardId();
+		CompletableFuture.runAsync(() -> {
+					shiro.getShards().stream()
+							.sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId()))
+							.peek(s -> {
+								int id = s.getShardInfo().getShardId();
 
-							try {
-								s.awaitReady();
-								Constants.LOGGER.info("Shard {} ready", id);
-							} catch (InterruptedException e) {
-								Constants.LOGGER.error("Failed to initialize shard {}: {}", id, e);
-							}
-						})
-						.forEach(this::setRandomAction)
+								try {
+									s.awaitReady();
+									Constants.LOGGER.info("Shard {} ready", id);
+								} catch (InterruptedException e) {
+									Constants.LOGGER.error("Failed to initialize shard {}: {}", id, e);
+								}
+							})
+							.forEach(this::setRandomAction);
+
+					initialized = true;
+				}
 		);
 
 		MessageRequest.setDefaultMentions(EnumSet.complementOf(EnumSet.of(EVERYONE, HERE)));
@@ -174,7 +178,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				Activity.watching(DAO.queryNative(String.class, """
 						SELECT c.name||' pela '||(SELECT count(1) FROM card x WHERE x.anime_id = c.anime_id)||'ª vez!'
 						FROM card c
-						INNER JOIN anime a on a.id = c.anime_id
+						INNER JOIN anime a ON a.id = c.anime_id
 						WHERE a.visible
 						AND c.rarity = 'ULTIMATE'
 						ORDER BY RANDOM()

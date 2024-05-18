@@ -68,7 +68,9 @@ public class GuildListener extends ListenerAdapter {
 	private static final Map<String, CopyOnWriteArrayList<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
 
 	@Override
-	public void onMessageReactionAdd(MessageReactionAddEvent event) {
+	public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
+		if (!Main.getApp().initialized) return;
+
 		User usr = event.getUser();
 		if (usr != null && usr.isBot()) return;
 
@@ -124,7 +126,8 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
-		if (event.getUser().isBot()) return;
+		if (!Main.getApp().initialized) return;
+		else if (event.getUser().isBot()) return;
 
 		GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
 
@@ -143,7 +146,8 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
-		if (event.getUser().isBot()) return;
+		if (!Main.getApp().initialized) return;
+		else if (event.getUser().isBot()) return;
 
 		GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
 
@@ -185,6 +189,8 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onMessageUpdate(@NotNull MessageUpdateEvent event) {
+		if (!Main.getApp().initialized) return;
+
 		onMessageReceived(new MessageReceivedEvent(
 				event.getJDA(),
 				event.getResponseNumber(),
@@ -193,8 +199,9 @@ public class GuildListener extends ListenerAdapter {
 	}
 
 	@Override
-	public void onMessageReceived(MessageReceivedEvent event) {
-		if (!event.isFromGuild() || event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
+	public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+		if (!Main.getApp().initialized) return;
+		else if (!event.isFromGuild() || event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
 
 		String content = event.getMessage().getContentRaw();
 		MessageData.Guild data;
