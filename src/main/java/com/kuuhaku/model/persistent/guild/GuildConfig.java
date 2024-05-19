@@ -51,7 +51,7 @@ public class GuildConfig extends DAO<GuildConfig> {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "locale", nullable = false)
-	private I18N locale = I18N.EN;
+	private I18N locale = I18N.PT;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumn(name = "gid")
