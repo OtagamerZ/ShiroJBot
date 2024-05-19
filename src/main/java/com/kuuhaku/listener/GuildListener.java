@@ -103,7 +103,7 @@ public class GuildListener extends ListenerAdapter {
 
 				EmbedBuilder eb = new EmbedBuilder()
 						.setColor(Color.ORANGE)
-						.setTitle(config.getLocale().get("str/highlight").formatted(author.getEffectiveName()), msg.getJumpUrl())
+						.setTitle(config.getLocale().get("str/highlight", author.getEffectiveName()), msg.getJumpUrl())
 						.setDescription(StringUtils.abbreviate(msg.getContentRaw(), MessageEmbed.DESCRIPTION_MAX_LENGTH));
 
 				if (ref != null) {
