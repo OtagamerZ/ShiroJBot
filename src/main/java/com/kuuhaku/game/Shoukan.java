@@ -143,6 +143,11 @@ public class Shoukan extends GameInstance<Phase> {
 
 			h.manualDraw(h.getRemainingDraws());
 			h.loadArchetype();
+
+			if (h.getOrigins().isPure(Race.BEAST)) {
+				double prcnt = Calc.prcntToInt(h.getUserDeck().getEvoWeight(), 24);
+				h.getRegDeg().add(Math.max(0, h.getBase().hp() * prcnt), 0);
+			}
 		}
 
 		setPhase(Phase.PLAN);
@@ -2203,6 +2208,11 @@ public class Shoukan extends GameInstance<Phase> {
 					trigger(ON_VICTORY, side.getOther());
 					trigger(ON_DEFEAT, side);
 
+					if (hand.getOrigins().isPure(Race.UNDEAD) && !hand.getData().getBoolean("undying")) {
+						hand.modHP(hand.getBase().hp() * 0.75, true);
+						hand.getData().put("undying", true);
+					}
+
 					if (hand.getOrigins().synergy() == Race.GOLEM) {
 						hand.modHP(hand.getMP() * hand.getBase().hp() / 10);
 						hand.consumeMP(hand.getMP());
@@ -2518,7 +2528,12 @@ public class Shoukan extends GameInstance<Phase> {
 											arena.getBanned().addAll(ds);
 											curr.getCards().removeAll(ds);
 
-											curr.getCards().add(chosen.getFirst());
+											Evogear d = (Evogear) chosen.getFirst();
+											if (curr.getOrigins().isPure()) {
+												d.setFlag(Flag.EMPOWERED);
+											}
+
+											curr.getCards().add(d);
 											curr.setOriginCooldown(3);
 											curr.showHand();
 

@@ -142,7 +142,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public int getTier() {
-		return tier + (int) stats.getTier().get();
+		int sum = tier;
+		if (hand != null) {
+			if (hand.getOrigins().isPure(Race.MACHINE)) {
+				sum += 1;
+			}
+		}
+
+		return sum + (int) stats.getTier().get();
 	}
 
 	public boolean isSpell() {
@@ -342,8 +349,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public double getPower() {
 		double mult = stats.getPower().get() * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
 		if (hand != null) {
-			if (spell && hand.getOrigins().hasMinor(Race.MYSTICAL)) {
-				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MYSTICAL) * 0.02);
+			if (spell) {
+				if (hand.getOrigins().hasMinor(Race.MYSTICAL)) {
+					mult *= 1.14 + (hand.getUserDeck().countRace(Race.MYSTICAL) * 0.02);
+				}
+
+				if (hand.getOrigins().isPure(Race.MYSTICAL)) {
+					mult *= 1.5;
+				}
 			}
 
 			if (hand.getOrigins().major() == Race.MIXED) {
@@ -473,6 +486,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 
 			csm.run();
+
+			if (isSpell() && hand.getOrigins().isPure(Race.MYSTICAL)) {
+				hand.modMP(1);
+			}
 
 			if (ep.trigger() != ON_TICK) {
 				hasFlag(Flag.EMPOWERED, true);

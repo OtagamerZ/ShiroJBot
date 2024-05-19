@@ -83,6 +83,15 @@ public class Hand {
 		d.setHand(this);
 		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
 
+		if (getOrigins().isPure(Race.DIVINITY) && d.isEthereal()) {
+			int eths = getData().getInt("eth_drawn") + 1;
+			if (eths % 2 == 0) {
+				modMP(1);
+			}
+
+			getData().put("eth_drawn", eths);
+		}
+
 		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
 			for (Evogear evogear : s.getEquipments()) {
 				it.add(evogear);
@@ -921,7 +930,12 @@ public class Hand {
 
 	public boolean consumeMP(int value) {
 		if (origin.major() == Race.DEMON) {
-			return consumeHP((int) (value * (base.hp() * 0.08)));
+			int val = (int) (value * (base.hp() * 0.08));
+			if (origin.isPure()) {
+				regdeg.add(val, 0);
+			}
+
+			return consumeHP(val);
 		} else if (this.mp < value) return false;
 
 		this.mp = Utils.clamp(this.mp - value, 0, 99);

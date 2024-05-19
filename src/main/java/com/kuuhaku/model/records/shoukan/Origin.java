@@ -73,6 +73,10 @@ public record Origin(boolean variant, Race major, Race[] minor) {
 		return major != Race.NONE && minor.length == 0;
 	}
 
+	public boolean isPure(Race r) {
+		return major == r && isPure();
+	}
+
 	public boolean hasMinor(Race race) {
 		for (Race r : minor()) {
 			if (r.isRace(race)) return true;

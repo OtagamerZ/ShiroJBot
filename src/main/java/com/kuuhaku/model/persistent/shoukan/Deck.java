@@ -477,6 +477,7 @@
 				 g.setColor(Color.WHITE);
 				 effects = "- " + ori.major().getMajor(locale)
 						 + "\n\n- " + locale.get("major/pureblood")
+						 + "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major().name())
 						 + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			 } else if (ori.major() == Race.MIXED) {
 				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
@@ -662,6 +663,10 @@
 
 				 int base = 6000;
 				 if (origin.major() == Race.HUMAN) {
+					 if (origin.isPure()) {
+						 base += 1000;
+					 }
+
 					 base += 1000;
 				 }
 
@@ -675,6 +680,10 @@
 				 SupplyChain<Integer> mpGain = new SupplyChain<>(mp)
 						 .add(m -> {
 							 if (origin.major() == Race.DEMON) {
+								 if (origin.isPure()) {
+									 m += 1;
+								 }
+
 								 m /= 2;
 							 }
 

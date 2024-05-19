@@ -51,6 +51,11 @@ public class RegDeg {
 
 		if (value < 0) {
 			if (parent.getOrigins().major() == Race.HUMAN) {
+				if (parent.getOrigins().isPure()) {
+					parent.modHP(val.intValue());
+					return;
+				}
+
 				mult += 0.2;
 			}
 

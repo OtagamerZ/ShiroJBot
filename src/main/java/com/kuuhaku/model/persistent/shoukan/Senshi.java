@@ -640,10 +640,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public double getCostMult() {
 		double mult = stats.getCostMult().get();
 		if (hand != null) {
-			if (hand.getOrigins().isPure() && race == hand.getOrigins().major()) {
-				mult *= 0.66;
-			}
-
 			if (hand.getOrigins().synergy() == Race.PIXIE) {
 				mult *= getFieldMult();
 			}
@@ -656,6 +652,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public double getAttrMult() {
 		double mult = stats.getAttrMult().get();
 		if (hand != null) {
+			if (hand.getOrigins().major() == Race.MIXED) {
+				mult *= 1 + (0.2 * (int) hand.getUserDeck().getSenshiRaw().stream().distinct().count());
+			}
+
 			if (hand.getOrigins().isPure() && race != hand.getOrigins().major()) {
 				mult *= 0.5;
 			}
