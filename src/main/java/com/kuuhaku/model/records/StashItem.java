@@ -46,7 +46,10 @@ public record StashItem(I18N locale, StashedCard sc) {
 
 		String rarity = locale.get("type/" + sc.getType());
 		if (Utils.equalsAny(sc.getType(), CardType.KAWAIPON, CardType.SENSHI)) {
-			rarity += " " + locale.get("rarity/" + sc.getCard().getRarity());
+			rarity += " " + locale.get("rarity/" + sc.getCard().getRarity()).toLowerCase();
+			if (sc.getKawaiponCard().isChrome()) {
+				rarity += " " + locale.get("str/foil").toLowerCase();
+			}
 		} else if (sc.getType() == CardType.FIELD) {
 			Field fd = sc.getCard().asField();
 			rarity += switch (fd.getType()) {

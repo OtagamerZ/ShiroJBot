@@ -128,7 +128,6 @@ public class StashCommand implements Executable {
 		query.appendNewLine("ORDER BY c.id DESC");
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
 		ThrowingFunction<Integer, Page> loader = p -> {
 			List<StashedCard> results = DAO.queryBuilder(
 					StashedCard.class,
