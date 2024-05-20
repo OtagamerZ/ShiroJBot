@@ -557,6 +557,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 		int streak = acc.getStreak() + 1;
 		acc.setStreak(streak);
+		acc.setVoteAwarded(true);
 		acc.save();
 
 		int cr = (weekend ? 1500 : 1000) * streak;
@@ -595,6 +596,14 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	protected void setLastVote(ZonedDateTime lastVote) {
 		this.lastVote = lastVote;
+	}
+
+	public boolean isVoteAwarded() {
+		return voteAwarded;
+	}
+
+	public void setVoteAwarded(boolean voteAwarded) {
+		this.voteAwarded = voteAwarded;
 	}
 
 	protected void setStreak(int voteStreak) {
