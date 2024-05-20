@@ -33,6 +33,7 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class AliasUserCommand implements Executable {
 		}
 
 		aliases.values().remove(cmd);
-		aliases.put(alias, cmd);
+		aliases.put(StringUtils.stripAccents(alias), cmd);
 		acc.getSettings().save();
 
 		event.channel().sendMessage(locale.get("success/alias_add")).queue();
