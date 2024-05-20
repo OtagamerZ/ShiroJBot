@@ -171,7 +171,7 @@ public class CommonSocket extends WebSocketClient {
 				case "vote" -> {
 					String id = payload.getString("user");
 					Account acc = DAO.find(Account.class, id);
-					if (acc == null) return;
+					if (acc == null || acc.getUser() == null) return;
 
 					acc.addVote(payload.getBoolean("isWeekend"));
 				}

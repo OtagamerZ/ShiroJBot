@@ -50,9 +50,8 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.awt.*;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.*;
@@ -127,6 +126,9 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	@Column(name = "last_vote")
 	private ZonedDateTime lastVote;
+
+	@Column(name = "vote_awarded", nullable = false)
+	private boolean voteAwarded;
 
 	@Column(name = "last_transfer")
 	private ZonedDateTime lastTransfer;
@@ -555,7 +557,6 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 		int streak = acc.getStreak() + 1;
 		acc.setStreak(streak);
-		acc.setLastVote(ZonedDateTime.now(ZoneId.of("GMT-3")));
 		acc.save();
 
 		int cr = (weekend ? 1500 : 1000) * streak;
@@ -580,10 +581,13 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	public boolean hasVoted() {
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
-
 		boolean voted = false;
 		if (lastVote != null) {
 			voted = now.isBefore(lastVote.plusHours(12));
+		}
+
+		if (voted && !voteAwarded) {
+			addVote(now.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.SATURDAY.getValue());
 		}
 
 		return voted;
