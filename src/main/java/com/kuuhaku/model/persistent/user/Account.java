@@ -568,7 +568,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 		}
 
 		EmbedBuilder eb = new EmbedBuilder()
-				.setColor(gems > 0 ? Color.orange : Color.red)
+				.setColor(gems > 0 ? Color.red : Color.orange)
 				.setThumbnail(Constants.ORIGIN_RESOURCES + "assets/" + (gems > 0 ? "gem_icon.png" : "cr_icon.png"))
 				.setDescription(getEstimateLocale().get("str/daily_message", cr, gems, streak))
 				.setTimestamp(acc.getLastVote());
