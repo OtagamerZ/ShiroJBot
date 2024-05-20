@@ -1510,10 +1510,10 @@ public class Shoukan extends GameInstance<Phase> {
 				int damage = Math.max(0, eHP - op.getHP());
 
 				if (thorns > 0) {
-					you.modHP(-damage * thorns / 100);
+					you.modHP(-dmg * thorns / 100);
 				}
 				if (lifesteal > 0) {
-					you.modHP(damage * lifesteal / 100);
+					you.modHP(dmg * lifesteal / 100);
 				}
 
 				if (you.getOrigins().synergy() == Race.DAEMON) {
@@ -1690,10 +1690,10 @@ public class Shoukan extends GameInstance<Phase> {
 				int damage = Math.max(0, eHP - target.getHP());
 
 				if (thorns > 0) {
-					you.modHP(-damage * thorns / 100);
+					you.modHP(-dmg * thorns / 100);
 				}
 				if (lifesteal > 0) {
-					you.modHP(damage * lifesteal / 100);
+					you.modHP(dmg * lifesteal / 100);
 				}
 
 				if (you.getOrigins().synergy() == Race.DAEMON) {
