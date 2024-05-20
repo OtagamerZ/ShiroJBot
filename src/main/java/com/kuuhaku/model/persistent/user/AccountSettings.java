@@ -22,8 +22,10 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.ProfileEffect;
 import com.kuuhaku.model.persistent.converter.ColorConverter;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
+import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -60,6 +62,11 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	@Column(name = "deck_capacity", nullable = false)
 	private int deckCapacity = 2;
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "aliases", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONObjectConverter.class)
+	private JSONObject aliases = new JSONObject();
 
 	public AccountSettings() {
 	}
@@ -114,5 +121,9 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	public void setDeckCapacity(int deckCapacity) {
 		this.deckCapacity = deckCapacity;
+	}
+
+	public JSONObject getAliases() {
+		return aliases;
 	}
 }

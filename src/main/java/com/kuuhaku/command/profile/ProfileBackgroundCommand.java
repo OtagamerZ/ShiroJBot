@@ -29,6 +29,7 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Message;
 import org.apache.commons.validator.routines.UrlValidator;
 
 @Command(
@@ -44,9 +45,23 @@ public class ProfileBackgroundCommand implements Executable {
 
 		String text = args.getString("text");
 		if (text.isBlank()) {
-			settings.setBackground(null);
-			event.channel().sendMessage(locale.get("success/profile_background_clear")).queue();
-		} else {
+			if (!event.message().getAttachments().isEmpty()) {
+				for (Message.Attachment att : event.message().getAttachments()) {
+					if (att.isImage()) {
+						text = att.getUrl();
+						break;
+					}
+				}
+			} else {
+				settings.setBackground(null);
+				settings.save();
+
+				event.channel().sendMessage(locale.get("success/profile_background_clear")).queue();
+				return;
+			}
+		}
+
+		if (!text.isBlank()) {
 			if (text.length() > 255) {
 				event.channel().sendMessage(locale.get("error/url_too_long")).queue();
 				return;
@@ -67,7 +82,5 @@ public class ProfileBackgroundCommand implements Executable {
 			settings.setBackground(text);
 			event.channel().sendMessage(locale.get("success/profile_background_set")).queue();
 		}
-
-		settings.save();
 	}
 }

@@ -31,6 +31,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.StringTree;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.PreparedCommand;
@@ -45,6 +46,8 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Command(
 		name = "help",
@@ -58,6 +61,8 @@ import java.util.concurrent.TimeUnit;
 public class HelpCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		Account acc = data.profile().getAccount();
+
 		String cmd = args.getString("command");
 		if (cmd.isBlank()) {
 			showHomePage(bot, locale, event);
@@ -65,37 +70,50 @@ public class HelpCommand implements Executable {
 		}
 
 		String[] parts = cmd.split("\\.");
-		JSONObject aliases = data.config().getSettings().getAliases();
+		JSONObject serverAliases = data.config().getSettings().getAliases();
 		for (int i = 0; i < parts.length; i++) {
 			String part = parts[i];
 
-			if (aliases.has(part)) {
-				parts[i] = aliases.getString(part);
+			if (serverAliases.has(part)) {
+				parts[i] = serverAliases.getString(part);
 			}
 		}
-		cmd = String.join(".", parts);
 
-		PreparedCommand pc = Main.getCommandManager().getCommand(cmd);
+		JSONObject userAliases = acc.getSettings().getAliases();
+		for (int i = 0; i < parts.length; i++) {
+			String part = parts[i];
+
+			if (userAliases.has(part)) {
+				parts[i] = userAliases.getString(part);
+			}
+		}
+
+		String command = String.join(".", parts);
+		PreparedCommand pc = Main.getCommandManager().getCommand(command);
 		if (pc == null) {
 			event.channel().sendMessage(locale.get("error/command_not_found")).queue();
 			return;
 		}
 
-		String alias = null;
-		for (Map.Entry<String, Object> e : aliases.entrySet()) {
-			if (e.getValue().equals(cmd)) {
-				alias = e.getKey();
-				break;
-			}
-		}
+		Set<String> aliases = new LinkedHashSet<>();
+		Stream.of(serverAliases.entrySet(), userAliases.entrySet())
+				.flatMap(Set::stream)
+				.filter(e -> e.getValue().equals(command))
+				.map(Map.Entry::getKey)
+				.forEach(aliases::add);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/command", pc.name()))
 				.addField(locale.get("str/category"), pc.category().getName(locale), true)
 				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.call());
 
-		if (alias != null) {
-			eb.addField("Alias", "`" + data.config().getPrefix() + alias + "`", true);
+		if (!aliases.isEmpty()) {
+			eb.addField("Alias",
+					aliases.stream()
+							.map(s -> "`" + data.config().getPrefix() + s + "`")
+							.collect(Collectors.joining("\n")),
+					true
+			);
 		}
 
 		List<String> sigs = SignatureParser.extract(locale, pc.command());

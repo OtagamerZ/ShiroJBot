@@ -16,13 +16,14 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.moderation;
+package com.kuuhaku.command.misc;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
@@ -30,16 +31,18 @@ import net.dv8tion.jda.api.JDA;
 
 @Command(
 		name = "unalias",
-		category = Category.MODERATION
+		path = "me",
+		category = Category.MISC
 )
 @Signature({
 		"<action:word:r>[clear]",
 		"<alias:word:r>"
 })
-public class UnaliasCommand implements Executable {
+public class UnaliasUserCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		JSONObject aliases = data.config().getSettings().getAliases();
+		Account acc = data.profile().getAccount();
+		JSONObject aliases = acc.getSettings().getAliases();
 		if (args.has("action")) {
 			aliases.clear();
 			data.config().save();
@@ -55,7 +58,7 @@ public class UnaliasCommand implements Executable {
 		}
 
 		aliases.remove(alias);
-		data.config().save();
+		acc.getSettings().save();
 
 		event.channel().sendMessage(locale.get("success/alias_remove")).queue();
 	}

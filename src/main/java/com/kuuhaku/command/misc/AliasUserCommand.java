@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.moderation;
+package com.kuuhaku.command.misc;
 
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.Main;
@@ -26,6 +26,7 @@ import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -37,13 +38,15 @@ import java.util.List;
 
 @Command(
 		name = "alias",
-		category = Category.MODERATION
+		path = "me",
+		category = Category.MISC
 )
 @Signature(allowEmpty = true, value = "<command:word:r> <alias:word:r>")
-public class AliasCommand implements Executable {
+public class AliasUserCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		JSONObject aliases = data.config().getSettings().getAliases();
+		Account acc = data.profile().getAccount();
+		JSONObject aliases = acc.getSettings().getAliases();
 		if (args.isEmpty()) {
 			if (aliases.isEmpty()) {
 				event.channel().sendMessage(locale.get("error/no_aliases")).queue();
@@ -77,7 +80,7 @@ public class AliasCommand implements Executable {
 
 		aliases.values().remove(cmd);
 		aliases.put(alias, cmd);
-		data.config().save();
+		acc.getSettings().save();
 
 		event.channel().sendMessage(locale.get("success/alias_add")).queue();
 	}
