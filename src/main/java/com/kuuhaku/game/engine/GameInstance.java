@@ -126,7 +126,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 				}
 
 				for (GuildMessageChannel gmc : channels) {
-					PLAYERS.remove(gmc.getId());
+					CHANNELS.remove(gmc.getId());
 				}
 			}
 		});
