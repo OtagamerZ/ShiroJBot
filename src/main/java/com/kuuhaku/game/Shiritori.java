@@ -31,6 +31,7 @@ import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.MagicConstant;
@@ -93,7 +94,6 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 	@Override
 	protected void begin() {
-		PLAYERS.addAll(Arrays.asList(getPlayers()));
 		reportEvent("str/game_start_shiritori", "<@" + inGame.get() + ">");
 	}
 

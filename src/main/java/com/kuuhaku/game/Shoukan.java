@@ -61,6 +61,7 @@ import com.ygimenez.json.JSONUtils;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -133,7 +134,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected void begin() {
-		PLAYERS.addAll(Arrays.asList(getPlayers()));
 		setRestoring(false);
 
 		for (Hand h : hands.values()) {

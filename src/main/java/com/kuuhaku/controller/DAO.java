@@ -365,7 +365,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			}
 
 			em.getTransaction().begin();
-			T out = em.merge(this.refresh());
+			T out = (T) em.merge(this);
 			em.getTransaction().commit();
 
 			return out;

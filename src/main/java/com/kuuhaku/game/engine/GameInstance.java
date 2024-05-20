@@ -35,6 +35,7 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.intellij.lang.annotations.MagicConstant;
@@ -42,10 +43,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Set;
-import java.util.SplittableRandom;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -53,6 +51,7 @@ import java.util.random.RandomGenerator;
 import java.util.regex.Pattern;
 
 public abstract class GameInstance<T extends Enum<T>> {
+	public static final Set<String> CHANNELS = ConcurrentHashMap.newKeySet();
 	public static final Set<String> PLAYERS = ConcurrentHashMap.newKeySet();
 	private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 	private final long seed = ThreadLocalRandom.current().nextLong();
@@ -99,6 +98,9 @@ public abstract class GameInstance<T extends Enum<T>> {
 			};
 
 			try {
+				PLAYERS.addAll(Arrays.asList(players));
+				CHANNELS.addAll(Arrays.stream(channels).map(GuildChannel::getId).toList());
+
 				begin();
 				GuildListener.addHandler(guild, sml);
 				initialized = true;
@@ -118,6 +120,14 @@ public abstract class GameInstance<T extends Enum<T>> {
 				Constants.LOGGER.error(e, e);
 			} finally {
 				sml.close();
+
+				for (String p : players) {
+					PLAYERS.remove(p);
+				}
+
+				for (GuildMessageChannel gmc : channels) {
+					PLAYERS.remove(gmc.getId());
+				}
 			}
 		});
 	}
