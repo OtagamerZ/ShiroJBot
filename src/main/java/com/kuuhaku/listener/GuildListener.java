@@ -87,6 +87,9 @@ public class GuildListener extends ListenerAdapter {
 					.count();
 
 			if (stars >= config.getSettings().getStarboardThreshold() && DAO.find(StarredMessage.class, msg.getId()) == null) {
+				Member author = msg.getMember();
+				if (author == null) return;
+
 				new StarredMessage(msg.getId()).save();
 
 				Message.Attachment img = null;
@@ -98,9 +101,6 @@ public class GuildListener extends ListenerAdapter {
 				}
 
 				Message ref = msg.getReferencedMessage();
-				Member author = msg.getMember();
-				assert author != null;
-
 				EmbedBuilder eb = new EmbedBuilder()
 						.setColor(Color.ORANGE)
 						.setTitle(config.getLocale().get("str/highlight", author.getEffectiveName()), msg.getJumpUrl())

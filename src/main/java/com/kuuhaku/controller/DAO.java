@@ -56,8 +56,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 								break;
 							} catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
 								throw new IllegalStateException("Failed to instantiate class", e);
-							} catch (ConstraintViolationException e) {
-								return find(klass, id);
 							}
 						}
 					}

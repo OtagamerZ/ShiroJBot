@@ -113,7 +113,7 @@ public class ItemShopCommand implements Executable {
 		int amount = args.getInt("amount", 1);
 
 		if (item == null || item.getCurrency() == null) {
-			String sug = Utils.didYouMean(args.getString("id").toUpperCase(), "SELECT id FROM user_item WHERE currency IS NOT NULL");
+			String sug = Utils.didYouMean(args.getString("id").toUpperCase(), "SELECT id AS value FROM user_item WHERE currency IS NOT NULL");
 			if (sug == null) {
 				event.channel().sendMessage(locale.get("error/unknown_item_none")).queue();
 			} else {

@@ -24,13 +24,13 @@ SELECT rank() OVER (ORDER BY x.winrate * x.match_count DESC) AS pos
      , x.winrate
      , x.match_count
 FROM (
-         SELECT a.uid
-              , a.name
-              , user_winrate(a.uid) AS winrate
-              , count(1)            AS match_count
-         FROM account a
-                  INNER JOIN v_matches m ON has(m.players, a.uid)
-         GROUP BY a.uid, a.name, winrate
+     SELECT a.uid
+          , a.name
+          , user_winrate(a.uid) AS winrate
+          , count(1)            AS match_count
+     FROM account a
+              INNER JOIN match_history h ON a.uid IN (h.info -> 'top' ->> 'uid', h.info -> 'bottom' ->> 'uid')
+     GROUP BY a.uid, a.name, winrate
      ) x
 WHERE x.winrate IS NOT NULL
 ORDER BY pos
