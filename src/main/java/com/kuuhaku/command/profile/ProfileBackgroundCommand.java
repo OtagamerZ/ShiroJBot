@@ -61,26 +61,26 @@ public class ProfileBackgroundCommand implements Executable {
 			}
 		}
 
-		if (!text.isBlank()) {
-			if (text.length() > 255) {
-				event.channel().sendMessage(locale.get("error/url_too_long")).queue();
-				return;
-			} else if (!UrlValidator.getInstance().isValid(text)) {
-				event.channel().sendMessage(locale.get("error/invalid_url")).queue();
-				return;
-			}
-
-			long size = IO.getImageSize(text);
-			if (size == 0) {
-				event.channel().sendMessage(locale.get("error/invalid_url")).queue();
-				return;
-			} else if (size > AccountSettings.MAX_BG_SIZE) {
-				event.channel().sendMessage(locale.get("error/image_too_big", "4 MB")).queue();
-				return;
-			}
-
-			settings.setBackground(text);
-			event.channel().sendMessage(locale.get("success/profile_background_set")).queue();
+		if (text.length() > 255) {
+			event.channel().sendMessage(locale.get("error/url_too_long")).queue();
+			return;
+		} else if (!UrlValidator.getInstance().isValid(text)) {
+			event.channel().sendMessage(locale.get("error/invalid_url")).queue();
+			return;
 		}
+
+		long size = IO.getImageSize(text);
+		if (size == 0) {
+			event.channel().sendMessage(locale.get("error/invalid_url")).queue();
+			return;
+		} else if (size > AccountSettings.MAX_BG_SIZE) {
+			event.channel().sendMessage(locale.get("error/image_too_big", "4 MB")).queue();
+			return;
+		}
+
+		settings.setBackground(text);
+		settings.save();
+
+		event.channel().sendMessage(locale.get("success/profile_background_set")).queue();
 	}
 }
