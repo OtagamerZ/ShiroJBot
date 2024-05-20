@@ -2534,6 +2534,10 @@ public class Shoukan extends GameInstance<Phase> {
 											}
 
 											curr.getCards().add(d);
+											if (d.getTier() == 4 && d.hasFlag(Flag.EMPOWERED)) {
+												curr.getAccount().setDynValue("emp_tier_4", true);
+											}
+
 											curr.setOriginCooldown(3);
 											curr.showHand();
 
