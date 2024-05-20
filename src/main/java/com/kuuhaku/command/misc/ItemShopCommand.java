@@ -135,7 +135,7 @@ public class ItemShopCommand implements Executable {
 			int value = amount * item.getPrice();
 			String price;
 			if (item.getCurrency() == Currency.ITEM) {
-				price = item.getPrice() + " " + item.getItemCost().getName(locale);
+				price = value + " " + item.getItemCost().getName(locale);
 			} else {
 				price = locale.get("currency/" + item.getCurrency(), value);
 			}
