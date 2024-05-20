@@ -575,7 +575,10 @@ public class Account extends DAO<Account> implements Blacklistable {
 				.setDescription(getEstimateLocale().get("str/daily_message", cr, gems, streak))
 				.setTimestamp(acc.getLastVote());
 
-		getUser().openPrivateChannel()
+		User user = getUser();
+		if (user == null) return;
+
+		user.openPrivateChannel()
 				.flatMap(c -> c.sendMessageEmbeds(eb.build()))
 				.queue(null, Utils::doNothing);
 	}

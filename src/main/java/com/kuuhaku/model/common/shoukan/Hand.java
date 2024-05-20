@@ -1150,7 +1150,10 @@ public class Hand {
 	public void send(BufferedImage bi) {
 		if (bi == null) return;
 
-		getUser().openPrivateChannel().flatMap(chn -> chn.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "hand.png"))).queue(m -> {
+		User user = getUser();
+		if (user == null) return;
+
+		user.openPrivateChannel().flatMap(chn -> chn.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "hand.png"))).queue(m -> {
 			if (lastMessage != null) {
 				m.getChannel().retrieveMessageById(lastMessage).flatMap(Objects::nonNull, Message::delete).queue(null, Utils::doNothing);
 			}
