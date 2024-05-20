@@ -36,7 +36,6 @@ import java.util.List;
 
 public enum SlotSkin {
 	DEFAULT,
-//	AHEGAO(""),
 	HEX("HOARDER_III"),
 	PLANK(3500, Currency.CR, "METANAUT"),
 	MISSING(10000, Currency.CR),
@@ -47,6 +46,7 @@ public enum SlotSkin {
 	RAINBOW(1, Currency.GEM),
 	DIGITAL(5000, Currency.CR, "TALKER_II"),
 	SYNTHWAVE("PARADOX", "FROM_ABYSS", "MONKE", "ONE_GOD"),
+	AHEGAO(1_000_000, Currency.CR, "NO_MANS_LAND", "ARE_ARE", "TRAVELLER", "PARADOX", "CODEX_OMNIUM")
 	;
 
 	private final int price;

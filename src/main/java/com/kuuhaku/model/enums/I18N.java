@@ -20,12 +20,14 @@ package com.kuuhaku.model.enums;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.text.Uwuifier;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public enum I18N {
 	PT(ZoneId.of("GMT-3"), "🇧🇷"),
@@ -34,6 +36,7 @@ public enum I18N {
 	private final Locale locale = Locale.forLanguageTag(name().toLowerCase());
 	private final ZoneId zone;
 	private final String emoji;
+	private final AtomicBoolean uwu = new AtomicBoolean(false);
 
 	I18N(ZoneId zone, String emoji) {
 		this.zone = zone;
@@ -63,7 +66,7 @@ public enum I18N {
 			}
 		}
 
-		return Main.getCacheManager().computeLocale(name() + "-" + key, (k, v) -> {
+		String out = Main.getCacheManager().computeLocale(name() + "-" + key, (k, v) -> {
 			if (v != null) return v;
 
 			try {
@@ -80,6 +83,12 @@ public enum I18N {
 				return key;
 			}
 		}).formatted(args);
+
+		if (uwu.get()) {
+			return Uwuifier.INSTANCE.uwu(this, out);
+		}
+
+		return out;
 	}
 
 	public Locale getLocale() {
@@ -92,5 +101,9 @@ public enum I18N {
 
 	public String getEmoji() {
 		return emoji;
+	}
+
+	public AtomicBoolean getUwu() {
+		return uwu;
 	}
 }
