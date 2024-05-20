@@ -27,8 +27,10 @@ import com.kuuhaku.model.persistent.user.Reminder;
 import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.entities.User;
 
+import java.time.DayOfWeek;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
@@ -44,10 +46,20 @@ public class HourlySchedule implements Runnable, PreInitialize {
 
 	@Override
 	public void run() {
-		ZonedDateTime limit = ZonedDateTime.now(ZoneId.of("GMT-3")).plusHours(1).truncatedTo(ChronoUnit.HOURS);
-		List<Reminder> rems = DAO.queryAll(Reminder.class, "SELECT r FROM Reminder r WHERE NOT r.reminded AND r.due <= ?1 AND r.id NOT IN ?2", limit, SCHED_REMINDERS);
+		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
+		List<Reminder> rems = DAO.queryAll(Reminder.class, "SELECT r FROM Reminder r WHERE NOT r.reminded AND r.due <= ?1 AND r.id NOT IN ?2",
+				now.plusHours(1).truncatedTo(ChronoUnit.HOURS), SCHED_REMINDERS
+		);
 		for (Reminder r : rems) {
 			scheduleReminder(r);
+		}
+
+		List<Account> accs = DAO.queryAll(Account.class, "SELECT a FROM Account a WHERE NOT a.voteAwarded AND a.lastVote IS NOT NULL");
+		for (Account a : accs) {
+			if (a.hasVoted()) {
+				a = a.refresh();
+				a.addVote(now.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.SATURDAY.getValue());
+			}
 		}
 	}
 
