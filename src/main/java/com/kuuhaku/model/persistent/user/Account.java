@@ -128,7 +128,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	private ZonedDateTime lastVote;
 
 	@Column(name = "vote_awarded", nullable = false)
-	private boolean voteAwarded;
+	private boolean voteAwarded = true;
 
 	@Column(name = "last_transfer")
 	private ZonedDateTime lastTransfer;
