@@ -18,14 +18,21 @@
 
 package com.kuuhaku.schedule;
 
+import com.kuuhaku.Constants;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Reminder;
+import com.kuuhaku.util.API;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.entities.User;
+import org.apache.http.HttpHeaders;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 
 import java.time.DayOfWeek;
 import java.time.ZoneId;
@@ -34,6 +41,7 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -61,6 +69,16 @@ public class HourlySchedule implements Runnable, PreInitialize {
 				a.addVote(now.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.SATURDAY.getValue());
 			}
 		}
+
+		API.call(
+				new HttpPost("https://top.gg/api/bots/" + Main.getApp().getId() + "/stats"), null,
+				new JSONObject(Map.of(
+						HttpHeaders.AUTHORIZATION, Constants.TOPGG_TOKEN
+				)),
+				new JSONObject(Map.of(
+					"server_count", Main.getApp().getShiro().getGuildCache().size()
+				)).toString()
+		);
 	}
 
 	public static void scheduleReminder(Reminder r) {
