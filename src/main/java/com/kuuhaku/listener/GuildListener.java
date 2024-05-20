@@ -475,7 +475,8 @@ public class GuildListener extends ListenerAdapter {
 
 		try (Mutex<String> ignore = new Mutex<>(data.user().getId())) {
 			String[] parts = name.split("\\.");
-			JSONObject aliases = event.config().getSettings().getAliases();
+			JSONObject aliases = new JSONObject();
+			aliases.putAll(event.config().getSettings().getAliases());
 			aliases.putAll(event.profile().getAccount().getSettings().getAliases());
 			for (int i = 0; i < parts.length; i++) {
 				String part = parts[i];
