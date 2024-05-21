@@ -110,14 +110,6 @@ public class SlotSkin extends DAO<SlotSkin> {
 		return bi;
 	}
 
-	public String getName(I18N locale) {
-		return locale.get("skin/" + id);
-	}
-
-	public String getDescription(I18N locale) {
-		return locale.get("skin/" + id + "_desc");
-	}
-
 	public List<Title> getTitles() {
 		if (titles == null) return List.of();
 

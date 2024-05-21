@@ -101,8 +101,8 @@ public class DeckSkinCommand implements Executable {
 			} else {
 				eb.setThumbnail(null)
 						.setImage(URL.formatted(skin.getId().toLowerCase()))
-						.setTitle(skin.getName(locale))
-						.setDescription(skin.getDescription(locale));
+						.setTitle(skin.getInfo(locale).getName())
+						.setDescription(skin.getInfo(locale).getDescription());
 			}
 			eb.setFooter(locale.get("str/page", i + 1, skins.size()));
 
