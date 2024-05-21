@@ -70,9 +70,9 @@ public class CardExtra implements Cloneable {
 	private final ListOrderedSet<String> curses;
 
 	private Race race = null;
-	private Card vanity = null;
 	private Senshi disguise = null;
 
+	private ConditionalVar<Card> vanity = new ConditionalVar<>();
 	private ConditionalVar<Callable<String>> write = new ConditionalVar<>();
 
 	private Drawable<?> source = null;
@@ -217,11 +217,12 @@ public class CardExtra implements Cloneable {
 	}
 
 	public Card getVanity() {
-		return vanity;
+		return vanity.getValue();
 	}
 
-	public void setVanity(Card vanity) {
-		this.vanity = vanity;
+	public void setVanity(BooleanSupplier condition, Card vanity) {
+		this.vanity.setValue(vanity);
+		this.vanity.setCondition(condition);
 	}
 
 	public Senshi getDisguise() {
@@ -252,22 +253,20 @@ public class CardExtra implements Cloneable {
 		this.write.setValue(write);
 	}
 
-	public void setWrite(BooleanSupplier condition, Callable<String> write) {
+	public void setWrite(Supplier<Object> condition, Callable<String> write) {
 		this.write.setValue(write);
-		this.write.setCondition(condition);
-	}
-
-	public void setWrite(Object ref, Callable<String> write) {
-		setWrite(() -> {
+		this.write.setCondition(() -> {
+			Object ref = condition.get();
 			if (ref == null) return false;
 
-			return !switch (ref) {
-				case Collection<?> c -> c.isEmpty();
-				case String s -> s.isBlank();
-				case Number n -> n.doubleValue() == 0;
+			return switch (ref) {
+				case Collection<?> c -> !c.isEmpty();
+				case String s -> !s.isBlank();
+				case Number n -> n.doubleValue() != 0;
+				case Boolean b -> b;
 				default -> true;
 			};
-		}, write);
+		});
 	}
 
 	public Drawable<?> getSource() {
