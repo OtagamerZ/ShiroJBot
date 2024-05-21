@@ -1258,7 +1258,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public void executeAssert(Trigger trigger) {
 		if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE)) return;
-		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
+		else if (getEffect().isBlank() || !getEffect().contains(trigger.name())) return;
 
 		if (trigger == ON_INITIALIZE) {
 			if (getBase().getTags().contains("AUGMENT") && !(this instanceof AugmentSenshi)) {
