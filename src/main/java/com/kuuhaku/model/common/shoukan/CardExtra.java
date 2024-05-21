@@ -32,6 +32,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
+import groovy.lang.GString;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.BooleanUtils;
 
@@ -237,7 +238,7 @@ public class CardExtra implements Cloneable {
 		Supplier<String> val = write.getValue();
 		if (val == null) return "";
 
-		return Utils.getOr(val.get(), "");
+		return Utils.getOr((Object) val.get(), "").toString();
 	}
 
 	public void setWrite(Supplier<String> write) {
