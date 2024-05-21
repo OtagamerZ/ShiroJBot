@@ -26,20 +26,24 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.LocalizedTitle;
 import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
+
+import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "slot_skin")
@@ -51,6 +55,11 @@ public class SlotSkin extends DAO<SlotSkin> {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
+
+	@OneToMany(cascade = ALL, orphanRemoval = true)
+	@JoinColumn(name = "id", referencedColumnName = "id")
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<LocalizedSkin> infos = new HashSet<>();
 
 	@Column(name = "price")
 	private int price;
@@ -71,6 +80,16 @@ public class SlotSkin extends DAO<SlotSkin> {
 		this.id = id;
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public LocalizedSkin getInfo(I18N locale) {
+		return infos.parallelStream()
+				.filter(ld -> ld.getLocale() == locale)
+				.findAny().orElseThrow();
+	}
+
 	public BufferedImage getImage(Side side, boolean legacy) {
 		String s = side.name().toLowerCase();
 		BufferedImage overlay = IO.getResourceAsImage(Shoukan.SKIN_PATH + "shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".png");
@@ -89,10 +108,6 @@ public class SlotSkin extends DAO<SlotSkin> {
 		g2d.dispose();
 
 		return bi;
-	}
-
-	public String getId() {
-		return id;
 	}
 
 	public String getName(I18N locale) {

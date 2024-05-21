@@ -72,6 +72,7 @@
         <class>com.kuuhaku.model.persistent.shoukan.Archetype</class>
         <class>com.kuuhaku.model.persistent.shoukan.LocalizedArch</class>
         <class>com.kuuhaku.model.persistent.shoukan.SlotSkin</class>
+        <class>com.kuuhaku.model.persistent.shoukan.LocalizedSkin</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
