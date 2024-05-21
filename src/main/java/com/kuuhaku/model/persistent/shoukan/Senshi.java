@@ -597,19 +597,31 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public int getDodge() {
 		if (isSleeping() || isStunned()) return 0;
 
-		int sum = base.getDodge() + (int) stats.getDodge().get() + getEquipDodge();
-
 		int min = 0;
-		if (hand != null && hand.getOrigins().synergy() == Race.GEIST) {
-			min += 10;
-		}
+		int sum = base.getDodge() + (int) stats.getDodge().get() + getEquipDodge();
 
 		if (isBlinded()) {
 			sum /= 2;
 		}
 
-		if (hand != null && getGame() != null && getGame().getArena().getField().getType() == FieldType.DUNGEON) {
-			return Utils.clamp(sum, min, 50);
+		if (hand != null) {
+			if (hand.getOrigins().synergy() == Race.GEIST) {
+				min += 10;
+			}
+
+			if (getHand().getOrigins().synergy() == Race.ELEMENTAL) {
+				int wind = (int) getCards(getHand().getSide()).parallelStream()
+						.filter(s -> s.getElement() == ElementType.WIND)
+						.count();
+
+				if (wind >= 4) {
+					sum += 20 * getNearby().size();
+				}
+			}
+
+			if (getGame() != null && getGame().getArena().getField().getType() == FieldType.DUNGEON) {
+				return Utils.clamp(sum, min, 50);
+			}
 		}
 
 		return Utils.clamp(min + sum, min, 100);
