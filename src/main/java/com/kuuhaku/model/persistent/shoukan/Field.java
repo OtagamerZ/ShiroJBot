@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
@@ -339,7 +340,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		BufferedImage aux = IO.getResourceAsImage("shoukan/side/middle.png");
+		BufferedImage aux = IO.getResourceAsImage(Shoukan.SKIN_PATH + "middle.png");
 		g2d.drawImage(aux, bi.getWidth() / 2 - aux.getWidth() / 2, bi.getHeight() / 2 - aux.getHeight() / 2, null);
 
 		aux = IO.getResourceAsImage("shoukan/overlay/middle.png");
