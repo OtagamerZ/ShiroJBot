@@ -42,6 +42,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class CardExtra implements Cloneable {
 	private final CumValue mana;
@@ -72,7 +73,7 @@ public class CardExtra implements Cloneable {
 	private Card vanity = null;
 	private Senshi disguise = null;
 
-	private ConditionalVar<String> write = new ConditionalVar<>();
+	private ConditionalVar<Callable<String>> write = new ConditionalVar<>();
 
 	private Drawable<?> source = null;
 	private String description = null;
@@ -234,25 +235,29 @@ public class CardExtra implements Cloneable {
 	public String getWrite() {
 		if (write == null) return "";
 
-		String out = write.getValue();
-		if (out == null) {
-			write = null;
+		try {
+			String out = write.getValue().call();
+			if (out == null) {
+				write = null;
+				return "";
+			}
+
+			return out;
+		} catch (Exception e) {
 			return "";
 		}
-
-		return out;
 	}
 
-	public void setWrite(String write) {
+	public void setWrite(Callable<String> write) {
 		this.write.setValue(write);
 	}
 
-	public void setWrite(String write, BooleanSupplier condition) {
+	public void setWrite(Callable<String> write, BooleanSupplier condition) {
 		this.write.setValue(write);
 		this.write.setCondition(condition);
 	}
 
-	public void setWrite(String write, Object ref) {
+	public void setWrite(Callable<String> write, Object ref) {
 		setWrite(write, () -> {
 			if (ref == null) return false;
 
