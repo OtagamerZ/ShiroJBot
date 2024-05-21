@@ -33,8 +33,10 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import org.apache.commons.collections4.set.ListOrderedSet;
+import org.apache.commons.lang3.BooleanUtils;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -70,7 +72,7 @@ public class CardExtra implements Cloneable {
 	private Card vanity = null;
 	private Senshi disguise = null;
 
-	private ConditionalVar<String> write = null;
+	private ConditionalVar<String> write = new ConditionalVar<>();
 
 	private Drawable<?> source = null;
 	private String description = null;
@@ -242,11 +244,25 @@ public class CardExtra implements Cloneable {
 	}
 
 	public void setWrite(String write) {
-		this.write = new ConditionalVar<>(() -> true, write);
+		this.write.setValue(write);
 	}
 
 	public void setWrite(String write, BooleanSupplier condition) {
-		this.write = new ConditionalVar<>(condition, write);
+		this.write.setValue(write);
+		this.write.setCondition(condition);
+	}
+
+	public void setWrite(String write, Object ref) {
+		setWrite(write, () -> {
+			if (ref == null) return false;
+
+			return !switch (ref) {
+				case Collection<?> c -> c.isEmpty();
+				case String s -> s.isBlank();
+				case Number n -> n.doubleValue() == 0;
+				default -> true;
+			};
+		});
 	}
 
 	public Drawable<?> getSource() {

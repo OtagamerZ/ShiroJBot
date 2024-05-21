@@ -22,20 +22,23 @@ import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
 public class ConditionalVar<T> {
-	private final BooleanSupplier condition;
+	private BooleanSupplier condition;
 	private T value;
 
-	public ConditionalVar(BooleanSupplier condition, T value) {
+	public void setCondition(BooleanSupplier condition) {
 		this.condition = condition;
-		this.value = value;
 	}
 
 	public T getValue() {
 		if (condition.getAsBoolean()) {
-			value = null;
+			return null;
 		}
 
 		return value;
+	}
+
+	public void setValue(T value) {
+		this.value = value;
 	}
 
 	@Override
