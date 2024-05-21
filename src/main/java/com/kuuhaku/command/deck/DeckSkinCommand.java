@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -57,7 +58,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class DeckSkinCommand implements Executable {
-	private static final String URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/rewrite/src/main/resources/shoukan/side/%s_bottom.png";
+	private static final String URL = Shoukan.SKIN_PATH + "/%s_bottom.png";
 
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

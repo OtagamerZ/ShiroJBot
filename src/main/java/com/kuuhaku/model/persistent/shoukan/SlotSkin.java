@@ -88,14 +88,13 @@ public class SlotSkin extends DAO<SlotSkin> {
 
 	public BufferedImage getImage(Side side, boolean legacy) {
 		String s = side.name().toLowerCase();
-		BufferedImage overlay = IO.getResourceAsImage(Shoukan.SKIN_PATH + "shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".png");
-		if (overlay == null) return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage overlay = IO.getResourceAsImage(Constants.ORIGIN_RESOURCES + "shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".png");
 
 		BufferedImage bi = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		BufferedImage theme = IO.getResourceAsImage("shoukan/side/" + id.toLowerCase() + "_" + s + ".png");
+		BufferedImage theme = IO.getResourceAsImage(Shoukan.SKIN_PATH + id.toLowerCase() + "_" + s + ".png");
 		Graph.applyMask(theme, IO.getResourceAsImage("shoukan/mask/slot_" + s + (legacy ? "_legacy" : "") + "_mask.png"), 0);
 
 		g2d.drawImage(theme, 5, 5, null);
