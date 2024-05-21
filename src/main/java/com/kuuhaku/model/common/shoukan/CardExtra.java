@@ -21,6 +21,7 @@ package com.kuuhaku.model.common.shoukan;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.common.ConditionalVar;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -36,6 +37,8 @@ import org.apache.commons.collections4.set.ListOrderedSet;
 import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 
 public class CardExtra implements Cloneable {
@@ -67,7 +70,7 @@ public class CardExtra implements Cloneable {
 	private Card vanity = null;
 	private Senshi disguise = null;
 
-	private String write = null;
+	private ConditionalVar<String> write = null;
 
 	private Drawable<?> source = null;
 	private String description = null;
@@ -227,11 +230,23 @@ public class CardExtra implements Cloneable {
 	}
 
 	public String getWrite() {
-		return Utils.getOr(write, "");
+		if (write == null) return "";
+
+		String out = write.getValue();
+		if (out == null) {
+			write = null;
+			return "";
+		}
+
+		return out;
 	}
 
 	public void setWrite(String write) {
-		this.write = write;
+		this.write = new ConditionalVar<>(() -> true, write);
+	}
+
+	public void setWrite(String write, BooleanSupplier condition) {
+		this.write = new ConditionalVar<>(condition, write);
 	}
 
 	public Drawable<?> getSource() {

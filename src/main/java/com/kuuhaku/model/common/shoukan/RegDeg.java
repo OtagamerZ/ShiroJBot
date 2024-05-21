@@ -23,6 +23,7 @@ import com.kuuhaku.model.enums.shoukan.Arcade;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.util.Utils;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class RegDeg {
@@ -51,27 +52,22 @@ public class RegDeg {
 
 		if (value < 0) {
 			if (parent.getOrigins().major() == Race.HUMAN) {
-				if (parent.getOrigins().isPure()) {
-					parent.modHP(val.intValue());
-					return;
-				}
-
-				mult += 0.2;
+				value /= 2;
 			}
 
 			if (parent.getGame().getArcade() == Arcade.DECAY) {
 				mult *= 1.5;
 			}
 
-			if (parent.getGame().getCurrent().getOrigins().synergy() == Race.FIEND) {
-				value /= 4;
-				mult = 1;
-			}
-
-			values.add(new Degen(-value, mult * parent.getStats().getDegenMult().get()));
+			values.add(new Degen((int) (-value * mult * parent.getStats().getDegenMult().get())));
 		} else if (value > 0) {
 			if (parent.getOrigins().major() == Race.HUMAN) {
-				mult -= 0.1;
+				if (parent.getOrigins().isPure()) {
+					parent.modHP(val.intValue());
+					return;
+				}
+
+				mult += 0.2;
 			}
 
 			if (parent.getGame().getArcade() == Arcade.DECAY) {
@@ -126,6 +122,19 @@ public class RegDeg {
 			return values.stream().mapToInt(ValueOverTime::next).sum() + virus;
 		} finally {
 			values.removeIf(v -> v.getValue() <= 0);
+
+			Iterator<ValueOverTime> it = values.iterator();
+			while (it.hasNext()) {
+				ValueOverTime vot = it.next();
+				if (vot instanceof Degen) {
+					if (parent.getGame().getCurrent().getOrigins().synergy() == Race.FIEND && parent.getGame().getRng().nextBoolean()) {
+						break;
+					}
+
+					it.remove();
+					break;
+				}
+			}
 		}
 	}
 

@@ -19,7 +19,7 @@
 package com.kuuhaku.model.common.shoukan;
 
 public class Degen extends ValueOverTime {
-	public Degen(int value, double multiplier) {
-		super(value, multiplier);
+	public Degen(int value) {
+		super(value, 1);
 	}
 }

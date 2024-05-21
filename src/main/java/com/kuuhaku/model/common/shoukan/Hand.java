@@ -796,15 +796,13 @@ public class Hand {
 			}
 
 			int dot = regdeg.peek();
-			int quart = (int) (value / 4);
+			int half = (int) (value / 4);
 			if (dot > 0 && value < 0) {
 				if (getOther().getOrigins().synergy() == Race.SPAWN) {
-					regdeg.reduce(Degen.class, quart);
+					regdeg.reduce(Degen.class, half);
 				}
 
-				value -= quart + regdeg.reduce(Degen.class, quart);
-			} else if (dot < 0 && value > 0) {
-				value -= quart - regdeg.reduce(Regen.class, quart);
+				value -= half + regdeg.reduce(Degen.class, half);
 			}
 
 			if (value < 0) {
@@ -979,6 +977,9 @@ public class Hand {
 		}
 
 		modHP(val, true);
+		if (val < 0 && getOther().getOrigins().synergy() == Race.VIRUS) {
+			getOther().modHP(-val / 2);
+		}
 	}
 
 	public JSONObject getData() {

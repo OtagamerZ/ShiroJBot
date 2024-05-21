@@ -124,7 +124,13 @@ public class Shoukan extends GameInstance<Phase> {
 		setSingleplayer(p1.equals(p2));
 		this.hands = Map.of(Side.TOP, new Hand(p1, this, Side.TOP), Side.BOTTOM, new Hand(p2, this, Side.BOTTOM));
 
-		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, getOther().getSide(), "str/game_wo", "<@" + getOther().getUid() + ">"), 5, TimeUnit.MINUTES);
+		setTimeout(turn -> {
+			if (getCurrent().selectionPending() && isLocked()) {
+				reportResult(GameReport.GAME_TIMEOUT, getCurrentSide(), "str/game_wo", "<@" + getCurrent().getUid() + ">");
+			}
+
+			reportResult(GameReport.GAME_TIMEOUT, getOtherSide(), "str/game_wo", "<@" + getOther().getUid() + ">");
+		}, 5, TimeUnit.MINUTES);
 	}
 
 	@Override
@@ -156,7 +162,6 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.modMP(curr.getBase().mpGain().get());
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
-		curr.showHand();
 		reportEvent("str/game_start", false, "<@" + curr.getUid() + ">");
 
 		takeSnapshot();
@@ -180,14 +185,14 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Method m = action.getFirst();
 		try {
-			setLocked(true);
-			if (m.getName().startsWith("deb")) {
+			if (!m.getName().startsWith("sel") && !m.getName().startsWith("deb")) {
+				return;
+			} else if (m.getName().startsWith("deb")) {
 				setCheated(true);
 			}
 
-			if ((boolean) m.invoke(this, hand.getSide(), action.getSecond())) {
-				getCurrent().showHand();
-			}
+			setLocked(true);
+			m.invoke(this, hand.getSide(), action.getSecond());
 		} catch (Exception e) {
 			if (e.getCause() instanceof StackOverflowError) {
 				Constants.LOGGER.error("Fatal error at {}", m.getName(), e);
@@ -1104,8 +1109,6 @@ public class Shoukan extends GameInstance<Phase> {
 						} else {
 							reportEvent(getString("str/effect_choice_ns", curr.getName(), sel.required()), true);
 						}
-
-						curr.showHand();
 					}
 
 					return t;
@@ -1378,7 +1381,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 					case FALLEN -> {
 						if (op.getRegDeg().peek() < 0) {
-							op.getRegDeg().apply(0.1);
+							op.getRegDeg().apply(0.2);
 						}
 					}
 				}
@@ -1654,7 +1657,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 					case FALLEN -> {
 						if (target.getRegDeg().peek() < 0) {
-							target.getRegDeg().apply(0.1);
+							target.getRegDeg().apply(0.2);
 						}
 					}
 				}
@@ -2319,6 +2322,8 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = getCurrent();
 		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
 		buttons.put(Utils.parseEmoji("▶"), w -> {
+			if (isLocked()) return;
+
 			if (curr.selectionPending()) {
 				getChannel().sendMessage(getString("error/pending_choice")).queue();
 				return;
@@ -2345,6 +2350,8 @@ public class Shoukan extends GameInstance<Phase> {
 		if (getPhase() == Phase.PLAN) {
 			if (getTurn() > 1) {
 				buttons.put(Utils.parseEmoji("⏩"), w -> {
+					if (isLocked()) return;
+
 					if (curr.selectionPending()) {
 						getChannel().sendMessage(getString("error/pending_choice")).queue();
 						return;
@@ -2365,6 +2372,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (!curr.getCards().isEmpty() && (getTurn() == 1 && !curr.hasRerolled()) || curr.getOrigins().synergy() == Race.DJINN) {
 				buttons.put(Utils.parseEmoji("\uD83D\uDD04"), w -> {
+					if (isLocked()) return;
+
 					curr.rerollHand();
 					reportEvent("str/hand_reroll", true, curr.getName());
 				});
@@ -2374,6 +2383,8 @@ public class Shoukan extends GameInstance<Phase> {
 				int rem = curr.getRemainingDraws();
 				if (rem > 0) {
 					buttons.put(Utils.parseEmoji("📤"), w -> {
+						if (isLocked()) return;
+
 						if (curr.selectionPending()) {
 							getChannel().sendMessage(getString("error/pending_choice")).queue();
 							return;
@@ -2383,13 +2394,21 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						curr.manualDraw();
-						curr.showHand();
+
+						BufferedImage bi = curr.renderChoices();
+						if (bi == null) return;
+
+						Objects.requireNonNull(w.getHook())
+								.setEphemeral(true)
+								.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
 
 						reportEvent("str/draw_card", true, curr.getName(), 1, "");
 					});
 
 					if (rem > 1) {
 						buttons.put(Utils.parseEmoji("📦"), w -> {
+							if (isLocked()) return;
+
 							if (curr.selectionPending()) {
 								getChannel().sendMessage(getString("error/pending_choice")).queue();
 								return;
@@ -2399,13 +2418,21 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							curr.manualDraw(curr.getRemainingDraws());
-							curr.showHand();
+
+							BufferedImage bi = curr.renderChoices();
+							if (bi == null) return;
+
+							Objects.requireNonNull(w.getHook())
+									.setEphemeral(true)
+									.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
 
 							reportEvent("str/draw_card", true, curr.getName(), rem, "s");
 						});
 					}
 				} else if (curr.getOrigins().major() == Race.DIVINITY) {
 					buttons.put(Utils.parseEmoji("1212407741046325308"), w -> {
+						if (isLocked()) return;
+
 						if (curr.selectionPending()) {
 							getChannel().sendMessage(getString("error/pending_choice")).queue();
 							return;
@@ -2416,8 +2443,14 @@ public class Shoukan extends GameInstance<Phase> {
 
 						Drawable<?> d = curr.manualDraw();
 						d.setEthereal(true);
-						curr.getRegDeg().add(-curr.getBase().hp() / 10);
-						curr.showHand();
+						curr.getRegDeg().add(-curr.getBase().hp() / 20);
+
+						BufferedImage bi = curr.renderChoices();
+						if (bi == null) return;
+
+						Objects.requireNonNull(w.getHook())
+								.setEphemeral(true)
+								.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
 
 						reportEvent("str/draw_card", true, curr.getName(), 1, "");
 					});
@@ -2425,6 +2458,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 				if (curr.canUseDestiny() && !Utils.equalsAny(curr.getOrigins().major(), Race.MACHINE, Race.MYSTICAL)) {
 					buttons.put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
+						if (isLocked()) return;
+
 						if (curr.selectionPending()) {
 							getChannel().sendMessage(getString("error/pending_choice")).queue();
 							return;
@@ -2447,7 +2482,13 @@ public class Shoukan extends GameInstance<Phase> {
 							curr.requestChoice(null, cards, ds -> {
 								curr.draw(ds.getFirst());
 								curr.setUsedDestiny(true);
-								curr.showHand();
+
+								BufferedImage bi = curr.renderChoices();
+								if (bi == null) return;
+
+								Objects.requireNonNull(w.getHook())
+										.setEphemeral(true)
+										.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
 
 								reportEvent("str/destiny_draw", true, curr.getName());
 							});
@@ -2460,6 +2501,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (curr.canUseDestiny() && Utils.equalsAny(curr.getOrigins().major(), Race.MACHINE, Race.MYSTICAL)) {
 				buttons.put(Utils.parseEmoji("⚡"), w -> {
+					if (isLocked()) return;
+
 					if (curr.selectionPending()) {
 						getChannel().sendMessage(getString("error/pending_choice")).queue();
 						return;
@@ -2506,6 +2549,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 					if (valid.size() >= 5) {
 						buttons.put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
+							if (isLocked()) return;
+
 							if (curr.selectionPending()) {
 								getChannel().sendMessage(getString("error/pending_choice")).queue();
 								return;
@@ -2539,7 +2584,13 @@ public class Shoukan extends GameInstance<Phase> {
 											}
 
 											curr.setOriginCooldown(3);
-											curr.showHand();
+
+											BufferedImage bi = curr.renderChoices();
+											if (bi == null) return;
+
+											Objects.requireNonNull(w.getHook())
+													.setEphemeral(true)
+													.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
 
 											reportEvent("str/spirit_synth", true, curr.getName());
 										});
@@ -2557,13 +2608,18 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (curr.getOrigins().synergy() == Race.ORACLE) {
 				buttons.put(Utils.parseEmoji("\uD83D\uDD2E"), w -> {
-					BufferedImage cards = curr.render(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
+					if (isLocked()) return;
 
-					Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(cards, "png"), "hand.png")).queue();
+					BufferedImage cards = curr.render(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
+					Objects.requireNonNull(w.getHook())
+							.setEphemeral(true)
+							.sendFiles(FileUpload.fromData(IO.getBytes(cards, "png"), "hand.png")).queue();
 				});
 			}
 
 			buttons.put(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
+				if (isLocked()) return;
+
 				setHistory(!hasHistory());
 
 				if (hasHistory()) {
@@ -2574,11 +2630,15 @@ public class Shoukan extends GameInstance<Phase> {
 			});
 
 			buttons.put(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
+				if (isLocked()) return;
+
 				if (curr.selectionPending()) {
 					BufferedImage bi = curr.renderChoices();
 					if (bi == null) return;
 
-					Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
+					Objects.requireNonNull(w.getHook())
+							.setEphemeral(true)
+							.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
 
 					return;
 				}
@@ -2586,9 +2646,17 @@ public class Shoukan extends GameInstance<Phase> {
 				Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "hand.png")).queue();
 			});
 
-			buttons.put(Utils.parseEmoji("\uD83D\uDD0D"), w -> Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")).queue());
+			buttons.put(Utils.parseEmoji("\uD83D\uDD0D"), w -> {
+				if (isLocked()) return;
+
+				Objects.requireNonNull(w.getHook())
+						.setEphemeral(true)
+						.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")).queue();
+			});
 
 			if (isSingleplayer() || getTurn() > 10) {
+				if (isLocked()) return;
+
 				buttons.put(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
 						reportResult(GameReport.SUCCESS, getOther().getSide(), "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
@@ -2759,8 +2827,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
-		curr.showHand();
-
 		reportEvent("str/game_turn_change", true, "<@" + curr.getUid() + ">", (int) Math.ceil(getTurn() / 2d));
 
 		takeSnapshot();
