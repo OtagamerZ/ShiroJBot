@@ -88,7 +88,7 @@ public class SlotSkin extends DAO<SlotSkin> {
 
 	public BufferedImage getImage(Side side, boolean legacy) {
 		String s = side.name().toLowerCase();
-		BufferedImage overlay = IO.getResourceAsImage(Constants.ORIGIN_RESOURCES + "shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".png");
+		BufferedImage overlay = IO.getResourceAsImage("shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".png");
 
 		BufferedImage bi = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
