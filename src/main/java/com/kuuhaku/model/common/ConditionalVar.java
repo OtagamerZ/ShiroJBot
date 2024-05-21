@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
 public class ConditionalVar<T> {
-	private BooleanSupplier condition;
+	private BooleanSupplier condition = () -> true;
 	private T value;
 
 	public void setCondition(BooleanSupplier condition) {

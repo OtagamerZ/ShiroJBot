@@ -72,8 +72,8 @@ public class CardExtra implements Cloneable {
 	private Race race = null;
 	private Senshi disguise = null;
 
-	private ConditionalVar<Card> vanity = new ConditionalVar<>();
-	private ConditionalVar<Callable<String>> write = new ConditionalVar<>();
+	private final ConditionalVar<Card> vanity = new ConditionalVar<>();
+	private final ConditionalVar<Callable<String>> write = new ConditionalVar<>();
 
 	private Drawable<?> source = null;
 	private String description = null;
@@ -234,16 +234,8 @@ public class CardExtra implements Cloneable {
 	}
 
 	public String getWrite() {
-		if (write == null) return "";
-
 		try {
-			String out = write.getValue().call();
-			if (out == null) {
-				write = null;
-				return "";
-			}
-
-			return out;
+			return write.getValue().call();
 		} catch (Exception e) {
 			return "";
 		}
