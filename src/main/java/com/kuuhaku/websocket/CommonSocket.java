@@ -39,6 +39,7 @@ import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -163,8 +164,11 @@ public class CommonSocket extends WebSocketClient {
 						}
 					}
 
+					User user = Main.getApp().getUserById(id);
+					if (user == null) return;
+
 					MessageEmbed toSend = first;
-					Main.getApp().getUserById(id).openPrivateChannel()
+					user.openPrivateChannel()
 							.flatMap(c -> c.sendMessageEmbeds(toSend))
 							.queue(s -> Pages.categorize(s, cats, true, 1, TimeUnit.MINUTES));
 				}

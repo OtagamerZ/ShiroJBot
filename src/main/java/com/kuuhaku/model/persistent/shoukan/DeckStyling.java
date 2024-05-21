@@ -22,6 +22,7 @@ import com.kuuhaku.model.enums.DeckOrder;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.enums.shoukan.SlotSkin;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -59,7 +60,7 @@ public class DeckStyling implements Serializable {
 	private boolean useChrome;
 
 	public FrameSkin getFrame() {
-		return frame;
+		return Utils.getOr(frame, FrameSkin.PINK);
 	}
 
 	public void setFrame(FrameSkin frame) {
@@ -67,7 +68,7 @@ public class DeckStyling implements Serializable {
 	}
 
 	public SlotSkin getSkin() {
-		return skin;
+		return Utils.getOr(skin, SlotSkin.DEFAULT);
 	}
 
 	public void setSkin(SlotSkin slot) {

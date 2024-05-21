@@ -248,7 +248,5 @@ public abstract class GameInstance<T extends Enum<T>> {
 		} else {
 			exec.completeExceptionally(new GameReport(code));
 		}
-
-		channel = null;
 	}
 }
