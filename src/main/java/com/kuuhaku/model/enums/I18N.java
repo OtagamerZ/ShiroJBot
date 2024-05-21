@@ -36,7 +36,7 @@ public enum I18N {
 	private final Locale locale = Locale.forLanguageTag(name().toLowerCase());
 	private final ZoneId zone;
 	private final String emoji;
-	private final AtomicBoolean uwu = new AtomicBoolean(false);
+	private boolean uwu = false;
 
 	I18N(ZoneId zone, String emoji) {
 		this.zone = zone;
@@ -84,7 +84,7 @@ public enum I18N {
 			}
 		}).formatted(args);
 
-		if (uwu.get()) {
+		if (uwu) {
 			return Uwuifier.INSTANCE.uwu(this, out);
 		}
 
@@ -103,7 +103,11 @@ public enum I18N {
 		return emoji;
 	}
 
-	public AtomicBoolean getUwu() {
+	public boolean isUwu() {
 		return uwu;
+	}
+
+	public void setUwu(boolean uwu) {
+		this.uwu = uwu;
 	}
 }

@@ -75,7 +75,8 @@ public class Uwuifier {
             String[] words = line.split("(?<=\\S) +");
             for (int j = 0; j < words.length; j++) {
                 String word = words[j];
-                if (UrlValidator.getInstance().isValid(word) || word.matches("[:<{].+[:>}]")) continue;
+                if (UrlValidator.getInstance().isValid(word) || word.contains("://")) continue;
+                else if (word.matches("[:<{].+[:>}]")) continue;
 
                 for (Pair<String, String> p : exp) {
                     word = word.replaceAll(p.getLeft(), p.getRight());

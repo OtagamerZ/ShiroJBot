@@ -105,7 +105,7 @@ public class GuildConfig extends DAO<GuildConfig> {
 
 	public I18N getLocale() {
 		if (settings != null) {
-			locale.getUwu().set(settings.isFeatureEnabled(GuildFeature.UWU_MODE));
+			locale.setUwu(settings.isFeatureEnabled(GuildFeature.UWU_MODE));
 		}
 
 		return locale;
