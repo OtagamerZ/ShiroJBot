@@ -147,12 +147,13 @@
 	 }
 
 	 public SlotSkin getSkin() {
+		 SlotSkin defSkin = DAO.find(SlotSkin.class, "DEFAULT");
 		 if (!styling.getSkin().canUse(account)) {
-			 styling.setSkin(null);
+			 styling.setSkin(defSkin);
 			 save();
 		 }
 
-		 return Utils.getOr(styling.getSkin(), DAO.find(SlotSkin.class, "DEFAULT"));
+		 return Utils.getOr(styling.getSkin(), defSkin);
 	 }
 
 	 public List<String> getSenshiRaw() {
