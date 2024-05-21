@@ -152,7 +152,7 @@
 			 save();
 		 }
 
-		 return Utils.getOr(styling.getSkin(), SlotSkin.DEFAULT);
+		 return Utils.getOr(styling.getSkin(), DAO.find(SlotSkin.class, "DEFAULT"));
 	 }
 
 	 public List<String> getSenshiRaw() {

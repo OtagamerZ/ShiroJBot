@@ -48,10 +48,6 @@ import static jakarta.persistence.CascadeType.ALL;
 @Entity
 @Table(name = "slot_skin")
 public class SlotSkin extends DAO<SlotSkin> {
-
-	@Transient
-	public static final SlotSkin DEFAULT = new SlotSkin("DEFAULT");
-
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
