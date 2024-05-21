@@ -85,7 +85,8 @@ import java.util.stream.Collectors;
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 public class Shoukan extends GameInstance<Phase> {
-	private static final String GIF_PATH = "https://raw.githubusercontent.com/OtagamerZ/ShoukanAssets/master/gifs/";
+	public static final String GIF_PATH = "https://raw.githubusercontent.com/OtagamerZ/ShoukanAssets/master/gifs/";
+	public static final String SKIN_PATH = "https://raw.githubusercontent.com/OtagamerZ/ShoukanAssets/master/skins/";
 
 	private final Arcade arcade;
 	private final Arena arena;

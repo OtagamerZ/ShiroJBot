@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Side;
@@ -72,7 +73,7 @@ public class SlotSkin extends DAO<SlotSkin> {
 
 	public BufferedImage getImage(Side side, boolean legacy) {
 		String s = side.name().toLowerCase();
-		BufferedImage overlay = IO.getResourceAsImage(Constants.ORIGIN_RESOURCES + "shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".png");
+		BufferedImage overlay = IO.getResourceAsImage(Shoukan.SKIN_PATH + "shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".png");
 		if (overlay == null) return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
 		BufferedImage bi = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
