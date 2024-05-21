@@ -1217,6 +1217,8 @@ public class Hand {
 	}
 
 	public BufferedImage renderChoices() {
+		if (selection == null) return null;
+
 		List<SelectionCard> cards = selection.cards();
 		if (cards.isEmpty()) return null;
 

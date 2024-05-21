@@ -2394,13 +2394,9 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						curr.manualDraw();
-
-						BufferedImage bi = curr.renderChoices();
-						if (bi == null) return;
-
 						Objects.requireNonNull(w.getHook())
 								.setEphemeral(true)
-								.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
+								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
 
 						reportEvent("str/draw_card", true, curr.getName(), 1, "");
 					});
@@ -2418,13 +2414,9 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							curr.manualDraw(curr.getRemainingDraws());
-
-							BufferedImage bi = curr.renderChoices();
-							if (bi == null) return;
-
 							Objects.requireNonNull(w.getHook())
 									.setEphemeral(true)
-									.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
+									.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
 
 							reportEvent("str/draw_card", true, curr.getName(), rem, "s");
 						});
@@ -2444,13 +2436,9 @@ public class Shoukan extends GameInstance<Phase> {
 						Drawable<?> d = curr.manualDraw();
 						d.setEthereal(true);
 						curr.getRegDeg().add(-curr.getBase().hp() / 20);
-
-						BufferedImage bi = curr.renderChoices();
-						if (bi == null) return;
-
 						Objects.requireNonNull(w.getHook())
 								.setEphemeral(true)
-								.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
+								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
 
 						reportEvent("str/draw_card", true, curr.getName(), 1, "");
 					});
@@ -2482,13 +2470,9 @@ public class Shoukan extends GameInstance<Phase> {
 							curr.requestChoice(null, cards, ds -> {
 								curr.draw(ds.getFirst());
 								curr.setUsedDestiny(true);
-
-								BufferedImage bi = curr.renderChoices();
-								if (bi == null) return;
-
 								Objects.requireNonNull(w.getHook())
 										.setEphemeral(true)
-										.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
+										.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
 
 								reportEvent("str/destiny_draw", true, curr.getName());
 							});
@@ -2584,13 +2568,9 @@ public class Shoukan extends GameInstance<Phase> {
 											}
 
 											curr.setOriginCooldown(3);
-
-											BufferedImage bi = curr.renderChoices();
-											if (bi == null) return;
-
 											Objects.requireNonNull(w.getHook())
 													.setEphemeral(true)
-													.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
+													.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
 
 											reportEvent("str/spirit_synth", true, curr.getName());
 										});
