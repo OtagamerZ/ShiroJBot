@@ -185,7 +185,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Method m = action.getFirst();
 		try {
-			if (!m.getName().startsWith("sel") && !m.getName().startsWith("deb")) {
+			if (isLocked() && (!m.getName().startsWith("sel") && !m.getName().startsWith("deb"))) {
 				return;
 			} else if (m.getName().startsWith("deb")) {
 				setCheated(true);
