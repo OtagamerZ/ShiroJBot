@@ -73,7 +73,7 @@ public class CardExtra implements Cloneable {
 	private Senshi disguise = null;
 
 	private final ConditionalVar<Card> vanity = new ConditionalVar<>();
-	private final ConditionalVar<Callable<String>> write = new ConditionalVar<>();
+	private final ConditionalVar<Supplier<String>> write = new ConditionalVar<>();
 
 	private Drawable<?> source = null;
 	private String description = null;
@@ -234,18 +234,14 @@ public class CardExtra implements Cloneable {
 	}
 
 	public String getWrite() {
-		try {
-			return Utils.getOr(write.getValue().call(), "");
-		} catch (Exception e) {
-			return "";
-		}
+		return Utils.getOr(write.getValue().get(), "");
 	}
 
-	public void setWrite(Callable<String> write) {
+	public void setWrite(Supplier<String> write) {
 		this.write.setValue(write);
 	}
 
-	public void setWrite(Supplier<Object> condition, Callable<String> write) {
+	public void setWrite(Supplier<Object> condition, Supplier<String> write) {
 		this.write.setValue(write);
 		this.write.setCondition(() -> {
 			Object ref = condition.get();

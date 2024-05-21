@@ -30,7 +30,7 @@ public class ConditionalVar<T> {
 	}
 
 	public T getValue() {
-		if (condition.getAsBoolean()) {
+		if (!condition.getAsBoolean()) {
 			return null;
 		}
 
