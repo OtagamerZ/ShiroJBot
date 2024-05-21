@@ -661,22 +661,34 @@ public class Hand {
 	}
 
 	public void verifyCap() {
-		if (cards.size() > 20) {
-			requestChoice(
-					null,
-					"str/destroy_cards",
-					cards.stream().map(c -> new SelectionCard(c, false)).toList(),
-					cards.size() - 20,
-					ds -> {
-						graveyard.addAll(ds);
-						cards.removeAll(ds);
+		List<SelectionCard> cards = this.cards.stream()
+				.filter(Drawable::isAvailable)
+				.map(c -> new SelectionCard(c, false))
+				.toList();
 
-						game.reportEvent("str/discard_card", true, getName(),
-								Utils.properlyJoin(game.getString("str/and")).apply(cards.stream().map(Drawable::toString).toList())
-						);
-					}
-			);
+		if (cards.size() > 20) {
+			requestDiscard(cards.size() - 20);
 		}
+	}
+
+	public CompletableFuture<List<Drawable<?>>> requestDiscard(int amount) {
+		List<SelectionCard> cards = this.cards.stream()
+				.filter(Drawable::isAvailable)
+				.map(c -> new SelectionCard(c, false))
+				.toList();
+
+		return requestChoice(null, "str/destroy_cards", cards, amount,
+				ds -> {
+					graveyard.addAll(ds);
+					this.cards.removeAll(ds);
+
+					game.reportEvent("str/discard_card", true, getName(),
+							Utils.properlyJoin(game.getString("str/and")).apply(
+									cards.stream().map(SelectionCard::card).map(Drawable::toString).toList()
+							)
+					);
+				}
+		);
 	}
 
 	public BondedList<Drawable<?>> getGraveyard() {

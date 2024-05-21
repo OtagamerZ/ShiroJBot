@@ -74,6 +74,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
@@ -645,10 +646,19 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
+		Drawable<?> orig = curr.getCards().get(args.getInt("inHand") - 1);
+		Drawable<?> d = orig;
 		if (!d.isAvailable() || d.isManipulated()) {
 			getChannel().sendMessage(getString("error/card_unavailable")).queue();
 			return false;
+		}
+
+		if (d instanceof Senshi s && curr.getOrigins().synergy() == Race.SHIKIGAMI) {
+			d = new EquippableSenshi(s.copy());
+
+			EquippableSenshi es = (EquippableSenshi) d;
+			es.getStats().getPower().set(-0.6);
+			es.getStats().getData().put("_shiki", true);
 		}
 
 		if (d instanceof Evogear chosen && !chosen.isSpell()) {
@@ -691,6 +701,11 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Evogear copy = chosen.copy();
 		Senshi target = slot.getTop();
+		if (target.getEquipments().stream().anyMatch(e -> e.getStats().getData().has("_shiki"))) {
+			getChannel().sendMessage(getString("error/only_one_shikigami")).queue();
+			return false;
+		}
+
 		curr.consumeHP(copy.getHPCost());
 		curr.consumeMP(copy.getMPCost());
 		List<Drawable<?>> consumed = curr.consumeSC(copy.getSCCost());
@@ -698,7 +713,12 @@ public class Shoukan extends GameInstance<Phase> {
 			copy.getStats().getData().put("consumed", consumed);
 		}
 
-		chosen.setAvailable(false);
+		if (chosen instanceof EquippableSenshi) {
+			orig.setAvailable(false);
+		} else {
+			chosen.setAvailable(false);
+		}
+
 		target.getEquipments().add(copy);
 		curr.getData().put("last_equipment", copy);
 		curr.getData().put("last_evogear", copy);
@@ -1311,12 +1331,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (you.getOrigins().synergy() == Race.DOPPELGANGER && source.getId().equals(target.getId())) {
 			dmg *= 2;
-		} else if (you.getOrigins().synergy() == Race.ELEMENTAL) {
-			if (source.getElement().getStrong() == target.getElement()) {
-				dmg *= 2;
-			} else if (source.getElement().getWeak() == target.getElement()) {
-				dmg /= 2;
-			}
 		}
 
 		int direct = 0;
@@ -1372,12 +1386,13 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				switch (you.getOrigins().synergy()) {
-					case SHIKIGAMI -> {
-						List<SlotColumn> slts = arena.getSlots(op.getSide());
-						for (SlotColumn slt : slts) {
-							if (slt.hasTop()) {
-								slt.getTop().getStats().getDodge().set(-2);
-							}
+					case ELEMENTAL -> {
+						int water = (int) getCards(you.getSide()).parallelStream()
+								.filter(s -> s.getElement() == ElementType.WATER)
+								.count();
+
+						if (water >= 4) {
+							you.modMP(1);
 						}
 					}
 					case FALLEN -> {
@@ -1450,10 +1465,6 @@ public class Shoukan extends GameInstance<Phase> {
 								outcome = getString("str/combat_dodge", dodge);
 								trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
 
-								if (you.getOrigins().synergy() == Race.FABLED) {
-									op.modHP((int) -(dmg * dmgMult * 0.2));
-								}
-
 								dmg = 0;
 							} else {
 								if (unstop || dmg > enemyStats) {
@@ -1471,12 +1482,24 @@ public class Shoukan extends GameInstance<Phase> {
 									}
 
 									if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
+										int duration;
 										if (enemyStats == 0) {
-											target.setStun(5);
+											duration = 5;
 										} else {
-											target.setStun(Utils.clamp(dmg / enemyStats, 1, 5));
+											duration = Utils.clamp(dmg / enemyStats, 1, 5);
 										}
 
+										if (you.getOrigins().synergy() == Race.ELEMENTAL) {
+											int earth = (int) getCards(you.getSide()).parallelStream()
+													.filter(s -> s.getElement() == ElementType.EARTH)
+													.count();
+
+											if (earth >= 4) {
+												duration *= 2;
+											}
+										}
+
+										target.setStun(duration);
 										dmg = 0;
 									} else {
 										op.getGraveyard().add(target);
@@ -1648,12 +1671,13 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				switch (you.getOrigins().synergy()) {
-					case SHIKIGAMI -> {
-						List<SlotColumn> slts = arena.getSlots(target.getSide());
-						for (SlotColumn slt : slts) {
-							if (slt.hasTop()) {
-								slt.getTop().getStats().getDodge().set(-2);
-							}
+					case ELEMENTAL -> {
+						int water = (int) getCards(you.getSide()).parallelStream()
+								.filter(s -> s.getElement() == ElementType.WATER)
+								.count();
+
+						if (water >= 4) {
+							you.modMP(1);
 						}
 					}
 					case FALLEN -> {
@@ -2709,6 +2733,21 @@ public class Shoukan extends GameInstance<Phase> {
 		turns.add(Turn.from(this));
 
 		Hand curr = getCurrent();
+		if (getOther().getOrigins().synergy() == Race.ELEMENTAL) {
+			int fire = (int) getCards(getOther().getSide()).parallelStream()
+					.filter(s -> s.getElement() == ElementType.FIRE)
+					.count();
+
+			if (fire >= 4) {
+				try {
+					curr.requestDiscard(1).get();
+				} catch (Exception e) {
+					curr.getRegDeg().add(-300);
+					getChannel().sendMessage(getString("str/fire_burn")).queue();
+				}
+			}
+		}
+
 		curr.flushDiscard();
 		trigger(ON_TURN_END, curr.getSide());
 
@@ -2723,7 +2762,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (curr.getOrigins().synergy() == Race.ANGEL) {
-			curr.modHP(curr.getMP() * 100);
+			curr.getRegDeg().add(curr.getMP() * 100);
 		}
 
 		for (Lock lock : Lock.values()) {

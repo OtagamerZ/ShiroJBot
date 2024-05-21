@@ -223,7 +223,12 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				for (Object type : types) {
 					props.compute(String.valueOf(type), (k, v) -> {
-						int value = Calc.round(NumberUtils.toDouble(val) * getPower() / equips);
+						double power = getPower();
+						if (h.getOrigins().synergy() == Race.FABLED) {
+							power = 1;
+						}
+
+						int value = Calc.round(NumberUtils.toDouble(val) * power / equips);
 
 						if (v == null) {
 							return value;

@@ -340,6 +340,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			if (getGame() != null && getGame().getArcade() == Arcade.OVERCHARGE) {
 				mult *= 1.5;
 			}
+
+			if (hand.getOrigins().synergy() == Race.FABLED) {
+				mult *= getPower();
+			}
 		}
 
 		return mult;

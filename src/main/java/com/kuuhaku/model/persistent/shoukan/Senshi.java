@@ -516,11 +516,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						mult *= 1.2;
 					}
 				}
-				case GHOUL -> {
-					if (hand.getHPPrcnt() > 1) {
-						mult *= 1 + Math.max(0, (hand.getHPPrcnt() - 1) / 2);
-					}
-				}
 				case CYBERBEAST -> sum += getGame().getCards(getSide()).stream().mapToInt(Senshi::getBlock).sum();
 			}
 
@@ -666,6 +661,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (hand.getOrigins().synergy() == Race.REVENANT && !hasEffect()) {
 				mult *= 1.2;
+			} else if (hand.getOrigins().synergy() == Race.FABLED) {
+				mult *= getPower();
 			}
 		}
 

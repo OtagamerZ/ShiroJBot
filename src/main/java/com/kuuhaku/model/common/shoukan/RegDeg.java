@@ -59,6 +59,13 @@ public class RegDeg {
 				mult *= 1.5;
 			}
 
+			if (parent.getOther().getOrigins().synergy() == Race.GHOUL) {
+				int split = (int) (-value * mult * parent.getStats().getDegenMult().get()) / 2;
+				values.add(new Degen(split));
+				values.add(new Degen(split));
+				return;
+			}
+
 			values.add(new Degen((int) (-value * mult * parent.getStats().getDegenMult().get())));
 		} else if (value > 0) {
 			if (parent.getOrigins().major() == Race.HUMAN) {
