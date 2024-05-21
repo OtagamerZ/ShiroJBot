@@ -51,7 +51,7 @@ public class LevelRoleAddCommand implements Executable {
 			return;
 		}
 
-		if (event.guild().getSelfMember().canInteract(role)) {
+		if (!event.guild().getSelfMember().canInteract(role)) {
 			event.channel().sendMessage(locale.get("error/higher_role")).queue();
 			return;
 		} else if (settings.getLevelRoles().stream().anyMatch(lr -> lr.getRole().equals(role))) {
