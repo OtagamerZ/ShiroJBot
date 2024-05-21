@@ -47,7 +47,7 @@ public class DeckStyling implements Serializable {
 	private DeckOrder evogearOrder = DeckOrder.NAME;
 
 	@ManyToOne
-	@JoinColumn(name = "cover_id")
+	@JoinColumn(name = "skin_id")
 	@Fetch(FetchMode.JOIN)
 	private SlotSkin skin;
 
