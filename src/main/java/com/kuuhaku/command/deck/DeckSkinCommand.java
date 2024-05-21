@@ -21,6 +21,7 @@ package com.kuuhaku.command.deck;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -28,7 +29,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.SlotSkin;
+import com.kuuhaku.model.persistent.shoukan.SlotSkin;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.DynamicProperty;
@@ -71,10 +72,10 @@ public class DeckSkinCommand implements Executable {
 				.setAuthor(locale.get("str/all_skins"))
 				.setFooter(acc.getBalanceFooter(locale));
 
-		SlotSkin[] skins = SlotSkin.values();
+		List<SlotSkin> skins = DAO.findAll(SlotSkin.class);
 		List<Page> pages = new ArrayList<>();
-		for (int i = 0; i < skins.length; i++) {
-			SlotSkin skin = skins[i];
+		for (int i = 0; i < skins.size(); i++) {
+			SlotSkin skin = skins.get(i);
 			if (!skin.canUse(acc)) {
 				List<Title> remaining = skin.getTitles().stream()
 						.filter(t -> !acc.hasTitle(t.getId()))
@@ -93,17 +94,17 @@ public class DeckSkinCommand implements Executable {
 							.setDescription(locale.get("str/requires_titles", req));
 				} else {
 					eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
-							.setImage(URL.formatted(skin.name().toLowerCase()))
+							.setImage(URL.formatted(skin.getId().toLowerCase()))
 							.setTitle(locale.get("str/skin_locked"))
 							.setDescription(locale.get("str/price", locale.get("currency/" + skin.getCurrency(), skin.getPrice())));
 				}
 			} else {
 				eb.setThumbnail(null)
-						.setImage(URL.formatted(skin.name().toLowerCase()))
+						.setImage(URL.formatted(skin.getId().toLowerCase()))
 						.setTitle(skin.getName(locale))
 						.setDescription(skin.getDescription(locale));
 			}
-			eb.setFooter(locale.get("str/page", i + 1, skins.length));
+			eb.setFooter(locale.get("str/page", i + 1, skins.size()));
 
 			pages.add(InteractPage.of(eb.build()));
 		}
@@ -119,13 +120,13 @@ public class DeckSkinCommand implements Executable {
 								}
 							});
 							m.put(Utils.parseEmoji("▶️"), w -> {
-								if (i.get() < skins.length - 1) {
+								if (i.get() < skins.size() - 1) {
 									confirm.set(false);
 									s.editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
 								}
 							});
 							m.put(Utils.parseEmoji("✅"), w -> {
-								SlotSkin skin = skins[i.get()];
+								SlotSkin skin = skins.get(i.get());
 								if (!skin.canUse(acc)) {
 									List<Title> remaining = skin.getTitles().stream()
 											.filter(t -> !acc.hasTitle(t.getId()))
@@ -151,7 +152,7 @@ public class DeckSkinCommand implements Executable {
 											acc.consumeGems(skin.getPrice(), "Skin " + skin);
 										}
 
-										DynamicProperty.update(acc.getUid(), "ss_" + skin.name().toLowerCase(), true);
+										DynamicProperty.update(acc.getUid(), "ss_" + skin.getId().toLowerCase(), true);
 										event.channel().sendMessage(locale.get("success/skin_bought", d.getName()))
 												.flatMap(ms -> s.delete())
 												.queue();

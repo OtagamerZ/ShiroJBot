@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2024  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,23 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.enums.shoukan;
+package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
+import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -34,53 +40,46 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public enum SlotSkin {
-	DEFAULT,
-	HEX("HOARDER_III"),
-	PLANK(3500, Currency.CR, "METANAUT"),
-	MISSING(10000, Currency.CR),
-	INVISIBLE("DEUS_VULT", "REBELLION", "HOARDER_II"),
-	LEGACY("VETERAN"),
-	NEBULA(5, Currency.GEM, "METANAUT", "TALKER_III", "UNTOUCHABLE", "MEDIC"),
-	GRAFITTI(5000, Currency.CR, "REBELLION", "SURVIVOR", "RUTHLESS"),
-	RAINBOW(1, Currency.GEM),
-	DIGITAL(5000, Currency.CR, "TALKER_II"),
-	SYNTHWAVE("PARADOX", "FROM_ABYSS", "MONKE", "ONE_GOD"),
-	AHEGAO(1_000_000, Currency.CR, "NO_MANS_LAND", "ARE_ARE", "TRAVELLER", "PARADOX", "CODEX_OMNIUM")
-	;
+@Entity
+@Table(name = "slot_skin")
+public class SlotSkin extends DAO<SlotSkin> {
 
-	private final int price;
-	private final Currency currency;
-	private final String[] titles;
+	@Transient
+	public static final SlotSkin DEFAULT = new SlotSkin("DEFAULT");
 
-	SlotSkin() {
-		this.price = 0;
-		this.currency = null;
-		this.titles = null;
+	@Id
+	@Column(name = "id", nullable = false)
+	private String id;
+
+	@Column(name = "price")
+	private int price;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "currency")
+	private Currency currency;
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "titles", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray titles;
+
+	public SlotSkin() {
 	}
 
-	SlotSkin(String... titles) {
-		this.price = 0;
-		this.currency = null;
-		this.titles = titles;
-	}
-
-	SlotSkin(int price, Currency currency, String... titles) {
-		this.price = price;
-		this.currency = currency;
-		this.titles = titles;
+	public SlotSkin(String id) {
+		this.id = id;
 	}
 
 	public BufferedImage getImage(Side side, boolean legacy) {
 		String s = side.name().toLowerCase();
-		BufferedImage overlay = IO.getResourceAsImage("shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".png");
-		if (this == INVISIBLE) return overlay;
+		BufferedImage overlay = IO.getResourceAsImage(Constants.ORIGIN_RESOURCES + "shoukan/overlay/" + s + (legacy ? "_legacy" : "") + ".png");
+		if (overlay == null) return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
 		BufferedImage bi = new BufferedImage(overlay.getWidth(), overlay.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
-		BufferedImage theme = IO.getResourceAsImage("shoukan/side/" + name().toLowerCase() + "_" + s + ".png");
+		BufferedImage theme = IO.getResourceAsImage("shoukan/side/" + id.toLowerCase() + "_" + s + ".png");
 		Graph.applyMask(theme, IO.getResourceAsImage("shoukan/mask/slot_" + s + (legacy ? "_legacy" : "") + "_mask.png"), 0);
 
 		g2d.drawImage(theme, 5, 5, null);
@@ -91,20 +90,29 @@ public enum SlotSkin {
 		return bi;
 	}
 
+	public String getId() {
+		return id;
+	}
+
 	public String getName(I18N locale) {
-		return locale.get("skin/" + name());
+		return locale.get("skin/" + id);
 	}
 
 	public String getDescription(I18N locale) {
-		return locale.get("skin/" + name() + "_desc");
+		return locale.get("skin/" + id + "_desc");
 	}
 
 	public List<Title> getTitles() {
 		if (titles == null) return List.of();
 
 		List<Title> out = new ArrayList<>();
-		for (String title : titles) {
-			out.add(DAO.find(Title.class, title));
+		for (Object title : titles) {
+			if (title instanceof String s) {
+				Title t = DAO.find(Title.class, s);
+				if (t != null) {
+					out.add(t);
+				}
+			}
 		}
 
 		return out;
@@ -121,20 +129,16 @@ public enum SlotSkin {
 	public boolean canUse(Account acc) {
 		if (titles == null) return true;
 
-		for (String title : titles) {
-			if (!acc.hasTitle(title)) return false;
+		for (Object title : titles) {
+			if (title instanceof String s) {
+				if (!acc.hasTitle(s)) return false;
+			}
 		}
 
 		if (price > 0) {
-			return !acc.getDynValue("ss_" + name().toLowerCase()).isBlank();
+			return !acc.getDynValue("ss_" + id.toLowerCase()).isBlank();
 		}
 
 		return true;
-	}
-
-	public static SlotSkin getByName(String name) {
-		return Arrays.stream(values()).parallel()
-				.filter(fc -> Utils.equalsAny(name, fc.name(), fc.toString()))
-				.findAny().orElse(null);
 	}
 }

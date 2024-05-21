@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.model.enums.DeckOrder;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
-import com.kuuhaku.model.enums.shoukan.SlotSkin;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
@@ -40,16 +39,17 @@ public class DeckStyling implements Serializable {
 	private FrameSkin frame = FrameSkin.PINK;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "skin", nullable = false)
-	private SlotSkin skin = SlotSkin.DEFAULT;
-
-	@Enumerated(EnumType.STRING)
 	@Column(name = "senshi_order", nullable = false)
 	private DeckOrder senshiOrder = DeckOrder.NAME;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "evogear_order", nullable = false)
 	private DeckOrder evogearOrder = DeckOrder.NAME;
+
+	@ManyToOne
+	@JoinColumn(name = "cover_id")
+	@Fetch(FetchMode.JOIN)
+	private SlotSkin skin;
 
 	@ManyToOne
 	@JoinColumn(name = "cover_id")
@@ -68,7 +68,7 @@ public class DeckStyling implements Serializable {
 	}
 
 	public SlotSkin getSkin() {
-		return Utils.getOr(skin, SlotSkin.DEFAULT);
+		return skin;
 	}
 
 	public void setSkin(SlotSkin slot) {

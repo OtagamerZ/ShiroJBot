@@ -148,11 +148,11 @@
 
 	 public SlotSkin getSkin() {
 		 if (!styling.getSkin().canUse(account)) {
-			 styling.setSkin(SlotSkin.DEFAULT);
+			 styling.setSkin(null);
 			 save();
 		 }
 
-		 return styling.getSkin();
+		 return Utils.getOr(styling.getSkin(), SlotSkin.DEFAULT);
 	 }
 
 	 public List<String> getSenshiRaw() {
