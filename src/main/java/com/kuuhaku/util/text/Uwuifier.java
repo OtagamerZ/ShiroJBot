@@ -76,13 +76,13 @@ public class Uwuifier {
             for (int j = 0; j < words.length; j++) {
                 String word = words[j];
                 if (UrlValidator.getInstance().isValid(word) || word.contains("://")) continue;
-                else if (word.matches("[:<{].+[:>}]")) continue;
+                else if (word.matches(":.+:|<.+>|\\{.+}|`.+`")) continue;
 
                 for (Pair<String, String> p : exp) {
                     word = word.replaceAll(p.getLeft(), p.getRight());
                 }
 
-                words[j] = word.replace("!", Utils.getRandomEntry(punctuation));
+                words[j] = word.replaceAll("[!?.]", Utils.getRandomEntry(punctuation));
             }
 
             String out = String.join(" ", words);
