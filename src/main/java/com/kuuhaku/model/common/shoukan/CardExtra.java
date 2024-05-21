@@ -235,7 +235,7 @@ public class CardExtra implements Cloneable {
 
 	public String getWrite() {
 		try {
-			return write.getValue().call();
+			return Utils.getOr(write.getValue().call(), "");
 		} catch (Exception e) {
 			return "";
 		}
