@@ -252,13 +252,13 @@ public class CardExtra implements Cloneable {
 		this.write.setValue(write);
 	}
 
-	public void setWrite(Callable<String> write, BooleanSupplier condition) {
+	public void setWrite(BooleanSupplier condition, Callable<String> write) {
 		this.write.setValue(write);
 		this.write.setCondition(condition);
 	}
 
-	public void setWrite(Callable<String> write, Object ref) {
-		setWrite(write, () -> {
+	public void setWrite(Object ref, Callable<String> write) {
+		setWrite(() -> {
 			if (ref == null) return false;
 
 			return !switch (ref) {
@@ -267,7 +267,7 @@ public class CardExtra implements Cloneable {
 				case Number n -> n.doubleValue() == 0;
 				default -> true;
 			};
-		});
+		}, write);
 	}
 
 	public Drawable<?> getSource() {
