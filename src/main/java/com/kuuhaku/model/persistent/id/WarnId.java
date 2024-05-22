@@ -21,8 +21,6 @@ package com.kuuhaku.model.persistent.id;
 import com.kuuhaku.controller.DAO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -33,7 +31,6 @@ public class WarnId implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 2255671099445472157L;
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private int id;
 

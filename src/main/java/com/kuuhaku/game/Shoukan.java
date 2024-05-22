@@ -701,7 +701,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Evogear copy = chosen.copy();
 		Senshi target = slot.getTop();
-		if (target.getEquipments().stream().anyMatch(e -> e.getStats().getData().has("_shiki"))) {
+		if (target.getEquipments().stream().anyMatch(e -> chosen instanceof EquippableSenshi && e.getStats().getData().has("_shiki"))) {
 			getChannel().sendMessage(getString("error/only_one_shikigami")).queue();
 			return false;
 		}
