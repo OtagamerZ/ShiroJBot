@@ -31,6 +31,7 @@ import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
+import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -175,6 +176,15 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public boolean hasCharm(Charm charm) {
 		return getCharms().contains(charm.name());
+	}
+
+	@Override
+	public SlotColumn getSlot() {
+		if (equipper != null) {
+			return equipper.getSlot();
+		}
+
+		return new SlotColumn(getGame(), hand.getSide(), -1);
 	}
 
 	@Override

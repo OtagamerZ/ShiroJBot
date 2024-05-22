@@ -113,9 +113,7 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 			if (source instanceof Senshi s) {
 				return s.getIndex() == -1;
 			} else if (source instanceof Evogear e) {
-				if (e.isSpell()) return false;
-
-				return e.getEquipper() == null || e.getEquipper().getIndex() == -1;
+				return !e.isSpell() && e.getIndex() == -1;
 			} else if (source instanceof Field f) {
 				return !f.isActive();
 			}
