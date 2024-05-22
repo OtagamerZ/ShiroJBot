@@ -186,10 +186,7 @@ public class CommonSocket extends WebSocketClient {
 
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
-		if (retry > 4) {
-			Constants.LOGGER.info("Failed to reconnect to {} in 5 retries, aborting", getClass().getSimpleName());
-			return;
-		}
+		if (retry > 6) retry = 6;
 
 		if (retry > 0) {
 			Constants.LOGGER.info("Failed to reconnect to {}, retrying in {} seconds", getClass().getSimpleName(), ++retry * 5);
