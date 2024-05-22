@@ -61,7 +61,6 @@ import com.ygimenez.json.JSONUtils;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -74,7 +73,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
@@ -657,8 +655,8 @@ public class Shoukan extends GameInstance<Phase> {
 			d = new EquippableSenshi(s.copy());
 
 			EquippableSenshi es = (EquippableSenshi) d;
-			es.getStats().getPower().set(-0.6);
 			es.getStats().getData().put("_shiki", true);
+			es.getStats().getAttrMult().set(-0.4);
 		}
 
 		if (d instanceof Evogear chosen && !chosen.isSpell()) {
