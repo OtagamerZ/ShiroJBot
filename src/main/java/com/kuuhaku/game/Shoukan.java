@@ -2079,7 +2079,7 @@ public class Shoukan extends GameInstance<Phase> {
 		for (TriggerBind binding : Set.copyOf(bindings)) {
 			if (binding.isBound(ep)) {
 				EffectHolder<?> holder = binding.getHolder();
-				if (holder.getIndex() == -1) {
+				if ((holder instanceof Senshi s && s.getIndex() == -1) || (holder instanceof Evogear e && e.getEquipper() == null)) {
 					bindings.remove(binding);
 					continue;
 				}
