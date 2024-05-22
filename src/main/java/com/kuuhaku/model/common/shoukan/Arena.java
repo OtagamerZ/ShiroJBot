@@ -358,7 +358,7 @@ public class Arena implements Renderer {
 					Graph.applyTransformed(g2d, slotWidth * x, (Drawable.SIZE.height + 100) * y, g1 -> {
 						List<Evogear> equips = s.getEquipments();
 						for (int i = 0; i < Math.min(equips.size(), 3); i++) {
-							g2d.drawImage(equips.get(i).render(game.getLocale(), s.getHand().getUserDeck()),
+							g1.drawImage(equips.get(i).render(game.getLocale(), s.getHand().getUserDeck()),
 									10 + Drawable.SIZE.width * i, 0, null
 							);
 						}
