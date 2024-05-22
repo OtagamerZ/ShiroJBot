@@ -61,10 +61,7 @@ public class ShoukanCommand implements Executable {
 
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		if (GameInstance.CHANNELS.contains(event.channel().getId())) {
-			event.channel().sendMessage(locale.get("error/channel_occupied_self")).queue();
-			return;
-		} else if (GameInstance.PLAYERS.contains(event.user().getId())) {
+		if (GameInstance.PLAYERS.contains(event.user().getId())) {
 			event.channel().sendMessage(locale.get("error/in_game_self")).queue();
 			return;
 		}

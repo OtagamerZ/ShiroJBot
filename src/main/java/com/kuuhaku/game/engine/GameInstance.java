@@ -98,6 +98,13 @@ public abstract class GameInstance<T extends Enum<T>> {
 			};
 
 			try {
+				for (GuildMessageChannel chn : channels) {
+					if (GameInstance.CHANNELS.contains(chn.getId())) {
+						channel.sendMessage(locale.get("error/channel_occupied_self")).queue();
+						return;
+					}
+				}
+
 				PLAYERS.addAll(Arrays.asList(players));
 				CHANNELS.addAll(Arrays.stream(channels).map(GuildChannel::getId).toList());
 
