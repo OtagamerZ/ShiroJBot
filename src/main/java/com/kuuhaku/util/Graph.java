@@ -397,8 +397,11 @@ public abstract class Graph {
 		try {
 			if (image != null) {
 				Palette p = Palette.from(image).generate();
+				List<Palette.Swatch> swatch = p.getSwatches();
 
-				return p.getDominantColor(p.getSwatches().getFirst().getColor());
+				if (!swatch.isEmpty()) {
+					return p.getDominantColor(swatch.getFirst().getColor());
+				}
 			}
 
 			return getRandomColor();
