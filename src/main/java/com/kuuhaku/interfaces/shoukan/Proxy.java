@@ -18,6 +18,12 @@
 
 package com.kuuhaku.interfaces.shoukan;
 
-public interface Proxy<T extends Drawable<T>> {
+import com.kuuhaku.model.common.shoukan.CardExtra;
+
+public interface Proxy<T extends EffectHolder<T>> {
 	T getOriginal();
+
+	default CardExtra getStats() {
+		return getOriginal().getStats();
+	}
 }
