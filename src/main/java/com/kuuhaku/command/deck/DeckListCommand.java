@@ -112,7 +112,9 @@ public class DeckListCommand implements Executable {
 				sb.appendNewLine(Utils.getEmoteString(r.name()) + " " + r.getName(locale) + " - " + races.getCount(r));
 			}
 
-			eb.appendDescription("\n\n" + sb);
+			eb.appendDescription("\n\n**%s**\n%s".formatted(
+					locale.get("str/races"), sb
+			));
 		}
 
 		Page home;
