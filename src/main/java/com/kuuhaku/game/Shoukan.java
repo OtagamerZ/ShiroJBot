@@ -1283,11 +1283,11 @@ public class Shoukan extends GameInstance<Phase> {
 		return attack(source, target, null, false);
 	}
 
-	public boolean attack(Senshi source, Senshi target, int dmg) {
-		return attack(source, target, dmg, false);
+	public boolean attack(Senshi source, Senshi target, int damage) {
+		return attack(source, target, damage, false);
 	}
 
-	private boolean attack(Senshi source, Senshi target, Integer dmg, boolean announce) {
+	private boolean attack(Senshi source, Senshi target, Integer damage, boolean announce) {
 		if (target == null) return false;
 		else if (source == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
 			if (announce) {
@@ -1322,10 +1322,7 @@ public class Shoukan extends GameInstance<Phase> {
 		int posHash = target.posHash();
 		trigger(ON_ATTACK, source.asSource(ON_ATTACK), t);
 
-		if (dmg == null) {
-			dmg = source.getActiveAttr();
-		}
-
+		int dmg = Utils.getOr(damage, source.getActiveAttr());
 		if (you.getOrigins().synergy() == Race.DOPPELGANGER && source.getId().equals(target.getId())) {
 			dmg *= 2;
 		}
@@ -1487,9 +1484,9 @@ public class Shoukan extends GameInstance<Phase> {
 						for (Object o : charms) {
 							Charm c = Charm.valueOf(String.valueOf(o));
 							switch (c) {
-								case PIERCING -> direct += dmg * c.getValue(e.getTier()) / 100;
+								case PIERCING -> direct += damage * c.getValue(e.getTier()) / 100;
 								case WOUNDING -> {
-									int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
+									int val = (int) -(damage * dmgMult * c.getValue(e.getTier()) / 100);
 									op.getRegDeg().add(val);
 								}
 								case DRAIN -> {
@@ -1535,17 +1532,15 @@ public class Shoukan extends GameInstance<Phase> {
 					op.modHP((int) -((dmg + direct) * dmgMult));
 					op.addChain();
 
-					int damage = Math.max(0, eHP - op.getHP());
-
 					if (thorns > 0) {
-						you.modHP(-dmg * thorns / 100);
+						you.modHP(-damage * thorns / 100);
 					}
 					if (lifesteal > 0) {
-						you.modHP(dmg * lifesteal / 100);
+						you.modHP(damage * lifesteal / 100);
 					}
 
 					if (you.getOrigins().synergy() == Race.DAEMON) {
-						you.modMP((int) (damage / op.getBase().hp() * 0.05));
+						you.modMP((int) (Math.max(0, eHP - op.getHP()) / op.getBase().hp() * 0.05));
 					}
 
 					for (Evogear e : source.getEquipments()) {
@@ -1556,7 +1551,7 @@ public class Shoukan extends GameInstance<Phase> {
 							if (c == Charm.BARRAGE) {
 								if (announce) {
 									for (int i = 0; i < c.getValue(e.getTier()); i++) {
-										attack(source, target, dmg / 10, false);
+										attack(source, target, damage / 10, false);
 									}
 								}
 							}
@@ -1600,11 +1595,11 @@ public class Shoukan extends GameInstance<Phase> {
 		return attack(source, target, null, false);
 	}
 
-	public boolean attack(Senshi source, Hand target, int dmg) {
-		return attack(source, target, dmg, false);
+	public boolean attack(Senshi source, Hand target, int damage) {
+		return attack(source, target, damage, false);
 	}
 
-	private boolean attack(Senshi source, Hand target, Integer dmg, boolean announce) {
+	private boolean attack(Senshi source, Hand target, Integer damage, boolean announce) {
 		if (source == null || target == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
 			if (announce) {
 				getChannel().sendMessage(getString("error/card_cannot_attack")).queue();
@@ -1627,12 +1622,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 		trigger(ON_ATTACK, source.asSource(ON_ATTACK));
 
-		if (dmg == null) {
-			if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
-				dmg = 0;
-			} else {
-				dmg = source.getActiveAttr();
-			}
+		int dmg = Utils.getOr(damage, source.getActiveAttr());
+		if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
+			dmg = 0;
 		}
 
 		int direct = 0;
@@ -1655,9 +1647,9 @@ public class Shoukan extends GameInstance<Phase> {
 					for (Object o : charms) {
 						Charm c = Charm.valueOf(String.valueOf(o));
 						switch (c) {
-							case PIERCING -> direct += dmg * c.getValue(e.getTier()) / 100;
+							case PIERCING -> direct += damage * c.getValue(e.getTier()) / 100;
 							case WOUNDING -> {
-								int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
+								int val = (int) -(damage * dmgMult * c.getValue(e.getTier()) / 100);
 								target.getRegDeg().add(val);
 							}
 							case DRAIN -> {
@@ -1717,17 +1709,15 @@ public class Shoukan extends GameInstance<Phase> {
 					you.modLockTime(Lock.CHARM, 1);
 				}
 
-				int damage = Math.max(0, eHP - target.getHP());
-
 				if (thorns > 0) {
-					you.modHP(-dmg * thorns / 100);
+					you.modHP(-damage * thorns / 100);
 				}
 				if (lifesteal > 0) {
-					you.modHP(dmg * lifesteal / 100);
+					you.modHP(damage * lifesteal / 100);
 				}
 
 				if (you.getOrigins().synergy() == Race.DAEMON) {
-					you.modMP((int) (damage / target.getBase().hp() * 0.05));
+					you.modMP((int) (Math.max(0, eHP - target.getHP()) / target.getBase().hp() * 0.05));
 				}
 
 				for (Evogear e : source.getEquipments()) {
