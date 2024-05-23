@@ -338,7 +338,7 @@ public abstract class Utils {
 	}
 
 	public static String underline(String text) {
-		return text.replaceAll("([A-OR-XZa-or-xz])", "$1̲");
+		return text.replaceAll("([A-OR-XZa-or-xz])", "$1\u0332");
 	}
 
 	public static <T> Page generatePage(EmbedBuilder eb, Collection<T> list, int itemsPerColumn, Function<T, String> mapper) {
