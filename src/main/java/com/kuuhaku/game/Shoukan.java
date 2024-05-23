@@ -1350,6 +1350,8 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				if (!ignore) {
+					target.setFlipped(false);
+
 					if (target.isSupporting()) {
 						outcome = getString("str/combat_success", dmg, 0);
 
@@ -1476,8 +1478,6 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				if (hit) {
-					target.setFlipped(false);
-
 					for (Evogear e : source.getEquipments()) {
 						JSONArray charms = e.getCharms();
 
