@@ -1343,63 +1343,11 @@ public class Shoukan extends GameInstance<Phase> {
 			dmgMult /= 2;
 		}
 
+		boolean hit = true;
 		boolean win = false;
 		String outcome = getString("str/combat_skip");
 		try {
 			if (posHash == target.posHash() && ((announce && source.canAttack()) || source.isAvailable())) {
-				for (Evogear e : source.getEquipments()) {
-					JSONArray charms = e.getCharms();
-
-					for (Object o : charms) {
-						Charm c = Charm.valueOf(String.valueOf(o));
-						switch (c) {
-							case PIERCING -> direct += dmg * c.getValue(e.getTier()) / 100;
-							case WOUNDING -> {
-								int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
-								op.getRegDeg().add(val);
-							}
-							case DRAIN -> {
-								int toDrain = Math.min(c.getValue(e.getTier()), op.getMP());
-								if (toDrain > 0) {
-									you.modMP(toDrain);
-									op.modMP(-toDrain);
-								}
-							}
-							case LIFESTEAL -> lifesteal += c.getValue(e.getTier());
-						}
-					}
-				}
-
-				target.setFlipped(false);
-
-				for (Evogear e : target.getEquipments()) {
-					JSONArray charms = e.getCharms();
-
-					for (Object o : charms) {
-						Charm c = Charm.valueOf(String.valueOf(o));
-						if (c == Charm.THORNS) {
-							thorns += c.getValue(e.getTier());
-						}
-					}
-				}
-
-				switch (you.getOrigins().synergy()) {
-					case ELEMENTAL -> {
-						int water = (int) getCards(you.getSide()).parallelStream()
-								.filter(s -> s.getElement() == ElementType.WATER)
-								.count();
-
-						if (water >= 4) {
-							you.modMP(1);
-						}
-					}
-					case FALLEN -> {
-						if (op.getRegDeg().peek() < 0) {
-							op.getRegDeg().apply(0.2);
-						}
-					}
-				}
-
 				boolean ignore = source.hasFlag(Flag.NO_COMBAT, true);
 				if (!ignore) {
 					ignore = target.getSlot().getIndex() == -1 || target.hasFlag(Flag.IGNORE_COMBAT, true);
@@ -1452,6 +1400,7 @@ public class Shoukan extends GameInstance<Phase> {
 								trigger(ON_MISS, source.asSource(ON_MISS));
 
 								dmg = 0;
+								hit = false;
 							} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_BLOCK, true) || chance(block))) {
 								outcome = getString("str/combat_block", block);
 								trigger(NONE, source.asSource(), target.asTarget(ON_BLOCK));
@@ -1464,6 +1413,7 @@ public class Shoukan extends GameInstance<Phase> {
 								trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
 
 								dmg = 0;
+								hit = false;
 							} else {
 								if (unstop || dmg > enemyStats) {
 									outcome = getString("str/combat_success", dmg, enemyStats);
@@ -1529,31 +1479,86 @@ public class Shoukan extends GameInstance<Phase> {
 					dmg = 0;
 				}
 
-				op.modHP((int) -((dmg + direct) * dmgMult));
-				op.addChain();
+				if (hit) {
+					target.setFlipped(false);
 
-				int damage = Math.max(0, eHP - op.getHP());
+					for (Evogear e : source.getEquipments()) {
+						JSONArray charms = e.getCharms();
 
-				if (thorns > 0) {
-					you.modHP(-dmg * thorns / 100);
-				}
-				if (lifesteal > 0) {
-					you.modHP(dmg * lifesteal / 100);
-				}
+						for (Object o : charms) {
+							Charm c = Charm.valueOf(String.valueOf(o));
+							switch (c) {
+								case PIERCING -> direct += dmg * c.getValue(e.getTier()) / 100;
+								case WOUNDING -> {
+									int val = (int) -(dmg * dmgMult * c.getValue(e.getTier()) / 100);
+									op.getRegDeg().add(val);
+								}
+								case DRAIN -> {
+									int toDrain = Math.min(c.getValue(e.getTier()), op.getMP());
+									if (toDrain > 0) {
+										you.modMP(toDrain);
+										op.modMP(-toDrain);
+									}
+								}
+								case LIFESTEAL -> lifesteal += c.getValue(e.getTier());
+							}
+						}
+					}
 
-				if (you.getOrigins().synergy() == Race.DAEMON) {
-					you.modMP((int) (damage / op.getBase().hp() * 0.05));
-				}
+					for (Evogear e : target.getEquipments()) {
+						JSONArray charms = e.getCharms();
 
-				for (Evogear e : source.getEquipments()) {
-					JSONArray charms = e.getCharms();
+						for (Object o : charms) {
+							Charm c = Charm.valueOf(String.valueOf(o));
+							if (c == Charm.THORNS) {
+								thorns += c.getValue(e.getTier());
+							}
+						}
+					}
 
-					for (Object o : charms) {
-						Charm c = Charm.valueOf(String.valueOf(o));
-						if (c == Charm.BARRAGE) {
-							if (announce) {
-								for (int i = 0; i < c.getValue(e.getTier()); i++) {
-									attack(source, target, dmg / 10, false);
+					switch (you.getOrigins().synergy()) {
+						case ELEMENTAL -> {
+							int water = (int) getCards(you.getSide()).parallelStream()
+									.filter(s -> s.getElement() == ElementType.WATER)
+									.count();
+
+							if (water >= 4) {
+								you.modMP(1);
+							}
+						}
+						case FALLEN -> {
+							if (op.getRegDeg().peek() < 0) {
+								op.getRegDeg().apply(0.2);
+							}
+						}
+					}
+
+					op.modHP((int) -((dmg + direct) * dmgMult));
+					op.addChain();
+
+					int damage = Math.max(0, eHP - op.getHP());
+
+					if (thorns > 0) {
+						you.modHP(-dmg * thorns / 100);
+					}
+					if (lifesteal > 0) {
+						you.modHP(dmg * lifesteal / 100);
+					}
+
+					if (you.getOrigins().synergy() == Race.DAEMON) {
+						you.modMP((int) (damage / op.getBase().hp() * 0.05));
+					}
+
+					for (Evogear e : source.getEquipments()) {
+						JSONArray charms = e.getCharms();
+
+						for (Object o : charms) {
+							Charm c = Charm.valueOf(String.valueOf(o));
+							if (c == Charm.BARRAGE) {
+								if (announce) {
+									for (int i = 0; i < c.getValue(e.getTier()); i++) {
+										attack(source, target, dmg / 10, false);
+									}
 								}
 							}
 						}
