@@ -109,7 +109,7 @@ public class DeckListCommand implements Executable {
 		if (!races.isEmpty()) {
 			XStringBuilder sb = new XStringBuilder();
 			for (Race r : races.stream().distinct().sorted(Comparator.comparingInt(races::getCount).reversed()).toList()) {
-				sb.appendNewLine(Utils.getEmoteString(r.name()) + " - " + races.getCount(r));
+				sb.appendNewLine(Utils.getEmoteString(r.name()) + " " + r.getName(locale) + " - " + races.getCount(r));
 			}
 
 			eb.appendDescription("\n\n" + sb);
