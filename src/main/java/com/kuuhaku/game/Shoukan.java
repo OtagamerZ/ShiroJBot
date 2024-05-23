@@ -1693,7 +1693,7 @@ public class Shoukan extends GameInstance<Phase> {
 				if (!source.hasFlag(Flag.NO_COMBAT, true)) {
 					for (SlotColumn sc : getSlots(target.getSide())) {
 						for (Senshi card : sc.getCards()) {
-							if (card instanceof TrapSpell) {
+							if (card instanceof TrapSpell && card.isFlipped()) {
 								EffectParameters params = new EffectParameters(ON_TRAP, target.getSide(), card.asSource(ON_TRAP), source.asTarget(ON_ATTACK, TargetType.ENEMY));
 
 								if (activateProxy(card, params)) {

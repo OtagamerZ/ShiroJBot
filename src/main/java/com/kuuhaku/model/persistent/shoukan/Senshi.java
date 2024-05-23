@@ -1156,7 +1156,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 					for (SlotColumn sc : game.getSlots(getSide())) {
 						for (Senshi card : sc.getCards()) {
-							if (card instanceof TrapSpell p && !triggered.contains(p.getId())) {
+							if (card instanceof TrapSpell && card.isFlipped() && !triggered.contains(card.getId())) {
 								EffectParameters params;
 								if (targeted) {
 									params = new EffectParameters(
@@ -1174,7 +1174,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 								}
 
 								if (game.activateProxy(card, params)) {
-									triggered.add(p.getId());
+									triggered.add(card.getId());
 									game.getChannel().sendMessage(game.getString("str/trap_activation", card)).queue();
 								}
 							}
