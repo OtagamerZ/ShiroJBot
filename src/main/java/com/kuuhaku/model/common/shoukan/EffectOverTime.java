@@ -36,9 +36,11 @@ import java.util.function.Supplier;
 
 public final class EffectOverTime implements Comparable<EffectOverTime>, Closeable {
 	private final @Nullable Drawable<?> source;
-	private final Supplier<Side> sideSupplier;
+	private final Side side;
 	private final BiConsumer<EffectOverTime, EffectParameters> effect;
 	private final EnumSet<Trigger> triggers;
+	private final Object equality;
+
 	private Integer turns;
 	private Integer limit;
 	private boolean lock;
@@ -54,22 +56,27 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 
 	public EffectOverTime(Drawable<?> source, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, int turns, int limit, Trigger... triggers) {
 		this(
-				source, () -> side, effect,
+				source, side, effect,
 				turns < 0 ? null : turns,
 				limit < 0 ? null : limit,
 				EnumSet.of(turns > -1 ? Trigger.ON_TURN_BEGIN : Trigger.NONE, triggers)
 		);
 	}
 
-	public EffectOverTime(@Nullable Drawable<?> source, Supplier<Side> sideSupplier, BiConsumer<EffectOverTime, EffectParameters> effect, Integer turns, Integer limit, EnumSet<Trigger> triggers) {
+	public EffectOverTime(@Nullable Drawable<?> source, Side side, BiConsumer<EffectOverTime, EffectParameters> effect, Integer turns, Integer limit, EnumSet<Trigger> triggers) {
 		this.source = source;
-		this.sideSupplier = sideSupplier;
+		this.side = side;
 		this.effect = effect;
 		this.turns = turns;
 		this.limit = limit;
 		this.triggers = triggers;
 
 		this.triggers.remove(Trigger.NONE);
+		if (source != null) {
+			equality = isPermanent() ? source.getId() : source.getSerial();
+		} else {
+			equality = side;
+		}
 	}
 
 	public void decreaseTurn() {
@@ -85,7 +92,7 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 	}
 
 	public Side getSide() {
-		return sideSupplier.get();
+		return side;
 	}
 
 	public BiConsumer<EffectOverTime, EffectParameters> getEffect() {
@@ -151,28 +158,12 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		EffectOverTime that = (EffectOverTime) o;
-
-		Side side = getSide();
-		Side oSide = that.getSide();
-		if (source != null && that.source != null) {
-			if (isPermanent()) {
-				return source.getId().equals(that.source.getId()) && side == oSide;
-			} else {
-				return source.getSerial() == that.source.getSerial() && side == oSide;
-			}
-		} else {
-			return side == oSide;
-		}
+		return Objects.equals(equality, that.equality);
 	}
 
 	@Override
 	public int hashCode() {
-		Side side = getSide();
-		if (source != null) {
-			return Objects.hash(isPermanent() ? source.getId() : source.getSerial(), side);
-		} else {
-			return Objects.hash(side);
-		}
+		return Objects.hashCode(equality);
 	}
 
 	@Override
