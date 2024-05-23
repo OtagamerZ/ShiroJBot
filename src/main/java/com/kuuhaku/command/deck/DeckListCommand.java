@@ -24,10 +24,12 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.shoukan.Origin;
@@ -36,8 +38,13 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
+import org.apache.commons.collections4.Bag;
+import org.apache.commons.collections4.bag.HashBag;
+import org.apache.commons.collections4.bag.TreeBag;
 
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -89,11 +96,28 @@ public class DeckListCommand implements Executable {
 			));
 		}
 
+		HashBag<Race> races = new HashBag<>();
+		for (Senshi s : d.getSenshi()) {
+			Race r = s.getRace();
+			if (r.isPure()) {
+				races.add(r);
+			} else {
+				races.addAll(r.split());
+			}
+		}
+
+		XStringBuilder sb = new XStringBuilder();
+		for (Race r : races.stream().sorted(Comparator.comparingInt(races::getCount).reversed()).toList()) {
+			sb.appendNewLine(Utils.getEmoteString(r.name()) + " - " + races.getCount(r));
+		}
+
 		Page home;
 		Map<Emoji, Page> pages = new LinkedHashMap<>();
 		pages.put(Utils.parseEmoji("⚔️"), home = Utils.generatePage(eb, Utils.padList(d.getSenshi(), 36), 12,
 				s -> {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/senshi")));
+					eb.addField(locale.get("str/races"), "", false);
+
 					if (s == null) return "*" + locale.get("str/empty") + "*";
 
 					return Utils.getEmoteString(s.getRace().name()) + " " + s;
@@ -102,6 +126,8 @@ public class DeckListCommand implements Executable {
 		pages.put(Utils.parseEmoji("\uD83D\uDEE1️"), Utils.generatePage(eb, Utils.padList(d.getEvogear(), 24), 12,
 				e -> {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/evogear")));
+					eb.clearFields();
+
 					if (e == null) return "*" + locale.get("str/empty") + "*";
 
 					return Utils.getEmoteString("tier_" + e.getTier()) + " " + e;
@@ -110,6 +136,8 @@ public class DeckListCommand implements Executable {
 		pages.put(Utils.parseEmoji("\uD83C\uDFD4️"), Utils.generatePage(eb, Utils.padList(d.getFields(), 3), 12,
 				f -> {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/field")));
+					eb.clearFields();
+
 					if (f == null) return "*" + locale.get("str/empty") + "*";
 
 					return switch (f.getType()) {
