@@ -106,9 +106,13 @@ public class DeckListCommand implements Executable {
 			}
 		}
 
-		XStringBuilder sb = new XStringBuilder();
-		for (Race r : races.stream().sorted(Comparator.comparingInt(races::getCount).reversed()).toList()) {
-			sb.appendNewLine(Utils.getEmoteString(r.name()) + " - " + races.getCount(r));
+		if (!races.isEmpty()) {
+			XStringBuilder sb = new XStringBuilder();
+			for (Race r : races.stream().sorted(Comparator.comparingInt(races::getCount).reversed()).toList()) {
+				sb.appendNewLine(Utils.getEmoteString(r.name()) + " - " + races.getCount(r));
+			}
+
+			eb.appendDescription("\n" + sb);
 		}
 
 		Page home;
@@ -116,8 +120,6 @@ public class DeckListCommand implements Executable {
 		pages.put(Utils.parseEmoji("⚔️"), home = Utils.generatePage(eb, Utils.padList(d.getSenshi(), 36), 12,
 				s -> {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/senshi")));
-					eb.addField(locale.get("str/races"), "", false);
-
 					if (s == null) return "*" + locale.get("str/empty") + "*";
 
 					return Utils.getEmoteString(s.getRace().name()) + " " + s;
@@ -126,8 +128,6 @@ public class DeckListCommand implements Executable {
 		pages.put(Utils.parseEmoji("\uD83D\uDEE1️"), Utils.generatePage(eb, Utils.padList(d.getEvogear(), 24), 12,
 				e -> {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/evogear")));
-					eb.clearFields();
-
 					if (e == null) return "*" + locale.get("str/empty") + "*";
 
 					return Utils.getEmoteString("tier_" + e.getTier()) + " " + e;
@@ -136,8 +136,6 @@ public class DeckListCommand implements Executable {
 		pages.put(Utils.parseEmoji("\uD83C\uDFD4️"), Utils.generatePage(eb, Utils.padList(d.getFields(), 3), 12,
 				f -> {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/field")));
-					eb.clearFields();
-
 					if (f == null) return "*" + locale.get("str/empty") + "*";
 
 					return switch (f.getType()) {
