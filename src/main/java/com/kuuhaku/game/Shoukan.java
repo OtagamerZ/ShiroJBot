@@ -1098,7 +1098,6 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		curr.showChoices();
 		return false;
 	}
 
@@ -2561,10 +2560,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 					if (valid.size() >= 5) {
 						buttons.put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
-							System.out.println(1);
 							if (isLocked()) return;
 
-							System.out.println(2);
 							if (curr.selectionPending()) {
 								getChannel().sendMessage(getString("error/pending_choice")).queue();
 								return;
@@ -2574,7 +2571,6 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							try {
-								System.out.println(3);
 								curr.requestChoice(null, valid, 5, ds -> {
 									List<StashedCard> material = ds.stream().map(d -> new StashedCard(null, d)).toList();
 

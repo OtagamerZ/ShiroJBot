@@ -1223,7 +1223,6 @@ public class Hand {
 						})
 		);
 
-		showChoices();
 		game.getChannel().sendMessage(game.getString("str/selection_sent")).queue();
 		return task;
 	}
@@ -1278,10 +1277,6 @@ public class Hand {
 		g2d.dispose();
 
 		return bi;
-	}
-
-	public void showChoices() {
-		send(renderChoices());
 	}
 
 	public SelectionAction getSelection() {
