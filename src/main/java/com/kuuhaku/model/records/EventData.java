@@ -24,12 +24,14 @@ import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 
+import java.util.List;
+
 public record EventData(MessageChannel channel, GuildConfig config, Profile profile) {
     public void notify(String message) {
         if (config.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
             MessageChannel chn = Utils.getOr(config.getSettings().getNotificationsChannel(), channel);
             if (chn.canTalk()) {
-                chn.sendMessage(message).queue();
+                chn.sendMessage(message).setAllowedMentions(List.of()).queue();
             }
         }
     }
