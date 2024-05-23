@@ -22,6 +22,8 @@ import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.util.Utils;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Message.MentionType;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 
 import java.util.List;
@@ -31,7 +33,7 @@ public record EventData(MessageChannel channel, GuildConfig config, Profile prof
         if (config.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
             MessageChannel chn = Utils.getOr(config.getSettings().getNotificationsChannel(), channel);
             if (chn.canTalk()) {
-                chn.sendMessage(message).setAllowedMentions(List.of()).queue();
+                chn.sendMessage(message).setAllowedMentions(List.of(MentionType.USER)).queue();
             }
         }
     }
