@@ -1200,13 +1200,16 @@ public class Hand {
 	}
 
 	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, String caption, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+		System.out.println(1);
 		if (selection != null) {
 			throw new SelectionException("err/pending_selection");
 		}
 
+		System.out.println(2);
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
 		else if (cards.size() < required) throw new ActivationException("err/insufficient_selection");
 
+		System.out.println(3);
 		CompletableFuture<List<Drawable<?>>> task = new CompletableFuture<>();
 		selection = new SelectionAction(
 				source, caption, cards, required,
@@ -1223,6 +1226,7 @@ public class Hand {
 						})
 		);
 
+		System.out.println(4);
 		game.getChannel().sendMessage(game.getString("str/selection_sent")).queue();
 		return task;
 	}
