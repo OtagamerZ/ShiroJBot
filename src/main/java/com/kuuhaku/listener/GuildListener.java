@@ -461,109 +461,112 @@ public class GuildListener extends ListenerAdapter {
 
 	private void processCommand(MessageData.Guild data, EventData event, String content) {
 		I18N locale = event.config().getLocale();
-		String[] args = content.toLowerCase().split("\\s+");
-		String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
 
-		DAO.apply(Account.class, data.user().getId(), acc -> {
-			Title t = acc.checkTitles(locale);
-			if (t != null) {
-				event.notify(locale.get("achievement/title", data.user().getAsMention(), t.getInfo(locale).getName()));
-			}
-		});
+		try {
+			String[] args = content.toLowerCase().split("\\s+");
+			String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
 
-		String[] parts = name.split("\\.");
-		JSONObject aliases = new JSONObject();
-		aliases.putAll(event.config().getSettings().getAliases());
-		aliases.putAll(event.profile().getAccount().getSettings().getAliases());
+			String[] parts = name.split("\\.");
+			JSONObject aliases = new JSONObject();
+			aliases.putAll(event.config().getSettings().getAliases());
+			aliases.putAll(event.profile().getAccount().getSettings().getAliases());
 
-		String part = "";
-		for (String s : parts) {
-			if (part.isBlank()) part = s;
-			else part += "." + s;
+			String part = "";
+			for (String s : parts) {
+				if (part.isBlank()) part = s;
+				else part += "." + s;
 
-			if (aliases.has(part)) {
-				name = aliases.getString(part);
-			}
-		}
-
-		PreparedCommand pc = Main.getCommandManager().getCommand(name);
-		if (pc != null) {
-			Permission[] missing = pc.getMissingPerms(data.channel());
-
-			if (!Constants.MOD_PRIVILEGE.apply(data.member())) {
-				if (event.config().getSettings().getDeniedChannels().stream().anyMatch(t -> t.equals(data.channel()))) {
-					data.channel().sendMessage(locale.get("error/denied_channel")).queue();
-					return;
-				} else if (event.config().getSettings().getDisabledCategories().contains(pc.category())) {
-					data.channel().sendMessage(locale.get("error/disabled_category")).queue();
-					return;
-				} else if (event.config().getSettings().getDisabledCommands().contains(pc.command().getClass().getCanonicalName())) {
-					data.channel().sendMessage(locale.get("error/disabled_command")).queue();
-					return;
+				if (aliases.has(part)) {
+					name = aliases.getString(part);
 				}
 			}
 
-			if (missing.length > 0) {
-				XStringBuilder sb = new XStringBuilder(locale.get("error/missing_perms"));
-				for (Permission perm : missing) {
-					sb.appendNewLine("- " + locale.get("perm/" + perm.name()));
+			PreparedCommand pc = Main.getCommandManager().getCommand(name);
+			if (pc != null) {
+				Permission[] missing = pc.getMissingPerms(data.channel());
+
+				if (!Constants.MOD_PRIVILEGE.apply(data.member())) {
+					if (event.config().getSettings().getDeniedChannels().stream().anyMatch(t -> t.equals(data.channel()))) {
+						data.channel().sendMessage(locale.get("error/denied_channel")).queue();
+						return;
+					} else if (event.config().getSettings().getDisabledCategories().contains(pc.category())) {
+						data.channel().sendMessage(locale.get("error/disabled_category")).queue();
+						return;
+					} else if (event.config().getSettings().getDisabledCommands().contains(pc.command().getClass().getCanonicalName())) {
+						data.channel().sendMessage(locale.get("error/disabled_command")).queue();
+						return;
+					}
 				}
 
-				data.channel().sendMessage(sb.toString()).queue();
-				return;
-			}
+				if (missing.length > 0) {
+					XStringBuilder sb = new XStringBuilder(locale.get("error/missing_perms"));
+					for (Permission perm : missing) {
+						sb.appendNewLine("- " + locale.get("perm/" + perm.name()));
+					}
 
-			if (event.profile().getAccount().isBlacklisted()) {
-				data.channel().sendMessage(locale.get("error/blacklisted")).queue();
-				return;
-			} else if (!pc.category().check(data.member())) {
-				data.channel().sendMessage(locale.get("error/not_allowed")).queue();
-				return;
-			} else if (ratelimit.containsKey(data.user().getId())) {
-				data.channel().sendMessage(locale.get("error/ratelimited")).queue();
-				return;
-			}
+					data.channel().sendMessage(sb.toString()).queue();
+					return;
+				}
 
-			try {
-				JSONObject params = SignatureParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
+				if (event.profile().getAccount().isBlacklisted()) {
+					data.channel().sendMessage(locale.get("error/blacklisted")).queue();
+					return;
+				} else if (!pc.category().check(data.member())) {
+					data.channel().sendMessage(locale.get("error/not_allowed")).queue();
+					return;
+				} else if (ratelimit.containsKey(data.user().getId())) {
+					data.channel().sendMessage(locale.get("error/ratelimited")).queue();
+					return;
+				}
 
 				try {
-					pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
-				} catch (Exception e) {
-					data.channel().sendMessage(locale.get("error/error", e)).queue();
-					Constants.LOGGER.error(e, e);
-				}
+					JSONObject params = SignatureParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
 
-				if (!Constants.STF_PRIVILEGE.apply(data.member())) {
-					ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
-				}
-			} catch (InvalidSignatureException e) {
-				String error;
+					try {
+						pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
+					} catch (Exception e) {
+						data.channel().sendMessage(locale.get("error/error", e)).queue();
+						Constants.LOGGER.error(e, e);
+					}
 
-				if (e.getOptions().length > 0) {
-					error = locale.get("error/invalid_option",
-							Utils.properlyJoin(locale.get("str/or")).apply(List.of(e.getOptions()))
-					) + "```css\n%s%s %s```".formatted(
-							event.config().getPrefix(),
-							name,
-							e.getMessage().replace("`", "'")
-					);
+					if (!Constants.STF_PRIVILEGE.apply(data.member())) {
+						ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
+					}
+				} catch (InvalidSignatureException e) {
+					String error;
 
-					data.channel().sendMessage(error).queue();
-				} else {
-					error = locale.get("error/invalid_signature");
+					if (e.getOptions().length > 0) {
+						error = locale.get("error/invalid_option",
+								Utils.properlyJoin(locale.get("str/or")).apply(List.of(e.getOptions()))
+						) + "```css\n%s%s %s```".formatted(
+								event.config().getPrefix(),
+								name,
+								e.getMessage().replace("`", "'")
+						);
 
-					List<String> signatures = SignatureParser.extract(locale, pc.command());
-					EmbedBuilder eb = new ColorlessEmbedBuilder()
-							.setAuthor(locale.get("str/command_signatures"))
-							.setDescription("```css\n" + String.join("\n", signatures).formatted(
-									event.config().getPrefix(),
-									name
-							) + "\n```");
+						data.channel().sendMessage(error).queue();
+					} else {
+						error = locale.get("error/invalid_signature");
 
-					data.channel().sendMessage(error).setEmbeds(eb.build()).queue();
+						List<String> signatures = SignatureParser.extract(locale, pc.command());
+						EmbedBuilder eb = new ColorlessEmbedBuilder()
+								.setAuthor(locale.get("str/command_signatures"))
+								.setDescription("```css\n" + String.join("\n", signatures).formatted(
+										event.config().getPrefix(),
+										name
+								) + "\n```");
+
+						data.channel().sendMessage(error).setEmbeds(eb.build()).queue();
+					}
 				}
 			}
+		} finally {
+			DAO.apply(Account.class, data.user().getId(), acc -> {
+				Title t = acc.checkTitles(locale);
+				if (t != null) {
+					event.notify(locale.get("achievement/title", data.user().getAsMention(), t.getInfo(locale).getName()));
+				}
+			});
 		}
 	}
 
