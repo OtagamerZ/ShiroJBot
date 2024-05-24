@@ -464,9 +464,9 @@ public class GuildListener extends ListenerAdapter {
 
 		try {
 			String[] args = content.toLowerCase().split("\\s+");
-			String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
+			StringBuilder name = new StringBuilder(StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), "")));
 
-			String[] parts = name.split("\\.");
+			String[] parts = name.toString().split("\\.");
 			JSONObject aliases = new JSONObject();
 			aliases.putAll(event.config().getSettings().getAliases());
 			aliases.putAll(event.profile().getAccount().getSettings().getAliases());
@@ -477,11 +477,13 @@ public class GuildListener extends ListenerAdapter {
 				else part += "." + s;
 
 				if (aliases.has(part)) {
-					name = aliases.getString(part);
+					name = new StringBuilder(aliases.getString(part));
+				} else {
+					name.append(".").append(part);
 				}
 			}
 
-			PreparedCommand pc = Main.getCommandManager().getCommand(name);
+			PreparedCommand pc = Main.getCommandManager().getCommand(name.toString());
 			if (pc != null) {
 				Permission[] missing = pc.getMissingPerms(data.channel());
 
@@ -540,7 +542,7 @@ public class GuildListener extends ListenerAdapter {
 								Utils.properlyJoin(locale.get("str/or")).apply(List.of(e.getOptions()))
 						) + "```css\n%s%s %s```".formatted(
 								event.config().getPrefix(),
-								name,
+								name.toString(),
 								e.getMessage().replace("`", "'")
 						);
 
@@ -553,7 +555,7 @@ public class GuildListener extends ListenerAdapter {
 								.setAuthor(locale.get("str/command_signatures"))
 								.setDescription("```css\n" + String.join("\n", signatures).formatted(
 										event.config().getPrefix(),
-										name
+										name.toString()
 								) + "\n```");
 
 						data.channel().sendMessage(error).setEmbeds(eb.build()).queue();
