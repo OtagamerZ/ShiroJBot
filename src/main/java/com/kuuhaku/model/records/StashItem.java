@@ -54,9 +54,9 @@ public record StashItem(I18N locale, StashedCard sc) {
 			Field fd = sc.getCard().asField();
 			rarity += switch (fd.getType()) {
 				case NONE -> "";
-				case DAY -> ":sunny:";
-				case NIGHT -> ":crescent_moon:";
-				case DUNGEON -> ":japanese_castle:";
+				case DAY -> " :sunny:";
+				case NIGHT -> " :crescent_moon:";
+				case DUNGEON -> " :japanese_castle:";
 			};
 		}
 
