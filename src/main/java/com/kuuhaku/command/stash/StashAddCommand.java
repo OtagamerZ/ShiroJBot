@@ -43,12 +43,14 @@ import net.dv8tion.jda.api.JDA;
 public class StashAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		System.out.println(1);
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
 		if (kp.getCapacity() <= 0) {
 			event.channel().sendMessage(locale.get("error/insufficient_space")).queue();
 			return;
 		}
 
+		System.out.println(2);
 		Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
 		if (card == null) {
 			String sug = Utils.didYouMean(args.getString("card").toUpperCase(), "SELECT id AS value FROM v_card_names");
@@ -60,12 +62,14 @@ public class StashAddCommand implements Executable {
 			return;
 		}
 
+		System.out.println(3);
 		KawaiponCard kc = kp.getCard(card, args.getString("kind", "n").equalsIgnoreCase("c"));
 		if (kc == null) {
 			event.channel().sendMessage(locale.get("error/not_owned")).queue();
 			return;
 		}
 
+		System.out.println(4);
 		new StashedCard(kp, kc).save();
 		event.channel().sendMessage(locale.get("success/card_stored")).queue();
 	}
