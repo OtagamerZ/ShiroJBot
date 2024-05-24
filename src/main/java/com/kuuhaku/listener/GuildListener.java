@@ -464,26 +464,32 @@ public class GuildListener extends ListenerAdapter {
 
 		try {
 			String[] args = content.toLowerCase().split("\\s+");
-			StringBuilder name = new StringBuilder(StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), "")));
+			String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
 
-			String[] parts = name.toString().split("\\.");
+			String[] parts = name.split("\\.");
 			JSONObject aliases = new JSONObject();
 			aliases.putAll(event.config().getSettings().getAliases());
 			aliases.putAll(event.profile().getAccount().getSettings().getAliases());
 
 			String part = "";
+			StringBuilder command = new StringBuilder();
 			for (String s : parts) {
 				if (part.isBlank()) part = s;
 				else part += "." + s;
 
 				if (aliases.has(part)) {
-					name = new StringBuilder(aliases.getString(part));
+					command = new StringBuilder(aliases.getString(part));
 				} else {
-					name.append(".").append(s);
+					if (!command.isEmpty()) {
+						command.append(".");
+					}
+
+					command.append(part);
 				}
 			}
 
-			PreparedCommand pc = Main.getCommandManager().getCommand(name.toString());
+			name = command.toString();
+			PreparedCommand pc = Main.getCommandManager().getCommand(name);
 			if (pc != null) {
 				Permission[] missing = pc.getMissingPerms(data.channel());
 
@@ -542,7 +548,7 @@ public class GuildListener extends ListenerAdapter {
 								Utils.properlyJoin(locale.get("str/or")).apply(List.of(e.getOptions()))
 						) + "```css\n%s%s %s```".formatted(
 								event.config().getPrefix(),
-								name.toString(),
+								name,
 								e.getMessage().replace("`", "'")
 						);
 
@@ -555,7 +561,7 @@ public class GuildListener extends ListenerAdapter {
 								.setAuthor(locale.get("str/command_signatures"))
 								.setDescription("```css\n" + String.join("\n", signatures).formatted(
 										event.config().getPrefix(),
-										name.toString()
+										name
 								) + "\n```");
 
 						data.channel().sendMessage(error).setEmbeds(eb.build()).queue();
