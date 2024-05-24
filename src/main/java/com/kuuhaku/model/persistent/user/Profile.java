@@ -243,233 +243,205 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	}
 
 	public BufferedImage render(I18N locale) {
-		try (Checkpoint cp = new Checkpoint()) {
-			BufferedImage mask = IO.getResourceAsImage("assets/masks/profile_mask.png");
-			BufferedImage overlay = IO.getResourceAsImage("assets/profile_overlay.png");
+		BufferedImage mask = IO.getResourceAsImage("assets/masks/profile_mask.png");
+		BufferedImage overlay = IO.getResourceAsImage("assets/profile_overlay.png");
 
-			cp.lap("1");
-			AccountSettings settings = account.getSettings();
-			BufferedImage bg = IO.getImage(settings.getBackground());
-			if (bg == null) {
-				settings.setBackground(null);
-				bg = IO.getImage(settings.getBackground());
+		AccountSettings settings = account.getSettings();
+		BufferedImage bg = IO.getImage(settings.getBackground());
+		if (bg == null) {
+			settings.setBackground(null);
+			bg = IO.getImage(settings.getBackground());
+		}
+		bg = Graph.scaleAndCenterImage(Graph.toColorSpace(bg, BufferedImage.TYPE_INT_ARGB), SIZE.width, SIZE.height);
+
+		BufferedImage bi = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
+
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setRenderingHints(Constants.HD_HINTS);
+
+		BufferedImage avatar = null;
+		Guild g = Main.getApp().getShiro().getGuildById(id.getGid());
+		if (g != null) {
+			Member m = g.getMemberById(id.getUid());
+			if (m != null) {
+				avatar = IO.getImage(m.getEffectiveAvatarUrl());
 			}
-			bg = Graph.scaleAndCenterImage(Graph.toColorSpace(bg, BufferedImage.TYPE_INT_ARGB), SIZE.width, SIZE.height);
+		}
 
-			cp.lap("2");
-			BufferedImage bi = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
+		g2d.drawImage(Utils.getOr(avatar, IO.getImage(account.getUser().getEffectiveAvatarUrl())), -23, 56, 150, 150, null);
 
-			cp.lap("3");
-			Graphics2D g2d = bi.createGraphics();
-			g2d.setRenderingHints(Constants.HD_HINTS);
+		Graph.applyMask(bg, mask, 0);
+		g2d.drawImage(bg, 0, 0, null);
 
-			cp.lap("4");
-			BufferedImage avatar = null;
-			Guild g = Main.getApp().getShiro().getGuildById(id.getGid());
-			if (g != null) {
-				Member m = g.getMemberById(id.getUid());
-				if (m != null) {
-					avatar = IO.getImage(m.getEffectiveAvatarUrl());
-				}
-			}
+		Color color;
+		if (settings.getColor().equals(Color.BLACK)) {
+			color = Graph.rotate(Graph.getColor(bg), 180);
+		} else {
+			color = settings.getColor();
+		}
 
-			cp.lap("5");
-			g2d.drawImage(Utils.getOr(avatar, IO.getImage(account.getUser().getEffectiveAvatarUrl())), -23, 56, 150, 150, null);
+		Graphics2D og2d = overlay.createGraphics();
+		og2d.setComposite(BlendComposite.Multiply);
+		og2d.setColor(color);
+		og2d.fillRect(0, 0, overlay.getWidth(), overlay.getHeight());
+		og2d.dispose();
 
-			cp.lap("6");
-			Graph.applyMask(bg, mask, 0);
-			g2d.drawImage(bg, 0, 0, null);
+		Polygon inner = Graph.makePoly(
+				6, 75,
+				475, 75,
+				525, 31,
+				897, 31,
+				944, 78,
+				944, 547,
+				897, 594,
+				53, 594,
+				6, 547
+		);
 
-			cp.lap("7");
-			Color color;
-			if (settings.getColor().equals(Color.BLACK)) {
-				color = Graph.rotate(Graph.getColor(bg), 180);
-			} else {
-				color = settings.getColor();
-			}
+		BufferedImage effect = settings.getEffect().getImage();
+		Graph.applyMask(effect, mask, 0, true);
+		g2d.drawImage(effect, 0, 0, null);
 
-			cp.lap("8");
-			Graphics2D og2d = overlay.createGraphics();
-			og2d.setComposite(BlendComposite.Multiply);
-			og2d.setColor(color);
-			og2d.fillRect(0, 0, overlay.getWidth(), overlay.getHeight());
-			og2d.dispose();
+		Map<String, Object> replaces = new HashMap<>();
+		replaces.put("guild", getGuild().getName());
+		replaces.put("g_rank", Utils.separate(account.getRanking()));
+		replaces.put("l_rank", Utils.separate(getRanking()));
+		replaces.put("xp", Utils.shorten(xp));
+		replaces.put("level", getLevel());
 
-			cp.lap("9");
-			Polygon inner = Graph.makePoly(
-					6, 75,
-					475, 75,
-					525, 31,
-					897, 31,
-					944, 78,
-					944, 547,
-					897, 594,
-					53, 594,
-					6, 547
+		for (AccountTitle title : account.getTitles()) {
+			Title t = title.getTitle();
+			if (t.getId().startsWith("SS_")) continue;
+
+			replaces.put(
+					t.getId().toLowerCase(),
+					"#%06X,%s".formatted(
+							t.getRarity().getColor(false).getRGB() & 0xFFFFFF,
+							t.getInfo(locale).getName().replace(" ", "_")
+					)
 			);
+		}
 
-			cp.lap("10");
-			BufferedImage effect = settings.getEffect().getImage();
-			Graph.applyMask(effect, mask, 0, true);
-			g2d.drawImage(effect, 0, 0, null);
+		Graph.applyTransformed(g2d, g1 -> {
+			Color bgCol = new Color((200 << 24) | (color.getRGB() & 0xFFFFFF), true);
 
-			cp.lap("11");
-			Map<String, Object> replaces = new HashMap<>();
-			replaces.put("guild", getGuild().getName());
-			replaces.put("g_rank", Utils.separate(account.getRanking()));
-			replaces.put("l_rank", Utils.separate(getRanking()));
-			replaces.put("xp", Utils.shorten(xp));
-			replaces.put("level", getLevel());
+			g1.setClip(inner);
+			g1.setColor(bgCol);
 
-			cp.lap("12");
-			for (AccountTitle title : account.getTitles()) {
-				Title t = title.getTitle();
-				if (t.getId().startsWith("SS_")) continue;
+			RoundRectangle2D wids = new RoundRectangle2D.Double(-14, 210, 200, 50, 20, 20);
 
-				replaces.put(
-						t.getId().toLowerCase(),
-						"#%06X,%s".formatted(
-								t.getRarity().getColor(false).getRGB() & 0xFFFFFF,
-								t.getInfo(locale).getName().replace(" ", "_")
-						)
-				);
+			int em = g1.getFontMetrics().getHeight();
+			g1.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(20));
+			for (Object o : settings.getWidgets()) {
+				String s = Utils.replaceTags(String.valueOf(o), '%', replaces);
+				Rectangle bounds;
+				if (s.startsWith("#")) {
+					bounds = Graph.getStringBounds(g1, s.substring(s.indexOf(",") + 1).replace("_", " ")).getBounds();
+				} else {
+					bounds = Graph.getStringBounds(g1, s).getBounds();
+				}
+				int y = (int) wids.getY();
+
+				g1.setColor(bgCol);
+				wids.setFrame(wids.getX(), y, 43 + bounds.getWidth(), em * 2);
+				Graph.drawOutlined(g1, wids, 1, Color.BLACK);
+				wids.setFrame(wids.getX(), y + wids.getHeight() + 10, 0, 0);
+
+				g1.setColor(Color.WHITE);
+				Graph.drawMultilineString(g1, s, 15, (int) (y + em * 1.5), SIZE.width, (str, px, py) -> {
+					if (str.startsWith("#")) {
+						String[] frags = str.split(",");
+
+						g1.setColor(Color.decode(frags[0]));
+						Graph.drawOutlinedString(g1, frags[1].replace("_", " "), px, py, 3, Color.BLACK);
+					} else {
+						g1.setColor(Color.WHITE);
+						Graph.drawOutlinedString(g1, str, px, py, 3, Color.BLACK);
+					}
+				});
 			}
 
-			cp.lap("13");
-			Graph.applyTransformed(g2d, g1 -> {
-				Color bgCol = new Color((200 << 24) | (color.getRGB() & 0xFFFFFF), true);
+			String bio = Utils.replaceTags(settings.getBio(), '%', replaces);
+			if (!bio.isBlank()) {
+				int x = (int) (SIZE.width - SIZE.width / 2d - 40);
+				int lines = Graph.getLineCount(g1, bio, (int) (SIZE.width / 2d - 20));
+				int h = em * 2 * lines - 3 * lines;
+				int w = (int) (SIZE.width / 2d);
 
-				g1.setClip(inner);
-				g1.setColor(bgCol);
+				Graph.applyTransformed(g1, x, SIZE.height - h - 20, g2 -> {
+					g2.setColor(bgCol);
+					Shape desc = new RoundRectangle2D.Double(0, 0, w, h, 20, 20);
+					Graph.drawOutlined(g2, desc, 1, Color.BLACK);
 
-				RoundRectangle2D wids = new RoundRectangle2D.Double(-14, 210, 200, 50, 20, 20);
-
-				cp.lap("14");
-				int em = g1.getFontMetrics().getHeight();
-				g1.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(20));
-				for (Object o : settings.getWidgets()) {
-					String s = Utils.replaceTags(String.valueOf(o), '%', replaces);
-					Rectangle bounds;
-					if (s.startsWith("#")) {
-						bounds = Graph.getStringBounds(g1, s.substring(s.indexOf(",") + 1).replace("_", " ")).getBounds();
-					} else {
-						bounds = Graph.getStringBounds(g1, s).getBounds();
-					}
-					int y = (int) wids.getY();
-
-					g1.setColor(bgCol);
-					wids.setFrame(wids.getX(), y, 43 + bounds.getWidth(), em * 2);
-					Graph.drawOutlined(g1, wids, 1, Color.BLACK);
-					wids.setFrame(wids.getX(), y + wids.getHeight() + 10, 0, 0);
-
-					g1.setColor(Color.WHITE);
-					Graph.drawMultilineString(g1, s, 15, (int) (y + em * 1.5), SIZE.width, (str, px, py) -> {
+					g2.setColor(Color.WHITE);
+					Graph.drawMultilineString(g2, bio, 10, (int) (em * 1.5), w - 20, 3, (str, px, py) -> {
 						if (str.startsWith("#")) {
 							String[] frags = str.split(",");
 
-							g1.setColor(Color.decode(frags[0]));
-							Graph.drawOutlinedString(g1, frags[1].replace("_", " "), px, py, 3, Color.BLACK);
+							g2.setColor(Color.decode(frags[0]));
+							Graph.drawOutlinedString(g2, frags[1].replace("_", " "), px, py, 3, Color.BLACK);
 						} else {
-							g1.setColor(Color.WHITE);
-							Graph.drawOutlinedString(g1, str, px, py, 3, Color.BLACK);
+							g2.setColor(Color.WHITE);
+							Graph.drawOutlinedString(g2, str, px, py, 3, Color.BLACK);
 						}
 					});
-				}
-
-				cp.lap("15");
-				String bio = Utils.replaceTags(settings.getBio(), '%', replaces);
-				if (!bio.isBlank()) {
-					int x = (int) (SIZE.width - SIZE.width / 2d - 40);
-					int lines = Graph.getLineCount(g1, bio, (int) (SIZE.width / 2d - 20));
-					int h = em * 2 * lines - 3 * lines;
-					int w = (int) (SIZE.width / 2d);
-
-					Graph.applyTransformed(g1, x, SIZE.height - h - 20, g2 -> {
-						g2.setColor(bgCol);
-						Shape desc = new RoundRectangle2D.Double(0, 0, w, h, 20, 20);
-						Graph.drawOutlined(g2, desc, 1, Color.BLACK);
-
-						g2.setColor(Color.WHITE);
-						Graph.drawMultilineString(g2, bio, 10, (int) (em * 1.5), w - 20, 3, (str, px, py) -> {
-							if (str.startsWith("#")) {
-								String[] frags = str.split(",");
-
-								g2.setColor(Color.decode(frags[0]));
-								Graph.drawOutlinedString(g2, frags[1].replace("_", " "), px, py, 3, Color.BLACK);
-							} else {
-								g2.setColor(Color.WHITE);
-								Graph.drawOutlinedString(g2, str, px, py, 3, Color.BLACK);
-							}
-						});
-					});
-				}
-			});
-
-			cp.lap("16");
-			Graph.applyMask(overlay, mask, 1);
-			g2d.drawImage(overlay, 0, 0, null);
-
-			cp.lap("17");
-			BufferedImage emote = IO.getImage(getLevelEmote().getImageUrl());
-			g2d.drawImage(emote, 6, -3, 81, 81, null);
-
-			cp.lap("18");
-			g2d.setColor(Color.GRAY);
-			Graph.drawOutlined(g2d, new Rectangle(88, 59, 384, 10), 2, Color.BLACK);
-
-			cp.lap("19");
-			int lvl = getLevel();
-			long lvlXp = getXpToLevel(lvl);
-			long toNext = getXpToLevel(lvl + 1);
-			int pad = 4;
-			double prcnt = Math.max(0, Calc.prcnt(xp - lvlXp, toNext - lvlXp));
-			int[] colors = {0x5b2d11, 0xb5b5b5, 0xd49800, 0x00d4d4, 0x9716ff, 0x0ed700, 0xe40000};
-
-			cp.lap("20");
-			g2d.setColor(new Color(colors[Math.max(0, (lvl % 210) / 30)]));
-			g2d.fillRect(88 + pad / 2, 59 + pad / 2, (int) ((384 - pad) * prcnt), 10 - pad);
-
-			cp.lap("21");
-			g2d.setFont(Fonts.DOREKING.derivePlain(55));
-			Graph.drawOutlinedString(g2d, String.valueOf(lvl), 88, 51, 3, Color.BLACK);
-
-			cp.lap("22");
-			int offset = (int) (Graph.getStringBounds(g2d, String.valueOf(lvl)).getWidth() + 10);
-			g2d.setColor(Color.WHITE);
-			g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(25));
-			Graph.drawOutlinedString(g2d, account.getName(), 88 + offset, 25, 3, Color.BLACK);
-
-			cp.lap("23");
-			String details = "XP: %s/%s I Rank: ".formatted(
-					Utils.shorten(xp - lvlXp), Utils.shorten(toNext - lvlXp)
-			);
-			g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(20));
-			Graph.drawOutlinedString(g2d, details, 88 + offset, 51, 3, Color.BLACK);
-
-			cp.lap("24");
-			offset += (int) Graph.getStringBounds(g2d, details).getWidth() + 5;
-			g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(12));
-			Graph.drawOutlinedString(g2d, "#", 88 + offset, 45, 3, Color.BLACK);
-
-			cp.lap("25");
-			offset += (int) Graph.getStringBounds(g2d, "#").getWidth();
-			g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(20));
-			Graph.drawOutlinedString(g2d, String.valueOf(account.getRanking()), 88 + offset, 51, 3, Color.BLACK);
-
-			cp.lap("26");
-			AccountTitle title = account.getTitle();
-			if (title != null) {
-				g2d.setColor(title.getTitle().getRarity().getColor(false));
-				g2d.setFont(Fonts.DOREKING.deriveBold(35));
-
-				String str = title.getTitle().getInfo(locale).getName();
-				Graph.drawShadowedString(g2d, str, 524 + (374 - g2d.getFontMetrics().stringWidth(str)) / 2, 70, 15, 2, Color.BLACK);
+				});
 			}
+		});
 
-			g2d.dispose();
+		Graph.applyMask(overlay, mask, 1);
+		g2d.drawImage(overlay, 0, 0, null);
 
-			return bi;
+		BufferedImage emote = IO.getImage(getLevelEmote().getImageUrl());
+		g2d.drawImage(emote, 6, -3, 81, 81, null);
+
+		g2d.setColor(Color.GRAY);
+		Graph.drawOutlined(g2d, new Rectangle(88, 59, 384, 10), 2, Color.BLACK);
+
+		int lvl = getLevel();
+		long lvlXp = getXpToLevel(lvl);
+		long toNext = getXpToLevel(lvl + 1);
+		int pad = 4;
+		double prcnt = Math.max(0, Calc.prcnt(xp - lvlXp, toNext - lvlXp));
+		int[] colors = {0x5b2d11, 0xb5b5b5, 0xd49800, 0x00d4d4, 0x9716ff, 0x0ed700, 0xe40000};
+
+		g2d.setColor(new Color(colors[Math.max(0, (lvl % 210) / 30)]));
+		g2d.fillRect(88 + pad / 2, 59 + pad / 2, (int) ((384 - pad) * prcnt), 10 - pad);
+
+		g2d.setFont(Fonts.DOREKING.derivePlain(55));
+		Graph.drawOutlinedString(g2d, String.valueOf(lvl), 88, 51, 3, Color.BLACK);
+
+		int offset = (int) (Graph.getStringBounds(g2d, String.valueOf(lvl)).getWidth() + 10);
+		g2d.setColor(Color.WHITE);
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(25));
+		Graph.drawOutlinedString(g2d, account.getName(), 88 + offset, 25, 3, Color.BLACK);
+
+		String details = "XP: %s/%s I Rank: ".formatted(
+				Utils.shorten(xp - lvlXp), Utils.shorten(toNext - lvlXp)
+		);
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(20));
+		Graph.drawOutlinedString(g2d, details, 88 + offset, 51, 3, Color.BLACK);
+
+		offset += (int) Graph.getStringBounds(g2d, details).getWidth() + 5;
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(12));
+		Graph.drawOutlinedString(g2d, "#", 88 + offset, 45, 3, Color.BLACK);
+
+		offset += (int) Graph.getStringBounds(g2d, "#").getWidth();
+		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(20));
+		Graph.drawOutlinedString(g2d, String.valueOf(account.getRanking()), 88 + offset, 51, 3, Color.BLACK);
+
+		AccountTitle title = account.getTitle();
+		if (title != null) {
+			g2d.setColor(title.getTitle().getRarity().getColor(false));
+			g2d.setFont(Fonts.DOREKING.deriveBold(35));
+
+			String str = title.getTitle().getInfo(locale).getName();
+			Graph.drawShadowedString(g2d, str, 524 + (374 - g2d.getFontMetrics().stringWidth(str)) / 2, 70, 15, 2, Color.BLACK);
 		}
+
+		g2d.dispose();
+
+		return bi;
 	}
 
 	@Override
