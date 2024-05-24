@@ -49,7 +49,6 @@ application {
 			"-Dsun.java2d.opengl=True",
 			"-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector",
 			"-Djdk.attach.allowAttachSelf=true",
-			"-Djol.tryWithSudo=true",
 //			"-Dgroovy.use.classvalue=true",
 //			,"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:55000"
 	]
@@ -154,7 +153,6 @@ dependencies {
 	implementation group: "org.knowm.xchart", name: "xchart", version: "3.8.7"
 	implementation group: "com.github.trickl", name: "palette", version: "0.1.1"
 	implementation group: "org.jetbrains", name: "annotations", version: "24.1.0"
-	implementation group: "org.openjdk.jol", name: "jol-core", version: "0.17"
 
 	//Unit test
 	testImplementation group: "org.junit.jupiter", name: "junit-jupiter", version: "5.10.2"
