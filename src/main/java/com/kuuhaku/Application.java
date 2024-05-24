@@ -70,7 +70,10 @@ public class Application implements Thread.UncaughtExceptionHandler {
 
 		shiro = DefaultShardManagerBuilder.create(Constants.BOT_TOKEN, EnumSet.allOf(GatewayIntent.class))
 				.disableCache(EnumSet.complementOf(EnumSet.of(CacheFlag.EMOJI)))
-				.setMemberCachePolicy(MemberCachePolicy.ONLINE.and(m -> !m.getUser().isBot()))
+				.setMemberCachePolicy(
+						MemberCachePolicy.all(MemberCachePolicy.ONLINE, m -> !m.getUser().isBot())
+								.or(MemberCachePolicy.OWNER)
+				)
 				.setBulkDeleteSplittingEnabled(false)
 				.setEventPool(new ForkJoinPool(
 						Runtime.getRuntime().availableProcessors(),
