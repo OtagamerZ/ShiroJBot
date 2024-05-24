@@ -486,8 +486,10 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 			name = String.join(".", parts);
+			System.out.println(name);
 
 			PreparedCommand pc = Main.getCommandManager().getCommand(name);
+			System.out.println("found " + (pc != null));
 			if (pc != null) {
 				Permission[] missing = pc.getMissingPerms(data.channel());
 
