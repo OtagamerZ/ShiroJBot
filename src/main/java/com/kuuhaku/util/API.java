@@ -23,6 +23,8 @@ import com.ygimenez.json.JSONObject;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -44,9 +46,14 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class API {
 	private static final Map<Class<? extends WebSocketClient>, WebSocketClient> SOCKET_CLIENTS = new HashMap<>();
-	public static final CloseableHttpClient HTTP = HttpClients.custom().setDefaultHeaders(List.of(
-			new BasicHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0")
-	)).build();
+	public static final CloseableHttpClient HTTP = HttpClients.custom()
+			.setDefaultRequestConfig(RequestConfig.custom()
+					.setCookieSpec(CookieSpecs.IGNORE_COOKIES)
+					.build())
+			.setDefaultHeaders(List.of(
+					new BasicHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0")
+			))
+			.build();
 
 	public static <T extends HttpRequestBase> JSONObject call(T req, JSONObject parameters, JSONObject headers, String body) {
 		try {
