@@ -471,24 +471,17 @@ public class GuildListener extends ListenerAdapter {
 			aliases.putAll(event.config().getSettings().getAliases());
 			aliases.putAll(event.profile().getAccount().getSettings().getAliases());
 
-			String part = "";
-			StringBuilder command = new StringBuilder();
+			String command = "";
 			for (String s : parts) {
-				if (part.isBlank()) part = s;
-				else part += "." + s;
+				if (command.isBlank()) command = s;
+				else command += "." + s;
 
-				if (aliases.has(part)) {
-					command = new StringBuilder(aliases.getString(part));
-				} else {
-					if (!command.isEmpty()) {
-						command.append(".");
-					}
-
-					command.append(part);
+				if (aliases.has(command)) {
+					command = aliases.getString(command);
 				}
 			}
 
-			name = command.toString();
+			name = command;
 			PreparedCommand pc = Main.getCommandManager().getCommand(name);
 			if (pc != null) {
 				Permission[] missing = pc.getMissingPerms(data.channel());
