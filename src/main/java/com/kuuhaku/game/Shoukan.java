@@ -1323,6 +1323,10 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(ON_ATTACK, source.asSource(ON_ATTACK), t);
 
 		int dmg = Utils.getOr(damage, source.getActiveAttr());
+		if (damage == null) {
+			damage = dmg;
+		}
+
 		if (you.getOrigins().synergy() == Race.DOPPELGANGER && source.getId().equals(target.getId())) {
 			dmg *= 2;
 		}
@@ -1623,6 +1627,10 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(ON_ATTACK, source.asSource(ON_ATTACK));
 
 		int dmg = Utils.getOr(damage, source.getActiveAttr());
+		if (damage == null) {
+			damage = dmg;
+		}
+
 		if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
 			dmg = 0;
 		}
