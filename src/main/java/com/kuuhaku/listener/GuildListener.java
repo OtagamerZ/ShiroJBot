@@ -479,7 +479,7 @@ public class GuildListener extends ListenerAdapter {
 				if (aliases.has(part)) {
 					name = new StringBuilder(aliases.getString(part));
 				} else {
-					name.append(".").append(part);
+					name.append(".").append(s);
 				}
 			}
 
