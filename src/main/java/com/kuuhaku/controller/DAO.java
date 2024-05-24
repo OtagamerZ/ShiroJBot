@@ -194,8 +194,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 						.toList();
 			} else if (Number.class.isAssignableFrom(klass)) {
 				return ((Stream<?>) q.getResultStream())
-						.map(o -> Utils.fromNumber(klass, (Number) o))
-						.map(klass::cast)
+						.map(o -> klass.cast(Utils.fromNumber(klass, (Number) o)))
 						.toList();
 			} else {
 				return ((Stream<?>) q.getResultStream())
