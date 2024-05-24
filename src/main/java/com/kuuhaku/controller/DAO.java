@@ -70,6 +70,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try (EntityManager em = Manager.getEntityManager()) {
 			TypedQuery<T> q = em.createQuery(query, klass);
 			q.setMaxResults(1);
+
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
@@ -95,6 +96,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try (EntityManager em = Manager.getEntityManager()) {
 			Query q = em.createNativeQuery(query);
 			q.setMaxResults(1);
+
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
@@ -124,6 +126,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try (EntityManager em = Manager.getEntityManager()) {
 			Query q = em.createNativeQuery(query);
 			q.setMaxResults(1);
+
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
@@ -159,6 +162,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static <T extends DAO<T>> List<T> queryAll(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		try (EntityManager em = Manager.getEntityManager()) {
 			TypedQuery<T> q = em.createQuery(query, klass);
+
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
@@ -177,6 +181,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static <T> List<T> queryAllNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		try (EntityManager em = Manager.getEntityManager()) {
 			Query q = em.createNativeQuery(query);
+
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
@@ -250,14 +255,14 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		try {
 			em.getTransaction().begin();
-
 			Query q = em.createQuery(query);
+
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
 			}
-			q.executeUpdate();
 
+			q.executeUpdate();
 			em.getTransaction().commit();
 		} finally {
 			if (em.isOpen() && em.getTransaction().isActive()) {
@@ -273,14 +278,14 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		try {
 			em.getTransaction().begin();
-
 			Query q = em.createNativeQuery(query);
+
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
 			}
-			q.executeUpdate();
 
+			q.executeUpdate();
 			em.getTransaction().commit();
 		} finally {
 			if (em.isOpen() && em.getTransaction().isActive()) {
@@ -294,6 +299,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static <T extends DAO<T>> List<T> queryBuilder(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, Function<TypedQuery<T>, List<T>> processor, @NotNull Object... params) {
 		try (EntityManager em = Manager.getEntityManager()) {
 			TypedQuery<T> q = em.createQuery(query, klass);
+
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
@@ -312,6 +318,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static <T> List<T> nativeQueryBuilder(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, Function<Query, List<T>> processor, @NotNull Object... params) {
 		try (EntityManager em = Manager.getEntityManager()) {
 			Query q = em.createNativeQuery(query);
+
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
@@ -338,6 +345,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static List<Object[]> unmappedQueryBuilder(@NotNull @Language("PostgreSQL") String query, Function<Query, List<Object>> processor, @NotNull Object... params) {
 		try (EntityManager em = Manager.getEntityManager()) {
 			Query q = em.createNativeQuery(query);
+
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
 				q.setParameter(i + 1, params[i]);
