@@ -1337,7 +1337,7 @@ public class Shoukan extends GameInstance<Phase> {
 			lifesteal += 7;
 		}
 
-		int thorns = (op.getLockTime(Lock.CHARM) > 0 ? 20 : 0) + (int) target.getStats().getThorns().get();
+		int thorns = (you.getLockTime(Lock.CHARM) > 0 ? 20 : 0) + (int) target.getStats().getThorns().get();
 		double dmgMult = 1;
 		if (dmg < 0 && (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0)) {
 			dmgMult /= 2;
@@ -1641,7 +1641,7 @@ public class Shoukan extends GameInstance<Phase> {
 			lifesteal += 7;
 		}
 
-		int thorns = target.getLockTime(Lock.CHARM) > 0 ? 20 : 0;
+		int thorns = you.getLockTime(Lock.CHARM) > 0 ? 20 : 0;
 		double dmgMult = 1;
 		if (dmg < 0 && (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0)) {
 			dmgMult /= 2;
