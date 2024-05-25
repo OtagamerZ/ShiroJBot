@@ -21,7 +21,7 @@ CREATE MATERIALIZED VIEW IF NOT EXISTS v_card_names AS
 SELECT c.id
 FROM card c
 INNER JOIN anime a on a.id = c.anime_id
-WHERE a.visible
+WHERE (a.visible OR c.rarity IN ('EVOGEAR', 'FIELD'))
   AND c.rarity NOT IN ('ULTIMATE', 'NONE')
 ORDER BY c.id;
 

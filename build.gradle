@@ -41,16 +41,13 @@ application {
 			"-XX:MaxDirectMemorySize=2G",
 			"-XX:+UseZGC",
 			"-XX:+HeapDumpOnOutOfMemoryError",
-			"-XX:HeapDumpPath=/shiro/ShiroJBot/logs/memdump.hprof",
-			"-XX:+EnableDynamicAgentLoading",
+			"-XX:HeapDumpPath=logs/memdump.hprof",
 			"-Dfile.encoding=UTF-8",
 			"-Duser.timezone=America/Sao_Paulo",
 			"-Djava.awt.headless=true",
 			"-Dsun.java2d.opengl=True",
 			"-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector",
 			"-Djdk.attach.allowAttachSelf=true",
-			"-Djol.tryWithSudo=true",
-//			"-Dgroovy.use.classvalue=true",
 //			,"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:55000"
 	]
 }
@@ -97,15 +94,15 @@ tasks.register("enforceVersion") {
 
 dependencies {
 	//Core
-	implementation group: "net.dv8tion", name: "JDA", version: "5.0.0-beta.22"
+	implementation group: "net.dv8tion", name: "JDA", version: "5.0.0-beta.24"
 	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "4.0.6"
 	implementation group: "com.github.ygimenez", name: "Simple-Moshi", version: "1.1.2"
 
 	//Database
 	implementation group: "org.postgresql", name: "postgresql", version: "42.7.3"
 	implementation group: "org.hibernate.orm", name: "hibernate-core", version: "6.4.4.Final"
-	implementation group: "com.zaxxer", name: "HikariCP", version: "5.1.0"
 	implementation group: "org.hibernate.orm", name: "hibernate-hikaricp", version: "6.4.4.Final"
+	implementation group: "com.zaxxer", name: "HikariCP", version: "5.1.0"
 
 	//Compiler
 	implementation group: "org.apache.groovy", name: "groovy", version: "4.0.21"
@@ -114,24 +111,24 @@ dependencies {
 	implementation group: "org.java-websocket", name: "Java-WebSocket", version: "1.5.6"
 
 	//Wrappers
-	implementation group: "com.graphql-java", name: "graphql-java", version: "21.3"
+	implementation group: "com.graphql-java", name: "graphql-java", version: "22.1"
 	implementation group: "club.minnced", name: "discord-webhooks", version: "0.8.4"
 
 	//Apache Commons
 	implementation group: "org.apache.commons", name: "commons-lang3", version: "3.14.0"
 	implementation group: "org.apache.commons", name: "commons-text", version: "1.11.0"
 	implementation group: "org.apache.commons", name: "commons-math3", version: "3.6.1"
-	implementation group: "org.apache.commons", name: "commons-imaging", version: "1.0-alpha3"
+	implementation group: "org.apache.commons", name: "commons-imaging", version: "1.0.0-alpha5"
 	implementation group: "org.apache.commons", name: "commons-compress", version: "1.26.1"
 	implementation group: "org.apache.httpcomponents", name: "httpclient", version: "4.5.14"
 	implementation group: "commons-validator", name: "commons-validator", version: "1.8.0"
-	implementation group: "commons-codec", name: "commons-codec", version: "1.16.1"
-	implementation group: "commons-cli", name: "commons-cli", version: "1.6.0"
+	implementation group: "commons-codec", name: "commons-codec", version: "1.17.0"
+	implementation group: "commons-cli", name: "commons-cli", version: "1.8.0"
 	implementation group: "commons-io", name: "commons-io", version: "2.16.1"
 
 	//Logger
 	implementation group: "org.slf4j", name: "slf4j-api", version: "2.0.12"
-	implementation group: "org.slf4j", name: "slf4j-log4j12", version: "2.0.12"
+	implementation group: "org.slf4j", name: "slf4j-log4j12", version: "2.0.13"
 	implementation group: "org.apache.logging.log4j", name: "log4j-api", version: "2.23.1"
 	implementation group: "org.apache.logging.log4j", name: "log4j-1.2-api", version: "2.23.1"
 	implementation group: "org.apache.logging.log4j", name: "log4j-core", version: "2.23.1"
@@ -154,10 +151,6 @@ dependencies {
 	implementation group: "org.knowm.xchart", name: "xchart", version: "3.8.7"
 	implementation group: "com.github.trickl", name: "palette", version: "0.1.1"
 	implementation group: "org.jetbrains", name: "annotations", version: "24.1.0"
-	implementation group: "org.openjdk.jol", name: "jol-core", version: "0.17"
-
-	//Unit test
-	testImplementation group: "org.junit.jupiter", name: "junit-jupiter", version: "5.10.2"
 
 	//Antlr
 	antlr group: "org.antlr", name: "antlr4", version: "4.13.1"
@@ -180,10 +173,6 @@ sourceSets.main {
 
 jar {
 	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
-}
-
-test {
-	useJUnitPlatform()
 }
 
 generateGrammarSource {

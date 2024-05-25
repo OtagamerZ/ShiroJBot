@@ -460,33 +460,28 @@ public class GuildListener extends ListenerAdapter {
 	}
 
 	private void processCommand(MessageData.Guild data, EventData event, String content) {
-		if (Mutex.isLocked(data.user().getId())) return;
-
 		I18N locale = event.config().getLocale();
-		String[] args = content.toLowerCase().split("\\s+");
-		String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
 
-		DAO.apply(Account.class, data.user().getId(), acc -> {
-			Title t = acc.checkTitles(locale);
-			if (t != null) {
-				event.notify(locale.get("achievement/title", data.user().getAsMention(), t.getInfo(locale).getName()));
-			}
-		});
+		try {
+			String[] args = content.toLowerCase().split("\\s+");
+			String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
 
-		try (Mutex<String> ignore = new Mutex<>(data.user().getId())) {
 			String[] parts = name.split("\\.");
 			JSONObject aliases = new JSONObject();
 			aliases.putAll(event.config().getSettings().getAliases());
 			aliases.putAll(event.profile().getAccount().getSettings().getAliases());
-			for (int i = 0; i < parts.length; i++) {
-				String part = parts[i];
 
-				if (aliases.has(part)) {
-					parts[i] = aliases.getString(part);
+			String command = "";
+			for (String s : parts) {
+				if (command.isBlank()) command = s;
+				else command += "." + s;
+
+				if (aliases.has(command)) {
+					command = aliases.getString(command);
 				}
 			}
-			name = String.join(".", parts);
 
+			name = command;
 			PreparedCommand pc = Main.getCommandManager().getCommand(name);
 			if (pc != null) {
 				Permission[] missing = pc.getMissingPerms(data.channel());
@@ -566,6 +561,13 @@ public class GuildListener extends ListenerAdapter {
 					}
 				}
 			}
+		} finally {
+			DAO.apply(Account.class, data.user().getId(), acc -> {
+				Title t = acc.checkTitles(locale);
+				if (t != null) {
+					event.notify(locale.get("achievement/title", data.user().getAsMention(), t.getInfo(locale).getName()));
+				}
+			});
 		}
 	}
 
