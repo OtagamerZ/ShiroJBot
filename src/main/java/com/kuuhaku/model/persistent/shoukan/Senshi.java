@@ -516,7 +516,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						mult *= 1.2;
 					}
 				}
-				case CYBERBEAST -> sum += getGame().getCards(getSide()).stream().mapToInt(Senshi::getBlock).sum();
+				case CYBERBEAST -> {
+					if (getGame() != null) {
+						sum += getGame().getCards(getSide()).stream().mapToInt(Senshi::getBlock).sum();
+					}
+				}
 			}
 
 			mult *= getFieldMult();
