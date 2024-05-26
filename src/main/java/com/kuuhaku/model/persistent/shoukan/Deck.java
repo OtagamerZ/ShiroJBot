@@ -621,6 +621,7 @@
 					 .iterator();
 
 			 int high = 0;
+			 int second = 0;
 			 boolean allSame = true;
 			 while (it.hasNext()) {
 				 Race r = it.next();
@@ -632,7 +633,11 @@
 				 } else {
 					 if (ori.size() < 2) {
 						 allSame = false;
+						 second = count;
 						 ori.add(r);
+						 continue;
+					 } else if (count == second) {
+						 allSame = true;
 					 }
 
 					 break;
