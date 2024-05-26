@@ -31,7 +31,6 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.http.HttpHeaders;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 
 import java.time.DayOfWeek;
@@ -90,7 +89,7 @@ public class HourlySchedule implements Runnable, PreInitialize {
 				I18N locale = acc.getEstimateLocale();
 				User u = acc.getUser();
 
-				if (r.getChannel().canTalk()) {
+				if (r.getChannel() != null && r.getChannel().canTalk()) {
 					r.getChannel().sendMessage(locale.get("str/reminder", u.getAsMention(), r.getMessage())).queue();
 				} else {
 					u.openPrivateChannel()
