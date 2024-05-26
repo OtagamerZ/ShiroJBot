@@ -295,24 +295,27 @@ public class GuildListener extends ListenerAdapter {
 						.orElse(List.of())
 						.parallelStream()
 						.map(LevelRole::getRole)
-						.filter(r -> !data.member().getRoles().contains(r))
 						.filter(data.me()::canInteract)
 						.toList();
 
 				List<Role> toRemove = roles.values().parallelStream()
 						.flatMap(List::parallelStream)
 						.map(LevelRole::getRole)
-						.filter(r -> !toAdd.contains(r) && data.member().getRoles().contains(r))
+						.filter(r -> !toAdd.contains(r))
 						.filter(data.me()::canInteract)
 						.toList();
 
-				data.guild().modifyMemberRoles(data.member(), toAdd, toRemove).queue(null, Utils::doNothing);
+				List<Role> toAnnounce = toAdd.parallelStream()
+						.filter(r -> !data.member().getRoles().contains(r))
+						.toList();
 
-				if (!toAdd.isEmpty() && profile.getLevel() > lvl) {
+				if (!toAnnounce.isEmpty() && profile.getLevel() > lvl) {
 					ed.notify(locale.get("str/level_role_earn",
-							Utils.properlyJoin(locale.get("str/and")).apply(toAdd.stream().map(Role::getAsMention).toList()))
+							Utils.properlyJoin(locale.get("str/and")).apply(toAnnounce.stream().map(Role::getAsMention).toList()))
 					);
 				}
+
+				data.guild().modifyMemberRoles(data.member(), toAdd, toRemove).queue(null, Utils::doNothing);
 			}
 
 			if (Utils.match(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
