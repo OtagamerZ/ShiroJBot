@@ -193,6 +193,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 			setLocked(true);
 			m.invoke(this, hand.getSide(), action.getSecond());
+		} catch (ActivationException e) {
+			getChannel().sendMessage(getString(e.getMessage())).queue();
 		} catch (Exception e) {
 			if (e.getCause() instanceof StackOverflowError) {
 				Constants.LOGGER.error("Fatal error at {}", m.getName(), e);
