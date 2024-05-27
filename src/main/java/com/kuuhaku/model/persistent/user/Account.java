@@ -554,6 +554,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 	public void addVote(boolean weekend) {
 		Account acc = refresh();
+		if (acc.isVoteAwarded()) return;
 
 		int streak = acc.getStreak() + 1;
 		acc.setStreak(streak);
