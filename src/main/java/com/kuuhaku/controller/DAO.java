@@ -389,7 +389,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public final T refresh() {
 		try (EntityManager em = Manager.getEntityManager()) {
 			beforeRefresh();
-			Object key = Manager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+			Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
 			return (T) Utils.getOr(em.find(getClass(), key), this);
 		} finally {
 			afterRefresh();
@@ -403,7 +403,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			DAO<?> ent = this;
 			if (!em.contains(ent)) {
-				Object key = Manager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
 				ent = em.find(getClass(), key);
 
 				if (ent == null) {

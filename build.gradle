@@ -19,6 +19,8 @@
 //file:noinspection GroovyUnusedAssignment
 //file:noinspection GroovyAssignabilityCheck
 
+import org.apache.tools.ant.filters.ReplaceTokens
+
 buildscript {
 	repositories {
 		mavenCentral()
@@ -79,10 +81,21 @@ tasks.withType(JavaCompile).configureEach {
 			<< "-Xlint:deprecation"
 
 	dependsOn enforceVersion
+	dependsOn replaceTokens
 }
 
 tasks.withType(GroovyCompile).configureEach {
 	groovyOptions.optimizationOptions.indy = true
+}
+
+tasks.register("replaceTokens", Copy) {
+	from('src/main/resources/META-INF') {
+		include "**/persistence.xml"
+	}
+	into 'build/resources/META-INF'
+	filter(ReplaceTokens, tokens: ["SERVER_IP", "DB_NAME", "DB_LOGIN", "DB_PASS"].collectEntries {
+		[it, System.getenv(it) ?: "NULL"]
+	})
 }
 
 tasks.register("enforceVersion") {

@@ -65,7 +65,11 @@ public class LevelRoleCommand implements Executable {
 				.entrySet().stream()
 				.sorted(Map.Entry.comparingByKey())
 				.map(e -> locale.get("str/level", e.getKey()) + ": " + Utils.properlyJoin(locale.get("str/and"))
-						.apply(e.getValue().stream().map(lr -> lr.getRole().getAsMention()).toList())
+						.apply(e.getValue().stream()
+								.map(LevelRole::getRole)
+								.map(r -> r == null ? locale.get("str/unknown") : r.getAsMention())
+								.toList()
+						)
 				).toList();
 
 		List<Page> pages = Utils.generatePages(eb, roles, 20, 10, Function.identity(),
