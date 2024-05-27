@@ -34,11 +34,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public abstract class Manager {
-	@PersistenceContext(unitName = "main")
-	private static EntityManager entityManager;
+public class Manager {
+	private static final Manager INSTANCE = new Manager();
 
-	static {
+	@PersistenceContext(unitName = "main")
+	private EntityManager entityManager;
+
+	private Manager() {
 		try (EntityManager em = getEntityManager()) {
 			String db = (String) em.createNativeQuery("SELECT current_database()").getSingleResult();
 			String schema = (String) em.createNativeQuery("SELECT current_schema()").getSingleResult();
@@ -71,7 +73,7 @@ public abstract class Manager {
 	}
 
 	public static EntityManager getEntityManager() {
-		return entityManager;
+		return INSTANCE.entityManager;
 	}
 
 	public static long ping() {
