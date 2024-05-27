@@ -81,7 +81,7 @@ tasks.withType(JavaCompile).configureEach {
 			<< "-Xlint:deprecation"
 
 	dependsOn enforceVersion
-	finalizedBy replaceTokens
+	dependsOn replaceTokens
 }
 
 tasks.withType(GroovyCompile).configureEach {
