@@ -52,7 +52,7 @@ public class Archetype extends DAO<Archetype> {
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true)
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedArch> infos = new HashSet<>();

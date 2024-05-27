@@ -78,10 +78,6 @@
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="jakarta.persistence.schema-generation.create-database-schemas" value="true"/>
 
-<!--            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://@SERVER_IP@/@DB_NAME@?currentSchema=shiro&amp;sslmode=require&amp;useEncoding=true&amp;characterEncoding=UTF-8"/>-->
-<!--            <property name="jakarta.persistence.jdbc.user" value="@DB_LOGIN@"/>-->
-<!--            <property name="jakarta.persistence.jdbc.password" value="@DB_PASS@"/>-->
-
             <property name="hibernate.jdbc.batch_size" value="10"/>
             <property name="hibernate.order_inserts" value="true"/>
             <property name="hibernate.order_updates" value="true"/>

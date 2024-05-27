@@ -31,7 +31,6 @@ import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
 import com.kuuhaku.model.persistent.id.ProfileId;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.shoukan.history.Match;
-import com.kuuhaku.util.API;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
@@ -42,15 +41,16 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.http.HttpHeaders;
-import org.apache.http.client.methods.HttpHead;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.awt.*;
-import java.time.*;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -93,20 +93,20 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderColumn(name = "index")
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<Deck> decks = new ArrayList<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<Transaction> transactions = new ArrayList<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private final Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private final Set<AccountTitle> titles = new HashSet<>();
 

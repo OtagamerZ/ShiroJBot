@@ -84,16 +84,16 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = RoleConverter.class)
 	private Role welcomer;
 
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("level")
 	private final List<LevelRole> levelRoles = new ArrayList<>();
 
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<CustomAnswer> customAnswers = new ArrayList<>();
 
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("threshold")
 	private final List<AutoRule> autoRules = new ArrayList<>();
