@@ -59,7 +59,7 @@ public class CustomAnswerAddCommand implements Executable {
 		for (Object chn : struct.getJSONArray("channels")) {
 			String id = String.valueOf(chn);
 
-			if ( !StringUtils.isNumeric(id) || Main.getApp().getMessageChannelById(id) == null) {
+			if (!StringUtils.isNumeric(id) || Main.getApp().getMessageChannelById(id) == null) {
 				event.channel().sendMessage(locale.get("error/invalid_channel_id", id)).queue();
 				return;
 			}
