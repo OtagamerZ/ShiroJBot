@@ -36,7 +36,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 public abstract class Manager {
-	private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("main");
+	private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("main");
 
 	static {
 		try (EntityManager em = emf.createEntityManager()) {
@@ -71,7 +71,7 @@ public abstract class Manager {
 	}
 
 	public static EntityManager getEntityManager() {
-		return getEntityManagerFactory().createEntityManager();
+		return emf.createEntityManager();
 	}
 
 	public static long ping() {
