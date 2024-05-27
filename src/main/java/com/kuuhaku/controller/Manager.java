@@ -50,11 +50,9 @@ public abstract class Manager {
 	));
 
 	static {
-		try (EntityManager em = emf.createEntityManager()) {
-			String db = (String) em.createNativeQuery("SELECT current_database()").getSingleResult();
-			String schema = (String) em.createNativeQuery("SELECT current_schema()").getSingleResult();
-			Constants.LOGGER.info("Connected to database {}, schema {} successfully", db, schema);
-		}
+		String db = DAO.queryNative(String.class, "SELECT current_database()");
+		String schema = DAO.queryNative(String.class, "SELECT current_schema()");
+		Constants.LOGGER.info("Connected to database {}, schema {} successfully", db, schema);
 
 		File initDir = IO.getResourceAsFile("database");
 		if (initDir != null && initDir.isDirectory()) {
