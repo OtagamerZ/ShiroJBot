@@ -42,14 +42,11 @@ import net.dv8tion.jda.api.interactions.Interaction;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
-import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.dv8tion.jda.api.utils.messages.MessageRequest;
 
-import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 
 import static net.dv8tion.jda.api.entities.Message.MentionType.EVERYONE;
@@ -73,6 +70,12 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				.disableCache(EnumSet.complementOf(EnumSet.of(CacheFlag.EMOJI)))
 				.setMemberCachePolicy(all(ONLINE.or(OWNER), m -> !m.getUser().isBot()))
 				.setBulkDeleteSplittingEnabled(false)
+				.setActivity(getRandomAction())
+				.addEventListeners(
+						new GuildListener(),
+						new AutoModListener(),
+						new PrivateChannelListener()
+				)
 				.setEventPool(new ForkJoinPool(
 						Runtime.getRuntime().availableProcessors(),
 						ForkJoinPool.defaultForkJoinWorkerThreadFactory,
@@ -80,28 +83,6 @@ public class Application implements Thread.UncaughtExceptionHandler {
 						true
 				), true)
 				.build();
-
-		CompletableFuture<Void> shardInit = CompletableFuture.runAsync(() -> {
-					List<JDA> shards = shiro.getShards().stream().sorted(Comparator.comparingInt(s -> s.getShardInfo().getShardId())).toList();
-					for (JDA shard : shards) {
-						int id = shard.getShardInfo().getShardId();
-
-						try {
-							shard.awaitReady();
-							Constants.LOGGER.info("Shard {} ready", id);
-						} catch (InterruptedException e) {
-							Constants.LOGGER.error("Failed to initialize shard {}: {}", id, e);
-						}
-					}
-
-					setRandomAction();
-					shiro.addEventListener(
-							new GuildListener(),
-							new AutoModListener(),
-							new PrivateChannelListener()
-					);
-				}
-		);
 
 		MessageRequest.setDefaultMentions(EnumSet.complementOf(EnumSet.of(EVERYONE, HERE)));
 
@@ -131,13 +112,11 @@ public class Application implements Thread.UncaughtExceptionHandler {
 			System.exit(1);
 		}
 
-		shardInit.thenRun(() -> {
-			API.connectSocket(CommonSocket.class, Constants.SOCKET_ROOT);
-			Constants.LOGGER.info("<----------END OF BOOT---------->");
+		API.connectSocket(CommonSocket.class, Constants.SOCKET_ROOT);
+		Constants.LOGGER.info("<----------END OF BOOT---------->");
 
-			Main.boot.stop();
-			Constants.LOGGER.info("Finished in {}", Utils.toStringDuration(I18N.EN, Main.boot.getTime()));
-		});
+		Main.boot.stop();
+		Constants.LOGGER.info("Finished in {}", Utils.toStringDuration(I18N.EN, Main.boot.getTime()));
 	}
 
 	public ShardManager getShiro() {
@@ -169,23 +148,22 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		return getMainShard().getSelfUser().getId();
 	}
 
-	public void setRandomAction() {
-		final List<Activity> activities = List.of(
-				Activity.watching(Utils.separate(shiro.getGuildCache().size()) + " servidores, e estou apenas começando!"),
-				Activity.competing("Shoukan ranqueado!"),
-				Activity.watching(DAO.queryNative(String.class, """
-						SELECT c.name||' pela '||(SELECT count(1) FROM card x WHERE x.anime_id = c.anime_id)||'ª vez!'
+	public Activity getRandomAction() {
+		final List<String> activities = List.of(
+				"Derrotando noobs no Shoukan!",
+				DAO.queryNative(String.class, """
+						SELECT 'Assistindo '||c.name||' pela '||(SELECT count(1) FROM card x WHERE x.anime_id = c.anime_id)||'ª vez!'
 						FROM card c
 						INNER JOIN anime a ON a.id = c.anime_id
 						WHERE a.visible
 						AND c.rarity = 'ULTIMATE'
 						ORDER BY RANDOM()
-						""")),
-				Activity.playing("com minhas cartas Kawaipon!"),
-				Activity.of(Activity.ActivityType.LISTENING, "Use " + Constants.DEFAULT_PREFIX + "help para ver os meus comandos!")
+						"""),
+				"Coletando cartas Kawaipon!",
+				"Use `" + Constants.DEFAULT_PREFIX + "help` para ver os meus comandos!"
 		);
 
-		shiro.setActivity(Utils.getRandomEntry(activities));
+		return Activity.customStatus(Utils.getRandomEntry(activities));
 	}
 
 	@Override
