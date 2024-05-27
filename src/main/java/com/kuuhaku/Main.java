@@ -18,10 +18,12 @@
 
 package com.kuuhaku;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.manager.CacheManager;
 import com.kuuhaku.manager.CommandManager;
 import com.kuuhaku.manager.ScheduleManager;
 import com.kuuhaku.model.common.ExecChain;
+import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.sun.management.OperatingSystemMXBean;
 import org.apache.commons.lang3.time.StopWatch;
 
@@ -77,6 +79,14 @@ public class Main {
 						System.getProperty("java.vendor.version")
 				)
 		);
+
+		GlobalProperty ver = DAO.find(GlobalProperty.class, "build_number");
+		if (ver == null) {
+			ver = new GlobalProperty("build_number", "0");
+		}
+
+		ver.setValue(Integer.parseInt(ver.getValue()) + 1);
+		ver.save();
 
 		ImageIO.setUseCache(false);
 		Thread.setDefaultUncaughtExceptionHandler(app = new Application());

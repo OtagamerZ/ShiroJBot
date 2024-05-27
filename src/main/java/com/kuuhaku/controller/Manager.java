@@ -18,21 +18,8 @@
 
 package com.kuuhaku.controller;
 
-import com.kuuhaku.Constants;
-import com.kuuhaku.model.persistent.shiro.GlobalProperty;
-import com.kuuhaku.util.IO;
-import jakarta.persistence.*;
-import org.apache.commons.io.FilenameUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Stream;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 public class Manager {
 	private static final Manager INSTANCE = new Manager();
@@ -41,35 +28,6 @@ public class Manager {
 	private EntityManager entityManager;
 
 	private Manager() {
-		try (EntityManager em = getEntityManager()) {
-			String db = (String) em.createNativeQuery("SELECT current_database()").getSingleResult();
-			String schema = (String) em.createNativeQuery("SELECT current_schema()").getSingleResult();
-			Constants.LOGGER.info("Connected to database {}, schema {} successfully", db, schema);
-		}
-
-		File initDir = IO.getResourceAsFile("database");
-		if (initDir != null && initDir.isDirectory()) {
-			Set<String> scripts = new HashSet<>();
-			try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
-				ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))
-						.sorted(Comparator.comparing(Path::toString).thenComparing(Path::getNameCount))
-						.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
-						.map(IO::readString)
-						.forEach(DAO::applyNative);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-
-			Constants.LOGGER.info("Applied {} scripts: {}", scripts.size(), scripts);
-		}
-
-		GlobalProperty ver = DAO.find(GlobalProperty.class, "build_number");
-		if (ver == null) {
-			ver = new GlobalProperty("build_number", "0");
-		}
-
-		ver.setValue(Integer.parseInt(ver.getValue()) + 1);
-		ver.save();
 	}
 
 	public static EntityManager getEntityManager() {

@@ -18,24 +18,53 @@
 
 package com.kuuhaku.controller;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
 import com.kuuhaku.interfaces.annotations.WhenNull;
+import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
+import org.apache.commons.io.FilenameUtils;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
-import javax.validation.ConstraintViolationException;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Objects;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 public abstract class DAO<T extends DAO<T>> implements DAOListener {
+	static {
+		try (EntityManager em = Manager.getEntityManager()) {
+			String db = (String) em.createNativeQuery("SELECT current_database()").getSingleResult();
+			String schema = (String) em.createNativeQuery("SELECT current_schema()").getSingleResult();
+			Constants.LOGGER.info("Connected to database {}, schema {} successfully", db, schema);
+		}
+
+		File initDir = IO.getResourceAsFile("database");
+		if (initDir != null && initDir.isDirectory()) {
+			Set<String> scripts = new HashSet<>();
+			try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
+				ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))
+						.sorted(Comparator.comparing(Path::toString).thenComparing(Path::getNameCount))
+						.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
+						.map(IO::readString)
+						.forEach(DAO::applyNative);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+
+			Constants.LOGGER.info("Applied {} scripts: {}", scripts.size(), scripts);
+		}
+	}
+
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
 		try (EntityManager em = Manager.getEntityManager()) {
 			T t = em.find(klass, id);
