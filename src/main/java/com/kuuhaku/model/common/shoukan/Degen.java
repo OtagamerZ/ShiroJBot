@@ -22,4 +22,9 @@ public class Degen extends ValueOverTime {
 	public Degen(int value) {
 		super(value, 1);
 	}
+
+	@Override
+	public int next() {
+		return -getValue();
+	}
 }
