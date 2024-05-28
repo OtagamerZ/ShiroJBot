@@ -1412,6 +1412,7 @@ public class Shoukan extends GameInstance<Phase> {
 								source.setStun(1);
 
 								dmg = 0;
+								hit = false;
 							} else if (!source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_DODGE, true) || chance(dodge))) {
 								outcome = getString("str/combat_dodge", dodge);
 								trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
