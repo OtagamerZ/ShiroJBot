@@ -17,7 +17,7 @@
  */
 
 -- DROP VIEW IF EXISTS v_senshi_truecost;
-CREATE VIEW v_senshi_truecost AS
+CREATE OR REPLACE VIEW v_senshi_truecost AS
 SELECT card_id
      , atk
      , block
