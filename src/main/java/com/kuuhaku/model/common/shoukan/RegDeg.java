@@ -42,7 +42,7 @@ public class RegDeg {
 	}
 
 	public void add(Number val) {
-		add(val, 0.2);
+		add(val, val.doubleValue() < 0 ? 1 : 0.2);
 	}
 
 	public void add(Number val, double mult) {

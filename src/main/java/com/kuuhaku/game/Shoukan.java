@@ -2462,7 +2462,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						Drawable<?> d = curr.manualDraw();
 						d.setEthereal(true);
-						curr.getRegDeg().add(-curr.getBase().hp() / 20);
+						curr.getRegDeg().add(-curr.getBase().hp() * 0.05);
 						Objects.requireNonNull(w.getHook())
 								.setEphemeral(true)
 								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
