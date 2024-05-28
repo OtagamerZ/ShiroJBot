@@ -21,6 +21,7 @@ package com.kuuhaku.command.dev;
 import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
+import com.kuuhaku.manager.CacheManager;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
@@ -35,10 +36,11 @@ import net.dv8tion.jda.api.JDA;
 public class ClearCacheCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Main.getCacheManager().getResourceCache().cleanUp();
-		Main.getCacheManager().getLocaleCache().cleanUp();
-		Main.getCacheManager().getScriptCache().cleanUp();
-		Main.getCacheManager().getPatternCache().cleanUp();
+		CacheManager man = Main.getCacheManager();
+		man.getResourceCache().invalidateAll();
+		man.getLocaleCache().invalidateAll();
+		man.getScriptCache().invalidateAll();
+		man.getPatternCache().invalidateAll();
 
 		event.channel().sendMessage(locale.get("success/cache_clear")).queue();
 	}
