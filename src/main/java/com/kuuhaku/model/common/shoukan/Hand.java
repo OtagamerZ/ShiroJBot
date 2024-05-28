@@ -623,6 +623,7 @@ public class Hand {
 			}
 		}
 
+		out.setAvailable(true);
 		out.setSolid(true);
 		cards.add(out);
 
