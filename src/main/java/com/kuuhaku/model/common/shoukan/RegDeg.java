@@ -60,13 +60,13 @@ public class RegDeg {
 			}
 
 			if (parent.getOther().getOrigins().synergy() == Race.GHOUL) {
-				int split = (int) (-value * mult * parent.getStats().getDegenMult().get()) / 2;
-				values.add(new Degen(split));
-				values.add(new Degen(split));
+				int split = (int) (-value * parent.getStats().getDegenMult().get()) / 2;
+				values.add(new Degen(split, mult));
+				values.add(new Degen(split, mult));
 				return;
 			}
 
-			values.add(new Degen((int) (-value * mult * parent.getStats().getDegenMult().get())));
+			values.add(new Degen(-value, mult * parent.getStats().getDegenMult().get()));
 		} else if (value > 0) {
 			if (parent.getOrigins().major() == Race.HUMAN) {
 				if (parent.getOrigins().isPure()) {
