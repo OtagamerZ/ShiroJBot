@@ -36,10 +36,9 @@ public record MessageData(net.dv8tion.jda.api.entities.Guild guild, MessageChann
 		);
 	}
 
-	public record Guild(net.dv8tion.jda.api.entities.Guild guild, GuildMessageChannel channel, Message message,
-						Member member) {
+	public record Guild(net.dv8tion.jda.api.entities.Guild guild, GuildMessageChannel channel, Message message, Member member, long interceptMillis) {
 		public Guild(Message message) {
-			this(message.getGuild(), message.getGuildChannel(), message, message.getMember());
+			this(message.getGuild(), message.getGuildChannel(), message, message.getMember(), System.currentTimeMillis());
 		}
 
 		public User user() {
@@ -80,9 +79,9 @@ public record MessageData(net.dv8tion.jda.api.entities.Guild guild, MessageChann
 		}
 	}
 
-	public record Private(PrivateChannel channel, Message message, User user) {
+	public record Private(PrivateChannel channel, Message message, User user, long interceptMillis) {
 		public Private(Message message) {
-			this(message.getChannel().asPrivateChannel(), message, message.getAuthor());
+			this(message.getChannel().asPrivateChannel(), message, message.getAuthor(), System.currentTimeMillis());
 		}
 
 		public IMentionable mentions(Message.MentionType type, int idx) {

@@ -34,8 +34,6 @@ import net.dv8tion.jda.api.JDA;
 public class PingCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		bot.getRestPing()
-				.flatMap(t -> event.channel().sendMessage("Pong! (%s ms)".formatted(t)))
-				.queue();
+		event.channel().sendMessage("Pong! (%s ms)".formatted(System.currentTimeMillis() - event.interceptMillis())).queue();
 	}
 }
