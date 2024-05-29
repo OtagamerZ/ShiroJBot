@@ -88,7 +88,7 @@ public class Checkpoint implements AutoCloseable {
 			));
 
 			if (lap > lngTime) {
-				lngIdx = i;
+				lngIdx = i - 1;
 				lngTime = lap;
 			}
 		}
