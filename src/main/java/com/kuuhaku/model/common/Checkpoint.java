@@ -49,7 +49,7 @@ public class Checkpoint implements AutoCloseable {
 
 		StackTraceElement line = null;
 		for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-			if (!ste.getClassName().equals(getClass().getName())) {
+			if (ste.getClassName().startsWith("com.kuuhaku") && !ste.getClassName().equals(getClass().getName())) {
 				line = ste;
 				break;
 			}
