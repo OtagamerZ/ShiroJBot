@@ -196,9 +196,9 @@ public class GuildListener extends ListenerAdapter {
 	public void onMessageReceived(@NotNull MessageReceivedEvent event) {
 		if (!event.isFromGuild() || event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
 
-		Checkpoint c1 = null;
+		Checkpoint cp = null;
 		if (event.getAuthor().getId().equals("350836145921327115")) {
-			c1 = new Checkpoint();
+			cp = new Checkpoint();
 		}
 
 		String content = event.getMessage().getContentRaw();
@@ -209,7 +209,7 @@ public class GuildListener extends ListenerAdapter {
 			return;
 		}
 
-		if (event.getAuthor().getId().equals("350836145921327115")) c1.lap();
+		if (event.getAuthor().getId().equals("350836145921327115")) cp.lap();
 		if (toHandle.containsKey(data.guild().getId())) {
 			List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
 			for (SimpleMessageListener evt : evts) {
@@ -220,7 +220,7 @@ public class GuildListener extends ListenerAdapter {
 			evts.removeIf(SimpleMessageListener::isClosed);
 		}
 
-		if (event.getAuthor().getId().equals("350836145921327115")) c1.lap();
+		if (event.getAuthor().getId().equals("350836145921327115")) cp.lap();
 		GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
 		I18N locale = config.getLocale();
 		if (!Objects.equals(config.getName(), data.guild().getName())) {
@@ -236,35 +236,29 @@ public class GuildListener extends ListenerAdapter {
 			}
 		}
 
-		if (event.getAuthor().getId().equals("350836145921327115")) c1.lap();
+		if (event.getAuthor().getId().equals("350836145921327115")) cp.lap();
 		Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
 		int lvl = profile.getLevel();
 
-		if (event.getAuthor().getId().equals("350836145921327115")) c1.lap();
+		if (event.getAuthor().getId().equals("350836145921327115")) cp.lap();
 		Account account = profile.getAccount();
 		if (!Objects.equals(account.getName(), data.user().getName())) {
 			account.setName(data.user().getName());
 			account.save();
 		}
 
-		if (event.getAuthor().getId().equals("350836145921327115")) c1.lap();
+		if (event.getAuthor().getId().equals("350836145921327115")) cp.lap();
 		GuildBuff gb = config.getCumBuffs();
 		profile.addXp((long) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
 		profile.save();
 
-		if (event.getAuthor().getId().equals("350836145921327115")) c1.lap();
+		if (event.getAuthor().getId().equals("350836145921327115")) cp.close();
 		EventData ed = new EventData(event.getChannel(), config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {
 			CompletableFuture.runAsync(() -> processCommand(data, ed, content));
 		}
 
-		if (event.getAuthor().getId().equals("350836145921327115")) c1.close();
 		CompletableFuture.runAsync(() -> {
-			Checkpoint cp = null;
-			if (event.getAuthor().getId().equals("350836145921327115")) {
-				cp = new Checkpoint();
-			}
-
 			if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
 				Member mb = event.getMember();
 				if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
@@ -279,7 +273,6 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			if (event.getAuthor().getId().equals("350836145921327115")) cp.lap();
 			if (profile.getLevel() > lvl) {
 				int high = account.getHighestLevel();
 				int prize = 0;
@@ -301,12 +294,10 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			if (event.getAuthor().getId().equals("350836145921327115")) cp.lap();
 			Map<Integer, List<LevelRole>> roles = config.getSettings().getLevelRoles().parallelStream()
 					.filter(lr -> lr.getLevel() <= profile.getLevel())
 					.collect(Collectors.groupingBy(LevelRole::getLevel));
 
-			if (event.getAuthor().getId().equals("350836145921327115")) cp.lap();
 			if (!roles.isEmpty()) {
 				List<Role> toAdd = roles.entrySet().parallelStream()
 						.max(Map.Entry.comparingByKey())
@@ -337,7 +328,6 @@ public class GuildListener extends ListenerAdapter {
 				data.guild().modifyMemberRoles(data.member(), toAdd, toRemove).queue(null, Utils::doNothing);
 			}
 
-			if (event.getAuthor().getId().equals("350836145921327115")) cp.lap();
 			if (Utils.match(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
 				data.channel().sendMessage(locale.get("str/mentioned",
 						data.user().getAsMention(),
@@ -346,7 +336,6 @@ public class GuildListener extends ListenerAdapter {
 				)).queue();
 			}
 
-			if (event.getAuthor().getId().equals("350836145921327115")) cp.lap();
 			if (config.getSettings().isFeatureEnabled(GuildFeature.NQN_MODE)) {
 				Member mb = event.getMember();
 				if (mb != null) {
@@ -415,7 +404,6 @@ public class GuildListener extends ListenerAdapter {
 					}
 				}
 			}
-			if (event.getAuthor().getId().equals("350836145921327115")) cp.close();
 		});
 
 		rollSpawns(config, locale, account);
@@ -486,17 +474,23 @@ public class GuildListener extends ListenerAdapter {
 	}
 
 	private void processCommand(MessageData.Guild data, EventData event, String content) {
-		I18N locale = event.config().getLocale();
+		Checkpoint cp = null;
+		if (data.user().getId().equals("350836145921327115")) {
+			cp = new Checkpoint();
+		}
 
+		I18N locale = event.config().getLocale();
 		try {
 			String[] args = content.toLowerCase().split("\\s+");
 			String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
 
+			if (data.user().getId().equals("350836145921327115")) cp.lap();
 			String[] parts = name.split("\\.");
 			JSONObject aliases = new JSONObject();
 			aliases.putAll(event.config().getSettings().getAliases());
 			aliases.putAll(event.profile().getAccount().getSettings().getAliases());
 
+			if (data.user().getId().equals("350836145921327115")) cp.lap();
 			String command = "";
 			for (String s : parts) {
 				if (command.isBlank()) command = s;
@@ -507,6 +501,7 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
+			if (data.user().getId().equals("350836145921327115")) cp.lap();
 			name = command;
 			PreparedCommand pc = Main.getCommandManager().getCommand(name);
 			if (pc != null) {
@@ -525,6 +520,7 @@ public class GuildListener extends ListenerAdapter {
 					}
 				}
 
+				if (data.user().getId().equals("350836145921327115")) cp.lap();
 				if (missing.length > 0) {
 					XStringBuilder sb = new XStringBuilder(locale.get("error/missing_perms"));
 					for (Permission perm : missing) {
@@ -535,6 +531,7 @@ public class GuildListener extends ListenerAdapter {
 					return;
 				}
 
+				if (data.user().getId().equals("350836145921327115")) cp.lap();
 				if (event.profile().getAccount().isBlacklisted()) {
 					data.channel().sendMessage(locale.get("error/blacklisted")).queue();
 					return;
@@ -546,9 +543,11 @@ public class GuildListener extends ListenerAdapter {
 					return;
 				}
 
+				if (data.user().getId().equals("350836145921327115")) cp.lap();
 				try {
 					JSONObject params = SignatureParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
 
+					if (data.user().getId().equals("350836145921327115")) cp.lap();
 					try {
 						pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
 					} catch (Exception e) {
@@ -556,6 +555,7 @@ public class GuildListener extends ListenerAdapter {
 						Constants.LOGGER.error(e, e);
 					}
 
+					if (data.user().getId().equals("350836145921327115")) cp.lap();
 					if (!Constants.STF_PRIVILEGE.apply(data.member())) {
 						ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
 					}
@@ -587,6 +587,8 @@ public class GuildListener extends ListenerAdapter {
 					}
 				}
 			}
+
+			if (data.user().getId().equals("350836145921327115")) cp.close();
 		} finally {
 			DAO.apply(Account.class, data.user().getId(), acc -> {
 				Title t = acc.checkTitles(locale);
