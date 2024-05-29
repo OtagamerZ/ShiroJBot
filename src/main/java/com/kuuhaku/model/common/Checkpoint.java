@@ -93,7 +93,7 @@ public class Checkpoint implements AutoCloseable {
 			}
 		}
 
-		sb.append("\nLongest lap was: %s - %sms at %s".formatted(lngIdx, lngTime, caller.get(lngIdx)));
+		sb.append("\nLongest lap was: %s - %sms after %s".formatted(lngIdx, lngTime, caller.getOrDefault(lngIdx, "starting point")));
 		Constants.LOGGER.info(sb.toString());
 	}
 }

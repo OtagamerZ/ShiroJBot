@@ -196,6 +196,11 @@ public class GuildListener extends ListenerAdapter {
 	public void onMessageReceived(@NotNull MessageReceivedEvent event) {
 		if (!event.isFromGuild() || event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
 
+		Checkpoint c1 = null;
+		if (event.getAuthor().getId().equals("350836145921327115")) {
+			c1 = new Checkpoint();
+		}
+
 		String content = event.getMessage().getContentRaw();
 		MessageData.Guild data;
 		try {
@@ -204,6 +209,7 @@ public class GuildListener extends ListenerAdapter {
 			return;
 		}
 
+		if (event.getAuthor().getId().equals("350836145921327115")) c1.lap();
 		if (toHandle.containsKey(data.guild().getId())) {
 			List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
 			for (SimpleMessageListener evt : evts) {
@@ -214,6 +220,7 @@ public class GuildListener extends ListenerAdapter {
 			evts.removeIf(SimpleMessageListener::isClosed);
 		}
 
+		if (event.getAuthor().getId().equals("350836145921327115")) c1.lap();
 		GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
 		I18N locale = config.getLocale();
 		if (!Objects.equals(config.getName(), data.guild().getName())) {
@@ -229,31 +236,35 @@ public class GuildListener extends ListenerAdapter {
 			}
 		}
 
+		if (event.getAuthor().getId().equals("350836145921327115")) c1.lap();
 		Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
 		int lvl = profile.getLevel();
 
+		if (event.getAuthor().getId().equals("350836145921327115")) c1.lap();
 		Account account = profile.getAccount();
 		if (!Objects.equals(account.getName(), data.user().getName())) {
 			account.setName(data.user().getName());
 			account.save();
 		}
 
+		if (event.getAuthor().getId().equals("350836145921327115")) c1.lap();
 		GuildBuff gb = config.getCumBuffs();
 		profile.addXp((long) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
 		profile.save();
 
+		if (event.getAuthor().getId().equals("350836145921327115")) c1.lap();
 		EventData ed = new EventData(event.getChannel(), config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {
 			CompletableFuture.runAsync(() -> processCommand(data, ed, content));
 		}
 
+		if (event.getAuthor().getId().equals("350836145921327115")) c1.close();
 		CompletableFuture.runAsync(() -> {
 			Checkpoint cp = null;
 			if (event.getAuthor().getId().equals("350836145921327115")) {
 				cp = new Checkpoint();
 			}
 
-			if (event.getAuthor().getId().equals("350836145921327115")) cp.lap();
 			if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
 				Member mb = event.getMember();
 				if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
@@ -385,7 +396,6 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			if (event.getAuthor().getId().equals("350836145921327115")) cp.lap();
 			if (!event.getAuthor().equals(data.me().getUser()) && Utils.between(content.length(), 3, 255)) {
 				List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
 						data.guild().getId(), StringUtils.stripAccents(content)
@@ -405,7 +415,6 @@ public class GuildListener extends ListenerAdapter {
 					}
 				}
 			}
-
 			if (event.getAuthor().getId().equals("350836145921327115")) cp.close();
 		});
 
