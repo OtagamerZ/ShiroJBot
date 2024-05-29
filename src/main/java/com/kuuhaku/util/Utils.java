@@ -396,7 +396,10 @@ public abstract class Utils {
 				.setFastForward(fast)
 				.setCanInteract(Arrays.asList(allowed)::contains);
 
-		return Pages.subGet(helper.apply(sendPage(channel, pages.getFirst())));
+		Message msg = Pages.subGet(helper.apply(sendPage(channel, pages.getFirst())));
+		Pages.paginate(msg, helper);
+
+		return msg;
 	}
 
 	public static Message paginate(ThrowingFunction<Integer, Page> loader, MessageChannel channel, User... allowed) {
@@ -404,7 +407,10 @@ public abstract class Utils {
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(Arrays.asList(allowed)::contains);
 
-		return Pages.subGet(helper.apply(sendPage(channel, loader.apply(0))));
+		Message msg = Pages.subGet(helper.apply(sendPage(channel, loader.apply(0))));
+		Pages.lazyPaginate(msg, helper);
+
+		return msg;
 	}
 
 	public static void lock(User... users) {
@@ -471,7 +477,7 @@ public abstract class Utils {
 					}
 				});
 
-		helper.apply(ma).queue();
+		helper.apply(ma).queue(s -> Pages.buttonize(s, helper));
 		return lock;
 	}
 

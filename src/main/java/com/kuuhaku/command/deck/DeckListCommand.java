@@ -155,6 +155,6 @@ public class DeckListCommand implements Executable {
 				.setCanInteract(event.user()::equals);
 
 		assert home != null;
-		helper.apply(Utils.sendPage(event.channel(), home));
+		helper.apply(Utils.sendPage(event.channel(), home)).queue(s -> Pages.categorize(s, helper));
 	}
 }

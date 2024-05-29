@@ -202,6 +202,6 @@ public class HelpCommand implements Executable {
 				.setCanInteract(event.user()::equals);
 
 		assert home != null;
-		helper.apply(event.channel().sendMessageEmbeds(index.build()));
+		helper.apply(event.channel().sendMessageEmbeds(index.build())).queue(s -> Pages.categorize(s, helper));
 	}
 }

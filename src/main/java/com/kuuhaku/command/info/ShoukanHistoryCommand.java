@@ -77,7 +77,7 @@ public class ShoukanHistoryCommand implements Executable {
 				.addAction(Utils.parseEmoji("📔"), w -> viewMatches(locale, w.getMessage(), acc))
 				.addAction(Utils.parseEmoji("📊"), w -> viewRaces(locale, w.getMessage(), acc));
 
-		helper.apply(event.channel().sendMessageEmbeds(eb.build())).queue();
+		helper.apply(event.channel().sendMessageEmbeds(eb.build())).queue(s -> Pages.buttonize(s, helper));
 	}
 
 	private void viewMatches(I18N locale, Message msg, Account acc) {
@@ -133,7 +133,7 @@ public class ShoukanHistoryCommand implements Executable {
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(u -> u.getId().equals(acc.getUid()));
 
-		helper.apply(msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent()));
+		helper.apply(msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent())).queue(s -> Pages.paginate(s, helper));
 	}
 
 	private void viewRaces(I18N locale, Message msg, Account acc) {
@@ -203,6 +203,6 @@ public class ShoukanHistoryCommand implements Executable {
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(u -> u.getId().equals(acc.getUid()));
 
-		helper.apply(msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent()));
+		helper.apply(msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent())).queue(s -> Pages.paginate(s, helper));
 	}
 }

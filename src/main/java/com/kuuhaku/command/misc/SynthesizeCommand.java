@@ -253,7 +253,9 @@ public class SynthesizeCommand implements Executable {
 						}
 					});
 
-			helper.apply(event.channel().sendMessage(locale.get("question/synth")).setEmbeds(eb.build())).queue();
+			helper.apply(event.channel().sendMessage(locale.get("question/synth")).setEmbeds(eb.build())).queue(
+					s -> Pages.buttonize(s, helper)
+			);
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
 		}

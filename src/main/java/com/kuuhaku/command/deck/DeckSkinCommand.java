@@ -172,6 +172,6 @@ public class DeckSkinCommand implements Executable {
 							.queue();
 				});
 
-		helper.apply(Utils.sendPage(event.channel(), pages.getFirst())).queue();
+		helper.apply(Utils.sendPage(event.channel(), pages.getFirst())).queue(s -> Pages.buttonize(s, helper));
 	}
 }

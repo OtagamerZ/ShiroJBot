@@ -20,10 +20,6 @@ package com.kuuhaku.game;
 
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.ButtonWrapper;
-import com.github.ygimenez.model.InteractPage;
-import com.github.ygimenez.model.Page;
-import com.github.ygimenez.model.ThrowingConsumer;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
@@ -37,11 +33,9 @@ import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedList;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
@@ -66,14 +60,10 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
-import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.awt.image.BufferedImage;
@@ -2280,11 +2270,14 @@ public class Shoukan extends GameInstance<Phase> {
 			BufferedImage img = hasHistory() ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
 			byte[] bytes = IO.getBytes(img, "png", 0.5f);
 
+			ButtonizeHelper helper = getButtons();
+
 			AtomicBoolean registered = new AtomicBoolean();
 			getChannel().sendMessage(getString(message, args))
 					.addFile(bytes, "game.png")
-					.apply(this::addButtons)
+					.apply(helper::apply)
 					.queue(m -> {
+						Pages.buttonize(m, helper);
 						messages.compute(m.getChannel().getId(), replaceMessages(m));
 
 						if (!registered.get()) {
@@ -2354,7 +2347,7 @@ public class Shoukan extends GameInstance<Phase> {
 		close(code);
 	}
 
-	private MessageCreateAction addButtons(MessageCreateAction mca) {
+	private ButtonizeHelper getButtons() {
 		Hand curr = getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
@@ -2690,7 +2683,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		return helper.apply(mca);
+		return helper;
 	}
 
 	public List<SlotColumn> getOpenSlots(Side side, boolean top) {

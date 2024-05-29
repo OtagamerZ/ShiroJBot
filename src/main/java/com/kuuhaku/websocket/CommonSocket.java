@@ -174,7 +174,7 @@ public class CommonSocket extends WebSocketClient {
 
 					user.openPrivateChannel()
 							.flatMap(c -> helper.apply(c.sendMessageEmbeds(toSend)))
-							.queue();
+							.queue(s -> Pages.categorize(s, helper));
 				}
 				case "vote" -> {
 					String id = payload.getString("user");
