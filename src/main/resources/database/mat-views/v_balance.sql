@@ -16,15 +16,20 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_card_names;
-CREATE MATERIALIZED VIEW IF NOT EXISTS v_card_names AS
-SELECT c.id
-FROM card c
-INNER JOIN anime a on a.id = c.anime_id
-WHERE (a.visible OR c.rarity IN ('EVOGEAR', 'FIELD'))
-  AND c.rarity NOT IN ('ULTIMATE', 'NONE')
-ORDER BY c.id;
+-- DROP MATERIALIZED VIEW IF EXISTS v_balance;
+CREATE MATERIALIZED VIEW IF NOT EXISTS v_balance AS
+WITH ranking AS (
+                SELECT uid, balance
+                FROM account
+                WHERE balance > 0
+                )
+SELECT last_value(r.balance) OVER w                AS lowest
+     , last_value(r.uid) OVER w                    AS lowest_uid
+     , first_value(r.balance) OVER w               AS highest
+     , first_value(r.uid) OVER w                   AS highest_uid
+     , cast(geo_mean(r.balance) OVER w AS INTEGER) AS avg
+FROM ranking r
+WINDOW w AS ()
+LIMIT 1;
 
-CREATE INDEX IF NOT EXISTS wrd_trgm ON v_card_names USING gin (id gin_trgm_ops);
-
-REFRESH MATERIALIZED VIEW v_card_names;
+REFRESH MATERIALIZED VIEW v_balance;

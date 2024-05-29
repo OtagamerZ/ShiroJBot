@@ -54,7 +54,7 @@ public abstract class Drop {
 		RandomList<DropCondition> pool = new RandomList<>();
 		pool.add(new DropCondition("low_cash",
 				(rng) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT geo_mean(balance) FROM account WHERE balance > 0");
+					int avg = DAO.queryNative(Integer.class, "SELECT avg FROM v_balance");
 
 					return new Object[]{(int) Calc.rng(avg, avg * 1.9, rng)};
 				},
@@ -62,15 +62,23 @@ public abstract class Drop {
 		), 2);
 		pool.add(new DropCondition("high_cash",
 				(rng) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT geo_mean(balance) FROM account WHERE balance > 0");
+					int avg = DAO.queryNative(Integer.class, "SELECT avg FROM v_balance");
 
 					return new Object[]{(int) Calc.rng(avg * 0.1, avg, rng)};
 				},
 				(vals, acc) -> acc.getBalance() >= (int) vals[0]
 		), 2);
-		pool.add(new DropCondition("level",
+		pool.add(new DropCondition("level_low",
 				(rng) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT geo_mean(cast(sqrt(xp / 100) AS NUMERIC)) FROM profile WHERE xp > 100");
+					int avg = DAO.queryNative(Integer.class, "SELECT avg_lvl FROM v_xp");
+
+					return new Object[]{(int) Calc.rng(avg / 2d, (avg * 1.5), rng)};
+				},
+				(vals, acc) -> acc.getHighestLevel() <= (int) vals[0]
+		), 3);
+		pool.add(new DropCondition("level_high",
+				(rng) -> {
+					int avg = DAO.queryNative(Integer.class, "SELECT avg_lvl FROM v_xp");
 
 					return new Object[]{(int) Calc.rng(avg / 2d, (avg * 1.5), rng)};
 				},

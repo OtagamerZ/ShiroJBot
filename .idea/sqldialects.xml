@@ -5,6 +5,9 @@
     <file url="file://$PROJECT_DIR$/src/main/java/com/kuuhaku/controller/Manager.java" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/functions/get_rarity_index.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/functions/get_weight.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/mat-views/card_names.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/mat-views/v_balance.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/mat-views/v_xp.sql" dialect="PostgreSQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>
 </project>
