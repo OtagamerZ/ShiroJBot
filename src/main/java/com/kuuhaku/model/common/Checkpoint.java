@@ -23,6 +23,7 @@ import org.apache.commons.lang3.time.StopWatch;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class Checkpoint implements AutoCloseable {
 	private final StopWatch watch = new StopWatch();
@@ -62,14 +63,21 @@ public class Checkpoint implements AutoCloseable {
 			return;
 		}
 
-		int i = 0;
+		int lngIdx = 0, i = 0;
+		long lngTime = 0;
 		StringBuilder sb = new StringBuilder("\nTotal time: " + total + "ms");
 		for (Long lap : laps) {
+			if (lap > lngTime) {
+				lngIdx = i;
+				lngTime = lap;
+			}
+
 			sb.append("\n%s: %sms (%s%%) %s".formatted(
 					++i, lap, lap * 100 / total, comments.getOrDefault(i, "")
 			));
 		}
 
+		sb.append("Longest lap was: ").append(lngIdx).append(" - ").append(lngTime).append("ms");
 		Constants.LOGGER.info(sb.toString());
 	}
 }
