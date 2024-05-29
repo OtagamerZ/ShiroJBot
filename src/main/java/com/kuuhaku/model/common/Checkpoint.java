@@ -29,6 +29,7 @@ public class Checkpoint implements AutoCloseable {
 	private final StopWatch watch = new StopWatch();
 	private final ArrayDeque<Long> laps = new ArrayDeque<>();
 	private final HashMap<Integer, String> comments = new HashMap<>();
+	private final HashMap<Integer, String> caller = new HashMap<>();
 
 	public Checkpoint() {
 		watch.start();
@@ -45,6 +46,9 @@ public class Checkpoint implements AutoCloseable {
 		if (comment != null) {
 			comments.put(laps.size(), comment);
 		}
+
+		StackTraceElement stack = Thread.currentThread().getStackTrace()[1];
+		caller.put(laps.size(), stack.getClassName() + "." + stack.getMethodName() + "(" + stack.getLineNumber() + ")");
 		watch.reset();
 		watch.start();
 
@@ -67,17 +71,17 @@ public class Checkpoint implements AutoCloseable {
 		long lngTime = 0;
 		StringBuilder sb = new StringBuilder("\nTotal time: " + total + "ms");
 		for (Long lap : laps) {
+			sb.append("\n%s: %sms (%s%%) %s".formatted(
+					++i, lap, lap * 100 / total, comments.getOrDefault(i, "")
+			));
+
 			if (lap > lngTime) {
 				lngIdx = i;
 				lngTime = lap;
 			}
-
-			sb.append("\n%s: %sms (%s%%) %s".formatted(
-					++i, lap, lap * 100 / total, comments.getOrDefault(i, "")
-			));
 		}
 
-		sb.append("Longest lap was: ").append(lngIdx).append(" - ").append(lngTime).append("ms");
+		sb.append("\nLongest lap was: %s - %sms at %s".formatted(lngIdx, lngTime, caller.get(lngIdx)));
 		Constants.LOGGER.info(sb.toString());
 	}
 }
