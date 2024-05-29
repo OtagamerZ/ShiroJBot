@@ -47,8 +47,20 @@ public class Checkpoint implements AutoCloseable {
 			comments.put(laps.size(), comment);
 		}
 
-		StackTraceElement stack = Thread.currentThread().getStackTrace()[1];
-		caller.put(laps.size(), stack.getClassName() + "." + stack.getMethodName() + "(" + stack.getLineNumber() + ")");
+		StackTraceElement line = null;
+		for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+			if (!ste.getClassName().equals(getClass().getName())) {
+				line = ste;
+				break;
+			}
+		}
+
+		if (line != null) {
+			caller.put(laps.size(), line.getClassName() + "." + line.getMethodName() + "(" + line.getLineNumber() + ")");
+		} else {
+			caller.put(laps.size(), "(Unknown source)");
+		}
+
 		watch.reset();
 		watch.start();
 
