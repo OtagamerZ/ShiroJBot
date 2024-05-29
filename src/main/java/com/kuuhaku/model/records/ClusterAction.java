@@ -26,6 +26,7 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public record ClusterAction(long delay, Map<String, MessageCreateAction> actions) {
 	public ClusterAction embed(MessageEmbed eb) {
@@ -35,6 +36,11 @@ public record ClusterAction(long delay, Map<String, MessageCreateAction> actions
 
 	public ClusterAction addFile(byte[] bytes, String filename) {
 		actions.replaceAll((k, msg) -> msg.addFiles(FileUpload.fromData(bytes, filename)));
+		return this;
+	}
+
+	public ClusterAction apply(Function<MessageCreateAction, MessageCreateAction> action) {
+		actions.replaceAll((k, msg) -> action.apply(msg));
 		return this;
 	}
 

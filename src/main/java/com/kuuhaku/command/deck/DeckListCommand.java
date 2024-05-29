@@ -20,6 +20,7 @@ package com.kuuhaku.command.deck;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.helper.CategorizeHelper;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -149,9 +150,11 @@ public class DeckListCommand implements Executable {
 				}
 		));
 
+		CategorizeHelper helper = new CategorizeHelper(pages, true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(event.user()::equals);
+
 		assert home != null;
-		Utils.sendPage(event.channel(), home).queue(s ->
-				Pages.categorize(s, pages, true, 1, TimeUnit.MINUTES, u -> u.equals(event.user()))
-		);
+		helper.apply(Utils.sendPage(event.channel(), home));
 	}
 }

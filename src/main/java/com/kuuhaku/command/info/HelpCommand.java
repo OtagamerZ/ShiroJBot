@@ -21,6 +21,7 @@ package com.kuuhaku.command.info;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.helper.CategorizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.Executable;
@@ -196,8 +197,11 @@ public class HelpCommand implements Executable {
 			}));
 		}
 
-		event.channel().sendMessageEmbeds(index.build()).queue(s ->
-				Pages.categorize(s, pages, true, 1, TimeUnit.MINUTES, u -> u.equals(event.user()))
-		);
+		CategorizeHelper helper = new CategorizeHelper(pages, true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(event.user()::equals);
+
+		assert home != null;
+		helper.apply(event.channel().sendMessageEmbeds(index.build()));
 	}
 }

@@ -20,6 +20,8 @@ package com.kuuhaku.command.info;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.helper.ButtonizeHelper;
+import com.github.ygimenez.model.helper.PaginateHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
@@ -28,6 +30,7 @@ import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
@@ -44,10 +47,12 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -66,13 +71,13 @@ public class ShoukanHistoryCommand implements Executable {
 				.setAuthor(locale.get("str/history_title", acc.getName()))
 				.setDescription(locale.get("str/history_index"));
 
-		event.channel().sendMessageEmbeds(eb.build()).queue(s ->
-				Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
-							m.put(Utils.parseEmoji("📔"), w -> viewMatches(locale, s, acc));
-							m.put(Utils.parseEmoji("📊"), w -> viewRaces(locale, s, acc));
-						}),
-						true, true, 1, TimeUnit.MINUTES, u -> u.equals(event.user()))
-		);
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(event.user()::equals)
+				.addAction(Utils.parseEmoji("📔"), w -> viewMatches(locale, w.getMessage(), acc))
+				.addAction(Utils.parseEmoji("📊"), w -> viewRaces(locale, w.getMessage(), acc));
+
+		helper.apply(event.channel().sendMessageEmbeds(eb.build())).queue();
 	}
 
 	private void viewMatches(I18N locale, Message msg, Account acc) {
@@ -124,9 +129,11 @@ public class ShoukanHistoryCommand implements Executable {
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 		);
 
-		msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent()).queue(s ->
-				Pages.paginate(s, pages, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(acc.getUid()))
-		);
+		PaginateHelper helper = new PaginateHelper(pages, true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(u -> u.getId().equals(acc.getUid()));
+
+		helper.apply(msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent()));
 	}
 
 	private void viewRaces(I18N locale, Message msg, Account acc) {
@@ -192,8 +199,10 @@ public class ShoukanHistoryCommand implements Executable {
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 		);
 
-		msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent()).queue(s ->
-				Pages.paginate(s, pages, true, 1, TimeUnit.MINUTES, u -> u.getId().equals(acc.getUid()))
-		);
+		PaginateHelper helper = new PaginateHelper(pages, true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(u -> u.getId().equals(acc.getUid()));
+
+		helper.apply(msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent()));
 	}
 }

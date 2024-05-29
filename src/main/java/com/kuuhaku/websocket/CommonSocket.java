@@ -21,6 +21,7 @@ package com.kuuhaku.websocket;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.helper.CategorizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
@@ -168,9 +169,12 @@ public class CommonSocket extends WebSocketClient {
 					if (user == null) return;
 
 					MessageEmbed toSend = first;
+					CategorizeHelper helper = new CategorizeHelper(cats, true)
+							.setTimeout(1, TimeUnit.MINUTES);
+
 					user.openPrivateChannel()
-							.flatMap(c -> c.sendMessageEmbeds(toSend))
-							.queue(s -> Pages.categorize(s, cats, true, 1, TimeUnit.MINUTES));
+							.flatMap(c -> helper.apply(c.sendMessageEmbeds(toSend)))
+							.queue();
 				}
 				case "vote" -> {
 					String id = payload.getString("user");

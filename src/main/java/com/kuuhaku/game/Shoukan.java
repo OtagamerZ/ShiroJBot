@@ -21,7 +21,10 @@ package com.kuuhaku.game;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.InteractPage;
+import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.ThrowingConsumer;
+import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.misc.SynthesizeCommand;
@@ -34,14 +37,15 @@ import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
-import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.model.records.SelectionAction;
 import com.kuuhaku.model.records.SelectionCard;
@@ -63,10 +67,13 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.awt.image.BufferedImage;
@@ -2178,8 +2185,6 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private BiFunction<String, String, String> replaceMessages(Message message) {
-		addButtons(message);
-
 		return (chn, msg) -> {
 			if (msg != null) {
 				GuildMessageChannel channel = Main.getApp().getMessageChannelById(chn);
@@ -2276,17 +2281,20 @@ public class Shoukan extends GameInstance<Phase> {
 			byte[] bytes = IO.getBytes(img, "png", 0.5f);
 
 			AtomicBoolean registered = new AtomicBoolean();
-			getChannel().sendMessage(getString(message, args)).addFile(bytes, "game.png").queue(m -> {
-				messages.compute(m.getChannel().getId(), replaceMessages(m));
+			getChannel().sendMessage(getString(message, args))
+					.addFile(bytes, "game.png")
+					.apply(this::addButtons)
+					.queue(m -> {
+						messages.compute(m.getChannel().getId(), replaceMessages(m));
 
-				if (!registered.get()) {
-					if (!message.startsWith("str/game_history")) {
-						getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
-					}
+						if (!registered.get()) {
+							if (!message.startsWith("str/game_history")) {
+								getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+							}
 
-					registered.set(true);
-				}
-			});
+							registered.set(true);
+						}
+					});
 		} finally {
 			setSending(false);
 		}
@@ -2346,10 +2354,14 @@ public class Shoukan extends GameInstance<Phase> {
 		close(code);
 	}
 
-	private void addButtons(Message msg) {
+	private MessageCreateAction addButtons(MessageCreateAction mca) {
 		Hand curr = getCurrent();
-		Map<Emoji, ThrowingConsumer<ButtonWrapper>> buttons = new LinkedHashMap<>();
-		buttons.put(Utils.parseEmoji("▶"), w -> {
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(u -> u.getId().equals(curr.getUid()))
+				.setCancellable(false);
+
+		helper.addAction(Utils.parseEmoji("▶"), w -> {
 			if (isLocked()) return;
 
 			if (curr.selectionPending()) {
@@ -2377,7 +2389,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (getPhase() == Phase.PLAN) {
 			if (getTurn() > 1) {
-				buttons.put(Utils.parseEmoji("⏩"), w -> {
+				helper.addAction(Utils.parseEmoji("⏩"), w -> {
 					if (isLocked()) return;
 
 					if (curr.selectionPending()) {
@@ -2399,7 +2411,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (!curr.getCards().isEmpty() && (getTurn() == 1 && !curr.hasRerolled()) || curr.getOrigins().synergy() == Race.DJINN) {
-				buttons.put(Utils.parseEmoji("\uD83D\uDD04"), w -> {
+				helper.addAction(Utils.parseEmoji("\uD83D\uDD04"), w -> {
 					if (isLocked()) return;
 
 					curr.rerollHand();
@@ -2410,7 +2422,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (!curr.getRealDeck().isEmpty() && arcade != Arcade.DECK_ROYALE) {
 				int rem = curr.getRemainingDraws();
 				if (rem > 0) {
-					buttons.put(Utils.parseEmoji("📤"), w -> {
+					helper.addAction(Utils.parseEmoji("📤"), w -> {
 						if (isLocked()) return;
 
 						if (curr.selectionPending()) {
@@ -2430,7 +2442,7 @@ public class Shoukan extends GameInstance<Phase> {
 					});
 
 					if (rem > 1) {
-						buttons.put(Utils.parseEmoji("📦"), w -> {
+						helper.addAction(Utils.parseEmoji("📦"), w -> {
 							if (isLocked()) return;
 
 							if (curr.selectionPending()) {
@@ -2450,7 +2462,7 @@ public class Shoukan extends GameInstance<Phase> {
 						});
 					}
 				} else if (curr.getOrigins().major() == Race.DIVINITY) {
-					buttons.put(Utils.parseEmoji("1212407741046325308"), w -> {
+					helper.addAction(Utils.parseEmoji("1212407741046325308"), w -> {
 						if (isLocked()) return;
 
 						if (curr.selectionPending()) {
@@ -2473,7 +2485,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				if (curr.canUseDestiny() && !Utils.equalsAny(curr.getOrigins().major(), Race.MACHINE, Race.MYSTICAL)) {
-					buttons.put(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
+					helper.addAction(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
 						if (isLocked()) return;
 
 						if (curr.selectionPending()) {
@@ -2512,7 +2524,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (curr.canUseDestiny() && Utils.equalsAny(curr.getOrigins().major(), Race.MACHINE, Race.MYSTICAL)) {
-				buttons.put(Utils.parseEmoji("⚡"), w -> {
+				helper.addAction(Utils.parseEmoji("⚡"), w -> {
 					if (isLocked()) return;
 
 					if (curr.selectionPending()) {
@@ -2560,7 +2572,7 @@ public class Shoukan extends GameInstance<Phase> {
 							.toList();
 
 					if (valid.size() >= 5) {
-						buttons.put(Utils.parseEmoji("\uD83C\uDF00"), w -> {
+						helper.addAction(Utils.parseEmoji("\uD83C\uDF00"), w -> {
 							if (isLocked()) return;
 
 							if (curr.selectionPending()) {
@@ -2615,7 +2627,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (curr.getOrigins().synergy() == Race.ORACLE) {
-				buttons.put(Utils.parseEmoji("\uD83D\uDD2E"), w -> {
+				helper.addAction(Utils.parseEmoji("\uD83D\uDD2E"), w -> {
 					if (isLocked()) return;
 
 					BufferedImage cards = curr.render(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
@@ -2625,7 +2637,7 @@ public class Shoukan extends GameInstance<Phase> {
 				});
 			}
 
-			buttons.put(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
+			helper.addAction(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
 				if (isLocked()) return;
 
 				setHistory(!hasHistory());
@@ -2637,7 +2649,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			});
 
-			buttons.put(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
+			helper.addAction(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
 				if (isLocked()) return;
 
 				if (curr.selectionPending()) {
@@ -2654,7 +2666,7 @@ public class Shoukan extends GameInstance<Phase> {
 				Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "hand.png")).queue();
 			});
 
-			buttons.put(Utils.parseEmoji("\uD83D\uDD0D"), w -> {
+			helper.addAction(Utils.parseEmoji("\uD83D\uDD0D"), w -> {
 				if (isLocked()) return;
 
 				Objects.requireNonNull(w.getHook())
@@ -2663,21 +2675,22 @@ public class Shoukan extends GameInstance<Phase> {
 			});
 
 			if (isSingleplayer() || getTurn() > 10) {
-				if (isLocked()) return;
+				if (!isLocked()) {
+					helper.addAction(Utils.parseEmoji("🏳"), w -> {
+						if (curr.isForfeit()) {
+							reportResult(GameReport.SUCCESS, getOther().getSide(), "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
+							return;
+						}
 
-				buttons.put(Utils.parseEmoji("🏳"), w -> {
-					if (curr.isForfeit()) {
-						reportResult(GameReport.SUCCESS, getOther().getSide(), "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
-						return;
-					}
+						curr.setForfeit(true);
+						Objects.requireNonNull(w.getHook()).setEphemeral(true).sendMessage(getString("str/confirm_forfeit")).queue();
+					});
+				}
 
-					curr.setForfeit(true);
-					Objects.requireNonNull(w.getHook()).setEphemeral(true).sendMessage(getString("str/confirm_forfeit")).queue();
-				});
 			}
 		}
 
-		Pages.buttonize(msg, buttons, true, false, u -> u.getId().equals(curr.getUid()));
+		return helper.apply(mca);
 	}
 
 	public List<SlotColumn> getOpenSlots(Side side, boolean top) {

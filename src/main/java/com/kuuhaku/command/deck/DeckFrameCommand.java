@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.EmbedCluster;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -101,36 +102,35 @@ public class DeckFrameCommand implements Executable {
                 }
             }
 
-            AtomicInteger i = new AtomicInteger();
-            Utils.sendPage(event.channel(), pages.getFirst()).queue(s ->
-                    Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
-                                m.put(Utils.parseEmoji("◀️"), w -> {
-                                    if (i.get() > 1) {
-                                        s.editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
-                                    }
-                                });
-                                m.put(Utils.parseEmoji("▶️"), w -> {
-                                    if (i.get() < frames.length - 1) {
-                                        s.editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
-                                    }
-                                });
-                                m.put(Utils.parseEmoji("✅"), w -> {
-                                    FrameSkin frame = frames[i.get()];
-                                    if (!frame.canUse(acc)) {
-                                        event.channel().sendMessage(locale.get("error/frame_locked")).queue();
-                                        return;
-                                    }
+			AtomicInteger i = new AtomicInteger();
+            ButtonizeHelper helper = new ButtonizeHelper(true)
+					.setTimeout(1, TimeUnit.MINUTES)
+					.setCanInteract(event.user()::equals)
+					.addAction(Utils.parseEmoji("◀️"), w -> {
+						if (i.get() > 1) {
+							w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
+						}
+					})
+					.addAction(Utils.parseEmoji("◀️"), w -> {
+						if (i.get() < frames.length - 1) {
+							w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
+						}
+					})
+					.addAction(Utils.parseEmoji("◀️"), w -> {
+						FrameSkin frame = frames[i.get()];
+						if (!frame.canUse(acc)) {
+							event.channel().sendMessage(locale.get("error/frame_locked")).queue();
+							return;
+						}
 
-                                    d.getStyling().setFrame(frame);
-                                    d.save();
-                                    event.channel().sendMessage(locale.get("success/frame_selected", d.getName()))
-                                            .flatMap(ms -> s.delete())
-                                            .queue();
-                                });
-                            }),
-                            true, true, 1, TimeUnit.MINUTES, event.user()::equals
-                    )
-            );
+						d.getStyling().setFrame(frame);
+						d.save();
+						event.channel().sendMessage(locale.get("success/frame_selected", d.getName()))
+								.flatMap(ms -> w.getMessage().delete())
+								.queue();
+					});
+
+			helper.apply(Utils.sendPage(event.channel(), pages.getFirst())).queue();
         }
     }
 }

@@ -21,6 +21,7 @@ package com.kuuhaku.command.deck;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.Executable;
@@ -30,6 +31,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.persistent.shoukan.SlotSkin;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
@@ -112,65 +114,64 @@ public class DeckSkinCommand implements Executable {
 
 		AtomicBoolean confirm = new AtomicBoolean();
 		AtomicInteger i = new AtomicInteger();
-		Utils.sendPage(event.channel(), pages.getFirst()).queue(s ->
-				Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
-							m.put(Utils.parseEmoji("◀️"), w -> {
-								if (i.get() > 1) {
-									confirm.set(false);
-									s.editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
-								}
-							});
-							m.put(Utils.parseEmoji("▶️"), w -> {
-								if (i.get() < skins.size() - 1) {
-									confirm.set(false);
-									s.editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
-								}
-							});
-							m.put(Utils.parseEmoji("✅"), w -> {
-								SlotSkin skin = skins.get(i.get());
-								if (!skin.canUse(acc)) {
-									List<Title> remaining = skin.getTitles().stream()
-											.filter(t -> !acc.hasTitle(t.getId()))
-											.toList();
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(event.user()::equals)
+				.addAction(Utils.parseEmoji("◀️"), w -> {
+					if (i.get() > 1) {
+						confirm.set(false);
+						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
+					}
+				})
+				.addAction(Utils.parseEmoji("◀️"), w -> {
+					if (i.get() < skins.size() - 1) {
+						confirm.set(false);
+						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
+					}
+				})
+				.addAction(Utils.parseEmoji("◀️"), w -> {
+					SlotSkin skin = skins.get(i.get());
+					if (!skin.canUse(acc)) {
+						List<Title> remaining = skin.getTitles().stream()
+								.filter(t -> !acc.hasTitle(t.getId()))
+								.toList();
 
-									if (!remaining.isEmpty()) {
-										event.channel().sendMessage(locale.get("error/skin_locked")).queue();
-									} else {
-										if (!acc.hasEnough(skin.getPrice(), skin.getCurrency())) {
-											event.channel().sendMessage(locale.get("error/insufficient_" + skin.getCurrency())).queue();
-											return;
-										} else if (!confirm.getAndSet(true)) {
-											Objects.requireNonNull(w.getHook())
-													.setEphemeral(true)
-													.sendMessage(locale.get("str/press_again"))
-													.queue();
-											return;
-										}
-
-										if (skin.getCurrency() == Currency.CR) {
-											acc.consumeCR(skin.getPrice(), "Skin " + skin);
-										} else {
-											acc.consumeGems(skin.getPrice(), "Skin " + skin);
-										}
-
-										DynamicProperty.update(acc.getUid(), "ss_" + skin.getId().toLowerCase(), true);
-										event.channel().sendMessage(locale.get("success/skin_bought", d.getName()))
-												.flatMap(ms -> s.delete())
-												.queue();
-									}
-
-									return;
-								}
-
-								d.getStyling().setSkin(skin);
-								d.save();
-								event.channel().sendMessage(locale.get("success/skin_selected", d.getName()))
-										.flatMap(ms -> s.delete())
+						if (!remaining.isEmpty()) {
+							event.channel().sendMessage(locale.get("error/skin_locked")).queue();
+						} else {
+							if (!acc.hasEnough(skin.getPrice(), skin.getCurrency())) {
+								event.channel().sendMessage(locale.get("error/insufficient_" + skin.getCurrency())).queue();
+								return;
+							} else if (!confirm.getAndSet(true)) {
+								Objects.requireNonNull(w.getHook())
+										.setEphemeral(true)
+										.sendMessage(locale.get("str/press_again"))
 										.queue();
-							});
-						}),
-						true, true, 1, TimeUnit.MINUTES, event.user()::equals
-				)
-		);
+								return;
+							}
+
+							if (skin.getCurrency() == Currency.CR) {
+								acc.consumeCR(skin.getPrice(), "Skin " + skin);
+							} else {
+								acc.consumeGems(skin.getPrice(), "Skin " + skin);
+							}
+
+							DynamicProperty.update(acc.getUid(), "ss_" + skin.getId().toLowerCase(), true);
+							event.channel().sendMessage(locale.get("success/skin_bought", d.getName()))
+									.flatMap(ms -> w.getMessage().delete())
+									.queue();
+						}
+
+						return;
+					}
+
+					d.getStyling().setSkin(skin);
+					d.save();
+					event.channel().sendMessage(locale.get("success/skin_selected", d.getName()))
+							.flatMap(ms -> w.getMessage().delete())
+							.queue();
+				});
+
+		helper.apply(Utils.sendPage(event.channel(), pages.getFirst())).queue();
 	}
 }

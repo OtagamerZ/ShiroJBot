@@ -21,6 +21,7 @@ package com.kuuhaku.command.misc;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
@@ -170,90 +171,89 @@ public class SynthesizeCommand implements Executable {
 			Utils.lock(usr);
 
 			AtomicBoolean lock = new AtomicBoolean(false);
-			event.channel().sendMessage(locale.get("question/synth"))
-					.setEmbeds(eb.build())
-					.queue(s -> Pages.buttonize(s, Utils.with(new LinkedHashMap<>(), m -> {
-								m.put(Utils.parseEmoji("1103779997317087364"), w -> {
-									Button btn = w.getButton();
-									assert btn != null;
+			ButtonizeHelper helper = new ButtonizeHelper(true)
+					.setTimeout(1, TimeUnit.MINUTES)
+					.setCanInteract(event.user()::equals)
+					.setOnFinalization(m -> Utils.unlock(usr))
+					.addAction(Utils.parseEmoji("1103779997317087364"), w -> {
+						Button btn = w.getButton();
+						assert btn != null;
 
-									String id = btn.getId();
-									assert id != null;
+						String id = btn.getId();
+						assert id != null;
 
-									if (acc.getItemCount("CHROMATIC_ESSENCE") == 0) {
-										event.channel().sendMessage(locale.get("error/no_chromatic")).queue();
-										return;
+						if (acc.getItemCount("CHROMATIC_ESSENCE") == 0) {
+							event.channel().sendMessage(locale.get("error/no_chromatic")).queue();
+							return;
+						}
+
+						lucky.set(true);
+						Page p = InteractPage.of(new ColorlessEmbedBuilder()
+								.setDescription(locale.get("str/synthesis_info",
+										Utils.roundToString(mult, 2) + "x <:chromatic_essence:1103779997317087364>",
+										field
+								)).build()
+						);
+
+						Pages.modifyButtons(w.getMessage(), p, Map.of(
+								btn.getId(), Button::asDisabled
+						));
+					})
+					.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
+						if (!lock.get()) {
+							Kawaipon k = kp.refresh();
+
+							double totalQ = 1;
+							Set<Rarity> rarities = EnumSet.noneOf(Rarity.class);
+							for (StashedCard sc : cards) {
+								if (sc.getType() == CardType.KAWAIPON) {
+									KawaiponCard kc = sc.getKawaiponCard();
+									if (kc != null) {
+										kc.delete();
+										rarities.add(kc.getCard().getRarity());
+										totalQ += kc.getQuality();
 									}
+								} else {
+									sc.delete();
+								}
+							}
 
-									lucky.set(true);
-									Page p = InteractPage.of(new ColorlessEmbedBuilder()
-											.setDescription(locale.get("str/synthesis_info",
-													Utils.roundToString(mult, 2) + "x <:chromatic_essence:1103779997317087364>",
-													field
-											)).build()
-									);
+							if (rarities.size() >= 5) {
+								UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
+								if (item != null) {
+									int gained = Calc.round(totalQ);
+									acc.addItem(item, gained);
+									event.channel().sendMessage(locale.get("str/received_item", gained, item.getName(locale))).queue();
+								}
+							}
 
-									Pages.modifyButtons(w.getMessage(), p, Map.of(
-											btn.getId(), Button::asDisabled
-									));
-								});
-								m.put(Utils.parseEmoji(Constants.ACCEPT), w -> {
-									if (!lock.get()) {
-										Kawaipon k = kp.refresh();
+							if (lucky.get()) {
+								acc.consumeItem("CHROMATIC_ESSENCE");
+							}
 
-										double totalQ = 1;
-										Set<Rarity> rarities = EnumSet.noneOf(Rarity.class);
-										for (StashedCard sc : cards) {
-											if (sc.getType() == CardType.KAWAIPON) {
-												KawaiponCard kc = sc.getKawaiponCard();
-												if (kc != null) {
-													kc.delete();
-													rarities.add(kc.getCard().getRarity());
-													totalQ += kc.getQuality();
-												}
-											} else {
-												sc.delete();
-											}
-										}
+							if (Calc.chance(field)) {
+								Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
+								new StashedCard(k, f).save();
 
-										if (rarities.size() >= 5) {
-											UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
-											if (item != null) {
-												int gained = Calc.round(totalQ);
-												acc.addItem(item, gained);
-												event.channel().sendMessage(locale.get("str/received_item", gained, item.getName(locale))).queue();
-											}
-										}
+								event.channel().sendMessage(locale.get("success/synth", f))
+										.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, k.getAccount().getCurrentDeck()), "png"), "synth.png"))
+										.queue();
+							} else {
+								Evogear e = rollSynthesis(event.user(), mult, lucky.get());
+								new StashedCard(k, e).save();
 
-										if (lucky.get()) {
-											acc.consumeItem("CHROMATIC_ESSENCE");
-										}
+								event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
+										.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, k.getAccount().getCurrentDeck()), "png"), "synth.png"))
+										.queue();
+							}
 
-										if (Calc.chance(field)) {
-											Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
-											new StashedCard(k, f).save();
+							lock.set(true);
+							w.getMessage().delete().queue(null, Utils::doNothing);
+							Utils.unlock(usr);
+						}
+					});
 
-											event.channel().sendMessage(locale.get("success/synth", f))
-													.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, k.getAccount().getCurrentDeck()), "png"), "synth.png"))
-													.queue();
-										} else {
-											Evogear e = rollSynthesis(event.user(), mult, lucky.get());
-											new StashedCard(k, e).save();
-
-											event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
-													.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, k.getAccount().getCurrentDeck()), "png"), "synth.png"))
-													.queue();
-										}
-
-										lock.set(true);
-										w.getMessage().delete().queue(null, Utils::doNothing);
-										Utils.unlock(usr);
-									}
-								});
-							}), true, true, 1, TimeUnit.MINUTES,
-							u -> u.equals(usr),
-							c -> Utils.unlock(usr)
-					));
+			helper.apply(event.channel().sendMessage(locale.get("question/synth")).setEmbeds(eb.build())).queue();
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
 		}

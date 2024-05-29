@@ -20,6 +20,9 @@ package com.kuuhaku.util;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.*;
+import com.github.ygimenez.model.helper.ButtonizeHelper;
+import com.github.ygimenez.model.helper.LazyPaginateHelper;
+import com.github.ygimenez.model.helper.PaginateHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
@@ -387,23 +390,21 @@ public abstract class Utils {
 	}
 
 	public static Message paginate(List<Page> pages, int skip, boolean fast, MessageChannel channel, User... allowed) {
-		Message msg = Pages.subGet(sendPage(channel, pages.getFirst()));
+		PaginateHelper helper = new PaginateHelper(pages, true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setSkipAmount(skip)
+				.setFastForward(fast)
+				.setCanInteract(Arrays.asList(allowed)::contains);
 
-		Pages.paginate(msg, pages, true, 1, TimeUnit.MINUTES, skip, fast, u ->
-				Arrays.asList(allowed).contains(u)
-		);
-
-		return msg;
+		return Pages.subGet(helper.apply(sendPage(channel, pages.getFirst())));
 	}
 
 	public static Message paginate(ThrowingFunction<Integer, Page> loader, MessageChannel channel, User... allowed) {
-		Message msg = Pages.subGet(sendPage(channel, loader.apply(0)));
+		LazyPaginateHelper helper = new LazyPaginateHelper(loader, true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(Arrays.asList(allowed)::contains);
 
-		Pages.lazyPaginate(msg, loader, true, 1, TimeUnit.MINUTES, u ->
-				Arrays.asList(allowed).contains(u)
-		);
-
-		return msg;
+		return Pages.subGet(helper.apply(sendPage(channel, loader.apply(0))));
 	}
 
 	public static void lock(User... users) {
@@ -455,21 +456,22 @@ public abstract class Utils {
 		}
 
 		CompletableFuture<Boolean> lock = new CompletableFuture<>();
-		ma.queue(s -> Pages.buttonize(s,
-				Map.of(Utils.parseEmoji(Constants.ACCEPT), w -> {
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(Arrays.asList(allowed)::contains)
+				.setOnFinalization(c -> onCancel.andThen(m -> {
+					unlock(allowed);
+					lock.complete(false);
+				}).accept(c))
+				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
 					if (!lock.isDone() && action.apply(w)) {
 						unlock(allowed);
 						lock.complete(true);
 						w.getMessage().delete().queue(null, Utils::doNothing);
 					}
-				}), true, true, 1, TimeUnit.MINUTES,
-				u -> Arrays.asList(allowed).contains(u),
-				c -> onCancel.andThen(m -> {
-					unlock(allowed);
-					lock.complete(false);
-				}).accept(c)
-		));
+				});
 
+		helper.apply(ma).queue();
 		return lock;
 	}
 

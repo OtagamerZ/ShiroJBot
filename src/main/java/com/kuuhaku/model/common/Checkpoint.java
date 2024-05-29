@@ -23,16 +23,32 @@ import org.apache.commons.lang3.time.StopWatch;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class Checkpoint implements AutoCloseable {
+	public static final Checkpoint INSTANCE = new Checkpoint();
+
 	private final StopWatch watch = new StopWatch();
 	private final ArrayDeque<Long> laps = new ArrayDeque<>();
 	private final HashMap<Integer, String> comments = new HashMap<>();
 	private final HashMap<Integer, String> caller = new HashMap<>();
 
-	public Checkpoint() {
+	public void start() {
 		watch.start();
+
+		StackTraceElement line = null;
+		for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+			if (ste.getClassName().startsWith("com.kuuhaku") && !ste.getClassName().equals(getClass().getName())) {
+				line = ste;
+				break;
+			}
+		}
+
+		if (line != null) {
+			caller.put(laps.size(), line.getClassName() + "." + line.getMethodName() + "(" + line.getLineNumber() + ")");
+		} else {
+			caller.put(laps.size(), "(Unknown source)");
+		}
+
 		Constants.LOGGER.info("Measurements started");
 	}
 
@@ -93,7 +109,12 @@ public class Checkpoint implements AutoCloseable {
 			}
 		}
 
-		sb.append("\nLongest lap was: %s - %sms after %s".formatted(lngIdx, lngTime, caller.getOrDefault(lngIdx, "starting point")));
+		sb.append("\nLongest lap was: %s - %sms after %s".formatted(lngIdx, lngTime, caller.get(lngIdx)));
 		Constants.LOGGER.info(sb.toString());
+
+		watch.reset();
+		laps.clear();
+		comments.clear();
+		caller.clear();
 	}
 }
