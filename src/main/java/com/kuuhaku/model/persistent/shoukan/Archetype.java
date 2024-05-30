@@ -40,7 +40,7 @@ import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "archetype")
 public class Archetype extends DAO<Archetype> {
 	@Id

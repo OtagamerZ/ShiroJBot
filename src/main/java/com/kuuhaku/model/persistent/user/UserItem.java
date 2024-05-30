@@ -40,7 +40,7 @@ import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "user_item")
 public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Id

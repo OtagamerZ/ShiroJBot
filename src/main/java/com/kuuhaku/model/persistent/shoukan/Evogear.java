@@ -65,7 +65,7 @@ import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 @Entity
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "evogear")
 public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Transient

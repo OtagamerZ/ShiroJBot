@@ -50,7 +50,7 @@ import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "slot_skin")
 public class SlotSkin extends DAO<SlotSkin> {
 	@Id

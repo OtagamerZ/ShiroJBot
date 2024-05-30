@@ -466,6 +466,13 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	}
 
 	@Override
+	public void afterSave() {
+
+
+		super.afterSave();
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
