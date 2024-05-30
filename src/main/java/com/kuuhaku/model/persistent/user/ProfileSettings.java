@@ -26,8 +26,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "profile_settings")
 public class ProfileSettings extends DAO<ProfileSettings> {
 	@EmbeddedId
