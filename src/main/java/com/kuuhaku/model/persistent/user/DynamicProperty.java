@@ -31,7 +31,7 @@ import java.util.Objects;
 
 @Entity
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "dynamic_property")
 public class DynamicProperty extends DAO<DynamicProperty> {
 	@EmbeddedId

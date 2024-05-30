@@ -34,7 +34,7 @@ import java.util.Objects;
 
 @Entity
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "custom_answer")
 public class CustomAnswer extends DAO<CustomAnswer> {
 	@EmbeddedId

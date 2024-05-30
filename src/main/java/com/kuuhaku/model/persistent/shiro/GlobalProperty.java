@@ -27,7 +27,7 @@ import java.util.Objects;
 
 @Entity
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "global_property")
 public class GlobalProperty extends DAO<GlobalProperty> {
 	@Id

@@ -29,7 +29,7 @@ import java.util.Objects;
 
 @Entity
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "account_title")
 public class AccountTitle extends DAO<AccountTitle> {
 	@Id
