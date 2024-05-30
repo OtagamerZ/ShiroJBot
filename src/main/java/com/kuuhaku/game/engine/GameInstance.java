@@ -53,6 +53,8 @@ import java.util.regex.Pattern;
 public abstract class GameInstance<T extends Enum<T>> {
 	public static final Set<String> CHANNELS = ConcurrentHashMap.newKeySet();
 	public static final Set<String> PLAYERS = ConcurrentHashMap.newKeySet();
+
+	private final ExecutorService worker = Executors.newSingleThreadExecutor();
 	private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 	private final long seed = ThreadLocalRandom.current().nextLong();
 	private final RandomGenerator rng = new SplittableRandom(seed);
@@ -136,7 +138,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 					CHANNELS.remove(gmc.getId());
 				}
 			}
-		});
+		}, worker);
 	}
 
 	protected abstract boolean validate(Message message);
@@ -255,5 +257,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 		} else {
 			exec.completeExceptionally(new GameReport(code));
 		}
+
+		worker.close();
+		service.close();
 	}
 }

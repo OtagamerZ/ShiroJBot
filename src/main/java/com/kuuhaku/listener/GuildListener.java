@@ -55,10 +55,7 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.random.RandomGenerator;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
@@ -66,6 +63,7 @@ import java.util.stream.Collectors;
 public class GuildListener extends ListenerAdapter {
 	private static final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
 	private static final Map<String, List<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
+	private static final ExecutorService asyncExec = Executors.newVirtualThreadPerTaskExecutor();
 
 	@Override
 	public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
@@ -244,10 +242,10 @@ public class GuildListener extends ListenerAdapter {
 
 		EventData ed = new EventData(event.getChannel(), config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {
-			CompletableFuture.runAsync(() -> processCommand(data, ed, content));
+			asyncExec.submit(() -> processCommand(data, ed, content));
 		}
 
-		CompletableFuture.runAsync(() -> {
+		asyncExec.submit(() -> {
 			if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
 				Member mb = event.getMember();
 				if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
