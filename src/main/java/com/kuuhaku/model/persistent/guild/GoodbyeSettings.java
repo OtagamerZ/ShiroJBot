@@ -36,7 +36,7 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 	@Column(name = "gid", nullable = false)
 	private String gid;
 
-	@ElementCollection(fetch = FetchType.EAGER)
+	@ElementCollection
 	@Column(name = "header")
 	@CollectionTable(name = "goodbye_settings_headers", joinColumns = @JoinColumn(name = "gid"))
 	private Set<String> headers = new LinkedHashSet<>();
@@ -54,7 +54,7 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 	public GoodbyeSettings(GuildConfig config) {
 		this.gid = config.getGid();
 		this.message = config.getLocale().get("default/goodbye_message");
-		this.headers.addAll(Set.of(
+		this.getHeaders().addAll(Set.of(
 				"default/goodbye_header_1",
 				"default/goodbye_header_2",
 				"default/goodbye_header_3",
@@ -68,7 +68,7 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 	}
 
 	public Set<String> getHeaders() {
-		return headers;
+		return DAO.loadProxy(() -> headers);
 	}
 
 	public String getMessage() {

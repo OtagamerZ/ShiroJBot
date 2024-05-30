@@ -53,7 +53,7 @@ public class SlotSkin extends DAO<SlotSkin> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = ALL, orphanRemoval = true)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedSkin> infos = new HashSet<>();
@@ -81,9 +81,8 @@ public class SlotSkin extends DAO<SlotSkin> {
 		return id;
 	}
 
-	@Transactional
 	public LocalizedSkin getInfo(I18N locale) {
-		return infos.parallelStream()
+		return DAO.loadProxy(() -> infos).parallelStream()
 				.filter(ld -> ld.getLocale() == locale)
 				.findAny().orElseThrow();
 	}

@@ -36,7 +36,7 @@ public class WelcomeSettings extends DAO<WelcomeSettings> {
 	@Column(name = "gid", nullable = false)
 	private String gid;
 
-	@ElementCollection(fetch = FetchType.EAGER)
+	@ElementCollection
 	@Column(name = "header")
 	@CollectionTable(name = "welcome_settings_headers", joinColumns = @JoinColumn(name = "gid"))
 	private Set<String> headers = new LinkedHashSet<>();
@@ -54,7 +54,7 @@ public class WelcomeSettings extends DAO<WelcomeSettings> {
 	public WelcomeSettings(GuildConfig config) {
 		this.gid = config.getGid();
 		this.message = config.getLocale().get("default/welcome_message");
-		this.headers.addAll(Set.of(
+		this.getHeaders().addAll(Set.of(
 				"default/welcome_header_1",
 				"default/welcome_header_2",
 				"default/welcome_header_3",
@@ -68,7 +68,7 @@ public class WelcomeSettings extends DAO<WelcomeSettings> {
 	}
 
 	public Set<String> getHeaders() {
-		return headers;
+		return DAO.loadProxy(() -> headers);
 	}
 
 	public String getMessage() {
