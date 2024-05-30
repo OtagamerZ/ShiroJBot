@@ -24,6 +24,7 @@ import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -69,7 +70,7 @@ public class CardAttributes implements Serializable, Cloneable {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = ALL, orphanRemoval = true)
 	@JoinColumn(name = "id", referencedColumnName = "card_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedDescription> descriptions = new HashSet<>();
@@ -113,8 +114,13 @@ public class CardAttributes implements Serializable, Cloneable {
 		return tags;
 	}
 
+	@Transactional
+	public Set<LocalizedDescription> getDescriptions() {
+		return descriptions;
+	}
+
 	public String getDescription(I18N locale) {
-		for (LocalizedDescription ld : descriptions) {
+		for (LocalizedDescription ld : getDescriptions()) {
 			if (ld.getLocale() == locale) {
 				return ld.toString();
 			}
@@ -173,7 +179,7 @@ public class CardAttributes implements Serializable, Cloneable {
 	public CardAttributes clone() throws CloneNotSupportedException {
 		CardAttributes clone = (CardAttributes) super.clone();
 		clone.tags = new JSONArray(tags);
-		clone.descriptions = new HashSet<>(descriptions);
+		clone.descriptions = new HashSet<>(getDescriptions());
 
 		return clone;
 	}

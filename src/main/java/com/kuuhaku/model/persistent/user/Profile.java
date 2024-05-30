@@ -36,6 +36,7 @@ import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -67,7 +68,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	@Column(name = "last_xp", nullable = false)
 	private long lastXp;
 
-	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<Warn> warns = new ArrayList<>();
 
@@ -132,12 +133,13 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		return Math.max(0, getXpToLevel(to) - getXpToLevel(from));
 	}
 
+	@Transactional
 	public List<Warn> getWarns() {
 		return warns;
 	}
 
 	public int getWarnCount() {
-		return (int) warns.parallelStream()
+		return (int) getWarns().parallelStream()
 				.filter(w -> w.getPardoner() == null)
 				.count();
 	}

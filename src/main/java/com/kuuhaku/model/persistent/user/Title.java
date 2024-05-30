@@ -24,6 +24,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
@@ -39,7 +40,7 @@ public class Title extends DAO<Title> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = ALL, orphanRemoval = true)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedTitle> infos = new HashSet<>();
@@ -58,8 +59,13 @@ public class Title extends DAO<Title> {
 		return id;
 	}
 
+	@Transactional
+	public Set<LocalizedTitle> getInfos() {
+		return infos;
+	}
+
 	public LocalizedTitle getInfo(I18N locale) {
-		return infos.parallelStream()
+		return getInfos().parallelStream()
 				.filter(ld -> ld.getLocale() == locale)
 				.findAny().orElseThrow();
 	}

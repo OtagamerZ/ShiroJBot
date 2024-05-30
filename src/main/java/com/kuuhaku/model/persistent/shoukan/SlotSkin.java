@@ -33,6 +33,7 @@ import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -52,7 +53,7 @@ public class SlotSkin extends DAO<SlotSkin> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = ALL, orphanRemoval = true)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedSkin> infos = new HashSet<>();
@@ -80,8 +81,13 @@ public class SlotSkin extends DAO<SlotSkin> {
 		return id;
 	}
 
+	@Transactional
+	public Set<LocalizedSkin> getInfos() {
+		return infos;
+	}
+
 	public LocalizedSkin getInfo(I18N locale) {
-		return infos.parallelStream()
+		return getInfos().parallelStream()
 				.filter(ld -> ld.getLocale() == locale)
 				.findAny().orElseThrow();
 	}

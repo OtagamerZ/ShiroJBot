@@ -28,6 +28,7 @@ import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import com.kuuhaku.model.persistent.javatype.RoleJavaType;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.hibernate.annotations.Fetch;
@@ -84,16 +85,16 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = RoleConverter.class)
 	private Role welcomer;
 
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("level")
 	private final List<LevelRole> levelRoles = new ArrayList<>();
 
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<CustomAnswer> customAnswers = new ArrayList<>();
 
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("threshold")
 	private final List<AutoRule> autoRules = new ArrayList<>();
@@ -197,20 +198,23 @@ public class GuildSettings extends DAO<GuildSettings> {
 		this.welcomer = welcomer;
 	}
 
+	@Transactional
 	public List<LevelRole> getLevelRoles() {
 		return levelRoles;
 	}
 
 	public List<LevelRole> getRolesForLevel(int level) {
-		return levelRoles.stream()
+		return getLevelRoles().stream()
 				.filter(r -> r.getLevel() == level)
 				.toList();
 	}
 
+	@Transactional
 	public List<CustomAnswer> getCustomAnswers() {
 		return customAnswers;
 	}
 
+	@Transactional
 	public List<AutoRule> getAutoRules() {
 		return autoRules;
 	}

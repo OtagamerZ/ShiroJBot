@@ -25,6 +25,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -69,7 +70,7 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Column(name = "account_bound", nullable = false)
 	private boolean accountBound = false;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = ALL, orphanRemoval = true)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedItem> infos = new HashSet<>();
@@ -133,8 +134,13 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 		return accountBound;
 	}
 
+	@Transactional
+	public Set<LocalizedItem> getInfos() {
+		return infos;
+	}
+
 	public LocalizedItem getInfo(I18N locale) {
-		return infos.parallelStream()
+		return getInfos().parallelStream()
 				.filter(ld -> ld.getLocale() == locale)
 				.findAny().orElseThrow();
 	}

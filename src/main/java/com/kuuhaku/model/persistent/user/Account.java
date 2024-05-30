@@ -37,6 +37,7 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -93,20 +94,20 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@OrderColumn(name = "index")
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<Deck> decks = new ArrayList<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<Transaction> transactions = new ArrayList<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private final Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private final Set<AccountTitle> titles = new HashSet<>();
 
@@ -323,6 +324,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return Utils.getOr(kawaipon, DAO.find(Kawaipon.class, uid));
 	}
 
+	@Transactional
 	public List<Deck> getDecks() {
 		boolean update = false;
 		while (decks.size() < getSettings().getDeckCapacity()) {
@@ -345,20 +347,22 @@ public class Account extends DAO<Account> implements Blacklistable {
 				.findAny().orElse(null);
 	}
 
+	@Transactional
 	public List<Transaction> getTransactions() {
 		return transactions;
 	}
 
 	public void addTransaction(long value, boolean input, String reason, Currency currency) {
-		transactions.add(new Transaction(this, value, input, reason, currency));
+		getTransactions().add(new Transaction(this, value, input, reason, currency));
 	}
 
+	@Transactional
 	public Set<DynamicProperty> getDynamicProperties() {
 		return dynamicProperties;
 	}
 
 	public DynamicProperty getDynamicProperty(String id) {
-		return dynamicProperties.parallelStream()
+		return getDynamicProperties().parallelStream()
 				.filter(dp -> dp.getId().getId().equals(id))
 				.findAny().orElse(new DynamicProperty(this, id, ""));
 	}
@@ -376,7 +380,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public AccountTitle getTitle() {
-		return titles.parallelStream()
+		return getTitles().parallelStream()
 				.filter(AccountTitle::isCurrent)
 				.findAny().orElse(null);
 	}
@@ -393,7 +397,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 		for (Title title : titles) {
 			if (title.check(this, locale)) {
-				this.titles.add(new AccountTitle(this, title));
+				this.getTitles().add(new AccountTitle(this, title));
 				return title;
 			}
 		}
@@ -401,12 +405,13 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return null;
 	}
 
+	@Transactional
 	public Set<AccountTitle> getTitles() {
 		return titles;
 	}
 
 	public boolean hasTitle(String title) {
-		return titles.parallelStream()
+		return getTitles().parallelStream()
 				.map(AccountTitle::getTitle)
 				.anyMatch(t -> t.getId().equals(title));
 	}
