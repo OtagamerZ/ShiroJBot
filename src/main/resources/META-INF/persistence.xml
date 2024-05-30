@@ -86,6 +86,7 @@
             <property name="hibernate.cache.use_second_level_cache" value="true"/>
             <property name="hibernate.cache.region.factory_class" value="jcache"/>
             <property name="hibernate.javax.cache.provider" value="org.ehcache.jsr107.EhcacheCachingProvider"/>
+            <property name="hibernate.javax.cache.missing_cache_strategy" value="create"/>
 
             <property name="hibernate.hikari.maximumPoolSize" value="50"/>
             <property name="hibernate.hikari.connectionTimeout" value="30000"/>
