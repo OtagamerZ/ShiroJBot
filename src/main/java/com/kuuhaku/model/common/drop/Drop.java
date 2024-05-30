@@ -24,6 +24,7 @@ import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.model.records.DropCondition;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
@@ -59,7 +60,7 @@ public abstract class Drop {
 					return new Object[]{(int) Calc.rng(avg, avg * 1.9, rng)};
 				},
 				(vals, acc) -> acc.getBalance() <= (int) vals[0]
-		), 2);
+		), 50);
 		pool.add(new DropCondition("high_cash",
 				(rng) -> {
 					int avg = DAO.queryNative(Integer.class, "SELECT avg FROM v_balance");
@@ -67,23 +68,23 @@ public abstract class Drop {
 					return new Object[]{(int) Calc.rng(avg * 0.1, avg, rng)};
 				},
 				(vals, acc) -> acc.getBalance() >= (int) vals[0]
-		), 2);
+		), 30);
 		pool.add(new DropCondition("level_low",
 				(rng) -> {
-					int avg = DAO.queryNative(Integer.class,  "SELECT highest_lvl FROM v_xp");
+					int val = DAO.queryNative(Integer.class,  "SELECT highest_lvl FROM v_xp");
 
-					return new Object[]{Calc.rng(avg / 2, avg, rng)};
+					return new Object[]{Calc.rng(val / 2, val, rng)};
 				},
 				(vals, acc) -> acc.getHighestLevel() <= (int) vals[0]
-		), 3);
+		), 50);
 		pool.add(new DropCondition("level_high",
 				(rng) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT highest_lvl FROM v_xp");
+					int val = DAO.queryNative(Integer.class, "SELECT highest_lvl FROM v_xp");
 
-					return new Object[]{Calc.rng(1, avg / 2, rng)};
+					return new Object[]{Calc.rng(1, val / 2, rng)};
 				},
 				(vals, acc) -> acc.getHighestLevel() >= (int) vals[0]
-		), 3);
+		), 30);
 		pool.add(new DropCondition("cards",
 				(rng) -> {
 					int avg = DAO.queryNative(Integer.class, """
@@ -105,34 +106,24 @@ public abstract class Drop {
 
 					return total.getFirst() + total.getSecond() >= (int) vals[0];
 				}
-		), 3);
+		), 25);
 		pool.add(new DropCondition("cards_anime",
 				(rng) -> {
 					List<Anime> animes = DAO.queryAll(Anime.class, "SELECT a FROM Anime a WHERE visible = TRUE");
 					Anime anime = Utils.getRandomEntry(rng, animes);
 
-					int avg = DAO.queryNative(Integer.class, """
-							SELECT round(geo_mean(x.count))
-							FROM (
-								 SELECT count(1) AS count
-								 FROM kawaipon_card kc
-										  INNER JOIN card c ON kc.card_id = c.id
-										  LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
-								 WHERE sc.id IS NULL
-								   AND c.anime_id = ?1
-								 GROUP BY kc.kawaipon_uid
-								 ) AS x
-							WHERE x.count > 0
-							""", anime.getId());
-
-					return new Object[]{(int) Calc.rng(avg / 2d, Math.min(avg * 1.5, anime.getCount()), rng), anime};
+					return new Object[]{Calc.rng(1, anime.getCount(), rng), anime};
 				},
 				(vals, acc) -> {
 					Pair<Integer, Integer> total = acc.getKawaipon().countCards((Anime) vals[1]);
 
 					return total.getFirst() + total.getSecond() >= (int) vals[0];
 				}
-		), 1);
+		), 15);
+		pool.add(new DropCondition("title",
+				(rng) -> new Object[]{Utils.getRandomEntry(rng, DAO.findAll(Title.class))},
+				(vals, acc) -> acc.hasTitle(((Title) vals[0]).getId())
+		), 10);
 
 		this.conditions = Arrays.asList(new DropCondition[getConditionCount()]);
 		conditions.replaceAll(c -> pool.remove());

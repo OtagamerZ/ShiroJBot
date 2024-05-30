@@ -199,7 +199,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 		this.welcomer = welcomer;
 	}
 
-	@Transactional
 	public List<LevelRole> getLevelRoles() {
 		return levelRoles;
 	}
@@ -210,12 +209,10 @@ public class GuildSettings extends DAO<GuildSettings> {
 				.toList();
 	}
 
-	@Transactional
 	public List<CustomAnswer> getCustomAnswers() {
 		return customAnswers;
 	}
 
-	@Transactional
 	public List<AutoRule> getAutoRules() {
 		return autoRules;
 	}

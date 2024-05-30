@@ -76,7 +76,6 @@ public class Archetype extends DAO<Archetype> {
 		Utils.exec(getClass().getSimpleName(), effect, Map.of("hand", hand));
 	}
 
-	@Transactional
 	public LocalizedArch getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale() == locale)

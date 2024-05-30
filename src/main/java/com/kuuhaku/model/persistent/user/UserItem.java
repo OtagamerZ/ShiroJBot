@@ -138,7 +138,6 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 		return accountBound;
 	}
 
-	@Transactional
 	public LocalizedItem getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale() == locale)

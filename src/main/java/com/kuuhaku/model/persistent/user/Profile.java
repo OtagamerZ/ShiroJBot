@@ -149,12 +149,10 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		return Math.max(0, getXpToLevel(to) - getXpToLevel(from));
 	}
 
-	@Transactional
 	public List<Warn> getWarns() {
 		return warns;
 	}
 
-	@Transactional
 	public int getWarnCount() {
 		return (int) warns.parallelStream()
 				.filter(w -> w.getPardoner() == null)

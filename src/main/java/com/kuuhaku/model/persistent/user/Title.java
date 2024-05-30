@@ -63,7 +63,6 @@ public class Title extends DAO<Title> {
 		return id;
 	}
 
-	@Transactional
 	public LocalizedTitle getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale() == locale)

@@ -85,7 +85,6 @@ public class SlotSkin extends DAO<SlotSkin> {
 		return id;
 	}
 
-	@Transactional
 	public LocalizedSkin getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale() == locale)

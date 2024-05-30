@@ -326,7 +326,6 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return Utils.getOr(kawaipon, DAO.find(Kawaipon.class, uid));
 	}
 
-	@Transactional
 	public List<Deck> getDecks() {
 		boolean update = false;
 		while (decks.size() < getSettings().getDeckCapacity()) {
@@ -349,12 +348,10 @@ public class Account extends DAO<Account> implements Blacklistable {
 				.findAny().orElse(null);
 	}
 
-	@Transactional
 	public void addTransaction(long value, boolean input, String reason, Currency currency) {
 		transactions.add(new Transaction(this, value, input, reason, currency));
 	}
 
-	@Transactional
 	public DynamicProperty getDynamicProperty(String id) {
 		return dynamicProperties.parallelStream()
 				.filter(dp -> dp.getId().getId().equals(id))
@@ -373,14 +370,12 @@ public class Account extends DAO<Account> implements Blacklistable {
 		DynamicProperty.update(uid, id, value);
 	}
 
-	@Transactional
 	public AccountTitle getTitle() {
 		return titles.parallelStream()
 				.filter(AccountTitle::isCurrent)
 				.findAny().orElse(null);
 	}
 
-	@Transactional
 	public Set<AccountTitle> getTitles() {
 		return titles;
 	}
@@ -405,7 +400,6 @@ public class Account extends DAO<Account> implements Blacklistable {
 		return null;
 	}
 
-	@Transactional
 	public boolean hasTitle(String title) {
 		return titles.parallelStream()
 				.map(AccountTitle::getTitle)

@@ -114,7 +114,6 @@ public class CardAttributes implements Serializable, Cloneable {
 		return tags;
 	}
 
-	@Transactional
 	public String getDescription(I18N locale) {
 		for (LocalizedDescription ld : descriptions) {
 			if (ld.getLocale() == locale) {
@@ -172,7 +171,6 @@ public class CardAttributes implements Serializable, Cloneable {
 	}
 
 	@Override
-	@Transactional
 	public CardAttributes clone() throws CloneNotSupportedException {
 		CardAttributes clone = (CardAttributes) super.clone();
 		clone.tags = new JSONArray(tags);
