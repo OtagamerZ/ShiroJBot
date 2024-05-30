@@ -94,20 +94,20 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderColumn(name = "index")
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<Deck> decks = new ArrayList<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<Transaction> transactions = new ArrayList<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private final Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private final Set<AccountTitle> titles = new HashSet<>();
 
@@ -348,21 +348,13 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	@Transactional
-	public List<Transaction> getTransactions() {
-		return transactions;
-	}
-
 	public void addTransaction(long value, boolean input, String reason, Currency currency) {
-		getTransactions().add(new Transaction(this, value, input, reason, currency));
+		transactions.add(new Transaction(this, value, input, reason, currency));
 	}
 
 	@Transactional
-	public Set<DynamicProperty> getDynamicProperties() {
-		return dynamicProperties;
-	}
-
 	public DynamicProperty getDynamicProperty(String id) {
-		return getDynamicProperties().parallelStream()
+		return dynamicProperties.parallelStream()
 				.filter(dp -> dp.getId().getId().equals(id))
 				.findAny().orElse(new DynamicProperty(this, id, ""));
 	}
@@ -380,9 +372,13 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public AccountTitle getTitle() {
-		return getTitles().parallelStream()
+		return titles.parallelStream()
 				.filter(AccountTitle::isCurrent)
 				.findAny().orElse(null);
+	}
+
+	public Set<AccountTitle> getTitles() {
+		return titles;
 	}
 
 	public synchronized Title checkTitles(I18N locale) {
@@ -397,7 +393,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 
 		for (Title title : titles) {
 			if (title.check(this, locale)) {
-				this.getTitles().add(new AccountTitle(this, title));
+				this.titles.add(new AccountTitle(this, title));
 				return title;
 			}
 		}
@@ -406,12 +402,8 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	@Transactional
-	public Set<AccountTitle> getTitles() {
-		return titles;
-	}
-
 	public boolean hasTitle(String title) {
-		return getTitles().parallelStream()
+		return titles.parallelStream()
 				.map(AccountTitle::getTitle)
 				.anyMatch(t -> t.getId().equals(title));
 	}

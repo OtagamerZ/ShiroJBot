@@ -70,7 +70,7 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Column(name = "account_bound", nullable = false)
 	private boolean accountBound = false;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true)
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedItem> infos = new HashSet<>();
@@ -135,12 +135,8 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	}
 
 	@Transactional
-	public Set<LocalizedItem> getInfos() {
-		return infos;
-	}
-
 	public LocalizedItem getInfo(I18N locale) {
-		return getInfos().parallelStream()
+		return infos.parallelStream()
 				.filter(ld -> ld.getLocale() == locale)
 				.findAny().orElseThrow();
 	}
