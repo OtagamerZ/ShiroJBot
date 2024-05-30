@@ -85,7 +85,7 @@
             <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
 
             <property name="hibernate.hikari.minimumIdle" value="5"/>
-            <property name="hibernate.hikari.maximumPoolSize" value="10"/>
+            <property name="hibernate.hikari.maximumPoolSize" value="20"/>
             <property name="hibernate.hikari.idleTimeout" value="30000"/>
             <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
             <property name="unreturnedConnectionTimeout" value="30"/>
