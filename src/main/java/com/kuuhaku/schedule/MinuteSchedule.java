@@ -22,26 +22,27 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
 import com.ygimenez.json.JSONArray;
+import kotlin.Pair;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Schedule("* * * * *")
 public class MinuteSchedule implements Runnable, PreInitialize {
-	public static final Map<String, Integer> XP_TO_ADD = new ConcurrentHashMap<>();
+	public static final Map<String, Pair<Integer, Long>> XP_TO_ADD = new ConcurrentHashMap<>();
 
 	@Override
 	public void run() {
-		Map<String, Integer> xps = Map.copyOf(XP_TO_ADD);
+		Map<String, Pair<Integer, Long>> xps = Map.copyOf(XP_TO_ADD);
 		XP_TO_ADD.clear();
 
 		JSONArray ja = new JSONArray();
-		for (Map.Entry<String, Integer> e : xps.entrySet()) {
+		for (Map.Entry<String, Pair<Integer, Long>> e : xps.entrySet()) {
 			String[] keys = e.getKey().split("-");
 			ja.add(Map.of(
 					"uid", keys[0],
 					"gid", keys[1],
-					"xp", e.getValue()
+					"xp", e.getValue().getFirst()
 			));
 		}
 

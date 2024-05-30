@@ -23,17 +23,18 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSignatureException;
-import com.kuuhaku.model.common.*;
+import com.kuuhaku.model.common.AutoEmbedBuilder;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.SimpleMessageListener;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.common.special.PadoruEvent;
 import com.kuuhaku.model.common.special.SpecialEvent;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;
-import com.kuuhaku.model.persistent.id.ProfileId;
 import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.*;
-import com.kuuhaku.schedule.MinuteSchedule;
 import com.kuuhaku.util.*;
 import com.ygimenez.json.JSONObject;
 import me.xuender.unidecode.Unidecode;
@@ -228,20 +229,17 @@ public class GuildListener extends ListenerAdapter {
 			}
 		}
 
-		Profile profile = DAO.find(Profile.class, new ProfileId(data.user().getId(), data.guild().getId()));
-		int lvl = profile.getLevel();
-
-		Account account = profile.getAccount();
+		Account account = DAO.find(Account.class, data.user().getId());
 		if (!Objects.equals(account.getName(), data.user().getName())) {
 			account.setName(data.user().getName());
 			account.save();
 		}
 
+		Profile profile = account.getProfile(data.member());
+		int lvl = profile.getLevel();
+
 		GuildBuff gb = config.getCumBuffs();
-		MinuteSchedule.XP_TO_ADD.compute(data.user().getId() + "-" + data.guild().getId(), (k, v) -> {
-			if (v == null) v = 0;
-			return v + (int) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d)));
-		});
+		profile.addXp((int) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
 
 		EventData ed = new EventData(event.getChannel(), config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {

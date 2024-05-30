@@ -24,25 +24,24 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.annotations.WhenNull;
-import com.kuuhaku.model.common.Checkpoint;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.RuleAction;
 import com.kuuhaku.model.persistent.guild.AutoRule;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.id.ProfileId;
+import com.kuuhaku.schedule.MinuteSchedule;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
+import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.jdesktop.swingx.graphics.BlendComposite;
@@ -113,18 +112,33 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	}
 
 	public long getXp() {
-		return xp;
+		return xp + getQueuedXp();
 	}
 
-	public void addXp(long value) {
-		if (System.currentTimeMillis() - lastXp >= 1000) {
-			xp += value;
-			lastXp = System.currentTimeMillis();
-		}
+	public int getQueuedXp() {
+		Pair<Integer, Long> val = MinuteSchedule.XP_TO_ADD.get(id.getUid() + "-" + id.getGid());
+
+		if (val == null) return 0;
+		else return val.getFirst();
+	}
+
+	public void addXp(int value) {
+		MinuteSchedule.XP_TO_ADD.compute(id.getUid() + "-" + id.getGid(), (k, v) -> {
+			int total = value;
+			if (v != null) {
+				if (System.currentTimeMillis() - v.getSecond() < 1000) {
+					return v;
+				}
+
+				total += v.getFirst();
+			}
+
+			return new Pair<>(total, System.currentTimeMillis());
+		});
 	}
 
 	public int getLevel() {
-		return (int) Math.max(1, Math.floor(Math.sqrt(xp / 100d)) + 1);
+		return (int) Math.max(1, Math.floor(Math.sqrt(getXp() / 100d)) + 1);
 	}
 
 	public long getXpToLevel(int level) {
@@ -196,6 +210,8 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 						.reason(cause + " (x" + (mult + 1) + ")")
 						.queue(null, Utils::doNothing);
 			}
+
+			save();
 		}
 	}
 
@@ -311,7 +327,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		replaces.put("guild", getGuild().getName());
 		replaces.put("g_rank", Utils.separate(account.getRanking()));
 		replaces.put("l_rank", Utils.separate(getRanking()));
-		replaces.put("xp", Utils.shorten(xp));
+		replaces.put("xp", Utils.shorten(getXp()));
 		replaces.put("level", getLevel());
 
 		for (AccountTitle title : account.getTitles()) {
@@ -407,7 +423,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		long lvlXp = getXpToLevel(lvl);
 		long toNext = getXpToLevel(lvl + 1);
 		int pad = 4;
-		double prcnt = Math.max(0, Calc.prcnt(xp - lvlXp, toNext - lvlXp));
+		double prcnt = Math.max(0, Calc.prcnt(getXp() - lvlXp, toNext - lvlXp));
 		int[] colors = {0x5b2d11, 0xb5b5b5, 0xd49800, 0x00d4d4, 0x9716ff, 0x0ed700, 0xe40000};
 
 		g2d.setColor(new Color(colors[Math.max(0, (lvl % 210) / 30)]));
@@ -422,7 +438,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		Graph.drawOutlinedString(g2d, account.getName(), 88 + offset, 25, 3, Color.BLACK);
 
 		String details = "XP: %s/%s I Rank: ".formatted(
-				Utils.shorten(xp - lvlXp), Utils.shorten(toNext - lvlXp)
+				Utils.shorten(getXp() - lvlXp), Utils.shorten(toNext - lvlXp)
 		);
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(20));
 		Graph.drawOutlinedString(g2d, details, 88 + offset, 51, 3, Color.BLACK);
