@@ -371,12 +371,14 @@ public class Account extends DAO<Account> implements Blacklistable {
 		DynamicProperty.update(uid, id, value);
 	}
 
+	@Transactional
 	public AccountTitle getTitle() {
 		return titles.parallelStream()
 				.filter(AccountTitle::isCurrent)
 				.findAny().orElse(null);
 	}
 
+	@Transactional
 	public Set<AccountTitle> getTitles() {
 		return titles;
 	}

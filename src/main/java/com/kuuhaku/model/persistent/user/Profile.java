@@ -134,6 +134,11 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	}
 
 	@Transactional
+	public List<Warn> getWarns() {
+		return warns;
+	}
+
+	@Transactional
 	public int getWarnCount() {
 		return (int) warns.parallelStream()
 				.filter(w -> w.getPardoner() == null)
