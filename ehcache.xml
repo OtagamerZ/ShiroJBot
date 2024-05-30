@@ -34,5 +34,11 @@
         </expiry>
     </cache-template>
 
-    <cache alias="org.ajames.hibernateormnative.Person" uses-template="simple"/>
+    <cache alias="com.kuuhaku.model.persistent.guild.GuildConfig" uses-template="simple"/>
+    <cache alias="com.kuuhaku.model.persistent.guild.GuildSettings" uses-template="simple"/>
+    <cache alias="com.kuuhaku.model.persistent.user.Profile" uses-template="simple"/>
+    <cache alias="com.kuuhaku.model.persistent.user.ProfileSettings" uses-template="simple"/>
+    <cache alias="com.kuuhaku.model.persistent.user.Account" uses-template="simple"/>
+    <cache alias="com.kuuhaku.model.persistent.user.AccountSettings" uses-template="simple"/>
+    <cache alias="com.kuuhaku.model.persistent.user.AccountTitle" uses-template="simple"/>
 </config>
