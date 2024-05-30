@@ -50,8 +50,8 @@ public class MinuteSchedule implements Runnable, PreInitialize {
 				UPDATE profile
 				SET xp = xp + cast(vals -> 'xp' AS INT)
 				FROM jsonb_array_elements(cast(?1 AS JSONB)) AS vals
-				WHERE uid = vals -> 'uid'
-				  AND gid = vals -> 'gid'
+				WHERE uid = vals ->> 'uid'
+				  AND gid = vals ->> 'gid'
 				""", ja.toString());
 	}
 }
