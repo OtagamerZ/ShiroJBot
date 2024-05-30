@@ -100,7 +100,7 @@ dependencies {
 
 	//Database
 	implementation group: "org.postgresql", name: "postgresql", version: "42.7.3"
-	implementation group: "org.hibernate", name: "hibernate-ehcache", version: "5.6.15.Final"
+	implementation group: "org.hibernate.orm", name: "hibernate-jcache", version: "6.4.4.Final"
 	implementation group: "org.hibernate.orm", name: "hibernate-core", version: "6.4.4.Final"
 	implementation group: "org.hibernate.orm", name: "hibernate-hikaricp", version: "6.4.4.Final"
 	implementation group: "com.zaxxer", name: "HikariCP", version: "5.1.0"
@@ -152,6 +152,7 @@ dependencies {
 	implementation group: "org.knowm.xchart", name: "xchart", version: "3.8.7"
 	implementation group: "com.github.trickl", name: "palette", version: "0.1.1"
 	implementation group: "org.jetbrains", name: "annotations", version: "24.1.0"
+	implementation group: "org.ehcache", name: "ehcache", version: "3.10.8"
 
 	//Antlr
 	antlr group: "org.antlr", name: "antlr4", version: "4.13.1"
