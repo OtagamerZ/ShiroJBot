@@ -47,7 +47,6 @@ import net.dv8tion.jda.api.utils.messages.MessageRequest;
 
 import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 
 import static net.dv8tion.jda.api.entities.Message.MentionType.EVERYONE;
@@ -77,7 +76,12 @@ public class Application implements Thread.UncaughtExceptionHandler {
 						new AutoModListener(),
 						new PrivateChannelListener()
 				)
-				.setEventPool(Executors.newVirtualThreadPerTaskExecutor(), true)
+				.setEventPool(new ForkJoinPool(
+						Runtime.getRuntime().availableProcessors(),
+						ForkJoinPool.defaultForkJoinWorkerThreadFactory,
+						this,
+						true
+				), true)
 				.build();
 
 		MessageRequest.setDefaultMentions(EnumSet.complementOf(EnumSet.of(EVERYONE, HERE)));
