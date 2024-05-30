@@ -70,17 +70,17 @@ public abstract class Drop {
 		), 2);
 		pool.add(new DropCondition("level_low",
 				(rng) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT avg_lvl FROM v_xp");
+					int avg = DAO.queryNative(Integer.class, "SELECT highest_lvl FROM v_xp");
 
-					return new Object[]{(int) Calc.rng(avg / 2d, (avg * 1.5), rng)};
+					return new Object[]{Calc.rng(avg / 2, avg)};
 				},
 				(vals, acc) -> acc.getHighestLevel() <= (int) vals[0]
 		), 3);
 		pool.add(new DropCondition("level_high",
 				(rng) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT avg_lvl FROM v_xp");
+					int avg = DAO.queryNative(Integer.class, "SELECT highest_lvl FROM v_xp");
 
-					return new Object[]{(int) Calc.rng(avg / 2d, (avg * 1.5), rng)};
+					return new Object[]{Calc.rng(1, avg / 2)};
 				},
 				(vals, acc) -> acc.getHighestLevel() >= (int) vals[0]
 		), 3);
