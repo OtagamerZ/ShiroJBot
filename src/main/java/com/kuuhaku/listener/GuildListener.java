@@ -33,6 +33,7 @@ import com.kuuhaku.model.persistent.guild.*;
 import com.kuuhaku.model.persistent.id.ProfileId;
 import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.*;
+import com.kuuhaku.schedule.MinuteSchedule;
 import com.kuuhaku.util.*;
 import com.ygimenez.json.JSONObject;
 import me.xuender.unidecode.Unidecode;
@@ -237,8 +238,10 @@ public class GuildListener extends ListenerAdapter {
 		}
 
 		GuildBuff gb = config.getCumBuffs();
-		profile.addXp((long) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
-		profile.save();
+		MinuteSchedule.XP_TO_ADD.compute(data.user().getId() + "-" + data.guild().getId(), (k, v) -> {
+			if (v == null) v = 0;
+			return v + (int) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d)));
+		});
 
 		EventData ed = new EventData(event.getChannel(), config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {

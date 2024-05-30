@@ -42,6 +42,8 @@ import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
@@ -58,6 +60,8 @@ import java.util.random.RandomGenerator;
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "senshi")
 public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Transient

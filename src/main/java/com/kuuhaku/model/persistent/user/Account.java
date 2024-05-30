@@ -64,8 +64,6 @@ import java.util.stream.Collectors;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "account", indexes = @Index(columnList = "balance DESC"))
 public class Account extends DAO<Account> implements Blacklistable {
 	@Id

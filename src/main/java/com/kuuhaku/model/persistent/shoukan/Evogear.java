@@ -44,6 +44,8 @@ import com.kuuhaku.util.*;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -62,6 +64,8 @@ import java.util.random.RandomGenerator;
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "evogear")
 public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Transient

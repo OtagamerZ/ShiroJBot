@@ -25,6 +25,8 @@ import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
@@ -37,6 +39,8 @@ import java.util.Set;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "archetype")
 public class Archetype extends DAO<Archetype> {
 	@Id

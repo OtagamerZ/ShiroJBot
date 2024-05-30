@@ -30,7 +30,7 @@ import java.util.Objects;
 
 @Entity
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "anime")
 public class Anime extends DAO<Anime> implements Serializable {
 	@Id

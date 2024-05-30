@@ -25,6 +25,8 @@ import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
@@ -34,6 +36,8 @@ import java.util.*;
 import static jakarta.persistence.CascadeType.*;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "title")
 public class Title extends DAO<Title> {
 	@Id

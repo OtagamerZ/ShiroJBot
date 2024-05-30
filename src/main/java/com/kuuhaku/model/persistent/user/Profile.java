@@ -57,8 +57,6 @@ import java.util.concurrent.TimeUnit;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "profile", indexes = @Index(columnList = "xp DESC"))
 public class Profile extends DAO<Profile> implements Blacklistable {
 	private static final Dimension SIZE = new Dimension(950, 600);

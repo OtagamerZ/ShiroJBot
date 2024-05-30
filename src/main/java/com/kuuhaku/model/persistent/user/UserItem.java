@@ -27,6 +27,8 @@ import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
@@ -37,6 +39,8 @@ import java.util.*;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "user_item")
 public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Id
