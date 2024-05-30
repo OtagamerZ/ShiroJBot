@@ -30,6 +30,8 @@ import com.kuuhaku.util.IO;
 import jakarta.persistence.*;
 import okio.Buffer;
 import org.apache.commons.io.FileUtils;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -43,6 +45,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Table(name = "card", indexes = @Index(columnList = "anime_id, id"))
 public class Card extends DAO<Card> implements Serializable {
 	@Id
