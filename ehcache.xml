@@ -43,4 +43,6 @@
     <cache alias="com.kuuhaku.model.persistent.user.AccountTitle" uses-template="simple"/>
     <cache alias="com.kuuhaku.model.persistent.shiro.Card" uses-template="simple"/>
     <cache alias="com.kuuhaku.model.persistent.shiro.Anime" uses-template="simple"/>
+    <cache alias="com.kuuhaku.model.persistent.shiro.GlobalProperty" uses-template="simple"/>
+    <cache alias="com.kuuhaku.model.persistent.user.DynamicProperty" uses-template="simple"/>
 </config>

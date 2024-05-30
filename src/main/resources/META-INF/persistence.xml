@@ -87,9 +87,11 @@
             <property name="hibernate.cache.region.factory_class" value="jcache"/>
             <property name="hibernate.javax.cache.provider" value="org.ehcache.jsr107.EhcacheCachingProvider"/>
 
-            <property name="hibernate.hikari.minimumIdle" value="5"/>
-            <property name="hibernate.hikari.maximumPoolSize" value="10"/>
-            <property name="hibernate.hikari.idleTimeout" value="30000"/>
+            <property name="hibernate.hikari.minimumIdle" value="3"/>
+            <property name="hibernate.hikari.maximumPoolSize" value="25"/>
+            <property name="hibernate.hikari.idleTimeout" value="3000"/>
+            <property name="hibernate.hikari.connectionTimeout" value="3000"/>
+            <property name="hibernate.hikari.leak-detection-threshold" value="10000"/>
             <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
             <property name="unreturnedConnectionTimeout" value="30"/>
             <property name="debugUnreturnedConnectionStackTraces" value="true"/>
