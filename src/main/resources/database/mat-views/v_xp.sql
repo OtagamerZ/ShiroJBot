@@ -25,15 +25,15 @@ WITH ranking AS (
                 ORDER BY xp DESC
                 )
 SELECT *
-     , cast(sqrt(x.lowest / 100) AS INTEGER)                               AS lowest_lvl
-     , cast(sqrt(x.highest / 100) AS INTEGER)                              AS highest_lvl
-     , (x.highest + x.lowest) / 2                                          AS avg
-     , cast((sqrt(x.highest / 100) + sqrt(x.lowest / 100)) / 2 AS INTEGER) AS avg_lvl
+     , cast(sqrt(x.lowest / 100) AS INTEGER)  AS lowest_lvl
+     , cast(sqrt(x.highest / 100) AS INTEGER) AS highest_lvl
+     , cast((sqrt(x.avg / 100)) AS INTEGER)   AS avg_lvl
 FROM (
-     SELECT last_value(r.xp) OVER w   AS lowest
-          , last_value(r.uid) OVER w  AS lowest_uid
-          , first_value(r.xp) OVER w  AS highest
-          , first_value(r.uid) OVER w AS highest_uid
+     SELECT last_value(r.xp) OVER w                AS lowest
+          , last_value(r.uid) OVER w               AS lowest_uid
+          , first_value(r.xp) OVER w               AS highest
+          , first_value(r.uid) OVER w              AS highest_uid
+          , cast(geo_mean(r.xp) OVER w AS INTEGER) AS avg
      FROM ranking r
      WINDOW w AS ()
      LIMIT 1

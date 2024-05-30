@@ -393,10 +393,10 @@ public class GuildListener extends ListenerAdapter {
 					}
 				}
 			}
-		});
 
-		rollSpawns(config, locale, account);
-		rollEvents(data.channel(), locale);
+			rollSpawns(config, locale, account);
+			rollEvents(data.channel(), locale);
+		});
 	}
 
 	private void rollSpawns(GuildConfig config, I18N locale, Account acc) {
