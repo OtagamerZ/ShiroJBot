@@ -466,10 +466,11 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	}
 
 	@Override
-	public void afterSave() {
+	public void beforeSave() {
+		Pair<Integer, Long> queued = MinuteSchedule.XP_TO_ADD.remove(id.getUid() + "-" + id.getGid());
+		if (queued == null) return;
 
-
-		super.afterSave();
+		xp += queued.getFirst();
 	}
 
 	@Override
