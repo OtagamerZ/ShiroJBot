@@ -40,7 +40,7 @@ public class Title extends DAO<Title> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true)
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedTitle> infos = new HashSet<>();
@@ -59,8 +59,9 @@ public class Title extends DAO<Title> {
 		return id;
 	}
 
+	@Transactional
 	public LocalizedTitle getInfo(I18N locale) {
-		return DAO.loadProxy(() -> infos).parallelStream()
+		return infos.parallelStream()
 				.filter(ld -> ld.getLocale() == locale)
 				.findAny().orElseThrow();
 	}

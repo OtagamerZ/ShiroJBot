@@ -53,7 +53,7 @@ public class Archetype extends DAO<Archetype> {
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true)
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedArch> infos = new HashSet<>();
@@ -72,8 +72,9 @@ public class Archetype extends DAO<Archetype> {
 		Utils.exec(getClass().getSimpleName(), effect, Map.of("hand", hand));
 	}
 
+	@Transactional
 	public LocalizedArch getInfo(I18N locale) {
-		return DAO.loadProxy(() -> infos).parallelStream()
+		return infos.parallelStream()
 				.filter(ld -> ld.getLocale() == locale)
 				.findAny().orElseThrow();
 	}

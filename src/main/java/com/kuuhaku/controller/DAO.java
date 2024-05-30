@@ -32,22 +32,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public abstract class DAO<T extends DAO<T>> implements DAOListener {
-	public static <P> P loadProxy(Supplier<P> supplier) {
-		EntityManager em = Manager.getEntityManager();
-
-		try {
-			em.getTransaction().begin();
-			return supplier.get();
-		} finally {
-			em.getTransaction().commit();
-			em.close();
-		}
-	}
-
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
 		try (EntityManager em = Manager.getEntityManager()) {
 			T t = em.find(klass, id);

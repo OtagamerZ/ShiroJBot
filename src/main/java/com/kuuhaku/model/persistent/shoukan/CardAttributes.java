@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.persistent.shoukan;
 
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -71,7 +70,7 @@ public class CardAttributes implements Serializable, Cloneable {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();
 
-	@OneToMany(cascade = ALL, orphanRemoval = true)
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "card_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedDescription> descriptions = new HashSet<>();
@@ -115,12 +114,9 @@ public class CardAttributes implements Serializable, Cloneable {
 		return tags;
 	}
 
-	public Set<LocalizedDescription> getDescriptions() {
-		return DAO.loadProxy(() -> descriptions);
-	}
-
+	@Transactional
 	public String getDescription(I18N locale) {
-		for (LocalizedDescription ld : getDescriptions()) {
+		for (LocalizedDescription ld : descriptions) {
 			if (ld.getLocale() == locale) {
 				return ld.toString();
 			}
@@ -176,10 +172,11 @@ public class CardAttributes implements Serializable, Cloneable {
 	}
 
 	@Override
+	@Transactional
 	public CardAttributes clone() throws CloneNotSupportedException {
 		CardAttributes clone = (CardAttributes) super.clone();
 		clone.tags = new JSONArray(tags);
-		clone.descriptions = new HashSet<>(getDescriptions());
+		clone.descriptions = new HashSet<>(descriptions);
 
 		return clone;
 	}

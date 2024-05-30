@@ -50,17 +50,17 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Column(name = "gid", nullable = false)
 	private String gid;
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "kawaipon_channels")
 	@CollectionTable(name = "guild_settings_kawaiponChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<GuildMessageChannel> kawaiponChannels = new ArrayList<>();
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "drop_channels")
 	@CollectionTable(name = "guild_settings_dropChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<GuildMessageChannel> dropChannels = new ArrayList<>();
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "denied_channels")
 	@CollectionTable(name = "guild_settings_deniedChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<GuildMessageChannel> deniedChannels = new ArrayList<>();
@@ -85,26 +85,26 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = RoleConverter.class)
 	private Role welcomer;
 
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("level")
 	private final List<LevelRole> levelRoles = new ArrayList<>();
 
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<CustomAnswer> customAnswers = new ArrayList<>();
 
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("threshold")
 	private final List<AutoRule> autoRules = new ArrayList<>();
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "disabled_categories")
 	@CollectionTable(name = "guild_settings_disabledcategories", joinColumns = @JoinColumn(name = "gid"))
 	private Set<Category> disabledCategories = new HashSet<>();
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "disabled_commands")
 	@CollectionTable(name = "guild_settings_disabledcommands", joinColumns = @JoinColumn(name = "gid"))
 	private Set<String> disabledCommands = new HashSet<>();
@@ -126,7 +126,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	private JSONObject aliases = new JSONObject();
 
 	@Enumerated(EnumType.STRING)
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name = "automod_entries",
 			joinColumns = @JoinColumn(name = "gid", referencedColumnName = "gid")
@@ -147,15 +147,15 @@ public class GuildSettings extends DAO<GuildSettings> {
 	}
 
 	public List<GuildMessageChannel> getKawaiponChannels() {
-		return DAO.loadProxy(() -> kawaiponChannels);
+		return kawaiponChannels;
 	}
 
 	public List<GuildMessageChannel> getDropChannels() {
-		return DAO.loadProxy(() -> dropChannels);
+		return dropChannels;
 	}
 
 	public List<GuildMessageChannel> getDeniedChannels() {
-		return DAO.loadProxy(() -> deniedChannels);
+		return deniedChannels;
 	}
 
 	public GuildMessageChannel getNotificationsChannel() {
@@ -198,8 +198,9 @@ public class GuildSettings extends DAO<GuildSettings> {
 		this.welcomer = welcomer;
 	}
 
+	@Transactional
 	public List<LevelRole> getLevelRoles() {
-		return DAO.loadProxy(() -> levelRoles);
+		return levelRoles;
 	}
 
 	public List<LevelRole> getRolesForLevel(int level) {
@@ -208,20 +209,22 @@ public class GuildSettings extends DAO<GuildSettings> {
 				.toList();
 	}
 
+	@Transactional
 	public List<CustomAnswer> getCustomAnswers() {
-		return DAO.loadProxy(() -> customAnswers);
+		return customAnswers;
 	}
 
+	@Transactional
 	public List<AutoRule> getAutoRules() {
-		return DAO.loadProxy(() -> autoRules);
+		return autoRules;
 	}
 
 	public Set<Category> getDisabledCategories() {
-		return DAO.loadProxy(() -> disabledCategories);
+		return disabledCategories;
 	}
 
 	public Set<String> getDisabledCommands() {
-		return DAO.loadProxy(() -> disabledCommands);
+		return disabledCommands;
 	}
 
 	public int getStarboardThreshold() {
@@ -253,6 +256,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 	}
 
 	public Map<AutoModType, String> getAutoModEntries() {
-		return DAO.loadProxy(() -> automodEntries);
+		return automodEntries;
 	}
 }

@@ -68,7 +68,7 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	@Column(name = "last_xp", nullable = false)
 	private long lastXp;
 
-	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<Warn> warns = new ArrayList<>();
 
@@ -133,18 +133,20 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 		return Math.max(0, getXpToLevel(to) - getXpToLevel(from));
 	}
 
+	@Transactional
 	public List<Warn> getWarns() {
-		return DAO.loadProxy(() -> warns);
+		return warns;
 	}
 
+	@Transactional
 	public int getWarnCount() {
-		return (int) getWarns().parallelStream()
+		return (int) warns.parallelStream()
 				.filter(w -> w.getPardoner() == null)
 				.count();
 	}
 
 	public void warn(User issuer, String reason) {
-		apply(Profile.class, id, p -> p.getWarns().add(new Warn(p, issuer, reason)));
+		apply(Profile.class, id, p -> p.warns.add(new Warn(p, issuer, reason)));
 
 		AutoRule rule = null;
 		int mult = 0;
