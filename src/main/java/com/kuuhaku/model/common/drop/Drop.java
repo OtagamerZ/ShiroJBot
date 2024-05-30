@@ -70,9 +70,9 @@ public abstract class Drop {
 		), 2);
 		pool.add(new DropCondition("level_low",
 				(rng) -> {
-					int avg = DAO.queryNative(Integer.class, "SELECT highest_lvl FROM v_xp");
+					int avg = DAO.queryNative(Integer.class,  "SELECT highest_lvl FROM v_xp");
 
-					return new Object[]{Calc.rng(avg / 2, avg)};
+					return new Object[]{Calc.rng(avg / 2, avg, rng)};
 				},
 				(vals, acc) -> acc.getHighestLevel() <= (int) vals[0]
 		), 3);
@@ -80,7 +80,7 @@ public abstract class Drop {
 				(rng) -> {
 					int avg = DAO.queryNative(Integer.class, "SELECT highest_lvl FROM v_xp");
 
-					return new Object[]{Calc.rng(1, avg / 2)};
+					return new Object[]{Calc.rng(1, avg / 2, rng)};
 				},
 				(vals, acc) -> acc.getHighestLevel() >= (int) vals[0]
 		), 3);
@@ -125,7 +125,7 @@ public abstract class Drop {
 							WHERE x.count > 0
 							""", anime.getId());
 
-					return new Object[]{(int) Calc.rng(avg / 2d, Math.min(avg * 1.5, anime.getCount()), seed), anime};
+					return new Object[]{(int) Calc.rng(avg / 2d, Math.min(avg * 1.5, anime.getCount()), rng), anime};
 				},
 				(vals, acc) -> {
 					Pair<Integer, Integer> total = acc.getKawaipon().countCards((Anime) vals[1]);
