@@ -2193,6 +2193,20 @@ public class Shoukan extends GameInstance<Phase> {
 		try {
 			setSending(true);
 
+			List<RestAction<?>> acts = new ArrayList<>();
+			for (Map.Entry<String, String> tuple : messages.entrySet()) {
+				if (tuple != null) {
+					GuildMessageChannel channel = Main.getApp().getMessageChannelById(tuple.getKey());
+					if (channel != null) {
+						acts.add(channel.retrieveMessageById(tuple.getValue()).flatMap(Objects::nonNull, Message::editMessageComponents));
+					}
+				}
+			}
+
+			if (!acts.isEmpty()) {
+				Pages.subGet(RestAction.allOf(acts));
+			}
+
 			if (trigger) {
 				resetTimer();
 
