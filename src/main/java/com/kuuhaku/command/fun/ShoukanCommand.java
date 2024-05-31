@@ -117,8 +117,6 @@ public class ShoukanCommand implements Executable {
 							}
 						}
 					}
-
-					m.delete().queue(null, Utils::doNothing);
 				}
 
 				return true;

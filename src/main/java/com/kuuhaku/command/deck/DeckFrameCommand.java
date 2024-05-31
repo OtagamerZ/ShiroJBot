@@ -111,12 +111,12 @@ public class DeckFrameCommand implements Executable {
 							w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
 						}
 					})
-					.addAction(Utils.parseEmoji("◀️"), w -> {
+					.addAction(Utils.parseEmoji("▶️"), w -> {
 						if (i.get() < frames.length - 1) {
 							w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
 						}
 					})
-					.addAction(Utils.parseEmoji("◀️"), w -> {
+					.addAction(Utils.parseEmoji("✅"), w -> {
 						FrameSkin frame = frames[i.get()];
 						if (!frame.canUse(acc)) {
 							event.channel().sendMessage(locale.get("error/frame_locked")).queue();

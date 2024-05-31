@@ -106,6 +106,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 				for (String chn : channels) {
 					if (CHANNELS.contains(chn)) {
 						channel.sendMessage(locale.get("error/channel_occupied_self")).queue();
+						close(GameReport.INITIALIZATION_ERROR);
 						return;
 					}
 				}
@@ -130,34 +131,34 @@ public abstract class GameInstance<T extends Enum<T>> {
 				initialized = true;
 				close(GameReport.INITIALIZATION_ERROR);
 				Constants.LOGGER.error(e, e);
-			}
-		}, worker).whenComplete((v, e) -> {
-			sml.close();
-			worker.close();
-			service.close();
+			} finally {
+				sml.close();
+				worker.close();
+				service.close();
 
-			for (String p : players) {
-				PLAYERS.remove(p);
-			}
+				for (String p : players) {
+					PLAYERS.remove(p);
+				}
 
-			for (String c : channels) {
-				CHANNELS.remove(c);
-			}
+				for (String c : channels) {
+					CHANNELS.remove(c);
+				}
 
-			if (exitCode == GameReport.SUCCESS && getTurn() > 10) {
-				if (this instanceof Shoukan s && !s.hasCheated() && s.getArcade() == null) {
-					int prize = (int) (500 * Calc.rng(0.75, 1.25, s.getRng()));
-					for (String uid : getPlayers()) {
-						DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
-					}
-				} else if (!(this instanceof Shoukan)) {
-					int prize = (int) (350 * Calc.rng(0.75, 1.25));
-					for (String uid : getPlayers()) {
-						DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
+				if (exitCode == GameReport.SUCCESS && getTurn() > 10) {
+					if (this instanceof Shoukan s && !s.hasCheated() && s.getArcade() == null) {
+						int prize = (int) (500 * Calc.rng(0.75, 1.25, s.getRng()));
+						for (String uid : getPlayers()) {
+							DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
+						}
+					} else if (!(this instanceof Shoukan)) {
+						int prize = (int) (350 * Calc.rng(0.75, 1.25));
+						for (String uid : getPlayers()) {
+							DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
+						}
 					}
 				}
 			}
-		});
+		}, worker);
 	}
 
 	protected abstract boolean validate(Message message);

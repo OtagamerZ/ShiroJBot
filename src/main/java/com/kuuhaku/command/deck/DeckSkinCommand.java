@@ -123,13 +123,13 @@ public class DeckSkinCommand implements Executable {
 						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
 					}
 				})
-				.addAction(Utils.parseEmoji("◀️"), w -> {
+				.addAction(Utils.parseEmoji("▶️"), w -> {
 					if (i.get() < skins.size() - 1) {
 						confirm.set(false);
 						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
 					}
 				})
-				.addAction(Utils.parseEmoji("◀️"), w -> {
+				.addAction(Utils.parseEmoji("✅"), w -> {
 					SlotSkin skin = skins.get(i.get());
 					if (!skin.canUse(acc)) {
 						List<Title> remaining = skin.getTitles().stream()
