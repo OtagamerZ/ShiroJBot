@@ -106,7 +106,6 @@ public abstract class GameInstance<T extends Enum<T>> {
 				for (String chn : channels) {
 					if (CHANNELS.contains(chn)) {
 						channel.sendMessage(locale.get("error/channel_occupied_self")).queue();
-						close(GameReport.INITIALIZATION_ERROR);
 						return;
 					}
 				}
@@ -133,8 +132,6 @@ public abstract class GameInstance<T extends Enum<T>> {
 				Constants.LOGGER.error(e, e);
 			} finally {
 				sml.close();
-				worker.close();
-				service.close();
 
 				for (String p : players) {
 					System.out.println("removing player " + p);
@@ -159,6 +156,9 @@ public abstract class GameInstance<T extends Enum<T>> {
 						}
 					}
 				}
+
+				worker.close();
+				service.close();
 			}
 		}, worker);
 	}
