@@ -30,7 +30,7 @@ import java.util.random.RandomGenerator;
 public record DropCondition(String key, Function<RandomGenerator, Object[]> extractor, BiFunction<Object[], Account, Boolean> condition) {
 	public String toString(I18N locale, RandomGenerator rng) {
 		Object[] vals = extractor().apply(rng);
-		String[] strs = new String[vals.length];
+		Object[] strs = new Object[vals.length];
 
 		fill: for (int i = 0; i < vals.length; i++) {
 			Object val = vals[i];
