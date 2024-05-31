@@ -2382,6 +2382,28 @@ public class Shoukan extends GameInstance<Phase> {
 			reportEvent("str/game_combat_phase", true, true);
 		});
 
+		if (getPhase() == Phase.PLAN && getTurn() > 1) {
+			helper.addAction(Utils.parseEmoji("⏩"), w -> {
+				if (isLocked()) return;
+
+				if (curr.selectionPending()) {
+					getChannel().sendMessage(getString("error/pending_choice")).queue();
+					return;
+				} else if (curr.selectionPending()) {
+					getChannel().sendMessage(getString("error/pending_action")).queue();
+					return;
+				} else if (curr.getLockTime(Lock.TAUNT) > 0) {
+					List<SlotColumn> yours = getSlots(curr.getSide());
+					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
+						getChannel().sendMessage(getString("error/taunt_locked", false, curr.getLockTime(Lock.TAUNT))).queue();
+						return;
+					}
+				}
+
+				nextTurn();
+			});
+		}
+
 		helper.addAction(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
 			if (isLocked()) return;
 
