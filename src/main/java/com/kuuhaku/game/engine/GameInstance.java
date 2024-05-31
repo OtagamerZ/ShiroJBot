@@ -80,8 +80,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 	}
 
 	public final CompletableFuture<Void> start(Guild guild, GuildMessageChannel... channels) {
-		String[] chns = Stream.of(channels).map(GuildMessageChannel::getId).toArray(String[]::new);
 		return exec = CompletableFuture.runAsync(() -> {
+			String[] chns = Stream.of(channels).map(GuildMessageChannel::getId).toArray(String[]::new);
 			SimpleMessageListener sml = new SimpleMessageListener(channels) {
 				{
 					turn = 1;
