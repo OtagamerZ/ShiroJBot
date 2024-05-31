@@ -24,7 +24,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
@@ -33,7 +32,7 @@ import org.intellij.lang.annotations.Language;
 
 import java.util.*;
 
-import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Cacheable
@@ -112,6 +111,10 @@ public class Title extends DAO<Title> {
 				, t.id
 				"""
 		);
+	}
+
+	public String toString(I18N locale) {
+		return getInfo(locale).getName();
 	}
 
 	@Override

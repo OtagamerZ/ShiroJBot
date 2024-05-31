@@ -123,7 +123,7 @@ public abstract class Drop {
 		pool.add(new DropCondition("title",
 				(rng) -> new Object[]{Utils.getRandomEntry(rng, DAO.findAll(Title.class))},
 				(vals, acc) -> acc.hasTitle(((Title) vals[0]).getId())
-		), 10);
+		), 5);
 
 		this.conditions = Arrays.asList(new DropCondition[getConditionCount()]);
 		conditions.replaceAll(c -> pool.remove());
