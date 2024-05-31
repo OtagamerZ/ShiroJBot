@@ -103,6 +103,7 @@ dependencies {
 	implementation group: "org.hibernate.orm", name: "hibernate-jcache", version: "6.4.4.Final"
 	implementation group: "org.hibernate.orm", name: "hibernate-core", version: "6.4.4.Final"
 	implementation group: "org.hibernate.orm", name: "hibernate-hikaricp", version: "6.4.4.Final"
+	implementation group: "io.ebean", name: "ebean-platform-postgres", version: "15.3.0"
 	implementation group: "com.zaxxer", name: "HikariCP", version: "5.1.0"
 
 	//Compiler

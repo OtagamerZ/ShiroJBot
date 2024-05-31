@@ -137,10 +137,12 @@ public abstract class GameInstance<T extends Enum<T>> {
 				service.close();
 
 				for (String p : players) {
+					System.out.println("removing player " + p);
 					PLAYERS.remove(p);
 				}
 
 				for (String c : channels) {
+					System.out.println("removing channel " + c);
 					CHANNELS.remove(c);
 				}
 
