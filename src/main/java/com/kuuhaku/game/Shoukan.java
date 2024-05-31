@@ -2385,10 +2385,15 @@ public class Shoukan extends GameInstance<Phase> {
 		helper.addAction(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
 			if (isLocked()) return;
 
-			Hand h = curr;
-			if (!h.getUid().equals(w.getUser().getId())) {
-				h = curr.getOther();
+			Hand h = null;
+			for (Hand hand : hands.values()) {
+				if (hand.getUid().equals(w.getUser().getId())) {
+					h = hand;
+					break;
+				}
 			}
+
+			if (h == null) return;
 
 			if (h.selectionPending()) {
 				BufferedImage bi = h.renderChoices();
