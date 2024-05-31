@@ -95,6 +95,10 @@ public class ShoukanCommand implements Executable {
 									event.channel().sendMessage(locale.get("error/error", e)).queue();
 									Constants.LOGGER.error(e, e);
 								}
+
+								for (String s : skn.getPlayers()) {
+									GameInstance.PLAYERS.remove(s);
+								}
 							});
 
 					updateTip(locale, skn, m);
