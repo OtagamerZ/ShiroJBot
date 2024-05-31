@@ -131,14 +131,6 @@ public abstract class GameInstance<T extends Enum<T>> {
 				Constants.LOGGER.error(e, e);
 			} finally {
 				sml.close();
-
-				for (String p : players) {
-					PLAYERS.remove(p);
-				}
-
-				for (String c : channels) {
-					CHANNELS.remove(c);
-				}
 			}
 		}, worker);
 	}
@@ -262,5 +254,13 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 		worker.close();
 		service.close();
+
+		for (String p : players) {
+			PLAYERS.remove(p);
+		}
+
+		for (String c : channels) {
+			CHANNELS.remove(c);
+		}
 	}
 }
