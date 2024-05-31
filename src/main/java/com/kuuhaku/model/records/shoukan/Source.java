@@ -37,6 +37,7 @@ public record Source(Drawable<?> card, Side side, int index, Trigger trigger) {
 
 	public boolean execute(EffectParameters ep) {
 		if (card != null && card instanceof EffectHolder<?> eh) {
+			card.getHand().getData().put("trigger_context", trigger);
 			return eh.execute(ep);
 		}
 

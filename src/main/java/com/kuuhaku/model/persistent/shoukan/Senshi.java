@@ -1337,10 +1337,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (getGame().chance(getDodge())) {
-			Shoukan game = getGame();
-			game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
-					this.isFlipped() ? game.getLocale().get("str/a_card") : this
-			)).queue();
+			if (getHand().getData().getEnum(Trigger.class, "trigger_context", NONE) != ON_TICK) {
+				Shoukan game = getGame();
+				game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
+						this.isFlipped() ? game.getLocale().get("str/a_card") : this
+				)).queue();
+			}
+
 			return true;
 		} else if (hasCharm(Charm.SHIELD, true)) {
 			blocked.add(source);

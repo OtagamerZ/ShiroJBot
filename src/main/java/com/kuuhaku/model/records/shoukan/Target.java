@@ -45,6 +45,7 @@ public record Target(Senshi card, Side side, int index, Trigger trigger, TargetT
 
 	public boolean execute(EffectParameters ep) {
 		if (card != null) {
+			card.getHand().getData().put("trigger_context", trigger);
 			return card.execute(ep);
 		}
 
