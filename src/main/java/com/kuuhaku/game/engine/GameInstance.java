@@ -131,7 +131,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 				close(GameReport.INITIALIZATION_ERROR);
 				Constants.LOGGER.error(e, e);
 			}
-		}, worker).thenRun(() -> {
+		}, worker).whenComplete((v, e) -> {
 			sml.close();
 			worker.close();
 			service.close();
