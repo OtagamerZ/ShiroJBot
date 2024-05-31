@@ -65,7 +65,6 @@ public abstract class GameInstance<T extends Enum<T>> {
 	private int turn = 1;
 	private T phase;
 	private boolean initialized;
-	private int exitCode;
 
 	private final I18N locale;
 	private final String[] players;
@@ -132,31 +131,6 @@ public abstract class GameInstance<T extends Enum<T>> {
 				Constants.LOGGER.error(e, e);
 			} finally {
 				sml.close();
-
-				for (String p : players) {
-					PLAYERS.remove(p);
-				}
-
-				for (String c : channels) {
-					CHANNELS.remove(c);
-				}
-
-				if (exitCode == GameReport.SUCCESS && getTurn() > 10) {
-					if (this instanceof Shoukan s && !s.hasCheated() && s.getArcade() == null) {
-						int prize = (int) (500 * Calc.rng(0.75, 1.25, s.getRng()));
-						for (String uid : getPlayers()) {
-							DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
-						}
-					} else if (!(this instanceof Shoukan)) {
-						int prize = (int) (350 * Calc.rng(0.75, 1.25));
-						for (String uid : getPlayers()) {
-							DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
-						}
-					}
-				}
-
-				worker.close();
-				service.close();
 			}
 		}, worker);
 	}
@@ -260,12 +234,36 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 	public final void close(@MagicConstant(valuesFromClass = GameReport.class) byte code) {
 		timeout.stop();
-		exitCode = code;
 
 		if (code == GameReport.SUCCESS) {
 			exec.complete(null);
+
+			if (getTurn() > 10) {
+				if (this instanceof Shoukan s && !s.hasCheated() && s.getArcade() == null) {
+					int prize = (int) (500 * Calc.rng(0.75, 1.25, s.getRng()));
+					for (String uid : getPlayers()) {
+						DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
+					}
+				} else if (!(this instanceof Shoukan)) {
+					int prize = (int) (350 * Calc.rng(0.75, 1.25));
+					for (String uid : getPlayers()) {
+						DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
+					}
+				}
+			}
 		} else {
 			exec.completeExceptionally(new GameReport(code));
 		}
+
+		for (String p : players) {
+			PLAYERS.remove(p);
+		}
+
+		for (String c : channels) {
+			CHANNELS.remove(c);
+		}
+
+		worker.close();
+		service.close();
 	}
 }
