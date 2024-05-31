@@ -2408,10 +2408,14 @@ public class Shoukan extends GameInstance<Phase> {
 			if (isLocked()) return;
 
 			Hand h = null;
-			for (Hand hand : hands.values()) {
-				if (hand.getUid().equals(w.getUser().getId())) {
-					h = hand;
-					break;
+			if (isSingleplayer()) {
+				h = curr;
+			} else {
+				for (Hand hand : hands.values()) {
+					if (hand.getUid().equals(w.getUser().getId())) {
+						h = hand;
+						break;
+					}
 				}
 			}
 
