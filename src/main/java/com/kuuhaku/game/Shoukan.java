@@ -2348,10 +2348,12 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private ButtonizeHelper getButtons() {
+		List<String> allowed = List.of("\uD83E\uDEAA", "\uD83D\uDD0D");
+
 		Hand curr = getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(u -> u.getId().equals(curr.getUid()))
+				.setCanInteract((u, b) -> u.getId().equals(curr.getUid()) || allowed.contains(b.getId()))
 				.setCancellable(false);
 
 		helper.addAction(Utils.parseEmoji("▶"), w -> {
@@ -2378,6 +2380,31 @@ public class Shoukan extends GameInstance<Phase> {
 
 			setPhase(Phase.COMBAT);
 			reportEvent("str/game_combat_phase", true, true);
+		});
+
+		helper.addAction(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
+			if (isLocked()) return;
+
+			if (curr.selectionPending()) {
+				BufferedImage bi = curr.renderChoices();
+				if (bi == null) return;
+
+				Objects.requireNonNull(w.getHook())
+						.setEphemeral(true)
+						.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
+
+				return;
+			}
+
+			Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "hand.png")).queue();
+		});
+
+		helper.addAction(Utils.parseEmoji("\uD83D\uDD0D"), w -> {
+			if (isLocked()) return;
+
+			Objects.requireNonNull(w.getHook())
+					.setEphemeral(true)
+					.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")).queue();
 		});
 
 		if (getPhase() == Phase.PLAN) {
@@ -2640,31 +2667,6 @@ public class Shoukan extends GameInstance<Phase> {
 				} else {
 					reportEvent("str/game_history_disable", false, curr.getName());
 				}
-			});
-
-			helper.addAction(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
-				if (isLocked()) return;
-
-				if (curr.selectionPending()) {
-					BufferedImage bi = curr.renderChoices();
-					if (bi == null) return;
-
-					Objects.requireNonNull(w.getHook())
-							.setEphemeral(true)
-							.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
-
-					return;
-				}
-
-				Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "hand.png")).queue();
-			});
-
-			helper.addAction(Utils.parseEmoji("\uD83D\uDD0D"), w -> {
-				if (isLocked()) return;
-
-				Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")).queue();
 			});
 
 			if (isSingleplayer() || getTurn() > 10) {
