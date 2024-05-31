@@ -69,6 +69,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 	private final I18N locale;
 	private final String[] players;
 	private final Deque<HistoryLog> history = new ArrayDeque<>();
+	private String[] channels;
 
 	public GameInstance(I18N locale, String[] players) {
 		this.locale = locale;
@@ -79,10 +80,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 		return seed;
 	}
 
-	public final CompletableFuture<Void> start(Guild guild, GuildMessageChannel... channels) {
+	public final CompletableFuture<Void> start(Guild guild, GuildMessageChannel... chns) {
 		return exec = CompletableFuture.runAsync(() -> {
-			String[] chns = Stream.of(channels).map(GuildMessageChannel::getId).toArray(String[]::new);
-			SimpleMessageListener sml = new SimpleMessageListener(channels) {
+			channels = Stream.of(chns).map(GuildMessageChannel::getId).toArray(String[]::new);
+			SimpleMessageListener sml = new SimpleMessageListener(chns) {
 				{
 					turn = 1;
 					channel = this.getChannel().setCooldown(1, TimeUnit.SECONDS);
@@ -101,7 +102,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 			};
 
 			try {
-				for (String chn : chns) {
+				for (String chn : channels) {
 					if (CHANNELS.contains(chn)) {
 						channel.sendMessage(locale.get("error/channel_occupied_self")).queue();
 						return;
@@ -109,7 +110,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 				}
 
 				PLAYERS.addAll(Arrays.asList(players));
-				CHANNELS.addAll(Arrays.asList(chns));
+				CHANNELS.addAll(Arrays.asList(channels));
 
 				begin();
 				GuildListener.addHandler(guild, sml);
@@ -135,7 +136,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 					PLAYERS.remove(p);
 				}
 
-				for (String c : chns) {
+				for (String c : channels) {
 					CHANNELS.remove(c);
 				}
 			}
