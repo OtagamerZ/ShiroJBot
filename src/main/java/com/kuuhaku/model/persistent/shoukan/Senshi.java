@@ -1345,7 +1345,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			return true;
-		} else if (hasCharm(Charm.SHIELD, true)) {
+		} else if (hasCharm(Charm.SHIELD, getHand().getData().getEnum(Trigger.class, "trigger_context", NONE)  != ON_TICK)) {
 			blocked.add(source);
 			Shoukan game = getGame();
 			game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
