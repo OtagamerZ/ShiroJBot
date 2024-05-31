@@ -2385,8 +2385,13 @@ public class Shoukan extends GameInstance<Phase> {
 		helper.addAction(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
 			if (isLocked()) return;
 
-			if (curr.selectionPending()) {
-				BufferedImage bi = curr.renderChoices();
+			Hand h = curr;
+			if (!h.getUid().equals(w.getUser().getId())) {
+				h = curr.getOther();
+			}
+
+			if (h.selectionPending()) {
+				BufferedImage bi = h.renderChoices();
 				if (bi == null) return;
 
 				Objects.requireNonNull(w.getHook())
@@ -2396,7 +2401,7 @@ public class Shoukan extends GameInstance<Phase> {
 				return;
 			}
 
-			Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "hand.png")).queue();
+			Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png")).queue();
 		});
 
 		helper.addAction(Utils.parseEmoji("\uD83D\uDD0D"), w -> {
