@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -53,8 +54,11 @@ public record ClusterAction(long delay, Map<String, MessageCreateAction> actions
 	}
 
 	public void queue(Consumer<? super Message> message, Consumer<? super Throwable> failure) {
-		for (MessageCreateAction act : actions.values()) {
+		Iterator<MessageCreateAction> it = actions.values().iterator();
+		while (it.hasNext()) {
+			MessageCreateAction act = it.next();
 			act.delay(delay, TimeUnit.MILLISECONDS).queue(message, failure);
+			it.remove();
 		}
 	}
 
@@ -67,8 +71,11 @@ public record ClusterAction(long delay, Map<String, MessageCreateAction> actions
 	}
 
 	public void queueAfter(long delay, TimeUnit unit, Consumer<? super Message> message, Consumer<? super Throwable> failure) {
-		for (MessageCreateAction act : actions.values()) {
+		Iterator<MessageCreateAction> it = actions.values().iterator();
+		while (it.hasNext()) {
+			MessageCreateAction act = it.next();
 			act.delay(delay, TimeUnit.MILLISECONDS).queueAfter(delay, unit, message, failure);
+			it.remove();
 		}
 	}
 }
