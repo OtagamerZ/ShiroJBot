@@ -35,7 +35,6 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.intellij.lang.annotations.MagicConstant;
@@ -49,6 +48,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.random.RandomGenerator;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public abstract class GameInstance<T extends Enum<T>> {
 	public static final Set<String> CHANNELS = ConcurrentHashMap.newKeySet();
@@ -80,6 +80,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 	}
 
 	public final CompletableFuture<Void> start(Guild guild, GuildMessageChannel... channels) {
+		String[] chns = Stream.of(channels).map(GuildMessageChannel::getId).toArray(String[]::new);
 		return exec = CompletableFuture.runAsync(() -> {
 			SimpleMessageListener sml = new SimpleMessageListener(channels) {
 				{
@@ -100,15 +101,15 @@ public abstract class GameInstance<T extends Enum<T>> {
 			};
 
 			try {
-				for (GuildMessageChannel chn : channels) {
-					if (GameInstance.CHANNELS.contains(chn.getId())) {
+				for (String chn : chns) {
+					if (CHANNELS.contains(chn)) {
 						channel.sendMessage(locale.get("error/channel_occupied_self")).queue();
 						return;
 					}
 				}
 
 				PLAYERS.addAll(Arrays.asList(players));
-				CHANNELS.addAll(Arrays.stream(channels).map(GuildChannel::getId).toList());
+				CHANNELS.addAll(Arrays.asList(chns));
 
 				begin();
 				GuildListener.addHandler(guild, sml);
@@ -134,8 +135,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 					PLAYERS.remove(p);
 				}
 
-				for (GuildMessageChannel gmc : channels) {
-					CHANNELS.remove(gmc.getId());
+				for (String c : chns) {
+					CHANNELS.remove(c);
 				}
 			}
 		}, worker);
