@@ -308,7 +308,12 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public Profile getProfile(Member member) {
-		return DAO.find(Profile.class, new ProfileId(uid, member.getGuild().getId()));
+		Profile out = DAO.query(Profile.class, "SELECT p FROM Profile p WHERE p.id.uid = ?1 AND p.id.gid = ?2", uid, member.getGuild().getId());
+		if (out == null) {
+			out = new Profile(new ProfileId(uid, member.getGuild().getId()));
+		}
+
+		return out;
 	}
 
 	public AccountSettings getSettings() {
