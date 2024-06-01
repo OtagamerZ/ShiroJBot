@@ -66,6 +66,5 @@ public abstract class SimpleMessageListener {
 
 	public void close() {
 		mutex = null;
-		exec.close();
 	}
 }
