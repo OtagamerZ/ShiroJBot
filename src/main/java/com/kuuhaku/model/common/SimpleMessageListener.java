@@ -53,11 +53,11 @@ public abstract class SimpleMessageListener {
 	}
 
 	public boolean checkChannel(GuildMessageChannel channel) {
-		return this.channel.getChannels().stream().anyMatch(tc -> tc.equals(channel));
+		return checkChannel(channel.getId());
 	}
 
 	public boolean checkChannel(String channel) {
-		return this.channel.getChannels().stream().anyMatch(tc -> tc.getId().equals(channel));
+		return this.channel.getChannels().parallelStream().anyMatch(tc -> tc.getId().equals(channel));
 	}
 
 	public boolean isClosed() {
