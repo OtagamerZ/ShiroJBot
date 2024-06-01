@@ -27,7 +27,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public abstract class SimpleMessageListener {
-	private final ExecutorService exec = Executors.newSingleThreadExecutor();
 	private final GameChannel channel;
 	public Object mutex = new Object();
 
@@ -40,7 +39,7 @@ public abstract class SimpleMessageListener {
 	}
 
 	public void execute(MessageReceivedEvent event) {
-		CompletableFuture.runAsync(() -> onMessageReceived(event), exec);
+		CompletableFuture.runAsync(() -> onMessageReceived(event));
 	}
 
 	protected abstract void onMessageReceived(@NotNull MessageReceivedEvent event);
