@@ -2194,10 +2194,12 @@ public class Shoukan extends GameInstance<Phase> {
 			setSending(true);
 
 			List<RestAction<?>> acts = new ArrayList<>();
-			for (GuildMessageChannel chn : getChannel().getChannels()) {
-				String msg = messages.get(chn.getId());
-				if (msg != null) {
-					acts.add(chn.retrieveMessageById(msg).flatMap(Objects::nonNull, Message::editMessageComponents));
+			for (Map.Entry<String, String> tuple : messages.entrySet()) {
+				if (tuple != null) {
+					GuildMessageChannel channel = Main.getApp().getMessageChannelById(tuple.getKey());
+					if (channel != null) {
+						acts.add(channel.retrieveMessageById(tuple.getValue()).flatMap(Objects::nonNull, Message::editMessageComponents));
+					}
 				}
 			}
 
@@ -2348,10 +2350,12 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private ButtonizeHelper getButtons() {
+		List<String> allowed = List.of("\uD83E\uDEAA", "\uD83D\uDD0D");
+
 		Hand curr = getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(u -> u.getId().equals(curr.getUid()))
+				.setCanInteract((u, b) -> u.getId().equals(curr.getUid()) || allowed.contains(b.getId()))
 				.setCancellable(false);
 
 		helper.addAction(Utils.parseEmoji("▶"), w -> {
@@ -2378,6 +2382,67 @@ public class Shoukan extends GameInstance<Phase> {
 
 			setPhase(Phase.COMBAT);
 			reportEvent("str/game_combat_phase", true, true);
+		});
+
+		if (getPhase() == Phase.PLAN && getTurn() > 1) {
+			helper.addAction(Utils.parseEmoji("⏩"), w -> {
+				if (isLocked()) return;
+
+				if (curr.selectionPending()) {
+					getChannel().sendMessage(getString("error/pending_choice")).queue();
+					return;
+				} else if (curr.selectionPending()) {
+					getChannel().sendMessage(getString("error/pending_action")).queue();
+					return;
+				} else if (curr.getLockTime(Lock.TAUNT) > 0) {
+					List<SlotColumn> yours = getSlots(curr.getSide());
+					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
+						getChannel().sendMessage(getString("error/taunt_locked", false, curr.getLockTime(Lock.TAUNT))).queue();
+						return;
+					}
+				}
+
+				nextTurn();
+			});
+		}
+
+		helper.addAction(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
+			if (isLocked()) return;
+
+			Hand h = null;
+			if (isSingleplayer()) {
+				h = curr;
+			} else {
+				for (Hand hand : hands.values()) {
+					if (hand.getUid().equals(w.getUser().getId())) {
+						h = hand;
+						break;
+					}
+				}
+			}
+
+			if (h == null) return;
+
+			if (h.selectionPending()) {
+				BufferedImage bi = h.renderChoices();
+				if (bi == null) return;
+
+				Objects.requireNonNull(w.getHook())
+						.setEphemeral(true)
+						.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
+
+				return;
+			}
+
+			Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png")).queue();
+		});
+
+		helper.addAction(Utils.parseEmoji("\uD83D\uDD0D"), w -> {
+			if (isLocked()) return;
+
+			Objects.requireNonNull(w.getHook())
+					.setEphemeral(true)
+					.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")).queue();
 		});
 
 		if (getPhase() == Phase.PLAN) {
@@ -2640,31 +2705,6 @@ public class Shoukan extends GameInstance<Phase> {
 				} else {
 					reportEvent("str/game_history_disable", false, curr.getName());
 				}
-			});
-
-			helper.addAction(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
-				if (isLocked()) return;
-
-				if (curr.selectionPending()) {
-					BufferedImage bi = curr.renderChoices();
-					if (bi == null) return;
-
-					Objects.requireNonNull(w.getHook())
-							.setEphemeral(true)
-							.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
-
-					return;
-				}
-
-				Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "hand.png")).queue();
-			});
-
-			helper.addAction(Utils.parseEmoji("\uD83D\uDD0D"), w -> {
-				if (isLocked()) return;
-
-				Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")).queue();
 			});
 
 			if (isSingleplayer() || getTurn() > 10) {

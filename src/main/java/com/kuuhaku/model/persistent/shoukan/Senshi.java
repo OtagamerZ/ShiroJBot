@@ -1323,6 +1323,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (source instanceof EffectHolder<?> eh && eh.hasTrueEffect(true)) return false;
 		else if (blocked.contains(source)) return true;
 
+		boolean isTick = getHand().getData().getEnum(Trigger.class, "trigger_context", NONE) == ON_TICK;
+
 		if (hand != null) {
 			if (hand.equals(source.getHand())) {
 				return false;
@@ -1337,15 +1339,21 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (getGame().chance(getDodge())) {
-			Shoukan game = getGame();
-			game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
-					this.isFlipped() ? game.getLocale().get("str/a_card") : this
-			)).queue();
+			if (!isTick) {
+				Shoukan game = getGame();
+				game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
+						this.isFlipped() ? game.getLocale().get("str/a_card") : this
+				)).queue();
+			}
+
 			return true;
-		} else if (hasCharm(Charm.SHIELD, true)) {
+		} else if (hasCharm(Charm.SHIELD, !isTick)) {
 			blocked.add(source);
-			Shoukan game = getGame();
-			game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
+			if (!isTick) {
+				Shoukan game = getGame();
+				game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
+			}
+
 			return true;
 		}
 

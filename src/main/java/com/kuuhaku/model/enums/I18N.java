@@ -24,23 +24,32 @@ import com.kuuhaku.util.text.Uwuifier;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.ZoneId;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public enum I18N {
 	PT(ZoneId.of("GMT-3"), "🇧🇷"),
-	EN(ZoneId.of("GMT-4"), "🇺🇸");
+	EN(ZoneId.of("GMT-4"), "🇺🇸"),
+
+	UWU_PT(PT),
+	UWU_EN(EN),
+	;
 
 	private final Locale locale = Locale.forLanguageTag(name().toLowerCase());
 	private final ZoneId zone;
 	private final String emoji;
-	private boolean uwu = false;
+	private final I18N parent;
 
 	I18N(ZoneId zone, String emoji) {
 		this.zone = zone;
 		this.emoji = emoji;
+		this.parent = null;
+	}
+
+	I18N(I18N parent) {
+		this.zone = parent.zone;
+		this.emoji = parent.emoji;
+		this.parent = parent;
 	}
 
 	public static String get(I18N code, String key) {
@@ -52,12 +61,14 @@ public enum I18N {
 	}
 
 	public String get(String key, Object... args) {
+		I18N loc = Utils.getOr(parent, this);
+
 		if (key == null) return "";
-		else if (args == null) return get(key);
+		else if (args == null) return loc.get(key);
 		else if (key.contains(" ") && !key.contains("/")) return key;
 
 		String lower = key.toLowerCase();
-		if (!key.equals(lower)) return get(lower, args);
+		if (!key.equals(lower)) return loc.get(lower, args);
 
 		for (int i = 0; i < args.length; i++) {
 			Object arg = args[i];
@@ -66,14 +77,14 @@ public enum I18N {
 			}
 		}
 
-		String out = Main.getCacheManager().computeLocale(name() + "-" + key, (k, v) -> {
+		String out = Main.getCacheManager().computeLocale(loc.name() + "-" + key, (k, v) -> {
 			if (v != null) return v;
 
 			try {
-				String message = ResourceBundle.getBundle("locale/lang", locale).getString(key);
+				String message = ResourceBundle.getBundle("locale/lang", loc.locale).getString(key);
 				String icon;
 				try {
-					icon = ResourceBundle.getBundle("locale/lang", locale).getString("icon/" + key.split("/")[0]);
+					icon = ResourceBundle.getBundle("locale/lang", loc.locale).getString("icon/" + key.split("/")[0]);
 				} catch (MissingResourceException e) {
 					icon = "";
 				}
@@ -84,8 +95,8 @@ public enum I18N {
 			}
 		}).formatted(args);
 
-		if (uwu) {
-			return Uwuifier.INSTANCE.uwu(this, out);
+		if (name().startsWith("UWU")) {
+			return Uwuifier.INSTANCE.uwu(loc, out);
 		}
 
 		return out;
@@ -103,11 +114,7 @@ public enum I18N {
 		return emoji;
 	}
 
-	public boolean isUwu() {
-		return uwu;
-	}
-
-	public void setUwu(boolean uwu) {
-		this.uwu = uwu;
+	public I18N getParent() {
+		return parent;
 	}
 }

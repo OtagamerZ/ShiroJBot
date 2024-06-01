@@ -37,13 +37,10 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -311,7 +308,12 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public Profile getProfile(Member member) {
-		return DAO.find(Profile.class, new ProfileId(uid, member.getGuild().getId()));
+		Profile out = DAO.query(Profile.class, "SELECT p FROM Profile p WHERE p.id.uid = ?1 AND p.id.gid = ?2", uid, member.getGuild().getId());
+		if (out == null) {
+			out = new Profile(new ProfileId(uid, member.getGuild().getId()));
+		}
+
+		return out;
 	}
 
 	public AccountSettings getSettings() {

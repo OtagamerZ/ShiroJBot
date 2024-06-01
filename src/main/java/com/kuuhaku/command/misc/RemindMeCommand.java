@@ -61,7 +61,8 @@ public class RemindMeCommand implements Executable {
 							Constants.TIMESTAMP.formatted(r.getDue().getLong(ChronoField.INSTANT_SECONDS))
 					), event.channel(), w -> {
 						event.channel().sendMessage(locale.get("success/reminder")).queue();
-						HourlySchedule.scheduleReminder(r.save());
+						HourlySchedule.scheduleReminder(r);
+						r.save();
 
 						return true;
 					}, event.user()

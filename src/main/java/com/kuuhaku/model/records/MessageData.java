@@ -36,13 +36,13 @@ public record MessageData(net.dv8tion.jda.api.entities.Guild guild, MessageChann
 		);
 	}
 
-	public record Guild(net.dv8tion.jda.api.entities.Guild guild, GuildMessageChannel channel, Message message, Member member, long interceptMillis) {
+	public record Guild(net.dv8tion.jda.api.entities.Guild guild, GuildMessageChannel channel, Message message, Member member, User user, long interceptMillis) {
 		public Guild(Message message) {
-			this(message.getGuild(), message.getGuildChannel(), message, message.getMember(), System.currentTimeMillis());
+			this(message.getGuild(), message.getGuildChannel(), message, message.getMember(), message.getAuthor(), System.currentTimeMillis());
 		}
 
 		public User user() {
-			return member.getUser();
+			return user;
 		}
 
 		public Member me() {

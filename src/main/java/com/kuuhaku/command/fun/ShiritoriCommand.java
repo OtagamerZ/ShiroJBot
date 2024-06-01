@@ -102,10 +102,6 @@ public class ShiritoriCommand implements Executable {
 											event.channel().sendMessage(locale.get("error/error", e)).queue();
 											Constants.LOGGER.error(e, e);
 										}
-
-										for (String s : shi.getPlayers()) {
-											GameInstance.PLAYERS.remove(s);
-										}
 									});
 						} catch (GameReport e) {
 							if (e.getContent().equals(event.user().getId())) {

@@ -96,9 +96,7 @@ public class ShoukanCommand implements Executable {
 									Constants.LOGGER.error(e, e);
 								}
 
-								for (String s : skn.getPlayers()) {
-									GameInstance.PLAYERS.remove(s);
-								}
+								m.delete().queue(null, Utils::doNothing);
 							});
 
 					updateTip(locale, skn, m);
@@ -119,8 +117,6 @@ public class ShoukanCommand implements Executable {
 							}
 						}
 					}
-
-					m.delete().queue(null, Utils::doNothing);
 				}
 
 				return true;

@@ -81,27 +81,27 @@ public abstract class GameInstance<T extends Enum<T>> {
 	}
 
 	public final CompletableFuture<Void> start(Guild guild, GuildMessageChannel... chns) {
-		return exec = CompletableFuture.runAsync(() -> {
-			channels = Stream.of(chns).map(GuildMessageChannel::getId).toArray(String[]::new);
-			SimpleMessageListener sml = new SimpleMessageListener(chns) {
-				{
-					turn = 1;
-					channel = this.getChannel().setCooldown(1, TimeUnit.SECONDS);
-				}
+		SimpleMessageListener sml = new SimpleMessageListener(chns) {
+			{
+				turn = 1;
+				channel = this.getChannel();
+			}
 
-				@Override
-				protected void onMessageReceived(@NotNull MessageReceivedEvent event) {
-					if (checkChannel(event.getGuildChannel()) && validate(event.getMessage())) {
-						try {
-							runtime(event.getAuthor(), event.getMessage().getContentRaw());
-						} catch (InvocationTargetException | IllegalAccessException e) {
-							Constants.LOGGER.error(e, e);
-						}
+			@Override
+			protected void onMessageReceived(@NotNull MessageReceivedEvent event) {
+				if (checkChannel(event.getGuildChannel()) && validate(event.getMessage())) {
+					try {
+						runtime(event.getAuthor(), event.getMessage().getContentRaw());
+					} catch (InvocationTargetException | IllegalAccessException e) {
+						Constants.LOGGER.error(e, e);
 					}
 				}
-			};
+			}
+		};
 
+		return exec = CompletableFuture.runAsync(() -> {
 			try {
+				channels = Stream.of(chns).map(GuildMessageChannel::getId).toArray(String[]::new);
 				for (String chn : channels) {
 					if (CHANNELS.contains(chn)) {
 						channel.sendMessage(locale.get("error/channel_occupied_self")).queue();
@@ -131,14 +131,6 @@ public abstract class GameInstance<T extends Enum<T>> {
 				Constants.LOGGER.error(e, e);
 			} finally {
 				sml.close();
-
-				for (String p : players) {
-					PLAYERS.remove(p);
-				}
-
-				for (String c : channels) {
-					CHANNELS.remove(c);
-				}
 			}
 		}, worker);
 	}
@@ -242,22 +234,33 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 	public final void close(@MagicConstant(valuesFromClass = GameReport.class) byte code) {
 		timeout.stop();
+
 		if (code == GameReport.SUCCESS) {
 			exec.complete(null);
 
-			if (this instanceof Shoukan s && !s.hasCheated() && s.getArcade() == null) {
-				int prize = (int) (500 * Calc.rng(0.75, 1.25, s.getRng()));
-				for (String uid : getPlayers()) {
-					DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
-				}
-			} else if (!(this instanceof Shoukan)) {
-				int prize = (int) (350 * Calc.rng(0.75, 1.25));
-				for (String uid : getPlayers()) {
-					DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
+			if (getTurn() > 10) {
+				if (this instanceof Shoukan s && !s.hasCheated() && s.getArcade() == null) {
+					int prize = (int) (500 * Calc.rng(0.75, 1.25, s.getRng()));
+					for (String uid : getPlayers()) {
+						DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
+					}
+				} else if (!(this instanceof Shoukan)) {
+					int prize = (int) (350 * Calc.rng(0.75, 1.25));
+					for (String uid : getPlayers()) {
+						DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
+					}
 				}
 			}
 		} else {
 			exec.completeExceptionally(new GameReport(code));
+		}
+
+		for (String p : players) {
+			PLAYERS.remove(p);
+		}
+
+		for (String c : channels) {
+			CHANNELS.remove(c);
 		}
 
 		worker.close();
