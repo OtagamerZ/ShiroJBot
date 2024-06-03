@@ -186,12 +186,12 @@ public class Shiritori extends GameInstance<NullPhase> {
 						if (channel != null) {
 							channel.retrieveMessageById(message.getSecond())
 									.flatMap(Objects::nonNull, Message::delete)
-									.queue();
+									.queue(null, Utils::doNothing);
 						}
 					}
 
 					message = new Pair<>(m.getChannel().getId(), m.getId());
-				});
+				}, Utils::doNothing);
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {

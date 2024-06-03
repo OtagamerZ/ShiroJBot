@@ -30,7 +30,10 @@ import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
+
+import java.util.Map;
 
 @Command(
 		name = "profile",
@@ -43,12 +46,17 @@ public class ProfileBackgroundCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		AccountSettings settings = data.profile().getAccount().getSettings();
 
-		String text = args.getString("text");
+		String url = args.getString("text");
+		String text = url;
 		if (text.isBlank()) {
 			if (!event.message().getAttachments().isEmpty()) {
 				for (Message.Attachment att : event.message().getAttachments()) {
 					if (att.isImage()) {
-						text = att.getUrl();
+						url = att.getUrl();
+						text = new JSONObject(Map.of(
+								"channel", event.channel().getId(),
+								"message", event.message().getId()
+						)).toString();
 						break;
 					}
 				}
@@ -61,15 +69,15 @@ public class ProfileBackgroundCommand implements Executable {
 			}
 		}
 
-		if (text.length() > 255) {
+		if (url.length() > 255) {
 			event.channel().sendMessage(locale.get("error/url_too_long")).queue();
 			return;
-		} else if (!UrlValidator.getInstance().isValid(text)) {
+		} else if (!UrlValidator.getInstance().isValid(url)) {
 			event.channel().sendMessage(locale.get("error/invalid_url")).queue();
 			return;
 		}
 
-		long size = IO.getImageSize(text);
+		long size = IO.getImageSize(url);
 		if (size == 0) {
 			event.channel().sendMessage(locale.get("error/invalid_url")).queue();
 			return;

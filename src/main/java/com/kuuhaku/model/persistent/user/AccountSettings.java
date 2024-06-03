@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.persistent.user;
 
+import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.ProfileEffect;
 import com.kuuhaku.model.persistent.converter.ColorConverter;
@@ -26,13 +28,18 @@ import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
+import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.awt.*;
+import java.util.Map;
 
 @Entity
 @Table(name = "account_settings")
@@ -90,7 +97,28 @@ public class AccountSettings extends DAO<AccountSettings> {
 	}
 
 	public String getBackground() {
-		return Utils.getOr(background, "https://i.ibb.co/F5rkrmR/cap-No-Game-No-Life-S01-E01-Beginner-00-11-41-04.jpg");
+		String url = Utils.getOr(background, "https://i.ibb.co/F5rkrmR/cap-No-Game-No-Life-S01-E01-Beginner-00-11-41-04.jpg");
+		if (url.startsWith("{") && url.endsWith("}")) {
+			JSONObject data = new JSONObject(url);
+			if (!data.isEmpty()) {
+				try {
+					GuildMessageChannel chn = Main.getApp().getMessageChannelById(data.getString("channel"));
+					Message msg = Pages.subGet(chn.retrieveMessageById(data.getString("message")));
+
+					for (Message.Attachment att : msg.getAttachments()) {
+						if (att.isImage()) {
+							return att.getUrl();
+						}
+					}
+				} catch (Exception ignore) {
+				}
+			} else {
+				background = "https://i.ibb.co/F5rkrmR/cap-No-Game-No-Life-S01-E01-Beginner-00-11-41-04.jpg";
+				save();
+			}
+		}
+
+		return url;
 	}
 
 	public void setBackground(String background) {

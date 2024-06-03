@@ -1540,7 +1540,7 @@ public class Shoukan extends GameInstance<Phase> {
 						you.modHP(-damage * thorns / 100);
 					}
 					if (lifesteal > 0) {
-						you.modHP(damage * lifesteal / 100);
+						you.modHP(dmg * lifesteal / 100);
 					}
 
 					if (you.getOrigins().synergy() == Race.DAEMON) {
@@ -1721,7 +1721,7 @@ public class Shoukan extends GameInstance<Phase> {
 					you.modHP(-damage * thorns / 100);
 				}
 				if (lifesteal > 0) {
-					you.modHP(damage * lifesteal / 100);
+					you.modHP(dmg * lifesteal / 100);
 				}
 
 				if (you.getOrigins().synergy() == Race.DAEMON) {
@@ -2179,7 +2179,9 @@ public class Shoukan extends GameInstance<Phase> {
 			if (msg != null) {
 				GuildMessageChannel channel = Main.getApp().getMessageChannelById(chn);
 				if (channel != null) {
-					channel.retrieveMessageById(msg).flatMap(Objects::nonNull, Message::delete).queue(null, Utils::doNothing);
+					channel.retrieveMessageById(msg)
+							.flatMap(Objects::nonNull, Message::delete)
+							.queue(null, Utils::doNothing);
 				}
 			}
 
@@ -2289,7 +2291,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 							registered.set(true);
 						}
-					});
+					}, Utils::doNothing);
 		} finally {
 			setSending(false);
 		}
@@ -2354,7 +2356,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Hand curr = getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
-				.setTimeout(1, TimeUnit.MINUTES)
+				.setTimeout(5, TimeUnit.MINUTES)
 				.setCanInteract((u, b) -> u.getId().equals(curr.getUid()) || allowed.contains(b.getId()))
 				.setCancellable(false);
 
