@@ -39,6 +39,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public abstract class DAO<T extends DAO<T>> implements DAOListener {
+	@SuppressWarnings("unchecked")
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
 		try {
 			Map<String, Object> ids = new HashMap<>();
