@@ -25,6 +25,8 @@ import com.kuuhaku.model.enums.ProfileEffect;
 import com.kuuhaku.model.persistent.converter.ColorConverter;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
+import com.kuuhaku.util.API;
+import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
@@ -33,6 +35,7 @@ import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.HttpGet;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -99,26 +102,38 @@ public class AccountSettings extends DAO<AccountSettings> {
 	public String getBackground() {
 		String url = Utils.getOr(background, "https://i.ibb.co/F5rkrmR/cap-No-Game-No-Life-S01-E01-Beginner-00-11-41-04.jpg");
 		if (url.startsWith("{") && url.endsWith("}")) {
-			JSONObject data = new JSONObject(url);
-			if (!data.isEmpty()) {
-				try {
-					GuildMessageChannel chn = Main.getApp().getMessageChannelById(data.getString("channel"));
-					Message msg = Pages.subGet(chn.retrieveMessageById(data.getString("message")));
+			String json = url;
+			url = null;
 
-					for (Message.Attachment att : msg.getAttachments()) {
-						if (att.isImage()) {
-							return att.getUrl();
+			JSONObject data = new JSONObject(json);
+			if (!data.isEmpty()) {
+				json = data.getString("url");
+				long size = IO.getImageSize(json);
+				if (size == 0) {
+					try {
+						GuildMessageChannel chn = Main.getApp().getMessageChannelById(data.getString("channel"));
+						Message msg = Pages.subGet(chn.retrieveMessageById(data.getString("message")));
+
+						for (Message.Attachment att : msg.getAttachments()) {
+							if (att.isImage()) {
+								url = att.getUrl();
+								break;
+							}
 						}
+
+						save();
+					} catch (Exception ignore) {
 					}
-				} catch (Exception ignore) {
 				}
-			} else {
-				background = "https://i.ibb.co/F5rkrmR/cap-No-Game-No-Life-S01-E01-Beginner-00-11-41-04.jpg";
-				save();
 			}
 		}
 
-		return url;
+		if (url == null) {
+			background = "https://i.ibb.co/F5rkrmR/cap-No-Game-No-Life-S01-E01-Beginner-00-11-41-04.jpg";
+			save();
+		}
+
+		return background;
 	}
 
 	public void setBackground(String background) {

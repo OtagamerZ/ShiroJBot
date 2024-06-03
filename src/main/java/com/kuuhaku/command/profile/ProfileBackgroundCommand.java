@@ -55,7 +55,8 @@ public class ProfileBackgroundCommand implements Executable {
 						url = att.getUrl();
 						text = new JSONObject(Map.of(
 								"channel", event.channel().getId(),
-								"message", event.message().getId()
+								"message", event.message().getId(),
+								"url", url
 						)).toString();
 						break;
 					}

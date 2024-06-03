@@ -57,7 +57,12 @@ public record ClusterAction(long delay, Map<String, MessageCreateAction> actions
 		Iterator<MessageCreateAction> it = actions.values().iterator();
 		while (it.hasNext()) {
 			MessageCreateAction act = it.next();
-			act.delay(delay, TimeUnit.MILLISECONDS).queue(message, failure);
+			if (delay > 0) {
+				act.delay(delay, TimeUnit.MILLISECONDS).queue(message, failure);
+			} else {
+				act.queue(message, failure);
+			}
+
 			it.remove();
 		}
 	}
@@ -74,7 +79,12 @@ public record ClusterAction(long delay, Map<String, MessageCreateAction> actions
 		Iterator<MessageCreateAction> it = actions.values().iterator();
 		while (it.hasNext()) {
 			MessageCreateAction act = it.next();
-			act.delay(delay, TimeUnit.MILLISECONDS).queueAfter(delay, unit, message, failure);
+			if (delay > 0) {
+				act.delay(delay, TimeUnit.MILLISECONDS).queueAfter(delay, unit, message, failure);
+			} else {
+				act.queueAfter(delay, unit, message, failure);
+			}
+
 			it.remove();
 		}
 	}

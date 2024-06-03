@@ -62,27 +62,27 @@ public class ShiritoriCommand implements Executable {
 			return;
 		}
 
-		List<Member> others = event.message().getMentions().getMembers();
-		if (others.contains(event.member())) {
+		List<User> others = event.message().getMentions().getUsers();
+		if (others.contains(event.user())) {
 			event.channel().sendMessage(locale.get("error/cannot_play_with_self")).queue();
 			return;
 		}
 
-		for (Member other : others) {
+		for (User other : others) {
 			if (GameInstance.PLAYERS.contains(other.getId())) {
 				event.channel().sendMessage(locale.get("error/in_game_target", other.getEffectiveName())).queue();
 				return;
 			}
 		}
 
-		Set<Member> pending = new HashSet<>(others);
+		Set<User> pending = new HashSet<>(others);
 		try {
 			Utils.confirm(locale.get("question/shiritori",
-							Utils.properlyJoin(locale.get("str/and")).apply(others.stream().map(Member::getAsMention).toList()),
+							Utils.properlyJoin(locale.get("str/and")).apply(others.stream().map(User::getAsMention).toList()),
 							event.user().getAsMention()
 					), event.channel(), w -> {
-						if (pending.remove(w.getMember())) {
-							event.channel().sendMessage(locale.get("str/match_accept", w.getMember().getEffectiveName())).queue();
+						if (pending.remove(w.getUser())) {
+							event.channel().sendMessage(locale.get("str/match_accept", w.getUser().getEffectiveName())).queue();
 
 							if (!pending.isEmpty()) return false;
 						} else {
@@ -91,8 +91,8 @@ public class ShiritoriCommand implements Executable {
 
 						try {
 							Shiritori shi = new Shiritori(locale,
-									Stream.concat(Stream.of(event.member()), others.stream())
-											.map(Member::getId)
+									Stream.concat(Stream.of(event.user()), others.stream())
+											.map(User::getId)
 											.sorted(Collections.reverseOrder())
 											.toArray(String[]::new)
 							);
@@ -112,7 +112,7 @@ public class ShiritoriCommand implements Executable {
 						}
 
 						return true;
-					}, others.stream().map(Member::getUser).toArray(User[]::new)
+					}, others.toArray(User[]::new)
 			);
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();

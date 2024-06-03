@@ -41,7 +41,7 @@ public class Anime extends DAO<Anime> implements Serializable {
 	private boolean visible = true;
 
 	public int getCount() {
-		return DAO.queryNative(Integer.class, "SELECT count FROM v_card_counter WHERE anime_id = ?1", id);
+		return DAO.queryNative(Integer.class, "SELECT coalesce(sum(count), 0) FROM v_card_counter WHERE anime_id = ?1", id);
 	}
 
 	public Card getCover() {

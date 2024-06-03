@@ -210,11 +210,15 @@ public class StashScrapCommand implements Executable {
 			double mult = Calc.rng(0.5, 0.8, sc.getId());
 			if (sc.getType() == CardType.KAWAIPON) {
 				KawaiponCard kc = sc.getKawaiponCard();
-				value += (int) (kc.getSuggestedPrice() / 3 * mult);
+				if (kc != null) {
+					value += (int) (kc.getSuggestedPrice() / 3 * mult);
+				}
 			} else {
 				if (sc.getType() == CardType.EVOGEAR) {
 					Evogear e = sc.getCard().asEvogear();
-					value += (int) (e.getTier() * 225 * mult);
+					if (e != null) {
+						value += (int) (e.getTier() * 225 * mult);
+					}
 				} else {
 					value += (int) (2500 * mult);
 				}

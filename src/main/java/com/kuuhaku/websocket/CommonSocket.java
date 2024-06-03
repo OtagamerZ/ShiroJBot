@@ -37,10 +37,12 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -174,7 +176,7 @@ public class CommonSocket extends WebSocketClient {
 
 					user.openPrivateChannel()
 							.flatMap(c -> helper.apply(c.sendMessageEmbeds(toSend)))
-							.queue(s -> Pages.categorize(s, helper));
+							.queue(s -> Pages.categorize(s, helper), Utils::doNothing);
 				}
 				case "vote" -> {
 					String id = payload.getString("user");
