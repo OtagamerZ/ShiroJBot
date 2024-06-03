@@ -19,10 +19,11 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.annotations.WhenNull;
+import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import kotlin.Pair;
 import org.hibernate.annotations.Fetch;
@@ -36,7 +37,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "kawaipon")
-public class Kawaipon extends DAO<Kawaipon> {
+public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 	@Id
 	@Column(name = "uid", nullable = false)
 	private String uid;
@@ -58,15 +59,16 @@ public class Kawaipon extends DAO<Kawaipon> {
 	public Kawaipon() {
 	}
 
-	public Kawaipon(Account account) {
-		this.uid = account.getUid();
-		this.account = account;
+	public Kawaipon(Account acc) {
+		this.uid = acc.getUid();
+		this.account = acc;
 	}
 
-	@WhenNull
-	public Kawaipon(String uid) {
-		this.uid = uid;
+	@Override
+	public Kawaipon make(JSONObject args) {
+		this.uid = args.getString("uid");
 		this.account = DAO.find(Account.class, uid);
+		return this;
 	}
 
 	public String getUid() {

@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.annotations.WhenNull;
+import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
@@ -39,7 +39,7 @@ import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "guild_config")
-public class GuildConfig extends DAO<GuildConfig> {
+public class GuildConfig extends DAO<GuildConfig> implements AutoMake<GuildConfig> {
 	@Id
 	@Column(name = "gid", nullable = false)
 	private String gid;
@@ -74,13 +74,11 @@ public class GuildConfig extends DAO<GuildConfig> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject buffs = new JSONObject();
 
-	public GuildConfig() {
-	}
-
-	@WhenNull
-	public GuildConfig(String gid) {
-		this.gid = gid;
+	@Override
+	public GuildConfig make(JSONObject args) {
+		this.gid = args.getString("gid");
 		this.settings = new GuildSettings(gid);
+		return this;
 	}
 
 	public String getGid() {

@@ -22,8 +22,8 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
-import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.RuleAction;
@@ -35,8 +35,8 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -57,7 +57,7 @@ import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "profile", indexes = @Index(columnList = "xp DESC"))
-public class Profile extends DAO<Profile> implements Blacklistable {
+public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklistable {
 	private static final Dimension SIZE = new Dimension(950, 600);
 
 	@EmbeddedId
@@ -93,18 +93,12 @@ public class Profile extends DAO<Profile> implements Blacklistable {
 	@Fetch(FetchMode.JOIN)
 	private ProfileSettings settings;
 
-	public Profile() {
-	}
-
-	public Profile(Member member) {
-		this(new ProfileId(member.getId(), member.getGuild().getId()));
-	}
-
-	@WhenNull
-	public Profile(ProfileId id) {
-		this.id = id;
+	@Override
+	public Profile make(JSONObject args) {
+		this.id = new ProfileId(args.getString("uid"), args.getString("gid"));
 		this.account = DAO.find(Account.class, id.getUid());
 		this.guild = DAO.find(GuildConfig.class, id.getGid());
+		return this;
 	}
 
 	public ProfileId getId() {

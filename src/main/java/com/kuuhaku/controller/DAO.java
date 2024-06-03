@@ -18,17 +18,21 @@
 
 package com.kuuhaku.controller;
 
+import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
-import com.kuuhaku.interfaces.annotations.WhenNull;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -36,32 +40,48 @@ import java.util.stream.Stream;
 
 public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
-		try (EntityManager em = Manager.getEntityManager()) {
-			T t = em.find(klass, id);
-			if (t instanceof Blacklistable lock) {
-				if (lock.isBlacklisted()) {
-					t = null;
-				}
-			}
-
-			if (t == null) {
-				for (Constructor<?> method : klass.getConstructors()) {
-					if (method.isAnnotationPresent(WhenNull.class)) {
-						Class<?>[] params = method.getParameterTypes();
-						if (Objects.requireNonNull(params).length > 0 && params[0] == id.getClass()) {
-							try {
-								t = klass.cast(method.newInstance(id));
-								t.save();
-								break;
-							} catch (InvocationTargetException | IllegalAccessException | InstantiationException e) {
-								throw new IllegalStateException("Failed to instantiate class", e);
-							}
+		try {
+			Map<String, Object> ids = new HashMap<>();
+			for (Field f : klass.getDeclaredFields()) {
+				if (f.isAnnotationPresent(Id.class)) {
+					Column col = f.getAnnotation(Column.class);
+					ids.put(col == null ? f.getName() : col.name(), id);
+					break;
+				} else if (f.isAnnotationPresent(EmbeddedId.class)) {
+					for (Field ef : f.getType().getDeclaredFields()) {
+						if (ef.isAnnotationPresent(Column.class)) {
+							Column col = f.getAnnotation(Column.class);
+							ids.put(col.name(), ef.get(id));
+							break;
 						}
 					}
 				}
 			}
 
+			if (ids.isEmpty()) {
+				throw new NoSuchFieldException("Class' ID not found");
+			}
+
+			XStringBuilder sb = new XStringBuilder("SELECT e FROM \"" + klass.getSimpleName() + "\" e");
+
+			int i = 1;
+			var args = List.copyOf(ids.entrySet());
+			for (Map.Entry<String, Object> e : args) {
+				if (i == 1) sb.appendNewLine("WHERE \"" + e.getKey() + "\" = ?" + i);
+				else sb.appendNewLine("AND WHERE \"" + e.getKey() + "\" = ?" + i);
+
+				i++;
+			}
+
+			T t = query(klass, sb.toString(), args.stream().map(Map.Entry::getValue).toArray());
+			if (t == null && AutoMake.class.isAssignableFrom(klass)) {
+				t = (T) ((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids));
+			}
+
 			return t;
+		} catch (IllegalAccessException | NoSuchFieldException | NoSuchMethodException | InstantiationException |
+				 InvocationTargetException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

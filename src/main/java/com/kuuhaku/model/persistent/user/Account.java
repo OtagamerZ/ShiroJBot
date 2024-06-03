@@ -21,8 +21,8 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
-import com.kuuhaku.interfaces.annotations.WhenNull;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
@@ -62,7 +62,7 @@ import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "account", indexes = @Index(columnList = "balance DESC"))
-public class Account extends DAO<Account> implements Blacklistable {
+public class Account extends DAO<Account> implements AutoMake<Account>, Blacklistable {
 	@Id
 	@Column(name = "uid", nullable = false)
 	private String uid;
@@ -136,13 +136,11 @@ public class Account extends DAO<Account> implements Blacklistable {
 	@Column(name = "vote_streak", nullable = false)
 	private int voteStreak;
 
-	public Account() {
-	}
-
-	@WhenNull
-	public Account(String uid) {
-		this.uid = uid;
+	@Override
+	public Account make(JSONObject args) {
+		this.uid = args.getString("uid");
 		this.kawaipon = new Kawaipon(this);
+		return this;
 	}
 
 	public String getUid() {
@@ -308,12 +306,7 @@ public class Account extends DAO<Account> implements Blacklistable {
 	}
 
 	public Profile getProfile(Member member) {
-		Profile out = DAO.query(Profile.class, "SELECT p FROM Profile p WHERE p.id.uid = ?1 AND p.id.gid = ?2", uid, member.getGuild().getId());
-		if (out == null) {
-			out = new Profile(new ProfileId(uid, member.getGuild().getId()));
-		}
-
-		return out;
+		return DAO.find(Profile.class, new ProfileId(member.getGuild().getId(), member.getId()));
 	}
 
 	public AccountSettings getSettings() {
