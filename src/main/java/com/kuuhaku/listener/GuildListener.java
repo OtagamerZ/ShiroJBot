@@ -136,7 +136,7 @@ public class GuildListener extends ListenerAdapter {
 
 		WelcomeSettings ws = config.getWelcomeSettings();
 		GuildMessageChannel channel = ws.getChannel();
-		if (channel != null) {
+		if (channel != null && channel.canTalk()) {
 			buildAndSendJLEmbed(config, channel, mb, ws.getMessage(), ws.getHeaders(), true);
 		}
 	}
@@ -149,7 +149,7 @@ public class GuildListener extends ListenerAdapter {
 
 		GoodbyeSettings gs = config.getGoodbyeSettings();
 		GuildMessageChannel channel = gs.getChannel();
-		if (channel != null) {
+		if (channel != null && channel.canTalk()) {
 			Member mb = event.getMember();
 			if (mb != null) {
 				buildAndSendJLEmbed(config, channel, mb, gs.getMessage(), gs.getHeaders(), false);
