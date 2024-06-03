@@ -44,9 +44,16 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			Map<String, Object> ids = new HashMap<>();
 			for (Field f : klass.getDeclaredFields()) {
-				if (f.isAnnotationPresent(Id.class) || f.isAnnotationPresent(EmbeddedId.class)) {
+				if (f.isAnnotationPresent(Id.class)) {
 					ids.put(f.getName(), id);
 					break;
+				} else if (f.isAnnotationPresent(EmbeddedId.class)) {
+					for (Field ef : f.getType().getDeclaredFields()) {
+						if (ef.isAnnotationPresent(Column.class)) {
+							ids.put(f.getName() + "." + ef.getName(), ef.get(id));
+							break;
+						}
+					}
 				}
 			}
 
@@ -60,7 +67,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			var args = List.copyOf(ids.entrySet());
 			for (Map.Entry<String, Object> e : args) {
 				if (i == 1) sb.appendNewLine("WHERE e." + e.getKey() + " = ?" + i);
-				else sb.appendNewLine("AND WHERE e." + e.getKey() + " = ?" + i);
+				else sb.appendNewLine("AND e." + e.getKey() + " = ?" + i);
 
 				i++;
 			}

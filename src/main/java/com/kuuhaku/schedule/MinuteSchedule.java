@@ -36,8 +36,6 @@ public class MinuteSchedule implements Runnable, PreInitialize {
 		Map<String, Pair<Integer, Long>> xps = Map.copyOf(XP_TO_ADD);
 		XP_TO_ADD.clear();
 
-		System.out.println(XP_TO_ADD);
-
 		JSONArray ja = new JSONArray();
 		for (Map.Entry<String, Pair<Integer, Long>> e : xps.entrySet()) {
 			String[] keys = e.getKey().split("-");
