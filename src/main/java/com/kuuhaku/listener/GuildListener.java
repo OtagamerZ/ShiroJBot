@@ -323,7 +323,7 @@ public class GuildListener extends ListenerAdapter {
 						data.user().getAsMention(),
 						config.getPrefix(),
 						Constants.SERVER_ROOT
-				)).queue();
+				)).queue(null, Utils::doNothing);
 			}
 
 			if (config.getSettings().isFeatureEnabled(GuildFeature.NQN_MODE)) {
