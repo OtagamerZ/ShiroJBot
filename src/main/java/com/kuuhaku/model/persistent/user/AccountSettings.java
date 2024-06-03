@@ -57,7 +57,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Convert(converter = ColorConverter.class)
 	private Color color = Color.BLACK;
 
-	@Column(name = "background")
+	@Column(name = "background", columnDefinition = "TEXT")
 	private String background;
 
 	@Enumerated(EnumType.STRING)
