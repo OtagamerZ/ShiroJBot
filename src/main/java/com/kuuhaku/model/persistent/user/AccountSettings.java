@@ -116,11 +116,12 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 						for (Message.Attachment att : msg.getAttachments()) {
 							if (att.isImage()) {
-								url = att.getUrl();
+								data.put("url", url = att.getUrl());
 								break;
 							}
 						}
 
+						background = data.toString();
 						save();
 					} catch (Exception ignore) {
 					}
