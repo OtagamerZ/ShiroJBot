@@ -24,6 +24,7 @@ import com.kuuhaku.interfaces.annotations.Schedule;
 import com.ygimenez.json.JSONArray;
 import kotlin.Pair;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -39,6 +40,8 @@ public class MinuteSchedule implements Runnable, PreInitialize {
 		JSONArray ja = new JSONArray();
 		for (Map.Entry<String, Pair<Integer, Long>> e : xps.entrySet()) {
 			String[] keys = e.getKey().split("-");
+			System.out.println(Arrays.toString(keys));
+
 			ja.add(Map.of(
 					"uid", keys[0],
 					"gid", keys[1],
