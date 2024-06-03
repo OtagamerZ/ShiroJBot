@@ -49,6 +49,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				} else if (f.isAnnotationPresent(EmbeddedId.class)) {
 					for (Field ef : f.getType().getDeclaredFields()) {
 						if (ef.isAnnotationPresent(Column.class)) {
+							ef.setAccessible(true);
 							ids.put(ef.getName(), ef.get(id));
 							break;
 						}
