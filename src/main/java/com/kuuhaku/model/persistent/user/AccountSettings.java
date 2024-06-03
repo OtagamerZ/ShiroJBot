@@ -57,7 +57,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Convert(converter = ColorConverter.class)
 	private Color color = Color.BLACK;
 
-	@Column(name = "background", columnDefinition = "TEXT")
+	@Column(name = "background")
 	private String background;
 
 	@Enumerated(EnumType.STRING)
@@ -100,41 +100,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	}
 
 	public String getBackground() {
-		String url = Utils.getOr(background, "https://i.ibb.co/F5rkrmR/cap-No-Game-No-Life-S01-E01-Beginner-00-11-41-04.jpg");
-		if (url.startsWith("{") && url.endsWith("}")) {
-			String json = url;
-			url = null;
-
-			JSONObject data = new JSONObject(json);
-			if (!data.isEmpty()) {
-				json = data.getString("url");
-				long size = IO.getImageSize(json);
-				if (size == 0) {
-					try {
-						GuildMessageChannel chn = Main.getApp().getMessageChannelById(data.getString("channel"));
-						Message msg = Pages.subGet(chn.retrieveMessageById(data.getString("message")));
-
-						for (Message.Attachment att : msg.getAttachments()) {
-							if (att.isImage()) {
-								data.put("url", url = att.getUrl());
-								break;
-							}
-						}
-
-						background = data.toString();
-						save();
-					} catch (Exception ignore) {
-					}
-				}
-			}
-		}
-
-		if (url == null) {
-			background = "https://i.ibb.co/F5rkrmR/cap-No-Game-No-Life-S01-E01-Beginner-00-11-41-04.jpg";
-			save();
-		}
-
-		return background;
+		return Utils.getOr(background, "https://i.ibb.co/F5rkrmR/cap-No-Game-No-Life-S01-E01-Beginner-00-11-41-04.jpg");
 	}
 
 	public void setBackground(String background) {
