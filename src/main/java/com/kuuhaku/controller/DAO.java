@@ -45,8 +45,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			Map<String, Object> ids = new HashMap<>();
 			for (Field f : klass.getDeclaredFields()) {
 				if (f.isAnnotationPresent(Id.class)) {
-					Column col = f.getAnnotation(Column.class);
-					ids.put(col == null ? f.getName() : col.name(), id);
+					ids.put(f.getName(), id);
 					break;
 				} else if (f.isAnnotationPresent(EmbeddedId.class)) {
 					for (Field ef : f.getType().getDeclaredFields()) {
@@ -63,13 +62,13 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				throw new NoSuchFieldException("Class' ID not found");
 			}
 
-			XStringBuilder sb = new XStringBuilder("SELECT e FROM \"" + klass.getSimpleName() + "\" e");
+			XStringBuilder sb = new XStringBuilder("SELECT e FROM " + klass.getSimpleName() + " e");
 
 			int i = 1;
 			var args = List.copyOf(ids.entrySet());
 			for (Map.Entry<String, Object> e : args) {
-				if (i == 1) sb.appendNewLine("WHERE \"" + e.getKey() + "\" = ?" + i);
-				else sb.appendNewLine("AND WHERE \"" + e.getKey() + "\" = ?" + i);
+				if (i == 1) sb.appendNewLine("WHERE e." + e.getKey() + " = ?" + i);
+				else sb.appendNewLine("AND WHERE e." + e.getKey() + " = ?" + i);
 
 				i++;
 			}
