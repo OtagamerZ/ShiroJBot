@@ -21,7 +21,6 @@ package com.kuuhaku.controller;
 import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
-import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -41,7 +40,7 @@ import java.util.stream.Stream;
 public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	@SuppressWarnings("unchecked")
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
-		try {
+		try (EntityManager em = Manager.getEntityManager()) {
 			Map<String, Object> ids = new HashMap<>();
 			for (Field f : klass.getDeclaredFields()) {
 				if (f.isAnnotationPresent(Id.class)) {
@@ -50,7 +49,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				} else if (f.isAnnotationPresent(EmbeddedId.class)) {
 					for (Field ef : f.getType().getDeclaredFields()) {
 						if (ef.isAnnotationPresent(Column.class)) {
-							ids.put(f.getName() + "." + ef.getName(), ef.get(id));
+							ids.put(ef.getName(), ef.get(id));
 							break;
 						}
 					}
@@ -61,18 +60,19 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				throw new NoSuchFieldException("Class' ID not found");
 			}
 
-			XStringBuilder sb = new XStringBuilder("SELECT e FROM " + klass.getSimpleName() + " e");
+//			XStringBuilder sb = new XStringBuilder("SELECT e FROM " + klass.getSimpleName() + " e");
+//
+//			int i = 1;
+//			var args = List.copyOf(ids.entrySet());
+//			for (Map.Entry<String, Object> e : args) {
+//				if (i == 1) sb.appendNewLine("WHERE e." + e.getKey() + " = ?" + i);
+//				else sb.appendNewLine("AND e." + e.getKey() + " = ?" + i);
+//
+//				i++;
+//			}
 
-			int i = 1;
-			var args = List.copyOf(ids.entrySet());
-			for (Map.Entry<String, Object> e : args) {
-				if (i == 1) sb.appendNewLine("WHERE e." + e.getKey() + " = ?" + i);
-				else sb.appendNewLine("AND e." + e.getKey() + " = ?" + i);
-
-				i++;
-			}
-
-			T t = query(klass, sb.toString(), args.stream().map(Map.Entry::getValue).toArray());
+//			T t = query(klass, sb.toString(), args.stream().map(Map.Entry::getValue).toArray());
+			T t = em.find(klass, id);
 			if (t == null && AutoMake.class.isAssignableFrom(klass)) {
 				t = (T) ((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids));
 			}
