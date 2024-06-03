@@ -202,10 +202,10 @@ public class Shiritori extends GameInstance<NullPhase> {
 						if (channel != null) {
 							channel.retrieveMessageById(message.getSecond())
 									.flatMap(Objects::nonNull, Message::delete)
-									.queue();
+									.queue(null, Utils::doNothing);
 						}
 					}
-				});
+				}, Utils::doNothing);
 
 		close(code);
 	}

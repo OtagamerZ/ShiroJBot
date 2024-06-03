@@ -30,10 +30,7 @@ import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
-
-import java.util.Map;
 
 @Command(
 		name = "profile",
@@ -47,17 +44,11 @@ public class ProfileBackgroundCommand implements Executable {
 		AccountSettings settings = data.profile().getAccount().getSettings();
 
 		String url = args.getString("text");
-		String text = url;
-		if (text.isBlank()) {
+		if (url.isBlank()) {
 			if (!event.message().getAttachments().isEmpty()) {
 				for (Message.Attachment att : event.message().getAttachments()) {
 					if (att.isImage()) {
 						url = att.getUrl();
-						text = new JSONObject(Map.of(
-								"channel", event.channel().getId(),
-								"message", event.message().getId(),
-								"url", url
-						)).toString();
 						break;
 					}
 				}
@@ -87,7 +78,7 @@ public class ProfileBackgroundCommand implements Executable {
 			return;
 		}
 
-		settings.setBackground(text);
+		settings.setBackground(url);
 		settings.save();
 
 		event.channel().sendMessage(locale.get("success/profile_background_set")).queue();
