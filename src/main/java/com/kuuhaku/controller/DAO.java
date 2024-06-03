@@ -44,17 +44,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			Map<String, Object> ids = new HashMap<>();
 			for (Field f : klass.getDeclaredFields()) {
-				if (f.isAnnotationPresent(Id.class)) {
+				if (f.isAnnotationPresent(Id.class) || f.isAnnotationPresent(EmbeddedId.class)) {
 					ids.put(f.getName(), id);
 					break;
-				} else if (f.isAnnotationPresent(EmbeddedId.class)) {
-					for (Field ef : f.getType().getDeclaredFields()) {
-						if (ef.isAnnotationPresent(Column.class)) {
-							Column col = f.getAnnotation(Column.class);
-							ids.put(col.name(), ef.get(id));
-							break;
-						}
-					}
 				}
 			}
 
