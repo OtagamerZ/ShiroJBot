@@ -70,376 +70,288 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			return t;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
 		}
 	}
 
 	public static <T extends DAO<T>> T query(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
-		try {
-			TypedQuery<T> q = em.createQuery(query, klass);
-			q.setMaxResults(1);
+		TypedQuery<T> q = em.createQuery(query, klass);
+		q.setMaxResults(1);
 
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
-
-			T t;
-			try {
-				t = q.getSingleResult();
-				if (t instanceof Blacklistable lock) {
-					if (lock.isBlacklisted()) {
-						t = null;
-					}
-				}
-			} catch (NoResultException e) {
-				t = null;
-			}
-
-			return t;
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+		int paramSize = Objects.requireNonNull(params).length;
+		for (int i = 0; i < paramSize; i++) {
+			q.setParameter(i + 1, params[i]);
 		}
+
+		T t;
+		try {
+			t = q.getSingleResult();
+			if (t instanceof Blacklistable lock) {
+				if (lock.isBlacklisted()) {
+					t = null;
+				}
+			}
+		} catch (NoResultException e) {
+			t = null;
+		}
+
+		return t;
 	}
 
 	public static <T> T queryNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
+		Query q = em.createNativeQuery(query);
+		q.setMaxResults(1);
+
+		int paramSize = Objects.requireNonNull(params).length;
+		for (int i = 0; i < paramSize; i++) {
+			q.setParameter(i + 1, params[i]);
+		}
+
+		T t;
 		try {
-			Query q = em.createNativeQuery(query);
-			q.setMaxResults(1);
-
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
-
-			T t;
-			try {
-				if (Number.class.isAssignableFrom(klass)) {
-					t = klass.cast(Utils.fromNumber(klass, (Number) q.getSingleResult()));
-				} else {
-					t = klass.cast(q.getSingleResult());
-					if (t instanceof Blacklistable lock) {
-						if (lock.isBlacklisted()) {
-							t = null;
-						}
+			if (Number.class.isAssignableFrom(klass)) {
+				t = klass.cast(Utils.fromNumber(klass, (Number) q.getSingleResult()));
+			} else {
+				t = klass.cast(q.getSingleResult());
+				if (t instanceof Blacklistable lock) {
+					if (lock.isBlacklisted()) {
+						t = null;
 					}
 				}
-			} catch (NoResultException e) {
-				t = null;
 			}
-
-			return t;
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+		} catch (NoResultException e) {
+			t = null;
 		}
+
+		return t;
 	}
 
 	public static Object[] queryUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
+		Query q = em.createNativeQuery(query);
+		q.setMaxResults(1);
+
+		int paramSize = Objects.requireNonNull(params).length;
+		for (int i = 0; i < paramSize; i++) {
+			q.setParameter(i + 1, params[i]);
+		}
+
 		try {
-			Query q = em.createNativeQuery(query);
-			q.setMaxResults(1);
-
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
+			Object obj = q.getSingleResult();
+			if (obj.getClass().isArray()) {
+				return (Object[]) obj;
+			} else {
+				return new Object[]{obj};
 			}
-
-			try {
-				Object obj = q.getSingleResult();
-				if (obj.getClass().isArray()) {
-					return (Object[]) obj;
-				} else {
-					return new Object[]{obj};
-				}
-			} catch (NoResultException e) {
-				return null;
-			}
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+		} catch (NoResultException e) {
+			return null;
 		}
 	}
 
 	public static <T extends DAO<T>> List<T> findAll(@NotNull Class<T> klass) {
 		EntityManager em = Manager.getEntityManager();
 
-		try {
-			TypedQuery<T> q = em.createQuery("SELECT o FROM " + klass.getSimpleName() + " o", klass);
+		TypedQuery<T> q = em.createQuery("SELECT o FROM " + klass.getSimpleName() + " o", klass);
 
-			if (klass.isInstance(Blacklistable.class)) {
-				return q.getResultStream()
-						.filter(o -> !((Blacklistable) o).isBlacklisted())
-						.toList();
-			} else {
-				return q.getResultList();
-			}
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+		if (klass.isInstance(Blacklistable.class)) {
+			return q.getResultStream()
+					.filter(o -> !((Blacklistable) o).isBlacklisted())
+					.toList();
+		} else {
+			return q.getResultList();
 		}
 	}
 
 	public static <T extends DAO<T>> List<T> queryAll(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
-		try {
-			TypedQuery<T> q = em.createQuery(query, klass);
+		TypedQuery<T> q = em.createQuery(query, klass);
 
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
+		int paramSize = Objects.requireNonNull(params).length;
+		for (int i = 0; i < paramSize; i++) {
+			q.setParameter(i + 1, params[i]);
+		}
 
-			if (klass.isInstance(Blacklistable.class)) {
-				return q.getResultStream()
-						.filter(o -> !((Blacklistable) o).isBlacklisted())
-						.toList();
-			} else {
-				return q.getResultList();
-			}
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+		if (klass.isInstance(Blacklistable.class)) {
+			return q.getResultStream()
+					.filter(o -> !((Blacklistable) o).isBlacklisted())
+					.toList();
+		} else {
+			return q.getResultList();
 		}
 	}
 
 	public static <T> List<T> queryAllNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
-		try {
-			Query q = em.createNativeQuery(query);
+		Query q = em.createNativeQuery(query);
 
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
+		int paramSize = Objects.requireNonNull(params).length;
+		for (int i = 0; i < paramSize; i++) {
+			q.setParameter(i + 1, params[i]);
+		}
 
-			if (klass.isInstance(Blacklistable.class)) {
-				return ((Stream<?>) q.getResultStream())
-						.map(klass::cast)
-						.filter(o -> !((Blacklistable) o).isBlacklisted())
-						.toList();
-			} else if (Number.class.isAssignableFrom(klass)) {
-				return ((Stream<?>) q.getResultStream())
-						.map(o -> klass.cast(Utils.fromNumber(klass, (Number) o)))
-						.toList();
-			} else {
-				return ((Stream<?>) q.getResultStream())
-						.map(klass::cast)
-						.toList();
-			}
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+		if (klass.isInstance(Blacklistable.class)) {
+			return ((Stream<?>) q.getResultStream())
+					.map(klass::cast)
+					.filter(o -> !((Blacklistable) o).isBlacklisted())
+					.toList();
+		} else if (Number.class.isAssignableFrom(klass)) {
+			return ((Stream<?>) q.getResultStream())
+					.map(o -> klass.cast(Utils.fromNumber(klass, (Number) o)))
+					.toList();
+		} else {
+			return ((Stream<?>) q.getResultStream())
+					.map(klass::cast)
+					.toList();
 		}
 	}
 
 	public static List<Object[]> queryAllUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
-		try {
-			Query q = em.createNativeQuery(query);
+		Query q = em.createNativeQuery(query);
 
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
-
-			return ((Stream<?>) q.getResultStream())
-					.map(o -> {
-						if (o.getClass().isArray()) {
-							return (Object[]) o;
-						} else {
-							return new Object[]{o};
-						}
-					}).toList();
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+		int paramSize = Objects.requireNonNull(params).length;
+		for (int i = 0; i < paramSize; i++) {
+			q.setParameter(i + 1, params[i]);
 		}
+
+		return ((Stream<?>) q.getResultStream())
+				.map(o -> {
+					if (o.getClass().isArray()) {
+						return (Object[]) o;
+					} else {
+						return new Object[]{o};
+					}
+				}).toList();
 	}
 
 	public static <T extends DAO<?>, ID> void apply(@NotNull Class<T> klass, @NotNull ID id, @NotNull Consumer<T> consumer) {
 		EntityManager em = Manager.getEntityManager();
 
-		try {
-			T obj = em.find(klass, id);
-			if (obj == null) return;
-			else if (obj instanceof Blacklistable lock) {
-				if (lock.isBlacklisted()) return;
-			}
-
-			transaction(em, () -> {
-				consumer.accept(obj);
-				em.flush();
-			});
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+		T obj = em.find(klass, id);
+		if (obj == null) return;
+		else if (obj instanceof Blacklistable lock) {
+			if (lock.isBlacklisted()) return;
 		}
+
+		transaction(em, () -> {
+			consumer.accept(obj);
+			em.flush();
+		});
 	}
 
 	public static void apply(@NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
-		try {
-			Query q = em.createQuery(query);
+		Query q = em.createQuery(query);
 
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
-
-			transaction(em, q::executeUpdate);
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+		int paramSize = Objects.requireNonNull(params).length;
+		for (int i = 0; i < paramSize; i++) {
+			q.setParameter(i + 1, params[i]);
 		}
+
+		transaction(em, q::executeUpdate);
 	}
 
 	public static void applyNative(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
-		try {
-			Query q = em.createNativeQuery(query);
+		Query q = em.createNativeQuery(query);
 
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
-
-			transaction(em, q::executeUpdate);
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+		int paramSize = Objects.requireNonNull(params).length;
+		for (int i = 0; i < paramSize; i++) {
+			q.setParameter(i + 1, params[i]);
 		}
+
+		transaction(em, q::executeUpdate);
 	}
 
 	public static <T extends DAO<T>> List<T> queryBuilder(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, Function<TypedQuery<T>, List<T>> processor, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
-		try {
-			TypedQuery<T> q = em.createQuery(query, klass);
+		TypedQuery<T> q = em.createQuery(query, klass);
 
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
+		int paramSize = Objects.requireNonNull(params).length;
+		for (int i = 0; i < paramSize; i++) {
+			q.setParameter(i + 1, params[i]);
+		}
 
-			if (klass.isInstance(Blacklistable.class)) {
-				return processor.apply(q).stream()
-						.filter(o -> !((Blacklistable) o).isBlacklisted())
-						.toList();
-			} else {
-				return processor.apply(q);
-			}
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+		if (klass.isInstance(Blacklistable.class)) {
+			return processor.apply(q).stream()
+					.filter(o -> !((Blacklistable) o).isBlacklisted())
+					.toList();
+		} else {
+			return processor.apply(q);
 		}
 	}
 
 	public static <T> List<T> nativeQueryBuilder(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, Function<Query, List<T>> processor, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
-		try {
-			Query q = em.createNativeQuery(query);
+		Query q = em.createNativeQuery(query);
 
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
+		int paramSize = Objects.requireNonNull(params).length;
+		for (int i = 0; i < paramSize; i++) {
+			q.setParameter(i + 1, params[i]);
+		}
 
-			if (klass.isInstance(Blacklistable.class)) {
-				return processor.apply(q).stream()
-						.map(klass::cast)
-						.filter(o -> !((Blacklistable) o).isBlacklisted())
-						.toList();
-			} else if (Number.class.isAssignableFrom(klass)) {
-				return processor.apply(q).stream()
-						.map(o -> klass.cast(Utils.fromNumber(klass, (Number) o)))
-						.toList();
-			} else {
-				return processor.apply(q).stream()
-						.map(klass::cast)
-						.toList();
-			}
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+		if (klass.isInstance(Blacklistable.class)) {
+			return processor.apply(q).stream()
+					.map(klass::cast)
+					.filter(o -> !((Blacklistable) o).isBlacklisted())
+					.toList();
+		} else if (Number.class.isAssignableFrom(klass)) {
+			return processor.apply(q).stream()
+					.map(o -> klass.cast(Utils.fromNumber(klass, (Number) o)))
+					.toList();
+		} else {
+			return processor.apply(q).stream()
+					.map(klass::cast)
+					.toList();
 		}
 	}
 
 	public static List<Object[]> unmappedQueryBuilder(@NotNull @Language("PostgreSQL") String query, Function<Query, List<Object>> processor, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
 
-		try {
-			Query q = em.createNativeQuery(query);
+		Query q = em.createNativeQuery(query);
 
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
-
-			return processor.apply(q).stream()
-					.map(o -> {
-						if (o.getClass().isArray()) {
-							return (Object[]) o;
-						} else {
-							return new Object[]{o};
-						}
-					}).toList();
-		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+		int paramSize = Objects.requireNonNull(params).length;
+		for (int i = 0; i < paramSize; i++) {
+			q.setParameter(i + 1, params[i]);
 		}
+
+		return processor.apply(q).stream()
+				.map(o -> {
+					if (o.getClass().isArray()) {
+						return (Object[]) o;
+					} else {
+						return new Object[]{o};
+					}
+				}).toList();
 	}
 
 	public final void save() {
 		EntityManager em = Manager.getEntityManager();
 
+		beforeSave();
 		try {
-			beforeSave();
-			try {
-				if (this instanceof Blacklistable lock) {
-					if (lock.isBlacklisted()) return;
-				}
+			if (this instanceof Blacklistable lock) {
+				if (lock.isBlacklisted()) return;
+			}
 
-				transaction(em, () -> {
-					if (!em.contains(this)) em.merge(this);
-					else em.flush();
-				});
-			} finally {
-				afterSave();
-			}
+			transaction(em, () -> {
+				if (!em.contains(this)) em.merge(this);
+				else em.flush();
+			});
 		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+			afterSave();
 		}
 	}
 
@@ -449,48 +361,33 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		try {
 			beforeRefresh();
-			if (Manager.isAttached()) {
-				em.refresh(this);
-				return (T) this;
-			} else {
-				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-				return (T) Utils.getOr(em.find(getClass(), key), this);
-			}
+			em.refresh(this);
+			return (T) this;
 		} finally {
 			afterRefresh();
-
-			if (!Manager.isAttached()) {
-				em.close();
-			}
 		}
 	}
 
 	public final void delete() {
 		EntityManager em = Manager.getEntityManager();
 
+		beforeDelete();
 		try {
-			beforeDelete();
-			try {
-				DAO<?> ent;
-				if (em.contains(this)) {
-					ent = this;
-				} else {
-					Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-					ent = em.find(getClass(), key);
+			DAO<?> ent;
+			if (em.contains(this)) {
+				ent = this;
+			} else {
+				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+				ent = em.find(getClass(), key);
 
-					if (ent == null) {
-						throw new EntityNotFoundException("Could not delete entity of class " + getClass().getSimpleName() + " [" + key + "]");
-					}
+				if (ent == null) {
+					throw new EntityNotFoundException("Could not delete entity of class " + getClass().getSimpleName() + " [" + key + "]");
 				}
+			}
 
-				transaction(em, () -> em.remove(ent));
-			} finally {
-				afterDelete();
-			}
+			transaction(em, () -> em.remove(ent));
 		} finally {
-			if (!Manager.isAttached()) {
-				em.close();
-			}
+			afterDelete();
 		}
 	}
 
