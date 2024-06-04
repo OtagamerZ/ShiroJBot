@@ -53,7 +53,11 @@ public class AutoRuleCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/autorule"));
 
-		List<Page> pages = Utils.generatePages(eb, settings.getAutoRules(), 20, 10,
+		List<AutoRule> rules = settings.getAutoRules().stream()
+				.sorted(Comparator.comparingInt(AutoRule::getThreshold))
+				.toList();
+
+		List<Page> pages = Utils.generatePages(eb, rules, 20, 10,
 				e -> "`ID: " + e.getId().getId() + "` " + locale.get("str/autorule_desc",
 						locale.get("str/autorule_" + e.getAction()),
 						e.getThreshold()

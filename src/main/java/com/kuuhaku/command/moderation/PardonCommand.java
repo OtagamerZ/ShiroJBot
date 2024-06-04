@@ -81,8 +81,12 @@ public class PardonCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(locale.get("str/warns"));
 
+			List<Warn> warns = profile.getWarns().stream()
+					.sorted(Comparator.comparingInt(w -> w.getId().getId()))
+					.toList();
+
 			XStringBuilder sb = new XStringBuilder();
-			List<Page> pages = Utils.generatePages(eb, profile.getWarns(), 20, 10,
+			List<Page> pages = Utils.generatePages(eb, warns, 20, 10,
 					w -> {
 						sb.clear();
 						sb.appendNewLine("`ID: " + w.getId().getId() + "` " + w.getReason());
