@@ -43,7 +43,7 @@ public class Title extends DAO<Title> {
 
 	@OneToMany(cascade = ALL, orphanRemoval = true)
 	@JoinColumn(name = "id", referencedColumnName = "id")
-	@Fetch(FetchMode.JOIN)
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedTitle> infos = new HashSet<>();
 
 	@Enumerated(EnumType.STRING)
