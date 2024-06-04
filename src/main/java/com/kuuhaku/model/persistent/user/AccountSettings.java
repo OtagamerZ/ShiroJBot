@@ -64,7 +64,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Column(name = "effect", nullable = false)
 	private ProfileEffect effect = ProfileEffect.NONE;
 
-	@Column(name = "bio")
+	@Column(name = "bio", length = 300)
 	private String bio;
 
 	@JdbcTypeCode(SqlTypes.JSON)
