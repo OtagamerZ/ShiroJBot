@@ -26,5 +26,3 @@ WHERE (a.visible OR c.rarity IN ('EVOGEAR', 'FIELD'))
 ORDER BY c.id;
 
 CREATE INDEX IF NOT EXISTS wrd_trgm ON v_card_names USING gin (id gin_trgm_ops);
-
-REFRESH MATERIALIZED VIEW v_card_names;

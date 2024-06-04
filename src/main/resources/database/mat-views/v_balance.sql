@@ -31,5 +31,3 @@ SELECT last_value(r.balance) OVER w                AS lowest
 FROM ranking r
 WINDOW w AS ()
 LIMIT 1;
-
-REFRESH MATERIALIZED VIEW v_balance;
