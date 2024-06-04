@@ -228,6 +228,10 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
+			if (em.getTransaction().isActive()) {
+				em.joinTransaction();
+			}
+
 			em.getTransaction().begin();
 
 			T obj = em.find(klass, id);
@@ -251,6 +255,10 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
+			if (em.getTransaction().isActive()) {
+				em.joinTransaction();
+			}
+
 			em.getTransaction().begin();
 			Query q = em.createQuery(query);
 
@@ -272,6 +280,10 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		EntityManager em = Manager.getEntityManager();
 
 		try {
+			if (em.getTransaction().isActive()) {
+				em.joinTransaction();
+			}
+
 			em.getTransaction().begin();
 			Query q = em.createNativeQuery(query);
 
@@ -360,6 +372,10 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				if (lock.isBlacklisted()) return;
 			}
 
+			if (em.getTransaction().isActive()) {
+				em.joinTransaction();
+			}
+
 			em.getTransaction().begin();
 			em.flush();
 			em.getTransaction().commit();
@@ -378,8 +394,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		try {
 			beforeRefresh();
-			Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-			return (T) Utils.getOr(em.find(getClass(), key), this);
+			em.refresh(this);
+			return (T) this;
 		} finally {
 			afterRefresh();
 		}
@@ -398,6 +414,10 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				if (ent == null) {
 					throw new EntityNotFoundException("Could not delete entity of class " + getClass().getSimpleName() + " [" + key + "]");
 				}
+			}
+
+			if (em.getTransaction().isActive()) {
+				em.joinTransaction();
 			}
 
 			em.getTransaction().begin();
