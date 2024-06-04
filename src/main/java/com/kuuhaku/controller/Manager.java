@@ -53,25 +53,27 @@ public abstract class Manager {
 	private static final ThreadLocal<EntityManager> em = new ThreadLocal<>();
 
 	static {
-		String db = DAO.queryNative(String.class, "SELECT current_database()");
-		String schema = DAO.queryNative(String.class, "SELECT current_schema()");
-		Constants.LOGGER.info("Connected to database {}, schema {} successfully", db, schema);
+		attach(() -> {
+			String db = DAO.queryNative(String.class, "SELECT current_database()");
+			String schema = DAO.queryNative(String.class, "SELECT current_schema()");
+			Constants.LOGGER.info("Connected to database {}, schema {} successfully", db, schema);
 
-		File initDir = IO.getResourceAsFile("database");
-		if (initDir != null && initDir.isDirectory()) {
-			Set<String> scripts = new HashSet<>();
-			try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
-				ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))
-						.sorted(Comparator.comparing(Path::toString).thenComparing(Path::getNameCount))
-						.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
-						.map(IO::readString)
-						.forEach(DAO::applyNative);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
+			File initDir = IO.getResourceAsFile("database");
+			if (initDir != null && initDir.isDirectory()) {
+				Set<String> scripts = new HashSet<>();
+				try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
+					ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))
+							.sorted(Comparator.comparing(Path::toString).thenComparing(Path::getNameCount))
+							.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
+							.map(IO::readString)
+							.forEach(DAO::applyNative);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+
+				Constants.LOGGER.info("Applied {} scripts: {}", scripts.size(), scripts);
 			}
-
-			Constants.LOGGER.info("Applied {} scripts: {}", scripts.size(), scripts);
-		}
+		}).run();
 	}
 
 	public static EntityManager getEntityManager() {
