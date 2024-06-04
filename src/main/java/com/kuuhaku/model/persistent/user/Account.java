@@ -88,11 +88,6 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	@Fetch(FetchMode.JOIN)
 	private AccountSettings settings;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = ALL, orphanRemoval = true)
-	@PrimaryKeyJoinColumn(name = "uid")
-	@Fetch(FetchMode.JOIN)
-	private Kawaipon kawaipon;
-
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderColumn(name = "index")
 	@Fetch(FetchMode.SUBSELECT)
@@ -139,7 +134,6 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	@Override
 	public Account make(JSONObject args) {
 		this.uid = args.getString("uid");
-		this.kawaipon = new Kawaipon(this);
 		return this;
 	}
 
@@ -318,7 +312,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	}
 
 	public Kawaipon getKawaipon() {
-		return Utils.getOr(kawaipon, DAO.find(Kawaipon.class, uid));
+		return DAO.find(Kawaipon.class, uid);
 	}
 
 	public List<Deck> getDecks() {

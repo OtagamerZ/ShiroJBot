@@ -42,7 +42,10 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 	@Column(name = "uid", nullable = false)
 	private String uid;
 
-	@OneToOne(mappedBy = "kawaipon")
+	@OneToOne(optional = false)
+	@PrimaryKeyJoinColumn(name = "uid")
+	@Fetch(FetchMode.JOIN)
+	@MapsId("uid")
 	private Account account;
 
 	@ManyToOne
