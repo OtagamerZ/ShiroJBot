@@ -87,10 +87,6 @@ public abstract class Manager {
 		attach(task).run();
 	}
 
-	public static <T> T withContext(Supplier<T> task) {
-		return attach(task).get();
-	}
-
 	public static Runnable attach(Runnable task) {
 		return () -> {
 			EntityManager man = em.get();
@@ -132,12 +128,10 @@ public abstract class Manager {
 	}
 
 	public static long ping() {
-		return withContext(() -> {
-			long curr = System.currentTimeMillis();
+		long curr = System.currentTimeMillis();
 
-			DAO.queryUnmapped("SELECT 1");
+		DAO.queryUnmapped("SELECT 1");
 
-			return System.currentTimeMillis() - curr;
-		});
+		return System.currentTimeMillis() - curr;
 	}
 }
