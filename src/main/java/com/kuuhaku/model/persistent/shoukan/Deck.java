@@ -425,7 +425,7 @@
 						 %s
 						 %s
 						 %s
-						 						 
+						 
 						 %s
 						 %s-(T4:-%s)
 						 %s
@@ -477,9 +477,9 @@
 				 g.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + ori.major().getMajor(locale)
-						   + "\n\n- " + locale.get("major/pureblood")
-						   + "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major().name())
-						   + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
+						 + "\n\n- " + locale.get("major/pureblood")
+						 + "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major().name())
+						 + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			 } else if (ori.major() == Race.MIXED) {
 				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
 				 g.setColor(Graph.mix(Arrays.stream(ori.minor()).map(Race::getColor).toArray(Color[]::new)));
@@ -490,11 +490,11 @@
 				 g.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + locale.get("major/mixed")
-						   + "\n\n" + Arrays.stream(ori.minor())
-								   .filter(r -> r != Race.DEMON)
-								   .map(o -> "- " + o.getMinor(locale))
-								   .collect(Collectors.joining("\n\n"))
-						   + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
+						 + "\n\n" + Arrays.stream(ori.minor())
+						 .filter(r -> r != Race.DEMON)
+						 .map(o -> "- " + o.getMinor(locale))
+						 .collect(Collectors.joining("\n\n"))
+						 + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			 } else {
 				 g.drawImage(ori.synergy().getBadge(), 0, 0, 150, 150, null);
 				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
@@ -513,12 +513,12 @@
 				 g.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + ori.major().getMajor(locale)
-						   + "\n\n" + Arrays.stream(ori.minor())
-								   .filter(r -> r != Race.DEMON)
-								   .map(o -> "- " + o.getMinor(locale))
-								   .collect(Collectors.joining("\n\n"))
-						   + "\n\n- " + syn.getSynergy(locale)
-						   + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
+						 + "\n\n" + Arrays.stream(ori.minor())
+						 .filter(r -> r != Race.DEMON)
+						 .map(o -> "- " + o.getMinor(locale))
+						 .collect(Collectors.joining("\n\n"))
+						 + "\n\n- " + syn.getSynergy(locale)
+						 + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
 			 }
 
 			 Archetype arch = getArchetype();
@@ -659,93 +659,98 @@
 	 }
 
 	 public BaseValues getBaseValues(Hand h) {
-		 return new BaseValues(() -> {
-			 Origin origin = h == null ? getOrigins() : h.getOrigins();
-			 double reduction = Math.pow(0.999, -24 * getEvoWeight());
-			 if (getOrigins().major() == Race.BEAST) {
-				 reduction *= 0.66;
-			 }
+		 try {
+			 return new BaseValues(() -> {
+				 Origin origin = h == null ? getOrigins() : h.getOrigins();
+				 double reduction = Math.pow(0.999, -24 * getEvoWeight());
+				 if (getOrigins().major() == Race.BEAST) {
+					 reduction *= 0.66;
+				 }
 
-			 int base = 6000;
-			 if (origin.major() == Race.HUMAN) {
-				 if (origin.isPure()) {
+				 int base = 6000;
+				 if (origin.major() == Race.HUMAN) {
+					 if (origin.isPure()) {
+						 base += 1000;
+					 }
+
 					 base += 1000;
 				 }
 
-				 base += 1000;
-			 }
+				 if (origin.synergy() == Race.DRAGON) {
+					 base += 1000;
+				 }
 
-			 if (origin.synergy() == Race.DRAGON) {
-				 base += 1000;
-			 }
+				 int bHP = (int) Calc.clamp(base * 1.5 - base * 0.2799 * reduction, 10, base);
 
-			 int bHP = (int) Calc.clamp(base * 1.5 - base * 0.2799 * reduction, 10, base);
+				 int mp = 5;
+				 SupplyChain<Integer> mpGain = new SupplyChain<>(mp)
+						 .add(m -> {
+							 if (origin.major() == Race.DEMON) {
+								 if (origin.isPure()) {
+									 m += 1;
+								 }
 
-			 int mp = 5;
-			 SupplyChain<Integer> mpGain = new SupplyChain<>(mp)
-					 .add(m -> {
-						 if (origin.major() == Race.DEMON) {
-							 if (origin.isPure()) {
-								 m += 1;
+								 m /= 2;
 							 }
 
-							 m /= 2;
-						 }
-
-						 if (origin.hasMinor(Race.DIVINITY)) {
-							 m += getSenshi().parallelStream()
-										  .map(Senshi::getMPCost)
-										  .min(Integer::compareTo)
-										  .orElse(0) / 2;
-						 }
-
-						 if (h != null && h.getGame() != null) {
-							 if (origin.synergy() == Race.DEMIGOD) {
-								 m += (int) h.getGame().getCards(h.getSide()).parallelStream()
-										 .filter(Senshi::isFusion)
-										 .count();
+							 if (origin.hasMinor(Race.DIVINITY)) {
+								 m += getSenshi().parallelStream()
+										 .map(Senshi::getMPCost)
+										 .min(Integer::compareTo)
+										 .orElse(0) / 2;
 							 }
 
-							 if (h.getGame().getArena().getField().getType() == FieldType.DAY) {
-								 m += 1;
-							 }
+							 if (h != null && h.getGame() != null) {
+								 if (origin.synergy() == Race.DEMIGOD) {
+									 m += (int) h.getGame().getCards(h.getSide()).parallelStream()
+											 .filter(Senshi::isFusion)
+											 .count();
+								 }
 
-							 if (origin.synergy() == Race.FEY) {
-								 if (Math.ceil(h.getGame().getTurn() / 2d) % 2 == 0) {
-									 m = (int) Math.ceil(m * 1.5);
-								 } else {
-									 m = (int) Math.floor(m * 0.5);
+								 if (h.getGame().getArena().getField().getType() == FieldType.DAY) {
+									 m += 1;
+								 }
+
+								 if (origin.synergy() == Race.FEY) {
+									 if (Math.ceil(h.getGame().getTurn() / 2d) % 2 == 0) {
+										 m = (int) Math.ceil(m * 1.5);
+									 } else {
+										 m = (int) Math.floor(m * 0.5);
+									 }
+								 }
+
+								 if (h.getGame().getArcade() == Arcade.OVERCHARGE) {
+									 m *= 2;
 								 }
 							 }
 
-							 if (h.getGame().getArcade() == Arcade.OVERCHARGE) {
-								 m *= 2;
+							 return m;
+						 });
+
+				 SupplyChain<Integer> handCap = new SupplyChain<>(5)
+						 .add(c -> {
+							 if (origin.synergy() == Race.DRAGON) {
+								 c += 1;
 							 }
-						 }
 
-						 return m;
-					 });
+							 return c;
+						 });
 
-			 SupplyChain<Integer> handCap = new SupplyChain<>(5)
-					 .add(c -> {
-						 if (origin.synergy() == Race.DRAGON) {
-							 c += 1;
-						 }
+				 int ls = 0;
+				 if (origin.major() == Race.DEMON) {
+					 ls += 10;
+				 }
 
-						 return c;
-					 });
+				 if (origin.synergy() == Race.VAMPIRE) {
+					 ls += 7;
+				 }
 
-			 int ls = 0;
-			 if (origin.major() == Race.DEMON) {
-				 ls += 10;
-			 }
-
-			 if (origin.synergy() == Race.VAMPIRE) {
-				 ls += 7;
-			 }
-
-			 return List.of(bHP, mpGain, handCap, ls);
-		 });
+				 return List.of(bHP, mpGain, handCap, ls);
+			 });
+		 } catch (Exception e) {
+			 Constants.LOGGER.error(e, e);
+			 return new BaseValues();
+		 }
 	 }
 
 	 public int getAverageMPCost() {

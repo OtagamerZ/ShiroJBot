@@ -23,12 +23,12 @@ import com.kuuhaku.controller.Manager;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
-import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.JDA;
@@ -36,11 +36,7 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.intellij.lang.annotations.Language;
 
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.function.Supplier;
+import java.util.concurrent.*;
 
 @Command(
 		name = "eval",
@@ -51,7 +47,7 @@ public class CompileCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/compiling"))).queue(m -> {
-			Supplier<Pair<String, Long>> execute = () -> {
+			Callable<Pair<String, Long>> execute = () -> {
 				StopWatch time = new StopWatch();
 
 				try {
@@ -85,21 +81,25 @@ public class CompileCommand implements Executable {
 				}
 			};
 
-			Pair<String, Long> out = execute.get();
-			if (out.getSecond() > -1) {
-				m.editMessage("""
-						```
-						(%s ms) Out -> %s
-						```
-						""".formatted(out.getSecond(), out.getFirst().replace("`", "'"))
-				).queue();
-			} else {
-				m.editMessage("""
-						```
-						Err -> %s
-						```
-						""".formatted(out.getFirst().replace("`", "'"))
-				).queue();
+			try {
+				Pair<String, Long> out = execute.call();
+				if (out.getSecond() > -1) {
+					m.editMessage("""
+							```
+							(%s ms) Out -> %s
+							```
+							""".formatted(out.getSecond(), out.getFirst().replace("`", "'"))
+					).queue();
+				} else {
+					m.editMessage("""
+							```
+							Err -> %s
+							```
+							""".formatted(out.getFirst().replace("`", "'"))
+					).queue();
+				}
+			} catch (Exception e) {
+				logger().error(e, e);
 			}
 		});
 	}

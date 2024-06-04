@@ -18,6 +18,7 @@
 
 package com.kuuhaku;
 
+import com.kuuhaku.interfaces.SafeCallable;
 import com.kuuhaku.model.common.LazyReference;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
@@ -47,7 +48,7 @@ public abstract class Constants {
     public static final Logger LOGGER = LogManager.getLogger("shiro");
     public static final LazyReference<GroovyShell> GROOVY = new LazyReference<>(GroovyShell::new, 10, TimeUnit.MINUTES);
     public static final String BOT_NAME = "Shiro J. Bot";
-    public static final Supplier<String> BOT_VERSION = () -> "v4." + GlobalProperty.get("build_number", "0");
+    public static final SafeCallable<String> BOT_VERSION = () -> "v4." + GlobalProperty.get("build_number", "0");
 
     public static final String EMOTE_REPO_1 = "666619034103447642";
     public static final String EMOTE_REPO_2 = "726171298044313694";
