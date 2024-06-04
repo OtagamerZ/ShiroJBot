@@ -88,20 +88,20 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	@Fetch(FetchMode.JOIN)
 	private AccountSettings settings;
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@OrderColumn(name = "index")
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<Deck> decks = new ArrayList<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<Transaction> transactions = new ArrayList<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private final Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
 	private final Set<AccountTitle> titles = new HashSet<>();
 

@@ -41,7 +41,7 @@ public class Title extends DAO<Title> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = ALL, orphanRemoval = true)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedTitle> infos = new HashSet<>();
