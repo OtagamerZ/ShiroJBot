@@ -22,7 +22,6 @@ import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.controller.Manager;
 import com.kuuhaku.exceptions.InvalidSignatureException;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -244,10 +243,10 @@ public class GuildListener extends ListenerAdapter {
 
 		EventData ed = new EventData(event.getChannel(), config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {
-			asyncExec.execute(Manager.attach(() -> {
+			asyncExec.execute(() -> {
 				Thread.currentThread().setName("Event-" + Thread.currentThread().threadId());
 				processCommand(data, ed, content);
-			}));
+			});
 		}
 
 		if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
