@@ -57,7 +57,7 @@ public class Archetype extends DAO<Archetype> {
 
 	@OneToMany(cascade = ALL, orphanRemoval = true)
 	@JoinColumn(name = "id", referencedColumnName = "id")
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.JOIN)
 	private Set<LocalizedArch> infos = new HashSet<>();
 
 	public String getId() {

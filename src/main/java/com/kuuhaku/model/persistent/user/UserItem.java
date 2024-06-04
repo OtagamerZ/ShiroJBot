@@ -74,7 +74,7 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 
 	@OneToMany(cascade = ALL, orphanRemoval = true)
 	@JoinColumn(name = "id", referencedColumnName = "id")
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.JOIN)
 	private Set<LocalizedItem> infos = new HashSet<>();
 
 	public String getId() {

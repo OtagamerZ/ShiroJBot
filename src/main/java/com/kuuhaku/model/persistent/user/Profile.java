@@ -70,7 +70,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 	private long lastXp;
 
 	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.JOIN)
 	private final Set<Warn> warns = new HashSet<>();
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
