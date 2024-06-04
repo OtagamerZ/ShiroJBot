@@ -57,11 +57,16 @@ public class ThreadBound<T> {
 	public T get() {
 		T out = threadLocal.get();
 		if (out == null) {
-			out = supplier.get();
-			if (out != null) {
-				threadBound.put(Thread.currentThread(), out);
-				threadLocal.set(out);
-			}
+			threadBound.compute(Thread.currentThread(), (k, v) -> {
+				if (v != null) {
+					closer.accept(v);
+				}
+
+				T val = supplier.get();
+				threadLocal.set(val);
+
+				return val;
+			});
 		}
 
 		return out;
