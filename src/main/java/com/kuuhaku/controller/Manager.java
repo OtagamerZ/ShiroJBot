@@ -53,7 +53,7 @@ public abstract class Manager {
 	private static final ThreadLocal<EntityManager> em = new ThreadLocal<>();
 
 	static {
-		attach(() -> {
+		withContext(() -> {
 			String db = DAO.queryNative(String.class, "SELECT current_database()");
 			String schema = DAO.queryNative(String.class, "SELECT current_schema()");
 			Constants.LOGGER.info("Connected to database {}, schema {} successfully", db, schema);
@@ -73,7 +73,7 @@ public abstract class Manager {
 
 				Constants.LOGGER.info("Applied {} scripts: {}", scripts.size(), scripts);
 			}
-		}).run();
+		});
 	}
 
 	public static EntityManager getEntityManager() {
@@ -81,6 +81,10 @@ public abstract class Manager {
 		if (man == null) throw new IllegalStateException("Manager has not been initialized");
 
 		return man;
+	}
+
+	public static void withContext(Runnable task) {
+		attach(task).run();
 	}
 
 	public static Runnable attach(Runnable task) {

@@ -19,6 +19,7 @@
 package com.kuuhaku;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.controller.Manager;
 import com.kuuhaku.manager.CacheManager;
 import com.kuuhaku.manager.CommandManager;
 import com.kuuhaku.manager.ScheduleManager;
@@ -80,13 +81,15 @@ public class Main {
 				)
 		);
 
-		GlobalProperty ver = DAO.find(GlobalProperty.class, "build_number");
-		if (ver == null) {
-			ver = new GlobalProperty("build_number", "0");
-		}
+		Manager.withContext(() -> {
+			GlobalProperty ver = DAO.find(GlobalProperty.class, "build_number");
+			if (ver == null) {
+				ver = new GlobalProperty("build_number", "0");
+			}
 
-		ver.setValue(Integer.parseInt(ver.getValue()) + 1);
-		ver.save();
+			ver.setValue(Integer.parseInt(ver.getValue()) + 1);
+			ver.save();
+		});
 
 		ImageIO.setUseCache(false);
 		Thread.setDefaultUncaughtExceptionHandler(app = new Application());
