@@ -243,7 +243,10 @@ public class GuildListener extends ListenerAdapter {
 
 		EventData ed = new EventData(event.getChannel(), config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {
-			asyncExec.execute(() -> processCommand(data, ed, content));
+			asyncExec.execute(() -> {
+				Thread.currentThread().setName("event");
+				processCommand(data, ed, content);
+			});
 		}
 
 		if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {

@@ -24,12 +24,13 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ThreadBound<T> {
 	private final ScheduledExecutorService checker = Executors.newSingleThreadScheduledExecutor();
-	private final Map<Thread, T> threadBound = new HashMap<>();
+	private final AtomicReference<Map<Thread, T>> threadBound = new AtomicReference<>(new HashMap<>());
 	private final Consumer<T> closer;
 	private final Supplier<T> supplier;
 
@@ -42,20 +43,20 @@ public class ThreadBound<T> {
 		this.closer = closer;
 
 		checker.scheduleAtFixedRate(() -> {
-			for (Thread t : Set.copyOf(threadBound.keySet())) {
+			for (Thread t : Set.copyOf(threadBound.get().keySet())) {
 				if (!t.isAlive()) {
-					this.closer.accept(threadBound.remove(t));
+					this.closer.accept(threadBound.get().remove(t));
 				}
 			}
 		}, 30, 30, TimeUnit.SECONDS);
 	}
 
 	public T get() {
-		T out = threadBound.get(Thread.currentThread());
+		T out = threadBound.get().get(Thread.currentThread());
 		if (out == null) {
 			out = supplier.get();
 			if (out != null) {
-				T previous = threadBound.put(Thread.currentThread(), out);
+				T previous = threadBound.get().put(Thread.currentThread(), out);
 				if (previous != null) {
 					closer.accept(previous);
 				}
