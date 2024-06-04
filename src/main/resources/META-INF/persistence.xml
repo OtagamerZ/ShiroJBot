@@ -83,9 +83,9 @@
             <property name="hibernate.order_updates" value="true"/>
             <property name="hibernate.show_sql" value="false"/>
 
-            <property name="hibernate.hikari.idleTimeout" value="1000"/>
             <property name="hibernate.hikari.minimumIdle" value="5"/>
             <property name="hibernate.hikari.maximumPoolSize" value="30"/>
+            <property name="hibernate.hikari.idleTimeout" value="10000"/>
             <property name="hibernate.hikari.connectionTimeout" value="30000"/>
             <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
             <property name="unreturnedConnectionTimeout" value="30"/>

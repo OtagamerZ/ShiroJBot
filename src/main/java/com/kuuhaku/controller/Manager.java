@@ -19,6 +19,7 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.model.common.ThreadBound;
 import com.kuuhaku.util.IO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -49,7 +50,7 @@ public abstract class Manager {
 			)
 	));
 
-	private static final ThreadLocal<EntityManager> em = new ThreadLocal<>();
+	private static final ThreadBound<EntityManager> em = new ThreadBound<>(emf::createEntityManager, EntityManager::close);
 
 	static {
 		String db = DAO.queryNative(String.class, "SELECT current_database()");
@@ -74,21 +75,7 @@ public abstract class Manager {
 	}
 
 	public static EntityManager getEntityManager() {
-		EntityManager man = em.get();
-		if (man == null) {
-			em.set(man = emf.createEntityManager());
-		}
-
-		return man;
-	}
-
-	public static void release() {
-		EntityManager man = em.get();
-		if (man != null) {
-			man.close();
-		}
-
-		em.remove();
+		return em.get();
 	}
 
 	public static long ping() {

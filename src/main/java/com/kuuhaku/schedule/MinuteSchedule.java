@@ -24,6 +24,7 @@ import com.kuuhaku.interfaces.annotations.Schedule;
 import com.ygimenez.json.JSONArray;
 import kotlin.Pair;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -33,11 +34,10 @@ public class MinuteSchedule implements Runnable, PreInitialize {
 
 	@Override
 	public void run() {
-		Map<String, Pair<Integer, Long>> xps = Map.copyOf(XP_TO_ADD);
-		XP_TO_ADD.clear();
-
 		JSONArray ja = new JSONArray();
-		for (Map.Entry<String, Pair<Integer, Long>> e : xps.entrySet()) {
+		Iterator<Map.Entry<String, Pair<Integer, Long>>> it = XP_TO_ADD.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, Pair<Integer, Long>> e = it.next();
 			String[] keys = e.getKey().split("-");
 			if (keys.length != 2) continue;
 
@@ -46,6 +46,8 @@ public class MinuteSchedule implements Runnable, PreInitialize {
 					"gid", keys[1],
 					"xp", e.getValue().getFirst()
 			));
+
+			it.remove();
 		}
 
 		DAO.applyNative("""
