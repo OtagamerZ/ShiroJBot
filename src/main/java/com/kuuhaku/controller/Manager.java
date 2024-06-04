@@ -78,7 +78,7 @@ public abstract class Manager {
 		return Utils.getOr(em.get(), emf.createEntityManager());
 	}
 
-	public static Runnable singleContext(Runnable task) {
+	public static Runnable attach(Runnable task) {
 		return () -> {
 			try (EntityManager em = getEntityManager()) {
 				Manager.em.set(em);
