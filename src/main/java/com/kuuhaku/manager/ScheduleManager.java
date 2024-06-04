@@ -32,17 +32,17 @@ public class ScheduleManager extends Scheduler {
 	private final Set<Class<?>> scheds = refl.getTypesAnnotatedWith(Schedule.class);
 
 	public ScheduleManager() {
-		Main.READY.add(() -> {
+		Main.READY.add(Manager.attach(() -> {
 			try {
 				for (Class<?> sched : scheds) {
 					if (Runnable.class.isAssignableFrom(sched)) {
 						Schedule info = sched.getDeclaredAnnotation(Schedule.class);
 
 						Runnable task = (Runnable) sched.getConstructor().newInstance();
-						schedule(info.value(), Manager.attach(task));
+						schedule(info.value(), task);
 
 						if (task instanceof PreInitialize) {
-							Manager.withContext(task);
+							task.run();
 						}
 					}
 				}
@@ -51,7 +51,7 @@ public class ScheduleManager extends Scheduler {
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-		});
+		}));
 	}
 
 	public Set<Class<?>> getSchedules() {
