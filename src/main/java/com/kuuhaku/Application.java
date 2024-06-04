@@ -76,7 +76,10 @@ public class Application implements Thread.UncaughtExceptionHandler {
 						new AutoModListener(),
 						new PrivateChannelListener()
 				)
-				.setEventPool(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()), true)
+				.setEventPool(Executors.newFixedThreadPool(
+						Runtime.getRuntime().availableProcessors(),
+						t -> new Thread(Manager.singleContext(t))
+				), true)
 				.build();
 
 		MessageRequest.setDefaultMentions(EnumSet.complementOf(EnumSet.of(EVERYONE, HERE)));
