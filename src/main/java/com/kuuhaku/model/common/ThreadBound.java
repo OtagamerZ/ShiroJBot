@@ -30,6 +30,7 @@ import java.util.function.Supplier;
 public class ThreadBound<T> {
 	private final ScheduledExecutorService checker = Executors.newSingleThreadScheduledExecutor();
 	private final Map<Thread, T> threadBound = new ConcurrentHashMap<>();
+	private final ThreadLocal<T> threadLocal = new ThreadLocal<>();
 	private final Consumer<T> closer;
 	private final Supplier<T> supplier;
 
@@ -54,15 +55,15 @@ public class ThreadBound<T> {
 	}
 
 	public T get() {
-		T out = threadBound.get(Thread.currentThread());
+		T out = threadLocal.get();
 		if (out == null) {
 			out = supplier.get();
 			if (out != null) {
 				threadBound.put(Thread.currentThread(), out);
+				threadLocal.set(out);
 			}
 		}
 
-		System.out.println(out + " - " + Thread.currentThread().threadId());
 		return out;
 	}
 }
