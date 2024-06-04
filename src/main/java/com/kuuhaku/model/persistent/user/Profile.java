@@ -95,7 +95,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 
 	@Override
 	public Profile make(JSONObject args) {
-		this.id = new ProfileId(args.getString("uid"), args.getString("gid"));
+		this.id = new ProfileId(args.getString("id.uid"), args.getString("id.gid"));
 		this.account = DAO.find(Account.class, id.getUid());
 		this.guild = DAO.find(GuildConfig.class, id.getGid());
 		return this;

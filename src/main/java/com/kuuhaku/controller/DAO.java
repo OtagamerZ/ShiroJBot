@@ -40,8 +40,6 @@ import java.util.stream.Stream;
 public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	@SuppressWarnings("unchecked")
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
-		EntityManager em = Manager.getEntityManager();
-
 		try {
 			Map<String, Object> ids = new HashMap<>();
 			for (Field f : klass.getDeclaredFields()) {
@@ -52,7 +50,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 					for (Field ef : f.getType().getDeclaredFields()) {
 						if (ef.isAnnotationPresent(Column.class)) {
 							ef.setAccessible(true);
-							ids.put(ef.getName(), ef.get(id));
+							ids.put(f.getName() + "." + ef.getName(), ef.get(id));
 							break;
 						}
 					}
