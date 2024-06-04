@@ -24,9 +24,6 @@ import com.kuuhaku.interfaces.DAOListener;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
