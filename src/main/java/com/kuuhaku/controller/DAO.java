@@ -235,7 +235,10 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				if (lock.isBlacklisted()) return;
 			}
 
-			tx.begin();
+			if (!tx.isActive()) {
+				tx.begin();
+			}
+
 			consumer.accept(obj);
 			em.flush();
 			tx.commit();
@@ -258,7 +261,10 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				q.setParameter(i + 1, params[i]);
 			}
 
-			tx.begin();
+			if (!tx.isActive()) {
+				tx.begin();
+			}
+
 			q.executeUpdate();
 			tx.commit();
 		} finally {
@@ -280,7 +286,10 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				q.setParameter(i + 1, params[i]);
 			}
 
-			tx.begin();
+			if (!tx.isActive()) {
+				tx.begin();
+			}
+
 			q.executeUpdate();
 			tx.commit();
 		} finally {
@@ -362,7 +371,10 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				if (lock.isBlacklisted()) return;
 			}
 
-			tx.begin();
+			if (!tx.isActive()) {
+				tx.begin();
+			}
+
 			if (!em.contains(this)) em.merge(this);
 			else em.flush();
 			tx.commit();
@@ -404,7 +416,10 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				}
 			}
 
-			tx.begin();
+			if (!tx.isActive()) {
+				tx.begin();
+			}
+
 			em.remove(ent);
 			tx.commit();
 		} finally {
