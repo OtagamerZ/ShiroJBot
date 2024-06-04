@@ -42,7 +42,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Command(
 		name = "custom",
@@ -116,7 +115,7 @@ public class CustomAnswerCommand implements Executable {
 			return;
 		}
 
-		Set<CustomAnswer> cas = settings.getCustomAnswers();
+		List<CustomAnswer> cas = settings.getCustomAnswers();
 		if (cas.isEmpty()) {
 			event.channel().sendMessage(locale.get("error/no_custom_answers")).queue();
 			return;
