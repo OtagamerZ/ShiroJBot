@@ -147,21 +147,23 @@ public class Application implements Thread.UncaughtExceptionHandler {
 	}
 
 	public Activity getRandomAction() {
-		final List<String> activities = List.of(
-				"Derrotando noobs no Shoukan!",
-				DAO.queryNative(String.class, """
-						SELECT 'Assistindo '||c.name||' pela '||(SELECT count(1) FROM card x WHERE x.anime_id = c.anime_id)||'ª vez!'
-						FROM card c
-						INNER JOIN anime a ON a.id = c.anime_id
-						WHERE a.visible
-						AND c.rarity = 'ULTIMATE'
-						ORDER BY RANDOM()
-						"""),
-				"Coletando cartas Kawaipon!",
-				"Use `" + Constants.DEFAULT_PREFIX + "help` para ver os meus comandos!"
-		);
+		return Manager.withContext(() -> {
+			final List<String> activities = List.of(
+					"Derrotando noobs no Shoukan!",
+					DAO.queryNative(String.class, """
+							SELECT 'Assistindo '||c.name||' pela '||(SELECT count(1) FROM card x WHERE x.anime_id = c.anime_id)||'ª vez!'
+							FROM card c
+							INNER JOIN anime a ON a.id = c.anime_id
+							WHERE a.visible
+							AND c.rarity = 'ULTIMATE'
+							ORDER BY RANDOM()
+							"""),
+					"Coletando cartas Kawaipon!",
+					"Use `" + Constants.DEFAULT_PREFIX + "help` para ver os meus comandos!"
+			);
 
-		return Activity.customStatus(Utils.getRandomEntry(activities));
+			return Activity.customStatus(Utils.getRandomEntry(activities));
+		});
 	}
 
 	@Override
