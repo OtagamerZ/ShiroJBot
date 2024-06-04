@@ -28,7 +28,6 @@ import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,26 +60,13 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				throw new NoSuchFieldException("Class' ID not found");
 			}
 
-//			XStringBuilder sb = new XStringBuilder("SELECT e FROM " + klass.getSimpleName() + " e");
-//
-//			int i = 1;
-//			var args = List.copyOf(ids.entrySet());
-//			for (Map.Entry<String, Object> e : args) {
-//				if (i == 1) sb.appendNewLine("WHERE e." + e.getKey() + " = ?" + i);
-//				else sb.appendNewLine("AND e." + e.getKey() + " = ?" + i);
-//
-//				i++;
-//			}
-
-//			T t = query(klass, sb.toString(), args.stream().map(Map.Entry::getValue).toArray());
 			T t = em.find(klass, id);
 			if (t == null && AutoMake.class.isAssignableFrom(klass)) {
 				t = (T) ((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids));
 			}
 
 			return t;
-		} catch (IllegalAccessException | NoSuchFieldException | NoSuchMethodException | InstantiationException |
-				 InvocationTargetException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
