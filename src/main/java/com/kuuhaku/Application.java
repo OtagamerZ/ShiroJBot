@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.util.API;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.websocket.CommonSocket;
+import jakarta.persistence.EntityManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.User;
@@ -47,8 +48,8 @@ import net.dv8tion.jda.api.utils.messages.MessageRequest;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
 
 import static net.dv8tion.jda.api.entities.Message.MentionType.EVERYONE;
 import static net.dv8tion.jda.api.entities.Message.MentionType.HERE;
@@ -77,7 +78,15 @@ public class Application implements Thread.UncaughtExceptionHandler {
 						new AutoModListener(),
 						new PrivateChannelListener()
 				)
-				.setEventPool(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()), true)
+				.setEventPool(Executors.newFixedThreadPool(
+						Runtime.getRuntime().availableProcessors(), t -> new Thread(() -> {
+							try (EntityManager ignored = Manager.getEntityManager()) {
+								t.run();
+							} finally {
+								Manager.release();
+							}
+						})
+				), true)
 				.build();
 
 		MessageRequest.setDefaultMentions(EnumSet.complementOf(EnumSet.of(EVERYONE, HERE)));

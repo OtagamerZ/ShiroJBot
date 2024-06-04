@@ -49,6 +49,8 @@ public abstract class Manager {
 			)
 	));
 
+	private static final ThreadLocal<EntityManager> em = new ThreadLocal<>();
+
 	static {
 		String db = DAO.queryNative(String.class, "SELECT current_database()");
 		String schema = DAO.queryNative(String.class, "SELECT current_schema()");
@@ -72,7 +74,21 @@ public abstract class Manager {
 	}
 
 	public static EntityManager getEntityManager() {
-		return emf.createEntityManager();
+		EntityManager man = em.get();
+		if (man == null) {
+			em.set(man = emf.createEntityManager());
+		}
+
+		return man;
+	}
+
+	public static void release() {
+		EntityManager man = em.get();
+		if (man != null) {
+			man.close();
+		}
+
+		em.remove();
 	}
 
 	public static long ping() {
