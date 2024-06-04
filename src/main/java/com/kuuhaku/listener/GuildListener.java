@@ -411,7 +411,7 @@ public class GuildListener extends ListenerAdapter {
 
 	private void rollSpawns(GuildConfig config, I18N locale, Account acc) {
 		GuildBuff gb = config.getCumBuffs();
-		List<GuildMessageChannel> channels = config.getSettings().getKawaiponChannels();
+		Set<GuildMessageChannel> channels = config.getSettings().getKawaiponChannels();
 		if (!channels.isEmpty() && Calc.chance(100d / channels.size())) {
 			GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 			if (!chosen.canTalk()) return;
