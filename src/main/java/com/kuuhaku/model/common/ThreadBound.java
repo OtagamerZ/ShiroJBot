@@ -62,6 +62,7 @@ public class ThreadBound<T> {
 			}
 		}
 
+		System.out.println(out + " - " + Thread.currentThread().threadId());
 		return out;
 	}
 }
