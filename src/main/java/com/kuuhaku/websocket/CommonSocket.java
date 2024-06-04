@@ -25,7 +25,6 @@ import com.github.ygimenez.model.helper.CategorizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.controller.Manager;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
@@ -43,6 +42,7 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -67,7 +67,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CommonSocket extends WebSocketClient {
 	private static final ScheduledExecutorService exec = Executors.newScheduledThreadPool(2);
-	private static final String TOKEN = Manager.withContext(() -> DAO.queryNative(String.class, "SELECT token FROM access_token WHERE bearer = 'Shiro'"));
+	private static final String TOKEN = DAO.queryNative(String.class, "SELECT token FROM access_token WHERE bearer = 'Shiro'");
 	private int retry = 0;
 
 	public CommonSocket(String address) throws URISyntaxException {
