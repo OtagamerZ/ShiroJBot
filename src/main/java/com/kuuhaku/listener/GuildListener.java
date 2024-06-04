@@ -242,7 +242,7 @@ public class GuildListener extends ListenerAdapter {
 		profile.addXp((int) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
 
 		EventData ed = new EventData(event.getChannel(), config, profile);
-		if (content.toLowerCase().startsWith(config.getPrefix())) {
+		if (content.toLowerCase().startsWith(config.getPrefix()) && data.channel().canTalk()) {
 			asyncExec.execute(() -> {
 				Thread.currentThread().setName("Event-" + Thread.currentThread().threadId());
 				processCommand(data, ed, content);
@@ -323,11 +323,17 @@ public class GuildListener extends ListenerAdapter {
 		}
 
 		if (Utils.match(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
-			data.channel().sendMessage(locale.get("str/mentioned",
-					data.user().getAsMention(),
-					config.getPrefix(),
-					Constants.SERVER_ROOT
-			)).queue(null, Utils::doNothing);
+			if (!data.channel().canTalk()) {
+				data.user().openPrivateChannel()
+						.flatMap(c -> c.sendMessage(locale.get("str/cant_talk", data.channel().getAsMention(), locale.get("perm/message_send"))))
+						.queue(null, Utils::doNothing);
+			} else {
+				data.channel().sendMessage(locale.get("str/mentioned",
+						data.user().getAsMention(),
+						config.getPrefix(),
+						Constants.SERVER_ROOT)
+				).queue(null, Utils::doNothing);
+			}
 		}
 
 		if (config.getSettings().isFeatureEnabled(GuildFeature.NQN_MODE)) {
