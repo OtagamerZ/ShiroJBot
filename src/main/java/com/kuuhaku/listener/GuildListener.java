@@ -244,7 +244,7 @@ public class GuildListener extends ListenerAdapter {
 
 		EventData ed = new EventData(event.getChannel(), config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {
-			asyncExec.execute(Manager.singleContext(() -> {
+			asyncExec.execute(Manager.attach(() -> {
 				Thread.currentThread().setName("Event-" + Thread.currentThread().threadId());
 				processCommand(data, ed, content);
 			}));

@@ -78,7 +78,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				)
 				.setEventPool(Executors.newFixedThreadPool(
 						Runtime.getRuntime().availableProcessors(),
-						t -> new Thread(Manager.singleContext(t))
+						t -> new Thread(Manager.attach(t))
 				), true)
 				.build();
 
