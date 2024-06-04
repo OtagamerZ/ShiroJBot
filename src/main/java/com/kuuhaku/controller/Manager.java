@@ -80,11 +80,13 @@ public abstract class Manager {
 
 	public static Runnable attach(Runnable task) {
 		return () -> {
-			try (EntityManager em = getEntityManager()) {
-				Manager.em.set(em);
-				task.run();
-			} finally {
-				Manager.em.remove();
+			synchronized (Thread.currentThread()) {
+				try (EntityManager em = getEntityManager()) {
+					Manager.em.set(em);
+					task.run();
+				} finally {
+					Manager.em.remove();
+				}
 			}
 		};
 	}

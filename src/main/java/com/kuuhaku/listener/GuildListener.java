@@ -66,7 +66,7 @@ import java.util.stream.Collectors;
 public class GuildListener extends ListenerAdapter {
 	private static final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
 	private static final Map<String, List<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
-	private static final ExecutorService asyncExec = Executors.newWorkStealingPool();
+	private static final ExecutorService asyncExec = Executors.newVirtualThreadPerTaskExecutor();
 
 	@Override
 	public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
