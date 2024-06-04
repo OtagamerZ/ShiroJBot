@@ -46,6 +46,11 @@ public class ThreadBound<T> {
 			Iterator<Map.Entry<Thread, T>> it = threadBound.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry<Thread, T> entry = it.next();
+				if (entry.getValue() == null) {
+					it.remove();
+					continue;
+				}
+
 				if (!entry.getKey().isAlive()) {
 					this.closer.accept(entry.getValue());
 					it.remove();
@@ -63,9 +68,12 @@ public class ThreadBound<T> {
 				}
 
 				T val = supplier.get();
-				threadLocal.set(val);
-
-				return val;
+				if (val != null) {
+					threadLocal.set(val);
+					return val;
+				} else {
+					return null;
+				}
 			});
 		}
 
