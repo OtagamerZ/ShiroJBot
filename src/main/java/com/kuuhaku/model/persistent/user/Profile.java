@@ -143,8 +143,10 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		return Math.max(0, getXpToLevel(to) - getXpToLevel(from));
 	}
 
-	public Set<Warn> getWarns() {
-		return warns;
+	public List<Warn> getWarns() {
+		return warns.stream()
+				.sorted(Comparator.comparingInt(w -> w.getId().getId()))
+				.toList();
 	}
 
 	public int getWarnCount() {

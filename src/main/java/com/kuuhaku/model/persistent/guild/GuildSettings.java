@@ -213,8 +213,10 @@ public class GuildSettings extends DAO<GuildSettings> {
 		return customAnswers;
 	}
 
-	public Set<AutoRule> getAutoRules() {
-		return autoRules;
+	public List<AutoRule> getAutoRules() {
+		return autoRules.stream()
+				.sorted(Comparator.comparingInt(AutoRule::getThreshold))
+				.toList();
 	}
 
 	public Set<Category> getDisabledCategories() {

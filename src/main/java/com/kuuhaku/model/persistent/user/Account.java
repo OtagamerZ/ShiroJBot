@@ -328,7 +328,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		}
 
 		if (update) save();
-		return List.copyOf(decks).stream()
+		return decks.stream()
 				.sorted(Comparator.comparingInt(Deck::getId))
 				.toList();
 	}
