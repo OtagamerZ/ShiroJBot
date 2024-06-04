@@ -69,9 +69,9 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 	@Column(name = "last_xp", nullable = false)
 	private long lastXp;
 
-	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SUBSELECT)
-	private final List<Warn> warns = new ArrayList<>();
+	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true)
+	@Fetch(FetchMode.JOIN)
+	private final Set<Warn> warns = new HashSet<>();
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "uid", nullable = false, updatable = false)
@@ -143,7 +143,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		return Math.max(0, getXpToLevel(to) - getXpToLevel(from));
 	}
 
-	public List<Warn> getWarns() {
+	public Set<Warn> getWarns() {
 		return warns;
 	}
 

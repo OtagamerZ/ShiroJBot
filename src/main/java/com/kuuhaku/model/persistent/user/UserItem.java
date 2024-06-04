@@ -72,9 +72,9 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Column(name = "account_bound", nullable = false)
 	private boolean accountBound = false;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = ALL, orphanRemoval = true)
 	@JoinColumn(name = "id", referencedColumnName = "id")
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.JOIN)
 	private Set<LocalizedItem> infos = new HashSet<>();
 
 	public String getId() {

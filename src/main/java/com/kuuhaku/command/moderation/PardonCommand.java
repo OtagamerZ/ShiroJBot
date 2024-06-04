@@ -27,6 +27,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.guild.AutoRule;
 import com.kuuhaku.model.persistent.id.ProfileId;
 import com.kuuhaku.model.persistent.id.WarnId;
 import com.kuuhaku.model.persistent.user.Profile;
@@ -39,6 +40,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Command(
@@ -79,8 +81,12 @@ public class PardonCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(locale.get("str/warns"));
 
+			List<Warn> warns = profile.getWarns().stream()
+					.sorted(Comparator.comparingInt(w -> w.getId().getId()))
+					.toList();
+
 			XStringBuilder sb = new XStringBuilder();
-			List<Page> pages = Utils.generatePages(eb, profile.getWarns(), 20, 10,
+			List<Page> pages = Utils.generatePages(eb, warns, 20, 10,
 					w -> {
 						sb.clear();
 						sb.appendNewLine("`ID: " + w.getId().getId() + "` " + w.getReason());
