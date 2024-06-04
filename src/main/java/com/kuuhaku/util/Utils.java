@@ -136,11 +136,11 @@ public abstract class Utils {
 		else return get == null ? or : get;
 	}
 
-	public static <T> T getOr(Callable<T> get, T or) {
+	public static <T> T getOr(Supplier<T> get, T or) {
 		try {
-			Object obj = get.call();
+			Object obj = get.get();
 			if (obj instanceof String s && s.isBlank()) return or;
-			else return obj == null ? or : get.call();
+			else return obj == null ? or : get.get();
 		} catch (Exception e) {
 			return or;
 		}
@@ -159,7 +159,7 @@ public abstract class Utils {
 	}
 
 	@SafeVarargs
-	public static <T> T getOrMany(Callable<T> get, T... or) {
+	public static <T> T getOrMany(Supplier<T> get, T... or) {
 		T out = null;
 
 		for (T t : or) {

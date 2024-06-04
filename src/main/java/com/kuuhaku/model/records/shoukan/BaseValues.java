@@ -21,15 +21,15 @@ package com.kuuhaku.model.records.shoukan;
 import com.kuuhaku.model.common.SupplyChain;
 
 import java.util.List;
-import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
 public record BaseValues(int hp, SupplyChain<Integer> mpGain, SupplyChain<Integer> handCapacity, int lifesteal) {
 	public BaseValues() {
 		this(6000, new SupplyChain<>(5), new SupplyChain<>(5), 0);
 	}
 
-	public BaseValues(Callable<List<?>> values) throws Exception {
-		this(values.call());
+	public BaseValues(Supplier<List<?>> values) {
+		this(values.get());
 	}
 
 	@SuppressWarnings("unchecked")
