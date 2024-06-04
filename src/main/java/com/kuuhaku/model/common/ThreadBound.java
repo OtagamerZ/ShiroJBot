@@ -18,9 +18,10 @@
 
 package com.kuuhaku.model.common;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -29,7 +30,7 @@ import java.util.function.Supplier;
 
 public class ThreadBound<T> {
 	private final ScheduledExecutorService checker = Executors.newSingleThreadScheduledExecutor();
-	private final Map<Thread, T> lifetimeTracker = new ConcurrentHashMap<>();
+	private final Map<Thread, T> threadBound = Collections.synchronizedMap(new HashMap<>());
 	private final Consumer<T> closer;
 	private final Supplier<T> supplier;
 
@@ -42,7 +43,7 @@ public class ThreadBound<T> {
 		this.closer = closer;
 
 		checker.scheduleAtFixedRate(() -> {
-			Iterator<Map.Entry<Thread, T>> it = lifetimeTracker.entrySet().iterator();
+			Iterator<Map.Entry<Thread, T>> it = threadBound.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry<Thread, T> entry = it.next();
 				if (!entry.getKey().isAlive()) {
@@ -54,11 +55,14 @@ public class ThreadBound<T> {
 	}
 
 	public T get() {
-		T out = lifetimeTracker.get(Thread.currentThread());
+		T out = threadBound.get(Thread.currentThread());
 		if (out == null) {
 			out = supplier.get();
 			if (out != null) {
-				lifetimeTracker.put(Thread.currentThread(), out);
+				T previous = threadBound.put(Thread.currentThread(), out);
+				if (previous != null) {
+					closer.accept(previous);
+				}
 			}
 		}
 
