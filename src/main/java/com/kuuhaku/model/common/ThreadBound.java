@@ -29,8 +29,7 @@ import java.util.function.Supplier;
 
 public class ThreadBound<T> {
 	private final ScheduledExecutorService checker = Executors.newSingleThreadScheduledExecutor();
-	private final Map<Thread, T> threadBound = new ConcurrentHashMap<>();
-	private final ThreadLocal<T> threadLocal = new ThreadLocal<>();
+	private final Map<Thread, T> lifetimeTracker = new ConcurrentHashMap<>();
 	private final Consumer<T> closer;
 	private final Supplier<T> supplier;
 
@@ -43,14 +42,9 @@ public class ThreadBound<T> {
 		this.closer = closer;
 
 		checker.scheduleAtFixedRate(() -> {
-			Iterator<Map.Entry<Thread, T>> it = threadBound.entrySet().iterator();
+			Iterator<Map.Entry<Thread, T>> it = lifetimeTracker.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry<Thread, T> entry = it.next();
-				if (entry.getValue() == null) {
-					it.remove();
-					continue;
-				}
-
 				if (!entry.getKey().isAlive()) {
 					this.closer.accept(entry.getValue());
 					it.remove();
@@ -60,17 +54,12 @@ public class ThreadBound<T> {
 	}
 
 	public T get() {
-		T out = threadLocal.get();
+		T out = lifetimeTracker.get(Thread.currentThread());
 		if (out == null) {
-			out = threadBound.compute(Thread.currentThread(), (k, v) -> {
-				if (v != null) {
-					closer.accept(v);
-				}
-
-				T val = supplier.get();
-				threadLocal.set(val);
-				return val;
-			});
+			out = supplier.get();
+			if (out != null) {
+				lifetimeTracker.put(Thread.currentThread(), out);
+			}
 		}
 
 		return out;

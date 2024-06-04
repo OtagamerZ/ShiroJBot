@@ -65,7 +65,6 @@ import java.util.stream.Collectors;
 public class GuildListener extends ListenerAdapter {
 	private static final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
 	private static final Map<String, List<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
-	private static final ExecutorService asyncExec = Executors.newVirtualThreadPerTaskExecutor();
 
 	@Override
 	public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
@@ -243,7 +242,7 @@ public class GuildListener extends ListenerAdapter {
 
 		EventData ed = new EventData(event.getChannel(), config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {
-			asyncExec.execute(() -> processCommand(data, ed, content));
+			CompletableFuture.runAsync(() -> processCommand(data, ed, content));
 		}
 
 		if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
