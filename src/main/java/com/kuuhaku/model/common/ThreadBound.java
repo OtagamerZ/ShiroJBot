@@ -50,7 +50,7 @@ public class ThreadBound<T> {
 					it.remove();
 				}
 			}
-		}, 1, 1, TimeUnit.MINUTES);
+		}, 30, 30, TimeUnit.SECONDS);
 	}
 
 	public T get() {
