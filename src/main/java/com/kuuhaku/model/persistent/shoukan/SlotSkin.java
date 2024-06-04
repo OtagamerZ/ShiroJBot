@@ -55,9 +55,9 @@ public class SlotSkin extends DAO<SlotSkin> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true)
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
-	@Fetch(FetchMode.JOIN)
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedSkin> infos = new HashSet<>();
 
 	@Column(name = "price")

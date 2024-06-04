@@ -24,7 +24,6 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.guild.AutoRule;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
@@ -33,9 +32,7 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 @Command(
 		name = "autorule",
@@ -53,11 +50,7 @@ public class AutoRuleCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/autorule"));
 
-		List<AutoRule> rules = settings.getAutoRules().stream()
-				.sorted(Comparator.comparingInt(AutoRule::getThreshold))
-				.toList();
-
-		List<Page> pages = Utils.generatePages(eb, rules, 20, 10,
+		List<Page> pages = Utils.generatePages(eb, settings.getAutoRules(), 20, 10,
 				e -> "`ID: " + e.getId().getId() + "` " + locale.get("str/autorule_desc",
 						locale.get("str/autorule_" + e.getAction()),
 						e.getThreshold()

@@ -88,21 +88,21 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	@Fetch(FetchMode.JOIN)
 	private AccountSettings settings;
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@OrderColumn(name = "index")
-	@Fetch(FetchMode.JOIN)
-	private final Set<Deck> decks = new HashSet<>();
+	@Fetch(FetchMode.SUBSELECT)
+	private final List<Deck> decks = new ArrayList<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.JOIN)
-	private final Set<Transaction> transactions = new HashSet<>();
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private final List<Transaction> transactions = new ArrayList<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.JOIN)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	private final Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
 
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.JOIN)
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	private final Set<AccountTitle> titles = new HashSet<>();
 
 	@JdbcTypeCode(SqlTypes.JSON)
@@ -328,9 +328,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		}
 
 		if (update) save();
-		return List.copyOf(decks).stream()
-				.sorted(Comparator.comparingInt(Deck::getId))
-				.toList();
+		return decks;
 	}
 
 	public Deck getCurrentDeck() {

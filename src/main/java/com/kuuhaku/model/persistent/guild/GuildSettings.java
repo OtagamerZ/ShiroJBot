@@ -51,20 +51,20 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Column(name = "gid", nullable = false)
 	private String gid;
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "kawaipon_channels")
 	@CollectionTable(name = "guild_settings_kawaiponChannels", joinColumns = @JoinColumn(name = "gid"))
-	private Set<GuildMessageChannel> kawaiponChannels = new HashSet<>();
+	private List<GuildMessageChannel> kawaiponChannels = new ArrayList<>();
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "drop_channels")
 	@CollectionTable(name = "guild_settings_dropChannels", joinColumns = @JoinColumn(name = "gid"))
-	private Set<GuildMessageChannel> dropChannels = new HashSet<>();
+	private List<GuildMessageChannel> dropChannels = new ArrayList<>();
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "denied_channels")
 	@CollectionTable(name = "guild_settings_deniedChannels", joinColumns = @JoinColumn(name = "gid"))
-	private Set<GuildMessageChannel> deniedChannels = new HashSet<>();
+	private List<GuildMessageChannel> deniedChannels = new ArrayList<>();
 
 	@Column(name = "notifications_channel")
 	@Convert(converter = ChannelConverter.class)
@@ -86,26 +86,26 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = RoleConverter.class)
 	private Role welcomer;
 
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.JOIN)
+	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("level")
-	private final Set<LevelRole> levelRoles = new HashSet<>();
+	private final List<LevelRole> levelRoles = new ArrayList<>();
 
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.JOIN)
-	private final Set<CustomAnswer> customAnswers = new HashSet<>();
+	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private final List<CustomAnswer> customAnswers = new ArrayList<>();
 
-	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.JOIN)
+	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("threshold")
-	private final Set<AutoRule> autoRules = new HashSet<>();
+	private final List<AutoRule> autoRules = new ArrayList<>();
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "disabled_categories")
 	@CollectionTable(name = "guild_settings_disabledcategories", joinColumns = @JoinColumn(name = "gid"))
 	private Set<Category> disabledCategories = new HashSet<>();
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "disabled_commands")
 	@CollectionTable(name = "guild_settings_disabledcommands", joinColumns = @JoinColumn(name = "gid"))
 	private Set<String> disabledCommands = new HashSet<>();
@@ -127,7 +127,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	private JSONObject aliases = new JSONObject();
 
 	@Enumerated(EnumType.STRING)
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name = "automod_entries",
 			joinColumns = @JoinColumn(name = "gid", referencedColumnName = "gid")
@@ -147,15 +147,15 @@ public class GuildSettings extends DAO<GuildSettings> {
 		return gid;
 	}
 
-	public Set<GuildMessageChannel> getKawaiponChannels() {
+	public List<GuildMessageChannel> getKawaiponChannels() {
 		return kawaiponChannels;
 	}
 
-	public Set<GuildMessageChannel> getDropChannels() {
+	public List<GuildMessageChannel> getDropChannels() {
 		return dropChannels;
 	}
 
-	public Set<GuildMessageChannel> getDeniedChannels() {
+	public List<GuildMessageChannel> getDeniedChannels() {
 		return deniedChannels;
 	}
 
@@ -199,7 +199,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 		this.welcomer = welcomer;
 	}
 
-	public Set<LevelRole> getLevelRoles() {
+	public List<LevelRole> getLevelRoles() {
 		return levelRoles;
 	}
 
@@ -209,11 +209,11 @@ public class GuildSettings extends DAO<GuildSettings> {
 				.toList();
 	}
 
-	public Set<CustomAnswer> getCustomAnswers() {
+	public List<CustomAnswer> getCustomAnswers() {
 		return customAnswers;
 	}
 
-	public Set<AutoRule> getAutoRules() {
+	public List<AutoRule> getAutoRules() {
 		return autoRules;
 	}
 
