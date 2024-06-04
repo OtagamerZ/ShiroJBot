@@ -244,14 +244,14 @@ public class GuildListener extends ListenerAdapter {
 		EventData ed = new EventData(event.getChannel(), config, profile);
 		if (content.toLowerCase().startsWith(config.getPrefix())) {
 			asyncExec.execute(() -> {
-				Thread.currentThread().setName("event");
+				Thread.currentThread().setName("Event-" + Thread.currentThread().threadId());
 				processCommand(data, ed, content);
 			});
 		}
 
 		if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
 			Member mb = event.getMember();
-			if (mb != null && event.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE)) {
+			if (mb != null && data.me().hasPermission(Permission.NICKNAME_MANAGE) && data.me().canInteract(mb)) {
 				String name = Unidecode.decode(mb.getEffectiveName()).trim();
 				if (!name.equals(mb.getEffectiveName())) {
 					if (name.length() < 3) {
