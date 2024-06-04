@@ -288,8 +288,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				if (lock.isBlacklisted()) return;
 			}
 
-			tx.begin();
 			consumer.accept(obj);
+
+			tx.begin();
 			em.flush();
 			tx.commit();
 		} finally {
