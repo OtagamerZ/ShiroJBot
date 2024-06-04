@@ -36,5 +36,3 @@ FROM (
      WINDOW w AS ()
      LIMIT 1
      ) x;
-
-REFRESH MATERIALIZED VIEW v_xp;
