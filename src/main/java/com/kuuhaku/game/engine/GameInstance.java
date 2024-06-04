@@ -21,6 +21,7 @@ package com.kuuhaku.game.engine;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.controller.Manager;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.GameChannel;
@@ -99,7 +100,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 			}
 		};
 
-		return exec = CompletableFuture.runAsync(() -> {
+		return exec = CompletableFuture.runAsync(Manager.attach(() -> {
 			try {
 				channels = Stream.of(chns).map(GuildMessageChannel::getId).toArray(String[]::new);
 				for (String chn : channels) {
@@ -132,7 +133,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 			} finally {
 				sml.close();
 			}
-		}, worker);
+		}), worker);
 	}
 
 	protected abstract boolean validate(Message message);
@@ -160,7 +161,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 		this.timeout = DelayedAction.of(service)
 				.setTimeUnit(time, unit)
-				.setTask(() -> action.accept(turn));
+				.setTask(Manager.attach(() -> action.accept(turn)));
 	}
 
 	public GameChannel getChannel() {

@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.controller.Manager;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +40,7 @@ public abstract class SimpleMessageListener {
 	}
 
 	public void execute(MessageReceivedEvent event) {
-		CompletableFuture.runAsync(() -> onMessageReceived(event));
+		CompletableFuture.runAsync(Manager.attach(() -> onMessageReceived(event)));
 	}
 
 	protected abstract void onMessageReceived(@NotNull MessageReceivedEvent event);

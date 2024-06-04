@@ -26,6 +26,7 @@ import com.github.ygimenez.model.helper.PaginateHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.controller.Manager;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -498,14 +499,14 @@ public abstract class Utils {
 			{
 				if (unit != null) {
 					Executor exec = CompletableFuture.delayedExecutor(time, unit);
-					timeout = CompletableFuture.runAsync(() -> {
+					timeout = CompletableFuture.runAsync(Manager.attach(() -> {
 						if (lock != null) {
 							lock.complete(null);
 						}
 
 						result.complete(null);
 						close();
-					}, exec);
+					}), exec);
 				}
 			}
 
