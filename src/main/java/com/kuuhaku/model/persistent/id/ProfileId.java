@@ -27,7 +27,7 @@ import java.util.Objects;
 @Embeddable
 public class ProfileId implements Serializable {
 	@Serial
-	private static final long serialVersionUID = 381070679371267271L;
+	private static final long serialVersionUID = -2852833447344428319L;
 
 	@Column(name = "uid", nullable = false)
 	private String uid;
