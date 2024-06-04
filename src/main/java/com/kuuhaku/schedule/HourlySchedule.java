@@ -21,7 +21,6 @@ package com.kuuhaku.schedule;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.controller.Manager;
 import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
 import com.kuuhaku.model.enums.I18N;
@@ -84,7 +83,7 @@ public class HourlySchedule implements Runnable, PreInitialize {
 	public static void scheduleReminder(Reminder r) {
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		SCHED_REMINDERS.add(r.getId());
-		exec.schedule(Manager.attach(() -> {
+		exec.schedule(() -> {
 			try {
 				Account acc = r.getAccount();
 				I18N locale = acc.getEstimateLocale();
@@ -102,6 +101,6 @@ public class HourlySchedule implements Runnable, PreInitialize {
 				r.setReminded(true);
 				r.save();
 			}
-		}), now.until(r.getDue(), ChronoUnit.MILLIS), TimeUnit.MILLISECONDS);
+		}, now.until(r.getDue(), ChronoUnit.MILLIS), TimeUnit.MILLISECONDS);
 	}
 }

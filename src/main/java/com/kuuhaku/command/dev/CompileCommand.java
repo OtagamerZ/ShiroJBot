@@ -19,7 +19,6 @@
 package com.kuuhaku.command.dev;
 
 import com.kuuhaku.Constants;
-import com.kuuhaku.controller.Manager;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Signature;
@@ -53,13 +52,13 @@ public class CompileCommand implements Executable {
 				try {
 					@Language("Groovy") String code = args.getString("code").replaceAll("```(?:.*\n)?", "").trim();
 
-					Future<?> fut = CompletableFuture.supplyAsync(Manager.attach(() -> {
+					Future<?> fut = CompletableFuture.supplyAsync(() -> {
 						time.start();
 						Object out = Utils.exec(getClass().getSimpleName(), code, Map.of("msg", event.message()));
 						time.stop();
 
 						return out;
-					}));
+					});
 
 					return new Pair<>(String.valueOf(fut.get(1, TimeUnit.MINUTES)), time.getTime());
 				} catch (TimeoutException e) {

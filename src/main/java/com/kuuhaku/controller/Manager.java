@@ -19,6 +19,7 @@
 package com.kuuhaku.controller;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.model.common.ThreadBound;
 import com.kuuhaku.util.IO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -33,7 +34,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public abstract class Manager {
@@ -50,7 +50,7 @@ public abstract class Manager {
 			)
 	));
 
-	private static final ThreadLocal<EntityManager> em = new ThreadLocal<>();
+	private static final ThreadBound<EntityManager> em = new ThreadBound<>(emf::createEntityManager, EntityManager::close);
 
 	static {
 		String db = DAO.queryNative(String.class, "SELECT current_database()");
@@ -75,50 +75,7 @@ public abstract class Manager {
 	}
 
 	public static EntityManager getEntityManager() {
-		EntityManager man = em.get();
-		if (man == null) throw new IllegalStateException("Manager has not been initialized");
-
-		return man;
-	}
-
-	public static Runnable attach(Runnable task) {
-		return () -> {
-			EntityManager man = em.get();
-			if (man == null) {
-				em.set(man = emf.createEntityManager());
-			}
-
-			try {
-				task.run();
-			} finally {
-				if (man.getTransaction().isActive()) {
-					man.getTransaction().rollback();
-				}
-
-				man.close();
-				em.remove();
-			}
-		};
-	}
-
-	public static <T> Supplier<T> attach(Supplier<T> task) {
-		return () -> {
-			EntityManager man = em.get();
-			if (man == null) {
-				em.set(man = emf.createEntityManager());
-			}
-
-			try {
-				return task.get();
-			} finally {
-				if (man.getTransaction().isActive()) {
-					man.getTransaction().rollback();
-				}
-
-				man.close();
-				em.remove();
-			}
-		};
+		return em.get();
 	}
 
 	public static long ping() {
