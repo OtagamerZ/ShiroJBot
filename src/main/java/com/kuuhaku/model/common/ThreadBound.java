@@ -18,10 +18,9 @@
 
 package com.kuuhaku.model.common;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +29,7 @@ import java.util.function.Supplier;
 
 public class ThreadBound<T> {
 	private final ScheduledExecutorService checker = Executors.newSingleThreadScheduledExecutor();
-	private final Map<Thread, T> threadBound = Collections.synchronizedMap(new HashMap<>());
+	private final Map<Thread, T> threadBound = new HashMap<>();
 	private final Consumer<T> closer;
 	private final Supplier<T> supplier;
 
@@ -43,12 +42,9 @@ public class ThreadBound<T> {
 		this.closer = closer;
 
 		checker.scheduleAtFixedRate(() -> {
-			Iterator<Map.Entry<Thread, T>> it = threadBound.entrySet().iterator();
-			while (it.hasNext()) {
-				Map.Entry<Thread, T> entry = it.next();
-				if (!entry.getKey().isAlive()) {
-					this.closer.accept(entry.getValue());
-					it.remove();
+			for (Thread t : Set.copyOf(threadBound.keySet())) {
+				if (!t.isAlive()) {
+					this.closer.accept(threadBound.remove(t));
 				}
 			}
 		}, 30, 30, TimeUnit.SECONDS);
