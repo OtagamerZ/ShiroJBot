@@ -226,32 +226,31 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T extends DAO<?>, ID> void apply(@NotNull Class<T> klass, @NotNull ID id, @NotNull Consumer<T> consumer) {
 		EntityManager em = Manager.getEntityManager();
+		EntityTransaction tx = em.getTransaction();
 
 		try {
-			em.getTransaction().begin();
-
 			T obj = em.find(klass, id);
 			if (obj == null) return;
 			else if (obj instanceof Blacklistable lock) {
 				if (lock.isBlacklisted()) return;
 			}
 
+			tx.begin();
 			consumer.accept(obj);
 			em.flush();
-
-			em.getTransaction().commit();
+			tx.commit();
 		} finally {
-			if (em.getTransaction().isActive()) {
-				em.getTransaction().rollback();
+			if (tx.isActive()) {
+				tx.rollback();
 			}
 		}
 	}
 
 	public static void apply(@NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
+		EntityTransaction tx = em.getTransaction();
 
 		try {
-			em.getTransaction().begin();
 			Query q = em.createQuery(query);
 
 			int paramSize = Objects.requireNonNull(params).length;
@@ -259,20 +258,21 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				q.setParameter(i + 1, params[i]);
 			}
 
+			tx.begin();
 			q.executeUpdate();
-			em.getTransaction().commit();
+			tx.commit();
 		} finally {
-			if (em.getTransaction().isActive()) {
-				em.getTransaction().rollback();
+			if (tx.isActive()) {
+				tx.rollback();
 			}
 		}
 	}
 
 	public static void applyNative(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		EntityManager em = Manager.getEntityManager();
+		EntityTransaction tx = em.getTransaction();
 
 		try {
-			em.getTransaction().begin();
 			Query q = em.createNativeQuery(query);
 
 			int paramSize = Objects.requireNonNull(params).length;
@@ -280,11 +280,12 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				q.setParameter(i + 1, params[i]);
 			}
 
+			tx.begin();
 			q.executeUpdate();
-			em.getTransaction().commit();
+			tx.commit();
 		} finally {
-			if (em.getTransaction().isActive()) {
-				em.getTransaction().rollback();
+			if (tx.isActive()) {
+				tx.rollback();
 			}
 		}
 	}
@@ -353,6 +354,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public final void save() {
 		EntityManager em = Manager.getEntityManager();
+		EntityTransaction tx = em.getTransaction();
 
 		beforeSave();
 		try {
@@ -360,13 +362,13 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				if (lock.isBlacklisted()) return;
 			}
 
-			em.getTransaction().begin();
+			tx.begin();
 			if (!em.contains(this)) em.merge(this);
 			else em.flush();
-			em.getTransaction().commit();
+			tx.commit();
 		} finally {
-			if (em.getTransaction().isActive()) {
-				em.getTransaction().rollback();
+			if (tx.isActive()) {
+				tx.rollback();
 			}
 
 			afterSave();
@@ -388,6 +390,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public final void delete() {
 		EntityManager em = Manager.getEntityManager();
+		EntityTransaction tx = em.getTransaction();
 
 		beforeDelete();
 		try {
@@ -401,12 +404,12 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				}
 			}
 
-			em.getTransaction().begin();
+			tx.begin();
 			em.remove(ent);
-			em.getTransaction().commit();
+			tx.commit();
 		} finally {
-			if (em.getTransaction().isActive()) {
-				em.getTransaction().rollback();
+			if (tx.isActive()) {
+				tx.rollback();
 			}
 
 			afterDelete();
