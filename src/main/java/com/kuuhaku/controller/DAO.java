@@ -83,9 +83,14 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				cq = cq.where(cb.equal(path, e.getValue()));
 			}
 
-			T t = em.createQuery(cq)
-					.setMaxResults(1)
-					.getSingleResult();
+			T t;
+			try {
+				t = em.createQuery(cq)
+						.setMaxResults(1)
+						.getSingleResult();
+			} catch (NoResultException e) {
+				t = null;
+			}
 
 			if (t == null && AutoMake.class.isAssignableFrom(klass)) {
 				t = (T) ((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids));
