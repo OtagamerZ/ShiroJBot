@@ -35,6 +35,8 @@ import java.util.*;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "title")
 public class Title extends DAO<Title> {
 	@Id

@@ -45,6 +45,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "card", indexes = @Index(columnList = "anime_id, id"))
 public class Card extends DAO<Card> implements Serializable {
 	@Id
