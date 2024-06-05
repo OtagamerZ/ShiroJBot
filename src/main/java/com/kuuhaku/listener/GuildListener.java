@@ -249,164 +249,166 @@ public class GuildListener extends ListenerAdapter {
 			});
 		}
 
-		if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
-			Member mb = event.getMember();
-			if (mb != null && data.me().hasPermission(Permission.NICKNAME_MANAGE) && data.me().canInteract(mb)) {
-				String name = Unidecode.decode(mb.getEffectiveName()).trim();
-				if (!name.equals(mb.getEffectiveName())) {
-					if (name.length() < 3) {
-						name = locale.get("zalgo/name_" + Calc.rng(1, 4));
+		asyncExec.execute(() -> {
+			if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
+				Member mb = event.getMember();
+				if (mb != null && data.me().hasPermission(Permission.NICKNAME_MANAGE) && data.me().canInteract(mb)) {
+					String name = Unidecode.decode(mb.getEffectiveName()).trim();
+					if (!name.equals(mb.getEffectiveName())) {
+						if (name.length() < 3) {
+							name = locale.get("zalgo/name_" + Calc.rng(1, 4));
+						}
+
+						mb.modifyNickname(name).queue();
+					}
+				}
+			}
+
+			if (profile.getLevel() > lvl) {
+				int high = account.getHighestLevel();
+				int prize = 0;
+
+				if (profile.getLevel() > high) {
+					prize = profile.getLevel() * 150;
+					account.addCR(prize, "Level up prize");
+
+					ed.notify(locale.get("achievement/level_up_prize", data.user().getAsMention(), profile.getLevel(), prize));
+
+					if (profile.getLevel() <= 19) {
+						UserItem item = DAO.find(UserItem.class, "STARTER_TOKEN");
+
+						account.addItem(item, 2);
+						ed.notify(locale.get("str/received_item", 2, item.getName(locale)));
+					}
+				} else {
+					ed.notify(locale.get("achievement/level_up", data.user().getAsMention(), profile.getLevel(), prize));
+				}
+			}
+
+			if (data.guild().getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
+				Map<Integer, List<LevelRole>> roles = config.getSettings().getLevelRoles().parallelStream()
+						.filter(lr -> lr.getLevel() <= profile.getLevel())
+						.collect(Collectors.groupingBy(LevelRole::getLevel));
+
+				if (!roles.isEmpty()) {
+					List<Role> toAdd = roles.entrySet().parallelStream()
+							.max(Map.Entry.comparingByKey())
+							.map(Map.Entry::getValue)
+							.orElse(List.of())
+							.parallelStream()
+							.map(LevelRole::getRole)
+							.filter(Objects::nonNull)
+							.filter(data.me()::canInteract)
+							.toList();
+
+					List<Role> toRemove = roles.values().parallelStream()
+							.flatMap(List::parallelStream)
+							.map(LevelRole::getRole)
+							.filter(Objects::nonNull)
+							.filter(r -> !toAdd.contains(r))
+							.filter(data.me()::canInteract)
+							.toList();
+
+					List<Role> toAnnounce = toAdd.parallelStream()
+							.filter(r -> !data.member().getRoles().contains(r))
+							.toList();
+
+					if (!toAnnounce.isEmpty() && profile.getLevel() > lvl) {
+						ed.notify(locale.get("str/level_role_earn",
+								Utils.properlyJoin(locale.get("str/and")).apply(toAnnounce.stream().map(Role::getAsMention).toList()))
+						);
 					}
 
-					mb.modifyNickname(name).queue();
+					data.guild().modifyMemberRoles(data.member(), toAdd, toRemove).queue(null, Utils::doNothing);
 				}
 			}
-		}
 
-		if (profile.getLevel() > lvl) {
-			int high = account.getHighestLevel();
-			int prize = 0;
-
-			if (profile.getLevel() > high) {
-				prize = profile.getLevel() * 150;
-				account.addCR(prize, "Level up prize");
-
-				ed.notify(locale.get("achievement/level_up_prize", data.user().getAsMention(), profile.getLevel(), prize));
-
-				if (profile.getLevel() <= 19) {
-					UserItem item = DAO.find(UserItem.class, "STARTER_TOKEN");
-
-					account.addItem(item, 2);
-					ed.notify(locale.get("str/received_item", 2, item.getName(locale)));
+			if (Utils.match(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
+				if (!data.channel().canTalk()) {
+					data.user().openPrivateChannel()
+							.flatMap(c -> c.sendMessage(locale.get("str/cant_talk", data.channel().getAsMention(), locale.get("perm/message_send"))))
+							.queue(null, Utils::doNothing);
+				} else {
+					data.channel().sendMessage(locale.get("str/mentioned",
+							data.user().getAsMention(),
+							config.getPrefix(),
+							Constants.SERVER_ROOT)
+					).queue(null, Utils::doNothing);
 				}
-			} else {
-				ed.notify(locale.get("achievement/level_up", data.user().getAsMention(), profile.getLevel(), prize));
 			}
-		}
 
-		if (data.guild().getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
-			Map<Integer, List<LevelRole>> roles = config.getSettings().getLevelRoles().parallelStream()
-					.filter(lr -> lr.getLevel() <= profile.getLevel())
-					.collect(Collectors.groupingBy(LevelRole::getLevel));
+			if (config.getSettings().isFeatureEnabled(GuildFeature.NQN_MODE)) {
+				Member mb = event.getMember();
+				if (mb != null) {
+					boolean proxy = false;
 
-			if (!roles.isEmpty()) {
-				List<Role> toAdd = roles.entrySet().parallelStream()
-						.max(Map.Entry.comparingByKey())
-						.map(Map.Entry::getValue)
-						.orElse(List.of())
-						.parallelStream()
-						.map(LevelRole::getRole)
-						.filter(Objects::nonNull)
-						.filter(data.me()::canInteract)
-						.toList();
+					StringBuilder sb = new StringBuilder();
+					for (String s : content.split(" ")) {
+						sb.append(" ");
 
-				List<Role> toRemove = roles.values().parallelStream()
-						.flatMap(List::parallelStream)
-						.map(LevelRole::getRole)
-						.filter(Objects::nonNull)
-						.filter(r -> !toAdd.contains(r))
-						.filter(data.me()::canInteract)
-						.toList();
+						if (!s.isBlank()) {
+							String name = Utils.extract(s, "^:([\\w-]+):$", 1);
+							if (name != null) {
+								RichCustomEmoji emj = null;
 
-				List<Role> toAnnounce = toAdd.parallelStream()
-						.filter(r -> !data.member().getRoles().contains(r))
-						.toList();
+								List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(name, true);
+								if (!valid.isEmpty()) {
+									for (RichCustomEmoji e : valid) {
+										if (e.getGuild().equals(event.getGuild())) {
+											emj = e;
+											break;
+										}
+									}
 
-				if (!toAnnounce.isEmpty() && profile.getLevel() > lvl) {
-					ed.notify(locale.get("str/level_role_earn",
-							Utils.properlyJoin(locale.get("str/and")).apply(toAnnounce.stream().map(Role::getAsMention).toList()))
-					);
-				}
-
-				data.guild().modifyMemberRoles(data.member(), toAdd, toRemove).queue(null, Utils::doNothing);
-			}
-		}
-
-		if (Utils.match(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
-			if (!data.channel().canTalk()) {
-				data.user().openPrivateChannel()
-						.flatMap(c -> c.sendMessage(locale.get("str/cant_talk", data.channel().getAsMention(), locale.get("perm/message_send"))))
-						.queue(null, Utils::doNothing);
-			} else {
-				data.channel().sendMessage(locale.get("str/mentioned",
-						data.user().getAsMention(),
-						config.getPrefix(),
-						Constants.SERVER_ROOT)
-				).queue(null, Utils::doNothing);
-			}
-		}
-
-		if (config.getSettings().isFeatureEnabled(GuildFeature.NQN_MODE)) {
-			Member mb = event.getMember();
-			if (mb != null) {
-				boolean proxy = false;
-
-				StringBuilder sb = new StringBuilder();
-				for (String s : content.split(" ")) {
-					sb.append(" ");
-
-					if (!s.isBlank()) {
-						String name = Utils.extract(s, "^:([\\w-]+):$", 1);
-						if (name != null) {
-							RichCustomEmoji emj = null;
-
-							List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(name, true);
-							if (!valid.isEmpty()) {
-								for (RichCustomEmoji e : valid) {
-									if (e.getGuild().equals(event.getGuild())) {
-										emj = e;
-										break;
+									if (emj == null) {
+										emj = valid.parallelStream()
+												.filter(e -> e.getGuild().isMember(mb))
+												.findAny()
+												.orElse(valid.getFirst());
 									}
 								}
 
-								if (emj == null) {
-									emj = valid.parallelStream()
-											.filter(e -> e.getGuild().isMember(mb))
-											.findAny()
-											.orElse(valid.getFirst());
+								if (emj != null) {
+									sb.append(emj.getAsMention());
+									proxy = true;
+									continue;
 								}
 							}
+						}
 
-							if (emj != null) {
-								sb.append(emj.getAsMention());
-								proxy = true;
-								continue;
+						sb.append(s);
+					}
+
+					if (proxy) {
+						PseudoUser pu = new PseudoUser(mb, event.getGuildChannel());
+						pu.send(data.message(), sb.toString());
+					}
+				}
+			}
+
+			if (!event.getAuthor().equals(data.me().getUser()) && Utils.between(content.length(), 3, 255)) {
+				List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
+						data.guild().getId(), StringUtils.stripAccents(content)
+				);
+
+				for (CustomAnswer ca : cas) {
+					if (ca.getChannels().isEmpty() || ca.getChannels().contains(event.getChannel().getId())) {
+						if (ca.getUsers().isEmpty() || ca.getUsers().contains(event.getAuthor().getId())) {
+							if (Calc.chance(ca.getChance() / (event.getAuthor().isBot() ? 2d : 1d))) {
+								event.getChannel().sendTyping()
+										.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
+										.flatMap(v -> event.getChannel().sendMessage(ca.getAnswer()))
+										.queue();
+								break;
 							}
 						}
 					}
-
-					sb.append(s);
-				}
-
-				if (proxy) {
-					PseudoUser pu = new PseudoUser(mb, event.getGuildChannel());
-					pu.send(data.message(), sb.toString());
 				}
 			}
-		}
 
-		if (!event.getAuthor().equals(data.me().getUser()) && Utils.between(content.length(), 3, 255)) {
-			List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
-					data.guild().getId(), StringUtils.stripAccents(content)
-			);
-
-			for (CustomAnswer ca : cas) {
-				if (ca.getChannels().isEmpty() || ca.getChannels().contains(event.getChannel().getId())) {
-					if (ca.getUsers().isEmpty() || ca.getUsers().contains(event.getAuthor().getId())) {
-						if (Calc.chance(ca.getChance() / (event.getAuthor().isBot() ? 2d : 1d))) {
-							event.getChannel().sendTyping()
-									.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
-									.flatMap(v -> event.getChannel().sendMessage(ca.getAnswer()))
-									.queue();
-							break;
-						}
-					}
-				}
-			}
-		}
-
-		rollSpawns(config, locale, account);
-		rollEvents(data.channel(), locale);
+			rollSpawns(config, locale, account);
+			rollEvents(data.channel(), locale);
+		});
 	}
 
 	private void rollSpawns(GuildConfig config, I18N locale, Account acc) {
