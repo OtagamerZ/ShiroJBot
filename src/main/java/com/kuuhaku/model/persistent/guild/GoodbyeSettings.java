@@ -23,6 +23,8 @@ import com.kuuhaku.model.persistent.converter.ChannelConverter;
 import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.JavaTypeRegistration;
 
 import java.util.LinkedHashSet;
@@ -36,7 +38,7 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 	@Column(name = "gid", nullable = false)
 	private String gid;
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "header")
 	@CollectionTable(name = "goodbye_settings_headers", joinColumns = @JoinColumn(name = "gid"))
 	private Set<String> headers = new LinkedHashSet<>();

@@ -148,6 +148,7 @@ public class SlotColumn {
 				card.executeAssert(Trigger.ON_INITIALIZE);
 			}
 
+			h.getData().put("last_summon", card);
 			if (!card.isFlipped()) {
 				h.getGame().trigger(Trigger.ON_SUMMON, card.asSource(Trigger.ON_SUMMON));
 			}

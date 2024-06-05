@@ -34,10 +34,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public abstract class DAO<T extends DAO<T>> implements DAOListener {
-	@SuppressWarnings("unchecked")
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -51,8 +51,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 					for (Field ef : f.getType().getDeclaredFields()) {
 						if (ef.isAnnotationPresent(Column.class)) {
 							ef.setAccessible(true);
-							ids.put(ef.getName(), ef.get(id));
-							break;
+							ids.put(f.getName() + "." + ef.getName(), ef.get(id));
+							ef.setAccessible(false);
 						}
 					}
 				}
@@ -64,8 +64,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 			T t = em.find(klass, id);
 			if (t == null && AutoMake.class.isAssignableFrom(klass)) {
-				t = (T) ((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids));
-				t.save();
+				t = klass.cast(((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids)));
 			}
 
 			return t;
@@ -405,6 +404,27 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				tx.begin();
 				op.run();
 				tx.commit();
+			} finally {
+				if (tx.isActive()) {
+					tx.rollback();
+				}
+			}
+		}
+	}
+
+	private static <T extends DAO<T>> T transaction(EntityManager em, Supplier<T> op) {
+		EntityTransaction tx = em.getTransaction();
+		boolean transOpen = tx.isActive();
+
+		if (transOpen) {
+			return op.get();
+		} else {
+			try {
+				tx.begin();
+				T t = op.get();
+				tx.commit();
+
+				return t;
 			} finally {
 				if (tx.isActive()) {
 					tx.rollback();

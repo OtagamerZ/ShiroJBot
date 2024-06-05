@@ -60,6 +60,8 @@ import java.util.random.RandomGenerator;
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "senshi")
 public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Transient
@@ -92,6 +94,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		e.executeAssert(ON_INITIALIZE);
 
 		Shoukan game = this.getGame();
+		getHand().getData().put("last_equipment", e);
+		getHand().getData().put("last_evogear", e);
 		game.trigger(ON_EQUIP, asSource(ON_EQUIP));
 
 		if (e.hasCharm(Charm.TIMEWARP)) {
@@ -1213,6 +1217,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 					if (trigger != ON_TICK) {
 						hasFlag(Flag.EMPOWERED, true);
+					}
+
+					if (trigger == ON_ACTIVATE) {
+						hand.getData().put("last_ability", this);
+						getGame().trigger(ON_ABILITY, getSide());
 					}
 				}
 			}

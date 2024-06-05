@@ -44,6 +44,8 @@ public class LocalizedId implements Serializable {
 	}
 
 	public LocalizedId(String id, I18N locale) {
+		if (id.isBlank()) throw new IllegalArgumentException("ID cannot be blank");
+
 		this.id = id;
 		this.locale = locale;
 	}

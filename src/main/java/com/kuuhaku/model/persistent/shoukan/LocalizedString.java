@@ -30,6 +30,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "locale_string")
 public class LocalizedString extends DAO<LocalizedString> implements Serializable {
 	@EmbeddedId

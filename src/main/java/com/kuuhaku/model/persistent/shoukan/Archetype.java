@@ -39,6 +39,8 @@ import java.util.Set;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "archetype")
 public class Archetype extends DAO<Archetype> {
 	@Id
@@ -55,7 +57,7 @@ public class Archetype extends DAO<Archetype> {
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true)
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedArch> infos = new HashSet<>();

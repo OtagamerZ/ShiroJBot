@@ -44,6 +44,7 @@ public class WarnId implements Serializable {
 	}
 
 	public WarnId(String gid, String uid) {
+		if (uid.isBlank() || gid.isBlank()) throw new IllegalArgumentException("UID and GID cannot be blank");
 		DAO.applyNative("CREATE SEQUENCE IF NOT EXISTS warn_id_seq");
 
 		this.id = DAO.queryNative(Integer.class, "SELECT nextval('warn_id_seq')");
