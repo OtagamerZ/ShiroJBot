@@ -39,6 +39,8 @@ public class ProfileId implements Serializable {
 	}
 
 	public ProfileId(String uid, String gid) {
+		if (uid.isBlank() || gid.isBlank()) throw new IllegalArgumentException("UID and GID cannot be blank");
+
 		this.uid = uid;
 		this.gid = gid;
 	}

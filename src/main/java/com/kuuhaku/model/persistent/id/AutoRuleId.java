@@ -41,6 +41,7 @@ public class AutoRuleId implements Serializable {
 	}
 
 	public AutoRuleId(String gid) {
+		if (gid.isBlank()) throw new IllegalArgumentException("GID cannot be blank");
 		DAO.applyNative("CREATE SEQUENCE IF NOT EXISTS auto_rule_id_seq");
 
 		this.id = DAO.queryNative(Integer.class, "SELECT nextval('auto_rule_id_seq')");

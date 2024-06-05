@@ -38,8 +38,9 @@ public class DynamicPropertyId implements Serializable {
 	public DynamicPropertyId() {
 	}
 
-	public DynamicPropertyId(String account, String id) {
-		this.uid = account;
+	public DynamicPropertyId(String uid, String id) {
+		if (uid.isBlank() || id.isBlank()) throw new IllegalArgumentException("UID and ID cannot be blank");
+		this.uid = uid;
 		this.id = id;
 	}
 
