@@ -142,9 +142,6 @@ public class DeckAddCommand implements Executable {
 				if (s.isFusion()) {
 					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
 					return false;
-				} else if (sc.getKawaiponCard().isChrome()) {
-					event.channel().sendMessage(locale.get("error/cannot_add_chrome")).queue();
-					return false;
 				} else if (d.getSenshiRaw().size() >= 36) {
 					event.channel().sendMessage(locale.get("error/deck_full")).queue();
 					return false;

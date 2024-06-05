@@ -403,6 +403,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			try {
 				tx.begin();
 				op.run();
+				em.flush();
 				tx.commit();
 			} finally {
 				if (tx.isActive()) {
