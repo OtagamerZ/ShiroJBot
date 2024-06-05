@@ -37,7 +37,7 @@ public record DropCondition(String key, Function<RandomGenerator, Object[]> extr
 			for (Method m : val.getClass().getDeclaredMethods()) {
 				if (m.getName().equals("toString") && m.getParameterCount() == 1 && m.getParameterTypes()[0] == I18N.class) {
 					try {
-						strs[i] = m.invoke(locale);
+						strs[i] = m.invoke(val, locale);
 						continue fill;
 					} catch (IllegalAccessException | InvocationTargetException ignored) {
 					}
