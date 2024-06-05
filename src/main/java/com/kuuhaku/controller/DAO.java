@@ -347,10 +347,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				if (lock.isBlacklisted()) return;
 			}
 
-			transaction(em, () -> {
-				if (!em.contains(this)) em.merge(this);
-				else em.flush();
-			});
+			transaction(em, () -> em.merge(this));
 		} finally {
 			afterSave();
 		}
