@@ -70,6 +70,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 			if (klass == Profile.class) {
 				sqlLogger.setLevel(Level.INFO);
+			} else {
+				sqlLogger.setLevel(Level.OFF);
 			}
 
 			T t = em.find(klass, id);
