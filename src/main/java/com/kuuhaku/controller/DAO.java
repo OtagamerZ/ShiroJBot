@@ -242,7 +242,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		transaction(em, () -> {
 			consumer.accept(obj);
-			em.flush();
+			em.merge(obj);
 		});
 	}
 
