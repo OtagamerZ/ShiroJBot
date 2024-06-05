@@ -27,22 +27,22 @@ import com.kuuhaku.model.persistent.converter.*;
 import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import com.kuuhaku.model.persistent.javatype.RoleJavaType;
 import com.ygimenez.json.JSONObject;
-import jakarta.persistence.*;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
-import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 
 import java.util.*;
 
-import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "guild_settings")
 @JavaTypeRegistration(javaType = Role.class, descriptorClass = RoleJavaType.class)
 @JavaTypeRegistration(javaType = GuildMessageChannel.class, descriptorClass = ChannelJavaType.class)
