@@ -65,6 +65,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			T t = em.find(klass, id);
 			if (t == null && AutoMake.class.isAssignableFrom(klass)) {
 				t = klass.cast(((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids)));
+			} else {
+				em.refresh(t);
 			}
 
 			return t;
@@ -241,6 +243,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 
 		transaction(em, () -> {
+			em.refresh(obj);
 			consumer.accept(obj);
 			em.merge(obj);
 		});
@@ -363,7 +366,12 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				return (T) this;
 			} else {
 				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-				return (T) Utils.getOr(em.find(getClass(), key), this);
+				T t = (T) em.find(getClass(), key);
+				if (t != null) {
+					em.refresh(t);
+				}
+
+				return (T) Utils.getOr(t, this);
 			}
 		} finally {
 			afterRefresh();
