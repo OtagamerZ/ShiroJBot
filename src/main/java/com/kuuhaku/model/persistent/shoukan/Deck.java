@@ -70,7 +70,7 @@
 	 @Column(name = "name")
 	 private String name;
 
-	 @ManyToOne(fetch = FetchType.LAZY, optional = false)
+	 @ManyToOne(optional = false)
 	 @PrimaryKeyJoinColumn(name = "account_uid")
 	 @Fetch(FetchMode.JOIN)
 	 private Account account;

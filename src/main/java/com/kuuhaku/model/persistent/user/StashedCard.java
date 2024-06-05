@@ -56,12 +56,12 @@ public class StashedCard extends DAO<StashedCard> {
 	@Column(name = "type", nullable = false)
 	private CardType type;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "kawaipon_uid")
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "deck_id")
 	private Deck deck;
 

@@ -60,7 +60,7 @@ public class CustomAnswer extends DAO<CustomAnswer> {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray users = new JSONArray();
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "gid", nullable = false, updatable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("gid")

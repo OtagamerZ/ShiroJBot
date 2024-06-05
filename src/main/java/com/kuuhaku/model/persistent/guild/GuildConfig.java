@@ -56,17 +56,17 @@ public class GuildConfig extends DAO<GuildConfig> implements AutoMake<GuildConfi
 	@Column(name = "locale", nullable = false)
 	private I18N locale = I18N.PT;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = ALL, orphanRemoval = true)
+	@OneToOne(cascade = ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumn(name = "gid")
 	@Fetch(FetchMode.JOIN)
 	private GuildSettings settings;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = ALL, orphanRemoval = true)
+	@OneToOne(cascade = ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumn(name = "gid")
 	@Fetch(FetchMode.JOIN)
 	private WelcomeSettings welcomeSettings;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = ALL, orphanRemoval = true)
+	@OneToOne(cascade = ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumn(name = "gid")
 	@Fetch(FetchMode.JOIN)
 	private GoodbyeSettings goodbyeSettings;

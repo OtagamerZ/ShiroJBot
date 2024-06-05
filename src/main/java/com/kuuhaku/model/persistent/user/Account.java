@@ -83,7 +83,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	@Column(name = "gems", nullable = false)
 	private int gems;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = ALL, orphanRemoval = true)
+	@OneToOne(cascade = ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumn(name = "uid")
 	@Fetch(FetchMode.JOIN)
 	private AccountSettings settings;

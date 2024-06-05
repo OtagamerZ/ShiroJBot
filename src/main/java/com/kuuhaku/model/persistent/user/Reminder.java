@@ -44,7 +44,7 @@ public class Reminder extends DAO<Reminder> {
 	@Column(name = "due", nullable = false)
 	private ZonedDateTime due;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "account_uid")
 	@Fetch(FetchMode.JOIN)
 	private Account account;

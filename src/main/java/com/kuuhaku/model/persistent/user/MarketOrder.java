@@ -39,7 +39,7 @@ public class MarketOrder extends DAO<MarketOrder> {
 	@Fetch(FetchMode.JOIN)
 	private Card card;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "kawaipon_uid")
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;

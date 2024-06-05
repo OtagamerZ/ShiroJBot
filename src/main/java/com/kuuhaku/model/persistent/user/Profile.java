@@ -73,19 +73,19 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<Warn> warns = new ArrayList<>();
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "uid", nullable = false, updatable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("uid")
 	private Account account;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "gid", nullable = false, updatable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("gid")
 	private GuildConfig guild;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = ALL, orphanRemoval = true)
+	@OneToOne(cascade = ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumns({
 			@PrimaryKeyJoinColumn(name = "uid"),
 			@PrimaryKeyJoinColumn(name = "gid")
