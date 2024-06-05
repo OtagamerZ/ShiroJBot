@@ -63,7 +63,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				throw new NoSuchFieldException("Class' ID not found");
 			}
 
-			System.out.println(ids);
+			System.out.println(klass.getSimpleName() + " - " + ids);
 			return transaction(em, () -> {
 				try {
 					T t = em.find(klass, id);
