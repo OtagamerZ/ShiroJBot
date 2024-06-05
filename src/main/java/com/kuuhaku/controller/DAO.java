@@ -62,15 +62,20 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				throw new NoSuchFieldException("Class' ID not found");
 			}
 
-			T t = em.find(klass, id);
-			if (t == null && AutoMake.class.isAssignableFrom(klass)) {
-				t = klass.cast(((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids)));
-			} else if (t != null) {
-				em.refresh(t);
-			}
+			return transaction(em, () -> {
+				try {
+					em.flush();
+					T t = em.find(klass, id);
+					if (t == null && AutoMake.class.isAssignableFrom(klass)) {
+						t = klass.cast(((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids)));
+					}
 
-			return t;
-		} catch (Exception e) {
+					return t;
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			});
+		} catch (NoSuchFieldException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -411,7 +416,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			try {
 				tx.begin();
 				op.run();
-				em.flush();
 				tx.commit();
 			} finally {
 				if (tx.isActive()) {
@@ -431,7 +435,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			try {
 				tx.begin();
 				T t = op.get();
-				em.flush();
 				tx.commit();
 
 				return t;
