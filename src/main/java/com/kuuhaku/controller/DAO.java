@@ -403,8 +403,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			try {
 				tx.begin();
 				op.run();
-				tx.commit();
 				em.flush();
+				tx.commit();
 			} finally {
 				if (tx.isActive()) {
 					tx.rollback();
@@ -423,6 +423,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			try {
 				tx.begin();
 				T t = op.get();
+				em.flush();
 				tx.commit();
 
 				return t;
