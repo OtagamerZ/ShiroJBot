@@ -31,8 +31,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "goodbye_settings")
 @JavaTypeRegistration(javaType = GuildMessageChannel.class, descriptorClass = ChannelJavaType.class)
 public class GoodbyeSettings extends DAO<GoodbyeSettings> {
