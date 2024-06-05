@@ -24,6 +24,9 @@ import com.kuuhaku.interfaces.DAOListener;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,7 +55,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 					for (Field ef : f.getType().getDeclaredFields()) {
 						if (ef.isAnnotationPresent(Column.class)) {
 							ef.setAccessible(true);
-							ids.put(ef.getName(), ef.get(id));
+							ids.put(f.getName() + "." + ef.getName(), ef.get(id));
 							ef.setAccessible(false);
 						}
 					}
@@ -63,7 +66,19 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				throw new NoSuchFieldException("Class' ID not found");
 			}
 
-			T t = em.find(klass, id);
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaQuery<T> cq = cb.createQuery(klass);
+			Root<T> root = cq.from(klass);
+
+			cq = cq.select(root);
+			for (Map.Entry<String, Object> e : ids.entrySet()) {
+				cq = cq.where(cb.equal(root.get(e.getKey()), e.getValue()));
+			}
+
+			T t = em.createQuery(cq)
+					.setMaxResults(1)
+					.getSingleResult();
+
 			if (t == null && AutoMake.class.isAssignableFrom(klass)) {
 				t = (T) ((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids));
 				t.save();
