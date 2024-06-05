@@ -21,13 +21,10 @@ package com.kuuhaku.controller;
 import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
+import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Path;
-import jakarta.persistence.criteria.Root;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,9 +36,13 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public abstract class DAO<T extends DAO<T>> implements DAOListener {
+	private static final Logger sqlLogger = Logger.getLogger("org.hibernate.SQL");
+
 	@SuppressWarnings("unchecked")
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
 		EntityManager em = Manager.getEntityManager();
@@ -67,31 +68,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				throw new NoSuchFieldException("Class' ID not found");
 			}
 
-			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<T> cq = cb.createQuery(klass);
-			Root<T> root = cq.from(klass);
-
-			cq = cq.select(root);
-			for (Map.Entry<String, Object> e : ids.entrySet()) {
-				String[] fields = e.getKey().split("\\.");
-				Path<Object> path = null;
-				for (String f : fields) {
-					if (path == null) path = root.get(f);
-					else path = path.get(f);
-				}
-
-				cq = cq.where(cb.equal(path, e.getValue()));
+			if (klass == Profile.class) {
+				sqlLogger.setLevel(Level.INFO);
 			}
 
-			T t;
-			try {
-				t = em.createQuery(cq)
-						.setMaxResults(1)
-						.getSingleResult();
-			} catch (NoResultException e) {
-				t = null;
-			}
-
+			T t = em.find(klass, id);
 			if (t == null && AutoMake.class.isAssignableFrom(klass)) {
 				t = (T) ((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids));
 				t.save();
