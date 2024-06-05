@@ -26,6 +26,7 @@ import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
@@ -72,7 +73,14 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 			cq = cq.select(root);
 			for (Map.Entry<String, Object> e : ids.entrySet()) {
-				cq = cq.where(cb.equal(root.get(e.getKey()), e.getValue()));
+				String[] fields = e.getKey().split("\\.");
+				Path<Object> path = null;
+				for (String f : fields) {
+					if (path == null) path = root.get(f);
+					else path = path.get(f);
+				}
+
+				cq = cq.where(cb.equal(path, e.getValue()));
 			}
 
 			T t = em.createQuery(cq)
