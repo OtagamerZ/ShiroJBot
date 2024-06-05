@@ -65,7 +65,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			T t = em.find(klass, id);
 			if (t == null && AutoMake.class.isAssignableFrom(klass)) {
 				t = klass.cast(((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids)));
-			} else {
+			} else if (t != null) {
 				em.refresh(t);
 			}
 
