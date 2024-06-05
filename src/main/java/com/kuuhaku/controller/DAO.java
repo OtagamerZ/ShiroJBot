@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public abstract class DAO<T extends DAO<T>> implements DAOListener {
@@ -62,14 +63,20 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				throw new NoSuchFieldException("Class' ID not found");
 			}
 
-			T t = em.find(klass, id);
-			if (t == null && AutoMake.class.isAssignableFrom(klass)) {
-				t = (T) ((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids));
-				t.save();
-			}
+			return transaction(em, () -> {
+				try {
+					T t = em.find(klass, id);
+					if (t == null && AutoMake.class.isAssignableFrom(klass)) {
+						t = (T) ((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids));
+						t.save();
+					}
 
-			return t;
-		} catch (Exception e) {
+					return t;
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			});
+		} catch (NoSuchFieldException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -408,6 +415,27 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				tx.begin();
 				op.run();
 				tx.commit();
+			} finally {
+				if (tx.isActive()) {
+					tx.rollback();
+				}
+			}
+		}
+	}
+
+	private static <T extends DAO<T>> T transaction(EntityManager em, Supplier<T> op) {
+		EntityTransaction tx = em.getTransaction();
+		boolean transOpen = tx.isActive();
+
+		if (transOpen) {
+			return op.get();
+		} else {
+			try {
+				tx.begin();
+				T t = op.get();
+				tx.commit();
+
+				return t;
 			} finally {
 				if (tx.isActive()) {
 					tx.rollback();
