@@ -40,8 +40,6 @@ import java.util.List;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "guild_config")
 public class GuildConfig extends DAO<GuildConfig> implements AutoMake<GuildConfig> {
 	@Id

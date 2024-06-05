@@ -35,8 +35,6 @@ import org.hibernate.type.SqlTypes;
 import java.awt.*;
 
 @Entity
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "account_settings")
 public class AccountSettings extends DAO<AccountSettings> {
 	public static final long MAX_BG_SIZE = 4 * 1024 * 1024;
