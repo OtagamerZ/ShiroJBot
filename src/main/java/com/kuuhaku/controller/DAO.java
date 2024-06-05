@@ -21,7 +21,6 @@ package com.kuuhaku.controller;
 import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
-import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -36,14 +35,9 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public abstract class DAO<T extends DAO<T>> implements DAOListener {
-	private static final Logger sqlLogger = Logger.getLogger("org.hibernate.SQL");
-
-	@SuppressWarnings("unchecked")
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
 		EntityManager em = Manager.getEntityManager();
 
@@ -68,15 +62,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				throw new NoSuchFieldException("Class' ID not found");
 			}
 
-			if (klass == Profile.class) {
-				sqlLogger.setLevel(Level.INFO);
-			} else {
-				sqlLogger.setLevel(Level.OFF);
-			}
-
 			T t = em.find(klass, id);
 			if (t == null && AutoMake.class.isAssignableFrom(klass)) {
-				t = (T) ((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids));
+				t = klass.cast(((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids)));
 				t.save();
 			}
 

@@ -152,6 +152,7 @@ public class Arena implements Renderer {
 			field.setHand(game.getCurrent());
 		}
 
+		field.getHand().getData().put("last_field", field);
 		game.trigger(Trigger.ON_FIELD_CHANGE);
 	}
 

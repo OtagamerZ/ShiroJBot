@@ -471,7 +471,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.setSummoned(true);
-		curr.getData().put("last_summon", copy);
 		reportEvent("str/place_card", true, curr.getName(), copy.isFlipped() ? getString("str/a_card") : copy, copy.getState().toString(getLocale()));
 		return true;
 	}
@@ -625,9 +624,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (e.execute(ep)) {
 			hand.getGraveyard().add(p);
-			hand.getData().put("last_spell", e);
-			hand.getData().put("last_evogear", e);
-			trigger(ON_SPELL, hand.getSide());
 			return true;
 		}
 
@@ -717,8 +713,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		target.getEquipments().add(copy);
-		curr.getData().put("last_equipment", copy);
-		curr.getData().put("last_evogear", copy);
 		reportEvent("str/equip_card", true, curr.getName(), copy.isFlipped() ? getString("str/an_equipment") : copy, target.isFlipped() ? getString("str/a_card") : target);
 		return true;
 	}
@@ -753,7 +747,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		chosen.setAvailable(false);
 		arena.setField(chosen.copy());
-		curr.getData().put("last_field", chosen);
 		reportEvent("str/place_field", true, curr.getName(), chosen);
 		return true;
 	}
@@ -1057,9 +1050,6 @@ public class Shoukan extends GameInstance<Phase> {
 			stack.add(chosen.copy());
 		}
 
-		curr.getData().put("last_spell", chosen);
-		curr.getData().put("last_evogear", chosen);
-		trigger(ON_SPELL, side);
 		reportEvent("str/activate_card", true, curr.getName(), chosen.getBase().getTags().contains("SECRET") ? getString("str/a_spell") : chosen);
 		return true;
 	}
@@ -1211,8 +1201,6 @@ public class Shoukan extends GameInstance<Phase> {
 			d.setAvailable(false);
 		}
 
-		curr.getData().put("last_ability", d);
-		trigger(ON_ABILITY, side);
 		reportEvent("str/card_special", true, curr.getName(), d);
 		return !curr.selectionPending();
 	}

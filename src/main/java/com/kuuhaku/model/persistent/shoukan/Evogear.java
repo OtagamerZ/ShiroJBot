@@ -505,8 +505,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 			csm.run();
 
-			if (isSpell() && hand.getOrigins().isPure(Race.MYSTICAL)) {
-				hand.modMP(1);
+			if (isSpell()) {
+				hand.getData().put("last_spell", this);
+				hand.getData().put("last_evogear", this);
+				getGame().trigger(ON_SPELL, getSide());
+
+				if (hand.getOrigins().isPure(Race.MYSTICAL)) {
+					hand.modMP(1);
+				}
 			}
 
 			if (ep.trigger() != ON_TICK) {
