@@ -42,12 +42,6 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 	@Column(name = "uid", nullable = false)
 	private String uid;
 
-	@OneToOne(optional = false)
-	@PrimaryKeyJoinColumn(name = "uid")
-	@Fetch(FetchMode.JOIN)
-	@MapsId("uid")
-	private Account account;
-
 	@ManyToOne
 	@JoinColumn(name = "fav_card")
 	@Fetch(FetchMode.JOIN)
@@ -64,16 +58,11 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 
 	public Kawaipon(Account acc) {
 		this.uid = acc.getUid();
-		this.account = acc;
 	}
 
 	@Override
 	public Kawaipon make(JSONObject args) {
 		this.uid = args.getString("uid");
-		this.account = DAO.find(Account.class, uid);
-		System.out.println(args);
-		System.out.println(uid);
-		System.out.println(account);
 		return this;
 	}
 
@@ -82,7 +71,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 	}
 
 	public Account getAccount() {
-		return account;
+		return DAO.find(Account.class, uid);
 	}
 
 	public List<KawaiponCard> getCards() {
@@ -98,10 +87,11 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 	}
 
 	public int getMaxCapacity() {
-		int mult = 3 + account.getItemCount("cap_boost");
-		int add = account.getItemCount("extra_cap") * 10;
+		Account acc = getAccount();
+		int mult = 3 + acc.getItemCount("cap_boost");
+		int add = acc.getItemCount("extra_cap") * 10;
 
-		return 250 + add + account.getHighestLevel() * mult;
+		return 250 + add + acc.getHighestLevel() * mult;
 	}
 
 	public int getStashUsage() {
@@ -122,7 +112,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				LEFT JOIN StashedCard sc ON kc.uuid = sc.uuid
 				WHERE sc.id IS NULL
 				  AND kc.kawaipon.uid = ?1
-				""", account.getUid()));
+				""", uid));
 	}
 
 	public Set<KawaiponCard> getCollection(Anime a, boolean chrome) {
@@ -134,7 +124,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				  AND kc.kawaipon.uid = ?1
 				  AND kc.card.anime.id = ?2
   				  AND kc.chrome = ?3
-				""", account.getUid(), a.getId(), chrome));
+				""", uid, a.getId(), chrome));
 	}
 
 	public KawaiponCard getCard(Card card, boolean chrome) {
@@ -146,7 +136,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				  AND kc.kawaipon.uid = ?1
 				  AND kc.card = ?2
 				  AND kc.chrome = ?3
-				""", account.getUid(), card, chrome);
+				""", uid, card, chrome);
 	}
 
 	public boolean hasCard(KawaiponCard card) {
@@ -169,7 +159,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				           AND sc.id IS NULL
 				         GROUP BY kc.card_id, kc.chrome
 				     ) x
-				""", account.getUid());
+				""", uid);
 
 		if (vals == null) {
 			return new Pair<>(0, 0);
@@ -192,7 +182,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				           AND sc.id IS NULL
 				         GROUP BY kc.card_id, kc.chrome
 				     ) x
-				""", account.getUid(), anime.getId());
+				""", uid, anime.getId());
 
 		if (vals == null) {
 			return new Pair<>(0, 0);
@@ -215,7 +205,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				           AND sc.id IS NULL
 				         GROUP BY kc.card_id, kc.chrome
 				     ) x
-				""", account.getUid(), rarity.name());
+				""", uid, rarity.name());
 
 		if (vals == null) {
 			return new Pair<>(0, 0);
@@ -310,11 +300,11 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Kawaipon kawaipon = (Kawaipon) o;
-		return Objects.equals(uid, kawaipon.uid) && Objects.equals(account, kawaipon.account);
+		return Objects.equals(uid, kawaipon.uid);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(uid, account);
+		return Objects.hashCode(uid);
 	}
 }
