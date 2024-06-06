@@ -238,7 +238,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 				a.setBalance(0);
 			}
 
-			target.addCR(value, "Received from " + target.getName());
+			target.addCR(value, "Received from " + getName());
 			a.addTransaction(value, false, "Transferred to " + target.getName(), Currency.CR);
 		});
 	}
