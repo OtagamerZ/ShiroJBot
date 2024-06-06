@@ -40,6 +40,7 @@ import com.kuuhaku.model.records.shoukan.DeferredTrigger;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
+import com.kuuhaku.util.Graph;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.hibernate.annotations.Cache;

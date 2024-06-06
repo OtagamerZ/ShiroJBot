@@ -32,6 +32,7 @@ import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.*;
+import com.kuuhaku.util.Graph;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;

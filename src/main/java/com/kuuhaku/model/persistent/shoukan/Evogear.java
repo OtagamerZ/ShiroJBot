@@ -41,6 +41,7 @@ import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.model.records.shoukan.Targeting;
 import com.kuuhaku.util.*;
+import com.kuuhaku.util.Graph;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
