@@ -58,15 +58,17 @@ public abstract class Manager {
 		File initDir = IO.getResourceAsFile("database");
 		if (initDir != null && initDir.isDirectory()) {
 			Set<String> scripts = new HashSet<>();
-			try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
-				ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))
-						.sorted(Comparator.comparing(Path::toString).thenComparing(Path::getNameCount))
-						.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
-						.map(IO::readString)
-						.forEach(DAO::applyNative);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+			emf.runInTransaction(em -> {
+				try (Stream<Path> ioStream = Files.walk(initDir.toPath())) {
+					ioStream.filter(p -> Files.isRegularFile(p) && p.toString().endsWith(".sql"))
+							.sorted(Comparator.comparing(Path::toString).thenComparing(Path::getNameCount))
+							.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
+							.map(IO::readString)
+							.forEach(sql -> em.createNativeQuery(sql).executeUpdate());
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			});
 
 			Constants.LOGGER.info("Applied {} scripts: {}", scripts.size(), scripts);
 		}
