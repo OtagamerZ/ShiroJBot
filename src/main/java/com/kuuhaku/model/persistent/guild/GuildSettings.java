@@ -72,7 +72,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = ChannelConverter.class)
 	private GuildMessageChannel generalChannel;
 
-	@Lob
 	@Column(name = "embed", nullable = false, columnDefinition = "TEXT")
 	@Convert(converter = EmbedConverter.class)
 	private AutoEmbedBuilder embed = new AutoEmbedBuilder();

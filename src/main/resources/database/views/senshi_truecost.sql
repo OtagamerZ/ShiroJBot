@@ -24,7 +24,7 @@ SELECT card_id
      , blood
      , dfs
      , dodge
-     , effect
+     , cast(effect AS TEXT) AS effect
      , mana + iif(has(tags, 'FUSION'), 5, 0) as mana
      , sacrifices
      , tags

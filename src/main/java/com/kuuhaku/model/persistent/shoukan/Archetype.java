@@ -53,7 +53,6 @@ public class Archetype extends DAO<Archetype> {
 	@MapsId("id")
 	private Anime anime;
 
-	@Lob
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;

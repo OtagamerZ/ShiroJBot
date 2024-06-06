@@ -38,7 +38,6 @@ public class Reminder extends DAO<Reminder> {
 	@Column(name = "id", nullable = false)
 	private int id;
 
-	@Lob
 	@Column(name = "message", nullable = false, columnDefinition = "TEXT")
 	private String message;
 

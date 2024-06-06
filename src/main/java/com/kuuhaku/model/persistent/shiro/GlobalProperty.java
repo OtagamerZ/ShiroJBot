@@ -32,7 +32,6 @@ public class GlobalProperty extends DAO<GlobalProperty> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@Lob
 	@Column(name = "value", nullable = false, columnDefinition = "TEXT")
 	private String value;
 

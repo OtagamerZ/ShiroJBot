@@ -43,7 +43,6 @@ public class WelcomeSettings extends DAO<WelcomeSettings> {
 	@CollectionTable(name = "welcome_settings_headers", joinColumns = @JoinColumn(name = "gid"))
 	private Set<String> headers = new LinkedHashSet<>();
 
-	@Lob
 	@Column(name = "message", nullable = false, columnDefinition = "TEXT")
 	private String message;
 

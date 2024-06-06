@@ -35,7 +35,6 @@ public class Warn extends DAO<Warn> {
 	@EmbeddedId
 	private WarnId id;
 
-	@Lob
 	@Column(name = "reason", nullable = false, columnDefinition = "TEXT")
 	private String reason;
 

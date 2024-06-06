@@ -37,7 +37,6 @@ public class LocalizedString extends DAO<LocalizedString> implements Serializabl
 	@EmbeddedId
 	private LocalizedId id;
 
-	@Lob
 	@Column(name = "value", nullable = false, columnDefinition = "TEXT")
 	private String value;
 

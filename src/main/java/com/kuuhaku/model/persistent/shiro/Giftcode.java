@@ -43,7 +43,6 @@ public class Giftcode extends DAO<Giftcode> {
 	@Column(name = "description")
 	private String description;
 
-	@Lob
 	@Language("Groovy")
 	@Column(name = "gift", columnDefinition = "TEXT")
 	private String gift;
