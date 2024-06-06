@@ -69,6 +69,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 
 	@Override
 	public Kawaipon make(JSONObject args) {
+		System.out.println(args);
 		this.uid = args.getString("uid");
 		this.account = DAO.find(Account.class, uid);
 		return this;

@@ -69,7 +69,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 						t.save();
 					} catch (Exception e) {
 						Constants.LOGGER.error(new JSONObject(ids));
-						throw new RuntimeException(e);
+						throw e;
 					}
 				}
 
