@@ -50,8 +50,6 @@ public abstract class Manager {
 			)
 	));
 
-	private static final ThreadBound<EntityManager> em = new ThreadBound<>(emf::createEntityManager, EntityManager::close);
-
 	static {
 		String db = DAO.queryNative(String.class, "SELECT current_database()");
 		String schema = DAO.queryNative(String.class, "SELECT current_schema()");
@@ -74,8 +72,8 @@ public abstract class Manager {
 		}
 	}
 
-	public static EntityManager getEntityManager() {
-		return em.get();
+	public static EntityManagerFactory getFactory() {
+		return emf;
 	}
 
 	public static long ping() {
