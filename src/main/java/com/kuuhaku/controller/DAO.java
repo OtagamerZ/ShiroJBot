@@ -68,8 +68,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 						t = klass.cast(((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids)));
 						t.save();
 					} catch (Exception e) {
-						Constants.LOGGER.error(e, e);
 						Constants.LOGGER.error(new JSONObject(ids));
+						throw new RuntimeException(e);
 					}
 				}
 

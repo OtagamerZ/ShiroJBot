@@ -26,7 +26,9 @@ import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.persistent.converter.*;
 import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import com.kuuhaku.model.persistent.javatype.RoleJavaType;
+import com.kuuhaku.model.records.embed.Embed;
 import com.ygimenez.json.JSONObject;
+import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
@@ -72,9 +74,9 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = ChannelConverter.class)
 	private GuildMessageChannel generalChannel;
 
-	@Column(name = "embed", nullable = false, columnDefinition = "TEXT")
-	@Convert(converter = EmbedConverter.class)
-	private AutoEmbedBuilder embed = new AutoEmbedBuilder();
+	@Column(name = "embed", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONObjectConverter.class)
+	private JSONObject embed = new JSONObject();
 
 	@Column(name = "join_role")
 	@Convert(converter = RoleConverter.class)
@@ -173,12 +175,12 @@ public class GuildSettings extends DAO<GuildSettings> {
 		this.generalChannel = generalChannel;
 	}
 
-	public AutoEmbedBuilder getEmbed() {
+	public JSONObject getEmbed() {
 		return embed;
 	}
 
-	public void setEmbed(AutoEmbedBuilder embed) {
-		this.embed = embed;
+	public void setEmbed(Embed embed) {
+		this.embed = new JSONObject(embed);
 	}
 
 	public Role getJoinRole() {

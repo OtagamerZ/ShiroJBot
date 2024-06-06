@@ -43,8 +43,7 @@ public class SetEmbedCommand implements Executable {
 
 		try {
 			AutoEmbedBuilder embed = new AutoEmbedBuilder(args.getString("json"));
-
-			settings.setEmbed(embed);
+			settings.setEmbed(embed.getEmbed());
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/set_embed")).queue();
