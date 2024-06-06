@@ -74,6 +74,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = ChannelConverter.class)
 	private GuildMessageChannel generalChannel;
 
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "embed", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject embed = new JSONObject();
