@@ -18,6 +18,7 @@
 
 package com.kuuhaku.controller;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
@@ -63,8 +64,13 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 				T t = em.find(klass, id);
 				if (t == null && AutoMake.class.isAssignableFrom(klass)) {
-					t = klass.cast(((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids)));
-					t.save();
+					try {
+						t = klass.cast(((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids)));
+						t.save();
+					} catch (Exception e) {
+						Constants.LOGGER.error(e, e);
+						Constants.LOGGER.error(new JSONObject(ids));
+					}
 				}
 
 				return t;
