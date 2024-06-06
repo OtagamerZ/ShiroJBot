@@ -65,6 +65,7 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	@Column(name = "signature")
 	private String signature;
 
+	@Lob
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;

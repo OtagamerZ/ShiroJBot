@@ -75,6 +75,7 @@ public class CardAttributes implements Serializable, Cloneable {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedDescription> descriptions = new HashSet<>();
 
+	@Lob
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;

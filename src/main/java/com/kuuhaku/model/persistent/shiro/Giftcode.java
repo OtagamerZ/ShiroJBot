@@ -22,10 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.Utils;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.intellij.lang.annotations.Language;
 
 import java.time.ZoneId;
@@ -46,6 +43,7 @@ public class Giftcode extends DAO<Giftcode> {
 	@Column(name = "description")
 	private String description;
 
+	@Lob
 	@Language("Groovy")
 	@Column(name = "gift", columnDefinition = "TEXT")
 	private String gift;

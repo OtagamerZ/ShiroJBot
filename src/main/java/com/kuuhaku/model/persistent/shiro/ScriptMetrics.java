@@ -36,6 +36,7 @@ public class ScriptMetrics extends DAO<ScriptMetrics> {
 	@Column(name = "issuer", nullable = false)
 	private String issuer;
 
+	@Lob
 	@Column(name = "script", nullable = false, columnDefinition = "TEXT")
 	private String script;
 

@@ -37,6 +37,7 @@ public class LocalizedDescription extends DAO<LocalizedDescription> implements S
 	@EmbeddedId
 	private LocalizedId id;
 
+	@Lob
 	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
 	private String description;
 

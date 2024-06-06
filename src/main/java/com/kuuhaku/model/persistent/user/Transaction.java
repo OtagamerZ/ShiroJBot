@@ -42,6 +42,7 @@ public class Transaction extends DAO<Transaction> {
 	@Column(name = "input", nullable = false)
 	private boolean input;
 
+	@Lob
 	@Column(name = "reason", nullable = false, columnDefinition = "TEXT")
 	private String reason;
 

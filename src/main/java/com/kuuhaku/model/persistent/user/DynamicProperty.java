@@ -33,6 +33,7 @@ public class DynamicProperty extends DAO<DynamicProperty> {
 	@EmbeddedId
 	private DynamicPropertyId id;
 
+	@Lob
 	@Column(name = "value", nullable = false, columnDefinition = "TEXT")
 	private String value;
 

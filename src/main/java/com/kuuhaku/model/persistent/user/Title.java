@@ -52,6 +52,7 @@ public class Title extends DAO<Title> {
 	@Column(name = "rarity", nullable = false)
 	private Rarity rarity;
 
+	@Lob
 	@Column(name = "condition", columnDefinition = "TEXT")
 	private String condition;
 
