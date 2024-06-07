@@ -204,8 +204,13 @@ public class SynthesizeCommand implements Executable {
 							Kawaipon k = kp.refresh();
 
 							double totalQ = 1;
+							int chromas = 0;
 							Set<Rarity> rarities = EnumSet.noneOf(Rarity.class);
 							for (StashedCard sc : cards) {
+								if (sc.isChrome()) {
+									chromas++;
+								}
+
 								if (sc.getType() == CardType.KAWAIPON) {
 									KawaiponCard kc = sc.getKawaiponCard();
 									if (kc != null) {
@@ -233,14 +238,22 @@ public class SynthesizeCommand implements Executable {
 
 							if (Calc.chance(field)) {
 								Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
-								new StashedCard(k, f).save();
+								StashedCard sc = new StashedCard(k, f);
+								if (Calc.chance(0.05 * chromas)) {
+									sc.setChrome(true);
+								}
+								sc.save();
 
 								event.channel().sendMessage(locale.get("success/synth", f))
 										.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, k.getAccount().getCurrentDeck()), "png"), "synth.png"))
 										.queue();
 							} else {
 								Evogear e = rollSynthesis(event.user(), mult, lucky.get());
-								new StashedCard(k, e).save();
+								StashedCard sc = new StashedCard(k, e);
+								if (Calc.chance(0.05 * chromas)) {
+									sc.setChrome(true);
+								}
+								sc.save();
 
 								event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
 										.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, k.getAccount().getCurrentDeck()), "png"), "synth.png"))
@@ -258,37 +271,6 @@ public class SynthesizeCommand implements Executable {
 			);
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
-		}
-	}
-
-	private static void synthShards(I18N locale, MessageChannel channel, Account acc, UserItem shard) {
-		if (acc.getItemCount(shard.getId()) < 10) {
-			channel.sendMessage(locale.get("error/not_enough_shards")).queue();
-			return;
-		}
-
-		try {
-			Rarity r = Rarity.valueOf(shard.getId().split("_")[0]);
-
-			Utils.confirm(locale.get("question/synth_shards", shard.getName(locale), locale.get("rarity/" + r)), channel, w -> {
-						Kawaipon kp = acc.getKawaipon();
-						acc.consumeItem(shard, 10);
-
-						List<Card> pool = DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE c.anime.visible = TRUE AND c.rarity = ?1", r);
-						KawaiponCard kc = new KawaiponCard(Utils.getRandomEntry(pool), false);
-						kc.setKawaipon(kp);
-						kc.save();
-
-						new StashedCard(kp, kc).save();
-						channel.sendMessage(locale.get("success/synth", kc))
-								.addFiles(FileUpload.fromData(IO.getBytes(kc.render(), "png"), "synth.png"))
-								.queue();
-
-						return true;
-					}, acc.getUser()
-			);
-		} catch (PendingConfirmationException e) {
-			channel.sendMessage(locale.get("error/pending_confirmation")).queue();
 		}
 	}
 
