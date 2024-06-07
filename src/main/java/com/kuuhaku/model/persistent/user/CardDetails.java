@@ -32,7 +32,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Entity
 @Table(name = "card_details")
-public class CardDetails extends DAO<CardDetails> implements AutoMake<CardDetails> {
+public class CardDetails extends DAO<CardDetails> {
 	@Id
 	@Column(name = "card_uuid", length = 36)
 	private String uuid;
@@ -43,10 +43,11 @@ public class CardDetails extends DAO<CardDetails> implements AutoMake<CardDetail
 	@Column(name = "quality", nullable = false)
 	private double quality = rollQuality();
 
-	@Override
-	public CardDetails make(JSONObject args) {
-		uuid = args.getString("uuid");
-		return this;
+	public CardDetails() {
+	}
+
+	public CardDetails(boolean chrome) {
+		this.chrome = chrome;
 	}
 
 	public String getUuid() {
