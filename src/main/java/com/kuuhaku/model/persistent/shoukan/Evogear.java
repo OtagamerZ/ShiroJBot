@@ -363,7 +363,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 		}
 
-		if (stashRef != null) {
+		if (!isSpell() && stashRef != null) {
 			mult *= 1 + stashRef.getQuality() / 100;
 		}
 
@@ -391,6 +391,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			if (getGame() != null && getGame().getArcade() == Arcade.OVERCHARGE) {
 				mult *= 1.75;
 			}
+		}
+
+		if (isSpell() && stashRef != null) {
+			mult *= 1 + stashRef.getQuality() / 100;
 		}
 
 		return mult;
