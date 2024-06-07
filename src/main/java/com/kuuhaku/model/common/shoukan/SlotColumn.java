@@ -169,6 +169,10 @@ public class SlotColumn {
 	}
 
 	public void replace(Senshi self, Senshi with) {
+		if (with != null && with.getHand() == null && with.isFusion()) {
+			with.setStashRef(self.getStashRef());
+		}
+
 		if (Objects.equals(self, getTop())) {
 			setTop(with);
 		} else if (Objects.equals(self, getBottom())) {
