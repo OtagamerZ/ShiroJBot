@@ -62,7 +62,7 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	private Kawaipon kawaipon;
 
 	@OneToOne(cascade = ALL)
-	@JoinColumn(name = "uuid", referencedColumnName = "uuid", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@JoinColumn(name = "uuid", referencedColumnName = "card_uuid", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@Fetch(FetchMode.JOIN)
 	private CardDetails details;
 
