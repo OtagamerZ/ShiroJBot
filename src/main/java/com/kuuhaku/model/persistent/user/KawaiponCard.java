@@ -24,6 +24,7 @@ import com.kuuhaku.model.enums.Quality;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import okio.Buffer;
 import org.hibernate.annotations.Fetch;
@@ -71,15 +72,13 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 
 	public KawaiponCard(Card card, boolean chrome) {
 		this.card = card;
-		this.details = DAO.find(CardDetails.class, uuid);
-		this.details.setChrome(chrome);
+		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(chrome));
 	}
 
 	public KawaiponCard(String uuid, Card card, boolean chrome) {
 		this.uuid = uuid;
 		this.card = card;
-		this.details = DAO.find(CardDetails.class, uuid);
-		this.details.setChrome(chrome);
+		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(chrome));
 	}
 
 	public int getId() {
