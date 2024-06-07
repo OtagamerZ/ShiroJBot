@@ -25,7 +25,7 @@ import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
-public record DeckEntry(CardType type, String id, String stashId) {
+public record DeckEntry(CardType type, String id, int stashId) {
 	public Drawable<?> card() {
 		return switch (type) {
 			case KAWAIPON, SENSHI -> DAO.find(Senshi.class, id);
