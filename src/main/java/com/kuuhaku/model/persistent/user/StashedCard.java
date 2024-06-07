@@ -64,7 +64,7 @@ public class StashedCard extends DAO<StashedCard> {
 	private Kawaipon kawaipon;
 
 	@ManyToOne
-	@JoinColumn(name = "uuid", insertable = false, updatable = false)
+	@JoinColumn(name = "uuid", insertable = false, updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@Fetch(FetchMode.JOIN)
 	private CardDetails details;
 
