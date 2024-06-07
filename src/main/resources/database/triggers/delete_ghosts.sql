@@ -16,25 +16,21 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION t_generate_kawaipon()
+CREATE OR REPLACE FUNCTION t_delete_ghosts()
     RETURNS TRIGGER
     LANGUAGE plpgsql
 AS
 $$
 BEGIN
-    IF ((SELECT 1 FROM kawaipon_card kc WHERE kc.uuid = NEW.uuid) IS NULL) THEN
-        INSERT INTO kawaipon_card (uuid, card_id, kawaipon_uid)
-        VALUES (NEW.uuid, NEW.card_id, NEW.kawaipon_uid);
-    END IF;
-
+    DELETE FROM stashed_card sc
+           WHERE sc.type = 'KAWAIPON'
+             AND NOT exists(SELECT 1 FROM kawaipon_card kc WHERE kc.uuid = sc.uuid);
     RETURN NEW;
 END;
 $$;
 
-DROP TRIGGER IF EXISTS generate_kawaipon ON stashed_card;
-CREATE TRIGGER generate_kawaipon
-    AFTER INSERT
-    ON stashed_card
-    FOR EACH ROW
-    WHEN ( NEW.type = 'KAWAIPON' )
-EXECUTE PROCEDURE t_generate_kawaipon();
+DROP TRIGGER IF EXISTS delete_ghosts ON kawaipon_card;
+CREATE TRIGGER delete_ghosts
+    AFTER DELETE
+    ON kawaipon_card
+EXECUTE PROCEDURE t_delete_ghosts();

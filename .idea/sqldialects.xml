@@ -8,7 +8,11 @@
     <file url="file://$PROJECT_DIR$/src/main/resources/database/mat-views/card_names.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/mat-views/v_balance.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/mat-views/v_xp.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/delete_ghosts.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/delete_orphan_details.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/delete_stashed.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/generate_kawaipon.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/prevent_duplicate.sql" dialect="PostgreSQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>
 </project>

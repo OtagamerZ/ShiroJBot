@@ -28,14 +28,11 @@ BEGIN
     FROM kawaipon_card kc
              INNER JOIN card_details cd ON cd.card_uuid = kc.uuid
              LEFT JOIN stashed_card sc ON sc.uuid = kc.uuid
-    WHERE kc.kawaipon_uid = OLD.kawaipon_uid
+    WHERE kc.uuid <> OLD.uuid
+      AND kc.kawaipon_uid = OLD.kawaipon_uid
       AND sc.id IS NULL
       AND kc.card_id = OLD.card_id
-      AND cd.chrome = (
-                      SELECT icd.chrome
-                      FROM card_details icd
-                      WHERE icd.card_uuid = OLD.uuid
-                      )
+      AND cd.chrome = (SELECT icd.chrome FROM card_details icd WHERE icd.card_uuid = OLD.uuid)
     INTO card_id;
 
     IF (card_id IS NOT NULL) THEN
@@ -51,4 +48,5 @@ CREATE TRIGGER prevent_duplicate
     BEFORE DELETE
     ON stashed_card
     FOR EACH ROW
+    WHEN ( OLD.price <> -1 )
 EXECUTE PROCEDURE t_prevent_duplicate();
