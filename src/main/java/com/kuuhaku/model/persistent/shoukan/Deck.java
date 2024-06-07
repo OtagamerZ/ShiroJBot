@@ -163,7 +163,7 @@
 				 SELECT d.card_id, coalesce(cd.chrome, FALSE)
 				 FROM senshi d
 				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
-				 LEFT JOIN card_details cd ON cd.uuid = sc.uuid
+				 LEFT JOIN card_details cd ON cd.card_uuid = sc.uuid
 				 WHERE sc.kawaipon_uid = ?1
 				 		AND sc.deck_id = ?2
 				 %s
@@ -208,7 +208,7 @@
 				 SELECT d.card_id, coalesce(sc.chrome, FALSE)
 				 FROM evogear d
 				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
-				 LEFT JOIN card_details cd ON cd.uuid = sc.uuid
+				 LEFT JOIN card_details cd ON cd.card_uuid = sc.uuid
 				 WHERE sc.kawaipon_uid = ?1
 				   AND sc.deck_id = ?2
 				 %s
@@ -276,7 +276,7 @@
 				 SELECT d.card_id, coalesce(sc.chrome, FALSE)
 				 FROM field d
 				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
-				 LEFT JOIN card_details cd ON cd.uuid = sc.uuid
+				 LEFT JOIN card_details cd ON cd.card_uuid = sc.uuid
 				 WHERE sc.kawaipon_uid = ?1
 				   AND sc.deck_id = ?2
 				 """, account.getUid(), id);

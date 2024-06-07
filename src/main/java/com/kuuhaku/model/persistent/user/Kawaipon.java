@@ -154,7 +154,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				FROM (
 				         SELECT cd.chrome
 				         FROM kawaipon_card kc
-				                  INNER JOIN card_details cd ON cd.uuid = kc.uuid
+				                  INNER JOIN card_details cd ON cd.card_uuid = kc.uuid
 				                  LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
 				         WHERE kc.kawaipon_uid = ?1
 				           AND sc.id IS NULL
@@ -177,7 +177,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				         SELECT cd.chrome
 				         FROM kawaipon_card kc
 				                  INNER JOIN card c ON c.id = kc.card_id
-				         		  INNER JOIN card_details cd ON cd.uuid = kc.uuid
+				         		  INNER JOIN card_details cd ON cd.card_uuid = kc.uuid
 				                  LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
 				         WHERE kc.kawaipon_uid = ?1
 				           AND c.anime_id = ?2
@@ -201,7 +201,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				         SELECT kc.chrome
 				         FROM kawaipon_card kc
 				                  INNER JOIN card c ON c.id = kc.card_id
-				         		  INNER JOIN card_details cd ON cd.uuid = kc.uuid
+				         		  INNER JOIN card_details cd ON cd.card_uuid = kc.uuid
 				                  LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
 				         WHERE kc.kawaipon_uid = ?1
 				           AND c.rarity = ?2

@@ -26,7 +26,7 @@ DECLARE
 BEGIN
     SELECT kc.card_id
     FROM kawaipon_card kc
-             INNER JOIN card_details cd ON cd.uuid = kc.uuid
+             INNER JOIN card_details cd ON cd.card_uuid = kc.uuid
              LEFT JOIN stashed_card sc ON sc.uuid = kc.uuid
     WHERE kc.kawaipon_uid = OLD.kawaipon_uid
       AND sc.id IS NULL
@@ -34,7 +34,7 @@ BEGIN
       AND cd.chrome = (
                       SELECT icd.chrome
                       FROM card_details icd
-                      WHERE icd.uuid = OLD.uuid
+                      WHERE icd.card_uuid = OLD.uuid
                       )
     INTO card_id;
 
