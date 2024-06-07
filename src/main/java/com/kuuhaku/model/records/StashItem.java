@@ -22,8 +22,6 @@ import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.user.CardDetails;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.util.Utils;
 

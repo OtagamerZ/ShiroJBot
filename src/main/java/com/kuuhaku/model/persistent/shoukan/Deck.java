@@ -25,14 +25,16 @@
  import com.kuuhaku.model.common.shoukan.Hand;
  import com.kuuhaku.model.enums.Fonts;
  import com.kuuhaku.model.enums.I18N;
- import com.kuuhaku.model.enums.shoukan.*;
+ import com.kuuhaku.model.enums.shoukan.Arcade;
+ import com.kuuhaku.model.enums.shoukan.FieldType;
+ import com.kuuhaku.model.enums.shoukan.FrameSkin;
+ import com.kuuhaku.model.enums.shoukan.Race;
  import com.kuuhaku.model.persistent.shiro.Anime;
  import com.kuuhaku.model.persistent.shiro.Card;
  import com.kuuhaku.model.persistent.user.Account;
  import com.kuuhaku.model.records.shoukan.BaseValues;
  import com.kuuhaku.model.records.shoukan.DeckEntry;
  import com.kuuhaku.model.records.shoukan.Origin;
- import com.kuuhaku.model.records.shoukan.RaceStats;
  import com.kuuhaku.util.Calc;
  import com.kuuhaku.util.Graph;
  import com.kuuhaku.util.IO;

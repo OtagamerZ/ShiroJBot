@@ -24,8 +24,9 @@ import com.kuuhaku.util.text.Uwuifier;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.ZoneId;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 public enum I18N {
 	PT(ZoneId.of("GMT-3"), "🇧🇷"),

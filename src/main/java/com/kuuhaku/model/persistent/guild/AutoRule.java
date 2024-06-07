@@ -22,8 +22,6 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.RuleAction;
 import com.kuuhaku.model.persistent.id.AutoRuleId;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 

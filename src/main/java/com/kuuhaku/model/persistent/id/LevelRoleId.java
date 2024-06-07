@@ -19,7 +19,6 @@
 package com.kuuhaku.model.persistent.id;
 
 import com.kuuhaku.controller.DAO;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 

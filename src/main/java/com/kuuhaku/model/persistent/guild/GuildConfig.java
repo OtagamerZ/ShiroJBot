@@ -28,8 +28,6 @@ import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.model.records.GuildBuff;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;

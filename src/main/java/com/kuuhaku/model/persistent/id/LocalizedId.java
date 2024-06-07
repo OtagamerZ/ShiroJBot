@@ -19,11 +19,11 @@
 package com.kuuhaku.model.persistent.id;
 
 import com.kuuhaku.model.enums.I18N;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;

@@ -22,7 +22,10 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.Utils;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.intellij.lang.annotations.Language;
 
 import java.time.ZoneId;

@@ -21,9 +21,7 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Quality;
-import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import okio.Buffer;
@@ -37,9 +35,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
-
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "kawaipon_card")
@@ -162,7 +157,7 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	}
 
 	@Override
-	public void beforeSave() {
+	public void afterSave() {
 		details.save();
 	}
 

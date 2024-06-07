@@ -22,7 +22,6 @@ import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.util.Utils;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Message.MentionType;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 

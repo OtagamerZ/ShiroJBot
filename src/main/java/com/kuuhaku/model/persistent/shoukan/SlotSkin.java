@@ -26,25 +26,22 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.LocalizedTitle;
 import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
-import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
+import jakarta.persistence.Table;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 

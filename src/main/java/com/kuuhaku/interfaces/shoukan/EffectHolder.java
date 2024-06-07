@@ -19,9 +19,9 @@
 package com.kuuhaku.interfaces.shoukan;
 
 import com.kuuhaku.ExpressionListener;
+import com.kuuhaku.Tag;
 import com.kuuhaku.generated.ShoukanExprLexer;
 import com.kuuhaku.generated.ShoukanExprParser;
-import com.kuuhaku.Tag;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Flags;

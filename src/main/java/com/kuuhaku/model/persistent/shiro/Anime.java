@@ -19,7 +19,6 @@
 package com.kuuhaku.model.persistent.shiro;
 
 import com.kuuhaku.controller.DAO;
-
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;

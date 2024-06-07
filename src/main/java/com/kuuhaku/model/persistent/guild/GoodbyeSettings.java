@@ -23,8 +23,6 @@ import com.kuuhaku.model.persistent.converter.ChannelConverter;
 import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.JavaTypeRegistration;
 
 import java.util.LinkedHashSet;

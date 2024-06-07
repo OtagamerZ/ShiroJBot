@@ -19,7 +19,6 @@
 package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

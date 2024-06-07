@@ -32,9 +32,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import groovy.lang.GString;
 import org.apache.commons.collections4.set.ListOrderedSet;
-import org.apache.commons.lang3.BooleanUtils;
 
 import java.lang.reflect.Field;
 import java.util.Collection;

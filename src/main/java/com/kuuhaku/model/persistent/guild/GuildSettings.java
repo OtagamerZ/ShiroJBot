@@ -19,23 +19,24 @@
 package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.enums.AutoModType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.GuildFeature;
-import com.kuuhaku.model.persistent.converter.*;
+import com.kuuhaku.model.persistent.converter.ChannelConverter;
+import com.kuuhaku.model.persistent.converter.GuildFeatureConverter;
+import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
+import com.kuuhaku.model.persistent.converter.RoleConverter;
 import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import com.kuuhaku.model.persistent.javatype.RoleJavaType;
 import com.kuuhaku.model.records.embed.Embed;
 import com.ygimenez.json.JSONObject;
-import com.ygimenez.json.JSONUtils;
-import jakarta.persistence.OrderBy;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.JavaTypeRegistration;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.util.*;

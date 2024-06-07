@@ -19,9 +19,9 @@
 package com.kuuhaku.model.persistent.converter;
 
 import com.kuuhaku.util.Bit;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+
 import java.util.EnumSet;
 
 @Converter(autoApply = true)

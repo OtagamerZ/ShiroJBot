@@ -36,8 +36,6 @@ import org.hibernate.annotations.FetchMode;
 import java.util.Objects;
 import java.util.UUID;
 
-import static jakarta.persistence.CascadeType.ALL;
-
 @Entity
 @Table(name = "stashed_card")
 public class StashedCard extends DAO<StashedCard> {
@@ -202,11 +200,6 @@ public class StashedCard extends DAO<StashedCard> {
 	}
 
 	@Override
-	public void beforeSave() {
-		details.save();
-	}
-
-	@Override
 	public void afterSave() {
 		if (price > 0) {
 			MarketOrder mo = MarketOrder.search(this);
@@ -215,6 +208,8 @@ public class StashedCard extends DAO<StashedCard> {
 				m.buy(mo, id);
 			}
 		}
+
+		details.save();
 	}
 
 	@Override

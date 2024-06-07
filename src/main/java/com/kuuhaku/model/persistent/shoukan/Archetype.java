@@ -24,7 +24,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;

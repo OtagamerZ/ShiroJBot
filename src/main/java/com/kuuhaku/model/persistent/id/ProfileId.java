@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.id;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;

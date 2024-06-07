@@ -32,7 +32,6 @@ import java.io.Closeable;
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
 public final class EffectOverTime implements Comparable<EffectOverTime>, Closeable {
 	private final @Nullable Drawable<?> source;

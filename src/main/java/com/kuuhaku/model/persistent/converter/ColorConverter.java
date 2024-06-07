@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+
 import java.awt.*;
 
 @Converter(autoApply = true)

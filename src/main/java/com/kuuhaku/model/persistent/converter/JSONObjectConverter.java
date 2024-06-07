@@ -19,7 +19,6 @@
 package com.kuuhaku.model.persistent.converter;
 
 import com.ygimenez.json.JSONObject;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import org.intellij.lang.annotations.Language;

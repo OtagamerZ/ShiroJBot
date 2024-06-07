@@ -20,10 +20,10 @@ package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Currency;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import jakarta.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Objects;

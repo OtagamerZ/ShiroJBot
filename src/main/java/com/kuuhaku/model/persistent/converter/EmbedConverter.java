@@ -19,7 +19,6 @@
 package com.kuuhaku.model.persistent.converter;
 
 import com.kuuhaku.model.common.AutoEmbedBuilder;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

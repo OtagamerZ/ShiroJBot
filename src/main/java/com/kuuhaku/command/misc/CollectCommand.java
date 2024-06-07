@@ -61,7 +61,6 @@ public class CollectCommand implements Executable {
 			if (acc.consumeItem("special_spice")) {
 				kc.setChrome(true);
 			}
-
 			kc.save();
 
 			acc.consumeCR(kc.getPrice(), "Collected " + kc);

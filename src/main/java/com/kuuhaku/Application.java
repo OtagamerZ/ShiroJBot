@@ -48,7 +48,6 @@ import net.dv8tion.jda.api.utils.messages.MessageRequest;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
 
 import static net.dv8tion.jda.api.entities.Message.MentionType.EVERYONE;
 import static net.dv8tion.jda.api.entities.Message.MentionType.HERE;

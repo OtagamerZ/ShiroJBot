@@ -19,9 +19,7 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.util.Calc;
-import com.ygimenez.json.JSONObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

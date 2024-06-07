@@ -18,7 +18,6 @@
 
 package com.kuuhaku.listener;
 
-import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.Utils;
