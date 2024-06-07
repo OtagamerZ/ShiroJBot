@@ -133,7 +133,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private final transient Set<Drawable<?>> blocked = new HashSet<>();
 	private transient TargetType targetType = TargetType.NONE;
 	private transient ElementType element = null;
-	private transient StashedCard deckRef = null;
+	private transient StashedCard stashRef = null;
 
 	@Transient
 	private int state = 0b10;
@@ -689,6 +689,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			} else if (hand.getOrigins().synergy() == Race.FABLED) {
 				mult *= getPower();
 			}
+		}
+
+		if (stashRef != null) {
+			mult *= 1 + stashRef.getQuality() / 100;
 		}
 
 		return mult;
@@ -1388,13 +1392,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public StashedCard getDeckRef() {
-		return deckRef;
+	public StashedCard getStashRef() {
+		return stashRef;
 	}
 
 	@Override
-	public void setDeckRef(StashedCard sc) {
-		deckRef = sc;
+	public void setStashRef(StashedCard sc) {
+		stashRef = sc;
 	}
 
 	@Override
@@ -1440,7 +1444,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			} else {
 				Senshi card = Utils.getOr(stats.getDisguise(), this);
 				String desc = isSealed() ? "" : card.getDescription(locale);
-				BufferedImage img = card.getVanity().drawCardNoBorder(style.isUsingChrome());
+				BufferedImage img = card.getVanity().drawCardNoBorder(Utils.getOr(() -> stashRef.isChrome(), false));
 
 				g1.setClip(style.getFrame().getBoundary());
 				g1.drawImage(img, 0, 0, null);

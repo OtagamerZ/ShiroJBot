@@ -107,7 +107,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private transient Hand hand = null;
 	private transient Hand leech = null;
 	private final transient CachedScriptManager cachedEffect = new CachedScriptManager();
-	private transient StashedCard deckRef = null;
+	private transient StashedCard stashRef = null;
 
 	@Transient
 	private byte state = 0b10;
@@ -363,6 +363,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 		}
 
+		if (stashRef != null) {
+			mult *= 1 + stashRef.getQuality() / 100;
+		}
+
 		return mult;
 	}
 
@@ -599,13 +603,13 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public StashedCard getDeckRef() {
-		return deckRef;
+	public StashedCard getStashRef() {
+		return stashRef;
 	}
 
 	@Override
-	public void setDeckRef(StashedCard sc) {
-		deckRef = sc;
+	public void setStashRef(StashedCard sc) {
+		stashRef = sc;
 	}
 
 	@Override
@@ -647,7 +651,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				}
 			} else {
 				String desc = getDescription(locale);
-				BufferedImage img = card.drawCardNoBorder(style.isUsingChrome());
+				BufferedImage img = card.drawCardNoBorder(Utils.getOr(() -> stashRef.isChrome(), false));
 
 				g1.setClip(style.getFrame().getBoundary());
 				g1.drawImage(img, 0, 0, null);

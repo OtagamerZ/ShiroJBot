@@ -186,11 +186,11 @@ public interface Drawable<T extends Drawable<T>> {
 		}
 	}
 
-	default StashedCard getDeckRef() {
+	default StashedCard getStashRef() {
 		return null;
 	}
 
-	default void setDeckRef(StashedCard sc) {
+	default void setStashRef(StashedCard sc) {
 	}
 
 	default boolean keepOnDestroy() {

@@ -50,6 +50,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
@@ -92,7 +93,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	private JSONArray tags = new JSONArray();
 
 	private transient Hand hand = null;
-	private transient StashedCard deckRef = null;
+	private transient StashedCard stashRef = null;
 
 	@Transient
 	private byte state = 0b10;
@@ -150,7 +151,15 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 			}
 		}
 
-		return modifiers;
+		JSONObject mods = modifiers;
+		if (stashRef != null) {
+			mods = new JSONObject();
+			for (Map.Entry<String, Object> e : modifiers.entrySet()) {
+				mods.put(e.getKey(), ((Double) e.getValue()) * (1 + stashRef.getQuality() / 100));
+			}
+		}
+
+		return mods;
 	}
 
 	public void setModifiers(JSONObject modifiers) {
@@ -239,13 +248,13 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	@Override
-	public StashedCard getDeckRef() {
-		return deckRef;
+	public StashedCard getStashRef() {
+		return stashRef;
 	}
 
 	@Override
-	public void setDeckRef(StashedCard sc) {
-		deckRef = sc;
+	public void setStashRef(StashedCard sc) {
+		stashRef = sc;
 	}
 
 	@Override
@@ -278,7 +287,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 					op.filter(out, out);
 				}
 			} else {
-				BufferedImage img = getVanity().drawCardNoBorder(false);
+				BufferedImage img = getVanity().drawCardNoBorder(Utils.getOr(() -> stashRef.isChrome(), false));
 
 				g1.setClip(style.getFrame().getBoundary());
 				g1.drawImage(img, 0, 0, null);

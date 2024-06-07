@@ -39,6 +39,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.SelectionAction;
 import com.kuuhaku.model.records.SelectionCard;
 import com.kuuhaku.model.records.shoukan.BaseValues;
+import com.kuuhaku.model.records.shoukan.DeckEntry;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.Bit;
@@ -319,19 +320,24 @@ public class Hand {
 			}
 		}
 
-		Stream<List<? extends Drawable<?>>> toAdd;
+		Stream<? extends Drawable<?>> toAdd;
 		if (game.getArcade() == Arcade.CARDMASTER) {
 			List<List<? extends Drawable<?>>> cards = new ArrayList<>();
 			cards.add(DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE cast(get_rarity_index(s.card.rarity) AS INTEGER) BETWEEN 1 AND 5 AND NOT CAST(has(s.base.tags, 'FUSION') AS BOOLEAN)"));
 			cards.add(DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.base.mana > 0"));
 			cards.add(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE NOT f.effect"));
 
-			toAdd = cards.stream();
+			toAdd = cards.parallelStream()
+					.flatMap(List::stream)
+					.map(Drawable::copy);
 		} else {
-			toAdd = Stream.of(userDeck.getSenshi(), userDeck.getEvogear(), userDeck.getFields());
+			toAdd = Stream.of(userDeck.getSenshiRaw(), userDeck.getEvogearRaw(), userDeck.getFieldsRaw())
+					.parallel()
+					.flatMap(List::stream)
+					.map(DeckEntry::card);
 		}
 
-		deck.addAll(toAdd.parallel().flatMap(List::stream).map(Drawable::copy).peek(d -> {
+		deck.addAll(toAdd.parallel().peek(d -> {
 			if (d instanceof Senshi s && origin.synergy() == Race.ELDRITCH && !s.hasEffect()) {
 				s.getStats().setSource(Senshi.getRandom(game.getRng(), "WHERE effect IS NOT NULL", "AND mana = " + s.getBase().getMana()));
 			}

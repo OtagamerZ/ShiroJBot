@@ -24,13 +24,21 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.user.StashedCard;
 
 public record DeckEntry(CardType type, String id, int stashId) {
 	public Drawable<?> card() {
-		return switch (type) {
+		Drawable<?> out = switch (type) {
 			case KAWAIPON, SENSHI -> DAO.find(Senshi.class, id);
 			case EVOGEAR -> DAO.find(Evogear.class, id);
 			case FIELD -> DAO.find(Field.class, id);
 		};
+		out.setStashRef(stashEntry());
+
+		return out;
+	}
+
+	public StashedCard stashEntry() {
+		return DAO.find(StashedCard.class, stashId);
 	}
 }
