@@ -23,6 +23,7 @@ AS
 $$
 BEGIN
     DELETE FROM stashed_card WHERE uuid = OLD.uuid;
+    RETURN NEW;
 END;
 $$;
 
