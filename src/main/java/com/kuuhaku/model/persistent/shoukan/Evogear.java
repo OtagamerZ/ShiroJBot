@@ -482,10 +482,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		}
 
 		try {
-			if (!spell) {
-				base.lock(ep.trigger());
-			}
-
+			base.lock(ep.trigger());
 			CachedScriptManager csm = getCSM();
 			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
 					.forScript(getEffect())
