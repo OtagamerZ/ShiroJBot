@@ -36,6 +36,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.shoukan.DeferredTrigger;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
@@ -132,6 +133,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private final transient Set<Drawable<?>> blocked = new HashSet<>();
 	private transient TargetType targetType = TargetType.NONE;
 	private transient ElementType element = null;
+	private transient StashedCard deckRef = null;
 
 	@Transient
 	private int state = 0b10;
@@ -1383,6 +1385,16 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		return element;
+	}
+
+	@Override
+	public StashedCard getDeckRef() {
+		return deckRef;
+	}
+
+	@Override
+	public void setDeckRef(StashedCard sc) {
+		deckRef = sc;
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Field;
+import com.kuuhaku.model.persistent.user.CardDetails;
 import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.util.Utils;
@@ -47,7 +48,7 @@ public record StashItem(I18N locale, StashedCard sc) {
 		String rarity = locale.get("type/" + sc.getType());
 		if (Utils.equalsAny(sc.getType(), CardType.KAWAIPON, CardType.SENSHI)) {
 			rarity += " " + locale.get("rarity/" + sc.getCard().getRarity()).toLowerCase();
-			if (sc.getKawaiponCard().isChrome()) {
+			if (sc.isChrome()) {
 				rarity += " " + locale.get("str/foil").toLowerCase();
 			}
 		} else if (sc.getType() == CardType.FIELD) {
@@ -61,9 +62,8 @@ public record StashItem(I18N locale, StashedCard sc) {
 		}
 
 		String quality = "";
-		KawaiponCard kc = sc.getKawaiponCard();
-		if (kc != null && kc.getQuality() > 0) {
-			quality = " (Q: " + Utils.roundToString(kc.getQuality(), 1) + "%)";
+		if (sc.getQuality() > 0) {
+			quality = " (Q: " + Utils.roundToString(sc.getQuality(), 1) + "%)";
 		}
 
 		return new FieldMimic(

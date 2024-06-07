@@ -143,6 +143,15 @@ public class StashScrapCommand implements Executable {
 
 						Bag<UserItem> items = new HashBag<>();
 						for (StashedCard sc : cards) {
+							if (sc.isChrome() && Calc.chance(50)) {
+								UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
+								if (item != null) {
+									int amount = Calc.rng(3, 5);
+									acc.addItem(item, amount);
+									items.add(item, amount);
+								}
+							}
+
 							if (sc.getType() == CardType.KAWAIPON) {
 								KawaiponCard kc = sc.getKawaiponCard();
 								if (kc != null) {
@@ -155,16 +164,6 @@ public class StashScrapCommand implements Executable {
 											items.add(item, 1);
 										}
 									}
-
-									if (kc.isChrome() && Calc.chance(50)) {
-										UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
-										if (item != null) {
-											int amount = Calc.rng(3, 5);
-											acc.addItem(item, amount);
-											items.add(item, amount);
-										}
-									}
-
 									continue;
 								}
 							}

@@ -211,7 +211,7 @@ public class SynthesizeCommand implements Executable {
 									if (kc != null) {
 										kc.delete();
 										rarities.add(kc.getCard().getRarity());
-										totalQ += kc.getQuality();
+										totalQ += sc.getQuality();
 									}
 								} else {
 									sc.delete();
@@ -344,25 +344,19 @@ public class SynthesizeCommand implements Executable {
 		double fac = 150 + (cards.size() - 3) * 10;
 
 		for (StashedCard sc : cards) {
-			switch (sc.getType()) {
-				case KAWAIPON -> {
+			double value = switch (sc.getType()) {
+				case KAWAIPON, SENSHI -> {
 					KawaiponCard kc = sc.getKawaiponCard();
-					int rarity = sc.getCard().getRarity().getIndex();
-
-					if (kc != null) {
-						if (kc.isChrome()) {
-							more *= 1 + rarity * (1 + kc.getQuality()) / fac;
-						} else {
-							inc += rarity * (1 + kc.getQuality()) / fac;
-						}
-					}
+					yield sc.getCard().getRarity().getIndex();
 				}
 				case EVOGEAR -> {
 					Evogear ev = sc.getCard().asEvogear();
-					inc += ev.getTier() / 6d * (150d / fac);
+					yield ev.getTier() * 2;
 				}
-				case FIELD -> more *= 1.25 * (150d / fac);
-			}
+				case FIELD -> 12;
+			};
+
+			inc += value * (1 + sc.getQuality()) / fac;
 		}
 
 		return 1 * inc * more;

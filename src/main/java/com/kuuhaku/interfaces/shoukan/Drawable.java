@@ -32,6 +32,7 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.shoukan.Source;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.Graph;
@@ -183,6 +184,13 @@ public interface Drawable<T extends Drawable<T>> {
 		} finally {
 			setManipulated(false);
 		}
+	}
+
+	default StashedCard getDeckRef() {
+		return null;
+	}
+
+	default void setDeckRef(StashedCard sc) {
 	}
 
 	default boolean keepOnDestroy() {

@@ -37,6 +37,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.model.records.shoukan.Targeting;
@@ -106,6 +107,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private transient Hand hand = null;
 	private transient Hand leech = null;
 	private final transient CachedScriptManager cachedEffect = new CachedScriptManager();
+	private transient StashedCard deckRef = null;
 
 	@Transient
 	private byte state = 0b10;
@@ -594,6 +596,16 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					new Target(tgt.enemy(), tgt.enemyPos(), ON_SPELL_TARGET, TargetType.ENEMY)
 			);
 		};
+	}
+
+	@Override
+	public StashedCard getDeckRef() {
+		return deckRef;
+	}
+
+	@Override
+	public void setDeckRef(StashedCard sc) {
+		deckRef = sc;
 	}
 
 	@Override

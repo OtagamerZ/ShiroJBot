@@ -73,8 +73,7 @@ public class StashRemoveCommand implements Executable {
 					}
 
 					if (sc.getType() == CardType.KAWAIPON) {
-						KawaiponCard kc = sc.getKawaiponCard();
-						if (kp.hasCard(card, kc.isChrome())) {
+						if (kp.hasCard(card, sc.isChrome())) {
 							event.channel().sendMessage(locale.get("error/in_collection")).queue();
 							return;
 						}

@@ -36,6 +36,8 @@ import org.hibernate.annotations.FetchMode;
 import java.util.Objects;
 import java.util.UUID;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 @Entity
 @Table(name = "stashed_card")
 public class StashedCard extends DAO<StashedCard> {
@@ -61,6 +63,11 @@ public class StashedCard extends DAO<StashedCard> {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
+	@OneToOne(cascade = ALL)
+	@JoinColumn(name = "uuid", referencedColumnName = "uuid", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@Fetch(FetchMode.JOIN)
+	private CardDetails details;
+
 	@ManyToOne
 	@JoinColumn(name = "deck_id")
 	private Deck deck;
@@ -75,7 +82,6 @@ public class StashedCard extends DAO<StashedCard> {
 	private boolean accountBound = false;
 
 	public StashedCard() {
-
 	}
 
 	public StashedCard(Kawaipon kawaipon, KawaiponCard card) {
@@ -83,11 +89,14 @@ public class StashedCard extends DAO<StashedCard> {
 		this.card = card.getCard();
 		this.type = CardType.KAWAIPON;
 		this.kawaipon = kawaipon;
+		this.details = DAO.find(CardDetails.class, uuid);
 	}
 
 	public StashedCard(Kawaipon kawaipon, Drawable<?> card) {
 		this.card = card.getCard();
 		this.kawaipon = kawaipon;
+		this.details = DAO.find(CardDetails.class, uuid);
+
 		if (card instanceof Senshi) {
 			this.type = CardType.KAWAIPON;
 		} else if (card instanceof Evogear) {
@@ -103,6 +112,26 @@ public class StashedCard extends DAO<StashedCard> {
 
 	public String getUUID() {
 		return uuid;
+	}
+
+	public CardDetails getDetails() {
+		return details;
+	}
+
+	public boolean isChrome() {
+		return details.isChrome();
+	}
+
+	public void setChrome(boolean chrome) {
+		this.details.setChrome(chrome);
+	}
+
+	public double getQuality() {
+		return details.getQuality();
+	}
+
+	public void setQuality(double quality) {
+		this.details.setQuality(quality);
 	}
 
 	public Card getCard() {

@@ -31,6 +31,7 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.Graph;
 import com.ygimenez.json.JSONArray;
@@ -91,6 +92,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	private JSONArray tags = new JSONArray();
 
 	private transient Hand hand = null;
+	private transient StashedCard deckRef = null;
 
 	@Transient
 	private byte state = 0b10;
@@ -234,6 +236,16 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	public boolean isActive() {
 		return getGame().getArena().getField().equals(this);
+	}
+
+	@Override
+	public StashedCard getDeckRef() {
+		return deckRef;
+	}
+
+	@Override
+	public void setDeckRef(StashedCard sc) {
+		deckRef = sc;
 	}
 
 	@Override

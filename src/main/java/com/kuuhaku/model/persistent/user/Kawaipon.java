@@ -123,7 +123,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				WHERE sc.id IS NULL
 				  AND kc.kawaipon.uid = ?1
 				  AND kc.card.anime.id = ?2
-  				  AND kc.chrome = ?3
+						  AND kc.details.chrome = ?3
 				""", uid, a.getId(), chrome));
 	}
 
@@ -135,7 +135,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				WHERE sc.id IS NULL
 				  AND kc.kawaipon.uid = ?1
 				  AND kc.card = ?2
-				  AND kc.chrome = ?3
+				  AND kc.details.chrome = ?3
 				""", uid, card, chrome);
 	}
 
@@ -152,12 +152,13 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				SELECT count(1) FILTER (WHERE NOT x.chrome)
 				     , count(1) FILTER (WHERE x.chrome)
 				FROM (
-				         SELECT kc.chrome
+				         SELECT cd.chrome
 				         FROM kawaipon_card kc
-				                  LEFT JOIN stashed_card sc on kc.uuid = sc.uuid
+				                  INNER JOIN card_details cd ON cd.uuid = kc.uuid
+				                  LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
 				         WHERE kc.kawaipon_uid = ?1
 				           AND sc.id IS NULL
-				         GROUP BY kc.card_id, kc.chrome
+				         GROUP BY kc.card_id, cd.chrome
 				     ) x
 				""", uid);
 
@@ -173,14 +174,15 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				SELECT count(1) FILTER (WHERE NOT x.chrome)
 				     , count(1) FILTER (WHERE x.chrome)
 								FROM (
-				         SELECT kc.chrome
+				         SELECT cd.chrome
 				         FROM kawaipon_card kc
-				                  INNER JOIN card c on c.id = kc.card_id
-				                  LEFT JOIN stashed_card sc on kc.uuid = sc.uuid
+				                  INNER JOIN card c ON c.id = kc.card_id
+				         		  INNER JOIN card_details cd ON cd.uuid = kc.uuid
+				                  LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
 				         WHERE kc.kawaipon_uid = ?1
 				           AND c.anime_id = ?2
 				           AND sc.id IS NULL
-				         GROUP BY kc.card_id, kc.chrome
+				         GROUP BY kc.card_id, cd.chrome
 				     ) x
 				""", uid, anime.getId());
 
@@ -198,12 +200,13 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 								FROM (
 				         SELECT kc.chrome
 				         FROM kawaipon_card kc
-				                  INNER JOIN card c on c.id = kc.card_id
-				                  LEFT JOIN stashed_card sc on kc.uuid = sc.uuid
+				                  INNER JOIN card c ON c.id = kc.card_id
+				         		  INNER JOIN card_details cd ON cd.uuid = kc.uuid
+				                  LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
 				         WHERE kc.kawaipon_uid = ?1
 				           AND c.rarity = ?2
 				           AND sc.id IS NULL
-				         GROUP BY kc.card_id, kc.chrome
+				         GROUP BY kc.card_id, cd.chrome
 				     ) x
 				""", uid, rarity.name());
 

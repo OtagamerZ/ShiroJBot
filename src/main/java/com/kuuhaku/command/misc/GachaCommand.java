@@ -195,8 +195,6 @@ public class GachaCommand implements Executable {
 			switch (tp) {
 				case KAWAIPON, SENSHI -> {
 					KawaiponCard kc = new KawaiponCard(card, Calc.chance(0.1 * Spawn.getRarityMult()));
-					process(type, kc);
-
 					kc.setKawaipon(kp);
 					kc.save();
 
@@ -206,7 +204,6 @@ public class GachaCommand implements Executable {
 				}
 				case EVOGEAR -> {
 					Evogear e = card.asEvogear();
-					process(type, e);
 
 					g2d.drawImage(e.render(locale, deck), 5, 20, null);
 					if (e.getTier() == 4) {
@@ -217,7 +214,6 @@ public class GachaCommand implements Executable {
 				}
 				case FIELD -> {
 					Field f = card.asField();
-					process(type, f);
 
 					g2d.drawImage(f.render(locale, deck), 5, 20, null);
 					g2d.drawImage(IO.getResourceAsImage("shoukan/frames/state/" + hPath + "/buffed.png"), 5, 20, null);
@@ -227,12 +223,6 @@ public class GachaCommand implements Executable {
 			}
 		} finally {
 			g2d.translate(265, 0);
-		}
-	}
-
-	private void process(GachaType type, Object card) {
-		if (!type.post().isBlank()) {
-			Utils.exec("Gacha", type.post(), Map.of("card", card));
 		}
 	}
 }

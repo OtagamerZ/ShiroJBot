@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Quality;
+import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.Calc;
 import jakarta.persistence.*;
@@ -37,6 +38,8 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 @Entity
 @Table(name = "kawaipon_card")
 public class KawaiponCard extends DAO<KawaiponCard> {
@@ -48,12 +51,6 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	@Column(name = "uuid", nullable = false, unique = true, length = 36)
 	private String uuid = UUID.randomUUID().toString();
 
-	@Column(name = "chrome", nullable = false)
-	private boolean chrome;
-
-	@Column(name = "quality", nullable = false)
-	private double quality = rollQuality();
-
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "card_id")
 	@Fetch(FetchMode.JOIN)
@@ -64,18 +61,25 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
+	@OneToOne(cascade = ALL)
+	@JoinColumn(name = "uuid", referencedColumnName = "uuid", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@Fetch(FetchMode.JOIN)
+	private CardDetails details;
+
 	public KawaiponCard() {
 	}
 
 	public KawaiponCard(Card card, boolean chrome) {
 		this.card = card;
-		this.chrome = chrome;
+		this.details = DAO.find(CardDetails.class, uuid);
+		this.details.setChrome(chrome);
 	}
 
 	public KawaiponCard(String uuid, Card card, boolean chrome) {
 		this.uuid = uuid;
 		this.card = card;
-		this.chrome = chrome;
+		this.details = DAO.find(CardDetails.class, uuid);
+		this.details.setChrome(chrome);
 	}
 
 	public int getId() {
@@ -86,24 +90,24 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 		return uuid;
 	}
 
+	public CardDetails getDetails() {
+		return details;
+	}
+
 	public boolean isChrome() {
-		return chrome;
+		return details.isChrome();
 	}
 
 	public void setChrome(boolean chrome) {
-		this.chrome = chrome;
+		this.details.setChrome(chrome);
 	}
 
 	public double getQuality() {
-		return quality;
+		return details.getQuality();
 	}
 
 	public void setQuality(double quality) {
-		this.quality = quality;
-	}
-
-	public double rollQuality() {
-		return Calc.round(Math.max(0, Math.pow(ThreadLocalRandom.current().nextDouble(), 5) * 40 - 20), 1);
+		this.details.setQuality(quality);
 	}
 
 	public Card getCard() {
@@ -111,7 +115,7 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	}
 
 	public String getName() {
-		return (chrome ? "« %s »" : "%s").formatted(card.getName());
+		return (isChrome() ? "« %s »" : "%s").formatted(card.getName());
 	}
 
 	public int getPrice() {
@@ -119,7 +123,7 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	}
 
 	public int getSuggestedPrice() {
-		return (int) (Math.max(1, card.getRarity().getIndex() * 500) * Math.pow(1.0025, Math.pow(quality, 2)));
+		return (int) (Math.max(1, card.getRarity().getIndex() * 500) * Math.pow(1.0025, Math.pow(getQuality(), 2)));
 	}
 
 	public Kawaipon getKawaipon() {
@@ -135,8 +139,8 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	}
 
 	public BufferedImage render() {
-		BufferedImage bi = card.drawCard(chrome);
-		Quality q = Quality.get(quality);
+		BufferedImage bi = card.drawCard(isChrome());
+		Quality q = Quality.get(getQuality());
 
 		if (q.ordinal() > 0) {
 			try {
@@ -147,7 +151,7 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 					Graphics2D g2d = bi.createGraphics();
 					g2d.setRenderingHints(Constants.HD_HINTS);
 
-					g2d.drawImage(chrome ? card.chrome(overlay, true) : overlay, 0, 0, null);
+					g2d.drawImage(isChrome() ? card.chrome(overlay, true) : overlay, 0, 0, null);
 					g2d.dispose();
 				}
 			} catch (IOException e) {
@@ -176,11 +180,11 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		KawaiponCard that = (KawaiponCard) o;
-		return chrome == that.chrome && Objects.equals(card, that.card) && getStashEntry() == null;
+		return isChrome() == that.isChrome() && Objects.equals(card, that.card) && getStashEntry() == null;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(chrome, card);
+		return Objects.hash(isChrome(), card);
 	}
 }
