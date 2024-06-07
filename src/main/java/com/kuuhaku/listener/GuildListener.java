@@ -60,6 +60,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.random.RandomGenerator;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class GuildListener extends ListenerAdapter {
@@ -478,7 +479,7 @@ public class GuildListener extends ListenerAdapter {
 		I18N locale = event.config().getLocale();
 		try {
 			String[] args = content.toLowerCase().split("\\s+");
-			String name = StringUtils.stripAccents(args[0].replaceFirst(event.config().getPrefix(), ""));
+			String name = StringUtils.stripAccents(args[0].replaceFirst(Pattern.quote(event.config().getPrefix()), ""));
 
 			String[] parts = name.split("\\.");
 			JSONObject aliases = new JSONObject();
