@@ -89,13 +89,13 @@ public class StashedCard extends DAO<StashedCard> {
 		this.card = card.getCard();
 		this.type = CardType.KAWAIPON;
 		this.kawaipon = kawaipon;
-		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails());
+		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(uuid, false));
 	}
 
 	public StashedCard(Kawaipon kawaipon, Drawable<?> card) {
 		this.card = card.getCard();
 		this.kawaipon = kawaipon;
-		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails());
+		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(uuid, false));
 
 		if (card instanceof Senshi) {
 			this.type = CardType.KAWAIPON;
