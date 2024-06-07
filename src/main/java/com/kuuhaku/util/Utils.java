@@ -1285,6 +1285,7 @@ public abstract class Utils {
 						Arrays.stream(args)
 								.map(o -> {
 									int idx = i.getAndIncrement();
+									Class<?> type = types[idx];
 
 									if (o instanceof Number n) {
 										if (n.doubleValue() - n.intValue() != 0) {
@@ -1294,9 +1295,15 @@ public abstract class Utils {
 										return n.intValue();
 									} else if (o instanceof Boolean b) {
 										return b;
+									} else if (o instanceof String s && type.isEnum()) {
+										for (Object e : type.getEnumConstants()) {
+											if (((Enum<?>) e).name().equals(s)) {
+												return e;
+											}
+										}
 									}
 
-									return types[idx].cast(o);
+									return type.cast(o);
 								})
 								.toArray()
 				));

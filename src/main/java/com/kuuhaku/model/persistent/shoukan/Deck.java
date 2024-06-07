@@ -30,7 +30,9 @@
  import com.kuuhaku.model.persistent.shiro.Card;
  import com.kuuhaku.model.persistent.user.Account;
  import com.kuuhaku.model.records.shoukan.BaseValues;
+ import com.kuuhaku.model.records.shoukan.DeckEntry;
  import com.kuuhaku.model.records.shoukan.Origin;
+ import com.kuuhaku.model.records.shoukan.RaceStats;
  import com.kuuhaku.util.Calc;
  import com.kuuhaku.util.Graph;
  import com.kuuhaku.util.IO;
@@ -156,24 +158,25 @@
 		 return styling.getSkin();
 	 }
 
-	 public List<String> getSenshiRaw() {
+	 public List<DeckEntry> getSenshiRaw() {
 		 if (account == null) return List.of();
 
-		 return DAO.queryAllNative(String.class, """
-				 SELECT d.card_id, coalesce(cd.chrome, FALSE)
+		 return DAO.queryAllUnmapped("""
+				 SELECT 'SENSHI', d.card_id, sc.id
 				 FROM senshi d
 				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
-				 LEFT JOIN card_details cd ON cd.card_uuid = sc.uuid
 				 WHERE sc.kawaipon_uid = ?1
 				 		AND sc.deck_id = ?2
 				 %s
-				 """.formatted(styling.getSenshiOrder()), account.getUid(), id);
+				 """.formatted(styling.getSenshiOrder()), account.getUid(), id).stream()
+				 .map(o -> Utils.map(DeckEntry.class, o))
+				 .toList();
 	 }
 
 	 public List<Senshi> getSenshi() {
 		 if (senshi == null) {
 			 senshi = getSenshiRaw().stream()
-					 .map(id -> DAO.find(Senshi.class, id))
+					 .map(de -> (Senshi) de.card())
 					 .toList();
 		 }
 
@@ -201,24 +204,25 @@
 				 .count();
 	 }
 
-	 public List<String> getEvogearRaw() {
+	 public List<DeckEntry> getEvogearRaw() {
 		 if (account == null) return List.of();
 
-		 return DAO.queryAllNative(String.class, """
-				 SELECT d.card_id, coalesce(sc.chrome, FALSE)
+		 return DAO.queryAllUnmapped("""
+				 SELECT 'EVOGEAR', d.card_id, sc.id
 				 FROM evogear d
 				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
-				 LEFT JOIN card_details cd ON cd.card_uuid = sc.uuid
 				 WHERE sc.kawaipon_uid = ?1
 				   AND sc.deck_id = ?2
 				 %s
-				 """.formatted(styling.getEvogearOrder()), account.getUid(), id);
+				 """.formatted(styling.getEvogearOrder()), account.getUid(), id).stream()
+				 .map(o -> Utils.map(DeckEntry.class, o))
+				 .toList();
 	 }
 
 	 public List<Evogear> getEvogear() {
 		 if (evogear == null) {
 			 evogear = getEvogearRaw().stream()
-					 .map(id -> DAO.find(Evogear.class, id))
+					 .map(de -> (Evogear) de.card())
 					 .toList();
 		 }
 
@@ -269,23 +273,24 @@
 		 return (int) (weight + penalty);
 	 }
 
-	 public List<String> getFieldsRaw() {
+	 public List<DeckEntry> getFieldsRaw() {
 		 if (account == null) return List.of();
 
-		 return DAO.queryAllNative(String.class, """
-				 SELECT d.card_id, coalesce(sc.chrome, FALSE)
+		 return DAO.queryAllUnmapped("""
+				 SELECT 'FIELD', d.card_id, sc.id
 				 FROM field d
 				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
-				 LEFT JOIN card_details cd ON cd.card_uuid = sc.uuid
 				 WHERE sc.kawaipon_uid = ?1
 				   AND sc.deck_id = ?2
-				 """, account.getUid(), id);
+				 """, account.getUid(), id).stream()
+				 .map(o -> Utils.map(DeckEntry.class, o))
+				 .toList();
 	 }
 
 	 public List<Field> getFields() {
 		 if (field == null) {
 			 field = getFieldsRaw().stream()
-					 .map(id -> DAO.find(Field.class, id))
+					 .map(de -> (Field) de.card())
 					 .toList();
 		 }
 
@@ -297,7 +302,7 @@
 	 }
 
 	 public int countCard(Drawable<?> card) {
-		 List<String> cards;
+		 List<DeckEntry> cards;
 
 		 if (card instanceof Senshi) {
 			 cards = getSenshiRaw();
@@ -308,7 +313,7 @@
 		 }
 
 		 return (int) cards.parallelStream()
-				 .filter(id -> id.equals(card.getId()))
+				 .filter(de -> de.id().equals(card.getId()))
 				 .count();
 	 }
 
