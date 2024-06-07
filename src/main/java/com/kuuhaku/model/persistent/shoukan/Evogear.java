@@ -461,6 +461,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public boolean execute(EffectParameters ep) {
+		if (ep.trigger() != ON_TICK) {
+			execute(new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
+		}
+
 		if (!hasEffect()) return false;
 		else if (!hasTrueEffect()) {
 			if (!isSpell() && hand.getLockTime(Lock.EFFECT) > 0) return false;
