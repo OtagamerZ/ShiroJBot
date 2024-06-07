@@ -202,6 +202,11 @@ public class StashedCard extends DAO<StashedCard> {
 	}
 
 	@Override
+	public void beforeSave() {
+		details.save();
+	}
+
+	@Override
 	public void afterSave() {
 		if (price > 0) {
 			MarketOrder mo = MarketOrder.search(this);

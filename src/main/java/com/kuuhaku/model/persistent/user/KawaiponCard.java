@@ -162,6 +162,11 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	}
 
 	@Override
+	public void beforeSave() {
+		details.save();
+	}
+
+	@Override
 	public void afterDelete() {
 		StashedCard sc = getStashEntry();
 		if (sc != null) {
