@@ -72,13 +72,13 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 
 	public KawaiponCard(Card card, boolean chrome) {
 		this.card = card;
-		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(chrome));
+		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(uuid, chrome));
 	}
 
 	public KawaiponCard(String uuid, Card card, boolean chrome) {
 		this.uuid = uuid;
 		this.card = card;
-		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(chrome));
+		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(uuid, chrome));
 	}
 
 	public int getId() {
