@@ -46,7 +46,8 @@ public class CardDetails extends DAO<CardDetails> {
 	public CardDetails() {
 	}
 
-	public CardDetails(boolean chrome) {
+	public CardDetails(String uuid, boolean chrome) {
+		this.uuid = uuid;
 		this.chrome = chrome;
 	}
 
