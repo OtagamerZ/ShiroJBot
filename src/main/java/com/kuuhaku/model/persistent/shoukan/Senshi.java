@@ -734,7 +734,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public int getEquipDmg() {
 		if (hasFlag(Flag.NO_EQUIP)) return 0;
-		else if (getGame() != null && Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
+		else if (hand != null && hand.getOther() != null && Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
 			return 0;
 		}
 
@@ -743,7 +743,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public int getEquipDfs() {
 		if (hasFlag(Flag.NO_EQUIP)) return 0;
-		else if (getGame() != null && Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
+		else if (hand != null && hand.getOther() != null && Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
 			return 0;
 		}
 
@@ -754,7 +754,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public int getEquipDodge() {
 		if (hasFlag(Flag.NO_EQUIP)) return 0;
-		else if (getGame() != null && Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
+		else if (hand != null && hand.getOther() != null && Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
 			return 0;
 		}
 
@@ -765,7 +765,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public int getEquipBlock() {
 		if (hasFlag(Flag.NO_EQUIP)) return 0;
-		else if (getGame() != null && Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
+		else if (hand != null && hand.getOther() != null && Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
 			return 0;
 		}
 
