@@ -31,6 +31,7 @@ import javax.imageio.ImageIO;
 import java.lang.management.ManagementFactory;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
+import java.util.concurrent.CompletableFuture;
 
 public class Main {
 	public static final ExecChain READY = new ExecChain();
@@ -91,6 +92,18 @@ public class Main {
 		ImageIO.setUseCache(false);
 		Thread.setDefaultUncaughtExceptionHandler(app = new Application());
 		READY.run();
+
+		CompletableFuture.runAsync(() -> {
+			String line;
+			while (!Thread.interrupted()) {
+				line = System.console().readLine();
+				if (line.equalsIgnoreCase("exit")) {
+					Constants.LOGGER.info("Exiting process...");
+					System.exit(0);
+					return;
+				}
+			}
+		});
 	}
 
 	public static CacheManager getCacheManager() {
