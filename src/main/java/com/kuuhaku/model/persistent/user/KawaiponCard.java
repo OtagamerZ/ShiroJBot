@@ -57,7 +57,7 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "uuid", insertable = false, updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@Fetch(FetchMode.JOIN)
 	private CardDetails details;

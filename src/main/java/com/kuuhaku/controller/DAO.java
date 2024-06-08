@@ -22,7 +22,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -355,14 +354,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 					if (lock.isBlacklisted()) return;
 				}
 
-				try {
-					em.merge(this);
-				} catch (EntityNotFoundException e) {
-					if (this instanceof KawaiponCard) {
-						System.out.println("mogus");
-					}
-					em.persist(this);
-				}
+				em.merge(this);
 			});
 		} finally {
 			afterSave();
