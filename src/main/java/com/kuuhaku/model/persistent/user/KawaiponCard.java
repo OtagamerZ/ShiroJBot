@@ -157,11 +157,6 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	}
 
 	@Override
-	public void afterSave() {
-		details.save();
-	}
-
-	@Override
 	public String toString() {
 		return getName();
 	}

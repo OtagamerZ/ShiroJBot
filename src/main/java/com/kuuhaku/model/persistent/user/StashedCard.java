@@ -208,8 +208,6 @@ public class StashedCard extends DAO<StashedCard> {
 				m.buy(mo, id);
 			}
 		}
-
-		details.save();
 	}
 
 	@Override
