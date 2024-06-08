@@ -61,11 +61,6 @@ public class StashedCard extends DAO<StashedCard> {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name = "uuid", insertable = false, updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@Fetch(FetchMode.JOIN)
-	private CardDetails details;
-
 	@ManyToOne
 	@JoinColumn(name = "deck_id")
 	private Deck deck;
@@ -79,7 +74,10 @@ public class StashedCard extends DAO<StashedCard> {
 	@Column(name = "account_bound", nullable = false)
 	private boolean accountBound = false;
 
+	private transient CardDetails details;
+
 	public StashedCard() {
+		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(uuid, false));
 	}
 
 	public StashedCard(Kawaipon kawaipon, KawaiponCard card) {
@@ -209,7 +207,9 @@ public class StashedCard extends DAO<StashedCard> {
 			}
 		}
 
-		details.save();
+		if (details != null) {
+			details.save();
+		}
 	}
 
 	@Override

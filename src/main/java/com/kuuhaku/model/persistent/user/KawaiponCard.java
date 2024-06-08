@@ -58,12 +58,10 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 	@Fetch(FetchMode.JOIN)
 	private Kawaipon kawaipon;
 
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name = "uuid", insertable = false, updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@Fetch(FetchMode.JOIN)
-	private CardDetails details;
+	private transient CardDetails details;
 
 	public KawaiponCard() {
+		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(uuid, false));
 	}
 
 	public KawaiponCard(Card card, boolean chrome) {
@@ -159,7 +157,9 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 
 	@Override
 	public void afterSave() {
-		details.save();
+		if (details != null) {
+			details.save();
+		}
 	}
 
 	@Override

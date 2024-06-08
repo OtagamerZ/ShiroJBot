@@ -119,11 +119,12 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 		return Set.copyOf(DAO.queryAll(KawaiponCard.class, """
 				SELECT kc
 				FROM KawaiponCard kc
+				INNER JOIN CardDetails cd ON cd.uuid = kc.uuid
 				LEFT JOIN StashedCard sc ON kc.uuid = sc.uuid
 				WHERE sc.id IS NULL
 				  AND kc.kawaipon.uid = ?1
 				  AND kc.card.anime.id = ?2
-						  AND kc.details.chrome = ?3
+						  AND cd.chrome = ?3
 				""", uid, a.getId(), chrome));
 	}
 
@@ -131,11 +132,12 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 		return DAO.query(KawaiponCard.class, """
 				SELECT kc
 				FROM KawaiponCard kc
+				INNER JOIN CardDetails cd ON cd.uuid = kc.uuid
 				LEFT JOIN StashedCard sc ON kc.uuid = sc.uuid
 				WHERE sc.id IS NULL
 				  AND kc.kawaipon.uid = ?1
 				  AND kc.card = ?2
-				  AND kc.details.chrome = ?3
+				  AND cd.chrome = ?3
 				""", uid, card, chrome);
 	}
 
@@ -198,7 +200,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				SELECT count(1) FILTER (WHERE NOT x.chrome)
 				     , count(1) FILTER (WHERE x.chrome)
 								FROM (
-				         SELECT kc.chrome
+				         SELECT cd.chrome
 				         FROM kawaipon_card kc
 				                  INNER JOIN card c ON c.id = kc.card_id
 				         		  INNER JOIN card_details cd ON cd.card_uuid = kc.uuid
@@ -236,8 +238,9 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				SELECT x.id
 				FROM (
 				         SELECT sc.id
-				              , row_number() OVER (PARTITION BY sc.card_id ORDER BY kc.quality DESC) AS copy
+				              , row_number() OVER (PARTITION BY sc.card_id ORDER BY cd.quality DESC) AS copy
 				         FROM stashed_card sc
+				         		  INNER JOIN card_details cd ON cd.card_uuid = sc.uuid
 				                  LEFT JOIN kawaipon_card kc ON kc.uuid = sc.uuid
 				         WHERE sc.kawaipon_uid = ?1
 				           AND sc.deck_id IS NULL

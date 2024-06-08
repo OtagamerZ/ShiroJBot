@@ -41,7 +41,7 @@ public class Market {
 			Map.entry("n", "AND c.card.id LIKE '%%'||?%s||'%%'"),
 			Map.entry("r", "AND cast(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'"),
 			Map.entry("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'"),
-			Map.entry("c", "AND c.details.chrome = TRUE"),
+			Map.entry("c", "AND cd.chrome = TRUE"),
 			Map.entry("k", "AND c.type = 'KAWAIPON'"),
 			Map.entry("s", "AND s.id IS NOT NULL"),
 			Map.entry("e", "AND e.id IS NOT NULL"),
@@ -59,6 +59,7 @@ public class Market {
 		List<Object> params = new ArrayList<>();
 		XStringBuilder query = new XStringBuilder("""
 				SELECT c FROM StashedCard c
+				INNER JOIN CardDetails cd ON cd.uuid = c.uuid
 				LEFT JOIN KawaiponCard kc ON kc.uuid = c.uuid
 				LEFT JOIN Senshi s ON s.card = c.card
 				LEFT JOIN Evogear e ON e.card = c.card
