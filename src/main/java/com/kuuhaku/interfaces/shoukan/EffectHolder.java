@@ -108,12 +108,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default boolean hasFlag(Flag flag, boolean pop) {
-		if (getHand() != null) {
-			if (Utils.equalsAny(flag, Flag.NO_EQUIP, Flag.IGNORE_EQUIP) && getHand().getOrigins().synergy() == Race.SLIME) {
-				return true;
-			}
-		}
-
 		if (pop) {
 			return getFlags().pop(flag);
 		} else {

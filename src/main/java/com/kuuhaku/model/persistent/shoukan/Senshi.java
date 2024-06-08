@@ -734,12 +734,18 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public int getEquipDmg() {
 		if (hasFlag(Flag.NO_EQUIP)) return 0;
+		else if (Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
+			return 0;
+		}
 
 		return equipments.stream().filter(Evogear::isAvailable).mapToInt(Evogear::getDmg).sum();
 	}
 
 	public int getEquipDfs() {
 		if (hasFlag(Flag.NO_EQUIP)) return 0;
+		else if (Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
+			return 0;
+		}
 
 		return equipments.stream()
 				.filter(Evogear::isAvailable)
@@ -748,6 +754,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public int getEquipDodge() {
 		if (hasFlag(Flag.NO_EQUIP)) return 0;
+		else if (Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
+			return 0;
+		}
 
 		return equipments.stream()
 				.filter(Evogear::isAvailable)
@@ -756,6 +765,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public int getEquipBlock() {
 		if (hasFlag(Flag.NO_EQUIP)) return 0;
+		else if (Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
+			return 0;
+		}
 
 		return equipments.stream()
 				.filter(Evogear::isAvailable)
