@@ -77,7 +77,6 @@ public class StashedCard extends DAO<StashedCard> {
 	private transient CardDetails details;
 
 	public StashedCard() {
-		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(uuid, false));
 	}
 
 	public StashedCard(Kawaipon kawaipon, KawaiponCard card) {
@@ -111,23 +110,27 @@ public class StashedCard extends DAO<StashedCard> {
 	}
 
 	public CardDetails getDetails() {
+		if (details == null) {
+			this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(uuid, false));
+		}
+
 		return details;
 	}
 
 	public boolean isChrome() {
-		return details.isChrome();
+		return getDetails().isChrome();
 	}
 
 	public void setChrome(boolean chrome) {
-		this.details.setChrome(chrome);
+		this.getDetails().setChrome(chrome);
 	}
 
 	public double getQuality() {
-		return details.getQuality();
+		return getDetails().getQuality();
 	}
 
 	public void setQuality(double quality) {
-		this.details.setQuality(quality);
+		this.getDetails().setQuality(quality);
 	}
 
 	public Card getCard() {
