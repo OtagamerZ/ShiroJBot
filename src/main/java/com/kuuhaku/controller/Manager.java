@@ -44,6 +44,7 @@ public abstract class Manager {
 	private static final String DB_PASS = System.getenv("DB_PASS");
 
 	private static final EntityManagerFactory emf = new PersistenceConfiguration("main")
+			.name("main")
 			.property(PersistenceConfiguration.JDBC_URL, "jdbc:postgresql://%s/%s?currentSchema=shiro&sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
 					SERVER_IP, DB_NAME
 			))
