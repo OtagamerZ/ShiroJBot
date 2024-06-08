@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
+import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -357,6 +358,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				try {
 					em.merge(this);
 				} catch (EntityNotFoundException e) {
+					if (this instanceof KawaiponCard) {
+						System.out.println("mogus");
+					}
 					em.persist(this);
 				}
 			});
@@ -367,9 +371,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	@SuppressWarnings("unchecked")
 	public final T refresh() {
-		try {
-			beforeRefresh();
-			return Manager.getFactory().callInTransaction(em -> {
+		return Manager.getFactory().callInTransaction(em -> {
+			try {
+				beforeRefresh();
 				if (em.contains(this)) {
 					em.refresh(this);
 					return (T) this;
@@ -382,16 +386,16 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 					return (T) Utils.getOr(t, this);
 				}
-			});
-		} finally {
-			afterRefresh();
-		}
+			} finally {
+				afterRefresh();
+			}
+		});
 	}
 
 	public final void delete() {
-		try {
+		Manager.getFactory().runInTransaction(em -> {
 			beforeDelete();
-			Manager.getFactory().runInTransaction(em -> {
+			try {
 				DAO<?> ent;
 				if (em.contains(this)) {
 					ent = this;
@@ -405,9 +409,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				}
 
 				em.remove(ent);
-			});
-		} finally {
-			afterDelete();
-		}
+			} finally {
+				afterDelete();
+			}
+		});
 	}
 }
