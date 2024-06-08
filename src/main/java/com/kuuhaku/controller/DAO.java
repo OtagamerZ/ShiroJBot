@@ -347,9 +347,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public final void save() {
-		Manager.getFactory().runInTransaction(em -> {
+		try {
 			beforeSave();
-			try {
+			Manager.getFactory().runInTransaction(em -> {
 				if (this instanceof Blacklistable lock) {
 					if (lock.isBlacklisted()) return;
 				}
@@ -359,17 +359,17 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				} catch (EntityNotFoundException e) {
 					em.persist(this);
 				}
-			} finally {
-				afterSave();
-			}
-		});
+			});
+		} finally {
+			afterSave();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public final T refresh() {
-		return Manager.getFactory().callInTransaction(em -> {
-			try {
-				beforeRefresh();
+		try {
+			beforeRefresh();
+			return Manager.getFactory().callInTransaction(em -> {
 				if (em.contains(this)) {
 					em.refresh(this);
 					return (T) this;
@@ -382,16 +382,16 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 					return (T) Utils.getOr(t, this);
 				}
-			} finally {
-				afterRefresh();
-			}
-		});
+			});
+		} finally {
+			afterRefresh();
+		}
 	}
 
 	public final void delete() {
-		Manager.getFactory().runInTransaction(em -> {
+		try {
 			beforeDelete();
-			try {
+			Manager.getFactory().runInTransaction(em -> {
 				DAO<?> ent;
 				if (em.contains(this)) {
 					ent = this;
@@ -405,9 +405,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				}
 
 				em.remove(ent);
-			} finally {
-				afterDelete();
-			}
-		});
+			});
+		} finally {
+			afterDelete();
+		}
 	}
 }
