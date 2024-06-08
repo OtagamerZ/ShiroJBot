@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Quality;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.Utils;
@@ -154,6 +155,11 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 		}
 
 		return bi;
+	}
+
+	@Override
+	public void afterSave() {
+		details.save();
 	}
 
 	@Override
