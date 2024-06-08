@@ -61,22 +61,18 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 					throw new NoSuchFieldException("Class' ID not found");
 				}
 
-				try {
-					T t = em.find(klass, id);
-					if (t == null && AutoMake.class.isAssignableFrom(klass)) {
-						try {
-							t = klass.cast(((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids)));
-							t.save();
-						} catch (Exception e) {
-							Constants.LOGGER.error(new JSONObject(ids));
-							throw e;
-						}
+				T t = em.find(klass, id);
+				if (t == null && AutoMake.class.isAssignableFrom(klass)) {
+					try {
+						t = klass.cast(((AutoMake<?>) klass.getConstructor().newInstance()).make(new JSONObject(ids)));
+						t.save();
+					} catch (Exception e) {
+						Constants.LOGGER.error(new JSONObject(ids));
+						throw e;
 					}
-
-					return t;
-				} catch (EntityNotFoundException e) {
-					return null;
 				}
+
+				return t;
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
