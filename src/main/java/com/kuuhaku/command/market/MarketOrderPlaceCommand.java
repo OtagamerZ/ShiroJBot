@@ -65,7 +65,7 @@ public class MarketOrderPlaceCommand implements Executable {
 		}
 
 		int price = args.getInt("price");
-		if (!Utils.between(price, 1, 10_000_000)) {
+		if (!Utils.between(price, 1, 100_000_000)) {
 			event.channel().sendMessage(locale.get("error/invalid_value_range", 1, 10_000_000)).queue();
 			return;
 		}
