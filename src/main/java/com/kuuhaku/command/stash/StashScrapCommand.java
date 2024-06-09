@@ -122,7 +122,7 @@ public class StashScrapCommand implements Executable {
 	private Card verifyCard(I18N locale, MessageData.Guild event, String id) {
 		Card card = DAO.find(Card.class, id);
 		if (card == null) {
-			String sug = Utils.didYouMean(id.toUpperCase(), "SELECT id AS value FROM v_card_names");
+			String sug = Utils.didYouMean(id, "SELECT id AS value FROM v_card_names");
 			if (sug == null) {
 				event.channel().sendMessage(locale.get("error/unknown_card_none")).queue();
 			} else {

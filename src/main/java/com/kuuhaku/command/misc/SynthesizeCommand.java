@@ -99,7 +99,7 @@ public class SynthesizeCommand implements Executable {
 		for (String id : ids) {
 			Card c = DAO.find(Card.class, id.toUpperCase());
 			if (c == null) {
-				String sug = Utils.didYouMean(id.toUpperCase(), "SELECT id AS value FROM v_card_names");
+				String sug = Utils.didYouMean(id, "SELECT id AS value FROM v_card_names");
 				if (sug == null) {
 					event.channel().sendMessage(locale.get("error/unknown_card_none")).queue();
 				} else {

@@ -52,7 +52,7 @@ public class DeckCoverCommand implements Executable {
 
 		Anime anime = DAO.find(Anime.class, args.getString("anime").toUpperCase());
 		if (anime == null || !anime.isVisible()) {
-			String sug = Utils.didYouMean(args.getString("anime").toUpperCase(), "SELECT id AS value FROM anime WHERE visible");
+			String sug = Utils.didYouMean(args.getString("anime"), "SELECT id AS value FROM anime WHERE visible");
 			if (sug == null) {
 				event.channel().sendMessage(locale.get("error/unknown_anime_none")).queue();
 			} else {

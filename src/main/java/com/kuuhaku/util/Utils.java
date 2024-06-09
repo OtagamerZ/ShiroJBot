@@ -814,8 +814,8 @@ public abstract class Utils {
 				SELECT x."value"
 				FROM (
 				     SELECT x."value"
-				      	  , levenshtein_less_equal(substring(x."value" FOR length('%1$s')), '%1$s', 5) AS dist
-				     FROM (%2$S) x
+				      	  , levenshtein_less_equal(substring(x."value" FOR length('%1$S')), '%1$S', 5) AS dist
+				     FROM (%2$s) x
 				     ) x
 				WHERE x.dist <= 5
 				ORDER BY x.dist

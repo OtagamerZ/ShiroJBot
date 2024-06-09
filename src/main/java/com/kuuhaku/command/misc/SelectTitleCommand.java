@@ -129,7 +129,7 @@ public class SelectTitleCommand implements Executable {
 		);
 		if (title == null) {
 			String sug = Utils.didYouMean(
-					args.getString("name").toUpperCase(),
+					args.getString("name"),
 					"SELECT t.title_id AS value FROM account_title t WHERE t.account_uid = ?1",
 					acc.getUid()
 			);
