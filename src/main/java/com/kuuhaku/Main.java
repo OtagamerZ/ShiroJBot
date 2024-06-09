@@ -92,18 +92,6 @@ public class Main {
 		ImageIO.setUseCache(false);
 		Thread.setDefaultUncaughtExceptionHandler(app = new Application());
 		READY.run();
-
-		CompletableFuture.runAsync(() -> {
-			String line;
-			while (!Thread.interrupted()) {
-				line = System.console().readLine();
-				if (line.equalsIgnoreCase("exit")) {
-					Constants.LOGGER.info("Exiting process...");
-					System.exit(0);
-					return;
-				}
-			}
-		});
 	}
 
 	public static CacheManager getCacheManager() {

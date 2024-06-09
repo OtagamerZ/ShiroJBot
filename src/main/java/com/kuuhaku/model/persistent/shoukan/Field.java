@@ -395,6 +395,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		Field clone = new Field(id, card, modifiers.clone(), type, effect, tags.clone());
 		clone.hand = hand;
 		clone.state = (byte) (state & 0b1110);
+		clone.stashRef = stashRef;
 
 		return clone;
 	}
