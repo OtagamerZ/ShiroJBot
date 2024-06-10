@@ -29,6 +29,7 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Entity
+@Cacheable(false)
 @Table(name = "transaction", indexes = @Index(columnList = "id DESC"))
 public class Transaction extends DAO<Transaction> {
 	@Id
