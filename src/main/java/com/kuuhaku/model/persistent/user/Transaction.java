@@ -19,7 +19,6 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.NoCache;
 import com.kuuhaku.model.enums.Currency;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -31,7 +30,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "transaction", indexes = @Index(columnList = "id DESC"))
-public class Transaction extends DAO<Transaction> implements NoCache {
+public class Transaction extends DAO<Transaction> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)

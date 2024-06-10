@@ -95,10 +95,6 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private final List<Transaction> transactions = new ArrayList<>();
-
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SUBSELECT)
 	private final Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
 
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -338,7 +334,10 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	}
 
 	public void addTransaction(long value, boolean input, String reason, Currency currency) {
-		transactions.add(new Transaction(this, value, input, reason, currency));
+		DAO.applyNative("""
+				INSERT INTO transaction (account_uid, date, input, reason, value, currency) 
+				VALUES (?1, current_timestamp AT TIME ZONE 'BRT', ?2, ?3, ?4, ?5)
+				""", uid, input, reason, value, currency.name());
 	}
 
 	public DynamicProperty getDynamicProperty(String id) {
