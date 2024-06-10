@@ -60,7 +60,7 @@ public class DeckRemoveCommand implements Executable {
 		}
 
 		if (args.has("action")) {
-			DAO.applyNative("UPDATE stashed_card SET deck_id = NULL WHERE kawaipon_uid = ?1 AND deck_id = ?2",
+			DAO.applyNative(StashedCard.class, "UPDATE stashed_card SET deck_id = NULL WHERE kawaipon_uid = ?1 AND deck_id = ?2",
 					event.user().getId(), d.getId()
 			);
 

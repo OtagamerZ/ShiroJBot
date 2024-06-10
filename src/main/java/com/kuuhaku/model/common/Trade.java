@@ -180,7 +180,7 @@ public class Trade {
     public void accept() {
         left.addCR(rightValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
         left.consumeCR(leftValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
-        DAO.applyNative("""
+        DAO.applyNative(StashedCard.class, """
                 UPDATE stashed_card sc
                 SET kawaipon_uid = ?1
                 WHERE sc.id IN ?2
@@ -188,7 +188,7 @@ public class Trade {
 
         right.addCR(leftValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
         right.consumeCR(rightValue, "Trade (" + left.getName() + "/" + right.getName() + ") commit");
-        DAO.applyNative("""    
+        DAO.applyNative(StashedCard.class, """    
                 UPDATE stashed_card sc
                 SET kawaipon_uid = ?1
                 WHERE sc.id IN ?2

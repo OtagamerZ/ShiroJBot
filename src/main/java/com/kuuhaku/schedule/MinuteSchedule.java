@@ -21,6 +21,8 @@ package com.kuuhaku.schedule;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
+import com.kuuhaku.model.persistent.user.Profile;
+import com.kuuhaku.model.persistent.user.Transaction;
 import com.ygimenez.json.JSONArray;
 import kotlin.Pair;
 
@@ -50,7 +52,7 @@ public class MinuteSchedule implements Runnable, PreInitialize {
 			it.remove();
 		}
 
-		DAO.applyNative("""
+		DAO.applyNative(Profile.class, """
 				UPDATE profile
 				SET xp = xp + cast(vals -> 'xp' AS INT)
 				FROM jsonb_array_elements(cast(?1 AS JSONB)) AS vals

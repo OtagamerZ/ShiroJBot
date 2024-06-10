@@ -42,7 +42,7 @@ public class CustomAnswerId implements Serializable {
 
 	public CustomAnswerId(String gid) {
 		if (gid.isBlank()) throw new IllegalArgumentException("GID cannot be blank");
-		DAO.applyNative("CREATE SEQUENCE IF NOT EXISTS custom_answer_id_seq");
+		DAO.applyNative((Class<?>) null, "CREATE SEQUENCE IF NOT EXISTS custom_answer_id_seq");
 
 		this.id = DAO.queryNative(Integer.class, "SELECT nextval('custom_answer_id_seq')");
 		this.gid = gid;

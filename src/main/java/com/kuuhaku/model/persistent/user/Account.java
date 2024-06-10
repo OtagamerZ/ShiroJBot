@@ -334,7 +334,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	}
 
 	public void addTransaction(long value, boolean input, String reason, Currency currency) {
-		DAO.applyNative("""
+		DAO.applyNative(Transaction.class, """
 				INSERT INTO transaction (account_uid, date, input, reason, value, currency) 
 				VALUES (?1, current_timestamp AT TIME ZONE 'BRT', ?2, ?3, ?4, ?5)
 				""", uid, input, reason, value, currency.name());
