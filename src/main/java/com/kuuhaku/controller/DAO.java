@@ -26,6 +26,7 @@ import com.kuuhaku.interfaces.DAOListener;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
+import org.hibernate.query.NativeQuery;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
@@ -111,8 +112,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T> T queryNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query)
-					.setMaxResults(1);
+			Query q = em.createNativeQuery(query);
+			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
+			q.setMaxResults(1);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -141,8 +143,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static Object[] queryUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query)
-					.setMaxResults(1);
+			Query q = em.createNativeQuery(query);
+			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
+			q.setMaxResults(1);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -200,6 +203,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static <T> List<T> queryAllNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
 			Query q = em.createNativeQuery(query);
+			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -226,6 +230,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static List<Object[]> queryAllUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
 			Query q = em.createNativeQuery(query);
+			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -307,6 +312,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static <T> List<T> nativeQueryBuilder(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, Function<Query, List<T>> processor, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
 			Query q = em.createNativeQuery(query);
+			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -332,8 +338,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static List<Object[]> unmappedQueryBuilder(@NotNull @Language("PostgreSQL") String query, Function<Query, List<Object>> processor, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query)
-					.setHint("org.hibernate.cacheable", true);
+			Query q = em.createNativeQuery(query);
+			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {

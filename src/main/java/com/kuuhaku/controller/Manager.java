@@ -68,7 +68,7 @@ public abstract class Manager {
 							.sorted(Comparator.comparing(Path::toString).thenComparing(Path::getNameCount))
 							.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
 							.map(IO::readString)
-							.forEach(sql -> em.createNativeQuery(sql).executeUpdate());
+							.forEach(DAO::applyNative);
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
