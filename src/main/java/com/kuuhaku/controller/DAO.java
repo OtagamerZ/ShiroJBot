@@ -112,7 +112,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static <T> T queryNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
 			Query q = em.createNativeQuery(query)
-					.setHint("org.hibernate.cacheable", true)
 					.setMaxResults(1);
 
 			int paramSize = Objects.requireNonNull(params).length;
@@ -143,7 +142,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static Object[] queryUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
 			Query q = em.createNativeQuery(query)
-					.setHint("org.hibernate.cacheable", true)
 					.setMaxResults(1);
 
 			int paramSize = Objects.requireNonNull(params).length;
@@ -201,8 +199,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T> List<T> queryAllNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query)
-					.setHint("org.hibernate.cacheable", true);
+			Query q = em.createNativeQuery(query);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -228,8 +225,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static List<Object[]> queryAllUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query)
-					.setHint("org.hibernate.cacheable", true);
+			Query q = em.createNativeQuery(query);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -277,8 +273,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static void applyNative(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		Manager.getFactory().runInTransaction(em -> {
-			Query q = em.createNativeQuery(query)
-					.setHint("org.hibernate.cacheable", true);
+			Query q = em.createNativeQuery(query);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -311,8 +306,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T> List<T> nativeQueryBuilder(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, Function<Query, List<T>> processor, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query)
-					.setHint("org.hibernate.cacheable", true);
+			Query q = em.createNativeQuery(query);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
