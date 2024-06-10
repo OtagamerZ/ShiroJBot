@@ -42,7 +42,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	private static final XSync<Object> MUTEX = new XSync<>();
 
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
-		return MUTEX.evaluate(id, () -> Manager.getFactory().callInTransaction(em -> {
+		return Manager.getFactory().callInTransaction(em -> {
 			try {
 				Map<String, Object> ids = new HashMap<>();
 				for (Field f : klass.getDeclaredFields()) {
@@ -79,7 +79,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-		}));
+		});
 	}
 
 	public static <T extends DAO<T>> T query(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
