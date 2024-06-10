@@ -25,6 +25,7 @@ import com.kuuhaku.model.common.SingleUseReference;
 import com.kuuhaku.model.common.drop.CreditDrop;
 import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.common.drop.FragmentDrop;
+import com.kuuhaku.model.common.drop.ItemDrop;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
@@ -128,6 +129,7 @@ public abstract class Spawn {
 			RandomList<Drop> drops = new RandomList<>(rarityBonus);
 			drops.add(new CreditDrop(locale, rarity), 5000);
 			drops.add(new FragmentDrop(locale, rarity), 575);
+			drops.add(new ItemDrop(locale, rarity), 10);
 
 			drop = drops.get();
 			spawnedDrops.put(

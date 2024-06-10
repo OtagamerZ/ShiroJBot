@@ -115,7 +115,6 @@ public abstract class GameInstance<T extends Enum<T>> {
 				begin();
 				GuildListener.addHandler(guild, sml);
 				initialized = true;
-				timeout.start();
 
 				try {
 					exec.join();
@@ -160,7 +159,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 		this.timeout = DelayedAction.of(service)
 				.setTimeUnit(time, unit)
-				.setTask(() -> action.accept(turn));
+				.setTask(() -> action.accept(turn))
+				.start();
 	}
 
 	public GameChannel getChannel() {

@@ -50,30 +50,37 @@ public class DelayedAction {
 		return this;
 	}
 
-	public void run(Runnable task) {
+	public DelayedAction run(Runnable task) {
 		stop();
 		action = exec.schedule(cachedTask = task, time, unit);
+		return this;
 	}
 
-	public void start() {
+	public DelayedAction start() {
 		if (cachedTask != null) {
-			if (action != null) return;
+			if (action != null) return this;
 
 			action = exec.schedule(cachedTask, time, unit);
 		}
+
+		return this;
 	}
 
-	public void stop() {
+	public DelayedAction stop() {
 		if (action != null) {
 			action.cancel(true);
 			action = null;
 		}
+
+		return this;
 	}
 
-	public void restart() {
+	public DelayedAction restart() {
 		if (cachedTask != null) {
 			stop();
 			action = exec.schedule(cachedTask, time, unit);
 		}
+
+		return this;
 	}
 }
