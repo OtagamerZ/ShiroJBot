@@ -95,10 +95,6 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private final Set<DynamicProperty> dynamicProperties = new LinkedHashSet<>();
-
-	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SUBSELECT)
 	private final Set<AccountTitle> titles = new HashSet<>();
 
 	@JdbcTypeCode(SqlTypes.JSON)
@@ -341,9 +337,8 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	}
 
 	public DynamicProperty getDynamicProperty(String id) {
-		return dynamicProperties.parallelStream()
-				.filter(dp -> dp.getId().getId().equals(id))
-				.findAny().orElse(new DynamicProperty(this, id, ""));
+		String value = DAO.queryNative(String.class, "SELECT value FROM dynamic_property WHERE uid = ?1 AND id = ?2", uid, id);
+		return new DynamicProperty(this, id, Utils.getOr(value, ""));
 	}
 
 	public String getDynValue(String id) {
