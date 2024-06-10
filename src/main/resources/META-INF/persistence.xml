@@ -92,7 +92,7 @@
             <property name="hibernate.javax.cache.provider" value="com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider"/>
 
             <property name="hibernate.hikari.minimumIdle" value="5"/>
-            <property name="hibernate.hikari.maximumPoolSize" value="30"/>
+            <property name="hibernate.hikari.maximumPoolSize" value="100"/>
             <property name="hibernate.hikari.idleTimeout" value="10000"/>
             <property name="hibernate.hikari.connectionTimeout" value="30000"/>
             <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
