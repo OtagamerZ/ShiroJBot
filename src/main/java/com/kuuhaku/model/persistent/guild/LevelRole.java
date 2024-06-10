@@ -24,6 +24,7 @@ import com.kuuhaku.model.persistent.id.LevelRoleId;
 import com.kuuhaku.model.persistent.javatype.RoleJavaType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.internal.entities.RoleImpl;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
@@ -42,7 +43,7 @@ public class LevelRole extends DAO<LevelRole> {
 
 	@Column(name = "role", nullable = false)
 	@Convert(converter = RoleConverter.class)
-	private Role role;
+	private RoleImpl role;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "gid", nullable = false, updatable = false)
@@ -56,7 +57,7 @@ public class LevelRole extends DAO<LevelRole> {
 	public LevelRole(GuildSettings settings, int level, Role role) {
 		this.id = new LevelRoleId(role.getGuild().getId());
 		this.level = level;
-		this.role = role;
+		this.role = (RoleImpl) role;
 		this.settings = settings;
 	}
 
