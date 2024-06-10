@@ -469,7 +469,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public boolean execute(EffectParameters ep) {
-		if (ep.trigger() != ON_TICK) {
+		if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
 			execute(new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
 		}
 

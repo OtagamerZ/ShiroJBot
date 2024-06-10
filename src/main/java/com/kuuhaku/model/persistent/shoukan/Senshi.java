@@ -1136,7 +1136,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean execute(boolean global, EffectParameters ep) {
-		if (ep.trigger() != ON_TICK) {
+		if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
 			execute(new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
 		}
 
