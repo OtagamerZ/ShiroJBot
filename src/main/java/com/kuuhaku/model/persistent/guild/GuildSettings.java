@@ -33,6 +33,7 @@ import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.internal.entities.RoleImpl;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
@@ -85,11 +86,11 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@Column(name = "join_role")
 	@Convert(converter = RoleConverter.class)
-	private Role joinRole;
+	private RoleImpl joinRole;
 
 	@Column(name = "welcomer")
 	@Convert(converter = RoleConverter.class)
-	private Role welcomer;
+	private RoleImpl welcomer;
 
 	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
@@ -193,7 +194,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	}
 
 	public void setJoinRole(Role joinRole) {
-		this.joinRole = joinRole;
+		this.joinRole = (RoleImpl) joinRole;
 	}
 
 	public Role getWelcomer() {
@@ -201,7 +202,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	}
 
 	public void setWelcomer(Role welcomer) {
-		this.welcomer = welcomer;
+		this.welcomer = (RoleImpl) welcomer;
 	}
 
 	public List<LevelRole> getLevelRoles() {

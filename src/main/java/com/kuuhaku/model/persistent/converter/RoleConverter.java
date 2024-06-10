@@ -22,19 +22,19 @@ import com.kuuhaku.Main;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.internal.entities.RoleImpl;
 
 @Converter(autoApply = true)
-public class RoleConverter implements AttributeConverter<Role, String> {
+public class RoleConverter implements AttributeConverter<RoleImpl, String> {
 	@Override
-	public String convertToDatabaseColumn(Role role) {
+	public String convertToDatabaseColumn(RoleImpl role) {
 		if (role == null) return null;
 
 		return role.getId();
 	}
 
 	@Override
-	public Role convertToEntityAttribute(String id) {
-		return Main.getApp().getShiro().getRoleById(Utils.getOr(id, "1"));
+	public RoleImpl convertToEntityAttribute(String id) {
+		return (RoleImpl) Main.getApp().getShiro().getRoleById(Utils.getOr(id, "1"));
 	}
 }
