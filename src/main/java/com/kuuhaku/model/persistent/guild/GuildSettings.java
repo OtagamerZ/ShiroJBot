@@ -34,6 +34,7 @@ import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.internal.entities.RoleImpl;
+import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
@@ -57,27 +58,27 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Column(name = "kawaipon_channels")
 	@Convert(converter = ChannelConverter.class)
 	@CollectionTable(name = "guild_settings_kawaiponChannels", joinColumns = @JoinColumn(name = "gid"))
-	private List<GuildMessageChannel> kawaiponChannels = new ArrayList<>();
+	private List<TextChannelImpl> kawaiponChannels = new ArrayList<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "drop_channels")
 	@Convert(converter = ChannelConverter.class)
 	@CollectionTable(name = "guild_settings_dropChannels", joinColumns = @JoinColumn(name = "gid"))
-	private List<GuildMessageChannel> dropChannels = new ArrayList<>();
+	private List<TextChannelImpl> dropChannels = new ArrayList<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "denied_channels")
 	@Convert(converter = ChannelConverter.class)
 	@CollectionTable(name = "guild_settings_deniedChannels", joinColumns = @JoinColumn(name = "gid"))
-	private List<GuildMessageChannel> deniedChannels = new ArrayList<>();
+	private List<TextChannelImpl> deniedChannels = new ArrayList<>();
 
 	@Column(name = "notifications_channel")
 	@Convert(converter = ChannelConverter.class)
-	private GuildMessageChannel notificationsChannel;
+	private TextChannelImpl notificationsChannel;
 
 	@Column(name = "general_channel")
 	@Convert(converter = ChannelConverter.class)
-	private GuildMessageChannel generalChannel;
+	private TextChannelImpl generalChannel;
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "embed", nullable = false, columnDefinition = "JSONB")
@@ -121,7 +122,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@Column(name = "starboard_channel")
 	@Convert(converter = ChannelConverter.class)
-	private GuildMessageChannel starboardChannel;
+	private TextChannelImpl starboardChannel;
 
 	@Column(name = "feature_flags", nullable = false)
 	@Convert(converter = GuildFeatureConverter.class)
@@ -153,15 +154,15 @@ public class GuildSettings extends DAO<GuildSettings> {
 		return gid;
 	}
 
-	public List<GuildMessageChannel> getKawaiponChannels() {
+	public List<TextChannelImpl> getKawaiponChannels() {
 		return kawaiponChannels;
 	}
 
-	public List<GuildMessageChannel> getDropChannels() {
+	public List<TextChannelImpl> getDropChannels() {
 		return dropChannels;
 	}
 
-	public List<GuildMessageChannel> getDeniedChannels() {
+	public List<TextChannelImpl> getDeniedChannels() {
 		return deniedChannels;
 	}
 
@@ -170,7 +171,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	}
 
 	public void setNotificationsChannel(GuildMessageChannel notificationsChannel) {
-		this.notificationsChannel = notificationsChannel;
+		this.notificationsChannel = (TextChannelImpl) notificationsChannel;
 	}
 
 	public GuildMessageChannel getGeneralChannel() {
@@ -178,7 +179,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	}
 
 	public void setGeneralChannel(GuildMessageChannel generalChannel) {
-		this.generalChannel = generalChannel;
+		this.generalChannel = (TextChannelImpl) generalChannel;
 	}
 
 	public JSONObject getEmbed() {
@@ -244,7 +245,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	}
 
 	public void setStarboardChannel(GuildMessageChannel starboardChannel) {
-		this.starboardChannel = starboardChannel;
+		this.starboardChannel = (TextChannelImpl) starboardChannel;
 	}
 
 	public boolean isFeatureEnabled(GuildFeature feature) {

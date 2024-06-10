@@ -23,6 +23,7 @@ import com.kuuhaku.model.persistent.converter.ChannelConverter;
 import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 import org.hibernate.annotations.JavaTypeRegistration;
 
 import java.util.LinkedHashSet;
@@ -46,7 +47,7 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 
 	@Column(name = "channel")
 	@Convert(converter = ChannelConverter.class)
-	private GuildMessageChannel channel;
+	private TextChannelImpl channel;
 
 	public GoodbyeSettings() {
 	}
@@ -84,6 +85,6 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 	}
 
 	public void setChannel(GuildMessageChannel channel) {
-		this.channel = channel;
+		this.channel = (TextChannelImpl) channel;
 	}
 }

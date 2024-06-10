@@ -50,6 +50,7 @@ import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.FileUpload;
+import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -414,7 +415,7 @@ public class GuildListener extends ListenerAdapter {
 
 	private void rollSpawns(GuildConfig config, I18N locale, Account acc) {
 		GuildBuff gb = config.getCumBuffs();
-		List<GuildMessageChannel> channels = config.getSettings().getKawaiponChannels();
+		List<TextChannelImpl> channels = config.getSettings().getKawaiponChannels();
 		if (!channels.isEmpty() && Calc.chance(100d / channels.size())) {
 			GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 			if (!chosen.canTalk()) return;

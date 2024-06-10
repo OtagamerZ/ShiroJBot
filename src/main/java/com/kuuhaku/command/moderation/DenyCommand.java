@@ -30,6 +30,7 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
 @Command(
 		name = "deny",
@@ -64,7 +65,7 @@ public class DenyCommand implements Executable {
 			return;
 		}
 
-		settings.getDeniedChannels().add(gmc);
+		settings.getDeniedChannels().add((TextChannelImpl) gmc);
 		settings.save();
 
 		event.channel().sendMessage(locale.get("success/commands_denied",

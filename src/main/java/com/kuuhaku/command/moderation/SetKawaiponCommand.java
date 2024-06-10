@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
 @Command(
 		name = "setkawaipon",
@@ -74,7 +75,7 @@ public class SetKawaiponCommand implements Executable {
 				return;
 			}
 
-			settings.getKawaiponChannels().add(gmc);
+			settings.getKawaiponChannels().add((TextChannelImpl) gmc);
 			event.channel().sendMessage(locale.get("success/kawaipon_channel_add", channel.getAsMention())).queue();
 		}
 

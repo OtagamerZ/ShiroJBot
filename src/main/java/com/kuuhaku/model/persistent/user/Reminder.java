@@ -22,6 +22,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.ChannelConverter;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -51,7 +52,7 @@ public class Reminder extends DAO<Reminder> {
 
 	@Column(name = "channel")
 	@Convert(converter = ChannelConverter.class)
-	private GuildMessageChannel channel;
+	private TextChannelImpl channel;
 
 	@Column(name = "reminded", nullable = false)
 	private boolean reminded;
@@ -63,7 +64,7 @@ public class Reminder extends DAO<Reminder> {
 		this.message = message;
 		this.due = ZonedDateTime.now(ZoneId.of("GMT-3")).plus(offset, ChronoUnit.MILLIS);
 		this.account = account;
-		this.channel = channel;
+		this.channel = (TextChannelImpl) channel;
 	}
 
 	public int getId() {
