@@ -54,16 +54,19 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "kawaipon_channels")
+	@Convert(converter = ChannelConverter.class)
 	@CollectionTable(name = "guild_settings_kawaiponChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<GuildMessageChannel> kawaiponChannels = new ArrayList<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "drop_channels")
+	@Convert(converter = ChannelConverter.class)
 	@CollectionTable(name = "guild_settings_dropChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<GuildMessageChannel> dropChannels = new ArrayList<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "denied_channels")
+	@Convert(converter = ChannelConverter.class)
 	@CollectionTable(name = "guild_settings_deniedChannels", joinColumns = @JoinColumn(name = "gid"))
 	private List<GuildMessageChannel> deniedChannels = new ArrayList<>();
 
