@@ -545,7 +545,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		acc.setVoteAwarded(true);
 		acc.save();
 
-		int cr = (int) (((weekend ? 1500 : 1000) - Math.min(800, balance / 2000)) * streak);
+		int cr = (int) (((weekend ? 1500 : 1000) - Math.min(balance / 2000, 800)) * streak);
 		acc.addCR(cr, "Daily");
 
 		int gems = 0;
