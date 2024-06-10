@@ -23,6 +23,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
+import com.kuuhaku.interfaces.NoCache;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -43,6 +44,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
 		return Manager.getFactory().callInTransaction(em -> {
+			if (NoCache.class.isAssignableFrom(klass)) {
+				em.setCacheRetrieveMode(CacheRetrieveMode.BYPASS);
+				em.setCacheStoreMode(CacheStoreMode.BYPASS);
+			}
+
 			try {
 				Map<String, Object> ids = new HashMap<>();
 				for (Field f : klass.getDeclaredFields()) {
@@ -84,6 +90,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T extends DAO<T>> T query(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
+			if (NoCache.class.isAssignableFrom(klass)) {
+				em.setCacheRetrieveMode(CacheRetrieveMode.BYPASS);
+				em.setCacheStoreMode(CacheStoreMode.BYPASS);
+			}
+
 			TypedQuery<T> q = em.createQuery(query, klass)
 					.setHint("org.hibernate.cacheable", true)
 					.setMaxResults(1);
@@ -111,6 +122,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T> T queryNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
+			if (NoCache.class.isAssignableFrom(klass)) {
+				em.setCacheRetrieveMode(CacheRetrieveMode.BYPASS);
+				em.setCacheStoreMode(CacheStoreMode.BYPASS);
+			}
+
 			Query q = em.createNativeQuery(query)
 					.setMaxResults(1);
 
@@ -164,6 +180,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T extends DAO<T>> List<T> findAll(@NotNull Class<T> klass) {
 		return Manager.getFactory().callInTransaction(em -> {
+			if (NoCache.class.isAssignableFrom(klass)) {
+				em.setCacheRetrieveMode(CacheRetrieveMode.BYPASS);
+				em.setCacheStoreMode(CacheStoreMode.BYPASS);
+			}
+
 			TypedQuery<T> q = em.createQuery("SELECT o FROM " + klass.getSimpleName() + " o", klass)
 					.setHint("org.hibernate.cacheable", true);
 
@@ -179,6 +200,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T extends DAO<T>> List<T> queryAll(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
+			if (NoCache.class.isAssignableFrom(klass)) {
+				em.setCacheRetrieveMode(CacheRetrieveMode.BYPASS);
+				em.setCacheStoreMode(CacheStoreMode.BYPASS);
+			}
+
 			TypedQuery<T> q = em.createQuery(query, klass)
 					.setHint("org.hibernate.cacheable", true);
 
@@ -199,6 +225,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T> List<T> queryAllNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
+			if (NoCache.class.isAssignableFrom(klass)) {
+				em.setCacheRetrieveMode(CacheRetrieveMode.BYPASS);
+				em.setCacheStoreMode(CacheStoreMode.BYPASS);
+			}
+
 			Query q = em.createNativeQuery(query);
 
 			int paramSize = Objects.requireNonNull(params).length;
@@ -245,6 +276,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T extends DAO<?>, ID> void apply(@NotNull Class<T> klass, @NotNull ID id, @NotNull Consumer<T> consumer) {
 		Manager.getFactory().runInTransaction(em -> {
+			if (NoCache.class.isAssignableFrom(klass)) {
+				em.setCacheRetrieveMode(CacheRetrieveMode.BYPASS);
+				em.setCacheStoreMode(CacheStoreMode.BYPASS);
+			}
+
 			T obj = em.find(klass, id);
 			if (obj == null) return;
 			else if (obj instanceof Blacklistable lock) {
@@ -286,6 +322,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T extends DAO<T>> List<T> queryBuilder(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, Function<TypedQuery<T>, List<T>> processor, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
+			if (NoCache.class.isAssignableFrom(klass)) {
+				em.setCacheRetrieveMode(CacheRetrieveMode.BYPASS);
+				em.setCacheStoreMode(CacheStoreMode.BYPASS);
+			}
+
 			TypedQuery<T> q = em.createQuery(query, klass)
 					.setHint("org.hibernate.cacheable", true);
 
@@ -306,6 +347,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T> List<T> nativeQueryBuilder(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, Function<Query, List<T>> processor, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
+			if (NoCache.class.isAssignableFrom(klass)) {
+				em.setCacheRetrieveMode(CacheRetrieveMode.BYPASS);
+				em.setCacheStoreMode(CacheStoreMode.BYPASS);
+			}
+
 			Query q = em.createNativeQuery(query);
 
 			int paramSize = Objects.requireNonNull(params).length;
@@ -355,6 +401,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			beforeSave();
 			Manager.getFactory().runInTransaction(em -> {
+				if (this instanceof NoCache) {
+					em.setCacheRetrieveMode(CacheRetrieveMode.BYPASS);
+					em.setCacheStoreMode(CacheStoreMode.BYPASS);
+				}
+
 				if (this instanceof Blacklistable lock) {
 					if (lock.isBlacklisted()) return;
 				}
@@ -369,6 +420,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	@SuppressWarnings("unchecked")
 	public final T refresh() {
 		return Manager.getFactory().callInTransaction(em -> {
+			if (this instanceof NoCache) {
+				em.setCacheRetrieveMode(CacheRetrieveMode.BYPASS);
+				em.setCacheStoreMode(CacheStoreMode.BYPASS);
+			}
+
 			try {
 				beforeRefresh();
 				if (em.contains(this)) {
@@ -391,6 +447,11 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public final void delete() {
 		Manager.getFactory().runInTransaction(em -> {
+			if (this instanceof NoCache) {
+				em.setCacheRetrieveMode(CacheRetrieveMode.BYPASS);
+				em.setCacheStoreMode(CacheStoreMode.BYPASS);
+			}
+
 			beforeDelete();
 			try {
 				DAO<?> ent;
