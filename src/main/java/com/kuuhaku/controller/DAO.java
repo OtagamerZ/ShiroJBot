@@ -81,8 +81,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T extends DAO<T>> T query(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			TypedQuery<T> q = em.createQuery(query, klass);
-			q.setMaxResults(1);
+			TypedQuery<T> q = em.createQuery(query, klass)
+					.setHint("org.hibernate.cacheable", true)
+					.setMaxResults(1);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -107,8 +108,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T> T queryNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
-			q.setMaxResults(1);
+			Query q = em.createNativeQuery(query)
+					.setHint("org.hibernate.cacheable", true)
+					.setMaxResults(1);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -137,8 +139,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static Object[] queryUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
-			q.setMaxResults(1);
+			Query q = em.createNativeQuery(query)
+					.setHint("org.hibernate.cacheable", true)
+					.setMaxResults(1);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -160,7 +163,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T extends DAO<T>> List<T> findAll(@NotNull Class<T> klass) {
 		return Manager.getFactory().callInTransaction(em -> {
-			TypedQuery<T> q = em.createQuery("SELECT o FROM " + klass.getSimpleName() + " o", klass);
+			TypedQuery<T> q = em.createQuery("SELECT o FROM " + klass.getSimpleName() + " o", klass)
+					.setHint("org.hibernate.cacheable", true);
 
 			if (klass.isInstance(Blacklistable.class)) {
 				return q.getResultStream()
@@ -174,7 +178,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T extends DAO<T>> List<T> queryAll(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			TypedQuery<T> q = em.createQuery(query, klass);
+			TypedQuery<T> q = em.createQuery(query, klass)
+					.setHint("org.hibernate.cacheable", true);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -193,7 +198,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T> List<T> queryAllNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
+			Query q = em.createNativeQuery(query)
+					.setHint("org.hibernate.cacheable", true);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -219,7 +225,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static List<Object[]> queryAllUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
+			Query q = em.createNativeQuery(query)
+					.setHint("org.hibernate.cacheable", true);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -253,7 +260,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static void apply(@NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		Manager.getFactory().runInTransaction(em -> {
-			Query q = em.createQuery(query);
+			Query q = em.createQuery(query)
+					.setHint("org.hibernate.cacheable", true);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -266,7 +274,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static void applyNative(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		Manager.getFactory().runInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
+			Query q = em.createNativeQuery(query)
+					.setHint("org.hibernate.cacheable", true);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -279,7 +288,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T extends DAO<T>> List<T> queryBuilder(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, Function<TypedQuery<T>, List<T>> processor, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			TypedQuery<T> q = em.createQuery(query, klass);
+			TypedQuery<T> q = em.createQuery(query, klass)
+					.setHint("org.hibernate.cacheable", true);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -298,7 +308,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T> List<T> nativeQueryBuilder(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, Function<Query, List<T>> processor, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
+			Query q = em.createNativeQuery(query)
+					.setHint("org.hibernate.cacheable", true);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {
@@ -324,7 +335,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static List<Object[]> unmappedQueryBuilder(@NotNull @Language("PostgreSQL") String query, Function<Query, List<Object>> processor, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
+			Query q = em.createNativeQuery(query)
+					.setHint("org.hibernate.cacheable", true);
 
 			int paramSize = Objects.requireNonNull(params).length;
 			for (int i = 0; i < paramSize; i++) {

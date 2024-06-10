@@ -103,7 +103,12 @@ dependencies {
 	implementation group: "jakarta.persistence", name: "jakarta.persistence-api", version: "3.2.0"
 	implementation group: "org.hibernate.orm", name: "hibernate-core", version: "7.0.0.Alpha2"
 	implementation group: "org.hibernate.orm", name: "hibernate-hikaricp", version: "7.0.0.Alpha2"
+	implementation group: "org.hibernate.orm", name: "hibernate-jcache", version: "7.0.0.Alpha2"
 	implementation group: "com.zaxxer", name: "HikariCP", version: "5.1.0"
+
+	//Cache
+	implementation group: "com.github.ben-manes.caffeine", name: "caffeine", version: "3.1.8"
+	implementation group: "com.github.ben-manes.caffeine", name: "jcache", version: "3.1.8"
 
 	//Compiler
 	implementation group: "org.apache.groovy", name: "groovy", version: "4.0.21"
@@ -146,7 +151,6 @@ dependencies {
 	implementation group: "me.xuender", name: "unidecode", version: "0.0.7"
 	implementation group: "com.github.sbesada", name: "java.math.expression.parser", version: "3.3.0"
 	implementation group: "org.tukaani", name: "xz", version: "1.9"
-	implementation group: "com.github.ben-manes.caffeine", name: "caffeine", version: "3.1.8"
 	implementation group: "com.vdurmont", name: "emoji-java", version: "5.1.1"
 	implementation group: "org.shredzone.commons", name: "commons-suncalc", version: "3.10"
 	implementation group: "org.knowm.xchart", name: "xchart", version: "3.8.7"

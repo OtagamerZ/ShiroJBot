@@ -44,9 +44,10 @@ public abstract class Manager {
 	private static final String DB_PASS = System.getenv("DB_PASS");
 
 	private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("main", Map.of(
-			"jakarta.persistence.jdbc.user", DB_LOGIN,
-			"jakarta.persistence.jdbc.password", DB_PASS,
-			"jakarta.persistence.jdbc.url", "jdbc:postgresql://%s/%s?currentSchema=shiro&sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
+			PersistenceConfiguration.JDBC_USER, DB_LOGIN,
+			PersistenceConfiguration.JDBC_PASSWORD, DB_PASS,
+			PersistenceConfiguration.CACHE_MODE, "ALL",
+			PersistenceConfiguration.JDBC_URL, "jdbc:postgresql://%s/%s?currentSchema=shiro&sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
 					SERVER_IP, DB_NAME
 			)
 	));
