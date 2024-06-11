@@ -83,15 +83,11 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		MessageRequest.setDefaultMentions(EnumSet.complementOf(EnumSet.of(EVERYONE, HERE)));
 
 		CompletableFuture.runAsync(() -> {
-			for (int i = 0; i < shiro.getShardsTotal(); i++) {
-				JDA shard = shiro.getShardById(i);
-				if (shard != null) {
-					try {
-						shard.awaitReady();
-						Constants.LOGGER.info("Shard {} ready", i);
-					} catch (InterruptedException e) {
-						throw new RuntimeException(e);
-					}
+			for (JDA shard : shiro.getShardCache()) {
+				try {
+					shard.awaitReady();
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
 				}
 			}
 

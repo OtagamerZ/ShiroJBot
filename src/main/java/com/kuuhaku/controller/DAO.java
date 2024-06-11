@@ -43,7 +43,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	private static final XSync<Object> MUTEX = new XSync<>();
 
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
-		return MUTEX.evaluate(id, () -> transaction(em -> {
+		return MUTEX.evaluate(id, () -> Manager.getFactory().callInTransaction(em -> {
 			try {
 				Map<String, Object> ids = new HashMap<>();
 				for (Field f : klass.getDeclaredFields()) {
@@ -84,7 +84,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static <T extends DAO<T>> T query(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
-		return transaction(em -> {
+		return Manager.getFactory().callInTransaction(em -> {
 			TypedQuery<T> q = em.createQuery(query, klass);
 			q.setMaxResults(1);
 
@@ -110,7 +110,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static <T> T queryNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
-		return transaction(em -> {
+		return Manager.getFactory().callInTransaction(em -> {
 			Query q = em.createNativeQuery(query);
 			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
 			q.setMaxResults(1);
@@ -141,7 +141,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static Object[] queryUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
-		return transaction(em -> {
+		return Manager.getFactory().callInTransaction(em -> {
 			Query q = em.createNativeQuery(query);
 			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
 			q.setMaxResults(1);
@@ -165,7 +165,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static <T extends DAO<T>> List<T> findAll(@NotNull Class<T> klass) {
-		return transaction(em -> {
+		return Manager.getFactory().callInTransaction(em -> {
 			TypedQuery<T> q = em.createQuery("SELECT o FROM " + klass.getSimpleName() + " o", klass);
 
 			if (klass.isInstance(Blacklistable.class)) {
@@ -179,7 +179,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static <T extends DAO<T>> List<T> queryAll(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
-		return transaction(em -> {
+		return Manager.getFactory().callInTransaction(em -> {
 			TypedQuery<T> q = em.createQuery(query, klass);
 
 			int paramSize = Objects.requireNonNull(params).length;
@@ -198,7 +198,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static <T> List<T> queryAllNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
-		return transaction(em -> {
+		return Manager.getFactory().callInTransaction(em -> {
 			Query q = em.createNativeQuery(query);
 			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
 
@@ -225,7 +225,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static List<Object[]> queryAllUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
-		return transaction(em -> {
+		return Manager.getFactory().callInTransaction(em -> {
 			Query q = em.createNativeQuery(query);
 			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
 
@@ -246,20 +246,21 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static <T extends DAO<?>, ID> void apply(@NotNull Class<T> klass, @NotNull ID id, @NotNull Consumer<T> consumer) {
-		transaction(em -> {
+		Manager.getFactory().runInTransaction(em -> {
 			T obj = em.find(klass, id);
 			if (obj == null) return;
 			else if (obj instanceof Blacklistable lock) {
 				if (lock.isBlacklisted()) return;
 			}
 
+			em.refresh(obj);
 			consumer.accept(obj);
 			em.merge(obj);
 		});
 	}
 
 	public static void apply(@NotNull @Language("JPAQL") String query, @NotNull Object... params) {
-		transaction(em -> {
+		Manager.getFactory().runInTransaction(em -> {
 			Query q = em.createQuery(query);
 
 			int paramSize = Objects.requireNonNull(params).length;
@@ -272,7 +273,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static void applyNative(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
-		transaction(em -> {
+		Manager.getFactory().runInTransaction(em -> {
 			Query q = em.createNativeQuery(query);
 
 			int paramSize = Objects.requireNonNull(params).length;
@@ -285,7 +286,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static void applyNative(Class<?> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
-		transaction(em -> {
+		Manager.getFactory().runInTransaction(em -> {
 			Query q = em.createNativeQuery(query);
 			if (klass != null) {
 				q.unwrap(NativeQuery.class).addSynchronizedEntityClass(klass);
@@ -303,7 +304,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static <T extends DAO<T>> List<T> queryBuilder(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, Function<TypedQuery<T>, List<T>> processor, @NotNull Object... params) {
-		return transaction(em -> {
+		return Manager.getFactory().callInTransaction(em -> {
 			TypedQuery<T> q = em.createQuery(query, klass);
 
 			int paramSize = Objects.requireNonNull(params).length;
@@ -322,7 +323,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static <T> List<T> nativeQueryBuilder(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, Function<Query, List<T>> processor, @NotNull Object... params) {
-		return transaction(em -> {
+		return Manager.getFactory().callInTransaction(em -> {
 			Query q = em.createNativeQuery(query);
 			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
 
@@ -349,7 +350,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static List<Object[]> unmappedQueryBuilder(@NotNull @Language("PostgreSQL") String query, Function<Query, List<Object>> processor, @NotNull Object... params) {
-		return transaction(em -> {
+		return Manager.getFactory().callInTransaction(em -> {
 			Query q = em.createNativeQuery(query);
 			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
 
@@ -372,7 +373,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public final void save() {
 		try {
 			beforeSave();
-			transaction(em -> {
+			Manager.getFactory().runInTransaction(em -> {
 				if (this instanceof Blacklistable lock) {
 					if (lock.isBlacklisted()) return;
 				}
@@ -386,7 +387,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	@SuppressWarnings("unchecked")
 	public final T refresh() {
-		return transaction(em -> {
+		return Manager.getFactory().callInTransaction(em -> {
 			try {
 				beforeRefresh();
 				if (em.contains(this)) {
@@ -408,7 +409,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public final void delete() {
-		transaction(em -> {
+		Manager.getFactory().runInTransaction(em -> {
 			beforeDelete();
 			try {
 				DAO<?> ent;
@@ -428,47 +429,5 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				afterDelete();
 			}
 		});
-	}
-
-	private static void transaction(Consumer<EntityManager> action) {
-		try (EntityManager em = Manager.getEntityManager()) {
-			EntityTransaction trans = em.getTransaction();
-			if (trans.isActive()) {
-				action.accept(em);
-				return;
-			}
-
-			try {
-				trans.begin();
-				action.accept(em);
-				trans.commit();
-			} finally {
-				if (trans.isActive()) {
-					trans.rollback();
-				}
-
-				em.close();
-			}
-		}
-	}
-
-	private static <T> T transaction(Function<EntityManager, T> action) {
-		try (EntityManager em = Manager.getEntityManager()) {
-			EntityTransaction trans = em.getTransaction();
-			if (trans.isActive()) {
-				return action.apply(em);
-			}
-
-			try {
-				trans.begin();
-				T t = action.apply(em);
-				trans.commit();
-				return t;
-			} finally {
-				if (trans.isActive()) {
-					trans.rollback();
-				}
-			}
-		}
 	}
 }

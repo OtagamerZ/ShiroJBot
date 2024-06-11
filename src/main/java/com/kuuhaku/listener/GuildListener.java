@@ -67,7 +67,7 @@ import java.util.stream.Collectors;
 public class GuildListener extends ListenerAdapter {
 	private static final ExpiringMap<String, Boolean> ratelimit = ExpiringMap.builder().variableExpiration().build();
 	private static final Map<String, List<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
-	private static final ExecutorService asyncExec = Executors.newVirtualThreadPerTaskExecutor();
+	private static final ExecutorService asyncExec = Executors.newWorkStealingPool();
 
 	@Override
 	public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
@@ -243,15 +243,13 @@ public class GuildListener extends ListenerAdapter {
 		GuildBuff gb = config.getCumBuffs();
 		profile.addXp((int) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
 
-		EventData ed = new EventData(event.getChannel(), config, profile);
-		if (content.toLowerCase().startsWith(config.getPrefix()) && data.channel().canTalk()) {
-			asyncExec.execute(() -> {
-				Thread.currentThread().setName("Event-" + Thread.currentThread().threadId());
-				processCommand(data, ed, content);
-			});
-		}
-
 		asyncExec.execute(() -> {
+			Thread.currentThread().setName("Event-" + Thread.currentThread().threadId());
+			EventData ed = new EventData(event.getChannel(), config, profile);
+			if (content.toLowerCase().startsWith(config.getPrefix()) && data.channel().canTalk()) {
+				processCommand(data, ed, content);
+			}
+
 			if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
 				Member mb = event.getMember();
 				if (mb != null && data.me().hasPermission(Permission.NICKNAME_MANAGE) && data.me().canInteract(mb)) {
@@ -388,7 +386,7 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			if (false && !event.getAuthor().equals(data.me().getUser()) && Utils.between(content.length(), 3, 255)) {
+			if (!event.getAuthor().equals(data.me().getUser()) && Utils.between(content.length(), 3, 255)) {
 				List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
 						data.guild().getId(), StringUtils.stripAccents(content)
 				);

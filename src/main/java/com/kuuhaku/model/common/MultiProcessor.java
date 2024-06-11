@@ -21,34 +21,36 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.Constants;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class MultiProcessor<In, Out> {
-	private final Supplier<Collection<In>> supplier;
+	private final List<In> tasks;
 	private final ExecutorService exec;
 
-	private MultiProcessor(Supplier<Collection<In>> supplier) {
-		this.supplier = supplier;
-		this.exec = Executors.newVirtualThreadPerTaskExecutor();
+	private MultiProcessor(List<In> tasks, ExecutorService executor) {
+		this.tasks = tasks;
+		this.exec = executor;
 	}
 
-	public static <In> MultiProcessor<In, ?> with(Supplier<Collection<In>> supplier) {
-		return new MultiProcessor<>(supplier);
+	public static <In> MultiProcessor<In, ?> with(ExecutorService executor, List<In> tasks) {
+		return new MultiProcessor<>(tasks, executor);
 	}
 
 	public <R> MultiProcessor<In, R> forResult(Class<R> klass) {
-		return new MultiProcessor<>(supplier);
+		return new MultiProcessor<>(tasks, exec);
+	}
+
+	public MultiProcessor<In, Out> addTask(In task) {
+		tasks.add(task);
+		return this;
 	}
 
 	public List<Out> process(Function<In, Out> task) {
-		List<In> all = List.copyOf(supplier.get());
+		List<In> all = List.copyOf(tasks);
 
 		List<CompletableFuture<Out>> tasks = new ArrayList<>();
 		for (int i = 0; i < all.size(); i++) {
@@ -62,6 +64,7 @@ public class MultiProcessor<In, Out> {
 				finished.add(t.get());
 			}
 
+			exec.close();
 			return finished;
 		} catch (ExecutionException | InterruptedException e) {
 			Constants.LOGGER.error(e, e);

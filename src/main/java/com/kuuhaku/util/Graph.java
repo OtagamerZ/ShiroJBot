@@ -33,6 +33,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -298,9 +299,7 @@ public abstract class Graph {
 				.boxed()
 				.toList();
 
-		MultiProcessor
-				.with(() -> ListUtils.partition(indexes, 8))
-				.forResult(Void.class)
+		MultiProcessor.with(Executors.newVirtualThreadPerTaskExecutor(), ListUtils.partition(indexes, 8))
 				.process(idx -> {
 					for (Integer i : idx) {
 						int x = i % width;
