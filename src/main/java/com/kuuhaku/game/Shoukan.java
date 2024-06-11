@@ -2261,7 +2261,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			BufferedImage img = hasHistory() ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
-			byte[] bytes = IO.getBytes(img, "png", 0.5f);
+			byte[] bytes = IO.getBytes(img, "png");
 
 			ButtonizeHelper helper = getButtons();
 

@@ -20,6 +20,7 @@ package com.kuuhaku.util;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
+import com.pngencoder.PngEncoder;
 import okio.Buffer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -102,14 +103,14 @@ public abstract class IO {
 
 	public static byte[] getBytes(BufferedImage image, String encoding) {
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-//			if (false && encoding.equalsIgnoreCase("png")) {
-//				new PngEncoder()
-//						.withBufferedImage(image)
-//						.withCompressionLevel(4)
-//						.toStream(os);
-//			} else {
-			ImageIO.write(image, encoding, os);
-//			}
+			if (encoding.equalsIgnoreCase("png")) {
+				new PngEncoder()
+						.withBufferedImage(image)
+						.withCompressionLevel(4)
+						.toStream(os);
+			} else {
+				ImageIO.write(image, encoding, os);
+			}
 
 			return os.toByteArray();
 		} catch (IOException e) {
@@ -119,7 +120,7 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding, float quality) {
-		try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+		try (Buffer buf = new Buffer(); OutputStream os = buf.outputStream()) {
 			ImageWriter writer = ImageIO.getImageWritersByFormatName(encoding).next();
 			ImageOutputStream ios = ImageIO.createImageOutputStream(os);
 			writer.setOutput(ios);
@@ -139,7 +140,7 @@ public abstract class IO {
 				writer.dispose();
 			}
 
-			return os.toByteArray();
+			return buf.readByteArray();
 		} catch (IOException e) {
 			Constants.LOGGER.error(e, e);
 			return new byte[0];

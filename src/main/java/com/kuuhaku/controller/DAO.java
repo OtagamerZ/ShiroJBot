@@ -442,6 +442,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			trans.begin();
 			action.accept(em);
+			em.flush();
 			trans.commit();
 		} finally {
 			if (trans.isActive()) {
@@ -460,6 +461,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		try {
 			trans.begin();
 			T t = action.apply(em);
+			em.flush();
 			trans.commit();
 			return t;
 		} finally {
