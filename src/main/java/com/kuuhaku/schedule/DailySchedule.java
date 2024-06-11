@@ -26,6 +26,6 @@ import com.kuuhaku.interfaces.annotations.Schedule;
 public class DailySchedule implements Runnable, PreInitialize {
 	@Override
 	public void run() {
-		DAO.applyNative((Class<?>) null, "CALL refresh_all_views('shiro')");
+		DAO.applyNative(null, "CALL refresh_all_views('shiro')");
 	}
 }

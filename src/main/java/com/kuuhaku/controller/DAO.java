@@ -276,19 +276,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		});
 	}
 
-	public static void applyNative(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
-		Manager.getFactory().runInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
-
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
-
-			q.executeUpdate();
-		});
-	}
-
 	public static <T extends DAO<T>> void applyNative(Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		Manager.getFactory().runInTransaction(em -> {
 			Query q = em.createNativeQuery(query);
