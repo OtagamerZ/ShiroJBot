@@ -83,36 +83,42 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		MessageRequest.setDefaultMentions(EnumSet.complementOf(EnumSet.of(EVERYONE, HERE)));
 
 		CompletableFuture.runAsync(() -> {
-			for (JDA shard : shiro.getShards()) {
-				try {
-					shard.awaitReady();
-
-					PaginatorBuilder.createPaginator()
-							.setHandler(shiro)
-							.shouldEventLock(true)
-							.setOnRemove(h ->
-									h.editOriginalComponents()
-											.map(m -> {
-												Interaction i = h.getInteraction();
-												if (i.isFromGuild() && i.getGuild() != null) {
-													GuildConfig gc = DAO.find(GuildConfig.class, i.getGuild().getId());
-
-													h.setEphemeral(true)
-															.sendMessage(gc.getLocale().get("error/event_not_mapped"))
-															.queue();
-												}
-
-												return m;
-											})
-											.queue(null, Utils::doNothing)
-							)
-							.activate();
-				} catch (InvalidHandlerException e) {
-					Constants.LOGGER.error("Failed to start pagination library: {}", e.toString());
-					System.exit(1);
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
+			for (int i = 0; i < shiro.getShardsTotal(); i++) {
+				JDA shard = shiro.getShardById(i);
+				if (shard != null) {
+					try {
+						shard.awaitReady();
+						Constants.LOGGER.info("Shard {} ready", i);
+					} catch (InterruptedException e) {
+						throw new RuntimeException(e);
+					}
 				}
+			}
+
+			try {
+				PaginatorBuilder.createPaginator()
+						.setHandler(shiro)
+						.shouldEventLock(true)
+						.setOnRemove(h ->
+								h.editOriginalComponents()
+										.map(m -> {
+											Interaction i = h.getInteraction();
+											if (i.isFromGuild() && i.getGuild() != null) {
+												GuildConfig gc = DAO.find(GuildConfig.class, i.getGuild().getId());
+
+												h.setEphemeral(true)
+														.sendMessage(gc.getLocale().get("error/event_not_mapped"))
+														.queue();
+											}
+
+											return m;
+										})
+										.queue(null, Utils::doNothing)
+						)
+						.activate();
+			} catch (InvalidHandlerException e) {
+				Constants.LOGGER.error("Failed to start pagination library: {}", e.toString());
+				System.exit(1);
 			}
 		});
 
