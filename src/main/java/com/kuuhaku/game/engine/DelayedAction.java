@@ -27,7 +27,7 @@ public class DelayedAction {
 	private int time;
 	private TimeUnit unit;
 	private ScheduledFuture<?> action;
-	private Runnable cachedTask;
+	private Runnable task;
 
 	private DelayedAction(ScheduledExecutorService exec) {
 		this.exec = exec;
@@ -45,29 +45,32 @@ public class DelayedAction {
 	}
 
 	public DelayedAction setTask(Runnable task) {
-		this.cachedTask = task;
+		this.task = task;
 
 		return this;
 	}
 
 	public DelayedAction run(Runnable task) {
-		stop();
-		action = exec.schedule(cachedTask = task, time, unit);
+		if (!exec.isShutdown()) {
+			stop();
+			action = exec.schedule(task = task, time, unit);
+		}
+
 		return this;
 	}
 
 	public DelayedAction start() {
-		if (cachedTask != null) {
+		if (task != null && !exec.isShutdown()) {
 			if (action != null) return this;
 
-			action = exec.schedule(cachedTask, time, unit);
+			action = exec.schedule(task, time, unit);
 		}
 
 		return this;
 	}
 
 	public DelayedAction stop() {
-		if (action != null) {
+		if (action != null && !exec.isShutdown()) {
 			action.cancel(true);
 			action = null;
 		}
@@ -76,9 +79,9 @@ public class DelayedAction {
 	}
 
 	public DelayedAction restart() {
-		if (cachedTask != null) {
+		if (task != null && !exec.isShutdown()) {
 			stop();
-			action = exec.schedule(cachedTask, time, unit);
+			action = exec.schedule(task, time, unit);
 		}
 
 		return this;
