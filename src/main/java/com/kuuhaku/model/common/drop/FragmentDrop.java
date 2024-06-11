@@ -32,7 +32,7 @@ public class FragmentDrop extends Drop {
 	public FragmentDrop(Rarity rarity) {
 		super(rarity);
 		fragment = DAO.find(UserItem.class, Rarity.values()[rarity.getIndex() - 1] + "_SHARD");
-		amount = (int) ((7 - rarity.getIndex()) * Calc.rng(1d, 2d));
+		amount = (int) ((7 - rarity.getIndex()) * Calc.rng(1d, 2d, getRng()));
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public class CreditDrop extends Drop {
 
 	public CreditDrop(Rarity rarity) {
 		super(rarity);
-		credits = (500 * (rarity.getIndex() - 1)) + Calc.rng(350, 500) * rarity.getIndex();
+		credits = (500 * (rarity.getIndex() - 1)) + Calc.rng(350, 500, getRng()) * rarity.getIndex();
 	}
 
 	@Override
