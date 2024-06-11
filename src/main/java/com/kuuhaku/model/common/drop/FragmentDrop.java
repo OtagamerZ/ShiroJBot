@@ -21,24 +21,27 @@ package com.kuuhaku.model.common.drop;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.util.Calc;
 
 public class FragmentDrop extends Drop {
-	public FragmentDrop(I18N locale, Rarity rarity) {
-		this(locale, rarity,  6 - rarity.getIndex() + Calc.rng(0, 10 / rarity.getIndex()));
+	private final UserItem fragment;
+	private final int amount;
+
+	public FragmentDrop(Rarity rarity) {
+		super(rarity);
+		fragment = DAO.find(UserItem.class, Rarity.values()[rarity.getIndex() - 1] + "_SHARD");
+		amount = 6 - Math.min(rarity.getIndex() + Calc.rng(0, 10 / rarity.getIndex()), 18 - rarity.getIndex() * 3);
 	}
 
-	private FragmentDrop(I18N locale, Rarity rarity, int value) {
-		super(rarity,
-				r -> {
-					UserItem i = DAO.find(UserItem.class, Rarity.values()[r - 1] + "_SHARD");
-					return locale.get("str/drop_content", Math.min(value, 18 - r * 3) + "x " + i.getName(locale));
-				},
-				(r, acc) -> {
-					UserItem i = DAO.find(UserItem.class, Rarity.values()[r - 1] + "_SHARD");
-					acc.addItem(i, Math.min(value, 18 - r * 3));
-				}
-		);
+	@Override
+	public String getContent(I18N locale) {
+		return locale.get("str/drop_content", amount + "x " + fragment.getName(locale));
+	}
+
+	@Override
+	public void apply(Account acc) {
+		acc.addItem(fragment, amount);
 	}
 }

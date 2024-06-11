@@ -21,6 +21,7 @@ package com.kuuhaku.model.common.drop;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.user.Account;
@@ -34,8 +35,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.SplittableRandom;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.random.RandomGenerator;
 
 public abstract class Drop {
@@ -43,14 +42,10 @@ public abstract class Drop {
 	private final String captcha = Utils.generateRandomHash(5);
 
 	private final Rarity rarity;
-	private final String content;
-	private final BiConsumer<Integer, Account> applier;
 	private final List<DropCondition> conditions;
 
-	public Drop(Rarity rarity, Function<Integer, String> content, BiConsumer<Integer, Account> applier) {
+	public Drop(Rarity rarity) {
 		this.rarity = rarity;
-		this.content = content.apply(rarity.getIndex());
-		this.applier = applier;
 
 		RandomList<DropCondition> pool = new RandomList<>();
 		pool.add(new DropCondition("low_cash",
@@ -137,10 +132,6 @@ public abstract class Drop {
 		return (int) Math.ceil(rarity.getIndex() / 2f);
 	}
 
-	public String getContent() {
-		return content;
-	}
-
 	public final List<DropCondition> getConditions() {
 		return conditions;
 	}
@@ -175,7 +166,11 @@ public abstract class Drop {
 
 	public final void award(Account acc) {
 		if (check(acc)) {
-			applier.accept(rarity.getIndex(), acc);
+			apply(acc);
 		}
 	}
+
+	public abstract String getContent(I18N locale);
+
+	public abstract void apply(Account acc);
 }

@@ -73,7 +73,7 @@ public class OpenCommand implements Executable {
 			event.channel().sendMessage(locale.get("success/claimed", event.user().getAsMention()))
 					.setEmbeds(
 							new EmbedBuilder()
-									.setDescription(dp.getContent())
+									.setDescription(dp.getContent(locale))
 									.build()
 					)
 					.queue();

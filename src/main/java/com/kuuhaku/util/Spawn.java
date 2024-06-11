@@ -127,9 +127,9 @@ public abstract class Spawn {
 
 			Rarity rarity = rarities.get();
 			RandomList<Drop> drops = new RandomList<>(rarityBonus);
-			drops.add(new CreditDrop(locale, rarity), 5000);
-			drops.add(new FragmentDrop(locale, rarity), 575);
-			// drops.add(new ItemDrop(locale, rarity), 10);
+			drops.add(new CreditDrop(rarity), 5000);
+			drops.add(new FragmentDrop(rarity), 575);
+			drops.add(new ItemDrop(rarity), 5);
 
 			drop = drops.get();
 			spawnedDrops.put(

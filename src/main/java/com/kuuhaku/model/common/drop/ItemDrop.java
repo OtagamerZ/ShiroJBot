@@ -21,39 +21,29 @@ package com.kuuhaku.model.common.drop;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.UserItem;
-import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 
-import java.util.List;
-
 public class ItemDrop extends Drop {
-	public ItemDrop(I18N locale, Rarity rarity) {
-		this(locale, rarity,  Calc.rng(Integer.MAX_VALUE));
+	private final UserItem item;
+
+	public ItemDrop(Rarity rarity) {
+		super(rarity);
+		item = Utils.getRandomEntry(getRng(), switch (rarity) {
+			case COMMON, UNCOMMON -> DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.effect IS NOT NULL AND i.currency = 'CR'");
+			case RARE, EPIC -> DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.currency = 'CR'");
+			default -> DAO.findAll(UserItem.class);
+		});
 	}
 
-	private ItemDrop(I18N locale, Rarity rarity, int value) {
-		super(rarity,
-				r -> {
-					List<UserItem> selection = switch (r) {
-						case 1, 2 -> DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.effect IS NOT NULL AND i.currency = 'CR'");
-						case 3, 4 -> DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.currency = 'CR'");
-						default -> DAO.findAll(UserItem.class);
-					};
+	@Override
+	public String getContent(I18N locale) {
+		return locale.get("str/drop_content", item.getName(locale));
+	}
 
-					UserItem i = Utils.getRandomEntry(selection);
-					return locale.get("str/drop_content", Math.min(value, 18 - r * 3) + "x " + i.getName(locale));
-				},
-				(r, acc) -> {
-					List<UserItem> selection = switch (r) {
-						case 1, 2 -> DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.effect IS NOT NULL AND i.currency = 'CR'");
-						case 3, 4 -> DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.currency = 'CR'");
-						default -> DAO.findAll(UserItem.class);
-					};
-
-					UserItem i = Utils.getRandomEntry(selection);
-					acc.addItem(i, Math.min(value, 18 - r * 3));
-				}
-		);
+	@Override
+	public void apply(Account acc) {
+		acc.addItem(item, 1);
 	}
 }
