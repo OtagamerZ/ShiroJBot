@@ -253,7 +253,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				if (lock.isBlacklisted()) return;
 			}
 
-			em.refresh(obj);
 			consumer.accept(obj);
 			em.merge(obj);
 		});
@@ -447,6 +446,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			if (trans.isActive()) {
 				trans.rollback();
 			}
+
+			em.close();
 		}
 	}
 
@@ -459,13 +460,15 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 		try {
 			trans.begin();
-			T t = em.merge(action.apply(em));
+			T t = action.apply(em);
 			trans.commit();
 			return t;
 		} finally {
 			if (trans.isActive()) {
 				trans.rollback();
 			}
+
+			em.close();
 		}
 	}
 }
