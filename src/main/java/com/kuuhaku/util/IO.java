@@ -20,6 +20,7 @@ package com.kuuhaku.util;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
+import com.pngencoder.PngEncoder;
 import okio.Buffer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -45,6 +46,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -85,7 +87,7 @@ public abstract class IO {
 			if (v != null && v.length > 0) return v;
 
 			try {
-				return getBytes(ImageIO.read(URI.create(url).toURL()), getImageType(url));
+				return getBytes(ImageIO.read(URI.create(url).toURL()), Objects.requireNonNull(getImageType(url)));
 			} catch (IllegalArgumentException | IOException e) {
 				return new byte[0];
 			}
@@ -100,7 +102,11 @@ public abstract class IO {
 
 	public static byte[] getBytes(BufferedImage image, String encoding) {
 		try (Buffer buf = new Buffer(); OutputStream os = buf.outputStream()) {
-			ImageIO.write(image, encoding, os);
+			if (encoding.equalsIgnoreCase("png")) {
+				new PngEncoder().withBufferedImage(image).toStream(os);
+			} else {
+				ImageIO.write(image, encoding, os);
+			}
 
 			return buf.readByteArray();
 		} catch (IOException e) {
