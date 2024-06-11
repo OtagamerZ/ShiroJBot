@@ -24,7 +24,6 @@ import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
-import com.kuuhaku.model.records.EntityKey;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -258,8 +257,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			em.refresh(obj);
 			consumer.accept(obj);
 			em.merge(obj);
-
-			Main.getCacheManager().getEntityCache().put(new EntityKey(klass, id), obj);
 		});
 	}
 
@@ -281,7 +278,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			Query q = em.createNativeQuery(query);
 			if (klass != null) {
 				q.unwrap(NativeQuery.class).addSynchronizedEntityClass(klass);
-				Main.getCacheManager().getEntityCache().asMap().keySet().removeIf(k -> k.klass() == klass);
 			} else {
 				q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
 			}
@@ -371,9 +367,6 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				}
 
 				em.merge(this);
-
-				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-				Main.getCacheManager().getEntityCache().put(new EntityKey(getClass(), key), this);
 			});
 		} finally {
 			afterSave();
