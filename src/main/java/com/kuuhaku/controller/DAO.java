@@ -431,44 +431,44 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	private static void transaction(Consumer<EntityManager> action) {
-		EntityManager em = Manager.getEntityManager();
-		EntityTransaction trans = em.getTransaction();
-		if (trans.isActive()) {
-			action.accept(em);
-			return;
-		}
-
-		try {
-			trans.begin();
-			action.accept(em);
-			trans.commit();
-		} finally {
+		try (EntityManager em = Manager.getEntityManager()) {
+			EntityTransaction trans = em.getTransaction();
 			if (trans.isActive()) {
-				trans.rollback();
+				action.accept(em);
+				return;
 			}
 
-			em.close();
+			try {
+				trans.begin();
+				action.accept(em);
+				trans.commit();
+			} finally {
+				if (trans.isActive()) {
+					trans.rollback();
+				}
+
+				em.close();
+			}
 		}
 	}
 
 	private static <T> T transaction(Function<EntityManager, T> action) {
-		EntityManager em = Manager.getEntityManager();
-		EntityTransaction trans = em.getTransaction();
-		if (trans.isActive()) {
-			return action.apply(em);
-		}
-
-		try {
-			trans.begin();
-			T t = action.apply(em);
-			trans.commit();
-			return t;
-		} finally {
+		try (EntityManager em = Manager.getEntityManager()) {
+			EntityTransaction trans = em.getTransaction();
 			if (trans.isActive()) {
-				trans.rollback();
+				return action.apply(em);
 			}
 
-			em.close();
+			try {
+				trans.begin();
+				T t = action.apply(em);
+				trans.commit();
+				return t;
+			} finally {
+				if (trans.isActive()) {
+					trans.rollback();
+				}
+			}
 		}
 	}
 }
