@@ -20,15 +20,11 @@ package com.kuuhaku.game.engine;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.DAO;
-import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.GameChannel;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
-import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
@@ -237,20 +233,6 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 		if (code == GameReport.SUCCESS) {
 			exec.complete(null);
-
-			if (getTurn() > 10) {
-				if (this instanceof Shoukan s && !s.hasCheated() && s.getArcade() == null) {
-					int prize = (int) (500 * Calc.rng(0.75, 1.25, s.getRng()));
-					for (String uid : getPlayers()) {
-						DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
-					}
-				} else if (!(this instanceof Shoukan)) {
-					int prize = (int) (350 * Calc.rng(0.75, 1.25));
-					for (String uid : getPlayers()) {
-						DAO.find(Account.class, uid).addCR(prize, getClass().getSimpleName());
-					}
-				}
-			}
 		} else {
 			exec.completeExceptionally(new GameReport(code));
 		}
