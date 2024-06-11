@@ -216,7 +216,7 @@ public class GuildListener extends ListenerAdapter {
 			evts.removeIf(SimpleMessageListener::isClosed);
 		}
 
-		GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
+		GuildConfig config = Main.getCacheManager().hitEntity(GuildConfig.class, data.guild().getId());
 		I18N locale = config.getLocale();
 		if (!Objects.equals(config.getName(), data.guild().getName())) {
 			config.setName(data.guild().getName());
@@ -231,7 +231,7 @@ public class GuildListener extends ListenerAdapter {
 			}
 		}
 
-		Account account = DAO.find(Account.class, data.user().getId());
+		Account account = Main.getCacheManager().hitEntity(Account.class, data.user().getId());
 		if (!Objects.equals(account.getName(), data.user().getName())) {
 			account.setName(data.user().getName());
 			account.save();

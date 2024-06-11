@@ -292,7 +292,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	}
 
 	public Profile getProfile(Member member) {
-		return DAO.find(Profile.class, new ProfileId(member.getId(), member.getGuild().getId()));
+		return Main.getCacheManager().hitEntity(Profile.class, new ProfileId(member.getId(), member.getGuild().getId()));
 	}
 
 	public AccountSettings getSettings() {

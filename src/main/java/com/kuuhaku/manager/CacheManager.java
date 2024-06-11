@@ -20,6 +20,9 @@ package com.kuuhaku.manager;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.records.EntityKey;
+import com.kuuhaku.util.Utils;
 import groovy.lang.Script;
 
 import java.util.concurrent.TimeUnit;
@@ -27,6 +30,10 @@ import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 
 public class CacheManager {
+	private final Cache<EntityKey, DAO<?>> entity = Caffeine.newBuilder()
+			.expireAfterAccess(1, TimeUnit.MINUTES)
+			.build();
+
 	private final Cache<String, byte[]> resource = Caffeine.newBuilder()
 			.expireAfterAccess(30, TimeUnit.MINUTES)
 			.maximumWeight(512 * 1024 * 1024)
@@ -47,6 +54,23 @@ public class CacheManager {
 			.expireAfterAccess(1, TimeUnit.HOURS)
 			.maximumSize(128)
 			.build();
+
+	public Cache<EntityKey, DAO<?>> getEntityCache() {
+		return entity;
+	}
+
+	public DAO<?> computeEntity(EntityKey key, BiFunction<EntityKey, DAO<?>, DAO<?>> mapper) {
+		DAO<?> ent = mapper.apply(key, entity.getIfPresent(key));
+		if (ent == null) return null;
+
+		entity.put(key, ent);
+		return ent;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends DAO<T>> T hitEntity(Class<T> klass, Object key) {
+		return (T) Utils.getOr(entity.getIfPresent(new EntityKey(klass, key)), DAO.find(klass, key));
+	}
 
 	public Cache<String, byte[]> getResourceCache() {
 		return resource;

@@ -20,9 +20,11 @@ package com.kuuhaku.controller;
 
 import com.antkorwin.xsync.XSync;
 import com.kuuhaku.Constants;
+import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
+import com.kuuhaku.model.records.EntityKey;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -256,6 +258,8 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			em.refresh(obj);
 			consumer.accept(obj);
 			em.merge(obj);
+
+			Main.getCacheManager().getEntityCache().put(new EntityKey(klass, id), obj);
 		});
 	}
 
@@ -285,11 +289,12 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		});
 	}
 
-	public static void applyNative(Class<?> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
+	public static <T extends DAO<T>> void applyNative(Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		Manager.getFactory().runInTransaction(em -> {
 			Query q = em.createNativeQuery(query);
 			if (klass != null) {
 				q.unwrap(NativeQuery.class).addSynchronizedEntityClass(klass);
+				Main.getCacheManager().getEntityCache().asMap().keySet().removeIf(k -> k.klass() == klass);
 			} else {
 				q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
 			}
@@ -379,6 +384,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				}
 
 				em.merge(this);
+
+				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+				Main.getCacheManager().getEntityCache().put(new EntityKey(getClass(), key), this);
 			});
 		} finally {
 			afterSave();
