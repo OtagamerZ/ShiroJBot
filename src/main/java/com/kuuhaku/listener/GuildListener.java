@@ -388,7 +388,7 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			if (!event.getAuthor().equals(data.me().getUser()) && Utils.between(content.length(), 3, 255)) {
+			if (false && !event.getAuthor().equals(data.me().getUser()) && Utils.between(content.length(), 3, 255)) {
 				List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
 						data.guild().getId(), StringUtils.stripAccents(content)
 				);
