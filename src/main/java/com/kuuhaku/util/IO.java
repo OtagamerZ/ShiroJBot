@@ -103,7 +103,10 @@ public abstract class IO {
 	public static byte[] getBytes(BufferedImage image, String encoding) {
 		try (Buffer buf = new Buffer(); OutputStream os = buf.outputStream()) {
 			if (encoding.equalsIgnoreCase("png")) {
-				new PngEncoder().withBufferedImage(image).toStream(os);
+				new PngEncoder()
+						.withBufferedImage(image)
+						.withCompressionLevel(4)
+						.toStream(os);
 			} else {
 				ImageIO.write(image, encoding, os);
 			}
