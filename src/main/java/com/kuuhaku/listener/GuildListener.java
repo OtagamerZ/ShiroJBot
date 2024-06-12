@@ -225,7 +225,7 @@ public class GuildListener extends ListenerAdapter {
 
 		if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_LINK)) {
 			Matcher m = Utils.regex(content, "(ht|f)tps?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*");
-			if (m.find() && data.me().hasPermission(Permission.MESSAGE_MANAGE)) {
+			if (m.find() && data.me().hasPermission(data.channel(), Permission.MESSAGE_MANAGE)) {
 				event.getMessage().delete().queue(null, Utils::doNothing);
 				return;
 			}
