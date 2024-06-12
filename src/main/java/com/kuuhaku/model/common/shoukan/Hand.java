@@ -989,7 +989,7 @@ public class Hand {
 		return regdeg;
 	}
 
-	public void applyVoTs() {
+	public void applyRegDeg() {
 		int val = regdeg.next();
 		if (origin.synergy() == Race.DRYAD && val > 0) {
 			val = 0;
