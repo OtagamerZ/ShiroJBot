@@ -576,7 +576,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (mod != 0 && hand.getOrigins().synergy() == Race.ELF) {
-				mod += 0.1;
+				mod += 0.15;
 			}
 
 			if (mod != 0 && hand.getOther().getOrigins().synergy() == Race.DARK_ELF) {
