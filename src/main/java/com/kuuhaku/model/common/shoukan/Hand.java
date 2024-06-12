@@ -837,7 +837,7 @@ public class Hand {
 			}
 
 			if (this.hp + value <= 0 && prcnt > 1 / 3d) {
-				if (prcnt > 2 / 3d || getGame().chance(prcnt * 100)) {
+				if (!origin.demon() && (prcnt > 2 / 3d || getGame().chance(prcnt * 100))) {
 					this.hp = 1;
 					return;
 				}
