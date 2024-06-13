@@ -60,9 +60,6 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray widgets = new JSONArray();
 
-	@Column(name = "deck_capacity", nullable = false)
-	private int deckCapacity = 2;
-
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "aliases", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
@@ -113,14 +110,6 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	public JSONArray getWidgets() {
 		return widgets;
-	}
-
-	public int getDeckCapacity() {
-		return deckCapacity;
-	}
-
-	public void setDeckCapacity(int deckCapacity) {
-		this.deckCapacity = deckCapacity;
 	}
 
 	public JSONObject getAliases() {

@@ -309,7 +309,9 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 
 	public List<Deck> getDecks() {
 		boolean update = false;
-		while (decks.size() < getSettings().getDeckCapacity()) {
+		int cap = 2 + getItemCount("EXTRA_DECK");
+
+		while (decks.size() < cap) {
 			Deck d = new Deck(this);
 			if (decks.isEmpty()) {
 				d.setCurrent(true);
