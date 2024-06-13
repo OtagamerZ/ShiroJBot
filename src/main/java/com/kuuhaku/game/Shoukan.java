@@ -2398,8 +2398,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		helper.addAction(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
-			if (isLocked()) return;
-
 			Hand h = null;
 			if (isSingleplayer()) {
 				h = curr;
@@ -2413,52 +2411,28 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (h == null) return;
-
-			if (h.selectionPending()) {
-				BufferedImage bi = h.renderChoices();
-				if (bi == null) return;
-
+			else if (h.selectionPending()) {
 				Objects.requireNonNull(w.getHook())
 						.setEphemeral(true)
-						.sendFiles(FileUpload.fromData(IO.getBytes(bi, "png"), "choices.png")).queue();
-
+						.sendFiles(FileUpload.fromData(IO.getBytes(h.renderChoices(), "png"), "choices.png"))
+						.queue();
 				return;
 			}
 
-			Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png")).queue();
+			Objects.requireNonNull(w.getHook())
+					.setEphemeral(true)
+					.sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png"))
+					.queue();
 		});
 
 		helper.addAction(Utils.parseEmoji("\uD83D\uDD0D"), w -> {
-			if (isLocked()) return;
-
 			Objects.requireNonNull(w.getHook())
 					.setEphemeral(true)
-					.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")).queue();
+					.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png"))
+					.queue();
 		});
 
 		if (getPhase() == Phase.PLAN) {
-			if (getTurn() > 1) {
-				helper.addAction(Utils.parseEmoji("⏩"), w -> {
-					if (isLocked()) return;
-
-					if (curr.selectionPending()) {
-						getChannel().sendMessage(getString("error/pending_choice")).queue();
-						return;
-					} else if (curr.selectionPending()) {
-						getChannel().sendMessage(getString("error/pending_action")).queue();
-						return;
-					} else if (curr.getLockTime(Lock.TAUNT) > 0) {
-						List<SlotColumn> yours = getSlots(curr.getSide());
-						if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
-							getChannel().sendMessage(getString("error/taunt_locked", false, curr.getLockTime(Lock.TAUNT))).queue();
-							return;
-						}
-					}
-
-					nextTurn();
-				});
-			}
-
 			if (!curr.getCards().isEmpty() && (getTurn() == 1 && !curr.hasRerolled()) || curr.getOrigins().synergy() == Race.DJINN) {
 				helper.addAction(Utils.parseEmoji("\uD83D\uDD04"), w -> {
 					if (isLocked()) return;
@@ -2485,7 +2459,8 @@ public class Shoukan extends GameInstance<Phase> {
 						curr.manualDraw();
 						Objects.requireNonNull(w.getHook())
 								.setEphemeral(true)
-								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
+								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
+								.queue();
 
 						reportEvent("str/draw_card", true, curr.getName(), 1, "");
 					});
@@ -2505,7 +2480,8 @@ public class Shoukan extends GameInstance<Phase> {
 							curr.manualDraw(curr.getRemainingDraws());
 							Objects.requireNonNull(w.getHook())
 									.setEphemeral(true)
-									.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
+									.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
+									.queue();
 
 							reportEvent("str/draw_card", true, curr.getName(), rem, "s");
 						});
@@ -2527,7 +2503,8 @@ public class Shoukan extends GameInstance<Phase> {
 						curr.getRegDeg().add(-Math.max(2, curr.getBase().hp() * 0.08));
 						Objects.requireNonNull(w.getHook())
 								.setEphemeral(true)
-								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
+								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
+								.queue();
 
 						reportEvent("str/draw_card", true, curr.getName(), 1, "");
 					});
@@ -2561,7 +2538,8 @@ public class Shoukan extends GameInstance<Phase> {
 								curr.setUsedDestiny(true);
 								Objects.requireNonNull(w.getHook())
 										.setEphemeral(true)
-										.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
+										.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
+										.queue();
 
 								reportEvent("str/destiny_draw", true, curr.getName());
 							});
@@ -2659,7 +2637,8 @@ public class Shoukan extends GameInstance<Phase> {
 											curr.setOriginCooldown(3);
 											Objects.requireNonNull(w.getHook())
 													.setEphemeral(true)
-													.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
+													.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
+													.queue();
 
 											reportEvent("str/spirit_synth", true, curr.getName());
 										});
@@ -2677,12 +2656,11 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (curr.getOrigins().synergy() == Race.ORACLE) {
 				helper.addAction(Utils.parseEmoji("\uD83D\uDD2E"), w -> {
-					if (isLocked()) return;
-
 					BufferedImage cards = curr.render(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
 					Objects.requireNonNull(w.getHook())
 							.setEphemeral(true)
-							.sendFiles(FileUpload.fromData(IO.getBytes(cards, "png"), "hand.png")).queue();
+							.sendFiles(FileUpload.fromData(IO.getBytes(cards, "png"), "hand.png"))
+							.queue();
 				});
 			}
 
@@ -2699,18 +2677,18 @@ public class Shoukan extends GameInstance<Phase> {
 			});
 
 			if (isSingleplayer() || getTurn() > 10) {
-				if (!isLocked()) {
-					helper.addAction(Utils.parseEmoji("🏳"), w -> {
-						if (curr.isForfeit()) {
-							reportResult(GameReport.SUCCESS, getOther().getSide(), "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
-							return;
-						}
+				helper.addAction(Utils.parseEmoji("🏳"), w -> {
+					if (curr.isForfeit()) {
+						reportResult(GameReport.SUCCESS, getOther().getSide(), "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
+						return;
+					}
 
-						curr.setForfeit(true);
-						Objects.requireNonNull(w.getHook()).setEphemeral(true).sendMessage(getString("str/confirm_forfeit")).queue();
-					});
-				}
-
+					curr.setForfeit(true);
+					Objects.requireNonNull(w.getHook())
+							.setEphemeral(true)
+							.sendMessage(getString("str/confirm_forfeit"))
+							.queue();
+				});
 			}
 		}
 

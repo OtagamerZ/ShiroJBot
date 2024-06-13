@@ -1258,7 +1258,7 @@ public class Hand {
 		if (selection == null) return null;
 
 		List<SelectionCard> cards = selection.cards();
-		if (cards.isEmpty()) return null;
+		if (cards.isEmpty()) return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
 		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, 100 + (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
