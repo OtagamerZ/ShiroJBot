@@ -72,7 +72,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				.setMemberCachePolicy(all(ONLINE.or(OWNER), m -> !m.getUser().isBot()))
 				.setBulkDeleteSplittingEnabled(false)
 				.setActivity(getRandomAction())
-				.setEventPool(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() / 2), true)
+				.setEventPool(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 2), true)
 				.addEventListeners(
 						new GuildListener(),
 						new AutoModListener(),
