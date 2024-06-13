@@ -42,7 +42,7 @@ public class ClearEntityCacheCommand implements Executable {
 			Manager.getFactory().getCache().evict(Class.forName("com.kuuhaku.model.persistent." + args.getString("class")));
 			event.channel().sendMessage(locale.get("success/cache_clear")).queue();
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e);
+			event.channel().sendMessage(locale.get("error/class_not_found")).queue();
 		}
 	}
 }
