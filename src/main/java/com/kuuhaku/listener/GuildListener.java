@@ -77,7 +77,7 @@ public class GuildListener extends ListenerAdapter {
 		MessageReaction reaction = event.getReaction();
 		if (reaction.getEmoji().getFormatted().equals("⭐")) {
 			GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
-			Message msg = Pages.subGet(event.getChannel().retrieveMessageById(event.getMessageId()));
+			Message msg = Pages.subGet(event.retrieveMessage());
 
 			GuildMessageChannel channel = config.getSettings().getStarboardChannel();
 			if (channel == null) return;

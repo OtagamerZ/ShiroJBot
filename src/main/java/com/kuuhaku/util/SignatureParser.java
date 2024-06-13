@@ -84,7 +84,7 @@ public abstract class SignatureParser {
 
                 if (str.isBlank() && required) {
                     fail = true;
-                    supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
+                    supplied.add(wrap.formatted("> " + locale.get("signature/" + name) + " <"));
                     continue;
                 }
 
@@ -199,7 +199,7 @@ public abstract class SignatureParser {
                         fail = true;
 
                         if (opts.isEmpty()) {
-                            supplied.add(wrap.formatted(Utils.underline(locale.get("signature/" + name))));
+                            supplied.add(wrap.formatted("> " + locale.get("signature/" + name) + " <"));
                         } else {
                             supplied.add(wrap.formatted(opts.stream().map(Utils::underline).collect(Collectors.joining("|"))));
                             failOpts = opts.stream().map(o -> "`" + o + "`").toArray(String[]::new);

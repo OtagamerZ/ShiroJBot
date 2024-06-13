@@ -1137,7 +1137,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public boolean execute(boolean global, EffectParameters ep) {
 		if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
-			execute(new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
+			execute(true, new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
 		}
 
 		if (!hasTrueEffect(true)) {
@@ -1305,7 +1305,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public void executeAssert(Trigger trigger) {
 		if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE)) return;
-		else if (getEffect().isBlank() || !getEffect().contains(trigger.name())) return;
+		else if (!getEffect().contains(trigger.name())) return;
 
 		if (trigger == ON_INITIALIZE) {
 			if (getBase().getTags().contains("AUGMENT") && !(this instanceof AugmentSenshi)) {
