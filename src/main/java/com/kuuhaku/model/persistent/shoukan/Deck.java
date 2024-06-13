@@ -537,7 +537,7 @@
 			 }
 
 			 Graph.drawMultilineString(g, effects,
-					 0, 190, 1100, 10, -20,
+					 0, 190, 1140, 10, -20,
 					 s -> {
 						 JSONArray args = Utils.extractGroups(s, "&\\((#[0-9A-F]{6})\\)(.+)");
 
