@@ -75,10 +75,14 @@ public class Hand {
 	private final HandExtra stats = new HandExtra();
 	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
 		if (getCards().contains(d)) return false;
-		else if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-			d.reset();
-			it.add(p.getOriginal());
-			return false;
+		else if (d instanceof EffectHolder<?> eh) {
+			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
+				d.reset();
+				it.add(p.getOriginal());
+				return false;
+			}
+
+			if (eh.hasFlag(Flag.NO_CONVERT, true) && d.getHand() != null && !equals(d.getHand())) return false;
 		}
 
 		d.setHand(this);
@@ -118,10 +122,14 @@ public class Hand {
 	});
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
 		if (d.isEthereal() || getRealDeck().contains(d)) return false;
-		else if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-			d.reset();
-			it.add(p.getOriginal());
-			return false;
+		else if (d instanceof EffectHolder<?> eh) {
+			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
+				d.reset();
+				it.add(p.getOriginal());
+				return false;
+			}
+
+			if (eh.hasFlag(Flag.NO_CONVERT, true) && d.getHand() != null && !equals(d.getHand())) return false;
 		}
 
 		d.setHand(this);
@@ -147,10 +155,14 @@ public class Hand {
 	});
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
 		if (d.isEthereal() || getGraveyard().contains(d)) return false;
-		else if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-			d.reset();
-			it.add(p.getOriginal());
-			return false;
+		else if (d instanceof EffectHolder<?> eh) {
+			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
+				d.reset();
+				it.add(p.getOriginal());
+				return false;
+			}
+
+			if (eh.hasFlag(Flag.NO_CONVERT, true) && d.getHand() != null && !equals(d.getHand())) return false;
 		}
 
 		if (d instanceof Senshi s) {
@@ -223,10 +235,14 @@ public class Hand {
 	});
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (d.isEthereal() || getDiscard().contains(d)) return false;
-		else if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-			d.reset();
-			it.add(p.getOriginal());
-			return false;
+		else if (d instanceof EffectHolder<?> eh) {
+			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
+				d.reset();
+				it.add(p.getOriginal());
+				return false;
+			}
+
+			if (eh.hasFlag(Flag.NO_CONVERT, true) && d.getHand() != null && !equals(d.getHand())) return false;
 		}
 
 		d.setHand(this);
