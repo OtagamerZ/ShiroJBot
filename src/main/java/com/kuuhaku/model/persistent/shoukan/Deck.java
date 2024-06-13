@@ -504,7 +504,7 @@
 						 .filter(r -> r != Race.DEMON)
 						 .map(o -> "- " + o.getMinor(locale))
 						 .collect(Collectors.joining("\n\n"))
-						 + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
+						 + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
 			 } else {
 				 g.drawImage(ori.synergy().getBadge(), 0, 0, 150, 150, null);
 				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
@@ -537,7 +537,7 @@
 			 }
 
 			 Graph.drawMultilineString(g, effects,
-					 0, 210, 1100, 10, -20,
+					 0, 190, 1100, 10, -20,
 					 s -> {
 						 JSONArray args = Utils.extractGroups(s, "&\\((#[0-9A-F]{6})\\)(.+)");
 
@@ -634,6 +634,8 @@
 			 int second = 0;
 			 boolean allSame = true;
 			 while (it.hasNext()) {
+				 if (ori.size() >= 8) break;
+
 				 Race r = it.next();
 				 int count = races.getCount(r);
 				 if (high == 0) high = count;
