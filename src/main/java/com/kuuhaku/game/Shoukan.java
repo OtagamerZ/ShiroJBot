@@ -267,16 +267,16 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("add,(?<card>[\\w-]+)(?:,(?<amount>\\d+))?")
+	@PlayerAction("add(?<cards>[\\w-,]+)")
 	private boolean debAddCard(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
-			String id = args.getString("card").toUpperCase();
-			CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)).stream().findFirst().orElse(CardType.KAWAIPON);
+			String ids = args.getString("cards").toUpperCase();
+			List<String> added = new ArrayList<>();
 
-			boolean add = false;
-			int amount = args.getInt("amount", 1);
-			for (int i = 0; i < amount; i++) {
+			for (String id : ids.split(",")) {
+				CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)).stream().findFirst().orElse(CardType.KAWAIPON);
+
 				Drawable<?> d = switch (type) {
 					case KAWAIPON, SENSHI -> DAO.find(Senshi.class, id);
 					case EVOGEAR -> DAO.find(Evogear.class, id);
@@ -284,13 +284,13 @@ public class Shoukan extends GameInstance<Phase> {
 				};
 
 				if (d != null) {
-					add = true;
+					added.add(id);
 					curr.getCards().add(d.copy());
 				}
 			}
 
-			if (add) {
-				reportEvent("ADD_CARD -> " + amount + "x " + id, false);
+			if (!added.isEmpty()) {
+				reportEvent("ADD_CARD -> " + String.join(", ", added), false);
 				return true;
 			}
 		}
