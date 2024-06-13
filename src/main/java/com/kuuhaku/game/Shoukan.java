@@ -2759,7 +2759,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (text.isBlank() && gif == null) return;
 
 		for (GuildMessageChannel chn : getChannel().getChannels()) {
-			PseudoUser pu = new PseudoUser(source.toString(), Constants.API_ROOT + "card/" + source.getCard().getId(), chn);
+			PseudoUser pu = new PseudoUser(source.toString(), Constants.API_ROOT + "card/" + source.getCard().getAnime().getId() + "/" + source.getCard().getId(), chn);
 			if (gif != null) {
 				pu.send(null, text, new WebhookEmbedBuilder().setImageUrl(GIF_PATH + gif + ".gif").build());
 			} else {
