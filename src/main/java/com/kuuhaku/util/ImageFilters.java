@@ -24,7 +24,8 @@ import java.awt.image.BufferedImage;
 
 public abstract class ImageFilters {
 	public static void grayscale(BufferedImage in) {
-		Graph.forEachPixel(in, (x, y, rgb) -> {
+		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		Graph.forEachPixel(source, (x, y, rgb) -> {
 			int luma = (int) (Calc.luminance(rgb) * 255);
 
 			in.setRGB(x, y, Graph.packRGB((rgb >> 24) & 0xFF, luma, luma, luma));
@@ -32,7 +33,8 @@ public abstract class ImageFilters {
 	}
 
 	public static void silhouette(BufferedImage in) {
-		Graph.forEachPixel(in, (x, y, rgb) -> in.setRGB(x, y, rgb & 0xFF000000));
+		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
+		Graph.forEachPixel(source, (x, y, rgb) -> in.setRGB(x, y, rgb & 0xFF000000));
 	}
 
 	public static void glitch(BufferedImage in, float severity) {
