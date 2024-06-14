@@ -71,8 +71,13 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
+		if (!event.isFromGuild()) return;
+
 		User usr = event.getUser();
 		if (usr != null && usr.isBot()) return;
+
+		GuildMessageChannel chn = event.getGuildChannel();
+		if (!event.getGuild().getSelfMember().hasPermission(chn, Permission.MESSAGE_HISTORY)) return;
 
 		MessageReaction reaction = event.getReaction();
 		if (reaction.getEmoji().getFormatted().equals("⭐")) {
