@@ -361,9 +361,11 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 			bi = IO.getResourceAsImage("shoukan/arenas/DEFAULT.jpg");
 		}
 
-		int inst = getGame().getData().getInt("temporal_instability", 0);
-		if (inst > 0) {
-			ImageFilters.glitch(bi, inst / 100f);
+		if (hand != null) {
+			int inst = getGame().getData().getInt("temporal_instability", 0);
+			if (inst > 0) {
+				ImageFilters.glitch(bi, inst / 100f);
+			}
 		}
 
 		Graphics2D g2d = bi.createGraphics();
