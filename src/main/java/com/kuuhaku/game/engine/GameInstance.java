@@ -42,7 +42,6 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.random.RandomGenerator;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -53,8 +52,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 	private final ExecutorService worker = Executors.newSingleThreadExecutor();
 	private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 	private final long seed = ThreadLocalRandom.current().nextLong();
-	private final RandomGenerator rng = new SplittableRandom(seed);
 
+	private SplittableRandom rng = new SplittableRandom(seed);
 	private CompletableFuture<Void> exec;
 	private DelayedAction timeout;
 	private GameChannel channel;
@@ -220,8 +219,12 @@ public abstract class GameInstance<T extends Enum<T>> {
 		return null;
 	}
 
-	public RandomGenerator getRng() {
+	public SplittableRandom getRng() {
 		return rng;
+	}
+
+	public void setRng(SplittableRandom rng) {
+		this.rng = rng;
 	}
 
 	public final boolean isClosed() {

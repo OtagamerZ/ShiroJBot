@@ -63,6 +63,9 @@ public class UseItemCommand implements Executable {
 		} else if (!items.containsKey(item)) {
 			event.channel().sendMessage(locale.get("error/item_not_have")).queue();
 			return;
+		} else if (item.isPassive()) {
+			event.channel().sendMessage(locale.get("error/item_not_usable")).queue();
+			return;
 		}
 
 		try {

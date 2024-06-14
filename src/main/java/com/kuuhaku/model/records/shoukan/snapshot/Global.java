@@ -23,19 +23,21 @@ import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONUtils;
 
 import java.io.IOException;
+import java.util.SplittableRandom;
 import java.util.stream.Collectors;
 
-public record Global(byte[] field, byte[] banned) {
+public record Global(byte[] field, byte[] banned, SplittableRandom rng) {
 	public Global(Shoukan game) throws IOException {
 		this(
 				JSONUtils.toJSON(game.getArena().getField()),
 				game.getArena().getBanned().stream()
 						.map(JSONUtils::toJSON)
-						.collect(Collectors.joining(",", "[", "]"))
+						.collect(Collectors.joining(",", "[", "]")),
+				game.getRng().split()
 		);
 	}
 
-	public Global(String field, String banned) throws IOException {
-		this(IO.compress(field), IO.compress(banned));
+	public Global(String field, String banned, SplittableRandom rng) throws IOException {
+		this(IO.compress(field), IO.compress(banned), rng);
 	}
 }

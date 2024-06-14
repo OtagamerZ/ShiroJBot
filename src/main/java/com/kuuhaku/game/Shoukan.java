@@ -356,6 +356,23 @@ public class Shoukan extends GameInstance<Phase> {
 		return false;
 	}
 
+	@PhaseConstraint({"PLAN", "COMBAT"})
+	@PlayerAction("set_val,(?<key>\\w+)=(?<value>.+)")
+	private boolean debSetVal(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
+		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+			String key = args.getString("key");
+			String value = args.getString("value");
+			if (key.isBlank() || value.isBlank()) return false;
+
+			data.put(key, value);
+			reportEvent("SET_VAL -> " + key + " = " + value, true);
+			return true;
+		}
+
+		return false;
+	}
+
 	// DEBUG END
 
 	@PhaseConstraint("PLAN")
@@ -2863,6 +2880,61 @@ public class Shoukan extends GameInstance<Phase> {
 						if (!valid.isEmpty()) {
 							attack(s, Utils.getRandomEntry(getRng(), valid), null, true);
 							s.setAvailable(false);
+						}
+					}
+				}
+			}
+		}
+
+		int inst = data.getInt("temporal_instability", 0);
+		if (inst > 0) {
+			float chance = inst / 2f;
+			for (Side side : hands.keySet()) {
+				Hand h = hands.get(side);
+				boolean arch = h.getArchetype().getId().equalsIgnoreCase("STEINS_GATE");
+
+				iterateSlots(side, s -> {
+					if (inst > 10 && Calc.chance(chance, getRng())) {
+						if (arch && Calc.chance(50, getRng())) {
+							s.getStats().getAttrMult().set(Calc.rng(inst, getRng()));
+						} else {
+							s.getStats().getAttrMult().set(Calc.rng(-inst, inst, getRng()));
+						}
+					}
+
+					if (inst > 25 && Calc.chance(chance / 2, getRng())) {
+						if (!arch || !Calc.chance(50, getRng())) {
+							s.setAvailable(false);
+						}
+					}
+
+					if (inst > 40 && Calc.chance(chance / 3, getRng())) {
+						s.replace(Senshi.getRandom(getRng(), "WHERE has(tags, 'FUSION') = " + (s.isFusion() ? "TRUE" : "FALSE")));
+					}
+				});
+
+				if (inst > 65) {
+					if (Calc.chance(chance / 4, getRng())) {
+						if (arch && Calc.chance(50, getRng())) {
+							h.modHP(Calc.rng(h.getHP() / 2, getRng()));
+						} else {
+							h.modHP(Calc.rng(-h.getHP() / 2, h.getHP() / 2, getRng()));
+						}
+					}
+
+					if (Calc.chance(chance / 4, getRng())) {
+						if (arch && Calc.chance(50, getRng())) {
+							h.modMP(Calc.rng(h.getMP() / 2, getRng()));
+						} else {
+							h.modMP(Calc.rng(-h.getMP() / 2, h.getMP() / 2, getRng()));
+						}
+					}
+				}
+
+				if (inst > 90 && !(arch && Calc.chance(50, getRng()))) {
+					for (SlotColumn slt : getSlots(side)) {
+						if (Calc.chance(chance / 5, getRng())) {
+							slt.setLock(1);
 						}
 					}
 				}
