@@ -94,7 +94,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final List<Turn> turns = new TreeList<>();
 	private final JSONObject data = new JSONObject();
 
-	private StateSnap snapshot = null;
+	private Map<Integer, StateSnap> snapshots = new HashMap<>();
 	private int tick;
 	private Side winner;
 
@@ -163,7 +163,7 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		reportEvent("str/game_start", false, "<@" + curr.getUid() + ">");
 
-		takeSnapshot();
+		snapshots.put(getTurn(), takeSnapshot());
 	}
 
 	@Override
@@ -1872,18 +1872,16 @@ public class Shoukan extends GameInstance<Phase> {
 		state = (byte) Bit.set(state, 5, sending);
 	}
 
-	public StateSnap getSnapshot() {
-		return snapshot;
+	public StateSnap getSnapshot(int turn) {
+		return snapshots.get(turn);
 	}
 
 	public StateSnap takeSnapshot() {
 		try {
-			snapshot = new StateSnap(this);
+			return new StateSnap(this);
 		} catch (IOException e) {
-			Constants.LOGGER.warn("Failed to take snapshot", e);
+			throw new RuntimeException("Failed to take snapshot", e);
 		}
-
-		return snapshot;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1956,6 +1954,8 @@ public class Shoukan extends GameInstance<Phase> {
 					slt.setBottom(JSONUtils.fromJSON(IO.uncompress(slot.bottom()), Senshi.class));
 				}
 			}
+
+			setRng(snap.global().rng());
 		} catch (IOException | ClassNotFoundException e) {
 			Constants.LOGGER.warn("Failed to restore snapshot", e);
 		} finally {
@@ -2944,7 +2944,7 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		reportEvent("str/game_turn_change", true, "<@" + curr.getUid() + ">", (int) Math.ceil(getTurn() / 2d));
 
-		takeSnapshot();
+		snapshots.put(getTurn(), takeSnapshot());
 	}
 
 	public Side getWinner() {
