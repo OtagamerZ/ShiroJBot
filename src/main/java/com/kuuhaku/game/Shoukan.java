@@ -92,6 +92,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Set<EffectOverTime> eots = new HashSet<>();
 	private final Set<TriggerBind> bindings = new HashSet<>();
 	private final List<Turn> turns = new TreeList<>();
+	private final JSONObject data = new JSONObject();
 
 	private StateSnap snapshot = null;
 	private int tick;
@@ -1800,6 +1801,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public List<Turn> getTurns() {
 		return turns;
+	}
+
+	public JSONObject getData() {
+		return data;
 	}
 
 	public boolean isSingleplayer() {

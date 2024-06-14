@@ -18,13 +18,13 @@
 
 package com.kuuhaku.util;
 
+import com.kuuhaku.Constants;
+
 import java.awt.image.BufferedImage;
 
 public abstract class ImageFilters {
-
 	public static void grayscale(BufferedImage in) {
-		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
-		Graph.forEachPixel(source, (x, y, rgb) -> {
+		Graph.forEachPixel(in, (x, y, rgb) -> {
 			int luma = (int) (Calc.luminance(rgb) * 255);
 
 			in.setRGB(x, y, Graph.packRGB((rgb >> 24) & 0xFF, luma, luma, luma));
@@ -32,7 +32,21 @@ public abstract class ImageFilters {
 	}
 
 	public static void silhouette(BufferedImage in) {
+		Graph.forEachPixel(in, (x, y, rgb) -> in.setRGB(x, y, rgb & 0xFF000000));
+	}
+
+	public static void glitch(BufferedImage in, float severity) {
 		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
-		Graph.forEachPixel(source, (x, y, rgb) -> in.setRGB(x, y, rgb & 0xFF000000));
+		int total = source.getHeight() * source.getWidth();
+		int[] dists = Constants.DEFAULT_RNG.get().ints(10, (int) (-100 * severity), (int) (100 * severity)).toArray();
+
+		Graph.forEachPixel(source, (x, y, rgb) -> {
+			int dist = dists[(x + source.getWidth() * y) * (dists.length - 1) / total];
+
+			x += dist;
+			if (Utils.between(x, 0, in.getWidth())) {
+				in.setRGB(x, y, rgb);
+			}
+		});
 	}
 }
