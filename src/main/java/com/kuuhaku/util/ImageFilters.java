@@ -46,16 +46,15 @@ public abstract class ImageFilters {
 
 	public static void glitch(BufferedImage in, float severity) {
 		try {
-			BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_3BYTE_BGR);
 			GlitchAlgorithm ga = new PixelSlice();
 			ga.setPixelGlitchParameters(Map.of(
 					"distortionLength", severity
 			));
 
-			byte[] buffer = ((DataBufferByte) source.getRaster().getDataBuffer()).getData();
-			byte[] bytes = ga.glitchPixels(buffer);
-			System.arraycopy(bytes, 0, buffer, 0, bytes.length);
-			Graph.forEachPixel(source, (x, y, rgb) -> in.setRGB(x, y, rgb & 0xFF000000));
+			BufferedImage source = IO.imageFromBytes(ga.glitchPixels(IO.getBytes(in)));
+			if (source != null) {
+				Graph.forEachPixel(source, in::setRGB);
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
