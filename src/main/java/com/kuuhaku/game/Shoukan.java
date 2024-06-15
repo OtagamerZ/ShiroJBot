@@ -2891,7 +2891,7 @@ public class Shoukan extends GameInstance<Phase> {
 			float chance = inst / 2f;
 			for (Side side : hands.keySet()) {
 				Hand h = hands.get(side);
-				boolean arch = h.getArchetype().getId().equalsIgnoreCase("STEINS_GATE");
+				boolean arch = Objects.equals(h.getArchetype().getId(), "STEINS_GATE");
 
 				iterateSlots(side, s -> {
 					if (inst > 10 && Calc.chance(chance, getRng())) {

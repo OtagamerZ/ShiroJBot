@@ -19,8 +19,15 @@
 package com.kuuhaku.util;
 
 import com.kuuhaku.Constants;
+import io.laniakia.algo.GlitchAlgorithm;
+import io.laniakia.algo.GlitchController;
+import io.laniakia.algo.PixelSlice;
+import io.laniakia.filter.RGBShiftFilter;
+import io.laniakia.util.GlitchTypes;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.util.Map;
 
 public abstract class ImageFilters {
 	public static void grayscale(BufferedImage in) {
@@ -38,17 +45,19 @@ public abstract class ImageFilters {
 	}
 
 	public static void glitch(BufferedImage in, float severity) {
-		BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_INT_ARGB);
-		int total = source.getHeight() * source.getWidth();
-		int[] dists = Constants.DEFAULT_RNG.get().ints(10, (int) (-100 * severity), (int) (100 * severity)).toArray();
+		try {
+			BufferedImage source = Graph.toColorSpace(in, BufferedImage.TYPE_3BYTE_BGR);
+			GlitchAlgorithm ga = new PixelSlice();
+			ga.setPixelGlitchParameters(Map.of(
+					"distortionLength", severity
+			));
 
-		Graph.forEachPixel(source, (x, y, rgb) -> {
-			int dist = dists[(x + source.getWidth() * y) * (dists.length - 1) / total];
-
-			x += dist;
-			if (Utils.between(x, 0, in.getWidth())) {
-				in.setRGB(x, y, rgb);
-			}
-		});
+			byte[] buffer = ((DataBufferByte) source.getRaster().getDataBuffer()).getData();
+			byte[] bytes = ga.glitchPixels(buffer);
+			System.arraycopy(bytes, 0, buffer, 0, bytes.length);
+			Graph.forEachPixel(source, (x, y, rgb) -> in.setRGB(x, y, rgb & 0xFF000000));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
