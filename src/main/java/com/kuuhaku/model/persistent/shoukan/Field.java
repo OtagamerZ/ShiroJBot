@@ -36,9 +36,6 @@ import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.*;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
-import io.laniakia.algo.GlitchAlgorithm;
-import io.laniakia.algo.GlitchController;
-import io.laniakia.algo.PixelSlice;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import kotlin.Pair;
@@ -362,13 +359,6 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		BufferedImage bi = IO.getResourceAsImage("shoukan/arenas/" + id + ".jpg");
 		if (bi == null) {
 			bi = IO.getResourceAsImage("shoukan/arenas/DEFAULT.jpg");
-		}
-
-		if (hand != null) {
-			int inst = getGame().getData().getInt("temporal_instability", 0);
-			if (inst > 0) {
-				ImageFilters.glitch(bi, inst / 100f);
-			}
 		}
 
 		Graphics2D g2d = bi.createGraphics();

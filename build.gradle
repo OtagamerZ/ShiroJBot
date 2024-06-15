@@ -158,7 +158,6 @@ dependencies {
 	implementation group: "org.jetbrains", name: "annotations", version: "24.1.0"
 	implementation group: "com.antkorwin", name: "xsync", version: "1.3"
 	implementation group: "com.pngencoder", name: "pngencoder", version: "0.15.0"
-	implementation group: "io.laniakia", name: "glitchKernel", version: "1.0.2"
 
 	//Antlr
 	antlr group: "org.antlr", name: "antlr4", version: "4.13.1"
