@@ -31,18 +31,26 @@ import java.util.Objects;
 public class TriggerBind {
 	private final EffectHolder<?> holder;
 	private final EnumMap<Side, EnumSet<Trigger>> binds;
+	private final boolean permanent;
 
 	public TriggerBind(EffectHolder<?> holder, EnumMap<Side, EnumSet<Trigger>> binds) {
-		this.holder = holder;
-		this.binds = binds;
+		this(holder, binds, false);
 	}
 
 	public TriggerBind(EffectHolder<?> holder, EnumSet<Trigger> binds) {
+		this(holder, new EnumMap<>(Map.of(Side.TOP, binds, Side.BOTTOM, binds)), false);
+	}
+
+	public TriggerBind(EffectHolder<?> holder, EnumSet<Trigger> binds, boolean permanent) {
 		this.holder = holder;
-		this.binds = new EnumMap<>(Map.of(
-				Side.TOP, binds,
-				Side.BOTTOM, binds
-		));
+		this.binds = new EnumMap<>(Map.of(Side.TOP, binds, Side.BOTTOM, binds));
+		this.permanent = permanent;
+	}
+
+	public TriggerBind(EffectHolder<?> holder, EnumMap<Side, EnumSet<Trigger>> binds, boolean permanent) {
+		this.holder = holder;
+		this.binds = binds;
+		this.permanent = permanent;
 	}
 
 	public EffectHolder<?> getHolder() {
@@ -51,6 +59,10 @@ public class TriggerBind {
 
 	public boolean isBound(EffectParameters ep) {
 		return binds.containsKey(ep.side()) && binds.get(ep.side()).contains(ep.trigger());
+	}
+
+	public boolean isPermanent() {
+		return permanent;
 	}
 
 	@Override
