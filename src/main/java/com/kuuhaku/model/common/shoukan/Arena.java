@@ -80,48 +80,36 @@ public class Arena implements Renderer {
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
 	private final BondedList<Drawable<?>> banned = new BondedList<>((d, it) -> {
-		boolean result = ((Supplier<Boolean>) () -> {
-			if (d.getHand() == null) return false;
-			else if (d.isEthereal() || getBanned().contains(d)) return false;
+		if (d.getHand() == null) return false;
+		else if (d.isEthereal() || getBanned().contains(d)) return false;
 
-			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-				d.reset();
-				it.add(p.getOriginal());
-				return false;
-			}
-
-			getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
-
-			if (d instanceof Senshi s) {
-				if (!s.getEquipments().isEmpty()) {
-					for (Evogear evogear : s.getEquipments()) {
-						it.add(evogear);
-					}
-				}
-			} else if (d instanceof Evogear e && e.getEquipper() != null) {
-				e.getEquipper().getEquipments().remove(e);
-			}
-
+		if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 			d.reset();
-
-			if (d instanceof Proxy<?> p) {
-				d.reset();
-				it.add(p.getOriginal());
-				return false;
-			}
-
-			return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
-		}).get();
-
-		if (result) {
-			for (Hand h : getGame().getHands().values()) {
-				h.getCards().remove(d);
-				h.getRealDeck().remove(d);
-				h.getGraveyard().remove(d);
-			}
+			it.add(p.getOriginal());
+			return false;
 		}
 
-		return result;
+		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
+
+		if (d instanceof Senshi s) {
+			if (!s.getEquipments().isEmpty()) {
+				for (Evogear evogear : s.getEquipments()) {
+					it.add(evogear);
+				}
+			}
+		} else if (d instanceof Evogear e && e.getEquipper() != null) {
+			e.getEquipper().getEquipments().remove(e);
+		}
+
+		d.reset();
+
+		if (d instanceof Proxy<?> p) {
+			d.reset();
+			it.add(p.getOriginal());
+			return false;
+		}
+
+		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	});
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
