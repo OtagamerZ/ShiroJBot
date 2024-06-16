@@ -210,6 +210,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			String out = "";
 			if (!tag) {
 				LinkedHashSet<Object> types = new LinkedHashSet<>(Utils.extractGroups(str, "\\$(\\w+)"));
+				if (types.isEmpty()) {
+					types.add("untyped");
+				}
+
 				String main = types.stream().map(String::valueOf).findFirst().orElse(null);
 
 				JSONObject props = csm.getStoredProps();
