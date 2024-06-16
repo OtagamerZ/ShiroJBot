@@ -27,7 +27,7 @@ public record SelectionAction(
 		Drawable<?> source,
 		String caption,
 		List<SelectionCard> cards,
-		int required,
+		Integer required,
 		List<Integer> indexes,
 		SupplyChain<List<Drawable<?>>> result
 ) {

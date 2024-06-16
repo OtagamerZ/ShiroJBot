@@ -1222,17 +1222,17 @@ public class Hand {
 		return requestChoice(source, caption, cards, 1, action);
 	}
 
-	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, List<SelectionCard> cards, Integer required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		return requestChoice(source, "str/select_a_card", cards, required, action);
 	}
 
-	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, String caption, List<SelectionCard> cards, int required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, String caption, List<SelectionCard> cards, Integer required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		if (selection != null) {
 			throw new SelectionException("err/pending_selection");
 		}
 
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
-		else if (cards.size() < required) throw new ActivationException("err/insufficient_selection");
+		else if (required != null && cards.size() < required) throw new ActivationException("err/insufficient_selection");
 
 		CompletableFuture<List<Drawable<?>>> task = new CompletableFuture<>();
 		selection = new SelectionAction(
@@ -1266,7 +1266,13 @@ public class Hand {
 		g2d.setFont(Fonts.OPEN_SANS.deriveBold(60));
 		g2d.translate(0, 100);
 
-		String str = game.getString(selection.caption(), selection.required());
+		String str;
+		if (selection.required() == null) {
+			str = game.getString(selection.caption(), game.getString("str/many").toLowerCase());
+		} else {
+			str = game.getString(selection.caption(), selection.required());
+		}
+
 		Graph.drawOutlinedString(g2d, str, bi.getWidth() / 2 - g2d.getFontMetrics().stringWidth(str) / 2, -10, 6, Color.BLACK);
 
 		for (int i = 0; i < cards.size(); i++) {
