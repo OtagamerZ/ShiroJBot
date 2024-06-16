@@ -61,6 +61,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.ON_DRAW_MULTIPLE;
@@ -74,164 +75,191 @@ public class Hand {
 	private final Side side;
 	private final HandExtra stats = new HandExtra();
 	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
-		if (getCards().contains(d)) return false;
-		else if (d instanceof EffectHolder<?> eh) {
-			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
+		boolean result = ((Supplier<Boolean>) () -> {
+			if (getCards().contains(d)) return false;
+			else if (d instanceof EffectHolder<?> eh) {
+				if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
+					d.reset();
+					it.add(p.getOriginal());
+					return false;
+				}
+
+				if (eh.hasFlag(Flag.NO_CONVERT, true) && d.getHand() != null && !equals(d.getHand())) return false;
+			}
+
+			d.setHand(this);
+			getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
+
+			if (getOrigins().isPure(Race.DIVINITY) && d.isEthereal()) {
+				int eths = getData().getInt("eth_drawn") + 1;
+				if (eths % 2 == 0) {
+					modMP(1);
+				}
+
+				getData().put("eth_drawn", eths);
+			}
+
+			if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
+				for (Evogear evogear : s.getEquipments()) {
+					it.add(evogear);
+				}
+			} else if (d instanceof Evogear e && e.getEquipper() != null) {
+				e.getEquipper().getEquipments().remove(e);
+			}
+
+			if (d.getSlot().getIndex() == -1 && d.isSolid()) {
+				getData().put("last_drawn", d);
+				getData().put("last_drawn_" + d.getClass().getSimpleName().toLowerCase(), d);
+			}
+
+			d.setSlot(null);
+
+			if (d instanceof Proxy<?> p) {
 				d.reset();
 				it.add(p.getOriginal());
 				return false;
 			}
 
-			if (eh.hasFlag(Flag.NO_CONVERT, true) && d.getHand() != null && !equals(d.getHand())) return false;
+			return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
+		}).get();
+
+		if (result) {
+			getRealDeck().remove(d);
+			getGraveyard().remove(d);
 		}
 
-		d.setHand(this);
-		getGame().trigger(Trigger.ON_HAND, d.asSource(Trigger.ON_HAND));
-
-		if (getOrigins().isPure(Race.DIVINITY) && d.isEthereal()) {
-			int eths = getData().getInt("eth_drawn") + 1;
-			if (eths % 2 == 0) {
-				modMP(1);
-			}
-
-			getData().put("eth_drawn", eths);
-		}
-
-		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			for (Evogear evogear : s.getEquipments()) {
-				it.add(evogear);
-			}
-		} else if (d instanceof Evogear e && e.getEquipper() != null) {
-			e.getEquipper().getEquipments().remove(e);
-		}
-
-		if (d.getSlot().getIndex() == -1 && d.isSolid()) {
-			getData().put("last_drawn", d);
-			getData().put("last_drawn_" + d.getClass().getSimpleName().toLowerCase(), d);
-		}
-
-		d.setSlot(null);
-
-		if (d instanceof Proxy<?> p) {
-			d.reset();
-			it.add(p.getOriginal());
-			return false;
-		}
-
-		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
+		return result;
 	});
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
-		if (d.isEthereal() || getRealDeck().contains(d)) return false;
-		else if (d instanceof EffectHolder<?> eh) {
-			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
+		boolean result = ((Supplier<Boolean>) () -> {
+			if (d.isEthereal() || getRealDeck().contains(d)) return false;
+			else if (d instanceof EffectHolder<?> eh) {
+				if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
+					d.reset();
+					it.add(p.getOriginal());
+					return false;
+				}
+
+				if (eh.hasFlag(Flag.NO_CONVERT, true) && d.getHand() != null && !equals(d.getHand())) return false;
+			}
+
+			d.setHand(this);
+			getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
+
+			if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
+				for (Evogear evogear : s.getEquipments()) {
+					it.add(evogear);
+				}
+			} else if (d instanceof Evogear e && e.getEquipper() != null) {
+				e.getEquipper().getEquipments().remove(e);
+			}
+
+			d.reset();
+
+			if (d instanceof Proxy<?> p) {
 				d.reset();
 				it.add(p.getOriginal());
 				return false;
 			}
 
-			if (eh.hasFlag(Flag.NO_CONVERT, true) && d.getHand() != null && !equals(d.getHand())) return false;
+			return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
+		}).get();
+
+		if (result) {
+			getCards().remove(d);
+			getGraveyard().remove(d);
 		}
 
-		d.setHand(this);
-		getGame().trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
-
-		if (d instanceof Senshi s && !s.getEquipments().isEmpty()) {
-			for (Evogear evogear : s.getEquipments()) {
-				it.add(evogear);
-			}
-		} else if (d instanceof Evogear e && e.getEquipper() != null) {
-			e.getEquipper().getEquipments().remove(e);
-		}
-
-		d.reset();
-
-		if (d instanceof Proxy<?> p) {
-			d.reset();
-			it.add(p.getOriginal());
-			return false;
-		}
-
-		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
+		return result;
 	});
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
-		if (d.isEthereal() || getGraveyard().contains(d)) return false;
-		else if (d instanceof EffectHolder<?> eh) {
-			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-				d.reset();
-				it.add(p.getOriginal());
-				return false;
+		boolean result = ((Supplier<Boolean>) () -> {
+			if (d.isEthereal() || getGraveyard().contains(d)) return false;
+			else if (d instanceof EffectHolder<?> eh) {
+				if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
+					d.reset();
+					it.add(p.getOriginal());
+					return false;
+				}
+
+				if (eh.hasFlag(Flag.NO_CONVERT, true) && d.getHand() != null && !equals(d.getHand())) return false;
 			}
 
-			if (eh.hasFlag(Flag.NO_CONVERT, true) && d.getHand() != null && !equals(d.getHand())) return false;
-		}
-
-		if (d instanceof Senshi s) {
-			if (getGame().getCurrentSide() != getSide() && getGame().chance(s.getDodge() / 2d)) {
-				getGame().getChannel().sendMessage(getGame().getString("str/avoid_destruction", s)).queue();
-				return false;
-			} else if (s.hasFlag(Flag.NO_DEATH, true) || s.hasCharm(Charm.WARDING, true)) {
-				return false;
-			}
-		}
-
-		d.setHand(this);
-		getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
-		if (d instanceof Senshi s) {
-			if (s.hasFlag(Flag.NO_DEATH, true)) {
-				return false;
+			if (d instanceof Senshi s) {
+				if (getGame().getCurrentSide() != getSide() && getGame().chance(s.getDodge() / 2d)) {
+					getGame().getChannel().sendMessage(getGame().getString("str/avoid_destruction", s)).queue();
+					return false;
+				} else if (s.hasFlag(Flag.NO_DEATH, true) || s.hasCharm(Charm.WARDING, true)) {
+					return false;
+				}
 			}
 
-			if (s.getLastInteraction() != null) {
-				getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget());
+			d.setHand(this);
+			getGame().trigger(Trigger.ON_GRAVEYARD, d.asSource(Trigger.ON_GRAVEYARD));
+			if (d instanceof Senshi s) {
 				if (s.hasFlag(Flag.NO_DEATH, true)) {
 					return false;
 				}
 
-				Hand op = getOther();
-				op.addKill();
-				getGame().trigger(Trigger.ON_CONFIRMED_KILL, s.getLastInteraction().asSource(Trigger.ON_CONFIRMED_KILL), s.asTarget());
-
-				if (op.getKills() % 7 == 0 && op.getOrigins().synergy() == Race.SHINIGAMI) {
-					for (Drawable<?> r : op.getDeck()) {
-						if (r instanceof EffectHolder<?> eh) {
-							ValueMod vm = eh.getStats().getCostMult().get(getGame().getArena().DEFAULT_FIELD);
-							eh.getStats().getCostMult().set(getGame().getArena().DEFAULT_FIELD, Math.max(vm.getValue() - 0.1, -0.5));
-						}
+				if (s.getLastInteraction() != null) {
+					getGame().trigger(Trigger.ON_KILL, s.getLastInteraction().asSource(Trigger.ON_KILL), s.asTarget());
+					if (s.hasFlag(Flag.NO_DEATH, true)) {
+						return false;
 					}
 
+					Hand op = getOther();
+					op.addKill();
+					getGame().trigger(Trigger.ON_CONFIRMED_KILL, s.getLastInteraction().asSource(Trigger.ON_CONFIRMED_KILL), s.asTarget());
 
-					getGame().getArena().getBanned().add(s);
-				} else if (op.getOrigins().synergy() == Race.REAPER) {
-					op.getDiscard().add(d.copy());
+					if (op.getKills() % 7 == 0 && op.getOrigins().synergy() == Race.SHINIGAMI) {
+						for (Drawable<?> r : op.getDeck()) {
+							if (r instanceof EffectHolder<?> eh) {
+								ValueMod vm = eh.getStats().getCostMult().get(getGame().getArena().DEFAULT_FIELD);
+								eh.getStats().getCostMult().set(getGame().getArena().DEFAULT_FIELD, Math.max(vm.getValue() - 0.1, -0.5));
+							}
+						}
+
+
+						getGame().getArena().getBanned().add(s);
+					} else if (op.getOrigins().synergy() == Race.REAPER) {
+						op.getDiscard().add(d.copy());
+					}
+
+					if (getOrigins().synergy() == Race.ESPER) {
+						getCards().add(s.withCopy(c -> c.setEthereal(true)));
+					}
+
+					if (getGame().getArcade() == Arcade.DECK_ROYALE) {
+						op.manualDraw(3);
+					}
 				}
 
-				if (getOrigins().synergy() == Race.ESPER) {
-					getCards().add(s.withCopy(c -> c.setEthereal(true)));
+				if (!s.getEquipments().isEmpty()) {
+					for (Evogear evogear : s.getEquipments()) {
+						it.add(evogear);
+					}
 				}
-
-				if (getGame().getArcade() == Arcade.DECK_ROYALE) {
-					op.manualDraw(3);
-				}
+			} else if (d instanceof Evogear e && e.getEquipper() != null) {
+				e.getEquipper().getEquipments().remove(e);
 			}
 
-			if (!s.getEquipments().isEmpty()) {
-				for (Evogear evogear : s.getEquipments()) {
-					it.add(evogear);
-				}
-			}
-		} else if (d instanceof Evogear e && e.getEquipper() != null) {
-			e.getEquipper().getEquipments().remove(e);
-		}
-
-		d.reset();
-
-		if (d instanceof Proxy<?> p) {
 			d.reset();
-			it.add(p.getOriginal());
-			return false;
+
+			if (d instanceof Proxy<?> p) {
+				d.reset();
+				it.add(p.getOriginal());
+				return false;
+			}
+
+			return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
+		}).get();
+
+		if (result) {
+			getCards().remove(d);
+			getRealDeck().remove(d);
 		}
 
-		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
+		return result;
 	});
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (d.isEthereal() || getDiscard().contains(d)) return false;

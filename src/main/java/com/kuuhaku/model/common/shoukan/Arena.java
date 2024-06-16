@@ -49,6 +49,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Arena implements Renderer {
@@ -79,36 +80,48 @@ public class Arena implements Renderer {
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
 	private final BondedList<Drawable<?>> banned = new BondedList<>((d, it) -> {
-		if (d.getHand() == null) return false;
-		else if (d.isEthereal() || getBanned().contains(d)) return false;
+		boolean result = ((Supplier<Boolean>) () -> {
+			if (d.getHand() == null) return false;
+			else if (d.isEthereal() || getBanned().contains(d)) return false;
 
-		if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-			d.reset();
-			it.add(p.getOriginal());
-			return false;
-		}
-
-		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
-
-		if (d instanceof Senshi s) {
-			if (!s.getEquipments().isEmpty()) {
-				for (Evogear evogear : s.getEquipments()) {
-					it.add(evogear);
-				}
+			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
+				d.reset();
+				it.add(p.getOriginal());
+				return false;
 			}
-		} else if (d instanceof Evogear e && e.getEquipper() != null) {
-			e.getEquipper().getEquipments().remove(e);
-		}
 
-		d.reset();
+			getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
 
-		if (d instanceof Proxy<?> p) {
+			if (d instanceof Senshi s) {
+				if (!s.getEquipments().isEmpty()) {
+					for (Evogear evogear : s.getEquipments()) {
+						it.add(evogear);
+					}
+				}
+			} else if (d instanceof Evogear e && e.getEquipper() != null) {
+				e.getEquipper().getEquipments().remove(e);
+			}
+
 			d.reset();
-			it.add(p.getOriginal());
-			return false;
+
+			if (d instanceof Proxy<?> p) {
+				d.reset();
+				it.add(p.getOriginal());
+				return false;
+			}
+
+			return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
+		}).get();
+
+		if (result) {
+			for (Hand h : getGame().getHands().values()) {
+				h.getCards().remove(d);
+				h.getRealDeck().remove(d);
+				h.getGraveyard().remove(d);
+			}
 		}
 
-		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
+		return result;
 	});
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
