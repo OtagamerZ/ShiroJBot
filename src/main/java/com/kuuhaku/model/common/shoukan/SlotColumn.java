@@ -153,9 +153,13 @@ public class SlotColumn {
 				h.getGame().trigger(Trigger.ON_SUMMON, card.asSource(Trigger.ON_SUMMON));
 			}
 
-			h.getCards().remove(card);
-			h.getGraveyard().remove(card);
-			h.getRealDeck().remove(card);
+			for (Hand hd : game.getHands().values()) {
+				hd.getCards().remove(card);
+				hd.getGraveyard().remove(card);
+				hd.getRealDeck().remove(card);
+				hd.getDiscard().remove(card);
+			}
+
 			game.getBanned().remove(card);
 		}
 	}

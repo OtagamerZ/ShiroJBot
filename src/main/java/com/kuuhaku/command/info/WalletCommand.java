@@ -58,7 +58,7 @@ public class WalletCommand implements Executable {
 
 		boolean weekend = dt.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.SATURDAY.getValue();
 		int streak = acc.getStreak() + 1;
-		int cr = (int) (((weekend ? 1500 : 1000) - Math.min(acc.getBalance() + acc.getTransferred() / 2000, 800)) * streak + 1);
+		int cr = (int) (((weekend ? 1500 : 1000) - Math.min((acc.getBalance() + acc.getTransferred()) / 2000, 800)) * streak + 1);
 		int gems = Math.min((int) Calc.getFibonacci((streak + 1) / 7), 3);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()

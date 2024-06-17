@@ -409,8 +409,7 @@ public class Shoukan extends GameInstance<Phase> {
 		} else {
 			if (args.getString("mode").equals("b") && placeProxy(curr, args)) return true;
 			else if (curr.getLockTime(Lock.BLIND) > 0) {
-				d.setAvailable(false);
-				curr.getGraveyard().add(d.copy());
+				curr.getGraveyard().add(d);
 				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
 				CardState state = switch (args.getString("mode")) {
@@ -419,6 +418,8 @@ public class Shoukan extends GameInstance<Phase> {
 					default -> CardState.ATTACK;
 				};
 
+				curr.markCardSpent();
+				curr.setSummoned(true);
 				reportEvent("str/place_card_fail", true, curr.getName(), d, state.toString(getLocale()));
 				return true;
 			}
@@ -439,68 +440,46 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Senshi copy;
-		int usedExtra = Calc.clamp(chosen.getMPCost() - curr.getMP(), 0, extraMp);
-		if (args.has("notCombat")) {
-			if (slot.hasBottom()) {
-				getChannel().sendMessage(getString("error/slot_occupied")).queue();
-				return false;
-			}
-
-			chosen.setAvailable(false);
-			slot.setBottom(copy = chosen.withCopy(s -> {
-				switch (args.getString("mode")) {
-					case "d" -> s.setDefending(true);
-					case "b" -> s.setFlipped(true);
-				}
-
-				if (curr.getOrigins().synergy() != Race.HERALD || curr.hasSummoned()) {
-					curr.consumeHP(s.getHPCost());
-					curr.consumeMP(s.getMPCost() - usedExtra);
-				}
-
-				List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost() + usedExtra);
-				if (!consumed.isEmpty()) {
-					s.getStats().getData().put("consumed", consumed);
-				}
-			}));
-		} else {
-			if (slot.hasTop()) {
-				getChannel().sendMessage(getString("error/slot_occupied")).queue();
-				return false;
-			}
-
-			chosen.setAvailable(false);
-			slot.setTop(copy = chosen.withCopy(s -> {
-				switch (args.getString("mode")) {
-					case "d" -> s.setDefending(true);
-					case "b" -> s.setFlipped(true);
-				}
-
-				if (curr.getOrigins().synergy() != Race.HERALD || curr.hasSummoned()) {
-					curr.consumeHP(s.getHPCost());
-					curr.consumeMP(s.getMPCost() - usedExtra);
-				}
-
-				List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost() + usedExtra);
-				if (!consumed.isEmpty()) {
-					s.getStats().getData().put("consumed", consumed);
-				}
-			}));
+		if ((args.has("notCombat") && slot.hasBottom()) || (!args.has("notCombat") && slot.hasTop())) {
+			getChannel().sendMessage(getString("error/slot_occupied")).queue();
+			return false;
 		}
 
+		int usedExtra = Calc.clamp(chosen.getMPCost() - curr.getMP(), 0, extraMp);
+		switch (args.getString("mode")) {
+			case "d" -> chosen.setDefending(true);
+			case "b" -> chosen.setFlipped(true);
+		}
+
+		if (curr.getOrigins().synergy() != Race.HERALD || curr.hasSummoned()) {
+			curr.consumeHP(chosen.getHPCost());
+			curr.consumeMP(chosen.getMPCost() - usedExtra);
+		}
+
+		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost() + usedExtra);
+		if (!consumed.isEmpty()) {
+			chosen.getStats().getData().put("consumed", consumed);
+		}
+
+		if (args.has("notCombat")) {
+			slot.setBottom(chosen);
+		} else {
+			slot.setTop(chosen);
+		}
+
+		curr.markCardSpent();
 		curr.setSummoned(true);
-		reportEvent("str/place_card", true, curr.getName(), copy.isFlipped() ? getString("str/a_card") : copy, copy.getState().toString(getLocale()));
+		reportEvent("str/place_card", true, curr.getName(), chosen.isFlipped() ? getString("str/a_card") : chosen, chosen.getState().toString(getLocale()));
 		return true;
 	}
 
-	private boolean placeProxy(Hand hand, JSONObject args) {
+	private boolean placeProxy(Hand curr, JSONObject args) {
 		int extraMp = 0;
-		if (hand.getOrigins().synergy() == Race.HOMUNCULUS) {
-			extraMp = hand.getDiscard().size();
+		if (curr.getOrigins().synergy() == Race.HOMUNCULUS) {
+			extraMp = curr.getDiscard().size();
 		}
 
-		Drawable<?> d = hand.getCards().get(args.getInt("inHand") - 1);
+		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
 		if (!d.isAvailable() || d.isManipulated()) {
 			getChannel().sendMessage(getString("error/card_unavailable")).queue();
 			return false;
@@ -510,27 +489,26 @@ public class Shoukan extends GameInstance<Phase> {
 			if (chosen.isPassive()) {
 				getChannel().sendMessage(getString("error/card_passive")).queue();
 				return false;
-			} else if (chosen.getHPCost() >= hand.getHP()) {
+			} else if (chosen.getHPCost() >= curr.getHP()) {
 				getChannel().sendMessage(getString("error/not_enough_hp")).queue();
 				return false;
-			} else if (chosen.getMPCost() > hand.getMP()) {
+			} else if (chosen.getMPCost() > curr.getMP()) {
 				getChannel().sendMessage(getString("error/not_enough_mp")).queue();
 				return false;
-			} else if (chosen.getSCCost() > hand.getDiscard().size()) {
+			} else if (chosen.getSCCost() > curr.getDiscard().size()) {
 				getChannel().sendMessage(getString("error/not_enough_sc")).queue();
 				return false;
 			}
 
-			int locktime = hand.getLockTime(Lock.SPELL);
+			int locktime = curr.getLockTime(Lock.SPELL);
 			if (locktime > 0 && !chosen.hasTrueEffect()) {
 				getChannel().sendMessage(getString("error/spell_locked", locktime)).queue();
 				return false;
 			}
 		} else {
-			if (hand.getLockTime(Lock.BLIND) > 0) {
-				d.setAvailable(false);
-				hand.getGraveyard().add(d.copy());
-				hand.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
+			if (curr.getLockTime(Lock.BLIND) > 0) {
+				curr.getGraveyard().add(d.copy());
+				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
 				CardState state = switch (args.getString("mode")) {
 					case "d" -> CardState.DEFENSE;
@@ -538,7 +516,9 @@ public class Shoukan extends GameInstance<Phase> {
 					default -> CardState.ATTACK;
 				};
 
-				reportEvent("str/place_card_fail", true, hand.getName(), d, state.toString(getLocale()));
+				curr.markCardSpent();
+				curr.setSummoned(true);
+				reportEvent("str/place_card_fail", true, curr.getName(), d, state.toString(getLocale()));
 				return true;
 			}
 
@@ -546,7 +526,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		SlotColumn slot = arena.getSlots(hand.getSide()).get(args.getInt("inField") - 1);
+		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
 		if (slot.isLocked()) {
 			int time = slot.getLock();
 
@@ -558,48 +538,37 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
+		if ((args.has("notCombat") && slot.hasBottom()) || (!args.has("notCombat") && slot.hasTop())) {
+			getChannel().sendMessage(getString("error/slot_occupied")).queue();
+			return false;
+		}
+
 		TrapSpell proxy = new TrapSpell(chosen);
-		int usedExtra = Calc.clamp(chosen.getMPCost() - hand.getMP(), 0, extraMp);
+		int usedExtra = Calc.clamp(chosen.getMPCost() - curr.getMP(), 0, extraMp);
+		if (slot.hasBottom()) {
+			getChannel().sendMessage(getString("error/slot_occupied")).queue();
+			return false;
+		}
+
+		if (curr.getOrigins().synergy() != Race.HERALD || curr.hasSummoned()) {
+			curr.consumeHP(chosen.getHPCost());
+			curr.consumeMP(chosen.getMPCost() - usedExtra);
+		}
+
+		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
+		if (!consumed.isEmpty()) {
+			proxy.getStats().getData().put("consumed", consumed);
+		}
+
 		if (args.has("notCombat")) {
-			if (slot.hasBottom()) {
-				getChannel().sendMessage(getString("error/slot_occupied")).queue();
-				return false;
-			}
-
-			if (hand.getOrigins().synergy() != Race.HERALD || hand.hasSummoned()) {
-				hand.consumeHP(chosen.getHPCost());
-				hand.consumeMP(chosen.getMPCost() - usedExtra);
-			}
-
-			List<Drawable<?>> consumed = hand.consumeSC(chosen.getSCCost());
-			if (!consumed.isEmpty()) {
-				proxy.getStats().getData().put("consumed", consumed);
-			}
-
-			chosen.setAvailable(false);
 			slot.setBottom(proxy);
 		} else {
-			if (slot.hasTop()) {
-				getChannel().sendMessage(getString("error/slot_occupied")).queue();
-				return false;
-			}
-
-			if (hand.getOrigins().synergy() != Race.HERALD || hand.hasSummoned()) {
-				hand.consumeHP(chosen.getHPCost());
-				hand.consumeMP(chosen.getMPCost() - usedExtra);
-			}
-
-			List<Drawable<?>> consumed = hand.consumeSC(chosen.getSCCost());
-			if (!consumed.isEmpty()) {
-				proxy.getStats().getData().put("consumed", consumed);
-			}
-
-			chosen.setAvailable(false);
 			slot.setTop(proxy);
 		}
 
-		hand.setSummoned(true);
-		reportEvent("str/place_card", true, hand.getName(), proxy.isFlipped() ? getString("str/a_card") : proxy, proxy.getState().toString(getLocale()));
+		curr.markCardSpent();
+		curr.setSummoned(true);
+		reportEvent("str/place_card", true, curr.getName(), proxy.isFlipped() ? getString("str/a_card") : proxy, proxy.getState().toString(getLocale()));
 		return true;
 	}
 
@@ -658,8 +627,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Drawable<?> orig = curr.getCards().get(args.getInt("inHand") - 1);
-		Drawable<?> d = orig;
+		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
 		if (!d.isAvailable() || d.isManipulated()) {
 			getChannel().sendMessage(getString("error/card_unavailable")).queue();
 			return false;
@@ -686,9 +654,12 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		} else {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
-				d.setAvailable(false);
-				curr.getGraveyard().add(d.copy());
+				curr.getGraveyard().add(d);
 				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
+
+				if (d instanceof EquippableSenshi es) {
+					curr.getCards().remove(es.getOriginal());
+				}
 
 				SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
 				if (!slot.hasTop()) {
@@ -697,6 +668,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				Senshi target = slot.getTop();
+				curr.markCardSpent();
 				reportEvent("str/equip_card_fail", true, curr.getName(), d, target.isFlipped() ? getString("str/a_card") : target);
 				return true;
 			}
@@ -711,28 +683,26 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Evogear copy = chosen.copy();
 		Senshi target = slot.getTop();
 		if (target.getEquipments().stream().anyMatch(e -> chosen instanceof EquippableSenshi && e.getStats().getData().has("_shiki"))) {
 			getChannel().sendMessage(getString("error/only_one_shikigami")).queue();
 			return false;
 		}
 
-		curr.consumeHP(copy.getHPCost());
-		curr.consumeMP(copy.getMPCost());
-		List<Drawable<?>> consumed = curr.consumeSC(copy.getSCCost());
+		curr.consumeHP(chosen.getHPCost());
+		curr.consumeMP(chosen.getMPCost());
+		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 		if (!consumed.isEmpty()) {
-			copy.getStats().getData().put("consumed", consumed);
+			chosen.getStats().getData().put("consumed", consumed);
 		}
 
-		if (chosen instanceof EquippableSenshi) {
-			orig.setAvailable(false);
-		} else {
-			chosen.setAvailable(false);
+		if (d instanceof EquippableSenshi es) {
+			curr.getCards().remove(es.getOriginal());
 		}
 
-		target.getEquipments().add(copy);
-		reportEvent("str/equip_card", true, curr.getName(), copy.isFlipped() ? getString("str/an_equipment") : copy, target.isFlipped() ? getString("str/a_card") : target);
+		target.getEquipments().add(chosen);
+		curr.markCardSpent();
+		reportEvent("str/equip_card", true, curr.getName(), chosen.isFlipped() ? getString("str/an_equipment") : chosen, target.isFlipped() ? getString("str/a_card") : target);
 		return true;
 	}
 
@@ -753,9 +723,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (!(d instanceof Field chosen)) {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
-				d.setAvailable(false);
-				curr.getGraveyard().add(d.copy());
+				curr.getGraveyard().add(d);
 				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
+
+				curr.markCardSpent();
 				reportEvent("str/equip_card_fail", true, curr.getName(), d);
 				return true;
 			}
@@ -764,8 +735,8 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		chosen.setAvailable(false);
-		arena.setField(chosen.copy());
+		arena.setField(chosen);
+		curr.markCardSpent();
 		reportEvent("str/place_field", true, curr.getName(), chosen);
 		return true;
 	}
@@ -931,6 +902,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.getDiscard().add(d);
+		curr.markCardSpent();
 
 		if (curr.getOrigins().synergy() == Race.FAMILIAR && d instanceof Senshi s) {
 			for (Drawable<?> c : curr.getCards()) {
@@ -968,6 +940,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.getDiscard().addAll(cards);
+		curr.markCardSpent(cards.size());
 
 		if (curr.getOrigins().synergy() == Race.FAMILIAR) {
 			for (Drawable<?> c : cards) {
@@ -2855,6 +2828,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.reduceOriginCooldown(1);
 		curr.setCanAttack(true);
 		curr.setSummoned(false);
+		curr.resetCardsSpent();
 		curr.flushDiscard();
 
 		if (curr.getOrigins().synergy() == Race.WRAITH) {
