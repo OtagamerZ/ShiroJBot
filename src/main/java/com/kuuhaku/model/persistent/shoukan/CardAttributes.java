@@ -85,28 +85,56 @@ public class CardAttributes implements Serializable, Cloneable {
 		return mana;
 	}
 
+	public void setUnsafeMana(int mana) {
+		this.mana = mana;
+	}
+
 	public int getBlood() {
 		return blood;
+	}
+
+	public void setUnsafeBlood(int blood) {
+		this.blood = blood;
 	}
 
 	public int getSacrifices() {
 		return sacrifices;
 	}
 
+	public void setUnsafeSacrifices(int sacrifices) {
+		this.sacrifices = sacrifices;
+	}
+
 	public int getAtk() {
 		return atk;
+	}
+
+	public void setUnsafeAtk(int atk) {
+		this.atk = atk;
 	}
 
 	public int getDfs() {
 		return dfs;
 	}
 
+	public void setUnsafeDfs(int dfs) {
+		this.dfs = dfs;
+	}
+
 	public int getDodge() {
 		return dodge;
 	}
 
+	public void setUnsafeDodge(int dodge) {
+		this.dodge = dodge;
+	}
+
 	public int getBlock() {
 		return block;
+	}
+
+	public void setUnsafeBlock(int block) {
+		this.block = block;
 	}
 
 	public JSONArray getTags() {
