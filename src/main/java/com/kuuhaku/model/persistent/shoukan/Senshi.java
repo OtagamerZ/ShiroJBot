@@ -124,6 +124,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}).get();
 
 		if (result) {
+				getHand().getCards().remove(e);
 				getHand().getRealDeck().remove(e);
 				getHand().getGraveyard().remove(e);
 				getHand().getDiscard().remove(e);

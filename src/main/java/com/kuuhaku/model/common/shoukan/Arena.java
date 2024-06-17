@@ -171,6 +171,13 @@ public class Arena implements Renderer {
 			field.setHand(game.getCurrent());
 		}
 
+		for (Hand hd : game.getHands().values()) {
+			hd.getCards().remove(field);
+			hd.getGraveyard().remove(field);
+			hd.getRealDeck().remove(field);
+			hd.getDiscard().remove(field);
+		}
+
 		field.getHand().getData().put("last_field", field);
 		game.trigger(Trigger.ON_FIELD_CHANGE);
 	}
