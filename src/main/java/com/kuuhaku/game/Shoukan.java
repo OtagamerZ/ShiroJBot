@@ -418,7 +418,6 @@ public class Shoukan extends GameInstance<Phase> {
 					default -> CardState.ATTACK;
 				};
 
-				curr.markCardSpent();
 				curr.setSummoned(true);
 				reportEvent("str/place_card_fail", true, curr.getName(), d, state.toString(getLocale()));
 				return true;

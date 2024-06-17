@@ -57,6 +57,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
@@ -89,36 +90,47 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Transient
 	private final transient BondedList<Evogear> equipments = new BondedList<>((e, it) -> {
-		if (getEquipments().contains(e)) return false;
+		boolean result = ((Supplier<Boolean>) () -> {
+			if (getEquipments().contains(e)) return false;
 
-		e.setEquipper(this);
-		e.setHand(this.getHand());
-		e.executeAssert(ON_INITIALIZE);
+			e.setEquipper(this);
+			e.setHand(this.getHand());
+			e.executeAssert(ON_INITIALIZE);
 
-		Shoukan game = this.getGame();
-		getHand().getData().put("last_equipment", e);
-		getHand().getData().put("last_evogear", e);
-		game.trigger(ON_EQUIP, asSource(ON_EQUIP));
+			Shoukan game = this.getGame();
+			getHand().getData().put("last_equipment", e);
+			getHand().getData().put("last_evogear", e);
+			game.trigger(ON_EQUIP, asSource(ON_EQUIP));
 
-		if (e.hasCharm(Charm.TIMEWARP)) {
-			int times = Charm.TIMEWARP.getValue(e.getTier());
-			for (int i = 0; i < times; i++) {
-				getStats().getPower().set(e, -0.1 * (i + 1));
-				game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
-				game.trigger(ON_TURN_END, asSource(ON_TURN_END));
+			if (e.hasCharm(Charm.TIMEWARP)) {
+				int times = Charm.TIMEWARP.getValue(e.getTier());
+				for (int i = 0; i < times; i++) {
+					getStats().getPower().set(e, -0.1 * (i + 1));
+					game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
+					game.trigger(ON_TURN_END, asSource(ON_TURN_END));
+				}
+
+				getStats().getPower().set(e, 0);
 			}
 
-			getStats().getPower().set(e, 0);
+			if (e.hasCharm(Charm.CLONE)) {
+				game.putAtOpenSlot(this.getSide(), true, withCopy(s -> {
+					s.getStats().getAttrMult().set(-1 + (0.25 * e.getTier()));
+					s.getStats().getData().put("cloned", true);
+				}));
+			}
+
+			return true;
+		}).get();
+
+		if (result) {
+				getHand().getRealDeck().remove(e);
+				getHand().getGraveyard().remove(e);
+				getHand().getDiscard().remove(e);
+				getGame().getBanned().remove(e);
 		}
 
-		if (e.hasCharm(Charm.CLONE)) {
-			game.putAtOpenSlot(this.getSide(), true, withCopy(s -> {
-				s.getStats().getAttrMult().set(-1 + (0.25 * e.getTier()));
-				s.getStats().getData().put("cloned", true);
-			}));
-		}
-
-		return true;
+		return result;
 	}, e -> {
 		e.executeAssert(ON_REMOVE);
 		e.setEquipper(null);
@@ -1353,8 +1365,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (source instanceof EffectHolder<?> eh && eh.hasTrueEffect(true)) return false;
 		else if (blocked.contains(source)) return true;
 
-		boolean isTick = getHand().getData().getEnum(Trigger.class, "trigger_context", NONE) == ON_TICK;
-
 		if (hand != null) {
 			if (hand.equals(source.getHand())) {
 				return false;
@@ -1369,20 +1379,16 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (getGame().chance(getDodge())) {
-			if (!isTick) {
-				Shoukan game = getGame();
-				game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
-						this.isFlipped() ? game.getLocale().get("str/a_card") : this
-				)).queue();
-			}
+			Shoukan game = getGame();
+			game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
+					this.isFlipped() ? game.getLocale().get("str/a_card") : this
+			)).queue();
 
 			return true;
-		} else if (hasCharm(Charm.SHIELD, !isTick)) {
+		} else if (hasCharm(Charm.SHIELD, true)) {
 			blocked.add(source);
-			if (!isTick) {
-				Shoukan game = getGame();
-				game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
-			}
+			Shoukan game = getGame();
+			game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
 
 			return true;
 		}
