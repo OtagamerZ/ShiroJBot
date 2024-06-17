@@ -190,6 +190,10 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		return DAO.queryNative(Long.class, "SELECT sum(buyout_price) FROM market_order WHERE kawaipon_uid = ?1", uid);
 	}
 
+	public long getTransferred() {
+		return DAO.queryNative(Long.class, "SELECT transf_total(?1)", uid);
+	}
+
 	public void addCR(long value, String reason) {
 		if (value <= 0) return;
 
@@ -541,7 +545,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		acc.setVoteAwarded(true);
 		acc.save();
 
-		int cr = (int) (((weekend ? 1500 : 1000) - Math.min(balance / 2000, 800)) * streak);
+		int cr = (int) (((weekend ? 1500 : 1000) - Math.min(balance + getTransferred() / 2000, 800)) * streak);
 		acc.addCR(cr, "Daily");
 
 		int gems = 0;

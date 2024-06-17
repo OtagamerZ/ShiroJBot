@@ -51,6 +51,7 @@ public class WalletCommand implements Executable {
 						acc.getUsable(),
 						acc.getReserved(),
 						acc.getDebit(),
+						acc.getTransferred(),
 						acc.getGems()
 				), true)
 				.addField(Constants.VOID, locale.get("str/wallet_info_2",
