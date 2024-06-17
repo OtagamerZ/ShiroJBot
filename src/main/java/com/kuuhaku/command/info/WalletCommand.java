@@ -28,11 +28,15 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Calc;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
+import java.time.DayOfWeek;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 
 @Command(
@@ -45,6 +49,18 @@ public class WalletCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
 
+		ZonedDateTime dt = acc.getLastVote();
+		if (dt != null) {
+			dt = dt.plusHours(12);
+		} else {
+			dt = ZonedDateTime.now(ZoneId.of("GMT-3"));
+		}
+
+		boolean weekend = dt.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.SATURDAY.getValue();
+		int streak = acc.getStreak() + 1;
+		int cr = (int) (((weekend ? 1500 : 1000) - Math.min(acc.getBalance() + acc.getTransferred() / 2000, 800)) * streak + 1);
+		int gems = Math.min((int) Calc.getFibonacci((streak + 1) / 7), 3);
+
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/wallet", event.member().getEffectiveName()))
 				.addField(Constants.VOID, locale.get("str/wallet_info_1",
@@ -56,7 +72,9 @@ public class WalletCommand implements Executable {
 				), true)
 				.addField(Constants.VOID, locale.get("str/wallet_info_2",
 						acc.getLastVote() == null ? locale.get("str/never") : Constants.TIMESTAMP.formatted(acc.getLastVote().getLong(ChronoField.INSTANT_SECONDS)),
-						acc.getStreak()
+						acc.getStreak(),
+						cr, gems
+
 				), true);
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();

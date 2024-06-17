@@ -550,7 +550,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 
 		int gems = 0;
 		if (streak > 0 && streak % 7 == 0) {
-			gems = Math.min((int) Calc.getFibonacci(acc.getStreak() / 7), 3);
+			gems = Math.min((int) Calc.getFibonacci(streak / 7), 3);
 			acc.addGems(gems, "Vote streak " + acc.getStreak());
 		}
 
