@@ -53,14 +53,6 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 			quality = " (Q: " + Utils.roundToString(sc.getQuality(), 1) + "%)";
 		}
 
-		int sale;
-		StashedCard offer = market.getDailyOffer();
-		if (offer != null) {
-			sale = offer.getId();
-		} else {
-			sale = -1;
-		}
-
 		double mult = 1;
 		Calendar cal = Calendar.getInstance();
 
@@ -68,7 +60,7 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 			mult *= 0.66;
 		}
 
-		if (sale == sc.getId()) {
+		if (market.getDailyOffer() == sc.getId()) {
 			mult *= 0.8;
 		}
 

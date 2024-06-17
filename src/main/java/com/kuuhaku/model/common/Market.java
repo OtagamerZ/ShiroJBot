@@ -153,15 +153,14 @@ public class Market {
 		return true;
 	}
 
-	public StashedCard getDailyOffer() {
+	public int getDailyOffer() {
 		API.call(new HttpHead(Constants.API_ROOT + "market/refresh"), null, null, null);
 
 		GlobalProperty gp = DAO.find(GlobalProperty.class, "daily_offer");
 		if (gp != null) {
-			int id = new JSONObject(gp.getValue()).getInt("id");
-			return DAO.query(StashedCard.class, "SELECT c FROM StashedCard c WHERE c.id = ?1 AND c.price > 0", id);
+			return new JSONObject(gp.getValue()).getInt("id");
 		}
 
-		return null;
+		return -1;
 	}
 }

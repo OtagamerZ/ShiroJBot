@@ -71,7 +71,7 @@ public class MarketBuyCommand implements Executable {
 			price = (int) (price * 0.66);
 		}
 
-		if (sc.equals(m.getDailyOffer())) {
+		if (sc.getId() == m.getDailyOffer()) {
 			price = (int) (price * 0.8);
 		}
 
