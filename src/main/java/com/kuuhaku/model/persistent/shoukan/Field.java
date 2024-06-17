@@ -396,7 +396,6 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		clone.hand = hand;
 		clone.state = (byte) (state & 0b1110);
 		clone.stashRef = stashRef;
-		clone.SERIAL = SERIAL;
 
 		return clone;
 	}

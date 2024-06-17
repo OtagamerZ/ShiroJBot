@@ -1597,7 +1597,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		clone.hand = hand;
 		clone.state = state & 0b11110;
 		clone.stashRef = stashRef;
-		clone.SERIAL = SERIAL;
 
 		return clone;
 	}

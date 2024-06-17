@@ -786,7 +786,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		clone.hand = hand;
 		clone.state = (byte) (state & 0b1110);
 		clone.stashRef = stashRef;
-		clone.SERIAL = SERIAL;
 
 		return clone;
 	}
