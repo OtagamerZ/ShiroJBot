@@ -115,7 +115,6 @@ public class Market {
 		StashedCard sc = DAO.find(StashedCard.class, id);
 		if (sc == null) return false;
 
-		GlobalProperty gp = Utils.getOr(DAO.find(GlobalProperty.class, "daily_offer"), new GlobalProperty("daily_offer", "{}"));
 		int price = sc.getPrice();
 
 		Account seller = sc.getKawaipon().getAccount();
@@ -126,8 +125,7 @@ public class Market {
 
 		Account buyer = DAO.find(Account.class, uid);
 		try {
-			int sale = new JSONObject(gp.getValue()).getInt("id");
-			if (sale == sc.getId()) {
+			if (sc.getId() == getDailyOffer()) {
 				buyer.consumeCR((long) (price * 0.8), "Purchased " + sc + " (SALE)");
 			} else {
 				buyer.consumeCR(price, "Purchased " + sc);
