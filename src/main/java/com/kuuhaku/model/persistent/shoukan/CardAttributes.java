@@ -85,7 +85,7 @@ public class CardAttributes implements Serializable, Cloneable {
 		return mana;
 	}
 
-	public void setUnsafeMana(int mana) {
+	public void setMana(int mana) {
 		this.mana = mana;
 	}
 
@@ -93,7 +93,7 @@ public class CardAttributes implements Serializable, Cloneable {
 		return blood;
 	}
 
-	public void setUnsafeBlood(int blood) {
+	public void setBlood(int blood) {
 		this.blood = blood;
 	}
 
@@ -101,7 +101,7 @@ public class CardAttributes implements Serializable, Cloneable {
 		return sacrifices;
 	}
 
-	public void setUnsafeSacrifices(int sacrifices) {
+	public void setSacrifices(int sacrifices) {
 		this.sacrifices = sacrifices;
 	}
 
@@ -109,7 +109,7 @@ public class CardAttributes implements Serializable, Cloneable {
 		return atk;
 	}
 
-	public void setUnsafeAtk(int atk) {
+	public void setAtk(int atk) {
 		this.atk = atk;
 	}
 
@@ -117,7 +117,7 @@ public class CardAttributes implements Serializable, Cloneable {
 		return dfs;
 	}
 
-	public void setUnsafeDfs(int dfs) {
+	public void setDfs(int dfs) {
 		this.dfs = dfs;
 	}
 
@@ -125,7 +125,7 @@ public class CardAttributes implements Serializable, Cloneable {
 		return dodge;
 	}
 
-	public void setUnsafeDodge(int dodge) {
+	public void setDodge(int dodge) {
 		this.dodge = dodge;
 	}
 
@@ -133,7 +133,7 @@ public class CardAttributes implements Serializable, Cloneable {
 		return block;
 	}
 
-	public void setUnsafeBlock(int block) {
+	public void setBlock(int block) {
 		this.block = block;
 	}
 
