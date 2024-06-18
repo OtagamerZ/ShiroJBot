@@ -147,7 +147,6 @@ public class Shoukan extends GameInstance<Phase> {
 				trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
 			}
 
-			h.resetDraws();
 			h.manualDraw(h.getRemainingDraws());
 			h.loadArchetype();
 
@@ -161,6 +160,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Hand curr = getCurrent();
 		curr.modMP(curr.getBase().mpGain().get());
+		curr.resetDraws();
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		reportEvent("str/game_start", false, "<@" + curr.getUid() + ">");
