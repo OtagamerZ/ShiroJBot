@@ -119,7 +119,7 @@ public class Hand {
 		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
-	}, d -> d.setCurrentStack(getCards(false)));
+	}, d -> d.setCurrentStack(getCards(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
 		if (d.isEthereal() || getRealDeck().contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
@@ -152,7 +152,7 @@ public class Hand {
 		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
-	}, d -> d.setCurrentStack(getRealDeck(false)));
+	}, d -> d.setCurrentStack(getRealDeck(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
 		if (d.isEthereal() || getGraveyard().contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
@@ -232,7 +232,7 @@ public class Hand {
 		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
-	}, d -> d.setCurrentStack(getGraveyard(false)));
+	}, d -> d.setCurrentStack(getGraveyard(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (d.isEthereal() || getDiscard().contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
@@ -256,7 +256,7 @@ public class Hand {
 		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
-	}, d -> d.setCurrentStack(getDiscard(false)));
+	}, d -> d.setCurrentStack(getDiscard(false)), Utils::doNothing);
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 	private final Set<EffectHolder<?>> leeches = new HashSet<>();
 
