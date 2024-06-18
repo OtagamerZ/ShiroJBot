@@ -33,6 +33,7 @@ import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
@@ -102,13 +103,12 @@ public class Shoukan extends GameInstance<Phase> {
 	private byte state = 0b100;
 	/*
 	0xF
-	  └ 0 111111
-	      │││││└ singleplayer
-	      ││││└─ cheats
-	      │││└── restoring
-	      ││└─── history
-	      │└──── lock
-	      └───── sending
+	  └ 00 11111
+	       ││││└ singleplayer
+	       │││└─ cheats
+	       ││└── restoring
+	       │└──── lock
+	       └───── sending
 	 */
 
 	public Shoukan(I18N locale, Arcade arcade, User p1, User p2) {
@@ -1578,28 +1578,20 @@ public class Shoukan extends GameInstance<Phase> {
 		state = (byte) Bit.set(state, 2, restoring);
 	}
 
-	public boolean hasHistory() {
+	public boolean isLocked() {
 		return Bit.on(state, 3);
 	}
 
-	public void setHistory(boolean history) {
-		state = (byte) Bit.set(state, 3, history);
-	}
-
-	public boolean isLocked() {
-		return Bit.on(state, 4);
-	}
-
 	public void setLocked(boolean locked) {
-		state = (byte) Bit.set(state, 4, locked);
+		state = (byte) Bit.set(state, 3, locked);
 	}
 
 	public boolean isSending() {
-		return Bit.on(state, 5);
+		return Bit.on(state, 4);
 	}
 
 	public void setSending(boolean sending) {
-		state = (byte) Bit.set(state, 5, sending);
+		state = (byte) Bit.set(state, 4, sending);
 	}
 
 	public StateSnap getSnapshot(int turn) {
@@ -2017,7 +2009,7 @@ public class Shoukan extends GameInstance<Phase> {
 				});
 			}
 
-			BufferedImage img = hasHistory() ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
+			BufferedImage img = arena.render(getLocale());
 			byte[] bytes = IO.getBytes(img, "png");
 
 			ButtonizeHelper helper = getButtons();
@@ -2098,7 +2090,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private ButtonizeHelper getButtons() {
-		List<String> allowed = List.of("\uD83E\uDEAA", "\uD83D\uDD0D");
+		List<String> allowed = List.of("\uD83E\uDEAA", "\uD83D\uDD0D", "\uD83D\uDCD1");
 
 		Hand curr = getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
@@ -2424,13 +2416,19 @@ public class Shoukan extends GameInstance<Phase> {
 			helper.addAction(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
 				if (isLocked()) return;
 
-				setHistory(!hasHistory());
+				XStringBuilder sb = new XStringBuilder();
 
-				if (hasHistory()) {
-					reportEvent("str/game_history_enable", false, curr.getName());
-				} else {
-					reportEvent("str/game_history_disable", false, curr.getName());
+				int i = 0;
+				Iterator<HistoryLog> it = getHistory().descendingIterator();
+				while (it.hasNext() && i++ < 20) {
+					HistoryLog next = it.next();
+					sb.appendNewLine("(" + hands.get(next.side()).getName() + ") " + next.message());
 				}
+
+				Objects.requireNonNull(w.getHook())
+						.setEphemeral(true)
+						.sendMessage(sb.toString())
+						.queue();
 			});
 
 			if (isSingleplayer() || getTurn() > 10) {

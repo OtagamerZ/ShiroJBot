@@ -103,6 +103,10 @@ public class XStringBuilder {
         return sb.toString().isBlank();
     }
 
+    public int length() {
+        return sb.length();
+    }
+
     public void clear() {
         sb.setLength(0);
     }
