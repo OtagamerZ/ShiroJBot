@@ -105,11 +105,6 @@ public class Hand {
 			e.getEquipper().getEquipments().remove(e);
 		}
 
-		if (d.getSlot().getIndex() == -1 && d.isSolid()) {
-			getData().put("last_drawn", d);
-			getData().put("last_drawn_" + d.getClass().getSimpleName().toLowerCase(), d);
-		}
-
 		d.setSlot(null);
 
 		if (d instanceof Proxy<?> p) {
@@ -416,11 +411,7 @@ public class Hand {
 	}
 
 	public int getHandCount() {
-		return (int) cards.stream().filter(Drawable::isSolid).count() + getCardsSpent();
-	}
-
-	public int getRemainingDraws() {
-		return Math.max(0, base.handCapacity().get() - getHandCount());
+		return (int) cards.stream().filter(Drawable::isSolid).count();
 	}
 
 	public BondedList<Drawable<?>> getRealDeck() {
@@ -658,8 +649,14 @@ public class Hand {
 		}
 
 		out.setAvailable(true);
-		out.setSolid(true);
 		cards.add(out);
+
+		if (manual) {
+			consumeDraw();
+		}
+
+		getData().put("last_drawn", out);
+		getData().put("last_drawn_" + out.getClass().getSimpleName().toLowerCase(), out);
 
 		getGame().trigger(Trigger.ON_DRAW, side);
 		if (manual) {
@@ -687,6 +684,7 @@ public class Hand {
 		}
 
 		Utils.shuffle(deck, game.getRng());
+		resetDraws();
 
 		if (origin.synergy() == Race.DJINN) {
 			manualDraw(i - 1);
@@ -1157,20 +1155,16 @@ public class Hand {
 		state = Bit.set(state, 2, curr + 1, 8);
 	}
 
-	public int getCardsSpent() {
+	public int getRemainingDraws() {
 		return Bit.get(state, 3, 8);
 	}
 
-	public void markCardSpent() {
-		markCardSpent(1);
-	}
-
-	public void markCardSpent(int spent) {
+	public void consumeDraw() {
 		int curr = Bit.get(state, 3, 8);
-		state = Bit.set(state, 3, curr + spent, 8);
+		state = Bit.set(state, 3, curr + 1, 8);
 	}
 
-	public void resetCardsSpent() {
+	public void resetDraws() {
 		state = Bit.set(state, 3, 0, 8);
 	}
 

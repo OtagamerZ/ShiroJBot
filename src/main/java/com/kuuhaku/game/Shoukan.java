@@ -459,7 +459,6 @@ public class Shoukan extends GameInstance<Phase> {
 			slot.setTop(s);
 		}
 
-		curr.markCardSpent();
 		curr.setSummoned(true);
 		reportEvent("str/place_card", true, curr.getName(), s.isFlipped() ? getString("str/a_card") : s, s.getState().toString(getLocale()));
 		return true;
@@ -506,7 +505,6 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				Senshi target = slot.getTop();
-				curr.markCardSpent();
 				reportEvent("str/equip_card_fail", true, curr.getName(), d, target.isFlipped() ? getString("str/a_card") : target);
 				return true;
 			}
@@ -539,7 +537,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		target.getEquipments().add(chosen);
-		curr.markCardSpent();
 		reportEvent("str/equip_card", true, curr.getName(), chosen.isFlipped() ? getString("str/an_equipment") : chosen, target.isFlipped() ? getString("str/a_card") : target);
 		return true;
 	}
@@ -564,7 +561,6 @@ public class Shoukan extends GameInstance<Phase> {
 				curr.getGraveyard().add(d);
 				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
-				curr.markCardSpent();
 				reportEvent("str/equip_card_fail", true, curr.getName(), d);
 				return true;
 			}
@@ -574,7 +570,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		arena.setField(chosen);
-		curr.markCardSpent();
 		reportEvent("str/place_field", true, curr.getName(), chosen);
 		return true;
 	}
@@ -740,7 +735,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.getDiscard().add(d);
-		curr.markCardSpent();
 
 		if (curr.getOrigins().synergy() == Race.FAMILIAR && d instanceof Senshi s) {
 			for (Drawable<?> c : curr.getCards()) {
@@ -778,7 +772,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.getDiscard().addAll(cards);
-		curr.markCardSpent(cards.size());
 
 		if (curr.getOrigins().synergy() == Race.FAMILIAR) {
 			for (Drawable<?> c : cards) {
@@ -843,25 +836,21 @@ public class Shoukan extends GameInstance<Phase> {
 			chosen.getStats().getData().put("consumed", consumed);
 		}
 
-		try {
-			if (!chosen.execute(chosen.toParameters(tgt))) {
-				if (!chosen.isAvailable()) {
-					reportEvent("str/effect_interrupted", true, chosen);
-					return true;
-				}
-
-				return false;
+		if (!chosen.execute(chosen.toParameters(tgt))) {
+			if (!chosen.isAvailable()) {
+				reportEvent("str/effect_interrupted", true, chosen);
+				return true;
 			}
 
-			if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
-				stack.add(chosen);
-			}
-
-			reportEvent("str/activate_card", true, curr.getName(), chosen.getBase().getTags().contains("SECRET") ? getString("str/a_spell") : chosen);
-			return true;
-		} finally {
-			curr.markCardSpent();
+			return false;
 		}
+
+		if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
+			stack.add(chosen);
+		}
+
+		reportEvent("str/activate_card", true, curr.getName(), chosen.getBase().getTags().contains("SECRET") ? getString("str/a_spell") : chosen);
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -1108,7 +1097,6 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.getGraveyard().add(card);
 		curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
-		curr.markCardSpent();
 		if (card instanceof Senshi) {
 			curr.setSummoned(true);
 		}
@@ -2584,7 +2572,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.reduceOriginCooldown(1);
 		curr.setCanAttack(true);
 		curr.setSummoned(false);
-		curr.resetCardsSpent();
+		curr.resetDraws();
 		curr.flushDiscard();
 
 		if (curr.getOrigins().synergy() == Race.WRAITH) {
