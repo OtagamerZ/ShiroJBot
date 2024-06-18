@@ -119,7 +119,7 @@ public class Hand {
 		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
-	}, d -> d.setCurrentStack(getCards(false)), Utils::doNothing);
+	}, d -> d.setCurrentStack(getCards(false)), d -> d.setSolid(false));
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
 		if (getRealDeck().contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {

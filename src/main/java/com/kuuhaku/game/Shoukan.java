@@ -2052,7 +2052,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 		setRestoring(false);
 
-		BufferedImage img = hasHistory() ? arena.render(getLocale(), getHistory()) : arena.render(getLocale());
+		BufferedImage img = arena.render(getLocale());
 		byte[] bytes = IO.getBytes(img, "png");
 
 		AtomicBoolean registered = new AtomicBoolean();
