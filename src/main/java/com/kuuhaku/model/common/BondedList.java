@@ -30,54 +30,60 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class BondedList<T> extends TreeList<T> {
-	private final BiFunction<T, ListIterator<T>, Boolean> onAdd;
+	private final BiFunction<T, ListIterator<T>, Boolean> condition;
+	private final Consumer<T> onAdd;
 	private final Consumer<T> onRemove;
 
-	public static <T> BondedList<T> withBind(BiFunction<T, ListIterator<T>, Boolean> onAdd) {
-		return withBind(onAdd, t -> {
-		});
-	}
-
-	public static <T> BondedList<T> withBind(Consumer<T> onRemove) {
-		return withBind((t, i) -> true, onRemove);
-	}
-
-	public static <T> BondedList<T> withBind(BiFunction<T, ListIterator<T>, Boolean> onAdd, Consumer<T> onRemove) {
-		return new BondedList<>(onAdd, onRemove);
+	public static <T> BondedList<T> withBind(BiFunction<T, ListIterator<T>, Boolean> condition) {
+		return new BondedList<>(condition);
 	}
 
 	public BondedList() {
 		this((a, b) -> true, t -> {
+		}, t -> {
 		});
 	}
 
-	public BondedList(BiFunction<T, ListIterator<T>, Boolean> onAdd) {
-		this(onAdd, t -> {
+	public BondedList(BiFunction<T, ListIterator<T>, Boolean> condition) {
+		this(condition, t -> {
+		}, t -> {
 		});
 	}
 
 	public BondedList(Consumer<T> onRemove) {
-		this((t, i) -> true, onRemove);
+		this((t, i) -> true, t -> {
+		}, onRemove);
 	}
 
-	public BondedList(BiFunction<T, ListIterator<T>, Boolean> onAdd, Consumer<T> onRemove) {
+	public BondedList(Consumer<T> onAdd, Consumer<T> onRemove) {
+		this((t, i) -> true, onAdd, onRemove);
+	}
+
+	public BondedList(BiFunction<T, ListIterator<T>, Boolean> condition, Consumer<T> onRemove) {
+		this(condition, t -> {}, onRemove);
+	}
+
+	public BondedList(BiFunction<T, ListIterator<T>, Boolean> condition, Consumer<T> onAdd, Consumer<T> onRemove) {
+		this.condition = condition;
 		this.onAdd = onAdd;
 		this.onRemove = onRemove;
 	}
 
-	public BondedList(@NotNull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> onAdd) {
-		this(c, onAdd, t -> {
+	public BondedList(@NotNull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> check) {
+		this(c, check, t -> {
+		}, t -> {
 		});
 	}
 
-	public BondedList(@NotNull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> onAdd, Consumer<T> onRemove) {
+	public BondedList(@NotNull Collection<? extends T> c, BiFunction<T, ListIterator<T>, Boolean> condition, Consumer<T> onAdd, Consumer<T> onRemove) {
+		this.condition = condition;
 		this.onAdd = onAdd;
 		this.onRemove = onRemove;
 		addAll(c);
 	}
 
-	public BiFunction<T, ListIterator<T>, Boolean> getOnAdd() {
-		return onAdd;
+	public BiFunction<T, ListIterator<T>, Boolean> getCondition() {
+		return condition;
 	}
 
 	public Consumer<T> getOnRemove() {
@@ -107,7 +113,7 @@ public class BondedList<T> extends TreeList<T> {
 		ListIterator<T> it = aux.listIterator();
 
 		int size = aux.size();
-		boolean ok = onAdd.apply(t, it);
+		boolean ok = condition.apply(t, it);
 		if (aux.size() != size) {
 			addAll(index, aux);
 			aux.clear();
@@ -116,12 +122,15 @@ public class BondedList<T> extends TreeList<T> {
 		}
 
 		if (ok) {
+			onAdd.accept(t);
 			it.add(t);
 		}
 
 		it = aux.listIterator();
 		while (it.hasNext()) {
-			super.add(Math.min(index, size()), it.next());
+			T next = it.next();
+			onAdd.accept(next);
+			super.add(Math.min(index, size()), next);
 			it.remove();
 		}
 

@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.Hand;
@@ -92,6 +93,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	private transient Hand hand = null;
 	private transient StashedCard stashRef = null;
+	private transient BondedList<?> currentStack;
 
 	@Transient
 	private byte state = 0b10;
@@ -253,6 +255,16 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@Override
 	public void setStashRef(StashedCard sc) {
 		stashRef = sc;
+	}
+
+	@Override
+	public BondedList<?> getCurrentStack() {
+		return currentStack;
+	}
+
+	@Override
+	public void setCurrentStack(BondedList<?> stack) {
+		currentStack = stack;
 	}
 
 	@Override

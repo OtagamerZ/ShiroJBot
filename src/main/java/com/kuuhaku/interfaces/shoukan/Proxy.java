@@ -18,6 +18,7 @@
 
 package com.kuuhaku.interfaces.shoukan;
 
+import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 
 public interface Proxy<T extends EffectHolder<T>> {
@@ -25,5 +26,13 @@ public interface Proxy<T extends EffectHolder<T>> {
 
 	default CardExtra getStats() {
 		return getOriginal().getStats();
+	}
+
+	default BondedList<?> getCurrentStack() {
+		return getOriginal().getCurrentStack();
+	}
+
+	default void setCurrentStack(BondedList<?> stack) {
+		getOriginal().setCurrentStack(stack);
 	}
 }

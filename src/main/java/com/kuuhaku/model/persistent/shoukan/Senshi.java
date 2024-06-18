@@ -57,7 +57,6 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
@@ -90,48 +89,38 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Transient
 	private final transient BondedList<Evogear> equipments = new BondedList<>((e, it) -> {
-		boolean result = ((Supplier<Boolean>) () -> {
-			if (getEquipments().contains(e)) return false;
+		if (getEquipments().contains(e)) return false;
 
-			e.setEquipper(this);
-			e.setHand(this.getHand());
-			e.executeAssert(ON_INITIALIZE);
+		e.setEquipper(this);
+		e.setHand(this.getHand());
+		e.executeAssert(ON_INITIALIZE);
 
-			Shoukan game = this.getGame();
-			getHand().getData().put("last_equipment", e);
-			getHand().getData().put("last_evogear", e);
-			game.trigger(ON_EQUIP, asSource(ON_EQUIP));
+		Shoukan game = this.getGame();
+		getHand().getData().put("last_equipment", e);
+		getHand().getData().put("last_evogear", e);
+		game.trigger(ON_EQUIP, asSource(ON_EQUIP));
 
-			if (e.hasCharm(Charm.TIMEWARP)) {
-				int times = Charm.TIMEWARP.getValue(e.getTier());
-				for (int i = 0; i < times; i++) {
-					getStats().getPower().set(e, -0.1 * (i + 1));
-					game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
-					game.trigger(ON_TURN_END, asSource(ON_TURN_END));
-				}
-
-				getStats().getPower().set(e, 0);
+		if (e.hasCharm(Charm.TIMEWARP)) {
+			int times = Charm.TIMEWARP.getValue(e.getTier());
+			for (int i = 0; i < times; i++) {
+				getStats().getPower().set(e, -0.1 * (i + 1));
+				game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
+				game.trigger(ON_TURN_END, asSource(ON_TURN_END));
 			}
 
-			if (e.hasCharm(Charm.CLONE)) {
-				game.putAtOpenSlot(this.getSide(), true, withCopy(s -> {
-					s.getStats().getAttrMult().set(-1 + (0.25 * e.getTier()));
-					s.getStats().getData().put("cloned", true);
-				}));
-			}
-
-			return true;
-		}).get();
-
-		if (result) {
-				getHand().getCards().remove(e);
-				getHand().getRealDeck().remove(e);
-				getHand().getGraveyard().remove(e);
-				getHand().getDiscard().remove(e);
-				getGame().getBanned().remove(e);
+			getStats().getPower().set(e, 0);
 		}
 
-		return result;
+		if (e.hasCharm(Charm.CLONE)) {
+			game.putAtOpenSlot(this.getSide(), true, withCopy(s -> {
+				s.getStats().getAttrMult().set(-1 + (0.25 * e.getTier()));
+				s.getStats().getData().put("cloned", true);
+			}));
+		}
+
+		return true;
+	}, e -> {
+		e.setCurrentStack(getEquipments(false));
 	}, e -> {
 		e.executeAssert(ON_REMOVE);
 		e.setEquipper(null);
@@ -147,6 +136,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient TargetType targetType = TargetType.NONE;
 	private transient ElementType element = null;
 	private transient StashedCard stashRef = null;
+	private transient BondedList<?> currentStack;
 
 	@Transient
 	private int state = 0b10;
@@ -257,7 +247,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public BondedList<Evogear> getEquipments() {
-		equipments.removeIf(e -> !equals(e.getEquipper()));
+		return getEquipments(true);
+	}
+
+	public BondedList<Evogear> getEquipments(boolean sweep) {
+		if (sweep) {
+			equipments.removeIf(e -> !equals(e.getEquipper()) || e.getCurrentStack() != equipments);
+		}
 
 		if (equipments.size() > 3) {
 			int fixs = (int) equipments.stream().filter(EffectHolder::isFixed).count();
@@ -1219,7 +1215,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 									);
 								}
 
-								if (game.activateProxy(card, params)) {
+								if (game.activateTrap(card, params)) {
 									triggered.add(card.getId());
 									game.getChannel().sendMessage(game.getString("str/trap_activation", card)).queue();
 								}
@@ -1418,6 +1414,16 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public void setStashRef(StashedCard sc) {
 		stashRef = sc;
+	}
+
+	@Override
+	public BondedList<?> getCurrentStack() {
+		return currentStack;
+	}
+
+	@Override
+	public void setCurrentStack(BondedList<?> stack) {
+		currentStack = stack;
 	}
 
 	@Override

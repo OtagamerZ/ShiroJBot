@@ -30,7 +30,6 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
-import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.Calc;
@@ -42,15 +41,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class Arena implements Renderer {
 	private final ExecutorService renderThread = Executors.newFixedThreadPool(3);
@@ -80,50 +76,37 @@ public class Arena implements Renderer {
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
 	private final BondedList<Drawable<?>> banned = new BondedList<>((d, it) -> {
-		boolean result = ((Supplier<Boolean>) () -> {
-			if (d.getHand() == null) return false;
-			else if (d.isEthereal() || getBanned().contains(d)) return false;
+		if (d.getHand() == null) return false;
+		else if (getBanned().contains(d)) return false;
 
-			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-				d.reset();
-				it.add(p.getOriginal());
-				return false;
-			}
-
-			getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
-
-			if (d instanceof Senshi s) {
-				if (!s.getEquipments().isEmpty()) {
-					for (Evogear evogear : s.getEquipments()) {
-						it.add(evogear);
-					}
-				}
-			} else if (d instanceof Evogear e && e.getEquipper() != null) {
-				e.getEquipper().getEquipments().remove(e);
-			}
-
+		if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 			d.reset();
-
-			if (d instanceof Proxy<?> p) {
-				d.reset();
-				it.add(p.getOriginal());
-				return false;
-			}
-
-			return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
-		}).get();
-
-		if (result) {
-			for (Hand h : getGame().getHands().values()) {
-				h.getCards().remove(d);
-				h.getRealDeck().remove(d);
-				h.getGraveyard().remove(d);
-				h.getDiscard().remove(d);
-			}
+			it.add(p.getOriginal());
+			return false;
 		}
 
-		return result;
-	});
+		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
+
+		if (d instanceof Senshi s) {
+			if (!s.getEquipments().isEmpty()) {
+				for (Evogear evogear : s.getEquipments()) {
+					it.add(evogear);
+				}
+			}
+		} else if (d instanceof Evogear e && e.getEquipper() != null) {
+			e.getEquipper().getEquipments().remove(e);
+		}
+
+		d.reset();
+
+		if (d instanceof Proxy<?> p) {
+			d.reset();
+			it.add(p.getOriginal());
+			return false;
+		}
+
+		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
+	}, d -> d.setCurrentStack(getBanned(false)), Utils::doNothing);
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
 	private Field field = null;
@@ -154,7 +137,13 @@ public class Arena implements Renderer {
 	}
 
 	public BondedList<Drawable<?>> getBanned() {
-		banned.removeIf(d -> !d.keepOnDestroy());
+		return getBanned(true);
+	}
+
+	public BondedList<Drawable<?>> getBanned(boolean sweep) {
+		if (sweep) {
+			banned.removeIf(d -> !d.keepOnDestroy() || d.isEthereal() || d.getCurrentStack() != banned);
+		}
 
 		return banned;
 	}
@@ -194,58 +183,6 @@ public class Arena implements Renderer {
 		Graph.applyTransformed((Graphics2D) g2d.create(), 0, BAR_SIZE.height, drawCenter());
 		Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(top));
 		Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(bottom));
-
-		return bi;
-	}
-
-	@Override
-	public BufferedImage render(I18N locale, Deque<HistoryLog> history) {
-		BufferedImage source = render(locale);
-
-		BufferedImage bi = new BufferedImage((int) (source.getWidth() * 1.33), source.getHeight(), source.getType());
-		Graphics2D g2d = bi.createGraphics();
-		g2d.setRenderingHints(Constants.SD_HINTS);
-
-		g2d.drawImage(source, 0, 0, null);
-
-		Graph.applyTransformed(g2d, source.getWidth(), BAR_SIZE.height, g1 -> {
-			int w = source.getWidth() / 3;
-
-			g1.setColor(new Color(0x50000000, true));
-			g1.fillRect(0, 0, w, SIZE.height);
-			g1.setFont(Fonts.OPEN_SANS.deriveBold((int) (BAR_SIZE.height / 2.5)));
-			g1.setClip(new Rectangle(0, 0, SIZE.width, SIZE.height));
-
-			Graph.applyTransformed(g1, 0, SIZE.height, g2 -> {
-				String hist = history.stream()
-						.map(log -> "{" + log.side().name() + "}" + log.message())
-						.collect(Collectors.joining("\n\n"));
-
-				int h = (int) Graph.getMultilineStringBounds(g2, hist, w).getHeight();
-
-				Color top = game.getHands().get(Side.TOP).getUserDeck().getStyling().getFrame().getThemeColor();
-				Color bot = game.getHands().get(Side.BOTTOM).getUserDeck().getStyling().getFrame().getThemeColor();
-
-				Graph.drawMultilineString(g2, hist,
-						MARGIN.x, -h, w - MARGIN.x, 0,
-						str -> {
-							boolean clrChange = false;
-							if (str.startsWith("{TOP}")) {
-								g2.setColor(top);
-								clrChange = true;
-							} else if (str.startsWith("{BOTTOM}")) {
-								g2.setColor(bot);
-								clrChange = true;
-							}
-
-							return clrChange ? str.substring(str.indexOf("}") + 1) : str;
-						},
-						(str, px, py) -> Graph.drawOutlinedString(g2, str, px, py, 6, Color.BLACK)
-				);
-			});
-		});
-
-		g2d.dispose();
 
 		return bi;
 	}

@@ -69,6 +69,7 @@ public class OpenCommand implements Executable {
 
 			Drop dp = drop.get();
 			dp.award(acc);
+			acc.setDynValue("drops", Integer.parseInt(acc.getDynValue("drops", "0")) + 1);
 
 			event.channel().sendMessage(locale.get("success/claimed", event.user().getAsMention()))
 					.setEmbeds(
