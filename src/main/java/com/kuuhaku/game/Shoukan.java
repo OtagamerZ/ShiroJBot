@@ -1176,6 +1176,7 @@ public class Shoukan extends GameInstance<Phase> {
 			posHash = target.posHash();
 			trigger(ON_ATTACK, source.asSource(ON_ATTACK), t);
 		} else {
+			trigger(ON_DIRECT, source.asSource(ON_DIRECT));
 			trigger(ON_ATTACK, source.asSource(ON_ATTACK));
 		}
 
