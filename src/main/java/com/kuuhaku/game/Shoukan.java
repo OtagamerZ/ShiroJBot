@@ -1175,6 +1175,8 @@ public class Shoukan extends GameInstance<Phase> {
 			Target t = target.asTarget(ON_DEFEND);
 			posHash = target.posHash();
 			trigger(ON_ATTACK, source.asSource(ON_ATTACK), t);
+		} else {
+			trigger(ON_ATTACK, source.asSource(ON_ATTACK));
 		}
 
 		int dmg = damage;
@@ -1200,11 +1202,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 		boolean hit = true;
 		boolean win = false;
-		String outcome = getString("str/combat_skip");
+		String outcome = "";
 		try {
 			boolean validTarget = true;
 			if (target != null) {
 				validTarget = posHash == target.posHash();
+				outcome = getString("str/combat_skip");
 			}
 
 			if (validTarget && ((announce && source.canAttack()) || source.isAvailable())) {
