@@ -28,7 +28,7 @@ public abstract class Bit {
 
 	public static int set(int bits, int index, int value, int size) {
 		index *= size;
-		value = Math.max(0, value);
+		if (value < 0) value = 0;
 
 		if (!Utils.between(index, 0, Integer.SIZE)) return bits;
 
