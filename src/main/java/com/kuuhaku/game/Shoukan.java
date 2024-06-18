@@ -142,17 +142,12 @@ public class Shoukan extends GameInstance<Phase> {
 	protected void begin() {
 		setRestoring(false);
 
-		setPhase(Phase.PLAN);
-
-		Hand curr = getCurrent();
-		curr.modMP(curr.getBase().mpGain().get());
-		curr.resetDraws();
-
 		for (Hand h : hands.values()) {
 			for (Drawable<?> d : h.getRealDeck()) {
 				trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
 			}
 
+			h.resetDraws();
 			h.manualDraw(h.getRemainingDraws());
 			h.loadArchetype();
 
@@ -161,6 +156,11 @@ public class Shoukan extends GameInstance<Phase> {
 				h.getRegDeg().add(Math.max(0, h.getBase().hp() * prcnt), 0);
 			}
 		}
+
+		setPhase(Phase.PLAN);
+
+		Hand curr = getCurrent();
+		curr.modMP(curr.getBase().mpGain().get());
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		reportEvent("str/game_start", false, "<@" + curr.getUid() + ">");
@@ -2513,6 +2513,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.flushDiscard();
 		trigger(ON_TURN_END, curr.getSide());
 		curr.applyRegDeg();
+		curr.resetDraws();
 
 		if (arcade == Arcade.DECK_ROYALE) {
 			boolean noHand = curr.getCards().stream().noneMatch(d -> d instanceof Senshi);
@@ -2573,7 +2574,6 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.reduceOriginCooldown(1);
 		curr.setCanAttack(true);
 		curr.setSummoned(false);
-		curr.resetDraws();
 		curr.flushDiscard();
 
 		if (curr.getOrigins().synergy() == Race.WRAITH) {
