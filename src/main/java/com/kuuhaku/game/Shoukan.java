@@ -1028,7 +1028,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (!chosen.execute(chosen.toParameters(tgt))) {
 			if (!chosen.isAvailable()) {
-				chosen.setAvailable(false);
 				reportEvent("str/effect_interrupted", true, chosen);
 				return true;
 			}
@@ -1037,7 +1036,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
-			chosen.setAvailable(false);
 			stack.add(chosen.copy());
 		}
 
