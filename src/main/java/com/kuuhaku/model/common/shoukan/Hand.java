@@ -744,7 +744,7 @@ public class Hand {
 
 	public BondedList<Drawable<?>> getDiscard(boolean sweep) {
 		if (sweep) {
-			discard.removeIf(d -> !cards.contains(d) || d.isEthereal() || !d.keepOnDestroy() || d.getCurrentStack() != discard);
+			discard.removeIf(d -> d.isEthereal() || !d.keepOnDestroy() || d.getCurrentStack() != discard);
 		}
 
 		return discard;
