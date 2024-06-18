@@ -147,6 +147,7 @@ public class Shoukan extends GameInstance<Phase> {
 				trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
 			}
 
+			h.resetDraws();
 			h.manualDraw(h.getRemainingDraws());
 			h.loadArchetype();
 
