@@ -1161,11 +1161,11 @@ public class Hand {
 
 	public void consumeDraw() {
 		int curr = Bit.get(state, 3, 8);
-		state = Bit.set(state, 3, curr + 1, 8);
+		state = Bit.set(state, 3, curr - 1, 8);
 	}
 
 	public void resetDraws() {
-		state = Bit.set(state, 3, 0, 8);
+		state = Bit.set(state, 3, base.handCapacity().get(), 8);
 	}
 
 	public HandExtra getStats() {
