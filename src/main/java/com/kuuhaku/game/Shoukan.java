@@ -418,6 +418,7 @@ public class Shoukan extends GameInstance<Phase> {
 					default -> CardState.ATTACK;
 				};
 
+				curr.markCardSpent();
 				curr.setSummoned(true);
 				reportEvent("str/place_card_fail", true, curr.getName(), d, state.toString(getLocale()));
 				return true;
@@ -997,6 +998,7 @@ public class Shoukan extends GameInstance<Phase> {
 				curr.getGraveyard().add(d);
 				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
+				curr.markCardSpent();
 				reportEvent("str/activate_card_fail", true, curr.getName(), d);
 				return true;
 			}
@@ -1025,21 +1027,25 @@ public class Shoukan extends GameInstance<Phase> {
 			chosen.getStats().getData().put("consumed", consumed);
 		}
 
-		if (!chosen.execute(chosen.toParameters(tgt))) {
-			if (!chosen.isAvailable()) {
-				reportEvent("str/effect_interrupted", true, chosen);
-				return true;
+		try {
+			if (!chosen.execute(chosen.toParameters(tgt))) {
+				if (!chosen.isAvailable()) {
+					reportEvent("str/effect_interrupted", true, chosen);
+					return true;
+				}
+
+				return false;
 			}
 
-			return false;
-		}
+			if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
+				stack.add(chosen);
+			}
 
-		if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
-			stack.add(chosen);
+			reportEvent("str/activate_card", true, curr.getName(), chosen.getBase().getTags().contains("SECRET") ? getString("str/a_spell") : chosen);
+			return true;
+		} finally {
+			curr.markCardSpent();
 		}
-
-		reportEvent("str/activate_card", true, curr.getName(), chosen.getBase().getTags().contains("SECRET") ? getString("str/a_spell") : chosen);
-		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
