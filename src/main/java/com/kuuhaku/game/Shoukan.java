@@ -142,6 +142,12 @@ public class Shoukan extends GameInstance<Phase> {
 	protected void begin() {
 		setRestoring(false);
 
+		setPhase(Phase.PLAN);
+
+		Hand curr = getCurrent();
+		curr.modMP(curr.getBase().mpGain().get());
+		curr.resetDraws();
+
 		for (Hand h : hands.values()) {
 			for (Drawable<?> d : h.getRealDeck()) {
 				trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
@@ -155,12 +161,6 @@ public class Shoukan extends GameInstance<Phase> {
 				h.getRegDeg().add(Math.max(0, h.getBase().hp() * prcnt), 0);
 			}
 		}
-
-		setPhase(Phase.PLAN);
-
-		Hand curr = getCurrent();
-		curr.modMP(curr.getBase().mpGain().get());
-		curr.resetDraws();
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		reportEvent("str/game_start", false, "<@" + curr.getUid() + ">");
