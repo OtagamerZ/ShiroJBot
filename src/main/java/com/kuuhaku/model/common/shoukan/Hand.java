@@ -121,7 +121,7 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	}, d -> d.setCurrentStack(getCards(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
-		if (d.isEthereal() || getRealDeck().contains(d)) return false;
+		if (getRealDeck().contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
 			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 				d.reset();
@@ -154,7 +154,7 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	}, d -> d.setCurrentStack(getRealDeck(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
-		if (d.isEthereal() || getGraveyard().contains(d)) return false;
+		if (getGraveyard().contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
 			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 				d.reset();
@@ -234,7 +234,7 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	}, d -> d.setCurrentStack(getGraveyard(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
-		if (d.isEthereal() || getDiscard().contains(d)) return false;
+		if (getDiscard().contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
 			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 				d.reset();
@@ -429,7 +429,7 @@ public class Hand {
 
 	public BondedList<Drawable<?>> getRealDeck(boolean sweep) {
 		if (sweep) {
-			deck.removeIf(d -> !equals(d.getHand()) || d.getCurrentStack() != deck);
+			deck.removeIf(d -> !equals(d.getHand()) || d.isEthereal() || d.getCurrentStack() != deck);
 		}
 
 		return deck;
@@ -732,7 +732,7 @@ public class Hand {
 
 	public BondedList<Drawable<?>> getGraveyard(boolean sweep) {
 		if (sweep) {
-			graveyard.removeIf(d -> !equals(d.getHand()) || !d.keepOnDestroy() || d.getCurrentStack() != graveyard);
+			graveyard.removeIf(d -> !equals(d.getHand()) || d.isEthereal() || !d.keepOnDestroy() || d.getCurrentStack() != graveyard);
 		}
 
 		return graveyard;
@@ -744,7 +744,7 @@ public class Hand {
 
 	public BondedList<Drawable<?>> getDiscard(boolean sweep) {
 		if (sweep) {
-			discard.removeIf(d -> !cards.contains(d) || !d.keepOnDestroy() || d.getCurrentStack() != discard);
+			discard.removeIf(d -> !cards.contains(d) || d.isEthereal() || !d.keepOnDestroy() || d.getCurrentStack() != discard);
 		}
 
 		return discard;

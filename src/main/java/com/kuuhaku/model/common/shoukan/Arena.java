@@ -80,7 +80,7 @@ public class Arena implements Renderer {
 	private final Map<Side, List<SlotColumn>> slots;
 	private final BondedList<Drawable<?>> banned = new BondedList<>((d, it) -> {
 		if (d.getHand() == null) return false;
-		else if (d.isEthereal() || getBanned().contains(d)) return false;
+		else if (getBanned().contains(d)) return false;
 
 		if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 			d.reset();
@@ -109,7 +109,7 @@ public class Arena implements Renderer {
 		}
 
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
-	}, d -> d.setCurrentStack(getBanned(false)));
+	}, d -> d.setCurrentStack(getBanned(false)), Utils::doNothing);
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
 	private Field field = null;
@@ -145,7 +145,7 @@ public class Arena implements Renderer {
 
 	public BondedList<Drawable<?>> getBanned(boolean sweep) {
 		if (sweep) {
-			banned.removeIf(d -> !d.keepOnDestroy() || d.getCurrentStack() != banned);
+			banned.removeIf(d -> !d.keepOnDestroy() || d.isEthereal() || d.getCurrentStack() != banned);
 		}
 
 		return banned;
