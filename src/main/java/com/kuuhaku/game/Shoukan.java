@@ -892,7 +892,7 @@ public class Shoukan extends GameInstance<Phase> {
 				selIdxs.add(idx);
 			}
 
-			if (selIdxs.size() > selection.required()) {
+			if (selection.required() != null && selIdxs.size() > selection.required()) {
 				selIdxs.removeFirst();
 			}
 		}
