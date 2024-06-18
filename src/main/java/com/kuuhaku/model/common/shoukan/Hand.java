@@ -684,11 +684,12 @@ public class Hand {
 		}
 
 		Utils.shuffle(deck, game.getRng());
-		consumeDraws(-i);
 
 		if (origin.synergy() == Race.DJINN) {
+			consumeDraws(-(i - 1));
 			manualDraw(i - 1);
 		} else {
+			consumeDraws(-i);
 			manualDraw(i);
 		}
 	}
