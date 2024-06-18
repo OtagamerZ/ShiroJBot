@@ -32,6 +32,7 @@ public abstract class Bit {
 
 		int mask = ((1 << size) - 1) << index;
 		if (value > mask) value -= mask;
+		else if (value < 0) value = 0;
 
 		return (bits & ~mask) | value << index;
 	}
