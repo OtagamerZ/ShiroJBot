@@ -684,7 +684,7 @@ public class Hand {
 		}
 
 		Utils.shuffle(deck, game.getRng());
-		resetDraws();
+		consumeDraws(-i);
 
 		if (origin.synergy() == Race.DJINN) {
 			manualDraw(i - 1);
@@ -1160,9 +1160,14 @@ public class Hand {
 	}
 
 	public void consumeDraw() {
-		int curr = Bit.get(state, 3, 8);
-		state = Bit.set(state, 3, curr - 1, 8);
+		consumeDraws(1);
 	}
+
+	public void consumeDraws(int draws) {
+		int curr = Bit.get(state, 3, 8);
+		state = Bit.set(state, 3, curr - draws, 8);
+	}
+
 
 	public void resetDraws() {
 		state = Bit.set(state, 3, base.handCapacity().get(), 8);
