@@ -1171,7 +1171,7 @@ public class Hand {
 
 
 	public void resetDraws() {
-		state = Bit.set(state, 3, base.handCapacity().get(), 8);
+		state = Bit.set(state, 3, Math.max(0, base.handCapacity().get() - cards.size()), 8);
 	}
 
 	public HandExtra getStats() {
