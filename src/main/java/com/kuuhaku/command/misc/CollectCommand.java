@@ -64,6 +64,7 @@ public class CollectCommand implements Executable {
 			kc.save();
 
 			acc.consumeCR(kc.getPrice(), "Collected " + kc);
+			acc.setDynValue("collected", Integer.parseInt(acc.getDynValue("collected", "0")) + 1);
 			event.channel().sendMessage(locale.get("success/collected", event.user().getAsMention(), kc)).queue();
 		} catch (NullPointerException e) {
 			event.channel().sendMessage(locale.get("error/no_card")).queue();
