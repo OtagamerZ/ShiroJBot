@@ -66,6 +66,7 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.ArrayUtils;
 import org.intellij.lang.annotations.MagicConstant;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -384,43 +385,34 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		int extraMp = 0;
-		if (curr.getOrigins().synergy() == Race.HOMUNCULUS) {
-			extraMp = curr.getDiscard().size();
-		}
-
 		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
 		if (!d.isAvailable() || d.isManipulated()) {
 			getChannel().sendMessage(getString("error/card_unavailable")).queue();
 			return false;
 		}
 
-		if (d instanceof Senshi chosen) {
-			if (chosen.getHPCost() >= curr.getHP()) {
-				getChannel().sendMessage(getString("error/not_enough_hp")).queue();
-				return false;
-			} else if (chosen.getMPCost() > curr.getMP() + extraMp) {
-				getChannel().sendMessage(getString("error/not_enough_mp")).queue();
-				return false;
-			} else if (chosen.getSCCost() > curr.getDiscard().size()) {
-				getChannel().sendMessage(getString("error/not_enough_sc")).queue();
-				return false;
-			}
-		} else {
-			if (args.getString("mode").equals("b") && placeProxy(curr, args)) return true;
-			else if (curr.getLockTime(Lock.BLIND) > 0) {
-				curr.getGraveyard().add(d);
-				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
+		return putCard(curr, d, args);
+	}
 
+	private boolean putCard(Hand curr, Drawable<?> d, JSONObject args) {
+		int extraMp = 0;
+		if (curr.getOrigins().synergy() == Race.HOMUNCULUS) {
+			extraMp = curr.getDiscard().size();
+		}
+
+		if (d instanceof Senshi s) {
+			if (!checkConstraints(curr, s)) return false;
+		} else {
+			if (d instanceof Evogear e && e.isSpell() && args.getString("mode").equals("b")) {
+				return putCard(curr, new TrapSpell(e), args);
+			} else if (curr.getLockTime(Lock.BLIND) > 0) {
 				CardState state = switch (args.getString("mode")) {
 					case "d" -> CardState.DEFENSE;
 					case "b" -> CardState.FLIPPED;
 					default -> CardState.ATTACK;
 				};
 
-				curr.markCardSpent();
-				curr.setSummoned(true);
-				reportEvent("str/place_card_fail", true, curr.getName(), d, state.toString(getLocale()));
+				blindFail(curr, d, "str/place_card_fail", curr.getName(), d, state.toString(getLocale()));
 				return true;
 			}
 
@@ -445,178 +437,32 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		int usedExtra = Calc.clamp(chosen.getMPCost() - curr.getMP(), 0, extraMp);
+		int usedExtra = Calc.clamp(s.getMPCost() - curr.getMP(), 0, extraMp);
 		switch (args.getString("mode")) {
-			case "d" -> chosen.setDefending(true);
-			case "b" -> chosen.setFlipped(true);
+			case "d" -> s.setDefending(true);
+			case "b" -> s.setFlipped(true);
 		}
 
 		if (curr.getOrigins().synergy() != Race.HERALD || curr.hasSummoned()) {
-			curr.consumeHP(chosen.getHPCost());
-			curr.consumeMP(chosen.getMPCost() - usedExtra);
+			curr.consumeHP(s.getHPCost());
+			curr.consumeMP(s.getMPCost() - usedExtra);
 		}
 
-		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost() + usedExtra);
+		List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost() + usedExtra);
 		if (!consumed.isEmpty()) {
-			chosen.getStats().getData().put("consumed", consumed);
+			s.getStats().getData().put("consumed", consumed);
 		}
 
 		if (args.has("notCombat")) {
-			slot.setBottom(chosen);
+			slot.setBottom(s);
 		} else {
-			slot.setTop(chosen);
+			slot.setTop(s);
 		}
 
 		curr.markCardSpent();
 		curr.setSummoned(true);
-		reportEvent("str/place_card", true, curr.getName(), chosen.isFlipped() ? getString("str/a_card") : chosen, chosen.getState().toString(getLocale()));
+		reportEvent("str/place_card", true, curr.getName(), s.isFlipped() ? getString("str/a_card") : s, s.getState().toString(getLocale()));
 		return true;
-	}
-
-	private boolean placeProxy(Hand curr, JSONObject args) {
-		int extraMp = 0;
-		if (curr.getOrigins().synergy() == Race.HOMUNCULUS) {
-			extraMp = curr.getDiscard().size();
-		}
-
-		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
-		if (!d.isAvailable() || d.isManipulated()) {
-			getChannel().sendMessage(getString("error/card_unavailable")).queue();
-			return false;
-		}
-
-		if (d instanceof Evogear chosen && chosen.isSpell()) {
-			if (chosen.isPassive()) {
-				getChannel().sendMessage(getString("error/card_passive")).queue();
-				return false;
-			} else if (chosen.getHPCost() >= curr.getHP()) {
-				getChannel().sendMessage(getString("error/not_enough_hp")).queue();
-				return false;
-			} else if (chosen.getMPCost() > curr.getMP()) {
-				getChannel().sendMessage(getString("error/not_enough_mp")).queue();
-				return false;
-			} else if (chosen.getSCCost() > curr.getDiscard().size()) {
-				getChannel().sendMessage(getString("error/not_enough_sc")).queue();
-				return false;
-			}
-
-			int locktime = curr.getLockTime(Lock.SPELL);
-			if (locktime > 0 && !chosen.hasTrueEffect()) {
-				getChannel().sendMessage(getString("error/spell_locked", locktime)).queue();
-				return false;
-			}
-		} else {
-			if (curr.getLockTime(Lock.BLIND) > 0) {
-				curr.getGraveyard().add(d);
-				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
-
-				CardState state = switch (args.getString("mode")) {
-					case "d" -> CardState.DEFENSE;
-					case "b" -> CardState.FLIPPED;
-					default -> CardState.ATTACK;
-				};
-
-				curr.markCardSpent();
-				curr.setSummoned(true);
-				reportEvent("str/place_card_fail", true, curr.getName(), d, state.toString(getLocale()));
-				return true;
-			}
-
-			getChannel().sendMessage(getString("error/wrong_card_type")).queue();
-			return false;
-		}
-
-		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
-		if (slot.isLocked()) {
-			int time = slot.getLock();
-
-			if (time == -1) {
-				getChannel().sendMessage(getString("error/slot_locked_perma")).queue();
-			} else {
-				getChannel().sendMessage(getString("error/slot_locked", time)).queue();
-			}
-			return false;
-		}
-
-		if ((args.has("notCombat") && slot.hasBottom()) || (!args.has("notCombat") && slot.hasTop())) {
-			getChannel().sendMessage(getString("error/slot_occupied")).queue();
-			return false;
-		}
-
-		TrapSpell proxy = new TrapSpell(chosen);
-		int usedExtra = Calc.clamp(chosen.getMPCost() - curr.getMP(), 0, extraMp);
-		if (slot.hasBottom()) {
-			getChannel().sendMessage(getString("error/slot_occupied")).queue();
-			return false;
-		}
-
-		if (curr.getOrigins().synergy() != Race.HERALD || curr.hasSummoned()) {
-			curr.consumeHP(chosen.getHPCost());
-			curr.consumeMP(chosen.getMPCost() - usedExtra);
-		}
-
-		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
-		if (!consumed.isEmpty()) {
-			proxy.getStats().getData().put("consumed", consumed);
-		}
-
-		if (args.has("notCombat")) {
-			slot.setBottom(proxy);
-		} else {
-			slot.setTop(proxy);
-		}
-
-		curr.getGraveyard().add(d);
-		curr.markCardSpent();
-		curr.setSummoned(true);
-		reportEvent("str/place_card", true, curr.getName(), proxy.isFlipped() ? getString("str/a_card") : proxy, proxy.getState().toString(getLocale()));
-		return true;
-	}
-
-	public boolean activateProxy(Senshi proxy, EffectParameters ep) {
-		if (!(proxy instanceof TrapSpell p)) return false;
-
-		Evogear e = p.getOriginal();
-		Hand hand = e.getHand();
-
-		Targeting tgt = switch (e.getTargetType()) {
-			case NONE -> new Targeting(hand, -1, -1);
-			case ALLY -> {
-				if (ep.allies().length == 0) {
-					yield null;
-				}
-
-				yield new Targeting(hand, ep.allies()[0].index(), -1);
-			}
-			case ENEMY -> {
-				if (ep.enemies().length == 0) {
-					yield null;
-				}
-
-				yield new Targeting(hand, -1, ep.enemies()[0].index());
-			}
-			case BOTH -> {
-				if (ep.allies().length == 0 || ep.enemies().length == 0) {
-					yield null;
-				}
-
-				yield new Targeting(hand, ep.allies()[0].index(), ep.enemies()[0].index());
-			}
-		};
-
-		if (tgt == null) return false;
-
-		if (!tgt.validate(e.getTargetType())) {
-			getChannel().sendMessage(getString("error/target", getString("str/target_" + e.getTargetType()))).queue();
-			return false;
-		}
-
-		if (e.execute(ep)) {
-			hand.getGraveyard().add(p);
-			return true;
-		}
-
-		return false;
 	}
 
 	@PhaseConstraint("PLAN")
@@ -643,16 +489,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (d instanceof Evogear chosen && !chosen.isSpell()) {
-			if (chosen.getHPCost() >= curr.getHP()) {
-				getChannel().sendMessage(getString("error/not_enough_hp")).queue();
-				return false;
-			} else if (chosen.getMPCost() > curr.getMP()) {
-				getChannel().sendMessage(getString("error/not_enough_mp")).queue();
-				return false;
-			} else if (chosen.getSCCost() > curr.getDiscard().size()) {
-				getChannel().sendMessage(getString("error/not_enough_sc")).queue();
-				return false;
-			}
+			if (!checkConstraints(curr, d)) return false;
 		} else {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
 				curr.getGraveyard().add(d);
@@ -975,32 +812,10 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (d instanceof Evogear chosen && chosen.isSpell()) {
-			if (chosen.isPassive()) {
-				getChannel().sendMessage(getString("error/card_passive")).queue();
-				return false;
-			} else if (chosen.getHPCost() >= curr.getHP()) {
-				getChannel().sendMessage(getString("error/not_enough_hp")).queue();
-				return false;
-			} else if (chosen.getMPCost() > curr.getMP()) {
-				getChannel().sendMessage(getString("error/not_enough_mp")).queue();
-				return false;
-			} else if (chosen.getSCCost() > curr.getDiscard().size()) {
-				getChannel().sendMessage(getString("error/not_enough_sc")).queue();
-				return false;
-			}
-
-			int locktime = curr.getLockTime(Lock.SPELL);
-			if (locktime > 0 && !chosen.hasTrueEffect()) {
-				getChannel().sendMessage(getString("error/spell_locked", locktime)).queue();
-				return false;
-			}
+			if (!checkConstraints(curr, d)) return false;
 		} else {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
-				curr.getGraveyard().add(d);
-				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
-
-				curr.markCardSpent();
-				reportEvent("str/activate_card_fail", true, curr.getName(), d);
+				blindFail(curr, d, "str/activate_card_fail", d);
 				return true;
 			}
 
@@ -1261,6 +1076,46 @@ public class Shoukan extends GameInstance<Phase> {
 		return false;
 	}
 
+	private boolean checkConstraints(Hand curr, Drawable<?> card) {
+		if (card instanceof Evogear e) {
+			if (e.isPassive()) {
+				getChannel().sendMessage(getString("error/card_passive")).queue();
+				return false;
+			}
+
+			int locktime = curr.getLockTime(Lock.SPELL);
+			if (locktime > 0 && !e.hasTrueEffect()) {
+				getChannel().sendMessage(getString("error/spell_locked", locktime)).queue();
+				return false;
+			}
+		}
+
+		if (card.getHPCost() >= curr.getHP()) {
+			getChannel().sendMessage(getString("error/not_enough_hp")).queue();
+			return false;
+		} else if (card.getMPCost() > curr.getMP()) {
+			getChannel().sendMessage(getString("error/not_enough_mp")).queue();
+			return false;
+		} else if (card.getSCCost() > curr.getDiscard().size()) {
+			getChannel().sendMessage(getString("error/not_enough_sc")).queue();
+			return false;
+		}
+
+		return true;
+	}
+
+	private void blindFail(Hand curr, Drawable<?> card, String message, Object... args) {
+		curr.getGraveyard().add(card);
+		curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
+
+		curr.markCardSpent();
+		if (card instanceof Senshi) {
+			curr.setSummoned(true);
+		}
+
+		reportEvent(message, true, curr.getName(), args);
+	}
+
 	public boolean attack(Senshi source, Senshi target) {
 		return attack(source, target, null, false);
 	}
@@ -1269,9 +1124,24 @@ public class Shoukan extends GameInstance<Phase> {
 		return attack(source, target, damage, false);
 	}
 
-	private boolean attack(Senshi source, Senshi target, Integer damage, boolean announce) {
-		if (target == null) return false;
-		else if (source == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
+	public boolean attack(Senshi source, Senshi target, Integer damage, boolean announce) {
+		return processAttack(source, target, target.getSide(), Utils.getOr(damage, source.getActiveAttr()), announce);
+	}
+
+	public boolean attack(Senshi source, Hand target) {
+		return attack(source, target, null, false);
+	}
+
+	public boolean attack(Senshi source, Hand target, int damage) {
+		return attack(source, target, damage, false);
+	}
+
+	public boolean attack(Senshi source, Hand target, Integer damage, boolean announce) {
+		return processAttack(source, null, target.getSide(), Utils.getOr(damage, source.getActiveAttr()), announce);
+	}
+
+	private boolean processAttack(Senshi source, @Nullable Senshi target, Side tgtSide, int damage, boolean announce) {
+		if (source == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
 			if (announce) {
 				getChannel().sendMessage(getString("error/card_cannot_attack")).queue();
 			}
@@ -1280,7 +1150,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Hand you = source.getHand();
-		Hand op = target.getHand();
+		Hand op = hands.get(tgtSide);
 		int pHP = you.getHP();
 		int eHP = op.getHP();
 
@@ -1292,24 +1162,23 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		if (target.isStasis()) {
-			if (announce) {
-				getChannel().sendMessage(getString("error/card_untargetable")).queue();
+		int posHash = 0;
+		if (target != null) {
+			if (target.isStasis()) {
+				if (announce) {
+					getChannel().sendMessage(getString("error/card_untargetable")).queue();
+				}
+
+				return false;
 			}
 
-			return false;
+			Target t = target.asTarget(ON_DEFEND);
+			posHash = target.posHash();
+			trigger(ON_ATTACK, source.asSource(ON_ATTACK), t);
 		}
 
-		Target t = target.asTarget(ON_DEFEND);
-		int posHash = target.posHash();
-		trigger(ON_ATTACK, source.asSource(ON_ATTACK), t);
-
-		int dmg = Utils.getOr(damage, source.getActiveAttr());
-		if (damage == null) {
-			damage = dmg;
-		}
-
-		if (you.getOrigins().synergy() == Race.DOPPELGANGER && source.getId().equals(target.getId())) {
+		int dmg = damage;
+		if (target != null && you.getOrigins().synergy() == Race.DOPPELGANGER && source.getId().equals(target.getId())) {
 			dmg *= 2;
 		}
 
@@ -1319,7 +1188,11 @@ public class Shoukan extends GameInstance<Phase> {
 			lifesteal += 7;
 		}
 
-		int thorns = (you.getLockTime(Lock.CHARM) > 0 ? 20 : 0) + (int) target.getStats().getThorns().get();
+		int thorns = (you.getLockTime(Lock.CHARM) > 0 ? 20 : 0);
+		if (target != null) {
+			thorns += (int) target.getStats().getThorns().get();
+		}
+
 		double dmgMult = 1;
 		if (dmg > 0 && (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0)) {
 			dmgMult /= 2;
@@ -1329,139 +1202,150 @@ public class Shoukan extends GameInstance<Phase> {
 		boolean win = false;
 		String outcome = getString("str/combat_skip");
 		try {
-			if (posHash == target.posHash() && ((announce && source.canAttack()) || source.isAvailable())) {
+			boolean validTarget = true;
+			if (target != null) {
+				validTarget = posHash == target.posHash();
+			}
+
+			if (validTarget && ((announce && source.canAttack()) || source.isAvailable())) {
 				boolean ignore = source.hasFlag(Flag.NO_COMBAT, true);
-				if (!ignore) {
-					ignore = target.getSlot().getIndex() == -1 || target.hasFlag(Flag.IGNORE_COMBAT, true);
-				}
+				if (target != null) {
+					if (!ignore) {
+						ignore = target.getSlot().getIndex() == -1 || target.hasFlag(Flag.IGNORE_COMBAT, true);
+					}
 
-				if (!ignore) {
-					target.setFlipped(false);
+					if (!ignore) {
+						target.setFlipped(false);
 
-					if (target.isSupporting()) {
-						outcome = getString("str/combat_success", dmg, 0);
+						if (target.isSupporting()) {
+							outcome = getString("str/combat_success", dmg, 0);
 
-						for (Senshi s : target.getNearby()) {
-							s.awaken();
-						}
-
-						op.getGraveyard().add(target);
-
-						dmg = 0;
-						win = true;
-					} else {
-						boolean dbl = op.getOrigins().synergy() == Race.CYBERBEAST && chance(20);
-						boolean unstop = source.hasFlag(Flag.UNSTOPPABLE, true);
-
-						int enemyStats = target.getActiveAttr(dbl);
-						if (source.hasFlag(Flag.IGNORE_EQUIP, true)) {
-							enemyStats -= target.getActiveEquips(dbl);
-						}
-
-						if (!unstop && dmg < enemyStats) {
-							outcome = getString("str/combat_defeat", dmg, enemyStats);
-							trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
-
-							for (Senshi s : source.getNearby()) {
+							for (Senshi s : target.getNearby()) {
 								s.awaken();
 							}
 
-							if (announce) {
-								if (!source.hasFlag(Flag.NO_DAMAGE, true)) {
-									you.modHP((int) -((enemyStats - dmg) * dmgMult));
-								}
-
-								you.getGraveyard().add(source);
-							}
+							op.getGraveyard().add(target);
 
 							dmg = 0;
+							win = true;
 						} else {
-							int block = target.getBlock();
-							int dodge = target.getDodge();
+							boolean dbl = op.getOrigins().synergy() == Race.CYBERBEAST && chance(20);
+							boolean unstop = source.hasFlag(Flag.UNSTOPPABLE, true);
 
-							if (source.isBlinded(true)) {
-								outcome = getString("str/combat_miss");
-								trigger(ON_MISS, source.asSource(ON_MISS));
+							int enemyStats = target.getActiveAttr(dbl);
+							if (source.hasFlag(Flag.IGNORE_EQUIP, true)) {
+								enemyStats -= target.getActiveEquips(dbl);
+							}
 
-								dmg = 0;
-								hit = false;
-							} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_BLOCK, true) || chance(block))) {
-								outcome = getString("str/combat_block", block);
-								trigger(NONE, source.asSource(), target.asTarget(ON_BLOCK));
+							if (!unstop && dmg < enemyStats) {
+								outcome = getString("str/combat_defeat", dmg, enemyStats);
+								trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
 
-								source.setStun(1);
+								for (Senshi s : source.getNearby()) {
+									s.awaken();
+								}
 
-								dmg = 0;
-								hit = false;
-							} else if (!source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_DODGE, true) || chance(dodge))) {
-								outcome = getString("str/combat_dodge", dodge);
-								trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
-
-								dmg = 0;
-								hit = false;
-							} else {
-								if (unstop || dmg > enemyStats) {
-									outcome = getString("str/combat_success", dmg, enemyStats);
-									trigger(ON_HIT, source.asSource(ON_HIT), target.asTarget(ON_LOSE));
-
-									if (target.isDefending() || target.hasFlag(Flag.NO_DAMAGE, true)) {
-										dmg = 0;
-									} else {
-										dmg = Math.max(0, dmg - enemyStats);
-									}
-
-									for (Senshi s : target.getNearby()) {
-										s.awaken();
-									}
-
-									if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
-										int duration;
-										if (enemyStats == 0) {
-											duration = 5;
-										} else {
-											duration = Utils.clamp(dmg / enemyStats, 1, 5);
-										}
-
-										if (you.getOrigins().synergy() == Race.ELEMENTAL) {
-											int earth = (int) getCards(you.getSide()).parallelStream()
-													.filter(s -> s.getElement() == ElementType.EARTH)
-													.count();
-
-											if (earth >= 4) {
-												duration *= 2;
-											}
-										}
-
-										target.setStun(duration);
-										dmg = 0;
-									} else {
-										op.getGraveyard().add(target);
-									}
-
-									win = true;
-								} else {
-									outcome = getString("str/combat_clash", dmg, enemyStats);
-									trigger(ON_CLASH, source.asSource(ON_SUICIDE), target.asTarget(ON_LOSE));
-
-									for (Senshi s : target.getNearby()) {
-										s.awaken();
-									}
-
-									op.getGraveyard().add(target);
-
-									for (Senshi s : source.getNearby()) {
-										s.awaken();
+								if (announce) {
+									if (!source.hasFlag(Flag.NO_DAMAGE, true)) {
+										you.modHP((int) -((enemyStats - dmg) * dmgMult));
 									}
 
 									you.getGraveyard().add(source);
+								}
+
+								dmg = 0;
+							} else {
+								int block = target.getBlock();
+								int dodge = target.getDodge();
+
+								if (source.isBlinded(true)) {
+									outcome = getString("str/combat_miss");
+									trigger(ON_MISS, source.asSource(ON_MISS));
 
 									dmg = 0;
+									hit = false;
+								} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_BLOCK, true) || chance(block))) {
+									outcome = getString("str/combat_block", block);
+									trigger(NONE, source.asSource(), target.asTarget(ON_BLOCK));
+
+									source.setStun(1);
+
+									dmg = 0;
+									hit = false;
+								} else if (!source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_DODGE, true) || chance(dodge))) {
+									outcome = getString("str/combat_dodge", dodge);
+									trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
+
+									dmg = 0;
+									hit = false;
+								} else {
+									if (unstop || dmg > enemyStats) {
+										outcome = getString("str/combat_success", dmg, enemyStats);
+										trigger(ON_HIT, source.asSource(ON_HIT), target.asTarget(ON_LOSE));
+
+										if (target.isDefending() || target.hasFlag(Flag.NO_DAMAGE, true)) {
+											dmg = 0;
+										} else {
+											dmg = Math.max(0, dmg - enemyStats);
+										}
+
+										for (Senshi s : target.getNearby()) {
+											s.awaken();
+										}
+
+										if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
+											int duration;
+											if (enemyStats == 0) {
+												duration = 5;
+											} else {
+												duration = Utils.clamp(dmg / enemyStats, 1, 5);
+											}
+
+											if (you.getOrigins().synergy() == Race.ELEMENTAL) {
+												int earth = (int) getCards(you.getSide()).parallelStream()
+														.filter(s -> s.getElement() == ElementType.EARTH)
+														.count();
+
+												if (earth >= 4) {
+													duration *= 2;
+												}
+											}
+
+											target.setStun(duration);
+											dmg = 0;
+										} else {
+											op.getGraveyard().add(target);
+										}
+
+										win = true;
+									} else {
+										outcome = getString("str/combat_clash", dmg, enemyStats);
+										trigger(ON_CLASH, source.asSource(ON_SUICIDE), target.asTarget(ON_LOSE));
+
+										for (Senshi s : target.getNearby()) {
+											s.awaken();
+										}
+
+										op.getGraveyard().add(target);
+
+										for (Senshi s : source.getNearby()) {
+											s.awaken();
+										}
+
+										you.getGraveyard().add(source);
+
+										dmg = 0;
+									}
 								}
 							}
 						}
+					} else {
+						dmg = 0;
 					}
 				} else {
-					dmg = 0;
+					if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
+						dmg = 0;
+					}
 				}
 
 				if (hit) {
@@ -1488,13 +1372,15 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 					}
 
-					for (Evogear e : target.getEquipments()) {
-						JSONArray charms = e.getCharms();
+					if (target != null) {
+						for (Evogear e : target.getEquipments()) {
+							JSONArray charms = e.getCharms();
 
-						for (Object o : charms) {
-							Charm c = Charm.valueOf(String.valueOf(o));
-							if (c == Charm.THORNS) {
-								thorns += c.getValue(e.getTier());
+							for (Object o : charms) {
+								Charm c = Charm.valueOf(String.valueOf(o));
+								if (c == Charm.THORNS) {
+									thorns += c.getValue(e.getTier());
+								}
 							}
 						}
 					}
@@ -1538,7 +1424,7 @@ public class Shoukan extends GameInstance<Phase> {
 							if (c == Charm.BARRAGE) {
 								if (announce) {
 									for (int i = 0; i < c.getValue(e.getTier()); i++) {
-										attack(source, target, damage / 10, false);
+										processAttack(source, target, tgtSide, damage / 10, false);
 									}
 								}
 							}
@@ -1578,190 +1464,54 @@ public class Shoukan extends GameInstance<Phase> {
 		return win;
 	}
 
-	public boolean attack(Senshi source, Hand target) {
-		return attack(source, target, null, false);
-	}
+	public boolean activateTrap(Senshi trap, EffectParameters ep) {
+		if (!(trap instanceof TrapSpell p)) return false;
 
-	public boolean attack(Senshi source, Hand target, int damage) {
-		return attack(source, target, damage, false);
-	}
+		Evogear e = p.getOriginal();
+		Hand hand = e.getHand();
 
-	private boolean attack(Senshi source, Hand target, Integer damage, boolean announce) {
-		if (source == null || target == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
-			if (announce) {
-				getChannel().sendMessage(getString("error/card_cannot_attack")).queue();
+		Targeting tgt = switch (e.getTargetType()) {
+			case NONE -> new Targeting(hand, -1, -1);
+			case ALLY -> {
+				if (ep.allies().length == 0) {
+					yield null;
+				}
+
+				yield new Targeting(hand, ep.allies()[0].index(), -1);
 			}
+			case ENEMY -> {
+				if (ep.enemies().length == 0) {
+					yield null;
+				}
 
+				yield new Targeting(hand, -1, ep.enemies()[0].index());
+			}
+			case BOTH -> {
+				if (ep.allies().length == 0 || ep.enemies().length == 0) {
+					yield null;
+				}
+
+				yield new Targeting(hand, ep.allies()[0].index(), ep.enemies()[0].index());
+			}
+		};
+
+		if (tgt == null) return false;
+
+		if (!tgt.validate(e.getTargetType())) {
+			getChannel().sendMessage(getString("error/target", getString("str/target_" + e.getTargetType()))).queue();
 			return false;
 		}
 
-		Hand you = source.getHand();
-		int pHP = you.getHP();
-		int eHP = target.getHP();
-
-		if (!arena.isFieldEmpty(target.getSide()) && !source.hasFlag(Flag.DIRECT, true)) {
-			if (announce) {
-				getChannel().sendMessage(getString("error/field_not_empty")).queue();
-			}
-
-			return false;
+		if (e.execute(ep)) {
+			hand.getGraveyard().add(p);
+			return true;
 		}
 
-		trigger(ON_ATTACK, source.asSource(ON_ATTACK));
-
-		int dmg = Utils.getOr(damage, source.getActiveAttr());
-		if (damage == null) {
-			damage = dmg;
-		}
-
-		if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
-			dmg = 0;
-		}
-
-		int direct = 0;
-		int lifesteal = you.getBase().lifesteal() + (int) source.getStats().getLifesteal().get();
-		if (you.getOrigins().synergy() == Race.VAMPIRE && you.isLowLife()) {
-			lifesteal += 7;
-		}
-
-		int thorns = you.getLockTime(Lock.CHARM) > 0 ? 20 : 0;
-		double dmgMult = 1;
-		if (dmg > 0 && (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0)) {
-			dmgMult /= 2;
-		}
-
-		try {
-			if ((announce && source.canAttack()) || source.isAvailable()) {
-				for (Evogear e : source.getEquipments()) {
-					JSONArray charms = e.getCharms();
-
-					for (Object o : charms) {
-						Charm c = Charm.valueOf(String.valueOf(o));
-						switch (c) {
-							case PIERCING -> direct += damage * c.getValue(e.getTier()) / 100;
-							case WOUNDING -> {
-								int val = (int) -(damage * dmgMult * c.getValue(e.getTier()) / 100);
-								target.getRegDeg().add(val);
-							}
-							case DRAIN -> {
-								int toDrain = Math.min(c.getValue(e.getTier()), target.getMP());
-								if (toDrain > 0) {
-									you.modMP(toDrain);
-									target.modMP(-toDrain);
-								}
-							}
-							case LIFESTEAL -> lifesteal += c.getValue(e.getTier());
-						}
-					}
-				}
-
-				switch (you.getOrigins().synergy()) {
-					case ELEMENTAL -> {
-						int water = (int) getCards(you.getSide()).parallelStream()
-								.filter(s -> s.getElement() == ElementType.WATER)
-								.count();
-
-						if (water >= 4) {
-							you.modMP(1);
-						}
-					}
-					case FALLEN -> {
-						if (target.getRegDeg().peek() < 0) {
-							target.getRegDeg().apply(0.2);
-						}
-					}
-				}
-
-				if (!source.hasFlag(Flag.NO_COMBAT, true)) {
-					for (SlotColumn sc : getSlots(target.getSide())) {
-						for (Senshi card : sc.getCards()) {
-							if (card instanceof TrapSpell && card.isFlipped()) {
-								EffectParameters params = new EffectParameters(ON_TRAP, target.getSide(), card.asSource(ON_TRAP), source.asTarget(ON_ATTACK, TargetType.ENEMY));
-
-								if (activateProxy(card, params)) {
-									source.setAvailable(false);
-									getChannel().sendMessage(getString("str/trap_activation", card)).queue();
-								}
-							}
-						}
-					}
-
-					if ((announce && source.canAttack()) || source.isAvailable()) {
-						trigger(ON_DIRECT, source.asSource(ON_DIRECT));
-					} else {
-						dmg = 0;
-					}
-				}
-
-				target.modHP((int) -((dmg + direct) * dmgMult));
-				target.addChain();
-
-				if (target.getOrigins().synergy() == Race.SUCCUBUS) {
-					you.modLockTime(Lock.CHARM, 1);
-				}
-
-				if (thorns > 0) {
-					you.modHP(-damage * thorns / 100);
-				}
-				if (lifesteal > 0) {
-					you.modHP(dmg * lifesteal / 100);
-				}
-
-				if (you.getOrigins().synergy() == Race.DAEMON) {
-					you.modMP((int) (Math.max(0, eHP - target.getHP()) / target.getBase().hp() * 0.05));
-				}
-
-				for (Evogear e : source.getEquipments()) {
-					JSONArray charms = e.getCharms();
-
-					for (Object o : charms) {
-						Charm c = Charm.valueOf(String.valueOf(o));
-						if (c == Charm.BARRAGE) {
-							if (announce) {
-								for (int i = 0; i < c.getValue(e.getTier()); i++) {
-									attack(source, target, dmg / 10, false);
-								}
-							}
-						}
-					}
-				}
-			}
-		} finally {
-			if (announce && source.getSlot().getIndex() != -1 && !source.hasFlag(Flag.FREE_ACTION, true)) {
-				source.setAvailable(false);
-			}
-		}
-
-		String outcome = "";
-		if (eHP != target.getHP()) {
-			int val = eHP - target.getHP();
-			outcome += "\n" + getString(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
-
-			double mult = (val > 0 ? dmgMult : target.getStats().getHealMult().get());
-			if (mult != 1) {
-				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString((1 - mult) * 100, 2)) + ")";
-			}
-		}
-
-		if (pHP != you.getHP()) {
-			int val = pHP - you.getHP();
-			outcome += "\n" + getString(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(val));
-
-			double mult = (val > 0 ? you.getStats().getDamageMult() : you.getStats().getHealMult()).get();
-			if (mult != 1) {
-				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString((1 - mult) * 100, 2)) + ")";
-			}
-		}
-
-		if (announce) {
-			reportEvent("str/combat", true, source, target.getName(), outcome);
-		}
-
-		return true;
+		return false;
 	}
 
 	public boolean chance(double percentage) {
-		return Calc.chance(percentage, 1, getRng());
+		return Calc.chance(percentage, getRng());
 	}
 
 	public Arcade getArcade() {
@@ -2214,6 +1964,7 @@ public class Shoukan extends GameInstance<Phase> {
 				hand.getCards();
 				hand.getRealDeck();
 				hand.getGraveyard();
+				hand.getDiscard();
 				hand.resetChain();
 				hand.getStats().removeExpired(ValueMod::isExpired);
 

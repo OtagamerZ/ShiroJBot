@@ -144,6 +144,8 @@ public class SlotColumn {
 			boolean init = card.getSlot().getIndex() == -1;
 
 			card.setSlot(this);
+			card.setCurrentStack(null);
+
 			if (init) {
 				card.executeAssert(Trigger.ON_INITIALIZE);
 			}
@@ -152,15 +154,6 @@ public class SlotColumn {
 			if (!card.isFlipped()) {
 				h.getGame().trigger(Trigger.ON_SUMMON, card.asSource(Trigger.ON_SUMMON));
 			}
-
-			for (Hand hd : game.getHands().values()) {
-				hd.getCards().remove(card);
-				hd.getGraveyard().remove(card);
-				hd.getRealDeck().remove(card);
-				hd.getDiscard().remove(card);
-			}
-
-			game.getBanned().remove(card);
 		}
 	}
 

@@ -19,6 +19,7 @@
 package com.kuuhaku.interfaces.shoukan;
 
 import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.Fonts;
@@ -186,12 +187,13 @@ public interface Drawable<T extends Drawable<T>> {
 		}
 	}
 
-	default StashedCard getStashRef() {
-		return null;
-	}
+	StashedCard getStashRef();
 
-	default void setStashRef(StashedCard sc) {
-	}
+	void setStashRef(StashedCard sc);
+
+	BondedList<?> getCurrentStack();
+
+	void setCurrentStack(BondedList<?> stack);
 
 	default boolean keepOnDestroy() {
 		return true;
