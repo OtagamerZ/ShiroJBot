@@ -28,11 +28,10 @@ public abstract class Bit {
 
 	public static int set(int bits, int index, int value, int size) {
 		index *= size;
-		if (value < 0) value = 0;
-
 		if (!Utils.between(index, 0, Integer.SIZE)) return bits;
 
 		int mask = ((1 << size) - 1) << index;
+		if (value < 0) value = 0;
 		if (value > mask) value -= mask;
 
 		return (bits & ~mask) | value << index;
