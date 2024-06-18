@@ -446,7 +446,7 @@ public class Hand {
 					return addToHand(out, true);
 				} finally {
 					if (trigger) {
-						getGame().trigger(ON_DRAW_SINGLE, getSide());
+						game.trigger(ON_DRAW_SINGLE, getSide());
 					}
 				}
 			}
@@ -458,7 +458,7 @@ public class Hand {
 				return addToHand(d, true);
 			} finally {
 				if (trigger) {
-					getGame().trigger(ON_DRAW_SINGLE, getSide());
+					game.trigger(ON_DRAW_SINGLE, getSide());
 				}
 			}
 		}
@@ -477,8 +477,8 @@ public class Hand {
 			}
 		}
 
-		getData().put("last_drawn_batch", List.copyOf(out));
-		getGame().trigger(ON_DRAW_MULTIPLE, getSide());
+		data.put("last_drawn_batch", List.copyOf(out));
+		game.trigger(ON_DRAW_MULTIPLE, getSide());
 		return out;
 	}
 
@@ -496,7 +496,7 @@ public class Hand {
 				return addToHand(out, false);
 			} finally {
 				if (trigger) {
-					getGame().trigger(ON_DRAW_SINGLE, getSide());
+					game.trigger(ON_DRAW_SINGLE, getSide());
 				}
 			}
 		}
@@ -515,8 +515,8 @@ public class Hand {
 			out.add(d);
 		}
 
-		getData().put("last_drawn_batch", List.copyOf(out));
-		getGame().trigger(ON_DRAW_MULTIPLE, getSide());
+		data.put("last_drawn_batch", List.copyOf(out));
+		game.trigger(ON_DRAW_MULTIPLE, getSide());
 		return out;
 	}
 
@@ -655,14 +655,14 @@ public class Hand {
 			consumeDraw();
 		}
 
-		getData().put("last_drawn", out);
-		getData().put("last_drawn_" + out.getClass().getSimpleName().toLowerCase(), out);
+		data.put("last_drawn", out);
+		data.put("last_drawn_" + out.getClass().getSimpleName().toLowerCase(), out);
 
-		getGame().trigger(Trigger.ON_DRAW, side);
+		game.trigger(Trigger.ON_DRAW, side);
 		if (manual) {
-			getGame().trigger(Trigger.ON_MANUAL_DRAW, out.asSource(Trigger.ON_MANUAL_DRAW));
+			game.trigger(Trigger.ON_MANUAL_DRAW, out.asSource(Trigger.ON_MANUAL_DRAW));
 		} else {
-			getGame().trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
+			game.trigger(Trigger.ON_MAGIC_DRAW, out.asSource(Trigger.ON_MAGIC_DRAW));
 		}
 
 		return out;
@@ -875,7 +875,7 @@ public class Hand {
 			}
 
 			if (this.hp + value <= 0 && prcnt > 1 / 3d) {
-				if (!origin.demon() && (prcnt > 2 / 3d || getGame().chance(prcnt * 100))) {
+				if (!origin.demon() && (prcnt > 2 / 3d || game.chance(prcnt * 100))) {
 					this.hp = 1;
 					return;
 				}
