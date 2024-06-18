@@ -506,7 +506,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		} else {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
-				curr.getGraveyard().add(d.copy());
+				curr.getGraveyard().add(d);
 				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
 				CardState state = switch (args.getString("mode")) {
@@ -633,7 +633,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (d instanceof Senshi s && curr.getOrigins().synergy() == Race.SHIKIGAMI) {
-			d = new EquippableSenshi(s.copy());
+			d = new EquippableSenshi(s);
 
 			EquippableSenshi es = (EquippableSenshi) d;
 			es.getStats().getData().put("_shiki", true);
@@ -994,8 +994,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		} else {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
-				d.setAvailable(false);
-				curr.getGraveyard().add(d.copy());
+				curr.getGraveyard().add(d);
 				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
 				reportEvent("str/activate_card_fail", true, curr.getName(), d);
@@ -1036,7 +1035,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
-			stack.add(chosen.copy());
+			stack.add(chosen);
 		}
 
 		reportEvent("str/activate_card", true, curr.getName(), chosen.getBase().getTags().contains("SECRET") ? getString("str/a_spell") : chosen);
