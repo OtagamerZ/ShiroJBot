@@ -907,7 +907,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!curr.selectionPending()) return false;
 
 		SelectionAction sel = curr.getSelection();
-		if (sel.indexes().size() != sel.required()) {
+		if (sel.required() != null && sel.indexes().size() != sel.required()) {
 			getChannel().sendMessage(getString("error/wrong_selection_amount", sel.required())).queue();
 			return false;
 		}
@@ -922,9 +922,9 @@ public class Shoukan extends GameInstance<Phase> {
 				.add(t -> {
 					if (tick == this.tick) {
 						if (sel.source() != null) {
-							reportEvent(getString("str/effect_choice", curr.getName(), sel.required(), sel.source()), true);
+							reportEvent(getString("str/effect_choice", curr.getName(), sel.indexes().size(), sel.source()), true);
 						} else {
-							reportEvent(getString("str/effect_choice_ns", curr.getName(), sel.required()), true);
+							reportEvent(getString("str/effect_choice_ns", curr.getName(), sel.indexes().size()), true);
 						}
 					}
 
