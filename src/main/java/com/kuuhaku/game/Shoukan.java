@@ -566,6 +566,7 @@ public class Shoukan extends GameInstance<Phase> {
 			slot.setTop(proxy);
 		}
 
+		curr.getGraveyard().add(d);
 		curr.markCardSpent();
 		curr.setSummoned(true);
 		reportEvent("str/place_card", true, curr.getName(), proxy.isFlipped() ? getString("str/a_card") : proxy, proxy.getState().toString(getLocale()));
