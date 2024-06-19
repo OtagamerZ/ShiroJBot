@@ -1,0 +1,83 @@
+<html>
+<head>
+    <style>
+        :root {
+            --radius: 800px;
+            --items: 20;
+            --angle: 90deg;
+        }
+
+        .container {
+            position: relative;
+            perspective: 1000px;
+
+            .carousel:hover {
+                --angle: calc(var(--angle) + 30deg);
+                transform: translateX(-50px) translateZ(-1000px) rotateY(var(--angle));
+            }
+
+            .carousel {
+                transition: transform 1s;
+                position: absolute;
+                width: 100px;
+                height: 100px;
+                left: 50%;
+                transform-style: preserve-3d;
+                background-color: red;
+
+                .item {
+                    position: absolute;
+                    transform: rotateY(calc(360deg / var(--items) * var(--index))) translateZ(var(--radius));
+                }
+
+                .item:nth-child(1) { --index: 0; }
+                .item:nth-child(2) { --index: 1; }
+                .item:nth-child(3) { --index: 2; }
+                .item:nth-child(4) { --index: 3; }
+                .item:nth-child(5) { --index: 4; }
+                .item:nth-child(6) { --index: 5; }
+                .item:nth-child(7) { --index: 6; }
+                .item:nth-child(8) { --index: 7; }
+                .item:nth-child(9) { --index: 8; }
+                .item:nth-child(10) { --index: 9; }
+                .item:nth-child(11) { --index: 10; }
+                .item:nth-child(12) { --index: 11; }
+                .item:nth-child(13) { --index: 12; }
+                .item:nth-child(14) { --index: 13; }
+                .item:nth-child(15) { --index: 14; }
+                .item:nth-child(16) { --index: 15; }
+                .item:nth-child(17) { --index: 16; }
+                .item:nth-child(18) { --index: 17; }
+                .item:nth-child(19) { --index: 18; }
+                .item:nth-child(20) { --index: 19; }
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="carousel">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/WISH" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/GOBLET_OF_GIANTS" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/PURPLE_POTION" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/SACRED_HEART" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/JUBILEUS" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/ZORIN_BLITZ" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/RAMIEL" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/STRELITZIA" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/COLA" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/SHINIGAMI_REALM" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/TRANSMUTATION" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/SORA" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/BLACK_GOLD_SAW" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/3DMG" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/FAR_CRY" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/CASULL" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/JIBRIL" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/LUCYNA_KUSHINADA" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/REG" alt="">
+        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/JEANNE_DARC" alt="">
+    </div>
+</div>
+</body>
+</html>
