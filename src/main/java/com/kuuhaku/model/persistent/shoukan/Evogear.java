@@ -108,6 +108,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private final transient CachedScriptManager cachedEffect = new CachedScriptManager();
 	private transient StashedCard stashRef = null;
 	private transient BondedList<?> currentStack;
+	private transient Trigger currentTrigger = null;
 
 	@Transient
 	private byte state = 0b10;
@@ -465,6 +466,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
+	public Trigger getCurrentTrigger() {
+		return currentTrigger;
+	}
+
+	@Override
 	public CachedScriptManager getCSM() {
 		return cachedEffect;
 	}
@@ -493,6 +499,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 		try {
 			base.lock(ep.trigger());
+			currentTrigger = ep.trigger();
 			CachedScriptManager csm = getCSM();
 			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
 					.forScript(getEffect())
@@ -553,6 +560,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			Constants.LOGGER.warn("Failed to execute {} effect\n{}", this, "/* " + source + " */\n" + getEffect(), e);
 			return false;
 		} finally {
+			currentTrigger = null;
 			base.unlock(ep.trigger());
 		}
 	}

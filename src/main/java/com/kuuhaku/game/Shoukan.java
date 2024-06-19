@@ -841,21 +841,23 @@ public class Shoukan extends GameInstance<Phase> {
 			chosen.getStats().getData().put("consumed", consumed);
 		}
 
-		if (!chosen.execute(chosen.toParameters(tgt))) {
-			if (!chosen.isAvailable()) {
-				reportEvent("str/effect_interrupted", true, chosen);
-				return true;
+		try {
+			if (!chosen.execute(chosen.toParameters(tgt))) {
+				if (!chosen.isAvailable()) {
+					reportEvent("str/effect_interrupted", true, chosen);
+					return true;
+				}
+
+				return false;
 			}
 
-			return false;
+			reportEvent("str/activate_card", true, curr.getName(), chosen.getBase().getTags().contains("SECRET") ? getString("str/a_spell") : chosen);
+			return true;
+		} finally {
+			if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
+				stack.add(chosen);
+			}
 		}
-
-		if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
-			stack.add(chosen);
-		}
-
-		reportEvent("str/activate_card", true, curr.getName(), chosen.getBase().getTags().contains("SECRET") ? getString("str/a_spell") : chosen);
-		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})

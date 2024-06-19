@@ -137,6 +137,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient ElementType element = null;
 	private transient StashedCard stashRef = null;
 	private transient BondedList<?> currentStack;
+	private transient Trigger currentTrigger = null;
 
 	@Transient
 	private int state = 0b10;
@@ -1135,6 +1136,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
+	public Trigger getCurrentTrigger() {
+		return currentTrigger;
+	}
+
+	@Override
 	public CachedScriptManager getCSM() {
 		return cachedEffect;
 	}
@@ -1192,6 +1198,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		try {
 			base.lock(trigger);
+			currentTrigger = trigger;
 			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
 				if (!game.getCurrent().equals(hand)) {
 					Set<String> triggered = new HashSet<>();
@@ -1307,6 +1314,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			Constants.LOGGER.warn("Failed to execute {} effect\n{}", this, "/* " + source + " */\n" + getEffect(), e);
 			return false;
 		} finally {
+			currentTrigger = null;
 			base.unlock(trigger);
 		}
 	}
@@ -1358,9 +1366,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return getActiveAttr() - target.getActiveAttr();
 	}
 
-	public boolean isProtected(Drawable<?> source) {
-		if (source instanceof EffectHolder<?> eh && eh.hasTrueEffect(true)) return false;
-		else if (blocked.contains(source)) return true;
+	public boolean isProtected(EffectHolder<?> source) {
+		if (blocked.contains(source) || source.hasTrueEffect(true)) return true;
 
 		if (hand != null) {
 			if (hand.equals(source.getHand())) {
@@ -1376,16 +1383,20 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (getGame().chance(getDodge())) {
-			Shoukan game = getGame();
-			game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
-					this.isFlipped() ? game.getLocale().get("str/a_card") : this
-			)).queue();
+			if (source.getCurrentTrigger() != ON_TICK) {
+				Shoukan game = getGame();
+				game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
+						this.isFlipped() ? game.getLocale().get("str/a_card") : this
+				)).queue();
+			}
 
 			return true;
-		} else if (hasCharm(Charm.SHIELD, true)) {
+		} else if (hasCharm(Charm.SHIELD, source.getCurrentTrigger() != ON_TICK)) {
 			blocked.add(source);
-			Shoukan game = getGame();
-			game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
+			if (source.getCurrentTrigger() != ON_TICK) {
+				Shoukan game = getGame();
+				game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
+			}
 
 			return true;
 		}

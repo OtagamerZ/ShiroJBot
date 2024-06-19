@@ -157,6 +157,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		return hasEffect() && (getBase().getTags().contains("TRUE_EFFECT") || hasFlag(Flag.EMPOWERED) || hasFlag(Flag.TRUE_EFFECT, pop));
 	}
 
+	Trigger getCurrentTrigger();
+
 	boolean execute(EffectParameters ep);
 
 	default void executeAssert(Trigger trigger) {

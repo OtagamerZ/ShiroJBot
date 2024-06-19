@@ -415,7 +415,9 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default Source asSource(Trigger trigger) {
-		return new Source(this, trigger);
+		if (!(this instanceof EffectHolder<T> eh)) throw new RuntimeException("Non-effect cards cannot be source");
+
+		return new Source(eh, trigger);
 	}
 
 	default Target asTarget() {
@@ -514,13 +516,13 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	private void addTarget(Senshi tgt, Set<Senshi> targets, boolean empower) {
-		if (tgt == null || tgt.isProtected(this)) return;
+		if (tgt == null || !(this instanceof EffectHolder<T> eh) || tgt.isProtected(eh)) return;
 
 		targets.add(tgt);
 
 		if (empower) {
 			for (Senshi s : tgt.getNearby()) {
-				if (!s.isProtected(this)) {
+				if (!s.isProtected(eh)) {
 					targets.add(s);
 				}
 			}
