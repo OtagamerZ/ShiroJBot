@@ -417,14 +417,14 @@ public class GuildListener extends ListenerAdapter {
 		});
 	}
 
-	private void rollSpawns(GuildConfig config, I18N locale, Account acc) {
+	private void rollSpawns(GuildConfig config, I18N locale, Account acc, User u) {
 		GuildBuff gb = config.getCumBuffs();
 		List<TextChannelImpl> channels = config.getSettings().getKawaiponChannels();
 		if (!channels.isEmpty() && Calc.chance(100d / channels.size())) {
 			GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 			if (!chosen.canTalk()) return;
 
-			KawaiponCard kc = Spawn.getKawaipon(locale, gb, chosen, acc.getUser());
+			KawaiponCard kc = Spawn.getKawaipon(locale, gb, chosen, u);
 			if (kc != null) {
 				EmbedBuilder eb = new EmbedBuilder()
 						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
@@ -446,7 +446,7 @@ public class GuildListener extends ListenerAdapter {
 			GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 			if (!chosen.canTalk()) return;
 
-			Drop drop = Spawn.getDrop(locale, gb, chosen, acc.getUser());
+			Drop drop = Spawn.getDrop(locale, gb, chosen, u);
 			if (drop != null) {
 				RandomGenerator rng = drop.getRng();
 

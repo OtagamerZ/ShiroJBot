@@ -11,22 +11,47 @@
             position: relative;
             perspective: 1000px;
 
-            .carousel:hover {
-                --angle: calc(var(--angle) + 30deg);
-                transform: translateX(-50px) translateZ(-1000px) rotateY(var(--angle));
+            input[type=radio] {
+                /*display: none;*/
             }
 
+            #item-1:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 0)); }
+            #item-2:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 1)); }
+            #item-3:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 2)); }
+            #item-4:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 3)); }
+            #item-5:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 4)); }
+            #item-6:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 5)); }
+            #item-7:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 6)); }
+            #item-8:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 7)); }
+            #item-9:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 8)); }
+            #item-10:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 9)); }
+            #item-11:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 10)); }
+            #item-12:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 11)); }
+            #item-13:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 12)); }
+            #item-14:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 13)); }
+            #item-15:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 14)); }
+            #item-16:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 15)); }
+            #item-17:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 16)); }
+            #item-18:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 17)); }
+            #item-19:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 18)); }
+            #item-20:checked ~ .carousel { transform: translateZ(-1000px) rotateY(calc(-360deg / var(--items) * 19)); }
+
             .carousel {
-                transition: transform 1s;
                 position: absolute;
-                width: 100px;
-                height: 100px;
+                width: 0;
+                height: 0;
                 left: 50%;
                 transform-style: preserve-3d;
                 background-color: red;
+                transition: transform 1s ease;
+
+                label {
+                    cursor: pointer;
+                }
 
                 .item {
                     position: absolute;
+                    left: -127px;
                     transform: rotateY(calc(360deg / var(--items) * var(--index))) translateZ(var(--radius));
                 }
 
@@ -56,27 +81,48 @@
 </head>
 <body>
 <div class="container">
+    <input type="radio" name="slider" id="item-1" checked>
+    <input type="radio" name="slider" id="item-2">
+    <input type="radio" name="slider" id="item-3">
+    <input type="radio" name="slider" id="item-4">
+    <input type="radio" name="slider" id="item-5">
+    <input type="radio" name="slider" id="item-6">
+    <input type="radio" name="slider" id="item-7">
+    <input type="radio" name="slider" id="item-8">
+    <input type="radio" name="slider" id="item-9">
+    <input type="radio" name="slider" id="item-10">
+    <input type="radio" name="slider" id="item-11">
+    <input type="radio" name="slider" id="item-12">
+    <input type="radio" name="slider" id="item-13">
+    <input type="radio" name="slider" id="item-14">
+    <input type="radio" name="slider" id="item-15">
+    <input type="radio" name="slider" id="item-16">
+    <input type="radio" name="slider" id="item-17">
+    <input type="radio" name="slider" id="item-18">
+    <input type="radio" name="slider" id="item-19">
+    <input type="radio" name="slider" id="item-20">
+
     <div class="carousel">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/WISH" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/GOBLET_OF_GIANTS" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/PURPLE_POTION" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/SACRED_HEART" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/JUBILEUS" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/ZORIN_BLITZ" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/RAMIEL" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/STRELITZIA" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/COLA" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/SHINIGAMI_REALM" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/TRANSMUTATION" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/SORA" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/BLACK_GOLD_SAW" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/3DMG" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/FAR_CRY" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/CASULL" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/JIBRIL" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/LUCYNA_KUSHINADA" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/REG" alt="">
-        <img class="item" src="https://api.shirojbot.site/v2/shoukan/PT/JEANNE_DARC" alt="">
+        <label class="item" for="item-1" id="card-1"><img src="https://api.shirojbot.site/v2/shoukan/PT/WISH"></label>
+        <label class="item" for="item-2" id="card-2"><img src="https://api.shirojbot.site/v2/shoukan/PT/GOBLET_OF_GIANTS"></label>
+        <label class="item" for="item-3" id="card-3"><img src="https://api.shirojbot.site/v2/shoukan/PT/PURPLE_POTION"></label>
+        <label class="item" for="item-4" id="card-4"><img src="https://api.shirojbot.site/v2/shoukan/PT/SACRED_HEART"></label>
+        <label class="item" for="item-5" id="card-5"><img src="https://api.shirojbot.site/v2/shoukan/PT/JUBILEUS"></label>
+        <label class="item" for="item-6" id="card-6"><img src="https://api.shirojbot.site/v2/shoukan/PT/ZORIN_BLITZ"></label>
+        <label class="item" for="item-7" id="card-7"><img src="https://api.shirojbot.site/v2/shoukan/PT/RAMIEL"></label>
+        <label class="item" for="item-8" id="card-8"><img src="https://api.shirojbot.site/v2/shoukan/PT/STRELITZIA"></label>
+        <label class="item" for="item-9" id="card-9"><img src="https://api.shirojbot.site/v2/shoukan/PT/COLA"></label>
+        <label class="item" for="item-10" id="card-10"><img src="https://api.shirojbot.site/v2/shoukan/PT/SHINIGAMI_REALM"></label>
+        <label class="item" for="item-11" id="card-11"><img src="https://api.shirojbot.site/v2/shoukan/PT/TRANSMUTATION"></label>
+        <label class="item" for="item-12" id="card-12"><img src="https://api.shirojbot.site/v2/shoukan/PT/SORA"></label>
+        <label class="item" for="item-13" id="card-13"><img src="https://api.shirojbot.site/v2/shoukan/PT/BLACK_GOLD_SAW"></label>
+        <label class="item" for="item-14" id="card-14"><img src="https://api.shirojbot.site/v2/shoukan/PT/3DMG"></label>
+        <label class="item" for="item-15" id="card-15"><img src="https://api.shirojbot.site/v2/shoukan/PT/FAR_CRY"></label>
+        <label class="item" for="item-16" id="card-16"><img src="https://api.shirojbot.site/v2/shoukan/PT/CASULL"></label>
+        <label class="item" for="item-17" id="card-17"><img src="https://api.shirojbot.site/v2/shoukan/PT/JIBRIL"></label>
+        <label class="item" for="item-18" id="card-18"><img src="https://api.shirojbot.site/v2/shoukan/PT/LUCYNA_KUSHINADA"></label>
+        <label class="item" for="item-19" id="card-19"><img src="https://api.shirojbot.site/v2/shoukan/PT/REG"></label>
+        <label class="item" for="item-20" id="card-20"><img src="https://api.shirojbot.site/v2/shoukan/PT/JEANNE_DARC"></label>
     </div>
 </div>
 </body>

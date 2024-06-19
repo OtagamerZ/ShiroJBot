@@ -88,7 +88,7 @@ public class SynthesizeCommand implements Executable {
 		} else if (ids.length == 1) {
 			Card c = DAO.find(Card.class, ids[0].toUpperCase());
 			if (c != null && c.getRarity() == Rarity.ULTIMATE && kp.isCollectionComplete(c.getAnime())) {
-				synthCollection(locale, event.channel(), kp.getAccount(), c.getAnime());
+				synthCollection(locale, event.channel(), kp.getAccount(), event.user(), c.getAnime());
 				return;
 			}
 		}
@@ -274,7 +274,7 @@ public class SynthesizeCommand implements Executable {
 		}
 	}
 
-	private static void synthCollection(I18N locale, MessageChannel channel, Account acc, Anime anime) {
+	private static void synthCollection(I18N locale, MessageChannel channel, Account acc, User u, Anime anime) {
 		try {
 			Kawaipon kp = acc.getKawaipon();
 			Set<KawaiponCard> collection = kp.getCollection(anime, false);
@@ -290,7 +290,7 @@ public class SynthesizeCommand implements Executable {
 						channel.sendMessage(locale.get("str/received_item", collection.size(), item.getName(locale))).queue();
 
 						return true;
-					}, acc.getUser()
+					}, u
 			);
 		} catch (PendingConfirmationException e) {
 			channel.sendMessage(locale.get("error/pending_confirmation")).queue();
