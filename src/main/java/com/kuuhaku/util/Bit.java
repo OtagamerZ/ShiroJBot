@@ -31,6 +31,7 @@ public abstract class Bit {
 		if (!Utils.between(index, 0, Integer.SIZE)) return bits;
 
 		int mask = ((1 << size) - 1) << index;
+		if (value < 0) value = 0;
 		if (value > mask) value -= mask;
 
 		return (bits & ~mask) | value << index;

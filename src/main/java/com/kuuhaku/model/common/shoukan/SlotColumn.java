@@ -148,6 +148,7 @@ public class SlotColumn {
 
 			if (init) {
 				card.executeAssert(Trigger.ON_INITIALIZE);
+				if (!card.getSlot().equals(this)) return;
 			}
 
 			h.getData().put("last_summon", card);

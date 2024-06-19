@@ -151,6 +151,10 @@ public class Shoukan extends GameInstance<Phase> {
 			h.manualDraw(h.getRemainingDraws());
 			h.loadArchetype();
 
+			if (h.getCards().parallelStream().filter(d -> d instanceof Field).count() >= 3) {
+				h.getAccount().setDynValue("cartographer", true);
+			}
+
 			if (h.getOrigins().isPure(Race.BEAST)) {
 				double prcnt = Calc.prcntToInt(h.getUserDeck().getEvoWeight(), 24);
 				h.getRegDeg().add(Math.max(0, h.getBase().hp() * prcnt), 0);

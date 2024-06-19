@@ -26,7 +26,7 @@ DECLARE
 BEGIN
     SELECT fav_card FROM kawaipon WHERE uid = NEW.kawaipon_uid INTO fav;
 
-    IF (fav IS NOT NULL AND (SELECT 1 FROM kawaipon_card kc WHERE kc.uuid = NEW.uuid) IS NULL) THEN
+    IF (fav IS NOT NULL) THEN
         IF (NEW.card_id = fav) THEN
             UPDATE kawaipon
             SET fav_card       = NULL
@@ -56,4 +56,5 @@ CREATE TRIGGER fav_stack
     BEFORE INSERT
     ON stashed_card
     FOR EACH ROW
+    WHEN (NEW.type <> 'KAWAIPON')
 EXECUTE PROCEDURE t_fav_stack();
