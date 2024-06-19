@@ -98,7 +98,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Shoukan game = this.getGame();
 		getHand().getData().put("last_equipment", e);
 		getHand().getData().put("last_evogear", e);
-		game.trigger(ON_EQUIP, asSource(ON_EQUIP));
 
 		if (e.hasCharm(Charm.TIMEWARP)) {
 			int times = Charm.TIMEWARP.getValue(e.getTier());
@@ -120,6 +119,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		return true;
 	}, e -> {
+		getGame().trigger(ON_EQUIP, asSource(ON_EQUIP));
 		e.setCurrentStack(getEquipments(false));
 	}, e -> {
 		e.executeAssert(ON_REMOVE);

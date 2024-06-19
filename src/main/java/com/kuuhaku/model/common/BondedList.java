@@ -122,15 +122,14 @@ public class BondedList<T> extends TreeList<T> {
 		}
 
 		if (ok) {
-			onAdd.accept(t);
 			it.add(t);
 		}
 
 		it = aux.listIterator();
 		while (it.hasNext()) {
 			T next = it.next();
-			onAdd.accept(next);
 			super.add(Math.min(index, size()), next);
+			onAdd.accept(next);
 			it.remove();
 		}
 
