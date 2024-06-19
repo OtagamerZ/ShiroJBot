@@ -226,7 +226,7 @@ public class SynthesizeCommand implements Executable {
 							if (rarities.size() >= 5) {
 								UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
 								if (item != null) {
-									int gained = Calc.round(totalQ);
+									int gained = 1 + (int) (totalQ / 10);
 									acc.addItem(item, gained);
 									event.channel().sendMessage(locale.get("str/received_item", gained, item.getName(locale))).queue();
 								}
