@@ -19,6 +19,7 @@
 package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.exceptions.TargetException;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Side;
@@ -76,7 +77,7 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 	}
 
 	public void consumeShields() {
-		if (source.card().hasFlag(Flag.EMPOWERED)) return;
+		if (source.card() instanceof EffectHolder<?> eh && eh.hasFlag(Flag.EMPOWERED)) return;
 
 		for (Target t : targets) {
 			Senshi card = t.card();

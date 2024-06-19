@@ -1366,8 +1366,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return getActiveAttr() - target.getActiveAttr();
 	}
 
-	public boolean isProtected(EffectHolder<?> source) {
-		if (blocked.contains(source) || source.hasTrueEffect(true)) return true;
+	public boolean isProtected(Drawable<?> source) {
+		if (source instanceof EffectHolder<?> eh && eh.hasTrueEffect(true)) return true;
+		else if (blocked.contains(source)) return true;
 
 		if (hand != null) {
 			if (hand.equals(source.getHand())) {
@@ -1382,8 +1383,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 		}
 
+		boolean isTick = source instanceof EffectHolder<?> eh && eh.getCurrentTrigger() == ON_TICK;
 		if (getGame().chance(getDodge())) {
-			if (source.getCurrentTrigger() != ON_TICK) {
+			if (!isTick) {
 				Shoukan game = getGame();
 				game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
 						this.isFlipped() ? game.getLocale().get("str/a_card") : this
@@ -1391,9 +1393,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			return true;
-		} else if (hasCharm(Charm.SHIELD, source.getCurrentTrigger() != ON_TICK)) {
+		} else if (hasCharm(Charm.SHIELD, !isTick)) {
 			blocked.add(source);
-			if (source.getCurrentTrigger() != ON_TICK) {
+			if (!isTick) {
 				Shoukan game = getGame();
 				game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
 			}

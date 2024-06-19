@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.records.shoukan;
 
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.TargetType;
@@ -25,18 +26,18 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 
 import java.util.Objects;
 
-public record Source(EffectHolder<?> card, Side side, int index, Trigger trigger) {
+public record Source(Drawable<?> card, Side side, int index, Trigger trigger) {
 	public Source() {
 		this(null, null, -1, Trigger.NONE);
 	}
 
-	public Source(EffectHolder<?> card, Trigger trigger) {
+	public Source(Drawable<?> card, Trigger trigger) {
 		this(card, card.getSide(), card.getIndex(), trigger);
 	}
 
 	public boolean execute(EffectParameters ep) {
-		if (card != null) {
-			return card.execute(ep);
+		if (card != null && card instanceof EffectHolder<?> eh) {
+			return eh.execute(ep);
 		}
 
 		return false;

@@ -415,9 +415,7 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default Source asSource(Trigger trigger) {
-		if (!(this instanceof EffectHolder<T> eh)) throw new RuntimeException("Non-effect cards cannot be source");
-
-		return new Source(eh, trigger);
+		return new Source(this, trigger);
 	}
 
 	default Target asTarget() {
