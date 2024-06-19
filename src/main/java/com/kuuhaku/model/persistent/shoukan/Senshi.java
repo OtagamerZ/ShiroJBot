@@ -205,6 +205,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
+	public boolean hasFlag(Flag flag) {
+		return hasFlag(flag, false);
+	}
+
+	@Override
 	public boolean hasFlag(Flag flag, boolean pop) {
 		for (Evogear e : equipments) {
 			if (e.hasFlag(flag, pop)) return true;
