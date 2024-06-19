@@ -135,9 +135,10 @@ public class GuildListener extends ListenerAdapter {
 
 		GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
 
+		Member me = event.getGuild().getSelfMember();
 		Member mb = event.getMember();
 		Role join = config.getSettings().getJoinRole();
-		if (join != null && event.getGuild().getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
+		if (join != null && me.canInteract(join) && me.hasPermission(Permission.MANAGE_ROLES)) {
 			event.getGuild().addRoleToMember(mb, join).queue();
 		}
 
