@@ -412,7 +412,7 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			rollSpawns(config, locale, account);
+			rollSpawns(config, locale, account, data.user());
 			rollEvents(data.channel(), locale);
 		});
 	}
