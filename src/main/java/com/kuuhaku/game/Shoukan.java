@@ -1339,6 +1339,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 						}
 					} else {
+						hit = false;
 						dmg = 0;
 					}
 				} else {
