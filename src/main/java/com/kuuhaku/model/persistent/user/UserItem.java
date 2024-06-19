@@ -79,11 +79,11 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	}
 
 	public String getName(I18N locale) {
-		return getInfo(locale).getName();
+		return getInfo(locale).setUwu(locale.isUwu()).getName();
 	}
 
 	public String getDescription(I18N locale) {
-		return getInfo(locale).getDescription();
+		return getInfo(locale).setUwu(locale.isUwu()).getDescription();
 	}
 
 	public String getIcon() {
@@ -135,7 +135,7 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 
 	public LocalizedItem getInfo(I18N locale) {
 		return infos.parallelStream()
-				.filter(ld -> ld.getLocale() == locale)
+				.filter(ld -> ld.getLocale().is(locale))
 				.findAny().orElseThrow();
 	}
 

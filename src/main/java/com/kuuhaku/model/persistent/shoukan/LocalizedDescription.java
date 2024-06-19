@@ -53,7 +53,7 @@ public class LocalizedDescription extends DAO<LocalizedDescription> implements S
 
 	@Override
 	public String toString() {
-		return description;
+		return getDescription();
 	}
 
 	@Override

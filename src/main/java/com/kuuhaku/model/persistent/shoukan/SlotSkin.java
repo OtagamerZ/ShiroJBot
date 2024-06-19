@@ -84,7 +84,8 @@ public class SlotSkin extends DAO<SlotSkin> {
 
 	public LocalizedSkin getInfo(I18N locale) {
 		return infos.parallelStream()
-				.filter(ld -> ld.getLocale() == locale)
+				.filter(ld -> ld.getLocale().is(locale))
+				.map(ld -> ld.setUwu(locale.isUwu()))
 				.findAny().orElseThrow();
 	}
 

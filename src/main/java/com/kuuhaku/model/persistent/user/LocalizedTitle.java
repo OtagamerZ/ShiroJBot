@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.id.LocalizedId;
+import com.kuuhaku.util.text.Uwuifier;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -42,6 +43,8 @@ public class LocalizedTitle extends DAO<LocalizedTitle> implements Serializable 
 	@Column(name = "description", nullable = false)
 	private String description;
 
+	private transient boolean uwu = false;
+
 	public LocalizedId getId() {
 		return id;
 	}
@@ -55,7 +58,16 @@ public class LocalizedTitle extends DAO<LocalizedTitle> implements Serializable 
 	}
 
 	public String getDescription() {
+		if (uwu) {
+			return Uwuifier.INSTANCE.uwu(getLocale(), description);
+		}
+
 		return description;
+	}
+
+	public LocalizedTitle setUwu(boolean uwu) {
+		this.uwu = uwu;
+		return this;
 	}
 
 	@Override

@@ -142,13 +142,10 @@ public class CardAttributes implements Serializable, Cloneable {
 	}
 
 	public String getDescription(I18N locale) {
-		for (LocalizedDescription ld : descriptions) {
-			if (ld.getLocale() == locale) {
-				return ld.toString();
-			}
-		}
-
-		return "";
+		return descriptions.parallelStream()
+				.filter(ld -> ld.getLocale().is(locale))
+				.map(LocalizedDescription::toString)
+				.findAny().orElse("");
 	}
 
 	public String getEffect() {

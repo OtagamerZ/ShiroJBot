@@ -44,7 +44,7 @@ public enum I18N {
 	I18N(ZoneId zone, String emoji) {
 		this.zone = zone;
 		this.emoji = emoji;
-		this.parent = null;
+		this.parent = this;
 	}
 
 	I18N(I18N parent) {
@@ -62,14 +62,12 @@ public enum I18N {
 	}
 
 	public String get(String key, Object... args) {
-		I18N loc = Utils.getOr(parent, this);
-
 		if (key == null) return "";
-		else if (args == null) return loc.get(key);
+		else if (args == null) return parent.get(key);
 		else if (key.contains(" ") && !key.contains("/")) return key;
 
 		String lower = key.toLowerCase();
-		if (!key.equals(lower)) return loc.get(lower, args);
+		if (!key.equals(lower)) return parent.get(lower, args);
 
 		for (int i = 0; i < args.length; i++) {
 			Object arg = args[i];
@@ -78,14 +76,14 @@ public enum I18N {
 			}
 		}
 
-		String out = Main.getCacheManager().computeLocale(loc.name() + "-" + key, (k, v) -> {
+		String out = Main.getCacheManager().computeLocale(parent.name() + "-" + key, (k, v) -> {
 			if (v != null) return v;
 
 			try {
-				String message = ResourceBundle.getBundle("locale/lang", loc.locale).getString(key);
+				String message = ResourceBundle.getBundle("locale/lang", parent.locale).getString(key);
 				String icon;
 				try {
-					icon = ResourceBundle.getBundle("locale/lang", loc.locale).getString("icon/" + key.split("/")[0]);
+					icon = ResourceBundle.getBundle("locale/lang", parent.locale).getString("icon/" + key.split("/")[0]);
 				} catch (MissingResourceException e) {
 					icon = "";
 				}
@@ -96,15 +94,11 @@ public enum I18N {
 			}
 		}).formatted(args);
 
-		if (name().startsWith("UWU")) {
-			return Uwuifier.INSTANCE.uwu(loc, out);
+		if (isUwu()) {
+			return Uwuifier.INSTANCE.uwu(parent, out);
 		}
 
 		return out;
-	}
-
-	public Locale getLocale() {
-		return locale;
 	}
 
 	public ZoneId getZone() {
@@ -117,5 +111,13 @@ public enum I18N {
 
 	public I18N getParent() {
 		return parent;
+	}
+
+	public boolean is(I18N locale) {
+		return parent == locale.parent;
+	}
+
+	public boolean isUwu() {
+		return name().startsWith("UWU");
 	}
 }
