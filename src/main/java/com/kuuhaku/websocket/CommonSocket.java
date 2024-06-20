@@ -26,10 +26,13 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.FieldType;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
+import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
@@ -104,7 +107,7 @@ public class CommonSocket extends WebSocketClient {
 
 				send(JSONObject.of(
 						Map.entry("type", "ATTACH"),
-						Map.entry("channels", List.of("shoukan", "i18n", "invite", "vote"))
+						Map.entry("channels", List.of("shoukan", "card_info", "i18n", "invite", "vote"))
 				).toString());
 				return;
 			}
@@ -126,7 +129,7 @@ public class CommonSocket extends WebSocketClient {
 				case "shoukan" -> {
 					String id = payload.getString("card");
 					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
-					if (types.isEmpty()) {
+					if (types.size() <= 1) {
 						deliver(md, new byte[0]);
 						return;
 					}
@@ -141,6 +144,52 @@ public class CommonSocket extends WebSocketClient {
 					dk.getStyling().setFrame(payload.getEnum(FrameSkin.class, "frame"));
 
 					deliver(md, IO.getBytes(d.render(payload.getEnum(I18N.class, "locale"), dk), "png"));
+				}
+				case "card_info" -> {
+					String id = payload.getString("card");
+					I18N locale = payload.getEnum(I18N.class, "locale");
+					Card c = DAO.find(Card.class, id);
+
+					JSONObject out = JSONObject.of(
+							Map.entry("id", id),
+							Map.entry("name", c.getName()),
+							Map.entry("rarity", locale.get("rarity/" + c.getRarity().name()))
+					);
+
+					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
+					if (types.size() > 1) {
+						CardType type = types.getLast();
+						Drawable<?> d = switch (type) {
+							case EVOGEAR -> c.asEvogear();
+							case FIELD -> c.asField();
+							default -> c.asSenshi();
+						};
+
+						out.put("shoukan", JSONObject.of(
+								Map.entry("type_id", type.name()),
+								Map.entry("type", locale.get("type/" + type.name())),
+								Map.entry("tier", d instanceof Evogear e ? e.getTier() : 0),
+								Map.entry("field_type", d instanceof Field f ? f.getType().name() : FieldType.NONE.name()),
+								Map.entry("description", d instanceof EffectHolder<?> eh ? JSONObject.of(
+										Map.entry("raw", eh.getBase().getDescription(locale)),
+										Map.entry("parsed", eh.getReadableDescription(locale)),
+										Map.entry("display", eh.getDescription(locale))
+								) : new JSONObject()),
+								Map.entry("cost", JSONObject.of(
+										Map.entry("mana", d.getMPCost()),
+										Map.entry("life", d.getHPCost()),
+										Map.entry("sacrifices", d.getSCCost())
+								)),
+								Map.entry("attributes", JSONObject.of(
+										Map.entry("attack", d.getDmg()),
+										Map.entry("defense", d.getDfs()),
+										Map.entry("dodge", d.getDodge()),
+										Map.entry("block", d.getBlock())
+								))
+						));
+					}
+
+					deliver(md, out.toString());
 				}
 				case "i18n" -> {
 					I18N locale = payload.getEnum(I18N.class, "locale");

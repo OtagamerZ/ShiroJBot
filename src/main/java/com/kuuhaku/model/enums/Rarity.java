@@ -110,7 +110,7 @@ public enum Rarity {
 		});
 	}
 
-	public List<Card> getCard() {
+	public List<Card> getCards() {
 		return DAO.queryAll(Card.class, "SELECT c FROM Card c WHERE c.anime.visible = TRUE AND c.rarity = ?1", this);
 	}
 
