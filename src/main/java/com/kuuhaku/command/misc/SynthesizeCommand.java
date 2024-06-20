@@ -69,7 +69,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 		category = Category.MISC
 )
 @Signature({
-		"<cards:text:r>",
+		"<y:word:>[y]", "<cards:text:r>",
 		"<anime:word:r>"
 })
 @Requires({
@@ -94,7 +94,24 @@ public class SynthesizeCommand implements Executable {
 		}
 
 		List<StashedCard> cards = new ArrayList<>();
+		List<StashedCard> selection = new ArrayList<>();
+
 		List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
+		if (args.has("y")) {
+			Map<String, StashedCard> distinct = new HashMap<>();
+			for (StashedCard s : stash) {
+				distinct.compute(s.getCard().getId(), (k, v) -> {
+					if (v == null) return s;
+					else if (v.isChrome() && !s.isChrome()) return s;
+
+					return v;
+				});
+			}
+
+			selection.addAll(distinct.values());
+		} else {
+			selection.addAll(stash);
+		}
 
 		for (String id : ids) {
 			Card c = DAO.find(Card.class, id.toUpperCase());
@@ -109,7 +126,7 @@ public class SynthesizeCommand implements Executable {
 			}
 
 			CompletableFuture<Boolean> success = new CompletableFuture<>();
-			Utils.selectOption(locale, event.channel(), stash, c, event.user())
+			Utils.selectOption(locale, event.channel(), selection, c, event.user())
 					.thenAccept(sc -> {
 						if (sc == null) {
 							event.channel().sendMessage(locale.get("error/invalid_value")).queue();
@@ -122,7 +139,7 @@ public class SynthesizeCommand implements Executable {
 						}
 
 						cards.add(sc);
-						stash.remove(sc);
+						selection.remove(sc);
 						success.complete(true);
 					})
 					.exceptionally(t -> {

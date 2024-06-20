@@ -49,8 +49,8 @@ import java.util.concurrent.ExecutionException;
 		category = Category.MISC
 )
 @Signature({
+		"<user:user:r> <card:word:r>",
 		"<user:user:r> <value:number:r>",
-		"<user:user:r> <card:word:r>"
 })
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class TransferCommand implements Executable {
