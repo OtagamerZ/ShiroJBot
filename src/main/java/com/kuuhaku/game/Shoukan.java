@@ -2417,8 +2417,7 @@ public class Shoukan extends GameInstance<Phase> {
 				int i = 0;
 				Iterator<HistoryLog> it = getHistory().descendingIterator();
 				while (it.hasNext() && i++ < 20) {
-					HistoryLog next = it.next();
-					sb.appendNewLine("(" + hands.get(next.side()).getName() + ") " + next.message());
+					sb.appendNewLine(it.next().message());
 				}
 
 				Objects.requireNonNull(w.getHook())
