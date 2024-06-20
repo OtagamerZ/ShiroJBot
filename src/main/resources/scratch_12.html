@@ -57,11 +57,11 @@
                     transform: rotateY(calc(360deg / var(--items) * var(--index))) translateZ(var(--radius)) rotateY(calc(-360deg / var(--items) * var(--index) - var(--angle)));
                     transition: transform 1s;
 					
-					img {
+		    img {
                         --big: 1 - min(abs(var(--current-item) - var(--index)), 1);
-                        scale: calc(1 + var(--big));
-						transition: scale 1s;
-					}
+                        scale: calc(0.5 + var(--big) / 2);
+		        transition: scale 1s;
+		    }
                 }
 
                 .item:nth-child(1) { --index: 0; }
