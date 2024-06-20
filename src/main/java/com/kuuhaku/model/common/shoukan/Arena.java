@@ -142,7 +142,7 @@ public class Arena implements Renderer {
 
 	public BondedList<Drawable<?>> getBanned(boolean sweep) {
 		if (sweep) {
-			banned.removeIf(d -> !d.keepOnDestroy() || d.isEthereal() || d.getCurrentStack() != banned);
+			banned.removeIf(d -> !d.keepOnDestroy() || d.isEthereal());
 		}
 
 		return banned;

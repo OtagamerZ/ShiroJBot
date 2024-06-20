@@ -80,6 +80,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
@@ -1954,6 +1955,13 @@ public class Shoukan extends GameInstance<Phase> {
 				resetTimer();
 
 				trigger(ON_TICK);
+				for (Hand h : hands.values()) {
+					Stream.of(h.getCards(), h.getGraveyard(), h.getRealDeck(), h.getDiscard())
+							.parallel()
+							.forEach(s -> s.removeIf(d -> d.getCurrentStack() != s));
+				}
+
+				arena.getBanned().removeIf(d -> d.getCurrentStack() != arena.getBanned(true));
 				getCurrent().setRerolled(true);
 				getCurrent().verifyCap();
 			}

@@ -258,7 +258,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public BondedList<Evogear> getEquipments(boolean sweep) {
 		if (sweep) {
-			equipments.removeIf(e -> !equals(e.getEquipper()) || e.getCurrentStack() != equipments);
+			equipments.removeIf(e -> !equals(e.getEquipper()));
 		}
 
 		if (equipments.size() > 3) {
