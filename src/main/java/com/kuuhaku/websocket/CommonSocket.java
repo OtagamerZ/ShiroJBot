@@ -135,7 +135,7 @@ public class CommonSocket extends WebSocketClient {
 						return;
 					}
 
-					Drawable<?> d = switch (types.getFirst()) {
+					Drawable<?> d = switch (types.getLast()) {
 						case EVOGEAR -> DAO.find(Evogear.class, id);
 						case FIELD -> DAO.find(Field.class, id);
 						default -> DAO.find(Senshi.class, id);
@@ -159,7 +159,7 @@ public class CommonSocket extends WebSocketClient {
 
 					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
 					if (!types.isEmpty()) {
-						CardType type = types.getFirst();
+						CardType type = types.getLast();
 						Drawable<?> d = switch (type) {
 							case EVOGEAR -> c.asEvogear();
 							case FIELD -> c.asField();
