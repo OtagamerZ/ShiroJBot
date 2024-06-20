@@ -89,7 +89,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Transient
 	private final transient BondedList<Evogear> equipments = new BondedList<>((e, it) -> {
-		if (getEquipments().contains(e)) return false;
+		if (getEquipments(false).contains(e)) return false;
 
 		e.setEquipper(this);
 		e.setHand(this.getHand());
@@ -119,8 +119,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		return true;
 	}, e -> {
-		getGame().trigger(ON_EQUIP, asSource(ON_EQUIP));
 		e.setCurrentStack(getEquipments(false));
+		getGame().trigger(ON_EQUIP, asSource(ON_EQUIP));
 	}, e -> {
 		e.executeAssert(ON_REMOVE);
 		e.setEquipper(null);

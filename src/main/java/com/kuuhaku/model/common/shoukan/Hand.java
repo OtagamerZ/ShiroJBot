@@ -74,7 +74,7 @@ public class Hand {
 	private final Side side;
 	private final HandExtra stats = new HandExtra();
 	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
-		if (getCards().contains(d)) return false;
+		if (getCards(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
 			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 				d.reset();
@@ -116,7 +116,7 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	}, d -> d.setCurrentStack(getCards(false)), d -> d.setSolid(false));
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
-		if (getRealDeck().contains(d)) return false;
+		if (getRealDeck(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
 			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 				d.reset();
@@ -149,7 +149,7 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	}, d -> d.setCurrentStack(getRealDeck(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
-		if (getGraveyard().contains(d)) return false;
+		if (getGraveyard(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
 			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 				d.reset();
@@ -229,7 +229,7 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
 	}, d -> d.setCurrentStack(getGraveyard(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
-		if (getDiscard().contains(d)) return false;
+		if (getDiscard(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
 			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 				d.reset();
