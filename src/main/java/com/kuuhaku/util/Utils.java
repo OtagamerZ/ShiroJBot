@@ -473,7 +473,9 @@ public abstract class Utils {
 					if (!lock.isDone() && action.apply(w)) {
 						unlock(allowed);
 						lock.complete(true);
-						w.getMessage().delete().queue(null, Utils::doNothing);
+						Objects.requireNonNull(w.getHook())
+								.deleteOriginal()
+								.queue(null, Utils::doNothing);
 					}
 				});
 

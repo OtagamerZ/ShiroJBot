@@ -261,7 +261,9 @@ public class SynthesizeCommand implements Executable {
 							}
 
 							lock.set(true);
-							w.getMessage().delete().queue(null, Utils::doNothing);
+							Objects.requireNonNull(w.getHook())
+									.deleteOriginal()
+									.queue(null, Utils::doNothing);
 							Utils.unlock(usr);
 						}
 					});
