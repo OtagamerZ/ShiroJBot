@@ -129,13 +129,13 @@ public class CommonSocket extends WebSocketClient {
 			switch (payload.getString("channel")) {
 				case "shoukan" -> {
 					String id = payload.getString("card");
-					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
-					if (types.size() <= 1) {
+					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1) & 14", id)));
+					if (types.isEmpty()) {
 						deliver(md, new byte[0]);
 						return;
 					}
 
-					Drawable<?> d = switch (types.getLast()) {
+					Drawable<?> d = switch (types.getFirst()) {
 						case EVOGEAR -> DAO.find(Evogear.class, id);
 						case FIELD -> DAO.find(Field.class, id);
 						default -> DAO.find(Senshi.class, id);
@@ -157,9 +157,9 @@ public class CommonSocket extends WebSocketClient {
 							Map.entry("rarity", locale.get("rarity/" + c.getRarity().name()))
 					);
 
-					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
-					if (types.size() > 1) {
-						CardType type = types.getLast();
+					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1) & 14", id)));
+					if (types.isEmpty()) {
+						CardType type = types.getFirst();
 						Drawable<?> d = switch (type) {
 							case EVOGEAR -> c.asEvogear();
 							case FIELD -> c.asField();
