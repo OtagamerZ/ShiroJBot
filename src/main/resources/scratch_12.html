@@ -56,7 +56,8 @@
                     left: -127px;
                     transform: rotateY(calc(360deg / var(--items) * var(--index))) translateZ(var(--radius)) rotateY(calc(-360deg / var(--items) * var(--index) - var(--angle)));
                     transition: all 1s;
-                    scale: calc(1 + (var(--current-item)) / var(--items));
+                    --big: min((var(--current-item) - var(--index)) * (var(--current-item) - var(--index)), 1);
+                    scale: calc(1 + var(--big));
                 }
 
                 .item:nth-child(1) { --index: 0; }
