@@ -47,7 +47,7 @@ public class GuildConfig extends DAO<GuildConfig> implements AutoMake<GuildConfi
 	@Column(name = "name")
 	private String name;
 
-	@Column(name = "prefix", length = 3)
+	@Column(name = "prefix", length = 10)
 	private String prefix = Constants.DEFAULT_PREFIX;
 
 	@Enumerated(EnumType.STRING)
