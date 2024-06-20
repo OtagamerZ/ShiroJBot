@@ -42,6 +42,7 @@ import com.kuuhaku.util.Bit;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
+import com.youbenzi.mdtool.tool.MDTool;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
@@ -173,7 +174,8 @@ public class CommonSocket extends WebSocketClient {
 								Map.entry("description", d instanceof EffectHolder<?> eh ? JSONObject.of(
 										Map.entry("raw", eh.getBase().getDescription(locale)),
 										Map.entry("parsed", eh.getReadableDescription(locale)),
-										Map.entry("display", eh.getDescription(locale))
+										Map.entry("display_md", eh.getDescription(locale)),
+										Map.entry("display_html", MDTool.markdown2Html(eh.getDescription(locale)))
 								) : new JSONObject()),
 								Map.entry("cost", JSONObject.of(
 										Map.entry("mana", d.getMPCost()),
