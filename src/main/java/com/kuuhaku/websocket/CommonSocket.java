@@ -173,9 +173,9 @@ public class CommonSocket extends WebSocketClient {
 								Map.entry("field_type", d instanceof Field f ? f.getType().name() : FieldType.NONE.name()),
 								Map.entry("description", d instanceof EffectHolder<?> eh ? JSONObject.of(
 										Map.entry("raw", eh.getBase().getDescription(locale)),
-										Map.entry("parsed", eh.getReadableDescription(locale)),
-										Map.entry("display_md", eh.getDescription(locale)),
-										Map.entry("display_html", MDTool.markdown2Html(eh.getDescription(locale)))
+										Map.entry("parsed_md", eh.getReadableDescription(locale)),
+										Map.entry("parsed_html", MDTool.markdown2Html(eh.getReadableDescription(locale))),
+										Map.entry("display", eh.getDescription(locale))
 								) : new JSONObject()),
 								Map.entry("cost", JSONObject.of(
 										Map.entry("mana", d.getMPCost()),
