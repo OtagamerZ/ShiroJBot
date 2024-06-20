@@ -111,15 +111,16 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private transient Trigger currentTrigger = null;
 
 	@Transient
-	private byte state = 0b10;
+	private short state = 0b10;
 	/*
-	0xF
-	  └ 00 11111
-	       ││││└ solid
-	       │││└─ available
-	       ││└── flipped
-	       │└─── ethereal
-	       └──── manipulated
+	0xF F
+	  │ └ 00 11111
+	  │      ││││└ solid
+	  │      │││└─ available
+	  │      ││└── flipped
+	  │      │└─── ethereal
+	  │      └──── manipulated
+	  └ cooldown (0 - 15)
 	 */
 
 	public Evogear() {
@@ -408,7 +409,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void setSolid(boolean solid) {
-		state = (byte) Bit.set(state, 0, solid);
+		state = (short) Bit.set(state, 0, solid);
 	}
 
 	@Override
@@ -418,7 +419,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void setAvailable(boolean available) {
-		state = (byte) Bit.set(state, 1, available);
+		state = (short) Bit.set(state, 1, available);
 	}
 
 	@Override
@@ -432,7 +433,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void setFlipped(boolean flipped) {
-		state = (byte) Bit.set(state, 2, flipped);
+		state = (short) Bit.set(state, 2, flipped);
 	}
 
 	@Override
@@ -442,7 +443,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void setEthereal(boolean ethereal) {
-		state = (byte) Bit.set(state, 3, ethereal);
+		state = (short) Bit.set(state, 3, ethereal);
 	}
 
 	@Override
@@ -452,7 +453,23 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void setManipulated(boolean manipulated) {
-		state = (byte) Bit.set(state, 4, manipulated);
+		state = (short) Bit.set(state, 4, manipulated);
+	}
+
+	@Override
+	public int getCooldown() {
+		return Bit.get(state, 7, 4);
+	}
+
+	@Override
+	public void setCooldown(int time) {
+		short curr = (short) Bit.get(state, 1, 4);
+		state = (short) Bit.set(state, 1, Math.max(curr, time), 4);
+	}
+
+	public void reduceCooldown(int time) {
+		short curr = (short) Bit.get(state, 1, 4);
+		state = (short) Bit.set(state, 1, Math.max(0, curr - time), 4);
 	}
 
 	public String getEffect() {

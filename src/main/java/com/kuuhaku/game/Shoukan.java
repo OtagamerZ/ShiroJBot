@@ -2602,6 +2602,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 					s.getStats().expireMods();
 					for (Evogear e : s.getEquipments()) {
+						e.reduceCooldown(1);
 						e.getStats().expireMods();
 					}
 
