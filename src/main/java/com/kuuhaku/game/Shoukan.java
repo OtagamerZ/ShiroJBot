@@ -1776,7 +1776,7 @@ public class Shoukan extends GameInstance<Phase> {
 		EffectParameters ep = new EffectParameters(trigger, side);
 
 		try {
-			iterateSlots(side, s -> s.execute(true, new EffectParameters(trigger, side, s.asSource(trigger))));
+			iterateSlots(side, s -> s.execute(new EffectParameters(trigger, side, s.asSource(trigger))));
 
 			Hand h = hands.get(side);
 			for (EffectHolder<?> leech : h.getLeeches()) {

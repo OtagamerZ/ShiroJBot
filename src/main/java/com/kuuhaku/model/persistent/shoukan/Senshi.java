@@ -1150,14 +1150,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return cachedEffect;
 	}
 
-	@Override
 	public boolean execute(EffectParameters ep) {
-		return execute(false, ep);
-	}
-
-	public boolean execute(boolean global, EffectParameters ep) {
 		if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
-			execute(true, new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
+			execute(new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
 		}
 
 		if (!hasTrueEffect(true)) {
@@ -1243,7 +1238,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (hasEffect() && getEffect().contains(trigger.name())) {
 				if (isStunned() && getGame().chance(25)) {
-					if (!global) {
+					if (trigger != ON_TICK) {
 						game.getChannel().sendMessage(game.getString("str/effect_stunned", this)).queue();
 					}
 				} else {
