@@ -119,6 +119,27 @@
                 transform: translateZ(var(--distance)) rotateY(var(--angle));
             }
 
+            .infobox {
+                position: absolute;
+                opacity: calc(var(--big));
+                transition: opacity 1s;
+                left: calc(50% + 255px * 0.75);
+                top: 10vh;
+                background-color: rgb(220 199 215);
+                border-radius: 10px;
+                border-color: rgb(187 112 161);
+                border-width: 3px;
+                border-style: solid;
+                box-shadow: 0 0 20px 0 black;
+                width: 50em;
+                height: 30em;
+
+                iframe {
+                    border: none;
+                    content: url("https://api.shirojbot.site/v2/shoukan/pt/sora/info?path=shoukan.description.parsed_html");
+                }
+            }
+
             .carousel {
                 position: absolute;
                 width: 0;
@@ -139,9 +160,9 @@
                     left: -127px;
                     transform: rotateY(calc(360deg / var(--items) * var(--index))) translateZ(var(--radius)) rotateY(calc(-360deg / var(--items) * var(--index) - var(--angle)));
                     transition: transform 1s;
+                    --big: 1 - min(max(var(--current-item) - var(--index), -1 * (var(--current-item) - var(--index))), 1);
 
                     img {
-                        --big: 1 - min(max(var(--current-item) - var(--index), -1 * (var(--current-item) - var(--index))), 1);
                         scale: calc(0.5 + var(--big) / 2);
                         transition: scale 1s;
                         background-image: url("https://i.ibb.co/qFhb2fc/placeholder.webp");
@@ -220,6 +241,10 @@
         <label class="item" for="item-18" id="card-18"><img src="https://api.shirojbot.site/v2/shoukan/PT/LUCYNA_KUSHINADA"></label>
         <label class="item" for="item-19" id="card-19"><img src="https://api.shirojbot.site/v2/shoukan/PT/REG"></label>
         <label class="item" for="item-20" id="card-20"><img src="https://api.shirojbot.site/v2/shoukan/PT/JEANNE_DARC"></label>
+    </div>
+
+    <div class="infobox">
+        <iframe></iframe>
     </div>
 </div>
 </body>

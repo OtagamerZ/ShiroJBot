@@ -1395,6 +1395,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
 						this.isFlipped() ? game.getLocale().get("str/a_card") : this
 				)).queue();
+				game.trigger(ON_DODGE, asSource(ON_DODGE));
 			}
 
 			return true;
@@ -1403,6 +1404,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (!isTick) {
 				Shoukan game = getGame();
 				game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
+				game.trigger(ON_BLOCK, asSource(ON_BLOCK));
 			}
 
 			return true;

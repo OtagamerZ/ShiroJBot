@@ -1171,6 +1171,14 @@ public class Shoukan extends GameInstance<Phase> {
 			posHash = target.posHash();
 			trigger(ON_ATTACK, source.asSource(ON_ATTACK), t);
 		} else {
+			if (!arena.isFieldEmpty(tgtSide) && !source.hasFlag(Flag.DIRECT, true)) {
+				if (announce) {
+					getChannel().sendMessage(getString("error/field_not_empty")).queue();
+				}
+
+				return false;
+			}
+
 			trigger(ON_DIRECT, source.asSource(ON_DIRECT));
 			trigger(ON_ATTACK, source.asSource(ON_ATTACK));
 		}
