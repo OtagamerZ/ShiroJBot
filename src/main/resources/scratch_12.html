@@ -2,15 +2,11 @@
 <head>
     <style>
         :root {
-            --radius: 800px;
-            --items: 20;
-            --current-item: 0;
-            --angle: 0deg;
-            --distance: -800px;
-        }
+            --radius: 600px;
+            --items: 20;--current-item:  0;--angle: 0d eg;--distance: -500px; }
 
         .container {
-            position: relative;
+            position:  relative;
             perspective: 1000px;
             width: 100%;
 
@@ -18,106 +14,26 @@
                 display: none;
             }
 
-            #item-1:checked ~ .carousel {
-                --current-item: 0;
-                --angle: calc(-360deg / var(--items) * 0);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-2:checked ~ .carousel {
-                --current-item: 1;
-                --angle: calc(-360deg / var(--items) * 1);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-3:checked ~ .carousel {
-                --current-item: 2;
-                --angle: calc(-360deg / var(--items) * 2);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-4:checked ~ .carousel {
-                --current-item: 3;
-                --angle: calc(-360deg / var(--items) * 3);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-5:checked ~ .carousel {
-                --current-item: 4;
-                --angle: calc(-360deg / var(--items) * 4);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-6:checked ~ .carousel {
-                --current-item: 5;
-                --angle: calc(-360deg / var(--items) * 5);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-7:checked ~ .carousel {
-                --current-item: 6;
-                --angle: calc(-360deg / var(--items) * 6);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-8:checked ~ .carousel {
-                --current-item: 7;
-                --angle: calc(-360deg / var(--items) * 7);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-9:checked ~ .carousel {
-                --current-item: 8;
-                --angle: calc(-360deg / var(--items) * 8);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-10:checked ~ .carousel {
-                --current-item: 9;
-                --angle: calc(-360deg / var(--items) * 9);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-11:checked ~ .carousel {
-                --current-item: 10;
-                --angle: calc(-360deg / var(--items) * 10);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-12:checked ~ .carousel {
-                --current-item: 11;
-                --angle: calc(-360deg / var(--items) * 11);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-13:checked ~ .carousel {
-                --current-item: 12;
-                --angle: calc(-360deg / var(--items) * 12);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-14:checked ~ .carousel {
-                --current-item: 13;
-                --angle: calc(-360deg / var(--items) * 13);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-15:checked ~ .carousel {
-                --current-item: 14;
-                --angle: calc(-360deg / var(--items) * 14);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-16:checked ~ .carousel {
-                --current-item: 15;
-                --angle: calc(-360deg / var(--items) * 15);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-17:checked ~ .carousel {
-                --current-item: 16;
-                --angle: calc(-360deg / var(--items) * 16);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-18:checked ~ .carousel {
-                --current-item: 17;
-                --angle: calc(-360deg / var(--items) * 17);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-19:checked ~ .carousel {
-                --current-item: 18;
-                --angle: calc(-360deg / var(--items) * 18);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
-            #item-20:checked ~ .carousel {
-                --current-item: 19;
-                --angle: calc(-360deg / var(--items) * 19);
-                transform: translateZ(var(--distance)) rotateY(var(--angle));
-            }
+            #item-1:checked ~ .carousel { --current-item: 0; --angle: calc(-360deg / var(--items) * 0); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-2:checked ~ .carousel { --current-item: 1; --angle: calc(-360deg / var(--items) * 1); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-3:checked ~ .carousel { --current-item: 2; --angle: calc(-360deg / var(--items) * 2); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-4:checked ~ .carousel { --current-item: 3; --angle: calc(-360deg / var(--items) * 3); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-5:checked ~ .carousel { --current-item: 4; --angle: calc(-360deg / var(--items) * 4); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-6:checked ~ .carousel { --current-item: 5; --angle: calc(-360deg / var(--items) * 5); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-7:checked ~ .carousel { --current-item: 6; --angle: calc(-360deg / var(--items) * 6); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-8:checked ~ .carousel { --current-item: 7; --angle: calc(-360deg / var(--items) * 7); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-9:checked ~ .carousel { --current-item: 8; --angle: calc(-360deg / var(--items) * 8); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-10:checked ~ .carousel { --current-item: 9; --angle: calc(-360deg / var(--items) * 9); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-11:checked ~ .carousel { --current-item: 10; --angle: calc(-360deg / var(--items) * 10); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-12:checked ~ .carousel { --current-item: 11; --angle: calc(-360deg / var(--items) * 11); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-13:checked ~ .carousel { --current-item: 12; --angle: calc(-360deg / var(--items) * 12); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-14:checked ~ .carousel { --current-item: 13; --angle: calc(-360deg / var(--items) * 13); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-15:checked ~ .carousel { --current-item: 14; --angle: calc(-360deg / var(--items) * 14); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-16:checked ~ .carousel { --current-item: 15; --angle: calc(-360deg / var(--items) * 15); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-17:checked ~ .carousel { --current-item: 16; --angle: calc(-360deg / var(--items) * 16); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-18:checked ~ .carousel { --current-item: 17; --angle: calc(-360deg / var(--items) * 17); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-19:checked ~ .carousel { --current-item: 18; --angle: calc(-360deg / var(--items) * 18); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
+            #item-20:checked ~ .carousel { --current-item: 19; --angle: calc(-360deg / var(--items) * 19); transform: translateZ(var(--distance)) rotateY(var(--angle)); }
 
             .carousel {
                 position: absolute;
@@ -137,12 +53,11 @@
                     position: absolute;
                     top: 190px;
                     left: -127px;
-                    transform: rotateY(calc(360deg / var(--items) * var(--index))) translateZ(var(--radius)) rotateY(calc(-360deg / var(--items) * var(--index) - var(--angle)));
-                    transition: transform 1s;
+                    transform: rotateY(calc(360deg / var(--items) * var(--index))) translateZ(var(--radius)) rotateY(calc(-360deg / var(--items) * var(--index) - var(--angle))) scale(calc(var(--big) / 3));
                     --big: 1 - min(max(var(--current-item) - var(--index), -1 * (var(--current-item) - var(--index))), 1);
+                    transition: transform 1s;
 
                     img {
-                        scale: calc(0.5 + var(--big) / 2);
                         transition: scale 1s;
                         background-image: url("https://i.ibb.co/qFhb2fc/placeholder.webp");
                         background-repeat: no-repeat;
@@ -155,16 +70,17 @@
                         position: absolute;
                         opacity: calc(var(--big));
                         transition: opacity 1s;
-                        left: calc(255px * 1.25);
-                        top: -100px;
+                        left: 255px;
                         background-color: rgb(220 199 215);
                         border-radius: 10px;
                         border-color: rgb(187 112 161);
                         border-width: 3px;
                         border-style: solid;
                         box-shadow: 0 0 20px 0 black;
-                        width: 50em;
-                        height: 30em;
+                        width: 30vw;
+                        height: 12em;
+                        pointer-events: none;
+                        scale: unset;
                     }
                 }
 
