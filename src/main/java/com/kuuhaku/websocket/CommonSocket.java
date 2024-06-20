@@ -130,7 +130,7 @@ public class CommonSocket extends WebSocketClient {
 				case "shoukan" -> {
 					String id = payload.getString("card");
 					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1) & 14", id)));
-					if (types.isEmpty()) {
+					if (!types.isEmpty()) {
 						deliver(md, new byte[0]);
 						return;
 					}
@@ -158,7 +158,7 @@ public class CommonSocket extends WebSocketClient {
 					);
 
 					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1) & 14", id)));
-					if (types.isEmpty()) {
+					if (!types.isEmpty()) {
 						CardType type = types.getFirst();
 						Drawable<?> d = switch (type) {
 							case EVOGEAR -> c.asEvogear();
