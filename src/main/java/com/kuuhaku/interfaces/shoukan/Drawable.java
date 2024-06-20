@@ -69,6 +69,19 @@ public interface Drawable<T extends Drawable<T>> {
 		return List.of();
 	}
 
+	default List<String> getTags(I18N locale) {
+		return getTags().stream()
+				.map(t -> {
+					if (!t.startsWith("tag/")) {
+						return locale.get(t);
+					}
+
+					return getString(locale, t);
+				})
+				.filter(s -> !s.isBlank())
+				.toList();
+	}
+
 	default SlotColumn getSlot() {
 		return new SlotColumn(getHand().getGame(), getSide(), -1);
 	}

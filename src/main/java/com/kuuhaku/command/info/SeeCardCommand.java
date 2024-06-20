@@ -204,15 +204,7 @@ public class SeeCardCommand implements Executable {
 
 				if (!d.getTags().isEmpty()) {
 					eb.addField(locale.get("str/tags"),
-							d.getTags().stream()
-									.map(s -> {
-										if (!s.startsWith("tag/")) {
-											return locale.get(s);
-										}
-
-										return d.getString(locale, s);
-									})
-									.filter(s -> !s.isBlank())
+							d.getTags(locale).stream()
 									.map(s -> "`" + s + "`")
 									.collect(Collectors.joining(" ")),
 							false

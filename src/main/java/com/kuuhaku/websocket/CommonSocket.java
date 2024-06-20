@@ -169,6 +169,7 @@ public class CommonSocket extends WebSocketClient {
 						out.put("shoukan", JSONObject.of(
 								Map.entry("type_id", type.name()),
 								Map.entry("type", locale.get("type/" + type.name())),
+								Map.entry("tags", d.getTags(locale)),
 								Map.entry("tier", d instanceof Evogear e ? e.getTier() : 0),
 								Map.entry("field_type", d instanceof Field f ? f.getType().name() : FieldType.NONE.name()),
 								Map.entry("description", d instanceof EffectHolder<?> eh ? JSONObject.of(
