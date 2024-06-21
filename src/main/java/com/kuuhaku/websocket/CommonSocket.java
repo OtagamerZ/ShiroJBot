@@ -30,7 +30,6 @@ import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.FieldType;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -171,7 +170,11 @@ public class CommonSocket extends WebSocketClient {
 								Map.entry("type", locale.get("type/" + type.name())),
 								Map.entry("tags", d.getTags(locale)),
 								Map.entry("tier", d instanceof Evogear e ? e.getTier() : 0),
-								Map.entry("field_type", d instanceof Field f ? f.getType().name() : FieldType.NONE.name()),
+								Map.entry("field", d instanceof Field f ?JSONObject.of(
+										Map.entry("type", f.getType().name()),
+										Map.entry("description", locale.get("field/" + f.getType().name() + "_desc")),
+										Map.entry("modifiers", f.getModifiers())
+								): new JSONObject()),
 								Map.entry("description", d instanceof EffectHolder<?> eh ? JSONObject.of(
 										Map.entry("raw", eh.getBase().getDescription(locale)),
 										Map.entry("parsed_md", eh.getReadableDescription(locale)),
