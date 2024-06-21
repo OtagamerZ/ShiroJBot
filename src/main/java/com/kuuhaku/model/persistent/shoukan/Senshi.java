@@ -191,6 +191,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public Race getRace() {
+		if (hand != null && getGame() != null && hand.getOrigins().synergy() == Race.DOPPELGANGER) {
+			return Race.MIXED;
+		}
+
 		return Utils.getOr(stats.getRace(), race);
 	}
 

@@ -1187,10 +1187,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int dmg = damage;
-		if (target != null && you.getOrigins().synergy() == Race.DOPPELGANGER && source.getId().equals(target.getId())) {
-			dmg *= 2;
-		}
-
 		int direct = 0;
 		int lifesteal = you.getBase().lifesteal() + (int) source.getStats().getLifesteal().get();
 		if (you.getOrigins().synergy() == Race.VAMPIRE && you.isLowLife()) {
