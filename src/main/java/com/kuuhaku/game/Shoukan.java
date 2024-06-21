@@ -996,22 +996,27 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		curr.consumeMP(1);
-		if (!trigger(ON_ACTIVATE, d.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
-			if (!d.isAvailable()) {
-				reportEvent("str/effect_interrupted", true, d);
-				return true;
+		try {
+			if (!trigger(ON_ACTIVATE, d.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
+				if (!d.isAvailable()) {
+					reportEvent("str/effect_interrupted", true, d);
+					return true;
+				}
+
+				return false;
 			}
 
-			return false;
-		}
+			if (getPhase() != Phase.PLAN && !d.hasFlag(Flag.FREE_ACTION, true)) {
+				d.setAvailable(false);
+			}
 
-		if (getPhase() != Phase.PLAN && !d.hasFlag(Flag.FREE_ACTION, true)) {
-			d.setAvailable(false);
+			reportEvent("str/card_special", true, curr.getName(), d);
+			return !curr.selectionPending();
+		} finally {
+			if (!d.isAvailable()) {
+				curr.consumeMP(1);
+			}
 		}
-
-		reportEvent("str/card_special", true, curr.getName(), d);
-		return !curr.selectionPending();
 	}
 
 	@PhaseConstraint("COMBAT")
