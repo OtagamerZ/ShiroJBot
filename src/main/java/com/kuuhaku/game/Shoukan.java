@@ -994,7 +994,10 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!tgt.validate(type)) {
 			getChannel().sendMessage(getString("error/target", getString("str/target_" + type))).queue();
 			return false;
-		} else if (!trigger(ON_ACTIVATE, d.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
+		}
+
+		curr.consumeMP(1);
+		if (!trigger(ON_ACTIVATE, d.asSource(ON_ACTIVATE), tgt.targets(ON_EFFECT_TARGET))) {
 			if (!d.isAvailable()) {
 				reportEvent("str/effect_interrupted", true, d);
 				return true;
@@ -1003,7 +1006,6 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		curr.consumeMP(1);
 		if (getPhase() != Phase.PLAN && !d.hasFlag(Flag.FREE_ACTION, true)) {
 			d.setAvailable(false);
 		}
@@ -2361,7 +2363,7 @@ public class Shoukan extends GameInstance<Phase> {
 							.filter(Drawable::isAvailable).map(d -> new SelectionCard(d, false))
 							.toList();
 
-					if (valid.size() >= 5) {
+					if (valid.size() >= 4) {
 						helper.addAction(Utils.parseEmoji("\uD83C\uDF00"), w -> {
 							if (isLocked()) return;
 

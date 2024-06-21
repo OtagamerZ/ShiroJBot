@@ -190,10 +190,9 @@ public class Hand {
 					for (Drawable<?> r : op.getDeck()) {
 						if (r instanceof EffectHolder<?> eh) {
 							ValueMod vm = eh.getStats().getCostMult().get(getGame().getArena().DEFAULT_FIELD);
-							eh.getStats().getCostMult().set(getGame().getArena().DEFAULT_FIELD, Math.max(vm.getValue() - 0.1, -0.5));
+							eh.getStats().getCostMult().set(Math.max(vm.getValue() - 0.1, -0.5));
 						}
 					}
-
 
 					getGame().getArena().getBanned().add(s);
 				} else if (op.getOrigins().synergy() == Race.REAPER) {
@@ -752,6 +751,11 @@ public class Hand {
 	public void flushDiscard() {
 		cards.removeIf(Drawable::isEthereal);
 		graveyard.addAll(discard);
+
+		if (origin.synergy() == Race.REAPER) {
+			regdeg.add(100 * discard.size());
+		}
+
 		discard.clear();
 	}
 
