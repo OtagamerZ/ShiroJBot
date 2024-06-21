@@ -593,7 +593,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi d = nc ? slot.getBottom() : slot.getTop();
-		if (!d.isAvailable() || d.isManipulated()) {
+		if (d.hasStatusEffect()) {
 			getChannel().sendMessage(getString("error/card_unavailable")).queue();
 			return false;
 		} else if (d.hasSwitched()) {
@@ -627,7 +627,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi d = slot.getBottom();
-		if (!d.isAvailable() || d.isManipulated()) {
+		if (d.hasStatusEffect()) {
 			getChannel().sendMessage(getString("error/card_unavailable")).queue();
 			return false;
 		}
@@ -656,7 +656,10 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi chosen = nc ? slot.getBottom() : slot.getTop();
-		if (chosen.isFixed()) {
+		if (chosen.hasStatusEffect()) {
+			getChannel().sendMessage(getString("error/card_unavailable")).queue();
+			return false;
+		} else if (chosen.isFixed()) {
 			getChannel().sendMessage(getString("error/card_fixed")).queue();
 			return false;
 		} else if ((int) (chosen.getHPCost() * mult) >= curr.getHP()) {
@@ -698,11 +701,22 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
+			double mult = 0.5;
+			if (curr.getOther().getOrigins().synergy() == Race.INFERNAL) {
+				mult *= 2;
+			}
+
 			Senshi chosen = nc ? slot.getBottom() : slot.getTop();
-			if (chosen.getHPCost() / 2 >= curr.getHP()) {
+			if (chosen.hasStatusEffect()) {
+				getChannel().sendMessage(getString("error/card_unavailable")).queue();
+				return false;
+			} else if (chosen.isFixed()) {
+				getChannel().sendMessage(getString("error/card_fixed")).queue();
+				return false;
+			} else if ((int) (chosen.getHPCost() * mult) >= curr.getHP()) {
 				getChannel().sendMessage(getString("error/not_enough_hp_sacrifice")).queue();
 				return false;
-			} else if (chosen.getMPCost() / 2 > curr.getMP()) {
+			} else if ((int) (chosen.getMPCost() * mult) > curr.getMP()) {
 				getChannel().sendMessage(getString("error/not_enough_mp_sacrifice")).queue();
 				return false;
 			}
@@ -943,7 +957,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi d = slot.getTop();
-		if (!d.isAvailable() || d.isManipulated()) {
+		if (d.hasStatusEffect()) {
 			getChannel().sendMessage(getString("error/card_unavailable")).queue();
 			return false;
 		} else if (d.isFlipped()) {

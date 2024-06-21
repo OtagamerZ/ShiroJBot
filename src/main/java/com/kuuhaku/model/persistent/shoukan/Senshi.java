@@ -1037,6 +1037,16 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		reduceBerserk(time);
 	}
 
+	public boolean hasStatusEffect() {
+		return isAvailable()
+			   || isSleeping()
+			   || isStunned()
+			   || isStasis()
+			   || getRemainingTaunt() > 0
+			   || isBerserk()
+			   || isManipulated();
+	}
+
 	@Override
 	public int getCooldown() {
 		return Bit.get(state, 7, 4);
