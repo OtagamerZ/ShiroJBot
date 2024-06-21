@@ -1955,13 +1955,7 @@ public class Shoukan extends GameInstance<Phase> {
 				resetTimer();
 
 				trigger(ON_TICK);
-				for (Hand h : hands.values()) {
-					Stream.of(h.getCards(), h.getGraveyard(), h.getRealDeck(), h.getDiscard())
-							.parallel()
-							.forEach(s -> s.removeIf(d -> d.getCurrentStack() != s));
-				}
 
-				arena.getBanned().removeIf(d -> d.getCurrentStack() != arena.getBanned(true));
 				getCurrent().setRerolled(true);
 				getCurrent().verifyCap();
 			}
@@ -2020,6 +2014,14 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				});
 			}
+
+			for (Hand h : hands.values()) {
+				Stream.of(h.getCards(), h.getGraveyard(), h.getRealDeck(), h.getDiscard())
+						.parallel()
+						.forEach(s -> s.removeIf(d -> d.getCurrentStack() != s));
+			}
+
+			arena.getBanned().removeIf(d -> d.getCurrentStack() != arena.getBanned(true));
 
 			BufferedImage img = arena.render(getLocale());
 			byte[] bytes = IO.getBytes(img, "png");
