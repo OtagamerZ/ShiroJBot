@@ -1038,7 +1038,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean hasStatusEffect() {
-		return isAvailable()
+		return !isAvailable()
 			   || isSleeping()
 			   || isStunned()
 			   || isStasis()
