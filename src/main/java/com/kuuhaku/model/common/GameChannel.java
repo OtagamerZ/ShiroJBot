@@ -76,7 +76,13 @@ public class GameChannel {
 
 		Map<String, MessageCreateAction> acts = new HashMap<>();
 		for (GuildMessageChannel chn : getChannels()) {
-			acts.put(chn.getId(), chn.sendMessage(message));
+			XStringBuilder buf = buffer.remove(chn.getId());
+
+			if (buf != null) {
+				acts.put(chn.getId(), chn.sendMessage(buf.appendNewLine(message).toString()));
+			} else {
+				acts.put(chn.getId(), chn.sendMessage(message));
+			}
 		}
 
 		lastAction = System.currentTimeMillis();

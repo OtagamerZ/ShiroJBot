@@ -715,7 +715,7 @@ public class Hand {
 					graveyard.addAll(ds);
 					this.cards.removeAll(ds);
 
-					game.reportEvent("str/discard_card", true, getName(),
+					game.reportEvent("str/discard_card", true, false, getName(),
 							Utils.properlyJoin(game.getString("str/and")).apply(
 									cards.stream().map(SelectionCard::card).map(Drawable::toString).toList()
 							)
