@@ -186,7 +186,7 @@ public class Hand {
 				op.addKill();
 				getGame().trigger(Trigger.ON_CONFIRMED_KILL, s.getLastInteraction().asSource(Trigger.ON_CONFIRMED_KILL), s.asTarget());
 
-				if (op.getKills() % 7 == 0 && op.getOrigins().synergy() == Race.SHINIGAMI) {
+				if (op.getKills() % 4 == 0 && op.getOrigins().synergy() == Race.SHINIGAMI) {
 					for (Drawable<?> r : op.getDeck()) {
 						if (r instanceof EffectHolder<?> eh) {
 							ValueMod vm = eh.getStats().getCostMult().get(getGame().getArena().DEFAULT_FIELD);
