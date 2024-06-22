@@ -887,7 +887,7 @@ public class Hand {
 			}
 
 			if (origin.major() == Race.UNDEAD) {
-				regdeg.add(value);
+				regdeg.add(value / 2);
 				value = 0;
 			}
 
