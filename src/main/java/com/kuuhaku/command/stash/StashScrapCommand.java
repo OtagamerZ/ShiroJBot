@@ -57,7 +57,7 @@ import java.util.stream.Collectors;
 		category = Category.MISC
 )
 @Signature({
-		"<action:word:r>[all]",
+		"<action:word:r>[all,extra]",
 		"<cards:text:r>"
 })
 public class StashScrapCommand implements Executable {
@@ -70,7 +70,12 @@ public class StashScrapCommand implements Executable {
 		}
 
 		if (args.has("action")) {
-			confirm(locale, kp.getExtras(), event, kp.getAccount());
+			if (args.getString("action").equalsIgnoreCase("all")) {
+				confirm(locale, kp.getNotInUse(), event, kp.getAccount());
+			} else {
+				confirm(locale, kp.getExtras(), event, kp.getAccount());
+			}
+
 			return;
 		}
 
