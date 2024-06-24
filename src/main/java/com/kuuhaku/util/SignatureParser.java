@@ -273,7 +273,7 @@ public abstract class SignatureParser {
                             .map(String::toLowerCase)
                             .toList();
 
-                    wrap = "<%s>(" + String.join("|", opts) + ")";
+                    wrap = String.join("|", opts);
                 }
 
                 if (type.equalsIgnoreCase(Signature.Type.TEXT.name()) && supplied.size() < args.length - 1) {
