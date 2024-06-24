@@ -65,11 +65,6 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 		this.inGame = new InfiniteList<>(Set.of(players));
 		this.dict = IO.getResourceAsFile("shiritori/" + locale.name().toLowerCase() + ".dict");
-		if (this.dict == null) {
-			getChannel().sendMessage(getString("error/dict_not_found")).queue();
-			close(GameReport.DICT_NOT_FOUND);
-			return;
-		}
 
 		setTimeout(turn -> {
 			getChannel().sendMessage(locale.get("str/game_wo_alt", "<@" + inGame.get() + ">", "<@" + inGame.peekNext() + ">")).queue();
@@ -93,6 +88,12 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 	@Override
 	protected void begin() {
+		if (this.dict == null) {
+			getChannel().sendMessage(getString("error/dict_not_found")).queue();
+			close(GameReport.DICT_NOT_FOUND);
+			return;
+		}
+
 		reportEvent("str/game_start_shiritori", "<@" + inGame.get() + ">");
 	}
 
