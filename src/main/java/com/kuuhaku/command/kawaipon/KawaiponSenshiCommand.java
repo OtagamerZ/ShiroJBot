@@ -106,7 +106,7 @@ public class KawaiponSenshiCommand implements Executable {
 
 			AtomicReference<Message> msg = new AtomicReference<>();
 			ThrowingFunction<Integer, Page> loader = i -> {
-				ub.setParameter("page", String.valueOf(i));
+				ub.setParameter("page", String.valueOf(i + 1));
 
 				try {
 					String url = ub.build().toString();
