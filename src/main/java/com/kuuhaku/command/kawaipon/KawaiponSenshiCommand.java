@@ -20,8 +20,8 @@ package com.kuuhaku.command.kawaipon;
 
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.model.ThrowingFunction;
 import com.kuuhaku.Constants;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -33,20 +33,15 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.utils.FileUpload;
-import org.apache.http.client.utils.URIBuilder;
 
-import java.awt.image.BufferedImage;
-import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Command(
@@ -60,79 +55,70 @@ public class KawaiponSenshiCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Deck dk = data.profile().getAccount().getCurrentDeck();
-		try {
-			URIBuilder ub = new URIBuilder(Constants.API_ROOT + "shoukan/" + locale.name() + "/senshi")
-					.setParameter("user", event.user().getId())
-					.setParameter("frame", dk.getStyling().getFrame().name());
+		if (!args.has("race")) {
+			int total = DAO.queryNative(Integer.class, "SELECT count(1) FROM senshi");
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/available_cards", locale.get("type/senshi")))
-					.setTitle(locale.get("type/senshi"))
-					.setImage("attachment://cards.jpg");
+					.setTitle(locale.get("type/senshi"));
 
-			AtomicReference<String> baseDesc = new AtomicReference<>("");
+			List<Page> pages = new ArrayList<>();
+			int max = (int) Math.ceil(total / 50d);
+			for (int i = 1; i <= max; i++) {
+				String url = (Constants.API_ROOT + "shoukan/%s/senshi?uid=%s&frame=%s&v=%s&page=%s").formatted(
+						locale, event.user().getId(), dk.getStyling().getFrame().name(), System.currentTimeMillis(), i
+				);
 
-			if (args.has("race")) {
-				Race race = args.getEnum(Race.class, "race");
-				if (!Utils.equalsAny(race, Race.validValues())) {
-					String sug = Utils.didYouMean(args.getString("race"), Arrays.stream(Race.validValues()).map(Race::name).toList());
-					if (sug == null) {
-						event.channel().sendMessage(locale.get("error/unknown_race_none")).queue();
-					} else {
-						event.channel().sendMessage(locale.get("error/unknown_race", sug)).queue();
-					}
-					return;
-				}
-
-				baseDesc.set(race.getDescription(locale) + "\n\n");
-
-				boolean variant = race != Race.getByFlag(race.getFlag());
-				eb.setThumbnail(Constants.ORIGIN_RESOURCES + "shoukan/race/full/" + race + ".png")
-						.setTitle(race.getName(locale) + " (`" + race.name() + "`)");
-
-				if (Integer.bitCount(race.getFlag()) == 1) {
-					eb.addField(locale.get("str/sub_races"), Utils.properlyJoin(locale.get("str/and")).apply(Arrays.stream(race.derivates()).map(r -> r.getName(locale)).toList()), false)
-							.addField(locale.get("str/major_effect"), race.getMajor(locale), false)
-							.addField(locale.get("str/minor_effect"), race.getMinor(locale), false);
-				} else {
-					eb.addField(locale.get("str/origins"), race.split().stream().map(r -> r.getName(locale)).collect(Collectors.joining(" + ")), false)
-							.addField(locale.get("str/synergy_effect"), race.getSynergy(locale), false);
-				}
-
-				ub.setParameter("race", String.valueOf(race.getFlag()))
-						.setParameter("variant", variant ? "1" : "0")
-						.setParameter("pure", args.has("pure") ? "1" : "0");
+				eb.setImage(url).setDescription(locale.get("str/fallback_url", url));
+				pages.add(InteractPage.of(eb.build()));
 			}
 
-			AtomicReference<Message> msg = new AtomicReference<>();
-			ThrowingFunction<Integer, Page> loader = i -> {
-				ub.setParameter("page", String.valueOf(i + 1));
+			Utils.paginate(pages, 1, true, event.channel(), event.user());
+			return;
+		}
 
-				try {
-					String url = ub.build().toString();
-					eb.setDescription(baseDesc.get() + locale.get("str/fallback_url", url));
-
-					if (msg.get() != null) {
-						BufferedImage img = IO.getImage(url);
-						if (img == null) return null;
-
-						msg.get().editMessageAttachments(FileUpload.fromData(IO.getBytes(img), "cards.jpg")).queue();
-					}
-
-					return InteractPage.of(eb.build());
-				} catch (URISyntaxException e) {
-					throw new RuntimeException(e);
-				}
-			};
-
-			msg.set(Utils.paginate(loader, event.channel(), event.user()));
-
-			BufferedImage img = IO.getImage(ub.build().toString());
-			if (img != null) {
-				msg.get().editMessageAttachments(FileUpload.fromData(IO.getBytes(img), "cards.jpg")).queue();
+		Race race = args.getEnum(Race.class, "race");
+		if (!Utils.equalsAny(race, Race.validValues())) {
+			String sug = Utils.didYouMean(args.getString("race"), Arrays.stream(Race.validValues()).map(Race::name).toList());
+			if (sug == null) {
+				event.channel().sendMessage(locale.get("error/unknown_race_none")).queue();
+			} else {
+				event.channel().sendMessage(locale.get("error/unknown_race", sug)).queue();
 			}
-		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
+			return;
+		}
+
+		boolean variant = race != Race.getByFlag(race.getFlag());
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setAuthor(locale.get("str/available_cards", locale.get("type/senshi")))
+				.setThumbnail(Constants.ORIGIN_RESOURCES + "shoukan/race/full/" + race + ".png")
+				.setTitle(race.getName(locale) + " (`" + race.name() + "`)");
+
+		if (Integer.bitCount(race.getFlag()) == 1) {
+			eb.addField(locale.get("str/sub_races"), Utils.properlyJoin(locale.get("str/and")).apply(Arrays.stream(race.derivates()).map(r -> r.getName(locale)).toList()), false)
+					.addField(locale.get("str/major_effect"), race.getMajor(locale), false)
+					.addField(locale.get("str/minor_effect"), race.getMinor(locale), false);
+		} else {
+			eb.addField(locale.get("str/origins"), race.split().stream().map(r -> r.getName(locale)).collect(Collectors.joining(" + ")), false)
+					.addField(locale.get("str/synergy_effect"), race.getSynergy(locale), false);
+		}
+
+		int total = race.getCount();
+		if (total > 0) {
+			List<Page> pages = new ArrayList<>();
+			int max = (int) Math.ceil(total / 50d);
+			for (int i = 1; i <= max; i++) {
+				String url = (Constants.API_ROOT + "shoukan/%s/senshi?race=%s&pure=%s&variant=%s&uid=%s&frame=%s&v=%s&page=%s").formatted(
+						locale, race.getFlag(), args.has("pure") ? 1 : 0, variant ? 1 : 0, event.user().getId(), dk.getStyling().getFrame().name(), System.currentTimeMillis(), i
+				);
+
+				eb.setImage(url).setDescription(race.getDescription(locale) + "\n\n" + locale.get("str/fallback_url", url));
+				pages.add(InteractPage.of(eb.build()));
+			}
+
+			Utils.paginate(pages, 1, true, event.channel(), event.user());
+		} else {
+			event.channel().sendMessageEmbeds(eb.build()).queue();
 		}
 	}
 }
