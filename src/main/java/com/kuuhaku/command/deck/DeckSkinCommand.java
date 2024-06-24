@@ -116,7 +116,7 @@ public class DeckSkinCommand implements Executable {
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(event.user()::equals)
 				.addAction(Utils.parseEmoji("◀️"), w -> {
-					if (i.get() > 1) {
+					if (i.get() > 0) {
 						confirm.set(false);
 						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
 					}
