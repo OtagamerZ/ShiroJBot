@@ -71,12 +71,12 @@ public class HourlySchedule implements Runnable, PreInitialize {
 
 		API.call(
 				new HttpPost("https://top.gg/api/bots/" + Main.getApp().getId() + "/stats"), null,
-				new JSONObject(Map.of(
-						HttpHeaders.AUTHORIZATION, Constants.TOPGG_TOKEN
-				)),
-				new JSONObject(Map.of(
-					"server_count", Main.getApp().getShiro().getGuildCache().size()
-				)).toString()
+				JSONObject.of(
+						Map.entry(HttpHeaders.AUTHORIZATION, Constants.TOPGG_TOKEN)
+				),
+				JSONObject.of(
+					Map.entry("server_count", Main.getApp().getShiro().getGuildCache().size())
+				).toString()
 		);
 	}
 

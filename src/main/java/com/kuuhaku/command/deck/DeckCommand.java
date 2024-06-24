@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -37,6 +38,7 @@ import net.dv8tion.jda.api.utils.FileUpload;
 		name = "deck",
 		category = Category.INFO
 )
+@Signature("<private:word>[p]")
 @Requires(Permission.MESSAGE_ATTACH_FILES)
 public class DeckCommand implements Executable {
 	@Override
@@ -47,10 +49,16 @@ public class DeckCommand implements Executable {
 			return;
 		}
 
-		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image")))
-				.flatMap(m -> event.channel().sendMessage(event.user().getAsMention())
-						.addFiles(FileUpload.fromData(IO.getBytes(d.render(locale), "png"), "deck.png"))
-						.flatMap(s -> m.delete())
-				).queue();
+		if (args.containsKey("private")) {
+			event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image")))
+					.flatMap(m -> event.user().openPrivateChannel()
+							.flatMap(s -> s.sendFiles(FileUpload.fromData(IO.getBytes(d.render(locale), "png"), "deck.png")))
+							.flatMap(s -> m.editMessage(locale.get("str/sent_in_private")))
+					).queue();
+		} else {
+			event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image")))
+					.flatMap(m -> m.editMessage(event.user().getAsMention()).setFiles(FileUpload.fromData(IO.getBytes(d.render(locale), "png"), "deck.png")))
+					.queue();
+		}
 	}
 }

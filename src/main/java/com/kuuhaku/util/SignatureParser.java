@@ -35,7 +35,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public abstract class SignatureParser {
     private static final Pattern ARGUMENT_PATTERN = Pattern.compile("^<(?<name>[a-z]\\w*):(?<type>[a-z]+)(?<required>:[r])?>(?:\\[(?<options>[^\\[\\]]+)+])?$", Pattern.CASE_INSENSITIVE);
@@ -201,7 +200,7 @@ public abstract class SignatureParser {
                         if (opts.isEmpty()) {
                             supplied.add(wrap.formatted("> " + locale.get("signature/" + name) + " <"));
                         } else {
-                            supplied.add(wrap.formatted(opts.stream().map(Utils::underline).collect(Collectors.joining("|"))));
+                            supplied.add(wrap.formatted(String.join("|", opts)));
                             failOpts = opts.stream().map(o -> "`" + o + "`").toArray(String[]::new);
                         }
                     }
@@ -264,8 +263,18 @@ public abstract class SignatureParser {
 
                 String name = groups.getString("name");
                 String type = groups.getString("type");
+                String opt = groups.getString("options");
                 boolean required = groups.has("required");
                 String wrap = "%s";
+
+                if (!opt.isBlank()) {
+                    List<String> opts = Arrays.stream(groups.getString("options", "").split(","))
+                            .filter(s -> !s.isBlank())
+                            .map(String::toLowerCase)
+                            .toList();
+
+                    wrap = "<%s>(" + String.join("|", opts) + ")";
+                }
 
                 if (type.equalsIgnoreCase(Signature.Type.TEXT.name()) && supplied.size() < args.length - 1) {
                     wrap = "\"" + wrap + "\"";

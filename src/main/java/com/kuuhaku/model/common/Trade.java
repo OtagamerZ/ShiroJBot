@@ -237,7 +237,7 @@ public class Trade {
 
             int count = (left ? leftOffer : rightOffer).getCount(card.getId());
             if (count > 1) {
-                sb.appendNewLine("- " + count + "x " + card);
+                sb.appendNewLine("- " + count + "x " + card + "(Q: " + card.getQuality() + ")");
             } else {
                 sb.appendNewLine("- " + card);
             }
