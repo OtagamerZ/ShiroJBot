@@ -69,7 +69,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CommonSocket extends WebSocketClient {
 	private static final ScheduledExecutorService exec = Executors.newScheduledThreadPool(2);
-	private static final String TOKEN = DAO.queryNative(String.class, "SELECT token FROM access_token WHERE bearer = 'Shiro'");
+	private static final String TOKEN = DAO.queryNative(String.class, "SELECT token FROM access_token WHERE bearer = 'shiro'");
 	private int retry = 0;
 
 	public CommonSocket(String address) throws URISyntaxException {
