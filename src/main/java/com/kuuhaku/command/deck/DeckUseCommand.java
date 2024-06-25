@@ -81,7 +81,7 @@ public class DeckUseCommand implements Executable {
 			return;
 		}
 
-		int id = args.getInt("id");
+		int id = args.getInt("id", -1);
 		String name = args.getString("name");
 		List<Deck> decks = acc.getDecks();
 		for (Deck deck : decks) {
