@@ -22,7 +22,7 @@ CREATE OR REPLACE FUNCTION t_generate_token()
 AS
 $$
 BEGIN
-    NEW.bearer = trim(NEW.bearer);
+    NEW.bearer = lower(trim(NEW.bearer));
     IF (NEW.bearer = '') THEN
         RAISE EXCEPTION 'a bearer must be supplied';
     ELSEIF (NEW.bearer <> OLD.bearer) THEN
