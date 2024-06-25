@@ -856,23 +856,25 @@ public class Shoukan extends GameInstance<Phase> {
 			chosen.getStats().getData().put("consumed", consumed);
 		}
 
-		try {
-			if (!chosen.execute(chosen.toParameters(tgt))) {
-				if (!chosen.isAvailable()) {
-					reportEvent("str/effect_interrupted", true, false, chosen);
-					return true;
+		if (!chosen.execute(chosen.toParameters(tgt))) {
+			if (!chosen.isAvailable()) {
+				if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
+					stack.add(chosen);
 				}
 
-				return false;
+				reportEvent("str/effect_interrupted", true, false, chosen);
+				return true;
 			}
 
-			reportEvent("str/activate_card", true, false, curr.getName(), chosen.getBase().getTags().contains("SECRET") ? getString("str/a_spell") : chosen);
-			return true;
-		} finally {
-			if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
-				stack.add(chosen);
-			}
+			return false;
 		}
+
+		if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
+			stack.add(chosen);
+		}
+
+		reportEvent("str/activate_card", true, false, curr.getName(), chosen.getBase().getTags().contains("SECRET") ? getString("str/a_spell") : chosen);
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -1983,12 +1985,12 @@ public class Shoukan extends GameInstance<Phase> {
 			List<Side> sides = List.of(getOtherSide(), getCurrentSide());
 			for (Side side : sides) {
 				Hand hand = hands.get(side);
-				hand.getCards();
-				hand.getRealDeck();
-				hand.getGraveyard();
-				hand.getDiscard();
 				hand.resetChain();
 				hand.getStats().removeExpired(ValueMod::isExpired);
+
+				Stream.of(hand.getCards(), hand.getGraveyard(), hand.getRealDeck(), hand.getDiscard())
+						.parallel()
+						.forEach(s -> s.removeIf(d -> d.getCurrentStack() != s));
 
 				if (hand.getOrigins().synergy() == Race.SUCCUBUS && hand.isLowLife()) {
 					Hand op = hand.getOther();
@@ -2033,12 +2035,6 @@ public class Shoukan extends GameInstance<Phase> {
 						e.getStats().removeIf(ValueMod::isExpired);
 					}
 				});
-			}
-
-			for (Hand h : hands.values()) {
-				Stream.of(h.getCards(), h.getGraveyard(), h.getRealDeck(), h.getDiscard())
-						.parallel()
-						.forEach(s -> s.removeIf(d -> d.getCurrentStack() != s));
 			}
 
 			arena.getBanned().removeIf(d -> d.getCurrentStack() != arena.getBanned(true));
