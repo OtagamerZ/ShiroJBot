@@ -69,14 +69,13 @@ public class HourlySchedule implements Runnable, PreInitialize {
 			}
 		}
 
+		int guilds = (int) Main.getApp().getShiro().getGuildCache().size();
 		API.call(
 				new HttpPost("https://top.gg/api/bots/" + Main.getApp().getId() + "/stats"), null,
 				JSONObject.of(
 						Map.entry(HttpHeaders.AUTHORIZATION, Constants.TOPGG_TOKEN)
 				),
-				JSONObject.of(
-					Map.entry("server_count", Main.getApp().getShiro().getGuildCache().size())
-				).toString()
+				Utils.JSON("{\"server_count\": " + guilds + "}")
 		);
 	}
 

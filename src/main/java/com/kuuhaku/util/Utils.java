@@ -58,6 +58,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -75,6 +76,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.Instant;
@@ -994,7 +996,7 @@ public abstract class Utils {
 
 	public static Script compile(@Language("Groovy") String code) {
 		Class<? extends Script> cached = Main.getCacheManager().computeScript(
-				Calc.hash(code, "sha1"),
+				DigestUtils.sha1Hex(code),
 				(k, v) -> v == null ? Constants.GROOVY.load().parse(code).getClass() : v
 		);
 
@@ -1067,19 +1069,19 @@ public abstract class Utils {
 	}
 
 	public static String generateRandomHash(int length) {
-		String method;
+		MessageDigest md;
 
 		if (length <= 0) return "";
-		else if (length <= 32) method = "MD5";
-		else if (length <= 40) method = "SHA-1";
-		else if (length <= 64) method = "SHA-256";
-		else if (length <= 128) method = "SHA-512";
+		else if (length <= 32) md = DigestUtils.getMd5Digest();
+		else if (length <= 40) md = DigestUtils.getSha1Digest();
+		else if (length <= 64) md = DigestUtils.getSha256Digest();
+		else if (length <= 128) md = DigestUtils.getSha512Digest();
 		else return "";
 
 		byte[] bytes = new byte[8];
 		ThreadLocalRandom.current().nextBytes(bytes);
 
-		String hash = Calc.hash(bytes, method);
+		String hash = HexFormat.of().formatHex(md.digest(bytes));
 		if (hash.isBlank()) return "";
 
 		return hash.substring(0, length);
@@ -1318,5 +1320,9 @@ public abstract class Utils {
 
 	public static int digits(double number) {
 		return BigDecimal.valueOf(number - (int) number).precision();
+	}
+
+	public static String JSON(@Language("JSON5") String json) {
+		return json;
 	}
 }

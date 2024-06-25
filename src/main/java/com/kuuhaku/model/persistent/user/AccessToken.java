@@ -27,6 +27,7 @@ import jakarta.persistence.Table;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.HexFormat;
 import java.util.Objects;
 
 @Entity
@@ -52,7 +53,7 @@ public class AccessToken extends DAO<AccessToken> {
 		byte[] salt = new byte[8];
 		Constants.DEFAULT_SECURE_RNG.nextBytes(salt);
 
-		this.salt = Hex.encodeHexString(DigestUtils.sha1(salt));
+		this.salt = DigestUtils.sha1Hex(salt);
 	}
 
 	public String getBearer() {

@@ -46,7 +46,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
@@ -55,11 +54,11 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ServerHandshake;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
+import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,27 +67,23 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class CommonSocket extends WebSocketClient {
-	private static final ScheduledExecutorService exec = Executors.newScheduledThreadPool(2);
+	private static final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 	private static final String TOKEN = DAO.queryNative(String.class, "SELECT token FROM access_token WHERE bearer = 'shiro'");
 	private int retry = 0;
 
 	public CommonSocket(String address) throws URISyntaxException {
 		super(new URI(address));
-		exec.scheduleAtFixedRate(this::ping, 0, 30, TimeUnit.SECONDS);
-	}
-
-	private void ping() {
-		if (isOpen()) {
-			sendPing();
-		}
 	}
 
 	@Override
 	public void onOpen(ServerHandshake handshake) {
-		send(JSONObject.of(
-				Map.entry("type", "AUTH"),
-				Map.entry("token", TOKEN)
-		).toString());
+		send(Utils.JSON("""
+				{
+					"type": "AUTH",
+					"token": "%s"
+				}
+				""").formatted(TOKEN)
+		);
 	}
 
 	@Override
@@ -105,32 +100,32 @@ public class CommonSocket extends WebSocketClient {
 					Constants.LOGGER.info("Connected to {}", getClass().getSimpleName());
 				}
 
-				send(JSONObject.of(
-						Map.entry("type", "ATTACH"),
-						Map.entry("channels", List.of("shoukan", "card_info", "i18n", "invite", "vote"))
-				).toString());
+				send(Utils.JSON("""
+						{
+							"type": "ATTACH",
+							"channels": ["shoukan", "card_info", "i18n", "invite", "vote"]
+						}
+						"""));
 				return;
 			}
 
-			String token = DigestUtils.sha256Hex(TOKEN);
 			if (!payload.getString("auth").equals(DigestUtils.sha256Hex(TOKEN))) return;
 
-			send(JSONObject.of(
-					Map.entry("type", "ACKNOWLEDGE"),
-					Map.entry("key", payload.getString("key")),
-					Map.entry("token", token)
-			).toString());
+			send(Utils.JSON("""
+						{
+							"type": "ACKNOWLEDGE",
+							"key": "%s"
+						}
+						""").formatted(payload.getString("key"))
+			);
 
-			MessageDigest md = DigestUtils.getDigest("md5");
-			md.update(payload.getString("key").getBytes(StandardCharsets.UTF_8));
-			md.update(token.getBytes(StandardCharsets.UTF_8));
-
-			switch (payload.getString("channel")) {
+			byte[] key = HexFormat.of().parseHex(payload.getString("key"));
+			switch (payload.getString("channel").toLowerCase()) {
 				case "shoukan" -> {
 					String id = payload.getString("card");
 					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
 					if (types.isEmpty()) {
-						deliver(md, new byte[0]);
+						deliver(key, new byte[0]);
 						return;
 					}
 
@@ -143,7 +138,7 @@ public class CommonSocket extends WebSocketClient {
 					Deck dk = new Deck();
 					dk.getStyling().setFrame(payload.getEnum(FrameSkin.class, "frame"));
 
-					deliver(md, IO.getBytes(d.render(payload.getEnum(I18N.class, "locale"), dk), "png"));
+					deliver(key, IO.getBytes(d.render(payload.getEnum(I18N.class, "locale"), dk), "png"));
 				}
 				case "card_info" -> {
 					String id = payload.getString("card");
@@ -195,16 +190,16 @@ public class CommonSocket extends WebSocketClient {
 						));
 					}
 
-					deliver(md, out.toString());
+					deliver(key, out.toString());
 				}
 				case "i18n" -> {
 					I18N locale = payload.getEnum(I18N.class, "locale");
 					if (locale == null) {
-						deliver(md, payload.getString("key"));
+						deliver(key, payload.getString("key"));
 						return;
 					}
 
-					deliver(md, locale.get(
+					deliver(key, locale.get(
 							payload.getString("str"),
 							(Object[]) payload.getString("params").split(",")
 					));
@@ -267,19 +262,14 @@ public class CommonSocket extends WebSocketClient {
 		Constants.LOGGER.error(e, e);
 	}
 
-	private void deliver(MessageDigest key, String content) {
-		deliver(key, content.getBytes(StandardCharsets.UTF_8));
+	private void deliver(byte[] id, String content) {
+		deliver(id, content.getBytes(StandardCharsets.UTF_8));
 	}
 
-	private void deliver(MessageDigest key, byte[] content) {
-		try {
-			send(JSONObject.of(
-					Map.entry("type", "DELIVERY"),
-					Map.entry("key", Hex.encodeHexString(key.digest())),
-					Map.entry("content", IO.atob(IO.compress(content)))
-			).toString());
-		} catch (IOException e) {
-			Constants.LOGGER.error(e, e);
-		}
+	private void deliver(byte[] id, byte[] content) {
+		send(ByteBuffer.allocate(id.length + content.length)
+				.put(id, 0, id.length)
+				.put(content, id.length, content.length)
+		);
 	}
 }
