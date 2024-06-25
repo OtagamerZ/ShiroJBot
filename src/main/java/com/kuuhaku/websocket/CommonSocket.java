@@ -92,7 +92,7 @@ public class CommonSocket extends WebSocketClient {
 			JSONObject payload = new JSONObject(message);
 			if (payload.isEmpty()) return;
 
-			if (payload.getString("type").equals("AUTH") && payload.getInt("code") == HttpStatus.SC_ACCEPTED) {
+			if (payload.getString("type").equals("AUTH") && payload.getInt("code") / 100 == 2) {
 				if (retry > 0) {
 					retry = 0;
 					Constants.LOGGER.info("Reconnected to {}", getClass().getSimpleName());
@@ -111,99 +111,13 @@ public class CommonSocket extends WebSocketClient {
 
 			if (!payload.getString("auth").equals(DigestUtils.sha256Hex(TOKEN))) return;
 
-			send(Utils.JSON("""
-						{
-							"type": "ACKNOWLEDGE",
-							"key": "%s"
-						}
-						""").formatted(payload.getString("key"))
-			);
+			String channel = payload.getString("channel").toLowerCase();
+			if (Utils.equalsAny(channel, "shoukan", "card_info", "i18n")) {
+				handleDeliverable(payload);
+				return;
+			}
 
-			byte[] key = HexFormat.of().parseHex(payload.getString("key"));
-			switch (payload.getString("channel").toLowerCase()) {
-				case "shoukan" -> {
-					String id = payload.getString("card");
-					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
-					if (types.isEmpty()) {
-						deliver(key, new byte[0]);
-						return;
-					}
-
-					Drawable<?> d = switch (types.getLast()) {
-						case EVOGEAR -> DAO.find(Evogear.class, id);
-						case FIELD -> DAO.find(Field.class, id);
-						default -> DAO.find(Senshi.class, id);
-					};
-
-					Deck dk = new Deck();
-					dk.getStyling().setFrame(payload.getEnum(FrameSkin.class, "frame"));
-
-					deliver(key, IO.getBytes(d.render(payload.getEnum(I18N.class, "locale"), dk), "png"));
-				}
-				case "card_info" -> {
-					String id = payload.getString("card");
-					I18N locale = payload.getEnum(I18N.class, "locale");
-					Card c = DAO.find(Card.class, id);
-
-					JSONObject out = JSONObject.of(
-							Map.entry("id", id),
-							Map.entry("name", c.getName()),
-							Map.entry("rarity", locale.get("rarity/" + c.getRarity().name()))
-					);
-
-					List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
-					if (!types.isEmpty()) {
-						CardType type = types.getLast();
-						Drawable<?> d = switch (type) {
-							case EVOGEAR -> c.asEvogear();
-							case FIELD -> c.asField();
-							default -> c.asSenshi();
-						};
-
-						out.put("shoukan", JSONObject.of(
-								Map.entry("type_id", type.name()),
-								Map.entry("type", locale.get("type/" + type.name())),
-								Map.entry("tags", d.getTags(locale)),
-								Map.entry("tier", d instanceof Evogear e ? e.getTier() : 0),
-								Map.entry("field", d instanceof Field f ?JSONObject.of(
-										Map.entry("type", f.getType().name()),
-										Map.entry("description", locale.get("field/" + f.getType().name() + "_desc")),
-										Map.entry("modifiers", f.getModifiers())
-								): new JSONObject()),
-								Map.entry("description", d instanceof EffectHolder<?> eh ? JSONObject.of(
-										Map.entry("raw", eh.getBase().getDescription(locale)),
-										Map.entry("parsed_md", eh.getReadableDescription(locale)),
-										Map.entry("parsed_html", MDTool.markdown2Html(eh.getReadableDescription(locale))),
-										Map.entry("display", eh.getDescription(locale))
-								) : new JSONObject()),
-								Map.entry("cost", JSONObject.of(
-										Map.entry("mana", d.getMPCost()),
-										Map.entry("life", d.getHPCost()),
-										Map.entry("sacrifices", d.getSCCost())
-								)),
-								Map.entry("attributes", JSONObject.of(
-										Map.entry("attack", d.getDmg()),
-										Map.entry("defense", d.getDfs()),
-										Map.entry("dodge", d.getDodge()),
-										Map.entry("block", d.getBlock())
-								))
-						));
-					}
-
-					deliver(key, out.toString());
-				}
-				case "i18n" -> {
-					I18N locale = payload.getEnum(I18N.class, "locale");
-					if (locale == null) {
-						deliver(key, payload.getString("key"));
-						return;
-					}
-
-					deliver(key, locale.get(
-							payload.getString("str"),
-							(Object[]) payload.getString("params").split(",")
-					));
-				}
+			switch (channel) {
 				case "invite" -> {
 					String id = payload.getString("user");
 					if (!StringUtils.isNumeric(id)) return;
@@ -241,6 +155,103 @@ public class CommonSocket extends WebSocketClient {
 				}
 			}
 		} catch (WebsocketNotConnectedException ignore) {
+		}
+	}
+
+	private void handleDeliverable(JSONObject payload) {
+		send(Utils.JSON("""
+						{
+							"type": "ACKNOWLEDGE",
+							"key": "%s"
+						}
+						""").formatted(payload.getString("key"))
+		);
+
+		byte[] key = HexFormat.of().parseHex(payload.getString("key"));
+		switch (payload.getString("channel").toLowerCase()) {
+			case "shoukan" -> {
+				String id = payload.getString("card");
+				List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
+				if (types.isEmpty()) {
+					deliver(key, new byte[0]);
+					return;
+				}
+
+				Drawable<?> d = switch (types.getLast()) {
+					case EVOGEAR -> DAO.find(Evogear.class, id);
+					case FIELD -> DAO.find(Field.class, id);
+					default -> DAO.find(Senshi.class, id);
+				};
+
+				Deck dk = new Deck();
+				dk.getStyling().setFrame(payload.getEnum(FrameSkin.class, "frame"));
+
+				deliver(key, IO.getBytes(d.render(payload.getEnum(I18N.class, "locale"), dk), "png"));
+			}
+			case "card_info" -> {
+				String id = payload.getString("card");
+				I18N locale = payload.getEnum(I18N.class, "locale");
+				Card c = DAO.find(Card.class, id);
+
+				JSONObject out = JSONObject.of(
+						Map.entry("id", id),
+						Map.entry("name", c.getName()),
+						Map.entry("rarity", locale.get("rarity/" + c.getRarity().name()))
+				);
+
+				List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
+				if (!types.isEmpty()) {
+					CardType type = types.getLast();
+					Drawable<?> d = switch (type) {
+						case EVOGEAR -> c.asEvogear();
+						case FIELD -> c.asField();
+						default -> c.asSenshi();
+					};
+
+					out.put("shoukan", JSONObject.of(
+							Map.entry("type_id", type.name()),
+							Map.entry("type", locale.get("type/" + type.name())),
+							Map.entry("tags", d.getTags(locale)),
+							Map.entry("tier", d instanceof Evogear e ? e.getTier() : 0),
+							Map.entry("field", d instanceof Field f ?JSONObject.of(
+									Map.entry("type", f.getType().name()),
+									Map.entry("description", locale.get("field/" + f.getType().name() + "_desc")),
+									Map.entry("modifiers", f.getModifiers())
+							): new JSONObject()),
+							Map.entry("description", d instanceof EffectHolder<?> eh ? JSONObject.of(
+									Map.entry("raw", eh.getBase().getDescription(locale)),
+									Map.entry("parsed_md", eh.getReadableDescription(locale)),
+									Map.entry("parsed_html", MDTool.markdown2Html(eh.getReadableDescription(locale))),
+									Map.entry("display", eh.getDescription(locale))
+							) : new JSONObject()),
+							Map.entry("cost", JSONObject.of(
+									Map.entry("mana", d.getMPCost()),
+									Map.entry("life", d.getHPCost()),
+									Map.entry("sacrifices", d.getSCCost())
+							)),
+							Map.entry("attributes", JSONObject.of(
+									Map.entry("attack", d.getDmg()),
+									Map.entry("defense", d.getDfs()),
+									Map.entry("dodge", d.getDodge()),
+									Map.entry("block", d.getBlock())
+							))
+					));
+				}
+
+				deliver(key, out.toString());
+			}
+			case "i18n" -> {
+				I18N locale = payload.getEnum(I18N.class, "locale");
+				if (locale == null) {
+					deliver(key, payload.getString("key"));
+					return;
+				}
+
+				deliver(key, locale.get(
+						payload.getString("str"),
+						(Object[]) payload.getString("params").split(",")
+				));
+			}
 		}
 	}
 
