@@ -2464,7 +2464,7 @@ public class Shoukan extends GameInstance<Phase> {
 			helper.addAction(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
 				if (isLocked()) return;
 
-				XStringBuilder sb = new XStringBuilder(getLocale().get("str/match_history"));
+				XStringBuilder sb = new XStringBuilder(getLocale().get("str/match_history", getTurn()));
 
 				int i = 0;
 				Iterator<HistoryLog> it = getHistory().descendingIterator();
