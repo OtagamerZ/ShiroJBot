@@ -65,7 +65,7 @@ public class SlotColumn {
 			top = null;
 
 			rem.executeAssert(Trigger.ON_REMOVE);
-			if (isLocked()) {
+			if (isLocked() && equals(rem.getSlot())) {
 				rem.setSlot(null);
 			}
 		}
@@ -87,7 +87,7 @@ public class SlotColumn {
 			bottom = null;
 
 			rem.executeAssert(Trigger.ON_REMOVE);
-			if (isLocked()) {
+			if (isLocked() && equals(rem.getSlot())) {
 				rem.setSlot(null);
 			}
 		}
@@ -128,7 +128,9 @@ public class SlotColumn {
 
 		if (current != null) {
 			current.executeAssert(Trigger.ON_REMOVE);
-			current.setSlot(null);
+			if (equals(current.getSlot())) {
+				current.setSlot(null);
+			}
 		}
 
 		if (top && (replace || this.top == null)) {
