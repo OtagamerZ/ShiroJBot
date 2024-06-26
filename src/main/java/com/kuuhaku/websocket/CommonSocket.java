@@ -276,13 +276,12 @@ public class CommonSocket extends WebSocketClient {
 
 	private void deliver(byte[] id, byte[] content) {
 		ByteBuffer buf = ByteBuffer.allocate(id.length + content.length)
-				.put(id)
-				.put(content)
-				.rewind();
+				.put(id).put(content)
+				.rewind().limit(0);
 
-		buf.limit(0);
-		while (buf.limit() + 1024 < buf.capacity()) {
-			buf.limit(buf.limit() + 1024);
+		int frameSize = 16384;
+		while (buf.limit() + frameSize < buf.capacity()) {
+			buf.limit(buf.limit() + frameSize);
 			sendFragmentedFrame(Opcode.BINARY, buf, false);
 		}
 
