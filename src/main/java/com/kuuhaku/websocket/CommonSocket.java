@@ -274,10 +274,10 @@ public class CommonSocket extends WebSocketClient {
 
 	private void deliver(byte[] id, byte[] content) {
 		int frameSize = 16384;
-		ByteBuffer buf = ByteBuffer.wrap(content).limit(0);
-		ByteBuffer frameBuffer = ByteBuffer.allocate(id.length + 2 + frameSize).put(id);
-
 		CompletableFuture.runAsync(() -> {
+			ByteBuffer buf = ByteBuffer.wrap(content).limit(0);
+			ByteBuffer frameBuffer = ByteBuffer.allocate(id.length + 2 + frameSize).put(id);
+
 			short part = 0;
 			do {
 				if (!isOpen()) {
@@ -290,6 +290,8 @@ public class CommonSocket extends WebSocketClient {
 						.putShort(part++)
 						.limit(buf.remaining())
 						.put(buf);
+
+				System.out.println("Sent part " + (part - 1) + " - length " + frameBuffer.remaining());
 
 				sendFragmentedFrame(Opcode.BINARY, frameBuffer, buf.limit() == buf.capacity());
 			} while (buf.limit() != buf.capacity());
