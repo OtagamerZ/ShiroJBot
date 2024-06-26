@@ -151,9 +151,7 @@ public class StashScrapCommand implements Executable {
 							if (sc.isChrome() && Calc.chance(50)) {
 								UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
 								if (item != null) {
-									int amount = Calc.rng(3, 5);
-									acc.addItem(item, amount);
-									items.add(item, amount);
+									items.add(item, Calc.rng(3, 5));
 								}
 							}
 
@@ -186,9 +184,14 @@ public class StashScrapCommand implements Executable {
 
 										int amount = items.getCount(i);
 										sb.appendNewLine("- " + amount + "x " + i.getName(locale));
-										acc.addItem(i, amount);
+										acc.getInventory().compute(i.getId(), (k, v) -> {
+											if (v == null) return amount;
+
+											return ((Number) v).intValue() + amount;
+										});
 									});
 
+							acc.save();
 							if (dist.get() == 1) {
 								UserItem item = items.stream().findAny().orElseThrow();
 								event.channel().sendMessage(locale.get("str/received_item", items.getCount(item), item.getName(locale))).queue();

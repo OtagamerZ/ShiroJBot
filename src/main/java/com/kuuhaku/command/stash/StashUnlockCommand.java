@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Kawaipon;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -39,7 +40,10 @@ import net.dv8tion.jda.api.JDA;
 		path = "unlock",
 		category = Category.MISC
 )
-@Signature("<card:word:r>")
+@Signature({
+		"<action:word:r>[all]",
+		"<card:word:r>"
+})
 public class StashUnlockCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -49,36 +53,41 @@ public class StashUnlockCommand implements Executable {
 			return;
 		}
 
-		Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
-		if (card == null) {
-			String sug = Utils.didYouMean(args.getString("card"), "SELECT id AS value FROM v_card_names");
-			if (sug == null) {
-				event.channel().sendMessage(locale.get("error/unknown_card_none")).queue();
-			} else {
-				event.channel().sendMessage(locale.get("error/unknown_card", sug)).queue();
+		if (args.has("action")) {
+			DAO.applyNative(StashedCard.class, "UPDATE stashed_card SET locked = FALSE WHERE kawaipon_uid = ?1", event.user().getId());
+			event.channel().sendMessage(locale.get("success/card_unlock_all")).queue();
+		} else {
+			Card card = DAO.find(Card.class, args.getString("card").toUpperCase());
+			if (card == null) {
+				String sug = Utils.didYouMean(args.getString("card"), "SELECT id AS value FROM v_card_names");
+				if (sug == null) {
+					event.channel().sendMessage(locale.get("error/unknown_card_none")).queue();
+				} else {
+					event.channel().sendMessage(locale.get("error/unknown_card", sug)).queue();
+				}
+				return;
 			}
-			return;
+
+			Utils.selectOption(locale, event.channel(), kp.getLocked(), card, event.user())
+					.thenAccept(sc -> {
+						if (sc == null) {
+							event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+							return;
+						}
+
+						sc.unlock();
+						sc.save();
+
+						event.channel().sendMessage(locale.get("success/card_unlock")).queue();
+					})
+					.exceptionally(t -> {
+						if (!(t.getCause() instanceof NoResultException)) {
+							Constants.LOGGER.error(t, t);
+						}
+
+						event.channel().sendMessage(locale.get("error/not_owned")).queue();
+						return null;
+					});
 		}
-
-		Utils.selectOption(locale, event.channel(), kp.getLocked(), card, event.user())
-				.thenAccept(sc -> {
-					if (sc == null) {
-						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
-						return;
-					}
-
-					sc.unlock();
-					sc.save();
-
-					event.channel().sendMessage(locale.get("success/card_unlock")).queue();
-				})
-				.exceptionally(t -> {
-					if (!(t.getCause() instanceof NoResultException)) {
-						Constants.LOGGER.error(t, t);
-					}
-
-					event.channel().sendMessage(locale.get("error/not_owned")).queue();
-					return null;
-				});
 	}
 }
