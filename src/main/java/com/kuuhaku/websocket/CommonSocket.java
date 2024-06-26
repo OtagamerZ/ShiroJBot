@@ -293,14 +293,14 @@ public class CommonSocket extends WebSocketClient {
 					frameBuffer.rewind()
 							.position(id.length)
 							.putShort(part++)
-							.limit(buf.remaining())
+							.limit(id.length + 2 + buf.remaining())
 							.put(buf);
 
 					System.out.println("Sent part " + (part - 1) + " - length " + frameBuffer.remaining());
 
 					sendFragmentedFrame(Opcode.BINARY, frameBuffer, buf.limit() == buf.capacity());
 				} catch (Exception e) {
-					Constants.LOGGER.error(e, e);
+					System.out.println(e.getMessage());
 				}
 			} while (buf.limit() != buf.capacity());
 		});
