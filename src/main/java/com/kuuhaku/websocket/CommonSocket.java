@@ -281,13 +281,13 @@ public class CommonSocket extends WebSocketClient {
 
 
 		int frameSize = 16384;
-		for (buf.limit(0); buf.limit() != buf.capacity(); buf.limit(Math.min(buf.limit() + frameSize, buf.capacity()))) {
+		do {
 			if (!isOpen()) {
 				Thread.onSpinWait();
-				continue;
 			}
 
+			buf.limit(Math.min(buf.limit() + frameSize, buf.capacity()));
 			sendFragmentedFrame(Opcode.BINARY, buf, buf.limit() == buf.capacity());
-		}
+		} while (buf.limit() + frameSize < buf.capacity());
 	}
 }
