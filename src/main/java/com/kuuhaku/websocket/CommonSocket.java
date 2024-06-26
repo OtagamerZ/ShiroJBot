@@ -289,7 +289,8 @@ public class CommonSocket extends WebSocketClient {
 
 				System.out.println("Assembling frame");
 				buf.limit(Math.min(buf.limit() + frameSize, buf.capacity()));
-				frameBuffer.position(id.length)
+				frameBuffer.rewind()
+						.position(id.length)
 						.putShort(part++)
 						.limit(buf.remaining())
 						.put(buf);
