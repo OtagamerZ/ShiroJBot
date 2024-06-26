@@ -281,7 +281,6 @@ public class CommonSocket extends WebSocketClient {
 			short part = 0;
 			do {
 				if (!isOpen()) {
-					System.out.println("Spin");
 					Thread.onSpinWait();
 					continue;
 				}
