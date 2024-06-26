@@ -50,6 +50,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.Language;
 import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.enums.Opcode;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -57,13 +58,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.HexFormat;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class CommonSocket extends WebSocketClient {
 	private static final ScheduledExecutorService RECON = Executors.newSingleThreadScheduledExecutor();
@@ -277,9 +273,27 @@ public class CommonSocket extends WebSocketClient {
 	}
 
 	private void deliver(byte[] id, byte[] content) {
-		send(ByteBuffer.allocate(id.length + content.length)
-				.put(id).put(content)
-				.rewind()
-		);
+		int frameSize = 16384;
+		CompletableFuture.runAsync(() -> {
+			ByteBuffer buf = ByteBuffer.wrap(content).limit(0);
+			ByteBuffer frameBuffer = ByteBuffer.allocate(id.length + 2 + frameSize).put(id);
+
+			short part = 0;
+			do {
+				if (!isOpen()) {
+					Thread.onSpinWait();
+					continue;
+				}
+
+				buf.limit(Math.min(buf.limit() + frameSize, buf.capacity()));
+				frameBuffer.position(id.length)
+						.putShort(part++)
+						.limit(id.length + 2 + buf.remaining())
+						.put(buf)
+						.rewind();
+
+				sendFragmentedFrame(Opcode.BINARY, frameBuffer, buf.limit() == buf.capacity());
+			} while (buf.limit() != buf.capacity());
+		});
 	}
 }
