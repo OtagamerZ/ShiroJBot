@@ -60,9 +60,7 @@ public class KawaiponFieldCommand implements Executable {
 		List<Page> pages = new ArrayList<>();
 		int max = (int) Math.ceil(total / 50d);
 		for (int i = 1; i <= max; i++) {
-			String url = (Constants.API_ROOT + "shoukan/%s/field?uid=%s&frame=%s&v=%s&page=%s").formatted(
-					locale, event.user().getId(), dk.getStyling().getFrame().name(), System.currentTimeMillis(), i
-			);
+			String url = (Constants.API_ROOT + "shoukan/%s/field?page=%s").formatted(locale, i);
 
 			eb.setImage(url).setDescription(locale.get("str/fallback_url", url));
 			pages.add(InteractPage.of(eb.build()));
