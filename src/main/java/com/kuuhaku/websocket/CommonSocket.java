@@ -274,7 +274,7 @@ public class CommonSocket extends WebSocketClient {
 
 	private void deliver(byte[] id, byte[] content) {
 		int frameSize = 16384;
-		ByteBuffer buf = ByteBuffer.wrap(content);
+		ByteBuffer buf = ByteBuffer.wrap(content).limit(0);
 		ByteBuffer frameBuffer = ByteBuffer.allocate(id.length + 2 + frameSize).put(id);
 
 		CompletableFuture.runAsync(() -> {
