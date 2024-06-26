@@ -290,11 +290,11 @@ public class CommonSocket extends WebSocketClient {
 				System.out.println("Assembling frame");
 				buf.limit(Math.min(buf.limit() + frameSize, buf.capacity()));
 				try {
-					frameBuffer.rewind()
-							.position(id.length)
+					frameBuffer.position(id.length)
 							.putShort(part++)
 							.limit(id.length + 2 + buf.remaining())
-							.put(buf);
+							.put(buf)
+							.rewind();
 
 					System.out.println("Sent part " + (part - 1) + " - length " + frameBuffer.remaining());
 
