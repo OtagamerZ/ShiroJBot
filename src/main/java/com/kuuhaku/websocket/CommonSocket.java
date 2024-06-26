@@ -287,21 +287,14 @@ public class CommonSocket extends WebSocketClient {
 					continue;
 				}
 
-				System.out.println("Assembling frame");
 				buf.limit(Math.min(buf.limit() + frameSize, buf.capacity()));
-				try {
-					frameBuffer.position(id.length)
-							.putShort(part++)
-							.limit(id.length + 2 + buf.remaining())
-							.put(buf)
-							.rewind();
+				frameBuffer.position(id.length)
+						.putShort(part++)
+						.limit(id.length + 2 + buf.remaining())
+						.put(buf)
+						.rewind();
 
-					System.out.println("Sent part " + (part - 1) + " - length " + frameBuffer.remaining());
-
-					sendFragmentedFrame(Opcode.BINARY, frameBuffer, buf.limit() == buf.capacity());
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-				}
+				sendFragmentedFrame(Opcode.BINARY, frameBuffer, buf.limit() == buf.capacity());
 			} while (buf.limit() != buf.capacity());
 		});
 	}
