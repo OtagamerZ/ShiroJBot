@@ -282,10 +282,12 @@ public class CommonSocket extends WebSocketClient {
 			do {
 				System.out.println("Sending part " + part);
 				if (!isOpen()) {
+					System.out.println("Spin");
 					Thread.onSpinWait();
 					continue;
 				}
 
+				System.out.println("Assembling frame");
 				buf.limit(Math.min(buf.limit() + frameSize, buf.capacity()));
 				frameBuffer.position(id.length)
 						.putShort(part++)
