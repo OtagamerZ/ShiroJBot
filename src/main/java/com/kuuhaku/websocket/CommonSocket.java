@@ -279,6 +279,8 @@ public class CommonSocket extends WebSocketClient {
 				.put(id).put(content)
 				.rewind().limit(0);
 
+
+
 		int frameSize = 16384;
 		while (buf.limit() + frameSize < buf.capacity()) {
 			buf.limit(buf.limit() + frameSize);
