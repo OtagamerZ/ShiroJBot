@@ -18,5 +18,5 @@
 
 package com.kuuhaku.model.records;
 
-public record ItemAmount(String id, int amount) {
+public record ItemAmount(String id, int amount, int max) {
 }

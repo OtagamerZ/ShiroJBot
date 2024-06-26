@@ -148,30 +148,34 @@ public class Trade {
         query = """
                 SELECT i.id
                      , sum(cast(i.amount AS INT)) AS amount
+                     , ui.stack_size
                 FROM account a
-                         CROSS JOIN jsonb_each(a.inventory) as i(id, amount)
+                         CROSS JOIN jsonb_each(a.inventory) AS i(id, amount)
+                         INNER JOIN user_item ui ON ui.id = i.id
                 WHERE a.uid = ?1
-                GROUP BY i.id
+                GROUP BY i.id, ui.stack_size
                 """;
 
         Map<String, ItemAmount> rows = Utils.map(
                 DAO.queryAllUnmapped(query, left.getUid()),
-                o -> new ItemAmount(String.valueOf(o[0]), ((Number) o[1]).intValue())
+                o -> new ItemAmount(String.valueOf(o[0]), ((Number) o[1]).intValue(), ((Number) o[2]).intValue())
         ).stream().collect(Collectors.toMap(ItemAmount::id, Function.identity()));
 
         Set<String> items = Set.copyOf(leftItems);
         for (String i : items) {
             if (leftItems.getCount(i) > rows.get(i).amount()) return false;
+            else if (right.getItemCount(i) + rightItems.getCount(i) > rows.get(i).max()) return false;
         }
 
         rows = Utils.map(
                 DAO.queryAllUnmapped(query, right.getUid()),
-                o -> new ItemAmount(String.valueOf(o[0]), ((Number) o[1]).intValue())
+                o -> new ItemAmount(String.valueOf(o[0]), ((Number) o[1]).intValue(), ((Number) o[2]).intValue())
         ).stream().collect(Collectors.toMap(ItemAmount::id, Function.identity()));
 
         items = Set.copyOf(rightItems);
         for (String i : items) {
             if (rightItems.getCount(i) > rows.get(i).amount()) return false;
+            else if (right.getItemCount(i) + leftItems.getCount(i) > rows.get(i).max()) return false;
         }
 
         return true;
