@@ -300,7 +300,7 @@ public class CommonSocket extends WebSocketClient {
 
 					sendFragmentedFrame(Opcode.BINARY, frameBuffer, buf.limit() == buf.capacity());
 				} catch (Exception e) {
-					System.out.println(e.getMessage());
+					Constants.LOGGER.error(e, e);
 				}
 			} while (buf.limit() != buf.capacity());
 		});
