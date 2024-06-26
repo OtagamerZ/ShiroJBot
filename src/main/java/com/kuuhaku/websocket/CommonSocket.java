@@ -288,6 +288,6 @@ public class CommonSocket extends WebSocketClient {
 
 			buf.limit(Math.min(buf.limit() + frameSize, buf.capacity()));
 			sendFragmentedFrame(Opcode.BINARY, buf, buf.limit() == buf.capacity());
-		} while (buf.limit() + frameSize < buf.capacity());
+		} while (buf.limit() != buf.capacity());
 	}
 }
