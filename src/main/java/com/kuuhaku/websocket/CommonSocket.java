@@ -47,11 +47,10 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpStatus;
 import org.intellij.lang.annotations.Language;
 import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.enums.Opcode;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -158,11 +157,11 @@ public class CommonSocket extends WebSocketClient {
 
 	private void handleDeliverable(JSONObject payload) {
 		send(Utils.JSON("""
-						{
-							"type": "ACKNOWLEDGE",
-							"key": "%s"
-						}
-						""").formatted(payload.getString("key"))
+				{
+					"type": "ACKNOWLEDGE",
+					"key": "%s"
+				}
+				""").formatted(payload.getString("key"))
 		);
 
 		byte[] key = HexFormat.of().parseHex(payload.getString("key"));
@@ -211,11 +210,11 @@ public class CommonSocket extends WebSocketClient {
 							Map.entry("type", locale.get("type/" + type.name())),
 							Map.entry("tags", d.getTags(locale)),
 							Map.entry("tier", d instanceof Evogear e ? e.getTier() : 0),
-							Map.entry("field", d instanceof Field f ?JSONObject.of(
+							Map.entry("field", d instanceof Field f ? JSONObject.of(
 									Map.entry("type", f.getType().name()),
 									Map.entry("description", locale.get("field/" + f.getType().name() + "_desc")),
 									Map.entry("modifiers", f.getModifiers())
-							): new JSONObject()),
+							) : new JSONObject()),
 							Map.entry("description", d instanceof EffectHolder<?> eh ? JSONObject.of(
 									Map.entry("raw", eh.getBase().getDescription(locale)),
 									Map.entry("parsed_md", eh.getReadableDescription(locale)),
@@ -276,8 +275,18 @@ public class CommonSocket extends WebSocketClient {
 	}
 
 	private void deliver(byte[] id, byte[] content) {
-		byte[] data = Arrays.copyOf(id, id.length + content.length);
-		System.arraycopy(content, 0, data, id.length, content.length);
-		send(data);
+		ByteBuffer buf = ByteBuffer.allocate(id.length + content.length)
+				.put(id)
+				.put(content)
+				.rewind();
+
+		buf.limit(0);
+		while (buf.limit() + 1024 < buf.capacity()) {
+			buf.limit(buf.limit() + 1024);
+			sendFragmentedFrame(Opcode.BINARY, buf, false);
+		}
+
+		buf.limit(buf.capacity());
+		sendFragmentedFrame(Opcode.BINARY, buf, true);
 	}
 }
