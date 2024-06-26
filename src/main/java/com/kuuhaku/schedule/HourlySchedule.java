@@ -75,7 +75,9 @@ public class HourlySchedule implements Runnable, PreInitialize {
 				JSONObject.of(
 						Map.entry(HttpHeaders.AUTHORIZATION, Constants.TOPGG_TOKEN)
 				),
-				Utils.JSON("{\"server_count\": " + guilds + "}")
+				JSONObject.of(
+						Map.entry("server_count", guilds)
+				).toString()
 		);
 	}
 

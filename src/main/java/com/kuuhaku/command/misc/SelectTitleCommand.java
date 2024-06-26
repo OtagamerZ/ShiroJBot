@@ -68,17 +68,20 @@ public class SelectTitleCommand implements Executable {
 					.map(ts -> ts.stream()
 							.sorted(Comparator.comparing(t -> t.getRarity().ordinal()))
 							.collect(ArrayList<Title>::new, (lst, t) -> {
-								if (acc.hasTitle(t.getId())) {
-									if (lst.isEmpty()) {
-										lst.add(t);
-									} else {
-										lst.set(0, t);
+								boolean has = acc.hasTitle(t.getId());
+
+								if (!has || lst.isEmpty()) {
+									if (!has && Utils.equalsAny(t.getId(), "VETERAN", "TEST_DUMMY")) {
+										return;
 									}
-								} else {
+
 									lst.add(t);
+								} else {
+									lst.set(0, t);
 								}
 							}, ArrayList::addAll)
 					)
+					.filter(a -> !a.isEmpty())
 					.sorted(Comparator.comparing(t -> t.getFirst().getRarity().ordinal(), Comparator.reverseOrder()))
 					.toList();
 

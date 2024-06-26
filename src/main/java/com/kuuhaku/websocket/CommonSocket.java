@@ -59,12 +59,10 @@ import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class CommonSocket extends WebSocketClient {
-	private static final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+	private static final ScheduledExecutorService RECON = Executors.newSingleThreadScheduledExecutor();
 	private static final String TOKEN = DAO.queryNative(String.class, "SELECT token FROM access_token WHERE bearer = 'shiro'");
 	private int retry = 0;
 
@@ -262,7 +260,7 @@ public class CommonSocket extends WebSocketClient {
 			Constants.LOGGER.info("Disconnected from {} ({}), attempting reconnect in {} seconds", getClass().getSimpleName(), code, ++retry * 5);
 		}
 
-		exec.schedule(this::reconnect, retry * 5L, TimeUnit.SECONDS);
+		RECON.schedule(this::reconnect, retry * 5L, TimeUnit.SECONDS);
 	}
 
 	@Override
@@ -275,9 +273,27 @@ public class CommonSocket extends WebSocketClient {
 	}
 
 	private void deliver(byte[] id, byte[] content) {
-		send(ByteBuffer.allocate(id.length + content.length)
-				.put(id).put(content)
-				.rewind()
-		);
+		int frameSize = 32768;
+		CompletableFuture.runAsync(() -> {
+			ByteBuffer buf = ByteBuffer.wrap(content).limit(0);
+			ByteBuffer frameBuffer = ByteBuffer.allocate(id.length + 2 + frameSize).put(id);
+
+			short part = 0;
+			do {
+				if (!isOpen()) {
+					Thread.onSpinWait();
+					continue;
+				}
+
+				buf.limit(Math.min(buf.limit() + frameSize, buf.capacity()));
+				frameBuffer.position(id.length)
+						.putShort(part++)
+						.limit(id.length + 2 + buf.remaining())
+						.put(buf)
+						.rewind();
+
+				sendFragmentedFrame(Opcode.BINARY, frameBuffer, buf.limit() == buf.capacity());
+			} while (buf.limit() != buf.capacity());
+		});
 	}
 }
