@@ -277,17 +277,17 @@ public class CommonSocket extends WebSocketClient {
 	private void deliver(byte[] id, byte[] content) {
 		ByteBuffer buf = ByteBuffer.allocate(id.length + content.length)
 				.put(id).put(content)
-				.rewind().limit(0);
-
+				.rewind();
 
 
 		int frameSize = 16384;
-		while (buf.limit() + frameSize < buf.capacity()) {
-			buf.limit(buf.limit() + frameSize);
-			sendFragmentedFrame(Opcode.BINARY, buf, false);
-		}
+		for (buf.limit(0); buf.limit() != buf.capacity(); buf.limit(Math.min(buf.limit() + frameSize, buf.capacity()))) {
+			if (!isOpen()) {
+				Thread.onSpinWait();
+				continue;
+			}
 
-		buf.limit(buf.capacity());
-		sendFragmentedFrame(Opcode.BINARY, buf, true);
+			sendFragmentedFrame(Opcode.BINARY, buf, buf.limit() == buf.capacity());
+		}
 	}
 }
