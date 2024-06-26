@@ -81,6 +81,7 @@ public class SelectTitleCommand implements Executable {
 								}
 							}, ArrayList::addAll)
 					)
+					.filter(a -> !a.isEmpty())
 					.sorted(Comparator.comparing(t -> t.getFirst().getRarity().ordinal(), Comparator.reverseOrder()))
 					.toList();
 
