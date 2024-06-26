@@ -280,6 +280,7 @@ public class CommonSocket extends WebSocketClient {
 
 			short part = 0;
 			do {
+				System.out.println("Sending part " + part);
 				if (!isOpen()) {
 					Thread.onSpinWait();
 					continue;
