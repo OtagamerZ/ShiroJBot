@@ -276,11 +276,10 @@ public class CommonSocket extends WebSocketClient {
 		int frameSize = 16384;
 		CompletableFuture.runAsync(() -> {
 			ByteBuffer buf = ByteBuffer.wrap(content).limit(0);
-			ByteBuffer frameBuffer = ByteBuffer.allocate(id.length + 2 + frameSize).put(id);
+			ByteBuffer frameBuffer = ByteBuffer.allocateDirect(id.length + 2 + frameSize).put(id);
 
 			short part = 0;
 			do {
-				System.out.println("Sending part " + part);
 				if (!isOpen()) {
 					System.out.println("Spin");
 					Thread.onSpinWait();
