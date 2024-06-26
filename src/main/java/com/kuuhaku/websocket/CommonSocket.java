@@ -275,19 +275,9 @@ public class CommonSocket extends WebSocketClient {
 	}
 
 	private void deliver(byte[] id, byte[] content) {
-		ByteBuffer buf = ByteBuffer.allocate(id.length + content.length)
+		send(ByteBuffer.allocate(id.length + content.length)
 				.put(id).put(content)
-				.rewind().limit(0);
-
-
-
-		int frameSize = 16384;
-		while (buf.limit() + frameSize < buf.capacity()) {
-			buf.limit(buf.limit() + frameSize);
-			sendFragmentedFrame(Opcode.BINARY, buf, false);
-		}
-
-		buf.limit(buf.capacity());
-		sendFragmentedFrame(Opcode.BINARY, buf, true);
+				.rewind()
+		);
 	}
 }
