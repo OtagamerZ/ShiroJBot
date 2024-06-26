@@ -47,6 +47,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.intellij.lang.annotations.Language;
@@ -58,10 +59,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.HexFormat;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -278,9 +276,8 @@ public class CommonSocket extends WebSocketClient {
 	}
 
 	private void deliver(byte[] id, byte[] content) {
-		send(ByteBuffer.allocate(id.length + content.length)
-				.put(id, 0, id.length)
-				.put(content, id.length, content.length)
-		);
+		byte[] data = Arrays.copyOf(id, id.length + content.length);
+		System.arraycopy(content, 0, data, id.length, content.length);
+		send(data);
 	}
 }
