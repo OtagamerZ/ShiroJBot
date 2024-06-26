@@ -289,15 +289,19 @@ public class CommonSocket extends WebSocketClient {
 
 				System.out.println("Assembling frame");
 				buf.limit(Math.min(buf.limit() + frameSize, buf.capacity()));
-				frameBuffer.rewind()
-						.position(id.length)
-						.putShort(part++)
-						.limit(buf.remaining())
-						.put(buf);
+				try {
+					frameBuffer.rewind()
+							.position(id.length)
+							.putShort(part++)
+							.limit(buf.remaining())
+							.put(buf);
 
-				System.out.println("Sent part " + (part - 1) + " - length " + frameBuffer.remaining());
+					System.out.println("Sent part " + (part - 1) + " - length " + frameBuffer.remaining());
 
-				sendFragmentedFrame(Opcode.BINARY, frameBuffer, buf.limit() == buf.capacity());
+					sendFragmentedFrame(Opcode.BINARY, frameBuffer, buf.limit() == buf.capacity());
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
 			} while (buf.limit() != buf.capacity());
 		});
 	}
