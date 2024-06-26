@@ -273,12 +273,12 @@ public class CommonSocket extends WebSocketClient {
 	}
 
 	private void deliver(byte[] id, byte[] content) {
-		ByteBuffer buf = ByteBuffer.allocate(id.length + content.length)
-				.put(id).put(content)
-				.rewind();
-
 		int frameSize = 16384;
+		ByteBuffer buf = ByteBuffer.wrap(content);
+		ByteBuffer frameBuffer = ByteBuffer.allocate(id.length + 2 + frameSize).put(id);
+
 		CompletableFuture.runAsync(() -> {
+			short part = 0;
 			do {
 				if (!isOpen()) {
 					Thread.onSpinWait();
@@ -286,7 +286,12 @@ public class CommonSocket extends WebSocketClient {
 				}
 
 				buf.limit(Math.min(buf.limit() + frameSize, buf.capacity()));
-				sendFragmentedFrame(Opcode.BINARY, buf, buf.limit() == buf.capacity());
+				frameBuffer.position(id.length)
+						.putShort(part++)
+						.limit(buf.remaining())
+						.put(buf);
+
+				sendFragmentedFrame(Opcode.BINARY, frameBuffer, buf.limit() == buf.capacity());
 			} while (buf.limit() != buf.capacity());
 		});
 	}
