@@ -42,6 +42,7 @@ import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.records.ClusterAction;
 import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.model.records.SelectionAction;
 import com.kuuhaku.model.records.SelectionCard;
@@ -2086,11 +2087,17 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 		setRestoring(false);
 
-		BufferedImage img = arena.render(getLocale());
-		byte[] bytes = IO.getBytes(img, "png");
-
+		ClusterAction msg = getChannel().sendMessage(getString(message, args));
 		AtomicBoolean registered = new AtomicBoolean();
-		getChannel().sendMessage(getString(message, args)).addFile(bytes, "game.png").queue(m -> {
+
+		try {
+			BufferedImage img = arena.render(getLocale());
+			byte[] bytes = IO.getBytes(img, "png");
+			msg.addFile(bytes, "game.png");
+		} catch (Exception ignore) {
+		}
+
+		msg.queue(m -> {
 			if (!registered.get()) {
 				getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
 				registered.set(true);
