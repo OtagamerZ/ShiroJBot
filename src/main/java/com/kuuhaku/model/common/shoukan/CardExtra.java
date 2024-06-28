@@ -239,10 +239,14 @@ public class CardExtra implements Cloneable {
 	}
 
 	public String getWrite() {
-		Supplier<String> val = write.getValue();
-		if (val == null) return "";
+		try {
+			Supplier<String> val = write.getValue();
+			if (val == null) return "";
 
-		return Utils.getOr((Object) val.get(), "").toString();
+			return Utils.getOr((Object) val.get(), "").toString();
+		} catch (Exception e) {
+			return "";
+		}
 	}
 
 	public void setWrite(Supplier<String> write) {
