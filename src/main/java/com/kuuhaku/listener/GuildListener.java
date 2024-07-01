@@ -19,6 +19,7 @@
 package com.kuuhaku.listener;
 
 import com.github.ygimenez.method.Pages;
+import com.kuuhaku.Application;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
@@ -71,7 +72,7 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
-		if (!event.isFromGuild()) return;
+		if (!Application.READY || !event.isFromGuild()) return;
 
 		User usr = event.getUser();
 		if (usr != null && usr.isBot()) return;
@@ -131,7 +132,7 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
-		if (event.getUser().isBot()) return;
+		if (!Application.READY || event.getUser().isBot()) return;
 
 		GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
 
@@ -151,7 +152,7 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
-		if (event.getUser().isBot()) return;
+		if (!Application.READY || event.getUser().isBot()) return;
 
 		GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
 
@@ -193,6 +194,8 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onMessageUpdate(@NotNull MessageUpdateEvent event) {
+		if (!Application.READY) return;
+
 		onMessageReceived(new MessageReceivedEvent(
 				event.getJDA(),
 				event.getResponseNumber(),
@@ -202,7 +205,7 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-		if (!event.isFromGuild() || event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
+		if (!Application.READY || !event.isFromGuild() || event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
 
 		String content = event.getMessage().getContentRaw();
 		MessageData.Guild data;
@@ -410,12 +413,12 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			rollSpawns(config, locale, account, data.user());
+			rollSpawns(config, locale, data.user());
 			rollEvents(data.channel(), locale);
 		});
 	}
 
-	private void rollSpawns(GuildConfig config, I18N locale, Account acc, User u) {
+	private void rollSpawns(GuildConfig config, I18N locale, User u) {
 		GuildBuff gb = config.getCumBuffs();
 		List<TextChannelImpl> channels = config.getSettings().getKawaiponChannels();
 		if (!channels.isEmpty() && Calc.chance(100d / channels.size())) {

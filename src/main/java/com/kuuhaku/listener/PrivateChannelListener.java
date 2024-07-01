@@ -18,6 +18,7 @@
 
 package com.kuuhaku.listener;
 
+import com.kuuhaku.Application;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.Utils;
@@ -31,6 +32,8 @@ import java.util.List;
 public class PrivateChannelListener extends ListenerAdapter {
 	@Override
 	public void onGuildJoin(@NotNull GuildJoinEvent event) {
+		if (!Application.READY) return;
+
 		List<String> devs = DAO.queryAllNative(String.class, "SELECT uid FROM account WHERE bool(role & 8)");
 		for (String dev : devs) {
 			Account acc = DAO.find(Account.class, dev);
@@ -44,6 +47,8 @@ public class PrivateChannelListener extends ListenerAdapter {
 
 	@Override
 	public void onGuildLeave(@NotNull GuildLeaveEvent event) {
+		if (!Application.READY) return;
+
 		List<String> devs = DAO.queryAllNative(String.class, "SELECT uid FROM account WHERE bool(role & 8)");
 		for (String dev : devs) {
 			Account acc = DAO.find(Account.class, dev);
