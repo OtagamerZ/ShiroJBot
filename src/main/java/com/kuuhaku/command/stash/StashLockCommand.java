@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Kawaipon;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -34,12 +35,15 @@ import com.ygimenez.json.JSONObject;
 import jakarta.persistence.NoResultException;
 import net.dv8tion.jda.api.JDA;
 
+import java.util.Comparator;
+import java.util.List;
+
 @Command(
 		name = "stash",
 		path = "lock",
 		category = Category.MISC
 )
-@Signature("<card:word:r>")
+@Signature("<card:word:r> <amount:number>")
 public class StashLockCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -60,25 +64,46 @@ public class StashLockCommand implements Executable {
 			return;
 		}
 
-		Utils.selectOption(locale, event.channel(), kp.getNotInUse(), card, event.user())
-				.thenAccept(sc -> {
-					if (sc == null) {
-						event.channel().sendMessage(locale.get("error/invalid_value")).queue();
-						return;
-					}
+		if (args.containsKey("amount")) {
+			int amount = args.getInt("amount");
+			if (amount <= 0) {
+				event.channel().sendMessage(locale.get("error/invalid_value_low", 0)).queue();
+				return;
+			}
 
-					sc.lock();
-					sc.save();
+			List<StashedCard> stashed = kp.getNotInUse().stream()
+					.filter(sc -> sc.getCard().equals(card))
+					.sorted(Comparator.comparing(StashedCard::isChrome).thenComparingDouble(sc -> -sc.getQuality()))
+					.limit(amount)
+					.toList();
 
-					event.channel().sendMessage(locale.get("success/card_lock")).queue();
-				})
-				.exceptionally(t -> {
-					if (!(t.getCause() instanceof NoResultException)) {
-						Constants.LOGGER.error(t, t);
-					}
+			for (StashedCard sc : stashed) {
+				sc.lock();
+				sc.save();
+			}
 
-					event.channel().sendMessage(locale.get("error/not_owned")).queue();
-					return null;
-				});
+			event.channel().sendMessage(locale.get("success/card_lock")).queue();
+		} else {
+			Utils.selectOption(locale, event.channel(), kp.getNotInUse(), card, event.user())
+					.thenAccept(sc -> {
+						if (sc == null) {
+							event.channel().sendMessage(locale.get("error/invalid_value")).queue();
+							return;
+						}
+
+						sc.lock();
+						sc.save();
+
+						event.channel().sendMessage(locale.get("success/card_lock")).queue();
+					})
+					.exceptionally(t -> {
+						if (!(t.getCause() instanceof NoResultException)) {
+							Constants.LOGGER.error(t, t);
+						}
+
+						event.channel().sendMessage(locale.get("error/not_owned")).queue();
+						return null;
+					});
+		}
 	}
 }
