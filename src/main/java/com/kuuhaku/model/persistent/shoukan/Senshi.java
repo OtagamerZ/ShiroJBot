@@ -1166,10 +1166,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean execute(EffectParameters ep) {
-		if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
-			execute(new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
-		}
-
 		if (!hasTrueEffect(true)) {
 			if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 			else if (hasFlag(Flag.NO_EFFECT, true)) {
@@ -1209,6 +1205,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Shoukan game = getGame();
 		if (base.isLocked(trigger) || trigger == NONE) {
 			return false;
+		}
+
+		if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
+			getGame().trigger(ON_TICK, asSource(ON_TICK));
 		}
 
 		try {

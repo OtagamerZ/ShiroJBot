@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Proxy;
+import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.shoukan.Charm;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -40,6 +41,21 @@ public class AugmentSenshi extends Senshi implements Proxy<Senshi> {
 	@Override
 	public Senshi getOriginal() {
 		return original;
+	}
+
+	@Override
+	public CardExtra getStats() {
+		return original.getStats();
+	}
+
+	@Override
+	public BondedList<?> getCurrentStack() {
+		return original.getCurrentStack();
+	}
+
+	@Override
+	public void setCurrentStack(BondedList<?> stack) {
+		original.setCurrentStack(stack);
 	}
 
 	@Override

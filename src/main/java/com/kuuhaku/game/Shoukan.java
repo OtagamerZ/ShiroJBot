@@ -81,7 +81,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
@@ -97,8 +96,8 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Set<TriggerBind> bindings = new HashSet<>();
 	private final List<Turn> turns = new TreeList<>();
 	private final JSONObject data = new JSONObject();
+	private final Map<Integer, StateSnap> snapshots = new HashMap<>();
 
-	private Map<Integer, StateSnap> snapshots = new HashMap<>();
 	private int tick;
 	private Side winner;
 
@@ -1813,6 +1812,11 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 		} finally {
+			if (trigger == ON_TICK) {
+				hands.get(side).flushStacks();
+				getBanned().removeIf(d -> d.getCurrentStack() != arena.getBanned(true));
+			}
+
 			triggerEOTs(ep);
 		}
 	}
@@ -1976,7 +1980,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (trigger) {
 				resetTimer();
-
 				trigger(ON_TICK);
 
 				getCurrent().setRerolled(true);
@@ -1988,10 +1991,7 @@ public class Shoukan extends GameInstance<Phase> {
 				Hand hand = hands.get(side);
 				hand.resetChain();
 				hand.getStats().removeExpired(ValueMod::isExpired);
-
-				Stream.of(hand.getCards(), hand.getGraveyard(), hand.getRealDeck(), hand.getDiscard())
-						.parallel()
-						.forEach(s -> s.removeIf(d -> d.getCurrentStack() != s));
+				hand.flushStacks();
 
 				if (hand.getOrigins().synergy() == Race.SUCCUBUS && hand.isLowLife()) {
 					Hand op = hand.getOther();
@@ -2037,8 +2037,6 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				});
 			}
-
-			arena.getBanned().removeIf(d -> d.getCurrentStack() != arena.getBanned(true));
 
 			BufferedImage img = arena.render(getLocale());
 			byte[] bytes = IO.getBytes(img, "png");

@@ -709,6 +709,8 @@ public abstract class Utils {
 			repls.put("%user%", mb.getAsMention());
 			repls.put("%user.id%", mb.getId());
 			repls.put("%user.name%", mb.getEffectiveName());
+			repls.put("%user.created%", Constants.TIMESTAMP.formatted(mb.getUser().getTimeCreated()));
+			repls.put("%user.created.r%", Constants.TIMESTAMP_R.formatted(mb.getUser().getTimeCreated()));
 		}
 
 		if (guild != null) {

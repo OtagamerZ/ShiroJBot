@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Proxy;
+import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -42,6 +43,21 @@ public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 	@Override
 	public Evogear getOriginal() {
 		return original;
+	}
+
+	@Override
+	public CardExtra getStats() {
+		return original.getStats();
+	}
+
+	@Override
+	public BondedList<?> getCurrentStack() {
+		return original.getCurrentStack();
+	}
+
+	@Override
+	public void setCurrentStack(BondedList<?> stack) {
+		original.setCurrentStack(stack);
 	}
 
 	@Override

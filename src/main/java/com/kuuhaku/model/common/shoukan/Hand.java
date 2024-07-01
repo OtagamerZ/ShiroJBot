@@ -1173,9 +1173,14 @@ public class Hand {
 		state = Bit.set(state, 3, curr - draws, 8);
 	}
 
-
 	public void resetDraws() {
 		state = Bit.set(state, 3, Math.max(0, base.handCapacity().get() - cards.size()), 8);
+	}
+
+	public void flushStacks() {
+		Stream.of(cards, graveyard, deck, discard)
+				.parallel()
+				.forEach(s -> s.removeIf(d -> d.getCurrentStack() != s));
 	}
 
 	public HandExtra getStats() {
