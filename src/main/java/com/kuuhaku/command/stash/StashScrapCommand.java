@@ -144,7 +144,7 @@ public class StashScrapCommand implements Executable {
 
 			Utils.confirm(locale.get(cards.size() == 1 ? "question/scrap" : "question/scraps", value, cards.size()), event.channel(), w -> {
 						event.channel().sendMessage(locale.get("success/scrap")).queue();
-						acc.addCR(value, cards.stream().map(StashedCard::toString).collect(Collectors.joining()) + " scrapped");
+						acc.addCR(value, "Scrapped " + cards.stream().map(StashedCard::toString).collect(Collectors.joining(", ")));
 
 						Bag<UserItem> items = new HashBag<>();
 						for (StashedCard sc : cards) {
