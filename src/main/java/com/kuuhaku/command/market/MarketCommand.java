@@ -100,6 +100,10 @@ public class MarketCommand implements Executable {
 			return;
 		}
 
-		Utils.paginate(loader, event.channel(), event.user());
+		try {
+			Utils.paginate(loader, event.channel(), event.user());
+		} catch (Exception e) {
+			event.channel().sendMessage(locale.get("error/invalid_params")).queue();
+		}
 	}
 }
