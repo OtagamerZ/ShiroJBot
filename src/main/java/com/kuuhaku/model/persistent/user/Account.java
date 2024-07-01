@@ -198,12 +198,14 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		if (value <= 0) return;
 
 		apply(getClass(), uid, a -> {
-			a.setDebit(a.getDebit() - value);
-			if (a.getDebit() < 0) {
-				a.setBalance(-a.getDebit() + a.getBalance());
-				a.setDebit(0);
+			long liquid = value;
+			if (a.getDebit() > 0) {
+				long deducted = Math.min(liquid, a.getDebit());
+				a.setDebit(a.getDebit() - deducted);
+				liquid -= deducted;
 			}
 
+			a.setBalance(a.getBalance() + liquid);
 			a.addTransaction(value, true, reason, Currency.CR);
 		});
 	}
