@@ -116,6 +116,7 @@ public class KawaiponSenshiCommand implements Executable {
 
 			Utils.paginate(pages, 1, true, event.channel(), event.user());
 		} else {
+			eb.setDescription(race.getDescription(locale));
 			event.channel().sendMessageEmbeds(eb.build()).queue();
 		}
 	}
