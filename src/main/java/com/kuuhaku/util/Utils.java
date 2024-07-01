@@ -112,7 +112,10 @@ public abstract class Utils {
 				hours > 0 ? hours + " " + locale.get("str/hour") + (hours != 1 ? "s" : "") : "",
 				minutes > 0 ? minutes + " " + locale.get("str/minute") + (minutes != 1 ? "s" : "") : "",
 				seconds > 0 ? seconds + " " + locale.get("str/second") + (seconds != 1 ? "s" : "") : ""
-		).filter(s -> !s.isBlank()).collect(Collectors.collectingAndThen(Collectors.toList(), properlyJoin(" e ")));
+		).filter(s -> !s.isBlank()).collect(Collectors.collectingAndThen(
+				Collectors.toList(),
+				properlyJoin(locale.get("str/and"))
+		));
 	}
 
 	public static long stringToDuration(String input) {
