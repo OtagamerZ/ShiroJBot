@@ -74,7 +74,7 @@ public class AliasServerCommand implements Executable {
 		} else if (aliases.containsValue(cmd)) {
 			event.channel().sendMessage(locale.get("error/aliased_command")).queue();
 			return;
-		} else if (cmd.contains(".")) {
+		} else if (alias.contains(".")) {
 			event.channel().sendMessage(locale.get("error/alias_no_period")).queue();
 			return;
 		}
