@@ -45,6 +45,7 @@ public class Market {
 	public List<StashedCard> getOffers(Option[] opts, int page) {
 		List<Object> params = new ArrayList<>();
 		XStringBuilder query = new XStringBuilder(StashFilter.BASE_QUERY);
+		query.appendNewLine("WHERE c.price > 0");
 
 		AtomicInteger i = new AtomicInteger(1);
 		for (Option opt : opts) {

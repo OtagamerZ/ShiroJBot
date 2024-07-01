@@ -51,7 +51,6 @@ public enum StashFilter {
 			LEFT JOIN Senshi s ON s.card = c.card
 			LEFT JOIN Evogear e ON e.card = c.card
 			LEFT JOIN Field f ON f.card = c.card
-			WHERE c.kawaipon.uid = ?1
 			""";
 
 	private final String shortName;

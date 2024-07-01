@@ -88,6 +88,8 @@ public class StashCommand implements Executable {
 		}
 
 		XStringBuilder query = new XStringBuilder(StashFilter.BASE_QUERY);
+		query.appendNewLine("WHERE c.kawaipon.uid = ?1");
+
 		List<Object> params = new ArrayList<>();
 		params.add(event.user().getId());
 
