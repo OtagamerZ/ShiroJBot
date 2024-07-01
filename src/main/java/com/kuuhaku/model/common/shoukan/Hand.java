@@ -749,7 +749,7 @@ public class Hand {
 	}
 
 	public void flushDiscard() {
-		cards.removeIf(Drawable::isEthereal);
+		cards.removeIf(d -> d.isEthereal() || !d.isAvailable());
 		graveyard.addAll(discard);
 
 		if (origin.synergy() == Race.REAPER) {
