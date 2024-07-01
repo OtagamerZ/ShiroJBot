@@ -360,16 +360,17 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 			for (DAO<?> entry : entries) {
 				entry.beforeDelete();
 				try {
+					DAO<?> ent = entry;
 					if (!em.contains(entry)) {
-						Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-						entry = em.find(entry.getClass(), key);
+						Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entry);
+						ent = em.find(entry.getClass(), key);
 
-						if (entry == null) {
+						if (ent == null) {
 							throw new EntityNotFoundException("Could not delete entity of class " + entry.getClass().getSimpleName() + " [" + key + "]");
 						}
 					}
 
-					em.remove(entry);
+					em.remove(ent);
 				} finally {
 					entry.afterDelete();
 				}
