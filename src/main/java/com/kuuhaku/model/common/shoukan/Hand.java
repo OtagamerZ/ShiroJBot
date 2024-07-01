@@ -929,9 +929,12 @@ public class Hand {
 	}
 
 	public boolean consumeHP(int value, boolean force) {
-		if (!force && hp <= value) return false;
+		if (!force && this.hp <= value) return false;
 
+		int before = this.hp;
 		this.hp = Math.max(1, this.hp - Math.max(0, value));
+		hpDelta = this.hp - before;
+
 		return true;
 	}
 
@@ -979,7 +982,6 @@ public class Hand {
 		}
 
 		int before = this.mp;
-
 		this.mp = Utils.clamp(this.mp + value, 0, 99);
 		mpDelta = this.mp - before;
 
@@ -1002,7 +1004,10 @@ public class Hand {
 			return consumeHP(val);
 		} else if (this.mp < value) return false;
 
+		int before = this.mp;
 		this.mp = Utils.clamp(this.mp - value, 0, 99);
+		mpDelta = this.mp - before;
+
 		return true;
 	}
 
