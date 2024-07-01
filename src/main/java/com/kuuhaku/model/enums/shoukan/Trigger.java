@@ -215,9 +215,19 @@ public enum Trigger {
 	ON_DAMAGE,
 
 	/**
+	 * On consuming HP
+	 **/
+	ON_CONSUME_HP,
+
+	/**
 	 * On receiving MP
 	 **/
 	ON_MP,
+
+	/**
+	 * On consuming MP
+	 **/
+	ON_CONSUME_MP,
 
 	/**
 	 * On using a card's active effect

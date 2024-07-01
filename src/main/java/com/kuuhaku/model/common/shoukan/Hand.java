@@ -935,6 +935,10 @@ public class Hand {
 		this.hp = Math.max(1, this.hp - Math.max(0, value));
 		hpDelta = this.hp - before;
 
+		if (value > 0) {
+			game.trigger(Trigger.ON_CONSUME_HP, side);
+		}
+
 		return true;
 	}
 
@@ -1007,6 +1011,10 @@ public class Hand {
 		int before = this.mp;
 		this.mp = Utils.clamp(this.mp - value, 0, 99);
 		mpDelta = this.mp - before;
+
+		if (value > 0) {
+			game.trigger(Trigger.ON_CONSUME_MP, side);
+		}
 
 		return true;
 	}
