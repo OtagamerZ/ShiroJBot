@@ -73,7 +73,7 @@ public abstract class Graph {
 	}
 
 	public static void drawOutlinedString(Graphics2D g2d, String text, int x, int y, float width, Color color) {
-		if (text.isEmpty()) return;
+		if (text == null || text.isEmpty()) return;
 
 		Stroke origStroke = g2d.getStroke();
 		Color origColor = g2d.getColor();
@@ -92,6 +92,8 @@ public abstract class Graph {
 	}
 
 	public static void drawShadowedString(Graphics2D g2d, String text, int x, int y, int width, int power, Color color) {
+		if (text == null || text.isEmpty()) return;
+
 		Stroke origStroke = g2d.getStroke();
 		Color origColor = g2d.getColor();
 
@@ -144,6 +146,8 @@ public abstract class Graph {
 	}
 
 	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, int spacing, int blankOffset, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
+		if (text == null || text.isEmpty()) return;
+
 		String[] lines = text.split("\n");
 		for (String line : lines) {
 			String[] words = line.split("(?<=\\S )");

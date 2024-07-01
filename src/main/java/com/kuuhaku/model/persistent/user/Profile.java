@@ -427,7 +427,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		int offset = (int) (Graph.getStringBounds(g2d, String.valueOf(lvl)).getWidth() + 10);
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(25));
-		Graph.drawOutlinedString(g2d, account.getName(), 88 + offset, 25, 3, Color.BLACK);
+		Graph.drawOutlinedString(g2d, Utils.getOr(account.getName(), "???"), 88 + offset, 25, 3, Color.BLACK);
 
 		String details = "XP: %s/%s I Rank: ".formatted(
 				Utils.shorten(getXp() - lvlXp), Utils.shorten(toNext - lvlXp)
