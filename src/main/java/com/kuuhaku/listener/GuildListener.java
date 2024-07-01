@@ -232,7 +232,7 @@ public class GuildListener extends ListenerAdapter {
 		if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_LINK)) {
 			Matcher m = Utils.regex(content, "(ht|f)tps?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*");
 			if (m.find() && data.me().hasPermission(data.channel(), Permission.MESSAGE_MANAGE)) {
-				event.getMessage().delete().queue(null, Utils::doNothing);
+				data.message().delete().queue(null, Utils::doNothing);
 				return;
 			}
 		}
@@ -251,14 +251,14 @@ public class GuildListener extends ListenerAdapter {
 
 		asyncExec.execute(() -> {
 			Thread.currentThread().setName("Event-" + Thread.currentThread().threadId());
-			EventData ed = new EventData(event.getChannel(), config, profile);
+			EventData ed = new EventData(data.channel(), config, profile);
 			if (content.toLowerCase().startsWith(config.getPrefix()) && data.channel().canTalk()) {
 				processCommand(data, ed, content);
 			}
 
 			if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_ZALGO)) {
-				Member mb = event.getMember();
-				if (mb != null && data.me().hasPermission(Permission.NICKNAME_MANAGE) && data.me().canInteract(mb)) {
+				Member mb = data.member();
+				if (data.me().hasPermission(Permission.NICKNAME_MANAGE) && data.me().canInteract(mb)) {
 					String name = Unidecode.decode(mb.getEffectiveName()).trim();
 					if (!name.equals(mb.getEffectiveName())) {
 						if (name.length() < 3) {
@@ -344,51 +344,49 @@ public class GuildListener extends ListenerAdapter {
 			}
 
 			if (config.getSettings().isFeatureEnabled(GuildFeature.NQN_MODE)) {
-				Member mb = event.getMember();
-				if (mb != null) {
-					boolean proxy = false;
+				Member mb = data.member();
+				boolean proxy = false;
 
-					StringBuilder sb = new StringBuilder();
-					for (String s : content.split(" ")) {
-						sb.append(" ");
+				StringBuilder sb = new StringBuilder();
+				for (String s : content.split(" ")) {
+					sb.append(" ");
 
-						if (!s.isBlank()) {
-							String name = Utils.extract(s, "^:([\\w-]+):$", 1);
-							if (name != null) {
-								RichCustomEmoji emj = null;
+					if (!s.isBlank()) {
+						String name = Utils.extract(s, "^:([\\w-]+):$", 1);
+						if (name != null) {
+							RichCustomEmoji emj = null;
 
-								List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(name, true);
-								if (!valid.isEmpty()) {
-									for (RichCustomEmoji e : valid) {
-										if (e.getGuild().equals(event.getGuild())) {
-											emj = e;
-											break;
-										}
-									}
-
-									if (emj == null) {
-										emj = valid.parallelStream()
-												.filter(e -> e.getGuild().isMember(mb))
-												.findAny()
-												.orElse(valid.getFirst());
+							List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(name, true);
+							if (!valid.isEmpty()) {
+								for (RichCustomEmoji e : valid) {
+									if (e.getGuild().equals(data.guild())) {
+										emj = e;
+										break;
 									}
 								}
 
-								if (emj != null) {
-									sb.append(emj.getAsMention());
-									proxy = true;
-									continue;
+								if (emj == null) {
+									emj = valid.parallelStream()
+											.filter(e -> e.getGuild().isMember(mb))
+											.findAny()
+											.orElse(valid.getFirst());
 								}
 							}
+
+							if (emj != null) {
+								sb.append(emj.getAsMention());
+								proxy = true;
+								continue;
+							}
 						}
-
-						sb.append(s);
 					}
 
-					if (proxy) {
-						PseudoUser pu = new PseudoUser(mb, event.getGuildChannel());
-						pu.send(data.message(), sb.toString());
-					}
+					sb.append(s);
+				}
+
+				if (proxy) {
+					PseudoUser pu = new PseudoUser(mb, data.channel());
+					pu.send(data.message(), sb.toString());
 				}
 			}
 
@@ -403,7 +401,7 @@ public class GuildListener extends ListenerAdapter {
 							if (Calc.chance(ca.getChance() / (data.user().isBot() ? 2d : 1d))) {
 								data.channel().sendTyping()
 										.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
-										.flatMap(v -> event.getChannel().sendMessage(ca.getAnswer()))
+										.flatMap(v -> data.channel().sendMessage(ca.getAnswer()))
 										.queue();
 								break;
 							}
