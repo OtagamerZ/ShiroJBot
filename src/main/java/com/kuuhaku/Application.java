@@ -47,7 +47,6 @@ import net.dv8tion.jda.api.utils.messages.MessageRequest;
 
 import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 
 import static net.dv8tion.jda.api.entities.Message.MentionType.EVERYONE;
@@ -82,41 +81,39 @@ public class Application implements Thread.UncaughtExceptionHandler {
 
 		MessageRequest.setDefaultMentions(EnumSet.complementOf(EnumSet.of(EVERYONE, HERE)));
 
-		CompletableFuture.runAsync(() -> {
-			for (JDA shard : shiro.getShardCache()) {
-				try {
-					shard.awaitReady();
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				}
-			}
-
+		for (JDA shard : shiro.getShardCache()) {
 			try {
-				PaginatorBuilder.createPaginator()
-						.setHandler(shiro)
-						.shouldEventLock(true)
-						.setOnRemove(h ->
-								h.editOriginalComponents()
-										.map(m -> {
-											Interaction i = h.getInteraction();
-											if (i.isFromGuild() && i.getGuild() != null) {
-												GuildConfig gc = DAO.find(GuildConfig.class, i.getGuild().getId());
-
-												h.setEphemeral(true)
-														.sendMessage(gc.getLocale().get("error/event_not_mapped"))
-														.queue();
-											}
-
-											return m;
-										})
-										.queue(null, Utils::doNothing)
-						)
-						.activate();
-			} catch (InvalidHandlerException e) {
-				Constants.LOGGER.error("Failed to start pagination library: {}", e.toString());
-				System.exit(1);
+				shard.awaitReady();
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
 			}
-		});
+		}
+
+		try {
+			PaginatorBuilder.createPaginator()
+					.setHandler(shiro)
+					.shouldEventLock(true)
+					.setOnRemove(h ->
+							h.editOriginalComponents()
+									.map(m -> {
+										Interaction i = h.getInteraction();
+										if (i.isFromGuild() && i.getGuild() != null) {
+											GuildConfig gc = DAO.find(GuildConfig.class, i.getGuild().getId());
+
+											h.setEphemeral(true)
+													.sendMessage(gc.getLocale().get("error/event_not_mapped"))
+													.queue();
+										}
+
+										return m;
+									})
+									.queue(null, Utils::doNothing)
+					)
+					.activate();
+		} catch (InvalidHandlerException e) {
+			Constants.LOGGER.error("Failed to start pagination library: {}", e.toString());
+			System.exit(1);
+		}
 
 		API.connectSocket(CommonSocket.class, Constants.SOCKET_ROOT);
 		Constants.LOGGER.info("<----------END OF BOOT---------->");
