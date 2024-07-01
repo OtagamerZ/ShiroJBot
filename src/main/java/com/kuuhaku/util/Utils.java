@@ -32,6 +32,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.StashFilter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shiro.ScriptMetrics;
 import com.kuuhaku.model.persistent.user.StashedCard;
@@ -829,18 +830,13 @@ public abstract class Utils {
 	}
 
 	public static Pair<CommandLine, Options> getCardCLI(I18N locale, String[] args, boolean market) {
-		String[] longOp = {"name", "rarity", "anime", "chrome", "kawaipon", "senshi", "evogear", "field", "valid", "locked", "min", "max", "mine"};
-		String[] shortOp = {"n", "r", "a", "c", "k", "s", "e", "f", "v", "l", "gt", "lt", "m"};
+		StashFilter[] filters = StashFilter.values();
 
 		Options opt = new Options();
-		List<String> hasParam = List.of("n", "r", "a", "gt", "lt");
-		for (int i = 0; i < longOp.length; i++) {
-			if (market && i == 8) continue;
-			else if (!market && i >= shortOp.length - 3) break;
+		for (StashFilter f : filters) {
+			if ((!market && f.isMarketOnly()) || (market && f.isStashOnly())) continue;
 
-			String lOp = longOp[i];
-			String sOp = shortOp[i];
-			opt.addOption(sOp, lOp, hasParam.contains(sOp), locale.get("search/" + lOp));
+			opt.addOption(f.getShortName(), f.getLongName(), f.hasParam(), f.toString(locale));
 		}
 
 		DefaultParser parser = new DefaultParser(false);

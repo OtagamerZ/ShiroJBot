@@ -29,6 +29,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.StashFilter;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
@@ -46,7 +47,6 @@ import org.apache.commons.cli.Options;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
@@ -87,45 +87,23 @@ public class StashCommand implements Executable {
 			return;
 		}
 
-		Map<String, String> filters = Map.ofEntries(
-				Map.entry("n", "AND c.card.id LIKE '%%'||?%s||'%%'"),
-				Map.entry("r", "AND cast(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'"),
-				Map.entry("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'"),
-				Map.entry("c", "AND cd.chrome = TRUE"),
-				Map.entry("k", "AND c.type = 'KAWAIPON'"),
-				Map.entry("s", "AND s.id IS NOT NULL"),
-				Map.entry("e", "AND e.id IS NOT NULL"),
-				Map.entry("f", "AND f.id IS NOT NULL"),
-				Map.entry("v", "AND c.deck IS NULL"),
-				Map.entry("l", "AND c.locked = TRUE")
-		);
-
-		XStringBuilder query = new XStringBuilder("""
-				SELECT c FROM StashedCard c
-				INNER JOIN CardDetails cd ON cd.uuid = c.uuid
-				LEFT JOIN KawaiponCard kc ON kc.uuid = c.uuid
-				LEFT JOIN Senshi s ON s.card = c.card
-				LEFT JOIN Evogear e ON e.card = c.card
-				LEFT JOIN Field f ON f.card = c.card
-				WHERE c.kawaipon.uid = ?1
-				""");
+		XStringBuilder query = new XStringBuilder(StashFilter.BASE_QUERY);
 		List<Object> params = new ArrayList<>();
 		params.add(event.user().getId());
 
 		AtomicInteger i = new AtomicInteger(2);
 		Option[] opts = cli.getFirst().getOptions();
 		for (Option opt : opts) {
-			String filter = filters.get(opt.getOpt());
-			if (filter == null) continue;
-			else if (filter.contains("%s")) {
+			StashFilter sf = StashFilter.getByArgument(opt.getOpt());
+			if (sf == null || sf.isMarketOnly()) continue;
+
+			String filter = sf.getWhereClause();
+			if (opt.hasArg()) {
 				filter = filter.formatted(i.getAndIncrement());
+				params.add(opt.getValue().toUpperCase());
 			}
 
 			query.appendNewLine(filter);
-
-			if (opt.hasArg()) {
-				params.add(opt.getValue().toUpperCase());
-			}
 		}
 
 		query.appendNewLine("ORDER BY c.id DESC");

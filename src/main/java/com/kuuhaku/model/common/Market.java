@@ -20,6 +20,7 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.StashFilter;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.MarketOrder;
@@ -32,24 +33,10 @@ import org.apache.http.client.methods.HttpHead;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Market {
 	private final String uid;
-	private final Map<String, String> filters = Map.ofEntries(
-			Map.entry("n", "AND c.card.id LIKE '%%'||?%s||'%%'"),
-			Map.entry("r", "AND cast(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'"),
-			Map.entry("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'"),
-			Map.entry("c", "AND cd.chrome = TRUE"),
-			Map.entry("k", "AND c.type = 'KAWAIPON'"),
-			Map.entry("s", "AND s.id IS NOT NULL"),
-			Map.entry("e", "AND e.id IS NOT NULL"),
-			Map.entry("f", "AND f.id IS NOT NULL"),
-			Map.entry("gl", "AND c.price >= ?%s"),
-			Map.entry("lt", "AND c.price <= ?%s"),
-			Map.entry("m", "AND c.kawaipon.uid = ?%s")
-	);
 
 	public Market(String uid) {
 		this.uid = uid;
@@ -57,31 +44,25 @@ public class Market {
 
 	public List<StashedCard> getOffers(Option[] opts, int page) {
 		List<Object> params = new ArrayList<>();
-		XStringBuilder query = new XStringBuilder("""
-				SELECT c FROM StashedCard c
-				INNER JOIN CardDetails cd ON cd.uuid = c.uuid
-				LEFT JOIN KawaiponCard kc ON kc.uuid = c.uuid
-				LEFT JOIN Senshi s ON s.card = c.card
-				LEFT JOIN Evogear e ON e.card = c.card
-				LEFT JOIN Field f ON f.card = c.card
-				WHERE c.price > 0
-				""");
+		XStringBuilder query = new XStringBuilder(StashFilter.BASE_QUERY);
 
 		AtomicInteger i = new AtomicInteger(1);
 		for (Option opt : opts) {
-			String filter = filters.get(opt.getOpt());
-			if (filter == null) continue;
-			else if (filter.contains("%s")) {
+			StashFilter sf = StashFilter.getByArgument(opt.getOpt());
+			if (sf == null || sf.isStashOnly()) continue;
+
+			String filter = sf.getWhereClause();
+			if (opt.hasArg()) {
 				filter = filter.formatted(i.getAndIncrement());
+
+				if (opt.getOpt().equals("m")) {
+					params.add(uid);
+				} else {
+					params.add(opt.getValue().toUpperCase());
+				}
 			}
 
 			query.appendNewLine(filter);
-
-			if (opt.hasArg()) {
-				params.add(opt.getValue().toUpperCase());
-			} else if (opt.getOpt().equals("m")) {
-				params.add(uid);
-			}
 		}
 
 		query.appendNewLine("""
