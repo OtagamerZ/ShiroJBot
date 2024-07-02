@@ -33,6 +33,7 @@ import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
+import com.kuuhaku.model.common.shoukan.TagBundle;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -55,10 +56,8 @@ import org.hibernate.type.SqlTypes;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
@@ -220,17 +219,17 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public List<String> getTags() {
-		List<String> out = new ArrayList<>();
+	public TagBundle getTags() {
+		TagBundle out = new TagBundle();
 		if (hasEffect()) {
 			if (isSpell()) {
-				out.add("tag/spell");
+				out.add("tag", "spell");
 			} else {
-				out.add("tag/effect");
+				out.add("tag", "effect");
 			}
 		}
 		for (Object tag : base.getTags()) {
-			out.add("tag/" + ((String) tag).toLowerCase());
+			out.add("tag", ((String) tag).toLowerCase());
 		}
 
 		return out;

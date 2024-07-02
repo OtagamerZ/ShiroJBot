@@ -22,6 +22,7 @@ import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
+import com.kuuhaku.model.common.shoukan.TagBundle;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Flag;
@@ -34,6 +35,7 @@ import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.records.shoukan.CardTag;
 import com.kuuhaku.model.records.shoukan.Source;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.Graph;
@@ -65,18 +67,18 @@ public interface Drawable<T extends Drawable<T>> {
 		return getCard();
 	}
 
-	default List<String> getTags() {
-		return List.of();
+	default TagBundle getTags() {
+		return new TagBundle();
 	}
 
 	default List<String> getTags(I18N locale) {
 		return getTags().stream()
 				.map(t -> {
-					if (!t.startsWith("tag/")) {
-						return locale.get(t);
+					if (!t.prefix().equals("tag")) {
+						return locale.get(t.toString());
 					}
 
-					return getString(locale, t);
+					return getString(locale, t.toString());
 				})
 				.filter(s -> !s.isBlank())
 				.toList();
@@ -264,7 +266,7 @@ public interface Drawable<T extends Drawable<T>> {
 
 		g2d.setFont(FONT);
 		FontMetrics m = g2d.getFontMetrics();
-		boolean aug = getTags().contains("tag/augment") && getHand().getGame() == null;
+		boolean aug = getTags().contains("augment") && getHand().getGame() == null;
 
 		{ // LEFT
 			int y = desc ? 225 : 291;
@@ -381,16 +383,16 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default String processTags(I18N locale) {
-		List<String> tags = getTags();
+		TagBundle tags = getTags();
 		if (tags.isEmpty()) return null;
 
 		List<String> out = new ArrayList<>();
 
-		for (String tag : tags) {
-			if (!tag.startsWith("tag/")) {
-				out.add(locale.get(tag).toUpperCase());
+		for (CardTag tag : tags) {
+			if (!tag.prefix().equals("tag")) {
+				out.add(locale.get(tag.toString()).toUpperCase());
 			} else {
-				out.add(getString(locale, tag).toUpperCase());
+				out.add(getString(locale, tag.toString()).toUpperCase());
 			}
 
 			if (out.toString().length() > 32) {

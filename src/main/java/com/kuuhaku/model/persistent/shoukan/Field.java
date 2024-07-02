@@ -26,6 +26,7 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.Hand;
+import com.kuuhaku.model.common.shoukan.TagBundle;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.FieldType;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -183,8 +184,14 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	@Override
-	public List<String> getTags() {
-		return tags.stream().map(t -> "tag/" + ((String) t).toLowerCase()).toList();
+	public TagBundle getTags() {
+		TagBundle out = new TagBundle();
+
+		for (Object tag : tags) {
+			out.add("tag", ((String) tag).toLowerCase());
+		}
+
+		return out;
 	}
 
 	@Override

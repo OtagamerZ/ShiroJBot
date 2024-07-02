@@ -130,10 +130,6 @@ public enum Race {
 	}
 
 	public boolean isRace(Race race) {
-		if (Integer.bitCount(race.flag) > 1) {
-			return this == race;
-		}
-
 		return (flag & race.flag) == race.flag;
 	}
 
@@ -160,14 +156,22 @@ public enum Race {
 	}
 
 	public List<Race> split() {
+		return split(false);
+	}
+
+	public List<Race> split(boolean pure) {
 		List<Race> races = new ArrayList<>();
 
 		int bits = flag;
 		int i = 1;
 		while (bits > 0) {
 			if ((bits & 1) == 1) {
-				races.add(getByFlag(i));
+				Race r = getByFlag(i);
+				if (!pure || r.isPure()) {
+					races.add(r);
+				}
 			}
+
 			i <<= 1;
 			bits >>= 1;
 		}

@@ -224,23 +224,23 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public List<String> getTags() {
-		List<String> out = new ArrayList<>();
+	public TagBundle getTags() {
+		TagBundle out = new TagBundle();
 		if (race != Race.NONE) {
-			out.add("race/" + getRace().name());
+			out.add("race", getRace().name());
 		}
 
 		if (hasEffect()) {
 			if (base.getTags().contains("MATERIAL")) {
-				out.add("tag/base");
+				out.add("tag", "base");
 			} else {
-				out.add("tag/effect");
+				out.add("tag", "effect");
 			}
 		} else if (isSealed()) {
-			out.add("tag/sealed");
+			out.add("tag", "sealed");
 		}
 
-		out.add("element/" + getElement().name().toLowerCase());
+		out.add("element", getElement().name().toLowerCase());
 
 		List<String> tags = base.getTags().stream()
 				.map(String::valueOf)
@@ -248,9 +248,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				.toList();
 
 		for (String tag : tags) {
-			if (out.contains("tag/base") && tag.equals("MATERIAL")) continue;
+			if (out.contains("base") && tag.equals("MATERIAL")) continue;
 
-			out.add("tag/" + tag.toLowerCase());
+			out.add("tag", tag.toLowerCase());
 		}
 
 		return out;
@@ -582,12 +582,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Field f = getGame().getArena().getField();
 
 		double mult = 1;
-		int races = race.split().size();
+		List<Race> races = getRace().split(true);
 		for (Map.Entry<String, Object> e : f.getModifiers().entrySet()) {
 			Race r = Race.valueOf(e.getKey());
 
 			double mod = 0;
-			if (race.isRace(r)) {
+			if (getRace().isRace(r)) {
 				mod = ((Number) e.getValue()).doubleValue();
 
 				if (mod != 0 && hand.getOrigins().synergy() == Race.ELF) {
@@ -598,8 +598,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					mod -= 0.15;
 				}
 
-				if (race != r) {
-					mod /= races;
+				if (getRace() != r) {
+					mod /= races.size();
 				}
 			}
 

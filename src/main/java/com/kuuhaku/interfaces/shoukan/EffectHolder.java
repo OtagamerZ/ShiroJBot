@@ -26,6 +26,7 @@ import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Flags;
 import com.kuuhaku.model.common.shoukan.Hand;
+import com.kuuhaku.model.common.shoukan.TagBundle;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Charm;
@@ -283,6 +284,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		DeckStyling style = getHand() == null ? new DeckStyling() : getHand().getUserDeck().getStyling();
 		AtomicInteger lastVal = new AtomicInteger();
 		AtomicInteger line = new AtomicInteger();
+		TagBundle tags = getTags();
 
 		return (str, x, y) -> {
 			if (lastVal.get() != y) {
@@ -290,7 +292,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				lastVal.set(y);
 			}
 
-			if (!legacy && line.get() == (getTags().isEmpty() ? 7 : 6)) {
+			if (!legacy && line.get() == (tags.isEmpty() ? 7 : 6)) {
 				x += 10;
 			}
 
