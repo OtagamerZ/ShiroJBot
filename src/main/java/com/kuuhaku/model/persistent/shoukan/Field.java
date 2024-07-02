@@ -327,7 +327,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 				g1.setFont(FONT);
 				FontMetrics m = g1.getFontMetrics();
 
-				List<Pair<Race, Double>> mods = modifiers.entrySet().stream()
+				List<Pair<Race, Double>> mods = getModifiers().entrySet().stream()
 						.map(e -> new Pair<>(Race.valueOf(e.getKey()), ((Number) e.getValue()).doubleValue()))
 						.sorted(Comparator.comparing(Pair::getSecond))
 						.toList();
