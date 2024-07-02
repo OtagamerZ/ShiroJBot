@@ -94,6 +94,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 			}
 		};
 
+		sml.getChannel().setCooldown(1, TimeUnit.SECONDS);
 		return exec = CompletableFuture.runAsync(() -> {
 			try {
 				channels = Stream.of(chns).map(GuildMessageChannel::getId).toArray(String[]::new);
