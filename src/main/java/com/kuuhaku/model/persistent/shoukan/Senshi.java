@@ -224,7 +224,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public TagBundle getTags() {
+	public TagBundle getTagBundle() {
 		TagBundle out = new TagBundle();
 		if (race != Race.NONE) {
 			out.add("race", getRace().name());

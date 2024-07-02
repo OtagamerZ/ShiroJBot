@@ -202,7 +202,7 @@ public class SeeCardCommand implements Executable {
 					}
 				}
 
-				if (!d.getTags().isEmpty()) {
+				if (!d.getTagBundle().isEmpty()) {
 					eb.addField(locale.get("str/tags"),
 							d.getTags(locale).stream()
 									.map(s -> "`" + s + "`")

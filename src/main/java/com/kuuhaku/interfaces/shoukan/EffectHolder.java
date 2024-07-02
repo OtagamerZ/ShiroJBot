@@ -284,7 +284,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		DeckStyling style = getHand() == null ? new DeckStyling() : getHand().getUserDeck().getStyling();
 		AtomicInteger lastVal = new AtomicInteger();
 		AtomicInteger line = new AtomicInteger();
-		TagBundle tags = getTags();
+		TagBundle tags = getTagBundle();
 
 		return (str, x, y) -> {
 			if (lastVal.get() != y) {

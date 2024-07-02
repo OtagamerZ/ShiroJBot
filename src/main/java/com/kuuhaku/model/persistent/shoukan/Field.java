@@ -184,7 +184,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	@Override
-	public TagBundle getTags() {
+	public TagBundle getTagBundle() {
 		TagBundle out = new TagBundle();
 
 		for (Object tag : tags) {

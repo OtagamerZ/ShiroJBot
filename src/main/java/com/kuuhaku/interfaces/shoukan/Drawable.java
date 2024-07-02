@@ -49,6 +49,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public interface Drawable<T extends Drawable<T>> {
 	int MAX_NAME_WIDTH = 175;
@@ -67,12 +68,19 @@ public interface Drawable<T extends Drawable<T>> {
 		return getCard();
 	}
 
-	default TagBundle getTags() {
+	default TagBundle getTagBundle() {
 		return new TagBundle();
 	}
 
+	default Set<String> getTags() {
+		return getTagBundle().parallelStream()
+				.map(CardTag::name)
+				.map(String::toUpperCase)
+				.collect(Collectors.toSet());
+	}
+
 	default List<String> getTags(I18N locale) {
-		return getTags().stream()
+		return getTagBundle().stream()
 				.map(t -> {
 					if (!t.prefix().equals("tag")) {
 						return locale.get(t.toString());
@@ -81,6 +89,7 @@ public interface Drawable<T extends Drawable<T>> {
 					return getString(locale, t.toString());
 				})
 				.filter(s -> !s.isBlank())
+				.distinct()
 				.toList();
 	}
 
@@ -266,7 +275,7 @@ public interface Drawable<T extends Drawable<T>> {
 
 		g2d.setFont(FONT);
 		FontMetrics m = g2d.getFontMetrics();
-		boolean aug = getTags().contains("augment") && getHand().getGame() == null;
+		boolean aug = getTagBundle().contains("augment") && getHand().getGame() == null;
 
 		{ // LEFT
 			int y = desc ? 225 : 291;
@@ -383,7 +392,7 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default String processTags(I18N locale) {
-		TagBundle tags = getTags();
+		TagBundle tags = getTagBundle();
 		if (tags.isEmpty()) return null;
 
 		List<String> out = new ArrayList<>();

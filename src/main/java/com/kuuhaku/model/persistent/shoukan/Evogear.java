@@ -219,7 +219,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public TagBundle getTags() {
+	public TagBundle getTagBundle() {
 		TagBundle out = new TagBundle();
 		if (hasEffect()) {
 			if (isSpell()) {
