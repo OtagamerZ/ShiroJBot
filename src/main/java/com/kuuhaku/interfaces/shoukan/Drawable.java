@@ -392,17 +392,12 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default String processTags(I18N locale) {
-		TagBundle tags = getTagBundle();
+		List<String> tags = getTags(locale);
 		if (tags.isEmpty()) return null;
 
 		List<String> out = new ArrayList<>();
-
-		for (CardTag tag : tags) {
-			if (!tag.prefix().equals("tag")) {
-				out.add(locale.get(tag.toString()).toUpperCase());
-			} else {
-				out.add(getString(locale, tag.toString()).toUpperCase());
-			}
+		for (String tag : tags) {
+			out.add(tag.toUpperCase());
 
 			if (out.toString().length() > 32) {
 				out.removeLast();
@@ -411,7 +406,7 @@ public interface Drawable<T extends Drawable<T>> {
 			}
 		}
 
-		return out.stream().filter(s -> !s.isBlank()).toList().toString();
+		return out.toString();
 	}
 
 	T fork() throws CloneNotSupportedException;
