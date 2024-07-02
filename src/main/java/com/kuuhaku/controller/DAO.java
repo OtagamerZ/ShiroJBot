@@ -32,10 +32,7 @@ import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -355,6 +352,29 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 							return new Object[]{o};
 						}
 					}).toList();
+		});
+	}
+
+	public static void deleteBatch(Collection<DAO<?>> entries) {
+		Manager.getFactory().runInTransaction(em -> {
+			for (DAO<?> entry : entries) {
+				entry.beforeDelete();
+				try {
+					DAO<?> ent = entry;
+					if (!em.contains(entry)) {
+						Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entry);
+						ent = em.find(entry.getClass(), key);
+
+						if (ent == null) {
+							throw new EntityNotFoundException("Could not delete entity of class " + entry.getClass().getSimpleName() + " [" + key + "]");
+						}
+					}
+
+					em.remove(ent);
+				} finally {
+					entry.afterDelete();
+				}
+			}
 		});
 	}
 

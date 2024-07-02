@@ -42,10 +42,7 @@ import net.dv8tion.jda.api.JDA;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.HashBag;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -146,6 +143,7 @@ public class StashScrapCommand implements Executable {
 						event.channel().sendMessage(locale.get("success/scrap")).queue();
 						acc.addCR(value, "Scrapped " + cards.stream().map(StashedCard::toString).collect(Collectors.joining(", ")));
 
+						Set<DAO<?>> batch = new HashSet<>();
 						Bag<UserItem> items = new HashBag<>();
 						for (StashedCard sc : cards) {
 							if (sc.isChrome() && Calc.chance(50)) {
@@ -158,7 +156,7 @@ public class StashScrapCommand implements Executable {
 							if (sc.getType() == CardType.KAWAIPON) {
 								KawaiponCard kc = sc.getKawaiponCard();
 								if (kc != null) {
-									kc.delete();
+									batch.add(kc);
 
 									Rarity rarity = kc.getCard().getRarity();
 									if (Calc.chance(Math.pow(2.15, 7 - rarity.getIndex()))) {
@@ -171,8 +169,9 @@ public class StashScrapCommand implements Executable {
 								}
 							}
 
-							sc.delete();
+							batch.add(sc);
 						}
+						DAO.deleteBatch(batch);
 
 						if (!items.isEmpty()) {
 							AtomicInteger dist = new AtomicInteger();
