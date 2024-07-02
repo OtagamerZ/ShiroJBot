@@ -74,6 +74,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
@@ -2038,17 +2040,14 @@ public class Shoukan extends GameInstance<Phase> {
 				});
 			}
 
-			BufferedImage img = arena.render(getLocale());
-			byte[] bytes = IO.getBytes(img, "png");
+			CompletableFuture<byte[]> img = CompletableFuture.supplyAsync(() -> IO.getBytes(arena.render(getLocale()), "png"));
 
 			ButtonizeHelper helper = getButtons();
-
 			AtomicBoolean registered = new AtomicBoolean();
 			if (buffer) {
 				getChannel().buffer(getString(message, args));
 			} else {
 				getChannel().sendMessage(getString(message, args))
-						.addFile(bytes, "game.png")
 						.apply(helper::apply)
 						.queue(m -> {
 							Pages.buttonize(m, helper);
@@ -2060,6 +2059,11 @@ public class Shoukan extends GameInstance<Phase> {
 								}
 
 								registered.set(true);
+							}
+
+							try {
+								m.editMessageAttachments(FileUpload.fromData(img.get(), "game.png")).queue(null, Utils::doNothing);
+							} catch (InterruptedException | ExecutionException ignore) {
 							}
 						}, Utils::doNothing);
 			}
