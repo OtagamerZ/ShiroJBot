@@ -179,10 +179,6 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		return effect;
 	}
 
-	public JSONArray getRawTags() {
-		return tags;
-	}
-
 	@Override
 	public TagBundle getTagBundle() {
 		TagBundle out = new TagBundle();
