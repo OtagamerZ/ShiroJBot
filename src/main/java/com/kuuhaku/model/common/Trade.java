@@ -163,8 +163,10 @@ public class Trade {
 
         Set<String> items = Set.copyOf(leftItems);
         for (String i : items) {
+            int max = rows.get(i).max();
+
             if (leftItems.getCount(i) > rows.get(i).amount()) return false;
-            else if (right.getItemCount(i) + rightItems.getCount(i) > rows.get(i).max()) return false;
+            else if (max > 0 && right.getItemCount(i) + rightItems.getCount(i) > max) return false;
         }
 
         rows = Utils.map(
@@ -174,8 +176,10 @@ public class Trade {
 
         items = Set.copyOf(rightItems);
         for (String i : items) {
+            int max = rows.get(i).max();
+
             if (rightItems.getCount(i) > rows.get(i).amount()) return false;
-            else if (right.getItemCount(i) + leftItems.getCount(i) > rows.get(i).max()) return false;
+            else if (max > 0 && right.getItemCount(i) + leftItems.getCount(i) > max) return false;
         }
 
         return true;
