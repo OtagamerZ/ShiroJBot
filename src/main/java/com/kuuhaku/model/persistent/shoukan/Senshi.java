@@ -1202,12 +1202,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			return false;
 		}
 
-		if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
-			getGame().trigger(ON_TICK, asSource(ON_TICK));
-		}
-
 		try {
 			base.lock(trigger);
+			if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
+				getGame().trigger(ON_TICK, asSource(ON_TICK));
+			}
+
 			currentTrigger = trigger;
 			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
 				if (!game.getCurrent().equals(hand)) {

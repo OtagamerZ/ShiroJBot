@@ -509,12 +509,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			return false;
 		}
 
-		if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
-			getGame().trigger(ON_TICK, asSource(ON_TICK));
-		}
-
 		try {
 			base.lock(ep.trigger());
+			if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
+				getGame().trigger(ON_TICK, asSource(ON_TICK));
+			}
+
 			currentTrigger = ep.trigger();
 			CachedScriptManager csm = getCSM();
 			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
