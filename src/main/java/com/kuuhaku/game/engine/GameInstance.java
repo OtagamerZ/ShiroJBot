@@ -79,7 +79,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 		SimpleMessageListener sml = new SimpleMessageListener(chns) {
 			{
 				turn = 1;
-				channel = this.getChannel();
+				channel = this.getChannel().setCooldown(1, TimeUnit.SECONDS);
 			}
 
 			@Override
@@ -94,7 +94,6 @@ public abstract class GameInstance<T extends Enum<T>> {
 			}
 		};
 
-		sml.getChannel().setCooldown(1, TimeUnit.SECONDS);
 		return exec = CompletableFuture.runAsync(() -> {
 			try {
 				channels = Stream.of(chns).map(GuildMessageChannel::getId).toArray(String[]::new);
