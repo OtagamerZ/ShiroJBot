@@ -536,11 +536,19 @@ public class Arena implements Renderer {
 			}
 
 			if (reversed) {
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
+				g.fillRect(0, BAR_SIZE.height + SIZE.height, SIZE.width, BAR_SIZE.height);
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+
 				g.drawImage(bi, SIZE.width - bi.getWidth(), BAR_SIZE.height + SIZE.height, null);
 
 				x = MARGIN.x;
 				y = SIZE.height + BAR_SIZE.height + (BAR_SIZE.height + BAR_SIZE.height / 3) / 2 + 10;
 			} else {
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
+				g.fillRect(0, 0, SIZE.width, BAR_SIZE.height);
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+
 				g.drawImage(bi, 0, 0, null);
 
 				x = SIZE.width - MARGIN.x - g.getFontMetrics().stringWidth(name);
