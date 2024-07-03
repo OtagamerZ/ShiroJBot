@@ -2084,6 +2084,8 @@ public class Shoukan extends GameInstance<Phase> {
 								throw new RuntimeException(e);
 							}
 						}, Utils::doNothing);
+
+				thumb.delete();
 			}
 		} finally {
 			setSending(false);
