@@ -2044,7 +2044,19 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			BufferedImage img = arena.render(getLocale());
-			byte[] bytes = IO.getBytes(img, "png");
+			CompletableFuture<byte[]> bytes = CompletableFuture.supplyAsync(() -> IO.getBytes(img, "png"));
+
+			File thumb;
+			try {
+				thumb = Files.createTempFile("shoukan-" + getSeed(), ".png").toFile();
+				Thumbnails.of(img)
+						.width(img.getWidth() / 3)
+						.outputFormat("png")
+						.toFile(thumb);
+			} catch (IOException e) {
+				thumb = null;
+				Constants.LOGGER.error(e, e);
+			}
 
 			ButtonizeHelper helper = getButtons();
 			AtomicBoolean registered = new AtomicBoolean();
@@ -2052,7 +2064,7 @@ public class Shoukan extends GameInstance<Phase> {
 				getChannel().buffer(getString(message, args));
 			} else {
 				getChannel().sendMessage(getString(message, args))
-						.addFile(bytes, "game.png")
+						.addFile(thumb)
 						.apply(helper::apply)
 						.queue(m -> {
 							Pages.buttonize(m, helper);
@@ -2064,6 +2076,12 @@ public class Shoukan extends GameInstance<Phase> {
 								}
 
 								registered.set(true);
+							}
+
+							try {
+								m.editMessageAttachments(FileUpload.fromData(bytes.get(), "game.png")).queue(null, Utils::doNothing);
+							} catch (ExecutionException | InterruptedException e) {
+								throw new RuntimeException(e);
 							}
 						}, Utils::doNothing);
 			}
