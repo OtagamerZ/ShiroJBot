@@ -25,25 +25,28 @@ import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
+import com.kuuhaku.model.common.BlurFilter;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.MultiProcessor;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
-import com.kuuhaku.model.records.shoukan.HandStateSnap;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -111,7 +114,7 @@ public class Arena implements Renderer {
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
 	private final BufferedImage canvas = new BufferedImage(SIZE.width, SIZE.height + BAR_SIZE.height * 2, BufferedImage.TYPE_INT_ARGB);
-	private Map<Side, HandStateSnap> handSnaps = new HashMap<>();
+	private File thumbnail;
 	private Field field = null;
 
 	public Arena(Shoukan game) {
@@ -174,8 +177,8 @@ public class Arena implements Renderer {
 		game.trigger(Trigger.ON_FIELD_CHANGE);
 	}
 
-	public BufferedImage getCanvas() {
-		return canvas;
+	public File getThumbnail() {
+		return thumbnail;
 	}
 
 	@Override
@@ -185,11 +188,18 @@ public class Arena implements Renderer {
 
 		Graph.applyTransformed((Graphics2D) g2d.create(), 0, BAR_SIZE.height, drawCenter());
 		for (Hand h : game.getHands().values()) {
-			HandStateSnap snap = new HandStateSnap(h);
-			if (!snap.equals(handSnaps.get(h.getSide()))) {
-				handSnaps.put(h.getSide(), snap);
-				Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(h));
-			}
+			Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(h));
+		}
+
+		try {
+			thumbnail = Files.createTempFile("shoukan-" + game.getSeed(), ".png").toFile();
+			Thumbnails.of(canvas)
+					.width(SIZE.width / 3)
+					.addFilter(new BlurFilter(25))
+					.outputFormat("png")
+					.toFile(thumbnail);
+		} catch (IOException e) {
+			Constants.LOGGER.error(e, e);
 		}
 
 		return canvas;

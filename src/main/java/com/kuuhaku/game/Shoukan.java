@@ -32,7 +32,6 @@ import com.kuuhaku.game.engine.PhaseConstraint;
 import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
-import com.kuuhaku.model.common.BlurFilter;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.*;
@@ -61,7 +60,6 @@ import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import com.ygimenez.json.JSONUtils;
 import kotlin.Pair;
-import net.coobird.thumbnailator.Thumbnails;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
@@ -73,10 +71,8 @@ import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -2050,26 +2046,13 @@ public class Shoukan extends GameInstance<Phase> {
 					IO.getBytes(arena.render(getLocale()), "png")
 			);
 
-			File thumb;
-			try {
-				thumb = Files.createTempFile("shoukan-" + getSeed(), ".png").toFile();
-				Thumbnails.of(arena.getCanvas())
-						.width(arena.SIZE.width / 3)
-						.addFilter(new BlurFilter(25))
-						.outputFormat("png")
-						.toFile(thumb);
-			} catch (IOException e) {
-				thumb = null;
-				Constants.LOGGER.error(e, e);
-			}
-
 			ButtonizeHelper helper = getButtons();
 			AtomicBoolean registered = new AtomicBoolean();
 			if (buffer) {
 				getChannel().buffer(getString(message, args));
 			} else {
 				getChannel().sendMessage(getString(message, args))
-						.addFile(thumb)
+						.addFile(arena.getThumbnail())
 						.apply(helper::apply)
 						.queue(m -> {
 							Pages.buttonize(m, helper);
