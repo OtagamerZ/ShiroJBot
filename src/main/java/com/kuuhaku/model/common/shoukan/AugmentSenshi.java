@@ -21,6 +21,7 @@ package com.kuuhaku.model.common.shoukan;
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.shoukan.Charm;
+import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
@@ -86,6 +87,11 @@ public class AugmentSenshi extends Senshi implements Proxy<Senshi> {
 	@Override
 	public boolean hasCharm(Charm charm, boolean pop) {
 		return super.hasCharm(charm, pop) || original.hasCharm(charm, pop);
+	}
+
+	@Override
+	public boolean hasFlag(Flag flag, boolean pop) {
+		return original.hasFlag(flag, pop);
 	}
 
 	public void destroy() {
