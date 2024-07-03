@@ -26,7 +26,6 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
-import com.kuuhaku.model.common.Checkpoint;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -244,7 +243,7 @@ public class Arena implements Renderer {
 			Hand bottom = game.getHands().get(Side.BOTTOM);
 			I18N locale = getGame().getLocale();
 
-			g.drawImage(getField().renderBackground(), 0, 0, null);
+			Graph.splitDrawImage(g, getField().renderBackground(), 0, 0, 3);
 
 			for (Side side : Side.values()) {
 				int xOffset = CENTER.x - ((225 + MARGIN.x) * 5 - MARGIN.x) / 2;

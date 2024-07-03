@@ -505,4 +505,37 @@ public abstract class Graph {
 
 		return text;
 	}
+
+	public static void splitDrawImage(Graphics2D g2d, BufferedImage img, int x, int y, int splits) {
+		if (splits <= 0) {
+			g2d.drawImage(img, x, y, null);
+			return;
+		}
+
+		Dimension chunkDim = new Dimension(img.getWidth() / splits, img.getHeight() / splits);
+		List<Integer> indexes = IntStream.range(0, (int) Math.pow(splits, 2))
+				.boxed()
+				.toList();
+
+		MultiProcessor.with(Executors.newVirtualThreadPerTaskExecutor(), indexes)
+				.process(idx -> {
+					int ox = idx % splits;
+					int oy = idx / splits;
+
+					int dx = chunkDim.width * ox;
+					int dy = chunkDim.height * oy;
+
+					Image chunk = img.getSubimage(
+							dx, dy,
+							Math.min(chunkDim.width, img.getWidth() - dx),
+							Math.min(chunkDim.height, img.getHeight() - dy)
+					);
+
+					Graphics2D g = (Graphics2D) g2d.create();
+					g.drawImage(chunk, ox, oy, null);
+					g.dispose();
+
+					return null;
+				});
+	}
 }
