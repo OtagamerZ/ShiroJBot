@@ -174,6 +174,8 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.modMP(curr.getBase().mpGain().get());
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
+		arena.render(getLocale());
+
 		reportEvent("str/game_start", false, false, "<@" + curr.getUid() + ">");
 
 		snapshots.put(getTurn(), takeSnapshot());
