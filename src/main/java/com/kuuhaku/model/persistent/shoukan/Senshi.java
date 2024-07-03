@@ -114,6 +114,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			game.putAtOpenSlot(this.getSide(), true, withCopy(s -> {
 				s.getStats().getAttrMult().set(-1 + (0.25 * e.getTier()));
 				s.getStats().getData().put("cloned", true);
+
+				if (s.hasAbility()) {
+					s.setCooldown(1);
+				}
 			}));
 		}
 
