@@ -26,7 +26,6 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
-import com.kuuhaku.model.common.Checkpoint;
 import com.kuuhaku.model.common.MultiProcessor;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
@@ -46,12 +45,10 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class Arena implements Renderer {
-	private final ExecutorService renderThread = Executors.newFixedThreadPool(3);
 	private final Point MARGIN = new Point(25, 25);
 	public final Dimension SIZE = new Dimension(
 			(225 + MARGIN.x * 2) * 5 /* slots */ + (225 + MARGIN.x * 2) * 4 /* side stacks */,
@@ -111,6 +108,7 @@ public class Arena implements Renderer {
 	}, d -> d.setCurrentStack(getBanned(false)), Utils::doNothing);
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
+	private final BufferedImage canvas = new BufferedImage(SIZE.width, SIZE.height + BAR_SIZE.height * 2, BufferedImage.TYPE_INT_ARGB);
 	private Field field = null;
 
 	public Arena(Shoukan game) {
@@ -175,18 +173,15 @@ public class Arena implements Renderer {
 
 	@Override
 	public BufferedImage render(I18N locale) {
-		Hand top = game.getHands().get(Side.TOP);
-		Hand bottom = game.getHands().get(Side.BOTTOM);
-
-		BufferedImage bi = new BufferedImage(SIZE.width, SIZE.height + BAR_SIZE.height * 2, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = bi.createGraphics();
+		Graphics2D g2d = canvas.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
 		Graph.applyTransformed((Graphics2D) g2d.create(), 0, BAR_SIZE.height, drawCenter());
-		Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(top));
-		Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(bottom));
+		for (Hand h : game.getHands().values()) {
+			Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(h));
+		}
 
-		return bi;
+		return canvas;
 	}
 
 	public BufferedImage renderEvogears() {
@@ -241,135 +236,122 @@ public class Arena implements Renderer {
 
 	private Consumer<Graphics2D> drawCenter() {
 		return g -> {
-			try (var cp = new Checkpoint()) {
-				Hand top = game.getHands().get(Side.TOP);
-				Hand bottom = game.getHands().get(Side.BOTTOM);
-				I18N locale = getGame().getLocale();
-				cp.lap();
+			Hand top = game.getHands().get(Side.TOP);
+			Hand bottom = game.getHands().get(Side.BOTTOM);
+			I18N locale = getGame().getLocale();
 
-				Graph.splitDrawImage(g, getField().renderBackground(), 0, 0, 3);
-				cp.lap();
+			Graph.splitDrawImage(g, getField().renderBackground(), 0, 0, 3);
 
-				for (Side side : Side.values()) {
-					int xOffset = CENTER.x - ((225 + MARGIN.x) * 5 - MARGIN.x) / 2;
-					int yOffset = switch (side) {
-						case TOP -> CENTER.y - (350 + MARGIN.y) * 2 - MARGIN.y * 4;
-						case BOTTOM -> CENTER.y + MARGIN.y * 5;
-					};
+			for (Side side : Side.values()) {
+				int xOffset = CENTER.x - ((225 + MARGIN.x) * 5 - MARGIN.x) / 2;
+				int yOffset = switch (side) {
+					case TOP -> CENTER.y - (350 + MARGIN.y) * 2 - MARGIN.y * 4;
+					case BOTTOM -> CENTER.y + MARGIN.y * 5;
+				};
 
-					Hand h = game.getHands().get(side);
-					int regdeg = h.getRegDeg().peek();
-					if (regdeg != 0) {
-						BufferedImage over = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen_" + side.name().toLowerCase() + ".png");
-						g.drawImage(over, 0, CENTER.y * side.ordinal(), null);
-					}
-					cp.lap();
-
-					Deck deck = h.getUserDeck();
-					DeckStyling style = deck.getStyling();
-
-					g.drawImage(deck.getSkin().getImage(side, style.getFrame().isLegacy()), 21, yOffset - 5, null);
-					cp.lap();
-
-					MultiProcessor.with(Executors.newVirtualThreadPerTaskExecutor(), slots.get(side))
-							.process(slot -> {
-								Graph.applyTransformed(g, xOffset, yOffset, g2 -> {
-									int x = (225 + MARGIN.x) * slot.getIndex() - 15;
-									int equips, frontline, backline;
-
-									if (side == Side.TOP) {
-										equips = 350 * 2 + MARGIN.y + MARGIN.y / 4 - 5;
-										frontline = 350 + MARGIN.y - 15;
-										backline = -15;
-									} else {
-										equips = -350 / 3 - MARGIN.y / 4 - 5;
-										frontline = -15;
-										backline = 350 + MARGIN.y - 15;
-									}
-
-									if (slot.isLocked()) {
-										BufferedImage hole = IO.getResourceAsImage("shoukan/states/broken.png");
-										g2.drawImage(hole, x + 15, frontline + 15, null);
-										g2.drawImage(hole, x + 15, backline + 15, null);
-									} else {
-										if (slot.hasTop()) {
-											Senshi s = slot.getTop();
-											g2.drawImage(s.render(locale, deck), x, frontline, null);
-
-											if (!s.getEquipments().isEmpty()) {
-												Graph.applyTransformed(g2, x, equips, g3 -> {
-													Dimension resized = new Dimension(Drawable.SIZE.width / 3, Drawable.SIZE.height / 3);
-													int middle = 225 / 2 - resized.width / 2;
-
-													for (int i = 0; i < s.getEquipments().size(); i++) {
-														g3.drawImage(s.getEquipments().get(i).render(locale, deck),
-																15 + middle + (resized.width - 5) * (i - 1), 0,
-																resized.width, resized.height,
-																null
-														);
-													}
-												});
-											}
-										}
-
-										if (slot.hasBottom()) {
-											g2.drawImage(slot.getBottom().render(getGame().getLocale(), deck), x, backline, null);
-										}
-									}
-								});
-
-								return null;
-							});
-					cp.lap();
+				Hand h = game.getHands().get(side);
+				int regdeg = h.getRegDeg().peek();
+				if (regdeg != 0) {
+					BufferedImage over = IO.getResourceAsImage("shoukan/overlay/" + (regdeg > 0 ? "r" : "d") + "egen_" + side.name().toLowerCase() + ".png");
+					g.drawImage(over, 0, CENTER.y * side.ordinal(), null);
 				}
 
-				Graph.applyTransformed(g, MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
-					if (!top.getRealDeck().isEmpty()) {
-						Deck d = top.getUserDeck();
-						g2.drawImage(d.getStyling().getFrame().getBack(d),
-								0, 15 - (350 + MARGIN.y), null
-						);
-						cp.lap();
-					}
-					if (!banned.isEmpty()) {
-						Drawable<?> d = banned.getLast();
-						g2.drawImage(d.render(locale, d.getHand().getUserDeck()),
-								-15, 0, null
-						);
-						cp.lap();
-					}
-					if (!bottom.getGraveyard().isEmpty()) {
-						Drawable<?> d = bottom.getGraveyard().getLast();
-						g2.drawImage(d.render(locale, bottom.getUserDeck()),
-								-15, 350 + MARGIN.y, null
-						);
-						cp.lap();
-					}
-				});
+				Deck deck = h.getUserDeck();
+				DeckStyling style = deck.getStyling();
 
-				Graph.applyTransformed(g, SIZE.width - Drawable.SIZE.width - MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
-					if (!top.getGraveyard().isEmpty()) {
-						Drawable<?> d = top.getGraveyard().getLast();
-						g2.drawImage(d.render(locale, top.getUserDeck()),
-								15, -(350 + MARGIN.y), null
-						);
-						cp.lap();
-					}
-					if (!getField().getId().equals("DEFAULT")) {
-						g2.drawImage(getField().render(locale, Utils.getOr(() -> getField().getHand().getUserDeck(), Deck.INSTANCE)),
-								15, 0, null
-						);
-						cp.lap();
-					}
-					if (!bottom.getRealDeck().isEmpty()) {
-						Deck d = bottom.getUserDeck();
-						g2.drawImage(d.getStyling().getFrame().getBack(d),
-								30, 15 + 350 + MARGIN.y, null
-						);
-						cp.lap();
-					}
-				});
+				g.drawImage(deck.getSkin().getImage(side, style.getFrame().isLegacy()), 21, yOffset - 5, null);
+
+				MultiProcessor.with(Executors.newVirtualThreadPerTaskExecutor(), slots.get(side))
+						.process(slot -> {
+							Graph.applyTransformed(g, xOffset, yOffset, g2 -> {
+								int x = (225 + MARGIN.x) * slot.getIndex() - 15;
+								int equips, frontline, backline;
+
+								if (side == Side.TOP) {
+									equips = 350 * 2 + MARGIN.y + MARGIN.y / 4 - 5;
+									frontline = 350 + MARGIN.y - 15;
+									backline = -15;
+								} else {
+									equips = -350 / 3 - MARGIN.y / 4 - 5;
+									frontline = -15;
+									backline = 350 + MARGIN.y - 15;
+								}
+
+								if (slot.isLocked()) {
+									BufferedImage hole = IO.getResourceAsImage("shoukan/states/broken.png");
+									g2.drawImage(hole, x + 15, frontline + 15, null);
+									g2.drawImage(hole, x + 15, backline + 15, null);
+								} else {
+									if (slot.hasTop()) {
+										Senshi s = slot.getTop();
+										g2.drawImage(s.render(locale, deck), x, frontline, null);
+
+										if (!s.getEquipments().isEmpty()) {
+											Graph.applyTransformed(g2, x, equips, g3 -> {
+												Dimension resized = new Dimension(Drawable.SIZE.width / 3, Drawable.SIZE.height / 3);
+												int middle = 225 / 2 - resized.width / 2;
+
+												for (int i = 0; i < s.getEquipments().size(); i++) {
+													g3.drawImage(s.getEquipments().get(i).render(locale, deck),
+															15 + middle + (resized.width - 5) * (i - 1), 0,
+															resized.width, resized.height,
+															null
+													);
+												}
+											});
+										}
+									}
+
+									if (slot.hasBottom()) {
+										g2.drawImage(slot.getBottom().render(getGame().getLocale(), deck), x, backline, null);
+									}
+								}
+							});
+
+							return null;
+						});
 			}
+
+			Graph.applyTransformed(g, MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
+				if (!top.getRealDeck().isEmpty()) {
+					Deck d = top.getUserDeck();
+					g2.drawImage(d.getStyling().getFrame().getBack(d),
+							0, 15 - (350 + MARGIN.y), null
+					);
+				}
+				if (!banned.isEmpty()) {
+					Drawable<?> d = banned.getLast();
+					g2.drawImage(d.render(locale, d.getHand().getUserDeck()),
+							-15, 0, null
+					);
+				}
+				if (!bottom.getGraveyard().isEmpty()) {
+					Drawable<?> d = bottom.getGraveyard().getLast();
+					g2.drawImage(d.render(locale, bottom.getUserDeck()),
+							-15, 350 + MARGIN.y, null
+					);
+				}
+			});
+
+			Graph.applyTransformed(g, SIZE.width - Drawable.SIZE.width - MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
+				if (!top.getGraveyard().isEmpty()) {
+					Drawable<?> d = top.getGraveyard().getLast();
+					g2.drawImage(d.render(locale, top.getUserDeck()),
+							15, -(350 + MARGIN.y), null
+					);
+				}
+				if (!getField().getId().equals("DEFAULT")) {
+					g2.drawImage(getField().render(locale, Utils.getOr(() -> getField().getHand().getUserDeck(), Deck.INSTANCE)),
+							15, 0, null
+					);
+				}
+				if (!bottom.getRealDeck().isEmpty()) {
+					Deck d = bottom.getUserDeck();
+					g2.drawImage(d.getStyling().getFrame().getBack(d),
+							30, 15 + 350 + MARGIN.y, null
+					);
+				}
+			});
 		};
 	}
 
