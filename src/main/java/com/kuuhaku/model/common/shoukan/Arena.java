@@ -239,8 +239,8 @@ public class Arena implements Renderer {
 	}
 
 	private Consumer<Graphics2D> drawCenter() {
-		try (var cp = new Checkpoint()) {
-			return g -> {
+		return g -> {
+			try (var cp = new Checkpoint()) {
 				Hand top = game.getHands().get(Side.TOP);
 				Hand bottom = game.getHands().get(Side.BOTTOM);
 				I18N locale = getGame().getLocale();
@@ -371,8 +371,8 @@ public class Arena implements Renderer {
 						cp.lap();
 					}
 				});
-			};
-		}
+			}
+		};
 	}
 
 	@SuppressWarnings("SuspiciousNameCombination")
