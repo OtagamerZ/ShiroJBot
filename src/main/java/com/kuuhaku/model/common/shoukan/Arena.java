@@ -26,6 +26,7 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.common.MultiProcessor;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -264,53 +265,55 @@ public class Arena implements Renderer {
 
 				g.drawImage(deck.getSkin().getImage(side, style.getFrame().isLegacy()), 21, yOffset - 5, null);
 
-				Graph.applyTransformed(g, xOffset, yOffset, g2 -> {
-					for (SlotColumn slot : slots.get(side)) {
-						int x = (225 + MARGIN.x) * slot.getIndex() - 15;
-						int equips, frontline, backline;
+				MultiProcessor.with(Executors.newVirtualThreadPerTaskExecutor(), slots.get(side))
+						.process(slot -> {
+							Graph.applyTransformed(g, xOffset, yOffset, g2 -> {
+								int x = (225 + MARGIN.x) * slot.getIndex() - 15;
+								int equips, frontline, backline;
 
-						if (side == Side.TOP) {
-							equips = 350 * 2 + MARGIN.y + MARGIN.y / 4 - 5;
-							frontline = 350 + MARGIN.y - 15;
-							backline = -15;
-						} else {
-							equips = -350 / 3 - MARGIN.y / 4 - 5;
-							frontline = -15;
-							backline = 350 + MARGIN.y - 15;
-						}
-
-						if (slot.isLocked()) {
-							BufferedImage hole = IO.getResourceAsImage("shoukan/states/broken.png");
-							g2.drawImage(hole, x + 15, frontline + 15, null);
-							g2.drawImage(hole, x + 15, backline + 15, null);
-						} else {
-							if (slot.hasTop()) {
-								Senshi s = slot.getTop();
-
-								g2.drawImage(s.render(locale, deck), x, frontline, null);
-
-								if (!s.getEquipments().isEmpty()) {
-									Graph.applyTransformed(g2, x, equips, g3 -> {
-										Dimension resized = new Dimension(Drawable.SIZE.width / 3, Drawable.SIZE.height / 3);
-										int middle = 225 / 2 - resized.width / 2;
-
-										for (int i = 0; i < s.getEquipments().size(); i++) {
-											g3.drawImage(s.getEquipments().get(i).render(locale, deck),
-													15 + middle + (resized.width - 5) * (i - 1), 0,
-													resized.width, resized.height,
-													null
-											);
-										}
-									});
+								if (side == Side.TOP) {
+									equips = 350 * 2 + MARGIN.y + MARGIN.y / 4 - 5;
+									frontline = 350 + MARGIN.y - 15;
+									backline = -15;
+								} else {
+									equips = -350 / 3 - MARGIN.y / 4 - 5;
+									frontline = -15;
+									backline = 350 + MARGIN.y - 15;
 								}
-							}
 
-							if (slot.hasBottom()) {
-								g2.drawImage(slot.getBottom().render(getGame().getLocale(), deck), x, backline, null);
-							}
-						}
-					}
-				});
+								if (slot.isLocked()) {
+									BufferedImage hole = IO.getResourceAsImage("shoukan/states/broken.png");
+									g2.drawImage(hole, x + 15, frontline + 15, null);
+									g2.drawImage(hole, x + 15, backline + 15, null);
+								} else {
+									if (slot.hasTop()) {
+										Senshi s = slot.getTop();
+										g2.drawImage(s.render(locale, deck), x, frontline, null);
+
+										if (!s.getEquipments().isEmpty()) {
+											Graph.applyTransformed(g2, x, equips, g3 -> {
+												Dimension resized = new Dimension(Drawable.SIZE.width / 3, Drawable.SIZE.height / 3);
+												int middle = 225 / 2 - resized.width / 2;
+
+												for (int i = 0; i < s.getEquipments().size(); i++) {
+													g3.drawImage(s.getEquipments().get(i).render(locale, deck),
+															15 + middle + (resized.width - 5) * (i - 1), 0,
+															resized.width, resized.height,
+															null
+													);
+												}
+											});
+										}
+									}
+
+									if (slot.hasBottom()) {
+										g2.drawImage(slot.getBottom().render(getGame().getLocale(), deck), x, backline, null);
+									}
+								}
+							});
+
+							return null;
+						});
 			}
 
 			Graph.applyTransformed(g, MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
