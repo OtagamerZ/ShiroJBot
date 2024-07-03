@@ -244,7 +244,7 @@ public class Arena implements Renderer {
 				Hand top = game.getHands().get(Side.TOP);
 				Hand bottom = game.getHands().get(Side.BOTTOM);
 				I18N locale = getGame().getLocale();
-				cp.lap();
+				cp.start();
 
 				g.drawImage(getField().renderBackground(), 0, 0, null);
 				cp.lap();
