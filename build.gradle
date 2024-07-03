@@ -160,6 +160,7 @@ dependencies {
 	implementation group: "com.pngencoder", name: "pngencoder", version: "0.15.0"
 	implementation group: "com.youbenzi", name: "MDTool", version: "1.2.4"
 	implementation group: "net.coobird", name: "thumbnailator", version: "0.4.20"
+	implementation group: "com.jhlabs", name: "filters", version: "2.0.235-1"
 
 	//Antlr
 	antlr group: "org.antlr", name: "antlr4", version: "4.13.1"

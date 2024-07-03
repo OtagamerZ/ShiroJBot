@@ -19,6 +19,7 @@
 package com.kuuhaku.model.common;
 
 import net.coobird.thumbnailator.filters.ImageFilter;
+import org.jdesktop.swingx.image.GaussianBlurFilter;
 
 import java.awt.image.BufferedImage;
 
@@ -31,9 +32,7 @@ public class BlurFilter implements ImageFilter {
 
 	@Override
 	public BufferedImage apply(BufferedImage img) {
-		StackBlur sb = new StackBlur();
-		sb.blur(img, radius);
-
-		return img;
+		GaussianBlurFilter op = new GaussianBlurFilter(radius);
+		return op.filter(img, null);
 	}
 }
