@@ -32,6 +32,10 @@ public class Checkpoint implements AutoCloseable {
 	private final HashMap<Integer, String> comments = new HashMap<>();
 	private final HashMap<Integer, String> caller = new HashMap<>();
 
+	public Checkpoint() {
+		start();
+	}
+
 	public void start() {
 		watch.start();
 
@@ -57,11 +61,6 @@ public class Checkpoint implements AutoCloseable {
 	}
 
 	public void lap(String comment) {
-		if (!watch.isStarted()) {
-			start();
-			return;
-		}
-
 		watch.stop();
 		laps.add(watch.getTime());
 		if (comment != null) {
@@ -109,7 +108,7 @@ public class Checkpoint implements AutoCloseable {
 			));
 
 			if (lap > lngTime) {
-				lngIdx = i - 1;
+				lngIdx = i;
 				lngTime = lap;
 			}
 		}
