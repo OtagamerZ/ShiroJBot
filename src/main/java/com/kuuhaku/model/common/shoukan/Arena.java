@@ -174,6 +174,10 @@ public class Arena implements Renderer {
 		game.trigger(Trigger.ON_FIELD_CHANGE);
 	}
 
+	public BufferedImage getCanvas() {
+		return canvas;
+	}
+
 	@Override
 	public BufferedImage render(I18N locale) {
 		Graphics2D g2d = canvas.createGraphics();
