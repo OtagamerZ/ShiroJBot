@@ -57,6 +57,11 @@ public class Checkpoint implements AutoCloseable {
 	}
 
 	public void lap(String comment) {
+		if (!watch.isStarted()) {
+			start();
+			return;
+		}
+
 		watch.stop();
 		laps.add(watch.getTime());
 		if (comment != null) {
