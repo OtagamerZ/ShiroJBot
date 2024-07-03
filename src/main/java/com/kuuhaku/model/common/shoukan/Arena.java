@@ -31,6 +31,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
+import com.kuuhaku.model.records.shoukan.HandStateSnap;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.Calc;
@@ -42,6 +43,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -109,6 +111,7 @@ public class Arena implements Renderer {
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
 	private final BufferedImage canvas = new BufferedImage(SIZE.width, SIZE.height + BAR_SIZE.height * 2, BufferedImage.TYPE_INT_ARGB);
+	private Map<Side, HandStateSnap> handSnaps = new HashMap<>();
 	private Field field = null;
 
 	public Arena(Shoukan game) {
@@ -178,7 +181,11 @@ public class Arena implements Renderer {
 
 		Graph.applyTransformed((Graphics2D) g2d.create(), 0, BAR_SIZE.height, drawCenter());
 		for (Hand h : game.getHands().values()) {
-			Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(h));
+			HandStateSnap snap = new HandStateSnap(h);
+			if (!snap.equals(handSnaps.get(h.getSide()))) {
+				handSnaps.put(h.getSide(), snap);
+				Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(h));
+			}
 		}
 
 		return canvas;
@@ -531,24 +538,13 @@ public class Arena implements Renderer {
 			String name = StringUtils.abbreviate(hand.getName(), 20);
 			g.setColor(Color.WHITE);
 			g.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(BAR_SIZE.height / 3f * 2));
-			if (game.getCurrentSide() == hand.getSide()) {
-				name = "==> " + name + " <==";
-			}
 
 			if (reversed) {
-				g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
-				g.fillRect(0, BAR_SIZE.height + SIZE.height, SIZE.width, BAR_SIZE.height);
-				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
-
 				g.drawImage(bi, SIZE.width - bi.getWidth(), BAR_SIZE.height + SIZE.height, null);
 
 				x = MARGIN.x;
 				y = SIZE.height + BAR_SIZE.height + (BAR_SIZE.height + BAR_SIZE.height / 3) / 2 + 10;
 			} else {
-				g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
-				g.fillRect(0, 0, SIZE.width, BAR_SIZE.height);
-				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
-
 				g.drawImage(bi, 0, 0, null);
 
 				x = SIZE.width - MARGIN.x - g.getFontMetrics().stringWidth(name);
