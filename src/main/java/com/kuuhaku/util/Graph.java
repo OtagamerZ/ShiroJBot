@@ -532,7 +532,7 @@ public abstract class Graph {
 					);
 
 					Graphics2D g = (Graphics2D) g2d.create();
-					g.drawImage(chunk, ox, oy, null);
+					g.drawImage(chunk, dx, dy, null);
 					g.dispose();
 
 					return null;
