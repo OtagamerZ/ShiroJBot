@@ -2049,6 +2049,8 @@ public class Shoukan extends GameInstance<Phase> {
 			File thumb;
 			try {
 				thumb = Files.createTempFile("shoukan-" + getSeed(), ".png").toFile();
+				thumb.deleteOnExit();
+
 				Thumbnails.of(img)
 						.width(img.getWidth() / 3)
 						.outputFormat("png")
