@@ -170,6 +170,8 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.modMP(curr.getBase().mpGain().get());
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
+		arena.render(getLocale());
+
 		reportEvent("str/game_start", false, false, "<@" + curr.getUid() + ">");
 
 		snapshots.put(getTurn(), takeSnapshot());
@@ -2041,7 +2043,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			CompletableFuture<byte[]> bytes = CompletableFuture.supplyAsync(() ->
-					IO.getBytes(arena.render(getLocale(), 1), "png")
+					IO.getBytes(arena.render(getLocale()), "png")
 			);
 
 			ButtonizeHelper helper = getButtons();
@@ -2050,7 +2052,7 @@ public class Shoukan extends GameInstance<Phase> {
 				getChannel().buffer(getString(message, args));
 			} else {
 				getChannel().sendMessage(getString(message, args))
-						.addFile(IO.getBytes(arena.render(getLocale(), 1f / 3), "png"), "preview.png")
+						.addFile(IO.getBytes(arena.getThumbnail(), "png"), "preview.png")
 						.apply(helper::apply)
 						.queue(m -> {
 							Pages.buttonize(m, helper);
@@ -2097,7 +2099,7 @@ public class Shoukan extends GameInstance<Phase> {
 		AtomicBoolean registered = new AtomicBoolean();
 
 		try {
-			BufferedImage img = arena.render(getLocale(), 1);
+			BufferedImage img = arena.render(getLocale());
 			byte[] bytes = IO.getBytes(img, "png");
 			msg.addFile(bytes, "game.png");
 		} catch (Exception ignore) {

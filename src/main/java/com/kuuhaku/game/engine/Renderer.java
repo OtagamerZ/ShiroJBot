@@ -23,7 +23,7 @@ import com.kuuhaku.model.enums.I18N;
 import java.awt.image.BufferedImage;
 
 public interface Renderer {
-	default BufferedImage render(I18N locale, double scale) {
+	default BufferedImage render(I18N locale) {
 		throw new IllegalStateException("Not implemented");
 	}
 }
