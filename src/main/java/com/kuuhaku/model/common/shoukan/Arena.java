@@ -25,7 +25,6 @@ import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
-import com.kuuhaku.model.common.BlurFilter;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.MultiProcessor;
 import com.kuuhaku.model.enums.Fonts;
@@ -38,15 +37,11 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -113,8 +108,6 @@ public class Arena implements Renderer {
 	}, d -> d.setCurrentStack(getBanned(false)), Utils::doNothing);
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
-	private final BufferedImage canvas = new BufferedImage(SIZE.width, SIZE.height + BAR_SIZE.height * 2, BufferedImage.TYPE_INT_ARGB);
-	private File thumbnail;
 	private Field field = null;
 
 	public Arena(Shoukan game) {
@@ -177,32 +170,22 @@ public class Arena implements Renderer {
 		game.trigger(Trigger.ON_FIELD_CHANGE);
 	}
 
-	public File getThumbnail() {
-		return thumbnail;
-	}
-
 	@Override
-	public BufferedImage render(I18N locale) {
-		Graphics2D g2d = canvas.createGraphics();
+	public BufferedImage render(I18N locale, double scale) {
+		int width = (int) (SIZE.width * scale);
+		int height = (int) (SIZE.height + BAR_SIZE.height * 2 * scale);
+
+		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.SD_HINTS);
+		g2d.scale((double) width / SIZE.width, (double) height / (SIZE.height + BAR_SIZE.height * 2));
 
 		Graph.applyTransformed((Graphics2D) g2d.create(), 0, BAR_SIZE.height, drawCenter());
 		for (Hand h : game.getHands().values()) {
 			Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(h));
 		}
 
-		try {
-			thumbnail = Files.createTempFile("shoukan-" + game.getSeed(), ".png").toFile();
-			Thumbnails.of(canvas)
-					.width(SIZE.width / 3)
-					.addFilter(new BlurFilter(25))
-					.outputFormat("png")
-					.toFile(thumbnail);
-		} catch (IOException e) {
-			Constants.LOGGER.error(e, e);
-		}
-
-		return canvas;
+		return bi;
 	}
 
 	public BufferedImage renderEvogears() {

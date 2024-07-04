@@ -2043,7 +2043,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			CompletableFuture<byte[]> bytes = CompletableFuture.supplyAsync(() ->
-					IO.getBytes(arena.render(getLocale()), "png")
+					IO.getBytes(arena.render(getLocale(), 1), "png")
 			);
 
 			ButtonizeHelper helper = getButtons();
@@ -2052,7 +2052,7 @@ public class Shoukan extends GameInstance<Phase> {
 				getChannel().buffer(getString(message, args));
 			} else {
 				getChannel().sendMessage(getString(message, args))
-						.addFile(arena.getThumbnail())
+						.addFile(IO.getBytes(arena.render(getLocale(), 1f / 3), "png"), "preview.png")
 						.apply(helper::apply)
 						.queue(m -> {
 							Pages.buttonize(m, helper);
