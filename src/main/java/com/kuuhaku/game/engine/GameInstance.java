@@ -248,7 +248,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 			CHANNELS.remove(c);
 		}
 
+		worker.shutdownNow();
 		worker.close();
+
+		service.shutdownNow();
 		service.close();
 	}
 }

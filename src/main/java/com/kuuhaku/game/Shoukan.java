@@ -170,8 +170,6 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.modMP(curr.getBase().mpGain().get());
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
-		arena.render(getLocale());
-
 		reportEvent("str/game_start", false, false, "<@" + curr.getUid() + ">");
 
 		snapshots.put(getTurn(), takeSnapshot());
@@ -2099,7 +2097,7 @@ public class Shoukan extends GameInstance<Phase> {
 		AtomicBoolean registered = new AtomicBoolean();
 
 		try {
-			BufferedImage img = arena.render(getLocale());
+			BufferedImage img = arena.render(getLocale(), 1);
 			byte[] bytes = IO.getBytes(img, "png");
 			msg.addFile(bytes, "game.png");
 		} catch (Exception ignore) {
