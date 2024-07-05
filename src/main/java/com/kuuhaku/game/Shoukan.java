@@ -1446,7 +1446,7 @@ public class Shoukan extends GameInstance<Phase> {
 							if (c == Charm.BARRAGE) {
 								if (!md.contains(SendMode.BARRAGE)) {
 									for (int i = 0; i < c.getValue(e.getTier()); i++) {
-										processAttack(source, target, tgtSide, damage / 10, ArrayUtils.add(mode, SendMode.BARRAGE));
+										processAttack(source, target, tgtSide, damage / 10, SendMode.BUFFER, SendMode.BARRAGE);
 									}
 								}
 							}
@@ -1479,7 +1479,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		if (md.contains(SendMode.REPORT)) {
+		if (md.contains(SendMode.REPORT) || md.contains(SendMode.BUFFER)) {
 			reportEvent("str/combat", true, md.contains(SendMode.BUFFER), source, Utils.getOr(target, op.getName()), outcome.trim());
 		}
 
