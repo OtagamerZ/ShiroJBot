@@ -1438,7 +1438,6 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 
 					op.modHP((int) -((dmg + direct) * dmgMult));
-					op.addChain();
 
 					if (thorns > 0) {
 						you.modHP(-damage * thorns / 100);
@@ -1993,8 +1992,7 @@ public class Shoukan extends GameInstance<Phase> {
 			List<Side> sides = List.of(getOtherSide(), getCurrentSide());
 			for (Side side : sides) {
 				Hand hand = hands.get(side);
-				hand.resetChain();
-				hand.getStats().removeExpired(ValueMod::isExpired);
+				hand.getStats().removeIf(ValueMod::isExpired);
 				hand.flushStacks();
 
 				if (hand.getOrigins().synergy() == Race.SUCCUBUS && hand.isLowLife()) {

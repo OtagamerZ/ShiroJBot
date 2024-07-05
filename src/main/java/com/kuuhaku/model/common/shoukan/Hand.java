@@ -276,15 +276,15 @@ public class Hand {
 	@Transient
 	private int state = 0b100;
 	/*
-	0xFFFF FF FF
-	  └┤└┤ ││ └┴ 0001 1111
-	   │ │ ││       │ │││└ forfeit
-	   │ │ ││       │ ││└─ destiny
-	   │ │ ││       │ │└── reroll
-	   │ │ ││       │ └─── can attack
-	   │ │ ││       └ has summoned
-	   │ │ │└ (0 - 15) cooldown
-	   │ │ └─ (0 - 15) chain reduction
+	0xFFFF 0 F FF
+	  └┤└┤   │ └┴ 0001 1111
+	   │ │   │       │ │││└ forfeit
+	   │ │   │       │ ││└─ destiny
+	   │ │   │       │ │└── reroll
+	   │ │   │       │ └─── can attack
+	   │ │   │       └ has summoned
+	   │ │   └ (0 - 15) cooldown
+	   │ │
 	   │ └─── (0 - 255) kills
 	   └───── (0 - 255) cards spent
 	 */
@@ -869,7 +869,6 @@ public class Hand {
 
 			if (value < 0) {
 				value *= Math.max(0, stats.getDamageMult().get());
-				value /= (1 << getChainReduction());
 			} else {
 				value *= Math.max(0, stats.getHealMult().get());
 			}
@@ -887,7 +886,7 @@ public class Hand {
 			}
 
 			if (origin.major() == Race.UNDEAD) {
-				regdeg.add(value / 2);
+				regdeg.add(value);
 				value = 0;
 			}
 
@@ -1149,19 +1148,6 @@ public class Hand {
 	public void reduceOriginCooldown(int time) {
 		int curr = Bit.get(state, 2, 4);
 		state = Bit.set(state, 2, Math.max(0, curr - time), 4);
-	}
-
-	public int getChainReduction() {
-		return Bit.get(state, 3, 4);
-	}
-
-	public void addChain() {
-		int curr = Bit.get(state, 3, 4);
-		state = Bit.set(state, 3, curr + 1, 4);
-	}
-
-	public void resetChain() {
-		state = Bit.set(state, 3, 0, 4);
 	}
 
 	public int getKills() {

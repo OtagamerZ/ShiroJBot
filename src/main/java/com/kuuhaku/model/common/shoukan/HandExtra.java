@@ -57,10 +57,10 @@ public class HandExtra {
 			return mod.isExpired();
 		};
 
-		removeExpired(check);
+		removeIf(check);
 	}
 
-	public void removeExpired(Predicate<ValueMod> check) {
+	public void removeIf(Predicate<ValueMod> check) {
 		if (fieldCache == null) {
 			fieldCache = getClass().getDeclaredFields();
 		}
