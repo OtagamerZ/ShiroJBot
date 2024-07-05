@@ -1233,7 +1233,7 @@ public class Shoukan extends GameInstance<Phase> {
 				boolean ignore = source.hasFlag(Flag.NO_COMBAT, true);
 				if (target != null) {
 					if (!ignore) {
-						ignore = target.getSlot().getIndex() == -1 || target.hasFlag(Flag.IGNORE_COMBAT, true);
+						ignore = target.getIndex() == -1 || target.hasFlag(Flag.IGNORE_COMBAT, true);
 					}
 
 					if (!ignore) {
@@ -1446,6 +1446,8 @@ public class Shoukan extends GameInstance<Phase> {
 							if (c == Charm.BARRAGE) {
 								if (!md.contains(SendMode.BARRAGE)) {
 									for (int i = 0; i < c.getValue(e.getTier()); i++) {
+										if (target != null && target.getIndex() == -1) break;
+
 										processAttack(source, target, tgtSide, damage / 10, SendMode.BUFFER, SendMode.BARRAGE);
 									}
 								}
@@ -1455,8 +1457,10 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 		} finally {
-			if (md.contains(SendMode.REPORT) && source.getSlot().getIndex() != -1 && target != null && !source.hasFlag(Flag.FREE_ACTION, true)) {
-				source.setAvailable(false);
+			if (source.getIndex() != -1) {
+				if (target == null || (md.contains(SendMode.REPORT) && !source.hasFlag(Flag.FREE_ACTION, true))) {
+					source.setAvailable(false);
+				}
 			}
 		}
 
@@ -2160,7 +2164,7 @@ public class Shoukan extends GameInstance<Phase> {
 			List<Senshi> allCards = getCards();
 			for (SlotColumn slt : getSlots(curr.getSide())) {
 				for (Senshi s : slt.getCards()) {
-					if (s != null && s.getSlot().getIndex() != -1 && s.isBerserk()) {
+					if (s != null && s.getIndex() != -1 && s.isBerserk()) {
 						List<Senshi> valid = allCards.stream().filter(d -> !d.equals(s)).toList();
 						if (!valid.isEmpty()) {
 							attack(s, Utils.getRandomEntry(getRng(), valid), null, null);
@@ -2596,7 +2600,7 @@ public class Shoukan extends GameInstance<Phase> {
 			slt.reduceLock(1);
 
 			for (Senshi s : slt.getCards()) {
-				if (s != null && s.getSlot().getIndex() != -1) {
+				if (s != null && s.getIndex() != -1) {
 					s.reduceDebuffs(1);
 					s.setAvailable(true);
 					s.setSwitched(false);
@@ -2647,7 +2651,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		for (SlotColumn slt : getSlots(curr.getSide())) {
 			for (Senshi s : slt.getCards()) {
-				if (s != null && s.getSlot().getIndex() != -1) {
+				if (s != null && s.getIndex() != -1) {
 					s.reduceCooldown(1);
 					s.reduceStasis(1);
 
