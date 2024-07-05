@@ -1052,7 +1052,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi ally = yourSlot.getTop();
-		attack(ally, you, null, true);
+		attack(ally, you, SendMode.REPORT, SendMode.SEND);
 
 		return false;
 	}
@@ -1088,9 +1088,9 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (enemy == null) {
-			attack(ally, op, null, true);
+			attack(ally, op, SendMode.REPORT, SendMode.SEND);
 		} else {
-			attack(ally, enemy, null, true);
+			attack(ally, enemy, SendMode.REPORT, SendMode.SEND);
 		}
 
 		return false;
@@ -1135,40 +1135,28 @@ public class Shoukan extends GameInstance<Phase> {
 		reportEvent(message, true, false, curr.getName(), args);
 	}
 
-	public boolean attack(Senshi source, Senshi target) {
-		return attack(source, target, null, false);
+	public boolean attack(Senshi source, Senshi target, SendMode... mode) {
+		return attack(source, target, null, mode);
 	}
 
-	public boolean attack(Senshi source, Senshi target, int damage) {
-		return attack(source, target, damage, false);
+	public boolean attack(Senshi source, Senshi target, Integer damage, SendMode... mode) {
+		return processAttack(source, target, target.getSide(), Utils.getOr(damage, source.getActiveAttr()), mode);
 	}
 
-	public boolean attack(Senshi source, Senshi target, Integer damage, Boolean announce) {
-		return processAttack(source, target, target.getSide(), Utils.getOr(damage, source.getActiveAttr()), announce);
+	public boolean attack(Senshi source, Hand target, SendMode... mode) {
+		return attack(source, target, null, mode);
 	}
 
-	public boolean attack(Senshi source, Hand target) {
-		return attack(source, target, null, false);
+	public boolean attack(Senshi source, Hand target, Integer damage, SendMode... mode) {
+		return processAttack(source, null, target.getSide(), Utils.getOr(damage, source.getActiveAttr()), mode);
 	}
 
-	public boolean attack(Senshi source, Hand target, int damage) {
-		return attack(source, target, damage, false);
-	}
-
-	public boolean attack(Senshi source, Hand target, Integer damage, Boolean announce) {
-		return processAttack(source, null, target.getSide(), Utils.getOr(damage, source.getActiveAttr()), announce);
-	}
-
-	private boolean processAttack(Senshi source, @Nullable Senshi target, Side tgtSide, int damage, @Nullable Boolean announce) {
+	private boolean processAttack(Senshi source, @Nullable Senshi target, Side tgtSide, int damage, SendMode... mode) {
 		if (isClosed()) return false;
+		Set<SendMode> md = EnumSet.of(SendMode.NONE, mode);
 
-		boolean buffer = false;
-		if (announce == null) {
-			buffer = announce = true;
-		}
-
-		if (source == null || ((announce && !source.canAttack()) || !source.isAvailable())) {
-			if (announce && !buffer) {
+		if (source == null || ((md.contains(SendMode.REPORT) && !source.canAttack()) || !source.isAvailable())) {
+			if (md.contains(SendMode.SEND)) {
 				getChannel().sendMessage(getString("error/card_cannot_attack")).queue();
 			}
 
@@ -1181,7 +1169,7 @@ public class Shoukan extends GameInstance<Phase> {
 		int eHP = op.getHP();
 
 		if (source.getTarget() != null && !Objects.equals(source.getTarget(), target)) {
-			if (announce && !buffer) {
+			if (md.contains(SendMode.SEND)) {
 				getChannel().sendMessage(getString("error/card_taunted", source.getTarget(), source.getTarget().getIndex() + 1)).queue();
 			}
 
@@ -1191,7 +1179,7 @@ public class Shoukan extends GameInstance<Phase> {
 		int posHash = 0;
 		if (target != null) {
 			if (target.isStasis()) {
-				if (announce && !buffer) {
+				if (md.contains(SendMode.SEND)) {
 					getChannel().sendMessage(getString("error/card_untargetable")).queue();
 				}
 
@@ -1203,7 +1191,7 @@ public class Shoukan extends GameInstance<Phase> {
 			trigger(ON_ATTACK, source.asSource(ON_ATTACK), t);
 		} else {
 			if (!arena.isFieldEmpty(tgtSide) && !source.hasFlag(Flag.DIRECT, true)) {
-				if (announce && !buffer) {
+				if (md.contains(SendMode.SEND)) {
 					getChannel().sendMessage(getString("error/field_not_empty")).queue();
 				}
 
@@ -1241,7 +1229,7 @@ public class Shoukan extends GameInstance<Phase> {
 				outcome = getString("str/combat_skip");
 			}
 
-			if (validTarget && ((announce && source.canAttack()) || source.isAvailable())) {
+			if (validTarget && ((md.contains(SendMode.REPORT) && source.canAttack()) || source.isAvailable())) {
 				boolean ignore = source.hasFlag(Flag.NO_COMBAT, true);
 				if (target != null) {
 					if (!ignore) {
@@ -1279,7 +1267,7 @@ public class Shoukan extends GameInstance<Phase> {
 									s.awaken();
 								}
 
-								if (announce) {
+								if (md.contains(SendMode.REPORT)) {
 									if (!source.hasFlag(Flag.NO_DAMAGE, true)) {
 										you.modHP((int) -((enemyStats - dmg) * dmgMult));
 									}
@@ -1456,9 +1444,9 @@ public class Shoukan extends GameInstance<Phase> {
 						for (Object o : charms) {
 							Charm c = Charm.valueOf(String.valueOf(o));
 							if (c == Charm.BARRAGE) {
-								if (announce) {
+								if (!md.contains(SendMode.BARRAGE)) {
 									for (int i = 0; i < c.getValue(e.getTier()); i++) {
-										processAttack(source, target, tgtSide, damage / 10, false);
+										processAttack(source, target, tgtSide, damage / 10, ArrayUtils.add(mode, SendMode.BARRAGE));
 									}
 								}
 							}
@@ -1467,7 +1455,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 		} finally {
-			if (announce && source.getSlot().getIndex() != -1 && target != null && !source.hasFlag(Flag.FREE_ACTION, true)) {
+			if (md.contains(SendMode.REPORT) && source.getSlot().getIndex() != -1 && target != null && !source.hasFlag(Flag.FREE_ACTION, true)) {
 				source.setAvailable(false);
 			}
 		}
@@ -1491,8 +1479,8 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		if (announce) {
-			reportEvent("str/combat", true, buffer, source, Utils.getOr(target, op.getName()), outcome.trim());
+		if (md.contains(SendMode.REPORT)) {
+			reportEvent("str/combat", true, md.contains(SendMode.BUFFER), source, Utils.getOr(target, op.getName()), outcome.trim());
 		}
 
 		return win;
