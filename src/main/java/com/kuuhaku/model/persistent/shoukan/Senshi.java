@@ -1348,6 +1348,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				replace(new AugmentSenshi(this, Senshi.getRandom(getGame().getRng())));
 				return;
 			}
+		} else if (trigger == ON_REMOVE) {
+			getGame().unbind(this);
 		}
 
 		try {

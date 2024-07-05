@@ -586,6 +586,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return;
 		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
 
+		if (trigger == ON_REMOVE) {
+			getGame().unbind(this);
+		}
+
 		try {
 			CachedScriptManager csm = getCSM();
 			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))

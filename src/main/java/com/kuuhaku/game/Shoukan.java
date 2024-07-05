@@ -1938,6 +1938,10 @@ public class Shoukan extends GameInstance<Phase> {
 		bindings.add(new TriggerBind(self, binds, permanent));
 	}
 
+	public void unbind(EffectHolder<?> self) {
+		bindings.removeIf(b -> !b.isPermanent() && b.getHolder().equals(self));
+	}
+
 	private BiFunction<String, String, String> replaceMessages(Message message) {
 		return (chn, msg) -> {
 			if (msg != null) {
