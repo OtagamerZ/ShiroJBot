@@ -20,6 +20,7 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -58,6 +59,11 @@ public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 	@Override
 	public void setCurrentStack(BondedList<?> stack) {
 		original.setCurrentStack(stack);
+	}
+
+	@Override
+	public CachedScriptManager getCSM() {
+		return super.getCSM().withConst("evo", original);
 	}
 
 	@Override
