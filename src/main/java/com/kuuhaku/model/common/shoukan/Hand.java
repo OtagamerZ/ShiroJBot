@@ -1050,11 +1050,15 @@ public class Hand {
 
 	public void applyRegDeg() {
 		int val = regdeg.next();
+		if (val == 0) return;
+
 		if (origin.synergy() == Race.DRYAD && val > 0) {
 			val = 0;
 		}
 
 		modHP(val, true);
+		game.trigger(val < 0 ? Trigger.ON_DEGEN : Trigger.ON_REGEN, getSide());
+
 		if (val < 0 && getOther().getOrigins().synergy() == Race.VIRUS) {
 			getOther().modHP(-val / 2);
 		}

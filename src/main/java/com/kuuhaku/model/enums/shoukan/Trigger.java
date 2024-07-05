@@ -210,9 +210,19 @@ public enum Trigger {
 	ON_HEAL,
 
 	/**
+	 * On healing through regen
+	 **/
+	ON_REGEN,
+
+	/**
 	 * On losing HP
 	 **/
 	ON_DAMAGE,
+
+	/**
+	 * On taking degen damage
+	 **/
+	ON_DEGEN,
 
 	/**
 	 * On consuming HP
