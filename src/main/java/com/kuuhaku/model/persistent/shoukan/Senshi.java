@@ -1265,8 +1265,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 							.withConst("data", stats.getData())
 							.withVar("ep", ep.forSide(getSide()))
 							.withVar("side", getSide())
-							.withVar("trigger", trigger)
-							.run();
+							.withVar("trigger", trigger);
+
+					if (this instanceof PlaceableEvogear pe) {
+						csm.withConst("evo", pe.getOriginal());
+					}
+
+					csm.run();
 
 					if (trigger != ON_TICK) {
 						hasFlag(Flag.EMPOWERED, true);
@@ -1355,8 +1360,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					.withConst("data", stats.getData())
 					.withVar("ep", new EffectParameters(trigger, getSide()))
 					.withVar("side", getSide())
-					.withVar("trigger", trigger)
-					.run();
+					.withVar("trigger", trigger);
+
+			if (this instanceof PlaceableEvogear pe) {
+				csm.withConst("evo", pe.getOriginal());
+			}
+
+			csm.run();
 		} catch (Exception e) {
 			Drawable<?> source = Utils.getOr(stats.getSource(), this);
 			Constants.LOGGER.warn("Failed to initialize {}\n{}", this, "/* " + source + " */\n" + getEffect(), e);
