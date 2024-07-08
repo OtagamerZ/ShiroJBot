@@ -226,10 +226,6 @@ public interface Drawable<T extends Drawable<T>> {
 			   || (this instanceof EffectHolder<T> eh && eh.hasFlag(Flag.BOUND, true));
 	}
 
-	default boolean keepOnDestroy() {
-		return true;
-	}
-
 	void reset();
 
 	BufferedImage render(I18N locale, Deck deck);
