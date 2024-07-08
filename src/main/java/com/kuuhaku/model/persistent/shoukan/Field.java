@@ -60,7 +60,9 @@ import java.util.random.RandomGenerator;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "field")
 public class Field extends DAO<Field> implements Drawable<Field> {
+	@Transient
 	public final String KLASS = getClass().getName();
+	@Transient
 	public final long SERIAL = ThreadLocalRandom.current().nextLong();
 
 	@Id
