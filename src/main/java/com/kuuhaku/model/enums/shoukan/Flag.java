@@ -134,10 +134,6 @@ public enum Flag {
 	 **/
 	UNSTOPPABLE,
 	/**
-	 * Cannot exist outside the field
-	 **/
-	BOUND,
-	/**
 	 * Nothing
 	 **/
 	NONE

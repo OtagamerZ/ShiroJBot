@@ -220,7 +220,6 @@ public interface Drawable<T extends Drawable<T>> {
 		return isEthereal()
 			   || !Objects.equals(getHand(), h)
 			   || stack != getCurrentStack()
-			   || (this instanceof EffectHolder<T> eh && eh.hasFlag(Flag.BOUND, true))
 			   || (this instanceof Field f && f.isEffect());
 	}
 
