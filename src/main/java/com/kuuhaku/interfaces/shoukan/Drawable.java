@@ -219,6 +219,13 @@ public interface Drawable<T extends Drawable<T>> {
 
 	void setCurrentStack(BondedList<?> stack);
 
+	default boolean checkRemoval(Hand h, BondedList<Drawable<?>> stack) {
+		return isEthereal()
+			   || !Objects.equals(getHand(), h)
+			   || stack != getCurrentStack()
+			   || (this instanceof EffectHolder<T> eh && eh.hasFlag(Flag.BOUND, true));
+	}
+
 	default boolean keepOnDestroy() {
 		return true;
 	}

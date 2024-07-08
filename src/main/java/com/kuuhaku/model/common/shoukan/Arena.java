@@ -44,9 +44,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -109,7 +107,7 @@ public class Arena implements Renderer {
 			return false;
 		}
 
-		return !(d instanceof EffectHolder<?> eh) || !eh.hasFlag(Flag.BOUND, true);
+		return !(d instanceof EffectHolder<?> eh) || (!eh.isEthereal() && !eh.hasFlag(Flag.BOUND, true));
 	}, d -> d.setCurrentStack(getBanned(false)), Utils::doNothing);
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
@@ -148,7 +146,7 @@ public class Arena implements Renderer {
 
 	public BondedList<Drawable<?>> getBanned(boolean sweep) {
 		if (sweep) {
-			banned.removeIf(d -> !d.keepOnDestroy() || d.isEthereal());
+			banned.removeIf(d -> d.checkRemoval(d.getHand(), banned));
 		}
 
 		return banned;
