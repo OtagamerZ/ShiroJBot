@@ -37,7 +37,7 @@ public class RegDeg {
 		this.parent = parent;
 	}
 
-	public List<ValueOverTime> getValues() {
+	public BondedList<ValueOverTime> getValues() {
 		return values;
 	}
 
