@@ -83,6 +83,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
@@ -1764,6 +1765,22 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		return null;
+	}
+
+	public Drawable<?> findCard(long serial) {
+		Drawable<?> out = null;
+		for (Hand h : hands.values()) {
+			out = findCard(h.getSide(), s -> s.SERIAL == serial);
+			if (out != null) break;
+
+			out = Stream.of(h.getCards(false), h.getDiscard(false), h.getGraveyard(false), h.getRealDeck(false))
+					.parallel()
+					.flatMap(List::stream)
+					.filter(d -> d.getSerial() == serial)
+					.findFirst().orElse(null);
+		}
+
+		return out;
 	}
 
 	public BondedList<Drawable<?>> getBanned() {

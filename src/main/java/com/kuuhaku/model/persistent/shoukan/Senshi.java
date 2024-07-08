@@ -66,9 +66,8 @@ import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "senshi")
 public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
-	@Transient
 	public final String KLASS = getClass().getName();
-	public transient long SERIAL = ThreadLocalRandom.current().nextLong();
+	public final long SERIAL = ThreadLocalRandom.current().nextLong();
 
 	@Id
 	@Column(name = "card_id", nullable = false)
