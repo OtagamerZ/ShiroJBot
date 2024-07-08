@@ -30,10 +30,6 @@ public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 	private final Evogear original;
 
 	public PlaceableEvogear(Evogear e) {
-		this(e.copy(), null);
-	}
-
-	private PlaceableEvogear(Evogear e, Void ignored) {
 		super(e.getId(), e.getCard(), e.isSpell() ? Race.MYSTICAL : Race.MACHINE, e.getBase());
 
 		original = e;

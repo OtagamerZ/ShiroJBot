@@ -31,10 +31,6 @@ public class EquippableSenshi extends Evogear implements Proxy<Senshi> {
 	private final Senshi original;
 
 	public EquippableSenshi(Senshi s) {
-		this(s.copy(), null);
-	}
-
-	private EquippableSenshi(Senshi s, Void ignored) {
 		super(s.getId(), s.getCard(), 0, false, TargetType.NONE, new JSONArray(), s.getBase());
 
 		original = s;

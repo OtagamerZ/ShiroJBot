@@ -2422,7 +2422,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							try {
-								curr.requestChoice(null, valid, 5, ds -> {
+								curr.requestChoice(null, valid, 4, ds -> {
 									List<StashedCard> material = ds.stream().map(d -> new StashedCard(null, d)).toList();
 
 									List<SelectionCard> pool = new ArrayList<>();
