@@ -1636,6 +1636,9 @@ public class Shoukan extends GameInstance<Phase> {
 			for (Map.Entry<Side, Hand> entry : hands.entrySet()) {
 				Hand h = entry.getValue();
 				Player p = snap.players().get(entry.getKey());
+				h.setHP(p.hp());
+				h.setMP(p.mp());
+				h.getRegDeg().getValues().addAll(JSONUtils.fromJSON(p.regdeg(), RegDeg.class).getValues());
 
 				h.getCards().clear();
 				JSONArray cards = new JSONArray(IO.uncompress(p.cards()));
