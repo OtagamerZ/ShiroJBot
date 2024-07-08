@@ -47,7 +47,7 @@ public class LocalizedArch extends DAO<LocalizedArch> implements Serializable {
 	}
 
 	public I18N getLocale() {
-		return id.getLocale();
+		return id.locale();
 	}
 
 	public String getDescription() {

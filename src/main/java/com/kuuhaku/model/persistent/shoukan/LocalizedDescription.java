@@ -44,7 +44,7 @@ public class LocalizedDescription extends DAO<LocalizedDescription> implements S
 	}
 
 	public I18N getLocale() {
-		return id.getLocale();
+		return id.locale();
 	}
 
 	public String getDescription() {

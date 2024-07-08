@@ -47,7 +47,7 @@ public class CustomAnswerRemoveCommand implements Executable {
 		Iterator<CustomAnswer> i = settings.getCustomAnswers().iterator();
 		while (i.hasNext()) {
 			CustomAnswer ca = i.next();
-			if (ca.getId().getId() == id) {
+			if (ca.getId().id() == id) {
 				i.remove();
 				settings.save();
 

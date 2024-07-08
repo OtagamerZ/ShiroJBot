@@ -57,7 +57,7 @@ public class CustomAnswerCommand implements Executable {
 		int id = args.getInt("id");
 		if (id > 0) {
 			CustomAnswer ca = settings.getCustomAnswers().parallelStream()
-					.filter(c -> c.getId().getId() == id)
+					.filter(c -> c.getId().id() == id)
 					.findAny().orElse(null);
 
 			if (ca == null) {
@@ -125,7 +125,7 @@ public class CustomAnswerCommand implements Executable {
 				.setTitle(locale.get("str/custom_answers"));
 
 		List<Page> pages = Utils.generatePages(eb, cas, 20, 10,
-				ca -> "`ID: " + ca.getId().getId() + "`\n" +
+				ca -> "`ID: " + ca.getId().id() + "`\n" +
 						locale.get("str/ca_trigger", StringUtils.abbreviate(ca.getTrigger().replace("`", "'"), 20)) +
 						"\n" +
 						locale.get("str/ca_answer", StringUtils.abbreviate(ca.getAnswer().replace("`", "'"), 20)) +

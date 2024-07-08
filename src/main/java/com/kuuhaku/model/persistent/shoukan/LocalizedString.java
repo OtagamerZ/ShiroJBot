@@ -44,7 +44,7 @@ public class LocalizedString extends DAO<LocalizedString> implements Serializabl
 	}
 
 	public I18N getLocale() {
-		return id.getLocale();
+		return id.locale();
 	}
 
 	public String getValue() {

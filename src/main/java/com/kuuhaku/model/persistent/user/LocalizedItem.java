@@ -50,7 +50,7 @@ public class LocalizedItem extends DAO<LocalizedItem> implements Serializable {
 	}
 
 	public I18N getLocale() {
-		return id.getLocale();
+		return id.locale();
 	}
 
 	public String getName() {

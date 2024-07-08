@@ -47,7 +47,7 @@ public class AutoRuleRemoveCommand implements Executable {
 		Iterator<AutoRule> i = settings.getAutoRules().iterator();
 		while (i.hasNext()) {
 			AutoRule rule = i.next();
-			if (rule.getId().getId() == id) {
+			if (rule.getId().id() == id) {
 				i.remove();
 				settings.save();
 
