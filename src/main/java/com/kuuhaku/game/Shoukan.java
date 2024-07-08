@@ -1635,6 +1635,8 @@ public class Shoukan extends GameInstance<Phase> {
 			for (Map.Entry<Side, Hand> entry : hands.entrySet()) {
 				Hand h = entry.getValue();
 				Player p = snap.players().get(entry.getKey());
+				h.setHP(p.hp());
+				h.setMP(p.mp());
 
 				h.getCards().clear();
 				JSONArray cards = new JSONArray(IO.uncompress(p.cards()));
@@ -1643,6 +1645,15 @@ public class Shoukan extends GameInstance<Phase> {
 					Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
 
 					h.getCards().add(JSONUtils.fromJSON(jo.toString(), klass));
+				}
+
+				h.getDiscard().clear();
+				JSONArray discard = new JSONArray(IO.uncompress(p.discard()));
+				for (Object o : discard) {
+					JSONObject jo = new JSONObject(o);
+					Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
+
+					h.getDiscard().add(JSONUtils.fromJSON(jo.toString(), klass));
 				}
 
 				h.getRealDeck().clear();

@@ -25,10 +25,14 @@ import com.ygimenez.json.JSONUtils;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
-public record Player(byte[] cards, byte[] deck, byte[] graveyard) {
+public record Player(int hp, int mp, byte[] cards, byte[] discard, byte[] deck, byte[] graveyard) {
 	public Player(Hand h) throws IOException {
-		this(
+		this(h.getHP(), h.getMP(),
 				h.getCards().stream().collect(Collectors.collectingAndThen(
+						Collectors.toList(),
+						JSONUtils::toJSON
+				)),
+				h.getDiscard().stream().collect(Collectors.collectingAndThen(
 						Collectors.toList(),
 						JSONUtils::toJSON
 				)),
@@ -43,7 +47,7 @@ public record Player(byte[] cards, byte[] deck, byte[] graveyard) {
 		);
 	}
 
-	public Player(String cards, String deck, String graveyard) throws IOException {
-		this(IO.compress(cards), IO.compress(deck), IO.compress(graveyard));
+	public Player(int hp, int mp, String cards, String discard, String deck, String graveyard) throws IOException {
+		this(hp, mp, IO.compress(cards), IO.compress(discard), IO.compress(deck), IO.compress(graveyard));
 	}
 }
