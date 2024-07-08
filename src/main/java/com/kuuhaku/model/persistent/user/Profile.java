@@ -224,10 +224,10 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 	}
 
 	public Member getMember() {
-		Guild guild = Main.getApp().getShiro().getGuildById(getId().getGid());
+		Guild guild = Main.getApp().getShiro().getGuildById(getId().gid());
 		assert guild != null;
 
-		return Pages.subGet(guild.retrieveMemberById(getId().getUid()));
+		return Pages.subGet(guild.retrieveMemberById(getId().uid()));
 	}
 
 	@Override
