@@ -1627,7 +1627,7 @@ public class Shoukan extends GameInstance<Phase> {
 				JSONObject jo = new JSONObject(o);
 				Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
 
-				arena.getBanned().add(JSONUtils.fromJSON(String.valueOf(o), klass));
+				getBanned().add(JSONUtils.fromJSON(String.valueOf(o), klass));
 			}
 
 			arena.setField(JSONUtils.fromJSON(IO.uncompress(snap.global().field()), Field.class));
@@ -1637,6 +1637,7 @@ public class Shoukan extends GameInstance<Phase> {
 				Player p = snap.players().get(entry.getKey());
 				h.setHP(p.hp());
 				h.setMP(p.mp());
+				h.getRegDeg().getValues().addAll(JSONUtils.fromJSON(p.regdeg(), RegDeg.class).getValues());
 
 				h.getCards().clear();
 				JSONArray cards = new JSONArray(IO.uncompress(p.cards()));

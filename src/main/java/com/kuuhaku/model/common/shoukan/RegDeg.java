@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class RegDeg {
-	private final Hand parent;
+	private transient final Hand parent;
 	private final BondedList<ValueOverTime> values = BondedList.withBind((v, it) -> {
 		v.setValue(reduce(v.getClass(), v.getValue()));
 		return true;

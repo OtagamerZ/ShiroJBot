@@ -30,9 +30,10 @@ public record Global(byte[] field, byte[] banned, SplittableRandom rng) {
 	public Global(Shoukan game) throws IOException {
 		this(
 				JSONUtils.toJSON(game.getArena().getField()),
-				game.getArena().getBanned().stream()
-						.map(JSONUtils::toJSON)
-						.collect(Collectors.joining(",", "[", "]")),
+				game.getBanned().stream().collect(Collectors.collectingAndThen(
+						Collectors.toList(),
+						JSONUtils::toJSON
+				)),
 				game.getRng().split()
 		);
 	}
