@@ -403,72 +403,72 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public boolean isSolid() {
-		return !isEthereal() && Bit.on(state, 0);
+		return !isEthereal() && Bit32.on(state, 0);
 	}
 
 	@Override
 	public void setSolid(boolean solid) {
-		state = (short) Bit.set(state, 0, solid);
+		state = (short) Bit32.set(state, 0, solid);
 	}
 
 	@Override
 	public boolean isAvailable() {
-		return Bit.on(state, 1);
+		return Bit32.on(state, 1);
 	}
 
 	@Override
 	public void setAvailable(boolean available) {
-		state = (short) Bit.set(state, 1, available);
+		state = (short) Bit32.set(state, 1, available);
 	}
 
 	@Override
 	public boolean isFlipped() {
 		if (equipper != null) {
-			return equipper.isFlipped() || Bit.on(state, 2);
+			return equipper.isFlipped() || Bit32.on(state, 2);
 		}
 
-		return Bit.on(state, 2);
+		return Bit32.on(state, 2);
 	}
 
 	@Override
 	public void setFlipped(boolean flipped) {
-		state = (short) Bit.set(state, 2, flipped);
+		state = (short) Bit32.set(state, 2, flipped);
 	}
 
 	@Override
 	public boolean isEthereal() {
-		return Bit.on(state, 3);
+		return Bit32.on(state, 3);
 	}
 
 	@Override
 	public void setEthereal(boolean ethereal) {
-		state = (short) Bit.set(state, 3, ethereal);
+		state = (short) Bit32.set(state, 3, ethereal);
 	}
 
 	@Override
 	public boolean isManipulated() {
-		return Bit.on(state, 4);
+		return Bit32.on(state, 4);
 	}
 
 	@Override
 	public void setManipulated(boolean manipulated) {
-		state = (short) Bit.set(state, 4, manipulated);
+		state = (short) Bit32.set(state, 4, manipulated);
 	}
 
 	@Override
 	public int getCooldown() {
-		return Bit.get(state, 7, 4);
+		return Bit32.get(state, 7, 4);
 	}
 
 	@Override
 	public void setCooldown(int time) {
-		short curr = (short) Bit.get(state, 1, 4);
-		state = (short) Bit.set(state, 1, Math.max(curr, time), 4);
+		short curr = (short) Bit32.get(state, 1, 4);
+		state = (short) Bit32.set(state, 1, Math.max(curr, time), 4);
 	}
 
 	public void reduceCooldown(int time) {
-		short curr = (short) Bit.get(state, 1, 4);
-		state = (short) Bit.set(state, 1, Math.max(0, curr - time), 4);
+		short curr = (short) Bit32.get(state, 1, 4);
+		state = (short) Bit32.set(state, 1, Math.max(0, curr - time), 4);
 	}
 
 	public String getEffect() {

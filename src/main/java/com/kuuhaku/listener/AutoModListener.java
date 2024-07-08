@@ -22,7 +22,7 @@ import com.kuuhaku.Application;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.AutoModType;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.model.persistent.id.ProfileId;
+import com.kuuhaku.model.records.id.ProfileId;
 import com.kuuhaku.model.persistent.user.Profile;
 import net.dv8tion.jda.api.events.automod.AutoModExecutionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

@@ -29,7 +29,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.RuleAction;
 import com.kuuhaku.model.persistent.guild.AutoRule;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.model.persistent.id.ProfileId;
+import com.kuuhaku.model.records.id.ProfileId;
 import com.kuuhaku.schedule.MinuteSchedule;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;

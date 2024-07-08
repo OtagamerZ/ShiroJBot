@@ -137,7 +137,7 @@ public class SeeCardCommand implements Executable {
 					return;
 				}
 
-				List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card.getId())));
+				List<CardType> types = List.copyOf(Bit32.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", card.getId())));
 				if (types.isEmpty()) {
 					event.channel().sendMessage(locale.get("error/not_in_shoukan")).queue();
 					return;

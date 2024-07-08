@@ -27,8 +27,8 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.id.ProfileId;
-import com.kuuhaku.model.persistent.id.WarnId;
+import com.kuuhaku.model.records.id.ProfileId;
+import com.kuuhaku.model.records.id.WarnId;
 import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.model.persistent.user.Warn;
 import com.kuuhaku.model.records.EventData;
@@ -83,7 +83,7 @@ public class PardonCommand implements Executable {
 			List<Page> pages = Utils.generatePages(eb, profile.getWarns(), 20, 10,
 					w -> {
 						sb.clear();
-						sb.appendNewLine("`ID: " + w.getId().getId() + "` " + w.getReason());
+						sb.appendNewLine("`ID: " + w.getId().id() + "` " + w.getReason());
 						sb.appendNewLine(locale.get("str/issuer", "<@" + w.getIssuer() + ">"));
 						if (w.getPardoner() != null) {
 							sb.appendNewLine(locale.get("str/pardoner", "<@" + w.getPardoner() + ">"));

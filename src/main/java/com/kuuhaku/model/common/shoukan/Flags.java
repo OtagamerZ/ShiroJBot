@@ -76,13 +76,9 @@ public class Flags implements Cloneable {
 		flags.entrySet().removeIf(e -> e.getKey().isExpired());
 	}
 
-	@Override
-	protected Flags clone() {
-		Flags clone = new Flags();
+	protected void copyTo(Flags to) {
 		for (Map.Entry<FlagSource, EnumSet<Flag>> e : permanent.entrySet()) {
-			clone.permanent.put(e.getKey(), EnumSet.copyOf(e.getValue()));
+			to.permanent.put(e.getKey(), EnumSet.copyOf(e.getValue()));
 		}
-
-		return clone;
 	}
 }

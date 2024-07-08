@@ -52,7 +52,7 @@ import com.kuuhaku.model.records.shoukan.history.Turn;
 import com.kuuhaku.model.records.shoukan.snapshot.Player;
 import com.kuuhaku.model.records.shoukan.snapshot.Slot;
 import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
-import com.kuuhaku.util.Bit;
+import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -292,7 +292,7 @@ public class Shoukan extends GameInstance<Phase> {
 			List<String> added = new ArrayList<>();
 
 			for (String id : ids.split(",")) {
-				CardType type = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)).stream().findFirst().orElse(CardType.KAWAIPON);
+				CardType type = Bit32.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)).stream().findFirst().orElse(CardType.KAWAIPON);
 
 				Drawable<?> d = switch (type) {
 					case KAWAIPON, SENSHI -> DAO.find(Senshi.class, id);
@@ -1442,28 +1442,11 @@ public class Shoukan extends GameInstance<Phase> {
 					if (you.getOrigins().synergy() == Race.DAEMON) {
 						you.modMP((int) (Math.max(0d, eHP - op.getHP()) / op.getBase().hp() * 0.05));
 					}
-
-					for (Evogear e : source.getEquipments()) {
-						JSONArray charms = e.getCharms();
-
-						for (Object o : charms) {
-							Charm c = Charm.valueOf(String.valueOf(o));
-							if (c == Charm.BARRAGE) {
-								if (!md.contains(SendMode.BARRAGE)) {
-									for (int i = 0; i < c.getValue(e.getTier()); i++) {
-										if (target != null && target.getIndex() == -1) break;
-
-										processAttack(source, target, tgtSide, damage / 10, SendMode.BUFFER, SendMode.BARRAGE);
-									}
-								}
-							}
-						}
-					}
 				}
 			}
 		} finally {
 			if (source.getIndex() != -1) {
-				if (target == null || (md.contains(SendMode.REPORT) && !source.hasFlag(Flag.FREE_ACTION, true))) {
+				if (target == null || (md.contains(SendMode.REPORT) && !source.spendAttack())) {
 					source.setAvailable(false);
 				}
 			}
@@ -1582,43 +1565,43 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public boolean isSingleplayer() {
-		return Bit.on(state, 0);
+		return Bit32.on(state, 0);
 	}
 
 	public void setSingleplayer(boolean sp) {
-		state = (byte) Bit.set(state, 0, sp);
+		state = (byte) Bit32.set(state, 0, sp);
 	}
 
 	public boolean hasCheated() {
-		return isSingleplayer() || Bit.on(state, 1);
+		return isSingleplayer() || Bit32.on(state, 1);
 	}
 
 	public void setCheated(boolean cheated) {
-		state = (byte) Bit.set(state, 1, cheated);
+		state = (byte) Bit32.set(state, 1, cheated);
 	}
 
 	public boolean isRestoring() {
-		return Bit.on(state, 2);
+		return Bit32.on(state, 2);
 	}
 
 	public void setRestoring(boolean restoring) {
-		state = (byte) Bit.set(state, 2, restoring);
+		state = (byte) Bit32.set(state, 2, restoring);
 	}
 
 	public boolean isLocked() {
-		return Bit.on(state, 3);
+		return Bit32.on(state, 3);
 	}
 
 	public void setLocked(boolean locked) {
-		state = (byte) Bit.set(state, 3, locked);
+		state = (byte) Bit32.set(state, 3, locked);
 	}
 
 	public boolean isSending() {
-		return Bit.on(state, 4);
+		return Bit32.on(state, 4);
 	}
 
 	public void setSending(boolean sending) {
-		state = (byte) Bit.set(state, 4, sending);
+		state = (byte) Bit32.set(state, 4, sending);
 	}
 
 	public StateSnap getSnapshot(int turn) {
@@ -2661,6 +2644,7 @@ public class Shoukan extends GameInstance<Phase> {
 		for (SlotColumn slt : getSlots(curr.getSide())) {
 			for (Senshi s : slt.getCards()) {
 				if (s != null && s.getIndex() != -1) {
+					s.setAvailable(true);
 					s.reduceCooldown(1);
 					s.reduceStasis(1);
 

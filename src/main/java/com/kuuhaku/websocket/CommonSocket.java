@@ -37,7 +37,7 @@ import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.util.Bit;
+import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
@@ -50,7 +50,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.Language;
 import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.enums.Opcode;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -166,7 +165,7 @@ public class CommonSocket extends WebSocketClient {
 		switch (payload.getString("channel").toLowerCase()) {
 			case "shoukan" -> {
 				String id = payload.getString("card");
-				List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
+				List<CardType> types = List.copyOf(Bit32.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
 				if (types.isEmpty()) {
 					deliver(key, new byte[0]);
 					return;
@@ -194,7 +193,7 @@ public class CommonSocket extends WebSocketClient {
 						Map.entry("rarity", locale.get("rarity/" + c.getRarity().name()))
 				);
 
-				List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
+				List<CardType> types = List.copyOf(Bit32.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
 				if (!types.isEmpty()) {
 					CardType type = types.getLast();
 					Drawable<?> d = switch (type) {

@@ -134,13 +134,9 @@ public class CumValue implements Iterable<ValueMod>, Cloneable {
 		return values.iterator();
 	}
 
-	@Override
-	public CumValue clone() {
-		CumValue clone = new CumValue(flat);
+	public void copyTo(CumValue to) {
 		for (ValueMod v : this) {
-			clone.values.add(v.clone());
+			to.values.add(v.clone());
 		}
-
-		return clone;
 	}
 }

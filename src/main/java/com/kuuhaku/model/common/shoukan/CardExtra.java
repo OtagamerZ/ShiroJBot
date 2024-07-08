@@ -25,7 +25,7 @@ import com.kuuhaku.model.common.ConditionalVar;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.persistent.id.LocalizedId;
+import com.kuuhaku.model.records.id.LocalizedId;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.LocalizedDescription;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -43,30 +43,30 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class CardExtra implements Cloneable {
-	private final CumValue mana;
-	private final CumValue blood;
-	private final CumValue sacrifices;
+	private final CumValue mana = CumValue.flat();
+	private final CumValue blood = CumValue.flat();
+	private final CumValue sacrifices = CumValue.flat();
 
-	private final CumValue atk;
-	private final CumValue dfs;
-	private final CumValue dodge;
-	private final CumValue block;
+	private final CumValue atk = CumValue.flat();
+	private final CumValue dfs = CumValue.flat();
+	private final CumValue dodge = CumValue.flat();
+	private final CumValue block = CumValue.flat();
 
-	private final CumValue piercing;
-	private final CumValue lifesteal;
-	private final CumValue thorns;
+	private final CumValue piercing = CumValue.flat();
+	private final CumValue lifesteal = CumValue.flat();
+	private final CumValue thorns = CumValue.flat();
 
-	private final CumValue costMult;
-	private final CumValue attrMult;
-	private final CumValue power;
+	private final CumValue costMult = CumValue.mult();
+	private final CumValue attrMult = CumValue.mult();
+	private final CumValue power = CumValue.mult();
 
-	private final CumValue tier;
+	private final CumValue attacks = CumValue.flat();
+	private final CumValue tier = CumValue.flat();
 
-	private final Flags flags;
+	private final Flags flags = new Flags();
 
-	private final JSONObject data;
-	private final JSONObject perm;
-	private final ListOrderedSet<String> curses;
+	private final JSONObject data = new JSONObject();
+	private final ListOrderedSet<String> curses = ListOrderedSet.listOrderedSet(BondedList.withBind((s, it) -> !s.isBlank()));
 
 	private Race race = null;
 	private Senshi disguise = null;
@@ -79,57 +79,6 @@ public class CardExtra implements Cloneable {
 	private String effect = null;
 
 	private transient Field[] fieldCache = null;
-
-	public CardExtra(
-			CumValue mana, CumValue blood, CumValue sacrifices,
-			CumValue atk, CumValue dfs, CumValue dodge,
-			CumValue block, CumValue tier, CumValue piercing,
-			CumValue lifesteal, CumValue thorns, CumValue costMult,
-			CumValue attrMult, CumValue power, Flags flags,
-			JSONObject data, JSONObject perm, ListOrderedSet<String> curses
-	) {
-		this.mana = mana;
-		this.blood = blood;
-		this.sacrifices = sacrifices;
-		this.atk = atk;
-		this.dfs = dfs;
-		this.dodge = dodge;
-		this.block = block;
-		this.piercing = piercing;
-		this.lifesteal = lifesteal;
-		this.thorns = thorns;
-		this.tier = tier;
-		this.costMult = costMult;
-		this.attrMult = attrMult;
-		this.power = power;
-		this.flags = flags;
-		this.data = data;
-		this.perm = perm;
-		this.curses = curses;
-	}
-
-	public CardExtra() {
-		this(
-				CumValue.flat(),
-				CumValue.flat(),
-				CumValue.flat(),
-				CumValue.flat(),
-				CumValue.flat(),
-				CumValue.flat(),
-				CumValue.flat(),
-				CumValue.flat(),
-				CumValue.flat(),
-				CumValue.flat(),
-				CumValue.flat(),
-				CumValue.mult(),
-				CumValue.mult(),
-				CumValue.mult(),
-				new Flags(),
-				new JSONObject(),
-				new JSONObject(),
-				ListOrderedSet.listOrderedSet(BondedList.withBind((s, it) -> !s.isBlank()))
-		);
-	}
 
 	public CumValue getMana() {
 		return mana;
@@ -183,6 +132,10 @@ public class CardExtra implements Cloneable {
 		return power;
 	}
 
+	public CumValue getAttacks() {
+		return attacks;
+	}
+
 	public CumValue getTier() {
 		return tier;
 	}
@@ -203,10 +156,6 @@ public class CardExtra implements Cloneable {
 
 	public JSONObject getData() {
 		return data;
-	}
-
-	public JSONObject getPerm() {
-		return perm;
 	}
 
 	public ListOrderedSet<String> getCurses() {
@@ -344,26 +293,23 @@ public class CardExtra implements Cloneable {
 
 	@Override
 	public CardExtra clone() {
-		CardExtra clone = new CardExtra(
-				mana.clone(),
-				blood.clone(),
-				sacrifices.clone(),
-				atk.clone(),
-				dfs.clone(),
-				dodge.clone(),
-				block.clone(),
-				piercing.clone(),
-				lifesteal.clone(),
-				thorns.clone(),
-				tier.clone(),
-				attrMult.clone(),
-				costMult.clone(),
-				power.clone(),
-				flags.clone(),
-				data.clone(),
-				perm.clone(),
-				ListOrderedSet.listOrderedSet(BondedList.withBind((s, it) -> !s.isBlank()))
-		);
+		CardExtra clone = new CardExtra();
+
+		if (fieldCache == null) {
+			fieldCache = getClass().getDeclaredFields();
+		}
+
+		for (Field f : fieldCache) {
+			try {
+				if (f.get(this) instanceof CumValue from && f.get(clone) instanceof CumValue to) {
+					from.copyTo(to);
+				}
+			} catch (IllegalAccessException ignore) {
+			}
+		}
+
+		flags.copyTo(clone.flags);
+		clone.data.putAll(data.clone());
 
 		clone.race = race;
 		clone.source = source;

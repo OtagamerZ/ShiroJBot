@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent.converter;
 
-import com.kuuhaku.util.Bit;
+import com.kuuhaku.util.Bit32;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
@@ -36,7 +36,7 @@ abstract class FlagConverter<T extends Enum<T>> implements AttributeConverter<En
 	public Integer convertToDatabaseColumn(EnumSet<T> enums) {
 		int i = 0;
 		for (T flag : enums) {
-			i = Bit.set(i, flag.ordinal(), true);
+			i = Bit32.set(i, flag.ordinal(), true);
 		}
 
 		return i;
@@ -46,7 +46,7 @@ abstract class FlagConverter<T extends Enum<T>> implements AttributeConverter<En
 	public EnumSet<T> convertToEntityAttribute(Integer flags) {
 		EnumSet<T> out = EnumSet.noneOf(klass);
 		for (T flag : klass.getEnumConstants()) {
-			if (Bit.on(flags, flag.ordinal())) {
+			if (Bit32.on(flags, flag.ordinal())) {
 				out.add(flag);
 			}
 		}

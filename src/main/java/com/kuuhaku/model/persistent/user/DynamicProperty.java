@@ -19,7 +19,7 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.persistent.id.DynamicPropertyId;
+import com.kuuhaku.model.records.id.DynamicPropertyId;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;

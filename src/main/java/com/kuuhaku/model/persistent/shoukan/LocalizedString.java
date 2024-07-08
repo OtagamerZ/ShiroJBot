@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.id.LocalizedId;
+import com.kuuhaku.model.records.id.LocalizedId;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;

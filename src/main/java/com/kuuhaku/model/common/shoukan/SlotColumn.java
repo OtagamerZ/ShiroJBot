@@ -23,7 +23,7 @@ import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
-import com.kuuhaku.util.Bit;
+import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Utils;
 
 import java.util.Arrays;
@@ -208,27 +208,27 @@ public class SlotColumn {
 	}
 
 	public int getLock() {
-		if (Bit.on(state, 0)) return -1;
+		if (Bit32.on(state, 0)) return -1;
 
-		return Bit.get(state, 1, 4);
+		return Bit32.get(state, 1, 4);
 	}
 
 	public boolean isLocked() {
-		return Bit.on(state, 0) || Bit.on(state, 1, 4);
+		return Bit32.on(state, 0) || Bit32.on(state, 1, 4);
 	}
 
 	public void setLock(boolean value) {
-		state = (byte) Bit.set(state, 0, value);
+		state = (byte) Bit32.set(state, 0, value);
 	}
 
 	public void setLock(int time) {
-		int curr = Bit.get(state, 1, 4);
-		state = (byte) Bit.set(state, 1, Math.max(curr, time), 4);
+		int curr = Bit32.get(state, 1, 4);
+		state = (byte) Bit32.set(state, 1, Math.max(curr, time), 4);
 	}
 
 	public void reduceLock(int time) {
-		int curr = Bit.get(state, 1, 4);
-		state = (byte) Bit.set(state, 1, Math.max(0, curr - time), 4);
+		int curr = Bit32.get(state, 1, 4);
+		state = (byte) Bit32.set(state, 1, Math.max(0, curr - time), 4);
 	}
 
 	public SlotColumn getLeft() {

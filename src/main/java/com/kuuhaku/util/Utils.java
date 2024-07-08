@@ -870,8 +870,8 @@ public abstract class Utils {
 		throw new ClassCastException();
 	}
 
-	public static int toInt(boolean val) {
-		return val ? 1 : 0;
+	public static byte toNum(boolean val) {
+		return (byte) (val ? 1 : 0);
 	}
 
 	public static <T> List<T> generate(int amount, Function<Integer, T> generator) {

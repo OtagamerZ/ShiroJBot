@@ -42,7 +42,7 @@ import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.DeckEntry;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
-import com.kuuhaku.util.Bit;
+import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -1085,19 +1085,19 @@ public class Hand {
 	}
 
 	public boolean isForfeit() {
-		return Bit.on(state, 0);
+		return Bit32.on(state, 0);
 	}
 
 	public void setForfeit(boolean forfeit) {
-		state = Bit.set(state, 0, forfeit);
+		state = Bit32.set(state, 0, forfeit);
 	}
 
 	public boolean hasUsedDestiny() {
-		return Bit.on(state, 1);
+		return Bit32.on(state, 1);
 	}
 
 	public void setUsedDestiny(boolean usedDestiny) {
-		state = Bit.set(state, 1, usedDestiny);
+		state = Bit32.set(state, 1, usedDestiny);
 	}
 
 	public boolean canUseDestiny() {
@@ -1105,27 +1105,27 @@ public class Hand {
 	}
 
 	public boolean hasRerolled() {
-		return Bit.on(state, 2);
+		return Bit32.on(state, 2);
 	}
 
 	public void setRerolled(boolean rerolled) {
-		state = Bit.set(state, 2, rerolled);
+		state = Bit32.set(state, 2, rerolled);
 	}
 
 	public boolean canAttack() {
-		return Bit.on(state, 3);
+		return Bit32.on(state, 3);
 	}
 
 	public void setCanAttack(boolean canAttack) {
-		state = Bit.set(state, 3, canAttack);
+		state = Bit32.set(state, 3, canAttack);
 	}
 
 	public boolean hasSummoned() {
-		return Bit.on(state, 4);
+		return Bit32.on(state, 4);
 	}
 
 	public void setSummoned(boolean summoned) {
-		state = Bit.set(state, 4, summoned);
+		state = Bit32.set(state, 4, summoned);
 	}
 
 	public boolean isDefeated() {
@@ -1141,30 +1141,30 @@ public class Hand {
 	}
 
 	public int getOriginCooldown() {
-		return Bit.get(state, 2, 4);
+		return Bit32.get(state, 2, 4);
 	}
 
 	public void setOriginCooldown(int time) {
-		int curr = Bit.get(state, 2, 4);
-		state = Bit.set(state, 2, Math.max(curr, time), 4);
+		int curr = Bit32.get(state, 2, 4);
+		state = Bit32.set(state, 2, Math.max(curr, time), 4);
 	}
 
 	public void reduceOriginCooldown(int time) {
-		int curr = Bit.get(state, 2, 4);
-		state = Bit.set(state, 2, Math.max(0, curr - time), 4);
+		int curr = Bit32.get(state, 2, 4);
+		state = Bit32.set(state, 2, Math.max(0, curr - time), 4);
 	}
 
 	public int getKills() {
-		return Bit.get(state, 2, 8);
+		return Bit32.get(state, 2, 8);
 	}
 
 	public void addKill() {
-		int curr = Bit.get(state, 2, 8);
-		state = Bit.set(state, 2, curr + 1, 8);
+		int curr = Bit32.get(state, 2, 8);
+		state = Bit32.set(state, 2, curr + 1, 8);
 	}
 
 	public int getRemainingDraws() {
-		return Bit.get(state, 3, 8);
+		return Bit32.get(state, 3, 8);
 	}
 
 	public void consumeDraw() {
@@ -1172,12 +1172,12 @@ public class Hand {
 	}
 
 	public void consumeDraws(int draws) {
-		int curr = Bit.get(state, 3, 8);
-		state = Bit.set(state, 3, curr - draws, 8);
+		int curr = Bit32.get(state, 3, 8);
+		state = Bit32.set(state, 3, curr - draws, 8);
 	}
 
 	public void resetDraws() {
-		state = Bit.set(state, 3, Math.max(0, base.handCapacity().get() - cards.size()), 8);
+		state = Bit32.set(state, 3, Math.max(0, base.handCapacity().get() - cards.size()), 8);
 	}
 
 	public void flushStacks() {

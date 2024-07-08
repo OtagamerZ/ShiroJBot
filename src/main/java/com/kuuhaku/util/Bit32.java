@@ -21,9 +21,9 @@ package com.kuuhaku.util;
 import java.util.EnumSet;
 import java.util.Set;
 
-public abstract class Bit {
+public abstract class Bit32 {
 	public static int set(int bits, int index, boolean value) {
-		return set(bits, index, Utils.toInt(value), 1);
+		return set(bits, index, Utils.toNum(value), 1);
 	}
 
 	public static int set(int bits, int index, int value, int size) {

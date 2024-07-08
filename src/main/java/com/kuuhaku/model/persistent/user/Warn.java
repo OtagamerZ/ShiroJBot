@@ -19,7 +19,7 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.persistent.id.WarnId;
+import com.kuuhaku.model.records.id.WarnId;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.Fetch;
@@ -59,7 +59,7 @@ public class Warn extends DAO<Warn> {
 	}
 
 	public Warn(Profile profile, User issuer, String reason) {
-		this.id = new WarnId(profile.getId().getGid(), profile.getId().getUid());
+		this.id = new WarnId(profile.getId().gid(), profile.getId().uid());
 		this.reason = reason;
 		this.issuer = issuer.getId();
 		this.profile = profile;

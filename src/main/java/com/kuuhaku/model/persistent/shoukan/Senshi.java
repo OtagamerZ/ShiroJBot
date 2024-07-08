@@ -144,24 +144,25 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient Trigger currentTrigger = null;
 
 	@Transient
-	private int state = 0b10;
+	private long state = 0b10;
 	/*
-	0xF FFFFF FF
-	  │ │││││ └┴ 1111 1111
-	  │ │││││    ││││ │││└ solid
-	  │ │││││    ││││ ││└─ available
-	  │ │││││    ││││ │└── defending
-	  │ │││││    ││││ └─── flipped
-	  │ │││││    │││└ sealed
-	  │ │││││    ││└─ switched
-	  │ │││││    │└── ethereal
-	  │ │││││    └─── manipulated
-	  │ ││││└─ (0 - 15) sleeping
-	  │ │││└── (0 - 15) stunned
-	  │ ││└─── (0 - 15) stasis
-	  │ │└──── (0 - 15) taunt
-	  │ └───── (0 - 15) berserk
-	  └ (0 - 15) cooldown
+	0x0000 000 FF FFFFF FF
+	           ││ │││││ └┴ 1111 1111
+	           ││ │││││    ││││ │││└ solid
+	           ││ │││││    ││││ ││└─ available
+	           ││ │││││    ││││ │└── defending
+	           ││ │││││    ││││ └─── flipped
+	           ││ │││││    │││└ sealed
+	           ││ │││││    ││└─ switched
+	           ││ │││││    │└── ethereal
+	           ││ │││││    └─── manipulated
+	           ││ ││││└─ (0 - 15) sleeping
+	           ││ │││└── (0 - 15) stunned
+	           ││ ││└─── (0 - 15) stasis
+	           ││ │└──── (0 - 15) taunt
+	           ││ └───── (0 - 15) berserk
+	           │└ (0 - 15) cooldown
+	           └─ (0 - 15) attacks
 	 */
 
 	public Senshi() {
@@ -820,50 +821,51 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public boolean isSolid() {
-		return !isEthereal() && Bit.on(state, 0) && !base.getTags().contains("FUSION");
+		return !isEthereal() && Bit64.on(state, 0) && !base.getTags().contains("FUSION");
 	}
 
 	@Override
 	public void setSolid(boolean solid) {
-		state = Bit.set(state, 0, solid);
+		state = Bit64.set(state, 0, solid);
 	}
 
 	@Override
 	public boolean isAvailable() {
-		return Bit.on(state, 1) && !isStasis() && !isStunned() && !isSleeping();
+		return Bit64.on(state, 1) && !isStasis() && !isStunned() && !isSleeping();
 	}
 
 	@Override
 	public void setAvailable(boolean available) {
-		state = Bit.set(state, 1, available);
+		boolean was = isAvailable();
+		state = Bit64.set(state, 1, available);
+
+		if (!was && isAvailable()) {
+			resetAttacks();
+		}
 	}
 
 	public boolean isDefending() {
-		return isFlipped() || Bit.on(state, 2) || hasFlag(Flag.ALWAYS_DEFENSE);
+		return isFlipped() || Bit64.on(state, 2) || hasFlag(Flag.ALWAYS_DEFENSE);
 	}
 
 	public void setDefending(boolean defending) {
-		state = Bit.set(state, 2, defending);
+		state = Bit64.set(state, 2, defending);
 
 		if (!isFlipped() && slot != null) {
 			getGame().trigger(ON_SWITCH, asSource(ON_SWITCH));
 		}
 	}
 
-	public boolean canAttack() {
-		return slot != null && isAvailable() && !isFlipped() && !hasFlag(Flag.NO_ATTACK, true);
-	}
-
 	@Override
 	public boolean isFlipped() {
-		return Bit.on(state, 3);
+		return Bit64.on(state, 3);
 	}
 
 	@Override
 	public void setFlipped(boolean flipped) {
 		boolean trigger = isFlipped() && !flipped && slot != null;
 
-		state = Bit.set(state, 3, flipped);
+		state = Bit64.set(state, 3, flipped);
 		if (trigger) {
 			setDefending(true);
 
@@ -878,107 +880,107 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isSealed() {
-		return Bit.on(state, 4);
+		return Bit64.on(state, 4);
 	}
 
 	public void setSealed(boolean sealed) {
-		state = Bit.set(state, 4, sealed);
+		state = Bit64.set(state, 4, sealed);
 	}
 
 	public boolean hasSwitched() {
-		return Bit.on(state, 5);
+		return Bit64.on(state, 5);
 	}
 
 	public void setSwitched(boolean switched) {
-		state = Bit.set(state, 5, switched);
+		state = Bit64.set(state, 5, switched);
 	}
 
 	@Override
 	public boolean isEthereal() {
-		return Bit.on(state, 6);
+		return Bit64.on(state, 6);
 	}
 
 	@Override
 	public void setEthereal(boolean ethereal) {
-		state = Bit.set(state, 6, ethereal);
+		state = Bit64.set(state, 6, ethereal);
 	}
 
 	@Override
 	public boolean isManipulated() {
-		return Bit.on(state, 7);
+		return Bit64.on(state, 7);
 	}
 
 	@Override
 	public void setManipulated(boolean manipulated) {
-		state = Bit.set(state, 7, manipulated);
+		state = Bit64.set(state, 7, manipulated);
 	}
 
 	public boolean isSleeping() {
-		return !isStunned() && Bit.on(state, 2, 4);
+		return !isStunned() && Bit64.on(state, 2, 4);
 	}
 
 	public int getRemainingSleep() {
-		return Bit.get(state, 2, 4);
+		return (int) Bit64.get(state, 2, 4);
 	}
 
 	public void awaken() {
-		int curr = Bit.get(state, 2, 4);
+		long curr = Bit64.get(state, 2, 4);
 
 		if (getGame().getArena().getField().getType() != FieldType.NIGHT && getGame().chance(100d / (curr + 1))) {
-			state = Bit.set(state, 2, 0, 4);
+			state = Bit64.set(state, 2, 0, 4);
 		}
 	}
 
 	public void setSleep(int time) {
 		if (hasFlag(Flag.NO_SLEEP, true)) return;
 
-		int curr = Bit.get(state, 2, 4);
-		state = Bit.set(state, 2, Math.max(curr, time), 4);
+		long curr = Bit64.get(state, 2, 4);
+		state = Bit64.set(state, 2, Math.max(curr, time), 4);
 	}
 
 	public void reduceSleep(int time) {
-		int curr = Bit.get(state, 2, 4);
-		state = Bit.set(state, 2, Math.max(0, curr - time), 4);
+		long curr = Bit64.get(state, 2, 4);
+		state = Bit64.set(state, 2, Math.max(0, curr - time), 4);
 	}
 
 	public boolean isStunned() {
-		return !isStasis() && Bit.on(state, 3, 4);
+		return !isStasis() && Bit64.on(state, 3, 4);
 	}
 
 	public int getRemainingStun() {
-		return Bit.get(state, 3, 4);
+		return (int) Bit64.get(state, 3, 4);
 	}
 
 	public void setStun(int time) {
 		if (hasFlag(Flag.NO_STUN, true)) return;
 
-		int curr = Bit.get(state, 3, 4);
-		state = Bit.set(state, 3, Math.max(curr, time), 4);
+		long curr = Bit64.get(state, 3, 4);
+		state = Bit64.set(state, 3, Math.max(curr, time), 4);
 	}
 
 	public void reduceStun(int time) {
-		int curr = Bit.get(state, 3, 4);
-		state = Bit.set(state, 3, Math.max(0, curr - time), 4);
+		long curr = Bit64.get(state, 3, 4);
+		state = Bit64.set(state, 3, Math.max(0, curr - time), 4);
 	}
 
 	public boolean isStasis() {
-		return Bit.on(state, 4, 4);
+		return Bit64.on(state, 4, 4);
 	}
 
 	public int getRemainingStasis() {
-		return Bit.get(state, 4, 4);
+		return (int) Bit64.get(state, 4, 4);
 	}
 
 	public void setStasis(int time) {
 		if (hasFlag(Flag.NO_STASIS, true)) return;
 
-		int curr = Bit.get(state, 4, 4);
-		state = Bit.set(state, 4, Math.max(curr, time), 4);
+		long curr = Bit64.get(state, 4, 4);
+		state = Bit64.set(state, 4, Math.max(curr, time), 4);
 	}
 
 	public void reduceStasis(int time) {
-		int curr = Bit.get(state, 4, 4);
-		state = Bit.set(state, 4, Math.max(0, curr - time), 4);
+		long curr = Bit64.get(state, 4, 4);
+		state = Bit64.set(state, 4, Math.max(0, curr - time), 4);
 	}
 
 	public Senshi getTarget() {
@@ -986,9 +988,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public int getRemainingTaunt() {
-		int taunt = Bit.get(state, 5, 4);
+		int taunt = (int) Bit64.get(state, 5, 4);
 		if (taunt == 0 || (target == null || target.getSide() == getSide() || target.getIndex() == -1)) {
-			state = Bit.set(state, 5, 0, 4);
+			state = Bit64.set(state, 5, 0, 4);
 			target = null;
 			taunt = 0;
 		}
@@ -1000,33 +1002,33 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (target == null || hasFlag(Flag.NO_TAUNT, true)) return;
 
 		this.target = target;
-		int curr = Bit.get(state, 5, 4);
-		state = Bit.set(state, 5, Math.max(curr, time), 4);
+		long curr = Bit64.get(state, 5, 4);
+		state = Bit64.set(state, 5, Math.max(curr, time), 4);
 	}
 
 	public void reduceTaunt(int time) {
-		int curr = Bit.get(state, 5, 4);
-		state = Bit.set(state, 5, Math.max(0, curr - time), 4);
+		long curr = Bit64.get(state, 5, 4);
+		state = Bit64.set(state, 5, Math.max(0, curr - time), 4);
 	}
 
 	public boolean isBerserk() {
-		return Bit.on(state, 6, 4);
+		return Bit64.on(state, 6, 4);
 	}
 
 	public int getRemainingBerserk() {
-		return Bit.get(state, 6, 4);
+		return (int) Bit64.get(state, 6, 4);
 	}
 
 	public void setBerserk(int time) {
 		if (hasFlag(Flag.NO_BERSERK, true)) return;
 
-		int curr = Bit.get(state, 6, 4);
-		state = Bit.set(state, 6, Math.max(curr, time), 4);
+		long curr = Bit64.get(state, 6, 4);
+		state = Bit64.set(state, 6, Math.max(curr, time), 4);
 	}
 
 	public void reduceBerserk(int time) {
-		int curr = Bit.get(state, 6, 4);
-		state = Bit.set(state, 6, Math.max(0, curr - time), 4);
+		long curr = Bit64.get(state, 6, 4);
+		state = Bit64.set(state, 6, Math.max(0, curr - time), 4);
 	}
 
 	public void reduceDebuffs(int time) {
@@ -1048,18 +1050,50 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int getCooldown() {
-		return Bit.get(state, 7, 4);
+		return (int) Bit64.get(state, 7, 4);
 	}
 
 	@Override
 	public void setCooldown(int time) {
-		int curr = Bit.get(state, 7, 4);
-		state = Bit.set(state, 7, Math.max(curr, time), 4);
+		long curr = Bit64.get(state, 7, 4);
+		state = Bit64.set(state, 7, Math.max(curr, time), 4);
 	}
 
 	public void reduceCooldown(int time) {
-		int curr = Bit.get(state, 7, 4);
-		state = Bit.set(state, 7, Math.max(0, curr - time), 4);
+		long curr = Bit64.get(state, 7, 4);
+		state = Bit64.set(state, 7, Math.max(0, curr - time), 4);
+	}
+
+	public int getAttacks() {
+		return (int) Bit64.get(state, 8, 4);
+	}
+
+	public int getRemAttacks() {
+		int base = 1 + (int) stats.getAttacks().get();
+		for (Evogear e : equipments) {
+			base += (int) e.getStats().getAttacks().get();
+			if (e.hasCharm(Charm.BARRAGE)) {
+				base += Charm.BARRAGE.getValue(e.getTier());
+			}
+		}
+
+		return base - getAttacks();
+	}
+
+	public boolean canAttack() {
+		return slot != null && isAvailable() && !isFlipped() && !hasFlag(Flag.NO_ATTACK, true);
+	}
+
+	public boolean spendAttack() {
+		if (hasFlag(Flag.FREE_ACTION, true)) return true;
+
+		long curr = Bit64.get(state, 8, 4);
+		state = Bit64.set(state, 8, curr + 1, 4);
+		return getRemAttacks() > 0;
+	}
+
+	public void resetAttacks() {
+		state = Bit64.set(state, 8, 0, 4);
 	}
 
 	public Senshi getLastInteraction() {
@@ -1481,8 +1515,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		leech = null;
 		lastInteraction = null;
 
-		byte base = 0b10;
-		base = (byte) Bit.set(base, 4, isSealed());
+		long base = 0b10;
+		base = Bit64.set(base, 4, isSealed());
 
 		state = base;
 	}

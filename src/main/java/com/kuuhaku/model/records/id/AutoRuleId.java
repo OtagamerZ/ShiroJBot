@@ -16,8 +16,28 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.enums.shoukan;
+package com.kuuhaku.model.records.id;
 
-public enum SendMode {
-	NONE, REPORT, SEND, BUFFER
+import com.kuuhaku.controller.DAO;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+
+@Embeddable
+public record AutoRuleId(
+		@Column(name = "id", nullable = false)
+		int id,
+		@Column(name = "gid", nullable = false)
+		String gid
+) {
+	static {
+		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS auto_rule_id_seq");
+	}
+
+	public AutoRuleId(String gid) {
+		this(DAO.queryNative(Integer.class, "SELECT nextval('auto_rule_id_seq')"), gid);
+	}
+
+	public AutoRuleId {
+		if (gid.isBlank()) throw new IllegalArgumentException("GID cannot be blank");
+	}
 }

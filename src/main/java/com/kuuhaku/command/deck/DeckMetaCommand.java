@@ -35,7 +35,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.shoukan.CardRanking;
-import com.kuuhaku.util.Bit;
+import com.kuuhaku.util.Bit32;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -64,7 +64,7 @@ public class DeckMetaCommand implements Executable {
 		List<CardRanking> cards = DAO.queryAllUnmapped("SELECT card_id, get_type(card_id), card_winrate(card_id) FROM v_shoukan_meta").stream()
 				.map(o -> {
 							int type = NumberUtils.toInt(String.valueOf(o[1]));
-							List<CardType> types = List.copyOf(Bit.toEnumSet(CardType.class, type));
+							List<CardType> types = List.copyOf(Bit32.toEnumSet(CardType.class, type));
 							if (types.isEmpty()) return null;
 
 							Drawable<?> card = switch (types.getLast()) {

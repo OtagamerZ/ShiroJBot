@@ -67,7 +67,7 @@ public enum Charm {
 			case WOUNDING, THORNS, LIFESTEAL -> tier * 5;
 			case CLONE -> tier * 25;
 			case PIERCING -> tier * 3;
-			case BARRAGE -> tier * 2;
+			case BARRAGE -> tier;
 		};
 	}
 }

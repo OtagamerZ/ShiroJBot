@@ -28,10 +28,10 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
-import com.kuuhaku.model.persistent.id.ProfileId;
+import com.kuuhaku.model.records.id.ProfileId;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.shoukan.history.Match;
-import com.kuuhaku.util.Bit;
+import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
@@ -152,7 +152,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	public static boolean hasRole(String uid, boolean and, Role... roles) {
 		int flags = 0;
 		for (Role r : roles) {
-			flags = Bit.set(flags, r.ordinal(), true);
+			flags = Bit32.set(flags, r.ordinal(), true);
 		}
 
 		if (and) {

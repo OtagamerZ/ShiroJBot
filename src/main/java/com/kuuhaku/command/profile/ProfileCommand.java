@@ -26,7 +26,7 @@ import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.id.ProfileId;
+import com.kuuhaku.model.records.id.ProfileId;
 import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;

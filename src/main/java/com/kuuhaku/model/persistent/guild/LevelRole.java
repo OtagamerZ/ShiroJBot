@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent.guild;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.RoleConverter;
-import com.kuuhaku.model.persistent.id.LevelRoleId;
+import com.kuuhaku.model.records.id.LevelRoleId;
 import com.kuuhaku.model.persistent.javatype.RoleJavaType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;

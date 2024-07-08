@@ -202,48 +202,48 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public boolean isSolid() {
-		return !isEthereal() && Bit.on(state, 0);
+		return !isEthereal() && Bit32.on(state, 0);
 	}
 
 	@Override
 	public void setSolid(boolean solid) {
-		state = (byte) Bit.set(state, 0, solid);
+		state = (byte) Bit32.set(state, 0, solid);
 	}
 
 	@Override
 	public boolean isAvailable() {
-		return Bit.on(state, 1);
+		return Bit32.on(state, 1);
 	}
 
 	@Override
 	public void setAvailable(boolean available) {
-		state = (byte) Bit.set(state, 1, available);
+		state = (byte) Bit32.set(state, 1, available);
 	}
 
 	public boolean wasBamboozled() {
-		return Bit.on(state, 2);
+		return Bit32.on(state, 2);
 	}
 
 	public void setBamboozled(boolean available) {
-		state = (byte) Bit.set(state, 2, available);
+		state = (byte) Bit32.set(state, 2, available);
 	}
 
 	public boolean isEthereal() {
-		return Bit.on(state, 3);
+		return Bit32.on(state, 3);
 	}
 
 	public void setEthereal(boolean ethereal) {
-		state = (byte) Bit.set(state, 3, ethereal);
+		state = (byte) Bit32.set(state, 3, ethereal);
 	}
 
 	@Override
 	public boolean isManipulated() {
-		return Bit.on(state, 3);
+		return Bit32.on(state, 3);
 	}
 
 	@Override
 	public void setManipulated(boolean manipulated) {
-		state = (byte) Bit.set(state, 3, manipulated);
+		state = (byte) Bit32.set(state, 3, manipulated);
 	}
 
 	public boolean isActive() {

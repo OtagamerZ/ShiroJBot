@@ -19,7 +19,7 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.persistent.id.ProfileId;
+import com.kuuhaku.model.records.id.ProfileId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

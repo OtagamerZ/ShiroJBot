@@ -16,8 +16,19 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.enums.shoukan;
+package com.kuuhaku.model.records.id;
 
-public enum SendMode {
-	NONE, REPORT, SEND, BUFFER
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+
+@Embeddable
+public record DynamicPropertyId(
+		@Column(name = "uid", nullable = false)
+		String uid,
+		@Column(name = "id", nullable = false)
+		String id
+) {
+	public DynamicPropertyId {
+		if (uid.isBlank() || id.isBlank()) throw new IllegalArgumentException("UID and ID cannot be blank");
+	}
 }

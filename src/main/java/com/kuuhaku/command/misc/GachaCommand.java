@@ -181,7 +181,7 @@ public class GachaCommand implements Executable {
 		Deck deck = acc.getCurrentDeck();
 		String hPath = deck.getStyling().getFrame().isLegacy() ? "old" : "new";
 
-		CardType tp = Bit.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)).stream()
+		CardType tp = Bit32.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)).stream()
 				.findFirst()
 				.orElse(CardType.KAWAIPON);
 
