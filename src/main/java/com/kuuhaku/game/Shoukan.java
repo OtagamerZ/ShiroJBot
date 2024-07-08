@@ -1636,9 +1636,6 @@ public class Shoukan extends GameInstance<Phase> {
 			for (Map.Entry<Side, Hand> entry : hands.entrySet()) {
 				Hand h = entry.getValue();
 				Player p = snap.players().get(entry.getKey());
-				h.setHP(p.hp());
-				h.setMP(p.mp());
-				h.getRegDeg().getValues().addAll(JSONUtils.fromJSON(p.regdeg(), RegDeg.class).getValues());
 
 				h.getCards().clear();
 				JSONArray cards = new JSONArray(IO.uncompress(p.cards()));
@@ -1814,10 +1811,6 @@ public class Shoukan extends GameInstance<Phase> {
 			iterateSlots(side, s -> s.execute(new EffectParameters(trigger, side, s.asSource(trigger))));
 
 			Hand h = hands.get(side);
-			for (EffectHolder<?> leech : h.getLeeches()) {
-				leech.execute(new EffectParameters(ON_LEECH, side, leech.asSource(trigger)));
-			}
-
 			for (Drawable<?> card : h.getCards()) {
 				if (card instanceof EffectHolder<?> eh && eh.isPassive()) {
 					eh.execute(ep);

@@ -134,10 +134,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		getGame().trigger(Trigger.ON_FLAG_ALTER, asSource(Trigger.ON_FLAG_ALTER));
 	}
 
-	Hand getLeech();
-
-	void setLeech(Hand leech);
-
 	boolean hasCharm(Charm charm);
 
 	default boolean isPassive() {

@@ -252,7 +252,6 @@ public class Hand {
 		return !d.isEthereal();
 	}, d -> d.setCurrentStack(getDiscard(false)), Utils::doNothing);
 	private final Set<Timed<Lock>> locks = new HashSet<>();
-	private final Set<EffectHolder<?>> leeches = new HashSet<>();
 
 	private final RegDeg regdeg = new RegDeg(this);
 	private final JSONObject data = new JSONObject();
@@ -786,12 +785,6 @@ public class Hand {
 
 	public int getLockTime(Lock lock) {
 		return locks.stream().filter(t -> t.obj().equals(lock)).map(Timed::time).mapToInt(AtomicInteger::get).sum();
-	}
-
-	public Set<EffectHolder<?>> getLeeches() {
-		leeches.removeIf(e -> !Objects.equals(e.getLeech(), this));
-
-		return leeches;
 	}
 
 	public BaseValues getBase() {

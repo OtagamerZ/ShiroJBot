@@ -251,27 +251,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public Hand getLeech() {
-		return leech;
-	}
-
-	@Override
-	public void setLeech(Hand leech) {
-		if (this.leech != null) {
-			if (leech == null) {
-				this.leech.getLeeches().remove(this);
-			} else {
-				return;
-			}
-		}
-
-		this.leech = leech;
-		if (this.leech != null) {
-			this.leech.getLeeches().add(this);
-		}
-	}
-
-	@Override
 	public String getDescription(I18N locale) {
 		EffectHolder<?> source = getSource();
 		return Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
@@ -660,9 +639,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		equipper = null;
 		stats.clear();
 		base.unlockAll();
-		if (leech != null) {
-			leech.getLeeches().remove(this);
-		}
 
 		state = 0b10;
 	}
