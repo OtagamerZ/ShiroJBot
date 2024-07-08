@@ -2159,7 +2159,7 @@ public class Shoukan extends GameInstance<Phase> {
 					if (s != null && s.getIndex() != -1 && s.isBerserk()) {
 						List<Senshi> valid = allCards.stream().filter(d -> !d.equals(s)).toList();
 						if (!valid.isEmpty()) {
-							attack(s, Utils.getRandomEntry(getRng(), valid), null, null);
+							attack(s, Utils.getRandomEntry(getRng(), valid));
 							s.setAvailable(false);
 						}
 					}
