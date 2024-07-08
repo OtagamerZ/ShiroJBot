@@ -96,8 +96,8 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 	@Override
 	public Profile make(JSONObject args) {
 		this.id = new ProfileId(args.getString("id.uid"), args.getString("id.gid"));
-		this.account = DAO.find(Account.class, id.getUid());
-		this.guild = DAO.find(GuildConfig.class, id.getGid());
+		this.account = DAO.find(Account.class, id.uid());
+		this.guild = DAO.find(GuildConfig.class, id.gid());
 		return this;
 	}
 
@@ -110,14 +110,14 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 	}
 
 	public int getQueuedXp() {
-		Pair<Integer, Long> val = MinuteSchedule.XP_TO_ADD.get(id.getUid() + "-" + id.getGid());
+		Pair<Integer, Long> val = MinuteSchedule.XP_TO_ADD.get(id.uid() + "-" + id.gid());
 
 		if (val == null) return 0;
 		else return val.getFirst();
 	}
 
 	public void addXp(int value) {
-		MinuteSchedule.XP_TO_ADD.compute(id.getUid() + "-" + id.getGid(), (k, v) -> {
+		MinuteSchedule.XP_TO_ADD.compute(id.uid() + "-" + id.gid(), (k, v) -> {
 			int total = value;
 			if (v != null) {
 				if (System.currentTimeMillis() - v.getSecond() < 1000) {
@@ -245,7 +245,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 				     WHERE p.gid = ?2
 				     ) x
 				WHERE x.uid = ?1
-				""", id.getUid(), id.getGid());
+				""", id.uid(), id.gid());
 	}
 
 	public RichCustomEmoji getLevelEmote() {
@@ -273,9 +273,9 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
 		BufferedImage avatar = null;
-		Guild g = Main.getApp().getShiro().getGuildById(id.getGid());
+		Guild g = Main.getApp().getShiro().getGuildById(id.gid());
 		if (g != null) {
-			Member m = g.getMemberById(id.getUid());
+			Member m = g.getMemberById(id.uid());
 			if (m != null) {
 				avatar = IO.getImage(m.getEffectiveAvatarUrl());
 			}
@@ -459,7 +459,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 
 	@Override
 	public void beforeSave() {
-		Pair<Integer, Long> queued = MinuteSchedule.XP_TO_ADD.remove(id.getUid() + "-" + id.getGid());
+		Pair<Integer, Long> queued = MinuteSchedule.XP_TO_ADD.remove(id.uid() + "-" + id.gid());
 		if (queued == null) return;
 
 		xp += queued.getFirst();
