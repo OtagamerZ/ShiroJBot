@@ -30,10 +30,7 @@ import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.TargetType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.LocalizedString;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.shoukan.CardTag;
 import com.kuuhaku.model.records.shoukan.Source;
@@ -223,7 +220,8 @@ public interface Drawable<T extends Drawable<T>> {
 		return isEthereal()
 			   || !Objects.equals(getHand(), h)
 			   || stack != getCurrentStack()
-			   || (this instanceof EffectHolder<T> eh && eh.hasFlag(Flag.BOUND, true));
+			   || (this instanceof EffectHolder<T> eh && eh.hasFlag(Flag.BOUND, true))
+			   || (this instanceof Field f) && f.isEffect();
 	}
 
 	void reset();
