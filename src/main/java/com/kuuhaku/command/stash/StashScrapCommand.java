@@ -179,15 +179,10 @@ public class StashScrapCommand implements Executable {
 										UserItem item = DAO.find(UserItem.class, i);
 										if (item != null) {
 											sb.appendNewLine("- " + amount + "x " + item.getName(locale));
-											acc.getInventory().compute(item.getId(), (k, v) -> {
-												if (v == null) return amount;
-
-												return ((Number) v).intValue() + amount;
-											});
+											acc.addItem(item, amount);
 										}
 									});
 
-							acc.save();
 							if (dist.get() == 1) {
 								String i = items.stream().findFirst().orElseThrow();
 								UserItem item = DAO.find(UserItem.class, i);
