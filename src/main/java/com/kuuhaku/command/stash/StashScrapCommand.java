@@ -144,13 +144,10 @@ public class StashScrapCommand implements Executable {
 						acc.addCR(value, "Scrapped " + cards.stream().map(StashedCard::toString).collect(Collectors.joining(", ")));
 
 						Set<DAO<?>> batch = new HashSet<>();
-						Bag<UserItem> items = new HashBag<>();
+						Bag<String> items = new HashBag<>();
 						for (StashedCard sc : cards) {
 							if (sc.isChrome() && Calc.chance(50)) {
-								UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
-								if (item != null) {
-									items.add(item, Calc.rng(3, 5));
-								}
+								items.add("CHROMATIC_ESSENCE", Calc.rng(3, 5));
 							}
 
 							if (sc.getType() == CardType.KAWAIPON) {
@@ -160,10 +157,7 @@ public class StashScrapCommand implements Executable {
 
 									Rarity rarity = kc.getCard().getRarity();
 									if (Calc.chance(Math.pow(2.15, 7 - rarity.getIndex()))) {
-										UserItem item = DAO.find(UserItem.class, rarity.name() + "_SHARD");
-										if (item != null) {
-											items.add(item, 1);
-										}
+										items.add(rarity.name() + "_SHARD", 1);
 									}
 									continue;
 								}
@@ -182,18 +176,23 @@ public class StashScrapCommand implements Executable {
 										dist.getAndIncrement();
 
 										int amount = items.getCount(i);
-										sb.appendNewLine("- " + amount + "x " + i.getName(locale));
-										acc.getInventory().compute(i.getId(), (k, v) -> {
-											if (v == null) return amount;
+										UserItem item = DAO.find(UserItem.class, i);
+										if (item != null) {
+											sb.appendNewLine("- " + amount + "x " + item.getName(locale));
+											acc.getInventory().compute(item.getId(), (k, v) -> {
+												if (v == null) return amount;
 
-											return ((Number) v).intValue() + amount;
-										});
+												return ((Number) v).intValue() + amount;
+											});
+										}
 									});
 
 							acc.save();
 							if (dist.get() == 1) {
-								UserItem item = items.stream().findAny().orElseThrow();
-								event.channel().sendMessage(locale.get("str/received_item", items.getCount(item), item.getName(locale))).queue();
+								String i = items.stream().findFirst().orElseThrow();
+								UserItem item = DAO.find(UserItem.class, i);
+
+								event.channel().sendMessage(locale.get("str/received_item", items.getCount(i), item.getName(locale))).queue();
 							} else {
 								event.channel().sendMessage(locale.get("str/received_items", sb.toString())).queue();
 							}
