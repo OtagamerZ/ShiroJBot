@@ -148,7 +148,7 @@ public class Arena implements Renderer {
 
 	public BondedList<Drawable<?>> getBanned(boolean sweep) {
 		if (sweep) {
-			banned.removeIf(d -> d.checkRemoval(d.getHand(), banned));
+			banned.removeIf(d -> d.checkRemoval(d.getHand(), false, banned));
 		}
 
 		return banned;

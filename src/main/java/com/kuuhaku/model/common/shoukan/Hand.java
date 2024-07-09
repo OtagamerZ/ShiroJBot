@@ -115,6 +115,30 @@ public class Hand {
 
 		return !d.isEthereal();
 	}, d -> d.setCurrentStack(getCards(false)), d -> d.setSolid(false));
+	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
+		if (getDiscard(false).contains(d)) return false;
+		else if (d instanceof EffectHolder<?> eh) {
+			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
+				d.reset();
+				it.add(p.getOriginal());
+				return false;
+			}
+
+			if (eh.hasFlag(Flag.NO_CONVERT, true) && d.getHand() != null && !equals(d.getHand())) return false;
+		}
+
+		d.setHand(this);
+		getData().put("last_discarded", d);
+		getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
+
+		if (d instanceof Proxy<?> p) {
+			d.reset();
+			it.add(p.getOriginal());
+			return false;
+		}
+
+		return !d.isEthereal();
+	}, d -> d.setCurrentStack(getDiscard(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
 		if (getRealDeck(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
@@ -227,30 +251,6 @@ public class Hand {
 
 		return !d.isEthereal();
 	}, d -> d.setCurrentStack(getGraveyard(false)), Utils::doNothing);
-	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
-		if (getDiscard(false).contains(d)) return false;
-		else if (d instanceof EffectHolder<?> eh) {
-			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-				d.reset();
-				it.add(p.getOriginal());
-				return false;
-			}
-
-			if (eh.hasFlag(Flag.NO_CONVERT, true) && d.getHand() != null && !equals(d.getHand())) return false;
-		}
-
-		d.setHand(this);
-		getData().put("last_discarded", d);
-		getGame().trigger(Trigger.ON_DISCARD, d.asSource(Trigger.ON_DISCARD));
-
-		if (d instanceof Proxy<?> p) {
-			d.reset();
-			it.add(p.getOriginal());
-			return false;
-		}
-
-		return !d.isEthereal();
-	}, d -> d.setCurrentStack(getDiscard(false)), Utils::doNothing);
 	private final Set<Timed<Lock>> locks = new HashSet<>();
 
 	private final RegDeg regdeg = new RegDeg(this);
@@ -402,7 +402,7 @@ public class Hand {
 
 	public BondedList<Drawable<?>> getCards(boolean sweep) {
 		if (sweep) {
-			cards.removeIf(d -> d.checkRemoval(this, cards));
+			cards.removeIf(d -> d.checkRemoval(this, true, cards));
 		}
 
 		return cards;
@@ -418,7 +418,7 @@ public class Hand {
 
 	public BondedList<Drawable<?>> getRealDeck(boolean sweep) {
 		if (sweep) {
-			cards.removeIf(d -> d.checkRemoval(this, cards));
+			deck.removeIf(d -> d.checkRemoval(this, false, deck));
 		}
 
 		return deck;
@@ -729,7 +729,7 @@ public class Hand {
 
 	public BondedList<Drawable<?>> getGraveyard(boolean sweep) {
 		if (sweep) {
-			cards.removeIf(d -> d.checkRemoval(this, cards));
+			graveyard.removeIf(d -> d.checkRemoval(this, false, graveyard));
 		}
 
 		return graveyard;
@@ -741,7 +741,7 @@ public class Hand {
 
 	public BondedList<Drawable<?>> getDiscard(boolean sweep) {
 		if (sweep) {
-			cards.removeIf(d -> d.checkRemoval(this, cards));
+			discard.removeIf(d -> d.checkRemoval(this, false, discard));
 		}
 
 		return discard;

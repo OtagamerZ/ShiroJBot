@@ -32,7 +32,8 @@ public record WarnId(
 		String uid
 ) {
 	public WarnId(String gid, String uid) {
-		this(DAO.queryNative(Integer.class, "CREATE SEQUENCE IF NOT EXISTS warn_id_seq; SELECT nextval('warn_id_seq')"), gid, uid);
+		this(DAO.queryNative(Integer.class, "SELECT nextval('warn_id_seq')"), gid, uid);
+		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS warn_id_seq");
 	}
 
 	public WarnId {

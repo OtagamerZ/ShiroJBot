@@ -30,7 +30,8 @@ public record LevelRoleId(
 		String gid
 ) {
 	public LevelRoleId(String gid) {
-		this(DAO.queryNative(Integer.class, "CREATE SEQUENCE IF NOT EXISTS level_role_id_seq; SELECT nextval('level_role_id_seq')"), gid);
+		this(DAO.queryNative(Integer.class, "SELECT nextval('level_role_id_seq')"), gid);
+		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS level_role_id_seq");
 	}
 
 	public LevelRoleId {
