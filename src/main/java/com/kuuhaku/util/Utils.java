@@ -1220,8 +1220,12 @@ public abstract class Utils {
 	}
 
 	public static <T> T luckyRoll(Supplier<T> supplier, BiFunction<T, T, Boolean> comparator) {
+		return luckyRoll(supplier, comparator, 2);
+	}
+
+	public static <T> T luckyRoll(Supplier<T> supplier, BiFunction<T, T, Boolean> comparator, int rolls) {
 		T out = null;
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < rolls; i++) {
 			T roll = supplier.get();
 			if (out == null || comparator.apply(out, roll)) {
 				out = roll;
