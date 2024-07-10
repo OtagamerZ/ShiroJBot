@@ -1808,6 +1808,8 @@ public class Shoukan extends GameInstance<Phase> {
 		EffectParameters ep = new EffectParameters(trigger, side);
 
 		try {
+			triggerBindings(ep);
+
 			iterateSlots(side, s -> s.execute(new EffectParameters(trigger, side, s.asSource(trigger))));
 
 			Hand h = hands.get(side);
@@ -1832,6 +1834,8 @@ public class Shoukan extends GameInstance<Phase> {
 		EffectParameters ep = new EffectParameters(trigger, source.side(), source, targets);
 
 		try {
+			triggerBindings(ep);
+
 			boolean executed = source.execute(ep);
 			for (Target t : ep.targets()) {
 				t.execute(ep);
@@ -1847,7 +1851,7 @@ public class Shoukan extends GameInstance<Phase> {
 		return eots;
 	}
 
-	public void triggerEOTs(EffectParameters ep) {
+	public void triggerBindings(EffectParameters ep) {
 		for (TriggerBind binding : Set.copyOf(bindings)) {
 			if (binding.isBound(ep)) {
 				EffectHolder<?> holder = binding.getHolder();
@@ -1859,7 +1863,9 @@ public class Shoukan extends GameInstance<Phase> {
 				holder.execute(new EffectParameters(ON_DEFER_BINDING, ep.side(), new DeferredTrigger(null, ep.trigger()), ep.source(), ep.targets()));
 			}
 		}
+	}
 
+	public void triggerEOTs(EffectParameters ep) {
 		for (EffectOverTime effect : Set.copyOf(eots)) {
 			if (effect.isLocked()) continue;
 			else if (effect.isClosed()) {
