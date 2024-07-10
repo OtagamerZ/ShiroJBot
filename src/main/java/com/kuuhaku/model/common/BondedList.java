@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.Constants;
 import org.apache.commons.collections4.list.TreeList;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,6 +29,7 @@ import java.util.ListIterator;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.random.RandomGenerator;
 
 public class BondedList<T> extends TreeList<T> {
 	private final BiFunction<T, ListIterator<T>, Boolean> condition;
@@ -140,8 +142,16 @@ public class BondedList<T> extends TreeList<T> {
 		add(0, t);
 	}
 
-	public void addlast(T t) {
+	public void addLast(T t) {
 		add(size(), t);
+	}
+
+	public void addRandom(T t) {
+		addRandom(Constants.DEFAULT_RNG.get(), t);
+	}
+
+	public void addRandom(RandomGenerator rng, T t) {
+		add(rng.nextInt(size()), t);
 	}
 
 	@Override
