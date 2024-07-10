@@ -49,16 +49,12 @@ import com.kuuhaku.model.records.SelectionCard;
 import com.kuuhaku.model.records.shoukan.*;
 import com.kuuhaku.model.records.shoukan.history.Match;
 import com.kuuhaku.model.records.shoukan.history.Turn;
-import com.kuuhaku.model.records.shoukan.snapshot.Player;
-import com.kuuhaku.model.records.shoukan.snapshot.Slot;
-import com.kuuhaku.model.records.shoukan.snapshot.StateSnap;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
-import com.ygimenez.json.JSONUtils;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -71,7 +67,6 @@ import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -99,7 +94,6 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Set<TriggerBind> bindings = new HashSet<>();
 	private final List<Turn> turns = new TreeList<>();
 	private final JSONObject data = new JSONObject();
-	private final Map<Integer, StateSnap> snapshots = new HashMap<>();
 
 	private int tick;
 	private Side winner;
@@ -179,8 +173,6 @@ public class Shoukan extends GameInstance<Phase> {
 		arena.render(getLocale());
 
 		reportEvent("str/game_start", false, false, "<@" + curr.getUid() + ">");
-
-		snapshots.put(getTurn(), takeSnapshot());
 	}
 
 	@Override
@@ -1605,106 +1597,6 @@ public class Shoukan extends GameInstance<Phase> {
 		state = (byte) Bit32.set(state, 4, sending);
 	}
 
-	public StateSnap getSnapshot(int turn) {
-		return snapshots.get(turn);
-	}
-
-	public StateSnap takeSnapshot() {
-		try {
-			return new StateSnap(this);
-		} catch (IOException e) {
-			throw new RuntimeException("Failed to take snapshot", e);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public void restoreSnapshot(StateSnap snap) {
-		setRestoring(true);
-
-		try {
-			arena.getBanned().clear();
-			JSONArray banned = new JSONArray(IO.uncompress(snap.global().banned()));
-			for (Object o : banned) {
-				JSONObject jo = new JSONObject(o);
-				Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
-
-				getBanned().add(JSONUtils.fromJSON(String.valueOf(o), klass));
-			}
-
-			arena.setField(JSONUtils.fromJSON(IO.uncompress(snap.global().field()), Field.class));
-
-			for (Map.Entry<Side, Hand> entry : hands.entrySet()) {
-				Hand h = entry.getValue();
-				Player p = snap.players().get(entry.getKey());
-
-				h.getCards().clear();
-				JSONArray cards = new JSONArray(IO.uncompress(p.cards()));
-				for (Object o : cards) {
-					JSONObject jo = new JSONObject(o);
-					Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
-
-					h.getCards().add(JSONUtils.fromJSON(jo.toString(), klass));
-				}
-
-				h.getDiscard().clear();
-				JSONArray discard = new JSONArray(IO.uncompress(p.discard()));
-				for (Object o : discard) {
-					JSONObject jo = new JSONObject(o);
-					Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
-
-					h.getDiscard().add(JSONUtils.fromJSON(jo.toString(), klass));
-				}
-
-				h.getRealDeck().clear();
-				JSONArray deck = new JSONArray(IO.uncompress(p.deck()));
-				for (Object o : deck) {
-					JSONObject jo = new JSONObject(o);
-					Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
-
-					h.getRealDeck().add(JSONUtils.fromJSON(jo.toString(), klass));
-				}
-
-				h.getGraveyard().clear();
-				JSONArray graveyard = new JSONArray(IO.uncompress(p.graveyard()));
-				for (Object o : graveyard) {
-					JSONObject jo = new JSONObject(o);
-					Class<Drawable<?>> klass = (Class<Drawable<?>>) Class.forName(jo.getString("KLASS"));
-
-					h.getGraveyard().add(JSONUtils.fromJSON(jo.toString(), klass));
-				}
-			}
-
-			for (Map.Entry<Side, List<SlotColumn>> entry : getArena().getSlots().entrySet()) {
-				List<SlotColumn> slts = entry.getValue();
-				List<Slot> slots = snap.slots().get(entry.getKey());
-
-				for (int i = 0; i < slts.size(); i++) {
-					SlotColumn slt = slts.get(i);
-					Slot slot = slots.get(i);
-
-					slt.setState(slot.state());
-					slt.setTop(JSONUtils.fromJSON(IO.uncompress(slot.top()), Senshi.class));
-					if (slt.hasTop()) {
-						JSONArray equips = new JSONArray(IO.uncompress(slot.equips()));
-						for (Object o : equips) {
-							JSONObject jo = new JSONObject(o);
-
-							slt.getTop().getEquipments().add(JSONUtils.fromJSON(jo.toString(), Evogear.class));
-						}
-					}
-
-					slt.setBottom(JSONUtils.fromJSON(IO.uncompress(slot.bottom()), Senshi.class));
-				}
-			}
-
-			setRng(snap.global().rng());
-		} catch (IOException | ClassNotFoundException e) {
-			Constants.LOGGER.warn("Failed to restore snapshot", e);
-		} finally {
-			setRestoring(false);
-		}
-	}
-
 	public List<Senshi> getCards() {
 		return Arrays.stream(Side.values()).flatMap(s -> getCards(s).stream()).toList();
 
@@ -2687,8 +2579,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
 		reportEvent("str/game_turn_change", true, false, "<@" + curr.getUid() + ">", (int) Math.ceil(getTurn() / 2d));
-
-		snapshots.put(getTurn(), takeSnapshot());
 	}
 
 	public Side getWinner() {
