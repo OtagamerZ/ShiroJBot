@@ -143,7 +143,8 @@ public class StashScrapCommand implements Executable {
 						event.channel().sendMessage(locale.get("success/scrap")).queue();
 						acc.addCR(value, "Scrapped " + cards.stream().map(StashedCard::toString).collect(Collectors.joining(", ")));
 
-						Set<DAO<?>> batch = new HashSet<>();
+						List<String> batchKC = new ArrayList<>();
+						List<String> batchSC = new ArrayList<>();
 						Bag<String> items = new HashBag<>();
 						for (StashedCard sc : cards) {
 							if (sc.isChrome() && Calc.chance(50)) {
@@ -153,7 +154,7 @@ public class StashScrapCommand implements Executable {
 							if (sc.getType() == CardType.KAWAIPON) {
 								KawaiponCard kc = sc.getKawaiponCard();
 								if (kc != null) {
-									batch.add(kc);
+									batchKC.add(kc.getUUID());
 
 									Rarity rarity = kc.getCard().getRarity();
 									if (Calc.chance(Math.pow(2.15, 7 - rarity.getIndex()))) {
@@ -163,9 +164,10 @@ public class StashScrapCommand implements Executable {
 								}
 							}
 
-							batch.add(sc);
+							batchSC.add(sc.getUUID());
 						}
-						DAO.deleteBatch(batch);
+						DAO.applyNative(null, "DELETE FROM kawaipon_card WHERE uuid IN ?1", batchKC);
+						DAO.applyNative(null, "DELETE FROM stashed_card WHERE uuid IN ?1", batchSC);
 
 						if (!items.isEmpty()) {
 							AtomicInteger dist = new AtomicInteger();
