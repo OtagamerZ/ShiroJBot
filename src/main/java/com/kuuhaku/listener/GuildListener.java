@@ -307,7 +307,7 @@ public class GuildListener extends ListenerAdapter {
 							.parallelStream()
 							.map(LevelRole::getRole)
 							.filter(Objects::nonNull)
-							.filter(data.me()::canInteract)
+							.filter(r -> data.me().canInteract(r) && !r.isManaged())
 							.toList();
 
 					List<Role> toRemove = roles.values().parallelStream()
@@ -315,7 +315,7 @@ public class GuildListener extends ListenerAdapter {
 							.map(LevelRole::getRole)
 							.filter(Objects::nonNull)
 							.filter(r -> !toAdd.contains(r))
-							.filter(data.me()::canInteract)
+							.filter(r -> data.me().canInteract(r) && !r.isManaged())
 							.toList();
 
 					List<Role> toAnnounce = toAdd.parallelStream()
