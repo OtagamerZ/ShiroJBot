@@ -2302,7 +2302,7 @@ public class Shoukan extends GameInstance<Phase> {
 							reportEvent("str/draw_card", true, false, curr.getName(), rem, "s");
 						});
 					}
-				} else if (curr.getOrigins().major() == Race.DIVINITY) {
+				} else if (curr.getOrigins().major() == Race.DIVINITY && curr.getHP() > 1) {
 					helper.addAction(Utils.parseEmoji("1212407741046325308"), w -> {
 						if (isLocked()) return;
 
@@ -2316,7 +2316,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						Drawable<?> d = curr.manualDraw();
 						d.setEthereal(true);
-						curr.getRegDeg().add(-Math.max(2, curr.getBase().hp() * 0.08));
+						curr.consumeHP((int) Math.max(2, curr.getBase().hp() * 0.08), true);
 						Objects.requireNonNull(w.getHook())
 								.setEphemeral(true)
 								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
