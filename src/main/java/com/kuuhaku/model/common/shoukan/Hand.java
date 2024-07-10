@@ -716,7 +716,7 @@ public class Hand {
 
 					game.reportEvent("str/discard_card", true, false, getName(),
 							Utils.properlyJoin(game.getString("str/and")).apply(
-									cards.stream().map(SelectionCard::card).map(Drawable::toString).toList()
+									ds.stream().map(Drawable::toString).toList()
 							)
 					);
 				}
