@@ -55,7 +55,7 @@ public @interface Signature {
 		}
 
 		Type(@Language("RegExp") String regex) {
-			this.pattern = Pattern.compile("\\b" + regex + "\\b");
+			this.pattern = Pattern.compile("(?<=\\s)" + regex + "(?=\\s|$)");
 		}
 
 		public boolean validate(String value) {
