@@ -66,7 +66,7 @@ public class TransferCrCommand implements Executable {
 		}
 
 		try {
-			Utils.confirm(locale.get("question/transfer", Utils.separate(value) + " ₵R", target.getName()), event.channel(), w -> {
+			Utils.confirm(locale.get("question/transfer", locale.separate(value) + " ₵R", target.getName()), event.channel(), w -> {
 						acc.transfer(value, target.getId());
 						event.channel().sendMessage(locale.get("success/transfer")).queue();
 						return true;

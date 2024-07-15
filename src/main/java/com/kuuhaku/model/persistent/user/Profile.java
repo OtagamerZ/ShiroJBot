@@ -317,8 +317,8 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 
 		Map<String, Object> replaces = new HashMap<>();
 		replaces.put("guild", getGuild().getName());
-		replaces.put("g_rank", Utils.separate(account.getRanking()));
-		replaces.put("l_rank", Utils.separate(getRanking()));
+		replaces.put("g_rank", locale.separate(account.getRanking()));
+		replaces.put("l_rank", locale.separate(getRanking()));
 		replaces.put("xp", Utils.shorten(getXp()));
 		replaces.put("level", getLevel());
 

@@ -66,6 +66,6 @@ public class TradeAddCrCommand implements Executable {
 		}
 
 		trade.addSelfValue(event.user().getId(), offer);
-		event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), Utils.separate(offer) + " ₵R")).queue();
+		event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), locale.separate(offer) + " ₵R")).queue();
 	}
 }

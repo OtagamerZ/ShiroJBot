@@ -234,7 +234,7 @@ public class Trade {
                 .toList();
 
         XStringBuilder sb = new XStringBuilder("```asciidoc");
-        sb.appendNewLine("= " + Utils.separate(value) + " ₵R =");
+        sb.appendNewLine("= " + locale.separate(value) + " ₵R =");
 
         CardType type = null;
         for (StashedCard card : offers) {

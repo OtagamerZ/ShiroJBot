@@ -707,7 +707,7 @@ public abstract class Utils {
 		return Color.decode("#%06x".formatted(crc.getValue() & 0xFFFFFF));
 	}
 
-	public static String replaceTags(Member mb, Guild guild, String str) {
+	public static String replaceTags(I18N locale, Member mb, Guild guild, String str) {
 		Map<String, String> repls = new HashMap<>();
 		if (mb != null) {
 			repls.put("%user%", mb.getAsMention());
@@ -719,7 +719,7 @@ public abstract class Utils {
 
 		if (guild != null) {
 			repls.put("%guild%", guild.getName());
-			repls.put("%guild.users%", separate(guild.getMemberCount()));
+			repls.put("%guild.users%", locale.separate(guild.getMemberCount()));
 
 			Member owner = guild.getOwner();
 			if (owner != null) {
@@ -736,18 +736,6 @@ public abstract class Utils {
 		}
 
 		return str;
-	}
-
-	public static String separate(Object value) {
-		try {
-			Number n = value instanceof Number nb ? nb : NumberUtils.createNumber(String.valueOf(value));
-			DecimalFormat df = new DecimalFormat();
-			df.setGroupingSize(3);
-
-			return df.format(n);
-		} catch (NumberFormatException e) {
-			return String.valueOf(value);
-		}
 	}
 
 	public static CompletionStage<StashedCard> selectOption(I18N locale, GuildMessageChannel channel, Collection<StashedCard> cards, Card card, User user) {

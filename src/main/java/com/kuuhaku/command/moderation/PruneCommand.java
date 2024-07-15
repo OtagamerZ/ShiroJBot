@@ -48,9 +48,9 @@ import java.util.concurrent.ExecutionException;
         name = "prune",
         category = Category.MODERATION
 )
-@Signature(allowEmpty = true, value = {
+@Signature({
         "<amount:number:r>",
-        "<user:user:r> <amount:number>",
+        "<user:user:r> <amount:number:r>",
         "<action:word:r>[all]"
 })
 @Requires({Permission.MESSAGE_HISTORY, Permission.MANAGE_CHANNEL})

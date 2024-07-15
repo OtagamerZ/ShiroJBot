@@ -169,9 +169,10 @@ public class GuildListener extends ListenerAdapter {
 	private void buildAndSendJLEmbed(GuildConfig config, GuildMessageChannel channel, Member mb, String message, Set<String> headers, boolean join) {
 		GuildSettings settings = config.getSettings();
 
-		EmbedBuilder eb = new AutoEmbedBuilder(Utils.replaceTags(mb, mb.getGuild(), settings.getEmbed().toString()))
-				.setDescription(Utils.replaceTags(mb, mb.getGuild(), message))
-				.setTitle(Utils.replaceTags(mb, mb.getGuild(), config.getLocale().get(Utils.getRandomEntry(headers))));
+		I18N locale = config.getLocale();
+		EmbedBuilder eb = new AutoEmbedBuilder(Utils.replaceTags(locale, mb, mb.getGuild(), settings.getEmbed().toString()))
+				.setDescription(Utils.replaceTags(locale, mb, mb.getGuild(), message))
+				.setTitle(Utils.replaceTags(locale, mb, mb.getGuild(), config.getLocale().get(Utils.getRandomEntry(headers))));
 
 		MessageEmbed temp = eb.build();
 		if (temp.getThumbnail() == null) {

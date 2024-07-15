@@ -48,26 +48,26 @@ public @interface Signature {
 
 		CUSTOM;
 
-		private final Pattern regex;
+		private final Pattern pattern;
 
 		Type() {
-			this.regex =  null;
+			this.pattern =  null;
 		}
 
 		Type(@Language("RegExp") String regex) {
-			this.regex =  Pattern.compile(regex);
+			this.pattern = Pattern.compile("\\b" + regex + "\\b");
 		}
 
 		public boolean validate(String value) {
-			return regex == null || (!value.isBlank() && regex.matcher(value).matches());
+			return pattern == null || (!value.isBlank() && pattern.matcher(value).matches());
 		}
 
 		public String getRegex() {
-			return regex.toString();
+			return pattern.toString();
 		}
 
 		public Pattern getPattern() {
-			return regex;
+			return pattern;
 		}
 	}
 }

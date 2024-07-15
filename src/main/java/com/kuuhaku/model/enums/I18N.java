@@ -19,10 +19,12 @@
 package com.kuuhaku.model.enums;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.text.Uwuifier;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -72,7 +74,7 @@ public enum I18N {
 		for (int i = 0; i < args.length; i++) {
 			Object arg = args[i];
 			if (StringUtils.isNumeric(String.valueOf(arg))) {
-				args[i] = Utils.separate(arg);
+				args[i] = separate(arg);
 			}
 		}
 
@@ -119,5 +121,18 @@ public enum I18N {
 
 	public boolean isUwu() {
 		return name().startsWith("UWU");
+	}
+
+	public String separate(Object value) {
+		try {
+			Number n = value instanceof Number nb ? nb : NumberUtils.createNumber(String.valueOf(value));
+			DecimalFormat df = new DecimalFormat();
+			df.setGroupingSize(3);
+			df.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(locale));
+
+			return df.format(n);
+		} catch (NumberFormatException e) {
+			return String.valueOf(value);
+		}
 	}
 }
