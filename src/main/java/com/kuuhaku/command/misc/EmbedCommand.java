@@ -39,7 +39,7 @@ public class EmbedCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		try {
 			event.channel().sendMessageEmbeds(new AutoEmbedBuilder(args.getString("json")).build()).queue();
-		} catch (IllegalArgumentException e) {
+		} catch (Exception e) {
 			event.channel().sendMessage(locale.get("error/invalid_json")).queue();
 		}
 	}
