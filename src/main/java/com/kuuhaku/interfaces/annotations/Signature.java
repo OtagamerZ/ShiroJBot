@@ -41,10 +41,10 @@ public @interface Signature {
 		NUMBER("-?[\\d.]+"),
 		TEXT("\"[^\"]+\""),
 
-		USER(Message.MentionType.USER.getPattern().pattern()),
-		ROLE(Message.MentionType.ROLE.getPattern().pattern()),
-		CHANNEL(Message.MentionType.CHANNEL.getPattern().pattern()),
-		EMOTE(Message.MentionType.EMOJI.getPattern().pattern()),
+		USER(Message.MentionType.USER.getPattern()),
+		ROLE(Message.MentionType.ROLE.getPattern()),
+		CHANNEL(Message.MentionType.CHANNEL.getPattern()),
+		EMOTE(Message.MentionType.EMOJI.getPattern()),
 
 		CUSTOM;
 
@@ -55,7 +55,11 @@ public @interface Signature {
 		}
 
 		Type(@Language("RegExp") String regex) {
-			this.pattern = Pattern.compile("(?<=\\s|^)" + regex + "(?=\\s|$)");
+			this(Pattern.compile(regex));
+		}
+
+		Type(Pattern pattern) {
+			this.pattern = pattern;
 		}
 
 		public boolean validate(String value) {
