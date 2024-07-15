@@ -113,7 +113,7 @@ public class Hand {
 			return false;
 		}
 
-		return !d.isEthereal();
+		return true;
 	}, d -> d.setCurrentStack(getCards(false)), d -> d.setSolid(false));
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getDiscard(false).contains(d)) return false;
