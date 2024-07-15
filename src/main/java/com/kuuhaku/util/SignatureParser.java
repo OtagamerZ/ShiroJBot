@@ -109,65 +109,67 @@ public abstract class SignatureParser {
 					String token = null;
 					List<String> opts = List.of();
 
-					if (!fail) {
-						String arg = args.getFirst();
+					if (!args.isEmpty()) {
+						if (!fail) {
+							String arg = args.getFirst();
 
-						if (type == Signature.Type.CUSTOM) {
-							@Language("RegExp") String opt = groups.getString("options", "");
-							@Language("RegExp") String pattern = opt;
-							if (patterns != null) {
-								pattern = "^" + Arrays.stream(patterns).parallel()
-										.filter(p -> p.id().equals(opt))
-										.map(SigPattern::value)
-										.findAny().orElse(opt);
-							}
+							if (type == Signature.Type.CUSTOM) {
+								@Language("RegExp") String opt = groups.getString("options", "");
+								@Language("RegExp") String pattern = opt;
+								if (patterns != null) {
+									pattern = "^" + Arrays.stream(patterns).parallel()
+											.filter(p -> p.id().equals(opt))
+											.map(SigPattern::value)
+											.findAny().orElse(opt);
+								}
 
-							if (Utils.match(arg, pattern)) {
-								token = arg;
-							}
-						} else {
-							opts = Arrays.stream(groups.getString("options", "").split(","))
-									.filter(s -> !s.isBlank())
-									.map(String::toLowerCase)
-									.toList();
+								if (Utils.match(arg, pattern)) {
+									token = arg;
+								}
+							} else {
+								opts = Arrays.stream(groups.getString("options", "").split(","))
+										.filter(s -> !s.isBlank())
+										.map(String::toLowerCase)
+										.toList();
 
-							if (Utils.match(arg, type.getPattern())) {
-								token = arg;
-								if (!opts.isEmpty() && !opts.contains(token.toLowerCase())) {
-									token = null;
+								if (Utils.match(arg, type.getPattern())) {
+									token = arg;
+									if (!opts.isEmpty() && !opts.contains(token.toLowerCase())) {
+										token = null;
+									}
 								}
 							}
 						}
-					}
 
-					if (token != null) {
-						args.removeFirst();
-						token = StringUtils.stripAccents(token);
+						if (token != null) {
+							args.removeFirst();
+							token = StringUtils.stripAccents(token);
 
-						if (type.validate(token)) {
-							switch (type) {
-								case CHANNEL -> token = token.replaceAll("[<#>]", "");
-								case USER, ROLE -> token = token.replaceAll("[<@!>]", "");
-							}
-
-							if (out.has(name)) {
-								JSONArray arr;
-								if (out.get(name) instanceof List<?> ls) {
-									arr = new JSONArray(ls);
-								} else {
-									arr = new JSONArray();
-									Object curr = out.get(name);
-									arr.add(curr);
+							if (type.validate(token)) {
+								switch (type) {
+									case CHANNEL -> token = token.replaceAll("[<#>]", "");
+									case USER, ROLE -> token = token.replaceAll("[<@!>]", "");
 								}
-								arr.add(token);
 
-								out.put(name, arr);
-							} else {
-								out.put(name, token);
+								if (out.has(name)) {
+									JSONArray arr;
+									if (out.get(name) instanceof List<?> ls) {
+										arr = new JSONArray(ls);
+									} else {
+										arr = new JSONArray();
+										Object curr = out.get(name);
+										arr.add(curr);
+									}
+									arr.add(token);
+
+									out.put(name, arr);
+								} else {
+									out.put(name, token);
+								}
+
+								supplied.add(token);
+								matches++;
 							}
-
-							supplied.add(token);
-							matches++;
 						}
 					}
 
