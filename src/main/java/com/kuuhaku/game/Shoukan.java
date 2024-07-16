@@ -1370,6 +1370,8 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				if (hit) {
+					data.put("last_attacker_" + source.getSide().name().toLowerCase(), source);
+
 					for (Evogear e : source.getEquipments()) {
 						JSONArray charms = e.getCharms();
 
