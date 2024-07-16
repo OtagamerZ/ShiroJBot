@@ -2344,11 +2344,12 @@ public class Shoukan extends GameInstance<Phase> {
 											curr.getCards().removeAll(ds);
 
 											Evogear d = (Evogear) chosen.getFirst();
+											curr.getCards().add(d);
+
 											if (curr.getOrigins().isPure()) {
 												d.setFlag(Flag.EMPOWERED);
 											}
 
-											curr.getCards().add(d);
 											if (d.getTier() == 4 && d.hasFlag(Flag.EMPOWERED)) {
 												curr.getAccount().setDynValue("emp_tier_4", true);
 											}
