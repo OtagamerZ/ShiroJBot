@@ -2312,7 +2312,7 @@ public class Shoukan extends GameInstance<Phase> {
 							.filter(Drawable::isAvailable).map(d -> new SelectionCard(d, false))
 							.toList();
 
-					if (valid.size() >= 4) {
+					if (!valid.isEmpty()) {
 						helper.addAction(Utils.parseEmoji("\uD83C\uDF00"), w -> {
 							if (isLocked()) return;
 
@@ -2325,8 +2325,11 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							try {
-								curr.requestChoice(null, valid, 4, ds -> {
-									List<StashedCard> material = ds.stream().map(d -> new StashedCard(null, d)).toList();
+								curr.requestChoice(null, valid, null, ds -> {
+									List<StashedCard> material = ds.stream()
+											.map(d -> new StashedCard(null, d))
+											.peek(m -> m.setQuality(Math.max(0, 1 - curr.getHPPrcnt()) * 100))
+											.toList();
 
 									List<SelectionCard> pool = new ArrayList<>();
 									for (int j = 0; j < 3; j++) {
@@ -2348,7 +2351,7 @@ public class Shoukan extends GameInstance<Phase> {
 												curr.getAccount().setDynValue("emp_tier_4", true);
 											}
 
-											curr.setOriginCooldown(3);
+											curr.setOriginCooldown(1);
 											Objects.requireNonNull(w.getHook())
 													.setEphemeral(true)
 													.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))

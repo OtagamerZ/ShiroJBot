@@ -630,7 +630,7 @@ public class Hand {
 							List.of(
 									new SelectionCard(out, false),
 									new SelectionCard(out.withCopy(c -> {
-										((Evogear) c).getStats().getAttrMult().set(0.5);
+										((Evogear) c).getStats().getAttrMult().set(0.3);
 										c.getCurses().add(curse.getEffect());
 									}), false)
 							),
