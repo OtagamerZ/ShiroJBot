@@ -290,11 +290,6 @@ public enum Trigger {
 	ON_DEFER_BINDING,
 
 	/**
-	 * Triggers mirrored from attached player
-	 **/
-	ON_LEECH,
-
-	/**
 	 * Nothing <b>(DO NOT USE)</b>
 	 **/
 	NONE

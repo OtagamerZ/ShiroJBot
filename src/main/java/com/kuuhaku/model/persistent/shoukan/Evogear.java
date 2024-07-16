@@ -104,7 +104,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private transient Senshi equipper = null;
 	private transient CardExtra stats = new CardExtra();
 	private transient Hand hand = null;
-	private transient Hand leech = null;
 	private final transient CachedScriptManager cachedEffect = new CachedScriptManager();
 	private transient StashedCard stashRef = null;
 	private transient BondedList<?> currentStack;

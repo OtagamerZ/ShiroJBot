@@ -180,10 +180,6 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 		return referee != null && Utils.equalsAny(referee.trigger(), trigger);
 	}
 
-	public boolean leeched() {
-		return trigger == Trigger.ON_LEECH;
-	}
-
 	public EffectParameters forSide(Side side) {
 		return new EffectParameters(trigger, side, referee, source, targets);
 	}

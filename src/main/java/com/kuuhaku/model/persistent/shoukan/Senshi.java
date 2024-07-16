@@ -133,7 +133,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient CardExtra stats = new CardExtra();
 	private transient SlotColumn slot = null;
 	private transient Hand hand = null;
-	private transient Hand leech = null;
 	private transient Senshi target = null;
 	private transient Senshi lastInteraction = null;
 	private final transient CachedScriptManager cachedEffect = new CachedScriptManager();
@@ -1491,7 +1490,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		stats.clear();
 		base.unlockAll();
 		slot = null;
-		leech = null;
 		lastInteraction = null;
 
 		long base = 0b10;
