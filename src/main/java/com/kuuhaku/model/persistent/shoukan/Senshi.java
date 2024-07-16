@@ -375,6 +375,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		getSlot().replace(this, other);
 	}
 
+	public void augment(Senshi other) {
+		getSlot().replace(this, new AugmentSenshi(other, this));
+	}
+
 	public void swap(Senshi other) {
 		getSlot().swap(this, other);
 	}
