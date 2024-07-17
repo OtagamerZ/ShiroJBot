@@ -2216,6 +2216,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						Drawable<?> d = curr.manualDraw();
 						d.setEthereal(true);
+
 						curr.consumeHP((int) Math.max(2, curr.getBase().hp() * 0.08), true);
 						Objects.requireNonNull(w.getHook())
 								.setEphemeral(true)

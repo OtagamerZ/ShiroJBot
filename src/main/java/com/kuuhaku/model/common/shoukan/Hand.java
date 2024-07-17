@@ -114,7 +114,7 @@ public class Hand {
 		}
 
 		return true;
-	}, d -> d.setCurrentStack(getCards(false)), d -> d.setSolid(false));
+	}, d -> d.setCurrentStack(getCards(false)));
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getDiscard(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
@@ -406,10 +406,6 @@ public class Hand {
 		}
 
 		return cards;
-	}
-
-	public int getHandCount() {
-		return (int) cards.stream().filter(Drawable::isSolid).count();
 	}
 
 	public BondedList<Drawable<?>> getRealDeck() {

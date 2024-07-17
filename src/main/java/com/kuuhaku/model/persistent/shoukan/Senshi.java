@@ -147,15 +147,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private long state = 0b10;
 	/*
 	0x0000 000 FF FFFFF FF
-	           ││ │││││ └┴ 1111 1111
-	           ││ │││││    ││││ │││└ solid
-	           ││ │││││    ││││ ││└─ available
-	           ││ │││││    ││││ │└── defending
-	           ││ │││││    ││││ └─── flipped
-	           ││ │││││    │││└ sealed
-	           ││ │││││    ││└─ switched
-	           ││ │││││    │└── ethereal
-	           ││ │││││    └─── manipulated
+	           ││ │││││ └┴ 0 111 1111
+	           ││ │││││      │││ │││└─ available
+	           ││ │││││      │││ ││└── defending
+	           ││ │││││      │││ │└─── flipped
+	           ││ │││││      │││ └──── sealed
+	           ││ │││││      ││└─ switched
+	           ││ │││││      │└── ethereal
+	           ││ │││││      └─── manipulated
 	           ││ ││││└─ (0 - 15) sleeping
 	           ││ │││└── (0 - 15) stunned
 	           ││ ││└─── (0 - 15) stasis
@@ -799,24 +798,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public boolean isSolid() {
-		return !isEthereal() && Bit64.on(state, 0) && !base.getTags().contains("FUSION");
-	}
-
-	@Override
-	public void setSolid(boolean solid) {
-		state = Bit64.set(state, 0, solid);
-	}
-
-	@Override
 	public boolean isAvailable() {
-		return Bit64.on(state, 1) && !isStasis() && !isStunned() && !isSleeping();
+		return Bit64.on(state, 0) && !isStasis() && !isStunned() && !isSleeping();
 	}
 
 	@Override
 	public void setAvailable(boolean available) {
 		boolean was = isAvailable();
-		state = Bit64.set(state, 1, available);
+		state = Bit64.set(state, 0, available);
 
 		if (!was && isAvailable()) {
 			resetAttacks();
@@ -824,11 +813,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isDefending() {
-		return isFlipped() || Bit64.on(state, 2) || hasFlag(Flag.ALWAYS_DEFENSE);
+		return isFlipped() || Bit64.on(state, 1) || hasFlag(Flag.ALWAYS_DEFENSE);
 	}
 
 	public void setDefending(boolean defending) {
-		state = Bit64.set(state, 2, defending);
+		state = Bit64.set(state, 1, defending);
 
 		if (!isFlipped() && slot != null) {
 			getGame().trigger(ON_SWITCH, asSource(ON_SWITCH));
@@ -837,14 +826,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public boolean isFlipped() {
-		return Bit64.on(state, 3);
+		return Bit64.on(state, 2);
 	}
 
 	@Override
 	public void setFlipped(boolean flipped) {
 		boolean trigger = isFlipped() && !flipped && slot != null;
 
-		state = Bit64.set(state, 3, flipped);
+		state = Bit64.set(state, 2, flipped);
 		if (trigger) {
 			setDefending(true);
 
@@ -859,39 +848,39 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isSealed() {
-		return Bit64.on(state, 4);
+		return Bit64.on(state, 3);
 	}
 
 	public void setSealed(boolean sealed) {
-		state = Bit64.set(state, 4, sealed);
+		state = Bit64.set(state, 3, sealed);
 	}
 
 	public boolean hasSwitched() {
-		return Bit64.on(state, 5);
+		return Bit64.on(state, 4);
 	}
 
 	public void setSwitched(boolean switched) {
-		state = Bit64.set(state, 5, switched);
+		state = Bit64.set(state, 4, switched);
 	}
 
 	@Override
 	public boolean isEthereal() {
-		return Bit64.on(state, 6);
+		return Bit64.on(state, 5);
 	}
 
 	@Override
 	public void setEthereal(boolean ethereal) {
-		state = Bit64.set(state, 6, ethereal);
+		state = Bit64.set(state, 5, ethereal);
 	}
 
 	@Override
 	public boolean isManipulated() {
-		return Bit64.on(state, 7);
+		return Bit64.on(state, 6);
 	}
 
 	@Override
 	public void setManipulated(boolean manipulated) {
-		state = Bit64.set(state, 7, manipulated);
+		state = Bit64.set(state, 6, manipulated);
 	}
 
 	public boolean isSleeping() {

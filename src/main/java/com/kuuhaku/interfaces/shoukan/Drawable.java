@@ -170,10 +170,6 @@ public interface Drawable<T extends Drawable<T>> {
 		return new ListOrderedSet<>();
 	}
 
-	boolean isSolid();
-
-	void setSolid(boolean solid);
-
 	boolean isAvailable();
 
 	void setAvailable(boolean available);
