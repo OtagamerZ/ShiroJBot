@@ -337,13 +337,13 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
 
 					if (isEthereal()) {
-						BufferedImage emp = IO.getResourceAsImage(path + "/ethereal.png");
-						g2d.drawImage(emp, 0, 0, null);
+						BufferedImage ovr = IO.getResourceAsImage(path + "/ethereal.png");
+						g2d.drawImage(ovr, 0, 0, null);
 					}
 
 					if (isManipulated()) {
-						BufferedImage emp = IO.getResourceAsImage("/locked.png");
-						g2d.drawImage(emp, 0, 0, null);
+						BufferedImage ovr = IO.getResourceAsImage("shoukan/states/locked.png");
+						g2d.drawImage(ovr, 15, 15, null);
 					}
 				}
 			}

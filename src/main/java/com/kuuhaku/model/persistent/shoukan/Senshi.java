@@ -1566,18 +1566,18 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					}
 
 					if (hasFlag(Flag.EMPOWERED)) {
-						BufferedImage emp = IO.getResourceAsImage(path + "/empowered.png");
-						g2d.drawImage(emp, 0, 0, null);
+						BufferedImage ovr = IO.getResourceAsImage(path + "/empowered.png");
+						g2d.drawImage(ovr, 0, 0, null);
 					}
 
 					if (isEthereal()) {
-						BufferedImage emp = IO.getResourceAsImage(path + "/ethereal.png");
-						g2d.drawImage(emp, 0, 0, null);
+						BufferedImage ovr = IO.getResourceAsImage(path + "/ethereal.png");
+						g2d.drawImage(ovr, 0, 0, null);
 					}
 
 					if (isManipulated()) {
-						BufferedImage emp = IO.getResourceAsImage(path + "/locked.png");
-						g2d.drawImage(emp, 0, 0, null);
+						BufferedImage ovr = IO.getResourceAsImage("shoukan/states/locked.png");
+						g2d.drawImage(ovr, 15, 15, null);
 					}
 				}
 			}
