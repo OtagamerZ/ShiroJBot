@@ -152,8 +152,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	           ││ │││││      │││ ││└── defending
 	           ││ │││││      │││ │└─── flipped
 	           ││ │││││      │││ └──── sealed
-	           ││ │││││      ││└─ switched
-	           ││ │││││      │└── ethereal
+	           ││ │││││      ││└─ ethereal
+	           ││ │││││      │└── switched
 	           ││ │││││      └─── manipulated
 	           ││ ││││└─ (0 - 15) sleeping
 	           ││ │││└── (0 - 15) stunned
@@ -855,22 +855,22 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		state = Bit64.set(state, 3, sealed);
 	}
 
-	public boolean hasSwitched() {
-		return Bit64.on(state, 4);
-	}
-
-	public void setSwitched(boolean switched) {
-		state = Bit64.set(state, 4, switched);
-	}
-
 	@Override
 	public boolean isEthereal() {
-		return Bit64.on(state, 5);
+		return Bit64.on(state, 4);
 	}
 
 	@Override
 	public void setEthereal(boolean ethereal) {
-		state = Bit64.set(state, 5, ethereal);
+		state = Bit64.set(state, 4, ethereal);
+	}
+
+	public boolean hasSwitched() {
+		return Bit64.on(state, 5);
+	}
+
+	public void setSwitched(boolean switched) {
+		state = Bit64.set(state, 5, switched);
 	}
 
 	@Override
@@ -1645,7 +1645,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Senshi clone = new Senshi(id, card, race, base.clone());
 		clone.stats = stats.clone();
 		clone.hand = hand;
-		clone.state = state & 0b101111;
+		clone.state = state & 0b11111;
 		clone.stashRef = stashRef;
 
 		return clone;
