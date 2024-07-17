@@ -632,7 +632,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		stats.clear();
 		base.unlockAll();
 
-		state = 0b10;
+		state = 0b1;
 	}
 
 	@Override

@@ -144,7 +144,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient Trigger currentTrigger = null;
 
 	@Transient
-	private long state = 0b10;
+	private long state = 0b1;
 	/*
 	0x0000 000 FF FFFFF FF
 	           ││ │││││ └┴ 0 111 1111
@@ -1477,7 +1477,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		slot = null;
 		lastInteraction = null;
 
-		long base = 0b10;
+		long base = 0b1;
 		base = Bit64.set(base, 4, isSealed());
 
 		state = base;
