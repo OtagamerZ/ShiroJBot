@@ -27,6 +27,10 @@ BEGIN
         FROM %1$s
         WHERE tags \?& '%2$s'
         %3$s
-        $$, $1, $2, iif(lower($1) = 'senshi', 'OR race = ANY(''%2$s'')', cast('' AS VARCHAR)));
-END;
+        $$, $1, $2, iif(
+            lower($1) = 'senshi',
+            cast('OR race = ANY(''{' || array_to_string($2, ',') || '}'')' AS VARCHAR),
+            cast('' AS VARCHAR)
+        ));
+END
 $body$;
