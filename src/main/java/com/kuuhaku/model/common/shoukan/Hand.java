@@ -114,7 +114,7 @@ public class Hand {
 		}
 
 		return true;
-	}, d -> d.setCurrentStack(getCards(false)));
+	}, d -> d.setCurrentStack(getCards(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getDiscard(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
