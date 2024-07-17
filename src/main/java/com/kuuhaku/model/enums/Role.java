@@ -19,5 +19,8 @@
 package com.kuuhaku.model.enums;
 
 public enum Role {
-	REVIEWER, TESTER, SUPPORT, DEVELOPER
+	REVIEWER, // 1
+	TESTER, // 2
+	SUPPORT, // 4
+	DEVELOPER // 8
 }
