@@ -62,7 +62,8 @@ public class BondedList<T> extends TreeList<T> {
 	}
 
 	public BondedList(BiFunction<T, ListIterator<T>, Boolean> condition, Consumer<T> onRemove) {
-		this(condition, t -> {}, onRemove);
+		this(condition, t -> {
+		}, onRemove);
 	}
 
 	public BondedList(BiFunction<T, ListIterator<T>, Boolean> condition, Consumer<T> onAdd, Consumer<T> onRemove) {
@@ -151,7 +152,8 @@ public class BondedList<T> extends TreeList<T> {
 	}
 
 	public void addRandom(RandomGenerator rng, T t) {
-		add(rng.nextInt(size()), t);
+		if (isEmpty()) add(t);
+		else add(rng.nextInt(size()), t);
 	}
 
 	@Override
