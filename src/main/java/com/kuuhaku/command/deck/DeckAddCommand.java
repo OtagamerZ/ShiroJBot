@@ -136,7 +136,7 @@ public class DeckAddCommand implements Executable {
 		}
 
 		switch (sc.getType()) {
-			case KAWAIPON, SENSHI -> {
+			case SENSHI -> {
 				Senshi s = sc.getCard().asSenshi();
 
 				if (s.isFusion()) {

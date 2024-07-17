@@ -144,9 +144,10 @@ public class SeeCardCommand implements Executable {
 				}
 
 				Drawable<?> d = switch (types.getLast()) {
-					case KAWAIPON, SENSHI -> card.asSenshi();
+					case SENSHI -> card.asSenshi();
 					case EVOGEAR -> card.asEvogear();
 					case FIELD -> card.asField();
+					default -> null;
 				};
 
 				if (d == null) {
