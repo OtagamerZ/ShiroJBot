@@ -164,6 +164,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		return spell && equipper == null;
 	}
 
+	public boolean isParasite() {
+		return base.getTags().contains("PARASITE");
+	}
+
 	public TargetType getTargetType() {
 		if (stats.getSource() instanceof Senshi s) {
 			return s.getTargetType();

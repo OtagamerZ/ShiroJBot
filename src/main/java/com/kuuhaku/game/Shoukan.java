@@ -521,7 +521,13 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
+		SlotColumn slot;
+		if (chosen.isParasite()) {
+			slot = arena.getSlots(curr.getSide().getOther()).get(args.getInt("inField") - 1);
+		} else {
+			slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
+		}
+
 		if (!slot.hasTop()) {
 			getChannel().sendMessage(getString("error/missing_card", slot.getIndex() + 1)).queue();
 			return false;
