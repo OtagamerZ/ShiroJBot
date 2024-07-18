@@ -69,6 +69,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -1297,6 +1298,10 @@ public class Shoukan extends GameInstance<Phase> {
 									hit = false;
 								} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_BLOCK, true) || chance(block))) {
 									outcome = getString("str/combat_block", block);
+									if (target.hasFlag(Flag.TRUE_BLOCK)) {
+										outcome += " **(" + getString("flag/true_block") + ")**";
+									}
+
 									trigger(NONE, source.asSource(), target.asTarget(ON_BLOCK));
 
 									source.setStun(1);
@@ -1305,6 +1310,10 @@ public class Shoukan extends GameInstance<Phase> {
 									hit = false;
 								} else if (!source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_DODGE, true) || chance(dodge))) {
 									outcome = getString("str/combat_dodge", dodge);
+									if (target.hasFlag(Flag.TRUE_DODGE)) {
+										outcome += " **(" + getString("flag/true_dodge") + ")**";
+									}
+
 									trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
 
 									dmg = 0;
@@ -1312,6 +1321,10 @@ public class Shoukan extends GameInstance<Phase> {
 								} else {
 									if (unstop || dmg > enemyStats) {
 										outcome = getString("str/combat_success", dmg, enemyStats);
+										if (source.hasFlag(Flag.UNSTOPPABLE)) {
+											outcome += " **(" + getString("flag/unstoppable") + ")**";
+										}
+
 										trigger(ON_HIT, source.asSource(ON_HIT), target.asTarget(ON_LOSE));
 
 										if (target.isDefending() || target.hasFlag(Flag.NO_DAMAGE, true)) {
@@ -1982,6 +1995,7 @@ public class Shoukan extends GameInstance<Phase> {
 							try {
 								byte[] bytes = IO.getBytes(img.get(), "png");
 								m.editMessageAttachments(FileUpload.fromData(bytes, "game.png")).queue(null, Utils::doNothing);
+							} catch (CancellationException ignore) {
 							} catch (ExecutionException | InterruptedException e) {
 								throw new RuntimeException(e);
 							}
