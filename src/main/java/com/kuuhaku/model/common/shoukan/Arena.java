@@ -50,10 +50,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class Arena implements Renderer {
+	private final ExecutorService RENDER = Executors.newSingleThreadScheduledExecutor();
 	private final Point MARGIN = new Point(25, 25);
 	public final Dimension SIZE = new Dimension(
 			(225 + MARGIN.x * 2) * 5 /* slots */ + (225 + MARGIN.x * 2) * 4 /* side stacks */,
@@ -114,6 +117,7 @@ public class Arena implements Renderer {
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
 	private final BufferedImage canvas = new BufferedImage(SIZE.width, SIZE.height + BAR_SIZE.height * 2, BufferedImage.TYPE_INT_ARGB);
+	private CompletableFuture<BufferedImage> renderTask;
 	private BufferedImage thumbnail;
 	private Field field = null;
 
@@ -182,26 +186,37 @@ public class Arena implements Renderer {
 	}
 
 	@Override
-	public BufferedImage render(I18N locale) {
-		Graphics2D g2d = canvas.createGraphics();
-		g2d.setRenderingHints(Constants.SD_HINTS);
-
-		Graph.applyTransformed((Graphics2D) g2d.create(), 0, BAR_SIZE.height, drawCenter());
-		for (Hand h : game.getHands().values()) {
-			Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(h));
+	public CompletableFuture<BufferedImage> render(I18N locale) {
+		if (renderTask != null) {
+			renderTask.cancel(true);
+			renderTask = null;
 		}
 
-		try {
-			thumbnail = Thumbnails.of(canvas)
-					.width(SIZE.width / 3)
-					.addFilter(new BlurFilter(25))
-					.outputFormat("png")
-					.asBufferedImage();
-		} catch (IOException e) {
-			Constants.LOGGER.error(e, e);
-		}
+		return renderTask = CompletableFuture.supplyAsync(() -> {
+			Graphics2D g2d = canvas.createGraphics();
+			g2d.setRenderingHints(Constants.SD_HINTS);
 
-		return canvas;
+			Graph.applyTransformed((Graphics2D) g2d.create(), 0, BAR_SIZE.height, drawCenter());
+			for (Hand h : game.getHands().values()) {
+				Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(h));
+			}
+
+			try {
+				thumbnail = Thumbnails.of(canvas)
+						.width(SIZE.width / 3)
+						.addFilter(new BlurFilter(25))
+						.outputFormat("png")
+						.asBufferedImage();
+			} catch (IOException e) {
+				Constants.LOGGER.error(e, e);
+			}
+
+			try {
+				return canvas;
+			} finally {
+				renderTask = null;
+			}
+		}, RENDER);
 	}
 
 	public BufferedImage renderEvogears() {

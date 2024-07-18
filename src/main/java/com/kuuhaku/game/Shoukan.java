@@ -170,7 +170,12 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.modMP(curr.getBase().mpGain().get());
 
 		trigger(ON_TURN_BEGIN, curr.getSide());
-		arena.render(getLocale());
+
+		try {
+			arena.render(getLocale()).get();
+		} catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e);
+		}
 
 		reportEvent("str/game_start", false, false, "<@" + curr.getUid() + ">");
 	}
@@ -1952,9 +1957,8 @@ public class Shoukan extends GameInstance<Phase> {
 				});
 			}
 
-			CompletableFuture<byte[]> bytes = CompletableFuture.supplyAsync(() ->
-					IO.getBytes(arena.render(getLocale()), "png")
-			);
+			CompletableFuture<byte[]> bytes = arena.render(getLocale())
+					.thenApply(bi -> IO.getBytes(bi, "png"));
 
 			ButtonizeHelper helper = getButtons();
 			AtomicBoolean registered = new AtomicBoolean();
@@ -2009,7 +2013,7 @@ public class Shoukan extends GameInstance<Phase> {
 		AtomicBoolean registered = new AtomicBoolean();
 
 		try {
-			BufferedImage img = arena.render(getLocale());
+			BufferedImage img = arena.render(getLocale()).get();
 			byte[] bytes = IO.getBytes(img, "png");
 			msg.addFile(bytes, "game.png");
 		} catch (Exception ignore) {
