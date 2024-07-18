@@ -146,14 +146,14 @@ public class SlotColumn {
 				card.getStats().removeIf(v ->
 						!(v instanceof PermMod)
 						&& !v.getSource().equals(card)
-						&& !Utils.equalsAny(v.getSource(), (List<?>) card.getEquipments())
+						&& (v.getSource() instanceof Evogear ev && !card.getEquipments().contains(ev))
 				);
 
 				for (Evogear e : card.getEquipments()) {
 					e.getStats().removeIf(v ->
 							!(v instanceof PermMod)
 							&& !v.getSource().equals(card)
-							&& !Utils.equalsAny(v.getSource(), (List<?>) card.getEquipments())
+							&& (v.getSource() instanceof Evogear ev && !card.getEquipments().contains(ev))
 					);
 				}
 			}
