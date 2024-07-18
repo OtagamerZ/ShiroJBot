@@ -192,15 +192,19 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Map.entry("data", getStats().getData())
 		);
 
-		CachedScriptManager csm = getCSM();
-		if (csm.getPropHash().intValue() != values.hashCode()) {
-			csm.getStoredProps().clear();
-		}
-
 		String desc = getDescription(locale);
 		Matcher pat = Utils.regex(desc, "(?:\\{=(.*?)}|\\{(\\w+)})(%)?");
-		Map<String, AtomicInteger> counter = new HashMap<>();
+		Map<String, Integer> counter = new HashMap<>();
+		int hash = Objects.hash(desc, values);
 
+		CachedScriptManager csm = getCSM();
+		boolean cached = csm.getPropHash().intValue() == hash;
+		if (!cached) {
+			csm.getStoredProps().clear();
+		}
+		csm.getPropHash().set(hash);
+
+		JSONObject props = csm.getStoredProps();
 		return pat.replaceAll(m -> {
 			boolean tag = m.group(2) != null;
 			boolean prcnt = m.group(3) != null;
@@ -215,30 +219,31 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				String main = types.stream().map(String::valueOf).findFirst().orElse(null);
 
-				JSONObject props = csm.getStoredProps();
-				String val = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
+				if (!cached) {
+					String val = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
 
-				for (Object type : types) {
-					props.compute(String.valueOf(type), (k, v) -> {
-						double power = getPower();
-						if (h.getOrigins().synergy() == Race.FABLED) {
-							power = 1;
-						}
+					for (Object type : types) {
+						props.compute(String.valueOf(type), (k, v) -> {
+							double power = getPower();
+							if (h.getOrigins().synergy() == Race.FABLED) {
+								power = 1;
+							}
 
-						int value = Calc.round(NumberUtils.toDouble(val) * power / equips);
+							int value = Calc.round(NumberUtils.toDouble(val) * power / equips);
 
-						if (v == null) {
-							return value;
-						} else if (v instanceof JSONArray a) {
-							a.add(value);
-							return a;
-						}
+							if (v == null) {
+								return value;
+							} else if (v instanceof JSONArray a) {
+								a.add(value);
+								return a;
+							}
 
-						return new JSONArray(List.of(v, value));
-					});
+							return new JSONArray(List.of(v, value));
+						});
+					}
 				}
 
-				int it = counter.computeIfAbsent(main, k -> new AtomicInteger()).getAndIncrement();
+				int it = counter.compute(main, (k, v) -> Utils.getOr(v, 0) + 1);
 
 				Object prop = props.get(main, "");
 				if (prop instanceof JSONArray a) {
