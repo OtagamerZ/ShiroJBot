@@ -50,9 +50,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
 public class Arena implements Renderer {
@@ -117,7 +117,7 @@ public class Arena implements Renderer {
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
 	private final BufferedImage canvas = new BufferedImage(SIZE.width, SIZE.height + BAR_SIZE.height * 2, BufferedImage.TYPE_INT_ARGB);
-	private CompletableFuture<BufferedImage> renderTask;
+	private Future<BufferedImage> renderTask;
 	private BufferedImage thumbnail;
 	private Field field = null;
 
@@ -186,13 +186,13 @@ public class Arena implements Renderer {
 	}
 
 	@Override
-	public CompletableFuture<BufferedImage> render(I18N locale) {
+	public Future<BufferedImage> render(I18N locale) {
 		if (renderTask != null) {
 			renderTask.cancel(true);
 			renderTask = null;
 		}
 
-		return renderTask = CompletableFuture.supplyAsync(() -> {
+		return renderTask = RENDER.submit(() -> {
 			Graphics2D g2d = canvas.createGraphics();
 			g2d.setRenderingHints(Constants.SD_HINTS);
 
@@ -216,7 +216,7 @@ public class Arena implements Renderer {
 			} finally {
 				renderTask = null;
 			}
-		}, RENDER);
+		});
 	}
 
 	public BufferedImage renderEvogears() {

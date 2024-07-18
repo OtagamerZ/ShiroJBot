@@ -21,10 +21,10 @@ package com.kuuhaku.game.engine;
 import com.kuuhaku.model.enums.I18N;
 
 import java.awt.image.BufferedImage;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 public interface Renderer {
-	default CompletableFuture<BufferedImage> render(I18N locale) {
+	default Future<BufferedImage> render(I18N locale) {
 		throw new IllegalStateException("Not implemented");
 	}
 }
