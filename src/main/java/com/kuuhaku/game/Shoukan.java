@@ -1842,11 +1842,11 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 	}
 
-	public void bind(EffectHolder<?> self, EnumMap<Side, EnumSet<Trigger>> binds) {
+	public void bind(EffectHolder<?> self, EnumMap<TriggerBind.Target, EnumSet<Trigger>> binds) {
 		bindings.add(new TriggerBind(self, binds));
 	}
 
-	public void bind(EffectHolder<?> self, EnumMap<Side, EnumSet<Trigger>> binds, boolean permanent) {
+	public void bind(EffectHolder<?> self, EnumMap<TriggerBind.Target, EnumSet<Trigger>> binds, boolean permanent) {
 		bindings.add(new TriggerBind(self, binds, permanent));
 	}
 

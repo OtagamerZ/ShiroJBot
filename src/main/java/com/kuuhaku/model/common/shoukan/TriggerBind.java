@@ -19,38 +19,41 @@
 package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
-import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
+import org.apache.commons.collections4.SetUtils;
 
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class TriggerBind {
+	public enum Target {
+		SAME, OTHER, BOTH
+	}
+
 	private final EffectHolder<?> holder;
-	private final EnumMap<Side, EnumSet<Trigger>> binds;
+	private final EnumMap<Target, EnumSet<Trigger>> binds;
 	private final boolean permanent;
 
-	public TriggerBind(EffectHolder<?> holder, EnumMap<Side, EnumSet<Trigger>> binds) {
+	public TriggerBind(EffectHolder<?> holder, EnumMap<Target, EnumSet<Trigger>> binds) {
 		this(holder, binds, false);
 	}
 
 	public TriggerBind(EffectHolder<?> holder, EnumSet<Trigger> binds) {
-		this(holder, new EnumMap<>(Map.of(Side.TOP, binds, Side.BOTTOM, binds)), false);
+		this(holder, binds, false);
 	}
 
 	public TriggerBind(EffectHolder<?> holder, EnumSet<Trigger> binds, boolean permanent) {
-		this.holder = holder;
-		this.binds = new EnumMap<>(Map.of(Side.TOP, binds, Side.BOTTOM, binds));
-		this.permanent = permanent;
+		this(holder, new EnumMap<>(Map.of(Target.BOTH, binds)), permanent);
 	}
 
-	public TriggerBind(EffectHolder<?> holder, EnumMap<Side, EnumSet<Trigger>> binds, boolean permanent) {
+	public TriggerBind(EffectHolder<?> holder, EnumMap<Target, EnumSet<Trigger>> binds, boolean permanent) {
 		this.holder = holder;
 		this.binds = binds;
 		this.permanent = permanent;
+
+		for (Target t : Target.values()) {
+			this.binds.computeIfAbsent(t, k -> EnumSet.noneOf(Trigger.class));
+		}
 	}
 
 	public EffectHolder<?> getHolder() {
@@ -58,7 +61,10 @@ public class TriggerBind {
 	}
 
 	public boolean isBound(EffectParameters ep) {
-		return binds.containsKey(ep.side()) && binds.get(ep.side()).contains(ep.trigger());
+		Target tgt = ep.side() == holder.getSide() ? Target.SAME : Target.OTHER;
+		Set<Trigger> trigs = SetUtils.union(binds.get(tgt), binds.get(Target.BOTH));
+
+		return trigs.contains(ep.trigger());
 	}
 
 	public boolean isPermanent() {
