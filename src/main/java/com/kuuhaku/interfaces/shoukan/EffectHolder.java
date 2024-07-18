@@ -199,6 +199,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 		CachedScriptManager csm = getCSM();
 		boolean stale = csm.getPropHash().intValue() != hash;
+		if (stale) {
+			csm.getStoredProps().clear();
+		}
 
 		JSONObject props = csm.getStoredProps();
 		try {
