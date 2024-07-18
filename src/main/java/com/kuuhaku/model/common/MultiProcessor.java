@@ -67,7 +67,8 @@ public class MultiProcessor<In, Out> {
 			exec.shutdownNow();
 			exec.close();
 			return finished;
-		} catch (ExecutionException | InterruptedException e) {
+		} catch (InterruptedException ignore) {
+		} catch (ExecutionException e) {
 			Constants.LOGGER.error(e, e);
 			return null;
 		}
