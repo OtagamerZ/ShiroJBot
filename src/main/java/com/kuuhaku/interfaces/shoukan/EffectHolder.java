@@ -198,6 +198,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		int hash = Objects.hash(desc, values);
 
 		CachedScriptManager csm = getCSM();
+		boolean stale = csm.getPropHash().intValue() != hash;
+
 		JSONObject props = csm.getStoredProps();
 		try {
 			return pat.replaceAll(m -> {
@@ -214,7 +216,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 					String main = types.stream().map(String::valueOf).findFirst().orElse(null);
 
-					if (csm.getPropHash().intValue() != hash) {
+					if (stale) {
 						String val = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
 
 						for (Object type : types) {

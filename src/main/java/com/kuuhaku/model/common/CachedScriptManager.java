@@ -59,6 +59,8 @@ public class CachedScriptManager {
 	public CachedScriptManager assertOwner(EffectHolder<?> owner, Runnable elseDo) {
 		if (!Objects.equals(this.owner, owner)) {
 			storedProps.clear();
+			propHash.set(0);
+
 			this.owner = owner;
 			elseDo.run();
 		}
