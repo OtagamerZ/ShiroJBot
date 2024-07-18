@@ -70,8 +70,9 @@ public class MultiProcessor<In, Out> {
 		} catch (InterruptedException ignore) {
 		} catch (ExecutionException e) {
 			Constants.LOGGER.error(e, e);
-			return null;
 		}
+
+		return null;
 	}
 
 	public Out process(Function<In, Out> task, Function<List<Out>, Out> merger) {
