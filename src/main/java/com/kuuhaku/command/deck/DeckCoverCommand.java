@@ -39,7 +39,7 @@ import net.dv8tion.jda.api.Permission;
 		path = "cover",
 		category = Category.MISC
 )
-@Signature("<anime:word:r>")
+@Signature("<anime:word>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class DeckCoverCommand implements Executable {
 	@Override
@@ -50,20 +50,25 @@ public class DeckCoverCommand implements Executable {
 			return;
 		}
 
-		Anime anime = DAO.find(Anime.class, args.getString("anime").toUpperCase());
-		if (anime == null || !anime.isVisible()) {
-			String sug = Utils.didYouMean(args.getString("anime"), "SELECT id AS value FROM anime WHERE visible");
-			if (sug == null) {
-				event.channel().sendMessage(locale.get("error/unknown_anime_none")).queue();
-			} else {
-				event.channel().sendMessage(locale.get("error/unknown_anime", sug)).queue();
+		if (!args.has("anime")) {
+			d.getStyling().setCover(null);
+			event.channel().sendMessage(locale.get("success/deck_cover_remove")).queue();
+		} else {
+			Anime anime = DAO.find(Anime.class, args.getString("anime").toUpperCase());
+			if (anime == null || !anime.isVisible()) {
+				String sug = Utils.didYouMean(args.getString("anime"), "SELECT id AS value FROM anime WHERE visible");
+				if (sug == null) {
+					event.channel().sendMessage(locale.get("error/unknown_anime_none")).queue();
+				} else {
+					event.channel().sendMessage(locale.get("error/unknown_anime", sug)).queue();
+				}
+				return;
 			}
-			return;
+
+			d.getStyling().setCover(anime.getCover());
+			event.channel().sendMessage(locale.get("success/deck_cover", anime)).queue();
 		}
 
-		d.getStyling().setCover(anime.getCover());
 		d.save();
-
-		event.channel().sendMessage(locale.get("success/deck_cover", anime)).queue();
 	}
 }
