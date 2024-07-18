@@ -114,7 +114,7 @@ public class Hand {
 		}
 
 		return true;
-	}, d -> d.setCurrentStack(getCards(false)));
+	}, d -> d.setCurrentStack(getCards(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getDiscard(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
@@ -887,17 +887,15 @@ public class Hand {
 
 		this.hp = (int) Utils.clamp(this.hp + value, 0, base.hp() * 2);
 
-		if (!pure) {
-			hpDelta = this.hp - before;
-			if (hpDelta <= 0) {
-				game.trigger(Trigger.ON_DAMAGE, side);
+		hpDelta = this.hp - before;
+		if (hpDelta <= 0) {
+			game.trigger(Trigger.ON_DAMAGE, side);
 
-				if (origin.synergy() == Race.TORMENTED) {
-					getOther().modHP((int) (hpDelta * 0.15));
-				}
-			} else {
-				game.trigger(Trigger.ON_HEAL, side);
+			if (origin.synergy() == Race.TORMENTED) {
+				getOther().modHP((int) (hpDelta * 0.15));
 			}
+		} else {
+			game.trigger(Trigger.ON_HEAL, side);
 		}
 
 		if (origin.synergy() == Race.GARGOYLE) {
