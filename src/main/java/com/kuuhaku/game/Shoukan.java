@@ -283,7 +283,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("add(?<cards>[\\w-,]+)")
+	@PlayerAction("add(?<cards>(,[\\w-]+)+)")
 	private boolean debAddCard(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
@@ -383,6 +383,33 @@ public class Shoukan extends GameInstance<Phase> {
 			data.put(key, value);
 			reportEvent("SET_VAL -> " + key + " = " + value, true, false);
 			return true;
+		}
+
+		return false;
+	}
+
+	@PhaseConstraint({"PLAN", "COMBAT"})
+	@PlayerAction("empower(?<indexes>(,\\d)+)")
+	private boolean debEmpower(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
+		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+			String ids = args.getString("indexes");
+			List<String> added = new ArrayList<>();
+
+			for (String idx : ids.split(",")) {
+				int i = Integer.parseInt(idx);
+				if (Utils.between(i, 0, curr.getCards().size())) {
+					if (curr.getCards().get(i) instanceof EffectHolder<?> eh) {
+						eh.setFlag(Flag.EMPOWERED);
+						added.add(eh.getId());
+					}
+				}
+			}
+
+			if (!added.isEmpty()) {
+				reportEvent("EMPOWER -> " + String.join(", ", added), false, false);
+				return true;
+			}
 		}
 
 		return false;

@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
-public class CumValue implements Iterable<ValueMod>, Cloneable {
+public class CumValue implements Iterable<ValueMod> {
 	final Set<ValueMod> values = new HashSet<>();
 	final boolean flat;
 

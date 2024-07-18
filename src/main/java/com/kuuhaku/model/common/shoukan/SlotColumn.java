@@ -22,6 +22,7 @@ import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Utils;
@@ -141,6 +142,21 @@ public class SlotColumn {
 
 		if (card != null) {
 			Hand h = game.getHands().get(side);
+			if (card.getSide() != h.getSide()) {
+				card.getStats().removeIf(v ->
+						!(v instanceof PermMod)
+						&& !v.getSource().equals(card)
+						&& !Utils.equalsAny(v.getSource(), (List<?>) card.getEquipments())
+				);
+
+				for (Evogear e : card.getEquipments()) {
+					e.getStats().removeIf(v ->
+							!(v instanceof PermMod)
+							&& !v.getSource().equals(card)
+							&& !Utils.equalsAny(v.getSource(), (List<?>) card.getEquipments())
+					);
+				}
+			}
 
 			card.setHand(h);
 			boolean init = card.getSlot().getIndex() == -1;

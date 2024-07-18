@@ -31,7 +31,6 @@ public class ValueMod implements Cloneable {
 	private int expiration;
 
 	private final Side side;
-	private final int hash;
 
 	protected ValueMod(double value) {
 		this(null, value);
@@ -46,16 +45,6 @@ public class ValueMod implements Cloneable {
 		this.value = value;
 		this.expiration = expiration;
 		this.side = source == null ? null : source.getSide();
-
-		if (source instanceof Evogear e) {
-			this.hash = e.posHash();
-		} else if (source instanceof Senshi s) {
-			this.hash = s.posHash();
-		} else if (source != null && source.getHand() != null) {
-			this.hash = source.getSlot().hashCode();
-		} else {
-			this.hash = -1;
-		}
 	}
 
 	public Drawable<?> getSource() {
@@ -98,9 +87,9 @@ public class ValueMod implements Cloneable {
 
 	public boolean isExpired() {
 		if (side != null) {
-			if (source instanceof Evogear e && !e.isSpell() && (e.getEquipper() == null || e.posHash() != hash)) {
+			if (source instanceof Evogear e && !e.isSpell() && (e.getEquipper() == null || e.getSide() != side)) {
 				return true;
-			} else if (source instanceof Senshi s && s.posHash() != hash) {
+			} else if (source instanceof Senshi s && s.getSide() != side) {
 				return true;
 			}
 		}
@@ -113,12 +102,12 @@ public class ValueMod implements Cloneable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		ValueMod valueMod = (ValueMod) o;
-		return hash == valueMod.hash && Objects.equals(source, valueMod.source) && side == valueMod.side;
+		return Objects.equals(source, valueMod.source) && side == valueMod.side;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(source, side, hash);
+		return Objects.hash(source, side);
 	}
 
 	@Override
