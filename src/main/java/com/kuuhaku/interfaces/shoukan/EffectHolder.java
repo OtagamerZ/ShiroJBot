@@ -202,83 +202,86 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		if (!cached) {
 			csm.getStoredProps().clear();
 		}
-		csm.getPropHash().set(hash);
 
 		JSONObject props = csm.getStoredProps();
-		return pat.replaceAll(m -> {
-			boolean tag = m.group(2) != null;
-			boolean prcnt = m.group(3) != null;
-			String str = tag ? m.group(2) : m.group(1);
+		try {
+			return pat.replaceAll(m -> {
+				boolean tag = m.group(2) != null;
+				boolean prcnt = m.group(3) != null;
+				String str = tag ? m.group(2) : m.group(1);
 
-			String out = "";
-			if (!tag) {
-				LinkedHashSet<Object> types = new LinkedHashSet<>(Utils.extractGroups(str, "\\$(\\w+)"));
-				if (types.isEmpty()) {
-					types.add("untyped");
-				}
-
-				String main = types.stream().map(String::valueOf).findFirst().orElse(null);
-
-				if (!cached) {
-					String val = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
-
-					for (Object type : types) {
-						props.compute(String.valueOf(type), (k, v) -> {
-							double power = getPower();
-							if (h.getOrigins().synergy() == Race.FABLED) {
-								power = 1;
-							}
-
-							int value = Calc.round(NumberUtils.toDouble(val) * power / equips);
-
-							if (v == null) {
-								return value;
-							} else if (v instanceof JSONArray a) {
-								a.add(value);
-								return a;
-							}
-
-							return new JSONArray(List.of(v, value));
-						});
+				String out = "";
+				if (!tag) {
+					LinkedHashSet<Object> types = new LinkedHashSet<>(Utils.extractGroups(str, "\\$(\\w+)"));
+					if (types.isEmpty()) {
+						types.add("untyped");
 					}
-				}
 
-				int it = counter.compute(main, (k, v) -> Utils.getOr(v, 0) + 1);
+					String main = types.stream().map(String::valueOf).findFirst().orElse(null);
 
-				Object prop = props.get(main, "");
-				if (prop instanceof JSONArray a) {
-					out = String.valueOf(a.getInt(it));
-				} else {
-					out = String.valueOf(((Number) prop).intValue());
-				}
+					if (!cached) {
+						String val = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
 
-				if (prcnt) {
-					out += "%";
-				}
+						for (Object type : types) {
+							props.compute(String.valueOf(type), (k, v) -> {
+								double power = getPower();
+								if (h.getOrigins().synergy() == Race.FABLED) {
+									power = 1;
+								}
 
-				out += types.stream()
-						.map(o -> (String) o)
-						.filter(COLORS::containsKey)
-						.map(t -> "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
-						.collect(Collectors.joining());
-			} else {
-				Pair<Integer, Color> idx = COLORS.get(str);
+								int value = Calc.round(NumberUtils.toDouble(val) * power / equips);
 
-				if (idx != null) {
-					if (idx.getFirst() != -1) {
-						out = "£" + Character.toString(0x2801 + idx.getFirst());
+								if (v == null) {
+									return value;
+								} else if (v instanceof JSONArray a) {
+									a.add(value);
+									return a;
+								}
+
+								return new JSONArray(List.of(v, value));
+							});
+						}
+					}
+
+					int it = counter.compute(main, (k, v) -> Utils.getOr(v, 0) + 1) - 1;
+
+					Object prop = props.get(main, 0);
+					if (prop instanceof JSONArray a) {
+						out = String.valueOf(a.getInt(it));
 					} else {
-						out = switch (str) {
-							case "b" -> DC1;
-							case "n" -> DC2;
-							default -> "";
-						};
+						out = String.valueOf(((Number) prop).intValue());
+					}
+
+					if (prcnt) {
+						out += "%";
+					}
+
+					out += types.stream()
+							.map(o -> (String) o)
+							.filter(COLORS::containsKey)
+							.map(t -> "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
+							.collect(Collectors.joining());
+				} else {
+					Pair<Integer, Color> idx = COLORS.get(str);
+
+					if (idx != null) {
+						if (idx.getFirst() != -1) {
+							out = "£" + Character.toString(0x2801 + idx.getFirst());
+						} else {
+							out = switch (str) {
+								case "b" -> DC1;
+								case "n" -> DC2;
+								default -> "";
+							};
+						}
 					}
 				}
-			}
 
-			return Matcher.quoteReplacement(out);
-		});
+				return Matcher.quoteReplacement(out);
+			});
+		} finally {
+			csm.getPropHash().set(hash);
+		}
 	}
 
 	default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d, boolean legacy) {
