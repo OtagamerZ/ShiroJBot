@@ -1177,7 +1177,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public boolean attack(Senshi source, Senshi target, Integer damage, SendMode... mode) {
-		return processAttack(source, target, target.getSide(), Utils.getOr(damage, source.getActiveAttr()), mode);
+		return processAttack(source, target, target.getSide(), damage, mode);
 	}
 
 	public boolean attack(Senshi source, Hand target, SendMode... mode) {
@@ -1185,10 +1185,10 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public boolean attack(Senshi source, Hand target, Integer damage, SendMode... mode) {
-		return processAttack(source, null, target.getSide(), Utils.getOr(damage, source.getActiveAttr()), mode);
+		return processAttack(source, null, target.getSide(), damage, mode);
 	}
 
-	private boolean processAttack(Senshi source, @Nullable Senshi target, Side tgtSide, int damage, SendMode... mode) {
+	private boolean processAttack(Senshi source, @Nullable Senshi target, Side tgtSide, Integer damage, SendMode... mode) {
 		if (isClosed()) return false;
 		Set<SendMode> md = EnumSet.of(SendMode.NONE, mode);
 
@@ -1237,6 +1237,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 			trigger(ON_DIRECT, source.asSource(ON_DIRECT));
 			trigger(ON_ATTACK, source.asSource(ON_ATTACK));
+		}
+
+		if (damage == null) {
+			damage = source.getActiveAttr();
 		}
 
 		int dmg = damage;
