@@ -631,7 +631,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		equipper = null;
 		stats.clear();
 		base.unlockAll();
-
 		state = 0b1;
 	}
 
