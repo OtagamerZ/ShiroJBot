@@ -478,18 +478,23 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		int usedExtra = Calc.clamp(s.getMPCost() - curr.getMP(), 0, extraMp);
+		int mult = 1;
+		if (curr.getOrigins().synergy() == Race.DULLAHAN) {
+			mult = 2;
+		}
+
+		int usedExtra = Calc.clamp(s.getMPCost() / mult - curr.getMP(), 0, extraMp);
 		switch (args.getString("mode")) {
 			case "d" -> s.setDefending(true);
 			case "b" -> s.setFlipped(true);
 		}
 
 		if (curr.getOrigins().synergy() != Race.HERALD || curr.hasSummoned()) {
-			curr.consumeHP(s.getHPCost());
-			curr.consumeMP(s.getMPCost() - usedExtra);
+			curr.consumeHP(s.getHPCost() / mult);
+			curr.consumeMP(s.getMPCost() / mult - usedExtra);
 		}
 
-		List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost() + usedExtra);
+		List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost() / mult + usedExtra);
 		if (!consumed.isEmpty()) {
 			s.getStats().getData().put("consumed", consumed);
 		}
@@ -1147,13 +1152,18 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		if (card.getHPCost() >= curr.getHP()) {
+		double mult = 1;
+		if (curr.getOrigins().synergy() == Race.DULLAHAN) {
+			mult = 0.5;
+		}
+
+		if (card.getHPCost() * mult >= curr.getHP()) {
 			getChannel().sendMessage(getString("error/not_enough_hp")).queue();
 			return false;
-		} else if (card.getMPCost() > curr.getMP()) {
+		} else if (card.getMPCost() * mult > curr.getMP()) {
 			getChannel().sendMessage(getString("error/not_enough_mp")).queue();
 			return false;
-		} else if (card.getSCCost() > curr.getDiscard().size()) {
+		} else if (card.getSCCost() * mult > curr.getDiscard().size()) {
 			getChannel().sendMessage(getString("error/not_enough_sc")).queue();
 			return false;
 		}

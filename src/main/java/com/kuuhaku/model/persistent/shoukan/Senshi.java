@@ -665,6 +665,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (hand.getOrigins().synergy() == Race.PIXIE) {
 				mult *= getFieldMult();
 			}
+
+			if (hand.getOrigins().synergy() == Race.DULLAHAN) {
+				mult *= 2;
+			}
 		}
 
 		return mult;

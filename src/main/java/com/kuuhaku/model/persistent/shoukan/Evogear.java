@@ -177,10 +177,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public JSONArray getCharms() {
-		if (hand != null && hand.getOrigins().synergy() == Race.DULLAHAN) {
-			return new JSONArray();
-		}
-
 		return charms;
 	}
 
@@ -318,8 +314,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public double getCostMult() {
 		double mult = stats.getCostMult().get();
-		if (hand != null && ((!spell && hand.getOrigins().hasMinor(Race.MACHINE)) || (spell && hand.getOrigins().hasMinor(Race.MYSTICAL)))) {
-			mult *= 0.8;
+		if (hand != null) {
+			if ((!spell && hand.getOrigins().hasMinor(Race.MACHINE)) || (spell && hand.getOrigins().hasMinor(Race.MYSTICAL))) {
+				mult *= 0.8;
+			}
+
+			if (hand.getOrigins().synergy() == Race.DULLAHAN) {
+				mult *= 2;
+			}
 		}
 
 		return mult;
@@ -329,10 +331,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public double getAttrMult() {
 		double mult = stats.getAttrMult().get();
 		if (hand != null) {
-			if (hand.getOrigins().synergy() == Race.DULLAHAN) {
-				mult *= 1 + (0.2 * charms.size());
-			}
-
 			if (!spell && hand.getOrigins().hasMinor(Race.MACHINE)) {
 				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MACHINE) * 0.02);
 			}

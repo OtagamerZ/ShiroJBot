@@ -826,7 +826,7 @@ public class Hand {
 		}
 
 		if (value < 0 && origin.hasMinor(Race.BEAST)) {
-			value = Math.max(-base.hp() / 4d, value);
+			value = Math.max(-base.hp() / 3d, value);
 		}
 
 		int before = hp;
@@ -846,14 +846,12 @@ public class Hand {
 				}
 			}
 
-			int dot = regdeg.peek();
-			int half = (int) (value / 4);
-			if (dot > 0 && value < 0) {
-				if (getOther().getOrigins().synergy() == Race.SPAWN) {
-					regdeg.reduce(Degen.class, half);
+			if (getOther().getOrigins().synergy() != Race.SPAWN) {
+				int dot = regdeg.peek();
+				int half = (int) (value / 4);
+				if (dot > 0 && value < 0) {
+					value -= half + regdeg.reduce(Degen.class, half);
 				}
-
-				value -= half + regdeg.reduce(Degen.class, half);
 			}
 
 			if (value < 0) {
