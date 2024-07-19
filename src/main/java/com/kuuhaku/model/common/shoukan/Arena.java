@@ -23,16 +23,14 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BlurFilter;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.MultiProcessor;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.Lock;
-import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.enums.shoukan.Side;
-import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.Timed;
@@ -625,11 +623,7 @@ public class Arena implements Renderer {
 						if (ori.major() != Race.MIXED) {
 							rect.translate(reversed ? -rect.width : 0, centerY - rect.height / 2);
 
-							int maxCd = switch (hand.getOrigins().major()) {
-								case SPIRIT -> 3;
-								case DIVINITY -> 4;
-								default -> 1;
-							};
+							int maxCd = 1;
 
 							Polygon clip = Graph.makePoly(new Dimension(rect.width, rect.height),
 									0.5, 0,
