@@ -89,10 +89,15 @@ public class MarketCommand implements Executable {
 				.setFooter(acc.getBalanceFooter(locale));
 
 		ThrowingFunction<Integer, Page> loader = p -> {
-			List<StashedCard> results = m.getOffers(cli.getFirst().getOptions(), p);
+			try {
+				List<StashedCard> results = m.getOffers(cli.getFirst().getOptions(), p);
 
-			eb.setAuthor(locale.get("str/search_result", results.size(), total));
-			return Utils.generatePage(eb, results, 5, sc -> new MarketItem(locale, m, sc).toString());
+				eb.setAuthor(locale.get("str/search_result", results.size(), total));
+				return Utils.generatePage(eb, results, 5, sc -> new MarketItem(locale, m, sc).toString());
+			} catch (Exception e) {
+				event.channel().sendMessage(locale.get("error/invalid_params")).queue();
+				return null;
+			}
 		};
 
 		if (loader.apply(0) == null) {
@@ -100,10 +105,6 @@ public class MarketCommand implements Executable {
 			return;
 		}
 
-		try {
-			Utils.paginate(loader, event.channel(), event.user());
-		} catch (Exception e) {
-			event.channel().sendMessage(locale.get("error/invalid_params")).queue();
-		}
+		Utils.paginate(loader, event.channel(), event.user());
 	}
 }

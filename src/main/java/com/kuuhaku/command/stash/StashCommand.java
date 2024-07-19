@@ -112,15 +112,20 @@ public class StashCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		ThrowingFunction<Integer, Page> loader = p -> {
-			List<StashedCard> results = DAO.queryBuilder(
-					StashedCard.class,
-					query.toString(),
-					q -> q.setFirstResult(p * 10).setMaxResults(10).getResultList(),
-					params.toArray()
-			);
+			try {
+				List<StashedCard> results = DAO.queryBuilder(
+						StashedCard.class,
+						query.toString(),
+						q -> q.setFirstResult(p * 10).setMaxResults(10).getResultList(),
+						params.toArray()
+				);
 
-			eb.setAuthor(locale.get("str/search_result_stash", results.size(), kp.getStashUsage(), kp.getMaxCapacity()));
-			return Utils.generatePage(eb, results, 5, sc -> new StashItem(locale, sc).toString());
+				eb.setAuthor(locale.get("str/search_result_stash", results.size(), kp.getStashUsage(), kp.getMaxCapacity()));
+				return Utils.generatePage(eb, results, 5, sc -> new StashItem(locale, sc).toString());
+			} catch (Exception e) {
+				event.channel().sendMessage(locale.get("error/invalid_params")).queue();
+				return null;
+			}
 		};
 
 		if (loader.apply(0) == null) {
@@ -128,10 +133,6 @@ public class StashCommand implements Executable {
 			return;
 		}
 
-		try {
-			Utils.paginate(loader, event.channel(), event.user());
-		} catch (Exception e) {
-			event.channel().sendMessage(locale.get("error/invalid_params")).queue();
-		}
+		Utils.paginate(loader, event.channel(), event.user());
 	}
 }
