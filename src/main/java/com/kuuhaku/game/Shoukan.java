@@ -1421,7 +1421,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				if (hit) {
-					data.put("last_attacker_" + source.getSide().name().toLowerCase(), source);
+					op.getData().put("last_attacked_by", source);
 
 					for (Evogear e : source.getEquipments()) {
 						JSONArray charms = e.getCharms();
@@ -1941,6 +1941,9 @@ public class Shoukan extends GameInstance<Phase> {
 			if (trigger) {
 				resetTimer();
 				trigger(ON_TICK);
+				for (Hand h : hands.values()) {
+					h.getData().remove("last_attacked_by");
+				}
 
 				getCurrent().setRerolled(true);
 				getCurrent().verifyCap();
