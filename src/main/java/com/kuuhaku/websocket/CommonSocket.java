@@ -121,6 +121,8 @@ public class CommonSocket extends WebSocketClient {
 					MessageEmbed first = null;
 
 					for (I18N loc : I18N.values()) {
+						if (loc.getParent() != null) continue;
+
 						eb.setDescription(loc.get("welcome/message", Constants.DEFAULT_PREFIX));
 						cats.put(Emoji.fromFormatted(loc.getEmoji()), InteractPage.of(eb.build()));
 

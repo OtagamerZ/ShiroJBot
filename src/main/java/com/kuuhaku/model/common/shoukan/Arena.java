@@ -112,7 +112,7 @@ public class Arena implements Renderer {
 			return false;
 		}
 
-		return !d.isEthereal();
+		return !d.isEthereal() && !(d instanceof EffectHolder<?> eh && eh.hasFlag(Flag.DESTROY));
 	}, d -> d.setCurrentStack(getBanned(false)), Utils::doNothing);
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");

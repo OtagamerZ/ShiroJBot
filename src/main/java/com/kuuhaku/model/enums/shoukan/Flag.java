@@ -67,7 +67,6 @@ public enum Flag {
 	 * Cannot attack
 	 **/
 	NO_ATTACK,
-
 	/**
 	 * Ignores target equipment stats
 	 **/
@@ -84,7 +83,6 @@ public enum Flag {
 	 * Cannot be targeted by effects
 	 **/
 	IGNORE_EFFECT,
-
 	/**
 	 * Stats are hidden (NO AUTO)
 	 **/
@@ -133,6 +131,10 @@ public enum Flag {
 	 * Will always defeat the target
 	 **/
 	UNSTOPPABLE,
+	/**
+	 * Prevents adding to stack
+	 */
+	DESTROY,
 	/**
 	 * Nothing
 	 **/
