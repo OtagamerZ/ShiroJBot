@@ -879,7 +879,7 @@ public class Hand {
 
 			Hand op = getOther();
 			if (op.getOrigins().hasMinor(Race.UNDEAD) && value < 0) {
-				value -= op.getGraveyard().parallelStream().mapToInt(d -> (d.getDmg() + d.getDfs()) / 100).sum();
+				value -= op.getGraveyard().parallelStream().mapToInt(d -> (d.getDmg() + d.getDfs()) / 50).sum();
 			}
 		}
 
