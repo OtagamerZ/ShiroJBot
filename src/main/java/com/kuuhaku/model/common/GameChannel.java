@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 public class GameChannel {
 	private final Set<ChannelReference> channels = new HashSet<>();
-	private final Map<String, XStringBuilder> buffer = new HashMap<>();
+	private final Map<String, List<String>> buffer = new HashMap<>();
 	private long lastAction = 0;
 	private long cooldown = 0;
 
@@ -76,10 +76,15 @@ public class GameChannel {
 
 		Map<String, MessageCreateAction> acts = new HashMap<>();
 		for (GuildMessageChannel chn : getChannels()) {
-			XStringBuilder buf = buffer.remove(chn.getId());
+			List<String> buf = buffer.remove(chn.getId());
 
 			if (buf != null) {
-				acts.put(chn.getId(), chn.sendMessage(buf.appendNewLine(message).toString()));
+				XStringBuilder sb = new XStringBuilder(message);
+				for (int i = buf.size() - 1; i >= 0; i--) {
+					sb.appendNewLine(buf.get(i));
+				}
+
+				acts.put(chn.getId(), chn.sendMessage(sb.toString()));
 			} else {
 				acts.put(chn.getId(), chn.sendMessage(message));
 			}
@@ -91,7 +96,7 @@ public class GameChannel {
 
 	public void buffer(String message) {
 		for (GuildMessageChannel chn : getChannels()) {
-			buffer.computeIfAbsent(chn.getId(), k -> new XStringBuilder()).appendNewLine(message);
+			buffer.computeIfAbsent(chn.getId(), k -> new LinkedList<>()).add(message);
 		}
 	}
 
