@@ -2285,7 +2285,8 @@ public class Shoukan extends GameInstance<Phase> {
 						Drawable<?> d = curr.manualDraw();
 						d.setEthereal(true);
 
-						curr.consumeHP((int) Math.max(2, curr.getBase().hp() * 0.08), true);
+						int loss = (int) Math.max(2, curr.getBase().hp() * 0.08);
+						curr.setHP(Math.max(1, curr.getHP() - loss));
 						Objects.requireNonNull(w.getHook())
 								.setEphemeral(true)
 								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
