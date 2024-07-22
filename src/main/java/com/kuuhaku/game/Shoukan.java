@@ -1312,7 +1312,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 							if (!unstop && dmg < enemyStats) {
 								outcome = getString("str/combat_defeat", dmg, enemyStats);
-								trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_PARRY));
+								trigger(ON_SUICIDE, source.asSource(ON_SUICIDE));
 
 								for (Senshi s : source.getNearby()) {
 									s.awaken();
@@ -1345,6 +1345,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 									trigger(NONE, source.asSource(), target.asTarget(ON_PARRY));
 									attack(target, source, SendMode.BUFFER);
+									source.setAvailable(false);
 
 									dmg = 0;
 									hit = false;
