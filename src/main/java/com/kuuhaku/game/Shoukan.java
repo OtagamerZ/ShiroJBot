@@ -436,11 +436,6 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private boolean putCard(Hand curr, Drawable<?> d, JSONObject args) {
-		int extraMp = 0;
-		if (curr.getOrigins().synergy() == Race.HOMUNCULUS) {
-			extraMp = curr.getDiscard().size();
-		}
-
 		if (d instanceof Senshi s) {
 			if (!checkConstraints(curr, s)) return false;
 		} else {
@@ -483,7 +478,6 @@ public class Shoukan extends GameInstance<Phase> {
 			mult = 2;
 		}
 
-		int usedExtra = Calc.clamp(s.getMPCost() / mult - curr.getMP(), 0, extraMp);
 		switch (args.getString("mode")) {
 			case "d" -> s.setDefending(true);
 			case "b" -> s.setFlipped(true);
@@ -491,10 +485,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (curr.getOrigins().synergy() != Race.HERALD || curr.hasSummoned()) {
 			curr.consumeHP(s.getHPCost() / mult);
-			curr.consumeMP(s.getMPCost() / mult - usedExtra);
+			curr.consumeMP(s.getMPCost() / mult);
 		}
 
-		List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost() / mult + usedExtra);
+		List<Drawable<?>> consumed = curr.consumeSC(s.getSCCost() / mult);
 		if (!consumed.isEmpty()) {
 			s.getStats().getData().put("consumed", consumed);
 		}
