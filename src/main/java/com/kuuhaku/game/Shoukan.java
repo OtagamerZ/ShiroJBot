@@ -1337,7 +1337,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 									dmg = 0;
 									hit = false;
-								} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_PARRY, true) || chance(parry))) {
+								} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && target.isAvailable() && (target.hasFlag(Flag.TRUE_PARRY, true) || chance(parry))) {
 									outcome = getString("str/combat_parry", parry);
 									if (target.hasFlag(Flag.TRUE_PARRY)) {
 										outcome += " **(" + getString("flag/true_parry") + ")**";
