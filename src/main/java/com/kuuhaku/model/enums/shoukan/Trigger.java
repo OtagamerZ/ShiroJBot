@@ -85,9 +85,9 @@ public enum Trigger {
 	ON_DIRECT,
 
 	/**
-	 * On successful block
+	 * On successful parry
 	 **/
-	ON_BLOCK,
+	ON_PARRY,
 
 	/**
 	 * On successful dodge

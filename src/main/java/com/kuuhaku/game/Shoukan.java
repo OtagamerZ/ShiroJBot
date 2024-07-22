@@ -1312,7 +1312,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 							if (!unstop && dmg < enemyStats) {
 								outcome = getString("str/combat_defeat", dmg, enemyStats);
-								trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_BLOCK));
+								trigger(ON_SUICIDE, source.asSource(ON_SUICIDE), target.asTarget(ON_PARRY));
 
 								for (Senshi s : source.getNearby()) {
 									s.awaken();
@@ -1328,7 +1328,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 								dmg = 0;
 							} else {
-								int block = target.getBlock();
+								int parry = target.getParry();
 								int dodge = target.getDodge();
 
 								if (source.isBlinded(true)) {
@@ -1337,15 +1337,14 @@ public class Shoukan extends GameInstance<Phase> {
 
 									dmg = 0;
 									hit = false;
-								} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_BLOCK, true) || chance(block))) {
-									outcome = getString("str/combat_block", block);
-									if (target.hasFlag(Flag.TRUE_BLOCK)) {
-										outcome += " **(" + getString("flag/true_block") + ")**";
+								} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_PARRY, true) || chance(parry))) {
+									outcome = getString("str/combat_parry", parry);
+									if (target.hasFlag(Flag.TRUE_PARRY)) {
+										outcome += " **(" + getString("flag/true_parry") + ")**";
 									}
 
-									trigger(NONE, source.asSource(), target.asTarget(ON_BLOCK));
-
-									source.setStun(1);
+									trigger(NONE, source.asSource(), target.asTarget(ON_PARRY));
+									attack(target, source, SendMode.BUFFER);
 
 									dmg = 0;
 									hit = false;

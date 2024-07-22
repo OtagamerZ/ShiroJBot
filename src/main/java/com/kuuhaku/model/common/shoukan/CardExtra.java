@@ -50,7 +50,7 @@ public class CardExtra implements Cloneable {
 	private final CumValue atk = CumValue.flat();
 	private final CumValue dfs = CumValue.flat();
 	private final CumValue dodge = CumValue.flat();
-	private final CumValue block = CumValue.flat();
+	private final CumValue parry = CumValue.flat();
 
 	private final CumValue piercing = CumValue.flat();
 	private final CumValue lifesteal = CumValue.flat();
@@ -104,8 +104,8 @@ public class CardExtra implements Cloneable {
 		return dodge;
 	}
 
-	public CumValue getBlock() {
-		return block;
+	public CumValue getParry() {
+		return parry;
 	}
 
 	public CumValue getPiercing() {

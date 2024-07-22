@@ -274,7 +274,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		int sum = base.getAtk() + (int) stats.getAtk().get();
 
 		if (hand != null && hand.getOrigins().synergy() == Race.CYBERBEAST) {
-			sum += getGame().getCards(getSide()).stream().mapToInt(Senshi::getBlock).sum();
+			sum += getCards(getSide()).stream().mapToInt(Senshi::getParry).sum();
 		}
 
 		return Calc.round(sum * getAttrMult());
@@ -300,8 +300,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public int getBlock() {
-		int sum = base.getBlock() + (int) stats.getBlock().get();
+	public int getParry() {
+		int sum = base.getParry() + (int) stats.getParry().get();
 
 		int min = 0;
 		if (hand != null && hand.getOrigins().synergy() == Race.CYBORG) {

@@ -73,7 +73,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			Map.entry("atk", new Pair<>(7, new Color(0xFF0000))),
 			Map.entry("dfs", new Pair<>(8, new Color(0x00C500))),
 			Map.entry("ddg", new Pair<>(9, new Color(0xFFC800))),
-			Map.entry("blk", new Pair<>(10, new Color(0xA9A9A9))),
+			Map.entry("pry", new Pair<>(10, new Color(0xA9A9A9))),
 			Map.entry("cd", new Pair<>(11, new Color(0x48BAFF))),
 
 			Map.entry("ally", new Pair<>(12, Color.BLACK)),
@@ -88,7 +88,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			"hp.png", "base_hp.png", "mp.png",
 			"degen.png", "regen.png", "blood.png",
 			"mana.png", "attack.png", "defense.png",
-			"dodge.png", "block.png", "cooldown.png",
+			"dodge.png", "parry.png", "cooldown.png",
 			"ally_target.png", "enemy_target.png"
 	};
 
@@ -187,7 +187,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Map.entry("atk", source.getDmg()),
 				Map.entry("dfs", source.getDfs()),
 				Map.entry("ddg", source.getDodge()),
-				Map.entry("blk", source.getBlock()),
+				Map.entry("blk", source.getParry()),
 				Map.entry("pow", source.getPower()),
 				Map.entry("data", getStats().getData())
 		);
@@ -333,7 +333,14 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 								.findAny().orElse(null)
 						)
 						.filter(Objects::nonNull)
-						.collect(Collectors.collectingAndThen(Collectors.toList(), Graph::mix));
+						.collect(Collectors.collectingAndThen(Collectors.toList(), c -> {
+							Color out = Graph.mix(c);
+							if (c.size() > 1) {
+								out = out.brighter();
+							}
+
+							return out;
+						}));
 
 				boolean tag = str.contains("£");
 				boolean after = false;

@@ -91,7 +91,7 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default SlotColumn getSlot() {
-		return new SlotColumn(getHand().getGame(), getSide(), -1);
+		return new SlotColumn(getGame(), getSide(), -1);
 	}
 
 	default void setSlot(SlotColumn slot) {
@@ -143,7 +143,7 @@ public interface Drawable<T extends Drawable<T>> {
 		return 0;
 	}
 
-	default int getBlock() {
+	default int getParry() {
 		return 0;
 	}
 
@@ -271,7 +271,7 @@ public interface Drawable<T extends Drawable<T>> {
 
 		g2d.setFont(FONT);
 		FontMetrics m = g2d.getFontMetrics();
-		boolean aug = getTagBundle().contains("augment") && getHand().getGame() == null;
+		boolean aug = getTagBundle().contains("augment") && getGame() == null;
 
 		{ // LEFT
 			int y = desc ? 225 : 291;
@@ -345,12 +345,12 @@ public interface Drawable<T extends Drawable<T>> {
 
 		{ // RIGHT
 			int y = desc ? 225 : 291;
-			if (getBlock() != 0) {
-				icon = IO.getResourceAsImage("shoukan/icons/block.png");
+			if (getParry() != 0) {
+				icon = IO.getResourceAsImage("shoukan/icons/parry.png");
 				assert icon != null;
 				int x = 200 - icon.getWidth();
 
-				String val = (aug ? Utils.sign(getBlock()) : getBlock()) + "%";
+				String val = (aug ? Utils.sign(getParry()) : getParry()) + "%";
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.GRAY);
 				Graph.drawOutlinedString(g2d, val, x - g2d.getFontMetrics().stringWidth(val) - 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
@@ -438,7 +438,7 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default Target asTarget(Trigger trigger) {
-		return asTarget(trigger, getSide() == getHand().getGame().getCurrentSide() ? TargetType.ALLY : TargetType.ENEMY);
+		return asTarget(trigger, getSide() == getGame().getCurrentSide() ? TargetType.ALLY : TargetType.ENEMY);
 	}
 
 	default Target asTarget(Trigger trigger, TargetType type) {
@@ -470,7 +470,7 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default List<Senshi> getCards(Side side, Boolean top, boolean xray, int... indexes) {
-		if (!(this instanceof EffectHolder<?> eh) || getIndex() == -1) return List.of();
+		if (getGame() == null || !(this instanceof EffectHolder<?> eh) || getIndex() == -1) return List.of();
 		xray |= side == getSide();
 
 		boolean empower = eh.hasFlag(Flag.EMPOWERED);
@@ -478,7 +478,7 @@ public interface Drawable<T extends Drawable<T>> {
 		for (int idx : indexes) {
 			if (idx < 0 || idx > 4) continue;
 
-			SlotColumn slt = getHand().getGame().getSlots(side).get(idx);
+			SlotColumn slt = getGame().getSlots(side).get(idx);
 
 			Senshi tgt;
 			if (top == null) {
@@ -517,7 +517,7 @@ public interface Drawable<T extends Drawable<T>> {
 		for (int idx : indexes) {
 			if (idx < 0 || idx > 4) continue;
 
-			SlotColumn slt = getHand().getGame().getSlots(side).get(idx);
+			SlotColumn slt = getGame().getSlots(side).get(idx);
 			Senshi tgt = slt.getTop();
 
 			if (tgt != null) {

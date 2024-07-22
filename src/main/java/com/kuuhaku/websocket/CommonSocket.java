@@ -229,7 +229,7 @@ public class CommonSocket extends WebSocketClient {
 									Map.entry("attack", d.getDmg()),
 									Map.entry("defense", d.getDfs()),
 									Map.entry("dodge", d.getDodge()),
-									Map.entry("block", d.getBlock())
+									Map.entry("block", d.getParry())
 							))
 					));
 				}

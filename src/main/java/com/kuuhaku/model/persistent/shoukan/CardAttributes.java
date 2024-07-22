@@ -61,8 +61,8 @@ public class CardAttributes implements Serializable, Cloneable {
 	@Column(name = "dodge", nullable = false)
 	private int dodge = 0;
 
-	@Column(name = "block", nullable = false)
-	private int block = 0;
+	@Column(name = "parry", nullable = false)
+	private int parry = 0;
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
@@ -129,12 +129,12 @@ public class CardAttributes implements Serializable, Cloneable {
 		this.dodge = dodge;
 	}
 
-	public int getBlock() {
-		return block;
+	public int getParry() {
+		return parry;
 	}
 
-	public void setBlock(int block) {
-		this.block = block;
+	public void setParry(int parry) {
+		this.parry = parry;
 	}
 
 	public JSONArray getTags() {

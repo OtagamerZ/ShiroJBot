@@ -533,7 +533,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 				case CYBERBEAST -> {
 					if (getGame() != null) {
-						sum += getGame().getCards(getSide()).stream().mapToInt(Senshi::getBlock).sum();
+						sum += getGame().getCards(getSide()).stream().mapToInt(Senshi::getParry).sum();
 					}
 				}
 			}
@@ -555,6 +555,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		double mult = 1;
 		if (hand != null) {
 			mult *= getFieldMult();
+
+			if (hand.getOrigins().synergy() == Race.WEREBEAST && isSleeping()) {
+				mult *= 1.5;
+			}
 		}
 
 		if (isStunned()) {
@@ -643,14 +647,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public int getBlock() {
-		int sum = base.getBlock() + (int) stats.getBlock().get() + getEquipBlock();
+	public int getParry() {
+		int sum = base.getParry() + (int) stats.getParry().get() + getEquipParry();
 
 		int min = 0;
 		if (hand != null) {
-			if (hand.getOrigins().synergy() == Race.WEREBEAST && isSleeping()) {
-				sum += 50;
-			} else if (hand.getOrigins().synergy() == Race.CYBORG) {
+			if (hand.getOrigins().synergy() == Race.CYBORG) {
 				min += 10;
 			}
 		}
@@ -765,7 +767,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				.mapToInt(Evogear::getDodge).sum();
 	}
 
-	public int getEquipBlock() {
+	public int getEquipParry() {
 		if (hasFlag(Flag.NO_EQUIP)) return 0;
 		else if (hand != null && hand.getOther() != null && Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
 			return 0;
@@ -773,7 +775,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		return equipments.stream()
 				.filter(Evogear::isAvailable)
-				.mapToInt(Evogear::getBlock).sum();
+				.mapToInt(Evogear::getParry).sum();
 	}
 
 	public int getActiveEquips() {
@@ -1431,7 +1433,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (!isTick) {
 				Shoukan game = getGame();
 				game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
-				game.trigger(ON_BLOCK, asSource(ON_BLOCK));
+				game.trigger(ON_PARRY, asSource(ON_PARRY));
 			}
 
 			return true;

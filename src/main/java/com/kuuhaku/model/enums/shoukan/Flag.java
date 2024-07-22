@@ -100,9 +100,9 @@ public enum Flag {
 	 **/
 	TRUE_DODGE,
 	/**
-	 * Will block
+	 * Will parry
 	 **/
-	TRUE_BLOCK,
+	TRUE_PARRY,
 	/**
 	 * Effect cannot be prevented
 	 **/

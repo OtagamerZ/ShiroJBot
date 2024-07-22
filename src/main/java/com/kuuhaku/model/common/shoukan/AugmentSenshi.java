@@ -80,8 +80,8 @@ public class AugmentSenshi extends Senshi implements Proxy<Senshi> {
 	}
 
 	@Override
-	public int getBlock() {
-		return super.getBlock() + original.getBlock();
+	public int getParry() {
+		return super.getParry() + original.getParry();
 	}
 
 	@Override
