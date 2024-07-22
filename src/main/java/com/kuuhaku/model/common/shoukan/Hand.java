@@ -663,28 +663,23 @@ public class Hand {
 	}
 
 	public void rerollHand() {
-		int i = 0;
-		Iterator<Drawable<?>> it = cards.iterator();
-		while (it.hasNext()) {
-			Drawable<?> card = it.next();
-			if (card.isAvailable()) {
-				discard.add(card);
-				it.remove();
+		var reroll = cards.stream()
+				.filter(Drawable::isAvailable)
+				.toList();
 
-				discard.remove(card);
-				deck.add(card);
-				i++;
-			}
-		}
+		discard.addAll(reroll);
+		deck.addAll(reroll);
+		cards.removeAll(reroll);
 
 		Utils.shuffle(deck, game.getRng());
 
+		int draws = reroll.size();
 		if (origin.synergy() == Race.DJINN) {
-			consumeDraws(-(i - 1));
-			manualDraw(i - 1);
+			consumeDraws(-(draws - 1));
+			manualDraw(draws - 1);
 		} else {
-			consumeDraws(-i);
-			manualDraw(i);
+			consumeDraws(-draws);
+			manualDraw(draws);
 		}
 	}
 

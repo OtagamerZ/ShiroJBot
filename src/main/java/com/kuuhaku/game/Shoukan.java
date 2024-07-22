@@ -2319,8 +2319,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 						try {
 							curr.requestChoice(null, cards, ds -> {
-								curr.draw(ds.getFirst());
+								curr.getCards().add(ds.getFirst());
 								curr.setUsedDestiny(true);
+
 								Objects.requireNonNull(w.getHook())
 										.setEphemeral(true)
 										.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
