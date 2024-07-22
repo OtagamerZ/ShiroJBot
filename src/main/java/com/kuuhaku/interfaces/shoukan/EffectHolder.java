@@ -187,7 +187,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Map.entry("atk", source.getDmg()),
 				Map.entry("dfs", source.getDfs()),
 				Map.entry("ddg", source.getDodge()),
-				Map.entry("blk", source.getParry()),
+				Map.entry("pry", source.getParry()),
 				Map.entry("pow", source.getPower()),
 				Map.entry("data", getStats().getData())
 		);
