@@ -63,8 +63,9 @@ public enum Charm {
 	public int getValue(int tier) {
 		tier = Math.max(1, tier);
 		return switch (this) {
+			case THORNS -> tier * 10;
 			case DRAIN, WARDING, TIMEWARP, SHIELD -> (int) Calc.getFibonacci(tier);
-			case WOUNDING, THORNS, LIFESTEAL -> tier * 5;
+			case WOUNDING, LIFESTEAL -> tier * 5;
 			case CLONE -> tier * 25;
 			case PIERCING -> tier * 3;
 			case BARRAGE -> tier;

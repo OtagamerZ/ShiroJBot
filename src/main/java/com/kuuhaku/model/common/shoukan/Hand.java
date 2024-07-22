@@ -809,7 +809,8 @@ public class Hand {
 
 	public void modHP(double value, boolean pure) {
 		if (value == 0) return;
-		else if (value > 0 && origin.major() == Race.UNDEAD) return;
+
+		if (value > 0 && origin.major() == Race.UNDEAD) return;
 		else if (game.getArcade() == Arcade.OVERCHARGE) {
 			value *= Math.min(0.5 + 0.5 * (Math.ceil(game.getTurn() / 2d) / 10), 1);
 		} else if (game.getArcade() == Arcade.DECAY) {
@@ -855,30 +856,28 @@ public class Hand {
 				value *= Math.max(0, stats.getHealMult().get());
 			}
 
-			double prcnt = getHPPrcnt();
-			if (origin.demon()) {
-				prcnt = Math.min(prcnt, 0.5);
-			}
-
-			if (this.hp + value <= 0 && prcnt > 1 / 3d) {
-				if (!origin.demon() && (prcnt > 2 / 3d || game.chance(prcnt * 100))) {
-					this.hp = 1;
-					return;
-				}
-			}
-
-			if (origin.major() == Race.UNDEAD) {
-				regdeg.add(value);
-				value = 0;
-			}
-
 			Hand op = getOther();
-			if (op.getOrigins().hasMinor(Race.UNDEAD) && value < 0) {
-				value -= op.getGraveyard().parallelStream().mapToInt(d -> (d.getDmg() + d.getDfs()) / 50).sum();
+			if (value < 0) {
+				if (op.getOrigins().hasMinor(Race.UNDEAD)) {
+					value -= op.getGraveyard().parallelStream().mapToInt(d -> (d.getDmg() + d.getDfs()) / 50).sum();
+				}
+
+				if (origin.major() == Race.UNDEAD) {
+					regdeg.add(value);
+					value = 0;
+				}
 			}
 		}
 
-		this.hp = (int) Utils.clamp(this.hp + value, 0, base.hp() * 2);
+		int min = 0;
+		double prcnt = getHPPrcnt();
+		if (this.hp + value <= 0 && prcnt > 1 / 3d) {
+			if (!origin.demon() && (prcnt > 2 / 3d || game.chance(prcnt * 100))) {
+				min = 1;
+			}
+		}
+
+		this.hp = (int) Utils.clamp(this.hp + value, min, base.hp() * 2);
 
 		hpDelta = this.hp - before;
 		if (hpDelta <= 0) {
