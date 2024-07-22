@@ -623,7 +623,7 @@ public class Arena implements Renderer {
 						if (ori.major() != Race.MIXED) {
 							rect.translate(reversed ? -rect.width : 0, centerY - rect.height / 2);
 
-							int maxCd = 1;
+							int maxCd = 4;
 
 							Polygon clip = Graph.makePoly(new Dimension(rect.width, rect.height),
 									0.5, 0,
