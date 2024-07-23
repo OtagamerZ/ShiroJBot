@@ -322,12 +322,18 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 			update = true;
 		}
 
-		if (update) save();
+		if (update) {
+			save();
+			return refresh().decks;
+		}
+
 		return decks;
 	}
 
 	public Deck getDeck() {
 		List<Deck> decks = getDecks();
+		System.out.println(decks);
+
 		for (Deck d : decks) {
 			if (d.isCurrent()) return d;
 		}
