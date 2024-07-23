@@ -89,9 +89,8 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	private AccountSettings settings;
 
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@OrderColumn(name = "id")
 	@Fetch(FetchMode.SUBSELECT)
-	private final List<Deck> decks = new ArrayList<>();
+	private final Set<Deck> decks = new HashSet<>();
 
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
@@ -324,10 +323,10 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 
 		if (update) {
 			save();
-			return refresh().decks;
+			return refresh().getDecks();
 		}
 
-		return decks;
+		return List.copyOf(decks);
 	}
 
 	public Deck getDeck() {
