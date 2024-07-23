@@ -65,10 +65,10 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject aliases = new JSONObject();
 
-	@Column(name = "current_deck")
+	@Column(name = "current_deck", nullable = false)
 	private int currentDeck;
 
-	@Column(name = "current_title")
+	@Column(name = "current_title", nullable = false)
 	private int currentTitle;
 
 	public AccountSettings() {
