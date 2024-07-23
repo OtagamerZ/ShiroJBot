@@ -58,7 +58,7 @@
  import java.util.stream.Stream;
 
  @Entity
- @Table(name = "deck", uniqueConstraints = @UniqueConstraint(columnNames = {"account_uid", "index"}))
+ @Table(name = "deck")
  public class Deck extends DAO<Deck> {
 	 @Transient
 	 public static final Deck INSTANCE = new Deck();
