@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
@@ -38,7 +39,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
@@ -55,39 +55,40 @@ public class DeckUseCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
+		AccountSettings settings = acc.getSettings();
+
 		if (args.isEmpty()) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(locale.get("str/decks"));
 
 			AtomicInteger idx = new AtomicInteger();
-			AtomicBoolean regen = new AtomicBoolean();
-			List<Page> pages = Utils.generatePages(eb, acc.getDecks(), 10, 2, deck -> {
-				if (idx.getAndIncrement() != deck.getIndex()) {
-					regen.set(true);
-				}
-
-				return new FieldMimic(
-						(deck.isCurrent() ? "✅ " : "") + "`" + deck.getIndex() + " | " + deck.getName() + "`",
-						deck.toString(locale)
-				).toString();
-			});
-
-			if (regen.get()) {
-				execute(bot, locale, data, event, args);
-				return;
-			}
+			List<Page> pages = Utils.generatePages(eb, acc.getDecks(), 10, 2,
+					deck -> new FieldMimic(
+							(deck.isCurrent() ? "✅ " : "") + "`" + idx.getAndIncrement() + " | " + deck.getName() + "`",
+							deck.toString(locale)
+					).toString()
+			);
 
 			Utils.paginate(pages, event.channel(), event.user());
 			return;
 		}
 
-		int id = args.getInt("id", -1);
-		String name = args.getString("name");
 		List<Deck> decks = acc.getDecks();
+		int id = args.getInt("id", -1);
+		if (Utils.between(id, 0, decks.size() - 1)) {
+			Deck d = decks.get(id);
+			settings.setCurrentDeck(d.getId());
+			settings.save();
+
+			event.channel().sendMessage(locale.get("success/deck_switch", d.getName())).queue();
+			return;
+		}
+
+		String name = args.getString("name");
 		for (Deck deck : decks) {
-			if (deck.getIndex() == id || deck.getName().equalsIgnoreCase(name)) {
-				deck.setCurrent(true);
-				deck.save();
+			if (deck.getName().equalsIgnoreCase(name)) {
+				settings.setCurrentDeck(deck.getId());
+				settings.save();
 
 				event.channel().sendMessage(locale.get("success/deck_switch", deck.getName())).queue();
 				return;

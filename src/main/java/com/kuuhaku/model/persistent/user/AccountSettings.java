@@ -65,6 +65,9 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject aliases = new JSONObject();
 
+	@Column(name = "current_deck")
+	private int currentDeck;
+
 	public AccountSettings() {
 	}
 
@@ -114,5 +117,13 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	public JSONObject getAliases() {
 		return aliases;
+	}
+
+	public int getCurrentDeck() {
+		return currentDeck;
+	}
+
+	public void setCurrentDeck(int id) {
+		this.currentDeck = id;
 	}
 }

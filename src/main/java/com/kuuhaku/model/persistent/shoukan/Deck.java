@@ -58,7 +58,7 @@
  import java.util.stream.Stream;
 
  @Entity
- @Table(name = "deck")
+ @Table(name = "deck", uniqueConstraints = @UniqueConstraint(columnNames = {"account_uid", "index"}))
  public class Deck extends DAO<Deck> {
 	 @Transient
 	 public static final Deck INSTANCE = new Deck();
@@ -68,9 +68,6 @@
 	 @Column(name = "id", nullable = false)
 	 private int id;
 
-	 @Column(name = "index", nullable = false)
-	 private int index;
-
 	 @Column(name = "name")
 	 private String name;
 
@@ -78,9 +75,6 @@
 	 @PrimaryKeyJoinColumn(name = "account_uid")
 	 @Fetch(FetchMode.JOIN)
 	 private Account account;
-
-	 @Column(name = "current", nullable = false)
-	 private boolean current;
 
 	 @Column(name = "variant", nullable = false)
 	 private boolean variant = false;
@@ -109,12 +103,8 @@
 		 return id;
 	 }
 
-	 public int getIndex() {
-		 return index;
-	 }
-
 	 public String getName() {
-		 return Utils.getOr(name, "deck " + index);
+		 return Utils.getOr(name, "deck " + account.getDecks().indexOf(this));
 	 }
 
 	 public void setName(String name) {
@@ -126,11 +116,7 @@
 	 }
 
 	 public boolean isCurrent() {
-		 return current;
-	 }
-
-	 public void setCurrent(boolean current) {
-		 this.current = current;
+		 return account.getSettings().getCurrentDeck() == id;
 	 }
 
 	 public boolean isVariant() {
@@ -164,13 +150,13 @@
 		 if (account == null) return List.of();
 
 		 return DAO.queryAllUnmapped("""
-				 SELECT 'SENSHI', d.card_id, sc.id
-				 FROM senshi d
-				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
-				 WHERE sc.kawaipon_uid = ?1
-				 		AND sc.deck_id = ?2
-				 %s
-				 """.formatted(styling.getSenshiOrder()), account.getUid(), id).stream()
+						 SELECT 'SENSHI', d.card_id, sc.id
+						 FROM senshi d
+						 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
+						 WHERE sc.kawaipon_uid = ?1
+						 		AND sc.deck_id = ?2
+						 %s
+						 """.formatted(styling.getSenshiOrder()), account.getUid(), id).stream()
 				 .map(o -> Utils.map(DeckEntry.class, o))
 				 .toList();
 	 }
@@ -210,13 +196,13 @@
 		 if (account == null) return List.of();
 
 		 return DAO.queryAllUnmapped("""
-				 SELECT 'EVOGEAR', d.card_id, sc.id
-				 FROM evogear d
-				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
-				 WHERE sc.kawaipon_uid = ?1
-				   AND sc.deck_id = ?2
-				 %s
-				 """.formatted(styling.getEvogearOrder()), account.getUid(), id).stream()
+						 SELECT 'EVOGEAR', d.card_id, sc.id
+						 FROM evogear d
+						 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
+						 WHERE sc.kawaipon_uid = ?1
+						   AND sc.deck_id = ?2
+						 %s
+						 """.formatted(styling.getEvogearOrder()), account.getUid(), id).stream()
 				 .map(o -> Utils.map(DeckEntry.class, o))
 				 .toList();
 	 }
@@ -279,12 +265,12 @@
 		 if (account == null) return List.of();
 
 		 return DAO.queryAllUnmapped("""
-				 SELECT 'FIELD', d.card_id, sc.id
-				 FROM field d
-				 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
-				 WHERE sc.kawaipon_uid = ?1
-				   AND sc.deck_id = ?2
-				 """, account.getUid(), id).stream()
+						 SELECT 'FIELD', d.card_id, sc.id
+						 FROM field d
+						 INNER JOIN stashed_card sc ON sc.card_id = d.card_id
+						 WHERE sc.kawaipon_uid = ?1
+						   AND sc.deck_id = ?2
+						 """, account.getUid(), id).stream()
 				 .map(o -> Utils.map(DeckEntry.class, o))
 				 .toList();
 	 }
@@ -435,7 +421,7 @@
 						 %s
 						 %s
 						 %s
-						 
+						 						 
 						 %s
 						 %s-(T4:-%s)
 						 %s
@@ -487,9 +473,9 @@
 				 g.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + ori.major().getMajor(locale)
-						 + "\n\n- " + locale.get("major/pureblood")
-						 + "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major().name())
-						 + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
+						   + "\n\n- " + locale.get("major/pureblood")
+						   + "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major().name())
+						   + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			 } else if (ori.major() == Race.MIXED) {
 				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
 				 g.setColor(Graph.mix(Arrays.stream(ori.minor()).map(Race::getColor).toArray(Color[]::new)));
@@ -500,11 +486,11 @@
 				 g.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + locale.get("major/mixed")
-						 + "\n\n" + Arrays.stream(ori.minor())
-						 .filter(r -> r != Race.DEMON)
-						 .map(o -> "- " + o.getMinor(locale))
-						 .collect(Collectors.joining("\n\n"))
-						 + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
+						   + "\n\n" + Arrays.stream(ori.minor())
+								   .filter(r -> r != Race.DEMON)
+								   .map(o -> "- " + o.getMinor(locale))
+								   .collect(Collectors.joining("\n\n"))
+						   + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
 			 } else {
 				 g.drawImage(ori.synergy().getBadge(), 0, 0, 150, 150, null);
 				 g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
@@ -523,12 +509,12 @@
 				 g.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				 g.setColor(Color.WHITE);
 				 effects = "- " + ori.major().getMajor(locale)
-						 + "\n\n" + Arrays.stream(ori.minor())
-						 .filter(r -> r != Race.DEMON)
-						 .map(o -> "- " + o.getMinor(locale))
-						 .collect(Collectors.joining("\n\n"))
-						 + "\n\n- " + syn.getSynergy(locale)
-						 + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
+						   + "\n\n" + Arrays.stream(ori.minor())
+								   .filter(r -> r != Race.DEMON)
+								   .map(o -> "- " + o.getMinor(locale))
+								   .collect(Collectors.joining("\n\n"))
+						   + "\n\n- " + syn.getSynergy(locale)
+						   + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
 			 }
 
 			 Archetype arch = getArchetype();
@@ -707,9 +693,9 @@
 
 							 if (origin.hasMinor(Race.DIVINITY)) {
 								 m += getSenshi().parallelStream()
-										 .map(Senshi::getMPCost)
-										 .min(Integer::compareTo)
-										 .orElse(0) / 2;
+											  .map(Senshi::getMPCost)
+											  .min(Integer::compareTo)
+											  .orElse(0) / 2;
 							 }
 
 							 if (h != null && h.getGame() != null) {
