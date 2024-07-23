@@ -302,7 +302,7 @@ public class Hand {
 
 	public Hand(String uid, Shoukan game, Side side) {
 		this.game = game;
-		this.userDeck = DAO.find(Account.class, uid).getCurrentDeck();
+		this.userDeck = DAO.find(Account.class, uid).getDeck();
 		if (userDeck == null) {
 			throw new GameReport(GameReport.NO_DECK, uid);
 		}

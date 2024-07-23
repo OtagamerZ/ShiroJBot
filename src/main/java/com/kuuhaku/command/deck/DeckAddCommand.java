@@ -65,7 +65,7 @@ public class DeckAddCommand implements Executable {
 			return;
 		}
 
-		Deck d = data.profile().getAccount().getCurrentDeck();
+		Deck d = data.profile().getAccount().getDeck();
 		if (d == null) {
 			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
 			return;

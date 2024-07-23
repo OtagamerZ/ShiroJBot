@@ -49,7 +49,7 @@ import java.util.List;
 public class KawaiponFieldCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck dk = data.profile().getAccount().getCurrentDeck();
+		Deck dk = data.profile().getAccount().getDeck();
 		int total = DAO.queryNative(Integer.class, "SELECT count(1) FROM field");
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()

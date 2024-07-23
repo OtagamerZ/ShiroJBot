@@ -131,7 +131,7 @@ public class SeeCardCommand implements Executable {
 				}
 			}
 			case "s" -> {
-				Deck dk = kp.getAccount().getCurrentDeck();
+				Deck dk = kp.getAccount().getDeck();
 				if (dk == null) {
 					event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
 					return;

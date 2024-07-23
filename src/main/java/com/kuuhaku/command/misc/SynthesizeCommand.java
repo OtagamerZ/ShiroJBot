@@ -245,7 +245,7 @@ public class SynthesizeCommand implements Executable {
 								sc.save();
 
 								event.channel().sendMessage(locale.get("success/synth", f))
-										.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, k.getAccount().getCurrentDeck()), "png"), "synth.png"))
+										.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, k.getAccount().getDeck()), "png"), "synth.png"))
 										.queue();
 							} else {
 								Evogear e = rollSynthesis(event.user(), mult, lucky.get());
@@ -256,7 +256,7 @@ public class SynthesizeCommand implements Executable {
 								sc.save();
 
 								event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
-										.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, k.getAccount().getCurrentDeck()), "png"), "synth.png"))
+										.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, k.getAccount().getDeck()), "png"), "synth.png"))
 										.queue();
 							}
 

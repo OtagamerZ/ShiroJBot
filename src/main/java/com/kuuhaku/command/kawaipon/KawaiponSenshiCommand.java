@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
 public class KawaiponSenshiCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck dk = data.profile().getAccount().getCurrentDeck();
+		Deck dk = data.profile().getAccount().getDeck();
 		if (!args.has("race")) {
 			int total = DAO.queryNative(Integer.class, "SELECT count(1) FROM senshi");
 

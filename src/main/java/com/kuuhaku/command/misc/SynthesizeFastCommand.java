@@ -152,7 +152,7 @@ public class SynthesizeFastCommand implements Executable {
 			sc.save();
 
 			event.channel().sendMessage(locale.get("success/synth", f))
-					.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png"))
+					.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, kp.getAccount().getDeck()), "png"), "synth.png"))
 					.queue();
 		} else {
 			Evogear e = SynthesizeCommand.rollSynthesis(event.user(), mult, false);
@@ -163,7 +163,7 @@ public class SynthesizeFastCommand implements Executable {
 			sc.save();
 
 			event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
-					.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, kp.getAccount().getCurrentDeck()), "png"), "synth.png"))
+					.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, kp.getAccount().getDeck()), "png"), "synth.png"))
 					.queue();
 		}
 	}

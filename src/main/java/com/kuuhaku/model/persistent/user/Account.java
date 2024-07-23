@@ -326,10 +326,13 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		return decks;
 	}
 
-	public Deck getCurrentDeck() {
-		return getDecks().parallelStream()
-				.filter(Deck::isCurrent)
-				.findAny().orElse(null);
+	public Deck getDeck() {
+		List<Deck> decks = getDecks();
+		for (Deck d : decks) {
+			if (d.isCurrent()) return d;
+		}
+
+		return decks.getFirst();
 	}
 
 	public void addTransaction(long value, boolean input, String reason, Currency currency) {

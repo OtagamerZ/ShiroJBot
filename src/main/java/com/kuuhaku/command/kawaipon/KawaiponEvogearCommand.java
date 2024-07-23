@@ -51,7 +51,7 @@ import java.util.List;
 public class KawaiponEvogearCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck dk = data.profile().getAccount().getCurrentDeck();
+		Deck dk = data.profile().getAccount().getDeck();
 		if (!args.has("tier")) {
 			int total = DAO.queryNative(Integer.class, "SELECT count(1) FROM evogear WHERE tier > 0");
 
