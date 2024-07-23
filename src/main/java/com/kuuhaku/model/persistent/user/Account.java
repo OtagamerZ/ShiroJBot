@@ -334,8 +334,6 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 
 	public Deck getDeck() {
 		List<Deck> decks = getDecks();
-		System.out.println(decks);
-
 		for (Deck d : decks) {
 			if (d.isCurrent()) return d;
 		}
