@@ -36,7 +36,7 @@ public record StashItem(I18N locale, StashedCard sc) {
 		if (t != null && t.getSelfOffers(uid).contains(sc.getId())) {
 			location = " (" + locale.get("str/trade") + ")";
 		} else if (sc.getDeck() != null) {
-			location = " (" + locale.get("str/deck", sc.getDeck().getIndex()) + ")";
+			location = " (" + locale.get("str/deck", sc.getDeck().getName()) + ")";
 		} else if (sc.getPrice() > 0) {
 			location = " (" + locale.get("str/market", sc.getPrice()) + ")";
 		} else if (sc.isLocked()) {
