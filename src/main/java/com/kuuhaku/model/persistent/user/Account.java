@@ -89,7 +89,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	private AccountSettings settings;
 
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@OrderColumn(name = "index")
+	@OrderColumn(name = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<Deck> decks = new ArrayList<>();
 
