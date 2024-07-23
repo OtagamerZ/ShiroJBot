@@ -1688,7 +1688,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public static Senshi getRandom(RandomGenerator rng, String... filters) {
 		XStringBuilder query = new XStringBuilder("""
 				WITH senshi_truecost AS (
-					SELECT card_id, atk, dfs, dodge, block
+					SELECT card_id, atk, dfs, dodge, parry
 						 , mana + iif(has(tags, 'FUSION'), 5, 0) as mana
 						 , blood, sacrifices
 						 , effect, tags, race
