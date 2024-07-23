@@ -68,6 +68,9 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Column(name = "current_deck")
 	private int currentDeck;
 
+	@Column(name = "current_title")
+	private int currentTitle;
+
 	public AccountSettings() {
 	}
 
@@ -125,5 +128,13 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	public void setCurrentDeck(int id) {
 		this.currentDeck = id;
+	}
+
+	public int getCurrentTitle() {
+		return currentTitle;
+	}
+
+	public void setCurrentTitle(int id) {
+		this.currentTitle = id;
 	}
 }

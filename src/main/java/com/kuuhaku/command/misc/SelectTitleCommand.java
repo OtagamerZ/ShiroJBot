@@ -27,10 +27,7 @@ import com.kuuhaku.interfaces.annotations.Signature;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.AccountTitle;
-import com.kuuhaku.model.persistent.user.LocalizedTitle;
-import com.kuuhaku.model.persistent.user.Title;
+import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
@@ -58,6 +55,8 @@ public class SelectTitleCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
+		AccountSettings settings = acc.getSettings();
+
 		if (args.isEmpty()) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(locale.get("str/all_titles"));
@@ -119,8 +118,8 @@ public class SelectTitleCommand implements Executable {
 		} else if (args.has("action")) {
 			AccountTitle title = acc.getTitle();
 			if (title != null) {
-				title.setCurrent(false);
-				title.save();
+				settings.setCurrentTitle(0);
+				settings.save();
 			}
 
 			event.channel().sendMessage(locale.get("success/title_clear")).queue();
@@ -144,7 +143,7 @@ public class SelectTitleCommand implements Executable {
 			return;
 		}
 
-		title.setCurrent(true);
+		settings.setCurrentTitle(title.getId());
 		title.save();
 
 		event.channel().sendMessage(locale.get("success/title")).queue();

@@ -38,9 +38,6 @@ public class AccountTitle extends DAO<AccountTitle> {
 	@Fetch(FetchMode.JOIN)
 	private Title title;
 
-	@Column(name = "current", nullable = false)
-	private boolean current;
-
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "account_uid")
 	@Fetch(FetchMode.JOIN)
@@ -63,11 +60,7 @@ public class AccountTitle extends DAO<AccountTitle> {
 	}
 
 	public boolean isCurrent() {
-		return current;
-	}
-
-	public void setCurrent(boolean current) {
-		this.current = current;
+		return account.getSettings().getCurrentTitle() == id;
 	}
 
 	public Account getAccount() {
