@@ -144,7 +144,7 @@ public class SelectTitleCommand implements Executable {
 		}
 
 		settings.setCurrentTitle(title.getId());
-		title.save();
+		settings.save();
 
 		event.channel().sendMessage(locale.get("success/title")).queue();
 	}
