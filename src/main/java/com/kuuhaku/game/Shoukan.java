@@ -1946,17 +1946,6 @@ public class Shoukan extends GameInstance<Phase> {
 				Pages.subGet(RestAction.allOf(acts));
 			}
 
-			if (trigger) {
-				resetTimer();
-				trigger(ON_TICK);
-				for (Hand h : hands.values()) {
-					h.getData().remove("last_attacked_by");
-				}
-
-				getCurrent().setRerolled(true);
-				getCurrent().verifyCap();
-			}
-
 			List<Side> sides = List.of(getOtherSide(), getCurrentSide());
 			for (Side side : sides) {
 				Hand hand = hands.get(side);
@@ -2006,6 +1995,17 @@ public class Shoukan extends GameInstance<Phase> {
 						e.getStats().removeIf(ValueMod::isExpired);
 					}
 				});
+			}
+
+			if (trigger) {
+				resetTimer();
+				trigger(ON_TICK);
+				for (Hand h : hands.values()) {
+					h.getData().remove("last_attacked_by");
+				}
+
+				getCurrent().setRerolled(true);
+				getCurrent().verifyCap();
 			}
 
 			Future<BufferedImage> img = arena.render(getLocale());
