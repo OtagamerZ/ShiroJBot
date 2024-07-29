@@ -87,24 +87,29 @@ public abstract class SignatureParser {
 
 				Signature.Type type = groups.getEnum(Signature.Type.class, "type");
 				if (type == Signature.Type.TEXT) {
-					if (out.has(name)) {
-						JSONArray arr;
-						if (out.get(name) instanceof List<?> ls) {
-							arr = new JSONArray(ls);
+					if (!args.isEmpty()) {
+						if (out.has(name)) {
+							JSONArray arr;
+							if (out.get(name) instanceof List<?> ls) {
+								arr = new JSONArray(ls);
+							} else {
+								arr = new JSONArray();
+								Object curr = out.get(name);
+								arr.add(curr);
+							}
+							arr.add(String.join(" ", args));
+
+							out.put(name, arr);
 						} else {
-							arr = new JSONArray();
-							Object curr = out.get(name);
-							arr.add(curr);
+							out.put(name, String.join(" ", args));
 						}
-						arr.add(String.join(" ", args));
 
-						out.put(name, arr);
-					} else {
-						out.put(name, String.join(" ", args));
+						args.clear();
+						matches++;
+					} else if (required) {
+						fail = true;
+						supplied.add(wrap.formatted("> " + locale.get("signature/" + name) + " <"));
 					}
-
-					args.clear();
-					matches++;
 				} else {
 					String token = null;
 					List<String> opts = List.of();

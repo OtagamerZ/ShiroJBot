@@ -141,6 +141,10 @@ public class GachaCommand implements Executable {
 			Utils.confirm(locale.get("question/gacha", locale.get("gacha/" + type.value()).toLowerCase(), price), event.channel(),
 					w -> {
 						List<String> result = gacha.draw(acc);
+						if (result.isEmpty()) {
+							event.channel().sendMessage(locale.get("error/empty_result")).queue();
+							return true;
+						}
 
 						BufferedImage bi = new BufferedImage(265 * result.size(), 400, BufferedImage.TYPE_INT_ARGB);
 						Graphics2D g2d = bi.createGraphics();

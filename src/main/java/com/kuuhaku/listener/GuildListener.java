@@ -212,6 +212,7 @@ public class GuildListener extends ListenerAdapter {
 		MessageData.Guild data;
 		try {
 			data = new MessageData.Guild(event.getMessage());
+			if (data.member() == null) return;
 		} catch (NullPointerException e) {
 			return;
 		}
