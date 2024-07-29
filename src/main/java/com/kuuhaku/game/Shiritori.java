@@ -158,11 +158,11 @@ public class Shiritori extends GameInstance<NullPhase> {
 				if (idx == 0) {
 					padSize = Integer.parseInt(line);
 				} else if (idx == 1) {
-					int range = padSize + 1;
+					int range = padSize;
 					int charIndex = line.indexOf(c);
 					if (charIndex == -1) return false;
 
-					lookupIndex = Integer.parseInt(line.substring(charIndex + 1, charIndex + range));
+					lookupIndex = Integer.parseInt(line.substring(charIndex + 1, charIndex + 1 + range));
 				} else if (idx > lookupIndex) {
 					if (line.charAt(0) != c) {
 						return false;
