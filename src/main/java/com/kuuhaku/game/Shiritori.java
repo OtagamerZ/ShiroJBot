@@ -162,7 +162,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 					int charIndex = line.indexOf(c);
 					if (charIndex == -1) return false;
 
-					lookupIndex = Integer.parseInt(line.substring(charIndex + 1, charIndex + 1 + range));
+					lookupIndex = Integer.parseInt(line.substring(charIndex + 1, charIndex + range));
 				} else if (idx > lookupIndex) {
 					if (line.charAt(0) != c) {
 						return false;
