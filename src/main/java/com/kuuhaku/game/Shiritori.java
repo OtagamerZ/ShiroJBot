@@ -211,7 +211,13 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 	@Override
 	protected void nextTurn() {
-		super.nextTurn();
+		nextTurn(false);
+	}
+
+	protected void nextTurn(boolean same) {
+		if (!same) {
+			super.nextTurn();
+		}
 
 		if (getTurn() >= 50) {
 			if (getTurn() == 50) {
@@ -229,8 +235,10 @@ public class Shiritori extends GameInstance<NullPhase> {
 				}, 30, TimeUnit.SECONDS);
 			}
 
-			reportEvent("alert/game_turn_change_shiritori", "<@" + inGame.getNext() + ">", current);
-		} else {
+			if (!same) {
+				reportEvent("alert/game_turn_change_shiritori", "<@" + inGame.getNext() + ">", current);
+			}
+		} else if (!same) {
 			reportEvent("str/game_turn_change_shiritori", "<@" + inGame.getNext() + ">", current);
 		}
 	}
