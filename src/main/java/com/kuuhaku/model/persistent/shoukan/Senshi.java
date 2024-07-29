@@ -1280,7 +1280,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (hasEffect() && getEffect().contains(trigger.name())) {
 				if (isStunned() && getGame().chance(25)) {
-					if (trigger != ON_TICK) {
+					if (Trigger.getAnnouceable().contains(trigger)) {
 						game.getChannel().sendMessage(game.getString("str/effect_stunned", this)).queue();
 					}
 				} else {
@@ -1437,26 +1437,29 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 		}
 
-		boolean isTick = source instanceof EffectHolder<?> eh && eh.getCurrentTrigger() == ON_TICK;
-		if (getGame().chance(getDodge())) {
-			if (!isTick) {
-				Shoukan game = getGame();
-				game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
-						this.isFlipped() ? game.getLocale().get("str/a_card") : this
-				)).queue();
-				game.trigger(ON_DODGE, asSource(ON_DODGE));
-			}
+		if (source instanceof EffectHolder<?> eh) {
+			boolean announce = Trigger.getAnnouceable().contains(eh.getCurrentTrigger());
 
-			return true;
-		} else if (hasCharm(Charm.SHIELD, !isTick)) {
-			blocked.add(source);
-			if (!isTick) {
-				Shoukan game = getGame();
-				game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
-				game.trigger(ON_PARRY, asSource(ON_PARRY));
-			}
+			if (getGame().chance(getDodge())) {
+				if (announce) {
+					Shoukan game = getGame();
+					game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
+							this.isFlipped() ? game.getLocale().get("str/a_card") : this
+					)).queue();
+					game.trigger(ON_DODGE, asSource(ON_DODGE));
+				}
 
-			return true;
+				return true;
+			} else if (hasCharm(Charm.SHIELD, announce)) {
+				blocked.add(source);
+				if (announce) {
+					Shoukan game = getGame();
+					game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
+					game.trigger(ON_PARRY, asSource(ON_PARRY));
+				}
+
+				return true;
+			}
 		}
 
 		return false;

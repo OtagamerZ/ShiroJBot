@@ -18,6 +18,9 @@
 
 package com.kuuhaku.model.enums.shoukan;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public enum Trigger {
 	/**
 	 * On each render
@@ -292,5 +295,11 @@ public enum Trigger {
 	/**
 	 * Nothing <b>(DO NOT USE)</b>
 	 **/
-	NONE
+	NONE;
+
+	public static Set<Trigger> getAnnouceable() {
+		return EnumSet.complementOf(EnumSet.of(
+				ON_TICK, ON_INITIALIZE, ON_REMOVE, NONE
+		));
+	}
 }
