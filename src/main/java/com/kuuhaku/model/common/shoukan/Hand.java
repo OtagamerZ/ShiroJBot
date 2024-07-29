@@ -137,7 +137,7 @@ public class Hand {
 			return false;
 		}
 
-		return !d.isEthereal() && !(d instanceof EffectHolder<?> eh && eh.hasFlag(Flag.DESTROY));
+		return !(d instanceof EffectHolder<?> eh && eh.hasFlag(Flag.DESTROY));
 	}, d -> d.setCurrentStack(getDiscard(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
 		if (getRealDeck(false).contains(d)) return false;
