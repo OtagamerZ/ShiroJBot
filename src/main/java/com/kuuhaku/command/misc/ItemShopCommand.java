@@ -141,6 +141,11 @@ public class ItemShopCommand implements Executable {
 			}
 
 			Utils.confirm(locale.get("question/item_buy", amount, item.getName(locale), price), event.channel(), w -> {
+						if (!acc.isTrueState()) {
+							event.channel().sendMessage(locale.get("error/account_state_changed", 0)).queue();
+							return true;
+						}
+
 						acc.addItem(item, amount);
 						switch (item.getCurrency()) {
 							case CR -> acc.consumeCR(value, "Bought " + amount + "x " + item.getName(locale));

@@ -29,7 +29,6 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
-import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.SlotSkin;
@@ -137,10 +136,7 @@ public class DeckSkinCommand implements Executable {
 						if (!remaining.isEmpty()) {
 							event.channel().sendMessage(locale.get("error/skin_locked")).queue();
 						} else {
-							if (!acc.hasEnough(skin.getPrice(), skin.getCurrency())) {
-								event.channel().sendMessage(locale.get("error/insufficient_" + skin.getCurrency())).queue();
-								return;
-							} else if (!confirm.getAndSet(true)) {
+							if (!confirm.getAndSet(true)) {
 								Objects.requireNonNull(w.getHook())
 										.setEphemeral(true)
 										.sendMessage(locale.get("str/press_again"))
@@ -148,10 +144,14 @@ public class DeckSkinCommand implements Executable {
 								return;
 							}
 
-							if (skin.getCurrency() == Currency.CR) {
-								acc.consumeCR(skin.getPrice(), "Skin " + skin);
-							} else {
-								acc.consumeGems(skin.getPrice(), "Skin " + skin);
+							if (!acc.isTrueState()) {
+								event.channel().sendMessage(locale.get("error/account_state_changed", 0)).queue();
+								return;
+							}
+
+							switch (skin.getCurrency()) {
+								case CR -> acc.consumeCR(skin.getPrice(), "Skin " + skin);
+								case GEM -> acc.consumeGems(skin.getPrice(), "Skin " + skin);
 							}
 
 							DynamicProperty.update(acc.getUid(), "ss_" + skin.getId().toLowerCase(), true);
