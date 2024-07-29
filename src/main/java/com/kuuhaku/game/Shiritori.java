@@ -151,7 +151,6 @@ public class Shiritori extends GameInstance<NullPhase> {
 			int idx = 0;
 			int padSize = 0;
 			int lookupIndex = 0;
-			int charIndex = c - 'a';
 
 			while (s.hasNextLine()) {
 				String line = s.nextLine();
@@ -160,7 +159,10 @@ public class Shiritori extends GameInstance<NullPhase> {
 					padSize = Integer.parseInt(line);
 				} else if (idx == 1) {
 					int range = padSize + 1;
-					lookupIndex = Integer.parseInt(line.substring(range * charIndex + 1, range * (charIndex + 1)));
+					int charIndex = line.indexOf(c);
+					if (charIndex == -1) return false;
+
+					lookupIndex = Integer.parseInt(line.substring(charIndex + 1, charIndex + 1 + range));
 				} else if (idx > lookupIndex) {
 					if (line.charAt(0) != c) {
 						return false;
