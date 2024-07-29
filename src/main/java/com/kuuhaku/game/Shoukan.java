@@ -1088,7 +1088,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		Senshi ally = yourSlot.getTop();
-		attack(ally, you, SendMode.REPORT, SendMode.SEND);
+		attack(ally, you, SendMode.REGULAR, SendMode.SEND);
 
 		return false;
 	}
@@ -1124,9 +1124,9 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (enemy == null) {
-			attack(ally, op, SendMode.REPORT, SendMode.SEND);
+			attack(ally, op, SendMode.REGULAR, SendMode.SEND);
 		} else {
-			attack(ally, enemy, SendMode.REPORT, SendMode.SEND);
+			attack(ally, enemy, SendMode.REGULAR, SendMode.SEND);
 		}
 
 		return false;
@@ -1196,7 +1196,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (isClosed()) return false;
 		Set<SendMode> md = EnumSet.of(SendMode.NONE, mode);
 
-		if (source == null || ((md.contains(SendMode.REPORT) && !source.canAttack()) || !source.isAvailable())) {
+		if (source == null || ((md.contains(SendMode.REGULAR) && !source.canAttack()) || !source.isAvailable())) {
 			if (md.contains(SendMode.SEND)) {
 				getChannel().sendMessage(getString("error/card_cannot_attack")).queue();
 			}
@@ -1274,7 +1274,7 @@ public class Shoukan extends GameInstance<Phase> {
 				outcome = getString("str/combat_skip");
 			}
 
-			if (validTarget && ((md.contains(SendMode.REPORT) && source.canAttack()) || source.isAvailable())) {
+			if (validTarget && ((md.contains(SendMode.REGULAR) && source.canAttack()) || source.isAvailable())) {
 				boolean ignore = source.hasFlag(Flag.NO_COMBAT, true);
 				if (target != null) {
 					if (!ignore) {
@@ -1312,7 +1312,7 @@ public class Shoukan extends GameInstance<Phase> {
 									s.awaken();
 								}
 
-								if (md.contains(SendMode.REPORT)) {
+								if (md.contains(SendMode.REGULAR)) {
 									if (!source.hasFlag(Flag.NO_DAMAGE, true)) {
 										you.modHP((int) -((enemyStats - dmg) * dmgMult));
 									}
@@ -1338,7 +1338,7 @@ public class Shoukan extends GameInstance<Phase> {
 									}
 
 									trigger(NONE, source.asSource(), target.asTarget(ON_PARRY));
-									attack(target, source, SendMode.BUFFER);
+									attack(target, source);
 									source.setAvailable(false);
 
 									dmg = 0;
@@ -1500,7 +1500,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		} finally {
 			if (source.getIndex() != -1) {
-				if (target == null || (md.contains(SendMode.REPORT) && !source.spendAttack())) {
+				if (target == null || (md.contains(SendMode.REGULAR) && !source.spendAttack())) {
 					source.setAvailable(false);
 				}
 			}
@@ -1525,10 +1525,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		if (md.contains(SendMode.REPORT) || md.contains(SendMode.BUFFER)) {
-			reportEvent("str/combat", true, md.contains(SendMode.BUFFER), source, Utils.getOr(target, op.getName()), outcome.trim());
-		}
-
+		reportEvent("str/combat", true, !md.contains(SendMode.SEND), source, Utils.getOr(target, op.getName()), outcome.trim());
 		return win;
 	}
 

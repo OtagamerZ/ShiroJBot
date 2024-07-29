@@ -19,5 +19,5 @@
 package com.kuuhaku.model.enums.shoukan;
 
 public enum SendMode {
-	NONE, REPORT, SEND, BUFFER
+	NONE, REGULAR, SEND, BUFFER
 }
