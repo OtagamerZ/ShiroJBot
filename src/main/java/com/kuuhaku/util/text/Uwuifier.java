@@ -69,6 +69,8 @@ public class Uwuifier {
     }
 
     public String uwu(I18N locale, String text) {
+        locale = locale.getParent();
+
         String[] lines = text.split("\n");
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];

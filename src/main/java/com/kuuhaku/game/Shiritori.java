@@ -27,6 +27,7 @@ import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.text.Uwuifier;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
@@ -64,7 +65,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 		super(locale, players);
 
 		this.inGame = new InfiniteList<>(Set.of(players));
-		this.dict = IO.getResourceAsFile("shiritori/" + locale.name().toLowerCase() + ".dict");
+		this.dict = IO.getResourceAsFile("shiritori/" + locale.getParent().name().toLowerCase() + ".dict");
 
 		setTimeout(turn -> {
 			getChannel().sendMessage(locale.get("str/game_wo_alt", "<@" + inGame.get() + ">", "<@" + inGame.peekNext() + ">")).queue();
@@ -162,6 +163,10 @@ public class Shiritori extends GameInstance<NullPhase> {
 					int range = padSize + 1;
 					lookupIndex = Integer.parseInt(line.substring(range * charIndex + 1, range * (charIndex + 1)));
 				} else if (idx > lookupIndex) {
+					if (getLocale().isUwu()) {
+						line = Uwuifier.INSTANCE.uwu(getLocale(), line);
+					}
+
 					if (line.charAt(0) != c) {
 						return false;
 					} else if (line.equals(word)) {
