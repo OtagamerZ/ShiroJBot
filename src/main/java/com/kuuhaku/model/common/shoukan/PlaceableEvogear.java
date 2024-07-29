@@ -30,7 +30,7 @@ public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 	private final Evogear original;
 
 	public PlaceableEvogear(Evogear e) {
-		super(e.getId(), e.getCard(), e.isSpell() ? Race.MYSTICAL : Race.MACHINE, e.getBase());
+		super(e.getId(), e.getCard(), e.isSpell() ? Race.MYSTICAL : Race.MACHINE, e.getBase(), e.getStats(), e.getStashRef());
 
 		original = e;
 		setHand(e.getHand());
@@ -39,11 +39,6 @@ public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 	@Override
 	public Evogear getOriginal() {
 		return original;
-	}
-
-	@Override
-	public CardExtra getStats() {
-		return original.getStats();
 	}
 
 	@Override

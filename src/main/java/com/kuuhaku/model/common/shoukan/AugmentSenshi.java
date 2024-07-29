@@ -31,7 +31,7 @@ public class AugmentSenshi extends Senshi implements Proxy<Senshi> {
 	private final Senshi original;
 
 	public AugmentSenshi(Senshi aug, Senshi original) {
-		super(aug.getId(), aug.getCard(), aug.getRace(), aug.getBase());
+		super(aug.getId(), aug.getCard(), aug.getRace(), aug.getBase(), aug.getStats(), aug.getStashRef());
 
 		this.original = original;
 		while (!aug.getEquipments().isEmpty()) {
@@ -42,11 +42,6 @@ public class AugmentSenshi extends Senshi implements Proxy<Senshi> {
 	@Override
 	public Senshi getOriginal() {
 		return original;
-	}
-
-	@Override
-	public CardExtra getStats() {
-		return original.getStats();
 	}
 
 	@Override

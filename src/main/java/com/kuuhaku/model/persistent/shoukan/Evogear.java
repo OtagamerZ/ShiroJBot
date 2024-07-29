@@ -124,14 +124,16 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public Evogear() {
 	}
 
-	public Evogear(String id, Card card, int tier, boolean spell, TargetType type, JSONArray charms, CardAttributes base) {
+	public Evogear(String id, Card card, int tier, boolean spell, TargetType targetType, JSONArray charms, CardAttributes base, CardExtra stats, StashedCard stashRef) {
 		this.id = id;
 		this.card = card;
 		this.tier = tier;
 		this.spell = spell;
-		this.targetType = type;
+		this.targetType = targetType;
 		this.charms = charms;
 		this.base = base;
+		this.stats = stats;
+		this.stashRef = stashRef;
 	}
 
 	@Override
@@ -782,7 +784,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public Evogear fork() throws CloneNotSupportedException {
-		Evogear clone = new Evogear(id, card, tier, spell, targetType, charms.clone(), base.clone());
+		Evogear clone = new Evogear(id, card, tier, spell, targetType, charms.clone(), base.clone(), stats.clone(), stashRef);
 		clone.stats = stats.clone();
 		clone.hand = hand;
 		clone.state = (byte) (state & (0b111 | 0xF0));

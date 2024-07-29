@@ -167,11 +167,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public Senshi() {
 	}
 
-	public Senshi(String id, Card card, Race race, CardAttributes base) {
+	public Senshi(String id, Card card, Race race, CardAttributes base, CardExtra stats, StashedCard stashRef) {
 		this.id = id;
 		this.card = card;
 		this.race = race;
 		this.base = base;
+		this.stats = stats;
+		this.stashRef = stashRef;
 	}
 
 	@Override
@@ -1667,7 +1669,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public Senshi fork() throws CloneNotSupportedException {
-		Senshi clone = new Senshi(id, card, race, base.clone());
+		Senshi clone = new Senshi(id, card, race, base.clone(), stats.clone(), stashRef);
 		clone.stats = stats.clone();
 		clone.hand = hand;
 		clone.state = state & (0b11111 | 0xF_FFFFF_00);
