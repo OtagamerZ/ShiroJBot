@@ -889,24 +889,27 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		curr.consumeHP(chosen.getHPCost());
-		curr.consumeMP(chosen.getMPCost());
 		List<Drawable<?>> consumed = curr.consumeSC(chosen.getSCCost());
 		if (!consumed.isEmpty()) {
 			chosen.getStats().getData().put("consumed", consumed);
 		}
 
-		if (!chosen.execute(chosen.toParameters(tgt))) {
-			if (!chosen.isAvailable()) {
-				if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
-					stack.add(chosen);
+		try {
+			if (!chosen.execute(chosen.toParameters(tgt))) {
+				if (!chosen.isAvailable()) {
+					if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
+						stack.add(chosen);
+					}
+
+					reportEvent("str/effect_interrupted", true, false, chosen);
+					return true;
 				}
 
-				reportEvent("str/effect_interrupted", true, false, chosen);
-				return true;
+				return false;
 			}
-
-			return false;
+		} finally {
+			curr.consumeHP(chosen.getHPCost());
+			curr.consumeMP(chosen.getMPCost());
 		}
 
 		if (!chosen.hasFlag(Flag.FREE_ACTION, true)) {
