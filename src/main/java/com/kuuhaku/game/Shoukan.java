@@ -2462,7 +2462,7 @@ public class Shoukan extends GameInstance<Phase> {
 						.queue();
 			});
 
-			if (isSingleplayer() || getTurn() > 10) {
+			if (isSingleplayer() || (getTurn() > 10 && curr.getLockTime(Lock.SURRENDER) == 0)) {
 				helper.addAction(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
 						reportResult(GameReport.SUCCESS, getOther().getSide(), "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
