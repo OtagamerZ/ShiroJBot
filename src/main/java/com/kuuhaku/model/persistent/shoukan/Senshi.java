@@ -1238,7 +1238,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		try {
 			base.lock(trigger);
-			if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
+			if (getSlot().getIndex() > -1 && trigger != ON_TICK) {
 				getGame().trigger(ON_TICK, asSource(ON_TICK));
 			}
 
@@ -1314,7 +1314,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 			}
 
-			if (ep.referee() == null) {
+			if (ep.referee() == null && trigger != ON_TICK) {
 				Senshi sup = getSupport();
 				if (sup != null) {
 					sup.execute(new EffectParameters(ON_DEFER_SUPPORT, getSide(), new DeferredTrigger(this, trigger), ep.source(), ep.targets()));

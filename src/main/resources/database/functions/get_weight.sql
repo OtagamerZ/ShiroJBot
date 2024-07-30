@@ -26,10 +26,11 @@ SELECT CASE type
            WHEN 'KAWAIPON' THEN cast(425 * pow(1.4, tier) AS INT)
            WHEN 'EVOGEAR' THEN cast(45 * pow(2, tier) AS INT)
            WHEN 'FIELD' THEN 100
+           ELSE 0
            END AS weight
 FROM (
      SELECT c.id
-          , 6 - coalesce(get_rarity_index(c.rarity), e.tier * 5 / 4)              AS tier
+          , 6 - coalesce(get_rarity_index(c.rarity), e.tier * 5 / 4)          AS tier
           , iif(get_rarity_index(c.rarity) IS NOT NULL, 'KAWAIPON', c.rarity) AS type
      FROM card c
               LEFT JOIN evogear e ON c.id = e.card_id AND e.tier > 0
@@ -61,6 +62,7 @@ SELECT CASE type
            WHEN 'KAWAIPON' THEN cast(425 * pow(1.4, tier) AS INT)
            WHEN 'EVOGEAR' THEN cast(45 * pow(2, tier) AS INT)
            WHEN 'FIELD' THEN 100
+           ELSE 0
            END AS weight
 FROM (
      SELECT 6 - ($2 * 5 / 4) AS tier, $1 AS type
