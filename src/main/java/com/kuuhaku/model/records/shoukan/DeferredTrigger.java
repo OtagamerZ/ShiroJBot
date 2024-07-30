@@ -22,4 +22,7 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 public record DeferredTrigger(Senshi card, Trigger trigger) {
+	public boolean isTriggerable() {
+		return card.getEffect().contains(trigger.name());
+	}
 }
