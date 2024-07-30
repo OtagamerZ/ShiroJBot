@@ -1820,8 +1820,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public void triggerEOTs(EffectParameters ep) {
 		for (EffectOverTime effect : Set.copyOf(eots)) {
-			if (effect.isLocked()) continue;
-			else if (effect.isClosed()) {
+			if (effect.isClosed()) {
 				eots.remove(effect);
 				continue;
 			}
@@ -1850,10 +1849,6 @@ public class Shoukan extends GameInstance<Phase> {
 					} catch (Exception e) {
 						getChannel().sendMessage(getString("error/effect")).queue();
 						Constants.LOGGER.warn("Failed to execute {} persistent effect", effect.getSource(), e);
-					}
-
-					if (effect.getSide() == null) {
-						effect.lock();
 					}
 				}
 			} else if (ep.source() != null) {
@@ -2659,10 +2654,6 @@ public class Shoukan extends GameInstance<Phase> {
 	protected void resetTimer() {
 		super.resetTimer();
 		getCurrent().setForfeit(false);
-
-		for (EffectOverTime eot : eots) {
-			eot.unlock();
-		}
 	}
 
 	@Override

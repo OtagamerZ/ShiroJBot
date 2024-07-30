@@ -42,7 +42,6 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 
 	private Integer turns;
 	private Integer limit;
-	private boolean lock;
 	private boolean closed;
 
 	public EffectOverTime(Drawable<?> source, BiConsumer<EffectOverTime, EffectParameters> effect, Trigger... triggers) {
@@ -130,18 +129,6 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 		if (limit != null) expired |= limit <= 0;
 
 		return expired;
-	}
-
-	public boolean isLocked() {
-		return lock;
-	}
-
-	public void lock() {
-		lock = true;
-	}
-
-	public void unlock() {
-		lock = false;
 	}
 
 	public boolean isPermanent() {
