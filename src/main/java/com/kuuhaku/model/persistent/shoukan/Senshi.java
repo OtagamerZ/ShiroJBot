@@ -1282,7 +1282,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (hasEffect() && getEffect().contains(trigger.name())) {
 				if (isStunned() && getGame().chance(25)) {
-					if (Trigger.getAnnouceable().contains(trigger)) {
+					if (Trigger.getAnnounceable().contains(trigger) && !ep.isDeferred(Trigger.getAnnounceable())) {
 						game.getChannel().sendMessage(game.getString("str/effect_stunned", this)).queue();
 					}
 				} else {
@@ -1440,7 +1440,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (source instanceof EffectHolder<?> eh) {
-			boolean announce = Trigger.getAnnouceable().contains(eh.getCurrentTrigger());
+			boolean announce = Trigger.getAnnounceable().contains(eh.getCurrentTrigger());
 
 			if (getGame().chance(getDodge())) {
 				if (announce) {

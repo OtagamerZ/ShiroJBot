@@ -297,7 +297,7 @@ public enum Trigger {
 	 **/
 	NONE;
 
-	public static Set<Trigger> getAnnouceable() {
+	public static Set<Trigger> getAnnounceable() {
 		return EnumSet.complementOf(EnumSet.of(
 				ON_TICK, ON_INITIALIZE, ON_REMOVE, NONE
 		));

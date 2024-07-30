@@ -177,6 +177,10 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 	}
 
 	public boolean isDeferred(Trigger... trigger) {
+		return isDeferred(List.of(trigger));
+	}
+
+	public boolean isDeferred(Collection<Trigger> trigger) {
 		return referee != null && Utils.equalsAny(referee.trigger(), trigger);
 	}
 
