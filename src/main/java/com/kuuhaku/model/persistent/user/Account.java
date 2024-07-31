@@ -582,6 +582,10 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		user.openPrivateChannel()
 				.flatMap(c -> c.sendMessageEmbeds(eb.build()))
 				.queue(null, Utils::doNothing);
+
+		if (settings.isRemindVote()) {
+			new Reminder(this, null, getEstimateLocale().get("str/vote_reminder"), 12 * Constants.MILLIS_IN_HOUR).save();
+		}
 	}
 
 	public boolean hasVoted() {

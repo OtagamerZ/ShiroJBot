@@ -71,6 +71,9 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Column(name = "current_title", nullable = false)
 	private int currentTitle;
 
+	@Column(name = "remind_vote", nullable = false)
+	private boolean remindVote;
+
 	public AccountSettings() {
 	}
 
@@ -136,5 +139,13 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	public void setCurrentTitle(int id) {
 		this.currentTitle = id;
+	}
+
+	public boolean isRemindVote() {
+		return remindVote;
+	}
+
+	public void setRemindVote(boolean remindVote) {
+		this.remindVote = remindVote;
 	}
 }
