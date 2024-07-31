@@ -19,8 +19,8 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.model.records.shoukan.PropValue;
 import com.kuuhaku.util.Utils;
-import com.ygimenez.json.JSONObject;
 import org.intellij.lang.annotations.Language;
 
 import java.util.HashMap;
@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CachedScriptManager {
 	private final Map<String, Object> context = new HashMap<>();
-	private final JSONObject storedProps = new JSONObject();
+	private final Map<String, PropValue> storedProps = new HashMap<>();
 	private final AtomicInteger propHash = new AtomicInteger();
 
 	@Language("Groovy")
@@ -72,7 +72,7 @@ public class CachedScriptManager {
 		Utils.exec(owner.toString(), code, context);
 	}
 
-	public JSONObject getStoredProps() {
+	public Map<String, PropValue> getStoredProps() {
 		return storedProps;
 	}
 

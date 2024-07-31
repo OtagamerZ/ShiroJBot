@@ -37,12 +37,11 @@ import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.DeckStyling;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
+import com.kuuhaku.model.records.shoukan.PropValue;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import com.ygimenez.json.JSONArray;
-import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -52,7 +51,6 @@ import org.apache.logging.log4j.util.TriConsumer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -204,7 +202,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			csm.getStoredProps().clear();
 		}
 
-		JSONObject props = csm.getStoredProps();
+		Map<String, PropValue> props = csm.getStoredProps();
 		try {
 			return pat.replaceAll(m -> {
 				boolean tag = m.group(2) != null;
@@ -235,29 +233,20 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 								int value = Calc.round(NumberUtils.toDouble(val) * power / equips);
 
 								if (v == null) {
-									return value;
-								} else if (v instanceof JSONArray a) {
-									a.add(value);
-									return a;
+									return PropValue.from(value);
+								} else {
+									return v.add(value);
 								}
-
-								return new JSONArray(List.of(v, value));
 							});
 						}
 
-						if (demon && props.has("hp")) {
+						if (demon && props.containsKey("hp")) {
 							props.put("mp", props.get("hp"));
 						}
 					}
 
 					int it = counter.compute(main, (k, v) -> Utils.getOr(v, 0) + 1) - 1;
-
-					Object prop = props.get(main, 0);
-					if (prop instanceof JSONArray a) {
-						out = String.valueOf(a.getInt(it));
-					} else {
-						out = String.valueOf(((Number) prop).intValue());
-					}
+					out = String.valueOf(props.get(main).getAt(it).intValue());
 
 					if (prcnt) {
 						out += "%";
