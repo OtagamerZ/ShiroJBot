@@ -196,8 +196,9 @@ public class Arena implements Renderer {
 
 			for (Hand h : game.getHands().values()) {
 				int offset = h.getSide() == Side.TOP ? 0 : canvas.getHeight() / 2;
+				Color bg = h.getUserDeck().getStyling().getFrame().getThemeColor();
 
-				g2d.setColor(h.getUserDeck().getStyling().getFrame().getThemeColor().darker().darker());
+				g2d.setColor(bg.darker().darker().darker().darker());
 				g2d.fillRect(0, offset, canvas.getWidth(), canvas.getHeight() / 2);
 
 				Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(h));
