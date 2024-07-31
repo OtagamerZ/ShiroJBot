@@ -35,6 +35,22 @@ public record PropValue(List<Number> values) {
 		return values.get(index);
 	}
 
+	public Number sum(Number other) {
+		return values.getFirst().doubleValue() + other.doubleValue();
+	}
+
+	public Number subtract(Number other) {
+		return values.getFirst().doubleValue() - other.doubleValue();
+	}
+
+	public Number multiply(Number other) {
+		return values.getFirst().doubleValue() * other.doubleValue();
+	}
+
+	public Number divide(Number other) {
+		return values.getFirst().doubleValue() / other.doubleValue();
+	}
+
 	public <T extends Number> T asType(Class<T> klass) {
 		if (values.isEmpty()) return klass.cast(0);
 
