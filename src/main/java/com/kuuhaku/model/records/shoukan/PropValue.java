@@ -35,20 +35,20 @@ public record PropValue(List<Number> values) {
 		return values.get(index).intValue();
 	}
 
-	public int plus(Number other) {
-		return (int) (values.getFirst().doubleValue() + other.doubleValue());
+	public double plus(Number other) {
+		return values.getFirst().doubleValue() + other.doubleValue();
 	}
 
-	public int minus(Number other) {
-		return (int) (values.getFirst().doubleValue() - other.doubleValue());
+	public double minus(Number other) {
+		return values.getFirst().doubleValue() - other.doubleValue();
 	}
 
-	public int multiply(Number other) {
-		return (int) (values.getFirst().doubleValue() * other.doubleValue());
+	public double multiply(Number other) {
+		return values.getFirst().doubleValue() * other.doubleValue();
 	}
 
-	public int div(Number other) {
-		return (int) (values.getFirst().doubleValue() / other.doubleValue());
+	public double div(Number other) {
+		return values.getFirst().doubleValue() / other.doubleValue();
 	}
 
 	public int negative() {
