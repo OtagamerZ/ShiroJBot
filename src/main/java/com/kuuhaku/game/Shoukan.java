@@ -1222,7 +1222,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		int posHash = 0;
 		if (target != null) {
-			if (target.isStasis()) {
+			if (target.isStasis() || target.getIndex() == -1) {
 				if (md.contains(SendMode.SEND)) {
 					getChannel().sendMessage(getString("error/card_untargetable")).queue();
 				}
