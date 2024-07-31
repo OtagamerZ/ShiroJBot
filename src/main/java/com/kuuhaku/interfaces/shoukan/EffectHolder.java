@@ -166,6 +166,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default String parseDescription(I18N locale) {
 		Hand h = getHand();
 		boolean inGame = h.getGame() != null;
+		boolean demon = h.getOrigins().major() == Race.DEMON;
 
 		int equips;
 		EffectHolder<?> source = this;
@@ -212,12 +213,18 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				String out = "";
 				if (!tag) {
+					if (demon) {
+						str = str.replace("$mp", "$hp*0.08");
+					}
+
 					LinkedHashSet<Object> types = new LinkedHashSet<>(Utils.extractGroups(str, "\\$(\\w+)"));
 					if (types.isEmpty()) {
 						types.add("untyped");
 					}
 
-					String main = types.stream().map(String::valueOf).findFirst().orElse(null);
+					String main = types.stream()
+							.map(String::valueOf)
+							.findFirst().orElse(null);
 
 					if (stale) {
 						String val = String.valueOf(Utils.exec("import static java.lang.Math.*\n\n" + str.replace("$", ""), values));
@@ -262,6 +269,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							.map(t -> "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
 							.collect(Collectors.joining());
 				} else {
+					if (str.equals("mp") && demon) {
+						str = "hp";
+					}
+
 					Pair<Integer, Color> idx = COLORS.get(str);
 
 					if (idx != null) {
