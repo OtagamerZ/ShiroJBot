@@ -241,7 +241,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					}
 
 					int it = counter.compute(main, (k, v) -> Utils.getOr(v, 0) + 1) - 1;
-					out = String.valueOf(props.get(main).getAt(it).intValue());
+					out = String.valueOf(props.get(main).getAt(it));
 
 					if (prcnt) {
 						out += "%";
