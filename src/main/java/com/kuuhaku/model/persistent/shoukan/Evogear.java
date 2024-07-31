@@ -258,12 +258,34 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public int getMPCost() {
-		return Math.max(0, Calc.round((base.getMana() + stats.getMana().get()) * getCostMult()));
+		return getMPCost(false);
+	}
+
+	public int getMPCost(boolean ignoreRace) {
+		int cost = Math.max(0, Calc.round((base.getMana() + stats.getMana().get()) * getCostMult()));
+		if (hand != null) {
+			if (!ignoreRace) {
+				if (hand.getOrigins().major() == Race.DEMON) {
+					cost = 0;
+				}
+			}
+		}
+
+		return cost;
 	}
 
 	@Override
 	public int getHPCost() {
-		return Math.max(0, Calc.round((base.getBlood() + stats.getBlood().get()) * getCostMult()));
+		int cost = Math.max(0, Calc.round((base.getBlood() + stats.getBlood().get()) * getCostMult()));
+		if (hand != null) {
+			int mp = getMPCost(true);
+
+			if (hand.getOrigins().major() == Race.DEMON) {
+				cost += (int) (hand.getBase().hp() * 0.08 * mp);
+			}
+		}
+
+		return cost;
 	}
 
 	@Override
