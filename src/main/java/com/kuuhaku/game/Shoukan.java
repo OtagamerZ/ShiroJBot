@@ -76,9 +76,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
@@ -1683,12 +1681,11 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void iterateSlots(Side side, Consumer<Senshi> act) {
-		Map<Senshi, Integer> cards = arena.getSlots(side).stream().flatMap(slt -> slt.getCards().stream()).filter(Objects::nonNull).collect(Collectors.toMap(Function.identity(), s -> s.getSlot().hashCode()));
-
-		for (Map.Entry<Senshi, Integer> e : cards.entrySet()) {
-			Senshi card = e.getKey();
-			if (card.getSlot().hashCode() == e.getValue()) {
-				act.accept(card);
+		for (SlotColumn slot : arena.getSlots(side)) {
+			for (Senshi card : slot.getCards()) {
+				if (card != null) {
+					act.accept(card);
+				}
 			}
 		}
 	}
@@ -2011,7 +2008,7 @@ public class Shoukan extends GameInstance<Phase> {
 				getChannel().buffer(getString(message, args));
 			} else {
 				getChannel().sendMessage(getString(message, args))
-						.addFile(IO.getBytes(arena.getThumbnail(), "png"), "preview.png")
+						.addFile(IO.getBytes(arena.getThumbnail(), "jpg"), "preview.jpg")
 						.apply(helper::apply)
 						.queue(m -> {
 							Pages.buttonize(m, helper);
@@ -2026,8 +2023,8 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							try {
-								byte[] bytes = IO.getBytes(img.get(), "png");
-								m.editMessageAttachments(FileUpload.fromData(bytes, "game.png")).queue(null, Utils::doNothing);
+								byte[] bytes = IO.getBytes(img.get());
+								m.editMessageAttachments(FileUpload.fromData(bytes, "game.jpg")).queue(null, Utils::doNothing);
 							} catch (CancellationException ignore) {
 							} catch (ExecutionException | InterruptedException e) {
 								throw new RuntimeException(e);
@@ -2061,8 +2058,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		try {
 			BufferedImage img = arena.render(getLocale()).get();
-			byte[] bytes = IO.getBytes(img, "png");
-			msg.addFile(bytes, "game.png");
+			byte[] bytes = IO.getBytes(img, "jpg");
+			msg.addFile(bytes, "game.jpg");
 		} catch (Exception ignore) {
 		}
 

@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
@@ -355,23 +356,29 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	public BufferedImage renderBackground() {
-		BufferedImage bi = IO.getResourceAsImage("shoukan/arenas/" + id + ".jpg");
-		if (bi == null) {
-			bi = IO.getResourceAsImage("shoukan/arenas/DEFAULT.jpg");
-		}
+		byte[] bytes = Main.getCacheManager().computeResource("field-" + id, (k, v) -> {
+			if (v != null && v.length > 0) return v;
 
-		Graphics2D g2d = bi.createGraphics();
-		g2d.setRenderingHints(Constants.SD_HINTS);
+			BufferedImage bi = IO.getResourceAsImage("shoukan/arenas/" + id + ".jpg");
+			if (bi == null) {
+				bi = IO.getResourceAsImage("shoukan/arenas/DEFAULT.jpg");
+			}
 
-		BufferedImage aux = IO.getImage(Shoukan.SKIN_PATH + "middle.png");
-		g2d.drawImage(aux, bi.getWidth() / 2 - aux.getWidth() / 2, bi.getHeight() / 2 - aux.getHeight() / 2, null);
+			Graphics2D g2d = bi.createGraphics();
+			g2d.setRenderingHints(Constants.SD_HINTS);
 
-		aux = IO.getResourceAsImage("shoukan/overlay/middle.png");
-		g2d.drawImage(aux, bi.getWidth() / 2 - aux.getWidth() / 2, bi.getHeight() / 2 - aux.getHeight() / 2, null);
+			BufferedImage aux = IO.getImage(Shoukan.SKIN_PATH + "middle.png");
+			g2d.drawImage(aux, bi.getWidth() / 2 - aux.getWidth() / 2, bi.getHeight() / 2 - aux.getHeight() / 2, null);
 
-		g2d.dispose();
+			aux = IO.getResourceAsImage("shoukan/overlay/middle.png");
+			g2d.drawImage(aux, bi.getWidth() / 2 - aux.getWidth() / 2, bi.getHeight() / 2 - aux.getHeight() / 2, null);
 
-		return bi;
+			g2d.dispose();
+
+			return IO.getBytes(bi);
+		});
+
+		return IO.imageFromBytes(bytes);
 	}
 
 	@Override

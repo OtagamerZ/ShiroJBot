@@ -114,7 +114,7 @@ public class Arena implements Renderer {
 	}, d -> d.setCurrentStack(getBanned(false)), Utils::doNothing);
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
-	private final BufferedImage canvas = new BufferedImage(SIZE.width, SIZE.height + BAR_SIZE.height * 2, BufferedImage.TYPE_INT_ARGB);
+	private final BufferedImage canvas = new BufferedImage(SIZE.width, SIZE.height + BAR_SIZE.height * 2, BufferedImage.TYPE_INT_RGB);
 	private Future<BufferedImage> renderTask;
 	private BufferedImage thumbnail;
 	private Field field = null;
@@ -194,16 +194,21 @@ public class Arena implements Renderer {
 			Graphics2D g2d = canvas.createGraphics();
 			g2d.setRenderingHints(Constants.SD_HINTS);
 
-			Graph.applyTransformed((Graphics2D) g2d.create(), 0, BAR_SIZE.height, drawCenter());
 			for (Hand h : game.getHands().values()) {
+				int offset = h.getSide() == Side.TOP ? 0 : canvas.getHeight() / 2;
+
+				g2d.setColor(h.getUserDeck().getStyling().getFrame().getThemeColor().darker().darker());
+				g2d.fillRect(0, offset, canvas.getWidth(), canvas.getHeight() / 2);
+
 				Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(h));
 			}
+			Graph.applyTransformed((Graphics2D) g2d.create(), 0, BAR_SIZE.height, drawCenter());
 
 			try {
 				thumbnail = Thumbnails.of(canvas)
 						.width(SIZE.width / 3)
 						.addFilter(new BlurFilter(25))
-						.outputFormat("png")
+						.outputFormat("jpg")
 						.asBufferedImage();
 			} catch (IOException e) {
 				Constants.LOGGER.error(e, e);
