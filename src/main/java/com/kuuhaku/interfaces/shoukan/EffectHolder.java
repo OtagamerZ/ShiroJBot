@@ -158,9 +158,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	CachedScriptManager getCSM();
 
-	default String parseDescription(I18N locale) {
-		Hand h = getHand();
-		boolean inGame = h.getGame() != null;
+	default String parseDescription(Hand h, I18N locale) {
 		boolean demon = h.getOrigins().major() == Race.DEMON;
 
 		int equips;
@@ -173,11 +171,11 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		}
 
 		Map<String, Object> values = Map.ofEntries(
-				Map.entry("php", inGame ? h.getHP() : 6000),
-				Map.entry("bhp", inGame ? h.getBase().hp() : 6000),
-				Map.entry("pmp", inGame ? h.getMP() : 5),
-				Map.entry("pdg", inGame ? Math.max(0, -h.getRegDeg().peek()) : 0),
-				Map.entry("prg", inGame ? Math.max(0, h.getRegDeg().peek()) : 0),
+				Map.entry("php", h.getHP()),
+				Map.entry("bhp", h.getBase().hp()),
+				Map.entry("pmp", h.getMP()),
+				Map.entry("pdg", Math.max(0, -h.getRegDeg().peek())),
+				Map.entry("prg", Math.max(0, h.getRegDeg().peek())),
 				Map.entry("mp", demon ? source.getHPCost() : source.getMPCost()),
 				Map.entry("hp", source.getHPCost()),
 				Map.entry("atk", source.getDmg()),
@@ -378,13 +376,13 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		};
 	}
 
-	default void drawDescription(Graphics2D g2d, I18N locale) {
+	default void drawDescription(Graphics2D g2d, Hand h, I18N locale) {
 		DeckStyling style = getHand() == null ? new DeckStyling() : getHand().getUserDeck().getStyling();
 
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(11));
 		g2d.setColor(style.getFrame().getSecondaryColor());
 
-		String desc = parseDescription(locale);
+		String desc = parseDescription(h, locale);
 		if (!desc.isBlank()) {
 			int y = 276;
 			String tags = processTags(locale);
