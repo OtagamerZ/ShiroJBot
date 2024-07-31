@@ -31,28 +31,28 @@ public record PropValue(List<Number> values) {
 		return this;
 	}
 
-	public int getAt(int index) {
-		return values.get(index).intValue();
+	public Number getAt(int index) {
+		return values.get(index);
 	}
 
-	public double plus(Number other) {
+	public Number plus(Number other) {
 		return values.getFirst().doubleValue() + other.doubleValue();
 	}
 
-	public double minus(Number other) {
+	public Number minus(Number other) {
 		return values.getFirst().doubleValue() - other.doubleValue();
 	}
 
-	public double multiply(Number other) {
+	public Number multiply(Number other) {
 		return values.getFirst().doubleValue() * other.doubleValue();
 	}
 
-	public double div(Number other) {
-		return values.getFirst().doubleValue() / other.doubleValue();
+	public Number negative() {
+		return -values.getFirst().doubleValue();
 	}
 
-	public int negative() {
-		return -values.getFirst().intValue();
+	public Number div(Number other) {
+		return values.getFirst().doubleValue() / other.doubleValue();
 	}
 
 	public <T extends Number> T asType(Class<T> klass) {
