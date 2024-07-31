@@ -23,10 +23,7 @@ import com.kuuhaku.Tag;
 import com.kuuhaku.generated.ShoukanExprLexer;
 import com.kuuhaku.generated.ShoukanExprParser;
 import com.kuuhaku.model.common.CachedScriptManager;
-import com.kuuhaku.model.common.shoukan.CardExtra;
-import com.kuuhaku.model.common.shoukan.Flags;
-import com.kuuhaku.model.common.shoukan.Hand;
-import com.kuuhaku.model.common.shoukan.TagBundle;
+import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Charm;
@@ -202,7 +199,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			csm.getStoredProps().clear();
 		}
 
-		Map<String, PropValue> props = csm.getStoredProps();
+		Props props = csm.getStoredProps();
 		try {
 			return pat.replaceAll(m -> {
 				boolean tag = m.group(2) != null;
