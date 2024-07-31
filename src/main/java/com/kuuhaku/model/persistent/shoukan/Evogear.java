@@ -518,7 +518,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 			currentTrigger = ep.trigger();
 			CachedScriptManager csm = getCSM();
-			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
+			csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
 					.forScript(getEffect())
 					.withConst("evo", this)
 					.withConst("game", getGame())
@@ -593,7 +593,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 		try {
 			CachedScriptManager csm = getCSM();
-			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
+			csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
 					.forScript(getEffect())
 					.withConst("evo", this)
 					.withConst("game", getGame())
@@ -677,7 +677,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			if (isFlipped()) {
 				g1.drawImage(style.getFrame().getBack(deck), 0, 0, null);
-				parseDescription(getGame().getLocale());
+				parseDescription(hand, getGame().getLocale());
 
 				if (!isAvailable() || isManipulated()) {
 					RescaleOp op = new RescaleOp(0.5f, 0, null);
@@ -711,7 +711,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					);
 				}
 
-				drawDescription(g1, locale);
+				drawDescription(g1, hand, locale);
 				drawCosts(g1);
 				drawAttributes(g1, !desc.isEmpty());
 

@@ -1309,7 +1309,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					}
 				} else {
 					CachedScriptManager csm = getCSM();
-					csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
+					csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
 							.forScript(getEffect())
 							.withConst("me", this)
 							.withConst("self", this)
@@ -1406,7 +1406,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		try {
 			CachedScriptManager csm = getCSM();
-			csm.assertOwner(getSource(), () -> parseDescription(getGame().getLocale()))
+			csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
 					.forScript(getEffect())
 					.withConst("me", this)
 					.withConst("self", this)
@@ -1546,7 +1546,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			if (isFlipped()) {
 				g1.drawImage(style.getFrame().getBack(deck), 0, 0, null);
-				parseDescription(getGame().getLocale());
+				parseDescription(hand, getGame().getLocale());
 
 				if (!isAvailable() || isManipulated()) {
 					RescaleOp op = new RescaleOp(0.5f, 0, null);
@@ -1583,7 +1583,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 
 				if (!desc.isEmpty()) {
-					drawDescription(g1, locale);
+					drawDescription(g1, hand, locale);
 				}
 
 				if (!hasFlag(Flag.HIDE_STATS)) {
