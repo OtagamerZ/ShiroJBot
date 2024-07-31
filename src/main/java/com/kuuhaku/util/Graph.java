@@ -25,6 +25,7 @@ import com.trickl.palette.Palette;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.TriConsumer;
+import org.jdesktop.swingx.graphics.ColorUtilities;
 
 import java.awt.*;
 import java.awt.font.TextLayout;
@@ -285,6 +286,18 @@ public abstract class Graph {
 				in.getGreen(),
 				in.getBlue(),
 				(int) (255 * opacity)
+		);
+	}
+
+	public static Color withBrightness(Color in, float brightness) {
+		brightness = Calc.clamp(brightness, 0, 1);
+		float[] hsl = ColorUtilities.RGBtoHSL(in);
+
+
+		return ColorUtilities.HSLtoRGB(
+				hsl[0],
+				hsl[1],
+				hsl[2] * brightness
 		);
 	}
 
