@@ -253,7 +253,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public String getDescription(I18N locale) {
 		EffectHolder<?> source = getSource();
-		return Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
+		String out = Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
+		if (hand != null) {
+			if (hand.getOrigins().major() == Race.DEMON) {
+				out = out.replace("$mp", "$hp*0.08");
+			}
+		}
+
+		return out;
 	}
 
 	@Override

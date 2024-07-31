@@ -183,7 +183,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Map.entry("pmp", inGame ? h.getMP() : 5),
 				Map.entry("pdg", inGame ? Math.max(0, -h.getRegDeg().peek()) : 0),
 				Map.entry("prg", inGame ? Math.max(0, h.getRegDeg().peek()) : 0),
-				Map.entry("mp", source.getMPCost()),
+				Map.entry("mp", demon ? source.getHPCost() : source.getMPCost()),
 				Map.entry("hp", source.getHPCost()),
 				Map.entry("atk", source.getDmg()),
 				Map.entry("dfs", source.getDfs()),
@@ -213,10 +213,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 				String out = "";
 				if (!tag) {
-					if (demon) {
-						str = str.replace("$mp", "$hp*0.08");
-					}
-
 					LinkedHashSet<Object> types = new LinkedHashSet<>(Utils.extractGroups(str, "\\$(\\w+)"));
 					if (types.isEmpty()) {
 						types.add("untyped");
@@ -247,6 +243,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 								return new JSONArray(List.of(v, value));
 							});
+						}
+
+						if (demon && props.has("hp")) {
+							props.put("mp", props.get("hp"));
 						}
 					}
 
