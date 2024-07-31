@@ -253,10 +253,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							.map(t -> "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
 							.collect(Collectors.joining());
 				} else {
-					if (str.equals("mp") && demon) {
-						str = "hp";
-					}
-
 					Pair<Integer, Color> idx = COLORS.get(str);
 
 					if (idx != null) {
