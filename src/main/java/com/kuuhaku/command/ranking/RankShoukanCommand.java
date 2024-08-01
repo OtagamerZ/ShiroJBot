@@ -33,6 +33,7 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -67,8 +68,8 @@ public class RankShoukanCommand implements Executable {
 				eb.appendDescription("**");
 			}
 
-			eb.appendDescription((i + 1) + " - " + e.name());
-			eb.appendDescription(" - " + locale.get("str/matches", e.matches()) + " `(" + locale.separate(e.winrate()) + "% WR)`\n");
+			eb.appendDescription((i + 1) + " - " + StringUtils.rightPad(e.name(), 35));
+			eb.appendDescription(locale.get("str/matches", e.matches()) + " `(" + locale.separate(e.winrate()) + "% WR)`\n");
 
 			if (e.uid().equals(event.user().getId())) {
 				eb.appendDescription("**");
