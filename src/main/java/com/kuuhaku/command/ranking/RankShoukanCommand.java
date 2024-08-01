@@ -45,7 +45,7 @@ import java.util.List;
 public class RankShoukanCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		List<RankShoukanEntry> rank = DAO.queryAllUnmapped("SELECT * AS matches FROM v_shoukan_ranking LIMIT 10").stream()
+		List<RankShoukanEntry> rank = DAO.queryAllUnmapped("SELECT * FROM v_shoukan_ranking LIMIT 10").stream()
 				.map(o -> Utils.map(RankShoukanEntry.class, o))
 				.toList();
 
