@@ -63,15 +63,16 @@ public class RankShoukanCommand implements Executable {
 				eb.appendDescription("### ");
 			}
 
-			eb.appendDescription((i + 1) + " - ");
-
-			if (e.uid().equals(event.user().getId()) && i > 1) {
-				eb.appendDescription("**" + e.name() + "**");
-			} else {
-				eb.appendDescription(e.name());
+			if (e.uid().equals(event.user().getId())) {
+				eb.appendDescription("**");
 			}
 
-			eb.appendDescription(" - " + locale.get("str/matches", e.matches()) + " (" + locale.separate(e.winrate()) + "% WR)\n");
+			eb.appendDescription((i + 1) + " - " + e.name());
+			eb.appendDescription(" - " + locale.get("str/matches", e.matches()) + " `(" + locale.separate(e.winrate()) + "% WR)`\n");
+
+			if (e.uid().equals(event.user().getId())) {
+				eb.appendDescription("**");
+			}
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
