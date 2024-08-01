@@ -18,5 +18,5 @@
 
 package com.kuuhaku.model.records;
 
-public record RankShoukanEntry(int pos, String uid, String name, double winrate, int matches) {
+public record RankShoukanEntry(int pos, String uid, String name, double winrate, int matches, int score) {
 }

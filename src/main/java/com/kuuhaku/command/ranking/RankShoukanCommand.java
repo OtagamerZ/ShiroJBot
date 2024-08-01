@@ -45,7 +45,7 @@ import java.util.List;
 public class RankShoukanCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		List<RankShoukanEntry> rank = DAO.queryAllUnmapped("SELECT pos, uid, name, winrate, match_count AS matches FROM v_shoukan_ranking LIMIT 10").stream()
+		List<RankShoukanEntry> rank = DAO.queryAllUnmapped("SELECT * AS matches FROM v_shoukan_ranking LIMIT 10").stream()
 				.map(o -> Utils.map(RankShoukanEntry.class, o))
 				.toList();
 
@@ -67,12 +67,12 @@ public class RankShoukanCommand implements Executable {
 				eb.appendDescription("__");
 			}
 
-			switch (i) {
-				case 0 -> eb.appendDescription("\uD83E\uDD47 - " + e.name());
-				case 1 -> eb.appendDescription("\uD83E\uDD48 - " + e.name());
-				case 2 -> eb.appendDescription("\uD83E\uDD49 - " + e.name());
-				default -> eb.appendDescription((i + 1) + " - " + e.name());
-			}
+			eb.appendDescription(switch (i) {
+				case 0 -> "\uD83E\uDD47";
+				case 1 -> "\uD83E\uDD48";
+				case 2 -> "\uD83E\uDD49";
+				default -> i + 1;
+			} + " - " + e.name() + "`〽 " + e.score() + "`");
 
 			if (e.uid().equals(event.user().getId())) {
 				eb.appendDescription("__");

@@ -23,6 +23,7 @@ SELECT rank() OVER (ORDER BY x.winrate * x.match_count DESC) AS pos
      , x.name
      , x.winrate
      , x.match_count
+     , cast(x.winrate * x.match_count AS INT) AS score
 FROM (
      SELECT a.uid
           , a.name
