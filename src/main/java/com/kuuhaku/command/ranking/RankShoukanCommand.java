@@ -60,10 +60,8 @@ public class RankShoukanCommand implements Executable {
 		for (int i = 0; i < rank.size(); i++) {
 			RankShoukanEntry e = rank.get(i);
 			eb.appendDescription(switch (i) {
-				case 0 -> "# ";
-				case 1 -> "## ";
-				case 2 -> "";
-				default -> "-# ";
+				case 0, 1, 2 -> "## ";
+				default -> "";
 			});
 
 			eb.appendDescription((i + 1) + " - ");
