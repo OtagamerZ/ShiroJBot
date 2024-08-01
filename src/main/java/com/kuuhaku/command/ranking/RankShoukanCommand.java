@@ -72,7 +72,7 @@ public class RankShoukanCommand implements Executable {
 				case 1 -> "\uD83E\uDD48";
 				case 2 -> "\uD83E\uDD49";
 				default -> i + 1;
-			} + " - " + e.name() + "`〽 " + e.score() + "`");
+			} + " - " + e.name() + "`🔺" + e.score() + "`");
 
 			if (e.uid().equals(event.user().getId())) {
 				eb.appendDescription("__");
