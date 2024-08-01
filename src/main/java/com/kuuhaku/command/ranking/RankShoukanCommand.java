@@ -71,7 +71,7 @@ public class RankShoukanCommand implements Executable {
 				eb.appendDescription(e.name());
 			}
 
-			eb.appendDescription(" " + locale.get("str/matches", e.matches()) + " (" + locale.separate(e.winrate()) + "% WR)\n");
+			eb.appendDescription(" - " + locale.get("str/matches", e.matches()) + " (" + locale.separate(e.winrate()) + "% WR)\n");
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
