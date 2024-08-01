@@ -60,7 +60,7 @@ public class RankShoukanCommand implements Executable {
 		for (int i = 0; i < rank.size(); i++) {
 			RankShoukanEntry e = rank.get(i);
 			if (i < 3) {
-				eb.appendDescription("## ");
+				eb.appendDescription("### ");
 			}
 
 			eb.appendDescription((i + 1) + " - ");
