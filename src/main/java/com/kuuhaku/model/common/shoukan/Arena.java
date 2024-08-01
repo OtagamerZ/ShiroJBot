@@ -194,6 +194,7 @@ public class Arena implements Renderer {
 			Graphics2D g2d = canvas.createGraphics();
 			g2d.setRenderingHints(Constants.SD_HINTS);
 
+			Graph.applyTransformed((Graphics2D) g2d.create(), 0, BAR_SIZE.height, drawCenter());
 			for (Hand h : game.getHands().values()) {
 				int offset = h.getSide() == Side.TOP ? 0 : canvas.getHeight() / 2;
 				Color bg = h.getUserDeck().getStyling().getFrame().getThemeColor();
@@ -203,7 +204,6 @@ public class Arena implements Renderer {
 
 				Graph.applyTransformed((Graphics2D) g2d.create(), drawBar(h));
 			}
-			Graph.applyTransformed((Graphics2D) g2d.create(), 0, BAR_SIZE.height, drawCenter());
 
 			try {
 				thumbnail = Thumbnails.of(canvas)
