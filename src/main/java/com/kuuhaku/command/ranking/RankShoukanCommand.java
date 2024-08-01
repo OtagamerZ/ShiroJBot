@@ -82,7 +82,7 @@ public class RankShoukanCommand implements Executable {
 				eb.appendDescription("**");
 			}
 
-			eb.appendDescription("\n> -# " + locale.get("str/matches", e.matches()) + " | " + locale.separate(e.winrate()) + "% WR`\n\n");
+			eb.appendDescription("\n> -# " + locale.get("str/matches", e.matches()) + " | " + locale.separate(e.winrate()) + "% WR\n\n");
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
