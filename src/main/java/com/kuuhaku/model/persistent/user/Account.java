@@ -583,7 +583,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 				.flatMap(c -> c.sendMessageEmbeds(eb.build()))
 				.queue(null, Utils::doNothing);
 
-		if (settings.isRemindVote()) {
+		if (settings != null && settings.isRemindVote()) {
 			new Reminder(this, null, getEstimateLocale().get("str/vote_reminder"), 12 * Constants.MILLIS_IN_HOUR).save();
 		}
 	}
