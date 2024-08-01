@@ -33,7 +33,6 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -61,17 +60,27 @@ public class RankShoukanCommand implements Executable {
 		for (int i = 0; i < rank.size(); i++) {
 			RankShoukanEntry e = rank.get(i);
 			if (i < 3) {
-				eb.appendDescription("### ");
-			}
-
-			if (e.uid().equals(event.user().getId())) {
 				eb.appendDescription("**");
 			}
 
-			eb.appendDescription((i + 1) + " - " + StringUtils.rightPad(e.name(), 35));
-			eb.appendDescription(locale.get("str/matches", e.matches()) + " `(" + locale.separate(e.winrate()) + "% WR)`\n");
+			if (e.uid().equals(event.user().getId())) {
+				eb.appendDescription("__");
+			}
+
+			switch (i) {
+				case 0 -> eb.appendDescription("\uD83E\uDD47 - " + e.name());
+				case 1 -> eb.appendDescription("\uD83E\uDD48 - " + e.name());
+				case 2 -> eb.appendDescription("\uD83E\uDD49 - " + e.name());
+				default -> eb.appendDescription((i + 1) + " - " + e.name());
+			}
+
+			eb.appendDescription("\n> -# " + locale.get("str/matches", e.matches()) + " | " + locale.separate(e.winrate()) + "% WR`\n");
 
 			if (e.uid().equals(event.user().getId())) {
+				eb.appendDescription("__");
+			}
+
+			if (i < 3) {
 				eb.appendDescription("**");
 			}
 		}
