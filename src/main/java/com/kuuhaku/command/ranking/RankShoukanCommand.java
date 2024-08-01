@@ -74,8 +74,6 @@ public class RankShoukanCommand implements Executable {
 				default -> eb.appendDescription((i + 1) + " - " + e.name());
 			}
 
-			eb.appendDescription("\n> -# " + locale.get("str/matches", e.matches()) + " | " + locale.separate(e.winrate()) + "% WR`\n");
-
 			if (e.uid().equals(event.user().getId())) {
 				eb.appendDescription("__");
 			}
@@ -83,6 +81,8 @@ public class RankShoukanCommand implements Executable {
 			if (i < 3) {
 				eb.appendDescription("**");
 			}
+
+			eb.appendDescription("\n> -# " + locale.get("str/matches", e.matches()) + " | " + locale.separate(e.winrate()) + "% WR`\n\n");
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
