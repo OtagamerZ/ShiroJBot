@@ -795,6 +795,10 @@ public class Hand {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public int getHP() {
 		return hp;
 	}

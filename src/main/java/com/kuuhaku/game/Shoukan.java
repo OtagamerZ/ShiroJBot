@@ -230,6 +230,20 @@ public class Shoukan extends GameInstance<Phase> {
 	// DEBUG START
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
+	@PlayerAction("set_name,(?<name>\\S+)")
+	private boolean debSetName(Side side, JSONObject args) {
+		Hand curr = hands.get(side);
+		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+			String name = args.getString("name");
+			curr.setName(name);
+
+			reportEvent("SET_NAME -> " + name, false, false);
+		}
+
+		return false;
+	}
+
+	@PhaseConstraint({"PLAN", "COMBAT"})
 	@PlayerAction("set_hp,(?<value>\\d+)")
 	private boolean debSetHp(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
