@@ -35,6 +35,10 @@ public class ChannelConverter implements AttributeConverter<TextChannelImpl, Str
 
 	@Override
 	public TextChannelImpl convertToEntityAttribute(String id) {
-		return (TextChannelImpl) Main.getApp().getMessageChannelById(Utils.getOr(id, "1"));
+		try {
+			return (TextChannelImpl) Main.getApp().getMessageChannelById(Utils.getOr(id, "1"));
+		} catch (ClassCastException e) {
+			return null;
+		}
 	}
 }

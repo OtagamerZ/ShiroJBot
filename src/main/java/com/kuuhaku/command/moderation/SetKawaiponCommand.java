@@ -70,12 +70,12 @@ public class SetKawaiponCommand implements Executable {
 			settings.getKawaiponChannels().removeIf(t -> t.equals(channel));
 			event.channel().sendMessage(locale.get("success/kawaipon_channel_remove", channel.getAsMention())).queue();
 		} else {
-			if (!(channel instanceof GuildMessageChannel gmc)) {
+			if (!(channel instanceof TextChannelImpl tc)) {
 				event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
 				return;
 			}
 
-			settings.getKawaiponChannels().add((TextChannelImpl) gmc);
+			settings.getKawaiponChannels().add(tc);
 			event.channel().sendMessage(locale.get("success/kawaipon_channel_add", channel.getAsMention())).queue();
 		}
 

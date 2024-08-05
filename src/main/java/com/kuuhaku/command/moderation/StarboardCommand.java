@@ -31,6 +31,7 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
 @Command(
 		name = "starboard",
@@ -59,12 +60,12 @@ public class StarboardCommand implements Executable {
 				return;
 			}
 
-			if (!(channel instanceof GuildMessageChannel gmc)) {
+			if (!(channel instanceof TextChannelImpl tc)) {
 				event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
 				return;
 			}
 
-			settings.setStarboardChannel(gmc);
+			settings.setStarboardChannel(tc);
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/starboard_channel_save")).queue();

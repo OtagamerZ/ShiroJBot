@@ -34,6 +34,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
 @Command(
 		name = "goodbye",
@@ -63,12 +64,12 @@ public class GoodbyeCommand implements Executable {
 				return;
 			}
 
-			if (!(channel instanceof GuildMessageChannel gmc)) {
+			if (!(channel instanceof TextChannelImpl tc)) {
 				event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
 				return;
 			}
 
-			settings.setChannel(gmc);
+			settings.setChannel(tc);
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/goodbye_channel_save")).queue();

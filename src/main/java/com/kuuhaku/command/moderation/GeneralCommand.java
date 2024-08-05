@@ -30,6 +30,7 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
 @Command(
 		name = "general",
@@ -57,12 +58,12 @@ public class GeneralCommand implements Executable {
 			return;
 		}
 
-		if (!(channel instanceof GuildMessageChannel gmc)) {
+		if (!(channel instanceof TextChannelImpl tc)) {
 			event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
 			return;
 		}
 
-		settings.setGeneralChannel(gmc);
+		settings.setGeneralChannel(tc);
 		settings.save();
 
 		event.channel().sendMessage(locale.get("success/general_channel_set", channel.getAsMention())).queue();

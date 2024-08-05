@@ -32,7 +32,6 @@ import com.kuuhaku.model.records.embed.Embed;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.internal.entities.RoleImpl;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 import org.hibernate.annotations.Fetch;
@@ -48,7 +47,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Entity
 @Table(name = "guild_settings")
 @JavaTypeRegistration(javaType = Role.class, descriptorClass = RoleJavaType.class)
-@JavaTypeRegistration(javaType = GuildMessageChannel.class, descriptorClass = ChannelJavaType.class)
+@JavaTypeRegistration(javaType = TextChannelImpl.class, descriptorClass = ChannelJavaType.class)
 public class GuildSettings extends DAO<GuildSettings> {
 	@Id
 	@Column(name = "gid", nullable = false)
@@ -166,20 +165,20 @@ public class GuildSettings extends DAO<GuildSettings> {
 		return deniedChannels;
 	}
 
-	public GuildMessageChannel getNotificationsChannel() {
+	public TextChannelImpl getNotificationsChannel() {
 		return notificationsChannel;
 	}
 
-	public void setNotificationsChannel(GuildMessageChannel notificationsChannel) {
-		this.notificationsChannel = (TextChannelImpl) notificationsChannel;
+	public void setNotificationsChannel(TextChannelImpl notificationsChannel) {
+		this.notificationsChannel = notificationsChannel;
 	}
 
-	public GuildMessageChannel getGeneralChannel() {
+	public TextChannelImpl getGeneralChannel() {
 		return generalChannel;
 	}
 
-	public void setGeneralChannel(GuildMessageChannel generalChannel) {
-		this.generalChannel = (TextChannelImpl) generalChannel;
+	public void setGeneralChannel(TextChannelImpl generalChannel) {
+		this.generalChannel = generalChannel;
 	}
 
 	public JSONObject getEmbed() {
@@ -240,12 +239,12 @@ public class GuildSettings extends DAO<GuildSettings> {
 		this.starboardThreshold = starboardThreshold;
 	}
 
-	public GuildMessageChannel getStarboardChannel() {
+	public TextChannelImpl getStarboardChannel() {
 		return starboardChannel;
 	}
 
-	public void setStarboardChannel(GuildMessageChannel starboardChannel) {
-		this.starboardChannel = (TextChannelImpl) starboardChannel;
+	public void setStarboardChannel(TextChannelImpl starboardChannel) {
+		this.starboardChannel = starboardChannel;
 	}
 
 	public boolean isFeatureEnabled(GuildFeature feature) {

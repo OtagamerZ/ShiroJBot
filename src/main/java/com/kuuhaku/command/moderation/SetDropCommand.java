@@ -70,12 +70,12 @@ public class SetDropCommand implements Executable {
 			settings.getDropChannels().removeIf(t -> t.equals(channel));
 			event.channel().sendMessage(locale.get("success/drop_channel_remove", channel.getAsMention())).queue();
 		} else {
-			if (!(channel instanceof GuildMessageChannel gmc)) {
+			if (!(channel instanceof TextChannelImpl tc)) {
 				event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
 				return;
 			}
 
-			settings.getDropChannels().add((TextChannelImpl) gmc);
+			settings.getDropChannels().add(tc);
 			event.channel().sendMessage(locale.get("success/drop_channel_add", channel.getAsMention())).queue();
 		}
 

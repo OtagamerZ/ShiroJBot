@@ -60,12 +60,12 @@ public class DenyCommand implements Executable {
 			return;
 		}
 
-		if (!(channel instanceof GuildMessageChannel gmc)) {
+		if (!(channel instanceof TextChannelImpl tc)) {
 			event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
 			return;
 		}
 
-		settings.getDeniedChannels().add((TextChannelImpl) gmc);
+		settings.getDeniedChannels().add(tc);
 		settings.save();
 
 		event.channel().sendMessage(locale.get("success/commands_denied",

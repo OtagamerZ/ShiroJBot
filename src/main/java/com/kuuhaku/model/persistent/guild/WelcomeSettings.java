@@ -31,7 +31,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "welcome_settings")
-@JavaTypeRegistration(javaType = GuildMessageChannel.class, descriptorClass = ChannelJavaType.class)
+@JavaTypeRegistration(javaType = TextChannelImpl.class, descriptorClass = ChannelJavaType.class)
 public class WelcomeSettings extends DAO<WelcomeSettings> {
 	@Id
 	@Column(name = "gid", nullable = false)
@@ -80,11 +80,11 @@ public class WelcomeSettings extends DAO<WelcomeSettings> {
 		this.message = message;
 	}
 
-	public GuildMessageChannel getChannel() {
+	public TextChannelImpl getChannel() {
 		return channel;
 	}
 
-	public void setChannel(GuildMessageChannel channel) {
-		this.channel = (TextChannelImpl) channel;
+	public void setChannel(TextChannelImpl channel) {
+		this.channel = channel;
 	}
 }
