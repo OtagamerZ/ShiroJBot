@@ -513,7 +513,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		try {
 			base.lock(ep.trigger());
 			if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
-				getGame().trigger(ON_TICK, asSource(ON_TICK));
+				execute(new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
 			}
 
 			currentTrigger = ep.trigger();

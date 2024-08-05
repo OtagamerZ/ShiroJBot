@@ -1261,7 +1261,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		try {
 			base.lock(trigger);
 			if (getSlot().getIndex() > -1 && trigger != ON_TICK) {
-				getGame().trigger(ON_TICK, asSource(ON_TICK));
+				execute(new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
 			}
 
 			currentTrigger = trigger;
