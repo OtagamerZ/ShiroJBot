@@ -22,6 +22,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
 @Converter(autoApply = true)
@@ -35,10 +36,9 @@ public class ChannelConverter implements AttributeConverter<TextChannelImpl, Str
 
 	@Override
 	public TextChannelImpl convertToEntityAttribute(String id) {
-		try {
-			return (TextChannelImpl) Main.getApp().getMessageChannelById(Utils.getOr(id, "1"));
-		} catch (ClassCastException e) {
-			return null;
-		}
+		GuildMessageChannel gmc = Main.getApp().getMessageChannelById(Utils.getOr(id, "1"));
+		if (gmc instanceof TextChannelImpl) return (TextChannelImpl) gmc;
+
+		return null;
 	}
 }
