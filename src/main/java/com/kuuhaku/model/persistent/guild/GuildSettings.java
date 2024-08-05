@@ -32,6 +32,7 @@ import com.kuuhaku.model.records.embed.Embed;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.internal.entities.RoleImpl;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 import org.hibernate.annotations.Fetch;
@@ -47,7 +48,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Entity
 @Table(name = "guild_settings")
 @JavaTypeRegistration(javaType = Role.class, descriptorClass = RoleJavaType.class)
-@JavaTypeRegistration(javaType = TextChannelImpl.class, descriptorClass = ChannelJavaType.class)
+@JavaTypeRegistration(javaType = GuildMessageChannel.class, descriptorClass = ChannelJavaType.class)
 public class GuildSettings extends DAO<GuildSettings> {
 	@Id
 	@Column(name = "gid", nullable = false)
