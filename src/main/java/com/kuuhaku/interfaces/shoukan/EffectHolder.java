@@ -73,6 +73,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 			Map.entry("ally", new Pair<>(12, Color.BLACK)),
 			Map.entry("enemy", new Pair<>(13, Color.BLACK)),
+			Map.entry("enemy_ignore", new Pair<>(14, Color.BLACK)),
 			Map.entry("b", EMPTY),
 			Map.entry("n", EMPTY)
 	);
@@ -84,7 +85,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			"degen.png", "regen.png", "blood.png",
 			"mana.png", "attack.png", "defense.png",
 			"dodge.png", "parry.png", "cooldown.png",
-			"ally_target.png", "enemy_target.png"
+			"ally_target.png", "enemy_target.png", "enemy_target_ignore.png"
 	};
 
 	CardAttributes getBase();

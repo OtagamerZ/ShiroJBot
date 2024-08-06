@@ -34,7 +34,8 @@ public enum Tag {
 	PRY("<:parry:1265010424252727316>"),
 	CD("<:cooldown:1142172789982363691>"),
 	ALLY("<:ally_target:1142172781308551188>"),
-	ENEMY("<:enemy_target:1142172797796356146>");
+	ENEMY("<:enemy_target:1142172797796356146>"),
+	ENEMY_IGNORE("<:enemy_target_ignore:1270359904460341248> ");
 
 	private final String emote;
 
