@@ -1996,6 +1996,12 @@ public class Shoukan extends GameInstance<Phase> {
 				iterateSlots(side, s -> {
 					s.getBase().unlockAll();
 					s.setLastInteraction(null);
+					s.clearBlocked();
+					s.getStats().getFlags().clearTemp();
+					for (Evogear e : s.getEquipments()) {
+						e.getStats().getFlags().clearTemp();
+					}
+
 					s.getStats().removeIf(ValueMod::isExpired);
 					for (Evogear e : s.getEquipments()) {
 						e.getStats().removeIf(ValueMod::isExpired);
@@ -2591,12 +2597,6 @@ public class Shoukan extends GameInstance<Phase> {
 					s.reduceDebuffs(1);
 					s.setAvailable(true);
 					s.setSwitched(false);
-
-					s.clearBlocked();
-					s.getStats().getFlags().clearTemp();
-					for (Evogear e : s.getEquipments()) {
-						e.getStats().getFlags().clearTemp();
-					}
 
 					if (arcade == Arcade.DECAY) {
 						s.getStats().getMana().set(-1);
