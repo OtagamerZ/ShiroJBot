@@ -2564,7 +2564,6 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.flushDiscard();
 		trigger(ON_TURN_END, curr.getSide());
 		curr.applyRegDeg();
-		curr.resetDraws();
 
 		if (arcade == Arcade.DECK_ROYALE) {
 			boolean noHand = curr.getCards().stream().noneMatch(d -> d instanceof Senshi);
@@ -2626,6 +2625,7 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.setCanAttack(true);
 		curr.setSummoned(false);
 		curr.flushDiscard();
+		curr.resetDraws();
 
 		if (curr.getOrigins().synergy() == Race.WRAITH) {
 			curr.getOther().modHP((int) -(curr.getGraveyard().size() * Math.ceil(getTurn() / 2d)));
