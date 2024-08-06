@@ -17,5 +17,5 @@ SUB: '-';
 MIN: 'min';
 MAX: 'max';
 NUM: [0-9]+ ('.' [0-9]+)?;
-NAME: [a-z]+;
+NAME: [a-z_]+;
 VAR: '$' NAME ('.' NAME)?;
