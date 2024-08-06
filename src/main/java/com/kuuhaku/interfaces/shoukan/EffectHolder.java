@@ -418,7 +418,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default String getReadableDescription(I18N locale) {
 		String desc = getDescription(locale);
 		if (desc != null) {
-			Matcher pat = Utils.regex(desc, "\\{=(\\S+?)}|([A-Za-z]+?)?\\{([a-z]+?)}");
+			Matcher pat = Utils.regex(desc, "\\{=(\\S+?)}|([A-Za-z]+?)?\\{([a-z_]+?)}");
 
 			// Original: \(([^()]|(?R))*\)
 			return parse(pat)
