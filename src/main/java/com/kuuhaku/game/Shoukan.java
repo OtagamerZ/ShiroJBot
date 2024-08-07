@@ -1148,7 +1148,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private boolean checkConstraints(Hand curr, Drawable<?> card) {
-		if (card instanceof Evogear e) {
+		if (card instanceof Evogear e && e.isSpell()) {
 			if (e.isPassive()) {
 				getChannel().sendMessage(getString("error/card_passive")).queue();
 				return false;
@@ -2276,7 +2276,7 @@ public class Shoukan extends GameInstance<Phase> {
 							reportEvent("str/draw_card", true, false, curr.getName(), rem, "s");
 						});
 					}
-				} else if (curr.getOrigins().major() == Race.DIVINITY && curr.getHP() > 1) {
+				} else if (curr.getOrigins().major() == Race.DIVINITY && !curr.isCritical()) {
 					helper.addAction(Utils.parseEmoji("1212407741046325308"), w -> {
 						if (isLocked()) return;
 
@@ -2288,10 +2288,14 @@ public class Shoukan extends GameInstance<Phase> {
 							return;
 						}
 
+						int eths = (int) curr.getCards().stream()
+								.filter(Drawable::isEthereal)
+								.count();
+
 						Drawable<?> d = curr.manualDraw();
 						d.setEthereal(true);
 
-						int loss = (int) Math.max(2, curr.getBase().hp() * 0.08);
+						int loss = (int) Math.max(2, curr.getBase().hp() * 0.06 * eths);
 						curr.setHP(Math.max(1, curr.getHP() - loss));
 						Objects.requireNonNull(w.getHook())
 								.setEphemeral(true)

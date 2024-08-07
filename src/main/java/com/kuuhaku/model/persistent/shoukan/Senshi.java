@@ -93,10 +93,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (getEquipments(false).contains(e)) return false;
 
 		e.setEquipper(this);
-		e.setHand(this.getHand());
+		e.setHand(getHand());
 		e.executeAssert(ON_INITIALIZE);
 
-		Shoukan game = this.getGame();
+		Shoukan game = getGame();
 		getHand().getData().put("last_equipment", e);
 		getHand().getData().put("last_evogear", e);
 
@@ -112,7 +112,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (e.hasCharm(Charm.CLONE)) {
-			game.putAtOpenSlot(this.getSide(), true, withCopy(s -> {
+			game.putAtOpenSlot(getSide(), true, withCopy(s -> {
 				s.getStats().getAttrMult().set(-1 + (0.25 * e.getTier()));
 				s.getStats().getData().put("cloned", true);
 
@@ -1468,7 +1468,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				if (announce) {
 					Shoukan game = getGame();
 					game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
-							this.isFlipped() ? game.getLocale().get("str/a_card") : this
+							isFlipped() ? game.getLocale().get("str/a_card") : this
 					)).queue();
 					game.trigger(ON_DODGE, asSource(ON_DODGE));
 				}
