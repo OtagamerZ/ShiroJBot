@@ -2480,7 +2480,9 @@ public class Shoukan extends GameInstance<Phase> {
 			if (isSingleplayer() || (getTurn() > 10 && curr.getLockTime(Lock.SURRENDER) == 0)) {
 				helper.addAction(Utils.parseEmoji("🏳"), w -> {
 					if (curr.isForfeit()) {
-						reportResult(GameReport.SUCCESS, getOther().getSide(), "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
+						curr.setForfeit(true);
+						getChannel().buffer(getString("str/game_forfeit_start", curr.getName()));
+						nextTurn();
 						return;
 					}
 
@@ -2620,6 +2622,11 @@ public class Shoukan extends GameInstance<Phase> {
 		super.nextTurn();
 		setPhase(Phase.PLAN);
 		curr = getCurrent();
+		if (curr.isForfeit()) {
+			reportResult(GameReport.SUCCESS, getOther().getSide(), "str/game_forfeit", "<@" + getCurrent().getUid() + ">");
+			return;
+		}
+
 		curr.modMP(curr.getBase().mpGain().get());
 		curr.reduceOriginCooldown(1);
 		curr.setCanAttack(true);
