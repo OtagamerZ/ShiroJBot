@@ -1339,6 +1339,7 @@ public class Shoukan extends GameInstance<Phase> {
 							} else {
 								int parry = target.getParry();
 								int dodge = target.getDodge();
+								boolean tParry, tDodge;
 
 								if (source.isBlinded(true)) {
 									outcome = getString("str/combat_miss");
@@ -1346,9 +1347,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 									dmg = 0;
 									hit = false;
-								} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && target.isAvailable() && (target.hasFlag(Flag.TRUE_PARRY, true) || chance(parry))) {
+								} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && target.isAvailable() && ((tDodge = target.hasFlag(Flag.TRUE_PARRY, true)) || chance(parry))) {
 									outcome = getString("str/combat_parry", parry);
-									if (target.hasFlag(Flag.TRUE_PARRY)) {
+									if (tDodge) {
 										outcome += " **(" + getString("flag/true_parry") + ")**";
 									}
 
@@ -1358,9 +1359,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 									dmg = 0;
 									hit = false;
-								} else if (!source.hasFlag(Flag.TRUE_STRIKE, true) && (target.hasFlag(Flag.TRUE_DODGE, true) || chance(dodge))) {
+								} else if (!source.hasFlag(Flag.TRUE_STRIKE, true) && ((tParry = target.hasFlag(Flag.TRUE_DODGE, true)) || chance(dodge))) {
 									outcome = getString("str/combat_dodge", dodge);
-									if (target.hasFlag(Flag.TRUE_DODGE)) {
+									if (tParry) {
 										outcome += " **(" + getString("flag/true_dodge") + ")**";
 									}
 
@@ -1371,7 +1372,7 @@ public class Shoukan extends GameInstance<Phase> {
 								} else {
 									if (unstop || dmg > enemyStats) {
 										outcome = getString("str/combat_success", dmg, enemyStats);
-										if (source.hasFlag(Flag.UNSTOPPABLE)) {
+										if (unstop) {
 											outcome += " **(" + getString("flag/unstoppable") + ")**";
 										}
 
