@@ -2295,7 +2295,7 @@ public class Shoukan extends GameInstance<Phase> {
 						Drawable<?> d = curr.manualDraw();
 						d.setEthereal(true);
 
-						int loss = (int) Math.max(2, curr.getBase().hp() * 0.06 * eths);
+						int loss = (int) Math.max(2, curr.getBase().hp() * 0.06) * eths;
 						curr.setHP(Math.max(1, curr.getHP() - loss));
 						Objects.requireNonNull(w.getHook())
 								.setEphemeral(true)

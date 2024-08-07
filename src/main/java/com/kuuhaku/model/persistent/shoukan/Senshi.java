@@ -1445,7 +1445,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isProtected(Drawable<?> source) {
-		if (source instanceof EffectHolder<?> eh && eh.hasTrueEffect(true)) return true;
+		if (source instanceof EffectHolder<?> eh && eh.hasTrueEffect(true)) return false;
 		else if (blocked.contains(source)) return true;
 
 		if (hand != null) {
