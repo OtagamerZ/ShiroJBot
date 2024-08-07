@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.ranking;
+package com.kuuhaku.command.shoukan;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
@@ -37,12 +37,12 @@ import net.dv8tion.jda.api.Permission;
 import java.util.List;
 
 @Command(
-		name = "rank",
-		path = "shoukan",
+		name = "shoukan",
+		path = "ranking",
 		category = Category.INFO
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class RankShoukanCommand implements Executable {
+public class ShoukanRankingCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		List<RankShoukanEntry> rank = DAO.queryAllUnmapped("SELECT * FROM v_shoukan_ranking LIMIT 10").stream()
