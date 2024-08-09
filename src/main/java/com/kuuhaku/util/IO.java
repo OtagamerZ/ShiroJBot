@@ -36,18 +36,15 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
-import java.util.Objects;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -88,7 +85,12 @@ public abstract class IO {
 			if (v != null && v.length > 0) return v;
 
 			try {
-				return getBytes(ImageIO.read(URI.create(url).toURL()), Objects.requireNonNull(getImageType(url)));
+				String type = getImageType(url);
+				if (type == null) {
+					return new byte[0];
+				}
+
+				return getBytes(ImageIO.read(URI.create(url).toURL()), type);
 			} catch (IllegalArgumentException | IOException e) {
 				return new byte[0];
 			}
@@ -223,19 +225,24 @@ public abstract class IO {
 		}
 	}
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static String getImageType(String url) {
-		try {
-			HttpHead req = new HttpHead(url);
+		try (InputStream is = URI.create(url).toURL().openStream(); PushbackInputStream pis = new PushbackInputStream(is, 100)) {
+			byte[] head = new byte[100];
+			pis.read(head);
+			pis.unread(head);
 
-			try (CloseableHttpResponse res = API.HTTP.execute(req)) {
-				Header h = res.getLastHeader(HttpHeaders.CONTENT_TYPE);
-				if (h != null && h.getValue().startsWith("image")) {
-					return h.getValue().substring(h.getValue().indexOf("/") + 1);
+			try (Buffer buf = new Buffer(); InputStream stream = buf.inputStream()) {
+				buf.write(head);
+				String mime = URLConnection.guessContentTypeFromStream(stream);
+
+				if (mime.startsWith("image/")) {
+					return mime.substring(6);
 				} else {
 					return null;
 				}
 			}
-		} catch (IOException e) {
+		} catch (IllegalArgumentException | IOException e) {
 			return null;
 		}
 	}

@@ -265,8 +265,8 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 			settings.setBackground(null);
 			bg = IO.getImage(settings.getBackground());
 		}
-		bg = Graph.scaleAndCenterImage(Graph.toColorSpace(bg, BufferedImage.TYPE_INT_ARGB), SIZE.width, SIZE.height);
 
+		bg = Graph.scaleAndCenterImage(Graph.toColorSpace(bg, BufferedImage.TYPE_INT_ARGB), SIZE.width, SIZE.height);
 		BufferedImage bi = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D g2d = bi.createGraphics();
