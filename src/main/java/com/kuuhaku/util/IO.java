@@ -80,8 +80,8 @@ public abstract class IO {
 		}
 	}
 
-	public static BufferedImage getImage(String url) {
-		byte[] bytes = Main.getCacheManager().computeResource(url, (k, v) -> {
+	public static byte[] getImageBytes(String url) {
+		return Main.getCacheManager().computeResource(url, (k, v) -> {
 			if (v != null && v.length > 0) return v;
 
 			try {
@@ -95,8 +95,10 @@ public abstract class IO {
 				return new byte[0];
 			}
 		});
+	}
 
-		return imageFromBytes(bytes);
+	public static BufferedImage getImage(String url) {
+		return imageFromBytes(getImageBytes(url));
 	}
 
 	public static byte[] getBytes(BufferedImage image) {
@@ -227,23 +229,24 @@ public abstract class IO {
 
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static String getImageType(String url) {
-		try (InputStream is = URI.create(url).toURL().openStream(); PushbackInputStream pis = new PushbackInputStream(is, 100)) {
-			byte[] head = new byte[100];
+		byte[] head = new byte[100];
+		try (InputStream is = URI.create(url).toURL().openStream(); PushbackInputStream pis = new PushbackInputStream(is, head.length)) {
 			pis.read(head);
-			pis.unread(head);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 
-			try (Buffer buf = new Buffer(); InputStream stream = buf.inputStream()) {
-				buf.write(head);
-				String mime = URLConnection.guessContentTypeFromStream(stream);
+		try (ByteArrayInputStream bais = new ByteArrayInputStream(head)) {
+			String mime = URLConnection.guessContentTypeFromStream(bais);
+			System.out.println(mime);
 
-				if (mime != null && mime.startsWith("image/")) {
-					return mime.substring(6);
-				} else {
-					return null;
-				}
+			if (mime != null && mime.startsWith("image/")) {
+				return mime.substring(6);
+			} else {
+				return null;
 			}
-		} catch (IllegalArgumentException | IOException e) {
-			return null;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

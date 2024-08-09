@@ -167,7 +167,7 @@ public class Card extends DAO<Card> implements Serializable {
 				if (f.exists()) {
 					return FileUtils.readFileToByteArray(f);
 				} else {
-					return IO.getBytes(IO.getImage(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png"), "png");
+					return IO.getImageBytes(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png");
 				}
 			} catch (IOException e) {
 				Constants.LOGGER.error(e, e);

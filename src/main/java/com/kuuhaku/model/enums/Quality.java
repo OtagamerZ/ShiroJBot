@@ -29,7 +29,7 @@ public enum Quality {
 		return Main.getCacheManager().computeResource("quality_" + name(), (k, v) -> {
 			if (v != null && v.length > 0) return v;
 
-			return IO.getBytes(IO.getImage(Constants.API_ROOT + "quality/" + name() + ".png"), "png");
+			return IO.getImageBytes(Constants.API_ROOT + "quality/" + name() + ".png");
 		});
 	}
 

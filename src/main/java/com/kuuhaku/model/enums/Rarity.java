@@ -106,7 +106,7 @@ public enum Rarity {
 		return Main.getCacheManager().computeResource("frame_" + name(), (k, v) -> {
 			if (v != null && v.length > 0) return v;
 
-			return IO.getBytes(IO.getImage(Constants.API_ROOT + "frame/" + name() + ".png"), "png");
+			return IO.getImageBytes(Constants.API_ROOT + "frame/" + name() + ".png");
 		});
 	}
 
