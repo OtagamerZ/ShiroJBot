@@ -236,7 +236,7 @@ public abstract class IO {
 				buf.write(head);
 				String mime = URLConnection.guessContentTypeFromStream(stream);
 
-				if (mime.startsWith("image/")) {
+				if (mime != null && mime.startsWith("image/")) {
 					return mime.substring(6);
 				} else {
 					return null;
