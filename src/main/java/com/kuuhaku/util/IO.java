@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.pngencoder.PngEncoder;
 import okio.Buffer;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -229,20 +230,28 @@ public abstract class IO {
 
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static String getImageType(String url) {
-		byte[] head = new byte[100];
-		try (InputStream is = URI.create(url).toURL().openStream(); PushbackInputStream pis = new PushbackInputStream(is, head.length)) {
-			pis.read(head);
-		} catch (IOException e) {
-			return null;
-		}
+		try {
+			URL uri = URI.create(url).toURL();
+			String type = FilenameUtils.getExtension(uri.getPath());
+			if (!type.isBlank()) return type;
 
-		try (ByteArrayInputStream bais = new ByteArrayInputStream(head)) {
-			String mime = URLConnection.guessContentTypeFromStream(bais);
+			URLConnection conn = uri.openConnection();
+			type = conn.getContentType();
+			if (type != null && type.startsWith("image/")) return type.substring("image/".length());
 
-			if (mime != null && mime.startsWith("image/")) {
-				return mime.substring(6);
-			} else {
-				return null;
+			byte[] head = new byte[100];
+			try (InputStream is = uri.openStream(); PushbackInputStream pis = new PushbackInputStream(is, head.length)) {
+				pis.read(head);
+			}
+
+			try (ByteArrayInputStream bais = new ByteArrayInputStream(head)) {
+				String mime = URLConnection.guessContentTypeFromStream(bais);
+
+				if (mime != null && mime.startsWith("image/")) {
+					return mime.substring(6);
+				} else {
+					return null;
+				}
 			}
 		} catch (IOException e) {
 			return null;
