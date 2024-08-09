@@ -233,12 +233,11 @@ public abstract class IO {
 		try (InputStream is = URI.create(url).toURL().openStream(); PushbackInputStream pis = new PushbackInputStream(is, head.length)) {
 			pis.read(head);
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			return null;
 		}
 
 		try (ByteArrayInputStream bais = new ByteArrayInputStream(head)) {
 			String mime = URLConnection.guessContentTypeFromStream(bais);
-			System.out.println(mime);
 
 			if (mime != null && mime.startsWith("image/")) {
 				return mime.substring(6);
@@ -246,7 +245,7 @@ public abstract class IO {
 				return null;
 			}
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			return null;
 		}
 	}
 
