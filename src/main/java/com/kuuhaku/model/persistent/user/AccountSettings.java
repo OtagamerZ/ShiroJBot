@@ -94,7 +94,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	}
 
 	public String getBackground() {
-		return Utils.getOr(background, "https://i.ibb.co/F5rkrmR/cap-No-Game-No-Life-S01-E01-Beginner-00-11-41-04.jpg");
+		return Utils.getOr(background, Profile.DEFAULT_BG);
 	}
 
 	public void setBackground(String background) {

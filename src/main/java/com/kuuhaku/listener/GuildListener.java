@@ -75,7 +75,7 @@ public class GuildListener extends ListenerAdapter {
 		if (!Application.READY || !event.isFromGuild()) return;
 
 		User usr = event.getUser();
-		if (usr != null && usr.isBot()) return;
+		if (usr == null || usr.isBot()) return;
 
 		GuildMessageChannel chn = event.getGuildChannel();
 		if (!event.getGuild().getSelfMember().hasPermission(chn, Permission.MESSAGE_HISTORY)) return;
@@ -83,49 +83,52 @@ public class GuildListener extends ListenerAdapter {
 		MessageReaction reaction = event.getReaction();
 		if (reaction.getEmoji().getFormatted().equals("⭐")) {
 			GuildConfig config = DAO.find(GuildConfig.class, event.getGuild().getId());
-			Message msg = Pages.subGet(event.retrieveMessage());
 
 			GuildMessageChannel channel = config.getSettings().getStarboardChannel();
 			if (channel == null) return;
 
-			int stars = (int) msg.getReactions().stream()
-					.filter(r -> r.getEmoji().getFormatted().equals("⭐"))
-					.flatMap(r -> r.retrieveUsers().stream())
-					.filter(u -> !u.isBot() && !u.equals(msg.getAuthor()))
+			int stars = (int) reaction.retrieveUsers().stream()
+					.filter(u -> !u.isBot() && !u.getId().equals(event.getMessageAuthorId()))
 					.count();
 
-			if (stars >= config.getSettings().getStarboardThreshold() && DAO.find(StarredMessage.class, msg.getId()) == null) {
-				Member author = msg.getMember();
-				if (author == null) return;
+			System.out.println(stars);
+			if (stars >= config.getSettings().getStarboardThreshold()) {
+				Message msg = Pages.subGet(event.retrieveMessage());
 
-				new StarredMessage(msg.getId()).save();
+				if (DAO.find(StarredMessage.class, msg.getId()) == null) {
+					Member author = msg.getMember();
+					if (author == null) return;
 
-				Message.Attachment img = null;
-				for (Message.Attachment att : msg.getAttachments()) {
-					if (att.isImage()) {
-						img = att;
-						break;
+					new StarredMessage(msg.getId()).save();
+
+					Message.Attachment img = null;
+					for (Message.Attachment att : msg.getAttachments()) {
+						if (att.isImage()) {
+							img = att;
+							break;
+						}
 					}
-				}
 
-				Message ref = msg.getReferencedMessage();
-				EmbedBuilder eb = new EmbedBuilder()
-						.setColor(Color.ORANGE)
-						.setTitle(config.getLocale().get("str/highlight", author.getEffectiveName()), msg.getJumpUrl())
-						.setDescription(StringUtils.abbreviate(msg.getContentRaw(), MessageEmbed.DESCRIPTION_MAX_LENGTH));
+					Message ref = msg.getReferencedMessage();
+					EmbedBuilder eb = new EmbedBuilder()
+							.setColor(Color.ORANGE)
+							.setTitle(config.getLocale().get("str/highlight", author.getEffectiveName()), msg.getJumpUrl())
+							.setDescription(StringUtils.abbreviate(msg.getContentRaw(), MessageEmbed.DESCRIPTION_MAX_LENGTH));
 
-				if (ref != null) {
-					eb.setAuthor(
-							StringUtils.abbreviate(ref.getContentRaw(), 128),
-							ref.getJumpUrl(),
-							"https://getmeroof.com/gmr-assets/reply.png"
-					);
-				}
-				if (img != null) {
-					eb.setImage(img.getUrl());
-				}
+					if (ref != null) {
+						eb.setAuthor(
+								StringUtils.abbreviate(ref.getContentRaw(), 128),
+								ref.getJumpUrl(),
+								"https://getmeroof.com/gmr-assets/reply.png"
+						);
+					}
 
-				channel.sendMessage(":star: | " + event.getChannel().getAsMention()).setEmbeds(eb.build()).queue();
+					if (img != null) {
+						eb.setImage(img.getUrl());
+					}
+
+					channel.sendMessage(":star: | " + event.getChannel().getAsMention()).setEmbeds(eb.build()).queue();
+				}
 			}
 		}
 	}

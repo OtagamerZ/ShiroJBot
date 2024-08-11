@@ -58,6 +58,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Entity
 @Table(name = "profile", indexes = @Index(columnList = "xp DESC"))
 public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklistable {
+	public static final String DEFAULT_BG = "https://i.ibb.co/F5rkrmR/cap-No-Game-No-Life-S01-E01-Beginner-00-11-41-04.jpg";
 	private static final Dimension SIZE = new Dimension(950, 600);
 
 	@EmbeddedId
@@ -262,8 +263,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		AccountSettings settings = account.getSettings();
 		BufferedImage bg = IO.getImage(settings.getBackground());
 		if (bg == null) {
-			settings.setBackground(null);
-			bg = IO.getImage(settings.getBackground());
+			bg = IO.getImage(DEFAULT_BG);
 		}
 
 		bg = Graph.scaleAndCenterImage(Graph.toColorSpace(bg, BufferedImage.TYPE_INT_ARGB), SIZE.width, SIZE.height);
