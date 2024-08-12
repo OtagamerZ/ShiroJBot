@@ -18,6 +18,7 @@
 
 package com.kuuhaku.listener;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Application;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
@@ -92,47 +93,42 @@ public class GuildListener extends ListenerAdapter {
 
 			System.out.println(stars + "/" + config.getSettings().getStarboardThreshold());
 			if (stars >= config.getSettings().getStarboardThreshold()) {
-				event.retrieveMessage().queue(msg -> {
-					System.out.println(msg.getContentRaw());
-					System.out.println(DAO.find(StarredMessage.class, msg.getId()));
+				Message msg = Pages.subGet(event.retrieveMessage());
+				if (DAO.find(StarredMessage.class, msg.getId()) == null) {
+					Member author = Pages.subGet(event.getGuild().retrieveMemberById(event.getMessageAuthorId()));
+					if (author == null) return;
 
-					if (DAO.find(StarredMessage.class, msg.getId()) == null) {
-						Member author = msg.getMember();
-						System.out.println(author);
-						if (author == null) return;
+					System.out.println(author.getEffectiveName());
+					new StarredMessage(msg.getId()).save();
 
-						System.out.println(author.getEffectiveName());
-						new StarredMessage(msg.getId()).save();
-
-						Message.Attachment img = null;
-						for (Message.Attachment att : msg.getAttachments()) {
-							if (att.isImage()) {
-								img = att;
-								break;
-							}
+					Message.Attachment img = null;
+					for (Message.Attachment att : msg.getAttachments()) {
+						if (att.isImage()) {
+							img = att;
+							break;
 						}
-
-						Message ref = msg.getReferencedMessage();
-						EmbedBuilder eb = new EmbedBuilder()
-								.setColor(Color.ORANGE)
-								.setTitle(config.getLocale().get("str/highlight", author.getEffectiveName()), msg.getJumpUrl())
-								.setDescription(StringUtils.abbreviate(msg.getContentRaw(), MessageEmbed.DESCRIPTION_MAX_LENGTH));
-
-						if (ref != null) {
-							eb.setAuthor(
-									StringUtils.abbreviate(ref.getContentRaw(), 128),
-									ref.getJumpUrl(),
-									"https://getmeroof.com/gmr-assets/reply.png"
-							);
-						}
-
-						if (img != null) {
-							eb.setImage(img.getUrl());
-						}
-
-						channel.sendMessage(":star: | " + event.getChannel().getAsMention()).setEmbeds(eb.build()).queue();
 					}
-				});
+
+					Message ref = msg.getReferencedMessage();
+					EmbedBuilder eb = new EmbedBuilder()
+							.setColor(Color.ORANGE)
+							.setTitle(config.getLocale().get("str/highlight", author.getEffectiveName()), msg.getJumpUrl())
+							.setDescription(StringUtils.abbreviate(msg.getContentRaw(), MessageEmbed.DESCRIPTION_MAX_LENGTH));
+
+					if (ref != null) {
+						eb.setAuthor(
+								StringUtils.abbreviate(ref.getContentRaw(), 128),
+								ref.getJumpUrl(),
+								"https://getmeroof.com/gmr-assets/reply.png"
+						);
+					}
+
+					if (img != null) {
+						eb.setImage(img.getUrl());
+					}
+
+					channel.sendMessage(":star: | " + event.getChannel().getAsMention()).setEmbeds(eb.build()).queue();
+				}
 			}
 		}
 	}
