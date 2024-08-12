@@ -40,19 +40,7 @@ public class Checkpoint implements AutoCloseable {
 	public void start() {
 		watch.start();
 
-		StackTraceElement line = null;
-		for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-			if (ste.getClassName().startsWith("com.kuuhaku") && !ste.getClassName().equals(getClass().getName())) {
-				line = ste;
-				break;
-			}
-		}
-
-		if (line != null) {
-			caller.put(laps.size(), line.getClassName() + "." + line.getMethodName() + "(" + line.getLineNumber() + ")");
-		} else {
-			caller.put(laps.size(), "(Unknown source)");
-		}
+		markCaller();
 
 		Constants.LOGGER.info("Measurements started");
 	}
@@ -68,6 +56,15 @@ public class Checkpoint implements AutoCloseable {
 			comments.put(laps.size(), comment);
 		}
 
+		markCaller();
+
+		watch.reset();
+		watch.start();
+
+		Constants.LOGGER.info("Lap {} marked at {}ms", laps.size(), laps.getLast());
+	}
+
+	private void markCaller() {
 		StackTraceElement line = null;
 		for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
 			if (ste.getClassName().startsWith("com.kuuhaku") && !ste.getClassName().equals(getClass().getName())) {
@@ -81,11 +78,6 @@ public class Checkpoint implements AutoCloseable {
 		} else {
 			caller.put(laps.size(), "(Unknown source)");
 		}
-
-		watch.reset();
-		watch.start();
-
-		Constants.LOGGER.info("Lap {} marked at {}ms", laps.size(), laps.getLast());
 	}
 
 	@Override
