@@ -18,7 +18,6 @@
 
 package com.kuuhaku.listener;
 
-import com.github.ygimenez.method.Pages;
 import com.kuuhaku.Application;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
@@ -91,44 +90,45 @@ public class GuildListener extends ListenerAdapter {
 					.filter(u -> !u.isBot() && !u.getId().equals(event.getMessageAuthorId()))
 					.count();
 
-			System.out.println(stars);
 			if (stars >= config.getSettings().getStarboardThreshold()) {
-				Message msg = Pages.subGet(event.retrieveMessage());
+				event.retrieveMessage().queue(msg -> {
+					System.out.println(msg.getContentRaw());
+					if (DAO.find(StarredMessage.class, msg.getId()) == null) {
+						Member author = msg.getMember();
+						if (author == null) return;
 
-				if (DAO.find(StarredMessage.class, msg.getId()) == null) {
-					Member author = msg.getMember();
-					if (author == null) return;
+						System.out.println(author.getEffectiveName());
+						new StarredMessage(msg.getId()).save();
 
-					new StarredMessage(msg.getId()).save();
-
-					Message.Attachment img = null;
-					for (Message.Attachment att : msg.getAttachments()) {
-						if (att.isImage()) {
-							img = att;
-							break;
+						Message.Attachment img = null;
+						for (Message.Attachment att : msg.getAttachments()) {
+							if (att.isImage()) {
+								img = att;
+								break;
+							}
 						}
+
+						Message ref = msg.getReferencedMessage();
+						EmbedBuilder eb = new EmbedBuilder()
+								.setColor(Color.ORANGE)
+								.setTitle(config.getLocale().get("str/highlight", author.getEffectiveName()), msg.getJumpUrl())
+								.setDescription(StringUtils.abbreviate(msg.getContentRaw(), MessageEmbed.DESCRIPTION_MAX_LENGTH));
+
+						if (ref != null) {
+							eb.setAuthor(
+									StringUtils.abbreviate(ref.getContentRaw(), 128),
+									ref.getJumpUrl(),
+									"https://getmeroof.com/gmr-assets/reply.png"
+							);
+						}
+
+						if (img != null) {
+							eb.setImage(img.getUrl());
+						}
+
+						channel.sendMessage(":star: | " + event.getChannel().getAsMention()).setEmbeds(eb.build()).queue();
 					}
-
-					Message ref = msg.getReferencedMessage();
-					EmbedBuilder eb = new EmbedBuilder()
-							.setColor(Color.ORANGE)
-							.setTitle(config.getLocale().get("str/highlight", author.getEffectiveName()), msg.getJumpUrl())
-							.setDescription(StringUtils.abbreviate(msg.getContentRaw(), MessageEmbed.DESCRIPTION_MAX_LENGTH));
-
-					if (ref != null) {
-						eb.setAuthor(
-								StringUtils.abbreviate(ref.getContentRaw(), 128),
-								ref.getJumpUrl(),
-								"https://getmeroof.com/gmr-assets/reply.png"
-						);
-					}
-
-					if (img != null) {
-						eb.setImage(img.getUrl());
-					}
-
-					channel.sendMessage(":star: | " + event.getChannel().getAsMention()).setEmbeds(eb.build()).queue();
-				}
+				});
 			}
 		}
 	}
