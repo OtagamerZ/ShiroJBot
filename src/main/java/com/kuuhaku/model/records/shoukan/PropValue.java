@@ -59,17 +59,17 @@ public record PropValue(List<Number> values) {
 		if (values.isEmpty()) return klass.cast(0);
 
 		if (klass == Short.class) {
-			return klass.cast(values.getFirst());
+			return klass.cast(values.getFirst().shortValue());
 		} else if (klass == Integer.class) {
-			return klass.cast(values.getFirst());
+			return klass.cast(values.getFirst().intValue());
 		} else if (klass == Long.class) {
-			return klass.cast(values.getFirst());
+			return klass.cast(values.getFirst().longValue());
 		} else if (klass == Float.class) {
-			return klass.cast(values.getFirst());
+			return klass.cast(values.getFirst().floatValue());
 		} else if (klass == Double.class) {
-			return klass.cast(values.getFirst());
+			return klass.cast(values.getFirst().doubleValue());
 		} else if (klass == Byte.class) {
-			return klass.cast(values.getFirst());
+			return klass.cast(values.getFirst().byteValue());
 		}
 
 		throw new ClassCastException();
