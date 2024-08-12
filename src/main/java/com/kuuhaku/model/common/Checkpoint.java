@@ -23,6 +23,7 @@ import org.apache.commons.lang3.time.StopWatch;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class Checkpoint implements AutoCloseable {
 	public static final Checkpoint INSTANCE = new Checkpoint();
@@ -62,7 +63,7 @@ public class Checkpoint implements AutoCloseable {
 
 	public void lap(String comment) {
 		watch.stop();
-		laps.add(watch.getTime());
+		laps.add(watch.getTime(TimeUnit.MILLISECONDS));
 		if (comment != null) {
 			comments.put(laps.size(), comment);
 		}
@@ -90,7 +91,7 @@ public class Checkpoint implements AutoCloseable {
 	@Override
 	public void close() {
 		watch.stop();
-		laps.add(watch.getTime());
+		laps.add(watch.getTime(TimeUnit.MILLISECONDS));
 
 		long total = laps.stream().mapToLong(l -> l).sum();
 		Constants.LOGGER.info("Final lap marked at {}ms", laps.getLast());

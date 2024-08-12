@@ -64,7 +64,7 @@ public class CompileCommand implements Executable {
 						return out;
 					});
 
-					return new Pair<>(String.valueOf(fut.get(1, TimeUnit.MINUTES)), time.getTime());
+					return new Pair<>(String.valueOf(fut.get(1, TimeUnit.MINUTES)), time.getTime(TimeUnit.MILLISECONDS));
 				} catch (TimeoutException e) {
 					return new Pair<>(locale.get("error/timeout"), -1L);
 				} catch (Exception e) {

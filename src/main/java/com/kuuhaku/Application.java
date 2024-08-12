@@ -48,6 +48,7 @@ import net.dv8tion.jda.api.utils.messages.MessageRequest;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static net.dv8tion.jda.api.entities.Message.MentionType.EVERYONE;
 import static net.dv8tion.jda.api.entities.Message.MentionType.HERE;
@@ -120,7 +121,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		Constants.LOGGER.info("<----------END OF BOOT---------->");
 
 		Main.boot.stop();
-		Constants.LOGGER.info("Finished in {}", Utils.toStringDuration(I18N.EN, Main.boot.getTime()));
+		Constants.LOGGER.info("Finished in {}", Utils.toStringDuration(I18N.EN, Main.boot.getTime(TimeUnit.MILLISECONDS)));
 		READY = true;
 	}
 
