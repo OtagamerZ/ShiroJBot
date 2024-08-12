@@ -90,6 +90,7 @@ public class GuildListener extends ListenerAdapter {
 					.filter(u -> !u.isBot() && !u.getId().equals(event.getMessageAuthorId()))
 					.count();
 
+			System.out.println(stars + "/" + config.getSettings().getStarboardThreshold());
 			if (stars >= config.getSettings().getStarboardThreshold()) {
 				event.retrieveMessage().queue(msg -> {
 					System.out.println(msg.getContentRaw());
@@ -209,7 +210,8 @@ public class GuildListener extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-		if (!Application.READY || !event.isFromGuild() || event.getAuthor().isBot() || !event.getChannel().canTalk()) return;
+		if (!Application.READY || !event.isFromGuild() || event.getAuthor().isBot() || !event.getChannel().canTalk())
+			return;
 
 		String content = event.getMessage().getContentRaw();
 		MessageData.Guild data;
@@ -562,29 +564,17 @@ public class GuildListener extends ListenerAdapter {
 				} catch (InvalidSignatureException e) {
 					String error;
 
-					if (e.getOptions().length > 0) {
-						error = locale.get("error/invalid_option",
-								Utils.properlyJoin(locale.get("str/or")).apply(List.of(e.getOptions()))
-						) + "```css\n%s%s %s```".formatted(
-								event.config().getPrefix(),
-								name,
-								e.getMessage().replace("`", "'")
-						);
+					error = locale.get("error/invalid_signature");
 
-						data.channel().sendMessage(error).queue();
-					} else {
-						error = locale.get("error/invalid_signature");
+					List<String> signatures = SignatureParser.extract(locale, pc.command());
+					EmbedBuilder eb = new ColorlessEmbedBuilder()
+							.setAuthor(locale.get("str/command_signatures"))
+							.setDescription("```css\n" + String.join("\n", signatures).formatted(
+									event.config().getPrefix(),
+									name
+							) + "\n```");
 
-						List<String> signatures = SignatureParser.extract(locale, pc.command());
-						EmbedBuilder eb = new ColorlessEmbedBuilder()
-								.setAuthor(locale.get("str/command_signatures"))
-								.setDescription("```css\n" + String.join("\n", signatures).formatted(
-										event.config().getPrefix(),
-										name
-								) + "\n```");
-
-						data.channel().sendMessage(error).setEmbeds(eb.build()).queue();
-					}
+					data.channel().sendMessage(error).setEmbeds(eb.build()).queue();
 				}
 			}
 
