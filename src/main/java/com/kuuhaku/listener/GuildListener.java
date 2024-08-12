@@ -91,14 +91,12 @@ public class GuildListener extends ListenerAdapter {
 					.filter(u -> !u.isBot() && !u.getId().equals(event.getMessageAuthorId()))
 					.count();
 
-			System.out.println(stars + "/" + config.getSettings().getStarboardThreshold());
 			if (stars >= config.getSettings().getStarboardThreshold()) {
 				Message msg = Pages.subGet(event.retrieveMessage());
 				if (DAO.find(StarredMessage.class, msg.getId()) == null) {
 					Member author = Pages.subGet(event.getGuild().retrieveMemberById(event.getMessageAuthorId()));
 					if (author == null) return;
 
-					System.out.println(author.getEffectiveName());
 					new StarredMessage(msg.getId()).save();
 
 					Message.Attachment img = null;

@@ -94,16 +94,16 @@ tasks.register("enforceVersion") {
 
 dependencies {
 	//Core
-	implementation group: "net.dv8tion", name: "JDA", version: "5.0.0-beta.24"
-	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "61d4f64dd9"
+	implementation group: "net.dv8tion", name: "JDA", version: "5.0.1"
+	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "87dcdfc83a"
 	implementation group: "com.github.ygimenez", name: "Simple-Moshi", version: "1.1.2"
 
 	//Database
 	implementation group: "org.postgresql", name: "postgresql", version: "42.7.3"
 	implementation group: "jakarta.persistence", name: "jakarta.persistence-api", version: "3.2.0"
-	implementation group: "org.hibernate.orm", name: "hibernate-core", version: "7.0.0.Alpha2"
-	implementation group: "org.hibernate.orm", name: "hibernate-hikaricp", version: "7.0.0.Alpha2"
-	implementation group: "org.hibernate.orm", name: "hibernate-jcache", version: "7.0.0.Alpha2"
+	implementation group: "org.hibernate.orm", name: "hibernate-core", version: "7.0.0.Alpha3"
+	implementation group: "org.hibernate.orm", name: "hibernate-hikaricp", version: "7.0.0.Alpha3"
+	implementation group: "org.hibernate.orm", name: "hibernate-jcache", version: "7.0.0.Alpha3"
 	implementation group: "com.zaxxer", name: "HikariCP", version: "5.1.0"
 
 	//Cache
@@ -114,26 +114,26 @@ dependencies {
 	implementation group: "org.apache.groovy", name: "groovy", version: "4.0.21"
 
 	//Websocket
-	implementation group: "org.java-websocket", name: "Java-WebSocket", version: "1.5.6"
+	implementation group: "org.java-websocket", name: "Java-WebSocket", version: "1.5.7"
 
 	//Wrappers
-	implementation group: "com.graphql-java", name: "graphql-java", version: "22.1"
+	implementation group: "com.graphql-java", name: "graphql-java", version: "22.2"
 	implementation group: "club.minnced", name: "discord-webhooks", version: "0.8.4"
 
 	//Apache Commons
-	implementation group: "org.apache.commons", name: "commons-lang3", version: "3.14.0"
-	implementation group: "org.apache.commons", name: "commons-text", version: "1.11.0"
+	implementation group: "org.apache.commons", name: "commons-lang3", version: "3.16.0"
+	implementation group: "org.apache.commons", name: "commons-text", version: "1.12.0"
 	implementation group: "org.apache.commons", name: "commons-math3", version: "3.6.1"
 	implementation group: "org.apache.commons", name: "commons-imaging", version: "1.0.0-alpha5"
-	implementation group: "org.apache.commons", name: "commons-compress", version: "1.26.1"
-	implementation group: "org.apache.httpcomponents", name: "httpclient", version: "4.5.14"
-	implementation group: "commons-validator", name: "commons-validator", version: "1.8.0"
-	implementation group: "commons-codec", name: "commons-codec", version: "1.17.0"
+	implementation group: "org.apache.commons", name: "commons-compress", version: "1.27.0"
+	implementation group: "org.apache.httpcomponents.client5", name: "httpclient5", version: "5.3.1"
+	implementation group: "commons-validator", name: "commons-validator", version: "1.9.0"
+	implementation group: "commons-codec", name: "commons-codec", version: "1.17.1"
 	implementation group: "commons-cli", name: "commons-cli", version: "1.8.0"
 	implementation group: "commons-io", name: "commons-io", version: "2.16.1"
 
 	//Logger
-	implementation group: "org.slf4j", name: "slf4j-api", version: "2.0.12"
+	implementation group: "org.slf4j", name: "slf4j-api", version: "2.0.16"
 	implementation group: "org.slf4j", name: "slf4j-log4j12", version: "2.0.13"
 	implementation group: "org.apache.logging.log4j", name: "log4j-api", version: "2.23.1"
 	implementation group: "org.apache.logging.log4j", name: "log4j-1.2-api", version: "2.23.1"
@@ -152,7 +152,7 @@ dependencies {
 	implementation group: "com.github.sbesada", name: "java.math.expression.parser", version: "3.3.0"
 	implementation group: "org.tukaani", name: "xz", version: "1.9"
 	implementation group: "com.vdurmont", name: "emoji-java", version: "5.1.1"
-	implementation group: "org.shredzone.commons", name: "commons-suncalc", version: "3.10"
+	implementation group: "org.shredzone.commons", name: "commons-suncalc", version: "3.11"
 	implementation group: "org.knowm.xchart", name: "xchart", version: "3.8.7"
 	implementation group: "com.github.trickl", name: "palette", version: "0.1.1"
 	implementation group: "org.jetbrains", name: "annotations", version: "24.1.0"
