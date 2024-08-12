@@ -96,6 +96,7 @@ public class GuildListener extends ListenerAdapter {
 					System.out.println(msg.getContentRaw());
 					if (DAO.find(StarredMessage.class, msg.getId()) == null) {
 						Member author = msg.getMember();
+						System.out.println(author);
 						if (author == null) return;
 
 						System.out.println(author.getEffectiveName());
