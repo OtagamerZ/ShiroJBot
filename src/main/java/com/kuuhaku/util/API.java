@@ -20,20 +20,17 @@ package com.kuuhaku.util;
 
 import com.kuuhaku.Constants;
 import com.ygimenez.json.JSONObject;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHeaders;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpHeaders;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.core5.http.message.BasicHeader;
+import org.apache.hc.core5.net.URIBuilder;
 import org.java_websocket.client.WebSocketClient;
 
 import java.io.IOException;
@@ -48,20 +45,20 @@ public abstract class API {
 	private static final Map<Class<? extends WebSocketClient>, WebSocketClient> SOCKET_CLIENTS = new HashMap<>();
 	public static final CloseableHttpClient HTTP = HttpClients.custom()
 			.setDefaultRequestConfig(RequestConfig.custom()
-					.setCookieSpec(CookieSpecs.IGNORE_COOKIES)
+					.setCookieSpec("ignoreCookies")
 					.build())
 			.setDefaultHeaders(List.of(
 					new BasicHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0")
 			))
 			.build();
 
-	public static <T extends HttpRequestBase> JSONObject call(T req, JSONObject parameters, JSONObject headers, String body) {
+	public static <T extends HttpUriRequestBase> JSONObject call(T req, JSONObject parameters, JSONObject headers, String body) {
 		try {
-			if (body != null && req instanceof HttpEntityEnclosingRequestBase r) {
-				r.setEntity(new StringEntity(body));
+			if (body != null) {
+				req.setEntity(new StringEntity(body));
 			}
 
-			URIBuilder ub = new URIBuilder(req.getURI());
+			URIBuilder ub = new URIBuilder(req.getUri());
 			if (parameters != null) {
 				for (Map.Entry<String, Object> params : parameters.entrySet()) {
 					ub.setParameter(params.getKey(), String.valueOf(params.getValue()));
@@ -75,17 +72,17 @@ public abstract class API {
 						.toArray(Header[]::new)
 				);
 			}
-			req.setURI(uri);
+			req.setUri(uri);
 
-			try (CloseableHttpResponse res = HTTP.execute(req)) {
-				HttpEntity ent = res.getEntity();
+			return HTTP.execute(req, r -> {
+				HttpEntity ent = r.getEntity();
 
 				if (ent != null) {
 					return new JSONObject(EntityUtils.toString(ent));
 				} else {
 					return new JSONObject();
 				}
-			}
+			});
 		} catch (IOException | URISyntaxException e) {
 			return new JSONObject();
 		}
