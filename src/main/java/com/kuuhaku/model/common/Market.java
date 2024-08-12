@@ -29,7 +29,7 @@ import com.kuuhaku.util.API;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import org.apache.commons.cli.Option;
-import org.apache.http.client.methods.HttpHead;
+import org.apache.hc.client5.http.classic.methods.HttpHead;
 
 import java.util.ArrayList;
 import java.util.List;

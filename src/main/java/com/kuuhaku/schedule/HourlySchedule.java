@@ -30,8 +30,8 @@ import com.kuuhaku.util.API;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.entities.User;
-import org.apache.http.HttpHeaders;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.core5.http.HttpHeaders;
 
 import java.time.DayOfWeek;
 import java.time.ZoneId;
