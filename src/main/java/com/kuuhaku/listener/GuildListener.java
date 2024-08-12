@@ -94,6 +94,8 @@ public class GuildListener extends ListenerAdapter {
 			if (stars >= config.getSettings().getStarboardThreshold()) {
 				event.retrieveMessage().queue(msg -> {
 					System.out.println(msg.getContentRaw());
+					System.out.println(DAO.find(StarredMessage.class, msg.getId()));
+
 					if (DAO.find(StarredMessage.class, msg.getId()) == null) {
 						Member author = msg.getMember();
 						System.out.println(author);
