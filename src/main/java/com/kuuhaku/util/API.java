@@ -74,8 +74,8 @@ public abstract class API {
 			}
 			req.setUri(uri);
 
-			return HTTP.execute(req, r -> {
-				HttpEntity ent = r.getEntity();
+			return HTTP.execute(req, res -> {
+				HttpEntity ent = res.getEntity();
 
 				if (ent != null) {
 					return new JSONObject(EntityUtils.toString(ent));

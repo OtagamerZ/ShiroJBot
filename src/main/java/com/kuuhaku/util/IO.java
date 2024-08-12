@@ -26,10 +26,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpHeaders;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpHead;
+import org.apache.hc.client5.http.classic.methods.HttpHead;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpHeaders;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -262,7 +261,7 @@ public abstract class IO {
 		try {
 			HttpHead req = new HttpHead(url);
 
-			try (CloseableHttpResponse res = API.HTTP.execute(req)) {
+			return API.HTTP.execute(req, res -> {
 				Header h = res.getLastHeader(HttpHeaders.CONTENT_TYPE);
 				if (h == null || !h.getValue().startsWith("image")) {
 					return 0;
@@ -274,7 +273,7 @@ public abstract class IO {
 				} else {
 					return 0;
 				}
-			}
+			}).longValue();
 		} catch (IOException e) {
 			return 0;
 		}
