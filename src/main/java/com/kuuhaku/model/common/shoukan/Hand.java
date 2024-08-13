@@ -917,6 +917,10 @@ public class Hand {
 		this.hp = Math.max(1, this.hp - Math.max(0, value));
 		hpDelta = this.hp - before;
 
+		if (origin.isPure(Race.DEMON)) {
+			regdeg.add(-hpDelta);
+		}
+
 		if (value > 0) {
 			game.trigger(Trigger.ON_CONSUME_HP, side);
 		}
