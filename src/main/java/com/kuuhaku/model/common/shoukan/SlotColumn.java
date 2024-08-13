@@ -62,13 +62,7 @@ public class SlotColumn {
 
 	public Senshi getTop() {
 		if (top != null && (isLocked() || !equals(top.getSlot()))) {
-			Senshi rem = top;
-			top = null;
-
-			rem.executeAssert(Trigger.ON_REMOVE);
-			if (isLocked() && equals(rem.getSlot())) {
-				rem.setSlot(null);
-			}
+			setTop(null);
 		}
 
 		return top;
@@ -84,13 +78,7 @@ public class SlotColumn {
 
 	public Senshi getBottom() {
 		if (bottom != null && (isLocked() || !equals(bottom.getSlot()))) {
-			Senshi rem = bottom;
-			bottom = null;
-
-			rem.executeAssert(Trigger.ON_REMOVE);
-			if (isLocked() && equals(rem.getSlot())) {
-				rem.setSlot(null);
-			}
+			setBottom(null);
 		}
 
 		return bottom;
@@ -121,7 +109,7 @@ public class SlotColumn {
 	}
 
 	private void placeCard(Senshi card, boolean top, boolean replace) {
-		Senshi current = top ? getTop() : getBottom();
+		Senshi current = top ? this.top : this.bottom;
 		if (Objects.equals(card, current)) return;
 		else if (card != null && card.getHand() != null && card.getSide() == side && card.hasFlag(Flag.NO_CONVERT, true)) {
 			return;
