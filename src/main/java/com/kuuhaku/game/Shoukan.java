@@ -1371,7 +1371,9 @@ public class Shoukan extends GameInstance<Phase> {
 										dmg = 0;
 										hit = false;
 									}
-								} else {
+								}
+
+								if (hit) {
 									if (unstop || dmg > enemyStats) {
 										outcome = getString("str/combat_success", dmg, enemyStats);
 										if (unstop) {
