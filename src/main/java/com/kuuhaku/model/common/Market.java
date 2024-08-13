@@ -56,7 +56,7 @@ public class Market {
 			if (opt.hasArg()) {
 				filter = filter.formatted(i.getAndIncrement());
 
-				if (opt.getOpt().equals("m")) {
+				if (opt.getOpt().equalsIgnoreCase("m")) {
 					params.add(uid);
 				} else {
 					params.add(opt.getValue().toUpperCase());
