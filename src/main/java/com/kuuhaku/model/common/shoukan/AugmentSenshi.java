@@ -86,7 +86,7 @@ public class AugmentSenshi extends Senshi implements Proxy<Senshi> {
 
 	@Override
 	public boolean hasFlag(Flag flag, boolean pop) {
-		return original.hasFlag(flag, pop);
+		return super.hasFlag(flag, pop) || original.hasFlag(flag, pop);
 	}
 
 	public void destroy() {

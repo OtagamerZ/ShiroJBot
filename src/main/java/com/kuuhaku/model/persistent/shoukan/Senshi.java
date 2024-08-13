@@ -1397,7 +1397,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		if (trigger == ON_INITIALIZE) {
 			if (getBase().getTags().contains("AUGMENT") && !(this instanceof AugmentSenshi)) {
-				replace(new AugmentSenshi(this, Senshi.getRandom(getGame().getRng())));
+				augment(Senshi.getRandom(getGame().getRng()));
 				return;
 			}
 		} else if (trigger == ON_REMOVE) {
