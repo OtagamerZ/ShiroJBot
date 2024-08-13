@@ -61,8 +61,12 @@ public class SlotColumn {
 	}
 
 	public Senshi getTop() {
-		if (top != null && (isLocked() || !equals(top.getSlot()))) {
-			setTop(null);
+		if (top != null) {
+			if (!equals(top.getSlot())) {
+				top = null;
+			} else if (isLocked()) {
+				setTop(null);
+			}
 		}
 
 		return top;
@@ -77,8 +81,12 @@ public class SlotColumn {
 	}
 
 	public Senshi getBottom() {
-		if (bottom != null && (isLocked() || !equals(bottom.getSlot()))) {
-			setBottom(null);
+		if (bottom != null) {
+			if (!equals(bottom.getSlot())) {
+				bottom = null;
+			} else if (isLocked()) {
+				setBottom(null);
+			}
 		}
 
 		return bottom;
@@ -98,14 +106,6 @@ public class SlotColumn {
 
 	public void setUnblocked(Senshi card) {
 		placeCard(card, top != null, false);
-	}
-
-	public void setFirst(Senshi card) {
-		placeCard(card, top == null, false);
-	}
-
-	public void setLast(Senshi card) {
-		placeCard(card, bottom != null, false);
 	}
 
 	private void placeCard(Senshi card, boolean top, boolean replace) {
