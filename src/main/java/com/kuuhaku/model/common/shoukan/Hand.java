@@ -618,7 +618,7 @@ public class Hand {
 			if (out instanceof Evogear e && !e.isSpell()) {
 				if (origin.synergy() == Race.EX_MACHINA) {
 					regdeg.add(500);
-				} else if (origin.synergy() == Race.MUMMY && out.getCurses().isEmpty()) {
+				} else if (origin.synergy() == Race.MUMMY && out.getCurses().isEmpty() && !selectionPending()) {
 					Evogear curse = Evogear.getByTag(game.getRng(), "MUMMY_CURSE").getRandom();
 
 					requestChoice(
@@ -1272,8 +1272,9 @@ public class Hand {
 		}
 
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
-		else if (required != null && cards.size() < required)
+		else if (required != null && cards.size() < required) {
 			throw new ActivationException("err/insufficient_selection");
+		}
 
 		CompletableFuture<List<Drawable<?>>> task = new CompletableFuture<>();
 		selection = new SelectionAction(
