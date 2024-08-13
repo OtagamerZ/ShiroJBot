@@ -1341,34 +1341,36 @@ public class Shoukan extends GameInstance<Phase> {
 								int dodge = target.getDodge();
 								boolean tParry, tDodge;
 
-								if (source.isBlinded(true)) {
-									outcome = getString("str/combat_miss");
-									trigger(ON_MISS, source.asSource(ON_MISS));
+								if (!source.hasFlag(Flag.TRUE_STRIKE, true)) {
+									if (source.isBlinded(true)) {
+										outcome = getString("str/combat_miss");
+										trigger(ON_MISS, source.asSource(ON_MISS));
 
-									dmg = 0;
-									hit = false;
-								} else if (!unstop && !source.hasFlag(Flag.TRUE_STRIKE, true) && target.isAvailable() && ((tDodge = target.hasFlag(Flag.TRUE_PARRY, true)) || chance(parry))) {
-									outcome = getString("str/combat_parry", parry);
-									if (tDodge) {
-										outcome += " **(" + getString("flag/true_parry") + ")**";
+										dmg = 0;
+										hit = false;
+									} else if (!unstop && target.isAvailable() && ((tDodge = target.hasFlag(Flag.TRUE_PARRY, true)) || chance(parry))) {
+										outcome = getString("str/combat_parry", parry);
+										if (tDodge) {
+											outcome += " **(" + getString("flag/true_parry") + ")**";
+										}
+
+										trigger(NONE, source.asSource(), target.asTarget(ON_PARRY));
+										attack(target, source);
+										source.setAvailable(false);
+
+										dmg = 0;
+										hit = false;
+									} else if ((tParry = target.hasFlag(Flag.TRUE_DODGE, true)) || chance(dodge)) {
+										outcome = getString("str/combat_dodge", dodge);
+										if (tParry) {
+											outcome += " **(" + getString("flag/true_dodge") + ")**";
+										}
+
+										trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
+
+										dmg = 0;
+										hit = false;
 									}
-
-									trigger(NONE, source.asSource(), target.asTarget(ON_PARRY));
-									attack(target, source);
-									source.setAvailable(false);
-
-									dmg = 0;
-									hit = false;
-								} else if (!source.hasFlag(Flag.TRUE_STRIKE, true) && ((tParry = target.hasFlag(Flag.TRUE_DODGE, true)) || chance(dodge))) {
-									outcome = getString("str/combat_dodge", dodge);
-									if (tParry) {
-										outcome += " **(" + getString("flag/true_dodge") + ")**";
-									}
-
-									trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
-
-									dmg = 0;
-									hit = false;
 								} else {
 									if (unstop || dmg > enemyStats) {
 										outcome = getString("str/combat_success", dmg, enemyStats);
