@@ -376,7 +376,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public void augment(Senshi other) {
-		getSlot().replace(this, new AugmentSenshi(other, this));
+		replace(new AugmentSenshi(other, this));
 	}
 
 	public void swap(Senshi other) {
@@ -1397,7 +1397,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		if (trigger == ON_INITIALIZE) {
 			if (getBase().getTags().contains("AUGMENT") && !(this instanceof AugmentSenshi)) {
-				augment(Senshi.getRandom(getGame().getRng()));
+				replace(new AugmentSenshi(this, Senshi.getRandom(getGame().getRng())));
 				return;
 			}
 		} else if (trigger == ON_REMOVE) {
