@@ -23,7 +23,7 @@ import org.intellij.lang.annotations.Language;
 
 import java.util.Arrays;
 
-public enum StashFilter {
+public enum CardFilter {
 	NAME("n", "AND c.card.id LIKE '%%'||?%s||'%%'"),
 	RARITY("r", "AND cast(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'"),
 	TIER("t", "AND e.tier = ?%s"),
@@ -57,11 +57,11 @@ public enum StashFilter {
 	private final String whereClause;
 	private final Boolean market;
 
-	StashFilter(String shortName, String whereClause) {
+	CardFilter(String shortName, String whereClause) {
 		this(shortName, whereClause, null);
 	}
 
-	StashFilter(String shortName, String whereClause, Boolean market) {
+	CardFilter(String shortName, String whereClause, Boolean market) {
 		this.shortName = shortName;
 		this.whereClause = whereClause;
 		this.market = market;
@@ -88,14 +88,14 @@ public enum StashFilter {
 	}
 
 	public boolean hasParam() {
-		return whereClause.contains("?%s");
+		return whereClause.contains("?%s") && this != MINE;
 	}
 
 	public String toString(I18N locale) {
 		return locale.get("search/" + name());
 	}
 
-	public static StashFilter getByArgument(String arg) {
+	public static CardFilter getByArgument(String arg) {
 		return Arrays.stream(values()).parallel()
 				.filter(f -> Utils.equalsAny(arg, f.shortName, f.name()))
 				.findFirst()

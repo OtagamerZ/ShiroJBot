@@ -20,7 +20,7 @@ package com.kuuhaku.model.common;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.enums.StashFilter;
+import com.kuuhaku.model.enums.CardFilter;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.MarketOrder;
@@ -44,12 +44,12 @@ public class Market {
 
 	public List<StashedCard> getOffers(Option[] opts, int page) {
 		List<Object> params = new ArrayList<>();
-		XStringBuilder query = new XStringBuilder(StashFilter.BASE_QUERY);
+		XStringBuilder query = new XStringBuilder(CardFilter.BASE_QUERY);
 		query.appendNewLine("WHERE c.price > 0");
 
 		AtomicInteger i = new AtomicInteger(1);
 		for (Option opt : opts) {
-			StashFilter sf = StashFilter.getByArgument(opt.getOpt());
+			CardFilter sf = CardFilter.getByArgument(opt.getOpt());
 			if (sf == null || sf.isStashOnly()) continue;
 
 			String filter = sf.getWhereClause();

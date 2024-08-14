@@ -29,7 +29,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.StashFilter;
+import com.kuuhaku.model.enums.CardFilter;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
@@ -87,7 +87,7 @@ public class StashCommand implements Executable {
 			return;
 		}
 
-		XStringBuilder query = new XStringBuilder(StashFilter.BASE_QUERY);
+		XStringBuilder query = new XStringBuilder(CardFilter.BASE_QUERY);
 		query.appendNewLine("WHERE c.kawaipon.uid = ?1");
 
 		List<Object> params = new ArrayList<>();
@@ -96,7 +96,7 @@ public class StashCommand implements Executable {
 		AtomicInteger i = new AtomicInteger(2);
 		Option[] opts = cli.getFirst().getOptions();
 		for (Option opt : opts) {
-			StashFilter sf = StashFilter.getByArgument(opt.getOpt());
+			CardFilter sf = CardFilter.getByArgument(opt.getOpt());
 			if (sf == null || sf.isMarketOnly()) continue;
 
 			String filter = sf.getWhereClause();

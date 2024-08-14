@@ -32,7 +32,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.StashFilter;
+import com.kuuhaku.model.enums.CardFilter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shiro.ScriptMetrics;
 import com.kuuhaku.model.persistent.user.StashedCard;
@@ -820,10 +820,10 @@ public abstract class Utils {
 	}
 
 	public static Pair<CommandLine, Options> getCardCLI(I18N locale, String[] args, boolean market) {
-		StashFilter[] filters = StashFilter.values();
+		CardFilter[] filters = CardFilter.values();
 
 		Options opt = new Options();
-		for (StashFilter f : filters) {
+		for (CardFilter f : filters) {
 			if ((!market && f.isMarketOnly()) || (market && f.isStashOnly())) continue;
 
 			opt.addOption(f.getShortName(), f.getLongName(), f.hasParam(), f.toString(locale));
