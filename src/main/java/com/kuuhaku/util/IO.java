@@ -102,7 +102,7 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image) {
-		return getBytes(image, "jpg", 0.8f);
+		return getBytes(image, "jpg", 0.9f);
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding) {
