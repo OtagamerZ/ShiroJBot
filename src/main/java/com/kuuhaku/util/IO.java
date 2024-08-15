@@ -106,21 +106,21 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding) {
-		try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-			if (encoding.equalsIgnoreCase("png")) {
+		if (encoding.equalsIgnoreCase("png")) {
+			try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
 				new PngEncoder()
 						.withBufferedImage(image)
 						.withCompressionLevel(4)
 						.toStream(os);
-			} else {
-				ImageIO.write(image, encoding, os);
-			}
 
-			return os.toByteArray();
-		} catch (IOException e) {
-			Constants.LOGGER.error(e, e);
-			return new byte[0];
+				return os.toByteArray();
+			} catch (IOException e) {
+				Constants.LOGGER.error(e, e);
+				return new byte[0];
+			}
 		}
+
+		return getBytes(image, encoding, 0.9f);
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding, float quality) {
