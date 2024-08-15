@@ -1783,8 +1783,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 			Hand h = hands.get(side);
 			for (Drawable<?> card : List.copyOf(h.getCards())) {
-				if (card instanceof EffectHolder<?> eh && eh.isPassive()) {
-					eh.execute(ep);
+				if (card instanceof EffectHolder<?> eh && eh.isPassive() && eh.execute(ep)) {
+					h.getData().put("last_spell", eh);
+					h.getData().put("last_evogear", eh);
+					trigger(ON_SPELL, h.getSide());
 				}
 			}
 		} finally {
