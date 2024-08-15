@@ -1790,8 +1790,6 @@ public class Shoukan extends GameInstance<Phase> {
 					h.getData().put("last_spell", e);
 					h.getData().put("last_evogear", e);
 					trigger(ON_SPELL, h.getSide());
-
-					send(e, getString("passive_activate"));
 				}
 			}
 		} finally {
