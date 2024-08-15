@@ -1782,7 +1782,7 @@ public class Shoukan extends GameInstance<Phase> {
 			iterateSlots(side, s -> s.execute(new EffectParameters(trigger, side, s.asSource(trigger))));
 
 			Hand h = hands.get(side);
-			for (Drawable<?> card : h.getCards()) {
+			for (Drawable<?> card : List.copyOf(h.getCards())) {
 				if (card instanceof EffectHolder<?> eh && eh.isPassive()) {
 					eh.execute(ep);
 				}
