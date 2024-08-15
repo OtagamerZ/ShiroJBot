@@ -133,7 +133,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	boolean hasCharm(Charm charm);
 
 	default boolean isPassive() {
-		return getBase().getTags().contains("PASSIVE");
+		return this instanceof Evogear e && e.isSpell() && e.getTags().contains("PASSIVE");
 	}
 
 	default boolean isFixed() {
