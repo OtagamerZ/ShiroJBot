@@ -67,7 +67,7 @@ public class DeckAddCommand implements Executable {
 			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
 			return;
 		} else if (d instanceof DailyDeck) {
-			event.channel().sendMessage(locale.get("error/daily_deck", data.config().getPrefix())).queue();
+			event.channel().sendMessage(locale.get("error/daily_deck")).queue();
 			return;
 		}
 
