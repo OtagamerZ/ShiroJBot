@@ -34,7 +34,7 @@ public class DailyDeck extends Deck {
 
 	@Override
 	public String getName() {
-		return "daily 🔒";
+		return "daily";
 	}
 
 	@Override
