@@ -2119,8 +2119,14 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (!isSingleplayer() && arcade == null && !hasCheated() && code == GameReport.SUCCESS) {
-			Match m = new Match(this, message.equals("str/game_end") ? "default" : String.valueOf(args[0]));
-			new MatchHistory(m).save();
+			String cond = "default";
+			if (message.equals("str/game_end_special")) {
+				cond = String.valueOf(args[0]);
+			} else if (hands.values().stream().anyMatch(Hand::isForfeit)) {
+				cond = "wo";
+			}
+
+			new MatchHistory(new Match(this, cond)).save();
 		}
 
 		close(code);

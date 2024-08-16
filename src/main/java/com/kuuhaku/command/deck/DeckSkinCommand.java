@@ -140,6 +140,11 @@ public class DeckSkinCommand implements Executable {
 						if (!remaining.isEmpty()) {
 							event.channel().sendMessage(locale.get("error/skin_locked")).queue();
 						} else {
+							if (!acc.hasEnough(skin.getPrice(), skin.getCurrency())) {
+								event.channel().sendMessage(locale.get("error/insufficient_" + skin.getCurrency())).queue();
+								return;
+							}
+
 							if (!confirm.getAndSet(true)) {
 								Objects.requireNonNull(w.getHook())
 										.setEphemeral(true)
