@@ -58,31 +58,15 @@ public class SynthesizeFastCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = data.profile().getAccount().getKawaipon();
-
 		String[] ids = args.getString("cards").toUpperCase().split(" +");
-		if (ids.length > 10) {
-			event.channel().sendMessage(locale.get("error/too_many_items", 10)).queue();
-			return;
-		}
 
 		List<StashedCard> cards = new ArrayList<>();
 		List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
-		Map<String, StashedCard> distinct = new HashMap<>();
-		for (StashedCard s : stash) {
-			if (!Utils.equalsAny(s.getCard().getId(), ids)) continue;
 
-			distinct.compute(s.getCard().getId(), (k, v) -> {
-				if (v == null) return s;
-				else if (v.isChrome() && !s.isChrome()) return s;
-
-				return v;
-			});
-		}
-
-		for (Map.Entry<String, StashedCard> e : distinct.entrySet()) {
-			Card c = DAO.find(Card.class, e.getKey());
+		for (String id : ids) {
+			Card c = DAO.find(Card.class, id);
 			if (c == null) {
-				String sug = Utils.didYouMean(e.getKey(), "SELECT id AS value FROM v_card_names");
+				String sug = Utils.didYouMean(id, "SELECT id AS value FROM v_card_names");
 				if (sug == null) {
 					event.channel().sendMessage(locale.get("error/unknown_card_none")).queue();
 				} else {
@@ -91,7 +75,17 @@ public class SynthesizeFastCommand implements Executable {
 				return;
 			}
 
-			cards.add(e.getValue());
+			StashedCard mat = stash.stream()
+					.filter(sc -> sc.getCard().getId().equalsIgnoreCase(id) && !cards.contains(sc))
+					.findFirst()
+					.orElse(null);
+
+			if (mat == null) {
+				event.channel().sendMessage(locale.get("error/not_owned")).queue();
+				return;
+			}
+
+			cards.add(mat);
 		}
 
 		if (cards.size() < 3) {
