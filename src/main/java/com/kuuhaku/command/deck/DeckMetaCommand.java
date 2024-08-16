@@ -28,7 +28,6 @@ import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -55,12 +54,6 @@ import java.util.Objects;
 public class DeckMetaCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck d = data.profile().getAccount().getDeck();
-		if (d == null) {
-			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-			return;
-		}
-
 		List<CardRanking> cards = DAO.queryAllUnmapped("SELECT card_id, get_type(card_id), card_winrate(card_id) FROM v_shoukan_meta").stream()
 				.map(o -> {
 							int type = NumberUtils.toInt(String.valueOf(o[1]));

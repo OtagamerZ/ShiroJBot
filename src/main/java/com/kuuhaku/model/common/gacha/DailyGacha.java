@@ -23,8 +23,6 @@ import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.enums.Currency;
 import net.dv8tion.jda.api.entities.User;
 
-import java.time.LocalDate;
-
 @GachaType(value = "daily", price = 3500, currency = Currency.CR)
 public class DailyGacha extends Gacha {
 	public DailyGacha(User u) {
@@ -47,10 +45,10 @@ public class DailyGacha extends Gacha {
 				                 OR e.tier > 0
 				                 OR NOT f.effect
 				             )
-				         ORDER BY hashtextextended(c.id, ?2)
+				         ORDER BY hashtextextended(c.id, get_seed())
 				         LIMIT 50
 				     ) x
 				ORDER BY x.weight, x.id
-				""", u.getId(), LocalDate.now().getDayOfYear()));
+				""", u.getId()));
 	}
 }

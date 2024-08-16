@@ -30,6 +30,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
+import com.kuuhaku.model.persistent.shoukan.DailyDeck;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Title;
@@ -62,7 +63,10 @@ public class DeckFrameCommand implements Executable {
         if (d == null) {
             event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
             return;
-        }
+        } else if (d instanceof DailyDeck) {
+			event.channel().sendMessage(locale.get("error/daily_deck", data.config().getPrefix())).queue();
+			return;
+		}
 
         if (args.isEmpty()) {
             EmbedBuilder eb = new ColorlessEmbedBuilder()

@@ -30,6 +30,7 @@ import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shoukan.DailyDeck;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.SlotSkin;
 import com.kuuhaku.model.persistent.user.Account;
@@ -65,6 +66,9 @@ public class DeckSkinCommand implements Executable {
 		Deck d = data.profile().getAccount().getDeck();
 		if (d == null) {
 			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
+			return;
+		} else if (d instanceof DailyDeck) {
+			event.channel().sendMessage(locale.get("error/daily_deck", data.config().getPrefix())).queue();
 			return;
 		}
 

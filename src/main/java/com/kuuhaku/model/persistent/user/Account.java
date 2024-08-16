@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
+import com.kuuhaku.model.persistent.shoukan.DailyDeck;
 import com.kuuhaku.model.records.id.ProfileId;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.shoukan.history.Match;
@@ -57,6 +58,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -337,7 +339,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 			return refresh().getDecks();
 		}
 
-		return decks.stream()
+		return Stream.concat(decks.stream(), Stream.of(new DailyDeck(this)))
 				.sorted(Comparator.comparingInt(Deck::getId))
 				.toList();
 	}

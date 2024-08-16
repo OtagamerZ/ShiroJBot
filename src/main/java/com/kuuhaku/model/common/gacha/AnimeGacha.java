@@ -21,10 +21,7 @@ package com.kuuhaku.model.common.gacha;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.enums.Currency;
-import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.entities.User;
-
-import java.util.Calendar;
 
 @GachaType(value = "anime", price = 10, prizes = 5, currency = Currency.ITEM, itemCostId = "MASTERY_TOKEN")
 public class AnimeGacha extends Gacha {
@@ -37,7 +34,7 @@ public class AnimeGacha extends Gacha {
 				         FROM anime a
 				         WHERE a.visible
 				           AND (SELECT count(1) FROM card c WHERE c.anime_id = a.id) > 10
-				         ORDER BY hashtextextended(a.id, ?2)
+				         ORDER BY hashtextextended(a.id, get_seed())
 				         LIMIT 1
 				     ) x
 				INNER JOIN card c ON c.anime_id = x.id
@@ -47,6 +44,6 @@ public class AnimeGacha extends Gacha {
 				          WHEN 'FIELD' THEN (SELECT NOT f.effect FROM field f WHERE f.card_id = c.id)
 				   END
 				ORDER BY weight, c.id
-				""", u.getId(), Utils.with(Calendar.getInstance(), c -> c.get(Calendar.YEAR) + c.get(Calendar.WEEK_OF_YEAR))));
+				""", u.getId()));
 	}
 }

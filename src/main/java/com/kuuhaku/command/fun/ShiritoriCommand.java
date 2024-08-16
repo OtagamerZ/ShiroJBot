@@ -88,27 +88,19 @@ public class ShiritoriCommand implements Executable {
 							return false;
 						}
 
-						try {
-							Shiritori shi = new Shiritori(locale,
-									Stream.concat(Stream.of(event.user()), others.stream())
-											.map(User::getId)
-											.sorted(Collections.reverseOrder())
-											.toArray(String[]::new)
-							);
-							shi.start(event.guild(), event.channel())
-									.whenComplete((v, e) -> {
-										if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
-											event.channel().sendMessage(locale.get("error/error", e)).queue();
-											Constants.LOGGER.error(e, e);
-										}
-									});
-						} catch (GameReport e) {
-							if (e.getContent().equals(event.user().getId())) {
-								event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-							} else {
-								event.channel().sendMessage(locale.get("error/no_deck_target", "<@" + e.getContent() + ">", data.config().getPrefix())).queue();
-							}
-						}
+						Shiritori shi = new Shiritori(locale,
+								Stream.concat(Stream.of(event.user()), others.stream())
+										.map(User::getId)
+										.sorted(Collections.reverseOrder())
+										.toArray(String[]::new)
+						);
+						shi.start(event.guild(), event.channel())
+								.whenComplete((v, e) -> {
+									if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
+										event.channel().sendMessage(locale.get("error/error", e)).queue();
+										Constants.LOGGER.error(e, e);
+									}
+								});
 
 						return true;
 					}, others.toArray(User[]::new)
