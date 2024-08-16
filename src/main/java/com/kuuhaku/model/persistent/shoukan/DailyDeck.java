@@ -21,8 +21,10 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.shoukan.DeckEntry;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class DailyDeck extends Deck {
@@ -33,6 +35,12 @@ public class DailyDeck extends Deck {
 	@Override
 	public String getName() {
 		return "daily 🔒";
+	}
+
+	@Override
+	public boolean isVariant() {
+		Calendar cal = Calendar.getInstance();
+		return Calc.rng(1d, (long) cal.get(Calendar.YEAR) + cal.get(Calendar.DAY_OF_YEAR)) > 0.5;
 	}
 
 	@Override
