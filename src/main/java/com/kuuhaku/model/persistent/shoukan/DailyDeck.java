@@ -37,21 +37,21 @@ public class DailyDeck extends Deck {
 
 	@Override
 	public List<DeckEntry> getSenshiRaw() {
-		return DAO.queryAllUnmapped("SELECT get_type(card_id), card_id, 0 FROM v_daily_senshi").stream()
+		return DAO.queryAllUnmapped("SELECT 'SENSHI', card_id, 0 FROM v_daily_senshi").stream()
 				.map(o -> Utils.map(DeckEntry.class, o))
 				.toList();
 	}
 
 	@Override
 	public List<DeckEntry> getEvogearRaw() {
-		return DAO.queryAllUnmapped("SELECT get_type(card_id), card_id, 0 FROM v_daily_evogear").stream()
+		return DAO.queryAllUnmapped("SELECT 'EVOGEAR', card_id, 0 FROM v_daily_evogear").stream()
 				.map(o -> Utils.map(DeckEntry.class, o))
 				.toList();
 	}
 
 	@Override
 	public List<DeckEntry> getFieldsRaw() {
-		return DAO.queryAllUnmapped("SELECT get_type(card_id), card_id, 0 FROM v_daily_field").stream()
+		return DAO.queryAllUnmapped("SELECT 'FIELD', card_id, 0 FROM v_daily_field").stream()
 				.map(o -> Utils.map(DeckEntry.class, o))
 				.toList();
 	}

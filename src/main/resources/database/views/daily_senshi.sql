@@ -29,7 +29,7 @@ FROM (
           , round(avg(x.mana) OVER (ROWS UNBOUNDED PRECEDING), 2) AS avg
      FROM (
           SELECT card_id
-               , mana
+               , greatest(1, mana) AS mana
           FROM senshi
           WHERE NOT has(tags, 'FUSION')
             AND mana <= 5
