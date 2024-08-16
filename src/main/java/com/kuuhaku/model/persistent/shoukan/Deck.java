@@ -130,7 +130,6 @@
 	 public FrameSkin getFrame() {
 		 if (!styling.getFrame().canUse(account)) {
 			 styling.setFrame(FrameSkin.PINK);
-			 save();
 		 }
 
 		 return styling.getFrame();
@@ -140,7 +139,6 @@
 		 SlotSkin defSkin = DAO.find(SlotSkin.class, "DEFAULT");
 		 if (styling.getSkin() == null || !styling.getSkin().canUse(account)) {
 			 styling.setSkin(defSkin);
-			 save();
 		 }
 
 		 return styling.getSkin();
