@@ -108,6 +108,11 @@ public class HelpCommand implements Executable {
 				.addField(locale.get("str/category"), pc.category().getName(locale), true)
 				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.get());
 
+		String desc = pc.description(locale);
+		if (!desc.isBlank()) {
+			eb.setDescription(desc);
+		}
+
 		if (!aliases.isEmpty()) {
 			eb.addField("Alias",
 					aliases.stream()

@@ -90,10 +90,6 @@ public class CommandManager {
 				Requires req = cmd.getDeclaredAnnotation(Requires.class);
 				return new PreparedCommand(
 						full,
-						"cmd/" + cmd.getSimpleName()
-								.replaceFirst("(Command|Reaction)$", "")
-								.replaceAll("[a-z](?=[A-Z])", "$0-")
-								.toLowerCase(),
 						params.category(),
 						req == null ? new Permission[0] : req.value(),
 						buildCommand(cmd)
@@ -114,10 +110,6 @@ public class CommandManager {
 			Requires req = cmd.getDeclaredAnnotation(Requires.class);
 			out.add(new PreparedCommand(
 					params.name() + "." + String.join(".", params.path()),
-					"cmd/" + cmd.getSimpleName()
-							.replaceFirst("(Command|Reaction)$", "")
-							.replaceAll("[a-z](?=[A-Z])", "$0-")
-							.toLowerCase(),
 					params.category(),
 					req == null ? new Permission[0] : req.value(),
 					buildCommand(cmd)
@@ -136,10 +128,6 @@ public class CommandManager {
 		Requires req = cmd.getDeclaredAnnotation(Requires.class);
 		commands.add(new PreparedCommand(
 				full,
-				"cmd/" + cmd.getSimpleName()
-						.replaceFirst("(Command|Reaction)$", "")
-						.replaceAll("[a-z](?=[A-Z])", "$0-")
-						.toLowerCase(),
 				params.category(),
 				req == null ? new Permission[0] : req.value(),
 				buildCommand(cmd)

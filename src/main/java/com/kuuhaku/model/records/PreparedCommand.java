@@ -34,14 +34,13 @@ import java.util.Set;
 
 public record PreparedCommand(
 		String name,
-		String description,
 		Category category,
 		Permission[] permissions,
 		Executable command
 ) implements Comparable<PreparedCommand> {
 
-	public String description(I18N code) {
-		return code.get(description);
+	public String description(I18N locale) {
+		return locale.get("cmd/" + name);
 	}
 
 	public boolean canExecute(GuildChannel gc) {
