@@ -2238,6 +2238,23 @@ public class Shoukan extends GameInstance<Phase> {
 					.queue();
 		});
 
+		helper.addAction(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
+			if (isLocked()) return;
+
+			XStringBuilder sb = new XStringBuilder(getLocale().get("str/match_history", getTurn()));
+
+			int i = 0;
+			Iterator<HistoryLog> it = getHistory().descendingIterator();
+			while (it.hasNext() && i++ < 20) {
+				sb.appendNewLine(it.next().message());
+			}
+
+			Objects.requireNonNull(w.getHook())
+					.setEphemeral(true)
+					.sendMessage(sb.toString())
+					.queue();
+		});
+
 		if (getPhase() == Phase.PLAN) {
 			if (!curr.getCards().isEmpty() && (getTurn() == 1 && !curr.hasRerolled()) || curr.getOrigins().synergy() == Race.DJINN) {
 				helper.addAction(Utils.parseEmoji("\uD83D\uDD04"), w -> {
@@ -2479,23 +2496,6 @@ public class Shoukan extends GameInstance<Phase> {
 							.queue();
 				});
 			}
-
-			helper.addAction(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
-				if (isLocked()) return;
-
-				XStringBuilder sb = new XStringBuilder(getLocale().get("str/match_history", getTurn()));
-
-				int i = 0;
-				Iterator<HistoryLog> it = getHistory().descendingIterator();
-				while (it.hasNext() && i++ < 20) {
-					sb.appendNewLine(it.next().message());
-				}
-
-				Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendMessage(sb.toString())
-						.queue();
-			});
 
 			if (isSingleplayer() || (getTurn() > 10 && curr.getLockTime(Lock.SURRENDER) == 0)) {
 				helper.addAction(Utils.parseEmoji("🏳"), w -> {
