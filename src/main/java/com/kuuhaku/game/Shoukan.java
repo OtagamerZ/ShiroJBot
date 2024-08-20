@@ -1786,10 +1786,6 @@ public class Shoukan extends GameInstance<Phase> {
 				if (card instanceof Evogear e && e.isPassive() && e.execute(ep)) {
 					List<Drawable<?>> stack = (e.getTier() > 3 ? arena.getBanned() : h.getGraveyard());
 					stack.add(e);
-
-					h.getData().put("last_spell", e);
-					h.getData().put("last_evogear", e);
-					trigger(ON_SPELL, h.getSide());
 				}
 			}
 		} finally {
