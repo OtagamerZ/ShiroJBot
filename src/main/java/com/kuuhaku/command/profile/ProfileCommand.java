@@ -40,7 +40,7 @@ import net.dv8tion.jda.api.utils.FileUpload;
 
 @Command(
 		name = "profile",
-		category = Category.MISC
+		category = Category.INFO
 )
 @Signature(allowEmpty = true, value = "<user:user:r>")
 @Requires(Permission.MESSAGE_ATTACH_FILES)
