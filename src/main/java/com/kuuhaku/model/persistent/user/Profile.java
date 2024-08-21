@@ -171,16 +171,23 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 			}
 		}
 
+		I18N locale = guild.getLocale();
+		Member m = getMember();
+		User u = m.getUser();
+
+		u.openPrivateChannel()
+				.flatMap(c -> c.sendMessage(locale.get("alert/warn", reason)))
+				.queue(null, Utils::doNothing);
+
 		if (rule != null) {
-			I18N locale = guild.getLocale();
 			String cause = locale.get("str/autorule_desc",
 					locale.get("str/autorule_" + rule.getAction()),
 					rule.getThreshold()
 			);
 
-			Member m = getMember();
+
 			int finalMult = mult;
-			m.getUser().openPrivateChannel()
+			u.openPrivateChannel()
 					.flatMap(c -> c.sendMessage(locale.get("alert/autorule_trigger", cause, finalMult + 1)))
 					.queue(null, Utils::doNothing);
 
