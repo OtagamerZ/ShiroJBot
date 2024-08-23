@@ -406,10 +406,7 @@ public interface Drawable<T extends Drawable<T>> {
 	@SuppressWarnings("unchecked")
 	default T copy() {
 		try {
-			T clone = fork();
-			clone.reset();
-
-			return clone;
+			return fork();
 		} catch (Exception e) {
 			return (T) this;
 		}
