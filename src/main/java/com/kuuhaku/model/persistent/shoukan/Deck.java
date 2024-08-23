@@ -736,21 +736,17 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public int getAverageMPCost() {
-		int total = Stream.of(getSenshi(), getEvogear())
+		return Calc.round(Stream.of(getSenshi(), getEvogear())
 				.flatMap(List::stream)
-				.mapToInt(d -> d.getMPCost(true))
-				.sum();
-
-		return Calc.round((double) total / (getSenshi().size() + getEvogear().size()));
+				.mapToDouble(d -> d.getMPCost(true))
+				.average().orElse(0));
 	}
 
 	public int getAverageHPCost() {
-		int total = Stream.of(getSenshi(), getEvogear())
+		return Calc.round(Stream.of(getSenshi(), getEvogear())
 				.flatMap(List::stream)
-				.mapToInt(d -> d.getHPCost(true))
-				.sum();
-
-		return Calc.round((double) total / (getSenshi().size() + getEvogear().size()));
+				.mapToDouble(d -> d.getHPCost(true))
+				.average().orElse(0));
 	}
 
 	public String toString(I18N locale) {
