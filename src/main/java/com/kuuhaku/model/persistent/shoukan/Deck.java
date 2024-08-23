@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.SupplyChain;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
@@ -42,6 +43,7 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import kotlin.Pair;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.collections4.bag.TreeBag;
 import org.hibernate.annotations.Fetch;
@@ -53,7 +55,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -87,10 +88,6 @@ public class Deck extends DAO<Deck> {
 	private transient List<Field> field = null;
 	private transient Archetype archetype = null;
 	private transient Origin origin = null;
-	private final transient AtomicInteger totalMPCost = new AtomicInteger();
-	private final transient AtomicInteger totalHPCost = new AtomicInteger();
-	private final transient AtomicInteger totalDmg = new AtomicInteger();
-	private final transient AtomicInteger totalDfs = new AtomicInteger();
 
 	public Deck() {
 	}
@@ -332,22 +329,6 @@ public class Deck extends DAO<Deck> {
 				""", id);
 	}
 
-	public void calcStats() {
-		totalMPCost.set(0);
-		totalHPCost.set(0);
-		totalDmg.set(0);
-		totalDfs.set(0);
-
-		Stream.of(getSenshi(), getEvogear(), getFields())
-				.flatMap(List::stream)
-				.forEach(d -> {
-					totalMPCost.addAndGet(d.getMPCost());
-					totalHPCost.addAndGet(d.getHPCost());
-					totalDmg.addAndGet(d.getDmg());
-					totalDfs.addAndGet(d.getDfs());
-				});
-	}
-
 	public BufferedImage render(I18N locale) {
 		BufferedImage bi = IO.getResourceAsImage("shoukan/deck.png");
 		Graphics2D g2d = bi.createGraphics();
@@ -372,10 +353,15 @@ public class Deck extends DAO<Deck> {
 		if (weight > 200) color = "FF0000";
 		else if (weight > 100) color = "FFFF00";
 
-		calcStats();
+		int totalDmg = 0, totalDfs = 0;
+		for (EffectHolder<?> e : ListUtils.union(getSenshi(), getEvogear())) {
+			totalDmg += e.getDmg();
+			totalDfs += e.getDfs();
+		}
+
 		double[] vals = Calc.clamp(new double[]{
-				Calc.prcnt(totalDmg.get(), (totalDmg.get() + totalDfs.get()) / 1.5),
-				Calc.prcnt(totalDfs.get(), (totalDmg.get() + totalDfs.get()) / 1.5),
+				Calc.prcnt(totalDmg, (totalDmg + totalDfs) / 1.5),
+				Calc.prcnt(totalDfs, (totalDmg + totalDfs) / 1.5),
 				getAverageMPCost() / mp,
 				Calc.prcnt(Set.copyOf(allCards).size(), allCards.size()),
 				getMetaDivergence(),
@@ -431,8 +417,8 @@ public class Deck extends DAO<Deck> {
 						Utils.roundToString(getMetaDivergence() * 100, 0),
 						Utils.roundToString((float) getAverageMPCost(), 1),
 						Utils.roundToString((float) getAverageHPCost(), 1),
-						Utils.roundToString((float) totalDmg.get() / allCards.size(), 0),
-						Utils.roundToString((float) totalDfs.get() / allCards.size(), 0),
+						Utils.roundToString((float) totalDmg / allCards.size(), 0),
+						Utils.roundToString((float) totalDfs / allCards.size(), 0),
 						getMaxSenshiCopies(), getMaxEvogearCopies(1), getMaxEvogearCopies(4),
 						3
 				), 1175, 45, 175, 0,
@@ -676,7 +662,7 @@ public class Deck extends DAO<Deck> {
 					base += 1000;
 				}
 
-				int bHP = (int) Calc.clamp(base * 1.5 - base * 0.2799 * reduction, 10, base);
+				int bHP = (int) Calc.clamp(base * 1.5 - base * 0.3 * reduction, 10, base);
 
 				int mp = 5;
 				SupplyChain<Integer> mpGain = new SupplyChain<>(mp)
@@ -750,19 +736,21 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public int getAverageMPCost() {
-		return Calc.round((double) totalMPCost.get() / (getSenshi().size() + getEvogear().size()));
+		int total = Stream.of(getSenshi(), getEvogear())
+				.flatMap(List::stream)
+				.mapToInt(d -> d.getMPCost(true))
+				.sum();
+
+		return Calc.round((double) total / (getSenshi().size() + getEvogear().size()));
 	}
 
 	public int getAverageHPCost() {
-		return Calc.round((double) totalHPCost.get() / (getSenshi().size() + getEvogear().size()));
-	}
+		int total = Stream.of(getSenshi(), getEvogear())
+				.flatMap(List::stream)
+				.mapToInt(d -> d.getHPCost(true))
+				.sum();
 
-	public int getAverageDmg() {
-		return Calc.round((double) totalDmg.get() / (getSenshi().size() + getEvogear().size()));
-	}
-
-	public int getAverageDfs() {
-		return Calc.round((double) totalDfs.get() / (getSenshi().size() + getEvogear().size()));
+		return Calc.round((double) total / (getSenshi().size() + getEvogear().size()));
 	}
 
 	public String toString(I18N locale) {

@@ -306,7 +306,6 @@ public class Hand {
 		if (userDeck == null) {
 			throw new GameReport(GameReport.NO_DECK, uid);
 		}
-		this.userDeck.calcStats();
 
 		if (game.getArcade() != Arcade.CARDMASTER && !game.isSingleplayer() && !Account.hasRole(uid, false, Role.TESTER)) {
 			if (!(userDeck.validateSenshi() && userDeck.validateEvogear() && userDeck.validateFields())) {
@@ -907,11 +906,14 @@ public class Hand {
 	}
 
 	public boolean consumeHP(int value) {
+		if (origin.synergy() == Race.LICH) return true;
+
 		return consumeHP(value, false);
 	}
 
 	public boolean consumeHP(int value, boolean force) {
-		if (!force && this.hp <= value) return false;
+		if (origin.synergy() == Race.LICH) return true;
+		else if (!force && this.hp <= value) return false;
 
 		int before = this.hp;
 		this.hp = Math.max(1, this.hp - Math.max(0, value));
@@ -985,6 +987,8 @@ public class Hand {
 	}
 
 	public boolean consumeMP(int value) {
+		if (origin.synergy() == Race.LICH) return true;
+
 		if (origin.major() == Race.DEMON) {
 			int val = (int) (value * (base.hp() * 0.08));
 			if (origin.isPure()) {
@@ -1011,6 +1015,13 @@ public class Hand {
 
 	public List<Drawable<?>> consumeSC(int value) {
 		List<Drawable<?>> consumed = new ArrayList<>();
+		if (origin.synergy() == Race.LICH) {
+			for (int i = discard.size() - 1; i >= 0 && consumed.size() < value; i--) {
+				consumed.add(discard.get(i));
+			}
+
+			return consumed;
+		}
 
 		for (int i = 0; i < value && !discard.isEmpty(); i++) {
 			Drawable<?> card = discard.removeLast();
@@ -1088,7 +1099,7 @@ public class Hand {
 	}
 
 	public boolean canUseDestiny() {
-		return (origin.synergy() == Race.LICH ? isLowLife() : isCritical()) && !hasUsedDestiny();
+		return isCritical() && !hasUsedDestiny();
 	}
 
 	public boolean hasRerolled() {

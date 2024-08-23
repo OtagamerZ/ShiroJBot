@@ -92,6 +92,20 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	CardExtra getStats();
 
+	@Override
+	default int getMPCost() {
+		return getMPCost(false);
+	}
+
+	int getMPCost(boolean ignoreRace);
+
+	@Override
+	default int getHPCost() {
+		return getHPCost(false);
+	}
+
+	int getHPCost(boolean ignoreRace);
+
 	default EffectHolder<?> getSource() {
 		return (EffectHolder<?>) Utils.getOr(getStats().getSource(), this);
 	}
