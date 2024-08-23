@@ -25,7 +25,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Flags implements Cloneable {
+public class Flags {
 	private final Map<FlagSource, EnumSet<Flag>> permanent = new HashMap<>();
 	private final Map<FlagSource, EnumSet<Flag>> flags = new HashMap<>();
 

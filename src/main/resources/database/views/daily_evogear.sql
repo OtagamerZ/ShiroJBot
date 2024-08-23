@@ -23,12 +23,15 @@ UNION ALL
 SELECT x.card_id
 FROM (
      SELECT x.card_id
+          , sum(iif(tier >= 4, 1, 0)) OVER (ROWS UNBOUNDED PRECEDING) AS tier_4
      FROM (
           SELECT card_id
+               , tier
           FROM evogear
           WHERE tier > 0
           ORDER BY hashtextextended(card_id, get_seed())
           ) x
      ) x
    , generate_series(1, least(cast(random() * 4 AS INT), 3)) s
+WHERE x.tier_4 < 2
 OFFSET 1 LIMIT 10;
