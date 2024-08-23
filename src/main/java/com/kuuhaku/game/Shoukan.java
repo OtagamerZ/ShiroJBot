@@ -444,6 +444,11 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
+		if (curr.getOrigins().synergy() == Race.LICH && curr.hasSummoned()) {
+			getChannel().sendMessage(getString("error/already_summoned")).queue();
+			return false;
+		}
+
 		return putCard(curr, d, args);
 	}
 
