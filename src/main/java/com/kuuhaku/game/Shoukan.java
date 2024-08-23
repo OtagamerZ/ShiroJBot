@@ -1828,7 +1828,11 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void triggerBindings(EffectParameters ep) {
-		for (TriggerBind binding : Set.copyOf(bindings)) {
+		var binds = bindings.stream()
+				.sorted(Comparator.comparing(b -> b.getHolder().getSide() == getCurrentSide(), Comparator.reverseOrder()))
+				.toList();
+
+		for (TriggerBind binding : binds) {
 			if (binding.isBound(ep)) {
 				EffectHolder<?> holder = binding.getHolder();
 				if (holder.getIndex() == -1 && !binding.isPermanent()) {
