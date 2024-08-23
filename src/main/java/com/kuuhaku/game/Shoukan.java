@@ -1082,8 +1082,9 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		curr.consumeMP(1);
-		if (getPhase() != Phase.PLAN && !d.hasFlag(Flag.FREE_ACTION, true)) {
+		if (getPhase() == Phase.PLAN) {
+			curr.consumeMP(1);
+		} else if (!d.hasFlag(Flag.FREE_ACTION, true)) {
 			d.setAvailable(false);
 		}
 
