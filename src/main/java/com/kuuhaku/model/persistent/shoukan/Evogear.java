@@ -266,19 +266,13 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public int getMPCost(boolean ignoreRace) {
 		int cost = Math.max(0, Calc.round((base.getMana() + stats.getMana().get()) * getCostMult()));
-		if (hand != null) {
-			if (!ignoreRace) {
-				if (hand.getOrigins().synergy() == Race.CELESTIAL) {
-					cost = hand.getUserDeck().getAverageMPCost();
-				}
+		if (hand != null && !ignoreRace) {
+			if (hand.getOrigins().synergy() == Race.CELESTIAL) {
+				cost = hand.getUserDeck().getAverageMPCost();
+			}
 
-				if (hand.getOrigins().major() == Race.DEMON) {
-					cost = 0;
-				}
-			} else {
-				if (hand.getOrigins().synergy() == Race.CELESTIAL) {
-					cost++;
-				}
+			if (hand.getOrigins().major() == Race.DEMON) {
+				cost = 0;
 			}
 		}
 

@@ -512,23 +512,17 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public int getMPCost(boolean ignoreRace) {
 		int cost = Math.max(0, Calc.round((base.getMana() + stats.getMana().get() + (isFusion() ? 5 : 0)) * getCostMult()));
-		if (hand != null) {
-			if (!ignoreRace) {
-				if (hand.getOrigins().synergy() == Race.CELESTIAL) {
-					cost = hand.getUserDeck().getAverageMPCost();
-				}
+		if (hand != null && !ignoreRace) {
+			if (hand.getOrigins().synergy() == Race.CELESTIAL) {
+				cost = hand.getUserDeck().getAverageMPCost();
+			}
 
-				if (hand.getOrigins().synergy() == Race.HOMUNCULUS && cost > hand.getMP()) {
-					cost = hand.getMP();
-				}
+			if (hand.getOrigins().synergy() == Race.HOMUNCULUS && cost > hand.getMP()) {
+				cost = hand.getMP();
+			}
 
-				if (hand.getOrigins().major() == Race.DEMON) {
-					cost = 0;
-				}
-			} else {
-				if (hand.getOrigins().synergy() == Race.CELESTIAL) {
-					cost++;
-				}
+			if (hand.getOrigins().major() == Race.DEMON) {
+				cost = 0;
 			}
 		}
 
