@@ -198,11 +198,6 @@ public enum Trigger {
 	ON_EQUIP,
 
 	/**
-	 * On being equipped to a card
-	 **/
-	ON_EQUIPPED,
-
-	/**
 	 * On changing card mode (Flip -> Defense -> Attack -> Defense)
 	 **/
 	ON_SWITCH,

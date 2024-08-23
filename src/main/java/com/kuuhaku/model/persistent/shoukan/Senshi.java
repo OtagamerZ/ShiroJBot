@@ -96,8 +96,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		e.setHand(getHand());
 		e.executeAssert(ON_INITIALIZE);
 
-		getGame().trigger(ON_EQUIPPED, e.asSource(ON_EQUIPPED));
-
 		Shoukan game = getGame();
 		getHand().getData().put("last_equipment", e);
 		getHand().getData().put("last_evogear", e);
