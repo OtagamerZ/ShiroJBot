@@ -2667,7 +2667,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (arcade != Arcade.DECK_ROYALE) {
 			if (curr.getRealDeck().isEmpty()) {
-				reportResult(GameReport.SUCCESS, getOther().getSide(), "arcade/deck_royale_win", "<@" + curr.getUid() + ">", "<@" + curr.getOther().getUid() + ">");
+				curr.setDefeat(new SpecialDefeat("end/royale_win", "<@" + curr.getUid() + ">"));
+				reportResult(GameReport.SUCCESS, getOther().getSide(), "str/game_end_special", "<@" + curr.getOther().getUid() + ">");
 				return;
 			}
 

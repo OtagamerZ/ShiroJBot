@@ -7,6 +7,7 @@
     <file url="file://$PROJECT_DIR$/src/main/resources/database/functions/get_rarity_index.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/functions/get_seed.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/functions/get_weight.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/functions/has_win_condition.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/functions/transf_total.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/functions/user_wo.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/mat-views/card_names.sql" dialect="PostgreSQL" />
@@ -22,6 +23,8 @@
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/daily_evogear.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/daily_field.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/daily_senshi.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/views/match_loser.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/views/match_winner.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/shoukan_ranking.sql" dialect="PostgreSQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>
