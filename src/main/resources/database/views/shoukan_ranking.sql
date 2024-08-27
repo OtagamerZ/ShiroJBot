@@ -39,9 +39,9 @@ FROM (
           FROM (
                SELECT acc.uid
                     , acc.name
-                    , h.info -> lower(h.info ->> 'winner') ->> 'uid'      AS winner
-                    , count(1) OVER (PARTITION BY acc.uid)                AS match_count
-                    , cast(acc.inventory -> 'LEAVER_TICKET' AS INT) * 250 AS penalty
+                    , h.info -> lower(h.info ->> 'winner') ->> 'uid'                   AS winner
+                    , count(1) OVER (PARTITION BY acc.uid)                             AS match_count
+                    , coalesce(cast(acc.inventory -> 'LEAVER_TICKET' AS INT), 0) * 250 AS penalty
                FROM account acc
                         INNER JOIN match_history h ON acc.uid IN (h.info -> 'top' ->> 'uid', h.info -> 'bottom' ->> 'uid')
                WHERE has(h.info, 'winner')

@@ -38,10 +38,7 @@ import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.SelectionAction;
 import com.kuuhaku.model.records.SelectionCard;
-import com.kuuhaku.model.records.shoukan.BaseValues;
-import com.kuuhaku.model.records.shoukan.DeckEntry;
-import com.kuuhaku.model.records.shoukan.Origin;
-import com.kuuhaku.model.records.shoukan.Timed;
+import com.kuuhaku.model.records.shoukan.*;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -226,10 +223,6 @@ public class Hand {
 				if (getOrigins().synergy() == Race.ESPER) {
 					getCards().add(s.withCopy(c -> c.setEthereal(true)));
 				}
-
-				if (getGame().getArcade() == Arcade.DECK_ROYALE) {
-					op.manualDraw(3);
-				}
 			}
 
 			if (!s.getEquipments().isEmpty()) {
@@ -266,7 +259,7 @@ public class Hand {
 
 	private transient Account account;
 	private transient String lastMessage;
-	private transient String defeat;
+	private transient SpecialDefeat defeat;
 	private transient int hpDelta = 0;
 	private transient int mpDelta = 0;
 	private transient boolean preventAction = false;
@@ -1130,11 +1123,11 @@ public class Hand {
 		return defeat != null;
 	}
 
-	public String getDefeat() {
+	public SpecialDefeat getDefeat() {
 		return defeat;
 	}
 
-	public void setDefeat(String defeat) {
+	public void setDefeat(SpecialDefeat defeat) {
 		this.defeat = defeat;
 	}
 

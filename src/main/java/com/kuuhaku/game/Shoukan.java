@@ -1981,7 +1981,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				String def = hand.getDefeat();
+				SpecialDefeat def = hand.getDefeat();
 				if (hand.getHP() == 0 || def != null) {
 					trigger(ON_VICTORY, side.getOther());
 					trigger(ON_DEFEAT, side);
@@ -2001,7 +2001,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 
 					if (def != null) {
-						reportResult(GameReport.SUCCESS, hand.getOther().getSide(), "str/game_end_special", def, "<@" + hand.getOther().getUid() + ">");
+						reportResult(GameReport.SUCCESS, hand.getOther().getSide(), "str/game_end_special", "<@" + hand.getOther().getUid() + ">");
 					} else {
 						reportResult(GameReport.SUCCESS, hand.getOther().getSide(), "str/game_end", "<@" + hand.getUid() + ">", "<@" + hand.getOther().getUid() + ">");
 					}
@@ -2089,7 +2089,19 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 		setRestoring(false);
 
-		ClusterAction msg = getChannel().sendMessage(getString(message, args));
+		ClusterAction msg;
+		SpecialDefeat defeat = null;
+		if (winner != null) {
+			defeat = hands.get(winner.getOther()).getDefeat();
+		}
+
+		if (defeat != null) {
+			String special = getString(defeat.key(), defeat.args());
+			msg = getChannel().sendMessage(getString(message, ArrayUtils.addFirst(args, special)));
+		} else {
+			msg = getChannel().sendMessage(getString(message, args));
+		}
+
 		AtomicBoolean registered = new AtomicBoolean();
 
 		try {
@@ -2130,8 +2142,8 @@ public class Shoukan extends GameInstance<Phase> {
 				if (code == GameReport.GAME_TIMEOUT) {
 					cond = "wo";
 					hands.get(winner.getOther()).getAccount().addItem("LEAVER_TICKER", 1);
-				} else if (message.equals("str/game_end_special")) {
-					cond = String.valueOf(args[0]);
+				} else if (defeat != null) {
+					cond = defeat.key();
 				}
 
 				new MatchHistory(new Match(this, cond)).save();
@@ -2602,16 +2614,6 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(ON_TURN_END, curr.getSide());
 		curr.applyRegDeg();
 
-		if (arcade == Arcade.DECK_ROYALE) {
-			boolean noHand = curr.getCards().stream().noneMatch(d -> d instanceof Senshi);
-			boolean noField = getSlots(curr.getSide()).stream().flatMap(sc -> sc.getCards().stream()).noneMatch(Objects::nonNull);
-
-			if (noHand && noField) {
-				reportResult(GameReport.SUCCESS, getOther().getSide(), "arcade/deck_royale_win", "<@" + curr.getUid() + ">", "<@" + curr.getOther().getUid() + ">");
-				return;
-			}
-		}
-
 		if (curr.getOrigins().synergy() == Race.ANGEL) {
 			curr.getRegDeg().add(curr.getMP() * 100);
 		}
@@ -2662,6 +2664,15 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.setSummoned(false);
 		curr.flushDiscard();
 		curr.resetDraws();
+
+		if (arcade != Arcade.DECK_ROYALE) {
+			if (curr.getRealDeck().isEmpty()) {
+				reportResult(GameReport.SUCCESS, getOther().getSide(), "arcade/deck_royale_win", "<@" + curr.getUid() + ">", "<@" + curr.getOther().getUid() + ">");
+				return;
+			}
+
+			curr.manualDraw(curr.getRemainingDraws());
+		}
 
 		if (curr.getOrigins().synergy() == Race.WRAITH) {
 			curr.getOther().modHP((int) -(curr.getGraveyard().size() * Math.ceil(getTurn() / 2d)));
