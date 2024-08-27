@@ -2137,9 +2137,9 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (Utils.equalsAny(code, GameReport.SUCCESS, GameReport.GAME_TIMEOUT)) {
-			if (!isSingleplayer() && arcade == null && !hasCheated() && winner != null) {
+			if (!isSingleplayer() && !hasCheated() && winner != null) {
 				String cond = "default";
-				if (code == GameReport.GAME_TIMEOUT) {
+				if (code == GameReport.GAME_TIMEOUT && arcade != Arcade.CASUAL) {
 					cond = "wo";
 					hands.get(winner.getOther()).getAccount().addItem("LEAVER_TICKER", 1);
 				} else if (defeat != null) {
