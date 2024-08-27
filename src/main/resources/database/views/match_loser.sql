@@ -22,18 +22,18 @@ SELECT x.id
      , x.info ->> 'uid' AS uid
      , x.info
      , x.turns
-     , x.condition
+     , x.match_info
 FROM (
      SELECT x.id
           , x.info
           , jsonb_path_query_array(x.data, cast('$.' || x.loser AS JSONPATH)) AS turns
-          , x.condition
+          , x.match_info
      FROM (
           SELECT x.id
-               , x.info -> x.loser                                                                                 AS info
-               , jsonb_path_query_array(x.turns,cast('$[*] ? (@.turn % 2 == ' || iif(x.loser = 'top', 0, 1) || ')' AS JSONPATH)) AS data
+               , x.info -> x.loser                                                                                                AS info
+               , jsonb_path_query_array(x.turns, cast('$[*] ? (@.turn % 2 == ' || iif(x.loser = 'top', 0, 1) || ')' AS JSONPATH)) AS data
                , x.loser
-               , x.info ->> 'winCondition' AS condition
+               , (x.info - 'top' - 'bottom')                                                                                      AS match_info
           FROM (
                SELECT id
                     , info
