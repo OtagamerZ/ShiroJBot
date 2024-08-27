@@ -25,7 +25,7 @@ $$
 SELECT count(1) > 0
 FROM v_match_winner
 WHERE uid = $1
-  AND condition = lower($2)
+  AND (match_info ->> 'winCondition') = lower($2)
 $$;
 
 CREATE OR REPLACE FUNCTION has_win_condition_any(VARCHAR, VARCHAR)
@@ -39,13 +39,13 @@ FROM (
      SELECT 1
      FROM v_match_winner
      WHERE uid = $1
-       AND condition = lower($2)
+       AND (match_info ->> 'winCondition') = lower($2)
 
      UNION ALL
 
      SELECT 1
      FROM v_match_loser
      WHERE uid = $1
-       AND condition = lower($2)
+       AND (match_info ->> 'winCondition') = lower($2)
      ) x
 $$;
