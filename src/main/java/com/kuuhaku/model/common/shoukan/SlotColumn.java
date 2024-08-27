@@ -105,7 +105,7 @@ public class SlotColumn {
 	}
 
 	public void setUnblocked(Senshi card) {
-		placeCard(card, top != null, false);
+		placeCard(card, top == null, false);
 	}
 
 	private void placeCard(Senshi card, boolean top, boolean replace) {
