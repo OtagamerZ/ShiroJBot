@@ -16,22 +16,16 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION card_winrate(VARCHAR)
-    RETURNS NUMERIC
+CREATE OR REPLACE FUNCTION user_wo(VARCHAR)
+    RETURNS INTEGER
     IMMUTABLE
     LANGUAGE sql
 AS
 $$
-SELECT round(sum(iif(has(x.w_cards, $1), 1.0, 0.0)) / count(1) * 100, 2)
-FROM (
-         SELECT ((x.start -> 'top' -> 'deck') || (x.start -> 'bottom' -> 'deck')) AS cards
-              , x.start -> x.winner -> 'deck'                                     AS w_cards
-         FROM (
-                  SELECT lower(info ->> 'winner') AS winner
-                       , turns -> 0               AS start
-                  FROM match_history
-                  WHERE has(info, 'winner')
-              ) x
-     ) x
-WHERE has(x.cards, $1)
+SELECT cast(count(1) AS INT)
+FROM match_history
+WHERE has(info, 'winner')
+  AND (info ->> 'winner') <> $1
+  AND (info ->> 'winCondition') = 'wo'
+  AND to_timestamp(cast(info ->> 'timestamp' AS BIGINT)) > current_timestamp - INTERVAL '7 days'
 $$;

@@ -17,14 +17,21 @@
  */
 
 CREATE OR REPLACE FUNCTION user_matches(VARCHAR)
-    RETURNS TABLE(id INT, info JSONB, turns JSONB, side VARCHAR)
+    RETURNS TABLE
+            (
+                id    INT,
+                info  JSONB,
+                turns JSONB,
+                side  VARCHAR
+            )
     LANGUAGE sql
 AS
 $$
-SELECT mh.id
-     , mh.info
-     , mh.turns
-     , iif((mh.info -> 'top' ->> 'uid') = $1, cast('top' AS VARCHAR), cast('bottom' AS VARCHAR))
-FROM match_history mh
-WHERE $1 IN (mh.info -> 'top' ->> 'uid', mh.info -> 'bottom' ->> 'uid')
+SELECT id
+     , info
+     , turns
+     , iif((info -> 'top' ->> 'uid') = $1, cast('top' AS VARCHAR), cast('bottom' AS VARCHAR))
+FROM match_history
+WHERE has(info, 'winner')
+  AND $1 IN (info -> 'top' ->> 'uid', info -> 'bottom' ->> 'uid')
 $$;

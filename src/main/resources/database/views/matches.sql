@@ -19,7 +19,8 @@
 -- DROP VIEW IF EXISTS v_matches;
 CREATE OR REPLACE VIEW v_matches AS
 SELECT *
-     , jsonb_path_query_array(h.info, '$.*.uid') AS players
-     , h.info -> lower(h.info ->> 'winner') ->> 'uid' AS winner
-FROM match_history h
-ORDER BY h.id
+     , jsonb_path_query_array(info, '$.*.uid') AS players
+     , info -> lower(info ->> 'winner') ->> 'uid' AS winner
+FROM match_history
+WHERE has(info, 'winner')
+ORDER BY id

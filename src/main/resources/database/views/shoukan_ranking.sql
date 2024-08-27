@@ -41,6 +41,7 @@ FROM (
                     , count(1) OVER (PARTITION BY acc.uid)           AS match_count
                FROM account acc
                         INNER JOIN match_history h ON acc.uid IN (h.info -> 'top' ->> 'uid', h.info -> 'bottom' ->> 'uid')
+               WHERE has(h.info, 'winner')
                ) x
           GROUP BY x.uid, x.name, x.match_count
           ) x

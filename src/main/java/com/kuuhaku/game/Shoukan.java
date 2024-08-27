@@ -123,10 +123,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 		setTimeout(turn -> {
 			if (getCurrent().selectionPending() && isLocked()) {
-				reportResult(GameReport.GAME_TIMEOUT, getCurrentSide(), "str/game_wo", "<@" + getCurrent().getUid() + ">");
+				reportResult(GameReport.GAME_TIMEOUT, getCurrentSide(), "str/game_wo", "<@" + getOther().getUid() + ">");
 			}
 
-			reportResult(GameReport.GAME_TIMEOUT, getOtherSide(), "str/game_wo", "<@" + getOther().getUid() + ">");
+			reportResult(GameReport.GAME_TIMEOUT, getOtherSide(), "str/game_wo", "<@" + getCurrent().getUid() + ">");
 		}, 5, TimeUnit.MINUTES);
 	}
 
@@ -2124,15 +2124,18 @@ public class Shoukan extends GameInstance<Phase> {
 			this.winner = winner;
 		}
 
-		if (!isSingleplayer() && arcade == null && !hasCheated() && code == GameReport.SUCCESS) {
-			String cond = "default";
-			if (message.equals("str/game_end_special")) {
-				cond = String.valueOf(args[0]);
-			} else if (hands.values().stream().anyMatch(Hand::isForfeit)) {
-				cond = "wo";
-			}
+		if (Utils.equalsAny(code, GameReport.SUCCESS, GameReport.GAME_TIMEOUT)) {
+			if (!isSingleplayer() && arcade == null && !hasCheated() && winner != null) {
+				String cond = "default";
+				if (code == GameReport.GAME_TIMEOUT) {
+					cond = "wo";
+					hands.get(winner.getOther()).getAccount().addItem("LEAVER_TICKER", 1);
+				} else if (message.equals("str/game_end_special")) {
+					cond = String.valueOf(args[0]);
+				}
 
-			new MatchHistory(new Match(this, cond)).save();
+				new MatchHistory(new Match(this, cond)).save();
+			}
 		}
 
 		close(code);

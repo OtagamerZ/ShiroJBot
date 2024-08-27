@@ -115,7 +115,11 @@ public class ShoukanHistoryCommand implements Executable {
 					} else if (winner.uid().equals(acc.getUid())) {
 						fm.appendLine(locale.get("str/win"));
 					} else {
-						fm.appendLine(locale.get("str/lose"));
+						if (m.info().winCondition().equalsIgnoreCase("wo")) {
+							fm.appendLine(locale.get("str/wo"));
+						} else {
+							fm.appendLine(locale.get("str/lose"));
+						}
 					}
 
 					fm.append(" | " + locale.get("str/turns_inline", m.turns().size()));
