@@ -2642,7 +2642,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (arcade == Arcade.INSTABILITY) {
-			int affected = Math.min((int) Math.ceil(getTurn() / 2d), 8);
+			int affected = Math.min(getTurn() / 5, 8);
 			List<SlotColumn> chosen = Utils.getRandomN(Utils.flatten(arena.getSlots().values()), affected, 1);
 
 			for (SlotColumn slt : chosen) {
