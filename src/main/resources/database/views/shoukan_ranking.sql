@@ -18,32 +18,35 @@
 
 -- DROP VIEW IF EXISTS v_shoukan_ranking;
 CREATE OR REPLACE VIEW v_shoukan_ranking AS
-SELECT rank() OVER (ORDER BY x.winrate * x.match_count DESC) AS pos
+SELECT rank() OVER (ORDER BY x.winrate * x.match_count - x.penalty DESC) AS pos
      , x.uid
      , x.name
      , x.winrate
      , x.match_count
-     , cast(x.winrate * x.match_count AS INT)                AS score
+     , cast(x.winrate * x.match_count - x.penalty AS INT)                AS score
 FROM (
      SELECT x.uid
           , x.name
           , x.match_count
           , round(x.wins * 100.0 / x.match_count, 2) AS winrate
+          , x.penalty
      FROM (
           SELECT x.uid
                , x.name
                , sum(iif(x.winner = x.uid, 1, NULL)) AS wins
                , x.match_count
+               , x.penalty
           FROM (
                SELECT acc.uid
                     , acc.name
-                    , h.info -> lower(h.info ->> 'winner') ->> 'uid' AS winner
-                    , count(1) OVER (PARTITION BY acc.uid)           AS match_count
+                    , h.info -> lower(h.info ->> 'winner') ->> 'uid'      AS winner
+                    , count(1) OVER (PARTITION BY acc.uid)                AS match_count
+                    , cast(acc.inventory -> 'LEAVER_TICKET' AS INT) * 250 AS penalty
                FROM account acc
                         INNER JOIN match_history h ON acc.uid IN (h.info -> 'top' ->> 'uid', h.info -> 'bottom' ->> 'uid')
                WHERE has(h.info, 'winner')
                ) x
-          GROUP BY x.uid, x.name, x.match_count
+          GROUP BY x.uid, x.name, x.match_count, x.penalty
           ) x
      ) x
 WHERE x.winrate IS NOT NULL
