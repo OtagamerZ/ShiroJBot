@@ -1348,7 +1348,7 @@ public class Shoukan extends GameInstance<Phase> {
 								boolean tParry, tDodge;
 
 								if (!source.hasFlag(Flag.TRUE_STRIKE, true)) {
-									if (source.isBlinded(true)) {
+									if (source.isBlinded(true) && chance(50)) {
 										outcome = getString("str/combat_miss");
 										trigger(ON_MISS, source.asSource(ON_MISS));
 
