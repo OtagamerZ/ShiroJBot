@@ -90,8 +90,9 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 		Account acc = getAccount();
 		int mult = 3 + acc.getItemCount("cap_boost");
 		int add = acc.getItemCount("extra_cap") * 10;
+		int rem = acc.getItemCount("leaver_penalty") * 10;
 
-		return 250 + add + acc.getHighestLevel() * mult;
+		return Math.max(0, 250 + add - rem + acc.getHighestLevel() * mult);
 	}
 
 	public int getStashUsage() {
