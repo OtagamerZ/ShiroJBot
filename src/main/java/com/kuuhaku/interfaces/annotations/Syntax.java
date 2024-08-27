@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Signature {
+public @interface Syntax {
 	@Language("ShiroSig")
 	String[] value();
 	SigPattern[] patterns() default {};

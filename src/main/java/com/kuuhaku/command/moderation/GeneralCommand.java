@@ -20,7 +20,7 @@ package com.kuuhaku.command.moderation;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
@@ -29,14 +29,13 @@ import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
 @Command(
 		name = "general",
 		category = Category.MODERATION
 )
-@Signature(allowEmpty = true, value = {
+@Syntax(allowEmpty = true, value = {
 		"<action:word:r>[clear]",
 		"<channel:channel:r>"
 })

@@ -21,7 +21,7 @@ package com.kuuhaku.command.customanswer;
 import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.CustomAnswer;
@@ -38,7 +38,7 @@ import org.apache.commons.lang3.StringUtils;
 		path = "add",
 		category = Category.MODERATION
 )
-@Signature("<json:text:r>")
+@Syntax("<json:text:r>")
 public class CustomAnswerAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

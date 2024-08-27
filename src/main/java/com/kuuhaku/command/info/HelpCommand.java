@@ -27,7 +27,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.StringTree;
 import com.kuuhaku.model.enums.Category;
@@ -36,7 +36,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.PreparedCommand;
-import com.kuuhaku.util.SignatureParser;
+import com.kuuhaku.util.SyntaxParser;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -54,7 +54,7 @@ import java.util.stream.Stream;
 		name = "help",
 		category = Category.INFO
 )
-@Signature("<command:word>")
+@Syntax("<command:word>")
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_EXT_EMOJI
@@ -122,7 +122,7 @@ public class HelpCommand implements Executable {
 			);
 		}
 
-		List<String> sigs = SignatureParser.extract(locale, pc.command());
+		List<String> sigs = SyntaxParser.extract(locale, pc.command());
 		if (!sigs.isEmpty()) {
 			eb.addField(
 					locale.get("str/command_signatures"),

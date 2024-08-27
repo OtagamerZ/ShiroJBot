@@ -23,7 +23,7 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.SigPattern;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
@@ -44,10 +44,10 @@ import java.util.Objects;
 		name = "kick",
 		category = Category.MODERATION
 )
-@Signature(
+@Syntax(
 		patterns = {
 				@SigPattern(id = "users", value = "(<@!?(\\d+)>\\s*)+"),
-				@SigPattern(id = "ids", value = "(\\d+\\s*)+")
+				@SigPattern(id = "ids", value = "(\\d+\\s+)+")
 		},
 		value = {
 				"<users:custom:r>[users] <reason:text:r>",

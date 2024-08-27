@@ -23,7 +23,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -58,7 +58,7 @@ import java.util.stream.Collectors;
 		name = "see",
 		category = Category.INFO
 )
-@Signature("<card:word:r> <kind:word>[n,c,s]")
+@Syntax("<card:word:r> <kind:word>[n,c,s]")
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ATTACH_FILES

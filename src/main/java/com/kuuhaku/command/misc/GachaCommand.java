@@ -27,7 +27,7 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.gacha.Gacha;
 import com.kuuhaku.model.enums.Currency;
@@ -58,7 +58,7 @@ import java.util.*;
 		name = "gacha",
 		category = Category.MISC
 )
-@Signature(allowEmpty = true, value = "<type:word>")
+@Syntax(allowEmpty = true, value = "<type:word>")
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ATTACH_FILES

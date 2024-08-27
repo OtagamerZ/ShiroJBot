@@ -21,7 +21,7 @@ package com.kuuhaku.util;
 import com.kuuhaku.exceptions.InvalidSignatureException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.SigPattern;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.FailedSignature;
 import com.ygimenez.json.JSONArray;
@@ -35,11 +35,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public abstract class SignatureParser {
+public abstract class SyntaxParser {
 	private static final Pattern ARGUMENT_PATTERN = Pattern.compile("^<(?<name>[a-z]\\w*):(?<type>[a-z]+)(?<required>:[r])?>(?:\\[(?<options>[^\\[\\]]+)+])?$", Pattern.CASE_INSENSITIVE);
 
 	public static JSONObject parse(I18N locale, Executable command, String input) throws InvalidSignatureException {
-		Signature annot = command.getClass().getDeclaredAnnotation(Signature.class);
+		Syntax annot = command.getClass().getDeclaredAnnotation(Syntax.class);
 		if (annot == null) return new JSONObject();
 
 		return parse(locale, annot.value(), annot.patterns(), annot.allowEmpty(), input);
@@ -85,8 +85,8 @@ public abstract class SignatureParser {
 					continue;
 				}
 
-				Signature.Type type = groups.getEnum(Signature.Type.class, "type");
-				if (type == Signature.Type.TEXT) {
+				Syntax.Type type = groups.getEnum(Syntax.Type.class, "type");
+				if (type == Syntax.Type.TEXT) {
 					if (!args.isEmpty()) {
 						if (out.has(name)) {
 							JSONArray arr;
@@ -118,7 +118,7 @@ public abstract class SignatureParser {
 						if (!fail) {
 							String arg = args.getFirst();
 
-							if (type == Signature.Type.CUSTOM) {
+							if (type == Syntax.Type.CUSTOM) {
 								@Language("RegExp") String opt = groups.getString("options", "");
 								@Language("RegExp") String pattern = opt;
 								if (patterns != null) {
@@ -212,7 +212,7 @@ public abstract class SignatureParser {
 	}
 
 	public static List<String> extract(I18N locale, Executable command) {
-		Signature annot = command.getClass().getDeclaredAnnotation(Signature.class);
+		Syntax annot = command.getClass().getDeclaredAnnotation(Syntax.class);
 		if (annot == null) return List.of();
 
 		return extract(locale, annot.value(), annot.allowEmpty());
@@ -251,7 +251,7 @@ public abstract class SignatureParser {
 				boolean required = groups.has("required");
 				String wrap = "%s";
 
-				if (!opt.isBlank()) {
+				if (!opt.isBlank() && !type.equalsIgnoreCase(Syntax.Type.CUSTOM.name())) {
 					List<String> opts = Arrays.stream(groups.getString("options", "").split(","))
 							.filter(s -> !s.isBlank())
 							.map(String::toLowerCase)
@@ -260,7 +260,7 @@ public abstract class SignatureParser {
 					wrap = String.join("|", opts);
 				}
 
-				if (type.equalsIgnoreCase(Signature.Type.TEXT.name()) && supplied.size() < args.length - 1) {
+				if (type.equalsIgnoreCase(Syntax.Type.TEXT.name()) && supplied.size() < args.length - 1) {
 					wrap = "\"" + wrap + "\"";
 				}
 

@@ -20,7 +20,7 @@ package com.kuuhaku.command.profile;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
@@ -39,7 +39,7 @@ import java.awt.image.BufferedImage;
 		path = {"widget", "add"},
 		category = Category.MISC
 )
-@Signature("<text:text:r>")
+@Syntax("<text:text:r>")
 public class ProfileWidgetAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

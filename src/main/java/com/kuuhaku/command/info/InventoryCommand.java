@@ -30,7 +30,7 @@ import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.SignatureParser;
+import com.kuuhaku.util.SyntaxParser;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -81,7 +81,7 @@ public class InventoryCommand implements Executable {
 
 					if (!i.isPassive()) {
 						String sig = i.getSignature();
-						sig = SignatureParser.extract(locale, sig == null ? null : new String[]{sig}, false).getFirst();
+						sig = SyntaxParser.extract(locale, sig == null ? null : new String[]{sig}, false).getFirst();
 						fm.appendLine("`" + sig.formatted(data.config().getPrefix(), "items.use " + i.getId()) + "`");
 					}
 

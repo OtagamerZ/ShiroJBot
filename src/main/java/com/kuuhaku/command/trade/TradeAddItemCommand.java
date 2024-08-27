@@ -20,7 +20,7 @@ package com.kuuhaku.command.trade;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -41,7 +41,7 @@ import java.util.Map;
 		path = {"add", "item"},
 		category = Category.MISC
 )
-@Signature("<item:word:r> <amount:number>")
+@Syntax("<item:word:r> <amount:number>")
 public class TradeAddItemCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

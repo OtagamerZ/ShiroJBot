@@ -547,7 +547,7 @@ public class GuildListener extends ListenerAdapter {
 				}
 
 				try {
-					JSONObject params = SignatureParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
+					JSONObject params = SyntaxParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
 
 					try {
 						pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
@@ -564,7 +564,7 @@ public class GuildListener extends ListenerAdapter {
 
 					error = locale.get("error/invalid_signature");
 
-					List<String> signatures = SignatureParser.extract(locale, pc.command());
+					List<String> signatures = SyntaxParser.extract(locale, pc.command());
 					EmbedBuilder eb = new ColorlessEmbedBuilder()
 							.setAuthor(locale.get("str/command_signatures"))
 							.setDescription("```css\n" + String.join("\n", signatures).formatted(

@@ -20,7 +20,7 @@ package com.kuuhaku.command.moderation;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.RuleAction;
@@ -38,7 +38,7 @@ import java.util.List;
 		path = "add",
 		category = Category.MODERATION
 )
-@Signature("<threshold:number:r> <action:word:r>[mute,aggravate,lose_xp,delevel,kick,ban]")
+@Syntax("<threshold:number:r> <action:word:r>[mute,aggravate,lose_xp,delevel,kick,ban]")
 public class AutoRuleAddCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

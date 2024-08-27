@@ -29,7 +29,7 @@ import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Arcade;
@@ -51,7 +51,7 @@ import java.util.concurrent.TimeUnit;
 		name = "shoukan",
 		category = Category.FUN
 )
-@Signature(allowEmpty = true, value = {
+@Syntax(allowEmpty = true, value = {
 		"<user:user:r> <arcade:word>",
 		"<arcade:word>"
 })

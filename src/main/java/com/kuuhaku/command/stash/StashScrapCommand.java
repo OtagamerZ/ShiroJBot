@@ -23,7 +23,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Category;
@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
 		path = "scrap",
 		category = Category.MISC
 )
-@Signature({
+@Syntax({
 		"<action:word:r>[all,extra]",
 		"<cards:text:r>"
 })

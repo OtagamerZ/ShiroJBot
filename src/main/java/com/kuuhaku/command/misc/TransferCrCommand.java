@@ -22,7 +22,7 @@ import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
@@ -40,7 +40,7 @@ import net.dv8tion.jda.api.entities.User;
 		path = "cr",
 		category = Category.MISC
 )
-@Signature("<user:user:r> <value:number:r>")
+@Syntax("<user:user:r> <value:number:r>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class TransferCrCommand implements Executable {
 	@Override

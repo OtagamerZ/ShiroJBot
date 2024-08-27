@@ -22,7 +22,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Currency;
@@ -43,7 +43,7 @@ import java.util.Calendar;
 		path = "buy",
 		category = Category.MISC
 )
-@Signature("<id:number:r>")
+@Syntax("<id:number:r>")
 public class MarketBuyCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

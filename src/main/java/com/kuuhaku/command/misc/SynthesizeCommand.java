@@ -28,7 +28,7 @@ import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.CardType;
@@ -68,7 +68,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 		name = "synth",
 		category = Category.MISC
 )
-@Signature({
+@Syntax({
 		"<cards:text:r>",
 		"<anime:word:r>"
 })

@@ -22,7 +22,7 @@ import com.expression.parser.exception.CalculatorException;
 import com.expression.parser.function.FunctionX;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
@@ -35,7 +35,7 @@ import net.dv8tion.jda.api.JDA;
 		name = "calc",
 		category = Category.MISC
 )
-@Signature("<expression:text:r>")
+@Syntax("<expression:text:r>")
 public class CalcCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

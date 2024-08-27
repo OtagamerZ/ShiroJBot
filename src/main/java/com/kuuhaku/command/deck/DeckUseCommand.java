@@ -22,7 +22,7 @@ import com.github.ygimenez.model.Page;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -46,7 +46,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 		path = "use",
 		category = Category.INFO
 )
-@Signature(allowEmpty = true, value = {
+@Syntax(allowEmpty = true, value = {
 		"<id:number:r>",
 		"<name:word:r>"
 })

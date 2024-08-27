@@ -21,7 +21,7 @@ package com.kuuhaku.command.deck;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.DailyDeck;
@@ -37,7 +37,7 @@ import net.dv8tion.jda.api.Permission;
 		path = "name",
 		category = Category.INFO
 )
-@Signature("<name:word>")
+@Syntax("<name:word>")
 @Requires(Permission.MESSAGE_ATTACH_FILES)
 public class DeckNameCommand implements Executable {
 	@Override

@@ -24,7 +24,7 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.gacha.Gacha;
 import com.kuuhaku.model.enums.Category;
@@ -48,7 +48,7 @@ import java.util.*;
 		path = "pool",
 		category = Category.INFO
 )
-@Signature("<type:word:r>")
+@Syntax("<type:word:r>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class GachaPoolCommand implements Executable {
 	@Override

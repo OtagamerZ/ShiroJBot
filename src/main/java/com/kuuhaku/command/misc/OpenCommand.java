@@ -21,7 +21,7 @@ package com.kuuhaku.command.misc;
 import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.SingleUseReference;
 import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.enums.Category;
@@ -41,7 +41,7 @@ import java.time.ZonedDateTime;
 		name = "open",
 		category = Category.MISC
 )
-@Signature("<captcha:any:r>")
+@Syntax("<captcha:any:r>")
 public class OpenCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

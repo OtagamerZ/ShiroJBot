@@ -22,7 +22,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Currency;
@@ -43,7 +43,7 @@ import net.dv8tion.jda.api.JDA;
 		path = {"order", "place"},
 		category = Category.MISC
 )
-@Signature("<card:word:r> <price:number:r>")
+@Syntax("<card:word:r> <price:number:r>")
 public class MarketOrderPlaceCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

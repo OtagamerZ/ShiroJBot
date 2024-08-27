@@ -23,7 +23,7 @@ import com.kuuhaku.exceptions.PassiveItemException;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.LocalizedString;
@@ -31,7 +31,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.SignatureParser;
+import com.kuuhaku.util.SyntaxParser;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
@@ -44,7 +44,7 @@ import java.util.Map;
 		path = "use",
 		category = Category.MISC
 )
-@Signature(allowEmpty = true, value = "<id:word:r> <args:text>")
+@Syntax(allowEmpty = true, value = "<id:word:r> <args:text>")
 public class UseItemCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -74,7 +74,7 @@ public class UseItemCommand implements Executable {
 							JSONObject params;
 							if (item.getSignature() == null) params = new JSONObject();
 							else {
-								params = SignatureParser.parse(locale, new String[]{item.getSignature()}, null, false, args.getString("args"));
+								params = SyntaxParser.parse(locale, new String[]{item.getSignature()}, null, false, args.getString("args"));
 							}
 
 							item.execute(locale, event.channel(), acc.refresh(), params);

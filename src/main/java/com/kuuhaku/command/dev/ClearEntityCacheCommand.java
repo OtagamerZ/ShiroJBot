@@ -21,7 +21,7 @@ package com.kuuhaku.command.dev;
 import com.kuuhaku.controller.Manager;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
@@ -34,7 +34,7 @@ import net.dv8tion.jda.api.JDA;
 		path = "class",
 		category = Category.DEV
 )
-@Signature("<class:word:r>")
+@Syntax("<class:word:r>")
 public class ClearEntityCacheCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

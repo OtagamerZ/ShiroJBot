@@ -21,7 +21,7 @@ package com.kuuhaku.command.dev;
 import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -45,7 +45,7 @@ import java.util.function.Supplier;
 		name = "eval",
 		category = Category.DEV
 )
-@Signature("<code:text:r>")
+@Syntax("<code:text:r>")
 public class CompileCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

@@ -23,7 +23,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.id.ProfileId;
@@ -42,7 +42,7 @@ import net.dv8tion.jda.api.utils.FileUpload;
 		name = "profile",
 		category = Category.INFO
 )
-@Signature(allowEmpty = true, value = "<user:user:r>")
+@Syntax(allowEmpty = true, value = "<user:user:r>")
 @Requires(Permission.MESSAGE_ATTACH_FILES)
 public class ProfileCommand implements Executable {
 	@Override

@@ -20,7 +20,7 @@ package com.kuuhaku.command.moderation;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
@@ -36,7 +36,7 @@ import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 		name = "starboard",
 		category = Category.MODERATION
 )
-@Signature({
+@Syntax({
 		"<action:word:r>[clear]",
 		"<channel:channel:r>",
 		"<value:number:r>"

@@ -24,7 +24,7 @@ import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -47,7 +47,7 @@ import java.util.concurrent.ExecutionException;
 		path = "card",
 		category = Category.MISC
 )
-@Signature("<user:user:r> <card:word:r>")
+@Syntax("<user:user:r> <card:word:r>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class TransferCardCommand implements Executable {
 	@Override

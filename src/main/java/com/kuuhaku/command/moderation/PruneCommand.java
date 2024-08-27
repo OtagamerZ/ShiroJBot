@@ -23,7 +23,7 @@ import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
@@ -48,7 +48,7 @@ import java.util.concurrent.ExecutionException;
         name = "prune",
         category = Category.MODERATION
 )
-@Signature({
+@Syntax({
         "<amount:number:r>",
         "<user:user:r> <amount:number:r>",
         "<action:word:r>[all]"

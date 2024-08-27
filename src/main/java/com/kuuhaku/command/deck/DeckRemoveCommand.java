@@ -23,7 +23,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -45,7 +45,7 @@ import java.util.List;
 		path = "remove",
 		category = Category.MISC
 )
-@Signature({
+@Syntax({
 		"<action:word:r>[all]",
 		"<card:word:r> <amount:number>",
 		"<card:word:r>"

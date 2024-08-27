@@ -24,7 +24,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Signature;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 		name = "stash",
 		category = Category.MISC
 )
-@Signature({
+@Syntax({
 		"<action:word:r>[help]",
 		"<params:text>"
 })
