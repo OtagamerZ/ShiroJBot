@@ -22,8 +22,8 @@ import com.kuuhaku.util.Utils;
 
 public abstract class ValueOverTime {
 	private final int baseValue;
-	private final double multiplier;
 
+	private double multiplier;
 	private int value;
 
 	public ValueOverTime(int value, double multiplier) {
@@ -37,6 +37,10 @@ public abstract class ValueOverTime {
 
 	public double getMultiplier() {
 		return multiplier;
+	}
+
+	public void setMultiplier(double multiplier) {
+		this.multiplier = Utils.clamp(multiplier, 0, 1);
 	}
 
 	public int getValue() {
