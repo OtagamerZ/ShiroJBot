@@ -80,7 +80,7 @@ public class InventoryCommand implements Executable {
 					fm.appendLine(i.getDescription(locale));
 
 					if (!i.isPassive()) {
-						String sig = i.getSignature();
+						String sig = i.getSyntax();
 						sig = SyntaxParser.extract(locale, sig == null ? null : new String[]{sig}, false).getFirst();
 						fm.appendLine("`" + sig.formatted(data.config().getPrefix(), "items.use " + i.getId()) + "`");
 					}

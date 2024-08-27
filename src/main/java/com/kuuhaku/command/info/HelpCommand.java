@@ -125,7 +125,7 @@ public class HelpCommand implements Executable {
 		List<String> sigs = SyntaxParser.extract(locale, pc.command());
 		if (!sigs.isEmpty()) {
 			eb.addField(
-					locale.get("str/command_signatures"),
+					locale.get("str/command_syntaxes"),
 					"```css\n" + String.join("\n", sigs).formatted(data.config().getPrefix(), pc.name()) + "\n```",
 					false
 			);

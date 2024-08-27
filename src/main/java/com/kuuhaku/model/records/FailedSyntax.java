@@ -18,5 +18,5 @@
 
 package com.kuuhaku.model.records;
 
-public record FailedSignature(String line, String[] options, int matches, int numArgs) {
+public record FailedSyntax(String line, String[] options, int matches, int numArgs) {
 }

@@ -59,8 +59,8 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 	private String itemCostId;
 
 	@Language("ShiroSig")
-	@Column(name = "signature")
-	private String signature;
+	@Column(name = "syntax")
+	private String syntax;
 
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
@@ -114,8 +114,8 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 		return effect == null;
 	}
 
-	public String getSignature() {
-		return signature;
+	public String getSyntax() {
+		return syntax;
 	}
 
 	public void execute(I18N locale, GuildMessageChannel channel, Account acc, JSONObject params) {

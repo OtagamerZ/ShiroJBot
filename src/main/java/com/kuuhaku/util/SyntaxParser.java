@@ -18,12 +18,12 @@
 
 package com.kuuhaku.util;
 
-import com.kuuhaku.exceptions.InvalidSignatureException;
+import com.kuuhaku.exceptions.InvalidSyntaxException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.SigPattern;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.records.FailedSignature;
+import com.kuuhaku.model.records.FailedSyntax;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -38,19 +38,19 @@ import java.util.regex.Pattern;
 public abstract class SyntaxParser {
 	private static final Pattern ARGUMENT_PATTERN = Pattern.compile("^<(?<name>[a-z]\\w*):(?<type>[a-z]+)(?<required>:[r])?>(?:\\[(?<options>[^\\[\\]]+)+])?$", Pattern.CASE_INSENSITIVE);
 
-	public static JSONObject parse(I18N locale, Executable command, String input) throws InvalidSignatureException {
+	public static JSONObject parse(I18N locale, Executable command, String input) throws InvalidSyntaxException {
 		Syntax annot = command.getClass().getDeclaredAnnotation(Syntax.class);
 		if (annot == null) return new JSONObject();
 
 		return parse(locale, annot.value(), annot.patterns(), annot.allowEmpty(), input);
 	}
 
-	public static JSONObject parse(I18N locale, String[] signatures, SigPattern[] patterns, boolean allowEmpty, String input) throws InvalidSignatureException {
+	public static JSONObject parse(I18N locale, String[] syntaxes, SigPattern[] patterns, boolean allowEmpty, String input) throws InvalidSyntaxException {
 		JSONObject out = new JSONObject();
-		List<FailedSignature> failed = new ArrayList<>();
+		List<FailedSyntax> failed = new ArrayList<>();
 
 		List<String> supplied = new ArrayList<>();
-		for (String sig : signatures) {
+		for (String sig : syntaxes) {
 			List<String> args = new ArrayList<>(List.of(input.split(" +")));
 			String[] params = sig.split(" +");
 			String[] failOpts = {};
@@ -81,7 +81,7 @@ public abstract class SyntaxParser {
 
 				if (args.isEmpty() && required) {
 					fail = true;
-					supplied.add(wrap.formatted("> " + locale.get("signature/" + name) + " <"));
+					supplied.add(wrap.formatted("> " + locale.get("syntax/" + name) + " <"));
 					continue;
 				}
 
@@ -108,7 +108,7 @@ public abstract class SyntaxParser {
 						matches++;
 					} else if (required) {
 						fail = true;
-						supplied.add(wrap.formatted("> " + locale.get("signature/" + name) + " <"));
+						supplied.add(wrap.formatted("> " + locale.get("syntax/" + name) + " <"));
 					}
 				} else {
 					String token = null;
@@ -182,7 +182,7 @@ public abstract class SyntaxParser {
 						fail = true;
 
 						if (opts.isEmpty()) {
-							supplied.add(wrap.formatted("> " + locale.get("signature/" + name) + " <"));
+							supplied.add(wrap.formatted("> " + locale.get("syntax/" + name) + " <"));
 						} else {
 							supplied.add(wrap.formatted(String.join("|", opts)));
 							failOpts = opts.stream().map(o -> "`" + o + "`").toArray(String[]::new);
@@ -193,7 +193,7 @@ public abstract class SyntaxParser {
 
 			if (fail) {
 				out.clear();
-				failed.add(new FailedSignature(String.join(" ", supplied), failOpts, matches, params.length));
+				failed.add(new FailedSyntax(String.join(" ", supplied), failOpts, matches, params.length));
 				supplied.clear();
 			} else {
 				return out;
@@ -203,11 +203,11 @@ public abstract class SyntaxParser {
 		if (allowEmpty) return new JSONObject();
 		else {
 			int argLength = input.split(" +").length;
-			FailedSignature first = failed.stream().max(
-					Comparator.comparingInt(FailedSignature::matches)
+			FailedSyntax first = failed.stream().max(
+					Comparator.comparingInt(FailedSyntax::matches)
 							.thenComparing(fs -> fs.numArgs() - argLength, Comparator.reverseOrder())
 			).orElseThrow();
-			throw new InvalidSignatureException(first.line(), first.options());
+			throw new InvalidSyntaxException(first.line(), first.options());
 		}
 	}
 
@@ -218,14 +218,14 @@ public abstract class SyntaxParser {
 		return extract(locale, annot.value(), annot.allowEmpty());
 	}
 
-	public static List<String> extract(I18N locale, String[] signatures, boolean allowEmpty) {
+	public static List<String> extract(I18N locale, String[] syntaxes, boolean allowEmpty) {
 		List<String> out = new ArrayList<>();
-		if (signatures == null) return List.of("%1$s%2$s");
+		if (syntaxes == null) return List.of("%1$s%2$s");
 
 		if (allowEmpty) {
 			out.add("%1$s%2$s");
 		} else {
-			for (String sig : signatures) {
+			for (String sig : syntaxes) {
 				if (!Utils.regex(sig, ":r>").find()) {
 					out.add("%1$s%2$s");
 					break;
@@ -234,7 +234,7 @@ public abstract class SyntaxParser {
 		}
 
 		List<String> supplied = new ArrayList<>();
-		for (String sig : signatures) {
+		for (String sig : syntaxes) {
 			String[] args = sig.split(" +");
 
 			supplied.add("%1$s%2$s");
@@ -268,7 +268,7 @@ public abstract class SyntaxParser {
 					wrap = "[" + wrap + "]";
 				}
 
-				supplied.add(wrap.formatted(locale.get("signature/" + name)));
+				supplied.add(wrap.formatted(locale.get("syntax/" + name)));
 			}
 
 			out.add(String.join(" ", supplied));

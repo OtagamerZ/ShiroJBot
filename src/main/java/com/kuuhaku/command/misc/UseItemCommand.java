@@ -72,9 +72,9 @@ public class UseItemCommand implements Executable {
 			Utils.confirm(locale.get("question/item_use", item.getName(locale), items.getOrDefault(item, 0)), event.channel(), w -> {
 						try {
 							JSONObject params;
-							if (item.getSignature() == null) params = new JSONObject();
+							if (item.getSyntax() == null) params = new JSONObject();
 							else {
-								params = SyntaxParser.parse(locale, new String[]{item.getSignature()}, null, false, args.getString("args"));
+								params = SyntaxParser.parse(locale, new String[]{item.getSyntax()}, null, false, args.getString("args"));
 							}
 
 							item.execute(locale, event.channel(), acc.refresh(), params);

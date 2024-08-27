@@ -23,7 +23,7 @@ import com.kuuhaku.Application;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.exceptions.InvalidSignatureException;
+import com.kuuhaku.exceptions.InvalidSyntaxException;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.SimpleMessageListener;
@@ -559,15 +559,15 @@ public class GuildListener extends ListenerAdapter {
 					if (!Constants.STF_PRIVILEGE.apply(data.member())) {
 						ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
 					}
-				} catch (InvalidSignatureException e) {
+				} catch (InvalidSyntaxException e) {
 					String error;
 
-					error = locale.get("error/invalid_signature");
+					error = locale.get("error/invalid_syntax");
 
-					List<String> signatures = SyntaxParser.extract(locale, pc.command());
+					List<String> syntaxes = SyntaxParser.extract(locale, pc.command());
 					EmbedBuilder eb = new ColorlessEmbedBuilder()
-							.setAuthor(locale.get("str/command_signatures"))
-							.setDescription("```css\n" + String.join("\n", signatures).formatted(
+							.setAuthor(locale.get("str/command_syntaxes"))
+							.setDescription("```css\n" + String.join("\n", syntaxes).formatted(
 									event.config().getPrefix(),
 									name
 							) + "\n```");

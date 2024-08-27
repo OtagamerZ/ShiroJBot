@@ -144,7 +144,7 @@ public class CommandManager {
 		}
 	}
 
-	public String[] getCommandSignature(Class<?> klass) {
+	public String[] getCommandSyntax(Class<?> klass) {
 		Syntax sig = klass.getDeclaredAnnotation(Syntax.class);
 		if (sig == null) return new String[0];
 

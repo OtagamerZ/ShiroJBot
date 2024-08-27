@@ -20,18 +20,18 @@ package com.kuuhaku.exceptions;
 
 import java.io.Serial;
 
-public class InvalidSignatureException extends RuntimeException {
+public class InvalidSyntaxException extends RuntimeException {
 	@Serial
 	private static final long serialVersionUID = -5088005722085511782L;
 
 	private final String[] options;
 
-	public InvalidSignatureException(String message) {
+	public InvalidSyntaxException(String message) {
 		super(message);
 		options = new String[0];
 	}
 
-	public InvalidSignatureException(String message, String[] options) {
+	public InvalidSyntaxException(String message, String[] options) {
 		super(message);
 		this.options = options;
 	}
