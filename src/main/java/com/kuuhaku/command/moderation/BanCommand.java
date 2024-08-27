@@ -47,8 +47,8 @@ import java.util.concurrent.TimeUnit;
 )
 @Syntax(
 		patterns = {
-				@SigPattern(id = "users", value = "(<@!?(\\d+)>\\s*)+"),
-				@SigPattern(id = "ids", value = "(\\d+\\s+)+")
+				@SigPattern(id = "users", value = "(<@!?(\\d+)>(?=\\s|$))+"),
+				@SigPattern(id = "ids", value = "((\\d+)(?=\\s|$))+")
 		},
 		value = {
 				"<users:custom:r>[users] <reason:text:r>",

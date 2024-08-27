@@ -49,7 +49,7 @@ import java.util.stream.Stream;
 		category = Category.FUN
 )
 @Syntax(
-		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>\\s*)+"),
+		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>(?=\\s|$))+"),
 		value = "<users:custom:r>[users]"
 )
 @Requires(Permission.MESSAGE_ATTACH_FILES)
