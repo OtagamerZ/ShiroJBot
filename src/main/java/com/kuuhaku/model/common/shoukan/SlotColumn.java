@@ -119,6 +119,10 @@ public class SlotColumn {
 			current.executeAssert(Trigger.ON_REMOVE);
 			if (equals(current.getSlot())) {
 				current.setSlot(null);
+
+				if (card == null) {
+					game.getBanned().add(current);
+				}
 			}
 		}
 
