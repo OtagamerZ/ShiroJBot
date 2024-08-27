@@ -27,3 +27,25 @@ FROM v_match_winner
 WHERE uid = $1
   AND condition = lower($2)
 $$;
+
+CREATE OR REPLACE FUNCTION has_win_condition_any(VARCHAR, VARCHAR)
+    RETURNS BOOLEAN
+    IMMUTABLE
+    LANGUAGE sql
+AS
+$$
+SELECT count(1) > 0
+FROM (
+     SELECT 1
+     FROM v_match_winner
+     WHERE uid = $1
+       AND condition = lower($2)
+
+     UNION ALL
+
+     SELECT 1
+     FROM v_match_loser
+     WHERE uid = $1
+       AND condition = lower($2)
+     ) x
+$$;
