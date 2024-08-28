@@ -145,7 +145,7 @@ public class Shoukan extends GameInstance<Phase> {
 		setRestoring(false);
 
 		for (Hand h : hands.values()) {
-			for (Drawable<?> d : h.getRealDeck()) {
+			for (Drawable<?> d : List.copyOf(h.getRealDeck())) {
 				trigger(Trigger.ON_DECK, d.asSource(Trigger.ON_DECK));
 			}
 
