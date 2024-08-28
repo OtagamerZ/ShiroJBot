@@ -1028,7 +1028,7 @@ public class Shoukan extends GameInstance<Phase> {
 		} else if (d.getCooldown() > 0) {
 			getChannel().sendMessage(getString("error/card_cooldown", d.getCooldown())).queue();
 			return false;
-		} else if (curr.getMP() < 1) {
+		} else if (getPhase() == Phase.PLAN && curr.getMP() < 1) {
 			getChannel().sendMessage(getString("error/not_enough_mp")).queue();
 			return false;
 		} else if (!d.hasAbility()) {
