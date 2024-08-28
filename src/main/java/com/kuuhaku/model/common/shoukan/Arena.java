@@ -81,7 +81,7 @@ public class Arena implements Renderer {
 	private final Shoukan game;
 	private final Map<Side, List<SlotColumn>> slots;
 	private final BondedList<Drawable<?>> banned = new BondedList<>((d, it) -> {
-		if (d == null || d.getHand() == null) return false;
+		if (d.getHand() == null) return false;
 		else if (getBanned(false).contains(d)) return false;
 
 		if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {

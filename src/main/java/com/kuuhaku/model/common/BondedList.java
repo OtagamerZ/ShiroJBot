@@ -22,10 +22,7 @@ import com.kuuhaku.Constants;
 import org.apache.commons.collections4.list.TreeList;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -166,7 +163,7 @@ public class BondedList<T> extends TreeList<T> {
 		List<T> aux = new ArrayList<>();
 
 		int before = size();
-		for (T t : List.copyOf(c)) {
+		for (T t : new ArrayList<>(c)) {
 			add(index++, t, aux);
 		}
 
