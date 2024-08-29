@@ -35,6 +35,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.shoukan.CodexEntry;
 import com.kuuhaku.model.records.shoukan.RaceStats;
 import com.kuuhaku.model.records.shoukan.history.Match;
 import com.kuuhaku.model.records.shoukan.history.Player;
@@ -46,8 +47,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -70,8 +70,9 @@ public class ShoukanHistoryCommand implements Executable {
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(event.user()::equals)
-				.addAction(Utils.parseEmoji("📔"), w -> viewMatches(locale, w.getMessage(), acc))
-				.addAction(Utils.parseEmoji("📊"), w -> viewRaces(locale, w.getMessage(), acc));
+				.addAction(Utils.parseEmoji("🗃"), w -> viewMatches(locale, w.getMessage(), acc))
+				.addAction(Utils.parseEmoji("📊"), w -> viewRaces(locale, w.getMessage(), acc))
+				.addAction(Utils.parseEmoji("📔"), w -> codexTracker(locale, w.getMessage(), acc));
 
 		helper.apply(event.channel().sendMessageEmbeds(eb.build())).queue(s -> Pages.buttonize(s, helper));
 	}
@@ -195,6 +196,48 @@ public class ShoukanHistoryCommand implements Executable {
 					);
 
 					return fm.toString();
+				},
+				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
+		);
+
+		PaginateHelper helper = new PaginateHelper(pages, true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(u -> u.getId().equals(acc.getUid()));
+
+		helper.apply(msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent())).queue(s -> Pages.paginate(s, helper));
+	}
+
+	private void codexTracker(I18N locale, Message msg, Account acc) {
+		Set<Race> races = DAO.queryAllUnmapped("""
+						SELECT flag
+						     , variant 
+						FROM v_codex_progress 
+						WHERE uid = ?1
+						""", acc.getUid()).stream()
+				.map(o -> Utils.map(CodexEntry.class, o))
+				.filter(Objects::nonNull)
+				.map(CodexEntry::race)
+				.collect(Collectors.toSet());
+
+		if (races.isEmpty()) {
+			msg.editMessage(locale.get("error/no_matches")).queue();
+			return;
+		}
+
+		List<Race> all = Arrays.stream(Race.validValues())
+				.filter(r -> Integer.bitCount(r.getFlag()) == 2)
+				.toList();
+
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setAuthor(locale.get("str/history_codex", acc.getName(), races.size(), all.size()));
+
+		List<Page> pages = Utils.generatePages(eb, all, 20, 10,
+				r -> {
+					if (races.contains(r)) {
+						return "||" + Utils.getEmoteString(r.name()) + " " + r.getName(locale) + "||\n";
+					}
+
+					return Utils.getEmoteString(r.name()) + " " + r.getName(locale) + "\n";
 				},
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 		);

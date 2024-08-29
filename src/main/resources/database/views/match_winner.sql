@@ -41,6 +41,7 @@ FROM (
                     , lower(info ->> 'winner') AS winner
                FROM match_history
                WHERE has(info, 'winner')
+                 AND (info ->> 'winCondition') <> 'wo'
                ) x
           ) x
      ) x
