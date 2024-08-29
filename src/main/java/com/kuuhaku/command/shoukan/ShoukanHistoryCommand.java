@@ -219,11 +219,6 @@ public class ShoukanHistoryCommand implements Executable {
 				.map(CodexEntry::race)
 				.collect(Collectors.toSet());
 
-		if (races.isEmpty()) {
-			msg.editMessage(locale.get("error/no_matches")).queue();
-			return;
-		}
-
 		List<Race> all = Arrays.stream(Race.validValues())
 				.filter(r -> Integer.bitCount(r.getFlag()) == 2)
 				.toList();
