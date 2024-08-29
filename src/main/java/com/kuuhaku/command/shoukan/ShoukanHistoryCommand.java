@@ -209,8 +209,8 @@ public class ShoukanHistoryCommand implements Executable {
 
 	private void codexTracker(I18N locale, Message msg, Account acc) {
 		Set<Race> races = DAO.queryAllUnmapped("""
-						SELECT flag
-						     , variant 
+						SELECT cast(flag AS INT) AS flag
+						     , variant
 						FROM v_codex_progress 
 						WHERE uid = ?1
 						""", acc.getUid()).stream()
@@ -226,7 +226,7 @@ public class ShoukanHistoryCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/history_codex", acc.getName(), races.size(), all.size()));
 
-		List<Page> pages = Utils.generatePages(eb, all, 20, 10,
+		List<Page> pages = Utils.generatePages(eb, all, 10, 5,
 				r -> {
 					if (races.contains(r)) {
 						return "||" + Utils.getEmoteString(r.name()) + " " + r.getName(locale) + "||\n";
