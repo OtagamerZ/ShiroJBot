@@ -211,7 +211,7 @@ public class ShoukanHistoryCommand implements Executable {
 		Set<Race> races = DAO.queryAllUnmapped("""
 						SELECT cast(flag AS INT) AS flag
 						     , variant
-						FROM v_codex_progress 
+						FROM v_codex_progress
 						WHERE uid = ?1
 						""", acc.getUid()).stream()
 				.map(o -> Utils.map(CodexEntry.class, o))
