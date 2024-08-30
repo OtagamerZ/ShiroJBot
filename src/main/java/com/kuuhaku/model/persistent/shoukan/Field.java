@@ -136,7 +136,7 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	public JSONObject getModifiers() {
-		if (hand != null && hand.getOther() != null && !wasBamboozled()) {
+		if (hand != null && !wasBamboozled()) {
 			if (Utils.equalsAny(Race.PIXIE, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
 				int mods = modifiers.size();
 				modifiers.clear();

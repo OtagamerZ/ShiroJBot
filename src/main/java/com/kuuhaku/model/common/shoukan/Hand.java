@@ -368,7 +368,7 @@ public class Hand {
 	}
 
 	public Hand getOther() {
-		if (game == null) return null;
+		if (game == null) return this;
 		return game.getHands().get(side.getOther());
 	}
 
