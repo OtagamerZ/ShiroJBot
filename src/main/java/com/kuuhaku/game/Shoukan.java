@@ -2154,7 +2154,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private ButtonizeHelper getButtons() {
-		List<String> allowed = List.of("\uD83E\uDEAA", "\uD83D\uDD0D", "\uD83D\uDCD1");
+		List<String> allowed = List.of("\uD83E\uDEAA", "\uD83D\uDD0D", "\uD83D\uDCD1", "\uD83C\uDFF3");
 
 		Hand curr = getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
@@ -2519,15 +2519,33 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (isSingleplayer() || (getTurn() > 10 && curr.getLockTime(Lock.SURRENDER) == 0)) {
-				helper.addAction(Utils.parseEmoji("🏳"), w -> {
-					if (curr.isForfeit()) {
-						curr.setForfeit(true);
-						getChannel().buffer(getString("str/game_forfeit_start", curr.getName()));
-						nextTurn();
+				helper.addAction(Utils.parseEmoji("\uD83C\uDFF3"), w -> {
+					Hand h = null;
+					if (isSingleplayer()) {
+						h = curr;
+					} else {
+						for (Hand hand : hands.values()) {
+							if (hand.getUid().equals(w.getUser().getId())) {
+								h = hand;
+								break;
+							}
+						}
+					}
+
+					if (h == null) return;
+
+					if (h.isForfeit()) {
+						if (h.getSide() == getCurrentSide()) {
+							getChannel().buffer(getString("str/game_forfeit_start", curr.getName()));
+							nextTurn();
+						} else {
+							getChannel().sendMessage(getString("str/game_forfeit_start", curr.getName()));
+						}
+
 						return;
 					}
 
-					curr.setForfeit(true);
+					h.setForfeit(true);
 					Objects.requireNonNull(w.getHook())
 							.setEphemeral(true)
 							.sendMessage(getString("str/confirm_forfeit"))
