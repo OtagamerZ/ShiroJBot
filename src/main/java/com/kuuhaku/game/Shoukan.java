@@ -153,7 +153,7 @@ public class Shoukan extends GameInstance<Phase> {
 			h.manualDraw(h.getRemainingDraws());
 			h.loadArchetype();
 
-			if (h.getCards().parallelStream().filter(d -> d instanceof Field).count() >= 3) {
+			if (!hasCheated() && h.getCards().parallelStream().filter(d -> d instanceof Field).count() >= 3) {
 				h.getAccount().setDynValue("cartographer", true);
 			}
 
@@ -1650,7 +1650,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public boolean hasCheated() {
-		return isSingleplayer() || Bit32.on(state, 1);
+		return isSingleplayer() || arcade == Arcade.CASUAL || Bit32.on(state, 1);
 	}
 
 	public void setCheated(boolean cheated) {
@@ -2137,7 +2137,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (Utils.equalsAny(code, GameReport.SUCCESS, GameReport.GAME_TIMEOUT)) {
-			if (!isSingleplayer() && arcade != Arcade.CASUAL && !hasCheated() && winner != null) {
+			if (!hasCheated() && winner != null) {
 				String cond = "default";
 				if (code == GameReport.GAME_TIMEOUT) {
 					cond = "wo";
@@ -2484,7 +2484,7 @@ public class Shoukan extends GameInstance<Phase> {
 												d.setFlag(Flag.EMPOWERED);
 											}
 
-											if (d.getTier() == 4 && d.hasFlag(Flag.EMPOWERED)) {
+											if (!hasCheated() && d.getTier() == 4 && d.hasFlag(Flag.EMPOWERED)) {
 												curr.getAccount().setDynValue("emp_tier_4", true);
 											}
 
