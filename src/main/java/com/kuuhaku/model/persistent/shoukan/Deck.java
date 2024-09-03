@@ -55,6 +55,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -172,12 +173,19 @@ public class Deck extends DAO<Deck> {
 	public boolean validateSenshi() {
 		int allowed = getMaxSenshiCopies();
 		HashBag<String> bag = new HashBag<>();
+
+		int count = 0;
 		for (Senshi s : getSenshi()) {
 			bag.add(s.getId());
+			count++;
+		}
+
+		if (!Utils.between(count, 30, 36)) {
+			return false;
 		}
 
 		bag.removeIf(s -> bag.getCount(s) <= allowed);
-		return bag.isEmpty() && Utils.between(getSenshi().size(), 30, 36);
+		return bag.isEmpty();
 	}
 
 	public int countRace(Race race) {
@@ -221,17 +229,26 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public boolean validateEvogear() {
-		HashBag<Pair<String, Integer>> bag = new HashBag<>();
+		HashMap<String, Pair<Evogear, AtomicInteger>> evos = new HashMap<>();
+
+		int count = 0;
 		for (Evogear e : getEvogear()) {
-			bag.add(new Pair<>(e.getId(), e.getTier()));
+			evos.computeIfAbsent(e.getId(), k -> new Pair<>(e, new AtomicInteger()))
+					.getSecond()
+					.getAndIncrement();
+			count++;
 		}
 
-		if (bag.stream().filter(p -> p.getSecond() == 4).count() > getMaxEvogearCopies(4)) {
+		if (!Utils.between(count, 0, 26)) {
+			return false;
+		} else if (evos.values().stream().filter(p -> p.getFirst().getTier() == 4).count() > getMaxEvogearCopies(4)) {
+			return false;
+		} else if (evos.values().stream().filter(p -> p.getFirst().getTags().contains("STRATAGEM")).count() > 2) {
 			return false;
 		}
 
-		bag.removeIf(p -> bag.getCount(p.getFirst()) <= getMaxEvogearCopies(p.getSecond()));
-		return bag.isEmpty() && Utils.between(getEvogear().size(), 0, 26);
+		evos.values().removeIf(p -> p.getSecond().get() <= getMaxEvogearCopies(p.getFirst().getTier()));
+		return evos.isEmpty();
 	}
 
 	public int getEvoWeight() {
