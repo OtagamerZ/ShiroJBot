@@ -502,6 +502,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		else if (isSpell() && getTags().contains("STRATAGEM")) {
 			setCurrentStack(null);
 			executeAssert(ON_INITIALIZE);
+			return false;
 		} else if (!hasTrueEffect()) {
 			if (!isSpell() && hand.getLockTime(Lock.EFFECT) > 0) return false;
 		}
