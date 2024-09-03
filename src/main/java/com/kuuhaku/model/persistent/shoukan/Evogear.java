@@ -167,7 +167,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public boolean isParasite() {
-		return base.getTags().contains("PARASITE");
+		return base.getTags().contains("PARASITE") || base.getTags().contains("STRATAGEM");
 	}
 
 	public TargetType getTargetType() {
