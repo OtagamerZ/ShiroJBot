@@ -151,7 +151,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 			h.resetDraws();
 			h.manualDraw(h.getRemainingDraws());
-			h.loadArchetype();
 
 			if (!hasCheated() && h.getCards().parallelStream().filter(d -> d instanceof Field).count() >= 3) {
 				h.getAccount().setDynValue("cartographer", true);

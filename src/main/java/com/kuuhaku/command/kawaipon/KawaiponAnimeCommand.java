@@ -30,7 +30,6 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Anime;
-import com.kuuhaku.model.persistent.shoukan.Archetype;
 import com.kuuhaku.model.persistent.user.Kawaipon;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
@@ -78,11 +77,6 @@ public class KawaiponAnimeCommand implements Executable {
 						Calc.prcntToInt(count.getFirst(), total),
 						Calc.prcntToInt(count.getSecond(), total)
 				));
-
-		Archetype arch = DAO.find(Archetype.class, anime.getId());
-		if (arch != null) {
-			eb.addField(locale.get("str/archetype_effect"), arch.getInfo(locale).toString(), false);
-		}
 
 		List<Page> pages = new ArrayList<>();
 		int max = (int) Math.ceil(total / 50d);

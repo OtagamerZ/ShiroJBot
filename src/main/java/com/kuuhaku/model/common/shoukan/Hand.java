@@ -372,14 +372,6 @@ public class Hand {
 		return game.getHands().get(side.getOther());
 	}
 
-	public Archetype getArchetype() {
-		return userDeck.getArchetype();
-	}
-
-	public void loadArchetype() {
-		userDeck.getArchetype().execute(this);
-	}
-
 	public Origin getOrigins() {
 		return origin;
 	}

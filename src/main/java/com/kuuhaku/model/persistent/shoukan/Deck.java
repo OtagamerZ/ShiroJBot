@@ -86,7 +86,6 @@ public class Deck extends DAO<Deck> {
 	private transient List<Senshi> senshi = null;
 	private transient List<Evogear> evogear = null;
 	private transient List<Field> field = null;
-	private transient Archetype archetype = null;
 	private transient Origin origin = null;
 
 	public Deck() {
@@ -238,13 +237,8 @@ public class Deck extends DAO<Deck> {
 	public int getEvoWeight() {
 		int weight = 0;
 		double penalty = 0;
-		Archetype arch = getArchetype();
 
 		for (Evogear e : getEvogear()) {
-			if (Objects.equals(arch.getId(), "MADE_IN_ABYSS") && e.getBase().getTags().contains("FOOD")) {
-				continue;
-			}
-
 			weight += e.getTier();
 			if ((!e.isSpell() && getOrigins().major() == Race.MACHINE) || (e.isSpell() && getOrigins().major() == Race.MYSTICAL)) {
 				weight -= 1;
@@ -501,11 +495,6 @@ public class Deck extends DAO<Deck> {
 						  + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
 			}
 
-			Archetype arch = getArchetype();
-			if (arch.getId() != null) {
-				effects += "\n\n&(#FFAA00)- " + arch.getInfo(locale);
-			}
-
 			Graph.drawMultilineString(g, effects,
 					0, 190, 1140, 10, -20,
 					s -> {
@@ -562,25 +551,6 @@ public class Deck extends DAO<Deck> {
 		g2d.dispose();
 
 		return bi;
-	}
-
-	public Archetype getArchetype() {
-		if (archetype == null) {
-			HashBag<Anime> anime = new HashBag<>();
-			for (Senshi s : getSenshi()) {
-				anime.add(s.getCard().getAnime());
-			}
-
-			Archetype a = anime.parallelStream()
-					.filter(an -> anime.getCount(an) >= 20)
-					.findAny()
-					.map(an -> DAO.find(Archetype.class, an.getId()))
-					.orElse(null);
-
-			archetype = Utils.getOr(a, new Archetype());
-		}
-
-		return archetype;
 	}
 
 	public Origin getOrigins() {
