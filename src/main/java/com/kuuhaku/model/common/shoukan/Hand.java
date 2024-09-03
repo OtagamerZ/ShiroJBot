@@ -23,7 +23,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
-import com.kuuhaku.exceptions.SelectionException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.shoukan.Drawable;
@@ -34,7 +33,10 @@ import com.kuuhaku.model.common.SupplyChain;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.shoukan.*;
+import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.SelectionAction;
 import com.kuuhaku.model.records.SelectionCard;
@@ -53,6 +55,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.util.List;
+import java.util.Queue;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
@@ -281,7 +284,7 @@ public class Hand {
 	   └───── (0 - 255) cards spent
 	 */
 
-	private transient SelectionAction selection = null;
+	private transient Queue<SelectionAction> selection = new ArrayDeque<>();
 
 	public Hand(Deck deck) {
 		this.game = null;
@@ -1263,22 +1266,18 @@ public class Hand {
 	}
 
 	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, String caption, List<SelectionCard> cards, Integer required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
-		if (selection != null) {
-			throw new SelectionException("err/pending_selection");
-		}
-
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
 		else if (required != null && cards.size() < required) {
 			throw new ActivationException("err/insufficient_selection");
 		}
 
 		CompletableFuture<List<Drawable<?>>> task = new CompletableFuture<>();
-		selection = new SelectionAction(
+		selection.add(new SelectionAction(
 				source, caption, cards, required,
 				new ArrayList<>(),
 				new SupplyChain<List<Drawable<?>>>(null)
 						.add(cs -> {
-							selection = null;
+							selection.poll();
 							return cs;
 						})
 						.add(cs -> {
@@ -1286,16 +1285,17 @@ public class Hand {
 							task.complete(cs);
 							return cs;
 						})
-		);
+		));
 
 		game.getChannel().sendMessage(game.getString("str/selection_sent")).queue();
 		return task;
 	}
 
 	public BufferedImage renderChoices() {
-		if (selection == null) return null;
+		if (selection.isEmpty()) return null;
 
-		List<SelectionCard> cards = selection.cards();
+		SelectionAction sel = selection.peek();
+		List<SelectionCard> cards = sel.cards();
 		if (cards.isEmpty()) return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
 		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, 100 + (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
@@ -1305,10 +1305,10 @@ public class Hand {
 		g2d.translate(0, 100);
 
 		String str;
-		if (selection.required() == null) {
-			str = game.getString(selection.caption(), game.getString("str/many").toLowerCase());
+		if (sel.required() == null) {
+			str = game.getString(sel.caption(), game.getString("str/many").toLowerCase());
 		} else {
-			str = game.getString(selection.caption(), selection.required());
+			str = game.getString(sel.caption(), sel.required());
 		}
 
 		Graph.drawOutlinedString(g2d, str, bi.getWidth() / 2 - g2d.getFontMetrics().stringWidth(str) / 2, -10, 6, Color.BLACK);
@@ -1328,7 +1328,7 @@ public class Hand {
 				img = d.card().render(game.getLocale(), deck);
 			}
 
-			if (selection.indexes().contains(i)) {
+			if (sel.indexes().contains(i)) {
 				RescaleOp op = new RescaleOp(0.5f, 0, null);
 				op.filter(img, img);
 
@@ -1351,11 +1351,11 @@ public class Hand {
 	}
 
 	public SelectionAction getSelection() {
-		return selection;
+		return selection.peek();
 	}
 
 	public boolean selectionPending() {
-		return selection != null;
+		return !selection.isEmpty();
 	}
 
 	public boolean actionPrevented() {
