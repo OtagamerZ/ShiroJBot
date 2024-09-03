@@ -588,8 +588,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void executeAssert(Trigger trigger) {
-		if (!Utils.equalsAny(trigger, Trigger.ON_INITIALIZE, Trigger.ON_REMOVE)) return;
-		else if (!hasEffect() || !getEffect().contains(trigger.name())) return;
+		if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE) || !hasEffect()) return;
+		else if (!getEffect().contains(trigger.name()) && !getTags().contains("STRATAGEM")) return;
 
 		if (trigger == ON_REMOVE) {
 			getGame().unbind(this);
