@@ -323,7 +323,9 @@ public class Hand {
 				deck.add(DAO.find(Evogear.class, "REBIRTH"));
 			}
 		}
+	}
 
+	public void loadCards() {
 		Stream<? extends Drawable<?>> toAdd;
 		if (game.getArcade() == Arcade.CARDMASTER) {
 			List<List<? extends Drawable<?>>> cards = new ArrayList<>();
