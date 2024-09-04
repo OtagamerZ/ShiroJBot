@@ -256,11 +256,16 @@ public class Deck extends DAO<Deck> {
 		double penalty = 0;
 
 		for (Evogear e : getEvogear()) {
-			weight += e.getTier();
+			int w = e.getTier();
 			if ((!e.isSpell() && getOrigins().major() == Race.MACHINE) || (e.isSpell() && getOrigins().major() == Race.MYSTICAL)) {
-				weight -= 1;
+				w -= 1;
 			}
 
+			if (e.getTags().contains("STRATAGEM")) {
+				w *= 2;
+			}
+
+			weight += w;
 			penalty += e.getCharms().size() * 0.75;
 		}
 
