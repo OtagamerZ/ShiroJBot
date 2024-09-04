@@ -2198,7 +2198,7 @@ public class Shoukan extends GameInstance<Phase> {
 			reportEvent("str/game_combat_phase", true, false, true);
 		});
 
-		if (getPhase() == Phase.PLAN && getTurn() > 1) {
+		if (getPhase() == Phase.PLAN && curr.canAttack()) {
 			helper.addAction(Utils.parseEmoji("⏩"), w -> {
 				if (isLocked()) return;
 

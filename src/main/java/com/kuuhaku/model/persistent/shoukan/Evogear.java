@@ -658,7 +658,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public void setCurrentStack(BondedList<?> stack) {
 		if (getTags().contains("STRATAGEM")) {
 			executeAssert(ON_INITIALIZE);
-			getGame().getChannel().buffer(getGame().getString("str/stratagem_use", this));
+			getGame().getChannel().sendMessage(getGame().getString("str/stratagem_use", this)).queue();
 			return;
 		}
 
