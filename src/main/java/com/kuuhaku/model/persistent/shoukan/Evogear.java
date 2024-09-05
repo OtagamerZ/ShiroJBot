@@ -834,7 +834,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public String toString() {
-		if ((isFlipped() || getBase().getTags().contains("SECRET")) && getHand() != null) {
+		if ((isFlipped() || getBase().getTags().contains("SECRET")) && hand != null) {
 			return getGame().getString("str/" + (isSpell() ? "a_spell" : "an_equipment"));
 		}
 

@@ -605,9 +605,7 @@ public class Hand {
 	private Drawable<?> addToHand(Drawable<?> out, boolean manual, boolean oriSkip) {
 		if (!oriSkip) {
 			if (out instanceof Evogear e && !e.isSpell()) {
-				if (origin.synergy() == Race.EX_MACHINA) {
-					regdeg.add(500);
-				} else if (origin.synergy() == Race.MUMMY && out.getCurses().isEmpty() && !selectionPending()) {
+				if (origin.synergy() == Race.MUMMY && out.getCurses().isEmpty() && !selectionPending()) {
 					Evogear curse = Evogear.getByTag(game.getRng(), "MUMMY_CURSE").getRandom();
 
 					requestChoice(

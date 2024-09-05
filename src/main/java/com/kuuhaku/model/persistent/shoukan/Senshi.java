@@ -57,6 +57,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
+import java.util.function.ToIntFunction;
 import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
@@ -672,8 +673,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				min += 10;
 			}
 
-			if (getHand().getOrigins().synergy() == Race.ELEMENTAL) {
-				int wind = (int) getCards(getHand().getSide()).parallelStream()
+			if (hand.getOrigins().synergy() == Race.ELEMENTAL) {
+				int wind = (int) getCards(hand.getSide()).parallelStream()
 						.filter(s -> s.getElement() == ElementType.WIND)
 						.count();
 
@@ -780,46 +781,38 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return mult;
 	}
 
-	public int getEquipDmg() {
+	private int getEquipValue(ToIntFunction<EffectHolder<?>> extractor) {
 		if (hasFlag(Flag.NO_EQUIP)) return 0;
-		else if (hand != null && Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
-			return 0;
+
+		int sum = equipments.stream().filter(Evogear::isAvailable).mapToInt(extractor).sum();
+		if (hand != null) {
+			if (Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
+				return 0;
+			} else if (hand.getOrigins().synergy() == Race.EX_MACHINA) {
+				Senshi sup = getSupport();
+				if (sup != null) {
+					sum += extractor.applyAsInt(sup);
+				}
+			}
 		}
 
-		return equipments.stream().filter(Evogear::isAvailable).mapToInt(Evogear::getDmg).sum();
+		return sum;
+	}
+
+	public int getEquipDmg() {
+		return getEquipValue(EffectHolder::getDmg);
 	}
 
 	public int getEquipDfs() {
-		if (hasFlag(Flag.NO_EQUIP)) return 0;
-		else if (hand != null && Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
-			return 0;
-		}
-
-		return equipments.stream()
-				.filter(Evogear::isAvailable)
-				.mapToInt(Evogear::getDfs).sum();
+		return getEquipValue(EffectHolder::getDfs);
 	}
 
 	public int getEquipDodge() {
-		if (hasFlag(Flag.NO_EQUIP)) return 0;
-		else if (hand != null && Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
-			return 0;
-		}
-
-		return equipments.stream()
-				.filter(Evogear::isAvailable)
-				.mapToInt(Evogear::getDodge).sum();
+		return getEquipValue(EffectHolder::getDodge);
 	}
 
 	public int getEquipParry() {
-		if (hasFlag(Flag.NO_EQUIP)) return 0;
-		else if (hand != null && Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
-			return 0;
-		}
-
-		return equipments.stream()
-				.filter(Evogear::isAvailable)
-				.mapToInt(Evogear::getParry).sum();
+		return getEquipValue(EffectHolder::getParry);
 	}
 
 	public int getActiveEquips() {
@@ -1302,6 +1295,15 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
 			}
 
+			if (hand.getOrigins().synergy() == Race.EX_MACHINA) {
+				Senshi sup = getSupport();
+				if (sup != null) {
+					Evogear e = new EquippableSenshi(sup);
+					e.setEquipper(this);
+					e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
+				}
+			}
+
 			if (hasEffect() && getEffect().contains(trigger.name())) {
 				if (isStunned() && getGame().chance(25)) {
 					if (Trigger.getAnnounceable().contains(trigger) && !ep.isDeferred(Trigger.getAnnounceable())) {
@@ -1700,7 +1702,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public String toString() {
-		if (isFlipped() && getHand() != null) {
+		if (isFlipped() && hand != null) {
 			return getGame().getString("str/a_card");
 		}
 
