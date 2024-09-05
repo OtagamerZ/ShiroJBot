@@ -284,7 +284,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		if (g != null) {
 			Member m = g.getMemberById(id.uid());
 			if (m != null) {
-				avatar = IO.getImage(m.getEffectiveAvatarUrl());
+				avatar = IO.getImage(m.getEffectiveAvatar().getUrl(256).replace(".gif", ".png"));
 			}
 		}
 

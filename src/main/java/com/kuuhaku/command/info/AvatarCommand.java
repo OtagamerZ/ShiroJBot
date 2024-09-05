@@ -50,11 +50,11 @@ public class AvatarCommand implements Executable {
 			target = event.user();
 		}
 
-		String url = target.getEffectiveAvatarUrl() + "?size=1024";
+		String url = target.getEffectiveAvatar().getUrl(1024);
 		EmbedBuilder eb = new EmbedBuilder()
 				.setTitle(locale.get("str/avatar", target.getEffectiveName()))
-				.setImage(url)
-				.setColor(Graph.getColor(url));
+				.setColor(Graph.getColor(url))
+				.setImage(url);
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
 	}

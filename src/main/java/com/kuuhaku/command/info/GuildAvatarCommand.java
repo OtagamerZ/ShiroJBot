@@ -28,6 +28,7 @@ import com.kuuhaku.util.Graph;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.utils.ImageProxy;
 
 @Command(
 		name = "avatar",
@@ -37,17 +38,17 @@ import net.dv8tion.jda.api.JDA;
 public class GuildAvatarCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		String url = event.guild().getIconUrl();
-		if (url == null) {
+		ImageProxy icon = event.guild().getIcon();
+		if (icon == null) {
 			event.channel().sendMessage(locale.get("error/no_icon")).queue();
 			return;
 		}
 
-		url += "?size=1024";
+		String url = icon.getUrl(1024);
 		EmbedBuilder eb = new EmbedBuilder()
 				.setTitle(locale.get("str/icon", event.guild().getName()))
-				.setImage(url)
-				.setColor(Graph.getColor(url));
+				.setColor(Graph.getColor(url))
+				.setImage(url);
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
 	}
