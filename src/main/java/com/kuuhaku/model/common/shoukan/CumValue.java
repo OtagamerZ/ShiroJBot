@@ -24,13 +24,12 @@ import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.util.Calc;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class CumValue implements Iterable<ValueMod> {
-	final Set<ValueMod> values = new HashSet<>();
+	final Set<ValueMod> values = Collections.newSetFromMap(new ConcurrentHashMap<>());
 	final boolean flat;
 
 	private CumValue(boolean flat) {
