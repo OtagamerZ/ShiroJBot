@@ -284,11 +284,15 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		if (g != null) {
 			Member m = g.getMemberById(id.uid());
 			if (m != null) {
-				avatar = IO.getImage(m.getEffectiveAvatar().getUrl(256).replace(".gif", ".png"));
+				avatar = IO.getImage(m.getEffectiveAvatar().getUrl(256));
 			}
 		}
 
-		g2d.drawImage(Utils.getOr(avatar, IO.getImage(account.getUser().getEffectiveAvatarUrl())), -23, 56, 150, 150, null);
+		if (avatar == null) {
+			avatar = IO.getImage(account.getUser().getEffectiveAvatar().getUrl(256));
+		}
+
+		g2d.drawImage(avatar, -23, 56, 150, 150, null);
 
 		Graph.applyMask(bg, mask, 0);
 		g2d.drawImage(bg, 0, 0, null);

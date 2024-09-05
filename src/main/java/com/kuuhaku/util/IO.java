@@ -87,7 +87,7 @@ public abstract class IO {
 			try {
 				String type = getImageType(url);
 				if (type == null) {
-					return new byte[0];
+					type = "png";
 				}
 
 				return getBytes(ImageIO.read(URI.create(url).toURL()), type);
