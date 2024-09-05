@@ -87,7 +87,7 @@ public abstract class IO {
 			try {
 				String type = getImageType(url);
 				if (type == null) {
-					type = "png";
+					return new byte[0];
 				}
 
 				return getBytes(ImageIO.read(URI.create(url).toURL()), type);
@@ -124,6 +124,10 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding, float quality) {
+		if (encoding.equalsIgnoreCase("gif")) {
+			encoding = "jpg";
+		}
+
 		try (Buffer buf = new Buffer(); OutputStream os = buf.outputStream()) {
 			ImageWriter writer = ImageIO.getImageWritersByFormatName(encoding).next();
 			ImageOutputStream ios = ImageIO.createImageOutputStream(os);
