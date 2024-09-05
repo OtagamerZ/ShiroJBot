@@ -43,6 +43,7 @@ public class GuildAvatarCommand implements Executable {
 			return;
 		}
 
+		url += "?size=1024";
 		EmbedBuilder eb = new EmbedBuilder()
 				.setTitle(locale.get("str/icon", event.guild().getName()))
 				.setImage(url)

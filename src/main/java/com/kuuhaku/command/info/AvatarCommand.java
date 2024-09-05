@@ -50,7 +50,7 @@ public class AvatarCommand implements Executable {
 			target = event.user();
 		}
 
-		String url = target.getEffectiveAvatarUrl();
+		String url = target.getEffectiveAvatarUrl() + "?size=1024";
 		EmbedBuilder eb = new EmbedBuilder()
 				.setTitle(locale.get("str/avatar", target.getEffectiveName()))
 				.setImage(url)
