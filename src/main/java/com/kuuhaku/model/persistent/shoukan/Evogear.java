@@ -834,6 +834,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public String toString() {
+		if (getGame() != null && isFlipped()) {
+			return getGame().getString("str/a_card");
+		}
+
 		return card.getName();
 	}
 

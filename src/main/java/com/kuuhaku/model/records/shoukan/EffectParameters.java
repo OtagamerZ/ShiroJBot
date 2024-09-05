@@ -187,4 +187,8 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 	public EffectParameters forSide(Side side) {
 		return new EffectParameters(trigger, side, referee, source, targets);
 	}
+
+	public EffectParameters withTrigger(Trigger trigger) {
+		return new EffectParameters(trigger, side, referee, source, targets);
+	}
 }

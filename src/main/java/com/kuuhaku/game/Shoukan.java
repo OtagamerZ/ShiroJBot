@@ -1589,7 +1589,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		if (e.execute(ep)) {
+		if (e.execute(ep.withTrigger(ON_ACTIVATE))) {
 			hand.getGraveyard().add(p);
 			return true;
 		}

@@ -1702,6 +1702,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public String toString() {
+		if (getGame() != null && isFlipped()) {
+			return getGame().getString("str/a_card");
+		}
+
 		return getVanity().getName();
 	}
 
