@@ -113,9 +113,9 @@ public class RegDeg {
 		parent.modHP(value);
 
 		if (value > 0) {
-			reduce(Regen.class, value);
-		} else {
 			reduce(Degen.class, value);
+		} else {
+			reduce(Regen.class, value);
 		}
 	}
 
