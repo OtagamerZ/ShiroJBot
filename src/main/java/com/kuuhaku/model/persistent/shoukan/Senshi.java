@@ -1467,9 +1467,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (getGame().chance(getDodge())) {
 				if (announce) {
 					Shoukan game = getGame();
-					game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect",
-							isFlipped() ? game.getLocale().get("str/a_card") : this
-					)).queue();
+					game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect", this)).queue();
 					game.trigger(ON_DODGE, asSource(ON_DODGE));
 				}
 
@@ -1702,7 +1700,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public String toString() {
-		if (getGame() != null && isFlipped()) {
+		if (isFlipped() || getGame() != null) {
 			return getGame().getString("str/a_card");
 		}
 

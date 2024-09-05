@@ -513,7 +513,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		curr.setSummoned(true);
-		reportEvent("str/place_card", true, false, curr.getName(), s.isFlipped() ? getString("str/a_card") : s, s.getState().toString(getLocale()));
+		reportEvent("str/place_card", true, false, curr.getName(), s, s.getState().toString(getLocale()));
 		return true;
 	}
 
@@ -558,7 +558,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				Senshi target = slot.getTop();
-				reportEvent("str/equip_card_fail", true, false, curr.getName(), d, target.isFlipped() ? getString("str/a_card") : target);
+				reportEvent("str/equip_card_fail", true, false, curr.getName(), d, target);
 				return true;
 			}
 
@@ -596,7 +596,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		target.getEquipments().add(chosen);
-		reportEvent("str/equip_card", true, false, curr.getName(), chosen.isFlipped() ? getString("str/an_equipment") : chosen, target.isFlipped() ? getString("str/a_card") : target);
+		reportEvent("str/equip_card", true, false, curr.getName(), chosen, target);
 		return true;
 	}
 
@@ -687,7 +687,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		slot.swap();
 
-		reportEvent("str/promote_card", true, false, curr.getName(), d.isFlipped() ? getString("str/a_card") : d);
+		reportEvent("str/promote_card", true, false, curr.getName(), d);
 		return true;
 	}
 
@@ -929,7 +929,7 @@ public class Shoukan extends GameInstance<Phase> {
 			stack.add(chosen);
 		}
 
-		reportEvent("str/activate_card", true, false, curr.getName(), chosen.getBase().getTags().contains("SECRET") ? getString("str/a_spell") : chosen);
+		reportEvent("str/activate_card", true, false, curr.getName(), chosen);
 		return true;
 	}
 
