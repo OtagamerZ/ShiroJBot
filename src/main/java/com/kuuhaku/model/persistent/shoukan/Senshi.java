@@ -1300,6 +1300,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				if (sup != null) {
 					Evogear e = new EquippableSenshi(sup);
 					e.setEquipper(this);
+					e.setHand(hand);
+
 					e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
 				}
 			}

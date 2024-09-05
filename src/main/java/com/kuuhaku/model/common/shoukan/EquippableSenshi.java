@@ -43,11 +43,6 @@ public class EquippableSenshi extends Evogear implements Proxy<Senshi> {
 	}
 
 	@Override
-	public CardExtra getStats() {
-		return original.getStats();
-	}
-
-	@Override
 	public BondedList<?> getCurrentStack() {
 		return original.getCurrentStack();
 	}
