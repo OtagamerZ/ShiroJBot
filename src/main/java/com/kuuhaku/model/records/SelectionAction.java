@@ -20,6 +20,7 @@ package com.kuuhaku.model.records;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.SupplyChain;
+import com.kuuhaku.model.records.shoukan.SelectionRange;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public record SelectionAction(
 		Drawable<?> source,
 		String caption,
 		List<SelectionCard> cards,
-		Integer required,
+		SelectionRange range,
 		List<Integer> indexes,
 		SupplyChain<List<Drawable<?>>> result
 ) {

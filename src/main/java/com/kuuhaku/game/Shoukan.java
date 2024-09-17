@@ -961,7 +961,7 @@ public class Shoukan extends GameInstance<Phase> {
 				selIdxs.add(idx);
 			}
 
-			if (selection.required() != null && selIdxs.size() > selection.required()) {
+			if (selIdxs.size() > selection.range().max()) {
 				selIdxs.removeFirst();
 			}
 		}
@@ -976,8 +976,8 @@ public class Shoukan extends GameInstance<Phase> {
 		if (!curr.selectionPending()) return false;
 
 		SelectionAction sel = curr.getSelection();
-		if (sel.required() != null && sel.indexes().size() != sel.required()) {
-			getChannel().sendMessage(getString("error/wrong_selection_amount", sel.required())).queue();
+		if (sel.indexes().size() < sel.range().min()) {
+			getChannel().sendMessage(getString("error/wrong_selection_amount", sel.range().min())).queue();
 			return false;
 		}
 
@@ -2458,7 +2458,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							try {
-								curr.requestChoice(null, valid, null, ds -> {
+								curr.requestChoice(null, valid, new SelectionRange(1, null), ds -> {
 									List<StashedCard> material = ds.stream()
 											.map(d -> new StashedCard(null, d))
 											.toList();

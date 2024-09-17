@@ -687,7 +687,7 @@ public class Hand {
 				.map(c -> new SelectionCard(c, false))
 				.toList();
 
-		return requestChoice(null, "str/destroy_cards", cards, amount,
+		return requestChoice(null, "str/destroy_cards", cards, new SelectionRange(amount),
 				ds -> {
 					graveyard.addAll(ds);
 					this.cards.removeAll(ds);
@@ -1254,26 +1254,26 @@ public class Hand {
 	}
 
 	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
-		return requestChoice(source, "str/select_a_card", cards, 1, action);
+		return requestChoice(source, SelectionRange.SINGLE.label(), cards, SelectionRange.SINGLE, action);
 	}
 
 	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, String caption, List<SelectionCard> cards, ThrowingConsumer<List<? extends Drawable<?>>> action) {
-		return requestChoice(source, caption, cards, 1, action);
+		return requestChoice(source, caption, cards, SelectionRange.SINGLE, action);
 	}
 
-	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, List<SelectionCard> cards, Integer required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
-		return requestChoice(source, "str/select_a_card", cards, required, action);
+	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, List<SelectionCard> cards, SelectionRange range, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+		return requestChoice(source, range.label(), cards, range, action);
 	}
 
-	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, String caption, List<SelectionCard> cards, Integer required, ThrowingConsumer<List<? extends Drawable<?>>> action) {
+	public CompletableFuture<List<Drawable<?>>> requestChoice(Drawable<?> source, String caption, List<SelectionCard> cards, SelectionRange range, ThrowingConsumer<List<? extends Drawable<?>>> action) {
 		if (cards.isEmpty()) throw new ActivationException("err/empty_selection");
-		else if (required != null && cards.size() < required) {
+		else if (cards.size() < range.min()) {
 			throw new ActivationException("err/insufficient_selection");
 		}
 
 		CompletableFuture<List<Drawable<?>>> task = new CompletableFuture<>();
 		selection.add(new SelectionAction(
-				source, caption, cards, required,
+				source, caption, cards, range,
 				new ArrayList<>(),
 				new SupplyChain<List<Drawable<?>>>(null)
 						.add(cs -> {
@@ -1304,13 +1304,7 @@ public class Hand {
 		g2d.setFont(Fonts.OPEN_SANS.deriveBold(60));
 		g2d.translate(0, 100);
 
-		String str;
-		if (sel.required() == null) {
-			str = game.getString(sel.caption(), game.getString("str/many").toLowerCase());
-		} else {
-			str = game.getString(sel.caption(), sel.required());
-		}
-
+		String str = game.getString(sel.caption(), sel.range().min(), sel.range().max());
 		Graph.drawOutlinedString(g2d, str, bi.getWidth() / 2 - g2d.getFontMetrics().stringWidth(str) / 2, -10, 6, Color.BLACK);
 
 		for (int i = 0; i < cards.size(); i++) {
