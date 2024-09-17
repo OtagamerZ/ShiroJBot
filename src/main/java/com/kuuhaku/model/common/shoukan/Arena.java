@@ -162,7 +162,7 @@ public class Arena implements Renderer {
 
 	public void setField(Field field) {
 		if (Objects.equals(this.field, field)) return;
-		this.field = field;
+		this.field = Utils.getOr(field, DEFAULT_FIELD);
 
 		if (field.getHand() == null) {
 			field.setHand(game.getCurrent());
