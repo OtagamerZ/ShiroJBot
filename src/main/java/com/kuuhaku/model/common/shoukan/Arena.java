@@ -164,18 +164,18 @@ public class Arena implements Renderer {
 		if (Objects.equals(this.field, field)) return;
 		this.field = Utils.getOr(field, DEFAULT_FIELD);
 
-		if (field.getHand() == null) {
-			field.setHand(game.getCurrent());
+		if (this.field.getHand() == null) {
+			this.field.setHand(game.getCurrent());
 		}
 
 		for (Hand hd : game.getHands().values()) {
-			hd.getCards().remove(field);
-			hd.getGraveyard().remove(field);
-			hd.getRealDeck().remove(field);
-			hd.getDiscard().remove(field);
+			hd.getCards().remove(this.field);
+			hd.getGraveyard().remove(this.field);
+			hd.getRealDeck().remove(this.field);
+			hd.getDiscard().remove(this.field);
 		}
 
-		field.getHand().getData().put("last_field", field);
+		this.field.getHand().getData().put("last_field", this.field);
 		game.trigger(Trigger.ON_FIELD_CHANGE);
 	}
 
