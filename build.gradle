@@ -94,7 +94,7 @@ tasks.register("enforceVersion") {
 
 dependencies {
 	//Core
-	implementation group: "net.dv8tion", name: "JDA", version: "5.0.1"
+	implementation group: "net.dv8tion", name: "JDA", version: "5.1.0"
 	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "87dcdfc83a"
 	implementation group: "com.github.ygimenez", name: "Simple-Moshi", version: "1.1.2"
 
@@ -145,7 +145,7 @@ dependencies {
 	implementation group: "it.sauronsoftware.cron4j", name: "cron4j", version: "2.2.5"
 	implementation group: "org.swinglabs.swingx", name: "swingx-graphics", version: "1.6.5-1"
 	implementation group: "org.reflections", name: "reflections", version: "0.10.2"
-	implementation group: "com.squareup.okio", name: "okio", version: "3.9.0"
+	implementation group: "com.squareup.okio", name: "okio", version: "3.9.1"
 	implementation group: "io.github.furstenheim", name: "copy_down", version: "1.1"
 	implementation group: "net.jodah", name: "expiringmap", version: "0.5.11"
 	implementation group: "me.xuender", name: "unidecode", version: "0.0.7"

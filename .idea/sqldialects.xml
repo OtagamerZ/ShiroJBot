@@ -16,6 +16,7 @@
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/delete_ghosts.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/delete_orphan_details.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/delete_stashed.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/editable_desc_i18n.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/fav_stack.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/generate_kawaipon.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/generate_token.sql" dialect="PostgreSQL" />
@@ -24,6 +25,7 @@
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/daily_evogear.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/daily_field.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/daily_senshi.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/views/desc_i18n.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/match_loser.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/match_winner.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/shoukan_ranking.sql" dialect="PostgreSQL" />
