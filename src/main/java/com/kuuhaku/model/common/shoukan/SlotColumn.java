@@ -27,7 +27,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Utils;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -169,7 +169,11 @@ public class SlotColumn {
 	}
 
 	public List<Senshi> getCards() {
-		return Arrays.asList(getTop(), getBottom());
+		List<Senshi> cards = new ArrayList<>();
+		if (hasTop()) cards.add(getTop());
+		if (hasBottom()) cards.add(getBottom());
+
+		return cards;
 	}
 
 	public Senshi getAtRole(boolean support) {
