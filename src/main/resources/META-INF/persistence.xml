@@ -73,6 +73,13 @@
         <class>com.kuuhaku.model.persistent.shoukan.SlotSkin</class>
         <class>com.kuuhaku.model.persistent.shoukan.LocalizedSkin</class>
 
+        <!-- DUNGEON HUNTERS -->
+        <class>com.kuuhaku.model.persistent.dunhun.Gear</class>
+        <class>com.kuuhaku.model.persistent.dunhun.GearBasetype</class>
+        <class>com.kuuhaku.model.persistent.dunhun.LocalizedBasetype</class>
+        <class>com.kuuhaku.model.persistent.dunhun.GearAffix</class>
+        <class>com.kuuhaku.model.persistent.dunhun.LocalizedAffix</class>
+
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="jakarta.persistence.schema-generation.create-database-schemas" value="true"/>
