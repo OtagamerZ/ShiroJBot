@@ -16,27 +16,16 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.dunhun;
+package com.kuuhaku.model.records.id;
 
-import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.ygimenez.json.JSONArray;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 @Embeddable
-public record GearStats(
-		@Column(name = "req_level", nullable = false)
-		int reqLevel,
-		@Column(name = "attack", nullable = false)
-		int attack,
-		@Column(name = "defense", nullable = false)
-		int defense,
-		@JdbcTypeCode(SqlTypes.JSON)
-		@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
-		@Convert(converter = JSONArrayConverter.class)
-		JSONArray tags
+public record GearAffixId(
+		@Column(name = "gear_id", nullable = false)
+		int gearId,
+		@Column(name = "affix_id", nullable = false)
+		String affixId
 ) {
 }

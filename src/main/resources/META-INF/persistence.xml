@@ -75,9 +75,9 @@
 
         <!-- DUNGEON HUNTERS -->
         <class>com.kuuhaku.model.persistent.dunhun.Gear</class>
-        <class>com.kuuhaku.model.persistent.dunhun.GearBasetype</class>
+        <class>com.kuuhaku.model.persistent.dunhun.Basetype</class>
         <class>com.kuuhaku.model.persistent.dunhun.LocalizedBasetype</class>
-        <class>com.kuuhaku.model.persistent.dunhun.GearAffix</class>
+        <class>com.kuuhaku.model.persistent.dunhun.Affix</class>
         <class>com.kuuhaku.model.persistent.dunhun.LocalizedAffix</class>
 
         <properties>

@@ -28,6 +28,8 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 @Entity
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -41,21 +43,22 @@ public class Gear extends DAO<Gear> {
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "gear_id")
 	@Fetch(FetchMode.JOIN)
-	private GearBasetype basetype;
+	private Basetype basetype;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "gear_affixes")
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@JoinColumn(name = "gear_id", referencedColumnName = "id")
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<GearAffix> affixes = new LinkedHashSet<>();
 
 	public int getId() {
 		return id;
 	}
 
-	public GearBasetype getBasetype() {
+	public Basetype getBasetype() {
 		return basetype;
 	}
 
-	public Set<GearAffix> getAffixes() {
+	public Set<Affix> getAffixes() {
 		return affixes;
 	}
 

@@ -19,60 +19,78 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.records.id.GearAffixId;
+import com.kuuhaku.model.enums.dunhun.AffixType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.intellij.lang.annotations.Language;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
+import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "gear_affix")
-public class GearAffix extends DAO<GearAffix> {
-	@EmbeddedId
-	private GearAffixId id;
+@Table(name = "affix")
+public class Affix extends DAO<Affix> {
+	@Id
+	@Column(name = "id", nullable = false)
+	private String id;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "gear_id", nullable = false, updatable = false)
-	@Fetch(FetchMode.JOIN)
-	@MapsId("gearId")
-	private Gear gear;
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@JoinColumn(name = "id", referencedColumnName = "id")
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<LocalizedAffix> infos = new HashSet<>();
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "affix_id", nullable = false, updatable = false)
-	@Fetch(FetchMode.JOIN)
-	@MapsId("affixId")
-	private Affix affix;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type", nullable = false)
+	private AffixType type;
 
-	@Column(name = "roll", nullable = false)
-	private double roll;
+	@Column(name = "tier", nullable = false)
+	private int tier;
 
-	public GearAffixId getId() {
+	@Column(name = "weight", nullable = false)
+	private int weight;
+
+	@Language("Groovy")
+	@Column(name = "effect", columnDefinition = "TEXT")
+	private String effect;
+
+	public String getId() {
 		return id;
 	}
 
-	public Gear getGear() {
-		return gear;
+	public Set<LocalizedAffix> getInfos() {
+		return infos;
 	}
 
-	public Affix getAffix() {
-		return affix;
+	public AffixType getType() {
+		return type;
 	}
 
-	public double getRoll() {
-		return roll;
+	public int getTier() {
+		return tier;
+	}
+
+	public int getWeight() {
+		return weight;
+	}
+
+	public String getEffect() {
+		return effect;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		GearAffix gearAffix = (GearAffix) o;
-		return Objects.equals(id, gearAffix.id);
+		Affix affix = (Affix) o;
+		return Objects.equals(id, affix.id);
 	}
 
 	@Override

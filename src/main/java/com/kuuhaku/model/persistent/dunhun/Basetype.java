@@ -34,8 +34,8 @@ import static jakarta.persistence.CascadeType.ALL;
 @Entity
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "gear_basetype")
-public class GearBasetype extends DAO<GearBasetype> {
+@Table(name = "basetype")
+public class Basetype extends DAO<Basetype> {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -71,7 +71,7 @@ public class GearBasetype extends DAO<GearBasetype> {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		GearBasetype that = (GearBasetype) o;
+		Basetype that = (Basetype) o;
 		return Objects.equals(id, that.id);
 	}
 
