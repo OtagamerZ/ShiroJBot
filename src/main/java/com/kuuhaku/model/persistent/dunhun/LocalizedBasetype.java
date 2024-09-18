@@ -32,7 +32,7 @@ import java.util.Objects;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "gear_basetype_info")
+@Table(name = "basetype_info")
 public class LocalizedBasetype extends DAO<LocalizedBasetype> implements Serializable {
 	@EmbeddedId
 	private LocalizedId id;
