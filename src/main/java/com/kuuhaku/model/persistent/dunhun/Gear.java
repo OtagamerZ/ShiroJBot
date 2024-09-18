@@ -44,6 +44,7 @@ public class Gear extends DAO<Gear> {
 	private GearBasetype basetype;
 
 	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "gear_affixes")
 	private Set<GearAffix> affixes = new LinkedHashSet<>();
 
 	public int getId() {
