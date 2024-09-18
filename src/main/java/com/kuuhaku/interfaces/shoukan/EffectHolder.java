@@ -197,7 +197,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				Map.entry("dfs", source.getDfs()),
 				Map.entry("ddg", source.getDodge()),
 				Map.entry("pry", source.getParry()),
-				Map.entry("pow", source.getPower()),
 				Map.entry("data", getStats().getData())
 		);
 
@@ -236,7 +235,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						for (Object type : types) {
 							props.compute(String.valueOf(type), (k, v) -> {
 								double power = getPower();
-								if (k.equalsIgnoreCase("pow") || h.getOrigins().synergy() == Race.FABLED) {
+								if (h.getOrigins().synergy() == Race.FABLED) {
 									power = 1;
 								}
 
