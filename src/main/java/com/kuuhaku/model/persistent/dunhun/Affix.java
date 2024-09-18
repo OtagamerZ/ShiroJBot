@@ -57,7 +57,7 @@ public class Affix extends DAO<Affix> {
 	@Column(name = "weight", nullable = false)
 	private int weight;
 
-	@Column(name = "affix_group", nullable = false)
+	@Column(name = "affix_group")
 	private int group;
 
 	@Language("Groovy")
