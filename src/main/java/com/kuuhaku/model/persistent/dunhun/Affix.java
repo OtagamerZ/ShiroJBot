@@ -57,6 +57,9 @@ public class Affix extends DAO<Affix> {
 	@Column(name = "weight", nullable = false)
 	private int weight;
 
+	@Column(name = "affix_group", nullable = false)
+	private int group;
+
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
@@ -79,6 +82,10 @@ public class Affix extends DAO<Affix> {
 
 	public int getWeight() {
 		return weight;
+	}
+
+	public int getGroup() {
+		return group;
 	}
 
 	public String getEffect() {
