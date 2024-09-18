@@ -19,7 +19,10 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.AffixType;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -32,7 +35,7 @@ import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "gear")
 public class Gear extends DAO<Gear> {
 	@Id
@@ -41,7 +44,7 @@ public class Gear extends DAO<Gear> {
 	private int id;
 
 	@ManyToOne(optional = false)
-	@PrimaryKeyJoinColumn(name = "gear_id")
+	@PrimaryKeyJoinColumn(name = "basetype_id")
 	@Fetch(FetchMode.JOIN)
 	private Basetype basetype;
 
@@ -60,6 +63,24 @@ public class Gear extends DAO<Gear> {
 
 	public Set<GearAffix> getAffixes() {
 		return affixes;
+	}
+
+	public String getName(I18N locale) {
+		if (affixes.isEmpty()) return basetype.getInfo(locale).getName();
+		else if (affixes.size() > 2) return "[RareItem]";
+
+		String template = switch (locale) {
+			case EN, UWU_EN -> "%2 %1 %3";
+			case PT, UWU_PT -> "%1 %2 %3";
+		};
+
+		String pref = "", suff = "";
+		for (GearAffix a : affixes) {
+			if (a.getAffix().getType() == AffixType.PREFIX) pref = a.getName(locale);
+			else suff = a.getName(locale);
+		}
+
+		return template.formatted(basetype.getInfo(locale), pref, suff);
 	}
 
 	@Override

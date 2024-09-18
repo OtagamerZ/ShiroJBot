@@ -19,68 +19,58 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.records.dunhun.GearStats;
+import com.kuuhaku.model.persistent.user.Account;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
-
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "basetype")
-public class Basetype extends DAO<Basetype> {
+public class Hero extends DAO<Hero> {
 	@Id
-	@Column(name = "id", nullable = false)
-	private String id;
-
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumn(name = "id", referencedColumnName = "id")
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<LocalizedBasetype> infos = new HashSet<>();
-
-	@Column(name = "icon", nullable = false)
-	private String icon;
+	@Column(name = "name", nullable = false)
+	private String name;
 
 	@Embedded
-	private GearStats stats;
+	private HeroStats stats;
 
-	public String getId() {
-		return id;
+	@ManyToOne(optional = false)
+	@PrimaryKeyJoinColumn(name = "account_uid")
+	@Fetch(FetchMode.JOIN)
+	private Account account;
+
+	public Hero() {
 	}
 
-	public LocalizedBasetype getInfo(I18N locale) {
-		return infos.parallelStream()
-				.filter(ld -> ld.getLocale().is(locale))
-				.findAny().orElseThrow();
+	public Hero(Account account, String name) {
+		this.name = name.toLowerCase();
+		this.account = account;
 	}
 
-	public String getIcon() {
-		return icon;
+	public String getName() {
+		return name;
 	}
 
-	public GearStats getStats() {
+	public HeroStats getStats() {
 		return stats;
+	}
+
+	public Account getAccount() {
+		return account;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Basetype that = (Basetype) o;
-		return Objects.equals(id, that.id);
+		Hero hero = (Hero) o;
+		return Objects.equals(name, hero.name);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(id);
+		return Objects.hashCode(name);
 	}
 }

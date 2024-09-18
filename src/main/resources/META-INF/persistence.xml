@@ -74,6 +74,8 @@
         <class>com.kuuhaku.model.persistent.shoukan.LocalizedSkin</class>
 
         <!-- DUNGEON HUNTERS -->
+        <class>com.kuuhaku.model.persistent.dunhun.Hero</class>
+        <class>com.kuuhaku.model.persistent.dunhun.HeroStats</class>
         <class>com.kuuhaku.model.persistent.dunhun.Gear</class>
         <class>com.kuuhaku.model.persistent.dunhun.Basetype</class>
         <class>com.kuuhaku.model.persistent.dunhun.LocalizedBasetype</class>

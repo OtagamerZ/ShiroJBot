@@ -19,7 +19,9 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.id.GearAffixId;
+import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -65,6 +67,22 @@ public class GearAffix extends DAO<GearAffix> {
 
 	public double getRoll() {
 		return roll;
+	}
+
+	public String getName(I18N locale) {
+		String ending = gear.getBasetype().getInfo(locale).getEnding();
+
+		return Utils.regex(affix.getInfo(locale).getName(), "\\[(?<F>\\w*)|(?<M>\\w*)]")
+				.replaceAll(r -> r.group(ending));
+	}
+
+	public String getDescription(I18N locale) {
+		return Utils.regex(affix.getInfo(locale).getName(), "\\{(\\d+)-(\\d+)}").replaceAll(r -> {
+			int min = Integer.parseInt(r.group(1));
+			int max = Integer.parseInt(r.group(2));
+
+			return String.valueOf((int) (min + (max - min) * roll));
+		});
 	}
 
 	@Override

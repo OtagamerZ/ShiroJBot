@@ -226,9 +226,12 @@ public abstract class Utils {
 		return new DecimalFormat("#,##0" + (places > 0 ? "." : "") + StringUtils.repeat("#", places)).format(value);
 	}
 
+	public static Pattern regex(@Language("RegExp") String regex) {
+		return Main.getCacheManager().computePattern(regex, (k, v) -> v == null ? Pattern.compile(regex) : v);
+	}
+
 	public static Matcher regex(String text, @Language("RegExp") String regex) {
-		Pattern pat = Main.getCacheManager().computePattern(regex, (k, v) -> v == null ? Pattern.compile(regex) : v);
-		return pat.matcher(text);
+		return regex(regex).matcher(text);
 	}
 
 	public static Matcher regex(String text, Pattern pattern) {

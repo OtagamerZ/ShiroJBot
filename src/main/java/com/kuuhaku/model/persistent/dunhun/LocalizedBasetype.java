@@ -61,6 +61,10 @@ public class LocalizedBasetype extends DAO<LocalizedBasetype> implements Seriali
 		return name;
 	}
 
+	public String getEnding() {
+		return ending;
+	}
+
 	public LocalizedBasetype setUwu(boolean uwu) {
 		this.uwu = uwu;
 		return this;

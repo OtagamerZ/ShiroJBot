@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
@@ -68,8 +69,10 @@ public class Affix extends DAO<Affix> {
 		return id;
 	}
 
-	public Set<LocalizedAffix> getInfos() {
-		return infos;
+	public LocalizedAffix getInfo(I18N locale) {
+		return infos.parallelStream()
+				.filter(ld -> ld.getLocale().is(locale))
+				.findAny().orElseThrow();
 	}
 
 	public AffixType getType() {
