@@ -18,11 +18,10 @@
 
 package com.kuuhaku.model.records.dunhun;
 
+import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.ygimenez.json.JSONArray;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -34,6 +33,9 @@ public record GearStats(
 		int attack,
 		@Column(name = "defense", nullable = false)
 		int defense,
+		@Enumerated(EnumType.STRING)
+		@Column(name = "slot", nullable = false)
+		GearSlot slot,
 		@JdbcTypeCode(SqlTypes.JSON)
 		@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 		@Convert(converter = JSONArrayConverter.class)
