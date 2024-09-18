@@ -58,7 +58,7 @@ public class Gear extends DAO<Gear> {
 		return basetype;
 	}
 
-	public Set<Affix> getAffixes() {
+	public Set<GearAffix> getAffixes() {
 		return affixes;
 	}
 
