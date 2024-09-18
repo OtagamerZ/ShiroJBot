@@ -34,7 +34,7 @@ plugins {
 }
 
 application {
-	getMainClass().set("com.kuuhaku.Main")
+	mainClass.set("com.kuuhaku.Main")
 	applicationDefaultJvmArgs = [
 			"-Xms512M",
 			"-Xmx4G",
