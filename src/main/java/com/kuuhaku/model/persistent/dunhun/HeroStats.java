@@ -45,6 +45,9 @@ public class HeroStats {
 	   └ vitality
 	 */
 
+	@Column(name = "image_hash", nullable = false)
+	private String imageHash;
+
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "equipment", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
