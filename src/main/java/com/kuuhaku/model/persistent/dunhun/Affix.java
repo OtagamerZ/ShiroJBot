@@ -21,11 +21,13 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
+import com.ygimenez.json.JSONArray;
+import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.*;
+import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
 import java.util.HashSet;
@@ -52,8 +54,8 @@ public class Affix extends DAO<Affix> {
 	@Column(name = "type", nullable = false)
 	private AffixType type;
 
-	@Column(name = "tier", nullable = false)
-	private int tier;
+	@Column(name = "min_level", nullable = false)
+	private int minLevel;
 
 	@Column(name = "weight", nullable = false)
 	private int weight;
@@ -64,6 +66,11 @@ public class Affix extends DAO<Affix> {
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "req_tags", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray reqTags;
 
 	public String getId() {
 		return id;
@@ -79,8 +86,8 @@ public class Affix extends DAO<Affix> {
 		return type;
 	}
 
-	public int getTier() {
-		return tier;
+	public int getMinLevel() {
+		return minLevel;
 	}
 
 	public int getWeight() {
