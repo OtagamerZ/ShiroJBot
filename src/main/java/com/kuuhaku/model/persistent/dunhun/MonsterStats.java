@@ -18,12 +18,11 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.util.Bit32;
 import com.ygimenez.json.JSONArray;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -31,6 +30,10 @@ import org.hibernate.type.SqlTypes;
 public class MonsterStats {
 	@Column(name = "hp", nullable = false)
 	private int hp;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "race", nullable = false)
+	private Race race;
 
 	@Column(name = "attributes", nullable = false)
 	private int attributes;
@@ -57,6 +60,10 @@ public class MonsterStats {
 
 	public void setHp(int hp) {
 		this.hp = hp;
+	}
+
+	public Race getRace() {
+		return race;
 	}
 
 	public int getStrength() {

@@ -34,12 +34,12 @@ public class HeroStats {
 	@Column(name = "hp", nullable = false)
 	private int hp;
 
+	@Column(name = "xp", nullable = false)
+	private int xp;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "race", nullable = false)
 	private Race race;
-
-	@Column(name = "xp", nullable = false)
-	private int xp;
 
 	@Column(name = "attributes", nullable = false)
 	private int attributes;
@@ -92,6 +92,10 @@ public class HeroStats {
 
 	public void addXp(int xp) {
 		this.xp += xp;
+	}
+
+	public Race getRace() {
+		return race;
 	}
 
 	public int getStrength() {
