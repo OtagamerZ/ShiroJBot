@@ -42,7 +42,7 @@ public class Hero extends DAO<Hero> {
 	private Account account;
 
 	@Transient
-	private transient AddedStats added;
+	private final AddedStats added = new AddedStats();
 
 	public Hero() {
 	}

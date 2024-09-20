@@ -84,4 +84,10 @@ public class AddedStats {
 	public Set<String> getEffects() {
 		return effects;
 	}
+
+	public void reset() {
+		hp = attributes = 0;
+		skills.clear();
+		effects.clear();
+	}
 }
