@@ -59,7 +59,7 @@ public class HeroStats {
 	private JSONArray inventory;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "inventory", nullable = false, columnDefinition = "JSONB")
+	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray skills;
 
