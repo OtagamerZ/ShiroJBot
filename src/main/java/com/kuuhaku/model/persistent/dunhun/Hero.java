@@ -41,6 +41,9 @@ public class Hero extends DAO<Hero> {
 	@Fetch(FetchMode.JOIN)
 	private Account account;
 
+	@Transient
+	private transient AddedStats added;
+
 	public Hero() {
 	}
 
@@ -55,6 +58,10 @@ public class Hero extends DAO<Hero> {
 
 	public HeroStats getStats() {
 		return stats;
+	}
+
+	public AddedStats getAddedStats() {
+		return added;
 	}
 
 	public Account getAccount() {
