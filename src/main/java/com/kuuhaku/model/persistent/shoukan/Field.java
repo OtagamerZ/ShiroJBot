@@ -59,7 +59,7 @@ import java.util.random.RandomGenerator;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "field", schema = "cards")
+@Table(name = "field", schema = "kawaipon"")
 public class Field extends DAO<Field> implements Drawable<Field> {
 	@Transient
 	public final String KLASS = getClass().getName();

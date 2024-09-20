@@ -37,7 +37,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "stashed_card", schema = "cards")
+@Table(name = "stashed_card", schema = "kawaipon"")
 public class StashedCard extends DAO<StashedCard> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

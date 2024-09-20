@@ -60,7 +60,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Entity
-@Table(name = "deck", schema = "cards")
+@Table(name = "deck", schema = "kawaipon"")
 public class Deck extends DAO<Deck> {
 	@Transient
 	public static final Deck INSTANCE = new Deck();
