@@ -38,7 +38,7 @@ BEGIN
              WHERE r.contype = 'f'
              ) x
            , regexp_match(x.def, 'FOREIGN KEY \((\w+)\) REFERENCES (\w+)\.(\w+)') m
-        WHERE def SIMILAR TO '% %.card\(id\)|%\(card_id\)'
+        WHERE def SIMILAR TO '% kawaipon\.card\(id\)|%\(card_id\)'
         LOOP
             EXECUTE format($$
             ALTER TABLE "%1$I"
