@@ -30,6 +30,7 @@ import com.kuuhaku.model.enums.shoukan.Arcade;
 import com.kuuhaku.model.enums.shoukan.FieldType;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Account;
@@ -122,6 +123,10 @@ public class Deck extends DAO<Deck> {
 
 	public void setVariant(boolean variant) {
 		this.variant = variant;
+	}
+
+	public Hero getHero() {
+		return DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?", account.getUid());
 	}
 
 	public FrameSkin getFrame() {

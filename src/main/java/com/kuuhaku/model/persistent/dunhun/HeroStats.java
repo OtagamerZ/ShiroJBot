@@ -55,17 +55,17 @@ public class HeroStats {
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "equipment", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
-	private JSONObject equipment;
+	private JSONObject equipment = new JSONObject();
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "inventory", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray inventory;
+	private JSONArray inventory = new JSONArray();
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray skills;
+	private JSONArray skills = new JSONArray();
 
 	public int getHp() {
 		return hp;
