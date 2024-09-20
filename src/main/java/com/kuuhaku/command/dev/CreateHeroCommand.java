@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.IO;
@@ -55,14 +56,27 @@ public class CreateHeroCommand implements Executable {
 			return;
 		}
 
-		BufferedImage img = event.message().getAttachments().stream()
-				.filter(Message.Attachment::isImage)
-				.findFirst()
-				.map(att -> IO.getImage(att.getUrl()))
-				.orElse(null);
+		String url = null;
+		if (!event.message().getAttachments().isEmpty()) {
+			for (Message.Attachment att : event.message().getAttachments()) {
+				if (att.isImage()) {
+					url = att.getUrl();
+					break;
+				}
+			}
+		}
 
-		if (img == null) {
+		if (url == null) {
 			event.channel().sendMessage(locale.get("error/image_required")).queue();
+			return;
+		}
+
+		long size = IO.getImageSize(url);
+		if (size == 0) {
+			event.channel().sendMessage(locale.get("error/invalid_url")).queue();
+			return;
+		} else if (size > AccountSettings.MAX_BG_SIZE) {
+			event.channel().sendMessage(locale.get("error/image_too_big", "4 MB")).queue();
 			return;
 		}
 
@@ -86,7 +100,9 @@ public class CreateHeroCommand implements Executable {
 		try {
 			Hero h = new Hero(data.profile().getAccount(), name, race);
 
+			String finalUrl = url;
 			Utils.confirm(locale.get("question/hero_creation", h.getDisplayName()), event.channel(), w -> {
+						BufferedImage img = IO.getImage(finalUrl);
 						h.setImage(img);
 						h.save();
 
