@@ -27,7 +27,7 @@ import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.records.id.LocalizedId;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.model.persistent.shoukan.LocalizedDescription;
+import com.kuuhaku.model.persistent.localized.LocalizedDescription;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;

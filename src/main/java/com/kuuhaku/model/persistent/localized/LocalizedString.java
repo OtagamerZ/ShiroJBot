@@ -16,62 +16,60 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.dunhun;
+package com.kuuhaku.model.persistent.localized;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.localized.LocalizedEvent;
+import com.kuuhaku.model.records.id.LocalizedId;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.intellij.lang.annotations.Language;
 
-import java.util.HashSet;
+import java.io.Serializable;
 import java.util.Objects;
-import java.util.Set;
-
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "event", schema = "dunhun")
-public class Event extends DAO<Event> {
-	@Id
-	@Column(name = "id", nullable = false)
-	private String id;
+@Table(name = "locale_string")
+public class LocalizedString extends DAO<LocalizedString> implements Serializable {
+	@EmbeddedId
+	private LocalizedId id;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumn(name = "id", referencedColumnName = "id")
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<LocalizedEvent> infos = new HashSet<>();
+	@Column(name = "value", nullable = false, columnDefinition = "TEXT")
+	private String value;
 
-	@Language("Groovy")
-	@Column(name = "effect", columnDefinition = "TEXT")
-	private String effect;
-
-	public String getId() {
+	public LocalizedId getId() {
 		return id;
 	}
 
-	public LocalizedEvent getInfo(I18N locale) {
-		return infos.parallelStream()
-				.filter(ld -> ld.getLocale().is(locale))
-				.findAny().orElseThrow();
+	public I18N getLocale() {
+		return id.locale();
 	}
 
-	public String getEffect() {
-		return effect;
+	public String getValue() {
+		return value;
+	}
+
+	public static String get(I18N locale, String key) {
+		return get(locale, key, key);
+	}
+
+	public static String get(I18N locale, String key, String def) {
+		if (key == null) return def;
+
+		LocalizedString ls = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(), locale));
+		if (ls == null) return def;
+
+		return ls.getValue();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Event affix = (Event) o;
-		return Objects.equals(id, affix.id);
+		LocalizedString that = (LocalizedString) o;
+		return Objects.equals(id, that.id);
 	}
 
 	@Override

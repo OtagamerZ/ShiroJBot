@@ -22,6 +22,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PassiveItemException;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.localized.LocalizedItem;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;

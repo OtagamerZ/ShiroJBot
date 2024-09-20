@@ -22,6 +22,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
+import com.kuuhaku.model.persistent.localized.LocalizedAffix;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;

@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2024  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,12 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.shoukan;
+package com.kuuhaku.model.persistent.localized;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.id.LocalizedId;
+import com.kuuhaku.util.text.Uwuifier;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -31,13 +32,15 @@ import java.util.Objects;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "locale_string")
-public class LocalizedString extends DAO<LocalizedString> implements Serializable {
+@Table(name = "monster_info", schema = "dunhun")
+public class LocalizedMonster extends DAO<LocalizedMonster> implements Serializable {
 	@EmbeddedId
 	private LocalizedId id;
 
-	@Column(name = "value", nullable = false, columnDefinition = "TEXT")
-	private String value;
+	@Column(name = "name", nullable = false)
+	private String name;
+
+	private transient boolean uwu = false;
 
 	public LocalizedId getId() {
 		return id;
@@ -47,28 +50,29 @@ public class LocalizedString extends DAO<LocalizedString> implements Serializabl
 		return id.locale();
 	}
 
-	public String getValue() {
-		return value;
+	public String getName() {
+		if (uwu) {
+			return Uwuifier.INSTANCE.uwu(getLocale(), name);
+		}
+
+		return name;
 	}
 
-	public static String get(I18N locale, String key) {
-		return get(locale, key, key);
+	public LocalizedMonster setUwu(boolean uwu) {
+		this.uwu = uwu;
+		return this;
 	}
 
-	public static String get(I18N locale, String key, String def) {
-		if (key == null) return def;
-
-		LocalizedString ls = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(), locale));
-		if (ls == null) return def;
-
-		return ls.getValue();
+	@Override
+	public String toString() {
+		return getName();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		LocalizedString that = (LocalizedString) o;
+		LocalizedMonster that = (LocalizedMonster) o;
 		return Objects.equals(id, that.id);
 	}
 

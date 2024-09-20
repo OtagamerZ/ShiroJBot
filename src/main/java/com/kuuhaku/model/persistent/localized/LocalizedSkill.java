@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.dunhun;
+package com.kuuhaku.model.persistent.localized;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
@@ -32,8 +32,8 @@ import java.util.Objects;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "affix_info", schema = "dunhun")
-public class LocalizedAffix extends DAO<LocalizedAffix> implements Serializable {
+@Table(name = "skill_info", schema = "dunhun")
+public class LocalizedSkill extends DAO<LocalizedSkill> implements Serializable {
 	@EmbeddedId
 	private LocalizedId id;
 
@@ -69,7 +69,7 @@ public class LocalizedAffix extends DAO<LocalizedAffix> implements Serializable 
 		return description;
 	}
 
-	public LocalizedAffix setUwu(boolean uwu) {
+	public LocalizedSkill setUwu(boolean uwu) {
 		this.uwu = uwu;
 		return this;
 	}
@@ -83,7 +83,7 @@ public class LocalizedAffix extends DAO<LocalizedAffix> implements Serializable 
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		LocalizedAffix that = (LocalizedAffix) o;
+		LocalizedSkill that = (LocalizedSkill) o;
 		return Objects.equals(id, that.id);
 	}
 

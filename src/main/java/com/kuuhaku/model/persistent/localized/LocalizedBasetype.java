@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.dunhun;
+package com.kuuhaku.model.persistent.localized;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
@@ -32,13 +32,16 @@ import java.util.Objects;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "monster_info", schema = "dunhun")
-public class LocalizedMonster extends DAO<LocalizedMonster> implements Serializable {
+@Table(name = "basetype_info", schema = "dunhun")
+public class LocalizedBasetype extends DAO<LocalizedBasetype> implements Serializable {
 	@EmbeddedId
 	private LocalizedId id;
 
 	@Column(name = "name", nullable = false)
 	private String name;
+
+	@Column(name = "ending")
+	private String ending;
 
 	private transient boolean uwu = false;
 
@@ -58,7 +61,11 @@ public class LocalizedMonster extends DAO<LocalizedMonster> implements Serializa
 		return name;
 	}
 
-	public LocalizedMonster setUwu(boolean uwu) {
+	public String getEnding() {
+		return ending;
+	}
+
+	public LocalizedBasetype setUwu(boolean uwu) {
 		this.uwu = uwu;
 		return this;
 	}
@@ -72,7 +79,7 @@ public class LocalizedMonster extends DAO<LocalizedMonster> implements Serializa
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		LocalizedMonster that = (LocalizedMonster) o;
+		LocalizedBasetype that = (LocalizedBasetype) o;
 		return Objects.equals(id, that.id);
 	}
 

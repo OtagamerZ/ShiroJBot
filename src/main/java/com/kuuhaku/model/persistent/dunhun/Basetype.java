@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.localized.LocalizedBasetype;
 import com.kuuhaku.model.records.dunhun.GearStats;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;

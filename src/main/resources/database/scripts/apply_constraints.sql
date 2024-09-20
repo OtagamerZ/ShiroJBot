@@ -37,19 +37,20 @@ BEGIN
              FROM pg_catalog.pg_constraint r
              WHERE r.contype = 'f'
              ) x
-           , regexp_match(x.def, 'FOREIGN KEY \((\w+)\) REFERENCES (\w+)\.(\w+)') m
-        WHERE def SIMILAR TO '% kawaipon\.card\(id\)|%\(card_id\)'
-        LOOP
-            EXECUTE format($$
-            ALTER TABLE "%1$I"
-                DROP CONSTRAINT "%2$I";
+           , regexp_match(x.def, 'FOREIGN KEY \((\w+)\) REFERENCES (\w+(?=\.))?(\w+)') m
+        WHERE m[3] = 'card'
+    LOOP
+        EXECUTE format($$
+            ALTER TABLE %4$I.%1$I
+                DROP CONSTRAINT %2$I;
 
-            ALTER TABLE "%1$I"
-                ADD CONSTRAINT "%2$I"
-                    FOREIGN KEY ("%3$I") REFERENCES "%4$I"."%5$I"(id)
+            ALTER TABLE %4$I.%1$I
+                ADD CONSTRAINT %2$I
+                    FOREIGN KEY (%3$I) REFERENCES %4$I.%5$I(id)
                         ON UPDATE CASCADE;
-            $$, _match.table, _match.name, _match.col, _match.sch, _match.ref);
-        END LOOP;
+            $$, _match.table, _match.name, _match.col, coalesce(_match.sch, 'kawaipon'), _match.ref
+        );
+    END LOOP;
 END
 $body$;
 

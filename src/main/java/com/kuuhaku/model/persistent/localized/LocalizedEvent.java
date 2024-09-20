@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.dunhun;
+package com.kuuhaku.model.persistent.localized;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
@@ -32,16 +32,13 @@ import java.util.Objects;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "basetype_info", schema = "dunhun")
-public class LocalizedBasetype extends DAO<LocalizedBasetype> implements Serializable {
+@Table(name = "event_info", schema = "dunhun")
+public class LocalizedEvent extends DAO<LocalizedEvent> implements Serializable {
 	@EmbeddedId
 	private LocalizedId id;
 
-	@Column(name = "name", nullable = false)
-	private String name;
-
-	@Column(name = "ending")
-	private String ending;
+	@Column(name = "description", nullable = false)
+	private String description;
 
 	private transient boolean uwu = false;
 
@@ -53,33 +50,29 @@ public class LocalizedBasetype extends DAO<LocalizedBasetype> implements Seriali
 		return id.locale();
 	}
 
-	public String getName() {
+	public String getDescription() {
 		if (uwu) {
-			return Uwuifier.INSTANCE.uwu(getLocale(), name);
+			return Uwuifier.INSTANCE.uwu(getLocale(), description);
 		}
 
-		return name;
+		return description;
 	}
 
-	public String getEnding() {
-		return ending;
-	}
-
-	public LocalizedBasetype setUwu(boolean uwu) {
+	public LocalizedEvent setUwu(boolean uwu) {
 		this.uwu = uwu;
 		return this;
 	}
 
 	@Override
 	public String toString() {
-		return getName();
+		return getDescription();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		LocalizedBasetype that = (LocalizedBasetype) o;
+		LocalizedEvent that = (LocalizedEvent) o;
 		return Objects.equals(id, that.id);
 	}
 

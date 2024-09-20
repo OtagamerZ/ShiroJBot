@@ -16,62 +16,75 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.dunhun;
+package com.kuuhaku.model.persistent.localized;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.localized.LocalizedEvent;
+import com.kuuhaku.model.records.id.LocalizedId;
+import com.kuuhaku.util.text.Uwuifier;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.intellij.lang.annotations.Language;
 
-import java.util.HashSet;
+import java.io.Serializable;
 import java.util.Objects;
-import java.util.Set;
-
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "event", schema = "dunhun")
-public class Event extends DAO<Event> {
-	@Id
-	@Column(name = "id", nullable = false)
-	private String id;
+@Table(name = "dungeon_info", schema = "dunhun")
+public class LocalizedDungeon extends DAO<LocalizedDungeon> implements Serializable {
+	@EmbeddedId
+	private LocalizedId id;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumn(name = "id", referencedColumnName = "id")
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<LocalizedEvent> infos = new HashSet<>();
+	@Column(name = "description", nullable = false)
+	private String name;
 
-	@Language("Groovy")
-	@Column(name = "effect", columnDefinition = "TEXT")
-	private String effect;
+	@Column(name = "description", nullable = false)
+	private String description;
 
-	public String getId() {
+	private transient boolean uwu = false;
+
+	public LocalizedId getId() {
 		return id;
 	}
 
-	public LocalizedEvent getInfo(I18N locale) {
-		return infos.parallelStream()
-				.filter(ld -> ld.getLocale().is(locale))
-				.findAny().orElseThrow();
+	public I18N getLocale() {
+		return id.locale();
 	}
 
-	public String getEffect() {
-		return effect;
+	public String getName() {
+		if (uwu) {
+			return Uwuifier.INSTANCE.uwu(getLocale(), name);
+		}
+
+		return name;
+	}
+
+	public String getDescription() {
+		if (uwu) {
+			return Uwuifier.INSTANCE.uwu(getLocale(), description);
+		}
+
+		return description;
+	}
+
+	public LocalizedDungeon setUwu(boolean uwu) {
+		this.uwu = uwu;
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		return getDescription();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Event affix = (Event) o;
-		return Objects.equals(id, affix.id);
+		LocalizedDungeon that = (LocalizedDungeon) o;
+		return Objects.equals(id, that.id);
 	}
 
 	@Override
