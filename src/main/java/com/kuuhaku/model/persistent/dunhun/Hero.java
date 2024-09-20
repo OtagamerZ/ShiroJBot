@@ -20,8 +20,6 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.HeroModifiers;
-import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -71,12 +69,12 @@ public class Hero extends DAO<Hero> {
 		return account;
 	}
 
-	public Senshi asSenshi() {
-		Senshi out = new Senshi(
-				name.toUpperCase(),
-				new Card(name),
-		)
-	}
+//	public Senshi asSenshi() {
+//		Senshi out = new Senshi(
+//				name.toUpperCase(),
+//				new Card(name),
+//		)
+//	}
 
 	@Override
 	public boolean equals(Object o) {
