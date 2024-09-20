@@ -40,7 +40,7 @@ public class LocalizedBasetype extends DAO<LocalizedBasetype> implements Seriali
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "ending", nullable = false)
+	@Column(name = "ending")
 	private String ending;
 
 	private transient boolean uwu = false;
