@@ -46,7 +46,7 @@ public abstract class Manager {
 			PersistenceConfiguration.JDBC_USER, DB_LOGIN,
 			PersistenceConfiguration.JDBC_PASSWORD, DB_PASS,
 			PersistenceConfiguration.CACHE_MODE, "ALL",
-			PersistenceConfiguration.JDBC_URL, "jdbc:postgresql://%s/%s?sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
+			PersistenceConfiguration.JDBC_URL, "jdbc:postgresql://%s/%s?currentSchema=shiro,dunhun,kawaipon&sslmode=require&useEncoding=true&characterEncoding=UTF-8".formatted(
 					SERVER_IP, DB_NAME
 			)
 	));
