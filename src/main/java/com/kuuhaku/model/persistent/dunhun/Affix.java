@@ -61,7 +61,7 @@ public class Affix extends DAO<Affix> {
 	private int weight;
 
 	@Column(name = "affix_group")
-	private String group;
+	private Integer group;
 
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
@@ -94,7 +94,7 @@ public class Affix extends DAO<Affix> {
 		return weight;
 	}
 
-	public String getGroup() {
+	public Integer getGroup() {
 		return group;
 	}
 
