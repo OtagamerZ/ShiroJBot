@@ -82,6 +82,8 @@
         <class>com.kuuhaku.model.persistent.dunhun.GearAffix</class>
         <class>com.kuuhaku.model.persistent.dunhun.Affix</class>
         <class>com.kuuhaku.model.persistent.dunhun.LocalizedAffix</class>
+        <class>com.kuuhaku.model.persistent.dunhun.Skill</class>
+        <class>com.kuuhaku.model.persistent.dunhun.LocalizedSkill</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
