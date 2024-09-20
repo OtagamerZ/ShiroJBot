@@ -573,7 +573,12 @@ public class Deck extends DAO<Deck> {
 			}
 		});
 
-		g2d.drawImage(styling.getFrame().getBack(this), 1252, 849, null);
+		Hero h = getHero();
+		if (h != null) {
+			g2d.drawImage(h.asSenshi(locale).render(locale, this), 1252, 849, null);
+		} else {
+			g2d.drawImage(styling.getFrame().getBack(this), 1252, 849, null);
+		}
 
 		g2d.dispose();
 
