@@ -16,14 +16,14 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.dunhun;
+package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.util.Bit32;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class AddedStats {
+public class HeroModifiers {
 	private int hp;
 	private int attributes;
 	/*

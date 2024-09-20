@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.common.dunhun.GearModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import jakarta.persistence.*;
@@ -53,6 +54,9 @@ public class Gear extends DAO<Gear> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<GearAffix> affixes = new LinkedHashSet<>();
 
+	@Transient
+	private final GearModifiers modifiers = new GearModifiers();
+
 	public int getId() {
 		return id;
 	}
@@ -81,6 +85,10 @@ public class Gear extends DAO<Gear> {
 		}
 
 		return template.formatted(basetype.getInfo(locale), pref, suff);
+	}
+
+	public GearModifiers getModifiers() {
+		return modifiers;
 	}
 
 	@Override

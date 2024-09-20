@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.common.dunhun.HeroModifiers;
 import com.kuuhaku.model.persistent.user.Account;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -42,7 +43,7 @@ public class Hero extends DAO<Hero> {
 	private Account account;
 
 	@Transient
-	private final AddedStats added = new AddedStats();
+	private final HeroModifiers modifiers = new HeroModifiers();
 
 	public Hero() {
 	}
@@ -60,8 +61,8 @@ public class Hero extends DAO<Hero> {
 		return stats;
 	}
 
-	public AddedStats getAddedStats() {
-		return added;
+	public HeroModifiers getModifiers() {
+		return modifiers;
 	}
 
 	public Account getAccount() {

@@ -33,6 +33,8 @@ public record GearStats(
 		int attack,
 		@Column(name = "defense", nullable = false)
 		int defense,
+		@Column(name = "critical", nullable = false)
+		int critical,
 		@Enumerated(EnumType.STRING)
 		@Column(name = "slot", nullable = false)
 		GearSlot slot,
