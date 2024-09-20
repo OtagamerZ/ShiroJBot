@@ -28,7 +28,7 @@ BEGIN
              , x.table
              , x.def
              , m[1] AS col
-             , m[2] AS schema
+             , m[2] AS sch
              , m[3] AS ref
         FROM (
              SELECT r.conname                              AS name
@@ -48,7 +48,7 @@ BEGIN
                 ADD CONSTRAINT "%2$I"
                     FOREIGN KEY ("%3$I") REFERENCES "%4$I"."%5$I"
                         ON UPDATE CASCADE;
-            $$, _match.table, _match.name, _match.col, _match.schema, _match.ref);
+            $$, _match.table, _match.name, _match.col, _match.sch, _match.ref);
         END LOOP;
 END
 $body$;
