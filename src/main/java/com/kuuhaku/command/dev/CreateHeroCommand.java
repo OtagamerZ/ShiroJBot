@@ -54,6 +54,9 @@ public class CreateHeroCommand implements Executable {
 		if (d == null) {
 			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
 			return;
+		} else if (d.getHero() != null) {
+			event.channel().sendMessage(locale.get("error/has_hero", data.config().getPrefix())).queue();
+			return;
 		}
 
 		String url = null;
