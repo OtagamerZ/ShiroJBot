@@ -58,10 +58,6 @@ public class LocalizedMonster extends DAO<LocalizedMonster> implements Serializa
 		return name;
 	}
 
-	public String getEnding() {
-		return ending;
-	}
-
 	public LocalizedMonster setUwu(boolean uwu) {
 		this.uwu = uwu;
 		return this;
