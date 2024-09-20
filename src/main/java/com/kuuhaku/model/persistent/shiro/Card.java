@@ -30,6 +30,7 @@ import com.kuuhaku.util.IO;
 import jakarta.persistence.*;
 import okio.Buffer;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
@@ -64,6 +65,16 @@ public class Card extends DAO<Card> implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "rarity", nullable = false)
 	private Rarity rarity;
+
+	public Card() {
+	}
+
+	public Card(String id) {
+		this.id = id;
+		this.name = WordUtils.capitalizeFully(id.replace("_", " "));
+		this.anime = DAO.find(Anime.class, "NO_SYNC");
+		this.rarity = Rarity.NONE;
+	}
 
 	public String getId() {
 		return id;

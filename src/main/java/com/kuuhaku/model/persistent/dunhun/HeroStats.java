@@ -18,15 +18,14 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -34,6 +33,10 @@ import org.hibernate.type.SqlTypes;
 public class HeroStats {
 	@Column(name = "hp", nullable = false)
 	private int hp;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "race", nullable = false)
+	private Race race;
 
 	@Column(name = "xp", nullable = false)
 	private int xp;
