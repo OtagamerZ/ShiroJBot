@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.common.dunhun;
 
+import com.kuuhaku.model.records.Attributes;
 import com.kuuhaku.util.Bit32;
 
 import java.util.HashSet;
@@ -75,6 +76,10 @@ public class HeroModifiers {
 
 	public void addVitality(int value) {
 		attributes = Bit32.set(attributes, 3, getVitality() + value, 8);
+	}
+
+	public Attributes getAttributes() {
+		return new Attributes(getStrength(), getDexterity(), getWisdom(), getVitality());
 	}
 
 	public Set<String> getSkills() {

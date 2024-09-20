@@ -18,10 +18,12 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.GearModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -29,6 +31,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -89,6 +92,30 @@ public class Gear extends DAO<Gear> {
 
 	public GearModifiers getModifiers() {
 		return modifiers;
+	}
+
+	public int getDmg() {
+		return (int) (basetype.getStats().attack() * modifiers.getAttackMult());
+	}
+
+	public int getDfs() {
+		return (int) (basetype.getStats().defense() * modifiers.getDefenseMult());
+	}
+
+	public void load(I18N locale, Hero hero) {
+		modifiers.reset();
+		for (GearAffix ga : affixes) {
+			try {
+				Affix a = ga.getAffix();
+				Utils.exec(getClass().getSimpleName(), a.getEffect(), Map.of(
+						"gear", this,
+						"hero", hero,
+						"values", ga.getValues(locale)
+				));
+			} catch (Exception e) {
+				Constants.LOGGER.warn("Failed to apply affix {}", ga, e);
+			}
+		}
 	}
 
 	@Override

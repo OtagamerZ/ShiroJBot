@@ -35,6 +35,14 @@ public record GearStats(
 		int defense,
 		@Column(name = "critical", nullable = false)
 		float critical,
+		@Column(name = "str", nullable = false)
+		float str,
+		@Column(name = "dex", nullable = false)
+		float dex,
+		@Column(name = "wis", nullable = false)
+		float wis,
+		@Column(name = "vit", nullable = false)
+		float vit,
 		@Enumerated(EnumType.STRING)
 		@Column(name = "slot", nullable = false)
 		GearSlot slot,

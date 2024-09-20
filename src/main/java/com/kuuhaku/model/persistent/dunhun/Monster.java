@@ -22,6 +22,8 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.HeroModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
+import com.kuuhaku.model.persistent.shoukan.CardAttributes;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -66,6 +68,21 @@ public class Monster extends DAO<Monster> {
 
 	public HeroModifiers getModifiers() {
 		return modifiers;
+	}
+
+	public Senshi asSenshi(I18N locale) {
+		Senshi s = new Senshi(id, stats.getRace());
+		CardAttributes base = s.getBase();
+
+		base.setAtk(stats.getAttack());
+		base.setDfs(stats.getDefense());
+		base.setDodge(stats.getDodge());
+		base.setParry(stats.getParry());
+
+		base.getTags().add("MONSTER");
+		s.getStats().setDescription(getInfo(locale).getDescription());
+
+		return s;
 	}
 
 	@Override

@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
+import com.kuuhaku.model.records.Attributes;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.ygimenez.json.JSONArray;
@@ -128,6 +129,10 @@ public class HeroStats {
 
 	public void setVitality(int value) {
 		attributes = Bit32.set(attributes, 3, value, 8);
+	}
+
+	public Attributes getAttributes() {
+		return new Attributes(getStrength(), getDexterity(), getWisdom(), getVitality());
 	}
 
 	public JSONObject getEquipment() {

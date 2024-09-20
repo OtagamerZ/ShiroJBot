@@ -28,7 +28,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
 
 @Entity
 @Cacheable
@@ -77,12 +80,27 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	public String getDescription(I18N locale) {
-		return Utils.regex(affix.getInfo(locale).getName(), "\\{(\\d+)-(\\d+)}").replaceAll(r -> {
-			int min = Integer.parseInt(r.group(1));
-			int max = Integer.parseInt(r.group(2));
+		List<Integer> vals = getValues(locale);
+		return Utils.regex(affix.getInfo(locale).getName(), "\\{.+?}")
+				.replaceAll(r -> String.valueOf(vals.removeFirst()));
+	}
 
-			return String.valueOf((int) (min + (max - min) * roll));
-		});
+	public List<Integer> getValues(I18N locale) {
+		List<Integer> values = new ArrayList<>();
+		Matcher m = Utils.regex(affix.getInfo(locale).getName(), "\\{(\\d+)(?:-(\\d+))?}");
+		while (m.find()) {
+			int min = Integer.parseInt(m.group(1));
+			if (m.group(2) == null) {
+				values.add(min);
+				continue;
+			}
+
+			int max = Integer.parseInt(m.group(2));
+
+			values.add((int) (min + (max - min) * roll));
+		}
+
+		return values;
 	}
 
 	@Override

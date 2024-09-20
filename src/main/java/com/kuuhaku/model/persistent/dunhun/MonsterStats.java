@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.kuuhaku.util.Bit32;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -35,15 +34,17 @@ public class MonsterStats {
 	@Column(name = "race", nullable = false)
 	private Race race;
 
-	@Column(name = "attributes", nullable = false)
-	private int attributes;
-	/*
-	0xFF FF FF FF
-	  └┤ └┤ └┤ └┴ strength
-	   │  │  └ dexterity
-	   │  └ wisdom
-	   └ vitality
-	 */
+	@Column(name = "attack", nullable = false)
+	private int attack;
+
+	@Column(name = "defense", nullable = false)
+	private int defense;
+
+	@Column(name = "dodge", nullable = false)
+	private int dodge;
+
+	@Column(name = "parry", nullable = false)
+	private int parry;
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
@@ -54,10 +55,6 @@ public class MonsterStats {
 		return hp;
 	}
 
-	public int getMaxHp() {
-		return 100 + getVitality() * 10;
-	}
-
 	public void setHp(int hp) {
 		this.hp = hp;
 	}
@@ -66,36 +63,20 @@ public class MonsterStats {
 		return race;
 	}
 
-	public int getStrength() {
-		return Bit32.get(attributes, 0, 8);
+	public int getAttack() {
+		return attack;
 	}
 
-	public void setStrength(int value) {
-		attributes = Bit32.set(attributes, 0, value, 8);
+	public int getDefense() {
+		return defense;
 	}
 
-	public int getDexterity() {
-		return Bit32.get(attributes, 0, 8);
+	public int getDodge() {
+		return dodge;
 	}
 
-	public void setDexterity(int value) {
-		attributes = Bit32.set(attributes, 1, value, 8);
-	}
-
-	public int getWisdom() {
-		return Bit32.get(attributes, 2, 8);
-	}
-
-	public void setWisdom(int value) {
-		attributes = Bit32.set(attributes, 2, value, 8);
-	}
-
-	public int getVitality() {
-		return Bit32.get(attributes, 3, 8);
-	}
-
-	public void setVitality(int value) {
-		attributes = Bit32.set(attributes, 3, value, 8);
+	public int getParry() {
+		return parry;
 	}
 
 	public JSONArray getSkills() {

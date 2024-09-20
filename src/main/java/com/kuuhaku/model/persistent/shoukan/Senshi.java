@@ -168,6 +168,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public Senshi() {
 	}
 
+	public Senshi(String id, Race race) {
+		this.id = id;
+		this.card = new Card(id);
+		this.race = race;
+		this.base = new CardAttributes();
+		this.stats = new CardExtra();
+	}
+
 	public Senshi(String id, Card card, Race race, CardAttributes base, CardExtra stats, StashedCard stashRef) {
 		this.id = id;
 		this.card = card;

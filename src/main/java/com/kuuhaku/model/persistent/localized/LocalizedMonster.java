@@ -37,8 +37,8 @@ public class LocalizedMonster extends DAO<LocalizedMonster> implements Serializa
 	@EmbeddedId
 	private LocalizedId id;
 
-	@Column(name = "name", nullable = false)
-	private String name;
+	@Column(name = "description", nullable = false)
+	private String description;
 
 	private transient boolean uwu = false;
 
@@ -50,22 +50,17 @@ public class LocalizedMonster extends DAO<LocalizedMonster> implements Serializa
 		return id.locale();
 	}
 
-	public String getName() {
+	public String getDescription() {
 		if (uwu) {
-			return Uwuifier.INSTANCE.uwu(getLocale(), name);
+			return Uwuifier.INSTANCE.uwu(getLocale(), description);
 		}
 
-		return name;
+		return description;
 	}
 
 	public LocalizedMonster setUwu(boolean uwu) {
 		this.uwu = uwu;
 		return this;
-	}
-
-	@Override
-	public String toString() {
-		return getName();
 	}
 
 	@Override

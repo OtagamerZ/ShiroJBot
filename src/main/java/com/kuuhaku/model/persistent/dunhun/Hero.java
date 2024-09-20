@@ -20,7 +20,11 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.HeroModifiers;
+import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shoukan.CardAttributes;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.records.Attributes;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -69,12 +73,33 @@ public class Hero extends DAO<Hero> {
 		return account;
 	}
 
-//	public Senshi asSenshi() {
-//		Senshi out = new Senshi(
-//				name.toUpperCase(),
-//				new Card(name),
-//		)
-//	}
+	public Senshi asSenshi(I18N locale) {
+		Senshi s = new Senshi(name, stats.getRace());
+		CardAttributes base = s.getBase();
+
+		int dmg = 100;
+		int def = 100;
+		for (Object o : getStats().getEquipment().values()) {
+			Gear gear = (Gear) o;
+			gear.load(locale, this);
+
+			dmg += gear.getDmg();
+			def += gear.getDfs();
+		}
+
+		Attributes a = getStats().getAttributes().merge(getModifiers().getAttributes());
+		base.setAtk((int) (dmg * (1 + a.str() * 0.03 + a.dex() * 0.02)));
+		base.setDfs((int) (def * (1 + a.str() * 0.04 + a.dex() * 0.01)));
+		base.setDodge(Math.max(0, a.dex() / 2 - a.vit() / 5));
+		base.setParry(Math.max(0, a.dex() / 5));
+
+		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750);
+		base.setSacrifices((base.getAtk() + base.getDfs()) / 3000);
+
+		base.getTags().add("HERO");
+
+		return s;
+	}
 
 	@Override
 	public boolean equals(Object o) {
