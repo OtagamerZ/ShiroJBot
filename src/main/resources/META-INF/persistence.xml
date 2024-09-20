@@ -45,7 +45,6 @@
         <class>com.kuuhaku.model.persistent.user.AccountSettings</class>
         <class>com.kuuhaku.model.persistent.user.DynamicProperty</class>
         <class>com.kuuhaku.model.persistent.user.UserItem</class>
-        <class>com.kuuhaku.model.persistent.localized.LocalizedItem</class>
         <class>com.kuuhaku.model.persistent.user.Kawaipon</class>
         <class>com.kuuhaku.model.persistent.user.KawaiponCard</class>
         <class>com.kuuhaku.model.persistent.user.CardDetails</class>
@@ -56,7 +55,6 @@
         <class>com.kuuhaku.model.persistent.user.AccessToken</class>
         <class>com.kuuhaku.model.persistent.user.Title</class>
         <class>com.kuuhaku.model.persistent.user.AccountTitle</class>
-        <class>com.kuuhaku.model.persistent.localized.LocalizedTitle</class>
         <class>com.kuuhaku.model.persistent.user.Warn</class>
         <class>com.kuuhaku.model.persistent.user.MarketOrder</class>
         <class>com.kuuhaku.model.persistent.user.Reminder</class>
@@ -67,26 +65,32 @@
         <class>com.kuuhaku.model.persistent.shoukan.Evogear</class>
         <class>com.kuuhaku.model.persistent.shoukan.Field</class>
         <class>com.kuuhaku.model.persistent.shoukan.Senshi</class>
-        <class>com.kuuhaku.model.persistent.localized.LocalizedDescription</class>
-        <class>com.kuuhaku.model.persistent.localized.LocalizedString</class>
         <class>com.kuuhaku.model.persistent.shoukan.MatchHistory</class>
         <class>com.kuuhaku.model.persistent.shoukan.SlotSkin</class>
-        <class>com.kuuhaku.model.persistent.localized.LocalizedSkin</class>
 
         <!-- DUNGEON HUNTERS -->
         <class>com.kuuhaku.model.persistent.dunhun.Hero</class>
         <class>com.kuuhaku.model.persistent.dunhun.HeroStats</class>
         <class>com.kuuhaku.model.persistent.dunhun.Gear</class>
         <class>com.kuuhaku.model.persistent.dunhun.Basetype</class>
-        <class>com.kuuhaku.model.persistent.localized.LocalizedBasetype</class>
         <class>com.kuuhaku.model.persistent.dunhun.GearAffix</class>
         <class>com.kuuhaku.model.persistent.dunhun.Affix</class>
-        <class>com.kuuhaku.model.persistent.localized.LocalizedAffix</class>
         <class>com.kuuhaku.model.persistent.dunhun.Skill</class>
-        <class>com.kuuhaku.model.persistent.localized.LocalizedSkill</class>
         <class>com.kuuhaku.model.persistent.dunhun.Monster</class>
-        <class>com.kuuhaku.model.persistent.localized.LocalizedMonster</class>
         <class>com.kuuhaku.model.persistent.dunhun.Event</class>
+        <class>com.kuuhaku.model.persistent.dunhun.Dungeon</class>
+
+        <!-- LOCALIZED -->
+        <class>com.kuuhaku.model.persistent.localized.LocalizedItem</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedTitle</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedDescription</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedString</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedSkin</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedBasetype</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedAffix</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedSkill</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedMonster</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedDungeon</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
