@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.util.Bit32;
+import com.kuuhaku.util.Calc;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -45,9 +46,6 @@ public class HeroStats {
 	   └ vitality
 	 */
 
-	@Column(name = "image_hash", nullable = false)
-	private String imageHash;
-
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "equipment", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
@@ -68,6 +66,14 @@ public class HeroStats {
 
 	public void setHp(int hp) {
 		this.hp = hp;
+	}
+
+	public int getLevel() {
+		return 1 + Calc.round(Math.pow(xp / 10d, 1 / 1.5));
+	}
+
+	public int getXpToNext() {
+		return (int) (Math.pow(getLevel(), 1.5) * 10);
 	}
 
 	public int getXp() {
