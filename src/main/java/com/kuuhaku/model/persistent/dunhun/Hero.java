@@ -78,7 +78,10 @@ public class Hero extends DAO<Hero> {
 
 	public boolean setImage(BufferedImage img) {
 		String hash = HexFormat.of().formatHex(DigestUtils.getSha256Digest().digest(name.getBytes()));
-		File f = new File(System.getenv("CARDS_PATH") + "../heroes", hash + ".png");
+		File parent = new File(System.getenv("CARDS_PATH") + "../heroes");
+		if (!parent.exists()) parent.mkdir();
+
+		File f = new File(parent, hash + ".png");
 		img = Graph.scaleAndCenterImage(Graph.toColorSpace(img, BufferedImage.TYPE_INT_ARGB), 225, 350);
 
 		try {
