@@ -66,7 +66,7 @@ import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "evogear", schema = "kawaipon"")
+@Table(name = "evogear", schema = "kawaipon")
 public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Transient
 	public final String KLASS = getClass().getName();

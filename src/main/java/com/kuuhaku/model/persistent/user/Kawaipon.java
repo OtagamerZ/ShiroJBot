@@ -36,7 +36,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "kawaipon", schema = "kawaipon"")
+@Table(name = "kawaipon", schema = "kawaipon")
 public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 	@Id
 	@Column(name = "uid", nullable = false)

@@ -29,7 +29,7 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Entity
-@Table(name = "card_details", schema = "kawaipon"")
+@Table(name = "card_details", schema = "kawaipon")
 public class CardDetails extends DAO<CardDetails> {
 	@Id
 	@Column(name = "card_uuid", length = 36)
