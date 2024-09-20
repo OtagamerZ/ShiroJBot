@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.Quality;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.util.Utils;
@@ -38,7 +37,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "kawaipon_card")
+@Table(name = "kawaipon_card", schema = "cards")
 public class KawaiponCard extends DAO<KawaiponCard> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

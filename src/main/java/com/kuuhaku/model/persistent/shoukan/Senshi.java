@@ -65,7 +65,7 @@ import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "senshi")
+@Table(name = "senshi", schema = "cards")
 public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Transient
 	public final String KLASS = getClass().getName();
