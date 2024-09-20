@@ -90,6 +90,7 @@
         <class>com.kuuhaku.model.persistent.localized.LocalizedAffix</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedSkill</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedMonster</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedEvent</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedDungeon</class>
 
         <properties>

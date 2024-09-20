@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.localized.LocalizedEvent;
+import com.kuuhaku.model.persistent.localized.LocalizedDungeon;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -46,7 +46,7 @@ public class Dungeon extends DAO<Dungeon> {
 	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<LocalizedEvent> infos = new HashSet<>();
+	private Set<LocalizedDungeon> infos = new HashSet<>();
 
 	@Language("Groovy")
 	@Column(name = "script", columnDefinition = "TEXT")
@@ -56,7 +56,7 @@ public class Dungeon extends DAO<Dungeon> {
 		return id;
 	}
 
-	public LocalizedEvent getInfo(I18N locale) {
+	public LocalizedDungeon getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.findAny().orElseThrow();
