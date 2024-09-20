@@ -46,7 +46,7 @@ public class Skill extends DAO<Skill> {
 	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<LocalizedAffix> infos = new HashSet<>();
+	private Set<LocalizedSkill> infos = new HashSet<>();
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false)
@@ -60,7 +60,7 @@ public class Skill extends DAO<Skill> {
 		return id;
 	}
 
-	public LocalizedAffix getInfo(I18N locale) {
+	public LocalizedSkill getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.findAny().orElseThrow();
