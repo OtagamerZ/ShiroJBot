@@ -28,7 +28,8 @@ BEGIN
              , x.table
              , x.def
              , m[1] AS col
-             , m[2] AS ref
+             , m[2] AS schema
+             , m[3] AS ref
         FROM (
              SELECT r.conname                              AS name
                   , cast(r.conrelid AS regclass)           AS "table"
@@ -36,8 +37,8 @@ BEGIN
              FROM pg_catalog.pg_constraint r
              WHERE r.contype = 'f'
              ) x
-           , regexp_match(x.def, 'FOREIGN KEY \((\w+)\) REFERENCES (\w+)') m
-        WHERE def SIMILAR TO '% card\(id\)|%\(card_id\)'
+           , regexp_match(x.def, 'FOREIGN KEY \((\w+)\) REFERENCES (\w+)\.(\w+)') m
+        WHERE def SIMILAR TO '% %.card\(id\)|%\(card_id\)'
         LOOP
             EXECUTE format($$
             ALTER TABLE "%1$I"
@@ -45,9 +46,9 @@ BEGIN
 
             ALTER TABLE "%1$I"
                 ADD CONSTRAINT "%2$I"
-                    FOREIGN KEY ("%3$I") REFERENCES "%4$I"
+                    FOREIGN KEY ("%3$I") REFERENCES "%4$I"."%5$I"
                         ON UPDATE CASCADE;
-            $$, _match.table, _match.name, _match.col, _match.ref);
+            $$, _match.table, _match.name, _match.col, _match.schema, _match.ref);
         END LOOP;
 END
 $body$;
