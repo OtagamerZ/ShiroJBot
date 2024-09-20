@@ -46,7 +46,7 @@ BEGIN
 
             ALTER TABLE "%1$I"
                 ADD CONSTRAINT "%2$I"
-                    FOREIGN KEY ("%3$I") REFERENCES %4$I."%5$I"
+                    FOREIGN KEY ("%3$I") REFERENCES "%4$I"."%5$I"(id)
                         ON UPDATE CASCADE;
             $$, _match.table, _match.name, _match.col, _match.sch, _match.ref);
         END LOOP;
