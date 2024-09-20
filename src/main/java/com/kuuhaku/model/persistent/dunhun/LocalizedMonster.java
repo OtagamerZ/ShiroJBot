@@ -19,60 +19,65 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.common.dunhun.HeroModifiers;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.records.id.LocalizedId;
+import com.kuuhaku.util.text.Uwuifier;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import java.util.HashSet;
+import java.io.Serializable;
 import java.util.Objects;
-import java.util.Set;
-
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-@Table(name = "monster", schema = "dunhun")
-public class Monster extends DAO<Monster> {
-	@Id
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Table(name = "monster_info", schema = "dunhun")
+public class LocalizedMonster extends DAO<LocalizedMonster> implements Serializable {
+	@EmbeddedId
+	private LocalizedId id;
+
 	@Column(name = "name", nullable = false)
-	private String id;
+	private String name;
 
-	@Embedded
-	private MonsterStats stats;
+	private transient boolean uwu = false;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumn(name = "id", referencedColumnName = "id")
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<LocalizedMonster> infos = new HashSet<>();
-
-	@Transient
-	private final HeroModifiers modifiers = new HeroModifiers();
-
-	public String getId() {
+	public LocalizedId getId() {
 		return id;
 	}
 
-	public MonsterStats getStats() {
-		return stats;
+	public I18N getLocale() {
+		return id.locale();
 	}
 
-	public LocalizedMonster getInfo(I18N locale) {
-		return infos.parallelStream()
-				.filter(ld -> ld.getLocale().is(locale))
-				.findAny().orElseThrow();
+	public String getName() {
+		if (uwu) {
+			return Uwuifier.INSTANCE.uwu(getLocale(), name);
+		}
+
+		return name;
 	}
 
-	public HeroModifiers getModifiers() {
-		return modifiers;
+	public String getEnding() {
+		return ending;
+	}
+
+	public LocalizedMonster setUwu(boolean uwu) {
+		this.uwu = uwu;
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Monster monster = (Monster) o;
-		return Objects.equals(id, monster.id);
+		LocalizedMonster that = (LocalizedMonster) o;
+		return Objects.equals(id, that.id);
 	}
 
 	@Override
