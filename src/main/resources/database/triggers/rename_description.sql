@@ -22,7 +22,7 @@ CREATE OR REPLACE FUNCTION t_rename_description()
 AS
 $$
 BEGIN
-    UPDATE card_descriptions cd
+    UPDATE kawaipon.card_descriptions cd
     SET id = NEW.id
     WHERE cd.id = OLD.id;
 
@@ -30,9 +30,9 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS rename_description ON card;
+DROP TRIGGER IF EXISTS rename_description ON kawaipon.card;
 CREATE TRIGGER rename_description
     BEFORE UPDATE OF id
-    ON card
+    ON kawaipon.card
     FOR EACH ROW
 EXECUTE PROCEDURE t_rename_description();

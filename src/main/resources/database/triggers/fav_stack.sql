@@ -28,13 +28,13 @@ BEGIN
 
     IF (fav IS NOT NULL) THEN
         IF (NEW.card_id = fav) THEN
-            UPDATE kawaipon
+            UPDATE kawaipon.kawaipon
             SET fav_card       = NULL
               , fav_expiration = NULL
               , fav_stacks     = 0
             WHERE uid = NEW.kawaipon_uid;
         ELSE
-            UPDATE kawaipon
+            UPDATE kawaipon.kawaipon
             SET fav_stacks = fav_stacks + 1
             WHERE uid = NEW.kawaipon_uid;
         END IF;
@@ -44,17 +44,17 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS fav_stack ON kawaipon_card;
+DROP TRIGGER IF EXISTS fav_stack ON kawaipon.kawaipon_card;
 CREATE TRIGGER fav_stack
     BEFORE INSERT
-    ON kawaipon_card
+    ON kawaipon.kawaipon_card
     FOR EACH ROW
 EXECUTE PROCEDURE t_fav_stack();
 
-DROP TRIGGER IF EXISTS fav_stack ON stashed_card;
+DROP TRIGGER IF EXISTS fav_stack ON kawaipon.stashed_card;
 CREATE TRIGGER fav_stack
     BEFORE INSERT
-    ON stashed_card
+    ON kawaipon.stashed_card
     FOR EACH ROW
     WHEN (NEW.type <> 'KAWAIPON')
 EXECUTE PROCEDURE t_fav_stack();

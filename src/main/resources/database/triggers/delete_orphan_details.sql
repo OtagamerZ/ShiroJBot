@@ -23,12 +23,12 @@ AS
 $$
 BEGIN
     DELETE
-    FROM card_details
+    FROM kawaipon.card_details
     WHERE card_uuid IN (
                        SELECT cd.card_uuid
-                       FROM card_details cd
-                                LEFT JOIN kawaipon_card kc ON kc.uuid = cd.card_uuid
-                                LEFT JOIN stashed_card sc ON sc.uuid = cd.card_uuid
+                       FROM kawaipon.card_details cd
+                                LEFT JOIN kawaipon.kawaipon_card kc ON kc.uuid = cd.card_uuid
+                                LEFT JOIN kawaipon.stashed_card sc ON sc.uuid = cd.card_uuid
                        WHERE kc.uuid IS NULL
                          AND sc.uuid IS NULL
                        );
@@ -37,20 +37,20 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS delete_orphan_details ON card_details;
+DROP TRIGGER IF EXISTS delete_orphan_details ON kawaipon.card_details;
 CREATE TRIGGER delete_orphan_details
     AFTER INSERT OR UPDATE
-    ON card_details
+    ON kawaipon.card_details
 EXECUTE PROCEDURE t_delete_orphan_details();
 
-DROP TRIGGER IF EXISTS delete_orphan_details ON kawaipon_card;
+DROP TRIGGER IF EXISTS delete_orphan_details ON kawaipon.kawaipon_card;
 CREATE TRIGGER delete_orphan_details
     AFTER DELETE
-    ON kawaipon_card
+    ON kawaipon.kawaipon_card
 EXECUTE PROCEDURE t_delete_orphan_details();
 
-DROP TRIGGER IF EXISTS delete_orphan_details ON stashed_card;
+DROP TRIGGER IF EXISTS delete_orphan_details ON kawaipon.stashed_card;
 CREATE TRIGGER delete_orphan_details
     AFTER DELETE
-    ON stashed_card
+    ON kawaipon.stashed_card
 EXECUTE PROCEDURE t_delete_orphan_details();

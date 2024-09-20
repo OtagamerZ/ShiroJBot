@@ -22,8 +22,8 @@ CREATE OR REPLACE FUNCTION t_generate_kawaipon()
 AS
 $$
 BEGIN
-    IF ((SELECT 1 FROM kawaipon_card kc WHERE kc.uuid = NEW.uuid) IS NULL) THEN
-        INSERT INTO kawaipon_card (uuid, card_id, kawaipon_uid)
+    IF ((SELECT 1 FROM kawaipon.kawaipon_card kc WHERE kc.uuid = NEW.uuid) IS NULL) THEN
+        INSERT INTO kawaipon.kawaipon_card (uuid, card_id, kawaipon_uid)
         VALUES (NEW.uuid, NEW.card_id, NEW.kawaipon_uid);
     END IF;
 
@@ -31,10 +31,10 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS generate_kawaipon ON stashed_card;
+DROP TRIGGER IF EXISTS generate_kawaipon ON kawaipon.stashed_card;
 CREATE TRIGGER generate_kawaipon
     AFTER INSERT
-    ON stashed_card
+    ON kawaipon.stashed_card
     FOR EACH ROW
     WHEN ( NEW.type = 'KAWAIPON' )
 EXECUTE PROCEDURE t_generate_kawaipon();

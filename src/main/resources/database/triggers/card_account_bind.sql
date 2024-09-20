@@ -26,10 +26,10 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS card_account_bind ON stashed_card;
+DROP TRIGGER IF EXISTS card_account_bind ON kawaipon.stashed_card;
 CREATE TRIGGER card_account_bind
     BEFORE UPDATE
-    ON stashed_card
+    ON kawaipon.stashed_card
     FOR EACH ROW
     WHEN ( OLD.account_bound AND NEW.kawaipon_uid <> OLD.kawaipon_uid )
 EXECUTE PROCEDURE t_card_account_bind();

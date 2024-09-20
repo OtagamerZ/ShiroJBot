@@ -21,7 +21,10 @@
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/generate_kawaipon.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/generate_token.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/prevent_duplicate.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/views/anime_cards.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/views/card_counter.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/codex_progress.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/views/collection_counter.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/daily_evogear.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/daily_field.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/daily_senshi.sql" dialect="PostgreSQL" />

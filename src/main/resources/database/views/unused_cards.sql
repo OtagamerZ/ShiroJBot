@@ -19,10 +19,10 @@
 -- DROP VIEW IF EXISTS v_unused_cards;
 CREATE OR REPLACE VIEW v_unused_cards AS
 SELECT c.id, c.rarity, c.anime_id
-FROM card c
-         LEFT JOIN senshi s ON c.id = s.card_id
-         LEFT JOIN evogear e ON c.id = e.card_id
-         LEFT JOIN field f ON c.id = f.card_id
+FROM kawaipon.card c
+         LEFT JOIN kawaipon.senshi s ON c.id = s.card_id
+         LEFT JOIN kawaipon.evogear e ON c.id = e.card_id
+         LEFT JOIN kawaipon.field f ON c.id = f.card_id
 WHERE s.card_id IS NULL
   AND e.card_id IS NULL
   AND f.card_id IS NULL

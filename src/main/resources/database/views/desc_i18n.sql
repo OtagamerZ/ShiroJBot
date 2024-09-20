@@ -21,7 +21,7 @@ CREATE OR REPLACE VIEW v_desc_i18n AS
 SELECT coalesce(pt.id, en.id) AS id
      , pt.description AS desc_pt
      , en.description AS desc_en
-FROM card_descriptions pt
-         FULL JOIN card_descriptions en ON en.id = pt.id AND en.locale = 'EN'
+FROM kawaipon.card_descriptions pt
+         FULL JOIN kawaipon.card_descriptions en ON en.id = pt.id AND en.locale = 'EN'
 WHERE pt.locale = 'PT'
 ORDER BY id

@@ -22,15 +22,15 @@ CREATE OR REPLACE FUNCTION t_delete_ghosts()
 AS
 $$
 BEGIN
-    DELETE FROM stashed_card sc
+    DELETE FROM kawaipon.stashed_card sc
            WHERE sc.type = 'KAWAIPON'
-             AND NOT exists(SELECT 1 FROM kawaipon_card kc WHERE kc.uuid = sc.uuid);
+             AND NOT exists(SELECT 1 FROM kawaipon.kawaipon_card kc WHERE kc.uuid = sc.uuid);
     RETURN NEW;
 END;
 $$;
 
-DROP TRIGGER IF EXISTS delete_ghosts ON kawaipon_card;
+DROP TRIGGER IF EXISTS delete_ghosts ON kawaipon.kawaipon_card;
 CREATE TRIGGER delete_ghosts
     AFTER DELETE
-    ON kawaipon_card
+    ON kawaipon.kawaipon_card
 EXECUTE PROCEDURE t_delete_ghosts();

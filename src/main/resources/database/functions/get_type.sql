@@ -22,10 +22,10 @@ CREATE OR REPLACE FUNCTION get_type(VARCHAR)
 AS
 $$
 SELECT cast((count(f) << 3) | (count(e) << 2) | (count(s) << 1) | count(k) AS INT)
-FROM card c
-         LEFT JOIN card k ON k.id = c.id AND get_rarity_index(k.rarity) BETWEEN 1 AND 5
-         LEFT JOIN senshi s ON c.id = s.card_id
-         LEFT JOIN evogear e ON c.id = e.card_id
-         LEFT JOIN field f ON c.id = f.card_id
+FROM kawaipon.card c
+         LEFT JOIN kawaipon.card k ON k.id = c.id AND get_rarity_index(k.rarity) BETWEEN 1 AND 5
+         LEFT JOIN kawaipon.senshi s ON c.id = s.card_id
+         LEFT JOIN kawaipon.evogear e ON c.id = e.card_id
+         LEFT JOIN kawaipon.field f ON c.id = f.card_id
 WHERE c.id = $1;
 $$;

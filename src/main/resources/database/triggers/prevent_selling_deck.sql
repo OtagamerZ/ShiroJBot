@@ -26,10 +26,10 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS prevent_selling_deck ON stashed_card;
+DROP TRIGGER IF EXISTS prevent_selling_deck ON kawaipon.stashed_card;
 CREATE TRIGGER prevent_selling_deck
     BEFORE UPDATE
-    ON stashed_card
+    ON kawaipon.stashed_card
     FOR EACH ROW
     WHEN ( NEW.deck_id IS NOT NULL AND NEW.price > 0 )
 EXECUTE PROCEDURE t_prevent_selling_deck();

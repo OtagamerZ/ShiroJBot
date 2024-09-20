@@ -22,7 +22,7 @@ CREATE OR REPLACE FUNCTION t_transfer_kawaipon()
 AS
 $$
 BEGIN
-    UPDATE kawaipon_card kc
+    UPDATE kawaipon.kawaipon_card kc
     SET kawaipon_uid = NEW.kawaipon_uid
     WHERE kc.uuid = NEW.uuid;
 
@@ -30,10 +30,10 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS transfer_kawaipon ON stashed_card;
+DROP TRIGGER IF EXISTS transfer_kawaipon ON kawaipon.stashed_card;
 CREATE TRIGGER transfer_kawaipon
     BEFORE UPDATE
-    ON stashed_card
+    ON kawaipon.stashed_card
     FOR EACH ROW
     WHEN ( NEW.kawaipon_uid <> OLD.kawaipon_uid )
 EXECUTE PROCEDURE t_transfer_kawaipon();

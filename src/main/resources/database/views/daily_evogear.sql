@@ -27,7 +27,7 @@ FROM (
      FROM (
           SELECT card_id
                , tier
-          FROM evogear
+          FROM kawaipon.evogear
           WHERE tier > 0
           ORDER BY hashtextextended(card_id, get_seed())
           ) x

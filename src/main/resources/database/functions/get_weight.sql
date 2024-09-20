@@ -32,9 +32,9 @@ FROM (
      SELECT c.id
           , 6 - coalesce(get_rarity_index(c.rarity), e.tier * 5 / 4)          AS tier
           , iif(get_rarity_index(c.rarity) IS NOT NULL, 'KAWAIPON', c.rarity) AS type
-     FROM card c
-              LEFT JOIN evogear e ON c.id = e.card_id AND e.tier > 0
-              LEFT JOIN field f ON c.id = f.card_id
+     FROM kawaipon.card c
+              LEFT JOIN kawaipon.evogear e ON c.id = e.card_id AND e.tier > 0
+              LEFT JOIN kawaipon.field f ON c.id = f.card_id
      WHERE C.rarity <> 'ULTIMATE'
        AND NOT coalesce(f.effect, FALSE)
      ) x
@@ -48,7 +48,7 @@ CREATE OR REPLACE FUNCTION get_weight(VARCHAR, VARCHAR)
 AS
 $$
 SELECT cast(round(get_weight($1) * iif(is_fav(kp.uid, $1), 1.5 + 0.02 * kp.fav_stacks, 1.0)) AS INT)
-FROM kawaipon kp
+FROM kawaipon.kawaipon kp
 WHERE kp.uid = $2
 $$;
 

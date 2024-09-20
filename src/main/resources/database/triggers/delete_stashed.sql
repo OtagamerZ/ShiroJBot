@@ -22,15 +22,15 @@ CREATE OR REPLACE FUNCTION t_delete_stashed()
 AS
 $$
 BEGIN
-    UPDATE stashed_card SET price = -1 WHERE uuid = OLD.uuid;
-    DELETE FROM stashed_card WHERE uuid = OLD.uuid;
+    UPDATE kawaipon.stashed_card SET price = -1 WHERE uuid = OLD.uuid;
+    DELETE FROM kawaipon.stashed_card WHERE uuid = OLD.uuid;
     RETURN NEW;
 END;
 $$;
 
-DROP TRIGGER IF EXISTS delete_stashed ON kawaipon_card;
+DROP TRIGGER IF EXISTS delete_stashed ON kawaipon.kawaipon_card;
 CREATE TRIGGER delete_stashed
     AFTER DELETE
-    ON kawaipon_card
+    ON kawaipon.kawaipon_card
     FOR EACH ROW
 EXECUTE PROCEDURE t_delete_stashed();

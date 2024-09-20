@@ -24,19 +24,19 @@ $$
 DECLARE
     card_id VARCHAR;
 BEGIN
-    IF (NOT exists(SELECT 1 FROM kawaipon_card kc WHERE kc.uuid = OLD.uuid)) THEN
+    IF (NOT exists(SELECT 1 FROM kawaipon.kawaipon_card kc WHERE kc.uuid = OLD.uuid)) THEN
         RETURN OLD;
     END IF;
 
     SELECT kc.card_id
-    FROM kawaipon_card kc
-             INNER JOIN card_details cd ON cd.card_uuid = kc.uuid
-             LEFT JOIN stashed_card sc ON sc.uuid = kc.uuid
+    FROM kawaipon.kawaipon_card kc
+             INNER JOIN kawaipon.card_details cd ON cd.card_uuid = kc.uuid
+             LEFT JOIN kawaipon.stashed_card sc ON sc.uuid = kc.uuid
     WHERE kc.uuid <> OLD.uuid
       AND kc.kawaipon_uid = OLD.kawaipon_uid
       AND sc.id IS NULL
       AND kc.card_id = OLD.card_id
-      AND cd.chrome = (SELECT icd.chrome FROM card_details icd WHERE icd.card_uuid = OLD.uuid)
+      AND cd.chrome = (SELECT icd.chrome FROM kawaipon.card_details icd WHERE icd.card_uuid = OLD.uuid)
     INTO card_id;
 
     IF (card_id IS NOT NULL) THEN
@@ -47,10 +47,10 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS prevent_duplicate ON stashed_card;
+DROP TRIGGER IF EXISTS prevent_duplicate ON kawaipon.stashed_card;
 CREATE TRIGGER prevent_duplicate
     BEFORE DELETE
-    ON stashed_card
+    ON kawaipon.stashed_card
     FOR EACH ROW
     WHEN ( OLD.price <> -1 )
 EXECUTE PROCEDURE t_prevent_duplicate();

@@ -19,8 +19,8 @@
 -- DROP MATERIALIZED VIEW IF EXISTS v_card_names;
 CREATE MATERIALIZED VIEW IF NOT EXISTS v_card_names AS
 SELECT c.id
-FROM card c
-INNER JOIN anime a on a.id = c.anime_id
+FROM kawaipon.card c
+INNER JOIN kawaipon.anime a on a.id = c.anime_id
 WHERE (a.visible OR c.rarity IN ('EVOGEAR', 'FIELD'))
   AND c.rarity NOT IN ('ULTIMATE', 'NONE')
 ORDER BY c.id;
