@@ -36,7 +36,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Table(name = "monster", schema = "dunhun")
 public class Monster extends DAO<Monster> {
 	@Id
-	@Column(name = "name", nullable = false)
+	@Column(name = "id", nullable = false)
 	private String id;
 
 	@Embedded
