@@ -27,7 +27,7 @@ import org.hibernate.annotations.FetchMode;
 import java.util.Objects;
 
 @Entity
-@Table(name = "market_order")
+@Table(name = "market_order", schema = "cards")
 public class MarketOrder extends DAO<MarketOrder> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
