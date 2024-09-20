@@ -99,6 +99,10 @@ public class HeroStats {
 		return race;
 	}
 
+	public void setRace(Race race) {
+		this.race = race;
+	}
+
 	public int getStrength() {
 		return Bit32.get(attributes, 0, 8);
 	}

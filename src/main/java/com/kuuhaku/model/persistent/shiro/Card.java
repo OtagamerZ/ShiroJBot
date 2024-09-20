@@ -29,6 +29,7 @@ import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import jakarta.persistence.*;
 import okio.Buffer;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Cache;
@@ -43,6 +44,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.HexFormat;
 import java.util.Objects;
 
 @Entity
@@ -170,20 +172,31 @@ public class Card extends DAO<Card> implements Serializable {
 	}
 
 	private byte[] getImageBytes() {
-		byte[] cardBytes = Main.getCacheManager().computeResource(id, (k, v) -> {
+		String key;
+		String path;
+		if (rarity != Rarity.HERO) {
+			key = id;
+			path = System.getenv("CARDS_PATH") + anime.getId();
+		} else {
+			key = HexFormat.of().formatHex(DigestUtils.getSha256Digest().digest(name.getBytes()));
+			path = System.getenv("CARDS_PATH") + "../heroes";
+		}
+
+		byte[] cardBytes = Main.getCacheManager().computeResource(key, (k, v) -> {
 			if (v != null && v.length > 0) return v;
 
 			try {
-				File f = new File(System.getenv("CARDS_PATH") + anime.getId(), id + ".png");
+				File f = new File(path, key + ".png");
 				if (f.exists()) {
 					return FileUtils.readFileToByteArray(f);
-				} else {
-					return IO.getImageBytes(Constants.API_ROOT + "card/" + anime.getId() + "/" + id + ".png");
+				} else if (rarity != Rarity.HERO) {
+					return IO.getImageBytes(Constants.API_ROOT + "card/" + anime.getId() + "/" + key + ".png");
 				}
 			} catch (IOException e) {
 				Constants.LOGGER.error(e, e);
-				return null;
 			}
+
+			return null;
 		});
 
 		if (cardBytes.length == 0) {

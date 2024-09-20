@@ -39,6 +39,7 @@ public enum Rarity {
 	EVOGEAR,
 	FIELD("\uD83C\uDFD4️ "),
 	FUSION,
+	HERO,
 	NONE;
 
 	private final int index;
