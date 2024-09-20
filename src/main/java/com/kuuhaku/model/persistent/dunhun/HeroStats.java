@@ -18,9 +18,11 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
+import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -53,8 +55,13 @@ public class HeroStats {
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "inventory", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONObjectConverter.class)
-	private JSONObject inventory;
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray inventory;
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "inventory", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray skills;
 
 	public int getHp() {
 		return hp;
@@ -120,7 +127,11 @@ public class HeroStats {
 		return equipment;
 	}
 
-	public JSONObject getInventory() {
+	public JSONArray getInventory() {
 		return inventory;
+	}
+
+	public JSONArray getSkills() {
+		return skills;
 	}
 }
