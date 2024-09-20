@@ -178,7 +178,7 @@ public class Card extends DAO<Card> implements Serializable {
 			key = id;
 			path = System.getenv("CARDS_PATH") + anime.getId();
 		} else {
-			key = HexFormat.of().formatHex(DigestUtils.getMD5Digest().digest(id.getBytes()));
+			key = HexFormat.of().formatHex(DigestUtils.getMd5Digest().digest(id.getBytes()));
 			path = System.getenv("CARDS_PATH") + "../heroes";
 		}
 
