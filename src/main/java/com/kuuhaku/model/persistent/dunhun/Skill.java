@@ -37,7 +37,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "skill")
+@Table(name = "skill", schema = "dunhun")
 public class Skill extends DAO<Skill> {
 	@Id
 	@Column(name = "id", nullable = false)

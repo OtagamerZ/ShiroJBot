@@ -20,62 +20,59 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.records.dunhun.GearStats;
+import com.kuuhaku.model.records.id.LocalizedId;
+import com.kuuhaku.util.text.Uwuifier;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
-import java.util.HashSet;
+import java.io.Serializable;
 import java.util.Objects;
-import java.util.Set;
-
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "basetype", schema = "dunhun")
-public class Basetype extends DAO<Basetype> {
-	@Id
-	@Column(name = "id", nullable = false)
-	private String id;
+@Table(name = "event_info", schema = "dunhun")
+public class LocalizedEvent extends DAO<LocalizedEvent> implements Serializable {
+	@EmbeddedId
+	private LocalizedId id;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumn(name = "id", referencedColumnName = "id")
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<LocalizedBasetype> infos = new HashSet<>();
+	@Column(name = "description", nullable = false)
+	private String description;
 
-	@Column(name = "icon", nullable = false)
-	private String icon;
+	private transient boolean uwu = false;
 
-	@Embedded
-	private GearStats stats;
-
-	public String getId() {
+	public LocalizedId getId() {
 		return id;
 	}
 
-	public LocalizedBasetype getInfo(I18N locale) {
-		return infos.parallelStream()
-				.filter(ld -> ld.getLocale().is(locale))
-				.findAny().orElseThrow();
+	public I18N getLocale() {
+		return id.locale();
 	}
 
-	public String getIcon() {
-		return icon;
+	public String getDescription() {
+		if (uwu) {
+			return Uwuifier.INSTANCE.uwu(getLocale(), description);
+		}
+
+		return description;
 	}
 
-	public GearStats getStats() {
-		return stats;
+	public LocalizedEvent setUwu(boolean uwu) {
+		this.uwu = uwu;
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		return getDescription();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Basetype that = (Basetype) o;
+		LocalizedEvent that = (LocalizedEvent) o;
 		return Objects.equals(id, that.id);
 	}
 

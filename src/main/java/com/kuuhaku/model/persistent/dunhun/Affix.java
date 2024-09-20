@@ -39,7 +39,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "affix")
+@Table(name = "affix", schema = "dunhun")
 public class Affix extends DAO<Affix> {
 	@Id
 	@Column(name = "id", nullable = false)

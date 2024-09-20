@@ -37,7 +37,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "gear")
+@Table(name = "gear", schema = "dunhun")
 public class Gear extends DAO<Gear> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

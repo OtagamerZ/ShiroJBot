@@ -33,7 +33,7 @@ import java.util.Objects;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "gear_affix")
+@Table(name = "gear_affix", schema = "dunhun")
 public class GearAffix extends DAO<GearAffix> {
 	@EmbeddedId
 	private GearAffixId id;

@@ -28,7 +28,7 @@ import org.hibernate.annotations.FetchMode;
 import java.util.Objects;
 
 @Entity
-@Table(name = "hero")
+@Table(name = "hero", schema = "dunhun")
 public class Hero extends DAO<Hero> {
 	@Id
 	@Column(name = "name", nullable = false)
