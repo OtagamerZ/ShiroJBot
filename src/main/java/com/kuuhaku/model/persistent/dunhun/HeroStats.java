@@ -22,6 +22,7 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.records.Attributes;
+import com.kuuhaku.model.records.dunhun.Equipment;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.ygimenez.json.JSONArray;
@@ -55,7 +56,7 @@ public class HeroStats {
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "equipment", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
-	private JSONObject equipment = new JSONObject();
+	private Equipment equipment = Equipment.empty();
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "inventory", nullable = false, columnDefinition = "JSONB")

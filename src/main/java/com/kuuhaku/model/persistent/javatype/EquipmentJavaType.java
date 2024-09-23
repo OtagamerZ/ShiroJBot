@@ -19,7 +19,12 @@
 package com.kuuhaku.model.persistent.javatype;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.dunhun.GearSlot;
+import com.kuuhaku.model.persistent.dunhun.Gear;
+import com.kuuhaku.model.records.dunhun.Equipment;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
@@ -29,15 +34,21 @@ import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
 
 import java.io.Serial;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-public class ChannelJavaType extends AbstractClassJavaType<GuildMessageChannel> {
+public class EquipmentJavaType extends AbstractClassJavaType<Equipment> {
 	@Serial
-	private static final long serialVersionUID = -8058769337567861762L;
+	private static final long serialVersionUID = -8552211191796240681L;
 
-	public static final ChannelJavaType INSTANCE = new ChannelJavaType();
+	public static final EquipmentJavaType INSTANCE = new EquipmentJavaType();
 
-	public ChannelJavaType() {
-		super(GuildMessageChannel.class, new ImmutableMutabilityPlan<>());
+	public EquipmentJavaType() {
+		super(Equipment.class, new ImmutableMutabilityPlan<>());
 	}
 
 	@Override
@@ -55,29 +66,51 @@ public class ChannelJavaType extends AbstractClassJavaType<GuildMessageChannel> 
 	}
 
 	@Override
-	public GuildMessageChannel fromString(CharSequence id) {
-		return Main.getApp().getMessageChannelById(Utils.getOr(String.valueOf(id), "1"));
+	public Equipment fromString(CharSequence id) {
+		JSONObject jo = new JSONObject(id);
+
+		List<Integer> ids = new ArrayList<>();
+		for (Object o : jo.values()) {
+			if (o instanceof Number n) {
+				ids.add(n.intValue());
+			} else if (o instanceof Collection<?> c) {
+				for (Object n : c) {
+					ids.add(((Number) n).intValue());
+				}
+			}
+		}
+
+		Map<Integer, Gear> gear = DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.id IN ?1", ids)
+				.parallelStream()
+				.collect(Collectors.toMap(Gear::getId, Function.identity()));
+
+		return Equipment.fromSupplier((gs, i) -> {
+			if (i < 0) {
+				return gear.get(jo.getInt(gs.name()));
+			}
+
+			return gear.get(jo.getJSONArray(gs.name()).getInt(i));
+		});
 	}
 
 	@Override
-	public <X> X unwrap(GuildMessageChannel value, Class<X> type, WrapperOptions options) {
+	public <X> X unwrap(Equipment value, Class<X> type, WrapperOptions options) {
 		if (value == null) return null;
 
 		if (String.class.isAssignableFrom(type)) {
-			return type.cast(value.getId());
+			return type.cast(value.toString());
 		}
 
 		throw unknownUnwrap(type);
 	}
 
 	@Override
-	public <X> GuildMessageChannel wrap(X value, WrapperOptions options) {
+	public <X> Equipment wrap(X value, WrapperOptions options) {
 		return switch (value) {
 			case null -> null;
-			case String id -> fromString(id);
-			case GuildMessageChannel c -> c;
+			case String data -> fromString(data);
+			case Equipment e -> e;
 			default -> throw unknownWrap(value.getClass());
 		};
-
 	}
 }
