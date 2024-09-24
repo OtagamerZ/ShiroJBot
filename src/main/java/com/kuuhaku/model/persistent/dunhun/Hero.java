@@ -24,7 +24,6 @@ import com.kuuhaku.model.common.dunhun.HeroModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.EquipmentConverter;
-import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.javatype.EquipmentJavaType;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -32,7 +31,6 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.Attributes;
 import com.kuuhaku.model.records.dunhun.Equipment;
 import com.kuuhaku.util.Graph;
-import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
@@ -47,7 +45,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HexFormat;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
+
+import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "hero", schema = "dunhun")
@@ -70,10 +72,10 @@ public class Hero extends DAO<Hero> {
 	@Convert(converter = EquipmentConverter.class)
 	private Equipment equipment = new Equipment();
 
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "inventory", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray inventory = new JSONArray();
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@JoinColumn(name = "hero_name", referencedColumnName = "name")
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<Gear> inventory = new LinkedHashSet<>();
 
 	@Transient
 	private final HeroModifiers modifiers = new HeroModifiers();
@@ -128,7 +130,7 @@ public class Hero extends DAO<Hero> {
 		return equipment;
 	}
 
-	public JSONArray getInventory() {
+	public Set<Gear> getInventory() {
 		return inventory;
 	}
 

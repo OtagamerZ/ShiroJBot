@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.id.GearAffixId;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
@@ -54,7 +55,12 @@ public class GearAffix extends DAO<GearAffix> {
 	private Affix affix;
 
 	@Column(name = "roll", nullable = false)
-	private double roll;
+	private double roll = Calc.rng();
+
+	public GearAffix(Gear gear, Affix affix) {
+		this.gear = gear;
+		this.affix = affix;
+	}
 
 	public GearAffixId getId() {
 		return id;

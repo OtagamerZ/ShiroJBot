@@ -58,19 +58,19 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Column(name = "kawaipon_channels")
 	@Convert(converter = ChannelConverter.class)
 	@CollectionTable(name = "guild_settings_kawaiponChannels", joinColumns = @JoinColumn(name = "gid"))
-	private List<TextChannelImpl> kawaiponChannels = new ArrayList<>();
+	private Set<TextChannelImpl> kawaiponChannels = new LinkedHashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "drop_channels")
 	@Convert(converter = ChannelConverter.class)
 	@CollectionTable(name = "guild_settings_dropChannels", joinColumns = @JoinColumn(name = "gid"))
-	private List<TextChannelImpl> dropChannels = new ArrayList<>();
+	private Set<TextChannelImpl> dropChannels = new LinkedHashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "denied_channels")
 	@Convert(converter = ChannelConverter.class)
 	@CollectionTable(name = "guild_settings_deniedChannels", joinColumns = @JoinColumn(name = "gid"))
-	private List<TextChannelImpl> deniedChannels = new ArrayList<>();
+	private Set<TextChannelImpl> deniedChannels = new LinkedHashSet<>();
 
 	@Column(name = "notifications_channel")
 	@Convert(converter = ChannelConverter.class)
@@ -154,15 +154,15 @@ public class GuildSettings extends DAO<GuildSettings> {
 		return gid;
 	}
 
-	public List<TextChannelImpl> getKawaiponChannels() {
+	public Set<TextChannelImpl> getKawaiponChannels() {
 		return kawaiponChannels;
 	}
 
-	public List<TextChannelImpl> getDropChannels() {
+	public Set<TextChannelImpl> getDropChannels() {
 		return dropChannels;
 	}
 
-	public List<TextChannelImpl> getDeniedChannels() {
+	public Set<TextChannelImpl> getDeniedChannels() {
 		return deniedChannels;
 	}
 

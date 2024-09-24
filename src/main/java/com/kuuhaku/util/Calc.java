@@ -109,6 +109,10 @@ public abstract class Calc {
 		return val >= from && val < to;
 	}
 
+	public static double rng() {
+		return rng(0d, 1d, Constants.DEFAULT_RNG.get());
+	}
+
 	public static int rng(int max) {
 		return rng(0, max, Constants.DEFAULT_RNG.get());
 	}

@@ -23,7 +23,10 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.GearModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.enums.dunhun.GearSlot;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -59,6 +62,21 @@ public class Gear extends DAO<Gear> {
 
 	@Transient
 	private final GearModifiers modifiers = new GearModifiers();
+
+	public Gear() {
+	}
+
+	public Gear(Basetype basetype, Affix prefix, Affix suffix) {
+		this.basetype = basetype;
+
+		if (prefix != null) {
+			affixes.add(new GearAffix(this, prefix));
+		}
+
+		if (suffix != null) {
+			affixes.add(new GearAffix(this, suffix));
+		}
+	}
 
 	public int getId() {
 		return id;
@@ -129,5 +147,17 @@ public class Gear extends DAO<Gear> {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(id);
+	}
+
+	public static Gear genRandom(GearSlot slot) {
+		Basetype base = Basetype.getRandom(slot);
+
+		JSONArray tags = new JSONArray(base.getStats().tags());
+		tags.add(base.getStats().slot().name());
+
+		return new Gear(base,
+				Calc.chance(50) ? Affix.getRand(AffixType.PREFIX, tags) : null,
+				Calc.chance(50) ? Affix.getRand(AffixType.SUFFIX, tags) : null
+		);
 	}
 }

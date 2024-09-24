@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -114,5 +115,14 @@ public class Affix extends DAO<Affix> {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(id);
+	}
+
+	public static Affix getRand(AffixType type, JSONArray tags) {
+		RandomList<String> rl = new RandomList<>();
+		DAO.queryAllUnmapped("SELECT id, weight FROM affix WHERE type = ?1 AND req_tags <@ ?2", type.name(), tags)
+				.parallelStream()
+				.forEach(a -> rl.add((String) a[0], ((Number) a[1]).intValue()));
+
+		return DAO.find(Affix.class, rl.get());
 	}
 }
