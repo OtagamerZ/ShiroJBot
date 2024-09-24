@@ -157,7 +157,10 @@ public class Gear extends DAO<Gear> {
 
 		for (AffixType type : AffixType.values()) {
 			if (Calc.chance(50)) {
-				out.getAffixes().add(new GearAffix(out, Affix.getRand(out, type)));
+				Affix af = Affix.getRand(out, type);
+				if (af == null) continue;
+
+				out.getAffixes().add(new GearAffix(out, af));
 			}
 		}
 

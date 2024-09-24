@@ -29,5 +29,5 @@ CREATE OR REPLACE FUNCTION get_affix_family(JSONB)
     LANGUAGE sql
 AS
 $$
-SELECT jsonb_agg(DISTINCT get_affix_family(a)) FROM jsonb_array_elements($1) a
+SELECT jsonb_agg(DISTINCT get_affix_family(a)) FROM jsonb_array_elements_text($1) a
 $$;

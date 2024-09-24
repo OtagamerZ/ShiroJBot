@@ -142,8 +142,12 @@ public class Affix extends DAO<Affix> {
 						  AND affix_group NOT IN ?4
 						""", type.name(), tags.toString(), affixes.toString(), groups)
 				.parallelStream()
-				.forEach(a -> rl.add((String) a[0], ((Number) a[1]).intValue()));
+				.forEach(a -> {
+					System.out.println(Arrays.toString(a));
+					rl.add((String) a[0], ((Number) a[1]).intValue());
+				});
 
+		if (rl.entries().isEmpty()) return null;
 		return DAO.find(Affix.class, rl.get());
 	}
 }
