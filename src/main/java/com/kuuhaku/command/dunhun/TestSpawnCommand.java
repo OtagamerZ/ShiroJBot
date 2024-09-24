@@ -56,6 +56,8 @@ public class TestSpawnCommand implements Executable {
 		}
 
 		Gear g = Gear.genRandom(Utils.getRandomEntry(GearSlot.values()));
+		g.save();
+
 		h.getInventory().add(g);
 		h.save();
 
