@@ -131,21 +131,23 @@ public class Affix extends DAO<Affix> {
 			}
 		}
 
+		System.out.println(type.name());
+		System.out.println(tags);
+		System.out.println(affixes);
+		System.out.println(groups);
+
 		RandomList<String> rl = new RandomList<>();
 		DAO.queryAllUnmapped("""
 						SELECT id
 						     , weight
 						FROM affix
 						WHERE type = ?1
-						  AND jsonb_length(req_tags - cast(?2 AS JSONB)) = 0
+						  AND req_tags <@ cast(?2 AS JSONB)
 						  AND NOT has(get_affix_family(cast(?3 AS JSONB)), get_affix_family(id))
 						  AND affix_group NOT IN ?4
 						""", type.name(), tags.toString(), affixes.toString(), groups)
 				.parallelStream()
-				.forEach(a -> {
-					System.out.println(Arrays.toString(a));
-					rl.add((String) a[0], ((Number) a[1]).intValue());
-				});
+				.forEach(a -> rl.add((String) a[0], ((Number) a[1]).intValue()));
 
 		if (rl.entries().isEmpty()) return null;
 		return DAO.find(Affix.class, rl.get());
