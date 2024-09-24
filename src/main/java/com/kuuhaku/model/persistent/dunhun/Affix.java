@@ -144,7 +144,7 @@ public class Affix extends DAO<Affix> {
 						WHERE type = ?1
 						  AND req_tags <@ cast(?2 AS JSONB)
 						  AND NOT has(get_affix_family(cast(?3 AS JSONB)), get_affix_family(id))
-						  AND affix_group NOT IN ?4
+						  AND (affix_group IS NULL OR affix_group NOT IN ?4)
 						""", type.name(), tags.toString(), affixes.toString(), groups)
 				.parallelStream()
 				.forEach(a -> rl.add((String) a[0], ((Number) a[1]).intValue()));
