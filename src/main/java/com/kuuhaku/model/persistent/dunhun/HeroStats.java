@@ -19,10 +19,8 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.persistent.converter.EquipmentConverter;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.Attributes;
-import com.kuuhaku.model.records.dunhun.Equipment;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.ygimenez.json.JSONArray;
@@ -51,16 +49,6 @@ public class HeroStats {
 	   │  └ wisdom
 	   └ vitality
 	 */
-
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "equipment", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = EquipmentConverter.class)
-	private Equipment equipment = new Equipment();
-
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "inventory", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray inventory = new JSONArray();
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
@@ -137,14 +125,6 @@ public class HeroStats {
 
 	public Attributes getAttributes() {
 		return new Attributes(getStrength(), getDexterity(), getWisdom(), getVitality());
-	}
-
-	public Equipment getEquipment() {
-		return equipment;
-	}
-
-	public JSONArray getInventory() {
-		return inventory;
 	}
 
 	public JSONArray getSkills() {

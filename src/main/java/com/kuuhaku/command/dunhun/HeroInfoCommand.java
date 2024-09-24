@@ -56,7 +56,7 @@ public class HeroInfoCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		Equipment equips = h.getStats().getEquipment();
+		Equipment equips = h.getEquipment();
 		XStringBuilder sb = new XStringBuilder();
 		for (GearSlot gs : GearSlot.values()) {
 			equips.withSlot(gs, g -> {

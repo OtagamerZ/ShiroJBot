@@ -23,6 +23,8 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.HeroModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.persistent.converter.EquipmentConverter;
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.javatype.EquipmentJavaType;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -30,12 +32,15 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.Attributes;
 import com.kuuhaku.model.records.dunhun.Equipment;
 import com.kuuhaku.util.Graph;
+import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -59,6 +64,16 @@ public class Hero extends DAO<Hero> {
 	@PrimaryKeyJoinColumn(name = "account_uid")
 	@Fetch(FetchMode.JOIN)
 	private Account account;
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "equipment", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = EquipmentConverter.class)
+	private Equipment equipment = new Equipment();
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "inventory", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray inventory = new JSONArray();
 
 	@Transient
 	private final HeroModifiers modifiers = new HeroModifiers();
@@ -109,13 +124,21 @@ public class Hero extends DAO<Hero> {
 		return account;
 	}
 
+	public Equipment getEquipment() {
+		return equipment;
+	}
+
+	public JSONArray getInventory() {
+		return inventory;
+	}
+
 	public Senshi asSenshi(I18N locale) {
 		Senshi s = new Senshi(name, stats.getRace());
 		CardAttributes base = s.getBase();
 
 		int dmg = 100;
 		int def = 100;
-		for (Gear g : getStats().getEquipment()) {
+		for (Gear g : equipment) {
 			if (g == null) continue;
 
 			g.load(locale, this);
