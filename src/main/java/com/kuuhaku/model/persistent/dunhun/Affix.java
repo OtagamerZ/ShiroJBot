@@ -24,7 +24,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedAffix;
-import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
@@ -33,7 +32,10 @@ import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -119,16 +121,12 @@ public class Affix extends DAO<Affix> {
 	public static Affix getRand(Gear gear, AffixType type) {
 		Basetype base = gear.getBasetype();
 
-		List<String> tags = new ArrayList<>();
+		JSONArray tags = new JSONArray(base.getStats().tags());
 		tags.add(base.getStats().slot().name());
 
-		for (Object t : base.getStats().tags()) {
-			tags.add((String) t);
-		}
-
-		List<String> affixes = gear.getAffixes().parallelStream()
-				.map(ga -> Utils.getOr(Utils.extract(ga.getAffix().getId(), "(.+)_\\w+$"), ga.getAffix().getId()))
-				.toList();
+		JSONArray affixes = gear.getAffixes().parallelStream()
+				.map(ga -> ga.getAffix().getId())
+				.collect(Collectors.toCollection(JSONArray::new));
 
 		RandomList<String> rl = new RandomList<>();
 		DAO.queryAllUnmapped("""
@@ -137,8 +135,8 @@ public class Affix extends DAO<Affix> {
 						FROM affix
 						WHERE type = ?1
 						  AND req_tags <@ cast(?2 AS JSONB)
-						  AND NOT has(cast(?3 AS JSONB), get_affix_family(id))
-						""", type.name(), tags, affixes)
+						  AND NOT has(get_affix_family(cast(?3 AS JSONB)), get_affix_family(id))
+						""", type.name(), tags.toString(), affixes.toString())
 				.parallelStream()
 				.forEach(a -> rl.add((String) a[0], ((Number) a[1]).intValue()));
 

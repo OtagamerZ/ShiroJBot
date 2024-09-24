@@ -24,10 +24,10 @@ $$
 SELECT regexp_replace($1, '(?<=.+)_\w+$', '')
 $$;
 
-CREATE OR REPLACE FUNCTION get_affix_family(VARCHAR[])
-    RETURNS VARCHAR[]
+CREATE OR REPLACE FUNCTION get_affix_family(JSONB)
+    RETURNS JSONB
     LANGUAGE sql
 AS
 $$
-SELECT array_agg(DISTINCT get_affix_family(a)) FROM unnest($1) a
+SELECT jsonb_agg(DISTINCT get_affix_family(a)) FROM jsonb_array_elements($1) a
 $$;
