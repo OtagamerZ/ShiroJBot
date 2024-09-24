@@ -21,12 +21,15 @@ package com.kuuhaku.command.dunhun;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
+import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.dunhun.Equipment;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -45,13 +48,31 @@ public class HeroInfoCommand implements Executable {
 			return;
 		}
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		for (GearSlot gs : GearSlot.values()) {
-
+		Hero h = d.getHero();
+		if (h == null) {
+			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
+			return;
 		}
 
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		"-# *" + locale.get("str/empty") + "*";
+		Equipment equips = h.getStats().getEquipment();
+		XStringBuilder sb = new XStringBuilder();
+		for (GearSlot gs : GearSlot.values()) {
+			equips.withSlot(gs, g -> {
+				if (g == null) {
+					sb.appendNewLine("-# *" + locale.get("str/empty") + "*");
+				} else {
+					sb.appendNewLine("- " + g.getName(locale));
+				}
+
+				return g;
+			});
+
+			eb.addField(locale.get("str/" + gs.name()), sb.toString(), true);
+			sb.clear();
+		}
+
+		event.channel().sendMessageEmbeds(eb.build()).queue();
 	}
 }

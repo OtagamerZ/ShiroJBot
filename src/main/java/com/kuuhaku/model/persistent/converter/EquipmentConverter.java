@@ -16,20 +16,16 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.persistent.javatype;
+package com.kuuhaku.model.persistent.converter;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.records.dunhun.Equipment;
 import com.ygimenez.json.JSONObject;
-import org.hibernate.type.descriptor.WrapperOptions;
-import org.hibernate.type.descriptor.java.AbstractClassJavaType;
-import org.hibernate.type.descriptor.java.ImmutableMutabilityPlan;
-import org.hibernate.type.descriptor.jdbc.JdbcType;
-import org.hibernate.type.descriptor.jdbc.JdbcTypeIndicators;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
+import org.intellij.lang.annotations.Language;
 
-import java.io.Serial;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -37,33 +33,18 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class EquipmentJavaType extends AbstractClassJavaType<Equipment> {
-	@Serial
-	private static final long serialVersionUID = -8552211191796240681L;
+@Converter(autoApply = true)
+public class EquipmentConverter implements AttributeConverter<Equipment, String> {
+	@Override
+	public String convertToDatabaseColumn(Equipment equip) {
+		if (equip == null) return null;
 
-	public static final EquipmentJavaType INSTANCE = new EquipmentJavaType();
-
-	public EquipmentJavaType() {
-		super(Equipment.class, new ImmutableMutabilityPlan<>());
+		return equip.toString();
 	}
 
 	@Override
-	public JdbcType getRecommendedJdbcType(JdbcTypeIndicators indicators) {
-		return indicators.getTypeConfiguration()
-				.getJdbcTypeRegistry()
-				.getDescriptor(Types.VARCHAR);
-	}
-
-	@Override
-	public String toString(Equipment value) {
-		if (value == null) return null;
-
-		return value.toString();
-	}
-
-	@Override
-	public Equipment fromString(CharSequence id) {
-		JSONObject jo = new JSONObject(id);
+	public Equipment convertToEntityAttribute(@Language("JSON5") String data) {
+		JSONObject jo = new JSONObject(data);
 
 		List<Integer> ids = new ArrayList<>();
 		for (Object o : jo.values()) {
@@ -87,26 +68,5 @@ public class EquipmentJavaType extends AbstractClassJavaType<Equipment> {
 
 			return gear.get(jo.getJSONArray(gs.name()).getInt(i));
 		});
-	}
-
-	@Override
-	public <X> X unwrap(Equipment value, Class<X> type, WrapperOptions options) {
-		if (value == null) return null;
-
-		if (String.class.isAssignableFrom(type)) {
-			return type.cast(value.toString());
-		}
-
-		throw unknownUnwrap(type);
-	}
-
-	@Override
-	public <X> Equipment wrap(X value, WrapperOptions options) {
-		return switch (value) {
-			case null -> null;
-			case String data -> fromString(data);
-			case Equipment e -> e;
-			default -> throw unknownWrap(value.getClass());
-		};
 	}
 }
