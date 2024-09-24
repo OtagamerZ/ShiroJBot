@@ -95,8 +95,9 @@ public class Basetype extends DAO<Basetype> {
 				SELECT b 
 				FROM Basetype b 
 				WHERE b.stats.slot = ?1
-				  AND b.stats.reqLevel 
-				BETWEEN ?2 AND ?3 ORDER BY random()
-				""", slot, minLevel, maxLevel);
+				  AND b.stats.reqLevel BETWEEN ?2 AND ?3 
+				ORDER BY random()
+				""", slot, minLevel, maxLevel
+		);
 	}
 }

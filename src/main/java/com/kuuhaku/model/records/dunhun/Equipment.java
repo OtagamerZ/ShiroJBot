@@ -31,7 +31,6 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
@@ -145,17 +144,22 @@ public final class Equipment implements Iterable<Gear>, Serializable {
 
 	@Override
 	public String toString() {
-		return JSONObject.of(
-				Map.entry(HELMET.name(), helmet),
-				Map.entry(BODY.name(), body),
-				Map.entry(BOOTS.name(), boots),
-				Map.entry(GLOVES.name(), gloves),
-				Map.entry(BACK.name(), back),
-				Map.entry(AMULET.name(), amulet),
-				Map.entry(BELT.name(), belt),
-				Map.entry(RING.name(), JSONArray.of(rings.getFirst(), rings.getSecond())),
-				Map.entry(WEAPON.name(), JSONArray.of(weapons.getFirst(), weapons.getSecond()))
-		).toString();
+		JSONObject jo = new JSONObject();
+		for (GearSlot slot : values()) {
+			withSlot(slot, g -> {
+				if (g != null) {
+					if (Utils.equalsAny(slot, RING, WEAPON)) {
+						((JSONArray) jo.computeIfAbsent(slot.name(), k -> new JSONArray())).add(g);
+					} else {
+						jo.put(slot.name(), g);
+					}
+				}
+
+				return g;
+			});
+		}
+
+		return jo.toString();
 	}
 
 	@NotNull
