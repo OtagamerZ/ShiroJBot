@@ -112,8 +112,9 @@ public class Hero extends DAO<Hero> {
 		int dmg = 100;
 		int def = 100;
 		for (Gear g : getStats().getEquipment()) {
-			g.load(locale, this);
+			if (g == null) continue;
 
+			g.load(locale, this);
 			dmg += g.getDmg();
 			def += g.getDfs();
 		}
