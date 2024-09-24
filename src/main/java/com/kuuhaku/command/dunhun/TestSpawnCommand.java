@@ -55,11 +55,8 @@ public class TestSpawnCommand implements Executable {
 			return;
 		}
 
-		Gear g = Gear.genRandom(Utils.getRandomEntry(GearSlot.values()));
+		Gear g = Gear.genRandom(h, Utils.getRandomEntry(GearSlot.values()));
 		g.save();
-
-		h.getInventory().add(g);
-		h.save();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(g.getName(locale));

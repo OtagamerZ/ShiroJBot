@@ -45,11 +45,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HexFormat;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "hero", schema = "dunhun")
@@ -71,11 +68,6 @@ public class Hero extends DAO<Hero> {
 	@Column(name = "equipment", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = EquipmentConverter.class)
 	private Equipment equipment = new Equipment();
-
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumn(name = "hero_name", referencedColumnName = "name")
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<Gear> inventory = new LinkedHashSet<>();
 
 	@Transient
 	private final HeroModifiers modifiers = new HeroModifiers();
@@ -130,8 +122,8 @@ public class Hero extends DAO<Hero> {
 		return equipment;
 	}
 
-	public Set<Gear> getInventory() {
-		return inventory;
+	public List<Gear> getInventory() {
+		return DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.owner = ?1", name);
 	}
 
 	public Senshi asSenshi(I18N locale) {

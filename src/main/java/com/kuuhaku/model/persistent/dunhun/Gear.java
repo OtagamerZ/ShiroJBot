@@ -54,6 +54,11 @@ public class Gear extends DAO<Gear> {
 	@Fetch(FetchMode.JOIN)
 	private Basetype basetype;
 
+	@ManyToOne(optional = false)
+	@PrimaryKeyJoinColumn(name = "hero_name")
+	@Fetch(FetchMode.JOIN)
+	private Hero owner;
+
 	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "gear_id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
@@ -65,8 +70,9 @@ public class Gear extends DAO<Gear> {
 	public Gear() {
 	}
 
-	public Gear(Basetype basetype) {
+	public Gear(Hero owner, Basetype basetype) {
 		this.basetype = basetype;
+		this.owner = owner;
 	}
 
 	public int getId() {
@@ -75,6 +81,10 @@ public class Gear extends DAO<Gear> {
 
 	public Basetype getBasetype() {
 		return basetype;
+	}
+
+	public Hero getOwner() {
+		return owner;
 	}
 
 	public Set<GearAffix> getAffixes() {
@@ -140,8 +150,8 @@ public class Gear extends DAO<Gear> {
 		return Objects.hashCode(id);
 	}
 
-	public static Gear genRandom(GearSlot slot) {
-		Gear out = new Gear(Basetype.getRandom(slot));
+	public static Gear genRandom(Hero hero, GearSlot slot) {
+		Gear out = new Gear(hero, Basetype.getRandom(slot));
 
 		for (AffixType type : AffixType.values()) {
 			if (Calc.chance(50)) {
