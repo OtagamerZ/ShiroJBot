@@ -24,6 +24,7 @@ import com.kuuhaku.model.common.dunhun.GearModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
@@ -121,7 +122,7 @@ public class Gear extends DAO<Gear> {
 		return (int) (basetype.getStats().defense() * modifiers.getDefenseMult());
 	}
 
-	public void load(I18N locale, Hero hero) {
+	public void load(I18N locale, Hero hero, Senshi senshi) {
 		modifiers.reset();
 		for (GearAffix ga : affixes) {
 			try {
@@ -129,6 +130,7 @@ public class Gear extends DAO<Gear> {
 				Utils.exec(getClass().getSimpleName(), a.getEffect(), Map.of(
 						"gear", this,
 						"hero", hero,
+						"self", senshi,
 						"values", ga.getValues(locale)
 				));
 			} catch (Exception e) {
