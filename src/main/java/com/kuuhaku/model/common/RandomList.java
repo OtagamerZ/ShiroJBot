@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.random.RandomGenerator;
 
 /**
@@ -122,9 +123,13 @@ public class RandomList<T> {
 	}
 
 	public void remove(@NotNull T item) {
+		removeIf(p -> p.equals(item));
+	}
+
+	public void removeIf(@NotNull Predicate<T> predicate) {
 		total = 0;
 		map.clear();
-		pool.removeIf(p -> p.getSecond().equals(item));
+		pool.removeIf(p -> predicate.test(p.getSecond()));
 	}
 
 	public Collection<T> values() {

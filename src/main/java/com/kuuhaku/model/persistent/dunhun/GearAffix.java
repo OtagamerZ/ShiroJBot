@@ -57,6 +57,9 @@ public class GearAffix extends DAO<GearAffix> {
 	@Column(name = "roll", nullable = false)
 	private double roll = Calc.rng();
 
+	public GearAffix() {
+	}
+
 	public GearAffix(Gear gear, Affix affix) {
 		this.gear = gear;
 		this.affix = affix;

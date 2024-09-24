@@ -33,6 +33,7 @@ import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -117,9 +118,25 @@ public class Affix extends DAO<Affix> {
 		return Objects.hashCode(id);
 	}
 
-	public static Affix getRand(AffixType type, JSONArray tags) {
+	public static Affix getRand(Gear gear, AffixType type) {
+		Basetype base = gear.getBasetype();
+
+		JSONArray tags = new JSONArray(base.getStats().tags());
+		tags.add(base.getStats().slot().name());
+
+		List<String> affixes = gear.getAffixes().parallelStream()
+				.map(ga -> ga.getAffix().getId())
+				.toList();
+
 		RandomList<String> rl = new RandomList<>();
-		DAO.queryAllUnmapped("SELECT id, weight FROM affix WHERE type = ?1 AND req_tags <@ ?2", type.name(), tags)
+		DAO.queryAllUnmapped("""
+						SELECT id
+						     , weight
+						FROM affix
+						WHERE type = ?1
+						  AND req_tags <@ ?2
+						  AND NOT (get_affix_family(id) = ANY (get_affix_family(?3)))
+						""", type.name(), tags, affixes)
 				.parallelStream()
 				.forEach(a -> rl.add((String) a[0], ((Number) a[1]).intValue()));
 
