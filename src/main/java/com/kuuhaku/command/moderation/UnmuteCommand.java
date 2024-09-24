@@ -67,6 +67,11 @@ public class UnmuteCommand implements Executable {
                     .toList();
         }
 
+        if (members.isEmpty()) {
+            event.channel().sendMessage(locale.get("error/no_mentions")).queue();
+            return;
+        }
+
         Member self = event.guild().getSelfMember();
         for (Member mb : members) {
             if (mb.equals(event.member())) {
