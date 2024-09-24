@@ -135,7 +135,7 @@ public class Affix extends DAO<Affix> {
 						     , weight
 						FROM affix
 						WHERE type = ?1
-						  AND req_tags <@ ?2
+						  AND req_tags <@ cast(?2 AS JSONB)
 						  AND NOT (get_affix_family(id) = ANY (get_affix_family(?3)))
 						""", type.name(), tags, affixes)
 				.parallelStream()
