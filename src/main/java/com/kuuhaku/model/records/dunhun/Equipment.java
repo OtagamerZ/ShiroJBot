@@ -27,6 +27,7 @@ import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -38,7 +39,7 @@ import java.util.function.Function;
 
 import static com.kuuhaku.model.enums.dunhun.GearSlot.*;
 
-public final class Equipment implements Iterable<Gear> {
+public final class Equipment implements Iterable<Gear>, Serializable {
 	private Gear helmet;
 	private Gear body;
 	private Gear boots;
