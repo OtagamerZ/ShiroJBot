@@ -111,12 +111,11 @@ public class Hero extends DAO<Hero> {
 
 		int dmg = 100;
 		int def = 100;
-		for (Object o : getStats().getEquipment().values()) {
-			Gear gear = (Gear) o;
-			gear.load(locale, this);
+		for (Gear g : getStats().getEquipment()) {
+			g.load(locale, this);
 
-			dmg += gear.getDmg();
-			def += gear.getDfs();
+			dmg += g.getDmg();
+			def += g.getDfs();
 		}
 
 		Attributes a = getStats().getAttributes().merge(getModifiers().getAttributes());

@@ -25,8 +25,11 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -35,7 +38,7 @@ import java.util.function.Function;
 
 import static com.kuuhaku.model.enums.dunhun.GearSlot.*;
 
-public final class Equipment {
+public final class Equipment implements Iterable<Gear> {
 	private Gear helmet;
 	private Gear body;
 	private Gear boots;
@@ -147,8 +150,21 @@ public final class Equipment {
 				Map.entry(GLOVES.name(), gloves),
 				Map.entry(BACK.name(), back),
 				Map.entry(AMULET.name(), amulet),
+				Map.entry(BELT.name(), belt),
 				Map.entry(RING.name(), JSONArray.of(rings.getFirst(), rings.getSecond())),
 				Map.entry(WEAPON.name(), JSONArray.of(weapons.getFirst(), weapons.getSecond()))
 		).toString();
+	}
+
+	@NotNull
+	@Override
+	public Iterator<Gear> iterator() {
+		Gear[] gears = {
+				helmet, body, boots, gloves, back, amulet, belt,
+				rings.getFirst(), rings.getSecond(),
+				weapons.getFirst(), weapons.getSecond()
+		};
+
+		return Arrays.stream(gears).iterator();
 	}
 }
