@@ -24,6 +24,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedAffix;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
@@ -126,7 +127,7 @@ public class Affix extends DAO<Affix> {
 		}
 
 		List<String> affixes = gear.getAffixes().parallelStream()
-				.map(ga -> ga.getAffix().getId())
+				.map(ga -> Utils.extract(ga.getAffix().getId(), "(.+)_\\w+$"))
 				.toList();
 
 		RandomList<String> rl = new RandomList<>();
@@ -136,7 +137,7 @@ public class Affix extends DAO<Affix> {
 						FROM affix
 						WHERE type = ?1
 						  AND req_tags <@ cast(?2 AS JSONB)
-						  AND NOT (get_affix_family(id) = ANY (get_affix_family(?3)))
+						  AND NOT has(cast(?3 AS JSONB), get_affix_family(id))
 						""", type.name(), tags, affixes)
 				.parallelStream()
 				.forEach(a -> rl.add((String) a[0], ((Number) a[1]).intValue()));
