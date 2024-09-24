@@ -127,7 +127,7 @@ public class Affix extends DAO<Affix> {
 		}
 
 		List<String> affixes = gear.getAffixes().parallelStream()
-				.map(ga -> Utils.extract(ga.getAffix().getId(), "(.+)_\\w+$"))
+				.map(ga -> Utils.getOr(Utils.extract(ga.getAffix().getId(), "(.+)_\\w+$"), ga.getAffix().getId()))
 				.toList();
 
 		RandomList<String> rl = new RandomList<>();
