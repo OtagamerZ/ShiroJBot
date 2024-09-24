@@ -21,19 +21,16 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.EquipmentConverter;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.kuuhaku.model.persistent.javatype.EquipmentJavaType;
 import com.kuuhaku.model.records.Attributes;
 import com.kuuhaku.model.records.dunhun.Equipment;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
-import org.hibernate.annotations.JavaTypeRegistration;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 @Embeddable
-@JavaTypeRegistration(javaType = Equipment.class, descriptorClass = EquipmentJavaType.class)
 public class HeroStats {
 	@Column(name = "hp", nullable = false)
 	private int hp;

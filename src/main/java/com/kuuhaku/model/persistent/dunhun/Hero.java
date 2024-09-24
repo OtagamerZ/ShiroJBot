@@ -23,16 +23,19 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.HeroModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.persistent.javatype.EquipmentJavaType;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.Attributes;
+import com.kuuhaku.model.records.dunhun.Equipment;
 import com.kuuhaku.util.Graph;
 import jakarta.persistence.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.JavaTypeRegistration;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -43,6 +46,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "hero", schema = "dunhun")
+@JavaTypeRegistration(javaType = Equipment.class, descriptorClass = EquipmentJavaType.class)
 public class Hero extends DAO<Hero> {
 	@Id
 	@Column(name = "name", nullable = false)
