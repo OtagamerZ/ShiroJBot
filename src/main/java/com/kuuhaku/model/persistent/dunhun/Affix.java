@@ -32,10 +32,7 @@ import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -124,9 +121,15 @@ public class Affix extends DAO<Affix> {
 		JSONArray tags = new JSONArray(base.getStats().tags());
 		tags.add(base.getStats().slot().name());
 
-		JSONArray affixes = gear.getAffixes().parallelStream()
-				.map(ga -> ga.getAffix().getId())
-				.collect(Collectors.toCollection(JSONArray::new));
+		JSONArray affixes = new JSONArray();
+		List<Integer> groups = new ArrayList<>();
+
+		for (GearAffix ga : gear.getAffixes()) {
+			affixes.add(ga.getAffix().getId());
+			if (ga.getAffix().getGroup() != null) {
+				groups.add(ga.getAffix().getGroup());
+			}
+		}
 
 		RandomList<String> rl = new RandomList<>();
 		DAO.queryAllUnmapped("""
@@ -136,7 +139,8 @@ public class Affix extends DAO<Affix> {
 						WHERE type = ?1
 						  AND req_tags <@ cast(?2 AS JSONB)
 						  AND NOT has(get_affix_family(cast(?3 AS JSONB)), get_affix_family(id))
-						""", type.name(), tags.toString(), affixes.toString())
+						  AND affix_group NOT IN ?4
+						""", type.name(), tags.toString(), affixes.toString(), groups)
 				.parallelStream()
 				.forEach(a -> rl.add((String) a[0], ((Number) a[1]).intValue()));
 
