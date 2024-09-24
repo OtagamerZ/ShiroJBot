@@ -32,10 +32,7 @@ import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -121,8 +118,12 @@ public class Affix extends DAO<Affix> {
 	public static Affix getRand(Gear gear, AffixType type) {
 		Basetype base = gear.getBasetype();
 
-		JSONArray tags = new JSONArray(base.getStats().tags());
+		List<String> tags = new ArrayList<>();
 		tags.add(base.getStats().slot().name());
+
+		for (Object t : base.getStats().tags()) {
+			tags.add((String) t);
+		}
 
 		List<String> affixes = gear.getAffixes().parallelStream()
 				.map(ga -> ga.getAffix().getId())
