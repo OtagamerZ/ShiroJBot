@@ -133,9 +133,10 @@ public final class Equipment implements Iterable<Gear>, Serializable {
 							action.apply(weapons.getSecond())
 					);
 				}
+				return;
 			}
 
-			Field f = getClass().getField(slot.name().toLowerCase());
+			Field f = getClass().getDeclaredField(slot.name().toLowerCase());
 			f.set(this, action.apply((Gear) f.get(this)));
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			Constants.LOGGER.error(e, e);
