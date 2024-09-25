@@ -49,8 +49,7 @@ public class Monster extends DAO<Monster> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedMonster> infos = new HashSet<>();
 
-	@Transient
-	private final HeroModifiers modifiers = new HeroModifiers();
+	private transient final HeroModifiers modifiers = new HeroModifiers();
 
 	public String getId() {
 		return id;

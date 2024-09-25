@@ -25,11 +25,12 @@ import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
+import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.model.records.dunhun.Equipment;
+import com.kuuhaku.model.common.dunhun.Equipment;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -61,9 +62,12 @@ public class HeroInfoCommand implements Executable {
 		for (GearSlot gs : GearSlot.values()) {
 			equips.withSlot(gs, g -> {
 				if (g == null) {
-					sb.appendNewLine("-# *" + locale.get("str/empty") + "*");
+					sb.appendNewLine("*" + locale.get("str/empty") + "*");
 				} else {
-					sb.appendNewLine("- " + g.getName(locale));
+					sb.appendNewLine("`" + g.getId() + "` - " + g.getName(locale));
+					for (GearAffix ga : g.getAllAffixes()) {
+						sb.appendNewLine("-# " + ga.getDescription(locale));
+					}
 				}
 
 				return g;

@@ -20,6 +20,7 @@ package com.kuuhaku.model.records.dunhun;
 
 import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
+import com.kuuhaku.model.persistent.dunhun.Affix;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -49,6 +50,9 @@ public record GearStats(
 		@JdbcTypeCode(SqlTypes.JSON)
 		@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 		@Convert(converter = JSONArrayConverter.class)
-		JSONArray tags
+		JSONArray tags,
+		@ManyToOne
+		@JoinColumn(name = "implicit_id")
+		Affix implicit
 ) {
 }

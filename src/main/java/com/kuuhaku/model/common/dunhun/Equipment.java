@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.dunhun;
+package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
@@ -27,7 +27,6 @@ import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -38,7 +37,7 @@ import java.util.function.Function;
 
 import static com.kuuhaku.model.enums.dunhun.GearSlot.*;
 
-public final class Equipment implements Iterable<Gear>, Serializable {
+public class Equipment implements Iterable<Gear> {
 	private Gear helmet;
 	private Gear body;
 	private Gear boots;
@@ -101,21 +100,33 @@ public final class Equipment implements Iterable<Gear>, Serializable {
 	}
 
 	public boolean equip(Gear gear) {
-		AtomicBoolean equipped = new AtomicBoolean();
+		unequip(gear);
+
+		AtomicBoolean done = new AtomicBoolean();
 		withSlot(gear.getBasetype().getStats().slot(), g -> {
-			if (g == null) {
-				equipped.set(true);
+			if (!done.get() && g == null) {
+				done.set(true);
 				return gear;
 			}
 
 			return g;
 		});
 
-		return equipped.get();
+		return done.get();
 	}
 
-	public void unequip(Gear gear) {
-		withSlot(gear.getBasetype().getStats().slot(), g -> Objects.equals(g, gear) ? null : g);
+	public boolean unequip(Gear gear) {
+		AtomicBoolean done = new AtomicBoolean();
+		withSlot(gear.getBasetype().getStats().slot(), g -> {
+			if (!done.get() && Objects.equals(g, gear)) {
+				done.set(true);
+				return null;
+			}
+
+			return g;
+		});
+
+		return done.get();
 	}
 
 	public void withSlot(GearSlot slot, Function<Gear, Gear> action) {
@@ -149,9 +160,9 @@ public final class Equipment implements Iterable<Gear>, Serializable {
 			withSlot(slot, g -> {
 				if (g != null) {
 					if (Utils.equalsAny(slot, RING, WEAPON)) {
-						((JSONArray) jo.computeIfAbsent(slot.name(), k -> new JSONArray())).add(g);
+						((JSONArray) jo.computeIfAbsent(slot.name(), k -> new JSONArray())).add(g.getId());
 					} else {
-						jo.put(slot.name(), g);
+						jo.put(slot.name(), g.getId());
 					}
 				}
 

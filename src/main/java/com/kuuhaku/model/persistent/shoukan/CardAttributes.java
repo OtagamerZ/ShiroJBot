@@ -142,6 +142,10 @@ public class CardAttributes implements Serializable, Cloneable {
 		return tags;
 	}
 
+	public Set<LocalizedDescription> getDescriptions() {
+		return descriptions;
+	}
+
 	public String getDescription(I18N locale) {
 		return descriptions.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
@@ -151,6 +155,14 @@ public class CardAttributes implements Serializable, Cloneable {
 
 	public String getEffect() {
 		return Utils.getOr(effect, "");
+	}
+
+	public void setEffect(@Language("Groovy") String effect) {
+		this.effect = effect;
+	}
+
+	public void appendEffect(@Language("Groovy") String effect) {
+		this.effect = "{\n" + effect + "\n}";
 	}
 
 	public EnumSet<Trigger> getLocks() {

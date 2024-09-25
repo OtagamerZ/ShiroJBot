@@ -132,6 +132,14 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		});
 	}
 
+	public void applyXp() {
+		Pair<Integer, Long> val = MinuteSchedule.XP_TO_ADD.remove(id.uid() + "-" + id.gid());
+		if (val != null) {
+			xp += val.getFirst();
+			save();
+		}
+	}
+
 	public int getLevel() {
 		return (int) Math.max(1, Math.floor(Math.sqrt(getXp() / 100d)) + 1);
 	}

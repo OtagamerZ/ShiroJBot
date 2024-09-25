@@ -18,33 +18,31 @@
 
 package com.kuuhaku.command.dunhun;
 
-import com.kuuhaku.controller.DAO;
+import com.github.ygimenez.model.Page;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.GearSlot;
-import com.kuuhaku.model.persistent.dunhun.Basetype;
 import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
+import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
+import java.util.List;
+
 @Command(
 		name = "hero",
-		path = {"debug", "gen_item"},
+		path = "inventory",
 		category = Category.STAFF
 )
-@Syntax(allowEmpty = true, value = "<id:word:r>")
-public class TestSpawnCommand implements Executable {
+public class HeroInventoryCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Deck d = data.profile().getAccount().getDeck();
@@ -59,32 +57,23 @@ public class TestSpawnCommand implements Executable {
 			return;
 		}
 
-		Gear g;
-		if (args.has("id")) {
-			g = Gear.getRandom(h, DAO.find(Basetype.class, args.getString("id").toUpperCase()));
-		} else {
-			g = Gear.getRandom(h, Utils.getRandomEntry(GearSlot.values()));
+		List<Gear> equips = h.getInventory();
+		if (equips.isEmpty()) {
+			event.channel().sendMessage(locale.get("error/inventory_empty_hero", h.getName())).queue();
+			return;
 		}
-
-		g.save();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(g.getName(locale));
+				.setAuthor(locale.get("str/hero_inventory", h.getName()));
 
-		GearAffix imp = g.getImplicit();
-		if (imp != null) {
-			eb.appendDescription(imp.getDescription(locale) + "\n");
-			if (!g.getAffixes().isEmpty()) {
-				eb.appendDescription("────────────────────\n");
-			}
-		}
+		List<Page> pages = Utils.generatePages(eb, equips, 10, 5,
+				g -> new FieldMimic(
+						"`" + g.getId() + "` - " + g.getBasetype().getIcon() + " " + g.getName(locale),
+						""
+				).toString(),
+				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
+		);
 
-		for (GearAffix ga : g.getAffixes()) {
-			eb.appendDescription(ga.getDescription(locale) + "\n");
-		}
-
-		event.channel().sendMessage("GEN_ITEM")
-				.addEmbeds(eb.build())
-				.queue();
+		Utils.paginate(pages, 1, true, event.channel(), event.user());
 	}
 }

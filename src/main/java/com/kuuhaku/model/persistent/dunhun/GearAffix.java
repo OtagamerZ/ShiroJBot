@@ -61,9 +61,14 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	public GearAffix(Gear gear, Affix affix) {
+		this(gear, affix, Calc.rng());
+	}
+
+	public GearAffix(Gear gear, Affix affix, double roll) {
 		this.id = new GearAffixId(gear.getId(), affix.getId());
 		this.gear = gear;
 		this.affix = affix;
+		this.roll = roll;
 	}
 
 	public GearAffixId getId() {
@@ -80,6 +85,10 @@ public class GearAffix extends DAO<GearAffix> {
 
 	public double getRoll() {
 		return roll;
+	}
+
+	public void setRoll(double roll) {
+		this.roll = roll;
 	}
 
 	public String getName(I18N locale) {

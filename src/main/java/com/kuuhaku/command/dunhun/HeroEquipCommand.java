@@ -22,29 +22,23 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.GearSlot;
-import com.kuuhaku.model.persistent.dunhun.Basetype;
 import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
 		name = "hero",
-		path = {"debug", "gen_item"},
+		path = "equip",
 		category = Category.STAFF
 )
-@Syntax(allowEmpty = true, value = "<id:word:r>")
-public class TestSpawnCommand implements Executable {
+@Syntax("<id:number:r>")
+public class HeroEquipCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Deck d = data.profile().getAccount().getDeck();
@@ -59,32 +53,18 @@ public class TestSpawnCommand implements Executable {
 			return;
 		}
 
-		Gear g;
-		if (args.has("id")) {
-			g = Gear.getRandom(h, DAO.find(Basetype.class, args.getString("id").toUpperCase()));
-		} else {
-			g = Gear.getRandom(h, Utils.getRandomEntry(GearSlot.values()));
+		Gear g = DAO.find(Gear.class, args.getInt("id"));
+		if (g == null || !g.getOwner().equals(h)) {
+			event.channel().sendMessage(locale.get("error/gear_not_found")).queue();
+			return;
 		}
 
-		g.save();
-
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(g.getName(locale));
-
-		GearAffix imp = g.getImplicit();
-		if (imp != null) {
-			eb.appendDescription(imp.getDescription(locale) + "\n");
-			if (!g.getAffixes().isEmpty()) {
-				eb.appendDescription("────────────────────\n");
-			}
+		if (!h.getEquipment().equip(g)) {
+			event.channel().sendMessage(locale.get("error/slot_full")).queue();
+			return;
 		}
 
-		for (GearAffix ga : g.getAffixes()) {
-			eb.appendDescription(ga.getDescription(locale) + "\n");
-		}
-
-		event.channel().sendMessage("GEN_ITEM")
-				.addEmbeds(eb.build())
-				.queue();
+		h.save();
+		event.channel().sendMessage(locale.get("success/equipped")).queue();
 	}
 }

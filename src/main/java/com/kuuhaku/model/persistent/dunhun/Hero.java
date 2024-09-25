@@ -20,23 +20,22 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.model.common.dunhun.HeroModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.persistent.converter.EquipmentConverter;
-import com.kuuhaku.model.persistent.javatype.EquipmentJavaType;
+import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.Attributes;
-import com.kuuhaku.model.records.dunhun.Equipment;
 import com.kuuhaku.util.Graph;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.JavaTypeRegistration;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -44,13 +43,12 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.HexFormat;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "hero", schema = "dunhun")
-@JavaTypeRegistration(javaType = Equipment.class, descriptorClass = EquipmentJavaType.class)
 public class Hero extends DAO<Hero> {
 	@Id
 	@Column(name = "id", nullable = false)
@@ -66,11 +64,11 @@ public class Hero extends DAO<Hero> {
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "equipment", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = EquipmentConverter.class)
-	private Equipment equipment = new Equipment();
+	@Convert(converter = JSONObjectConverter.class)
+	private JSONObject equipment = new JSONObject();
 
-	@Transient
-	private final HeroModifiers modifiers = new HeroModifiers();
+	private transient final HeroModifiers modifiers = new HeroModifiers();
+	private transient Equipment equipCache;
 
 	public Hero() {
 	}
@@ -119,11 +117,42 @@ public class Hero extends DAO<Hero> {
 	}
 
 	public Equipment getEquipment() {
-		return equipment;
+		if (equipCache != null) return equipCache;
+
+		List<Integer> ids = new ArrayList<>();
+		for (Object o : equipment.values()) {
+			if (o instanceof Number n) {
+				ids.add(n.intValue());
+			} else if (o instanceof Collection<?> c) {
+				for (Object n : c) {
+					ids.add(((Number) n).intValue());
+				}
+			}
+		}
+
+		Map<Integer, Gear> gear = DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.id IN ?1", ids)
+				.parallelStream()
+				.collect(Collectors.toMap(Gear::getId, Function.identity()));
+
+		return equipCache = new Equipment((gs, i) -> {
+			if (i < 0) {
+				return gear.get(equipment.getInt(gs.name()));
+			}
+
+			return gear.get(equipment.getJSONArray(gs.name()).getInt(i));
+		});
 	}
 
 	public List<Gear> getInventory() {
-		return DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.owner.id = ?1", id);
+		List<Integer> ids = DAO.queryAllNative(Integer.class, """
+				SELECT g.id
+				FROM gear g
+				INNER JOIN hero h ON h.id = g.owner_id
+				WHERE h.id = ?1
+				  AND NOT (jsonb_path_query_array(h.equipment, '$.*') @> cast(cast(g.id AS VARCHAR) AS JSONB))
+				""", id);
+
+		return DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.id IN ?1", ids);
 	}
 
 	public Senshi asSenshi(I18N locale) {
@@ -132,7 +161,7 @@ public class Hero extends DAO<Hero> {
 
 		int dmg = 100;
 		int def = 100;
-		for (Gear g : equipment) {
+		for (Gear g : getEquipment()) {
 			if (g == null) continue;
 
 			g.load(locale, this, s);
@@ -152,6 +181,14 @@ public class Hero extends DAO<Hero> {
 		base.getTags().add("HERO");
 
 		return s;
+	}
+
+	@Override
+	public void beforeSave() {
+		if (equipCache != null) {
+			equipment = new JSONObject(equipCache.toString());
+			equipCache = null;
+		}
 	}
 
 	@Override

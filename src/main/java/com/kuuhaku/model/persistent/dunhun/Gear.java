@@ -33,10 +33,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -65,8 +62,10 @@ public class Gear extends DAO<Gear> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<GearAffix> affixes = new LinkedHashSet<>();
 
-	@Transient
-	private final GearModifiers modifiers = new GearModifiers();
+	@Column(name = "base_roll", nullable = false)
+	private double roll = Calc.rng();
+
+	private transient final GearModifiers modifiers = new GearModifiers();
 
 	public Gear() {
 	}
@@ -88,8 +87,31 @@ public class Gear extends DAO<Gear> {
 		return owner;
 	}
 
+	public List<GearAffix> getAllAffixes() {
+		List<GearAffix> affs = new ArrayList<>();
+		GearAffix imp = getImplicit();
+		if (imp != null) {
+			affs.add(imp);
+		}
+		affs.addAll(affixes.stream()
+				.sorted(Comparator.comparing(ga -> ga.getAffix().getType() == AffixType.SUFFIX))
+				.toList()
+		);
+
+		return affs;
+	}
+
 	public Set<GearAffix> getAffixes() {
 		return affixes;
+	}
+
+	public GearAffix getImplicit() {
+		if (basetype.getStats().implicit() == null) return null;
+		return new GearAffix(this, basetype.getStats().implicit(), roll);
+	}
+
+	public double getRoll() {
+		return roll;
 	}
 
 	public String getName(I18N locale) {
@@ -124,17 +146,19 @@ public class Gear extends DAO<Gear> {
 
 	public void load(I18N locale, Hero hero, Senshi senshi) {
 		modifiers.reset();
-		for (GearAffix ga : affixes) {
+
+		for (GearAffix ga : getAllAffixes()) {
 			try {
 				Affix a = ga.getAffix();
 				Utils.exec(getClass().getSimpleName(), a.getEffect(), Map.of(
 						"gear", this,
 						"hero", hero,
 						"self", senshi,
-						"values", ga.getValues(locale)
+						"values", ga.getValues(locale),
+						"grant", Utils.getOr(Utils.extract(ga.getDescription(locale), "\"(.+?)\""), "")
 				));
 			} catch (Exception e) {
-				Constants.LOGGER.warn("Failed to apply affix {}", ga, e);
+				Constants.LOGGER.warn("Failed to apply implicit {}", ga, e);
 			}
 		}
 	}
@@ -153,9 +177,13 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public static Gear getRandom(Hero hero, GearSlot slot) {
-		Gear out = new Gear(hero, Basetype.getRandom(slot));
+		return getRandom(hero, Basetype.getRandom(slot));
+	}
 
-		for (AffixType type : AffixType.values()) {
+	public static Gear getRandom(Hero hero, Basetype base) {
+		Gear out = new Gear(hero, base);
+
+		for (AffixType type : AffixType.validValues()) {
 			if (Calc.chance(50)) {
 				Affix af = Affix.getRandom(out, type);
 				if (af == null) continue;

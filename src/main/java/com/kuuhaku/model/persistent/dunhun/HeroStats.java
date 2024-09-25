@@ -59,10 +59,6 @@ public class HeroStats {
 		return hp;
 	}
 
-	public int getMaxHp() {
-		return 100 + getVitality() * 10;
-	}
-
 	public void setHp(int hp) {
 		this.hp = hp;
 	}
