@@ -92,10 +92,10 @@ public class Basetype extends DAO<Basetype> {
 
 	public static Basetype getRandom(GearSlot slot, int minLevel, int maxLevel) {
 		return DAO.query(Basetype.class, """
-				SELECT b 
-				FROM Basetype b 
+				SELECT b
+				FROM Basetype b
 				WHERE b.stats.slot = ?1
-				  AND b.stats.reqLevel BETWEEN ?2 AND ?3 
+				  AND b.stats.reqLevel BETWEEN ?2 AND ?3
 				ORDER BY random()
 				""", slot, minLevel, maxLevel
 		);
