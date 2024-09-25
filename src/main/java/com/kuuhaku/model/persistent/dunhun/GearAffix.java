@@ -82,7 +82,7 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	public String getName(I18N locale) {
-		String ending = gear.getBasetype().getInfo(locale).getEnding();
+		String ending = Utils.getOr(gear.getBasetype().getInfo(locale).getEnding(), "M");
 
 		return Utils.regex(affix.getInfo(locale).getName(), "\\[(?<F>\\w*)|(?<M>\\w*)]")
 				.replaceAll(r -> r.group(ending));
