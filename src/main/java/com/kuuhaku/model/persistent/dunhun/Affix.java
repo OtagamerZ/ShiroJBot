@@ -115,7 +115,7 @@ public class Affix extends DAO<Affix> {
 		return Objects.hashCode(id);
 	}
 
-	public static Affix getRand(Gear gear, AffixType type) {
+	public static Affix getRandom(Gear gear, AffixType type) {
 		Basetype base = gear.getBasetype();
 
 		JSONArray tags = new JSONArray(base.getStats().tags());
@@ -131,23 +131,21 @@ public class Affix extends DAO<Affix> {
 			}
 		}
 
-		System.out.println(type.name());
-		System.out.println(tags);
-		System.out.println(affixes);
-		System.out.println(groups);
-
 		RandomList<String> rl = new RandomList<>();
-		DAO.queryAllUnmapped("""
-						SELECT id
-						     , weight
-						FROM affix
-						WHERE type = ?1
-						  AND req_tags <@ cast(?2 AS JSONB)
-						  AND NOT has(get_affix_family(cast(?3 AS JSONB)), get_affix_family(id))
-						  AND (affix_group IS NULL OR affix_group NOT IN ?4)
-						""", type.name(), tags.toString(), affixes.toString(), groups)
-				.parallelStream()
-				.forEach(a -> rl.add((String) a[0], ((Number) a[1]).intValue()));
+		List<Object[]> affs = DAO.queryAllUnmapped("""
+				SELECT id
+				     , weight
+				FROM affix
+				WHERE type = ?1
+				  AND req_tags <@ cast(?2 AS JSONB)
+				  AND NOT has(get_affix_family(cast(?3 AS JSONB)), get_affix_family(id))
+				  AND (affix_group IS NULL OR affix_group NOT IN ?4)
+				""", type.name(), tags.toString(), affixes.toString(), groups);
+
+		for (Object[] a : affs) {
+			rl.add((String) a[0], ((Number) a[1]).intValue());
+			System.out.println(Arrays.toString(a));
+		}
 
 		if (rl.entries().isEmpty()) return null;
 		return DAO.find(Affix.class, rl.get());
