@@ -123,7 +123,15 @@ public class Hero extends DAO<Hero> {
 	}
 
 	public List<Gear> getInventory() {
-		return DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.owner.id = ?1", id);
+		List<Integer> ids = DAO.queryAllNative(Integer.class, """
+				SELECT g.id
+				FROM gear g
+				INNER JOIN hero h ON h.id = g.owner_id
+				WHERE h.id = ?1
+				  AND !(jsonb_path_query_array(h.equipment, '$.*') @> g.id)
+				""");
+
+		return DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.id IN ?1", ids);
 	}
 
 	public Senshi asSenshi(I18N locale) {
