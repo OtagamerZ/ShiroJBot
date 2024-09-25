@@ -113,6 +113,11 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	@Override
+	public String toString() {
+		return affix.getId();
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
