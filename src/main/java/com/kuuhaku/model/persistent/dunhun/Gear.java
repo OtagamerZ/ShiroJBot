@@ -156,10 +156,12 @@ public class Gear extends DAO<Gear> {
 		Gear out = new Gear(hero, Basetype.getRandom(slot));
 
 		for (AffixType type : AffixType.values()) {
-			Affix af = Affix.getRandom(out, type);
-			if (af == null) continue;
+			if (Calc.chance(50)) {
+				Affix af = Affix.getRandom(out, type);
+				if (af == null) continue;
 
-			out.getAffixes().add(new GearAffix(out, af));
+				out.getAffixes().add(new GearAffix(out, af));
+			}
 		}
 
 		return out;
