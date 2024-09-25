@@ -29,7 +29,7 @@ import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.Attributes;
-import com.kuuhaku.model.records.dunhun.Equipment;
+import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.util.Graph;
 import jakarta.persistence.*;
 import org.apache.commons.codec.digest.DigestUtils;

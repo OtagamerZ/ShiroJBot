@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.dunhun;
+package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
@@ -38,7 +38,7 @@ import java.util.function.Function;
 
 import static com.kuuhaku.model.enums.dunhun.GearSlot.*;
 
-public final class Equipment implements Iterable<Gear>, Serializable {
+public class Equipment implements Iterable<Gear>, Serializable {
 	private Gear helmet;
 	private Gear body;
 	private Gear boots;
@@ -161,9 +161,9 @@ public final class Equipment implements Iterable<Gear>, Serializable {
 			withSlot(slot, g -> {
 				if (g != null) {
 					if (Utils.equalsAny(slot, RING, WEAPON)) {
-						((JSONArray) jo.computeIfAbsent(slot.name(), k -> new JSONArray())).add(g);
+						((JSONArray) jo.computeIfAbsent(slot.name(), k -> new JSONArray())).add(g.getId());
 					} else {
-						jo.put(slot.name(), g);
+						jo.put(slot.name(), g.getId());
 					}
 				}
 

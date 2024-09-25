@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent.converter;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.records.dunhun.Equipment;
+import com.kuuhaku.model.common.dunhun.Equipment;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

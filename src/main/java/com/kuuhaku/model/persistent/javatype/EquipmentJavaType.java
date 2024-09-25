@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent.javatype;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.records.dunhun.Equipment;
+import com.kuuhaku.model.common.dunhun.Equipment;
 import com.ygimenez.json.JSONObject;
 import org.hibernate.type.descriptor.WrapperOptions;
 import org.hibernate.type.descriptor.java.AbstractClassJavaType;
