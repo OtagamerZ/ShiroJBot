@@ -152,7 +152,7 @@ public class Gear extends DAO<Gear> {
 		return Objects.hashCode(id);
 	}
 
-	public static Gear genRandom(Hero hero, GearSlot slot) {
+	public static Gear getRandom(Hero hero, GearSlot slot) {
 		Gear out = new Gear(hero, Basetype.getRandom(slot));
 
 		for (AffixType type : AffixType.values()) {

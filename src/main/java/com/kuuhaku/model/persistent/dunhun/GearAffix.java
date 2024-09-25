@@ -90,13 +90,13 @@ public class GearAffix extends DAO<GearAffix> {
 
 	public String getDescription(I18N locale) {
 		List<Integer> vals = getValues(locale);
-		return Utils.regex(affix.getInfo(locale).getName(), "\\{.+?}")
+		return Utils.regex(affix.getInfo(locale).getDescription(), "\\{.+?}")
 				.replaceAll(r -> String.valueOf(vals.removeFirst()));
 	}
 
 	public List<Integer> getValues(I18N locale) {
 		List<Integer> values = new ArrayList<>();
-		Matcher m = Utils.regex(affix.getInfo(locale).getName(), "\\{(\\d+)(?:-(\\d+))?}");
+		Matcher m = Utils.regex(affix.getInfo(locale).getDescription(), "\\{(\\d+)(?:-(\\d+))?}");
 		while (m.find()) {
 			int min = Integer.parseInt(m.group(1));
 			if (m.group(2) == null) {
