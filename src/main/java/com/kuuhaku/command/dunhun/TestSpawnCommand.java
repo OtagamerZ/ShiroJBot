@@ -18,12 +18,15 @@
 
 package com.kuuhaku.command.dunhun;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
+import com.kuuhaku.model.persistent.dunhun.Basetype;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
@@ -40,6 +43,7 @@ import net.dv8tion.jda.api.JDA;
 		path = {"debug", "gen_item"},
 		category = Category.STAFF
 )
+@Syntax(allowEmpty = true, value = "<id:word:r>")
 public class TestSpawnCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -55,7 +59,13 @@ public class TestSpawnCommand implements Executable {
 			return;
 		}
 
-		Gear g = Gear.getRandom(h, Utils.getRandomEntry(GearSlot.values()));
+		Gear g;
+		if (args.has("id")) {
+			g = Gear.getRandom(h, DAO.find(Basetype.class, args.getString("id").toUpperCase()));
+		} else {
+			g = Gear.getRandom(h, Utils.getRandomEntry(GearSlot.values()));
+		}
+
 		g.save();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()

@@ -175,7 +175,11 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public static Gear getRandom(Hero hero, GearSlot slot) {
-		Gear out = new Gear(hero, Basetype.getRandom(slot));
+		return getRandom(hero, Basetype.getRandom(slot));
+	}
+
+	public static Gear getRandom(Hero hero, Basetype base) {
+		Gear out = new Gear(hero, base);
 
 		for (AffixType type : AffixType.validValues()) {
 			if (Calc.chance(50)) {

@@ -58,7 +58,7 @@ import java.util.*;
 		name = "gacha",
 		category = Category.MISC
 )
-@Syntax(allowEmpty = true, value = "<type:word>")
+@Syntax(allowEmpty = true, value = "<type:word:r>")
 @Requires({
 		Permission.MESSAGE_EMBED_LINKS,
 		Permission.MESSAGE_ATTACH_FILES
