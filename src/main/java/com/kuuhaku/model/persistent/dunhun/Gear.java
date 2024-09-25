@@ -64,9 +64,8 @@ public class Gear extends DAO<Gear> {
 
 	@Column(name = "base_roll", nullable = false)
 	private double roll = Calc.rng();
-
-	@Transient
-	private final GearModifiers modifiers = new GearModifiers();
+	
+	private transient final GearModifiers modifiers = new GearModifiers();
 
 	public Gear() {
 	}
