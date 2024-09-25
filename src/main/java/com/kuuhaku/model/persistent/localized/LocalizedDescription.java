@@ -39,6 +39,14 @@ public class LocalizedDescription extends DAO<LocalizedDescription> implements S
 	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
 	private String description;
 
+	public LocalizedDescription() {
+	}
+
+	public LocalizedDescription(I18N locale, String description) {
+		this.id = new LocalizedId("GEN_" + locale, locale);
+		this.description = description;
+	}
+
 	public LocalizedId getId() {
 		return id;
 	}
@@ -49,6 +57,10 @@ public class LocalizedDescription extends DAO<LocalizedDescription> implements S
 
 	public String getDescription() {
 		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
