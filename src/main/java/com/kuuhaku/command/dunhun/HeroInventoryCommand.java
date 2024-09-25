@@ -18,27 +18,30 @@
 
 package com.kuuhaku.command.dunhun;
 
-import com.kuuhaku.controller.DAO;
+import com.github.ygimenez.model.Page;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Syntax;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
+import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+
+import java.util.List;
 
 @Command(
 		name = "hero",
-		path = "unequip",
+		path = "inventory",
 		category = Category.STAFF
 )
-@Syntax("<id:number:r>")
-public class HeroUnequipCommand implements Executable {
+public class HeroInventoryCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Deck d = data.profile().getAccount().getDeck();
@@ -53,18 +56,17 @@ public class HeroUnequipCommand implements Executable {
 			return;
 		}
 
-		Gear g = DAO.find(Gear.class, args.getInt("id"));
-		if (g == null || !g.getOwner().equals(h)) {
-			event.channel().sendMessage(locale.get("error/gear_not_found")).queue();
-			return;
-		}
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setAuthor(locale.get("str/hero_inventory", h.getName()));
 
-		if (!h.getEquipment().unequip(g)) {
-			event.channel().sendMessage(locale.get("error/not_equipped")).queue();
-			return;
-		}
+		List<Page> pages = Utils.generatePages(eb, h.getInventory(), 10, 5,
+				g -> new FieldMimic(
+						g.getBasetype().getIcon() + " " + g.getName(locale) + " (`" + g.getId() + "`)",
+						""
+				).toString(),
+				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
+		);
 
-		h.save();
-		event.channel().sendMessage(locale.get("success/equipped")).queue();
+		Utils.paginate(pages, 1, true, event.channel(), event.user());
 	}
 }
