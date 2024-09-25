@@ -103,21 +103,31 @@ public final class Equipment implements Iterable<Gear>, Serializable {
 	public boolean equip(Gear gear) {
 		unequip(gear);
 
-		AtomicBoolean equipped = new AtomicBoolean();
+		AtomicBoolean done = new AtomicBoolean();
 		withSlot(gear.getBasetype().getStats().slot(), g -> {
 			if (g == null) {
-				equipped.set(true);
+				done.set(true);
 				return gear;
 			}
 
 			return g;
 		});
 
-		return equipped.get();
+		return done.get();
 	}
 
-	public void unequip(Gear gear) {
-		withSlot(gear.getBasetype().getStats().slot(), g -> Objects.equals(g, gear) ? null : g);
+	public boolean unequip(Gear gear) {
+		AtomicBoolean done = new AtomicBoolean();
+		withSlot(gear.getBasetype().getStats().slot(), g -> {
+			if (Objects.equals(g, gear)) {
+				done.set(true);
+				return null;
+			}
+
+			return g;
+		});
+
+		return done.get();
 	}
 
 	public void withSlot(GearSlot slot, Function<Gear, Gear> action) {
