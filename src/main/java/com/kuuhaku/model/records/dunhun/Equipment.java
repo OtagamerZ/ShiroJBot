@@ -101,6 +101,8 @@ public final class Equipment implements Iterable<Gear>, Serializable {
 	}
 
 	public boolean equip(Gear gear) {
+		unequip(gear);
+
 		AtomicBoolean equipped = new AtomicBoolean();
 		withSlot(gear.getBasetype().getStats().slot(), g -> {
 			if (g == null) {

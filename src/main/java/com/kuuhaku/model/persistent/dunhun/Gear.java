@@ -33,10 +33,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -91,6 +88,20 @@ public class Gear extends DAO<Gear> {
 		return owner;
 	}
 
+	public List<GearAffix> getAllAffixes() {
+		List<GearAffix> affs = new ArrayList<>();
+		GearAffix imp = getImplicit();
+		if (imp != null) {
+			affs.add(imp);
+		}
+		affs.addAll(affixes.stream()
+				.sorted(Comparator.comparing(ga -> ga.getAffix().getType() == AffixType.SUFFIX))
+				.toList()
+		);
+
+		return affs;
+	}
+
 	public Set<GearAffix> getAffixes() {
 		return affixes;
 	}
@@ -137,27 +148,18 @@ public class Gear extends DAO<Gear> {
 	public void load(I18N locale, Hero hero, Senshi senshi) {
 		modifiers.reset();
 
-		GearAffix imp = getImplicit();
-		if (imp != null) {
-			execute(locale, hero, senshi, imp);
-		}
-
-		for (GearAffix ga : affixes) {
-			execute(locale, hero, senshi, ga);
-		}
-	}
-
-	private void execute(I18N locale, Hero hero, Senshi senshi, GearAffix ga) {
-		try {
-			Affix a = ga.getAffix();
-			Utils.exec(getClass().getSimpleName(), a.getEffect(), Map.of(
-					"gear", this,
-					"hero", hero,
-					"self", senshi,
-					"values", ga.getValues(locale)
-			));
-		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to apply implicit {}", ga, e);
+		for (GearAffix ga : getAllAffixes()) {
+			try {
+				Affix a = ga.getAffix();
+				Utils.exec(getClass().getSimpleName(), a.getEffect(), Map.of(
+						"gear", this,
+						"hero", hero,
+						"self", senshi,
+						"values", ga.getValues(locale)
+				));
+			} catch (Exception e) {
+				Constants.LOGGER.warn("Failed to apply implicit {}", ga, e);
+			}
 		}
 	}
 

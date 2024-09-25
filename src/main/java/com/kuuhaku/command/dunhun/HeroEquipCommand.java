@@ -18,29 +18,27 @@
 
 package com.kuuhaku.command.dunhun;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.GearSlot;
-import com.kuuhaku.model.persistent.dunhun.GearAffix;
+import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.model.records.dunhun.Equipment;
 import com.ygimenez.json.JSONObject;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
 		name = "hero",
-		path = "info",
+		path = "equip",
 		category = Category.STAFF
 )
-public class HeroInfoCommand implements Executable {
+@Syntax("<id:number:r>")
+public class HeroEquipCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Deck d = data.profile().getAccount().getDeck();
@@ -55,28 +53,18 @@ public class HeroInfoCommand implements Executable {
 			return;
 		}
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		Equipment equips = h.getEquipment();
-		XStringBuilder sb = new XStringBuilder();
-		for (GearSlot gs : GearSlot.values()) {
-			equips.withSlot(gs, g -> {
-				if (g == null) {
-					sb.appendNewLine("-# *" + locale.get("str/empty") + "*");
-				} else {
-					sb.appendNewLine("`" + g.getId() + "` - " + g.getName(locale));
-					for (GearAffix ga : g.getAllAffixes()) {
-						sb.appendNewLine("-# " + ga.getDescription(locale));
-					}
-				}
-
-				return g;
-			});
-
-			eb.addField(locale.get("str/" + gs.name()), sb.toString(), true);
-			sb.clear();
+		Gear g = DAO.find(Gear.class, args.getInt("id"));
+		if (g == null || !g.getOwner().equals(h)) {
+			event.channel().sendMessage(locale.get("error/gear_not_found")).queue();
+			return;
 		}
 
-		event.channel().sendMessageEmbeds(eb.build()).queue();
+		if (!h.getEquipment().equip(g)) {
+			event.channel().sendMessage(locale.get("error/slot_full")).queue();
+			return;
+		}
+
+		h.save();
+		event.channel().sendMessage(locale.get("success/equipped")).queue();
 	}
 }
