@@ -95,6 +95,11 @@ public class Gear extends DAO<Gear> {
 		return affixes;
 	}
 
+	public GearAffix getImplicit() {
+		if (basetype.getStats().implicit() == null) return null;
+		return new GearAffix(this, basetype.getStats().implicit(), roll);
+	}
+
 	public double getRoll() {
 		return roll;
 	}
@@ -132,8 +137,9 @@ public class Gear extends DAO<Gear> {
 	public void load(I18N locale, Hero hero, Senshi senshi) {
 		modifiers.reset();
 
-		if (basetype.getStats().implicit() != null) {
-			execute(locale, hero, senshi, new GearAffix(this, basetype.getStats().implicit()));
+		GearAffix imp = getImplicit();
+		if (imp != null) {
+			execute(locale, hero, senshi, imp);
 		}
 
 		for (GearAffix ga : affixes) {

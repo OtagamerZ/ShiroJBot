@@ -61,8 +61,16 @@ public class TestSpawnCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(g.getName(locale));
 
+		GearAffix imp = g.getImplicit();
+		if (imp != null) {
+			eb.appendDescription(imp.getDescription(locale) + "\n");
+			if (!g.getAffixes().isEmpty()) {
+				eb.appendDescription("────────────────────\n");
+			}
+		}
+
 		for (GearAffix ga : g.getAffixes()) {
-			eb.appendDescription("- " + ga.getDescription(locale) + "\n");
+			eb.appendDescription(ga.getDescription(locale) + "\n");
 		}
 
 		event.channel().sendMessage("GEN_ITEM")
