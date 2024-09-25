@@ -144,7 +144,6 @@ public class Affix extends DAO<Affix> {
 
 		for (Object[] a : affs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
-			System.out.println(Arrays.toString(a));
 		}
 
 		if (rl.entries().isEmpty()) return null;
