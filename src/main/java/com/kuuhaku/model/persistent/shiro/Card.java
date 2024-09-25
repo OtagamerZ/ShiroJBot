@@ -72,7 +72,7 @@ public class Card extends DAO<Card> implements Serializable {
 	}
 
 	public Card(String id) {
-		this.id = id;
+		this.id = "H:" + id;
 		this.name = WordUtils.capitalizeFully(id.replace("_", " "));
 		this.anime = DAO.find(Anime.class, "NO_SYNC");
 		this.rarity = Rarity.HERO;
