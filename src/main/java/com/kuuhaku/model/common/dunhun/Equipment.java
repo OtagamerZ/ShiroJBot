@@ -104,7 +104,7 @@ public class Equipment implements Iterable<Gear> {
 
 		AtomicBoolean done = new AtomicBoolean();
 		withSlot(gear.getBasetype().getStats().slot(), g -> {
-			if (g == null) {
+			if (!done.get() && g == null) {
 				done.set(true);
 				return gear;
 			}
@@ -118,7 +118,7 @@ public class Equipment implements Iterable<Gear> {
 	public boolean unequip(Gear gear) {
 		AtomicBoolean done = new AtomicBoolean();
 		withSlot(gear.getBasetype().getStats().slot(), g -> {
-			if (Objects.equals(g, gear)) {
+			if (!done.get() && Objects.equals(g, gear)) {
 				done.set(true);
 				return null;
 			}
