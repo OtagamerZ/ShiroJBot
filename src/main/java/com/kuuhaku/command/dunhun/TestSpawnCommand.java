@@ -62,7 +62,7 @@ public class TestSpawnCommand implements Executable {
 				.setTitle(g.getName(locale));
 
 		for (GearAffix ga : g.getAffixes()) {
-			eb.appendDescription(ga.getDescription(locale) + "\n");
+			eb.appendDescription("- " + ga.getDescription(locale) + "\n");
 		}
 
 		event.channel().sendMessage("GEN_ITEM")
