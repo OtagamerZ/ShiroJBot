@@ -64,7 +64,7 @@ public class Gear extends DAO<Gear> {
 
 	@Column(name = "base_roll", nullable = false)
 	private double roll = Calc.rng();
-	
+
 	private transient final GearModifiers modifiers = new GearModifiers();
 
 	public Gear() {
@@ -154,7 +154,8 @@ public class Gear extends DAO<Gear> {
 						"gear", this,
 						"hero", hero,
 						"self", senshi,
-						"values", ga.getValues(locale)
+						"values", ga.getValues(locale),
+						"grant", Utils.getOr(Utils.extract(ga.getDescription(locale), "\"(.+?)\""), "")
 				));
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to apply implicit {}", ga, e);
