@@ -142,10 +142,8 @@ public class Affix extends DAO<Affix> {
 				  AND (affix_group IS NULL OR affix_group NOT IN ?4)
 				""", type.name(), tags.toString(), affixes.toString(), groups);
 
-		System.out.println(type);
 		for (Object[] a : affs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
-			System.out.println(Arrays.toString(a));
 		}
 
 		if (rl.entries().isEmpty()) return null;

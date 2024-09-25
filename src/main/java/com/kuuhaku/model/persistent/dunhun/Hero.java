@@ -53,8 +53,8 @@ import java.util.Objects;
 @JavaTypeRegistration(javaType = Equipment.class, descriptorClass = EquipmentJavaType.class)
 public class Hero extends DAO<Hero> {
 	@Id
-	@Column(name = "name", nullable = false)
-	private String name;
+	@Column(name = "id", nullable = false)
+	private String id;
 
 	@Embedded
 	private HeroStats stats = new HeroStats();
@@ -76,21 +76,21 @@ public class Hero extends DAO<Hero> {
 	}
 
 	public Hero(Account account, String name, Race race) {
-		this.name = name.toUpperCase();
+		this.id = name.toUpperCase();
 		this.account = account;
 		stats.setRace(race);
 	}
 
-	public String getName() {
-		return name;
+	public String getId() {
+		return id;
 	}
 
-	public String getDisplayName() {
-		return WordUtils.capitalizeFully(name.replace("_", " "));
+	public String getName() {
+		return WordUtils.capitalizeFully(id.replace("_", " "));
 	}
 
 	public boolean setImage(BufferedImage img) {
-		String hash = HexFormat.of().formatHex(DigestUtils.getMd5Digest().digest(name.getBytes()));
+		String hash = HexFormat.of().formatHex(DigestUtils.getMd5Digest().digest(id.getBytes()));
 		File parent = new File(System.getenv("CARDS_PATH") + "../heroes");
 		if (!parent.exists()) parent.mkdir();
 
@@ -123,11 +123,11 @@ public class Hero extends DAO<Hero> {
 	}
 
 	public List<Gear> getInventory() {
-		return DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.owner = ?1", name);
+		return DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.owner.id = ?1", id);
 	}
 
 	public Senshi asSenshi(I18N locale) {
-		Senshi s = new Senshi(name, stats.getRace());
+		Senshi s = new Senshi(id, stats.getRace());
 		CardAttributes base = s.getBase();
 
 		int dmg = 100;
@@ -159,11 +159,11 @@ public class Hero extends DAO<Hero> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Hero hero = (Hero) o;
-		return Objects.equals(name, hero.name);
+		return Objects.equals(id, hero.id);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(name);
+		return Objects.hashCode(id);
 	}
 }

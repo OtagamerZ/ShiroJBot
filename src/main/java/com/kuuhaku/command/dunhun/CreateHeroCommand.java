@@ -104,7 +104,7 @@ public class CreateHeroCommand implements Executable {
 			Hero h = new Hero(data.profile().getAccount(), name, race);
 
 			String finalUrl = url;
-			Utils.confirm(locale.get("question/hero_creation", h.getDisplayName()), event.channel(), w -> {
+			Utils.confirm(locale.get("question/hero_creation", h.getName()), event.channel(), w -> {
 						BufferedImage img = IO.getImage(finalUrl);
 						h.setImage(img);
 						h.save();
