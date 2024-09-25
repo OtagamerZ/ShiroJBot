@@ -61,6 +61,7 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	public GearAffix(Gear gear, Affix affix) {
+		this.id = new GearAffixId(gear.getId(), affix.getId());
 		this.gear = gear;
 		this.affix = affix;
 	}

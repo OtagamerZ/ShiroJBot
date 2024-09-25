@@ -159,11 +159,9 @@ public class Gear extends DAO<Gear> {
 			Affix af = Affix.getRandom(out, type);
 			if (af == null) continue;
 
-			System.out.println(out.basetype.getId() + " -> " + af.getId());
 			out.getAffixes().add(new GearAffix(out, af));
 		}
 
-		System.out.println(out.getAffixes());
 		return out;
 	}
 }
