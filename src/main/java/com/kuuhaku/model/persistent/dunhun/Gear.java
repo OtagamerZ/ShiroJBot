@@ -97,14 +97,14 @@ public class Gear extends DAO<Gear> {
 		else if (affixes.size() > 2) return "[RareItem]";
 
 		String template = switch (locale) {
-			case EN, UWU_EN -> "%2$s %1$s %3$s";
-			case PT, UWU_PT -> "%1$s %2$s %3$s";
+			case EN, UWU_EN -> "%2$s%1$s%3$s";
+			case PT, UWU_PT -> "%1$s%2$s%3$s";
 		};
 
-		String pref = "", suff = "";
+		String pref = "", suff = " ";
 		for (GearAffix a : affixes) {
-			if (a.getAffix().getType() == AffixType.PREFIX) pref = a.getName(locale);
-			else suff = a.getName(locale);
+			if (a.getAffix().getType() == AffixType.PREFIX) pref = " " + a.getName(locale);
+			else suff = " " + a.getName(locale);
 		}
 
 		return template.formatted(basetype.getInfo(locale), pref, suff);
@@ -156,7 +156,7 @@ public class Gear extends DAO<Gear> {
 		Gear out = new Gear(hero, Basetype.getRandom(slot));
 
 		for (AffixType type : AffixType.values()) {
-			if (Calc.chance(50)) {
+			if (Calc.chance(75)) {
 				Affix af = Affix.getRandom(out, type);
 				if (af == null) continue;
 
