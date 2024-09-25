@@ -68,7 +68,7 @@ public class HeroInventoryCommand implements Executable {
 
 		List<Page> pages = Utils.generatePages(eb, equips, 10, 5,
 				g -> new FieldMimic(
-						g.getBasetype().getIcon() + " " + g.getName(locale) + " (`" + g.getId() + "`)",
+						"`" + g.getId() + "` - " + g.getBasetype().getIcon() + " " + g.getName(locale),
 						""
 				).toString(),
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))

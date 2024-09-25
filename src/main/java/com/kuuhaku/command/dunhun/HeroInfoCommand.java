@@ -62,7 +62,7 @@ public class HeroInfoCommand implements Executable {
 		for (GearSlot gs : GearSlot.values()) {
 			equips.withSlot(gs, g -> {
 				if (g == null) {
-					sb.appendNewLine("-# *" + locale.get("str/empty") + "*");
+					sb.appendNewLine("*" + locale.get("str/empty") + "*");
 				} else {
 					sb.appendNewLine("`" + g.getId() + "` - " + g.getName(locale));
 					for (GearAffix ga : g.getAllAffixes()) {
