@@ -282,6 +282,7 @@ public class GuildListener extends ListenerAdapter {
 				int high = account.getHighestLevel();
 				int prize = 0;
 
+				profile.applyXp();
 				if (profile.getLevel() > high) {
 					prize = profile.getLevel() * 150;
 					account.addCR(prize, "Level up prize");
