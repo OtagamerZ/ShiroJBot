@@ -56,7 +56,7 @@ public class Gear extends DAO<Gear> {
 	private Basetype basetype;
 
 	@ManyToOne(optional = false)
-	@PrimaryKeyJoinColumn(name = "hero_id")
+	@PrimaryKeyJoinColumn(name = "owner_id")
 	@Fetch(FetchMode.JOIN)
 	private Hero owner;
 
@@ -163,6 +163,7 @@ public class Gear extends DAO<Gear> {
 			out.getAffixes().add(new GearAffix(out, af));
 		}
 
+		System.out.println(out.getAffixes());
 		return out;
 	}
 }
