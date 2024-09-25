@@ -65,6 +65,9 @@ public class Gear extends DAO<Gear> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<GearAffix> affixes = new LinkedHashSet<>();
 
+	@Column(name = "base_roll", nullable = false)
+	private double roll = Calc.rng();
+
 	@Transient
 	private final GearModifiers modifiers = new GearModifiers();
 
@@ -90,6 +93,10 @@ public class Gear extends DAO<Gear> {
 
 	public Set<GearAffix> getAffixes() {
 		return affixes;
+	}
+
+	public double getRoll() {
+		return roll;
 	}
 
 	public String getName(I18N locale) {
@@ -124,18 +131,27 @@ public class Gear extends DAO<Gear> {
 
 	public void load(I18N locale, Hero hero, Senshi senshi) {
 		modifiers.reset();
+
+		if (basetype.getStats().implicit() != null) {
+			execute(locale, hero, senshi, new GearAffix(this, basetype.getStats().implicit()));
+		}
+
 		for (GearAffix ga : affixes) {
-			try {
-				Affix a = ga.getAffix();
-				Utils.exec(getClass().getSimpleName(), a.getEffect(), Map.of(
-						"gear", this,
-						"hero", hero,
-						"self", senshi,
-						"values", ga.getValues(locale)
-				));
-			} catch (Exception e) {
-				Constants.LOGGER.warn("Failed to apply affix {}", ga, e);
-			}
+			execute(locale, hero, senshi, ga);
+		}
+	}
+
+	private void execute(I18N locale, Hero hero, Senshi senshi, GearAffix ga) {
+		try {
+			Affix a = ga.getAffix();
+			Utils.exec(getClass().getSimpleName(), a.getEffect(), Map.of(
+					"gear", this,
+					"hero", hero,
+					"self", senshi,
+					"values", ga.getValues(locale)
+			));
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to apply implicit {}", ga, e);
 		}
 	}
 
