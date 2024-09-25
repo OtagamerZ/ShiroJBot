@@ -97,8 +97,8 @@ public class Gear extends DAO<Gear> {
 		else if (affixes.size() > 2) return "[RareItem]";
 
 		String template = switch (locale) {
-			case EN, UWU_EN -> "%2 %1 %3";
-			case PT, UWU_PT -> "%1 %2 %3";
+			case EN, UWU_EN -> "%2$s %1$s %3$s";
+			case PT, UWU_PT -> "%1$s %2$s %3$s";
 		};
 
 		String pref = "", suff = "";
