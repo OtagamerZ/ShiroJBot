@@ -24,6 +24,7 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
@@ -56,10 +57,16 @@ public class HeroInventoryCommand implements Executable {
 			return;
 		}
 
+		List<Gear> equips = h.getInventory();
+		if (equips.isEmpty()) {
+			event.channel().sendMessage(locale.get("error/inventory_empty_hero", h.getName())).queue();
+			return;
+		}
+
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/hero_inventory", h.getName()));
 
-		List<Page> pages = Utils.generatePages(eb, h.getInventory(), 10, 5,
+		List<Page> pages = Utils.generatePages(eb, equips, 10, 5,
 				g -> new FieldMimic(
 						g.getBasetype().getIcon() + " " + g.getName(locale) + " (`" + g.getId() + "`)",
 						""
