@@ -149,7 +149,7 @@ public class Hero extends DAO<Hero> {
 				FROM gear g
 				INNER JOIN hero h ON h.id = g.owner_id
 				WHERE h.id = ?1
-				  AND NOT (jsonb_path_query_array(h.equipment, '$.*') @> cast(cast(g.id AS VARCHAR) AS JSONB))
+				  AND NOT jsonb_path_exists(h.equipment, '$.* \\? (@ == $val)', cast('{"val": ' || g.id || '}' AS JSONB))
 				""", id);
 
 		return DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.id IN ?1", ids);
