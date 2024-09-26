@@ -96,10 +96,7 @@ public class Gear extends DAO<Gear> {
 		if (imp != null) {
 			affs.add(imp);
 		}
-		affs.addAll(affixes.stream()
-				.sorted(Comparator.comparing(ga -> ga.getAffix().getType() == AffixType.SUFFIX))
-				.toList()
-		);
+		affs.addAll(affixes);
 
 		return affs;
 	}
