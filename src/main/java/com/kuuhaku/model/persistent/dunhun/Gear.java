@@ -129,7 +129,8 @@ public class Gear extends DAO<Gear> {
 
 			seq.set(0);
 			desc.lines().forEach(l -> {
-				String base = pat.matcher(l).replaceAll(m -> Matcher.quoteReplacement("[%" + seq.incrementAndGet() + "$s]"));
+				String base = pat.matcher(l.replace("%", "%%"))
+						.replaceAll(m -> Matcher.quoteReplacement("[%" + seq.incrementAndGet() + "$s]"));
 
 				mods.compute(base, (k, v) -> {
 					if (v == null) return new ArrayList<>(vals);
