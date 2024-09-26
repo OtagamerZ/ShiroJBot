@@ -135,11 +135,8 @@ public class Gear extends DAO<Gear> {
 		}
 
 		mods.forEach((k, v) -> {
-			Integer[] vals = v.stream()
-					.filter(i -> i != 0)
-					.toArray(Integer[]::new);
-
-			if (vals.length == 0) return;
+			Integer[] vals = v.toArray(Integer[]::new);
+			if (vals.length > 0 && Arrays.stream(vals).allMatch(i -> i == 0)) return;
 
 			out.add(k.formatted((Object[]) vals));
 		});
