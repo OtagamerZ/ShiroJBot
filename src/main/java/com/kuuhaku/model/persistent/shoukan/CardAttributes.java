@@ -33,9 +33,8 @@ import org.intellij.lang.annotations.Language;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -172,16 +171,31 @@ public class CardAttributes implements Serializable, Cloneable {
 	}
 
 	public void appendEffect(@Language("Groovy") String effect) {
-		this.effect = Utils.getOr(effect, "");
+		this.effect = Utils.getOr(this.effect, "");
 
 		Set<String> imports = new HashSet<>();
-		this.effect = Utils.regex(this.effect + "\n{\n" + effect.stripIndent() + "\n}", "^import .+")
-				.replaceAll(m -> {
-					imports.add(m.group());
-					return "";
-				});
+		String code = effect.lines()
+				.dropWhile(l -> {
+					String trim = l.trim();
 
-		this.effect = String.join("\n", imports) + "\n" + this.effect.trim();
+					if (trim.isBlank()) return true;
+					else if (trim.startsWith("import")) {
+						imports.add(trim);
+						return true;
+					}
+
+					return false;
+				})
+				.map(l -> "\t" + l)
+				.collect(Collectors.joining("\n"));
+
+		imports.removeIf(i -> Utils.match(this.effect, "^" + i));
+
+		if (imports.isEmpty()) {
+			this.effect += "{\n" + code + "\n}";
+		} else {
+			this.effect = String.join("\n", imports) + "\n" + this.effect;
+		}
 	}
 
 	public EnumSet<Trigger> getLocks() {
