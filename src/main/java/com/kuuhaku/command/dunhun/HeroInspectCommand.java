@@ -72,7 +72,7 @@ public class HeroInspectCommand implements Executable {
 		GearAffix imp = g.getImplicit();
 		if (imp != null) {
 			eb.appendDescription("-# " + locale.get("str/implicit") + "\n");
-			eb.appendDescription(imp.getDescription(locale) + "\n");
+			eb.appendDescription(imp.getDescription(locale, true) + "\n");
 			if (!g.getAffixes().isEmpty()) {
 				eb.appendDescription("────────────────────\n");
 			}
@@ -90,7 +90,7 @@ public class HeroInspectCommand implements Executable {
 			eb.appendDescription("-# %s - %s\n".formatted(
 					locale.get("str/" + ga.getAffix().getType().name()), ga.getName(locale)
 			));
-			eb.appendDescription(ga.getDescription(locale, true) + "\n");
+			eb.appendDescription(ga.getDescription(locale, true) + "\n\n");
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
