@@ -61,14 +61,21 @@ public class AntiSpamCommand implements Executable {
 			settings.getFeatures().add(GuildFeature.ANTI_SPAM);
 			event.channel().sendMessage(locale.get("success/anti_spam_enable")).queue();
 
-			settings.getAutoModEntries().computeIfAbsent(AutoModType.SPAM, t -> {
+			String ruleId = settings.getAutoModEntries().get(AutoModType.SPAM);
+			if (ruleId == null) {
 				AutoModRule rule = Pages.subGet(event.guild().createAutoModRule(
-						AutoModRuleData.onMessage("Shiro anti-SPAM", TriggerConfig.antiSpam())
+						AutoModRuleData
+								.onMessage("Shiro anti-SPAM", TriggerConfig.antiSpam())
 								.putResponses(AutoModResponse.blockMessage())
 				));
 
-				return rule.getId();
-			});
+				if (rule == null) {
+					event.channel().sendMessage(locale.get("error/automod_full")).queue();
+					return;
+				}
+
+				settings.getAutoModEntries().put(AutoModType.SPAM, rule.getId());
+			}
 		}
 
 		settings.save();
