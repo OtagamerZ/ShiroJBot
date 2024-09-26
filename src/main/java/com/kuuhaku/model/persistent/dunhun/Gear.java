@@ -116,15 +116,15 @@ public class Gear extends DAO<Gear> {
 		List<String> out = new ArrayList<>();
 		LinkedHashMap<String, List<Integer>> mods = new LinkedHashMap<>();
 
-		AtomicInteger i = new AtomicInteger();
+		AtomicInteger seq = new AtomicInteger();
 		Pattern pat = Utils.regex("\\[.+?]");
 		for (GearAffix ga : getAllAffixes()) {
 			String desc = ga.getAffix().getInfo(locale).getDescription();
 			List<Integer> vals = ga.getValues(locale);
 
-			i.set(0);
+			seq.set(0);
 			desc.lines().forEach(l -> {
-				String base = pat.matcher(l).replaceAll(m -> "[%" + i.incrementAndGet() + "$s]");
+				String base = pat.matcher(l).replaceAll(m -> "[%" + seq.incrementAndGet() + "$s]");
 
 				mods.compute(base, (k, v) -> {
 					if (v == null) return new ArrayList<>(vals);
