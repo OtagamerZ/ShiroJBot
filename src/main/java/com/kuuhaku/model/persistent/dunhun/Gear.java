@@ -151,6 +151,7 @@ public class Gear extends DAO<Gear> {
 			try {
 				Affix a = ga.getAffix();
 				Utils.exec(a.getId(), a.getEffect(), Map.of(
+						"locale", locale,
 						"gear", this,
 						"hero", hero,
 						"self", senshi,
