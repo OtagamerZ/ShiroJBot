@@ -33,6 +33,7 @@ import com.kuuhaku.model.common.SupplyChain;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
+import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
@@ -348,6 +349,11 @@ public class Hand {
 				s.getStats().setSource(Senshi.getRandom(game.getRng(), "WHERE effect IS NOT NULL", "AND mana = " + s.getBase().getMana()));
 			}
 		}).toList());
+
+		Hero h = userDeck.getHero();
+		if (h != null) {
+			deck.add(h.asSenshi(game.getLocale()));
+		}
 
 		Utils.shuffle(deck, game.getRng());
 	}
