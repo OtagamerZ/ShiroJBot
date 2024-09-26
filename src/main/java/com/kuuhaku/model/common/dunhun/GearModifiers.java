@@ -22,11 +22,22 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class GearModifiers {
+	private int attack;
 	private float attackMult = 1;
+	private int defense;
 	private float defenseMult = 1;
+	private float critical;
 	private float criticalMult = 1;
 
 	private final Set<String> addedTags = new HashSet<>();
+
+	public float getAttack() {
+		return attack;
+	}
+
+	public void addAttack(int value) {
+		attack += value;
+	}
 
 	public float getAttackMult() {
 		return attackMult;
@@ -36,12 +47,28 @@ public class GearModifiers {
 		attackMult += mult;
 	}
 
+	public float getDefense() {
+		return defense;
+	}
+
+	public void addDefense(int value) {
+		defense += value;
+	}
+
 	public float getDefenseMult() {
 		return defenseMult;
 	}
 
 	public void addDefenseMult(float mult) {
 		defenseMult += mult;
+	}
+
+	public float getCritical() {
+		return critical;
+	}
+
+	public void addCritical(float mult) {
+		critical += mult;
 	}
 
 	public float getCriticalMult() {

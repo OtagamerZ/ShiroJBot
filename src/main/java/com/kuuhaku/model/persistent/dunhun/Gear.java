@@ -189,11 +189,15 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public int getDmg() {
-		return (int) (basetype.getStats().attack() * modifiers.getAttackMult());
+		return (int) ((basetype.getStats().attack() + modifiers.getAttack()) * modifiers.getAttackMult());
 	}
 
 	public int getDfs() {
-		return (int) (basetype.getStats().defense() * modifiers.getDefenseMult());
+		return (int) ((basetype.getStats().defense() + modifiers.getDefense()) * modifiers.getDefenseMult());
+	}
+
+	public int getCritical() {
+		return (int) ((basetype.getStats().critical() + modifiers.getCritical()) * modifiers.getCriticalMult());
 	}
 
 	public void load(I18N locale, Hero hero, Senshi senshi) {
