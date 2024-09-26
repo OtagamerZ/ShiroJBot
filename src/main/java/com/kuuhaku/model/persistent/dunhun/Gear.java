@@ -34,6 +34,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -115,13 +116,15 @@ public class Gear extends DAO<Gear> {
 		List<String> out = new ArrayList<>();
 		LinkedHashMap<String, List<Integer>> mods = new LinkedHashMap<>();
 
+		AtomicInteger i = new AtomicInteger();
 		Pattern pat = Utils.regex("\\[.+?]");
 		for (GearAffix ga : getAllAffixes()) {
 			String desc = ga.getAffix().getInfo(locale).getDescription();
 			List<Integer> vals = ga.getValues(locale);
 
+			i.set(0);
 			desc.lines().forEach(l -> {
-				String base = pat.matcher(l).replaceAll(m -> "[%s]");
+				String base = pat.matcher(l).replaceAll(m -> "[%" + i.incrementAndGet() + "$s]");
 
 				mods.compute(base, (k, v) -> {
 					if (v == null) return new ArrayList<>(vals);
