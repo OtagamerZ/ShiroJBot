@@ -86,7 +86,7 @@ public class HeroInspectCommand implements Executable {
 		eb.appendDescription("\n");
 
 		if (stats.str() + stats.dex() + stats.wis() + stats.vit() > 0) {
-			eb.appendDescription("-# " + locale.get("str/required_attributes"));
+			eb.appendDescription("-# " + locale.get("str/required_attributes") + "\n");
 		}
 
 		List<String> attrs = new ArrayList<>();
