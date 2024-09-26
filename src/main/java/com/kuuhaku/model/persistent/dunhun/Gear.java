@@ -197,7 +197,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public int getCritical() {
-		return (int) ((basetype.getStats().critical() + modifiers.getCritical()) * modifiers.getCriticalMult());
+		return (int) Calc.clamp((basetype.getStats().critical() + modifiers.getCritical()) * modifiers.getCriticalMult(), 0, 100);
 	}
 
 	public void load(I18N locale, Hero hero, Senshi senshi) {

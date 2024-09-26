@@ -37,13 +37,13 @@ public record GearStats(
 		@Column(name = "critical", nullable = false)
 		float critical,
 		@Column(name = "str", nullable = false)
-		float str,
+		int str,
 		@Column(name = "dex", nullable = false)
-		float dex,
+		int dex,
 		@Column(name = "wis", nullable = false)
-		float wis,
+		int wis,
 		@Column(name = "vit", nullable = false)
-		float vit,
+		int vit,
 		@Enumerated(EnumType.STRING)
 		@Column(name = "slot", nullable = false)
 		GearSlot slot,

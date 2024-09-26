@@ -73,20 +73,20 @@ public class HeroInspectCommand implements Executable {
 				.setTitle(g.getName(locale));
 
 		GearStats stats = g.getBasetype().getStats();
-		if (stats.attack() > 0) {
-			eb.appendDescription(locale.get("str/attack") + ": " + stats.attack() + "\n");
+		if (g.getDmg() != 0) {
+			eb.appendDescription(locale.get("str/attack") + ": " + g.getDmg() + "\n");
 		}
-		if (stats.defense() > 0) {
-			eb.appendDescription(locale.get("str/defense") + ": " + stats.attack() + "\n");
+		if (g.getDfs() != 0) {
+			eb.appendDescription(locale.get("str/defense") + ": " + g.getDfs() + "\n");
 		}
-		if (stats.critical() > 0) {
-			eb.appendDescription(locale.get("str/critical_chance") + ": " + Utils.roundToString(stats.critical(), 2) + "%\n");
+		if (g.getCritical() != 0) {
+			eb.appendDescription(locale.get("str/critical_chance") + ": " + Utils.roundToString(g.getCritical(), 2) + "%\n");
 		}
 
 		eb.appendDescription("\n");
 
 		if (stats.str() + stats.dex() + stats.wis() + stats.vit() > 0) {
-			eb.appendDescription("-# " + locale.get("str/required_attributes") + ": " + stats.attack() + "\n");
+			eb.appendDescription("-# " + locale.get("str/required_attributes"));
 		}
 
 		List<String> attrs = new ArrayList<>();
@@ -95,7 +95,9 @@ public class HeroInspectCommand implements Executable {
 		if (stats.wis() > 0) attrs.add("WIS: " + stats.wis() + " ");
 		if (stats.vit() > 0) attrs.add("VIT: " + stats.vit() + " ");
 
-		eb.appendDescription(String.join(" | ", attrs) + "\n\n");
+		if (!attrs.isEmpty()) {
+			eb.appendDescription(String.join(" | ", attrs) + "\n\n");
+		}
 
 		GearAffix imp = g.getImplicit();
 		if (imp != null) {
@@ -112,7 +114,6 @@ public class HeroInspectCommand implements Executable {
 						.thenComparing(ga -> ga.getAffix().getId())
 				)
 				.toList();
-
 
 		for (GearAffix ga : affs) {
 			eb.appendDescription("-# %s - %s\n".formatted(
