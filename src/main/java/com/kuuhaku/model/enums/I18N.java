@@ -26,6 +26,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -134,5 +135,11 @@ public enum I18N {
 		} catch (NumberFormatException e) {
 			return String.valueOf(value);
 		}
+	}
+
+	public static I18N[] validValues() {
+		return Arrays.stream(I18N.values())
+				.filter(l -> l.parent == l)
+				.toArray(I18N[]::new);
 	}
 }
