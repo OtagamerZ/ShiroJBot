@@ -34,6 +34,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -108,6 +109,39 @@ public class Gear extends DAO<Gear> {
 	public GearAffix getImplicit() {
 		if (basetype.getStats().implicit() == null) return null;
 		return new GearAffix(this, basetype.getStats().implicit(), roll);
+	}
+
+	public List<String> getAffixLines(I18N locale) {
+		List<String> out = new ArrayList<>();
+		LinkedHashMap<String, List<Integer>> mods = new LinkedHashMap<>();
+
+		Pattern pat = Utils.regex("\\[.+?]");
+		for (GearAffix ga : getAllAffixes()) {
+			String desc = ga.getAffix().getInfo(locale).getDescription();
+			desc.lines().forEach(l -> {
+				String base = pat.matcher(l).replaceAll(m -> "[%s]");
+
+				List<Integer> vals = ga.getValues(locale);
+				mods.compute(base, (k, v) -> {
+					if (v == null) return new ArrayList<>(ga.getValues(locale));
+
+					for (int j = 0; j < Math.min(v.size(), vals.size()); j++) {
+						v.set(j, v.get(j) + vals.get(j));
+					}
+
+					return v;
+				});
+			});
+
+			mods.forEach((k, v) -> {
+				Integer[] vals = v.toArray(Integer[]::new);
+				if (Arrays.stream(vals).allMatch(i -> i == 0)) return;
+
+				out.add("-# " + k.formatted((Object[]) vals));
+			});
+		}
+
+		return out;
 	}
 
 	public double getRoll() {

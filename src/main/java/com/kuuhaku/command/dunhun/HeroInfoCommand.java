@@ -26,21 +26,13 @@ import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
-import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.regex.Pattern;
 
 @Command(
 		name = "hero",
@@ -72,32 +64,8 @@ public class HeroInfoCommand implements Executable {
 					sb.appendNewLine("*" + locale.get("str/empty") + "*");
 				} else {
 					sb.appendNewLine("`" + g.getId() + "` - " + g.getName(locale));
-					LinkedHashMap<String, List<Integer>> mods = new LinkedHashMap<>();
-
-					Pattern pat = Utils.regex("\\[.+?]");
-					for (GearAffix ga : g.getAllAffixes()) {
-						String desc = ga.getAffix().getInfo(locale).getDescription();
-						desc.lines().forEach(l -> {
-							String base = pat.matcher(l).replaceAll(m -> "[%s]");
-
-							List<Integer> vals = ga.getValues(locale);
-							mods.compute(base, (k, v) -> {
-								if (v == null) return new ArrayList<>(ga.getValues(locale));
-
-								for (int j = 0; j < Math.min(v.size(), vals.size()); j++) {
-									v.set(j, v.get(j) + vals.get(j));
-								}
-
-								return v;
-							});
-						});
-
-						mods.forEach((k, v) -> {
-							Integer[] vals = v.toArray(Integer[]::new);
-							if (Arrays.stream(vals).allMatch(i -> i == 0)) return;
-
-							sb.appendNewLine("-# " + k.formatted((Object[]) vals));
-						});
+					for (String l : g.getAffixLines(locale)) {
+						sb.appendNewLine("-# " + l);
 					}
 				}
 
