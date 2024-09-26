@@ -172,7 +172,14 @@ public class CardAttributes implements Serializable, Cloneable {
 	}
 
 	public void appendEffect(@Language("Groovy") String effect) {
-		this.effect = "{\n" + effect + "\n}";
+		Set<String> imports = new HashSet<>();
+		this.effect = Utils.regex(this.effect + "\n{\n" + effect.stripIndent() + "\n}", "^import .+")
+				.replaceAll(m -> {
+					imports.add(m.group());
+					return "";
+				});
+
+		this.effect = String.join("\n", imports) + "\n" + this.effect.trim();
 	}
 
 	public EnumSet<Trigger> getLocks() {
