@@ -96,7 +96,7 @@ public class HeroInfoCommand implements Executable {
 							Integer[] vals = v.toArray(Integer[]::new);
 							if (Arrays.stream(vals).allMatch(i -> i == 0)) return;
 
-							sb.appendNewLine("-# " + k.formatted(vals));
+							sb.appendNewLine("-# " + k.formatted((Object[]) vals));
 						});
 					}
 				}
