@@ -102,16 +102,27 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	public String getDescription(I18N locale) {
+		return getDescription(locale, false);
+	}
+
+	public String getDescription(I18N locale, boolean showScaling) {
 		List<Integer> vals = getValues(locale);
 
 		AtomicInteger i = new AtomicInteger();
-		return Utils.regex(affix.getInfo(locale).getDescription(), "\\[.+?](%)?")
+		return Utils.regex(affix.getInfo(locale).getDescription(), "\\[(-?\\d+)(?:-(-?\\d+))?](%)?")
 				.replaceAll(r -> {
-					if (r.group(1) != null) {
-						return vals.get(i.getAndIncrement()) + "%";
+					String out;
+					if (r.group(3) != null) {
+						out = vals.get(i.getAndIncrement()) + "%";
+					} else {
+						out = Utils.sign(vals.get(i.getAndIncrement()));
 					}
 
-					return Utils.sign(vals.get(i.getAndIncrement()));
+					if (showScaling && r.group(2) != null) {
+						out += " (" + r.group(1) + " - " + r.group(2) + ")";
+					}
+
+					return out;
 				});
 	}
 
