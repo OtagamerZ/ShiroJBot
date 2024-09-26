@@ -28,7 +28,6 @@ import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
-import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
@@ -67,10 +66,7 @@ public class HeroInventoryCommand implements Executable {
 				.setAuthor(locale.get("str/hero_inventory", h.getName()));
 
 		List<Page> pages = Utils.generatePages(eb, equips, 10, 5,
-				g -> new FieldMimic(
-						"`" + g.getId() + "` - " + g.getBasetype().getIcon() + " " + g.getName(locale),
-						""
-				).toString(),
+				g -> "`" + g.getId() + "` - " + g.getBasetype().getIcon() + " " + g.getName(locale) + "\n",
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 		);
 
