@@ -119,7 +119,14 @@ public class Gear extends DAO<Gear> {
 
 		AtomicInteger seq = new AtomicInteger();
 		Pattern pat = Utils.regex("\\[.+?]");
-		for (GearAffix ga : getAllAffixes()) {
+		List<GearAffix> affixes = this.affixes.stream()
+				.sorted(Comparator
+						.<GearAffix, Boolean>comparing(ga -> ga.getAffix().getType() == AffixType.SUFFIX, Boolean::compareTo)
+						.thenComparing(ga -> ga.getAffix().getId())
+				)
+				.toList();
+
+		for (GearAffix ga : affixes) {
 			String desc = ga.getAffix().getInfo(locale).getDescription();
 			List<Integer> vals = ga.getValues(locale);
 
