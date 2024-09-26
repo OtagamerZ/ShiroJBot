@@ -153,6 +153,16 @@ public class CardAttributes implements Serializable, Cloneable {
 				.findAny().orElse("");
 	}
 
+	public void appendDescription(I18N locale, String description) {
+		LocalizedDescription desc = descriptions.parallelStream()
+				.filter(ld -> ld.getLocale().is(locale))
+				.findAny()
+				.orElse(new LocalizedDescription(locale, description));
+
+		desc.setDescription(desc.getDescription() + " " + description);
+		descriptions.add(desc);
+	}
+
 	public String getEffect() {
 		return Utils.getOr(effect, "");
 	}
