@@ -87,7 +87,7 @@ public class HeroInspectCommand implements Executable {
 
 
 		for (GearAffix ga : affs) {
-			eb.appendDescription("-# %s - %s".formatted(
+			eb.appendDescription("-# %s - %s\n".formatted(
 					locale.get("str/" + ga.getAffix().getType().name()), ga.getName(locale)
 			));
 			eb.appendDescription(ga.getDescription(locale, true) + "\n");
