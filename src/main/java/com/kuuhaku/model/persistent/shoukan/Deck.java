@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.model.common.MultiProcessor;
 import com.kuuhaku.model.common.SupplyChain;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
@@ -56,7 +57,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -353,7 +356,7 @@ public class Deck extends DAO<Deck> {
 	public BufferedImage render(I18N locale) {
 		BufferedImage bi = IO.getResourceAsImage("shoukan/deck.png");
 		Graphics2D g2d = bi.createGraphics();
-		g2d.setRenderingHints(Constants.HD_HINTS);
+		g2d.setRenderingHints(Constants.SD_HINTS);
 
 		Graph.applyTransformed(g2d, g -> {
 			g.setColor(styling.getFrame().getThemeColor());
@@ -362,61 +365,77 @@ public class Deck extends DAO<Deck> {
 		});
 		Graph.applyMask(bi, IO.getResourceAsImage("shoukan/mask/deck_mask.png"), 0, true);
 
-		List<Drawable<?>> allCards = new ArrayList<>();
-		allCards.addAll(getSenshi());
-		allCards.addAll(getEvogear());
-		allCards.addAll(getFields());
+		MultiProcessor.with(Executors.newVirtualThreadPerTaskExecutor(), new ArrayList<Consumer<Graphics2D>>())
+				.addTask(renderData(locale))
+				.addTask(renderRaceInfo(locale, bi))
+				.addTask(renderCards(locale))
+				.process(t -> {
+					t.accept((Graphics2D) g2d.create());
+					return null;
+				});
 
-		BaseValues base = getBaseValues(null);
-		double mp = base.mpGain().get();
-		int weight = Calc.prcntToInt(getEvoWeight(), 24);
-		String color = "FFFFFF";
-		if (weight > 200) color = "FF0000";
-		else if (weight > 100) color = "FFFF00";
+		g2d.dispose();
 
-		int totalDmg = 0, totalDfs = 0;
-		for (EffectHolder<?> e : ListUtils.union(getSenshi(), getEvogear())) {
-			totalDmg += e.getDmg();
-			totalDfs += e.getDfs();
-		}
+		return bi;
+	}
 
-		double[] vals = Calc.clamp(new double[]{
-				Calc.prcnt(totalDmg, (totalDmg + totalDfs) / 1.5),
-				Calc.prcnt(totalDfs, (totalDmg + totalDfs) / 1.5),
-				getAverageMPCost() / mp,
-				Calc.prcnt(Set.copyOf(allCards).size(), allCards.size()),
-				getMetaDivergence(),
-				0
-		}, 0, 1);
-		vals[5] = Calc.average(vals[0], vals[1], vals[2], 0.5 + vals[3] * 0.5, 0.25 + vals[4] * 0.75);
+	public Consumer<Graphics2D> renderData(I18N locale) {
+		return g2d -> {
+			List<Drawable<?>> allCards = new ArrayList<>();
+			allCards.addAll(getSenshi());
+			allCards.addAll(getEvogear());
+			allCards.addAll(getFields());
 
-		RadarChart rc = new RadarChart(600, 500);
-		rc.setRadiiLabels(new String[]{
-				locale.get("str/attack"),
-				locale.get("str/defense"),
-				locale.get("str/mp_cost"),
-				locale.get("str/variety"),
-				locale.get("str/divergence"),
-				locale.get("str/overall_score")
-		});
-		rc.addSeries("A", vals);
+			BaseValues base = getBaseValues(null);
+			double mp = base.mpGain().get();
+			int weight = Calc.prcntToInt(getEvoWeight(), 24);
+			String color = "FFFFFF";
+			if (weight > 200) color = "FF0000";
+			else if (weight > 100) color = "FFFF00";
 
-		rc.getStyler()
-				.setLegendVisible(false)
-				.setChartTitleVisible(false)
-				.setPlotBorderVisible(false)
-				.setChartTitleBoxVisible(false)
-				.setChartBackgroundColor(new Color(0, 0, 0, 0))
-				.setPlotBackgroundColor(new Color(0, 0, 0, 0))
-				.setSeriesColors(new Color[]{Graph.withOpacity(styling.getFrame().getThemeColor(), 0.5f)})
-				.setChartFontColor(Color.WHITE);
+			int totalDmg = 0, totalDfs = 0;
+			for (EffectHolder<?> e : ListUtils.union(getSenshi(), getEvogear())) {
+				totalDmg += e.getDmg();
+				totalDfs += e.getDfs();
+			}
 
-		rc.paint(g2d, rc.getWidth(), rc.getHeight());
+			double[] vals = Calc.clamp(new double[]{
+					Calc.prcnt(totalDmg, (totalDmg + totalDfs) / 1.5),
+					Calc.prcnt(totalDfs, (totalDmg + totalDfs) / 1.5),
+					getAverageMPCost() / mp,
+					Calc.prcnt(Set.copyOf(allCards).size(), allCards.size()),
+					getMetaDivergence(),
+					0
+			}, 0, 1);
+			vals[5] = Calc.average(vals[0], vals[1], vals[2], 0.5 + vals[3] * 0.5, 0.25 + vals[4] * 0.75);
 
-		g2d.setFont(Fonts.OPEN_SANS.derivePlain(30));
-		g2d.setColor(Color.WHITE);
-		Graph.drawMultilineString(g2d, locale.get("str/deck_analysis"), 600, 45, 400);
-		Graph.drawMultilineString(g2d, """
+			RadarChart rc = new RadarChart(600, 500);
+			rc.setRadiiLabels(new String[]{
+					locale.get("str/attack"),
+					locale.get("str/defense"),
+					locale.get("str/mp_cost"),
+					locale.get("str/variety"),
+					locale.get("str/divergence"),
+					locale.get("str/overall_score")
+			});
+			rc.addSeries("A", vals);
+
+			rc.getStyler()
+					.setLegendVisible(false)
+					.setChartTitleVisible(false)
+					.setPlotBorderVisible(false)
+					.setChartTitleBoxVisible(false)
+					.setChartBackgroundColor(new Color(0, 0, 0, 0))
+					.setPlotBackgroundColor(new Color(0, 0, 0, 0))
+					.setSeriesColors(new Color[]{Graph.withOpacity(styling.getFrame().getThemeColor(), 0.5f)})
+					.setChartFontColor(Color.WHITE);
+
+			rc.paint(g2d, rc.getWidth(), rc.getHeight());
+
+			g2d.setFont(Fonts.OPEN_SANS.derivePlain(30));
+			g2d.setColor(Color.WHITE);
+			Graph.drawMultilineString(g2d, locale.get("str/deck_analysis"), 600, 45, 400);
+			Graph.drawMultilineString(g2d, """
 						%s
 						%s
 						%s-(%s/%s/%s)
@@ -431,35 +450,38 @@ public class Deck extends DAO<Deck> {
 						%s-(T4:-%s)
 						%s
 						""".formatted(
-						base.hp(),
-						Utils.roundToString(mp, 1),
-						allCards.size(), getSenshi().size(), getEvogear().size(), getFields().size(),
-						weight, color,
-						Utils.roundToString(getMetaDivergence() * 100, 0),
-						Utils.roundToString((float) getAverageMPCost(), 1),
-						Utils.roundToString((float) getAverageHPCost(), 1),
-						Utils.roundToString((float) totalDmg / allCards.size(), 0),
-						Utils.roundToString((float) totalDfs / allCards.size(), 0),
-						getMaxSenshiCopies(), getMaxEvogearCopies(1), getMaxEvogearCopies(4),
-						3
-				), 1175, 45, 175, 0,
-				s -> {
-					JSONArray values = Utils.extractGroups(s, "\\{(.+);(0x[\\da-fA-F]{6})}");
-					if (values.isEmpty()) {
-						g2d.setColor(Color.WHITE);
-						return s;
+							base.hp(),
+							Utils.roundToString(mp, 1),
+							allCards.size(), getSenshi().size(), getEvogear().size(), getFields().size(),
+							weight, color,
+							Utils.roundToString(getMetaDivergence() * 100, 0),
+							Utils.roundToString((float) getAverageMPCost(), 1),
+							Utils.roundToString((float) getAverageHPCost(), 1),
+							Utils.roundToString((float) totalDmg / allCards.size(), 0),
+							Utils.roundToString((float) totalDfs / allCards.size(), 0),
+							getMaxSenshiCopies(), getMaxEvogearCopies(1), getMaxEvogearCopies(4),
+							3
+					), 1175, 45, 175, 0,
+					s -> {
+						JSONArray values = Utils.extractGroups(s, "\\{(.+);(0x[\\da-fA-F]{6})}");
+						if (values.isEmpty()) {
+							g2d.setColor(Color.WHITE);
+							return s;
+						}
+
+						g2d.setColor(Color.decode(values.getString(1)));
+						return values.getString(0);
+					},
+					(s, x, y) -> {
+						FontMetrics m = g2d.getFontMetrics();
+						g2d.drawString(s.replace("-", " "), x - m.stringWidth(s), y);
 					}
+			);
+		};
+	}
 
-					g2d.setColor(Color.decode(values.getString(1)));
-					return values.getString(0);
-				},
-				(s, x, y) -> {
-					FontMetrics m = g2d.getFontMetrics();
-					g2d.drawString(s.replace("-", " "), x - m.stringWidth(s), y);
-				}
-		);
-
-		Graph.applyTransformed(g2d, 30, 520, g -> {
+	public Consumer<Graphics2D> renderRaceInfo(I18N locale, BufferedImage bi) {
+		return g2d -> Graph.applyTransformed(g2d, 30, 520, g1 -> {
 			Origin ori = getOrigins();
 			if (ori.major() == Race.NONE) return;
 
@@ -468,28 +490,28 @@ public class Deck extends DAO<Deck> {
 
 			String effects;
 			if (ori.isPure()) {
-				g.drawImage(ori.major().getImage(), 0, 0, 150, 150, null);
-				g.setFont(Fonts.OPEN_SANS.deriveBold(60));
-				g.setColor(ori.major().getColor());
+				g1.drawImage(ori.major().getImage(), 0, 0, 150, 150, null);
+				g1.setFont(Fonts.OPEN_SANS.deriveBold(60));
+				g1.setColor(ori.major().getColor());
 
 				String text = locale.get("str/deck_origin_pure", ori.major().getName(locale));
-				Graph.drawOutlinedString(g, text, 175, (150 + 75) / 2, 2, Color.BLACK);
+				Graph.drawOutlinedString(g1, text, 175, (150 + 75) / 2, 2, Color.BLACK);
 
-				g.setFont(Fonts.OPEN_SANS.derivePlain(36));
-				g.setColor(Color.WHITE);
+				g1.setFont(Fonts.OPEN_SANS.derivePlain(36));
+				g1.setColor(Color.WHITE);
 				effects = "- " + ori.major().getMajor(locale)
 						  + "\n\n- " + locale.get("major/pureblood")
 						  + "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major().name())
 						  + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			} else if (ori.major() == Race.MIXED) {
-				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
-				g.setColor(Graph.mix(Arrays.stream(ori.minor()).map(Race::getColor).toArray(Color[]::new)));
+				g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
+				g1.setColor(Graph.mix(Arrays.stream(ori.minor()).map(Race::getColor).toArray(Color[]::new)));
 
 				String text = locale.get("str/deck_origin_mixed");
-				Graph.drawOutlinedString(g, text, 0, (150 + 75) / 2, 2, Color.BLACK);
+				Graph.drawOutlinedString(g1, text, 0, (150 + 75) / 2, 2, Color.BLACK);
 
-				g.setFont(Fonts.OPEN_SANS.derivePlain(36));
-				g.setColor(Color.WHITE);
+				g1.setFont(Fonts.OPEN_SANS.derivePlain(36));
+				g1.setColor(Color.WHITE);
 				effects = "- " + locale.get("major/mixed")
 						  + "\n\n" + Arrays.stream(ori.minor())
 								  .filter(r -> r != Race.DEMON)
@@ -497,22 +519,22 @@ public class Deck extends DAO<Deck> {
 								  .collect(Collectors.joining("\n\n"))
 						  + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
 			} else {
-				g.drawImage(ori.synergy().getBadge(), 0, 0, 150, 150, null);
-				g.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
-				g.setColor(ori.synergy().getColor());
+				g1.drawImage(ori.synergy().getBadge(), 0, 0, 150, 150, null);
+				g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
+				g1.setColor(ori.synergy().getColor());
 
 				String text = locale.get("str/deck_origin", syn.getName(locale));
-				Graph.drawOutlinedString(g, text, 175, (150 + 75) / 2, 2, Color.BLACK);
+				Graph.drawOutlinedString(g1, text, 175, (150 + 75) / 2, 2, Color.BLACK);
 
-				int majOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 12));
-				int minOffset = g.getFontMetrics().stringWidth(text.substring(0, text.length() - 6));
-				Graph.applyTransformed(g, 175, 150 / 2 - 75 / 2, g1 -> {
-					g1.drawImage(icons.getFirst(), majOffset + 5, 10, 75, 75, null);
-					g1.drawImage(icons.get(1), minOffset + 5, 10, 75, 75, null);
+				int majOffset = g1.getFontMetrics().stringWidth(text.substring(0, text.length() - 12));
+				int minOffset = g1.getFontMetrics().stringWidth(text.substring(0, text.length() - 6));
+				Graph.applyTransformed(g1, 175, 150 / 2 - 75 / 2, g2 -> {
+					g2.drawImage(icons.getFirst(), majOffset + 5, 10, 75, 75, null);
+					g2.drawImage(icons.get(1), minOffset + 5, 10, 75, 75, null);
 				});
 
-				g.setFont(Fonts.OPEN_SANS.derivePlain(36));
-				g.setColor(Color.WHITE);
+				g1.setFont(Fonts.OPEN_SANS.derivePlain(36));
+				g1.setColor(Color.WHITE);
 				effects = "- " + ori.major().getMajor(locale)
 						  + "\n\n" + Arrays.stream(ori.minor())
 								  .filter(r -> r != Race.DEMON)
@@ -522,13 +544,13 @@ public class Deck extends DAO<Deck> {
 						  + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
 			}
 
-			Graph.drawMultilineString(g, effects,
+			Graph.drawMultilineString(g1, effects,
 					0, 190, 1140, 10, -20,
 					s -> {
 						JSONArray args = Utils.extractGroups(s, "&\\((#[0-9A-F]{6})\\)(.+)");
 
 						if (!args.isEmpty()) {
-							g.setColor(Color.decode(args.getString(0)));
+							g1.setColor(Color.decode(args.getString(0)));
 							return args.getString(1);
 						}
 
@@ -545,44 +567,44 @@ public class Deck extends DAO<Deck> {
 				str = "  \"" + syn.getDescription(locale) + "\"";
 			}
 
-			g.setColor(Color.WHITE);
-			Graph.drawMultilineString(g, str,
-					0, g.getFontMetrics().getHeight() / 2 + bi.getHeight() - 520 - (int) Graph.getMultilineStringBounds(g, str, 1100, 10).getHeight(),
+			g1.setColor(Color.WHITE);
+			Graph.drawMultilineString(g1, str,
+					0, g1.getFontMetrics().getHeight() / 2 + bi.getHeight() - 520 - (int) Graph.getMultilineStringBounds(g1, str, 1100, 10).getHeight(),
 					1100, 10
 			);
 		});
+	}
 
-		Graph.applyTransformed(g2d, 1212, 14, g -> {
-			for (int i = 0; i < Math.min(getSenshi().size(), 36); i++) {
-				Senshi s = getSenshi().get(i);
-				g.drawImage(s.render(locale, this), 120 * (i % 9), 182 * (i / 9), 113, 175, null);
+	public Consumer<Graphics2D> renderCards(I18N locale) {
+		return g2d -> {
+			Graph.applyTransformed(g2d, 1212, 14, g -> {
+				for (int i = 0; i < Math.min(getSenshi().size(), 36); i++) {
+					Senshi s = getSenshi().get(i);
+					g.drawImage(s.render(locale, this), 120 * (i % 9), 182 * (i / 9), 113, 175, null);
+				}
+			});
+
+			Graph.applyTransformed(g2d, 1571, 768, g -> {
+				for (int i = 0; i < Math.min(getEvogear().size(), 24); i++) {
+					Evogear e = getEvogear().get(i);
+					g.drawImage(e.render(locale, this), 120 * (i % 6), 182 * (i / 6), 113, 175, null);
+				}
+			});
+
+			Graph.applyTransformed(g2d, 1185, 1314, g -> {
+				for (int i = 0; i < Math.min(getFields().size(), 3); i++) {
+					Field f = getFields().get(i);
+					g.drawImage(f.render(locale, this), 120 * (i % 6), 0, 113, 175, null);
+				}
+			});
+
+			Hero h = getHero();
+			if (h != null) {
+				g2d.drawImage(h.asSenshi(locale).render(locale, this), 1237, 834, null);
+			} else {
+				g2d.drawImage(styling.getFrame().getBack(this), 1252, 849, null);
 			}
-		});
-
-		Graph.applyTransformed(g2d, 1571, 768, g -> {
-			for (int i = 0; i < Math.min(getEvogear().size(), 24); i++) {
-				Evogear e = getEvogear().get(i);
-				g.drawImage(e.render(locale, this), 120 * (i % 6), 182 * (i / 6), 113, 175, null);
-			}
-		});
-
-		Graph.applyTransformed(g2d, 1185, 1314, g -> {
-			for (int i = 0; i < Math.min(getFields().size(), 3); i++) {
-				Field f = getFields().get(i);
-				g.drawImage(f.render(locale, this), 120 * (i % 6), 0, 113, 175, null);
-			}
-		});
-
-		Hero h = getHero();
-		if (h != null) {
-			g2d.drawImage(h.asSenshi(locale).render(locale, this), 1237, 834, null);
-		} else {
-			g2d.drawImage(styling.getFrame().getBack(this), 1252, 849, null);
-		}
-
-		g2d.dispose();
-
-		return bi;
+		};
 	}
 
 	public Origin getOrigins() {
