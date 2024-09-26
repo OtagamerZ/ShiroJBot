@@ -91,7 +91,7 @@ public class HeroInfoCommand implements Executable {
 							});
 						});
 
-						mods.forEach((k, v) -> sb.appendNewLine("-# " + k.formatted(v.toArray()) + "\n"));
+						mods.forEach((k, v) -> sb.appendNewLine("-# " + k.formatted(v.toArray())));
 					}
 				}
 
