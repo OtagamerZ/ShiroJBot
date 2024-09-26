@@ -172,6 +172,8 @@ public class CardAttributes implements Serializable, Cloneable {
 	}
 
 	public void appendEffect(@Language("Groovy") String effect) {
+		this.effect = Utils.getOr(effect, "");
+
 		Set<String> imports = new HashSet<>();
 		this.effect = Utils.regex(this.effect + "\n{\n" + effect.stripIndent() + "\n}", "^import .+")
 				.replaceAll(m -> {

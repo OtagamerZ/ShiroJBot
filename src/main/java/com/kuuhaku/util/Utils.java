@@ -227,7 +227,7 @@ public abstract class Utils {
 	}
 
 	public static Pattern regex(@Language("RegExp") String regex) {
-		return Main.getCacheManager().computePattern(regex, (k, v) -> v == null ? Pattern.compile(regex) : v);
+		return Main.getCacheManager().computePattern(regex, (k, v) -> v == null ? Pattern.compile(regex, Pattern.MULTILINE) : v);
 	}
 
 	public static Matcher regex(String text, @Language("RegExp") String regex) {
