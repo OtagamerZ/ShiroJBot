@@ -37,6 +37,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -91,7 +92,12 @@ public class HeroInfoCommand implements Executable {
 							});
 						});
 
-						mods.forEach((k, v) -> sb.appendNewLine("-# " + k.formatted(v.toArray())));
+						mods.forEach((k, v) -> {
+							Integer[] vals = v.toArray(Integer[]::new);
+							if (Arrays.stream(vals).allMatch(i -> i == 0)) return;
+
+							sb.appendNewLine("-# " + k.formatted(vals));
+						});
 					}
 				}
 
