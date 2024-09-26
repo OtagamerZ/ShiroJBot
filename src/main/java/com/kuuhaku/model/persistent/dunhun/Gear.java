@@ -132,16 +132,27 @@ public class Gear extends DAO<Gear> {
 					return v;
 				});
 			});
-
-			mods.forEach((k, v) -> {
-				Integer[] vals = v.toArray(Integer[]::new);
-				if (Arrays.stream(vals).allMatch(i -> i == 0)) return;
-
-				out.add("-# " + k.formatted((Object[]) vals));
-			});
 		}
 
-		return out;
+		mods.forEach((k, v) -> {
+			Integer[] vals = v.stream()
+					.filter(i -> i != 0)
+					.toArray(Integer[]::new);
+
+			if (vals.length == 0) return;
+
+			out.add(k.formatted((Object[]) vals));
+		});
+
+		return out.stream()
+				.map(l -> Utils.regex(l, "\\[(.+?)](%)?").replaceAll(m -> {
+					if (m.group(2) != null) {
+						return m.group(1) + "%";
+					}
+
+					return Utils.sign(Integer.parseInt(m.group(1)));
+				}))
+				.toList();
 	}
 
 	public double getRoll() {

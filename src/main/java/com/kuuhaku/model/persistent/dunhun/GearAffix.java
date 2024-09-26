@@ -32,6 +32,7 @@ import org.hibernate.annotations.FetchMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 
 @Entity
@@ -102,13 +103,15 @@ public class GearAffix extends DAO<GearAffix> {
 
 	public String getDescription(I18N locale) {
 		List<Integer> vals = getValues(locale);
+
+		AtomicInteger i = new AtomicInteger();
 		return Utils.regex(affix.getInfo(locale).getDescription(), "\\[.+?](%)?")
 				.replaceAll(r -> {
 					if (r.group(1) != null) {
-						return String.valueOf(vals.removeFirst());
+						return vals.get(i.getAndIncrement()) + "%";
 					}
 
-					return Utils.sign(vals.removeFirst());
+					return Utils.sign(vals.get(i.getAndIncrement()));
 				});
 	}
 
