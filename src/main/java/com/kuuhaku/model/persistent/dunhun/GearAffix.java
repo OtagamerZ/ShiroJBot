@@ -57,6 +57,8 @@ public class GearAffix extends DAO<GearAffix> {
 	@Column(name = "roll", nullable = false)
 	private double roll = Calc.rng();
 
+	private transient List<Integer> values;
+
 	public GearAffix() {
 	}
 
@@ -111,6 +113,8 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	public List<Integer> getValues(I18N locale) {
+		if (values != null) return values;
+
 		List<Integer> values = new ArrayList<>();
 		Matcher m = Utils.regex(affix.getInfo(locale).getDescription(), "\\[(-?\\d+)(?:-(-?\\d+))?]");
 		while (m.find()) {
@@ -125,7 +129,7 @@ public class GearAffix extends DAO<GearAffix> {
 			values.add((int) (min + (max - min) * roll));
 		}
 
-		return values;
+		return this.values = values;
 	}
 
 	@Override

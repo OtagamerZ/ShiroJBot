@@ -22,6 +22,7 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
@@ -30,12 +31,15 @@ import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.model.common.dunhun.Equipment;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.regex.Pattern;
 
 @Command(
 		name = "hero",
@@ -67,12 +71,27 @@ public class HeroInfoCommand implements Executable {
 					sb.appendNewLine("*" + locale.get("str/empty") + "*");
 				} else {
 					sb.appendNewLine("`" + g.getId() + "` - " + g.getName(locale));
+					LinkedHashMap<String, List<Integer>> mods = new LinkedHashMap<>();
+
+					Pattern pat = Utils.regex("\\[(.+?)]");
 					for (GearAffix ga : g.getAllAffixes()) {
-						sb.appendNewLine(
-								ga.getDescription(locale).lines()
-										.map(l -> "-# " + l)
-										.collect(Collectors.joining("\n"))
-						);
+						String desc = ga.getDescription(locale);
+						desc.lines().forEach(l -> {
+							String base = pat.matcher(l).replaceAll(m -> "[%s]");
+
+							List<Integer> vals = ga.getValues(locale);
+							mods.compute(base, (k, v) -> {
+								if (v == null) return new ArrayList<>(ga.getValues(locale));
+
+								for (int j = 0; j < Math.min(v.size(), vals.size()); j++) {
+									v.set(j, v.get(j) + vals.get(j));
+								}
+
+								return v;
+							});
+						});
+
+						mods.forEach((k, v) -> sb.appendNewLine("-# " + k.formatted(v.toArray()) + "\n"));
 					}
 				}
 
