@@ -35,6 +35,8 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
+import java.util.stream.Collectors;
+
 @Command(
 		name = "hero",
 		path = "info",
@@ -66,7 +68,11 @@ public class HeroInfoCommand implements Executable {
 				} else {
 					sb.appendNewLine("`" + g.getId() + "` - " + g.getName(locale));
 					for (GearAffix ga : g.getAllAffixes()) {
-						sb.appendNewLine("-# " + ga.getDescription(locale));
+						sb.appendNewLine(
+								ga.getDescription(locale).lines()
+										.map(l -> "-# " + l)
+										.collect(Collectors.joining("\n"))
+						);
 					}
 				}
 
