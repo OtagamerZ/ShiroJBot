@@ -32,10 +32,13 @@ import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.dunhun.GearStats;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -68,6 +71,31 @@ public class HeroInspectCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(g.getName(locale));
+
+		GearStats stats = g.getBasetype().getStats();
+		if (stats.attack() > 0) {
+			eb.appendDescription(locale.get("str/attack") + ": " + stats.attack() + "\n");
+		}
+		if (stats.defense() > 0) {
+			eb.appendDescription(locale.get("str/defense") + ": " + stats.attack() + "\n");
+		}
+		if (stats.critical() > 0) {
+			eb.appendDescription(locale.get("str/critical_chance") + ": " + Utils.roundToString(stats.critical(), 2) + "%\n");
+		}
+
+		eb.appendDescription("\n");
+
+		if (stats.str() + stats.dex() + stats.wis() + stats.vit() > 0) {
+			eb.appendDescription("-# " + locale.get("str/required_attributes") + ": " + stats.attack() + "\n");
+		}
+
+		List<String> attrs = new ArrayList<>();
+		if (stats.str() > 0) attrs.add("STR: " + stats.str() + " ");
+		if (stats.dex() > 0) attrs.add("DEX: " + stats.dex() + " ");
+		if (stats.wis() > 0) attrs.add("WIS: " + stats.wis() + " ");
+		if (stats.vit() > 0) attrs.add("VIT: " + stats.vit() + " ");
+
+		eb.appendDescription(String.join(" | ", attrs) + "\n\n");
 
 		GearAffix imp = g.getImplicit();
 		if (imp != null) {
