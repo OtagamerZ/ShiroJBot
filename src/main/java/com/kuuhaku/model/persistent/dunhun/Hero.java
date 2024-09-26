@@ -88,7 +88,7 @@ public class Hero extends DAO<Hero> {
 	}
 
 	public boolean setImage(BufferedImage img) {
-		String hash = HexFormat.of().formatHex(DigestUtils.getMd5Digest().digest(id.getBytes()));
+		String hash = HexFormat.of().formatHex(DigestUtils.getMd5Digest().digest(("H:" + id).getBytes()));
 		File parent = new File(System.getenv("CARDS_PATH") + "../heroes");
 		if (!parent.exists()) parent.mkdir();
 
