@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 public enum I18N {
 	PT(ZoneId.of("GMT-3"), "🇧🇷"),
@@ -141,5 +142,11 @@ public enum I18N {
 		return Arrays.stream(I18N.values())
 				.filter(l -> l.parent == l)
 				.toArray(I18N[]::new);
+	}
+
+	public static void each(Consumer<I18N> consumer) {
+		for (I18N l : validValues()) {
+			consumer.accept(l);
+		}
 	}
 }
