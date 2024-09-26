@@ -157,7 +157,7 @@ public class CardAttributes implements Serializable, Cloneable {
 		LocalizedDescription desc = descriptions.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.findAny()
-				.orElse(new LocalizedDescription(locale, description));
+				.orElse(new LocalizedDescription(locale, ""));
 
 		desc.setDescription(desc.getDescription() + " " + description);
 		descriptions.add(desc);
