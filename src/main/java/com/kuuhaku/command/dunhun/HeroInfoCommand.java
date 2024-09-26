@@ -73,9 +73,9 @@ public class HeroInfoCommand implements Executable {
 					sb.appendNewLine("`" + g.getId() + "` - " + g.getName(locale));
 					LinkedHashMap<String, List<Integer>> mods = new LinkedHashMap<>();
 
-					Pattern pat = Utils.regex("\\[(.+?)]");
+					Pattern pat = Utils.regex("\\[.+?]");
 					for (GearAffix ga : g.getAllAffixes()) {
-						String desc = ga.getDescription(locale);
+						String desc = ga.getAffix().getInfo(locale).getDescription();
 						desc.lines().forEach(l -> {
 							String base = pat.matcher(l).replaceAll(m -> "[%s]");
 
