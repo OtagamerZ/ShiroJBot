@@ -150,12 +150,12 @@ public class Gear extends DAO<Gear> {
 		for (GearAffix ga : getAllAffixes()) {
 			try {
 				Affix a = ga.getAffix();
-				Utils.exec(getClass().getSimpleName(), a.getEffect(), Map.of(
+				Utils.exec(a.getId(), a.getEffect(), Map.of(
 						"gear", this,
 						"hero", hero,
 						"self", senshi,
 						"values", ga.getValues(locale),
-						"grant", Utils.getOr(Utils.extract(ga.getDescription(locale), "\"(.+?)\""), "")
+						"grant", Utils.getOr(Utils.extract(ga.getDescription(locale), "\"(.+?)\"", 1), "")
 				));
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to apply implicit {}", ga, e);
