@@ -100,8 +100,14 @@ public class GearAffix extends DAO<GearAffix> {
 
 	public String getDescription(I18N locale) {
 		List<Integer> vals = getValues(locale);
-		return Utils.regex(affix.getInfo(locale).getDescription(), "\\[.+?]")
-				.replaceAll(r -> String.valueOf(vals.removeFirst()));
+		return Utils.regex(affix.getInfo(locale).getDescription(), "\\[.+?](%)?")
+				.replaceAll(r -> {
+					if (r.group(1) != null) {
+						return String.valueOf(vals.removeFirst());
+					}
+
+					return Utils.sign(vals.removeFirst());
+				});
 	}
 
 	public List<Integer> getValues(I18N locale) {
