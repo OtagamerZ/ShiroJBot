@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.GearStats;
@@ -73,7 +74,7 @@ public class HeroInspectCommand implements Executable {
 			return;
 		}
 
-		g.load(locale, null);
+		g.load(locale, new Senshi(h.getId(), h.getStats().getRace()));
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(g.getName(locale));
 
