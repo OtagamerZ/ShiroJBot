@@ -61,7 +61,13 @@ public class TestSpawnCommand implements Executable {
 
 		Gear g;
 		if (args.has("id")) {
-			g = Gear.getRandom(h, DAO.find(Basetype.class, args.getString("id").toUpperCase()));
+			Basetype base = DAO.find(Basetype.class, args.getString("id").toUpperCase());
+			if (base == null) {
+				event.channel().sendMessage("ERR_BASE_NOT_FOUND").queue();
+				return;
+			}
+
+			g = Gear.getRandom(h, base);
 		} else {
 			g = Gear.getRandom(h, Utils.getRandomEntry(GearSlot.values()));
 		}
