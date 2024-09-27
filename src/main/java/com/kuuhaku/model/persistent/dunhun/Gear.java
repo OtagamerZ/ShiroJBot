@@ -222,7 +222,7 @@ public class Gear extends DAO<Gear> {
 				@Language("Groovy") String effect = a.getEffect();
 
 				if (senshi == null) {
-					effect = Utils.regex(effect, "\\bself\\.\\b").replaceAll("null?.");
+					effect = Utils.regex(effect, "\\bself\\b\\.").replaceAll("null?.");
 					Utils.exec(a.getId(), effect, Map.of(
 							"locale", locale,
 							"gear", this,
