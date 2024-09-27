@@ -19,14 +19,13 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.Attributes;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
-import com.ygimenez.json.JSONArray;
-import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Embeddable
 public class HeroStats {
@@ -46,11 +45,6 @@ public class HeroStats {
 	   │  └ wisdom
 	   └ vitality
 	 */
-
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray skills = new JSONArray();
 
 	public int getLevel() {
 		return 1 + Calc.round(Math.pow(xp / 10d, 1 / 1.5));
@@ -110,9 +104,5 @@ public class HeroStats {
 
 	public Attributes getAttributes() {
 		return new Attributes(getStrength(), getDexterity(), getWisdom(), getVitality());
-	}
-
-	public JSONArray getSkills() {
-		return skills;
 	}
 }

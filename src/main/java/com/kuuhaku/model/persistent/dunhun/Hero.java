@@ -24,12 +24,14 @@ import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.model.common.dunhun.HeroModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.Attributes;
 import com.kuuhaku.util.Graph;
+import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -70,8 +72,14 @@ public class Hero extends DAO<Hero> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject equipment = new JSONObject();
 
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray skills = new JSONArray();
+
 	private transient final HeroModifiers modifiers = new HeroModifiers();
 	private transient Equipment equipCache;
+	private transient List<Skill> skillCache;
 
 	public Hero() {
 	}
@@ -112,12 +120,15 @@ public class Hero extends DAO<Hero> {
 	}
 
 	public int getMaxHp() {
-		Attributes a = getStats().getAttributes().merge(getModifiers().getAttributes());
-		return (int) ((hp + modifiers.getHp()) * (1 + 0.1 * a.vit()));
+		return (int) ((hp + modifiers.getMaxHp()) * (1 + 0.1 * getAttributes().vit()));
 	}
 
 	public void setHp(int hp) {
 		this.hp = hp;
+	}
+
+	public Attributes getAttributes() {
+		return getStats().getAttributes().merge(getModifiers().getAttributes());
 	}
 
 	public HeroStats getStats() {
@@ -171,6 +182,12 @@ public class Hero extends DAO<Hero> {
 		return DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.id IN ?1", ids);
 	}
 
+	public List<Skill> getSkills() {
+		if (skillCache != null) return skillCache;
+
+		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", skills);
+	}
+
 	public Senshi asSenshi(I18N locale) {
 		Senshi s = new Senshi(id, stats.getRace());
 		CardAttributes base = s.getBase();
@@ -185,7 +202,7 @@ public class Hero extends DAO<Hero> {
 			def += g.getDfs();
 		}
 
-		Attributes a = getStats().getAttributes().merge(getModifiers().getAttributes());
+		Attributes a = getAttributes();
 		base.setAtk((int) (dmg * (1 + a.str() * 0.075 + a.dex() * 0.05)));
 		base.setDfs((int) (def * (1 + a.str() * 0.06 + a.dex() * 0.03)));
 		base.setDodge(Math.max(0, a.dex() / 2 - a.vit() / 5));
@@ -206,6 +223,13 @@ public class Hero extends DAO<Hero> {
 		if (equipCache != null) {
 			equipment = new JSONObject(equipCache.toString());
 			equipCache = null;
+		}
+
+		if (skillCache != null) {
+			skills = skillCache.stream()
+					.map(Skill::getId)
+					.collect(Collectors.toCollection(JSONArray::new));
+			skillCache = null;
 		}
 	}
 

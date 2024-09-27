@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class HeroModifiers {
-	private int hp;
+	private int maxHp;
 	private int attributes;
 	/*
 	0xFF FF FF FF
@@ -38,12 +38,12 @@ public class HeroModifiers {
 	private final Set<String> skills = new HashSet<>();
 	private final Set<String> effects = new HashSet<>();
 
-	public int getHp() {
-		return hp;
+	public int getMaxHp() {
+		return maxHp;
 	}
 
-	public void addHp(int hp) {
-		this.hp += hp;
+	public void addMaxHp(int hp) {
+		this.maxHp += hp;
 	}
 
 	public int getStrength() {
@@ -91,7 +91,7 @@ public class HeroModifiers {
 	}
 
 	public void reset() {
-		hp = attributes = 0;
+		maxHp = attributes = 0;
 		skills.clear();
 		effects.clear();
 	}
