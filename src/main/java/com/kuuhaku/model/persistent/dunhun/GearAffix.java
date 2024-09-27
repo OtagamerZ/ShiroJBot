@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.common.dunhun.AffixModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.id.GearAffixId;
 import com.kuuhaku.util.Calc;
@@ -57,6 +58,8 @@ public class GearAffix extends DAO<GearAffix> {
 
 	@Column(name = "roll", nullable = false)
 	private int roll = Calc.rng(Integer.MAX_VALUE);
+
+	private transient final AffixModifiers modifiers = new AffixModifiers();
 
 	public GearAffix() {
 	}
@@ -125,14 +128,14 @@ public class GearAffix extends DAO<GearAffix> {
 		String desc = affix.getInfo(locale).getDescription();
 		Matcher m = Utils.regex(desc, "\\[(-?\\d+)(?:-(-?\\d+))?]");
 		while (m.find()) {
-			int min = Integer.parseInt(m.group(1));
+			int min = (int) (Integer.parseInt(m.group(1)) * modifiers.getMinMult());
 			if (m.group(2) == null) {
 				values.add(min);
 				continue;
 			}
 
-			int max = Integer.parseInt(m.group(2));
-			values.add((int) (Calc.rng(min, max, roll + desc.hashCode()) * gear.getModifiers().getAffixMult()));
+			int max = (int) (Integer.parseInt(m.group(2)) * modifiers.getMaxMult());
+			values.add(Calc.rng(min, max, roll + desc.hashCode()));
 		}
 
 		return values;

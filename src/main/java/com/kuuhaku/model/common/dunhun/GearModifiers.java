@@ -30,7 +30,6 @@ public class GearModifiers {
 	private float criticalMult = 1;
 
 	private final Set<String> addedTags = new HashSet<>();
-	private float affixMult = 1;
 
 	public float getAttack() {
 		return attack;
@@ -84,18 +83,10 @@ public class GearModifiers {
 		return addedTags;
 	}
 
-	public float getAffixMult() {
-		return affixMult;
-	}
-
-	public void addAffixMult(float mult) {
-		this.affixMult += mult;
-	}
-
 	public void reset() {
 		attack = defense = 0;
 		critical = 0;
-		attackMult = defenseMult = criticalMult = affixMult = 1;
+		attackMult = defenseMult = criticalMult = 1;
 		addedTags.clear();
 	}
 }
