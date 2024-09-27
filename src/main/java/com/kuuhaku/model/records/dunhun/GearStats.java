@@ -53,6 +53,8 @@ public record GearStats(
 		JSONArray tags,
 		@ManyToOne
 		@JoinColumn(name = "implicit_id")
-		Affix implicit
+		Affix implicit,
+		@Column(name = "weight", nullable = false)
+		int weight
 ) {
 }
