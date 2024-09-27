@@ -87,6 +87,10 @@ public class GearAffix extends DAO<GearAffix> {
 		return affix;
 	}
 
+	public int getRoll() {
+		return roll;
+	}
+
 	public void reroll() {
 		this.roll = Calc.rng(Integer.MAX_VALUE);
 	}
