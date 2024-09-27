@@ -54,6 +54,9 @@ public class Hero extends DAO<Hero> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
+	@Column(name = "hp", nullable = false)
+	private int hp;
+
 	@Embedded
 	private HeroStats stats = new HeroStats();
 
@@ -102,6 +105,19 @@ public class Hero extends DAO<Hero> {
 			Constants.LOGGER.error(e, e);
 			return false;
 		}
+	}
+
+	public int getHp() {
+		return hp;
+	}
+
+	public int getMaxHp() {
+		Attributes a = getStats().getAttributes().merge(getModifiers().getAttributes());
+		return (int) ((hp + modifiers.getHp()) * (1 + 0.1 * a.vit()));
+	}
+
+	public void setHp(int hp) {
+		this.hp = hp;
 	}
 
 	public HeroStats getStats() {
@@ -170,10 +186,12 @@ public class Hero extends DAO<Hero> {
 		}
 
 		Attributes a = getStats().getAttributes().merge(getModifiers().getAttributes());
-		base.setAtk((int) (dmg * (1 + a.str() * 0.03 + a.dex() * 0.02)));
-		base.setDfs((int) (def * (1 + a.str() * 0.04 + a.dex() * 0.01)));
+		base.setAtk((int) (dmg * (1 + a.str() * 0.075 + a.dex() * 0.05)));
+		base.setDfs((int) (def * (1 + a.str() * 0.06 + a.dex() * 0.03)));
 		base.setDodge(Math.max(0, a.dex() / 2 - a.vit() / 5));
 		base.setParry(Math.max(0, a.dex() / 5));
+
+		s.getStats().getPower().set(0.05 * a.wis());
 
 		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750);
 		base.setSacrifices((base.getAtk() + base.getDfs()) / 3000);

@@ -30,9 +30,6 @@ import org.hibernate.type.SqlTypes;
 
 @Embeddable
 public class HeroStats {
-	@Column(name = "hp", nullable = false)
-	private int hp;
-
 	@Column(name = "xp", nullable = false)
 	private int xp;
 
@@ -54,14 +51,6 @@ public class HeroStats {
 	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray skills = new JSONArray();
-
-	public int getHp() {
-		return hp;
-	}
-
-	public void setHp(int hp) {
-		this.hp = hp;
-	}
 
 	public int getLevel() {
 		return 1 + Calc.round(Math.pow(xp / 10d, 1 / 1.5));
