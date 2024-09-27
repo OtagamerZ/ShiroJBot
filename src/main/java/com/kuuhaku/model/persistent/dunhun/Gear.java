@@ -66,7 +66,7 @@ public class Gear extends DAO<Gear> {
 	private Set<GearAffix> affixes = new LinkedHashSet<>();
 
 	@Column(name = "base_roll", nullable = false)
-	private int roll = Calc.rng(Integer.MIN_VALUE, Integer.MAX_VALUE);
+	private int roll = Calc.rng(Integer.MAX_VALUE);
 
 	private transient final GearModifiers modifiers = new GearModifiers();
 
@@ -106,7 +106,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public void reroll() {
-		this.roll = Calc.rng(Integer.MIN_VALUE, Integer.MAX_VALUE);
+		this.roll = Calc.rng(Integer.MAX_VALUE);
 	}
 
 	public GearAffix getImplicit() {

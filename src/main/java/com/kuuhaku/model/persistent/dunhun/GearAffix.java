@@ -56,7 +56,7 @@ public class GearAffix extends DAO<GearAffix> {
 	private Affix affix;
 
 	@Column(name = "roll", nullable = false)
-	private int roll = Calc.rng(Integer.MIN_VALUE, Integer.MAX_VALUE);
+	private int roll = Calc.rng(Integer.MAX_VALUE);
 
 	private transient List<Integer> values;
 
@@ -64,7 +64,7 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	public GearAffix(Gear gear, Affix affix) {
-		this(gear, affix, Calc.rng(Integer.MIN_VALUE, Integer.MAX_VALUE));
+		this(gear, affix, Calc.rng(Integer.MAX_VALUE));
 	}
 
 	public GearAffix(Gear gear, Affix affix, int roll) {
@@ -87,7 +87,7 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	public void reroll() {
-		this.roll = Calc.rng(Integer.MIN_VALUE, Integer.MAX_VALUE);
+		this.roll = Calc.rng(Integer.MAX_VALUE);
 	}
 
 	public String getName(I18N locale) {
