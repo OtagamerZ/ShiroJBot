@@ -93,6 +93,9 @@ public class GearModifiers {
 	}
 
 	public void reset() {
-		attackMult = defenseMult = criticalMult;
+		attack = defense = 0;
+		critical = 0;
+		attackMult = defenseMult = criticalMult = affixMult = 1;
+		addedTags.clear();
 	}
 }
