@@ -211,27 +211,14 @@ public class Gear extends DAO<Gear> {
 		for (GearAffix ga : getAllAffixes()) {
 			try {
 				Affix a = ga.getAffix();
-				@Language("Groovy") String effect = a.getEffect();
-
-				if (senshi == null) {
-					effect = Utils.regex(effect, "\\bself\\.\\b").replaceAll("null?.");
-					Utils.exec(a.getId(), effect, Map.of(
-							"locale", locale,
-							"gear", this,
-							"hero", owner,
-							"values", ga.getValues(locale),
-							"grant", ""
-					));
-				} else {
-					Utils.exec(a.getId(), effect, Map.of(
-							"locale", locale,
-							"gear", this,
-							"hero", owner,
-							"self", senshi,
-							"values", ga.getValues(locale),
-							"grant", Utils.getOr(Utils.extract(ga.getDescription(locale), "\"(.+?)\"", 1), "")
-					));
-				}
+				Utils.exec(a.getId(), a.getEffect(), Map.of(
+						"locale", locale,
+						"gear", this,
+						"hero", owner,
+						"self", senshi,
+						"values", ga.getValues(locale),
+						"grant", Utils.getOr(Utils.extract(ga.getDescription(locale), "\"(.+?)\"", 1), "")
+				));
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to apply implicit {}", ga, e);
 			}
