@@ -66,7 +66,7 @@ public class Gear extends DAO<Gear> {
 	private Set<GearAffix> affixes = new LinkedHashSet<>();
 
 	@Column(name = "base_roll", nullable = false)
-	private double roll = Calc.rng();
+	private int roll = Calc.rng(Integer.MAX_VALUE);
 
 	private transient final GearModifiers modifiers = new GearModifiers();
 
@@ -103,6 +103,10 @@ public class Gear extends DAO<Gear> {
 
 	public Set<GearAffix> getAffixes() {
 		return affixes;
+	}
+
+	public void reroll() {
+		this.roll = Calc.rng(Integer.MAX_VALUE);
 	}
 
 	public GearAffix getImplicit() {
@@ -196,8 +200,8 @@ public class Gear extends DAO<Gear> {
 		return (int) ((basetype.getStats().defense() + modifiers.getDefense()) * modifiers.getDefenseMult());
 	}
 
-	public int getCritical() {
-		return (int) Calc.clamp((basetype.getStats().critical() + modifiers.getCritical()) * modifiers.getCriticalMult(), 0, 100);
+	public float getCritical() {
+		return Calc.clamp((basetype.getStats().critical() + modifiers.getCritical()) * modifiers.getCriticalMult(), 0, 100);
 	}
 
 	public void load(I18N locale, Hero hero, Senshi senshi) {

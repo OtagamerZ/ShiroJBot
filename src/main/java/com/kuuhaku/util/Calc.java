@@ -26,10 +26,8 @@ import org.apache.commons.math3.util.Precision;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
-import java.util.SplittableRandom;
 import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
@@ -118,7 +116,7 @@ public abstract class Calc {
 	}
 
 	public static int rng(int max, long seed) {
-		return rng(0, max, new SplittableRandom(seed));
+		return rng(0, max, seed);
 	}
 
 	public static int rng(int max, RandomGenerator random) {
@@ -130,7 +128,10 @@ public abstract class Calc {
 	}
 
 	public static int rng(int min, int max, long seed) {
-		return rng(min, max, new SplittableRandom(seed));
+		return Utils.withUnsafeRng(rng -> {
+			rng.setSeed(seed);
+			return rng(min, max, rng);
+		});
 	}
 
 	public static int rng(int min, int max, RandomGenerator random) {
@@ -142,7 +143,7 @@ public abstract class Calc {
 	}
 
 	public static double rng(double max, long seed) {
-		return rng(0, max, new SplittableRandom(seed));
+		return rng(0, max, seed);
 	}
 
 	public static double rng(double max, RandomGenerator random) {
@@ -154,7 +155,10 @@ public abstract class Calc {
 	}
 
 	public static double rng(double min, double max, long seed) {
-		return rng(min, max, new SplittableRandom(seed));
+		return Utils.withUnsafeRng(rng -> {
+			rng.setSeed(seed);
+			return rng(min, max, rng);
+		});
 	}
 
 	public static double rng(double min, double max, RandomGenerator random) {

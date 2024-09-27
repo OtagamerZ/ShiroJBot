@@ -56,7 +56,7 @@ public class GearAffix extends DAO<GearAffix> {
 	private Affix affix;
 
 	@Column(name = "roll", nullable = false)
-	private double roll = Calc.rng();
+	private int roll = Calc.rng(Integer.MAX_VALUE);
 
 	private transient List<Integer> values;
 
@@ -64,10 +64,10 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	public GearAffix(Gear gear, Affix affix) {
-		this(gear, affix, Calc.rng());
+		this(gear, affix, Calc.rng(Integer.MAX_VALUE));
 	}
 
-	public GearAffix(Gear gear, Affix affix, double roll) {
+	public GearAffix(Gear gear, Affix affix, int roll) {
 		this.id = new GearAffixId(gear.getId(), affix.getId());
 		this.gear = gear;
 		this.affix = affix;
@@ -86,12 +86,8 @@ public class GearAffix extends DAO<GearAffix> {
 		return affix;
 	}
 
-	public double getRoll() {
-		return roll;
-	}
-
-	public void setRoll(double roll) {
-		this.roll = roll;
+	public void reroll() {
+		this.roll = Calc.rng(Integer.MAX_VALUE);
 	}
 
 	public String getName(I18N locale) {
@@ -130,7 +126,8 @@ public class GearAffix extends DAO<GearAffix> {
 		if (values != null) return values;
 
 		List<Integer> values = new ArrayList<>();
-		Matcher m = Utils.regex(affix.getInfo(locale).getDescription(), "\\[(-?\\d+)(?:-(-?\\d+))?]");
+		String desc = affix.getInfo(locale).getDescription();
+		Matcher m = Utils.regex(desc, "\\[(-?\\d+)(?:-(-?\\d+))?]");
 		while (m.find()) {
 			int min = Integer.parseInt(m.group(1));
 			if (m.group(2) == null) {
@@ -140,7 +137,7 @@ public class GearAffix extends DAO<GearAffix> {
 
 			int max = Integer.parseInt(m.group(2));
 
-			values.add((int) (min + (max - min) * roll));
+			values.add(Calc.rng(min, max, roll + desc.hashCode()));
 		}
 
 		return this.values = values;

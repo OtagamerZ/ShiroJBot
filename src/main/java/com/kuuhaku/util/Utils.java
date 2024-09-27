@@ -590,11 +590,14 @@ public abstract class Utils {
 	}
 
 	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances) {
-		return getRandomN(list, elements, maxInstances, new SplittableRandom());
+		return getRandomN(list, elements, maxInstances, Constants.DEFAULT_RNG.get());
 	}
 
-	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances, long seed) {
-		return getRandomN(list, elements, maxInstances, new SplittableRandom(seed));
+	public static synchronized <T> List<T> getRandomN(List<T> list, int elements, int maxInstances, long seed) {
+		return withUnsafeRng(rng -> {
+			rng.setSeed(seed);
+			return getRandomN(list, elements, maxInstances, rng);
+		});
 	}
 
 	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances, RandomGenerator rng) {
@@ -880,7 +883,7 @@ public abstract class Utils {
 	}
 
 	public static <T> Collector<T, ?, List<T>> toShuffledList() {
-		return toShuffledList(new SplittableRandom());
+		return toShuffledList(Constants.DEFAULT_RNG.get());
 	}
 
 	public static <T> Collector<T, ?, List<T>> toShuffledList(RandomGenerator rng) {
@@ -999,7 +1002,7 @@ public abstract class Utils {
 	}
 
 	public static <K, V> void shufflePairs(Map<K, V> map) {
-		shufflePairs(map, new SplittableRandom());
+		shufflePairs(map, Constants.DEFAULT_RNG.get());
 	}
 
 	public static <K, V> void shufflePairs(Map<K, V> map, RandomGenerator rng) {
@@ -1319,5 +1322,9 @@ public abstract class Utils {
 
 	public static String JSON(@Language("JSON5") String json) {
 		return json;
+	}
+
+	public static synchronized <T> T withUnsafeRng(Function<Random, T> doWith) {
+		return doWith.apply(Constants.UNSAFE_RNG);
 	}
 }

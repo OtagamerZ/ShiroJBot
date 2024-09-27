@@ -31,7 +31,8 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.security.SecureRandom;
 import java.util.Map;
-import java.util.SplittableRandom;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -76,9 +77,10 @@ public abstract class Constants {
 
     public static final Function<Object, String> LOADING = o -> "<a:loading:697879726630502401> | " + o;
 
-    private static final SplittableRandom SOURCE_RNG = new SplittableRandom();
-    public static final Supplier<RandomGenerator> DEFAULT_RNG = SOURCE_RNG::split;
+    public static final Supplier<RandomGenerator> DEFAULT_RNG = ThreadLocalRandom::current;
     public static final SecureRandom DEFAULT_SECURE_RNG = new SecureRandom();
+    public static final Random UNSAFE_RNG = new Random();
+
 
     public static final Function<Member, Boolean> DEV_PRIVILEGE = m -> Account.hasRole(m.getId(), false, Role.DEVELOPER);
     public static final Function<Member, Boolean> SUP_PRIVILEGE = m -> Account.hasRole(m.getId(), false, Role.SUPPORT);
