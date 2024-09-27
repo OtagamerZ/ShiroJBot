@@ -82,7 +82,7 @@ public class HeroInspectCommand implements Executable {
 		if (!tags.isEmpty()) {
 			String tgs = tags.stream().map(t -> {
 				try {
-					String key = String.valueOf(t);
+					String key = "tag/" + t;
 					String out = locale.get(key, args);
 					if (out.isBlank() || out.equalsIgnoreCase(key)) {
 						out = LocalizedString.get(locale, key, "");
