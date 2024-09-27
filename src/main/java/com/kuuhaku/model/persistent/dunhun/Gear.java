@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -191,6 +192,13 @@ public class Gear extends DAO<Gear> {
 
 	public GearModifiers getModifiers() {
 		return modifiers;
+	}
+
+	public JSONArray getTags() {
+		JSONArray out = new JSONArray(basetype.getStats().tags());
+		out.addAll(modifiers.getAddedTags());
+
+		return out;
 	}
 
 	public int getDmg() {

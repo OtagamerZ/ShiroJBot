@@ -132,16 +132,28 @@ public class Equipment implements Iterable<Gear> {
 	public void withSlot(GearSlot slot, Function<Gear, Gear> action) {
 		try {
 			if (Utils.equalsAny(slot, RING, WEAPON)) {
+				Function<Pair<Gear, Gear>, Pair<Gear, Gear>> proc = p -> {
+					Gear dual = null;
+					if (p.getFirst() != null && p.getFirst().getTags().contains("2-SLOT")) {
+						dual = p.getFirst();
+					} else if (p.getSecond() != null && p.getSecond().getTags().contains("2-SLOT")) {
+						dual = p.getSecond();
+					}
+
+					if (dual != null) {
+						return new Pair<>(action.apply(dual), null);
+					} else {
+						return new Pair<>(
+								action.apply(p.getFirst()),
+								action.apply(p.getSecond())
+						);
+					}
+				};
+
 				if (slot == RING) {
-					rings = new Pair<>(
-							action.apply(rings.getFirst()),
-							action.apply(rings.getSecond())
-					);
+					rings = proc.apply(rings);
 				} else {
-					weapons = new Pair<>(
-							action.apply(weapons.getFirst()),
-							action.apply(weapons.getSecond())
-					);
+					weapons = proc.apply(weapons);
 				}
 				return;
 			}
