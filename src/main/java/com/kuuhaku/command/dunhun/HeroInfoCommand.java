@@ -153,7 +153,7 @@ public class HeroInfoCommand implements Executable {
 
 		List<Skill> skills = h.getSkills();
 		for (int i = 0; i < 5; i++) {
-			if (skills.size() < i) {
+			if (skills.size() <= i) {
 				eb.appendDescription("*" + locale.get("str/empty") + "*\n\n");
 				continue;
 			}
