@@ -219,9 +219,7 @@ public class Gear extends DAO<Gear> {
 		for (GearAffix ga : getAllAffixes()) {
 			try {
 				Affix a = ga.getAffix();
-				@Language("Groovy") String effect = a.getEffect();
-
-				Utils.exec(a.getId(), effect, Map.of(
+				Utils.exec(a.getId(), a.getEffect(), Map.of(
 						"locale", locale,
 						"gear", this,
 						"hero", owner,

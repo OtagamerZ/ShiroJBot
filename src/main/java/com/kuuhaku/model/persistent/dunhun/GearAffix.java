@@ -141,6 +141,10 @@ public class GearAffix extends DAO<GearAffix> {
 		return values;
 	}
 
+	public AffixModifiers getModifiers() {
+		return modifiers;
+	}
+
 	@Override
 	public String toString() {
 		return affix.getId();

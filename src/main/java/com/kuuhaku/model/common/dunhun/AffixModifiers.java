@@ -26,7 +26,7 @@ public class AffixModifiers {
 		return minMult;
 	}
 
-	public void addMinMult(int value) {
+	public void addMinMult(float value) {
 		minMult += value;
 	}
 
