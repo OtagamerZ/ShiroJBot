@@ -32,6 +32,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.intellij.lang.annotations.Language;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -204,20 +205,33 @@ public class Gear extends DAO<Gear> {
 		return Calc.clamp((basetype.getStats().critical() + modifiers.getCritical()) * modifiers.getCriticalMult(), 0, 100);
 	}
 
-	public void load(I18N locale, Hero hero, Senshi senshi) {
+	public void load(I18N locale, Senshi senshi) {
 		modifiers.reset();
 
 		for (GearAffix ga : getAllAffixes()) {
 			try {
 				Affix a = ga.getAffix();
-				Utils.exec(a.getId(), a.getEffect(), Map.of(
-						"locale", locale,
-						"gear", this,
-						"hero", hero,
-						"self", senshi,
-						"values", ga.getValues(locale),
-						"grant", Utils.getOr(Utils.extract(ga.getDescription(locale), "\"(.+?)\"", 1), "")
-				));
+				@Language("Groovy") String effect = a.getEffect();
+
+				if (senshi == null) {
+					effect = Utils.regex(effect, "\\bself\\.\\b").replaceAll("null?.");
+					Utils.exec(a.getId(), effect, Map.of(
+							"locale", locale,
+							"gear", this,
+							"hero", owner,
+							"values", ga.getValues(locale),
+							"grant", ""
+					));
+				} else {
+					Utils.exec(a.getId(), effect, Map.of(
+							"locale", locale,
+							"gear", this,
+							"hero", owner,
+							"self", senshi,
+							"values", ga.getValues(locale),
+							"grant", Utils.getOr(Utils.extract(ga.getDescription(locale), "\"(.+?)\"", 1), "")
+					));
+				}
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to apply implicit {}", ga, e);
 			}

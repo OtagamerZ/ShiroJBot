@@ -69,6 +69,7 @@ public class HeroInspectCommand implements Executable {
 			return;
 		}
 
+		g.load(locale, null);
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(g.getName(locale));
 

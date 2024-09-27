@@ -186,7 +186,7 @@ public class Hero extends DAO<Hero> {
 		for (Gear g : getEquipment()) {
 			if (g == null) continue;
 
-			g.load(locale, this, s);
+			g.load(locale, s);
 			dmg += g.getDmg();
 			def += g.getDfs();
 		}
