@@ -29,11 +29,13 @@ import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
+import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.GearStats;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -41,6 +43,8 @@ import net.dv8tion.jda.api.JDA;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.MissingFormatArgumentException;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "hero",
@@ -72,6 +76,25 @@ public class HeroInspectCommand implements Executable {
 		g.load(locale, null);
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(g.getName(locale));
+
+		JSONArray tags = g.getTags();
+		if (!tags.isEmpty()) {
+			String tgs = tags.stream().map(t -> {
+				try {
+					String key = String.valueOf(t);
+					String out = locale.get(key, args);
+					if (out.isBlank() || out.equalsIgnoreCase(key)) {
+						out = LocalizedString.get(locale, key, "");
+					}
+
+					return Utils.getOr(out, key);
+				} catch (MissingFormatArgumentException e) {
+					return "";
+				}
+			}).collect(Collectors.joining(", "));
+
+			eb.appendDescription("-# " + tgs + "\n\n");
+		}
 
 		GearStats stats = g.getBasetype().getStats();
 		if (g.getDmg() != 0) {
