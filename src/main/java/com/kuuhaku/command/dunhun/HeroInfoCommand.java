@@ -129,7 +129,9 @@ public class HeroInfoCommand implements Executable {
 
 					GearAffix imp = g.getImplicit();
 					if (imp != null) {
-						sb.appendNewLine("-# " + imp.getDescription(locale));
+						imp.getDescription(locale).lines()
+								.map(l -> "-# " + l)
+								.forEach(sb::appendNewLine);
 						sb.appendNewLine("-# ────────────────────");
 					}
 

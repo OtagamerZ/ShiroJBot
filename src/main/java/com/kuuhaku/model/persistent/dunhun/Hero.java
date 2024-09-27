@@ -56,9 +56,6 @@ public class Hero extends DAO<Hero> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	@Column(name = "hp", nullable = false)
-	private int hp;
-
 	@Embedded
 	private HeroStats stats = new HeroStats();
 
@@ -115,16 +112,8 @@ public class Hero extends DAO<Hero> {
 		}
 	}
 
-	public int getHp() {
-		return hp;
-	}
-
 	public int getMaxHp() {
-		return (int) ((hp + modifiers.getMaxHp()) * (1 + 0.1 * getAttributes().vit()));
-	}
-
-	public void setHp(int hp) {
-		this.hp = hp;
+		return (int) ((100 + modifiers.getMaxHp()) * (1 + 0.1 * getAttributes().vit()));
 	}
 
 	public Attributes getAttributes() {
