@@ -115,7 +115,8 @@ public class HeroInfoCommand implements Executable {
 
 	private Page viewGear(I18N locale, Hero h) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("str/equipment");
+				.setTitle("str/equipment")
+				.setThumbnail("attachment://card.png");
 
 		Equipment equips = h.getEquipment();
 		XStringBuilder sb = new XStringBuilder();
@@ -149,7 +150,8 @@ public class HeroInfoCommand implements Executable {
 
 	private Page viewSkills(I18N locale, Hero h) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle("str/skills");
+				.setTitle("str/skills")
+				.setThumbnail("attachment://card.png");
 
 		List<Skill> skills = h.getSkills();
 		for (int i = 0; i < 5; i++) {
