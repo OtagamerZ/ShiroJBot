@@ -25,6 +25,8 @@ public class MonsterModifiers {
 	private float defenseMult = 1;
 	private int hp;
 	private float hpMult = 1;
+	private int dodge;
+	private int parry;
 
 	public float getAttack() {
 		return attack;
@@ -74,8 +76,24 @@ public class MonsterModifiers {
 		hpMult += mult;
 	}
 
+	public int getDodge() {
+		return dodge;
+	}
+
+	public void addDodge(int value) {
+		dodge += value;
+	}
+
+	public int getParry() {
+		return parry;
+	}
+
+	public void addParry(int value) {
+		parry += value;
+	}
+
 	public void reset() {
-		attack = defense = hp = 0;
+		attack = defense = hp = dodge = parry = 0;
 		attackMult = defenseMult = hpMult = 1;
 	}
 }
