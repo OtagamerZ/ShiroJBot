@@ -26,6 +26,7 @@ import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
@@ -33,8 +34,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.intellij.lang.annotations.Language;
 
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -174,12 +175,19 @@ public class Gear extends DAO<Gear> {
 
 	public String getName(I18N locale) {
 		if (affixes.isEmpty()) return basetype.getInfo(locale).getName();
-		else if (affixes.size() > 2) return "[RareItem]";
 
 		String template = switch (locale) {
 			case EN, UWU_EN -> "%2$s%1$s%3$s";
 			case PT, UWU_PT -> "%1$s%2$s%3$s";
 		};
+
+		if (affixes.size() > 2) {
+			String loc = locale.getParent().name().toLowerCase();
+			String prefix = IO.getLine(Path.of("dunhun", "prefix", loc), Calc.rng(0, 32, roll));
+			String suffix = IO.getLine(Path.of("dunhun", "suffix", loc), Calc.rng(0, 32, roll));
+
+			return template.formatted(prefix, suffix, "");
+		}
 
 		String pref = "", suff = " ";
 		for (GearAffix a : affixes) {
@@ -259,6 +267,17 @@ public class Gear extends DAO<Gear> {
 				if (af == null) continue;
 
 				out.getAffixes().add(new GearAffix(out, af));
+			}
+		}
+
+		if (Calc.chance(25)) {
+			for (AffixType type : AffixType.validValues()) {
+				if (Calc.chance(50)) {
+					Affix af = Affix.getRandom(out, type);
+					if (af == null) continue;
+
+					out.getAffixes().add(new GearAffix(out, af));
+				}
 			}
 		}
 

@@ -45,6 +45,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
+import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -280,6 +281,16 @@ public abstract class IO {
 			}).longValue();
 		} catch (IOException e) {
 			return 0;
+		}
+	}
+
+	public static String getLine(Path path, int line) {
+		try (Stream<String> lines = Files.lines(path)) {
+			if (line < 1) return lines.findFirst().orElse("EOF");
+
+			return lines.skip(line - 1).findFirst().orElse("EOF");
+		} catch (IOException e) {
+			return "ERROR";
 		}
 	}
 }
