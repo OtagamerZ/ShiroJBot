@@ -23,7 +23,6 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.GearModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
-import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
@@ -275,7 +274,7 @@ public class Gear extends DAO<Gear> {
 	public static Gear getRandom(Hero hero, Basetype base) {
 		Gear out = new Gear(hero, base);
 
-		for (AffixType type : AffixType.validValues()) {
+		for (AffixType type : AffixType.itemValues()) {
 			if (Calc.chance(50)) {
 				Affix af = Affix.getRandom(out, type);
 				if (af == null) continue;
@@ -285,7 +284,7 @@ public class Gear extends DAO<Gear> {
 		}
 
 		if (Calc.chance(25)) {
-			for (AffixType type : AffixType.validValues()) {
+			for (AffixType type : AffixType.itemValues()) {
 				if (Calc.chance(50)) {
 					Affix af = Affix.getRandom(out, type);
 					if (af == null) continue;
