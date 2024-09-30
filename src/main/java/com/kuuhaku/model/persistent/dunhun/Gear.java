@@ -35,7 +35,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -178,9 +177,9 @@ public class Gear extends DAO<Gear> {
 		if (affixes.isEmpty()) return basetype.getInfo(locale).getName();
 
 		if (affixes.size() > 2) {
-			String loc = locale.getParent().name().toLowerCase() + ".dict";
-			String prefix = IO.getLine(Path.of("dunhun", "prefix", loc), Calc.rng(0, 32, roll - hashCode()));
-			String suffix = IO.getLine(Path.of("dunhun", "suffix", loc), Calc.rng(0, 32, roll - prefix.hashCode()));
+			String loc = locale.getParent().name().toLowerCase();
+			String prefix = IO.getLine("dunhun/prefix" + loc + ".dict", Calc.rng(0, 32, roll - hashCode()));
+			String suffix = IO.getLine("dunhun/suffix" + loc + ".dict", Calc.rng(0, 32, roll - prefix.hashCode()));
 
 			AtomicReference<String> ending = new AtomicReference<>("M");
 			suffix = Utils.regex(suffix, "\\[([FM])]").replaceAll(m -> {

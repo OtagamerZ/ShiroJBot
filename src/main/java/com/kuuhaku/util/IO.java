@@ -284,8 +284,11 @@ public abstract class IO {
 		}
 	}
 
-	public static String getLine(Path path, int line) {
-		try (Stream<String> lines = Files.lines(path)) {
+	public static String getLine(String path, int line) {
+		File file = getResourceAsFile(path);
+		if (file == null) return "FNF";
+
+		try (Stream<String> lines = Files.lines(file.toPath())) {
 			if (line < 1) return lines.findFirst().orElse("EOF");
 
 			return lines.skip(line - 1).findFirst().orElse("EOF");
