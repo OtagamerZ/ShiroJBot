@@ -19,7 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.common.dunhun.HeroModifiers;
+import com.kuuhaku.model.common.dunhun.MonsterModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
@@ -56,7 +56,7 @@ public class Monster extends DAO<Monster> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedMonster> infos = new HashSet<>();
 
-	private transient final HeroModifiers modifiers = new HeroModifiers();
+	private transient final MonsterModifiers modifiers = new MonsterModifiers();
 	private transient final Set<Affix> affixes = new LinkedHashSet<>();
 	private transient int roll = Calc.rng(Integer.MAX_VALUE);
 
@@ -122,7 +122,7 @@ public class Monster extends DAO<Monster> {
 		return template.formatted(getInfo(locale).getName(), pref, suff);
 	}
 
-	public HeroModifiers getModifiers() {
+	public MonsterModifiers getModifiers() {
 		return modifiers;
 	}
 
