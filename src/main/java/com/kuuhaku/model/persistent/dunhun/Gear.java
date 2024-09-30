@@ -250,7 +250,7 @@ public class Gear extends DAO<Gear> {
 						"grant", Utils.getOr(Utils.extract(ga.getDescription(locale), "\"(.+?)\"", 1), "")
 				));
 			} catch (Exception e) {
-				Constants.LOGGER.warn("Failed to apply implicit {}", ga, e);
+				Constants.LOGGER.warn("Failed to apply modifier {}", ga, e);
 			}
 		}
 	}

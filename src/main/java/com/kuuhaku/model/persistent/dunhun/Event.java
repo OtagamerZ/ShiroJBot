@@ -18,9 +18,13 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedEvent;
+import com.kuuhaku.model.records.dunhun.EventAction;
+import com.kuuhaku.model.records.dunhun.EventDescription;
+import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -28,9 +32,9 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.regex.Matcher;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -52,6 +56,8 @@ public class Event extends DAO<Event> {
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
 
+	private transient final Map<String, Runnable> actions = new HashMap<>();
+
 	public String getId() {
 		return id;
 	}
@@ -62,8 +68,31 @@ public class Event extends DAO<Event> {
 				.findAny().orElseThrow();
 	}
 
-	public String getEffect() {
-		return effect;
+	public EventDescription parse(I18N locale, Hero hero) {
+		String desc = getInfo(locale).getDescription();
+
+		List<EventAction> out = new ArrayList<>();
+		desc = Utils.regex(desc, "\\[(.+?)]\\{\\w+}").replaceAll(m -> {
+			out.add(new EventAction(m.group(1), m.group(2)));
+			return Matcher.quoteReplacement(m.group(1));
+		});
+
+		try {
+			Utils.exec(id, effect, Map.of(
+					"locale", locale,
+					"gear", this,
+					"hero", hero,
+					"forAction", (BiConsumer<String, Runnable>) this::forAction
+			));
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to execute event {}", id, e);
+		}
+
+		return new EventDescription(desc, out);
+	}
+
+	public void forAction(String action, Runnable runnable) {
+		actions.put(action, runnable);
 	}
 
 	@Override
@@ -77,5 +106,9 @@ public class Event extends DAO<Event> {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(id);
+	}
+
+	public static Event getRandom() {
+		return DAO.query(Event.class, "SELECT e FROM Event e ORDER BY random()");
 	}
 }
