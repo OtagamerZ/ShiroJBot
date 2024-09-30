@@ -191,8 +191,8 @@ public class Gear extends DAO<Gear> {
 					.replaceAll(r -> r.group(ending.get()));
 
 			String template = switch (locale) {
-				case EN, UWU_EN -> "%2$s %1$s";
-				case PT, UWU_PT -> "%1$s %2$s";
+				case EN, UWU_EN -> "%1$s %2$s";
+				case PT, UWU_PT -> "%2$s %1$s";
 			};
 
 			return template.formatted(prefix, suffix);
