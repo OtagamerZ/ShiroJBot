@@ -57,7 +57,7 @@ public class Monster extends DAO<Monster> {
 	private Set<LocalizedMonster> infos = new HashSet<>();
 
 	private transient final HeroModifiers modifiers = new HeroModifiers();
-	private transient final Set<GearAffix> affixes = new LinkedHashSet<>();
+	private transient final Set<Affix> affixes = new LinkedHashSet<>();
 	private transient int roll = Calc.rng(Integer.MAX_VALUE);
 
 	public String getId() {
@@ -114,9 +114,9 @@ public class Monster extends DAO<Monster> {
 		};
 
 		String pref = "", suff = " ";
-		for (GearAffix a : affixes) {
-			if (a.getAffix().getType() == AffixType.PREFIX) pref = " " + a.getName(locale);
-			else suff = " " + a.getName(locale);
+		for (Affix a : affixes) {
+			if (a.getType() == AffixType.PREFIX) pref = " " + a.getInfo(locale).getName();
+			else suff = " " + a.getInfo(locale).getName();
 		}
 
 		return template.formatted(getInfo(locale).getName(), pref, suff);
@@ -126,7 +126,15 @@ public class Monster extends DAO<Monster> {
 		return modifiers;
 	}
 
-	public Senshi asSenshi(I18N locale) {
+	public Set<Affix> getAffixes() {
+		return affixes;
+	}
+
+	public int getRoll() {
+		return roll;
+	}
+
+	public Senshi asSenshi() {
 		Senshi s = new Senshi(id, stats.getRace());
 		CardAttributes base = s.getBase();
 
@@ -151,5 +159,37 @@ public class Monster extends DAO<Monster> {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(id);
+	}
+
+	public static Monster getRandom() {
+		return getRandom(DAO.queryNative(String.class, "SELECT id FROM monster ORDER BY random()"));
+	}
+
+	public static Monster getRandom(String id) {
+		Monster mon = DAO.find(Monster.class, id);
+
+		if (Calc.chance(50)) {
+			for (AffixType type : AffixType.monsterValues()) {
+				if (Calc.chance(50)) {
+					Affix af = Affix.getRandom(mon, type);
+					if (af == null) continue;
+
+					mon.getAffixes().add(af);
+				}
+			}
+		}
+
+		if (Calc.chance(10)) {
+			for (AffixType type : AffixType.monsterValues()) {
+				if (Calc.chance(10)) {
+					Affix af = Affix.getRandom(mon, type);
+					if (af == null) continue;
+
+					mon.getAffixes().add(af);
+				}
+			}
+		}
+
+		return mon;
 	}
 }

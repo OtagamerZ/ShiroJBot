@@ -21,11 +21,15 @@ package com.kuuhaku.command.dunhun;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.dunhun.Affix;
+import com.kuuhaku.model.persistent.dunhun.Monster;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
@@ -37,25 +41,22 @@ import net.dv8tion.jda.api.JDA;
 public class TestMonsterCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-//		g.save();
-//
-//		EmbedBuilder eb = new ColorlessEmbedBuilder()
-//				.setTitle(g.getName(locale));
-//
-//		GearAffix imp = g.getImplicit();
-//		if (imp != null) {
-//			eb.appendDescription(imp.getDescription(locale) + "\n");
-//			if (!g.getAffixes().isEmpty()) {
-//				eb.appendDescription("────────────────────\n");
-//			}
-//		}
-//
-//		for (String l : g.getAffixLines(locale)) {
-//			eb.appendDescription(l + "\n");
-//		}
-//
-//		event.channel().sendMessage("GEN_ITEM")
-//				.addEmbeds(eb.build())
-//				.queue();
+		Monster mon;
+		if (args.has("id")) {
+			mon = Monster.getRandom(args.getString("id").toUpperCase());
+		} else {
+			mon = Monster.getRandom();
+		}
+
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setTitle(mon.getName(locale));
+
+		for (Affix a : mon.getAffixes()) {
+			eb.appendDescription(a.getInfo(locale).getDescription() + "\n");
+		}
+
+		event.channel().sendMessage("GEN_MOB")
+				.addEmbeds(eb.build())
+				.queue();
 	}
 }

@@ -149,4 +149,33 @@ public class Affix extends DAO<Affix> {
 		if (rl.entries().isEmpty()) return null;
 		return DAO.find(Affix.class, rl.get());
 	}
+
+	public static Affix getRandom(Monster monster, AffixType type) {
+		JSONArray affixes = new JSONArray();
+		List<Integer> groups = new ArrayList<>();
+
+		for (Affix a : monster.getAffixes()) {
+			affixes.add(a.getId());
+			if (a.getGroup() != null) {
+				groups.add(a.getGroup());
+			}
+		}
+
+		RandomList<String> rl = new RandomList<>();
+		List<Object[]> affs = DAO.queryAllUnmapped("""
+				SELECT id
+				     , weight
+				FROM affix
+				WHERE type = ?1
+				  AND NOT has(get_affix_family(cast(?2 AS JSONB)), get_affix_family(id))
+				  AND (affix_group IS NULL OR affix_group NOT IN ?3)
+				""", type.name(), affixes.toString(), groups);
+
+		for (Object[] a : affs) {
+			rl.add((String) a[0], ((Number) a[1]).intValue());
+		}
+
+		if (rl.entries().isEmpty()) return null;
+		return DAO.find(Affix.class, rl.get());
+	}
 }
