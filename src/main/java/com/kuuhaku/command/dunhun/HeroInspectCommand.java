@@ -75,8 +75,13 @@ public class HeroInspectCommand implements Executable {
 		}
 
 		g.load(locale, new Senshi(h.getId(), h.getStats().getRace()));
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(g.getName(locale));
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
+
+		if (g.getAffixes().size() > 2) {
+			eb.setTitle(g.getName(locale) + ", " + g.getBasetype().getInfo(locale).getName());
+		} else {
+			eb.setTitle(g.getName(locale));
+		}
 
 		JSONArray tags = g.getTags();
 		if (!tags.isEmpty()) {
