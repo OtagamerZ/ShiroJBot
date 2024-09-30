@@ -29,7 +29,6 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
-import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -58,7 +57,6 @@ public class Monster extends DAO<Monster> {
 
 	private transient final MonsterModifiers modifiers = new MonsterModifiers();
 	private transient final Set<Affix> affixes = new LinkedHashSet<>();
-	private transient int roll = Calc.rng(Integer.MAX_VALUE);
 
 	public String getId() {
 		return id;
@@ -84,9 +82,11 @@ public class Monster extends DAO<Monster> {
 		}
 
 		if (p > 1 || s > 1) {
+			int seed = id.hashCode();
+
 			String loc = locale.getParent().name().toLowerCase();
-			String prefix = IO.getLine("dunhun/monster/prefix/" + loc + ".dict", Calc.rng(0, 32, roll - hashCode()));
-			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict", Calc.rng(0, 32, roll - prefix.hashCode()));
+			String prefix = IO.getLine("dunhun/monster/prefix/" + loc + ".dict", Calc.rng(0, 32, seed + affixes.hashCode()));
+			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict", Calc.rng(0, 32, seed - prefix.hashCode()));
 
 			AtomicReference<String> ending = new AtomicReference<>("M");
 			prefix = Utils.regex(prefix, "\\[([FM])]").replaceAll(m -> {
@@ -99,10 +99,10 @@ public class Monster extends DAO<Monster> {
 
 			StringBuilder name = new StringBuilder();
 			for (int i = 0; i < 2; i++) {
-				String part = IO.getLine("dunhun/monster/name_parts.dict", Calc.rng(0, 32, roll >> i));
+				String part = IO.getLine("dunhun/monster/name_parts.dict", Calc.rng(0, 32, seed >> i));
 				if (i == 0) {
 					if (Calc.chance(25)) {
-						part = part.charAt(0) + "'" + WordUtils.capitalizeFully(part.substring(1));
+						part = part.charAt(0) + "'" + part.substring(1);
 					}
 				} else {
 					part = part.toLowerCase();
@@ -134,10 +134,6 @@ public class Monster extends DAO<Monster> {
 
 	public Set<Affix> getAffixes() {
 		return affixes;
-	}
-
-	public int getRoll() {
-		return roll;
 	}
 
 	public Senshi asSenshi() {
