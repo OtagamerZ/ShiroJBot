@@ -175,7 +175,13 @@ public class Gear extends DAO<Gear> {
 	public String getName(I18N locale) {
 		if (affixes.isEmpty()) return basetype.getInfo(locale).getName();
 
-		if (affixes.size() > 2) {
+		int p = 0, s = 0;
+		for (GearAffix ga : affixes) {
+			if (ga.getAffix().getType() == AffixType.PREFIX) p++;
+			else s++;
+		}
+
+		if (p > 1 || s > 1) {
 			String loc = locale.getParent().name().toLowerCase();
 			String prefix = IO.getLine("dunhun/item/prefix/" + loc + ".dict", Calc.rng(0, 32, roll - hashCode()));
 			String suffix = IO.getLine("dunhun/item/suffix/" + loc + ".dict", Calc.rng(0, 32, roll - prefix.hashCode()));

@@ -77,7 +77,13 @@ public class Monster extends DAO<Monster> {
 	public String getName(I18N locale) {
 		if (affixes.isEmpty()) return getInfo(locale).getName();
 
-		if (affixes.size() > 2) {
+		int p = 0, s = 0;
+		for (Affix a : affixes) {
+			if (a.getType() == AffixType.MON_PREFIX) p++;
+			else s++;
+		}
+
+		if (p > 1 || s > 1) {
 			String loc = locale.getParent().name().toLowerCase();
 			String prefix = IO.getLine("dunhun/monster/prefix/" + loc + ".dict", Calc.rng(0, 32, roll - hashCode()));
 			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict", Calc.rng(0, 32, roll - prefix.hashCode()));
