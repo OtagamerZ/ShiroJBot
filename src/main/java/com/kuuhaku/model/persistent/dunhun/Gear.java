@@ -38,6 +38,7 @@ import org.hibernate.annotations.FetchMode;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -185,6 +186,15 @@ public class Gear extends DAO<Gear> {
 			String loc = locale.getParent().name().toLowerCase();
 			String prefix = IO.getLine(Path.of("dunhun", "prefix", loc), Calc.rng(0, 32, roll));
 			String suffix = IO.getLine(Path.of("dunhun", "suffix", loc), Calc.rng(0, 32, roll));
+
+			AtomicReference<String> ending = new AtomicReference<>("M");
+			suffix = Utils.regex(suffix, "\\[(F|M)]").replaceAll(m -> {
+				ending.set(m.group(1));
+				return "";
+			});
+
+			prefix = Utils.regex(prefix, "\\[(?<F>\\w*)\\|(?<M>\\w*)]")
+					.replaceAll(r -> r.group(ending.get()));
 
 			return template.formatted(prefix, suffix, "");
 		}
