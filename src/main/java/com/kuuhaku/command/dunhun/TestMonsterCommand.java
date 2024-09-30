@@ -25,7 +25,6 @@ import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.dunhun.Basetype;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.GearAffix;
@@ -33,31 +32,20 @@ import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
 		name = "hero",
-		path = {"debug", "gen_item"},
+		path = {"debug", "gen_mob"},
 		category = Category.STAFF
 )
 @Syntax(allowEmpty = true, value = "<id:word:r>")
-public class TestSpawnCommand implements Executable {
+public class TestMonsterCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck d = data.profile().getAccount().getDeck();
-		if (d == null) {
-			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-			return;
-		}
 
-		Hero h = d.getHero();
-		if (h == null) {
-			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
-			return;
-		}
 
 		Gear g;
 		if (args.has("id")) {
