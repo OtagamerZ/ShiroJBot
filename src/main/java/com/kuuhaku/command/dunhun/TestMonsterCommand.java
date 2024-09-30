@@ -18,22 +18,14 @@
 
 package com.kuuhaku.command.dunhun;
 
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.dunhun.Basetype;
-import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.persistent.dunhun.GearAffix;
-import com.kuuhaku.model.persistent.dunhun.Hero;
-import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
@@ -45,40 +37,25 @@ import net.dv8tion.jda.api.JDA;
 public class TestMonsterCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-
-
-		Gear g;
-		if (args.has("id")) {
-			Basetype base = DAO.find(Basetype.class, args.getString("id").toUpperCase());
-			if (base == null) {
-				event.channel().sendMessage("ERR_BASE_NOT_FOUND").queue();
-				return;
-			}
-
-			g = Gear.getRandom(h, base);
-		} else {
-			g = Gear.getRandom(h);
-		}
-
-		g.save();
-
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(g.getName(locale));
-
-		GearAffix imp = g.getImplicit();
-		if (imp != null) {
-			eb.appendDescription(imp.getDescription(locale) + "\n");
-			if (!g.getAffixes().isEmpty()) {
-				eb.appendDescription("────────────────────\n");
-			}
-		}
-
-		for (String l : g.getAffixLines(locale)) {
-			eb.appendDescription(l + "\n");
-		}
-
-		event.channel().sendMessage("GEN_ITEM")
-				.addEmbeds(eb.build())
-				.queue();
+//		g.save();
+//
+//		EmbedBuilder eb = new ColorlessEmbedBuilder()
+//				.setTitle(g.getName(locale));
+//
+//		GearAffix imp = g.getImplicit();
+//		if (imp != null) {
+//			eb.appendDescription(imp.getDescription(locale) + "\n");
+//			if (!g.getAffixes().isEmpty()) {
+//				eb.appendDescription("────────────────────\n");
+//			}
+//		}
+//
+//		for (String l : g.getAffixLines(locale)) {
+//			eb.appendDescription(l + "\n");
+//		}
+//
+//		event.channel().sendMessage("GEN_ITEM")
+//				.addEmbeds(eb.build())
+//				.queue();
 	}
 }
