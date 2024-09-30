@@ -187,20 +187,15 @@ public class Gear extends DAO<Gear> {
 			String suffix = IO.getLine("dunhun/item/suffix/" + loc + ".dict", Calc.rng(0, 32, roll - prefix.hashCode()));
 
 			AtomicReference<String> ending = new AtomicReference<>("M");
-			suffix = Utils.regex(suffix, "\\[([FM])]").replaceAll(m -> {
+			prefix = Utils.regex(prefix, "\\[([FM])]").replaceAll(m -> {
 				ending.set(m.group(1));
 				return "";
 			});
 
-			prefix = Utils.regex(prefix, "\\[(?<F>\\w*)\\|(?<M>\\w*)]")
+			suffix = Utils.regex(suffix, "\\[(?<F>\\w*)\\|(?<M>\\w*)]")
 					.replaceAll(r -> r.group(ending.get()));
 
-			String template = switch (locale) {
-				case EN, UWU_EN -> "%1$s %2$s";
-				case PT, UWU_PT -> "%2$s %1$s";
-			};
-
-			return template.formatted(prefix, suffix);
+			return prefix + " " + suffix;
 		}
 
 		String template = switch (locale) {

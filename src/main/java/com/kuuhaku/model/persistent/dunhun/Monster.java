@@ -89,17 +89,17 @@ public class Monster extends DAO<Monster> {
 			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict", Calc.rng(0, 32, roll - prefix.hashCode()));
 
 			AtomicReference<String> ending = new AtomicReference<>("M");
-			suffix = Utils.regex(suffix, "\\[([FM])]").replaceAll(m -> {
+			prefix = Utils.regex(prefix, "\\[([FM])]").replaceAll(m -> {
 				ending.set(m.group(1));
 				return "";
 			});
 
-			prefix = Utils.regex(prefix, "\\[(?<F>\\w*)\\|(?<M>\\w*)]")
+			suffix = Utils.regex(suffix, "\\[(?<F>\\w*)\\|(?<M>\\w*)]")
 					.replaceAll(r -> r.group(ending.get()));
 
 			StringBuilder name = new StringBuilder();
 			for (int i = 0; i < 2; i++) {
-				String part = IO.getLine("dunhun/monster/name_parts.dict", Calc.rng(0, 32, roll - i));
+				String part = IO.getLine("dunhun/monster/name_parts.dict", Calc.rng(0, 32, roll / (i + 1)));
 				if (i == 0) {
 					if (Calc.chance(25)) {
 						part = part.charAt(0) + "'" + WordUtils.capitalizeFully(part.substring(1));
