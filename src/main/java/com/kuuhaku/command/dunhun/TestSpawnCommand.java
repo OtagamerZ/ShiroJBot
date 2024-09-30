@@ -69,7 +69,7 @@ public class TestSpawnCommand implements Executable {
 
 			g = Gear.getRandom(h, base);
 		} else {
-			g = Gear.getRandom(h, Utils.getRandomEntry(GearSlot.values()));
+			g = Gear.getRandom(h);
 		}
 
 		g.save();
