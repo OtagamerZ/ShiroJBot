@@ -21,16 +21,23 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.HeroModifiers;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
+import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -50,6 +57,8 @@ public class Monster extends DAO<Monster> {
 	private Set<LocalizedMonster> infos = new HashSet<>();
 
 	private transient final HeroModifiers modifiers = new HeroModifiers();
+	private transient final Set<GearAffix> affixes = new LinkedHashSet<>();
+	private transient int roll = Calc.rng(Integer.MAX_VALUE);
 
 	public String getId() {
 		return id;
@@ -63,6 +72,54 @@ public class Monster extends DAO<Monster> {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.findAny().orElseThrow();
+	}
+
+	public String getName(I18N locale) {
+		if (affixes.isEmpty()) return getInfo(locale).getName();
+
+		if (affixes.size() > 2) {
+			String loc = locale.getParent().name().toLowerCase();
+			String prefix = IO.getLine("dunhun/monster/prefix/" + loc + ".dict", Calc.rng(0, 32, roll - hashCode()));
+			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict", Calc.rng(0, 32, roll - prefix.hashCode()));
+
+			AtomicReference<String> ending = new AtomicReference<>("M");
+			suffix = Utils.regex(suffix, "\\[([FM])]").replaceAll(m -> {
+				ending.set(m.group(1));
+				return "";
+			});
+
+			prefix = Utils.regex(prefix, "\\[(?<F>\\w*)\\|(?<M>\\w*)]")
+					.replaceAll(r -> r.group(ending.get()));
+
+			StringBuilder name = new StringBuilder();
+			for (int i = 0; i < 2; i++) {
+				String part = IO.getLine("dunhun/monster/name_parts.dict", Calc.rng(0, 32, roll - i));
+				if (i == 0) {
+					if (Calc.chance(25)) {
+						part = part.charAt(0) + "'" + WordUtils.capitalizeFully(part.substring(1));
+					}
+				} else {
+					part = part.toLowerCase();
+				}
+
+				name.append(part);
+			}
+
+			return name + ", " + prefix + " " + suffix;
+		}
+
+		String template = switch (locale) {
+			case EN, UWU_EN -> "%2$s%1$s%3$s";
+			case PT, UWU_PT -> "%1$s%2$s%3$s";
+		};
+
+		String pref = "", suff = " ";
+		for (GearAffix a : affixes) {
+			if (a.getAffix().getType() == AffixType.PREFIX) pref = " " + a.getName(locale);
+			else suff = " " + a.getName(locale);
+		}
+
+		return template.formatted(getInfo(locale).getName(), pref, suff);
 	}
 
 	public HeroModifiers getModifiers() {
