@@ -136,7 +136,6 @@ public class Monster extends DAO<Monster> {
 		base.setParry(stats.getParry());
 
 		base.getTags().add("MONSTER");
-		s.getStats().setDescription(getInfo(locale).getDescription());
 
 		return s;
 	}
