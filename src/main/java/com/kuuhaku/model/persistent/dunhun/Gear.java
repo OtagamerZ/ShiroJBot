@@ -177,11 +177,6 @@ public class Gear extends DAO<Gear> {
 	public String getName(I18N locale) {
 		if (affixes.isEmpty()) return basetype.getInfo(locale).getName();
 
-		String template = switch (locale) {
-			case EN, UWU_EN -> "%2$s%1$s%3$s";
-			case PT, UWU_PT -> "%1$s%2$s%3$s";
-		};
-
 		if (affixes.size() > 2) {
 			String loc = locale.getParent().name().toLowerCase() + ".dict";
 			String prefix = IO.getLine(Path.of("dunhun", "prefix", loc), Calc.rng(0, 32, roll - hashCode()));
@@ -196,8 +191,18 @@ public class Gear extends DAO<Gear> {
 			prefix = Utils.regex(prefix, "\\[(?<F>\\w*)\\|(?<M>\\w*)]")
 					.replaceAll(r -> r.group(ending.get()));
 
-			return template.formatted(prefix, suffix, "");
+			String template = switch (locale) {
+				case EN, UWU_EN -> "%2$s %1$s";
+				case PT, UWU_PT -> "%1$s %2$s";
+			};
+
+			return template.formatted(prefix, suffix);
 		}
+
+		String template = switch (locale) {
+			case EN, UWU_EN -> "%2$s%1$s%3$s";
+			case PT, UWU_PT -> "%1$s%2$s%3$s";
+		};
 
 		String pref = "", suff = " ";
 		for (GearAffix a : affixes) {
