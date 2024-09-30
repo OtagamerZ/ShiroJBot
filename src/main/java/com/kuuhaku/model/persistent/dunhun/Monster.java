@@ -99,7 +99,7 @@ public class Monster extends DAO<Monster> {
 
 			StringBuilder name = new StringBuilder();
 			for (int i = 0; i < 2; i++) {
-				String part = IO.getLine("dunhun/monster/name_parts.dict", Calc.rng(0, 32, roll / (i + 1)));
+				String part = IO.getLine("dunhun/monster/name_parts.dict", Calc.rng(0, 32, roll >> i));
 				if (i == 0) {
 					if (Calc.chance(25)) {
 						part = part.charAt(0) + "'" + WordUtils.capitalizeFully(part.substring(1));
