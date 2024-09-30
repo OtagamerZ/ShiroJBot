@@ -185,8 +185,8 @@ public class Gear extends DAO<Gear> {
 		String base = basetype.getInfo(locale).getName();
 		if (affixes.size() > 2) {
 			String loc = locale.getParent().name().toLowerCase();
-			String prefix = IO.getLine(Path.of("dunhun", "prefix", loc), Calc.rng(0, 32, roll / hashCode()));
-			String suffix = IO.getLine(Path.of("dunhun", "suffix", loc), Calc.rng(0, 32, roll / prefix.hashCode()));
+			String prefix = IO.getLine(Path.of("dunhun", "prefix", loc), Calc.rng(0, 32, roll - hashCode()));
+			String suffix = IO.getLine(Path.of("dunhun", "suffix", loc), Calc.rng(0, 32, roll - prefix.hashCode()));
 
 			AtomicReference<String> ending = new AtomicReference<>("M");
 			suffix = Utils.regex(suffix, "\\[([FM])]").replaceAll(m -> {
