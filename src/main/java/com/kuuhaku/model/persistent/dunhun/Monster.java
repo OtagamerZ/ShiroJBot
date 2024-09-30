@@ -115,7 +115,7 @@ public class Monster extends DAO<Monster> {
 
 		String pref = "", suff = " ";
 		for (Affix a : affixes) {
-			if (a.getType() == AffixType.PREFIX) pref = " " + a.getInfo(locale).getName();
+			if (a.getType() == AffixType.MON_PREFIX) pref = " " + a.getInfo(locale).getName();
 			else suff = " " + a.getInfo(locale).getName();
 		}
 
