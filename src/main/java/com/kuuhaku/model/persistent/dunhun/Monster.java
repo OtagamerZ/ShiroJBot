@@ -179,7 +179,7 @@ public class Monster extends DAO<Monster> {
 			}
 		}
 
-		if (Calc.chance(10)) {
+		if (Calc.chance(25)) {
 			for (AffixType type : AffixType.monsterValues()) {
 				if (Calc.chance(50)) {
 					Affix af = Affix.getRandom(mon, type);
