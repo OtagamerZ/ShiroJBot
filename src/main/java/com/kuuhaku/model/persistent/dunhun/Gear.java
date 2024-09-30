@@ -183,7 +183,7 @@ public class Gear extends DAO<Gear> {
 		};
 
 		if (affixes.size() > 2) {
-			String loc = locale.getParent().name().toLowerCase();
+			String loc = locale.getParent().name().toLowerCase() + ".dict";
 			String prefix = IO.getLine(Path.of("dunhun", "prefix", loc), Calc.rng(0, 32, roll - hashCode()));
 			String suffix = IO.getLine(Path.of("dunhun", "suffix", loc), Calc.rng(0, 32, roll - prefix.hashCode()));
 
