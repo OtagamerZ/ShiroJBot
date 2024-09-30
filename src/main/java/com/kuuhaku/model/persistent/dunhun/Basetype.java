@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.localized.LocalizedBasetype;
@@ -30,6 +31,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -91,13 +93,20 @@ public class Basetype extends DAO<Basetype> {
 	}
 
 	public static Basetype getRandom(GearSlot slot, int minLevel, int maxLevel) {
-		return DAO.query(Basetype.class, """
-				SELECT b
-				FROM Basetype b
-				WHERE b.stats.slot = ?1
-				  AND b.stats.reqLevel BETWEEN ?2 AND ?3
-				ORDER BY random()
+		List<Object[]> bases = DAO.queryAllUnmapped("""
+				SELECT id
+				     , weight
+				FROM Basetype
+				WHERE req_level BETWEEN ?2 AND ?3
 				""", slot, minLevel, maxLevel
 		);
+
+		RandomList<String> rl = new RandomList<>();
+		for (Object[] a : bases) {
+			rl.add((String) a[0], ((Number) a[1]).intValue());
+		}
+
+		if (rl.entries().isEmpty()) return null;
+		return DAO.find(Basetype.class, rl.get());
 	}
 }
