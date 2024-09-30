@@ -23,6 +23,8 @@ public class MonsterModifiers {
 	private float attackMult = 1;
 	private int defense;
 	private float defenseMult = 1;
+	private int hp;
+	private float hpMult = 1;
 
 	public float getAttack() {
 		return attack;
@@ -56,8 +58,24 @@ public class MonsterModifiers {
 		defenseMult += mult;
 	}
 
+	public float getHp() {
+		return hp;
+	}
+
+	public void addHp(int value) {
+		hp += value;
+	}
+
+	public float getHpMult() {
+		return hpMult;
+	}
+
+	public void addHpMult(float mult) {
+		hpMult += mult;
+	}
+
 	public void reset() {
-		attack = defense = 0;
-		attackMult = defenseMult = 1;
+		attack = defense = hp = 0;
+		attackMult = defenseMult = hpMult = 1;
 	}
 }

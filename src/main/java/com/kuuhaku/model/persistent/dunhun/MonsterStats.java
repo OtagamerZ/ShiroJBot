@@ -27,8 +27,8 @@ import org.hibernate.type.SqlTypes;
 
 @Embeddable
 public class MonsterStats {
-	@Column(name = "hp", nullable = false)
-	private int hp;
+	@Column(name = "base_hp", nullable = false)
+	private int baseHp;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "race", nullable = false)
@@ -51,12 +51,8 @@ public class MonsterStats {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray skills;
 
-	public int getHp() {
-		return hp;
-	}
-
-	public void setHp(int hp) {
-		this.hp = hp;
+	public int getBaseHp() {
+		return baseHp;
 	}
 
 	public Race getRace() {
