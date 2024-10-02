@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedEvent;
+import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.records.dunhun.EventAction;
 import com.kuuhaku.model.records.dunhun.EventDescription;
 import com.kuuhaku.util.Utils;
@@ -59,6 +60,7 @@ public class Event extends DAO<Event> {
 
 	private transient final Map<String, Supplier<String>> actions = new HashMap<>();
 	private transient String result;
+	private transient I18N locale;
 
 	public String getId() {
 		return id;
@@ -106,6 +108,19 @@ public class Event extends DAO<Event> {
 
 	public Supplier<String> getAction(String action) {
 		return actions.getOrDefault(action, () -> "");
+	}
+
+	public String getString(String key, Object... args) {
+		try {
+			String out = locale.get(key, args);
+			if (out.isBlank() || out.equalsIgnoreCase(key)) {
+				out = LocalizedString.get(locale, key, "").formatted(args);
+			}
+
+			return Utils.getOr(out, key);
+		} catch (MissingFormatArgumentException e) {
+			return "";
+		}
 	}
 
 	@Override
