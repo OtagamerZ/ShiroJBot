@@ -144,7 +144,17 @@ public abstract class IO {
 			}
 
 			try {
-				writer.write(null, new IIOImage(image, null, null), param);
+				for (int i = 0; i < 2; i++) {
+					if (i == 1) image = Graph.toColorSpace(
+							image, image.getColorModel().hasAlpha() ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB
+					);
+
+					try {
+						writer.write(null, new IIOImage(image, null, null), param);
+						break;
+					} catch (IOException ignore) {
+					}
+				}
 			} finally {
 				writer.dispose();
 			}
