@@ -27,6 +27,7 @@ import com.kuuhaku.model.records.dunhun.EventDescription;
 import com.kuuhaku.util.Utils;
 import groovy.lang.Closure;
 import jakarta.persistence.*;
+import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
@@ -83,7 +84,7 @@ public class Event extends DAO<Event> {
 
 		List<EventAction> out = new ArrayList<>();
 		desc = Utils.regex(desc, "\\[(.+?)]\\{(\\S+)}").replaceAll(m -> {
-			out.add(new EventAction(m.group(1), m.group(2)));
+			out.add(new EventAction(WordUtils.capitalizeFully(m.group(1)), m.group(2)));
 			return Matcher.quoteReplacement(m.group(1));
 		});
 
