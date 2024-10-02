@@ -82,6 +82,7 @@ public class Event extends DAO<Event> {
 
 	public EventDescription parse(I18N locale, Hero hero) {
 		String desc = getInfo(locale).getDescription();
+		this.locale = locale;
 
 		List<EventAction> out = new ArrayList<>();
 		desc = Utils.regex(desc, "\\[(.+?)]\\{(.+?)}").replaceAll(m -> {
