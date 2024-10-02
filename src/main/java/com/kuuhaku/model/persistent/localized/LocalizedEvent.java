@@ -37,7 +37,7 @@ public class LocalizedEvent extends DAO<LocalizedEvent> implements Serializable 
 	@EmbeddedId
 	private LocalizedId id;
 
-	@Column(name = "description", nullable = false)
+	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
 	private String description;
 
 	private transient boolean uwu = false;
