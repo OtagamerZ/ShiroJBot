@@ -92,7 +92,7 @@ public class Event extends DAO<Event> {
 					"locale", locale,
 					"event", this,
 					"hero", hero,
-					"forAction", (BiConsumer<String, Runnable>) this::forAction
+					"forAction", (BiConsumer<String, Supplier<String>>) this::forAction
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute event {}", id, e);
