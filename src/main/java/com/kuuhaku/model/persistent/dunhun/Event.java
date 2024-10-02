@@ -34,7 +34,6 @@ import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 
@@ -92,8 +91,7 @@ public class Event extends DAO<Event> {
 			Utils.exec(id, effect, Map.of(
 					"locale", locale,
 					"event", this,
-					"hero", hero,
-					"forAction", (BiConsumer<String, Supplier<String>>) this::forAction
+					"hero", hero
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute event {}", id, e);
