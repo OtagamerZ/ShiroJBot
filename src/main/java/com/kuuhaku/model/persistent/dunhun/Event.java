@@ -95,6 +95,10 @@ public class Event extends DAO<Event> {
 		actions.put(action, runnable);
 	}
 
+	public Runnable getAction(String action) {
+		return actions.getOrDefault(action, () -> {});
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

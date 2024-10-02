@@ -95,7 +95,7 @@ tasks.register("enforceVersion") {
 dependencies {
 	//Core
 	implementation group: "net.dv8tion", name: "JDA", version: "5.1.0"
-	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "87dcdfc83a"
+	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "nightly-SNAPSHOT"
 	implementation group: "com.github.ygimenez", name: "Simple-Moshi", version: "1.1.2"
 
 	//Database
