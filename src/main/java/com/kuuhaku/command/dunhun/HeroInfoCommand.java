@@ -19,6 +19,7 @@
 package com.kuuhaku.command.dunhun;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.EmojiMapping;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.helper.CategorizeHelper;
@@ -99,7 +100,7 @@ public class HeroInfoCommand implements Executable {
 				attr.vit(), Utils.sign(h.getModifiers().getVitality())
 		), true);
 
-		Map<Emoji, Page> pages = new LinkedHashMap<>();
+		EmojiMapping<Page> pages = new EmojiMapping<>();
 		pages.put(Utils.parseEmoji("📋"), InteractPage.of(eb.build()));
 		pages.put(Utils.parseEmoji("📖"), viewSkills(locale, h));
 		pages.put(Utils.parseEmoji("🛡"), viewGear(locale, h));

@@ -19,6 +19,7 @@
 package com.kuuhaku.command.deck;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.EmojiMapping;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.helper.CategorizeHelper;
 import com.kuuhaku.interfaces.Executable;
@@ -39,12 +40,9 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.collections4.bag.HashBag;
 
 import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -116,7 +114,7 @@ public class DeckListCommand implements Executable {
 		}
 
 		Page home;
-		Map<Emoji, Page> pages = new LinkedHashMap<>();
+		EmojiMapping<Page> pages = new EmojiMapping<>();
 		pages.put(Utils.parseEmoji("⚔️"), home = Utils.generatePage(eb, Utils.padList(d.getSenshi(), 36), 12,
 				s -> {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/senshi")));

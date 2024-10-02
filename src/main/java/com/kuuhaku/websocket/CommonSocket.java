@@ -19,6 +19,7 @@
 package com.kuuhaku.websocket;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.EmojiMapping;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.helper.CategorizeHelper;
@@ -57,8 +58,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.HexFormat;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class CommonSocket extends WebSocketClient {
 	private static final ScheduledExecutorService RECON = Executors.newSingleThreadScheduledExecutor();
@@ -117,7 +122,7 @@ public class CommonSocket extends WebSocketClient {
 					if (!StringUtils.isNumeric(id)) return;
 
 					EmbedBuilder eb = new ColorlessEmbedBuilder();
-					Map<Emoji, Page> cats = new LinkedHashMap<>();
+					EmojiMapping<Page> cats = new EmojiMapping<>();
 					MessageEmbed first = null;
 
 					for (I18N loc : I18N.validValues()) {

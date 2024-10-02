@@ -19,6 +19,7 @@
 package com.kuuhaku.command.info;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.EmojiMapping;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.helper.CategorizeHelper;
@@ -43,7 +44,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -162,7 +162,7 @@ public class HelpCommand implements Executable {
 				.appendDescription(locale.get("str/command_counter", categories.stream().map(Category::getCommands).mapToInt(Set::size).sum()))
 				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.get());
 
-		Map<Emoji, Page> pages = new LinkedHashMap<>();
+		EmojiMapping<Page> pages = new EmojiMapping<>();
 		for (Category cat : categories) {
 			CustomEmoji emt = cat.getEmote();
 			if (emt == null) continue;
