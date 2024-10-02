@@ -18,12 +18,19 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.intellij.lang.annotations.Language;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Embeddable
 public class MonsterStats {
@@ -51,6 +58,10 @@ public class MonsterStats {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray skills;
 
+	@Language("Groovy")
+	@Column(name = "loot_generator", columnDefinition = "TEXT")
+	private String lootGenerator;
+
 	public int getBaseHp() {
 		return baseHp;
 	}
@@ -77,5 +88,16 @@ public class MonsterStats {
 
 	public JSONArray getSkills() {
 		return skills;
+	}
+
+	public List<Gear> generateLoot() {
+		List<Gear> loot = new ArrayList<>();
+
+		try {
+			Utils.exec(getClass().getSimpleName(), lootGenerator, Map.of("loot", loot));
+			return loot;
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to generate loot", e);
+		}
 	}
 }
