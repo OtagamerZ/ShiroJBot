@@ -25,6 +25,7 @@ import com.kuuhaku.model.persistent.localized.LocalizedEvent;
 import com.kuuhaku.model.records.dunhun.EventAction;
 import com.kuuhaku.model.records.dunhun.EventDescription;
 import com.kuuhaku.util.Utils;
+import groovy.lang.Closure;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -34,7 +35,6 @@ import org.intellij.lang.annotations.Language;
 
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -57,7 +57,7 @@ public class Event extends DAO<Event> {
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
 
-	private transient final Map<String, Supplier<String>> actions = new HashMap<>();
+	private transient final Map<String, Closure<?>> actions = new HashMap<>();
 	private transient String result;
 
 	public String getId() {
@@ -92,7 +92,7 @@ public class Event extends DAO<Event> {
 					"locale", locale,
 					"event", this,
 					"hero", hero,
-					"forAction", (BiConsumer<String, Supplier<String>>) this::forAction
+					"forAction", (BiConsumer<String, Closure<?>>) this::forAction
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute event {}", id, e);
@@ -101,12 +101,12 @@ public class Event extends DAO<Event> {
 		return new EventDescription(desc, out);
 	}
 
-	public void forAction(String action, Supplier<String> act) {
+	public void forAction(String action, Closure<?> act) {
 		actions.put(action, act);
 	}
 
-	public Supplier<String> getAction(String action) {
-		return actions.getOrDefault(action, () -> "");
+	public Closure<?> getAction(String action) {
+		return actions.getOrDefault(action, Closure.IDENTITY);
 	}
 
 	@Override
