@@ -69,7 +69,11 @@ public class TestEventCommand implements Executable {
 		for (EventAction act : ed.actions()) {
 			helper.addAction(act.label(), w -> {
 				eb.setDescription(evt.getAction(act.action()).get());
-				w.getMessage().editMessageEmbeds(eb.build()).queue();
+
+				Pages.finalizeEvent(
+						w.getMessage(),
+						s -> w.getMessage().editMessageEmbeds(eb.build()).queue()
+				);
 			});
 		}
 
