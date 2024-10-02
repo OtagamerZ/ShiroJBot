@@ -57,6 +57,7 @@ public class Event extends DAO<Event> {
 	private String effect;
 
 	private transient final Map<String, Runnable> actions = new HashMap<>();
+	private transient String result;
 
 	public String getId() {
 		return id;
@@ -66,6 +67,14 @@ public class Event extends DAO<Event> {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.findAny().orElseThrow();
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
 	}
 
 	public EventDescription parse(I18N locale, Hero hero) {
@@ -80,7 +89,7 @@ public class Event extends DAO<Event> {
 		try {
 			Utils.exec(id, effect, Map.of(
 					"locale", locale,
-					"gear", this,
+					"event", this,
 					"hero", hero,
 					"forAction", (BiConsumer<String, Runnable>) this::forAction
 			));

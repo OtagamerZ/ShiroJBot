@@ -66,7 +66,11 @@ public class TestEventCommand implements Executable {
 				.setCanInteract(event.user()::equals);
 
 		for (EventAction act : ed.actions()) {
-			helper.addAction(act.label(), w -> evt.getAction(act.action()).run());
+			helper.addAction(act.label(), w -> {
+				evt.getAction(act.action()).run();
+				eb.setDescription(evt.getResult());
+				w.getMessage().editMessageEmbeds(eb.build()).queue();
+			});
 		}
 
 		helper.apply(event.channel().sendMessage("GEN_EVENT"))
