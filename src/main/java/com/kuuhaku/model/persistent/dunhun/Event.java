@@ -82,7 +82,7 @@ public class Event extends DAO<Event> {
 		String desc = getInfo(locale).getDescription();
 
 		List<EventAction> out = new ArrayList<>();
-		desc = Utils.regex(desc, "\\[(.+?)]\\{\\w+}").replaceAll(m -> {
+		desc = Utils.regex(desc, "\\[(.+?)]\\{(\\w+)}").replaceAll(m -> {
 			out.add(new EventAction(m.group(1), m.group(2)));
 			return Matcher.quoteReplacement(m.group(1));
 		});
