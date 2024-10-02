@@ -34,6 +34,7 @@ import org.intellij.lang.annotations.Language;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -56,7 +57,7 @@ public class Event extends DAO<Event> {
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
 
-	private transient final Map<String, Runnable> actions = new HashMap<>();
+	private transient final Map<String, Supplier<String>> actions = new HashMap<>();
 	private transient String result;
 
 	public String getId() {
@@ -100,12 +101,12 @@ public class Event extends DAO<Event> {
 		return new EventDescription(desc, out);
 	}
 
-	public void forAction(String action, Runnable runnable) {
-		actions.put(action, runnable);
+	public void forAction(String action, Supplier<String> act) {
+		actions.put(action, act);
 	}
 
-	public Runnable getAction(String action) {
-		return actions.getOrDefault(action, () -> {});
+	public Supplier<String> getAction(String action) {
+		return actions.getOrDefault(action, () -> "");
 	}
 
 	@Override

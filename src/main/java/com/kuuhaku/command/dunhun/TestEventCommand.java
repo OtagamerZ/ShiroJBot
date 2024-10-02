@@ -67,8 +67,7 @@ public class TestEventCommand implements Executable {
 
 		for (EventAction act : ed.actions()) {
 			helper.addAction(act.label(), w -> {
-				evt.getAction(act.action()).run();
-				eb.setDescription(evt.getResult());
+				eb.setDescription(evt.getAction(act.action()).get());
 				w.getMessage().editMessageEmbeds(eb.build()).queue();
 			});
 		}
