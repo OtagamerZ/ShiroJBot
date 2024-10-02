@@ -33,7 +33,6 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.EventAction;
 import com.kuuhaku.model.records.dunhun.EventDescription;
 import com.ygimenez.json.JSONObject;
-import groovy.lang.Closure;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
@@ -69,9 +68,7 @@ public class TestEventCommand implements Executable {
 
 		for (EventAction act : ed.actions()) {
 			helper.addAction(act.label(), w -> {
-				Closure<?> a = evt.getAction(act.action());
-
-				eb.setDescription(String.valueOf(a.call()));
+				eb.setDescription(evt.getAction(act.action()).get());
 				w.getMessage().editMessageEmbeds(eb.build()).queue();
 			});
 		}
