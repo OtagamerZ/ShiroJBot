@@ -2714,7 +2714,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@Override
-	protected void resetTimer() {
+	public void resetTimer() {
 		super.resetTimer();
 		getCurrent().setForfeit(false);
 	}

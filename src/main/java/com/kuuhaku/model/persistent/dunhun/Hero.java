@@ -20,11 +20,11 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.model.common.dunhun.HeroModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -53,13 +53,13 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "hero", schema = "dunhun")
-public class Hero extends DAO<Hero> {
+public class Hero extends DAO<Hero> implements Actor {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
 
 	@Embedded
-	private HeroStats stats = new HeroStats();
+	private final HeroStats stats = new HeroStats();
 
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "account_uid")
@@ -71,14 +71,10 @@ public class Hero extends DAO<Hero> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject equipment = new JSONObject();
 
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray skills = new JSONArray();
-
 	private transient final HeroModifiers modifiers = new HeroModifiers();
 	private transient Equipment equipCache;
 	private transient List<Skill> skillCache;
+	private transient Senshi senshiCache;
 	private transient Deck deck;
 	private transient int hp = -1;
 	private transient int ap;
@@ -100,6 +96,11 @@ public class Hero extends DAO<Hero> {
 		return WordUtils.capitalizeFully(id.replace("_", " "));
 	}
 
+	@Override
+	public String getName(I18N locale) {
+		return getName();
+	}
+
 	public boolean setImage(BufferedImage img) {
 		String hash = HexFormat.of().formatHex(DigestUtils.getMd5Digest().digest(("H:" + id).getBytes()));
 		File parent = new File(System.getenv("CARDS_PATH") + "../heroes");
@@ -117,27 +118,38 @@ public class Hero extends DAO<Hero> {
 		}
 	}
 
+	@Override
 	public int getHp() {
 		if (hp == -1) hp = getMaxHp();
 		return hp;
 	}
 
+	@Override
 	public void modHp(int value) {
 		hp = Calc.clamp(getHp() + value, 0, getMaxHp());
 	}
 
+	@Override
 	public int getMaxHp() {
-		return (int) ((100 + modifiers.getMaxHp()) * (1 + 0.1 * getAttributes().vit()));
+		return (100 + modifiers.getMaxHp()) * (1 + getAttributes().vit() / 10);
 	}
 
+	@Override
 	public int getAp() {
 		return ap;
 	}
 
+	@Override
 	public void modAp(int value) {
 		ap = Calc.clamp(ap + value, 0, getMaxAp());
 	}
 
+	@Override
+	public int getInitiative() {
+		return getAttributes().dex() / 3 + modifiers.getInitiative();
+	}
+
+	@Override
 	public int getMaxAp() {
 		return Calc.clamp(1 + getModifiers().getMaxAp() + getAttributes().dex() / 10, 0, 5);
 	}
@@ -197,13 +209,17 @@ public class Hero extends DAO<Hero> {
 		return DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.id IN ?1", ids);
 	}
 
+	@Override
 	public List<Skill> getSkills() {
 		if (skillCache != null) return skillCache;
 
-		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", skills);
+		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", stats.getSkills());
 	}
 
+	@Override
 	public Senshi asSenshi(I18N locale) {
+		if (senshiCache != null) return senshiCache;
+
 		Senshi s = new Senshi(id, stats.getRace());
 		CardAttributes base = s.getBase();
 
@@ -230,9 +246,10 @@ public class Hero extends DAO<Hero> {
 
 		base.getTags().add("HERO");
 
-		return s;
+		return senshiCache = s;
 	}
 
+	@Override
 	public BufferedImage render(I18N locale) {
 		if (deck == null) deck = account.getDeck();
 		return asSenshi(locale).render(locale, deck);
@@ -246,9 +263,10 @@ public class Hero extends DAO<Hero> {
 		}
 
 		if (skillCache != null) {
-			skills = skillCache.stream()
+			stats.setSkills(skillCache.stream()
 					.map(Skill::getId)
-					.collect(Collectors.toCollection(JSONArray::new));
+					.collect(Collectors.toCollection(JSONArray::new))
+			);
 			skillCache = null;
 		}
 	}

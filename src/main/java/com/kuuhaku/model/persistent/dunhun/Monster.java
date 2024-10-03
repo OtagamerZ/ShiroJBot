@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.MonsterModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
@@ -35,17 +36,14 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.awt.image.BufferedImage;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "monster", schema = "dunhun")
-public class Monster extends DAO<Monster> {
+public class Monster extends DAO<Monster> implements Actor {
 	@Transient
 	public static final Deck DECK = Utils.with(new Deck(), d -> {
 		d.getStyling().setFrame(FrameSkin.GLITCH);
@@ -65,6 +63,8 @@ public class Monster extends DAO<Monster> {
 
 	private transient final MonsterModifiers modifiers = new MonsterModifiers();
 	private transient final Set<Affix> affixes = new LinkedHashSet<>();
+	private transient List<Skill> skillCache;
+	private transient Senshi senshiCache;
 	private transient int hp = -1;
 	private transient int ap;
 
@@ -82,6 +82,7 @@ public class Monster extends DAO<Monster> {
 				.findAny().orElseThrow();
 	}
 
+	@Override
 	public String getName(I18N locale) {
 		if (affixes.isEmpty()) return getInfo(locale).getName();
 
@@ -138,27 +139,38 @@ public class Monster extends DAO<Monster> {
 		return template.formatted(getInfo(locale).getName(), pref, suff);
 	}
 
+	@Override
 	public int getHp() {
 		if (hp == -1) hp = getMaxHp();
 		return hp;
 	}
 
+	@Override
 	public void modHp(int value) {
 		hp = Calc.clamp(getHp(), 0, getMaxHp());
 	}
 
+	@Override
 	public int getMaxHp() {
 		return (int) ((stats.getBaseHp() + modifiers.getMaxHp()) * modifiers.getHpMult());
 	}
 
+	@Override
 	public int getAp() {
 		return ap;
 	}
 
+	@Override
 	public void modAp(int value) {
 		ap = Calc.clamp(ap + value, 0, getMaxAp());
 	}
 
+	@Override
+	public int getInitiative() {
+		return 0;
+	}
+
+	@Override
 	public int getMaxAp() {
 		return Math.max(1, 1 + getModifiers().getMaxAp());
 	}
@@ -171,7 +183,17 @@ public class Monster extends DAO<Monster> {
 		return affixes;
 	}
 
-	public Senshi asSenshi() {
+	@Override
+	public List<Skill> getSkills() {
+		if (skillCache != null) return skillCache;
+
+		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", stats.getSkills());
+	}
+
+	@Override
+	public Senshi asSenshi(I18N locale) {
+		if (senshiCache != null) return senshiCache;
+
 		Senshi s = new Senshi(id, stats.getRace());
 		CardAttributes base = s.getBase();
 
@@ -182,11 +204,12 @@ public class Monster extends DAO<Monster> {
 
 		base.getTags().add("MONSTER");
 
-		return s;
+		return senshiCache = s;
 	}
 
+	@Override
 	public BufferedImage render(I18N locale) {
-		return asSenshi().render(locale, DECK);
+		return asSenshi(locale).render(locale, DECK);
 	}
 
 	@Override

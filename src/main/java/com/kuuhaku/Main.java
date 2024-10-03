@@ -31,7 +31,6 @@ import javax.imageio.ImageIO;
 import java.lang.management.ManagementFactory;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
-import java.util.concurrent.CompletableFuture;
 
 public class Main {
 	public static final ExecChain READY = new ExecChain();

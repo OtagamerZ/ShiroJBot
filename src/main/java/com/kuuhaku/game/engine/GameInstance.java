@@ -183,7 +183,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 		}
 	}
 
-	protected void resetTimer() {
+	public void resetTimer() {
 		if (timeout != null) {
 			timeout.restart();
 		}

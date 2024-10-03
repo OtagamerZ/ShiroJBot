@@ -9,7 +9,6 @@ import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Dungeon;
 import com.kuuhaku.model.persistent.dunhun.Hero;
-import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
@@ -51,7 +50,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/dungeon_leave"
 				, Utils.properlyJoin(locale.get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
 				, getTurn()
-		), 1, TimeUnit.MINUTES);
+		), 1 /* TODO Revert to 5 */, TimeUnit.MINUTES);
 	}
 
 	@Override
@@ -62,9 +61,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 	@Override
 	protected void begin() {
 		Combat c = new Combat(this);
-		getChannel().sendEmbed(c.getEmbed())
-				.addFile(IO.getBytes(c.render(getLocale()), "png"), "cards.png")
-				.queue();
 	}
 
 	@Override
@@ -94,5 +90,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public Map<String, Hero> getHeroes() {
 		return heroes;
+	}
+
+	public Pair<String, String> getMessage() {
+		return message;
+	}
+
+	public void setMessage(Pair<String, String> message) {
+		this.message = message;
 	}
 }

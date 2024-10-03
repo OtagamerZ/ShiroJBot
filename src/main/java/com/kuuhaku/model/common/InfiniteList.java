@@ -20,10 +20,13 @@ package com.kuuhaku.model.common;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
-public class InfiniteList<T> extends ArrayDeque<T> {
+public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
+	private int iter = -1;
+
 	public InfiniteList() {
 	}
 
@@ -31,35 +34,70 @@ public class InfiniteList<T> extends ArrayDeque<T> {
 		super(c);
 	}
 
+	private int next() {
+		return (iter + 1) % size();
+	}
+
+	private int previous() {
+		if (iter == -1) iter = 0;
+
+		return Math.abs(iter - 1) % size();
+	}
+
 	public T getNext() {
 		if (isEmpty()) throw new IllegalStateException("This collection is empty");
 
-		addLast(pollFirst());
-		return getFirst();
+		return get(iter = next());
 	}
 
 	public T getPrevious() {
 		if (isEmpty()) throw new IllegalStateException("This collection is empty");
 
-		addFirst(pollLast());
-		return getLast();
+		return get(iter = previous());
 	}
 
 	public T peekNext() {
-		ArrayDeque<T> aux = new ArrayDeque<>(this);
+		if (isEmpty()) return null;
 
-		aux.addLast(aux.removeFirst());
-		return aux.getFirst();
+		return get(next());
 	}
 
 	public T peekPrevious() {
-		ArrayDeque<T> aux = new ArrayDeque<>(this);
+		if (isEmpty()) return null;
 
-		aux.addFirst(aux.removeLast());
-		return aux.getLast();
+		return get(previous());
 	}
 
 	public T get() {
-		return super.getFirst();
+		if (isEmpty()) return null;
+
+		return get(iter);
+	}
+
+	public T remove() {
+		if (isEmpty()) return null;
+
+		return remove(iter);
+	}
+
+	@Override
+	public void clear() {
+		super.clear();
+		iter = -1;
+	}
+
+	@Override
+	public @NotNull Iterator<T> iterator() {
+		return new Iterator<>() {
+			@Override
+			public boolean hasNext() {
+				return !isEmpty();
+			}
+
+			@Override
+			public T next() {
+				return getNext();
+			}
+		};
 	}
 }

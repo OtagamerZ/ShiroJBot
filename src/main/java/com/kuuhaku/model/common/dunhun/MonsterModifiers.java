@@ -28,6 +28,7 @@ public class MonsterModifiers {
 	private int maxAp;
 	private int dodge;
 	private int parry;
+	private int initiative;
 
 	public float getAttack() {
 		return attack;
@@ -101,8 +102,16 @@ public class MonsterModifiers {
 		parry += value;
 	}
 
+	public int getInitiative() {
+		return initiative;
+	}
+
+	public void addInitiative(int value) {
+		initiative += value;
+	}
+
 	public void reset() {
-		attack = defense = maxHp = maxAp = dodge = parry = 0;
+		attack = defense = maxHp = maxAp = dodge = parry = initiative = 0;
 		attackMult = defenseMult = hpMult = 1;
 	}
 }

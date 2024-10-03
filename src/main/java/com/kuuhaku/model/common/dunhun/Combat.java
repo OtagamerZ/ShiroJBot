@@ -1,29 +1,53 @@
 package com.kuuhaku.model.common.dunhun;
 
+import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
+import com.kuuhaku.Main;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.Renderer;
+import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Monster;
+import com.kuuhaku.model.records.ClusterAction;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class Combat implements Renderer<BufferedImage> {
+	private final long seed = ThreadLocalRandom.current().nextLong();
+
 	private String lastAction = "";
 	private Dunhun game;
-	private Monster enemy;
+	private List<Actor> heroes;
+	private List<Actor> enemies;
+	private final InfiniteList<Actor> turns = new InfiniteList<>();
 
 	public Combat(Dunhun game) {
 		this.game = game;
-		enemy = Monster.getRandom();
+		heroes = List.copyOf(game.getHeroes().values());
+		enemies = List.of(Monster.getRandom());
+
+		process();
 	}
 
 	@Override
@@ -32,8 +56,8 @@ public class Combat implements Renderer<BufferedImage> {
 		Graphics2D g2d = bi.createGraphics();
 
 		int offset = 0;
-		for (Hero h : game.getHeroes().values()) {
-			g2d.drawImage(h.render(locale), offset, 0, null);
+		for (Actor a : heroes) {
+			g2d.drawImage(a.render(locale), offset, 0, null);
 			offset += 255;
 		}
 
@@ -41,7 +65,11 @@ public class Combat implements Renderer<BufferedImage> {
 		g2d.drawImage(cbIcon, offset, 153, null);
 		offset += 64;
 
-		g2d.drawImage(enemy.render(locale), offset, 0, null);
+		for (Actor a : enemies) {
+			g2d.drawImage(a.render(locale), offset, 0, null);
+			offset += 255;
+		}
+
 		g2d.dispose();
 
 		return bi;
@@ -52,23 +80,80 @@ public class Combat implements Renderer<BufferedImage> {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		XStringBuilder sb = new XStringBuilder();
-		for (Hero h : game.getHeroes().values()) {
-			if (!sb.isEmpty()) sb.nextLine();
+		for (List<Actor> acts : List.of(heroes, enemies)) {
+			sb.clear();
+			for (Actor a : acts) {
+				if (!sb.isEmpty()) sb.nextLine();
 
-			sb.appendNewLine(h.getName() + "『" + h.getHp() + "/" + h.getMaxHp() + "』");
-			sb.appendNewLine(Utils.makeProgressBar(h.getHp(), h.getMaxHp(), 10));
-			sb.appendNewLine(Utils.makeProgressBar(h.getAp(), h.getMaxAp(), h.getMaxAp(), '◇', '◈'));
+				sb.appendNewLine(a.getName(locale) + "『" + a.getHp() + "/" + a.getMaxHp() + "』");
+				sb.appendNewLine(Utils.makeProgressBar(a.getHp(), a.getMaxHp(), 10));
+				sb.appendNewLine(Utils.makeProgressBar(a.getAp(), a.getMaxAp(), a.getMaxAp(), '◇', '◈'));
+			}
+			eb.addField(Constants.VOID, sb.toString(), true);
 		}
-		eb.addField(Constants.VOID, sb.toString(), true);
-
-		sb.clear();
-		sb.appendNewLine(enemy.getName(locale) + "『" + enemy.getHp() + "/" + enemy.getMaxHp() + "』");
-		sb.appendNewLine(Utils.makeProgressBar(enemy.getHp(), enemy.getMaxHp(), 10));
-		sb.appendNewLine(Utils.makeProgressBar(enemy.getAp(), enemy.getMaxAp(), enemy.getMaxAp(), '◇', '◈'));
-		eb.addField(Constants.VOID, sb.toString(), true);
 
 		eb.setImage("attachment://cards.png");
 
 		return eb.build();
+	}
+
+	private void process() {
+		Stream.of(heroes.stream(), enemies.stream())
+				.flatMap(Function.identity())
+				.sorted(Comparator
+						.comparingInt(Actor::getInitiative).reversed()
+						.thenComparingInt(a -> Calc.rng(20, seed - a.hashCode()))
+				)
+				.forEach(turns::add);
+
+		for (Actor act : turns) {
+			if (heroes.stream().noneMatch(h -> h.getHp() > 0) || enemies.stream().noneMatch(h -> h.getHp() > 0)) break;
+			else if (act.getHp() == 0) continue;
+
+			try {
+				reload().get();
+			} catch (InterruptedException | ExecutionException ignore) {
+			}
+		}
+	}
+
+	public CompletableFuture<Void> reload() {
+		game.resetTimer();
+
+		CompletableFuture<Void> lock = new CompletableFuture<>();
+		ClusterAction ca = game.getChannel().sendEmbed(getEmbed())
+				.addFile(IO.getBytes(render(game.getLocale()), "png"), "cards.png");
+
+		if (turns.get() instanceof Hero h) {
+			ButtonizeHelper helper = new ButtonizeHelper(true)
+					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
+					.addAction(Utils.parseEmoji("🗡"), w -> {
+						lock.complete(null);
+					})
+					.addAction(Utils.parseEmoji("🛡"), w -> {
+						lock.complete(null);
+					})
+					.addAction(Utils.parseEmoji("💨"), w -> {
+						lock.complete(null);
+					});
+
+			ca.apply(helper::apply);
+		}
+
+		ca.queue(m -> {
+			Pair<String, String> previous = game.getMessage();
+			if (previous != null) {
+				GuildMessageChannel channel = Main.getApp().getMessageChannelById(previous.getFirst());
+				if (channel != null) {
+					channel.retrieveMessageById(previous.getSecond())
+							.flatMap(Objects::nonNull, Message::delete)
+							.queue(null, Utils::doNothing);
+				}
+			}
+
+			game.setMessage(new Pair<>(m.getChannel().getId(), m.getId()));
+		});
+
+		return lock;
 	}
 }
