@@ -1335,7 +1335,7 @@ public abstract class Utils {
 	public static String makeProgressBar(int val, int max, int length, char emptyChar, char fillChar) {
 		StringBuilder sb = new StringBuilder();
 
-		double prog = val * length / max;
+		double prog = (double) (val * length) / max;
 		for (int i = 0; i < length; i++) {
 			if (prog > i) sb.append(fillChar);
 			else sb.append(emptyChar);
