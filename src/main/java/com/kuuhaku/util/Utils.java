@@ -1343,4 +1343,8 @@ public abstract class Utils {
 
 		return sb.toString();
 	}
+
+	public static String fancyNumber(int n) {
+		return n + "⃣";
+	}
 }

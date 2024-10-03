@@ -132,13 +132,18 @@ public class Combat implements Renderer<BufferedImage> {
 			else if (!act.asSenshi(locale).isAvailable()) continue;
 
 			try {
-				reload().get();
+				reload(true).get();
 			} catch (InterruptedException | ExecutionException ignore) {
 			}
 		}
+
+		try {
+			reload(false).get();
+		} catch (InterruptedException | ExecutionException ignore) {
+		}
 	}
 
-	public CompletableFuture<Void> reload() {
+	public CompletableFuture<Void> reload(boolean execute) {
 		game.resetTimer();
 
 		CompletableFuture<Void> lock = new CompletableFuture<>();
@@ -146,40 +151,40 @@ public class Combat implements Renderer<BufferedImage> {
 				.addFile(IO.getBytes(render(game.getLocale()), "png"), "cards.png");
 
 		Actor curr = turns.get();
-		System.out.println(curr.getName(locale) + " turn");
+		curr.asSenshi(locale).setDefending(false);
 
 		ButtonizeHelper helper;
-		if (curr instanceof Hero h) {
-			h.asSenshi(locale).setDefending(false);
+		if (execute) {
+			if (curr instanceof Hero h) {
+				helper = new ButtonizeHelper(true)
+						.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
+						.setCancellable(false)
+						.addAction(Utils.parseEmoji("🗡"), w -> {
+							attack(h, Utils.getRandomEntry(defenders));
+							lock.complete(null);
+						})
+						.addAction(Utils.parseEmoji("🛡"), w -> {
+							h.asSenshi(locale).setDefending(true);
+							lastAction = locale.get("str/actor_defend", h.getName());
 
-			helper = new ButtonizeHelper(true)
-					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
-					.setCancellable(false)
-					.addAction(Utils.parseEmoji("🗡"), w -> {
-						attack(h, Utils.getRandomEntry(defenders));
-						lock.complete(null);
-					})
-					.addAction(Utils.parseEmoji("🛡"), w -> {
-						h.asSenshi(locale).setDefending(true);
-						lastAction = locale.get("str/actor_defend", h.getName());
+							lock.complete(null);
+						})
+						.addAction(Utils.parseEmoji("💨"), w -> {
+							System.out.println("c");
+							lock.complete(null);
+						});
 
-						lock.complete(null);
-					})
-					.addAction(Utils.parseEmoji("💨"), w -> {
-						System.out.println("c");
-						lock.complete(null);
-					});
+				ca.apply(helper::apply);
+			} else {
+				helper = null;
 
-			ca.apply(helper::apply);
+				exec.schedule(() -> {
+					attack(curr, Utils.getRandomEntry(hunters));
+					lock.complete(null);
+				}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
+			}
 		} else {
 			helper = null;
-
-			exec.schedule(() -> {
-				System.out.println("sched");
-
-				attack(curr, Utils.getRandomEntry(hunters));
-				lock.complete(null);
-			}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
 		}
 
 		ca.queue(m -> {
@@ -203,19 +208,19 @@ public class Combat implements Renderer<BufferedImage> {
 		return lock;
 	}
 
-	private int attack(Actor attacker, Actor defender) {
-		int raw = attacker.asSenshi(locale).getDmg();
-		int def = defender.asSenshi(locale).getDfs();
+	private int attack(Actor source, Actor target) {
+		int raw = source.asSenshi(locale).getDmg();
+		int def = target.asSenshi(locale).getDfs();
 
 		int dmg;
-		if (defender.asSenshi(locale).isDefending()) {
+		if (target.asSenshi(locale).isDefending()) {
 			dmg = (int) Math.max(raw / 10f, (2.5 * Math.pow(raw, 2)) / (def + 2.5 * raw));
 		} else {
 			dmg = (int) Math.max(raw / 5f, (5 * Math.pow(raw, 2)) / (def + 5 * raw));
 		}
 
-		defender.modHp(-dmg);
-		lastAction = locale.get("str/actor_combat", attacker.getName(locale), defender.getName(locale), dmg);
+		target.modHp(-dmg);
+		lastAction = locale.get("str/actor_combat", source.getName(locale), target.getName(locale), dmg);
 
 		return dmg;
 	}
