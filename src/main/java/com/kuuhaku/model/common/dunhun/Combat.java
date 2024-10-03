@@ -1,7 +1,6 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.github.ygimenez.model.helper.ButtonizeHelper;
-import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.Renderer;
@@ -13,7 +12,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Monster;
 import com.kuuhaku.model.records.ClusterAction;
-import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import kotlin.Pair;
@@ -24,28 +22,25 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 public class Combat implements Renderer<BufferedImage> {
 	private final long seed = ThreadLocalRandom.current().nextLong();
 
 	private String lastAction = "";
 	private Dunhun game;
-	private List<Actor> heroes;
-	private List<Actor> enemies;
+	private List<Actor> hunters;
+	private List<Actor> defenders;
 	private final InfiniteList<Actor> turns = new InfiniteList<>();
 
 	public Combat(Dunhun game) {
 		this.game = game;
-		heroes = List.copyOf(game.getHeroes().values());
-		enemies = List.of(Monster.getRandom());
+		hunters = List.copyOf(game.getHeroes().values());
+		defenders = List.of(Monster.getRandom());
 
 		process();
 	}
@@ -56,7 +51,7 @@ public class Combat implements Renderer<BufferedImage> {
 		Graphics2D g2d = bi.createGraphics();
 
 		int offset = 0;
-		for (Actor a : heroes) {
+		for (Actor a : hunters) {
 			g2d.drawImage(a.render(locale), offset, 0, null);
 			offset += 255;
 		}
@@ -65,7 +60,7 @@ public class Combat implements Renderer<BufferedImage> {
 		g2d.drawImage(cbIcon, offset, 153, null);
 		offset += 64;
 
-		for (Actor a : enemies) {
+		for (Actor a : defenders) {
 			g2d.drawImage(a.render(locale), offset, 0, null);
 			offset += 255;
 		}
@@ -79,8 +74,9 @@ public class Combat implements Renderer<BufferedImage> {
 		I18N locale = game.getLocale();
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
+		String title = locale.get("str/hunters");
 		XStringBuilder sb = new XStringBuilder();
-		for (List<Actor> acts : List.of(heroes, enemies)) {
+		for (List<Actor> acts : List.of(hunters, defenders)) {
 			sb.clear();
 			for (Actor a : acts) {
 				if (!sb.isEmpty()) sb.nextLine();
@@ -89,7 +85,9 @@ public class Combat implements Renderer<BufferedImage> {
 				sb.appendNewLine(Utils.makeProgressBar(a.getHp(), a.getMaxHp(), 10));
 				sb.appendNewLine(Utils.makeProgressBar(a.getAp(), a.getMaxAp(), a.getMaxAp(), '◇', '◈'));
 			}
-			eb.addField(Constants.VOID, sb.toString(), true);
+
+			eb.addField(title, sb.toString(), true);
+			title = locale.get("str/defenders");
 		}
 
 		eb.setImage("attachment://cards.png");
@@ -98,6 +96,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	private void process() {
+		/* TODO Uncomment
 		Stream.of(heroes.stream(), enemies.stream())
 				.flatMap(Function.identity())
 				.sorted(Comparator
@@ -105,9 +104,13 @@ public class Combat implements Renderer<BufferedImage> {
 						.thenComparingInt(a -> Calc.rng(20, seed - a.hashCode()))
 				)
 				.forEach(turns::add);
+		 */
+
+		turns.addAll(hunters);
+		turns.addAll(defenders);
 
 		for (Actor act : turns) {
-			if (heroes.stream().noneMatch(h -> h.getHp() > 0) || enemies.stream().noneMatch(h -> h.getHp() > 0)) break;
+			if (hunters.stream().noneMatch(h -> h.getHp() > 0) || defenders.stream().noneMatch(h -> h.getHp() > 0)) break;
 			else if (act.getHp() == 0) continue;
 
 			try {
