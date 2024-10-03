@@ -105,7 +105,17 @@ public class Combat implements Renderer<BufferedImage> {
 				if (!sb.isEmpty()) sb.nextLine();
 
 				sb.appendNewLine(a.getName(locale) + "『" + a.getHp() + "/" + a.getMaxHp() + "』");
-				sb.appendNewLine(Utils.makeProgressBar(a.getHp(), a.getMaxHp(), 10));
+
+				int steps = a.getMaxHp() / 100;
+				int rows = steps / 10;
+				for (int i = 0; i < rows; i++) {
+					sb.appendNewLine(Utils.makeProgressBar(
+							a.getHp() - 1000 * i,
+							Math.min(a.getMaxHp(), 1000),
+							Math.min(steps - 10 * i, 10)
+					));
+				}
+
 				sb.appendNewLine(Utils.makeProgressBar(a.getAp(), a.getMaxAp(), a.getMaxAp(), '◇', '◈'));
 			}
 
