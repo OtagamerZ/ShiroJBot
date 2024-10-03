@@ -53,6 +53,9 @@ public class MonsterStats {
 	@Column(name = "parry", nullable = false)
 	private int parry;
 
+	@Column(name = "weight", nullable = false)
+	private int weight;
+
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
@@ -84,6 +87,10 @@ public class MonsterStats {
 
 	public int getParry() {
 		return parry;
+	}
+
+	public int getWeight() {
+		return weight;
 	}
 
 	public JSONArray getSkills() {
