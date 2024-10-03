@@ -13,6 +13,8 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Monster;
 import com.kuuhaku.model.records.ClusterAction;
+import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import kotlin.Pair;
@@ -25,21 +27,23 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.*;
 
 public class Combat implements Renderer<BufferedImage> {
+	private final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 	private final long seed = ThreadLocalRandom.current().nextLong();
+	private final Dunhun game;
+	private final I18N locale;
 
 	private String lastAction = "";
-	private Dunhun game;
 	private List<Actor> hunters;
 	private List<Actor> defenders;
 	private final InfiniteList<Actor> turns = new InfiniteList<>();
 
 	public Combat(Dunhun game) {
 		this.game = game;
+		this.locale = game.getLocale();
+
 		hunters = List.copyOf(game.getHeroes().values());
 		defenders = List.of(Monster.getRandom());
 
@@ -52,18 +56,30 @@ public class Combat implements Renderer<BufferedImage> {
 		Graphics2D g2d = bi.createGraphics();
 
 		int offset = 0;
-		for (Actor a : hunters) {
-			g2d.drawImage(a.render(locale), offset, 0, null);
-			offset += 255;
-		}
+		boolean divided = false;
+		for (List<Actor> acts : List.of(hunters, defenders)) {
+			for (Actor a : acts) {
+				BufferedImage card;
+				if (a.getHp() <= 0) {
+					a.asSenshi(locale).setAvailable(false);
+					BufferedImage overlay = IO.getResourceAsImage("shoukan/states/dead.png");
 
-		BufferedImage cbIcon = IO.getResourceAsImage("dunhun/icons/combat.png");
-		g2d.drawImage(cbIcon, offset, 153, null);
-		offset += 64;
+					card = a.render(locale);
+					Graph.overlay(card, overlay);
+				} else {
+					card = a.render(locale);
+				}
 
-		for (Actor a : defenders) {
-			g2d.drawImage(a.render(locale), offset, 0, null);
-			offset += 255;
+				g2d.drawImage(card, offset, 0, null);
+				offset += 255;
+			}
+
+			if (!divided) {
+				BufferedImage cbIcon = IO.getResourceAsImage("dunhun/icons/combat.png");
+				g2d.drawImage(cbIcon, offset, 153, null);
+				offset += 64;
+				divided = true;
+			}
 		}
 
 		g2d.dispose();
@@ -72,7 +88,6 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public MessageEmbed getEmbed() {
-		I18N locale = game.getLocale();
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		String title = locale.get("str/hunters");
@@ -113,7 +128,7 @@ public class Combat implements Renderer<BufferedImage> {
 		for (Actor act : turns) {
 			if (game.isClosed()) break;
 			else if (hunters.stream().noneMatch(h -> h.getHp() > 0) || defenders.stream().noneMatch(h -> h.getHp() > 0)) break;
-			else if (act.getHp() == 0) continue;
+			else if (!act.asSenshi(locale).isAvailable()) continue;
 
 			try {
 				reload().get();
@@ -129,13 +144,16 @@ public class Combat implements Renderer<BufferedImage> {
 		ClusterAction ca = game.getChannel().sendEmbed(getEmbed())
 				.addFile(IO.getBytes(render(game.getLocale()), "png"), "cards.png");
 
+		Actor curr = turns.get();
 		ButtonizeHelper helper;
-		if (turns.get() instanceof Hero h) {
+		if (curr instanceof Hero h) {
+			h.asSenshi(locale).setDefending(false);
+
 			helper = new ButtonizeHelper(true)
 					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 					.setCancellable(false)
 					.addAction(Utils.parseEmoji("🗡"), w -> {
-						System.out.println("a");
+						attack(h, Utils.getRandomEntry(defenders));
 						lock.complete(null);
 					})
 					.addAction(Utils.parseEmoji("🛡"), w -> {
@@ -150,6 +168,11 @@ public class Combat implements Renderer<BufferedImage> {
 			ca.apply(helper::apply);
 		} else {
 			helper = null;
+
+			exec.schedule(() -> {
+				attack(curr, Utils.getRandomEntry(hunters));
+				lock.complete(null);
+			}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
 		}
 
 		ca.queue(m -> {
@@ -171,5 +194,22 @@ public class Combat implements Renderer<BufferedImage> {
 		});
 
 		return lock;
+	}
+
+	private int attack(Actor attacker, Actor defender) {
+		int raw = attacker.asSenshi(locale).getDmg();
+		int def = defender.asSenshi(locale).getDfs();
+
+		int dmg;
+		if (defender.asSenshi(locale).isDefending()) {
+			dmg = (int) Math.max(raw / 10f, (2.5 * Math.pow(raw, 2)) / (def + 2.5 * raw));
+		} else {
+			dmg = (int) Math.max(raw / 5f, (5 * Math.pow(raw, 2)) / (def + 5 * raw));
+		}
+
+		defender.modHp(-dmg);
+		lastAction = locale.get("str/actor_combat", attacker, defender, dmg);
+
+		return dmg;
 	}
 }
