@@ -24,6 +24,7 @@ import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.GameChannel;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
@@ -140,7 +141,16 @@ public abstract class GameInstance<T extends Enum<T>> {
 	}
 
 	public String getString(String key, Object... args) {
-		return locale.get(key, args);
+		try {
+			String out = locale.get(key, args);
+			if (out.isBlank() || out.equalsIgnoreCase(key)) {
+				out = LocalizedString.get(getLocale(), key, "").formatted(args);
+			}
+
+			return Utils.getOr(out, key);
+		} catch (MissingFormatArgumentException e) {
+			return "";
+		}
 	}
 
 	public String[] getPlayers() {

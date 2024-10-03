@@ -95,9 +95,10 @@ public class MonsterStats {
 
 		try {
 			Utils.exec(getClass().getSimpleName(), lootGenerator, Map.of("loot", loot));
-			return loot;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to generate loot", e);
 		}
+
+		return loot;
 	}
 }

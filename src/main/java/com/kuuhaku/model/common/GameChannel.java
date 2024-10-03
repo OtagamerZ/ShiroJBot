@@ -21,6 +21,7 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.model.records.ChannelReference;
 import com.kuuhaku.model.records.ClusterAction;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
@@ -88,6 +89,18 @@ public class GameChannel {
 			} else {
 				acts.put(chn.getId(), chn.sendMessage(message));
 			}
+		}
+
+		lastAction = System.currentTimeMillis();
+		return new ClusterAction(delay, acts);
+	}
+
+	public ClusterAction sendEmbed(MessageEmbed embed) {
+		long delay = Math.max(0, (lastAction + cooldown) - System.currentTimeMillis());
+
+		Map<String, MessageCreateAction> acts = new HashMap<>();
+		for (GuildMessageChannel chn : getChannels()) {
+			acts.put(chn.getId(), chn.sendMessageEmbeds(embed));
 		}
 
 		lastAction = System.currentTimeMillis();

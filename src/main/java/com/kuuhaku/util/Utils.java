@@ -31,8 +31,8 @@ import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.common.XStringBuilder;
-import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.CardFilter;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shiro.ScriptMetrics;
 import com.kuuhaku.model.persistent.user.StashedCard;
@@ -1326,5 +1326,21 @@ public abstract class Utils {
 
 	public static synchronized <T> T withUnsafeRng(Function<Random, T> doWith) {
 		return doWith.apply(Constants.UNSAFE_RNG);
+	}
+
+	public static String makeProgressBar(int val, int max, int length) {
+		return makeProgressBar(val, max, length, '▱', '▰');
+	}
+
+	public static String makeProgressBar(int val, int max, int length, char emptyChar, char fillChar) {
+		StringBuilder sb = new StringBuilder();
+
+		int prog = val * length / max;
+		for (int i = 0; i < length; i++) {
+			if (i <= prog) sb.append(fillChar);
+			else sb.append(emptyChar);
+		}
+
+		return sb.toString();
 	}
 }

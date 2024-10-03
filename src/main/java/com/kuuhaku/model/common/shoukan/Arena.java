@@ -53,7 +53,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
-public class Arena implements Renderer {
+public class Arena implements Renderer<Future<BufferedImage>> {
 	private final ExecutorService RENDER = Executors.newSingleThreadScheduledExecutor();
 	private final Point MARGIN = new Point(25, 25);
 	public final Dimension SIZE = new Dimension(

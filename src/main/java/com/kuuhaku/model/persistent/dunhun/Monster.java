@@ -22,8 +22,10 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.MonsterModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
@@ -32,6 +34,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -43,6 +46,11 @@ import static jakarta.persistence.CascadeType.ALL;
 @Entity
 @Table(name = "monster", schema = "dunhun")
 public class Monster extends DAO<Monster> {
+	@Transient
+	public static final Deck DECK = Utils.with(new Deck(), d -> {
+		d.getStyling().setFrame(FrameSkin.GLITCH);
+	});
+
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -57,6 +65,8 @@ public class Monster extends DAO<Monster> {
 
 	private transient final MonsterModifiers modifiers = new MonsterModifiers();
 	private transient final Set<Affix> affixes = new LinkedHashSet<>();
+	private transient int hp = -1;
+	private transient int ap;
 
 	public String getId() {
 		return id;
@@ -128,6 +138,31 @@ public class Monster extends DAO<Monster> {
 		return template.formatted(getInfo(locale).getName(), pref, suff);
 	}
 
+	public int getHp() {
+		if (hp == -1) hp = getMaxHp();
+		return hp;
+	}
+
+	public void modHp(int value) {
+		hp = Calc.clamp(getHp(), 0, getMaxHp());
+	}
+
+	public int getMaxHp() {
+		return (int) ((stats.getBaseHp() + modifiers.getMaxHp()) * modifiers.getHpMult());
+	}
+
+	public int getAp() {
+		return ap;
+	}
+
+	public void modAp(int value) {
+		ap = Calc.clamp(ap + value, 0, getMaxAp());
+	}
+
+	public int getMaxAp() {
+		return Math.max(1, 1 + getModifiers().getMaxAp());
+	}
+
 	public MonsterModifiers getModifiers() {
 		return modifiers;
 	}
@@ -148,6 +183,10 @@ public class Monster extends DAO<Monster> {
 		base.getTags().add("MONSTER");
 
 		return s;
+	}
+
+	public BufferedImage render(I18N locale) {
+		return asSenshi().render(locale, DECK);
 	}
 
 	@Override

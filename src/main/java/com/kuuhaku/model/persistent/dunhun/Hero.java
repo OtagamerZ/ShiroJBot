@@ -27,9 +27,11 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.Attributes;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
@@ -77,6 +79,9 @@ public class Hero extends DAO<Hero> {
 	private transient final HeroModifiers modifiers = new HeroModifiers();
 	private transient Equipment equipCache;
 	private transient List<Skill> skillCache;
+	private transient Deck deck;
+	private transient int hp = -1;
+	private transient int ap;
 
 	public Hero() {
 	}
@@ -112,8 +117,29 @@ public class Hero extends DAO<Hero> {
 		}
 	}
 
+	public int getHp() {
+		if (hp == -1) hp = getMaxHp();
+		return hp;
+	}
+
+	public void modHp(int value) {
+		hp = Calc.clamp(getHp() + value, 0, getMaxHp());
+	}
+
 	public int getMaxHp() {
 		return (int) ((100 + modifiers.getMaxHp()) * (1 + 0.1 * getAttributes().vit()));
+	}
+
+	public int getAp() {
+		return ap;
+	}
+
+	public void modAp(int value) {
+		ap = Calc.clamp(ap + value, 0, getMaxAp());
+	}
+
+	public int getMaxAp() {
+		return Calc.clamp(1 + getModifiers().getMaxAp() + getAttributes().dex() / 10, 0, 5);
 	}
 
 	public Attributes getAttributes() {
@@ -205,6 +231,11 @@ public class Hero extends DAO<Hero> {
 		base.getTags().add("HERO");
 
 		return s;
+	}
+
+	public BufferedImage render(I18N locale) {
+		if (deck == null) deck = account.getDeck();
+		return asSenshi(locale).render(locale, deck);
 	}
 
 	@Override

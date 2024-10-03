@@ -26,6 +26,7 @@ import java.util.Set;
 
 public class HeroModifiers {
 	private int maxHp;
+	private int maxAp;
 	private int attributes;
 	/*
 	0xFF FF FF FF
@@ -42,8 +43,16 @@ public class HeroModifiers {
 		return maxHp;
 	}
 
-	public void addMaxHp(int hp) {
-		this.maxHp += hp;
+	public void addMaxHp(int value) {
+		this.maxHp += value;
+	}
+
+	public int getMaxAp() {
+		return maxAp;
+	}
+
+	public void addMaxAp(int value) {
+		this.maxAp += value;
 	}
 
 	public int getStrength() {
@@ -91,7 +100,7 @@ public class HeroModifiers {
 	}
 
 	public void reset() {
-		maxHp = attributes = 0;
+		maxHp = maxAp = attributes = 0;
 		skills.clear();
 		effects.clear();
 	}

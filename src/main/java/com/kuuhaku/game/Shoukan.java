@@ -39,8 +39,10 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.localized.LocalizedString;
-import com.kuuhaku.model.persistent.shoukan.*;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
+import com.kuuhaku.model.persistent.shoukan.MatchHistory;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.ClusterAction;
@@ -2573,19 +2575,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public boolean putAtOpenSlot(Side side, Senshi card) {
 		return putAtOpenSlot(side, true, card) || putAtOpenSlot(side, false, card);
-	}
-
-	public String getString(String key, Object... args) {
-		try {
-			String out = super.getString(key, args);
-			if (out.isBlank() || out.equalsIgnoreCase(key)) {
-				out = LocalizedString.get(getLocale(), key, "").formatted(args);
-			}
-
-			return Utils.getOr(out, key);
-		} catch (MissingFormatArgumentException e) {
-			return "";
-		}
 	}
 
 	public void send(Drawable<?> source, String text) {

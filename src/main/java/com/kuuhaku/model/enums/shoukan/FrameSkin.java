@@ -25,6 +25,7 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.DeckStyling;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Title;
+import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 
@@ -68,6 +69,7 @@ public enum FrameSkin {
 	),*/
 
 	PADORU("PADORU"),
+	GLITCH("DUNGEON_HUNTER"),
 
 	/*METALLIC("**(75% das conquistas desbloqueadas)** Com estilo (e um revestimento semi-transparente), faça suas jogadas mostrando sua classe!",
 			acc -> (float) acc.getMedalBag().size() / Achievement.getMedalBag().size() > 0.75f
@@ -101,7 +103,8 @@ public enum FrameSkin {
 			case GRAY, LEGACY_GRAY -> new Color(0xBEBEBE);
 
 			case PADORU -> new Color(177, 30, 49);
-			/*case RAINBOW, GLITCH -> ImageHelper.getRandomColor();
+			case GLITCH -> Utils.getRandomEntry(values()).getThemeColor();
+			/*case RAINBOW -> ImageHelper.getRandomColor();
 			case BLACK -> Color.BLACK;
 			case HALLOWEEN -> new Color(220, 89, 16);
 			case METALLIC -> new Color(190, 194, 203);
@@ -124,10 +127,10 @@ public enum FrameSkin {
 				/*HALLOWEEN*/ -> Color.BLACK;
 
 			case PADORU -> getThemeColor().darker();
+			case GLITCH -> Graph.rotate(getThemeColor(), 90);
 
 			/*case BLACK -> Color.WHITE;
 			case RAINBOW -> ImageHelper.toLuma(getThemeColor().getRGB()) > 127 ? Color.BLACK : Color.WHITE;
-			case GLITCH -> ImageHelper.reverseColor(getThemeColor());
 			case METALLIC, RICH -> getThemeColor().darker();*/
 		};
 	}
@@ -144,10 +147,10 @@ public enum FrameSkin {
 					ORANGE,
 					RED, LEGACY_RED,
 					GRAY, LEGACY_GRAY,
-					PADORU /*HALLOWEEN, METALLIC, RICH*/ -> Color.WHITE;
+					PADORU, GLITCH /*HALLOWEEN, METALLIC, RICH*/ -> Color.WHITE;
 
 			/*case BLACK -> Color.BLACK;
-			case RAINBOW, GLITCH -> getThemeColor();*/
+			case RAINBOW -> getThemeColor();*/
 		};
 	}
 
@@ -165,8 +168,8 @@ public enum FrameSkin {
 					GRAY, LEGACY_GRAY
 				/*RAINBOW, METALLIC*/ -> Color.BLACK;
 
-			case PADORU -> Color.WHITE;
-			//case BLACK, HALLOWEEN, GLITCH, RICH -> Color.WHITE;
+			case PADORU, GLITCH -> Color.WHITE;
+			//case BLACK, HALLOWEEN, RICH -> Color.WHITE;
 		};
 	}
 

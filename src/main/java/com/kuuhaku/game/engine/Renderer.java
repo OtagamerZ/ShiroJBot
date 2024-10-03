@@ -20,11 +20,8 @@ package com.kuuhaku.game.engine;
 
 import com.kuuhaku.model.enums.I18N;
 
-import java.awt.image.BufferedImage;
-import java.util.concurrent.Future;
-
-public interface Renderer {
-	default Future<BufferedImage> render(I18N locale) {
+public interface Renderer<T> {
+	default T render(I18N locale) {
 		throw new IllegalStateException("Not implemented");
 	}
 }

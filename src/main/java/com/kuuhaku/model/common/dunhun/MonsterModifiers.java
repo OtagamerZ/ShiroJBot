@@ -23,8 +23,9 @@ public class MonsterModifiers {
 	private float attackMult = 1;
 	private int defense;
 	private float defenseMult = 1;
-	private int hp;
+	private int maxHp;
 	private float hpMult = 1;
+	private int maxAp;
 	private int dodge;
 	private int parry;
 
@@ -60,12 +61,12 @@ public class MonsterModifiers {
 		defenseMult += mult;
 	}
 
-	public float getHp() {
-		return hp;
+	public int getMaxHp() {
+		return maxHp;
 	}
 
-	public void addHp(int value) {
-		hp += value;
+	public void addMaxHp(int value) {
+		maxHp += value;
 	}
 
 	public float getHpMult() {
@@ -74,6 +75,14 @@ public class MonsterModifiers {
 
 	public void addHpMult(float mult) {
 		hpMult += mult;
+	}
+
+	public int getMaxAp() {
+		return maxAp;
+	}
+
+	public void addMaxAp(int value) {
+		maxAp += value;
 	}
 
 	public int getDodge() {
@@ -93,7 +102,7 @@ public class MonsterModifiers {
 	}
 
 	public void reset() {
-		attack = defense = hp = dodge = parry = 0;
+		attack = defense = maxHp = maxAp = dodge = parry = 0;
 		attackMult = defenseMult = hpMult = 1;
 	}
 }
