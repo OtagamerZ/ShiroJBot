@@ -110,7 +110,8 @@ public class Combat implements Renderer<BufferedImage> {
 		turns.addAll(defenders);
 
 		for (Actor act : turns) {
-			if (hunters.stream().noneMatch(h -> h.getHp() > 0) || defenders.stream().noneMatch(h -> h.getHp() > 0)) break;
+			if (game.isClosed()) break;
+			else if (hunters.stream().noneMatch(h -> h.getHp() > 0) || defenders.stream().noneMatch(h -> h.getHp() > 0)) break;
 			else if (act.getHp() == 0) continue;
 
 			try {
@@ -130,6 +131,7 @@ public class Combat implements Renderer<BufferedImage> {
 		if (turns.get() instanceof Hero h) {
 			ButtonizeHelper helper = new ButtonizeHelper(true)
 					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
+					.setCancellable(false)
 					.addAction(Utils.parseEmoji("🗡"), w -> {
 						lock.complete(null);
 					})
