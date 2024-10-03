@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.dunhun;
+package com.kuuhaku.command.fun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.exceptions.PendingConfirmationException;
@@ -40,7 +40,7 @@ import net.dv8tion.jda.api.entities.User;
 
 @Command(
 		name = "dunhun",
-		category = Category.FUN
+		category = Category.DEV
 )
 @Syntax(value = {
 		"<user:user:r> <dungeon:word:r>",
