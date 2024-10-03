@@ -38,13 +38,14 @@ import java.util.function.Consumer;
 public class Combat implements Renderer<BufferedImage> {
 	private final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 	private final long seed = ThreadLocalRandom.current().nextLong();
+
 	private final Dunhun game;
 	private final I18N locale;
+	private final List<Actor> hunters;
+	private final List<Actor> defenders;
+	private final InfiniteList<Actor> turns = new InfiniteList<>();
 
 	private String lastAction = "";
-	private List<Actor> hunters;
-	private List<Actor> defenders;
-	private final InfiniteList<Actor> turns = new InfiniteList<>();
 
 	public Combat(Dunhun game) {
 		this.game = game;
@@ -106,14 +107,14 @@ public class Combat implements Renderer<BufferedImage> {
 
 				sb.appendNewLine(a.getName(locale) + "『" + a.getHp() + "/" + a.getMaxHp() + "』");
 
-				int steps = a.getMaxHp() / 100;
-				int rows = steps / 10;
-				for (int i = 0; i < rows; i++) {
-					sb.appendNewLine(Utils.makeProgressBar(
-							a.getHp() - 1000 * i,
-							Math.min(a.getMaxHp(), 1000),
-							Math.min(steps - 10 * i, 10)
-					));
+				int hp = a.getHp();
+				int max = a.getMaxHp();
+				while (max > 0) {
+					int eMax = Math.min(max, 1000);
+					sb.appendNewLine(Utils.makeProgressBar(hp, eMax, (int) Math.ceil(eMax / 100f)));
+
+					hp -= 1000;
+					max -= 1000;
 				}
 
 				sb.appendNewLine(Utils.makeProgressBar(a.getAp(), a.getMaxAp(), a.getMaxAp(), '◇', '◈'));
