@@ -158,7 +158,7 @@ public class Combat implements Renderer<BufferedImage> {
 						lock.complete(null);
 					})
 					.addAction(Utils.parseEmoji("🛡"), w -> {
-						System.out.println("b");
+						h.asSenshi(locale).setDefending(true);
 						lock.complete(null);
 					})
 					.addAction(Utils.parseEmoji("💨"), w -> {
