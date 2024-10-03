@@ -30,10 +30,13 @@ import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class Combat implements Renderer<BufferedImage> {
 	private final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
@@ -131,18 +134,13 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	private void process() {
-		/* TODO Uncomment
-		Stream.of(heroes.stream(), enemies.stream())
+		Stream.of(hunters.stream(), defenders.stream())
 				.flatMap(Function.identity())
 				.sorted(Comparator
 						.comparingInt(Actor::getInitiative).reversed()
 						.thenComparingInt(a -> Calc.rng(20, seed - a.hashCode()))
 				)
 				.forEach(turns::add);
-		 */
-
-		turns.addAll(hunters);
-		turns.addAll(defenders);
 
 		for (Actor act : turns) {
 			if (game.isClosed()) break;
@@ -151,7 +149,9 @@ public class Combat implements Renderer<BufferedImage> {
 			else if (!act.asSenshi(locale).isAvailable()) continue;
 
 			try {
+				act.asSenshi(locale).setDefending(false);
 				act.modAp(act.getMaxAp());
+
 				while (act.getAp() > 0) {
 					reload(true).get();
 				}
@@ -172,8 +172,6 @@ public class Combat implements Renderer<BufferedImage> {
 		ClusterAction ca = game.getChannel().sendEmbed(getEmbed());
 
 		Actor curr = turns.get();
-		curr.asSenshi(locale).setDefending(false);
-
 		ButtonizeHelper helper;
 		if (execute) {
 			if (curr instanceof Hero h) {
