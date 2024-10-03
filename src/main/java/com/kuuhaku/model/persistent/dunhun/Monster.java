@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.MonsterModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
@@ -240,7 +241,15 @@ public class Monster extends DAO<Monster> implements Actor {
 	}
 
 	public static Monster getRandom() {
-		return getRandom(DAO.queryNative(String.class, "SELECT id FROM monster ORDER BY random()"));
+		RandomList<String> rl = new RandomList<>();
+		List<Object[]> mons = DAO.queryAllUnmapped("SELECT id, weight FROM monster");
+
+		for (Object[] a : mons) {
+			rl.add((String) a[0], ((Number) a[1]).intValue());
+		}
+
+		if (rl.entries().isEmpty()) return null;
+		return getRandom(rl.get());
 	}
 
 	public static Monster getRandom(String id) {
