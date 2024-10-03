@@ -104,6 +104,7 @@ public class Combat implements Renderer<BufferedImage> {
 			sb.clear();
 			for (Actor a : acts) {
 				if (!sb.isEmpty()) sb.nextLine();
+				a.asSenshi(locale);
 
 				sb.appendNewLine(a.getName(locale) + "『" + a.getHp() + "/" + a.getMaxHp() + "』");
 
