@@ -39,11 +39,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 		this.instance = instance;
 		for (String p : players) {
 			Hero h = DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1", p);
-			if(h == null) {
+			if (h == null) {
 				getChannel().sendMessage(getString("error/no_hero_other", "<@" + p + ">")).queue();
 				close(GameReport.NO_HERO);
 				return;
 			}
+
+			heroes.put(p, h);
 		}
 
 		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/dungeon_leave"

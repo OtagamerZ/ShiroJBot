@@ -38,7 +38,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		BufferedImage cbIcon = IO.getResourceAsImage("dunhun/icons/combat.png");
-		g2d.drawImage(cbIcon, offset, 185, null);
+		g2d.drawImage(cbIcon, offset, 153, null);
 		offset += 64;
 
 		g2d.drawImage(enemy.render(locale), offset, 0, null);
