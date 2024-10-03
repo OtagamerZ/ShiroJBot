@@ -119,7 +119,8 @@ public class Combat implements Renderer<BufferedImage> {
 			sb.clear();
 			for (Actor a : acts) {
 				if (!sb.isEmpty()) sb.nextLine();
-				sb.appendNewLine(a.getName(locale) + "『" + a.getHp() + "/" + a.getMaxHp() + "』");
+				sb.appendNewLine(a.getName(locale));
+				sb.appendNewLine("HP:" + a.getHp() + "/" + a.getMaxHp());
 
 				int hp = a.getHp();
 				int max = a.getMaxHp();

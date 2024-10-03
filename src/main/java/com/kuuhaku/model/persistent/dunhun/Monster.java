@@ -25,6 +25,7 @@ import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.MonsterModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
@@ -88,13 +89,7 @@ public class Monster extends DAO<Monster> implements Actor {
 	public String getName(I18N locale) {
 		if (affixes.isEmpty()) return getInfo(locale).getName();
 
-		int p = 0, s = 0;
-		for (Affix a : affixes) {
-			if (a.getType() == AffixType.MON_PREFIX) p++;
-			else s++;
-		}
-
-		if (p > 1 || s > 1) {
+		if (getRarityClass() == RarityClass.RARE) {
 			int seed = id.hashCode();
 
 			String loc = locale.getParent().name().toLowerCase();
@@ -154,7 +149,13 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	@Override
 	public int getMaxHp() {
-		return (int) ((stats.getBaseHp() + modifiers.getMaxHp()) * modifiers.getHpMult());
+		int hp = (int) ((stats.getBaseHp() + modifiers.getMaxHp()) * modifiers.getHpMult());
+		switch (getRarityClass()) {
+			case RARE -> hp = (int) (hp * 2.25);
+			case MAGIC -> hp = (int) (hp * 1.5);
+		}
+
+		return hp;
 	}
 
 	@Override
@@ -183,6 +184,18 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	public Set<Affix> getAffixes() {
 		return affixes;
+	}
+
+	public RarityClass getRarityClass() {
+		int pre = 0, suf = 0;
+		for (Affix a : affixes) {
+			if (a.getType() == AffixType.MON_PREFIX) pre++;
+			else if (a.getType() == AffixType.MON_SUFFIX) suf++;
+		}
+
+		if (pre > 1 || suf > 1) return RarityClass.RARE;
+		else if (pre + suf > 1) return RarityClass.MAGIC;
+		else return RarityClass.NORMAL;
 	}
 
 	@Override

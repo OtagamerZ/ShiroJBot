@@ -23,6 +23,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.GearModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
@@ -107,6 +108,19 @@ public class Gear extends DAO<Gear> {
 		return affixes;
 	}
 
+	public RarityClass getRarityClass() {
+		int pre = 0, suf = 0;
+		for (GearAffix ga : affixes) {
+			Affix a = ga.getAffix();
+			if (a.getType() == AffixType.MON_PREFIX) pre++;
+			else if (a.getType() == AffixType.MON_SUFFIX) suf++;
+		}
+
+		if (pre > 1 || suf > 1) return RarityClass.RARE;
+		else if (pre + suf > 1) return RarityClass.MAGIC;
+		else return RarityClass.NORMAL;
+	}
+
 	public void reroll() {
 		this.roll = Calc.rng(Integer.MAX_VALUE);
 	}
@@ -175,13 +189,7 @@ public class Gear extends DAO<Gear> {
 	public String getName(I18N locale) {
 		if (affixes.isEmpty()) return basetype.getInfo(locale).getName();
 
-		int p = 0, s = 0;
-		for (GearAffix ga : affixes) {
-			if (ga.getAffix().getType() == AffixType.PREFIX) p++;
-			else s++;
-		}
-
-		if (p > 1 || s > 1) {
+		if (getRarityClass() == RarityClass.RARE) {
 			String loc = locale.getParent().name().toLowerCase();
 			String prefix = IO.getLine("dunhun/item/prefix/" + loc + ".dict", Calc.rng(0, 32, id + affixes.hashCode()));
 			String suffix = IO.getLine("dunhun/item/suffix/" + loc + ".dict", Calc.rng(0, 32, id - prefix.hashCode()));
