@@ -57,6 +57,10 @@ public class Combat implements Renderer<BufferedImage> {
 		hunters = List.copyOf(game.getHeroes().values());
 		defenders = List.of(Monster.getRandom());
 
+		for (List<Actor> acts : List.of(hunters, defenders)) {
+			acts.forEach(a -> a.asSenshi(locale));
+		}
+
 		process();
 	}
 
@@ -107,8 +111,6 @@ public class Combat implements Renderer<BufferedImage> {
 			sb.clear();
 			for (Actor a : acts) {
 				if (!sb.isEmpty()) sb.nextLine();
-				a.asSenshi(locale);
-
 				sb.appendNewLine(a.getName(locale) + "『" + a.getHp() + "/" + a.getMaxHp() + "』");
 
 				int hp = a.getHp();

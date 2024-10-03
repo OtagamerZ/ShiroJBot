@@ -80,9 +80,11 @@ public class HeroInfoCommand implements Executable {
 
 		eb.addField(Constants.VOID, """
 				HP: %s (%s)
+				AP: %s (%s)
 				%s (%s/%s)
 				""".formatted(
 				h.getMaxHp(), Utils.sign(h.getModifiers().getMaxHp()),
+				h.getMaxAp(), Utils.sign(h.getModifiers().getMaxAp()),
 				locale.get("str/level", h.getStats().getLevel()),
 				h.getStats().getXp(), h.getStats().getXpToNext()
 		), true);

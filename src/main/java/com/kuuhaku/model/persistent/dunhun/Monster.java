@@ -248,7 +248,6 @@ public class Monster extends DAO<Monster> implements Actor {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}
 
-		if (rl.entries().isEmpty()) return null;
 		return getRandom(rl.get());
 	}
 
