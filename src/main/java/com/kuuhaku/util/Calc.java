@@ -205,8 +205,22 @@ public abstract class Calc {
 		return chance(percentage, Constants.DEFAULT_RNG.get());
 	}
 
+	public static boolean chance(double percentage, long seed) {
+		return Utils.withUnsafeRng(rng -> {
+			rng.setSeed(seed);
+			return chance(percentage, 1, rng);
+		});
+	}
+
 	public static boolean chance(double percentage, RandomGenerator rng) {
 		return chance(percentage, 1, rng);
+	}
+
+	public static boolean chance(double percentage, int rolls, long seed) {
+		return Utils.withUnsafeRng(rng -> {
+			rng.setSeed(seed);
+			return chance(percentage, rolls, rng);
+		});
 	}
 
 	public static boolean chance(double percentage, int rolls, RandomGenerator rng) {

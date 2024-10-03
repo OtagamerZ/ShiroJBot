@@ -114,7 +114,7 @@ public class Monster extends DAO<Monster> implements Actor {
 			for (int i = 0; i < 2; i++) {
 				String part = IO.getLine("dunhun/monster/name_parts.dict", Calc.rng(0, 32, seed >> i));
 				if (i == 0) {
-					if (Calc.chance(25)) {
+					if (Calc.chance(25, prefix.hashCode() + suffix.hashCode())) {
 						part = part.charAt(0) + "'" + part.substring(1);
 					}
 				} else {

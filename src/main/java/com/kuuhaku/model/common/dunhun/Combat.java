@@ -30,6 +30,7 @@ import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -55,7 +56,13 @@ public class Combat implements Renderer<BufferedImage> {
 		this.locale = game.getLocale();
 
 		hunters = List.copyOf(game.getHeroes().values());
-		defenders = List.of(Monster.getRandom());
+		defenders = new ArrayList<>();
+
+		for (int i = 0; i < 3; i++) {
+			if (!Calc.chance(100 / (defenders.size() + 2d / hunters.size()))) break;
+
+			defenders.add(Monster.getRandom());
+		}
 
 		for (List<Actor> acts : List.of(hunters, defenders)) {
 			acts.forEach(a -> a.asSenshi(locale));
@@ -103,6 +110,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public MessageEmbed getEmbed() {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setTitle(locale.get("str/actor_turn", turns.get().getName(locale)))
 				.setDescription(lastAction);
 
 		String title = locale.get("str/hunters");
