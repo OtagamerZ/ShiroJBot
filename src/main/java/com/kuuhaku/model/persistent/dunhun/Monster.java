@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.MonsterModifiers;
@@ -196,6 +197,19 @@ public class Monster extends DAO<Monster> implements Actor {
 
 		Senshi s = new Senshi(id, getName(locale), stats.getRace());
 		CardAttributes base = s.getBase();
+
+		for (Affix a : affixes) {
+			if (a == null) continue;
+
+			try {
+				Utils.exec(a.getId(), a.getEffect(), Map.of(
+						"locale", locale,
+						"mon", this
+				));
+			} catch (Exception e) {
+				Constants.LOGGER.warn("Failed to apply modifier {}", a.getId(), e);
+			}
+		}
 
 		base.setAtk(stats.getAttack());
 		base.setDfs(stats.getDefense());
