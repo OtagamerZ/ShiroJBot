@@ -112,7 +112,7 @@ public class Combat implements Renderer<BufferedImage> {
 				int max = a.getMaxHp();
 				while (max > 0) {
 					int eMax = Math.min(max, 1000);
-					sb.appendNewLine(Utils.makeProgressBar(hp, eMax, (int) Math.ceil(eMax / 100f)));
+					sb.appendNewLine(Utils.makeProgressBar(hp, eMax, Math.round(eMax / 100f)));
 
 					hp -= 1000;
 					max -= 1000;
@@ -151,7 +151,9 @@ public class Combat implements Renderer<BufferedImage> {
 			else if (!act.asSenshi(locale).isAvailable()) continue;
 
 			try {
-				reload(true).get();
+				while (act.getAp() > 0) {
+					reload(true).get();
+				}
 			} catch (InterruptedException | ExecutionException ignore) {
 			}
 		}
@@ -166,11 +168,11 @@ public class Combat implements Renderer<BufferedImage> {
 		game.resetTimer();
 
 		CompletableFuture<Void> lock = new CompletableFuture<>();
-		ClusterAction ca = game.getChannel().sendEmbed(getEmbed())
-				.addFile(IO.getBytes(render(game.getLocale()), "png"), "cards.png");
+		ClusterAction ca = game.getChannel().sendEmbed(getEmbed());
 
 		Actor curr = turns.get();
 		curr.asSenshi(locale).setDefending(false);
+		curr.modAp(curr.getMaxAp());
 
 		ButtonizeHelper helper;
 		if (execute) {
@@ -182,13 +184,16 @@ public class Combat implements Renderer<BufferedImage> {
 				helper.addAction(Utils.parseEmoji("🗡"),
 								w -> addSelector(w.getMessage(), helper, defenders, t -> {
 									attack(h, t);
+									h.modAp(-1);
+
 									lock.complete(null);
 								})
 						)
 						.addAction(Utils.parseEmoji("🛡"), w -> {
 							h.asSenshi(locale).setDefending(true);
-							lastAction = locale.get("str/actor_defend", h.getName());
+							h.modAp(-1);
 
+							lastAction = locale.get("str/actor_defend", h.getName());
 							lock.complete(null);
 						})
 						.addAction(Utils.parseEmoji("💨"), w -> {
@@ -202,6 +207,8 @@ public class Combat implements Renderer<BufferedImage> {
 
 				exec.schedule(() -> {
 					attack(curr, Utils.getRandomEntry(hunters));
+					curr.modAp(-1);
+
 					lock.complete(null);
 				}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
 			}
@@ -209,23 +216,24 @@ public class Combat implements Renderer<BufferedImage> {
 			helper = null;
 		}
 
-		ca.queue(m -> {
-			if (helper != null) {
-				Pages.buttonize(m, helper);
-			}
+		ca.addFile(IO.getBytes(render(game.getLocale()), "png"), "cards.png")
+				.queue(m -> {
+					if (helper != null) {
+						Pages.buttonize(m, helper);
+					}
 
-			Pair<String, String> previous = game.getMessage();
-			if (previous != null) {
-				GuildMessageChannel channel = Main.getApp().getMessageChannelById(previous.getFirst());
-				if (channel != null) {
-					channel.retrieveMessageById(previous.getSecond())
-							.flatMap(Objects::nonNull, Message::delete)
-							.queue(null, Utils::doNothing);
-				}
-			}
+					Pair<String, String> previous = game.getMessage();
+					if (previous != null) {
+						GuildMessageChannel channel = Main.getApp().getMessageChannelById(previous.getFirst());
+						if (channel != null) {
+							channel.retrieveMessageById(previous.getSecond())
+									.flatMap(Objects::nonNull, Message::delete)
+									.queue(null, Utils::doNothing);
+						}
+					}
 
-			game.setMessage(new Pair<>(m.getChannel().getId(), m.getId()));
-		});
+					game.setMessage(new Pair<>(m.getChannel().getId(), m.getId()));
+				});
 
 		return lock;
 	}
