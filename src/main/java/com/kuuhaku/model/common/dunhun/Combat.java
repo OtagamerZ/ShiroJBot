@@ -88,7 +88,8 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public MessageEmbed getEmbed() {
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setDescription(lastAction);
 
 		String title = locale.get("str/hunters");
 		XStringBuilder sb = new XStringBuilder();
