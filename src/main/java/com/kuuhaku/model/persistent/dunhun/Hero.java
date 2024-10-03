@@ -220,7 +220,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	public Senshi asSenshi(I18N locale) {
 		if (senshiCache != null) return senshiCache;
 
-		Senshi s = new Senshi(id, stats.getRace());
+		Senshi s = new Senshi(id, getName(), stats.getRace());
 		CardAttributes base = s.getBase();
 
 		int dmg = 100;

@@ -31,7 +31,6 @@ import jakarta.persistence.*;
 import okio.Buffer;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
@@ -71,9 +70,9 @@ public class Card extends DAO<Card> implements Serializable {
 	public Card() {
 	}
 
-	public Card(String id) {
+	public Card(String id, String name) {
 		this.id = "H:" + id;
-		this.name = WordUtils.capitalizeFully(id.replace("_", " "));
+		this.name = name;
 		this.anime = DAO.find(Anime.class, "NO_SYNC");
 		this.rarity = Rarity.HERO;
 	}

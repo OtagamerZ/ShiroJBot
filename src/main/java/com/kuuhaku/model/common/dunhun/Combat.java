@@ -133,12 +133,15 @@ public class Combat implements Renderer<BufferedImage> {
 					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 					.setCancellable(false)
 					.addAction(Utils.parseEmoji("🗡"), w -> {
+						System.out.println("a");
 						lock.complete(null);
 					})
 					.addAction(Utils.parseEmoji("🛡"), w -> {
+						System.out.println("b");
 						lock.complete(null);
 					})
 					.addAction(Utils.parseEmoji("💨"), w -> {
+						System.out.println("c");
 						lock.complete(null);
 					});
 
