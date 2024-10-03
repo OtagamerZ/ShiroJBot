@@ -199,6 +199,7 @@ public class Monster extends DAO<Monster> implements Actor {
 		Senshi s = new Senshi(id, getName(locale), stats.getRace());
 		CardAttributes base = s.getBase();
 
+		modifiers.reset();
 		for (Affix a : affixes) {
 			if (a == null) continue;
 

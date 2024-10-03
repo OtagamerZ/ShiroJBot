@@ -236,6 +236,14 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public void load(I18N locale, Senshi senshi) {
+		load(locale, owner, senshi);
+	}
+
+	public void load(I18N locale, Hero owner) {
+		load(locale, owner, owner.asSenshi(locale));
+	}
+
+	public void load(I18N locale, Hero owner, Senshi senshi) {
 		modifiers.reset();
 
 		for (GearAffix ga : getAllAffixes()) {
@@ -245,7 +253,7 @@ public class Gear extends DAO<Gear> {
 						"locale", locale,
 						"gear", this,
 						"hero", owner,
-						"self", senshi,
+						"self", owner.asSenshi(locale),
 						"values", ga.getValues(locale),
 						"grant", Utils.getOr(Utils.extract(ga.getDescription(locale), "\"(.+?)\"", 1), "")
 				));

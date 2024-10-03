@@ -151,7 +151,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public int getMaxAp() {
-		return Calc.clamp(1 + getModifiers().getMaxAp() + stats.getLevel() / 5, 0, 5 + getAttributes().dex() / 10);
+		return Calc.clamp(1 + modifiers.getMaxAp() + stats.getLevel() / 5, 1, 5 + getAttributes().dex() / 10);
 	}
 
 	public Attributes getAttributes() {
@@ -220,15 +220,16 @@ public class Hero extends DAO<Hero> implements Actor {
 	public Senshi asSenshi(I18N locale) {
 		if (senshiCache != null) return senshiCache;
 
-		Senshi s = new Senshi(id, getName(), stats.getRace());
-		CardAttributes base = s.getBase();
+		senshiCache = new Senshi(id, getName(), stats.getRace());
+		CardAttributes base = senshiCache.getBase();
 
+		modifiers.reset();
 		int dmg = 100;
 		int def = 100;
 		for (Gear g : getEquipment()) {
 			if (g == null) continue;
 
-			g.load(locale, s);
+			g.load(locale, this);
 			dmg += g.getDmg();
 			def += g.getDfs();
 		}
@@ -239,14 +240,14 @@ public class Hero extends DAO<Hero> implements Actor {
 		base.setDodge(Math.max(0, a.dex() / 2 - a.vit() / 5));
 		base.setParry(Math.max(0, a.dex() / 5));
 
-		s.getStats().getPower().set(0.05 * a.wis());
+		senshiCache.getStats().getPower().set(0.05 * a.wis());
 
 		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750);
 		base.setSacrifices((base.getAtk() + base.getDfs()) / 3000);
 
 		base.getTags().add("HERO");
 
-		return senshiCache = s;
+		return senshiCache;
 	}
 
 	@Override
