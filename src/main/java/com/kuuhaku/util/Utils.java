@@ -1345,6 +1345,6 @@ public abstract class Utils {
 	}
 
 	public static String fancyNumber(int n) {
-		return n + "⃣";
+		return new String(new char[]{(char) (0x30 + n), 0xFE0F, 0x20E3});
 	}
 }

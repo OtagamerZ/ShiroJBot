@@ -167,10 +167,12 @@ public class Combat implements Renderer<BufferedImage> {
 						.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 						.setCancellable(false);
 
-				helper.addAction(Utils.parseEmoji("🗡"), w -> {
-							addSelector(w.getMessage(), helper, defenders, t -> attack(h, t));
-							lock.complete(null);
-						})
+				helper.addAction(Utils.parseEmoji("🗡"),
+								w -> addSelector(w.getMessage(), helper, defenders, t -> {
+									attack(h, t);
+									lock.complete(null);
+								})
+						)
 						.addAction(Utils.parseEmoji("🛡"), w -> {
 							h.asSenshi(locale).setDefending(true);
 							lastAction = locale.get("str/actor_defend", h.getName());
@@ -253,7 +255,8 @@ public class Combat implements Renderer<BufferedImage> {
 		List<LayoutComponent> rows = helper.getComponents(act);
 
 		int idx = 0;
-		loop: for (LayoutComponent row : rows) {
+		loop:
+		for (LayoutComponent row : rows) {
 			if (row instanceof ActionRow ar) {
 				List<ItemComponent> items = ar.getComponents();
 				for (int i = 0, sz = items.size(); i < sz; i++, idx++) {
