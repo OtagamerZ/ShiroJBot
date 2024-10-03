@@ -151,6 +151,7 @@ public class Combat implements Renderer<BufferedImage> {
 			else if (!act.asSenshi(locale).isAvailable()) continue;
 
 			try {
+				act.modAp(act.getMaxAp());
 				while (act.getAp() > 0) {
 					reload(true).get();
 				}
@@ -172,7 +173,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 		Actor curr = turns.get();
 		curr.asSenshi(locale).setDefending(false);
-		curr.modAp(curr.getMaxAp());
 
 		ButtonizeHelper helper;
 		if (execute) {
