@@ -22,6 +22,11 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.ItemComponent;
+import net.dv8tion.jda.api.interactions.components.LayoutComponent;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -239,9 +244,27 @@ public class Combat implements Renderer<BufferedImage> {
 			helper.addAction(Utils.fancyNumber(i + 1), w -> action.accept(tgt));
 		}
 
-		helper.addAction(Utils.parseEmoji("↩"),
-						w -> root.apply(msg.editMessageComponents()).queue(s -> Pages.buttonize(s, root))
-				)
-				.apply(msg.editMessageComponents()).queue(s -> Pages.buttonize(s, helper));
+		helper.addAction(
+				Utils.parseEmoji("↩"),
+				w -> root.apply(msg.editMessageComponents()).queue(s -> Pages.buttonize(s, root))
+		);
+
+		MessageEditAction act = msg.editMessageComponents();
+		List<LayoutComponent> rows = helper.getComponents(act);
+
+		int idx = 0;
+		for (LayoutComponent row : rows) {
+			if (row instanceof ActionRow ar) {
+				List<ItemComponent> items = ar.getComponents();
+				for (int i = 0, sz = items.size(); i < sz; i++, idx++) {
+					ItemComponent item = items.get(i);
+					if (item instanceof Button b && targets.get(idx).getHp() <= 0) {
+						items.set(i, b.asDisabled());
+					}
+				}
+			}
+		}
+
+		act.setComponents(rows).queue(s -> Pages.buttonize(s, helper));
 	}
 }
