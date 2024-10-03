@@ -146,6 +146,8 @@ public class Combat implements Renderer<BufferedImage> {
 				.addFile(IO.getBytes(render(game.getLocale()), "png"), "cards.png");
 
 		Actor curr = turns.get();
+		System.out.println(curr.getName(locale) + " turn");
+
 		ButtonizeHelper helper;
 		if (curr instanceof Hero h) {
 			h.asSenshi(locale).setDefending(false);
@@ -159,6 +161,8 @@ public class Combat implements Renderer<BufferedImage> {
 					})
 					.addAction(Utils.parseEmoji("🛡"), w -> {
 						h.asSenshi(locale).setDefending(true);
+						lastAction = locale.get("str/actor_defend", h.getName());
+
 						lock.complete(null);
 					})
 					.addAction(Utils.parseEmoji("💨"), w -> {
@@ -171,6 +175,8 @@ public class Combat implements Renderer<BufferedImage> {
 			helper = null;
 
 			exec.schedule(() -> {
+				System.out.println("sched");
+
 				attack(curr, Utils.getRandomEntry(hunters));
 				lock.complete(null);
 			}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
@@ -209,7 +215,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		defender.modHp(-dmg);
-		lastAction = locale.get("str/actor_combat", attacker, defender, dmg);
+		lastAction = locale.get("str/actor_combat", attacker.getName(locale), defender.getName(locale), dmg);
 
 		return dmg;
 	}
