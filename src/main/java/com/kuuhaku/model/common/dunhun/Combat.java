@@ -253,10 +253,12 @@ public class Combat implements Renderer<BufferedImage> {
 		List<LayoutComponent> rows = helper.getComponents(act);
 
 		int idx = 0;
-		for (LayoutComponent row : rows) {
+		loop: for (LayoutComponent row : rows) {
 			if (row instanceof ActionRow ar) {
 				List<ItemComponent> items = ar.getComponents();
 				for (int i = 0, sz = items.size(); i < sz; i++, idx++) {
+					if (idx >= targets.size()) break loop;
+
 					ItemComponent item = items.get(i);
 					if (item instanceof Button b && targets.get(idx).getHp() <= 0) {
 						items.set(i, b.asDisabled());
