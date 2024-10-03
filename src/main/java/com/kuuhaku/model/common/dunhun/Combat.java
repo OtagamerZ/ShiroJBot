@@ -243,7 +243,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 		for (int i = 0; i < targets.size(); i++) {
 			Actor tgt = targets.get(i);
-			helper.addAction(Utils.fancyNumber(i + 1), w -> action.accept(tgt));
+			helper.addAction(
+					Utils.parseEmoji(Utils.fancyNumber(i + 1)),
+					w -> action.accept(tgt)
+			);
 		}
 
 		helper.addAction(
