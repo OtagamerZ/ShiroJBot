@@ -147,7 +147,7 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	@Override
 	public void modHp(int value) {
-		hp = Calc.clamp(getHp(), 0, getMaxHp());
+		hp = Calc.clamp(getHp() + value, 0, getMaxHp());
 	}
 
 	@Override
