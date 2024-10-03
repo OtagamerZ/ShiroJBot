@@ -1,5 +1,6 @@
 package com.kuuhaku.model.common.dunhun;
 
+import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Main;
 import com.kuuhaku.game.Dunhun;
@@ -128,8 +129,9 @@ public class Combat implements Renderer<BufferedImage> {
 		ClusterAction ca = game.getChannel().sendEmbed(getEmbed())
 				.addFile(IO.getBytes(render(game.getLocale()), "png"), "cards.png");
 
+		ButtonizeHelper helper;
 		if (turns.get() instanceof Hero h) {
-			ButtonizeHelper helper = new ButtonizeHelper(true)
+			helper = new ButtonizeHelper(true)
 					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 					.setCancellable(false)
 					.addAction(Utils.parseEmoji("🗡"), w -> {
@@ -146,9 +148,15 @@ public class Combat implements Renderer<BufferedImage> {
 					});
 
 			ca.apply(helper::apply);
+		} else {
+			helper = null;
 		}
 
 		ca.queue(m -> {
+			if (helper != null) {
+				Pages.buttonize(m, helper);
+			}
+
 			Pair<String, String> previous = game.getMessage();
 			if (previous != null) {
 				GuildMessageChannel channel = Main.getApp().getMessageChannelById(previous.getFirst());

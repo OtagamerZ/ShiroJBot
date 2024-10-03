@@ -1337,7 +1337,7 @@ public abstract class Utils {
 
 		int prog = val * length / max;
 		for (int i = 0; i < length; i++) {
-			if (i <= prog) sb.append(fillChar);
+			if (prog > i) sb.append(fillChar);
 			else sb.append(emptyChar);
 		}
 
