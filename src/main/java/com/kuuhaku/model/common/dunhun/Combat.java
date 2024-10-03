@@ -28,6 +28,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.*;
+import java.util.function.Consumer;
 
 public class Combat implements Renderer<BufferedImage> {
 	private final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
@@ -128,7 +129,8 @@ public class Combat implements Renderer<BufferedImage> {
 
 		for (Actor act : turns) {
 			if (game.isClosed()) break;
-			else if (hunters.stream().noneMatch(h -> h.getHp() > 0) || defenders.stream().noneMatch(h -> h.getHp() > 0)) break;
+			else if (hunters.stream().noneMatch(h -> h.getHp() > 0) || defenders.stream().noneMatch(h -> h.getHp() > 0))
+				break;
 			else if (!act.asSenshi(locale).isAvailable()) continue;
 
 			try {
@@ -158,9 +160,10 @@ public class Combat implements Renderer<BufferedImage> {
 			if (curr instanceof Hero h) {
 				helper = new ButtonizeHelper(true)
 						.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
-						.setCancellable(false)
-						.addAction(Utils.parseEmoji("🗡"), w -> {
-							attack(h, Utils.getRandomEntry(defenders));
+						.setCancellable(false);
+
+				helper.addAction(Utils.parseEmoji("🗡"), w -> {
+							addSelector(w.getMessage(), helper, defenders, t -> attack(h, t));
 							lock.complete(null);
 						})
 						.addAction(Utils.parseEmoji("🛡"), w -> {
@@ -223,5 +226,22 @@ public class Combat implements Renderer<BufferedImage> {
 		lastAction = locale.get("str/actor_combat", source.getName(locale), target.getName(locale), dmg);
 
 		return dmg;
+	}
+
+	public void addSelector(Message msg, ButtonizeHelper root, List<Actor> targets, Consumer<Actor> action) {
+		Hero h = (Hero) turns.get();
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
+				.setCancellable(false);
+
+		for (int i = 0; i < targets.size(); i++) {
+			Actor tgt = targets.get(i);
+			helper.addAction(Utils.fancyNumber(i + 1), w -> action.accept(tgt));
+		}
+
+		helper.addAction(Utils.parseEmoji("↩"),
+						w -> root.apply(msg.editMessageComponents()).queue(s -> Pages.buttonize(s, root))
+				)
+				.apply(msg.editMessageComponents()).queue(s -> Pages.buttonize(s, helper));
 	}
 }
