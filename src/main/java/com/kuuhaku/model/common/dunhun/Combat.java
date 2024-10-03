@@ -230,7 +230,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return lock;
 	}
 
-	private int attack(Actor source, Actor target) {
+	private void attack(Actor source, Actor target) {
 		int raw = source.asSenshi(locale).getDmg();
 		int def = target.asSenshi(locale).getDfs();
 
@@ -243,11 +243,23 @@ public class Combat implements Renderer<BufferedImage> {
 
 		target.modHp(-dmg);
 		lastAction = locale.get("str/actor_combat", source.getName(locale), target.getName(locale), dmg);
-
-		return dmg;
 	}
 
 	public void addSelector(Message msg, ButtonizeHelper root, List<Actor> targets, Consumer<Actor> action) {
+		Actor single = null;
+		for (Actor a : targets) {
+			if (single == null && a.getHp() > 0) single = a;
+			else if (a.getHp() > 0) {
+				single = null;
+				break;
+			}
+		}
+
+		if (single != null) {
+			action.accept(single);
+			return;
+		}
+
 		Hero h = (Hero) turns.get();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
