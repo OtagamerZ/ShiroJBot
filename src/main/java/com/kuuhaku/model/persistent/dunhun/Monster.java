@@ -242,7 +242,7 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	public static Monster getRandom() {
 		RandomList<String> rl = new RandomList<>();
-		List<Object[]> mons = DAO.queryAllUnmapped("SELECT id, weight FROM monster");
+		List<Object[]> mons = DAO.queryAllUnmapped("SELECT id, weight FROM monster WHERE weight > 0");
 
 		for (Object[] a : mons) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());

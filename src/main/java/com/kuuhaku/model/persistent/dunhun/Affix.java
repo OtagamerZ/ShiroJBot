@@ -137,6 +137,7 @@ public class Affix extends DAO<Affix> {
 				     , weight
 				FROM affix
 				WHERE type = ?1
+				  AND weight > 0
 				  AND req_tags <@ cast(?2 AS JSONB)
 				  AND NOT has(get_affix_family(cast(?3 AS JSONB)), get_affix_family(id))
 				  AND (affix_group IS NULL OR affix_group NOT IN ?4)
@@ -167,6 +168,7 @@ public class Affix extends DAO<Affix> {
 				     , weight
 				FROM affix
 				WHERE type = ?1
+				  AND weight > 0
 				  AND NOT has(get_affix_family(cast(?2 AS JSONB)), get_affix_family(id))
 				  AND (affix_group IS NULL OR affix_group NOT IN ?3)
 				""", type.name(), affixes.toString(), groups);

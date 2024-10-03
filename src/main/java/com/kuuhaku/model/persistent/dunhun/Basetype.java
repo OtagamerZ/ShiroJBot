@@ -97,6 +97,7 @@ public class Basetype extends DAO<Basetype> {
 				     , weight
 				FROM basetype
 				WHERE req_level BETWEEN ?1 AND ?2
+				  AND weight > 0
 				""", minLevel, maxLevel
 		);
 
