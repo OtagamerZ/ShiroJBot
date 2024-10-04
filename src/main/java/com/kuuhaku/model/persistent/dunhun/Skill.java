@@ -87,12 +87,13 @@ public class Skill extends DAO<Skill> {
 		}
 	}
 
-	public List<Actor> getTargets(Combat combat) {
+	public List<Actor> getTargets(Combat combat, Actor source) {
 		List<Actor> out = new ArrayList<>();
 
 		try {
 			Utils.exec(id, targeter, Map.of(
 					"combat", combat,
+					"actor", source,
 					"targets", out
 			));
 		} catch (Exception e) {

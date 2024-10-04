@@ -205,14 +205,18 @@ public class Combat implements Renderer<BufferedImage> {
 						.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 						.setCancellable(false);
 
-				helper.addAction(Utils.parseEmoji("🗡"),
-								w -> addSelector(w.getMessage(), helper, getTeam(h.getTeam().getOther()),
-										t -> lock.complete(() -> {
-											attack(h, t);
-											h.modAp(-1);
-										})
-								)
-						)
+				helper.addAction(Utils.parseEmoji("🗡"), w -> {
+							List<Actor> tgts = getTeam(h.getTeam().getOther()).stream()
+									.map(a -> a.hasFleed() || a.getHp() <= 0 ? null : a)
+									.toList();
+
+							addSelector(w.getMessage(), helper, tgts,
+									t -> lock.complete(() -> {
+										attack(h, t);
+										h.modAp(-1);
+									})
+							);
+						})
 						.addAction(Utils.parseEmoji("🛡"), w -> lock.complete(() -> {
 							h.asSenshi(locale).setDefending(true);
 							h.modAp(-1);
@@ -395,7 +399,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 					Actor tgt = targets.get(idx);
 					ItemComponent item = items.get(i);
-					if (item instanceof Button b && (tgt == null || tgt.hasFleed() || tgt.getHp() <= 0)) {
+					if (item instanceof Button b && tgt == null) {
 						items.set(i, b.asDisabled());
 					}
 				}
