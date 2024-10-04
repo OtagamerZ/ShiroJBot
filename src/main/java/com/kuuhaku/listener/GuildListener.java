@@ -481,8 +481,6 @@ public class GuildListener extends ListenerAdapter {
 
 				if (drop instanceof CandyDrop) {
 					eb.setThumbnail("https://cdn.pixabay.com/photo/2012/04/01/16/39/halloween-23439_1280.png");
-				} else {
-					eb.setThumbnail("https://static.vecteezy.com/system/resources/previews/026/750/022/original/treasure-chest-clipart-free-png.png");
 				}
 
 				chosen.sendMessageEmbeds(eb.build())
