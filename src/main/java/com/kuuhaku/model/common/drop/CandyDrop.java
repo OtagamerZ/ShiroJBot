@@ -37,7 +37,7 @@ public class CandyDrop extends Drop {
 
 	@Override
 	public String getContent(I18N locale) {
-		return locale.get("str/drop_content", item.getName(locale));
+		return locale.get("str/drop_content", amount + "x " + item.getName(locale));
 	}
 
 	@Override
