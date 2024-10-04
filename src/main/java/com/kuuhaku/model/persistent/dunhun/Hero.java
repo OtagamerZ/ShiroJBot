@@ -80,6 +80,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	private transient Team team;
 	private transient int hp = -1;
 	private transient int ap;
+	private transient boolean flee;
 
 	public Hero() {
 	}
@@ -149,6 +150,16 @@ public class Hero extends DAO<Hero> implements Actor {
 	@Override
 	public int getInitiative() {
 		return getAttributes().dex() / 3 + modifiers.getInitiative();
+	}
+
+	@Override
+	public boolean hasFleed() {
+		return flee;
+	}
+
+	@Override
+	public void setFleed(boolean flee) {
+		this.flee = flee;
 	}
 
 	@Override

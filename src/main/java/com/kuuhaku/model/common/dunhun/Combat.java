@@ -90,9 +90,9 @@ public class Combat implements Renderer<BufferedImage> {
 		for (List<Actor> acts : List.of(hunters, keepers)) {
 			for (Actor a : acts) {
 				BufferedImage card;
-				if (a.getHp() <= 0) {
+				if (a.getHp() <= 0 || a.hasFleed()) {
 					a.asSenshi(locale).setAvailable(false);
-					BufferedImage overlay = IO.getResourceAsImage("shoukan/states/dead.png");
+					BufferedImage overlay = IO.getResourceAsImage("shoukan/states/" + (a.getHp() <= 0 ? "dead" : "flee") + ".png");
 
 					card = a.render(locale);
 					Graph.overlay(card, overlay);
@@ -164,8 +164,8 @@ public class Combat implements Renderer<BufferedImage> {
 
 		for (Actor act : turns) {
 			if (game.isClosed()) break;
-			else if (hunters.stream().noneMatch(h -> h.getHp() > 0)) break;
-			else if (keepers.stream().noneMatch(h -> h.getHp() > 0)) break;
+			else if (hunters.stream().noneMatch(a -> !a.hasFleed() && a.getHp() > 0)) break;
+			else if (keepers.stream().noneMatch(a -> !a.hasFleed() && a.getHp() > 0)) break;
 			else if (!act.asSenshi(locale).isAvailable()) continue;
 
 			try {
@@ -217,7 +217,15 @@ public class Combat implements Renderer<BufferedImage> {
 							history.add(locale.get("str/actor_defend", h.getName()));
 						}))
 						.addAction(Utils.parseEmoji("💨"), w -> lock.complete(() -> {
-							System.out.println("c");
+							int chance = Math.min(100 - 20 * game.getTurn() + 5 * h.getAttributes().dex(), 100 - 2 * game.getTurn());
+
+							if (Calc.chance(chance)) {
+								h.setFleed(true);
+								history.add(locale.get("str/actor_flee", h.getName()));
+							} else {
+								history.add(locale.get("str/actor_flee_fail", h.getName(), chance));
+								h.modAp(-h.getAp());
+							}
 						}));
 
 				ca.apply(helper::apply);
@@ -225,7 +233,7 @@ public class Combat implements Renderer<BufferedImage> {
 				helper = null;
 
 				cpu.schedule(() -> {
-					attack(curr, Utils.getRandomEntry(getTeam(curr.getTeam().getOther())));
+					attack(curr, Utils.getRandomEntry(getActors(curr.getTeam().getOther())));
 					curr.modAp(-1);
 
 					lock.complete(null);
@@ -287,8 +295,8 @@ public class Combat implements Renderer<BufferedImage> {
 	public void addSelector(Message msg, ButtonizeHelper root, List<Actor> targets, Consumer<Actor> action) {
 		Actor single = null;
 		for (Actor a : targets) {
-			if (single == null && a.getHp() > 0) single = a;
-			else if (a.getHp() > 0) {
+			if (single == null && !a.hasFleed() && a.getHp() > 0) single = a;
+			else if (!a.hasFleed() && a.getHp() > 0) {
 				single = null;
 				break;
 			}
@@ -334,7 +342,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 					Actor tgt = targets.get(idx);
 					ItemComponent item = items.get(i);
-					if (item instanceof Button b && (tgt == null || tgt.getHp() <= 0)) {
+					if (item instanceof Button b && (tgt == null || tgt.hasFleed() || tgt.getHp() <= 0)) {
 						items.set(i, b.asDisabled());
 					}
 				}
@@ -351,6 +359,13 @@ public class Combat implements Renderer<BufferedImage> {
 	public List<Actor> getActors() {
 		return Stream.of(hunters, keepers)
 				.flatMap(List::stream)
+				.filter(a -> !a.hasFleed() && a.getHp() > 0)
+				.toList();
+	}
+
+	public List<Actor> getActors(Team team) {
+		return getTeam(team).stream()
+				.filter(a -> !a.hasFleed() && a.getHp() > 0)
 				.toList();
 	}
 

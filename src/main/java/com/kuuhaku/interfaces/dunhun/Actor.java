@@ -20,6 +20,8 @@ public interface Actor {
 	void modAp(int value);
 
 	int getInitiative();
+	boolean hasFleed();
+	void setFleed(boolean flee);
 
 	Senshi asSenshi(I18N locale);
 	BufferedImage render(I18N locale);

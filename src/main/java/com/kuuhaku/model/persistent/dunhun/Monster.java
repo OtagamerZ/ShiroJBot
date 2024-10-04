@@ -73,6 +73,7 @@ public class Monster extends DAO<Monster> implements Actor {
 	private transient Team team;
 	private transient int hp = -1;
 	private transient int ap;
+	private transient boolean flee;
 
 	public String getId() {
 		return id;
@@ -175,6 +176,16 @@ public class Monster extends DAO<Monster> implements Actor {
 	@Override
 	public int getInitiative() {
 		return 0;
+	}
+
+	@Override
+	public boolean hasFleed() {
+		return flee;
+	}
+
+	@Override
+	public void setFleed(boolean flee) {
+		this.flee = flee;
 	}
 
 	@Override
