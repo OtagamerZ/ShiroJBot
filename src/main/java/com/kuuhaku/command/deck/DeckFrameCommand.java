@@ -44,6 +44,7 @@ import net.dv8tion.jda.api.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -76,8 +77,10 @@ public class DeckFrameCommand implements Executable {
             List<Page> pages = new ArrayList<>();
             for (int i = 0; i < frames.length; i++) {
                 FrameSkin fc = frames[i];
+				List<Title> titles = fc.getTitles();
+				if (titles.stream().anyMatch(Objects::isNull)) continue;
+
                 if (!fc.canUse(acc)) {
-                    List<Title> titles = fc.getTitles();
                     String req = Utils.properlyJoin(locale.get("str/and")).apply(
                             titles.stream()
                                     .map(t -> "**`" + t.getInfo(locale).getName() + "`**")
