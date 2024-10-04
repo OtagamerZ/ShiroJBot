@@ -51,7 +51,7 @@ public class MonsterModifiers {
 	}
 
 	public double getAttackMult() {
-		return attackMult.get();
+		return 1 + attackMult.get();
 	}
 
 	public void addAttackMult(float mult) {
@@ -75,7 +75,7 @@ public class MonsterModifiers {
 	}
 
 	public double getDefenseMult() {
-		return defenseMult.get();
+		return 1 + defenseMult.get();
 	}
 
 	public void addDefenseMult(float mult) {
@@ -99,7 +99,7 @@ public class MonsterModifiers {
 	}
 
 	public double getHpMult() {
-		return hpMult.get();
+		return 1 + hpMult.get();
 	}
 
 	public void addHpMult(float mult) {
