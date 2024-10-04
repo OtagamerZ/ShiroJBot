@@ -74,7 +74,7 @@ public class StealCommand implements Executable {
 		int total = them.getItemCount("spooky_candy");
 		int stolen = Calc.rng(total / 5, total / 3);
 
-		if (them.consumeItem("spooky_candy", stolen)) {
+		if (stolen > 0 && them.consumeItem("spooky_candy", stolen)) {
 			acc.addItem("spooky_candy", stolen);
 			acc.setDynValue("last_steal", now.toString());
 
