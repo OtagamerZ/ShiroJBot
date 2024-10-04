@@ -31,7 +31,7 @@ public class SpookyGacha extends Gacha {
 				     , cast(x.weight + x.candies / x.mult AS INT) AS weight
 				FROM (
 				     SELECT c.id
-				          , get_weight(c.id, ?1)                                      AS weight
+				          , get_weight(c.id, ?1) AS weight
 				          , coalesce(cast(acc.inventory -> 'SPOOKY_CANDY' AS INT), 0) AS candies
 				          , CASE c.rarity
 				                WHEN 'EVOGEAR' THEN 4
@@ -39,10 +39,19 @@ public class SpookyGacha extends Gacha {
 				                ELSE 10 / get_rarity_index(c.rarity)
 				         END                                                          AS mult
 				     FROM card c
-				              INNER JOIN anime a ON a.id = c.anime_id
 				              INNER JOIN account acc ON acc.uid = ?1
-				     WHERE a.visible
-				       AND is_valid_rarity(c.rarity)
+				              LEFT JOIN anime a ON a.id = c.anime_id
+				              LEFT JOIN senshi s ON c.id = s.card_id
+				              LEFT JOIN evogear e ON c.id = e.card_id
+				              LEFT JOIN field f ON c.id = f.card_id
+				     WHERE is_valid_rarity(c.rarity)
+				       AND (
+				         (coalesce(a.visible, TRUE) = TRUE
+				             AND get_rarity_index(c.rarity) BETWEEN 3 AND 5
+				             AND NOT has(s.tags, 'FUSION'))
+				             OR e.tier > 2
+				             OR NOT f.effect
+				         )
 				     ) x
 				ORDER BY x.weight, x.id
 				""", u.getId()));
