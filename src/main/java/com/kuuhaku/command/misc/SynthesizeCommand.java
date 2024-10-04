@@ -233,7 +233,7 @@ public class SynthesizeCommand implements Executable {
 							}
 
 							if (lucky.get()) {
-								acc.consumeItem("CHROMATIC_ESSENCE");
+								acc.consumeItem("chromatic_essence");
 							}
 
 							if (Calc.chance(field)) {

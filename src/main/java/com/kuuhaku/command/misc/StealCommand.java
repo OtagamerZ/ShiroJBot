@@ -33,7 +33,7 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
 
-import java.time.LocalDate;
+import java.time.*;
 import java.util.Calendar;
 
 @Command(
@@ -56,9 +56,9 @@ public class StealCommand implements Executable {
 
 		Account acc = data.profile().getAccount();
 
-		LocalDate now = LocalDate.now();
-		LocalDate last = LocalDate.parse(acc.getDynValue("last_steal", LocalDate.ofEpochDay(0).toString()));
-		if (!last.isBefore(now)) {
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime last = LocalDateTime.parse(acc.getDynValue("last_steal", LocalDateTime.ofInstant(Instant.EPOCH, ZoneId.of("GMT-3")).toString()));
+		if (!last.isBefore(now.minusHours(6))) {
 			event.channel().sendMessage(locale.get("error/stole_recent")).queue();
 			return;
 		}
@@ -70,7 +70,7 @@ public class StealCommand implements Executable {
 		if (stolen > 0) {
 			int current = acc.getItemCount("spooky_candy");
 			if (them.consumeItem("hallowed_card") || Calc.chance(Math.min(Math.pow(current / 100d, 2), 70))) {
-				acc.consumeItem("SPOOKY_CANDY", current, true);
+				acc.consumeItem("spooky_candy", current, true);
 				acc.setDynValue("last_steal", now.toString());
 
 				event.channel().sendMessage(locale.get("str/steal_caught")).queue();
