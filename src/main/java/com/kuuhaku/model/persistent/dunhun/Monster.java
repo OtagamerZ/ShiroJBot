@@ -246,8 +246,8 @@ public class Monster extends DAO<Monster> implements Actor {
 			default -> 1;
 		};
 
-		base.setAtk((int) ((stats.getAttack() * modifiers.getAttack()) * mult));
-		base.setDfs((int) ((stats.getDefense() * modifiers.getDefense()) * mult));
+		base.setAtk((int) ((stats.getAttack() + modifiers.getAttack()) * modifiers.getAttackMult() * mult));
+		base.setDfs((int) ((stats.getDefense() + modifiers.getDefense()) * modifiers.getDefenseMult() * mult));
 		base.setDodge(stats.getDodge() + modifiers.getDodge());
 		base.setParry(stats.getParry() + modifiers.getParry());
 
