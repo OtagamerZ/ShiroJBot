@@ -88,7 +88,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 
 	public int getMaxCapacity() {
 		Account acc = getAccount();
-		int mult = 3 + acc.getItemCount("cap_boost");
+		int mult = 3 + acc.getItemCount("cap_boost") + acc.getItemCount("pumpkin_gummy");
 		int add = acc.getItemCount("extra_cap") * 10;
 		int rem = acc.getItemCount("leaver_penalty") * 10;
 

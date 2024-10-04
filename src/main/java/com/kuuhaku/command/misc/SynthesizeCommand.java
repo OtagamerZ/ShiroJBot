@@ -182,7 +182,7 @@ public class SynthesizeCommand implements Executable {
 						String id = btn.getId();
 						assert id != null;
 
-						if (acc.getItemCount("CHROMATIC_ESSENCE") == 0) {
+						if (acc.getItemCount("chromatic_essence") == 0) {
 							event.channel().sendMessage(locale.get("error/no_chromatic")).queue();
 							return;
 						}

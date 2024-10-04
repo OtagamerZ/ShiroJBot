@@ -63,7 +63,7 @@ public class StealCommand implements Executable {
 			return;
 		}
 
-		int current = acc.getItemCount("SPOOKY_CANDY");
+		int current = acc.getItemCount("spooky_candy");
 		if (Calc.chance(Math.min(Math.pow(current / 100d, 2), 70))) {
 			acc.consumeItem("SPOOKY_CANDY", current, true);
 			event.channel().sendMessage(locale.get("str/steal_caught")).queue();
@@ -71,11 +71,11 @@ public class StealCommand implements Executable {
 		}
 
 		Account them = DAO.find(Account.class, target.getId());
-		int total = them.getItemCount("SPOOKY_CANDY");
+		int total = them.getItemCount("spooky_candy");
 		int stolen = Calc.rng(total / 5, total / 3);
 
-		if (them.consumeItem("SPOOKY_CANDY", stolen)) {
-			acc.addItem("SPOOKY_CANDY", stolen);
+		if (them.consumeItem("spooky_candy", stolen)) {
+			acc.addItem("spooky_candy", stolen);
 			acc.setDynValue("last_steal", now.toString());
 
 			event.channel().sendMessage(locale.get("success/candy_stolen", stolen, target.getAsMention())).queue();
