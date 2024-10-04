@@ -66,6 +66,8 @@ public class StealCommand implements Executable {
 		int current = acc.getItemCount("spooky_candy");
 		if (Calc.chance(Math.min(Math.pow(current / 100d, 2), 70))) {
 			acc.consumeItem("SPOOKY_CANDY", current, true);
+			acc.setDynValue("last_steal", now.toString());
+
 			event.channel().sendMessage(locale.get("str/steal_caught")).queue();
 			return;
 		}
