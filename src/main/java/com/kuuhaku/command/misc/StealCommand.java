@@ -63,26 +63,29 @@ public class StealCommand implements Executable {
 			return;
 		}
 
-		int current = acc.getItemCount("spooky_candy");
-		if (Calc.chance(Math.min(Math.pow(current / 100d, 2), 70))) {
-			acc.consumeItem("SPOOKY_CANDY", current, true);
-			acc.setDynValue("last_steal", now.toString());
-
-			event.channel().sendMessage(locale.get("str/steal_caught")).queue();
-			return;
-		}
-
 		Account them = DAO.find(Account.class, target.getId());
 		int total = them.getItemCount("spooky_candy");
 		int stolen = Calc.rng(total / 5, total / 3);
 
-		if (stolen > 0 && them.consumeItem("spooky_candy", stolen)) {
-			acc.addItem("spooky_candy", stolen);
-			acc.setDynValue("last_steal", now.toString());
+		if (stolen > 0) {
+			int current = acc.getItemCount("spooky_candy");
+			if (them.consumeItem("hallowed_card") || Calc.chance(Math.min(Math.pow(current / 100d, 2), 70))) {
+				acc.consumeItem("SPOOKY_CANDY", current, true);
+				acc.setDynValue("last_steal", now.toString());
 
-			event.channel().sendMessage(locale.get("success/candy_stolen", stolen, target.getAsMention())).queue();
-		} else {
-			event.channel().sendMessage(locale.get("error/could_not_steal")).queue();
+				event.channel().sendMessage(locale.get("str/steal_caught")).queue();
+				return;
+			}
+
+			if (them.consumeItem("spooky_candy", stolen)) {
+				acc.addItem("spooky_candy", stolen);
+				acc.setDynValue("last_steal", now.toString());
+
+				event.channel().sendMessage(locale.get("success/candy_stolen", stolen, target.getAsMention())).queue();
+				return;
+			}
 		}
+
+		event.channel().sendMessage(locale.get("error/could_not_steal")).queue();
 	}
 }
