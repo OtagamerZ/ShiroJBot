@@ -12,8 +12,10 @@ import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
+import com.kuuhaku.model.persistent.dunhun.Affix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Monster;
+import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.ClusterAction;
 import com.kuuhaku.util.Calc;
@@ -29,6 +31,7 @@ import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.LayoutComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 
 import java.awt.*;
@@ -227,9 +230,58 @@ public class Combat implements Renderer<BufferedImage> {
 							}
 
 							h.modAp(-h.getAp());
-						}));
+						}))
+						.addAction(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
+							EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-				ca.apply(helper::apply);
+							for (Actor a : getActors()) {
+								if (!(a instanceof Monster m)) continue;
+
+								XStringBuilder sb = new XStringBuilder();
+
+								Set<Affix> affs = m.getAffixes();
+								if (!affs.isEmpty()) {
+									sb.appendNewLine("**" + locale.get("str/affixes") + "**");
+									for (Affix aff : affs) {
+										sb.appendNewLine("- " + aff.getInfo(locale).getDescription());
+									}
+								}
+
+								sb.nextLine();
+
+								List<Skill> skills = m.getSkills();
+								if (!skills.isEmpty()) {
+									sb.appendNewLine("**" + locale.get("str/skills") + "**");
+									for (Skill skill : skills) {
+										sb.appendNewLine("- " + skill.getInfo(locale).getName());
+										sb.appendNewLine("-# " + skill.getInfo(locale).getDescription());
+										sb.nextLine();
+									}
+								}
+
+								eb.addField(a.getName(locale), sb.toString(), true);
+							}
+
+							Objects.requireNonNull(w.getHook())
+									.setEphemeral(true)
+									.sendMessageEmbeds(eb.build())
+									.queue();
+						});
+
+				ca.apply(a -> {
+					List<Skill> skills = h.getSkills();
+					if (!skills.isEmpty()) {
+						StringSelectMenu.Builder b = StringSelectMenu.create("skills");
+
+						for (Skill s : skills) {
+							b.addOption(s.getInfo(locale).getName(), s.getId(), s.getInfo(locale).getDescription());
+						}
+
+						return helper.apply(a).addActionRow(b.build());
+					}
+
+					return helper.apply(a);
+				});
 			} else {
 				helper = null;
 
