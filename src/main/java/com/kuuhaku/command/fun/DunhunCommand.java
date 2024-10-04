@@ -110,7 +110,6 @@ public class DunhunCommand implements Executable {
 						Dunhun dun = new Dunhun(locale, new Dungeon(),
 								Stream.concat(Stream.of(event.user()), others.stream())
 										.map(User::getId)
-										.sorted(Collections.reverseOrder())
 										.toArray(String[]::new)
 						);
 						dun.start(event.guild(), event.channel())

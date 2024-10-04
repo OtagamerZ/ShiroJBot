@@ -40,7 +40,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class Combat implements Renderer<BufferedImage> {
-	private final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+	private final ExecutorService exec = Executors.newSingleThreadExecutor();
+	private final ScheduledExecutorService cpu = Executors.newSingleThreadScheduledExecutor();
 	private final long seed = ThreadLocalRandom.current().nextLong();
 
 	private final Dunhun game;
@@ -49,6 +50,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final List<Actor> defenders;
 	private final InfiniteList<Actor> turns = new InfiniteList<>();
 
+	private CompletableFuture<Void> lock;
 	private String lastAction = "";
 
 	public Combat(Dunhun game) {
@@ -68,7 +70,7 @@ public class Combat implements Renderer<BufferedImage> {
 			acts.forEach(a -> a.asSenshi(locale));
 		}
 
-		process();
+		CompletableFuture.runAsync(this::process, exec);
 	}
 
 	@Override
@@ -179,7 +181,7 @@ public class Combat implements Renderer<BufferedImage> {
 	public CompletableFuture<Void> reload(boolean execute) {
 		game.resetTimer();
 
-		CompletableFuture<Void> lock = new CompletableFuture<>();
+		lock = new CompletableFuture<>();
 		ClusterAction ca = game.getChannel().sendEmbed(getEmbed());
 
 		Actor curr = turns.get();
@@ -214,7 +216,7 @@ public class Combat implements Renderer<BufferedImage> {
 			} else {
 				helper = null;
 
-				exec.schedule(() -> {
+				cpu.schedule(() -> {
 					attack(curr, Utils.getRandomEntry(hunters));
 					curr.modAp(-1);
 

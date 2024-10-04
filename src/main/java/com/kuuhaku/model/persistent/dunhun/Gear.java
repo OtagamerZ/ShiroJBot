@@ -116,7 +116,7 @@ public class Gear extends DAO<Gear> {
 			else if (a.getType() == AffixType.MON_SUFFIX) suf++;
 		}
 
-		if (pre > 1 || suf > 1) return RarityClass.RARE;
+		if (pre > 1 || suf > 1 || pre + suf > 2) return RarityClass.RARE;
 		else if (pre + suf > 1) return RarityClass.MAGIC;
 		else return RarityClass.NORMAL;
 	}
