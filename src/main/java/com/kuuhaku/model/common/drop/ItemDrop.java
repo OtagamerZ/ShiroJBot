@@ -31,9 +31,9 @@ public class ItemDrop extends Drop {
 	public ItemDrop(Rarity rarity) {
 		super(rarity);
 		item = Utils.getRandomEntry(getRng(), switch (rarity) {
-			case COMMON, UNCOMMON -> DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.effect IS NOT NULL AND i.currency = 'CR'");
-			case RARE, EPIC -> DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.currency = 'CR'");
-			default -> DAO.findAll(UserItem.class);
+			case COMMON, UNCOMMON -> DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.accountBound = FALSE AND i.effect IS NOT NULL AND i.currency = 'CR'");
+			case RARE, EPIC -> DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.accountBound = FALSE AND i.currency = 'CR'");
+			default -> DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.accountBound = FALSE");
 		});
 	}
 
