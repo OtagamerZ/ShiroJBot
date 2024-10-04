@@ -78,7 +78,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@PlayerAction("reload")
 	private void reload(JSONObject args) {
-		if (combat != null) combat.reload(true);
+		if (combat != null) combat.getLock().complete(null);
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
