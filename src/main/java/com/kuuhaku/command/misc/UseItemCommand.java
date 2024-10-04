@@ -77,7 +77,7 @@ public class UseItemCommand implements Executable {
 								params = SyntaxParser.parse(locale, new String[]{item.getSyntax()}, null, false, args.getString("args"));
 							}
 
-							item.execute(locale, event.channel(), acc.refresh(), params);
+							item.execute(locale, event.channel(), data.profile().refresh(), params);
 						} catch (PassiveItemException e) {
 							event.channel().sendMessage(locale.get("error/item_not_usable")).queue();
 							return true;
