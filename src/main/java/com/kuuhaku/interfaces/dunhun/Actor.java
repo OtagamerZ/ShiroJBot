@@ -1,6 +1,7 @@
 package com.kuuhaku.interfaces.dunhun;
 
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
@@ -24,4 +25,7 @@ public interface Actor {
 	BufferedImage render(I18N locale);
 
 	List<Skill> getSkills();
+
+	Team getTeam();
+	void setTeam(Team team);
 }

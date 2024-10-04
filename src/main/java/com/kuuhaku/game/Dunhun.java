@@ -52,7 +52,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			heroes.put(p, h);
 		}
 
-		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/dungeon_leave"
+		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, players.length > 1 ? "str/dungeon_leave_multi" : "str/dungeon_leave"
 				, Utils.properlyJoin(locale.get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
 				, getTurn()
 		), 1 /* TODO Revert to 5 */, TimeUnit.MINUTES);

@@ -18,100 +18,174 @@
 
 package com.kuuhaku.model.common.dunhun;
 
-public class MonsterModifiers {
-	private int attack;
-	private float attackMult = 1;
-	private int defense;
-	private float defenseMult = 1;
-	private int maxHp;
-	private float hpMult = 1;
-	private int maxAp;
-	private int dodge;
-	private int parry;
-	private int initiative;
+import com.kuuhaku.model.common.shoukan.CumValue;
+import com.kuuhaku.model.common.shoukan.ValueMod;
 
-	public float getAttack() {
-		return attack;
+import java.lang.reflect.Field;
+import java.util.function.Predicate;
+
+public class MonsterModifiers {
+	private final CumValue attack = CumValue.flat();
+	private final CumValue attackMult = CumValue.flat();
+	private final CumValue defense = CumValue.flat();
+	private final CumValue defenseMult = CumValue.flat();
+	private final CumValue maxHp = CumValue.flat();
+	private final CumValue hpMult = CumValue.flat();
+	private final CumValue maxAp = CumValue.flat();
+	private final CumValue dodge = CumValue.flat();
+	private final CumValue parry = CumValue.flat();
+	private final CumValue initiative = CumValue.flat();
+
+	private transient Field[] fieldCache = null;
+
+	public int getAttack() {
+		return (int) attack.get();
 	}
 
 	public void addAttack(int value) {
-		attack += value;
+		addAttack(value, -1);
 	}
 
-	public float getAttackMult() {
-		return attackMult;
+	public void addAttack(int value, int expiration) {
+		attack.set(null, value, expiration);
+	}
+
+	public double getAttackMult() {
+		return attackMult.get();
 	}
 
 	public void addAttackMult(float mult) {
-		attackMult += mult;
+		addAttackMult(mult, -1);
 	}
 
-	public float getDefense() {
-		return defense;
+	public void addAttackMult(float mult, int expiration) {
+		attackMult.set(null, mult, expiration);
+	}
+
+	public int getDefense() {
+		return (int) defense.get();
 	}
 
 	public void addDefense(int value) {
-		defense += value;
+		addDefense(value, -1);
 	}
 
-	public float getDefenseMult() {
-		return defenseMult;
+	public void addDefense(int value, int expiration) {
+		defense.set(null, value, expiration);
+	}
+
+	public double getDefenseMult() {
+		return defenseMult.get();
 	}
 
 	public void addDefenseMult(float mult) {
-		defenseMult += mult;
+		addDefenseMult(mult, -1);
+	}
+
+	public void addDefenseMult(float mult, int expiration) {
+		defenseMult.set(null, mult, expiration);
 	}
 
 	public int getMaxHp() {
-		return maxHp;
+		return (int) maxHp.get();
 	}
 
 	public void addMaxHp(int value) {
-		maxHp += value;
+		addMaxHp(value, -1);
 	}
 
-	public float getHpMult() {
-		return hpMult;
+	public void addMaxHp(int value, int expiration) {
+		maxHp.set(null, value, expiration);
+	}
+
+	public double getHpMult() {
+		return hpMult.get();
 	}
 
 	public void addHpMult(float mult) {
-		hpMult += mult;
+		addHpMult(mult, -1);
+	}
+
+	public void addHpMult(float mult, int expiration) {
+		hpMult.set(null, mult, expiration);
 	}
 
 	public int getMaxAp() {
-		return maxAp;
+		return (int) maxAp.get();
 	}
 
 	public void addMaxAp(int value) {
-		maxAp += value;
+		addMaxAp(value, -1);
+	}
+
+	public void addMaxAp(int value, int expiration) {
+		maxAp.set(null, value, expiration);
 	}
 
 	public int getDodge() {
-		return dodge;
+		return (int) dodge.get();
 	}
 
 	public void addDodge(int value) {
-		dodge += value;
+		addDodge(value, -1);
+	}
+
+	public void addDodge(int value, int expiration) {
+		dodge.set(null, value, expiration);
 	}
 
 	public int getParry() {
-		return parry;
+		return (int) parry.get();
 	}
 
 	public void addParry(int value) {
-		parry += value;
+		addParry(value, -1);
+	}
+
+	public void addParry(int value, int expiration) {
+		parry.set(null, value, expiration);
 	}
 
 	public int getInitiative() {
-		return initiative;
+		return (int) initiative.get();
 	}
 
 	public void addInitiative(int value) {
-		initiative += value;
+		addInitiative(value, -1);
 	}
 
-	public void reset() {
-		attack = defense = maxHp = maxAp = dodge = parry = initiative = 0;
-		attackMult = defenseMult = hpMult = 1;
+	public void addInitiative(int value, int expiration) {
+		initiative.set(null, value, expiration);
+	}
+
+	public void expireMods() {
+		Predicate<ValueMod> check = mod -> {
+			if (mod.getExpiration() > 0) {
+				mod.decExpiration();
+			}
+
+			return mod.isExpired();
+		};
+
+		removeIf(check);
+	}
+
+	public void clear() {
+		removeIf(o -> true);
+	}
+
+	public void removeIf(Predicate<ValueMod> check) {
+		if (fieldCache == null) {
+			fieldCache = getClass().getDeclaredFields();
+		}
+
+		for (Field f : fieldCache) {
+			try {
+				if (f.get(this) instanceof CumValue cv) {
+					cv.values().removeIf(check);
+				}
+			} catch (IllegalAccessException ignore) {
+			}
+		}
 	}
 }

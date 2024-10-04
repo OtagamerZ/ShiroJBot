@@ -24,6 +24,7 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.model.common.dunhun.HeroModifiers;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
@@ -76,6 +77,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	private transient List<Skill> skillCache;
 	private transient Senshi senshiCache;
 	private transient Deck deck;
+	private transient Team team;
 	private transient int hp = -1;
 	private transient int ap;
 
@@ -217,13 +219,23 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	@Override
+	public Team getTeam() {
+		return team;
+	}
+
+	@Override
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
+	@Override
 	public Senshi asSenshi(I18N locale) {
 		if (senshiCache != null) return senshiCache;
 
 		senshiCache = new Senshi(id, getName(), stats.getRace());
 		CardAttributes base = senshiCache.getBase();
 
-		modifiers.reset();
+		modifiers.clear();
 		int dmg = 100;
 		int def = 100;
 		for (Gear g : getEquipment()) {

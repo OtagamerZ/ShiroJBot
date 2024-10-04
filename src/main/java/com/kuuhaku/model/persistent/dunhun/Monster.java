@@ -26,6 +26,7 @@ import com.kuuhaku.model.common.dunhun.MonsterModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
+import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
@@ -69,6 +70,7 @@ public class Monster extends DAO<Monster> implements Actor {
 	private transient String nameCache;
 	private transient List<Skill> skillCache;
 	private transient Senshi senshiCache;
+	private transient Team team;
 	private transient int hp = -1;
 	private transient int ap;
 
@@ -208,13 +210,23 @@ public class Monster extends DAO<Monster> implements Actor {
 	}
 
 	@Override
+	public Team getTeam() {
+		return team;
+	}
+
+	@Override
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
+	@Override
 	public Senshi asSenshi(I18N locale) {
 		if (senshiCache != null) return senshiCache;
 
 		Senshi s = new Senshi(id, getName(locale), stats.getRace());
 		CardAttributes base = s.getBase();
 
-		modifiers.reset();
+		modifiers.clear();
 		for (Affix a : affixes) {
 			if (a == null) continue;
 
@@ -234,10 +246,10 @@ public class Monster extends DAO<Monster> implements Actor {
 			default -> 1;
 		};
 
-		base.setAtk((int) (stats.getAttack() * mult));
-		base.setDfs((int) (stats.getDefense() * mult));
-		base.setDodge(stats.getDodge());
-		base.setParry(stats.getParry());
+		base.setAtk((int) ((stats.getAttack() * modifiers.getAttack()) * mult));
+		base.setDfs((int) ((stats.getDefense() * modifiers.getDefense()) * mult));
+		base.setDodge(stats.getDodge() + modifiers.getDodge());
+		base.setParry(stats.getParry() + modifiers.getParry());
 
 		base.getTags().add("MONSTER");
 

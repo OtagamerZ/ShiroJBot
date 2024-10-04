@@ -18,17 +18,19 @@
 
 package com.kuuhaku.model.common.dunhun;
 
+import com.kuuhaku.model.common.shoukan.CumValue;
+import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.records.Attributes;
 import com.kuuhaku.util.Bit32;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.util.function.Predicate;
 
 public class HeroModifiers {
-	private int maxHp;
-	private int maxAp;
-	private int initiative;
-	private int attributes;
+	private final CumValue maxHp = CumValue.flat();
+	private final CumValue maxAp = CumValue.flat();
+	private final CumValue initiative = CumValue.flat();
+	private final CumValue attributes = CumValue.flat();
 	/*
 	0xFF FF FF FF
 	  └┤ └┤ └┤ └┴ strength
@@ -37,80 +39,136 @@ public class HeroModifiers {
 	   └ vitality
 	 */
 
-	private final Set<String> skills = new HashSet<>();
-	private final Set<String> effects = new HashSet<>();
+	private transient Field[] fieldCache = null;
 
 	public int getMaxHp() {
-		return maxHp;
+		return (int) maxHp.get();
 	}
 
 	public void addMaxHp(int value) {
-		maxHp += value;
+		addMaxHp(value, -1);
+	}
+
+	public void addMaxHp(int value, int expiration) {
+		maxHp.set(null, value, expiration);
 	}
 
 	public int getMaxAp() {
-		return maxAp;
+		return (int) maxAp.get();
 	}
 
 	public void addMaxAp(int value) {
-		maxAp += value;
+		addMaxAp(value, -1);
+	}
+
+	public void addMaxAp(int value, int expiration) {
+		maxAp.set(null, value, expiration);
 	}
 
 	public int getInitiative() {
-		return initiative;
+		return (int) initiative.get();
 	}
 
 	public void addInitiative(int value) {
-		initiative += value;
+		addInitiative(value, -1);
+	}
+
+	public void addInitiative(int value, int expiration) {
+		initiative.set(null, value, expiration);
 	}
 
 	public int getStrength() {
-		return Bit32.get(attributes, 0, 8);
+		return Bit32.get((int) attributes.get(), 0, 8);
 	}
 
 	public void addStrength(int value) {
-		attributes = Bit32.set(attributes, 0, getStrength() + value, 8);
+		addStrength(value, -1);
+	}
+
+	public void addStrength(int value, int expiration) {
+		attributes.set(null,
+				Bit32.set((int) attributes.get(), 0, getStrength() + value, 8),
+				expiration
+		);
 	}
 
 	public int getDexterity() {
-		return Bit32.get(attributes, 0, 8);
+		return Bit32.get((int) attributes.get(), 0, 8);
 	}
 
 	public void addDexterity(int value) {
-		attributes = Bit32.set(attributes, 1, getDexterity() + value, 8);
+		addDexterity(value, -1);
+	}
+
+	public void addDexterity(int value, int expiration) {
+		attributes.set(null,
+				Bit32.set((int) attributes.get(), 1, getDexterity() + value, 8),
+				expiration
+		);
 	}
 
 	public int getWisdom() {
-		return Bit32.get(attributes, 2, 8);
+		return Bit32.get((int) attributes.get(), 2, 8);
 	}
 
 	public void addWisdom(int value) {
-		attributes = Bit32.set(attributes, 2, getWisdom() + value, 8);
+		addWisdom(value, -1);
+	}
+
+	public void addWisdom(int value, int expiration) {
+		attributes.set(null,
+				Bit32.set((int) attributes.get(), 2, getWisdom() + value, 8),
+				expiration
+		);
 	}
 
 	public int getVitality() {
-		return Bit32.get(attributes, 3, 8);
+		return Bit32.get((int) attributes.get(), 3, 8);
 	}
 
 	public void addVitality(int value) {
-		attributes = Bit32.set(attributes, 3, getVitality() + value, 8);
+		addVitality(value, -1);
+	}
+
+	public void addVitality(int value, int expiration) {
+		attributes.set(null,
+				Bit32.set((int) attributes.get(), 3, getVitality() + value, 8),
+				expiration
+		);
 	}
 
 	public Attributes getAttributes() {
 		return new Attributes(getStrength(), getDexterity(), getWisdom(), getVitality());
 	}
 
-	public Set<String> getSkills() {
-		return skills;
+	public void expireMods() {
+		Predicate<ValueMod> check = mod -> {
+			if (mod.getExpiration() > 0) {
+				mod.decExpiration();
+			}
+
+			return mod.isExpired();
+		};
+
+		removeIf(check);
 	}
 
-	public Set<String> getEffects() {
-		return effects;
+	public void clear() {
+		removeIf(o -> true);
 	}
 
-	public void reset() {
-		maxHp = maxAp = initiative = attributes = 0;
-		skills.clear();
-		effects.clear();
+	public void removeIf(Predicate<ValueMod> check) {
+		if (fieldCache == null) {
+			fieldCache = getClass().getDeclaredFields();
+		}
+
+		for (Field f : fieldCache) {
+			try {
+				if (f.get(this) instanceof CumValue cv) {
+					cv.values().removeIf(check);
+				}
+			} catch (IllegalAccessException ignore) {
+			}
+		}
 	}
 }

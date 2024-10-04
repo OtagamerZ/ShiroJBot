@@ -10,8 +10,10 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Monster;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.ClusterAction;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
@@ -40,47 +42,53 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class Combat implements Renderer<BufferedImage> {
-	private final ExecutorService exec = Executors.newSingleThreadExecutor();
 	private final ScheduledExecutorService cpu = Executors.newSingleThreadScheduledExecutor();
 	private final long seed = ThreadLocalRandom.current().nextLong();
 
 	private final Dunhun game;
 	private final I18N locale;
 	private final List<Actor> hunters;
-	private final List<Actor> defenders;
+	private final List<Actor> keepers;
 	private final InfiniteList<Actor> turns = new InfiniteList<>();
+	private final XStringBuilder lastAction = new XStringBuilder();
 
-	private CompletableFuture<Void> lock;
-	private String lastAction = "";
+	private CompletableFuture<Runnable> lock;
 
 	public Combat(Dunhun game) {
 		this.game = game;
 		this.locale = game.getLocale();
 
 		hunters = List.copyOf(game.getHeroes().values());
-		defenders = new ArrayList<>();
+		keepers = new ArrayList<>();
 
 		for (int i = 0; i < 3; i++) {
-			if (!Calc.chance(100 - 50d / hunters.size() * defenders.size())) break;
+			if (!Calc.chance(100 - 50d / hunters.size() * keepers.size())) break;
 
-			defenders.add(Monster.getRandom());
+			keepers.add(Monster.getRandom());
 		}
 
-		for (List<Actor> acts : List.of(hunters, defenders)) {
-			acts.forEach(a -> a.asSenshi(locale));
+		Team team = Team.HUNTERS;
+		for (List<Actor> acts : List.of(hunters, keepers)) {
+			for (Actor a : acts) {
+				a.setTeam(team);
+				a.asSenshi(locale);
+			}
+
+			team = Team.KEEPERS;
 		}
 
+		ExecutorService exec = Executors.newSingleThreadExecutor();
 		CompletableFuture.runAsync(this::process, exec);
 	}
 
 	@Override
 	public BufferedImage render(I18N locale) {
-		BufferedImage bi = new BufferedImage(255 * (hunters.size() + defenders.size()) + 64, 370, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(255 * (hunters.size() + keepers.size()) + 64, 370, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 
 		int offset = 0;
 		boolean divided = false;
-		for (List<Actor> acts : List.of(hunters, defenders)) {
+		for (List<Actor> acts : List.of(hunters, keepers)) {
 			for (Actor a : acts) {
 				BufferedImage card;
 				if (a.getHp() <= 0) {
@@ -113,11 +121,11 @@ public class Combat implements Renderer<BufferedImage> {
 	public MessageEmbed getEmbed() {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/actor_turn", turns.get().getName(locale)))
-				.setDescription(lastAction);
+				.setDescription(lastAction.toString());
 
 		String title = locale.get("str/hunters");
 		XStringBuilder sb = new XStringBuilder();
-		for (List<Actor> acts : List.of(hunters, defenders)) {
+		for (List<Actor> acts : List.of(hunters, keepers)) {
 			sb.clear();
 			for (Actor a : acts) {
 				if (!sb.isEmpty()) sb.nextLine();
@@ -138,7 +146,7 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 
 			eb.addField(title, sb.toString(), true);
-			title = locale.get("str/defenders");
+			title = locale.get("str/keepers");
 		}
 
 		eb.setImage("attachment://cards.png");
@@ -147,7 +155,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	private void process() {
-		Stream.of(hunters.stream(), defenders.stream())
+		Stream.of(hunters.stream(), keepers.stream())
 				.flatMap(Function.identity())
 				.sorted(Comparator
 						.comparingInt(Actor::getInitiative).reversed()
@@ -158,7 +166,7 @@ public class Combat implements Renderer<BufferedImage> {
 		for (Actor act : turns) {
 			if (game.isClosed()) break;
 			else if (hunters.stream().noneMatch(h -> h.getHp() > 0)) break;
-			else if (defenders.stream().noneMatch(h -> h.getHp() > 0)) break;
+			else if (keepers.stream().noneMatch(h -> h.getHp() > 0)) break;
 			else if (!act.asSenshi(locale).isAvailable()) continue;
 
 			try {
@@ -166,7 +174,11 @@ public class Combat implements Renderer<BufferedImage> {
 				act.modAp(act.getMaxAp());
 
 				while (act.getAp() > 0) {
-					reload(true).get();
+					Runnable action = reload(true).get();
+					if (action != null) {
+						lastAction.clear();
+						action.run();
+					}
 				}
 			} catch (InterruptedException | ExecutionException ignore) {
 			}
@@ -178,7 +190,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 	}
 
-	public CompletableFuture<Void> reload(boolean execute) {
+	public CompletableFuture<Runnable> reload(boolean execute) {
 		game.resetTimer();
 
 		lock = new CompletableFuture<>();
@@ -193,31 +205,29 @@ public class Combat implements Renderer<BufferedImage> {
 						.setCancellable(false);
 
 				helper.addAction(Utils.parseEmoji("🗡"),
-								w -> addSelector(w.getMessage(), helper, defenders, t -> {
-									attack(h, t);
-									h.modAp(-1);
-
-									lock.complete(null);
-								})
+								w -> addSelector(w.getMessage(), helper, getTeam(h.getTeam().getOther()),
+										t -> lock.complete(() -> {
+											attack(h, t);
+											h.modAp(-1);
+										})
+								)
 						)
-						.addAction(Utils.parseEmoji("🛡"), w -> {
+						.addAction(Utils.parseEmoji("🛡"), w -> lock.complete(() -> {
 							h.asSenshi(locale).setDefending(true);
 							h.modAp(-1);
 
-							lastAction = locale.get("str/actor_defend", h.getName());
-							lock.complete(null);
-						})
-						.addAction(Utils.parseEmoji("💨"), w -> {
+							lastAction.appendNewLine(locale.get("str/actor_defend", h.getName()));
+						}))
+						.addAction(Utils.parseEmoji("💨"), w -> lock.complete(() -> {
 							System.out.println("c");
-							lock.complete(null);
-						});
+						}));
 
 				ca.apply(helper::apply);
 			} else {
 				helper = null;
 
 				cpu.schedule(() -> {
-					attack(curr, Utils.getRandomEntry(hunters));
+					attack(curr, Utils.getRandomEntry(getTeam(curr.getTeam().getOther())));
 					curr.modAp(-1);
 
 					lock.complete(null);
@@ -250,18 +260,30 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	private void attack(Actor source, Actor target) {
-		int raw = source.asSenshi(locale).getDmg();
-		int def = target.asSenshi(locale).getDfs();
+		Senshi srcSen = source.asSenshi(locale);
+		Senshi tgtSen = target.asSenshi(locale);
+
+		if (Calc.chance(tgtSen.getDodge())) {
+			lastAction.appendNewLine(locale.get("str/actor_dodge", source.getName(locale)));
+			return;
+		} else if (Calc.chance(tgtSen.getParry())) {
+			lastAction.appendNewLine(locale.get("str/actor_parry", source.getName(locale)));
+			attack(target, source);
+			return;
+		}
+
+		int raw = srcSen.getDmg();
+		int def = tgtSen.getDfs();
 
 		int dmg;
-		if (target.asSenshi(locale).isDefending()) {
+		if (tgtSen.isDefending()) {
 			dmg = (int) Math.max(raw / 10f, (2.5 * Math.pow(raw, 2)) / (def + 2.5 * raw));
 		} else {
 			dmg = (int) Math.max(raw / 5f, (5 * Math.pow(raw, 2)) / (def + 5 * raw));
 		}
 
 		target.modHp(-dmg);
-		lastAction = locale.get("str/actor_combat", source.getName(locale), target.getName(locale), dmg);
+		lastAction.appendNewLine(locale.get("str/actor_combat", source.getName(locale), target.getName(locale), dmg));
 	}
 
 	public void addSelector(Message msg, ButtonizeHelper root, List<Actor> targets, Consumer<Actor> action) {
@@ -288,7 +310,11 @@ public class Combat implements Renderer<BufferedImage> {
 			Actor tgt = targets.get(i);
 			helper.addAction(
 					Utils.parseEmoji(Utils.fancyNumber(i + 1)),
-					w -> action.accept(tgt)
+					w -> {
+						if (tgt != null) {
+							action.accept(tgt);
+						}
+					}
 			);
 		}
 
@@ -308,8 +334,9 @@ public class Combat implements Renderer<BufferedImage> {
 				for (int i = 0, sz = items.size(); i < sz; i++, idx++) {
 					if (idx >= targets.size()) break loop;
 
+					Actor tgt = targets.get(idx);
 					ItemComponent item = items.get(i);
-					if (item instanceof Button b && targets.get(idx).getHp() <= 0) {
+					if (item instanceof Button b && (tgt == null || tgt.getHp() <= 0)) {
 						items.set(i, b.asDisabled());
 					}
 				}
@@ -319,7 +346,20 @@ public class Combat implements Renderer<BufferedImage> {
 		act.setComponents(rows).queue(s -> Pages.buttonize(s, helper));
 	}
 
-	public CompletableFuture<Void> getLock() {
+	public CompletableFuture<Runnable> getLock() {
 		return lock;
 	}
- }
+
+	public List<Actor> getActors() {
+		return Stream.of(hunters, keepers)
+				.flatMap(List::stream)
+				.toList();
+	}
+
+	public List<Actor> getTeam(Team team) {
+		return switch (team) {
+			case HUNTERS -> hunters;
+			case KEEPERS -> keepers;
+		};
+	}
+}

@@ -18,10 +18,13 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
+import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -29,9 +32,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -49,13 +50,16 @@ public class Skill extends DAO<Skill> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedSkill> infos = new HashSet<>();
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "type", nullable = false)
-	private AffixType type;
+	@Column(name = "ap_cost", nullable = false)
+	private int apCost;
 
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
+
+	@Language("Groovy")
+	@Column(name = "targeter", columnDefinition = "TEXT")
+	private String targeter;
 
 	public String getId() {
 		return id;
@@ -67,12 +71,35 @@ public class Skill extends DAO<Skill> {
 				.findAny().orElseThrow();
 	}
 
-	public AffixType getType() {
-		return type;
+	public int getApCost() {
+		return apCost;
 	}
 
-	public String getEffect() {
-		return effect;
+	public void execute(Combat combat, Actor source, Actor target) {
+		try {
+			Utils.exec(id, effect, Map.of(
+					"combat", combat,
+					"actor", source,
+					"target", target
+			));
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to execute skill {}", id, e);
+		}
+	}
+
+	public List<Actor> getTargets(Combat combat) {
+		List<Actor> out = new ArrayList<>();
+
+		try {
+			Utils.exec(id, targeter, Map.of(
+					"combat", combat,
+					"targets", out
+			));
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to load targets {}", id, e);
+		}
+
+		return out;
 	}
 
 	@Override
