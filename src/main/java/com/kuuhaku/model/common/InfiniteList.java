@@ -70,7 +70,7 @@ public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
 
 	public T get() {
 		if (isEmpty()) return null;
-		else if (iter == -1) iter = 0;
+		else if (iter == -1 || iter >= size()) iter = 0;
 
 		return get(iter);
 	}
