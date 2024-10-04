@@ -61,15 +61,13 @@ public enum FrameSkin {
 	BLACK("**(Conquista \"O Intocável\")** Lute nas sombras, apareça na hora menos esperada e torne-se o nêmesis de seus oponentes.",
 			acc -> acc.getAchievements().contains(Achievement.UNTOUCHABLE)),
 
-	HALLOWEEN("**(Conquista \"Noites de Arrepio\")** Muahaha, invoque os espíritos malígnos para atormentar seus oponentes!",
-			acc -> acc.getAchievements().contains(Achievement.SPOOKY_NIGHTS)),
-
 	GLITCH("**(Emblema \"Bug hunter\")** Ę̶̄͛Ŗ̴̓R̸̩͉͗O̴̪͉͊:̸̻̗͗ ̶̧̤̋̕P̴̘̪͑R̶̳̭̈̂Ǫ̸͒̽T̷̡̗̈́̃Ǫ̶̨̈́̐C̸̯͛̂O̴̯̓L̶̲̱̾̌Ọ̸̗͑̓ ̷̰͓̅͌\"̶̝̈͝D̶̳̯̈́Ĕ̵͍Ŕ̴ͅR̶̮̹͛Õ̶̢̾T̶͓͆A̸͚̰͆\"̶̡̌̓ ̸̬̃̈́N̶̢͉̒Ã̸͍̀Ȍ̸̘ͅ ̵̥͒̈́E̵̤̹̽̅Ṅ̷̼̆C̸̞̒O̷͚̪̎Ň̵͎Ṱ̵̨̽R̸̘̍̆Ả̴̙̞͝D̵̜͍̈́̋O̵̯͆",
 			acc -> Tag.getTags(Main.getMemberByID(acc.getUid())).contains(Tag.BUG_HUNTER)
 	),*/
 
 	PADORU("PADORU"),
 	GLITCH("DUNGEON_HUNTER"),
+	HALLOWEEN("TRICK_OR_TREAT"),
 
 	/*METALLIC("**(75% das conquistas desbloqueadas)** Com estilo (e um revestimento semi-transparente), faça suas jogadas mostrando sua classe!",
 			acc -> (float) acc.getMedalBag().size() / Achievement.getMedalBag().size() > 0.75f
@@ -89,7 +87,9 @@ public enum FrameSkin {
 		this.titles = titles;
 	}
 
-	/** Main color of the frame **/
+	/**
+	 * Main color of the frame
+	 **/
 	public Color getThemeColor() {
 		return switch (this) {
 			case PINK, LEGACY_PINK -> new Color(0xE874BC);
@@ -104,27 +104,29 @@ public enum FrameSkin {
 
 			case PADORU -> new Color(177, 30, 49);
 			case GLITCH -> Utils.getRandomEntry(values()).getThemeColor();
+			case HALLOWEEN -> new Color(220, 89, 16);
 			/*case RAINBOW -> ImageHelper.getRandomColor();
 			case BLACK -> Color.BLACK;
-			case HALLOWEEN -> new Color(220, 89, 16);
 			case METALLIC -> new Color(190, 194, 203);
 			case RICH -> new Color(212, 175, 55);*/
 		};
 	}
 
-	/** Background color for title **/
+	/**
+	 * Background color for title
+	 **/
 	public Color getBackgroundColor() {
 		return switch (this) {
 			case PINK, LEGACY_PINK,
-					PURPLE, LEGACY_PURPLE,
-					BLUE, LEGACY_BLUE,
-					CYAN, LEGACY_CYAN,
-					GREEN, LEGACY_GREEN,
-					YELLOW, LEGACY_YELLOW,
-					ORANGE,
-					RED, LEGACY_RED,
-					GRAY, LEGACY_GRAY
-				/*HALLOWEEN*/ -> Color.BLACK;
+				 PURPLE, LEGACY_PURPLE,
+				 BLUE, LEGACY_BLUE,
+				 CYAN, LEGACY_CYAN,
+				 GREEN, LEGACY_GREEN,
+				 YELLOW, LEGACY_YELLOW,
+				 ORANGE,
+				 RED, LEGACY_RED,
+				 GRAY, LEGACY_GRAY,
+				 HALLOWEEN -> Color.BLACK;
 
 			case PADORU -> getThemeColor().darker();
 			case GLITCH -> Graph.rotate(getThemeColor(), 90);
@@ -135,41 +137,45 @@ public enum FrameSkin {
 		};
 	}
 
-	/** Foreground color for title **/
+	/**
+	 * Foreground color for title
+	 **/
 	public Color getPrimaryColor() {
 		return switch (this) {
 			case PINK, LEGACY_PINK,
-					PURPLE, LEGACY_PURPLE,
-					BLUE, LEGACY_BLUE,
-					CYAN, LEGACY_CYAN,
-					GREEN, LEGACY_GREEN,
-					YELLOW, LEGACY_YELLOW,
-					ORANGE,
-					RED, LEGACY_RED,
-					GRAY, LEGACY_GRAY,
-					PADORU, GLITCH /*HALLOWEEN, METALLIC, RICH*/ -> Color.WHITE;
+				 PURPLE, LEGACY_PURPLE,
+				 BLUE, LEGACY_BLUE,
+				 CYAN, LEGACY_CYAN,
+				 GREEN, LEGACY_GREEN,
+				 YELLOW, LEGACY_YELLOW,
+				 ORANGE,
+				 RED, LEGACY_RED,
+				 GRAY, LEGACY_GRAY,
+				 PADORU, GLITCH, HALLOWEEN /*METALLIC, RICH*/ -> Color.WHITE;
 
 			/*case BLACK -> Color.BLACK;
 			case RAINBOW -> getThemeColor();*/
 		};
 	}
 
-	/** Foreground color for description **/
+	/**
+	 * Foreground color for description
+	 **/
 	public Color getSecondaryColor() {
 		return switch (this) {
 			case PINK, LEGACY_PINK,
-					PURPLE, LEGACY_PURPLE,
-					BLUE, LEGACY_BLUE,
-					CYAN, LEGACY_CYAN,
-					GREEN, LEGACY_GREEN,
-					YELLOW, LEGACY_YELLOW,
-					ORANGE,
-					RED, LEGACY_RED,
-					GRAY, LEGACY_GRAY
+				 PURPLE, LEGACY_PURPLE,
+				 BLUE, LEGACY_BLUE,
+				 CYAN, LEGACY_CYAN,
+				 GREEN, LEGACY_GREEN,
+				 YELLOW, LEGACY_YELLOW,
+				 ORANGE,
+				 RED, LEGACY_RED,
+				 GRAY, LEGACY_GRAY
 				/*RAINBOW, METALLIC*/ -> Color.BLACK;
 
-			case PADORU, GLITCH -> Color.WHITE;
-			//case BLACK, HALLOWEEN, RICH -> Color.WHITE;
+			case PADORU, GLITCH, HALLOWEEN -> Color.WHITE;
+			//case BLACK, RICH -> Color.WHITE;
 		};
 	}
 

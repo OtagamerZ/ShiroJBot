@@ -28,6 +28,7 @@ import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.drop.CandyDrop;
 import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.common.special.PadoruEvent;
 import com.kuuhaku.model.common.special.SpecialEvent;
@@ -297,6 +298,13 @@ public class GuildListener extends ListenerAdapter {
 					}
 				} else {
 					ed.notify(locale.get("achievement/level_up", data.user().getAsMention(), profile.getLevel(), prize));
+
+					if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.OCTOBER) {
+						UserItem item = DAO.find(UserItem.class, "SPOOKY_CANDY");
+
+						account.addItem(item, profile.getLevel());
+						ed.notify(locale.get("str/received_item", profile.getLevel(), item.getName(locale)));
+					}
 				}
 			}
 
@@ -470,6 +478,12 @@ public class GuildListener extends ListenerAdapter {
 								true
 						)
 						.addField("Captcha", "`" + drop.getCaptcha(true) + "`", true);
+
+				if (drop instanceof CandyDrop) {
+					eb.setThumbnail("https://cdn.pixabay.com/photo/2012/04/01/16/39/halloween-23439_1280.png");
+				} else {
+					eb.setThumbnail("https://static.vecteezy.com/system/resources/previews/026/750/022/original/treasure-chest-clipart-free-png.png");
+				}
 
 				chosen.sendMessageEmbeds(eb.build())
 						.delay((long) (60 / Spawn.getQuantityMult()), TimeUnit.SECONDS)

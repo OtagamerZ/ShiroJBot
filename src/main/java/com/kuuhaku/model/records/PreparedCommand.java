@@ -38,7 +38,6 @@ public record PreparedCommand(
 		Permission[] permissions,
 		Executable command
 ) implements Comparable<PreparedCommand> {
-
 	public String description(I18N locale) {
 		return locale.get("cmd/" + name);
 	}

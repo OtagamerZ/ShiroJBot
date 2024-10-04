@@ -22,17 +22,16 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.Seasonal;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.records.PreparedCommand;
 import net.dv8tion.jda.api.Permission;
+import org.apache.commons.lang3.ArrayUtils;
 import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class CommandManager {
 	private final Reflections refl = new Reflections("com.kuuhaku.command");
@@ -68,7 +67,11 @@ public class CommandManager {
 	public Set<PreparedCommand> getCommands(Category category) {
 		Set<PreparedCommand> commands = new TreeSet<>();
 
+		int month = Calendar.getInstance().get(Calendar.MONTH);
 		for (Class<?> cmd : cmds) {
+			Seasonal season = cmd.getDeclaredAnnotation(Seasonal.class);
+			if (season != null && !ArrayUtils.contains(season.months(), month)) continue;
+
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			if (params.category() == category) {
 				extractCommand(commands, cmd, params);
@@ -79,7 +82,11 @@ public class CommandManager {
 	}
 
 	public PreparedCommand getCommand(String name) {
+		int month = Calendar.getInstance().get(Calendar.MONTH);
 		for (Class<?> cmd : cmds) {
+			Seasonal season = cmd.getDeclaredAnnotation(Seasonal.class);
+			if (season != null && !ArrayUtils.contains(season.months(), month)) continue;
+
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			String full = params.name();
 			if (params.path().length > 0) {
@@ -103,7 +110,11 @@ public class CommandManager {
 	public Set<PreparedCommand> getSubCommands(String parent) {
 		Set<PreparedCommand> out = new TreeSet<>();
 
+		int month = Calendar.getInstance().get(Calendar.MONTH);
 		for (Class<?> cmd : cmds) {
+			Seasonal season = cmd.getDeclaredAnnotation(Seasonal.class);
+			if (season != null && !ArrayUtils.contains(season.months(), month)) continue;
+
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			if (params.path().length == 0 || !params.name().equalsIgnoreCase(parent)) continue;
 
