@@ -158,8 +158,10 @@ public class CardAttributes implements Serializable, Cloneable {
 				.findAny()
 				.orElse(new LocalizedDescription(locale, ""));
 
-		desc.setDescription(desc.getDescription() + " " + description);
-		descriptions.add(desc);
+		if (!desc.getDescription().contains(description)) {
+			desc.setDescription(desc.getDescription() + " " + description);
+			descriptions.add(desc);
+		}
 	}
 
 	public String getEffect() {

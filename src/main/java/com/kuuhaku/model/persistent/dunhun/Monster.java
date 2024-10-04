@@ -66,6 +66,7 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	private transient final MonsterModifiers modifiers = new MonsterModifiers();
 	private transient final Set<Affix> affixes = new LinkedHashSet<>();
+	private transient String nameCache;
 	private transient List<Skill> skillCache;
 	private transient Senshi senshiCache;
 	private transient int hp = -1;
@@ -87,9 +88,10 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	@Override
 	public String getName(I18N locale) {
-		if (affixes.isEmpty()) return getInfo(locale).getName();
+		if (nameCache != null) return nameCache;
 
-		if (getRarityClass() == RarityClass.RARE) {
+		if (affixes.isEmpty()) return nameCache = getInfo(locale).getName();
+		else if (getRarityClass() == RarityClass.RARE) {
 			int seed = id.hashCode();
 
 			String loc = locale.getParent().name().toLowerCase();
@@ -119,7 +121,7 @@ public class Monster extends DAO<Monster> implements Actor {
 				name.append(part);
 			}
 
-			return name + ", " + prefix + " " + suffix;
+			return nameCache = name + ", " + prefix + " " + suffix;
 		}
 
 		String template = switch (locale) {
@@ -133,7 +135,7 @@ public class Monster extends DAO<Monster> implements Actor {
 			else suff = " " + a.getInfo(locale).getName();
 		}
 
-		return template.formatted(getInfo(locale).getName(), pref, suff);
+		return nameCache = template.formatted(getInfo(locale).getName(), pref, suff);
 	}
 
 	@Override
@@ -226,8 +228,14 @@ public class Monster extends DAO<Monster> implements Actor {
 			}
 		}
 
-		base.setAtk(stats.getAttack());
-		base.setDfs(stats.getDefense());
+		double mult = switch (getRarityClass()) {
+			case RARE -> 2;
+			case MAGIC -> 1.25;
+			default -> 1;
+		};
+
+		base.setAtk((int) (stats.getAttack() * mult));
+		base.setDfs((int) (stats.getDefense() * mult));
 		base.setDodge(stats.getDodge());
 		base.setParry(stats.getParry());
 

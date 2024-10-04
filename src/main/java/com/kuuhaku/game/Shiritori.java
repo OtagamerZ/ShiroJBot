@@ -53,8 +53,8 @@ public class Shiritori extends GameInstance<NullPhase> {
 	private final InfiniteList<String> inGame;
 	private final File dict;
 	private final Set<String> used = new HashSet<>();
-	private Pair<String, String> message = null;
-	private String current = null;
+	private Pair<String, String> message;
+	private String current;
 
 	public Shiritori(I18N locale, User... players) {
 		this(locale, Arrays.stream(players).map(User::getId).toArray(String[]::new));

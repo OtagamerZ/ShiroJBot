@@ -59,7 +59,7 @@ public class Combat implements Renderer<BufferedImage> {
 		defenders = new ArrayList<>();
 
 		for (int i = 0; i < 3; i++) {
-			if (!Calc.chance(100 / (defenders.size() + 2d / hunters.size()))) break;
+			if (!Calc.chance(100 - 50d / hunters.size() * defenders.size())) break;
 
 			defenders.add(Monster.getRandom());
 		}
@@ -155,8 +155,8 @@ public class Combat implements Renderer<BufferedImage> {
 
 		for (Actor act : turns) {
 			if (game.isClosed()) break;
-			else if (hunters.stream().noneMatch(h -> h.getHp() > 0) || defenders.stream().noneMatch(h -> h.getHp() > 0))
-				break;
+			else if (hunters.stream().noneMatch(h -> h.getHp() > 0)) break;
+			else if (defenders.stream().noneMatch(h -> h.getHp() > 0)) break;
 			else if (!act.asSenshi(locale).isAvailable()) continue;
 
 			try {

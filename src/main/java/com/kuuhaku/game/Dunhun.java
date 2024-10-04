@@ -5,18 +5,22 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.NullPhase;
+import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Dungeon;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,7 +30,8 @@ import java.util.concurrent.TimeUnit;
 public class Dunhun extends GameInstance<NullPhase> {
 	private final Dungeon instance;
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
-	private Pair<String, String> message = null;
+	private Pair<String, String> message;
+	private Combat combat;
 
 	public Dunhun(I18N locale, Dungeon instance, User... players) {
 		this(locale, instance, Arrays.stream(players).map(User::getId).toArray(String[]::new));
@@ -55,17 +60,25 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@Override
 	protected boolean validate(Message message) {
-		return false;
+		return true;
 	}
 
 	@Override
 	protected void begin() {
-		Combat c = new Combat(this);
+		combat = new Combat(this);
 	}
 
 	@Override
 	protected void runtime(User user, String value) throws InvocationTargetException, IllegalAccessException {
+		Pair<Method, JSONObject> action = toAction(StringUtils.stripAccents(value).toLowerCase());
+		if (action != null) {
+			action.getFirst().invoke(this, action.getSecond());
+		}
+	}
 
+	@PlayerAction("reload")
+	private void reload(JSONObject args) {
+		if (combat != null) combat.reload(true);
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
