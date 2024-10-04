@@ -319,7 +319,7 @@ public class Combat implements Renderer<BufferedImage> {
 		act.setComponents(rows).queue(s -> Pages.buttonize(s, helper));
 	}
 
-	public CompletableFuture<Boolean> getLock() {
+	public CompletableFuture<Void> getLock() {
 		return lock;
 	}
  }
