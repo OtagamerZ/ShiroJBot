@@ -439,7 +439,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 
 	public void addItem(String id, int amount) {
 		apply(getClass(), uid, a ->
-				a.getInventory().compute(id, (k, v) -> {
+				a.getInventory().compute(id.toUpperCase(), (k, v) -> {
 					if (v == null) return amount;
 
 					return ((Number) v).intValue() + amount;
