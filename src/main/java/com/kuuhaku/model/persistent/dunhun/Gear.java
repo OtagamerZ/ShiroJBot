@@ -117,7 +117,7 @@ public class Gear extends DAO<Gear> {
 		}
 
 		if (pre > 1 || suf > 1 || pre + suf > 2) return RarityClass.RARE;
-		else if (pre + suf > 1) return RarityClass.MAGIC;
+		else if (pre + suf > 0) return RarityClass.MAGIC;
 		else return RarityClass.NORMAL;
 	}
 

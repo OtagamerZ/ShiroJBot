@@ -198,7 +198,7 @@ public class Monster extends DAO<Monster> implements Actor {
 		}
 
 		if (pre > 1 || suf > 1) return RarityClass.RARE;
-		else if (pre + suf > 1) return RarityClass.MAGIC;
+		else if (pre + suf > 0) return RarityClass.MAGIC;
 		else return RarityClass.NORMAL;
 	}
 
