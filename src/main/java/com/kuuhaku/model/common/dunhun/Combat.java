@@ -7,6 +7,7 @@ import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.FixedSizeDeque;
 import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.I18N;
@@ -32,10 +33,8 @@ import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -50,7 +49,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final List<Actor> hunters;
 	private final List<Actor> keepers;
 	private final InfiniteList<Actor> turns = new InfiniteList<>();
-	private final XStringBuilder lastAction = new XStringBuilder();
+	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(5);
 
 	private CompletableFuture<Runnable> lock;
 
@@ -121,7 +120,7 @@ public class Combat implements Renderer<BufferedImage> {
 	public MessageEmbed getEmbed() {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/actor_turn", turns.get().getName(locale)))
-				.setDescription(lastAction.toString());
+				.setDescription(String.join("\n", history));
 
 		String title = locale.get("str/hunters");
 		XStringBuilder sb = new XStringBuilder();
@@ -176,7 +175,6 @@ public class Combat implements Renderer<BufferedImage> {
 				while (act.getAp() > 0) {
 					Runnable action = reload(true).get();
 					if (action != null) {
-						lastAction.clear();
 						action.run();
 					}
 				}
@@ -216,7 +214,7 @@ public class Combat implements Renderer<BufferedImage> {
 							h.asSenshi(locale).setDefending(true);
 							h.modAp(-1);
 
-							lastAction.appendNewLine(locale.get("str/actor_defend", h.getName()));
+							history.add(locale.get("str/actor_defend", h.getName()));
 						}))
 						.addAction(Utils.parseEmoji("💨"), w -> lock.complete(() -> {
 							System.out.println("c");
@@ -264,10 +262,10 @@ public class Combat implements Renderer<BufferedImage> {
 		Senshi tgtSen = target.asSenshi(locale);
 
 		if (Calc.chance(tgtSen.getDodge())) {
-			lastAction.appendNewLine(locale.get("str/actor_dodge", source.getName(locale)));
+			history.add(locale.get("str/actor_dodge", target.getName(locale)));
 			return;
 		} else if (Calc.chance(tgtSen.getParry())) {
-			lastAction.appendNewLine(locale.get("str/actor_parry", source.getName(locale)));
+			history.add(locale.get("str/actor_parry", target.getName(locale)));
 			attack(target, source);
 			return;
 		}
@@ -283,7 +281,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		target.modHp(-dmg);
-		lastAction.appendNewLine(locale.get("str/actor_combat", source.getName(locale), target.getName(locale), dmg));
+		history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale), dmg));
 	}
 
 	public void addSelector(Message msg, ButtonizeHelper root, List<Actor> targets, Consumer<Actor> action) {
