@@ -302,7 +302,7 @@ public class GuildListener extends ListenerAdapter {
 					if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.OCTOBER) {
 						UserItem item = DAO.find(UserItem.class, "SPOOKY_CANDY");
 
-						account.addItem(item, profile.getLevel());
+						account.addItem(item, profile.getLevel() * 2);
 						ed.notify(locale.get("str/received_item", profile.getLevel(), item.getName(locale)));
 					}
 				}
