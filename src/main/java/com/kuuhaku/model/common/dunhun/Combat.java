@@ -223,9 +223,10 @@ public class Combat implements Renderer<BufferedImage> {
 								h.setFleed(true);
 								history.add(locale.get("str/actor_flee", h.getName()));
 							} else {
-								h.modAp(-h.getAp());
 								history.add(locale.get("str/actor_flee_fail", h.getName(), chance));
 							}
+
+							h.modAp(-h.getAp());
 						}));
 
 				ca.apply(helper::apply);
