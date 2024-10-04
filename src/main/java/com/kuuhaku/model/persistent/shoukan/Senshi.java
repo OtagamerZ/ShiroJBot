@@ -1272,7 +1272,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 					for (SlotColumn sc : game.getSlots(getSide())) {
 						for (Senshi card : sc.getCards()) {
-							if (card instanceof TrapSpell && card.isFlipped() && !triggered.contains(card.getId())) {
+							if (card instanceof TrapSpell && card.isFlipped() && !triggered.contains(card.getId()) && !ep.isTarget(card)) {
 								EffectParameters params;
 								if (targeted) {
 									params = new EffectParameters(
