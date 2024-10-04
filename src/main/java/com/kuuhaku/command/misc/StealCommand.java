@@ -29,11 +29,13 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 
 @Command(
@@ -59,7 +61,7 @@ public class StealCommand implements Executable {
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime last = LocalDateTime.parse(acc.getDynValue("last_steal", LocalDateTime.ofInstant(Instant.EPOCH, ZoneId.of("GMT-3")).toString()));
 		if (!last.isBefore(now.minusHours(6))) {
-			event.channel().sendMessage(locale.get("error/stole_recent")).queue();
+			event.channel().sendMessage(locale.get("error/stole_recent", Utils.toStringDuration(locale, now.minusHours(6).until(last, ChronoUnit.MILLIS)))).queue();
 			return;
 		}
 

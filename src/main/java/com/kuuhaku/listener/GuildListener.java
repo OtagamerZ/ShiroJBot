@@ -303,7 +303,7 @@ public class GuildListener extends ListenerAdapter {
 						UserItem item = DAO.find(UserItem.class, "SPOOKY_CANDY");
 
 						account.addItem(item, profile.getLevel() * 2);
-						ed.notify(locale.get("str/received_item", profile.getLevel(), item.getName(locale)));
+						ed.notify(locale.get("str/received_item", profile.getLevel() * 2, item.getName(locale)));
 					}
 				}
 			}
