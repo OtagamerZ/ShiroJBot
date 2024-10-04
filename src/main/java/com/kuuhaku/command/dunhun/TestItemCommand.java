@@ -79,7 +79,7 @@ public class TestItemCommand implements Executable {
 		if (imp != null) {
 			eb.appendDescription(imp.getDescription(locale) + "\n");
 			if (!g.getAffixes().isEmpty()) {
-				eb.appendDescription("────────────────────\n");
+				eb.appendDescription("──────────────────\n");
 			}
 		}
 

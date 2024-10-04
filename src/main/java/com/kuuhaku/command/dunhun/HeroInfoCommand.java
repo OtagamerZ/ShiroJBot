@@ -135,7 +135,7 @@ public class HeroInfoCommand implements Executable {
 						imp.getDescription(locale).lines()
 								.map(l -> "-# " + l)
 								.forEach(sb::appendNewLine);
-						sb.appendNewLine("-# ────────────────────");
+						sb.appendNewLine("-# ──────────────────");
 					}
 
 					for (String l : g.getAffixLines(locale)) {
