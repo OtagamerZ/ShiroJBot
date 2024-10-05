@@ -433,13 +433,8 @@ public class Combat implements Renderer<BufferedImage> {
 	public void addSelector(Message msg, ButtonizeHelper root, List<Actor> targets, Consumer<Actor> action) {
 		Actor single = null;
 		for (Actor a : targets) {
-			if (a != null) {
-				if (single == null && !a.hasFleed() && a.getHp() > 0) single = a;
-				else if (!a.hasFleed() && a.getHp() > 0) {
-					single = null;
-					break;
-				}
-			}
+			if (single == null) single = a;
+			else if (a != null) break;
 		}
 
 		if (single != null) {
