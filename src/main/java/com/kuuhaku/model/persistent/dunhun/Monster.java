@@ -112,8 +112,9 @@ public class Monster extends DAO<Monster> implements Actor {
 			suffix = Utils.regex(suffix, "\\[(?<F>\\w*)\\|(?<M>\\w*)]")
 					.replaceAll(r -> r.group(ending.get()));
 
+			int parts = Calc.rng(1, 3);
 			StringBuilder name = new StringBuilder();
-			for (int i = 0; i < 2; i++) {
+			for (int i = 0; i < parts; i++) {
 				String part = IO.getLine("dunhun/monster/name_parts.dict", Calc.rng(0, 32, seed >> i));
 				if (i == 0) {
 					if (Calc.chance(25, prefix.hashCode() + suffix.hashCode())) {
