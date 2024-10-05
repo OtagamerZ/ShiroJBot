@@ -347,16 +347,22 @@ public class Combat implements Renderer<BufferedImage> {
 					if (!skills.isEmpty() && Calc.chance(33)) {
 						Skill skill = Utils.getRandomEntry(skills);
 
-						Actor tgt = Utils.getRandomEntry(skill.getTargets(this, curr));
-						skill.execute(this, curr, tgt);
+						Actor t = Utils.getRandomEntry(skill.getTargets(this, curr));
+						skill.execute(this, curr, t);
 						curr.modAp(-skill.getApCost());
 
 						if (skill.getCooldown() > 0) {
 							curr.getModifiers().setCooldown(skill, skill.getCooldown());
 						}
+
+						history.add(locale.get(t.equals(curr) ? "str/used_skill_self" : "str/used_skill",
+							curr.getName(), skill.getInfo(locale).getName(), t.getName(locale))
+						);
 					} else if (curr.getAp() == 1 && Calc.chance(25)) {
 						curr.asSenshi(locale).setDefending(true);
 						curr.modAp(-1);
+
+						history.add(locale.get("str/actor_defend", curr.getName()));
 					} else {
 						attack(curr, Utils.getRandomEntry(getActors(curr.getTeam().getOther())));
 						curr.modAp(-1);
