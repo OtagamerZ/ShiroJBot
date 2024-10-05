@@ -260,7 +260,7 @@ public class Gear extends DAO<Gear> {
 				Utils.exec(a.getId(), a.getEffect(), Map.of(
 						"locale", locale,
 						"gear", this,
-						"hero", owner,
+						"actor", owner,
 						"self", owner.asSenshi(locale),
 						"values", ga.getValues(locale),
 						"grant", Utils.getOr(Utils.extract(ga.getDescription(locale), "\"(.+?)\"", 1), "")

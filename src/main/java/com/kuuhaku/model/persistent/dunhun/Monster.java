@@ -253,7 +253,7 @@ public class Monster extends DAO<Monster> implements Actor {
 			try {
 				Utils.exec(a.getId(), a.getEffect(), Map.of(
 						"locale", locale,
-						"mon", this
+						"actor", this
 				));
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to apply modifier {}", a.getId(), e);
