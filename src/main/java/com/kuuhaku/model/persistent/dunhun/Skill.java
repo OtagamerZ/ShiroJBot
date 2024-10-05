@@ -82,9 +82,10 @@ public class Skill extends DAO<Skill> {
 		return cooldown;
 	}
 
-	public void execute(Combat combat, Actor source, Actor target) {
+	public void execute(I18N locale, Combat combat, Actor source, Actor target) {
 		try {
 			Utils.exec(id, effect, Map.of(
+					"locale", locale,
 					"combat", combat,
 					"actor", source,
 					"target", target
