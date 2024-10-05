@@ -32,6 +32,7 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.*;
@@ -47,12 +48,15 @@ import java.util.Calendar;
 public class StealCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		User target = event.users(0);
+		Member target = event.members(0);
 		if (target == null) {
 			event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
 			return;
 		} else if (target.equals(event.user())) {
 			event.channel().sendMessage(locale.get("error/self_not_allowed")).queue();
+			return;
+		} else if (event.channel().canTalk(target)) {
+			event.channel().sendMessage(locale.get("error/steal_not_here")).queue();
 			return;
 		}
 

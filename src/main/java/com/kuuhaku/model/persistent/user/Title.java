@@ -59,6 +59,9 @@ public class Title extends DAO<Title> {
 	@Column(name = "tracker")
 	private String tracker;
 
+	@Column(name = "unlockable", nullable = false)
+	private boolean unlockable;
+
 	public String getId() {
 		return id;
 	}
@@ -97,22 +100,8 @@ public class Title extends DAO<Title> {
 		return Utils.getOr(acc.getDynamicProperty(tracker).getValue(), "N/A");
 	}
 
-	@SuppressWarnings("JpaQlInspection")
-	public static List<Title> getAllTitles() {
-		return DAO.queryAll(Title.class, """
-				SELECT t
-				FROM Title t
-				ORDER BY CASE t.rarity
-					WHEN 'COMMON' THEN 1
-					WHEN 'UNCOMMON' THEN 2
-					WHEN 'RARE' THEN 3
-					WHEN 'EPIC' THEN 4
-					WHEN 'LEGENDARY' THEN 5
-					WHEN 'ULTIMATE' THEN 6
-				END DESC
-				, t.id
-				"""
-		);
+	public boolean isUnlockable() {
+		return unlockable;
 	}
 
 	public String toString(I18N locale) {
@@ -130,5 +119,23 @@ public class Title extends DAO<Title> {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(id);
+	}
+
+	@SuppressWarnings("JpaQlInspection")
+	public static List<Title> getAllTitles() {
+		return DAO.queryAll(Title.class, """
+				SELECT t
+				FROM Title t
+				ORDER BY CASE t.rarity
+					WHEN 'COMMON' THEN 1
+					WHEN 'UNCOMMON' THEN 2
+					WHEN 'RARE' THEN 3
+					WHEN 'EPIC' THEN 4
+					WHEN 'LEGENDARY' THEN 5
+					WHEN 'ULTIMATE' THEN 6
+				END DESC
+				, t.id
+				"""
+		);
 	}
 }
