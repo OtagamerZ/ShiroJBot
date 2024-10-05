@@ -167,10 +167,8 @@ public class Combat implements Renderer<BufferedImage> {
 				)
 				.forEach(turns::add);
 
-		for (Actor act : turns) {
+		loop: for (Actor act : turns) {
 			if (game.isClosed()) break;
-			else if (hunters.stream().noneMatch(a -> !a.hasFleed() && a.getHp() > 0)) break;
-			else if (keepers.stream().noneMatch(a -> !a.hasFleed() && a.getHp() > 0)) break;
 			else if (!act.asSenshi(locale).isAvailable()) continue;
 
 			try {
@@ -183,6 +181,9 @@ public class Combat implements Renderer<BufferedImage> {
 					if (action != null) {
 						action.run();
 					}
+
+					if (hunters.stream().noneMatch(a -> !a.hasFleed() && a.getHp() > 0)) break loop;
+					else if (keepers.stream().noneMatch(a -> !a.hasFleed() && a.getHp() > 0)) break loop;
 				}
 			} catch (InterruptedException | ExecutionException ignore) {
 			}
