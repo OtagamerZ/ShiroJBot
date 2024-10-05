@@ -22,7 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.RandomList;
-import com.kuuhaku.model.common.dunhun.MonsterModifiers;
+import com.kuuhaku.model.common.dunhun.ActorModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
@@ -65,7 +65,7 @@ public class Monster extends DAO<Monster> implements Actor {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedMonster> infos = new HashSet<>();
 
-	private transient final MonsterModifiers modifiers = new MonsterModifiers();
+	private transient final ActorModifiers modifiers = new ActorModifiers();
 	private transient final Set<Affix> affixes = new LinkedHashSet<>();
 	private transient String nameCache;
 	private transient List<Skill> skillCache;
@@ -169,6 +169,11 @@ public class Monster extends DAO<Monster> implements Actor {
 	}
 
 	@Override
+	public int getMaxAp() {
+		return Math.max(1, 1 + getModifiers().getMaxAp());
+	}
+
+	@Override
 	public void modAp(int value) {
 		ap = Calc.clamp(ap + value, 0, getMaxAp());
 	}
@@ -179,6 +184,11 @@ public class Monster extends DAO<Monster> implements Actor {
 	}
 
 	@Override
+	public ActorModifiers getModifiers() {
+		return modifiers;
+	}
+
+	@Override
 	public boolean hasFleed() {
 		return flee;
 	}
@@ -186,15 +196,6 @@ public class Monster extends DAO<Monster> implements Actor {
 	@Override
 	public void setFleed(boolean flee) {
 		this.flee = flee;
-	}
-
-	@Override
-	public int getMaxAp() {
-		return Math.max(1, 1 + getModifiers().getMaxAp());
-	}
-
-	public MonsterModifiers getModifiers() {
-		return modifiers;
 	}
 
 	public Set<Affix> getAffixes() {

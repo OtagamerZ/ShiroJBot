@@ -176,6 +176,7 @@ public class Combat implements Renderer<BufferedImage> {
 			try {
 				act.asSenshi(locale).setDefending(false);
 				act.modAp(act.getMaxAp());
+				act.getModifiers().expireMods();
 
 				while (act.getAp() > 0) {
 					Runnable action = reload(true).get();

@@ -1,5 +1,6 @@
 package com.kuuhaku.interfaces.dunhun;
 
+import com.kuuhaku.model.common.dunhun.ActorModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.Skill;
@@ -22,6 +23,8 @@ public interface Actor {
 	int getInitiative();
 	boolean hasFleed();
 	void setFleed(boolean flee);
+
+	ActorModifiers getModifiers();
 
 	Senshi asSenshi(I18N locale);
 	BufferedImage render(I18N locale);

@@ -26,10 +26,18 @@ import com.kuuhaku.util.Bit32;
 import java.lang.reflect.Field;
 import java.util.function.Predicate;
 
-public class HeroModifiers {
+public class ActorModifiers {
 	private final CumValue maxHp = CumValue.flat();
 	private final CumValue maxAp = CumValue.flat();
 	private final CumValue initiative = CumValue.flat();
+	private final CumValue attack = CumValue.flat();
+	private final CumValue attackMult = CumValue.flat();
+	private final CumValue defense = CumValue.flat();
+	private final CumValue defenseMult = CumValue.flat();
+	private final CumValue hpMult = CumValue.flat();
+	private final CumValue dodge = CumValue.flat();
+	private final CumValue parry = CumValue.flat();
+
 	private final CumValue attributes = CumValue.flat();
 	/*
 	0xFF FF FF FF
@@ -51,6 +59,18 @@ public class HeroModifiers {
 
 	public void addMaxHp(int value, int expiration) {
 		maxHp.set(null, value, expiration);
+	}
+
+	public double getHpMult() {
+		return 1 + hpMult.get();
+	}
+
+	public void addHpMult(float mult) {
+		addHpMult(mult, -1);
+	}
+
+	public void addHpMult(float mult, int expiration) {
+		hpMult.set(null, mult, expiration);
 	}
 
 	public int getMaxAp() {
@@ -75,6 +95,78 @@ public class HeroModifiers {
 
 	public void addInitiative(int value, int expiration) {
 		initiative.set(null, value, expiration);
+	}
+
+	public int getAttack() {
+		return (int) attack.get();
+	}
+
+	public void addAttack(int value) {
+		addAttack(value, -1);
+	}
+
+	public void addAttack(int value, int expiration) {
+		attack.set(null, value, expiration);
+	}
+
+	public double getAttackMult() {
+		return 1 + attackMult.get();
+	}
+
+	public void addAttackMult(float mult) {
+		addAttackMult(mult, -1);
+	}
+
+	public void addAttackMult(float mult, int expiration) {
+		attackMult.set(null, mult, expiration);
+	}
+
+	public int getDefense() {
+		return (int) defense.get();
+	}
+
+	public void addDefense(int value) {
+		addDefense(value, -1);
+	}
+
+	public void addDefense(int value, int expiration) {
+		defense.set(null, value, expiration);
+	}
+
+	public double getDefenseMult() {
+		return 1 + defenseMult.get();
+	}
+
+	public void addDefenseMult(float mult) {
+		addDefenseMult(mult, -1);
+	}
+
+	public void addDefenseMult(float mult, int expiration) {
+		defenseMult.set(null, mult, expiration);
+	}
+
+	public int getDodge() {
+		return (int) dodge.get();
+	}
+
+	public void addDodge(int value) {
+		addDodge(value, -1);
+	}
+
+	public void addDodge(int value, int expiration) {
+		dodge.set(null, value, expiration);
+	}
+
+	public int getParry() {
+		return (int) parry.get();
+	}
+
+	public void addParry(int value) {
+		addParry(value, -1);
+	}
+
+	public void addParry(int value, int expiration) {
+		parry.set(null, value, expiration);
 	}
 
 	public int getStrength() {

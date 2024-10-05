@@ -21,8 +21,8 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.ActorModifiers;
 import com.kuuhaku.model.common.dunhun.Equipment;
-import com.kuuhaku.model.common.dunhun.HeroModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -72,7 +72,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject equipment = new JSONObject();
 
-	private transient final HeroModifiers modifiers = new HeroModifiers();
+	private transient final ActorModifiers modifiers = new ActorModifiers();
 	private transient Equipment equipCache;
 	private transient List<Skill> skillCache;
 	private transient Senshi senshiCache;
@@ -143,6 +143,11 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	@Override
+	public int getMaxAp() {
+		return Calc.clamp(1 + modifiers.getMaxAp() + stats.getLevel() / 5, 1, 5 + getAttributes().dex() / 10);
+	}
+
+	@Override
 	public void modAp(int value) {
 		ap = Calc.clamp(ap + value, 0, getMaxAp());
 	}
@@ -163,8 +168,8 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	@Override
-	public int getMaxAp() {
-		return Calc.clamp(1 + modifiers.getMaxAp() + stats.getLevel() / 5, 1, 5 + getAttributes().dex() / 10);
+	public ActorModifiers getModifiers() {
+		return modifiers;
 	}
 
 	public Attributes getAttributes() {
@@ -173,10 +178,6 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	public HeroStats getStats() {
 		return stats;
-	}
-
-	public HeroModifiers getModifiers() {
-		return modifiers;
 	}
 
 	public Account getAccount() {
