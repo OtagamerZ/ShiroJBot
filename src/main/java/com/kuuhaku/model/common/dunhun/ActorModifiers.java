@@ -52,48 +52,16 @@ public class ActorModifiers {
 		return (int) maxHp.get();
 	}
 
-	public void addMaxHp(int value) {
-		addMaxHp(value, -1);
-	}
-
-	public void addMaxHp(int value, int expiration) {
-		maxHp.set(null, value, expiration);
-	}
-
 	public double getHpMult() {
 		return 1 + hpMult.get();
-	}
-
-	public void addHpMult(float mult) {
-		addHpMult(mult, -1);
-	}
-
-	public void addHpMult(float mult, int expiration) {
-		hpMult.set(null, mult, expiration);
 	}
 
 	public int getMaxAp() {
 		return (int) maxAp.get();
 	}
 
-	public void addMaxAp(int value) {
-		addMaxAp(value, -1);
-	}
-
-	public void addMaxAp(int value, int expiration) {
-		maxAp.set(null, value, expiration);
-	}
-
 	public int getInitiative() {
 		return (int) initiative.get();
-	}
-
-	public void addInitiative(int value) {
-		addInitiative(value, -1);
-	}
-
-	public void addInitiative(int value, int expiration) {
-		initiative.set(null, value, expiration);
 	}
 
 	public int getStrength() {

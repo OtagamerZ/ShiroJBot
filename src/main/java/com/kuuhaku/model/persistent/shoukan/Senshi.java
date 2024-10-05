@@ -577,7 +577,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public int getDmg() {
 		int sum = base.getAtk() + (int) stats.getAtk().get() + getEquipDmg();
 
-		double mult = 1;
+		double mult = stats.getAtkMult().get();
 		if (hand != null) {
 			switch (hand.getOrigins().synergy()) {
 				case ONI -> {
@@ -606,7 +606,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public int getDfs() {
 		int sum = base.getDfs() + (int) stats.getDfs().get() + getEquipDfs();
 
-		double mult = 1;
+		double mult = stats.getDfsMult().get();
 		if (hand != null) {
 			mult *= getFieldMult();
 

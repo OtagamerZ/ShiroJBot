@@ -58,6 +58,8 @@ public class CardExtra implements Cloneable {
 
 	private final CumValue costMult = CumValue.mult();
 	private final CumValue attrMult = CumValue.mult();
+	private final CumValue atkMult = CumValue.mult();
+	private final CumValue dfsMult = CumValue.mult();
 	private final CumValue power = CumValue.mult();
 
 	private final CumValue attacks = CumValue.flat();
@@ -126,6 +128,14 @@ public class CardExtra implements Cloneable {
 
 	public CumValue getAttrMult() {
 		return attrMult;
+	}
+
+	public CumValue getAtkMult() {
+		return atkMult;
+	}
+
+	public CumValue getDfsMult() {
+		return dfsMult;
 	}
 
 	public CumValue getPower() {

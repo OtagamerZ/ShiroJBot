@@ -312,14 +312,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			sum += getCards(getSide()).stream().mapToInt(Senshi::getParry).sum();
 		}
 
-		return Calc.round(sum * getAttrMult());
+		return Calc.round(sum * getAttrMult() * stats.getAtkMult().get());
 	}
 
 	@Override
 	public int getDfs() {
 		int sum = base.getDfs() + (int) stats.getDfs().get();
 
-		return Calc.round(sum * getAttrMult());
+		return Calc.round(sum * getAttrMult() * stats.getDfsMult().get());
 	}
 
 	@Override
