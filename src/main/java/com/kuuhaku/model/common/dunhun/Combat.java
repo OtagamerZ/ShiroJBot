@@ -214,7 +214,7 @@ public class Combat implements Renderer<BufferedImage> {
 						.setCancellable(false);
 
 				helper.addAction(Utils.parseEmoji("🗡"), w -> {
-							List<Actor> tgts = getTeam(h.getTeam().getOther()).stream()
+							List<Actor> tgts = getActors(h.getTeam().getOther()).stream()
 									.map(a -> a.hasFleed() || a.getHp() <= 0 ? null : a)
 									.toList();
 
@@ -527,14 +527,11 @@ public class Combat implements Renderer<BufferedImage> {
 	public List<Actor> getActors() {
 		return Stream.of(hunters, keepers)
 				.flatMap(List::stream)
-				.filter(a -> !a.hasFleed() && a.getHp() > 0)
 				.toList();
 	}
 
 	public List<Actor> getActors(Team team) {
-		return getTeam(team).stream()
-				.filter(a -> !a.hasFleed() && a.getHp() > 0)
-				.toList();
+		return getTeam(team);
 	}
 
 	public List<Actor> getTeam(Team team) {
