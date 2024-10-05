@@ -437,7 +437,10 @@ public class Combat implements Renderer<BufferedImage> {
 		Actor single = null;
 		for (Actor a : targets) {
 			if (single == null) single = a;
-			else if (a != null) break;
+			else if (a != null) {
+				single = null;
+				break;
+			}
 		}
 
 		if (single != null) {
