@@ -81,6 +81,8 @@ public class DeckFrameCommand implements Executable {
 				if (titles.stream().anyMatch(Objects::isNull)) continue;
 
                 if (!fc.canUse(acc)) {
+					if (titles.stream().anyMatch(t -> !t.isUnlockable())) continue;
+
                     String req = Utils.properlyJoin(locale.get("str/and")).apply(
                             titles.stream()
                                     .map(t -> "**`" + t.getInfo(locale).getName() + "`**")
