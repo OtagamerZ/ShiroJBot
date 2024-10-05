@@ -45,7 +45,7 @@ public class LazyReference<T> {
 		}
 	}
 
-	public T load() {
+	public synchronized T load() {
 		try {
 			if (loaded) return ref;
 
