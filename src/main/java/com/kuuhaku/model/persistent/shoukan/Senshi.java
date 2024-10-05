@@ -24,6 +24,7 @@ import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.exceptions.SelectionException;
 import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
@@ -168,10 +169,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public Senshi() {
 	}
 
-	public Senshi(String id, String name, Race race) {
+	public Senshi(Actor actor, I18N locale) {
 		this.id = id;
-		this.card = new Card(id, name);
-		this.race = race;
+		this.card = new Card(actor, locale);
+		this.race = actor.getRace();
 		this.base = new CardAttributes();
 		this.stats = new CardExtra();
 	}

@@ -74,7 +74,7 @@ public class HeroInspectCommand implements Executable {
 			return;
 		}
 
-		g.load(locale, new Senshi(h.getId(), h.getName(), h.getStats().getRace()));
+		g.load(locale, new Senshi(h, locale));
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		if (g.getAffixes().size() > 2) {

@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -143,6 +144,11 @@ public class Monster extends DAO<Monster> implements Actor {
 	}
 
 	@Override
+	public Race getRace() {
+		return stats.getRace();
+	}
+
+	@Override
 	public int getHp() {
 		if (hp == -1) hp = getMaxHp();
 		return hp;
@@ -236,7 +242,7 @@ public class Monster extends DAO<Monster> implements Actor {
 	public Senshi asSenshi(I18N locale) {
 		if (senshiCache != null) return senshiCache;
 
-		Senshi s = new Senshi(id, getName(locale), stats.getRace());
+		Senshi s = new Senshi(this, locale);
 		CardAttributes base = s.getBase();
 
 		modifiers.clear();

@@ -105,6 +105,11 @@ public class Hero extends DAO<Hero> implements Actor {
 		return getName();
 	}
 
+	@Override
+	public Race getRace() {
+		return stats.getRace();
+	}
+
 	public boolean setImage(BufferedImage img) {
 		String hash = HexFormat.of().formatHex(DigestUtils.getMd5Digest().digest(("H:" + id).getBytes()));
 		File parent = new File(System.getenv("CARDS_PATH") + "../heroes");
@@ -245,7 +250,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	public Senshi asSenshi(I18N locale) {
 		if (senshiCache != null) return senshiCache;
 
-		senshiCache = new Senshi(id, getName(), stats.getRace());
+		senshiCache = new Senshi(this, locale);
 		CardAttributes base = senshiCache.getBase();
 
 		modifiers.clear();
