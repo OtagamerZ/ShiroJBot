@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 public interface Actor {
+	String getId();
 	String getName(I18N locale);
 
 	int getHp();

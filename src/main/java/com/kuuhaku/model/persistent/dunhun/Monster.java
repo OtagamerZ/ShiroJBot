@@ -75,6 +75,7 @@ public class Monster extends DAO<Monster> implements Actor {
 	private transient int ap;
 	private transient boolean flee;
 
+	@Override
 	public String getId() {
 		return id;
 	}

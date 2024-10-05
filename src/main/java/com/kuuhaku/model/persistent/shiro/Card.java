@@ -21,7 +21,10 @@ package com.kuuhaku.model.persistent.shiro;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
+import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -70,11 +73,11 @@ public class Card extends DAO<Card> implements Serializable {
 	public Card() {
 	}
 
-	public Card(String id, String name) {
-		this.id = "H:" + id;
-		this.name = name;
+	public Card(Actor act, I18N locale) {
+		this.id = (act instanceof Hero ? "H" : "M") + ":" + act.getId();
+		this.name = act.getName(locale);
 		this.anime = DAO.find(Anime.class, "NO_SYNC");
-		this.rarity = Rarity.HERO;
+		this.rarity = act instanceof Hero ? Rarity.HERO : Rarity.MONSTER;
 	}
 
 	public String getId() {
@@ -173,12 +176,19 @@ public class Card extends DAO<Card> implements Serializable {
 	private byte[] getImageBytes() {
 		String key;
 		String path;
-		if (rarity != Rarity.HERO) {
-			key = id;
-			path = System.getenv("CARDS_PATH") + anime.getId();
-		} else {
-			key = HexFormat.of().formatHex(DigestUtils.getMd5Digest().digest(id.getBytes()));
-			path = System.getenv("CARDS_PATH") + "../heroes";
+		switch (rarity) {
+			case HERO -> {
+				key = HexFormat.of().formatHex(DigestUtils.getMd5Digest().digest(id.getBytes()));
+				path = System.getenv("CARDS_PATH") + "../heroes";
+			}
+			case MONSTER -> {
+				key = id.split(":")[1];
+				path = System.getenv("CARDS_PATH") + "../monsters";
+			}
+			default -> {
+				key = id;
+				path = System.getenv("CARDS_PATH") + anime.getId();
+			}
 		}
 
 		byte[] cardBytes = Main.getCacheManager().computeResource(key, (k, v) -> {

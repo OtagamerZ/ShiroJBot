@@ -40,6 +40,7 @@ public enum Rarity {
 	FIELD("\uD83C\uDFD4️ "),
 	FUSION,
 	HERO,
+	MONSTER,
 	NONE;
 
 	private final int index;

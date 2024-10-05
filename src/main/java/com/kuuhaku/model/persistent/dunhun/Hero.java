@@ -91,6 +91,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		stats.setRace(race);
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
