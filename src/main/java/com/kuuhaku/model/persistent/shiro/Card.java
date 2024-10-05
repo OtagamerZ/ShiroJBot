@@ -30,6 +30,7 @@ import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import okio.Buffer;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -198,7 +199,7 @@ public class Card extends DAO<Card> implements Serializable {
 				File f = new File(path, key + ".png");
 				if (f.exists()) {
 					return FileUtils.readFileToByteArray(f);
-				} else if (rarity != Rarity.HERO) {
+				} else if (!Utils.equalsAny(rarity, Rarity.HERO, Rarity.MONSTER)) {
 					return IO.getImageBytes(Constants.API_ROOT + "card/" + anime.getId() + "/" + key + ".png");
 				}
 			} catch (IOException e) {
