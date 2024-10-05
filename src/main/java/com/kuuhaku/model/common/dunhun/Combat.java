@@ -3,6 +3,7 @@ package com.kuuhaku.model.common.dunhun;
 import com.github.ygimenez.listener.EventHandler;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
+import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.Renderer;
@@ -341,32 +342,36 @@ public class Combat implements Renderer<BufferedImage> {
 				helper = null;
 
 				cpu.schedule(() -> {
-					List<Skill> skills = curr.getSkills().stream()
-							.filter(s -> s.getApCost() <= curr.getAp() && !curr.getModifiers().isCoolingDown(s))
-							.toList();
+					try {
+						List<Skill> skills = curr.getSkills().stream()
+								.filter(s -> s.getApCost() <= curr.getAp() && !curr.getModifiers().isCoolingDown(s))
+								.toList();
 
-					if (!skills.isEmpty() && Calc.chance(33)) {
-						Skill skill = Utils.getRandomEntry(skills);
+						if (!skills.isEmpty() && Calc.chance(33)) {
+							Skill skill = Utils.getRandomEntry(skills);
 
-						Actor t = Utils.getRandomEntry(skill.getTargets(this, curr));
-						skill.execute(this, curr, t);
-						curr.modAp(-skill.getApCost());
+							Actor t = Utils.getRandomEntry(skill.getTargets(this, curr));
+							skill.execute(this, curr, t);
+							curr.modAp(-skill.getApCost());
 
-						if (skill.getCooldown() > 0) {
-							curr.getModifiers().setCooldown(skill, skill.getCooldown());
+							if (skill.getCooldown() > 0) {
+								curr.getModifiers().setCooldown(skill, skill.getCooldown());
+							}
+
+							history.add(locale.get(t.equals(curr) ? "str/used_skill_self" : "str/used_skill",
+									curr.getName(locale), skill.getInfo(locale).getName(), t.getName(locale))
+							);
+						} else if (curr.getAp() == 1 && Calc.chance(25)) {
+							curr.asSenshi(locale).setDefending(true);
+							curr.modAp(-1);
+
+							history.add(locale.get("str/actor_defend", curr.getName(locale)));
+						} else {
+							attack(curr, Utils.getRandomEntry(getActors(curr.getTeam().getOther())));
+							curr.modAp(-1);
 						}
-
-						history.add(locale.get(t.equals(curr) ? "str/used_skill_self" : "str/used_skill",
-							curr.getName(locale), skill.getInfo(locale).getName(), t.getName(locale))
-						);
-					} else if (curr.getAp() == 1 && Calc.chance(25)) {
-						curr.asSenshi(locale).setDefending(true);
-						curr.modAp(-1);
-
-						history.add(locale.get("str/actor_defend", curr.getName(locale)));
-					} else {
-						attack(curr, Utils.getRandomEntry(getActors(curr.getTeam().getOther())));
-						curr.modAp(-1);
+					} catch (Exception e) {
+						Constants.LOGGER.error(e, e);
 					}
 
 					lock.complete(null);
