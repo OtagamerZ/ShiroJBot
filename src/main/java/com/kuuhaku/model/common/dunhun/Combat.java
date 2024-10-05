@@ -344,7 +344,7 @@ public class Combat implements Renderer<BufferedImage> {
 							.filter(s -> s.getApCost() <= curr.getAp() && !curr.getModifiers().isCoolingDown(s))
 							.toList();
 
-					if (!skills.isEmpty() && Calc.chance(50)) {
+					if (!skills.isEmpty() && Calc.chance(33)) {
 						Skill skill = Utils.getRandomEntry(skills);
 
 						Actor tgt = Utils.getRandomEntry(skill.getTargets(this, curr));
