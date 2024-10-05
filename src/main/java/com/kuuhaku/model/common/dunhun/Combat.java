@@ -141,7 +141,10 @@ public class Combat implements Renderer<BufferedImage> {
 				int max = a.getMaxHp();
 				while (max > 0) {
 					int eMax = Math.min(max, 1000);
-					sb.appendNewLine(Utils.makeProgressBar(hp, eMax, Math.round(eMax / 100f)));
+					int steps = Math.round(eMax / 100f);
+					if (steps == 0) break;
+
+					sb.appendNewLine(Utils.makeProgressBar(hp, eMax, steps));
 
 					hp -= 1000;
 					max -= 1000;
@@ -281,7 +284,7 @@ public class Combat implements Renderer<BufferedImage> {
 							for (Actor a : getActors()) {
 								if (!(a instanceof Monster m)) continue;
 
-								XStringBuilder sb = new XStringBuilder();
+								XStringBuilder sb = new XStringBuilder("-# " + m.getInfo(locale).getName() + "\n");
 
 								Set<Affix> affs = m.getAffixes();
 								if (!affs.isEmpty()) {
