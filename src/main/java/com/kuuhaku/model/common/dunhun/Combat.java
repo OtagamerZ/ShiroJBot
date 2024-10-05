@@ -247,7 +247,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 							addSelector(w.getMessage(), helper, skill.getTargets(this, h),
 									t -> lock.complete(() -> {
-										skill.execute(this, h, t);
+										skill.execute(locale, this, h, t);
 										h.modAp(-skill.getApCost());
 
 										if (skill.getCooldown() > 0) {
