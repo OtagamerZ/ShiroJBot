@@ -94,7 +94,7 @@ public class Event extends DAO<Event> {
 			Utils.exec(id, effect, Map.of(
 					"locale", locale,
 					"event", this,
-					"hero", hero
+					"actor", hero
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute event {}", id, e);
