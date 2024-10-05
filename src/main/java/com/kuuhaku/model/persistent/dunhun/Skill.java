@@ -53,6 +53,9 @@ public class Skill extends DAO<Skill> {
 	@Column(name = "ap_cost", nullable = false)
 	private int apCost;
 
+	@Column(name = "cooldown", nullable = false)
+	private int cooldown;
+
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
@@ -73,6 +76,10 @@ public class Skill extends DAO<Skill> {
 
 	public int getApCost() {
 		return apCost;
+	}
+
+	public int getCooldown() {
+		return cooldown;
 	}
 
 	public void execute(Combat combat, Actor source, Actor target) {

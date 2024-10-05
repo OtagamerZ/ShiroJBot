@@ -235,12 +235,19 @@ public class Combat implements Renderer<BufferedImage> {
 							} else if (skill.getApCost() > h.getAp()) {
 								game.getChannel().sendMessage(locale.get("error/not_enough_ap")).queue();
 								return;
+							} else if (h.getModifiers().isCoolingDown(skill)) {
+								game.getChannel().sendMessage(locale.get("error/skill_cooldown")).queue();
+								return;
 							}
 
 							addSelector(w.getMessage(), helper, skill.getTargets(this, h),
 									t -> lock.complete(() -> {
 										skill.execute(this, h, t);
 										h.modAp(-skill.getApCost());
+
+										if (skill.getCooldown() > 0) {
+											h.getModifiers().setCooldown(skill, skill.getCooldown());
+										}
 
 										history.add(locale.get(t.equals(h) ? "str/used_skill_self" : "str/used_skill",
 												h.getName(), skill.getInfo(locale).getName(), t.getName(locale))
@@ -311,8 +318,14 @@ public class Combat implements Renderer<BufferedImage> {
 								.setMaxValues(1);
 
 						for (Skill s : skills) {
+							String cdText = "";
+							int cd = h.getModifiers().getCooldowns().getOrDefault(s.getId(), 0);
+							if (cd > 0) {
+								cdText = " (CD: " + locale.get("str/turns_inline", cd) + ")";
+							}
+
 							b.addOption(
-									s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()),
+									s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()) + cdText,
 									s.getId(),
 									s.getInfo(locale).getDescription()
 							);
@@ -327,8 +340,27 @@ public class Combat implements Renderer<BufferedImage> {
 				helper = null;
 
 				cpu.schedule(() -> {
-					attack(curr, Utils.getRandomEntry(getActors(curr.getTeam().getOther())));
-					curr.modAp(-1);
+					List<Skill> skills = curr.getSkills().stream()
+							.filter(s -> s.getApCost() <= curr.getAp() && !curr.getModifiers().isCoolingDown(s))
+							.toList();
+
+					if (!skills.isEmpty() && Calc.chance(50)) {
+						Skill skill = Utils.getRandomEntry(skills);
+
+						Actor tgt = Utils.getRandomEntry(skill.getTargets(this, curr));
+						skill.execute(this, curr, tgt);
+						curr.modAp(-skill.getApCost());
+
+						if (skill.getCooldown() > 0) {
+							curr.getModifiers().setCooldown(skill, skill.getCooldown());
+						}
+					} else if (curr.getAp() == 1 && Calc.chance(25)) {
+						curr.asSenshi(locale).setDefending(true);
+						curr.modAp(-1);
+					} else {
+						attack(curr, Utils.getRandomEntry(getActors(curr.getTeam().getOther())));
+						curr.modAp(-1);
+					}
 
 					lock.complete(null);
 				}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
@@ -428,8 +460,14 @@ public class Combat implements Renderer<BufferedImage> {
 						.setMaxValues(1);
 
 				for (Skill s : skills) {
+					String cdText = "";
+					int cd = h.getModifiers().getCooldowns().getOrDefault(s.getId(), 0);
+					if (cd > 0) {
+						cdText = " (CD: " + locale.get("str/turns_inline", cd) + ")";
+					}
+
 					b.addOption(
-							s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()),
+							s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()) + cdText,
 							s.getId(),
 							s.getInfo(locale).getDescription()
 					);
