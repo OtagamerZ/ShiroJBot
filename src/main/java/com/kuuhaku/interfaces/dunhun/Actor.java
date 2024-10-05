@@ -27,6 +27,12 @@ public interface Actor {
 	BufferedImage render(I18N locale);
 
 	List<Skill> getSkills();
+	default Skill getSkill(String id) {
+		return getSkills().stream()
+				.filter(skill -> skill.getId().equals(id))
+				.findFirst()
+				.orElse(null);
+	}
 
 	Team getTeam();
 	void setTeam(Team team);

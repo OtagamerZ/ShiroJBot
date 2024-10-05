@@ -1,5 +1,6 @@
 package com.kuuhaku.model.common.dunhun;
 
+import com.github.ygimenez.listener.EventHandler;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Main;
@@ -33,6 +34,7 @@ import net.dv8tion.jda.api.interactions.components.LayoutComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -217,6 +219,29 @@ public class Combat implements Renderer<BufferedImage> {
 									})
 							);
 						})
+						.addAction(Utils.parseEmoji("⚡"), w -> {
+							EventHandler handle = Pages.getHandler();
+							List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("skills");
+							if (selected == null || selected.isEmpty()) {
+								game.getChannel().sendMessage(locale.get("error/no_skill_selected")).queue();
+								return;
+							}
+
+							Skill skill = h.getSkill(String.valueOf(selected.getFirst()));
+							if (skill == null) {
+								game.getChannel().sendMessage(locale.get("error/invalid_skill")).queue();
+								return;
+							}
+
+							addSelector(w.getMessage(), helper, skill.getTargets(this, h),
+									t -> lock.complete(() -> {
+										skill.execute(this, h, t);
+										history.add(locale.get("str/used_skill",
+												h.getName(), skill.getInfo(locale).getName(), t.getName(locale))
+										);
+									})
+							);
+						})
 						.addAction(Utils.parseEmoji("🛡"), w -> lock.complete(() -> {
 							h.asSenshi(locale).setDefending(true);
 							h.modAp(-1);
@@ -275,10 +300,16 @@ public class Combat implements Renderer<BufferedImage> {
 				ca.apply(a -> {
 					List<Skill> skills = h.getSkills();
 					if (!skills.isEmpty()) {
-						StringSelectMenu.Builder b = StringSelectMenu.create("skills");
+						StringSelectMenu.Builder b = StringSelectMenu.create("skills")
+								.setPlaceholder(locale.get("str/use_a_skill"))
+								.setMaxValues(1);
 
 						for (Skill s : skills) {
-							b.addOption(s.getInfo(locale).getName(), s.getId(), s.getInfo(locale).getDescription());
+							b.addOption(
+									s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()),
+									s.getId(),
+									s.getInfo(locale).getDescription()
+							);
 						}
 
 						return helper.apply(a).addActionRow(b.build());
