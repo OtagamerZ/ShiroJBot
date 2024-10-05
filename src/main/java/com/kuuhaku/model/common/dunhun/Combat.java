@@ -231,12 +231,17 @@ public class Combat implements Renderer<BufferedImage> {
 							if (skill == null) {
 								game.getChannel().sendMessage(locale.get("error/invalid_skill")).queue();
 								return;
+							} else if (skill.getApCost() > h.getAp()) {
+								game.getChannel().sendMessage(locale.get("error/not_enough_ap")).queue();
+								return;
 							}
 
 							addSelector(w.getMessage(), helper, skill.getTargets(this, h),
 									t -> lock.complete(() -> {
 										skill.execute(this, h, t);
-										history.add(locale.get("str/used_skill",
+										h.modAp(-skill.getApCost());
+
+										history.add(locale.get(t.equals(h) ? "str/used_skill_self" : "str/used_skill",
 												h.getName(), skill.getInfo(locale).getName(), t.getName(locale))
 										);
 									})
@@ -412,10 +417,31 @@ public class Combat implements Renderer<BufferedImage> {
 			);
 		}
 
-		helper.addAction(
-				Utils.parseEmoji("↩"),
-				w -> root.apply(msg.editMessageComponents()).queue(s -> Pages.buttonize(s, root))
-		);
+		helper.addAction(Utils.parseEmoji("↩"), w -> {
+			MessageEditAction ma = root.apply(msg.editMessageComponents());
+
+			List<Skill> skills = h.getSkills();
+			if (!skills.isEmpty()) {
+				StringSelectMenu.Builder b = StringSelectMenu.create("skills")
+						.setPlaceholder(locale.get("str/use_a_skill"))
+						.setMaxValues(1);
+
+				for (Skill s : skills) {
+					b.addOption(
+							s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()),
+							s.getId(),
+							s.getInfo(locale).getDescription()
+					);
+				}
+
+				List<LayoutComponent> comps = new ArrayList<>(ma.getComponents());
+				comps.add(ActionRow.of(b.build()));
+
+				ma.setComponents(comps);
+			}
+
+			ma.queue(s -> Pages.buttonize(s, root));
+		});
 
 		MessageEditAction act = msg.editMessageComponents();
 		List<LayoutComponent> rows = helper.getComponents(act);
