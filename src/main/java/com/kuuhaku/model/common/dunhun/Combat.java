@@ -214,7 +214,7 @@ public class Combat implements Renderer<BufferedImage> {
 						.setCancellable(false);
 
 				helper.addAction(Utils.parseEmoji("🗡"), w -> {
-							List<Actor> tgts = getTeam(h.getTeam().getOther()).stream()
+							List<Actor> tgts = getActors(h.getTeam().getOther()).stream()
 									.map(a -> a.hasFleed() || a.getHp() <= 0 ? null : a)
 									.toList();
 
@@ -247,7 +247,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 							addSelector(w.getMessage(), helper, skill.getTargets(this, h),
 									t -> lock.complete(() -> {
-										skill.execute(locale, this, h, t);
+										skill.execute(this, h, t);
 										h.modAp(-skill.getApCost());
 
 										if (skill.getCooldown() > 0) {
@@ -350,28 +350,38 @@ public class Combat implements Renderer<BufferedImage> {
 								.filter(s -> s.getApCost() <= curr.getAp() && !curr.getModifiers().isCoolingDown(s))
 								.toList();
 
+						boolean used = false;
 						if (!skills.isEmpty() && Calc.chance(33)) {
 							Skill skill = Utils.getRandomEntry(skills);
 
-							Actor t = Utils.getRandomEntry(skill.getTargets(this, curr));
-							skill.execute(locale, this, curr, t);
-							curr.modAp(-skill.getApCost());
+							List<Actor> tgts = skill.getTargets(this, curr);
+							if (!tgts.isEmpty()) {
+								Actor t = Utils.getRandomEntry(tgts);
+								skill.execute(locale, this, curr, t);
+								curr.modAp(-skill.getApCost());
 
 							if (skill.getCooldown() > 0) {
 								curr.getModifiers().setCooldown(skill, skill.getCooldown());
 							}
 
-							history.add(locale.get(t.equals(curr) ? "str/used_skill_self" : "str/used_skill",
-									curr.getName(locale), skill.getInfo(locale).getName(), t.getName(locale))
-							);
-						} else if (curr.getAp() == 1 && Calc.chance(25)) {
-							curr.asSenshi(locale).setDefending(true);
-							curr.modAp(-1);
+								history.add(locale.get(t.equals(curr) ? "str/used_skill_self" : "str/used_skill",
+										curr.getName(locale), skill.getInfo(locale).getName(), t.getName(locale))
+								);
 
-							history.add(locale.get("str/actor_defend", curr.getName(locale)));
-						} else {
-							attack(curr, Utils.getRandomEntry(getActors(curr.getTeam().getOther())));
-							curr.modAp(-1);
+								used = true;
+							}
+ 						}
+
+						if (!used) {
+							if (curr.getAp() == 1 && Calc.chance(25)) {
+								curr.asSenshi(locale).setDefending(true);
+								curr.modAp(-1);
+
+								history.add(locale.get("str/actor_defend", curr.getName(locale)));
+							} else {
+								attack(curr, Utils.getRandomEntry(getActors(curr.getTeam().getOther())));
+								curr.modAp(-1);
+							}
 						}
 					} catch (Exception e) {
 						Constants.LOGGER.error(e, e);
@@ -527,17 +537,10 @@ public class Combat implements Renderer<BufferedImage> {
 	public List<Actor> getActors() {
 		return Stream.of(hunters, keepers)
 				.flatMap(List::stream)
-				.filter(a -> !a.hasFleed() && a.getHp() > 0)
 				.toList();
 	}
 
 	public List<Actor> getActors(Team team) {
-		return getTeam(team).stream()
-				.filter(a -> !a.hasFleed() && a.getHp() > 0)
-				.toList();
-	}
-
-	public List<Actor> getTeam(Team team) {
 		return switch (team) {
 			case HUNTERS -> hunters;
 			case KEEPERS -> keepers;

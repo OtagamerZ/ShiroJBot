@@ -211,7 +211,7 @@ public class Gear extends DAO<Gear> {
 			case PT, UWU_PT -> "%1$s%2$s%3$s";
 		};
 
-		String pref = "", suff = " ";
+		String pref = "", suff = "";
 		for (GearAffix a : affixes) {
 			if (a.getAffix().getType() == AffixType.PREFIX) pref = " " + a.getName(locale);
 			else suff = " " + a.getName(locale);

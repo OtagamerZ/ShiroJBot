@@ -135,7 +135,7 @@ public class Monster extends DAO<Monster> implements Actor {
 			case PT, UWU_PT -> "%1$s%2$s%3$s";
 		};
 
-		String pref = "", suff = " ";
+		String pref = "", suff = "";
 		for (Affix a : affixes) {
 			if (a.getType() == AffixType.MON_PREFIX) pref = " " + a.getInfo(locale).getName();
 			else suff = " " + a.getInfo(locale).getName();
