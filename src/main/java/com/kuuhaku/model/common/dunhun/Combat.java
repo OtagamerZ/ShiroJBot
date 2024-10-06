@@ -202,13 +202,15 @@ public class Combat implements Renderer<BufferedImage> {
 					if (hunters.stream().noneMatch(a -> !a.hasFleed() && a.getHp() > 0)) break loop;
 					else if (keepers.stream().noneMatch(a -> !a.hasFleed() && a.getHp() > 0)) break loop;
 				}
-			} catch (InterruptedException | ExecutionException ignore) {
+			} catch (InterruptedException | ExecutionException e) {
+				Constants.LOGGER.warn(e, e);
 			}
 		}
 
 		try {
 			reload(false).get();
-		} catch (InterruptedException | ExecutionException ignore) {
+		} catch (InterruptedException | ExecutionException e) {
+			Constants.LOGGER.warn(e, e);
 		}
 	}
 

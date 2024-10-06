@@ -23,17 +23,18 @@ import com.kuuhaku.model.enums.shoukan.Arcade;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.util.Utils;
 
+import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 
 public class RegDeg {
-	private transient final Hand parent;
+	@Nullable private transient final Hand parent;
 	private final BondedList<ValueOverTime> values = BondedList.withBind((v, it) -> {
 		v.setValue(reduce(v.getClass(), v.getValue()));
 		return true;
 	});
 
-	public RegDeg(Hand parent) {
+	public RegDeg(@Nullable Hand parent) {
 		this.parent = parent;
 	}
 
@@ -132,7 +133,7 @@ public class RegDeg {
 	public int next() {
 		try {
 			int virus = 0;
-			if (parent.getOrigins().synergy() == Race.VIRUS) {
+			if (parent != null && parent.getOrigins().synergy() == Race.VIRUS) {
 				virus = -Math.min(parent.getOther().getRegDeg().peek(), 0);
 			}
 
@@ -168,7 +169,7 @@ public class RegDeg {
 		return values.stream().mapToInt(ValueOverTime::peek).sum() + virus;
 	}
 
-	public <T extends ValueOverTime> void clear() {
+	public void clear() {
 		values.clear();
 	}
 
