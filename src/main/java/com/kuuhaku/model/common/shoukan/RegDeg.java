@@ -116,17 +116,17 @@ public class RegDeg {
 		return val;
 	}
 
-	public int apply(double prcnt) {
+	public void apply(double prcnt) {
+		if (parent == null) return;
+
 		int value = (int) (peek() * Utils.clamp(prcnt, 0, 1));
-		if (parent != null) parent.modHP(value);
+		parent.modHP(value);
 
 		if (value > 0) {
 			reduce(Degen.class, value);
 		} else {
 			reduce(Regen.class, value);
 		}
-
-		return value;
 	}
 
 	public int next() {
