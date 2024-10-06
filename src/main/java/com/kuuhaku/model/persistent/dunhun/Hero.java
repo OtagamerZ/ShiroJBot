@@ -142,7 +142,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public int getMaxHp() {
-		return (int) ((500 + modifiers.getMaxHp()) * (1 + getAttributes().vit() / 10d));
+		return (int) ((500 + modifiers.getMaxHp().get()) * (1 + getAttributes().vit() / 10d));
 	}
 
 	@Override
@@ -152,7 +152,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public int getMaxAp() {
-		return Calc.clamp(1 + modifiers.getMaxAp() + stats.getLevel() / 5, 1, 5 + getAttributes().dex() / 10);
+		return Calc.clamp(1 + (int) modifiers.getMaxAp().get() + stats.getLevel() / 5, 1, 5 + getAttributes().dex() / 10);
 	}
 
 	@Override
@@ -162,7 +162,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public int getInitiative() {
-		return getAttributes().dex() / 3 + modifiers.getInitiative();
+		return getAttributes().dex() / 3 + (int) modifiers.getInitiative().get();
 	}
 
 	@Override

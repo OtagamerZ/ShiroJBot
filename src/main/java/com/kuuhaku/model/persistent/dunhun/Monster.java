@@ -164,7 +164,7 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	@Override
 	public int getMaxHp() {
-		int hp = (int) ((stats.getBaseHp() + modifiers.getMaxHp()) * modifiers.getHpMult());
+		int hp = (int) ((stats.getBaseHp() + modifiers.getMaxHp().get()) * modifiers.getHpMult().get());
 		switch (getRarityClass()) {
 			case RARE -> hp = (int) (hp * 2.25);
 			case MAGIC -> hp = (int) (hp * 1.5);
@@ -180,7 +180,7 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	@Override
 	public int getMaxAp() {
-		return Math.max(1, 1 + getModifiers().getMaxAp());
+		return (int) Math.max(1, 1 + getModifiers().getMaxAp().get());
 	}
 
 	@Override
