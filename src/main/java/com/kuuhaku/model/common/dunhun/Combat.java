@@ -138,7 +138,7 @@ public class Combat implements Renderer<BufferedImage> {
 				sb.appendNewLine("HP: " + a.getHp() + "/" + a.getMaxHp());
 				sb.nextLine();
 
-				int rd = a.getHp() + a.getRegDeg().peek();
+				int rd = a.getRegDeg().peek();
 				if (rd != 0) sb.append("__");
 
 				boolean rdClosed = false;
@@ -147,7 +147,7 @@ public class Combat implements Renderer<BufferedImage> {
 					if (i > 0 && i % 10 == 0) sb.nextLine();
 					int threshold = i * 100;
 
-					if (!rdClosed && threshold > rd) {
+					if (!rdClosed && threshold > a.getHp() + rd) {
 						sb.append("__");
 						rdClosed = true;
 					}
