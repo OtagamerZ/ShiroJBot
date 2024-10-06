@@ -26,6 +26,8 @@ public interface Actor {
 	void modAp(int value);
 
 	int getInitiative();
+	int getAggroScore();
+
 	boolean hasFleed();
 	void setFleed(boolean flee);
 

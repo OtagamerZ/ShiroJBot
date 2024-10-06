@@ -173,6 +173,9 @@ public class Monster extends DAO<Monster> implements Actor {
 		if (hp != 0) return;
 
 		this.hp = Calc.clamp(hp, 0, getMaxHp());
+		if (senshiCache != null) {
+			senshiCache.setAvailable(true);
+		}
 	}
 
 	@Override
@@ -204,6 +207,16 @@ public class Monster extends DAO<Monster> implements Actor {
 	@Override
 	public int getInitiative() {
 		return 0;
+	}
+
+	@Override
+	public int getAggroScore() {
+		int aggro = 0;
+		if (senshiCache != null) {
+			aggro += senshiCache.getDmg() / 10 + senshiCache.getDfs() / 20;
+		}
+
+		return (int) (aggro * modifiers.getAggroMult().get());
 	}
 
 	@Override

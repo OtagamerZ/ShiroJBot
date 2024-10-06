@@ -29,6 +29,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.SimpleMessageListener;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.CardFilter;
@@ -537,30 +538,19 @@ public abstract class Utils {
 	}
 
 	public static <T> T getRandomEntry(Collection<T> col) {
-		if (col.isEmpty()) throw new IllegalArgumentException("Collection must not be empty");
-
-		List<T> list = List.copyOf(col);
-		if (list.size() == 1) return list.getFirst();
-
-		return list.get(Calc.rng(list.size() - 1));
+		return getRandomEntry(Constants.DEFAULT_RNG.get(), col);
 	}
 
 	@SafeVarargs
 	public static <T> T getRandomEntry(T... array) {
-		if (array.length == 0) throw new IllegalArgumentException("Array must not be empty");
-		else if (array.length == 1) return array[0];
-
-		List<T> list = List.of(array);
-
-		return list.get(Calc.rng(list.size() - 1));
+		return getRandomEntry(Constants.DEFAULT_RNG.get(), array);
 	}
 
 	public static <T> T getRandomEntry(RandomGenerator random, Collection<T> col) {
 		if (col.isEmpty()) throw new IllegalArgumentException("Collection must not be empty");
+		else if (col.size() == 1) return col.iterator().next();
 
 		List<T> list = List.copyOf(col);
-		if (list.size() == 1) return list.getFirst();
-
 		return list.get(Calc.rng(list.size() - 1, random));
 	}
 
@@ -572,6 +562,38 @@ public abstract class Utils {
 		List<T> list = List.of(array);
 
 		return list.get(Calc.rng(list.size() - 1, random));
+	}
+
+	public static <T> T getWeightedEntry(Function<T, Integer> weighter, Collection<T> col) {
+		return getWeightedEntry(new RandomList<>(), weighter, col);
+	}
+
+	@SafeVarargs
+	public static <T> T getWeightedEntry(Function<T, Integer> weighter, T... array) {
+		return getWeightedEntry(new RandomList<>(), weighter, array);
+	}
+
+	public static <T> T getWeightedEntry(RandomList<T> randomizer, Function<T, Integer> weighter, Collection<T> col) {
+		if (col.isEmpty()) throw new IllegalArgumentException("Collection must not be empty");
+		else if (col.size() == 1) return col.iterator().next();
+
+		for (T t : col) {
+			randomizer.add(t, weighter.apply(t));
+		}
+
+		return randomizer.get();
+	}
+
+	@SafeVarargs
+	public static <T> T getWeightedEntry(RandomList<T> randomizer, Function<T, Integer> weighter, T... array) {
+		if (array.length == 0) throw new IllegalArgumentException("Array must not be empty");
+		else if (array.length == 1) return array[0];
+
+		for (T t : array) {
+			randomizer.add(t, weighter.apply(t));
+		}
+
+		return randomizer.get();
 	}
 
 	public static <T> List<T> getRandomN(List<T> list, int elements) {
