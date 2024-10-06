@@ -162,7 +162,7 @@ public class Combat implements Renderer<BufferedImage> {
 						rdClosed = true;
 					}
 
-					if (a.getHp() >= threshold) sb.append('▰');
+					if (a.getHp() > 0 && a.getHp() >= threshold) sb.append('▰');
 					else sb.append('▱');
 				}
 
