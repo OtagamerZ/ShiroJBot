@@ -18,26 +18,40 @@
 
 package com.kuuhaku.model.records;
 
+import com.kuuhaku.util.Bit32;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public record Attributes(
-		@Column(name = "str", nullable = false)
-		int str,
-		@Column(name = "dex", nullable = false)
-		int dex,
-		@Column(name = "wis", nullable = false)
-		int wis,
-		@Column(name = "vit", nullable = false)
-		int vit
-) {
+public record Attributes(@Column(name = "attributes", nullable = false) int attributes) {
+	public Attributes(int str, int dex, int wis, int vit) {
+		this((str & 0xFF) | (dex & 0xFF) << 8 | (wis & 0xFF) << 16 | (vit & 0xFF) << 24);
+	}
+	/*
+	0xFF FF FF FF
+	  └┤ └┤ └┤ └┴ strength
+	   │  │  └ dexterity
+	   │  └ wisdom
+	   └ vitality
+	 */
+
+	public int str() {
+		return Bit32.get(attributes, 0, 8);
+	}
+
+	public int dex() {
+		return Bit32.get(attributes, 1, 8);
+	}
+
+	public int wis() {
+		return Bit32.get(attributes, 2, 8);
+	}
+
+	public int vit() {
+		return Bit32.get(attributes, 3, 8);
+	}
+
 	public Attributes merge(Attributes attr) {
-		return new Attributes(
-				str + attr.str,
-				dex + attr.dex,
-				wis + attr.wis,
-				vit + attr.vit
-		);
+		return new Attributes(attributes | attr.attributes);
 	}
 }

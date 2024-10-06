@@ -37,15 +37,8 @@ public class HeroStats {
 	@Column(name = "race", nullable = false)
 	private Race race;
 
-	@Column(name = "attributes", nullable = false)
-	private int attributes;
-	/*
-	0xFF FF FF FF
-	  └┤ └┤ └┤ └┴ strength
-	   │  │  └ dexterity
-	   │  └ wisdom
-	   └ vitality
-	 */
+	@Embedded
+	private Attributes attributes;
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
@@ -76,40 +69,8 @@ public class HeroStats {
 		this.race = race;
 	}
 
-	public int getStrength() {
-		return Bit32.get(attributes, 0, 8);
-	}
-
-	public void setStrength(int value) {
-		attributes = Bit32.set(attributes, 0, value, 8);
-	}
-
-	public int getDexterity() {
-		return Bit32.get(attributes, 0, 8);
-	}
-
-	public void setDexterity(int value) {
-		attributes = Bit32.set(attributes, 1, value, 8);
-	}
-
-	public int getWisdom() {
-		return Bit32.get(attributes, 2, 8);
-	}
-
-	public void setWisdom(int value) {
-		attributes = Bit32.set(attributes, 2, value, 8);
-	}
-
-	public int getVitality() {
-		return Bit32.get(attributes, 3, 8);
-	}
-
-	public void setVitality(int value) {
-		attributes = Bit32.set(attributes, 3, value, 8);
-	}
-
 	public Attributes getAttributes() {
-		return new Attributes(getStrength(), getDexterity(), getWisdom(), getVitality());
+		return attributes;
 	}
 
 	public JSONArray getSkills() {
