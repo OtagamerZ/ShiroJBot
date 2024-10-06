@@ -21,6 +21,7 @@ package com.kuuhaku.model.records.dunhun;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.dunhun.Affix;
+import com.kuuhaku.model.records.Attributes;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -36,14 +37,8 @@ public record GearStats(
 		int defense,
 		@Column(name = "critical", nullable = false)
 		float critical,
-		@Column(name = "str", nullable = false)
-		int str,
-		@Column(name = "dex", nullable = false)
-		int dex,
-		@Column(name = "wis", nullable = false)
-		int wis,
-		@Column(name = "vit", nullable = false)
-		int vit,
+		@Embedded
+		Attributes requirements,
 		@Enumerated(EnumType.STRING)
 		@Column(name = "slot", nullable = false)
 		GearSlot slot,

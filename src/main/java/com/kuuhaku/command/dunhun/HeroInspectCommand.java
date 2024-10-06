@@ -32,6 +32,7 @@ import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.records.Attributes;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.GearStats;
@@ -121,15 +122,16 @@ public class HeroInspectCommand implements Executable {
 			eb.appendDescription("\n");
 		}
 
-		if (stats.str() + stats.dex() + stats.wis() + stats.vit() > 0) {
+		Attributes reqs = stats.requirements();
+		if (reqs.str() + reqs.dex() + reqs.wis() + reqs.vit() > 0) {
 			eb.appendDescription("-# " + locale.get("str/required_attributes") + "\n");
 		}
 
 		List<String> attrs = new ArrayList<>();
-		if (stats.str() > 0) attrs.add("STR: " + stats.str() + " ");
-		if (stats.dex() > 0) attrs.add("DEX: " + stats.dex() + " ");
-		if (stats.wis() > 0) attrs.add("WIS: " + stats.wis() + " ");
-		if (stats.vit() > 0) attrs.add("VIT: " + stats.vit() + " ");
+		if (reqs.str() > 0) attrs.add("STR: " + reqs.str() + " ");
+		if (reqs.dex() > 0) attrs.add("DEX: " + reqs.dex() + " ");
+		if (reqs.wis() > 0) attrs.add("WIS: " + reqs.wis() + " ");
+		if (reqs.vit() > 0) attrs.add("VIT: " + reqs.vit() + " ");
 
 		if (!attrs.isEmpty()) {
 			eb.appendDescription(String.join(" | ", attrs) + "\n\n");

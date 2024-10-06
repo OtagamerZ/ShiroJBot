@@ -24,6 +24,8 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
+import com.kuuhaku.model.records.Attributes;
+import com.kuuhaku.model.records.dunhun.GearStats;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
@@ -63,6 +65,9 @@ public class Skill extends DAO<Skill> {
 	@Language("Groovy")
 	@Column(name = "targeter", columnDefinition = "TEXT")
 	private String targeter;
+
+	@Embedded
+	private Attributes requirements;
 
 	public String getId() {
 		return id;
@@ -109,6 +114,10 @@ public class Skill extends DAO<Skill> {
 		}
 
 		return out;
+	}
+
+	public Attributes getRequirements() {
+		return requirements;
 	}
 
 	@Override

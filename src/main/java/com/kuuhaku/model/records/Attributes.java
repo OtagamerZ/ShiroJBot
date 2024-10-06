@@ -18,7 +18,20 @@
 
 package com.kuuhaku.model.records;
 
-public record Attributes(int str, int dex, int wis, int vit) {
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+
+@Embeddable
+public record Attributes(
+		@Column(name = "str", nullable = false)
+		int str,
+		@Column(name = "dex", nullable = false)
+		int dex,
+		@Column(name = "wis", nullable = false)
+		int wis,
+		@Column(name = "vit", nullable = false)
+		int vit
+) {
 	public Attributes merge(Attributes attr) {
 		return new Attributes(
 				str + attr.str,
