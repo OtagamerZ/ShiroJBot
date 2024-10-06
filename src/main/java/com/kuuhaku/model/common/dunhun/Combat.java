@@ -153,13 +153,13 @@ public class Combat implements Renderer<BufferedImage> {
 					if (i > 0 && i % 10 == 0) sb.nextLine();
 					int threshold = i * 100;
 
-					if (a.getHp() >= threshold) sb.append('▰');
-					else sb.append('▱');
-
 					if (!rdClosed && threshold > rd) {
 						sb.append("__");
 						rdClosed = true;
 					}
+
+					if (a.getHp() >= threshold) sb.append('▰');
+					else sb.append('▱');
 				}
 
 				sb.appendNewLine(Utils.makeProgressBar(a.getAp(), a.getMaxAp(), a.getMaxAp(), '◇', '◈'));
