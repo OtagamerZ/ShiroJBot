@@ -268,7 +268,7 @@ public class Combat implements Renderer<BufferedImage> {
 						})
 						.addAction(Utils.parseEmoji("🛡"), w -> lock.complete(() -> {
 							h.asSenshi(locale).setDefending(true);
-							h.modAp(-1);
+							h.modAp(-h.getAp());
 
 							history.add(locale.get("str/actor_defend", h.getName()));
 						}))
