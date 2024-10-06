@@ -871,7 +871,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public void setDefending(boolean defending) {
 		state = Bit64.set(state, 1, defending);
 
-		if (!isFlipped() && slot != null) {
+		if (getGame() != null && !isFlipped() && slot != null) {
 			getGame().trigger(ON_SWITCH, asSource(ON_SWITCH));
 		}
 	}
