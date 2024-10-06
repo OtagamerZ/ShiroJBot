@@ -55,7 +55,7 @@ public class StealCommand implements Executable {
 		} else if (target.equals(event.user())) {
 			event.channel().sendMessage(locale.get("error/self_not_allowed")).queue();
 			return;
-		} else if (event.channel().canTalk(target)) {
+		} else if (!event.channel().canTalk(target)) {
 			event.channel().sendMessage(locale.get("error/steal_not_here")).queue();
 			return;
 		}
