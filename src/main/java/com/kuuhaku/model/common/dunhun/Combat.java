@@ -379,7 +379,7 @@ public class Combat implements Renderer<BufferedImage> {
 									.toList();
 
 							if (!tgts.isEmpty()) {
-								Actor t = Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts);
+								Actor t = Utils.getWeightedEntry(rngList, a -> a.getAggroScore(locale), tgts);
 								skill.execute(locale, this, curr, t);
 								curr.modAp(-skill.getApCost());
 
@@ -404,7 +404,7 @@ public class Combat implements Renderer<BufferedImage> {
 							} else {
 								List<Actor> tgts = getActors(curr.getTeam().getOther());
 
-								attack(curr, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
+								attack(curr, Utils.getWeightedEntry(rngList, a -> a.getAggroScore(locale), tgts));
 								curr.modAp(-1);
 							}
 						}

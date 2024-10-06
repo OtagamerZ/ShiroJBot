@@ -27,7 +27,7 @@ public interface Actor {
 
 	int getInitiative();
 	double getCritical();
-	int getAggroScore();
+	int getAggroScore(I18N locale);
 
 	boolean hasFleed();
 	void setFleed(boolean flee);
