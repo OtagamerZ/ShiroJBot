@@ -138,10 +138,13 @@ public class Combat implements Renderer<BufferedImage> {
 				sb.appendNewLine("HP: " + a.getHp() + "/" + a.getMaxHp());
 				sb.nextLine();
 
+				boolean rdClosed = true;
 				int rd = a.getRegDeg().peek();
-				if (rd != 0) sb.append("__");
-
-				boolean rdClosed = false;
+				if (rd != 0) {
+					sb.append("__");
+					rdClosed = false;
+				}
+ 
 				int steps = (int) Math.ceil(a.getMaxHp() / 100d);
 				for (int i = 0; i < steps; i++) {
 					if (i > 0 && i % 10 == 0) sb.nextLine();
