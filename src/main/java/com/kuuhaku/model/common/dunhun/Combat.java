@@ -83,7 +83,13 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		ExecutorService exec = Executors.newSingleThreadExecutor();
-		CompletableFuture.runAsync(this::process, exec);
+		CompletableFuture.runAsync(() -> {
+			try {
+				process();
+			} catch (Exception e) {
+				Constants.LOGGER.error(e, e);
+			}
+		}, exec);
 	}
 
 	@Override
