@@ -83,13 +83,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		ExecutorService exec = Executors.newSingleThreadExecutor();
-		CompletableFuture.runAsync(() -> {
-			try {
-				process();
-			} catch (Exception e) {
-				Constants.LOGGER.error(e, e);
-			}
-		}, exec);
+		CompletableFuture.runAsync(this::process, exec);
 	}
 
 	@Override
@@ -191,7 +185,7 @@ public class Combat implements Renderer<BufferedImage> {
 				act.asSenshi(locale).setDefending(false);
 				act.modAp(act.getMaxAp());
 				act.getModifiers().expireMods();
-//				act.modHp(act.getRegDeg().next());
+				act.modHp(act.getRegDeg().next());
 
 				while (act.getAp() > 0) {
 					Runnable action = reload(true).get();
@@ -202,14 +196,14 @@ public class Combat implements Renderer<BufferedImage> {
 					if (hunters.stream().noneMatch(a -> !a.hasFleed() && a.getHp() > 0)) break loop;
 					else if (keepers.stream().noneMatch(a -> !a.hasFleed() && a.getHp() > 0)) break loop;
 				}
-			} catch (InterruptedException | ExecutionException e) {
+			} catch (Exception e) {
 				Constants.LOGGER.warn(e, e);
 			}
 		}
 
 		try {
 			reload(false).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (Exception e) {
 			Constants.LOGGER.warn(e, e);
 		}
 	}
