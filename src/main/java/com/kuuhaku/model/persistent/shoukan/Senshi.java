@@ -127,7 +127,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return true;
 	}, e -> {
 		e.setCurrentStack(getEquipments(false));
-		getGame().trigger(ON_EQUIP, asSource(ON_EQUIP));
+		trigger(ON_EQUIP, asSource(ON_EQUIP));
 	}, e -> {
 		e.executeAssert(ON_REMOVE);
 		e.setEquipper(null);
@@ -871,8 +871,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public void setDefending(boolean defending) {
 		state = Bit64.set(state, 1, defending);
 
-		if (getGame() != null && !isFlipped() && slot != null) {
-			getGame().trigger(ON_SWITCH, asSource(ON_SWITCH));
+		if (!isFlipped() && slot != null) {
+			trigger(ON_SWITCH, asSource(ON_SWITCH));
 		}
 	}
 
@@ -891,9 +891,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (hand != null && getGame() != null) {
 				if (getGame().getCurrentSide() != hand.getSide()) {
-					getGame().trigger(ON_FLIP, asSource(ON_FLIP));
+					trigger(ON_FLIP, asSource(ON_FLIP));
 				} else {
-					getGame().trigger(ON_SUMMON, asSource(ON_SUMMON));
+					trigger(ON_SUMMON, asSource(ON_SUMMON));
 				}
 			}
 		}
@@ -1344,7 +1344,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 					if (trigger == ON_ACTIVATE) {
 						hand.getData().put("last_ability", this);
-						getGame().trigger(ON_ABILITY, getSide());
+						trigger(ON_ABILITY, getSide());
 					}
 				}
 			}
@@ -1466,11 +1466,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				return false;
 			}
 
-			if (getGame() != null) {
-				getGame().trigger(ON_EFFECT_TARGET, source.asSource(), asTarget(ON_EFFECT_TARGET));
-				if (isStasis() || hasFlag(Flag.IGNORE_EFFECT, true)) {
-					return true;
-				}
+			trigger(ON_EFFECT_TARGET, source.asSource(), asTarget(ON_EFFECT_TARGET));
+			if (isStasis() || hasFlag(Flag.IGNORE_EFFECT, true)) {
+				return true;
 			}
 		}
 

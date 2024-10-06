@@ -26,15 +26,14 @@ import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.Charm;
-import com.kuuhaku.model.enums.shoukan.Flag;
-import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.DeckStyling;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.PropValue;
+import com.kuuhaku.model.records.shoukan.Source;
+import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -110,6 +109,18 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		return (EffectHolder<?>) Utils.getOr(getStats().getSource(), this);
 	}
 
+	default void trigger(Trigger trigger, Source source, Target... targets) {
+		if (getGame() != null) {
+			getGame().trigger(trigger, source, targets);
+		}
+	}
+
+	default void trigger(Trigger trigger, Side side) {
+		if (getGame() != null) {
+			getGame().trigger(trigger, side);
+		}
+	}
+
 	default Flags getFlags() {
 		return getStats().getFlags();
 	}
@@ -132,9 +143,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	default void setFlag(Drawable<?> source, Flag flag) {
 		getStats().setFlag(source, flag, true, true);
-		if (getGame() != null) {
-			getGame().trigger(Trigger.ON_FLAG_ALTER, asSource(Trigger.ON_FLAG_ALTER));
-		}
+		trigger(Trigger.ON_FLAG_ALTER, asSource(Trigger.ON_FLAG_ALTER));
 	}
 
 	default void setFlag(Flag flag, boolean value) {
@@ -143,9 +152,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	default void setFlag(Drawable<?> source, Flag flag, boolean value) {
 		getStats().setFlag(source, flag, value, false);
-		if (getGame() != null) {
-			getGame().trigger(Trigger.ON_FLAG_ALTER, asSource(Trigger.ON_FLAG_ALTER));
-		}
+		trigger(Trigger.ON_FLAG_ALTER, asSource(Trigger.ON_FLAG_ALTER));
 	}
 
 	boolean hasCharm(Charm charm);
