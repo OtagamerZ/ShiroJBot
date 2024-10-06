@@ -8,10 +8,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.dunhun.Actor;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.FixedSizeDeque;
-import com.kuuhaku.model.common.InfiniteList;
-import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.Affix;
@@ -56,6 +53,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final List<Actor> keepers;
 	private final InfiniteList<Actor> turns = new InfiniteList<>();
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(5);
+	private final RandomList<Actor> rngList = new RandomList<>();
 
 	private CompletableFuture<Runnable> lock;
 
@@ -381,7 +379,7 @@ public class Combat implements Renderer<BufferedImage> {
 									.toList();
 
 							if (!tgts.isEmpty()) {
-								Actor t = Utils.getWeightedEntry(Actor::getAggroScore, tgts);
+								Actor t = Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts);
 								skill.execute(locale, this, curr, t);
 								curr.modAp(-skill.getApCost());
 
@@ -405,7 +403,8 @@ public class Combat implements Renderer<BufferedImage> {
 								history.add(locale.get("str/actor_defend", curr.getName(locale)));
 							} else {
 								List<Actor> tgts = getActors(curr.getTeam().getOther());
-								attack(curr, Utils.getWeightedEntry(Actor::getAggroScore, tgts));
+
+								attack(curr, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
 								curr.modAp(-1);
 							}
 						}

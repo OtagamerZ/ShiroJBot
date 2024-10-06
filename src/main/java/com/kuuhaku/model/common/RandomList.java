@@ -132,6 +132,12 @@ public class RandomList<T> {
 		pool.removeIf(p -> predicate.test(p.getSecond()));
 	}
 
+	public void clear() {
+		total = 0;
+		map.clear();
+		pool.clear();
+	}
+
 	public Collection<T> values() {
 		return map.values();
 	}

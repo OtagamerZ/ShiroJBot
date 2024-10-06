@@ -577,10 +577,12 @@ public abstract class Utils {
 		if (col.isEmpty()) throw new IllegalArgumentException("Collection must not be empty");
 		else if (col.size() == 1) return col.iterator().next();
 
+		randomizer.clear();
 		for (T t : col) {
 			randomizer.add(t, weighter.apply(t));
 		}
 
+		System.out.println(randomizer);
 		return randomizer.get();
 	}
 
@@ -589,6 +591,7 @@ public abstract class Utils {
 		if (array.length == 0) throw new IllegalArgumentException("Array must not be empty");
 		else if (array.length == 1) return array[0];
 
+		randomizer.clear();
 		for (T t : array) {
 			randomizer.add(t, weighter.apply(t));
 		}
