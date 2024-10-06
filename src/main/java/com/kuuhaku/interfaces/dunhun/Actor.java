@@ -19,6 +19,7 @@ public interface Actor {
 	int getHp();
 	int getMaxHp();
 	void modHp(int value);
+	void revive(int hp);
 
 	int getAp();
 	int getMaxAp();
@@ -27,6 +28,10 @@ public interface Actor {
 	int getInitiative();
 	boolean hasFleed();
 	void setFleed(boolean flee);
+
+	default boolean isSkipped() {
+		return hasFleed() || getHp() <= 0;
+	}
 
 	ActorModifiers getModifiers();
 	RegDeg getRegDeg();

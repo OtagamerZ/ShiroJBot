@@ -137,7 +137,16 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public void modHp(int value) {
+		if (hp == 0) return;
+
 		hp = Calc.clamp(getHp() + value, 0, getMaxHp());
+	}
+
+	@Override
+	public void revive(int hp) {
+		if (hp != 0) return;
+
+		this.hp = Calc.clamp(hp, 0, getMaxHp());
 	}
 
 	@Override

@@ -96,7 +96,7 @@ public class Combat implements Renderer<BufferedImage> {
 		for (List<Actor> acts : List.of(hunters, keepers)) {
 			for (Actor a : acts) {
 				BufferedImage card;
-				if (a.getHp() <= 0 || a.hasFleed()) {
+				if (a.isSkipped()) {
 					a.asSenshi(locale).setAvailable(false);
 					BufferedImage overlay = IO.getResourceAsImage("shoukan/states/" + (a.getHp() <= 0 ? "dead" : "flee") + ".png");
 
@@ -194,10 +194,7 @@ public class Combat implements Renderer<BufferedImage> {
 			try {
 				act.asSenshi(locale).setDefending(false);
 				act.modHp(act.getRegDeg().next());
-				if (act.getHp() <= 0 || act.hasFleed()) {
-					act.asSenshi(locale).setAvailable(false);
-					continue;
-				}
+				if (act.isSkipped()) continue;
 
 				act.modAp(act.getMaxAp());
 				act.getModifiers().expireMods();
@@ -208,8 +205,8 @@ public class Combat implements Renderer<BufferedImage> {
 						action.run();
 					}
 
-					if (hunters.stream().noneMatch(a -> !a.hasFleed() && a.getHp() > 0)) break loop;
-					else if (keepers.stream().noneMatch(a -> !a.hasFleed() && a.getHp() > 0)) break loop;
+					if (hunters.stream().allMatch(Actor::isSkipped)) break loop;
+					else if (keepers.stream().allMatch(Actor::isSkipped)) break loop;
 				}
 			} catch (Exception e) {
 				Constants.LOGGER.warn(e, e);
@@ -239,7 +236,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 				helper.addAction(Utils.parseEmoji("🗡"), w -> {
 							List<Actor> tgts = getActors(h.getTeam().getOther()).stream()
-									.map(a -> a.hasFleed() || a.getHp() <= 0 ? null : a)
+									.map(a -> a.isSkipped() ? null : a)
 									.toList();
 
 							addSelector(w.getMessage(), helper, tgts,
