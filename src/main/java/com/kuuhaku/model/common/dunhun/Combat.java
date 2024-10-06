@@ -458,7 +458,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		boolean crit = Calc.chance(source.getCritical());
-		int raw = srcSen.getDmg();
+		int raw = srcSen.getDmg() * (crit ? 2 : 1);
 		int def = tgtSen.getDfs();
 
 		int dmg;
@@ -469,7 +469,12 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		target.modHp(-dmg);
-		history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale), dmg));
+		history.add(locale.get("str/actor_combat",
+				source.getName(locale),
+				target.getName(locale),
+				dmg,
+				crit ? ("**(" + locale.get("str/critical") + ")**") : ""
+		));
 	}
 
 	public void addSelector(Message msg, ButtonizeHelper root, List<Actor> targets, Consumer<Actor> action) {
