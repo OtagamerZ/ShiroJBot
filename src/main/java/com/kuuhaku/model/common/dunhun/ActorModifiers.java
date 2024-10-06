@@ -34,7 +34,7 @@ public class ActorModifiers {
 	private final CumValue maxHp = CumValue.flat();
 	private final CumValue maxAp = CumValue.flat();
 	private final CumValue initiative = CumValue.flat();
-	private final CumValue hpMult = CumValue.flat();
+	private final CumValue hpMult = CumValue.mult();
 
 	private final Map<String, Integer> cooldowns = new HashMap<>();
 	private final CumValue attributes = CumValue.flat();
