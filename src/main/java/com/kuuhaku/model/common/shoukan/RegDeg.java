@@ -47,41 +47,49 @@ public class RegDeg {
 
 	public void add(Number val, double mult) {
 		if (val == null) return;
-		else if (parent.getOrigins().synergy() == Race.CONDEMNED) return;
+		else if (parent != null && parent.getOrigins().synergy() == Race.CONDEMNED) return;
 		int value = val.intValue();
 
 		if (value < 0) {
-			if (Utils.equalsAny(parent.getOrigins().major(), Race.HUMAN, Race.UNDEAD)) {
-				value /= 2;
-			}
+			if (parent != null) {
+				if (Utils.equalsAny(parent.getOrigins().major(), Race.HUMAN, Race.UNDEAD)) {
+					value /= 2;
+				}
 
-			if (parent.getGame().getArcade() == Arcade.DECAY) {
-				mult *= 1.5;
-			}
+				if (parent.getGame().getArcade() == Arcade.DECAY) {
+					mult *= 1.5;
+				}
 
-			if (parent.getOther().getOrigins().synergy() == Race.GHOUL) {
-				int split = (int) (-value * parent.getStats().getDegenMult().get()) / 2;
-				values.add(new Degen(split, mult));
-				values.add(new Degen(split, mult));
-				return;
-			}
-
-			values.add(new Degen(-value, mult * parent.getStats().getDegenMult().get()));
-		} else if (value > 0) {
-			if (parent.getOrigins().major() == Race.HUMAN) {
-				if (parent.getOrigins().isPure()) {
-					parent.modHP(val.intValue());
+				if (parent.getOther().getOrigins().synergy() == Race.GHOUL) {
+					int split = (int) (-value * parent.getStats().getDegenMult().get()) / 2;
+					values.add(new Degen(split, mult));
+					values.add(new Degen(split, mult));
 					return;
 				}
 
-				mult += 0.2;
+				values.add(new Degen(-value, mult * parent.getStats().getDegenMult().get()));
+			} else {
+				values.add(new Degen(-value, mult));
 			}
+		} else if (value > 0) {
+			if (parent != null) {
+				if (parent.getOrigins().major() == Race.HUMAN) {
+					if (parent.getOrigins().isPure()) {
+						parent.modHP(val.intValue());
+						return;
+					}
 
-			if (parent.getGame().getArcade() == Arcade.DECAY) {
-				mult /= 2;
+					mult += 0.2;
+				}
+
+				if (parent.getGame().getArcade() == Arcade.DECAY) {
+					mult /= 2;
+				}
+
+				values.add(new Regen(value, mult * parent.getStats().getRegenMult().get()));
+			} else {
+				values.add(new Regen(value, mult));
 			}
-
-			values.add(new Regen(value, mult * parent.getStats().getRegenMult().get()));
 		}
 	}
 
@@ -108,15 +116,17 @@ public class RegDeg {
 		return val;
 	}
 
-	public void apply(double prcnt) {
+	public int apply(double prcnt) {
 		int value = (int) (peek() * Utils.clamp(prcnt, 0, 1));
-		parent.modHP(value);
+		if (parent != null) parent.modHP(value);
 
 		if (value > 0) {
 			reduce(Degen.class, value);
 		} else {
 			reduce(Regen.class, value);
 		}
+
+		return value;
 	}
 
 	public int next() {
@@ -130,16 +140,18 @@ public class RegDeg {
 		} finally {
 			values.removeIf(v -> v.getValue() <= 0);
 
-			Iterator<ValueOverTime> it = values.iterator();
-			while (it.hasNext()) {
-				ValueOverTime vot = it.next();
-				if (vot instanceof Degen) {
-					if (parent.getGame().getCurrent().getOrigins().synergy() == Race.FIEND && parent.getGame().getRng().nextBoolean()) {
+			if (parent != null) {
+				Iterator<ValueOverTime> it = values.iterator();
+				while (it.hasNext()) {
+					ValueOverTime vot = it.next();
+					if (vot instanceof Degen) {
+						if (parent.getGame().getCurrent().getOrigins().synergy() == Race.FIEND && parent.getGame().getRng().nextBoolean()) {
+							break;
+						}
+
+						it.remove();
 						break;
 					}
-
-					it.remove();
-					break;
 				}
 			}
 		}
@@ -147,8 +159,10 @@ public class RegDeg {
 
 	public int peek() {
 		int virus = 0;
-		if (parent.getOrigins().synergy() == Race.VIRUS && parent.getOther().getOrigins().synergy() != Race.VIRUS) {
-			virus = -Math.min(parent.getOther().getRegDeg().peek(), 0);
+		if (parent != null) {
+			if (parent.getOrigins().synergy() == Race.VIRUS && parent.getOther().getOrigins().synergy() != Race.VIRUS) {
+				virus = -Math.min(parent.getOther().getRegDeg().peek(), 0);
+			}
 		}
 
 		return values.stream().mapToInt(ValueOverTime::peek).sum() + virus;

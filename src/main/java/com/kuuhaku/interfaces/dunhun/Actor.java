@@ -1,6 +1,7 @@
 package com.kuuhaku.interfaces.dunhun;
 
 import com.kuuhaku.model.common.dunhun.ActorModifiers;
+import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -28,6 +29,7 @@ public interface Actor {
 	void setFleed(boolean flee);
 
 	ActorModifiers getModifiers();
+	RegDeg getRegDeg();
 
 	Senshi asSenshi(I18N locale);
 	BufferedImage render(I18N locale);

@@ -136,18 +136,24 @@ public class Combat implements Renderer<BufferedImage> {
 				if (!sb.isEmpty()) sb.nextLine();
 				sb.appendNewLine(a.getName(locale));
 				sb.appendNewLine("HP: " + a.getHp() + "/" + a.getMaxHp());
+				sb.nextLine();
 
-				int hp = a.getHp();
-				int max = a.getMaxHp();
-				while (max > 0) {
-					int eMax = Math.min(max, 1000);
-					int steps = Math.round(eMax / 100f);
-					if (steps == 0) break;
+				int rd = a.getHp() + a.getRegDeg().peek();
+				if (rd != 0) sb.append("__");
 
-					sb.appendNewLine(Utils.makeProgressBar(hp, eMax, steps));
+				boolean rdClosed = false;
+				int steps = (int) Math.ceil(a.getMaxHp() / 100d);
+				for (int i = 0; i < steps; i++) {
+					if (i > 0 && i % 10 == 0) sb.nextLine();
+					int threshold = i * 100;
 
-					hp -= 1000;
-					max -= 1000;
+					if (a.getHp() >= threshold) sb.append('▰');
+					else sb.append('▱');
+
+					if (!rdClosed && threshold > rd) {
+						sb.append("__");
+						rdClosed = true;
+					}
 				}
 
 				sb.appendNewLine(Utils.makeProgressBar(a.getAp(), a.getMaxAp(), a.getMaxAp(), '◇', '◈'));

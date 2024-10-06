@@ -23,6 +23,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.ActorModifiers;
 import com.kuuhaku.model.common.dunhun.Equipment;
+import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -73,6 +74,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	private JSONObject equipment = new JSONObject();
 
 	private transient final ActorModifiers modifiers = new ActorModifiers();
+	private transient final RegDeg regDeg = new RegDeg(null);
 	private transient Equipment equipCache;
 	private transient List<Skill> skillCache;
 	private transient Senshi senshiCache;
@@ -176,6 +178,11 @@ public class Hero extends DAO<Hero> implements Actor {
 	@Override
 	public ActorModifiers getModifiers() {
 		return modifiers;
+	}
+
+	@Override
+	public RegDeg getRegDeg() {
+		return regDeg;
 	}
 
 	public Attributes getAttributes() {

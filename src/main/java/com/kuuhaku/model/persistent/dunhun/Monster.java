@@ -23,6 +23,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.ActorModifiers;
+import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
@@ -67,6 +68,7 @@ public class Monster extends DAO<Monster> implements Actor {
 	private Set<LocalizedMonster> infos = new HashSet<>();
 
 	private transient final ActorModifiers modifiers = new ActorModifiers();
+	private transient final RegDeg regDeg = new RegDeg(null);
 	private transient final Set<Affix> affixes = new LinkedHashSet<>();
 	private transient String nameCache;
 	private transient List<Skill> skillCache;
@@ -194,6 +196,11 @@ public class Monster extends DAO<Monster> implements Actor {
 	@Override
 	public ActorModifiers getModifiers() {
 		return modifiers;
+	}
+
+	@Override
+	public RegDeg getRegDeg() {
+		return regDeg;
 	}
 
 	@Override
