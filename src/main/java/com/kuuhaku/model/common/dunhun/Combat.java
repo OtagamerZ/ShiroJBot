@@ -457,6 +457,7 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 		}
 
+		boolean crit = Calc.chance(source.getCritical());
 		int raw = srcSen.getDmg();
 		int def = tgtSen.getDfs();
 

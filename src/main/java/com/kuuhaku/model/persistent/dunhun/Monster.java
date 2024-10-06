@@ -210,6 +210,11 @@ public class Monster extends DAO<Monster> implements Actor {
 	}
 
 	@Override
+	public double getCritical() {
+		return (int) (5 * (1 + modifiers.getCritical().get()));
+	}
+
+	@Override
 	public int getAggroScore() {
 		int aggro = 0;
 		if (senshiCache != null) {

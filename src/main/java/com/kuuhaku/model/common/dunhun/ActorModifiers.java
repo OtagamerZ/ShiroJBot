@@ -35,6 +35,7 @@ public class ActorModifiers {
 	private final CumValue hpMult = CumValue.flat();
 	private final CumValue maxAp = CumValue.flat();
 	private final CumValue initiative = CumValue.flat();
+	private final CumValue critical = CumValue.flat();
 	private final CumValue aggroMult = CumValue.flat();
 
 	private final Map<String, Integer> cooldowns = new HashMap<>();
@@ -63,6 +64,10 @@ public class ActorModifiers {
 
 	public CumValue getInitiative() {
 		return initiative;
+	}
+
+	public CumValue getCritical() {
+		return critical;
 	}
 
 	public CumValue getAggroMult() {

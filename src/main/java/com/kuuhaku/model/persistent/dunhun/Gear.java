@@ -239,7 +239,7 @@ public class Gear extends DAO<Gear> {
 		return (int) ((basetype.getStats().defense() + modifiers.getDefense()) * modifiers.getDefenseMult());
 	}
 
-	public float getCritical() {
+	public double getCritical() {
 		return Calc.clamp((basetype.getStats().critical() + modifiers.getCritical()) * modifiers.getCriticalMult(), 0, 100);
 	}
 

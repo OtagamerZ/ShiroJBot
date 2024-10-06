@@ -178,6 +178,23 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	@Override
+	public double getCritical() {
+		double crit = 0;
+
+		Gear w = getEquipment().getWeapons().getFirst();
+		if (w != null) {
+			crit += w.getCritical();
+		}
+
+		w = getEquipment().getWeapons().getSecond();
+		if (w != null) {
+			crit = (crit + w.getCritical()) / 2;
+		}
+
+		return (int) (crit * (1 + modifiers.getCritical().get() + getAttributes().dex() * 0.02));
+	}
+
+	@Override
 	public int getAggroScore() {
 		int aggro = 0;
 		if (senshiCache != null) {
