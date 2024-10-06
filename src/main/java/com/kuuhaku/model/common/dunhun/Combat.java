@@ -151,7 +151,7 @@ public class Combat implements Renderer<BufferedImage> {
 					sb.append("__");
 					rdClosed = false;
 				}
- 
+
 				int steps = (int) Math.ceil(a.getMaxHp() / 100d);
 				for (int i = 0; i < steps; i++) {
 					if (i > 0 && i % 10 == 0) sb.nextLine();
@@ -187,7 +187,8 @@ public class Combat implements Renderer<BufferedImage> {
 				)
 				.forEach(turns::add);
 
-		loop: for (Actor act : turns) {
+		loop:
+		for (Actor act : turns) {
 			if (game.isClosed()) break;
 			else if (!act.asSenshi(locale).isAvailable()) continue;
 
@@ -375,16 +376,18 @@ public class Combat implements Renderer<BufferedImage> {
 						boolean used = false;
 						if (!skills.isEmpty() && Calc.chance(33)) {
 							Skill skill = Utils.getRandomEntry(skills);
+							List<Actor> tgts = skill.getTargets(this, curr).stream()
+									.filter(Objects::nonNull)
+									.toList();
 
-							List<Actor> tgts = skill.getTargets(this, curr);
 							if (!tgts.isEmpty()) {
 								Actor t = Utils.getWeightedEntry(Actor::getAggroScore, tgts);
 								skill.execute(locale, this, curr, t);
 								curr.modAp(-skill.getApCost());
 
-							if (skill.getCooldown() > 0) {
-								curr.getModifiers().setCooldown(skill, skill.getCooldown());
-							}
+								if (skill.getCooldown() > 0) {
+									curr.getModifiers().setCooldown(skill, skill.getCooldown());
+								}
 
 								history.add(locale.get(t.equals(curr) ? "str/used_skill_self" : "str/used_skill",
 										curr.getName(locale), skill.getInfo(locale).getName(), t.getName(locale))
@@ -392,7 +395,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 								used = true;
 							}
- 						}
+						}
 
 						if (!used) {
 							if (curr.getAp() == 1 && Calc.chance(25)) {
