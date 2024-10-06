@@ -420,13 +420,18 @@ public class Combat implements Renderer<BufferedImage> {
 		Senshi srcSen = source.asSenshi(locale);
 		Senshi tgtSen = target.asSenshi(locale);
 
-		if (Calc.chance(tgtSen.getDodge())) {
-			history.add(locale.get("str/actor_dodge", target.getName(locale)));
+		if (srcSen.isBlinded(true) && Calc.chance(50)) {
+			history.add(locale.get("str/actor_miss", source.getName(locale)));
 			return;
-		} else if (Calc.chance(tgtSen.getParry())) {
-			history.add(locale.get("str/actor_parry", target.getName(locale)));
-			attack(target, source);
-			return;
+		} else {
+			if (Calc.chance(tgtSen.getDodge())) {
+				history.add(locale.get("str/actor_dodge", target.getName(locale)));
+				return;
+			} else if (Calc.chance(tgtSen.getParry())) {
+				history.add(locale.get("str/actor_parry", target.getName(locale)));
+				attack(target, source);
+				return;
+			}
 		}
 
 		int raw = srcSen.getDmg();
