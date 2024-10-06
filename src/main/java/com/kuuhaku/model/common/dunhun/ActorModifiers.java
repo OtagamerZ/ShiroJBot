@@ -48,20 +48,20 @@ public class ActorModifiers {
 
 	private Field[] fieldCache = null;
 
-	public int getMaxHp() {
-		return (int) maxHp.get();
+	public CumValue getMaxHp() {
+		return maxHp;
 	}
 
-	public double getHpMult() {
-		return 1 + hpMult.get();
+	public CumValue getHpMult() {
+		return hpMult;
 	}
 
-	public int getMaxAp() {
-		return (int) maxAp.get();
+	public CumValue getMaxAp() {
+		return maxAp;
 	}
 
-	public int getInitiative() {
-		return (int) initiative.get();
+	public CumValue getInitiative() {
+		return initiative;
 	}
 
 	public int getStrength() {
