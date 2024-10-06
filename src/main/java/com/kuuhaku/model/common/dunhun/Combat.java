@@ -88,7 +88,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	@Override
 	public BufferedImage render(I18N locale) {
-		BufferedImage bi = new BufferedImage(255 * (hunters.size() + keepers.size()) + 64, 370, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(255 * (hunters.size() + keepers.size()) + 64, 400, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 
 		int offset = 0;
