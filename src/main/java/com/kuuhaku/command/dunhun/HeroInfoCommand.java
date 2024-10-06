@@ -83,8 +83,8 @@ public class HeroInfoCommand implements Executable {
 				AP: %s (%s)
 				%s (%s/%s)
 				""".formatted(
-				h.getMaxHp(), Utils.sign(h.getModifiers().getMaxHp()),
-				h.getMaxAp(), Utils.sign(h.getModifiers().getMaxAp()),
+				h.getMaxHp(), Utils.sign((int) h.getModifiers().getMaxHp().get()),
+				h.getMaxAp(), Utils.sign((int) h.getModifiers().getMaxAp().get()),
 				locale.get("str/level", h.getStats().getLevel()),
 				h.getStats().getXp(), h.getStats().getXpToNext()
 		), true);
