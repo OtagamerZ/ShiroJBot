@@ -75,7 +75,7 @@ public class StealCommand implements Executable {
 
 		if (stolen > 0) {
 			int current = acc.getItemCount("spooky_candy");
-			if (them.consumeItem("hallowed_card") || Calc.chance(Math.min(Math.pow(current / 100d, 2), 70))) {
+			if (them.consumeItem("hallowed_card") || Calc.chance(Math.min(Math.pow(current / 50d, 2), 50))) {
 				acc.consumeItem("spooky_candy", current, true);
 				acc.setDynValue("last_steal", now.toString());
 
