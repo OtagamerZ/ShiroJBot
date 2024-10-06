@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ValueMod implements Cloneable {
-	private final int serial = ThreadLocalRandom.current().nextInt();
+	private final int SERIAL = ThreadLocalRandom.current().nextInt();
 	private final Drawable<?> source;
 	private double value;
 	private int expiration;
@@ -104,14 +104,14 @@ public class ValueMod implements Cloneable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		ValueMod valueMod = (ValueMod) o;
-		if (source == null) return serial == valueMod.serial;
+		if (source == null) return SERIAL == valueMod.SERIAL;
 
 		return Objects.equals(source, valueMod.source) && side == valueMod.side;
 	}
 
 	@Override
 	public int hashCode() {
-		if (source == null) return serial;
+		if (source == null) return SERIAL;
 		return Objects.hash(source, side);
 	}
 

@@ -43,6 +43,7 @@ import org.hibernate.annotations.FetchMode;
 
 import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -50,6 +51,9 @@ import static jakarta.persistence.CascadeType.ALL;
 @Entity
 @Table(name = "monster", schema = "dunhun")
 public class Monster extends DAO<Monster> implements Actor {
+	@Transient
+	public final long SERIAL = ThreadLocalRandom.current().nextLong();
+
 	@Transient
 	public static final Deck DECK = Utils.with(new Deck(), d -> {
 		d.getStyling().setFrame(FrameSkin.GLITCH);
@@ -294,12 +298,12 @@ public class Monster extends DAO<Monster> implements Actor {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Monster monster = (Monster) o;
-		return Objects.equals(id, monster.id);
+		return SERIAL == monster.SERIAL && Objects.equals(id, monster.id);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(id);
+		return Objects.hash(SERIAL, id);
 	}
 
 	public static Monster getRandom() {

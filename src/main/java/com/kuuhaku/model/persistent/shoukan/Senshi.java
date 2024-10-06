@@ -1688,7 +1688,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Senshi senshi = (Senshi) o;
-		return Objects.equals(id, senshi.id) && Objects.equals(card, senshi.card) && SERIAL == senshi.SERIAL;
+		return SERIAL == senshi.SERIAL
+			   && Objects.equals(id, senshi.id)
+			   && Objects.equals(card, senshi.card);
 	}
 
 	public int posHash() {
@@ -1697,7 +1699,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, card, SERIAL);
+		return Objects.hash(SERIAL, id, card);
 	}
 
 	@Override

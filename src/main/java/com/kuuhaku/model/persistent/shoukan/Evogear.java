@@ -809,7 +809,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Evogear evogear = (Evogear) o;
-		return Objects.equals(id, evogear.id) && Objects.equals(card, evogear.card) && SERIAL == evogear.SERIAL;
+		return SERIAL == evogear.SERIAL
+			   && Objects.equals(id, evogear.id)
+			   && Objects.equals(card, evogear.card);
 	}
 
 	public int posHash() {
@@ -818,7 +820,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, card, SERIAL);
+		return Objects.hash(SERIAL, id, card);
 	}
 
 	@Override

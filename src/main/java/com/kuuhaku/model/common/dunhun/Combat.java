@@ -146,8 +146,8 @@ public class Combat implements Renderer<BufferedImage> {
 				sb.nextLine();
 
 				boolean rdClosed = true;
-				int rd = a.getRegDeg().peek();
-				if (rd != 0) {
+				int rd = -a.getRegDeg().peek();
+				if (rd > 0) {
 					sb.append("__");
 					rdClosed = false;
 				}
@@ -157,7 +157,7 @@ public class Combat implements Renderer<BufferedImage> {
 					if (i > 0 && i % 10 == 0) sb.nextLine();
 					int threshold = i * 100;
 
-					if (!rdClosed && threshold > a.getHp() + rd) {
+					if (!rdClosed && threshold > rd) {
 						sb.append("__");
 						rdClosed = true;
 					}
@@ -193,9 +193,14 @@ public class Combat implements Renderer<BufferedImage> {
 
 			try {
 				act.asSenshi(locale).setDefending(false);
+				act.modHp(act.getRegDeg().next());
+				if (act.getHp() <= 0 || act.hasFleed()) {
+					act.asSenshi(locale).setAvailable(false);
+					continue;
+				}
+
 				act.modAp(act.getMaxAp());
 				act.getModifiers().expireMods();
-				act.modHp(act.getRegDeg().next());
 
 				while (act.getAp() > 0) {
 					Runnable action = reload(true).get();
