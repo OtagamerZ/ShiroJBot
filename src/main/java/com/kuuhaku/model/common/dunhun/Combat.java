@@ -206,7 +206,7 @@ public class Combat implements Renderer<BufferedImage> {
 					PersistentEffect effect = it.next();
 					if (!effect.target().equals(act)) continue;
 
-					effect.effect().accept(act);
+					effect.effect().accept(effect, act);
 					if (effect.duration().decrementAndGet() <= 0) it.remove();
 				}
 
