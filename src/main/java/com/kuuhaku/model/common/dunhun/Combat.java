@@ -199,15 +199,17 @@ public class Combat implements Renderer<BufferedImage> {
 			if (game.isClosed()) break;
 
 			try {
-				act.getModifiers().expireMods();
-				act.asSenshi(locale).reduceDebuffs(1);
-
 				if (!act.asSenshi(locale).isAvailable() || act.isSkipped()) {
+					act.getModifiers().expireMods();
+					act.asSenshi(locale).reduceDebuffs(1);
+
 					if (hunters.stream().allMatch(Actor::isSkipped)) break;
 					else if (keepers.stream().allMatch(Actor::isSkipped)) break;
-
 					continue;
 				}
+
+				act.getModifiers().expireMods();
+				act.asSenshi(locale).reduceDebuffs(1);
 
 				act.modAp(act.getMaxAp());
 				act.asSenshi(locale).setDefending(false);
@@ -252,10 +254,11 @@ public class Combat implements Renderer<BufferedImage> {
 		if (execute) {
 			if (curr instanceof Hero h) {
 				helper = new ButtonizeHelper(true)
-						.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 						.setCancellable(false);
 
 				helper.addAction(Utils.parseEmoji("🗡"), w -> {
+							if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
+
 							List<Actor> tgts = getActors(h.getTeam().getOther()).stream()
 									.map(a -> a.isSkipped() ? null : a)
 									.toList();
@@ -268,6 +271,8 @@ public class Combat implements Renderer<BufferedImage> {
 							);
 						})
 						.addAction(Utils.parseEmoji("⚡"), w -> {
+							if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
+
 							EventHandler handle = Pages.getHandler();
 							List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("skills");
 							if (selected == null || selected.isEmpty()) {
@@ -312,12 +317,16 @@ public class Combat implements Renderer<BufferedImage> {
 							);
 						})
 						.addAction(Utils.parseEmoji("🛡"), w -> lock.complete(() -> {
+							if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
+
 							h.asSenshi(locale).setDefending(true);
 							h.modAp(-h.getAp());
 
 							history.add(locale.get("str/actor_defend", h.getName()));
 						}))
 						.addAction(Utils.parseEmoji("💨"), w -> {
+							if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
+
 							ButtonizeHelper confirm = new ButtonizeHelper(true)
 									.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 									.setCancellable(false)

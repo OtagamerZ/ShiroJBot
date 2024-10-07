@@ -147,10 +147,10 @@ public class Gear extends DAO<Gear> {
 			String desc = ga.getAffix().getInfo(locale).getDescription();
 			List<Integer> vals = ga.getValues(locale);
 
-			seq.set(0);
 			desc.lines().forEach(l -> {
-				String base = pat.matcher(l.replace("%", "%%"))
-						.replaceAll(m -> Matcher.quoteReplacement("[%" + seq.incrementAndGet() + "$s]"));
+				String base = pat
+						.matcher(l.replace("%", "%%"))
+						.replaceAll(m -> Matcher.quoteReplacement("[%s]"));
 
 				mods.compute(base, (k, v) -> {
 					if (v == null) return new ArrayList<>(vals);
