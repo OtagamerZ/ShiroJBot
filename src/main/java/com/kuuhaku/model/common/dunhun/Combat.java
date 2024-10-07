@@ -57,12 +57,14 @@ public class Combat implements Renderer<BufferedImage> {
 	private final BondedList<Actor> hunters = new BondedList<>(a -> {
 		if (turns.isEmpty()) return;
 		turns.add(a);
-		a.asSenshi(getLocale());
+		a.asSenshi(getLocale()).setAvailable(true);
+		a.modAp(-a.getAp());
 	}, turns::remove);
 	private final BondedList<Actor> keepers = new BondedList<>(a -> {
 		if (turns.isEmpty()) return;
 		turns.add(a);
-		a.asSenshi(getLocale());
+		a.asSenshi(getLocale()).setAvailable(true);
+		a.modAp(-a.getAp());
 	}, turns::remove);
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(5);
 	private final RandomList<Actor> rngList = new RandomList<>();

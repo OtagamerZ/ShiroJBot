@@ -312,8 +312,18 @@ public class Hero extends DAO<Hero> implements Actor {
 	public Bag<Consumable> getConsumables() {
 		if (consumableCache != null) return consumableCache;
 
-		List<Consumable> cons = DAO.queryAll(Consumable.class, "SELECT c FROM Consumable c WHERE c.id IN ?1", stats.getConsumables());
-		return consumableCache = new TreeBag<>(cons);
+		Map<String, Consumable> cons = DAO.queryAll(Consumable.class, "SELECT c FROM Consumable c WHERE c.id IN ?1", stats.getConsumables())
+				.stream()
+				.collect(Collectors.toMap(Consumable::getId, Function.identity()));
+
+		TreeBag<Consumable> out = new TreeBag<>();
+		for (Object id : stats.getConsumables()) {
+			if (cons.containsKey(String.valueOf(id))) {
+				out.add(cons.get(String.valueOf(id)));
+			}
+		}
+
+		return consumableCache = out;
 	}
 
 	public Consumable getConsumable(String id) {

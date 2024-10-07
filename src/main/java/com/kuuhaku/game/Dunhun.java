@@ -81,7 +81,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				nextTurn();
-				getChannel().sendMessage(getLocale().get("str/dungeon_next_floor", getTurn())).queue();
+				getChannel().sendMessage(getLocale().get(getPlayers().length > 1 ? "str/dungeon_next_floor_multi" : "str/dungeon_next_floor", getTurn())).queue();
 			}
 		}, main);
 	}
