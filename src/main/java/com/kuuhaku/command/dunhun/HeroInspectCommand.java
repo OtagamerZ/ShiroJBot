@@ -25,6 +25,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
@@ -76,7 +77,7 @@ public class HeroInspectCommand implements Executable {
 		g.load(locale, new Senshi(h, locale));
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		if (g.getAffixes().size() > 2) {
+		if (g.getRarityClass() == RarityClass.RARE) {
 			eb.setTitle(g.getName(locale) + ", " + g.getBasetype().getInfo(locale).getName());
 		} else {
 			eb.setTitle(g.getName(locale));

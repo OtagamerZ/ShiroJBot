@@ -25,6 +25,7 @@ import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.persistent.dunhun.Basetype;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.GearAffix;
@@ -75,7 +76,7 @@ public class TestItemCommand implements Executable {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		if (g.getAffixes().size() > 2) {
+		if (g.getRarityClass() == RarityClass.RARE) {
 			eb.setTitle(g.getName(locale) + ", " + g.getBasetype().getInfo(locale).getName());
 		} else {
 			eb.setTitle(g.getName(locale));
