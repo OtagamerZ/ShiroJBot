@@ -236,12 +236,6 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 		}
 
-		try {
-			reload(false).get();
-		} catch (Exception e) {
-			Constants.LOGGER.warn(e, e);
-		}
-
 		return hunters.stream().anyMatch(a -> a.getHp() > 0);
 	}
 

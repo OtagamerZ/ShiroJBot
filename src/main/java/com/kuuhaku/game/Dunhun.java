@@ -73,7 +73,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			while (true) {
 				combat = new Combat(this);
 				if (!combat.isWin()) {
-					reportResult(GameReport.GAME_TIMEOUT, getPlayers().length > 1 ? "str/dungeon_leave_multi" : "str/dungeon_leave"
+					reportResult(GameReport.GAME_TIMEOUT, getPlayers().length > 1 ? "str/dungeon_fail_multi" : "str/dungeon_fail"
 							, Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
 							, getTurn()
 					);
@@ -81,6 +81,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				nextTurn();
+				getChannel().sendMessage(getLocale().get("str/dungeon_next_floor", getTurn())).queue();
 			}
 		}, main);
 	}
