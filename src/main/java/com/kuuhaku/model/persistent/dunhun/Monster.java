@@ -216,10 +216,12 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	@Override
 	public int getAggroScore(I18N locale) {
-		if (senshiCache == null) senshiCache = asSenshi(locale);
-		int aggro = senshiCache.getDmg() / 10 + senshiCache.getDfs() / 20;
+		int aggro = 1;
+		if (senshiCache != null) {
+			aggro = senshiCache.getDmg() / 10 + senshiCache.getDfs() / 20;
+		}
 
-		return (int) (aggro * modifiers.getAggroMult().get());
+		return (int) (aggro * (1 + modifiers.getAggroMult().get()));
 	}
 
 	@Override
