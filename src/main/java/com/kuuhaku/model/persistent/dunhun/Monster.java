@@ -112,11 +112,9 @@ public class Monster extends DAO<Monster> implements Actor {
 
 		if (affixes.isEmpty()) return nameCache = getInfo(locale).getName();
 		else if (getRarityClass() == RarityClass.RARE) {
-			int seed = id.hashCode();
-
 			String loc = locale.getParent().name().toLowerCase();
-			String prefix = IO.getLine("dunhun/monster/prefix/" + loc + ".dict", Calc.rng(0, 32, seed + affixes.hashCode()));
-			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict", Calc.rng(0, 32, seed - prefix.hashCode()));
+			String prefix = IO.getLine("dunhun/monster/prefix/" + loc + ".dict", Calc.rng(0, 32, SERIAL + affixes.hashCode()));
+			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict", Calc.rng(0, 32, SERIAL - prefix.hashCode()));
 
 			AtomicReference<String> ending = new AtomicReference<>("M");
 			prefix = Utils.regex(prefix, "\\[([FM])]").replaceAll(m -> {
@@ -130,7 +128,7 @@ public class Monster extends DAO<Monster> implements Actor {
 			int parts = Calc.rng(1, 3);
 			StringBuilder name = new StringBuilder();
 			for (int i = 0; i < parts; i++) {
-				String part = IO.getLine("dunhun/monster/name_parts.dict", Calc.rng(0, 32, seed >> i));
+				String part = IO.getLine("dunhun/monster/name_parts.dict", Calc.rng(0, 64, SERIAL >> i));
 				if (i == 0) {
 					if (Calc.chance(25, prefix.hashCode() + suffix.hashCode())) {
 						part = part.charAt(0) + "'" + part.substring(1);
