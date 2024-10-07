@@ -25,7 +25,11 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public record Attributes(@Column(name = "attributes", nullable = false) int attributes) {
 	public Attributes(int str, int dex, int wis, int vit) {
-		this((str & 0xFF) | (dex & 0xFF) << 8 | (wis & 0xFF) << 16 | (vit & 0xFF) << 24);
+		this((Math.max(0, str) & 0xFF)
+			 | (Math.max(0, dex) & 0xFF) << 8
+			 | (Math.max(0, wis) & 0xFF) << 16
+			 | (Math.max(0, vit) & 0xFF) << 24
+		);
 	}
 	/*
 	0xFF FF FF FF
@@ -53,10 +57,10 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 
 	public Attributes merge(Attributes attr) {
 		return new Attributes(
-				Math.max(0, str() + attr.str()),
-				Math.max(0, dex() + attr.dex()),
-				Math.max(0, wis() + attr.wis()),
-				Math.max(0, vit() + attr.vit())
+				str() + attr.str(),
+				dex() + attr.dex(),
+				wis() + attr.wis(),
+				vit() + attr.vit()
 		);
 	}
 }
