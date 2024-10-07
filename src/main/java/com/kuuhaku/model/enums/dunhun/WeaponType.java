@@ -19,5 +19,5 @@
 package com.kuuhaku.model.enums.dunhun;
 
 public enum WeaponType {
-	SWORD, MACE, AXE, DAGGER, STAFF, SCEPTRE, BOW, FIST
+	SWORD, MACE, AXE, DAGGER, STAFF, SCEPTRE, BOW, FIST, SHIELD
 }
