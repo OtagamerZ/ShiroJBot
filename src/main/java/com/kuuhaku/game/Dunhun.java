@@ -70,8 +70,18 @@ public class Dunhun extends GameInstance<NullPhase> {
 	@Override
 	protected void begin() {
 		CompletableFuture.runAsync(() -> {
-			combat = new Combat(this);
-			nextTurn();
+			while (true) {
+				combat = new Combat(this);
+				if (!combat.isWin()) {
+					reportResult(GameReport.GAME_TIMEOUT, getPlayers().length > 1 ? "str/dungeon_leave_multi" : "str/dungeon_leave"
+							, Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
+							, getTurn()
+					);
+					break;
+				}
+
+				nextTurn();
+			}
 		}, main);
 	}
 

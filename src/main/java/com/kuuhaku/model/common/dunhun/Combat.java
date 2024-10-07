@@ -68,6 +68,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final Set<PersistentEffect> persEffects = new HashSet<>();
 
 	private CompletableFuture<Runnable> lock;
+	private boolean win;
 
 	public Combat(Dunhun game) {
 		this.game = game;
@@ -92,7 +93,7 @@ public class Combat implements Renderer<BufferedImage> {
 			team = Team.KEEPERS;
 		}
 
-		process();
+		win = process();
 	}
 
 	@Override
@@ -187,7 +188,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return eb.build();
 	}
 
-	private void process() {
+	private boolean process() {
 		Stream.of(hunters.stream(), keepers.stream())
 				.flatMap(Function.identity())
 				.sorted(Comparator
@@ -240,6 +241,8 @@ public class Combat implements Renderer<BufferedImage> {
 		} catch (Exception e) {
 			Constants.LOGGER.warn(e, e);
 		}
+
+		return hunters.stream().anyMatch(a -> a.getHp() > 0);
 	}
 
 	public CompletableFuture<Runnable> reload(boolean execute) {
@@ -615,5 +618,9 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public I18N getLocale() {
 		return locale;
+	}
+
+	public boolean isWin() {
+		return win;
 	}
 }
