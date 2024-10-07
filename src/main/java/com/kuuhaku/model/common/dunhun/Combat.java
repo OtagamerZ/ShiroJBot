@@ -50,6 +50,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private final Dunhun game;
 	private final I18N locale;
+	private final InfiniteList<Actor> turns = new InfiniteList<>();
 	private final BondedList<Actor> hunters = new BondedList<>(a -> {
 		if (getTurns().isEmpty()) return;
 		getTurns().add(a);
@@ -58,7 +59,6 @@ public class Combat implements Renderer<BufferedImage> {
 		if (getTurns().isEmpty()) return;
 		getTurns().add(a);
 	}, getTurns()::remove);
-	private final InfiniteList<Actor> turns = new InfiniteList<>();
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(5);
 	private final RandomList<Actor> rngList = new RandomList<>();
 	private final Set<PersistentEffect> persEffects = new HashSet<>();
