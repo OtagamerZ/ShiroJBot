@@ -19,6 +19,7 @@
 package com.kuuhaku.model.records.dunhun;
 
 import com.kuuhaku.model.enums.dunhun.GearSlot;
+import com.kuuhaku.model.enums.dunhun.WeaponType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.dunhun.Affix;
 import com.kuuhaku.model.records.Attributes;
@@ -42,6 +43,9 @@ public record GearStats(
 		@Enumerated(EnumType.STRING)
 		@Column(name = "slot", nullable = false)
 		GearSlot slot,
+		@Enumerated(EnumType.STRING)
+		@Column(name = "weapon_type")
+		WeaponType wpnType,
 		@JdbcTypeCode(SqlTypes.JSON)
 		@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 		@Convert(converter = JSONArrayConverter.class)

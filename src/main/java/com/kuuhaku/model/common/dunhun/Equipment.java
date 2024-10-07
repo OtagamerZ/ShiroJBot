@@ -28,9 +28,7 @@ import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -95,8 +93,24 @@ public class Equipment implements Iterable<Gear> {
 		return rings;
 	}
 
+	public List<Gear> getRingList() {
+		List<Gear> gears = new ArrayList<>();
+		if (rings.getFirst() != null) gears.add(rings.getFirst());
+		if (rings.getSecond() != null) gears.add(rings.getSecond());
+
+		return gears;
+	}
+
 	public Pair<Gear, Gear> getWeapons() {
 		return weapons;
+	}
+
+	public List<Gear> getWeaponList() {
+		List<Gear> gears = new ArrayList<>();
+		if (weapons.getFirst() != null) gears.add(weapons.getFirst());
+		if (weapons.getSecond() != null) gears.add(weapons.getSecond());
+
+		return gears;
 	}
 
 	public boolean equip(Gear gear) {
