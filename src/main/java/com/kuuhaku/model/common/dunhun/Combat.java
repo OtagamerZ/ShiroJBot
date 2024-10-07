@@ -8,7 +8,9 @@ import com.kuuhaku.Main;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.*;
+import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.Consumable;
@@ -98,8 +100,9 @@ public class Combat implements Renderer<BufferedImage> {
 
 	@Override
 	public BufferedImage render(I18N locale) {
-		BufferedImage bi = new BufferedImage(255 * (hunters.size() + keepers.size()) + 64, 400, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(Drawable.SIZE.width * (hunters.size() + keepers.size()) + 64, 50 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
+		g2d.setFont(Fonts.OPEN_SANS.deriveBold(60));
 
 		int offset = 0;
 		boolean divided = false;
@@ -121,9 +124,10 @@ public class Combat implements Renderer<BufferedImage> {
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
 
 					Graph.overlay(card, IO.getResourceAsImage(path + "/hero.png"));
+					g2d.drawString("⌄", offset + Drawable.SIZE.width / 2, 40);
 				}
 
-				g2d.drawImage(card, offset, 0, null);
+				g2d.drawImage(card, offset, 50, null);
 				offset += 255;
 			}
 
