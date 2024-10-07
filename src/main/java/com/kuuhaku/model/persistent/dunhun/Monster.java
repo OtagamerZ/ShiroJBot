@@ -352,6 +352,7 @@ public class Monster extends DAO<Monster> implements Actor {
 		Monster clone = new Monster(id);
 		clone.stats = stats;
 		clone.infos = infos;
+		clone.skillCache = skillCache;
 		clone.team = team;
 		clone.affixes.addAll(affixes);
 

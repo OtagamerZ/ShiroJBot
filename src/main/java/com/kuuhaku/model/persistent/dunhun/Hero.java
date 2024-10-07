@@ -378,6 +378,8 @@ public class Hero extends DAO<Hero> implements Actor {
 		Hero clone = new Hero(account, id, stats.getRace());
 		clone.stats = stats;
 		clone.equipment = new JSONObject(equipment);
+		clone.equipCache = equipCache;
+		clone.skillCache = skillCache;
 		clone.team = team;
 
 		return clone;
