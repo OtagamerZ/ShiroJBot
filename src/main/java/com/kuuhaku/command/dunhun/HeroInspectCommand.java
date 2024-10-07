@@ -31,9 +31,9 @@ import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
-import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.GearStats;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
@@ -45,7 +45,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.MissingFormatArgumentException;
-import java.util.stream.Collectors;
 
 @Command(
 		name = "hero",
@@ -85,12 +84,12 @@ public class HeroInspectCommand implements Executable {
 
 		JSONArray tags = g.getTags();
 		if (!tags.isEmpty()) {
-			String tgs = "";
+			List<String> tgs = new ArrayList<>();
 			if (g.getBasetype().getStats().wpnType() != null) {
-				tgs += locale.get("wpn/" + g.getBasetype().getStats().wpnType().name());
+				tgs.add(locale.get("wpn/" + g.getBasetype().getStats().wpnType().name()));
 			}
 
-			tgs += tags.stream()
+			tgs.addAll(tags.stream()
 					.map(t -> {
 						try {
 							String key = "tag/" + t;
@@ -104,9 +103,10 @@ public class HeroInspectCommand implements Executable {
 							return "";
 						}
 					})
-					.collect(Collectors.joining());
+					.toList()
+			);
 
-			eb.appendDescription("-# " + tgs + "\n\n");
+			eb.appendDescription("-# " + String.join(", ", tgs) + "\n\n");
 		}
 
 		boolean hasStats = false;
