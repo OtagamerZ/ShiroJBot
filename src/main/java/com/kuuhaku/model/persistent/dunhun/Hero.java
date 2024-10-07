@@ -289,6 +289,10 @@ public class Hero extends DAO<Hero> implements Actor {
 		return DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.id IN ?1", ids);
 	}
 
+	public Gear getInvGear(int id) {
+		return DAO.query(Gear.class, "SELECT g FROM Gear g WHERE g.id = ?1 AND g.owner.id = ?2", id, this.id);
+	}
+
 	@Override
 	public List<Skill> getSkills() {
 		if (skillCache != null) return skillCache;

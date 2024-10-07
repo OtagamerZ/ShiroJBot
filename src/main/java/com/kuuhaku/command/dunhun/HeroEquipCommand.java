@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.dunhun;
 
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
@@ -53,8 +52,8 @@ public class HeroEquipCommand implements Executable {
 			return;
 		}
 
-		Gear g = DAO.find(Gear.class, args.getInt("id"));
-		if (g == null || !g.getOwner().getId().equals(h.getId())) {
+		Gear g = h.getInvGear(args.getInt("id"));
+		if (g == null) {
 			event.channel().sendMessage(locale.get("error/gear_not_found")).queue();
 			return;
 		}
