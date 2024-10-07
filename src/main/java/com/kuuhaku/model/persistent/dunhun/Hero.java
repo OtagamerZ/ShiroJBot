@@ -331,13 +331,20 @@ public class Hero extends DAO<Hero> implements Actor {
 		modifiers.clear();
 		int dmg = 100;
 		int def = 100;
+
 		for (Gear g : getEquipment()) {
 			if (g == null) continue;
 
 			g.load(locale, this);
-			dmg += g.getDmg();
 			def += g.getDfs();
+			if (g.getBasetype().getStats().wpnType() == null) {
+				dmg += g.getDmg();
+			}
 		}
+
+		dmg += getEquipment().getWeaponList().stream()
+				.mapToInt(g -> (int) (g.getDmg() * 0.6))
+				.sum();
 
 		Attributes a = getAttributes();
 		base.setAtk((int) (dmg * (1 + a.str() * 0.075 + a.dex() * 0.05)));

@@ -72,7 +72,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		CompletableFuture.runAsync(() -> {
 			while (true) {
 				combat = new Combat(this);
-				if (!combat.isWin()) {
+				if (!combat.process()) {
 					reportResult(GameReport.GAME_TIMEOUT, getPlayers().length > 1 ? "str/dungeon_fail_multi" : "str/dungeon_fail"
 							, Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
 							, getTurn()

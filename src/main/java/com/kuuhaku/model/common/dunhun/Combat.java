@@ -68,7 +68,6 @@ public class Combat implements Renderer<BufferedImage> {
 	private final Set<PersistentEffect> persEffects = new HashSet<>();
 
 	private CompletableFuture<Runnable> lock;
-	private boolean win;
 
 	public Combat(Dunhun game) {
 		this.game = game;
@@ -92,8 +91,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 			team = Team.KEEPERS;
 		}
-
-		win = process();
 	}
 
 	@Override
@@ -188,7 +185,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return eb.build();
 	}
 
-	private boolean process() {
+	public boolean process() {
 		Stream.of(hunters.stream(), keepers.stream())
 				.flatMap(Function.identity())
 				.sorted(Comparator
@@ -205,7 +202,12 @@ public class Combat implements Renderer<BufferedImage> {
 				act.getModifiers().expireMods();
 				act.asSenshi(locale).reduceDebuffs(1);
 
-				if (!act.asSenshi(locale).isAvailable() || act.isSkipped()) continue;
+				if (!act.asSenshi(locale).isAvailable() || act.isSkipped()) {
+					if (hunters.stream().allMatch(Actor::isSkipped)) break;
+					else if (keepers.stream().allMatch(Actor::isSkipped)) break;
+
+					continue;
+				}
 
 				act.modAp(act.getMaxAp());
 				act.asSenshi(locale).setDefending(false);
@@ -396,6 +398,7 @@ public class Combat implements Renderer<BufferedImage> {
 							Skill skill = Utils.getRandomEntry(skills);
 							List<Actor> tgts = skill.getTargets(this, curr).stream()
 									.filter(Objects::nonNull)
+									.filter(a -> !a.isSkipped())
 									.toList();
 
 							if (!tgts.isEmpty()) {
@@ -418,6 +421,7 @@ public class Combat implements Renderer<BufferedImage> {
 						if (!used) {
 							List<Actor> tgts = getActors(curr.getTeam().getOther());
 							double threat = tgts.stream()
+									.filter(a -> !a.isSkipped())
 									.mapToInt(Actor::getAggroScore)
 									.average()
 									.orElse(1);
@@ -612,9 +616,5 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public I18N getLocale() {
 		return locale;
-	}
-
-	public boolean isWin() {
-		return win;
 	}
 }
