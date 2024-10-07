@@ -53,10 +53,10 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 
 	public Attributes merge(Attributes attr) {
 		return new Attributes(
-				str() + attr.str(),
-				dex() + attr.dex(),
-				wis() + attr.wis(),
-				vit() + attr.vit()
+				Math.max(0, str() + attr.str()),
+				Math.max(0, dex() + attr.dex()),
+				Math.max(0, wis() + attr.wis()),
+				Math.max(0, vit() + attr.vit())
 		);
 	}
 }
