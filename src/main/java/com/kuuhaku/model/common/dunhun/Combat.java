@@ -208,16 +208,6 @@ public class Combat implements Renderer<BufferedImage> {
 						action.run();
 					}
 
-					act.modHp(act.getRegDeg().next());
-					Iterator<PersistentEffect> it = persEffects.iterator();
-					while (it.hasNext()) {
-						PersistentEffect effect = it.next();
-						if (!effect.target().equals(act)) continue;
-
-						if (effect.duration().decrementAndGet() <= 0) it.remove();
-						effect.effect().accept(effect, act);
-					}
-
 					if (hunters.stream().allMatch(Actor::isSkipped)) break loop;
 					else if (keepers.stream().allMatch(Actor::isSkipped)) break loop;
 				}
@@ -226,6 +216,16 @@ public class Combat implements Renderer<BufferedImage> {
 			} finally {
 				act.getModifiers().expireMods();
 				act.asSenshi(locale).reduceDebuffs(1);
+				act.modHp(act.getRegDeg().next());
+
+				Iterator<PersistentEffect> it = persEffects.iterator();
+				while (it.hasNext()) {
+					PersistentEffect effect = it.next();
+					if (!effect.target().equals(act)) continue;
+
+					if (effect.duration().decrementAndGet() <= 0) it.remove();
+					effect.effect().accept(effect, act);
+				}
 			}
 		}
 
