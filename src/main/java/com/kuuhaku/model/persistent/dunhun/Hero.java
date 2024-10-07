@@ -34,7 +34,7 @@ import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.records.Attributes;
+import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.ygimenez.json.JSONArray;

@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records;
+package com.kuuhaku.model.records.dunhun;
 
 import com.kuuhaku.util.Bit32;
 import jakarta.persistence.Column;
@@ -52,6 +52,11 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 	}
 
 	public Attributes merge(Attributes attr) {
-		return new Attributes(attributes | attr.attributes);
+		return new Attributes(
+				str() + attr.str(),
+				dex() + attr.dex(),
+				wis() + attr.wis(),
+				vit() + attr.vit()
+		);
 	}
 }

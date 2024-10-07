@@ -37,7 +37,7 @@ import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
-import com.kuuhaku.model.records.Attributes;
+import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.IO;
@@ -45,12 +45,9 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.utils.FileUpload;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -90,16 +87,17 @@ public class HeroInfoCommand implements Executable {
 		), true);
 
 		Attributes attr = h.getAttributes();
+		Attributes mods = h.getModifiers().getAttributes();
 		eb.addField(Constants.VOID, """
 				STR: %s (%s)
 				DEX: %s (%s)
 				WIS: %s (%s)
 				VIT: %s (%s)
 				""".formatted(
-				attr.str(), Utils.sign(h.getModifiers().getStrength()),
-				attr.dex(), Utils.sign(h.getModifiers().getDexterity()),
-				attr.wis(), Utils.sign(h.getModifiers().getWisdom()),
-				attr.vit(), Utils.sign(h.getModifiers().getVitality())
+				attr.str(), Utils.sign(mods.str()),
+				attr.dex(), Utils.sign(mods.dex()),
+				attr.wis(), Utils.sign(mods.wis()),
+				attr.vit(), Utils.sign(mods.vit())
 		), true);
 
 		EmojiMapping<Page> pages = new EmojiMapping<>();

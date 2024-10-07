@@ -25,7 +25,7 @@ import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.WeaponType;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
-import com.kuuhaku.model.records.Attributes;
+import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;

@@ -21,8 +21,7 @@ package com.kuuhaku.model.common.dunhun;
 import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.persistent.dunhun.Skill;
-import com.kuuhaku.model.records.Attributes;
-import com.kuuhaku.util.Bit32;
+import com.kuuhaku.model.records.dunhun.Attributes;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -39,14 +38,10 @@ public class ActorModifiers {
 	private final CumValue aggroMult = CumValue.flat();
 
 	private final Map<String, Integer> cooldowns = new HashMap<>();
-	private final CumValue attributes = CumValue.flat();
-	/*
-	0xFF FF FF FF
-	  └┤ └┤ └┤ └┴ strength
-	   │  │  └ dexterity
-	   │  └ wisdom
-	   └ vitality
-	 */
+	private final CumValue str = CumValue.flat();
+	private final CumValue dex = CumValue.flat();
+	private final CumValue wis = CumValue.flat();
+	private final CumValue vit = CumValue.flat();
 
 	private Field[] fieldCache = null;
 
@@ -74,68 +69,29 @@ public class ActorModifiers {
 		return aggroMult;
 	}
 
-	public int getStrength() {
-		return Bit32.get((int) attributes.get(), 0, 8);
+	public CumValue getStrength() {
+		return str;
 	}
 
-	public void addStrength(int value) {
-		addStrength(value, -1);
+	public CumValue getDexterity() {
+		return dex;
 	}
 
-	public void addStrength(int value, int expiration) {
-		attributes.set(null,
-				Bit32.set((int) attributes.get(), 0, getStrength() + value, 8),
-				expiration
-		);
+	public CumValue getWisdom() {
+		return wis;
 	}
 
-	public int getDexterity() {
-		return Bit32.get((int) attributes.get(), 0, 8);
-	}
-
-	public void addDexterity(int value) {
-		addDexterity(value, -1);
-	}
-
-	public void addDexterity(int value, int expiration) {
-		attributes.set(null,
-				Bit32.set((int) attributes.get(), 1, getDexterity() + value, 8),
-				expiration
-		);
-	}
-
-	public int getWisdom() {
-		return Bit32.get((int) attributes.get(), 2, 8);
-	}
-
-	public void addWisdom(int value) {
-		addWisdom(value, -1);
-	}
-
-	public void addWisdom(int value, int expiration) {
-		attributes.set(null,
-				Bit32.set((int) attributes.get(), 2, getWisdom() + value, 8),
-				expiration
-		);
-	}
-
-	public int getVitality() {
-		return Bit32.get((int) attributes.get(), 3, 8);
-	}
-
-	public void addVitality(int value) {
-		addVitality(value, -1);
-	}
-
-	public void addVitality(int value, int expiration) {
-		attributes.set(null,
-				Bit32.set((int) attributes.get(), 3, getVitality() + value, 8),
-				expiration
-		);
+	public CumValue getVitality() {
+		return vit;
 	}
 
 	public Attributes getAttributes() {
-		return new Attributes(getStrength(), getDexterity(), getWisdom(), getVitality());
+		return new Attributes(
+				(int) getStrength().get(),
+				(int) getDexterity().get(),
+				(int) getWisdom().get(),
+				(int) getVitality().get()
+		);
 	}
 
 	public void setCooldown(Skill s, int time) {
