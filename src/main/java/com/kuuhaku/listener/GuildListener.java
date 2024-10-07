@@ -298,13 +298,13 @@ public class GuildListener extends ListenerAdapter {
 					}
 				} else {
 					ed.notify(locale.get("achievement/level_up", data.user().getAsMention(), profile.getLevel(), prize));
+				}
 
-					if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.OCTOBER) {
-						UserItem item = DAO.find(UserItem.class, "SPOOKY_CANDY");
+				if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.OCTOBER) {
+					UserItem item = DAO.find(UserItem.class, "SPOOKY_CANDY");
 
-						account.addItem(item, profile.getLevel() * 2);
-						ed.notify(locale.get("str/received_item", profile.getLevel() * 2, item.getName(locale)));
-					}
+					account.addItem(item, profile.getLevel() * 2);
+					ed.notify(locale.get("str/received_item", profile.getLevel() * 2, item.getName(locale)));
 				}
 			}
 
