@@ -149,7 +149,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	public int getHpDelta() {
 		if (hp.previous() == null) return 0;
 
-		return hp.previous() - hp.get();
+		return hp.get() - hp.previous();
 	}
 
 	@Override

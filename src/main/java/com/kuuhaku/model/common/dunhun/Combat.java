@@ -197,7 +197,10 @@ public class Combat implements Renderer<BufferedImage> {
 			if (game.isClosed()) break;
 
 			try {
-				if (!act.asSenshi(locale).isAvailable() && act.isSkipped()) continue;
+				act.getModifiers().expireMods();
+				act.asSenshi(locale).reduceDebuffs(1);
+
+				if (!act.asSenshi(locale).isAvailable() || act.isSkipped()) continue;
 
 				act.modAp(act.getMaxAp());
 				act.asSenshi(locale).setDefending(false);
@@ -214,8 +217,6 @@ public class Combat implements Renderer<BufferedImage> {
 			} catch (Exception e) {
 				Constants.LOGGER.warn(e, e);
 			} finally {
-				act.getModifiers().expireMods();
-				act.asSenshi(locale).reduceDebuffs(1);
 				act.modHp(act.getRegDeg().next());
 				act.asSenshi(locale).setAvailable(true);
 
