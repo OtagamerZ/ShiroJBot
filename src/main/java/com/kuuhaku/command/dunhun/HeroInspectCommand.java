@@ -99,7 +99,7 @@ public class HeroInspectCommand implements Executable {
 								out = LocalizedString.get(locale, key, "");
 							}
 
-							return ", " + Utils.getOr(out, key);
+							return Utils.getOr(out, key);
 						} catch (MissingFormatArgumentException e) {
 							return "";
 						}
