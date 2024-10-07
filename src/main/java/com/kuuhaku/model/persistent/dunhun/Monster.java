@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.Delta;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.ActorModifiers;
 import com.kuuhaku.model.common.shoukan.RegDeg;
@@ -74,11 +75,11 @@ public class Monster extends DAO<Monster> implements Actor {
 	private transient final ActorModifiers modifiers = new ActorModifiers();
 	private transient final RegDeg regDeg = new RegDeg(null);
 	private transient final Set<Affix> affixes = new LinkedHashSet<>();
+	private transient final Delta<Integer> hp = new Delta<>();
 	private transient String nameCache;
 	private transient List<Skill> skillCache;
 	private transient Senshi senshiCache;
 	private transient Team team;
-	private transient int hp = -1;
 	private transient int ap;
 	private transient boolean flee;
 
@@ -157,25 +158,8 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	@Override
 	public int getHp() {
-		if (hp == -1) hp = getMaxHp();
-		return hp;
-	}
-
-	@Override
-	public void modHp(int value) {
-		if (hp == 0) return;
-
-		hp = Calc.clamp(getHp() + value, 0, getMaxHp());
-	}
-
-	@Override
-	public void revive(int value) {
-		if (hp > 0) return;
-
-		hp = Calc.clamp(value, 0, getMaxHp());
-		if (senshiCache != null) {
-			senshiCache.setAvailable(true);
-		}
+		if (hp.get() == null) hp.set(getMaxHp());
+		return hp.get();
 	}
 
 	@Override
@@ -187,6 +171,30 @@ public class Monster extends DAO<Monster> implements Actor {
 		}
 
 		return hp;
+	}
+
+	@Override
+	public int getHpDelta() {
+		if (hp.previous() == null) return 0;
+
+		return hp.previous() - hp.get();
+	}
+
+	@Override
+	public void modHp(int value) {
+		if (getHp() == 0) return;
+
+		hp.set(Calc.clamp(getHp() + value, 0, getMaxHp()));
+	}
+
+	@Override
+	public void revive(int value) {
+		if (getHp() > 0) return;
+
+		hp.set(Calc.clamp(value, 0, getMaxHp()));
+		if (senshiCache != null) {
+			senshiCache.setAvailable(true);
+		}
 	}
 
 	@Override
@@ -215,7 +223,7 @@ public class Monster extends DAO<Monster> implements Actor {
 	}
 
 	@Override
-	public int getAggroScore(I18N locale) {
+	public int getAggroScore() {
 		int aggro = 1;
 		if (senshiCache != null) {
 			aggro = senshiCache.getDmg() / 10 + senshiCache.getDfs() / 20;

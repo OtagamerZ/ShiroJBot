@@ -17,6 +17,7 @@ import com.kuuhaku.model.persistent.dunhun.Monster;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.ClusterAction;
+import com.kuuhaku.model.records.dunhun.PersistentEffect;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -54,6 +55,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final InfiniteList<Actor> turns = new InfiniteList<>();
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(5);
 	private final RandomList<Actor> rngList = new RandomList<>();
+	private final Set<PersistentEffect> persEffects = new HashSet<>();
 
 	private CompletableFuture<Runnable> lock;
 
@@ -193,6 +195,16 @@ public class Combat implements Renderer<BufferedImage> {
 			try {
 				act.asSenshi(locale).setDefending(false);
 				act.modHp(act.getRegDeg().next());
+
+				Iterator<PersistentEffect> it = persEffects.iterator();
+				while (it.hasNext()) {
+					PersistentEffect effect = it.next();
+					if (!effect.target().equals(act)) continue;
+
+					effect.effect().accept(act);
+					if (effect.duration().decrementAndGet() <= 0) it.remove();
+				}
+
 				if (act.isSkipped()) continue;
 
 				act.modAp(act.getMaxAp());
@@ -379,7 +391,7 @@ public class Combat implements Renderer<BufferedImage> {
 									.toList();
 
 							if (!tgts.isEmpty()) {
-								Actor t = Utils.getWeightedEntry(rngList, a -> a.getAggroScore(locale), tgts);
+								Actor t = Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts);
 								skill.execute(locale, this, curr, t);
 								curr.modAp(-skill.getApCost());
 
@@ -396,15 +408,22 @@ public class Combat implements Renderer<BufferedImage> {
 						}
 
 						if (!used) {
-							if (curr.getAp() == 1 && Calc.chance(25)) {
+							List<Actor> tgts = getActors(curr.getTeam().getOther());
+							double threat = tgts.stream()
+									.mapToInt(Actor::getAggroScore)
+									.average()
+									.orElse(1);
+
+							double risk = threat / curr.getAggroScore();
+							double lifeFac = Math.max(curr.getHp() * 2d / curr.getMaxHp(), 1);
+
+							if (curr.getAp() == 1 && Calc.chance(20 * lifeFac * risk)) {
 								curr.asSenshi(locale).setDefending(true);
 								curr.modAp(-1);
 
 								history.add(locale.get("str/actor_defend", curr.getName(locale)));
 							} else {
-								List<Actor> tgts = getActors(curr.getTeam().getOther());
-
-								attack(curr, Utils.getWeightedEntry(rngList, a -> a.getAggroScore(locale), tgts));
+								attack(curr, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
 								curr.modAp(-1);
 							}
 						}
@@ -568,6 +587,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public CompletableFuture<Runnable> getLock() {
 		return lock;
+	}
+
+	public Set<PersistentEffect> getPersEffects() {
+		return persEffects;
 	}
 
 	public List<Actor> getActors() {

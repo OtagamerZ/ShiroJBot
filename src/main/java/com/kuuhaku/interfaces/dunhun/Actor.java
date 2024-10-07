@@ -18,6 +18,7 @@ public interface Actor {
 
 	int getHp();
 	int getMaxHp();
+	int getHpDelta();
 	void modHp(int value);
 	void revive(int hp);
 
@@ -27,7 +28,7 @@ public interface Actor {
 
 	int getInitiative();
 	double getCritical();
-	int getAggroScore(I18N locale);
+	int getAggroScore();
 
 	boolean hasFleed();
 	void setFleed(boolean flee);

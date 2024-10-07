@@ -582,7 +582,6 @@ public abstract class Utils {
 			randomizer.add(t, weighter.apply(t));
 		}
 
-		System.out.println(randomizer);
 		return randomizer.get();
 	}
 
