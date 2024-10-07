@@ -237,7 +237,7 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	@Override
 	public int getInitiative() {
-		return 0;
+		return (int) modifiers.getInitiative().get();
 	}
 
 	@Override
