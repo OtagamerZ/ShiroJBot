@@ -195,26 +195,12 @@ public class Combat implements Renderer<BufferedImage> {
 		loop:
 		for (Actor act : turns) {
 			if (game.isClosed()) break;
-			else if (!act.asSenshi(locale).isAvailable()) continue;
 
 			try {
-				act.asSenshi(locale).setDefending(false);
-				act.modHp(act.getRegDeg().next());
-
-				Iterator<PersistentEffect> it = persEffects.iterator();
-				while (it.hasNext()) {
-					PersistentEffect effect = it.next();
-					if (!effect.target().equals(act)) continue;
-
-					if (effect.duration().decrementAndGet() <= 0) it.remove();
-					effect.effect().accept(effect, act);
-				}
-
-				if (act.isSkipped()) continue;
+				if (!act.asSenshi(locale).isAvailable() && act.isSkipped()) continue;
 
 				act.modAp(act.getMaxAp());
-				act.getModifiers().expireMods();
-				act.asSenshi(locale).reduceDebuffs(1);
+				act.asSenshi(locale).setDefending(false);
 
 				while (act.getAp() > 0) {
 					Runnable action = reload(true).get();
@@ -222,11 +208,24 @@ public class Combat implements Renderer<BufferedImage> {
 						action.run();
 					}
 
+					act.modHp(act.getRegDeg().next());
+					Iterator<PersistentEffect> it = persEffects.iterator();
+					while (it.hasNext()) {
+						PersistentEffect effect = it.next();
+						if (!effect.target().equals(act)) continue;
+
+						if (effect.duration().decrementAndGet() <= 0) it.remove();
+						effect.effect().accept(effect, act);
+					}
+
 					if (hunters.stream().allMatch(Actor::isSkipped)) break loop;
 					else if (keepers.stream().allMatch(Actor::isSkipped)) break loop;
 				}
 			} catch (Exception e) {
 				Constants.LOGGER.warn(e, e);
+			} finally {
+				act.getModifiers().expireMods();
+				act.asSenshi(locale).reduceDebuffs(1);
 			}
 		}
 
