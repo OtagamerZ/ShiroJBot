@@ -332,19 +332,20 @@ public class Combat implements Renderer<BufferedImage> {
 							return;
 						}
 
-						Consumable cons = h.getConsumable(String.valueOf(selected.getFirst()));
-						if (cons == null) {
+						Consumable con = h.getConsumable(String.valueOf(selected.getFirst()));
+						if (con == null) {
 							game.getChannel().sendMessage(locale.get("error/invalid_consumable")).queue();
 							return;
 						}
 
-						addSelector(w.getMessage(), helper, cons.getTargets(this, h),
+						addSelector(w.getMessage(), helper, con.getTargets(this, h),
 								t -> lock.complete(() -> {
-									cons.execute(locale, this, h, t);
+									con.execute(locale, this, h, t);
+									h.getConsumables().remove(con);
 									h.modAp(-1);
 
 									history.add(locale.get(t.equals(h) ? "str/used_skill_self" : "str/used_skill",
-											h.getName(), cons.getInfo(locale).getName(), t.getName(locale))
+											h.getName(), con.getInfo(locale).getName(), t.getName(locale))
 									);
 								})
 						);
