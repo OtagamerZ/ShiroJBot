@@ -52,13 +52,13 @@ public class Combat implements Renderer<BufferedImage> {
 	private final I18N locale;
 	private final InfiniteList<Actor> turns = new InfiniteList<>();
 	private final BondedList<Actor> hunters = new BondedList<>(a -> {
-		if (getTurns().isEmpty()) return;
-		getTurns().add(a);
-	}, getTurns()::remove);
+		if (turns.isEmpty()) return;
+		turns.add(a);
+	}, turns::remove);
 	private final BondedList<Actor> keepers = new BondedList<>(a -> {
-		if (getTurns().isEmpty()) return;
-		getTurns().add(a);
-	}, getTurns()::remove);
+		if (turns.isEmpty()) return;
+		turns.add(a);
+	}, turns::remove);
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(5);
 	private final RandomList<Actor> rngList = new RandomList<>();
 	private final Set<PersistentEffect> persEffects = new HashSet<>();
@@ -608,9 +608,5 @@ public class Combat implements Renderer<BufferedImage> {
 			case HUNTERS -> hunters;
 			case KEEPERS -> keepers;
 		};
-	}
-
-	public InfiniteList<Actor> getTurns() {
-		return turns;
 	}
 }
