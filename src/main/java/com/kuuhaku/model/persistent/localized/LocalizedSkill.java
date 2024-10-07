@@ -23,6 +23,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.id.LocalizedId;
 import com.kuuhaku.util.text.Uwuifier;
 import jakarta.persistence.*;
+import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -37,10 +38,10 @@ public class LocalizedSkill extends DAO<LocalizedSkill> implements Serializable 
 	@EmbeddedId
 	private LocalizedId id;
 
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", nullable = false, length = SelectOption.LABEL_MAX_LENGTH)
 	private String name;
 
-	@Column(name = "description", nullable = false)
+	@Column(name = "description", nullable = false, length = SelectOption.DESCRIPTION_MAX_LENGTH)
 	private String description;
 
 	private transient boolean uwu = false;
