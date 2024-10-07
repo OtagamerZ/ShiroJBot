@@ -86,19 +86,26 @@ public class HeroInspectCommand implements Executable {
 
 		JSONArray tags = g.getTags();
 		if (!tags.isEmpty()) {
-			String tgs = tags.stream().map(t -> {
-				try {
-					String key = "tag/" + t;
-					String out = locale.get(key, args);
-					if (out.isBlank() || out.equalsIgnoreCase(key)) {
-						out = LocalizedString.get(locale, key, "");
-					}
+			String tgs = "";
+			if (g.getBasetype().getStats().wpnType() != null) {
+				tgs += locale.get("wpn/" + g.getBasetype().getStats().wpnType().name());
+			}
 
-					return Utils.getOr(out, key);
-				} catch (MissingFormatArgumentException e) {
-					return "";
-				}
-			}).collect(Collectors.joining(", "));
+			tgs += tags.stream()
+					.map(t -> {
+						try {
+							String key = "tag/" + t;
+							String out = locale.get(key, args);
+							if (out.isBlank() || out.equalsIgnoreCase(key)) {
+								out = LocalizedString.get(locale, key, "");
+							}
+
+							return ", " + Utils.getOr(out, key);
+						} catch (MissingFormatArgumentException e) {
+							return "";
+						}
+					})
+					.collect(Collectors.joining());
 
 			eb.appendDescription("-# " + tgs + "\n\n");
 		}
