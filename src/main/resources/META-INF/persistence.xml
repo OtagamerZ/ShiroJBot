@@ -79,6 +79,7 @@
         <class>com.kuuhaku.model.persistent.dunhun.Monster</class>
         <class>com.kuuhaku.model.persistent.dunhun.Event</class>
         <class>com.kuuhaku.model.persistent.dunhun.Dungeon</class>
+        <class>com.kuuhaku.model.persistent.dunhun.Consumable</class>
 
         <!-- LOCALIZED -->
         <class>com.kuuhaku.model.persistent.localized.LocalizedItem</class>
@@ -92,6 +93,7 @@
         <class>com.kuuhaku.model.persistent.localized.LocalizedMonster</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedEvent</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedDungeon</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedConsumable</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>

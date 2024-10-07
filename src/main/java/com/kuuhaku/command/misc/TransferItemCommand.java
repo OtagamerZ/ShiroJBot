@@ -16,12 +16,14 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.trade;
+package com.kuuhaku.command.misc;
 
+import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
+import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Syntax;
-import com.kuuhaku.model.common.Trade;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
@@ -31,30 +33,32 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.User;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 @Command(
-		name = "trade",
-		path = {"add", "item"},
+		name = "transfer",
+		path = "item",
 		category = Category.MISC
 )
-@Syntax("<item:word:r> <amount:number>")
-public class TradeAddItemCommand implements Executable {
+@Syntax("<user:user:r> <item:word:r> <amount:number>")
+@Requires(Permission.MESSAGE_EMBED_LINKS)
+public class TransferItemCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Trade trade = Trade.getPending().get(event.user().getId());
-		if (trade == null) {
-			event.channel().sendMessage(locale.get("error/not_in_trade")).queue();
+		User target = event.users(0);
+		if (target == null) {
+			event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
 			return;
-		} else if (trade.isFinalizing()) {
-			event.channel().sendMessage(locale.get("error/trade_finalizing")).queue();
+		} else if (target.equals(event.user())) {
+			event.channel().sendMessage(locale.get("error/self_not_allowed")).queue();
 			return;
 		}
 
-		Account acc = trade.getSelf(event.user().getId());
+		Account acc = data.profile().getAccount();
 		Map<UserItem, Integer> items = acc.getItems();
 		if (items.isEmpty()) {
 			event.channel().sendMessage(locale.get("error/empty_inventory")).queue();
@@ -64,6 +68,12 @@ public class TradeAddItemCommand implements Executable {
 		UserItem item = items.keySet().parallelStream()
 				.filter(i -> i.getId().equals(args.getString("item").toUpperCase()))
 				.findAny().orElse(null);
+
+		int qtd = args.getInt("amount", 1);
+		if (qtd < 1) {
+			event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
+			return;
+		}
 
 		if (item == null) {
 			List<String> names = items.keySet().stream().map(UserItem::getId).toList();
@@ -77,10 +87,29 @@ public class TradeAddItemCommand implements Executable {
 		} else if (item.isAccountBound()) {
 			event.channel().sendMessage(locale.get("error/item_account_bound")).queue();
 			return;
+		} else if (acc.getItemCount(item.getId()) < qtd) {
+			event.channel().sendMessage(locale.get("error/item_not_enough")).queue();
+			return;
 		}
 
-		int amount = args.getInt("amount", 1);
-		trade.getSelfItems(event.user().getId()).addAll(Collections.nCopies(amount, item.getId()));
-		event.channel().sendMessage(locale.get("success/offer_add", event.user().getAsMention(), amount + "x " + item.getName(locale))).queue();
+		try {
+			Utils.confirm(locale.get("question/transfer", item.getInfo(locale).getName(), target.getName()), event.channel(), w -> {
+						if (!acc.isTrueState()) {
+							event.channel().sendMessage(locale.get("error/account_state_changed", 0)).queue();
+							return true;
+						}
+
+						acc.addItem(item, -qtd);
+
+						Account tgt = DAO.find(Account.class, target.getId());
+						tgt.addItem(item, qtd);
+
+						event.channel().sendMessage(locale.get("success/transfer")).queue();
+						return true;
+					}, event.user()
+			);
+		} catch (PendingConfirmationException e) {
+			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+		}
 	}
 }

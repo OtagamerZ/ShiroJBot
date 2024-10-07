@@ -93,6 +93,10 @@ public class Gear extends DAO<Gear> {
 		return owner;
 	}
 
+	public void setOwner(Hero owner) {
+		this.owner = owner;
+	}
+
 	public List<GearAffix> getAllAffixes() {
 		List<GearAffix> affs = new ArrayList<>();
 		GearAffix imp = getImplicit();

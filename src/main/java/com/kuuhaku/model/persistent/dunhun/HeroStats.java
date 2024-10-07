@@ -44,6 +44,11 @@ public class HeroStats {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray skills = new JSONArray();
 
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "consumables", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray consumables = new JSONArray();
+
 	public int getLevel() {
 		return 1 + Calc.round(Math.pow(xp / 10d, 1 / 1.5));
 	}
@@ -78,5 +83,13 @@ public class HeroStats {
 
 	public void setSkills(JSONArray skills) {
 		this.skills = skills;
+	}
+
+	public JSONArray getConsumables() {
+		return consumables;
+	}
+
+	public void setConsumables(JSONArray consumables) {
+		this.consumables = consumables;
 	}
 }

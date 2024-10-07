@@ -41,6 +41,8 @@ import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.collections4.Bag;
+import org.apache.commons.collections4.bag.TreeBag;
 import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -84,6 +86,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	private transient final Delta<Integer> hp = new Delta<>();
 	private transient Equipment equipCache;
 	private transient List<Skill> skillCache;
+	private transient Bag<Consumable> consumableCache;
 	private transient Senshi senshiCache;
 	private transient Dunhun game;
 	private transient Deck deck;
@@ -306,6 +309,20 @@ public class Hero extends DAO<Hero> implements Actor {
 		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", stats.getSkills());
 	}
 
+	public Bag<Consumable> getConsumables() {
+		if (consumableCache != null) return consumableCache;
+
+		List<Consumable> cons = DAO.queryAll(Consumable.class, "SELECT c FROM Consumable c WHERE c.id IN ?1", stats.getConsumables());
+		return consumableCache = new TreeBag<>(cons);
+	}
+
+	public Consumable getConsumable(String id) {
+		return getConsumables().stream()
+				.filter(cons -> cons.getId().equals(id))
+				.findFirst()
+				.orElse(null);
+	}
+
 	@Override
 	public Team getTeam() {
 		return team;
@@ -404,6 +421,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		clone.equipment = new JSONObject(equipment);
 		clone.equipCache = equipCache;
 		clone.skillCache = skillCache;
+		clone.consumableCache = new TreeBag<>();
 		clone.team = team;
 		clone.game = game;
 

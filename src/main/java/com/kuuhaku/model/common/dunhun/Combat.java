@@ -11,7 +11,7 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
-import com.kuuhaku.model.persistent.dunhun.Affix;
+import com.kuuhaku.model.persistent.dunhun.Consumable;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Monster;
 import com.kuuhaku.model.persistent.dunhun.Skill;
@@ -35,12 +35,13 @@ import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.messages.MessageRequest;
+import org.apache.commons.collections4.Bag;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -257,66 +258,100 @@ public class Combat implements Renderer<BufferedImage> {
 						.setCancellable(false);
 
 				helper.addAction(Utils.parseEmoji("🗡"), w -> {
-							if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
+					if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
 
-							List<Actor> tgts = getActors(h.getTeam().getOther()).stream()
-									.map(a -> a.isSkipped() ? null : a)
-									.toList();
+					List<Actor> tgts = getActors(h.getTeam().getOther()).stream()
+							.map(a -> a.isSkipped() ? null : a)
+							.toList();
 
-							addSelector(w.getMessage(), helper, tgts,
-									t -> lock.complete(() -> {
-										attack(h, t);
-										h.modAp(-1);
-									})
-							);
-						})
-						.addAction(Utils.parseEmoji("⚡"), w -> {
-							if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
+					addSelector(w.getMessage(), helper, tgts,
+							t -> lock.complete(() -> {
+								attack(h, t);
+								h.modAp(-1);
+							})
+					);
+				});
 
-							EventHandler handle = Pages.getHandler();
-							List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("skills");
-							if (selected == null || selected.isEmpty()) {
-								game.getChannel().sendMessage(locale.get("error/no_skill_selected")).queue();
-								return;
-							}
+				if (!h.getSkills().isEmpty()) {
+					helper.addAction(Utils.parseEmoji("⚡"), w -> {
+						if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
 
-							Skill skill = h.getSkill(String.valueOf(selected.getFirst()));
-							if (skill == null) {
-								game.getChannel().sendMessage(locale.get("error/invalid_skill")).queue();
-								return;
-							} else if (skill.getApCost() > h.getAp()) {
-								game.getChannel().sendMessage(locale.get("error/not_enough_ap")).queue();
-								return;
-							} else if (h.getModifiers().isCoolingDown(skill)) {
-								game.getChannel().sendMessage(locale.get("error/skill_cooldown")).queue();
-								return;
-							}
+						EventHandler handle = Pages.getHandler();
+						List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("skills");
+						if (selected == null || selected.isEmpty()) {
+							game.getChannel().sendMessage(locale.get("error/no_skill_selected")).queue();
+							return;
+						}
 
-							boolean validWpn = skill.getReqWeapon() == null
-											   || h.getEquipment().getWeaponList().stream()
-													   .anyMatch(g -> g.getBasetype().getStats().wpnType() == skill.getReqWeapon());
+						Skill skill = h.getSkill(String.valueOf(selected.getFirst()));
+						if (skill == null) {
+							game.getChannel().sendMessage(locale.get("error/invalid_skill")).queue();
+							return;
+						} else if (skill.getApCost() > h.getAp()) {
+							game.getChannel().sendMessage(locale.get("error/not_enough_ap")).queue();
+							return;
+						} else if (h.getModifiers().isCoolingDown(skill)) {
+							game.getChannel().sendMessage(locale.get("error/skill_cooldown")).queue();
+							return;
+						}
 
-							if (!validWpn) {
-								game.getChannel().sendMessage(locale.get("error/skill_cooldown")).queue();
-								return;
-							}
+						boolean validWpn = skill.getReqWeapon() == null
+										   || h.getEquipment().getWeaponList().stream()
+												   .anyMatch(g -> g.getBasetype().getStats().wpnType() == skill.getReqWeapon());
 
-							addSelector(w.getMessage(), helper, skill.getTargets(this, h),
-									t -> lock.complete(() -> {
-										skill.execute(locale, this, h, t);
-										h.modAp(-skill.getApCost());
+						if (!validWpn) {
+							game.getChannel().sendMessage(locale.get("error/skill_cooldown")).queue();
+							return;
+						}
 
-										if (skill.getCooldown() > 0) {
-											h.getModifiers().setCooldown(skill, skill.getCooldown());
-										}
+						addSelector(w.getMessage(), helper, skill.getTargets(this, h),
+								t -> lock.complete(() -> {
+									skill.execute(locale, this, h, t);
+									h.modAp(-skill.getApCost());
 
-										history.add(locale.get(t.equals(h) ? "str/used_skill_self" : "str/used_skill",
-												h.getName(), skill.getInfo(locale).getName(), t.getName(locale))
-										);
-									})
-							);
-						})
-						.addAction(Utils.parseEmoji("🛡"), w -> lock.complete(() -> {
+									if (skill.getCooldown() > 0) {
+										h.getModifiers().setCooldown(skill, skill.getCooldown());
+									}
+
+									history.add(locale.get(t.equals(h) ? "str/used_skill_self" : "str/used_skill",
+											h.getName(), skill.getInfo(locale).getName(), t.getName(locale))
+									);
+								})
+						);
+					});
+				}
+
+				if (!h.getConsumables().isEmpty()) {
+					helper.addAction(Utils.parseEmoji("\uD83E\uDED9"), w -> {
+						if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
+
+						EventHandler handle = Pages.getHandler();
+						List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("consumables");
+						if (selected == null || selected.isEmpty()) {
+							game.getChannel().sendMessage(locale.get("error/no_consumable_selected")).queue();
+							return;
+						}
+
+						Consumable cons = h.getConsumable(String.valueOf(selected.getFirst()));
+						if (cons == null) {
+							game.getChannel().sendMessage(locale.get("error/invalid_consumable")).queue();
+							return;
+						}
+
+						addSelector(w.getMessage(), helper, cons.getTargets(this, h),
+								t -> lock.complete(() -> {
+									cons.execute(locale, this, h, t);
+									h.modAp(-1);
+
+									history.add(locale.get(t.equals(h) ? "str/used_skill_self" : "str/used_skill",
+											h.getName(), cons.getInfo(locale).getName(), t.getName(locale))
+									);
+								})
+						);
+					});
+				}
+
+				helper.addAction(Utils.parseEmoji("🛡"), w -> lock.complete(() -> {
 							if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
 
 							h.asSenshi(locale).setDefending(true);
@@ -344,52 +379,16 @@ public class Combat implements Renderer<BufferedImage> {
 									}))
 									.addAction(Utils.parseEmoji("↩"), v -> {
 										MessageEditAction ma = helper.apply(v.getMessage().editMessageComponents());
-										addSkillMenu(h, ma);
+										addSelectors(h, ma);
 										ma.queue(s -> Pages.buttonize(s, helper));
 									});
 
 							confirm.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, helper));
-						})
-						.addAction(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
-							EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-							for (Actor a : getActors()) {
-								if (!(a instanceof Monster m)) continue;
-
-								XStringBuilder sb = new XStringBuilder("-# " + m.getInfo(locale).getName() + "\n");
-
-								Set<Affix> affs = m.getAffixes();
-								if (!affs.isEmpty()) {
-									sb.appendNewLine("**" + locale.get("str/affixes") + "**");
-									for (Affix aff : affs) {
-										sb.appendNewLine("- " + aff.getInfo(locale).getDescription());
-									}
-								}
-
-								sb.nextLine();
-
-								List<Skill> skills = m.getSkills();
-								if (!skills.isEmpty()) {
-									sb.appendNewLine("**" + locale.get("str/skills") + "**");
-									for (Skill skill : skills) {
-										sb.appendNewLine("- " + skill.getInfo(locale).getName());
-										sb.appendNewLine("-# " + skill.getInfo(locale).getDescription());
-										sb.nextLine();
-									}
-								}
-
-								eb.addField(a.getName(locale), sb.toString(), true);
-							}
-
-							Objects.requireNonNull(w.getHook())
-									.setEphemeral(true)
-									.sendMessageEmbeds(eb.build())
-									.queue();
 						});
 
 				ca.apply(a -> {
 					MessageCreateAction ma = helper.apply(a);
-					addSkillMenu(h, ma);
+					addSelectors(h, ma);
 
 					return ma;
 				});
@@ -481,7 +480,9 @@ public class Combat implements Renderer<BufferedImage> {
 		return lock;
 	}
 
-	private void addSkillMenu(Hero h, MessageRequest<?> ma) {
+	private void addSelectors(Hero h, MessageRequest<?> ma) {
+		List<LayoutComponent> comps = new ArrayList<>(ma.getComponents());
+
 		List<Skill> skills = h.getSkills();
 		if (!skills.isEmpty()) {
 			StringSelectMenu.Builder b = StringSelectMenu.create("skills")
@@ -502,11 +503,27 @@ public class Combat implements Renderer<BufferedImage> {
 				);
 			}
 
-			List<LayoutComponent> comps = new ArrayList<>(ma.getComponents());
 			comps.add(ActionRow.of(b.build()));
-
-			ma.setComponents(comps);
 		}
+
+		Bag<Consumable> cons = h.getConsumables();
+		if (!cons.isEmpty()) {
+			StringSelectMenu.Builder b = StringSelectMenu.create("consumables")
+					.setPlaceholder(locale.get("str/use_a_consumable"))
+					.setMaxValues(1);
+
+			for (Consumable c : cons.uniqueSet()) {
+				b.addOption(
+						c.getInfo(locale).getName() + " (x" + cons.getCount(c) + ")",
+						c.getId(),
+						c.getInfo(locale).getDescription()
+				);
+			}
+
+			comps.add(ActionRow.of(b.build()));
+		}
+
+		ma.setComponents(comps);
 	}
 
 	private void attack(Actor source, Actor target) {
@@ -574,7 +591,7 @@ public class Combat implements Renderer<BufferedImage> {
 		helper.addAction(Utils.parseEmoji("↩"), w -> {
 			MessageEditAction ma = root.apply(msg.editMessageComponents());
 
-			addSkillMenu(h, ma);
+			addSelectors(h, ma);
 
 			ma.queue(s -> Pages.buttonize(s, root));
 		});

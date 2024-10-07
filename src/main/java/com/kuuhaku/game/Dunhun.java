@@ -6,13 +6,16 @@ import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.NullPhase;
 import com.kuuhaku.game.engine.PlayerAction;
+import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.dunhun.Dungeon;
-import com.kuuhaku.model.persistent.dunhun.Hero;
+import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
@@ -21,10 +24,7 @@ import org.intellij.lang.annotations.MagicConstant;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -48,7 +48,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		for (String p : players) {
 			Hero h = DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1", p);
 			if (h == null) {
-				getChannel().sendMessage(getString("error/no_hero_other", "<@" + p + ">")).queue();
+				getChannel().sendMessage(getString("error/no_hero_target", "<@" + p + ">")).queue();
 				close(GameReport.NO_HERO);
 				return;
 			}
@@ -97,6 +97,43 @@ public class Dunhun extends GameInstance<NullPhase> {
 	@PlayerAction("reload")
 	private void reload(JSONObject args) {
 		if (combat != null) combat.getLock().complete(null);
+	}
+
+	@PlayerAction("info")
+	private void info(JSONObject args) {
+		if (combat == null) return;
+
+		EmbedBuilder eb = new ColorlessEmbedBuilder();
+
+		for (Actor a : combat.getActors()) {
+			if (!(a instanceof Monster m)) continue;
+
+			XStringBuilder sb = new XStringBuilder("-# " + m.getInfo(getLocale()).getName() + "\n");
+
+			Set<Affix> affs = m.getAffixes();
+			if (!affs.isEmpty()) {
+				sb.appendNewLine("**" + getLocale().get("str/affixes") + "**");
+				for (Affix aff : affs) {
+					sb.appendNewLine("- " + aff.getInfo(getLocale()).getDescription());
+				}
+			}
+
+			sb.nextLine();
+
+			List<Skill> skills = m.getSkills();
+			if (!skills.isEmpty()) {
+				sb.appendNewLine("**" + getLocale().get("str/skills") + "**");
+				for (Skill skill : skills) {
+					sb.appendNewLine("- " + skill.getInfo(getLocale()).getName());
+					sb.appendNewLine("-# " + skill.getInfo(getLocale()).getDescription());
+					sb.nextLine();
+				}
+			}
+
+			eb.addField(a.getName(getLocale()), sb.toString(), true);
+		}
+
+		getChannel().sendEmbed(eb.build()).queue();
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
