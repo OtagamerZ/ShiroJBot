@@ -33,9 +33,10 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.User;
 
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 
@@ -52,7 +53,7 @@ public class StealCommand implements Executable {
 		if (target == null) {
 			event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
 			return;
-		} else if (target.equals(event.user())) {
+		} else if (target.equals(event.member())) {
 			event.channel().sendMessage(locale.get("error/self_not_allowed")).queue();
 			return;
 		} else if (!event.channel().canTalk(target)) {
