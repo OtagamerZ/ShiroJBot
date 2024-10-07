@@ -124,7 +124,7 @@ public class Combat implements Renderer<BufferedImage> {
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
 
 					Graph.overlay(card, IO.getResourceAsImage(path + "/hero.png"));
-					g2d.drawString("⌄", offset + Drawable.SIZE.width / 2, 40);
+					g2d.drawString("v", offset + Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth("v") / 2, 40);
 				}
 
 				g2d.drawImage(card, offset, 50, null);
