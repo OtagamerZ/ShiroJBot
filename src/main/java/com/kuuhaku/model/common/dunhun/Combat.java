@@ -50,8 +50,14 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private final Dunhun game;
 	private final I18N locale;
-	private final List<Actor> hunters;
-	private final List<Actor> keepers;
+	private final BondedList<Actor> hunters = new BondedList<>(a -> {
+		if (getTurns().isEmpty()) return;
+		getTurns().add(a);
+	}, getTurns()::remove);
+	private final BondedList<Actor> keepers = new BondedList<>(a -> {
+		if (getTurns().isEmpty()) return;
+		getTurns().add(a);
+	}, getTurns()::remove);
 	private final InfiniteList<Actor> turns = new InfiniteList<>();
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(5);
 	private final RandomList<Actor> rngList = new RandomList<>();
@@ -63,8 +69,7 @@ public class Combat implements Renderer<BufferedImage> {
 		this.game = game;
 		this.locale = game.getLocale();
 
-		hunters = List.copyOf(game.getHeroes().values());
-		keepers = new ArrayList<>();
+		hunters.addAll(game.getHeroes().values());
 
 		for (int i = 0; i < 3; i++) {
 			if (!Calc.chance(100 - 50d / hunters.size() * keepers.size())) break;
@@ -604,5 +609,9 @@ public class Combat implements Renderer<BufferedImage> {
 			case HUNTERS -> hunters;
 			case KEEPERS -> keepers;
 		};
+	}
+
+	public InfiniteList<Actor> getTurns() {
+		return turns;
 	}
 }

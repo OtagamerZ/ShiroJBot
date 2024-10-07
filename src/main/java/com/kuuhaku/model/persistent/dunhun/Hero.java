@@ -36,7 +36,6 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.Attributes;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
-import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -52,18 +51,22 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "hero", schema = "dunhun")
 public class Hero extends DAO<Hero> implements Actor {
+	@Transient
+	public final long SERIAL = ThreadLocalRandom.current().nextLong();
+
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
 
 	@Embedded
-	private final HeroStats stats = new HeroStats();
+	private HeroStats stats = new HeroStats();
 
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "account_uid")
@@ -362,11 +365,21 @@ public class Hero extends DAO<Hero> implements Actor {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Hero hero = (Hero) o;
-		return Objects.equals(id, hero.id);
+		return SERIAL == hero.SERIAL && Objects.equals(id, hero.id);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(id);
+		return Objects.hash(SERIAL, id);
+	}
+
+	@Override
+	public Actor fork() {
+		Hero clone = new Hero(account, id, stats.getRace());
+		clone.stats = stats;
+		clone.equipment = new JSONObject(equipment);
+		clone.team = team;
+
+		return clone;
 	}
 }

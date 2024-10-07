@@ -53,12 +53,11 @@ import static jakarta.persistence.CascadeType.ALL;
 @Table(name = "monster", schema = "dunhun")
 public class Monster extends DAO<Monster> implements Actor {
 	@Transient
-	public final long SERIAL = ThreadLocalRandom.current().nextLong();
-
-	@Transient
 	public static final Deck DECK = Utils.with(new Deck(), d -> {
 		d.getStyling().setFrame(FrameSkin.GLITCH);
 	});
+	@Transient
+	public final long SERIAL = ThreadLocalRandom.current().nextLong();
 
 	@Id
 	@Column(name = "id", nullable = false)
@@ -82,6 +81,13 @@ public class Monster extends DAO<Monster> implements Actor {
 	private transient Team team;
 	private transient int ap;
 	private transient boolean flee;
+
+	public Monster() {
+	}
+
+	public Monster(String id) {
+		this.id = id;
+	}
 
 	@Override
 	public String getId() {
@@ -339,6 +345,17 @@ public class Monster extends DAO<Monster> implements Actor {
 	@Override
 	public int hashCode() {
 		return Objects.hash(SERIAL, id);
+	}
+
+	@Override
+	public Actor fork() {
+		Monster clone = new Monster(id);
+		clone.stats = stats;
+		clone.infos = infos;
+		clone.team = team;
+		clone.affixes.addAll(affixes);
+
+		return clone;
 	}
 
 	public static Monster getRandom() {

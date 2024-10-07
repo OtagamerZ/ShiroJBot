@@ -53,4 +53,14 @@ public interface Actor {
 
 	Team getTeam();
 	void setTeam(Team team);
+
+	Actor fork() throws CloneNotSupportedException;
+
+	default Actor copy() {
+		try {
+			return fork();
+		} catch (Exception e) {
+			return this;
+		}
+	}
 }
