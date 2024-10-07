@@ -139,10 +139,10 @@ public class Affix extends DAO<Affix> {
 				WHERE type = ?1
 				  AND weight > 0
 				  AND req_tags <@ cast(?2 AS JSONB)
+				  AND NOT (has(req_tags, 'WEAPON') AND has(cast(?2 AS JSONB), 'OFFHAND'))
 				  AND NOT has(get_affix_family(cast(?3 AS JSONB)), get_affix_family(id))
 				  AND (affix_group IS NULL OR affix_group NOT IN ?4)
-				  AND NOT (has(req_tags, 'WEAPON') AND ?5 = 'SHIELD')
-				""", type.name(), tags.toString(), affixes.toString(), groups, base.getStats().wpnType());
+				""", type.name(), tags.toString(), affixes.toString(), groups);
 
 		for (Object[] a : affs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
