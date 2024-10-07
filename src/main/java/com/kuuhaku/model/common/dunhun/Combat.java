@@ -102,7 +102,7 @@ public class Combat implements Renderer<BufferedImage> {
 	public BufferedImage render(I18N locale) {
 		BufferedImage bi = new BufferedImage(Drawable.SIZE.width * (hunters.size() + keepers.size()) + 64, 50 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
-		g2d.setFont(Fonts.OPEN_SANS.deriveBold(60));
+		g2d.setFont(Fonts.OPEN_SANS.deriveBold(50));
 
 		int offset = 0;
 		boolean divided = false;
