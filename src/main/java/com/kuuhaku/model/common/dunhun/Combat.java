@@ -493,20 +493,12 @@ public class Combat implements Renderer<BufferedImage> {
 
 		boolean crit = Calc.chance(source.getCritical());
 		int raw = srcSen.getDmg() * (crit ? 2 : 1);
-		int def = tgtSen.getDfs();
 
-		int dmg;
-		if (tgtSen.isDefending()) {
-			dmg = (int) Math.max(raw / 10f, (2.5 * Math.pow(raw, 2)) / (def + 2.5 * raw));
-		} else {
-			dmg = (int) Math.max(raw / 5f, (5 * Math.pow(raw, 2)) / (def + 5 * raw));
-		}
-
-		target.modHp(-dmg);
+		target.modHp(-raw);
 		history.add(locale.get("str/actor_combat",
 				source.getName(locale),
 				target.getName(locale),
-				dmg,
+				-target.getHpDelta(),
 				crit ? ("**(" + locale.get("str/critical") + ")**") : ""
 		));
 	}

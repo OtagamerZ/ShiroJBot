@@ -156,6 +156,16 @@ public class Hero extends DAO<Hero> implements Actor {
 	public void modHp(int value) {
 		if (getHp() == 0) return;
 
+		if (value < 0 && senshiCache != null) {
+			value = -value;
+
+			if (senshiCache.isDefending()) {
+				value = (int) -Math.max(value / 10f, (2.5 * Math.pow(value, 2)) / (senshiCache.getDfs() + 2.5 * value));
+			} else {
+				value = (int) -Math.max(value / 5f, (5 * Math.pow(value, 2)) / (senshiCache.getDfs() + 5 * value));
+			}
+		}
+
 		hp.set(Calc.clamp(getHp() + value, 0, getMaxHp()));
 	}
 
