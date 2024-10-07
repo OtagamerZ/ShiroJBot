@@ -217,6 +217,7 @@ public class Combat implements Renderer<BufferedImage> {
 				act.getModifiers().expireMods();
 				act.asSenshi(locale).reduceDebuffs(1);
 				act.modHp(act.getRegDeg().next());
+				act.asSenshi(locale).setAvailable(true);
 
 				Iterator<PersistentEffect> it = persEffects.iterator();
 				while (it.hasNext()) {
