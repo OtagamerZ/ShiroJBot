@@ -32,7 +32,9 @@ import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.LayoutComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
+import net.dv8tion.jda.api.utils.messages.MessageRequest;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -73,7 +75,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		hunters.addAll(game.getHeroes().values());
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 4; i++) {
 			if (!Calc.chance(100 - 50d / hunters.size() * keepers.size())) break;
 
 			keepers.add(Monster.getRandom());
@@ -83,14 +85,14 @@ public class Combat implements Renderer<BufferedImage> {
 		for (List<Actor> acts : List.of(hunters, keepers)) {
 			for (Actor a : acts) {
 				a.setTeam(team);
+				a.setGame(game);
 				a.asSenshi(locale);
 			}
 
 			team = Team.KEEPERS;
 		}
 
-		ExecutorService exec = Executors.newSingleThreadExecutor();
-		CompletableFuture.runAsync(this::process, exec);
+		process();
 	}
 
 	@Override
@@ -316,18 +318,30 @@ public class Combat implements Renderer<BufferedImage> {
 
 							history.add(locale.get("str/actor_defend", h.getName()));
 						}))
-						.addAction(Utils.parseEmoji("💨"), w -> lock.complete(() -> {
-							int chance = Math.min(100 - 20 * game.getTurn() + 5 * h.getAttributes().dex(), 100 - 2 * game.getTurn());
+						.addAction(Utils.parseEmoji("💨"), w -> {
+							ButtonizeHelper confirm = new ButtonizeHelper(true)
+									.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
+									.setCancellable(false)
+									.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() -> {
+										int chance = Math.min(100 - 20 * game.getTurn() + 5 * h.getAttributes().dex(), 100 - 2 * game.getTurn());
 
-							if (Calc.chance(chance)) {
-								h.setFleed(true);
-								history.add(locale.get("str/actor_flee", h.getName()));
-							} else {
-								history.add(locale.get("str/actor_flee_fail", h.getName(), chance));
-							}
+										if (Calc.chance(chance)) {
+											h.setFleed(true);
+											history.add(locale.get("str/actor_flee", h.getName()));
+										} else {
+											history.add(locale.get("str/actor_flee_fail", h.getName(), chance));
+										}
 
-							h.modAp(-h.getAp());
-						}))
+										h.modAp(-h.getAp());
+									}))
+									.addAction(Utils.parseEmoji("↩"), v -> {
+										MessageEditAction ma = helper.apply(v.getMessage().editMessageComponents());
+										addSkillMenu(h, ma);
+										ma.queue(s -> Pages.buttonize(s, helper));
+									});
+
+							confirm.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, helper));
+						})
 						.addAction(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
 							EmbedBuilder eb = new ColorlessEmbedBuilder();
 
@@ -366,30 +380,10 @@ public class Combat implements Renderer<BufferedImage> {
 						});
 
 				ca.apply(a -> {
-					List<Skill> skills = h.getSkills();
-					if (!skills.isEmpty()) {
-						StringSelectMenu.Builder b = StringSelectMenu.create("skills")
-								.setPlaceholder(locale.get("str/use_a_skill"))
-								.setMaxValues(1);
+					MessageCreateAction ma = helper.apply(a);
+					addSkillMenu(h, ma);
 
-						for (Skill s : skills) {
-							String cdText = "";
-							int cd = h.getModifiers().getCooldowns().getOrDefault(s.getId(), 0);
-							if (cd > 0) {
-								cdText = " (CD: " + locale.get("str/turns_inline", cd) + ")";
-							}
-
-							b.addOption(
-									s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()) + cdText,
-									s.getId(),
-									s.getInfo(locale).getDescription()
-							);
-						}
-
-						return helper.apply(a).addActionRow(b.build());
-					}
-
-					return helper.apply(a);
+					return ma;
 				});
 			} else {
 				helper = null;
@@ -477,6 +471,34 @@ public class Combat implements Renderer<BufferedImage> {
 		return lock;
 	}
 
+	private void addSkillMenu(Hero h, MessageRequest<?> ma) {
+		List<Skill> skills = h.getSkills();
+		if (!skills.isEmpty()) {
+			StringSelectMenu.Builder b = StringSelectMenu.create("skills")
+					.setPlaceholder(locale.get("str/use_a_skill"))
+					.setMaxValues(1);
+
+			for (Skill s : skills) {
+				String cdText = "";
+				int cd = h.getModifiers().getCooldowns().getOrDefault(s.getId(), 0);
+				if (cd > 0) {
+					cdText = " (CD: " + locale.get("str/turns_inline", cd) + ")";
+				}
+
+				b.addOption(
+						s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()) + cdText,
+						s.getId(),
+						s.getInfo(locale).getDescription()
+				);
+			}
+
+			List<LayoutComponent> comps = new ArrayList<>(ma.getComponents());
+			comps.add(ActionRow.of(b.build()));
+
+			ma.setComponents(comps);
+		}
+	}
+
 	private void attack(Actor source, Actor target) {
 		Senshi srcSen = source.asSenshi(locale);
 		Senshi tgtSen = target.asSenshi(locale);
@@ -542,31 +564,7 @@ public class Combat implements Renderer<BufferedImage> {
 		helper.addAction(Utils.parseEmoji("↩"), w -> {
 			MessageEditAction ma = root.apply(msg.editMessageComponents());
 
-			List<Skill> skills = h.getSkills();
-			if (!skills.isEmpty()) {
-				StringSelectMenu.Builder b = StringSelectMenu.create("skills")
-						.setPlaceholder(locale.get("str/use_a_skill"))
-						.setMaxValues(1);
-
-				for (Skill s : skills) {
-					String cdText = "";
-					int cd = h.getModifiers().getCooldowns().getOrDefault(s.getId(), 0);
-					if (cd > 0) {
-						cdText = " (CD: " + locale.get("str/turns_inline", cd) + ")";
-					}
-
-					b.addOption(
-							s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()) + cdText,
-							s.getId(),
-							s.getInfo(locale).getDescription()
-					);
-				}
-
-				List<LayoutComponent> comps = new ArrayList<>(ma.getComponents());
-				comps.add(ActionRow.of(b.build()));
-
-				ma.setComponents(comps);
-			}
+			addSkillMenu(h, ma);
 
 			ma.queue(s -> Pages.buttonize(s, root));
 		});

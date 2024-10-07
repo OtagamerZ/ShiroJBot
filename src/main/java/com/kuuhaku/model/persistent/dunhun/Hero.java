@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.Delta;
 import com.kuuhaku.model.common.dunhun.ActorModifiers;
@@ -84,6 +85,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	private transient Equipment equipCache;
 	private transient List<Skill> skillCache;
 	private transient Senshi senshiCache;
+	private transient Dunhun game;
 	private transient Deck deck;
 	private transient Team team;
 	private transient int ap;
@@ -315,6 +317,11 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	@Override
+	public void setGame(Dunhun game) {
+		this.game = game;
+	}
+
+	@Override
 	public Senshi asSenshi(I18N locale) {
 		if (senshiCache != null) return senshiCache;
 
@@ -391,6 +398,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		clone.equipCache = equipCache;
 		clone.skillCache = skillCache;
 		clone.team = team;
+		clone.game = game;
 
 		return clone;
 	}

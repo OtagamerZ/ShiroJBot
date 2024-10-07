@@ -1,5 +1,6 @@
 package com.kuuhaku.interfaces.dunhun;
 
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.dunhun.ActorModifiers;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
@@ -53,6 +54,7 @@ public interface Actor {
 
 	Team getTeam();
 	void setTeam(Team team);
+	void setGame(Dunhun game);
 
 	Actor fork() throws CloneNotSupportedException;
 

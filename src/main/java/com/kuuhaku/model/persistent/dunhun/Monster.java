@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.Delta;
 import com.kuuhaku.model.common.RandomList;
@@ -78,6 +79,7 @@ public class Monster extends DAO<Monster> implements Actor {
 	private transient String nameCache;
 	private transient List<Skill> skillCache;
 	private transient Senshi senshiCache;
+	private transient Dunhun game;
 	private transient Team team;
 	private transient int ap;
 	private transient boolean flee;
@@ -171,12 +173,13 @@ public class Monster extends DAO<Monster> implements Actor {
 	@Override
 	public int getMaxHp() {
 		int hp = (int) ((stats.getBaseHp() + modifiers.getMaxHp().get()) * (1 + modifiers.getHpMult().get()));
-		switch (getRarityClass()) {
-			case RARE -> hp = (int) (hp * 2.25);
-			case MAGIC -> hp = (int) (hp * 1.5);
-		}
+		double mult = switch (getRarityClass()) {
+			case RARE -> 2.25;
+			case MAGIC -> 1.5;
+			default -> 1;
+		} * (1 + game.getTurn() / 4d);
 
-		return hp;
+		return (int) (hp * mult);
 	}
 
 	@Override
@@ -306,6 +309,11 @@ public class Monster extends DAO<Monster> implements Actor {
 	}
 
 	@Override
+	public void setGame(Dunhun game) {
+		this.game = game;
+	}
+
+	@Override
 	public Senshi asSenshi(I18N locale) {
 		if (senshiCache != null) return senshiCache;
 
@@ -331,7 +339,7 @@ public class Monster extends DAO<Monster> implements Actor {
 			case RARE -> 2;
 			case MAGIC -> 1.25;
 			default -> 1;
-		};
+		} * (1 + game.getTurn() / 4d);
 
 		base.setAtk((int) (stats.getAttack() * mult));
 		base.setDfs((int) (stats.getDefense() * mult));
@@ -368,6 +376,7 @@ public class Monster extends DAO<Monster> implements Actor {
 		clone.infos = infos;
 		clone.skillCache = skillCache;
 		clone.team = team;
+		clone.game = game;
 		clone.affixes.addAll(affixes);
 
 		return clone;

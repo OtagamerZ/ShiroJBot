@@ -25,9 +25,13 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Dunhun extends GameInstance<NullPhase> {
+	private final ExecutorService main = Executors.newSingleThreadExecutor();
 	private final Dungeon instance;
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private Pair<String, String> message;
@@ -65,7 +69,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@Override
 	protected void begin() {
-		combat = new Combat(this);
+		CompletableFuture.runAsync(() -> {
+			combat = new Combat(this);
+			nextTurn();
+		}, main);
 	}
 
 	@Override
