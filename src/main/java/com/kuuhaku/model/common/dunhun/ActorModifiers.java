@@ -20,13 +20,9 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.ValueMod;
-import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.records.dunhun.Attributes;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.function.Predicate;
 
 public class ActorModifiers {
@@ -37,7 +33,6 @@ public class ActorModifiers {
 	private final CumValue critical = CumValue.flat();
 	private final CumValue aggroMult = CumValue.flat();
 
-	private final Map<String, Integer> cooldowns = new HashMap<>();
 	private final CumValue str = CumValue.flat();
 	private final CumValue dex = CumValue.flat();
 	private final CumValue wis = CumValue.flat();
@@ -94,28 +89,7 @@ public class ActorModifiers {
 		);
 	}
 
-	public void setCooldown(Skill s, int time) {
-		cooldowns.put(s.getId(), time);
-	}
-
-	public boolean isCoolingDown(Skill s) {
-		return cooldowns.getOrDefault(s.getId(), 0) > 0;
-	}
-
-	public Map<String, Integer> getCooldowns() {
-		return cooldowns;
-	}
-
 	public void expireMods() {
-		Iterator<Map.Entry<String, Integer>> it = cooldowns.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry<String, Integer> entry = it.next();
-
-			int cd = entry.getValue() - 1;
-			if (cd <= 0) it.remove();
-			else entry.setValue(cd);
-		}
-
 		Predicate<ValueMod> check = mod -> {
 			if (mod.getExpiration() > 0) {
 				mod.decExpiration();

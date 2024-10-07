@@ -73,6 +73,8 @@ public class Skill extends DAO<Skill> {
 	@Embedded
 	private Attributes requirements;
 
+	private transient int cd = 0;
+
 	public String getId() {
 		return id;
 	}
@@ -127,6 +129,18 @@ public class Skill extends DAO<Skill> {
 
 	public WeaponType getReqWeapon() {
 		return reqWeapon;
+	}
+
+	public int getCd() {
+		return cd;
+	}
+
+	public void setCd(int cd) {
+		this.cd = Math.max(0, cd);
+	}
+
+	public void reduceCd() {
+		cd = Math.max(0, cd - 1);
 	}
 
 	@Override

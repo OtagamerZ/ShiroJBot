@@ -204,6 +204,10 @@ public class Combat implements Renderer<BufferedImage> {
 					act.getModifiers().expireMods();
 					act.asSenshi(locale).reduceDebuffs(1);
 
+					for (Skill s : act.getSkills()) {
+						s.reduceCd();
+					}
+
 					if (hunters.stream().allMatch(Actor::isSkipped)) break;
 					else if (keepers.stream().allMatch(Actor::isSkipped)) break;
 					continue;
@@ -255,11 +259,10 @@ public class Combat implements Renderer<BufferedImage> {
 		if (execute) {
 			if (curr instanceof Hero h) {
 				helper = new ButtonizeHelper(true)
+						.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 						.setCancellable(false);
 
 				helper.addAction(Utils.parseEmoji("🗡"), w -> {
-					if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
-
 					List<Actor> tgts = getActors(h.getTeam().getOther()).stream()
 							.map(a -> a.isSkipped() ? null : a)
 							.toList();
@@ -274,8 +277,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 				if (!h.getSkills().isEmpty()) {
 					helper.addAction(Utils.parseEmoji("⚡"), w -> {
-						if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
-
 						EventHandler handle = Pages.getHandler();
 						List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("skills");
 						if (selected == null || selected.isEmpty()) {
@@ -290,13 +291,14 @@ public class Combat implements Renderer<BufferedImage> {
 						} else if (skill.getApCost() > h.getAp()) {
 							game.getChannel().sendMessage(locale.get("error/not_enough_ap")).queue();
 							return;
-						} else if (h.getModifiers().isCoolingDown(skill)) {
+						} else if (skill.getCd() > 0) {
 							game.getChannel().sendMessage(locale.get("error/skill_cooldown")).queue();
 							return;
 						}
 
 						boolean validWpn = skill.getReqWeapon() == null
-										   || h.getEquipment().getWeaponList().stream()
+										   || h.getEquipment().getWeaponList()
+												   .stream()
 												   .anyMatch(g -> g.getBasetype().getStats().wpnType() == skill.getReqWeapon());
 
 						if (!validWpn) {
@@ -310,7 +312,7 @@ public class Combat implements Renderer<BufferedImage> {
 									h.modAp(-skill.getApCost());
 
 									if (skill.getCooldown() > 0) {
-										h.getModifiers().setCooldown(skill, skill.getCooldown());
+										skill.setCd(skill.getCooldown());
 									}
 
 									history.add(locale.get(t.equals(h) ? "str/used_skill_self" : "str/used_skill",
@@ -323,8 +325,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 				if (!h.getConsumables().isEmpty()) {
 					helper.addAction(Utils.parseEmoji("\uD83E\uDED9"), w -> {
-						if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
-
 						EventHandler handle = Pages.getHandler();
 						List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("consumables");
 						if (selected == null || selected.isEmpty()) {
@@ -353,16 +353,12 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				helper.addAction(Utils.parseEmoji("🛡"), w -> lock.complete(() -> {
-							if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
-
 							h.asSenshi(locale).setDefending(true);
 							h.modAp(-h.getAp());
 
 							history.add(locale.get("str/actor_defend", h.getName()));
 						}))
 						.addAction(Utils.parseEmoji("💨"), w -> {
-							if (!w.getUser().getId().equals(h.getAccount().getUid())) return;
-
 							ButtonizeHelper confirm = new ButtonizeHelper(true)
 									.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 									.setCancellable(false)
@@ -399,7 +395,7 @@ public class Combat implements Renderer<BufferedImage> {
 				cpu.schedule(() -> {
 					try {
 						List<Skill> skills = curr.getSkills().stream()
-								.filter(s -> s.getApCost() <= curr.getAp() && !curr.getModifiers().isCoolingDown(s))
+								.filter(s -> s.getApCost() <= curr.getAp() && s.getCd() == 0)
 								.toList();
 
 						boolean used = false;
@@ -416,7 +412,7 @@ public class Combat implements Renderer<BufferedImage> {
 								curr.modAp(-skill.getApCost());
 
 								if (skill.getCooldown() > 0) {
-									curr.getModifiers().setCooldown(skill, skill.getCooldown());
+									skill.setCd(skill.getCooldown());
 								}
 
 								history.add(locale.get(t.equals(curr) ? "str/used_skill_self" : "str/used_skill",
@@ -492,7 +488,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			for (Skill s : skills) {
 				String cdText = "";
-				int cd = h.getModifiers().getCooldowns().getOrDefault(s.getId(), 0);
+				int cd = s.getCd();
 				if (cd > 0) {
 					cdText = " (CD: " + locale.get("str/turns_inline", cd) + ")";
 				}
