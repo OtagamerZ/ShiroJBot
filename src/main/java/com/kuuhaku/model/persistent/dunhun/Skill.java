@@ -93,7 +93,8 @@ public class Skill extends DAO<Skill> {
 					"locale", locale,
 					"combat", combat,
 					"actor", source,
-					"target", target
+					"target", target,
+					"pow", source instanceof Hero h ? (1 + h.getAttributes().wis() / 20) : 1
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute skill {}", id, e);
