@@ -24,14 +24,16 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.WeaponType;
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
 import java.util.*;
@@ -66,9 +68,10 @@ public class Skill extends DAO<Skill> {
 	@Column(name = "targeter", columnDefinition = "TEXT")
 	private String targeter;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "req_weapon")
-	private WeaponType reqWeapon;
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "req_weapons", columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray reqWeapons;
 
 	@Embedded
 	private Attributes requirements;
@@ -127,8 +130,14 @@ public class Skill extends DAO<Skill> {
 		return requirements;
 	}
 
-	public WeaponType getReqWeapon() {
-		return reqWeapon;
+	public Set<WeaponType> getReqWeapons() {
+		Set<WeaponType> out = EnumSet.noneOf(WeaponType.class);
+		for (int i = 0; i < reqWeapons.size(); i++) {
+			WeaponType type = reqWeapons.getEnum(WeaponType.class, i);
+			if (type != null) out.add(type);
+		}
+
+		return out;
 	}
 
 	public int getCd() {

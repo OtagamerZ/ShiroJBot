@@ -295,10 +295,10 @@ public class Combat implements Renderer<BufferedImage> {
 							return;
 						}
 
-						boolean validWpn = skill.getReqWeapon() == null
+						boolean validWpn = skill.getReqWeapons().isEmpty()
 										   || h.getEquipment().getWeaponList()
 												   .stream()
-												   .anyMatch(g -> g.getBasetype().getStats().wpnType() == skill.getReqWeapon());
+												   .anyMatch(g -> skill.getReqWeapons().contains(g.getBasetype().getStats().wpnType()));
 
 						if (!validWpn) {
 							game.getChannel().sendMessage(locale.get("error/skill_cooldown")).queue();
