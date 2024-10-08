@@ -210,7 +210,6 @@ public class Combat implements Renderer<BufferedImage> {
 				if (!act.asSenshi(locale).isAvailable() || act.isSkipped()) {
 					act.getModifiers().expireMods();
 					act.asSenshi(locale).reduceDebuffs(1);
-
 					for (Skill s : act.getSkills()) {
 						s.reduceCd();
 					}
@@ -222,6 +221,9 @@ public class Combat implements Renderer<BufferedImage> {
 
 				act.getModifiers().expireMods();
 				act.asSenshi(locale).reduceDebuffs(1);
+				for (Skill s : act.getSkills()) {
+					s.reduceCd();
+				}
 
 				act.modAp(act.getMaxAp());
 				act.asSenshi(locale).setDefending(false);
