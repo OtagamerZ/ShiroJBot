@@ -125,7 +125,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract(u -> Utils.equalsAny(getPlayers(), u.getId()))
+				.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
 				.setCancellable(false);
 
 		Map<String, String> votes = new HashMap<>();
@@ -133,6 +133,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 			helper.addAction(act.label(), w -> {
 				if (votes.containsKey(w.getUser().getId())) return;
 				votes.put(w.getUser().getId(), act.action());
+
+				getChannel().sendMessage(getLocale().get("str/actor_chose", act.label())).queue();
 
 				if (votes.size() >= heroes.size()) {
 					eb.setDescription(evt.getAction(Utils.getRandomEntry(votes.values())).get());
@@ -150,8 +152,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 							.queue(s -> Pages.buttonize(s, fin));
 					return;
 				}
-
-				getChannel().sendMessage(getLocale().get("str/actor_chose", act.label())).queue();
 			});
 		}
 
