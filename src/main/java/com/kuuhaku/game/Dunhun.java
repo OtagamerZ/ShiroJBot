@@ -154,6 +154,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 				getChannel().sendMessage(getLocale().get("str/actor_chose", act.label())).queue();
 			});
 		}
+
+		getChannel().sendEmbed(eb.build())
+				.apply(helper::apply)
+				.queue(s -> Pages.buttonize(s, helper));
 	}
 
 	@Override
