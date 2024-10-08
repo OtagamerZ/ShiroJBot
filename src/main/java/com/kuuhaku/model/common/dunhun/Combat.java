@@ -200,7 +200,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 			try {
 				if (!act.asSenshi(locale).isAvailable() || act.isSkipped()) {
-					act.getModifiers().expireMods();
 					act.asSenshi(locale).reduceDebuffs(1);
 					for (Skill s : act.getSkills()) {
 						s.reduceCd();
@@ -211,7 +210,6 @@ public class Combat implements Renderer<BufferedImage> {
 					continue;
 				}
 
-				act.getModifiers().expireMods();
 				act.asSenshi(locale).reduceDebuffs(1);
 				for (Skill s : act.getSkills()) {
 					s.reduceCd();
@@ -232,6 +230,7 @@ public class Combat implements Renderer<BufferedImage> {
 			} catch (Exception e) {
 				Constants.LOGGER.warn(e, e);
 			} finally {
+				act.getModifiers().expireMods();
 				act.modHp(act.getRegDeg().next());
 				act.asSenshi(locale).setAvailable(true);
 

@@ -139,7 +139,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				).queue();
 
 				if (votes.size() >= heroes.size()) {
-					eb.setDescription(evt.getAction(Utils.getRandomEntry(votes.values())).get());
+					eb.setDescription(Utils.getOr(evt.getAction(Utils.getRandomEntry(votes.values())).get(), "PLACEHOLDER"));
 
 					ButtonizeHelper fin = new ButtonizeHelper(true)
 							.setTimeout(5, TimeUnit.MINUTES)
@@ -152,7 +152,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 					fin.apply(w.getMessage().editMessageEmbeds(eb.build()))
 							.queue(s -> Pages.buttonize(s, fin));
-					return;
 				}
 			});
 		}
