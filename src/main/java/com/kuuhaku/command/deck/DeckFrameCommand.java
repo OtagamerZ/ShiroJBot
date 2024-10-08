@@ -72,7 +72,10 @@ public class DeckFrameCommand implements Executable {
                     .setAuthor(locale.get("str/all_frames"));
 
             List<FrameSkin> frames = Arrays.stream(FrameSkin.values())
-					.filter(f -> f.getTitles().stream().noneMatch(t -> t == null || (!t.isUnlockable() && !f.canUse(acc))))
+					.filter(f -> {
+						boolean can = f.canUse(acc);
+						return f.getTitles().stream().noneMatch(t -> t == null || (!t.isUnlockable() && !can));
+					})
 					.toList();
 
 			List<Page> pages = new ArrayList<>();
