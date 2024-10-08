@@ -102,6 +102,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	private void runCombat() {
+		combat.set(new Combat(this));
 		for (int i = 0; i < 4; i++) {
 			List<Actor> keepers = getCombat().getActors(Team.KEEPERS);
 			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size())) break;
