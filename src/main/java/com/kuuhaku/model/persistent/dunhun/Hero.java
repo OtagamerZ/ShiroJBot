@@ -180,7 +180,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public void revive(int value) {
-		if (getHp() > 0) return;
+		if (getHp() >= value) return;
 
 		hp.set(Calc.clamp(value, 0, getMaxHp()));
 		if (senshiCache != null) {
