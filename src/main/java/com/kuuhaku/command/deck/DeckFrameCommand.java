@@ -117,6 +117,7 @@ public class DeckFrameCommand implements Executable {
 					.addAction(Utils.parseEmoji("⏮"), w -> {
 						if (i.get() > 0) {
 							w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getFirst())).queue();
+							i.set(0);
 						}
 					})
 					.addAction(Utils.parseEmoji("◀️"), w -> {
@@ -132,6 +133,7 @@ public class DeckFrameCommand implements Executable {
 					.addAction(Utils.parseEmoji("⏭"), w -> {
 						if (i.get() < pages.size() - 1) {
 							w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getLast())).queue();
+							i.set(pages.size() - 1);
 						}
 					})
 					.addAction(Utils.parseEmoji("✅"), w -> {
