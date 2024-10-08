@@ -60,13 +60,11 @@ public class Combat implements Renderer<BufferedImage> {
 		if (turns.isEmpty()) return;
 		turns.add(a);
 		a.asSenshi(getLocale()).setAvailable(true);
-		a.modAp(-a.getAp());
 	}, turns::remove);
 	private final BondedList<Actor> keepers = new BondedList<>(a -> {
 		if (turns.isEmpty()) return;
 		turns.add(a);
 		a.asSenshi(getLocale()).setAvailable(true);
-		a.modAp(-a.getAp());
 	}, turns::remove);
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(5);
 	private final RandomList<Actor> rngList = new RandomList<>();
@@ -126,6 +124,8 @@ public class Combat implements Renderer<BufferedImage> {
 
 					Graph.overlay(card, IO.getResourceAsImage(path + "/hero.png"));
 					g2d.drawString("v", offset + Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth("v") / 2, 40);
+				} else {
+					a.modAp(-a.getAp());
 				}
 
 				g2d.drawImage(card, offset, 50, null);
