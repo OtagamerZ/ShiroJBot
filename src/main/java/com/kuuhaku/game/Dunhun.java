@@ -1,5 +1,7 @@
 package com.kuuhaku.game;
 
+import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.engine.GameInstance;
@@ -11,7 +13,11 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.*;
+import com.kuuhaku.model.records.dunhun.EventAction;
+import com.kuuhaku.model.records.dunhun.EventDescription;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
@@ -25,17 +31,16 @@ import org.intellij.lang.annotations.MagicConstant;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Dunhun extends GameInstance<NullPhase> {
 	private final ExecutorService main = Executors.newSingleThreadExecutor();
 	private final Dungeon instance;
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
+	private final AtomicReference<Combat> combat = new AtomicReference<>();
+	private CompletableFuture<Void> lock;
 	private Pair<String, String> message;
-	private Combat combat;
 
 	public Dunhun(I18N locale, Dungeon instance, User... players) {
 		this(locale, instance, Arrays.stream(players).map(User::getId).toArray(String[]::new));
@@ -56,10 +61,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 			heroes.put(p, h);
 		}
 
-		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, players.length > 1 ? "str/dungeon_leave_multi" : "str/dungeon_leave"
+		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, parsePlural("str/dungeon_leave")
 				, Utils.properlyJoin(locale.get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
 				, getTurn()
-		), 1 /* TODO Revert to 5 */, TimeUnit.MINUTES);
+		), 5, TimeUnit.MINUTES);
 	}
 
 	@Override
@@ -71,19 +76,83 @@ public class Dunhun extends GameInstance<NullPhase> {
 	protected void begin() {
 		CompletableFuture.runAsync(() -> {
 			while (true) {
-				combat = new Combat(this);
-				if (!combat.process()) {
-					reportResult(GameReport.GAME_TIMEOUT, getPlayers().length > 1 ? "str/dungeon_fail_multi" : "str/dungeon_fail"
+				if (Calc.chance(25)) {
+					runEvent();
+				} else {
+					runCombat();
+				}
+
+				try {
+					if (lock != null) lock.get();
+				} catch (ExecutionException | InterruptedException ignore) {
+				}
+
+				if (heroes.values().stream().allMatch(h -> h.getHp() <= 0 || h.hasFleed())) {
+					reportResult(GameReport.GAME_TIMEOUT, parsePlural("str/dungeon_fail")
 							, Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
 							, getTurn()
 					);
 					break;
+				} else {
+					nextTurn();
+					getChannel().sendMessage(getLocale().get(parsePlural("str/dungeon_next_floor"), getTurn())).queue();
 				}
-
-				nextTurn();
-				getChannel().sendMessage(getLocale().get(getPlayers().length > 1 ? "str/dungeon_next_floor_multi" : "str/dungeon_next_floor", getTurn())).queue();
 			}
 		}, main);
+	}
+
+	private void runCombat() {
+		for (int i = 0; i < 4; i++) {
+			List<Actor> keepers = getCombat().getActors(Team.KEEPERS);
+			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size())) break;
+
+			keepers.add(Monster.getRandom());
+		}
+
+		getCombat().process();
+		combat.set(null);
+	}
+
+	private void runEvent() {
+		lock = new CompletableFuture<>();
+
+		Event evt = Event.getRandom();
+		EventDescription ed = evt.parse(getLocale(), this);
+
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setDescription(ed.description());
+
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(5, TimeUnit.MINUTES)
+				.setCanInteract(u -> Utils.equalsAny(getPlayers(), u.getId()))
+				.setCancellable(false);
+
+		Map<String, String> votes = new HashMap<>();
+		for (EventAction act : ed.actions()) {
+			helper.addAction(act.label(), w -> {
+				if (votes.containsKey(w.getUser().getId())) return;
+				votes.put(w.getUser().getId(), act.action());
+
+				if (votes.size() >= heroes.size()) {
+					eb.setDescription(evt.getAction(Utils.getRandomEntry(votes.values())).get());
+
+					ButtonizeHelper fin = new ButtonizeHelper(true)
+							.setTimeout(5, TimeUnit.MINUTES)
+							.setCanInteract(u -> Utils.equalsAny(getPlayers(), u.getId()))
+							.setCancellable(false)
+							.addAction(
+									getLocale().get("str/continue"),
+									s -> lock.complete(null)
+							);
+
+					fin.apply(w.getMessage().editMessageEmbeds(eb.build()))
+							.queue(s -> Pages.buttonize(s, fin));
+					return;
+				}
+
+				getChannel().sendMessage(getLocale().get("str/actor_chose", act.label())).queue();
+			});
+		}
 	}
 
 	@Override
@@ -96,16 +165,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@PlayerAction("reload")
 	private void reload(JSONObject args) {
-		if (combat != null) combat.getLock().complete(null);
+		if (getCombat() != null) getCombat().getLock().complete(null);
 	}
 
 	@PlayerAction("info")
 	private void info(JSONObject args) {
-		if (combat == null) return;
+		if (getCombat() == null) return;
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		for (Actor a : combat.getActors()) {
+		for (Actor a : getCombat().getActors()) {
 			if (!(a instanceof Monster m)) continue;
 
 			XStringBuilder sb = new XStringBuilder("-# " + m.getInfo(getLocale()).getName() + "\n");
@@ -166,5 +235,21 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public void setMessage(Pair<String, String> message) {
 		this.message = message;
+	}
+
+	public Combat getCombat() {
+		return combat.get();
+	}
+
+	public void beginCombat(Monster... enemies) {
+		if (this.combat.get() != null) return;
+		this.combat.set(new Combat(this, enemies));
+	}
+
+	public String parsePlural(String text) {
+		String plural = heroes.size() > 1 ? "P" : "S";
+
+		return Utils.regex(text, "\\[(?<S>.*?)\\|(?<P>.*?)]")
+				.replaceAll(r -> r.group(plural));
 	}
 }

@@ -57,7 +57,7 @@ public class TestEventCommand implements Executable {
 		}
 
 		Event evt = Event.getRandom();
-		EventDescription ed = evt.parse(locale, h);
+		EventDescription ed = evt.parse(locale, null);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setDescription(ed.description());

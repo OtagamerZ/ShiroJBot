@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedEvent;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
@@ -80,7 +81,7 @@ public class Event extends DAO<Event> {
 		this.result = result;
 	}
 
-	public EventDescription parse(I18N locale, Hero hero) {
+	public EventDescription parse(I18N locale, Dunhun game) {
 		String desc = getInfo(locale).getDescription();
 		this.locale = locale;
 
@@ -93,14 +94,14 @@ public class Event extends DAO<Event> {
 		try {
 			Utils.exec(id, effect, Map.of(
 					"locale", locale,
-					"event", this,
-					"actor", hero
+					"dungeon", game,
+					"event", this
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute event {}", id, e);
 		}
 
-		return new EventDescription(desc, out);
+		return new EventDescription(game.parsePlural(desc), out);
 	}
 
 	public void forAction(String action, Supplier<String> act) {
@@ -111,17 +112,16 @@ public class Event extends DAO<Event> {
 		return actions.getOrDefault(action, () -> "");
 	}
 
-	public String getString(String key, Object... args) {
-		try {
-			String out = locale.get(key, args);
-			if (out.isBlank() || out.equalsIgnoreCase(key)) {
-				out = LocalizedString.get(locale, key, "").formatted(args);
-			}
+	public String getEvent(Dunhun game, String key) {
+		return game.parsePlural(LocalizedString.get(locale, "event/" + key));
+	}
 
-			return Utils.getOr(out, key);
-		} catch (MissingFormatArgumentException e) {
-			return "";
-		}
+	public String getOutcome(String key, Object... args) {
+		return LocalizedString.get(locale, "outcome/" + key).formatted(args);
+	}
+
+	public String getEvent(Dunhun game, String key, String outcome, Object... args) {
+		return getEvent(game, key) + "\n\n" + getOutcome(outcome, args);
 	}
 
 	@Override

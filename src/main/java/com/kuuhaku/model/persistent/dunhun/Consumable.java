@@ -116,4 +116,8 @@ public class Consumable extends DAO<Consumable> implements Comparable<Consumable
 	public int compareTo(@NotNull Consumable o) {
 		return id.compareTo(o.id);
 	}
+
+	public static Consumable getRandom() {
+		return DAO.query(Consumable.class, "SELECT c FROM Consumable c ORDER BY random()");
+	}
 }

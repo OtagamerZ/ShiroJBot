@@ -60,11 +60,17 @@ public class Combat implements Renderer<BufferedImage> {
 		if (turns.isEmpty()) return;
 		turns.add(a);
 		a.asSenshi(getLocale()).setAvailable(true);
+		a.setTeam(Team.HUNTERS);
+		a.setGame(getGame());
 	}, turns::remove);
 	private final BondedList<Actor> keepers = new BondedList<>(a -> {
 		if (turns.isEmpty()) return;
 		turns.add(a);
 		a.asSenshi(getLocale()).setAvailable(true);
+
+		a.setFleed(false);
+		a.setTeam(Team.KEEPERS);
+		a.setGame(getGame());
 	}, turns::remove);
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(5);
 	private final RandomList<Actor> rngList = new RandomList<>();
@@ -72,28 +78,12 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private CompletableFuture<Runnable> lock;
 
-	public Combat(Dunhun game) {
+	public Combat(Dunhun game, Monster... enemies) {
 		this.game = game;
 		this.locale = game.getLocale();
 
 		hunters.addAll(game.getHeroes().values());
-
-		for (int i = 0; i < 4; i++) {
-			if (!Calc.chance(100 - 50d / hunters.size() * keepers.size())) break;
-
-			keepers.add(Monster.getRandom());
-		}
-
-		Team team = Team.HUNTERS;
-		for (List<Actor> acts : List.of(hunters, keepers)) {
-			for (Actor a : acts) {
-				a.setTeam(team);
-				a.setGame(game);
-				a.asSenshi(locale);
-			}
-
-			team = Team.KEEPERS;
-		}
+		keepers.addAll(List.of(enemies));
 	}
 
 	@Override
@@ -193,7 +183,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return eb.build();
 	}
 
-	public boolean process() {
+	public void process() {
 		Stream.of(hunters.stream(), keepers.stream())
 				.flatMap(Function.identity())
 				.sorted(Comparator
@@ -253,8 +243,6 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 			}
 		}
-
-		return hunters.stream().anyMatch(a -> a.getHp() > 0);
 	}
 
 	public CompletableFuture<Runnable> reload(boolean execute) {
@@ -649,5 +637,9 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public I18N getLocale() {
 		return locale;
+	}
+
+	public Dunhun getGame() {
+		return game;
 	}
 }

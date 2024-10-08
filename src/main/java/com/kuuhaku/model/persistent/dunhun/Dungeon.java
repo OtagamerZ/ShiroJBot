@@ -18,19 +18,21 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedDungeon;
+import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -38,7 +40,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "dungeon", schema = "dunhun")
-public class Dungeon extends DAO<Dungeon> {
+public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -52,6 +54,11 @@ public class Dungeon extends DAO<Dungeon> {
 	@Column(name = "script", columnDefinition = "TEXT")
 	private String script;
 
+	@Column(name = "area_level")
+	private int areaLevel;
+
+	private transient final List<Runnable> floors = new ArrayList<>();
+
 	public String getId() {
 		return id;
 	}
@@ -62,8 +69,21 @@ public class Dungeon extends DAO<Dungeon> {
 				.findAny().orElseThrow();
 	}
 
-	public String getScript() {
-		return script;
+	public int getAreaLevel() {
+		return areaLevel;
+	}
+
+	public void init(I18N locale, Dunhun dungeon) {
+		try {
+			floors.clear();
+			Utils.exec(id, script, Map.of(
+					"locale", locale,
+					"dungeon", dungeon,
+					"floors", floors
+			));
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to process dungeon {}", id, e);
+		}
 	}
 
 	@Override
@@ -77,5 +97,10 @@ public class Dungeon extends DAO<Dungeon> {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(id);
+	}
+
+	@Override
+	public @NotNull Iterator<Runnable> iterator() {
+		return floors.iterator();
 	}
 }
