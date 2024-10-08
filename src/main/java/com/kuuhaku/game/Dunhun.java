@@ -145,10 +145,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 							.setTimeout(5, TimeUnit.MINUTES)
 							.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
 							.setCancellable(false)
-							.addAction(
-									getLocale().get("str/continue"),
-									s -> lock.complete(null)
-							);
+							.addAction(getLocale().get("str/continue"), s -> {
+								lock.complete(null);
+								Pages.finalizeEvent(s.getMessage(), Utils::doNothing);
+							});
 
 					fin.apply(w.getMessage().editMessageEmbeds(eb.build()))
 							.queue(s -> Pages.buttonize(s, fin));
