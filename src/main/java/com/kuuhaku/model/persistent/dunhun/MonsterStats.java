@@ -54,7 +54,7 @@ public class MonsterStats {
 	private int parry;
 
 	@Column(name = "action_points", nullable = false)
-	private int ap;
+	private int maxAp;
 
 	@Column(name = "weight", nullable = false)
 	private int weight;
@@ -112,7 +112,7 @@ public class MonsterStats {
 		return loot;
 	}
 
-	public int getAp() {
-		return ap;
+	public int getMaxAp() {
+		return maxAp;
 	}
 }
