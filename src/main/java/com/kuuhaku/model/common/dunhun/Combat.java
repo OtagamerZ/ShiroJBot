@@ -387,7 +387,7 @@ public class Combat implements Renderer<BufferedImage> {
 										ma.queue(s -> Pages.buttonize(s, helper));
 									});
 
-							confirm.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, helper));
+							confirm.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, confirm));
 						});
 
 				ca.apply(a -> {
