@@ -133,7 +133,7 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public FrameSkin getFrame() {
-		if (!styling.getFrame().canUse(account)) {
+		if (account != null && !styling.getFrame().canUse(account)) {
 			styling.setFrame(FrameSkin.PINK);
 		}
 

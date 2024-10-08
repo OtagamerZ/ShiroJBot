@@ -61,7 +61,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			heroes.put(p, h);
 		}
 
-		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, parsePlural("str/dungeon_leave")
+		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/dungeon_leave"
 				, Utils.properlyJoin(locale.get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
 				, getTurn()
 		), 5, TimeUnit.MINUTES);
@@ -88,14 +88,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				if (heroes.values().stream().allMatch(h -> h.getHp() <= 0 || h.hasFleed())) {
-					reportResult(GameReport.GAME_TIMEOUT, parsePlural("str/dungeon_fail")
+					reportResult(GameReport.GAME_TIMEOUT, "str/dungeon_fail"
 							, Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
 							, getTurn()
 					);
 					break;
 				} else {
 					nextTurn();
-					getChannel().sendMessage(getLocale().get(parsePlural("str/dungeon_next_floor"), getTurn())).queue();
+					getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor", getTurn()))).queue();
 				}
 			}
 		}, main);
@@ -211,7 +211,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
-		getChannel().sendMessage(getString(msg, args))
+		getChannel().sendMessage(parsePlural(getString(msg, args)))
 				.queue(m -> {
 					if (message != null) {
 						GuildMessageChannel channel = Main.getApp().getMessageChannelById(message.getFirst());
@@ -252,9 +252,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public String parsePlural(String text) {
-		String plural = heroes.size() > 1 ? "P" : "S";
+		String plural = heroes.size() == 1 ? "S" : "P";
 
-		return Utils.regex(text, "\\[(?<S>.*?)\\|(?<P>.*?)]")
+		return Utils.regex(getString(text), "\\[(?<S>.*?)\\|(?<P>.*?)]")
 				.replaceAll(r -> r.group(plural));
 	}
 }
