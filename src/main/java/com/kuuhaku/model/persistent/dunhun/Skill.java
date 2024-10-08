@@ -69,7 +69,7 @@ public class Skill extends DAO<Skill> {
 	private String targeter;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "req_weapons", columnDefinition = "JSONB")
+	@Column(name = "req_weapons", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray reqWeapons;
 
