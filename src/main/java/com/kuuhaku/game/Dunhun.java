@@ -141,7 +141,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 					ButtonizeHelper fin = new ButtonizeHelper(true)
 							.setTimeout(5, TimeUnit.MINUTES)
-							.setCanInteract(u -> Utils.equalsAny(getPlayers(), u.getId()))
+							.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
 							.setCancellable(false)
 							.addAction(
 									getLocale().get("str/continue"),
