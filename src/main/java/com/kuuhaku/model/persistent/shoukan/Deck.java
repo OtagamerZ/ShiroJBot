@@ -359,7 +359,7 @@ public class Deck extends DAO<Deck> {
 		g2d.setRenderingHints(Constants.SD_HINTS);
 
 		Graph.applyTransformed(g2d, g -> {
-			g.setColor(styling.getFrame().getThemeColor());
+			g.setColor(getFrame().getThemeColor());
 			g.setComposite(BlendComposite.Color);
 			g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		});
@@ -427,7 +427,7 @@ public class Deck extends DAO<Deck> {
 					.setChartTitleBoxVisible(false)
 					.setChartBackgroundColor(new Color(0, 0, 0, 0))
 					.setPlotBackgroundColor(new Color(0, 0, 0, 0))
-					.setSeriesColors(new Color[]{Graph.withOpacity(styling.getFrame().getThemeColor(), 0.5f)})
+					.setSeriesColors(new Color[]{Graph.withOpacity(getFrame().getThemeColor(), 0.5f)})
 					.setChartFontColor(Color.WHITE);
 
 			rc.paint(g2d, rc.getWidth(), rc.getHeight());
@@ -602,7 +602,7 @@ public class Deck extends DAO<Deck> {
 			if (h != null) {
 				g2d.drawImage(h.asSenshi(locale).render(locale, this), 1237, 834, null);
 			} else {
-				g2d.drawImage(styling.getFrame().getBack(this), 1252, 849, null);
+				g2d.drawImage(getFrame().getBack(this), 1252, 849, null);
 			}
 		};
 	}

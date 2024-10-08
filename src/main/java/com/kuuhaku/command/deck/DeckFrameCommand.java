@@ -42,9 +42,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -73,12 +71,14 @@ public class DeckFrameCommand implements Executable {
             EmbedBuilder eb = new ColorlessEmbedBuilder()
                     .setAuthor(locale.get("str/all_frames"));
 
-            FrameSkin[] frames = FrameSkin.values();
-            List<Page> pages = new ArrayList<>();
-            for (int i = 0; i < frames.length; i++) {
-                FrameSkin fc = frames[i];
+            List<FrameSkin> frames = Arrays.stream(FrameSkin.values())
+					.filter(f -> f.getTitles().stream().noneMatch(Objects::isNull))
+					.toList();
+
+			List<Page> pages = new ArrayList<>();
+            for (int i = 0; i < frames.size(); i++) {
+                FrameSkin fc = frames.get(i);
 				List<Title> titles = fc.getTitles();
-				if (titles.stream().anyMatch(Objects::isNull)) continue;
 
                 if (!fc.canUse(acc)) {
 					if (titles.stream().anyMatch(t -> !t.isUnlockable())) continue;
@@ -93,7 +93,7 @@ public class DeckFrameCommand implements Executable {
                             .setImage(null)
                             .setTitle(locale.get("str/frame_locked"))
                             .setDescription(locale.get("str/requires_titles", req))
-                            .setFooter(locale.get("str/page", i + 1, frames.length));
+                            .setFooter(locale.get("str/page", i + 1, frames.size()));
 
                     pages.add(InteractPage.of(eb.build()));
                 } else {
@@ -101,7 +101,7 @@ public class DeckFrameCommand implements Executable {
 
                     eb.setTitle(fc.getName(locale), URL.formatted("front", fc.name().toLowerCase()))
                             .setDescription(fc.getDescription(locale))
-                            .setFooter(locale.get("str/page", i + 1, frames.length));
+                            .setFooter(locale.get("str/page", i + 1, frames.size()));
 
                     embeds.getEmbeds().add(eb.setImage(URL.formatted("front", fc.name().toLowerCase())).build());
                     embeds.getEmbeds().add(eb.setImage(URL.formatted("back", fc.name().toLowerCase())).build());
@@ -135,7 +135,7 @@ public class DeckFrameCommand implements Executable {
 						}
 					})
 					.addAction(Utils.parseEmoji("✅"), w -> {
-						FrameSkin frame = frames[i.get()];
+						FrameSkin frame = frames.get(i.get());
 						if (!frame.canUse(acc)) {
 							event.channel().sendMessage(locale.get("error/frame_locked")).queue();
 							return;

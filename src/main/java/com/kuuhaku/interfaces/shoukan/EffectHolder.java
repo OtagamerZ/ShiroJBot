@@ -301,7 +301,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d, boolean legacy) {
-		DeckStyling style = getHand() == null ? new DeckStyling() : getHand().getUserDeck().getStyling();
+		FrameSkin frame = getHand() == null ? FrameSkin.PINK : getHand().getUserDeck().getFrame();
 		AtomicInteger lastVal = new AtomicInteger();
 		AtomicInteger line = new AtomicInteger();
 		TagBundle tags = getTagBundle();
@@ -317,7 +317,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			}
 
 			g2d.setFont(Fonts.OPEN_SANS.deriveBold(10));
-			g2d.setColor(style.getFrame().getSecondaryColor());
+			g2d.setColor(frame.getSecondaryColor());
 
 			FontMetrics fm = g2d.getFontMetrics();
 			try {
@@ -384,7 +384,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 							g2d.setColor(color);
 							Graph.drawOutlinedString(g2d, s, x, y, 1.5f, Color.BLACK);
 						} else {
-							g2d.setColor(style.getFrame().getSecondaryColor());
+							g2d.setColor(frame.getSecondaryColor());
 						}
 
 						g2d.drawString(s, x, y);
@@ -398,10 +398,10 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default void drawDescription(Graphics2D g2d, Hand h, I18N locale) {
-		DeckStyling style = getHand() == null ? new DeckStyling() : getHand().getUserDeck().getStyling();
+		FrameSkin frame = getHand() == null ? FrameSkin.PINK : getHand().getUserDeck().getFrame();
 
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(11));
-		g2d.setColor(style.getFrame().getSecondaryColor());
+		g2d.setColor(frame.getSecondaryColor());
 
 		String desc = parseDescription(h, locale);
 		if (!desc.isBlank()) {
@@ -413,7 +413,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 			}
 
 			g2d.setFont(Fonts.OPEN_SANS.deriveBold(10));
-			renderText(g2d, desc, y, highlightValues(g2d, style.getFrame().isLegacy()));
+			renderText(g2d, desc, y, highlightValues(g2d, frame.isLegacy()));
 		}
 	}
 

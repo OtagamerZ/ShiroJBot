@@ -1551,10 +1551,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
-		DeckStyling style = deck.getStyling();
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			if (isFlipped()) {
-				g1.drawImage(style.getFrame().getBack(deck), 0, 0, null);
+				g1.drawImage(deck.getFrame().getBack(deck), 0, 0, null);
 				parseDescription(hand, getGame().getLocale());
 
 				if (!isAvailable() || isManipulated()) {
@@ -1566,18 +1565,18 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				String desc = isSealed() ? "" : card.getDescription(locale);
 				BufferedImage img = card.getVanity().drawCardNoBorder(Utils.getOr(() -> stashRef.isChrome(), false));
 
-				g1.setClip(style.getFrame().getBoundary());
+				g1.setClip(deck.getFrame().getBoundary());
 				g1.drawImage(img, 0, 0, null);
 				g1.setClip(null);
 
-				g1.drawImage(style.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
+				g1.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
 				g1.drawImage(card.getRace().getIcon(), 190, 12, null);
 
 				g1.setFont(FONT);
-				g1.setColor(style.getFrame().getPrimaryColor());
+				g1.setColor(deck.getFrame().getPrimaryColor());
 				String name = Graph.abbreviate(g1, card.getVanity().getName(), MAX_NAME_WIDTH);
 
-				Graph.drawOutlinedString(g1, name, 12, 30, 2, style.getFrame().getBackgroundColor());
+				Graph.drawOutlinedString(g1, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
 
 				if (!stats.getWrite().isBlank()) {
 					g1.setColor(Color.ORANGE);
@@ -1608,7 +1607,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 
 				if (hand != null && getGame() != null) {
-					boolean legacy = hand.getUserDeck().getStyling().getFrame().isLegacy();
+					boolean legacy = hand.getUserDeck().getFrame().isLegacy();
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
 
 					double mult = getFieldMult();

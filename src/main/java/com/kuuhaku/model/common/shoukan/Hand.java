@@ -1203,19 +1203,19 @@ public class Hand {
 			boolean ally = equals(d.getHand());
 
 			if (getLockTime(Lock.BLIND) > 0 && ally) {
-				g2d.drawImage(userDeck.getStyling().getFrame().getBack(userDeck), x, y, null);
+				g2d.drawImage(userDeck.getFrame().getBack(userDeck), x, y, null);
 			} else {
 				g2d.drawImage(d.render(game.getLocale(), userDeck), x, y, null);
 
 				if (!ally) {
 					Graph.applyTransformed(g2d, x, y, g -> {
-						g.setClip(userDeck.getStyling().getFrame().getBoundary());
+						g.setClip(userDeck.getFrame().getBoundary());
 						g.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 0, 0, null);
 					});
 				}
 
 				if (d instanceof EffectHolder<?> e && e.hasFlag(Flag.EMPOWERED)) {
-					boolean legacy = userDeck.getStyling().getFrame().isLegacy();
+					boolean legacy = userDeck.getFrame().isLegacy();
 					BufferedImage emp = IO.getResourceAsImage("shoukan/frames/state/" + (legacy ? "old" : "new") + "/empowered.png");
 
 					g2d.drawImage(emp, x, y, null);
@@ -1323,7 +1323,7 @@ public class Hand {
 			BufferedImage img;
 
 			if (d.hidden()) {
-				img = deck.getStyling().getFrame().getBack(deck);
+				img = deck.getFrame().getBack(deck);
 			} else {
 				img = d.card().render(game.getLocale(), deck);
 			}

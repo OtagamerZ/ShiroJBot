@@ -119,7 +119,7 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				if (turns.get().equals(a)) {
-					boolean legacy = a.asSenshi(locale).getHand().getUserDeck().getStyling().getFrame().isLegacy();
+					boolean legacy = a.asSenshi(locale).getHand().getUserDeck().getFrame().isLegacy();
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
 
 					Graph.overlay(card, IO.getResourceAsImage(path + "/hero.png"));

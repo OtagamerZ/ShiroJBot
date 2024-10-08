@@ -196,7 +196,7 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 
 			for (Hand h : game.getHands().values()) {
 				int offset = h.getSide() == Side.TOP ? 0 : canvas.getHeight() / 2;
-				Color bg = h.getUserDeck().getStyling().getFrame().getThemeColor();
+				Color bg = h.getUserDeck().getFrame().getThemeColor();
 
 				g2d.setColor(Graph.withBrightness(bg, 0.25f));
 				g2d.fillRect(0, offset, canvas.getWidth(), canvas.getHeight() / 2);
@@ -298,9 +298,7 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 				}
 
 				Deck deck = h.getUserDeck();
-				DeckStyling style = deck.getStyling();
-
-				g.drawImage(deck.getSkin().getImage(side, style.getFrame().isLegacy()), 21, yOffset - 5, null);
+				g.drawImage(deck.getSkin().getImage(side, deck.getFrame().isLegacy()), 21, yOffset - 5, null);
 
 				MultiProcessor.with(Executors.newVirtualThreadPerTaskExecutor(), slots.get(side))
 						.process(slot -> {
@@ -356,7 +354,7 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 			Graph.applyTransformed(g, MARGIN.x, CENTER.y - Drawable.SIZE.height / 2, g2 -> {
 				if (!top.getRealDeck().isEmpty()) {
 					Deck d = top.getUserDeck();
-					g2.drawImage(d.getStyling().getFrame().getBack(d),
+					g2.drawImage(d.getFrame().getBack(d),
 							0, 15 - (350 + MARGIN.y), null
 					);
 				}
@@ -388,7 +386,7 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 				}
 				if (!bottom.getRealDeck().isEmpty()) {
 					Deck d = bottom.getUserDeck();
-					g2.drawImage(d.getStyling().getFrame().getBack(d),
+					g2.drawImage(d.getFrame().getBack(d),
 							30, 15 + 350 + MARGIN.y, null
 					);
 				}
@@ -426,7 +424,7 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 						lOffPercent + w, h,
 						1 - w, h
 				);
-				g1.setColor(hand.getUserDeck().getStyling().getFrame().getThemeColor());
+				g1.setColor(hand.getUserDeck().getFrame().getThemeColor());
 				g1.fill(boundaries);
 
 				g1.setClip(boundaries);
@@ -560,7 +558,7 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 				});
 
 				g1.setClip(null);
-				g1.setColor(hand.getUserDeck().getStyling().getFrame().getThemeColor());
+				g1.setColor(hand.getUserDeck().getFrame().getThemeColor());
 				g1.setStroke(new BasicStroke(5));
 				g1.draw(boundaries);
 			});
@@ -586,7 +584,7 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 			}
 
 			if (game.getCurrentSide() == hand.getSide()) {
-				g.setColor(hand.getUserDeck().getStyling().getFrame().getThemeColor());
+				g.setColor(hand.getUserDeck().getFrame().getThemeColor());
 			} else {
 				g.setColor(Color.WHITE);
 			}
