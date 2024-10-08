@@ -409,8 +409,7 @@ public class Combat implements Renderer<BufferedImage> {
 						if (!skills.isEmpty() && Calc.chance(33)) {
 							Skill skill = Utils.getRandomEntry(skills);
 							List<Actor> tgts = skill.getTargets(this, curr).stream()
-									.filter(Objects::nonNull)
-									.filter(a -> !a.isSkipped())
+									.filter(a -> a != null && !a.isSkipped())
 									.toList();
 
 							if (!tgts.isEmpty()) {
@@ -431,9 +430,11 @@ public class Combat implements Renderer<BufferedImage> {
 						}
 
 						if (!used) {
-							List<Actor> tgts = getActors(curr.getTeam().getOther());
-							double threat = tgts.stream()
+							List<Actor> tgts = getActors(curr.getTeam().getOther()).stream()
 									.filter(a -> !a.isSkipped())
+									.toList();
+
+							double threat = tgts.stream()
 									.mapToInt(Actor::getAggroScore)
 									.average()
 									.orElse(1);
