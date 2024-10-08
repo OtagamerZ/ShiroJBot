@@ -28,7 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class RegDeg {
-	@Nullable private transient final Hand parent;
+	@Nullable
+	private transient final Hand parent;
 	private final BondedList<ValueOverTime> values = BondedList.withBind((v, it) -> {
 		v.setValue(reduce(v.getClass(), v.getValue()));
 		return true;
@@ -141,18 +142,16 @@ public class RegDeg {
 		} finally {
 			values.removeIf(v -> v.getValue() <= 0);
 
-			if (parent != null) {
-				Iterator<ValueOverTime> it = values.iterator();
-				while (it.hasNext()) {
-					ValueOverTime vot = it.next();
-					if (vot instanceof Degen) {
-						if (parent.getGame().getCurrent().getOrigins().synergy() == Race.FIEND && parent.getGame().getRng().nextBoolean()) {
-							break;
-						}
-
-						it.remove();
+			Iterator<ValueOverTime> it = values.iterator();
+			while (it.hasNext()) {
+				ValueOverTime vot = it.next();
+				if (vot instanceof Degen) {
+					if (parent != null && parent.getGame().getCurrent().getOrigins().synergy() == Race.FIEND && parent.getGame().getRng().nextBoolean()) {
 						break;
 					}
+
+					it.remove();
+					break;
 				}
 			}
 		}

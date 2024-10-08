@@ -53,6 +53,9 @@ public class MonsterStats {
 	@Column(name = "parry", nullable = false)
 	private int parry;
 
+	@Column(name = "action_points", nullable = false)
+	private int ap;
+
 	@Column(name = "weight", nullable = false)
 	private int weight;
 
@@ -64,21 +67,6 @@ public class MonsterStats {
 	@Language("Groovy")
 	@Column(name = "loot_generator", columnDefinition = "TEXT")
 	private String lootGenerator;
-
-	public MonsterStats() {
-	}
-
-	public MonsterStats(int baseHp, Race race, int attack, int defense, int dodge, int parry, int weight, JSONArray skills, String lootGenerator) {
-		this.baseHp = baseHp;
-		this.race = race;
-		this.attack = attack;
-		this.defense = defense;
-		this.dodge = dodge;
-		this.parry = parry;
-		this.weight = weight;
-		this.skills = skills;
-		this.lootGenerator = lootGenerator;
-	}
 
 	public int getBaseHp() {
 		return baseHp;
