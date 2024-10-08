@@ -134,7 +134,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 				if (votes.containsKey(w.getUser().getId())) return;
 				votes.put(w.getUser().getId(), act.action());
 
-				getChannel().sendMessage(getLocale().get("str/actor_chose", act.label())).queue();
+				getChannel().sendMessage(getLocale().get("str/actor_chose",
+						heroes.get(w.getUser().getId()).getName(), act.label())
+				).queue();
 
 				if (votes.size() >= heroes.size()) {
 					eb.setDescription(evt.getAction(Utils.getRandomEntry(votes.values())).get());
