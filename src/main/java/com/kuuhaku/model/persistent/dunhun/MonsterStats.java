@@ -111,4 +111,8 @@ public class MonsterStats {
 
 		return loot;
 	}
+
+	public int getAp() {
+		return ap;
+	}
 }
