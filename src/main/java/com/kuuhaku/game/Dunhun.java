@@ -79,6 +79,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			while (true) {
 				if (getCombat() != null) {
 					getCombat().process();
+					combat.set(null);
 				} else {
 					if (Calc.chance(25)) {
 						runEvent();
