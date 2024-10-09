@@ -493,6 +493,10 @@ public class Combat implements Renderer<BufferedImage> {
 		trigger(Trigger.ON_SPELL, source);
 		trigger(Trigger.ON_SPELL_TARGET, target);
 
+		history.add(locale.get(target.equals(source) ? "str/used_skill_self" : "str/used_skill",
+				source.getName(locale), skill.getInfo(locale).getName(), target.getName(locale))
+		);
+
 		skill.execute(locale, this, source, target);
 		source.modAp(-skill.getApCost());
 
@@ -503,10 +507,6 @@ public class Combat implements Renderer<BufferedImage> {
 		if (target.getHp() == 0) {
 			trigger(Trigger.ON_KILL, source);
 		}
-
-		history.add(locale.get(target.equals(source) ? "str/used_skill_self" : "str/used_skill",
-				source.getName(locale), skill.getInfo(locale).getName(), target.getName(locale))
-		);
 	}
 
 	private void addSelectors(Hero h, MessageRequest<?> ma) {
@@ -582,15 +582,15 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 		}
 
+		history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale)));
+
 		trigger(Trigger.ON_ATTACK, source);
-		target.modHp(srcSen.getDmg(), Calc.chance(source.getCritical()));
+		target.modHp(-srcSen.getDmg(), Calc.chance(source.getCritical()));
 		trigger(Trigger.ON_HIT, source);
 
 		if (target.getHp() == 0) {
 			trigger(Trigger.ON_KILL, source);
 		}
-
-		history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale)));
 	}
 
 	public void addSelector(Message msg, ButtonizeHelper root, List<Actor> targets, Consumer<Actor> action) {
