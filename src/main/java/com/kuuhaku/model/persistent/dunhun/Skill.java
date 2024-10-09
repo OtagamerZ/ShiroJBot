@@ -66,7 +66,7 @@ public class Skill extends DAO<Skill> {
 	private String effect;
 
 	@Language("Groovy")
-	@Column(name = "targeter", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "targeter", columnDefinition = "TEXT")
 	private String targeter;
 
 	@Language("Groovy")
@@ -149,8 +149,9 @@ public class Skill extends DAO<Skill> {
 	}
 
 	public List<Actor> getTargets(Combat combat, Actor source) {
-		List<Actor> out = new ArrayList<>();
+		if (targeter == null) return List.of(source);
 
+		List<Actor> out = new ArrayList<>();
 		try {
 			Utils.exec(id, targeter, Map.of(
 					"combat", combat,
