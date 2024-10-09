@@ -58,22 +58,26 @@ public enum Trigger {
 	ON_DEFEAT,
 
 	/**
-	 * Before attack calculations
+	 * Before attack calculations<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_ATTACK,
 
 	/**
-	 * Before defense calculations
+	 * Before defense calculations<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_DEFEND,
 
 	/**
-	 * On defeating a card
+	 * On defeating a card<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_HIT,
 
 	/**
-	 * On sending a card to the graveyard
+	 * On sending a card to the graveyard<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_KILL,
 
@@ -88,12 +92,14 @@ public enum Trigger {
 	ON_DIRECT,
 
 	/**
-	 * On successful parry
+	 * On successful parry<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_PARRY,
 
 	/**
-	 * On successful dodge
+	 * On successful dodge<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_DODGE,
 
@@ -113,7 +119,8 @@ public enum Trigger {
 	ON_SUICIDE,
 
 	/**
-	 * On missing an attack
+	 * On missing an attack<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_MISS,
 
@@ -208,7 +215,8 @@ public enum Trigger {
 	ON_FLIP,
 
 	/**
-	 * On receiving HP
+	 * On receiving HP<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_HEAL,
 
@@ -218,7 +226,8 @@ public enum Trigger {
 	ON_REGEN,
 
 	/**
-	 * On losing HP
+	 * On losing HP<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_DAMAGE,
 
@@ -248,7 +257,8 @@ public enum Trigger {
 	ON_ACTIVATE,
 
 	/**
-	 * On using a spell
+	 * On using a spell<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_SPELL,
 
@@ -263,7 +273,8 @@ public enum Trigger {
 	ON_FLAG_ALTER,
 
 	/**
-	 * When targeted by a spell
+	 * When targeted by a spell<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_SPELL_TARGET,
 

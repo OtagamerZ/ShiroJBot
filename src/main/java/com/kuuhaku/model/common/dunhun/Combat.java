@@ -13,13 +13,13 @@ import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Consumable;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Monster;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.ClusterAction;
-import com.kuuhaku.model.records.dunhun.PersistentEffect;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -76,7 +76,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}, turns::remove);
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(5);
 	private final RandomList<Actor> rngList = new RandomList<>();
-	private final Set<PersistentEffect> persEffects = new HashSet<>();
+	private final List<EffectBase> effects = new ArrayList<>();
 
 	private CompletableFuture<Runnable> lock;
 
@@ -234,13 +234,15 @@ public class Combat implements Renderer<BufferedImage> {
 				act.modHp(act.getRegDeg().next());
 				act.asSenshi(locale).setAvailable(true);
 
-				Iterator<PersistentEffect> it = persEffects.iterator();
+				Iterator<EffectBase> it = effects.iterator();
 				while (it.hasNext()) {
-					PersistentEffect effect = it.next();
-					if (!effect.target().equals(act)) continue;
+					EffectBase e = it.next();
+					if (!e.getTarget().equals(act)) continue;
 
-					if (effect.duration().decrementAndGet() <= 0) it.remove();
-					effect.effect().accept(effect, act);
+					if (e.decDuration()) it.remove();
+					if (e instanceof PersistentEffect pe) {
+						pe.getEffect().accept(e, act);
+					}
 				}
 			}
 		}
@@ -408,16 +410,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 							if (!tgts.isEmpty()) {
 								Actor t = Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts);
-								skill.execute(locale, this, curr, t);
-								curr.modAp(-skill.getApCost());
-
-								if (skill.getCooldown() > 0) {
-									skill.setCd(skill.getCooldown());
-								}
-
-								history.add(locale.get(t.equals(curr) ? "str/used_skill_self" : "str/used_skill",
-										curr.getName(locale), skill.getInfo(locale).getName(), t.getName(locale))
-								);
+								skill(skill, curr, t);
 
 								used = true;
 							}
@@ -484,6 +477,26 @@ public class Combat implements Renderer<BufferedImage> {
 		return lock;
 	}
 
+	private void skill(Skill skill, Actor source, Actor target) {
+		trigger(Trigger.ON_SPELL, source);
+		trigger(Trigger.ON_SPELL_TARGET, target);
+
+		skill.execute(locale, this, source, target);
+		source.modAp(-skill.getApCost());
+
+		if (skill.getCooldown() > 0) {
+			skill.setCd(skill.getCooldown());
+		}
+
+		if (target.getHp() == 0) {
+			trigger(Trigger.ON_KILL, source);
+		}
+
+		history.add(locale.get(target.equals(source) ? "str/used_skill_self" : "str/used_skill",
+				source.getName(locale), skill.getInfo(locale).getName(), target.getName(locale))
+		);
+	}
+
 	private void addSelectors(Hero h, MessageRequest<?> ma) {
 		List<LayoutComponent> comps = new ArrayList<>(ma.getComponents());
 
@@ -534,24 +547,41 @@ public class Combat implements Renderer<BufferedImage> {
 		Senshi srcSen = source.asSenshi(locale);
 		Senshi tgtSen = target.asSenshi(locale);
 
+		trigger(Trigger.ON_DEFEND, target);
+
 		if (srcSen.isBlinded(true) && Calc.chance(50)) {
+			trigger(Trigger.ON_MISS, source);
+
 			history.add(locale.get("str/actor_miss", source.getName(locale)));
 			return;
 		} else {
 			if (Calc.chance(tgtSen.getDodge())) {
+				trigger(Trigger.ON_MISS, source);
+				trigger(Trigger.ON_DODGE, target);
+
 				history.add(locale.get("str/actor_dodge", target.getName(locale)));
 				return;
 			} else if (Calc.chance(tgtSen.getParry())) {
+				trigger(Trigger.ON_PARRY, target);
+
 				history.add(locale.get("str/actor_parry", target.getName(locale)));
 				attack(target, source);
 				return;
 			}
 		}
 
+		trigger(Trigger.ON_ATTACK, source);
+
 		boolean crit = Calc.chance(source.getCritical());
 		int raw = srcSen.getDmg() * (crit ? 2 : 1);
 
 		target.modHp(-raw);
+		trigger(Trigger.ON_HIT, source);
+
+		if (target.getHp() == 0) {
+			trigger(Trigger.ON_KILL, source);
+		}
+
 		history.add(locale.get("str/actor_combat",
 				source.getName(locale),
 				target.getName(locale),
@@ -627,8 +657,8 @@ public class Combat implements Renderer<BufferedImage> {
 		return lock;
 	}
 
-	public Set<PersistentEffect> getPersEffects() {
-		return persEffects;
+	public List<EffectBase> getEffects() {
+		return effects;
 	}
 
 	public List<Actor> getActors() {
@@ -650,5 +680,17 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public Dunhun getGame() {
 		return game;
+	}
+
+	public void trigger(Trigger t, Actor act) {
+		Iterator<EffectBase> it = effects.iterator();
+		while (it.hasNext()) {
+			EffectBase e = it.next();
+			if (!(e instanceof TriggeredEffect te && te.getTrigger() == t)) continue;
+			else if (!e.getTarget().equals(act)) continue;
+
+			if (te.decLimit()) it.remove();
+			te.getEffect().accept(e, act);
+		}
 	}
 }
