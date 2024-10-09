@@ -62,12 +62,16 @@ public class Skill extends DAO<Skill> {
 	private int cooldown;
 
 	@Language("Groovy")
-	@Column(name = "effect", columnDefinition = "TEXT")
+	@Column(name = "effect", nullable = false, columnDefinition = "TEXT")
 	private String effect;
 
 	@Language("Groovy")
-	@Column(name = "targeter", columnDefinition = "TEXT")
+	@Column(name = "targeter", nullable = false, columnDefinition = "TEXT")
 	private String targeter;
+
+	@Language("Groovy")
+	@Column(name = "cpu_rule", nullable = false, columnDefinition = "TEXT")
+	private String cpuRule;
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "req_weapons", nullable = false, columnDefinition = "JSONB")
@@ -158,6 +162,23 @@ public class Skill extends DAO<Skill> {
 		}
 
 		return out;
+	}
+
+	public Boolean canCpuUse(Combat combat, Monster source) {
+		if (cpuRule == null) return null;
+
+		try {
+			Object out = Utils.exec(id, cpuRule, Map.of(
+					"combat", combat,
+					"actor", source
+			));
+
+			if (out instanceof Boolean b) return b;
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to check CPU rule {}", id, e);
+		}
+
+		return null;
 	}
 
 	public Attributes getRequirements() {

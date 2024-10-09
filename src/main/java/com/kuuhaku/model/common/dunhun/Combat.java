@@ -397,12 +397,24 @@ public class Combat implements Renderer<BufferedImage> {
 					boolean canDefend = curr.asSenshi(locale).getDfs() > 0;
 
 					try {
-						List<Skill> skills = curr.getSkills().stream()
-								.filter(s -> s.getApCost() <= curr.getAp() && s.getCd() == 0)
-								.toList();
+						boolean forcing = false;
+						List<Skill> skills = new ArrayList<>();
+						for (Skill s : curr.getSkills()) {
+							if (s.getApCost() > curr.getAp() || s.getCd() > 0) continue;
+
+							Boolean canUse = s.canCpuUse(this, (Monster) curr);
+							if (canUse == null) {
+								if (!forcing) skills.add(s);
+							} else if (canUse) {
+								if (!forcing) skills.clear();
+								forcing = true;
+
+								skills.add(s);
+							}
+						}
 
 						boolean used = false;
-						if (!skills.isEmpty() && (Calc.chance(33) || !(canAttack || (canDefend && curr.getAp() == 1)))) {
+						if (!skills.isEmpty() && (forcing || Calc.chance(33) || !(canAttack || (canDefend && curr.getAp() == 1)))) {
 							Skill skill = Utils.getRandomEntry(skills);
 							List<Actor> tgts = skill.getTargets(this, curr).stream()
 									.filter(a -> a != null && !a.isSkipped())
