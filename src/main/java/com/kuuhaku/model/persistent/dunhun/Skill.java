@@ -70,7 +70,7 @@ public class Skill extends DAO<Skill> {
 	private String targeter;
 
 	@Language("Groovy")
-	@Column(name = "cpu_rule", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "cpu_rule", columnDefinition = "TEXT")
 	private String cpuRule;
 
 	@JdbcTypeCode(SqlTypes.JSON)
