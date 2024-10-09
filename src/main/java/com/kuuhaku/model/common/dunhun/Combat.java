@@ -444,7 +444,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 								if (!canAttack || (curr.getAp() == 1 && Calc.chance(20 * lifeFac * risk))) {
 									curr.asSenshi(locale).setDefending(true);
-									curr.modAp(curr.getAp());
+									curr.modAp(-curr.getAp());
 
 									history.add(locale.get("str/actor_defend", curr.getName(locale)));
 									return;
