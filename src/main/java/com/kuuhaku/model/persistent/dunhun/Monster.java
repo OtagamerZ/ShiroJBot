@@ -209,7 +209,7 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	@Override
 	public int getMaxAp() {
-		return stats.getMaxAp() + (int) Math.max(0, getModifiers().getMaxAp().get());
+		return Math.max(1, stats.getMaxAp() + (int) getModifiers().getMaxAp().get());
 	}
 
 	@Override
