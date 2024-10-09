@@ -686,11 +686,17 @@ public class Combat implements Renderer<BufferedImage> {
 		Iterator<EffectBase> it = effects.iterator();
 		while (it.hasNext()) {
 			EffectBase e = it.next();
-			if (!(e instanceof TriggeredEffect te && te.getTrigger() == t)) continue;
+			if (!(e instanceof TriggeredEffect te && te.getTrigger() == t && !te.isLocked())) continue;
 			else if (!e.getTarget().equals(act)) continue;
 
 			if (te.decLimit()) it.remove();
-			te.getEffect().accept(e, act);
+
+			try {
+				te.lock();
+				te.getEffect().accept(e, act);
+			} finally {
+				te.unlock();
+			}
 		}
 	}
 }

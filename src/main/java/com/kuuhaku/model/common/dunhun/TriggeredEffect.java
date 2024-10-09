@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
 public final class TriggeredEffect extends EffectBase {
 	private final Trigger trigger;
 	private int limit;
+	private boolean lock;
 
 	public TriggeredEffect(Actor target, Trigger trigger, int duration, int limit, BiConsumer<EffectBase, Actor> effect) {
 		super(target, duration, effect);
@@ -26,5 +27,17 @@ public final class TriggeredEffect extends EffectBase {
 	public boolean decLimit() {
 		if (limit > 0) limit--;
 		return limit == 0;
+	}
+
+	public boolean isLocked() {
+		return lock;
+	}
+
+	public void lock() {
+		lock = true;
+	}
+
+	public void unlock() {
+		lock = false;
 	}
 }
