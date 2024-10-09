@@ -316,7 +316,7 @@ public class Monster extends DAO<Monster> implements Actor {
 			case RARE -> 2;
 			case MAGIC -> 1.25;
 			default -> 1;
-		} * (1 + game.getTurn() / 3d);
+		} * (1 + game.getTurn() / 4d);
 
 		base.setAtk((int) (stats.getAttack() * mult));
 		base.setDfs((int) (stats.getDefense() * mult));
