@@ -128,7 +128,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			if (!divided) {
 				BufferedImage cbIcon = IO.getResourceAsImage("dunhun/icons/combat.png");
-				g2d.drawImage(cbIcon, offset, 153, null);
+				g2d.drawImage(cbIcon, offset, bi.getHeight() / 2 - cbIcon.getHeight() / 2, null);
 				offset += 64;
 				divided = true;
 			}
