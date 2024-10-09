@@ -453,7 +453,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 							if (canAttack) {
 								attack(curr, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
-								curr.modAp(-1);
 							}
 						}
 					} catch (Exception e) {
@@ -487,26 +486,6 @@ public class Combat implements Renderer<BufferedImage> {
 				});
 
 		return lock;
-	}
-
-	private void skill(Skill skill, Actor source, Actor target) {
-		trigger(Trigger.ON_SPELL, source);
-		trigger(Trigger.ON_SPELL_TARGET, target);
-
-		history.add(locale.get(target.equals(source) ? "str/used_skill_self" : "str/used_skill",
-				source.getName(locale), skill.getInfo(locale).getName(), target.getName(locale))
-		);
-
-		skill.execute(locale, this, source, target);
-		source.modAp(-skill.getApCost());
-
-		if (skill.getCooldown() > 0) {
-			skill.setCd(skill.getCooldown());
-		}
-
-		if (target.getHp() == 0) {
-			trigger(Trigger.ON_KILL, source);
-		}
 	}
 
 	private void addSelectors(Hero h, MessageRequest<?> ma) {
@@ -556,6 +535,8 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	private void attack(Actor source, Actor target) {
+		source.modAp(-1);
+
 		Senshi srcSen = source.asSenshi(locale);
 		Senshi tgtSen = target.asSenshi(locale);
 
@@ -587,6 +568,26 @@ public class Combat implements Renderer<BufferedImage> {
 		trigger(Trigger.ON_ATTACK, source);
 		target.modHp(-srcSen.getDmg(), Calc.chance(source.getCritical()));
 		trigger(Trigger.ON_HIT, source);
+
+		if (target.getHp() == 0) {
+			trigger(Trigger.ON_KILL, source);
+		}
+	}
+
+	private void skill(Skill skill, Actor source, Actor target) {
+		trigger(Trigger.ON_SPELL, source);
+		trigger(Trigger.ON_SPELL_TARGET, target);
+
+		history.add(locale.get(target.equals(source) ? "str/used_skill_self" : "str/used_skill",
+				source.getName(locale), skill.getInfo(locale).getName(), target.getName(locale))
+		);
+
+		skill.execute(locale, this, source, target);
+		source.modAp(-skill.getApCost());
+
+		if (skill.getCooldown() > 0) {
+			skill.setCd(skill.getCooldown());
+		}
 
 		if (target.getHp() == 0) {
 			trigger(Trigger.ON_KILL, source);
