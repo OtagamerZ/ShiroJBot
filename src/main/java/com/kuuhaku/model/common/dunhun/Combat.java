@@ -13,6 +13,7 @@ import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
+import com.kuuhaku.model.enums.dunhun.WeaponType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Consumable;
 import com.kuuhaku.model.persistent.dunhun.Hero;
@@ -47,6 +48,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Combat implements Renderer<BufferedImage> {
@@ -485,13 +487,23 @@ public class Combat implements Renderer<BufferedImage> {
 
 			for (Skill s : skills) {
 				String cdText = "";
+				String reqText = Utils.properlyJoin(locale.get("str/or")).apply(
+						s.getReqWeapons().stream()
+								.map(w -> locale.get("wpn/" + w.name()))
+								.toList()
+				);
+
 				int cd = s.getCd();
 				if (cd > 0) {
 					cdText = " (CD: " + locale.get("str/turns_inline", cd) + ")";
 				}
 
+				if (!reqText.isBlank()) {
+					reqText = " [" + locale.get("str/requires", reqText) + "]";
+				}
+
 				b.addOption(
-						s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()) + cdText,
+						s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()) + cdText + reqText,
 						s.getId(),
 						s.getDescription(locale)
 				);
