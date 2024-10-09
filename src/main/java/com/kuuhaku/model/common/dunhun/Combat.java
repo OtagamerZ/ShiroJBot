@@ -495,7 +495,7 @@ public class Combat implements Renderer<BufferedImage> {
 				b.addOption(
 						s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()) + cdText,
 						s.getId(),
-						s.getInfo(locale).getDescription()
+						s.getDescription(locale)
 				);
 			}
 

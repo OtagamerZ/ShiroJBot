@@ -200,7 +200,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				sb.appendNewLine("**" + getLocale().get("str/skills") + "**");
 				for (Skill skill : skills) {
 					sb.appendNewLine("- " + skill.getInfo(getLocale()).getName());
-					sb.appendNewLine("-# " + skill.getInfo(getLocale()).getDescription());
+					sb.appendNewLine("-# " + skill.getDescription(getLocale()));
 					sb.nextLine();
 				}
 			}

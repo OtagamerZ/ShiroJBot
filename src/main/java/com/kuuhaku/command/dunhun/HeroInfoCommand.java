@@ -165,7 +165,7 @@ public class HeroInfoCommand implements Executable {
 
 			Skill s = skills.get(i);
 			eb.appendDescription(s.getInfo(locale).getName() + "\n");
-			s.getInfo(locale).getDescription().lines()
+			s.getDescription(locale).lines()
 					.map(l -> "-# " + l + "\n")
 					.forEach(eb::appendDescription);
 
