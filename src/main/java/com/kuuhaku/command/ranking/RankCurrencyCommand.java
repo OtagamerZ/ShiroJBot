@@ -102,7 +102,7 @@ public class RankCurrencyCommand implements Executable {
 				eb.appendDescription("**");
 			}
 
-			eb.appendDescription("\n");
+			eb.appendDescription("\n\n");
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
