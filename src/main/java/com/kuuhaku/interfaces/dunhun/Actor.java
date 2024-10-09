@@ -26,7 +26,7 @@ public interface Actor {
 		modHp(value, false);
 	}
 	default void modHp(int value, boolean crit) {
-		if (getHp() == 0) return;
+		if (value == 0 || getHp() == 0) return;
 		if (crit) value *= 2;
 
 		Dunhun game = getGame();
@@ -49,6 +49,7 @@ public interface Actor {
 
 		int diff = getHp();
 		setHp(getHp() + value);
+		diff = diff - getHp();
 
 		if (game != null && game.getCombat() != null) {
 			Combat comb = game.getCombat();
@@ -59,8 +60,8 @@ public interface Actor {
 			}
 
 			I18N locale = game.getLocale();
-			comb.getHistory().add(locale.get(value < 0 ? "str/actor_damage" : "str/actor_heal",
-					getName(locale), diff, crit ? ("**(" + locale.get("str/critical") + ")**") : ""
+			comb.getHistory().add(locale.get(diff < 0 ? "str/actor_damage" : "str/actor_heal",
+					getName(locale), Math.abs(diff), crit ? ("**(" + locale.get("str/critical") + ")**") : ""
 			));
 		}
 	}
