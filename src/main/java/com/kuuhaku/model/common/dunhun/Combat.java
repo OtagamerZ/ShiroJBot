@@ -90,6 +90,7 @@ public class Combat implements Renderer<BufferedImage> {
 		keepers.addAll(List.of(enemies));
 
 		for (Actor a : hunters) {
+			a.modAp(-a.getAp());
 			a.revive(1);
 		}
 	}
@@ -122,8 +123,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 					Graph.overlay(card, IO.getResourceAsImage(path + "/hero.png"));
 					g2d.drawString("v", offset + Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth("v") / 2, 40);
-				} else {
-					a.modAp(-a.getAp());
 				}
 
 				g2d.drawImage(card, offset, 50, null);
