@@ -64,6 +64,10 @@ public enum Flag {
 	 **/
 	NO_TAUNT,
 	/**
+	 * Cannot be paralysed
+	 */
+	NO_PARALYSIS,
+	/**
 	 * Cannot attack
 	 **/
 	NO_ATTACK,

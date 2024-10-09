@@ -856,6 +856,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public void setAvailable(boolean available) {
+		if (hasFlag(Flag.NO_PARALYSIS, true)) return;
+
 		boolean was = isAvailable();
 		state = Bit64.set(state, 0, available);
 

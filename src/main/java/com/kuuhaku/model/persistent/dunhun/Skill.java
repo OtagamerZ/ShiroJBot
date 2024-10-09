@@ -23,6 +23,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.WeaponType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
@@ -82,6 +83,14 @@ public class Skill extends DAO<Skill> {
 		return id;
 	}
 
+	public String getName(I18N locale) {
+		return getInfo(locale).getName();
+	}
+
+	public String getDescription(I18N locale) {
+		return getInfo(locale).getDescription().replaceAll("\\{(\\d+)}", "$1");
+	}
+
 	public LocalizedSkill getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
@@ -97,13 +106,38 @@ public class Skill extends DAO<Skill> {
 	}
 
 	public void execute(I18N locale, Combat combat, Actor source, Actor target) {
+		List<Integer> values = new ArrayList<>();
+
+		if (source instanceof Hero h) {
+			Attributes attr = h.getAttributes();
+			String desc = getInfo(locale).getDescription();
+
+			double scale;
+			String type = Utils.extract(desc, "(?<=^\\()\\w+(?=\\))");
+			if (type != null) {
+				scale = 1 + switch (AttrType.valueOf(type.toUpperCase())) {
+					case STR -> attr.str();
+					case DEX -> attr.dex();
+					case WIS -> attr.wis();
+					case VIT -> attr.vit();
+				} / 10d;
+			} else {
+				scale = 1;
+			}
+
+			Utils.regex(desc, "\\{(\\d+)}").results().forEach(v -> {
+				int val = (int) (Integer.parseInt(v.group(1)) * scale);
+				values.add(val);
+			});
+		}
+
 		try {
 			Utils.exec(id, effect, Map.of(
 					"locale", locale,
 					"combat", combat,
 					"actor", source,
 					"target", target,
-					"pow", source instanceof Hero h ? (1 + h.getAttributes().wis() / 10d) : 1
+					"values", values
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute skill {}", id, e);
