@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records;
+package com.kuuhaku.model.records.rank;
 
-public record RankShoukanEntry(int pos, String uid, String name, double winrate, int matches, int score) {
+public record RankCandiesEntry(int pos, String uid, String name, int candies) {
 }

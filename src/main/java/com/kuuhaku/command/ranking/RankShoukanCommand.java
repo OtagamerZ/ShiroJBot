@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.shoukan;
+package com.kuuhaku.command.ranking;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
@@ -27,7 +27,7 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.model.records.RankShoukanEntry;
+import com.kuuhaku.model.records.rank.RankShoukanEntry;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -37,12 +37,12 @@ import net.dv8tion.jda.api.Permission;
 import java.util.List;
 
 @Command(
-		name = "shoukan",
-		path = "ranking",
+		name = "rank",
+		path = "shoukan",
 		category = Category.INFO
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class ShoukanRankingCommand implements Executable {
+public class RankShoukanCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		List<RankShoukanEntry> rank = DAO.queryAllUnmapped("SELECT * FROM v_shoukan_ranking LIMIT 10").stream()
@@ -55,7 +55,8 @@ public class ShoukanRankingCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/rank_title", "Shoukan"));
+				.setTitle(locale.get("str/rank_title", "Shoukan"))
+				.setFooter(locale.get("str/rank_footer", data.config().getPrefix()));
 
 		for (int i = 0; i < rank.size(); i++) {
 			RankShoukanEntry e = rank.get(i);

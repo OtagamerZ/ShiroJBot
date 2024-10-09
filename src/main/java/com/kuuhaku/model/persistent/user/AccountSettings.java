@@ -74,6 +74,9 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Column(name = "remind_vote", nullable = false)
 	private boolean remindVote;
 
+	@Column(name = "private", nullable = false)
+	private boolean privt;
+
 	public AccountSettings() {
 	}
 
@@ -147,5 +150,13 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	public void setRemindVote(boolean remindVote) {
 		this.remindVote = remindVote;
+	}
+
+	public boolean isPrivate() {
+		return privt;
+	}
+
+	public void setPrivate(boolean privt) {
+		this.privt = privt;
 	}
 }

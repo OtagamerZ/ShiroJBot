@@ -302,7 +302,7 @@ public class Combat implements Renderer<BufferedImage> {
 												   .anyMatch(g -> skill.getReqWeapons().contains(g.getBasetype().getStats().wpnType()));
 
 						if (!validWpn) {
-							game.getChannel().sendMessage(locale.get("error/skill_cooldown")).queue();
+							game.getChannel().sendMessage(locale.get("error/invalid_weapon")).queue();
 							return;
 						}
 
