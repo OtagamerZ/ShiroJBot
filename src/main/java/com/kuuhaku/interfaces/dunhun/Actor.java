@@ -49,7 +49,7 @@ public interface Actor {
 
 		int diff = getHp();
 		setHp(getHp() + value);
-		diff = diff - getHp();
+		diff = getHp() - diff;
 
 		if (game != null && game.getCombat() != null) {
 			Combat comb = game.getCombat();
