@@ -98,6 +98,8 @@ public class RankLevelCommand implements Executable {
 			if (i < 3) {
 				eb.appendDescription("**");
 			}
+
+			eb.appendDescription("\n");
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
