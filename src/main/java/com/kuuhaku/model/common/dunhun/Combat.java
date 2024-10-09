@@ -268,10 +268,7 @@ public class Combat implements Renderer<BufferedImage> {
 							.toList();
 
 					addSelector(w.getMessage(), helper, tgts,
-							t -> lock.complete(() -> {
-								attack(h, t);
-								h.modAp(-1);
-							})
+							t -> lock.complete(() -> attack(h, t))
 					);
 				});
 
@@ -307,18 +304,7 @@ public class Combat implements Renderer<BufferedImage> {
 						}
 
 						addSelector(w.getMessage(), helper, skill.getTargets(this, h),
-								t -> lock.complete(() -> {
-									skill.execute(locale, this, h, t);
-									h.modAp(-skill.getApCost());
-
-									if (skill.getCooldown() > 0) {
-										skill.setCd(skill.getCooldown());
-									}
-
-									history.add(locale.get(t.equals(h) ? "str/used_skill_self" : "str/used_skill",
-											h.getName(), skill.getInfo(locale).getName(), t.getName(locale))
-									);
-								})
+								t -> lock.complete(() -> skill(skill, h, t))
 						);
 					});
 				}
