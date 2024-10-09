@@ -26,6 +26,7 @@ import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.id.ProfileId;
 import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.model.records.EventData;
@@ -55,6 +56,12 @@ public class ProfileCommand implements Executable {
 			}
 
 			Profile p = DAO.find(Profile.class, new ProfileId(usr.getId(), event.guild().getId()));
+			Account acc = p.getAccount();
+			if (!usr.equals(event.user()) && acc.getSettings().isPrivate()) {
+				m.editMessage(locale.get("error/profile_private")).queue();
+				return;
+			}
+
 			event.channel()
 					.sendMessage(usr.getAsMention())
 					.addFiles(FileUpload.fromData(IO.getBytes(p.render(locale), "png"), "profile.png"))
