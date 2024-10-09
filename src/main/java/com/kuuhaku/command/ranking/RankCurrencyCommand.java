@@ -74,7 +74,7 @@ public class RankCurrencyCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/rank_title", locale.get("str/level_rank")))
+				.setTitle(locale.get("str/rank_title", locale.get("str/currency_rank")))
 				.setFooter(locale.get("str/rank_footer", data.config().getPrefix()));
 
 		for (int i = 0; i < rank.size(); i++) {
