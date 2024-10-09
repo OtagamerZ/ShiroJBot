@@ -27,7 +27,7 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.model.records.rank.RankShoukanEntry;
+import com.kuuhaku.model.records.rank.RankLevelEntry;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -38,15 +38,31 @@ import java.util.List;
 
 @Command(
 		name = "rank",
-		path = "shoukan",
+		path = "level",
 		category = Category.INFO
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class RankShoukanCommand implements Executable {
+public class RankLevelCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		List<RankShoukanEntry> rank = DAO.queryAllUnmapped("SELECT * FROM v_shoukan_ranking LIMIT 10").stream()
-				.map(o -> Utils.map(RankShoukanEntry.class, o))
+		List<RankLevelEntry> rank = DAO.queryAllUnmapped("""
+						SELECT rank() OVER (ORDER BY x.xp DESC)  AS rank
+						     , x.uid
+						     , x.name
+						     , cast(sqrt(x.xp / 100) AS INT) + 1 AS level
+						FROM (
+						     SELECT a.uid
+						          , a.name
+						          , p.xp
+						     FROM profile p
+						              INNER JOIN account a ON a.uid = p.uid
+						              INNER JOIN account_settings s ON s.uid = a.uid
+						     WHERE NOT s.private
+						     ) x
+						ORDER BY x.xp DESC
+						LIMIT 10
+						""").stream()
+				.map(o -> Utils.map(RankLevelEntry.class, o))
 				.toList();
 
 		if (rank.isEmpty()) {
@@ -55,11 +71,11 @@ public class RankShoukanCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/rank_title", "Shoukan"))
+				.setTitle(locale.get("str/rank_title", locale.get("str/level_rank")))
 				.setFooter(locale.get("str/rank_footer", data.config().getPrefix()));
 
 		for (int i = 0; i < rank.size(); i++) {
-			RankShoukanEntry e = rank.get(i);
+			RankLevelEntry e = rank.get(i);
 			if (i < 3) {
 				eb.appendDescription("**");
 			}
@@ -73,7 +89,7 @@ public class RankShoukanCommand implements Executable {
 				case 1 -> "\uD83E\uDD48";
 				case 2 -> "\uD83E\uDD49";
 				default -> i + 1;
-			} + " - " + e.name() + "`🔰" + e.score() + "`");
+			} + " - " + e.name() + "`🎉" + e.level() + "`");
 
 			if (e.uid().equals(event.user().getId())) {
 				eb.appendDescription("__");
@@ -82,8 +98,6 @@ public class RankShoukanCommand implements Executable {
 			if (i < 3) {
 				eb.appendDescription("**");
 			}
-
-			eb.appendDescription("\n> -# " + locale.get("str/matches", e.matches()) + " | " + locale.separate(e.winrate()) + "% WR\n\n");
 		}
 
 		event.channel().sendMessageEmbeds(eb.build()).queue();
