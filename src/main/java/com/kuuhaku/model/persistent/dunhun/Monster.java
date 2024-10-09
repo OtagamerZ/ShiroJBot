@@ -25,7 +25,6 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.Delta;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.ActorModifiers;
-import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
@@ -33,7 +32,6 @@ import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -190,43 +188,6 @@ public class Monster extends DAO<Monster> implements Actor {
 	}
 
 	@Override
-	public void modHp(int value, boolean crit) {
-		if (getHp() == 0) return;
-		if (crit) value *= 2;
-
-		if (value < 0 && senshiCache != null) {
-			value = -value;
-
-			if (senshiCache.isDefending()) {
-				value = (int) -Math.max(value / 10f, (2.5 * Math.pow(value, 2)) / (senshiCache.getDfs() + 2.5 * value));
-			} else {
-				value = (int) -Math.max(value / 5f, (5 * Math.pow(value, 2)) / (senshiCache.getDfs() + 5 * value));
-			}
-
-			if (senshiCache.isSleeping()) {
-				senshiCache.reduceSleep(999);
-			}
-		}
-
-		int diff = getHp();
-		setHp(getHp() + value);
-
-		if (game != null && game.getCombat() != null) {
-			Combat comb = game.getCombat();
-			if (value < 0) {
-				comb.trigger(Trigger.ON_DAMAGE, this);
-			} else {
-				comb.trigger(Trigger.ON_HEAL, this);
-			}
-
-			I18N locale = game.getLocale();
-			comb.getHistory().add(locale.get(value < 0 ? "str/actor_damage" : "str/actor_heal",
-					getName(locale), diff, crit ? ("**(" + locale.get("str/critical") + ")**") : ""
-			));
-		}
-	}
-
-	@Override
 	public void setHp(int value) {
 		hp.set(Calc.clamp(value, 0, getMaxHp()));
 	}
@@ -327,6 +288,11 @@ public class Monster extends DAO<Monster> implements Actor {
 	@Override
 	public void setTeam(Team team) {
 		this.team = team;
+	}
+
+	@Override
+	public Dunhun getGame() {
+		return game;
 	}
 
 	@Override

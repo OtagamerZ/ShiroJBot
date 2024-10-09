@@ -2,10 +2,12 @@ package com.kuuhaku.interfaces.dunhun;
 
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.dunhun.ActorModifiers;
+import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
@@ -20,7 +22,48 @@ public interface Actor {
 	int getHp();
 	int getMaxHp();
 	int getHpDelta();
-	void modHp(int value, boolean crit);
+	default void modHp(int value) {
+		modHp(value, false);
+	}
+	default void modHp(int value, boolean crit) {
+		if (getHp() == 0) return;
+		if (crit) value *= 2;
+
+		Dunhun game = getGame();
+		if (game != null) {
+			Senshi sen = asSenshi(game.getLocale());
+			if (value < 0 && sen != null) {
+				value = -value;
+
+				if (sen.isDefending()) {
+					value = (int) -Math.max(value / 10f, (2.5 * Math.pow(value, 2)) / (sen.getDfs() + 2.5 * value));
+				} else {
+					value = (int) -Math.max(value / 5f, (5 * Math.pow(value, 2)) / (sen.getDfs() + 5 * value));
+				}
+
+				if (sen.isSleeping()) {
+					sen.reduceSleep(999);
+				}
+			}
+		}
+
+		int diff = getHp();
+		setHp(getHp() + value);
+
+		if (game != null && game.getCombat() != null) {
+			Combat comb = game.getCombat();
+			if (value < 0) {
+				comb.trigger(Trigger.ON_DAMAGE, this);
+			} else {
+				comb.trigger(Trigger.ON_HEAL, this);
+			}
+
+			I18N locale = game.getLocale();
+			comb.getHistory().add(locale.get(value < 0 ? "str/actor_damage" : "str/actor_heal",
+					getName(locale), diff, crit ? ("**(" + locale.get("str/critical") + ")**") : ""
+			));
+		}
+	}
 	void setHp(int value);
 	void revive(int hp);
 
@@ -55,6 +98,8 @@ public interface Actor {
 
 	Team getTeam();
 	void setTeam(Team team);
+
+	Dunhun getGame();
 	void setGame(Dunhun game);
 
 	Actor fork() throws CloneNotSupportedException;
