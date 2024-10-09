@@ -125,7 +125,7 @@ public abstract class IO {
 	}
 
 	public static byte[] getBytes(BufferedImage image, String encoding, float quality) {
-		if (encoding.equalsIgnoreCase("gif")) {
+		if (Utils.equalsAny("gif", "webp")) {
 			encoding = "jpg";
 		}
 
