@@ -77,10 +77,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 	protected void begin() {
 		CompletableFuture.runAsync(() -> {
 			while (true) {
-				if (Calc.chance(25)) {
-					runEvent();
+				if (getCombat() != null) {
+					getCombat().process();
 				} else {
-					runCombat();
+					if (Calc.chance(25)) {
+						runEvent();
+					} else {
+						runCombat();
+					}
 				}
 
 				try {
