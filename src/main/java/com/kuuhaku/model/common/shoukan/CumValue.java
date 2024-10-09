@@ -24,9 +24,11 @@ import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.util.Calc;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 public class CumValue implements Iterable<ValueMod> {
 	final Set<ValueMod> values = Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -80,31 +82,35 @@ public class CumValue implements Iterable<ValueMod> {
 		return get(source);
 	}
 
-	public void set(double value) {
+	public ValueMod set(double value) {
 		for (ValueMod mod : this.values) {
 			if (mod instanceof PermMod) {
 				mod.setValue(mod.getValue() + value);
-				return;
+				return mod;
 			}
 		}
 
-		this.values.add(new PermMod(value));
+		ValueMod mod = new PermMod(value);
+		this.values.add(mod);
+		return mod;
 	}
 
-	public void set(Drawable<?> source, double value) {
+	public ValueMod set(Drawable<?> source, double value) {
 		ValueMod mod = new ValueMod(source, value);
 		this.values.remove(mod);
 		this.values.add(mod);
+		return mod;
 	}
 
-	public void set(Drawable<?> source, double value, int expiration) {
+	public ValueMod set(Drawable<?> source, double value, int expiration) {
 		ValueMod mod = new ValueMod(source, value, expiration);
 		this.values.remove(mod);
 		this.values.add(mod);
+		return mod;
 	}
 
-	public void leftShift(Number value) {
-		set(value.doubleValue());
+	public ValueMod leftShift(Number value) {
+		return set(value.doubleValue());
 	}
 
 	public Set<ValueMod> values() {
