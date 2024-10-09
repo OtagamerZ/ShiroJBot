@@ -10,6 +10,7 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.util.Calc;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -66,7 +67,15 @@ public interface Actor {
 		}
 	}
 	void setHp(int value);
-	void revive(int hp);
+	default void revive(int value) {
+		if (getHp() >= value) return;
+
+		setHp(value);
+		Dunhun game = getGame();
+		if (game != null) {
+			asSenshi(game.getLocale()).setAvailable(true);
+		}
+	}
 
 	int getAp();
 	int getMaxAp();

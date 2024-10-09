@@ -88,6 +88,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 		hunters.addAll(game.getHeroes().values());
 		keepers.addAll(List.of(enemies));
+
+		for (Actor a : hunters) {
+			a.revive(1);
+		}
 	}
 
 	@Override

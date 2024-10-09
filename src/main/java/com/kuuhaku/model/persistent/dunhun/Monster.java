@@ -193,16 +193,6 @@ public class Monster extends DAO<Monster> implements Actor {
 	}
 
 	@Override
-	public void revive(int value) {
-		if (getHp() > 0) return;
-
-		hp.set(Calc.clamp(value, 0, getMaxHp()));
-		if (senshiCache != null) {
-			senshiCache.setAvailable(true);
-		}
-	}
-
-	@Override
 	public int getAp() {
 		return ap;
 	}

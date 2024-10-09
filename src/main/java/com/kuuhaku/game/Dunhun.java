@@ -58,6 +58,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				return;
 			}
 
+			h.asSenshi(locale);
 			heroes.put(p, h);
 		}
 
