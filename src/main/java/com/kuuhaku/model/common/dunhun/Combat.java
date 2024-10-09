@@ -74,7 +74,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		a.asSenshi(getLocale()).setAvailable(true);
 	}, turns::remove);
-	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(5);
+	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
 	private final RandomList<Actor> rngList = new RandomList<>();
 	private final List<EffectBase> effects = new ArrayList<>();
 
@@ -231,7 +231,7 @@ public class Combat implements Renderer<BufferedImage> {
 				Constants.LOGGER.warn(e, e);
 			} finally {
 				act.getModifiers().expireMods();
-				act.modHp(act.getRegDeg().next());
+				act.modHp(act.getRegDeg().next(), false);
 				act.asSenshi(locale).setAvailable(true);
 
 				Iterator<EffectBase> it = effects.iterator();
@@ -571,23 +571,14 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		trigger(Trigger.ON_ATTACK, source);
-
-		boolean crit = Calc.chance(source.getCritical());
-		int raw = srcSen.getDmg() * (crit ? 2 : 1);
-
-		target.modHp(-raw);
+		target.modHp(srcSen.getDmg(), Calc.chance(source.getCritical()));
 		trigger(Trigger.ON_HIT, source);
 
 		if (target.getHp() == 0) {
 			trigger(Trigger.ON_KILL, source);
 		}
 
-		history.add(locale.get("str/actor_combat",
-				source.getName(locale),
-				target.getName(locale),
-				-target.getHpDelta(),
-				crit ? ("**(" + locale.get("str/critical") + ")**") : ""
-		));
+		history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale)));
 	}
 
 	public void addSelector(Message msg, ButtonizeHelper root, List<Actor> targets, Consumer<Actor> action) {
@@ -680,6 +671,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public Dunhun getGame() {
 		return game;
+	}
+
+	public FixedSizeDeque<String> getHistory() {
+		return history;
 	}
 
 	public void trigger(Trigger t, Actor act) {

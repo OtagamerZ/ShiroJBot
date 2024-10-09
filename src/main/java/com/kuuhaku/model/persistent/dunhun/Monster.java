@@ -190,8 +190,9 @@ public class Monster extends DAO<Monster> implements Actor {
 	}
 
 	@Override
-	public void modHp(int value) {
+	public void modHp(int value, boolean crit) {
 		if (getHp() == 0) return;
+		if (crit) value *= 2;
 
 		if (value < 0 && senshiCache != null) {
 			value = -value;
@@ -207,6 +208,7 @@ public class Monster extends DAO<Monster> implements Actor {
 			}
 		}
 
+		int diff = getHp();
 		setHp(getHp() + value);
 
 		if (game != null && game.getCombat() != null) {
@@ -216,6 +218,11 @@ public class Monster extends DAO<Monster> implements Actor {
 			} else {
 				comb.trigger(Trigger.ON_HEAL, this);
 			}
+
+			I18N locale = game.getLocale();
+			comb.getHistory().add(locale.get(value < 0 ? "str/actor_damage" : "str/actor_heal",
+					getName(locale), diff, crit ? ("**(" + locale.get("str/critical") + ")**") : ""
+			));
 		}
 	}
 

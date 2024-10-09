@@ -20,7 +20,7 @@ public interface Actor {
 	int getHp();
 	int getMaxHp();
 	int getHpDelta();
-	void modHp(int value);
+	void modHp(int value, boolean crit);
 	void setHp(int value);
 	void revive(int hp);
 
