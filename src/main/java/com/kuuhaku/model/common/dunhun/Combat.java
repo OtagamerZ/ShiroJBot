@@ -391,13 +391,16 @@ public class Combat implements Renderer<BufferedImage> {
 				helper = null;
 
 				cpu.schedule(() -> {
+					boolean canAttack = curr.asSenshi(locale).getDmg() > 0;
+					boolean canDefend = curr.asSenshi(locale).getDfs() > 0;
+
 					try {
 						List<Skill> skills = curr.getSkills().stream()
 								.filter(s -> s.getApCost() <= curr.getAp() && s.getCd() == 0)
 								.toList();
 
 						boolean used = false;
-						if (!skills.isEmpty() && Calc.chance(33)) {
+						if (!skills.isEmpty() && (Calc.chance(33) || !(canAttack || (canDefend && curr.getAp() == 1)))) {
 							Skill skill = Utils.getRandomEntry(skills);
 							List<Actor> tgts = skill.getTargets(this, curr).stream()
 									.filter(a -> a != null && !a.isSkipped())
@@ -425,29 +428,34 @@ public class Combat implements Renderer<BufferedImage> {
 									.filter(a -> !a.isSkipped())
 									.toList();
 
-							double threat = tgts.stream()
-									.mapToInt(Actor::getAggroScore)
-									.average()
-									.orElse(1);
+							if (canDefend) {
+								double threat = tgts.stream()
+										.mapToInt(Actor::getAggroScore)
+										.average()
+										.orElse(1);
 
-							double risk = threat / curr.getAggroScore();
-							double lifeFac = Math.max(curr.getHp() * 2d / curr.getMaxHp(), 1);
+								double risk = threat / curr.getAggroScore();
+								double lifeFac = Math.max(curr.getHp() * 2d / curr.getMaxHp(), 1);
 
-							if (curr.getAp() == 1 && Calc.chance(20 * lifeFac * risk)) {
-								curr.asSenshi(locale).setDefending(true);
-								curr.modAp(-1);
+								if (!canAttack || (curr.getAp() == 1 && Calc.chance(20 * lifeFac * risk))) {
+									curr.asSenshi(locale).setDefending(true);
+									curr.modAp(curr.getAp());
 
-								history.add(locale.get("str/actor_defend", curr.getName(locale)));
-							} else {
+									history.add(locale.get("str/actor_defend", curr.getName(locale)));
+									return;
+								}
+							}
+
+							if (canAttack) {
 								attack(curr, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
 								curr.modAp(-1);
 							}
 						}
 					} catch (Exception e) {
 						Constants.LOGGER.error(e, e);
+					} finally {
+						lock.complete(null);
 					}
-
-					lock.complete(null);
 				}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
 			}
 		} else {
