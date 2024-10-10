@@ -233,7 +233,6 @@ public class HeroInfoCommand implements Executable {
 			h.getStats().setAttributes(alloc.merge(new Attributes(attr[0], attr[1], attr[2], attr[3])));
 			h.save();
 
-			Pages.finalizeEvent(msg, Utils::doNothing);
 			msg.getChannel().sendMessage(locale.get("success/points_allocated"))
 					.flatMap(ms -> w.getMessage().delete())
 					.queue();
