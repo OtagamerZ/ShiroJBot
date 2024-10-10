@@ -422,7 +422,6 @@ public class Combat implements Renderer<BufferedImage> {
 							} else if (canUse) {
 								if (!forcing) skills.clear();
 								forcing = true;
-
 								skills.add(s);
 							}
 						}
@@ -430,12 +429,14 @@ public class Combat implements Renderer<BufferedImage> {
 						boolean used = false;
 						if (!skills.isEmpty() && (forcing || Calc.chance(33) || !(canAttack || (canDefend && curr.getAp() == 1)))) {
 							Skill skill = Utils.getRandomEntry(skills);
+							System.out.println(skill.getId());
+
 							List<Actor> tgts = skill.getTargets(this, curr).stream()
 									.filter(a -> a != null && !a.isSkipped())
 									.toList();
 
 							if (!tgts.isEmpty()) {
-								Actor t = Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts);
+								Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == curr.getTeam() ? 1 : a.getAggroScore(), tgts);
 								skill(skill, curr, t);
 
 								used = true;
