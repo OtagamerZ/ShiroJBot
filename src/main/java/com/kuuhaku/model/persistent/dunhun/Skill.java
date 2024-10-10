@@ -95,6 +95,43 @@ public class Skill extends DAO<Skill> {
 		return getInfo(locale).getDescription().replaceAll("\\{(\\d+)}", "$1");
 	}
 
+	public String getDescription(I18N locale, Actor source) {
+		return getDescription(locale, source, new ArrayList<>());
+	}
+
+	public String getDescription(I18N locale, Actor source, List<Integer> values) {
+		String desc = getInfo(locale).setUwu(false).getDescription();
+		if (source instanceof Hero h) {
+			Attributes attr = h.getAttributes();
+
+			double scale;
+			String type = Utils.extract(desc, "(?<=^\\()\\w+(?=\\))");
+			if (type != null) {
+				scale = (1 + switch (AttrType.valueOf(type.toUpperCase())) {
+					case STR -> attr.str();
+					case DEX -> attr.dex();
+					case WIS -> attr.wis();
+					case VIT -> attr.vit();
+				} / 10d) * h.asSenshi(locale).getPower();
+			} else {
+				scale = h.asSenshi(locale).getPower();
+			}
+
+			Utils.regex(desc, "\\{(\\d+)}").results().forEach(v -> {
+				int val = (int) (Integer.parseInt(v.group(1)) * scale);
+				values.add(val);
+			});
+		} else {
+			Monster m = (Monster) source;
+			Utils.regex(desc, "\\{(\\d+)}").results().forEach(v -> {
+				int val = (int) (Integer.parseInt(v.group(1)) * m.asSenshi(locale).getPower());
+				values.add(val);
+			});
+		}
+
+		return desc;
+	}
+
 	public LocalizedSkill getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
@@ -112,29 +149,7 @@ public class Skill extends DAO<Skill> {
 
 	public void execute(I18N locale, Combat combat, Actor source, Actor target) {
 		List<Integer> values = new ArrayList<>();
-
-		if (source instanceof Hero h) {
-			Attributes attr = h.getAttributes();
-			String desc = getInfo(locale).setUwu(false).getDescription();
-
-			double scale;
-			String type = Utils.extract(desc, "(?<=^\\()\\w+(?=\\))");
-			if (type != null) {
-				scale = 1 + switch (AttrType.valueOf(type.toUpperCase())) {
-					case STR -> attr.str();
-					case DEX -> attr.dex();
-					case WIS -> attr.wis();
-					case VIT -> attr.vit();
-				} / 10d;
-			} else {
-				scale = 1;
-			}
-
-			Utils.regex(desc, "\\{(\\d+)}").results().forEach(v -> {
-				int val = (int) (Integer.parseInt(v.group(1)) * scale);
-				values.add(val);
-			});
-		}
+		getDescription(locale, source, values);
 
 		try {
 			Utils.exec(id, effect, Map.of(
