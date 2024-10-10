@@ -117,15 +117,23 @@ public class Skill extends DAO<Skill> {
 				scale = h.asSenshi(locale).getPower();
 			}
 
-			Utils.regex(desc, "\\{(\\d+)}").results().forEach(v -> {
+			desc = Utils.regex(desc, "\\{(\\d+)}").replaceAll(v -> {
 				int val = (int) (Integer.parseInt(v.group(1)) * scale);
 				values.add(val);
+				return String.valueOf(val);
 			});
 		} else {
 			Monster m = (Monster) source;
-			Utils.regex(desc, "\\{(\\d+)}").results().forEach(v -> {
-				int val = (int) (Integer.parseInt(v.group(1)) * m.asSenshi(locale).getPower());
+			double mult = switch (m.getRarityClass()) {
+				case RARE -> 2;
+				case MAGIC -> 1.25;
+				default -> 1;
+			} * (1 + m.getGame().getTurn() / 4d) * m.asSenshi(locale).getPower();
+
+			desc = Utils.regex(desc, "\\{(\\d+)}").replaceAll(v -> {
+				int val = (int) (Integer.parseInt(v.group(1)) * mult);
 				values.add(val);
+				return String.valueOf(val);
 			});
 		}
 

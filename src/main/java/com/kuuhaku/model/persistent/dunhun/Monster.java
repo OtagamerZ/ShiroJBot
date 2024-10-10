@@ -274,7 +274,7 @@ public class Monster extends DAO<Monster> implements Actor {
 			case RARE -> 2.25;
 		} * (1 + getAffixes().size() * 0.2);
 
-		double xp = stats.getBaseHp() / 100d + stats.getAttack() / 75d + stats.getDefense() / 200d;
+		double xp = stats.getBaseHp() / 500d + stats.getAttack() / 175d + stats.getDefense() / 250d;
 		if (game != null) {
 			xp *= 1 + game.getTurn() * 0.1;
 		}
