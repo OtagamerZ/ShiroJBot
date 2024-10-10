@@ -76,7 +76,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	@Override
 	protected void begin() {
 		CompletableFuture.runAsync(() -> {
-			while (true) {
+			while (!isClosed()) {
 				if (getCombat() != null) {
 					getCombat().process();
 				} else {
@@ -107,7 +107,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 							}
 						}
 
-						System.out.println(xpGained);
+						for (Hero h : heroes.values()) {
+							int lvl = h.getStats().getLevel();
+							h.getStats().addXp(xpGained);
+							h.save();
+
+							if (h.getStats().getLevel() > lvl) {
+								getChannel().sendMessage(getLocale().get("str/actor_level_up", h.getName(), h.getStats().getLevel())).queue();
+							}
+						}
+
 						combat.set(null);
 					}
 

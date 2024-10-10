@@ -110,7 +110,6 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default int getIndex() {
-		if (getGame() == null) return -1;
 		return getSlot().getIndex();
 	}
 
