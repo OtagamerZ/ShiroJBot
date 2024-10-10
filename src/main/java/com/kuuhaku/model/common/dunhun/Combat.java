@@ -376,7 +376,7 @@ public class Combat implements Renderer<BufferedImage> {
 									.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 									.setCancellable(false)
 									.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() -> {
-										int chance = Math.min(100 - 20 * game.getTurn() + 5 * h.getAttributes().dex(), 100 - 2 * game.getTurn());
+										int chance = Utils.clamp(100 - 10 * game.getTurn() + 5 * h.getAttributes().dex(), 0, 100 - 2 * game.getTurn());
 
 										if (Calc.chance(chance)) {
 											h.setFleed(true);
