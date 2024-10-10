@@ -57,10 +57,9 @@ import java.util.function.Supplier;
 
 @Command(
 		name = "hero",
-		path = "info",
 		category = Category.STAFF
 )
-public class HeroInfoCommand implements Executable {
+public class HeroCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Deck d = data.profile().getAccount().getDeck();
