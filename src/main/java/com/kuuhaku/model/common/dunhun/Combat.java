@@ -262,7 +262,10 @@ public class Combat implements Renderer<BufferedImage> {
 				Iterator<EffectBase> it = effects.iterator();
 				while (it.hasNext()) {
 					EffectBase e = it.next();
-					if (!e.getTarget().equals(act)) continue;
+					if (!e.getTarget().equals(act)) {
+						if (!getActors().contains(e.getTarget())) it.remove();
+						continue;
+					}
 
 					if (e.decDuration()) it.remove();
 					if (e instanceof PersistentEffect pe) {
@@ -739,7 +742,10 @@ public class Combat implements Renderer<BufferedImage> {
 		while (it.hasNext()) {
 			EffectBase e = it.next();
 			if (!(e instanceof TriggeredEffect te && te.getTrigger() == t && !te.isLocked())) continue;
-			else if (!e.getTarget().equals(act)) continue;
+			else if (!e.getTarget().equals(act)) {
+				if (!getActors().contains(e.getTarget())) it.remove();
+				continue;
+			}
 
 			if (te.decLimit()) it.remove();
 
