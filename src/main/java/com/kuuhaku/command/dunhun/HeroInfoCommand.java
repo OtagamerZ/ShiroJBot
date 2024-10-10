@@ -217,12 +217,13 @@ public class HeroInfoCommand implements Executable {
 			XStringBuilder sb = new XStringBuilder();
 			for (AttrType at : AttrType.values()) {
 				String name = locale.get("attr/" + at.name());
-				sb.appendNewLine(name + ": " + (alloc.get(at) + attr[i]));
+				sb.appendNewLine("**" + name.charAt(0) + "**" + name.substring(1) + ": " + (alloc.get(at) + attr[i]));
 
 				if (func != null) func.accept(name.charAt(0), i++);
 			}
 
 			eb.addField(Constants.VOID, sb.toString(), true);
+			msg.editMessageEmbeds(eb.build()).queue();
 		};
 
 		updateDesc.accept((ch, i) -> helper.addAction(Utils.parseEmoji(Utils.fancyLetter(ch)), w -> {
