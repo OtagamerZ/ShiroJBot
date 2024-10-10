@@ -202,12 +202,7 @@ public class HeroInfoCommand implements Executable {
 
 		int[] attr = new int[4];
 		Attributes alloc = h.getStats().getAttributes();
-		Supplier<Integer> remaining = () -> {
-			int allocated = alloc.count() + attr[0] + attr[1] + attr[2] + attr[3];
-			int total = h.getStats().getLevel();
-
-			return Math.max(0, total - allocated);
-		};
+		Supplier<Integer> remaining = () -> Math.max(0, h.getStats().getPointsLeft() - (attr[0] + attr[1] + attr[2] + attr[3]));
 
 		Consumer<BiConsumer<Character, Integer>> updateDesc = func -> {
 			eb.clearFields();
@@ -217,9 +212,10 @@ public class HeroInfoCommand implements Executable {
 			XStringBuilder sb = new XStringBuilder();
 			for (AttrType at : AttrType.values()) {
 				String name = locale.get("attr/" + at.name());
-				sb.appendNewLine("**" + name.charAt(0) + "**" + name.substring(1) + ": " + (alloc.get(at) + attr[i]));
 
-				if (func != null) func.accept(name.charAt(0), i++);
+				int idx = i++;
+				sb.appendNewLine("**" + name.charAt(0) + "**" + name.substring(1) + ": " + (alloc.get(at) + attr[idx]));
+				if (func != null) func.accept(name.charAt(0), idx);
 			}
 
 			eb.addField(Constants.VOID, sb.toString(), true);

@@ -53,6 +53,10 @@ public class HeroStats {
 		return 1 + Calc.round(Math.pow(xp / 10d, 1 / 1.5));
 	}
 
+	public int getPointsLeft() {
+		return (4 + getLevel()) - attributes.count();
+	}
+
 	public int getXpToNext() {
 		return (int) (Math.pow(getLevel(), 1.5) * 10);
 	}
