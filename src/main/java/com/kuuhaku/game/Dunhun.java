@@ -79,7 +79,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 			while (true) {
 				if (getCombat() != null) {
 					getCombat().process();
-					combat.set(null);
 				} else {
 					if (Calc.chance(25)) {
 						runEvent();
@@ -100,6 +99,18 @@ public class Dunhun extends GameInstance<NullPhase> {
 					);
 					break;
 				} else {
+					if (getCombat() != null && getCombat().isDone()) {
+						int xpGained = 0;
+						for (Actor a : getCombat().getActors(Team.KEEPERS)) {
+							if (a instanceof Monster m) {
+								xpGained += m.getKillXp();
+							}
+						}
+
+						System.out.println(xpGained);
+						combat.set(null);
+					}
+
 					nextTurn();
 					getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor", getTurn()))).queue();
 				}
@@ -117,7 +128,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		getCombat().process();
-		combat.set(null);
 	}
 
 	private void runEvent() {

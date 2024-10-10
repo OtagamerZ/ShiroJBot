@@ -267,6 +267,21 @@ public class Monster extends DAO<Monster> implements Actor {
 		else return RarityClass.NORMAL;
 	}
 
+	public int getKillXp() {
+		double mult = switch (getRarityClass()) {
+			case NORMAL -> 1;
+			case MAGIC -> 1.5;
+			case RARE -> 2.25;
+		} * (1 + getAffixes().size() * 0.2);
+
+		double xp = stats.getBaseHp() / 100d + stats.getAttack() / 50d + stats.getDefense() / 100d;
+		if (game != null) {
+			xp *= 1 + game.getTurn() * 0.1;
+		}
+
+		return (int) (xp * mult);
+	}
+
 	@Override
 	public List<Skill> getSkills() {
 		if (skillCache != null) return skillCache;

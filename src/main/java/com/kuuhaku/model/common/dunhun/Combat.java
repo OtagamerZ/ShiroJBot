@@ -85,6 +85,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final List<EffectBase> effects = new ArrayList<>();
 
 	private CompletableFuture<Runnable> lock;
+	private boolean done = false;
 
 	public Combat(Dunhun game, Monster... enemies) {
 		this.game = game;
@@ -270,6 +271,8 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 			}
 		}
+
+		done = true;
 	}
 
 	public CompletableFuture<Runnable> reload(boolean execute) {
@@ -725,6 +728,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public FixedSizeDeque<String> getHistory() {
 		return history;
+	}
+
+	public boolean isDone() {
+		return done;
 	}
 
 	public void trigger(Trigger t, Actor act) {
