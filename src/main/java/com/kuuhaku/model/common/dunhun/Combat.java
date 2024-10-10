@@ -154,7 +154,21 @@ public class Combat implements Renderer<BufferedImage> {
 			for (Actor a : acts) {
 				if (!sb.isEmpty()) sb.nextLine();
 				sb.appendNewLine(a.getName(locale));
-				sb.appendNewLine("HP: " + a.getHp() + "/" + a.getMaxHp());
+
+				String hp, max;
+				if (a.getHp() > 5000) {
+					hp = Utils.roundToString(a.getHp() / 1000d, 1) + "k";
+				} else {
+					hp = String.valueOf(a.getHp());
+				}
+
+				if (a.getMaxHp() > 5000) {
+					max = Utils.roundToString(a.getMaxHp() / 1000d, 1) + "k";
+				} else {
+					max = String.valueOf(a.getMaxHp());
+				}
+
+				sb.appendNewLine("HP: " + hp + "/" + max);
 				sb.nextLine();
 
 				boolean rdClosed = true;
@@ -164,10 +178,11 @@ public class Combat implements Renderer<BufferedImage> {
 					rdClosed = false;
 				}
 
-				int steps = (int) Math.ceil(a.getMaxHp() / 100d);
+				double parts = a.getMaxHp() > 5000 ? 500 : 100;
+				int steps = (int) Math.ceil(a.getMaxHp() / parts);
 				for (int i = 0; i < steps; i++) {
 					if (i > 0 && i % 10 == 0) sb.nextLine();
-					int threshold = i * 100;
+					int threshold = (int) (i * parts);
 
 					if (!rdClosed && threshold > rd) {
 						sb.append("__");
