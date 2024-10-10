@@ -224,7 +224,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			if (!skills.isEmpty()) {
 				sb.appendNewLine("**" + getLocale().get("str/skills") + "**");
 				for (Skill skill : skills) {
-					sb.appendNewLine("- " + skill.getInfo(getLocale()).getName());
+					sb.appendNewLine("- " + skill.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', skill.getApCost()));
 					sb.appendNewLine("-# " + skill.getDescription(getLocale(), a));
 					sb.nextLine();
 				}
