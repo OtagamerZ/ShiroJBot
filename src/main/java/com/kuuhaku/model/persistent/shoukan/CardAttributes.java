@@ -174,7 +174,7 @@ public class CardAttributes implements Serializable, Cloneable {
 
 			XStringBuilder sb = new XStringBuilder();
 			for (String e : effects) {
-				String code = effect.lines()
+				String code = e.lines()
 						.dropWhile(l -> {
 							String trim = l.trim();
 
