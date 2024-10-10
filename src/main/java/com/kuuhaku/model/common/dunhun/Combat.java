@@ -407,10 +407,32 @@ public class Combat implements Renderer<BufferedImage> {
 				helper = null;
 
 				cpu.schedule(() -> {
-					boolean canAttack = curr.asSenshi(locale).getDmg() > 0;
-					boolean canDefend = curr.asSenshi(locale).getDfs() > 0;
-
 					try {
+						boolean canAttack = curr.asSenshi(locale).getDmg() > 0;
+						boolean canDefend = curr.asSenshi(locale).getDfs() > 0;
+
+						List<Actor> tgts = getActors(curr.getTeam().getOther()).stream()
+								.filter(a -> !a.isSkipped())
+								.toList();
+
+						if (canDefend) {
+							double threat = tgts.stream()
+									.mapToInt(Actor::getAggroScore)
+									.average()
+									.orElse(1);
+
+							double risk = threat / curr.getAggroScore();
+							double lifeFac = Math.max(curr.getHp() * 2d / curr.getMaxHp(), 1);
+
+							if (!canAttack || (curr.getAp() == 1 && Calc.chance(20 * lifeFac * risk))) {
+								curr.asSenshi(locale).setDefending(true);
+								curr.modAp(-curr.getAp());
+
+								history.add(locale.get("str/actor_defend", curr.getName(locale)));
+								return;
+							}
+						}
+
 						boolean forcing = false;
 						List<Skill> skills = new ArrayList<>();
 						for (Skill s : curr.getSkills()) {
@@ -426,48 +448,20 @@ public class Combat implements Renderer<BufferedImage> {
 							}
 						}
 
-						boolean used = false;
-						if (!skills.isEmpty() && (forcing || Calc.chance(33) || !(canAttack || (canDefend && curr.getAp() == 1)))) {
+						if (!skills.isEmpty() && (forcing || !canAttack || Calc.chance(33))) {
 							Skill skill = Utils.getRandomEntry(skills);
-							List<Actor> tgts = skill.getTargets(this, curr).stream()
+							tgts = skill.getTargets(this, curr).stream()
 									.filter(a -> a != null && !a.isSkipped())
 									.toList();
 
 							if (!tgts.isEmpty()) {
 								Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == curr.getTeam() ? 1 : a.getAggroScore(), tgts);
 								skill(skill, curr, t);
-
-								used = true;
+								return;
 							}
 						}
 
-						if (!used) {
-							List<Actor> tgts = getActors(curr.getTeam().getOther()).stream()
-									.filter(a -> !a.isSkipped())
-									.toList();
-
-							if (canDefend) {
-								double threat = tgts.stream()
-										.mapToInt(Actor::getAggroScore)
-										.average()
-										.orElse(1);
-
-								double risk = threat / curr.getAggroScore();
-								double lifeFac = Math.max(curr.getHp() * 2d / curr.getMaxHp(), 1);
-
-								if (!canAttack || (curr.getAp() == 1 && Calc.chance(20 * lifeFac * risk))) {
-									curr.asSenshi(locale).setDefending(true);
-									curr.modAp(-curr.getAp());
-
-									history.add(locale.get("str/actor_defend", curr.getName(locale)));
-									return;
-								}
-							}
-
-							if (canAttack) {
-								attack(curr, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
-							}
-						}
+						attack(curr, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
 					} catch (Exception e) {
 						Constants.LOGGER.error(e, e);
 					} finally {

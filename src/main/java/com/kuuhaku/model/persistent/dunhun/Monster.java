@@ -111,13 +111,13 @@ public class Monster extends DAO<Monster> implements Actor {
 	public String getName(I18N locale) {
 		if (nameCache != null) return nameCache;
 
+		AtomicReference<String> ending = new AtomicReference<>(Utils.getOr(getInfo(locale).getEnding(), "M"));
 		if (affixes.isEmpty()) return nameCache = getInfo(locale).getName();
 		else if (getRarityClass() == RarityClass.RARE) {
 			String loc = locale.getParent().name().toLowerCase();
 			String prefix = IO.getLine("dunhun/monster/prefix/" + loc + ".dict", Calc.rng(0, 32, SERIAL + affixes.hashCode()));
 			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict", Calc.rng(0, 32, SERIAL - prefix.hashCode()));
 
-			AtomicReference<String> ending = new AtomicReference<>(Utils.getOr(getInfo(locale).getEnding(), "M"));
 			prefix = Utils.regex(prefix, "\\[(?<F>.*?)\\|(?<M>.*?)]")
 					.replaceAll(r -> r.group(ending.get()));
 
@@ -158,7 +158,8 @@ public class Monster extends DAO<Monster> implements Actor {
 			else suff = " " + a.getInfo(locale).getName();
 		}
 
-		return nameCache = template.formatted(getInfo(locale).getName(), pref, suff);
+		return nameCache = Utils.regex(template.formatted(getInfo(locale).getName(), pref, suff), "\\[(?<F>.*?)\\|(?<M>.*?)]")
+				.replaceAll(r -> r.group(ending.get()));
 	}
 
 	@Override
