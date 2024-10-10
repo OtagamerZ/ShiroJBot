@@ -113,7 +113,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							h.save();
 
 							if (h.getStats().getLevel() > lvl) {
-								getChannel().sendMessage(getLocale().get("str/actor_level_up", h.getName(), h.getStats().getLevel())).queue();
+								getChannel().buffer(getLocale().get("str/actor_level_up", h.getName(), h.getStats().getLevel()));
 							}
 						}
 
