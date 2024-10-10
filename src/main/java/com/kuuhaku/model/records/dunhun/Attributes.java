@@ -63,4 +63,8 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 				vit() + attr.vit()
 		);
 	}
+
+	public int count() {
+		return str() + dex() + wis() + vit();
+	}
 }

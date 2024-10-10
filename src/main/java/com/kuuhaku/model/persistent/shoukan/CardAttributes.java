@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.shoukan;
 
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -80,6 +81,9 @@ public class CardAttributes implements Serializable, Cloneable {
 
 	@Transient
 	private transient EnumSet<Trigger> lock = EnumSet.noneOf(Trigger.class);
+
+	@Transient
+	private transient Set<String> effects = new HashSet<>();
 
 	public int getMana() {
 		return mana;
@@ -165,6 +169,39 @@ public class CardAttributes implements Serializable, Cloneable {
 	}
 
 	public String getEffect() {
+		if (!effects.isEmpty()) {
+			Set<String> imports = new HashSet<>();
+
+			XStringBuilder sb = new XStringBuilder();
+			for (String e : effects) {
+				String code = effect.lines()
+						.dropWhile(l -> {
+							String trim = l.trim();
+
+							if (trim.isBlank()) return true;
+							else if (trim.startsWith("import")) {
+								imports.add(trim);
+								return true;
+							}
+
+							return false;
+						})
+						.map(l -> "\t" + l)
+						.collect(Collectors.joining("\n"));
+
+				sb.appendNewLine("{\n" + code + "\n}");
+				mana++;
+			}
+
+			if (imports.isEmpty()) {
+				effect = sb.toString();
+			} else {
+				effect = String.join("\n", imports) + "\n" + sb;
+			}
+
+			effects.clear();
+		}
+
 		return Utils.getOr(effect, "");
 	}
 
@@ -173,33 +210,7 @@ public class CardAttributes implements Serializable, Cloneable {
 	}
 
 	public void appendEffect(@Language("Groovy") String effect) {
-		this.effect = Utils.getOr(this.effect, "");
-
-		Set<String> imports = new HashSet<>();
-		@Language("Groovy")
-		String code = effect.lines()
-				.dropWhile(l -> {
-					String trim = l.trim();
-
-					if (trim.isBlank()) return true;
-					else if (trim.startsWith("import")) {
-						imports.add(trim);
-						return true;
-					}
-
-					return false;
-				})
-				.map(l -> "\t" + l)
-				.collect(Collectors.joining("\n"));
-
-		imports.removeIf(i -> Utils.match(this.effect, "^" + i));
-		code = "{ /* %EFFECT% */ \n" + code + "\n}\n";
-
-		if (imports.isEmpty()) {
-			this.effect += code;
-		} else {
-			this.effect = String.join("\n", imports) + this.effect + code;
-		}
+		effects.add(effect);
 	}
 
 	public EnumSet<Trigger> getLocks() {

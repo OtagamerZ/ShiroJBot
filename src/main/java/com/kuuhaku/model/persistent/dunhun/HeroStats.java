@@ -77,6 +77,10 @@ public class HeroStats {
 		return attributes;
 	}
 
+	public void setAttributes(Attributes attributes) {
+		this.attributes = attributes;
+	}
+
 	public JSONArray getSkills() {
 		return skills;
 	}

@@ -1371,4 +1371,8 @@ public abstract class Utils {
 	public static String fancyNumber(int n) {
 		return new String(new char[]{(char) (0x30 + n), 0xFE0F, 0x20E3});
 	}
+
+	public static String fancyLetter(char l) {
+		return new String(new char[]{0xD83C, (char) (0xDDE5 + (l - (Character.isUpperCase(l) ? 64 : 96)))});
+	}
 }

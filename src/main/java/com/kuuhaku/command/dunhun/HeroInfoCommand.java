@@ -19,10 +19,9 @@
 package com.kuuhaku.command.dunhun;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.EmojiMapping;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
-import com.github.ygimenez.model.helper.CategorizeHelper;
+import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -31,6 +30,7 @@ import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
@@ -45,10 +45,15 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @Command(
 		name = "hero",
@@ -100,18 +105,29 @@ public class HeroInfoCommand implements Executable {
 				attr.vit(), Utils.sign(mods.vit())
 		), true);
 
-		EmojiMapping<Page> pages = new EmojiMapping<>();
-		pages.put(Utils.parseEmoji("📋"), InteractPage.of(eb.build()));
-		pages.put(Utils.parseEmoji("📖"), viewSkills(locale, h));
-		pages.put(Utils.parseEmoji("🛡"), viewGear(locale, h));
-
-		CategorizeHelper helper = new CategorizeHelper(pages, true)
+		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(event.user()::equals);
+				.setCanInteract(event.user()::equals)
+				.addAction(Utils.parseEmoji("📋"),
+						w -> updatePage(InteractPage.of(eb.build()), w.getMessage())
+				)
+				.addAction(Utils.parseEmoji("📖"),
+						w -> updatePage(viewSkills(locale, h), w.getMessage())
+				)
+				.addAction(Utils.parseEmoji("🛡"),
+						w -> updatePage(viewGear(locale, h), w.getMessage())
+				)
+				.addAction(locale.get("str/allocate_points", h.getStats().getLevel() - attr.count()),
+						w -> allocAttributes(locale, h, w.getMessage())
+				);
 
 		helper.apply(event.channel().sendMessageEmbeds(eb.build()))
 				.addFiles(FileUpload.fromData(IO.getBytes(card.render(locale, d), "png"), "card.png"))
-				.queue(s -> Pages.categorize(s, helper));
+				.queue(s -> Pages.buttonize(s, helper));
+	}
+
+	private void updatePage(Page p, Message msg) {
+		msg.editMessageEmbeds((MessageEmbed) p.getContent()).queue();
 	}
 
 	private Page viewGear(I18N locale, Hero h) {
@@ -173,5 +189,59 @@ public class HeroInfoCommand implements Executable {
 		}
 
 		return InteractPage.of(eb.build());
+	}
+
+	private void allocAttributes(I18N locale, Hero h, Message msg) {
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setTitle(locale.get("str/attributes"))
+				.setThumbnail("attachment://card.png");
+
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()));
+
+		int[] attr = new int[4];
+		Attributes alloc = h.getStats().getAttributes();
+		Supplier<Integer> remaining = () -> {
+			int allocated = alloc.count() + attr[0] + attr[1] + attr[2] + attr[3];
+			int total = h.getStats().getLevel();
+
+			return Math.max(0, total - allocated);
+		};
+
+		Consumer<BiConsumer<Character, Integer>> updateDesc = func -> {
+			eb.clearFields();
+			eb.setDescription(locale.get("str/remaining_points", remaining.get()));
+
+			int i = 0;
+			XStringBuilder sb = new XStringBuilder();
+			for (AttrType at : AttrType.values()) {
+				String name = locale.get("attr/" + at.name());
+				sb.appendNewLine(name);
+
+				if (func != null) func.accept(name.charAt(0), i);
+			}
+
+			eb.addField(Constants.VOID, sb.toString(), true);
+		};
+
+		updateDesc.accept((ch, i) -> helper.addAction(Utils.parseEmoji(Utils.fancyLetter(ch)), w -> {
+			if (remaining.get() <= 0) return;
+
+			attr[i]++;
+			updateDesc.accept(null);
+		}));
+
+		helper.addAction(Utils.parseEmoji("✅"), w -> {
+			h.getStats().setAttributes(alloc.merge(new Attributes(attr[0], attr[1], attr[2], attr[3])));
+			h.save();
+
+			Pages.finalizeEvent(msg, Utils::doNothing);
+			msg.getChannel().sendMessage(locale.get("success/points_allocated"))
+					.flatMap(ms -> w.getMessage().delete())
+					.queue();
+		});
+
+		helper.apply(msg.editMessageEmbeds(eb.build())).queue(s -> Pages.buttonize(s, helper));
 	}
 }
