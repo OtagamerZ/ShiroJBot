@@ -107,12 +107,14 @@ public class Skill extends DAO<Skill> {
 			double scale;
 			String type = Utils.extract(desc, "(?<=^\\()\\w+(?=\\))");
 			if (type != null) {
-				scale = (1 + switch (AttrType.valueOf(type.toUpperCase())) {
+				int sa = switch (AttrType.valueOf(type.toUpperCase())) {
 					case STR -> attr.str();
 					case DEX -> attr.dex();
 					case WIS -> attr.wis();
 					case VIT -> attr.vit();
-				} / 20d) * h.asSenshi(locale).getPower();
+				};
+
+				scale = (1 + sa / (9d + sa)) * h.asSenshi(locale).getPower();
 			} else {
 				scale = h.asSenshi(locale).getPower();
 			}

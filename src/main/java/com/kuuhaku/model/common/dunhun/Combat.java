@@ -424,7 +424,7 @@ public class Combat implements Renderer<BufferedImage> {
 							double risk = threat / curr.getAggroScore();
 							double lifeFac = Math.max(curr.getHp() * 2d / curr.getMaxHp(), 1);
 
-							if (!canAttack || (curr.getAp() == 1 && Calc.chance(20 * lifeFac * risk))) {
+							if (!canAttack || (curr.getAp() == 1 && Calc.chance(10 * lifeFac * risk))) {
 								curr.asSenshi(locale).setDefending(true);
 								curr.modAp(-curr.getAp());
 
