@@ -58,7 +58,8 @@ public class Combat implements Renderer<BufferedImage> {
 	private final Dunhun game;
 	private final I18N locale;
 	private final InfiniteList<Actor> turns = new InfiniteList<>();
-	private final BondedList<Actor> hunters = new BondedList<>(a -> {
+	private final BondedList<Actor> hunters = new BondedList<>((a, it) -> {
+		if (getActors(Team.HUNTERS).size() >= 4) return false;
 		if (!turns.isEmpty()) turns.add(a);
 
 		a.setFleed(false);
@@ -66,8 +67,10 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setGame(getGame());
 
 		a.asSenshi(getLocale()).setAvailable(true);
+		return true;
 	}, turns::remove);
-	private final BondedList<Actor> keepers = new BondedList<>(a -> {
+	private final BondedList<Actor> keepers = new BondedList<>((a, it) -> {
+		if (getActors(Team.KEEPERS).size() >= 4) return false;
 		if (!turns.isEmpty()) turns.add(a);
 
 		a.setFleed(false);
@@ -75,6 +78,7 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setGame(getGame());
 
 		a.asSenshi(getLocale()).setAvailable(true);
+		return true;
 	}, turns::remove);
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
 	private final RandomList<Actor> rngList = new RandomList<>();

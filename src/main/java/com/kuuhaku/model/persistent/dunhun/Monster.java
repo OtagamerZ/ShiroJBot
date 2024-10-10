@@ -103,6 +103,7 @@ public class Monster extends DAO<Monster> implements Actor {
 	public LocalizedMonster getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
+				.map(ld -> ld.setUwu(locale.isUwu()))
 				.findAny().orElseThrow();
 	}
 
@@ -116,13 +117,16 @@ public class Monster extends DAO<Monster> implements Actor {
 			String prefix = IO.getLine("dunhun/monster/prefix/" + loc + ".dict", Calc.rng(0, 32, SERIAL + affixes.hashCode()));
 			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict", Calc.rng(0, 32, SERIAL - prefix.hashCode()));
 
-			AtomicReference<String> ending = new AtomicReference<>("M");
+			AtomicReference<String> ending = new AtomicReference<>(getInfo(locale).getEnding());
+			prefix = Utils.regex(prefix, "\\[(?<F>.*?)\\|(?<M>.*?)]")
+					.replaceAll(r -> r.group(ending.get()));
+
 			prefix = Utils.regex(prefix, "\\[([FM])]").replaceAll(m -> {
 				ending.set(m.group(1));
 				return "";
 			});
 
-			suffix = Utils.regex(suffix, "\\[(?<F>\\w*)\\|(?<M>\\w*)]")
+			suffix = Utils.regex(suffix, "\\[(?<F>.*?)\\|(?<M>.*?)]")
 					.replaceAll(r -> r.group(ending.get()));
 
 			int parts = Calc.rng(1, 3);

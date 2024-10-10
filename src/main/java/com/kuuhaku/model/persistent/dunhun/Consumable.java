@@ -66,6 +66,7 @@ public class Consumable extends DAO<Consumable> implements Comparable<Consumable
 	public LocalizedConsumable getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
+				.map(ld -> ld.setUwu(locale.isUwu()))
 				.findAny().orElseThrow();
 	}
 

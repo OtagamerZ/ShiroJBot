@@ -70,6 +70,7 @@ public class Event extends DAO<Event> {
 	public LocalizedEvent getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
+				.map(ld -> ld.setUwu(locale.isUwu()))
 				.findAny().orElseThrow();
 	}
 

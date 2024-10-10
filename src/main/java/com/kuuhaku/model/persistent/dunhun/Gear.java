@@ -28,6 +28,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.text.Uwuifier;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
@@ -138,7 +139,6 @@ public class Gear extends DAO<Gear> {
 		List<String> out = new ArrayList<>();
 		LinkedHashMap<String, List<Integer>> mods = new LinkedHashMap<>();
 
-		AtomicInteger seq = new AtomicInteger();
 		Pattern pat = Utils.regex("\\[.+?]");
 		List<GearAffix> affixes = this.affixes.stream()
 				.sorted(Comparator
@@ -148,7 +148,7 @@ public class Gear extends DAO<Gear> {
 				.toList();
 
 		for (GearAffix ga : affixes) {
-			String desc = ga.getAffix().getInfo(locale).getDescription();
+			String desc = ga.getAffix().getInfo(locale).setUwu(false).getDescription();
 			List<Integer> vals = ga.getValues(locale);
 
 			desc.lines().forEach(l -> {
@@ -183,6 +183,7 @@ public class Gear extends DAO<Gear> {
 
 					return Utils.sign(Integer.parseInt(m.group(1)));
 				}))
+				.map(s -> locale.isUwu() ? Uwuifier.INSTANCE.uwu(locale, s) : s)
 				.toList();
 	}
 
@@ -204,7 +205,7 @@ public class Gear extends DAO<Gear> {
 				return "";
 			});
 
-			suffix = Utils.regex(suffix, "\\[(?<F>\\w*)\\|(?<M>\\w*)]")
+			suffix = Utils.regex(suffix, "\\[(?<F>.*?)\\|(?<M>.*?)]")
 					.replaceAll(r -> r.group(ending.get()));
 
 			return prefix + " " + suffix;

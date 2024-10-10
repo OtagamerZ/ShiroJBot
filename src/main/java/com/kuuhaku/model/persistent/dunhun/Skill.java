@@ -98,6 +98,7 @@ public class Skill extends DAO<Skill> {
 	public LocalizedSkill getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
+				.map(ld -> ld.setUwu(locale.isUwu()))
 				.findAny().orElseThrow();
 	}
 
@@ -114,7 +115,7 @@ public class Skill extends DAO<Skill> {
 
 		if (source instanceof Hero h) {
 			Attributes attr = h.getAttributes();
-			String desc = getInfo(locale).getDescription();
+			String desc = getInfo(locale).setUwu(false).getDescription();
 
 			double scale;
 			String type = Utils.extract(desc, "(?<=^\\()\\w+(?=\\))");

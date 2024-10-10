@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.localized;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.id.LocalizedId;
+import com.kuuhaku.util.text.Uwuifier;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -39,6 +40,9 @@ public class LocalizedMonster extends DAO<LocalizedMonster> implements Serializa
 	@Column(name = "name", nullable = false)
 	private String name;
 
+	@Column(name = "ending")
+	private String ending;
+
 	private transient boolean uwu = false;
 
 	public LocalizedId getId() {
@@ -50,7 +54,15 @@ public class LocalizedMonster extends DAO<LocalizedMonster> implements Serializa
 	}
 
 	public String getName() {
+		if (uwu) {
+			return Uwuifier.INSTANCE.uwu(getLocale(), name);
+		}
+
 		return name;
+	}
+
+	public String getEnding() {
+		return ending;
 	}
 
 	public LocalizedMonster setUwu(boolean uwu) {
