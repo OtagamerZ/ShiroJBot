@@ -117,7 +117,7 @@ public class HeroInfoCommand implements Executable {
 				.addAction(Utils.parseEmoji("🛡"),
 						w -> updatePage(viewGear(locale, h), w.getMessage())
 				)
-				.addAction(locale.get("str/allocate_points", h.getStats().getLevel() - attr.count()),
+				.addAction(Utils.parseEmoji("🧮"),
 						w -> allocAttributes(locale, h, w.getMessage())
 				);
 
@@ -217,9 +217,9 @@ public class HeroInfoCommand implements Executable {
 			XStringBuilder sb = new XStringBuilder();
 			for (AttrType at : AttrType.values()) {
 				String name = locale.get("attr/" + at.name());
-				sb.appendNewLine(name);
+				sb.appendNewLine(name + ": " + (alloc.get(at) + attr[i]));
 
-				if (func != null) func.accept(name.charAt(0), i);
+				if (func != null) func.accept(name.charAt(0), i++);
 			}
 
 			eb.addField(Constants.VOID, sb.toString(), true);

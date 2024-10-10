@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.records.dunhun;
 
+import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.util.Bit32;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -53,6 +54,15 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 
 	public int vit() {
 		return Bit32.get(attributes, 3, 8);
+	}
+
+	public int get(AttrType type) {
+		return switch (type) {
+			case STR -> str();
+			case DEX -> dex();
+			case WIS -> wis();
+			case VIT -> vit();
+		};
 	}
 
 	public Attributes merge(Attributes attr) {
