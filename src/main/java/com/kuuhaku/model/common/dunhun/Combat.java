@@ -57,7 +57,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final I18N locale;
 	private final InfiniteList<Actor> turns = new InfiniteList<>();
 	private final BondedList<Actor> hunters = new BondedList<>((a, it) -> {
-		if (getActors(Team.HUNTERS).size() >= 9) return false;
+		if (getActors(Team.HUNTERS).size() >= 6) return false;
 		if (!turns.isEmpty()) turns.add(a);
 
 		a.setFleed(false);
@@ -68,7 +68,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return true;
 	}, turns::remove);
 	private final BondedList<Actor> keepers = new BondedList<>((a, it) -> {
-		if (getActors(Team.KEEPERS).size() >= 9) return false;
+		if (getActors(Team.KEEPERS).size() >= 6) return false;
 		if (!turns.isEmpty()) turns.add(a);
 
 		a.setFleed(false);
