@@ -682,16 +682,33 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public List<Actor> getActors() {
+		return getActors(false);
+	}
+
+	public List<Actor> getActors(boolean removeDead) {
 		return Stream.of(hunters, keepers)
 				.flatMap(List::stream)
+				.filter(a -> !removeDead || !a.isSkipped())
 				.toList();
 	}
 
 	public List<Actor> getActors(Team team) {
-		return switch (team) {
+		return getActors(team, false);
+	}
+
+	public List<Actor> getActors(Team team, boolean removeDead) {
+		List<Actor> out = switch (team) {
 			case HUNTERS -> hunters;
 			case KEEPERS -> keepers;
 		};
+
+		if (removeDead) {
+			out = out.stream()
+					.filter(a -> !a.isSkipped())
+					.toList();
+		}
+
+		return out;
 	}
 
 	public I18N getLocale() {
