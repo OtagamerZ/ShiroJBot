@@ -176,6 +176,7 @@ public class CardAttributes implements Serializable, Cloneable {
 		this.effect = Utils.getOr(this.effect, "");
 
 		Set<String> imports = new HashSet<>();
+		@Language("Groovy")
 		String code = effect.lines()
 				.dropWhile(l -> {
 					String trim = l.trim();
@@ -192,11 +193,12 @@ public class CardAttributes implements Serializable, Cloneable {
 				.collect(Collectors.joining("\n"));
 
 		imports.removeIf(i -> Utils.match(this.effect, "^" + i));
+		code = "{ /* %EFFECT% */ \n" + code + "\n}\n";
 
 		if (imports.isEmpty()) {
-			this.effect += "{\n" + code + "\n}";
+			this.effect += code;
 		} else {
-			this.effect = String.join("\n", imports) + "\n" + this.effect;
+			this.effect = String.join("\n", imports) + this.effect + code;
 		}
 	}
 

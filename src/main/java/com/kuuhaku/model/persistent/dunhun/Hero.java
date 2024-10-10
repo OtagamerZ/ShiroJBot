@@ -37,6 +37,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -360,7 +361,8 @@ public class Hero extends DAO<Hero> implements Actor {
 
 		senshiCache.getStats().getPower().set(0.05 * a.wis());
 
-		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750);
+		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();
+		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750 + effCost);
 		base.setSacrifices((base.getAtk() + base.getDfs()) / 3000);
 
 		base.getTags().add("HERO");

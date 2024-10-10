@@ -208,6 +208,8 @@ public class Equipment implements Iterable<Gear> {
 				weapons.getFirst(), weapons.getSecond()
 		};
 
-		return Arrays.stream(gears).iterator();
+		return Arrays.stream(gears)
+				.filter(Objects::nonNull)
+				.iterator();
 	}
 }
