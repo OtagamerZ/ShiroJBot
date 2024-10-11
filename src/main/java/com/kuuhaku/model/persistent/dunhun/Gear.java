@@ -37,7 +37,6 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -290,22 +289,21 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public static Gear getRandom(Hero hero) {
-		return getRandom(hero, Basetype.getRandom());
+		return getRandom(hero, -1);
 	}
 
 	public static Gear getRandom(Hero hero, Basetype base) {
+		return getRandom(hero, base, -1);
+	}
+
+	public static Gear getRandom(Hero hero, int mods) {
+		return getRandom(hero, Basetype.getRandom(), mods);
+	}
+
+	public static Gear getRandom(Hero hero, Basetype base, int mods) {
 		Gear out = new Gear(hero, base);
 
-		for (AffixType type : AffixType.itemValues()) {
-			if (Calc.chance(50)) {
-				Affix af = Affix.getRandom(out, type);
-				if (af == null) continue;
-
-				out.getAffixes().add(new GearAffix(out, af));
-			}
-		}
-
-		if (Calc.chance(25)) {
+		if (mods == -1) {
 			for (AffixType type : AffixType.itemValues()) {
 				if (Calc.chance(50)) {
 					Affix af = Affix.getRandom(out, type);
@@ -313,6 +311,29 @@ public class Gear extends DAO<Gear> {
 
 					out.getAffixes().add(new GearAffix(out, af));
 				}
+			}
+
+			if (Calc.chance(25)) {
+				for (AffixType type : AffixType.itemValues()) {
+					if (Calc.chance(50)) {
+						Affix af = Affix.getRandom(out, type);
+						if (af == null) continue;
+
+						out.getAffixes().add(new GearAffix(out, af));
+					}
+				}
+			}
+		} else {
+			List<AffixType> types = Utils.getRandomN(
+					List.of(AffixType.SUFFIX, AffixType.PREFIX, AffixType.SUFFIX, AffixType.PREFIX),
+					Math.min(mods, 4), 1
+			);
+
+			for (AffixType type : types) {
+				Affix af = Affix.getRandom(out, type);
+				if (af == null) continue;
+
+				out.getAffixes().add(new GearAffix(out, af));
 			}
 		}
 

@@ -30,15 +30,17 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "user_item")
-public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
+public class UserItem extends DAO<UserItem> {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -139,13 +141,6 @@ public class UserItem extends DAO<UserItem> implements Comparable<UserItem> {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.findAny().orElseThrow();
-	}
-
-	@Override
-	public int compareTo(@NotNull UserItem o) {
-		if (Objects.equals(this, o)) return 0;
-
-		return Comparator.comparing(UserItem::getId).compare(this, o);
 	}
 
 	@Override

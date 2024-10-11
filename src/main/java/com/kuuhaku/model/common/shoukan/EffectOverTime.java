@@ -25,7 +25,6 @@ import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Closeable;
@@ -33,7 +32,7 @@ import java.util.EnumSet;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-public final class EffectOverTime implements Comparable<EffectOverTime>, Closeable {
+public final class EffectOverTime implements Closeable {
 	private final @Nullable Drawable<?> source;
 	private final Side side;
 	private final BiConsumer<EffectOverTime, EffectParameters> effect;
@@ -150,14 +149,6 @@ public final class EffectOverTime implements Comparable<EffectOverTime>, Closeab
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(equality);
-	}
-
-	@Override
-	public int compareTo(@NotNull EffectOverTime other) {
-		if (turns != null && other.turns != null) return turns - other.turns;
-		if (limit != null && other.limit != null) return limit - other.limit;
-
-		return (turns != null || limit != null) ? Integer.MAX_VALUE : -255;
 	}
 
 	@Override

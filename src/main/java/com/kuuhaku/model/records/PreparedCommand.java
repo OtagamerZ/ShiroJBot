@@ -26,7 +26,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -37,7 +36,7 @@ public record PreparedCommand(
 		Category category,
 		Permission[] permissions,
 		Executable command
-) implements Comparable<PreparedCommand> {
+) {
 	public String description(I18N locale) {
 		return locale.get("cmd/" + name);
 	}
@@ -67,10 +66,5 @@ public record PreparedCommand(
 
 	public Set<PreparedCommand> getSubCommands() {
 		return Main.getCommandManager().getSubCommands(name);
-	}
-
-	@Override
-	public int compareTo(@NotNull PreparedCommand o) {
-		return name.compareTo(o.name);
 	}
 }

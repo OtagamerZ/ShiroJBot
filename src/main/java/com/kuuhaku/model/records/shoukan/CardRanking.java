@@ -23,14 +23,8 @@ import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Utils;
-import org.jetbrains.annotations.NotNull;
 
-public record CardRanking(double winrate, int type, Drawable<?> card) implements Comparable<CardRanking> {
-	@Override
-	public int compareTo(@NotNull CardRanking other) {
-		return Double.compare(other.winrate, winrate);
-	}
-
+public record CardRanking(double winrate, int type, Drawable<?> card) {
 	@Override
 	public String toString() {
 		String name = "`" + winrate + "%`";

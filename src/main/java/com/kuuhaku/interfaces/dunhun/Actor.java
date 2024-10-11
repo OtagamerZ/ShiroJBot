@@ -1,6 +1,7 @@
 package com.kuuhaku.interfaces.dunhun;
 
 import com.kuuhaku.game.Dunhun;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.ActorModifiers;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.shoukan.RegDeg;
@@ -10,6 +11,7 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.util.Utils;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -91,11 +93,55 @@ public interface Actor {
 		}
 	}
 
+	default void addHpBar(XStringBuilder sb) {
+		String hp, max;
+		if (getHp() > 5000) {
+			hp = Utils.roundToString(getHp() / 1000d, 1) + "k";
+		} else {
+			hp = String.valueOf(getHp());
+		}
+
+		if (getMaxHp() > 5000) {
+			max = Utils.roundToString(getMaxHp() / 1000d, 1) + "k";
+		} else {
+			max = String.valueOf(getMaxHp());
+		}
+
+		sb.appendNewLine("HP: " + hp + "/" + max);
+		sb.nextLine();
+
+		boolean rdClosed = true;
+		int rd = -getRegDeg().peek();
+		if (rd > 0) {
+			sb.append("__");
+			rdClosed = false;
+		}
+
+		double parts = getMaxHp() > 5000 ? 500 : 100;
+		int steps = (int) Math.ceil(getMaxHp() / parts);
+		for (int i = 0; i < steps; i++) {
+			if (i > 0 && i % 10 == 0) sb.nextLine();
+			int threshold = (int) (i * parts);
+
+			if (!rdClosed && threshold > rd) {
+				sb.append("__");
+				rdClosed = true;
+			}
+
+			if (getHp() > 0 && getHp() >= threshold) sb.append('▰');
+			else sb.append('▱');
+		}
+	}
+
 	int getAp();
 
 	int getMaxAp();
 
 	void modAp(int value);
+
+	default void addApBar(XStringBuilder sb) {
+		sb.appendNewLine(Utils.makeProgressBar(getAp(), getMaxAp(), getMaxAp(), '◇', '◈'));
+	}
 
 	int getInitiative();
 

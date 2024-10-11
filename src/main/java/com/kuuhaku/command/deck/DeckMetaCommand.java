@@ -70,7 +70,7 @@ public class DeckMetaCommand implements Executable {
 						}
 				)
 				.filter(Objects::nonNull)
-				.sorted(Comparator.comparingInt(CardRanking::type).thenComparing(CardRanking::compareTo))
+				.sorted(Comparator.comparingInt(CardRanking::type).thenComparingDouble(CardRanking::winrate))
 				.toList();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()

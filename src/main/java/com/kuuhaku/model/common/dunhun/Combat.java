@@ -95,6 +95,7 @@ public class Combat implements Renderer<BufferedImage> {
 		for (Actor a : hunters) {
 			a.modAp(-a.getAp());
 			a.revive(1);
+			a.setFleed(false);
 		}
 	}
 
@@ -156,6 +157,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public MessageEmbed getEmbed() {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setAuthor(locale.get("str/dungeon_floor", game.getTurn()))
 				.setTitle(locale.get("str/actor_turn", turns.get().getName(locale)))
 				.setDescription(String.join("\n", history));
 
@@ -166,46 +168,8 @@ public class Combat implements Renderer<BufferedImage> {
 			for (Actor a : acts) {
 				if (!sb.isEmpty()) sb.nextLine();
 				sb.appendNewLine(a.getName(locale));
-
-				String hp, max;
-				if (a.getHp() > 5000) {
-					hp = Utils.roundToString(a.getHp() / 1000d, 1) + "k";
-				} else {
-					hp = String.valueOf(a.getHp());
-				}
-
-				if (a.getMaxHp() > 5000) {
-					max = Utils.roundToString(a.getMaxHp() / 1000d, 1) + "k";
-				} else {
-					max = String.valueOf(a.getMaxHp());
-				}
-
-				sb.appendNewLine("HP: " + hp + "/" + max);
-				sb.nextLine();
-
-				boolean rdClosed = true;
-				int rd = -a.getRegDeg().peek();
-				if (rd > 0) {
-					sb.append("__");
-					rdClosed = false;
-				}
-
-				double parts = a.getMaxHp() > 5000 ? 500 : 100;
-				int steps = (int) Math.ceil(a.getMaxHp() / parts);
-				for (int i = 0; i < steps; i++) {
-					if (i > 0 && i % 10 == 0) sb.nextLine();
-					int threshold = (int) (i * parts);
-
-					if (!rdClosed && threshold > rd) {
-						sb.append("__");
-						rdClosed = true;
-					}
-
-					if (a.getHp() > 0 && a.getHp() >= threshold) sb.append('▰');
-					else sb.append('▱');
-				}
-
-				sb.appendNewLine(Utils.makeProgressBar(a.getAp(), a.getMaxAp(), a.getMaxAp(), '◇', '◈'));
+				a.addHpBar(sb);
+				a.addApBar(sb);
 			}
 
 			eb.addField(title, sb.toString(), true);
@@ -739,6 +703,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public FixedSizeDeque<String> getHistory() {
 		return history;
+	}
+
+	public InfiniteList<Actor> getTurns() {
+		return turns;
 	}
 
 	public boolean isDone() {

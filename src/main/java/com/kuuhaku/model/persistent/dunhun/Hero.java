@@ -27,6 +27,7 @@ import com.kuuhaku.model.common.dunhun.ActorModifiers;
 import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.ContinueMode;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
@@ -94,6 +95,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	private transient Team team;
 	private transient int ap;
 	private transient boolean flee;
+	private transient ContinueMode contMode = ContinueMode.CONTINUE;
 
 	public Hero() {
 	}
@@ -291,7 +293,7 @@ public class Hero extends DAO<Hero> implements Actor {
 				.stream()
 				.collect(Collectors.toMap(Consumable::getId, Function.identity()));
 
-		TreeBag<Consumable> out = new TreeBag<>();
+		TreeBag<Consumable> out = new TreeBag<>(Comparator.comparing(Consumable::getId));
 		for (Object id : stats.getConsumables()) {
 			if (cons.containsKey(String.valueOf(id))) {
 				out.add(cons.get(String.valueOf(id)));
@@ -326,6 +328,14 @@ public class Hero extends DAO<Hero> implements Actor {
 	@Override
 	public void setGame(Dunhun game) {
 		this.game = game;
+	}
+
+	public ContinueMode getContMode() {
+		return contMode;
+	}
+
+	public void setContMode(ContinueMode contMode) {
+		this.contMode = contMode;
 	}
 
 	@Override
@@ -410,7 +420,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		clone.equipment = new JSONObject(equipment);
 		clone.equipCache = equipCache;
 		clone.skillCache = skillCache;
-		clone.consumableCache = new TreeBag<>();
+		clone.consumableCache = new TreeBag<>(Comparator.comparing(Consumable::getId));
 		clone.team = team;
 		clone.game = game;
 

@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
+import com.kuuhaku.model.records.dunhun.Loot;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
@@ -28,8 +29,6 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Embeddable
@@ -100,8 +99,9 @@ public class MonsterStats {
 		return skills;
 	}
 
-	public List<Gear> generateLoot() {
-		List<Gear> loot = new ArrayList<>();
+	public Loot generateLoot() {
+		Loot loot = new Loot();
+		if (lootGenerator == null) return loot;
 
 		try {
 			Utils.exec(getClass().getSimpleName(), lootGenerator, Map.of("loot", loot));
