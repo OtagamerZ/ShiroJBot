@@ -125,22 +125,22 @@ public class Dunhun extends GameInstance<NullPhase> {
 					break;
 				}
 
-				System.out.println(getCombat());
 				if (getCombat() != null) {
 					getCombat().process();
 				} else {
 					if (Calc.chance(25)) {
+						System.out.println("event");
 						runEvent();
+						System.out.println("pass");
 					} else {
+						System.out.println("combat");
 						runCombat();
+						System.out.println("pass");
 					}
 				}
 
 				try {
-					if (lock != null) {
-						System.out.println("locked");
-						lock.get();
-					}
+					if (lock != null) lock.get();
 				} catch (ExecutionException | InterruptedException ignore) {
 				}
 
