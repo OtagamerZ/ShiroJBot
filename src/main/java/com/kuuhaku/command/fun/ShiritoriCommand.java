@@ -88,23 +88,21 @@ public class ShiritoriCommand implements Executable {
 							return false;
 						}
 
-						try {
-							return true;
-						} finally {
-							Shiritori shi = new Shiritori(locale,
-									Stream.concat(Stream.of(event.user()), others.stream())
-											.map(User::getId)
-											.sorted(Collections.reverseOrder())
-											.toArray(String[]::new)
-							);
-							shi.start(event.guild(), event.channel())
-									.whenComplete((v, e) -> {
-										if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
-											event.channel().sendMessage(locale.get("error/error", e)).queue();
-											Constants.LOGGER.error(e, e);
-										}
-									});
-						}
+						Shiritori shi = new Shiritori(locale,
+								Stream.concat(Stream.of(event.user()), others.stream())
+										.map(User::getId)
+										.sorted(Collections.reverseOrder())
+										.toArray(String[]::new)
+						);
+						shi.start(event.guild(), event.channel())
+								.whenComplete((v, e) -> {
+									if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
+										event.channel().sendMessage(locale.get("error/error", e)).queue();
+										Constants.LOGGER.error(e, e);
+									}
+								});
+
+						return true;
 					}, others.toArray(User[]::new)
 			);
 		} catch (PendingConfirmationException e) {

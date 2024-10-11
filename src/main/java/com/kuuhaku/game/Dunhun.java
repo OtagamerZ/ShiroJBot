@@ -39,6 +39,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final Dungeon instance;
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
+	private final boolean duel;
 	private CompletableFuture<Void> lock;
 	private Pair<String, String> message;
 
@@ -48,8 +49,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public Dunhun(I18N locale, Dungeon instance, String... players) {
 		super(locale, players);
-
 		this.instance = instance;
+		this.duel = instance.equals(Dungeon.DUEL);
+		if (duel && players.length != 2) {
+			getChannel().sendMessage(getString("error/invalid_duel")).queue();
+			close(GameReport.OTHER);
+			return;
+		}
+
 		for (String p : players) {
 			Hero h = DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1", p);
 			if (h == null) {
@@ -62,10 +69,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 			heroes.put(p, h);
 		}
 
-		setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/dungeon_leave"
-				, Utils.properlyJoin(locale.get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
-				, getTurn()
-		), 5, TimeUnit.MINUTES);
+		if (duel) {
+			setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/versus_end_timeout"), 5, TimeUnit.MINUTES);
+		} else {
+			setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/dungeon_leave"
+					, Utils.properlyJoin(locale.get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
+					, getTurn()
+			), 5, TimeUnit.MINUTES);
+		}
 	}
 
 	@Override
@@ -77,6 +88,23 @@ public class Dunhun extends GameInstance<NullPhase> {
 	protected void begin() {
 		CompletableFuture.runAsync(() -> {
 			while (!isClosed()) {
+				if (duel) {
+					new Combat(this, heroes.values());
+					getCombat().process();
+
+					Hero winner = heroes.values().stream()
+							.filter(h -> h.getHp() > 0 && !h.hasFleed())
+							.findFirst().orElse(null);
+
+					if (winner != null) {
+						reportResult(GameReport.SUCCESS, "str/versus_end_win", winner.getName());
+					} else {
+						reportResult(GameReport.SUCCESS, "str/versus_end_draw");
+					}
+
+					break;
+				}
+
 				if (getCombat() != null) {
 					getCombat().process();
 				} else {
@@ -93,7 +121,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				if (heroes.values().stream().allMatch(h -> h.getHp() <= 0 || h.hasFleed())) {
-					reportResult(GameReport.GAME_TIMEOUT, "str/dungeon_fail"
+					reportResult(GameReport.SUCCESS, "str/dungeon_fail"
 							, Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
 							, getTurn()
 					);
@@ -274,6 +302,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public Combat getCombat() {
 		return combat.get();
+	}
+
+	public boolean isDuel() {
+		return duel;
 	}
 
 	public void beginCombat(Monster... enemies) {

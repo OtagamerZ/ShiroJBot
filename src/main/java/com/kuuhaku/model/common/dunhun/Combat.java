@@ -98,6 +98,15 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 	}
 
+	public Combat(Dunhun game, Collection<Hero> duelists) {
+		this.game = game;
+		this.locale = game.getLocale();
+
+		List<Hero> sides = List.copyOf(duelists);
+		hunters.add(sides.get(0));
+		keepers.add(sides.get(1));
+	}
+
 	@Override
 	public BufferedImage render(I18N locale) {
 		BufferedImage bi = new BufferedImage(Drawable.SIZE.width * (hunters.size() + keepers.size()) + 64, 50 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);

@@ -44,12 +44,13 @@ public interface Actor {
 			}
 
 			if (value < 0) {
-				value = -value;
-				if (sen.isDefending()) {
-					value = (int) -Math.max(value / 10f, (2.5 * Math.pow(value, 2)) / (sen.getDfs() + 2.5 * value));
-				} else {
-					value = (int) -Math.max(value / 5f, (5 * Math.pow(value, 2)) / (sen.getDfs() + 5 * value));
+				double fac = sen.isDefending() ? 2 : 1;
+				if (game.isDuel()) {
+					fac *= 2;
 				}
+
+				value = -value;
+				value = (int) -Math.max(value / (5 * fac), ((5 / fac) * Math.pow(value, 2)) / (sen.getDfs() + (5 / fac) * value));
 
 				if (sen.isSleeping()) {
 					sen.reduceSleep(999);

@@ -41,6 +41,8 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "dungeon", schema = "dunhun")
 public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
+	public static final Dungeon DUEL = new Dungeon("DUEL", 1);
+
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -58,6 +60,14 @@ public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
 	private int areaLevel;
 
 	private transient final List<Runnable> floors = new ArrayList<>();
+
+	public Dungeon() {
+	}
+
+	public Dungeon(String id, int areaLevel) {
+		this.id = id;
+		this.areaLevel = areaLevel;
+	}
 
 	public String getId() {
 		return id;
