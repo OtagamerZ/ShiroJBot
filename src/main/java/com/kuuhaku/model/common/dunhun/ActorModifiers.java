@@ -98,8 +98,6 @@ public class ActorModifiers {
 				mod.decExpiration();
 			}
 
-			System.out.println("V:" + mod.getValue() + ", E:" + mod.getExpiration());
-
 			return mod.isExpired();
 		});
 	}
