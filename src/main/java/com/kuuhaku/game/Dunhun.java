@@ -87,8 +87,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 					return;
 				}
 
-				lock.complete(null);
 				finish();
+				lock.complete(null);
 			}, 5, TimeUnit.MINUTES);
 		}
 	}
@@ -203,7 +203,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							.reduce((a, b) -> Calc.chance(50) ? a : b)
 							.orElse(ContinueMode.CONTINUE);
 
-					if (mode == ContinueMode.CONTINUE) {
+					if (!isClosed() && mode == ContinueMode.CONTINUE) {
 						nextTurn();
 						getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor", getTurn()))).queue();
 					} else {
