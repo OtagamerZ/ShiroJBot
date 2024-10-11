@@ -10,47 +10,52 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
-import com.kuuhaku.util.Calc;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
 
 public interface Actor {
 	String getId();
+
 	String getName(I18N locale);
+
 	Race getRace();
 
 	int getHp();
+
 	int getMaxHp();
+
 	int getHpDelta();
+
 	default void modHp(int value) {
 		modHp(value, false);
 	}
+
 	default void modHp(int value, boolean crit) {
 		if (value == 0 || getHp() == 0) return;
 		if (crit) value *= 2;
 
 		Dunhun game = getGame();
-		if (game != null) {
+		if (game != null && value < 0) {
 			Senshi sen = asSenshi(game.getLocale());
-			if (value < 0 && sen != null) {
-				value = -value;
+			value = -value;
 
-				if (sen.isDefending()) {
-					value = (int) -Math.max(value / 10f, (2.5 * Math.pow(value, 2)) / (sen.getDfs() + 2.5 * value));
-				} else {
-					value = (int) -Math.max(value / 5f, (5 * Math.pow(value, 2)) / (sen.getDfs() + 5 * value));
-				}
+			if (sen.isDefending()) {
+				value = (int) -Math.max(value / 10f, (2.5 * Math.pow(value, 2)) / (sen.getDfs() + 2.5 * value));
+			} else {
+				value = (int) -Math.max(value / 5f, (5 * Math.pow(value, 2)) / (sen.getDfs() + 5 * value));
+			}
 
-				if (sen.isSleeping()) {
-					sen.reduceSleep(999);
-				}
+			if (sen.isSleeping()) {
+				sen.reduceSleep(999);
 			}
 		}
 
 		int diff = getHp();
 		setHp(getHp() + value);
 		diff = getHp() - diff;
+
+		if (diff == 0) return;
 
 		if (game != null && game.getCombat() != null) {
 			Combat comb = game.getCombat();
@@ -66,7 +71,9 @@ public interface Actor {
 			));
 		}
 	}
+
 	void setHp(int value);
+
 	default void revive(int value) {
 		if (getHp() >= value) return;
 
@@ -78,14 +85,19 @@ public interface Actor {
 	}
 
 	int getAp();
+
 	int getMaxAp();
+
 	void modAp(int value);
 
 	int getInitiative();
+
 	double getCritical();
+
 	int getAggroScore();
 
 	boolean hasFleed();
+
 	void setFleed(boolean flee);
 
 	default boolean isSkipped() {
@@ -93,12 +105,15 @@ public interface Actor {
 	}
 
 	ActorModifiers getModifiers();
+
 	RegDeg getRegDeg();
 
 	Senshi asSenshi(I18N locale);
+
 	BufferedImage render(I18N locale);
 
 	List<Skill> getSkills();
+
 	default Skill getSkill(String id) {
 		return getSkills().stream()
 				.filter(skill -> skill.getId().equals(id))
@@ -107,9 +122,11 @@ public interface Actor {
 	}
 
 	Team getTeam();
+
 	void setTeam(Team team);
 
 	Dunhun getGame();
+
 	void setGame(Dunhun game);
 
 	Actor fork() throws CloneNotSupportedException;

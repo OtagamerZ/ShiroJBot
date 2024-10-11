@@ -280,9 +280,15 @@ public class Combat implements Renderer<BufferedImage> {
 		game.resetTimer();
 
 		lock = new CompletableFuture<>();
-		ClusterAction ca = game.getChannel().sendEmbed(getEmbed());
-
 		Actor curr = turns.get();
+
+		ClusterAction ca;
+		if (curr instanceof Hero h) {
+			ca = game.getChannel().sendMessage("<@" + h.getAccount().getUid() + ">").embed(getEmbed());
+		} else {
+			ca = game.getChannel().sendEmbed(getEmbed());
+		}
+
 		ButtonizeHelper helper;
 		if (execute) {
 			if (curr instanceof Hero h) {

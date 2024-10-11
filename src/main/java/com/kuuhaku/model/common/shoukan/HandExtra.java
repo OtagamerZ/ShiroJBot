@@ -49,15 +49,13 @@ public class HandExtra {
 	}
 
 	public void expireMods() {
-		Predicate<ValueMod> check = mod -> {
+		removeIf(mod -> {
 			if (mod.getExpiration() > 0) {
 				mod.decExpiration();
 			}
 
 			return mod.isExpired();
-		};
-
-		removeIf(check);
+		});
 	}
 
 	public void removeIf(Predicate<ValueMod> check) {

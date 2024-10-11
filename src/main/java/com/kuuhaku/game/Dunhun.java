@@ -109,6 +109,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 						for (Hero h : heroes.values()) {
 							int lvl = h.getStats().getLevel();
+							if (lvl > getTurn() - 5) {
+								xpGained = Math.max(1, getTurn() * xpGained / (lvl - 5));
+							}
+
 							h.getStats().addXp(xpGained);
 							h.save();
 

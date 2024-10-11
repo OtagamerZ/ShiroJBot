@@ -90,15 +90,15 @@ public class ActorModifiers {
 	}
 
 	public void expireMods() {
-		Predicate<ValueMod> check = mod -> {
+		removeIf(mod -> {
 			if (mod.getExpiration() > 0) {
 				mod.decExpiration();
 			}
 
-			return mod.isExpired();
-		};
+			System.out.println("V:" + mod.getValue() + ", E:" + mod.getExpiration());
 
-		removeIf(check);
+			return mod.isExpired();
+		});
 	}
 
 	public void clear() {
