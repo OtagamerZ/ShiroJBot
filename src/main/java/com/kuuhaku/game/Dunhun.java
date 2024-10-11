@@ -104,8 +104,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		CompletableFuture.runAsync(() -> {
 			while (!isClosed()) {
 				if (duel) {
-					new Combat(this, heroes.values());
-					getCombat().process();
+					new Combat(this, heroes.values()).process();
 
 					Hero winner = heroes.values().stream()
 							.filter(h -> h.getHp() > 0 && !h.hasFleed())
