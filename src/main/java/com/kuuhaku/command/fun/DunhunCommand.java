@@ -105,7 +105,7 @@ public class DunhunCommand implements Executable {
 					return false;
 				}
 
-				Dunhun dun = new Dunhun(locale, new Dungeon(),
+				Dunhun dun = new Dunhun(locale, Dungeon.DUEL,
 						Stream.concat(Stream.of(event.user()), others.stream())
 								.map(User::getId)
 								.toArray(String[]::new)
