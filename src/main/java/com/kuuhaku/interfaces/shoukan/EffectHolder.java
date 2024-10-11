@@ -216,7 +216,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		);
 
 		String desc = getDescription(locale);
-		Matcher pat = Utils.regex(desc, "(?:\\{=(.*?)}|\\{(\\w+)})(%)?");
+		Matcher pat = Utils.regex(desc, "(?:\\{=([^{}]*?)}|\\{(\\w+)})(%)?");
 		Map<String, Integer> counter = new HashMap<>();
 		int hash = Objects.hash(desc, values);
 
@@ -448,10 +448,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		if (desc != null) {
 			Matcher pat = Utils.regex(desc, "\\{=(\\S+?)}|([A-Za-z]+?)?\\{([a-z_]+?)}");
 
-			// Original: \(([^()]|(?R))*\)
 			return parse(pat)
 					.replaceAll("\\(([^()]|\\(([^()]|\\(([^()]|\\(([^()])*\\))*\\))*\\))*\\)", "**$0**")
-					.replaceAll("[(]{2}(.+?)[)]{2}", "($1)");
+					.replaceAll("\\({2}([^()]+?)\\){2}", "($1)");
 		}
 
 		return "";

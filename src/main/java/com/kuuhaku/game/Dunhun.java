@@ -492,7 +492,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	public String parsePlural(String text) {
 		String plural = heroes.size() == 1 ? "S" : "P";
 
-		return Utils.regex(getString(text), "\\[(?<S>.*?)\\|(?<P>.*?)]")
+		return Utils.regex(getString(text), "\\[(?<S>[^\\[\\]]*?)\\|(?<P>.*?)]")
 				.replaceAll(r -> r.group(plural));
 	}
 }
