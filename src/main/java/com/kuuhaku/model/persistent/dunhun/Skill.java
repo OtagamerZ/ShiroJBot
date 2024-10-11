@@ -227,7 +227,7 @@ public class Skill extends DAO<Skill> {
 	}
 
 	public void setCd(int cd) {
-		this.cd = Math.max(0, cd);
+		this.cd = Math.max(this.cd, cd);
 	}
 
 	public void reduceCd() {
