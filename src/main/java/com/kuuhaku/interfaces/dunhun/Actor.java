@@ -36,18 +36,24 @@ public interface Actor {
 		if (crit) value *= 2;
 
 		Dunhun game = getGame();
-		if (game != null && value < 0) {
+		if (game != null) {
 			Senshi sen = asSenshi(game.getLocale());
-			value = -value;
-
-			if (sen.isDefending()) {
-				value = (int) -Math.max(value / 10f, (2.5 * Math.pow(value, 2)) / (sen.getDfs() + 2.5 * value));
-			} else {
-				value = (int) -Math.max(value / 5f, (5 * Math.pow(value, 2)) / (sen.getDfs() + 5 * value));
+			if (sen.isStasis()) {
+				getRegDeg().add(Math.min(value, -getRegDeg().peek()));
+				return;
 			}
 
-			if (sen.isSleeping()) {
-				sen.reduceSleep(999);
+			if (value < 0) {
+				value = -value;
+				if (sen.isDefending()) {
+					value = (int) -Math.max(value / 10f, (2.5 * Math.pow(value, 2)) / (sen.getDfs() + 2.5 * value));
+				} else {
+					value = (int) -Math.max(value / 5f, (5 * Math.pow(value, 2)) / (sen.getDfs() + 5 * value));
+				}
+
+				if (sen.isSleeping()) {
+					sen.reduceSleep(999);
+				}
 			}
 		}
 

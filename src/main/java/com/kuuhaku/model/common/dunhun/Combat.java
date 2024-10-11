@@ -254,8 +254,10 @@ public class Combat implements Renderer<BufferedImage> {
 				Constants.LOGGER.warn(e, e);
 			} finally {
 				act.getModifiers().expireMods();
-				act.modHp(act.getRegDeg().next(), false);
 				act.asSenshi(locale).setAvailable(true);
+				if (!act.asSenshi(locale).isStasis()) {
+					act.modHp(act.getRegDeg().next(), false);
+				}
 
 				Iterator<EffectBase> it = effects.iterator();
 				while (it.hasNext()) {
