@@ -137,7 +137,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				try {
-					if (lock != null) lock.get();
+					if (lock != null) {
+						System.out.println("locked");
+						lock.get();
+					}
 				} catch (ExecutionException | InterruptedException ignore) {
 				}
 
