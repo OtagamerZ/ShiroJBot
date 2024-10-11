@@ -20,6 +20,7 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.ValueMod;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.dunhun.Attributes;
 
 import java.lang.reflect.Field;
@@ -89,7 +90,9 @@ public class ActorModifiers {
 		);
 	}
 
-	public void expireMods() {
+	public void expireMods(Senshi sen) {
+		sen.getStats().expireMods();
+
 		removeIf(mod -> {
 			if (mod.getExpiration() > 0) {
 				mod.decExpiration();

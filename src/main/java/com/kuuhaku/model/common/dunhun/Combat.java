@@ -253,7 +253,7 @@ public class Combat implements Renderer<BufferedImage> {
 			} catch (Exception e) {
 				Constants.LOGGER.warn(e, e);
 			} finally {
-				act.getModifiers().expireMods();
+				act.getModifiers().expireMods(act.asSenshi(locale));
 				act.asSenshi(locale).setAvailable(true);
 				if (!act.asSenshi(locale).isStasis()) {
 					act.modHp(act.getRegDeg().next(), false);
