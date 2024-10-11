@@ -131,8 +131,8 @@ public class DunhunCommand implements Executable {
 				List<String> t2 = others.stream().skip(2).map(User::getAsMention).toList();
 
 				Utils.confirm(locale.get("question/dunhun_duel_team",
-								Utils.properlyJoin(locale.get("str/and")).apply(t1),
-								Utils.properlyJoin(locale.get("str/and")).apply(t2)
+								Utils.properlyJoin(locale.get("str/and")).apply(t2),
+								Utils.properlyJoin(locale.get("str/and")).apply(t1)
 						), event.channel(), start, others.toArray(User[]::new)
 				);
 			}
