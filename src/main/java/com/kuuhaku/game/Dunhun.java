@@ -233,7 +233,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@PlayerAction("info")
 	private void info(JSONObject args) {
-		if (getCombat() == null) return;
+		if (getCombat() == null || duel) return;
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
