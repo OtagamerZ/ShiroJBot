@@ -118,6 +118,9 @@ public class Monster extends DAO<Monster> implements Actor {
 			String prefix = IO.getLine("dunhun/monster/prefix/" + loc + ".dict", Calc.rng(0, 32, SERIAL + affixes.hashCode()));
 			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict", Calc.rng(0, 32, SERIAL - prefix.hashCode()));
 
+			prefix = Utils.regex(prefix, "\\[(?<F>.*?)\\|(?<M>.*?)]")
+					.replaceAll(r -> r.group(ending.get()));
+
 			prefix = Utils.regex(prefix, "\\[([FM])]").replaceAll(m -> {
 				ending.set(m.group(1));
 				return "";
