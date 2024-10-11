@@ -125,6 +125,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					break;
 				}
 
+				System.out.println(getCombat());
 				if (getCombat() != null) {
 					getCombat().process();
 				} else {

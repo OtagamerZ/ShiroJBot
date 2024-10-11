@@ -204,7 +204,7 @@ public class Gear extends DAO<Gear> {
 				return "";
 			});
 
-			suffix = Utils.regex(suffix, "\\[(?<F>.*?)\\|(?<M>.*?)]")
+			suffix = Utils.regex(suffix, "\\[(?<F>[^\\[\\]]*?)\\|(?<M>[^\\[\\]]*?)]")
 					.replaceAll(r -> r.group(ending.get()));
 
 			return prefix + " " + suffix;

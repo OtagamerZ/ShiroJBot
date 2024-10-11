@@ -118,7 +118,7 @@ public class Monster extends DAO<Monster> implements Actor {
 			String prefix = IO.getLine("dunhun/monster/prefix/" + loc + ".dict", Calc.rng(0, 32, SERIAL + affixes.hashCode()));
 			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict", Calc.rng(0, 32, SERIAL - prefix.hashCode()));
 
-			prefix = Utils.regex(prefix, "\\[(?<F>.*?)\\|(?<M>.*?)]")
+			prefix = Utils.regex(prefix, "\\[(?<F>[^\\[\\]]*?)\\|(?<M>[^\\[\\]]*?)]")
 					.replaceAll(r -> r.group(ending.get()));
 
 			prefix = Utils.regex(prefix, "\\[([FM])]").replaceAll(m -> {
@@ -126,7 +126,7 @@ public class Monster extends DAO<Monster> implements Actor {
 				return "";
 			});
 
-			suffix = Utils.regex(suffix, "\\[(?<F>.*?)\\|(?<M>.*?)]")
+			suffix = Utils.regex(suffix, "\\[(?<F>[^\\[\\]]*?)\\|(?<M>[^\\[\\]]*?)]")
 					.replaceAll(r -> r.group(ending.get()));
 
 			int parts = Calc.rng(1, 3);
@@ -158,7 +158,7 @@ public class Monster extends DAO<Monster> implements Actor {
 			else suff = " " + a.getInfo(locale).getName();
 		}
 
-		return nameCache = Utils.regex(template.formatted(getInfo(locale).getName(), pref, suff), "\\[(?<F>.*?)\\|(?<M>.*?)]")
+		return nameCache = Utils.regex(template.formatted(getInfo(locale).getName(), pref, suff), "\\[(?<F>[^\\[\\]]*?)\\|(?<M>[^\\[\\]]*?)]")
 				.replaceAll(r -> r.group(ending.get()));
 	}
 
