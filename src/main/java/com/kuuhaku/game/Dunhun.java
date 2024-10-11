@@ -97,7 +97,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 	@Override
 	protected boolean validate(Message message) {
 		return !duel || (
-				getCombat().getTurns().get() instanceof Hero h
+				getCombat() != null
+				&& getCombat().getTurns().get() instanceof Hero h
 				&& h.getAccount().getUid().equals(message.getAuthor().getId())
 		);
 	}
@@ -107,7 +108,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 		CompletableFuture.runAsync(() -> {
 			while (!isClosed()) {
 				if (duel) {
-					System.out.println("start");
 					new Combat(this, heroes.values()).process();
 
 					Hero winner = heroes.values().stream()

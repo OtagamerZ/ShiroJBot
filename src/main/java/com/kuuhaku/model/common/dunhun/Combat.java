@@ -105,10 +105,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		List<Hero> sides = List.copyOf(duelists);
 		hunters.add(sides.get(0));
-		System.out.println("loaded 1");
-
 		keepers.add(sides.get(1));
-		System.out.println("loaded 2");
 	}
 
 	@Override
@@ -196,8 +193,6 @@ public class Combat implements Renderer<BufferedImage> {
 		loop:
 		for (Actor act : turns) {
 			if (game.isClosed()) break;
-
-			System.out.println(act.getName(locale) + " turn");
 
 			try {
 				if (!act.asSenshi(locale).isAvailable() || act.asSenshi(locale).isStasis() || act.isSkipped()) {
