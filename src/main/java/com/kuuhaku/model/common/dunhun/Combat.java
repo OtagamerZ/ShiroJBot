@@ -222,7 +222,7 @@ public class Combat implements Renderer<BufferedImage> {
 			if (game.isClosed()) break;
 
 			try {
-				if (!act.asSenshi(locale).isAvailable() || act.isSkipped()) {
+				if (!act.asSenshi(locale).isAvailable() || act.asSenshi(locale).isStasis() || act.isSkipped()) {
 					act.asSenshi(locale).reduceDebuffs(1);
 					for (Skill s : act.getSkills()) {
 						s.reduceCd();
