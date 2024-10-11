@@ -37,6 +37,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +59,11 @@ public class InventoryCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/items_available"));
 
-		List<Page> pages = Utils.generatePages(eb, items.keySet().stream().sorted().toList(), 10, 5,
+		List<UserItem> its = items.keySet().stream()
+				.sorted(Comparator.comparing(UserItem::getId))
+				.toList();
+
+		List<Page> pages = Utils.generatePages(eb, its, 10, 5,
 				i -> {
 					int has = items.getOrDefault(i, 0);
 
