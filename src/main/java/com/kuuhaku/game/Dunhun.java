@@ -152,24 +152,22 @@ public class Dunhun extends GameInstance<NullPhase> {
 							if (a instanceof Monster m) {
 								xpGained += m.getKillXp();
 
-								if (Calc.chance(25)) {
-									Loot lt = m.getStats().generateLoot();
-									if (!lt.gear().isEmpty() || !lt.items().isEmpty()) {
-										loot.add(lt);
+								Loot lt = m.getStats().generateLoot();
+								if (!lt.gear().isEmpty() || !lt.items().isEmpty()) {
+									loot.add(lt);
 
-										XStringBuilder sb = new XStringBuilder(getLocale().get("str/monster_loot"));
+									XStringBuilder sb = new XStringBuilder(getLocale().get("str/monster_loot"));
 
-										for (Gear g : lt.gear()) {
-											sb.appendNewLine("- " + g.getName(getLocale()) + ", " + g.getBasetype().getInfo(getLocale()).getName());
-											sb.appendNewLine("-# " + g.getName(getLocale()) + ", " + g.getBasetype().getInfo(getLocale()).getName());
-										}
-
-										for (UserItem i : lt.items().uniqueSet()) {
-											sb.appendNewLine("- " + i.getName(getLocale()) + " (x" + lt.items().getCount(i) + ")");
-										}
-
-										getChannel().buffer(sb.toString());
+									for (Gear g : lt.gear()) {
+										sb.appendNewLine("- " + g.getName(getLocale()) + ", " + g.getBasetype().getInfo(getLocale()).getName());
+										sb.appendNewLine("-# " + g.getName(getLocale()) + ", " + g.getBasetype().getInfo(getLocale()).getName());
 									}
+
+									for (UserItem i : lt.items().uniqueSet()) {
+										sb.appendNewLine("- " + i.getName(getLocale()) + " (x" + lt.items().getCount(i) + ")");
+									}
+
+									getChannel().buffer(sb.toString());
 								}
 							}
 						}
