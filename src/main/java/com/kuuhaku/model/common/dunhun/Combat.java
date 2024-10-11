@@ -157,7 +157,9 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public MessageEmbed getEmbed() {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get(game.isDuel() ? "str/dungeon_duel" : "str/dungeon_floor", game.getTurn()))
+				.setAuthor(locale.get(game.isDuel() ? "str/dungeon_duel" : "str/dungeon_floor",
+						game.isDuel() ? hunters.get(0) : game.getTurn(), keepers.get(0)
+ 				))
 				.setTitle(locale.get("str/actor_turn", turns.get().getName(locale)))
 				.setDescription(String.join("\n", history));
 
