@@ -39,7 +39,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -107,20 +106,22 @@ public class DunhunCommand implements Executable {
 							return false;
 						}
 
-						Dunhun dun = new Dunhun(locale, new Dungeon(),
-								Stream.concat(Stream.of(event.user()), others.stream())
-										.map(User::getId)
-										.toArray(String[]::new)
-						);
-						dun.start(event.guild(), event.channel())
-								.whenComplete((v, e) -> {
-									if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
-										event.channel().sendMessage(locale.get("error/error", e)).queue();
-										Constants.LOGGER.error(e, e);
-									}
-								});
-
-						return true;
+						try {
+							return true;
+						} finally {
+							Dunhun dun = new Dunhun(locale, new Dungeon(),
+									Stream.concat(Stream.of(event.user()), others.stream())
+											.map(User::getId)
+											.toArray(String[]::new)
+							);
+							dun.start(event.guild(), event.channel())
+									.whenComplete((v, e) -> {
+										if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
+											event.channel().sendMessage(locale.get("error/error", e)).queue();
+											Constants.LOGGER.error(e, e);
+										}
+									});
+						}
 					}, others.toArray(User[]::new)
 			);
 		} catch (PendingConfirmationException e) {
