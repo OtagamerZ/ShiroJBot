@@ -215,7 +215,6 @@ public class Combat implements Renderer<BufferedImage> {
 				act.asSenshi(locale).setDefending(false);
 
 				while (turns.get().equals(act) && act.getAp() > 0) {
-					System.out.println("action" + turns.get().getName(locale));
 					Runnable action = reload(true).get();
 					if (action != null) {
 						action.run();
