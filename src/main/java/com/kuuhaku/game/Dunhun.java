@@ -108,7 +108,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 		CompletableFuture.runAsync(() -> {
 			while (!isClosed()) {
 				if (duel) {
-					new Combat(this, heroes.values()).process();
+					combat.set(new Combat(this, heroes.values()));
+					getCombat().process();
 
 					Hero winner = heroes.values().stream()
 							.filter(h -> h.getHp() > 0 && !h.hasFleed())
@@ -159,6 +160,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 									for (Gear g : lt.gear()) {
 										sb.appendNewLine("- " + g.getName(getLocale()) + ", " + g.getBasetype().getInfo(getLocale()).getName());
+										sb.appendNewLine("-# " + g.getName(getLocale()) + ", " + g.getBasetype().getInfo(getLocale()).getName());
 									}
 
 									for (UserItem i : lt.items().uniqueSet()) {
