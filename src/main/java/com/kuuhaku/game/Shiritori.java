@@ -207,7 +207,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 	}
 
 	@Override
-	protected void nextTurn() {
+	public void nextTurn() {
 		nextTurn(false);
 	}
 

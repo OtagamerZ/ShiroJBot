@@ -179,7 +179,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 		return turn;
 	}
 
-	protected void nextTurn() {
+	public void nextTurn() {
 		turn++;
 		if (timeout != null) {
 			timeout.restart();

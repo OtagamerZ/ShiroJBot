@@ -113,6 +113,10 @@ public class GameChannel {
 		}
 	}
 
+	public void clearBuffer() {
+		buffer.clear();
+	}
+
 	public ClusterAction flush() {
 		long delay = Math.max(0, (lastAction + cooldown) - System.currentTimeMillis());
 

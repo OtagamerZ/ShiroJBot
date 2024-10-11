@@ -15,6 +15,7 @@ import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.ContinueMode;
+import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.user.UserItem;
@@ -148,6 +149,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 				} else {
 					if (getCombat() != null && getCombat().isDone()) {
 						int xpGained = 0;
+
+						XStringBuilder sb = new XStringBuilder();
 						for (Actor a : getCombat().getActors(Team.KEEPERS)) {
 							if (a instanceof Monster m) {
 								xpGained += m.getKillXp();
@@ -156,20 +159,24 @@ public class Dunhun extends GameInstance<NullPhase> {
 								if (!lt.gear().isEmpty() || !lt.items().isEmpty()) {
 									loot.add(lt);
 
-									XStringBuilder sb = new XStringBuilder(getLocale().get("str/monster_loot"));
-
 									for (Gear g : lt.gear()) {
-										sb.appendNewLine("- " + g.getName(getLocale()) + ", " + g.getBasetype().getInfo(getLocale()).getName());
-										sb.appendNewLine("-# " + g.getName(getLocale()) + ", " + g.getBasetype().getInfo(getLocale()).getName());
+										String name = g.getName(getLocale());
+										if (g.getRarityClass() == RarityClass.RARE) {
+											name += ", " + g.getBasetype().getInfo(getLocale()).getName();
+										}
+
+										sb.appendNewLine("- " + name);
 									}
 
 									for (UserItem i : lt.items().uniqueSet()) {
 										sb.appendNewLine("- " + i.getName(getLocale()) + " (x" + lt.items().getCount(i) + ")");
 									}
-
-									getChannel().buffer(sb.toString());
 								}
 							}
+						}
+
+						if (!sb.isBlank()) {
+							getChannel().buffer(getLocale().get("str/monster_loot") + "\n" + sb);
 						}
 
 						for (Hero h : heroes.values()) {
@@ -198,6 +205,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 						nextTurn();
 						getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor", getTurn()))).queue();
 					} else {
+						getChannel().clearBuffer();
+
 						if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
 							if (heroes.size() == 1) {
 								Hero h = List.copyOf(heroes.values()).getFirst();
@@ -217,7 +226,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								}
 
 								lines.sort(String::compareTo);
-								getChannel().buffer(getLocale().get("str/dungeon_loot") + String.join("\n", lines));
+								getChannel().buffer(getLocale().get("str/dungeon_loot") + "\n" + String.join("\n", lines));
 							} else {
 								InfiniteList<Hero> robin = new InfiniteList<>(heroes.values());
 								Collections.shuffle(robin);
@@ -229,7 +238,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 									g.save();
 									g = g.refresh();
 
-									lines.add("- " + h.getName() + " -> " + g.getName(getLocale()));
+									String name = g.getName(getLocale());
+									if (g.getRarityClass() == RarityClass.RARE) {
+										name += ", " + g.getBasetype().getInfo(getLocale()).getName();
+									}
+
+									lines.add("- " + h.getName() + " -> " + name);
 								}
 
 								Map<Hero, Map<UserItem, Integer>> split = new HashMap<>();
@@ -248,7 +262,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								}
 
 								lines.sort(String::compareTo);
-								getChannel().buffer(getLocale().get("str/dungeon_loot_split") + String.join("\n", lines));
+								getChannel().buffer(getLocale().get("str/dungeon_loot_split") + "\n" + String.join("\n", lines));
 							}
 						}
 
