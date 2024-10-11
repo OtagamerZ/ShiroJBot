@@ -44,7 +44,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 
 public class Shiritori extends GameInstance<NullPhase> {
 	private static final String[] blacklisted = {};
@@ -81,9 +80,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 	@Override
 	protected boolean validate(Message message) {
-		return ((Predicate<Message>) m -> Utils.equalsAny(m.getAuthor().getId(), getPlayers()))
-				.and(m -> m.getAuthor().getId().equals(inGame.get()))
-				.test(message);
+		return message.getAuthor().getId().equals(inGame.get());
 	}
 
 	@Override
