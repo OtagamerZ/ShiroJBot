@@ -352,7 +352,10 @@ public class Hand {
 
 		Hero h = userDeck.getHero();
 		if (h != null) {
-			deck.add(h.asSenshi(game.getLocale()));
+			Senshi hero = h.asSenshi(game.getLocale());
+			hero.getStats().getPower().set(0.05 * h.getAttributes().wis());
+
+			deck.add(hero);
 		}
 
 		Utils.shuffle(deck, game.getRng());
