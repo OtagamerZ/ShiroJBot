@@ -40,6 +40,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -62,7 +63,7 @@ public class ItemShopCommand implements Executable {
 
 			List<UserItem> catalogue = DAO.findAll(UserItem.class).stream()
 					.filter(i -> i.getCurrency() != null)
-					.sorted()
+					.sorted(Comparator.comparing(UserItem::getId))
 					.toList();
 
 			List<Page> pages = Utils.generatePages(eb, catalogue, 10, 5,
