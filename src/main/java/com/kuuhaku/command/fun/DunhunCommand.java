@@ -18,8 +18,6 @@
 
 package com.kuuhaku.command.fun;
 
-import com.github.ygimenez.model.ButtonWrapper;
-import com.github.ygimenez.model.ThrowingFunction;
 import com.kuuhaku.Constants;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.game.Dunhun;
@@ -96,45 +94,34 @@ public class DunhunCommand implements Executable {
 				return;
 			}
 
-			ThrowingFunction<ButtonWrapper, Boolean> start = w -> {
-				if (pending.remove(w.getUser())) {
-					event.channel().sendMessage(locale.get("str/match_accept", w.getUser().getEffectiveName())).queue();
+			Utils.confirm(locale.get("question/dunhun",
+							Utils.properlyJoin(locale.get("str/and")).apply(others.stream().map(User::getAsMention).toList()),
+							event.user().getAsMention()
+					), event.channel(), w -> {
+						if (pending.remove(w.getUser())) {
+							event.channel().sendMessage(locale.get("str/match_accept", w.getUser().getEffectiveName())).queue();
 
-					if (!pending.isEmpty()) return false;
-				} else {
-					return false;
-				}
+							if (!pending.isEmpty()) return false;
+						} else {
+							return false;
+						}
 
-				Dunhun dun = new Dunhun(locale, Dungeon.DUEL,
-						Stream.concat(Stream.of(event.user()), others.stream())
-								.map(User::getId)
-								.toArray(String[]::new)
-				);
-				dun.start(event.guild(), event.channel())
-						.whenComplete((v, e) -> {
-							if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
-								event.channel().sendMessage(locale.get("error/error", e)).queue();
-								Constants.LOGGER.error(e, e);
-							}
-						});
+						Dunhun dun = new Dunhun(locale, new Dungeon(),
+								Stream.concat(Stream.of(event.user()), others.stream())
+										.map(User::getId)
+										.toArray(String[]::new)
+						);
+						dun.start(event.guild(), event.channel())
+								.whenComplete((v, e) -> {
+									if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
+										event.channel().sendMessage(locale.get("error/error", e)).queue();
+										Constants.LOGGER.error(e, e);
+									}
+								});
 
-				return true;
-			};
-
-			if (others.size() == 1) {
-				Utils.confirm(
-						locale.get("question/dunhun_duel", others.getFirst(), event.user().getAsMention()),
-						event.channel(), start, others.toArray(User[]::new)
-				);
-			} else {
-				List<String> t1 = others.stream().limit(2).map(User::getAsMention).toList();
-				List<String> t2 = others.stream().skip(2).map(User::getAsMention).toList();
-
-				Utils.confirm(locale.get("question/dunhun_duel_team",
-						Utils.properlyJoin(locale.get("str/and")).apply(t2),
-						Utils.properlyJoin(locale.get("str/and")).apply(t1)
-				), event.channel(), start, others.toArray(User[]::new));
-			}
+						return true;
+					}, others.toArray(User[]::new)
+			);
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
 		}
