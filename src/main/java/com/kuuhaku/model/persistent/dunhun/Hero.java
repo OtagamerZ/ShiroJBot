@@ -359,8 +359,6 @@ public class Hero extends DAO<Hero> implements Actor {
 		base.setDodge(Math.max(0, a.dex() / 2 - a.vit() / 5));
 		base.setParry(Math.max(0, a.dex() / 5));
 
-		senshiCache.getStats().getPower().set(0.05 * a.wis());
-
 		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();
 		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750 + effCost);
 		base.setSacrifices((base.getAtk() + base.getDfs()) / 3000);
