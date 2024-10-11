@@ -38,6 +38,7 @@ import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.messages.MessageRequest;
 import org.apache.commons.collections4.Bag;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -104,8 +105,11 @@ public class Combat implements Renderer<BufferedImage> {
 		this.locale = game.getLocale();
 
 		List<Hero> sides = List.copyOf(duelists);
-		hunters.add(sides.get(0));
-		keepers.add(sides.get(1));
+		List<Actor> team = hunters;
+		for (List<Hero> hs : ListUtils.partition(sides, sides.size() / 2)) {
+			team.addAll(hs);
+			team = keepers;
+		}
 	}
 
 	@Override
@@ -157,11 +161,12 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public MessageEmbed getEmbed() {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get(game.isDuel() ? "str/dungeon_duel" : "str/dungeon_floor",
-						game.isDuel() ? hunters.getFirst() : game.getTurn(), keepers.getFirst()
- 				))
 				.setTitle(locale.get("str/actor_turn", turns.get().getName(locale)))
 				.setDescription(String.join("\n", history));
+
+		if (!game.isDuel()) {
+			eb.setAuthor(locale.get("str/dungeon_floor", game.getTurn()));
+		}
 
 		String title = locale.get("str/hunters");
 		XStringBuilder sb = new XStringBuilder();

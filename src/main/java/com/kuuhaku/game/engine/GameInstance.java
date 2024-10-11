@@ -85,7 +85,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 			@Override
 			protected void onMessageReceived(@NotNull MessageReceivedEvent event) {
-				if (checkChannel(event.getGuildChannel()) && validate(event.getMessage())) {
+				if (checkChannel(event.getGuildChannel())
+					&& Utils.equalsAny(event.getAuthor().getId(), players)
+					&& validate(event.getMessage())
+				) {
 					try {
 						runtime(event.getAuthor(), event.getMessage().getContentRaw());
 					} catch (InvocationTargetException | IllegalAccessException e) {

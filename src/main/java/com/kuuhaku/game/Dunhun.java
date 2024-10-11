@@ -56,7 +56,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		super(locale, players);
 		this.instance = instance;
 		this.duel = instance.equals(Dungeon.DUEL);
-		if (duel && players.length != 2) {
+		if (duel && players.length % 2 != 0) {
 			getChannel().sendMessage(getString("error/invalid_duel")).queue();
 			close(GameReport.OTHER);
 			return;
@@ -99,7 +99,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		return !duel || (
 				getCombat() != null
 				&& getCombat().getTurns().get() instanceof Hero h
-				&& h.getAccount().getUid().equals(message.getAuthor().getId())
+				&& h.getTeam() == heroes.get(message.getAuthor().getId()).getTeam()
 		);
 	}
 
