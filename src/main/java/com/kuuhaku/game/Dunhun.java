@@ -198,56 +198,58 @@ public class Dunhun extends GameInstance<NullPhase> {
 						nextTurn();
 						getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor", getTurn()))).queue();
 					} else {
-						if (heroes.size() == 1) {
-							Hero h = List.copyOf(heroes.values()).getFirst();
+						if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
+							if (heroes.size() == 1) {
+								Hero h = List.copyOf(heroes.values()).getFirst();
 
-							List<String> lines = new ArrayList<>();
-							for (Gear g : loot.gear()) {
-								g.setOwner(h);
-								g.save();
-								g = g.refresh();
+								List<String> lines = new ArrayList<>();
+								for (Gear g : loot.gear()) {
+									g.setOwner(h);
+									g.save();
+									g = g.refresh();
 
-								lines.add("- " + g.getName(getLocale()));
-							}
-
-							for (UserItem i : loot.items().uniqueSet()) {
-								h.getAccount().addItem(i, loot.items().getCount(i));
-								lines.add("- " + i.getName(getLocale()) + " (x" + loot.items().getCount(i) + ")");
-							}
-
-							lines.sort(String::compareTo);
-							getChannel().buffer(getLocale().get("str/dungeon_loot") + String.join("\n", lines));
-						} else {
-							InfiniteList<Hero> robin = new InfiniteList<>(heroes.values());
-							Collections.shuffle(robin);
-
-							List<String> lines = new ArrayList<>();
-							for (Gear g : loot.gear()) {
-								Hero h = robin.getNext();
-								g.setOwner(h);
-								g.save();
-								g = g.refresh();
-
-								lines.add("- " + h.getName() + " -> " + g.getName(getLocale()));
-							}
-
-							Map<Hero, Map<UserItem, Integer>> split = new HashMap<>();
-							for (UserItem i : loot.items()) {
-								Hero h = robin.getNext();
-								split.computeIfAbsent(h, k -> new HashMap<>())
-										.compute(i, (k, v) -> v == null ? 1 : v + 1);
-							}
-
-							for (Map.Entry<Hero, Map<UserItem, Integer>> e : split.entrySet()) {
-								Hero h = e.getKey();
-								for (Map.Entry<UserItem, Integer> i : e.getValue().entrySet()) {
-									h.getAccount().addItem(i.getKey(), i.getValue());
-									lines.add("- " + h.getName() + " -> " + i.getKey().getName(getLocale()) + " (x" + i.getValue() + ")");
+									lines.add("- " + g.getName(getLocale()));
 								}
-							}
 
-							lines.sort(String::compareTo);
-							getChannel().buffer(getLocale().get("str/dungeon_loot_split") + String.join("\n", lines));
+								for (UserItem i : loot.items().uniqueSet()) {
+									h.getAccount().addItem(i, loot.items().getCount(i));
+									lines.add("- " + i.getName(getLocale()) + " (x" + loot.items().getCount(i) + ")");
+								}
+
+								lines.sort(String::compareTo);
+								getChannel().buffer(getLocale().get("str/dungeon_loot") + String.join("\n", lines));
+							} else {
+								InfiniteList<Hero> robin = new InfiniteList<>(heroes.values());
+								Collections.shuffle(robin);
+
+								List<String> lines = new ArrayList<>();
+								for (Gear g : loot.gear()) {
+									Hero h = robin.getNext();
+									g.setOwner(h);
+									g.save();
+									g = g.refresh();
+
+									lines.add("- " + h.getName() + " -> " + g.getName(getLocale()));
+								}
+
+								Map<Hero, Map<UserItem, Integer>> split = new HashMap<>();
+								for (UserItem i : loot.items()) {
+									Hero h = robin.getNext();
+									split.computeIfAbsent(h, k -> new HashMap<>())
+											.compute(i, (k, v) -> v == null ? 1 : v + 1);
+								}
+
+								for (Map.Entry<Hero, Map<UserItem, Integer>> e : split.entrySet()) {
+									Hero h = e.getKey();
+									for (Map.Entry<UserItem, Integer> i : e.getValue().entrySet()) {
+										h.getAccount().addItem(i.getKey(), i.getValue());
+										lines.add("- " + h.getName() + " -> " + i.getKey().getName(getLocale()) + " (x" + i.getValue() + ")");
+									}
+								}
+
+								lines.sort(String::compareTo);
+								getChannel().buffer(getLocale().get("str/dungeon_loot_split") + String.join("\n", lines));
+							}
 						}
 
 						reportResult(GameReport.SUCCESS, "str/dungeon_leave"
