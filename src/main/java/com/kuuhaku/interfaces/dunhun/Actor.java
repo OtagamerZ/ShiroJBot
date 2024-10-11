@@ -48,7 +48,7 @@ public interface Actor {
 			if (value < 0) {
 				double fac = sen.isDefending() ? 2 : 1;
 				if (game.isDuel()) {
-					fac *= 2;
+					fac *= 25;
 				}
 
 				value = -value;
