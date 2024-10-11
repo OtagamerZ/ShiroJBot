@@ -100,6 +100,7 @@ public interface Drawable<T extends Drawable<T>> {
 	void setHand(Hand hand);
 
 	default Shoukan getGame() {
+		if (getHand() == null) return null;
 		return getHand().getGame();
 	}
 
