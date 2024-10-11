@@ -36,6 +36,7 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.dunhun.Attributes;
+import com.kuuhaku.model.records.dunhun.GearStats;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
@@ -250,8 +251,13 @@ public class Hero extends DAO<Hero> implements Actor {
 			}
 		}
 
+		Attributes attr = getAttributes();
 		Map<Integer, Gear> gear = DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.id IN ?1", ids)
 				.parallelStream()
+				.filter(g -> {
+					GearStats st = g.getBasetype().getStats();
+					return st.reqLevel() <= stats.getLevel() && attr.has(st.requirements());
+				})
 				.collect(Collectors.toMap(Gear::getId, Function.identity()));
 
 		return equipCache = new Equipment((gs, i) -> {

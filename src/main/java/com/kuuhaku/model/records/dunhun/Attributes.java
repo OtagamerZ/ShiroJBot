@@ -74,6 +74,13 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 		);
 	}
 
+	public boolean has(Attributes attr) {
+		return str() >= attr.str()
+			   && dex() >= attr.dex()
+			   && wis() >= attr.wis()
+			   && vit() >= attr.vit();
+	}
+
 	public int count() {
 		return str() + dex() + wis() + vit();
 	}
