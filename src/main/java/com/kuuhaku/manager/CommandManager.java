@@ -54,7 +54,7 @@ public class CommandManager {
 	}
 
 	public Set<PreparedCommand> getCommands() {
-		Set<PreparedCommand> commands = new TreeSet<>();
+		Set<PreparedCommand> commands = new TreeSet<>(Comparator.comparing(PreparedCommand::name));
 
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
@@ -65,7 +65,7 @@ public class CommandManager {
 	}
 
 	public Set<PreparedCommand> getCommands(Category category) {
-		Set<PreparedCommand> commands = new TreeSet<>();
+		Set<PreparedCommand> commands = new TreeSet<>(Comparator.comparing(PreparedCommand::name));
 
 		int month = Calendar.getInstance().get(Calendar.MONTH);
 		for (Class<?> cmd : cmds) {
@@ -108,7 +108,7 @@ public class CommandManager {
 	}
 
 	public Set<PreparedCommand> getSubCommands(String parent) {
-		Set<PreparedCommand> out = new TreeSet<>();
+		Set<PreparedCommand> out = new TreeSet<>(Comparator.comparing(PreparedCommand::name));
 
 		int month = Calendar.getInstance().get(Calendar.MONTH);
 		for (Class<?> cmd : cmds) {

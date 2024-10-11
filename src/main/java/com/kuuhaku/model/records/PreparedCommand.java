@@ -67,4 +67,5 @@ public record PreparedCommand(
 	public Set<PreparedCommand> getSubCommands() {
 		return Main.getCommandManager().getSubCommands(name);
 	}
+
 }
