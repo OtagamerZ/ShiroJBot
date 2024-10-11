@@ -154,20 +154,22 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 								if (Calc.chance(25)) {
 									Loot lt = m.getStats().generateLoot();
-									loot.add(lt);
+									if (!lt.gear().isEmpty() || !lt.items().isEmpty()) {
+										loot.add(lt);
 
-									XStringBuilder sb = new XStringBuilder(getLocale().get("str/monster_loot"));
+										XStringBuilder sb = new XStringBuilder(getLocale().get("str/monster_loot"));
 
-									for (Gear g : lt.gear()) {
-										sb.appendNewLine("- " + g.getName(getLocale()) + ", " + g.getBasetype().getInfo(getLocale()).getName());
-										sb.appendNewLine("-# " + g.getName(getLocale()) + ", " + g.getBasetype().getInfo(getLocale()).getName());
+										for (Gear g : lt.gear()) {
+											sb.appendNewLine("- " + g.getName(getLocale()) + ", " + g.getBasetype().getInfo(getLocale()).getName());
+											sb.appendNewLine("-# " + g.getName(getLocale()) + ", " + g.getBasetype().getInfo(getLocale()).getName());
+										}
+
+										for (UserItem i : lt.items().uniqueSet()) {
+											sb.appendNewLine("- " + i.getName(getLocale()) + " (x" + lt.items().getCount(i) + ")");
+										}
+
+										getChannel().buffer(sb.toString());
 									}
-
-									for (UserItem i : lt.items().uniqueSet()) {
-										sb.appendNewLine("- " + i.getName(getLocale()) + " (x" + lt.items().getCount(i) + ")");
-									}
-
-									getChannel().buffer(sb.toString());
 								}
 							}
 						}
@@ -343,24 +345,27 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 			XStringBuilder sb = new XStringBuilder("-# " + m.getInfo(getLocale()).getName() + "\n");
 
-			Set<Affix> affs = m.getAffixes();
+			List<String> affs = m.getAffixes().stream()
+					.map(aff -> "> - " + aff.getInfo(getLocale()).getDescription())
+					.toList();
+
 			if (!affs.isEmpty()) {
+				sb.appendNewLine("> ");
 				sb.appendNewLine("> **" + getLocale().get("str/affixes") + "**");
-				for (Affix aff : affs) {
-					sb.appendNewLine("> - " + aff.getInfo(getLocale()).getDescription());
-				}
+				sb.appendNewLine(String.join("\n", affs));
 			}
 
-			sb.appendNewLine("> ");
+			List<String> skills = m.getSkills().stream()
+					.map(s ->
+							"> - " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
+							"\n> -# " + s.getDescription(getLocale(), m)
+					)
+					.toList();
 
-			List<Skill> skills = m.getSkills();
 			if (!skills.isEmpty()) {
+				sb.appendNewLine("> ");
 				sb.appendNewLine("> **" + getLocale().get("str/skills") + "**");
-				for (Skill skill : skills) {
-					sb.appendNewLine("> - " + skill.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', skill.getApCost()));
-					sb.appendNewLine("> -# " + skill.getDescription(getLocale(), a));
-					sb.appendNewLine("> ");
-				}
+				sb.appendNewLine(String.join("\n>\n", skills));
 			}
 
 			eb.addField(a.getName(getLocale()), sb.toString(), true);
@@ -377,16 +382,17 @@ public class Dunhun extends GameInstance<NullPhase> {
 			XStringBuilder sb = new XStringBuilder("-# " + getLocale().get("race/" + h.getRace().name()) + "\n");
 			h.addHpBar(sb);
 
-			sb.appendNewLine("> ");
+			List<String> skills = h.getSkills().stream()
+					.map(s ->
+							"> - " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
+							"\n> -# " + s.getDescription(getLocale(), h)
+					)
+					.toList();
 
-			List<Skill> skills = h.getSkills();
 			if (!skills.isEmpty()) {
+				sb.appendNewLine("> ");
 				sb.appendNewLine("> **" + getLocale().get("str/skills") + "**");
-				for (Skill skill : skills) {
-					sb.appendNewLine("> - " + skill.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', skill.getApCost()));
-					sb.appendNewLine("> -# " + skill.getDescription(getLocale(), h));
-					sb.appendNewLine("> ");
-				}
+				sb.appendNewLine(String.join("\n>\n", skills));
 			}
 
 			eb.addField(
