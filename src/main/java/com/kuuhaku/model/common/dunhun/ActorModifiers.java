@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 
 public class ActorModifiers {
 	private final CumValue maxHp = CumValue.flat();
-	private final CumValue hpMult = CumValue.flat();
+	private final CumValue hpMult = CumValue.mult();
 	private final CumValue maxAp = CumValue.flat();
 	private final CumValue initiative = CumValue.flat();
 	private final CumValue critical = CumValue.flat();
