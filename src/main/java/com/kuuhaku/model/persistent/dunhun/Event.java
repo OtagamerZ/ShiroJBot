@@ -46,7 +46,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "event", schema = "dunhun")
-public class Event extends DAO<Event> {
+public class 	Event extends DAO<Event> {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -92,8 +92,10 @@ public class Event extends DAO<Event> {
 
 		List<EventAction> out = new ArrayList<>();
 		desc = Utils.regex(desc, "\\[([^\\[\\]]+?)]\\{([^{}]+?)}").replaceAll(m -> {
+			boolean hide = m.group(1).startsWith("!");
 			out.add(new EventAction(WordUtils.capitalizeFully(m.group(1)), m.group(2)));
-			return Matcher.quoteReplacement("**" + m.group(1) + "**");
+
+			return Matcher.quoteReplacement(hide ? "" : "**" + m.group(1) + "**");
 		});
 
 		try {
