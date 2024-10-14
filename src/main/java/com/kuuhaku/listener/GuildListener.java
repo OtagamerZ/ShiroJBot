@@ -501,101 +501,98 @@ public class GuildListener extends ListenerAdapter {
 
 	private void processCommand(MessageData.Guild data, EventData event, String content) {
 		I18N locale = event.config().getLocale();
-		try {
-			String[] args = content.toLowerCase().split("\\s+");
-			String name = StringUtils.stripAccents(args[0].replaceFirst(Pattern.quote(event.config().getPrefix()), ""));
+		String[] args = content.toLowerCase().split("\\s+");
+		String name = StringUtils.stripAccents(args[0].replaceFirst(Pattern.quote(event.config().getPrefix()), ""));
 
-			String[] parts = name.split("\\.");
-			JSONObject aliases = new JSONObject();
-			aliases.putAll(event.config().getSettings().getAliases());
-			aliases.putAll(event.profile().getAccount().getSettings().getAliases());
+		String[] parts = name.split("\\.");
+		JSONObject aliases = new JSONObject();
+		aliases.putAll(event.config().getSettings().getAliases());
+		aliases.putAll(event.profile().getAccount().getSettings().getAliases());
 
-			String command = "";
-			for (String s : parts) {
-				if (command.isBlank()) command = s;
-				else command += "." + s;
+		String command = "";
+		for (String s : parts) {
+			if (command.isBlank()) command = s;
+			else command += "." + s;
 
-				if (aliases.has(command)) {
-					command = aliases.getString(command);
+			if (aliases.has(command)) {
+				command = aliases.getString(command);
+			}
+		}
+
+		name = command;
+		PreparedCommand pc = Main.getCommandManager().getCommand(name);
+		if (pc != null) {
+			Permission[] missing = pc.getMissingPerms(data.channel());
+
+			if (!Constants.MOD_PRIVILEGE.apply(data.member())) {
+				if (event.config().getSettings().getDeniedChannels().stream().anyMatch(t -> t.equals(data.channel()))) {
+					data.channel().sendMessage(locale.get("error/denied_channel")).queue();
+					return;
+				} else if (event.config().getSettings().getDisabledCategories().contains(pc.category())) {
+					data.channel().sendMessage(locale.get("error/disabled_category")).queue();
+					return;
+				} else if (event.config().getSettings().getDisabledCommands().contains(pc.command().getClass().getCanonicalName())) {
+					data.channel().sendMessage(locale.get("error/disabled_command")).queue();
+					return;
 				}
 			}
 
-			name = command;
-			PreparedCommand pc = Main.getCommandManager().getCommand(name);
-			if (pc != null) {
-				Permission[] missing = pc.getMissingPerms(data.channel());
-
-				if (!Constants.MOD_PRIVILEGE.apply(data.member())) {
-					if (event.config().getSettings().getDeniedChannels().stream().anyMatch(t -> t.equals(data.channel()))) {
-						data.channel().sendMessage(locale.get("error/denied_channel")).queue();
-						return;
-					} else if (event.config().getSettings().getDisabledCategories().contains(pc.category())) {
-						data.channel().sendMessage(locale.get("error/disabled_category")).queue();
-						return;
-					} else if (event.config().getSettings().getDisabledCommands().contains(pc.command().getClass().getCanonicalName())) {
-						data.channel().sendMessage(locale.get("error/disabled_command")).queue();
-						return;
-					}
+			if (missing.length > 0) {
+				XStringBuilder sb = new XStringBuilder(locale.get("error/missing_perms"));
+				for (Permission perm : missing) {
+					sb.appendNewLine("- " + locale.get("perm/" + perm.name()));
 				}
 
-				if (missing.length > 0) {
-					XStringBuilder sb = new XStringBuilder(locale.get("error/missing_perms"));
-					for (Permission perm : missing) {
-						sb.appendNewLine("- " + locale.get("perm/" + perm.name()));
-					}
+				data.channel().sendMessage(sb.toString()).queue();
+				return;
+			}
 
-					data.channel().sendMessage(sb.toString()).queue();
-					return;
-				}
+			if (event.profile().getAccount().isBlacklisted()) {
+				data.channel().sendMessage(locale.get("error/blacklisted")).queue();
+				return;
+			} else if (!pc.category().check(data.member())) {
+				data.channel().sendMessage(locale.get("error/not_allowed")).queue();
+				return;
+			} else if (ratelimit.containsKey(data.user().getId())) {
+				data.channel().sendMessage(locale.get("error/ratelimited")).queue();
+				return;
+			}
 
-				if (event.profile().getAccount().isBlacklisted()) {
-					data.channel().sendMessage(locale.get("error/blacklisted")).queue();
-					return;
-				} else if (!pc.category().check(data.member())) {
-					data.channel().sendMessage(locale.get("error/not_allowed")).queue();
-					return;
-				} else if (ratelimit.containsKey(data.user().getId())) {
-					data.channel().sendMessage(locale.get("error/ratelimited")).queue();
-					return;
-				}
+			try {
+				JSONObject params = SyntaxParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
 
 				try {
-					JSONObject params = SyntaxParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
-
-					try {
-						pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
-					} catch (Exception e) {
-						data.channel().sendMessage(locale.get("error/error", e)).queue();
-						Constants.LOGGER.error(e, e);
-					}
-
-					if (!Constants.STF_PRIVILEGE.apply(data.member())) {
-						ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
-					}
-				} catch (InvalidSyntaxException e) {
-					String error;
-
-					error = locale.get("error/invalid_syntax");
-
-					List<String> syntaxes = SyntaxParser.extract(locale, pc.command());
-					EmbedBuilder eb = new ColorlessEmbedBuilder()
-							.setAuthor(locale.get("str/command_syntaxes"))
-							.setDescription("```css\n" + String.join("\n", syntaxes).formatted(
-									event.config().getPrefix(),
-									name
-							) + "\n```");
-
-					data.channel().sendMessage(error).setEmbeds(eb.build()).queue();
+					pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
+				} catch (Exception e) {
+					data.channel().sendMessage(locale.get("error/error", e)).queue();
+					Constants.LOGGER.error(e, e);
 				}
+
+				if (!Constants.STF_PRIVILEGE.apply(data.member())) {
+					ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
+				}
+			} catch (InvalidSyntaxException e) {
+				String error;
+
+				error = locale.get("error/invalid_syntax");
+
+				List<String> syntaxes = SyntaxParser.extract(locale, pc.command());
+				EmbedBuilder eb = new ColorlessEmbedBuilder()
+						.setAuthor(locale.get("str/command_syntaxes"))
+						.setDescription("```css\n" + String.join("\n", syntaxes).formatted(
+								event.config().getPrefix(),
+								name
+						) + "\n```");
+
+				data.channel().sendMessage(error).setEmbeds(eb.build()).queue();
+			} finally {
+				DAO.apply(Account.class, data.user().getId(), acc -> {
+					Title t = acc.checkTitles(locale);
+					if (t != null) {
+						event.notify(locale.get("achievement/title", data.user().getAsMention(), t.getInfo(locale).getName()));
+					}
+				});
 			}
-
-		} finally {
-			DAO.apply(Account.class, data.user().getId(), acc -> {
-				Title t = acc.checkTitles(locale);
-				if (t != null) {
-					event.notify(locale.get("achievement/title", data.user().getAsMention(), t.getInfo(locale).getName()));
-				}
-			});
 		}
 	}
 
