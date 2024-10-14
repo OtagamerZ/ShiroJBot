@@ -55,7 +55,7 @@ public class CommandManager {
 
 		for (String name : names) {
 			String parent = name.split("\\.")[0];
-			if (!names.contains(parent) && surrogate.add(name)) {
+			if (!names.contains(parent) && surrogate.add(parent)) {
 				Constants.LOGGER.info("Mapped surrogate command parent: {}", parent);
 			}
 		}
