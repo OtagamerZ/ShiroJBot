@@ -100,10 +100,7 @@ public class TradeAddCardCommand implements Executable {
                         return null;
                     });
 
-            try {
-                if (!success.get()) return;
-            } catch (InterruptedException | ExecutionException ignore) {
-            }
+            if (!success.join()) return;
         }
 
         trade.getSelfOffers(event.user().getId()).addAll(cards);

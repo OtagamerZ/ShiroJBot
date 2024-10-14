@@ -67,7 +67,7 @@ public class PruneCommand implements Executable {
         if (args.has("action")) {
             try {
                 CompletableFuture<Boolean> allow = Utils.confirm(locale.get("question/prune_all"), event.channel(), w -> true, event.user());
-                if (!allow.get()) return;
+                if (!allow.join()) return;
 
                 Utils.confirm(locale.get("question/prune_all_confirm"), event.channel(), w -> {
                     StandardGuildMessageChannel chn = (StandardGuildMessageChannel) event.message().getChannel();
@@ -77,8 +77,7 @@ public class PruneCommand implements Executable {
                         MessageChannel mc = Pages.subGet(chn.createCopy());
                         event.channel().delete()
                                 .flatMap(c -> mc.sendMessage(locale.get("success/prune_all")))
-                                .submit().get();
-                    } catch (ExecutionException | InterruptedException ignore) {
+                                .submit().join();
                     } catch (InsufficientPermissionException e) {
                         event.channel().sendMessage(locale.get("error/missing_perms") + " " + locale.get("perm/" + e.getPermission().name())).queue();
                     } finally {
@@ -89,7 +88,6 @@ public class PruneCommand implements Executable {
                 }, event.user());
             } catch (PendingConfirmationException e) {
                 event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
-            } catch (ExecutionException | InterruptedException ignore) {
             }
 
             return;

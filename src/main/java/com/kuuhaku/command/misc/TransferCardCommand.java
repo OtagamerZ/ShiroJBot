@@ -100,7 +100,7 @@ public class TransferCardCommand implements Executable {
 				});
 
 		try {
-			StashedCard selected = select.get();
+			StashedCard selected = select.join();
 			if (selected == null) return;
 
 			Utils.confirm(locale.get("question/transfer", selected, target.getName()), event.channel(), w -> {
@@ -111,7 +111,6 @@ public class TransferCardCommand implements Executable {
 						return true;
 					}, event.user()
 			);
-		} catch (InterruptedException | ExecutionException ignore) {
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
 		}

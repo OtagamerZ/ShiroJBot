@@ -112,10 +112,7 @@ public class StashScrapCommand implements Executable {
 						return null;
 					});
 
-			try {
-				if (!success.get()) return;
-			} catch (InterruptedException | ExecutionException ignore) {
-			}
+			if (!success.join()) return;
 		}
 
 		confirm(locale, cards, event, kp.getAccount());

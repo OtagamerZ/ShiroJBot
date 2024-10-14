@@ -135,10 +135,7 @@ public class SynthesizeCommand implements Executable {
 						return null;
 					});
 
-			try {
-				if (!success.get()) return;
-			} catch (InterruptedException | ExecutionException ignore) {
-			}
+			if (!success.join()) return;
 		}
 
 		if (cards.size() < 3) {

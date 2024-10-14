@@ -58,19 +58,14 @@ public class MultiProcessor<In, Out> {
 			tasks.add(CompletableFuture.supplyAsync(() -> task.apply(all.get(index)), exec));
 		}
 
-		try {
-			List<Out> finished = new ArrayList<>();
-			for (CompletableFuture<Out> t : tasks) {
-				finished.add(t.get());
-			}
-
-			exec.shutdownNow();
-			exec.close();
-			return finished;
-		} catch (InterruptedException ignore) {
-		} catch (ExecutionException e) {
-			Constants.LOGGER.error(e, e);
+		List<Out> finished = new ArrayList<>();
+		for (CompletableFuture<Out> t : tasks) {
+			finished.add(t.join());
 		}
+
+		exec.shutdownNow();
+		exec.close();
+		return finished;
 
 		return null;
 	}
