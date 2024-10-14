@@ -46,9 +46,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
 	private final boolean duel;
+	private final Loot loot = new Loot();
 	private CompletableFuture<Void> lock;
 	private Pair<String, String> message;
-	private Loot loot = new Loot();
 
 	public Dunhun(I18N locale, Dungeon instance, User... players) {
 		this(locale, instance, Arrays.stream(players).map(User::getId).toArray(String[]::new));
