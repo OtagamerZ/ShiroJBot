@@ -214,6 +214,8 @@ public class HeroCommand implements Executable {
 
 				int idx = i++;
 				sb.appendNewLine("**" + name.charAt(0) + "**" + name.substring(1) + ": " + (alloc.get(at) + attr[idx]));
+				sb.appendNewLine("-# " + locale.get("attr/" + at.name() + "_desc"));
+				sb.nextLine();
 				if (func != null) func.accept(name.charAt(0), idx);
 			}
 

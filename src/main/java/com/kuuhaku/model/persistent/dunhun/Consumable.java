@@ -76,7 +76,7 @@ public class Consumable extends DAO<Consumable> {
 					"combat", combat,
 					"actor", source,
 					"target", target,
-					"pow", source instanceof Hero h ? (1 + h.getAttributes().wis() / 10d) : 1
+					"pow", source instanceof Hero h ? (1 + h.getAttributes().wis() * 0.1) : 1
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute skill {}", id, e);
