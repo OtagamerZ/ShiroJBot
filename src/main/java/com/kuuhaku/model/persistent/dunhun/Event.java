@@ -93,7 +93,7 @@ public class 	Event extends DAO<Event> {
 		List<EventAction> out = new ArrayList<>();
 		desc = Utils.regex(desc, "\\[([^\\[\\]]+?)]\\{([^{}]+?)}").replaceAll(m -> {
 			boolean hide = m.group(1).startsWith("!");
-			out.add(new EventAction(WordUtils.capitalizeFully(m.group(1)), m.group(2)));
+			out.add(new EventAction(WordUtils.capitalizeFully(m.group(1).replaceFirst("^!", "")), m.group(2)));
 
 			return Matcher.quoteReplacement(hide ? "" : "**" + m.group(1) + "**");
 		});
