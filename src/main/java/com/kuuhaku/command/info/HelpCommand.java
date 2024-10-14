@@ -104,17 +104,9 @@ public class HelpCommand implements Executable {
 				.forEach(aliases::add);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setTitle(locale.get("str/command", pc.name()))
+				.addField(locale.get("str/category"), pc.category().getName(locale), true)
 				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.get());
-
-		if (pc.command() != null) {
-			eb.setTitle(locale.get("str/command", pc.name()));
-		} else {
-			eb.setTitle(locale.get("str/command", pc.name()) + " (" + locale.get("str/not_a_command") + ")");
-		}
-
-		if (pc.category() != null) {
-			eb.addField(locale.get("str/category"), pc.category().getName(locale), true);
-		}
 
 		String desc = pc.description(locale);
 		if (!desc.isBlank()) {
@@ -139,7 +131,7 @@ public class HelpCommand implements Executable {
 			);
 		}
 
-		Set<PreparedCommand> subCmds = Main.getCommandManager().getSubCommands(pc.name().split("\\.")[0]);
+		Set<PreparedCommand> subCmds = pc.getSubCommands();
 		if (!subCmds.isEmpty()) {
 			StringTree tree = new StringTree();
 
@@ -198,14 +190,17 @@ public class HelpCommand implements Executable {
 					.appendDescription(locale.get("str/command_counter", cat.getCommands().size()))
 					.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.get());
 
-			pages.put(Utils.parseEmoji(emt.getId()), Utils.generatePage(eb, cat.getCommands(), 10, cmd -> {
-				if (cmd.name().contains(".")) return null;
+			Set<String> cmds = new TreeSet<>();
+			for (PreparedCommand cmd : cat.getCommands()) {
+				cmds.add(cmd.name().split("\\.")[0]);
+			}
 
-				int subs = cmd.getSubCommands().size();
+			pages.put(Utils.parseEmoji(emt.getId()), Utils.generatePage(eb, cmds, 10, cmd -> {
+				int subs = Main.getCommandManager().getSubCommands(cmd).size();
 				if (subs > 0) {
-					return "`" + cmd.name() + "` **(+" + subs + ")**";
+					return "`" + cmd + "` **(+" + subs + ")**";
 				} else {
-					return "`" + cmd.name() + "`";
+					return "`" + cmd + "`";
 				}
 			}));
 		}

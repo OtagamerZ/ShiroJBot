@@ -25,10 +25,7 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSyntaxException;
 import com.kuuhaku.interfaces.annotations.Seasonal;
-import com.kuuhaku.model.common.AutoEmbedBuilder;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.SimpleMessageListener;
-import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.common.drop.CandyDrop;
 import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.common.special.PadoruEvent;
@@ -525,6 +522,27 @@ public class GuildListener extends ListenerAdapter {
 		name = command;
 		PreparedCommand pc = Main.getCommandManager().getCommand(name);
 		if (pc != null) {
+			if (pc.command() == null) {
+				String msg = locale.get("error/surrogate_command");
+
+				Set<PreparedCommand> subCmds = pc.getSubCommands();
+				if (!subCmds.isEmpty()) {
+					StringTree tree = new StringTree();
+
+					for (PreparedCommand sub : subCmds) {
+						String[] path = sub.name().split("(?=\\.)");
+						path[0] = event.config().getPrefix() + path[0];
+
+						tree.addElement(path[path.length - 1], path);
+					}
+
+					msg += " ```" + tree + "```";
+				}
+
+				data.channel().sendMessage(msg).queue();
+				return;
+			}
+
 			int month = Calendar.getInstance().get(Calendar.MONTH);
 			Seasonal season = pc.command().getClass().getDeclaredAnnotation(Seasonal.class);
 			if (season != null && !ArrayUtils.contains(season.months(), month)) {

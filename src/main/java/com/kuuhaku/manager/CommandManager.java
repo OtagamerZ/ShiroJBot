@@ -35,7 +35,7 @@ public class CommandManager {
 	private final Reflections refl = new Reflections("com.kuuhaku.command");
 	private final Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
 	private final Set<String> names = new HashSet<>();
-	private final Set<String> surrogate = new HashSet<>();
+	private final Map<String, PreparedCommand> surrogate = new HashMap<>();
 	private final Map<String, PreparedCommand> mapped = new HashMap<>();
 
 	public CommandManager() {
@@ -53,9 +53,12 @@ public class CommandManager {
 			}
 		}
 
-		for (String name : names) {
-			String parent = name.split("\\.")[0];
-			if (!names.contains(parent) && surrogate.add(parent)) {
+		for (Class<?> cmd : cmds) {
+			Command params = cmd.getDeclaredAnnotation(Command.class);
+			String parent = params.name();
+
+			if (!names.contains(parent) && !surrogate.containsKey(parent)) {
+				surrogate.put(parent, new PreparedCommand(parent, params.category(), null, null));
 				Constants.LOGGER.info("Mapped surrogate command parent: {}", parent);
 			}
 		}
@@ -88,11 +91,7 @@ public class CommandManager {
 	public PreparedCommand getCommand(String name) {
 		name = name.toLowerCase();
 		if (!names.contains(name)) {
-			if (surrogate.contains(name)) {
-				return new PreparedCommand(name, null, null, null);
-			}
-
-			return null;
+			return surrogate.get(name);
 		}
 
 		if (mapped.containsKey(name)) return mapped.get(name);
