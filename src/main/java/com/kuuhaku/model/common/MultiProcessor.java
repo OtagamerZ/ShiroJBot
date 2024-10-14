@@ -66,8 +66,6 @@ public class MultiProcessor<In, Out> {
 		exec.shutdownNow();
 		exec.close();
 		return finished;
-
-		return null;
 	}
 
 	public Out process(Function<In, Out> task, Function<List<Out>, Out> merger) {
