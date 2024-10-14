@@ -34,11 +34,15 @@ public interface Actor {
 	}
 
 	default void modHp(int value, boolean crit) {
+		modHp(value, crit, false);
+	}
+
+	default void modHp(int value, boolean crit, boolean pure) {
 		if (value == 0 || getHp() == 0) return;
 		if (crit) value *= 2;
 
 		Dunhun game = getGame();
-		if (game != null) {
+		if (!pure && game != null) {
 			Senshi sen = asSenshi(game.getLocale());
 			if (sen.isStasis()) {
 				getRegDeg().add(Math.min(value, -getRegDeg().peek()));
@@ -66,7 +70,7 @@ public interface Actor {
 
 		if (diff == 0) return;
 
-		if (game != null && game.getCombat() != null) {
+		if (!pure && game != null && game.getCombat() != null) {
 			Combat comb = game.getCombat();
 			if (value < 0) {
 				comb.trigger(Trigger.ON_DAMAGE, this);
