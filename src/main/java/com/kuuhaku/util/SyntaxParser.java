@@ -212,6 +212,8 @@ public abstract class SyntaxParser {
 	}
 
 	public static List<String> extract(I18N locale, Executable command) {
+		if (command == null) return List.of();
+
 		Syntax annot = command.getClass().getDeclaredAnnotation(Syntax.class);
 		if (annot == null) return List.of();
 

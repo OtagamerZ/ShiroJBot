@@ -38,7 +38,10 @@ public record PreparedCommand(
 		Executable command
 ) {
 	public String description(I18N locale) {
-		return locale.get("cmd/" + name);
+		String desc = locale.get("cmd/" + name);
+		if (desc.equals("cmd/" + name)) return "";
+
+		return desc;
 	}
 
 	public boolean canExecute(GuildChannel gc) {

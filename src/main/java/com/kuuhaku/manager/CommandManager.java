@@ -22,12 +22,10 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Seasonal;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.records.PreparedCommand;
 import net.dv8tion.jda.api.Permission;
-import org.apache.commons.lang3.ArrayUtils;
 import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
@@ -37,6 +35,8 @@ public class CommandManager {
 	private final Reflections refl = new Reflections("com.kuuhaku.command");
 	private final Set<Class<?>> cmds = refl.getTypesAnnotatedWith(Command.class);
 	private final Set<String> names = new HashSet<>();
+	private final Set<String> surrogate = new HashSet<>();
+	private final Map<String, PreparedCommand> mapped = new HashMap<>();
 
 	public CommandManager() {
 		for (Class<?> cmd : cmds) {
@@ -46,10 +46,16 @@ public class CommandManager {
 				full += "." + String.join(".", params.path());
 			}
 
+			full = full.toLowerCase();
 			if (!names.add(full)) {
 				Constants.LOGGER.fatal("Detected commands with the same name: {}", full);
 				System.exit(1);
 			}
+		}
+
+		for (String name : names) {
+			String parent = name.split("\\.")[0];
+			if (!name.contains(parent)) surrogate.add(name);
 		}
 	}
 
@@ -67,11 +73,7 @@ public class CommandManager {
 	public Set<PreparedCommand> getCommands(Category category) {
 		Set<PreparedCommand> commands = new TreeSet<>(Comparator.comparing(PreparedCommand::name));
 
-		int month = Calendar.getInstance().get(Calendar.MONTH);
 		for (Class<?> cmd : cmds) {
-			Seasonal season = cmd.getDeclaredAnnotation(Seasonal.class);
-			if (season != null && !ArrayUtils.contains(season.months(), month)) continue;
-
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			if (params.category() == category) {
 				extractCommand(commands, cmd, params);
@@ -82,25 +84,36 @@ public class CommandManager {
 	}
 
 	public PreparedCommand getCommand(String name) {
-		int month = Calendar.getInstance().get(Calendar.MONTH);
-		for (Class<?> cmd : cmds) {
-			Seasonal season = cmd.getDeclaredAnnotation(Seasonal.class);
-			if (season != null && !ArrayUtils.contains(season.months(), month)) continue;
-
-			Command params = cmd.getDeclaredAnnotation(Command.class);
-			String full = params.name();
-			if (params.path().length > 0) {
-				full += "." + String.join(".", params.path());
+		name = name.toLowerCase();
+		if (!names.contains(name)) {
+			if (surrogate.contains(name)) {
+				return new PreparedCommand(name, null, null, null);
 			}
 
-			if (name.equalsIgnoreCase(full)) {
-				Requires req = cmd.getDeclaredAnnotation(Requires.class);
-				return new PreparedCommand(
-						full,
-						params.category(),
-						req == null ? new Permission[0] : req.value(),
-						buildCommand(cmd)
-				);
+			return null;
+		}
+
+		if (mapped.containsKey(name)) return mapped.get(name);
+		else {
+			for (Class<?> cmd : cmds) {
+				Command params = cmd.getDeclaredAnnotation(Command.class);
+				String full = params.name();
+				if (params.path().length > 0) {
+					full += "." + String.join(".", params.path());
+				}
+
+				if (name.equals(full)) {
+					Requires req = cmd.getDeclaredAnnotation(Requires.class);
+					PreparedCommand pc = new PreparedCommand(
+							full,
+							params.category(),
+							req == null ? new Permission[0] : req.value(),
+							buildCommand(cmd)
+					);
+
+					mapped.put(full, pc);
+					return pc;
+				}
 			}
 		}
 
@@ -110,13 +123,9 @@ public class CommandManager {
 	public Set<PreparedCommand> getSubCommands(String parent) {
 		Set<PreparedCommand> out = new TreeSet<>(Comparator.comparing(PreparedCommand::name));
 
-		int month = Calendar.getInstance().get(Calendar.MONTH);
 		for (Class<?> cmd : cmds) {
-			Seasonal season = cmd.getDeclaredAnnotation(Seasonal.class);
-			if (season != null && !ArrayUtils.contains(season.months(), month)) continue;
-
 			Command params = cmd.getDeclaredAnnotation(Command.class);
-			if (params.path().length == 0 || !params.name().equalsIgnoreCase(parent)) continue;
+			if (params.path().length == 0 || !params.name().equals(parent)) continue;
 
 			Requires req = cmd.getDeclaredAnnotation(Requires.class);
 			out.add(new PreparedCommand(

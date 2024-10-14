@@ -104,9 +104,17 @@ public class HelpCommand implements Executable {
 				.forEach(aliases::add);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/command", pc.name()))
-				.addField(locale.get("str/category"), pc.category().getName(locale), true)
 				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.get());
+
+		if (pc.command() != null) {
+			eb.setTitle(locale.get("str/command", pc.name()));
+		} else {
+			eb.setTitle(locale.get("str/command", pc.name()) + " (" + locale.get("str/not_a_command") + ")");
+		}
+
+		if (pc.category() != null) {
+			eb.addField(locale.get("str/category"), pc.category().getName(locale), true);
+		}
 
 		String desc = pc.description(locale);
 		if (!desc.isBlank()) {

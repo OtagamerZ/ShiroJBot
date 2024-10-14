@@ -24,6 +24,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSyntaxException;
+import com.kuuhaku.interfaces.annotations.Seasonal;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.SimpleMessageListener;
@@ -54,10 +55,12 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 import net.jodah.expiringmap.ExpiringMap;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.time.Month;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
@@ -522,6 +525,20 @@ public class GuildListener extends ListenerAdapter {
 		name = command;
 		PreparedCommand pc = Main.getCommandManager().getCommand(name);
 		if (pc != null) {
+			int month = Calendar.getInstance().get(Calendar.MONTH);
+			Seasonal season = pc.command().getClass().getDeclaredAnnotation(Seasonal.class);
+			if (season != null && !ArrayUtils.contains(season.months(), month)) {
+				List<String> months = Arrays.stream(season.months())
+						.mapToObj(Month::of)
+						.map(m -> locale.get("month/" + m.name()))
+						.toList();
+
+				data.channel().sendMessage(locale.get("error/out_of_season",
+						Utils.properlyJoin(locale.get("str/or")).apply(months)
+				)).queue();
+				return;
+			}
+
 			Permission[] missing = pc.getMissingPerms(data.channel());
 
 			if (!Constants.MOD_PRIVILEGE.apply(data.member())) {
