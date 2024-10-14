@@ -55,7 +55,10 @@ public class CommandManager {
 
 		for (String name : names) {
 			String parent = name.split("\\.")[0];
-			if (!name.contains(parent)) surrogate.add(name);
+			if (!name.contains(parent)) {
+				surrogate.add(name);
+				Constants.LOGGER.info("Mapped surrogate command parent: {}", parent);
+			}
 		}
 	}
 
@@ -127,13 +130,7 @@ public class CommandManager {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
 			if (params.path().length == 0 || !params.name().equals(parent)) continue;
 
-			Requires req = cmd.getDeclaredAnnotation(Requires.class);
-			out.add(new PreparedCommand(
-					params.name() + "." + String.join(".", params.path()),
-					params.category(),
-					req == null ? new Permission[0] : req.value(),
-					buildCommand(cmd)
-			));
+			extractCommand(out, cmd, params);
 		}
 
 		return out;
@@ -145,13 +142,17 @@ public class CommandManager {
 			full += "." + String.join(".", params.path());
 		}
 
-		Requires req = cmd.getDeclaredAnnotation(Requires.class);
-		commands.add(new PreparedCommand(
-				full,
-				params.category(),
-				req == null ? new Permission[0] : req.value(),
-				buildCommand(cmd)
-		));
+		if (mapped.containsKey(full)) {
+			commands.add(mapped.get(full));
+		} else {
+			Requires req = cmd.getDeclaredAnnotation(Requires.class);
+			commands.add(new PreparedCommand(
+					full,
+					params.category(),
+					req == null ? new Permission[0] : req.value(),
+					buildCommand(cmd)
+			));
+		}
 	}
 
 	private Executable buildCommand(Class<?> klass) {
