@@ -60,6 +60,15 @@ public class EmoteAddCommand implements Executable {
 
 		List<RestAction<RichCustomEmoji>> acts = new ArrayList<>();
 		if (args.has("name")) {
+			List<RichCustomEmoji> current = event.guild().getEmojis();
+			int animated = (int) current.stream().filter(CustomEmoji::isAnimated).count();
+			int normal = current.size() - animated;
+
+			if (animated + 1 > event.guild().getMaxEmojis() || normal + 1 > event.guild().getMaxEmojis()) {
+				event.channel().sendMessage(locale.get("error/no_emote_space")).queue();
+				return;
+			}
+
 			if (!event.message().getAttachments().isEmpty()) {
 				for (Message.Attachment att : event.message().getAttachments()) {
 					if (att.isImage()) {
