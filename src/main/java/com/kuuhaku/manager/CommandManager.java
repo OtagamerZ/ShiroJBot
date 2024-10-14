@@ -58,6 +58,8 @@ public class CommandManager {
 			if (!name.contains(parent)) {
 				surrogate.add(name);
 				Constants.LOGGER.info("Mapped surrogate command parent: {}", parent);
+			} else {
+				Constants.LOGGER.info("Found: {}", parent);
 			}
 		}
 	}
