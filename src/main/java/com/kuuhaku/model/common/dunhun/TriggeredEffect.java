@@ -6,18 +6,18 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 import java.util.function.BiConsumer;
 
 public final class TriggeredEffect extends EffectBase {
-	private final Trigger trigger;
+	private final Trigger[] triggers;
 	private int limit;
 	private boolean lock;
 
-	public TriggeredEffect(Actor target, Trigger trigger, int duration, int limit, BiConsumer<EffectBase, Actor> effect) {
+	public TriggeredEffect(Actor target, int duration, int limit, BiConsumer<EffectBase, Actor> effect, Trigger... triggers) {
 		super(target, duration, effect);
-		this.trigger = trigger;
+		this.triggers = triggers;
 		this.limit = limit;
 	}
 
-	public Trigger getTrigger() {
-		return trigger;
+	public Trigger[] getTriggers() {
+		return triggers;
 	}
 
 	public int getLimit() {

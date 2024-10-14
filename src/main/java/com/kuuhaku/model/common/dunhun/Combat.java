@@ -81,7 +81,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}, turns::remove);
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
 	private final RandomList<Actor> rngList = new RandomList<>();
-	private final List<EffectBase> effects = new ArrayList<>();
+	private final Set<EffectBase> effects = new HashSet<>();
 
 	private CompletableFuture<Runnable> lock;
 	private boolean done = false;
@@ -98,6 +98,9 @@ public class Combat implements Renderer<BufferedImage> {
 			a.revive(1);
 			a.setFleed(false);
 		}
+
+		effects.addAll(game.getEffects());
+		trigger(Trigger.ON_COMBAT);
 	}
 
 	public Combat(Dunhun game, Collection<Hero> duelists) {
@@ -110,6 +113,9 @@ public class Combat implements Renderer<BufferedImage> {
 			team.addAll(hs);
 			team = keepers;
 		}
+
+		effects.addAll(game.getEffects());
+		trigger(Trigger.ON_COMBAT);
 	}
 
 	@Override
@@ -256,6 +262,11 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		done = true;
+		for (EffectBase e : effects) {
+			if (e.getTarget() instanceof Hero) {
+				game.getEffects().add(e);
+			}
+		}
 	}
 
 	public CompletableFuture<Runnable> reload(boolean execute) {
@@ -666,7 +677,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return lock;
 	}
 
-	public List<EffectBase> getEffects() {
+	public Set<EffectBase> getEffects() {
 		return effects;
 	}
 
@@ -720,11 +731,19 @@ public class Combat implements Renderer<BufferedImage> {
 		return done;
 	}
 
+	public void trigger(Trigger t) {
+		trigger(t, null);
+	}
+
 	public void trigger(Trigger t, Actor act) {
 		Iterator<EffectBase> it = effects.iterator();
 		while (it.hasNext()) {
 			EffectBase e = it.next();
-			if (!(e instanceof TriggeredEffect te && te.getTrigger() == t && !te.isLocked())) continue;
+			if (act == null) {
+				act = e.getTarget();
+			}
+
+			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) continue;
 			else if (!e.getTarget().equals(act)) {
 				if (!getActors().contains(e.getTarget())) it.remove();
 				continue;

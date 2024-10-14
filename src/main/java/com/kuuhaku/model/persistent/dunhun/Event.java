@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
+import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedEvent;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
@@ -58,6 +59,9 @@ public class Event extends DAO<Event> {
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
+
+	@Column(name = "weight", nullable = false)
+	private int weight;
 
 	private transient final Map<String, Supplier<String>> actions = new HashMap<>();
 	private transient String result;
@@ -139,6 +143,19 @@ public class Event extends DAO<Event> {
 	}
 
 	public static Event getRandom() {
-		return DAO.query(Event.class, "SELECT e FROM Event e ORDER BY random()");
+		RandomList<String> rl = new RandomList<>();
+		List<Object[]> evts = DAO.queryAllUnmapped("""
+				SELECT id
+				     , weight
+				FROM event
+				WHERE weight > 0
+				""");
+
+		for (Object[] a : evts) {
+			rl.add((String) a[0], ((Number) a[1]).intValue());
+		}
+
+		if (rl.entries().isEmpty()) return null;
+		return DAO.find(Event.class, rl.get());
 	}
 }

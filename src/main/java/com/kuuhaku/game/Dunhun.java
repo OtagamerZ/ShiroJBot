@@ -14,6 +14,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.Combat;
+import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.ContinueMode;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
@@ -45,8 +46,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final Dungeon instance;
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
-	private final boolean duel;
 	private final Loot loot = new Loot();
+	private final Set<EffectBase> effects = new HashSet<>();
+	private final boolean duel;
 	private CompletableFuture<Void> lock;
 	private Pair<String, String> message;
 
@@ -463,6 +465,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public Map<String, Hero> getHeroes() {
 		return heroes;
+	}
+
+	public Set<EffectBase> getEffects() {
+		return effects;
 	}
 
 	public Pair<String, String> getMessage() {

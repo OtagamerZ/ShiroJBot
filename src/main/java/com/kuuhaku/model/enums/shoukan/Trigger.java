@@ -43,7 +43,8 @@ public enum Trigger {
 	ON_PLAN,
 
 	/**
-	 * When COMBAT phase begins
+	 * When COMBAT phase begins<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_COMBAT,
 
