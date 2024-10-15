@@ -52,9 +52,9 @@ public abstract class Graph {
 
 	public static Rectangle getMultilineStringBounds(Graphics2D g2d, String text, int width, int kerning) {
 		int y = 0;
-		String[] lines = text.split("\n");
-		for (String line : lines) {
-			String[] words = line.split("(?<=\\S[ \u200B])");
+		AtomicInteger yOffset = new AtomicInteger(y);
+		text.lines().forEach(l -> {
+			String[] words = l.split("(?<=\\S[ \u200B])");
 			int offset = 0;
 			for (String word : words) {
 				FontMetrics m = g2d.getFontMetrics();
@@ -62,15 +62,15 @@ public abstract class Graph {
 				if (offset + m.stringWidth(word) <= width) {
 					offset += m.stringWidth(word);
 				} else {
-					y += m.getHeight();
+					yOffset.updateAndGet(o -> o + m.getHeight());
 					offset = m.stringWidth(word);
 				}
 			}
 
-			y += g2d.getFontMetrics().getHeight() - kerning;
-		}
+			yOffset.updateAndGet(o -> o + g2d.getFontMetrics().getHeight() - kerning);
+		});
 
-		return new Rectangle(0, 0, width, y);
+		return new Rectangle(0, 0, width, yOffset.get());
 	}
 
 	public static void drawOutlinedString(Graphics2D g2d, String text, int x, int y, float width, Color color) {
@@ -149,29 +149,29 @@ public abstract class Graph {
 	public static void drawMultilineString(Graphics2D g2d, String text, int x, int y, int width, int spacing, int blankOffset, Function<String, String> processor, TriConsumer<String, Integer, Integer> renderer) {
 		if (text == null || text.isEmpty()) return;
 
-		String[] lines = text.split("\n");
-		for (String line : lines) {
-			String[] words = line.split("(?<=\\S )");
+		AtomicInteger yOffset = new AtomicInteger(y);
+		text.lines().forEach(l -> {
+			String[] words = l.split("(?<=\\S )");
 			int offset = 0;
 			for (String s : words) {
 				String word = processor.apply(s);
 				FontMetrics m = g2d.getFontMetrics();
 
 				if (offset + m.stringWidth(word) <= width) {
-					renderer.accept(word, x + offset, y);
+					renderer.accept(word, x + offset, yOffset.get());
 					offset += m.stringWidth(word);
 				} else {
-					renderer.accept(word, x, y += m.getHeight() - spacing);
+					renderer.accept(word, x, yOffset.updateAndGet(o -> o + m.getHeight() - spacing));
 					offset = m.stringWidth(word);
 				}
 			}
 
-			if (line.isBlank()) {
-				y += g2d.getFontMetrics().getHeight() - spacing + blankOffset;
+			if (l.isBlank()) {
+				yOffset.updateAndGet(o -> o + g2d.getFontMetrics().getHeight() - spacing + blankOffset);
 			} else {
-				y += g2d.getFontMetrics().getHeight() - spacing;
+				yOffset.updateAndGet(o -> o + g2d.getFontMetrics().getHeight() - spacing);
 			}
-		}
+		});
 	}
 
 	public static void drawProcessedString(Graphics2D g2d, String text, int x, int y, Function<String, String> processor) {
@@ -193,11 +193,9 @@ public abstract class Graph {
 	}
 
 	public static int getLineCount(Graphics2D g2d, String text, int width) {
-		int l = 0;
-
-		String[] lines = text.split("\n");
-		for (String line : lines) {
-			String[] words = line.split("(?<=\\S[ \u200B])");
+		AtomicInteger count = new AtomicInteger();
+		text.lines().forEach(l -> {
+			String[] words = l.split("(?<=\\S[ \u200B])");
 			int offset = 0;
 			for (String word : words) {
 				FontMetrics m = g2d.getFontMetrics();
@@ -205,15 +203,15 @@ public abstract class Graph {
 				if (offset + m.stringWidth(word) <= width) {
 					offset += m.stringWidth(word);
 				} else {
-					l++;
+					count.incrementAndGet();
 					offset = m.stringWidth(word);
 				}
 			}
 
-			l++;
-		}
+			count.incrementAndGet();
+		});
 
-		return l;
+		return count.get();
 	}
 
 	public static void applyTransformed(Graphics2D g2d, Consumer<Graphics2D> action) {

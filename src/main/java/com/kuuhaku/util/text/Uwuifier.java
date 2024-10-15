@@ -25,6 +25,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Uwuifier {
     public static final Uwuifier INSTANCE = new Uwuifier();
@@ -69,33 +70,29 @@ public class Uwuifier {
     }
 
     public String uwu(I18N locale, String text) {
-        locale = locale.getParent();
+        return text.lines()
+                .map(l -> {
+                    String[] words = l.split("(?<=\\S) +");
+                    for (int j = 0; j < words.length; j++) {
+                        String word = words[j];
+                        if (UrlValidator.getInstance().isValid(word) || word.contains("://")) continue;
+                        else if (word.matches(":.+:|<.+>|\\{.+}|`.+`")) continue;
 
-        String[] lines = text.split("\n");
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
-            String[] words = line.split("(?<=\\S) +");
-            for (int j = 0; j < words.length; j++) {
-                String word = words[j];
-                if (UrlValidator.getInstance().isValid(word) || word.contains("://")) continue;
-                else if (word.matches(":.+:|<.+>|\\{.+}|`.+`")) continue;
+                        for (Pair<String, String> p : exp) {
+                            word = word.replaceAll(p.getLeft(), p.getRight());
+                        }
 
-                for (Pair<String, String> p : exp) {
-                    word = word.replaceAll(p.getLeft(), p.getRight());
-                }
+                        words[j] = word.replaceAll("[!?.]", Utils.getRandomEntry(punctuation));
+                    }
 
-                words[j] = word.replaceAll("[!?.]", Utils.getRandomEntry(punctuation));
-            }
+                    String out = String.join(" ", words);
+                    while (Utils.regex(out, " [A-z]").find()) {
+                        out = out.replaceFirst(" ([A-z])", replaceSpace(locale.getParent()));
+                    }
 
-            String out = String.join(" ", words);
-            while (Utils.regex(out, " [A-z]").find()) {
-                out = out.replaceFirst(" ([A-z])", replaceSpace(locale));
-            }
-
-            lines[i] = out.replace("§", " ");
-        }
-
-        return String.join("\n", lines);
+                    return out.replace("§", " ");
+                })
+                .collect(Collectors.joining("\n"));
     }
 
     private String replaceSpace(I18N locale) {

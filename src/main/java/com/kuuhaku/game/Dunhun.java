@@ -40,6 +40,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class Dunhun extends GameInstance<NullPhase> {
 	private final ExecutorService main = Executors.newSingleThreadExecutor();
@@ -367,32 +368,36 @@ public class Dunhun extends GameInstance<NullPhase> {
 		for (Actor a : getCombat().getActors()) {
 			if (!(a instanceof Monster m)) continue;
 
-			XStringBuilder sb = new XStringBuilder("-# " + m.getInfo(getLocale()).getName() + "\n");
+			XStringBuilder sb = new XStringBuilder("#-# " + m.getInfo(getLocale()).getName() + "\n");
 
 			List<String> affs = m.getAffixes().stream()
-					.map(aff -> "> - " + aff.getInfo(getLocale()).getDescription())
+					.map(aff -> "- " + aff.getInfo(getLocale()).getDescription())
 					.toList();
 
 			if (!affs.isEmpty()) {
-				sb.appendNewLine("> ");
-				sb.appendNewLine("> **" + getLocale().get("str/affixes") + "**");
+				sb.nextLine();
+				sb.appendNewLine("**" + getLocale().get("str/affixes") + "**");
 				sb.appendNewLine(String.join("\n", affs));
 			}
 
 			List<String> skills = m.getSkills().stream()
 					.map(s ->
-							"> - " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
-							"\n> -# " + s.getDescription(getLocale(), m)
+							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
+							"\n-# " + s.getDescription(getLocale(), m)
 					)
 					.toList();
 
 			if (!skills.isEmpty()) {
-				sb.appendNewLine("> ");
-				sb.appendNewLine("> **" + getLocale().get("str/skills") + "**");
-				sb.appendNewLine(String.join("\n>\n", skills));
+				sb.nextLine();
+				sb.appendNewLine("**" + getLocale().get("str/skills") + "**");
+				sb.appendNewLine(String.join("\n\n", skills));
 			}
 
-			eb.addField(a.getName(getLocale()), sb.toString(), true);
+			String desc = sb.toString().lines()
+					.map(l -> l.startsWith("#") ? l.substring(1) : "> " + l)
+					.collect(Collectors.joining("\n"));
+
+			eb.addField(a.getName(getLocale()), desc, true);
 		}
 
 		getChannel().sendEmbed(eb.build()).queue();
@@ -403,27 +408,27 @@ public class Dunhun extends GameInstance<NullPhase> {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		for (Hero h : heroes.values()) {
-			XStringBuilder sb = new XStringBuilder("-# " + getLocale().get("race/" + h.getRace().name()) + "\n");
+			XStringBuilder sb = new XStringBuilder("#-# " + getLocale().get("race/" + h.getRace().name()) + "\n");
 			h.addHpBar(sb);
 
 			List<String> skills = h.getSkills().stream()
 					.map(s ->
-							"> - " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
-							"\n> -# " + s.getDescription(getLocale(), h)
+							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
+							"\n-# " + s.getDescription(getLocale(), h)
 					)
 					.toList();
 
 			if (!skills.isEmpty()) {
-				sb.appendNewLine("> ");
-				sb.appendNewLine("> **" + getLocale().get("str/skills") + "**");
+				sb.nextLine();
+				sb.appendNewLine("**" + getLocale().get("str/skills") + "**");
 				sb.appendNewLine(String.join("\n>\n", skills));
 			}
 
-			eb.addField(
-					(h.getContMode() == ContinueMode.CONTINUE ? "🆗 " : "🚪 ") + h.getName(),
-					sb.toString(),
-					true
-			);
+			String desc = sb.toString().lines()
+					.map(l -> l.startsWith("#") ? l.substring(1) : "> " + l)
+					.collect(Collectors.joining("\n"));
+
+			eb.addField((h.getContMode() == ContinueMode.CONTINUE ? "🆗 " : "🚪 ") + h.getName(), desc, true);
 		}
 
 		getChannel().sendEmbed(eb.build()).queue();

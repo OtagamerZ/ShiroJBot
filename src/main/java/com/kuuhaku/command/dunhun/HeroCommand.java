@@ -148,6 +148,7 @@ public class HeroCommand implements Executable {
 						imp.getDescription(locale).lines()
 								.map(l -> "-# " + l)
 								.forEach(sb::appendNewLine);
+
 						sb.appendNewLine("-# ──────────────────");
 					}
 

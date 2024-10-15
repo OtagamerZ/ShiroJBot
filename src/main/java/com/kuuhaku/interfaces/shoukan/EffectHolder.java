@@ -422,25 +422,25 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	private static void renderText(Graphics2D g2d, String text, int y, TriConsumer<String, Integer, Integer> renderer) {
-		String[] lines = text.split("\n");
-		for (String line : lines) {
-			String[] words = line.split("(?<=\\S )|(?=\\{=)|(?<=}%?)(?=[^%{ ])|(?<=[}])|(?<=\\(\\d)");
+		AtomicInteger yOffset = new AtomicInteger(y);
+		text.lines().forEach(l -> {
+			String[] words = l.split("(?<=\\S )|(?=\\{=)|(?<=}%?)(?=[^%{ ])|(?<=[}])|(?<=\\(\\d)");
 			int offset = 0;
 			for (String s : words) {
 				FontMetrics m = g2d.getFontMetrics();
 
 				if (offset + m.stringWidth(s) <= 211) {
-					renderer.accept(s, 7 + offset, y);
+					renderer.accept(s, 7 + offset, yOffset.get());
 					offset += m.stringWidth(s);
 				} else {
-					y += m.getHeight() - 3;
-					renderer.accept(s, 7, y);
+					yOffset.updateAndGet(o -> o + m.getHeight() - 3);
+					renderer.accept(s, 7, yOffset.get());
 					offset = m.stringWidth(s);
 				}
 			}
 
-			y += g2d.getFontMetrics().getHeight() - 3;
-		}
+			yOffset.updateAndGet(o -> o + g2d.getFontMetrics().getHeight() - 3);
+		});
 	}
 
 	default String getReadableDescription(I18N locale) {
