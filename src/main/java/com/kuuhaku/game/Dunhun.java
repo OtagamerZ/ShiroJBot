@@ -518,6 +518,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 		return duel;
 	}
 
+	public final void beginCombat(Collection<Monster> enemies) {
+		beginCombat(enemies.toArray(Monster[]::new));
+	}
+
 	@SafeVarargs
 	public final <T extends MonsterBase<T>> void beginCombat(MonsterBase<T>... enemies) {
 		if (this.combat.get() != null) return;
