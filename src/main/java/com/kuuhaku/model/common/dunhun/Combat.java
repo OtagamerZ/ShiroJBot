@@ -523,7 +523,7 @@ public class Combat implements Renderer<BufferedImage> {
 				b.addOption(
 						s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()) + cdText + reqText,
 						s.getId(),
-						s.getDescription(locale, h)
+						StringUtils.abbreviate(s.getDescription(locale, h), 100)
 				);
 			}
 
@@ -540,7 +540,7 @@ public class Combat implements Renderer<BufferedImage> {
 				b.addOption(
 						c.getInfo(locale).getName() + " (x" + cons.getCount(c) + ")",
 						c.getId(),
-						c.getInfo(locale).getDescription()
+						StringUtils.abbreviate(c.getInfo(locale).getDescription(), 100)
 				);
 			}
 

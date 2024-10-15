@@ -41,7 +41,7 @@ public class LocalizedSkill extends DAO<LocalizedSkill> implements Serializable 
 	@Column(name = "name", nullable = false, length = SelectOption.LABEL_MAX_LENGTH)
 	private String name;
 
-	@Column(name = "description", nullable = false, length = SelectOption.DESCRIPTION_MAX_LENGTH)
+	@Column(name = "description", nullable = false)
 	private String description;
 
 	private transient boolean uwu = false;
