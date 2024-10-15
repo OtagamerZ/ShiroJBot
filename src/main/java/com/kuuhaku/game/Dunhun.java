@@ -241,7 +241,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public void runCombat() {
-		runCombat(null);
+		runCombat(List.of());
 	}
 
 	public void runCombat(Collection<String> pool) {
