@@ -20,13 +20,13 @@ package com.kuuhaku.controller;
 
 import com.antkorwin.xsync.XSync;
 import com.kuuhaku.Constants;
-import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.interfaces.DAOListener;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.hibernate.query.NativeQuery;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +44,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		return MUTEX.evaluate(id, () -> Manager.getFactory().callInTransaction(em -> {
 			try {
 				Map<String, Object> ids = new HashMap<>();
-				for (Field f : klass.getDeclaredFields()) {
+				for (Field f : FieldUtils.getAllFields(klass)) {
 					if (f.isAnnotationPresent(Id.class)) {
 						ids.put(f.getName(), id);
 						break;
