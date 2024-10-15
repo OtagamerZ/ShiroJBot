@@ -81,7 +81,7 @@ public class TransferGearCommand implements Executable {
 			return;
 		}
 
-		Gear g = from.getInvGear(args.getInt("id"));
+		Gear g = from.getInvGear(args.getInt("gear"));
 		if (g == null) {
 			event.channel().sendMessage(locale.get("error/gear_not_found")).queue();
 			return;
