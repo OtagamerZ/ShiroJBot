@@ -382,7 +382,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					.toList();
 
 			if (!affs.isEmpty()) {
-				sb.nextLine();
+				sb.appendNewLine("#");
 				sb.appendNewLine("**" + getLocale().get("str/affixes") + "**");
 				sb.appendNewLine(String.join("\n", affs));
 			}
@@ -426,7 +426,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					.toList();
 
 			if (!skills.isEmpty()) {
-				sb.nextLine();
+				sb.appendNewLine("#");
 				sb.appendNewLine("**" + getLocale().get("str/skills") + "**");
 				sb.appendNewLine(String.join("\n\n", skills));
 			}
