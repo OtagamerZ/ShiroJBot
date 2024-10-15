@@ -129,30 +129,43 @@ public class Dunhun extends GameInstance<NullPhase> {
 					break;
 				}
 
-				if (getCombat() != null) {
-					getCombat().process();
-				} else {
-					try {
-						if (getTurn() == 10) {
-							beginCombat(DAO.find(Boss.class, "CRYSTAL_BOSS"));
+				try {
+					List<Runnable> floors = instance.getFloors();
+					if (!floors.isEmpty()) {
+						if (getTurn() >= floors.size()) {
+							reportResult(GameReport.SUCCESS, "str/dungeon_end",
+									Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
+							);
+
+							break;
+						}
+
+						floors.get(getTurn()).run();
+					} else {
+						if (getTurn() % 10 == 0) {
+							beginCombat(Boss.getRandom());
 						} else {
-							if (Calc.chance(25)) {
+							if (Calc.chance(Math.max(10, 25 - getTurn()))) {
 								runEvent();
 							} else {
 								runCombat();
 							}
 						}
-					} catch (Exception e) {
-						Constants.LOGGER.error(e, e);
 					}
+				} catch (Exception e) {
+					Constants.LOGGER.error(e, e);
+				}
+
+				if (getCombat() != null) {
+					getCombat().process();
 				}
 
 				if (lock != null) lock.join();
 
 				if (heroes.values().stream().allMatch(h -> h.getHp() <= 0 || h.hasFleed())) {
-					reportResult(GameReport.SUCCESS, "str/dungeon_fail"
-							, Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
-							, getTurn()
+					reportResult(GameReport.SUCCESS, "str/dungeon_fail",
+							Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
+							getTurn()
 					);
 					break;
 				} else {
@@ -347,9 +360,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 			}
 		}
 
-		reportResult(GameReport.SUCCESS, "str/dungeon_leave"
-				, Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
-				, getTurn()
+		reportResult(GameReport.SUCCESS, "str/dungeon_leave",
+				Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
+				getTurn()
 		);
 	}
 

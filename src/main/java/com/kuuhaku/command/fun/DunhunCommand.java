@@ -19,6 +19,7 @@
 package com.kuuhaku.command.fun;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.GameInstance;
@@ -52,7 +53,7 @@ import java.util.stream.Stream;
 		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>(?=\\s|$))+"),
 		value = {
 				"<users:custom:r>[users] <dungeon:word:r>",
-				"<dungeon:word:r>"
+				"<dungeon:word>"
 		}
 )
 @Requires(Permission.MESSAGE_ATTACH_FILES)
@@ -80,10 +81,26 @@ public class DunhunCommand implements Executable {
 			}
 		}
 
+		Dungeon dungeon = Dungeon.INFINITE;
+		if (args.has("dungeon")) {
+			dungeon = DAO.find(Dungeon.class, args.getString("dungeon").toUpperCase());
+			if (dungeon == null) {
+				String sug = Utils.didYouMean(args.getString("dungeon"), "SELECT id AS value FROM dungeon");
+				if (sug == null) {
+					event.channel().sendMessage(locale.get("error/unknown_dungeon_none")).queue();
+				} else {
+					event.channel().sendMessage(locale.get("error/unknown_dungeon", sug)).queue();
+				}
+				return;
+			}
+		}
+
 		Set<User> pending = new HashSet<>(others);
 		try {
+			Dungeon instance = dungeon;
+
 			if (others.isEmpty()) {
-				Dunhun dun = new Dunhun(locale, new Dungeon(), event.user());
+				Dunhun dun = new Dunhun(locale, instance, event.user());
 				dun.start(event.guild(), event.channel())
 						.whenComplete((v, e) -> {
 							if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
@@ -106,7 +123,7 @@ public class DunhunCommand implements Executable {
 							return false;
 						}
 
-						Dunhun dun = new Dunhun(locale, new Dungeon(),
+						Dunhun dun = new Dunhun(locale, instance,
 								Stream.concat(Stream.of(event.user()), others.stream())
 										.map(User::getId)
 										.toArray(String[]::new)

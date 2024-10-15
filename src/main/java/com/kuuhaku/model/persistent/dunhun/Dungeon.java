@@ -41,6 +41,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "dungeon", schema = "dunhun")
 public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
+	public static final Dungeon INFINITE = new Dungeon("INFINITE", 1);
 	public static final Dungeon DUEL = new Dungeon("DUEL", 1);
 
 	@Id
@@ -84,7 +85,13 @@ public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
 		return areaLevel;
 	}
 
+	public void setAreaLevel(int areaLevel) {
+		this.areaLevel = areaLevel;
+	}
+
 	public void init(I18N locale, Dunhun dungeon) {
+		if (script == null) return;
+
 		try {
 			floors.clear();
 			Utils.exec(id, script, Map.of(
@@ -95,6 +102,10 @@ public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to process dungeon {}", id, e);
 		}
+	}
+
+	public List<Runnable> getFloors() {
+		return floors;
 	}
 
 	@Override

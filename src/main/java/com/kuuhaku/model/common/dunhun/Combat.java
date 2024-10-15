@@ -195,6 +195,8 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void process() {
+		if (done) return;
+
 		Stream.of(hunters.stream(), keepers.stream())
 				.flatMap(Function.identity())
 				.sorted(Comparator
