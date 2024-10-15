@@ -16,7 +16,6 @@ import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Consumable;
 import com.kuuhaku.model.persistent.dunhun.Hero;
-import com.kuuhaku.model.persistent.dunhun.Monster;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.ClusterAction;
@@ -436,7 +435,7 @@ public class Combat implements Renderer<BufferedImage> {
 						for (Skill s : curr.getSkills()) {
 							if (s.getApCost() > curr.getAp() || s.getCd() > 0) continue;
 
-							Boolean canUse = s.canCpuUse(this, (Monster) curr);
+							Boolean canUse = s.canCpuUse(this, (MonsterBase<?>) curr);
 							if (canUse == null) {
 								if (!forcing) skills.add(s);
 							} else if (canUse) {
@@ -562,7 +561,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			history.add(locale.get("str/actor_miss", source.getName(locale)));
 			return;
-		} else {
+		} else if (!tgtSen.isSleeping() && !tgtSen.isStunned() && !tgtSen.isStasis()) {
 			if (Calc.chance(tgtSen.getDodge())) {
 				trigger(Trigger.ON_MISS, source, target);
 				trigger(Trigger.ON_DODGE, target, source);

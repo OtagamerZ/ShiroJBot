@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.Combat;
+import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.WeaponType;
@@ -191,7 +192,7 @@ public class Skill extends DAO<Skill> {
 		return out;
 	}
 
-	public Boolean canCpuUse(Combat combat, Monster source) {
+	public Boolean canCpuUse(Combat combat, MonsterBase<?> source) {
 		if (cpuRule == null) return null;
 
 		try {

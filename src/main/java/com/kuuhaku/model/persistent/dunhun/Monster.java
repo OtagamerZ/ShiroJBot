@@ -35,10 +35,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Entity
@@ -190,7 +187,16 @@ public class Monster extends MonsterBase<Monster> {
 	}
 
 	public static Monster getRandom(String id) {
+		return getRandom(id, null);
+	}
+
+	public static Monster getRandom(String id, RarityClass rarity) {
 		Monster mon = DAO.find(Monster.class, id);
+
+		List<AffixType> pool = new ArrayList<>();
+		switch (rarity) {
+			case RARE -> pool.addAll(Arrays.asList(AffixType.values()));
+		}
 
 		if (Calc.chance(50)) {
 			for (AffixType type : AffixType.monsterValues()) {
