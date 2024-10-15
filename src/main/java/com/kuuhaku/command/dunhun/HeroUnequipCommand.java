@@ -65,6 +65,6 @@ public class HeroUnequipCommand implements Executable {
 		}
 
 		h.save();
-		event.channel().sendMessage(locale.get("success/equipped")).queue();
+		event.channel().sendMessage(locale.get("success/unequipped")).queue();
 	}
 }

@@ -137,7 +137,7 @@ public class HeroCommand implements Executable {
 		Equipment equips = h.getEquipment();
 		XStringBuilder sb = new XStringBuilder();
 		for (GearSlot gs : GearSlot.values()) {
-			equips.withSlot(gs, g -> {
+			equips.withSlot(gs, null, g -> {
 				if (g == null) {
 					sb.appendNewLine("*" + locale.get("str/empty") + "*");
 				} else {

@@ -24,11 +24,13 @@ import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
-import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -43,8 +45,8 @@ public class Equipment implements Iterable<Gear> {
 	private Gear back;
 	private Gear amulet;
 	private Gear belt;
-	private Pair<Gear, Gear> rings = new Pair<>(null, null);
-	private Pair<Gear, Gear> weapons = new Pair<>(null, null);
+	private MultiSlot<Gear> rings = new MultiSlot<>(2);
+	private MultiSlot<Gear> weapons = new MultiSlot<>(2);
 
 	public Equipment() {
 	}
@@ -57,8 +59,11 @@ public class Equipment implements Iterable<Gear> {
 		back = supplier.apply(BACK, -1);
 		amulet = supplier.apply(AMULET, -1);
 		belt = supplier.apply(BELT, -1);
-		rings = new Pair<>(supplier.apply(RING, 0), supplier.apply(RING, 1));
-		weapons = new Pair<>(supplier.apply(WEAPON, 0), supplier.apply(WEAPON, 1));
+
+		for (int i = 0; i < 2; i++) {
+			rings.add(supplier.apply(RING, i));
+			weapons.add(supplier.apply(WEAPON, i));
+		}
 	}
 
 	public Gear getHelmet() {
@@ -89,35 +94,27 @@ public class Equipment implements Iterable<Gear> {
 		return belt;
 	}
 
-	public Pair<Gear, Gear> getRings() {
+	public MultiSlot<Gear> getRings() {
 		return rings;
 	}
 
 	public List<Gear> getRingList() {
-		List<Gear> gears = new ArrayList<>();
-		if (rings.getFirst() != null) gears.add(rings.getFirst());
-		if (rings.getSecond() != null) gears.add(rings.getSecond());
-
-		return gears;
+		return List.copyOf(rings.getEntries());
 	}
 
-	public Pair<Gear, Gear> getWeapons() {
+	public MultiSlot<Gear> getWeapons() {
 		return weapons;
 	}
 
 	public List<Gear> getWeaponList() {
-		List<Gear> gears = new ArrayList<>();
-		if (weapons.getFirst() != null) gears.add(weapons.getFirst());
-		if (weapons.getSecond() != null) gears.add(weapons.getSecond());
-
-		return gears;
+		return List.copyOf(weapons.getEntries());
 	}
 
 	public boolean equip(Gear gear) {
 		unequip(gear);
 
 		AtomicBoolean done = new AtomicBoolean();
-		withSlot(gear.getBasetype().getStats().slot(), g -> {
+		withSlot(gear.getBasetype().getStats().slot(), gear, g -> {
 			if (!done.get() && g == null) {
 				done.set(true);
 				return gear;
@@ -131,7 +128,7 @@ public class Equipment implements Iterable<Gear> {
 
 	public boolean unequip(Gear gear) {
 		AtomicBoolean done = new AtomicBoolean();
-		withSlot(gear.getBasetype().getStats().slot(), g -> {
+		withSlot(gear.getBasetype().getStats().slot(), gear, g -> {
 			if (!done.get() && Objects.equals(g, gear)) {
 				done.set(true);
 				return null;
@@ -143,32 +140,21 @@ public class Equipment implements Iterable<Gear> {
 		return done.get();
 	}
 
-	public void withSlot(GearSlot slot, Function<Gear, Gear> action) {
+	public void withSlot(GearSlot slot, Gear ref, Function<Gear, Gear> action) {
 		try {
 			if (Utils.equalsAny(slot, RING, WEAPON)) {
-				Function<Pair<Gear, Gear>, Pair<Gear, Gear>> proc = p -> {
-					Gear dual = null;
-					if (p.getFirst() != null && p.getFirst().getTags().contains("2-SLOT")) {
-						dual = p.getFirst();
-					} else if (p.getSecond() != null && p.getSecond().getTags().contains("2-SLOT")) {
-						dual = p.getSecond();
-					}
-
-					if (dual != null) {
-						return new Pair<>(action.apply(dual), null);
-					} else {
-						return new Pair<>(
-								action.apply(p.getFirst()),
-								action.apply(p.getSecond())
-						);
-					}
-				};
-
-				if (slot == RING) {
-					rings = proc.apply(rings);
-				} else {
-					weapons = proc.apply(weapons);
+				MultiSlot<Gear> items = slot == RING ? rings : weapons;
+				if (ref != null) {
+					if (ref.getTags().contains("2-SLOT") && !items.getEntries().isEmpty()) return;
 				}
+
+				for (int i = 0; i < items.getSize(); i++) {
+					Gear curr = items.get(i);
+					action.apply(curr);
+
+					if (curr.getTags().contains("2-SLOT")) break;
+				}
+
 				return;
 			}
 
@@ -183,7 +169,7 @@ public class Equipment implements Iterable<Gear> {
 	public String toString() {
 		JSONObject jo = new JSONObject();
 		for (GearSlot slot : values()) {
-			withSlot(slot, g -> {
+			withSlot(slot, null, g -> {
 				if (g != null) {
 					if (Utils.equalsAny(slot, RING, WEAPON)) {
 						((JSONArray) jo.computeIfAbsent(slot.name(), k -> new JSONArray())).add(g.getId());
@@ -204,8 +190,8 @@ public class Equipment implements Iterable<Gear> {
 	public Iterator<Gear> iterator() {
 		Gear[] gears = {
 				helmet, body, boots, gloves, back, amulet, belt,
-				rings.getFirst(), rings.getSecond(),
-				weapons.getFirst(), weapons.getSecond()
+				rings.get(0), rings.get(1),
+				weapons.get(0), weapons.get(1)
 		};
 
 		return Arrays.stream(gears)
