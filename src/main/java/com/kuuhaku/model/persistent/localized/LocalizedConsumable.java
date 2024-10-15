@@ -41,7 +41,7 @@ public class LocalizedConsumable extends DAO<LocalizedConsumable> implements Ser
 	@Column(name = "name", nullable = false, length = SelectOption.LABEL_MAX_LENGTH)
 	private String name;
 
-	@Column(name = "description", nullable = false)
+	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
 	private String description;
 
 	private transient boolean uwu = false;
