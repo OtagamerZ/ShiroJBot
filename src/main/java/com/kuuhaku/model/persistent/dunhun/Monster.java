@@ -30,6 +30,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -43,6 +44,9 @@ import java.util.concurrent.atomic.AtomicReference;
 @Entity
 @Table(name = "monster", schema = "dunhun")
 public class Monster extends MonsterBase<Monster> {
+	@Column(name = "weight", nullable = false)
+	private int weight;
+
 	@Transient
 	private transient final Set<Affix> affixes = new LinkedHashSet<>();
 
