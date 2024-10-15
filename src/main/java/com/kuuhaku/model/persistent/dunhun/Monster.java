@@ -20,96 +20,40 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Actor;
-import com.kuuhaku.model.common.Delta;
 import com.kuuhaku.model.common.RandomList;
-import com.kuuhaku.model.common.dunhun.ActorModifiers;
-import com.kuuhaku.model.common.dunhun.EffectBase;
-import com.kuuhaku.model.common.dunhun.SelfEffect;
-import com.kuuhaku.model.common.shoukan.RegDeg;
+import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
-import com.kuuhaku.model.enums.dunhun.Team;
-import com.kuuhaku.model.enums.shoukan.FrameSkin;
-import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.enums.shoukan.Trigger;
-import com.kuuhaku.model.persistent.localized.LocalizedMonster;
-import com.kuuhaku.model.persistent.shoukan.CardAttributes;
-import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
-import java.awt.image.BufferedImage;
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiConsumer;
-
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "monster", schema = "dunhun")
-public class Monster extends DAO<Monster> implements Actor {
+public class Monster extends MonsterBase<Monster> {
 	@Transient
-	public static final Deck DECK = Utils.with(new Deck(), d -> {
-		d.getStyling().setFrame(FrameSkin.GLITCH);
-	});
-	@Transient
-	public final long SERIAL = ThreadLocalRandom.current().nextLong();
-
-	@Id
-	@Column(name = "id", nullable = false)
-	private String id;
-
-	@Embedded
-	private MonsterStats stats;
-
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumn(name = "id", referencedColumnName = "id")
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<LocalizedMonster> infos = new HashSet<>();
-
-	private transient final ActorModifiers modifiers = new ActorModifiers();
-	private transient final Set<SelfEffect> effects = new HashSet<>();
-	private transient final RegDeg regDeg = new RegDeg(null);
 	private transient final Set<Affix> affixes = new LinkedHashSet<>();
-	private transient final Delta<Integer> hp = new Delta<>();
+
+	@Transient
 	private transient String nameCache;
-	private transient List<Skill> skillCache;
-	private transient Senshi senshiCache;
-	private transient Dunhun game;
-	private transient Team team;
-	private transient int ap;
-	private transient boolean flee;
 
 	public Monster() {
 	}
 
 	public Monster(String id) {
-		this.id = id;
-	}
-
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	public MonsterStats getStats() {
-		return stats;
-	}
-
-	public LocalizedMonster getInfo(I18N locale) {
-		return infos.parallelStream()
-				.filter(ld -> ld.getLocale().is(locale))
-				.map(ld -> ld.setUwu(locale.isUwu()))
-				.findAny().orElseThrow();
+		super(id);
 	}
 
 	@Override
@@ -168,121 +112,24 @@ public class Monster extends DAO<Monster> implements Actor {
 	}
 
 	@Override
-	public Race getRace() {
-		return stats.getRace();
-	}
-
-	@Override
-	public int getHp() {
-		int max = getMaxHp();
-
-		if (hp.get() == null || hp.get() > max) hp.set(max);
-		return hp.get();
-	}
-
-	@Override
 	public int getMaxHp() {
-		double flat = stats.getBaseHp() + modifiers.getMaxHp().get() + game.getTurn() * 5;
+		double flat = getStats().getBaseHp() + getModifiers().getMaxHp().get() + getGame().getTurn() * 5;
 		double mult = switch (getRarityClass()) {
 			case RARE -> 2.25;
 			case MAGIC -> 1.5;
 			default -> 1;
-		} * (1 + game.getTurn() / 5d);
+		} * (1 + getGame().getTurn() / 5d);
 
-		return (int) (flat * mult * modifiers.getHpMult().get());
-	}
-
-	@Override
-	public int getHpDelta() {
-		if (hp.previous() == null) return 0;
-
-		return hp.get() - hp.previous();
-	}
-
-	@Override
-	public void setHp(int value) {
-		hp.set(Calc.clamp(value, 0, getMaxHp()));
-	}
-
-	@Override
-	public int getAp() {
-		return ap;
+		return (int) (flat * mult * getModifiers().getHpMult().get());
 	}
 
 	@Override
 	public int getMaxAp() {
-		return Math.max(1, stats.getMaxAp() + (int) getModifiers().getMaxAp().get() + game.getTurn() / 5);
-	}
-
-	@Override
-	public void modAp(int value) {
-		ap = Calc.clamp(ap + value, 0, getMaxAp());
-	}
-
-	@Override
-	public int getInitiative() {
-		return (int) modifiers.getInitiative().get();
-	}
-
-	@Override
-	public double getCritical() {
-		return (int) (5 * (1 + modifiers.getCritical().get()));
-	}
-
-	@Override
-	public int getAggroScore() {
-		int aggro = 1;
-		if (senshiCache != null) {
-			aggro = senshiCache.getDmg() / 10 + senshiCache.getDfs() / 20;
-		}
-
-		return (int) (aggro * (1 + modifiers.getAggroMult().get()));
-	}
-
-	@Override
-	public ActorModifiers getModifiers() {
-		return modifiers;
-	}
-
-	@Override
-	public RegDeg getRegDeg() {
-		return regDeg;
-	}
-
-	@Override
-	public boolean hasFleed() {
-		return flee;
-	}
-
-	@Override
-	public void setFleed(boolean flee) {
-		this.flee = flee;
+		return Math.max(1, getStats().getMaxAp() + (int) getModifiers().getMaxAp().get() + getGame().getTurn() / 5);
 	}
 
 	public Set<Affix> getAffixes() {
 		return affixes;
-	}
-
-	public Set<SelfEffect> getEffects() {
-		return effects;
-	}
-
-	public void addEffect(BiConsumer<EffectBase, Actor> effect, Trigger... triggers) {
-		effects.add(new SelfEffect(this, effect, triggers));
-	}
-
-	@Override
-	public void trigger(Trigger trigger, Actor target) {
-		for (SelfEffect e : effects) {
-			if (!Utils.equalsAny(trigger, e.getTriggers())) continue;
-
-			try {
-				e.lock();
-				e.getEffect().accept(e, target);
-			} finally {
-				e.unlock();
-			}
-		}
 	}
 
 	public RarityClass getRarityClass() {
@@ -297,56 +144,8 @@ public class Monster extends DAO<Monster> implements Actor {
 		else return RarityClass.NORMAL;
 	}
 
-	public int getKillXp() {
-		double mult = switch (getRarityClass()) {
-			case NORMAL -> 1;
-			case MAGIC -> 1.5;
-			case RARE -> 2.25;
-		} * (1 + getAffixes().size() * 0.2);
-
-		double xp = stats.getBaseHp() / 500d + stats.getAttack() / 175d + stats.getDefense() / 250d;
-		if (game != null) {
-			xp *= 1 + game.getTurn() * 0.1;
-		}
-
-		return (int) (xp * mult);
-	}
-
 	@Override
-	public List<Skill> getSkills() {
-		if (skillCache != null) return skillCache;
-
-		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", stats.getSkills());
-	}
-
-	@Override
-	public Team getTeam() {
-		return team;
-	}
-
-	@Override
-	public void setTeam(Team team) {
-		this.team = team;
-	}
-
-	@Override
-	public Dunhun getGame() {
-		return game;
-	}
-
-	@Override
-	public void setGame(Dunhun game) {
-		this.game = game;
-	}
-
-	@Override
-	public Senshi asSenshi(I18N locale) {
-		if (senshiCache != null) return senshiCache;
-
-		Senshi s = new Senshi(this, locale);
-		CardAttributes base = s.getBase();
-
-		modifiers.clear();
+	protected void load(I18N locale, Senshi s, MonsterBase<Monster> self) {
 		for (Affix a : affixes) {
 			if (a == null) continue;
 
@@ -360,49 +159,16 @@ public class Monster extends DAO<Monster> implements Actor {
 				Constants.LOGGER.warn("Failed to apply modifier {}", a.getId(), e);
 			}
 		}
-
-		double mult = switch (getRarityClass()) {
-			case RARE -> 2;
-			case MAGIC -> 1.25;
-			default -> 1;
-		} * (1 + game.getTurn() / 4d);
-
-		base.setAtk((int) (stats.getAttack() * mult));
-		base.setDfs((int) (stats.getDefense() * mult));
-		base.setDodge(stats.getDodge());
-		base.setParry(stats.getParry());
-
-		base.getTags().add("MONSTER");
-
-		return senshiCache = s;
-	}
-
-	@Override
-	public BufferedImage render(I18N locale) {
-		return asSenshi(locale).render(locale, DECK);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Monster monster = (Monster) o;
-		return SERIAL == monster.SERIAL && Objects.equals(id, monster.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(SERIAL, id);
 	}
 
 	@Override
 	public Actor fork() {
-		Monster clone = new Monster(id);
+		Monster clone = new Monster(getId());
 		clone.stats = stats;
 		clone.infos = infos;
 		clone.skillCache = skillCache;
-		clone.team = team;
-		clone.game = game;
+		clone.setTeam(getTeam());
+		clone.setGame(getGame());
 		clone.affixes.addAll(affixes);
 
 		return clone;

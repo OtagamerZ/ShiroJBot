@@ -28,7 +28,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.shoukan.Trigger;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -261,15 +260,7 @@ public class Gear extends DAO<Gear> {
 		return Calc.clamp((basetype.getStats().critical() + modifiers.getCritical()) * modifiers.getCriticalMult(), 0, 100);
 	}
 
-	public void load(I18N locale, Senshi senshi) {
-		load(locale, owner, senshi);
-	}
-
 	public void load(I18N locale, Hero owner) {
-		load(locale, owner, owner.asSenshi(locale));
-	}
-
-	public void load(I18N locale, Hero owner, Senshi senshi) {
 		modifiers.reset();
 
 		for (GearAffix ga : getAllAffixes()) {

@@ -65,7 +65,7 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setTeam(Team.HUNTERS);
 		a.setGame(getGame());
 
-		a.asSenshi(getLocale()).setAvailable(true);
+		a.getSenshi().setAvailable(true);
 		return true;
 	}, turns::remove);
 	private final BondedList<Actor> keepers = new BondedList<>((a, it) -> {
@@ -76,7 +76,7 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setTeam(Team.KEEPERS);
 		a.setGame(getGame());
 
-		a.asSenshi(getLocale()).setAvailable(true);
+		a.getSenshi().setAvailable(true);
 		return true;
 	}, turns::remove);
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
@@ -131,7 +131,7 @@ public class Combat implements Renderer<BufferedImage> {
 			for (Actor a : acts) {
 				BufferedImage card;
 				if (a.isSkipped()) {
-					a.asSenshi(locale).setAvailable(false);
+					a.getSenshi().setAvailable(false);
 					BufferedImage overlay = IO.getResourceAsImage("shoukan/states/" + (a.getHp() <= 0 ? "dead" : "flee") + ".png");
 
 					card = a.render(locale);
@@ -141,7 +141,7 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				if (turns.get().equals(a)) {
-					boolean legacy = a.asSenshi(locale).getHand().getUserDeck().getFrame().isLegacy();
+					boolean legacy = a.getSenshi().getHand().getUserDeck().getFrame().isLegacy();
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
 
 					Graph.overlay(card, IO.getResourceAsImage(path + "/hero.png"));
@@ -208,8 +208,8 @@ public class Combat implements Renderer<BufferedImage> {
 			if (game.isClosed()) break;
 
 			try {
-				if (!act.asSenshi(locale).isAvailable() || act.asSenshi(locale).isStasis() || act.isSkipped()) {
-					act.asSenshi(locale).reduceDebuffs(1);
+				if (!act.getSenshi().isAvailable() || act.getSenshi().isStasis() || act.isSkipped()) {
+					act.getSenshi().reduceDebuffs(1);
 					for (Skill s : act.getSkills()) {
 						s.reduceCd();
 					}
@@ -219,13 +219,13 @@ public class Combat implements Renderer<BufferedImage> {
 					continue;
 				}
 
-				act.asSenshi(locale).reduceDebuffs(1);
+				act.getSenshi().reduceDebuffs(1);
 				for (Skill s : act.getSkills()) {
 					s.reduceCd();
 				}
 
 				act.modAp(act.getMaxAp());
-				act.asSenshi(locale).setDefending(false);
+				act.getSenshi().setDefending(false);
 
 				while (turns.get().equals(act) && !act.isSkipped() && act.getAp() > 0) {
 					Runnable action = reload(true).get();
@@ -239,9 +239,9 @@ public class Combat implements Renderer<BufferedImage> {
 			} catch (Exception e) {
 				Constants.LOGGER.warn(e, e);
 			} finally {
-				act.getModifiers().expireMods(act.asSenshi(locale));
-				act.asSenshi(locale).setAvailable(true);
-				if (!act.asSenshi(locale).isStasis()) {
+				act.getModifiers().expireMods(act.getSenshi());
+				act.getSenshi().setAvailable(true);
+				if (!act.getSenshi().isStasis()) {
 					act.modHp(act.getRegDeg().next(), false);
 				}
 
@@ -366,7 +366,7 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				helper.addAction(Utils.parseEmoji("🛡"), w -> lock.complete(() -> {
-							h.asSenshi(locale).setDefending(true);
+							h.getSenshi().setDefending(true);
 							h.modAp(-h.getAp());
 
 							history.add(locale.get("str/actor_defend", h.getName()));
@@ -407,8 +407,8 @@ public class Combat implements Renderer<BufferedImage> {
 
 				cpu.schedule(() -> {
 					try {
-						boolean canAttack = curr.asSenshi(locale).getDmg() > 0;
-						boolean canDefend = curr.asSenshi(locale).getDfs() > 0;
+						boolean canAttack = curr.getSenshi().getDmg() > 0;
+						boolean canDefend = curr.getSenshi().getDfs() > 0;
 
 						List<Actor> tgts = getActors(curr.getTeam().getOther()).stream()
 								.filter(a -> !a.isSkipped())
@@ -424,7 +424,7 @@ public class Combat implements Renderer<BufferedImage> {
 							double lifeFac = Math.max(curr.getHp() * 2d / curr.getMaxHp(), 1);
 
 							if (!canAttack || (curr.getAp() == 1 && Calc.chance(10 * lifeFac * risk))) {
-								curr.asSenshi(locale).setDefending(true);
+								curr.getSenshi().setDefending(true);
 								curr.modAp(-curr.getAp());
 
 								history.add(locale.get("str/actor_defend", curr.getName(locale)));
@@ -553,8 +553,8 @@ public class Combat implements Renderer<BufferedImage> {
 	private void attack(Actor source, Actor target) {
 		source.modAp(-1);
 
-		Senshi srcSen = source.asSenshi(locale);
-		Senshi tgtSen = target.asSenshi(locale);
+		Senshi srcSen = source.getSenshi();
+		Senshi tgtSen = target.getSenshi();
 
 		trigger(Trigger.ON_DEFEND, target, source);
 

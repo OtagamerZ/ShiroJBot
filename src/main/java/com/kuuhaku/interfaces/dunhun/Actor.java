@@ -43,7 +43,7 @@ public interface Actor {
 
 		Dunhun game = getGame();
 		if (!pure && game != null) {
-			Senshi sen = asSenshi(game.getLocale());
+			Senshi sen = getSenshi();
 			if (sen.isStasis()) {
 				getRegDeg().add(Math.min(value, -getRegDeg().peek()));
 				return;
@@ -93,7 +93,7 @@ public interface Actor {
 		setHp(value);
 		Dunhun game = getGame();
 		if (game != null) {
-			asSenshi(game.getLocale()).setAvailable(true);
+			getSenshi().setAvailable(true);
 		}
 	}
 
@@ -168,6 +168,10 @@ public interface Actor {
 	RegDeg getRegDeg();
 
 	Senshi asSenshi(I18N locale);
+
+	default Senshi getSenshi() {
+		return asSenshi(getGame().getLocale());
+	}
 
 	BufferedImage render(I18N locale);
 
