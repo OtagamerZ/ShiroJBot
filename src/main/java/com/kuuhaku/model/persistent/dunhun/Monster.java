@@ -192,31 +192,24 @@ public class Monster extends MonsterBase<Monster> {
 
 	public static Monster getRandom(String id, RarityClass rarity) {
 		Monster mon = DAO.find(Monster.class, id);
+		if (Utils.equalsAny(rarity, RarityClass.NORMAL, RarityClass.UNIQUE)) return mon;
 
-		List<AffixType> pool = new ArrayList<>();
-		switch (rarity) {
-			case RARE -> pool.addAll(Arrays.asList(AffixType.values()));
+		List<AffixType> pool = new ArrayList<>(List.of(AffixType.monsterValues()));
+
+		int min = rarity == RarityClass.MAGIC ? 1 : 2;
+		List<AffixType> rolled = Utils.getRandomN(pool, Calc.rng(min, min * 2), min);
+
+		for (AffixType type : rolled) {
+			Affix af = Affix.getRandom(mon, type);
+			if (af == null) continue;
+
+			mon.getAffixes().add(af);
 		}
 
-		if (Calc.chance(50)) {
-			for (AffixType type : AffixType.monsterValues()) {
-				if (Calc.chance(50)) {
-					Affix af = Affix.getRandom(mon, type);
-					if (af == null) continue;
-
-					mon.getAffixes().add(af);
-				}
-			}
-		}
-
-		if (Calc.chance(25)) {
-			for (AffixType type : AffixType.monsterValues()) {
-				if (Calc.chance(50)) {
-					Affix af = Affix.getRandom(mon, type);
-					if (af == null) continue;
-
-					mon.getAffixes().add(af);
-				}
+		if (rarity == RarityClass.RARE && mon.getRarityClass() != RarityClass.RARE) {
+			Affix af = Affix.getRandom(mon, Utils.getRandomEntry(pool));
+			if (af != null) {
+				mon.getAffixes().add(af);
 			}
 		}
 
