@@ -50,7 +50,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	protected MonsterStats stats;
 
 	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumn(name = "id", referencedColumnName = "id")
+	@JoinColumn(name = "id", referencedColumnName = "id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@Fetch(FetchMode.SUBSELECT)
 	protected Set<LocalizedMonster> infos = new HashSet<>();
 
