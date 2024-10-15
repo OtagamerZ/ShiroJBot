@@ -114,14 +114,15 @@ public interface Actor {
 		sb.appendNewLine("HP: " + hp + "/" + max);
 		sb.nextLine();
 
+		double parts = getMaxHp() > 5000 ? 500 : 100;
+
 		boolean rdClosed = true;
 		int rd = -getRegDeg().peek();
-		if (rd > 0) {
+		if (rd >= parts) {
 			sb.append("__");
 			rdClosed = false;
 		}
 
-		double parts = getMaxHp() > 5000 ? 500 : 100;
 		int steps = (int) Math.ceil(getMaxHp() / parts);
 		for (int i = 0; i < steps; i++) {
 			if (i > 0 && i % 10 == 0) sb.nextLine();
