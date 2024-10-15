@@ -27,6 +27,16 @@ public class MultiSlot<T> implements Iterable<T> {
 		return slots.remove(entry);
 	}
 
+	public void replace(T oldEntry, T newEntry) {
+		if (Objects.equals(oldEntry, newEntry)) return;
+
+		int index = slots.indexOf(oldEntry);
+		if (index >= 0) {
+			if (newEntry == null) remove(oldEntry);
+			else slots.set(index, newEntry);
+		}
+	}
+
 	public List<T> getEntries() {
 		return slots;
 	}

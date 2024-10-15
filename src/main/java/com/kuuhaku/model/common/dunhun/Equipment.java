@@ -150,7 +150,7 @@ public class Equipment implements Iterable<Gear> {
 
 				for (int i = 0; i < items.getSize(); i++) {
 					Gear curr = items.get(i);
-					action.apply(curr);
+					items.replace(curr, action.apply(curr));
 
 					if (curr.getTags().contains("2-SLOT")) break;
 				}
