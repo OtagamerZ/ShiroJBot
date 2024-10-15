@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.common.dunhun;
 
+import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -38,6 +39,8 @@ public class ActorModifiers {
 	private final CumValue dex = CumValue.flat();
 	private final CumValue wis = CumValue.flat();
 	private final CumValue vit = CumValue.flat();
+
+	private Actor channeled;
 
 	private Field[] fieldCache = null;
 
@@ -88,6 +91,14 @@ public class ActorModifiers {
 				(int) getWisdom().get(),
 				(int) getVitality().get()
 		);
+	}
+
+	public Actor getChanneled() {
+		return channeled;
+	}
+
+	public void setChanneled(Actor channeled) {
+		this.channeled = channeled;
 	}
 
 	public void expireMods(Senshi sen) {

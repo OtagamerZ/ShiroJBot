@@ -86,7 +86,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private CompletableFuture<Runnable> lock;
 	private boolean done = false;
 
-	public Combat(Dunhun game, Monster... enemies) {
+	public Combat(Dunhun game, MonsterBase<?>... enemies) {
 		this.game = game;
 		this.locale = game.getLocale();
 
@@ -550,7 +550,7 @@ public class Combat implements Renderer<BufferedImage> {
 		ma.setComponents(comps);
 	}
 
-	private void attack(Actor source, Actor target) {
+	public void attack(Actor source, Actor target) {
 		source.modAp(-1);
 
 		Senshi srcSen = source.getSenshi();
@@ -590,7 +590,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 	}
 
-	private void skill(Skill skill, Actor source, Actor target) {
+	public void skill(Skill skill, Actor source, Actor target) {
 		trigger(Trigger.ON_SPELL, source, target);
 		trigger(Trigger.ON_SPELL_TARGET, target, source);
 

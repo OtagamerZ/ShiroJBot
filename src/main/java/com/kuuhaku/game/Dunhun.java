@@ -15,6 +15,7 @@ import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.EffectBase;
+import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.ContinueMode;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
@@ -130,10 +131,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 					getCombat().process();
 				} else {
 					try {
-						if (Calc.chance(25)) {
-							runEvent();
+						if (getTurn() == 10) {
+							beginCombat(DAO.find(Boss.class, "CRYSTAL_BOSS"));
 						} else {
-							runCombat();
+							if (Calc.chance(25)) {
+								runEvent();
+							} else {
+								runCombat();
+							}
 						}
 					} catch (Exception e) {
 						Constants.LOGGER.error(e, e);
@@ -496,7 +501,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		return duel;
 	}
 
-	public void beginCombat(Monster... enemies) {
+	public void beginCombat(MonsterBase<?>... enemies) {
 		if (this.combat.get() != null) return;
 		this.combat.set(new Combat(this, enemies));
 	}
