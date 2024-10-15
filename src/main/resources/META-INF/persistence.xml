@@ -77,6 +77,7 @@
         <class>com.kuuhaku.model.persistent.dunhun.Affix</class>
         <class>com.kuuhaku.model.persistent.dunhun.Skill</class>
         <class>com.kuuhaku.model.persistent.dunhun.Monster</class>
+        <class>com.kuuhaku.model.persistent.dunhun.Boss</class>
         <class>com.kuuhaku.model.persistent.dunhun.Event</class>
         <class>com.kuuhaku.model.persistent.dunhun.Dungeon</class>
         <class>com.kuuhaku.model.persistent.dunhun.Consumable</class>
