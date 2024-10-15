@@ -110,6 +110,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@Override
 	protected void begin() {
+		instance.init(getLocale(), this);
+
 		CompletableFuture.runAsync(() -> {
 			while (!isClosed()) {
 				if (duel) {
