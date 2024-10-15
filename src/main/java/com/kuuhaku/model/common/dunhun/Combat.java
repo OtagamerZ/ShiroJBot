@@ -261,6 +261,9 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 				}
 			}
+
+			if (hunters.stream().allMatch(Actor::isSkipped)) break;
+			else if (keepers.stream().allMatch(Actor::isSkipped)) break;
 		}
 
 		done = true;
