@@ -240,22 +240,32 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}, main);
 	}
 
-	private void runCombat() {
+	public void runCombat() {
+		runCombat(null);
+	}
+
+	public void runCombat(Collection<String> pool) {
 		combat.set(new Combat(this));
 		for (int i = 0; i < 3; i++) {
 			List<Actor> keepers = getCombat().getActors(Team.KEEPERS);
 			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size())) break;
 
-			keepers.add(Monster.getRandom());
+			if (!pool.isEmpty()) keepers.add(Monster.getRandom(Utils.getRandomEntry(pool)));
+			else keepers.add(Monster.getRandom());
 		}
 
 		getCombat().process();
 	}
 
-	private void runEvent() {
+	public void runEvent() {
 		lock = new CompletableFuture<>();
 
 		Event evt = Event.getRandom();
+		if (evt == null) {
+			runCombat();
+			return;
+		}
+
 		EventDescription ed = evt.parse(getLocale(), this);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
