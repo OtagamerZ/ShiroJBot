@@ -501,7 +501,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 		return duel;
 	}
 
-	public void beginCombat(MonsterBase<?>... enemies) {
+	@SafeVarargs
+	public final <T extends MonsterBase<T>> void beginCombat(MonsterBase<T>... enemies) {
 		if (this.combat.get() != null) return;
 		this.combat.set(new Combat(this, enemies));
 	}
