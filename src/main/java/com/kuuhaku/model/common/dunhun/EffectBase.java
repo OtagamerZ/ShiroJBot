@@ -8,18 +8,18 @@ import java.util.function.BiConsumer;
 
 public abstract class EffectBase {
 	public final long SERIAL = ThreadLocalRandom.current().nextLong();
-	private final Actor target;
+	private final Actor owner;
 	private final BiConsumer<EffectBase, Actor> effect;
 	private int duration;
 
-	public EffectBase(Actor target, int duration, BiConsumer<EffectBase, Actor> effect) {
-		this.target = target;
+	public EffectBase(Actor owner, int duration, BiConsumer<EffectBase, Actor> effect) {
+		this.owner = owner;
 		this.duration = duration;
 		this.effect = effect;
 	}
 
-	public Actor getTarget() {
-		return target;
+	public Actor getOwner() {
+		return owner;
 	}
 
 	public int getDuration() {

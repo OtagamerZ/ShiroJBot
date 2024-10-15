@@ -73,9 +73,9 @@ public interface Actor {
 		if (!pure && game != null && game.getCombat() != null) {
 			Combat comb = game.getCombat();
 			if (value < 0) {
-				comb.trigger(Trigger.ON_DAMAGE, this);
+				comb.trigger(Trigger.ON_DAMAGE, this, this);
 			} else {
-				comb.trigger(Trigger.ON_HEAL, this);
+				comb.trigger(Trigger.ON_HEAL, this, this);
 			}
 
 			I18N locale = game.getLocale();
@@ -162,6 +162,8 @@ public interface Actor {
 	}
 
 	ActorModifiers getModifiers();
+
+	void trigger(Trigger trigger, Actor target);
 
 	RegDeg getRegDeg();
 

@@ -5,28 +5,17 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 
 import java.util.function.BiConsumer;
 
-public final class TriggeredEffect extends EffectBase {
+public class SelfEffect extends EffectBase{
 	private final Trigger[] triggers;
-	private int limit;
 	private boolean lock;
 
-	public TriggeredEffect(Actor owner, int duration, int limit, BiConsumer<EffectBase, Actor> effect, Trigger... triggers) {
-		super(owner, duration, effect);
+	public SelfEffect(Actor owner, BiConsumer<EffectBase, Actor> effect, Trigger... triggers) {
+		super(owner, -1, effect);
 		this.triggers = triggers;
-		this.limit = limit;
 	}
 
 	public Trigger[] getTriggers() {
 		return triggers;
-	}
-
-	public int getLimit() {
-		return limit;
-	}
-
-	public boolean decLimit() {
-		if (limit > 0) limit--;
-		return limit == 0;
 	}
 
 	public boolean isLocked() {

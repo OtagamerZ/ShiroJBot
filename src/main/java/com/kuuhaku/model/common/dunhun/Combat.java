@@ -248,8 +248,8 @@ public class Combat implements Renderer<BufferedImage> {
 				Iterator<EffectBase> it = effects.iterator();
 				while (it.hasNext()) {
 					EffectBase e = it.next();
-					if (!e.getTarget().equals(act)) {
-						if (!getActors().contains(e.getTarget())) it.remove();
+					if (!e.getOwner().equals(act)) {
+						if (!getActors().contains(e.getOwner())) it.remove();
 						continue;
 					}
 
@@ -263,7 +263,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		done = true;
 		for (EffectBase e : effects) {
-			if (e.getTarget() instanceof Hero) {
+			if (e.getOwner() instanceof Hero) {
 				game.getEffects().add(e);
 			}
 		}
@@ -556,22 +556,22 @@ public class Combat implements Renderer<BufferedImage> {
 		Senshi srcSen = source.asSenshi(locale);
 		Senshi tgtSen = target.asSenshi(locale);
 
-		trigger(Trigger.ON_DEFEND, target);
+		trigger(Trigger.ON_DEFEND, target, source);
 
 		if (srcSen.isBlinded(true) && Calc.chance(50)) {
-			trigger(Trigger.ON_MISS, source);
+			trigger(Trigger.ON_MISS, source, target);
 
 			history.add(locale.get("str/actor_miss", source.getName(locale)));
 			return;
 		} else {
 			if (Calc.chance(tgtSen.getDodge())) {
-				trigger(Trigger.ON_MISS, source);
-				trigger(Trigger.ON_DODGE, target);
+				trigger(Trigger.ON_MISS, source, target);
+				trigger(Trigger.ON_DODGE, target, source);
 
 				history.add(locale.get("str/actor_dodge", target.getName(locale)));
 				return;
 			} else if (Calc.chance(tgtSen.getParry())) {
-				trigger(Trigger.ON_PARRY, target);
+				trigger(Trigger.ON_PARRY, target, source);
 
 				history.add(locale.get("str/actor_parry", target.getName(locale)));
 				attack(target, source);
@@ -581,18 +581,18 @@ public class Combat implements Renderer<BufferedImage> {
 
 		history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale)));
 
-		trigger(Trigger.ON_ATTACK, source);
+		trigger(Trigger.ON_ATTACK, source, target);
 		target.modHp(-srcSen.getDmg(), Calc.chance(source.getCritical()));
-		trigger(Trigger.ON_HIT, source);
+		trigger(Trigger.ON_HIT, source, target);
 
 		if (target.getHp() == 0) {
-			trigger(Trigger.ON_KILL, source);
+			trigger(Trigger.ON_KILL, source, target);
 		}
 	}
 
 	private void skill(Skill skill, Actor source, Actor target) {
-		trigger(Trigger.ON_SPELL, source);
-		trigger(Trigger.ON_SPELL_TARGET, target);
+		trigger(Trigger.ON_SPELL, source, target);
+		trigger(Trigger.ON_SPELL_TARGET, target, source);
 
 		history.add(locale.get(target.equals(source) ? "str/used_skill_self" : "str/used_skill",
 				source.getName(locale), skill.getInfo(locale).getName(), target.getName(locale))
@@ -606,7 +606,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		if (target.getHp() == 0) {
-			trigger(Trigger.ON_KILL, source);
+			trigger(Trigger.ON_KILL, source, target);
 		}
 	}
 
@@ -732,20 +732,20 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void trigger(Trigger t) {
-		trigger(t, null);
+		trigger(t, null, null);
 	}
 
-	public void trigger(Trigger t, Actor act) {
+	public void trigger(Trigger t, Actor from, Actor to) {
 		Iterator<EffectBase> it = effects.iterator();
 		while (it.hasNext()) {
 			EffectBase e = it.next();
-			if (act == null) {
-				act = e.getTarget();
+			if (from == null) {
+				from = e.getOwner();
 			}
 
 			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) continue;
-			else if (!e.getTarget().equals(act)) {
-				if (!getActors().contains(e.getTarget())) it.remove();
+			else if (!e.getOwner().equals(from)) {
+				if (!getActors().contains(e.getOwner())) it.remove();
 				continue;
 			}
 
@@ -753,10 +753,14 @@ public class Combat implements Renderer<BufferedImage> {
 
 			try {
 				te.lock();
-				te.getEffect().accept(e, act);
+				te.getEffect().accept(e, from);
 			} finally {
 				te.unlock();
 			}
+		}
+
+		if (from != null && to != null) {
+			from.trigger(t, to);
 		}
 	}
 }

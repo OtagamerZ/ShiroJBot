@@ -25,11 +25,13 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.Delta;
 import com.kuuhaku.model.common.dunhun.ActorModifiers;
 import com.kuuhaku.model.common.dunhun.Equipment;
+import com.kuuhaku.model.common.dunhun.SelfEffect;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.ContinueMode;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -271,6 +273,24 @@ public class Hero extends DAO<Hero> implements Actor {
 
 			return gear.get(equipment.getJSONArray(gs.name()).getInt(i));
 		});
+	}
+
+	@Override
+	public void trigger(Trigger trigger, Actor target) {
+		for (Gear g : getEquipment()) {
+			if (g.getEffects().isEmpty()) continue;
+
+			for (SelfEffect e : g.getEffects()) {
+				if (!Utils.equalsAny(trigger, e.getTriggers())) continue;
+
+				try {
+					e.lock();
+					e.getEffect().accept(e, target);
+				} finally {
+					e.unlock();
+				}
+			}
+		}
 	}
 
 	public List<Gear> getInventory() {

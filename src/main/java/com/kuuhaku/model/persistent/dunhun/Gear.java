@@ -20,10 +20,14 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.GearModifiers;
+import com.kuuhaku.model.common.dunhun.SelfEffect;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
@@ -38,6 +42,7 @@ import org.hibernate.annotations.FetchMode;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,6 +77,7 @@ public class Gear extends DAO<Gear> {
 	private int roll = Calc.rng(Integer.MAX_VALUE);
 
 	private transient final GearModifiers modifiers = new GearModifiers();
+	private transient final Set<SelfEffect> effects = new HashSet<>();
 
 	public Gear() {
 	}
@@ -226,6 +232,14 @@ public class Gear extends DAO<Gear> {
 
 	public GearModifiers getModifiers() {
 		return modifiers;
+	}
+
+	public Set<SelfEffect> getEffects() {
+		return effects;
+	}
+
+	public void addEffect(BiConsumer<EffectBase, Actor> effect, Trigger... triggers) {
+		effects.add(new SelfEffect(owner, effect, triggers));
 	}
 
 	public JSONArray getTags() {

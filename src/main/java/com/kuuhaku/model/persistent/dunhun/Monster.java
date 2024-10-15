@@ -25,6 +25,8 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.Delta;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.ActorModifiers;
+import com.kuuhaku.model.common.dunhun.EffectBase;
+import com.kuuhaku.model.common.dunhun.SelfEffect;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
@@ -32,6 +34,7 @@ import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -47,6 +50,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -73,6 +77,7 @@ public class Monster extends DAO<Monster> implements Actor {
 	private Set<LocalizedMonster> infos = new HashSet<>();
 
 	private transient final ActorModifiers modifiers = new ActorModifiers();
+	private transient final Set<SelfEffect> effects = new HashSet<>();
 	private transient final RegDeg regDeg = new RegDeg(null);
 	private transient final Set<Affix> affixes = new LinkedHashSet<>();
 	private transient final Delta<Integer> hp = new Delta<>();
@@ -256,6 +261,28 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	public Set<Affix> getAffixes() {
 		return affixes;
+	}
+
+	public Set<SelfEffect> getEffects() {
+		return effects;
+	}
+
+	public void addEffect(BiConsumer<EffectBase, Actor> effect, Trigger... triggers) {
+		effects.add(new SelfEffect(this, effect, triggers));
+	}
+
+	@Override
+	public void trigger(Trigger trigger, Actor target) {
+		for (SelfEffect e : effects) {
+			if (!Utils.equalsAny(trigger, e.getTriggers())) continue;
+
+			try {
+				e.lock();
+				e.getEffect().accept(e, target);
+			} finally {
+				e.unlock();
+			}
+		}
 	}
 
 	public RarityClass getRarityClass() {
