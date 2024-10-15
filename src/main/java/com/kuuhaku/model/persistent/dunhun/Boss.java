@@ -2,6 +2,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
@@ -48,6 +49,9 @@ public class Boss extends MonsterBase<Boss> {
 						"actor", this,
 						"self", getSenshi()
 				));
+
+				Combat comb = getGame().getCombat();
+				comb.getHistory().add(getGame().getLocale().get("str/boss_enraged"));
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to enrage {}", getId(), e);
 			}
