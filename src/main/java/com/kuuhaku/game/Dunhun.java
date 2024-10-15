@@ -181,17 +181,21 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}
 
 						for (Hero h : heroes.values()) {
-							int lvl = h.getStats().getLevel();
-							if (lvl > getTurn() - 5) {
-								xpGained = Math.max(1, getTurn() * xpGained / (lvl - 5));
-							}
+							int xp = xpGained;
+							DAO.apply(Hero.class, h.getId(), n -> {
+								int gain = xp;
+								int lvl = h.getStats().getLevel();
+								if (lvl > getTurn() - 5) {
+									gain = Math.max(1, getTurn() * gain / (lvl - 5));
+								}
 
-							h.getStats().addXp(xpGained);
-							h.save();
+								h.getStats().addXp(gain);
+								h.save();
 
-							if (h.getStats().getLevel() > lvl) {
-								getChannel().buffer(getLocale().get("str/actor_level_up", h.getName(), h.getStats().getLevel()));
-							}
+								if (h.getStats().getLevel() > lvl) {
+									getChannel().buffer(getLocale().get("str/actor_level_up", h.getName(), h.getStats().getLevel()));
+								}
+							});
 						}
 
 						combat.set(null);
