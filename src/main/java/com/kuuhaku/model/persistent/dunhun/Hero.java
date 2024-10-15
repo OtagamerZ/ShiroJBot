@@ -145,13 +145,17 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public int getHp() {
-		if (hp.get() == null) hp.set(getMaxHp());
+		int max = getMaxHp();
+
+		if (hp.get() == null || hp.get() > max) hp.set(max);
 		return hp.get();
 	}
 
 	@Override
 	public int getMaxHp() {
-		return (int) ((500 + modifiers.getMaxHp().get()) * (1 + modifiers.getHpMult().get()) * (1 + getAttributes().vit() / 10d));
+		double flat = 300 + modifiers.getMaxHp().get() + stats.getLevel() * (5 + getAttributes().vit());
+
+		return (int) (flat * modifiers.getHpMult().get());
 	}
 
 	@Override

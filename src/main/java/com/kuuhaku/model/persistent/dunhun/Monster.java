@@ -169,20 +169,22 @@ public class Monster extends DAO<Monster> implements Actor {
 
 	@Override
 	public int getHp() {
-		if (hp.get() == null) hp.set(getMaxHp());
+		int max = getMaxHp();
+
+		if (hp.get() == null || hp.get() > max) hp.set(max);
 		return hp.get();
 	}
 
 	@Override
 	public int getMaxHp() {
-		int hp = (int) ((stats.getBaseHp() + modifiers.getMaxHp().get()) * (1 + modifiers.getHpMult().get()));
+		double flat = stats.getBaseHp() + modifiers.getMaxHp().get() + game.getTurn() * 5;
 		double mult = switch (getRarityClass()) {
 			case RARE -> 2.25;
 			case MAGIC -> 1.5;
 			default -> 1;
 		} * (1 + game.getTurn() / 5d);
 
-		return (int) (hp * mult);
+		return (int) (flat * mult * modifiers.getHpMult().get());
 	}
 
 	@Override
