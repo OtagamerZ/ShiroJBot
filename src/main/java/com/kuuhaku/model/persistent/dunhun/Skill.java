@@ -115,9 +115,9 @@ public class Skill extends DAO<Skill> {
 					case VIT -> attr.vit();
 				};
 
-				scale = (1 + sa / (9d + sa)) * h.getSenshi().getPower();
+				scale = (1 + sa / (9d + sa)) * h.asSenshi(locale).getPower();
 			} else {
-				scale = h.getSenshi().getPower();
+				scale = h.asSenshi(locale).getPower();
 			}
 
 			desc = Utils.regex(desc, "\\{(\\d+)}").replaceAll(v -> {
@@ -131,7 +131,7 @@ public class Skill extends DAO<Skill> {
 				case RARE -> 2;
 				case MAGIC -> 1.25;
 				default -> 1;
-			} * (1 + m.getGame().getTurn() / 4d) * m.getSenshi().getPower();
+			} * (1 + m.getGame().getTurn() / 4d) * m.asSenshi(locale).getPower();
 
 			desc = Utils.regex(desc, "\\{(\\d+)}").replaceAll(v -> {
 				int val = (int) (Integer.parseInt(v.group(1)) * mult);
