@@ -57,7 +57,7 @@ public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
 	private String script;
 
 	@Column(name = "area_level")
-	private int areaLevel;
+	private int areaLevel = 1;
 
 	private transient final List<Runnable> floors = new ArrayList<>();
 
