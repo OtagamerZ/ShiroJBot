@@ -376,14 +376,8 @@ public class Combat implements Renderer<BufferedImage> {
 									.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 									.setCancellable(false)
 									.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() -> {
-										int chance = Utils.clamp(100 - 10 * game.getTurn() + 5 * h.getAttributes().dex(), 0, 100 - 2 * game.getTurn());
-
-										if (Calc.chance(chance)) {
-											h.setFleed(true);
-											history.add(locale.get("str/actor_flee", h.getName()));
-										} else {
-											history.add(locale.get("str/actor_flee_fail", h.getName(), chance));
-										}
+										h.setFleed(true);
+										history.add(locale.get("str/actor_flee", h.getName()));
 
 										h.modAp(-h.getAp());
 									}))

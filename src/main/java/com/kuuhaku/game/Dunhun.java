@@ -87,6 +87,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 				if (getCombat() != null) {
 					Actor current = getCombat().getTurns().get();
 					current.modAp(-current.getAp());
+					current.setFleed(true);
+
 					getCombat().getLock().complete(null);
 					return;
 				}
@@ -373,7 +375,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		for (Actor a : getCombat().getActors()) {
 			if (!(a instanceof Monster m)) continue;
 
-			XStringBuilder sb = new XStringBuilder("#-# " + m.getInfo(getLocale()).getName() + "\n");
+			XStringBuilder sb = new XStringBuilder("#-# " + m.getInfo(getLocale()).getName());
 
 			List<String> affs = m.getAffixes().stream()
 					.map(aff -> "- " + aff.getInfo(getLocale()).getDescription())
@@ -413,7 +415,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		for (Hero h : heroes.values()) {
-			XStringBuilder sb = new XStringBuilder("#-# " + getLocale().get("race/" + h.getRace().name()) + "\n");
+			XStringBuilder sb = new XStringBuilder("#-# " + getLocale().get("race/" + h.getRace().name()));
 			h.addHpBar(sb);
 
 			List<String> skills = h.getSkills().stream()
@@ -426,7 +428,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			if (!skills.isEmpty()) {
 				sb.nextLine();
 				sb.appendNewLine("**" + getLocale().get("str/skills") + "**");
-				sb.appendNewLine(String.join("\n>\n", skills));
+				sb.appendNewLine(String.join("\n\n", skills));
 			}
 
 			String desc = sb.toString().lines()
