@@ -37,13 +37,13 @@ import org.apache.commons.validator.routines.UrlValidator;
 		path = "background",
 		category = Category.MISC
 )
-@Syntax(allowEmpty = true, value = "<text:text:r>")
+@Syntax(allowEmpty = true, value = "<url:text:r>")
 public class ProfileBackgroundCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		AccountSettings settings = data.profile().getAccount().getSettings();
 
-		String url = args.getString("text");
+		String url = args.getString("url");
 		if (url.isBlank()) {
 			if (!event.message().getAttachments().isEmpty()) {
 				for (Message.Attachment att : event.message().getAttachments()) {
@@ -61,7 +61,10 @@ public class ProfileBackgroundCommand implements Executable {
 			}
 		}
 
-		if (url.length() > 255) {
+		if (url.isBlank()) {
+			event.channel().sendMessage(locale.get("error/image_required")).queue();
+			return;
+		} else if (url.length() > 255) {
 			event.channel().sendMessage(locale.get("error/url_too_long")).queue();
 			return;
 		} else if (!UrlValidator.getInstance().isValid(url)) {
@@ -74,7 +77,7 @@ public class ProfileBackgroundCommand implements Executable {
 			event.channel().sendMessage(locale.get("error/invalid_url")).queue();
 			return;
 		} else if (size > AccountSettings.MAX_BG_SIZE) {
-			event.channel().sendMessage(locale.get("error/image_too_big", "4 MB")).queue();
+			event.channel().sendMessage(locale.get("error/image_too_big", (AccountSettings.MAX_BG_SIZE / 1024 / 1024) + " MB")).queue();
 			return;
 		}
 

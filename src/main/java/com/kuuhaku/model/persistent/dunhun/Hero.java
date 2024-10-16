@@ -68,6 +68,7 @@ import java.util.stream.Collectors;
 public class Hero extends DAO<Hero> implements Actor {
 	@Transient
 	public final long SERIAL = ThreadLocalRandom.current().nextLong();
+	public static final long MAX_IMG_SIZE = 4 * 1024 * 1024;
 
 	@Id
 	@Column(name = "id", nullable = false)
