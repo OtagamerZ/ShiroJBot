@@ -303,7 +303,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public static Gear getRandom(Dunhun game, Hero hero, RarityClass rarity) {
-		return getRandom(game, hero, Basetype.getRandom(), rarity);
+		return getRandom(game, hero, Basetype.getRandom(game), rarity);
 	}
 
 	public static Gear getRandom(Dunhun game, Hero hero, Basetype base, RarityClass rarity) {
