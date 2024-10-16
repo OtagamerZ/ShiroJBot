@@ -142,7 +142,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							break;
 						}
 
-						floors.get(getTurn()).run();
+						floors.get(getTurn() - 1).run();
 					} else {
 						if (getTurn() % 10 == 0) {
 							beginCombat(Boss.getRandom());
