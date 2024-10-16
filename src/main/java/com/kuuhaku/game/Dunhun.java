@@ -211,7 +211,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								int diff = Math.abs(dungeon.getAreaLevel() - lvl);
 
 								if (diff > 5) {
-									gain = Math.max(1, );
+//									gain = Math.max(1, );
 								}
 
 								h.getStats().addXp(gain);
