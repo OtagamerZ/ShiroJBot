@@ -43,7 +43,7 @@ public class Boss extends MonsterBase<Boss> {
 	@Override
 	public int getHp() {
 		int hp = super.getHp();
-		if (onEnrage != null && hp < getMaxHp() / 2 && !enraged) {
+		if (onEnrage != null && hp <= getMaxHp() / 2 && !enraged) {
 			try {
 				Utils.exec(getId(), onEnrage, Map.of(
 						"locale", getGame().getLocale(),

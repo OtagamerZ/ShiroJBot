@@ -87,7 +87,7 @@ public class CreateHeroCommand implements Executable {
 			event.channel().sendMessage(locale.get("error/invalid_url")).queue();
 			return;
 		} else if (size > Hero.MAX_IMG_SIZE) {
-			event.channel().sendMessage(locale.get("error/image_too_big", (Hero.MAX_IMG_SIZE / 1024 / 1024) + " MB")).queue();
+				event.channel().sendMessage(locale.get("error/image_too_big", (Hero.MAX_IMG_SIZE / 1024 / 1024) + " MB")).queue();
 			return;
 		}
 
