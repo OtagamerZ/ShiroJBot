@@ -398,24 +398,26 @@ public class Dunhun extends GameInstance<NullPhase> {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		for (Actor a : getCombat().getActors()) {
-			if (!(a instanceof Monster m)) continue;
+			if (!(a instanceof MonsterBase<?> mb)) continue;
 
-			XStringBuilder sb = new XStringBuilder("#-# " + m.getInfo(getLocale()).getName());
+			XStringBuilder sb = new XStringBuilder("#-# " + mb.getInfo(getLocale()).getName());
 
-			List<String> affs = m.getAffixes().stream()
-					.map(aff -> "- " + aff.getInfo(getLocale()).getDescription())
-					.toList();
+			if (mb instanceof Monster m) {
+				List<String> affs = m.getAffixes().stream()
+						.map(aff -> "- " + aff.getInfo(getLocale()).getDescription())
+						.toList();
 
-			if (!affs.isEmpty()) {
-				sb.appendNewLine("#");
-				sb.appendNewLine("**" + getLocale().get("str/affixes") + "**");
-				sb.appendNewLine(String.join("\n", affs));
+				if (!affs.isEmpty()) {
+					sb.appendNewLine("#");
+					sb.appendNewLine("**" + getLocale().get("str/affixes") + "**");
+					sb.appendNewLine(String.join("\n", affs));
+				}
 			}
 
-			List<String> skills = m.getSkills().stream()
+			List<String> skills = mb.getSkills().stream()
 					.map(s ->
 							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
-							"\n-# " + s.getDescription(getLocale(), m)
+							"\n-# " + s.getDescription(getLocale(), mb)
 					)
 					.toList();
 
