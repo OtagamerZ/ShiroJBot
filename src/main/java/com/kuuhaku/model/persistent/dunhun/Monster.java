@@ -193,7 +193,7 @@ public class Monster extends MonsterBase<Monster> {
 	public static Monster getRandom(String id, RarityClass rarity) {
 		if (rarity == null) {
 			if (Calc.chance(5)) rarity = RarityClass.RARE;
-			else if (Calc.chance(30)) rarity = RarityClass.MAGIC;
+			else if (Calc.chance(35)) rarity = RarityClass.MAGIC;
 			else rarity = RarityClass.NORMAL;
 		}
 
