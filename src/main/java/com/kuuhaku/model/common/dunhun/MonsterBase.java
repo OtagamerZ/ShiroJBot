@@ -128,7 +128,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 
 	@Override
 	public int getInitiative() {
-		return game.getInstance().getAreaLevel() + (int) modifiers.getInitiative().get();
+		return game.getDungeon().getAreaLevel() + (int) modifiers.getInitiative().get();
 	}
 
 	@Override

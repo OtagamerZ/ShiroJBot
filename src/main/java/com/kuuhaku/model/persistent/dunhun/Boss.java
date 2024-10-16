@@ -52,7 +52,7 @@ public class Boss extends MonsterBase<Boss> {
 				));
 
 				Combat comb = getGame().getCombat();
-				comb.getHistory().add(getGame().getLocale().get("str/boss_enraged"));
+				comb.getHistory().add(getGame().getLocale().get("str/boss_enraged", getName(getGame().getLocale())));
 				enraged = true;
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to enrage {}", getId(), e);
@@ -71,7 +71,7 @@ public class Boss extends MonsterBase<Boss> {
 
 	@Override
 	public int getMaxHp() {
-		return (int) (stats.getBaseHp() * getGame().getInstance().getAreaLevel());
+		return stats.getBaseHp() * getGame().getDungeon().getAreaLevel();
 	}
 
 	@Override

@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 
 public class Dunhun extends GameInstance<NullPhase> {
 	private final ExecutorService main = Executors.newSingleThreadExecutor();
-	private final Dungeon instance;
+	private final Dungeon dungeon;
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
 	private final Loot loot = new Loot();
@@ -54,14 +54,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private CompletableFuture<Void> lock;
 	private Pair<String, String> message;
 
-	public Dunhun(I18N locale, Dungeon instance, User... players) {
-		this(locale, instance, Arrays.stream(players).map(User::getId).toArray(String[]::new));
+	public Dunhun(I18N locale, Dungeon dungeon, User... players) {
+		this(locale, dungeon, Arrays.stream(players).map(User::getId).toArray(String[]::new));
 	}
 
-	public Dunhun(I18N locale, Dungeon instance, String... players) {
+	public Dunhun(I18N locale, Dungeon dungeon, String... players) {
 		super(locale, players);
-		this.instance = instance;
-		this.duel = instance.equals(Dungeon.DUEL);
+		this.dungeon = dungeon;
+		this.duel = dungeon.equals(Dungeon.DUEL);
 		if (duel && players.length % 2 != 0) {
 			getChannel().sendMessage(getString("error/invalid_duel")).queue();
 			close(GameReport.OTHER);
@@ -110,7 +110,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@Override
 	protected void begin() {
-		instance.init(getLocale(), this);
+		dungeon.init(getLocale(), this);
 
 		CompletableFuture.runAsync(() -> {
 			while (!isClosed()) {
@@ -132,7 +132,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				try {
-					List<Runnable> floors = instance.getFloors();
+					List<Runnable> floors = dungeon.getFloors();
 					if (!floors.isEmpty()) {
 						if (getTurn() >= floors.size()) {
 							reportResult(GameReport.SUCCESS, "str/dungeon_end",
@@ -208,8 +208,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 							DAO.apply(Hero.class, h.getId(), n -> {
 								int gain = xp;
 								int lvl = h.getStats().getLevel();
-								if (lvl > getTurn() - 5) {
-									gain = Math.max(1, getTurn() * gain / (lvl - 5));
+								int diff = dungeon.getAreaLevel();
+								int areaLvl = dungeon.getAreaLevel();
+
+
+								if (!Utils.between(lvl, areaLvl - 5, areaLvl + 5)) {
+									gain = Math.max(1, areaLvl * gain / (lvl - 5));
 								}
 
 								h.getStats().addXp(gain);
@@ -502,8 +506,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 		close(code);
 	}
 
-	public Dungeon getInstance() {
-		return instance;
+	public Dungeon getDungeon() {
+		return dungeon;
 	}
 
 	public Map<String, Hero> getHeroes() {
