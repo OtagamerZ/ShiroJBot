@@ -126,7 +126,7 @@ public class Skill extends DAO<Skill> {
 				return String.valueOf(val);
 			});
 		} else {
-			Monster m = (Monster) source;
+			MonsterBase<?> m = (MonsterBase<?>) source;
 			double mult = switch (m.getRarityClass()) {
 				case RARE -> 2;
 				case MAGIC -> 1.25;
