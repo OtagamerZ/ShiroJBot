@@ -45,6 +45,7 @@ public class Boss extends MonsterBase<Boss> {
 		int hp = super.getHp();
 		if (onEnrage != null && hp <= getMaxHp() / 2 && !enraged) {
 			try {
+				enraged = true;
 				Utils.exec(getId(), onEnrage, Map.of(
 						"locale", getGame().getLocale(),
 						"actor", this,
@@ -53,7 +54,6 @@ public class Boss extends MonsterBase<Boss> {
 
 				Combat comb = getGame().getCombat();
 				comb.getHistory().add(getGame().getLocale().get("str/boss_enraged", getName(getGame().getLocale())));
-				enraged = true;
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to enrage {}", getId(), e);
 			}

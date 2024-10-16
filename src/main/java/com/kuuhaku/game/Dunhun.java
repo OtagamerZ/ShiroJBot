@@ -208,12 +208,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 							DAO.apply(Hero.class, h.getId(), n -> {
 								int gain = xp;
 								int lvl = h.getStats().getLevel();
-								int diff = dungeon.getAreaLevel();
-								int areaLvl = dungeon.getAreaLevel();
+								int diff = Math.abs(dungeon.getAreaLevel() - lvl);
 
-
-								if (!Utils.between(lvl, areaLvl - 5, areaLvl + 5)) {
-									gain = Math.max(1, areaLvl * gain / (lvl - 5));
+								if (diff > 5) {
+									gain = Math.max(1, );
 								}
 
 								h.getStats().addXp(gain);
@@ -421,7 +419,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 			List<String> skills = mb.getSkills().stream()
 					.map(s ->
 							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
-							"\n-# " + s.getDescription(getLocale(), mb)
+							"\n+" + s.getDescription(getLocale(), mb).lines()
+									.map(l -> "-# " + l)
+									.collect(Collectors.joining("\n"))
 					)
 					.toList();
 
@@ -452,7 +452,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 			List<String> skills = h.getSkills().stream()
 					.map(s ->
 							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
-							"\n-# " + s.getDescription(getLocale(), h)
+							"\n+" + s.getDescription(getLocale(), h).lines()
+									.map(l -> "-# " + l)
+									.collect(Collectors.joining("\n"))
 					)
 					.toList();
 

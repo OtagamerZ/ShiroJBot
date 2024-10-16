@@ -200,6 +200,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 
 		double xp = getStats().getBaseHp() / 500d + getStats().getAttack() / 175d + getStats().getDefense() / 250d;
 		if (getGame() != null) {
+			xp += getGame().getDungeon().getAreaLevel();
 			xp *= 1 + getGame().getTurn() * 0.1;
 		}
 
