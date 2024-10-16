@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.GearModifiers;
@@ -293,51 +294,48 @@ public class Gear extends DAO<Gear> {
 		return Objects.hashCode(id);
 	}
 
-	public static Gear getRandom(Hero hero) {
-		return getRandom(hero, -1);
+	public static Gear getRandom(Dunhun game, Hero hero) {
+		return getRandom(game, hero, (RarityClass) null);
 	}
 
-	public static Gear getRandom(Hero hero, Basetype base) {
-		return getRandom(hero, base, -1);
+	public static Gear getRandom(Dunhun game, Hero hero, Basetype base) {
+		return getRandom(game, hero, base, null);
 	}
 
-	public static Gear getRandom(Hero hero, int mods) {
-		return getRandom(hero, Basetype.getRandom(), mods);
+	public static Gear getRandom(Dunhun game, Hero hero, RarityClass rarity) {
+		return getRandom(game, hero, Basetype.getRandom(), rarity);
 	}
 
-	public static Gear getRandom(Hero hero, Basetype base, int mods) {
+	public static Gear getRandom(Dunhun game, Hero hero, Basetype base, RarityClass rarity) {
 		Gear out = new Gear(hero, base);
+		int dropLevel = Integer.MAX_VALUE;
+		if (game != null) {
+			dropLevel = game.getDungeon().getAreaLevel();
+		}
 
-		if (mods == -1) {
-			for (AffixType type : AffixType.itemValues()) {
-				if (Calc.chance(50)) {
-					Affix af = Affix.getRandom(out, type);
-					if (af == null) continue;
+		if (rarity == null) {
+			if (Calc.chance(5)) rarity = RarityClass.RARE;
+			else if (Calc.chance(35)) rarity = RarityClass.MAGIC;
+			else rarity = RarityClass.NORMAL;
+		}
 
-					out.getAffixes().add(new GearAffix(out, af));
-				}
-			}
+		if (Utils.equalsAny(rarity, RarityClass.NORMAL, RarityClass.UNIQUE)) return out;
 
-			if (Calc.chance(25)) {
-				for (AffixType type : AffixType.itemValues()) {
-					if (Calc.chance(50)) {
-						Affix af = Affix.getRandom(out, type);
-						if (af == null) continue;
+		List<AffixType> pool = new ArrayList<>(List.of(AffixType.itemValues()));
 
-						out.getAffixes().add(new GearAffix(out, af));
-					}
-				}
-			}
-		} else {
-			List<AffixType> types = Utils.getRandomN(
-					List.of(AffixType.SUFFIX, AffixType.PREFIX, AffixType.SUFFIX, AffixType.PREFIX),
-					Math.min(mods, 4), 1
-			);
+		int min = rarity == RarityClass.MAGIC ? 1 : 2;
+		List<AffixType> rolled = Utils.getRandomN(pool, Calc.rng(min, min * 2), min);
 
-			for (AffixType type : types) {
-				Affix af = Affix.getRandom(out, type);
-				if (af == null) continue;
+		for (AffixType type : rolled) {
+			Affix af = Affix.getRandom(out, type, dropLevel);
+			if (af == null) continue;
 
+			out.getAffixes().add(new GearAffix(out, af));
+		}
+
+		if (rarity == RarityClass.RARE && out.getRarityClass() != RarityClass.RARE) {
+			Affix af = Affix.getRandom(out, Utils.getRandomEntry(pool), dropLevel);
+			if (af != null) {
 				out.getAffixes().add(new GearAffix(out, af));
 			}
 		}

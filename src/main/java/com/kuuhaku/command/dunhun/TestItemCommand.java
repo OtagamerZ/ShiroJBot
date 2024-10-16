@@ -66,9 +66,9 @@ public class TestItemCommand implements Executable {
 				return;
 			}
 
-			g = Gear.getRandom(h, base);
+			g = Gear.getRandom(null, h, base);
 		} else {
-			g = Gear.getRandom(h);
+			g = Gear.getRandom(null, h);
 		}
 
 		g.save();

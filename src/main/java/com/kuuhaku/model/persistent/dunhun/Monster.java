@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
@@ -175,7 +176,7 @@ public class Monster extends MonsterBase<Monster> {
 		return clone;
 	}
 
-	public static Monster getRandom() {
+	public static Monster getRandom(Dunhun game) {
 		RandomList<String> rl = new RandomList<>();
 		List<Object[]> mons = DAO.queryAllUnmapped("SELECT id, weight FROM monster WHERE weight > 0");
 
@@ -183,14 +184,19 @@ public class Monster extends MonsterBase<Monster> {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}
 
-		return getRandom(rl.get());
+		return getRandom(game, rl.get());
 	}
 
-	public static Monster getRandom(String id) {
-		return getRandom(id, null);
+	public static Monster getRandom(Dunhun game, String id) {
+		return getRandom(game, id, null);
 	}
 
-	public static Monster getRandom(String id, RarityClass rarity) {
+	public static Monster getRandom(Dunhun game, String id, RarityClass rarity) {
+		int dropLevel = Integer.MAX_VALUE;
+		if (game != null) {
+			dropLevel = game.getDungeon().getAreaLevel();
+		}
+
 		if (rarity == null) {
 			if (Calc.chance(5)) rarity = RarityClass.RARE;
 			else if (Calc.chance(35)) rarity = RarityClass.MAGIC;
@@ -206,14 +212,14 @@ public class Monster extends MonsterBase<Monster> {
 		List<AffixType> rolled = Utils.getRandomN(pool, Calc.rng(min, min * 2), min);
 
 		for (AffixType type : rolled) {
-			Affix af = Affix.getRandom(mon, type);
+			Affix af = Affix.getRandom(mon, type, dropLevel);
 			if (af == null) continue;
 
 			mon.getAffixes().add(af);
 		}
 
 		if (rarity == RarityClass.RARE && mon.getRarityClass() != RarityClass.RARE) {
-			Affix af = Affix.getRandom(mon, Utils.getRandomEntry(pool));
+			Affix af = Affix.getRandom(mon, Utils.getRandomEntry(pool), dropLevel);
 			if (af != null) {
 				mon.getAffixes().add(af);
 			}
