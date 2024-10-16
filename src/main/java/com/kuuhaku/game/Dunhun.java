@@ -134,7 +134,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 				try {
 					List<Runnable> floors = dungeon.getFloors();
 					if (!floors.isEmpty()) {
-						if (getTurn() >= floors.size()) {
+						int floor = getTurn() - 1;
+						if (floor >= floors.size()) {
 							reportResult(GameReport.SUCCESS, "str/dungeon_end",
 									Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
 							);
@@ -142,7 +143,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							break;
 						}
 
-						floors.get(getTurn() - 1).run();
+						floors.get(floor).run();
 					} else {
 						if (getTurn() % 10 == 0) {
 							beginCombat(Boss.getRandom());
