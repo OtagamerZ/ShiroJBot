@@ -211,7 +211,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								int diff = Math.abs(dungeon.getAreaLevel() - lvl);
 
 								if (diff > 5) {
-//									gain = Math.max(1, );
+									gain = (int) Calc.clamp(gain * Math.pow(0.9, diff - 5), 1, gain);
 								}
 
 								h.getStats().addXp(gain);
@@ -419,7 +419,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			List<String> skills = mb.getSkills().stream()
 					.map(s ->
 							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
-							"\n+" + s.getDescription(getLocale(), mb).lines()
+							"\n- " + s.getDescription(getLocale(), mb).lines()
 									.map(l -> "-# " + l)
 									.collect(Collectors.joining("\n"))
 					)
@@ -452,7 +452,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			List<String> skills = h.getSkills().stream()
 					.map(s ->
 							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
-							"\n+" + s.getDescription(getLocale(), h).lines()
+							"\n- " + s.getDescription(getLocale(), h).lines()
 									.map(l -> "-# " + l)
 									.collect(Collectors.joining("\n"))
 					)
