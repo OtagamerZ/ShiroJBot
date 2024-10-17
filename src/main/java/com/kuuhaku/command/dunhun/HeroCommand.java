@@ -248,7 +248,6 @@ public class HeroCommand implements Executable {
 			msg.getChannel().sendMessage(locale.get("success/equipped")).queue();
 		});
 		acts.put(new TextId(locale.get("str/unequip")), w -> {
-			msg.getChannel().sendMessage(locale.get("error/inventory_empty_hero", h.getName())).queue();
 			Message s = Utils.awaitMessage(
 					h.getAccount().getUid(),
 					(GuildMessageChannel) w.getChannel(),
@@ -317,11 +316,13 @@ public class HeroCommand implements Executable {
 			sb.clear();
 		}
 
-		msg.editMessageEmbeds(eb.build()).queue(s -> Pages.buttonize(
-				s, () -> acts, true, false,
-				1, TimeUnit.MINUTES,
-				u -> u.getId().equals(h.getAccount().getUid())
-		));
+		msg.editMessageComponents()
+				.setEmbeds(eb.build())
+				.queue(s -> Pages.buttonize(
+						s, () -> acts, true, false,
+						1, TimeUnit.MINUTES,
+						u -> u.getId().equals(h.getAccount().getUid())
+				));
 	}
 
 	private void viewInventory(I18N locale, Hero h, Message msg, Map<ButtonId<?>, ThrowingConsumer<ButtonWrapper>> acts) {
@@ -365,10 +366,12 @@ public class HeroCommand implements Executable {
 			}
 		});
 
-		msg.editMessageEmbeds(eb.build()).queue(s -> Pages.buttonize(
-				s, () -> newActs, true, false,
-				1, TimeUnit.MINUTES,
-				u -> u.getId().equals(h.getAccount().getUid())
-		));
+		msg.editMessageComponents()
+				.setEmbeds(eb.build())
+				.queue(s -> Pages.buttonize(
+						s, () -> newActs, true, false,
+						1, TimeUnit.MINUTES,
+						u -> u.getId().equals(h.getAccount().getUid())
+				));
 	}
 }
