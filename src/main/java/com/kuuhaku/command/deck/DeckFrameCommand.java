@@ -102,7 +102,8 @@ public class DeckFrameCommand implements Executable {
                 } else {
                     EmbedCluster embeds = new EmbedCluster();
 
-                    eb.setTitle(fc.getName(locale), URL.formatted("front", fc.name().toLowerCase()))
+                    eb.setThumbnail(null)
+							.setTitle(fc.getName(locale), URL.formatted("front", fc.name().toLowerCase()))
                             .setDescription(fc.getDescription(locale))
                             .setFooter(locale.get("str/page", i + 1, frames.size()));
 
