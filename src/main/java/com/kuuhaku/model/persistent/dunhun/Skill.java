@@ -26,15 +26,16 @@ import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.WeaponType;
+import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
-import jakarta.persistence.*;
 import jakarta.persistence.Table;
-import org.hibernate.annotations.*;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
@@ -81,6 +82,10 @@ public class Skill extends DAO<Skill> {
 
 	@Embedded
 	private Attributes requirements;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "req_race")
+	private Race reqRace;
 
 	private transient int cd = 0;
 
@@ -221,6 +226,10 @@ public class Skill extends DAO<Skill> {
 		}
 
 		return out;
+	}
+
+	public Race getReqRace() {
+		return reqRace;
 	}
 
 	public int getCd() {

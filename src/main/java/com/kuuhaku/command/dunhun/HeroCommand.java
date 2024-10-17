@@ -145,8 +145,7 @@ public class HeroCommand implements Executable {
 
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
-				.setCancellable(false);
+				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()));
 
 		int[] attr = new int[4];
 		Attributes alloc = h.getStats().getAttributes();
@@ -183,9 +182,7 @@ public class HeroCommand implements Executable {
 			h.getStats().setAttributes(alloc.merge(new Attributes(attr[0], attr[1], attr[2], attr[3])));
 			h.save();
 
-			msg.getChannel().sendMessage(locale.get("success/points_allocated"))
-					.flatMap(ms -> w.getMessage().delete())
-					.queue();
+			msg.getChannel().sendMessage(locale.get("success/points_allocated")).queue();
 		}).addAction(Utils.parseEmoji("↩"), w -> restore.accept(w.getMessage()));
 
 		helper.apply(msg.editMessageEmbeds(eb.build())).queue(s -> Pages.buttonize(s, helper));
@@ -330,7 +327,7 @@ public class HeroCommand implements Executable {
 		msg.editMessageComponents()
 				.setEmbeds(eb.build())
 				.queue(s -> Pages.buttonize(
-						s, () -> acts, true, false,
+						s, () -> acts, true, true,
 						1, TimeUnit.MINUTES,
 						u -> u.getId().equals(h.getAccount().getUid())
 				));
@@ -380,7 +377,7 @@ public class HeroCommand implements Executable {
 		msg.editMessageComponents()
 				.setEmbeds(eb.build())
 				.queue(s -> Pages.buttonize(
-						s, () -> newActs, true, false,
+						s, () -> newActs, true, true,
 						1, TimeUnit.MINUTES,
 						u -> u.getId().equals(h.getAccount().getUid())
 				));
