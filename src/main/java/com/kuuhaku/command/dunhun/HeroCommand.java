@@ -375,7 +375,7 @@ public class HeroCommand implements Executable {
 		});
 
 		msg.editMessageComponents()
-				.setEmbeds(eb.build())
+				.setEmbeds((MessageEmbed) pages.getFirst().getContent())
 				.queue(s -> Pages.buttonize(
 						s, () -> newActs, true, true,
 						1, TimeUnit.MINUTES,

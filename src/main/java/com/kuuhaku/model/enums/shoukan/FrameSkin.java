@@ -60,10 +60,7 @@ public enum FrameSkin {
 
 	BLACK("**(Conquista \"O Intocável\")** Lute nas sombras, apareça na hora menos esperada e torne-se o nêmesis de seus oponentes.",
 			acc -> acc.getAchievements().contains(Achievement.UNTOUCHABLE)),
-
-	GLITCH("**(Emblema \"Bug hunter\")** Ę̶̄͛Ŗ̴̓R̸̩͉͗O̴̪͉͊:̸̻̗͗ ̶̧̤̋̕P̴̘̪͑R̶̳̭̈̂Ǫ̸͒̽T̷̡̗̈́̃Ǫ̶̨̈́̐C̸̯͛̂O̴̯̓L̶̲̱̾̌Ọ̸̗͑̓ ̷̰͓̅͌\"̶̝̈͝D̶̳̯̈́Ĕ̵͍Ŕ̴ͅR̶̮̹͛Õ̶̢̾T̶͓͆A̸͚̰͆\"̶̡̌̓ ̸̬̃̈́N̶̢͉̒Ã̸͍̀Ȍ̸̘ͅ ̵̥͒̈́E̵̤̹̽̅Ṅ̷̼̆C̸̞̒O̷͚̪̎Ň̵͎Ṱ̵̨̽R̸̘̍̆Ả̴̙̞͝D̵̜͍̈́̋O̵̯͆",
-			acc -> Tag.getTags(Main.getMemberByID(acc.getUid())).contains(Tag.BUG_HUNTER)
-	),*/
+	 */
 
 	PADORU("PADORU"),
 	GLITCH("DUNGEON_HUNTER"),
