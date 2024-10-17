@@ -56,6 +56,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -214,13 +215,19 @@ public class HeroCommand implements Executable {
 
 	private void allocGear(ButtonizeHelper root, I18N locale, Hero h, Message msg) {
 		Map<ButtonId<?>, ThrowingConsumer<ButtonWrapper>> acts = new LinkedHashMap<>();
-		acts.put(new EmojiId(Utils.parseEmoji("👤")), w ->
-				viewGear(locale, h, msg, acts)
-		);
-		acts.put(new EmojiId(Utils.parseEmoji("🎒")), w ->
-				viewInventory(locale, h, msg, acts)
-		);
+		AtomicReference<Runnable> ctx = new AtomicReference<>(() -> viewGear(locale, h, msg, acts));
+
+		acts.put(new EmojiId(Utils.parseEmoji("👤")), w -> {
+			ctx.set(() -> viewGear(locale, h, msg, acts));
+			ctx.get().run();
+		});
+		acts.put(new EmojiId(Utils.parseEmoji("🎒")), w -> {
+			ctx.set(() -> viewInventory(locale, h, msg, acts));
+			ctx.get().run();
+		});
 		acts.put(new TextId(locale.get("str/equip")), w -> {
+			w.getChannel().sendMessage(locale.get("str/select_an_equipment")).queue();
+
 			Message s = Utils.awaitMessage(
 					h.getAccount().getUid(),
 					(GuildMessageChannel) w.getChannel(),
@@ -246,8 +253,11 @@ public class HeroCommand implements Executable {
 
 			h.save();
 			msg.getChannel().sendMessage(locale.get("success/equipped")).queue();
+			ctx.get().run();
 		});
 		acts.put(new TextId(locale.get("str/unequip")), w -> {
+			w.getChannel().sendMessage(locale.get("str/select_an_equipment")).queue();
+
 			Message s = Utils.awaitMessage(
 					h.getAccount().getUid(),
 					(GuildMessageChannel) w.getChannel(),
@@ -273,12 +283,13 @@ public class HeroCommand implements Executable {
 
 			h.save();
 			w.getChannel().sendMessage(locale.get("success/unequipped")).queue();
+			ctx.get().run();
 		});
 		acts.put(new EmojiId(Utils.parseEmoji("↩")), w ->
 				Pages.buttonize(w.getMessage(), root)
 		);
 
-		viewGear(locale, h, msg, acts);
+		ctx.get().run();
 	}
 
 	private void viewGear(I18N locale, Hero h, Message msg, Map<ButtonId<?>, ThrowingConsumer<ButtonWrapper>> acts) {
