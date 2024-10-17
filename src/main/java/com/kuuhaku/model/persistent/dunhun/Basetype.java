@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedBasetype;
@@ -88,18 +89,19 @@ public class Basetype extends DAO<Basetype> {
 		return Objects.hashCode(id);
 	}
 
-	public static Basetype getRandom() {
-		return getRandom(0, Integer.MAX_VALUE);
-	}
+	public static Basetype getRandom(Dunhun game) {
+		int dropLevel = Integer.MAX_VALUE;
+		if (game != null) {
+			dropLevel = game.getDungeon().getAreaLevel();
+		}
 
-	public static Basetype getRandom(int minLevel, int maxLevel) {
 		List<Object[]> bases = DAO.queryAllUnmapped("""
 				SELECT id
 				     , weight
 				FROM basetype
-				WHERE req_level BETWEEN ?1 AND ?2
-				  AND weight > 0
-				""", minLevel, maxLevel
+				WHERE weight > 0
+ 				  AND req_level <= ?1
+				""", dropLevel
 		);
 
 		RandomList<String> rl = new RandomList<>();
