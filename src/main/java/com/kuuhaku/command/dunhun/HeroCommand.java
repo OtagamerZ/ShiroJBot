@@ -124,7 +124,7 @@ public class HeroCommand implements Executable {
 						w -> allocAttributes(restore, locale, h, w.getMessage())
 				)
 				.addAction(Utils.parseEmoji("📖"),
-						w -> updatePage(viewSkills(locale, h), w.getMessage())
+						w -> allocSkills(restore, locale, h, w.getMessage())
 				)
 				.addAction(Utils.parseEmoji("🛡"),
 						w -> allocGear(restore, locale, h, w.getMessage())
@@ -188,12 +188,21 @@ public class HeroCommand implements Executable {
 		helper.apply(msg.editMessageEmbeds(eb.build())).queue(s -> Pages.buttonize(s, helper));
 	}
 
-	private Page viewSkills(I18N locale, Hero h) {
+	private void allocSkills(Consumer<Message> restore, I18N locale, Hero h, Message msg) {
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()));
+
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/skills"))
 				.setThumbnail("attachment://card.png");
 
-		List<Skill> skills = h.getSkills();
+		List<Skill> skills = h.getInventory();
+		if (skills.isEmpty()) {
+			msg.getChannel().sendMessage(locale.get("error/inventory_empty_hero", h.getName())).queue();
+			return;
+		}
+
 		for (int i = 0; i < 5; i++) {
 			if (skills.size() <= i) {
 				eb.appendDescription("*" + locale.get("str/empty") + "*\n\n");
@@ -209,7 +218,7 @@ public class HeroCommand implements Executable {
 			eb.appendDescription("\n");
 		}
 
-		return InteractPage.of(eb.build());
+		helper.apply(msg.editMessageComponents()).queue(s -> Pages.buttonize(s, helper));
 	}
 
 	private void allocGear(Consumer<Message> restore, I18N locale, Hero h, Message msg) {
