@@ -21,8 +21,8 @@ CREATE OR REPLACE FUNCTION has_attributes(a INT, b INT)
     LANGUAGE sql
 AS
 $$
-SELECT ((a >> 24) & cast(x'FF' AS INT)) >= ((b >> 24) & cast(x'FF' AS INT))
-    AND ((a >> 16) & cast(x'FF' AS INT)) >= ((b >> 16) & cast(x'FF' AS INT))
-    AND ((a >> 8) & cast(x'FF' AS INT)) >= ((b >> 8) & cast(x'FF' AS INT))
-    AND (a & cast(x'FF' AS INT)) >= (b & cast(x'FF' AS INT));
+SELECT (a >> 24) & cast(x'FF' AS INT) >= (b >> 24) & cast(x'FF' AS INT)
+    AND (a >> 16) & cast(x'FF' AS INT) >= (b >> 16) & cast(x'FF' AS INT)
+    AND (a >> 8) & cast(x'FF' AS INT) >= (b >> 8) & cast(x'FF' AS INT)
+    AND a & cast(x'FF' AS INT) >= b & cast(x'FF' AS INT);
 $$;

@@ -181,7 +181,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	@Override
-	public int 	getMaxAp() {
+	public int getMaxAp() {
 		return Calc.clamp(1 + (int) modifiers.getMaxAp().get() + stats.getLevel() / 8, 1, 5 + getAttributes().dex() / 10);
 	}
 
@@ -324,6 +324,24 @@ public class Hero extends DAO<Hero> implements Actor {
 		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", stats.getSkills())
 				.stream()
 				.filter(s -> getAttributes().has(s.getRequirements()))
+				.toList();
+	}
+
+	public List<Skill> getAvailableSkills() {
+		List<String> valid = DAO.queryAllNative(String.class, """
+				SELECT s.id
+				FROM skill s
+				         INNER JOIN hero h ON h.id = 'MIPE'
+				WHERE s.attributes != -1
+				  AND has_attributes(h.attributes, s.attributes)
+				  AND (s.req_race IS NULL OR s.req_race = h.race)
+				""");
+
+		return DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", valid).stream()
+				.sorted(Comparator
+						.<Skill>comparingInt(s -> s.getRequirements().count())
+						.thenComparing(Skill::getId)
+				)
 				.toList();
 	}
 
