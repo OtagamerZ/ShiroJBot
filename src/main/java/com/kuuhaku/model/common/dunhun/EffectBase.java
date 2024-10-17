@@ -1,6 +1,7 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.records.dunhun.CombatContext;
 
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
@@ -9,10 +10,10 @@ import java.util.function.BiConsumer;
 public abstract class EffectBase {
 	public final long SERIAL = ThreadLocalRandom.current().nextLong();
 	private final Actor owner;
-	private final BiConsumer<EffectBase, Actor> effect;
+	private final BiConsumer<EffectBase, CombatContext> effect;
 	private int duration;
 
-	public EffectBase(Actor owner, int duration, BiConsumer<EffectBase, Actor> effect) {
+	public EffectBase(Actor owner, int duration, BiConsumer<EffectBase, CombatContext> effect) {
 		this.owner = owner;
 		this.duration = duration;
 		this.effect = effect;
@@ -31,7 +32,7 @@ public abstract class EffectBase {
 		return duration == 0;
 	}
 
-	public BiConsumer<EffectBase, Actor> getEffect() {
+	public BiConsumer<EffectBase, CombatContext> getEffect() {
 		return effect;
 	}
 

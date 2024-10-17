@@ -118,6 +118,7 @@ public class Skill extends DAO<Skill> {
 					case DEX -> attr.dex();
 					case WIS -> attr.wis();
 					case VIT -> attr.vit();
+					case LVL -> h.getStats().getLevel();
 				};
 
 				scale = (1 + sa / (9d + sa)) * h.asSenshi(locale).getPower();

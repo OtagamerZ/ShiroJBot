@@ -6,6 +6,7 @@ import com.kuuhaku.model.common.dunhun.ActorModifiers;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Trigger;
@@ -162,6 +163,8 @@ public interface Actor {
 	default boolean isSkipped() {
 		return hasFleed() || getHp() <= 0;
 	}
+
+	RarityClass getRarityClass();
 
 	ActorModifiers getModifiers();
 

@@ -6,7 +6,6 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.Delta;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -17,6 +16,7 @@ import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
@@ -170,7 +170,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		return effects;
 	}
 
-	public void addEffect(BiConsumer<EffectBase, Actor> effect, Trigger... triggers) {
+	public void addEffect(BiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
 		effects.add(new SelfEffect(this, effect, triggers));
 	}
 
@@ -181,14 +181,12 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 
 			try {
 				e.lock();
-				e.getEffect().accept(e, target);
+				e.getEffect().accept(e, new CombatContext(this, target));
 			} finally {
 				e.unlock();
 			}
 		}
 	}
-
-	public abstract RarityClass getRarityClass();
 
 	public int getKillXp() {
 		double mult = switch (getRarityClass()) {

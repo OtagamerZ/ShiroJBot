@@ -29,6 +29,7 @@ import com.kuuhaku.model.common.dunhun.SelfEffect;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.ContinueMode;
+import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Trigger;
@@ -38,6 +39,7 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.dunhun.Attributes;
+import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.model.records.dunhun.GearStats;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
@@ -223,6 +225,11 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	@Override
+	public RarityClass getRarityClass() {
+		return RarityClass.UNIQUE;
+	}
+
+	@Override
 	public ActorModifiers getModifiers() {
 		return modifiers;
 	}
@@ -286,7 +293,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 				try {
 					e.lock();
-					e.getEffect().accept(e, target);
+					e.getEffect().accept(e, new CombatContext(this, target));
 				} finally {
 					e.unlock();
 				}

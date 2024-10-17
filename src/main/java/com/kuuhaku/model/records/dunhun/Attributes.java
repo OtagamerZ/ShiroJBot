@@ -62,6 +62,7 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 			case DEX -> dex();
 			case WIS -> wis();
 			case VIT -> vit();
+			default -> 0;
 		};
 	}
 

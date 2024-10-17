@@ -2,6 +2,7 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.records.dunhun.CombatContext;
 
 import java.util.function.BiConsumer;
 
@@ -10,7 +11,7 @@ public final class TriggeredEffect extends EffectBase {
 	private int limit;
 	private boolean lock;
 
-	public TriggeredEffect(Actor owner, int duration, int limit, BiConsumer<EffectBase, Actor> effect, Trigger... triggers) {
+	public TriggeredEffect(Actor owner, int duration, int limit, BiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
 		super(owner, duration, effect);
 		this.triggers = triggers;
 		this.limit = limit;

@@ -19,6 +19,7 @@ import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.ClusterAction;
+import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -256,7 +257,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 					if (e.decDuration()) it.remove();
 					if (e instanceof PersistentEffect pe) {
-						pe.getEffect().accept(e, act);
+						pe.getEffect().accept(e, new CombatContext(act, act));
 					}
 				}
 			}
@@ -751,7 +752,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			try {
 				te.lock();
-				te.getEffect().accept(e, from);
+				te.getEffect().accept(e, new CombatContext(from, to));
 			} finally {
 				te.unlock();
 			}
