@@ -80,53 +80,57 @@ public class HeroCommand implements Executable {
 			return;
 		}
 
-		Senshi card = h.asSenshi(locale);
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/hero_info", h.getName()))
-				.setImage("attachment://card.png");
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(event.user()::equals);
 
-		eb.addField(Constants.VOID, """
+		Consumer<Message> restore = m -> {
+			Senshi card = h.asSenshi(locale);
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.setAuthor(locale.get("str/hero_info", h.getName()))
+					.setImage("attachment://card.png");
+
+			eb.addField(Constants.VOID, """
 				HP: %s (%s)
 				AP: %s (%s)
 				%s (%s/%s)
 				""".formatted(
-				h.getMaxHp(), Utils.sign((int) h.getModifiers().getMaxHp().get()),
-				h.getMaxAp(), Utils.sign((int) h.getModifiers().getMaxAp().get()),
-				locale.get("str/level", h.getStats().getLevel()),
-				h.getStats().getXp(), h.getStats().getXpToNext()
-		), true);
+					h.getMaxHp(), Utils.sign((int) h.getModifiers().getMaxHp().get()),
+					h.getMaxAp(), Utils.sign((int) h.getModifiers().getMaxAp().get()),
+					locale.get("str/level", h.getStats().getLevel()),
+					h.getStats().getXp(), h.getStats().getXpToNext()
+			), true);
 
-		Attributes attr = h.getAttributes();
-		Attributes mods = h.getModifiers().getAttributes();
-		eb.addField(Constants.VOID, """
+			Attributes attr = h.getAttributes();
+			Attributes mods = h.getModifiers().getAttributes();
+			eb.addField(Constants.VOID, """
 				STR: %s (%s)
 				DEX: %s (%s)
 				WIS: %s (%s)
 				VIT: %s (%s)
 				""".formatted(
-				attr.str(), Utils.sign(mods.str()),
-				attr.dex(), Utils.sign(mods.dex()),
-				attr.wis(), Utils.sign(mods.wis()),
-				attr.vit(), Utils.sign(mods.vit())
-		), true);
+					attr.str(), Utils.sign(mods.str()),
+					attr.dex(), Utils.sign(mods.dex()),
+					attr.wis(), Utils.sign(mods.wis()),
+					attr.vit(), Utils.sign(mods.vit())
+			), true);
 
-		ButtonizeHelper helper = new ButtonizeHelper(true)
-				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(event.user()::equals);
+			helper.apply(m.editMessageComponents().setEmbeds(eb.build()))
+					.setFiles(FileUpload.fromData(IO.getBytes(card.render(locale, d), "png"), "card.png"))
+					.queue(s -> Pages.buttonize(s, helper));
+		};
 
 		helper.addAction(Utils.parseEmoji("🧮"),
-						w -> allocAttributes(helper, locale, h, w.getMessage())
+						w -> allocAttributes(restore, locale, h, w.getMessage())
 				)
 				.addAction(Utils.parseEmoji("📖"),
 						w -> updatePage(viewSkills(locale, h), w.getMessage())
 				)
 				.addAction(Utils.parseEmoji("🛡"),
-						w -> allocGear(helper, locale, h, w.getMessage())
+						w -> allocGear(restore, locale, h, w.getMessage())
 				);
 
-		helper.apply(event.channel().sendMessageEmbeds(eb.build()))
-				.addFiles(FileUpload.fromData(IO.getBytes(card.render(locale, d), "png"), "card.png"))
-				.queue(s -> Pages.buttonize(s, helper));
+		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating"))).queue(restore);
 	}
 
 	private void updatePage(Page p, Message msg) {
@@ -134,7 +138,7 @@ public class HeroCommand implements Executable {
 		msg.editMessageEmbeds((MessageEmbed) p.getContent()).queue();
 	}
 
-	private void allocAttributes(ButtonizeHelper root, I18N locale, Hero h, Message msg) {
+	private void allocAttributes(Consumer<Message> restore, I18N locale, Hero h, Message msg) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/attributes"))
 				.setThumbnail("attachment://card.png");
@@ -182,9 +186,7 @@ public class HeroCommand implements Executable {
 			msg.getChannel().sendMessage(locale.get("success/points_allocated"))
 					.flatMap(ms -> w.getMessage().delete())
 					.queue();
-		}).addAction(Utils.parseEmoji("↩"), w ->
-				Pages.buttonize(w.getMessage(), root)
-		);
+		}).addAction(Utils.parseEmoji("↩"), w -> restore.accept(w.getMessage()));
 
 		helper.apply(msg.editMessageEmbeds(eb.build())).queue(s -> Pages.buttonize(s, helper));
 	}
@@ -213,7 +215,7 @@ public class HeroCommand implements Executable {
 		return InteractPage.of(eb.build());
 	}
 
-	private void allocGear(ButtonizeHelper root, I18N locale, Hero h, Message msg) {
+	private void allocGear(Consumer<Message> restore, I18N locale, Hero h, Message msg) {
 		Map<ButtonId<?>, ThrowingConsumer<ButtonWrapper>> acts = new LinkedHashMap<>();
 		AtomicReference<Runnable> ctx = new AtomicReference<>(() -> viewGear(locale, h, msg, acts));
 
@@ -285,9 +287,7 @@ public class HeroCommand implements Executable {
 			w.getChannel().sendMessage(locale.get("success/unequipped")).queue();
 			ctx.get().run();
 		});
-		acts.put(new EmojiId(Utils.parseEmoji("↩")), w ->
-				Pages.buttonize(w.getMessage(), root)
-		);
+		acts.put(new EmojiId(Utils.parseEmoji("↩")), w -> restore.accept(w.getMessage()));
 
 		ctx.get().run();
 	}
