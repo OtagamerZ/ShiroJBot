@@ -40,9 +40,14 @@ public class HeroStats {
 	private Attributes attributes;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
+	@Column(name = "equpped_skills", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray skills = new JSONArray();
+	private JSONArray equippedSkills = new JSONArray();
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "unlocked_skills", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray unlockedSkills = new JSONArray();
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "consumables", nullable = false, columnDefinition = "JSONB")
@@ -86,11 +91,19 @@ public class HeroStats {
 	}
 
 	public JSONArray getSkills() {
-		return skills;
+		return equippedSkills;
 	}
 
-	public void setSkills(JSONArray skills) {
-		this.skills = skills;
+	public void setSkills(JSONArray equippedSkills) {
+		this.equippedSkills = equippedSkills;
+	}
+
+	public JSONArray getUnlockedSkills() {
+		return unlockedSkills;
+	}
+
+	public void setUnlockedSkills(JSONArray unlockedSkills) {
+		this.unlockedSkills = unlockedSkills;
 	}
 
 	public JSONArray getConsumables() {

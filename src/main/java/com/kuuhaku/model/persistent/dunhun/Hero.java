@@ -327,6 +327,12 @@ public class Hero extends DAO<Hero> implements Actor {
 				.toList();
 	}
 
+	public List<Skill> getUnlockedSkill() {
+		if (skillCache != null) return skillCache;
+
+		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", stats.getUnlockedSkills());
+	}
+
 	public List<Skill> getAvailableSkills() {
 		List<String> valid = DAO.queryAllNative(String.class, """
 				SELECT s.id
