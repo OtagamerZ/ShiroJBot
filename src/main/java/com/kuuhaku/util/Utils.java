@@ -496,11 +496,11 @@ public abstract class Utils {
 		return awaitMessage(null, chn, act);
 	}
 
-	public static CompletableFuture<Message> awaitMessage(User u, GuildMessageChannel chn, Function<Message, Boolean> act) {
-		return awaitMessage(u, chn, act, 0, null, null);
+	public static CompletableFuture<Message> awaitMessage(String id, GuildMessageChannel chn, Function<Message, Boolean> act) {
+		return awaitMessage(id, chn, act, 0, null, null);
 	}
 
-	public static CompletableFuture<Message> awaitMessage(User u, GuildMessageChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit, CompletableFuture<?> lock) {
+	public static CompletableFuture<Message> awaitMessage(String id, GuildMessageChannel chn, Function<Message, Boolean> act, int time, TimeUnit unit, CompletableFuture<?> lock) {
 		CompletableFuture<Message> result = new CompletableFuture<>();
 
 		GuildListener.addHandler(chn.getGuild(), new SimpleMessageListener(chn) {
@@ -522,7 +522,7 @@ public abstract class Utils {
 
 			@Override
 			protected void onMessageReceived(@NotNull MessageReceivedEvent event) {
-				if ((u == null || event.getAuthor().equals(u)) && act.apply(event.getMessage())) {
+				if ((id == null || event.getAuthor().getId().equals(id)) && act.apply(event.getMessage())) {
 					if (timeout != null) {
 						timeout.cancel(true);
 						timeout = null;
@@ -797,7 +797,7 @@ public abstract class Utils {
 		Message msg = paginate(pages, channel, user);
 
 		CompletableFuture<T> out = new CompletableFuture<>();
-		awaitMessage(user, channel,
+		awaitMessage(user.getId(), channel,
 				m -> {
 					if (!StringUtils.isNumeric(m.getContentRaw())) return false;
 

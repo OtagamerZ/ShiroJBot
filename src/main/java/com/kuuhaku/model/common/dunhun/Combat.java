@@ -387,7 +387,7 @@ public class Combat implements Renderer<BufferedImage> {
 									}))
 									.addAction(Utils.parseEmoji("↩"), v -> {
 										MessageEditAction ma = helper.apply(v.getMessage().editMessageComponents());
-										addSelectors(h, ma);
+										addDropdowns(h, ma);
 										ma.queue(s -> Pages.buttonize(s, helper));
 									});
 
@@ -396,7 +396,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 				ca.apply(a -> {
 					MessageCreateAction ma = helper.apply(a);
-					addSelectors(h, ma);
+					addDropdowns(h, ma);
 
 					return ma;
 				});
@@ -492,7 +492,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return lock;
 	}
 
-	private void addSelectors(Hero h, MessageRequest<?> ma) {
+	private void addDropdowns(Hero h, MessageRequest<?> ma) {
 		List<LayoutComponent> comps = new ArrayList<>(ma.getComponents());
 
 		List<Skill> skills = h.getSkills();
@@ -643,7 +643,7 @@ public class Combat implements Renderer<BufferedImage> {
 		helper.addAction(Utils.parseEmoji("↩"), w -> {
 			MessageEditAction ma = root.apply(msg.editMessageComponents());
 
-			addSelectors(h, ma);
+			addDropdowns(h, ma);
 
 			ma.queue(s -> Pages.buttonize(s, root));
 		});
