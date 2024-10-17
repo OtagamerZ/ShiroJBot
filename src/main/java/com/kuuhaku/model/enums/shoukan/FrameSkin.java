@@ -63,7 +63,7 @@ public enum FrameSkin {
 	 */
 
 	PADORU("PADORU"),
-	GLITCH("DUNGEON_HUNTER"),
+	GLITCH("PARADOX"),
 	HALLOWEEN("TRICK_OR_TREAT_IV"),
 
 	/*METALLIC("**(75% das conquistas desbloqueadas)** Com estilo (e um revestimento semi-transparente), faça suas jogadas mostrando sua classe!",
