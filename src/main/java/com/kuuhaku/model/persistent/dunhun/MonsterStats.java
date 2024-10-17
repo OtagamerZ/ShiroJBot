@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.dunhun.Loot;
@@ -92,12 +93,15 @@ public class MonsterStats {
 		return skills;
 	}
 
-	public Loot generateLoot() {
+	public Loot generateLoot(Dunhun game) {
 		Loot loot = new Loot();
 		if (lootGenerator == null) return loot;
 
 		try {
-			Utils.exec(getClass().getSimpleName(), lootGenerator, Map.of("loot", loot));
+			Utils.exec(getClass().getSimpleName(), lootGenerator, Map.of(
+					"loot", loot,
+					"dungeon", game
+			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to generate loot", e);
 		}

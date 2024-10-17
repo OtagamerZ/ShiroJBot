@@ -180,7 +180,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							if (a instanceof Monster m) {
 								xpGained += m.getKillXp();
 
-								Loot lt = m.getStats().generateLoot();
+								Loot lt = m.getStats().generateLoot(this);
 								if (!lt.gear().isEmpty() || !lt.items().isEmpty()) {
 									loot.add(lt);
 
