@@ -197,7 +197,7 @@ public class HeroCommand implements Executable {
 				.setTitle(locale.get("str/skills"))
 				.setThumbnail("attachment://card.png");
 
-		List<Skill> skills = h.getInventory();
+		List<Skill> skills = h.getSkills();
 		if (skills.isEmpty()) {
 			msg.getChannel().sendMessage(locale.get("error/inventory_empty_hero", h.getName())).queue();
 			return;
