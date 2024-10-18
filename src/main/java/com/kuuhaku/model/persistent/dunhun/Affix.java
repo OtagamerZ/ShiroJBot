@@ -26,7 +26,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedAffix;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.Table;
@@ -107,12 +106,12 @@ public class Affix extends DAO<Affix> {
 		return effect;
 	}
 
-	public void apply(I18N locale, Senshi s, Actor target) {
+	public void apply(I18N locale, Actor target) {
 		try {
 			Utils.exec(id, effect, Map.of(
 					"locale", locale,
 					"actor", target,
-					"self", s
+					"self", target.asSenshi(locale)
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply modifier {}", id, e);

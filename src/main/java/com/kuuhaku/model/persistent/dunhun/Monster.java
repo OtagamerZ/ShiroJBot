@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Actor;
@@ -36,7 +35,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Entity
@@ -150,7 +152,7 @@ public class Monster extends MonsterBase<Monster> {
 	@Override
 	protected void load(I18N locale, Senshi s) {
 		for (Affix a : affixes) {
-			a.apply(locale, s, this);
+			a.apply(locale, this);
 		}
 	}
 
