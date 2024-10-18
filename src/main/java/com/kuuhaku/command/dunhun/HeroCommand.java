@@ -269,7 +269,7 @@ public class HeroCommand implements Executable {
 
 		Function<Integer, String> getButtonLabel = j -> {
 			if (j >= skills.size() || skills.get(j) == null) {
-				return locale.get("str/slot", j);
+				return locale.get("str/slot", j + 1);
 			}
 
 			return skills.get(j).getName(locale);
@@ -280,6 +280,8 @@ public class HeroCommand implements Executable {
 
 			int fi = j;
 			helper.addAction(locale.get("str/slot", j + 1), w -> {
+				w.getChannel().sendMessage(locale.get("str/select_a_skill")).queue();
+
 				Message m = Utils.awaitMessage(
 						h.getAccount().getUid(),
 						(GuildMessageChannel) w.getChannel(),
@@ -322,7 +324,9 @@ public class HeroCommand implements Executable {
 				}
 
 				skills.set(fi, s);
-				w.getChannel().sendMessage(locale.get("str/skill_set")).queue();
+				h.save();
+
+				w.getChannel().sendMessage(locale.get("success/skill_set")).queue();
 
 				refresh.run();
 				if (i.get() >= pages.size()) {
@@ -332,7 +336,7 @@ public class HeroCommand implements Executable {
 				Button btn = w.getButton();
 				if (btn != null && btn.getId() != null) {
 					Pages.modifyButtons(w.getMessage(), pages.get(i.get()), Map.of(
-							btn.getId(), b -> b.withLabel(getButtonLabel.apply(fi + 1))
+							btn.getId(), b -> b.withLabel(getButtonLabel.apply(fi))
 					));
 				}
 			});
@@ -373,11 +377,11 @@ public class HeroCommand implements Executable {
 				.queue(s -> {
 					Pages.buttonize(s, helper);
 					Pages.modifyButtons(s, null, Map.of(
-							locale.get("str/slot", 1), b -> b.withLabel(getButtonLabel.apply(1)),
-							locale.get("str/slot", 2), b -> b.withLabel(getButtonLabel.apply(2)),
-							locale.get("str/slot", 3), b -> b.withLabel(getButtonLabel.apply(3)),
-							locale.get("str/slot", 4), b -> b.withLabel(getButtonLabel.apply(4)),
-							locale.get("str/slot", 5), b -> b.withLabel(getButtonLabel.apply(5))
+							locale.get("str/slot", 1), b -> b.withLabel(getButtonLabel.apply(0)),
+							locale.get("str/slot", 2), b -> b.withLabel(getButtonLabel.apply(1)),
+							locale.get("str/slot", 3), b -> b.withLabel(getButtonLabel.apply(2)),
+							locale.get("str/slot", 4), b -> b.withLabel(getButtonLabel.apply(3)),
+							locale.get("str/slot", 5), b -> b.withLabel(getButtonLabel.apply(4))
 					));
 				});
 	}
