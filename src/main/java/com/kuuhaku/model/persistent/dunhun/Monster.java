@@ -120,7 +120,7 @@ public class Monster extends MonsterBase<Monster> {
 			case RARE -> 2.25;
 			case MAGIC -> 1.5;
 			default -> 1;
-		} * (1 + getGame().getTurn() / 5d);
+		} * (1 + getGame().getTurn() * 0.15) * (1 + getGame().getDungeon().getAreaLevel() * 0.25);
 
 		return (int) (flat * mult * getModifiers().getHpMult().get());
 	}
