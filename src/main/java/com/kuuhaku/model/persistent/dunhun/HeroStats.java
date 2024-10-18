@@ -59,7 +59,7 @@ public class HeroStats {
 	}
 
 	public int getPointsLeft() {
-		return (4 + getLevel()) - attributes.count();
+		return (4 + getLevel()) - attributes.count() - unlockedSkills.size();
 	}
 
 	public int getXpToNext() {

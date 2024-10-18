@@ -323,27 +323,20 @@ public class Hero extends DAO<Hero> implements Actor {
 
 		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", stats.getSkills())
 				.stream()
-				.filter(s -> getAttributes().has(s.getRequirements()))
-				.toList();
+				.filter(s -> getAttributes().has(s.getRequirements()) && (
+						(s.getReqRace() == null && getStats().getUnlockedSkills().contains(s.getId()))
+						|| s.getReqRace() == getRace()
+				))
+				.collect(ArrayList::new, List::add, List::addAll);
 	}
 
-	public List<Skill> getUnlockedSkill() {
-		if (skillCache != null) return skillCache;
-
-		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", stats.getUnlockedSkills());
-	}
-
-	public List<Skill> getAvailableSkills() {
-		List<String> valid = DAO.queryAllNative(String.class, """
-				SELECT s.id
-				FROM skill s
-				         INNER JOIN hero h ON h.id = 'MIPE'
-				WHERE s.attributes != -1
-				  AND has_attributes(h.attributes, s.attributes)
-				  AND (s.req_race IS NULL OR s.req_race = h.race)
-				""");
-
-		return DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", valid).stream()
+	public List<Skill> getAllSkills() {
+		return DAO.queryAll(Skill.class, """
+						SELECT s
+						FROM Skill s
+						WHERE (s.reqRace IS NULL OR s.reqRace = ?1)
+						  AND s.requirements.attributes != -1
+						""", getRace()).stream()
 				.sorted(Comparator
 						.<Skill>comparingInt(s -> s.getRequirements().count())
 						.thenComparing(Skill::getId)
@@ -457,6 +450,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 		if (skillCache != null) {
 			stats.setSkills(skillCache.stream()
+					.filter(Objects::nonNull)
 					.map(Skill::getId)
 					.collect(Collectors.toCollection(JSONArray::new))
 			);

@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.*;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
+import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
@@ -38,6 +39,7 @@ import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.EventData;
+import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.util.IO;
@@ -48,9 +50,11 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +63,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "hero",
@@ -91,10 +97,10 @@ public class HeroCommand implements Executable {
 					.setImage("attachment://card.png");
 
 			eb.addField(Constants.VOID, """
-				HP: %s (%s)
-				AP: %s (%s)
-				%s (%s/%s)
-				""".formatted(
+					HP: %s (%s)
+					AP: %s (%s)
+					%s (%s/%s)
+					""".formatted(
 					h.getMaxHp(), Utils.sign((int) h.getModifiers().getMaxHp().get()),
 					h.getMaxAp(), Utils.sign((int) h.getModifiers().getMaxAp().get()),
 					locale.get("str/level", h.getStats().getLevel()),
@@ -104,11 +110,11 @@ public class HeroCommand implements Executable {
 			Attributes attr = h.getAttributes();
 			Attributes mods = h.getModifiers().getAttributes();
 			eb.addField(Constants.VOID, """
-				STR: %s (%s)
-				DEX: %s (%s)
-				WIS: %s (%s)
-				VIT: %s (%s)
-				""".formatted(
+					STR: %s (%s)
+					DEX: %s (%s)
+					WIS: %s (%s)
+					VIT: %s (%s)
+					""".formatted(
 					attr.str(), Utils.sign(mods.str()),
 					attr.dex(), Utils.sign(mods.dex()),
 					attr.wis(), Utils.sign(mods.wis()),
@@ -178,47 +184,180 @@ public class HeroCommand implements Executable {
 			updateDesc.accept(null);
 		}));
 
-		helper.addAction(Utils.parseEmoji("✅"), w -> {
-			h.getStats().setAttributes(alloc.merge(new Attributes(attr[0], attr[1], attr[2], attr[3])));
-			h.save();
+		helper.addAction(Utils.parseEmoji("↩"), w -> restore.accept(w.getMessage()))
+				.addAction(Utils.parseEmoji("✅"), w -> {
+					h.getStats().setAttributes(alloc.merge(new Attributes(attr[0], attr[1], attr[2], attr[3])));
+					h.save();
 
-			msg.getChannel().sendMessage(locale.get("success/points_allocated")).queue();
-		}).addAction(Utils.parseEmoji("↩"), w -> restore.accept(w.getMessage()));
+					msg.getChannel().sendMessage(locale.get("success/points_allocated")).queue();
+				});
 
 		helper.apply(msg.editMessageEmbeds(eb.build())).queue(s -> Pages.buttonize(s, helper));
 	}
 
 	private void allocSkills(Consumer<Message> restore, I18N locale, Hero h, Message msg) {
-		ButtonizeHelper helper = new ButtonizeHelper(true)
-				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()));
+		Map<String, Skill> all = new LinkedHashMap<>();
+		for (Skill s : h.getAllSkills()) {
+			all.put(s.getId(), s);
+		}
+
+		if (all.isEmpty()) {
+			msg.getChannel().sendMessage(locale.get("error/skills_empty_hero", h.getName())).queue();
+			return;
+		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/skills"))
 				.setThumbnail("attachment://card.png");
 
 		List<Skill> skills = h.getSkills();
-		if (skills.isEmpty()) {
-			msg.getChannel().sendMessage(locale.get("error/inventory_empty_hero", h.getName())).queue();
-			return;
-		}
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()));
 
-		for (int i = 0; i < 5; i++) {
-			if (skills.size() <= i) {
-				eb.appendDescription("*" + locale.get("str/empty") + "*\n\n");
-				continue;
+		AtomicInteger i = new AtomicInteger();
+		List<Page> pages = new ArrayList<>();
+		Runnable refresh = () -> {
+			eb.setDescription(locale.get("str/remaining_points", h.getStats().getPointsLeft()));
+
+			Utils.generatePages(eb, all.values(), 10, 5,
+					s -> {
+						int idx = skills.indexOf(s);
+						String prefix;
+						if (idx > -1) {
+							prefix = Utils.fancyNumber(idx);
+						} else if (s.getReqRace() == null && !h.getStats().getUnlockedSkills().contains(s.getId())) {
+							prefix = "🔒";
+						} else {
+							prefix = "";
+						}
+
+						String reqText = Utils.properlyJoin(locale.get("str/or")).apply(
+								s.getReqWeapons().stream()
+										.map(w -> locale.get("wpn/" + w.name()))
+										.toList()
+						);
+
+						return new FieldMimic(
+								prefix + " `" + s.getId() + " | " + s.getName(locale) + "`",
+								("(" + reqText + ") " + s.getDescription(locale, h)).lines()
+										.map(l -> "-# " + l)
+										.collect(Collectors.joining("\n"))
+						).toString();
+					},
+					(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
+			);
+		};
+
+		Function<Integer, String> getButtonLabel = j -> {
+			if (j >= skills.size() || skills.get(j) == null) {
+				return locale.get("str/slot", j);
 			}
 
-			Skill s = skills.get(i);
-			eb.appendDescription(s.getInfo(locale).getName() + "\n");
-			s.getDescription(locale, h).lines()
-					.map(l -> "-# " + l + "\n")
-					.forEach(eb::appendDescription);
+			return skills.get(j).getName(locale);
+		};
 
-			eb.appendDescription("\n");
+		for (int j = 0; j < 5; j++) {
+			if (skills.size() < j) skills.add(null);
+
+			int fi = j;
+			helper.addAction(locale.get("str/slot", j + 1), w -> {
+				Message m = Utils.awaitMessage(
+						h.getAccount().getUid(),
+						(GuildMessageChannel) w.getChannel(),
+						ms -> true,
+						1, TimeUnit.MINUTES, null
+				).join();
+
+				if (m == null) {
+					w.getChannel().sendMessage(locale.get("error/invalid_value")).queue();
+					return;
+				}
+
+				Skill s = all.get(m.getContentRaw().toUpperCase());
+				if (s == null) {
+					String sug = Utils.didYouMean(m.getContentRaw().toUpperCase(), all.keySet());
+					if (sug == null) {
+						w.getChannel().sendMessage(locale.get("error/unknown_skill_none")).queue();
+					} else {
+						w.getChannel().sendMessage(locale.get("error/unknown_skill", sug)).queue();
+					}
+					return;
+				}
+
+				if (s.getReqRace() == null && !h.getStats().getUnlockedSkills().contains(s.getId())) {
+					if (h.getStats().getPointsLeft() <= 0) {
+						w.getChannel().sendMessage(locale.get("error/insufficient_points")).queue();
+						return;
+					}
+
+					try {
+						boolean unlock = Utils.confirm(locale.get("question/unlock_skill"), w.getChannel(), n -> {
+							h.getStats().getUnlockedSkills().add(s.getId());
+							return true;
+						}, m.getAuthor()).join();
+
+						if (!unlock) return;
+					} catch (PendingConfirmationException e) {
+						w.getChannel().sendMessage(locale.get("error/pending_confirmation")).queue();
+					}
+				}
+
+				skills.set(fi, s);
+				refresh.run();
+				w.getChannel().sendMessage(locale.get("str/skill_set")).queue();
+
+				Button btn = w.getButton();
+				if (btn != null && btn.getId() != null) {
+					Pages.modifyButtons(w.getMessage(), null, Map.of(
+							btn.getId(), b -> b.withLabel(getButtonLabel.apply(fi + 1))
+					));
+				}
+			});
 		}
 
-		helper.apply(msg.editMessageComponents()).queue(s -> Pages.buttonize(s, helper));
+		helper.addAction(Utils.parseEmoji("⏮"), w -> {
+			if (i.get() > 0) {
+				w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getFirst())).queue();
+				i.set(0);
+			}
+		});
+		helper.addAction(Utils.parseEmoji("◀️"), w -> {
+			if (i.get() >= pages.size()) i.set(pages.size() - 1);
+
+			if (i.get() > 0) {
+				w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
+			}
+		});
+		helper.addAction(Utils.parseEmoji("▶️"), w -> {
+			if (i.get() >= pages.size()) i.set(pages.size() - 1);
+
+			if (i.get() < pages.size() - 1) {
+				w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
+			}
+		});
+		helper.addAction(Utils.parseEmoji("⏭"), w -> {
+			if (i.get() >= pages.size()) i.set(pages.size() - 1);
+
+			if (i.get() < pages.size() - 1) {
+				w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getLast())).queue();
+				i.set(pages.size() - 1);
+			}
+		});
+
+		refresh.run();
+		msg.editMessageComponents()
+				.setEmbeds((MessageEmbed) pages.getFirst().getContent())
+				.queue(s -> {
+					Pages.buttonize(s, helper);
+					Pages.modifyButtons(s, null, Map.of(
+							locale.get("str/slot", 1), b -> b.withLabel(getButtonLabel.apply(1)),
+							locale.get("str/slot", 2), b -> b.withLabel(getButtonLabel.apply(2)),
+							locale.get("str/slot", 3), b -> b.withLabel(getButtonLabel.apply(3)),
+							locale.get("str/slot", 4), b -> b.withLabel(getButtonLabel.apply(4)),
+							locale.get("str/slot", 5), b -> b.withLabel(getButtonLabel.apply(5))
+					));
+				});
 	}
 
 	private void allocGear(Consumer<Message> restore, I18N locale, Hero h, Message msg) {

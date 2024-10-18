@@ -134,6 +134,7 @@ public class Monster extends MonsterBase<Monster> {
 		return affixes;
 	}
 
+	@Override
 	public RarityClass getRarityClass() {
 		int pre = 0, suf = 0;
 		for (Affix a : affixes) {
