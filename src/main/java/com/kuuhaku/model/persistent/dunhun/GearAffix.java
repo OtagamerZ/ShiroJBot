@@ -151,13 +151,13 @@ public class GearAffix extends DAO<GearAffix> {
 		return modifiers;
 	}
 
-	public void apply(I18N locale, Gear target) {
+	public void apply(I18N locale, Gear target, Hero owner) {
 		try {
 			Utils.exec(affix.getId(), affix.getEffect(), Map.of(
 					"locale", locale,
 					"gear", target,
-					"actor", target.getOwner(),
-					"self", target.getOwner().asSenshi(locale),
+					"actor", owner,
+					"self", owner.asSenshi(locale),
 					"values", getValues(locale),
 					"grant", Utils.getOr(Utils.extract(getDescription(locale), "\"(.+?)\"", 1), "")
 			));
