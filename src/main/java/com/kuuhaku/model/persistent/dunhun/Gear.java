@@ -280,7 +280,7 @@ public class Gear extends DAO<Gear> {
 		modifiers.reset();
 
 		for (GearAffix ga : getAllAffixes()) {
-			ga.apply(locale, owner);
+			ga.apply(locale, this);
 		}
 	}
 
