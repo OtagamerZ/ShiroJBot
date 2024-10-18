@@ -21,7 +21,6 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
-import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.GearModifiers;
 import com.kuuhaku.model.common.dunhun.SelfEffect;
@@ -64,6 +63,11 @@ public class Gear extends DAO<Gear> {
 	@Fetch(FetchMode.JOIN)
 	private Basetype basetype;
 
+	@ManyToOne
+	@PrimaryKeyJoinColumn(name = "unique_id")
+	@Fetch(FetchMode.JOIN)
+	private Unique unique;
+
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "owner_id")
 	@Fetch(FetchMode.JOIN)
@@ -86,6 +90,12 @@ public class Gear extends DAO<Gear> {
 	public Gear(Hero owner, Basetype basetype) {
 		this.basetype = basetype;
 		this.owner = owner;
+	}
+
+	public Gear(Hero owner, Unique unique) {
+		this.basetype = unique.getBasetype();
+		this.owner = owner;
+		this.unique = unique;
 	}
 
 	public int getId() {
@@ -308,19 +318,29 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public static Gear getRandom(Dunhun game, Hero hero, Basetype base, RarityClass rarity) {
+		if (rarity == null) {
+			if (Calc.chance(1)) rarity = RarityClass.UNIQUE;
+			else if (Calc.chance(5)) rarity = RarityClass.RARE;
+			else if (Calc.chance(35)) rarity = RarityClass.MAGIC;
+			else rarity = RarityClass.NORMAL;
+		}
+
+		if (rarity == RarityClass.UNIQUE) {
+			Unique u = Unique.getRandom();
+			if (u != null) {
+				return u.asGear(hero);
+			}
+
+			rarity = RarityClass.RARE;
+		}
+
 		Gear out = new Gear(hero, base);
 		int dropLevel = Integer.MAX_VALUE;
 		if (game != null) {
 			dropLevel = game.getDungeon().getAreaLevel();
 		}
 
-		if (rarity == null) {
-			if (Calc.chance(5)) rarity = RarityClass.RARE;
-			else if (Calc.chance(35)) rarity = RarityClass.MAGIC;
-			else rarity = RarityClass.NORMAL;
-		}
-
-		if (Utils.equalsAny(rarity, RarityClass.NORMAL, RarityClass.UNIQUE)) return out;
+		if (rarity == RarityClass.NORMAL) return out;
 
 		List<AffixType> pool = new ArrayList<>(List.of(AffixType.itemValues()));
 
