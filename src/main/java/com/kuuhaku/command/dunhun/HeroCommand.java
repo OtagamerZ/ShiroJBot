@@ -305,12 +305,16 @@ public class HeroCommand implements Executable {
 				}
 
 				skills.set(fi, s);
-				refresh.run();
 				w.getChannel().sendMessage(locale.get("str/skill_set")).queue();
+
+				refresh.run();
+				if (i.get() >= pages.size()) {
+					i.set(pages.size() - 1);
+				}
 
 				Button btn = w.getButton();
 				if (btn != null && btn.getId() != null) {
-					Pages.modifyButtons(w.getMessage(), null, Map.of(
+					Pages.modifyButtons(w.getMessage(), pages.get(i.get()), Map.of(
 							btn.getId(), b -> b.withLabel(getButtonLabel.apply(fi + 1))
 					));
 				}
