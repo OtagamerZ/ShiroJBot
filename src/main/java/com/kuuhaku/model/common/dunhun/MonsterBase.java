@@ -240,11 +240,11 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	public Senshi asSenshi(I18N locale) {
 		if (senshiCache != null) return senshiCache;
 
-		Senshi s = new Senshi(this, locale);
-		CardAttributes base = s.getBase();
+		senshiCache = new Senshi(this, locale);
+		CardAttributes base = senshiCache.getBase();
 
 		modifiers.clear();
-		load(locale, s);
+		load(locale, senshiCache);
 
 		double mult = switch (getRarityClass()) {
 			case RARE -> 2;
@@ -259,7 +259,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 
 		base.getTags().add("MONSTER");
 
-		return senshiCache = s;
+		return senshiCache;
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.AffixModifiers;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.id.GearAffixId;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
@@ -151,7 +152,7 @@ public class GearAffix extends DAO<GearAffix> {
 		return modifiers;
 	}
 
-	public void apply(I18N locale, Gear target) {
+	public void apply(I18N locale, Gear target, Senshi s) {
 		try {
 			Utils.exec(affix.getId(), affix.getEffect(), Map.of(
 					"locale", locale,
