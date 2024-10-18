@@ -23,15 +23,15 @@ import java.util.Set;
 
 public class GearModifiers {
 	private int attack;
-	private float attackMult = 1;
+	private double attackMult = 1;
 	private int defense;
-	private float defenseMult = 1;
-	private float critical;
-	private float criticalMult = 1;
+	private double defenseMult = 1;
+	private double critical;
+	private double criticalMult = 1;
 
 	private final Set<String> addedTags = new HashSet<>();
 
-	public float getAttack() {
+	public double getAttack() {
 		return attack;
 	}
 
@@ -39,15 +39,15 @@ public class GearModifiers {
 		attack += value;
 	}
 
-	public float getAttackMult() {
+	public double getAttackMult() {
 		return attackMult;
 	}
 
-	public void addAttackMult(float mult) {
+	public void addAttackMult(double mult) {
 		attackMult += mult;
 	}
 
-	public float getDefense() {
+	public double getDefense() {
 		return defense;
 	}
 
@@ -55,27 +55,27 @@ public class GearModifiers {
 		defense += value;
 	}
 
-	public float getDefenseMult() {
+	public double getDefenseMult() {
 		return defenseMult;
 	}
 
-	public void addDefenseMult(float mult) {
+	public void addDefenseMult(double mult) {
 		defenseMult += mult;
 	}
 
-	public float getCritical() {
+	public double getCritical() {
 		return critical;
 	}
 
-	public void addCritical(float mult) {
+	public void addCritical(double mult) {
 		critical += mult;
 	}
 
-	public float getCriticalMult() {
+	public double getCriticalMult() {
 		return criticalMult;
 	}
 
-	public void addCriticalMult(float mult) {
+	public void addCriticalMult(double mult) {
 		criticalMult += mult;
 	}
 
