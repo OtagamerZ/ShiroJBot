@@ -220,7 +220,8 @@ public class HeroCommand implements Executable {
 		Runnable refresh = () -> {
 			eb.setDescription(locale.get("str/remaining_points", h.getStats().getPointsLeft()));
 
-			Utils.generatePages(eb, all.values(), 10, 5,
+			pages.clear();
+			pages.addAll(Utils.generatePages(eb, all.values(), 10, 5,
 					s -> {
 						int idx = skills.indexOf(s);
 						String prefix;
@@ -246,7 +247,7 @@ public class HeroCommand implements Executable {
 						).toString();
 					},
 					(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
-			);
+			));
 		};
 
 		Function<Integer, String> getButtonLabel = j -> {
