@@ -82,6 +82,10 @@ public class HeroInspectCommand implements Executable {
 			eb.setTitle(g.getName(locale));
 		}
 
+		if (g.getUnique() != null) {
+			eb.setFooter(g.getUnique().getInfo(locale).getDescription());
+		}
+
 		JSONArray tags = g.getTags();
 		if (!tags.isEmpty()) {
 			List<String> tgs = new ArrayList<>();
