@@ -96,6 +96,7 @@
         <class>com.kuuhaku.model.persistent.localized.LocalizedEvent</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedDungeon</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedConsumable</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedUnique</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>

@@ -106,6 +106,10 @@ public class Gear extends DAO<Gear> {
 		return basetype;
 	}
 
+	public Unique getUnique() {
+		return unique;
+	}
+
 	public Hero getOwner() {
 		return owner;
 	}
@@ -208,7 +212,8 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public String getName(I18N locale) {
-		if (affixes.isEmpty()) return basetype.getInfo(locale).getName();
+		if (unique != null) return unique.getInfo(locale).getName();
+		else if (affixes.isEmpty()) return basetype.getInfo(locale).getName();
 
 		if (getRarityClass() == RarityClass.RARE) {
 			String loc = locale.getParent().name().toLowerCase();
