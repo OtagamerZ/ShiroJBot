@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.dunhun.EffectBase;
@@ -281,19 +280,7 @@ public class Gear extends DAO<Gear> {
 		modifiers.reset();
 
 		for (GearAffix ga : getAllAffixes()) {
-			try {
-				Affix a = ga.getAffix();
-				Utils.exec(a.getId(), a.getEffect(), Map.of(
-						"locale", locale,
-						"gear", this,
-						"actor", owner,
-						"self", owner.asSenshi(locale),
-						"values", ga.getValues(locale),
-						"grant", Utils.getOr(Utils.extract(ga.getDescription(locale), "\"(.+?)\"", 1), "")
-				));
-			} catch (Exception e) {
-				Constants.LOGGER.warn("Failed to apply modifier {}", ga, e);
-			}
+			ga.apply(locale, owner);
 		}
 	}
 

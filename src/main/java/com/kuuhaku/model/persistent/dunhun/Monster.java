@@ -148,19 +148,9 @@ public class Monster extends MonsterBase<Monster> {
 	}
 
 	@Override
-	protected void load(I18N locale, Senshi s, MonsterBase<Monster> self) {
+	protected void load(I18N locale, Senshi s) {
 		for (Affix a : affixes) {
-			if (a == null) continue;
-
-			try {
-				Utils.exec(a.getId(), a.getEffect(), Map.of(
-						"locale", locale,
-						"actor", this,
-						"self", s
-				));
-			} catch (Exception e) {
-				Constants.LOGGER.warn("Failed to apply modifier {}", a.getId(), e);
-			}
+			a.apply(locale, s, this);
 		}
 	}
 

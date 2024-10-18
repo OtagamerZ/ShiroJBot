@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.AffixModifiers;
 import com.kuuhaku.model.enums.I18N;
@@ -32,6 +33,7 @@ import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -147,6 +149,21 @@ public class GearAffix extends DAO<GearAffix> {
 
 	public AffixModifiers getModifiers() {
 		return modifiers;
+	}
+
+	public void apply(I18N locale, Hero owner) {
+		try {
+			Utils.exec(affix.getId(), affix.getEffect(), Map.of(
+					"locale", locale,
+					"gear", this,
+					"actor", owner,
+					"self", owner.asSenshi(locale),
+					"values", getValues(locale),
+					"grant", Utils.getOr(Utils.extract(getDescription(locale), "\"(.+?)\"", 1), "")
+			));
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to apply modifier {}", affix.getId(), e);
+		}
 	}
 
 	@Override
