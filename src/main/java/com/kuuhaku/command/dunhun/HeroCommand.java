@@ -241,7 +241,7 @@ public class HeroCommand implements Executable {
 						);
 
 						if (!reqText.isBlank()) {
-							reqText = "(" + reqText + ") ";
+							reqText = "[" + reqText + "] ";
 						}
 
 						return new FieldMimic(
