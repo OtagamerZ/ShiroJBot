@@ -73,7 +73,7 @@ public class StealCommand implements Executable {
 		Account them = DAO.find(Account.class, target.getId());
 		LocalDateTime lastStolen = LocalDateTime.parse(them.getDynValue("last_stolen", LocalDateTime.ofInstant(Instant.EPOCH, ZoneId.of("GMT-3")).toString()));
 		if (!lastStolen.isBefore(now.minusHours(1))) {
-			event.channel().sendMessage(locale.get("error/stolen_recent", Utils.toStringDuration(locale, now.minusHours(1).until(lastStolen, ChronoUnit.MILLIS)))).queue();
+			event.channel().sendMessage(locale.get("error/stolen_recent", target.getAsMention(), Utils.toStringDuration(locale, now.minusHours(1).until(lastStolen, ChronoUnit.MILLIS)))).queue();
 			return;
 		}
 
