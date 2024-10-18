@@ -26,7 +26,6 @@ import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -150,7 +149,7 @@ public class Monster extends MonsterBase<Monster> {
 	}
 
 	@Override
-	protected void load(I18N locale, Senshi s) {
+	protected void load(I18N locale) {
 		for (Affix a : affixes) {
 			a.apply(locale, this);
 		}

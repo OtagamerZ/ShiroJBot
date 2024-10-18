@@ -276,7 +276,7 @@ public class Gear extends DAO<Gear> {
 		return Calc.clamp((basetype.getStats().critical() + modifiers.getCritical()) * modifiers.getCriticalMult(), 0, 100);
 	}
 
-	public void load(I18N locale, Hero owner) {
+	public void load(I18N locale) {
 		modifiers.reset();
 
 		for (GearAffix ga : getAllAffixes()) {

@@ -232,7 +232,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		this.game = game;
 	}
 
-	protected void load(I18N locale, Senshi s) {
+	protected void load(I18N locale) {
 
 	}
 
@@ -244,7 +244,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		CardAttributes base = senshiCache.getBase();
 
 		modifiers.clear();
-		load(locale, senshiCache);
+		load(locale);
 
 		double mult = switch (getRarityClass()) {
 			case RARE -> 2;

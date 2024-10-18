@@ -410,7 +410,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		for (Gear g : getEquipment()) {
 			if (g == null) continue;
 
-			g.load(locale, this);
+			g.load(locale);
 			def += g.getDfs();
 			if (g.getBasetype().getStats().wpnType() == null) {
 				dmg += g.getDmg();

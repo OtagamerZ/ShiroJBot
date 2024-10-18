@@ -73,7 +73,7 @@ public class HeroInspectCommand implements Executable {
 			return;
 		}
 
-		g.load(locale, h);
+		g.load(locale);
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		if (g.getRarityClass() == RarityClass.RARE) {
