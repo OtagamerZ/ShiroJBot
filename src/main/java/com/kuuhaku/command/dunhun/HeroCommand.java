@@ -234,19 +234,31 @@ public class HeroCommand implements Executable {
 							prefix = "";
 						}
 
-						String reqText = Utils.properlyJoin(locale.get("str/or")).apply(
+						Attributes reqs = s.getRequirements();
+						List<String> reqLine = new ArrayList<>();
+						if (reqs.str() > 0) reqLine.add("STR: " + reqs.str() + " ");
+						if (reqs.dex() > 0) reqLine.add("DEX: " + reqs.dex() + " ");
+						if (reqs.wis() > 0) reqLine.add("WIS: " + reqs.wis() + " ");
+						if (reqs.vit() > 0) reqLine.add("VIT: " + reqs.vit() + " ");
+
+						if (!reqLine.isEmpty()) {
+							eb.appendDescription(String.join(" | ", reqLine) + "\n\n");
+						}
+
+						String reqWpn = Utils.properlyJoin(locale.get("str/or")).apply(
 								s.getReqWeapons().stream()
 										.map(w -> locale.get("wpn/" + w.name()))
 										.toList()
 						);
 
-						if (!reqText.isBlank()) {
-							reqText = "[" + reqText + "] ";
+						if (!reqWpn.isBlank()) {
+							reqLine.add(reqWpn);
 						}
 
+						String req = reqLine.isEmpty() ? "" : String.join(" | ", reqLine) + "\n";
 						return new FieldMimic(
 								prefix + " `" + s.getId() + "` " + s.getName(locale),
-								(reqText + s.getDescription(locale, h)).lines()
+								(req + s.getDescription(locale, h)).lines()
 										.map(l -> "-# " + l)
 										.collect(Collectors.joining("\n"))
 						).toString();
