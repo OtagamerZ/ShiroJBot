@@ -159,11 +159,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 					Constants.LOGGER.error(e, e);
 				}
 
+				if (lock != null) lock.join();
 				if (getCombat() != null) {
 					getCombat().process();
 				}
-
-				if (lock != null) lock.join();
 
 				if (heroes.values().stream().allMatch(h -> h.getHp() <= 0 || h.hasFleed())) {
 					reportResult(GameReport.SUCCESS, "str/dungeon_fail",

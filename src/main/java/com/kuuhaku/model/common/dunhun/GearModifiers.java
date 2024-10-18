@@ -23,60 +23,60 @@ import java.util.Set;
 
 public class GearModifiers {
 	private int attack;
-	private double attackMult = 1;
+	private float attackMult = 1;
 	private int defense;
-	private double defenseMult = 1;
-	private double critical;
-	private double criticalMult = 1;
+	private float defenseMult = 1;
+	private float critical;
+	private float criticalMult = 1;
 
 	private final Set<String> addedTags = new HashSet<>();
 
-	public double getAttack() {
+	public float getAttack() {
 		return attack;
 	}
 
-	public void addAttack(Number value) {
-		attack += value.intValue();
+	public void addAttack(int value) {
+		attack += value;
 	}
 
-	public double getAttackMult() {
+	public float getAttackMult() {
 		return attackMult;
 	}
 
-	public void addAttackMult(Number mult) {
-		attackMult += mult.doubleValue();
+	public void addAttackMult(float mult) {
+		attackMult += mult;
 	}
 
-	public double getDefense() {
+	public float getDefense() {
 		return defense;
 	}
 
-	public void addDefense(Number value) {
-		defense += value.intValue();
+	public void addDefense(int value) {
+		defense += value;
 	}
 
-	public double getDefenseMult() {
+	public float getDefenseMult() {
 		return defenseMult;
 	}
 
-	public void addDefenseMult(Number mult) {
-		defenseMult += mult.doubleValue();
+	public void addDefenseMult(float mult) {
+		defenseMult += mult;
 	}
 
-	public double getCritical() {
+	public float getCritical() {
 		return critical;
 	}
 
-	public void addCritical(Number mult) {
-		critical += mult.doubleValue();
+	public void addCritical(float mult) {
+		critical += mult;
 	}
 
-	public double getCriticalMult() {
+	public float getCriticalMult() {
 		return criticalMult;
 	}
 
-	public void addCriticalMult(Number mult) {
-		criticalMult += mult.doubleValue();
+	public void addCriticalMult(float mult) {
+		criticalMult += mult;
 	}
 
 	public Set<String> getAddedTags() {
