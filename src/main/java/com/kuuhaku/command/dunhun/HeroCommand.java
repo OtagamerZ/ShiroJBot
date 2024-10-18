@@ -240,9 +240,13 @@ public class HeroCommand implements Executable {
 										.toList()
 						);
 
+						if (!reqText.isBlank()) {
+							reqText = "(" + reqText + ") ";
+						}
+
 						return new FieldMimic(
 								prefix + " `" + s.getId() + "` " + s.getName(locale),
-								("(" + reqText + ") " + s.getDescription(locale, h)).lines()
+								(reqText + s.getDescription(locale, h)).lines()
 										.map(l -> "-# " + l)
 										.collect(Collectors.joining("\n"))
 						).toString();
