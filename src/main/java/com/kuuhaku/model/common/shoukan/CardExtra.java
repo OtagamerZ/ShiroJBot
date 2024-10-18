@@ -33,16 +33,15 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import org.apache.commons.collections4.set.ListOrderedSet;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class CardExtra implements Cloneable {
+public class CardExtra implements Cloneable, Iterable<CumValue> {
 	private final CumValue mana = CumValue.flat();
 	private final CumValue blood = CumValue.flat();
 	private final CumValue sacrifices = CumValue.flat();
@@ -325,5 +324,26 @@ public class CardExtra implements Cloneable {
 		clone.effect = effect;
 
 		return clone;
+	}
+
+	@Override
+	public @NotNull Iterator<CumValue> iterator() {
+		if (fieldCache == null) {
+			fieldCache = getClass().getDeclaredFields();
+		}
+
+		return Arrays.stream(fieldCache)
+				.map(f -> {
+					try {
+						if (f.get(this) instanceof CumValue cv) {
+							return cv;
+						}
+					} catch (IllegalAccessException ignore) {
+					}
+
+					return null;
+				})
+				.filter(Objects::nonNull)
+				.iterator();
 	}
 }

@@ -23,11 +23,15 @@ import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.dunhun.Attributes;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Objects;
 import java.util.function.Predicate;
 
-public class ActorModifiers {
+public class ActorModifiers implements Iterable<CumValue> {
 	private final CumValue maxHp = CumValue.flat();
 	private final CumValue hpMult = CumValue.mult();
 	private final CumValue maxAp = CumValue.flat();
@@ -130,5 +134,26 @@ public class ActorModifiers {
 			} catch (IllegalAccessException ignore) {
 			}
 		}
+	}
+
+	@Override
+	public @NotNull Iterator<CumValue> iterator() {
+		if (fieldCache == null) {
+			fieldCache = getClass().getDeclaredFields();
+		}
+
+		return Arrays.stream(fieldCache)
+				.map(f -> {
+					try {
+						if (f.get(this) instanceof CumValue cv) {
+							return cv;
+						}
+					} catch (IllegalAccessException ignore) {
+					}
+
+					return null;
+				})
+				.filter(Objects::nonNull)
+				.iterator();
 	}
 }
