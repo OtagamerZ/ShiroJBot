@@ -35,48 +35,48 @@ public class GearModifiers {
 		return attack;
 	}
 
-	public void addAttack(int value) {
-		attack += value;
+	public void addAttack(Number value) {
+		attack += value.intValue();
 	}
 
 	public double getAttackMult() {
 		return attackMult;
 	}
 
-	public void addAttackMult(double mult) {
-		attackMult += mult;
+	public void addAttackMult(Number mult) {
+		attackMult += mult.doubleValue();
 	}
 
 	public double getDefense() {
 		return defense;
 	}
 
-	public void addDefense(int value) {
-		defense += value;
+	public void addDefense(Number value) {
+		defense += value.intValue();
 	}
 
 	public double getDefenseMult() {
 		return defenseMult;
 	}
 
-	public void addDefenseMult(double mult) {
-		defenseMult += mult;
+	public void addDefenseMult(Number mult) {
+		defenseMult += mult.doubleValue();
 	}
 
 	public double getCritical() {
 		return critical;
 	}
 
-	public void addCritical(double mult) {
-		critical += mult;
+	public void addCritical(Number mult) {
+		critical += mult.doubleValue();
 	}
 
 	public double getCriticalMult() {
 		return criticalMult;
 	}
 
-	public void addCriticalMult(double mult) {
-		criticalMult += mult;
+	public void addCriticalMult(Number mult) {
+		criticalMult += mult.doubleValue();
 	}
 
 	public Set<String> getAddedTags() {
