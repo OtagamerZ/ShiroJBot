@@ -240,7 +240,7 @@ public class HeroCommand implements Executable {
 						);
 
 						return new FieldMimic(
-								prefix + " `" + s.getId() + " | " + s.getName(locale) + "`",
+								prefix + " `" + s.getId() + "` " + s.getName(locale),
 								("(" + reqText + ") " + s.getDescription(locale, h)).lines()
 										.map(l -> "-# " + l)
 										.collect(Collectors.joining("\n"))
