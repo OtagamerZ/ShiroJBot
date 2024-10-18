@@ -276,7 +276,7 @@ public class HeroCommand implements Executable {
 		};
 
 		for (int j = 0; j < 5; j++) {
-			if (skills.size() < j) skills.add(null);
+			if (skills.size() <= j) skills.add(null);
 
 			int fi = j;
 			helper.addAction(locale.get("str/slot", j + 1), w -> {
