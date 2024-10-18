@@ -121,7 +121,7 @@ public class HeroCommand implements Executable {
 					attr.vit(), Utils.sign(mods.vit())
 			), true);
 
-			helper.apply(m.editMessageComponents().setEmbeds(eb.build()))
+			helper.apply(m.editMessageComponents().setContent(null).setEmbeds(eb.build()))
 					.setFiles(FileUpload.fromData(IO.getBytes(card.render(locale, d), "png"), "card.png"))
 					.queue(s -> Pages.buttonize(s, helper));
 		};
@@ -322,37 +322,37 @@ public class HeroCommand implements Executable {
 		}
 
 		helper.addAction(Utils.parseEmoji("⏮"), w -> {
-			if (i.get() > 0) {
-				w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getFirst())).queue();
-				i.set(0);
-			}
-		});
-		helper.addAction(Utils.parseEmoji("◀️"), w -> {
-			if (i.get() >= pages.size()) i.set(pages.size() - 1);
+					if (i.get() > 0) {
+						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getFirst())).queue();
+						i.set(0);
+					}
+				})
+				.addAction(Utils.parseEmoji("◀️"), w -> {
+					if (i.get() >= pages.size()) i.set(pages.size() - 1);
 
-			if (i.get() > 0) {
-				w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
-			}
-		});
-		helper.addAction(Utils.parseEmoji("▶️"), w -> {
-			if (i.get() >= pages.size()) i.set(pages.size() - 1);
+					if (i.get() > 0) {
+						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
+					}
+				})
+				.addAction(Utils.parseEmoji("▶️"), w -> {
+					if (i.get() >= pages.size()) i.set(pages.size() - 1);
 
-			if (i.get() < pages.size() - 1) {
-				w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
-			}
-		});
-		helper.addAction(Utils.parseEmoji("⏭"), w -> {
-			if (i.get() >= pages.size()) i.set(pages.size() - 1);
+					if (i.get() < pages.size() - 1) {
+						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
+					}
+				})
+				.addAction(Utils.parseEmoji("⏭"), w -> {
+					if (i.get() >= pages.size()) i.set(pages.size() - 1);
 
-			if (i.get() < pages.size() - 1) {
-				w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getLast())).queue();
-				i.set(pages.size() - 1);
-			}
-		});
+					if (i.get() < pages.size() - 1) {
+						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getLast())).queue();
+						i.set(pages.size() - 1);
+					}
+				})
+				.addAction(Utils.parseEmoji("↩"), w -> restore.accept(w.getMessage()));
 
 		refresh.run();
-		msg.editMessageComponents()
-				.setEmbeds((MessageEmbed) pages.getFirst().getContent())
+		msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent())
 				.queue(s -> {
 					Pages.buttonize(s, helper);
 					Pages.modifyButtons(s, null, Map.of(
