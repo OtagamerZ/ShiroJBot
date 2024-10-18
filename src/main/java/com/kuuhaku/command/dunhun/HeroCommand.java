@@ -164,6 +164,7 @@ public class HeroCommand implements Executable {
 			int i = 0;
 			XStringBuilder sb = new XStringBuilder();
 			for (AttrType at : AttrType.values()) {
+				if (at == AttrType.LVL) break;
 				String name = locale.get("attr/" + at.name());
 
 				int idx = i++;
@@ -352,7 +353,7 @@ public class HeroCommand implements Executable {
 				.addAction(Utils.parseEmoji("↩"), w -> restore.accept(w.getMessage()));
 
 		refresh.run();
-		msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent())
+		helper.apply(msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent()))
 				.queue(s -> {
 					Pages.buttonize(s, helper);
 					Pages.modifyButtons(s, null, Map.of(
