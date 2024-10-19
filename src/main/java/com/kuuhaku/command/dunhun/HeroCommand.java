@@ -185,12 +185,13 @@ public class HeroCommand implements Executable {
 			updateDesc.accept(null);
 		}));
 
-		helper.addAction(Utils.parseEmoji("↩"), w -> restore.accept(w.getMessage()))
-				.addAction(Utils.parseEmoji("✅"), w -> {
-					h.getStats().setAttributes(alloc.merge(new Attributes(attr[0], attr[1], attr[2], attr[3])));
-					h.save();
+		helper.addAction(Utils.parseEmoji(Constants.RETURN), w -> restore.accept(w.getMessage()))
+				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
+					Hero nh = h.refresh();
+					nh.getStats().setAttributes(alloc.merge(new Attributes(attr[0], attr[1], attr[2], attr[3])));
+					nh.save();
 
-					msg.getChannel().sendMessage(locale.get("success/points_allocated")).queue();
+					w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();
 				});
 
 		helper.apply(msg.editMessageEmbeds(eb.build())).queue(s -> Pages.buttonize(s, helper));
@@ -324,8 +325,6 @@ public class HeroCommand implements Executable {
 				}
 
 				skills.set(fi, s);
-				h.save();
-
 				w.getChannel().sendMessage(locale.get("success/skill_set")).queue();
 
 				refresh.run();
@@ -370,7 +369,14 @@ public class HeroCommand implements Executable {
 						i.set(pages.size() - 1);
 					}
 				})
-				.addAction(Utils.parseEmoji("↩"), w -> restore.accept(w.getMessage()));
+				.addAction(Utils.parseEmoji(Constants.RETURN), w -> restore.accept(w.getMessage()))
+				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
+					Hero nh = h.refresh();
+					nh.setSkills(skills);
+					nh.save();
+
+					w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();
+				});
 
 		refresh.run();
 		helper.apply(msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent()))
@@ -424,7 +430,6 @@ public class HeroCommand implements Executable {
 				return;
 			}
 
-			h.save();
 			msg.getChannel().sendMessage(locale.get("success/equipped")).queue();
 			ctx.get().run();
 		});
@@ -458,7 +463,14 @@ public class HeroCommand implements Executable {
 			w.getChannel().sendMessage(locale.get("success/unequipped")).queue();
 			ctx.get().run();
 		});
-		acts.put(new EmojiId(Utils.parseEmoji("↩")), w -> restore.accept(w.getMessage()));
+		acts.put(new EmojiId(Utils.parseEmoji(Constants.RETURN)), w -> restore.accept(w.getMessage()));
+		acts.put(new EmojiId(Utils.parseEmoji(Constants.ACCEPT)), w -> {
+			Hero nh = h.refresh();
+			nh.setEquipment(h.getEquipment());
+			nh.save();
+
+			w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();
+		});
 
 		ctx.get().run();
 	}

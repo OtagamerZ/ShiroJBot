@@ -283,6 +283,10 @@ public class Hero extends DAO<Hero> implements Actor {
 		});
 	}
 
+	public void setEquipment(Equipment equipment) {
+		equipCache = equipment;
+	}
+
 	@Override
 	public void trigger(Trigger trigger, Actor target) {
 		for (Gear g : getEquipment()) {
@@ -328,6 +332,10 @@ public class Hero extends DAO<Hero> implements Actor {
 						|| s.getReqRace() == getRace()
 				))
 				.collect(ArrayList::new, List::add, List::addAll);
+	}
+
+	public void setSkills(List<Skill> skills) {
+		skillCache = skills;
 	}
 
 	public List<Skill> getAllSkills() {

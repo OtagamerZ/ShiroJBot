@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.Executable;
@@ -130,7 +131,7 @@ public class DeckSkinCommand implements Executable {
 						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
 					}
 				})
-				.addAction(Utils.parseEmoji("✅"), w -> {
+				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
 					SlotSkin skin = skins.get(i.get());
 					if (!skin.canUse(acc)) {
 						List<Title> remaining = skin.getTitles().stream()

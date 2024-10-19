@@ -23,6 +23,7 @@ import com.github.ygimenez.model.EmbedCluster;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
+import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
@@ -140,7 +141,7 @@ public class DeckFrameCommand implements Executable {
 							i.set(pages.size() - 1);
 						}
 					})
-					.addAction(Utils.parseEmoji("✅"), w -> {
+					.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
 						FrameSkin frame = frames.get(i.get());
 						if (!frame.canUse(acc)) {
 							event.channel().sendMessage(locale.get("error/frame_locked")).queue();

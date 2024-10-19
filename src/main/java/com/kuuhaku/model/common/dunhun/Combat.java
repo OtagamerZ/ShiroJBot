@@ -386,7 +386,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 										h.modAp(-h.getAp());
 									}))
-									.addAction(Utils.parseEmoji("↩"), v -> {
+									.addAction(Utils.parseEmoji(Constants.RETURN), v -> {
 										MessageEditAction ma = helper.apply(v.getMessage().editMessageComponents());
 										addDropdowns(h, ma);
 										ma.queue(s -> Pages.buttonize(s, helper));
@@ -641,7 +641,7 @@ public class Combat implements Renderer<BufferedImage> {
 			);
 		}
 
-		helper.addAction(Utils.parseEmoji("↩"), w -> {
+		helper.addAction(Utils.parseEmoji(Constants.RETURN), w -> {
 			MessageEditAction ma = root.apply(msg.editMessageComponents());
 
 			addDropdowns(h, ma);

@@ -66,6 +66,7 @@ public abstract class Constants {
     public static final String TIMESTAMP_R = "<t:%s:R>";
     public static final String VOID = "\u200B";
     public static final String ACCEPT = "✅";
+    public static final String RETURN = "↩";
 
     public static final String SERVER_ROOT = System.getenv("SERVER_URL");
     public static final String API_ROOT = "https://api." + SERVER_ROOT + "/v2/";
