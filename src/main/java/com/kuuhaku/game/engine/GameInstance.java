@@ -80,11 +80,13 @@ public abstract class GameInstance<T extends Enum<T>> {
 		SimpleMessageListener sml = new SimpleMessageListener(chns) {
 			{
 				turn = 1;
-				channel = this.getChannel().setCooldown(1, TimeUnit.SECONDS);
+				channel = getChannel().setCooldown(1, TimeUnit.SECONDS);
 			}
 
 			@Override
 			protected void onMessageReceived(@NotNull MessageReceivedEvent event) {
+				if (!getChannel().isCooldownOver()) return;
+
 				if (checkChannel(event.getGuildChannel())
 					&& Utils.equalsAny(event.getAuthor().getId(), players)
 					&& validate(event.getMessage())

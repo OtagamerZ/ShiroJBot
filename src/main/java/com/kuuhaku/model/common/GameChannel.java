@@ -60,6 +60,10 @@ public class GameChannel {
 		return this;
 	}
 
+	public boolean isCooldownOver() {
+		return Math.max(0, (lastAction + cooldown) - System.currentTimeMillis()) == 0;
+	}
+
 	public ClusterAction sendFile(byte[] bytes, String filename) {
 		long delay = Math.max(0, (lastAction + cooldown) - System.currentTimeMillis());
 

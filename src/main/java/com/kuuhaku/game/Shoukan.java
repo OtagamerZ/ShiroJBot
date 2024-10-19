@@ -1236,7 +1236,13 @@ public class Shoukan extends GameInstance<Phase> {
 
 		int posHash = 0;
 		if (target != null) {
-			if (target.isStasis() || target.getIndex() == -1) {
+			if (source.isDefending() && target.isStunned()) {
+				if (md.contains(SendMode.SEND)) {
+					getChannel().sendMessage(getString("error/target_stunned_in_def")).queue();
+				}
+
+				return false;
+			} else if (target.isStasis() || target.getIndex() == -1) {
 				if (md.contains(SendMode.SEND)) {
 					getChannel().sendMessage(getString("error/card_untargetable")).queue();
 				}
