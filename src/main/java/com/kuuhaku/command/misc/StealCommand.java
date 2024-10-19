@@ -65,14 +65,14 @@ public class StealCommand implements Executable {
 
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime lastSteal = LocalDateTime.parse(acc.getDynValue("last_steal", LocalDateTime.ofInstant(Instant.EPOCH, ZoneId.of("GMT-3")).toString()));
-		if (!lastSteal.isBefore(now.minusHours(6))) {
+		if (lastSteal.isAfter(now.minusHours(6))) {
 			event.channel().sendMessage(locale.get("error/stole_recent", Utils.toStringDuration(locale, now.minusHours(6).until(lastSteal, ChronoUnit.MILLIS)))).queue();
 			return;
 		}
 
 		Account them = DAO.find(Account.class, target.getId());
 		LocalDateTime lastStolen = LocalDateTime.parse(them.getDynValue("last_stolen", LocalDateTime.ofInstant(Instant.EPOCH, ZoneId.of("GMT-3")).toString()));
-		if (!lastStolen.isBefore(now.minusHours(1))) {
+		if (lastStolen.isAfter(now.minusHours(1))) {
 			event.channel().sendMessage(locale.get("error/stolen_recent", target.getAsMention(), Utils.toStringDuration(locale, now.minusHours(1).until(lastStolen, ChronoUnit.MILLIS)))).queue();
 			return;
 		}
@@ -85,7 +85,6 @@ public class StealCommand implements Executable {
 			if (them.consumeItem("hallowed_card") || Calc.chance(Math.min(Math.pow(current / 200d, 2), 50))) {
 				acc.consumeItem("spooky_candy", current, true);
 				acc.setDynValue("last_steal", now.toString());
-				them.setDynValue("last_stolen", now.toString());
 
 				event.channel().sendMessage(locale.get("str/steal_caught")).queue();
 				return;
@@ -94,6 +93,7 @@ public class StealCommand implements Executable {
 			if (them.consumeItem("spooky_candy", stolen)) {
 				acc.addItem("spooky_candy", stolen);
 				acc.setDynValue("last_steal", now.toString());
+				them.setDynValue("last_stolen", now.toString());
 
 				event.channel().sendMessage(locale.get("success/candy_stolen", stolen, target.getAsMention())).queue();
 				return;
