@@ -23,12 +23,12 @@ AS
 $$
 BEGIN
     DELETE
-    FROM kawaipon.card_details
+    FROM card_details
     WHERE card_uuid IN (
                        SELECT cd.card_uuid
-                       FROM kawaipon.card_details cd
-                                LEFT JOIN kawaipon.kawaipon_card kc ON kc.uuid = cd.card_uuid
-                                LEFT JOIN kawaipon.stashed_card sc ON sc.uuid = cd.card_uuid
+                       FROM card_details cd
+                                LEFT JOIN kawaipon_card kc ON kc.uuid = cd.card_uuid
+                                LEFT JOIN stashed_card sc ON sc.uuid = cd.card_uuid
                        WHERE kc.uuid IS NULL
                          AND sc.uuid IS NULL
                        );

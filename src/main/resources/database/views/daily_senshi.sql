@@ -30,7 +30,7 @@ FROM (
      FROM (
           SELECT card_id
                , greatest(1, mana) AS mana
-          FROM kawaipon.senshi
+          FROM senshi
           WHERE NOT has(tags, 'FUSION')
             AND mana <= 5
           ORDER BY hashtextextended(card_id, get_seed())

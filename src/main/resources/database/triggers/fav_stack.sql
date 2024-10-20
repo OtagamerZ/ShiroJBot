@@ -28,13 +28,13 @@ BEGIN
 
     IF (fav IS NOT NULL) THEN
         IF (NEW.card_id = fav) THEN
-            UPDATE kawaipon.kawaipon
+            UPDATE kawaipon
             SET fav_card       = NULL
               , fav_expiration = NULL
               , fav_stacks     = 0
             WHERE uid = NEW.kawaipon_uid;
         ELSE
-            UPDATE kawaipon.kawaipon
+            UPDATE kawaipon
             SET fav_stacks = fav_stacks + 1
             WHERE uid = NEW.kawaipon_uid;
         END IF;

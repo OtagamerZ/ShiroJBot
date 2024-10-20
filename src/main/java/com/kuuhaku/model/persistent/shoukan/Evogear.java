@@ -658,7 +658,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public void setCurrentStack(BondedList<?> stack) {
 		if (getTags().contains("STRATAGEM") && getGame().getArcade() != Arcade.CARDMASTER) {
 			executeAssert(ON_INITIALIZE);
-			getGame().getChannel().sendMessage(getGame().getString("str/stratagem_use", this)).queue();
+			getGame().getChannel().buffer(getGame().getString("str/stratagem_use", this));
 			return;
 		}
 

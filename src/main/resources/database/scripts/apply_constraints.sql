@@ -34,7 +34,7 @@ BEGIN
              SELECT r.conname                              AS name
                   , cast(r.conrelid AS regclass)           AS "table"
                   , pg_catalog.pg_get_constraintdef(r.oid) AS def
-             FROM pg_catalog.pg_constraint r
+             FROM pg_constraint r
              WHERE r.contype = 'f'
              ) x
            , regexp_match(x.def, 'FOREIGN KEY \((\w+)\) REFERENCES (\w+(?=\.))?(\w+)') m

@@ -22,8 +22,8 @@ CREATE OR REPLACE FUNCTION t_generate_kawaipon()
 AS
 $$
 BEGIN
-    IF ((SELECT 1 FROM kawaipon.kawaipon_card kc WHERE kc.uuid = NEW.uuid) IS NULL) THEN
-        INSERT INTO kawaipon.kawaipon_card (uuid, card_id, kawaipon_uid)
+    IF ((SELECT 1 FROM kawaipon_card kc WHERE kc.uuid = NEW.uuid) IS NULL) THEN
+        INSERT INTO kawaipon_card (uuid, card_id, kawaipon_uid)
         VALUES (NEW.uuid, NEW.card_id, NEW.kawaipon_uid);
     END IF;
 

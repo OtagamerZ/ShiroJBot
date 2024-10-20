@@ -25,7 +25,7 @@ FROM (
      SELECT x.card_id
      FROM (
           SELECT card_id
-          FROM kawaipon.field
+          FROM field
           WHERE NOT effect
           ORDER BY hashtextextended(card_id, get_seed())
           ) x

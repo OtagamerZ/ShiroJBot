@@ -20,8 +20,8 @@
 CREATE OR REPLACE VIEW v_card_counter AS
 SELECT c.anime_id,
        count(1) AS count
-FROM kawaipon.card c
-         INNER JOIN kawaipon.anime a on a.id = c.anime_id
+FROM card c
+         INNER JOIN anime a on a.id = c.anime_id
 WHERE a.visible
   AND get_rarity_index(c.rarity) BETWEEN 1 AND 5
 GROUP BY c.anime_id;

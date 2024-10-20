@@ -22,9 +22,9 @@ CREATE OR REPLACE FUNCTION t_delete_ghosts()
 AS
 $$
 BEGIN
-    DELETE FROM kawaipon.stashed_card sc
+    DELETE FROM stashed_card sc
            WHERE sc.type = 'KAWAIPON'
-             AND NOT exists(SELECT 1 FROM kawaipon.kawaipon_card kc WHERE kc.uuid = sc.uuid);
+             AND NOT exists(SELECT 1 FROM kawaipon_card kc WHERE kc.uuid = sc.uuid);
     RETURN NEW;
 END;
 $$;

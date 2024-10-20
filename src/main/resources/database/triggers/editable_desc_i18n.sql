@@ -23,11 +23,11 @@ AS
 $$
 BEGIN
     IF (NEW.desc_pt IS NOT NULL) THEN
-        INSERT INTO kawaipon.card_descriptions (id, locale, description) VALUES (NEW.id, 'PT', NEW.desc_pt);
+        INSERT INTO card_descriptions (id, locale, description) VALUES (NEW.id, 'PT', NEW.desc_pt);
     END IF;
 
     IF (NEW.desc_en IS NOT NULL) THEN
-        INSERT INTO kawaipon.card_descriptions (id, locale, description) VALUES (NEW.id, 'EN', NEW.desc_en);
+        INSERT INTO card_descriptions (id, locale, description) VALUES (NEW.id, 'EN', NEW.desc_en);
     END IF;
 
     RETURN NEW;
@@ -48,7 +48,7 @@ AS
 $$
 BEGIN
     IF (NEW.desc_pt IS NOT NULL) THEN
-        INSERT INTO kawaipon.card_descriptions (id, locale, description)
+        INSERT INTO card_descriptions (id, locale, description)
         VALUES (NEW.id, 'PT', NEW.desc_pt)
         ON CONFLICT (id, locale) DO UPDATE SET description = excluded.description;
     ELSE
@@ -56,11 +56,11 @@ BEGIN
     END IF;
 
     IF (NEW.desc_en IS NOT NULL) THEN
-        INSERT INTO kawaipon.card_descriptions (id, locale, description)
+        INSERT INTO card_descriptions (id, locale, description)
         VALUES (NEW.id, 'EN', NEW.desc_en)
         ON CONFLICT (id, locale) DO UPDATE SET description = excluded.description;
     ELSE
-        DELETE FROM kawaipon.card_descriptions WHERE id = NEW.id AND locale = 'EN';
+        DELETE FROM card_descriptions WHERE id = NEW.id AND locale = 'EN';
     END IF;
 
     RETURN NEW;
@@ -80,7 +80,7 @@ CREATE OR REPLACE FUNCTION t_delete_desc_i18n()
 AS
 $$
 BEGIN
-    DELETE FROM kawaipon.card_descriptions WHERE id = OLD.id;
+    DELETE FROM card_descriptions WHERE id = OLD.id;
     RETURN NEW;
 END
 $$;

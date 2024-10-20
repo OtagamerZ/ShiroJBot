@@ -1294,7 +1294,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 								if (game.activateTrap(card, params)) {
 									triggered.add(card.getId());
-									game.getChannel().sendMessage(game.getString("str/trap_activation", card)).queue();
+									game.getChannel().buffer(game.getString("str/trap_activation", card));
 								}
 							}
 						}
@@ -1320,7 +1320,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (hasEffect() && getEffect().contains(trigger.name())) {
 				if (isStunned() && getGame().chance(25)) {
 					if (Trigger.getAnnounceable().contains(trigger) && !ep.isDeferred(Trigger.getAnnounceable())) {
-						game.getChannel().sendMessage(game.getString("str/effect_stunned", this)).queue();
+						game.getChannel().buffer(game.getString("str/effect_stunned", this));
 					}
 				} else {
 					CachedScriptManager csm = getCSM();
@@ -1480,7 +1480,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (getGame().chance(getDodge())) {
 				if (announce) {
 					Shoukan game = getGame();
-					game.getChannel().sendMessage(game.getLocale().get("str/avoid_effect", this)).queue();
+					game.getChannel().buffer(game.getLocale().get("str/avoid_effect", this));
 					game.trigger(ON_DODGE, asSource(ON_DODGE));
 				}
 
@@ -1489,7 +1489,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				blocked.add(source);
 				if (announce) {
 					Shoukan game = getGame();
-					game.getChannel().sendMessage(game.getString("str/spell_shield", this)).queue();
+					game.getChannel().buffer(game.getString("str/spell_shield", this));
 					game.trigger(ON_PARRY, asSource(ON_PARRY));
 				}
 

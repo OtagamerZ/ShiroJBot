@@ -22,7 +22,7 @@ CREATE OR REPLACE FUNCTION t_rename_description()
 AS
 $$
 BEGIN
-    UPDATE kawaipon.card_descriptions cd
+    UPDATE card_descriptions cd
     SET id = NEW.id
     WHERE cd.id = OLD.id;
 

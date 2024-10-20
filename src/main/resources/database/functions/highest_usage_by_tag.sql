@@ -41,7 +41,7 @@ BEGIN
               ) x
          ) x
              CROSS JOIN jsonb_array_elements_text(x.cards) e(card)
-    WHERE e.card IN (SELECT card_id FROM kawaipon.senshi WHERE tags \?& $2)
+    WHERE e.card IN (SELECT card_id FROM senshi WHERE tags \?& $2)
     GROUP BY x.id
     ORDER BY used DESC;
 END;

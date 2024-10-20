@@ -22,8 +22,8 @@ CREATE OR REPLACE FUNCTION t_delete_stashed()
 AS
 $$
 BEGIN
-    UPDATE kawaipon.stashed_card SET price = -1 WHERE uuid = OLD.uuid;
-    DELETE FROM kawaipon.stashed_card WHERE uuid = OLD.uuid;
+    UPDATE stashed_card SET price = -1 WHERE uuid = OLD.uuid;
+    DELETE FROM stashed_card WHERE uuid = OLD.uuid;
     RETURN NEW;
 END;
 $$;
