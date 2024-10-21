@@ -183,7 +183,7 @@ public class Card extends DAO<Card> implements Serializable {
 			if (v != null && v.length > 0) return v;
 
 			try {
-				String key = Utils.equalsAny(rarity, Rarity.HERO, Rarity.MONSTER) ? id.split(":")[0] : id;
+				String key = Utils.equalsAny(rarity, Rarity.HERO, Rarity.MONSTER) ? id.split(":")[1] : id;
 
 				File f = new File(path, key + ".png");
 				if (f.exists()) {
