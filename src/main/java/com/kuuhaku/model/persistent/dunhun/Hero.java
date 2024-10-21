@@ -132,11 +132,10 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	public boolean setImage(BufferedImage img) {
-		String hash = HexFormat.of().formatHex(DigestUtils.getMd5Digest().digest(("H:" + id).getBytes()));
 		File parent = new File(System.getenv("CARDS_PATH") + "../heroes");
 		if (!parent.exists()) parent.mkdir();
 
-		File f = new File(parent, hash + ".png");
+		File f = new File(parent, id + ".png");
 		img = Graph.scaleAndCenterImage(Graph.toColorSpace(img, BufferedImage.TYPE_INT_ARGB), 225, 350);
 
 		try {
