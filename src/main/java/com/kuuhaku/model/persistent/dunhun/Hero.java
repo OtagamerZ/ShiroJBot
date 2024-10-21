@@ -159,7 +159,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	public int getMaxHp() {
 		double flat = 300 + modifiers.getMaxHp().get() + stats.getLevel() * 5;
 
-		return (int) (flat * modifiers.getHpMult().get() * (1 + getAttributes().vit() / 10d));
+		return (int) (flat * modifiers.getHpMult().get() * (1 + getAttributes().vit() / 5d));
 	}
 
 	@Override
@@ -200,7 +200,7 @@ public class Hero extends DAO<Hero> implements Actor {
 				.mapToDouble(Gear::getCritical)
 				.average().orElse(0);
 
-		return (int) (crit * (1 + modifiers.getCritical().get() + getAttributes().dex() * 0.02));
+		return (int) (crit * (1 + modifiers.getCritical().get() + getAttributes().dex() / 20d));
 	}
 
 	@Override
@@ -424,13 +424,18 @@ public class Hero extends DAO<Hero> implements Actor {
 			}
 		}
 
-		dmg += getEquipment().getWeaponList().stream()
-				.mapToInt(g -> (int) (g.getDmg() * 0.6))
-				.sum();
+		List<Gear> wpns = getEquipment().getWeaponList();
+		if (wpns.size() == 1) {
+			dmg += wpns.getFirst().getDmg();
+		} else {
+			dmg += wpns.stream()
+					.mapToInt(g -> (int) (g.getDmg() * 0.6))
+					.sum();
+		}
 
 		Attributes a = getAttributes();
-		base.setAtk(dmg * (1 + a.str() / 10));
-		base.setDfs((int) (def * (1 + a.str() * 0.08)));
+		base.setAtk((int) (dmg * (1 + a.str() / 5d)));
+		base.setDfs((int) (def * (1 + a.str() / 8d)));
 		base.setDodge(Math.max(0, a.dex() / 2 - a.vit() / 3));
 
 		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();
