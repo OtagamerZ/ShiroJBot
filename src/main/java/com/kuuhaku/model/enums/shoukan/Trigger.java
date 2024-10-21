@@ -234,6 +234,7 @@ public enum Trigger {
 
 	/**
 	 * On taking degen damage
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_DEGEN,
 

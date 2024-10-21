@@ -33,7 +33,6 @@ import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import okio.Buffer;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -47,7 +46,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.HexFormat;
 import java.util.Objects;
 
 @Entity
@@ -178,13 +176,9 @@ public class Card extends DAO<Card> implements Serializable {
 		String key;
 		String path;
 		switch (rarity) {
-			case HERO -> {
-				key = HexFormat.of().formatHex(DigestUtils.getMd5Digest().digest(id.getBytes()));
-				path = System.getenv("CARDS_PATH") + "../heroes";
-			}
-			case MONSTER -> {
+			case HERO, MONSTER -> {
 				key = id.split(":")[1];
-				path = System.getenv("CARDS_PATH") + "../monsters";
+				path = System.getenv("CARDS_PATH") + (rarity == Rarity.HERO ? "../heroes" : "../monsters");
 			}
 			default -> {
 				key = id;
