@@ -16,6 +16,7 @@ import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
@@ -247,7 +248,10 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		load(locale);
 
 		double mult = switch (getRarityClass()) {
-			case RARE -> 2;
+			case RARE -> {
+				senshiCache.setChromeOverride(true);
+				yield 2;
+			}
 			case MAGIC -> 1.25;
 			default -> 1;
 		} * (1 + game.getTurn() * 0.1) * (1 + game.getDungeon().getAreaLevel() * 0.2);

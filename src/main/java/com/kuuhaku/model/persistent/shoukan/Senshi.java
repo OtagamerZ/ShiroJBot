@@ -144,6 +144,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient StashedCard stashRef = null;
 	private transient BondedList<?> currentStack;
 	private transient Trigger currentTrigger = null;
+	private transient boolean chromeOverride = false;
 
 	@Transient
 	private long state = 0b1;
@@ -1215,6 +1216,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return currentTrigger;
 	}
 
+	public boolean isChromeOverride() {
+		return chromeOverride;
+	}
+
+	public void setChromeOverride(boolean chromeOverride) {
+		this.chromeOverride = chromeOverride;
+	}
+
 	@Override
 	public CachedScriptManager getCSM() {
 		return cachedEffect;
@@ -1565,7 +1574,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			} else {
 				Senshi card = Utils.getOr(stats.getDisguise(), this);
 				String desc = isSealed() ? "" : card.getDescription(locale);
-				BufferedImage img = card.getVanity().drawCardNoBorder(Utils.getOr(() -> stashRef.isChrome(), false));
+				BufferedImage img = card.getVanity().drawCardNoBorder(Utils.getOr(() -> chromeOverride || stashRef.isChrome(), false));
 
 				g1.setClip(deck.getFrame().getBoundary());
 				g1.drawImage(img, 0, 0, null);
