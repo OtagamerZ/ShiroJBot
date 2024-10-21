@@ -245,6 +245,7 @@ public class Combat implements Renderer<BufferedImage> {
 				act.getSenshi().setAvailable(true);
 				if (!act.getSenshi().isStasis()) {
 					act.modHp(act.getRegDeg().next(), false);
+					trigger(Trigger.ON_DEGEN, act, act);
 				}
 
 				Iterator<EffectBase> it = effects.iterator();
