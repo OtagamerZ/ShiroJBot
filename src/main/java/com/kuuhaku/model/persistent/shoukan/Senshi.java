@@ -1579,7 +1579,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				if (hueOffset != 0) {
 					img = card.getVanity().drawCardNoBorder();
 					Graph.forEachPixel(img, (x, y, rgb) -> {
-						int[] color = Graph.unpackRGB(img.getRGB(x, y));
+						int[] color = Graph.unpackRGB(rgb);
 						float[] hsv = Color.RGBtoHSB(color[1], color[2], color[3], null);
 						hsv[0] = Math.floorMod((int) (hsv[0] * 360 + hueOffset), 360) / 360f;
 

@@ -154,7 +154,7 @@ public class Card extends DAO<Card> implements Serializable {
 		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
 		Graph.forEachPixel(bi, (x, y, rgb) -> {
-			int[] color = Graph.unpackRGB(bi.getRGB(x, y));
+			int[] color = Graph.unpackRGB(rgb);
 			int alpha = color[0];
 			float[] hsv;
 			if (border) {
