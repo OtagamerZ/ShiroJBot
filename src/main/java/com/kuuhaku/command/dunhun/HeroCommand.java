@@ -303,14 +303,14 @@ public class HeroCommand implements Executable {
 						w.getChannel().sendMessage(locale.get("error/unknown_skill", sug)).queue();
 					}
 					return;
+				} else if (!h.getAttributes().has(s.getRequirements())) {
+					w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
+					return;
 				}
 
 				if (s.getReqRace() == null && !h.getStats().getUnlockedSkills().contains(s.getId())) {
 					if (h.getStats().getPointsLeft() <= 0) {
 						w.getChannel().sendMessage(locale.get("error/insufficient_points")).queue();
-						return;
-					} else if (!h.getAttributes().has(s.getRequirements())) {
-						w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 						return;
 					}
 
@@ -374,6 +374,7 @@ public class HeroCommand implements Executable {
 				.addAction(Utils.parseEmoji(Constants.RETURN), w -> restore.accept(w.getMessage()))
 				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
 					Hero nh = h.refresh();
+					nh.getStats().setUnlockedSkills(h.getStats().getUnlockedSkills());
 					nh.setSkills(skills);
 					nh.save();
 
@@ -424,6 +425,9 @@ public class HeroCommand implements Executable {
 			Gear g = h.getInvGear(Integer.parseInt(s.getContentRaw()));
 			if (g == null) {
 				w.getChannel().sendMessage(locale.get("error/gear_not_found")).queue();
+				return;
+			} else if (!h.getAttributes().has(g.getBasetype().getStats().requirements())) {
+				w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 				return;
 			}
 
