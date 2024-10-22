@@ -330,6 +330,7 @@ public class Hero extends DAO<Hero> implements Actor {
 						(s.getReqRace() == null && getStats().getUnlockedSkills().contains(s.getId()))
 						|| s.getReqRace() == getRace()
 				))
+				.sorted(Comparator.comparingInt(s -> stats.getSkills().indexOf(s.getId())))
 				.collect(ArrayList::new, List::add, List::addAll);
 	}
 
