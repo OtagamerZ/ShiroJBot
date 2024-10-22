@@ -1578,13 +1578,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				BufferedImage img;
 				if (hueOffset != 0) {
 					img = card.getVanity().drawCardNoBorder();
-					Graph.forEachPixel(img, (x, y, rgb) -> {
-						int[] color = Graph.unpackRGB(rgb);
-						float[] hsv = Color.RGBtoHSB(color[1], color[2], color[3], null);
-						hsv[0] = Math.floorMod((int) (hsv[0] * 360 + hueOffset), 360) / 360f;
-
-						out.setRGB(x, y, Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]) & (color[0] << 24));
-					});
+					Graph.forEachPixel(img, (x, y, rgb) -> out.setRGB(x, y, Graph.rotate(rgb, hueOffset)));
 				} else {
 					img = card.getVanity().drawCardNoBorder(Utils.getOr(() -> stashRef.isChrome(), false));
 				}
