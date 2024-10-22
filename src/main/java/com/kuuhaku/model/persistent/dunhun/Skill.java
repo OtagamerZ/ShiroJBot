@@ -113,7 +113,7 @@ public class Skill extends DAO<Skill> {
 			double scale;
 			String type = Utils.extract(desc, "(?<=^\\()\\w+(?=\\))");
 			if (type != null) {
-				int sa = switch (AttrType.valueOf(type.toUpperCase())) {
+				int atb = switch (AttrType.valueOf(type.toUpperCase())) {
 					case STR -> attr.str();
 					case DEX -> attr.dex();
 					case WIS -> attr.wis();
@@ -121,7 +121,7 @@ public class Skill extends DAO<Skill> {
 					case LVL -> h.getStats().getLevel();
 				};
 
-				scale = (1 + sa / (9d + sa)) * h.asSenshi(locale).getPower();
+				scale = (1 + atb / (9d + atb)) * h.asSenshi(locale).getPower();
 			} else {
 				scale = h.asSenshi(locale).getPower();
 			}
@@ -133,11 +133,13 @@ public class Skill extends DAO<Skill> {
 			});
 		} else {
 			MonsterBase<?> m = (MonsterBase<?>) source;
+			int area = m.getGame().getAreaLevel();
+
 			double mult = switch (m.getRarityClass()) {
 				case RARE -> 2;
 				case MAGIC -> 1.25;
 				default -> 1;
-			} * (1 + m.getGame().getAreaLevel() / 4d) * m.asSenshi(locale).getPower();
+			} * (1 + area / (9d + area)) * m.asSenshi(locale).getPower();
 
 			desc = Utils.regex(desc, "\\{(\\d+)}").replaceAll(v -> {
 				int val = (int) (Integer.parseInt(v.group(1)) * mult);
