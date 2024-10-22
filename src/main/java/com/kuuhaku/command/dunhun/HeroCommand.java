@@ -220,6 +220,7 @@ public class HeroCommand implements Executable {
 		AtomicInteger i = new AtomicInteger();
 		List<Page> pages = new ArrayList<>();
 		Runnable refresh = () -> {
+			Attributes attr = h.getAttributes();
 			eb.setDescription(locale.get("str/remaining_points", h.getStats().getPointsLeft()));
 
 			pages.clear();
@@ -252,7 +253,9 @@ public class HeroCommand implements Executable {
 							reqLine.add(reqWpn);
 						}
 
-						String req = reqLine.isEmpty() ? "" : ("- " + String.join(" | ", reqLine) + "\n");
+						String req = !reqLine.isEmpty()
+								? ("- " + (attr.has(reqs) ? "" : "\\❌ ") + String.join(" | ", reqLine) + "\n")
+								: "";
 						return new FieldMimic(
 								prefix + " `" + s.getId() + "` " + s.getName(locale),
 								(req + s.getDescription(locale, h)).lines()
@@ -305,6 +308,9 @@ public class HeroCommand implements Executable {
 				if (s.getReqRace() == null && !h.getStats().getUnlockedSkills().contains(s.getId())) {
 					if (h.getStats().getPointsLeft() <= 0) {
 						w.getChannel().sendMessage(locale.get("error/insufficient_points")).queue();
+						return;
+					} else if (!h.getAttributes().has(s.getRequirements())) {
+						w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 						return;
 					}
 

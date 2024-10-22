@@ -611,6 +611,11 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void addSelector(Message msg, ButtonizeHelper root, List<Actor> targets, Consumer<Actor> action) {
+		if (targets.stream().allMatch(Objects::isNull)) {
+			game.getChannel().sendMessage(locale.get("error/no_targets")).queue();
+			return;
+		}
+
 		Actor single = null;
 		for (Actor a : targets) {
 			if (single == null) single = a;
