@@ -228,7 +228,7 @@ public class HeroCommand implements Executable {
 						int idx = skills.indexOf(s);
 						String prefix;
 						if (idx > -1) {
-							prefix = Utils.fancyNumber(idx);
+							prefix = Utils.fancyNumber(idx + 1);
 						} else if (s.getReqRace() == null && !h.getStats().getUnlockedSkills().contains(s.getId())) {
 							prefix = "🔒";
 						} else {
