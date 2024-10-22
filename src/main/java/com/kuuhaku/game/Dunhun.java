@@ -242,17 +242,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}, main);
 	}
 
-	public void runCombat() {
-		runCombat(List.of());
-	}
-
-	public void runCombat(Collection<String> pool) {
+	public void runCombat(String... pool) {
 		combat.set(new Combat(this));
 		for (int i = 0; i < 3; i++) {
 			List<Actor> keepers = getCombat().getActors(Team.KEEPERS);
 			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size())) break;
 
-			if (!pool.isEmpty()) keepers.add(Monster.getRandom(this, Utils.getRandomEntry(pool)));
+			if (pool.length == 0) keepers.add(Monster.getRandom(this, Utils.getRandomEntry(pool)));
 			else keepers.add(Monster.getRandom(this));
 		}
 
@@ -538,10 +534,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public int getAreaLevel() {
 		return (dungeon.getAreaLevel() + getTurn() / 2) - 1;
-	}
-
-	public final void beginCombat(Collection<Monster> enemies) {
-		beginCombat(enemies.toArray(Monster[]::new));
 	}
 
 	@SafeVarargs
