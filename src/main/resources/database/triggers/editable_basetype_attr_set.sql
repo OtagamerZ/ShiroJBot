@@ -33,7 +33,7 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS update_basetype_attr_set ON v_desc_i18n;
+DROP TRIGGER IF EXISTS update_basetype_attr_set ON v_basetype_attr_set;
 CREATE TRIGGER update_basetype_attr_set
     INSTEAD OF UPDATE
     ON v_basetype_attr_set
