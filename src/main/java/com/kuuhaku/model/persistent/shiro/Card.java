@@ -173,23 +173,18 @@ public class Card extends DAO<Card> implements Serializable {
 	}
 
 	private byte[] getImageBytes() {
-		String key;
 		String path;
 		switch (rarity) {
-			case HERO, MONSTER -> {
-				key = id.split(":")[1];
-				path = System.getenv("CARDS_PATH") + (rarity == Rarity.HERO ? "../heroes" : "../monsters");
-			}
-			default -> {
-				key = id;
-				path = System.getenv("CARDS_PATH") + anime.getId();
-			}
+			case HERO, MONSTER -> path = System.getenv("CARDS_PATH") + (rarity == Rarity.HERO ? "../heroes" : "../monsters");
+			default -> path = System.getenv("CARDS_PATH") + anime.getId();
 		}
 
-		byte[] cardBytes = Main.getCacheManager().computeResource(key, (k, v) -> {
+		byte[] cardBytes = Main.getCacheManager().computeResource(id, (k, v) -> {
 			if (v != null && v.length > 0) return v;
 
 			try {
+				String key = Utils.equalsAny(rarity, Rarity.HERO, Rarity.MONSTER) ? id.split(":")[1] : id;
+
 				File f = new File(path, key + ".png");
 				if (f.exists()) {
 					return FileUtils.readFileToByteArray(f);

@@ -84,8 +84,9 @@ public class Consumable extends DAO<Consumable> {
 	}
 
 	public List<Actor> getTargets(Combat combat, Actor source) {
-		List<Actor> out = new ArrayList<>();
+		if (targeter == null) return List.of(source);
 
+		List<Actor> out = new ArrayList<>();
 		try {
 			Utils.exec(id, targeter, Map.of(
 					"combat", combat,
