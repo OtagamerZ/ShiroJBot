@@ -208,7 +208,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							DAO.apply(Hero.class, h.getId(), n -> {
 								int gain = xp;
 								int lvl = h.getStats().getLevel();
-								int diff = Math.abs(getAreaLevel() - lvl);
+								int diff = Math.abs(getAreaLevel() + 1 - lvl);
 
 								if (diff > 5) {
 									gain = (int) Calc.clamp(gain * Math.pow(0.9, diff - 5), 1, gain);
@@ -419,7 +419,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			List<String> skills = mb.getSkills().stream()
 					.map(s ->
 							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
-							"\n- " + s.getDescription(getLocale(), mb).lines()
+							"\n" + s.getDescription(getLocale(), mb).lines()
 									.map(l -> "-# " + l)
 									.collect(Collectors.joining("\n"))
 					)
@@ -452,7 +452,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			List<String> skills = h.getSkills().stream()
 					.map(s ->
 							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
-							"\n- " + s.getDescription(getLocale(), h).lines()
+							"\n" + s.getDescription(getLocale(), h).lines()
 									.map(l -> "-# " + l)
 									.collect(Collectors.joining("\n"))
 					)
@@ -537,7 +537,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public int getAreaLevel() {
-		return dungeon.getAreaLevel() + getTurn() / 2;
+		return (dungeon.getAreaLevel() + getTurn() / 2) - 1;
 	}
 
 	public final void beginCombat(Collection<Monster> enemies) {

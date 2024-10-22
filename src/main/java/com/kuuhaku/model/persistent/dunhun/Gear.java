@@ -329,7 +329,7 @@ public class Gear extends DAO<Gear> {
 		Gear out = new Gear(hero, base);
 		int dropLevel = Integer.MAX_VALUE;
 		if (game != null) {
-			dropLevel = game.getAreaLevel();
+			dropLevel = game.getAreaLevel() + 1;
 		}
 
 		if (rarity == RarityClass.NORMAL) return out;
