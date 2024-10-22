@@ -501,12 +501,10 @@ public abstract class Graph {
 	public static int rotate(int color, int deg) {
 		int[] rgb = unpackRGB(color);
 
-		float[] hsv;
-		hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
+		float[] hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
 		hsv[0] = ((hsv[0] * 360 + deg) % 360) / 360;
 
-		rgb = unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
-		return packRGB(255, rgb[1], rgb[2], rgb[3]);
+		return Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]) & (rgb[0] << 24);
 	}
 
 	public static String abbreviate(Graphics2D g2d, String text, int width) {
