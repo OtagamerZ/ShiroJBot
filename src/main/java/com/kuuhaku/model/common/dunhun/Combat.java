@@ -416,7 +416,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 						if (canDefend) {
 							double threat = tgts.stream()
-									.mapToInt(Actor::getAggroScore)
+									.mapToInt(a -> a.getHp() * a.getAggroScore() / a.getMaxHp())
 									.average()
 									.orElse(1);
 
