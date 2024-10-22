@@ -242,6 +242,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}, main);
 	}
 
+	public void runCombat(Collection<String> pool) {
+		runCombat(pool.toArray(String[]::new));
+	}
+
 	public void runCombat(String... pool) {
 		combat.set(new Combat(this));
 		for (int i = 0; i < 3; i++) {
