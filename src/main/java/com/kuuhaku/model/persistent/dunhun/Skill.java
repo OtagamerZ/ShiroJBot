@@ -137,7 +137,7 @@ public class Skill extends DAO<Skill> {
 				case RARE -> 2;
 				case MAGIC -> 1.25;
 				default -> 1;
-			} * (1 + m.getGame().getTurn() / 4d) * m.asSenshi(locale).getPower();
+			} * (1 + m.getGame().getAreaLevel() / 4d) * m.asSenshi(locale).getPower();
 
 			desc = Utils.regex(desc, "\\{(\\d+)}").replaceAll(v -> {
 				int val = (int) (Integer.parseInt(v.group(1)) * mult);

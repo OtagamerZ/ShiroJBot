@@ -92,7 +92,7 @@ public class Basetype extends DAO<Basetype> {
 	public static Basetype getRandom(Dunhun game) {
 		int dropLevel = Integer.MAX_VALUE;
 		if (game != null) {
-			dropLevel = game.getDungeon().getAreaLevel();
+			dropLevel = game.getAreaLevel();
 		}
 
 		List<Object[]> bases = DAO.queryAllUnmapped("""

@@ -116,19 +116,19 @@ public class Monster extends MonsterBase<Monster> {
 
 	@Override
 	public int getMaxHp() {
-		double flat = getStats().getBaseHp() + getModifiers().getMaxHp().get() + getGame().getTurn() * 5;
+		double flat = getStats().getBaseHp() + getModifiers().getMaxHp().get() + getGame().getAreaLevel() * 5;
 		double mult = switch (getRarityClass()) {
 			case RARE -> 2.25;
 			case MAGIC -> 1.5;
 			default -> 1;
-		} * (1 + getGame().getTurn() * 0.15) * (1 + getGame().getDungeon().getAreaLevel() * 0.25);
+		} * (1 + getGame().getAreaLevel() * 0.15);
 
 		return (int) (flat * mult * getModifiers().getHpMult().get());
 	}
 
 	@Override
 	public int getMaxAp() {
-		return Math.max(1, getStats().getMaxAp() + (int) getModifiers().getMaxAp().get() + getGame().getTurn() / 5);
+		return Math.max(1, getStats().getMaxAp() + (int) getModifiers().getMaxAp().get() + getGame().getAreaLevel() / 5);
 	}
 
 	public Set<Affix> getAffixes() {
@@ -186,7 +186,7 @@ public class Monster extends MonsterBase<Monster> {
 	public static Monster getRandom(Dunhun game, String id, RarityClass rarity) {
 		int dropLevel = Integer.MAX_VALUE;
 		if (game != null) {
-			dropLevel = game.getDungeon().getAreaLevel();
+			dropLevel = game.getAreaLevel();
 		}
 
 		if (rarity == null) {
