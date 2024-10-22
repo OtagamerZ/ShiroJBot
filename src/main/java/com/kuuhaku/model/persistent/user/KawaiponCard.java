@@ -141,12 +141,16 @@ public class KawaiponCard extends DAO<KawaiponCard> {
 			try {
 				try (Buffer buf = new Buffer(); InputStream is = buf.inputStream()) {
 					buf.write(q.getOverlayBytes());
-					BufferedImage overlay = ImageIO.read(is);
+					BufferedImage img = ImageIO.read(is);
 
 					Graphics2D g2d = bi.createGraphics();
 					g2d.setRenderingHints(Constants.HD_HINTS);
 
-					g2d.drawImage(isChrome() ? card.chrome(overlay, true) : overlay, 0, 0, null);
+					if (isChrome()) {
+						card.chrome(img, true);
+					}
+
+					g2d.drawImage(img, 0, 0, null);
 					g2d.dispose();
 				}
 			} catch (IOException e) {

@@ -24,6 +24,7 @@ import com.kuuhaku.model.common.MultiProcessor;
 import com.trickl.palette.Palette;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.function.TriFunction;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.jdesktop.swingx.graphics.ColorUtilities;
 
@@ -307,7 +308,7 @@ public abstract class Graph {
 		return out;
 	}
 
-	public static void forEachPixel(BufferedImage bi, TriConsumer<Integer, Integer, Integer> act) {
+	public static void forEachPixel(BufferedImage bi, TriFunction<Integer, Integer, Integer, Integer> act) {
 		int width = bi.getWidth();
 		int[] pixels = bi.getRGB(0, 0, width, bi.getHeight(), null, 0, width);
 		List<Integer> indexes = IntStream.range(0, pixels.length)
@@ -320,7 +321,7 @@ public abstract class Graph {
 						int x = i % width;
 						int y = i / width;
 
-						act.accept(x, y, pixels[i]);
+						pixels[i] = act.apply(x, y, pixels[i]);
 					}
 
 					return null;
@@ -504,7 +505,7 @@ public abstract class Graph {
 		float[] hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
 		hsv[0] = ((hsv[0] * 360 + deg) % 360) / 360;
 
-		return Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]) & (rgb[0] << 24);
+		return Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]);
 	}
 
 	public static String abbreviate(Graphics2D g2d, String text, int width) {

@@ -109,8 +109,13 @@ public class Card extends DAO<Card> implements Serializable {
 				Graphics2D g2d = canvas.createGraphics();
 				g2d.setRenderingHints(Constants.HD_HINTS);
 
-				g2d.drawImage(chrome ? chrome(card, false) : card, 15, 15, null);
-				g2d.drawImage(chrome ? chrome(frame, true) : frame, 0, 0, null);
+				if (chrome) {
+					chrome(card, false);
+					chrome(frame, true);
+				}
+
+				g2d.drawImage(card, 15, 15, null);
+				g2d.drawImage(frame, 0, 0, null);
 
 				g2d.dispose();
 
@@ -143,16 +148,20 @@ public class Card extends DAO<Card> implements Serializable {
 
 			try (Buffer buf = new Buffer(); InputStream is = buf.inputStream()) {
 				buf.write(cardBytes);
-				return chrome ? chrome(ImageIO.read(is), false) : ImageIO.read(is);
+				BufferedImage img = ImageIO.read(is);
+
+				if (chrome) {
+					chrome(img, false);
+				}
+
+				return img;
 			}
 		} catch (IOException e) {
 			return null;
 		}
 	}
 
-	public BufferedImage chrome(BufferedImage bi, boolean border) {
-		BufferedImage out = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
-
+	public void chrome(BufferedImage bi, boolean border) {
 		Graph.forEachPixel(bi, (x, y, rgb) -> {
 			int[] color = Graph.unpackRGB(rgb);
 			int alpha = color[0];
@@ -166,10 +175,8 @@ public class Card extends DAO<Card> implements Serializable {
 			}
 
 			color = Graph.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
-			out.setRGB(x, y, Graph.packRGB(alpha, color[1], color[2], color[3]));
+			return Graph.packRGB(alpha, color[1], color[2], color[3]);
 		});
-
-		return out;
 	}
 
 	private byte[] getImageBytes() {
