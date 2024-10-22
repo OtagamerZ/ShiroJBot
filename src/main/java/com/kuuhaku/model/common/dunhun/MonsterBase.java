@@ -252,7 +252,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 			}
 			case MAGIC -> 1.25;
 			default -> 1;
-		} * (1 + (game == null ? 1 : game.getAreaLevel()) * 0.2);
+		} * (1 + game.getAreaLevel() * 0.2);
 
 		base.setAtk((int) (stats.getAttack() * mult));
 		base.setDfs((int) (stats.getDefense() * mult));
