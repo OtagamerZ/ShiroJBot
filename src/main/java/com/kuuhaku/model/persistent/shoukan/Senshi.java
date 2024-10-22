@@ -144,7 +144,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient StashedCard stashRef = null;
 	private transient BondedList<?> currentStack;
 	private transient Trigger currentTrigger = null;
-	private transient boolean chromeOverride = false;
+	private transient int hueOffset = 0;
 
 	@Transient
 	private long state = 0b1;
@@ -1216,12 +1216,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return currentTrigger;
 	}
 
-	public boolean isChromeOverride() {
-		return chromeOverride;
+	public int getHueOffset() {
+		return hueOffset;
 	}
 
-	public void setChromeOverride(boolean chromeOverride) {
-		this.chromeOverride = chromeOverride;
+	public void setHueOffset(int hueOffset) {
+		this.hueOffset = hueOffset;
 	}
 
 	@Override
@@ -1574,7 +1574,22 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			} else {
 				Senshi card = Utils.getOr(stats.getDisguise(), this);
 				String desc = isSealed() ? "" : card.getDescription(locale);
-				BufferedImage img = card.getVanity().drawCardNoBorder(Utils.getOr(() -> chromeOverride || stashRef.isChrome(), false));
+
+				BufferedImage img;
+				if (hueOffset != 0) {
+					img = card.getVanity().drawCardNoBorder();
+					Graph.forEachPixel(img, (x, y, rgb) -> {
+						int[] color = Graph.unpackRGB(img.getRGB(x, y));
+						int alpha = color[0];
+						float[] hsv = Color.RGBtoHSB(color[1], color[3], color[2], null);
+						hsv[0] = Math.floorMod((int) (hsv[0] * 360 + hueOffset), 360) / 360f;
+
+						color = Graph.unpackRGB(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
+						out.setRGB(x, y, Graph.packRGB(alpha, color[1], color[2], color[3]));
+					});
+				} else {
+					img = card.getVanity().drawCardNoBorder(Utils.getOr(() -> stashRef.isChrome(), false));
+				}
 
 				g1.setClip(deck.getFrame().getBoundary());
 				g1.drawImage(img, 0, 0, null);

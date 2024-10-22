@@ -249,7 +249,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 
 		double mult = switch (getRarityClass()) {
 			case RARE -> {
-				senshiCache.setChromeOverride(true);
+				senshiCache.setHueOffset(Calc.rng(90, 270, SERIAL));
 				yield 2;
 			}
 			case MAGIC -> 1.25;
