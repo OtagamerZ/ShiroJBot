@@ -533,7 +533,7 @@ public class HeroCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/hero_inventory", h.getName()))
+				.setTitle(locale.get("str/hero_inventory", h.getName(), equips.size(), h.getInventoryCapacity()))
 				.setThumbnail("attachment://card.png");
 
 		AtomicInteger i = new AtomicInteger();

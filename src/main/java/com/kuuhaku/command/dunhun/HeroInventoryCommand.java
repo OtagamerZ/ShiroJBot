@@ -63,7 +63,7 @@ public class HeroInventoryCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/hero_inventory", h.getName()));
+				.setAuthor(locale.get("str/hero_inventory", h.getName(), equips.size(), h.getInventoryCapacity()));
 
 		List<Page> pages = Utils.generatePages(eb, equips, 10, 5,
 				g -> "`" + g.getId() + "` - " + g.getBasetype().getIcon() + " " + g.getName(locale) + "\n",
