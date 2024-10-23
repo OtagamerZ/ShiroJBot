@@ -100,14 +100,29 @@ public class DunhunCommand implements Executable {
 			Dungeon instance = dungeon;
 
 			if (others.isEmpty()) {
-				Dunhun dun = new Dunhun(locale, instance, event.user());
-				dun.start(event.guild(), event.channel())
-						.whenComplete((v, e) -> {
-							if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
-								event.channel().sendMessage(locale.get("error/error", e)).queue();
-								Constants.LOGGER.error(e, e);
+				try {
+					Dunhun dun = new Dunhun(locale, instance, event.user());
+					dun.start(event.guild(), event.channel())
+							.whenComplete((v, e) -> {
+								if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
+									event.channel().sendMessage(locale.get("error/error", e)).queue();
+									Constants.LOGGER.error(e, e);
+								}
+							});
+				} catch (GameReport e) {
+					switch (e.getCode()) {
+						case GameReport.NO_HERO -> {
+							if (e.getContent().equals(event.user().getId())) {
+								event.channel().sendMessage(locale.get("error/no_hero")).queue();
+							} else {
+								event.channel().sendMessage(locale.get("error/no_hero_target", "<@" + e.getContent() + ">")).queue();
 							}
-						});
+						}
+						case GameReport.OVERBURDENED ->
+								event.channel().sendMessage(locale.get("error/overburdened_target", e.getContent())).queue();
+					}
+				}
+
 				return;
 			}
 
