@@ -56,10 +56,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private final Dunhun game;
 	private final I18N locale;
-	private final InfiniteList<Actor> turns = new InfiniteList<>();
+//	private final InfiniteList<Actor> turns = new InfiniteList<>();
+	private final RandomList<Actor> turns = new RandomList<>();
 	private final BondedList<Actor> hunters = new BondedList<>((a, it) -> {
 		if (getActors(Team.HUNTERS).size() >= 6) return false;
-		if (!turns.isEmpty()) turns.add(a);
 
 		a.setFleed(false);
 		a.setTeam(Team.HUNTERS);
@@ -70,7 +70,6 @@ public class Combat implements Renderer<BufferedImage> {
 	}, turns::remove);
 	private final BondedList<Actor> keepers = new BondedList<>((a, it) -> {
 		if (getActors(Team.KEEPERS).size() >= 6) return false;
-		if (!turns.isEmpty()) turns.add(a);
 
 		a.setFleed(false);
 		a.setTeam(Team.KEEPERS);
@@ -83,6 +82,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final RandomList<Actor> rngList = new RandomList<>();
 	private final Set<EffectBase> effects = new HashSet<>();
 
+	private Actor current = null;
 	private CompletableFuture<Runnable> lock;
 	private boolean done = false;
 
@@ -206,13 +206,18 @@ public class Combat implements Renderer<BufferedImage> {
 				.forEach(turns::add);
 
 		loop:
-		for (Actor act : turns) {
+		while (true) {
 			if (game.isClosed()) break;
+			current = Utils.getWeightedEntry(turns, Actor::getInitiative,
+					getActors(true).stream()
+							.filter(a -> !a.equals(current))
+							.toList()
+			);
 
 			try {
-				if (!act.getSenshi().isAvailable() || act.getSenshi().isStasis() || act.isSkipped()) {
-					act.getSenshi().reduceDebuffs(1);
-					for (Skill s : act.getSkills()) {
+				if (!current.getSenshi().isAvailable() || current.getSenshi().isStasis() || current.isSkipped()) {
+					current.getSenshi().reduceDebuffs(1);
+					for (Skill s : current.getSkills()) {
 						s.reduceCd();
 					}
 
@@ -221,15 +226,15 @@ public class Combat implements Renderer<BufferedImage> {
 					continue;
 				}
 
-				act.getSenshi().reduceDebuffs(1);
-				for (Skill s : act.getSkills()) {
+				current.getSenshi().reduceDebuffs(1);
+				for (Skill s : current.getSkills()) {
 					s.reduceCd();
 				}
 
-				act.modAp(act.getMaxAp());
-				act.getSenshi().setDefending(false);
+				current.modAp(current.getMaxAp());
+				current.getSenshi().setDefending(false);
 
-				while (turns.get().equals(act) && !act.isSkipped() && act.getAp() > 0) {
+				while (turns.get().equals(current) && !current.isSkipped() && current.getAp() > 0) {
 					Runnable action = reload(true).get();
 					if (action != null) {
 						action.run();
@@ -241,24 +246,24 @@ public class Combat implements Renderer<BufferedImage> {
 			} catch (Exception e) {
 				Constants.LOGGER.warn(e, e);
 			} finally {
-				act.getModifiers().expireMods(act.getSenshi());
-				act.getSenshi().setAvailable(true);
-				if (!act.getSenshi().isStasis()) {
-					act.modHp(act.getRegDeg().next(), false);
-					trigger(Trigger.ON_DEGEN, act, act);
+				current.getModifiers().expireMods(current.getSenshi());
+				current.getSenshi().setAvailable(true);
+				if (!current.getSenshi().isStasis()) {
+					current.modHp(current.getRegDeg().next(), false);
+					trigger(Trigger.ON_DEGEN, current, current);
 				}
 
 				Iterator<EffectBase> it = effects.iterator();
 				while (it.hasNext()) {
 					EffectBase e = it.next();
-					if (!e.getOwner().equals(act)) {
+					if (!e.getOwner().equals(current)) {
 						if (!getActors().contains(e.getOwner())) it.remove();
 						continue;
 					}
 
 					if (e.decDuration()) it.remove();
 					if (e instanceof PersistentEffect pe) {
-						pe.getEffect().accept(e, new CombatContext(act, act));
+						pe.getEffect().accept(e, new CombatContext(current, current));
 					}
 				}
 			}
@@ -728,8 +733,8 @@ public class Combat implements Renderer<BufferedImage> {
 		return history;
 	}
 
-	public InfiniteList<Actor> getTurns() {
-		return turns;
+	public Actor getCurrent() {
+		return current;
 	}
 
 	public boolean isDone() {

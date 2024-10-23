@@ -145,4 +145,8 @@ public class RandomList<T> {
 	public List<Pair<Double, T>> entries() {
 		return pool;
 	}
+
+	public boolean isEmpty() {
+		return entries().isEmpty();
+	}
 }

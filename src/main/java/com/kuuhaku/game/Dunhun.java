@@ -85,9 +85,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 		} else {
 			setTimeout(turn -> {
 				if (getCombat() != null) {
-					Actor current = getCombat().getTurns().get();
-					current.modAp(-current.getAp());
-					current.setFleed(true);
+					Actor current = getCombat().getCurrent();
+					if (current != null) {
+						current.modAp(-current.getAp());
+						current.setFleed(true);
+					}
 
 					getCombat().getLock().complete(null);
 					return;
@@ -103,7 +105,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	protected boolean validate(Message message) {
 		return !duel || (
 				getCombat() != null
-				&& getCombat().getTurns().get() instanceof Hero h
+				&& getCombat().getCurrent() instanceof Hero h
 				&& h.getTeam() == heroes.get(message.getAuthor().getId()).getTeam()
 		);
 	}
