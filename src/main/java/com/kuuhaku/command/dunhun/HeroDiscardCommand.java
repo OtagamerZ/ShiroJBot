@@ -36,10 +36,7 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Command(
@@ -47,7 +44,10 @@ import java.util.stream.Collectors;
 		path = "discard",
 		category = Category.STAFF
 )
-@Syntax("<ids:text:r>")
+@Syntax({
+		"<action:word:r>[all]",
+		"<ids:text:r>"
+})
 public class HeroDiscardCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -63,19 +63,27 @@ public class HeroDiscardCommand implements Executable {
 			return;
 		}
 
+		Set<Integer> ids = new HashSet<>();
 		List<Gear> gears = new ArrayList<>();
-		Set<Integer> ids = Arrays.stream(args.getString("ids").toUpperCase().split(" +"))
-				.map(NumberUtils::toInt)
-				.collect(Collectors.toSet());
+		if (!args.has("action")) {
+			ids.addAll(Arrays.stream(args.getString("ids").toUpperCase().split(" +"))
+					.map(NumberUtils::toInt)
+					.collect(Collectors.toSet()));
 
-		for (Integer id : ids) {
-			Gear g = h.getInvGear(id);
-			if (g == null) {
-				event.channel().sendMessage(locale.get("error/gear_not_found")).queue();
-				return;
+			for (Integer id : ids) {
+				Gear g = h.getInvGear(id);
+				if (g == null) {
+					event.channel().sendMessage(locale.get("error/gear_not_found")).queue();
+					return;
+				}
+
+				gears.add(g);
 			}
-
-			gears.add(g);
+		} else {
+			for (Gear g : h.getInventory()) {
+				gears.add(g);
+				ids.add(g.getId());
+			}
 		}
 
 		List<String> names = gears.stream()
