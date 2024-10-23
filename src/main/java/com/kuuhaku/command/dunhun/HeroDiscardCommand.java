@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.dunhun;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -25,6 +26,7 @@ import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Gear;
+import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
@@ -36,6 +38,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Command(
@@ -60,7 +63,7 @@ public class HeroDiscardCommand implements Executable {
 		}
 
 		List<Gear> gears = new ArrayList<>();
-		String[] ids = args.getString("ids").toUpperCase().split(" +");
+		Set<String> ids = Set.of(args.getString("ids").toUpperCase().split(" +"));
 		for (String id : ids) {
 			Gear g = h.getInvGear(NumberUtils.toInt(id));
 			if (g == null) {
@@ -83,9 +86,8 @@ public class HeroDiscardCommand implements Executable {
 		try {
 			Utils.confirm(locale.get(gears.size() == 1 ? "question/discard" : "question/discard_multi", Utils.properlyJoin("").apply(names)), event.channel(),
 					w -> {
-						for (Gear g : gears) {
-							g.delete();
-						}
+						DAO.applyNative(GearAffix.class, "DELETE FROM gear_affix WHERE gear_id IN ?1", ids);
+						DAO.applyNative(Gear.class, "DELETE FROM gear WHERE id IN ?1", ids);
 
 						event.channel().sendMessage(gears.size() == 1 ? "success/discard" : "success/discard_multi").queue();
 						return true;
