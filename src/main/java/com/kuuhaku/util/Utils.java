@@ -699,7 +699,7 @@ public abstract class Utils {
 			int i = 0;
 			int size = objs.size();
 			for (String obj : objs) {
-				if (i == size - 1 && size > 1) sb.append(" ").append(connector).append(" ");
+				if (!connector.isBlank() && i == size - 1 && size > 1) sb.append(" ").append(connector).append(" ");
 				else if (i > 0) sb.append(", ");
 
 				sb.append(obj);

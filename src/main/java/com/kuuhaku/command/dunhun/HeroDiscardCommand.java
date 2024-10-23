@@ -36,6 +36,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "hero",
@@ -70,10 +71,18 @@ public class HeroDiscardCommand implements Executable {
 			gears.add(g);
 		}
 
+		List<String> names = gears.stream()
+				.map(g -> g.getName(locale))
+				.limit(5)
+				.collect(Collectors.toCollection(ArrayList::new));
+
+		if (names.size() < gears.size()) {
+			names.add(locale.get("str/and_more", gears.size() - names.size()));
+		}
+
 		try {
-			Utils.confirm(locale.get(gears.size() == 1 ? "question/discard" : "question/discard_multi",
-							Utils.properlyJoin(locale.get("str/and")).apply(gears.stream().map(g -> g.getName(locale)).toList())
-					), event.channel(), w -> {
+			Utils.confirm(locale.get(gears.size() == 1 ? "question/discard" : "question/discard_multi", Utils.properlyJoin("").apply(names)), event.channel(),
+					w -> {
 						for (Gear g : gears) {
 							g.delete();
 						}
