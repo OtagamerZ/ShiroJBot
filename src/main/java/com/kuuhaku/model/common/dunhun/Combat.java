@@ -140,7 +140,7 @@ public class Combat implements Renderer<BufferedImage> {
 					card = a.render(locale);
 				}
 
-				if (turns.get().equals(a)) {
+				if (a.equals(current)) {
 					boolean legacy = a.getSenshi().getHand().getUserDeck().getFrame().isLegacy();
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
 
@@ -167,7 +167,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public MessageEmbed getEmbed() {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/actor_turn", turns.get().getName(locale)))
+				.setTitle(locale.get("str/actor_turn", current.getName(locale)))
 				.setDescription(String.join("\n", history));
 
 		if (!game.isDuel()) {
@@ -206,7 +206,7 @@ public class Combat implements Renderer<BufferedImage> {
 				.forEach(turns::add);
 
 		loop:
-		while (true) {
+		while (true) { // TODO init
 			if (game.isClosed()) break;
 			current = Utils.getWeightedEntry(turns, Actor::getInitiative,
 					getActors(true).stream()
@@ -234,7 +234,7 @@ public class Combat implements Renderer<BufferedImage> {
 				current.modAp(current.getMaxAp());
 				current.getSenshi().setDefending(false);
 
-				while (turns.get().equals(current) && !current.isSkipped() && current.getAp() > 0) {
+				while (!current.isSkipped() && current.getAp() > 0) {
 					Runnable action = reload(true).get();
 					if (action != null) {
 						action.run();
@@ -635,7 +635,7 @@ public class Combat implements Renderer<BufferedImage> {
 			return;
 		}
 
-		Hero h = (Hero) turns.get();
+		Hero h = (Hero) current;
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 				.setCancellable(false);
