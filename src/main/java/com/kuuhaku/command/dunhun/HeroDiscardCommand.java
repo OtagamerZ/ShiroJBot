@@ -18,32 +18,32 @@
 
 package com.kuuhaku.command.dunhun;
 
-import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.RarityClass;
-import com.kuuhaku.model.persistent.dunhun.Basetype;
 import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import org.apache.commons.lang3.math.NumberUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Command(
 		name = "hero",
-		path = {"debug", "gen_item"},
+		path = "discard",
 		category = Category.STAFF
 )
-@Syntax(allowEmpty = true, value = "<id:word:r>")
-public class TestItemCommand implements Executable {
+@Syntax("<ids:text:r>")
+public class HeroDiscardCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Deck d = data.profile().getAccount().getDeck();
@@ -58,44 +58,32 @@ public class TestItemCommand implements Executable {
 			return;
 		}
 
-		Gear g;
-		if (args.has("id")) {
-			Basetype base = DAO.find(Basetype.class, args.getString("id").toUpperCase());
-			if (base == null) {
-				event.channel().sendMessage("ERR_BASE_NOT_FOUND").queue();
+		List<Gear> gears = new ArrayList<>();
+		String[] ids = args.getString("ids").toUpperCase().split(" +");
+		for (String id : ids) {
+			Gear g = h.getInvGear(NumberUtils.toInt(id));
+			if (g == null) {
+				event.channel().sendMessage(locale.get("error/gear_not_found")).queue();
 				return;
 			}
 
-			g = Gear.getRandom(null, h, base);
-		} else {
-			g = Gear.getRandom(null, h);
+			gears.add(g);
 		}
 
-		g.save();
-		g = g.refresh();
+		try {
+			Utils.confirm(locale.get(gears.size() == 1 ? "question/discard" : "question/discard_multi",
+							Utils.properlyJoin(locale.get("str/and")).apply(gears.stream().map(g -> g.getName(locale)).toList())
+					), event.channel(), w -> {
+						for (Gear g : gears) {
+							g.delete();
+						}
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		if (g.getRarityClass() == RarityClass.RARE) {
-			eb.setTitle(g.getName(locale) + ", " + g.getBasetype().getInfo(locale).getName());
-		} else {
-			eb.setTitle(g.getName(locale));
+						event.channel().sendMessage(gears.size() == 1 ? "success/discard" : "success/discard_multi").queue();
+						return true;
+					}, event.user()
+			);
+		} catch (PendingConfirmationException e) {
+			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
 		}
-
-		GearAffix imp = g.getImplicit();
-		if (imp != null) {
-			eb.appendDescription(imp.getDescription(locale) + "\n");
-			if (!g.getAffixes().isEmpty()) {
-				eb.appendDescription("──────────────────\n");
-			}
-		}
-
-		for (String l : g.getAffixLines(locale)) {
-			eb.appendDescription(l + "\n");
-		}
-
-		event.channel().sendMessage("GEN_ITEM")
-				.addEmbeds(eb.build())
-				.queue();
 	}
 }

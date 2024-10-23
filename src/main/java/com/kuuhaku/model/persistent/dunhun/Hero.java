@@ -304,6 +304,10 @@ public class Hero extends DAO<Hero> implements Actor {
 		}
 	}
 
+	public int getInventoryCapacity() {
+		return 50 + getAttributes().str() * 5;
+	}
+
 	public List<Gear> getInventory() {
 		List<Integer> ids = DAO.queryAllNative(Integer.class, """
 				SELECT g.id
