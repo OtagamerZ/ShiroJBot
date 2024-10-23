@@ -140,7 +140,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	public int getAggroScore() {
 		int aggro = 1;
 		if (senshiCache != null) {
-			aggro = senshiCache.getDmg() / 10 + senshiCache.getDfs() / 20;
+			aggro = senshiCache.getDmg() / 10 + senshiCache.getDfs() / 20 + getHp() / 150;
 		}
 
 		return (int) Math.max(1, aggro * (1 + modifiers.getAggroMult().get()) * game.getAreaLevel() / 2);
