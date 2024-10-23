@@ -60,7 +60,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -81,12 +80,12 @@ public class SynthesizeCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = data.profile().getAccount().getKawaipon();
 
-		String[] ids = args.getString("cards").split(" +");
-		if (ids.length > 10) {
+		Set<String> ids = Set.of(args.getString("cards").split(" +"));
+		if (ids.size() > 10) {
 			event.channel().sendMessage(locale.get("error/too_many_items", 10)).queue();
 			return;
-		} else if (ids.length == 1) {
-			Card c = DAO.find(Card.class, ids[0].toUpperCase());
+		} else if (ids.size() == 1) {
+			Card c = DAO.find(Card.class, ids.stream().findFirst().orElse(""));
 			if (c != null && c.getRarity() == Rarity.ULTIMATE && kp.isCollectionComplete(c.getAnime())) {
 				synthCollection(locale, event.channel(), kp.getAccount(), event.user(), c.getAnime());
 				return;
@@ -151,7 +150,7 @@ public class SynthesizeCommand implements Executable {
 							.mapToDouble(sc -> {
 								KawaiponCard kc = sc.getKawaiponCard();
 								if (sc.getType() == CardType.FIELD || (kc != null && kc.isChrome())) {
-									return 100 / 3d;
+									return 100 / 5d;
 								}
 
 								return 0;
@@ -211,14 +210,14 @@ public class SynthesizeCommand implements Executable {
 								if (sc.getType() == CardType.KAWAIPON) {
 									KawaiponCard kc = sc.getKawaiponCard();
 									if (kc != null) {
-										kc.delete();
 										rarities.add(kc.getCard().getRarity());
 										totalQ += sc.getQuality();
 									}
-								} else {
-									sc.delete();
 								}
 							}
+
+							DAO.applyNative(KawaiponCard.class, "DELETE FROM kawaipon_card WHERE id IN ?1", ids);
+							DAO.applyNative(StashedCard.class, "DELETE FROM stashed_card WHERE id IN ?1", ids);
 
 							if (rarities.size() >= 5) {
 								UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
