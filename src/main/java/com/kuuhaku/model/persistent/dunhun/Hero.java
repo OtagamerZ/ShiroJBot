@@ -107,7 +107,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	public Hero(Account account, String name, Race race) {
-		this.id = name.toUpperCase();
+		this.id = name;
 		this.account = account;
 		stats.setRace(race);
 	}

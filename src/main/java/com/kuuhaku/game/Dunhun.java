@@ -71,9 +71,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 		for (String p : players) {
 			Hero h = DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1", p);
 			if (h == null) {
-				getChannel().sendMessage(getString("error/no_hero_target", "<@" + p + ">")).queue();
-				close(GameReport.NO_HERO);
-				return;
+				throw new GameReport(GameReport.NO_HERO, p);
+			} else if (h.getInventory().size() > h.getInventoryCapacity()) {
+				throw new GameReport(GameReport.OVERBURDENED, h.getName());
 			}
 
 			h.asSenshi(locale);

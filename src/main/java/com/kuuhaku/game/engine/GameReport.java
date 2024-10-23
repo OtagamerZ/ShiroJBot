@@ -26,7 +26,8 @@ public class GameReport extends RuntimeException {
 	public static final byte INVALID_DECK = 4;
 	public static final byte DICT_NOT_FOUND = 5;
 	public static final byte NO_HERO = 6;
-	public static final byte STACK_OVERFLOW = 7;
+	public static final byte OVERBURDENED = 7;
+	public static final byte STACK_OVERFLOW = 8;
 	public static final byte OTHER = Byte.MAX_VALUE;
 
 	private final byte code;
@@ -59,6 +60,7 @@ public class GameReport extends RuntimeException {
 			case NO_DECK -> "NO_DECK";
 			case DICT_NOT_FOUND -> "DICT_NOT_FOUND";
 			case NO_HERO -> "NO_HERO";
+			case OVERBURDENED -> "OVERBURDENED";
 			case STACK_OVERFLOW -> "STACK_OVERFLOW";
 			case OTHER -> "OTHER";
 			default -> "UNKNOWN_CODE";
