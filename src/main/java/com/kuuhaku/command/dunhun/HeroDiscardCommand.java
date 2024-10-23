@@ -93,7 +93,7 @@ public class HeroDiscardCommand implements Executable {
 						DAO.applyNative(GearAffix.class, "DELETE FROM gear_affix WHERE gear_id IN ?1", ids);
 						DAO.applyNative(Gear.class, "DELETE FROM gear WHERE id IN ?1", ids);
 
-						event.channel().sendMessage(gears.size() == 1 ? "success/discard" : "success/discard_multi").queue();
+						event.channel().sendMessage(locale.get(gears.size() == 1 ? "success/discard" : "success/discard_multi")).queue();
 						return true;
 					}, event.user()
 			);
