@@ -25,6 +25,7 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
@@ -45,7 +46,7 @@ import java.util.stream.Collectors;
 		category = Category.STAFF
 )
 @Syntax({
-		"<action:word:r>[all]",
+		"<action:word:r>[all,common,magic,rare,unique]",
 		"<ids:text:r>"
 })
 public class HeroDiscardCommand implements Executable {
@@ -80,7 +81,10 @@ public class HeroDiscardCommand implements Executable {
 				gears.add(g);
 			}
 		} else {
+			RarityClass rarity = args.getEnum(RarityClass.class, "action", null);
 			for (Gear g : h.getInventory()) {
+				if (rarity != null && h.getRarityClass() != rarity) continue;
+
 				gears.add(g);
 				ids.add(g.getId());
 			}
