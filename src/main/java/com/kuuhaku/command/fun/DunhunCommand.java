@@ -112,7 +112,7 @@ public class DunhunCommand implements Executable {
 				} catch (GameReport e) {
 					switch (e.getCode()) {
 						case GameReport.NO_HERO -> event.channel().sendMessage(locale.get("error/no_hero")).queue();
-						case GameReport.OVERBURDENED -> event.channel().sendMessage(locale.get("error/overburdened_target", e.getContent())).queue();
+						case GameReport.OVERBURDENED -> event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
 					}
 				}
 
