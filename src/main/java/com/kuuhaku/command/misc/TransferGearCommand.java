@@ -80,7 +80,7 @@ public class TransferGearCommand implements Executable {
 			event.channel().sendMessage(locale.get("error/no_hero_target", target.getAsMention(), data.config().getPrefix())).queue();
 			return;
 		} else if (to.getInventory().size() > to.getInventoryCapacity()) {
-			event.channel().sendMessage(locale.get("error/overburdened_target", to.getName())).queue();
+			event.channel().sendMessage(locale.get("error/overburdened", to.getName())).queue();
 			return;
 		}
 

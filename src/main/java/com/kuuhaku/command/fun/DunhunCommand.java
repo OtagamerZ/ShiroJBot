@@ -154,7 +154,7 @@ public class DunhunCommand implements Executable {
 									}
 								}
 								case GameReport.OVERBURDENED ->
-										event.channel().sendMessage(locale.get("error/overburdened_target", e.getContent())).queue();
+										event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
 							}
 						}
 
