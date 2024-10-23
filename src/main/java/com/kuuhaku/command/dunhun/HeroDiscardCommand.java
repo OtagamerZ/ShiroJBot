@@ -37,6 +37,7 @@ import net.dv8tion.jda.api.JDA;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -63,9 +64,12 @@ public class HeroDiscardCommand implements Executable {
 		}
 
 		List<Gear> gears = new ArrayList<>();
-		Set<String> ids = Set.of(args.getString("ids").toUpperCase().split(" +"));
-		for (String id : ids) {
-			Gear g = h.getInvGear(NumberUtils.toInt(id));
+		Set<Integer> ids = Arrays.stream(args.getString("ids").toUpperCase().split(" +"))
+				.map(NumberUtils::toInt)
+				.collect(Collectors.toSet());
+
+		for (Integer id : ids) {
+			Gear g = h.getInvGear(id);
 			if (g == null) {
 				event.channel().sendMessage(locale.get("error/gear_not_found")).queue();
 				return;
