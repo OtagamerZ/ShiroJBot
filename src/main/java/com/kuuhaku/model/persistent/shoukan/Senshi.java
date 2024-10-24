@@ -525,7 +525,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		int cost = Math.max(0, Calc.round((base.getMana() + stats.getMana().get() + (isFusion() ? 5 : 0)) * getCostMult()));
 		if (hand != null && !ignoreRace) {
 			if (hand.getOrigins().synergy() == Race.CELESTIAL) {
-				cost -= hand.getCards().size();
+				cost -= hand.getCards().size() / 2;
 			}
 
 			if (hand.getOrigins().synergy() == Race.HOMUNCULUS && cost > hand.getMP()) {

@@ -268,7 +268,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		int cost = Math.max(0, Calc.round((base.getMana() + stats.getMana().get()) * getCostMult()));
 		if (hand != null && !ignoreRace) {
 			if (hand.getOrigins().synergy() == Race.CELESTIAL) {
-				cost -= hand.getCards().size();
+				cost -= hand.getCards().size() / 2;
 			}
 
 			if (hand.getOrigins().major() == Race.DEMON) {
