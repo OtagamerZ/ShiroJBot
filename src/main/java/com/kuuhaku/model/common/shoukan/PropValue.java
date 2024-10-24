@@ -62,6 +62,10 @@ public final class PropValue extends Number {
 		return values.getFirst().doubleValue();
 	}
 
+	public double negative() {
+		return -doubleValue();
+	}
+
 	public List<Number> values() {
 		return values;
 	}
