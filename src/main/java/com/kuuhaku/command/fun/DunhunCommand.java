@@ -112,7 +112,8 @@ public class DunhunCommand implements Executable {
 				} catch (GameReport e) {
 					switch (e.getCode()) {
 						case GameReport.NO_HERO -> event.channel().sendMessage(locale.get("error/no_hero")).queue();
-						case GameReport.OVERBURDENED -> event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
+						case GameReport.OVERBURDENED ->
+								event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
 					}
 				}
 
@@ -121,7 +122,8 @@ public class DunhunCommand implements Executable {
 
 			Utils.confirm(locale.get("question/dunhun",
 							Utils.properlyJoin(locale.get("str/and")).apply(others.stream().map(User::getAsMention).toList()),
-							event.user().getAsMention()
+							event.user().getAsMention(),
+							dungeon.getInfo(locale).getName()
 					), event.channel(), w -> {
 						if (pending.remove(w.getUser())) {
 							event.channel().sendMessage(locale.get("str/match_accept", w.getUser().getEffectiveName())).queue();
