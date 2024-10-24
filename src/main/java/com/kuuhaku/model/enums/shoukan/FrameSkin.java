@@ -65,6 +65,7 @@ public enum FrameSkin {
 	PADORU("PADORU"),
 	GLITCH("PARADOX"),
 	HALLOWEEN("TRICK_OR_TREAT_IV"),
+	RICH("SHINY_SHINY"),
 
 	/*METALLIC("**(75% das conquistas desbloqueadas)** Com estilo (e um revestimento semi-transparente), faça suas jogadas mostrando sua classe!",
 			acc -> (float) acc.getMedalBag().size() / Achievement.getMedalBag().size() > 0.75f
@@ -99,9 +100,10 @@ public enum FrameSkin {
 			case RED, LEGACY_RED -> new Color(0xE87474);
 			case GRAY, LEGACY_GRAY -> new Color(0xBEBEBE);
 
-			case PADORU -> new Color(177, 30, 49);
+			case PADORU -> new Color(0xB11E31);
 			case GLITCH -> Utils.getRandomEntry(values()).getThemeColor();
-			case HALLOWEEN -> new Color(220, 89, 16);
+			case HALLOWEEN -> new Color(0XDC5910);
+			case RICH -> new Color(0x2B2B2B);
 			/*case RAINBOW -> ImageHelper.getRandomColor();
 			case BLACK -> Color.BLACK;
 			case METALLIC -> new Color(190, 194, 203);
@@ -125,12 +127,12 @@ public enum FrameSkin {
 				 GRAY, LEGACY_GRAY,
 				 HALLOWEEN -> Color.BLACK;
 
-			case PADORU -> getThemeColor().darker();
+			case PADORU, RICH -> getThemeColor().darker();
 			case GLITCH -> Graph.rotate(getThemeColor(), 90);
 
 			/*case BLACK -> Color.WHITE;
 			case RAINBOW -> ImageHelper.toLuma(getThemeColor().getRGB()) > 127 ? Color.BLACK : Color.WHITE;
-			case METALLIC, RICH -> getThemeColor().darker();*/
+			case METALLIC -> getThemeColor().darker();*/
 		};
 	}
 
@@ -148,7 +150,7 @@ public enum FrameSkin {
 				 ORANGE,
 				 RED, LEGACY_RED,
 				 GRAY, LEGACY_GRAY,
-				 PADORU, GLITCH, HALLOWEEN /*METALLIC, RICH*/ -> Color.WHITE;
+				 PADORU, GLITCH, HALLOWEEN, RICH /*METALLIC*/ -> Color.WHITE;
 
 			/*case BLACK -> Color.BLACK;
 			case RAINBOW -> getThemeColor();*/
@@ -171,8 +173,8 @@ public enum FrameSkin {
 				 GRAY, LEGACY_GRAY
 				/*RAINBOW, METALLIC*/ -> Color.BLACK;
 
-			case PADORU, GLITCH, HALLOWEEN -> Color.WHITE;
-			//case BLACK, RICH -> Color.WHITE;
+			case PADORU, GLITCH, HALLOWEEN, RICH -> Color.WHITE;
+			//case BLACK -> Color.WHITE;
 		};
 	}
 
