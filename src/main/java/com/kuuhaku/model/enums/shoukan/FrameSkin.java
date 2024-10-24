@@ -106,8 +106,7 @@ public enum FrameSkin {
 			case RICH -> new Color(0x2B2B2B);
 			/*case RAINBOW -> ImageHelper.getRandomColor();
 			case BLACK -> Color.BLACK;
-			case METALLIC -> new Color(190, 194, 203);
-			case RICH -> new Color(212, 175, 55);*/
+			case METALLIC -> new Color(190, 194, 203);*/
 		};
 	}
 

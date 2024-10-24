@@ -59,7 +59,7 @@ public class SynthesizeFastCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = data.profile().getAccount().getKawaipon();
-		Set<String> ids = Set.of(args.getString("cards").toUpperCase().split(" +"));
+		String[] ids = args.getString("cards").toUpperCase().split(" +");
 
 		List<StashedCard> cards = new ArrayList<>();
 		List<StashedCard> stash = data.profile().getAccount().getKawaipon().getNotInUse();
@@ -111,6 +111,8 @@ public class SynthesizeFastCommand implements Executable {
 
 		double totalQ = 1;
 		int chromas = 0;
+		Set<Integer> delKc = new HashSet<>();
+		Set<Integer> delSc = new HashSet<>();
 		Set<Rarity> rarities = EnumSet.noneOf(Rarity.class);
 		for (StashedCard sc : cards) {
 			if (sc.isChrome()) {
@@ -122,12 +124,15 @@ public class SynthesizeFastCommand implements Executable {
 				if (kc != null) {
 					rarities.add(kc.getCard().getRarity());
 					totalQ += sc.getQuality();
+					delKc.add(kc.getId());
 				}
 			}
+
+			delSc.add(sc.getId());
 		}
 
-		DAO.applyNative(KawaiponCard.class, "DELETE FROM kawaipon_card WHERE id IN ?1", ids);
-		DAO.applyNative(StashedCard.class, "DELETE FROM stashed_card WHERE id IN ?1", ids);
+		DAO.applyNative(KawaiponCard.class, "DELETE FROM kawaipon_card WHERE id IN ?1", delKc);
+		DAO.applyNative(StashedCard.class, "DELETE FROM stashed_card WHERE id IN ?1", delSc);
 
 		if (rarities.size() >= 5) {
 			UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");

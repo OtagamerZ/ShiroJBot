@@ -81,12 +81,12 @@ public class SynthesizeCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = data.profile().getAccount().getKawaipon();
 
-		Set<String> ids = Set.of(args.getString("cards").split(" +"));
-		if (ids.size() > 10) {
+		String[] ids = args.getString("cards").split(" +");
+		if (ids.length > 10) {
 			event.channel().sendMessage(locale.get("error/too_many_items", 10)).queue();
 			return;
-		} else if (ids.size() == 1) {
-			Card c = DAO.find(Card.class, ids.stream().findFirst().orElse(""));
+		} else if (ids.length == 1) {
+			Card c = DAO.find(Card.class, ids[0]);
 			if (c != null && c.getRarity() == Rarity.ULTIMATE && kp.isCollectionComplete(c.getAnime())) {
 				synthCollection(locale, event.channel(), kp.getAccount(), event.user(), c.getAnime());
 				return;
@@ -202,6 +202,8 @@ public class SynthesizeCommand implements Executable {
 
 							double totalQ = 1;
 							int chromas = 0;
+							Set<Integer> delKc = new HashSet<>();
+							Set<Integer> delSc = new HashSet<>();
 							Set<Rarity> rarities = EnumSet.noneOf(Rarity.class);
 							for (StashedCard sc : cards) {
 								if (sc.isChrome()) {
@@ -213,12 +215,15 @@ public class SynthesizeCommand implements Executable {
 									if (kc != null) {
 										rarities.add(kc.getCard().getRarity());
 										totalQ += sc.getQuality();
+										delKc.add(kc.getId());
 									}
 								}
+
+								delSc.add(sc.getId());
 							}
 
-							DAO.applyNative(KawaiponCard.class, "DELETE FROM kawaipon_card WHERE id IN ?1", ids);
-							DAO.applyNative(StashedCard.class, "DELETE FROM stashed_card WHERE id IN ?1", ids);
+							DAO.applyNative(KawaiponCard.class, "DELETE FROM kawaipon_card WHERE id IN ?1", delKc);
+							DAO.applyNative(StashedCard.class, "DELETE FROM stashed_card WHERE id IN ?1", delSc);
 
 							if (rarities.size() >= 5) {
 								UserItem item = DAO.find(UserItem.class, "CHROMATIC_ESSENCE");
