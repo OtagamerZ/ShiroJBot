@@ -39,10 +39,7 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.shoukan.MatchHistory;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.ClusterAction;
@@ -150,8 +147,11 @@ public class Shoukan extends GameInstance<Phase> {
 			h.manualDraw(h.getRemainingDraws());
 
 			if (!hasCheated()) {
-				if (h.getRealDeck().parallelStream().allMatch(d -> d.getStashRef() != null && d.getStashRef().isChrome())) {
-					h.getAccount().setDynValue("all_chrome", true);
+				Deck deck = h.getUserDeck();
+				if (deck.getEvogearRaw().size() >= 5 && !deck.getFieldsRaw().isEmpty()) {
+					if (h.getRealDeck().parallelStream().allMatch(d -> d.getStashRef() != null && d.getStashRef().isChrome())) {
+						h.getAccount().setDynValue("all_chrome", true);
+					}
 				}
 
 				if (h.getCards().parallelStream().filter(d -> d instanceof Field).count() >= 3) {
