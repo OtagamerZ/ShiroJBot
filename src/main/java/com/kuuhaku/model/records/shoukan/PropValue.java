@@ -20,8 +20,15 @@ package com.kuuhaku.model.records.shoukan;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public record PropValue(List<Number> values) {
+public final class PropValue extends Number {
+	private final List<Number> values;
+
+	public PropValue(List<Number> values) {
+		this.values = values;
+	}
+
 	public static PropValue from(Number n) {
 		return new PropValue(new ArrayList<>()).add(n);
 	}
@@ -35,43 +42,40 @@ public record PropValue(List<Number> values) {
 		return values.get(index);
 	}
 
-	public Number plus(Number other) {
-		return values.getFirst().doubleValue() + other.doubleValue();
+	@Override
+	public int intValue() {
+		return values.getFirst().intValue();
 	}
 
-	public Number minus(Number other) {
-		return values.getFirst().doubleValue() - other.doubleValue();
+	@Override
+	public long longValue() {
+		return values.getFirst().longValue();
 	}
 
-	public Number multiply(Number other) {
-		return values.getFirst().doubleValue() * other.doubleValue();
+	@Override
+	public float floatValue() {
+		return values.getFirst().floatValue();
 	}
 
-	public Number negative() {
-		return -values.getFirst().doubleValue();
+	@Override
+	public double doubleValue() {
+		return values.getFirst().doubleValue();
 	}
 
-	public Number div(Number other) {
-		return values.getFirst().doubleValue() / other.doubleValue();
+	public List<Number> values() {
+		return values;
 	}
 
-	public <T extends Number> T asType(Class<T> klass) {
-		if (values.isEmpty()) return klass.cast(0);
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) return true;
+		if (obj == null || obj.getClass() != this.getClass()) return false;
+		var that = (PropValue) obj;
+		return Objects.equals(this.values, that.values);
+	}
 
-		if (klass == Short.class) {
-			return klass.cast(values.getFirst().shortValue());
-		} else if (klass == Integer.class) {
-			return klass.cast(values.getFirst().intValue());
-		} else if (klass == Long.class) {
-			return klass.cast(values.getFirst().longValue());
-		} else if (klass == Float.class) {
-			return klass.cast(values.getFirst().floatValue());
-		} else if (klass == Double.class) {
-			return klass.cast(values.getFirst().doubleValue());
-		} else if (klass == Byte.class) {
-			return klass.cast(values.getFirst().byteValue());
-		}
-
-		throw new ClassCastException();
+	@Override
+	public int hashCode() {
+		return Objects.hash(values);
 	}
 }
