@@ -2161,7 +2161,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract((u, b) -> u.getId().equals(curr.getUid()) || allowed.contains(b.getId()))
+				.setCanInteract((u, b) -> b != null && u.getId().equals(curr.getUid()) || allowed.contains(b.getId()))
 				.setCancellable(false);
 
 		helper.addAction(Utils.parseEmoji("▶"), w -> {
