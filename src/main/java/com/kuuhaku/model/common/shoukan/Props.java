@@ -18,8 +18,6 @@
 
 package com.kuuhaku.model.common.shoukan;
 
-import com.kuuhaku.model.records.shoukan.PropValue;
-
 import java.util.HashMap;
 
 public class Props extends HashMap<String, PropValue> {
