@@ -1035,7 +1035,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		int locktime = curr.getLockTime(Lock.ABILITY);
+		int locktime = Math.max(curr.getLockTime(Lock.ABILITY), curr.getLockTime(Lock.EFFECT));
 		if (locktime > 0 && !d.hasTrueEffect()) {
 			getChannel().sendMessage(getString("error/ability_locked", locktime)).queue();
 			return false;
@@ -1156,7 +1156,7 @@ public class Shoukan extends GameInstance<Phase> {
 				return false;
 			}
 
-			int locktime = curr.getLockTime(Lock.SPELL);
+			int locktime = Math.max(curr.getLockTime(Lock.SPELL), curr.getLockTime(Lock.EFFECT));
 			if (locktime > 0 && !e.hasTrueEffect()) {
 				getChannel().sendMessage(getString("error/spell_locked", locktime)).queue();
 				return false;
