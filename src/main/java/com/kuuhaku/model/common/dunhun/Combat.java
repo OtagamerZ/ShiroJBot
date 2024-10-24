@@ -87,9 +87,9 @@ public class Combat implements Renderer<BufferedImage> {
 	private final RandomList<Actor> rngList = new RandomList<>();
 	private final Set<EffectBase> effects = new HashSet<>();
 
-	private Actor current = null;
 	private CompletableFuture<Runnable> lock;
 	private boolean done = false;
+	private Actor current;
 
 	public Combat(Dunhun game, MonsterBase<?>... enemies) {
 		this.game = game;
@@ -213,11 +213,16 @@ public class Combat implements Renderer<BufferedImage> {
 		loop:
 		while (true) {
 			if (game.isClosed()) break;
+			else if (hunters.stream().allMatch(Actor::isSkipped)) break;
+			else if (keepers.stream().allMatch(Actor::isSkipped)) break;
+
 			current = Utils.getWeightedEntry(turns, Actor::getInitiative,
 					getActors(true).stream()
 							.filter(a -> !a.equals(current))
 							.toList()
 			);
+
+			if (current == null) break;
 
 			try {
 				current.getSenshi().reduceDebuffs(1);
@@ -267,9 +272,6 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 				}
 			}
-
-			if (hunters.stream().allMatch(Actor::isSkipped)) break;
-			else if (keepers.stream().allMatch(Actor::isSkipped)) break;
 		}
 
 		done = true;
