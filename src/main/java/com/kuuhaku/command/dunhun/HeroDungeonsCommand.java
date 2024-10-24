@@ -66,7 +66,9 @@ public class HeroDungeonsCommand implements Executable {
 		List<Page> pages = new ArrayList<>();
 		for (Dungeon dg : dgs) {
 			if (!dg.getMonsterPool().isEmpty()) {
-				List<String> mobs = DAO.queryAllNative(String.class, "SELECT name FROM monster_info WHERE id IN ?1", dg.getMonsterPool());
+				List<String> mobs = DAO.queryAllNative(String.class, "SELECT name FROM monster_info WHERE locale = ?1 AND id IN ?2",
+						locale, dg.getMonsterPool()
+				);
 				eb.addField(locale.get("str/monster_pool"), Utils.properlyJoin(locale.get("str/and")).apply(mobs), true);
 			} else {
 				eb.addField(locale.get("str/monster_pool"), locale.get("str/unknown"), true);
