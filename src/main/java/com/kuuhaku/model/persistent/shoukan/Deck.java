@@ -700,10 +700,7 @@ public class Deck extends DAO<Deck> {
 							}
 
 							if (origin.hasMinor(Race.DIVINITY)) {
-								m += getSenshi().parallelStream()
-											 .map(Senshi::getMPCost)
-											 .min(Integer::compareTo)
-											 .orElse(0) / 2;
+								m += getAverageMPCost();
 							}
 
 							if (h != null && h.getGame() != null) {
