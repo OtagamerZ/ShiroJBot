@@ -41,6 +41,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.*;
 
@@ -155,6 +156,12 @@ public class SynthesizeFastCommand implements Executable {
 				sc.setChrome(true);
 			}
 			sc.save();
+
+			if (sc.isChrome()) {
+				DynamicProperty prop = kp.getAccount().getDynamicProperty("highest_chrome");
+				prop.setValue(Math.max(NumberUtils.toInt(prop.getValue()), e.getTier()));
+				prop.save();
+			}
 
 			event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
 					.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, kp.getAccount().getDeck()), "png"), "synth.png"))

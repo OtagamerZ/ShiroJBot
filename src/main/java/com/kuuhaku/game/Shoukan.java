@@ -149,8 +149,14 @@ public class Shoukan extends GameInstance<Phase> {
 			h.resetDraws();
 			h.manualDraw(h.getRemainingDraws());
 
-			if (!hasCheated() && h.getCards().parallelStream().filter(d -> d instanceof Field).count() >= 3) {
-				h.getAccount().setDynValue("cartographer", true);
+			if (!hasCheated()) {
+				if (h.getRealDeck().parallelStream().allMatch(d -> d.getStashRef() != null && d.getStashRef().isChrome())) {
+					h.getAccount().setDynValue("shiny", true);
+				}
+
+				if (h.getCards().parallelStream().filter(d -> d instanceof Field).count() >= 3) {
+					h.getAccount().setDynValue("cartographer", true);
+				}
 			}
 
 			if (h.getOrigins().isPure(Race.BEAST)) {
