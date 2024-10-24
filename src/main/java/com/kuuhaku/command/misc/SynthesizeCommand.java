@@ -57,6 +57,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -240,6 +241,10 @@ public class SynthesizeCommand implements Executable {
 								}
 								sc.save();
 
+								if (sc.isChrome()) {
+									kp.getAccount().setDynValue("chrome_field", true);
+								}
+
 								event.channel().sendMessage(locale.get("success/synth", f))
 										.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, k.getAccount().getDeck()), "png"), "synth.png"))
 										.queue();
@@ -250,6 +255,12 @@ public class SynthesizeCommand implements Executable {
 									sc.setChrome(true);
 								}
 								sc.save();
+
+								if (sc.isChrome()) {
+									DynamicProperty prop = kp.getAccount().getDynamicProperty("highest_chrome");
+									prop.setValue(Math.max(NumberUtils.toInt(prop.getValue()), e.getTier()));
+									prop.save();
+								}
 
 								event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
 										.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, k.getAccount().getDeck()), "png"), "synth.png"))

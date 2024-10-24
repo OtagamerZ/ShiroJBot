@@ -146,6 +146,10 @@ public class SynthesizeFastCommand implements Executable {
 			}
 			sc.save();
 
+			if (sc.isChrome()) {
+				kp.getAccount().setDynValue("chrome_field", true);
+			}
+
 			event.channel().sendMessage(locale.get("success/synth", f))
 					.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, kp.getAccount().getDeck()), "png"), "synth.png"))
 					.queue();
