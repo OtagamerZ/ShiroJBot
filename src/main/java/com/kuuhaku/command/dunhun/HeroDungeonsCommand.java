@@ -64,16 +64,12 @@ public class HeroDungeonsCommand implements Executable {
 				.setAuthor(locale.get("str/dungeons"));
 
 		List<Page> pages = new ArrayList<>();
-		for (int i = -1; i < dgs.size(); i++) {
-			Dungeon dg;
-			if (i == -1) {
-				dg = Dungeon.INFINITE;
-				eb.addField(locale.get("str/monster_pool"), locale.get("str/unknown"), true);
-			} else {
-				dg = dgs.get(i);
-
+		for (Dungeon dg : dgs) {
+			if (!dg.getMonsterPool().isEmpty()) {
 				List<String> mobs = DAO.queryAllNative(String.class, "SELECT name FROM monster_info WHERE id IN ?1", dg.getMonsterPool());
 				eb.addField(locale.get("str/monster_pool"), Utils.properlyJoin(locale.get("str/and")).apply(mobs), true);
+			} else {
+				eb.addField(locale.get("str/monster_pool"), locale.get("str/unknown"), true);
 			}
 
 			eb.setTitle(dg.getInfo(locale).getName())

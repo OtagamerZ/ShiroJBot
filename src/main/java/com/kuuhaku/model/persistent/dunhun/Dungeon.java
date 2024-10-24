@@ -43,7 +43,6 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "dungeon", schema = "dunhun")
 public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
-	public static final Dungeon INFINITE = new Dungeon("INFINITE", 1);
 	public static final Dungeon DUEL = new Dungeon("DUEL", 1);
 
 	@Id

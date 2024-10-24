@@ -81,7 +81,7 @@ public class DunhunCommand implements Executable {
 			}
 		}
 
-		Dungeon dungeon = Dungeon.INFINITE;
+		Dungeon dungeon;
 		if (args.has("dungeon")) {
 			dungeon = DAO.find(Dungeon.class, args.getString("dungeon").toUpperCase());
 			if (dungeon == null) {
@@ -93,15 +93,15 @@ public class DunhunCommand implements Executable {
 				}
 				return;
 			}
+		} else {
+			dungeon = DAO.find(Dungeon.class, "INFINITE");
 		}
 
 		Set<User> pending = new HashSet<>(others);
 		try {
-			Dungeon instance = dungeon;
-
 			if (others.isEmpty()) {
 				try {
-					Dunhun dun = new Dunhun(locale, instance, event.user());
+					Dunhun dun = new Dunhun(locale, dungeon, event.user());
 					dun.start(event.guild(), event.channel())
 							.whenComplete((v, e) -> {
 								if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
@@ -132,7 +132,7 @@ public class DunhunCommand implements Executable {
 						}
 
 						try {
-							Dunhun dun = new Dunhun(locale, instance,
+							Dunhun dun = new Dunhun(locale, dungeon,
 									Stream.concat(Stream.of(event.user()), others.stream())
 											.map(User::getId)
 											.toArray(String[]::new)
