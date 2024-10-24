@@ -284,10 +284,9 @@ public class Combat implements Renderer<BufferedImage> {
 		game.resetTimer();
 
 		lock = new CompletableFuture<>();
-		Actor curr = turns.get();
 
 		ClusterAction ca;
-		if (curr instanceof Hero h) {
+		if (current instanceof Hero h) {
 			ca = game.getChannel().sendMessage("<@" + h.getAccount().getUid() + ">").embed(getEmbed());
 		} else {
 			ca = game.getChannel().sendEmbed(getEmbed());
@@ -295,7 +294,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		ButtonizeHelper helper;
 		if (execute) {
-			if (curr instanceof Hero h) {
+			if (current instanceof Hero h) {
 				helper = new ButtonizeHelper(true)
 						.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 						.setCancellable(false);
@@ -412,10 +411,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 				cpu.schedule(() -> {
 					try {
-						boolean canAttack = curr.getSenshi().getDmg() > 0;
-						boolean canDefend = curr.getSenshi().getDfs() > 0;
+						boolean canAttack = current.getSenshi().getDmg() > 0;
+						boolean canDefend = current.getSenshi().getDfs() > 0;
 
-						List<Actor> tgts = getActors(curr.getTeam().getOther()).stream()
+						List<Actor> tgts = getActors(current.getTeam().getOther()).stream()
 								.filter(a -> !a.isSkipped())
 								.toList();
 
@@ -425,24 +424,24 @@ public class Combat implements Renderer<BufferedImage> {
 									.average()
 									.orElse(1);
 
-							double risk = threat / curr.getAggroScore();
-							double lifeFac = Math.max(0.5, (double) curr.getMaxHp() / curr.getHp());
+							double risk = threat / current.getAggroScore();
+							double lifeFac = Math.max(0.5, (double) current.getMaxHp() / current.getHp());
 
-							if (curr.getAp() == 1 && Calc.chance(5 / lifeFac * risk)) {
-								curr.getSenshi().setDefending(true);
-								curr.modAp(-curr.getAp());
+							if (current.getAp() == 1 && Calc.chance(5 / lifeFac * risk)) {
+								current.getSenshi().setDefending(true);
+								current.modAp(-current.getAp());
 
-								history.add(locale.get("str/actor_defend", curr.getName(locale)));
+								history.add(locale.get("str/actor_defend", current.getName(locale)));
 								return;
 							}
 						}
 
 						boolean forcing = false;
 						List<Skill> skills = new ArrayList<>();
-						for (Skill s : curr.getSkills()) {
-							if (s.getApCost() > curr.getAp() || s.getCd() > 0) continue;
+						for (Skill s : current.getSkills()) {
+							if (s.getApCost() > current.getAp() || s.getCd() > 0) continue;
 
-							Boolean canUse = s.canCpuUse(this, (MonsterBase<?>) curr);
+							Boolean canUse = s.canCpuUse(this, (MonsterBase<?>) current);
 							if (canUse == null) {
 								if (!forcing) skills.add(s);
 							} else if (canUse) {
@@ -454,18 +453,18 @@ public class Combat implements Renderer<BufferedImage> {
 
 						if (!skills.isEmpty() && (forcing || !canAttack || Calc.chance(33))) {
 							Skill skill = Utils.getRandomEntry(skills);
-							tgts = skill.getTargets(this, curr).stream()
+							tgts = skill.getTargets(this, current).stream()
 									.filter(a -> a != null && !a.isSkipped())
 									.toList();
 
 							if (!tgts.isEmpty()) {
-								Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == curr.getTeam() ? 1 : a.getAggroScore(), tgts);
-								skill(skill, curr, t);
+								Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == current.getTeam() ? 1 : a.getAggroScore(), tgts);
+								skill(skill, current, t);
 								return;
 							}
 						}
 
-						attack(curr, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
+						attack(current, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
 					} catch (Exception e) {
 						Constants.LOGGER.error(e, e);
 					} finally {
