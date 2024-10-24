@@ -177,8 +177,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 						int xpGained = 0;
 
 						XStringBuilder sb = new XStringBuilder();
-						for (Actor a : getCombat().getActors(Team.KEEPERS)) {
-							if (a instanceof Monster m) {
+						for (Actor a : getCombat().getParticipated()) {
+							if (a instanceof Monster m && m.getHp() == 0 && m.getTeam() == Team.KEEPERS) {
 								xpGained += m.getKillXp();
 
 								Loot lt = m.getStats().generateLoot(this);

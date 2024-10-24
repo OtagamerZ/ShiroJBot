@@ -56,6 +56,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private final Dunhun game;
 	private final I18N locale;
+	private final List<Actor> participated = new ArrayList<>();
 	private final RandomList<Actor> turns = new RandomList<>();
 	private final BondedList<Actor> hunters = new BondedList<>((a, it) -> {
 		if (getActors(Team.HUNTERS).size() >= 6) return false;
@@ -63,11 +64,12 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setFleed(false);
 		a.setTeam(Team.HUNTERS);
 		a.setGame(getGame());
+		participated.add(a);
 
 		a.getSenshi().setAvailable(true);
 		return true;
 	}, a -> {
-		a.setTeam(null);
+		a.setHp(0);
 		turns.remove(a);
 	});
 	private final BondedList<Actor> keepers = new BondedList<>((a, it) -> {
@@ -76,11 +78,12 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setFleed(false);
 		a.setTeam(Team.KEEPERS);
 		a.setGame(getGame());
+		participated.add(a);
 
 		a.getSenshi().setAvailable(true);
 		return true;
 	}, a -> {
-		a.setTeam(null);
+		a.setHp(0);
 		turns.remove(a);
 	});
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
@@ -239,7 +242,7 @@ public class Combat implements Renderer<BufferedImage> {
 				current.modAp(current.getMaxAp());
 				current.getSenshi().setDefending(false);
 
-				while (current.getTeam() != null && !current.isSkipped() && current.getAp() > 0) {
+				while (!current.isSkipped() && current.getAp() > 0) {
 					Runnable action = reload(true).get();
 					if (action != null) {
 						action.run();
@@ -420,22 +423,27 @@ public class Combat implements Renderer<BufferedImage> {
 								.filter(a -> !a.isSkipped())
 								.toList();
 
-						if (canDefend) {
-							double threat = tgts.stream()
-									.mapToInt(a -> a.getHp() * a.getAggroScore() / a.getMaxHp())
-									.average()
-									.orElse(1);
+						double threat = tgts.stream()
+								.mapToInt(a -> a.getHp() * a.getAggroScore() / a.getMaxHp())
+								.average()
+								.orElse(1);
 
-							double risk = threat / current.getAggroScore();
-							double lifeFac = Math.max(0.5, (double) current.getMaxHp() / current.getHp());
+						double risk = threat / current.getAggroScore();
+						double lifeFac = Math.max(0.5, (double) current.getMaxHp() / current.getHp());
 
-							if (current.getAp() == 1 && Calc.chance(5 / lifeFac * risk)) {
-								current.getSenshi().setDefending(true);
-								current.modAp(-current.getAp());
+						if (risk > 5 && Calc.chance(25)) {
+							current.setFleed(true);
 
-								history.add(locale.get("str/actor_defend", current.getName(locale)));
-								return;
-							}
+							history.add(locale.get("str/actor_flee", current.getName(locale)));
+							return;
+						}
+
+						if (canDefend && current.getAp() == 1 && Calc.chance(5 / lifeFac * risk)) {
+							current.getSenshi().setDefending(true);
+							current.modAp(-current.getAp());
+
+							history.add(locale.get("str/actor_defend", current.getName(locale)));
+							return;
 						}
 
 						boolean forcing = false;
@@ -736,6 +744,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public Actor getCurrent() {
 		return current;
+	}
+
+	public List<Actor> getParticipated() {
+		return participated;
 	}
 
 	public boolean isDone() {

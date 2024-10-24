@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.dunhun;
 
+import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
@@ -26,7 +27,6 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Dungeon;
-import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
@@ -36,6 +36,7 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Command(
@@ -60,12 +61,27 @@ public class HeroDungeonsCommand implements Executable {
 
 		List<Dungeon> dgs = DAO.findAll(Dungeon.class);
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/hero_inventory"));
+				.setAuthor(locale.get("str/dungeons"));
 
-		List<Page> pages = Utils.generatePages(eb, equips, 10, 5,
-				g -> "`" + g.getId() + "` - " + g.getBasetype().getIcon() + " " + g.getName(locale) + "\n",
-				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
-		);
+		List<Page> pages = new ArrayList<>();
+		for (int i = -1; i < dgs.size(); i++) {
+			Dungeon dg;
+			if (i == -1) {
+				dg = Dungeon.INFINITE;
+				eb.addField(locale.get("str/monster_pool"), locale.get("str/unknown"), true);
+			} else {
+				dg = dgs.get(i);
+
+				List<String> mobs = DAO.queryAllNative(String.class, "SELECT name FROM monster_info WHERE id IN ?1", dg.getMonsterPool());
+				eb.addField(locale.get("str/monster_pool"), Utils.properlyJoin(locale.get("str/and")).apply(mobs), true);
+			}
+
+			eb.setTitle(dg.getInfo(locale).getName())
+					.setDescription(dg.getInfo(locale).getDescription())
+					.addField(locale.get("str/area_level"), String.valueOf(dg.getAreaLevel()), true);
+
+			pages.add(InteractPage.of(eb.build()));
+		}
 
 		Utils.paginate(pages, 1, true, event.channel(), event.user());
 	}

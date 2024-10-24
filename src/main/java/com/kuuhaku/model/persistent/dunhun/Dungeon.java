@@ -22,13 +22,15 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedDungeon;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,6 +58,11 @@ public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
 	@Language("Groovy")
 	@Column(name = "script", columnDefinition = "TEXT")
 	private String script;
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "monster_pool", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray monsterPool;
 
 	@Column(name = "area_level")
 	private int areaLevel = 1;
@@ -89,6 +96,10 @@ public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
 		this.areaLevel = areaLevel;
 	}
 
+	public JSONArray getMonsterPool() {
+		return monsterPool;
+	}
+
 	public void init(I18N locale, Dunhun dungeon) {
 		if (script == null) return;
 
@@ -97,7 +108,8 @@ public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
 			Utils.exec(id, script, Map.of(
 					"locale", locale,
 					"dungeon", dungeon,
-					"floors", floors
+					"floors", floors,
+					"pool", monsterPool
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to process dungeon {}", id, e);
