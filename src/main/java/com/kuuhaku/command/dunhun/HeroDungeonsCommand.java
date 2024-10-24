@@ -72,7 +72,8 @@ public class HeroDungeonsCommand implements Executable {
 				eb.addField(locale.get("str/monster_pool"), locale.get("str/unknown"), true);
 			}
 
-			eb.setTitle(dg.getInfo(locale).getName())
+			eb.clearFields()
+					.setTitle(dg.getInfo(locale).getName() + " (`" + dg.getId() + "`)")
 					.setDescription(dg.getInfo(locale).getDescription())
 					.addField(locale.get("str/area_level"), String.valueOf(dg.getAreaLevel()), true);
 
