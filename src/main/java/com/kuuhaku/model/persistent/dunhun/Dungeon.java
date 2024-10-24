@@ -91,10 +91,6 @@ public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
 		return areaLevel;
 	}
 
-	public void setAreaLevel(int areaLevel) {
-		this.areaLevel = areaLevel;
-	}
-
 	public JSONArray getMonsterPool() {
 		return monsterPool;
 	}

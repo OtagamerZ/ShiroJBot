@@ -539,7 +539,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public int getAreaLevel() {
-		return (dungeon.getAreaLevel() + getTurn() / 2) - 1;
+		return dungeon.getAreaLevel() + getTurn() / 2;
 	}
 
 	@SafeVarargs

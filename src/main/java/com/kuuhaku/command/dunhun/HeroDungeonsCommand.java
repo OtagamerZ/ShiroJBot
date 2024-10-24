@@ -59,7 +59,7 @@ public class HeroDungeonsCommand implements Executable {
 			return;
 		}
 
-		List<Dungeon> dgs = DAO.findAll(Dungeon.class);
+		List<Dungeon> dgs = DAO.queryAll(Dungeon.class, "SELECT d FROM Dungeon d ORDER BY d.areaLevel");
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/dungeons"));
 
