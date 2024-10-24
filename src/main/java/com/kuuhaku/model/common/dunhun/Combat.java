@@ -56,7 +56,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private final Dunhun game;
 	private final I18N locale;
-//	private final InfiniteList<Actor> turns = new InfiniteList<>();
 	private final RandomList<Actor> turns = new RandomList<>();
 	private final BondedList<Actor> hunters = new BondedList<>((a, it) -> {
 		if (getActors(Team.HUNTERS).size() >= 6) return false;
@@ -67,7 +66,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 		a.getSenshi().setAvailable(true);
 		return true;
-	}, turns::remove);
+	}, a -> {
+		a.setTeam(null);
+		turns.remove(a);
+	});
 	private final BondedList<Actor> keepers = new BondedList<>((a, it) -> {
 		if (getActors(Team.KEEPERS).size() >= 6) return false;
 
@@ -77,7 +79,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 		a.getSenshi().setAvailable(true);
 		return true;
-	}, turns::remove);
+	}, a -> {
+		a.setTeam(null);
+		turns.remove(a);
+	});
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
 	private final RandomList<Actor> rngList = new RandomList<>();
 	private final Set<EffectBase> effects = new HashSet<>();
@@ -206,7 +211,7 @@ public class Combat implements Renderer<BufferedImage> {
 				.forEach(turns::add);
 
 		loop:
-		while (true) { // TODO init
+		while (true) {
 			if (game.isClosed()) break;
 			current = Utils.getWeightedEntry(turns, Actor::getInitiative,
 					getActors(true).stream()
@@ -215,26 +220,21 @@ public class Combat implements Renderer<BufferedImage> {
 			);
 
 			try {
-				if (!current.getSenshi().isAvailable() || current.getSenshi().isStasis() || current.isSkipped()) {
-					current.getSenshi().reduceDebuffs(1);
-					for (Skill s : current.getSkills()) {
-						s.reduceCd();
-					}
-
-					if (hunters.stream().allMatch(Actor::isSkipped)) break;
-					else if (keepers.stream().allMatch(Actor::isSkipped)) break;
-					continue;
-				}
-
 				current.getSenshi().reduceDebuffs(1);
 				for (Skill s : current.getSkills()) {
 					s.reduceCd();
 				}
 
+				if (!current.getSenshi().isAvailable() || current.getSenshi().isStasis() || current.isSkipped()) {
+					if (hunters.stream().allMatch(Actor::isSkipped)) break;
+					else if (keepers.stream().allMatch(Actor::isSkipped)) break;
+					continue;
+				}
+
 				current.modAp(current.getMaxAp());
 				current.getSenshi().setDefending(false);
 
-				while (!current.isSkipped() && current.getAp() > 0) {
+				while (current.getTeam() != null && !current.isSkipped() && current.getAp() > 0) {
 					Runnable action = reload(true).get();
 					if (action != null) {
 						action.run();
