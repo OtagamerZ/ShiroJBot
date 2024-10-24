@@ -151,7 +151,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (!hasCheated()) {
 				if (h.getRealDeck().parallelStream().allMatch(d -> d.getStashRef() != null && d.getStashRef().isChrome())) {
-					h.getAccount().setDynValue("shiny", true);
+					h.getAccount().setDynValue("all_chrome", true);
 				}
 
 				if (h.getCards().parallelStream().filter(d -> d instanceof Field).count() >= 3) {
