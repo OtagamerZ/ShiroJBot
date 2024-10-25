@@ -221,6 +221,10 @@ public class Hero extends DAO<Hero> implements Actor {
 	@Override
 	public void setFleed(boolean flee) {
 		this.flee = flee;
+
+		if (game != null && flee) {
+			game.getLocale().get("str/actor_flee", getName());
+		}
 	}
 
 	@Override

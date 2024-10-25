@@ -164,6 +164,10 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	@Override
 	public void setFleed(boolean flee) {
 		this.flee = flee;
+
+		if (game != null && flee) {
+			game.getLocale().get("str/actor_flee", getName(game.getLocale()));
+		}
 	}
 
 	public Set<SelfEffect> getEffects() {
