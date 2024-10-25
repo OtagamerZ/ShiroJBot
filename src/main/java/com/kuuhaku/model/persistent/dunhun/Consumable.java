@@ -59,7 +59,7 @@ public class Consumable extends DAO<Consumable> {
 	private String targeter;
 
 	@Column(name = "price")
-	private int price;
+	private Integer price;
 
 	public String getId() {
 		return id;
