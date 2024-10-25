@@ -34,12 +34,10 @@ import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.File;
@@ -100,30 +98,29 @@ public class HeroDungeonsCommand implements Executable {
 				.addAction(Utils.parseEmoji("◀️"), w -> {
 					if (i.get() > 0) {
 						int it = i.decrementAndGet();
-						MessageEditAction ma = w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(it)));
+						File img = new File(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
 
-						File img = IO.getResourceAsFile(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
-						if (img != null) {
-							ma.setFiles(FileUpload.fromData(img, "image.png"));
-						}
-
-						ma.queue();
+						w.getMessage()
+								.editMessageEmbeds(Utils.getEmbeds(pages.get(it)))
+								.setFiles(FileUpload.fromData(img, "image.png"))
+								.queue();
 					}
 				})
 				.addAction(Utils.parseEmoji("▶️"), w -> {
 					if (i.get() < pages.size() - 1) {
 						int it = i.incrementAndGet();
-						MessageEditAction ma = w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(it)));
+						File img = new File(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
 
-						File img = IO.getResourceAsFile(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
-						if (img != null) {
-							ma.setFiles(FileUpload.fromData(img, "image.png"));
-						}
-
-						ma.queue();
+						w.getMessage()
+								.editMessageEmbeds(Utils.getEmbeds(pages.get(it)))
+								.setFiles(FileUpload.fromData(img, "image.png"))
+								.queue();
 					}
 				});
 
-		helper.apply(Utils.sendPage(event.channel(), pages.getFirst())).queue(s -> Pages.buttonize(s, helper));
+		File img = new File(Constants.CARDS_ROOT + "../dungeons/" + dgs.getFirst().getId() + ".png");
+		helper.apply(Utils.sendPage(event.channel(), pages.getFirst()))
+				.addFiles(FileUpload.fromData(img, "image.png"))
+				.queue(s -> Pages.buttonize(s, helper));
 	}
 }
