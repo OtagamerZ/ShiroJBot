@@ -56,15 +56,14 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private final Dunhun game;
 	private final I18N locale;
-	private final List<Actor> participated = new ArrayList<>();
-	private final RandomList<Actor> turns = new RandomList<>();
+	private final InfiniteList<Actor> turns = new InfiniteList<>();
 	private final BondedList<Actor> hunters = new BondedList<>((a, it) -> {
 		if (getActors(Team.HUNTERS).size() >= 6) return false;
 
 		a.setFleed(false);
 		a.setTeam(Team.HUNTERS);
 		a.setGame(getGame());
-		participated.add(a);
+		regenTurns = true;
 
 		a.getSenshi().setAvailable(true);
 		return true;
@@ -78,7 +77,7 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setFleed(false);
 		a.setTeam(Team.KEEPERS);
 		a.setGame(getGame());
-		participated.add(a);
+		regenTurns = true;
 
 		a.getSenshi().setAvailable(true);
 		return true;
@@ -91,7 +90,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final Set<EffectBase> effects = new HashSet<>();
 
 	private CompletableFuture<Runnable> lock;
-	private boolean done = false;
+	private boolean done, regenTurns;
 	private Actor current;
 
 	public Combat(Dunhun game, MonsterBase<?>... enemies) {
@@ -205,26 +204,18 @@ public class Combat implements Renderer<BufferedImage> {
 	public void process() {
 		if (done) return;
 
-		Stream.of(hunters.stream(), keepers.stream())
-				.flatMap(Function.identity())
-				.sorted(Comparator
-						.comparingInt(Actor::getInitiative).reversed()
-						.thenComparingInt(a -> Calc.rng(20, seed - a.hashCode()))
-				)
-				.forEach(turns::add);
-
 		loop:
-		while (true) {
+		for (Actor turn : turns) {
+			if (regenTurns) {
+				generateTurns();
+				regenTurns = false;
+			}
+
 			if (game.isClosed()) break;
 			else if (hunters.stream().allMatch(Actor::isSkipped)) break;
 			else if (keepers.stream().allMatch(Actor::isSkipped)) break;
 
-			current = Utils.getWeightedEntry(turns, Actor::getInitiative,
-					getActors(true).stream()
-							.filter(a -> !a.equals(current))
-							.toList()
-			);
-
+			current = turn;
 			if (current == null) break;
 
 			try {
@@ -746,12 +737,29 @@ public class Combat implements Renderer<BufferedImage> {
 		return current;
 	}
 
-	public List<Actor> getParticipated() {
-		return participated;
+	public List<Actor> getTurns() {
+		return turns;
 	}
 
 	public boolean isDone() {
 		return done;
+	}
+
+	public void generateTurns() {
+		Set<Actor> pool = new HashSet<>(getTurns());
+		pool.addAll(hunters);
+		pool.addAll(keepers);
+
+		turns.clear();
+		Stream.of(hunters.stream(), keepers.stream())
+				.flatMap(Function.identity())
+				.sorted(Comparator
+						.comparingInt(Actor::getInitiative).reversed()
+						.thenComparingInt(a -> Calc.rng(20, seed - a.hashCode()))
+				)
+				.forEach(turns::add);
+
+		turns.setIndex(turns.indexOf(current));
 	}
 
 	public void trigger(Trigger t) {

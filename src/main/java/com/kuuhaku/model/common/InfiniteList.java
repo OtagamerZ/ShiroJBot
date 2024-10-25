@@ -81,6 +81,10 @@ public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
 		return remove(iter);
 	}
 
+	public void setIndex(int idx) {
+		iter = idx;
+	}
+
 	@Override
 	public void clear() {
 		super.clear();
