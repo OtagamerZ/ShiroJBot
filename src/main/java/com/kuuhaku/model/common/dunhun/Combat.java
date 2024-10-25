@@ -287,6 +287,7 @@ public class Combat implements Renderer<BufferedImage> {
 				channel.retrieveMessageById(previous.getSecond())
 						.flatMap(Objects::nonNull, Message::delete)
 						.queue(null, Utils::doNothing);
+				game.setMessage(null);
 			}
 		}
 	}
@@ -503,6 +504,7 @@ public class Combat implements Renderer<BufferedImage> {
 							channel.retrieveMessageById(previous.getSecond())
 									.flatMap(Objects::nonNull, Message::delete)
 									.queue(null, Utils::doNothing);
+							game.setMessage(null);
 						}
 					}
 
