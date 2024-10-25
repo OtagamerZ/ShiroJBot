@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
 	private int iter = -1;
@@ -89,6 +90,10 @@ public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
 	public void clear() {
 		super.clear();
 		iter = -1;
+	}
+
+	public List<T> values() {
+		return super.stream().toList();
 	}
 
 	@Override

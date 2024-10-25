@@ -47,7 +47,6 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class Combat implements Renderer<BufferedImage> {
@@ -740,7 +739,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return current;
 	}
 
-	public List<Actor> getTurns() {
+	public InfiniteList<Actor> getTurns() {
 		return turns;
 	}
 
@@ -749,13 +748,12 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void generateTurns() {
-		Set<Actor> pool = new HashSet<>(getTurns());
+		Set<Actor> pool = new HashSet<>(getTurns().values());
 		pool.addAll(hunters);
 		pool.addAll(keepers);
 
 		turns.clear();
-		Stream.of(hunters.stream(), keepers.stream())
-				.flatMap(Function.identity())
+		pool.stream()
 				.sorted(Comparator
 						.comparingInt(Actor::getInitiative).reversed()
 						.thenComparingInt(a -> Calc.rng(20, seed - a.hashCode()))
