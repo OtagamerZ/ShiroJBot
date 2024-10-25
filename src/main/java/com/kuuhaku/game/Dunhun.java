@@ -209,17 +209,15 @@ public class Dunhun extends GameInstance<NullPhase> {
 							int xp = xpGained;
 							DAO.apply(Hero.class, h.getId(), n -> {
 								int gain = xp;
-								int lvl = h.getStats().getLevel();
+								int lvl = n.getStats().getLevel();
 								int diff = Math.abs(getAreaLevel() + 1 - lvl);
 
 								if (diff > 5) {
 									gain = (int) Calc.clamp(gain * Math.pow(0.9, diff - 5), 1, gain);
 								}
 
-								h.getStats().addXp(gain);
-								h.save();
-
-								if (h.getStats().getLevel() > lvl) {
+								n.getStats().addXp(gain);
+								if (n.getStats().getLevel() > lvl) {
 									getChannel().buffer(getLocale().get("str/actor_level_up", h.getName(), h.getStats().getLevel()));
 								}
 							});
@@ -448,7 +446,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		for (Hero h : heroes.values()) {
-			XStringBuilder sb = new XStringBuilder("#-# " + getLocale().get("race/" + h.getRace().name()));
+			XStringBuilder sb = new XStringBuilder("#-# " + getLocale().get("race/" + h.getRace()));
 			h.addHpBar(sb);
 
 			List<String> skills = h.getSkills().stream()
@@ -506,6 +504,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}
 					}
 				}, Utils::doNothing);
+
+		for (Hero h : heroes.values()) {
+			DAO.apply(Hero.class, h.getId(), n -> {
+				n.getStats().setConsumables(h.getStats().getConsumables());
+			});
+		}
 
 		close(code);
 	}

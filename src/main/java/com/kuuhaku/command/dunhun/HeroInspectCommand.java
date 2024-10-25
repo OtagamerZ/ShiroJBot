@@ -90,7 +90,7 @@ public class HeroInspectCommand implements Executable {
 		if (!tags.isEmpty()) {
 			List<String> tgs = new ArrayList<>();
 			if (g.getBasetype().getStats().wpnType() != null) {
-				tgs.add(locale.get("wpn/" + g.getBasetype().getStats().wpnType().name()));
+				tgs.add(locale.get("wpn/" + g.getBasetype().getStats().wpnType()));
 			}
 
 			tgs.addAll(tags.stream()
@@ -165,7 +165,7 @@ public class HeroInspectCommand implements Executable {
 
 		for (GearAffix ga : affs) {
 			eb.appendDescription("-# %s - %s\n".formatted(
-					locale.get("str/" + ga.getAffix().getType().name()), ga.getName(locale)
+					locale.get("str/" + ga.getAffix().getType()), ga.getName(locale)
 			));
 			eb.appendDescription(ga.getDescription(locale, true) + "\n\n");
 		}

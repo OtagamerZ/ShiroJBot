@@ -165,11 +165,11 @@ public class HeroCommand implements Executable {
 			XStringBuilder sb = new XStringBuilder();
 			for (AttrType at : AttrType.values()) {
 				if (at == AttrType.LVL) break;
-				String name = locale.get("attr/" + at.name());
+				String name = locale.get("attr/" + at);
 
 				int idx = i++;
 				sb.appendNewLine("**" + name.charAt(0) + "**" + name.substring(1) + ": " + (alloc.get(at) + attr[idx]));
-				sb.appendNewLine("-# " + locale.get("attr/" + at.name() + "_desc"));
+				sb.appendNewLine("-# " + locale.get("attr/" + at + "_desc"));
 				sb.nextLine();
 				if (func != null) func.accept(name.charAt(0), idx);
 			}
@@ -245,7 +245,7 @@ public class HeroCommand implements Executable {
 
 						String reqWpn = Utils.properlyJoin(locale.get("str/or")).apply(
 								s.getReqWeapons().stream()
-										.map(w -> locale.get("wpn/" + w.name()))
+										.map(w -> locale.get("wpn/" + w))
 										.toList()
 						);
 
@@ -512,7 +512,7 @@ public class HeroCommand implements Executable {
 				return g;
 			});
 
-			eb.addField(locale.get("str/" + gs.name()), sb.toString(), true);
+			eb.addField(locale.get("str/" + gs), sb.toString(), true);
 			sb.clear();
 		}
 

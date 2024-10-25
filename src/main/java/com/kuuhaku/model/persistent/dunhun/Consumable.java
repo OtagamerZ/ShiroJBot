@@ -58,15 +58,23 @@ public class Consumable extends DAO<Consumable> {
 	@Column(name = "targeter", columnDefinition = "TEXT")
 	private String targeter;
 
+	@Column(name = "price")
+	private int price;
+
 	public String getId() {
 		return id;
 	}
 
-	public LocalizedConsumable getInfo(I18N locale) {
-		return infos.parallelStream()
-				.filter(ld -> ld.getLocale().is(locale))
-				.map(ld -> ld.setUwu(locale.isUwu()))
-				.findAny().orElseThrow();
+	public String getName(I18N locale) {
+		return getInfo(locale).setUwu(locale.isUwu()).getName();
+	}
+
+	public String getDescription(I18N locale) {
+		return getInfo(locale).setUwu(locale.isUwu()).getDescription();
+	}
+
+	public int getPrice() {
+		return price;
 	}
 
 	public void execute(I18N locale, Combat combat, Actor source, Actor target) {
@@ -98,6 +106,13 @@ public class Consumable extends DAO<Consumable> {
 		}
 
 		return out;
+	}
+
+	public LocalizedConsumable getInfo(I18N locale) {
+		return infos.parallelStream()
+				.filter(ld -> ld.getLocale().is(locale))
+				.map(ld -> ld.setUwu(locale.isUwu()))
+				.findAny().orElseThrow();
 	}
 
 	@Override

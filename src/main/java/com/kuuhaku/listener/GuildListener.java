@@ -442,7 +442,7 @@ public class GuildListener extends ListenerAdapter {
 			KawaiponCard kc = Spawn.getKawaipon(locale, gb, chosen, u);
 			if (kc != null) {
 				EmbedBuilder eb = new EmbedBuilder()
-						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity().name())))
+						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity())))
 						.setTitle(kc + " (" + kc.getCard().getAnime() + ")")
 						.setColor(kc.getCard().getRarity().getColor(kc.isChrome()))
 						.setImage("attachment://card.png")
@@ -548,7 +548,7 @@ public class GuildListener extends ListenerAdapter {
 			if (season != null && !ArrayUtils.contains(season.months(), month)) {
 				List<String> months = Arrays.stream(season.months())
 						.mapToObj(Month::of)
-						.map(m -> locale.get("month/" + m.name()))
+						.map(m -> locale.get("month/" + m))
 						.toList();
 
 				data.channel().sendMessage(locale.get("error/out_of_season",
@@ -575,7 +575,7 @@ public class GuildListener extends ListenerAdapter {
 			if (missing.length > 0) {
 				XStringBuilder sb = new XStringBuilder(locale.get("error/missing_perms"));
 				for (Permission perm : missing) {
-					sb.appendNewLine("- " + locale.get("perm/" + perm.name()));
+					sb.appendNewLine("- " + locale.get("perm/" + perm));
 				}
 
 				data.channel().sendMessage(sb.toString()).queue();

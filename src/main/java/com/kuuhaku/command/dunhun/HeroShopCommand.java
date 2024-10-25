@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.misc;
+package com.kuuhaku.command.dunhun;
 
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.controller.DAO;
@@ -29,8 +29,10 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.dunhun.Consumable;
+import com.kuuhaku.model.persistent.dunhun.Hero;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
@@ -39,58 +41,53 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import org.apache.commons.collections4.Bag;
 
 import java.util.List;
-import java.util.Map;
 
 @Command(
-		name = "items",
+		name = "hero",
 		path = "buy",
 		category = Category.MISC
 )
 @Syntax(allowEmpty = true, value = "<id:word:r> <amount:number>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class ItemShopCommand implements Executable {
+public class HeroShopCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
-		Map<UserItem, Integer> items = acc.getItems();
+		Deck d = data.profile().getAccount().getDeck();
+		if (d == null) {
+			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
+			return;
+		}
+
+		Hero h = d.getHero();
+		if (h == null) {
+			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
+			return;
+		}
+
+		Bag<Consumable> items = h.getConsumables();
 
 		if (!args.has("id")) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/items_available"));
 
-			List<UserItem> catalogue = DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.currency IS NOT NULL ORDER BY i.id");
+			List<Consumable> catalogue = DAO.queryAll(Consumable.class, "SELECT c FROM Consumable c WHERE c.price IS NOT NULL ORDER BY c.id");
 
 			List<Page> pages = Utils.generatePages(eb, catalogue, 10, 5,
-					i -> {
-						int has = items.getOrDefault(i, 0);
+					c -> {
+						int has = items.getCount(c);
 
-						FieldMimic fm = new FieldMimic(i.getIcon() + " " + i.getName(locale), "");
-						if (i.getPrice() > 0) {
-							if (i.getCurrency() == Currency.ITEM) {
-								fm.appendLine(locale.get("str/price", i.getPrice() + " " + i.getItemCost().getName(locale)));
-							} else {
-								fm.appendLine(locale.get("str/price", locale.get("currency/" + i.getCurrency(), i.getPrice())));
-							}
+						FieldMimic fm = new FieldMimic(c.getName(locale), "");
+						if (c.getPrice() > 0) {
+							fm.appendLine(locale.get("str/price", locale.get("currency/cr", c.getPrice())));
 						}
 
-						if (i.getStackSize() > 0) {
-							fm.appendLine(locale.get("str/item_has", has + "/" + i.getStackSize()));
-						} else {
-							fm.appendLine(locale.get("str/item_has", has));
-						}
-
-						if (i.isPassive()) {
-							fm.append(" | **" + locale.get("str/passive") + "**");
-						}
-
-						if (i.isAccountBound()) {
-							fm.append(" :lock:");
-						}
-
-						fm.appendLine(i.getDescription(locale));
-						fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "items.buy " + i.getId()));
+						fm.appendLine(locale.get("str/item_has", has));
+						fm.appendLine(c.getDescription(locale));
+						fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "hero.buy " + c.getId()));
 
 						return fm.toString();
 					},
@@ -106,22 +103,22 @@ public class ItemShopCommand implements Executable {
 			return;
 		}
 
-		UserItem item = DAO.find(UserItem.class, args.getString("id").toUpperCase());
+		Consumable item = DAO.find(Consumable.class, args.getString("id").toUpperCase());
 		int amount = args.getInt("amount", 1);
 
-		if (item == null || item.getCurrency() == null) {
-			String sug = Utils.didYouMean(args.getString("id"), "SELECT id AS value FROM user_item WHERE currency IS NOT NULL");
+		if (item == null) {
+			String sug = Utils.didYouMean(args.getString("id"), "SELECT id AS value FROM consumable WHERE price IS NOT NULL");
 			if (sug == null) {
-				event.channel().sendMessage(locale.get("error/unknown_item_none")).queue();
+				event.channel().sendMessage(locale.get("error/unknown_consumable_none")).queue();
 			} else {
-				event.channel().sendMessage(locale.get("error/unknown_item", sug)).queue();
+				event.channel().sendMessage(locale.get("error/unknown_consumable", sug)).queue();
 			}
 			return;
-		} else if (item.getStackSize() > 0 && items.getOrDefault(item, 0) + amount > item.getStackSize()) {
-			event.channel().sendMessage(locale.get("error/stack_full")).queue();
+		} else if (items.size() > 10) {
+			event.channel().sendMessage(locale.get("error/consumables_full")).queue();
 			return;
-		} else if (!acc.hasEnough(amount * item.getPrice(), item.getCurrency(), item.getItemCostId())) {
-			event.channel().sendMessage(locale.get("error/insufficient_" + item.getCurrency())).queue();
+		} else if (!acc.hasEnough(amount * item.getPrice(), Currency.CR)) {
+			event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
 			return;
 		} else if (amount <= 0) {
 			event.channel().sendMessage(locale.get("error/invalid_value_low", 0)).queue();
@@ -130,12 +127,7 @@ public class ItemShopCommand implements Executable {
 
 		try {
 			int value = amount * item.getPrice();
-			String price;
-			if (item.getCurrency() == Currency.ITEM) {
-				price = value + " " + item.getItemCost().getName(locale);
-			} else {
-				price = locale.get("currency/" + item.getCurrency(), value);
-			}
+			String price = locale.get("currency/cr", value);
 
 			Utils.confirm(locale.get("question/item_buy", amount, item.getName(locale), price), event.channel(), w -> {
 						if (!acc.isTrueState()) {
@@ -143,12 +135,10 @@ public class ItemShopCommand implements Executable {
 							return true;
 						}
 
-						acc.addItem(item, amount);
-						switch (item.getCurrency()) {
-							case CR -> acc.consumeCR(value, "Bought " + amount + "x " + item.getName(locale));
-							case GEM -> acc.consumeGems(value, "Bought " + amount + "x " + item.getName(locale));
-							case ITEM -> acc.consumeItem(item.getItemCostId(), value);
-						}
+						h.getStats().getConsumables().add(item.getId());
+						h.save();
+
+						acc.consumeCR(value, "Consumable " + amount + "x " + item.getName(locale));
 
 						event.channel().sendMessage(locale.get("success/item_buy", amount, item.getName(locale))).queue();
 						return true;

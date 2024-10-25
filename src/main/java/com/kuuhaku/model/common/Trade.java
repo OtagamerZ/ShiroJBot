@@ -240,7 +240,7 @@ public class Trade {
         for (StashedCard card : offers) {
             if (type != card.getType()) {
                 type = card.getType();
-                sb.appendNewLine("\n[" + locale.get("type/" + type.name()) + "]");
+                sb.appendNewLine("\n[" + locale.get("type/" + type) + "]");
             }
 
             int count = (left ? leftOffer : rightOffer).getCount(card.getId());

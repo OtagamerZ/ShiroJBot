@@ -85,7 +85,7 @@ public class MarketCommand implements Executable {
 
 		int total = DAO.queryNative(Integer.class, "SELECT count(1) FROM stashed_card c WHERE c.price > 0");
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setImage(Constants.API_ROOT + "market/offer/" + locale.getParent().name() + "?hide=true&v=" + System.currentTimeMillis())
+				.setImage(Constants.API_ROOT + "market/offer/" + locale.getParent() + "?hide=true&v=" + System.currentTimeMillis())
 				.setFooter(acc.getBalanceFooter(locale));
 
 		ThrowingFunction<Integer, Page> loader = p -> {

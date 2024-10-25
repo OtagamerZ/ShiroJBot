@@ -79,7 +79,7 @@ public class PruneCommand implements Executable {
                                 .flatMap(c -> mc.sendMessage(locale.get("success/prune_all")))
                                 .submit().join();
                     } catch (InsufficientPermissionException e) {
-                        event.channel().sendMessage(locale.get("error/missing_perms") + " " + locale.get("perm/" + e.getPermission().name())).queue();
+                        event.channel().sendMessage(locale.get("error/missing_perms") + " " + locale.get("perm/" + e.getPermission())).queue();
                     } finally {
                         queue.remove(event.guild().getId());
                     }

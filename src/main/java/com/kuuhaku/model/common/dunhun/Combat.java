@@ -373,7 +373,7 @@ public class Combat implements Renderer<BufferedImage> {
 									h.modAp(-1);
 
 									history.add(locale.get(t.equals(h) ? "str/used_skill_self" : "str/used_skill",
-											h.getName(), con.getInfo(locale).getName(), t.getName(locale))
+											h.getName(), con.getName(locale), t.getName(locale))
 									);
 								})
 						);
@@ -392,7 +392,7 @@ public class Combat implements Renderer<BufferedImage> {
 									.setCancellable(false)
 									.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() -> {
 										h.setFleed(true);
-										history.add(locale.get("str/actor_flee", h.getName()));
+										game.getChannel().sendMessage(locale.get("str/actor_flee", h.getName())).queue();
 
 										h.modAp(-h.getAp());
 									}))
@@ -434,7 +434,7 @@ public class Combat implements Renderer<BufferedImage> {
 						if (risk > 5 && Calc.chance(25)) {
 							current.setFleed(true);
 
-							history.add(locale.get("str/actor_flee", current.getName(locale)));
+							game.getChannel().sendMessage(locale.get("str/actor_flee", current.getName(locale))).queue();
 							return;
 						}
 
@@ -521,7 +521,7 @@ public class Combat implements Renderer<BufferedImage> {
 				String cdText = "";
 				String reqText = Utils.properlyJoin(locale.get("str/or")).apply(
 						s.getReqWeapons().stream()
-								.map(w -> locale.get("wpn/" + w.name()))
+								.map(w -> locale.get("wpn/" + w))
 								.toList()
 				);
 
@@ -552,9 +552,9 @@ public class Combat implements Renderer<BufferedImage> {
 
 			for (Consumable c : cons.uniqueSet()) {
 				b.addOption(
-						c.getInfo(locale).getName() + " (x" + cons.getCount(c) + ")",
+						c.getName(locale) + " (x" + cons.getCount(c) + ")",
 						c.getId(),
-						StringUtils.abbreviate(c.getInfo(locale).getDescription(), 100)
+						StringUtils.abbreviate(c.getDescription(locale), 100)
 				);
 			}
 

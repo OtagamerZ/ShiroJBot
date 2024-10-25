@@ -501,7 +501,7 @@ public class Deck extends DAO<Deck> {
 				g1.setColor(Color.WHITE);
 				effects = "- " + ori.major().getMajor(locale)
 						  + "\n\n- " + locale.get("major/pureblood")
-						  + "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major().name())
+						  + "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major())
 						  + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
 			} else if (ori.major() == Race.MIXED) {
 				g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));

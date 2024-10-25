@@ -327,11 +327,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		for (Evogear e : equipments) {
 			if (e.hasCharm(charm)) {
 				if (pop && Utils.equalsAny(charm, Charm.SHIELD, Charm.WARDING)) {
-					int charges = e.getStats().getData().getInt("C_" + charm.name(), 0) + 1;
+					int charges = e.getStats().getData().getInt("C_" + charm, 0) + 1;
 					if (charges >= charm.getValue(e.getTier())) {
 						e.getCharms().remove(charm.name());
 					} else {
-						e.getStats().getData().put("C_" + charm.name(), charges);
+						e.getStats().getData().put("C_" + charm, charges);
 					}
 				}
 

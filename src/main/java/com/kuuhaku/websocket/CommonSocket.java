@@ -195,7 +195,7 @@ public class CommonSocket extends WebSocketClient {
 				JSONObject out = JSONObject.of(
 						Map.entry("id", id),
 						Map.entry("name", c.getName()),
-						Map.entry("rarity", locale.get("rarity/" + c.getRarity().name()))
+						Map.entry("rarity", locale.get("rarity/" + c.getRarity()))
 				);
 
 				List<CardType> types = List.copyOf(Bit32.toEnumSet(CardType.class, DAO.queryNative(Integer.class, "SELECT get_type(?1)", id)));
@@ -209,12 +209,12 @@ public class CommonSocket extends WebSocketClient {
 
 					out.put("shoukan", JSONObject.of(
 							Map.entry("type_id", type.name()),
-							Map.entry("type", locale.get("type/" + type.name())),
+							Map.entry("type", locale.get("type/" + type)),
 							Map.entry("tags", d.getTags(locale)),
 							Map.entry("tier", d instanceof Evogear e ? e.getTier() : 0),
 							Map.entry("field", d instanceof Field f ? JSONObject.of(
 									Map.entry("type", f.getType().name()),
-									Map.entry("description", locale.get("field/" + f.getType().name() + "_desc")),
+									Map.entry("description", locale.get("field/" + f.getType() + "_desc")),
 									Map.entry("modifiers", f.getModifiers())
 							) : new JSONObject()),
 							Map.entry("description", d instanceof EffectHolder<?> eh ? JSONObject.of(

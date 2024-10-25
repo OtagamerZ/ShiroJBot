@@ -74,7 +74,7 @@ public class DeckListCommand implements Executable {
 		Race[] minors = o.minor();
 		if (minors.length == 0) {
 			eb.appendDescription("\n\n**%s**\n%s".formatted(
-					locale.get("str/pure_effect"), locale.get("pure/" + o.major().name()))
+					locale.get("str/pure_effect"), locale.get("pure/" + o.major()))
 			);
 		} else {
 			eb.appendDescription("\n\n**" + locale.get("str/minor_effect") + "**");
