@@ -72,6 +72,7 @@ public abstract class Constants {
     public static final String API_ROOT = "https://api." + SERVER_ROOT + "/v2/";
     public static final String SOCKET_ROOT = "wss://socket." + SERVER_ROOT + "/v2/";
     public static final String SHOUKAN_ASSETS = System.getenv("SHOUKAN_ASSETS");
+    public static final String CARDS_ROOT = System.getenv("CARDS_PATH");
     public static final String ORIGIN_RESOURCES = System.getenv("GIT_ORIGIN")
             .replace("https://github.com/", "https://raw.githubusercontent.com/") +
             "/" + System.getenv("GIT_BRANCH").replace(".git", "") + "/src/main/resources/";

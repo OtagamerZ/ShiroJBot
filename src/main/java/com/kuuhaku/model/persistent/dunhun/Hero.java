@@ -132,7 +132,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	public boolean setImage(BufferedImage img) {
-		File parent = new File(System.getenv("CARDS_PATH") + "../heroes");
+		File parent = new File(Constants.CARDS_ROOT + "../heroes");
 		if (!parent.exists()) parent.mkdir();
 
 		File f = new File(parent, id + ".png");

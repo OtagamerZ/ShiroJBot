@@ -134,7 +134,7 @@ public class ShoukanHistoryCommand implements Executable {
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(u -> u.getId().equals(acc.getUid()));
 
-		helper.apply(msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent())).queue(s -> Pages.paginate(s, helper));
+		helper.apply(msg.editMessageEmbeds(Utils.getEmbeds(pages.getFirst()))).queue(s -> Pages.paginate(s, helper));
 	}
 
 	private void viewRaces(I18N locale, Message msg, Account acc) {
@@ -204,7 +204,7 @@ public class ShoukanHistoryCommand implements Executable {
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(u -> u.getId().equals(acc.getUid()));
 
-		helper.apply(msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent())).queue(s -> Pages.paginate(s, helper));
+		helper.apply(msg.editMessageEmbeds(Utils.getEmbeds(pages.getFirst()))).queue(s -> Pages.paginate(s, helper));
 	}
 
 	private void codexTracker(I18N locale, Message msg, Account acc) {
@@ -241,6 +241,6 @@ public class ShoukanHistoryCommand implements Executable {
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(u -> u.getId().equals(acc.getUid()));
 
-		helper.apply(msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent())).queue(s -> Pages.paginate(s, helper));
+		helper.apply(msg.editMessageEmbeds(Utils.getEmbeds(pages.getFirst()))).queue(s -> Pages.paginate(s, helper));
 	}
 }

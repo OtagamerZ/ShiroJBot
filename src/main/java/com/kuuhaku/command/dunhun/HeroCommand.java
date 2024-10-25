@@ -141,7 +141,7 @@ public class HeroCommand implements Executable {
 
 	private void updatePage(Page p, Message msg) {
 		if (p == null) return;
-		msg.editMessageEmbeds((MessageEmbed) p.getContent()).queue();
+		msg.editMessageEmbeds(Utils.getEmbeds(p)).queue();
 	}
 
 	private void allocAttributes(Consumer<Message> restore, I18N locale, Hero h, Message msg) {
@@ -382,7 +382,7 @@ public class HeroCommand implements Executable {
 				});
 
 		refresh.run();
-		helper.apply(msg.editMessageEmbeds((MessageEmbed) pages.getFirst().getContent()))
+		helper.apply(msg.editMessageEmbeds(Utils.getEmbeds(pages.getFirst())))
 				.queue(s -> {
 					Pages.buttonize(s, helper);
 					Pages.modifyButtons(s, null, Map.of(
@@ -567,7 +567,7 @@ public class HeroCommand implements Executable {
 		});
 
 		msg.editMessageComponents()
-				.setEmbeds((MessageEmbed) pages.getFirst().getContent())
+				.setEmbeds(Utils.getEmbeds(pages.getFirst()))
 				.queue(s -> Pages.buttonize(
 						s, () -> newActs, true, true,
 						1, TimeUnit.MINUTES,

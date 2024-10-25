@@ -182,8 +182,8 @@ public class Card extends DAO<Card> implements Serializable {
 	private byte[] getImageBytes() {
 		String path;
 		switch (rarity) {
-			case HERO, MONSTER -> path = System.getenv("CARDS_PATH") + (rarity == Rarity.HERO ? "../heroes" : "../monsters");
-			default -> path = System.getenv("CARDS_PATH") + anime.getId();
+			case HERO, MONSTER -> path = Constants.CARDS_ROOT + (rarity == Rarity.HERO ? "../heroes" : "../monsters");
+			default -> path = Constants.CARDS_ROOT + anime.getId();
 		}
 
 		byte[] cardBytes = Main.getCacheManager().computeResource(id, (k, v) -> {

@@ -18,8 +18,11 @@
 
 package com.kuuhaku.command.dunhun;
 
+import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.helper.ButtonizeHelper;
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -31,13 +34,19 @@ import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
+import net.dv8tion.jda.api.utils.FileUpload;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
 		name = "hero",
@@ -61,7 +70,8 @@ public class HeroDungeonsCommand implements Executable {
 
 		List<Dungeon> dgs = DAO.queryAll(Dungeon.class, "SELECT d FROM Dungeon d ORDER BY d.areaLevel, d.id");
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/dungeons"));
+				.setAuthor(locale.get("str/dungeons"))
+				.setImage("attachment://image.png");
 
 		List<Page> pages = new ArrayList<>();
 		for (Dungeon dg : dgs) {
@@ -83,6 +93,37 @@ public class HeroDungeonsCommand implements Executable {
 			pages.add(InteractPage.of(eb.build()));
 		}
 
-		Utils.paginate(pages, 1, true, event.channel(), event.user());
+		AtomicInteger i = new AtomicInteger();
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(event.user()::equals)
+				.addAction(Utils.parseEmoji("◀️"), w -> {
+					if (i.get() > 0) {
+						int it = i.decrementAndGet();
+						MessageEditAction ma = w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(it)));
+
+						File img = IO.getResourceAsFile(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
+						if (img != null) {
+							ma.setFiles(FileUpload.fromData(img));
+						}
+
+						ma.queue();
+					}
+				})
+				.addAction(Utils.parseEmoji("▶️"), w -> {
+					if (i.get() < pages.size() - 1) {
+						int it = i.incrementAndGet();
+						MessageEditAction ma = w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(it)));
+
+						File img = IO.getResourceAsFile(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
+						if (img != null) {
+							ma.setFiles(FileUpload.fromData(img));
+						}
+
+						ma.queue();
+					}
+				});
+
+		helper.apply(Utils.sendPage(event.channel(), pages.getFirst())).queue(s -> Pages.buttonize(s, helper));
 	}
 }
