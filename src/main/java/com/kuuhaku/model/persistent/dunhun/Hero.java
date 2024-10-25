@@ -223,7 +223,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		this.flee = flee;
 
 		if (game != null && flee) {
-			game.getLocale().get("str/actor_flee", getName());
+			game.getChannel().sendMessage(game.getLocale().get("str/actor_flee", getName()));
 		}
 	}
 

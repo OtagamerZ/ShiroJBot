@@ -204,6 +204,9 @@ public class Combat implements Renderer<BufferedImage> {
 	public void process() {
 		if (done) return;
 
+		generateTurns();
+		regenTurns = false;
+
 		loop:
 		for (Actor turn : turns) {
 			if (regenTurns) {
@@ -419,6 +422,13 @@ public class Combat implements Renderer<BufferedImage> {
 
 						double risk = threat / current.getAggroScore();
 						double lifeFac = Math.max(0.5, (double) current.getMaxHp() / current.getHp());
+
+						if (risk > 5 && Calc.chance(25)) {
+							current.setFleed(true);
+
+							game.getChannel().sendMessage(locale.get("str/actor_flee", current.getName(locale))).queue();
+							return;
+						}
 
 						if (canDefend && current.getAp() == 1 && Calc.chance(5 / lifeFac * risk)) {
 							current.getSenshi().setDefending(true);
