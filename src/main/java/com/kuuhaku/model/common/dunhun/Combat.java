@@ -222,12 +222,14 @@ public class Combat implements Renderer<BufferedImage> {
 			if (current == null) break;
 
 			try {
+				boolean skip = !current.getSenshi().isAvailable() || current.getSenshi().isStasis() || current.isSkipped();
+
 				current.getSenshi().reduceDebuffs(1);
 				for (Skill s : current.getSkills()) {
 					s.reduceCd();
 				}
 
-				if (!current.getSenshi().isAvailable() || current.getSenshi().isStasis() || current.isSkipped()) {
+				if (skip) {
 					if (hunters.stream().allMatch(Actor::isSkipped)) break;
 					else if (keepers.stream().allMatch(Actor::isSkipped)) break;
 					continue;

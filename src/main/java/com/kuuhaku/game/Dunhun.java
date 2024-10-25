@@ -27,6 +27,7 @@ import com.kuuhaku.model.records.dunhun.EventDescription;
 import com.kuuhaku.model.records.dunhun.Loot;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -506,9 +507,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}, Utils::doNothing);
 
 		for (Hero h : heroes.values()) {
-			DAO.apply(Hero.class, h.getId(), n -> {
-				n.getStats().setConsumables(h.getStats().getConsumables());
-			});
+			DAO.apply(Hero.class, h.getId(), n -> n.getStats().setConsumables(h.getConsumables().stream()
+					.map(Consumable::getId)
+					.collect(Collectors.toCollection(JSONArray::new))
+			));
 		}
 
 		close(code);
