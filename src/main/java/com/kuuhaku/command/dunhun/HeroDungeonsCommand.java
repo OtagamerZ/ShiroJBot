@@ -104,7 +104,7 @@ public class HeroDungeonsCommand implements Executable {
 
 						File img = IO.getResourceAsFile(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
 						if (img != null) {
-							ma.setFiles(FileUpload.fromData(img));
+							ma.setFiles(FileUpload.fromData(img, "image.png"));
 						}
 
 						ma.queue();
@@ -117,7 +117,7 @@ public class HeroDungeonsCommand implements Executable {
 
 						File img = IO.getResourceAsFile(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
 						if (img != null) {
-							ma.setFiles(FileUpload.fromData(img));
+							ma.setFiles(FileUpload.fromData(img, "image.png"));
 						}
 
 						ma.queue();
