@@ -166,7 +166,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		this.flee = flee;
 
 		if (game != null && flee) {
-			game.getChannel().sendMessage(game.getLocale().get("str/actor_flee", getName()));
+			game.getChannel().sendMessage(game.getLocale().get("str/actor_flee", getName(game.getLocale())));
 		}
 	}
 
