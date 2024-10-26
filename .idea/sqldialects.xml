@@ -3,6 +3,7 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/resources/database/functions/get_attribute_class.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/functions/has_attributes.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/scripts/apply_constraints.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/editable_basetype_attr_set.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/editable_skill_attr_set.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/fav_stack.sql" dialect="PostgreSQL" />

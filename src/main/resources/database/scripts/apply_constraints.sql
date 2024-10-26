@@ -25,32 +25,46 @@ DECLARE
 BEGIN
     FOR _match IN
         SELECT x.name
-             , x.table
+             , x."table"
              , x.def
-             , m[1] AS col
-             , m[2] AS sch
-             , m[3] AS ref
+             , x.col
+             , x.sch
+             , x.ref
+             , x.tgt
         FROM (
-             SELECT r.conname                              AS name
-                  , cast(r.conrelid AS regclass)           AS "table"
-                  , pg_catalog.pg_get_constraintdef(r.oid) AS def
-             FROM pg_constraint r
-             WHERE r.contype = 'f'
+             SELECT x.name
+                  , replace(x.table, '"', '')                    AS "table"
+                  , x.def
+                  , replace(m[1], '"', '')                       AS col
+                  , replace(coalesce(m[2], x."schema"), '"', '') AS sch
+                  , replace(m[3], '"', '')                       AS ref
+                  , replace(m[4], '"', '')                       AS tgt
+             FROM (
+                  SELECT r.conname                                             AS name
+                       , pg_get_constraintdef(r.oid)                           AS def
+                       , cast(cast(r.conrelid AS regclass) AS VARCHAR)         AS "table"
+                       , cast(cast(c.relnamespace AS regnamespace) AS VARCHAR) AS "schema"
+                  FROM pg_constraint r
+                           INNER JOIN pg_class c ON c.oid = r.confrelid
+                  WHERE r.contype = 'f'
+                  ) x
+                , regexp_match(x.def, 'FOREIGN KEY \(([\w"]+)\) REFERENCES ([\w"]+(?=\.))?([\w"]+)\((\w+?)\)') m
              ) x
-           , regexp_match(x.def, 'FOREIGN KEY \((\w+)\) REFERENCES (\w+(?=\.))?(\w+)') m
-        WHERE m[3] = 'card'
-    LOOP
-        EXECUTE format($$
-            ALTER TABLE %4$I.%1$I
-                DROP CONSTRAINT %2$I;
+        WHERE x.ref = 'card'
+           OR x.sch = 'dunhun'
+        LOOP
+            EXECUTE format($$
+                        ALTER TABLE %4$I.%1$I
+                            DROP CONSTRAINT %2$I;
 
-            ALTER TABLE %4$I.%1$I
-                ADD CONSTRAINT %2$I
-                    FOREIGN KEY (%3$I) REFERENCES %4$I.%5$I(id)
-                        ON UPDATE CASCADE;
-            $$, _match.table, _match.name, _match.col, coalesce(_match.sch, 'kawaipon'), _match.ref
-        );
-    END LOOP;
+                        ALTER TABLE %4$I.%1$I
+                            ADD CONSTRAINT %2$I
+                                FOREIGN KEY (%3$I) REFERENCES %4$I.%5$I(%6$I)
+                                    ON UPDATE CASCADE;
+                        $$, _match.table, _match.name, _match.col, _match.sch, _match.ref,
+                           _match.tgt
+                    );
+        END LOOP;
 END
 $body$;
 
