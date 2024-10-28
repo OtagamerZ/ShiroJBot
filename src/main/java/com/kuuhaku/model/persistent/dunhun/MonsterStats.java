@@ -19,7 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
-import com.kuuhaku.game.Dunhun;
+import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.dunhun.Loot;
@@ -93,14 +93,22 @@ public class MonsterStats {
 		return skills;
 	}
 
-	public Loot generateLoot(Dunhun game) {
+	public Loot generateLoot(Actor self) {
 		Loot loot = new Loot();
 		if (lootGenerator == null) return loot;
+
+		double mult = switch (self.getRarityClass()) {
+			case NORMAL -> 1;
+			case MAGIC -> 1.2;
+			case RARE -> 1.5;
+			case UNIQUE -> 2.5;
+		};
 
 		try {
 			Utils.exec(getClass().getSimpleName(), lootGenerator, Map.of(
 					"loot", loot,
-					"dungeon", game
+					"dungeon", self.getGame(),
+					"mult", mult
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to generate loot", e);

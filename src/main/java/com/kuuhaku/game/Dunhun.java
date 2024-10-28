@@ -182,7 +182,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							if (a instanceof Monster m && m.getHp() == 0 && m.getTeam() == Team.KEEPERS) {
 								xpGained += m.getKillXp();
 
-								Loot lt = m.getStats().generateLoot(this);
+								Loot lt = m.getStats().generateLoot(m);
 								if (!lt.gear().isEmpty() || !lt.items().isEmpty()) {
 									loot.add(lt);
 
@@ -261,14 +261,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public void runEvent() {
-		lock = new CompletableFuture<>();
+		runEvent(Event.getRandom());
+	}
 
-		Event evt = Event.getRandom();
+	public void runEvent(Event evt) {
 		if (evt == null) {
 			runCombat();
 			return;
 		}
 
+		lock = new CompletableFuture<>();
 		EventDescription ed = evt.parse(getLocale(), this);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
