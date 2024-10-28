@@ -55,4 +55,15 @@ public record GearStats(
 		@Column(name = "weight", nullable = false)
 		int weight
 ) {
+	public JSONArray allTags() {
+		JSONArray tags = new JSONArray();
+		tags.addAll(tags());
+
+		if (gearType != null) {
+			tags.add(gearType.getId());
+			tags.addAll(gearType.getTags());
+		}
+
+		return tags;
+	}
 }

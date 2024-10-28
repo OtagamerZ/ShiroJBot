@@ -134,13 +134,8 @@ public class Affix extends DAO<Affix> {
 	public static Affix getRandom(Gear gear, AffixType type, int level) {
 		Basetype base = gear.getBasetype();
 
-		JSONArray tags = new JSONArray(base.getStats().tags());
+		JSONArray tags = new JSONArray(base.getStats().allTags());
 		tags.add(base.getStats().slot().name());
-
-		if (base.getStats().gearType() != null) {
-			tags.add(base.getStats().gearType().getId());
-			tags.addAll(base.getStats().gearType().getTags());
-		}
 
 		JSONArray affixes = new JSONArray();
 		List<Integer> groups = new ArrayList<>();
