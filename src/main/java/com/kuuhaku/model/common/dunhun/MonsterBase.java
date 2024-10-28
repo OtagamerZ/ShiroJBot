@@ -246,7 +246,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		senshiCache = new Senshi(this, locale);
 		CardAttributes base = senshiCache.getBase();
 
-		modifiers.clear();
+		modifiers.clear(senshiCache);
 		load(locale);
 
 		double mult = switch (getRarityClass()) {
