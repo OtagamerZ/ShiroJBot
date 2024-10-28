@@ -244,12 +244,12 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		if (senshiCache != null) return senshiCache;
 
 		senshiCache = new Senshi(this, locale);
+
 		CardAttributes base = senshiCache.getBase();
+		modifiers.clear(senshiCache);
+		load(locale);
 
 		if (!id.equalsIgnoreCase("DUMMY")) {
-			modifiers.clear(senshiCache);
-			load(locale);
-
 			double mult = switch (getRarityClass()) {
 				case RARE -> {
 					senshiCache.setHueOffset(Calc.rng(90, 270, SERIAL));
