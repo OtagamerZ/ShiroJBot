@@ -65,6 +65,19 @@ public class MonsterStats {
 	@Column(name = "loot_generator", columnDefinition = "TEXT")
 	private String lootGenerator;
 
+	public MonsterStats() {
+	}
+
+	public MonsterStats(int baseHp, Race race, int attack, int defense, int dodge, int parry, int maxAp) {
+		this.baseHp = baseHp;
+		this.race = race;
+		this.attack = attack;
+		this.defense = defense;
+		this.dodge = dodge;
+		this.parry = parry;
+		this.maxAp = maxAp;
+	}
+
 	public int getBaseHp() {
 		return baseHp;
 	}

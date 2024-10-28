@@ -291,7 +291,13 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	public static Monster dummy(Actor of) {
 		MonsterBase<?> dummy = new Monster("DUMMY");
 		dummy.game = of.getGame();
-		dummy.senshiCache = of.getSenshi().copy();
+
+		Senshi sof = of.getSenshi();
+		dummy.stats = new MonsterStats(
+				of.getMaxHp(), of.getRace(),
+				sof.getDmg(), sof.getDfs(), sof.getDodge(), sof.getParry(),
+				of.getMaxAp()
+		);
 
 		return (Monster) dummy;
 	}
