@@ -10,6 +10,7 @@ import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.persistent.dunhun.Monster;
 import com.kuuhaku.model.persistent.dunhun.MonsterStats;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
@@ -285,5 +286,13 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	@Override
 	public int hashCode() {
 		return Objects.hash(SERIAL, id);
+	}
+
+	public static MonsterBase<?> dummy(Actor of) {
+		MonsterBase<?> dummy = new Monster("DUMMY");
+		dummy.game = of.getGame();
+		dummy.senshiCache = of.getSenshi().copy();
+
+		return dummy;
 	}
 }
