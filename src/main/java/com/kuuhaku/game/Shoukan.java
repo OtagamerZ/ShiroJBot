@@ -403,7 +403,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("empower(?<indexes>\\d+(,\\d+)*)")
+	@PlayerAction("empower,(?<indexes>\\d+(,\\d+)*)")
 	private boolean debEmpower(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
