@@ -51,9 +51,6 @@ public class Basetype extends DAO<Basetype> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedBasetype> infos = new HashSet<>();
 
-	@Column(name = "icon", nullable = false)
-	private String icon;
-
 	@Embedded
 	private GearStats stats;
 
@@ -69,7 +66,11 @@ public class Basetype extends DAO<Basetype> {
 	}
 
 	public String getIcon() {
-		return icon;
+		if (stats.gearType() != null) {
+			return stats.gearType().getIcon();
+		}
+
+		return "";
 	}
 
 	public GearStats getStats() {
