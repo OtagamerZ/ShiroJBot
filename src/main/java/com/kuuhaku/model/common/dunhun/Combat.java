@@ -5,6 +5,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.dunhun.Actor;
@@ -14,10 +15,7 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Trigger;
-import com.kuuhaku.model.persistent.dunhun.Consumable;
-import com.kuuhaku.model.persistent.dunhun.Hero;
-import com.kuuhaku.model.persistent.dunhun.Monster;
-import com.kuuhaku.model.persistent.dunhun.Skill;
+import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.ClusterAction;
 import com.kuuhaku.model.records.dunhun.CombatContext;
@@ -530,7 +528,12 @@ public class Combat implements Renderer<BufferedImage> {
 				String cdText = "";
 				String reqText = Utils.properlyJoin(locale.get("str/or")).apply(
 						s.getReqWeapons().stream()
-								.map(w -> locale.get("wpn/" + w))
+								.map(w -> {
+									GearType type = DAO.find(GearType.class, w);
+									if (type == null) return "???";
+
+									return type.getInfo(locale).getName();
+								})
 								.toList()
 				);
 

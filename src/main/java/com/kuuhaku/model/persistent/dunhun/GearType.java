@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedGearType;
@@ -39,7 +40,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "gear_type", schema = "dunhun")
-public class GearType {
+public class GearType extends DAO<GearType> {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;

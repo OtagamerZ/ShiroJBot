@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.*;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -32,10 +33,7 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
-import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.persistent.dunhun.GearAffix;
-import com.kuuhaku.model.persistent.dunhun.Hero;
-import com.kuuhaku.model.persistent.dunhun.Skill;
+import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.EventData;
@@ -48,7 +46,6 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.FileUpload;
@@ -245,7 +242,12 @@ public class HeroCommand implements Executable {
 
 						String reqWpn = Utils.properlyJoin(locale.get("str/or")).apply(
 								s.getReqWeapons().stream()
-										.map(w -> locale.get("wpn/" + w))
+										.map(w -> {
+											GearType type = DAO.find(GearType.class, w);
+											if (type == null) return "???";
+
+											return type.getInfo(locale).getName();
+										})
 										.toList()
 						);
 
