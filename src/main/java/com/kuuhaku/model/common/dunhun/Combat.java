@@ -16,6 +16,7 @@ import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Consumable;
 import com.kuuhaku.model.persistent.dunhun.Hero;
+import com.kuuhaku.model.persistent.dunhun.Monster;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.ClusterAction;
@@ -278,6 +279,17 @@ public class Combat implements Renderer<BufferedImage> {
 				game.getEffects().add(e);
 			}
 		}
+
+		Pair<String, String> previous = game.getMessage();
+		if (previous != null) {
+			GuildMessageChannel channel = Main.getApp().getMessageChannelById(previous.getFirst());
+			if (channel != null) {
+				channel.retrieveMessageById(previous.getSecond())
+						.flatMap(Objects::nonNull, Message::delete)
+						.queue(null, Utils::doNothing);
+				game.setMessage(null);
+			}
+		}
 	}
 
 	public CompletableFuture<Runnable> reload(boolean execute) {
@@ -424,7 +436,7 @@ public class Combat implements Renderer<BufferedImage> {
 						double risk = threat / current.getAggroScore();
 						double lifeFac = Math.max(0.5, (double) current.getMaxHp() / current.getHp());
 
-						if (risk > 5 && Calc.chance(25)) {
+						if (current instanceof Monster && risk > 5 && Calc.chance(25)) {
 							current.setFleed(true);
 
 							game.getChannel().sendMessage(locale.get("str/actor_flee", current.getName(locale))).queue();
@@ -492,6 +504,7 @@ public class Combat implements Renderer<BufferedImage> {
 							channel.retrieveMessageById(previous.getSecond())
 									.flatMap(Objects::nonNull, Message::delete)
 									.queue(null, Utils::doNothing);
+							game.setMessage(null);
 						}
 					}
 

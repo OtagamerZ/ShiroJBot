@@ -93,12 +93,7 @@ public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
 	}
 
 	public List<T> values() {
-		List<T> out = new ArrayList<>();
-		for (int i = 0; i < size(); i++) {
-			out.add(get(i));
-		}
-
-		return out;
+		return super.stream().toList();
 	}
 
 	@Override

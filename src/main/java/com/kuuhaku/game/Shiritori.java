@@ -183,6 +183,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 							channel.retrieveMessageById(message.getSecond())
 									.flatMap(Objects::nonNull, Message::delete)
 									.queue(null, Utils::doNothing);
+							message = null;
 						}
 					}
 
@@ -199,6 +200,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 							channel.retrieveMessageById(message.getSecond())
 									.flatMap(Objects::nonNull, Message::delete)
 									.queue(null, Utils::doNothing);
+							message = null;
 						}
 					}
 				}, Utils::doNothing);

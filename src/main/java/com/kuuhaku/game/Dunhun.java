@@ -504,6 +504,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							channel.retrieveMessageById(message.getSecond())
 									.flatMap(Objects::nonNull, Message::delete)
 									.queue(null, Utils::doNothing);
+							message = null;
 						}
 					}
 				}, Utils::doNothing);
