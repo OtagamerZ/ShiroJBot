@@ -239,7 +239,9 @@ public class Combat implements Renderer<BufferedImage> {
 				current.getSenshi().setDefending(false);
 
 				while (!current.isSkipped() && current.getAp() > 0) {
-					Runnable action = reload(true).get();
+					trigger(Trigger.ON_TICK);
+
+					Runnable action = reload().get();
 					if (action != null) {
 						action.run();
 					}
@@ -292,7 +294,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 	}
 
-	public CompletableFuture<Runnable> reload(boolean execute) {
+	public CompletableFuture<Runnable> reload() {
 		game.resetTimer();
 
 		lock = new CompletableFuture<>();
@@ -305,194 +307,190 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		ButtonizeHelper helper;
-		if (execute) {
-			for (Actor a : getActors()) {
-				a.getModifiers().removeIf(a.getSenshi(), m -> m.getExpiration() == 0);
-			}
+		for (Actor a : getActors()) {
+			a.getModifiers().removeIf(a.getSenshi(), m -> m.getExpiration() == 0);
+		}
 
-			if (current instanceof Hero h) {
-				helper = new ButtonizeHelper(true)
-						.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
-						.setCancellable(false);
+		if (current instanceof Hero h) {
+			helper = new ButtonizeHelper(true)
+					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
+					.setCancellable(false);
 
-				helper.addAction(Utils.parseEmoji("🗡"), w -> {
-					List<Actor> tgts = getActors(h.getTeam().getOther()).stream()
-							.map(a -> a.isSkipped() ? null : a)
-							.toList();
+			helper.addAction(Utils.parseEmoji("🗡"), w -> {
+				List<Actor> tgts = getActors(h.getTeam().getOther()).stream()
+						.map(a -> a.isSkipped() ? null : a)
+						.toList();
 
-					addSelector(w.getMessage(), helper, tgts,
-							t -> lock.complete(() -> attack(h, t))
+				addSelector(w.getMessage(), helper, tgts,
+						t -> lock.complete(() -> attack(h, t))
+				);
+			});
+
+			if (!h.getSkills().isEmpty()) {
+				helper.addAction(Utils.parseEmoji("⚡"), w -> {
+					EventHandler handle = Pages.getHandler();
+					List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("skills");
+					if (selected == null || selected.isEmpty()) {
+						game.getChannel().sendMessage(locale.get("error/no_skill_selected")).queue();
+						return;
+					}
+
+					Skill skill = h.getSkill(String.valueOf(selected.getFirst()));
+					if (skill == null) {
+						game.getChannel().sendMessage(locale.get("error/invalid_skill")).queue();
+						return;
+					} else if (skill.getApCost() > h.getAp()) {
+						game.getChannel().sendMessage(locale.get("error/not_enough_ap")).queue();
+						return;
+					} else if (skill.getCd() > 0) {
+						game.getChannel().sendMessage(locale.get("error/skill_cooldown")).queue();
+						return;
+					}
+
+					boolean validWpn = skill.getReqWeapons().isEmpty()
+									   || h.getEquipment().getWeaponList()
+											   .stream()
+											   .anyMatch(g -> skill.getReqWeapons().contains(g.getBasetype().getStats().gearType().getId()));
+
+					if (!validWpn) {
+						game.getChannel().sendMessage(locale.get("error/invalid_weapon")).queue();
+						return;
+					}
+
+					addSelector(w.getMessage(), helper, skill.getTargets(this, h),
+							t -> lock.complete(() -> skill(skill, h, t))
 					);
 				});
-
-				if (!h.getSkills().isEmpty()) {
-					helper.addAction(Utils.parseEmoji("⚡"), w -> {
-						EventHandler handle = Pages.getHandler();
-						List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("skills");
-						if (selected == null || selected.isEmpty()) {
-							game.getChannel().sendMessage(locale.get("error/no_skill_selected")).queue();
-							return;
-						}
-
-						Skill skill = h.getSkill(String.valueOf(selected.getFirst()));
-						if (skill == null) {
-							game.getChannel().sendMessage(locale.get("error/invalid_skill")).queue();
-							return;
-						} else if (skill.getApCost() > h.getAp()) {
-							game.getChannel().sendMessage(locale.get("error/not_enough_ap")).queue();
-							return;
-						} else if (skill.getCd() > 0) {
-							game.getChannel().sendMessage(locale.get("error/skill_cooldown")).queue();
-							return;
-						}
-
-						boolean validWpn = skill.getReqWeapons().isEmpty()
-										   || h.getEquipment().getWeaponList()
-												   .stream()
-												   .anyMatch(g -> skill.getReqWeapons().contains(g.getBasetype().getStats().gearType().getId()));
-
-						if (!validWpn) {
-							game.getChannel().sendMessage(locale.get("error/invalid_weapon")).queue();
-							return;
-						}
-
-						addSelector(w.getMessage(), helper, skill.getTargets(this, h),
-								t -> lock.complete(() -> skill(skill, h, t))
-						);
-					});
-				}
-
-				if (!h.getConsumables().isEmpty()) {
-					helper.addAction(Utils.parseEmoji("\uD83E\uDED9"), w -> {
-						EventHandler handle = Pages.getHandler();
-						List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("consumables");
-						if (selected == null || selected.isEmpty()) {
-							game.getChannel().sendMessage(locale.get("error/no_consumable_selected")).queue();
-							return;
-						}
-
-						Consumable con = h.getConsumable(String.valueOf(selected.getFirst()));
-						if (con == null) {
-							game.getChannel().sendMessage(locale.get("error/invalid_consumable")).queue();
-							return;
-						}
-
-						addSelector(w.getMessage(), helper, con.getTargets(this, h),
-								t -> lock.complete(() -> {
-									con.execute(locale, this, h, t);
-									h.getConsumables().remove(con, 1);
-									h.modAp(-1);
-
-									history.add(locale.get(t.equals(h) ? "str/used_skill_self" : "str/used_skill",
-											h.getName(), con.getName(locale), t.getName(locale))
-									);
-								})
-						);
-					});
-				}
-
-				helper.addAction(Utils.parseEmoji("🛡"), w -> lock.complete(() -> {
-							h.getSenshi().setDefending(true);
-							h.modAp(-h.getAp());
-
-							history.add(locale.get("str/actor_defend", h.getName()));
-						}))
-						.addAction(Utils.parseEmoji("💨"), w -> {
-							ButtonizeHelper confirm = new ButtonizeHelper(true)
-									.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
-									.setCancellable(false)
-									.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() -> {
-										h.setFleed(true);
-										h.modAp(-h.getAp());
-									}))
-									.addAction(Utils.parseEmoji(Constants.RETURN), v -> {
-										MessageEditAction ma = helper.apply(v.getMessage().editMessageComponents());
-										addDropdowns(h, ma);
-										ma.queue(s -> Pages.buttonize(s, helper));
-									});
-
-							confirm.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, confirm));
-						});
-
-				ca.apply(a -> {
-					MessageCreateAction ma = helper.apply(a);
-					addDropdowns(h, ma);
-
-					return ma;
-				});
-			} else {
-				helper = null;
-
-				cpu.schedule(() -> {
-					try {
-						boolean canAttack = current.getSenshi().getDmg() > 0;
-						boolean canDefend = current.getSenshi().getDfs() > 0;
-
-						List<Actor> tgts = getActors(current.getTeam().getOther()).stream()
-								.filter(a -> !a.isSkipped())
-								.toList();
-
-						double threat = tgts.stream()
-								.mapToInt(a -> a.getHp() * a.getAggroScore() / a.getMaxHp())
-								.average()
-								.orElse(1);
-
-						double risk = threat / current.getAggroScore();
-						double lifeFac = Math.max(0.5, (double) current.getMaxHp() / current.getHp());
-
-						if (current instanceof Monster && risk > 5 && Calc.chance(25)) {
-							current.setFleed(true);
-
-							game.getChannel().sendMessage(locale.get("str/actor_flee", current.getName(locale))).queue();
-							return;
-						}
-
-						if (canDefend && current.getAp() == 1 && Calc.chance(5 / lifeFac * risk)) {
-							current.getSenshi().setDefending(true);
-							current.modAp(-current.getAp());
-
-							history.add(locale.get("str/actor_defend", current.getName(locale)));
-							return;
-						}
-
-						boolean forcing = false;
-						List<Skill> skills = new ArrayList<>();
-						for (Skill s : current.getSkills()) {
-							if (s.getApCost() > current.getAp() || s.getCd() > 0) continue;
-
-							Boolean canUse = s.canCpuUse(this, (MonsterBase<?>) current);
-							if (canUse == null) {
-								if (!forcing) skills.add(s);
-							} else if (canUse) {
-								if (!forcing) skills.clear();
-								forcing = true;
-								skills.add(s);
-							}
-						}
-
-						if (!skills.isEmpty() && (forcing || !canAttack || Calc.chance(33))) {
-							Skill skill = Utils.getRandomEntry(skills);
-							tgts = skill.getTargets(this, current).stream()
-									.filter(a -> a != null && !a.isSkipped())
-									.toList();
-
-							if (!tgts.isEmpty()) {
-								Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == current.getTeam() ? 1 : a.getAggroScore(), tgts);
-								skill(skill, current, t);
-								return;
-							}
-						}
-
-						attack(current, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
-					} catch (Exception e) {
-						Constants.LOGGER.error(e, e);
-					} finally {
-						lock.complete(null);
-					}
-				}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
 			}
+
+			if (!h.getConsumables().isEmpty()) {
+				helper.addAction(Utils.parseEmoji("\uD83E\uDED9"), w -> {
+					EventHandler handle = Pages.getHandler();
+					List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("consumables");
+					if (selected == null || selected.isEmpty()) {
+						game.getChannel().sendMessage(locale.get("error/no_consumable_selected")).queue();
+						return;
+					}
+
+					Consumable con = h.getConsumable(String.valueOf(selected.getFirst()));
+					if (con == null) {
+						game.getChannel().sendMessage(locale.get("error/invalid_consumable")).queue();
+						return;
+					}
+
+					addSelector(w.getMessage(), helper, con.getTargets(this, h),
+							t -> lock.complete(() -> {
+								con.execute(locale, this, h, t);
+								h.getConsumables().remove(con, 1);
+								h.modAp(-1);
+
+								history.add(locale.get(t.equals(h) ? "str/used_skill_self" : "str/used_skill",
+										h.getName(), con.getName(locale), t.getName(locale))
+								);
+							})
+					);
+				});
+			}
+
+			helper.addAction(Utils.parseEmoji("🛡"), w -> lock.complete(() -> {
+						h.getSenshi().setDefending(true);
+						h.modAp(-h.getAp());
+
+						history.add(locale.get("str/actor_defend", h.getName()));
+					}))
+					.addAction(Utils.parseEmoji("💨"), w -> {
+						ButtonizeHelper confirm = new ButtonizeHelper(true)
+								.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
+								.setCancellable(false)
+								.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() -> {
+									h.setFleed(true);
+									h.modAp(-h.getAp());
+								}))
+								.addAction(Utils.parseEmoji(Constants.RETURN), v -> {
+									MessageEditAction ma = helper.apply(v.getMessage().editMessageComponents());
+									addDropdowns(h, ma);
+									ma.queue(s -> Pages.buttonize(s, helper));
+								});
+
+						confirm.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, confirm));
+					});
+
+			ca.apply(a -> {
+				MessageCreateAction ma = helper.apply(a);
+				addDropdowns(h, ma);
+
+				return ma;
+			});
 		} else {
 			helper = null;
+
+			cpu.schedule(() -> {
+				try {
+					boolean canAttack = current.getSenshi().getDmg() > 0;
+					boolean canDefend = current.getSenshi().getDfs() > 0;
+
+					List<Actor> tgts = getActors(current.getTeam().getOther()).stream()
+							.filter(a -> !a.isSkipped())
+							.toList();
+
+					double threat = tgts.stream()
+							.mapToInt(a -> a.getHp() * a.getAggroScore() / a.getMaxHp())
+							.average()
+							.orElse(1);
+
+					double risk = threat / current.getAggroScore();
+					double lifeFac = Math.max(0.5, (double) current.getMaxHp() / current.getHp());
+
+					if (current instanceof Monster && risk > 5 && Calc.chance(25)) {
+						current.setFleed(true);
+
+						game.getChannel().sendMessage(locale.get("str/actor_flee", current.getName(locale))).queue();
+						return;
+					}
+
+					if (canDefend && current.getAp() == 1 && Calc.chance(5 / lifeFac * risk)) {
+						current.getSenshi().setDefending(true);
+						current.modAp(-current.getAp());
+
+						history.add(locale.get("str/actor_defend", current.getName(locale)));
+						return;
+					}
+
+					boolean forcing = false;
+					List<Skill> skills = new ArrayList<>();
+					for (Skill s : current.getSkills()) {
+						if (s.getApCost() > current.getAp() || s.getCd() > 0) continue;
+
+						Boolean canUse = s.canCpuUse(this, (MonsterBase<?>) current);
+						if (canUse == null) {
+							if (!forcing) skills.add(s);
+						} else if (canUse) {
+							if (!forcing) skills.clear();
+							forcing = true;
+							skills.add(s);
+						}
+					}
+
+					if (!skills.isEmpty() && (forcing || !canAttack || Calc.chance(33))) {
+						Skill skill = Utils.getRandomEntry(skills);
+						tgts = skill.getTargets(this, current).stream()
+								.filter(a -> a != null && !a.isSkipped())
+								.toList();
+
+						if (!tgts.isEmpty()) {
+							Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == current.getTeam() ? 1 : a.getAggroScore(), tgts);
+							skill(skill, current, t);
+							return;
+						}
+					}
+
+					attack(current, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
+				} catch (Exception e) {
+					Constants.LOGGER.error(e, e);
+				} finally {
+					lock.complete(null);
+				}
+			}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
 		}
 
 		ca.addFile(IO.getBytes(render(game.getLocale()), "png"), "cards.png")

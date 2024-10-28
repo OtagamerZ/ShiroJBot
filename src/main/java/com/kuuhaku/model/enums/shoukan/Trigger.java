@@ -23,7 +23,8 @@ import java.util.Set;
 
 public enum Trigger {
 	/**
-	 * On each render
+	 * On each render<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_TICK,
 
@@ -233,7 +234,7 @@ public enum Trigger {
 	ON_DAMAGE,
 
 	/**
-	 * On taking degen damage
+	 * On taking degen damage<br>
 	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_DEGEN,
