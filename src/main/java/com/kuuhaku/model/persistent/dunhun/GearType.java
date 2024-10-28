@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.kuuhaku.model.persistent.localized.LocalizedWeaponType;
+import com.kuuhaku.model.persistent.localized.LocalizedGearType;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -38,8 +38,8 @@ import static jakarta.persistence.CascadeType.ALL;
 @Entity
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "weapon_type", schema = "dunhun")
-public class WeaponType {
+@Table(name = "gear_type", schema = "dunhun")
+public class GearType {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -53,7 +53,7 @@ public class WeaponType {
 	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<LocalizedWeaponType> infos = new HashSet<>();
+	private Set<LocalizedGearType> infos = new HashSet<>();
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
@@ -68,7 +68,11 @@ public class WeaponType {
 		return icon;
 	}
 
-	public LocalizedWeaponType getInfo(I18N locale) {
+	public int getSlots() {
+		return slots;
+	}
+
+	public LocalizedGearType getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.map(ld -> ld.setUwu(locale.isUwu()))
@@ -83,7 +87,7 @@ public class WeaponType {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		WeaponType that = (WeaponType) o;
+		GearType that = (GearType) o;
 		return Objects.equals(id, that.id);
 	}
 

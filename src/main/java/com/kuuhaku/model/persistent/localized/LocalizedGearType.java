@@ -32,8 +32,8 @@ import java.util.Objects;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "weapon_type_info", schema = "dunhun")
-public class LocalizedWeaponType extends DAO<LocalizedWeaponType> implements Serializable {
+@Table(name = "gear_type_info", schema = "dunhun")
+public class LocalizedGearType extends DAO<LocalizedGearType> implements Serializable {
 	@EmbeddedId
 	private LocalizedId id;
 
@@ -58,7 +58,7 @@ public class LocalizedWeaponType extends DAO<LocalizedWeaponType> implements Ser
 		return name;
 	}
 
-	public LocalizedWeaponType setUwu(boolean uwu) {
+	public LocalizedGearType setUwu(boolean uwu) {
 		this.uwu = uwu;
 		return this;
 	}
@@ -72,7 +72,7 @@ public class LocalizedWeaponType extends DAO<LocalizedWeaponType> implements Ser
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		LocalizedWeaponType that = (LocalizedWeaponType) o;
+		LocalizedGearType that = (LocalizedGearType) o;
 		return Objects.equals(id, that.id);
 	}
 
