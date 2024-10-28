@@ -31,8 +31,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CumValue implements Iterable<ValueMod> {
-	final Set<ValueMod> values = Collections.newSetFromMap(new ConcurrentHashMap<>());
-	final boolean flat;
+	private final Set<ValueMod> values = Collections.newSetFromMap(new ConcurrentHashMap<>());
+	private final boolean flat;
 
 	private CumValue(boolean flat) {
 		this.flat = flat;
@@ -44,6 +44,12 @@ public class CumValue implements Iterable<ValueMod> {
 
 	public static CumValue mult() {
 		return new CumValue(false);
+	}
+
+	public double raw() {
+		return values.parallelStream()
+				.mapToDouble(ValueMod::getValue)
+				.sum();
 	}
 
 	public double get() {

@@ -246,22 +246,24 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		senshiCache = new Senshi(this, locale);
 		CardAttributes base = senshiCache.getBase();
 
-		modifiers.clear(senshiCache);
-		load(locale);
+		if (!id.equalsIgnoreCase("DUMMY")) {
+			modifiers.clear(senshiCache);
+			load(locale);
 
-		double mult = switch (getRarityClass()) {
-			case RARE -> {
-				senshiCache.setHueOffset(Calc.rng(90, 270, SERIAL));
-				yield 2;
-			}
-			case MAGIC -> 1.25;
-			default -> 1;
-		} * (1 + game.getAreaLevel() * 0.2);
+			double mult = switch (getRarityClass()) {
+				case RARE -> {
+					senshiCache.setHueOffset(Calc.rng(90, 270, SERIAL));
+					yield 2;
+				}
+				case MAGIC -> 1.25;
+				default -> 1;
+			} * (1 + game.getAreaLevel() * 0.2);
 
-		base.setAtk((int) (stats.getAttack() * mult));
-		base.setDfs((int) (stats.getDefense() * mult));
-		base.setDodge(stats.getDodge());
-		base.setParry(stats.getParry());
+			base.setAtk((int) (stats.getAttack() * mult));
+			base.setDfs((int) (stats.getDefense() * mult));
+			base.setDodge(stats.getDodge());
+			base.setParry(stats.getParry());
+		}
 
 		base.getTags().add("MONSTER");
 
