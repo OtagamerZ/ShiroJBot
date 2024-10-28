@@ -47,9 +47,6 @@ public class GearType {
 	@Column(name = "icon", nullable = false)
 	private String icon;
 
-	@Column(name = "slots", nullable = false)
-	private int slots;
-
 	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
@@ -66,10 +63,6 @@ public class GearType {
 
 	public String getIcon() {
 		return icon;
-	}
-
-	public int getSlots() {
-		return slots;
 	}
 
 	public LocalizedGearType getInfo(I18N locale) {
