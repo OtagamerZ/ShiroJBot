@@ -20,7 +20,7 @@
 CREATE OR REPLACE VIEW v_basetype_attr_set AS
 SELECT id
      , slot
-     , weapon_type
+     , gear_type
      , str
      , dex
      , wis
@@ -30,7 +30,7 @@ SELECT id
 FROM (
      SELECT id
           , slot
-          , weapon_type
+          , gear_type
           , bit_get(attributes, 8, 0) AS str
           , bit_get(attributes, 8, 1) AS dex
           , bit_get(attributes, 8, 2) AS wis
