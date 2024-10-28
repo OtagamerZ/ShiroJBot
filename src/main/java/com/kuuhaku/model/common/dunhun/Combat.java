@@ -48,7 +48,6 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 public class Combat implements Renderer<BufferedImage> {
 	private final ScheduledExecutorService cpu = Executors.newSingleThreadScheduledExecutor();
@@ -56,20 +55,25 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private final Dunhun game;
 	private final I18N locale;
-	private final InfiniteList<Actor> turns = new InfiniteList<>();
+	private final List<Actor> actors = new ArrayList<>();
 	private final BondedList<Actor> hunters = new BondedList<>((a, it) -> {
 		if (getActors(Team.HUNTERS).size() >= 6) return false;
 
 		a.setFleed(false);
 		a.setTeam(Team.HUNTERS);
 		a.setGame(getGame());
-		regenTurns = true;
+
+		actors.add(a);
+		actors.sort(Comparator
+				.comparingInt(Actor::getInitiative)
+				.thenComparingInt(n -> Calc.rng(20, seed - n.hashCode()))
+		);
 
 		a.getSenshi().setAvailable(true);
 		return true;
 	}, a -> {
 		a.setHp(0);
-		turns.remove(a);
+		actors.remove(a);
 	});
 	private final BondedList<Actor> keepers = new BondedList<>((a, it) -> {
 		if (getActors(Team.KEEPERS).size() >= 6) return false;
@@ -77,20 +81,25 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setFleed(false);
 		a.setTeam(Team.KEEPERS);
 		a.setGame(getGame());
-		regenTurns = true;
+
+		actors.add(a);
+		actors.sort(Comparator
+				.comparingInt(Actor::getInitiative)
+				.thenComparingInt(n -> Calc.rng(20, seed - n.hashCode()))
+		);
 
 		a.getSenshi().setAvailable(true);
 		return true;
 	}, a -> {
 		a.setHp(0);
-		turns.remove(a);
+		actors.remove(a);
 	});
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
 	private final RandomList<Actor> rngList = new RandomList<>();
 	private final Set<EffectBase> effects = new HashSet<>();
 
 	private CompletableFuture<Runnable> lock;
-	private boolean done, regenTurns;
+	private boolean done;
 	private Actor current;
 
 	public Combat(Dunhun game, MonsterBase<?>... enemies) {
@@ -204,16 +213,8 @@ public class Combat implements Renderer<BufferedImage> {
 	public void process() {
 		if (done) return;
 
-		generateTurns();
-		regenTurns = false;
-
 		loop:
-		for (Actor turn : turns) {
-			if (regenTurns) {
-				generateTurns();
-				regenTurns = false;
-			}
-
+		for (Actor turn : new InfiniteIterator<>(actors)) {
 			if (game.isClosed()) break;
 			else if (hunters.stream().allMatch(Actor::isSkipped)) break;
 			else if (keepers.stream().allMatch(Actor::isSkipped)) break;
@@ -713,8 +714,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public List<Actor> getActors(boolean removeDead) {
-		return Stream.of(hunters, keepers)
-				.flatMap(List::stream)
+		return actors.stream()
 				.filter(a -> !removeDead || !a.isSkipped())
 				.toList();
 	}
@@ -754,28 +754,8 @@ public class Combat implements Renderer<BufferedImage> {
 		return current;
 	}
 
-	public InfiniteList<Actor> getTurns() {
-		return turns;
-	}
-
 	public boolean isDone() {
 		return done;
-	}
-
-	public void generateTurns() {
-		Set<Actor> pool = new HashSet<>(getTurns().values());
-		pool.addAll(hunters);
-		pool.addAll(keepers);
-
-		turns.clear();
-		pool.stream()
-				.sorted(Comparator
-						.comparingInt(Actor::getInitiative).reversed()
-						.thenComparingInt(a -> Calc.rng(20, seed - a.hashCode()))
-				)
-				.forEach(turns::add);
-
-		turns.setIndex(turns.indexOf(current));
 	}
 
 	public void trigger(Trigger t) {
