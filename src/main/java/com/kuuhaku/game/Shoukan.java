@@ -403,7 +403,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("empower(?<indexes>(,\\d)+)")
+	@PlayerAction("empower(?<indexes>(,\\d+)+)")
 	private boolean debEmpower(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
@@ -411,7 +411,7 @@ public class Shoukan extends GameInstance<Phase> {
 			List<String> added = new ArrayList<>();
 
 			for (String idx : ids.split(",")) {
-				int i = Integer.parseInt(idx);
+				int i = Integer.parseInt(idx) - 1;
 				if (Utils.between(i, 0, curr.getCards().size())) {
 					if (curr.getCards().get(i) instanceof EffectHolder<?> eh) {
 						eh.setFlag(Flag.EMPOWERED);

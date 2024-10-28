@@ -51,8 +51,8 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 		this.source = source;
 
 		Set<Target> tgts = new HashSet<>(List.of(targets));
-		if (source.card() instanceof Senshi s) {
-			if (s.hasFlag(Flag.EMPOWERED)) {
+		if (source.card() instanceof EffectHolder<?> eh) {
+			if (eh.hasFlag(Flag.EMPOWERED)) {
 				for (Target tgt : targets) {
 					if (tgt.trigger() == null) continue;
 
@@ -65,10 +65,12 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 				}
 			}
 
-			for (Target tgt : tgts) {
-				Senshi card = tgt.card();
-				if (card != null) {
-					card.setLastInteraction(s);
+			if (eh instanceof Senshi s) {
+				for (Target tgt : tgts) {
+					Senshi card = tgt.card();
+					if (card != null) {
+						card.setLastInteraction(s);
+					}
 				}
 			}
 		}
