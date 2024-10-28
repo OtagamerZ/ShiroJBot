@@ -349,7 +349,7 @@ public class Combat implements Renderer<BufferedImage> {
 						boolean validWpn = skill.getReqWeapons().isEmpty()
 										   || h.getEquipment().getWeaponList()
 												   .stream()
-												   .anyMatch(g -> skill.getReqWeapons().contains(g.getBasetype().getStats().wpnType()));
+												   .anyMatch(g -> skill.getReqWeapons().contains(g.getBasetype().getStats().gearType().getId()));
 
 						if (!validWpn) {
 							game.getChannel().sendMessage(locale.get("error/invalid_weapon")).queue();

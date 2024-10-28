@@ -89,8 +89,8 @@ public class HeroInspectCommand implements Executable {
 		JSONArray tags = g.getTags();
 		if (!tags.isEmpty()) {
 			List<String> tgs = new ArrayList<>();
-			if (g.getBasetype().getStats().wpnType() != null) {
-				tgs.add(locale.get("wpn/" + g.getBasetype().getStats().wpnType()));
+			if (g.getBasetype().getStats().gearType() != null) {
+				tgs.add(g.getBasetype().getStats().gearType().getInfo(locale).getName());
 			}
 
 			tgs.addAll(tags.stream()

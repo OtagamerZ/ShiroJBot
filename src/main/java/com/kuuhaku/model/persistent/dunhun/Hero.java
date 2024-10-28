@@ -47,7 +47,6 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.TreeBag;
 import org.apache.commons.text.WordUtils;
@@ -428,7 +427,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 			g.load(locale, this);
 			def += g.getDfs();
-			if (g.getBasetype().getStats().wpnType() == null) {
+			if (g.getBasetype().getStats().gearType() == null) {
 				dmg += g.getDmg();
 			}
 		}

@@ -25,7 +25,6 @@ import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AttrType;
-import com.kuuhaku.model.enums.dunhun.WeaponType;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
@@ -221,14 +220,8 @@ public class Skill extends DAO<Skill> {
 		return requirements;
 	}
 
-	public Set<WeaponType> getReqWeapons() {
-		Set<WeaponType> out = EnumSet.noneOf(WeaponType.class);
-		for (int i = 0; i < reqWeapons.size(); i++) {
-			WeaponType type = reqWeapons.getEnum(WeaponType.class, i);
-			if (type != null) out.add(type);
-		}
-
-		return out;
+	public JSONArray getReqWeapons() {
+		return reqWeapons;
 	}
 
 	public Race getReqRace() {
