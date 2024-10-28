@@ -136,6 +136,7 @@ public class Affix extends DAO<Affix> {
 
 		JSONArray tags = new JSONArray(base.getStats().tags());
 		tags.add(base.getStats().slot().name());
+		tags.add(base.getStats().wpnType().name());
 
 		JSONArray affixes = new JSONArray();
 		List<Integer> groups = new ArrayList<>();
