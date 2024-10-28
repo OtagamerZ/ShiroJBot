@@ -249,10 +249,19 @@ public class Deck extends DAO<Deck> {
 
 		if (!Utils.between(count, 0, 26)) {
 			return false;
-		} else if (evos.values().stream().filter(p -> p.getFirst().getTier() == 4).count() > getMaxEvogearCopies(4)) {
-			return false;
-		} else if (evos.values().stream().filter(p -> p.getFirst().getTags().contains("STRATAGEM")).count() > 2) {
-			return false;
+		}
+
+		int t4 = 0, strats = 0;
+		int t4Max = getMaxEvogearCopies(4);
+		for (Pair<Evogear, AtomicInteger> e : evos.values()) {
+			if (e.getFirst().getTier() == 4) {
+				t4 += e.getSecond().get();
+			}
+			if (e.getFirst().getTags().contains("STRATAGEM")) {
+				strats += e.getSecond().get();
+			}
+
+			if (t4 > t4Max || strats > 2) return false;
 		}
 
 		evos.values().removeIf(p -> p.getSecond().get() <= getMaxEvogearCopies(p.getFirst().getTier()));
