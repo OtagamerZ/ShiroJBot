@@ -106,6 +106,7 @@ public class MonsterStats {
 
 		try {
 			Utils.exec(getClass().getSimpleName(), lootGenerator, Map.of(
+					"actor", self,
 					"loot", loot,
 					"dungeon", self.getGame(),
 					"mult", mult
