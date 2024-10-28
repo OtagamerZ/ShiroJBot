@@ -30,6 +30,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Utils;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public record EffectParameters(Trigger trigger, Side side, DeferredTrigger referee, Source source, Target... targets) {
 	public EffectParameters(Trigger trigger, Side side) {
@@ -49,33 +50,16 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 		this.side = side;
 		this.referee = referee;
 		this.source = source;
+		this.targets = targets;
 
-		Set<Target> tgts = new HashSet<>(List.of(targets));
-		if (source.card() instanceof EffectHolder<?> eh) {
-			if (eh.hasFlag(Flag.EMPOWERED)) {
-				for (Target tgt : targets) {
-					if (tgt.trigger() == null) continue;
-
-					Senshi t = tgt.card();
-					if (t != null) {
-						for (Senshi n : t.getNearby()) {
-							tgts.add(new Target(n, n.getIndex(), tgt.trigger(), tgt.type()));
-						}
-					}
-				}
-			}
-
-			if (eh instanceof Senshi s) {
-				for (Target tgt : tgts) {
-					Senshi card = tgt.card();
-					if (card != null) {
-						card.setLastInteraction(s);
-					}
+		if (source.card() instanceof Senshi s) {
+			for (Target tgt : targets) {
+				Senshi card = tgt.card();
+				if (card != null) {
+					card.setLastInteraction(s);
 				}
 			}
 		}
-
-		this.targets = tgts.toArray(Target[]::new);
 	}
 
 	public void consumeShields() {
@@ -106,6 +90,15 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 			if (t.card() != null && t.card().getIndex() != t.index()) {
 				t.skip().set(true);
 			}
+		}
+
+		if (source.card() instanceof EffectHolder<?> eh && eh.hasFlag(Flag.EMPOWERED)) {
+			return Stream.of(targets)
+					.flatMap(t -> Stream.concat(
+							Stream.of(t),
+							t.card().getNearby().stream().map(n -> n.asTarget(t.trigger(), t.type()))
+					))
+					.toArray(Target[]::new);
 		}
 
 		return targets;

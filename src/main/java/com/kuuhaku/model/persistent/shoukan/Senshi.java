@@ -60,6 +60,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 import java.util.function.ToIntFunction;
 import java.util.random.RandomGenerator;
+import java.util.stream.Stream;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
@@ -472,25 +473,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public List<Senshi> getNearby() {
 		if (slot == null) return List.of();
 
-		List<Senshi> out = new ArrayList<>();
-
-		if (getLeft() != null) {
-			out.add(getLeft());
-		}
-
-		if (getFrontline() != null) {
-			out.add(getFrontline());
-		}
-
-		if (getSupport() != null) {
-			out.add(getSupport());
-		}
-
-		if (getRight() != null) {
-			out.add(getRight());
-		}
-
-		return out;
+		return Stream.of(getLeft(), getRight(), getFrontline(), getSupport())
+				.filter(Objects::nonNull)
+				.toList();
 	}
 
 	@Override
