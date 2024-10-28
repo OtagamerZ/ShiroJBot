@@ -69,6 +69,7 @@ import static com.kuuhaku.model.enums.shoukan.Trigger.ON_DRAW_SINGLE;
 
 public class Hand {
 	private final long SERIAL = ThreadLocalRandom.current().nextLong();
+	private final BondedList<Drawable<?>> fakeDeck = new BondedList<>((a, b) -> false);
 
 	private final Shoukan game;
 	private final Deck userDeck;
@@ -141,7 +142,8 @@ public class Hand {
 		return !(d instanceof EffectHolder<?> eh && eh.hasFlag(Flag.DESTROY));
 	}, d -> d.setCurrentStack(getDiscard(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
-		if (getRealDeck(false).contains(d)) return false;
+		if (getLockTime(Lock.DECK) > 0) return false;
+		else if (getRealDeck(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
 			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
 				d.reset();
@@ -420,7 +422,7 @@ public class Hand {
 
 	public BondedList<Drawable<?>> getDeck() {
 		if (getLockTime(Lock.DECK) > 0) {
-			return new BondedList<>();
+			return fakeDeck;
 		}
 
 		return getRealDeck();
@@ -659,6 +661,8 @@ public class Hand {
 	}
 
 	public void rerollHand() {
+		if (getLockTime(Lock.DECK) > 0) return;
+
 		var reroll = cards.stream()
 				.filter(Drawable::isAvailable)
 				.toList();
