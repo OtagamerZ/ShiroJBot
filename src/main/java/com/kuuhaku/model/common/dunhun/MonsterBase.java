@@ -288,11 +288,11 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		return Objects.hash(SERIAL, id);
 	}
 
-	public static MonsterBase<?> dummy(Actor of) {
+	public static Monster dummy(Actor of) {
 		MonsterBase<?> dummy = new Monster("DUMMY");
 		dummy.game = of.getGame();
 		dummy.senshiCache = of.getSenshi().copy();
 
-		return dummy;
+		return (Monster) dummy;
 	}
 }
