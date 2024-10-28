@@ -45,6 +45,15 @@ public class LocalizedMonster extends DAO<LocalizedMonster> implements Serializa
 
 	private transient boolean uwu = false;
 
+	public LocalizedMonster() {
+	}
+
+	public LocalizedMonster(LocalizedId id, String name, String ending) {
+		this.id = id;
+		this.name = name;
+		this.ending = ending;
+	}
+
 	public LocalizedId getId() {
 		return id;
 	}

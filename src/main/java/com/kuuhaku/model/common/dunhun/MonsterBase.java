@@ -18,6 +18,7 @@ import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.dunhun.CombatContext;
+import com.kuuhaku.model.records.id.LocalizedId;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
@@ -291,6 +292,10 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	public static Monster dummy(Actor of) {
 		MonsterBase<?> dummy = new Monster("DUMMY");
 		dummy.game = of.getGame();
+		dummy.infos.add(new LocalizedMonster(
+				new LocalizedId("DUMMY", I18N.EN),
+				"Dummy", null
+		));
 
 		Senshi sof = of.getSenshi();
 		dummy.stats = new MonsterStats(
