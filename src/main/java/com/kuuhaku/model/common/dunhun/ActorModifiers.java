@@ -108,7 +108,7 @@ public class ActorModifiers implements Iterable<CumValue> {
 	public void expireMods(Senshi sen) {
 		sen.getStats().expireMods();
 
-		removeIf(mod -> {
+		removeIf(sen, mod -> {
 			if (mod.getExpiration() > 0) {
 				mod.decExpiration();
 			}
@@ -117,11 +117,14 @@ public class ActorModifiers implements Iterable<CumValue> {
 		});
 	}
 
-	public void clear() {
-		removeIf(o -> true);
+	public void clear(Senshi sen) {
+		sen.getStats().removeIf(o -> true);
+		removeIf(sen, o -> true);
 	}
 
-	public void removeIf(Predicate<ValueMod> check) {
+	public void removeIf(Senshi sen, Predicate<ValueMod> check) {
+		sen.getStats().removeIf(check);
+
 		if (fieldCache == null) {
 			fieldCache = getClass().getDeclaredFields();
 		}

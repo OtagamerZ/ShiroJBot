@@ -306,6 +306,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 		ButtonizeHelper helper;
 		if (execute) {
+			for (Actor a : getActors()) {
+				a.getModifiers().removeIf(a.getSenshi(), m -> m.getExpiration() == 0);
+			}
+
 			if (current instanceof Hero h) {
 				helper = new ButtonizeHelper(true)
 						.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
