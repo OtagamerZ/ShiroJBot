@@ -135,7 +135,7 @@ public class Affix extends DAO<Affix> {
 		Basetype base = gear.getBasetype();
 
 		JSONArray tags = new JSONArray(base.getStats().allTags());
-		tags.add(base.getStats().slot().name());
+		tags.add(base.getStats().gearType().getSlot().name());
 
 		JSONArray affixes = new JSONArray();
 		List<Integer> groups = new ArrayList<>();
