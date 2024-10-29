@@ -24,7 +24,14 @@ public class ItemUseException extends RuntimeException {
 	@Serial
 	private static final long serialVersionUID = -5447658789385700637L;
 
-	public ItemUseException(String key) {
+	private final Object[] args;
+
+	public ItemUseException(String key, Object... args) {
 		super(key, null, true, false);
+		this.args = args;
+	}
+
+	public Object[] getArgs() {
+		return args;
 	}
 }

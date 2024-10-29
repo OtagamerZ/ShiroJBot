@@ -38,6 +38,7 @@ import net.dv8tion.jda.api.JDA;
 
 import java.util.List;
 import java.util.Map;
+import java.util.MissingFormatArgumentException;
 
 @Command(
 		name = "items",
@@ -82,7 +83,12 @@ public class UseItemCommand implements Executable {
 							event.channel().sendMessage(locale.get("error/item_not_usable")).queue();
 							return true;
 						} catch (ItemUseException e) {
-							event.channel().sendMessage(LocalizedString.get(locale, e.getMessage(), locale.get(e.getMessage()))).queue();
+							String out = locale.get(e.getMessage(), e.getArgs());
+							if (out.isBlank() || out.equalsIgnoreCase(e.getMessage())) {
+								out = LocalizedString.get(locale, e.getMessage(), "").formatted(e.getArgs());
+							}
+
+							event.channel().sendMessage(Utils.getOr(out, e.getMessage())).queue();
 							return true;
 						} catch (Exception e) {
 							event.channel().sendMessage(locale.get("error/item_invalid_args")).queue();
