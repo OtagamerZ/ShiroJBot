@@ -39,9 +39,6 @@ public record GearStats(
 		float critical,
 		@Embedded
 		Attributes requirements,
-		@Enumerated(EnumType.STRING)
-		@Column(name = "slot", nullable = false)
-		GearSlot slot,
 		@ManyToOne
 		@JoinColumn(name = "gear_type", nullable = false)
 		GearType gearType,
