@@ -114,8 +114,8 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	}
 
 	@Override
-	public void setHp(int value) {
-		hp.set(Calc.clamp(value, 0, getMaxHp()));
+	public void setHp(int value, boolean bypass) {
+		hp.set(Calc.clamp(value, 0, getMaxHp()), bypass);
 	}
 
 	@Override

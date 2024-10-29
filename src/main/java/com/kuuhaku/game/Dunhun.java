@@ -122,7 +122,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					getCombat().process();
 
 					Hero winner = heroes.values().stream()
-							.filter(h -> h.getHp() > 0 && !h.hasFleed())
+							.filter(h -> !h.isOutOfCombat())
 							.findFirst().orElse(null);
 
 					if (winner != null) {
@@ -167,7 +167,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					getCombat().process();
 				}
 
-				if (heroes.values().stream().allMatch(h -> h.getHp() <= 0 || h.hasFleed())) {
+				if (heroes.values().stream().allMatch(Actor::isOutOfCombat)) {
 					reportResult(GameReport.SUCCESS, "str/dungeon_fail",
 							Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
 							getTurn()

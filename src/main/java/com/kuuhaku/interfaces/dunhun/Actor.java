@@ -66,7 +66,7 @@ public interface Actor {
 		}
 
 		int diff = getHp();
-		setHp(getHp() + value);
+		setHp(getHp() + value, pure);
 		diff = getHp() - diff;
 
 		if (diff == 0) return;
@@ -86,7 +86,11 @@ public interface Actor {
 		}
 	}
 
-	void setHp(int value);
+	default void setHp(int value) {
+		setHp(value, false);
+	}
+
+	void setHp(int value, boolean bypass);
 
 	default void revive(int value) {
 		if (getHp() >= value) return;
@@ -160,7 +164,7 @@ public interface Actor {
 
 	void setFleed(boolean flee);
 
-	default boolean isSkipped() {
+	default boolean isOutOfCombat() {
 		return hasFleed() || getHp() <= 0;
 	}
 

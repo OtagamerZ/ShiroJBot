@@ -170,8 +170,8 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	@Override
-	public void setHp(int value) {
-		hp.set(Calc.clamp(value, 0, getMaxHp()));
+	public void setHp(int value, boolean bypass) {
+		hp.set(Calc.clamp(value, 0, getMaxHp()), bypass);
 	}
 
 	@Override

@@ -33,7 +33,14 @@ public class Delta<T> {
 	}
 
 	public void set(T value) {
-		previous = current;
+		set(value, false);
+	}
+
+	public void set(T value, boolean bypass) {
+		if (!bypass) {
+			previous = current;
+		}
+
 		current = value;
 	}
 

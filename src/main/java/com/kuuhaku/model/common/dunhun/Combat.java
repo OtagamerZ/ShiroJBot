@@ -138,7 +138,7 @@ public class Combat implements Renderer<BufferedImage> {
 		for (List<Actor> acts : List.of(hunters, keepers)) {
 			for (Actor a : acts) {
 				BufferedImage card;
-				if (a.isSkipped()) {
+				if (a.isOutOfCombat()) {
 					a.getSenshi().setAvailable(false);
 					BufferedImage overlay = IO.getResourceAsImage("shoukan/states/" + (a.getHp() <= 0 ? "dead" : "flee") + ".png");
 
@@ -208,14 +208,14 @@ public class Combat implements Renderer<BufferedImage> {
 		loop:
 		for (Actor turn : new InfiniteIterator<>(actors)) {
 			if (game.isClosed()) break;
-			else if (hunters.stream().allMatch(Actor::isSkipped)) break;
-			else if (keepers.stream().allMatch(Actor::isSkipped)) break;
+			else if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
+			else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
 
 			current = turn;
 			if (current == null) break;
 
 			try {
-				boolean skip = !current.getSenshi().isAvailable() || current.getSenshi().isStasis() || current.isSkipped();
+				boolean skip = !current.getSenshi().isAvailable() || current.getSenshi().isStasis() || current.isOutOfCombat();
 
 				current.getSenshi().reduceDebuffs(1);
 				for (Skill s : current.getSkills()) {
@@ -223,15 +223,15 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				if (skip) {
-					if (hunters.stream().allMatch(Actor::isSkipped)) break;
-					else if (keepers.stream().allMatch(Actor::isSkipped)) break;
+					if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
+					else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
 					continue;
 				}
 
 				current.modAp(current.getMaxAp());
 				current.getSenshi().setDefending(false);
 
-				while (!current.isSkipped() && current.getAp() > 0) {
+				while (!current.isOutOfCombat() && current.getAp() > 0) {
 					trigger(Trigger.ON_TICK);
 
 					Runnable action = reload().get();
@@ -239,8 +239,8 @@ public class Combat implements Renderer<BufferedImage> {
 						action.run();
 					}
 
-					if (hunters.stream().allMatch(Actor::isSkipped)) break loop;
-					else if (keepers.stream().allMatch(Actor::isSkipped)) break loop;
+					if (hunters.stream().allMatch(Actor::isOutOfCombat)) break loop;
+					else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break loop;
 				}
 			} catch (Exception e) {
 				Constants.LOGGER.warn(e, e);
@@ -311,7 +311,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			helper.addAction(Utils.parseEmoji("🗡"), w -> {
 				List<Actor> tgts = getActors(h.getTeam().getOther()).stream()
-						.map(a -> a.isSkipped() ? null : a)
+						.map(a -> a.isOutOfCombat() ? null : a)
 						.toList();
 
 				addSelector(w.getMessage(), helper, tgts,
@@ -423,7 +423,7 @@ public class Combat implements Renderer<BufferedImage> {
 					boolean canDefend = current.getSenshi().getDfs() > 0;
 
 					List<Actor> tgts = getActors(current.getTeam().getOther()).stream()
-							.filter(a -> !a.isSkipped())
+							.filter(a -> !a.isOutOfCombat())
 							.toList();
 
 					double threat = tgts.stream()
@@ -467,7 +467,7 @@ public class Combat implements Renderer<BufferedImage> {
 					if (!skills.isEmpty() && (forcing || !canAttack || Calc.chance(33))) {
 						Skill skill = Utils.getRandomEntry(skills);
 						tgts = skill.getTargets(this, current).stream()
-								.filter(a -> a != null && !a.isSkipped())
+								.filter(a -> a != null && !a.isOutOfCombat())
 								.toList();
 
 						if (!tgts.isEmpty()) {
@@ -712,7 +712,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public List<Actor> getActors(boolean removeDead) {
 		return actors.stream()
-				.filter(a -> !removeDead || !a.isSkipped())
+				.filter(a -> !removeDead || !a.isOutOfCombat())
 				.toList();
 	}
 
@@ -728,7 +728,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		if (removeDead) {
 			out = out.stream()
-					.filter(a -> !a.isSkipped())
+					.filter(a -> !a.isOutOfCombat())
 					.toList();
 		}
 
