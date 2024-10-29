@@ -174,17 +174,18 @@ public class HeroInspectCommand implements Executable {
 				case UNIQUE -> new Color(0xC64C00);
 			}).getRGB());
 
-			int[] out = new int[4];
+			ThreadLocal<int[]> out = ThreadLocal.withInitial(() -> new int[4]);
 			BufferedImage icon = IO.getImage(e.getImageUrl());
 			Graph.forEachPixel(icon, (x, y, rgb) -> {
 				double bright = (rgb & 0xFF) / 255d;
+				int[] aux = out.get();
 
-				out[0] = (rgb >> 24) & 0xFF;
+				aux[0] = (rgb >> 24) & 0xFF;
 				for (int i = 1; i < color.length; i++) {
-					out[i] = (int) (color[i] * bright);
+					aux[i] = (int) (color[i] * bright);
 				}
 
-				return Graph.packRGB(out);
+				return Graph.packRGB(aux);
 			});
 
 			ma.addFiles(FileUpload.fromData(IO.getBytes(icon, "png"), "thumb.png"));
