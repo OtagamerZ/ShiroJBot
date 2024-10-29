@@ -37,7 +37,7 @@ import net.dv8tion.jda.api.JDA;
 		path = "unequip",
 		category = Category.STAFF
 )
-@Syntax("<id:number:r>")
+@Syntax("<gear:number:r>")
 public class HeroUnequipCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

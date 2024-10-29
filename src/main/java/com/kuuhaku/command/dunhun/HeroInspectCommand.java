@@ -58,7 +58,7 @@ import java.util.List;
 		path = "inspect",
 		category = Category.STAFF
 )
-@Syntax("<id:number:r>")
+@Syntax("<gear:number:r>")
 public class HeroInspectCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

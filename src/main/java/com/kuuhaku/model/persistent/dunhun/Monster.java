@@ -202,7 +202,7 @@ public class Monster extends MonsterBase<Monster> {
 
 		List<AffixType> pool = new ArrayList<>(List.of(AffixType.monsterValues()));
 
-		int min = rarity == RarityClass.MAGIC ? 1 : 2;
+		int min = rarity.getMaxMods() / 2;
 		List<AffixType> rolled = Utils.getRandomN(pool, Calc.rng(min, min * 2), min);
 
 		for (AffixType type : rolled) {
