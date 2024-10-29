@@ -19,7 +19,6 @@
 -- DROP VIEW IF EXISTS v_basetype_attr_set;
 CREATE OR REPLACE VIEW v_basetype_attr_set AS
 SELECT id
-     , slot
      , gear_type
      , str
      , dex
@@ -29,7 +28,6 @@ SELECT id
      , x.class
 FROM (
      SELECT id
-          , slot
           , gear_type
           , bit_get(attributes, 8, 0) AS str
           , bit_get(attributes, 8, 1) AS dex
