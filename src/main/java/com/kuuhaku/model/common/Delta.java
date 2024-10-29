@@ -37,6 +37,7 @@ public class Delta<T> {
 	}
 
 	public void set(T value, boolean bypass) {
+		if (current == value) return;
 		if (!bypass) {
 			previous = current;
 		}
