@@ -132,6 +132,23 @@ public class Affix extends DAO<Affix> {
 	}
 
 	public static Affix getRandom(Gear gear, AffixType type, int level) {
+		if (type == null) {
+			List<AffixType> left = new ArrayList<>();
+			left.addAll(List.of(AffixType.itemValues()));
+			left.addAll(List.of(AffixType.itemValues()));
+
+			for (GearAffix ga : gear.getAffixes()) {
+				int idx = left.indexOf(ga.getAffix().getType());
+				if (idx > -1) {
+					left.remove(idx);
+				}
+			}
+
+			if (left.isEmpty()) return null;
+
+			type = Utils.getRandomEntry(left);
+		}
+
 		Basetype base = gear.getBasetype();
 
 		JSONArray tags = new JSONArray(base.getStats().allTags());
@@ -170,6 +187,23 @@ public class Affix extends DAO<Affix> {
 	}
 
 	public static Affix getRandom(Monster monster, AffixType type, int level) {
+		if (type == null) {
+			List<AffixType> left = new ArrayList<>();
+			left.addAll(List.of(AffixType.itemValues()));
+			left.addAll(List.of(AffixType.itemValues()));
+
+			for (Affix ga : monster.getAffixes()) {
+				int idx = left.indexOf(ga.getType());
+				if (idx > -1) {
+					left.remove(idx);
+				}
+			}
+
+			if (left.isEmpty()) return null;
+
+			type = Utils.getRandomEntry(left);
+		}
+
 		JSONArray affixes = new JSONArray();
 		List<Integer> groups = new ArrayList<>();
 
@@ -187,7 +221,7 @@ public class Affix extends DAO<Affix> {
 				FROM affix
 				WHERE type = ?1
 				  AND weight > 0
-  				  AND min_level <= ?2
+				  AND min_level <= ?2
 				  AND NOT has(get_affix_family(cast(?3 AS JSONB)), get_affix_family(id))
 				  AND (affix_group IS NULL OR affix_group NOT IN ?4)
 				""", type.name(), level, affixes.toString(), groups);
