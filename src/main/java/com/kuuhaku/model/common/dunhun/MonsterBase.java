@@ -292,10 +292,13 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	public static Monster dummy(Actor of) {
 		MonsterBase<?> dummy = new Monster("DUMMY");
 		dummy.game = of.getGame();
-		dummy.infos.add(new LocalizedMonster(
-				new LocalizedId("DUMMY", I18N.EN),
-				"Dummy", null
-		));
+
+		for (I18N loc : I18N.validValues()) {
+			dummy.infos.add(new LocalizedMonster(
+					new LocalizedId("DUMMY", loc),
+					"Dummy", null
+			));
+		}
 
 		Senshi sof = of.getSenshi();
 		dummy.stats = new MonsterStats(
