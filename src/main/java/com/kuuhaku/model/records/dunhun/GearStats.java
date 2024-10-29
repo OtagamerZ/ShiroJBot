@@ -43,7 +43,7 @@ public record GearStats(
 		@Column(name = "slot", nullable = false)
 		GearSlot slot,
 		@ManyToOne
-		@JoinColumn(name = "gear_type")
+		@JoinColumn(name = "gear_type", nullable = false)
 		GearType gearType,
 		@JdbcTypeCode(SqlTypes.JSON)
 		@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
@@ -58,11 +58,7 @@ public record GearStats(
 	public JSONArray allTags() {
 		JSONArray tags = new JSONArray();
 		tags.addAll(tags());
-
-		if (gearType != null) {
-			tags.add(gearType.getId());
-			tags.addAll(gearType.getTags());
-		}
+		tags.addAll(gearType.getTags());
 
 		return tags;
 	}

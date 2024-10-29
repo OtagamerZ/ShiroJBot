@@ -62,10 +62,7 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setGame(getGame());
 
 		actors.add(a);
-		actors.sort(Comparator
-				.comparingInt(Actor::getInitiative)
-				.thenComparingInt(n -> Calc.rng(20, seed - n.hashCode()))
-		);
+		sortTurns();
 
 		a.getSenshi().setAvailable(true);
 		return true;
@@ -81,10 +78,7 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setGame(getGame());
 
 		actors.add(a);
-		actors.sort(Comparator
-				.comparingInt(Actor::getInitiative)
-				.thenComparingInt(n -> Calc.rng(20, seed - n.hashCode()))
-		);
+		sortTurns();
 
 		a.getSenshi().setAvailable(true);
 		return true;
@@ -792,5 +786,12 @@ public class Combat implements Renderer<BufferedImage> {
 		if (from != null && to != null) {
 			from.trigger(t, to);
 		}
+	}
+
+	public void sortTurns() {
+		actors.sort(Comparator
+				.comparingInt(Actor::getInitiative).reversed()
+				.thenComparingInt(n -> Calc.rng(20, seed - n.hashCode()))
+		);
 	}
 }

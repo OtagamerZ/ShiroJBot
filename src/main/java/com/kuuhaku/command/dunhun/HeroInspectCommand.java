@@ -44,7 +44,6 @@ import net.dv8tion.jda.api.JDA;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.MissingFormatArgumentException;
 
 @Command(
 		name = "hero",
@@ -89,24 +88,10 @@ public class HeroInspectCommand implements Executable {
 		JSONArray tags = g.getTags();
 		if (!tags.isEmpty()) {
 			List<String> tgs = new ArrayList<>();
-			if (g.getBasetype().getStats().gearType() != null) {
-				tgs.add(g.getBasetype().getStats().gearType().getInfo(locale).getName());
-			}
+			tgs.add(g.getBasetype().getStats().gearType().getInfo(locale).getName());
 
 			tgs.addAll(tags.stream()
-					.map(t -> {
-						try {
-							String key = "tag/" + t;
-							String out = locale.get(key, args);
-							if (out.isBlank() || out.equalsIgnoreCase(key)) {
-								out = LocalizedString.get(locale, key, "");
-							}
-
-							return Utils.getOr(out, key);
-						} catch (MissingFormatArgumentException e) {
-							return "";
-						}
-					})
+					.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
 					.toList()
 			);
 

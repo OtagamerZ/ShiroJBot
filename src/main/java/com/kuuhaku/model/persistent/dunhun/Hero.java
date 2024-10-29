@@ -29,6 +29,7 @@ import com.kuuhaku.model.common.dunhun.SelfEffect;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.ContinueMode;
+import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -427,7 +428,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 			g.load(locale, this);
 			def += g.getDfs();
-			if (g.getBasetype().getStats().gearType() == null) {
+			if (g.getBasetype().getStats().gearType().getSlot() != GearSlot.WEAPON) {
 				dmg += g.getDmg();
 			}
 		}

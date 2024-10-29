@@ -66,11 +66,7 @@ public class Basetype extends DAO<Basetype> {
 	}
 
 	public String getIcon() {
-		if (stats.gearType() != null) {
-			return stats.gearType().getIcon();
-		}
-
-		return "";
+		return stats.gearType().getIcon();
 	}
 
 	public GearStats getStats() {
@@ -101,7 +97,7 @@ public class Basetype extends DAO<Basetype> {
 				     , weight
 				FROM basetype
 				WHERE weight > 0
- 				  AND req_level <= ?1
+					  AND req_level <= ?1
 				""", dropLevel
 		);
 

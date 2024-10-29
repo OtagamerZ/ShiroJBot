@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedGearType;
 import com.ygimenez.json.JSONArray;
@@ -58,6 +59,10 @@ public class GearType extends DAO<GearType> {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "slot", nullable = false)
+	private GearSlot slot;
+
 	public String getId() {
 		return id;
 	}
@@ -75,6 +80,10 @@ public class GearType extends DAO<GearType> {
 
 	public JSONArray getTags() {
 		return tags;
+	}
+
+	public GearSlot getSlot() {
+		return slot;
 	}
 
 	@Override
