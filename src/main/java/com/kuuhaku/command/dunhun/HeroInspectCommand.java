@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.GearAffix;
+import com.kuuhaku.model.persistent.dunhun.GearType;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -40,6 +41,7 @@ import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -73,7 +75,12 @@ public class HeroInspectCommand implements Executable {
 		}
 
 		g.load(locale, h);
+		GearType type = g.getBasetype().getStats().gearType();
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
+
+		if (Utils.parseEmoji(type.getIcon()) instanceof CustomEmoji e) {
+			eb.setThumbnail(e.getImageUrl());
+		}
 
 		if (g.getRarityClass() == RarityClass.RARE) {
 			eb.setTitle(g.getName(locale) + ", " + g.getBasetype().getInfo(locale).getName());
@@ -88,7 +95,7 @@ public class HeroInspectCommand implements Executable {
 		JSONArray tags = g.getTags();
 		if (!tags.isEmpty()) {
 			List<String> tgs = new ArrayList<>();
-			tgs.add(g.getBasetype().getStats().gearType().getInfo(locale).getName());
+			tgs.add(type.getInfo(locale).getName());
 
 			tgs.addAll(tags.stream()
 					.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
