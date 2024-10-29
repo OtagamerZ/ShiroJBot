@@ -371,7 +371,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 				}
 
-				System.out.println("G:" + loot.gear().size() + ", I:" + loot.items().size());
 				lines.sort(String::compareTo);
 				getChannel().buffer(getLocale().get("str/dungeon_loot_split") + "\n" + String.join("\n", lines));
 			}
