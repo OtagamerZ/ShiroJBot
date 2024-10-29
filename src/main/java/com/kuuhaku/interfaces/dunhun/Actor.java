@@ -67,9 +67,6 @@ public interface Actor {
 
 		int diff = getHp();
 		setHp(getHp() + value, pure);
-		diff = getHp() - diff;
-
-		if (diff == 0) return;
 
 		if (!pure && game != null && game.getCombat() != null) {
 			Combat comb = game.getCombat();
@@ -78,6 +75,9 @@ public interface Actor {
 			} else {
 				comb.trigger(Trigger.ON_HEAL, this, this);
 			}
+
+			diff = getHp() - diff;
+			if (diff == 0) return;
 
 			I18N locale = game.getLocale();
 			comb.getHistory().add(locale.get(diff < 0 ? "str/actor_damage" : "str/actor_heal",
