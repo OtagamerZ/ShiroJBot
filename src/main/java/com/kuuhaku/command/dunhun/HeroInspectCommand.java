@@ -36,13 +36,19 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.GearStats;
+import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
+import net.dv8tion.jda.api.utils.FileUpload;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -76,11 +82,8 @@ public class HeroInspectCommand implements Executable {
 
 		g.load(locale, h);
 		GearType type = g.getBasetype().getStats().gearType();
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		if (Utils.parseEmoji(type.getIcon()) instanceof CustomEmoji e) {
-			eb.setThumbnail(e.getImageUrl());
-		}
+		EmbedBuilder eb = new ColorlessEmbedBuilder()
+				.setThumbnail("attachment://thumb.png");
 
 		if (g.getRarityClass() == RarityClass.RARE) {
 			eb.setTitle(g.getName(locale) + ", " + g.getBasetype().getInfo(locale).getName());
@@ -162,6 +165,31 @@ public class HeroInspectCommand implements Executable {
 			eb.appendDescription(ga.getDescription(locale, true) + "\n\n");
 		}
 
-		event.channel().sendMessageEmbeds(eb.build()).queue();
+		MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
+		if (Utils.parseEmoji(type.getIcon()) instanceof CustomEmoji e) {
+			int[] color = Graph.unpackRGB((switch (g.getRarityClass()) {
+				case NORMAL -> Color.WHITE;
+				case MAGIC -> new Color(0x4BA5FF);
+				case RARE -> Color.ORANGE;
+				case UNIQUE -> new Color(0xC64C00);
+			}).getRGB());
+
+			int[] out = new int[4];
+			BufferedImage icon = IO.getImage(e.getImageUrl());
+			Graph.forEachPixel(icon, (x, y, rgb) -> {
+				double bright = (rgb & 0xFF) / 255d;
+
+				out[0] = (rgb >> 24) & 0xFF;
+				for (int i = 1; i < color.length; i++) {
+					out[i] = (int) (color[i] * bright);
+				}
+
+				return Graph.packRGB(out);
+			});
+
+			ma.addFiles(FileUpload.fromData(IO.getBytes(icon, "png"), "thumb.png"));
+		}
+
+		ma.queue();
 	}
 }
