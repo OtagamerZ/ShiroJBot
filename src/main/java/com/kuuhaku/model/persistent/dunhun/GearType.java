@@ -60,7 +60,7 @@ public class GearType extends DAO<GearType> {
 	private JSONArray tags;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "slot")
+	@Column(name = "slot", nullable = false)
 	private GearSlot slot;
 
 	public String getId() {
