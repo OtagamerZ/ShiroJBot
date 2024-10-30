@@ -51,6 +51,7 @@ public class MultiSlot<T> implements Iterable<T> {
 	@SuppressWarnings("unchecked")
 	public List<T> getEntries() {
 		return Stream.of(slots)
+				.filter(Objects::nonNull)
 				.map(o -> (T) o)
 				.toList();
 	}
@@ -63,6 +64,7 @@ public class MultiSlot<T> implements Iterable<T> {
 	@SuppressWarnings("unchecked")
 	public @NotNull Iterator<T> iterator() {
 		return Stream.of(slots)
+				.filter(Objects::nonNull)
 				.map(o -> (T) o)
 				.iterator();
 	}
