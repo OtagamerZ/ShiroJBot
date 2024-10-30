@@ -54,6 +54,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final Dunhun game;
 	private final I18N locale;
 	private final List<Actor> actors = new ArrayList<>();
+	private final List<Actor> played = new ArrayList<>();
 	private final BondedList<Actor> hunters = new BondedList<>((a, it) -> {
 		if (getActors(Team.HUNTERS).size() >= 6) return false;
 
@@ -62,12 +63,13 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setGame(getGame());
 
 		actors.add(a);
+		played.add(a);
 		sortTurns();
 
 		a.getSenshi().setAvailable(true);
 		return true;
 	}, a -> {
-		a.setHp(0);
+		a.setHp(0, true);
 		actors.remove(a);
 	});
 	private final BondedList<Actor> keepers = new BondedList<>((a, it) -> {
@@ -78,12 +80,13 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setGame(getGame());
 
 		actors.add(a);
+		played.add(a);
 		sortTurns();
 
 		a.getSenshi().setAvailable(true);
 		return true;
 	}, a -> {
-		a.setHp(0);
+		a.setHp(0, true);
 		actors.remove(a);
 	});
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
@@ -233,8 +236,9 @@ public class Combat implements Renderer<BufferedImage> {
 
 				while (!current.isOutOfCombat() && current.getAp() > 0) {
 					trigger(Trigger.ON_TICK);
+					System.out.println("loop " + current.getName(locale) + "- Skip: " + current.isOutOfCombat() + " - AP: " + current.getAp());
 
-					Runnable action = reload().get();
+					Runnable action = reload().join();
 					if (action != null) {
 						action.run();
 					}
@@ -287,7 +291,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 	}
 
-	public CompletableFuture<Runnable> reload() {
+	public synchronized CompletableFuture<Runnable> reload() {
 		game.resetTimer();
 
 		lock = new CompletableFuture<>();
@@ -418,19 +422,14 @@ public class Combat implements Renderer<BufferedImage> {
 			helper = null;
 
 			cpu.schedule(() -> {
-				StringTree tree = new StringTree();
-
 				try {
-					tree.addElement("START", "Schedule " + current.getName(locale));
 					boolean canAttack = current.getSenshi().getDmg() > 0;
 					boolean canDefend = current.getSenshi().getDfs() > 0;
 
-					tree.addElement("START", "Can attack: " + canAttack + ", Can defend: " + canDefend);
 					List<Actor> tgts = getActors(current.getTeam().getOther()).stream()
 							.filter(a -> !a.isOutOfCombat())
 							.toList();
 
-					tree.addElement("START", "Targets: " + tgts);
 					double threat = tgts.stream()
 							.mapToInt(a -> a.getHp() * a.getAggroScore() / a.getMaxHp())
 							.average()
@@ -439,9 +438,7 @@ public class Combat implements Renderer<BufferedImage> {
 					double risk = threat / current.getAggroScore();
 					double lifeFac = Math.max(0.5, (double) current.getMaxHp() / current.getHp());
 
-					tree.addElement("START", "ACTION", "T:" + threat + ", R:" + risk + ", L:" + lifeFac);
 					if (current instanceof Monster && risk > 5 && Calc.chance(25)) {
-						tree.addElement("START", "ACTION", "FLEE");
 						current.setFleed(true);
 
 						game.getChannel().sendMessage(locale.get("str/actor_flee", current.getName(locale))).queue();
@@ -449,7 +446,6 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 
 					if (canDefend && current.getAp() == 1 && Calc.chance(5 / lifeFac * risk)) {
-						tree.addElement("START", "ACTION", "DEFEND");
 						current.getSenshi().setDefending(true);
 						current.modAp(-current.getAp());
 
@@ -457,7 +453,6 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					tree.addElement("START", "ACTION", "Checking skills");
 					boolean forcing = false;
 					List<Skill> skills = new ArrayList<>();
 					for (Skill s : current.getSkills()) {
@@ -474,33 +469,25 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 
 					if (!skills.isEmpty() && (forcing || !canAttack || Calc.chance(33))) {
-						tree.addElement("START", "ACTION", "SKILL");
 
 						Skill skill = Utils.getRandomEntry(skills);
-						tree.addElement("START", "ACTION", "SKILL", "Use " + skill.getName(locale));
 
 						tgts = skill.getTargets(this, current).stream()
 								.filter(a -> a != null && !a.isOutOfCombat())
 								.toList();
 
-						tree.addElement("START", "ACTION", "SKILL", "Targets: " + tgts);
 						if (!tgts.isEmpty()) {
 							Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == current.getTeam() ? 1 : a.getAggroScore(), tgts);
-							tree.addElement("START", "ACTION", "SKILL", "At " + t.getName(locale));
 
 							skill(skill, current, t);
 							return;
 						}
 					}
 
-					tree.addElement("START", "ACTION", "ATTACK");
 					attack(current, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 				} finally {
-					tree.addElement("END");
-					System.out.println(tree);
-
 					lock.complete(null);
 				}
 			}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
@@ -724,6 +711,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public Set<EffectBase> getEffects() {
 		return effects;
+	}
+
+	public List<Actor> getPlayed() {
+		return played;
 	}
 
 	public List<Actor> getActors() {
