@@ -52,6 +52,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final Dungeon dungeon;
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
+	private final AtomicReference<Pair<Message, ButtonizeHelper>> event = new AtomicReference<>();
 	private final Loot loot = new Loot();
 	private final Set<EffectBase> effects = new HashSet<>();
 	private final boolean duel;
@@ -165,7 +166,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 					Constants.LOGGER.error(e, e);
 				}
 
-				if (lock != null) lock.join();
+				if (lock != null) {
+					lock.join();
+					event.set(null);
+				}
+
 				if (getCombat() != null) {
 					getCombat().process();
 				}
@@ -314,7 +319,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		getChannel().sendEmbed(eb.build())
 				.apply(helper::apply)
-				.queue(s -> Pages.buttonize(s, helper));
+				.queue(s -> {
+					Pages.buttonize(s, helper);
+					event.set(new Pair<>(s, helper));
+				});
 	}
 
 	private void finish() {
@@ -396,6 +404,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 	@PlayerAction("reload")
 	private void reload(JSONObject args, User u) {
 		if (getCombat() != null) getCombat().getLock().complete(null);
+		if (getEvent() != null) {
+			ButtonizeHelper helper = getEvent().getSecond();
+			helper.apply(getEvent().getFirst().editMessageComponents())
+					.queue(s -> Pages.buttonize(s, helper));
+		}
 	}
 
 	@PlayerAction("info")
@@ -543,6 +556,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public Combat getCombat() {
 		return combat.get();
+	}
+
+	public Pair<Message, ButtonizeHelper> getEvent() {
+		return event.get();
 	}
 
 	public boolean isDuel() {
