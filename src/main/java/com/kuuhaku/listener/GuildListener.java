@@ -611,7 +611,12 @@ public class GuildListener extends ListenerAdapter {
 
 				if (!Constants.STF_PRIVILEGE.apply(data.member())) {
 					int runtime = Math.toIntExact(Duration.between(start, Instant.now()).toMillis());
-					new CommandMetrics(pc.getClass().getSimpleName(), runtime, error).save();
+					new CommandMetrics(
+							data.user().getId(),
+							data.guild().getId(),
+							pc.getClass().getSimpleName(),
+							runtime, error
+					).save();
 
 					ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
 				}
