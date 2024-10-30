@@ -536,7 +536,7 @@ public class GuildListener extends ListenerAdapter {
 						String[] path = sub.name().split("(?=\\.)");
 						path[0] = event.config().getPrefix() + path[0];
 
-						tree.addElement(path);
+						tree.addElement((Object[]) path);
 					}
 
 					msg += " ```" + tree + "```";
