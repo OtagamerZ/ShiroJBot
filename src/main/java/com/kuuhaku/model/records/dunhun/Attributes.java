@@ -25,6 +25,10 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record Attributes(@Column(name = "attributes", nullable = false) int attributes) {
+	public Attributes() {
+		this(0);
+	}
+
 	public Attributes(int str, int dex, int wis, int vit) {
 		this((Math.max(0, str) & 0xFF)
 			 | (Math.max(0, dex) & 0xFF) << 8
