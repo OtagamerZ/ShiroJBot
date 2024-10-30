@@ -418,14 +418,19 @@ public class Combat implements Renderer<BufferedImage> {
 			helper = null;
 
 			cpu.schedule(() -> {
+				StringTree tree = new StringTree();
+
 				try {
+					tree.addElement("START", "Schedule " + current.getName(locale));
 					boolean canAttack = current.getSenshi().getDmg() > 0;
 					boolean canDefend = current.getSenshi().getDfs() > 0;
 
+					tree.addElement("START", "Can attack: " + canAttack + ", Can defend: " + canDefend);
 					List<Actor> tgts = getActors(current.getTeam().getOther()).stream()
 							.filter(a -> !a.isOutOfCombat())
 							.toList();
 
+					tree.addElement("START", "Targets: " + tgts);
 					double threat = tgts.stream()
 							.mapToInt(a -> a.getHp() * a.getAggroScore() / a.getMaxHp())
 							.average()
@@ -434,7 +439,9 @@ public class Combat implements Renderer<BufferedImage> {
 					double risk = threat / current.getAggroScore();
 					double lifeFac = Math.max(0.5, (double) current.getMaxHp() / current.getHp());
 
+					tree.addElement("START", "ACTION", "T:" + threat + ", R:" + risk + ", L:" + lifeFac);
 					if (current instanceof Monster && risk > 5 && Calc.chance(25)) {
+						tree.addElement("START", "ACTION", "FLEE");
 						current.setFleed(true);
 
 						game.getChannel().sendMessage(locale.get("str/actor_flee", current.getName(locale))).queue();
@@ -442,6 +449,7 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 
 					if (canDefend && current.getAp() == 1 && Calc.chance(5 / lifeFac * risk)) {
+						tree.addElement("START", "ACTION", "DEFEND");
 						current.getSenshi().setDefending(true);
 						current.modAp(-current.getAp());
 
@@ -449,6 +457,7 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
+					tree.addElement("START", "Checking skills");
 					boolean forcing = false;
 					List<Skill> skills = new ArrayList<>();
 					for (Skill s : current.getSkills()) {
@@ -465,22 +474,33 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 
 					if (!skills.isEmpty() && (forcing || !canAttack || Calc.chance(33))) {
+						tree.addElement("START", "ACTION", "SKILL");
+
 						Skill skill = Utils.getRandomEntry(skills);
+						tree.addElement("START", "ACTION", "SKILL", "Use " + skill.getName(locale));
+
 						tgts = skill.getTargets(this, current).stream()
 								.filter(a -> a != null && !a.isOutOfCombat())
 								.toList();
 
+						tree.addElement("START", "ACTION", "SKILL", "Targets: " + skill.getName(locale));
 						if (!tgts.isEmpty()) {
 							Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == current.getTeam() ? 1 : a.getAggroScore(), tgts);
+							tree.addElement("START", "ACTION", "SKILL", "At " + t.getName(locale));
+
 							skill(skill, current, t);
 							return;
 						}
 					}
 
+					tree.addElement("START", "ACTION", "ATTACK");
 					attack(current, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 				} finally {
+					tree.addElement("END");
+					System.out.println(tree);
+
 					lock.complete(null);
 				}
 			}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);

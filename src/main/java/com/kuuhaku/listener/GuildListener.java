@@ -33,6 +33,7 @@ import com.kuuhaku.model.common.special.SpecialEvent;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;
+import com.kuuhaku.model.persistent.shiro.CommandMetrics;
 import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.*;
 import com.kuuhaku.util.*;
@@ -57,6 +58,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.Month;
 import java.util.List;
 import java.util.*;
@@ -533,7 +536,7 @@ public class GuildListener extends ListenerAdapter {
 						String[] path = sub.name().split("(?=\\.)");
 						path[0] = event.config().getPrefix() + path[0];
 
-						tree.addElement(path[path.length - 1], path);
+						tree.addElement(path);
 					}
 
 					msg += " ```" + tree + "```";
@@ -596,11 +599,17 @@ public class GuildListener extends ListenerAdapter {
 			try {
 				JSONObject params = SyntaxParser.parse(locale, pc.command(), content.substring(args[0].length()).trim());
 
+				Exception error = null;
+				Instant start = Instant.now();
 				try {
 					pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
 				} catch (Exception e) {
 					data.channel().sendMessage(locale.get("error/error", e)).queue();
 					Constants.LOGGER.error(e, e);
+					error = e;
+				} finally {
+					int runtime = Math.toIntExact(Duration.between(start, Instant.now()).toMillis());
+					new CommandMetrics(pc.getClass().getSimpleName(), runtime, error).save();
 				}
 
 				if (!Constants.STF_PRIVILEGE.apply(data.member())) {

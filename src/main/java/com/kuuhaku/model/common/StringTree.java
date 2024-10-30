@@ -32,14 +32,17 @@ public class StringTree {
 
     private final Root root = new Root();
 
-    public void addElement(Object elem, String... path) {
+    public void addElement(Object... path) {
         TreeNode node = root;
-        for (int i = 0; i < path.length - 1; i++) {
-            String p = path[i];
-            node = node.getChildren().compute(p, (k, v) -> v == null ? new NamedNode(k) : v);
-        }
+        for (int i = 0; i < path.length; i++) {
+            String p = String.valueOf(path[i]);
 
-        node.addNode(new NamedNode(String.valueOf(elem)));
+            if (i == path.length - 1) {
+                node.addNode(new NamedNode(p));
+            } else {
+                node = node.getChildren().compute(p, (k, v) -> v == null ? new NamedNode(k) : v);
+            }
+        }
     }
 
     @Override

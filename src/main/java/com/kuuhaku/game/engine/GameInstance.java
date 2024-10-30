@@ -119,7 +119,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 				try {
 					exec.join();
-				} catch (Exception ignore) {
+				} catch (Exception e) {
+					Constants.LOGGER.error(e, e);
 				}
 			} catch (GameReport e) {
 				initialized = true;
