@@ -437,14 +437,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 	}
 
-	@PlayerAction("info")
-	private void info(JSONObject args, User u) {
+	@PlayerAction("enemies")
+	private void enemies(JSONObject args, User u) {
 		if (getCombat() == null || duel) return;
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		for (Actor a : getCombat().getActors()) {
-			if (!(a instanceof MonsterBase<?> mb)) continue;
+			if (!(a instanceof MonsterBase<?> mb) || a.getTeam() != Team.KEEPERS) continue;
 
 			XStringBuilder sb = new XStringBuilder("#-# " + mb.getInfo(getLocale()).getName());
 
