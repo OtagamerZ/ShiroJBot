@@ -70,8 +70,8 @@ public class CommandMetrics extends DAO<CommandMetrics> {
 		return id;
 	}
 
-	public String getUser() {
-		return user;
+	public String getIssuer() {
+		return issuer;
 	}
 
 	public String getGuild() {
