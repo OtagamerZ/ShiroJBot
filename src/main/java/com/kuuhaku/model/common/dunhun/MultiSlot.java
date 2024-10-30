@@ -1,44 +1,58 @@
 package com.kuuhaku.model.common.dunhun;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class MultiSlot<T> implements Iterable<T> {
-	private final List<T> slots;
+	private final Object[] slots;
 	private final int size;
 
 	public MultiSlot(int size) {
-		this.slots = new ArrayList<>(size);
+		this.slots = new Object[size];
 		this.size = size;
 	}
 
+	@SuppressWarnings("unchecked")
 	public T get(int index) {
-		if (index >= slots.size()) return null;
-		return slots.get(index);
+		if (index >= slots.length) return null;
+		return (T) slots[index];
 	}
 
 	public boolean add(T entry) {
-		if (slots.size() >= size || entry == null) return false;
-		return slots.add(entry);
+		if (entry == null) return false;
+
+		int free = ArrayUtils.indexOf(slots, null);
+		if (free == -1) return false;
+
+		slots[free] = entry;
+		return true;
 	}
 
 	public boolean remove(T entry) {
-		return slots.remove(entry);
+		int idx = ArrayUtils.indexOf(slots, entry);
+		if (idx == -1) return false;
+
+		slots[idx] = null;
+		return true;
 	}
 
 	public void replace(T oldEntry, T newEntry) {
-		if (Objects.equals(oldEntry, newEntry)) return;
+		if (Objects.equals(newEntry, oldEntry)) return;
 
-		int index = slots.indexOf(oldEntry);
-		if (index >= 0) {
-			if (newEntry == null) remove(oldEntry);
-			else slots.set(index, newEntry);
-		}
+		int idx = ArrayUtils.indexOf(slots, oldEntry);
+		if (idx == -1) return;
+
+		slots[idx] = newEntry;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<T> getEntries() {
-		return slots;
+		return Stream.of(slots)
+				.map(o -> (T) o)
+				.toList();
 	}
 
 	public int getSize() {
@@ -46,7 +60,10 @@ public class MultiSlot<T> implements Iterable<T> {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public @NotNull Iterator<T> iterator() {
-		return slots.iterator();
+		return Stream.of(slots)
+				.map(o -> (T) o)
+				.iterator();
 	}
 }

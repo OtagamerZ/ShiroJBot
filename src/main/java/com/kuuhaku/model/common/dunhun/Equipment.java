@@ -45,8 +45,8 @@ public class Equipment implements Iterable<Gear> {
 	private Gear back;
 	private Gear amulet;
 	private Gear belt;
-	private MultiSlot<Gear> rings = new MultiSlot<>(2);
-	private MultiSlot<Gear> weapons = new MultiSlot<>(2);
+	private final MultiSlot<Gear> rings = new MultiSlot<>(2);
+	private final MultiSlot<Gear> weapons = new MultiSlot<>(2);
 
 	public Equipment() {
 	}

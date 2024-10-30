@@ -133,6 +133,8 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public RarityClass getRarityClass() {
+		if (unique != null) return RarityClass.UNIQUE;
+
 		int pre = 0, suf = 0;
 		for (GearAffix ga : affixes) {
 			Affix a = ga.getAffix();
