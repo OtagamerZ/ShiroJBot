@@ -222,13 +222,14 @@ public class Combat implements Renderer<BufferedImage> {
 				Supplier<Boolean> skip = () -> !current.getSenshi().isAvailable()
 											   || current.getSenshi().isStasis()
 											   || current.isOutOfCombat();
+				boolean skipped = skip.get();
 
 				current.getSenshi().reduceDebuffs(1);
 				for (Skill s : current.getSkills()) {
 					s.reduceCd();
 				}
 
-				if (skip.get()) {
+				if (skipped) {
 					if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
 					else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
 					continue;
