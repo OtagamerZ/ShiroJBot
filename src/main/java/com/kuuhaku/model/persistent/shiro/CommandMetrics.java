@@ -34,8 +34,8 @@ public class CommandMetrics extends DAO<CommandMetrics> {
 	@Column(name = "id", nullable = false)
 	private int id;
 
-	@Column(name = "user", nullable = false)
-	private String user;
+	@Column(name = "issuer", nullable = false)
+	private String issuer;
 
 	@Column(name = "guild", nullable = false)
 	private String guild;
@@ -55,8 +55,8 @@ public class CommandMetrics extends DAO<CommandMetrics> {
 	public CommandMetrics() {
 	}
 
-	public CommandMetrics(String user, String guild, String command, int runTime, Exception error) {
-		this.user = user;
+	public CommandMetrics(String issuer, String guild, String command, int runTime, Exception error) {
+		this.issuer = issuer;
 		this.guild = guild;
 		this.command = command;
 		this.runTime = runTime;
