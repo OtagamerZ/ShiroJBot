@@ -11,7 +11,7 @@ import com.kuuhaku.game.engine.NullPhase;
 import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.InfiniteList;
+import com.kuuhaku.model.common.InfiniteIterator;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.EffectBase;
@@ -40,7 +40,10 @@ import org.intellij.lang.annotations.MagicConstant;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -325,7 +328,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 				for (Gear g : loot.gear()) {
 					g.setOwner(h);
 					g.save();
-					g = g.refresh();
 
 					lines.add("- " + g.getName(getLocale()));
 				}
@@ -338,15 +340,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 				lines.sort(String::compareTo);
 				getChannel().buffer(getLocale().get("str/dungeon_loot") + "\n" + String.join("\n", lines));
 			} else {
-				InfiniteList<Hero> robin = new InfiniteList<>(heroes.values());
-				Collections.shuffle(robin);
+				List<Hero> hs = new ArrayList<>(heroes.values());
+				Collections.shuffle(hs);
+
+				InfiniteIterator<Hero> robin = new InfiniteIterator<>(hs);
 
 				List<String> lines = new ArrayList<>();
 				for (Gear g : loot.gear()) {
-					Hero h = robin.getNext();
+					Hero h = robin.next();
 					g.setOwner(h);
 					g.save();
-					g = g.refresh();
 
 					String name = g.getName(getLocale());
 					if (g.getRarityClass() == RarityClass.RARE) {
@@ -358,7 +361,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 				Map<Hero, Map<UserItem, Integer>> split = new HashMap<>();
 				for (UserItem i : loot.items()) {
-					Hero h = robin.getNext();
+					Hero h = robin.next();
 					split.computeIfAbsent(h, k -> new HashMap<>())
 							.compute(i, (k, v) -> v == null ? 1 : v + 1);
 				}

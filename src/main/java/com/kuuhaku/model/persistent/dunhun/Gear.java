@@ -80,6 +80,9 @@ public class Gear extends DAO<Gear> {
 	@Column(name = "base_roll", nullable = false)
 	private int roll = Calc.rng(Integer.MAX_VALUE);
 
+	@Column(name = "seed", nullable = false)
+	private int seed = Calc.rng(Integer.MAX_VALUE);
+
 	private transient final GearModifiers modifiers = new GearModifiers();
 	private transient final Set<SelfEffect> effects = new HashSet<>();
 
@@ -216,8 +219,8 @@ public class Gear extends DAO<Gear> {
 
 		if (getRarityClass() == RarityClass.RARE) {
 			String loc = locale.getParent().name().toLowerCase();
-			String prefix = IO.getLine("dunhun/item/prefix/" + loc + ".dict", Calc.rng(0, 32, id + affixes.hashCode()));
-			String suffix = IO.getLine("dunhun/item/suffix/" + loc + ".dict", Calc.rng(0, 32, id - prefix.hashCode()));
+			String prefix = IO.getLine("dunhun/item/prefix/" + loc + ".dict", Calc.rng(0, 32, seed));
+			String suffix = IO.getLine("dunhun/item/suffix/" + loc + ".dict", Calc.rng(0, 32, seed - prefix.hashCode()));
 
 			AtomicReference<String> ending = new AtomicReference<>("M");
 			prefix = Utils.regex(prefix, "\\[([FM])]").replaceAll(m -> {

@@ -614,7 +614,7 @@ public class GuildListener extends ListenerAdapter {
 					new CommandMetrics(
 							data.user().getId(),
 							data.guild().getId(),
-							pc.getClass().getSimpleName(),
+							pc.name(),
 							runtime, error
 					).save();
 
