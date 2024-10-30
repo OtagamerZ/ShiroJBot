@@ -10,10 +10,7 @@ import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.NullPhase;
 import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.interfaces.dunhun.Actor;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.InfiniteIterator;
-import com.kuuhaku.model.common.RandomList;
-import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
@@ -374,14 +371,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 				lines.sort(String::compareTo);
 				getChannel().buffer(getLocale().get("str/dungeon_loot") + "\n" + String.join("\n", lines));
 			} else {
-				List<Hero> hs = new ArrayList<>(heroes.values());
-				Collections.shuffle(hs);
-
-				InfiniteIterator<Hero> robin = new InfiniteIterator<>(hs);
+				InfiniteList<Hero> robin = new InfiniteList<>(heroes.values());
+				Collections.shuffle(robin);
 
 				List<String> lines = new ArrayList<>();
 				for (Gear g : loot.gear()) {
-					Hero h = robin.next();
+					Hero h = robin.getNext();
 					g.setOwner(h);
 					g.save();
 
@@ -395,7 +390,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 				Map<Hero, Map<UserItem, Integer>> split = new HashMap<>();
 				for (UserItem i : loot.items()) {
-					Hero h = robin.next();
+					Hero h = robin.getNext();
 					split.computeIfAbsent(h, k -> new HashMap<>())
 							.compute(i, (k, v) -> v == null ? 1 : v + 1);
 				}

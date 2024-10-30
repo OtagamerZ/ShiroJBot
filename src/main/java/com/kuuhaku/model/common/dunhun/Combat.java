@@ -54,8 +54,8 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private final Dunhun game;
 	private final I18N locale;
-	private final List<Actor> actors = new ArrayList<>();
 	private final List<Actor> played = new ArrayList<>();
+	private final InfiniteList<Actor> actors = new InfiniteList<>();
 	private final BondedList<Actor> hunters = new BondedList<>((a, it) -> {
 		if (getActors(Team.HUNTERS).size() >= 6) return false;
 
@@ -65,7 +65,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 		actors.add(a);
 		played.add(a);
-		sortTurns();
 
 		a.getSenshi().setAvailable(true);
 		return true;
@@ -82,7 +81,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 		actors.add(a);
 		played.add(a);
-		sortTurns();
 
 		a.getSenshi().setAvailable(true);
 		return true;
@@ -209,8 +207,13 @@ public class Combat implements Renderer<BufferedImage> {
 	public void process() {
 		if (done) return;
 
+		actors.sort(Comparator
+				.comparingInt(Actor::getInitiative).reversed()
+				.thenComparingInt(n -> Calc.rng(20, seed - n.hashCode()))
+		);
+
 		loop:
-		for (Actor turn : new InfiniteIterator<>(actors)) {
+		for (Actor turn : actors) {
 			if (game.isClosed()) break;
 			else if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
 			else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
@@ -240,7 +243,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 				while (!skip.get() && current.getAp() > 0) {
 					trigger(Trigger.ON_TICK);
-					System.out.println("loop " + current.getName(locale) + "- Skip: " + current.isOutOfCombat() + " - AP: " + current.getAp());
 
 					Runnable action = reload().join();
 					if (action != null) {
@@ -726,7 +728,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public List<Actor> getActors(boolean removeDead) {
-		return actors.stream()
+		return actors.values().stream()
 				.filter(a -> !removeDead || !a.isOutOfCombat())
 				.toList();
 	}
@@ -801,12 +803,5 @@ public class Combat implements Renderer<BufferedImage> {
 		if (from != null && to != null) {
 			from.trigger(t, to);
 		}
-	}
-
-	public void sortTurns() {
-		actors.sort(Comparator
-				.comparingInt(Actor::getInitiative).reversed()
-				.thenComparingInt(n -> Calc.rng(20, seed - n.hashCode()))
-		);
 	}
 }
