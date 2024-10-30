@@ -457,7 +457,7 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					tree.addElement("START", "Checking skills");
+					tree.addElement("START", "ACTION", "Checking skills");
 					boolean forcing = false;
 					List<Skill> skills = new ArrayList<>();
 					for (Skill s : current.getSkills()) {
@@ -483,7 +483,7 @@ public class Combat implements Renderer<BufferedImage> {
 								.filter(a -> a != null && !a.isOutOfCombat())
 								.toList();
 
-						tree.addElement("START", "ACTION", "SKILL", "Targets: " + skill.getName(locale));
+						tree.addElement("START", "ACTION", "SKILL", "Targets: " + tgts);
 						if (!tgts.isEmpty()) {
 							Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == current.getTeam() ? 1 : a.getAggroScore(), tgts);
 							tree.addElement("START", "ACTION", "SKILL", "At " + t.getName(locale));
