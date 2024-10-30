@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class Combat implements Renderer<BufferedImage> {
 	private final ScheduledExecutorService cpu = Executors.newSingleThreadScheduledExecutor();
@@ -53,7 +54,8 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private final Dunhun game;
 	private final I18N locale;
-	private final List<Actor> actors = new ArrayList<>();
+	private final List<Actor> played = new ArrayList<>();
+	private final InfiniteList<Actor> actors = new InfiniteList<>();
 	private final BondedList<Actor> hunters = new BondedList<>((a, it) -> {
 		if (getActors(Team.HUNTERS).size() >= 6) return false;
 
@@ -62,12 +64,12 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setGame(getGame());
 
 		actors.add(a);
-		sortTurns();
+		played.add(a);
 
 		a.getSenshi().setAvailable(true);
 		return true;
 	}, a -> {
-		a.setHp(0);
+		a.setHp(0, true);
 		actors.remove(a);
 	});
 	private final BondedList<Actor> keepers = new BondedList<>((a, it) -> {
@@ -78,12 +80,12 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setGame(getGame());
 
 		actors.add(a);
-		sortTurns();
+		played.add(a);
 
 		a.getSenshi().setAvailable(true);
 		return true;
 	}, a -> {
-		a.setHp(0);
+		a.setHp(0, true);
 		actors.remove(a);
 	});
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
@@ -205,8 +207,13 @@ public class Combat implements Renderer<BufferedImage> {
 	public void process() {
 		if (done) return;
 
+		actors.sort(Comparator
+				.comparingInt(Actor::getInitiative).reversed()
+				.thenComparingInt(n -> Calc.rng(20, seed - n.hashCode()))
+		);
+
 		loop:
-		for (Actor turn : new InfiniteIterator<>(actors)) {
+		for (Actor turn : actors) {
 			if (game.isClosed()) break;
 			else if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
 			else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
@@ -215,14 +222,17 @@ public class Combat implements Renderer<BufferedImage> {
 			if (current == null) break;
 
 			try {
-				boolean skip = !current.getSenshi().isAvailable() || current.getSenshi().isStasis() || current.isOutOfCombat();
+				Supplier<Boolean> skip = () -> !current.getSenshi().isAvailable()
+											   || current.getSenshi().isStasis()
+											   || current.isOutOfCombat();
+				boolean skipped = skip.get();
 
 				current.getSenshi().reduceDebuffs(1);
 				for (Skill s : current.getSkills()) {
 					s.reduceCd();
 				}
 
-				if (skip) {
+				if (skipped) {
 					if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
 					else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
 					continue;
@@ -231,10 +241,10 @@ public class Combat implements Renderer<BufferedImage> {
 				current.modAp(current.getMaxAp());
 				current.getSenshi().setDefending(false);
 
-				while (!current.isOutOfCombat() && current.getAp() > 0) {
+				while (!skip.get() && current.getAp() > 0) {
 					trigger(Trigger.ON_TICK);
 
-					Runnable action = reload().get();
+					Runnable action = reload().join();
 					if (action != null) {
 						action.run();
 					}
@@ -287,7 +297,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 	}
 
-	public CompletableFuture<Runnable> reload() {
+	public synchronized CompletableFuture<Runnable> reload() {
 		game.resetTimer();
 
 		lock = new CompletableFuture<>();
@@ -465,13 +475,16 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 
 					if (!skills.isEmpty() && (forcing || !canAttack || Calc.chance(33))) {
+
 						Skill skill = Utils.getRandomEntry(skills);
+
 						tgts = skill.getTargets(this, current).stream()
 								.filter(a -> a != null && !a.isOutOfCombat())
 								.toList();
 
 						if (!tgts.isEmpty()) {
 							Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == current.getTeam() ? 1 : a.getAggroScore(), tgts);
+
 							skill(skill, current, t);
 							return;
 						}
@@ -706,12 +719,16 @@ public class Combat implements Renderer<BufferedImage> {
 		return effects;
 	}
 
+	public List<Actor> getPlayed() {
+		return played;
+	}
+
 	public List<Actor> getActors() {
 		return getActors(false);
 	}
 
 	public List<Actor> getActors(boolean removeDead) {
-		return actors.stream()
+		return actors.values().stream()
 				.filter(a -> !removeDead || !a.isOutOfCombat())
 				.toList();
 	}
@@ -786,12 +803,5 @@ public class Combat implements Renderer<BufferedImage> {
 		if (from != null && to != null) {
 			from.trigger(t, to);
 		}
-	}
-
-	public void sortTurns() {
-		actors.sort(Comparator
-				.comparingInt(Actor::getInitiative).reversed()
-				.thenComparingInt(n -> Calc.rng(20, seed - n.hashCode()))
-		);
 	}
 }

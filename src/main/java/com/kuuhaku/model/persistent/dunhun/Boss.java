@@ -63,10 +63,10 @@ public class Boss extends MonsterBase<Boss> {
 	}
 
 	@Override
-	public void setHp(int value) {
+	public void setHp(int value, boolean bypass) {
 		if (onEnrage != null && value < getMaxHp() / 2 && !enraged) value = getMaxHp() / 2;
 
-		super.setHp(value);
+		super.setHp(value, bypass);
 	}
 
 	@Override

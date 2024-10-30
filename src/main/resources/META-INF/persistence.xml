@@ -29,6 +29,7 @@
         <class>com.kuuhaku.model.persistent.shiro.GlobalProperty</class>
         <class>com.kuuhaku.model.persistent.shiro.Giftcode</class>
         <class>com.kuuhaku.model.persistent.shiro.ScriptMetrics</class>
+        <class>com.kuuhaku.model.persistent.shiro.CommandMetrics</class>
 
         <!-- GUILD -->
         <class>com.kuuhaku.model.persistent.guild.GoodbyeSettings</class>

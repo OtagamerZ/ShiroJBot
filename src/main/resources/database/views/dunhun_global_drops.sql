@@ -16,22 +16,12 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-public abstract class TreeNode {
-    protected final Map<String, TreeNode> children = new LinkedHashMap<>();
-
-    public Map<String, TreeNode> getChildren() {
-        return children;
-    }
-
-    public TreeNode addNode(StringTree.NamedNode node) {
-        children.put(node.getName(), node);
-        return this;
-    }
-
-    public abstract void print(XStringBuilder buffer, int level, boolean parentHasNext, boolean hasNext);
-}
+-- DROP VIEW IF EXISTS v_dunhun_global_drops;
+CREATE OR REPLACE VIEW v_dunhun_global_drops AS
+SELECT id
+     , weight
+FROM jsonb_to_recordset('[
+  {"id": "NULLIFYING_POWDER", "weight": 8000},
+  {"id": "ALCHEMICAL_EMBER", "weight": 5500},
+  {"id": "UNSTABLE_DICE", "weight": 2000}
+]') AS (id VARCHAR, weight INT)

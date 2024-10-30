@@ -139,7 +139,7 @@ public class HelpCommand implements Executable {
 				String[] path = sub.name().split("(?=\\.)");
 				path[0] = data.config().getPrefix() + path[0];
 
-				tree.addElement(path[path.length - 1], path);
+				tree.addElement((Object[]) path);
 			}
 
 			eb.addField(locale.get("str/subcommands"), "```" + tree + "```", false);

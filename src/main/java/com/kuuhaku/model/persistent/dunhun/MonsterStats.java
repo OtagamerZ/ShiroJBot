@@ -56,6 +56,9 @@ public class MonsterStats {
 	@Column(name = "action_points", nullable = false)
 	private int maxAp;
 
+	@Column(name = "initiative", nullable = false)
+	private int initiative;
+
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
@@ -106,6 +109,14 @@ public class MonsterStats {
 		return skills;
 	}
 
+	public int getMaxAp() {
+		return maxAp;
+	}
+
+	public int getInitiative() {
+		return initiative;
+	}
+
 	public Loot generateLoot(Actor self) {
 		Loot loot = new Loot();
 		if (lootGenerator == null) return loot;
@@ -129,9 +140,5 @@ public class MonsterStats {
 		}
 
 		return loot;
-	}
-
-	public int getMaxAp() {
-		return maxAp;
 	}
 }

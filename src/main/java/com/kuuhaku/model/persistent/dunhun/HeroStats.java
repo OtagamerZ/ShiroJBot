@@ -29,6 +29,14 @@ import org.hibernate.type.SqlTypes;
 
 @Embeddable
 public class HeroStats {
+	private static final int[] xpTable = new int[1000];
+
+	static {
+		for (int i = 0; i < xpTable.length; i++) {
+			xpTable[i] = (int) (Math.pow(i + 1, 1.5) * 10);
+		}
+	}
+
 	@Column(name = "xp", nullable = false)
 	private int xp;
 
@@ -62,8 +70,16 @@ public class HeroStats {
 		return (4 + getLevel()) - attributes.count() - unlockedSkills.size();
 	}
 
+	public int getXpToCurrent() {
+		return xpTable[getLevel() - 1];
+	}
+
 	public int getXpToNext() {
-		return (int) (Math.pow(getLevel(), 1.5) * 10);
+		return xpTable[getLevel()];
+	}
+
+	public int getLosableXp() {
+		return getXpToNext() - getXpToCurrent();
 	}
 
 	public int getXp() {
@@ -72,6 +88,10 @@ public class HeroStats {
 
 	public void addXp(int xp) {
 		this.xp += xp;
+	}
+
+	public void loseXp(int xp) {
+		this.xp = Math.max(getXpToCurrent(), this.xp - xp);
 	}
 
 	public Race getRace() {
