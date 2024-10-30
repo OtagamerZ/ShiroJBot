@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class Combat implements Renderer<BufferedImage> {
 	private final ScheduledExecutorService cpu = Executors.newSingleThreadScheduledExecutor();
@@ -218,14 +219,16 @@ public class Combat implements Renderer<BufferedImage> {
 			if (current == null) break;
 
 			try {
-				boolean skip = !current.getSenshi().isAvailable() || current.getSenshi().isStasis() || current.isOutOfCombat();
+				Supplier<Boolean> skip = () -> !current.getSenshi().isAvailable()
+											   || current.getSenshi().isStasis()
+											   || current.isOutOfCombat();
 
 				current.getSenshi().reduceDebuffs(1);
 				for (Skill s : current.getSkills()) {
 					s.reduceCd();
 				}
 
-				if (skip) {
+				if (skip.get()) {
 					if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
 					else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
 					continue;
@@ -234,7 +237,7 @@ public class Combat implements Renderer<BufferedImage> {
 				current.modAp(current.getMaxAp());
 				current.getSenshi().setDefending(false);
 
-				while (!current.isOutOfCombat() && current.getAp() > 0) {
+				while (!skip.get() && current.getAp() > 0) {
 					trigger(Trigger.ON_TICK);
 					System.out.println("loop " + current.getName(locale) + "- Skip: " + current.isOutOfCombat() + " - AP: " + current.getAp());
 
