@@ -176,7 +176,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 					getCombat().process();
 				}
 
-				if (heroes.values().stream().allMatch(Actor::isOutOfCombat)) {
+				List<Hero> hs = List.copyOf(heroes.values());
+				if (hs.stream().allMatch(Actor::isOutOfCombat)) {
+					for (Hero h : hs) {
+						h.getStats().loseXp(h.getStats().getLosableXp() * getAreaLevel() / 100);
+						h.save();
+					}
+
 					reportResult(GameReport.SUCCESS, "str/dungeon_fail",
 							Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
 							getTurn()
@@ -247,7 +253,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 								n.getStats().addXp(gain);
 								if (n.getStats().getLevel() > lvl) {
-									getChannel().buffer(getLocale().get("str/actor_level_up", h.getName(), h.getStats().getLevel()));
+									getChannel().buffer(getLocale().get("str/actor_level_up", n.getName(), n.getStats().getLevel()));
 								}
 							});
 						}
