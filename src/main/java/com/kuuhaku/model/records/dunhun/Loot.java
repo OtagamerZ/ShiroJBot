@@ -5,13 +5,13 @@ import com.kuuhaku.model.persistent.user.UserItem;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.TreeBag;
 
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
-public record Loot(Set<Gear> gear, Bag<UserItem> items) {
+public record Loot(List<Gear> gear, Bag<UserItem> items) {
 	public Loot() {
-		this(new HashSet<>(), new TreeBag<>(Comparator.comparing(UserItem::getId)));
+		this(new ArrayList<>(), new TreeBag<>(Comparator.comparing(UserItem::getId)));
 	}
 
 	public void add(Loot lt) {
