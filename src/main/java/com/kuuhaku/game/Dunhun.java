@@ -12,6 +12,7 @@ import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.InfiniteIterator;
+import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.EffectBase;
@@ -191,6 +192,25 @@ public class Dunhun extends GameInstance<NullPhase> {
 								xpGained += m.getKillXp();
 
 								Loot lt = m.getStats().generateLoot(m);
+								if (Calc.chance(10)) {
+									List<Object[]> bases = DAO.queryAllUnmapped("""
+											SELECT id
+											     , weight
+											FROM v_dunhun_global_drops
+											WHERE weight > 0
+											"""
+									);
+
+									RandomList<String> rl = new RandomList<>();
+									for (Object[] i : bases) {
+										rl.add((String) i[0], ((Number) i[1]).intValue());
+									}
+
+									if (!rl.entries().isEmpty()) {
+										lt.items().add(DAO.find(UserItem.class, rl.get()));
+									}
+								}
+
 								if (!lt.gear().isEmpty() || !lt.items().isEmpty()) {
 									loot.add(lt);
 
