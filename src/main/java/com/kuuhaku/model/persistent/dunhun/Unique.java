@@ -115,7 +115,7 @@ public class Unique extends DAO<Unique> {
 
 	public static Unique getRandom() {
 		RandomList<String> rl = new RandomList<>();
-		List<Object[]> affs = DAO.queryAllUnmapped("SELECT id, weight FROM unique WHERE weight > 0");
+		List<Object[]> affs = DAO.queryAllUnmapped("SELECT id, weight FROM \"unique\" WHERE weight > 0");
 
 		for (Object[] a : affs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
