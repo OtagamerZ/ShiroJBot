@@ -607,12 +607,12 @@ public class GuildListener extends ListenerAdapter {
 					data.channel().sendMessage(locale.get("error/error", e)).queue();
 					Constants.LOGGER.error(e, e);
 					error = e;
-				} finally {
-					int runtime = Math.toIntExact(Duration.between(start, Instant.now()).toMillis());
-					new CommandMetrics(pc.getClass().getSimpleName(), runtime, error).save();
 				}
 
 				if (!Constants.STF_PRIVILEGE.apply(data.member())) {
+					int runtime = Math.toIntExact(Duration.between(start, Instant.now()).toMillis());
+					new CommandMetrics(pc.getClass().getSimpleName(), runtime, error).save();
+
 					ratelimit.put(data.user().getId(), true, Calc.rng(2000, 3500), TimeUnit.MILLISECONDS);
 				}
 			} catch (InvalidSyntaxException e) {
