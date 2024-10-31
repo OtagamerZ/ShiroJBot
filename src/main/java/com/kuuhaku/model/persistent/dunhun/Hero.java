@@ -481,6 +481,11 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	@Override
+	public void beforeDelete() {
+		DAO.applyNative(Gear.class, "DELETE FROM gear WHERE owner_id = ?1", id);
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
