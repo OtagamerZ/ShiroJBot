@@ -117,11 +117,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 				GuildListener.addHandler(guild, sml);
 				initialized = true;
 
-				try {
-					exec.join();
-				} catch (Exception e) {
-					Constants.LOGGER.error(e, e);
-				}
+				exec.join();
 			} catch (GameReport e) {
 				initialized = true;
 				//noinspection MagicConstant
