@@ -81,7 +81,7 @@ public interface Actor {
 
 			I18N locale = game.getLocale();
 			comb.getHistory().add(locale.get(diff < 0 ? "str/actor_damage" : "str/actor_heal",
-					getName(locale), Math.abs(diff), crit ? ("**(" + locale.get("str/critical") + ")**") : ""
+					getName(locale), Math.abs(diff), crit ? ("**(" + locale.get("str/critical_hit") + ")**") : ""
 			));
 		}
 	}

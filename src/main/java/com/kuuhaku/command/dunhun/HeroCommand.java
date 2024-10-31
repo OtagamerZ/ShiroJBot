@@ -95,13 +95,13 @@ public class HeroCommand implements Executable {
 
 			eb.addField(Constants.VOID, """
 					HP: %s (%s)
-					AP: %s (%s)
-					Crit: %s%%
+					%s (%s)
+					%s
 					%s (%s/%s)
 					""".formatted(
 					h.getMaxHp(), Utils.sign((int) h.getModifiers().getMaxHp().get()),
-					h.getMaxAp(), Utils.sign((int) h.getModifiers().getMaxAp().get()),
-					Utils.roundToString(h.getCritical(), 2),
+					locale.get("str/ap", h.getMaxAp()), Utils.sign((int) h.getModifiers().getMaxAp().get()),
+					locale.get("str/critical", Utils.roundToString(h.getCritical(), 2)),
 					locale.get("str/level", h.getStats().getLevel()),
 					h.getStats().getXp(), h.getStats().getXpToNext()
 			), true);
