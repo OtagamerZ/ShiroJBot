@@ -21,7 +21,6 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.dunhun.Attributes;
-import com.kuuhaku.util.Calc;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -63,7 +62,7 @@ public class HeroStats {
 	private JSONArray consumables = new JSONArray();
 
 	public int getLevel() {
-		return 1 + Calc.round(Math.pow(xp / 10d, 1 / 1.5));
+		return 1 + (int) Math.pow(xp / 10d, 1 / 1.5);
 	}
 
 	public int getPointsLeft() {
