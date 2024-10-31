@@ -62,7 +62,7 @@ public class HeroStats {
 	private JSONArray consumables = new JSONArray();
 
 	public int getLevel() {
-		return 1 + (int) Math.pow(xp / 10d, 1 / 1.5);
+		return 1 + (int) Math.cbrt(Math.pow(xp, 2) / 100);
 	}
 
 	public int getPointsLeft() {
