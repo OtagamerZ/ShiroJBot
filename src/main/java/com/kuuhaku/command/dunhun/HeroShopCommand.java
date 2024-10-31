@@ -43,6 +43,8 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import org.apache.commons.collections4.Bag;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Command(
@@ -135,7 +137,7 @@ public class HeroShopCommand implements Executable {
 							return true;
 						}
 
-						h.getStats().getConsumables().add(item.getId());
+						h.getStats().getConsumables().addAll(Collections.nCopies(amount, item.getId()));
 						h.save();
 
 						acc.consumeCR(value, "Consumable " + amount + "x " + item.getName(locale));
