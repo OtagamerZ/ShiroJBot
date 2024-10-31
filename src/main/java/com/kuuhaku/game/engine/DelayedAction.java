@@ -86,13 +86,4 @@ public class DelayedAction {
 
 		return this;
 	}
-
-	public void triggerNow() {
-		if (task != null && !exec.isShutdown()) {
-			if (action == null) return;
-
-			stop();
-			task.run();
-		}
-	}
 }
