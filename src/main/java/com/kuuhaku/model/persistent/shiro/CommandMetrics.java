@@ -46,7 +46,7 @@ public class CommandMetrics extends DAO<CommandMetrics> {
 	@Column(name = "run_time", nullable = false)
 	private int runTime;
 
-	@Column(name = "error")
+	@Column(name = "error", columnDefinition = "TEXT")
 	private String error;
 
 	@Column(name = "execution", nullable = false)
