@@ -252,22 +252,31 @@ public class Combat implements Renderer<BufferedImage> {
 
 					Runnable action = reload().join();
 					if (action != null) {
+						System.out.println("joined");
 						action.run();
+						System.out.println("ran");
 					}
 
+					System.out.println("loop check");
 					if (hunters.stream().allMatch(Actor::isOutOfCombat)) break loop;
 					else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break loop;
 				}
+
+				System.out.println("exit loop");
 			} catch (Exception e) {
 				Constants.LOGGER.warn(e, e);
 			} finally {
+				System.out.println("expire");
 				current.getModifiers().expireMods(current.getSenshi());
+				System.out.println("unavail");
 				current.getSenshi().setAvailable(true);
+				System.out.println("degen");
 				if (!current.getSenshi().isStasis()) {
 					current.modHp(current.getRegDeg().next(), false);
 					trigger(Trigger.ON_DEGEN, current, current);
 				}
 
+				System.out.println("eots");
 				Iterator<EffectBase> it = effects.iterator();
 				while (it.hasNext()) {
 					EffectBase e = it.next();
@@ -646,7 +655,6 @@ public class Combat implements Renderer<BufferedImage> {
 		if (target.getHp() == 0) {
 			trigger(Trigger.ON_KILL, source, target);
 		}
-
 		System.out.println("finished");
 	}
 
