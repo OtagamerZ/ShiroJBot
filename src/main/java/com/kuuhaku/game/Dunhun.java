@@ -176,6 +176,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 				List<Hero> hs = List.copyOf(heroes.values());
 				if (hs.stream().allMatch(Actor::isOutOfCombat)) {
 					for (Hero h : hs) {
+						if (h.getHp() > 0) continue;
+
 						h.getStats().loseXp(h.getStats().getLosableXp() * getAreaLevel() / 100);
 						h.save();
 					}
