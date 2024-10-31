@@ -48,7 +48,7 @@ import java.util.List;
 @Command(
 		name = "hero",
 		path = "buy",
-		category = Category.STAFF
+		category = Category.MISC
 )
 @Syntax(allowEmpty = true, value = "<id:word:r> <amount:number>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)

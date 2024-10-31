@@ -56,7 +56,7 @@ import java.util.List;
 @Command(
 		name = "hero",
 		path = "inspect",
-		category = Category.STAFF
+		category = Category.INFO
 )
 @Syntax("<gear:number:r>")
 public class HeroInspectCommand implements Executable {

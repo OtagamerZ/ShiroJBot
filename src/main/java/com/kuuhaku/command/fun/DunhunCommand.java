@@ -47,7 +47,7 @@ import java.util.stream.Stream;
 
 @Command(
 		name = "dunhun",
-		category = Category.STAFF
+		category = Category.FUN
 )
 @Syntax(
 		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>(?=\\s|$))+"),

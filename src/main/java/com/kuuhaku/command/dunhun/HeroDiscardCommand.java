@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 @Command(
 		name = "hero",
 		path = "discard",
-		category = Category.STAFF
+		category = Category.MISC
 )
 @Syntax({
 		"<action:word:r>[all,common,magic,rare,unique]",

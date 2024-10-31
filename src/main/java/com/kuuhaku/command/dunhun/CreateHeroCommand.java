@@ -41,6 +41,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.utils.FileUpload;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import java.awt.image.BufferedImage;
@@ -49,7 +50,7 @@ import java.util.Arrays;
 @Command(
 		name = "hero",
 		path = "new",
-		category = Category.STAFF
+		category = Category.MISC
 )
 @Syntax("<name:word:r> <race:word:r> <url:text>")
 public class CreateHeroCommand implements Executable {
@@ -96,7 +97,7 @@ public class CreateHeroCommand implements Executable {
 			return;
 		}
 
-		String name = args.getString("name").toUpperCase();
+		String name = StringUtils.stripAccents(args.getString("name").toUpperCase());
 		if (name.length() > 20) {
 			event.channel().sendMessage(locale.get("error/name_too_long", 20)).queue();
 			return;

@@ -44,7 +44,7 @@ public class HeroStats {
 	private Race race;
 
 	@Embedded
-	private Attributes attributes;
+	private Attributes attributes = new Attributes();
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
