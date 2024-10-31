@@ -88,9 +88,7 @@ public class HeroImageCommand implements Executable {
 			return;
 		}
 
-		BufferedImage img = IO.getImage(url);
-		h.setImage(img);
-		h.save();
+		h.setImage(IO.getImage(url));
 
 		event.channel().sendMessage(locale.get("success/hero_image", h.getName())).queue();
 	}
