@@ -482,7 +482,16 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public void beforeDelete() {
-		DAO.deleteBatch(getInventory());
+		List<Integer> ids = DAO.queryAllNative(Integer.class, """
+				SELECT g.id
+				FROM gear g
+				INNER JOIN hero h ON h.id = g.owner_id
+				WHERE h.id = ?1
+				ORDER BY g.id DESC
+				""", id);
+
+		DAO.applyNative(GearAffix.class, "DELETE FROM gear_affix WHERE gear_id IN ?1", ids);
+		DAO.applyNative(Gear.class, "DELETE FROM gear WHERE id IN ?1", ids);
 	}
 
 	@Override
