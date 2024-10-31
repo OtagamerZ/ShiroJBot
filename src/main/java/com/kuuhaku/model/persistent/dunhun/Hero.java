@@ -181,7 +181,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public int getMaxAp() {
-		return Calc.clamp(1 + (int) modifiers.getMaxAp().get() + stats.getLevel() / 8, 1, 5 + getAttributes().dex() / 10);
+		return Calc.clamp(2 + (int) modifiers.getMaxAp().get() + stats.getLevel() / 8, 1, 5 + getAttributes().dex() / 10);
 	}
 
 	@Override
