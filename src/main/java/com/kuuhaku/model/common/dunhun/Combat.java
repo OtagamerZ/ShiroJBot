@@ -243,6 +243,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 				while (current == actors.get() && !skip.get() && current.getAp() > 0) {
 					trigger(Trigger.ON_TICK);
+					System.out.println("loop: " + current);
 
 					Runnable action = reload().join();
 					if (action != null) {
@@ -297,7 +298,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 	}
 
-	public synchronized CompletableFuture<Runnable> reload() {
+	public CompletableFuture<Runnable> reload() {
 		game.resetTimer();
 		System.out.println("curr: " + current.getName(locale));
 
