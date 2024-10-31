@@ -249,6 +249,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							int xp = xpGained;
 							DAO.apply(Hero.class, h.getId(), n -> {
 								int gain = xp;
+
 								int lvl = n.getStats().getLevel();
 								int diff = Math.abs(getAreaLevel() + 1 - lvl);
 
@@ -257,6 +258,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								}
 
 								n.getStats().addXp(gain);
+								System.out.println(n.getName() + " gained " + gain + " xp (" + lvl + " -> " + n.getStats().getLevel() + ")");
 								if (n.getStats().getLevel() > lvl) {
 									getChannel().sendMessage(getLocale().get("str/actor_level_up", n.getName(), n.getStats().getLevel())).queue();
 								}
