@@ -44,6 +44,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import org.apache.commons.collections4.Bag;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,7 +75,8 @@ public class HeroInnateCommand implements Executable {
 					Race r = s.getReqRace();
 					return new FieldMimic(
 							locale.get("race/" + r),
-							s.getName(locale) + "\n" + s.getDescription(locale).lines()
+							s.getName(locale) + " " + StringUtils.repeat('◈', s.getApCost()) +
+							"\n" + s.getDescription(locale).lines()
 									.map(l -> "-# " + l)
 									.collect(Collectors.joining("\n"))
 					).toString();
