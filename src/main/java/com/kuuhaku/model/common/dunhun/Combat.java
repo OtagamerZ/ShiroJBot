@@ -23,6 +23,7 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -352,12 +353,8 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					boolean validWpn = skill.getReqWeapons().isEmpty()
-									   || h.getEquipment().getWeaponList()
-											   .stream()
-											   .anyMatch(g -> skill.getReqWeapons().contains(g.getBasetype().getStats().gearType().getId()));
-
-					if (!validWpn) {
+					JSONArray tags = h.getWeaponTags();
+					if (skill.getReqWeapons().stream().noneMatch(tags::contains)) {
 						game.getChannel().sendMessage(locale.get("error/invalid_weapon")).queue();
 						return;
 					}

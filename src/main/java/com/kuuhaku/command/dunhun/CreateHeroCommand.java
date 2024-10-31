@@ -80,9 +80,6 @@ public class CreateHeroCommand implements Executable {
 		if (url.isBlank()) {
 			event.channel().sendMessage(locale.get("error/image_required")).queue();
 			return;
-		} else if (url.length() > 255) {
-			event.channel().sendMessage(locale.get("error/url_too_long")).queue();
-			return;
 		} else if (!UrlValidator.getInstance().isValid(url)) {
 			event.channel().sendMessage(locale.get("error/invalid_url")).queue();
 			return;

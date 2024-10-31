@@ -286,6 +286,27 @@ public class Hero extends DAO<Hero> implements Actor {
 		});
 	}
 
+	public JSONArray getWeaponTags() {
+		JSONArray out = new JSONArray();
+		Equipment equips = getEquipment();
+
+		boolean unarmed = true;
+		for (Gear g : equips.getWeapons().getEntries()) {
+			if (g.getBasetype().getStats().gearType().getSlot() == GearSlot.WEAPON) {
+				if (!g.getTags().contains("UNARMED")) unarmed = false;
+			}
+
+			out.addAll(g.getTags());
+		}
+
+		if (unarmed) {
+			out.add("UNARMED");
+			out.add("FIST");
+		}
+
+		return out;
+	}
+
 	public void setEquipment(Equipment equipment) {
 		equipCache = equipment;
 	}
