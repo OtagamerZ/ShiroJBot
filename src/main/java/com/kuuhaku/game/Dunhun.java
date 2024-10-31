@@ -591,6 +591,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 		return event.get();
 	}
 
+	public Loot getLoot() {
+		return loot;
+	}
+
 	public boolean isDuel() {
 		return duel;
 	}
