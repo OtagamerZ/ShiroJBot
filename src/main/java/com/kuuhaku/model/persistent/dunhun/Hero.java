@@ -301,7 +301,6 @@ public class Hero extends DAO<Hero> implements Actor {
 
 		if (unarmed) {
 			out.add("UNARMED");
-			out.add("FIST");
 		}
 
 		return out;
