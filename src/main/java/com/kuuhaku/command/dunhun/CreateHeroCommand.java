@@ -51,7 +51,7 @@ import java.util.Arrays;
 		path = "new",
 		category = Category.STAFF
 )
-@Syntax("<name:word:r> <race:word:r> <url:text:>")
+@Syntax("<name:word:r> <race:word:r> <url:text>")
 public class CreateHeroCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
