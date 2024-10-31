@@ -299,6 +299,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public synchronized CompletableFuture<Runnable> reload() {
 		game.resetTimer();
+		System.out.println("curr: " + current.getName(locale));
 
 		lock = new CompletableFuture<>();
 
