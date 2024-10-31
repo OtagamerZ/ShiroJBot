@@ -222,11 +222,13 @@ public class Combat implements Renderer<BufferedImage> {
 			if (current == null) break;
 
 			try {
+				System.out.println("skip check");
 				Supplier<Boolean> skip = () -> !current.getSenshi().isAvailable()
 											   || current.getSenshi().isStasis()
 											   || current.isOutOfCombat();
 				boolean skipped = skip.get();
 
+				System.out.println("red debuff");
 				current.getSenshi().reduceDebuffs(1);
 				for (Skill s : current.getSkills()) {
 					s.reduceCd();
@@ -238,12 +240,15 @@ public class Combat implements Renderer<BufferedImage> {
 					continue;
 				}
 
+				System.out.println("mod ap");
 				current.modAp(current.getMaxAp());
+				System.out.println("undef");
 				current.getSenshi().setDefending(false);
 
+				System.out.println("begin loop");
 				while (current == actors.get() && !skip.get() && current.getAp() > 0) {
+					System.out.println("curr " + current.getName(locale));
 					trigger(Trigger.ON_TICK);
-					System.out.println("loop: " + current);
 
 					Runnable action = reload().join();
 					if (action != null) {
@@ -300,7 +305,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public CompletableFuture<Runnable> reload() {
 		game.resetTimer();
-		System.out.println("curr: " + current.getName(locale));
 
 		lock = new CompletableFuture<>();
 
@@ -642,6 +646,8 @@ public class Combat implements Renderer<BufferedImage> {
 		if (target.getHp() == 0) {
 			trigger(Trigger.ON_KILL, source, target);
 		}
+
+		System.out.println("finished");
 	}
 
 	public void addSelector(Message msg, ButtonizeHelper root, List<Actor> targets, Consumer<Actor> action) {
