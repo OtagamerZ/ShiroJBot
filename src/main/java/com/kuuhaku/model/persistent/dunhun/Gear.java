@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.EffectBase;
@@ -41,7 +42,6 @@ import org.hibernate.annotations.FetchMode;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -258,7 +258,7 @@ public class Gear extends DAO<Gear> {
 		return effects;
 	}
 
-	public void addEffect(BiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
+	public void addEffect(ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
 		effects.add(new SelfEffect(owner, effect, triggers));
 	}
 

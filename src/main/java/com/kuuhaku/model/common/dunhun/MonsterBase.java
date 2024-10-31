@@ -1,5 +1,6 @@
 package com.kuuhaku.model.common.dunhun;
 
+import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Actor;
@@ -31,7 +32,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.BiConsumer;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -176,7 +176,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		return effects;
 	}
 
-	public void addEffect(BiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
+	public void addEffect(ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
 		effects.add(new SelfEffect(this, effect, triggers));
 	}
 

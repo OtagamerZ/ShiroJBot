@@ -1,5 +1,6 @@
 package com.kuuhaku.model.common.dunhun;
 
+import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 
@@ -13,7 +14,7 @@ public abstract class EffectBase {
 	private final BiConsumer<EffectBase, CombatContext> effect;
 	private int duration;
 
-	public EffectBase(Actor owner, int duration, BiConsumer<EffectBase, CombatContext> effect) {
+	public EffectBase(Actor owner, int duration, ThrowingBiConsumer<EffectBase, CombatContext> effect) {
 		this.owner = owner;
 		this.duration = duration;
 		this.effect = effect;
