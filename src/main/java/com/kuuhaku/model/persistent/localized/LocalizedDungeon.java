@@ -40,7 +40,7 @@ public class LocalizedDungeon extends DAO<LocalizedDungeon> implements Serializa
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "description", nullable = false)
+	@Column(name = "description", nullable = false, columnDefinition = "TEXT")
 	private String description;
 
 	private transient boolean uwu = false;

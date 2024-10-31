@@ -53,7 +53,7 @@ public class DelayedAction {
 	public DelayedAction run(Runnable task) {
 		if (!exec.isShutdown()) {
 			stop();
-			action = exec.schedule(task = task, time, unit);
+			action = exec.schedule(this.task = task, time, unit);
 		}
 
 		return this;
@@ -85,5 +85,14 @@ public class DelayedAction {
 		}
 
 		return this;
+	}
+
+	public void triggerNow() {
+		if (task != null && !exec.isShutdown()) {
+			if (action == null) return;
+
+			stop();
+			task.run();
+		}
 	}
 }

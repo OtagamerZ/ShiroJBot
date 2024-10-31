@@ -174,6 +174,11 @@ public abstract class GameInstance<T extends Enum<T>> {
 				.start();
 	}
 
+	public void triggerTimeout() {
+		if (timeout == null) return;
+		timeout.triggerNow();
+	}
+
 	public GameChannel getChannel() {
 		return channel;
 	}
