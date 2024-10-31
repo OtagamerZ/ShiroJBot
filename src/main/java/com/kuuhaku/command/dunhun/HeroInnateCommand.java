@@ -79,7 +79,7 @@ public class HeroInnateCommand implements Executable {
 									.collect(Collectors.joining("\n"))
 					).toString();
 				},
-				(p, t) -> eb.setFooter(acc.getBalanceFooter(locale) + "\n" + locale.get("str/page", p + 1, t))
+				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 		);
 
 		Utils.paginate(pages, 1, true, event.channel(), event.user());
