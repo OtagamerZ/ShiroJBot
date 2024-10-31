@@ -355,7 +355,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		});
 	}
 
-	public static void deleteBatch(Collection<DAO<?>> entries) {
+	public static <T extends DAO<T>> void deleteBatch(Collection<T> entries) {
 		Manager.getFactory().runInTransaction(em -> {
 			for (DAO<?> entry : entries) {
 				entry.beforeDelete();
