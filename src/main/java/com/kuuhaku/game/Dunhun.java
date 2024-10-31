@@ -343,6 +343,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
 							.setCancellable(false)
 							.addAction(getLocale().get("str/continue"), s -> {
+								event.set(null);
 								lock.complete(null);
 								Pages.finalizeEvent(s.getMessage(), Utils::doNothing);
 							});
