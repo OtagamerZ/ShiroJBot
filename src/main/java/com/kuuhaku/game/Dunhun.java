@@ -99,6 +99,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				finish();
+				reportResult(GameReport.SUCCESS, "str/dungeon_leave",
+						Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
+						getTurn()
+				);
+
 				lock.complete(null);
 			}, 5, TimeUnit.MINUTES);
 		}
@@ -141,6 +146,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					if (!floors.isEmpty()) {
 						int floor = getTurn() - 1;
 						if (floor >= floors.size()) {
+							finish();
 							reportResult(GameReport.SUCCESS, "str/dungeon_end",
 									Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
 							);
@@ -252,7 +258,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 								n.getStats().addXp(gain);
 								if (n.getStats().getLevel() > lvl) {
-									getChannel().buffer(getLocale().get("str/actor_level_up", n.getName(), n.getStats().getLevel()));
+									getChannel().sendMessage(getLocale().get("str/actor_level_up", n.getName(), n.getStats().getLevel())).queue();
 								}
 							});
 						}
@@ -270,6 +276,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 						getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor", getTurn()))).queue();
 					} else {
 						finish();
+						reportResult(GameReport.SUCCESS, "str/dungeon_leave",
+								Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
+								getTurn()
+						);
 					}
 				}
 			}
@@ -409,11 +419,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 				getChannel().buffer(getLocale().get("str/dungeon_loot_split") + "\n" + String.join("\n", lines));
 			}
 		}
-
-		reportResult(GameReport.SUCCESS, "str/dungeon_leave",
-				Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-				getTurn()
-		);
 	}
 
 	@Override

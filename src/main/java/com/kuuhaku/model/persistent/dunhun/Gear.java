@@ -72,8 +72,7 @@ public class Gear extends DAO<Gear> {
 	@Fetch(FetchMode.JOIN)
 	private Hero owner;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumn(name = "gear_id", referencedColumnName = "id")
+	@OneToMany(mappedBy = "gear", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<GearAffix> affixes = new LinkedHashSet<>();
 
