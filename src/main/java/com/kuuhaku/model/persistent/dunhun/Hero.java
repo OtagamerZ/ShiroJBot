@@ -293,7 +293,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		boolean unarmed = true;
 		for (Gear g : equips.getWeapons().getEntries()) {
 			if (g.getBasetype().getStats().gearType().getSlot() == GearSlot.WEAPON) {
-				if (!g.getTags().contains("UNARMED")) unarmed = false;
+				if (!g.getTags().contains("OFFHAND") && !g.getTags().contains("UNARMED")) unarmed = false;
 			}
 
 			out.addAll(g.getTags());
