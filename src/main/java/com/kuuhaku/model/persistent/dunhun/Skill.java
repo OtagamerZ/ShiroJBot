@@ -167,7 +167,9 @@ public class Skill extends DAO<Skill> {
 
 	public void execute(I18N locale, Combat combat, Actor source, Actor target) {
 		List<Integer> values = new ArrayList<>();
+		System.out.println("exec " + id);
 		getDescription(locale, source, values);
+		System.out.println("done " + id);
 
 		try {
 			Utils.exec(id, effect, Map.of(

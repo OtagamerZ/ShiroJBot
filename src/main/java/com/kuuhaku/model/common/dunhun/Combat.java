@@ -242,17 +242,13 @@ public class Combat implements Renderer<BufferedImage> {
 				current.getSenshi().setDefending(false);
 
 				while (current == actors.get() && !skip.get() && current.getAp() > 0) {
-					if (current.getId().equals("MIPE")) System.out.println("ON_TICK");
 					trigger(Trigger.ON_TICK);
 
-					if (current.getId().equals("MIPE")) System.out.println("RELOAD");
 					Runnable action = reload().join();
 					if (action != null) {
-						if (current.getId().equals("MIPE")) System.out.println("RUN");
 						action.run();
 					}
 
-					if (current.getId().equals("MIPE")) System.out.println("CHECK");
 					if (hunters.stream().allMatch(Actor::isOutOfCombat)) break loop;
 					else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break loop;
 				}
@@ -479,7 +475,6 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 
 					if (!skills.isEmpty() && (forcing || !canAttack || Calc.chance(33))) {
-
 						Skill skill = Utils.getRandomEntry(skills);
 
 						tgts = skill.getTargets(this, current).stream()
@@ -628,27 +623,20 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void skill(Skill skill, Actor source, Actor target) {
-		if (source.getId().equals("MIPE")) System.out.println("ON_SPELL");
 		trigger(Trigger.ON_SPELL, source, target);
-		if (source.getId().equals("MIPE")) System.out.println("ON_SPELL_TARGET");
 		trigger(Trigger.ON_SPELL_TARGET, target, source);
 
-		if (source.getId().equals("MIPE")) System.out.println("HISTORY");
 		history.add(locale.get(target.equals(source) ? "str/used_skill_self" : "str/used_skill",
 				source.getName(locale), skill.getInfo(locale).getName(), target.getName(locale))
 		);
 
-		if (source.getId().equals("MIPE")) System.out.println("EXECUTE");
 		skill.execute(locale, this, source, target);
-		if (source.getId().equals("MIPE")) System.out.println("MOD_AP");
 		source.modAp(-skill.getApCost());
 
-		if (source.getId().equals("MIPE")) System.out.println("COOLDOWN");
 		if (skill.getCooldown() > 0) {
 			skill.setCd(skill.getCooldown());
 		}
 
-		if (source.getId().equals("MIPE")) System.out.println("ON_KILL");
 		if (target.getHp() == 0) {
 			trigger(Trigger.ON_KILL, source, target);
 		}
@@ -740,7 +728,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public List<Actor> getActors(boolean removeDead) {
 		return actors.values().stream()
-				.filter(a -> !removeDead || !a.isOutOfCombat())
+				.filter(a -> !(removeDead || a.isOutOfCombat()))
 				.toList();
 	}
 
