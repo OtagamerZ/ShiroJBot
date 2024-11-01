@@ -169,7 +169,6 @@ public class Gear extends DAO<Gear> {
 		List<String> out = new ArrayList<>();
 		LinkedHashMap<String, List<Integer>> mods = new LinkedHashMap<>();
 
-		Pattern pat = Utils.regex("\\[[^\\[\\]]+?]");
 		List<GearAffix> affixes = this.affixes.stream()
 				.sorted(Comparator
 						.<GearAffix, Boolean>comparing(ga -> ga.getAffix().getType() == AffixType.SUFFIX, Boolean::compareTo)
@@ -177,14 +176,15 @@ public class Gear extends DAO<Gear> {
 				)
 				.toList();
 
+		Pattern pat = Utils.regex("[-+][\\d.]+");
 		for (GearAffix ga : affixes) {
-			String desc = ga.getAffix().getInfo(locale).setUwu(false).getDescription();
+			String desc = ga.getDescription(locale, false);
 			List<Integer> vals = ga.getValues(locale);
 
 			desc.lines().forEach(l -> {
 				String base = pat
 						.matcher(l.replace("%", "%%"))
-						.replaceAll(m -> Matcher.quoteReplacement("[%s]"));
+						.replaceAll(m -> Matcher.quoteReplacement("%s"));
 
 				mods.compute(base, (k, v) -> {
 					if (v == null) return new ArrayList<>(vals);
