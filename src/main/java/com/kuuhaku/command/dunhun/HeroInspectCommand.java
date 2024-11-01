@@ -133,6 +133,7 @@ public class HeroInspectCommand implements Executable {
 		}
 
 		List<String> attrs = new ArrayList<>();
+		if (g.getReqLevel() > 0) attrs.add(locale.get("str/level", g.getReqLevel()));
 		if (reqs.str() > 0) attrs.add("STR: " + reqs.str() + " ");
 		if (reqs.dex() > 0) attrs.add("DEX: " + reqs.dex() + " ");
 		if (reqs.wis() > 0) attrs.add("WIS: " + reqs.wis() + " ");
