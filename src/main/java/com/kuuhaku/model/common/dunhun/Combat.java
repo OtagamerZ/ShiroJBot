@@ -246,6 +246,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 				current.modAp(current.getMaxAp());
 				current.getSenshi().setDefending(false);
+				trigger(Trigger.ON_TURN_BEGIN, current, current);
 
 				while (current == actors.get() && !skip.get() && current.getAp() > 0) {
 					trigger(Trigger.ON_TICK);
@@ -263,6 +264,8 @@ public class Combat implements Renderer<BufferedImage> {
 			} finally {
 				current.getModifiers().expireMods(current.getSenshi());
 				current.getSenshi().setAvailable(true);
+				trigger(Trigger.ON_TURN_END, current, current);
+
 				if (!current.getSenshi().isStasis()) {
 					current.modHp(current.getRegDeg().next(), false);
 					trigger(Trigger.ON_DEGEN, current, current);

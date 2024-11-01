@@ -29,12 +29,14 @@ public enum Trigger {
 	ON_TICK,
 
 	/**
-	 * When turn begins (also expires turn-based effects)
+	 * When turn begins (also expires turn-based effects)<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_TURN_BEGIN,
 
 	/**
-	 * When turn ends
+	 * When turn ends<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_TURN_END,
 
