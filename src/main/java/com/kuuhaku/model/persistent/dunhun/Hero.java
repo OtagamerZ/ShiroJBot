@@ -399,7 +399,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		return consumableCache = out;
 	}
 
-	public Bag<Consumable> getSpentConsumables() {
+	public List<Consumable> getSpentConsumables() {
 		return spentConsumables;
 	}
 
