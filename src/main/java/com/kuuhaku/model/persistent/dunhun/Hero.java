@@ -321,7 +321,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 				try {
 					e.lock();
-					e.getEffect().accept(e, new CombatContext(this, target));
+					e.getEffect().accept(e, new CombatContext(trigger, this, target));
 				} finally {
 					e.unlock();
 				}

@@ -283,7 +283,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 					if (e.decDuration()) it.remove();
 					if (e instanceof PersistentEffect pe) {
-						pe.getEffect().accept(e, new CombatContext(current, current));
+						pe.getEffect().accept(e, new CombatContext(Trigger.ON_TURN_END, current, current));
 					}
 				}
 			}
@@ -813,7 +813,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			try {
 				te.lock();
-				te.getEffect().accept(e, new CombatContext(from, to));
+				te.getEffect().accept(e, new CombatContext(t, from, to));
 			} finally {
 				te.unlock();
 			}
