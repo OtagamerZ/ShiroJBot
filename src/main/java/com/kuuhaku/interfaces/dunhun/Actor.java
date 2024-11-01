@@ -123,8 +123,7 @@ public interface Actor {
 
 		boolean rdClosed = true;
 		int rd = -getRegDeg().peek();
-		if (rd > 0) {
-			rd = (int) Math.max(part, rd);
+		if (rd >= part) {
 			sb.append("__");
 			rdClosed = false;
 		}
