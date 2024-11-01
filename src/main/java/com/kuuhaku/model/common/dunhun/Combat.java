@@ -260,12 +260,13 @@ public class Combat implements Renderer<BufferedImage> {
 					if (hunters.stream().allMatch(Actor::isOutOfCombat)) break loop;
 					else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break loop;
 				}
+
+				trigger(Trigger.ON_TURN_END, current, current);
 			} catch (Exception e) {
 				Constants.LOGGER.warn(e, e);
 			} finally {
 				current.getModifiers().expireMods(current.getSenshi());
 				current.getSenshi().setAvailable(true);
-				trigger(Trigger.ON_TURN_END, current, current);
 
 				if (!current.getSenshi().isStasis()) {
 					current.modHp(current.getRegDeg().next(), false);
