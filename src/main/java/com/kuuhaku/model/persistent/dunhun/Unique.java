@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -113,9 +114,21 @@ public class Unique extends DAO<Unique> {
 		return Objects.hashCode(id);
 	}
 
-	public static Unique getRandom() {
+	public static Unique getRandom(Actor source) {
+		int dropLevel = Integer.MAX_VALUE;
+		if (source != null && source.getGame() != null) {
+			dropLevel = source.getGame().getAreaLevel() + 1;
+		}
+
 		RandomList<String> rl = new RandomList<>();
-		List<Object[]> affs = DAO.queryAllUnmapped("SELECT id, weight FROM \"unique\" WHERE weight > 0");
+		List<Object[]> affs = DAO.queryAllUnmapped("""
+				SELECT u.id
+				     , u.weight 
+				FROM \"unique\" u
+				INNER JOIN basetype b ON u.basetype_id = b.id
+				WHERE u.weight > 0
+				  AND b.req_level <= ?1
+				""", dropLevel);
 
 		for (Object[] a : affs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
