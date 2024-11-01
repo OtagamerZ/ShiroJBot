@@ -128,7 +128,7 @@ public class Monster extends MonsterBase<Monster> {
 
 	@Override
 	public int getMaxAp() {
-		return Math.max(1, getStats().getMaxAp() + (int) getModifiers().getMaxAp().get() + getGame().getAreaLevel() / 8);
+		return Math.max(1, getStats().getMaxAp() + (int) getModifiers().getMaxAp().get() + getGame().getAreaLevel() / 6);
 	}
 
 	public Set<Affix> getAffixes() {
