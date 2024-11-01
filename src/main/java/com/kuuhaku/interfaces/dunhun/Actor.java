@@ -46,7 +46,7 @@ public interface Actor {
 		if (!pure && game != null) {
 			Senshi sen = getSenshi();
 			if (sen.isStasis()) {
-				getRegDeg().add(Math.min(value, -getRegDeg().peek()));
+				getRegDeg().add(Math.min(value, 0));
 				return;
 			}
 

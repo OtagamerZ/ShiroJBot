@@ -234,6 +234,7 @@ public class Combat implements Renderer<BufferedImage> {
 				boolean skipped = skip.get();
 
 				current.getSenshi().reduceDebuffs(1);
+				current.getSenshi().reduceStasis(1);
 				for (Skill s : current.getSkills()) {
 					s.reduceCd();
 				}
