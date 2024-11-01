@@ -79,6 +79,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				throw new GameReport(GameReport.OVERBURDENED, h.getName());
 			}
 
+			h.setGame(this);
 			h.asSenshi(locale);
 			heroes.put(p, h);
 		}
