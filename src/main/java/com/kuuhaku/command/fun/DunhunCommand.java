@@ -52,7 +52,7 @@ import java.util.stream.Stream;
 @Syntax(
 		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>(?=\\s|$))+"),
 		value = {
-				"<users:custom:r>[users] <dungeon:word:r>",
+				"<users:custom:r>[users] <dungeon:word>",
 				"<dungeon:word>"
 		}
 )
