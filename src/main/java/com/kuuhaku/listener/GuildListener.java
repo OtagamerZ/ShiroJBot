@@ -550,7 +550,7 @@ public class GuildListener extends ListenerAdapter {
 			Seasonal season = pc.command().getClass().getDeclaredAnnotation(Seasonal.class);
 			if (season != null && !ArrayUtils.contains(season.months(), month)) {
 				List<String> months = Arrays.stream(season.months())
-						.mapToObj(Month::of)
+						.mapToObj(m -> Month.of(m + 1))
 						.map(m -> locale.get("month/" + m))
 						.toList();
 
