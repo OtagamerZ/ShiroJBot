@@ -556,9 +556,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}, Utils::doNothing);
 
 		for (Hero h : heroes.values()) {
-			DAO.apply(Hero.class, h.getId(), n -> n.getStats().setConsumables(h.getConsumables().stream()
-					.map(Consumable::getId)
-					.collect(Collectors.toCollection(JSONArray::new))
+			DAO.apply(Hero.class, h.getId(), n -> n.getStats().getConsumables().addAll(
+					h.getConsumables().stream()
+							.map(Consumable::getId)
+							.collect(Collectors.toCollection(JSONArray::new))
 			));
 		}
 
