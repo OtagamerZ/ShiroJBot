@@ -228,64 +228,66 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 
 			try {
-				Supplier<Boolean> skip = () -> !current.getSenshi().isAvailable()
-											   || current.getSenshi().isStasis()
-											   || current.isOutOfCombat();
-				boolean skipped = skip.get();
+				try {
+					Supplier<Boolean> skip = () -> !current.getSenshi().isAvailable()
+												   || current.getSenshi().isStasis()
+												   || current.isOutOfCombat();
+					boolean skipped = skip.get();
 
-				current.getSenshi().reduceDebuffs(1);
-				current.getSenshi().reduceStasis(1);
-				for (Skill s : current.getSkills()) {
-					s.reduceCd();
-				}
-
-				if (skipped) {
-					if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
-					else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
-					continue;
-				}
-
-				current.modAp(current.getMaxAp());
-				current.getSenshi().setDefending(false);
-				trigger(Trigger.ON_TURN_BEGIN, current, current);
-
-				while (current == actors.get() && !skip.get() && current.getAp() > 0) {
-					trigger(Trigger.ON_TICK);
-
-					Runnable action = reload().join();
-					if (action != null) {
-						action.run();
+					current.getSenshi().reduceDebuffs(1);
+					current.getSenshi().reduceStasis(1);
+					for (Skill s : current.getSkills()) {
+						s.reduceCd();
 					}
 
-					if (hunters.stream().allMatch(Actor::isOutOfCombat)) break loop;
-					else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break loop;
-				}
-
-				trigger(Trigger.ON_TURN_END, current, current);
-			} catch (Exception e) {
-				Constants.LOGGER.warn(e, e);
-			} finally {
-				current.getModifiers().expireMods(current.getSenshi());
-				current.getSenshi().setAvailable(true);
-
-				if (!current.getSenshi().isStasis()) {
-					current.modHp(current.getRegDeg().next(), false);
-					trigger(Trigger.ON_DEGEN, current, current);
-				}
-
-				Iterator<EffectBase> it = effects.iterator();
-				while (it.hasNext()) {
-					EffectBase e = it.next();
-					if (!e.getOwner().equals(current)) {
-						if (!getActors().contains(e.getOwner())) it.remove();
+					if (skipped) {
+						if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
+						else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
 						continue;
 					}
 
-					if (e.decDuration()) it.remove();
-					if (e instanceof PersistentEffect pe) {
-						pe.getEffect().accept(e, new CombatContext(Trigger.ON_TURN_END, current, current));
+					current.modAp(current.getMaxAp());
+					current.getSenshi().setDefending(false);
+					trigger(Trigger.ON_TURN_BEGIN, current, current);
+
+					while (current == actors.get() && !skip.get() && current.getAp() > 0) {
+						trigger(Trigger.ON_TICK);
+
+						Runnable action = reload().join();
+						if (action != null) {
+							action.run();
+						}
+
+						if (hunters.stream().allMatch(Actor::isOutOfCombat)) break loop;
+						else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break loop;
+					}
+
+					trigger(Trigger.ON_TURN_END, current, current);
+				} finally {
+					current.getModifiers().expireMods(current.getSenshi());
+					current.getSenshi().setAvailable(true);
+
+					if (!current.getSenshi().isStasis()) {
+						current.modHp(current.getRegDeg().next(), false);
+						trigger(Trigger.ON_DEGEN, current, current);
+					}
+
+					Iterator<EffectBase> it = effects.iterator();
+					while (it.hasNext()) {
+						EffectBase e = it.next();
+						if (!e.getOwner().equals(current)) {
+							if (!getActors().contains(e.getOwner())) it.remove();
+							continue;
+						}
+
+						if (e.decDuration()) it.remove();
+						if (e instanceof PersistentEffect pe) {
+							pe.getEffect().accept(e, new CombatContext(Trigger.ON_TURN_END, current, current));
+						}
 					}
 				}
+			} catch (Exception e) {
+				Constants.LOGGER.error(e, e);
 			}
 		}
 
