@@ -25,6 +25,7 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.GearAffix;
@@ -134,10 +135,12 @@ public class HeroInspectCommand implements Executable {
 
 		List<String> attrs = new ArrayList<>();
 		if (g.getReqLevel() > 0) attrs.add(locale.get("str/level", g.getReqLevel()));
-		if (reqs.str() > 0) attrs.add("STR: " + reqs.str() + " ");
-		if (reqs.dex() > 0) attrs.add("DEX: " + reqs.dex() + " ");
-		if (reqs.wis() > 0) attrs.add("WIS: " + reqs.wis() + " ");
-		if (reqs.vit() > 0) attrs.add("VIT: " + reqs.vit() + " ");
+
+		for (AttrType t : AttrType.values()) {
+			if (t.ordinal() >= AttrType.LVL.ordinal()) break;
+
+			if (reqs.get(t) > 0) attrs.add(t + ": " + reqs.get(t) + " ");
+		}
 
 		if (!attrs.isEmpty()) {
 			eb.appendDescription(String.join(" | ", attrs) + "\n\n");
