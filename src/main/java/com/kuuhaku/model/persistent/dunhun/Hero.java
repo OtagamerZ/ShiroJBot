@@ -202,6 +202,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	@Override
 	public double getCritical() {
 		double crit = getEquipment().getWeaponList().stream()
+				.filter(Gear::isWeapon)
 				.mapToDouble(Gear::getCritical)
 				.average().orElse(0);
 
@@ -297,7 +298,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 		boolean unarmed = true;
 		for (Gear g : equips.getWeapons().getEntries()) {
-			if (g.getBasetype().getStats().gearType().getSlot() == GearSlot.WEAPON) {
+			if (g.isWeapon()) {
 				if (!g.getTags().contains("UNARMED")) unarmed = false;
 			}
 
@@ -457,12 +458,15 @@ public class Hero extends DAO<Hero> implements Actor {
 
 			g.load(locale, this);
 			def += g.getDfs();
-			if (g.getBasetype().getStats().gearType().getSlot() != GearSlot.WEAPON) {
+			if (!g.isWeapon()) {
 				dmg += g.getDmg();
 			}
 		}
 
-		List<Gear> wpns = getEquipment().getWeaponList();
+		List<Gear> wpns = getEquipment().getWeaponList().stream()
+				.filter(Gear::isWeapon)
+				.toList();
+
 		if (wpns.size() == 1) {
 			dmg += wpns.getFirst().getDmg();
 		} else {

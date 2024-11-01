@@ -26,6 +26,7 @@ import com.kuuhaku.model.common.dunhun.GearModifiers;
 import com.kuuhaku.model.common.dunhun.SelfEffect;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.records.dunhun.CombatContext;
@@ -112,6 +113,10 @@ public class Gear extends DAO<Gear> {
 				affixes.stream().mapToInt(ga -> ga.getAffix().getMinLevel()).max().orElse(0),
 				basetype.getStats().reqLevel()
 		);
+	}
+
+	public boolean isWeapon() {
+		return basetype.getStats().gearType().getSlot() == GearSlot.WEAPON && !getTags().contains("OFFHAND");
 	}
 
 	public Unique getUnique() {
