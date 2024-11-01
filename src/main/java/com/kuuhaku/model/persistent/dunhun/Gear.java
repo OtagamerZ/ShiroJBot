@@ -107,6 +107,13 @@ public class Gear extends DAO<Gear> {
 		return basetype;
 	}
 
+	public int getReqLevel() {
+		return Math.max(
+				affixes.stream().mapToInt(ga -> ga.getAffix().getMinLevel()).max().orElse(0),
+				basetype.getStats().reqLevel()
+		);
+	}
+
 	public Unique getUnique() {
 		return unique;
 	}

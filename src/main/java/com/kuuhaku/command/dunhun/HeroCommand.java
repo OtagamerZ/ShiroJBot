@@ -40,6 +40,7 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
+import com.kuuhaku.model.records.dunhun.GearStats;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
@@ -422,10 +423,11 @@ public class HeroCommand implements Executable {
 			}
 
 			Gear g = h.getInvGear(Integer.parseInt(s.getContentRaw()));
+			GearStats stats = g.getBasetype().getStats();
 			if (g == null) {
 				w.getChannel().sendMessage(locale.get("error/gear_not_found")).queue();
 				return;
-			} else if (!h.getAttributes().has(g.getBasetype().getStats().requirements())) {
+			} else if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes().has(stats.requirements())) {
 				w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 				return;
 			}
