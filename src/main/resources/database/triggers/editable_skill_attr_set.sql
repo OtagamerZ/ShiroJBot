@@ -24,7 +24,7 @@ $$
 BEGIN
     UPDATE skill
     SET req_race = NEW.req_race
-      , req_weapons = NEW.req_weapons
+      , req_tags = NEW.req_tags
       , attributes = (NEW.str & cast(x'FF' AS INT))
                          | ((NEW.dex & cast(x'FF' AS INT)) << 8)
                          | ((NEW.wis & cast(x'FF' AS INT)) << 16)

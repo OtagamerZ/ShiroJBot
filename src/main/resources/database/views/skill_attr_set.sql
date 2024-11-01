@@ -20,7 +20,7 @@
 CREATE OR REPLACE VIEW v_skill_attr_set AS
 SELECT id
      , req_race
-     , req_weapons
+     , req_tags
      , str
      , dex
      , wis
@@ -30,7 +30,7 @@ SELECT id
 FROM (
      SELECT id
           , req_race
-          , req_weapons
+          , req_tags
           , bit_get(attributes, 8, 0) AS str
           , bit_get(attributes, 8, 1) AS dex
           , bit_get(attributes, 8, 2) AS wis
