@@ -590,11 +590,12 @@ public class Combat implements Renderer<BufferedImage> {
 	public void attack(Actor source, Actor target) {
 		source.modAp(-1);
 
-		Senshi srcSen = source.getSenshi();
-		Senshi tgtSen = target.getSenshi();
-
 		trigger(Trigger.ON_DEFEND, target, source);
 
+		history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale)));
+
+		Senshi srcSen = source.getSenshi();
+		Senshi tgtSen = target.getSenshi();
 		if (srcSen.isBlinded(true) && Calc.chance(50)) {
 			trigger(Trigger.ON_MISS, source, target);
 
@@ -616,8 +617,6 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 		}
 
-		history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale)));
-
 		trigger(Trigger.ON_ATTACK, source, target);
 		target.modHp(-srcSen.getDmg(), Calc.chance(source.getCritical()));
 		trigger(Trigger.ON_HIT, source, target);
@@ -628,6 +627,8 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void skill(Skill skill, Actor source, Actor target) {
+		source.modAp(-skill.getApCost());
+
 		trigger(Trigger.ON_SPELL, source, target);
 		trigger(Trigger.ON_SPELL_TARGET, target, source);
 
@@ -635,15 +636,24 @@ public class Combat implements Renderer<BufferedImage> {
 				source.getName(locale), skill.getInfo(locale).getName(), target.getName(locale))
 		);
 
-		skill.execute(locale, this, source, target);
-		source.modAp(-skill.getApCost());
+		try {
+			if (source.getTeam() != target.getTeam() && Calc.chance(target.getSenshi().getDodge())) {
+				trigger(Trigger.ON_MISS, source, target);
+				trigger(Trigger.ON_DODGE, target, source);
 
-		if (skill.getCooldown() > 0) {
-			skill.setCd(skill.getCooldown());
-		}
+				history.add(locale.get("str/actor_dodge", target.getName(locale)));
+				return;
+			}
 
-		if (target.getHp() == 0) {
-			trigger(Trigger.ON_KILL, source, target);
+			skill.execute(locale, this, source, target);
+		} finally {
+			if (skill.getCooldown() > 0) {
+				skill.setCd(skill.getCooldown());
+			}
+
+			if (target.getHp() == 0) {
+				trigger(Trigger.ON_KILL, source, target);
+			}
 		}
 	}
 

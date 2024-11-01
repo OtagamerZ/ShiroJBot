@@ -28,6 +28,7 @@ import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.dunhun.GearStats;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
@@ -58,10 +59,11 @@ public class HeroEquipCommand implements Executable {
 			return;
 		}
 
+		GearStats stats = g.getBasetype().getStats();
 		if (!h.getEquipment().equip(g)) {
 			event.channel().sendMessage(locale.get("error/slot_full")).queue();
 			return;
-		} else if (!h.getAttributes().has(g.getBasetype().getStats().requirements())) {
+		} else if (h.getStats().getLevel() < stats.reqLevel() || !h.getAttributes().has(stats.requirements())) {
 			event.channel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 			return;
 		}
