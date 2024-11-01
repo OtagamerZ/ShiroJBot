@@ -34,6 +34,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.dunhun.*;
+import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.EventData;
@@ -242,14 +243,9 @@ public class HeroCommand implements Executable {
 						if (reqs.wis() > 0) reqLine.add("WIS: " + reqs.wis() + " ");
 						if (reqs.vit() > 0) reqLine.add("VIT: " + reqs.vit() + " ");
 
-						String reqWpn = Utils.properlyJoin(locale.get("str/or")).apply(
+						String reqWpn = Utils.properlyJoin(locale.get("str/and")).apply(
 								s.getReqWeapons().stream()
-										.map(w -> {
-											GearType type = DAO.find(GearType.class, w);
-											if (type == null) return "???";
-
-											return type.getInfo(locale).getName();
-										})
+										.map(t -> LocalizedString.get(locale, String.valueOf(t), "???"))
 										.toList()
 						);
 
