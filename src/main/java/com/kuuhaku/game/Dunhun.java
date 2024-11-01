@@ -397,7 +397,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				InfiniteList<Hero> robin = new InfiniteList<>(heroes.values());
 				Collections.shuffle(robin);
 
-				List<String> lines = new ArrayList<>();
+				Map<String, List<String>> dist = new HashMap<>();
 				for (Gear g : loot.gear()) {
 					Hero h = robin.getNext();
 					g.setOwner(h);
@@ -408,7 +408,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						name += ", " + g.getBasetype().getInfo(getLocale()).getName();
 					}
 
-					lines.add("- " + h.getName() + " -> " + name);
+					dist.computeIfAbsent(h.getName(), k -> new ArrayList<>()).add(name);
 				}
 
 				Map<Hero, Map<UserItem, Integer>> split = new HashMap<>();
@@ -422,12 +422,19 @@ public class Dunhun extends GameInstance<NullPhase> {
 					Hero h = e.getKey();
 					for (Map.Entry<UserItem, Integer> i : e.getValue().entrySet()) {
 						h.getAccount().addItem(i.getKey(), i.getValue());
-						lines.add("- " + h.getName() + " -> " + i.getKey().getName(getLocale()) + " (x" + i.getValue() + ")");
+						dist.computeIfAbsent(h.getName(), k -> new ArrayList<>())
+								.add(i.getKey().getName(getLocale()) + " (x" + i.getValue() + ")");
 					}
 				}
 
-				lines.sort(String::compareTo);
-				getChannel().buffer(getLocale().get("str/dungeon_loot_split") + "\n" + String.join("\n", lines));
+				XStringBuilder sb = new XStringBuilder();
+				for (Map.Entry<String, List<String>> e : dist.entrySet()) {
+					sb.appendNewLine(e.getKey() + ":").appendNewLine("```%s```".formatted(
+							Utils.properlyJoin(getLocale().get("str/and")).apply(e.getValue())
+					));
+				}
+
+				getChannel().buffer(getLocale().get("str/dungeon_loot_split") + "\n" + sb);
 			}
 		}
 	}
