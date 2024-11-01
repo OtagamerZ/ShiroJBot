@@ -95,7 +95,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	private transient Equipment equipCache;
 	private transient List<Skill> skillCache;
 	private transient Bag<Consumable> consumableCache;
-	private transient Bag<Consumable> spentConsumables;
+	private transient List<Consumable> spentConsumables = new ArrayList<>();
 	private transient Senshi senshiCache;
 	private transient Dunhun game;
 	private transient Deck deck;
