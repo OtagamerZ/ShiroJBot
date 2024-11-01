@@ -95,6 +95,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	private transient Equipment equipCache;
 	private transient List<Skill> skillCache;
 	private transient Bag<Consumable> consumableCache;
+	private transient Bag<Consumable> spentConsumables;
 	private transient Senshi senshiCache;
 	private transient Dunhun game;
 	private transient Deck deck;
@@ -396,6 +397,10 @@ public class Hero extends DAO<Hero> implements Actor {
 		}
 
 		return consumableCache = out;
+	}
+
+	public Bag<Consumable> getSpentConsumables() {
+		return spentConsumables;
 	}
 
 	public Consumable getConsumable(String id) {

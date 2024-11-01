@@ -26,6 +26,7 @@ import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
+import com.kuuhaku.model.persistent.dunhun.Consumable;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
@@ -33,8 +34,10 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.*;
@@ -66,10 +69,18 @@ public class HeroDiscardCommand implements Executable {
 
 		Set<Integer> ids = new HashSet<>();
 		List<Gear> gears = new ArrayList<>();
+		List<Consumable> consumables = new ArrayList<>();
 		if (!args.has("action")) {
-			ids.addAll(Arrays.stream(args.getString("ids").toUpperCase().split(" +"))
-					.map(NumberUtils::toInt)
-					.collect(Collectors.toSet()));
+			for (String s : args.getString("ids").toUpperCase().split(" +")) {
+				if (StringUtils.isNumeric(s)) {
+					ids.add(NumberUtils.toInt(s));
+				} else {
+					Consumable c = DAO.find(Consumable.class, s);
+					if (c != null) {
+						consumables.add(c);
+					}
+				}
+			}
 
 			for (Integer id : ids) {
 				Gear g = h.getInvGear(id);
@@ -95,6 +106,8 @@ public class HeroDiscardCommand implements Executable {
 				.limit(5)
 				.collect(Collectors.toCollection(ArrayList::new));
 
+		names.addAll(consumables.stream().map(c -> c.getName(locale)).toList());
+
 		if (names.size() < gears.size()) {
 			names.add(locale.get("str/and_more", gears.size() - names.size()));
 		}
@@ -104,6 +117,15 @@ public class HeroDiscardCommand implements Executable {
 					w -> {
 						DAO.applyNative(GearAffix.class, "DELETE FROM gear_affix WHERE gear_id IN ?1", ids);
 						DAO.applyNative(Gear.class, "DELETE FROM gear WHERE id IN ?1", ids);
+
+						Hero n = h.refresh();
+						n.getConsumables().removeAll(consumables);
+						n.getStats().setConsumables(
+								h.getConsumables().stream()
+										.map(Consumable::getId)
+										.collect(Collectors.toCollection(JSONArray::new))
+						);
+						n.save();
 
 						event.channel().sendMessage(locale.get(gears.size() == 1 ? "success/discard" : "success/discard_multi")).queue();
 						return true;

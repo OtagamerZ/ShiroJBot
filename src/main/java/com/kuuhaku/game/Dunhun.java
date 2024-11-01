@@ -10,7 +10,10 @@ import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.NullPhase;
 import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.interfaces.dunhun.Actor;
-import com.kuuhaku.model.common.*;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.InfiniteList;
+import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
@@ -25,7 +28,6 @@ import com.kuuhaku.model.records.dunhun.EventDescription;
 import com.kuuhaku.model.records.dunhun.Loot;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
-import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -556,11 +558,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}, Utils::doNothing);
 
 		for (Hero h : heroes.values()) {
-			DAO.apply(Hero.class, h.getId(), n -> n.getStats().getConsumables().addAll(
-					h.getConsumables().stream()
-							.map(Consumable::getId)
-							.collect(Collectors.toCollection(JSONArray::new))
-			));
+			DAO.apply(Hero.class, h.getId(), n -> {
+				for (Consumable c : h.getSpentConsumables()) {
+					n.getStats().getConsumables().remove(c.getId());
+				}
+			});
 		}
 
 		close(code);

@@ -386,7 +386,7 @@ public class Combat implements Renderer<BufferedImage> {
 					addSelector(w.getMessage(), helper, con.getTargets(this, h),
 							t -> lock.complete(() -> {
 								con.execute(locale, this, h, t);
-								h.getConsumables().remove(con, 1);
+								h.getSpentConsumables().add(con);
 								h.modAp(-1);
 
 								history.add(locale.get(t.equals(h) ? "str/used_skill_self" : "str/used_skill",
