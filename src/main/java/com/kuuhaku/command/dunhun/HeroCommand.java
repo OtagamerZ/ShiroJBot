@@ -22,7 +22,6 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.*;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -243,14 +242,14 @@ public class HeroCommand implements Executable {
 						if (reqs.wis() > 0) reqLine.add("WIS: " + reqs.wis() + " ");
 						if (reqs.vit() > 0) reqLine.add("VIT: " + reqs.vit() + " ");
 
-						String reqWpn = Utils.properlyJoin(locale.get("str/and")).apply(
-								s.getReqWeapons().stream()
+						String reqTags = Utils.properlyJoin(locale.get("str/and")).apply(
+								s.getReqTags().stream()
 										.map(t -> LocalizedString.get(locale, String.valueOf(t), "???"))
 										.toList()
 						);
 
-						if (!reqWpn.isBlank()) {
-							reqLine.add(reqWpn);
+						if (!reqTags.isBlank()) {
+							reqLine.add(reqTags);
 						}
 
 						String req = !reqLine.isEmpty()

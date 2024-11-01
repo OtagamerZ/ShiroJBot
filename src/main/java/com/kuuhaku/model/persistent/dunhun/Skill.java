@@ -75,9 +75,9 @@ public class Skill extends DAO<Skill> {
 	private String cpuRule;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "req_weapons", nullable = false, columnDefinition = "JSONB")
+	@Column(name = "req_tags", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray reqWeapons;
+	private JSONArray reqTags;
 
 	@Embedded
 	private Attributes requirements;
@@ -220,8 +220,8 @@ public class Skill extends DAO<Skill> {
 		return requirements;
 	}
 
-	public JSONArray getReqWeapons() {
-		return reqWeapons;
+	public JSONArray getReqTags() {
+		return reqTags;
 	}
 
 	public Race getReqRace() {

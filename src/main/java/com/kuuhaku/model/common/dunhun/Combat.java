@@ -16,6 +16,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.*;
+import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.ClusterAction;
 import com.kuuhaku.model.records.dunhun.CombatContext;
@@ -354,7 +355,7 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 
 					JSONArray tags = h.getWeaponTags();
-					if (skill.getReqWeapons().stream().noneMatch(tags::contains)) {
+					if (!tags.containsAll(skill.getReqTags())) {
 						game.getChannel().sendMessage(locale.get("error/invalid_weapon")).queue();
 						return;
 					}
@@ -531,14 +532,9 @@ public class Combat implements Renderer<BufferedImage> {
 
 			for (Skill s : skills) {
 				String cdText = "";
-				String reqText = Utils.properlyJoin(locale.get("str/or")).apply(
-						s.getReqWeapons().stream()
-								.map(w -> {
-									GearType type = DAO.find(GearType.class, w);
-									if (type == null) return "???";
-
-									return type.getInfo(locale).getName();
-								})
+				String reqTags = Utils.properlyJoin(locale.get("str/and")).apply(
+						s.getReqTags().stream()
+								.map(t -> LocalizedString.get(locale, String.valueOf(t), "???"))
 								.toList()
 				);
 
@@ -547,12 +543,12 @@ public class Combat implements Renderer<BufferedImage> {
 					cdText = " (CD: " + locale.get("str/turns_inline", cd) + ")";
 				}
 
-				if (!reqText.isBlank()) {
-					reqText = " [" + locale.get("str/requires", reqText) + "]";
+				if (!reqTags.isBlank()) {
+					reqTags = " [" + locale.get("str/requires", reqTags) + "]";
 				}
 
 				b.addOption(
-						s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()) + cdText + reqText,
+						s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()) + cdText + reqTags,
 						s.getId(),
 						StringUtils.abbreviate(s.getDescription(locale, h), 100)
 				);
