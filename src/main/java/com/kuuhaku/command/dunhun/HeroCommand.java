@@ -244,7 +244,7 @@ public class HeroCommand implements Executable {
 
 						String reqTags = Utils.properlyJoin(locale.get("str/and")).apply(
 								s.getReqTags().stream()
-										.map(t -> LocalizedString.get(locale, String.valueOf(t), "???"))
+										.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
 										.toList()
 						);
 
