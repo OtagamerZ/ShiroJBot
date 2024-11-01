@@ -127,164 +127,170 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		CompletableFuture.runAsync(() -> {
 			while (!isClosed()) {
-				if (duel) {
-					combat.set(new Combat(this, heroes.values()));
-					getCombat().process();
-
-					Hero winner = heroes.values().stream()
-							.filter(h -> !h.isOutOfCombat())
-							.findFirst().orElse(null);
-
-					if (winner != null) {
-						reportResult(GameReport.SUCCESS, "str/versus_end_win", winner.getName());
-					} else {
-						reportResult(GameReport.SUCCESS, "str/versus_end_draw");
-					}
-
-					break;
-				}
-
 				try {
-					List<Runnable> floors = dungeon.getFloors();
-					if (!floors.isEmpty()) {
-						int floor = getTurn() - 1;
-						if (floor >= floors.size()) {
-							finish();
-							reportResult(GameReport.SUCCESS, "str/dungeon_end",
-									Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
-							);
+					if (duel) {
+						combat.set(new Combat(this, heroes.values()));
+						getCombat().process();
 
-							break;
+						Hero winner = heroes.values().stream()
+								.filter(h -> !h.isOutOfCombat())
+								.findFirst().orElse(null);
+
+						if (winner != null) {
+							reportResult(GameReport.SUCCESS, "str/versus_end_win", winner.getName());
+						} else {
+							reportResult(GameReport.SUCCESS, "str/versus_end_draw");
 						}
 
-						floors.get(floor).run();
-					} else {
-						if (getTurn() % 10 == 0) {
-							beginCombat(Boss.getRandom());
+						break;
+					}
+
+					try {
+						List<Runnable> floors = dungeon.getFloors();
+						if (!floors.isEmpty()) {
+							int floor = getTurn() - 1;
+							if (floor >= floors.size()) {
+								finish();
+								reportResult(GameReport.SUCCESS, "str/dungeon_end",
+										Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
+								);
+
+								break;
+							}
+
+							floors.get(floor).run();
 						} else {
-							if (Calc.chance(Math.max(5, 15 - getTurn()))) {
-								runEvent();
+							if (getTurn() % 10 == 0) {
+								beginCombat(Boss.getRandom());
 							} else {
-								runCombat();
+								if (Calc.chance(Math.max(5, 15 - getTurn()))) {
+									runEvent();
+								} else {
+									runCombat();
+								}
 							}
 						}
-					}
-				} catch (Exception e) {
-					Constants.LOGGER.error(e, e);
-				}
-
-				if (lock != null) {
-					lock.join();
-					event.set(null);
-				}
-
-				if (getCombat() != null) {
-					getCombat().process();
-				}
-
-				List<Hero> hs = List.copyOf(heroes.values());
-				if (hs.stream().allMatch(Actor::isOutOfCombat)) {
-					for (Hero h : hs) {
-						if (h.getHp() > 0) continue;
-
-						h.getStats().loseXp(h.getStats().getLosableXp() * getAreaLevel() / 100);
-						h.save();
+					} catch (Exception e) {
+						Constants.LOGGER.error(e, e);
 					}
 
-					reportResult(GameReport.SUCCESS, "str/dungeon_fail",
-							Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-							getTurn()
-					);
-					break;
-				} else {
-					if (getCombat() != null && getCombat().isDone()) {
-						int xpGained = 0;
+					if (lock != null) {
+						lock.join();
+						event.set(null);
+					}
 
-						XStringBuilder sb = new XStringBuilder();
-						for (Actor a : getCombat().getPlayed()) {
-							if (a instanceof MonsterBase<?> m && m.getHp() == 0 && m.getTeam() == Team.KEEPERS) {
-								xpGained += m.getKillXp();
+					if (getCombat() != null) {
+						getCombat().process();
+					}
 
-								Loot lt = m.getStats().generateLoot(m);
-								if (Calc.chance(10)) {
-									List<Object[]> bases = DAO.queryAllUnmapped("""
+					List<Hero> hs = List.copyOf(heroes.values());
+					if (hs.stream().allMatch(Actor::isOutOfCombat)) {
+						for (Hero h : hs) {
+							if (h.getHp() > 0) continue;
+
+							h.getStats().loseXp(h.getStats().getLosableXp() * getAreaLevel() / 100);
+							h.save();
+						}
+
+						reportResult(GameReport.SUCCESS, "str/dungeon_fail",
+								Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
+								getTurn()
+						);
+						break;
+					} else {
+						if (getCombat() != null && getCombat().isDone()) {
+							int xpGained = 0;
+
+							XStringBuilder sb = new XStringBuilder();
+							for (Actor a : getCombat().getPlayed()) {
+								if (a instanceof MonsterBase<?> m && m.getHp() == 0 && m.getTeam() == Team.KEEPERS) {
+									xpGained += m.getKillXp();
+
+									Loot lt = m.getStats().generateLoot(m);
+									if (Calc.chance(10)) {
+										List<Object[]> bases = DAO.queryAllUnmapped("""
 											SELECT id
 											     , weight
 											FROM v_dunhun_global_drops
 											WHERE weight > 0
 											"""
-									);
+										);
 
-									RandomList<String> rl = new RandomList<>();
-									for (Object[] i : bases) {
-										rl.add((String) i[0], ((Number) i[1]).intValue());
-									}
-
-									if (!rl.entries().isEmpty()) {
-										lt.items().add(DAO.find(UserItem.class, rl.get()));
-									}
-								}
-
-								if (!lt.gear().isEmpty() || !lt.items().isEmpty()) {
-									loot.add(lt);
-
-									for (Gear g : lt.gear()) {
-										String name = g.getName(getLocale());
-										if (g.getRarityClass() == RarityClass.RARE) {
-											name += ", " + g.getBasetype().getInfo(getLocale()).getName();
+										RandomList<String> rl = new RandomList<>();
+										for (Object[] i : bases) {
+											rl.add((String) i[0], ((Number) i[1]).intValue());
 										}
 
-										sb.appendNewLine("- " + name);
+										if (!rl.entries().isEmpty()) {
+											lt.items().add(DAO.find(UserItem.class, rl.get()));
+										}
 									}
 
-									for (UserItem i : lt.items().uniqueSet()) {
-										sb.appendNewLine("- " + i.getName(getLocale()) + " (x" + lt.items().getCount(i) + ")");
+									if (!lt.gear().isEmpty() || !lt.items().isEmpty()) {
+										loot.add(lt);
+
+										for (Gear g : lt.gear()) {
+											String name = g.getName(getLocale());
+											if (g.getRarityClass() == RarityClass.RARE) {
+												name += ", " + g.getBasetype().getInfo(getLocale()).getName();
+											}
+
+											sb.appendNewLine("- " + name);
+										}
+
+										for (UserItem i : lt.items().uniqueSet()) {
+											sb.appendNewLine("- " + i.getName(getLocale()) + " (x" + lt.items().getCount(i) + ")");
+										}
 									}
 								}
 							}
+
+							if (!sb.isBlank()) {
+								getChannel().buffer(getLocale().get("str/monster_loot") + "\n" + sb);
+							}
+
+							for (Hero h : heroes.values()) {
+								int xp = xpGained;
+								DAO.apply(Hero.class, h.getId(), n -> {
+									int gain = xp;
+
+									int lvl = n.getStats().getLevel();
+									int diff = Math.abs(getAreaLevel() + 1 - lvl);
+
+									if (diff > 5) {
+										gain = (int) Calc.clamp(gain * Math.pow(0.9, diff - 5), 1, gain);
+									}
+
+									n.getStats().addXp(gain);
+									if (n.getStats().getLevel() > lvl) {
+										getChannel().sendMessage(getLocale().get("str/actor_level_up", n.getName(), n.getStats().getLevel())).queue();
+									}
+								});
+							}
+
+							combat.set(null);
 						}
 
-						if (!sb.isBlank()) {
-							getChannel().buffer(getLocale().get("str/monster_loot") + "\n" + sb);
+						ContinueMode mode = heroes.values().stream()
+								.map(Hero::getContMode)
+								.reduce((a, b) -> Calc.chance(50) ? a : b)
+								.orElse(ContinueMode.CONTINUE);
+
+						if (!isClosed() && mode == ContinueMode.CONTINUE) {
+							nextTurn();
+							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor", getTurn()))).queue();
+						} else {
+							finish();
+							reportResult(GameReport.SUCCESS, "str/dungeon_leave",
+									Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
+									getTurn()
+							);
 						}
-
-						for (Hero h : heroes.values()) {
-							int xp = xpGained;
-							DAO.apply(Hero.class, h.getId(), n -> {
-								int gain = xp;
-
-								int lvl = n.getStats().getLevel();
-								int diff = Math.abs(getAreaLevel() + 1 - lvl);
-
-								if (diff > 5) {
-									gain = (int) Calc.clamp(gain * Math.pow(0.9, diff - 5), 1, gain);
-								}
-
-								n.getStats().addXp(gain);
-								if (n.getStats().getLevel() > lvl) {
-									getChannel().sendMessage(getLocale().get("str/actor_level_up", n.getName(), n.getStats().getLevel())).queue();
-								}
-							});
-						}
-
-						combat.set(null);
 					}
-
-					ContinueMode mode = heroes.values().stream()
-							.map(Hero::getContMode)
-							.reduce((a, b) -> Calc.chance(50) ? a : b)
-							.orElse(ContinueMode.CONTINUE);
-
-					if (!isClosed() && mode == ContinueMode.CONTINUE) {
-						nextTurn();
-						getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor", getTurn()))).queue();
-					} else {
-						finish();
-						reportResult(GameReport.SUCCESS, "str/dungeon_leave",
-								Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-								getTurn()
-						);
-					}
+				} catch (Exception e) {
+					getChannel().sendMessage(getLocale().get("error/error", e)).queue();
+					Constants.LOGGER.error(e, e);
+					close(GameReport.OTHER);
 				}
 			}
 		}, main);
