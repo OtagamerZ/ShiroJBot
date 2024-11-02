@@ -141,6 +141,10 @@ public interface Actor {
 			if (getHp() > 0 && getHp() >= threshold) sb.append('▰');
 			else sb.append('▱');
 		}
+
+		if (rd >= getMaxHp() && !rdClosed) {
+			sb.append("__");
+		}
 	}
 
 	int getAp();
