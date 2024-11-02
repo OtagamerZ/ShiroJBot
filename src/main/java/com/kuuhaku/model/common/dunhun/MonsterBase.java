@@ -135,7 +135,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 
 	@Override
 	public double getCritical() {
-		return (int) (5 * (1 + modifiers.getCritical().get()));
+		return 5 * (1 + modifiers.getCritical().get());
 	}
 
 	@Override

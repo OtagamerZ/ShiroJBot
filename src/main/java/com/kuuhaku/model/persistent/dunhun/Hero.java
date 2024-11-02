@@ -209,7 +209,7 @@ public class Hero extends DAO<Hero> implements Actor {
 				.mapToDouble(Gear::getCritical)
 				.average().orElse(0);
 
-		return (int) (crit * (1 + modifiers.getCritical().get() + getAttributes().dex() / 20d));
+		return crit * (1 + modifiers.getCritical().get() + getAttributes().dex() / 20d);
 	}
 
 	@Override
