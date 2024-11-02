@@ -103,7 +103,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private CompletableFuture<Runnable> lock;
 	private boolean done;
-	private Pair<Actor, Integer> current;
+	private Actor current;
 
 	public Combat(Dunhun game, MonsterBase<?>... enemies) {
 		this.game = game;
@@ -171,7 +171,7 @@ public class Combat implements Renderer<BufferedImage> {
 					card = a.render(locale);
 				}
 
-				if (actors.getIndex() == current.getSecond()) {
+				if (Objects.equals(a, current)) {
 					boolean legacy = a.getSenshi().getHand().getUserDeck().getFrame().isLegacy();
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
 
@@ -205,7 +205,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public MessageEmbed getEmbed() {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/actor_turn", current.getFirst().getName(locale)))
+				.setTitle(locale.get("str/actor_turn", current.getName(locale)))
 				.setDescription(String.join("\n", history))
 				.setFooter(locale.get("str/combat_footer"));
 
@@ -247,19 +247,18 @@ public class Combat implements Renderer<BufferedImage> {
 			else if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
 			else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
 
-			Actor curr;
-			current = new Pair<>(curr = turn, actors.getIndex());
+			current = turn;
 
 			try {
 				try {
-					Supplier<Boolean> skip = () -> !curr.getSenshi().isAvailable()
-												   || curr.getSenshi().isStasis()
-												   || curr.isOutOfCombat();
+					Supplier<Boolean> skip = () -> !current.getSenshi().isAvailable()
+												   || current.getSenshi().isStasis()
+												   || current.isOutOfCombat();
 					boolean skipped = skip.get();
 
-					curr.getSenshi().reduceDebuffs(1);
-					curr.getSenshi().reduceStasis(1);
-					for (Skill s : curr.getSkills()) {
+					current.getSenshi().reduceDebuffs(1);
+					current.getSenshi().reduceStasis(1);
+					for (Skill s : current.getSkills()) {
 						s.reduceCd();
 					}
 
@@ -269,11 +268,11 @@ public class Combat implements Renderer<BufferedImage> {
 						continue;
 					}
 
-					curr.modAp(curr.getMaxAp());
-					curr.getSenshi().setDefending(false);
-					trigger(Trigger.ON_TURN_BEGIN, curr, curr);
+					current.modAp(current.getMaxAp());
+					current.getSenshi().setDefending(false);
+					trigger(Trigger.ON_TURN_BEGIN, current, current);
 
-					while (curr == actors.get() && !skip.get() && curr.getAp() > 0) {
+					while (current == actors.get() && !skip.get() && current.getAp() > 0) {
 						trigger(Trigger.ON_TICK);
 
 						Runnable action = reload().join();
@@ -285,27 +284,27 @@ public class Combat implements Renderer<BufferedImage> {
 						else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break loop;
 					}
 
-					trigger(Trigger.ON_TURN_END, curr, curr);
+					trigger(Trigger.ON_TURN_END, current, current);
 				} finally {
-					curr.getModifiers().expireMods(curr.getSenshi());
-					curr.getSenshi().setAvailable(true);
+					current.getModifiers().expireMods(current.getSenshi());
+					current.getSenshi().setAvailable(true);
 
-					if (!curr.getSenshi().isStasis()) {
-						curr.modHp(curr.getRegDeg().next(), false);
-						trigger(Trigger.ON_DEGEN, curr, curr);
+					if (!current.getSenshi().isStasis()) {
+						current.modHp(current.getRegDeg().next(), false);
+						trigger(Trigger.ON_DEGEN, current, current);
 					}
 
 					Iterator<EffectBase> it = effects.iterator();
 					while (it.hasNext()) {
 						EffectBase e = it.next();
-						if (!e.getOwner().equals(curr)) {
+						if (!e.getOwner().equals(current)) {
 							if (!getActors().contains(e.getOwner())) it.remove();
 							continue;
 						}
 
 						if (e.decDuration()) it.remove();
 						if (e instanceof PersistentEffect pe) {
-							pe.getEffect().accept(e, new CombatContext(Trigger.ON_TURN_END, curr, curr));
+							pe.getEffect().accept(e, new CombatContext(Trigger.ON_TURN_END, current, current));
 						}
 					}
 				}
@@ -339,7 +338,7 @@ public class Combat implements Renderer<BufferedImage> {
 		lock = new CompletableFuture<>();
 
 		ClusterAction ca;
-		if (current.getFirst() instanceof Hero h) {
+		if (current instanceof Hero h) {
 			ca = game.getChannel().sendMessage("<@" + h.getAccount().getUid() + ">").embed(getEmbed());
 		} else {
 			ca = game.getChannel().sendEmbed(getEmbed());
@@ -350,7 +349,7 @@ public class Combat implements Renderer<BufferedImage> {
 			a.getModifiers().removeIf(a.getSenshi(), m -> m.getExpiration() == 0);
 		}
 
-		if (current.getFirst() instanceof Hero h && !h.isMindControlled()) {
+		if (current instanceof Hero h && !h.isMindControlled()) {
 			helper = new ButtonizeHelper(true)
 					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 					.setCancellable(false);
@@ -459,7 +458,7 @@ public class Combat implements Renderer<BufferedImage> {
 		} else {
 			helper = null;
 
-			Actor curr = current.getFirst();
+			Actor curr = current;
 			cpu.schedule(() -> {
 				try {
 					boolean canAttack = curr.getSenshi().getDmg() > 0;
@@ -708,7 +707,7 @@ public class Combat implements Renderer<BufferedImage> {
 			return;
 		}
 
-		Hero h = (Hero) current.getFirst();
+		Hero h = (Hero) current;
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 				.setCancellable(false);
@@ -810,8 +809,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public Actor getCurrent() {
-		if (current == null) return null;
-		return current.getFirst();
+		return current;
 	}
 
 	public boolean isDone() {

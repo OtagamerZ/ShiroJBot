@@ -48,8 +48,6 @@ import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import kotlin.Pair;
-import org.apache.commons.collections4.Bag;
-import org.apache.commons.collections4.bag.TreeBag;
 import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -178,6 +176,10 @@ public class Hero extends DAO<Hero> implements Actor {
 	@Override
 	public int getAp() {
 		return ap;
+	}
+
+	public void mindControl(int time) {
+		mindControl = Math.max(mindControl, time);
 	}
 
 	public boolean isMindControlled() {
