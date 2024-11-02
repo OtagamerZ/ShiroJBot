@@ -75,7 +75,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return true;
 	}, a -> {
 		actors.remove(a);
-		if (!actors.contains(a)) {
+		if (!actors.contains(a) && !getActors(Team.KEEPERS).contains(a)) {
 			a.setHp(0, true);
 		}
 	});
@@ -93,7 +93,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return true;
 	}, a -> {
 		actors.remove(a);
-		if (!actors.contains(a)) {
+		if (!actors.contains(a) && !getActors(Team.HUNTERS).contains(a)) {
 			a.setHp(0, true);
 		}
 	});
@@ -343,7 +343,7 @@ public class Combat implements Renderer<BufferedImage> {
 			a.getModifiers().removeIf(a.getSenshi(), m -> m.getExpiration() == 0);
 		}
 
-		if (current.getFirst() instanceof Hero h) {
+		if (current.getFirst() instanceof Hero h && !h.isMindControlled()) {
 			helper = new ButtonizeHelper(true)
 					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 					.setCancellable(false);
@@ -452,7 +452,7 @@ public class Combat implements Renderer<BufferedImage> {
 		} else {
 			helper = null;
 
-			MonsterBase<?> curr = (MonsterBase<?>) current.getFirst();
+			Actor curr = current.getFirst();
 			cpu.schedule(() -> {
 				try {
 					boolean canAttack = curr.getSenshi().getDmg() > 0;

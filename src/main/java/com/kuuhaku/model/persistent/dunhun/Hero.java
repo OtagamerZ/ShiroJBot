@@ -92,15 +92,15 @@ public class Hero extends DAO<Hero> implements Actor {
 	private transient final ActorModifiers modifiers = new ActorModifiers();
 	private transient final RegDeg regDeg = new RegDeg(null);
 	private transient final Delta<Integer> hp = new Delta<>();
+	private transient final List<Consumable> spentConsumables = new ArrayList<>();
 	private transient Equipment equipCache;
 	private transient List<Skill> skillCache;
-	private transient Bag<Consumable> consumableCache;
-	private transient List<Consumable> spentConsumables = new ArrayList<>();
 	private transient Senshi senshiCache;
 	private transient Dunhun game;
 	private transient Deck deck;
 	private transient Team team;
 	private transient int ap;
+	private transient int mindControl;
 	private transient boolean flee;
 	private transient ContinueMode contMode = ContinueMode.CONTINUE;
 
@@ -178,6 +178,14 @@ public class Hero extends DAO<Hero> implements Actor {
 	@Override
 	public int getAp() {
 		return ap;
+	}
+
+	public boolean isMindControlled() {
+		return mindControl > 0;
+	}
+
+	public void decMindControl() {
+		if (mindControl > 0) mindControl--;
 	}
 
 	@Override
