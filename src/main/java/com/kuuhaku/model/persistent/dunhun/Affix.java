@@ -171,7 +171,7 @@ public class Affix extends DAO<Affix> {
 				FROM affix
 				WHERE type = ?1
 				  AND weight > 0
-				  AND (min_level <= ?2 OR has(cast(?3 AS JSONB), 'JEWELRY'))
+				  AND (min_level <= ?2 OR has(cast(?3 AS JSONB), 'ACCESSORY'))
 				  AND req_tags <@ cast(?3 AS JSONB)
 				  AND NOT (has(req_tags, 'WEAPON') AND has(cast(?3 AS JSONB), 'OFFHAND'))
 				  AND NOT has(get_affix_family(cast(?4 AS JSONB)), get_affix_family(id))
