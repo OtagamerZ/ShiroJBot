@@ -521,8 +521,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 		getChannel().sendEmbed(eb.build()).queue();
 	}
 
-	@PlayerAction("players")
-	private void players(JSONObject args, User u) {
+	@PlayerAction("allies")
+	private void allies(JSONObject args, User u) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		for (Hero h : heroes.values()) {
