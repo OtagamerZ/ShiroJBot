@@ -103,14 +103,20 @@ public interface Actor {
 	}
 
 	default void addHpBar(XStringBuilder sb) {
+		double part;
+		if (getMaxHp() > 10000) part = 1000;
+		else if (getMaxHp() > 5000) part = 500;
+		else if (getMaxHp() > 2500) part = 250;
+		else part = 100;
+
 		String hp, max;
-		if (getHp() > 5000) {
+		if (getHp() > part * 10) {
 			hp = Utils.roundToString(getHp() / 1000d, 1) + "k";
 		} else {
 			hp = String.valueOf(getHp());
 		}
 
-		if (getMaxHp() > 5000) {
+		if (getMaxHp() > part * 10) {
 			max = Utils.roundToString(getMaxHp() / 1000d, 1) + "k";
 		} else {
 			max = String.valueOf(getMaxHp());
@@ -118,12 +124,6 @@ public interface Actor {
 
 		sb.appendNewLine("HP: " + hp + "/" + max);
 		sb.nextLine();
-
-		double part;
-		if (getMaxHp() > 10000) part = 1000;
-		else if (getMaxHp() > 5000) part = 500;
-		else if (getMaxHp() > 2500) part = 250;
-		else part = 100;
 
 		boolean rdClosed = true;
 		int rd = -getRegDeg().peek();
