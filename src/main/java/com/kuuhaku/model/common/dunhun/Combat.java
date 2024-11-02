@@ -74,8 +74,10 @@ public class Combat implements Renderer<BufferedImage> {
 		a.getSenshi().setAvailable(true);
 		return true;
 	}, a -> {
-		a.setHp(0, true);
 		actors.remove(a);
+		if (!actors.contains(a)) {
+			a.setHp(0, true);
+		}
 	});
 	private final BondedList<Actor> keepers = new BondedList<>((a, it) -> {
 		if (getActors(Team.KEEPERS).size() >= 6) return false;
@@ -90,8 +92,10 @@ public class Combat implements Renderer<BufferedImage> {
 		a.getSenshi().setAvailable(true);
 		return true;
 	}, a -> {
-		a.setHp(0, true);
 		actors.remove(a);
+		if (!actors.contains(a)) {
+			a.setHp(0, true);
+		}
 	});
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
 	private final RandomList<Actor> rngList = new RandomList<>();
@@ -145,11 +149,10 @@ public class Combat implements Renderer<BufferedImage> {
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveBold(60));
 
+		int i = 0;
 		int offset = 0;
 		boolean divided = false;
-		List<BondedList<Actor>> bondedLists = List.of(hunters, keepers);
-		for (int i = 0, s = bondedLists.size(); i < s; i++) {
-			List<Actor> acts = bondedLists.get(i);
+		for (List<Actor> acts : List.of(hunters, keepers)) {
 			for (Actor a : acts) {
 				BufferedImage card;
 				if (a.isOutOfCombat()) {
@@ -172,6 +175,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 				g2d.drawImage(card, offset, 50, null);
 				offset += 255;
+				i++;
 			}
 
 			if (!divided) {
