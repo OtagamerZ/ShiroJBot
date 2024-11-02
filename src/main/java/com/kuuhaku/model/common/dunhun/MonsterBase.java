@@ -152,7 +152,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 			case UNIQUE -> 10;
 		};
 
-		return (int) Math.max(1, aggro * (1 + modifiers.getAggroMult().get()) * game.getAreaLevel() / 2 * mult);
+		return (int) Math.max(1, aggro * (1 + modifiers.getAggroMult().get()) * (game.getAreaLevel() + 1) * mult);
 	}
 
 	@Override
