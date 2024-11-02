@@ -140,6 +140,8 @@ public class Combat implements Renderer<BufferedImage> {
 				h.clearMindControl();
 				h.getSenshi().setFlag(Flag.NO_STUN);
 				h.getSenshi().setFlag(Flag.NO_STASIS);
+				h.getSenshi().setFlag(Flag.NO_PARALYSIS);
+				h.getSenshi().setFlag(Flag.NO_SLEEP);
 			}
 		}
 
