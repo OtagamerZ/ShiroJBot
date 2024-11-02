@@ -363,14 +363,14 @@ public class Gear extends DAO<Gear> {
 		List<AffixType> rolled = Utils.getRandomN(pool, Calc.rng(min, min * 2), min);
 
 		for (AffixType type : rolled) {
-			Affix af = Affix.getRandom(out, type, dropLevel);
+			Affix af = Affix.getRandom(out, type);
 			if (af == null) continue;
 
 			out.getAffixes().add(new GearAffix(out, af));
 		}
 
 		if (rarity == RarityClass.RARE && out.getRarityClass() != RarityClass.RARE) {
-			Affix af = Affix.getRandom(out, Utils.getRandomEntry(pool), dropLevel);
+			Affix af = Affix.getRandom(out, Utils.getRandomEntry(pool));
 			if (af != null) {
 				out.getAffixes().add(new GearAffix(out, af));
 			}
