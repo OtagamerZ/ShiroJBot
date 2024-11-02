@@ -188,6 +188,10 @@ public class Hero extends DAO<Hero> implements Actor {
 		if (mindControl > 0) mindControl--;
 	}
 
+	public void clearMindControl() {
+		mindControl = 0;
+	}
+
 	@Override
 	public int getMaxAp() {
 		return (int) Calc.clamp(2 + stats.getLevel() / 8d, 1, getApCap());

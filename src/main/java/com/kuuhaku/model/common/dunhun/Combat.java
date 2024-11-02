@@ -113,6 +113,10 @@ public class Combat implements Renderer<BufferedImage> {
 		keepers.addAll(List.of(enemies));
 
 		for (Actor a : hunters) {
+			if (a instanceof Hero h) {
+				h.clearMindControl();
+			}
+
 			a.modAp(-a.getAp());
 			a.revive(1);
 			a.setFleed(false);
@@ -133,6 +137,7 @@ public class Combat implements Renderer<BufferedImage> {
 			team = keepers;
 
 			for (Hero h : hs) {
+				h.clearMindControl();
 				h.getSenshi().setFlag(Flag.NO_STUN);
 				h.getSenshi().setFlag(Flag.NO_STASIS);
 			}
