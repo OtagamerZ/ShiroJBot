@@ -147,7 +147,9 @@ public class Combat implements Renderer<BufferedImage> {
 
 		int offset = 0;
 		boolean divided = false;
-		for (List<Actor> acts : List.of(hunters, keepers)) {
+		List<BondedList<Actor>> bondedLists = List.of(hunters, keepers);
+		for (int i = 0, s = bondedLists.size(); i < s; i++) {
+			List<Actor> acts = bondedLists.get(i);
 			for (Actor a : acts) {
 				BufferedImage card;
 				if (a.isOutOfCombat()) {
@@ -160,7 +162,7 @@ public class Combat implements Renderer<BufferedImage> {
 					card = a.render(locale);
 				}
 
-				if (a.equals(current)) {
+				if (actors.getIndex() == i) {
 					boolean legacy = a.getSenshi().getHand().getUserDeck().getFrame().isLegacy();
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
 
