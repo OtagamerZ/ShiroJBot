@@ -22,6 +22,7 @@ import com.kuuhaku.model.enums.dunhun.ContinueMode;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.*;
+import com.kuuhaku.model.persistent.user.DynamicProperty;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.dunhun.EventAction;
 import com.kuuhaku.model.records.dunhun.EventDescription;
@@ -35,6 +36,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.lang.reflect.InvocationTargetException;
@@ -285,7 +287,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 								});
 
 								if (dungeon.getMonsterPool().isEmpty() && getTurn() % 10 == 0) {
-									h.getAccount().setDynValue("skip_floor_" + dungeon.getId().toLowerCase(), getTurn());
+									DynamicProperty prop = h.getAccount().getDynamicProperty("skip_floor_" + dungeon.getId().toLowerCase());
+									prop.setValue(Math.max(NumberUtils.toInt(prop.getValue()), getTurn()));
+									prop.save();
 								}
 							}
 
