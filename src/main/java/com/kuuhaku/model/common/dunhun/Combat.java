@@ -144,7 +144,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	@Override
 	public BufferedImage render(I18N locale) {
-		BufferedImage bi = new BufferedImage(Drawable.SIZE.width * (hunters.size() + keepers.size()) + 64, 80 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(Drawable.SIZE.width * (hunters.size() + keepers.size()) + 64, 75 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveBold(60));
@@ -177,8 +177,8 @@ public class Combat implements Renderer<BufferedImage> {
 				Graph.applyTransformed(g2d, offset, 55 + Drawable.SIZE.height, g -> {
 					if (a.getHp() < a.getMaxHp() / 3) g.setColor(Color.RED);
 
-					g.drawRect(20, 0, Drawable.SIZE.width - 40, 25);
-					g.fillRect(22, 2, a.getHp() * (Drawable.SIZE.width - 42) / a.getMaxHp(), 21);
+					g.drawRect(50, 0, Drawable.SIZE.width - 100, 20);
+					g.fillRect(75, 5, a.getHp() * (Drawable.SIZE.width - 150) / a.getMaxHp(), 10);
 				});
 
 				offset += 255;
