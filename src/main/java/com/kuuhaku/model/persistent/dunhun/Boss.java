@@ -7,6 +7,8 @@ import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
+import com.kuuhaku.model.enums.shoukan.Flag;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.intellij.lang.annotations.Language;
@@ -43,14 +45,22 @@ public class Boss extends MonsterBase<Boss> {
 	@Override
 	public int getHp() {
 		int hp = super.getHp();
-		if (onEnrage != null && hp <= getMaxHp() / 2 && !enraged) {
+		if (hp <= getMaxHp() / 2 && !enraged) {
 			try {
 				enraged = true;
-				Utils.exec(getId(), onEnrage, Map.of(
-						"locale", getGame().getLocale(),
-						"actor", this,
-						"self", getSenshi()
-				));
+				if (onEnrage != null) {
+					Utils.exec(getId(), onEnrage, Map.of(
+							"locale", getGame().getLocale(),
+							"actor", this,
+							"self", getSenshi()
+					));
+				}
+
+				Senshi s = getSenshi();
+				s.setFlag(Flag.NO_STUN);
+				s.setFlag(Flag.NO_SLEEP);
+				s.setFlag(Flag.NO_PARALYSIS);
+				s.setFlag(Flag.NO_STASIS);
 
 				Combat comb = getGame().getCombat();
 				comb.getHistory().add(getGame().getLocale().get("str/boss_enraged", getName(getGame().getLocale())));
