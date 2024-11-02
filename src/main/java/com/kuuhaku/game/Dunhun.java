@@ -403,12 +403,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					g.setOwner(h);
 					g.save();
 
-					String name = g.getName(getLocale());
-					if (g.getRarityClass() == RarityClass.RARE) {
-						name += ", " + g.getBasetype().getInfo(getLocale()).getName();
-					}
-
-					dist.computeIfAbsent(h.getName(), k -> new ArrayList<>()).add(name);
+					dist.computeIfAbsent(h.getName(), k -> new ArrayList<>()).add(g.getName(getLocale()));
 				}
 
 				Map<Hero, Map<UserItem, Integer>> split = new HashMap<>();
