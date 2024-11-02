@@ -173,7 +173,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 											.max().orElse(0);
 
 									if (skip > 0 && getTurn() == 0) {
-										runEvent(DAO.find(Event.class, "SKIP"));
+										runEvent(DAO.find(Event.class, "CHECKPOINT"));
 										skipped = true;
 									}
 								}
