@@ -103,7 +103,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private CompletableFuture<Runnable> lock;
 	private boolean done;
-	private Actor current;
+	private Pair<Actor, Integer> current;
 
 	public Combat(Dunhun game, MonsterBase<?>... enemies) {
 		this.game = game;
@@ -144,53 +144,51 @@ public class Combat implements Renderer<BufferedImage> {
 
 	@Override
 	public BufferedImage render(I18N locale) {
-		BufferedImage bi = new BufferedImage(Drawable.SIZE.width * (hunters.size() + keepers.size()) + 64, 75 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(Drawable.SIZE.width * (hunters.size() + keepers.size()) + 64, 80 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveBold(60));
 
 		int offset = 0;
 		boolean divided = false;
+		for (List<Actor> acts : List.of(hunters, keepers)) {
+			for (Actor a : acts) {
+				BufferedImage card;
+				if (a.isOutOfCombat()) {
+					a.getSenshi().setAvailable(false);
+					BufferedImage overlay = IO.getResourceAsImage("shoukan/states/" + (a.getHp() <= 0 ? "dead" : "flee") + ".png");
 
-		List<Actor> values = actors.values();
-		for (int i = 0, s = values.size(); i < s; i++) {
-			Actor a = values.get(i);
+					card = a.render(locale);
+					Graph.overlay(card, overlay);
+				} else {
+					card = a.render(locale);
+				}
 
-			if (!divided && a.getTeam() == Team.KEEPERS) {
+				if (actors.getIndex() == current.getSecond()) {
+					boolean legacy = a.getSenshi().getHand().getUserDeck().getFrame().isLegacy();
+					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
+
+					Graph.overlay(card, IO.getResourceAsImage(path + "/hero.png"));
+					g2d.drawString("v", offset + Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth("v") / 2, 40);
+				}
+
+				g2d.drawImage(card, offset, 50, null);
+				Graph.applyTransformed(g2d, offset, 55 + Drawable.SIZE.height, g -> {
+					if (a.getHp() < a.getMaxHp() / 3) g.setColor(Color.RED);
+
+					g.drawRect(50, 0, Drawable.SIZE.width - 100, 20);
+					g.fillRect(55, 5, a.getHp() * (Drawable.SIZE.width - 110) / a.getMaxHp(), 10);
+				});
+
+				offset += 255;
+			}
+
+			if (!divided) {
 				BufferedImage cbIcon = IO.getResourceAsImage("dunhun/icons/combat.png");
 				g2d.drawImage(cbIcon, offset, 50 + (bi.getHeight() - 50) / 2 - cbIcon.getHeight() / 2, null);
 				offset += 64;
 				divided = true;
 			}
-
-			BufferedImage card;
-			if (a.isOutOfCombat()) {
-				a.getSenshi().setAvailable(false);
-				BufferedImage overlay = IO.getResourceAsImage("shoukan/states/" + (a.getHp() <= 0 ? "dead" : "flee") + ".png");
-
-				card = a.render(locale);
-				Graph.overlay(card, overlay);
-			} else {
-				card = a.render(locale);
-			}
-
-			if (actors.getIndex() == i) {
-				boolean legacy = a.getSenshi().getHand().getUserDeck().getFrame().isLegacy();
-				String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
-
-				Graph.overlay(card, IO.getResourceAsImage(path + "/hero.png"));
-				g2d.drawString("v", offset + Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth("v") / 2, 40);
-			}
-
-			g2d.drawImage(card, offset, 50, null);
-			Graph.applyTransformed(g2d, offset, 55 + Drawable.SIZE.height, g -> {
-				if (a.getHp() < a.getMaxHp() / 3) g.setColor(Color.RED);
-
-				g.drawRect(50, 0, Drawable.SIZE.width - 100, 20);
-				g.fillRect(55, 5, a.getHp() * (Drawable.SIZE.width - 110) / a.getMaxHp(), 10);
-			});
-
-			offset += 255;
 		}
 
 		g2d.dispose();
@@ -200,7 +198,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public MessageEmbed getEmbed() {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/actor_turn", current.getName(locale)))
+				.setTitle(locale.get("str/actor_turn", current.getFirst().getName(locale)))
 				.setDescription(String.join("\n", history))
 				.setFooter(locale.get("str/combat_footer"));
 
@@ -242,21 +240,19 @@ public class Combat implements Renderer<BufferedImage> {
 			else if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
 			else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
 
-			current = turn;
-			if (current == null) {
-				break;
-			}
+			Actor curr;
+			current = new Pair<>(curr = turn, actors.getIndex());
 
 			try {
 				try {
-					Supplier<Boolean> skip = () -> !current.getSenshi().isAvailable()
-												   || current.getSenshi().isStasis()
-												   || current.isOutOfCombat();
+					Supplier<Boolean> skip = () -> !curr.getSenshi().isAvailable()
+												   || curr.getSenshi().isStasis()
+												   || curr.isOutOfCombat();
 					boolean skipped = skip.get();
 
-					current.getSenshi().reduceDebuffs(1);
-					current.getSenshi().reduceStasis(1);
-					for (Skill s : current.getSkills()) {
+					curr.getSenshi().reduceDebuffs(1);
+					curr.getSenshi().reduceStasis(1);
+					for (Skill s : curr.getSkills()) {
 						s.reduceCd();
 					}
 
@@ -266,11 +262,11 @@ public class Combat implements Renderer<BufferedImage> {
 						continue;
 					}
 
-					current.modAp(current.getMaxAp());
-					current.getSenshi().setDefending(false);
-					trigger(Trigger.ON_TURN_BEGIN, current, current);
+					curr.modAp(curr.getMaxAp());
+					curr.getSenshi().setDefending(false);
+					trigger(Trigger.ON_TURN_BEGIN, curr, curr);
 
-					while (current == actors.get() && !skip.get() && current.getAp() > 0) {
+					while (curr == actors.get() && !skip.get() && curr.getAp() > 0) {
 						trigger(Trigger.ON_TICK);
 
 						Runnable action = reload().join();
@@ -282,27 +278,27 @@ public class Combat implements Renderer<BufferedImage> {
 						else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break loop;
 					}
 
-					trigger(Trigger.ON_TURN_END, current, current);
+					trigger(Trigger.ON_TURN_END, curr, curr);
 				} finally {
-					current.getModifiers().expireMods(current.getSenshi());
-					current.getSenshi().setAvailable(true);
+					curr.getModifiers().expireMods(curr.getSenshi());
+					curr.getSenshi().setAvailable(true);
 
-					if (!current.getSenshi().isStasis()) {
-						current.modHp(current.getRegDeg().next(), false);
-						trigger(Trigger.ON_DEGEN, current, current);
+					if (!curr.getSenshi().isStasis()) {
+						curr.modHp(curr.getRegDeg().next(), false);
+						trigger(Trigger.ON_DEGEN, curr, curr);
 					}
 
 					Iterator<EffectBase> it = effects.iterator();
 					while (it.hasNext()) {
 						EffectBase e = it.next();
-						if (!e.getOwner().equals(current)) {
+						if (!e.getOwner().equals(curr)) {
 							if (!getActors().contains(e.getOwner())) it.remove();
 							continue;
 						}
 
 						if (e.decDuration()) it.remove();
 						if (e instanceof PersistentEffect pe) {
-							pe.getEffect().accept(e, new CombatContext(Trigger.ON_TURN_END, current, current));
+							pe.getEffect().accept(e, new CombatContext(Trigger.ON_TURN_END, curr, curr));
 						}
 					}
 				}
@@ -336,7 +332,7 @@ public class Combat implements Renderer<BufferedImage> {
 		lock = new CompletableFuture<>();
 
 		ClusterAction ca;
-		if (current instanceof Hero h) {
+		if (current.getFirst() instanceof Hero h) {
 			ca = game.getChannel().sendMessage("<@" + h.getAccount().getUid() + ">").embed(getEmbed());
 		} else {
 			ca = game.getChannel().sendEmbed(getEmbed());
@@ -347,7 +343,7 @@ public class Combat implements Renderer<BufferedImage> {
 			a.getModifiers().removeIf(a.getSenshi(), m -> m.getExpiration() == 0);
 		}
 
-		if (current instanceof Hero h) {
+		if (current.getFirst() instanceof Hero h) {
 			helper = new ButtonizeHelper(true)
 					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 					.setCancellable(false);
@@ -456,7 +452,7 @@ public class Combat implements Renderer<BufferedImage> {
 		} else {
 			helper = null;
 
-			MonsterBase<?> curr = (MonsterBase<?>) current;
+			MonsterBase<?> curr = (MonsterBase<?>) current.getFirst();
 			cpu.schedule(() -> {
 				try {
 					boolean canAttack = curr.getSenshi().getDmg() > 0;
@@ -705,7 +701,7 @@ public class Combat implements Renderer<BufferedImage> {
 			return;
 		}
 
-		Hero h = (Hero) current;
+		Hero h = (Hero) current.getFirst();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 				.setCancellable(false);
@@ -807,7 +803,8 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public Actor getCurrent() {
-		return current;
+		if (current == null) return null;
+		return current.getFirst();
 	}
 
 	public boolean isDone() {
