@@ -230,7 +230,7 @@ public class HeroCommand implements Executable {
 						String prefix;
 						if (idx > -1) {
 							prefix = Utils.fancyNumber(idx + 1);
-						} else if (s.getReqRace() == null && !h.getStats().getUnlockedSkills().contains(s.getId())) {
+						} else if (!s.isFree()) {
 							prefix = "🔒";
 						} else {
 							prefix = "";
@@ -308,7 +308,7 @@ public class HeroCommand implements Executable {
 					return;
 				}
 
-				if (s.getReqRace() == null && !h.getStats().getUnlockedSkills().contains(s.getId())) {
+				if (!s.isFree()) {
 					if (h.getStats().getPointsLeft() <= 0) {
 						w.getChannel().sendMessage(locale.get("error/insufficient_points")).queue();
 						return;

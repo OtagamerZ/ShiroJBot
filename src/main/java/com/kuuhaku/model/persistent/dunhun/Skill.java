@@ -165,6 +165,10 @@ public class Skill extends DAO<Skill> {
 		return cooldown;
 	}
 
+	public boolean isFree() {
+		return reqRace != null || id.equalsIgnoreCase("CHANNEL");
+	}
+
 	public void execute(I18N locale, Combat combat, Actor source, Actor target) {
 		List<Integer> values = new ArrayList<>();
 		getDescription(locale, source, values);
