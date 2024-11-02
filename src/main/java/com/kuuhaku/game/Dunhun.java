@@ -165,10 +165,25 @@ public class Dunhun extends GameInstance<NullPhase> {
 							if (getTurn() % 10 == 0) {
 								beginCombat(Boss.getRandom());
 							} else {
-								if (Calc.chance(Math.max(5, 15 - getTurn()))) {
-									runEvent();
-								} else {
-									runCombat();
+								boolean skipped = false;
+								if (dungeon.getMonsterPool().isEmpty()) {
+									int skip = heroes.values().stream()
+											.map(h -> h.getAccount().getDynValue("skip_floor_" + dungeon.getId().toLowerCase(), "0"))
+											.mapToInt(Integer::parseInt)
+											.max().orElse(0);
+
+									if (skip > 0 && getTurn() == 0) {
+										runEvent(DAO.find(Event.class, "SKIP"));
+										skipped = true;
+									}
+								}
+
+								if (!skipped) {
+									if (Calc.chance(Math.max(5, 15 - getTurn()))) {
+										runEvent();
+									} else {
+										runCombat();
+									}
 								}
 							}
 						}
@@ -268,6 +283,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 										getChannel().sendMessage(getLocale().get("str/actor_level_up", n.getName(), n.getStats().getLevel())).queue();
 									}
 								});
+
+								if (dungeon.getMonsterPool().isEmpty() && getTurn() % 10 == 0) {
+									h.getAccount().setDynValue("skip_floor_" + dungeon.getId().toLowerCase(), getTurn());
+								}
 							}
 
 							combat.set(null);
