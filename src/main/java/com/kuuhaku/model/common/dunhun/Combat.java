@@ -41,7 +41,6 @@ import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.messages.MessageRequest;
-import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -447,25 +446,27 @@ public class Combat implements Renderer<BufferedImage> {
 							.filter(a -> !a.isOutOfCombat())
 							.toList();
 
-					double threat = tgts.stream()
-							.mapToInt(a -> a.getHp() * a.getAggroScore() / a.getMaxHp())
-							.average()
-							.orElse(1);
+					if (curr.getAp() == 1) {
+						double threat = tgts.stream()
+								.mapToInt(a -> a.getHp() * a.getAggroScore() / a.getMaxHp())
+								.average()
+								.orElse(1);
 
-					double risk = threat / (curr.getHp() * (double) curr.getAggroScore() / curr.getMaxHp());
-					if (curr instanceof Monster && risk > 5 && Calc.chance(20)) {
-						curr.setFleed(true);
+						double risk = threat / (curr.getHp() * (double) curr.getAggroScore() / curr.getMaxHp());
+						if (curr instanceof Monster && risk > 5 && Calc.chance(20)) {
+							curr.setFleed(true);
 
-						game.getChannel().sendMessage(locale.get("str/actor_flee", curr.getName(locale))).queue();
-						return;
-					}
+							game.getChannel().sendMessage(locale.get("str/actor_flee", curr.getName(locale))).queue();
+							return;
+						}
 
-					if (canDefend && curr.getAp() == 1 && Calc.chance(5 * risk)) {
-						curr.getSenshi().setDefending(true);
-						curr.modAp(-curr.getAp());
+						if (canDefend && Calc.chance(5 * risk)) {
+							curr.getSenshi().setDefending(true);
+							curr.modAp(-curr.getAp());
 
-						history.add(locale.get("str/actor_defend", curr.getName(locale)));
-						return;
+							history.add(locale.get("str/actor_defend", curr.getName(locale)));
+							return;
+						}
 					}
 
 					boolean forcing = false;
