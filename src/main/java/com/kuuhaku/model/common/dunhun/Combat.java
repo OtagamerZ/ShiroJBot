@@ -155,6 +155,14 @@ public class Combat implements Renderer<BufferedImage> {
 		List<Actor> values = actors.values();
 		for (int i = 0, s = values.size(); i < s; i++) {
 			Actor a = values.get(i);
+
+			if (!divided && a.getTeam() == Team.KEEPERS) {
+				BufferedImage cbIcon = IO.getResourceAsImage("dunhun/icons/combat.png");
+				g2d.drawImage(cbIcon, offset, 50 + (bi.getHeight() - 50) / 2 - cbIcon.getHeight() / 2, null);
+				offset += 64;
+				divided = true;
+			}
+
 			BufferedImage card;
 			if (a.isOutOfCombat()) {
 				a.getSenshi().setAvailable(false);
@@ -183,13 +191,6 @@ public class Combat implements Renderer<BufferedImage> {
 			});
 
 			offset += 255;
-
-			if (!divided && a.getTeam() == Team.KEEPERS) {
-				BufferedImage cbIcon = IO.getResourceAsImage("dunhun/icons/combat.png");
-				g2d.drawImage(cbIcon, offset, 50 + (bi.getHeight() - 50) / 2 - cbIcon.getHeight() / 2, null);
-				offset += 64;
-				divided = true;
-			}
 		}
 
 		g2d.dispose();
