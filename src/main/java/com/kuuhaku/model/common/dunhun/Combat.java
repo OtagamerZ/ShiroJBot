@@ -14,6 +14,7 @@ import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
+import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Consumable;
 import com.kuuhaku.model.persistent.dunhun.Hero;
@@ -126,6 +127,11 @@ public class Combat implements Renderer<BufferedImage> {
 		for (List<Hero> hs : ListUtils.partition(sides, sides.size() / 2)) {
 			team.addAll(hs);
 			team = keepers;
+
+			for (Hero h : hs) {
+				h.getSenshi().setFlag(Flag.NO_STUN);
+				h.getSenshi().setFlag(Flag.NO_STASIS);
+			}
 		}
 
 		effects.addAll(game.getEffects());
