@@ -96,7 +96,7 @@ public class HeroDiscardCommand implements Executable {
 		} else {
 			RarityClass rarity = args.getEnum(RarityClass.class, "action", null);
 			for (Gear g : h.getInventory()) {
-				if (rarity != null && h.getRarityClass() != rarity) continue;
+				if (rarity != null && g.getRarityClass() != rarity) continue;
 
 				gears.add(g);
 				ids.add(g.getId());
