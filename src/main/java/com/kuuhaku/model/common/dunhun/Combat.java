@@ -5,6 +5,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.dunhun.Actor;
@@ -384,7 +385,7 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					Consumable con = h.getConsumable(String.valueOf(selected.getFirst()));
+					Consumable con = DAO.find(Consumable.class, String.valueOf(selected.getFirst()));
 					if (con == null) {
 						game.getChannel().sendMessage(locale.get("error/invalid_consumable")).queue();
 						return;
@@ -436,12 +437,13 @@ public class Combat implements Renderer<BufferedImage> {
 		} else {
 			helper = null;
 
+			MonsterBase<?> curr = (MonsterBase<?>) current;
 			cpu.schedule(() -> {
 				try {
-					boolean canAttack = current.getSenshi().getDmg() > 0;
-					boolean canDefend = current.getSenshi().getDfs() > 0;
+					boolean canAttack = curr.getSenshi().getDmg() > 0;
+					boolean canDefend = curr.getSenshi().getDfs() > 0;
 
-					List<Actor> tgts = getActors(current.getTeam().getOther()).stream()
+					List<Actor> tgts = getActors(curr.getTeam().getOther()).stream()
 							.filter(a -> !a.isOutOfCombat())
 							.toList();
 
@@ -450,30 +452,28 @@ public class Combat implements Renderer<BufferedImage> {
 							.average()
 							.orElse(1);
 
-					double risk = threat / current.getAggroScore();
-					double lifeFac = Math.max(0.5, (double) current.getMaxHp() / current.getHp());
+					double risk = threat / (curr.getHp() * (double) curr.getAggroScore() / curr.getMaxHp());
+					if (curr instanceof Monster && risk > 5 && Calc.chance(20)) {
+						curr.setFleed(true);
 
-					if (current instanceof Monster && risk > 5 && Calc.chance(25)) {
-						current.setFleed(true);
-
-						game.getChannel().sendMessage(locale.get("str/actor_flee", current.getName(locale))).queue();
+						game.getChannel().sendMessage(locale.get("str/actor_flee", curr.getName(locale))).queue();
 						return;
 					}
 
-					if (canDefend && current.getAp() == 1 && Calc.chance(5 / lifeFac * risk)) {
-						current.getSenshi().setDefending(true);
-						current.modAp(-current.getAp());
+					if (canDefend && curr.getAp() == 1 && Calc.chance(5 * risk)) {
+						curr.getSenshi().setDefending(true);
+						curr.modAp(-curr.getAp());
 
-						history.add(locale.get("str/actor_defend", current.getName(locale)));
+						history.add(locale.get("str/actor_defend", curr.getName(locale)));
 						return;
 					}
 
 					boolean forcing = false;
 					List<Skill> skills = new ArrayList<>();
-					for (Skill s : current.getSkills()) {
-						if (s.getApCost() > current.getAp() || s.getCd() > 0) continue;
+					for (Skill s : curr.getSkills()) {
+						if (s.getApCost() > curr.getAp() || s.getCd() > 0) continue;
 
-						Boolean canUse = s.canCpuUse(this, (MonsterBase<?>) current);
+						Boolean canUse = s.canCpuUse(this, (MonsterBase<?>) curr);
 						if (canUse == null) {
 							if (!forcing) skills.add(s);
 						} else if (canUse) {
@@ -486,27 +486,27 @@ public class Combat implements Renderer<BufferedImage> {
 					if (!skills.isEmpty() && (forcing || !canAttack || Calc.chance(33))) {
 						Skill skill = Utils.getRandomEntry(skills);
 
-						tgts = skill.getTargets(this, current).stream()
+						tgts = skill.getTargets(this, curr).stream()
 								.filter(a -> a != null && !a.isOutOfCombat())
 								.toList();
 
 						if (!tgts.isEmpty()) {
-							Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == current.getTeam() ? 1 : a.getAggroScore(), tgts);
+							Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == curr.getTeam() ? 1 : a.getAggroScore(), tgts);
 
-							skill(skill, current, t);
+							skill(skill, curr, t);
 							return;
 						}
 					}
 
 					if (tgts.isEmpty()) {
-						current.getSenshi().setDefending(true);
-						current.modAp(-current.getAp());
+						curr.getSenshi().setDefending(true);
+						curr.modAp(-curr.getAp());
 
-						history.add(locale.get("str/actor_defend", current.getName(locale)));
+						history.add(locale.get("str/actor_defend", curr.getName(locale)));
 						return;
 					}
 
-					attack(current, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
+					attack(curr, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 				} finally {
@@ -574,15 +574,15 @@ public class Combat implements Renderer<BufferedImage> {
 			comps.add(ActionRow.of(b.build()));
 		}
 
-		Bag<Consumable> cons = h.getConsumables();
+		Map<Consumable, Integer> cons = h.getConsumables();
 		if (!cons.isEmpty()) {
 			StringSelectMenu.Builder b = StringSelectMenu.create("consumables")
 					.setPlaceholder(locale.get("str/use_a_consumable"))
 					.setMaxValues(1);
 
-			for (Consumable c : cons.uniqueSet()) {
+			for (Consumable c : cons.keySet()) {
 				b.addOption(
-						c.getName(locale) + " (x" + cons.getCount(c) + ")",
+						c.getName(locale) + " (x" + cons.getOrDefault(c, 0) + ")",
 						c.getId(),
 						StringUtils.abbreviate(c.getDescription(locale), 100)
 				);

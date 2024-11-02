@@ -423,13 +423,15 @@ public class HeroCommand implements Executable {
 			}
 
 			Gear g = h.getInvGear(Integer.parseInt(s.getContentRaw()));
-			GearStats stats = g.getBasetype().getStats();
 			if (g == null) {
 				w.getChannel().sendMessage(locale.get("error/gear_not_found")).queue();
 				return;
-			} else if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes().has(stats.requirements())) {
-				w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
-				return;
+			} else {
+				GearStats stats = g.getBasetype().getStats();
+				if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes().has(stats.requirements())) {
+					w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
+					return;
+				}
 			}
 
 			if (!h.getEquipment().equip(g)) {

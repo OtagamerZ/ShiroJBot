@@ -45,6 +45,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
+import java.util.Iterator;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -130,7 +131,10 @@ public abstract class IO {
 		}
 
 		try (Buffer buf = new Buffer(); OutputStream os = buf.outputStream()) {
-			ImageWriter writer = ImageIO.getImageWritersByFormatName(encoding).next();
+			Iterator<ImageWriter> available = ImageIO.getImageWritersByFormatName(encoding);
+			if (!available.hasNext()) return new byte[0];
+
+			ImageWriter writer = available.next();
 			ImageOutputStream ios = ImageIO.createImageOutputStream(os);
 			writer.setOutput(ios);
 

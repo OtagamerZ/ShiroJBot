@@ -39,6 +39,7 @@ import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.model.records.dunhun.GearStats;
@@ -48,6 +49,7 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
+import kotlin.Pair;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.TreeBag;
 import org.apache.commons.text.WordUtils;
@@ -62,6 +64,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -386,32 +389,66 @@ public class Hero extends DAO<Hero> implements Actor {
 				.toList();
 	}
 
-	public Bag<Consumable> getConsumables() {
-		if (consumableCache != null) return consumableCache;
+	public int getConsumableCount(String id) {
+		return stats.getConsumables().getInt(id.toUpperCase());
+	}
 
-		Map<String, Consumable> cons = DAO.queryAll(Consumable.class, "SELECT c FROM Consumable c WHERE c.id IN ?1", stats.getConsumables())
-				.stream()
-				.collect(Collectors.toMap(Consumable::getId, Function.identity()));
+	public void addConsumable(Consumable item, int amount) {
+		addConsumable(item.getId(), amount);
+	}
 
-		TreeBag<Consumable> out = new TreeBag<>(Comparator.comparing(Consumable::getId));
-		for (Object id : stats.getConsumables()) {
-			if (cons.containsKey(String.valueOf(id))) {
-				out.add(cons.get(String.valueOf(id)));
-			}
+	public void addConsumable(String id, int amount) {
+		stats.getConsumables().compute(id.toUpperCase(), (k, v) -> {
+			if (v == null) return amount;
+
+			return ((Number) v).intValue() + amount;
+		});
+	}
+
+	public boolean consume(Consumable item) {
+		return consume(item.getId());
+	}
+
+	public boolean consume(String id) {
+		return consume(id, 1);
+	}
+
+	public boolean consume(Consumable item, int amount) {
+		return consume(item.getId(), amount);
+	}
+
+	public boolean consume(String id, int amount) {
+		return consume(id, amount, false);
+	}
+
+	public boolean consume(String id, int amount, boolean force) {
+		if (amount <= 0) return false;
+
+		int rem = stats.getConsumables().getInt(id.toUpperCase());
+		if (rem < amount && !force) return false;
+
+		if (rem - amount == 0) {
+			stats.getConsumables().remove(id.toUpperCase());
+		} else {
+			stats.getConsumables().put(id.toUpperCase(), rem - amount);
 		}
 
-		return consumableCache = out;
+		return true;
+	}
+
+	public Map<Consumable, Integer> getConsumables() {
+		return stats.getConsumables().entrySet().parallelStream()
+				.filter(e -> ((Number) e.getValue()).intValue() > 0)
+				.map(e -> new Pair<>(DAO.find(Consumable.class, e.getKey()), ((Number) e.getValue()).intValue()))
+				.filter(p -> p.getFirst() != null)
+				.collect(Collectors.toMap(
+						Pair::getFirst, Pair::getSecond, Integer::sum,
+						() -> new TreeMap<>(Comparator.comparing(Consumable::getId))
+				));
 	}
 
 	public List<Consumable> getSpentConsumables() {
 		return spentConsumables;
-	}
-
-	public Consumable getConsumable(String id) {
-		return getConsumables().stream()
-				.filter(cons -> cons.getId().equals(id))
-				.findFirst()
-				.orElse(null);
 	}
 
 	@Override

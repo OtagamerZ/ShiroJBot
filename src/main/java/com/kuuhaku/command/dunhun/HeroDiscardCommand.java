@@ -37,6 +37,8 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import org.apache.commons.collections4.Bag;
+import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -69,7 +71,7 @@ public class HeroDiscardCommand implements Executable {
 
 		Set<Integer> ids = new HashSet<>();
 		List<Gear> gears = new ArrayList<>();
-		List<Consumable> consumables = new ArrayList<>();
+		Bag<Consumable> consumables = new HashBag<>();
 		if (!args.has("action")) {
 			for (String s : args.getString("ids").toUpperCase().split(" +")) {
 				if (StringUtils.isNumeric(s)) {
@@ -119,12 +121,9 @@ public class HeroDiscardCommand implements Executable {
 						DAO.applyNative(Gear.class, "DELETE FROM gear WHERE id IN ?1", ids);
 
 						Hero n = h.refresh();
-						n.getConsumables().removeAll(consumables);
-						n.getStats().setConsumables(
-								h.getConsumables().stream()
-										.map(Consumable::getId)
-										.collect(Collectors.toCollection(JSONArray::new))
-						);
+						for (Consumable c : consumables.uniqueSet()) {
+							n.consume(c.getId(), consumables.getCount(c));
+						}
 						n.save();
 
 						event.channel().sendMessage(locale.get(gears.size() == 1 ? "success/discard" : "success/discard_multi")).queue();
