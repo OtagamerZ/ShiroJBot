@@ -120,8 +120,7 @@ public interface Actor {
 		sb.nextLine();
 
 		double part;
-		if (getMaxHp() > 10000) part = 1000;
-		else if (getMaxHp() > 5000) part = 500;
+		if (getMaxHp() > 5000) part = 500;
 		else if (getMaxHp() > 2500) part = 250;
 		else part = 100;
 
