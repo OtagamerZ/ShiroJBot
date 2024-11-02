@@ -149,43 +149,42 @@ public class Combat implements Renderer<BufferedImage> {
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveBold(60));
 
-		int i = 0;
 		int offset = 0;
 		boolean divided = false;
-		for (List<Actor> acts : List.of(hunters, keepers)) {
-			for (Actor a : acts) {
-				BufferedImage card;
-				if (a.isOutOfCombat()) {
-					a.getSenshi().setAvailable(false);
-					BufferedImage overlay = IO.getResourceAsImage("shoukan/states/" + (a.getHp() <= 0 ? "dead" : "flee") + ".png");
 
-					card = a.render(locale);
-					Graph.overlay(card, overlay);
-				} else {
-					card = a.render(locale);
-				}
+		List<Actor> values = actors.values();
+		for (int i = 0, s = values.size(); i < s; i++) {
+			Actor a = values.get(i);
+			BufferedImage card;
+			if (a.isOutOfCombat()) {
+				a.getSenshi().setAvailable(false);
+				BufferedImage overlay = IO.getResourceAsImage("shoukan/states/" + (a.getHp() <= 0 ? "dead" : "flee") + ".png");
 
-				if (actors.getIndex() == i) {
-					boolean legacy = a.getSenshi().getHand().getUserDeck().getFrame().isLegacy();
-					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
-
-					Graph.overlay(card, IO.getResourceAsImage(path + "/hero.png"));
-					g2d.drawString("v", offset + Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth("v") / 2, 40);
-				}
-
-				g2d.drawImage(card, offset, 50, null);
-				Graph.applyTransformed(g2d, offset, 55 + Drawable.SIZE.height, g -> {
-					if (a.getHp() < a.getMaxHp() / 3) g.setColor(Color.RED);
-
-					g.drawRect(50, 0, Drawable.SIZE.width - 100, 20);
-					g.fillRect(55, 5, a.getHp() * (Drawable.SIZE.width - 110) / a.getMaxHp(), 10);
-				});
-
-				offset += 255;
-				i++;
+				card = a.render(locale);
+				Graph.overlay(card, overlay);
+			} else {
+				card = a.render(locale);
 			}
 
-			if (!divided) {
+			if (actors.getIndex() == i) {
+				boolean legacy = a.getSenshi().getHand().getUserDeck().getFrame().isLegacy();
+				String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
+
+				Graph.overlay(card, IO.getResourceAsImage(path + "/hero.png"));
+				g2d.drawString("v", offset + Drawable.SIZE.width / 2 - g2d.getFontMetrics().stringWidth("v") / 2, 40);
+			}
+
+			g2d.drawImage(card, offset, 50, null);
+			Graph.applyTransformed(g2d, offset, 55 + Drawable.SIZE.height, g -> {
+				if (a.getHp() < a.getMaxHp() / 3) g.setColor(Color.RED);
+
+				g.drawRect(50, 0, Drawable.SIZE.width - 100, 20);
+				g.fillRect(55, 5, a.getHp() * (Drawable.SIZE.width - 110) / a.getMaxHp(), 10);
+			});
+
+			offset += 255;
+
+			if (!divided && a.getTeam() == Team.KEEPERS) {
 				BufferedImage cbIcon = IO.getResourceAsImage("dunhun/icons/combat.png");
 				g2d.drawImage(cbIcon, offset, 50 + (bi.getHeight() - 50) / 2 - cbIcon.getHeight() / 2, null);
 				offset += 64;
