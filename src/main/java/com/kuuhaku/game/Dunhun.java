@@ -473,18 +473,27 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 	}
 
-	@PlayerAction("enemies")
-	private void enemies(JSONObject args, User u) {
+	@PlayerAction("hunters")
+	private void hunters(JSONObject args, User u) {
+		info(Team.HUNTERS);
+	}
+
+	@PlayerAction("keepers")
+	private void keepers(JSONObject args, User u) {
+		info(Team.KEEPERS);
+	}
+
+	private void info(Team team) {
 		if (getCombat() == null || duel) return;
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		for (Actor a : getCombat().getActors()) {
-			if (!(a instanceof MonsterBase<?> mb) || a.getTeam() != Team.KEEPERS) continue;
+			if (a.getTeam() != team) continue;
 
-			XStringBuilder sb = new XStringBuilder("#-# " + mb.getInfo(getLocale()).getName());
+			XStringBuilder sb = new XStringBuilder("#-# " + a.getName(getLocale()));
 
-			if (mb instanceof Monster m) {
+			if (a instanceof Monster m) {
 				List<String> affs = m.getAffixes().stream()
 						.map(aff -> "- " + aff.getInfo(getLocale()).getDescription())
 						.toList();
@@ -496,10 +505,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 			}
 
-			List<String> skills = mb.getSkills().stream()
+			List<String> skills = a.getSkills().stream()
 					.map(s ->
 							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
-							"\n" + s.getDescription(getLocale(), mb).lines()
+							"\n" + s.getDescription(getLocale(), a).lines()
 									.map(l -> "-# " + l)
 									.collect(Collectors.joining("\n"))
 					)
@@ -515,40 +524,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 					.map(l -> l.startsWith("#") ? l.substring(1) : "> " + l)
 					.collect(Collectors.joining("\n"));
 
-			eb.addField(a.getName(getLocale()), desc, true);
-		}
-
-		getChannel().sendEmbed(eb.build()).queue();
-	}
-
-	@PlayerAction("allies")
-	private void allies(JSONObject args, User u) {
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		for (Hero h : heroes.values()) {
-			XStringBuilder sb = new XStringBuilder("#-# " + getLocale().get("race/" + h.getRace()));
-			h.addHpBar(sb);
-
-			List<String> skills = h.getSkills().stream()
-					.map(s ->
-							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
-							"\n" + s.getDescription(getLocale(), h).lines()
-									.map(l -> "-# " + l)
-									.collect(Collectors.joining("\n"))
-					)
-					.toList();
-
-			if (!skills.isEmpty()) {
-				sb.appendNewLine("#");
-				sb.appendNewLine("**" + getLocale().get("str/skills") + "**");
-				sb.appendNewLine(String.join("\n\n", skills));
+			if (a instanceof Hero h) {
+				eb.addField((h.getContMode() == ContinueMode.CONTINUE ? "🆗 " : "🚪 ") + h.getName(), desc, true);
+			} else {
+				eb.addField(a.getName(getLocale()), desc, true);
 			}
-
-			String desc = sb.toString().lines()
-					.map(l -> l.startsWith("#") ? l.substring(1) : "> " + l)
-					.collect(Collectors.joining("\n"));
-
-			eb.addField((h.getContMode() == ContinueMode.CONTINUE ? "🆗 " : "🚪 ") + h.getName(), desc, true);
 		}
 
 		getChannel().sendEmbed(eb.build()).queue();
