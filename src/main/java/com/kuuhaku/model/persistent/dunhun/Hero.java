@@ -592,7 +592,6 @@ public class Hero extends DAO<Hero> implements Actor {
 		clone.equipment = new JSONObject(equipment);
 		clone.equipCache = equipCache;
 		clone.skillCache = skillCache;
-		clone.consumableCache = new TreeBag<>(Comparator.comparing(Consumable::getId));
 		clone.team = team;
 		clone.game = game;
 
