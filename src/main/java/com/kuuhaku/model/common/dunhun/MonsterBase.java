@@ -145,7 +145,14 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 			aggro = senshiCache.getDmg() / 10 + senshiCache.getDfs() / 20 + getHp() / 150;
 		}
 
-		return (int) Math.max(1, aggro * (1 + modifiers.getAggroMult().get()) * game.getAreaLevel() / 2);
+		double mult = switch (getRarityClass()) {
+			case NORMAL -> 1;
+			case MAGIC -> 1.5;
+			case RARE -> 2.25;
+			case UNIQUE -> 10;
+		};
+
+		return (int) Math.max(1, aggro * (1 + modifiers.getAggroMult().get()) * game.getAreaLevel() / 2 * mult);
 	}
 
 	@Override
