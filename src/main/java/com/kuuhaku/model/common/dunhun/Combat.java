@@ -178,7 +178,7 @@ public class Combat implements Renderer<BufferedImage> {
 					if (a.getHp() < a.getMaxHp() / 3) g.setColor(Color.RED);
 
 					g.drawRect(50, 0, Drawable.SIZE.width - 100, 20);
-					g.fillRect(75, 5, a.getHp() * (Drawable.SIZE.width - 150) / a.getMaxHp(), 10);
+					g.fillRect(55, 5, a.getHp() * (Drawable.SIZE.width - 110) / a.getMaxHp(), 10);
 				});
 
 				offset += 255;
