@@ -119,7 +119,7 @@ public interface Actor {
 		sb.appendNewLine("HP: " + hp + "/" + max);
 		sb.nextLine();
 
-		double part = getMaxHp() > 2500 ? 250 : 100;
+		double part = getMaxHp() > 5000 ? 500 : 100;
 
 		boolean rdClosed = true;
 		int rd = -getRegDeg().peek();
