@@ -60,7 +60,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private final Dunhun game;
 	private final I18N locale;
-	private final List<Actor> played = new ArrayList<>();
 	private final InfiniteList<Actor> actors = new InfiniteList<>();
 	private final BondedList<Actor> hunters = new BondedList<>((a, it) -> {
 		if (getActors(Team.HUNTERS).size() >= 6) return false;
@@ -69,9 +68,7 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setTeam(Team.HUNTERS);
 		a.setGame(getGame());
 		getActors(a.getTeam().getOther()).remove(a);
-
 		actors.add(a);
-		played.add(a);
 
 		a.getSenshi().setAvailable(true);
 		return true;
@@ -83,9 +80,7 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setTeam(Team.KEEPERS);
 		a.setGame(getGame());
 		getActors(a.getTeam().getOther()).remove(a);
-
 		actors.add(a);
-		played.add(a);
 
 		a.getSenshi().setAvailable(true);
 		return true;
@@ -311,11 +306,6 @@ public class Combat implements Renderer<BufferedImage> {
 			if (e.getOwner() instanceof Hero) {
 				game.getEffects().add(e);
 			}
-		}
-
-		List<Actor> inGame = Stream.of(hunters, keepers).flatMap(List::stream).toList();
-		for (Actor a : played) {
-			if (!inGame.contains(a)) a.setHp(0, true);
 		}
 
 		Pair<String, String> previous = game.getMessage();
@@ -765,10 +755,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public Set<EffectBase> getEffects() {
 		return effects;
-	}
-
-	public List<Actor> getPlayed() {
-		return played;
 	}
 
 	public List<Actor> getActors() {

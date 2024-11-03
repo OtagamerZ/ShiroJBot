@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Actor;
@@ -28,6 +29,7 @@ import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.model.common.dunhun.SelfEffect;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.dunhun.ContinueMode;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
@@ -134,8 +136,10 @@ public class Hero extends DAO<Hero> implements Actor {
 		File parent = new File(Constants.CARDS_ROOT + "../heroes");
 		if (!parent.exists()) parent.mkdir();
 
+
 		File f = new File(parent, id + ".png");
 		img = Graph.scaleAndCenterImage(Graph.toColorSpace(img, BufferedImage.TYPE_INT_ARGB), 225, 350);
+		Main.getCacheManager().getResourceCache().invalidate("H:" + id);
 
 		try {
 			ImageIO.write(img, "png", f);
