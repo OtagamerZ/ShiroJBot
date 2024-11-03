@@ -500,7 +500,7 @@ public class Combat implements Renderer<BufferedImage> {
 					for (Skill s : curr.getSkills()) {
 						if (s.getApCost() > curr.getAp() || s.getCd() > 0) continue;
 
-						Boolean canUse = s.canCpuUse(this, (MonsterBase<?>) curr);
+						Boolean canUse = s.canCpuUse(this, curr, null);
 						if (canUse == null) {
 							if (!forcing) skills.add(s);
 						} else if (canUse) {
@@ -514,7 +514,7 @@ public class Combat implements Renderer<BufferedImage> {
 						Skill skill = Utils.getRandomEntry(skills);
 
 						tgts = skill.getTargets(this, curr).stream()
-								.filter(a -> a != null && !a.isOutOfCombat())
+								.filter(a -> a != null && !a.isOutOfCombat() && skill.canCpuUse(this, curr, a))
 								.toList();
 
 						if (!tgts.isEmpty()) {

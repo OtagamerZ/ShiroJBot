@@ -203,13 +203,14 @@ public class Skill extends DAO<Skill> {
 		return out;
 	}
 
-	public Boolean canCpuUse(Combat combat, MonsterBase<?> source) {
+	public Boolean canCpuUse(Combat combat, Actor source, Actor target) {
 		if (cpuRule == null) return null;
 
 		try {
 			Object out = Utils.exec(id, cpuRule, Map.of(
 					"combat", combat,
-					"actor", source
+					"actor", source,
+					"target", target
 			));
 
 			if (out instanceof Boolean b) return b;
