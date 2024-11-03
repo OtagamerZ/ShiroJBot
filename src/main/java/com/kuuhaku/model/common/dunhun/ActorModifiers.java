@@ -106,8 +106,6 @@ public class ActorModifiers implements Iterable<CumValue> {
 	}
 
 	public void expireMods(Senshi sen) {
-		sen.getStats().expireMods();
-
 		removeIf(sen, mod -> {
 			if (mod.getExpiration() > 0) {
 				mod.decExpiration();
