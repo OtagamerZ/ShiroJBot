@@ -34,7 +34,6 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
-import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import org.apache.commons.collections4.Bag;
@@ -42,7 +41,10 @@ import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Command(
@@ -51,7 +53,7 @@ import java.util.stream.Collectors;
 		category = Category.MISC
 )
 @Syntax({
-		"<action:word:r>[all,common,magic,rare,unique]",
+		"<action:word:r>[all,normal,magic,rare,unique]",
 		"<ids:text:r>"
 })
 public class HeroDiscardCommand implements Executable {
