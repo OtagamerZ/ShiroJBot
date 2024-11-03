@@ -377,13 +377,15 @@ public class Dunhun extends GameInstance<NullPhase> {
 							.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
 							.setCancellable(false)
 							.addAction(getLocale().get("str/continue"), s -> {
-								event.set(null);
 								lock.complete(null);
 								Pages.finalizeEvent(s.getMessage(), Utils::doNothing);
 							});
 
 					fin.apply(w.getMessage().editMessageEmbeds(eb.build()))
-							.queue(s -> Pages.buttonize(s, fin));
+							.queue(s -> {
+								event.set(new Pair<>(s, fin));
+								Pages.buttonize(s, fin);
+							});
 				}
 			});
 		}

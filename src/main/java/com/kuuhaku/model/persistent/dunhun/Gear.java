@@ -181,18 +181,21 @@ public class Gear extends DAO<Gear> {
 				)
 				.toList();
 
-		Pattern pat = Utils.regex("[-+][\\d.]+");
+		Pattern pat = Utils.regex("(?<=\\+)?[-\\d]+");
 		for (GearAffix ga : affixes) {
 			String desc = ga.getDescription(locale, false);
-			List<Integer> vals = ga.getValues(locale);
 
+			List<Integer> vals = new ArrayList<>();
 			desc.lines().forEach(l -> {
 				String base = pat
 						.matcher(l.replace("%", "%%"))
-						.replaceAll(m -> Matcher.quoteReplacement("%s"));
+						.replaceAll(m -> {
+							vals.add(Integer.parseInt(m.group()));
+							return Matcher.quoteReplacement("%s");
+						});
 
 				mods.compute(base, (k, v) -> {
-					if (v == null) return new ArrayList<>(vals);
+					if (v == null) return vals;
 
 					for (int j = 0; j < Math.min(v.size(), vals.size()); j++) {
 						v.set(j, v.get(j) + vals.get(j));
