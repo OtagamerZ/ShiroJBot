@@ -52,6 +52,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class Combat implements Renderer<BufferedImage> {
 	private final ScheduledExecutorService cpu = Executors.newSingleThreadScheduledExecutor();
@@ -74,12 +75,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		a.getSenshi().setAvailable(true);
 		return true;
-	}, a -> {
-		actors.remove(a);
-		if (!getActors(Team.KEEPERS).contains(a)) {
-			a.setHp(0, true);
-		}
-	});
+	}, actors::remove);
 	private final BondedList<Actor> keepers = new BondedList<>((a, it) -> {
 		if (getActors(Team.KEEPERS).size() >= 6) return false;
 
@@ -93,12 +89,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		a.getSenshi().setAvailable(true);
 		return true;
-	}, a -> {
-		actors.remove(a);
-		if (!getActors(Team.HUNTERS).contains(a)) {
-			a.setHp(0, true);
-		}
-	});
+	}, actors::remove);
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
 	private final RandomList<Actor> rngList = new RandomList<>();
 	private final Set<EffectBase> effects = new HashSet<>();
@@ -320,6 +311,11 @@ public class Combat implements Renderer<BufferedImage> {
 			if (e.getOwner() instanceof Hero) {
 				game.getEffects().add(e);
 			}
+		}
+
+		List<Actor> inGame = Stream.of(hunters, keepers).flatMap(List::stream).toList();
+		for (Actor a : actors.values()) {
+			if (!inGame.contains(a)) a.setHp(0, true);
 		}
 
 		Pair<String, String> previous = game.getMessage();
