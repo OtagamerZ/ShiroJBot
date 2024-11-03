@@ -174,35 +174,29 @@ public class Gear extends DAO<Gear> {
 		List<String> out = new ArrayList<>();
 		LinkedHashMap<String, List<Integer>> mods = new LinkedHashMap<>();
 
-		List<GearAffix> affixes = this.affixes.stream()
-				.sorted(Comparator
-						.<GearAffix, Boolean>comparing(ga -> ga.getAffix().getType() == AffixType.SUFFIX, Boolean::compareTo)
-						.thenComparing(ga -> ga.getAffix().getId())
-				)
+		List<String> affixes = this.affixes.stream()
+				.map(g -> g.getDescription(locale, false))
+				.flatMap(String::lines)
 				.toList();
 
 		Pattern pat = Utils.regex("[+-]\\d+");
-		for (GearAffix ga : affixes) {
-			String desc = ga.getDescription(locale, false);
-
+		for (String l : affixes) {
 			List<Integer> vals = new ArrayList<>();
-			desc.lines().forEach(l -> {
-				String base = pat
-						.matcher(l.replace("%", "%%"))
-						.replaceAll(m -> {
-							vals.add(Integer.parseInt(m.group()));
-							return Matcher.quoteReplacement("%s");
-						});
+			String base = pat
+					.matcher(l.replace("%", "%%"))
+					.replaceAll(m -> {
+						vals.add(Integer.parseInt(m.group()));
+						return Matcher.quoteReplacement("%s");
+					});
 
-				mods.compute(base, (k, v) -> {
-					if (v == null) return vals;
+			mods.compute(base, (k, v) -> {
+				if (v == null) return vals;
 
-					for (int j = 0; j < Math.min(v.size(), vals.size()); j++) {
-						v.set(j, v.get(j) + vals.get(j));
-					}
+				for (int j = 0; j < Math.min(v.size(), vals.size()); j++) {
+					v.set(j, v.get(j) + vals.get(j));
+				}
 
-					return v;
-				});
+				return v;
 			});
 		}
 
