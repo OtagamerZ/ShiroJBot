@@ -221,7 +221,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							int xpGained = 0;
 
 							XStringBuilder sb = new XStringBuilder();
-							for (Actor a : getCombat().getActors().values()) {
+							for (Actor a : getCombat().getActors()) {
 								if (a instanceof MonsterBase<?> m && m.getHp() == 0 && m.getTeam() == Team.KEEPERS) {
 									xpGained += m.getKillXp();
 
