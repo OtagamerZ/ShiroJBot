@@ -67,6 +67,7 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setFleed(false);
 		a.setTeam(Team.HUNTERS);
 		a.setGame(getGame());
+		getActors(a.getTeam().getOther()).remove(a);
 
 		actors.add(a);
 		played.add(a);
@@ -85,6 +86,7 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setFleed(false);
 		a.setTeam(Team.KEEPERS);
 		a.setGame(getGame());
+		getActors(a.getTeam().getOther()).remove(a);
 
 		actors.add(a);
 		played.add(a);
