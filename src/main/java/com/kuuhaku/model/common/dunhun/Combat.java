@@ -314,7 +314,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		List<Actor> inGame = Stream.of(hunters, keepers).flatMap(List::stream).toList();
-		for (Actor a : actors.values()) {
+		for (Actor a : played) {
 			if (!inGame.contains(a)) a.setHp(0, true);
 		}
 
