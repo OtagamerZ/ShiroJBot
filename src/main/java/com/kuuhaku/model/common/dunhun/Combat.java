@@ -365,7 +365,13 @@ public class Combat implements Renderer<BufferedImage> {
 			if (!h.getSkills().isEmpty()) {
 				helper.addAction(Utils.parseEmoji("⚡"), w -> {
 					EventHandler handle = Pages.getHandler();
-					List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("skills");
+					Map<String, List<?>> values = handle.getDropdownValues(handle.getEventId(w.getMessage()));
+					if (values == null) {
+						game.getChannel().sendMessage(locale.get("error/no_values")).queue();
+						return;
+					}
+
+					List<?> selected = values.get("skills");
 					if (selected == null || selected.isEmpty()) {
 						game.getChannel().sendMessage(locale.get("error/no_skill_selected")).queue();
 						return;
