@@ -116,6 +116,11 @@ public class HeroDiscardCommand implements Executable {
 			names.add(locale.get("str/and_more", gears.size() - names.size()));
 		}
 
+		if (names.isEmpty()) {
+			event.channel().sendMessage(locale.get("error/no_items")).queue();
+			return;
+		}
+
 		try {
 			Utils.confirm(locale.get(gears.size() == 1 ? "question/discard" : "question/discard_multi", Utils.properlyJoin("").apply(names)), event.channel(),
 					w -> {
