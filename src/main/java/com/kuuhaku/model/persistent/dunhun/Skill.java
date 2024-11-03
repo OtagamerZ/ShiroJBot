@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.localized.LocalizedSkill;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
@@ -207,11 +208,12 @@ public class Skill extends DAO<Skill> {
 		if (cpuRule == null) return null;
 
 		try {
-			Object out = Utils.exec(id, cpuRule, Map.of(
-					"combat", combat,
-					"actor", source,
-					"target", target
-			));
+			JSONObject jo = new JSONObject();
+			jo.put("combat", combat);
+			jo.put("actor", source);
+			jo.put("target", target);
+
+			Object out = Utils.exec(id, cpuRule, jo);
 
 			if (out instanceof Boolean b) return b;
 		} catch (Exception e) {
