@@ -327,9 +327,7 @@ public class Gear extends DAO<Gear> {
 
 	public static Gear getRandom(Actor source, Hero hero, Basetype base, RarityClass rarity) {
 		double mult = 1;
-		int dropLevel = Integer.MAX_VALUE;
 		if (source != null && source.getGame() != null) {
-			dropLevel = source.getGame().getAreaLevel() + 1;
 			mult = switch (source.getRarityClass()) {
 				case NORMAL -> 1;
 				case MAGIC -> 1.2;
