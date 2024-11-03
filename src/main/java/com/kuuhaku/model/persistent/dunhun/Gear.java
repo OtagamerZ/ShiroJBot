@@ -181,7 +181,7 @@ public class Gear extends DAO<Gear> {
 				)
 				.toList();
 
-		Pattern pat = Utils.regex("(?<=\\+)?[-\\d]+");
+		Pattern pat = Utils.regex("[+-]\\d+");
 		for (GearAffix ga : affixes) {
 			String desc = ga.getDescription(locale, false);
 
