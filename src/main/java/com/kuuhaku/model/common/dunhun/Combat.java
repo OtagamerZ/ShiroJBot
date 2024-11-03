@@ -514,7 +514,7 @@ public class Combat implements Renderer<BufferedImage> {
 						Skill skill = Utils.getRandomEntry(skills);
 
 						tgts = skill.getTargets(this, curr).stream()
-								.filter(a -> a != null && !a.isOutOfCombat() && skill.canCpuUse(this, curr, a))
+								.filter(a -> a != null && !a.isOutOfCombat() && skill.canCpuUse(this, curr, a) != false)
 								.toList();
 
 						if (!tgts.isEmpty()) {
