@@ -75,7 +75,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return true;
 	}, a -> {
 		actors.remove(a);
-		if (!actors.contains(a) && !getActors(Team.KEEPERS).contains(a)) {
+		if (!getActors(Team.KEEPERS).contains(a)) {
 			a.setHp(0, true);
 		}
 	});
@@ -93,7 +93,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return true;
 	}, a -> {
 		actors.remove(a);
-		if (!actors.contains(a) && !getActors(Team.HUNTERS).contains(a)) {
+		if (!getActors(Team.HUNTERS).contains(a)) {
 			a.setHp(0, true);
 		}
 	});
