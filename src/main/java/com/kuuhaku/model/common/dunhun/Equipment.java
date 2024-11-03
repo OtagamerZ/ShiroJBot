@@ -42,7 +42,7 @@ public class Equipment implements Iterable<Gear> {
 	private Gear body;
 	private Gear boots;
 	private Gear gloves;
-	private Gear back;
+	private Gear grimoire;
 	private Gear amulet;
 	private Gear belt;
 	private final MultiSlot<Gear> rings = new MultiSlot<>(2);
@@ -56,9 +56,9 @@ public class Equipment implements Iterable<Gear> {
 		body = supplier.apply(BODY, -1);
 		boots = supplier.apply(BOOTS, -1);
 		gloves = supplier.apply(GLOVES, -1);
-		back = supplier.apply(BACK, -1);
 		amulet = supplier.apply(AMULET, -1);
 		belt = supplier.apply(BELT, -1);
+		grimoire = supplier.apply(GRIMOIRE, -1);
 
 		for (int i = 0; i < 2; i++) {
 			rings.add(supplier.apply(RING, i));
@@ -82,8 +82,8 @@ public class Equipment implements Iterable<Gear> {
 		return gloves;
 	}
 
-	public Gear getBack() {
-		return back;
+	public Gear getGrimoire() {
+		return grimoire;
 	}
 
 	public Gear getAmulet() {
@@ -189,7 +189,7 @@ public class Equipment implements Iterable<Gear> {
 	@Override
 	public Iterator<Gear> iterator() {
 		Gear[] gears = {
-				helmet, body, boots, gloves, back, amulet, belt,
+				helmet, body, boots, gloves, grimoire, amulet, belt,
 				rings.get(0), rings.get(1),
 				weapons.get(0), weapons.get(1)
 		};

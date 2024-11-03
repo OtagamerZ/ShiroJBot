@@ -19,5 +19,5 @@
 package com.kuuhaku.model.enums.dunhun;
 
 public enum GearSlot {
-	BACK, HELMET, AMULET, WEAPON, BODY, RING, GLOVES, BOOTS, BELT;
+	GRIMOIRE, HELMET, AMULET, WEAPON, BODY, RING, GLOVES, BOOTS, BELT
 }
