@@ -79,11 +79,11 @@ public class HeroStats {
 	}
 
 	public int getXpToCurrent() {
-		return xpTable[getLevel() - 1];
+		return xpTable[getLevel() - 2];
 	}
 
 	public int getXpToNext() {
-		return xpTable[getLevel()];
+		return xpTable[getLevel() - 1];
 	}
 
 	public int getLosableXp() {
