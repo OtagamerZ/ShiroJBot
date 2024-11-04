@@ -96,12 +96,12 @@ public class HeroCommand implements Executable {
 
 			eb.addField(Constants.VOID, """
 					HP: %s (%s)
-					%s (%s)
+					%s/%s (%s)
 					%s
 					%s (%s/%s)
 					""".formatted(
 					h.getMaxHp(), Utils.sign((int) h.getModifiers().getMaxHp().get()),
-					locale.get("str/ap", h.getMaxAp()), Utils.sign((int) h.getModifiers().getMaxAp().get()),
+					locale.get("str/ap", h.getMaxAp()), h.getApCap(), Utils.sign((int) h.getModifiers().getMaxAp().get()),
 					locale.get("str/critical", Utils.roundToString(h.getCritical(), 2)),
 					locale.get("str/level", h.getStats().getLevel()),
 					h.getStats().getXp(), h.getStats().getXpToNext()
@@ -230,7 +230,7 @@ public class HeroCommand implements Executable {
 						String prefix;
 						if (idx > -1) {
 							prefix = Utils.fancyNumber(idx + 1);
-						} else if (s.getReqRace() == null && !h.getStats().getUnlockedSkills().contains(s.getId())) {
+						} else if (!(s.isFree() || h.getStats().getUnlockedSkills().contains(s.getId()))) {
 							prefix = "🔒";
 						} else {
 							prefix = "";
@@ -308,7 +308,7 @@ public class HeroCommand implements Executable {
 					return;
 				}
 
-				if (s.getReqRace() == null && !h.getStats().getUnlockedSkills().contains(s.getId())) {
+				if (!(s.isFree() || h.getStats().getUnlockedSkills().contains(s.getId()))) {
 					if (h.getStats().getPointsLeft() <= 0) {
 						w.getChannel().sendMessage(locale.get("error/insufficient_points")).queue();
 						return;
@@ -423,13 +423,15 @@ public class HeroCommand implements Executable {
 			}
 
 			Gear g = h.getInvGear(Integer.parseInt(s.getContentRaw()));
-			GearStats stats = g.getBasetype().getStats();
 			if (g == null) {
 				w.getChannel().sendMessage(locale.get("error/gear_not_found")).queue();
 				return;
-			} else if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes().has(stats.requirements())) {
-				w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
-				return;
+			} else {
+				GearStats stats = g.getBasetype().getStats();
+				if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes().has(stats.requirements())) {
+					w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
+					return;
+				}
 			}
 
 			if (!h.getEquipment().equip(g)) {

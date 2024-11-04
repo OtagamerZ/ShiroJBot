@@ -82,6 +82,10 @@ public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
 		return remove(index);
 	}
 
+	public int getIndex() {
+		return index;
+	}
+
 	public void setIndex(int idx) {
 		index = idx;
 	}

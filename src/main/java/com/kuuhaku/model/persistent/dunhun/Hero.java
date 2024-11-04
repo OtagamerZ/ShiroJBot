@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Actor;
@@ -28,8 +29,8 @@ import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.model.common.dunhun.SelfEffect;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.dunhun.ContinueMode;
-import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -48,8 +49,7 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
-import org.apache.commons.collections4.Bag;
-import org.apache.commons.collections4.bag.TreeBag;
+import kotlin.Pair;
 import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -92,15 +92,15 @@ public class Hero extends DAO<Hero> implements Actor {
 	private transient final ActorModifiers modifiers = new ActorModifiers();
 	private transient final RegDeg regDeg = new RegDeg(null);
 	private transient final Delta<Integer> hp = new Delta<>();
+	private transient final List<Consumable> spentConsumables = new ArrayList<>();
 	private transient Equipment equipCache;
 	private transient List<Skill> skillCache;
-	private transient Bag<Consumable> consumableCache;
-	private transient List<Consumable> spentConsumables = new ArrayList<>();
 	private transient Senshi senshiCache;
 	private transient Dunhun game;
 	private transient Deck deck;
 	private transient Team team;
 	private transient int ap;
+	private transient int mindControl;
 	private transient boolean flee;
 	private transient ContinueMode contMode = ContinueMode.CONTINUE;
 
@@ -136,8 +136,10 @@ public class Hero extends DAO<Hero> implements Actor {
 		File parent = new File(Constants.CARDS_ROOT + "../heroes");
 		if (!parent.exists()) parent.mkdir();
 
+
 		File f = new File(parent, id + ".png");
 		img = Graph.scaleAndCenterImage(Graph.toColorSpace(img, BufferedImage.TYPE_INT_ARGB), 225, 350);
+		Main.getCacheManager().getResourceCache().invalidate("H:" + id);
 
 		try {
 			ImageIO.write(img, "png", f);
@@ -180,9 +182,29 @@ public class Hero extends DAO<Hero> implements Actor {
 		return ap;
 	}
 
+	public void mindControl(int time) {
+		mindControl = Math.max(mindControl, time);
+	}
+
+	public boolean isMindControlled() {
+		return mindControl > 0;
+	}
+
+	public void decMindControl() {
+		if (mindControl > 0) mindControl--;
+	}
+
+	public void clearMindControl() {
+		mindControl = 0;
+	}
+
 	@Override
 	public int getMaxAp() {
-		return Calc.clamp(2 + (int) modifiers.getMaxAp().get() + stats.getLevel() / 8, 1, 5 + getAttributes().dex() / 10);
+		return (int) Calc.clamp(2 + stats.getLevel() / 8d, 1, getApCap());
+	}
+
+	public int getApCap() {
+		return (int) (5 + getAttributes().dex() / 10d + modifiers.getMaxAp().get());
 	}
 
 	@Override
@@ -198,10 +220,11 @@ public class Hero extends DAO<Hero> implements Actor {
 	@Override
 	public double getCritical() {
 		double crit = getEquipment().getWeaponList().stream()
+				.filter(Gear::isWeapon)
 				.mapToDouble(Gear::getCritical)
 				.average().orElse(0);
 
-		return (int) (crit * (1 + modifiers.getCritical().get() + getAttributes().dex() / 20d));
+		return Calc.clamp(crit * (1 + modifiers.getCritical().get() + getAttributes().dex() / 20d), 0, 100);
 	}
 
 	@Override
@@ -293,7 +316,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 		boolean unarmed = true;
 		for (Gear g : equips.getWeapons().getEntries()) {
-			if (g.getBasetype().getStats().gearType().getSlot() == GearSlot.WEAPON) {
+			if (g.isWeapon()) {
 				if (!g.getTags().contains("UNARMED")) unarmed = false;
 			}
 
@@ -356,7 +379,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", stats.getSkills())
 				.stream()
 				.filter(s -> getAttributes().has(s.getRequirements()) && (
-						(s.getReqRace() == null && getStats().getUnlockedSkills().contains(s.getId()))
+						(s.getReqRace() == null && (s.isFree() || getStats().getUnlockedSkills().contains(s.getId())))
 						|| s.getReqRace() == getRace()
 				))
 				.sorted(Comparator.comparingInt(s -> stats.getSkills().indexOf(s.getId())))
@@ -381,32 +404,66 @@ public class Hero extends DAO<Hero> implements Actor {
 				.toList();
 	}
 
-	public Bag<Consumable> getConsumables() {
-		if (consumableCache != null) return consumableCache;
+	public int getConsumableCount(String id) {
+		return stats.getConsumables().getInt(id.toUpperCase());
+	}
 
-		Map<String, Consumable> cons = DAO.queryAll(Consumable.class, "SELECT c FROM Consumable c WHERE c.id IN ?1", stats.getConsumables())
-				.stream()
-				.collect(Collectors.toMap(Consumable::getId, Function.identity()));
+	public void addConsumable(Consumable item, int amount) {
+		addConsumable(item.getId(), amount);
+	}
 
-		TreeBag<Consumable> out = new TreeBag<>(Comparator.comparing(Consumable::getId));
-		for (Object id : stats.getConsumables()) {
-			if (cons.containsKey(String.valueOf(id))) {
-				out.add(cons.get(String.valueOf(id)));
-			}
+	public void addConsumable(String id, int amount) {
+		stats.getConsumables().compute(id.toUpperCase(), (k, v) -> {
+			if (v == null) return amount;
+
+			return ((Number) v).intValue() + amount;
+		});
+	}
+
+	public boolean consume(Consumable item) {
+		return consume(item.getId());
+	}
+
+	public boolean consume(String id) {
+		return consume(id, 1);
+	}
+
+	public boolean consume(Consumable item, int amount) {
+		return consume(item.getId(), amount);
+	}
+
+	public boolean consume(String id, int amount) {
+		return consume(id, amount, false);
+	}
+
+	public boolean consume(String id, int amount, boolean force) {
+		if (amount <= 0) return false;
+
+		int rem = stats.getConsumables().getInt(id.toUpperCase());
+		if (rem < amount && !force) return false;
+
+		if (rem - amount == 0) {
+			stats.getConsumables().remove(id.toUpperCase());
+		} else {
+			stats.getConsumables().put(id.toUpperCase(), rem - amount);
 		}
 
-		return consumableCache = out;
+		return true;
+	}
+
+	public Map<Consumable, Integer> getConsumables() {
+		return stats.getConsumables().entrySet().parallelStream()
+				.filter(e -> ((Number) e.getValue()).intValue() > 0)
+				.map(e -> new Pair<>(DAO.find(Consumable.class, e.getKey()), ((Number) e.getValue()).intValue()))
+				.filter(p -> p.getFirst() != null)
+				.collect(Collectors.toMap(
+						Pair::getFirst, Pair::getSecond, Integer::sum,
+						() -> new TreeMap<>(Comparator.comparing(Consumable::getId))
+				));
 	}
 
 	public List<Consumable> getSpentConsumables() {
 		return spentConsumables;
-	}
-
-	public Consumable getConsumable(String id) {
-		return getConsumables().stream()
-				.filter(cons -> cons.getId().equals(id))
-				.findFirst()
-				.orElse(null);
 	}
 
 	@Override
@@ -453,12 +510,15 @@ public class Hero extends DAO<Hero> implements Actor {
 
 			g.load(locale, this);
 			def += g.getDfs();
-			if (g.getBasetype().getStats().gearType().getSlot() != GearSlot.WEAPON) {
+			if (!g.isWeapon()) {
 				dmg += g.getDmg();
 			}
 		}
 
-		List<Gear> wpns = getEquipment().getWeaponList();
+		List<Gear> wpns = getEquipment().getWeaponList().stream()
+				.filter(Gear::isWeapon)
+				.toList();
+
 		if (wpns.size() == 1) {
 			dmg += wpns.getFirst().getDmg();
 		} else {
@@ -468,8 +528,8 @@ public class Hero extends DAO<Hero> implements Actor {
 		}
 
 		Attributes a = getAttributes();
-		base.setAtk((int) (dmg * (1 + a.str() / 5d)));
-		base.setDfs((int) (def * (1 + a.str() / 8d)));
+		base.setAtk((int) (dmg * (1 + a.str() / 10d)));
+		base.setDfs((int) (def * (1 + a.vit() * 0.075)));
 		base.setDodge(Math.max(0, a.dex() / 2 - a.vit() / 3));
 
 		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();
@@ -538,7 +598,6 @@ public class Hero extends DAO<Hero> implements Actor {
 		clone.equipment = new JSONObject(equipment);
 		clone.equipCache = equipCache;
 		clone.skillCache = skillCache;
-		clone.consumableCache = new TreeBag<>(Comparator.comparing(Consumable::getId));
 		clone.team = team;
 		clone.game = game;
 

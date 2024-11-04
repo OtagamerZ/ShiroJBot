@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.localized.LocalizedSkill;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
@@ -120,7 +121,7 @@ public class Skill extends DAO<Skill> {
 					case LVL -> h.getStats().getLevel();
 				};
 
-				scale = (1 + atb / (9d + atb)) * attr.wis() * 0.075 * h.asSenshi(locale).getPower();
+				scale = (1 + atb / (9d + atb * Math.pow(0.95, attr.wis()))) * h.asSenshi(locale).getPower();
 			} else {
 				scale = h.asSenshi(locale).getPower();
 			}
@@ -165,6 +166,10 @@ public class Skill extends DAO<Skill> {
 		return cooldown;
 	}
 
+	public boolean isFree() {
+		return reqRace != null || id.equalsIgnoreCase("CHANNEL");
+	}
+
 	public void execute(I18N locale, Combat combat, Actor source, Actor target) {
 		List<Integer> values = new ArrayList<>();
 		getDescription(locale, source, values);
@@ -199,14 +204,16 @@ public class Skill extends DAO<Skill> {
 		return out;
 	}
 
-	public Boolean canCpuUse(Combat combat, MonsterBase<?> source) {
+	public Boolean canCpuUse(Combat combat, Actor source, Actor target) {
 		if (cpuRule == null) return null;
 
 		try {
-			Object out = Utils.exec(id, cpuRule, Map.of(
-					"combat", combat,
-					"actor", source
-			));
+			JSONObject jo = new JSONObject();
+			jo.put("combat", combat);
+			jo.put("actor", source);
+			jo.put("target", target);
+
+			Object out = Utils.exec(id, cpuRule, jo);
 
 			if (out instanceof Boolean b) return b;
 		} catch (Exception e) {

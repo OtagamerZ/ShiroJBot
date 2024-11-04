@@ -52,7 +52,7 @@ import java.util.stream.Stream;
 @Syntax(
 		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>(?=\\s|$))+"),
 		value = {
-				"<users:custom:r>[users] <dungeon:word>",
+				"<dungeon:word> <users:custom:r>[users]",
 				"<dungeon:word>"
 		}
 )
@@ -112,8 +112,8 @@ public class DunhunCommand implements Executable {
 				} catch (GameReport e) {
 					switch (e.getCode()) {
 						case GameReport.NO_HERO -> event.channel().sendMessage(locale.get("error/no_hero")).queue();
-						case GameReport.OVERBURDENED ->
-								event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
+						case GameReport.OVERBURDENED -> event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
+						case GameReport.UNDERLEVELLED -> event.channel().sendMessage(locale.get("error/underlevelled", e.getContent())).queue();
 					}
 				}
 
@@ -157,6 +157,8 @@ public class DunhunCommand implements Executable {
 								}
 								case GameReport.OVERBURDENED ->
 										event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
+								case GameReport.UNDERLEVELLED ->
+										event.channel().sendMessage(locale.get("error/underlevelled", e.getContent())).queue();
 							}
 						}
 

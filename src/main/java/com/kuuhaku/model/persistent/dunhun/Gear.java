@@ -26,6 +26,7 @@ import com.kuuhaku.model.common.dunhun.GearModifiers;
 import com.kuuhaku.model.common.dunhun.SelfEffect;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.records.dunhun.CombatContext;
@@ -114,6 +115,10 @@ public class Gear extends DAO<Gear> {
 		);
 	}
 
+	public boolean isWeapon() {
+		return basetype.getStats().gearType().getSlot() == GearSlot.WEAPON && !getTags().contains("OFFHAND");
+	}
+
 	public Unique getUnique() {
 		return unique;
 	}
@@ -169,32 +174,29 @@ public class Gear extends DAO<Gear> {
 		List<String> out = new ArrayList<>();
 		LinkedHashMap<String, List<Integer>> mods = new LinkedHashMap<>();
 
-		List<GearAffix> affixes = this.affixes.stream()
-				.sorted(Comparator
-						.<GearAffix, Boolean>comparing(ga -> ga.getAffix().getType() == AffixType.SUFFIX, Boolean::compareTo)
-						.thenComparing(ga -> ga.getAffix().getId())
-				)
+		List<String> affixes = this.affixes.stream()
+				.map(g -> g.getDescription(locale, false))
+				.flatMap(String::lines)
 				.toList();
 
-		Pattern pat = Utils.regex("[-+][\\d.]+");
-		for (GearAffix ga : affixes) {
-			String desc = ga.getDescription(locale, false);
-			List<Integer> vals = ga.getValues(locale);
+		Pattern pat = Utils.regex("[+-]\\d+");
+		for (String l : affixes) {
+			List<Integer> vals = new ArrayList<>();
+			String base = pat
+					.matcher(l.replace("%", "%%"))
+					.replaceAll(m -> {
+						vals.add(Integer.parseInt(m.group()));
+						return Matcher.quoteReplacement("%s");
+					});
 
-			desc.lines().forEach(l -> {
-				String base = pat
-						.matcher(l.replace("%", "%%"))
-						.replaceAll(m -> Matcher.quoteReplacement("%s"));
+			mods.compute(base, (k, v) -> {
+				if (v == null) return vals;
 
-				mods.compute(base, (k, v) -> {
-					if (v == null) return new ArrayList<>(vals);
+				for (int j = 0; j < Math.min(v.size(), vals.size()); j++) {
+					v.set(j, v.get(j) + vals.get(j));
+				}
 
-					for (int j = 0; j < Math.min(v.size(), vals.size()); j++) {
-						v.set(j, v.get(j) + vals.get(j));
-					}
-
-					return v;
-				});
+				return v;
 			});
 		}
 
@@ -322,9 +324,7 @@ public class Gear extends DAO<Gear> {
 
 	public static Gear getRandom(Actor source, Hero hero, Basetype base, RarityClass rarity) {
 		double mult = 1;
-		int dropLevel = Integer.MAX_VALUE;
 		if (source != null && source.getGame() != null) {
-			dropLevel = source.getGame().getAreaLevel() + 1;
 			mult = switch (source.getRarityClass()) {
 				case NORMAL -> 1;
 				case MAGIC -> 1.2;
@@ -358,14 +358,14 @@ public class Gear extends DAO<Gear> {
 		List<AffixType> rolled = Utils.getRandomN(pool, Calc.rng(min, min * 2), min);
 
 		for (AffixType type : rolled) {
-			Affix af = Affix.getRandom(out, type, dropLevel);
+			Affix af = Affix.getRandom(out, type);
 			if (af == null) continue;
 
 			out.getAffixes().add(new GearAffix(out, af));
 		}
 
 		if (rarity == RarityClass.RARE && out.getRarityClass() != RarityClass.RARE) {
-			Affix af = Affix.getRandom(out, Utils.getRandomEntry(pool), dropLevel);
+			Affix af = Affix.getRandom(out, Utils.getRandomEntry(pool));
 			if (af != null) {
 				out.getAffixes().add(new GearAffix(out, af));
 			}

@@ -131,7 +131,7 @@ public class Affix extends DAO<Affix> {
 		return Objects.hashCode(id);
 	}
 
-	public static Affix getRandom(Gear gear, AffixType type, int level) {
+	public static Affix getRandom(Gear gear, AffixType type) {
 		if (type == null) {
 			List<AffixType> left = new ArrayList<>();
 			left.addAll(List.of(AffixType.itemValues()));
@@ -171,12 +171,12 @@ public class Affix extends DAO<Affix> {
 				FROM affix
 				WHERE type = ?1
 				  AND weight > 0
-				  AND (min_level <= ?2 OR has(cast(?3 AS JSONB), 'JEWELRY'))
+				  AND (min_level <= ?2 OR has(cast(?3 AS JSONB), 'ACCESSORY'))
 				  AND req_tags <@ cast(?3 AS JSONB)
 				  AND NOT (has(req_tags, 'WEAPON') AND has(cast(?3 AS JSONB), 'OFFHAND'))
 				  AND NOT has(get_affix_family(cast(?4 AS JSONB)), get_affix_family(id))
 				  AND (affix_group IS NULL OR affix_group NOT IN ?5)
-				""", type.name(), level, tags.toString(), affixes.toString(), groups);
+				""", type.name(), gear.getReqLevel(), tags.toString(), affixes.toString(), groups);
 
 		for (Object[] a : affs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());

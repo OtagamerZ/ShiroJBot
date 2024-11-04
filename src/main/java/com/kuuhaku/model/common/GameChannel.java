@@ -69,6 +69,7 @@ public class GameChannel {
 
 		Map<String, MessageCreateAction> acts = new HashMap<>();
 		for (GuildMessageChannel chn : getChannels()) {
+			if (!chn.canTalk()) continue;
 			acts.put(chn.getId(), chn.sendFiles(FileUpload.fromData(bytes, filename)));
 		}
 
@@ -81,6 +82,7 @@ public class GameChannel {
 
 		Map<String, MessageCreateAction> acts = new HashMap<>();
 		for (GuildMessageChannel chn : getChannels()) {
+			if (!chn.canTalk()) continue;
 			List<String> buf = buffer.remove(chn.getId());
 
 			if (buf != null) {
@@ -104,6 +106,7 @@ public class GameChannel {
 
 		Map<String, MessageCreateAction> acts = new HashMap<>();
 		for (GuildMessageChannel chn : getChannels()) {
+			if (!chn.canTalk()) continue;
 			acts.put(chn.getId(), chn.sendMessageEmbeds(embed));
 		}
 
@@ -126,6 +129,8 @@ public class GameChannel {
 
 		Map<String, MessageCreateAction> acts = new HashMap<>();
 		for (GuildMessageChannel chn : getChannels()) {
+			if (!chn.canTalk()) continue;
+
 			String msg = buffer.remove(chn.getId()).toString();
 			if (!msg.isBlank()) {
 				acts.put(chn.getId(), chn.sendMessage(msg));

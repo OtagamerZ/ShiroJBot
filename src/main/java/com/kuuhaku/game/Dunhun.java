@@ -22,6 +22,7 @@ import com.kuuhaku.model.enums.dunhun.ContinueMode;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.*;
+import com.kuuhaku.model.persistent.user.DynamicProperty;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.dunhun.EventAction;
 import com.kuuhaku.model.records.dunhun.EventDescription;
@@ -35,6 +36,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.lang.reflect.InvocationTargetException;
@@ -79,6 +81,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 				throw new GameReport(GameReport.NO_HERO, p);
 			} else if (h.getInventory().size() > h.getInventoryCapacity()) {
 				throw new GameReport(GameReport.OVERBURDENED, h.getName());
+			} else if (h.getStats().getLevel() < dungeon.getAreaLevel()) {
+				throw new GameReport(GameReport.UNDERLEVELLED, h.getName());
 			}
 
 			h.setGame(this);
@@ -163,10 +167,25 @@ public class Dunhun extends GameInstance<NullPhase> {
 							if (getTurn() % 10 == 0) {
 								beginCombat(Boss.getRandom());
 							} else {
-								if (Calc.chance(Math.max(5, 15 - getTurn()))) {
-									runEvent();
-								} else {
-									runCombat();
+								boolean skipped = false;
+								if (dungeon.getMonsterPool().isEmpty()) {
+									int skip = heroes.values().stream()
+											.map(h -> h.getAccount().getDynValue("skip_floor_" + dungeon.getId().toLowerCase(), "0"))
+											.mapToInt(Integer::parseInt)
+											.max().orElse(0);
+
+									if (skip > 0 && getTurn() == 1) {
+										runEvent(DAO.find(Event.class, "CHECKPOINT"));
+										skipped = true;
+									}
+								}
+
+								if (!skipped) {
+									if (Calc.chance(Math.max(5, 15 - getTurn()))) {
+										runEvent();
+									} else {
+										runCombat();
+									}
 								}
 							}
 						}
@@ -202,8 +221,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 							int xpGained = 0;
 
 							XStringBuilder sb = new XStringBuilder();
-							for (Actor a : getCombat().getPlayed()) {
-								if (a instanceof MonsterBase<?> m && m.getHp() == 0 && m.getTeam() == Team.KEEPERS) {
+							for (Actor a : getCombat().getActors(Team.KEEPERS)) {
+								if (a instanceof MonsterBase<?> m && m.getHp() == 0) {
 									xpGained += m.getKillXp();
 
 									Loot lt = m.getStats().generateLoot(m);
@@ -266,6 +285,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 										getChannel().sendMessage(getLocale().get("str/actor_level_up", n.getName(), n.getStats().getLevel())).queue();
 									}
 								});
+
+								if (dungeon.getMonsterPool().isEmpty() && getTurn() % 10 == 0) {
+									DynamicProperty prop = h.getAccount().getDynamicProperty("skip_floor_" + dungeon.getId().toLowerCase());
+									prop.setValue(Math.max(NumberUtils.toInt(prop.getValue()), getTurn()));
+									prop.save();
+								}
 							}
 
 							combat.set(null);
@@ -352,13 +377,15 @@ public class Dunhun extends GameInstance<NullPhase> {
 							.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
 							.setCancellable(false)
 							.addAction(getLocale().get("str/continue"), s -> {
-								event.set(null);
 								lock.complete(null);
 								Pages.finalizeEvent(s.getMessage(), Utils::doNothing);
 							});
 
 					fin.apply(w.getMessage().editMessageEmbeds(eb.build()))
-							.queue(s -> Pages.buttonize(s, fin));
+							.queue(s -> {
+								event.set(new Pair<>(s, fin));
+								Pages.buttonize(s, fin);
+							});
 				}
 			});
 		}
@@ -403,12 +430,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					g.setOwner(h);
 					g.save();
 
-					String name = g.getName(getLocale());
-					if (g.getRarityClass() == RarityClass.RARE) {
-						name += ", " + g.getBasetype().getInfo(getLocale()).getName();
-					}
-
-					dist.computeIfAbsent(h.getName(), k -> new ArrayList<>()).add(name);
+					dist.computeIfAbsent(h.getName(), k -> new ArrayList<>()).add(g.getName(getLocale()));
 				}
 
 				Map<Hero, Map<UserItem, Integer>> split = new HashMap<>();
@@ -457,18 +479,27 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 	}
 
-	@PlayerAction("enemies")
-	private void enemies(JSONObject args, User u) {
+	@PlayerAction("hunters")
+	private void hunters(JSONObject args, User u) {
+		info(Team.HUNTERS);
+	}
+
+	@PlayerAction("keepers")
+	private void keepers(JSONObject args, User u) {
+		info(Team.KEEPERS);
+	}
+
+	private void info(Team team) {
 		if (getCombat() == null || duel) return;
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
 		for (Actor a : getCombat().getActors()) {
-			if (!(a instanceof MonsterBase<?> mb) || a.getTeam() != Team.KEEPERS) continue;
+			if (a.getTeam() != team) continue;
 
-			XStringBuilder sb = new XStringBuilder("#-# " + mb.getInfo(getLocale()).getName());
+			XStringBuilder sb = new XStringBuilder("#-# " + a.getName(getLocale()));
 
-			if (mb instanceof Monster m) {
+			if (a instanceof Monster m) {
 				List<String> affs = m.getAffixes().stream()
 						.map(aff -> "- " + aff.getInfo(getLocale()).getDescription())
 						.toList();
@@ -480,10 +511,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 			}
 
-			List<String> skills = mb.getSkills().stream()
+			List<String> skills = a.getSkills().stream()
 					.map(s ->
 							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
-							"\n" + s.getDescription(getLocale(), mb).lines()
+							"\n" + s.getDescription(getLocale(), a).lines()
 									.map(l -> "-# " + l)
 									.collect(Collectors.joining("\n"))
 					)
@@ -499,40 +530,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 					.map(l -> l.startsWith("#") ? l.substring(1) : "> " + l)
 					.collect(Collectors.joining("\n"));
 
-			eb.addField(a.getName(getLocale()), desc, true);
-		}
-
-		getChannel().sendEmbed(eb.build()).queue();
-	}
-
-	@PlayerAction("players")
-	private void players(JSONObject args, User u) {
-		EmbedBuilder eb = new ColorlessEmbedBuilder();
-
-		for (Hero h : heroes.values()) {
-			XStringBuilder sb = new XStringBuilder("#-# " + getLocale().get("race/" + h.getRace()));
-			h.addHpBar(sb);
-
-			List<String> skills = h.getSkills().stream()
-					.map(s ->
-							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
-							"\n" + s.getDescription(getLocale(), h).lines()
-									.map(l -> "-# " + l)
-									.collect(Collectors.joining("\n"))
-					)
-					.toList();
-
-			if (!skills.isEmpty()) {
-				sb.appendNewLine("#");
-				sb.appendNewLine("**" + getLocale().get("str/skills") + "**");
-				sb.appendNewLine(String.join("\n\n", skills));
+			if (a instanceof Hero h) {
+				eb.addField((h.getContMode() == ContinueMode.CONTINUE ? "🆗 " : "🚪 ") + h.getName(), desc, true);
+			} else {
+				eb.addField(a.getName(getLocale()), desc, true);
 			}
-
-			String desc = sb.toString().lines()
-					.map(l -> l.startsWith("#") ? l.substring(1) : "> " + l)
-					.collect(Collectors.joining("\n"));
-
-			eb.addField((h.getContMode() == ContinueMode.CONTINUE ? "🆗 " : "🚪 ") + h.getName(), desc, true);
 		}
 
 		getChannel().sendEmbed(eb.build()).queue();
@@ -619,7 +621,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public int getAreaLevel() {
 		if (dungeon.getAreaLevel() == 0) {
-			return dungeon.getAreaLevel() + getTurn() / 2;
+			return dungeon.getAreaLevel() + getTurn();
 		}
 
 		return dungeon.getAreaLevel();

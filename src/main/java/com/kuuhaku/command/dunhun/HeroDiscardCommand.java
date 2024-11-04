@@ -34,13 +34,17 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
-import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import org.apache.commons.collections4.Bag;
+import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Command(
@@ -49,7 +53,7 @@ import java.util.stream.Collectors;
 		category = Category.STAFF
 )
 @Syntax({
-		"<action:word:r>[all,common,magic,rare,unique]",
+		"<action:word:r>[all,normal,magic,rare,unique]",
 		"<ids:text:r>"
 })
 public class HeroDiscardCommand implements Executable {
@@ -69,7 +73,7 @@ public class HeroDiscardCommand implements Executable {
 
 		Set<Integer> ids = new HashSet<>();
 		List<Gear> gears = new ArrayList<>();
-		List<Consumable> consumables = new ArrayList<>();
+		Bag<Consumable> consumables = new HashBag<>();
 		if (!args.has("action")) {
 			for (String s : args.getString("ids").toUpperCase().split(" +")) {
 				if (StringUtils.isNumeric(s)) {
@@ -94,10 +98,10 @@ public class HeroDiscardCommand implements Executable {
 		} else {
 			RarityClass rarity = args.getEnum(RarityClass.class, "action", null);
 			for (Gear g : h.getInventory()) {
-				if (rarity != null && h.getRarityClass() != rarity) continue;
-
-				gears.add(g);
-				ids.add(g.getId());
+				if (rarity == null || rarity == g.getRarityClass()) {
+					gears.add(g);
+					ids.add(g.getId());
+				}
 			}
 		}
 
@@ -112,6 +116,11 @@ public class HeroDiscardCommand implements Executable {
 			names.add(locale.get("str/and_more", gears.size() - names.size()));
 		}
 
+		if (names.isEmpty()) {
+			event.channel().sendMessage(locale.get("error/no_items")).queue();
+			return;
+		}
+
 		try {
 			Utils.confirm(locale.get(gears.size() == 1 ? "question/discard" : "question/discard_multi", Utils.properlyJoin("").apply(names)), event.channel(),
 					w -> {
@@ -119,12 +128,9 @@ public class HeroDiscardCommand implements Executable {
 						DAO.applyNative(Gear.class, "DELETE FROM gear WHERE id IN ?1", ids);
 
 						Hero n = h.refresh();
-						n.getConsumables().removeAll(consumables);
-						n.getStats().setConsumables(
-								h.getConsumables().stream()
-										.map(Consumable::getId)
-										.collect(Collectors.toCollection(JSONArray::new))
-						);
+						for (Consumable c : consumables.uniqueSet()) {
+							n.consume(c.getId(), consumables.getCount(c));
+						}
 						n.save();
 
 						event.channel().sendMessage(locale.get(gears.size() == 1 ? "success/discard" : "success/discard_multi")).queue();

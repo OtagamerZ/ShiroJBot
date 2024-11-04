@@ -20,8 +20,10 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
+import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -58,8 +60,8 @@ public class HeroStats {
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "consumables", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray consumables = new JSONArray();
+	@Convert(converter = JSONObjectConverter.class)
+	private JSONObject consumables = new JSONObject();
 
 	public int getLevel() {
 		return 1 + (int) Math.cbrt(Math.pow(xp + 1, 2) / 100);
@@ -70,14 +72,14 @@ public class HeroStats {
 	}
 
 	public int getXpToCurrent() {
-		int lvl = getLevel() - 1;
+		int lvl = getLevel() - 2;
 		if (lvl < 0) return 0;
 
 		return xpTable[lvl];
 	}
 
 	public int getXpToNext() {
-		return xpTable[getLevel()];
+		return xpTable[getLevel() - 1];
 	}
 
 	public int getLosableXp() {
@@ -128,11 +130,7 @@ public class HeroStats {
 		this.unlockedSkills = unlockedSkills;
 	}
 
-	public JSONArray getConsumables() {
+	public JSONObject getConsumables() {
 		return consumables;
-	}
-
-	public void setConsumables(JSONArray consumables) {
-		this.consumables = consumables;
 	}
 }

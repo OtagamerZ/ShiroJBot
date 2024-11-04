@@ -5,6 +5,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.dunhun.Actor;
@@ -13,6 +14,7 @@ import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
+import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Consumable;
 import com.kuuhaku.model.persistent.dunhun.Hero;
@@ -40,7 +42,6 @@ import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.messages.MessageRequest;
-import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -51,6 +52,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class Combat implements Renderer<BufferedImage> {
 	private final ScheduledExecutorService cpu = Executors.newSingleThreadScheduledExecutor();
@@ -58,7 +60,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private final Dunhun game;
 	private final I18N locale;
-	private final List<Actor> played = new ArrayList<>();
 	private final InfiniteList<Actor> actors = new InfiniteList<>();
 	private final BondedList<Actor> hunters = new BondedList<>((a, it) -> {
 		if (getActors(Team.HUNTERS).size() >= 6) return false;
@@ -66,32 +67,24 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setFleed(false);
 		a.setTeam(Team.HUNTERS);
 		a.setGame(getGame());
-
+		getActors(a.getTeam().getOther()).remove(a);
 		actors.add(a);
-		played.add(a);
 
 		a.getSenshi().setAvailable(true);
 		return true;
-	}, a -> {
-		a.setHp(0, true);
-		actors.remove(a);
-	});
+	}, actors::remove);
 	private final BondedList<Actor> keepers = new BondedList<>((a, it) -> {
 		if (getActors(Team.KEEPERS).size() >= 6) return false;
 
 		a.setFleed(false);
 		a.setTeam(Team.KEEPERS);
 		a.setGame(getGame());
-
+		getActors(a.getTeam().getOther()).remove(a);
 		actors.add(a);
-		played.add(a);
 
 		a.getSenshi().setAvailable(true);
 		return true;
-	}, a -> {
-		a.setHp(0, true);
-		actors.remove(a);
-	});
+	}, actors::remove);
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
 	private final RandomList<Actor> rngList = new RandomList<>();
 	private final Set<EffectBase> effects = new HashSet<>();
@@ -108,6 +101,10 @@ public class Combat implements Renderer<BufferedImage> {
 		keepers.addAll(List.of(enemies));
 
 		for (Actor a : hunters) {
+			if (a instanceof Hero h) {
+				h.clearMindControl();
+			}
+
 			a.modAp(-a.getAp());
 			a.revive(1);
 			a.setFleed(false);
@@ -126,6 +123,14 @@ public class Combat implements Renderer<BufferedImage> {
 		for (List<Hero> hs : ListUtils.partition(sides, sides.size() / 2)) {
 			team.addAll(hs);
 			team = keepers;
+
+			for (Hero h : hs) {
+				h.clearMindControl();
+				h.getSenshi().setFlag(Flag.NO_STUN);
+				h.getSenshi().setFlag(Flag.NO_STASIS);
+				h.getSenshi().setFlag(Flag.NO_PARALYSIS);
+				h.getSenshi().setFlag(Flag.NO_SLEEP);
+			}
 		}
 
 		effects.addAll(game.getEffects());
@@ -134,7 +139,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	@Override
 	public BufferedImage render(I18N locale) {
-		BufferedImage bi = new BufferedImage(Drawable.SIZE.width * (hunters.size() + keepers.size()) + 64, 50 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi = new BufferedImage(Drawable.SIZE.width * (hunters.size() + keepers.size()) + 64, 80 + Drawable.SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 		g2d.setFont(Fonts.OPEN_SANS.deriveBold(60));
@@ -154,7 +159,7 @@ public class Combat implements Renderer<BufferedImage> {
 					card = a.render(locale);
 				}
 
-				if (a.equals(current)) {
+				if (Objects.equals(a, current)) {
 					boolean legacy = a.getSenshi().getHand().getUserDeck().getFrame().isLegacy();
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
 
@@ -163,6 +168,13 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				g2d.drawImage(card, offset, 50, null);
+				Graph.applyTransformed(g2d, offset, 55 + Drawable.SIZE.height, g -> {
+					if (a.getHp() < a.getMaxHp() / 3) g.setColor(Color.RED);
+
+					g.drawRect(50, 0, Drawable.SIZE.width - 100, 20);
+					g.fillRect(55, 5, a.getHp() * (Drawable.SIZE.width - 110) / a.getMaxHp(), 10);
+				});
+
 				offset += 255;
 			}
 
@@ -182,7 +194,8 @@ public class Combat implements Renderer<BufferedImage> {
 	public MessageEmbed getEmbed() {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/actor_turn", current.getName(locale)))
-				.setDescription(String.join("\n", history));
+				.setDescription(String.join("\n", history))
+				.setFooter(locale.get("str/combat_footer"));
 
 		if (!game.isDuel()) {
 			eb.setAuthor(locale.get("str/dungeon_floor", game.getTurn()));
@@ -223,9 +236,6 @@ public class Combat implements Renderer<BufferedImage> {
 			else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
 
 			current = turn;
-			if (current == null) {
-				break;
-			}
 
 			try {
 				try {
@@ -327,7 +337,7 @@ public class Combat implements Renderer<BufferedImage> {
 			a.getModifiers().removeIf(a.getSenshi(), m -> m.getExpiration() == 0);
 		}
 
-		if (current instanceof Hero h) {
+		if (current instanceof Hero h && !h.isMindControlled()) {
 			helper = new ButtonizeHelper(true)
 					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 					.setCancellable(false);
@@ -345,7 +355,13 @@ public class Combat implements Renderer<BufferedImage> {
 			if (!h.getSkills().isEmpty()) {
 				helper.addAction(Utils.parseEmoji("⚡"), w -> {
 					EventHandler handle = Pages.getHandler();
-					List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("skills");
+					Map<String, List<?>> values = handle.getDropdownValues(handle.getEventId(w.getMessage()));
+					if (values == null) {
+						game.getChannel().sendMessage(locale.get("error/no_values")).queue();
+						return;
+					}
+
+					List<?> selected = values.get("skills");
 					if (selected == null || selected.isEmpty()) {
 						game.getChannel().sendMessage(locale.get("error/no_skill_selected")).queue();
 						return;
@@ -384,7 +400,7 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					Consumable con = h.getConsumable(String.valueOf(selected.getFirst()));
+					Consumable con = DAO.find(Consumable.class, String.valueOf(selected.getFirst()));
 					if (con == null) {
 						game.getChannel().sendMessage(locale.get("error/invalid_consumable")).queue();
 						return;
@@ -436,44 +452,45 @@ public class Combat implements Renderer<BufferedImage> {
 		} else {
 			helper = null;
 
+			Actor curr = current;
 			cpu.schedule(() -> {
 				try {
-					boolean canAttack = current.getSenshi().getDmg() > 0;
-					boolean canDefend = current.getSenshi().getDfs() > 0;
+					boolean canAttack = curr.getSenshi().getDmg() > 0;
+					boolean canDefend = curr.getSenshi().getDfs() > 0;
 
-					List<Actor> tgts = getActors(current.getTeam().getOther()).stream()
+					List<Actor> tgts = getActors(curr.getTeam().getOther()).stream()
 							.filter(a -> !a.isOutOfCombat())
 							.toList();
 
-					double threat = tgts.stream()
-							.mapToInt(a -> a.getHp() * a.getAggroScore() / a.getMaxHp())
-							.average()
-							.orElse(1);
+					if (curr.getAp() == 1) {
+						double threat = tgts.stream()
+								.mapToInt(a -> a.getHp() * a.getAggroScore() / a.getMaxHp())
+								.average()
+								.orElse(1);
 
-					double risk = threat / current.getAggroScore();
-					double lifeFac = Math.max(0.5, (double) current.getMaxHp() / current.getHp());
+						double risk = threat / (curr.getHp() * (double) curr.getAggroScore() / curr.getMaxHp());
+						if (curr instanceof Monster && risk > 5 && Calc.chance(20)) {
+							curr.setFleed(true);
 
-					if (current instanceof Monster && risk > 5 && Calc.chance(25)) {
-						current.setFleed(true);
+							game.getChannel().sendMessage(locale.get("str/actor_flee", curr.getName(locale))).queue();
+							return;
+						}
 
-						game.getChannel().sendMessage(locale.get("str/actor_flee", current.getName(locale))).queue();
-						return;
-					}
+						if (canDefend && Calc.chance(5 * risk)) {
+							curr.getSenshi().setDefending(true);
+							curr.modAp(-curr.getAp());
 
-					if (canDefend && current.getAp() == 1 && Calc.chance(5 / lifeFac * risk)) {
-						current.getSenshi().setDefending(true);
-						current.modAp(-current.getAp());
-
-						history.add(locale.get("str/actor_defend", current.getName(locale)));
-						return;
+							history.add(locale.get("str/actor_defend", curr.getName(locale)));
+							return;
+						}
 					}
 
 					boolean forcing = false;
 					List<Skill> skills = new ArrayList<>();
-					for (Skill s : current.getSkills()) {
-						if (s.getApCost() > current.getAp() || s.getCd() > 0) continue;
+					for (Skill s : curr.getSkills()) {
+						if (s.getApCost() > curr.getAp() || s.getCd() > 0) continue;
 
-						Boolean canUse = s.canCpuUse(this, (MonsterBase<?>) current);
+						Boolean canUse = s.canCpuUse(this, curr, null);
 						if (canUse == null) {
 							if (!forcing) skills.add(s);
 						} else if (canUse) {
@@ -486,27 +503,27 @@ public class Combat implements Renderer<BufferedImage> {
 					if (!skills.isEmpty() && (forcing || !canAttack || Calc.chance(33))) {
 						Skill skill = Utils.getRandomEntry(skills);
 
-						tgts = skill.getTargets(this, current).stream()
-								.filter(a -> a != null && !a.isOutOfCombat())
+						tgts = skill.getTargets(this, curr).stream()
+								.filter(a -> a != null && !a.isOutOfCombat() && skill.canCpuUse(this, curr, a) != Boolean.FALSE)
 								.toList();
 
 						if (!tgts.isEmpty()) {
-							Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == current.getTeam() ? 1 : a.getAggroScore(), tgts);
+							Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == curr.getTeam() ? 1 : a.getAggroScore(), tgts);
 
-							skill(skill, current, t);
+							skill(skill, curr, t);
 							return;
 						}
 					}
 
 					if (tgts.isEmpty()) {
-						current.getSenshi().setDefending(true);
-						current.modAp(-current.getAp());
+						curr.getSenshi().setDefending(true);
+						curr.modAp(-curr.getAp());
 
-						history.add(locale.get("str/actor_defend", current.getName(locale)));
+						history.add(locale.get("str/actor_defend", curr.getName(locale)));
 						return;
 					}
 
-					attack(current, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
+					attack(curr, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts));
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 				} finally {
@@ -574,15 +591,15 @@ public class Combat implements Renderer<BufferedImage> {
 			comps.add(ActionRow.of(b.build()));
 		}
 
-		Bag<Consumable> cons = h.getConsumables();
+		Map<Consumable, Integer> cons = h.getConsumables();
 		if (!cons.isEmpty()) {
 			StringSelectMenu.Builder b = StringSelectMenu.create("consumables")
 					.setPlaceholder(locale.get("str/use_a_consumable"))
 					.setMaxValues(1);
 
-			for (Consumable c : cons.uniqueSet()) {
+			for (Consumable c : cons.keySet()) {
 				b.addOption(
-						c.getName(locale) + " (x" + cons.getCount(c) + ")",
+						c.getName(locale) + " (x" + cons.getOrDefault(c, 0) + ")",
 						c.getId(),
 						StringUtils.abbreviate(c.getDescription(locale), 100)
 				);
@@ -738,10 +755,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public Set<EffectBase> getEffects() {
 		return effects;
-	}
-
-	public List<Actor> getPlayed() {
-		return played;
 	}
 
 	public List<Actor> getActors() {

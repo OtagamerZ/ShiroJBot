@@ -45,6 +45,7 @@ import org.apache.commons.collections4.Bag;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Command(
 		name = "hero",
@@ -69,7 +70,7 @@ public class HeroShopCommand implements Executable {
 			return;
 		}
 
-		Bag<Consumable> items = h.getConsumables();
+		Map<Consumable, Integer> items = h.getConsumables();
 
 		if (!args.has("id")) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -79,7 +80,7 @@ public class HeroShopCommand implements Executable {
 
 			List<Page> pages = Utils.generatePages(eb, catalogue, 10, 5,
 					c -> {
-						int has = items.getCount(c);
+						int has = items.getOrDefault(c, 0);
 
 						FieldMimic fm = new FieldMimic(c.getName(locale), "");
 						if (c.getPrice() > 0) {
@@ -137,7 +138,7 @@ public class HeroShopCommand implements Executable {
 						}
 
 						Hero n = h.refresh();
-						n.getStats().getConsumables().addAll(Collections.nCopies(amount, item.getId()));
+						n.addConsumable(item, amount);
 						n.save();
 
 						acc.consumeCR(value, "Consumable " + amount + "x " + item.getName(locale));
