@@ -129,6 +129,8 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public Hero getHero() {
+		if (true) return null;
+
 		return DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1", account.getUid());
 	}
 
