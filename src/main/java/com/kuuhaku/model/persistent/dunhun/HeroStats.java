@@ -70,7 +70,10 @@ public class HeroStats {
 	}
 
 	public int getXpToCurrent() {
-		return xpTable[getLevel() - 1];
+		int lvl = getLevel() - 1;
+		if (lvl < 0) return 0;
+
+		return xpTable[lvl];
 	}
 
 	public int getXpToNext() {

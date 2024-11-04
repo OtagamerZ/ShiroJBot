@@ -48,7 +48,7 @@ import java.util.stream.Stream;
 @Command(
 		name = "dunhun",
 		path = "duel",
-		category = Category.FUN
+		category = Category.STAFF
 )
 @Syntax({
 		"<user:user:r>",

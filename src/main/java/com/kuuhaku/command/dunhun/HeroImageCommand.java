@@ -38,7 +38,7 @@ import java.awt.image.BufferedImage;
 @Command(
 		name = "hero",
 		path = "image",
-		category = Category.MISC
+		category = Category.STAFF
 )
 @Syntax(allowEmpty = true, value = "<url:text:r>")
 public class HeroImageCommand implements Executable {

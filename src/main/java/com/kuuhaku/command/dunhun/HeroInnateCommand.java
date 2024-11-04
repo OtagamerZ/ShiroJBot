@@ -20,18 +20,13 @@ package com.kuuhaku.command.dunhun;
 
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
-import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.persistent.dunhun.Consumable;
-import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
@@ -43,7 +38,6 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import org.apache.commons.collections4.Bag;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -52,7 +46,7 @@ import java.util.stream.Collectors;
 @Command(
 		name = "hero",
 		path = "innate",
-		category = Category.MISC
+		category = Category.STAFF
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class HeroInnateCommand implements Executable {
