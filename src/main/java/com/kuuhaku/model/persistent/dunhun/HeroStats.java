@@ -28,13 +28,17 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.NavigableMap;
+import java.util.TreeMap;
+
 @Embeddable
 public class HeroStats {
-	private static final int[] xpTable = new int[1000];
+	private static final NavigableMap<Integer, Integer> xpTable = new TreeMap<>();
 
 	static {
-		for (int i = 0; i < xpTable.length; i++) {
-			xpTable[i] = (int) (Math.pow(i + 1, 1.5) * 10);
+		xpTable.put(0, 1);
+		for (int i = 1; i <= 1000; i++) {
+			xpTable.put((int) (Math.pow(i, 1.5) * 10), i + 1);
 		}
 	}
 
@@ -64,7 +68,7 @@ public class HeroStats {
 	private JSONObject consumables = new JSONObject();
 
 	public int getLevel() {
-		return 1 + (int) Math.cbrt(Math.pow(xp + 1, 2) / 100);
+		return xpTable.floorEntry(xp).getValue();
 	}
 
 	public int getPointsLeft() {
@@ -75,11 +79,11 @@ public class HeroStats {
 		int lvl = getLevel() - 2;
 		if (lvl < 0) return 0;
 
-		return xpTable[lvl];
+		return xpTable.get(lvl);
 	}
 
 	public int getXpToNext() {
-		return xpTable[getLevel() - 1];
+		return xpTable.get(getLevel() - 1);
 	}
 
 	public int getLosableXp() {
