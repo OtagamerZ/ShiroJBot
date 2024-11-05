@@ -65,7 +65,7 @@ public class Affix extends DAO<Affix> {
 	private int weight;
 
 	@Column(name = "affix_group")
-	private Integer group;
+	private String group;
 
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
@@ -104,7 +104,7 @@ public class Affix extends DAO<Affix> {
 		return weight;
 	}
 
-	public Integer getGroup() {
+	public String getGroup() {
 		return group;
 	}
 
@@ -169,7 +169,7 @@ public class Affix extends DAO<Affix> {
 		tags.add(base.getStats().gearType().getSlot().name());
 
 		JSONArray affixes = new JSONArray();
-		List<Integer> groups = new ArrayList<>();
+		List<String> groups = new ArrayList<>();
 
 		for (GearAffix ga : gear.getAffixes()) {
 			affixes.add(ga.getAffix().getId());
