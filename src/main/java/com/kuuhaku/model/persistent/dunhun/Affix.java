@@ -231,7 +231,7 @@ public class Affix extends DAO<Affix> {
 		}
 
 		JSONArray affixes = new JSONArray();
-		List<Integer> groups = new ArrayList<>();
+		List<String> groups = new ArrayList<>();
 
 		for (Affix a : monster.getAffixes()) {
 			affixes.add(a.getId());
