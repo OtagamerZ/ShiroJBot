@@ -301,10 +301,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		dummy.game = of.getGame();
 
 		for (I18N loc : I18N.validValues()) {
-			dummy.infos.add(new LocalizedMonster(
-					new LocalizedId("DUMMY", loc),
-					"Dummy", null
-			));
+			dummy.infos.add(new LocalizedMonster(new LocalizedId("DUMMY", loc), "Dummy"));
 		}
 
 		Senshi sof = of.getSenshi();
