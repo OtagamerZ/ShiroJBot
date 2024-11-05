@@ -252,7 +252,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 	public final void close(@MagicConstant(valuesFromClass = GameReport.class) byte code) {
 		timeout.stop();
 
-		if (code == GameReport.SUCCESS) {
+		if (Utils.equalsAny(code, GameReport.SUCCESS, GameReport.GAME_TIMEOUT)) {
 			exec.complete(null);
 		} else {
 			exec.completeExceptionally(new GameReport(code));
