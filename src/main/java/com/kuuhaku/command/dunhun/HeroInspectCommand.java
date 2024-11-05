@@ -168,7 +168,7 @@ public class HeroInspectCommand implements Executable {
 			eb.appendDescription("-# %s - %s%s\n".formatted(
 					locale.get("str/" + ga.getAffix().getType()), ga.getName(locale),
 					ga.getAffix().getTags().isEmpty() ? "" : ga.getAffix().getTags().stream()
-							.map(String::valueOf)
+							.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
 							.collect(Collectors.joining(", "))
 			));
 			eb.appendDescription(ga.getDescription(locale, true) + "\n\n");
