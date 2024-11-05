@@ -19,7 +19,7 @@
 package com.kuuhaku.model.enums.dunhun;
 
 public enum AffixType {
-	PREFIX, SUFFIX, IMPLICIT, MON_PREFIX, MON_SUFFIX;
+	PREFIX, SUFFIX, MON_PREFIX, MON_SUFFIX;
 
 	public static AffixType[] itemValues() {
 		return new AffixType[]{PREFIX, SUFFIX};

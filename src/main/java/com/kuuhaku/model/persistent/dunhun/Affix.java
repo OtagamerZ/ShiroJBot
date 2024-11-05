@@ -36,6 +36,7 @@ import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -69,6 +70,11 @@ public class Affix extends DAO<Affix> {
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray tags;
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "req_tags", nullable = false, columnDefinition = "JSONB")
@@ -118,6 +124,14 @@ public class Affix extends DAO<Affix> {
 		}
 	}
 
+	public JSONArray getTags() {
+		return tags;
+	}
+
+	public JSONArray getReqTags() {
+		return reqTags;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -164,6 +178,17 @@ public class Affix extends DAO<Affix> {
 			}
 		}
 
+		AtomicReference<String> only = new AtomicReference<>();
+		gear.hasAffix(a -> {
+			String tag = Utils.extract(a, "ONLY_ROLL_(\\w+)", 1);
+			if (tag != null) {
+				only.set(tag);
+				return true;
+			}
+
+			return false;
+		});
+
 		RandomList<String> rl = new RandomList<>();
 		List<Object[]> affs = DAO.queryAllUnmapped("""
 				SELECT id
@@ -176,7 +201,8 @@ public class Affix extends DAO<Affix> {
 				  AND NOT (has(req_tags, 'WEAPON') AND has(cast(?3 AS JSONB), 'OFFHAND'))
 				  AND NOT has(get_affix_family(cast(?4 AS JSONB)), get_affix_family(id))
 				  AND (affix_group IS NULL OR affix_group NOT IN ?5)
-				""", type.name(), gear.getReqLevel(), tags.toString(), affixes.toString(), groups);
+				  AND (?6 IS NULL OR has(tags, ?6))
+				""", type.name(), gear.getReqLevel(), tags.toString(), affixes.toString(), groups, only.get());
 
 		for (Object[] a : affs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());

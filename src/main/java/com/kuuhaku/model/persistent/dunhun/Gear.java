@@ -43,6 +43,7 @@ import org.hibernate.annotations.FetchMode;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -144,6 +145,15 @@ public class Gear extends DAO<Gear> {
 
 	public Set<GearAffix> getAffixes() {
 		return affixes;
+	}
+
+	public boolean hasAffix(String affix) {
+		return hasAffix(affix::equalsIgnoreCase);
+	}
+
+	public boolean hasAffix(Predicate<String> cond) {
+		if (cond.test(basetype.getStats().implicit().getId())) return true;
+		return affixes.parallelStream().anyMatch(ga -> cond.test(ga.getAffix().getId()));
 	}
 
 	public RarityClass getRarityClass() {

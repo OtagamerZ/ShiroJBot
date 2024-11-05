@@ -97,6 +97,13 @@ public class GearAffix extends DAO<GearAffix> {
 		this.roll = Calc.rng(Integer.MAX_VALUE);
 	}
 
+	public boolean isLocked() {
+		return switch (affix.getType()) {
+			case PREFIX, MON_PREFIX -> gear.hasAffix("PREFIX_LOCK");
+			case SUFFIX, MON_SUFFIX -> gear.hasAffix("SUFFIX_LOCK");
+		};
+	}
+
 	public String getName(I18N locale) {
 		String ending = Utils.getOr(gear.getBasetype().getInfo(locale).getEnding(), "M");
 

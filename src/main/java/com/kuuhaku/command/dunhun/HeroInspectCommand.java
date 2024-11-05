@@ -54,6 +54,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Command(
 		name = "hero",
@@ -164,8 +165,11 @@ public class HeroInspectCommand implements Executable {
 				.toList();
 
 		for (GearAffix ga : affs) {
-			eb.appendDescription("-# %s - %s\n".formatted(
-					locale.get("str/" + ga.getAffix().getType()), ga.getName(locale)
+			eb.appendDescription("-# %s - %s%s\n".formatted(
+					locale.get("str/" + ga.getAffix().getType()), ga.getName(locale),
+					ga.getAffix().getTags().isEmpty() ? "" : ga.getAffix().getTags().stream()
+							.map(String::valueOf)
+							.collect(Collectors.joining(", "))
 			));
 			eb.appendDescription(ga.getDescription(locale, true) + "\n\n");
 		}
