@@ -45,11 +45,6 @@ public interface Actor {
 		Dunhun game = getGame();
 		if (!pure && game != null) {
 			Senshi sen = getSenshi();
-			if (sen.isStasis()) {
-				getRegDeg().add(Math.min(value, 0));
-				return;
-			}
-
 			if (value < 0) {
 				double fac = sen.isDefending() ? 2 : 1;
 				if (game.isDuel()) {
@@ -58,10 +53,11 @@ public interface Actor {
 
 				value = -value;
 				value = (int) -Math.max(value / (5 * fac), ((5 / fac) * Math.pow(value, 2)) / (sen.getDfs() + (5 / fac) * value));
+			}
 
-				if (sen.isSleeping()) {
-					sen.reduceSleep(999);
-				}
+			if (sen.isStasis()) {
+				getRegDeg().add(Math.min(value, 0));
+				return;
 			}
 		}
 
@@ -72,6 +68,11 @@ public interface Actor {
 			Combat comb = game.getCombat();
 			if (value < 0) {
 				comb.trigger(Trigger.ON_DAMAGE, this, this);
+
+				Senshi sen = getSenshi();
+				if (sen.isSleeping()) {
+					sen.reduceSleep(999);
+				}
 			} else {
 				comb.trigger(Trigger.ON_HEAL, this, this);
 			}

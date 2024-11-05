@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.records.dunhun;
 
-import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.dunhun.Affix;
 import com.kuuhaku.model.persistent.dunhun.GearType;
@@ -54,8 +53,16 @@ public record GearStats(
 ) {
 	public JSONArray allTags() {
 		JSONArray tags = new JSONArray();
-		tags.addAll(tags());
 		tags.addAll(gearType.getTags());
+
+		for (Object o : tags()) {
+			String t = (String) o;
+			if (t.startsWith("-")) {
+				tags.remove(t.substring(1));
+			} else {
+				tags.add(t);
+			}
+		}
 
 		return tags;
 	}
