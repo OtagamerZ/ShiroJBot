@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.AffixModifiers;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.records.id.GearAffixId;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
@@ -139,15 +140,21 @@ public class GearAffix extends DAO<GearAffix> {
 	public List<Integer> getValues(I18N locale) {
 		List<Integer> values = new ArrayList<>();
 		String desc = affix.getInfo(locale).getDescription();
+
+		double mult = 1;
+		if (gear.getRarityClass() == RarityClass.MAGIC) {
+			mult = 1.2;
+		}
+
 		Matcher m = Utils.regex(desc, "\\[(-?\\d+)(?:-(-?\\d+))?]");
 		while (m.find()) {
-			int min = (int) (Integer.parseInt(m.group(1)) * modifiers.getMinMult());
+			int min = (int) (Integer.parseInt(m.group(1)) * mult * modifiers.getMinMult());
 			if (m.group(2) == null) {
 				values.add(min);
 				continue;
 			}
 
-			int max = (int) (Integer.parseInt(m.group(2)) * modifiers.getMaxMult());
+			int max = (int) (Integer.parseInt(m.group(2)) * mult * modifiers.getMaxMult());
 			values.add(Calc.rng(min, max, roll + desc.hashCode()));
 		}
 
