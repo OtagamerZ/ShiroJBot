@@ -57,7 +57,6 @@ public class Boss extends MonsterBase<Boss> {
 				}
 
 				Senshi s = getSenshi();
-				s.setFlag(Flag.NO_STUN);
 				s.setFlag(Flag.NO_SLEEP);
 				s.setFlag(Flag.NO_PARALYSIS);
 				s.setFlag(Flag.NO_STASIS);
