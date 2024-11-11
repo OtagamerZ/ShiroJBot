@@ -45,7 +45,7 @@ public class UnaliasUserCommand implements Executable {
 		JSONObject aliases = acc.getSettings().getAliases();
 		if (args.has("action")) {
 			aliases.clear();
-			data.config().save();
+			acc.getSettings().save();
 
 			event.channel().sendMessage(locale.get("success/alias_clear")).queue();
 			return;
