@@ -256,6 +256,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 					current.modAp(current.getMaxAp());
 					current.getSenshi().setDefending(false);
+					if (current instanceof Hero h) {
+						h.decMindControl();
+					}
+
 					trigger(Trigger.ON_TURN_BEGIN, current, current);
 
 					for (EffectBase e : effects) {
