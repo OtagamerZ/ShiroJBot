@@ -81,7 +81,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 				throw new GameReport(GameReport.NO_HERO, p);
 			}
 
-			h.setLocale(locale);
 			if (h.getInventory().size() > h.getInventoryCapacity()) {
 				throw new GameReport(GameReport.OVERBURDENED, h.getName());
 			} else if (h.getStats().getLevel() < dungeon.getAreaLevel()) {

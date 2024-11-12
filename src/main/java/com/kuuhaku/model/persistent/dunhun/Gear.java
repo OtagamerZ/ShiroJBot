@@ -29,6 +29,7 @@ import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
@@ -86,6 +87,7 @@ public class Gear extends DAO<Gear> {
 
 	private transient final GearModifiers modifiers = new GearModifiers();
 	private transient final Set<SelfEffect> effects = new HashSet<>();
+	private transient Attributes attributes = new Attributes();
 
 	public Gear() {
 	}
@@ -276,6 +278,10 @@ public class Gear extends DAO<Gear> {
 
 	public Set<SelfEffect> getEffects() {
 		return effects;
+	}
+
+	public Attributes getAttributes() {
+		return attributes;
 	}
 
 	public void addEffect(ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {

@@ -23,6 +23,9 @@ import com.kuuhaku.util.Bit32;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.util.Collection;
+import java.util.List;
+
 @Embeddable
 public record Attributes(@Column(name = "attributes", nullable = false) int attributes) {
 	public Attributes() {
@@ -70,13 +73,22 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 		};
 	}
 
-	public Attributes merge(Attributes attr) {
-		return new Attributes(
-				str() + attr.str(),
-				dex() + attr.dex(),
-				wis() + attr.wis(),
-				vit() + attr.vit()
-		);
+	public Attributes merge(Attributes... attrs) {
+		return merge(List.of(attrs));
+	}
+
+	public Attributes merge(Collection<Attributes> attrs) {
+		Attributes out = this;
+		for (Attributes a : attrs) {
+			out = new Attributes(
+					out.str() + a.str(),
+					out.dex() + a.dex(),
+					out.wis() + a.wis(),
+					out.vit() + a.vit()
+			);
+		}
+
+		return out;
 	}
 
 	public boolean has(Attributes attr) {

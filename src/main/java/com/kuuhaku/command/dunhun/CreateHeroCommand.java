@@ -61,7 +61,7 @@ public class CreateHeroCommand implements Executable {
 		if (d == null) {
 			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
 			return;
-		} else if (d.getHero(locale) != null) {
+		} else if (d.getHero() != null) {
 			event.channel().sendMessage(locale.get("error/has_hero", data.config().getPrefix())).queue();
 			return;
 		}
@@ -117,7 +117,6 @@ public class CreateHeroCommand implements Executable {
 
 		try {
 			Hero h = new Hero(data.profile().getAccount(), name, race);
-			h.setLocale(locale);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			Skill innate = DAO.query(Skill.class, "SELECT s FROM Skill s WHERE s.reqRace = ?1", h.getRace());

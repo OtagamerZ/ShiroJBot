@@ -81,7 +81,7 @@ public class HeroCommand implements Executable {
 			return;
 		}
 
-		Hero h = d.getHero(locale);
+		Hero h = d.getHero();
 		if (h == null) {
 			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
 			return;
@@ -109,18 +109,19 @@ public class HeroCommand implements Executable {
 					h.getStats().getXp(), h.getStats().getXpToNext()
 			), true);
 
+
+			Attributes base = h.getStats().getAttributes();
 			Attributes attr = h.getAttributes();
-			Attributes mods = h.getModifiers().getAttributes();
 			eb.addField(Constants.VOID, """
 					STR: %s (%s)
 					DEX: %s (%s)
 					WIS: %s (%s)
 					VIT: %s (%s)
 					""".formatted(
-					attr.str(), Utils.sign(mods.str()),
-					attr.dex(), Utils.sign(mods.dex()),
-					attr.wis(), Utils.sign(mods.wis()),
-					attr.vit(), Utils.sign(mods.vit())
+					attr.str(), Utils.sign(attr.str() - base.str()),
+					attr.dex(), Utils.sign(attr.dex() - base.dex()),
+					attr.wis(), Utils.sign(attr.wis() - base.wis()),
+					attr.vit(), Utils.sign(attr.vit() - base.vit())
 			), true);
 
 			helper.apply(m.editMessageComponents().setContent(null).setEmbeds(eb.build()))
@@ -304,6 +305,9 @@ public class HeroCommand implements Executable {
 					} else {
 						w.getChannel().sendMessage(locale.get("error/unknown_skill", sug)).queue();
 					}
+					return;
+				} else if (s.getReqRace() != null) {
+					w.getChannel().sendMessage(locale.get("error/innate_skill")).queue();
 					return;
 				} else if (!h.getAttributes().has(s.getRequirements())) {
 					w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();

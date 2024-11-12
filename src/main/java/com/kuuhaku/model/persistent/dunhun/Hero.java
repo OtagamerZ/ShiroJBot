@@ -104,7 +104,6 @@ public class Hero extends DAO<Hero> implements Actor {
 	private transient int mindControl;
 	private transient boolean flee;
 	private transient ContinueMode contMode = ContinueMode.CONTINUE;
-	private transient I18N locale;
 
 	public Hero() {
 	}
@@ -269,8 +268,12 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	public Attributes getAttributes() {
-		if (senshiCache == null) asSenshi(locale);
-		return getStats().getAttributes().merge(getModifiers().getAttributes());
+		List<Attributes> adds = new ArrayList<>();
+		for (Gear g : getEquipment()) {
+			adds.add(g.getAttributes());
+		}
+
+		return getStats().getAttributes().merge(adds);
 	}
 
 	public HeroStats getStats() {
@@ -279,14 +282,6 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	public Account getAccount() {
 		return account;
-	}
-
-	public I18N getLocale() {
-		return locale;
-	}
-
-	public void setLocale(I18N locale) {
-		this.locale = locale;
 	}
 
 	public Equipment getEquipment() {
@@ -319,14 +314,20 @@ public class Hero extends DAO<Hero> implements Actor {
 			return gear.get(equipment.getJSONArray(gs.name()).getInt(i));
 		});
 
+		Map<Integer, Attributes> map = new HashMap<>();
+		for (Gear g : equipCache) {
+			map.put(g.getId(), g.getAttributes());
+		}
+
 		boolean check = true;
 		while (check) {
 			check = false;
+			Attributes total = stats.getAttributes().merge(map.values());
 
-			Attributes attr = getAttributes();
 			for (Gear g : equipCache) {
-				if (!attr.has(g.getBasetype().getStats().requirements())) {
+				if (!total.has(g.getBasetype().getStats().requirements())) {
 					equipCache.unequip(g);
+					map.remove(g.getId());
 					check = true;
 				}
 			}
@@ -405,7 +406,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	public List<Skill> getSkills() {
 		if (skillCache != null) return skillCache;
 
-		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", stats.getSkills())
+		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1 AND s.reqRace IS NULL", stats.getSkills())
 				.stream()
 				.filter(s -> getAttributes().has(s.getRequirements()) && (
 						(s.getReqRace() == null && (s.isFree() || getStats().getUnlockedSkills().contains(s.getId())))

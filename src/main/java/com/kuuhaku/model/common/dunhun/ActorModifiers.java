@@ -22,7 +22,6 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
-import com.kuuhaku.model.records.dunhun.Attributes;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -38,11 +37,6 @@ public class ActorModifiers implements Iterable<CumValue> {
 	private final CumValue initiative = CumValue.flat();
 	private final CumValue critical = CumValue.flat();
 	private final CumValue aggroMult = CumValue.flat();
-
-	private final CumValue str = CumValue.flat();
-	private final CumValue dex = CumValue.flat();
-	private final CumValue wis = CumValue.flat();
-	private final CumValue vit = CumValue.flat();
 
 	private Actor channeled;
 
@@ -70,31 +64,6 @@ public class ActorModifiers implements Iterable<CumValue> {
 
 	public CumValue getAggroMult() {
 		return aggroMult;
-	}
-
-	public CumValue getStrength() {
-		return str;
-	}
-
-	public CumValue getDexterity() {
-		return dex;
-	}
-
-	public CumValue getWisdom() {
-		return wis;
-	}
-
-	public CumValue getVitality() {
-		return vit;
-	}
-
-	public Attributes getAttributes() {
-		return new Attributes(
-				(int) getStrength().get(),
-				(int) getDexterity().get(),
-				(int) getWisdom().get(),
-				(int) getVitality().get()
-		);
 	}
 
 	public Actor getChanneled() {

@@ -48,7 +48,7 @@ public class HeroEquipCommand implements Executable {
 			return;
 		}
 
-		Hero h = d.getHero(locale);
+		Hero h = d.getHero();
 		if (h == null) {
 			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
 			return;
