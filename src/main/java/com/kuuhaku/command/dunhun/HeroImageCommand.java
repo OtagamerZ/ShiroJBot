@@ -49,7 +49,7 @@ public class HeroImageCommand implements Executable {
 			return;
 		}
 
-		Hero h = d.getHero();
+		Hero h = d.getHero(locale);
 		if (h == null) {
 			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
 			return;
