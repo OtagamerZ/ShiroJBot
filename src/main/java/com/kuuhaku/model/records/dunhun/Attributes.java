@@ -73,6 +73,10 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 		};
 	}
 
+	public Attributes plus(Attributes other) {
+		return merge(other);
+	}
+
 	public Attributes merge(Attributes... attrs) {
 		return merge(List.of(attrs));
 	}
