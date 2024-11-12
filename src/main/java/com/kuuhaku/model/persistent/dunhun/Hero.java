@@ -377,7 +377,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	public List<Skill> getSkills() {
 		if (skillCache != null) return skillCache;
 
-		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", stats.getSkills())
+		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1 OR s.reqRace = ?2", stats.getSkills(), getRace())
 				.stream()
 				.filter(s -> getAttributes().has(s.getRequirements()) && (
 						(s.getReqRace() == null && (s.isFree() || getStats().getUnlockedSkills().contains(s.getId())))
@@ -395,7 +395,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		return DAO.queryAll(Skill.class, """
 						SELECT s
 						FROM Skill s
-						WHERE (s.reqRace IS NULL OR s.reqRace = ?1)
+						WHERE s.reqRace IS NULL
 						  AND s.requirements.attributes != -1
 						""", getRace()).stream()
 				.sorted(Comparator

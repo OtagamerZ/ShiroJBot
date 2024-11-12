@@ -221,7 +221,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	public List<Skill> getSkills() {
 		if (skillCache != null) return skillCache;
 
-		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", stats.getSkills());
+		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1 OR s.reqRace = ?2", stats.getSkills(), getRace());
 	}
 
 	@Override
