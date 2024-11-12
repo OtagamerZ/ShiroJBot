@@ -452,35 +452,28 @@ public class Hero extends DAO<Hero> implements Actor {
 		});
 	}
 
-	public boolean consume(Consumable item) {
-		return consume(item.getId());
+	public void consume(Consumable item) {
+		consume(item.getId());
 	}
 
-	public boolean consume(String id) {
-		return consume(id, 1);
+	public void consume(String id) {
+		consume(id, 1);
 	}
 
-	public boolean consume(Consumable item, int amount) {
-		return consume(item.getId(), amount);
+	public void consume(Consumable item, int amount) {
+		consume(item.getId(), amount);
 	}
 
-	public boolean consume(String id, int amount) {
-		return consume(id, amount, false);
-	}
-
-	public boolean consume(String id, int amount, boolean force) {
-		if (amount <= 0) return false;
+	public void consume(String id, int amount) {
+		if (amount <= 0) return;
 
 		int rem = stats.getConsumables().getInt(id.toUpperCase());
-		if (rem < amount && !force) return false;
 
 		if (rem - amount == 0) {
 			stats.getConsumables().remove(id.toUpperCase());
 		} else {
 			stats.getConsumables().put(id.toUpperCase(), rem - amount);
 		}
-
-		return true;
 	}
 
 	public Map<Consumable, Integer> getConsumables() {
