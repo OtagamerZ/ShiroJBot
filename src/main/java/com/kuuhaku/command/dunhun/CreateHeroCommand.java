@@ -117,6 +117,7 @@ public class CreateHeroCommand implements Executable {
 
 		try {
 			Hero h = new Hero(data.profile().getAccount(), name, race);
+			h.setLocale(locale);
 
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			Skill innate = DAO.query(Skill.class, "SELECT s FROM Skill s WHERE s.reqRace = ?1", h.getRace());
