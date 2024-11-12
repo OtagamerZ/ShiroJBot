@@ -267,7 +267,8 @@ public class Hero extends DAO<Hero> implements Actor {
 		return regDeg;
 	}
 
-	public Attributes getAttributes() {
+	public Attributes getAttributes(I18N locale) {
+		if (senshiCache == null) asSenshi(locale);
 		return getStats().getAttributes().merge(getModifiers().getAttributes());
 	}
 
@@ -298,7 +299,7 @@ public class Hero extends DAO<Hero> implements Actor {
 				.parallelStream()
 				.filter(g -> {
 					GearStats st = g.getBasetype().getStats();
-					return st.reqLevel() <= stats.getLevel() && attr.has(st.requirements());
+					return stats.getLevel() >= st.reqLevel() && attr.has(st.requirements());
 				})
 				.collect(Collectors.toMap(Gear::getId, Function.identity()));
 
@@ -373,11 +374,15 @@ public class Hero extends DAO<Hero> implements Actor {
 		return DAO.query(Gear.class, "SELECT g FROM Gear g WHERE g.id = ?1 AND g.owner.id = ?2", id, this.id);
 	}
 
+	public Skill getInnate() {
+		return DAO.query(Skill.class, "SELECT s FROM Skill s WHERE s.reqRace = ?1", getRace());
+	}
+
 	@Override
 	public List<Skill> getSkills() {
 		if (skillCache != null) return skillCache;
 
-		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1 OR s.reqRace = ?2", stats.getSkills(), getRace())
+		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", stats.getSkills())
 				.stream()
 				.filter(s -> getAttributes().has(s.getRequirements()) && (
 						(s.getReqRace() == null && (s.isFree() || getStats().getUnlockedSkills().contains(s.getId())))

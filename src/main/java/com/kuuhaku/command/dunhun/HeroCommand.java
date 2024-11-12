@@ -32,10 +32,12 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
-import com.kuuhaku.model.persistent.dunhun.*;
+import com.kuuhaku.model.persistent.dunhun.Gear;
+import com.kuuhaku.model.persistent.dunhun.GearAffix;
+import com.kuuhaku.model.persistent.dunhun.Hero;
+import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
@@ -90,7 +92,6 @@ public class HeroCommand implements Executable {
 				.setCanInteract(event.user()::equals);
 
 		Consumer<Message> restore = m -> {
-			Senshi card = h.asSenshi(locale);
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/hero_info", h.getName()))
 					.setImage("attachment://card.png");
@@ -108,7 +109,7 @@ public class HeroCommand implements Executable {
 					h.getStats().getXp(), h.getStats().getXpToNext()
 			), true);
 
-			Attributes attr = h.getAttributes();
+			Attributes attr = h.getAttributes(locale);
 			Attributes mods = h.getModifiers().getAttributes();
 			eb.addField(Constants.VOID, """
 					STR: %s (%s)
@@ -221,7 +222,7 @@ public class HeroCommand implements Executable {
 		AtomicInteger i = new AtomicInteger();
 		List<Page> pages = new ArrayList<>();
 		Runnable refresh = () -> {
-			Attributes attr = h.getAttributes();
+			Attributes attr = h.getAttributes(locale);
 			eb.setDescription(locale.get("str/remaining_points", h.getStats().getPointsLeft()));
 
 			pages.clear();
@@ -304,7 +305,7 @@ public class HeroCommand implements Executable {
 						w.getChannel().sendMessage(locale.get("error/unknown_skill", sug)).queue();
 					}
 					return;
-				} else if (!h.getAttributes().has(s.getRequirements())) {
+				} else if (!h.getAttributes(locale).has(s.getRequirements())) {
 					w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 					return;
 				}
@@ -429,7 +430,7 @@ public class HeroCommand implements Executable {
 				return;
 			} else {
 				GearStats stats = g.getBasetype().getStats();
-				if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes().has(stats.requirements())) {
+				if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes(locale).has(stats.requirements())) {
 					w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 					return;
 				}
