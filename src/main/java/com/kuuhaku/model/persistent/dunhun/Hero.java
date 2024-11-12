@@ -303,6 +303,7 @@ public class Hero extends DAO<Hero> implements Actor {
 				.filter(g -> stats.getLevel() >= g.getBasetype().getStats().reqLevel())
 				.collect(Collectors.toMap(Gear::getId, Function.identity()));
 
+		equipCache = new Equipment();
 		Equipment equip = new Equipment((gs, i) -> {
 			if (i < 0) {
 				return gear.get(equipment.getInt(gs.name()));
