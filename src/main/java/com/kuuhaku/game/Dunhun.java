@@ -578,7 +578,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		for (Hero h : heroes.values()) {
 			DAO.apply(Hero.class, h.getId(), n -> {
 				for (Consumable c : h.getSpentConsumables()) {
-					n.getStats().getConsumables().remove(c.getId());
+					h.consume(c);
 				}
 			});
 		}
