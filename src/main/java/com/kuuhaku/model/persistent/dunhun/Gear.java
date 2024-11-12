@@ -312,6 +312,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public void load(I18N locale, Hero owner) {
+		attributes = new Attributes();
 		modifiers.reset();
 
 		for (GearAffix ga : getAllAffixes()) {

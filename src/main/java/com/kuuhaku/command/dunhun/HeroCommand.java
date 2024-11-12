@@ -145,11 +145,6 @@ public class HeroCommand implements Executable {
 		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating"))).queue(restore);
 	}
 
-	private void updatePage(Page p, Message msg) {
-		if (p == null) return;
-		msg.editMessageEmbeds(Utils.getEmbeds(p)).queue();
-	}
-
 	private void allocAttributes(Consumer<Message> restore, I18N locale, Hero h, Message msg) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/attributes"))
