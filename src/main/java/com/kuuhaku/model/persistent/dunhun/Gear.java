@@ -280,6 +280,10 @@ public class Gear extends DAO<Gear> {
 		return effects;
 	}
 
+	public void setAttributes(Attributes attributes) {
+		this.attributes = attributes;
+	}
+
 	public Attributes getAttributes() {
 		return attributes;
 	}
