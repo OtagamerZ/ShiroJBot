@@ -67,7 +67,7 @@ public class HeroStats {
 	private JSONObject consumables = new JSONObject();
 
 	public int getLevel() {
-		return xpTable.floorEntry(xp).getValue();
+		return xpTable.floorEntry(xp + 1).getValue();
 	}
 
 	public int getPointsLeft() {
