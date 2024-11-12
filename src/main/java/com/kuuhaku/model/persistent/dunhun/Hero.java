@@ -104,6 +104,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	private transient int mindControl;
 	private transient boolean flee;
 	private transient ContinueMode contMode = ContinueMode.CONTINUE;
+	private transient I18N locale;
 
 	public Hero() {
 	}
@@ -267,7 +268,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		return regDeg;
 	}
 
-	public Attributes getAttributes(I18N locale) {
+	public Attributes getAttributes() {
 		if (senshiCache == null) asSenshi(locale);
 		return getStats().getAttributes().merge(getModifiers().getAttributes());
 	}
@@ -278,6 +279,14 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	public Account getAccount() {
 		return account;
+	}
+
+	public I18N getLocale() {
+		return locale;
+	}
+
+	public void setLocale(I18N locale) {
+		this.locale = locale;
 	}
 
 	public Equipment getEquipment() {

@@ -109,7 +109,7 @@ public class HeroCommand implements Executable {
 					h.getStats().getXp(), h.getStats().getXpToNext()
 			), true);
 
-			Attributes attr = h.getAttributes(locale);
+			Attributes attr = h.getAttributes();
 			Attributes mods = h.getModifiers().getAttributes();
 			eb.addField(Constants.VOID, """
 					STR: %s (%s)
@@ -222,7 +222,7 @@ public class HeroCommand implements Executable {
 		AtomicInteger i = new AtomicInteger();
 		List<Page> pages = new ArrayList<>();
 		Runnable refresh = () -> {
-			Attributes attr = h.getAttributes(locale);
+			Attributes attr = h.getAttributes();
 			eb.setDescription(locale.get("str/remaining_points", h.getStats().getPointsLeft()));
 
 			pages.clear();
@@ -305,7 +305,7 @@ public class HeroCommand implements Executable {
 						w.getChannel().sendMessage(locale.get("error/unknown_skill", sug)).queue();
 					}
 					return;
-				} else if (!h.getAttributes(locale).has(s.getRequirements())) {
+				} else if (!h.getAttributes().has(s.getRequirements())) {
 					w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 					return;
 				}
@@ -430,7 +430,7 @@ public class HeroCommand implements Executable {
 				return;
 			} else {
 				GearStats stats = g.getBasetype().getStats();
-				if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes(locale).has(stats.requirements())) {
+				if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes().has(stats.requirements())) {
 					w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 					return;
 				}

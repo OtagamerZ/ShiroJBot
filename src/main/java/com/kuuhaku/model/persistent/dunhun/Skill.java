@@ -108,7 +108,7 @@ public class Skill extends DAO<Skill> {
 	public String getDescription(I18N locale, Actor source, List<Integer> values) {
 		String desc = getInfo(locale).setUwu(false).getDescription();
 		if (source instanceof Hero h) {
-			Attributes attr = h.getAttributes(locale);
+			Attributes attr = h.getAttributes();
 
 			double scale;
 			String type = Utils.extract(desc, "(?<=^\\()\\w+(?=\\))");

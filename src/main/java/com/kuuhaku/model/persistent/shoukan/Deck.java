@@ -128,8 +128,11 @@ public class Deck extends DAO<Deck> {
 		this.variant = variant;
 	}
 
-	public Hero getHero() {
-		return DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1", account.getUid());
+	public Hero getHero(I18N locale) {
+		Hero h = DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1", account.getUid());
+		h.setLocale(locale);
+
+		return h;
 	}
 
 	public FrameSkin getFrame() {

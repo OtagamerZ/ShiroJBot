@@ -64,7 +64,7 @@ public class HeroEquipCommand implements Executable {
 		if (!h.getEquipment().equip(g)) {
 			event.channel().sendMessage(locale.get("error/slot_full")).queue();
 			return;
-		} else if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes(locale).has(stats.requirements())) {
+		} else if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes().has(stats.requirements())) {
 			event.channel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 			return;
 		}
