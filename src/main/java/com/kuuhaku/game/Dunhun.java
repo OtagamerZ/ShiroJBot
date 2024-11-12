@@ -79,7 +79,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 			Hero h = DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1", p);
 			if (h == null) {
 				throw new GameReport(GameReport.NO_HERO, p);
-			} else if (h.getInventory().size() > h.getInventoryCapacity()) {
+			}
+
+			h.setLocale(locale);
+			if (h.getInventory().size() > h.getInventoryCapacity()) {
 				throw new GameReport(GameReport.OVERBURDENED, h.getName());
 			} else if (h.getStats().getLevel() < dungeon.getAreaLevel()) {
 				throw new GameReport(GameReport.UNDERLEVELLED, h.getName());
