@@ -853,6 +853,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			try {
 				te.lock();
+				System.out.println("exec");
 				te.getEffect().accept(e, new CombatContext(t, from, to));
 			} finally {
 				te.unlock();
