@@ -5,6 +5,7 @@
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/editable_basetype_attr_set.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/editable_basetype_i18n.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/editable_skill_attr_set.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/generate_unique_weight.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/views/basetype_i18n.sql" dialect="PostgreSQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>

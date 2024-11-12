@@ -35,7 +35,8 @@ import net.dv8tion.jda.api.JDA;
 @Command(
 		name = "hero",
 		path = "equip",
-		category = Category.STAFF
+		category = Category.MISC,
+		beta = true
 )
 @Syntax("<gear:number:r>")
 public class HeroEquipCommand implements Executable {

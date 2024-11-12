@@ -41,16 +41,15 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import org.apache.commons.collections4.Bag;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 @Command(
 		name = "hero",
 		path = "buy",
-		category = Category.STAFF
+		category = Category.MISC,
+		beta = true
 )
 @Syntax(allowEmpty = true, value = "<id:word:r> <amount:number>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)

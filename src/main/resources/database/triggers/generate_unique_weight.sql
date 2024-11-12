@@ -16,20 +16,27 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.interfaces.annotations;
+CREATE OR REPLACE FUNCTION t_generate_unique_weight()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    SELECT avg(a.weight * 1.5) - avg(a.weight * 1.5) % 25
+    FROM "unique" u
+             INNER JOIN affix a ON u.affixes ? a.id
+    WHERE u.id = NEW.id
+      AND a.weight > 0
+    INTO NEW.weight;
 
-import com.kuuhaku.model.enums.Category;
+    RETURN NEW;
+END;
+$$;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Command {
-	String name();
-	String[] path() default {};
-	Category category();
-	boolean beta() default false;
-}
+DROP TRIGGER IF EXISTS generate_unique_weight ON "unique";
+CREATE TRIGGER generate_unique_weight
+    BEFORE UPDATE
+    ON "unique"
+    FOR EACH ROW
+    WHEN (NEW.weight = -1)
+EXECUTE PROCEDURE t_generate_unique_weight();

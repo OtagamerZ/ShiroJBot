@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.dunhun;
 
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
@@ -35,7 +34,8 @@ import net.dv8tion.jda.api.JDA;
 @Command(
 		name = "hero",
 		path = "unequip",
-		category = Category.STAFF
+		category = Category.MISC,
+		beta = true
 )
 @Syntax("<gear:number:r>")
 public class HeroUnequipCommand implements Executable {

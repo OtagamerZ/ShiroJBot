@@ -591,6 +591,9 @@ public class GuildListener extends ListenerAdapter {
 			} else if (!pc.category().check(data.member())) {
 				data.channel().sendMessage(locale.get("error/not_allowed")).queue();
 				return;
+			} else if (pc.isBeta() && !event.config().getGid().equals(Constants.SUPPORT_SERVER)) {
+				data.channel().sendMessage(locale.get("error/beta_command")).queue();
+				return;
 			} else if (ratelimit.containsKey(data.user().getId())) {
 				data.channel().sendMessage(locale.get("error/ratelimited")).queue();
 				return;

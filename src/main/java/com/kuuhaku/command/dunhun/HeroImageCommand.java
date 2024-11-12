@@ -33,12 +33,11 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
 import org.apache.commons.validator.routines.UrlValidator;
 
-import java.awt.image.BufferedImage;
-
 @Command(
 		name = "hero",
 		path = "image",
-		category = Category.STAFF
+		category = Category.MISC,
+		beta = true
 )
 @Syntax(allowEmpty = true, value = "<url:text:r>")
 public class HeroImageCommand implements Executable {

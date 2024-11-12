@@ -35,7 +35,8 @@ public record PreparedCommand(
 		String name,
 		Category category,
 		Permission[] permissions,
-		Executable command
+		Executable command,
+		boolean isBeta
 ) {
 	public String description(I18N locale) {
 		String desc = locale.get("cmd/" + name);

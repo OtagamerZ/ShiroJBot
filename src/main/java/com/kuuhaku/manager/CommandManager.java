@@ -58,7 +58,7 @@ public class CommandManager {
 			String parent = params.name();
 
 			if (!names.contains(parent) && !surrogate.containsKey(parent)) {
-				surrogate.put(parent, new PreparedCommand(parent, params.category(), null, null));
+				surrogate.put(parent, new PreparedCommand(parent, params.category(), null, null, params.beta()));
 				Constants.LOGGER.info("Mapped surrogate command parent: {}", parent);
 			}
 		}
@@ -109,7 +109,8 @@ public class CommandManager {
 							full,
 							params.category(),
 							req == null ? new Permission[0] : req.value(),
-							buildCommand(cmd)
+							buildCommand(cmd),
+							params.beta()
 					);
 
 					mapped.put(full, pc);
@@ -148,7 +149,8 @@ public class CommandManager {
 					full,
 					params.category(),
 					req == null ? new Permission[0] : req.value(),
-					buildCommand(cmd)
+					buildCommand(cmd),
+					params.beta()
 			));
 		}
 	}
