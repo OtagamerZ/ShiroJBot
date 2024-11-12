@@ -152,7 +152,9 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public boolean hasAffix(Predicate<String> cond) {
-		if (cond.test(basetype.getStats().implicit().getId())) return true;
+		Affix imp = basetype.getStats().implicit();
+		if (imp != null && cond.test(imp.getId())) return true;
+
 		return affixes.parallelStream().anyMatch(ga -> cond.test(ga.getAffix().getId()));
 	}
 

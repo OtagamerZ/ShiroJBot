@@ -79,7 +79,7 @@ public class HeroStats {
 	}
 
 	public int getXpToNext() {
-		return xpTable.ceilingEntry(xp).getKey();
+		return xpTable.ceilingEntry(xp + 1).getKey();
 	}
 
 	public int getLosableXp() {
