@@ -110,18 +110,22 @@ public class HeroCommand implements Executable {
 			), true);
 
 
-			Attributes base = h.getStats().getAttributes();
 			Attributes attr = h.getAttributes();
+			Attributes extra = new Attributes();
+			for (Gear g : h.getEquipment()) {
+				extra = extra.merge(g.getAttributes());
+			}
+
 			eb.addField(Constants.VOID, """
 					STR: %s (%s)
 					DEX: %s (%s)
 					WIS: %s (%s)
 					VIT: %s (%s)
 					""".formatted(
-					attr.str(), Utils.sign(attr.str() - base.str()),
-					attr.dex(), Utils.sign(attr.dex() - base.dex()),
-					attr.wis(), Utils.sign(attr.wis() - base.wis()),
-					attr.vit(), Utils.sign(attr.vit() - base.vit())
+					attr.str(), Utils.sign(extra.str()),
+					attr.dex(), Utils.sign(extra.dex()),
+					attr.wis(), Utils.sign(extra.wis()),
+					attr.vit(), Utils.sign(extra.vit())
 			), true);
 
 			helper.apply(m.editMessageComponents().setContent(null).setEmbeds(eb.build()))
