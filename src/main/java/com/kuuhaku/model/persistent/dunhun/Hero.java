@@ -93,7 +93,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	private transient final ActorModifiers modifiers = new ActorModifiers();
 	private transient final RegDeg regDeg = new RegDeg(null);
 	private transient final Delta<Integer> hp = new Delta<>();
-	private transient final List<Consumable> spentConsumables = new ArrayList<>();
+	private transient final Map<Consumable, Integer> spentConsumables = new HashMap<>();
 	private transient Equipment equipCache;
 	private transient List<Skill> skillCache;
 	private transient Senshi senshiCache;
@@ -485,13 +485,15 @@ public class Hero extends DAO<Hero> implements Actor {
 				.filter(e -> ((Number) e.getValue()).intValue() > 0)
 				.map(e -> new Pair<>(DAO.find(Consumable.class, e.getKey()), ((Number) e.getValue()).intValue()))
 				.filter(p -> p.getFirst() != null)
+				.map(p -> new Pair<>(p.getFirst(), p.getSecond() - spentConsumables.getOrDefault(p.getFirst(), 0)))
+				.filter(p -> p.getSecond() > 0)
 				.collect(Collectors.toMap(
 						Pair::getFirst, Pair::getSecond, Integer::sum,
 						() -> new TreeMap<>(Comparator.comparing(Consumable::getId))
 				));
 	}
 
-	public List<Consumable> getSpentConsumables() {
+	public Map<Consumable, Integer> getSpentConsumables() {
 		return spentConsumables;
 	}
 
