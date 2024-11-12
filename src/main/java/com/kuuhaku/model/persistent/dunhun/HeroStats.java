@@ -36,8 +36,7 @@ public class HeroStats {
 	private static final NavigableMap<Integer, Integer> xpTable = new TreeMap<>();
 
 	static {
-		xpTable.put(0, 0);
-		for (int i = 1; i <= 1000; i++) {
+		for (int i = 0; i < 1000; i++) {
 			xpTable.put((int) (Math.pow(i, 1.5) * 10), i + 1);
 		}
 	}
@@ -68,7 +67,7 @@ public class HeroStats {
 	private JSONObject consumables = new JSONObject();
 
 	public int getLevel() {
-		return xpTable.ceilingEntry(xp).getValue();
+		return xpTable.floorEntry(xp).getValue();
 	}
 
 	public int getPointsLeft() {
