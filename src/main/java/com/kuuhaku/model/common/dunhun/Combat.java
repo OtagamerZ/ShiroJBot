@@ -832,15 +832,19 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void trigger(Trigger t, Actor from, Actor to) {
-		Iterator<EffectBase> it = effects.iterator();
+		Iterator<EffectBase> it = effects.stream().iterator();
 		while (it.hasNext()) {
 			EffectBase e = it.next();
 			if (from == null) {
 				from = e.getOwner();
 			}
 
-			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) continue;
-			else if (!e.getOwner().equals(from)) {
+			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) {
+				System.out.println(e + " " + t);
+				continue;
+			} else if (!e.getOwner().equals(from)) {
+				System.out.println(e.getOwner() + " " + from);
+
 				if (!getActors().contains(e.getOwner())) it.remove();
 				continue;
 			}
@@ -855,8 +859,8 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 		}
 
-		if (from != null && to != null) {
-			from.trigger(t, to);
+		if (from != null) {
+			from.trigger(t, Utils.getOr(to, from));
 		}
 	}
 }
