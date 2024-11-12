@@ -123,7 +123,7 @@ public class HeroCommand implements Executable {
 			), true);
 
 			helper.apply(m.editMessageComponents().setContent(null).setEmbeds(eb.build()))
-					.setFiles(FileUpload.fromData(IO.getBytes(card.render(locale, d), "png"), "card.png"))
+					.setFiles(FileUpload.fromData(IO.getBytes(h.render(locale), "png"), "card.png"))
 					.queue(s -> Pages.buttonize(s, helper));
 		};
 

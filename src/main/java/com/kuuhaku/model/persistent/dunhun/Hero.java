@@ -43,6 +43,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.model.records.dunhun.GearStats;
+import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
@@ -543,7 +544,11 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public BufferedImage render(I18N locale) {
-		if (deck == null) deck = account.getDeck();
+		if (deck == null) {
+			deck = account.getDeck();
+			deck.setOrigin(Origin.from(false, Race.NONE));
+		}
+
 		return asSenshi(locale).render(locale, deck);
 	}
 

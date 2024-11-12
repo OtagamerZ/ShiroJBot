@@ -134,7 +134,7 @@ public class CreateHeroCommand implements Executable {
 
 						Senshi s = h.asSenshi(locale);
 						event.channel().sendMessage(locale.get("success/hero_created"))
-								.addFiles(FileUpload.fromData(IO.getBytes(s.render(locale, d), "png"), "hero.png"))
+								.addFiles(FileUpload.fromData(IO.getBytes(h.render(locale), "png"), "hero.png"))
 								.queue();
 						return true;
 					}, event.user()
