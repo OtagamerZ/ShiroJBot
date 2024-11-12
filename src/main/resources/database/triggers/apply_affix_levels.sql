@@ -53,7 +53,7 @@ $$;
 
 DROP TRIGGER IF EXISTS apply_affix_levels ON affix;
 CREATE TRIGGER apply_affix_levels
-    AFTER UPDATE OF min_level
+    AFTER UPDATE OF min_level OR INSERT
     ON affix
     FOR EACH ROW
 EXECUTE PROCEDURE t_apply_affix_levels();

@@ -253,26 +253,28 @@ public abstract class GameInstance<T extends Enum<T>> {
 	}
 
 	public final void close(@MagicConstant(valuesFromClass = GameReport.class) byte code) {
-		timeout.stop();
+		try {
+			timeout.stop();
 
-		if (Utils.equalsAny(code, GameReport.SUCCESS, GameReport.GAME_TIMEOUT)) {
-			exec.complete(null);
-		} else {
-			exec.completeExceptionally(new GameReport(code));
+			if (Utils.equalsAny(code, GameReport.SUCCESS, GameReport.GAME_TIMEOUT)) {
+				exec.complete(null);
+			} else {
+				exec.completeExceptionally(new GameReport(code));
+			}
+
+			worker.shutdownNow();
+			worker.close();
+
+			service.shutdownNow();
+			service.close();
+		} finally {
+			for (String p : players) {
+				PLAYERS.remove(p);
+			}
+
+			for (String c : channels) {
+				CHANNELS.remove(c);
+			}
 		}
-
-		for (String p : players) {
-			PLAYERS.remove(p);
-		}
-
-		for (String c : channels) {
-			CHANNELS.remove(c);
-		}
-
-		worker.shutdownNow();
-		worker.close();
-
-		service.shutdownNow();
-		service.close();
 	}
 }
