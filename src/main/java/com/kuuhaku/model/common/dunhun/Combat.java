@@ -832,7 +832,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void trigger(Trigger t, Actor from, Actor to) {
-		Iterator<EffectBase> it = effects.stream().iterator();
+		Iterator<EffectBase> it = effects.iterator();
 		while (it.hasNext()) {
 			EffectBase e = it.next();
 			if (from == null) {
