@@ -83,7 +83,7 @@ public class HeroStats {
 	}
 
 	public int getLosableXp() {
-		return getXpToNext() - getXpToCurrent();
+		return Math.min(getXpToNext() - getXpToCurrent(), getXpToNext() / 2);
 	}
 
 	public int getXp() {
