@@ -36,7 +36,7 @@ public class HeroStats {
 	private static final NavigableMap<Integer, Integer> xpTable = new TreeMap<>();
 
 	static {
-		xpTable.put(0, 1);
+		xpTable.put(0, 0);
 		for (int i = 1; i <= 1000; i++) {
 			xpTable.put((int) (Math.pow(i, 1.5) * 10), i + 1);
 		}
