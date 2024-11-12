@@ -76,14 +76,14 @@ public class HeroStats {
 	}
 
 	public int getXpToCurrent() {
-		int lvl = getLevel() - 2;
+		int lvl = getLevel() - 1;
 		if (lvl < 0) return 0;
 
 		return xpTable.get(lvl);
 	}
 
 	public int getXpToNext() {
-		return xpTable.get(getLevel() - 1);
+		return xpTable.get(getLevel());
 	}
 
 	public int getLosableXp() {
