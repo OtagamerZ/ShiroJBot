@@ -355,13 +355,7 @@ public class Combat implements Renderer<BufferedImage> {
 				);
 			});
 
-			List<Skill> skills = new ArrayList<>(h.getSkills());
-
-			Skill innate = h.getInnate();
-			if (innate != null) {
-				skills.addFirst(innate);
-			}
-
+			List<Skill> skills = h.getSkills();
 			if (!skills.isEmpty()) {
 				helper.addAction(Utils.parseEmoji("⚡"), w -> {
 					EventHandler handle = Pages.getHandler();
@@ -568,13 +562,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private void addDropdowns(Hero h, MessageRequest<?> ma) {
 		List<LayoutComponent> comps = new ArrayList<>(ma.getComponents());
 
-		List<Skill> skills = new ArrayList<>(h.getSkills());
-
-		Skill innate = h.getInnate();
-		if (innate != null) {
-			skills.addFirst(innate);
-		}
-
+		List<Skill> skills = h.getSkills();
 		if (!skills.isEmpty()) {
 			StringSelectMenu.Builder b = StringSelectMenu.create("skills")
 					.setPlaceholder(locale.get("str/use_a_skill"))

@@ -399,16 +399,12 @@ public class Hero extends DAO<Hero> implements Actor {
 		return DAO.query(Gear.class, "SELECT g FROM Gear g WHERE g.id = ?1 AND g.owner.id = ?2", id, this.id);
 	}
 
-	public Skill getInnate() {
-		return DAO.query(Skill.class, "SELECT s FROM Skill s WHERE s.reqRace = ?1", getRace());
-	}
-
 	@Override
 	public List<Skill> getSkills() {
 		if (skillCache != null) return skillCache;
 
 		Attributes attrs = getAttributes();
-		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1 AND s.reqRace IS NULL", stats.getSkills())
+		return skillCache = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1 AND s.reqRace = ?2", stats.getSkills(), getRace())
 				.stream()
 				.filter(s -> attrs.has(s.getRequirements()) && (
 						(s.getReqRace() == null && (s.isFree() || getStats().getUnlockedSkills().contains(s.getId())))
@@ -588,6 +584,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		if (skillCache != null) {
 			stats.setSkills(skillCache.stream()
 					.filter(Objects::nonNull)
+					.filter(s -> s.getReqRace() == null)
 					.map(Skill::getId)
 					.collect(Collectors.toCollection(JSONArray::new))
 			);

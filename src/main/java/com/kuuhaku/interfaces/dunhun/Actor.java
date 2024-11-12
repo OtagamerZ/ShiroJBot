@@ -201,11 +201,6 @@ public interface Actor {
 	List<Skill> getSkills();
 
 	default Skill getSkill(String id) {
-		if (this instanceof Hero h) {
-			Skill innate = h.getInnate();
-			if (innate != null && innate.getId().equalsIgnoreCase(id)) return innate;
-		}
-
 		return getSkills().stream()
 				.filter(skill -> skill.getId().equals(id))
 				.findFirst()
