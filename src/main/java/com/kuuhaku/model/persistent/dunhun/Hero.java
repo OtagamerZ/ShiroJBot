@@ -303,22 +303,36 @@ public class Hero extends DAO<Hero> implements Actor {
 			}
 		}
 
-		Attributes attr = getAttributes();
 		Map<Integer, Gear> gear = DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.id IN ?1", ids)
 				.parallelStream()
 				.filter(g -> {
 					GearStats st = g.getBasetype().getStats();
-					return stats.getLevel() >= st.reqLevel() && attr.has(st.requirements());
+					return stats.getLevel() >= st.reqLevel();
 				})
 				.collect(Collectors.toMap(Gear::getId, Function.identity()));
 
-		return equipCache = new Equipment((gs, i) -> {
+		equipCache = new Equipment((gs, i) -> {
 			if (i < 0) {
 				return gear.get(equipment.getInt(gs.name()));
 			}
 
 			return gear.get(equipment.getJSONArray(gs.name()).getInt(i));
 		});
+
+		boolean check = true;
+		while (check) {
+			check = false;
+
+			Attributes attr = getAttributes();
+			for (Gear g : equipCache) {
+				if (!attr.has(g.getBasetype().getStats().requirements())) {
+					equipCache.unequip(g);
+					check = true;
+				}
+			}
+		}
+
+		return equipCache;
 	}
 
 	public JSONArray getWeaponTags() {
