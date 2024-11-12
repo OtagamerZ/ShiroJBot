@@ -258,6 +258,18 @@ public class Combat implements Renderer<BufferedImage> {
 					current.getSenshi().setDefending(false);
 					trigger(Trigger.ON_TURN_BEGIN, current, current);
 
+					for (EffectBase e : effects) {
+						if (!e.getOwner().equals(current)) {
+							if (!getActors().contains(e.getOwner())) effects.remove(e);
+							continue;
+						}
+
+						if (e.decDuration()) effects.remove(e);
+						if (e instanceof PersistentEffect pe) {
+							pe.getEffect().accept(e, new CombatContext(Trigger.ON_TURN_BEGIN, current, current));
+						}
+					}
+
 					while (current == actors.get() && !skip.get() && current.getAp() > 0) {
 						trigger(Trigger.ON_TICK);
 
@@ -280,20 +292,6 @@ public class Combat implements Renderer<BufferedImage> {
 						if (dg < 0) {
 							current.modHp(dg, false);
 							trigger(Trigger.ON_DEGEN, current, current);
-						}
-					}
-
-					Iterator<EffectBase> it = effects.iterator();
-					while (it.hasNext()) {
-						EffectBase e = it.next();
-						if (!e.getOwner().equals(current)) {
-							if (!getActors().contains(e.getOwner())) it.remove();
-							continue;
-						}
-
-						if (e.decDuration()) it.remove();
-						if (e instanceof PersistentEffect pe) {
-							pe.getEffect().accept(e, new CombatContext(Trigger.ON_TURN_END, current, current));
 						}
 					}
 				}
@@ -835,27 +833,22 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void trigger(Trigger t, Actor from, Actor to) {
-		Iterator<EffectBase> it = effects.iterator();
-		while (it.hasNext()) {
-			EffectBase e = it.next();
+		for (EffectBase e : Set.copyOf(effects)) {
 			if (from == null) {
 				from = e.getOwner();
 			}
 
 			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) {
-				System.out.println("SKIP: " + e + " " + t);
 				continue;
 			} else if (!e.getOwner().equals(from)) {
-				System.out.println("RM: " + e.getOwner() + " " + from);
-				if (!getActors().contains(e.getOwner())) it.remove();
+				if (!getActors().contains(e.getOwner())) effects.remove(e);
 				continue;
 			}
 
-			if (te.decLimit()) it.remove();
+			if (te.decLimit()) effects.remove(e);
 
 			try {
 				te.lock();
-				System.out.println("exec");
 				te.getEffect().accept(e, new CombatContext(t, from, to));
 			} finally {
 				te.unlock();
