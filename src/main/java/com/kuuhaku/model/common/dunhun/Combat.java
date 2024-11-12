@@ -840,10 +840,10 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 
 			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) {
-				System.out.println(e + " " + t);
+				System.out.println("RM: " + e + " " + t);
 				continue;
 			} else if (!e.getOwner().equals(from)) {
-				System.out.println(e.getOwner() + " " + from);
+				System.out.println("RM: " + e.getOwner() + " " + from);
 
 				if (!getActors().contains(e.getOwner())) it.remove();
 				continue;
