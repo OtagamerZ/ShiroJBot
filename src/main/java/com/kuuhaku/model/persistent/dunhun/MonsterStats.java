@@ -117,6 +117,14 @@ public class MonsterStats {
 		return initiative;
 	}
 
+	public boolean hasLoot() {
+		return lootGenerator != null;
+	}
+
+	public void noLoot() {
+		lootGenerator = null;
+	}
+
 	public Loot generateLoot(Actor self) {
 		Loot loot = new Loot();
 		if (lootGenerator == null) return loot;

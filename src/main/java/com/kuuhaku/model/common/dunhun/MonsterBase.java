@@ -202,6 +202,8 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	}
 
 	public int getKillXp() {
+		if (!stats.hasLoot()) return 0;
+
 		double mult = switch (getRarityClass()) {
 			case NORMAL -> 1;
 			case MAGIC -> 1.5;
@@ -209,7 +211,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 			case UNIQUE -> 10;
 		};
 
-		double xp = getStats().getBaseHp() / 500d + getStats().getAttack() / 175d + getStats().getDefense() / 250d;
+		double xp = getMaxHp() / 500d + getSenshi().getDmg() / 175d + getSenshi().getDfs() / 250d;
 		if (game != null) {
 			xp *= 1 + game.getAreaLevel() * 0.1;
 		}
