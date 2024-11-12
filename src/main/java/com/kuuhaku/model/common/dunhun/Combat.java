@@ -276,8 +276,11 @@ public class Combat implements Renderer<BufferedImage> {
 					current.getSenshi().setAvailable(true);
 
 					if (!current.getSenshi().isStasis()) {
-						current.modHp(current.getRegDeg().next(), false);
-						trigger(Trigger.ON_DEGEN, current, current);
+						int dg = current.getRegDeg().next();
+						if (dg < 0) {
+							current.modHp(dg, false);
+							trigger(Trigger.ON_DEGEN, current, current);
+						}
 					}
 
 					Iterator<EffectBase> it = effects.iterator();
@@ -840,7 +843,7 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 
 			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) {
-				System.out.println("RM: " + e + " " + t);
+				System.out.println("SKIP: " + e + " " + t);
 				continue;
 			} else if (!e.getOwner().equals(from)) {
 				System.out.println("RM: " + e.getOwner() + " " + from);
