@@ -85,6 +85,11 @@ public interface Actor {
 					getName(locale), Math.abs(diff), crit ? ("**(" + locale.get("str/critical_hit") + ")**") : ""
 			));
 		}
+
+		if (game != null && game.getCombat() != null && getHp() == 0) {
+			Combat comb = game.getCombat();
+			comb.trigger(Trigger.ON_GRAVEYARD, this, this);
+		}
 	}
 
 	default void setHp(int value) {

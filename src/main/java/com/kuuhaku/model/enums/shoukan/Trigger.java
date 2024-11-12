@@ -134,7 +134,8 @@ public enum Trigger {
 	ON_SACRIFICE,
 
 	/**
-	 * On being added to the graveyard pile
+	 * On being added to the graveyard pile<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_GRAVEYARD,
 
