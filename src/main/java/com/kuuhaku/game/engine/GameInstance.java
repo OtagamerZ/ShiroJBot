@@ -130,6 +130,9 @@ public abstract class GameInstance<T extends Enum<T>> {
 				close(GameReport.INITIALIZATION_ERROR);
 			} finally {
 				sml.close();
+				if (timeout != null) {
+					timeout.stop();
+				}
 			}
 		}, worker);
 	}
