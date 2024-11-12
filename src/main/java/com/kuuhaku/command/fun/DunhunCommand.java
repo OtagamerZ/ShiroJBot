@@ -70,8 +70,8 @@ public class DunhunCommand implements Executable {
 		if (others.contains(event.user())) {
 			event.channel().sendMessage(locale.get("error/cannot_play_with_self")).queue();
 			return;
-		} else if (others.size() > 2) {
-			event.channel().sendMessage(locale.get("error/many_players", 3)).queue();
+		} else if (others.size() > 3) {
+			event.channel().sendMessage(locale.get("error/many_players", 4)).queue();
 			return;
 		}
 

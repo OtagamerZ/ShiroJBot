@@ -28,6 +28,7 @@ import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.SigPattern;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -51,10 +52,12 @@ import java.util.stream.Stream;
 		category = Category.FUN,
 		beta = true
 )
-@Syntax({
-		"<user:user:r>",
-		"<user:user:r> <user:user:r> <user:user:r>"
-})
+@Syntax(
+		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>(?=\\s|$))+"),
+		value = {
+				"<users:custom:r>[users]"
+		}
+)
 @Requires(Permission.MESSAGE_ATTACH_FILES)
 public class DunhunDuelCommand implements Executable {
 	@Override
@@ -68,8 +71,8 @@ public class DunhunDuelCommand implements Executable {
 		if (others.contains(event.user())) {
 			event.channel().sendMessage(locale.get("error/cannot_play_with_self")).queue();
 			return;
-		} else if (others.size() > 2) {
-			event.channel().sendMessage(locale.get("error/many_players", 3)).queue();
+		} else if (others.size() > 5) {
+			event.channel().sendMessage(locale.get("error/many_players", 6)).queue();
 			return;
 		}
 
