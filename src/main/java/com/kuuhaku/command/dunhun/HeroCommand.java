@@ -109,7 +109,6 @@ public class HeroCommand implements Executable {
 					h.getStats().getXp(), h.getStats().getXpToNext()
 			), true);
 
-
 			Attributes attr = h.getAttributes();
 			Attributes extra = new Attributes();
 			for (Gear g : h.getEquipment()) {

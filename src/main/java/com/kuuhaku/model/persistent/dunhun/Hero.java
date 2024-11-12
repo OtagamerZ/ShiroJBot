@@ -303,7 +303,6 @@ public class Hero extends DAO<Hero> implements Actor {
 				.filter(g -> stats.getLevel() >= g.getBasetype().getStats().reqLevel())
 				.collect(Collectors.toMap(Gear::getId, Function.identity()));
 
-		equipCache = new Equipment();
 		Equipment equip = new Equipment((gs, i) -> {
 			if (i < 0) {
 				return gear.get(equipment.getInt(gs.name()));
@@ -313,6 +312,8 @@ public class Hero extends DAO<Hero> implements Actor {
 		});
 
 		Hero dummy = (Hero) copy();
+		dummy.senshiCache = new Senshi(this, I18N.EN);
+
 		Map<Integer, Attributes> map = new HashMap<>();
 		for (Gear g : equip) {
 			g.load(I18N.EN, dummy);
