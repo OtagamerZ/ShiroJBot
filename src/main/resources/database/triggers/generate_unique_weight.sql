@@ -24,7 +24,7 @@ $$
 BEGIN
     SELECT avg(a.weight * 1.5) - avg(a.weight * 1.5) % 25
     FROM "unique" u
-             INNER JOIN affix a ON u.affixes ? a.id
+             INNER JOIN affix a ON has(u.affixes, a.id)
     WHERE u.id = NEW.id
       AND a.weight > 0
     INTO NEW.weight;

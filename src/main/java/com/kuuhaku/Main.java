@@ -46,38 +46,36 @@ public class Main {
 	public static void main(String[] args) {
 		boot.start();
 		Constants.LOGGER.info("""
-
-				----------------------------------------------------------
-				Shiro J. Bot  Copyright (C) 2019-%s Yago Gimenez (KuuHaKu)
-				This program comes with ABSOLUTELY NO WARRANTY
-				This is free software, and you are welcome to redistribute it under certain conditions
-				See license for more information regarding redistribution conditions
-				----------------------------------------------------------
-				SYSTEM INFO
-				----------------------------------------------------------
-				Name: %s
-				Version: %s
-				Architecture: %s
-				CPU: %s cores
-				Memory: %s GiB (Allocated: %s GiB)
-				Charset: %s
-				Java runtime: %s %s
-				----------------------------------------------------------
-				END OF SUMMARY
-				----------------------------------------------------------
-				"""
-				.formatted(
-						LocalDate.now().getYear(),
-						info.getName(),
-						info.getVersion(),
-						info.getArch(),
-						Runtime.getRuntime().availableProcessors(),
-						Math.round(info.getTotalMemorySize() / Math.pow(1024, 3)),
-						Math.round(Runtime.getRuntime().maxMemory() / Math.pow(1024, 3)),
-						Charset.defaultCharset(),
-						System.getProperty("java.vm.name"),
-						System.getProperty("java.vendor.version")
-				)
+						
+						----------------------------------------------------------
+						Shiro J. Bot  Copyright (C) 2019-{} Yago Gimenez (KuuHaKu)
+						This program comes with ABSOLUTELY NO WARRANTY
+						This is free software, and you are welcome to redistribute it under certain conditions
+						See license for more information regarding redistribution conditions
+						----------------------------------------------------------
+						SYSTEM INFO
+						----------------------------------------------------------
+						Name: {}
+						Version: {}
+						Architecture: {}
+						CPU: {} cores
+						Memory: {} GiB (Allocated: {} GiB)
+						Charset: {}
+						Java runtime: {} {}
+						----------------------------------------------------------
+						END OF SUMMARY
+						----------------------------------------------------------
+						""",
+				LocalDate.now().getYear(),
+				info.getName(),
+				info.getVersion(),
+				info.getArch(),
+				Runtime.getRuntime().availableProcessors(),
+				Math.round(info.getTotalMemorySize() / Math.pow(1024, 3)),
+				Math.round(Runtime.getRuntime().maxMemory() / Math.pow(1024, 3)),
+				Charset.defaultCharset(),
+				System.getProperty("java.vm.name"),
+				System.getProperty("java.vendor.version")
 		);
 
 		GlobalProperty ver = DAO.find(GlobalProperty.class, "build_number");
