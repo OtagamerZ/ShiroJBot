@@ -112,6 +112,7 @@ public interface Actor {
 			int idx = acts.indexOf(this);
 			if (idx < acts.getIndex()) {
 				acts.add(acts.remove(idx));
+				acts.setIndex(acts.previous());
 			}
 		}
 	}

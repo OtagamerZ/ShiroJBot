@@ -35,11 +35,11 @@ public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
 		super(c);
 	}
 
-	private int next() {
+	public int next() {
 		return (index + 1) % size();
 	}
 
-	private int previous() {
+	public int previous() {
 		if (index == -1) index = 0;
 
 		return Math.abs(index - 1) % size();
