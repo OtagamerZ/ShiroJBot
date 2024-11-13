@@ -622,18 +622,13 @@ public class Combat implements Renderer<BufferedImage> {
 	public void attack(Actor source, Actor target, Double damageMult) {
 		int init = source.getAp();
 		source.modAp(-1);
-		if (source.getAp() == init) System.out.println(1);
 
 		trigger(Trigger.ON_DEFEND, target, source);
-		if (source.getAp() == init) System.out.println(2);
 
 		history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale)));
-		if (source.getAp() == init) System.out.println(3);
 
 		Senshi srcSen = source.getSenshi();
-		if (source.getAp() == init) System.out.println(3);
 		Senshi tgtSen = target.getSenshi();
-		if (source.getAp() == init) System.out.println(4);
 		if (damageMult == null) {
 			if (srcSen.isBlinded(true) && Calc.chance(50)) {
 				trigger(Trigger.ON_MISS, source, target);
@@ -655,22 +650,18 @@ public class Combat implements Renderer<BufferedImage> {
 					return;
 				}
 			}
-			if (source.getAp() == init) System.out.println(5);
 
 			damageMult = 1d;
 		}
 
 		trigger(Trigger.ON_ATTACK, source, target);
-		if (source.getAp() == init) System.out.println(6);
 		target.modHp((int) -(srcSen.getDmg() * damageMult), Calc.chance(source.getCritical()));
-		if (source.getAp() == init) System.out.println(7);
 		trigger(Trigger.ON_HIT, source, target);
 		if (source.getAp() == init) System.out.println(8);
 
 		if (target.getHp() == 0) {
 			trigger(Trigger.ON_KILL, source, target);
 		}
-		if (source.getAp() == init) System.out.println(9);
 	}
 
 	public void skill(Skill skill, Actor source, Actor target) {
@@ -849,30 +840,40 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void trigger(Trigger t, Actor from, Actor to) {
+		int init = from == null ? 0 : from.getAp();
 		for (EffectBase e : Set.copyOf(effects)) {
 			if (from == null) {
 				from = e.getOwner();
 			}
+			if (init == from.getAp()) System.out.println(1);
 
 			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) {
+				if (init == from.getAp()) System.out.println(2);
 				continue;
 			} else if (!e.getOwner().equals(from)) {
+				if (init == from.getAp()) System.out.println(3);
 				if (!getActors().contains(e.getOwner())) effects.remove(e);
+				if (init == from.getAp()) System.out.println(4);
 				continue;
 			}
 
 			if (te.decLimit()) effects.remove(e);
+			if (init == from.getAp()) System.out.println(5);
 
 			try {
 				te.lock();
+				if (init == from.getAp()) System.out.println(6);
 				te.getEffect().accept(e, new CombatContext(t, from, to));
+				if (init == from.getAp()) System.out.println(7);
 			} finally {
 				te.unlock();
+				if (init == from.getAp()) System.out.println(8);
 			}
 		}
 
 		if (from != null) {
 			from.trigger(t, Utils.getOr(to, from));
 		}
+		if (init == from.getAp()) System.out.println(9);
 	}
 }
