@@ -24,5 +24,6 @@ FROM jsonb_to_recordset('[
   {"id": "NULLIFYING_POWDER", "weight": 8000},
   {"id": "ALTERATING_EMBER", "weight": 5500},
   {"id": "UNSTABLE_DICE", "weight": 2000},
-  {"id": "ALCHEMICAL_EMBER", "weight": 1800}
+  {"id": "UNMAKING_HAMMER", "weight": 1800},
+  {"id": "ALCHEMICAL_EMBER", "weight": 1200}
 ]') AS (id VARCHAR, weight INT)

@@ -236,11 +236,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 									Loot lt = m.getStats().generateLoot(m);
 									if (Calc.chance(10)) {
 										List<Object[]> bases = DAO.queryAllUnmapped("""
-											SELECT id
-											     , weight
-											FROM v_dunhun_global_drops
-											WHERE weight > 0
-											"""
+												SELECT id
+												     , weight
+												FROM v_dunhun_global_drops
+												WHERE weight > 0
+												"""
 										);
 
 										RandomList<String> rl = new RandomList<>();
