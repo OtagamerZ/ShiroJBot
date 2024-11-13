@@ -129,7 +129,7 @@ public class Skill extends DAO<Skill> {
 			desc = Utils.regex(desc, "\\{(\\d+)}").replaceAll(v -> {
 				int val = (int) (Integer.parseInt(v.group(1)) * scale);
 				values.add(val);
-				return String.valueOf(val);
+				return "**" + val + "**";
 			});
 		} else {
 			MonsterBase<?> m = (MonsterBase<?>) source;
@@ -144,7 +144,7 @@ public class Skill extends DAO<Skill> {
 			desc = Utils.regex(desc, "\\{(\\d+)}").replaceAll(v -> {
 				int val = (int) (Integer.parseInt(v.group(1)) * mult);
 				values.add(val);
-				return String.valueOf(val);
+				return "**" + val + "**";
 			});
 		}
 
