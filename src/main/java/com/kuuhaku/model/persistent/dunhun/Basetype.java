@@ -89,7 +89,12 @@ public class Basetype extends DAO<Basetype> {
 	public static Basetype getRandom(Actor source) {
 		int dropLevel = Integer.MAX_VALUE;
 		if (source != null && source.getGame() != null) {
-			dropLevel = source.getGame().getAreaLevel() + 1;
+			dropLevel = switch (source.getRarityClass()) {
+				case NORMAL -> 0;
+				case MAGIC -> 1;
+				case RARE -> 2;
+				case UNIQUE -> 5;
+			} + source.getGame().getAreaLevel() + 1;
 		}
 
 		List<Object[]> bases = DAO.queryAllUnmapped("""
