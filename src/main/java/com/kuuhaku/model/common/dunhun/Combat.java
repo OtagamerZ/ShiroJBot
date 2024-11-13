@@ -873,7 +873,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		if (from != null) {
 			from.trigger(t, Utils.getOr(to, from));
+			if (init == from.getAp()) System.out.println(9);
 		}
-		if (init == from.getAp()) System.out.println(9);
 	}
 }
