@@ -626,7 +626,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public int getAreaLevel() {
 		if (dungeon.getAreaLevel() == 0) {
-			return Math.max(0, (getTurn() - 1) / 10 * 5);
+			return 1 + Math.max(0, (getTurn() - 1) / 10 * 5);
 		}
 
 		return dungeon.getAreaLevel();
