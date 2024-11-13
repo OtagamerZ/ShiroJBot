@@ -98,7 +98,7 @@ public class Skill extends DAO<Skill> {
 	}
 
 	public String getDescription(I18N locale) {
-		return getInfo(locale).getDescription().replaceAll("\\{(\\d+)}", "$1");
+		return getInfo(locale).getDescription().replaceAll("\\{(\\d+)}", "**$1**");
 	}
 
 	public String getDescription(I18N locale, Actor source) {
