@@ -318,8 +318,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}
 					}
 				} catch (Exception e) {
-					getChannel().sendMessage(getLocale().get("error/error", e)).queue();
 					Constants.LOGGER.error(e, e);
+					getChannel().sendMessage(getLocale().get("error/error", e)).queue();
 					close(GameReport.OTHER);
 				}
 			}

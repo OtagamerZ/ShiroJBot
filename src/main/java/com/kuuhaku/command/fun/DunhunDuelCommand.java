@@ -90,8 +90,8 @@ public class DunhunDuelCommand implements Executable {
 				dun.start(event.guild(), event.channel())
 						.whenComplete((v, e) -> {
 							if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
-								event.channel().sendMessage(locale.get("error/error", e)).queue();
 								Constants.LOGGER.error(e, e);
+								event.channel().sendMessage(locale.get("error/error", e)).queue();
 							}
 						});
 				return;
@@ -114,8 +114,8 @@ public class DunhunDuelCommand implements Executable {
 				dun.start(event.guild(), event.channel())
 						.whenComplete((v, e) -> {
 							if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
-								event.channel().sendMessage(locale.get("error/error", e)).queue();
 								Constants.LOGGER.error(e, e);
+								event.channel().sendMessage(locale.get("error/error", e)).queue();
 							}
 						});
 
