@@ -103,7 +103,6 @@ public class DunhunCommand implements Executable {
 			if (others.isEmpty()) {
 				try {
 					Dunhun dun = new Dunhun(locale, dungeon, event.user());
-					System.out.println(event.member().getEffectiveName() + " started");
 					dun.start(event.guild(), event.channel())
 							.whenComplete((v, e) -> {
 								if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
