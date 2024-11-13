@@ -214,6 +214,8 @@ public class HeroCommand implements Executable {
 				.setThumbnail("attachment://card.png");
 
 		List<Skill> skills = h.getSkills();
+		skills.removeIf(s -> s.getReqRace() != null);
+
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()));
