@@ -303,7 +303,7 @@ public class Hero extends DAO<Hero> implements Actor {
 				.filter(g -> stats.getLevel() >= g.getBasetype().getStats().reqLevel())
 				.collect(Collectors.toMap(Gear::getId, Function.identity()));
 
-		Equipment equip = new Equipment((gs, i) -> {
+		equipCache = new Equipment((gs, i) -> {
 			if (i < 0) {
 				return gear.get(equipment.getInt(gs.name()));
 			}
@@ -315,7 +315,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		dummy.senshiCache = new Senshi(this, I18N.EN);
 
 		Map<Integer, Attributes> map = new HashMap<>();
-		for (Gear g : equip) {
+		for (Gear g : equipCache) {
 			g.load(I18N.EN, dummy);
 			map.put(g.getId(), g.getAttributes());
 		}
@@ -325,16 +325,16 @@ public class Hero extends DAO<Hero> implements Actor {
 			check = false;
 			Attributes total = stats.getAttributes().merge(map.values());
 
-			for (Gear g : equip) {
+			for (Gear g : equipCache) {
 				if (!total.has(g.getBasetype().getStats().requirements())) {
-					equip.unequip(g);
+					equipCache.unequip(g);
 					map.remove(g.getId());
 					check = true;
 				}
 			}
 		}
 
-		return equipCache = equip;
+		return equipCache;
 	}
 
 	public JSONArray getWeaponTags() {
