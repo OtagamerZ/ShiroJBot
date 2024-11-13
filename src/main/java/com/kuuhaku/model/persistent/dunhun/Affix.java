@@ -24,7 +24,6 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
-import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedAffix;
 import com.kuuhaku.util.Utils;
@@ -107,6 +106,20 @@ public class Affix extends DAO<Affix> {
 
 	public String getGroup() {
 		return group;
+	}
+
+	public int getTier() {
+		return DAO.queryNative(Integer.class, """
+				SELECT x.tier
+				FROM (
+				     SELECT id
+				          , row_number() OVER (ORDER BY id DESC) AS tier
+				     FROM affix
+				     WHERE get_affix_family(id) = get_affix_family(?1)
+				     ) x
+				WHERE x.id = ?1
+				""", id
+		);
 	}
 
 	public String getEffect() {
