@@ -24,6 +24,7 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedAffix;
 import com.kuuhaku.util.Utils;
@@ -145,24 +146,7 @@ public class Affix extends DAO<Affix> {
 		return Objects.hashCode(id);
 	}
 
-	public static Affix getRandom(Gear gear, AffixType type) {
-		if (type == null) {
-			List<AffixType> left = new ArrayList<>();
-			left.addAll(List.of(AffixType.itemValues()));
-			left.addAll(List.of(AffixType.itemValues()));
-
-			for (GearAffix ga : gear.getAffixes()) {
-				int idx = left.indexOf(ga.getAffix().getType());
-				if (idx > -1) {
-					left.remove(idx);
-				}
-			}
-
-			if (left.isEmpty()) return null;
-
-			type = Utils.getRandomEntry(left);
-		}
-
+	public static Affix getRandom(Gear gear, AffixType type, int maxMods) {
 		Basetype base = gear.getBasetype();
 
 		JSONArray tags = new JSONArray(base.getStats().allTags());
@@ -189,12 +173,15 @@ public class Affix extends DAO<Affix> {
 			return false;
 		});
 
+		String tp = type != null ? type.name() : "";
 		RandomList<String> rl = new RandomList<>();
-		List<Object[]> affs = DAO.queryAllUnmapped("""
+		List<Object[]> affs = new ArrayList<>(
+				DAO.queryAllUnmapped("""
 				SELECT id
+				 	 , type
 				     , weight
 				FROM affix
-				WHERE type = ?1
+				WHERE ((?1 <> '' AND type = ?1) OR type NOT LIKE 'MON\\_%')
 				  AND weight > 0
 				  AND (min_level <= ?2 OR has(cast(?3 AS JSONB), 'ACCESSORY'))
 				  AND req_tags <@ cast(?3 AS JSONB)
@@ -202,7 +189,29 @@ public class Affix extends DAO<Affix> {
 				  AND NOT has(get_affix_family(cast(?4 AS JSONB)), get_affix_family(id))
 				  AND (affix_group IS NULL OR affix_group NOT IN ?5)
 				  AND (cast(?6 AS VARCHAR) IS NULL OR has(tags, ?6))
-				""", type.name(), gear.getReqLevel(), tags.toString(), affixes.toString(), groups, only.get());
+				""", tp, gear.getReqLevel(), tags.toString(), affixes.toString(), groups, only.get())
+		);
+
+		if (type == null) {
+			List<AffixType> left = new ArrayList<>();
+			for (int i = 0; i < maxMods / 2; i++) {
+				left.addAll(List.of(AffixType.itemValues()));
+			}
+
+			left.removeIf(a -> affs.stream().noneMatch(o -> o[3].equals(a.name())));
+
+			for (GearAffix ga : gear.getAffixes()) {
+				int idx = left.indexOf(ga.getAffix().getType());
+				if (idx > -1) {
+					left.remove(idx);
+				}
+			}
+
+			if (left.isEmpty()) return null;
+
+			AffixType chosen = Utils.getRandomEntry(left);
+			affs.removeIf(o -> !o[3].equals(chosen.name()));
+		}
 
 		for (Object[] a : affs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
@@ -213,23 +222,6 @@ public class Affix extends DAO<Affix> {
 	}
 
 	public static Affix getRandom(Monster monster, AffixType type, int level) {
-		if (type == null) {
-			List<AffixType> left = new ArrayList<>();
-			left.addAll(List.of(AffixType.itemValues()));
-			left.addAll(List.of(AffixType.itemValues()));
-
-			for (Affix ga : monster.getAffixes()) {
-				int idx = left.indexOf(ga.getType());
-				if (idx > -1) {
-					left.remove(idx);
-				}
-			}
-
-			if (left.isEmpty()) return null;
-
-			type = Utils.getRandomEntry(left);
-		}
-
 		JSONArray affixes = new JSONArray();
 		List<String> groups = new ArrayList<>();
 
@@ -240,17 +232,39 @@ public class Affix extends DAO<Affix> {
 			}
 		}
 
+		String tp = type != null ? type.name() : "";
 		RandomList<String> rl = new RandomList<>();
 		List<Object[]> affs = DAO.queryAllUnmapped("""
 				SELECT id
 				     , weight
 				FROM affix
-				WHERE type = ?1
+				WHERE ((?1 <> '' AND type = ?1) OR type LIKE 'MON\\_%')
 				  AND weight > 0
 				  AND min_level <= ?2
 				  AND NOT has(get_affix_family(cast(?3 AS JSONB)), get_affix_family(id))
 				  AND (affix_group IS NULL OR affix_group NOT IN ?4)
-				""", type.name(), level, affixes.toString(), groups);
+				""", tp, level, affixes.toString(), groups);
+
+		if (type == null) {
+			List<AffixType> left = new ArrayList<>();
+			for (int i = 0; i < 2; i++) {
+				left.addAll(List.of(AffixType.monsterValues()));
+			}
+
+			left.removeIf(a -> affs.stream().noneMatch(o -> o[3].equals(a.name())));
+
+			for (Affix a : monster.getAffixes()) {
+				int idx = left.indexOf(a.getType());
+				if (idx > -1) {
+					left.remove(idx);
+				}
+			}
+
+			if (left.isEmpty()) return null;
+
+			AffixType chosen = Utils.getRandomEntry(left);
+			affs.removeIf(o -> !o[3].equals(chosen.name()));
+		}
 
 		for (Object[] a : affs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());

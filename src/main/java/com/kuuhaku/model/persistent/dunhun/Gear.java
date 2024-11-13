@@ -375,22 +375,15 @@ public class Gear extends DAO<Gear> {
 		Gear out = new Gear(hero, base);
 		if (rarity == RarityClass.NORMAL) return out;
 
-		List<AffixType> pool = new ArrayList<>(List.of(AffixType.itemValues()));
-
-		int min = rarity == RarityClass.MAGIC ? 1 : 2;
-		List<AffixType> rolled = Utils.getRandomN(pool, Calc.rng(min, min * 2), min);
-
-		for (AffixType type : rolled) {
-			Affix af = Affix.getRandom(out, type);
-			if (af == null) continue;
+		int mods = Calc.rng(1, rarity.getMaxMods());
+		for (int i = 0; i < mods; i++) {
+			Affix af = Affix.getRandom(out, null, rarity.getMaxMods());
+			if (af == null) break;
 
 			out.getAffixes().add(new GearAffix(out, af));
-		}
 
-		if (rarity == RarityClass.RARE && out.getRarityClass() != RarityClass.RARE) {
-			Affix af = Affix.getRandom(out, Utils.getRandomEntry(pool));
-			if (af != null) {
-				out.getAffixes().add(new GearAffix(out, af));
+			if (i == mods - 1 && mods < rarity.getMaxMods() && out.getRarityClass() != rarity) {
+				mods++;
 			}
 		}
 
