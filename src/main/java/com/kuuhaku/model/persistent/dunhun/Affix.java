@@ -198,7 +198,7 @@ public class Affix extends DAO<Affix> {
 				left.addAll(List.of(AffixType.itemValues()));
 			}
 
-			left.removeIf(a -> affs.stream().noneMatch(o -> o[3].equals(a.name())));
+			left.removeIf(a -> affs.stream().noneMatch(o -> o[2].equals(a.name())));
 
 			for (GearAffix ga : gear.getAffixes()) {
 				int idx = left.indexOf(ga.getAffix().getType());
@@ -210,7 +210,7 @@ public class Affix extends DAO<Affix> {
 			if (left.isEmpty()) return null;
 
 			AffixType chosen = Utils.getRandomEntry(left);
-			affs.removeIf(o -> !o[3].equals(chosen.name()));
+			affs.removeIf(o -> !o[2].equals(chosen.name()));
 		}
 
 		for (Object[] a : affs) {
@@ -252,7 +252,7 @@ public class Affix extends DAO<Affix> {
 				left.addAll(List.of(AffixType.monsterValues()));
 			}
 
-			left.removeIf(a -> affs.stream().noneMatch(o -> o[3].equals(a.name())));
+			left.removeIf(a -> affs.stream().noneMatch(o -> o[2].equals(a.name())));
 
 			for (Affix a : monster.getAffixes()) {
 				int idx = left.indexOf(a.getType());
@@ -264,7 +264,7 @@ public class Affix extends DAO<Affix> {
 			if (left.isEmpty()) return null;
 
 			AffixType chosen = Utils.getRandomEntry(left);
-			affs.removeIf(o -> !o[3].equals(chosen.name()));
+			affs.removeIf(o -> !o[2].equals(chosen.name()));
 		}
 
 		for (Object[] a : affs) {
