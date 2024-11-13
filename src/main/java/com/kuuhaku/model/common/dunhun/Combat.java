@@ -351,11 +351,7 @@ public class Combat implements Renderer<BufferedImage> {
 						.toList();
 
 				addSelector(w.getMessage(), helper, tgts,
-						t -> lock.complete(() -> {
-							System.out.println("B: " + h.getAp());
-							attack(h, t, null);
-							System.out.println("A: " + h.getAp());
-						})
+						t -> lock.complete(() -> attack(h, t, null))
 				);
 			});
 
@@ -624,14 +620,20 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void attack(Actor source, Actor target, Double damageMult) {
+		int init = source.getAp();
 		source.modAp(-1);
+		if (source.getAp() == init) System.out.println(1);
 
 		trigger(Trigger.ON_DEFEND, target, source);
+		if (source.getAp() == init) System.out.println(2);
 
 		history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale)));
+		if (source.getAp() == init) System.out.println(3);
 
 		Senshi srcSen = source.getSenshi();
+		if (source.getAp() == init) System.out.println(3);
 		Senshi tgtSen = target.getSenshi();
+		if (source.getAp() == init) System.out.println(4);
 		if (damageMult == null) {
 			if (srcSen.isBlinded(true) && Calc.chance(50)) {
 				trigger(Trigger.ON_MISS, source, target);
@@ -653,17 +655,22 @@ public class Combat implements Renderer<BufferedImage> {
 					return;
 				}
 			}
+			if (source.getAp() == init) System.out.println(5);
 
 			damageMult = 1d;
 		}
 
 		trigger(Trigger.ON_ATTACK, source, target);
+		if (source.getAp() == init) System.out.println(6);
 		target.modHp((int) -(srcSen.getDmg() * damageMult), Calc.chance(source.getCritical()));
+		if (source.getAp() == init) System.out.println(7);
 		trigger(Trigger.ON_HIT, source, target);
+		if (source.getAp() == init) System.out.println(8);
 
 		if (target.getHp() == 0) {
 			trigger(Trigger.ON_KILL, source, target);
 		}
+		if (source.getAp() == init) System.out.println(9);
 	}
 
 	public void skill(Skill skill, Actor source, Actor target) {
