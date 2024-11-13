@@ -85,8 +85,10 @@ public class Monster extends MonsterBase<Monster> {
 			StringBuilder name = new StringBuilder();
 			for (int i = 0; i < parts; i++) {
 				String part = IO.getLine("dunhun/monster/name_parts.dict", Calc.rng(0, 64, SERIAL >> i));
-				if (i == 0 && parts > 1 && Calc.chance(25, prefix.hashCode() + suffix.hashCode())) {
-					part += "'";
+				if (i == 0) {
+					if (parts > 1 && Calc.chance(25, prefix.hashCode() + suffix.hashCode())) {
+						part += "'";
+					}
 				} else {
 					part = part.toLowerCase();
 				}
