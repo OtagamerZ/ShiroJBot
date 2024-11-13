@@ -277,7 +277,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							}
 
 							for (Hero h : heroes.values()) {
-								int xp = xpGained;
+								int xp = Math.max(1, xpGained);
 								DAO.apply(Hero.class, h.getId(), n -> {
 									int gain = xp;
 
