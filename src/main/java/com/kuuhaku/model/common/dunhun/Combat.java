@@ -262,7 +262,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 					trigger(Trigger.ON_TURN_BEGIN, current, current);
 
-					for (EffectBase e : effects) {
+					for (EffectBase e : Set.copyOf(effects)) {
 						if (!e.getOwner().equals(current)) {
 							if (!getActors().contains(e.getOwner())) effects.remove(e);
 							continue;
