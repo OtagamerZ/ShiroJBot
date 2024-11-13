@@ -274,6 +274,7 @@ public class Combat implements Renderer<BufferedImage> {
 						}
 					}
 
+					System.out.println(current.getName(locale));
 					while (current == actors.get() && !skip.get() && current.getAp() > 0) {
 						trigger(Trigger.ON_TICK);
 
@@ -351,7 +352,7 @@ public class Combat implements Renderer<BufferedImage> {
 						.toList();
 
 				addSelector(w.getMessage(), helper, tgts,
-						t -> lock.complete(() -> attack(current, t, null))
+						t -> lock.complete(() -> attack(h, t, null))
 				);
 			});
 
