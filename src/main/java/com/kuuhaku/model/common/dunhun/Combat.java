@@ -277,12 +277,10 @@ public class Combat implements Renderer<BufferedImage> {
 					while (current == actors.get() && !skip.get() && current.getAp() > 0) {
 						trigger(Trigger.ON_TICK);
 
-						System.out.println("B: " + current.getAp());
 						Runnable action = reload().join();
 						if (action != null) {
 							action.run();
 						}
-						System.out.println("A: " + current.getAp());
 
 						if (hunters.stream().allMatch(Actor::isOutOfCombat)) break loop;
 						else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break loop;
@@ -353,7 +351,7 @@ public class Combat implements Renderer<BufferedImage> {
 						.toList();
 
 				addSelector(w.getMessage(), helper, tgts,
-						t -> lock.complete(() -> attack(h, t, null))
+						t -> lock.complete(() -> attack(current, t, null))
 				);
 			});
 
