@@ -28,10 +28,13 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
 import org.apache.commons.validator.routines.UrlValidator;
+
+import javax.imageio.ImageIO;
 
 @Command(
 		name = "hero",
@@ -81,6 +84,9 @@ public class HeroImageCommand implements Executable {
 			return;
 		} else if (size > Hero.MAX_IMG_SIZE) {
 			event.channel().sendMessage(locale.get("error/image_too_big", (Hero.MAX_IMG_SIZE / 1024 / 1024) + " MB")).queue();
+			return;
+		} else if (!ImageIO.getImageReadersByFormatName(Utils.getOr(IO.getImageType(url), "")).hasNext()) {
+			event.channel().sendMessage(locale.get("error/format_not_supported")).queue();
 			return;
 		}
 

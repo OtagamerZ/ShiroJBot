@@ -44,6 +44,7 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
@@ -91,7 +92,10 @@ public class CreateHeroCommand implements Executable {
 			event.channel().sendMessage(locale.get("error/invalid_url")).queue();
 			return;
 		} else if (size > Hero.MAX_IMG_SIZE) {
-				event.channel().sendMessage(locale.get("error/image_too_big", (Hero.MAX_IMG_SIZE / 1024 / 1024) + " MB")).queue();
+			event.channel().sendMessage(locale.get("error/image_too_big", (Hero.MAX_IMG_SIZE / 1024 / 1024) + " MB")).queue();
+			return;
+		} else if (!ImageIO.getImageReadersByFormatName(Utils.getOr(IO.getImageType(url), "")).hasNext()) {
+			event.channel().sendMessage(locale.get("error/format_not_supported")).queue();
 			return;
 		}
 
