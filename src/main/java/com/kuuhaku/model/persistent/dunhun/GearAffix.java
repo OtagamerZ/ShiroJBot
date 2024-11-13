@@ -166,6 +166,8 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	public void apply(I18N locale, Gear target, Hero owner) {
+		if (affix.getEffect() == null) return;
+
 		try {
 			Utils.exec(affix.getId(), affix.getEffect(), Map.of(
 					"locale", locale,
