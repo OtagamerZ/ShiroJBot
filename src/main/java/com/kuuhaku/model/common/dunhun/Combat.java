@@ -416,7 +416,7 @@ public class Combat implements Renderer<BufferedImage> {
 								h.getSpentConsumables().compute(con, (k, v) -> v == null ? 1 : v + 1);
 								h.modAp(-1);
 
-								history.add(locale.get(t.equals(h) ? "str/used_skill_self" : "str/used_skill",
+								history.add(locale.get(t.equals(h) ? "str/used_self" : "str/used",
 										h.getName(), con.getName(locale), t.getName(locale))
 								);
 							})
@@ -620,7 +620,9 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void attack(Actor source, Actor target, Double damageMult) {
+		System.out.println("Before: " + source.getAp());
 		source.modAp(-1);
+		System.out.println("After: " + source.getAp());
 
 		trigger(Trigger.ON_DEFEND, target, source);
 
@@ -668,7 +670,7 @@ public class Combat implements Renderer<BufferedImage> {
 		trigger(Trigger.ON_SPELL, source, target);
 		trigger(Trigger.ON_SPELL_TARGET, target, source);
 
-		history.add(locale.get(target.equals(source) ? "str/used_skill_self" : "str/used_skill",
+		history.add(locale.get(target.equals(source) ? "str/used_self" : "str/used",
 				source.getName(locale), skill.getInfo(locale).getName(), target.getName(locale))
 		);
 
