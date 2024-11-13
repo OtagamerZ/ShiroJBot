@@ -845,29 +845,21 @@ public class Combat implements Renderer<BufferedImage> {
 			if (from == null) {
 				from = e.getOwner();
 			}
-			if (init == from.getAp()) System.out.println(1);
 
 			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) {
-				if (init == from.getAp()) System.out.println(2);
 				continue;
 			} else if (!e.getOwner().equals(from)) {
-				if (init == from.getAp()) System.out.println(3);
 				if (!getActors().contains(e.getOwner())) effects.remove(e);
-				if (init == from.getAp()) System.out.println(4);
 				continue;
 			}
 
 			if (te.decLimit()) effects.remove(e);
-			if (init == from.getAp()) System.out.println(5);
 
 			try {
 				te.lock();
-				if (init == from.getAp()) System.out.println(6);
 				te.getEffect().accept(e, new CombatContext(t, from, to));
-				if (init == from.getAp()) System.out.println(7);
 			} finally {
 				te.unlock();
-				if (init == from.getAp()) System.out.println(8);
 			}
 		}
 
