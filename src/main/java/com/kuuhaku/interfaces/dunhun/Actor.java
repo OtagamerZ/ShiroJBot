@@ -1,6 +1,7 @@
 package com.kuuhaku.interfaces.dunhun;
 
 import com.kuuhaku.game.Dunhun;
+import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.ActorModifiers;
 import com.kuuhaku.model.common.dunhun.Combat;
@@ -105,6 +106,13 @@ public interface Actor {
 		Dunhun game = getGame();
 		if (game != null) {
 			getSenshi().setAvailable(true);
+
+			InfiniteList<Actor> acts = game.getCombat().getTuns();
+
+			int idx = acts.indexOf(this);
+			if (idx < acts.getIndex()) {
+				acts.add(acts.remove(idx));
+			}
 		}
 	}
 

@@ -784,6 +784,10 @@ public class Combat implements Renderer<BufferedImage> {
 		return effects;
 	}
 
+	public InfiniteList<Actor> getTuns() {
+		return actors;
+	}
+
 	public List<Actor> getActors() {
 		return getActors(false);
 	}
