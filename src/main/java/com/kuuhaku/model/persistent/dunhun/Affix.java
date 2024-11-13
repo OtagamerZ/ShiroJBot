@@ -178,8 +178,8 @@ public class Affix extends DAO<Affix> {
 		List<Object[]> affs = new ArrayList<>(
 				DAO.queryAllUnmapped("""
 				SELECT id
-				 	 , type
 				     , weight
+				     , type
 				FROM affix
 				WHERE ((?1 <> '' AND type = ?1) OR type NOT LIKE 'MON\\_%')
 				  AND weight > 0
@@ -237,6 +237,7 @@ public class Affix extends DAO<Affix> {
 		List<Object[]> affs = DAO.queryAllUnmapped("""
 				SELECT id
 				     , weight
+				     , type
 				FROM affix
 				WHERE ((?1 <> '' AND type = ?1) OR type LIKE 'MON\\_%')
 				  AND weight > 0
