@@ -166,7 +166,7 @@ public class HeroInspectCommand implements Executable {
 				.toList();
 
 		for (GearAffix ga : affs) {
-			eb.appendDescription("-# %s -%s - %s%s\n".formatted(
+			eb.appendDescription("-# %s - %s - %s%s\n".formatted(
 					locale.get("str/" + ga.getAffix().getType()),
 					locale.get("str/tier", ga.getAffix().getTier()), ga.getName(locale),
 					ga.getAffix().getTags().isEmpty() ? "" : ga.getAffix().getTags().stream()
