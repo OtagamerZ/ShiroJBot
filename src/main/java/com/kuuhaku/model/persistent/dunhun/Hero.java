@@ -361,23 +361,17 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public void trigger(Trigger trigger, Actor target) {
-		int init = ap;
 		for (Gear g : getEquipment()) {
 			if (g.getEffects().isEmpty()) continue;
-			if (ap == init) System.out.println(1);
 
 			for (SelfEffect e : g.getEffects()) {
 				if (!Utils.equalsAny(trigger, e.getTriggers())) continue;
-				if (ap == init) System.out.println(2);
 
 				try {
 					e.lock();
-					if (ap == init) System.out.println(3);
 					e.getEffect().accept(e, new CombatContext(trigger, this, target));
-					if (ap == init) System.out.println(4);
 				} finally {
 					e.unlock();
-					if (ap == init) System.out.println(5);
 				}
 			}
 		}

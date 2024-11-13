@@ -620,7 +620,6 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void attack(Actor source, Actor target, Double damageMult) {
-		int init = source.getAp();
 		source.modAp(-1);
 
 		trigger(Trigger.ON_DEFEND, target, source);
@@ -657,7 +656,6 @@ public class Combat implements Renderer<BufferedImage> {
 		trigger(Trigger.ON_ATTACK, source, target);
 		target.modHp((int) -(srcSen.getDmg() * damageMult), Calc.chance(source.getCritical()));
 		trigger(Trigger.ON_HIT, source, target);
-		if (source.getAp() == init) System.out.println(8);
 
 		if (target.getHp() == 0) {
 			trigger(Trigger.ON_KILL, source, target);
@@ -840,7 +838,6 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void trigger(Trigger t, Actor from, Actor to) {
-		int init = from == null ? 0 : from.getAp();
 		for (EffectBase e : Set.copyOf(effects)) {
 			if (from == null) {
 				from = e.getOwner();
@@ -865,7 +862,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 		if (from != null) {
 			from.trigger(t, Utils.getOr(to, from));
-			if (init == from.getAp()) System.out.println(9);
 		}
 	}
 }
