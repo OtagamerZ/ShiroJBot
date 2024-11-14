@@ -33,7 +33,7 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 		this(0);
 	}
 
-	public Attributes(int str, int dex, int wis, int vit) {
+	public Attributes(byte str, byte dex, byte wis, byte vit) {
 		this((Math.max(0, str) & 0xFF)
 			 | (Math.max(0, dex) & 0xFF) << 8
 			 | (Math.max(0, wis) & 0xFF) << 16
@@ -48,23 +48,23 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 	   └ vitality
 	 */
 
-	public int str() {
-		return Bit32.get(attributes, 0, 8);
+	public byte str() {
+		return (byte) Bit32.get(attributes, 0, 8);
 	}
 
-	public int dex() {
-		return Bit32.get(attributes, 1, 8);
+	public byte dex() {
+		return (byte) Bit32.get(attributes, 1, 8);
 	}
 
-	public int wis() {
-		return Bit32.get(attributes, 2, 8);
+	public byte wis() {
+		return (byte) Bit32.get(attributes, 2, 8);
 	}
 
-	public int vit() {
-		return Bit32.get(attributes, 3, 8);
+	public byte vit() {
+		return (byte) Bit32.get(attributes, 3, 8);
 	}
 
-	public int get(AttrType type) {
+	public byte get(AttrType type) {
 		return switch (type) {
 			case STR -> str();
 			case DEX -> dex();
@@ -90,10 +90,10 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 		Attributes out = this;
 		for (Attributes a : attrs) {
 			out = new Attributes(
-					out.str() + a.str(),
-					out.dex() + a.dex(),
-					out.wis() + a.wis(),
-					out.vit() + a.vit()
+					(byte) (out.str() + a.str()),
+					(byte) (out.dex() + a.dex()),
+					(byte) (out.wis() + a.wis()),
+					(byte) (out.vit() + a.vit())
 			);
 		}
 
@@ -108,10 +108,10 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 		Attributes out = this;
 		for (Attributes a : attrs) {
 			out = new Attributes(
-					Math.max(0, out.str() - a.str()),
-					Math.max(0, out.dex() - a.dex()),
-					Math.max(0, out.wis() - a.wis()),
-					Math.max(0, out.vit() - a.vit())
+					(byte) (out.str() - a.str()),
+					(byte) (out.dex() - a.dex()),
+					(byte) (out.wis() - a.wis()),
+					(byte) (out.vit() - a.vit())
 			);
 		}
 
@@ -124,11 +124,11 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 
 	public Attributes modify(Attributes add, Attributes sub) {
 		return new Attributes(
-					Math.max(0, str() + add.str() - sub.str()),
-					Math.max(0, dex() + add.dex() - sub.dex()),
-					Math.max(0, wis() + add.wis() - sub.wis()),
-					Math.max(0, vit() + add.vit() - sub.vit())
-			);
+				(byte) (str() + add.str() - sub.str()),
+				(byte) (dex() + add.dex() - sub.dex()),
+				(byte) (wis() + add.wis() - sub.wis()),
+				(byte) (vit() + add.vit() - sub.vit())
+		);
 	}
 
 	public boolean has(Attributes attr) {
