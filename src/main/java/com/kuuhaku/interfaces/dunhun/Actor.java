@@ -107,12 +107,15 @@ public interface Actor {
 		if (game != null) {
 			getSenshi().setAvailable(true);
 
-			InfiniteList<Actor> acts = game.getCombat().getTuns();
+			Combat combat = game.getCombat();
+			if (combat != null) {
+				InfiniteList<Actor> acts = game.getCombat().getTuns();
 
-			int idx = acts.indexOf(this);
-			if (idx < acts.getIndex()) {
-				acts.add(acts.remove(idx));
-				acts.setIndex(acts.previous());
+				int idx = acts.indexOf(this);
+				if (idx < acts.getIndex()) {
+					acts.add(acts.remove(idx));
+					acts.setIndex(acts.previous());
+				}
 			}
 		}
 	}
