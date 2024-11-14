@@ -223,7 +223,7 @@ public class Gear extends DAO<Gear> {
 			Integer[] vals = v.toArray(Integer[]::new);
 			if (vals.length > 0 && Arrays.stream(vals).allMatch(i -> i == 0)) return;
 
-			out.add(k.formatted((Object[]) vals));
+			out.add(k.formatted(Arrays.stream(vals).map(Utils::sign).toArray()));
 		});
 
 		return out.stream()
@@ -334,9 +334,9 @@ public class Gear extends DAO<Gear> {
 				}
 
 				if (val < 0) {
-					sub.set(Bit32.set(sub.get(), a.ordinal(), -val, 8));
+					sub.set(Bit32.set(sub.get(), a.ordinal(), sub.get() - val, 8));
 				} else {
-					add.set(Bit32.set(add.get(), a.ordinal(), val, 8));
+					add.set(Bit32.set(add.get(), a.ordinal(), add.get() + val, 8));
 				}
 			});
 		}
