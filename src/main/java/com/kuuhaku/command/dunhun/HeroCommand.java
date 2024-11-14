@@ -113,7 +113,7 @@ public class HeroCommand implements Executable {
 			Attributes attr = h.getAttributes();
 			Attributes extra = new Attributes();
 			for (Gear g : h.getEquipment()) {
-				extra.modify(g.getAttributes());
+				extra = extra.modify(g.getAttributes());
 			}
 
 			eb.addField(Constants.VOID, """
