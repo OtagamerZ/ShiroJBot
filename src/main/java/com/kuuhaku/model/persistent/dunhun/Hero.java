@@ -315,7 +315,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		});
 
 		Attributes total = getStats().getAttributes();
-		for (Gear g : getEquipment()) {
+		for (Gear g : equip) {
 			Pair<Attributes, Attributes> p = g.getAttributes();
 
 			total = total.merge(p.getFirst());
