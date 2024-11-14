@@ -10,7 +10,10 @@ import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Utils;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import org.intellij.lang.annotations.Language;
 
 import java.util.Map;
@@ -85,7 +88,7 @@ public class Boss extends MonsterBase<Boss> {
 
 	@Override
 	public int getMaxAp() {
-		return stats.getMaxAp();
+		return Math.max(1, getStats().getMaxAp() + (int) getModifiers().getMaxAp().get() + getGame().getAreaLevel() / 5);
 	}
 
 	@Override
