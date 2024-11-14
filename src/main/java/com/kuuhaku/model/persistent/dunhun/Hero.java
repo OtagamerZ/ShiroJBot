@@ -426,6 +426,7 @@ public class Hero extends DAO<Hero> implements Actor {
 						FROM Skill s
 						WHERE s.reqRace IS NULL
 						  AND s.requirements.attributes != -1
+						ORDER BY s.id
 						""").stream()
 				.sorted(Comparator
 						.<Skill>comparingInt(s -> s.getRequirements().count())
