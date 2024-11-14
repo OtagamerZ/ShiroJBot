@@ -265,7 +265,7 @@ public class HeroCommand implements Executable {
 								? ("- " + (attr.has(reqs) ? "" : "\\❌ ") + String.join(" | ", reqLine) + "\n")
 								: "";
 						return new FieldMimic(
-								prefix + s.getName(locale) + " " + StringUtils.repeat('◈', s.getApCost()),
+								prefix + " " + s.getName(locale) + " " + StringUtils.repeat('◈', s.getApCost()),
 								"-# ID: `" + s.getId() + "`\n" +
 								(req + s.getDescription(locale, h)).lines()
 										.map(l -> "-# " + l)
