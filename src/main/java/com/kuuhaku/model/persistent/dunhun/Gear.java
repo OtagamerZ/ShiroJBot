@@ -39,6 +39,7 @@ import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.text.Uwuifier;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
+import kotlin.Pair;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
@@ -90,7 +91,8 @@ public class Gear extends DAO<Gear> {
 
 	private transient final GearModifiers modifiers = new GearModifiers();
 	private transient final Set<SelfEffect> effects = new HashSet<>();
-	private transient Attributes attributes;
+	private transient Attributes addAttributes;
+	private transient Attributes redAttributes;
 
 	public Gear() {
 	}
@@ -283,14 +285,10 @@ public class Gear extends DAO<Gear> {
 		return effects;
 	}
 
-	public void setAttributes(Attributes attributes) {
-		this.attributes = attributes;
-	}
+	public Pair<Attributes, Attributes> getAttributes() {
+		if (addAttributes == null || redAttributes == null) loadAttr(I18N.EN);
 
-	public Attributes getAttributes() {
-		if (attributes == null) loadAttr(I18N.EN);
-
-		return attributes;
+		return new Pair<>(addAttributes, redAttributes);
 	}
 
 	public void addEffect(ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
@@ -317,7 +315,8 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public void loadAttr(I18N locale) {
-		AtomicInteger attr = new AtomicInteger();
+		AtomicInteger add = new AtomicInteger();
+		AtomicInteger sub = new AtomicInteger();
 
 		for (GearAffix ga : getAllAffixes()) {
 			String eff = ga.getAffix().getEffect();
@@ -327,15 +326,23 @@ public class Gear extends DAO<Gear> {
 			Utils.regex(eff, "(?<=//)(STR|DEX|WIS|VIT)=(\\d+|\\$\\d)").results().forEach(r -> {
 				AttrType a = AttrType.valueOf(r.group(1));
 
+				int val;
 				if (r.group(2).startsWith("$")) {
-					attr.set(Bit32.set(attr.get(), a.ordinal(), values.get(Integer.parseInt(r.group(2))), 8));
+					val = values.get(Integer.parseInt(r.group(2).substring(1)));
 				} else {
-					attr.set(Bit32.set(attr.get(), a.ordinal(), Integer.parseInt(r.group(2)), 8));
+					val = Integer.parseInt(r.group(2));
+				}
+
+				if (val < 0) {
+					sub.set(Bit32.set(sub.get(), a.ordinal(), -val, 8));
+				} else {
+					add.set(Bit32.set(add.get(), a.ordinal(), val, 8));
 				}
 			});
 		}
 
-		attributes = new Attributes(attr.get());
+		addAttributes = new Attributes(add.get());
+		redAttributes = new Attributes(sub.get());
 	}
 
 	public void load(I18N locale, Hero owner) {

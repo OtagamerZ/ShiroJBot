@@ -268,12 +268,15 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	public Attributes getAttributes() {
-		List<Attributes> adds = new ArrayList<>();
+		Attributes total = getStats().getAttributes();
 		for (Gear g : getEquipment()) {
-			adds.add(g.getAttributes());
+			Pair<Attributes, Attributes> p = g.getAttributes();
+
+			total = total.merge(p.getFirst());
+			total = total.reduce(p.getSecond());
 		}
 
-		return getStats().getAttributes().merge(adds);
+		return total;
 	}
 
 	public HeroStats getStats() {
@@ -311,20 +314,27 @@ public class Hero extends DAO<Hero> implements Actor {
 			return gear.get(equipment.getJSONArray(gs.name()).getInt(i));
 		});
 
-		Map<Integer, Attributes> map = new HashMap<>();
-		for (Gear g : equip) {
-			map.put(g.getId(), g.getAttributes());
+		Attributes total = getStats().getAttributes();
+		for (Gear g : getEquipment()) {
+			Pair<Attributes, Attributes> p = g.getAttributes();
+
+			total = total.merge(p.getFirst());
+			total = total.reduce(p.getSecond());
 		}
 
 		boolean check = true;
 		while (check) {
 			check = false;
-			Attributes total = stats.getAttributes().merge(map.values());
 
 			for (Gear g : equip) {
 				if (!total.has(g.getBasetype().getStats().requirements())) {
 					equip.unequip(g);
-					map.remove(g.getId());
+
+					Pair<Attributes, Attributes> p = g.getAttributes();
+
+					total = total.reduce(p.getFirst());
+					total = total.merge(p.getSecond());
+
 					check = true;
 				}
 			}

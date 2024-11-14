@@ -77,6 +77,10 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 		return merge(other);
 	}
 
+	public Attributes minus(Attributes other) {
+		return merge(other);
+	}
+
 	public Attributes merge(Attributes... attrs) {
 		return merge(List.of(attrs));
 	}
@@ -89,6 +93,24 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 					out.dex() + a.dex(),
 					out.wis() + a.wis(),
 					out.vit() + a.vit()
+			);
+		}
+
+		return out;
+	}
+
+	public Attributes reduce(Attributes... attrs) {
+		return merge(List.of(attrs));
+	}
+
+	public Attributes reduce(Collection<Attributes> attrs) {
+		Attributes out = this;
+		for (Attributes a : attrs) {
+			out = new Attributes(
+					Math.max(0, out.str() - a.str()),
+					Math.max(0, out.dex() - a.dex()),
+					Math.max(0, out.wis() - a.wis()),
+					Math.max(0, out.vit() - a.vit())
 			);
 		}
 

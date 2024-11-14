@@ -46,6 +46,7 @@ import com.kuuhaku.model.records.dunhun.GearStats;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
+import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
@@ -113,7 +114,10 @@ public class HeroCommand implements Executable {
 			Attributes attr = h.getAttributes();
 			Attributes extra = new Attributes();
 			for (Gear g : h.getEquipment()) {
-				extra = extra.merge(g.getAttributes());
+				Pair<Attributes, Attributes> p = g.getAttributes();
+
+				extra = extra.merge(p.getFirst());
+				extra = extra.reduce(p.getSecond());
 			}
 
 			eb.addField(Constants.VOID, """
