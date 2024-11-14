@@ -246,10 +246,10 @@ public class HeroCommand implements Executable {
 
 						Attributes reqs = s.getRequirements();
 						List<String> reqLine = new ArrayList<>();
-						if (reqs.str() > 0) reqLine.add("STR: " + reqs.str() + " ");
-						if (reqs.dex() > 0) reqLine.add("DEX: " + reqs.dex() + " ");
-						if (reqs.wis() > 0) reqLine.add("WIS: " + reqs.wis() + " ");
-						if (reqs.vit() > 0) reqLine.add("VIT: " + reqs.vit() + " ");
+						if (reqs.str() > 0) reqLine.add("STR: " + reqs.str());
+						if (reqs.dex() > 0) reqLine.add("DEX: " + reqs.dex());
+						if (reqs.wis() > 0) reqLine.add("WIS: " + reqs.wis());
+						if (reqs.vit() > 0) reqLine.add("VIT: " + reqs.vit());
 
 						String reqTags = Utils.properlyJoin(locale.get("str/and")).apply(
 								s.getReqTags().stream()
@@ -265,7 +265,8 @@ public class HeroCommand implements Executable {
 								? ("- " + (attr.has(reqs) ? "" : "\\❌ ") + String.join(" | ", reqLine) + "\n")
 								: "";
 						return new FieldMimic(
-								prefix + " `" + s.getId() + "` " + s.getName(locale),
+								prefix + s.getName(locale) + " " + StringUtils.repeat('◈', s.getApCost()),
+								"-# ID: `" + s.getId() + "`\n" +
 								(req + s.getDescription(locale, h)).lines()
 										.map(l -> "-# " + l)
 										.collect(Collectors.joining("\n"))
