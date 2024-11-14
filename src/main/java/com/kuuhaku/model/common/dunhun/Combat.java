@@ -261,6 +261,7 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 
 					trigger(Trigger.ON_TURN_BEGIN, current, current);
+					current.getModifiers().expireMods(current.getSenshi());
 
 					for (EffectBase e : Set.copyOf(effects)) {
 						if (!e.getOwner().equals(current)) {
@@ -288,7 +289,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 					trigger(Trigger.ON_TURN_END, current, current);
 				} finally {
-					current.getModifiers().expireMods(current.getSenshi());
 					current.getSenshi().setAvailable(true);
 
 					if (!current.getSenshi().isStasis()) {
