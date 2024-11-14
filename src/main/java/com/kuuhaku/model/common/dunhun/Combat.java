@@ -629,7 +629,7 @@ public class Combat implements Renderer<BufferedImage> {
 		Senshi srcSen = source.getSenshi();
 		Senshi tgtSen = target.getSenshi();
 		if (damageMult == null) {
-			if (!Objects.equals(source, target)) {
+			if (source.getTeam() != target.getTeam()) {
 				if (srcSen.isBlinded(true) && Calc.chance(50)) {
 					trigger(Trigger.ON_MISS, source, target);
 
@@ -677,14 +677,14 @@ public class Combat implements Renderer<BufferedImage> {
 		try {
 			Senshi srcSen = source.getSenshi();
 			Senshi tgtSen = target.getSenshi();
-			if (!Objects.equals(source, target)) {
+			if (source.getTeam() != target.getTeam()) {
 				if (srcSen.isBlinded(true) && Calc.chance(50)) {
 					trigger(Trigger.ON_MISS, source, target);
 
 					history.add(locale.get("str/actor_miss", source.getName(locale)));
 					return;
 				} else if (!tgtSen.isSleeping() && !tgtSen.isStasis()) {
-					if (source.getTeam() != target.getTeam() && Calc.chance(tgtSen.getDodge())) {
+					if (Calc.chance(tgtSen.getDodge())) {
 						trigger(Trigger.ON_MISS, source, target);
 						trigger(Trigger.ON_DODGE, target, source);
 
