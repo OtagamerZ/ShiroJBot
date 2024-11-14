@@ -26,6 +26,7 @@ import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
+import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -121,14 +122,13 @@ public class Monster extends MonsterBase<Monster> {
 			case RARE -> 2.25;
 			case MAGIC -> 1.5;
 			default -> 1;
-		} * (1 + getGame().getAreaLevel() * 0.5);
+		} * (1 + getGame().getAreaLevel() * 0.25);
+
+		if (getGame().getPartySize() > 1 && getTeam() == Team.KEEPERS) {
+			mult *= 1 + getGame().getPartySize() * 0.5;
+		}
 
 		return (int) (flat * mult * getModifiers().getHpMult().get());
-	}
-
-	@Override
-	public int getMaxAp() {
-		return Math.max(1, getStats().getMaxAp() + (int) getModifiers().getMaxAp().get() + getGame().getAreaLevel() / 5);
 	}
 
 	public Set<Affix> getAffixes() {

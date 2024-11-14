@@ -335,7 +335,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public void runCombat(String... pool) {
 		combat.set(new Combat(this));
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 4; i++) {
 			List<Actor> keepers = getCombat().getActors(Team.KEEPERS);
 			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size())) break;
 
@@ -377,7 +377,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						heroes.get(w.getUser().getId()).getName(), act.label())
 				).queue();
 
-				if (votes.size() >= heroes.size()) {
+				if (votes.size() >= getPartySize()) {
 					eb.setDescription(Utils.getOr(evt.getAction(Utils.getRandomEntry(votes.values())).get(), "PLACEHOLDER"));
 
 					ButtonizeHelper fin = new ButtonizeHelper(true)
@@ -410,7 +410,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		getChannel().clearBuffer();
 
 		if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
-			if (heroes.size() == 1) {
+			if (getPartySize() == 1) {
 				Hero h = List.copyOf(heroes.values()).getFirst();
 
 				List<String> lines = new ArrayList<>();
@@ -627,6 +627,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 		return duel;
 	}
 
+	public int getPartySize() {
+		return heroes.size();
+	}
+
 	public int getAreaLevel() {
 		if (dungeon.getAreaLevel() == 0) {
 			return 1 + Math.max(0, (getTurn() - 1) / 10 * 5);
@@ -642,7 +646,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public String parsePlural(String text) {
-		String plural = heroes.size() == 1 ? "S" : "P";
+		String plural = getPartySize() == 1 ? "S" : "P";
 
 		return Utils.regex(getString(text), "\\[(?<S>[^\\[\\]]*?)\\|(?<P>.*?)]")
 				.replaceAll(r -> r.group(plural));

@@ -124,6 +124,16 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	}
 
 	@Override
+	public int getMaxAp() {
+		int bonus = 0;
+		if (game.getPartySize() > 1 && team == Team.KEEPERS) {
+			bonus = game.getPartySize() / 2;
+		}
+
+		return Math.max(1, (int) (getStats().getMaxAp() + getModifiers().getMaxAp().get() + game.getAreaLevel() / 5d + bonus));
+	}
+
+	@Override
 	public void modAp(int value) {
 		ap = Calc.clamp(ap + value, 0, getMaxAp());
 	}
@@ -140,11 +150,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 
 	@Override
 	public int getAggroScore() {
-		int aggro = 1;
-		if (senshiCache != null) {
-			aggro = senshiCache.getDmg() / 10 + senshiCache.getDfs() / 20 + getHp() / 150;
-		}
-
+		int flat = getSenshi().getDmg() / 10 + getSenshi().getDfs() / 20 + getHp() / 150;
 		double mult = switch (getRarityClass()) {
 			case NORMAL -> 1;
 			case MAGIC -> 1.5;
@@ -152,7 +158,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 			case UNIQUE -> 10;
 		};
 
-		return (int) Math.max(1, aggro * (1 + modifiers.getAggroMult().get()) * (game.getAreaLevel() + 1) * mult);
+		return (int) Math.max(1, flat * (1 + modifiers.getAggroMult().get()) * (game.getAreaLevel() + 1) * mult);
 	}
 
 	@Override
@@ -267,7 +273,11 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 				}
 				case MAGIC -> 1.25;
 				default -> 1;
-			} * (1 + game.getAreaLevel() * 0.3);
+			} * (1 + game.getAreaLevel() * 0.2);
+
+			if (game.getPartySize() > 1 && team == Team.KEEPERS) {
+				mult *= 1 + game.getPartySize() * 0.3;
+			}
 
 			base.setAtk((int) (stats.getAttack() * mult));
 			base.setDfs((int) (stats.getDefense() * mult));

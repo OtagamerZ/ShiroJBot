@@ -230,12 +230,8 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public int getAggroScore() {
-		int aggro = 1;
-		if (senshiCache != null) {
-			aggro = senshiCache.getDmg() / 10 + senshiCache.getDfs() / 20 + getHp() / 150;
-		}
-
-		return (int) Math.max(1, aggro * (1 + modifiers.getAggroMult().get()) * stats.getLevel() / 2);
+		int flat = getSenshi().getDmg() / 10 + getSenshi().getDfs() / 20 + getHp() / 200;
+		return (int) Math.max(1, flat * (1 + modifiers.getAggroMult().get()) * stats.getLevel() / 2);
 	}
 
 	@Override

@@ -87,11 +87,6 @@ public class Boss extends MonsterBase<Boss> {
 	}
 
 	@Override
-	public int getMaxAp() {
-		return Math.max(1, getStats().getMaxAp() + (int) getModifiers().getMaxAp().get() + getGame().getAreaLevel() / 5);
-	}
-
-	@Override
 	public Actor fork() {
 		Boss clone = new Boss(getId());
 		clone.stats = stats;
