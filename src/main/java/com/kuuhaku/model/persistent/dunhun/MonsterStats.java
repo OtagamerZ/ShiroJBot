@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.dunhun.Loot;
@@ -144,7 +145,7 @@ public class MonsterStats {
 					"mult", mult
 			));
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to generate loot", e);
+			Constants.LOGGER.warn("Failed to generate loot for {}", self.getName(I18N.EN), e);
 		}
 
 		return loot;
