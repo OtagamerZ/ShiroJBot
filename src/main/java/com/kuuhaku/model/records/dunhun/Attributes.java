@@ -34,11 +34,7 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 	}
 
 	public Attributes(byte str, byte dex, byte wis, byte vit) {
-		this((Math.max(0, str) & 0xFF)
-			 | (Math.max(0, dex) & 0xFF) << 8
-			 | (Math.max(0, wis) & 0xFF) << 16
-			 | (Math.max(0, vit) & 0xFF) << 24
-		);
+		this((str & 0xFF) | (dex & 0xFF) << 8 | (wis & 0xFF) << 16 | (vit & 0xFF) << 24);
 	}
 	/*
 	0xFF FF FF FF
