@@ -20,6 +20,7 @@ package com.kuuhaku.model.records.dunhun;
 
 import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.util.Bit32;
+import com.kuuhaku.util.Calc;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import kotlin.Pair;
@@ -34,7 +35,11 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 	}
 
 	public Attributes(byte str, byte dex, byte wis, byte vit) {
-		this((str & 0xFF) | (dex & 0xFF) << 8 | (wis & 0xFF) << 16 | (vit & 0xFF) << 24);
+		this((Calc.clamp(str, Byte.MIN_VALUE, Byte.MAX_VALUE) & 0xFF)
+			 | (Calc.clamp(dex, Byte.MIN_VALUE, Byte.MAX_VALUE) & 0xFF) << 8
+			 | (Calc.clamp(wis, Byte.MIN_VALUE, Byte.MAX_VALUE) & 0xFF) << 16
+			 | (Calc.clamp(vit, Byte.MIN_VALUE, Byte.MAX_VALUE) & 0xFF) << 24
+		);
 	}
 	/*
 	0xFF FF FF FF
