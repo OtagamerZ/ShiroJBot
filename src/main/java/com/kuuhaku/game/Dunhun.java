@@ -229,7 +229,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							for (Actor a : getCombat().getActors(Team.KEEPERS)) {
 								if (a instanceof MonsterBase<?> m && m.getHp() == 0) {
 									int xp = m.getKillXp();
-									if (xp == 0) continue;
+									if (!m.getStats().hasLoot()) continue;
 
 									xpGained += xp;
 
@@ -277,7 +277,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							}
 
 							for (Hero h : heroes.values()) {
-								int xp = xpGained;
+								int xp = Math.max(1, xpGained);
 								DAO.apply(Hero.class, h.getId(), n -> {
 									int gain = xp;
 

@@ -588,7 +588,7 @@ public class Combat implements Renderer<BufferedImage> {
 				b.addOption(
 						s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()) + cdText + reqTags,
 						s.getId(),
-						StringUtils.abbreviate(s.getDescription(locale, h), 100)
+						StringUtils.abbreviate(s.getDescription(locale, h).replace("*", ""), 100)
 				);
 			}
 
@@ -629,24 +629,26 @@ public class Combat implements Renderer<BufferedImage> {
 		Senshi srcSen = source.getSenshi();
 		Senshi tgtSen = target.getSenshi();
 		if (damageMult == null) {
-			if (srcSen.isBlinded(true) && Calc.chance(50)) {
-				trigger(Trigger.ON_MISS, source, target);
-
-				history.add(locale.get("str/actor_miss", source.getName(locale)));
-				return;
-			} else if (!tgtSen.isSleeping() && !tgtSen.isStasis()) {
-				if (Calc.chance(tgtSen.getDodge())) {
+			if (!Objects.equals(source, target)) {
+				if (srcSen.isBlinded(true) && Calc.chance(50)) {
 					trigger(Trigger.ON_MISS, source, target);
-					trigger(Trigger.ON_DODGE, target, source);
 
-					history.add(locale.get("str/actor_dodge", target.getName(locale)));
+					history.add(locale.get("str/actor_miss", source.getName(locale)));
 					return;
-				} else if (Calc.chance(tgtSen.getParry())) {
-					trigger(Trigger.ON_PARRY, target, source);
+				} else if (!tgtSen.isSleeping() && !tgtSen.isStasis()) {
+					if (Calc.chance(tgtSen.getDodge())) {
+						trigger(Trigger.ON_MISS, source, target);
+						trigger(Trigger.ON_DODGE, target, source);
 
-					history.add(locale.get("str/actor_parry", target.getName(locale)));
-					attack(target, source, null);
-					return;
+						history.add(locale.get("str/actor_dodge", target.getName(locale)));
+						return;
+					} else if (Calc.chance(tgtSen.getParry())) {
+						trigger(Trigger.ON_PARRY, target, source);
+
+						history.add(locale.get("str/actor_parry", target.getName(locale)));
+						attack(target, source, null);
+						return;
+					}
 				}
 			}
 
@@ -675,24 +677,26 @@ public class Combat implements Renderer<BufferedImage> {
 		try {
 			Senshi srcSen = source.getSenshi();
 			Senshi tgtSen = target.getSenshi();
-			if (srcSen.isBlinded(true) && Calc.chance(50)) {
-				trigger(Trigger.ON_MISS, source, target);
-
-				history.add(locale.get("str/actor_miss", source.getName(locale)));
-				return;
-			} else if (!tgtSen.isSleeping() && !tgtSen.isStasis()) {
-				if (source.getTeam() != target.getTeam() && Calc.chance(tgtSen.getDodge())) {
+			if (!Objects.equals(source, target)) {
+				if (srcSen.isBlinded(true) && Calc.chance(50)) {
 					trigger(Trigger.ON_MISS, source, target);
-					trigger(Trigger.ON_DODGE, target, source);
 
-					history.add(locale.get("str/actor_dodge", target.getName(locale)));
+					history.add(locale.get("str/actor_miss", source.getName(locale)));
 					return;
-				} else if (Calc.chance(tgtSen.getParry())) {
-					trigger(Trigger.ON_PARRY, target, source);
+				} else if (!tgtSen.isSleeping() && !tgtSen.isStasis()) {
+					if (source.getTeam() != target.getTeam() && Calc.chance(tgtSen.getDodge())) {
+						trigger(Trigger.ON_MISS, source, target);
+						trigger(Trigger.ON_DODGE, target, source);
 
-					history.add(locale.get("str/actor_parry", target.getName(locale)));
-					attack(target, source, null);
-					return;
+						history.add(locale.get("str/actor_dodge", target.getName(locale)));
+						return;
+					} else if (Calc.chance(tgtSen.getParry())) {
+						trigger(Trigger.ON_PARRY, target, source);
+
+						history.add(locale.get("str/actor_parry", target.getName(locale)));
+						attack(target, source, null);
+						return;
+					}
 				}
 			}
 
