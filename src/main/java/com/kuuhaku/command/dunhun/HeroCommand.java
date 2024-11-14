@@ -155,7 +155,7 @@ public class HeroCommand implements Executable {
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()));
 
-		int[] attr = new int[4];
+		byte[] attr = new byte[4];
 		Attributes alloc = h.getStats().getAttributes();
 		Supplier<Integer> remaining = () -> Math.max(0, h.getStats().getPointsLeft() - (attr[0] + attr[1] + attr[2] + attr[3]));
 
