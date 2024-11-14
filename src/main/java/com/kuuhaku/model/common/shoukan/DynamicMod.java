@@ -18,27 +18,34 @@
 
 package com.kuuhaku.model.common.shoukan;
 
-import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 
-public class PermMod extends ValueMod {
-	private final long seed = ThreadLocalRandom.current().nextLong();
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
 
-	public PermMod(double value) {
-		super(value);
+public class DynamicMod extends ValueMod {
+	private final List<Supplier<Double>> suppliers = new ArrayList<>();
+
+	protected DynamicMod(Supplier<Double> supplier) {
+		this(null, supplier);
+	}
+
+	public DynamicMod(Drawable<?> source, Supplier<Double> supplier) {
+		this(source, supplier, -1);
+	}
+
+	public DynamicMod(Drawable<?> source, Supplier<Double> supplier, int expiration) {
+		super(source, 0, expiration);
+		this.suppliers.add(supplier);
+	}
+
+	public void addSupplier(Supplier<Double> supplier) {
+		suppliers.add(supplier);
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		if (!super.equals(o)) return false;
-		PermMod permMod = (PermMod) o;
-		return seed == permMod.seed;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), seed);
+	public double getValue() {
+		return super.getValue() + suppliers.parallelStream().map(Supplier::get).reduce(0d, Double::sum);
 	}
 }

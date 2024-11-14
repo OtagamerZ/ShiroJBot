@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 public class CumValue implements Iterable<ValueMod> {
 	private final Set<ValueMod> values = Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -90,22 +91,19 @@ public class CumValue implements Iterable<ValueMod> {
 
 	public ValueMod set(double value) {
 		for (ValueMod mod : this.values) {
-			if (mod instanceof PermMod) {
+			if (mod.isPermanent() && mod.getClass() == ValueMod.class) {
 				mod.setValue(mod.getValue() + value);
 				return mod;
 			}
 		}
 
-		ValueMod mod = new PermMod(value);
+		ValueMod mod = new ValueMod(value);
 		this.values.add(mod);
 		return mod;
 	}
 
 	public ValueMod set(Drawable<?> source, double value) {
-		ValueMod mod = new ValueMod(source, value);
-		this.values.remove(mod);
-		this.values.add(mod);
-		return mod;
+		return set(source, value, -1);
 	}
 
 	public ValueMod set(Drawable<?> source, double value, int expiration) {
@@ -117,6 +115,34 @@ public class CumValue implements Iterable<ValueMod> {
 
 	public ValueMod leftShift(Number value) {
 		return set(value.doubleValue());
+	}
+
+	public ValueMod set(Supplier<Double> supplier) {
+		for (ValueMod mod : this.values) {
+			if (mod.isPermanent() && mod.getClass() == DynamicMod.class) {
+				((DynamicMod) mod).addSupplier(supplier);
+				return mod;
+			}
+		}
+
+		DynamicMod mod = new DynamicMod(supplier);
+		this.values.add(mod);
+		return mod;
+	}
+
+	public ValueMod set(Drawable<?> source, Supplier<Double> supplier) {
+		return set(source, supplier, -1);
+	}
+
+	public ValueMod set(Drawable<?> source, Supplier<Double> supplier, int expiration) {
+		DynamicMod mod = new DynamicMod(source, supplier, expiration);
+		this.values.remove(mod);
+		this.values.add(mod);
+		return mod;
+	}
+
+	public ValueMod leftShift(Supplier<Double> supplier) {
+		return set(supplier);
 	}
 
 	public Set<ValueMod> values() {

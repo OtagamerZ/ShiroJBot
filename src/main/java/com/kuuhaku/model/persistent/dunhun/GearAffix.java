@@ -174,6 +174,7 @@ public class GearAffix extends DAO<GearAffix> {
 					"gear", target,
 					"actor", owner,
 					"self", owner.asSenshi(locale),
+					"dummy", owner.copy(),
 					"values", getValues(locale),
 					"grant", Utils.getOr(Utils.extract(getDescription(locale), "\"(.+?)\"", 1), "")
 			));

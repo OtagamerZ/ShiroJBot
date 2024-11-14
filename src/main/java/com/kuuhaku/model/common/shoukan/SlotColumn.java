@@ -136,14 +136,14 @@ public class SlotColumn {
 			Hand h = game.getHands().get(side);
 			if (card.getSide() != h.getSide()) {
 				card.getStats().removeIf(v ->
-						!(v instanceof PermMod)
+						!v.isPermanent()
 						&& !v.getSource().equals(card)
 						&& !(v.getSource() instanceof Evogear ev && card.getEquipments().contains(ev))
 				);
 
 				for (Evogear e : card.getEquipments()) {
 					e.getStats().removeIf(v ->
-							!(v instanceof PermMod)
+							!v.isPermanent()
 							&& !v.getSource().equals(card)
 							&& !(v.getSource() instanceof Evogear ev && card.getEquipments().contains(ev))
 					);

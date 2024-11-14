@@ -265,11 +265,11 @@ public class CardExtra implements Cloneable, Iterable<CumValue> {
 	}
 
 	public void clear() {
-		removeIf(o -> !(o instanceof PermMod));
+		removeIf(o -> !o.isPermanent());
 	}
 
 	public void clear(Drawable<?> source) {
-		removeIf(o -> !(o instanceof PermMod) && Objects.equals(o.getSource(), source));
+		removeIf(o -> !o.isPermanent() && Objects.equals(o.getSource(), source));
 	}
 
 	public void removeIf(Predicate<ValueMod> check) {

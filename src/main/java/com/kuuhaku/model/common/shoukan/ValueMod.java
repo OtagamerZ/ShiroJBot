@@ -29,6 +29,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ValueMod implements Cloneable {
 	private final int SERIAL = ThreadLocalRandom.current().nextInt();
 	private final Drawable<?> source;
+	private final boolean permanent;
 	private double value;
 	private int expiration;
 
@@ -47,6 +48,8 @@ public class ValueMod implements Cloneable {
 		this.value = value;
 		this.expiration = expiration;
 		this.side = source == null ? null : source.getSide();
+
+		permanent = source == null && expiration == -1;
 	}
 
 	public Drawable<?> getSource() {
@@ -97,6 +100,10 @@ public class ValueMod implements Cloneable {
 		}
 
 		return value == 0 || expiration == 0;
+	}
+
+	public boolean isPermanent() {
+		return permanent;
 	}
 
 	@Override

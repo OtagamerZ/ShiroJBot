@@ -96,6 +96,7 @@ public class HeroCommand implements Executable {
 					.setAuthor(locale.get("str/hero_info", h.getName()))
 					.setImage("attachment://card.png");
 
+			h.asSenshi(locale);
 			eb.addField(Constants.VOID, """
 					HP: %s (%s)
 					%s/%s (%s)
