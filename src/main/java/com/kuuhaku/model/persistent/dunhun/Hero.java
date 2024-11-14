@@ -266,10 +266,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	public Attributes getAttributes() {
 		Attributes total = getStats().getAttributes();
 		for (Gear g : getEquipment()) {
-			Pair<Attributes, Attributes> p = g.getAttributes();
-
-			total = total.merge(p.getFirst());
-			total = total.reduce(p.getSecond());
+			total.modify(g.getAttributes());
 		}
 
 		return total;
@@ -312,10 +309,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 		Attributes total = getStats().getAttributes();
 		for (Gear g : equip) {
-			Pair<Attributes, Attributes> p = g.getAttributes();
-
-			total = total.merge(p.getFirst());
-			total = total.reduce(p.getSecond());
+			total.modify(g.getAttributes());
 		}
 
 		boolean check = true;
@@ -327,9 +321,7 @@ public class Hero extends DAO<Hero> implements Actor {
 					equip.unequip(g);
 
 					Pair<Attributes, Attributes> p = g.getAttributes();
-
-					total = total.reduce(p.getFirst());
-					total = total.merge(p.getSecond());
+					total = total.modify(p.getSecond(), p.getFirst());
 
 					check = true;
 				}

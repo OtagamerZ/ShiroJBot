@@ -22,6 +22,7 @@ import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.util.Bit32;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kotlin.Pair;
 
 import java.util.Collection;
 import java.util.List;
@@ -100,7 +101,7 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 	}
 
 	public Attributes reduce(Attributes... attrs) {
-		return merge(List.of(attrs));
+		return reduce(List.of(attrs));
 	}
 
 	public Attributes reduce(Collection<Attributes> attrs) {
@@ -117,6 +118,19 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 		return out;
 	}
 
+	public Attributes modify(Pair<Attributes, Attributes> attrs) {
+		return modify(attrs.getFirst(), attrs.getSecond());
+	}
+
+	public Attributes modify(Attributes add, Attributes sub) {
+		return new Attributes(
+					Math.max(0, str() + add.str() - sub.str()),
+					Math.max(0, dex() + add.dex() - sub.dex()),
+					Math.max(0, wis() + add.wis() - sub.wis()),
+					Math.max(0, vit() + add.vit() - sub.vit())
+			);
+	}
+
 	public boolean has(Attributes attr) {
 		return str() >= attr.str()
 			   && dex() >= attr.dex()
@@ -126,5 +140,10 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 
 	public int count() {
 		return str() + dex() + wis() + vit();
+	}
+
+	@Override
+	public String toString() {
+		return "Attributes[str=" + str() + ", dex=" + dex() + ", wis=" + wis() + ", vit=" + vit() + "]";
 	}
 }
