@@ -200,9 +200,7 @@ public interface Actor {
 
 	Senshi asSenshi(I18N locale);
 
-	default Senshi getSenshi() {
-		return asSenshi(getGame().getLocale());
-	}
+	Senshi getSenshi();
 
 	BufferedImage render(I18N locale);
 

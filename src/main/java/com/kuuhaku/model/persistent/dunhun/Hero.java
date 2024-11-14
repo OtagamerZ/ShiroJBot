@@ -571,6 +571,12 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	@Override
+	public Senshi getSenshi() {
+		if (senshiCache != null) return senshiCache;
+		return asSenshi(game.getLocale());
+	}
+
+	@Override
 	public BufferedImage render(I18N locale) {
 		if (deck == null) {
 			deck = account.getDeck();

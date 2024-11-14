@@ -281,6 +281,12 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	}
 
 	@Override
+	public Senshi getSenshi() {
+		if (senshiCache != null) return senshiCache;
+		return asSenshi(game.getLocale());
+	}
+
+	@Override
 	public BufferedImage render(I18N locale) {
 		return asSenshi(locale).render(locale, DECK);
 	}
