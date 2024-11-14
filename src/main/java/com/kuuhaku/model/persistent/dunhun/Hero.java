@@ -311,12 +311,8 @@ public class Hero extends DAO<Hero> implements Actor {
 			return gear.get(equipment.getJSONArray(gs.name()).getInt(i));
 		});
 
-		Hero dummy = (Hero) copy();
-		dummy.senshiCache = new Senshi(this, I18N.EN);
-
 		Map<Integer, Attributes> map = new HashMap<>();
 		for (Gear g : equip) {
-			g.load(I18N.EN, dummy);
 			map.put(g.getId(), g.getAttributes());
 		}
 

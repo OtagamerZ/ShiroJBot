@@ -26,11 +26,13 @@ import com.kuuhaku.model.common.dunhun.GearModifiers;
 import com.kuuhaku.model.common.dunhun.SelfEffect;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.CombatContext;
+import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -43,6 +45,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -87,7 +90,7 @@ public class Gear extends DAO<Gear> {
 
 	private transient final GearModifiers modifiers = new GearModifiers();
 	private transient final Set<SelfEffect> effects = new HashSet<>();
-	private transient Attributes attributes = new Attributes();
+	private transient Attributes attributes;
 
 	public Gear() {
 	}
@@ -285,6 +288,8 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public Attributes getAttributes() {
+		if (attributes == null) loadAttr(I18N.EN);
+
 		return attributes;
 	}
 
@@ -311,8 +316,29 @@ public class Gear extends DAO<Gear> {
 		return Calc.clamp((basetype.getStats().critical() + modifiers.getCritical()) * modifiers.getCriticalMult(), 0, 100);
 	}
 
+	public void loadAttr(I18N locale) {
+		AtomicInteger attr = new AtomicInteger();
+
+		for (GearAffix ga : getAllAffixes()) {
+			String eff = ga.getAffix().getEffect();
+			if (eff == null) continue;
+
+			List<Integer> values = ga.getValues(locale);
+			Utils.regex(eff, "(?<=//)(STR|DEX|WIS|VIT)=(\\d+|\\$\\d)").results().forEach(r -> {
+				AttrType a = AttrType.valueOf(r.group(1));
+
+				if (r.group(2).startsWith("$")) {
+					attr.set(Bit32.set(attr.get(), a.ordinal(), values.get(Integer.parseInt(r.group(2))), 8));
+				} else {
+					attr.set(Bit32.set(attr.get(), a.ordinal(), Integer.parseInt(r.group(2)), 8));
+				}
+			});
+		}
+
+		attributes = new Attributes(attr.get());
+	}
+
 	public void load(I18N locale, Hero owner) {
-		attributes = new Attributes();
 		modifiers.reset();
 
 		for (GearAffix ga : getAllAffixes()) {
