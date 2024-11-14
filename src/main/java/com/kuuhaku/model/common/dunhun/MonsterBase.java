@@ -130,7 +130,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 
 	@Override
 	public int getInitiative() {
-		return game.getAreaLevel() / 2 + stats.getInitiative() + (int) modifiers.getInitiative().get();
+		return game.getAreaLevel() / 3 + stats.getInitiative() + (int) modifiers.getInitiative().get();
 	}
 
 	@Override
@@ -267,7 +267,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 				}
 				case MAGIC -> 1.25;
 				default -> 1;
-			} * (1 + game.getAreaLevel() * 0.2);
+			} * (1 + game.getAreaLevel() * 0.3);
 
 			base.setAtk((int) (stats.getAttack() * mult));
 			base.setDfs((int) (stats.getDefense() * mult));
