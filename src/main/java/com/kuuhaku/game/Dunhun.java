@@ -273,7 +273,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							}
 
 							if (!sb.isBlank()) {
-								getChannel().buffer(getLocale().get("str/monster_loot") + "\n" + sb);
+								getChannel().buffer(getLocale().get("str/dungeon_loot") + "\n" + sb);
 							}
 
 							for (Hero h : heroes.values()) {
@@ -427,7 +427,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				lines.sort(String::compareTo);
-				getChannel().buffer(getLocale().get("str/dungeon_loot") + "\n" + String.join("\n", lines));
+				getChannel().buffer(getLocale().get("str/dungeon_loot_single") + "\n" + String.join("\n", lines));
 			} else {
 				InfiniteList<Hero> robin = new InfiniteList<>(heroes.values());
 				Collections.shuffle(robin);
