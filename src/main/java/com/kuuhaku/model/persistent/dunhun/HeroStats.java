@@ -75,7 +75,7 @@ public class HeroStats {
 	}
 
 	public int getXpToCurrent() {
-		return xpTable.floorEntry(xp).getKey();
+		return xpTable.floorEntry(xp + 1).getKey();
 	}
 
 	public int getXpToNext() {
