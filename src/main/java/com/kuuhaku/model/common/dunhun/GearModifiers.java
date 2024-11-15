@@ -18,75 +18,78 @@
 
 package com.kuuhaku.model.common.dunhun;
 
+import com.kuuhaku.model.common.shoukan.CumValue;
+import com.kuuhaku.model.common.shoukan.ValueMod;
+
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class GearModifiers {
-	private int attack;
-	private float attackMult = 1;
-	private int defense;
-	private float defenseMult = 1;
-	private float critical;
-	private float criticalMult = 1;
+	private final CumValue attack = CumValue.flat();
+	private final CumValue attackMult = CumValue.flat();
+	private final CumValue defense = CumValue.flat();
+	private final CumValue defenseMult = CumValue.flat();
+	private final CumValue critical = CumValue.flat();
+	private final CumValue criticalMult = CumValue.flat();
 
 	private final Set<String> addedTags = new HashSet<>();
 
-	public float getAttack() {
+	private Field[] fieldCache = null;
+
+	public CumValue getAttack() {
 		return attack;
 	}
 
-	public void addAttack(int value) {
-		attack += value;
-	}
-
-	public float getAttackMult() {
+	public CumValue getAttackMult() {
 		return attackMult;
 	}
 
-	public void addAttackMult(float mult) {
-		attackMult += mult;
-	}
-
-	public float getDefense() {
+	public CumValue getDefense() {
 		return defense;
 	}
 
-	public void addDefense(int value) {
-		defense += value;
-	}
-
-	public float getDefenseMult() {
+	public CumValue getDefenseMult() {
 		return defenseMult;
 	}
 
-	public void addDefenseMult(float mult) {
-		defenseMult += mult;
-	}
-
-	public float getCritical() {
+	public CumValue getCritical() {
 		return critical;
 	}
 
-	public void addCritical(float mult) {
-		critical += mult;
-	}
-
-	public float getCriticalMult() {
+	public CumValue getCriticalMult() {
 		return criticalMult;
-	}
-
-	public void addCriticalMult(float mult) {
-		criticalMult += mult;
 	}
 
 	public Set<String> getAddedTags() {
 		return addedTags;
 	}
 
-	public void reset() {
-		attack = defense = 0;
-		critical = 0;
-		attackMult = defenseMult = criticalMult = 1;
+	public void expireMods() {
+		removeIf(mod -> {
+			if (mod.getExpiration() > 0) {
+				mod.decExpiration();
+			}
+
+			return mod.isExpired();
+		});
+	}
+
+	public void clear() {
+		removeIf(o -> true);
+	}
+
+	public void removeIf(Predicate<ValueMod> check) {
 		addedTags.clear();
+
+		for (Field f : fieldCache) {
+			try {
+				if (f.get(this) instanceof CumValue cv) {
+					cv.values().removeIf(check);
+				}
+			} catch (IllegalAccessException ignore) {
+			}
+		}
 	}
 }

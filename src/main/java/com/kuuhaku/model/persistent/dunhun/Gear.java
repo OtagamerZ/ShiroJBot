@@ -32,21 +32,18 @@ import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.CombatContext;
-import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.text.Uwuifier;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
-import kotlin.Pair;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -301,15 +298,15 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public int getDmg() {
-		return (int) ((basetype.getStats().attack() + modifiers.getAttack()) * modifiers.getAttackMult());
+		return (int) ((basetype.getStats().attack() + modifiers.getAttack().get()) * modifiers.getAttackMult().get());
 	}
 
 	public int getDfs() {
-		return (int) ((basetype.getStats().defense() + modifiers.getDefense()) * modifiers.getDefenseMult());
+		return (int) ((basetype.getStats().defense() + modifiers.getDefense().get()) * modifiers.getDefenseMult().get());
 	}
 
 	public double getCritical() {
-		return Calc.clamp((basetype.getStats().critical() + modifiers.getCritical()) * modifiers.getCriticalMult(), 0, 100);
+		return Calc.clamp((basetype.getStats().critical() + modifiers.getCritical().get()) * modifiers.getCriticalMult().get(), 0, 100);
 	}
 
 	public void loadAttr(I18N locale) {
@@ -336,7 +333,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public void load(I18N locale, Hero owner) {
-		modifiers.reset();
+		modifiers.clear();
 
 		for (GearAffix ga : getAllAffixes()) {
 			ga.apply(locale, this, owner);
