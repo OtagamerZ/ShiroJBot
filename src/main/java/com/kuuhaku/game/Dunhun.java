@@ -235,7 +235,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 									xpGained += m.getKillXp();
 
 									Loot lt = m.getStats().generateLoot(m);
-									double dropFac = 10 * switch (m.getRarityClass()) {
+									double dropFac = 20 * switch (m.getRarityClass()) {
 										case NORMAL -> 1;
 										case MAGIC -> 1.2;
 										case RARE -> 1.5;
@@ -247,22 +247,30 @@ public class Dunhun extends GameInstance<NullPhase> {
 										dropFac /= 2;
 									}
 
-									if (Calc.chance(10)) {
-										List<Object[]> bases = DAO.queryAllUnmapped("""
+									List<Object[]> bases = DAO.queryAllUnmapped("""
 												SELECT id
 												     , weight
 												FROM v_dunhun_global_drops
 												WHERE weight > 0
 												"""
-										);
+									);
 
-										RandomList<String> rl = new RandomList<>();
-										for (Object[] i : bases) {
-											rl.add((String) i[0], ((Number) i[1]).intValue());
-										}
+									RandomList<String> rl = new RandomList<>();
+									for (Object[] i : bases) {
+										rl.add((String) i[0], ((Number) i[1]).intValue());
+									}
 
-										if (!rl.entries().isEmpty()) {
-											lt.items().add(DAO.find(UserItem.class, rl.get()));
+									if (!rl.entries().isEmpty()) {
+										dropFac = 10 * switch (m.getRarityClass()) {
+											case NORMAL -> 1;
+											case MAGIC -> 1.2;
+											case RARE -> 1.5;
+											case UNIQUE -> 2.5;
+										} * mf;
+
+										while (Calc.chance(dropFac)) {
+											lt.gear().add(Gear.getRandom(m, null));
+											dropFac /= 2;
 										}
 									}
 
