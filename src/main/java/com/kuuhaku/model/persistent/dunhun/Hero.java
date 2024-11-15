@@ -530,11 +530,11 @@ public class Hero extends DAO<Hero> implements Actor {
 			} else {
 				double mult = 1;
 				if (g.getTags().contains("LIGHT")) {
-					mult *= a.dex() * 0.1f;
+					mult *= 1 + a.dex() * 0.1f;
 				}
 
 				if (g.getTags().contains("HEAVY")) {
-					mult *= a.str() * 0.1f;
+					mult *= 1 + a.str() * 0.1f;
 				}
 
 				def += (int) (g.getDfs() * mult);
@@ -549,11 +549,11 @@ public class Hero extends DAO<Hero> implements Actor {
 			Gear wpn = wpns.getFirst();
 			double mult = 1;
 			if (wpn.getTags().contains("LIGHT")) {
-				mult *= a.dex() * 0.1f;
+				mult *= 1 + a.dex() * 0.1f;
 			}
 
 			if (wpn.getTags().contains("HEAVY")) {
-				mult *= a.str() * 0.1f;
+				mult *= 1 + a.str() * 0.1f;
 			}
 
 			dmg += (int) (wpn.getDmg() * mult);
@@ -562,11 +562,11 @@ public class Hero extends DAO<Hero> implements Actor {
 					.mapToInt(g -> {
 						double mult = 1;
 						if (g.getTags().contains("LIGHT")) {
-							mult *= a.dex() * 0.1f;
+							mult *= 1 + a.dex() * 0.1f;
 						}
 
 						if (g.getTags().contains("HEAVY")) {
-							mult *= a.str() * 0.1f;
+							mult *= 1 + a.str() * 0.1f;
 						}
 
 						return (int) (g.getDmg() * mult * 0.6);

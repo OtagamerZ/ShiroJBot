@@ -116,11 +116,11 @@ public class HeroInspectCommand implements Executable {
 		Attributes a = h.getAttributes();
 		if (g.isWeapon()) {
 			if (g.getTags().contains("LIGHT")) {
-				mult *= a.dex() * 0.1f;
+				mult *= 1 + a.dex() * 0.1f;
 			}
 
 			if (g.getTags().contains("HEAVY")) {
-				mult *= a.str() * 0.1f;
+				mult *= 1 + a.str() * 0.1f;
 			}
 		}
 
