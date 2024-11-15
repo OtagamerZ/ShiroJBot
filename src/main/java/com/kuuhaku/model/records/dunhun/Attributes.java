@@ -77,10 +77,10 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 
 	public Attributes set(AttrType type, int value) {
 		return merge(switch (type) {
-			case STR -> new Attributes(str() + value, 0, 0, 0);
-			case DEX -> new Attributes(0, dex() + value, 0, 0);
-			case WIS -> new Attributes(0, 0, wis() + value, 0);
-			case VIT -> new Attributes(0, 0, 0, vit() + value);
+			case STR -> new Attributes(value, 0, 0, 0);
+			case DEX -> new Attributes(0, value, 0, 0);
+			case WIS -> new Attributes(0, 0, value, 0);
+			case VIT -> new Attributes(0, 0, 0, value);
 			default -> new Attributes();
 		});
 	}
@@ -145,7 +145,7 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 	public boolean has(Attributes attr) {
 		for (AttrType a : AttrType.values()) {
 			if (a == AttrType.LVL) break;
-			if (attr.get(a) > 0 && str() < attr.get(a)) return false;
+			if (attr.get(a) > 0 && get(a) < attr.get(a)) return false;
 		}
 
 		return true;
