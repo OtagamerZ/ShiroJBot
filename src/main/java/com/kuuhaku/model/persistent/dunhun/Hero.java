@@ -533,20 +533,30 @@ public class Hero extends DAO<Hero> implements Actor {
 				.filter(Gear::isWeapon)
 				.toList();
 
+		int wDmg;
 		Attributes a = getAttributes();
 		if (wpns.size() == 1) {
 			Gear wpn = wpns.getFirst();
-			dmg += wpn.getDmg();
+			wDmg = wpn.getDmg();
 
-			if (wpn.getTags().contains("LIGHT")) dmg = (int) (dmg * a.dex() / 10d);
-			else if (wpn.getTags().contains("HEAVY")) dmg = (int) (dmg * a.str() / 10d);
+			double mult = 1 + (a.str() + a.dex()) * 0.05;
+			if (wpn.getTags().contains("LIGHT")) mult += a.dex() * 0.05;
+			else if (wpn.getTags().contains("HEAVY")) mult += a.str() * 0.05;
+
+			wDmg = (int) (wDmg * mult);
 		} else {
-			dmg += wpns.stream()
-					.mapToInt(g -> (int) (g.getDmg() * 0.6))
+			wDmg = wpns.stream()
+					.mapToInt(g -> {
+						double mult = 1 + (a.str() + a.dex()) * 0.05;
+						if (g.getTags().contains("LIGHT")) mult += a.dex() * 0.05;
+						else if (g.getTags().contains("HEAVY")) mult += a.str() * 0.05;
+
+						return (int) (g.getDmg() * mult * 0.6);
+					})
 					.sum();
 		}
 
-		base.setAtk((int) (dmg * (1 + (a.str() + a.dex()) / 20d)));
+		base.setAtk(wDmg + dmg);
 		base.setDfs((int) (def * (1 + a.vit() * 0.1 + a.str() * 0.05)));
 		base.setDodge(Math.max(0, a.dex() / 2));
 
