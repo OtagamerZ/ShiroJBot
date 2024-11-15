@@ -447,7 +447,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 					names.add(i.getName(getLocale()) + " (x" + loot.items().getCount(i) + ")");
 				}
 
-				names.sort(String::compareTo);
 				getChannel().buffer(getLocale().get(
 						"str/dungeon_loot_single") + "\n" + "```" + Utils.properlyJoin(getLocale().get("str/and")).apply(names) + "```"
 				);
