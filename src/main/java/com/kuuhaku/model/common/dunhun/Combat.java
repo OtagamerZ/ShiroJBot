@@ -275,6 +275,9 @@ public class Combat implements Renderer<BufferedImage> {
 						}
 					}
 
+					if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
+					else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
+
 					while (current == actors.get() && !skip.get() && current.getAp() > 0) {
 						trigger(Trigger.ON_TICK);
 
