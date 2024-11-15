@@ -112,14 +112,26 @@ public class HeroInspectCommand implements Executable {
 			eb.appendDescription("-# " + String.join(", ", tgs) + "\n\n");
 		}
 
+		double mult = 1;
+		Attributes a = h.getAttributes();
+		if (g.isWeapon()) {
+			if (g.getTags().contains("LIGHT")) {
+				mult *= a.dex() * 0.1f;
+			}
+
+			if (g.getTags().contains("HEAVY")) {
+				mult *= a.str() * 0.1f;
+			}
+		}
+
 		boolean hasStats = false;
 		GearStats stats = g.getBasetype().getStats();
 		if (g.getDmg() != 0) {
-			eb.appendDescription(locale.get("str/attack") + ": " + g.getDmg() + "\n");
+			eb.appendDescription(locale.get("str/attack") + ": " + (int) (g.getDmg() * mult) + "\n");
 			hasStats = true;
 		}
 		if (g.getDfs() != 0) {
-			eb.appendDescription(locale.get("str/defense") + ": " + g.getDfs() + "\n");
+			eb.appendDescription(locale.get("str/defense") + ": " + (int) (g.getDfs() * mult) + "\n");
 			hasStats = true;
 		}
 		if (g.getCritical() != 0) {
