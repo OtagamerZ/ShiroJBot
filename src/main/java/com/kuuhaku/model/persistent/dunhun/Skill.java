@@ -183,7 +183,7 @@ public class Skill extends DAO<Skill> {
 					"actor", source,
 					"target", target,
 					"values", values,
-					"ctx", ctxVar
+					"ctxVar", ctxVar
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute skill {}", id, e);
