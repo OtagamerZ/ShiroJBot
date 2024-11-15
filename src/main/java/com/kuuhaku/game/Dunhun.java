@@ -444,7 +444,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						name += ", " + g.getBasetype().getInfo(getLocale()).getName();
 					}
 
-					names.add(g.getName(getLocale()));
+					names.add(name);
 				}
 
 				for (UserItem i : loot.items().uniqueSet()) {
