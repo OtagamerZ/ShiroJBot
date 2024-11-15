@@ -235,7 +235,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 									xpGained += m.getKillXp();
 
 									Loot lt = m.getStats().generateLoot(m);
-									double dropFac = 20 * switch (m.getRarityClass()) {
+									double dropFac = 15 * switch (m.getRarityClass()) {
 										case NORMAL -> 1;
 										case MAGIC -> 1.2;
 										case RARE -> 1.5;
