@@ -27,6 +27,7 @@ import com.kuuhaku.model.records.id.GearAffixId;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
@@ -118,6 +119,7 @@ public class GearAffix extends DAO<GearAffix> {
 
 	public String getDescription(I18N locale, boolean showScaling) {
 		List<Integer> vals = getValues(locale);
+		double mult = gear.getRarityClass() == RarityClass.MAGIC ? 1.2 : 1;
 
 		AtomicInteger i = new AtomicInteger();
 		return Utils.regex(affix.getInfo(locale).getDescription(), "\\[(-?\\d+)(?:-(-?\\d+))?](%)?")
@@ -129,8 +131,13 @@ public class GearAffix extends DAO<GearAffix> {
 						out = Utils.sign(vals.get(i.getAndIncrement()));
 					}
 
-					if (showScaling && r.group(2) != null) {
-						out += " (" + r.group(1) + " - " + r.group(2) + ")";
+					if (showScaling) {
+						int min = (int) (Integer.parseInt(r.group(1)) * mult * modifiers.getMinMult());
+						int max = (int) (NumberUtils.toInt(r.group(2), min) * mult * modifiers.getMaxMult());
+
+						if (min != max) {
+							out += " (" + r.group(1) + " - " + r.group(2) + ")";
+						}
 					}
 
 					return out;
@@ -140,21 +147,18 @@ public class GearAffix extends DAO<GearAffix> {
 	public List<Integer> getValues(I18N locale) {
 		List<Integer> values = new ArrayList<>();
 		String desc = affix.getInfo(locale).getDescription();
-
-		double mult = 1;
-		if (gear.getRarityClass() == RarityClass.MAGIC) {
-			mult = 1.2;
-		}
+		double mult = gear.getRarityClass() == RarityClass.MAGIC ? 1.2 : 1;
 
 		Matcher m = Utils.regex(desc, "\\[(-?\\d+)(?:-(-?\\d+))?]");
 		while (m.find()) {
 			int min = (int) (Integer.parseInt(m.group(1)) * mult * modifiers.getMinMult());
-			if (m.group(2) == null) {
+			int max = (int) (NumberUtils.toInt(m.group(2), min) * mult * modifiers.getMaxMult());
+
+			if (min == max) {
 				values.add(min);
 				continue;
 			}
 
-			int max = (int) (Integer.parseInt(m.group(2)) * mult * modifiers.getMaxMult());
 			values.add(Calc.rng(min, max, roll + desc.hashCode()));
 		}
 

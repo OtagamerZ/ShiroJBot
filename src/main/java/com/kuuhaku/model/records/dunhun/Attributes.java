@@ -133,10 +133,12 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 	}
 
 	public boolean has(Attributes attr) {
-		return str() >= attr.str()
-			   && dex() >= attr.dex()
-			   && wis() >= attr.wis()
-			   && vit() >= attr.vit();
+		for (AttrType a : AttrType.values()) {
+			if (a == AttrType.LVL) break;
+			if (attr.get(a) > 0 && str() < attr.get(a)) return false;
+		}
+
+		return true;
 	}
 
 	public int count() {

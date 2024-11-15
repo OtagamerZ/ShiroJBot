@@ -91,8 +91,7 @@ public class Gear extends DAO<Gear> {
 
 	private transient final GearModifiers modifiers = new GearModifiers();
 	private transient final Set<SelfEffect> effects = new HashSet<>();
-	private transient Attributes addAttributes;
-	private transient Attributes redAttributes;
+	private transient Attributes attributes;
 
 	public Gear() {
 	}
@@ -285,10 +284,9 @@ public class Gear extends DAO<Gear> {
 		return effects;
 	}
 
-	public Pair<Attributes, Attributes> getAttributes() {
-		if (addAttributes == null || redAttributes == null) loadAttr(I18N.EN);
-
-		return new Pair<>(addAttributes, redAttributes);
+	public Attributes getAttributes() {
+		if (attributes == null) loadAttr(I18N.EN);
+		return attributes;
 	}
 
 	public void addEffect(ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
@@ -315,15 +313,14 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public void loadAttr(I18N locale) {
-		AtomicInteger add = new AtomicInteger();
-		AtomicInteger sub = new AtomicInteger();
+		AtomicInteger out = new AtomicInteger();
 
 		for (GearAffix ga : getAllAffixes()) {
 			String eff = ga.getAffix().getEffect();
 			if (eff == null) continue;
 
 			List<Integer> values = ga.getValues(locale);
-			Utils.regex(eff, "(?<=//)(STR|DEX|WIS|VIT)=(\\d+|\\$\\d)").results().forEach(r -> {
+			Utils.regex(eff, "(?<=//)(STR|DEX|WIS|VIT)=(-?\\d+|\\$\\d)").results().forEach(r -> {
 				AttrType a = AttrType.valueOf(r.group(1));
 
 				int val;
@@ -333,16 +330,11 @@ public class Gear extends DAO<Gear> {
 					val = Integer.parseInt(r.group(2));
 				}
 
-				if (val < 0) {
-					sub.set(Bit32.set(sub.get(), a.ordinal(), sub.get() - val, 8));
-				} else {
-					add.set(Bit32.set(add.get(), a.ordinal(), add.get() + val, 8));
-				}
+				out.set(Bit32.set(out.get(), a.ordinal(), out.get() + val, 8));
 			});
 		}
 
-		addAttributes = new Attributes(add.get());
-		redAttributes = new Attributes(sub.get());
+		attributes = new Attributes(out.get());
 	}
 
 	public void load(I18N locale, Hero owner) {
