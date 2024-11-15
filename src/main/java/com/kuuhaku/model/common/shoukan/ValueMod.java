@@ -60,7 +60,9 @@ public class ValueMod implements Cloneable {
 		return value;
 	}
 
-	public <T extends Number> T asType(Class<T> klass) {
+	public <T> T asType(Class<T> klass) {
+		if (ValueMod.class.isAssignableFrom(klass)) return klass.cast(this);
+
 		if (klass == Short.class) {
 			return klass.cast((short) value);
 		} else if (klass == Integer.class) {
