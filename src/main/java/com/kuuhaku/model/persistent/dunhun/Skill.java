@@ -87,6 +87,8 @@ public class Skill extends DAO<Skill> {
 	@Column(name = "req_race")
 	private Race reqRace;
 
+	@Transient
+	private final transient JSONObject ctxVar = new JSONObject();
 	private transient int cd = 0;
 
 	public String getId() {
@@ -180,7 +182,8 @@ public class Skill extends DAO<Skill> {
 					"combat", combat,
 					"actor", source,
 					"target", target,
-					"values", values
+					"values", values,
+					"ctx", ctxVar
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute skill {}", id, e);

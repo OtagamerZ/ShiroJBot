@@ -284,7 +284,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 			}
 
 			base.setAtk((int) (stats.getAttack() * mult));
-			base.setDfs((int) (stats.getDefense() * mult));
+			base.setDfs((int) (stats.getDefense() * mult / 2));
 			base.setDodge(stats.getDodge());
 			base.setParry(stats.getParry());
 		}
