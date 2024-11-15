@@ -515,7 +515,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		senshiCache = new Senshi(this, locale);
 		CardAttributes base = senshiCache.getBase();
 
-		modifiers.clear(senshiCache);
+		modifiers.clear(this);
 		int dmg = 100;
 		int def = 100;
 

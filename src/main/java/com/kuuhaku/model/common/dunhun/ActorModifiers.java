@@ -21,7 +21,8 @@ package com.kuuhaku.model.common.dunhun;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.ValueMod;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.dunhun.Gear;
+import com.kuuhaku.model.persistent.dunhun.Hero;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -79,8 +80,8 @@ public class ActorModifiers implements Iterable<CumValue> {
 		this.channeled = channeled;
 	}
 
-	public void expireMods(Senshi sen) {
-		removeIf(sen, mod -> {
+	public void expireMods(Actor act) {
+		removeIf(act, mod -> {
 			if (mod.getExpiration() > 0) {
 				mod.decExpiration();
 			}
@@ -89,13 +90,18 @@ public class ActorModifiers implements Iterable<CumValue> {
 		});
 	}
 
-	public void clear(Senshi sen) {
-		sen.getStats().removeIf(o -> true);
-		removeIf(sen, o -> true);
+	public void clear(Actor act) {
+		removeIf(act, o -> true);
 	}
 
-	public void removeIf(Senshi sen, Predicate<ValueMod> check) {
-		sen.getStats().removeIf(check);
+	public void removeIf(Actor act, Predicate<ValueMod> check) {
+		act.getSenshi().getStats().removeIf(check);
+
+		if (act instanceof Hero h) {
+			for (Gear g : h.getInventory()) {
+				g.getModifiers().removeIf(check);
+			}
+		}
 
 		if (fieldCache == null) {
 			fieldCache = getClass().getDeclaredFields();

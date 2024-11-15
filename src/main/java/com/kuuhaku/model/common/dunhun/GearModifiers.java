@@ -83,6 +83,10 @@ public class GearModifiers {
 	public void removeIf(Predicate<ValueMod> check) {
 		addedTags.clear();
 
+		if (fieldCache == null) {
+			fieldCache = getClass().getDeclaredFields();
+		}
+
 		for (Field f : fieldCache) {
 			try {
 				if (f.get(this) instanceof CumValue cv) {

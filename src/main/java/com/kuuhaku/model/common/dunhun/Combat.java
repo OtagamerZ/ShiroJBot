@@ -261,7 +261,7 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 
 					trigger(Trigger.ON_TURN_BEGIN, current, current);
-					current.getModifiers().expireMods(current.getSenshi());
+					current.getModifiers().expireMods(current);
 
 					for (EffectBase e : Set.copyOf(effects)) {
 						if (!e.getOwner().equals(current)) {
@@ -337,7 +337,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		ButtonizeHelper helper;
 		for (Actor a : getActors()) {
-			a.getModifiers().removeIf(a.getSenshi(), m -> m.getExpiration() == 0);
+			a.getModifiers().removeIf(a, m -> m.getExpiration() == 0);
 		}
 
 		if (current instanceof Hero h && !h.isMindControlled()) {

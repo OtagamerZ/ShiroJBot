@@ -150,7 +150,7 @@ public class Monster extends MonsterBase<Monster> {
 
 	@Override
 	protected void load(I18N locale) {
-		getModifiers().clear(getSenshi());
+		getModifiers().clear(this);
 
 		for (Affix a : affixes) {
 			a.apply(locale, this);
