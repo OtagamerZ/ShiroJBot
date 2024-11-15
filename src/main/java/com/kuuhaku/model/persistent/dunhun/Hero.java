@@ -29,7 +29,6 @@ import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.model.common.dunhun.SelfEffect;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.dunhun.ContinueMode;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
@@ -42,7 +41,6 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.CombatContext;
-import com.kuuhaku.model.records.dunhun.GearStats;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
@@ -205,7 +203,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	}
 
 	public int getApCap() {
-		return (int) (5 + getAttributes().dex() / 10d + modifiers.getMaxAp().get());
+		return (int) (5 + modifiers.getMaxAp().get());
 	}
 
 	@Override
@@ -535,16 +533,20 @@ public class Hero extends DAO<Hero> implements Actor {
 				.filter(Gear::isWeapon)
 				.toList();
 
+		Attributes a = getAttributes();
 		if (wpns.size() == 1) {
-			dmg += wpns.getFirst().getDmg();
+			Gear wpn = wpns.getFirst();
+			dmg += wpn.getDmg();
+
+			if (wpn.getTags().contains("LIGHT")) dmg = (int) (dmg * a.dex() / 10d);
+			else if (wpn.getTags().contains("HEAVY")) dmg = (int) (dmg * a.str() / 10d);
 		} else {
 			dmg += wpns.stream()
 					.mapToInt(g -> (int) (g.getDmg() * 0.6))
 					.sum();
 		}
 
-		Attributes a = getAttributes();
-		base.setAtk((int) (dmg * (1 + a.str() / 10d)));
+		base.setAtk((int) (dmg * (1 + (a.str() + a.dex()) / 20d)));
 		base.setDfs((int) (def * (1 + a.vit() * 0.075)));
 		base.setDodge(Math.max(0, a.dex() / 2 - a.vit() / 3));
 

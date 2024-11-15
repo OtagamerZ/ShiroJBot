@@ -37,6 +37,7 @@ public class ActorModifiers implements Iterable<CumValue> {
 	private final CumValue initiative = CumValue.flat();
 	private final CumValue critical = CumValue.flat();
 	private final CumValue aggroMult = CumValue.flat();
+	private final CumValue magicFind = CumValue.flat();
 
 	private Actor channeled;
 
@@ -64,6 +65,10 @@ public class ActorModifiers implements Iterable<CumValue> {
 
 	public CumValue getAggroMult() {
 		return aggroMult;
+	}
+
+	public CumValue getMagicFind() {
+		return magicFind;
 	}
 
 	public Actor getChanneled() {

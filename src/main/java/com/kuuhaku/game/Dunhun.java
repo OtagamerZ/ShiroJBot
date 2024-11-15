@@ -224,16 +224,29 @@ public class Dunhun extends GameInstance<NullPhase> {
 					} else {
 						if (getCombat() != null && getCombat().isDone()) {
 							int xpGained = 0;
+							double mf = 1 + heroes.values().stream()
+									.mapToDouble(h -> h.getModifiers().getMagicFind().get())
+									.sum();
 
 							XStringBuilder sb = new XStringBuilder();
 							for (Actor a : getCombat().getActors(Team.KEEPERS)) {
 								if (a instanceof MonsterBase<?> m && m.getHp() == 0) {
-									int xp = m.getKillXp();
-									if (!m.getStats().hasLoot()) continue;
-
-									xpGained += xp;
+									if (m.getStats().isMinion()) continue;
+									xpGained += m.getKillXp();
 
 									Loot lt = m.getStats().generateLoot(m);
+									double dropFac = 10 * switch (m.getRarityClass()) {
+										case NORMAL -> 1;
+										case MAGIC -> 1.2;
+										case RARE -> 1.5;
+										case UNIQUE -> 2.5;
+									} * mf;
+
+									while (Calc.chance(dropFac)) {
+										lt.gear().add(Gear.getRandom(m, null));
+										dropFac /= 2;
+									}
+
 									if (Calc.chance(10)) {
 										List<Object[]> bases = DAO.queryAllUnmapped("""
 												SELECT id

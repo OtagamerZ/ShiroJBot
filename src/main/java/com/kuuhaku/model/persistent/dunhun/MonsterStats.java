@@ -69,10 +69,12 @@ public class MonsterStats {
 	@Column(name = "loot_generator", columnDefinition = "TEXT")
 	private String lootGenerator;
 
+	private transient boolean minion;
+
 	public MonsterStats() {
 	}
 
-	public MonsterStats(int baseHp, Race race, int attack, int defense, int dodge, int parry, int maxAp) {
+	public MonsterStats(int baseHp, Race race, int attack, int defense, int dodge, int parry, int maxAp, int initiative) {
 		this.baseHp = baseHp;
 		this.race = race;
 		this.attack = attack;
@@ -80,6 +82,7 @@ public class MonsterStats {
 		this.dodge = dodge;
 		this.parry = parry;
 		this.maxAp = maxAp;
+		this.initiative = initiative;
 	}
 
 	public int getBaseHp() {
@@ -118,17 +121,17 @@ public class MonsterStats {
 		return initiative;
 	}
 
-	public boolean hasLoot() {
-		return lootGenerator != null;
+	public boolean isMinion() {
+		return minion;
 	}
 
-	public void noLoot() {
-		lootGenerator = null;
+	public void makeMinion() {
+		minion = true;
 	}
 
 	public Loot generateLoot(Actor self) {
 		Loot loot = new Loot();
-		if (lootGenerator == null) return loot;
+		if (minion || lootGenerator == null) return loot;
 
 		double mult = switch (self.getRarityClass()) {
 			case NORMAL -> 1;

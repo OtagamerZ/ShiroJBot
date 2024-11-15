@@ -130,7 +130,11 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 			bonus = game.getPartySize() / 2;
 		}
 
-		return Math.max(1, (int) (getStats().getMaxAp() + getModifiers().getMaxAp().get() + game.getAreaLevel() / 5d + bonus));
+		return (int) Calc.clamp(getStats().getMaxAp() + modifiers.getMaxAp().get() + game.getAreaLevel() / 5d + bonus, 1, getApCap() + bonus);
+	}
+
+	public int getApCap() {
+		return (int) (5 + getStats().getMaxAp() + modifiers.getMaxAp().get());
 	}
 
 	@Override
@@ -208,7 +212,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 	}
 
 	public int getKillXp() {
-		if (!stats.hasLoot()) return 0;
+		if (stats.isMinion()) return 0;
 
 		double mult = switch (getRarityClass()) {
 			case NORMAL -> 1;
@@ -326,7 +330,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		dummy.stats = new MonsterStats(
 				of.getMaxHp(), of.getRace(),
 				sof.getDmg(), sof.getDfs(), sof.getDodge(), sof.getParry(),
-				of.getMaxAp()
+				of.getMaxAp(), of.getInitiative()
 		);
 
 		return (Monster) dummy;
