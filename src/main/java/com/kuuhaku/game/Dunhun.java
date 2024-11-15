@@ -439,12 +439,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					g.setOwner(h);
 					g.save();
 
-					String name = g.getName(getLocale());
-					if (g.getRarityClass() == RarityClass.RARE) {
-						name += ", " + g.getBasetype().getInfo(getLocale()).getName();
-					}
-
-					names.add(name);
+					names.add(g.getName(getLocale()));
 				}
 
 				for (UserItem i : loot.items().uniqueSet()) {
