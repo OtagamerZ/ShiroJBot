@@ -547,8 +547,8 @@ public class Hero extends DAO<Hero> implements Actor {
 		}
 
 		base.setAtk((int) (dmg * (1 + (a.str() + a.dex()) / 20d)));
-		base.setDfs((int) (def * (1 + a.vit() * 0.075)));
-		base.setDodge(Math.max(0, a.dex() / 2 - a.vit() / 3));
+		base.setDfs((int) (def * (1 + a.vit() * 0.1 + a.str() * 0.05)));
+		base.setDodge(Math.max(0, a.dex() / 2));
 
 		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();
 		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750 + effCost);
