@@ -133,7 +133,7 @@ public class GearAffix extends DAO<GearAffix> {
 
 					if (showScaling) {
 						int min = (int) (Integer.parseInt(r.group(1)) * mult * modifiers.getMinMult());
-						int max = (int) (NumberUtils.toInt(r.group(2), min) * mult * modifiers.getMaxMult());
+						int max = (int) (Integer.parseInt(Utils.getOr(r.group(2), r.group(1))) * mult * modifiers.getMaxMult());
 
 						if (min != max) {
 							out += " (" + min + " - " + max + ")";
@@ -152,7 +152,7 @@ public class GearAffix extends DAO<GearAffix> {
 		Matcher m = Utils.regex(desc, "\\[(-?\\d+)(?:-(-?\\d+))?]");
 		while (m.find()) {
 			int min = (int) (Integer.parseInt(m.group(1)) * mult * modifiers.getMinMult());
-			int max = (int) (NumberUtils.toInt(m.group(2), min) * mult * modifiers.getMaxMult());
+			int max = (int) (Integer.parseInt(Utils.getOr(m.group(2), m.group(1))) * mult * modifiers.getMaxMult());
 
 			if (min == max) {
 				values.add(min);
