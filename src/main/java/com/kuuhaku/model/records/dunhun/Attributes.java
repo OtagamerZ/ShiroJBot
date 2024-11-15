@@ -34,7 +34,7 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 		this(0);
 	}
 
-	public Attributes(byte str, byte dex, byte wis, byte vit) {
+	public Attributes(int str, int dex, int wis, int vit) {
 		this((Calc.clamp(str, Byte.MIN_VALUE, Byte.MAX_VALUE) & 0xFF)
 			 | (Calc.clamp(dex, Byte.MIN_VALUE, Byte.MAX_VALUE) & 0xFF) << 8
 			 | (Calc.clamp(wis, Byte.MIN_VALUE, Byte.MAX_VALUE) & 0xFF) << 16
@@ -75,6 +75,16 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 		};
 	}
 
+	public Attributes set(AttrType type, int value) {
+		return merge(switch (type) {
+			case STR -> new Attributes(str() + value, 0, 0, 0);
+			case DEX -> new Attributes(0, dex() + value, 0, 0);
+			case WIS -> new Attributes(0, 0, wis() + value, 0);
+			case VIT -> new Attributes(0, 0, 0, vit() + value);
+			default -> new Attributes();
+		});
+	}
+
 	public Attributes plus(Attributes other) {
 		return merge(other);
 	}
@@ -91,10 +101,10 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 		Attributes out = this;
 		for (Attributes a : attrs) {
 			out = new Attributes(
-					(byte) (out.str() + a.str()),
-					(byte) (out.dex() + a.dex()),
-					(byte) (out.wis() + a.wis()),
-					(byte) (out.vit() + a.vit())
+					out.str() + a.str(),
+					out.dex() + a.dex(),
+					out.wis() + a.wis(),
+					out.vit() + a.vit()
 			);
 		}
 
@@ -109,10 +119,10 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 		Attributes out = this;
 		for (Attributes a : attrs) {
 			out = new Attributes(
-					(byte) (out.str() - a.str()),
-					(byte) (out.dex() - a.dex()),
-					(byte) (out.wis() - a.wis()),
-					(byte) (out.vit() - a.vit())
+					out.str() - a.str(),
+					out.dex() - a.dex(),
+					out.wis() - a.wis(),
+					out.vit() - a.vit()
 			);
 		}
 
@@ -125,10 +135,10 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 
 	public Attributes modify(Attributes add, Attributes sub) {
 		return new Attributes(
-				(byte) (str() + add.str() - sub.str()),
-				(byte) (dex() + add.dex() - sub.dex()),
-				(byte) (wis() + add.wis() - sub.wis()),
-				(byte) (vit() + add.vit() - sub.vit())
+				str() + add.str() - sub.str(),
+				dex() + add.dex() - sub.dex(),
+				wis() + add.wis() - sub.wis(),
+				vit() + add.vit() - sub.vit()
 		);
 	}
 

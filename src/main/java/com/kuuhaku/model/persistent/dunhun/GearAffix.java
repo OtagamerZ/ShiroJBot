@@ -136,7 +136,7 @@ public class GearAffix extends DAO<GearAffix> {
 						int max = (int) (NumberUtils.toInt(r.group(2), min) * mult * modifiers.getMaxMult());
 
 						if (min != max) {
-							out += " (" + r.group(1) + " - " + r.group(2) + ")";
+							out += " (" + min + " - " + max + ")";
 						}
 					}
 

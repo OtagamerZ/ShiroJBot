@@ -313,7 +313,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public void loadAttr(I18N locale) {
-		AtomicInteger out = new AtomicInteger();
+		attributes = new Attributes();
 
 		for (GearAffix ga : getAllAffixes()) {
 			String eff = ga.getAffix().getEffect();
@@ -330,11 +330,9 @@ public class Gear extends DAO<Gear> {
 					val = Integer.parseInt(r.group(2));
 				}
 
-				out.set(Bit32.set(out.get(), a.ordinal(), out.get() + val, 8));
+				attributes = attributes.set(a, val);
 			});
 		}
-
-		attributes = new Attributes(out.get());
 	}
 
 	public void load(I18N locale, Hero owner) {
