@@ -248,11 +248,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 									}
 
 									List<Object[]> bases = DAO.queryAllUnmapped("""
-												SELECT id
-												     , weight
-												FROM v_dunhun_global_drops
-												WHERE weight > 0
-												"""
+											SELECT id
+											     , weight
+											FROM v_dunhun_global_drops
+											WHERE weight > 0
+											"""
 									);
 
 									RandomList<String> rl = new RandomList<>();
@@ -434,21 +434,28 @@ public class Dunhun extends GameInstance<NullPhase> {
 			if (getPartySize() == 1) {
 				Hero h = List.copyOf(heroes.values()).getFirst();
 
-				List<String> lines = new ArrayList<>();
+				List<String> names = new ArrayList<>();
 				for (Gear g : loot.gear()) {
 					g.setOwner(h);
 					g.save();
 
-					lines.add("- " + g.getName(getLocale()));
+					String name = g.getName(getLocale());
+					if (g.getRarityClass() == RarityClass.RARE) {
+						name += ", " + g.getBasetype().getInfo(getLocale()).getName();
+					}
+
+					names.add(g.getName(getLocale()));
 				}
 
 				for (UserItem i : loot.items().uniqueSet()) {
 					h.getAccount().addItem(i, loot.items().getCount(i));
-					lines.add("- " + i.getName(getLocale()) + " (x" + loot.items().getCount(i) + ")");
+					names.add(i.getName(getLocale()) + " (x" + loot.items().getCount(i) + ")");
 				}
 
-				lines.sort(String::compareTo);
-				getChannel().buffer(getLocale().get("str/dungeon_loot_single") + "\n" + String.join("\n", lines));
+				names.sort(String::compareTo);
+				getChannel().buffer(getLocale().get(
+						"str/dungeon_loot_single") + "\n" + "```" + Utils.properlyJoin(getLocale().get("str/and")).apply(names) + "```"
+				);
 			} else {
 				InfiniteList<Hero> robin = new InfiniteList<>(heroes.values());
 				Collections.shuffle(robin);
