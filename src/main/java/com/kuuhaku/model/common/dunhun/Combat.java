@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Combat implements Renderer<BufferedImage> {
@@ -463,6 +464,12 @@ public class Combat implements Renderer<BufferedImage> {
 				try {
 					boolean canAttack = curr.getSenshi().getDmg() > 0;
 					boolean canDefend = curr.getSenshi().getDfs() > 0;
+					Function<Actor, Integer> criteria = a -> {
+						if (a.getTeam() == curr.getTeam()) return 1;
+
+						Senshi sen = a.getSenshi();
+						return (int) (a.getAggroScore() * (1 - sen.getDodge() / 100d) * (1 - sen.getParry() / 100d));
+					};
 
 					List<Actor> tgts = getActors(curr.getTeam().getOther()).stream()
 							.filter(a -> !a.isOutOfCombat())
@@ -514,12 +521,7 @@ public class Combat implements Renderer<BufferedImage> {
 								.toList();
 
 						if (!tgts.isEmpty()) {
-							Actor t = Utils.getWeightedEntry(rngList, a -> {
-								if (a.getTeam() == curr.getTeam()) return 1;
-
-								Senshi sen = a.getSenshi();
-								return (int) (a.getAggroScore() * (1 - sen.getDodge() / 100d) * (1 - sen.getParry() / 100d));
-							}, tgts);
+							Actor t = Utils.getWeightedEntry(rngList, criteria, tgts);
 
 							if (t.getTeam() == curr.getTeam()) {
 								skill(skill, curr, t);
@@ -541,7 +543,7 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					attack(curr, Utils.getWeightedEntry(rngList, Actor::getAggroScore, tgts), null);
+					attack(curr, Utils.getWeightedEntry(rngList, criteria, tgts), null);
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 				} finally {
