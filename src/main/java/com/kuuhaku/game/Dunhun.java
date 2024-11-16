@@ -303,13 +303,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 									int gain = xp;
 
 									int lvl = n.getStats().getLevel();
-									int diff = Math.abs(getAreaLevel() + 1 - lvl);
+									int diff = Math.abs(getAreaLevel() - lvl) - 5;
 
 									if (diff > 5) {
-										gain = (int) Calc.clamp(gain * Math.pow(0.9, diff - 5), 1, gain);
+										gain = (int) (gain * Math.min(Math.pow(0.8, diff), 1));
 									}
 
-									n.getStats().addXp(gain);
+									n.getStats().addXp(Math.max(1, gain));
 									if (n.getStats().getLevel() > lvl) {
 										getChannel().sendMessage(getLocale().get("str/actor_level_up", n.getName(), n.getStats().getLevel())).queue();
 									}

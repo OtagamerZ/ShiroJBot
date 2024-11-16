@@ -37,7 +37,7 @@ public class HeroStats {
 
 	static {
 		for (int i = 0; i < 1000; i++) {
-			xpTable.put((int) (Math.pow(i, 1.5) * 10), i + 1);
+			xpTable.put((int) (Math.pow(i, 1.7) * 10), i + 1);
 		}
 	}
 

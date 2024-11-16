@@ -121,26 +121,24 @@ public interface Actor {
 	}
 
 	default void addHpBar(XStringBuilder sb) {
-		double part;
-		if (getMaxHp() > 10000) part = 1000;
-		else if (getMaxHp() > 5000) part = 500;
-		else if (getMaxHp() > 2500) part = 250;
-		else part = 100;
+		int[] blocks = {1000, 2500, 5000};
 
-		String hp, max;
-		if (getHp() > part * 10) {
-			hp = Utils.roundToString(getHp() / 1000d, 1) + "k";
-		} else {
-			hp = String.valueOf(getHp());
+		int part = 0;
+		int maxHp = getMaxHp();
+		for (int i = 0, mult = 1; i < blocks.length; i++) {
+			part = blocks[i] * mult;
+			if (maxHp <= part) {
+				part /= 10;
+				break;
+			}
+
+			if (i == blocks.length - 1) {
+				mult *= 10;
+				i = -1;
+			}
 		}
 
-		if (getMaxHp() > part * 10) {
-			max = Utils.roundToString(getMaxHp() / 1000d, 1) + "k";
-		} else {
-			max = String.valueOf(getMaxHp());
-		}
-
-		sb.appendNewLine("HP: " + hp + "/" + max);
+		sb.appendNewLine("HP: " + Utils.shorten(getHp()) + "/" + Utils.shorten(getMaxHp()));
 		sb.nextLine();
 
 		boolean rdClosed = true;
@@ -150,7 +148,7 @@ public interface Actor {
 			rdClosed = false;
 		}
 
-		int steps = (int) Math.ceil(getMaxHp() / part);
+		int steps = maxHp / part;
 		for (int i = 0; i < steps; i++) {
 			if (i > 0 && i % 10 == 0) sb.nextLine();
 			int threshold = (int) (i * part);
@@ -164,7 +162,7 @@ public interface Actor {
 			else sb.append('▱');
 		}
 
-		if (rd >= getMaxHp() && !rdClosed) {
+		if (rd >= maxHp && !rdClosed) {
 			sb.append("__");
 		}
 	}

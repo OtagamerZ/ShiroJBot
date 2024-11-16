@@ -122,7 +122,7 @@ public class Monster extends MonsterBase<Monster> {
 			case RARE -> 2.25;
 			case MAGIC -> 1.5;
 			default -> 1;
-		} * (1 + getGame().getAreaLevel() * 0.25);
+		} * (1 + getGame().getAreaLevel() * (0.25 + getGame().getAreaLevel() * 0.01));
 
 		if (getGame().getPartySize() > 1 && getTeam() == Team.KEEPERS) {
 			mult *= 1 + getGame().getPartySize() * 0.5;

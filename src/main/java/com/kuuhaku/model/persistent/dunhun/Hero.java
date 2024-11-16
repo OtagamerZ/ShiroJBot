@@ -161,7 +161,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	public int getMaxHp() {
 		double flat = 300 + modifiers.getMaxHp().get() + stats.getLevel() * 20;
 
-		return (int) (flat * modifiers.getHpMult().get() * (1 + getAttributes().vit() / 5d));
+		return (int) (flat * modifiers.getHpMult().get() * (1 + getAttributes().vit() * 0.1));
 	}
 
 	@Override
@@ -574,9 +574,8 @@ public class Hero extends DAO<Hero> implements Actor {
 					.sum();
 		}
 
-		base.setAtk((int) (dmg * (1 + (a.str() + a.dex()) * 0.05)));
+		base.setAtk((int) (dmg * (1 + (a.str() + a.dex()) * 0.01)));
 		base.setDfs((int) (def * (1 + a.vit() * 0.1 + a.str() * 0.05)));
-		base.setDodge(Math.max(0, a.dex() / 2));
 
 		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();
 		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750 + effCost);
