@@ -650,7 +650,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 					history.add(locale.get("str/actor_miss", source.getName(locale)));
 					return;
-				} else if (!tgtSen.isSleeping() && !tgtSen.isStasis()) {
+				} else if (!srcSen.hasFlag(Flag.TRUE_STRIKE, true) && !tgtSen.isSleeping() && !tgtSen.isStasis()) {
 					if (Calc.chance(tgtSen.getDodge())) {
 						trigger(Trigger.ON_MISS, source, target);
 						trigger(Trigger.ON_DODGE, target, source);
@@ -698,7 +698,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 					history.add(locale.get("str/actor_miss", source.getName(locale)));
 					return;
-				} else if (!tgtSen.isSleeping() && !tgtSen.isStasis()) {
+				} else if (!srcSen.hasFlag(Flag.TRUE_STRIKE, true) && !tgtSen.isSleeping() && !tgtSen.isStasis()) {
 					if (Calc.chance(tgtSen.getDodge())) {
 						trigger(Trigger.ON_MISS, source, target);
 						trigger(Trigger.ON_DODGE, target, source);
