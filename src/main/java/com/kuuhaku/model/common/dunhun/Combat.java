@@ -637,11 +637,10 @@ public class Combat implements Renderer<BufferedImage> {
 	public void attack(Actor source, Actor target, Double damageMult) {
 		if (damageMult == null) {
 			source.modAp(-1);
+			history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale)));
 		}
 
 		trigger(Trigger.ON_DEFEND, target, source);
-
-		history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale)));
 
 		Senshi srcSen = source.getSenshi();
 		Senshi tgtSen = target.getSenshi();
