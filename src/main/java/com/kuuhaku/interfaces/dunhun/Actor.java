@@ -135,7 +135,7 @@ public interface Actor {
 		for (int i = 0, mult = 1; i < blocks.length; i++) {
 			part = blocks[i] * mult;
 			if (maxHp <= part) {
-				part /= 10;
+				part /= 20;
 				break;
 			}
 
@@ -158,7 +158,7 @@ public interface Actor {
 		int steps = maxHp / part;
 		for (int i = 0; i < steps; i++) {
 			if (i > 0 && i % 10 == 0) sb.nextLine();
-			int threshold = (int) (i * part);
+			int threshold = i * part;
 
 			if (!rdClosed && threshold > rd) {
 				sb.append("__");
