@@ -110,7 +110,6 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		effects.addAll(game.getEffects());
-		trigger(Trigger.ON_COMBAT);
 	}
 
 	public Combat(Dunhun game, Collection<Hero> duelists) {
@@ -132,7 +131,6 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		effects.addAll(game.getEffects());
-		trigger(Trigger.ON_COMBAT);
 	}
 
 	@Override
@@ -226,6 +224,7 @@ public class Combat implements Renderer<BufferedImage> {
 				.comparingInt(Actor::getInitiative).reversed()
 				.thenComparingInt(n -> Calc.rng(20, seed - n.hashCode()))
 		);
+		trigger(Trigger.ON_COMBAT);
 
 		loop:
 		for (Actor turn : actors) {
