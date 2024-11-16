@@ -654,7 +654,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public int getAreaLevel() {
-		if (dungeon.getAreaLevel() == 0) {
+		if (duel) {
+			return (int) heroes.values().stream()
+					.mapToInt(h -> h.getStats().getLevel())
+					.average().orElse(1);
+		} else if (dungeon.getAreaLevel() == 0) {
 			return 1 + Math.max(0, (getTurn() - 1) / 10 * 5);
 		}
 
