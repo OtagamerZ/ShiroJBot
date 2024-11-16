@@ -506,7 +506,7 @@ public class Combat implements Renderer<BufferedImage> {
 						Boolean canUse = s.canCpuUse(this, curr, null);
 						if (canUse == null) {
 							if (!forcing) skills.add(s);
-						} else if (canUse && s.getCd() == 0) {
+						} else if (canUse) {
 							if (!forcing) skills.clear();
 							forcing = true;
 							skills.add(s);
@@ -517,7 +517,7 @@ public class Combat implements Renderer<BufferedImage> {
 						Skill skill = Utils.getRandomEntry(skills);
 
 						tgts = skill.getTargets(this, curr).stream()
-								.filter(a -> a != null && !a.isOutOfCombat() && skill.canCpuUse(this, curr, a) != Boolean.FALSE)
+								.filter(a -> a != null && skill.canCpuUse(this, curr, a) != Boolean.FALSE)
 								.toList();
 
 						if (!tgts.isEmpty()) {
