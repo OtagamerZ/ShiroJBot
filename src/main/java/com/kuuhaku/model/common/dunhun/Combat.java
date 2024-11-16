@@ -507,7 +507,7 @@ public class Combat implements Renderer<BufferedImage> {
 						}
 					}
 
-					if (!skills.isEmpty() && (forcing || !canAttack || Calc.chance(33))) {
+					if (!skills.isEmpty()) {
 						Skill skill = Utils.getRandomEntry(skills);
 
 						tgts = skill.getTargets(this, curr).stream()
@@ -515,10 +515,22 @@ public class Combat implements Renderer<BufferedImage> {
 								.toList();
 
 						if (!tgts.isEmpty()) {
-							Actor t = Utils.getWeightedEntry(rngList, a -> a.getTeam() == curr.getTeam() ? 1 : a.getAggroScore(), tgts);
+							Actor t = Utils.getWeightedEntry(rngList, a -> {
+								if (a.getTeam() == curr.getTeam()) return 1;
 
-							skill(skill, curr, t);
-							return;
+								Senshi sen = a.getSenshi();
+								return a.getAggroScore() * (1 - sen.getDodge() / 100) * (1 - sen.getParry() / 100);
+							}, tgts);
+
+							if (t.getTeam() == curr.getTeam()) {
+								skill(skill, curr, t);
+								return;
+							}
+
+							if (t.equals(curr) || (forcing || !canAttack || Calc.chance(50))) {
+								skill(skill, curr, t);
+								return;
+							}
 						}
 					}
 

@@ -47,13 +47,7 @@ public interface Actor {
 		if (!pure && game != null) {
 			Senshi sen = getSenshi();
 			if (value < 0) {
-				double fac = sen.isDefending() ? 2 : 1;
-				if (game.isDuel()) {
-					fac *= 25;
-				}
-
-				value = -value;
-				value = (int) -Math.max(value / (5 * fac), ((5 / fac) * Math.pow(value, 2)) / (sen.getDfs() + (5 / fac) * value));
+				value = applyMitigation(-value);
 			}
 
 			if (sen.isStasis()) {
@@ -91,6 +85,19 @@ public interface Actor {
 			Combat comb = game.getCombat();
 			comb.trigger(Trigger.ON_GRAVEYARD, this, this);
 		}
+	}
+
+	default int applyMitigation(int raw) {
+		Dunhun game = getGame();
+		if (raw < 0 || game == null) return raw;
+
+		Senshi sen = getSenshi();
+		double fac = sen.isDefending() ? 2 : 1;
+		if (game.isDuel()) {
+			fac *= 25;
+		}
+
+		return (int) -Math.max(raw / (5 * fac), ((5 / fac) * Math.pow(raw, 2)) / (sen.getDfs() + (5 / fac) * raw));
 	}
 
 	default void setHp(int value) {
