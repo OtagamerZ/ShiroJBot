@@ -635,7 +635,9 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void attack(Actor source, Actor target, Double damageMult) {
-		source.modAp(-1);
+		if (damageMult == null) {
+			source.modAp(-1);
+		}
 
 		trigger(Trigger.ON_DEFEND, target, source);
 
