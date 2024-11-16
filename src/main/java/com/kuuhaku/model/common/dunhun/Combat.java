@@ -506,7 +506,7 @@ public class Combat implements Renderer<BufferedImage> {
 						Boolean canUse = s.canCpuUse(this, curr, null);
 						if (canUse == null) {
 							if (!forcing) skills.add(s);
-						} else if (canUse) {
+						} else if (canUse && s.getCd() == 0) {
 							if (!forcing) skills.clear();
 							forcing = true;
 							skills.add(s);
