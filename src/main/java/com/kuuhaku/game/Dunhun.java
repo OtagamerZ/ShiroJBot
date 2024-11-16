@@ -261,7 +261,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 									}
 
 									if (!rl.entries().isEmpty()) {
-										dropFac = 10 * switch (m.getRarityClass()) {
+										dropFac = 5 * switch (m.getRarityClass()) {
 											case NORMAL -> 1;
 											case MAGIC -> 1.2;
 											case RARE -> 1.5;
@@ -269,7 +269,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 										} * mf;
 
 										while (Calc.chance(dropFac)) {
-											lt.gear().add(Gear.getRandom(m, null));
+											lt.items().add(DAO.find(UserItem.class, rl.get()));
 											dropFac /= 2;
 										}
 									}
