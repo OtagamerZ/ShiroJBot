@@ -220,11 +220,11 @@ public class Combat implements Renderer<BufferedImage> {
 	public void process() {
 		if (done) return;
 
+		trigger(Trigger.ON_COMBAT);
 		actors.sort(Comparator
 				.comparingInt(Actor::getInitiative).reversed()
 				.thenComparingInt(n -> Calc.rng(20, seed - n.hashCode()))
 		);
-		trigger(Trigger.ON_COMBAT);
 
 		loop:
 		for (Actor turn : actors) {
