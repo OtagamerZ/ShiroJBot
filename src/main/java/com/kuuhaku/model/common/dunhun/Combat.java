@@ -858,15 +858,13 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void trigger(Trigger t) {
-		trigger(t, null, null);
+		for (Actor a : actors.values()) {
+			trigger(t, a, a);
+		}
 	}
 
 	public void trigger(Trigger t, Actor from, Actor to) {
 		for (EffectBase e : Set.copyOf(effects)) {
-			if (from == null) {
-				from = e.getOwner();
-			}
-
 			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) {
 				continue;
 			} else if (!e.getOwner().equals(from)) {

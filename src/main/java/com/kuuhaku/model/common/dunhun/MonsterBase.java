@@ -277,7 +277,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 				}
 				case MAGIC -> 1.25;
 				default -> 1;
-			} * (1 + game.getAreaLevel() * (0.2 + game.getAreaLevel() * 0.001));
+			} * (1 + game.getAreaLevel() * 0.2);
 
 			if (game.getPartySize() > 1 && team == Team.KEEPERS) {
 				mult *= 1 + game.getPartySize() * 0.3;
