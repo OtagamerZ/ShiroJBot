@@ -226,7 +226,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							int xpGained = 0;
 							double mf = 1 + heroes.values().stream()
 									.mapToDouble(h -> h.getModifiers().getMagicFind().get())
-									.sum() * getAreaLevel() * 0.02;
+									.sum() + (getAreaLevel() * 0.02);
 
 							XStringBuilder sb = new XStringBuilder();
 							for (Actor a : getCombat().getActors(Team.KEEPERS)) {
