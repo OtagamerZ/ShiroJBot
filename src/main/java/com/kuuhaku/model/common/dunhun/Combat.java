@@ -518,7 +518,7 @@ public class Combat implements Renderer<BufferedImage> {
 								if (a.getTeam() == curr.getTeam()) return 1;
 
 								Senshi sen = a.getSenshi();
-								return a.getAggroScore() * (1 - sen.getDodge() / 100) * (1 - sen.getParry() / 100);
+								return (int) (a.getAggroScore() * (1 - sen.getDodge() / 100d) * (1 - sen.getParry() / 100d));
 							}, tgts);
 
 							if (t.getTeam() == curr.getTeam()) {
