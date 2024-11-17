@@ -873,7 +873,7 @@ public class Combat implements Renderer<BufferedImage> {
 		for (EffectBase e : Set.copyOf(effects)) {
 			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) {
 				continue;
-			} else if (!e.getOwner().equals(from) || e.getOwner().isOutOfCombat()) {
+			} else if (!e.getOwner().equals(from)) {
 				if (!getActors().contains(e.getOwner())) effects.remove(e);
 				continue;
 			}
