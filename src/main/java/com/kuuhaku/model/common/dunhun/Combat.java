@@ -11,6 +11,7 @@ import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.*;
+import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
@@ -865,6 +866,10 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void trigger(Trigger t, Actor from, Actor to) {
+		if (t == Trigger.ON_TICK) {
+			from.getModifiers().removeIf(from, ValueMod::isExpired);
+		}
+
 		for (EffectBase e : Set.copyOf(effects)) {
 			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) {
 				continue;
