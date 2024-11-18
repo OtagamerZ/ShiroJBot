@@ -83,7 +83,7 @@ public class Boss extends MonsterBase<Boss> {
 
 	@Override
 	public int getMaxHp() {
-		return (int) (stats.getBaseHp() * (1 + getGame().getAreaLevel() / 5d));
+		return (int) Math.max(1, stats.getBaseHp() * (1 + getGame().getAreaLevel() / 5d));
 	}
 
 	@Override
