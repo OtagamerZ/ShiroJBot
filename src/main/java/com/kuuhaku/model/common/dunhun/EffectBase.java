@@ -4,6 +4,7 @@ import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
@@ -20,6 +21,7 @@ public abstract class EffectBase {
 		this.effect = effect;
 	}
 
+	@Nullable
 	public Actor getOwner() {
 		return owner;
 	}

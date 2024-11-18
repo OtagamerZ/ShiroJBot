@@ -265,7 +265,7 @@ public class Combat implements Renderer<BufferedImage> {
 					current.getModifiers().expireMods(current);
 
 					for (EffectBase e : Set.copyOf(effects)) {
-						if (!e.getOwner().equals(current)) {
+						if (e.getOwner() != null && !e.getOwner().equals(current)) {
 							if (!getActors().contains(e.getOwner())) effects.remove(e);
 							continue;
 						}
@@ -310,7 +310,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		done = true;
 		for (EffectBase e : effects) {
-			if (e.getOwner() instanceof Hero) {
+			if (e.getOwner() == null || e.getOwner() instanceof Hero) {
 				game.getEffects().add(e);
 			}
 		}
@@ -873,7 +873,7 @@ public class Combat implements Renderer<BufferedImage> {
 		for (EffectBase e : Set.copyOf(effects)) {
 			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) {
 				continue;
-			} else if (!e.getOwner().equals(from)) {
+			} else if (e.getOwner() != null && !e.getOwner().equals(from)) {
 				if (!getActors().contains(e.getOwner())) effects.remove(e);
 				continue;
 			}
