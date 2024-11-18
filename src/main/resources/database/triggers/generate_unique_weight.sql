@@ -35,7 +35,7 @@ $$;
 
 DROP TRIGGER IF EXISTS generate_unique_weight ON "unique";
 CREATE TRIGGER generate_unique_weight
-    BEFORE UPDATE
+    BEFORE UPDATE OF weight OR INSERT
     ON "unique"
     FOR EACH ROW
     WHEN (NEW.weight = -1)

@@ -209,7 +209,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					Collection<Hero> hs = heroes.values();
-					if (hs.stream().allMatch(a -> a.isOutOfCombat() || a.getTeam() != Team.HUNTERS)) {
+					if (hs.stream().allMatch(a -> a.isOutOfCombat() || a.isMindControlled())) {
 						for (Hero h : hs) {
 							if (h.getHp() > 0) continue;
 
