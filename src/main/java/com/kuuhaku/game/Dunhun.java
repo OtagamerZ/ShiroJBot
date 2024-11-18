@@ -229,10 +229,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 									.mapToDouble(h -> h.getModifiers().getMagicFind().get())
 									.sum() + (getAreaLevel() * 0.02);
 
+							Loot loot = getCombat().getLoot();
 							XStringBuilder sb = new XStringBuilder();
 							for (Actor a : getCombat().getActors(Team.KEEPERS)) {
-								Loot loot = getCombat().getLoot();
-
 								if (a instanceof MonsterBase<?> m && m.getHp() == 0) {
 									if (m.getStats().isMinion()) continue;
 									xpGained += m.getKillXp();
@@ -279,22 +278,22 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 									loot.add(lt);
 								}
+							}
 
-								if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
-									this.loot.add(loot);
+							if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
+								this.loot.add(loot);
 
-									for (Gear g : loot.gear()) {
-										String name = g.getName(getLocale());
-										if (g.getRarityClass() == RarityClass.RARE) {
-											name += ", " + g.getBasetype().getInfo(getLocale()).getName();
-										}
-
-										sb.appendNewLine("- " + name);
+								for (Gear g : loot.gear()) {
+									String name = g.getName(getLocale());
+									if (g.getRarityClass() == RarityClass.RARE) {
+										name += ", " + g.getBasetype().getInfo(getLocale()).getName();
 									}
 
-									for (UserItem i : loot.items().uniqueSet()) {
-										sb.appendNewLine("- " + i.getName(getLocale()) + " (x" + loot.items().getCount(i) + ")");
-									}
+									sb.appendNewLine("- " + name);
+								}
+
+								for (UserItem i : loot.items().uniqueSet()) {
+									sb.appendNewLine("- " + i.getName(getLocale()) + " (x" + loot.items().getCount(i) + ")");
 								}
 							}
 
