@@ -187,7 +187,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								}
 
 								if (!skipped) {
-									if (Calc.chance(Math.max(5, 15 - getTurn()))) {
+									if (Calc.chance(10)) {
 										runEvent();
 									} else {
 										runCombat();
