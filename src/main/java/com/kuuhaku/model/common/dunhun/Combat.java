@@ -308,6 +308,8 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 		}
 
+		trigger(Trigger.ON_VICTORY);
+
 		done = true;
 		for (EffectBase e : effects) {
 			if (e.getOwner() == null || e.getOwner() instanceof Hero) {

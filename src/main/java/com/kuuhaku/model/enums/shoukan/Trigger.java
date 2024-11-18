@@ -52,7 +52,8 @@ public enum Trigger {
 	ON_COMBAT,
 
 	/**
-	 * When victory is imminent
+	 * When victory is imminent<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_VICTORY,
 
