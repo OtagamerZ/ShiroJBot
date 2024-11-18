@@ -89,7 +89,7 @@ public class HeroInspectCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setThumbnail("attachment://thumb.png");
 
-		if (g.getRarityClass() == RarityClass.RARE) {
+		if (g.getRarityClass().ordinal() >= RarityClass.RARE.ordinal()) {
 			eb.setTitle(g.getName(locale) + ", " + g.getBasetype().getInfo(locale).getName());
 		} else {
 			eb.setTitle(g.getName(locale));
