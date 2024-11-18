@@ -41,6 +41,7 @@ import org.intellij.lang.annotations.MagicConstant;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -458,10 +459,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 				for (Gear g : loot.gear()) {
 					Hero h = robin.getNext();
 					g.setOwner(h);
-					g.save();
 
 					dist.computeIfAbsent(h.getName(), k -> new ArrayList<>()).add(g.getName(getLocale()));
 				}
+				DAO.insertBatch(loot.gear());
 
 				Map<Hero, Map<UserItem, Integer>> split = new HashMap<>();
 				for (UserItem i : loot.items()) {
@@ -486,7 +487,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 					));
 				}
 
-				getChannel().buffer(getLocale().get("str/dungeon_loot_split") + "\n" + sb);
+				if (sb.length() > Message.MAX_CONTENT_LENGTH * 0.75) {
+					getChannel().sendMessage(getLocale().get("str/dungeon_loot_split"))
+							.addFile(sb.toString().getBytes(StandardCharsets.UTF_8), "loot.txt")
+							.queue();
+				} else {
+					getChannel().buffer(getLocale().get("str/dungeon_loot_split") + "\n" + sb);
+				}
 			}
 		}
 	}
