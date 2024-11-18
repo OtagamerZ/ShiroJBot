@@ -25,6 +25,7 @@ import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.ClusterAction;
 import com.kuuhaku.model.records.dunhun.CombatContext;
+import com.kuuhaku.model.records.dunhun.Loot;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -89,6 +90,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
 	private final RandomList<Actor> rngList = new RandomList<>();
 	private final Set<EffectBase> effects = new HashSet<>();
+	private final Loot loot = new Loot();
 
 	private CompletableFuture<Runnable> lock;
 	private boolean done;
@@ -855,6 +857,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public Actor getCurrent() {
 		return current;
+	}
+
+	public Loot getLoot() {
+		return loot;
 	}
 
 	public boolean isDone() {

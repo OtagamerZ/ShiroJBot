@@ -231,6 +231,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 							XStringBuilder sb = new XStringBuilder();
 							for (Actor a : getCombat().getActors(Team.KEEPERS)) {
+								Loot loot = getCombat().getLoot();
+
 								if (a instanceof MonsterBase<?> m && m.getHp() == 0) {
 									if (m.getStats().isMinion()) continue;
 									xpGained += m.getKillXp();
@@ -275,21 +277,23 @@ public class Dunhun extends GameInstance<NullPhase> {
 										}
 									}
 
-									if (!lt.gear().isEmpty() || !lt.items().isEmpty()) {
-										loot.add(lt);
+									loot.add(lt);
+								}
 
-										for (Gear g : lt.gear()) {
-											String name = g.getName(getLocale());
-											if (g.getRarityClass() == RarityClass.RARE) {
-												name += ", " + g.getBasetype().getInfo(getLocale()).getName();
-											}
+								if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
+									this.loot.add(loot);
 
-											sb.appendNewLine("- " + name);
+									for (Gear g : loot.gear()) {
+										String name = g.getName(getLocale());
+										if (g.getRarityClass() == RarityClass.RARE) {
+											name += ", " + g.getBasetype().getInfo(getLocale()).getName();
 										}
 
-										for (UserItem i : lt.items().uniqueSet()) {
-											sb.appendNewLine("- " + i.getName(getLocale()) + " (x" + lt.items().getCount(i) + ")");
-										}
+										sb.appendNewLine("- " + name);
+									}
+
+									for (UserItem i : loot.items().uniqueSet()) {
+										sb.appendNewLine("- " + i.getName(getLocale()) + " (x" + loot.items().getCount(i) + ")");
 									}
 								}
 							}
