@@ -208,8 +208,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 						getCombat().process();
 					}
 
-					List<Hero> hs = List.copyOf(heroes.values());
-					if (hs.stream().allMatch(Actor::isOutOfCombat)) {
+					Collection<Hero> hs = heroes.values();
+					if (hs.stream().allMatch(a -> a.isOutOfCombat() || a.getTeam() != Team.HUNTERS)) {
 						for (Hero h : hs) {
 							if (h.getHp() > 0) continue;
 
