@@ -155,7 +155,7 @@ public class HeroCommand implements Executable {
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()));
 
-		byte[] attr = new byte[4];
+		int[] attr = new int[4];
 		Attributes alloc = h.getStats().getAttributes();
 		Supplier<Integer> remaining = () -> Math.max(0, h.getStats().getPointsLeft() - (attr[0] + attr[1] + attr[2] + attr[3]));
 
@@ -181,9 +181,29 @@ public class HeroCommand implements Executable {
 		};
 
 		updateDesc.accept((ch, i) -> helper.addAction(Utils.parseEmoji(Utils.fancyLetter(ch)), w -> {
-			if (remaining.get() <= 0) return;
+			w.getChannel().sendMessage(locale.get("str/select_a_value", locale.get("attr/" + AttrType.values()[i]).toLowerCase())).queue();
 
-			attr[i]++;
+			Message m = Utils.awaitMessage(
+					h.getAccount().getUid(),
+					(GuildMessageChannel) w.getChannel(),
+					ms -> StringUtils.isNumeric(ms.getContentRaw()),
+					1, TimeUnit.MINUTES, null
+			).join();
+
+			if (m == null) {
+				w.getChannel().sendMessage(locale.get("error/invalid_value")).queue();
+				return;
+			}
+
+			int v = Integer.parseInt(m.getContentRaw());
+			int max = Math.min(remaining.get(), 127);
+			if (!Utils.between(v, 0, max)) {
+				w.getChannel().sendMessage(locale.get("error/invalid_value_range", 0, max)).queue();
+				return;
+			}
+
+			attr[i] = v;
+			w.getChannel().sendMessage(locale.get("success/value_set")).queue();
 			updateDesc.accept(null);
 		}));
 
