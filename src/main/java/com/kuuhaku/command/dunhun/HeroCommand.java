@@ -197,7 +197,7 @@ public class HeroCommand implements Executable {
 
 			int v = Integer.parseInt(m.getContentRaw());
 			int max = Math.min(remaining.get(), 127);
-			if (!Utils.between(v, attr[i], max)) {
+			if (!Utils.between(v, 0, max)) {
 				w.getChannel().sendMessage(locale.get("error/invalid_value_range", 0, max)).queue();
 				return;
 			}
