@@ -331,10 +331,12 @@ public class Hero extends DAO<Hero> implements Actor {
 		JSONArray out = new JSONArray();
 		Equipment equips = getEquipment();
 
+		int weapons = 0;
 		boolean unarmed = true;
 		for (Gear g : equips.getWeapons().getEntries()) {
 			if (g.isWeapon()) {
 				if (!g.getTags().contains("UNARMED")) unarmed = false;
+				weapons++;
 			}
 
 			out.addAll(g.getTags());
@@ -342,6 +344,10 @@ public class Hero extends DAO<Hero> implements Actor {
 
 		if (unarmed) {
 			out.add("UNARMED");
+		}
+
+		if (weapons >= 2) {
+			out.add("DUAL_WIELD");
 		}
 
 		return out;
