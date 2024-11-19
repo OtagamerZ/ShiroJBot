@@ -204,6 +204,8 @@ public interface Actor {
 
 	void trigger(Trigger trigger, Actor target);
 
+	void shiftInto(Actor a);
+
 	RegDeg getRegDeg();
 
 	Senshi asSenshi(I18N locale);

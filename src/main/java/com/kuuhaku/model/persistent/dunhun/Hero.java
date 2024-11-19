@@ -375,6 +375,17 @@ public class Hero extends DAO<Hero> implements Actor {
 		}
 	}
 
+	@Override
+	public void shiftInto(Actor a) {
+		if (a == null) {
+			senshiCache = null;
+			skillCache = null;
+		} else {
+			senshiCache = a.getSenshi();
+			skillCache = a.getSkills();
+		}
+	}
+
 	public int getInventoryCapacity() {
 		return 50 + getAttributes().str() * 5;
 	}

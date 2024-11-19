@@ -211,6 +211,17 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		}
 	}
 
+	@Override
+	public void shiftInto(Actor a) {
+		if (a == null) {
+			senshiCache = null;
+			skillCache = null;
+		} else {
+			senshiCache = a.getSenshi();
+			skillCache = a.getSkills();
+		}
+	}
+
 	public int getKillXp() {
 		if (stats.isMinion()) return 0;
 
