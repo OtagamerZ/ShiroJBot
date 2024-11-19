@@ -381,8 +381,10 @@ public class Hero extends DAO<Hero> implements Actor {
 			senshiCache = null;
 			skillCache = null;
 		} else {
-			senshiCache = a.getSenshi();
-			skillCache = a.getSkills();
+			senshiCache = a.getSenshi().copy();
+			skillCache = a.getSkills().stream()
+					.map(s -> DAO.find(Skill.class, s.getId()))
+					.collect(Collectors.toCollection(ArrayList::new));
 		}
 	}
 
