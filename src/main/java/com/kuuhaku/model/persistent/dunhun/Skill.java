@@ -47,7 +47,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "skill", schema = "dunhun")
-public class Skill extends DAO<Skill> {
+public class Skill extends DAO<Skill> implements Cloneable {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -88,7 +88,7 @@ public class Skill extends DAO<Skill> {
 	private Race reqRace;
 
 	@Transient
-	private final transient JSONObject ctxVar = new JSONObject();
+	private transient JSONObject ctxVar = new JSONObject();
 	private transient int cd = 0;
 
 	public String getId() {
@@ -261,5 +261,18 @@ public class Skill extends DAO<Skill> {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(id);
+	}
+
+	@Override
+	public Skill clone() {
+		try {
+			Skill clone = (Skill) super.clone();
+			clone.reqTags = new JSONArray(reqTags);
+			clone.ctxVar = new JSONObject(ctxVar);
+
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new AssertionError();
+		}
 	}
 }

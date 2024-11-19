@@ -27,11 +27,9 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.awt.image.BufferedImage;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -217,8 +215,10 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 			senshiCache = null;
 			skillCache = null;
 		} else {
-			senshiCache = a.getSenshi();
-			skillCache = a.getSkills();
+			senshiCache = a.getSenshi().copy();
+			skillCache = a.getSkills().stream()
+					.map(Skill::clone)
+					.collect(Collectors.toCollection(ArrayList::new));
 		}
 	}
 
