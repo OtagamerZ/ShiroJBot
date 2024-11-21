@@ -21,26 +21,23 @@ CREATE OR REPLACE FUNCTION t_make_evil()
     LANGUAGE plpgsql
 AS
 $$
+DECLARE
+    ids VARCHAR[];
 BEGIN
+    SELECT array_agg(g.id)
+    FROM gear g
+             INNER JOIN hero h ON h.id = g.owner_id
+    WHERE h.id = ?1
+      AND NOT jsonb_path_exists(h.equipment, '$.* ? (@ == $val)', cast('{"val": ' || g.id || '}' AS JSONB))
+    INTO ids;
+
     DELETE
     FROM gear_affix
-    WHERE gear_id IN (
-                SELECT g.id
-                FROM gear g
-                         INNER JOIN hero h ON h.id = g.owner_id
-                WHERE h.id = ?1
-                  AND NOT jsonb_path_exists(h.equipment, '$.* ? (@ == $val)', cast('{"val": ' || g.id || '}' AS JSONB))
-                );
+    WHERE gear_id = ANY(ids);
 
     DELETE
     FROM gear
-    WHERE id IN (
-                SELECT g.id
-                FROM gear g
-                         INNER JOIN hero h ON h.id = g.owner_id
-                WHERE h.id = ?1
-                  AND NOT jsonb_path_exists(h.equipment, '$.* ? (@ == $val)', cast('{"val": ' || g.id || '}' AS JSONB))
-                );
+    WHERE id = ANY(ids);
 
     RETURN NEW;
 END;
