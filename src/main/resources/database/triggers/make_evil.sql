@@ -27,7 +27,7 @@ BEGIN
     SELECT array_agg(g.id)
     FROM gear g
              INNER JOIN hero h ON h.id = g.owner_id
-    WHERE h.id = ?1
+    WHERE h.id = NEW.id
       AND NOT jsonb_path_exists(h.equipment, '$.* ? (@ == $val)', cast('{"val": ' || g.id || '}' AS JSONB))
     INTO ids;
 
