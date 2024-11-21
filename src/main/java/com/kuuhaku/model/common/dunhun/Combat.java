@@ -69,7 +69,7 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setFleed(false);
 		a.setTeam(Team.HUNTERS);
 		a.setGame(getGame());
-		getActors(a.getTeam().getOther()).remove(a);
+		getActors(Team.KEEPERS).remove(a);
 		actors.add(a);
 
 		a.getSenshi().setAvailable(true);
@@ -81,7 +81,7 @@ public class Combat implements Renderer<BufferedImage> {
 		a.setFleed(false);
 		a.setTeam(Team.KEEPERS);
 		a.setGame(getGame());
-		getActors(a.getTeam().getOther()).remove(a);
+		getActors(Team.HUNTERS).remove(a);
 		actors.add(a);
 
 		a.getSenshi().setAvailable(true);
