@@ -59,8 +59,7 @@ import java.util.stream.Collectors;
 @Command(
 		name = "hero",
 		path = "inspect",
-		category = Category.INFO,
-		beta = true
+		category = Category.INFO
 )
 @Syntax("<gear:number:r>")
 public class HeroInspectCommand implements Executable {

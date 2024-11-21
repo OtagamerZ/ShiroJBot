@@ -39,8 +39,7 @@ import javax.imageio.ImageIO;
 @Command(
 		name = "hero",
 		path = "image",
-		category = Category.MISC,
-		beta = true
+		category = Category.MISC
 )
 @Syntax(allowEmpty = true, value = "<url:text:r>")
 public class HeroImageCommand implements Executable {

@@ -48,8 +48,7 @@ import java.util.Map;
 @Command(
 		name = "hero",
 		path = "buy",
-		category = Category.MISC,
-		beta = true
+		category = Category.MISC
 )
 @Syntax(allowEmpty = true, value = "<id:word:r> <amount:number>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)

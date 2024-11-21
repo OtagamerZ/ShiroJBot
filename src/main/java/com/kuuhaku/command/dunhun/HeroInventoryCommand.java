@@ -39,8 +39,7 @@ import java.util.List;
 @Command(
 		name = "hero",
 		path = "inventory",
-		category = Category.INFO,
-		beta = true
+		category = Category.INFO
 )
 public class HeroInventoryCommand implements Executable {
 	@Override
