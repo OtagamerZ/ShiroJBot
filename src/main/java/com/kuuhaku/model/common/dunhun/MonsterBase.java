@@ -40,7 +40,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 
 	static {
 		for (int i = 0; i < 1000; i++) {
-			hpTable[i] = 1 + i / 3d;
+			hpTable[i] = 1 + i / 5d;
 			statTable[i] = 15 * i / (i + 100d);
 		}
 	}
