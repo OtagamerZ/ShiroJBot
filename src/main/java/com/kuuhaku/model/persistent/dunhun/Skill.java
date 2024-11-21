@@ -132,7 +132,7 @@ public class Skill extends DAO<Skill> implements Cloneable {
 			int max = NumberUtils.toInt(v.group(2), min);
 			int cap = NumberUtils.toInt(v.group(3), 0);
 
-			int val = (int) ((min + (max - min) / 100d * level) * mult);
+			int val = (int) (min + (max - min) / 100d * level * mult);
 			if (cap != 0) {
 				val = Calc.clamp(val, -cap, cap);
 			}
