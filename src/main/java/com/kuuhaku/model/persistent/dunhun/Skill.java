@@ -24,16 +24,17 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
 import com.kuuhaku.model.records.dunhun.Attributes;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
@@ -109,46 +110,36 @@ public class Skill extends DAO<Skill> implements Cloneable {
 
 	public String getDescription(I18N locale, Actor source, List<Integer> values) {
 		String desc = getInfo(locale).setUwu(false).getDescription();
+
+		int level;
+		double mult;
 		if (source instanceof Hero h) {
-			Attributes attr = h.getAttributes();
-
-			double scale;
-			String type = Utils.extract(desc, "(?<=^\\()\\w+(?=\\))");
-			if (type != null) {
-				int atb = switch (AttrType.valueOf(type.toUpperCase())) {
-					case STR -> attr.str();
-					case DEX -> attr.dex();
-					case WIS -> attr.wis();
-					case VIT -> attr.vit();
-					case LVL -> h.getStats().getLevel();
-				};
-
-				scale = (1 + atb / (9d + atb * Math.pow(0.95, attr.wis()))) * (h.asSenshi(locale).getPower() + (int) (attr.wis() / 10d) * 0.1);
-			} else {
-				scale = h.asSenshi(locale).getPower() + (int) (attr.wis() / 10d) * 0.1;
-			}
-
-			desc = Utils.regex(desc, "\\{(\\d+)}").replaceAll(v -> {
-				int val = (int) (Integer.parseInt(v.group(1)) * scale);
-				values.add(val);
-				return "**" + val + "**";
-			});
+			level = h.getStats().getLevel();
+			mult = h.asSenshi(locale).getPower() + h.getAttributes().wis() / 100d;
 		} else {
 			MonsterBase<?> m = (MonsterBase<?>) source;
-			int area = m.getGame().getAreaLevel();
+			level = m.getGame().getAreaLevel();
 
-			double mult = switch (m.getRarityClass()) {
+			mult = switch (m.getRarityClass()) {
 				case RARE -> 2;
 				case MAGIC -> 1.25;
 				default -> 1;
-			} * (1 + area / (9d + area)) * (m.asSenshi(locale).getPower() + (int) (area / 10d) * 0.1);
-
-			desc = Utils.regex(desc, "\\{(\\d+)}").replaceAll(v -> {
-				int val = (int) (Integer.parseInt(v.group(1)) * mult);
-				values.add(val);
-				return "**" + val + "**";
-			});
+			} * (m.asSenshi(locale).getPower() + level / 200d);
 		}
+
+		desc = Utils.regex(desc, "\\{(\\d+)(?:-(\\d+))?}(%)?").replaceAll(v -> {
+			int min = Integer.parseInt(v.group(1));
+			int max = NumberUtils.toInt(v.group(2), min);
+			boolean prcnt = v.group(3) != null;
+
+			int val = (int) ((min + (max - min) / 100d * level) * mult);
+			if (prcnt) {
+				val = Calc.clamp(val, -max, max);
+			}
+
+			values.add(val);
+			return "**" + val + (prcnt ? "%" : "") + "**";
+		});
 
 		return desc;
 	}
