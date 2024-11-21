@@ -127,14 +127,14 @@ public class Skill extends DAO<Skill> implements Cloneable {
 			} * (m.asSenshi(locale).getPower() + level / 200d);
 		}
 
-		desc = Utils.regex(desc, "\\{(\\d+)(?:-(\\d+))?(:C)?}(%)?").replaceAll(v -> {
+		desc = Utils.regex(desc, "\\{(\\d+)(?:-(\\d+))?(?::\\((\\d+)\\))?}(%)?").replaceAll(v -> {
 			int min = Integer.parseInt(v.group(1));
 			int max = NumberUtils.toInt(v.group(2), min);
-			boolean cap = v.group(3) != null;
+			int cap = NumberUtils.toInt(v.group(3), 0);
 
 			int val = (int) ((min + (max - min) / 100d * level) * mult);
-			if (cap) {
-				val = Calc.clamp(val, -max, max);
+			if (cap != 0) {
+				val = Calc.clamp(val, -cap, cap);
 			}
 
 			values.add(val);
