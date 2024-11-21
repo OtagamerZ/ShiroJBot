@@ -31,13 +31,8 @@ BEGIN
       AND NOT jsonb_path_exists(h.equipment, '$.* ? (@ == $val)', cast('{"val": ' || g.id || '}' AS JSONB))
     INTO ids;
 
-    DELETE
-    FROM gear_affix
-    WHERE gear_id = ANY(ids);
-
-    DELETE
-    FROM gear
-    WHERE id = ANY(ids);
+    DELETE FROM gear_affix WHERE gear_id = ANY (ids);
+    DELETE FROM gear WHERE id = ANY (ids);
 
     RETURN NEW;
 END;
