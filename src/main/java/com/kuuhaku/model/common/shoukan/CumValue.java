@@ -117,7 +117,7 @@ public class CumValue implements Iterable<ValueMod> {
 		return set(value.doubleValue());
 	}
 
-	public ValueMod set(Supplier<Double> supplier) {
+	public ValueMod set(Supplier<Number> supplier) {
 		for (ValueMod mod : this.values) {
 			if (mod.isPermanent() && mod.getClass() == DynamicMod.class) {
 				((DynamicMod) mod).addSupplier(supplier);
@@ -130,18 +130,18 @@ public class CumValue implements Iterable<ValueMod> {
 		return mod;
 	}
 
-	public ValueMod set(Drawable<?> source, Supplier<Double> supplier) {
+	public ValueMod set(Drawable<?> source, Supplier<Number> supplier) {
 		return set(source, supplier, -1);
 	}
 
-	public ValueMod set(Drawable<?> source, Supplier<Double> supplier, int expiration) {
+	public ValueMod set(Drawable<?> source, Supplier<Number> supplier, int expiration) {
 		DynamicMod mod = new DynamicMod(source, supplier, expiration);
 		this.values.remove(mod);
 		this.values.add(mod);
 		return mod;
 	}
 
-	public ValueMod leftShift(Supplier<Double> supplier) {
+	public ValueMod leftShift(Supplier<Number> supplier) {
 		return set(supplier);
 	}
 

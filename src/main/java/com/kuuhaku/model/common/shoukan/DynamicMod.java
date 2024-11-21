@@ -25,27 +25,30 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class DynamicMod extends ValueMod {
-	private final List<Supplier<Double>> suppliers = new ArrayList<>();
+	private final List<Supplier<Number>> suppliers = new ArrayList<>();
 
-	protected DynamicMod(Supplier<Double> supplier) {
+	protected DynamicMod(Supplier<Number> supplier) {
 		this(null, supplier);
 	}
 
-	public DynamicMod(Drawable<?> source, Supplier<Double> supplier) {
+	public DynamicMod(Drawable<?> source, Supplier<Number> supplier) {
 		this(source, supplier, -1);
 	}
 
-	public DynamicMod(Drawable<?> source, Supplier<Double> supplier, int expiration) {
+	public DynamicMod(Drawable<?> source, Supplier<Number> supplier, int expiration) {
 		super(source, 0, expiration);
 		this.suppliers.add(supplier);
 	}
 
-	public void addSupplier(Supplier<Double> supplier) {
+	public void addSupplier(Supplier<Number> supplier) {
 		suppliers.add(supplier);
 	}
 
 	@Override
 	public double getValue() {
-		return super.getValue() + suppliers.parallelStream().map(Supplier::get).reduce(0d, Double::sum);
+		return super.getValue() + suppliers.parallelStream()
+				.map(Supplier::get)
+				.mapToDouble(Number::doubleValue)
+				.reduce(0d, Double::sum);
 	}
 }
