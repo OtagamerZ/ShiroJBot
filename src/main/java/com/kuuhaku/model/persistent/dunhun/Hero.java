@@ -213,7 +213,7 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public int getInitiative() {
-		return getAttributes().dex() / 3 + (int) modifiers.getInitiative().get();
+		return stats.getLevel() / 3 + (int) modifiers.getInitiative().get();
 	}
 
 	@Override
