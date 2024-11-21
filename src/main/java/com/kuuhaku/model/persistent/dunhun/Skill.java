@@ -101,7 +101,7 @@ public class Skill extends DAO<Skill> implements Cloneable {
 	}
 
 	public String getDescription(I18N locale) {
-		return getInfo(locale).getDescription().replaceAll("\\{(\\d+)}", "**$1**");
+		return getInfo(locale).getDescription().replaceAll("\\{(\\d+)(?:-\\d+)?}(%)?", "**$1$2**");
 	}
 
 	public String getDescription(I18N locale, Actor source) {
