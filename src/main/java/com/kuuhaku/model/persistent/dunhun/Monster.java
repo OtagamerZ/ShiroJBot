@@ -35,10 +35,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Entity
@@ -122,7 +119,7 @@ public class Monster extends MonsterBase<Monster> {
 			case RARE -> 2.25;
 			case MAGIC -> 1.5;
 			default -> 1;
-		} * (1 + getGame().getAreaLevel() * 0.25);
+		} * hpTable[getGame().getAreaLevel()];
 
 		if (getGame().getPartySize() > 1 && getTeam() == Team.KEEPERS) {
 			mult *= 1 + getGame().getPartySize() * 0.5;

@@ -35,6 +35,16 @@ import static jakarta.persistence.CascadeType.ALL;
 
 @MappedSuperclass
 public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> implements Actor {
+	protected static final double[] hpTable = new double[1000];
+	protected static final double[] statTable = new double[1000];
+
+	static {
+		for (int i = 0; i < 1000; i++) {
+			hpTable[i] = 1 + i / 2d;
+			statTable[i] = i / (i + 100d);
+		}
+	}
+
 	@Transient
 	public static final Deck DECK = Utils.with(new Deck(), d -> {
 		d.getStyling().setFrame(FrameSkin.GLITCH);
@@ -288,7 +298,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 				}
 				case MAGIC -> 1.25;
 				default -> 1;
-			} * (1 + game.getAreaLevel() * 0.2);
+			} * statTable[game.getAreaLevel()];
 
 			if (game.getPartySize() > 1 && team == Team.KEEPERS) {
 				mult *= 1 + game.getPartySize() * 0.3;

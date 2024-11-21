@@ -537,6 +537,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		modifiers.clear(this);
 		int dmg = 100;
 		int def = 100;
+		int wDmg = 0;
 
 		Attributes a = getAttributes();
 		for (Gear g : getEquipment()) {
@@ -549,48 +550,26 @@ public class Hero extends DAO<Hero> implements Actor {
 			} else {
 				double mult = 1;
 				if (g.getTags().contains("LIGHT")) {
-					mult *= 1 + a.dex() * 0.1f;
+					mult *= 1 + a.dex() * 0.05f;
 				}
 
 				if (g.getTags().contains("HEAVY")) {
-					mult *= 1 + a.str() * 0.1f;
+					mult *= 1 + a.str() * 0.05f;
+				}
+
+				if (g.getTags().contains("OFFHAND")) {
+					dmg += (int) (g.getDmg() * mult);
+				} else {
+					int d = (int) (g.getDmg() * mult);
+					if (wDmg > 0) {
+						wDmg = (int) ((wDmg + d) * 0.6);
+					} else {
+						wDmg += d;
+					}
 				}
 
 				def += (int) (g.getDfs() * mult);
 			}
-		}
-
-		List<Gear> wpns = getEquipment().getWeaponList().stream()
-				.filter(Gear::isWeapon)
-				.toList();
-
-		if (wpns.size() == 1) {
-			Gear wpn = wpns.getFirst();
-			double mult = 1;
-			if (wpn.getTags().contains("LIGHT")) {
-				mult *= 1 + a.dex() * 0.1f;
-			}
-
-			if (wpn.getTags().contains("HEAVY")) {
-				mult *= 1 + a.str() * 0.1f;
-			}
-
-			dmg += (int) (wpn.getDmg() * mult);
-		} else {
-			dmg += wpns.stream()
-					.mapToInt(g -> {
-						double mult = 1;
-						if (g.getTags().contains("LIGHT")) {
-							mult *= 1 + a.dex() * 0.1f;
-						}
-
-						if (g.getTags().contains("HEAVY")) {
-							mult *= 1 + a.str() * 0.1f;
-						}
-
-						return (int) (g.getDmg() * mult * 0.6);
-					})
-					.sum();
 		}
 
 		base.setAtk((int) (dmg * (1 + (a.str() + a.dex()) * 0.01)));
