@@ -491,6 +491,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				if (sb.length() > Message.MAX_CONTENT_LENGTH * 0.75) {
+					sb.clear();
+					for (Map.Entry<String, List<String>> e : dist.entrySet()) {
+						sb.appendNewLine(e.getKey() + ":");
+						for (String l : e.getValue()) {
+							sb.appendNewLine("- " + l);
+						}
+					}
+
 					getChannel().sendMessage(getLocale().get("str/dungeon_loot_split"))
 							.addFile(sb.toString().getBytes(StandardCharsets.UTF_8), "loot.txt")
 							.queue();
