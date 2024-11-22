@@ -497,6 +497,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						for (String l : e.getValue()) {
 							sb.appendNewLine("- " + l);
 						}
+						sb.nextLine();
 					}
 
 					getChannel().sendMessage(getLocale().get("str/dungeon_loot_split"))
