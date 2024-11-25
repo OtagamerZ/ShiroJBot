@@ -36,7 +36,7 @@ public class HeroStats {
 	private static final NavigableMap<Integer, Integer> xpTable = new TreeMap<>();
 
 	static {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 1000; i++) {
 			xpTable.put((int) (Math.pow(i, 1.8) * 10), i + 1);
 		}
 	}
@@ -74,7 +74,7 @@ public class HeroStats {
 	}
 
 	public int getPointsLeft() {
-		return (4 + getLevel()) - attributes.count() - unlockedSkills.size();
+		return (4 + Math.min(100, getLevel())) - attributes.count() - unlockedSkills.size();
 	}
 
 	public int getXpToCurrent() {
@@ -82,14 +82,10 @@ public class HeroStats {
 	}
 
 	public int getXpToNext() {
-		if (getLevel() == 100) return 0;
-
 		return xpTable.ceilingKey(xp + 1);
 	}
 
 	public int getLosableXp() {
-		if (getLevel() == 100) return 0;
-
 		int next = getXpToNext();
 		return Math.min(next - getXpToCurrent(), (next - xp) / 2);
 	}
