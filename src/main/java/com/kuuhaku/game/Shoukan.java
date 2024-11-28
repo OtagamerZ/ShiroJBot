@@ -2177,9 +2177,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (handlePendingSelection("error/pending_choice")) return;
 
-			if (handlePendingSelection("error/pending_action")) return;
+			else if (handlePendingSelection("error/pending_action")) return;
 
-			if (getPhase() == Phase.COMBAT || !curr.canAttack()) {
+			else if (getPhase() == Phase.COMBAT || !curr.canAttack()) {
 				if (curr.getLockTime(Lock.TAUNT) > 0) {
 					List<SlotColumn> yours = getSlots(curr.getSide());
 					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
@@ -2216,9 +2216,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 				if (handlePendingSelection("error/pending_choice")) return;
 
-				if (handlePendingSelection("error/pending_action")) return;
+				else if (handlePendingSelection("error/pending_action")) return;
 
-				if (curr.getLockTime(Lock.TAUNT) > 0) {
+				else if (curr.getLockTime(Lock.TAUNT) > 0) {
 					List<SlotColumn> yours = getSlots(curr.getSide());
 					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
 						getChannel().sendMessage(getString("error/taunt_locked", curr.getLockTime(Lock.TAUNT))).queue();
@@ -2291,7 +2291,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						if (handlePendingSelection("error/pending_choice")) return;
 
-						if (handlePendingSelection("error/pending_action")) return;
+						else if (handlePendingSelection("error/pending_action")) return;
 
 						curr.manualDraw();
 						sendFileResponse(w.getHook(), IO.getBytes(curr.render(), "png"), "cards.png");
@@ -2305,7 +2305,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 							if (handlePendingSelection("error/pending_choice")) return;
 
-							if (handlePendingSelection("error/pending_action")) return;
+							else if (handlePendingSelection("error/pending_action")) return;
 
 							curr.manualDraw(curr.getRemainingDraws());
 							sendFileResponse(w.getHook(), IO.getBytes(curr.render(), "png"), "cards.png");
@@ -2319,7 +2319,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						if (handlePendingSelection("error/pending_choice")) return;
 
-						if (handlePendingSelection("error/pending_action")) return;
+						else if (handlePendingSelection("error/pending_action")) return;
 
 						int eths = (int) curr.getCards().stream()
 								.filter(Drawable::isEthereal)
@@ -2342,7 +2342,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						if (handlePendingSelection("error/pending_choice")) return;
 
-						if (handlePendingSelection("error/pending_action")) return;
+						else if (handlePendingSelection("error/pending_action")) return;
 
 						BondedList<Drawable<?>> deque = curr.getRealDeck();
 						List<SelectionCard> cards = new ArrayList<>();
@@ -2376,7 +2376,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 					if (handlePendingSelection("error/pending_choice")) return;
 
-					if (handlePendingSelection("error/pending_action")) return;
+					else if (handlePendingSelection("error/pending_action")) return;
 
 					List<SelectionCard> valid = curr.getCards().stream().filter(d -> {
 						if (d instanceof Evogear e && e.isAvailable()) {
@@ -2420,7 +2420,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 							if (handlePendingSelection("error/pending_choice")) return;
 
-							if (handlePendingSelection("error/pending_action")) return;
+							else if (handlePendingSelection("error/pending_action")) return;
 
 							try {
 								curr.requestChoice(null, valid, new SelectionRange(1, null), ds -> {
