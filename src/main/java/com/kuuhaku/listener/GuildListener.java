@@ -25,23 +25,63 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.InvalidSyntaxException;
 import com.kuuhaku.interfaces.annotations.Seasonal;
-import com.kuuhaku.model.common.*;
+
+import com.kuuhaku.model.common.SimpleMessageListener;
+import com.kuuhaku.model.common.AutoEmbedBuilder;
+import com.kuuhaku.model.common.StringTree;
+import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+
 import com.kuuhaku.model.common.drop.CandyDrop;
 import com.kuuhaku.model.common.drop.Drop;
 import com.kuuhaku.model.common.special.PadoruEvent;
 import com.kuuhaku.model.common.special.SpecialEvent;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.guild.*;
+
+import com.kuuhaku.model.persistent.guild.GuildConfig;
+import com.kuuhaku.model.persistent.guild.StarredMessage;
+import com.kuuhaku.model.persistent.guild.WelcomeSettings;
+import com.kuuhaku.model.persistent.guild.GoodbyeSettings;
+import com.kuuhaku.model.persistent.guild.GuildSettings;
+import com.kuuhaku.model.persistent.guild.LevelRole;
+import com.kuuhaku.model.persistent.guild.CustomAnswer;
+
 import com.kuuhaku.model.persistent.shiro.CommandMetrics;
-import com.kuuhaku.model.persistent.user.*;
-import com.kuuhaku.model.records.*;
-import com.kuuhaku.util.*;
+
+import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.Profile;
+import com.kuuhaku.model.persistent.user.UserItem;
+import com.kuuhaku.model.persistent.user.KawaiponCard;
+import com.kuuhaku.model.persistent.user.Title;
+
+import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.GuildBuff;
+import com.kuuhaku.model.records.EventData;
+import com.kuuhaku.model.records.PreparedCommand;
+import com.kuuhaku.model.records.PseudoUser;
+
+import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Spawn;
+import com.kuuhaku.util.IO;
+import com.kuuhaku.util.SyntaxParser;
+
 import com.ygimenez.json.JSONObject;
 import me.xuender.unidecode.Unidecode;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
+
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.Guild;
+
+
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
