@@ -65,118 +65,168 @@ import java.util.stream.Collectors;
 public class HeroInspectCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck d = data.profile().getAccount().getDeck();
-		if (d == null) {
+		// Obtém o deck do perfil do jogador
+		Deck deck = getDeck(data, event, locale);
+		if (deck == null) return;
+
+		// Obtém o herói associado ao deck
+		Hero hero = getHero(deck, event, data, locale);
+		if (hero == null) return;
+
+		// Obtém o gear
+		Gear gear = getGear(args, event, locale);
+		if (gear == null) return;
+
+		// Carrega as informações do gear em relação ao herói
+		gear.load(locale, hero);
+
+		// Constrói o embed com as informações do gear
+		EmbedBuilder embed = buildGearEmbed(gear, locale, hero);
+
+		// Cria e envia a mensagem com o embed e imagem
+		MessageCreateAction action = createMessageWithEmbed(event, gear, embed);
+    	action.queue();
+	}
+	// Recupera o deck do perfil do jogador
+	private Deck getDeck(EventData data, MessageData.Guild event, I18N locale) {
+		Deck deck = data.profile().getAccount().getDeck();
+		if (deck == null) {
 			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-			return;
+			return null;
 		}
-
-		Hero h = d.getHero();
-		if (h == null) {
+		return deck;
+	}
+	
+	// Recupera o herói do deck
+	private Hero getHero(Deck deck, MessageData.Guild event, EventData data, I18N locale) {
+		Hero hero = deck.getHero();
+		if (hero == null) {
 			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
-			return;
+			return null;
 		}
-
-		Gear g = DAO.find(Gear.class, args.getInt("gear"));
-		if (g == null) {
+		return hero;
+	}
+	
+	// Recupera o gear com base no argumento fornecido
+	private Gear getGear(JSONObject args, MessageData.Guild event, I18N locale) {
+		Gear gear = DAO.find(Gear.class, args.getInt("gear"));
+		if (gear == null) {
 			event.channel().sendMessage(locale.get("error/gear_not_found")).queue();
-			return;
 		}
+		return gear;
+	}
 
-		g.load(locale, h);
-		GearType type = g.getBasetype().getStats().gearType();
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
+	// Constrói o embed com as informações detalhadas do equipamento
+	private EmbedBuilder buildGearEmbed(Gear gear, I18N locale, Hero hero) {
+		EmbedBuilder embed = new ColorlessEmbedBuilder()
 				.setThumbnail("attachment://thumb.png");
 
-		if (g.getRarityClass() == RarityClass.RARE) {
-			eb.setTitle(g.getName(locale) + ", " + g.getBasetype().getInfo(locale).getName());
+		// Define o título do embed com base na raridade do gear
+		if (gear.getRarityClass() == RarityClass.RARE) {
+			embed.setTitle(gear.getName(locale) + ", " + gear.getBasetype().getInfo(locale).getName());
 		} else {
-			eb.setTitle(g.getName(locale));
+			embed.setTitle(gear.getName(locale));
 		}
 
-		if (g.getUnique() != null) {
-			eb.setFooter(g.getUnique().getInfo(locale).getDescription());
+		if (gear.getUnique() != null) {
+			embed.setFooter(gear.getUnique().getInfo(locale).getDescription());
 		}
 
-		JSONArray tags = g.getTags();
+		// Constrói a seção de tags e atributos do gear
+		buildTagsAndAttributes(gear, embed, locale);
+
+		// Constrói a seção de afixos
+		buildGearAffixes(gear, embed, locale);
+	
+		return embed;
+	}
+	
+	private void buildTagsAndAttributes(Gear gear, EmbedBuilder embed, I18N locale) {
+		GearType type = gear.getBasetype().getStats().gearType();
+
+		// Adiciona as tags do gear
+		JSONArray tags = gear.getTags();
 		if (!tags.isEmpty()) {
-			List<String> tgs = new ArrayList<>();
-			tgs.add(type.getInfo(locale).getName());
-
-			tgs.addAll(tags.stream()
+			List<String> tagNames = tags.stream()
 					.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
-					.toList()
-			);
-
-			eb.appendDescription("-# " + String.join(", ", tgs) + "\n\n");
+					.toList();
+			tagNames.add(type.getInfo(locale).getName());
+			embed.appendDescription("-# " + String.join(", ", tagNames) + "\n\n");
 		}
 
+		// Adiciona atributos
 		boolean hasStats = false;
-		GearStats stats = g.getBasetype().getStats();
-		if (g.getDmg() != 0) {
-			eb.appendDescription(locale.get("str/attack") + ": " + g.getDmg() + "\n");
-			hasStats = true;
-		}
-		if (g.getDfs() != 0) {
-			eb.appendDescription(locale.get("str/defense") + ": " + g.getDfs() + "\n");
-			hasStats = true;
-		}
-		if (g.getCritical() != 0) {
-			eb.appendDescription(locale.get("str/critical_chance") + ": " + Utils.roundToString(g.getCritical(), 2) + "%\n");
-			hasStats = true;
+		GearStats stats = gear.getBasetype().getStats();
+		if (gear.getDmg() != 0) {
+			embed.appendDescription(locale.get("str/attack") + ": " + gear.getDmg() + "\n");
 		}
 
+		if (gear.getDfs() != 0) {
+			embed.appendDescription(locale.get("str/defense") + ": " + gear.getDfs() + "\n");
+		}
+
+		if (gear.getCritical() != 0) {
+			embed.appendDescription(locale.get("str/critical_chance") + ": " + Utils.roundToString(gear.getCritical(), 2) + "%\n");
+		}
+		
 		if (hasStats) {
-			eb.appendDescription("\n");
+			embed.appendDescription("\n");
 		}
-
+		
+		// Adiciona requisitos de atributos
 		Attributes reqs = stats.requirements();
 		if (reqs.str() + reqs.dex() + reqs.wis() + reqs.vit() > 0) {
-			eb.appendDescription("-# " + locale.get("str/required_attributes") + "\n");
+			embed.appendDescription("-# " + locale.get("str/required_attributes") + "\n");
 		}
-
-		List<String> attrs = new ArrayList<>();
-		if (g.getReqLevel() > 0) attrs.add(locale.get("str/level", g.getReqLevel()));
-
+	
+		List<String> attributes = new ArrayList<>();
+		if (gear.getReqLevel() > 0) attributes.add(locale.get("str/level", gear.getReqLevel()));
 		for (AttrType t : AttrType.values()) {
 			if (t.ordinal() >= AttrType.LVL.ordinal()) break;
-
-			if (reqs.get(t) > 0) attrs.add(t + ": " + reqs.get(t) + " ");
+			if (reqs.get(t) > 0) attributes.add(t + ": " + reqs.get(t) + " ");
 		}
-
-		if (!attrs.isEmpty()) {
-			eb.appendDescription(String.join(" | ", attrs) + "\n\n");
+		if (!attributes.isEmpty()) {
+			embed.appendDescription(String.join(" | ", attributes) + "\n\n");
 		}
-
-		GearAffix imp = g.getImplicit();
-		if (imp != null) {
-			eb.appendDescription("-# " + locale.get("str/implicit") + "\n");
-			eb.appendDescription(imp.getDescription(locale, true) + "\n");
-			if (!g.getAffixes().isEmpty()) {
-				eb.appendDescription("──────────────────\n");
+	}
+	
+	// Adiciona afixos ao embed
+	private void buildGearAffixes(Gear gear, EmbedBuilder embed, I18N locale) {
+		GearAffix implicit = gear.getImplicit();
+		if (implicit != null) {
+			embed.appendDescription("-# " + locale.get("str/implicit") + "\n");
+			embed.appendDescription(implicit.getDescription(locale, true) + "\n");
+			if (!gear.getAffixes().isEmpty()) {
+				embed.appendDescription("──────────────────\n");
 			}
 		}
-
-		List<GearAffix> affs = g.getAffixes().stream()
+		
+		// Ordena e adiciona os afixos
+		List<GearAffix> affixes = gear.getAffixes().stream()
 				.sorted(Comparator
 						.<GearAffix, Boolean>comparing(ga -> ga.getAffix().getType() == AffixType.SUFFIX, Boolean::compareTo)
 						.thenComparing(ga -> ga.getAffix().getId())
 				)
 				.toList();
-
-		for (GearAffix ga : affs) {
-			eb.appendDescription("-# %s - %s%s\n".formatted(
+	
+		for (GearAffix ga : affixes) {
+			embed.appendDescription("-# %s - %s%s\n".formatted(
 					locale.get("str/" + ga.getAffix().getType()), ga.getName(locale),
 					ga.getAffix().getTags().isEmpty() ? "" : ga.getAffix().getTags().stream()
 							.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
 							.collect(Collectors.joining(", "))
 			));
-			eb.appendDescription(ga.getDescription(locale, true) + "\n\n");
+			embed.appendDescription(ga.getDescription(locale, true) + "\n\n");
 		}
-
-		MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
+	}
+	
+	// Cria a mensagem com embed e adiciona o ícone processado
+	private MessageCreateAction createMessageWithEmbed(MessageData.Guild event, Gear gear, EmbedBuilder embed) {
+		MessageCreateAction action = event.channel().sendMessageEmbeds(embed.build());
+	
+		GearType type = gear.getBasetype().getStats().gearType();
 		if (Utils.parseEmoji(type.getIcon()) instanceof CustomEmoji e) {
-			int[] color = Graph.unpackRGB((switch (g.getRarityClass()) {
+			int[] color = Graph.unpackRGB((switch (gear.getRarityClass()) {
 				case NORMAL -> Color.WHITE;
 				case MAGIC -> new Color(0x4BA5FF);
 				case RARE -> Color.ORANGE;
@@ -197,9 +247,8 @@ public class HeroInspectCommand implements Executable {
 				return Graph.packRGB(aux);
 			});
 
-			ma.addFiles(FileUpload.fromData(IO.getBytes(icon, "png"), "thumb.png"));
+			action.addFiles(FileUpload.fromData(IO.getBytes(icon, "png"), "thumb.png"));
 		}
-
-		ma.queue();
+		return action;
 	}
 }
