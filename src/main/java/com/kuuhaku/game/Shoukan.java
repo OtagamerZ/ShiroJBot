@@ -58,7 +58,9 @@ import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.collections4.list.TreeList;
@@ -2173,13 +2175,11 @@ public class Shoukan extends GameInstance<Phase> {
 		helper.addAction(Utils.parseEmoji("▶"), w -> {
 			if (isLocked()) return;
 
-			if (curr.selectionPending()) {
-				getChannel().sendMessage(getString("error/pending_choice")).queue();
-				return;
-			} else if (curr.selectionPending()) {
-				getChannel().sendMessage(getString("error/pending_action")).queue();
-				return;
-			} else if (getPhase() == Phase.COMBAT || !curr.canAttack()) {
+			if (handlePendingSelection("error/pending_choice")) return;
+
+			if (handlePendingSelection("error/pending_action")) return;
+
+			if (getPhase() == Phase.COMBAT || !curr.canAttack()) {
 				if (curr.getLockTime(Lock.TAUNT) > 0) {
 					List<SlotColumn> yours = getSlots(curr.getSide());
 					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
@@ -2214,13 +2214,11 @@ public class Shoukan extends GameInstance<Phase> {
 			helper.addAction(Utils.parseEmoji("⏩"), w -> {
 				if (isLocked()) return;
 
-				if (curr.selectionPending()) {
-					getChannel().sendMessage(getString("error/pending_choice")).queue();
-					return;
-				} else if (curr.selectionPending()) {
-					getChannel().sendMessage(getString("error/pending_action")).queue();
-					return;
-				} else if (curr.getLockTime(Lock.TAUNT) > 0) {
+				if (handlePendingSelection("error/pending_choice")) return;
+
+				if (handlePendingSelection("error/pending_action")) return;
+
+				if (curr.getLockTime(Lock.TAUNT) > 0) {
 					List<SlotColumn> yours = getSlots(curr.getSide());
 					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
 						getChannel().sendMessage(getString("error/taunt_locked", curr.getLockTime(Lock.TAUNT))).queue();
@@ -2247,24 +2245,15 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (h == null) return;
 			else if (h.selectionPending()) {
-				Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendFiles(FileUpload.fromData(IO.getBytes(h.renderChoices(), "png"), "choices.png"))
-						.queue();
+				sendFileResponse(w.getHook(), IO.getBytes(h.render(), "png"), "choices.png");
 				return;
 			}
 
-			Objects.requireNonNull(w.getHook())
-					.setEphemeral(true)
-					.sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png"))
-					.queue();
+			sendFileResponse(w.getHook(), IO.getBytes(h.render(), "png"), "hand.png");
 		});
 
 		helper.addAction(Utils.parseEmoji("\uD83D\uDD0D"), w -> {
-			Objects.requireNonNull(w.getHook())
-					.setEphemeral(true)
-					.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png"))
-					.queue();
+			sendFileResponse(w.getHook(), IO.getBytes(arena.renderEvogears(), "png"), "evogears.png");
 		});
 
 		helper.addAction(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
@@ -2300,19 +2289,12 @@ public class Shoukan extends GameInstance<Phase> {
 					helper.addAction(Utils.parseEmoji("📤"), w -> {
 						if (isLocked()) return;
 
-						if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_choice")).queue();
-							return;
-						} else if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_action")).queue();
-							return;
-						}
+						if (handlePendingSelection("error/pending_choice")) return;
+
+						if (handlePendingSelection("error/pending_action")) return;
 
 						curr.manualDraw();
-						Objects.requireNonNull(w.getHook())
-								.setEphemeral(true)
-								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
-								.queue();
+						sendFileResponse(w.getHook(), IO.getBytes(curr.render(), "png"), "cards.png");
 
 						reportEvent("str/draw_card", true, false, curr.getName(), 1, "");
 					});
@@ -2321,19 +2303,12 @@ public class Shoukan extends GameInstance<Phase> {
 						helper.addAction(Utils.parseEmoji("📦"), w -> {
 							if (isLocked()) return;
 
-							if (curr.selectionPending()) {
-								getChannel().sendMessage(getString("error/pending_choice")).queue();
-								return;
-							} else if (curr.selectionPending()) {
-								getChannel().sendMessage(getString("error/pending_action")).queue();
-								return;
-							}
+							if (handlePendingSelection("error/pending_choice")) return;
+
+							if (handlePendingSelection("error/pending_action")) return;
 
 							curr.manualDraw(curr.getRemainingDraws());
-							Objects.requireNonNull(w.getHook())
-									.setEphemeral(true)
-									.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
-									.queue();
+							sendFileResponse(w.getHook(), IO.getBytes(curr.render(), "png"), "cards.png");
 
 							reportEvent("str/draw_card", true, false, curr.getName(), rem, "s");
 						});
@@ -2342,13 +2317,9 @@ public class Shoukan extends GameInstance<Phase> {
 					helper.addAction(Utils.parseEmoji("1212407741046325308"), w -> {
 						if (isLocked()) return;
 
-						if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_choice")).queue();
-							return;
-						} else if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_action")).queue();
-							return;
-						}
+						if (handlePendingSelection("error/pending_choice")) return;
+
+						if (handlePendingSelection("error/pending_action")) return;
 
 						int eths = (int) curr.getCards().stream()
 								.filter(Drawable::isEthereal)
@@ -2359,10 +2330,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						int loss = (int) Math.max(2, curr.getBase().hp() * 0.06) * eths;
 						curr.setHP(Math.max(1, curr.getHP() - loss));
-						Objects.requireNonNull(w.getHook())
-								.setEphemeral(true)
-								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
-								.queue();
+						sendFileResponse(w.getHook(), IO.getBytes(curr.render(), "png"), "cards.png");
 
 						reportEvent("str/draw_card", true, false, curr.getName(), 1, "");
 					});
@@ -2372,13 +2340,9 @@ public class Shoukan extends GameInstance<Phase> {
 					helper.addAction(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
 						if (isLocked()) return;
 
-						if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_choice")).queue();
-							return;
-						} else if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_action")).queue();
-							return;
-						}
+						if (handlePendingSelection("error/pending_choice")) return;
+
+						if (handlePendingSelection("error/pending_action")) return;
 
 						BondedList<Drawable<?>> deque = curr.getRealDeck();
 						List<SelectionCard> cards = new ArrayList<>();
@@ -2395,10 +2359,7 @@ public class Shoukan extends GameInstance<Phase> {
 								curr.getCards().add(ds.getFirst());
 								curr.setUsedDestiny(true);
 
-								Objects.requireNonNull(w.getHook())
-										.setEphemeral(true)
-										.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
-										.queue();
+								sendFileResponse(w.getHook(), IO.getBytes(curr.render(), "png"), "cards.png");
 
 								reportEvent("str/destiny_draw", true, false, curr.getName());
 							});
@@ -2413,13 +2374,9 @@ public class Shoukan extends GameInstance<Phase> {
 				helper.addAction(Utils.parseEmoji("⚡"), w -> {
 					if (isLocked()) return;
 
-					if (curr.selectionPending()) {
-						getChannel().sendMessage(getString("error/pending_choice")).queue();
-						return;
-					} else if (curr.selectionPending()) {
-						getChannel().sendMessage(getString("error/pending_action")).queue();
-						return;
-					}
+					if (handlePendingSelection("error/pending_choice")) return;
+
+					if (handlePendingSelection("error/pending_action")) return;
 
 					List<SelectionCard> valid = curr.getCards().stream().filter(d -> {
 						if (d instanceof Evogear e && e.isAvailable()) {
@@ -2461,13 +2418,9 @@ public class Shoukan extends GameInstance<Phase> {
 						helper.addAction(Utils.parseEmoji("\uD83C\uDF00"), w -> {
 							if (isLocked()) return;
 
-							if (curr.selectionPending()) {
-								getChannel().sendMessage(getString("error/pending_choice")).queue();
-								return;
-							} else if (curr.selectionPending()) {
-								getChannel().sendMessage(getString("error/pending_action")).queue();
-								return;
-							}
+							if (handlePendingSelection("error/pending_choice")) return;
+
+							if (handlePendingSelection("error/pending_action")) return;
 
 							try {
 								curr.requestChoice(null, valid, new SelectionRange(1, null), ds -> {
@@ -2497,10 +2450,7 @@ public class Shoukan extends GameInstance<Phase> {
 											}
 
 											curr.setOriginCooldown(Math.max(0, 4 - material.size()));
-											Objects.requireNonNull(w.getHook())
-													.setEphemeral(true)
-													.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
-													.queue();
+											sendFileResponse(w.getHook(), IO.getBytes(curr.render(), "png"), "cards.png");
 
 											reportEvent("str/spirit_synth", true, false, curr.getName());
 										});
@@ -2519,10 +2469,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (curr.getOrigins().synergy() == Race.ORACLE) {
 				helper.addAction(Utils.parseEmoji("\uD83D\uDD2E"), w -> {
 					BufferedImage cards = curr.render(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
-					Objects.requireNonNull(w.getHook())
-							.setEphemeral(true)
-							.sendFiles(FileUpload.fromData(IO.getBytes(cards, "png"), "hand.png"))
-							.queue();
+					sendFileResponse(w.getHook(), IO.getBytes(cards, "png"), "cards.png");
 				});
 			}
 
@@ -2563,6 +2510,22 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		return helper;
+	}
+
+	public boolean handlePendingSelection(String errorKey) {
+		Hand curr = getCurrent();
+		if (curr.selectionPending()) {
+			getChannel().sendMessage(getString(errorKey)).queue();
+			return true;
+		}
+		return false;
+	}
+
+	private void sendFileResponse(InteractionHook w, byte[] fileData, String fileName) {
+    Objects.requireNonNull(w)
+           .setEphemeral(true)
+           .sendFiles(FileUpload.fromData(fileData, fileName))
+           .queue();
 	}
 
 	public List<SlotColumn> getOpenSlots(Side side, boolean top) {
