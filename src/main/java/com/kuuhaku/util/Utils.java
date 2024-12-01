@@ -1062,7 +1062,7 @@ public abstract class Utils {
 	}
 
 	public static Webhook getWebhook(StandardGuildMessageChannel channel) {
-		if (!channel.getGuild().getSelfMember().hasPermission(Permission.MANAGE_WEBHOOKS)) return null;
+		if (!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MANAGE_WEBHOOKS)) return null;
 
 		List<Webhook> hooks = Utils.getOr(Pages.subGet(channel.retrieveWebhooks()), List.of());
 		for (Webhook hook : hooks) {
