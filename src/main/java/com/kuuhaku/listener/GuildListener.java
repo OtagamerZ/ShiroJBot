@@ -431,7 +431,9 @@ public class GuildListener extends ListenerAdapter {
 			}
 
 			rollSpawns(config, locale, data.user());
-			rollEvents(data.channel(), locale);
+			if (!config.getSettings().isFeatureEnabled(GuildFeature.NO_SEASON)) {
+				rollEvents(data.channel(), locale);
+			}
 		});
 	}
 

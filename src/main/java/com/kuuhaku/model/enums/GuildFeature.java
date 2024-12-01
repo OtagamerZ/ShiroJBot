@@ -27,4 +27,5 @@ public enum GuildFeature {
 	NQN_MODE,      //0x10
 	NOTIFICATIONS, //0x20
 	UWU_MODE,      //0x40
+	NO_SEASON,      //0x80
 }
