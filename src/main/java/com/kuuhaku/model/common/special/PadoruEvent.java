@@ -72,7 +72,7 @@ public class PadoruEvent extends SpecialEvent {
 		if (content.equalsIgnoreCase(phrase) && users.add(msg.getAuthor().getId())) {
 			stage++;
 
-			Emoji e = msg.getJDA().getEmojiById("787012642501689344");
+			Emoji e = Utils.parseEmoji("787012642501689344");
 			if (e != null) {
 				msg.addReaction(e).queue(null, Utils::doNothing);
 			}
