@@ -22,6 +22,7 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.util.Utils;
 
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
@@ -63,21 +64,7 @@ public class ValueMod implements Cloneable {
 	public <T> T asType(Class<T> klass) {
 		if (ValueMod.class.isAssignableFrom(klass)) return klass.cast(this);
 
-		if (klass == Short.class) {
-			return klass.cast((short) value);
-		} else if (klass == Integer.class) {
-			return klass.cast((int) value);
-		} else if (klass == Long.class) {
-			return klass.cast((long) value);
-		} else if (klass == Float.class) {
-			return klass.cast((float) value);
-		} else if (klass == Double.class) {
-			return klass.cast(value);
-		} else if (klass == Byte.class) {
-			return klass.cast((byte) value);
-		}
-
-		throw new ClassCastException();
+		return Utils.fromNumber(klass, value);
 	}
 
 	public void setValue(double value) {

@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.common.shoukan;
 
+import com.kuuhaku.util.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -69,21 +71,7 @@ public final class PropValue extends Number {
 	public <T extends Number> T asType(Class<T> klass) {
 		if (values.isEmpty()) return klass.cast(0);
 
-		if (klass == Short.class) {
-			return klass.cast(shortValue());
-		} else if (klass == Integer.class) {
-			return klass.cast(intValue());
-		} else if (klass == Long.class) {
-			return klass.cast(longValue());
-		} else if (klass == Float.class) {
-			return klass.cast(floatValue());
-		} else if (klass == Double.class) {
-			return klass.cast(doubleValue());
-		} else if (klass == Byte.class) {
-			return klass.cast(byteValue());
-		}
-
-		throw new ClassCastException();
+		return Utils.fromNumber(klass, this);
 	}
 
 	public List<Number> values() {

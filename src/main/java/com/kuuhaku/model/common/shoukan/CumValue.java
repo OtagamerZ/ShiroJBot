@@ -22,6 +22,7 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -68,21 +69,7 @@ public class CumValue implements Iterable<ValueMod> {
 	}
 
 	public <T extends Number> T asType(Class<T> klass) {
-		if (klass == Short.class) {
-			return klass.cast((short) get());
-		} else if (klass == Integer.class) {
-			return klass.cast((int) get());
-		} else if (klass == Long.class) {
-			return klass.cast((long) get());
-		} else if (klass == Float.class) {
-			return klass.cast((float) get());
-		} else if (klass == Double.class) {
-			return klass.cast(get());
-		} else if (klass == Byte.class) {
-			return klass.cast((byte) get());
-		}
-
-		throw new ClassCastException();
+		return Utils.fromNumber(klass, get());
 	}
 
 	public ValueMod rightShift(Drawable<?> source) {
