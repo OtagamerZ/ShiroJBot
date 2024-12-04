@@ -52,7 +52,7 @@ public class PadoruEvent extends SpecialEvent {
 		addEvent(channel.getGuild(), this);
 
 		PseudoUser pu = new PseudoUser("Nero Claudius", Constants.ORIGIN_RESOURCES + "avatar/nero/1.png", channel);
-		pu.send(null, "***Hashire sori yo***");
+		pu.send(null, "***Hashire sori yo***\n-# " + getLocale().get("str/padoru_event1"));
 
 		Utils.awaitMessage(channel, this::onRun);
 		EXEC.schedule(() -> onTimeout(channel), 3, TimeUnit.MINUTES);
