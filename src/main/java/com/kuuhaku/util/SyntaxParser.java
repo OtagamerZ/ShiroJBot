@@ -49,17 +49,22 @@ public abstract class SyntaxParser {
 		JSONObject out = new JSONObject();
 		List<FailedSyntax> failed = new ArrayList<>();
 
+		List<String> inp = Arrays.stream(input.split(" +"))
+				.filter(i -> !i.isBlank())
+				.toList();
+
 		List<String> supplied = new ArrayList<>();
+		List<String> args = new ArrayList<>();
 		for (String sig : syntaxes) {
-			List<String> args = new ArrayList<>(List.of(input.split(" +")));
+			args.clear();
+			args.addAll(inp);
+
 			String[] params = sig.split(" +");
 			String[] failOpts = {};
 
-			int i = 0;
 			int matches = 0;
 			boolean fail = false;
 			for (String param : params) {
-				i++;
 				JSONObject groups = Utils.extractNamedGroups(param, ARGUMENT_PATTERN);
 				if (groups.isEmpty()) {
 					String s = args.removeFirst();
