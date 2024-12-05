@@ -194,7 +194,7 @@ public class Affix extends DAO<Affix> {
 				     , weight
 				     , type
 				FROM affix
-				WHERE ((?1 <> '' AND type = ?1) OR type NOT LIKE 'MON\\_%')
+				WHERE ((?1 = '' OR type = ?1) AND type NOT LIKE 'MON\\_%')
 				  AND weight > 0
 				  AND (min_level <= ?2 OR has(cast(?3 AS JSONB), 'ACCESSORY'))
 				  AND req_tags <@ cast(?3 AS JSONB)
@@ -252,7 +252,7 @@ public class Affix extends DAO<Affix> {
 				     , weight
 				     , type
 				FROM affix
-				WHERE ((?1 <> '' AND type = ?1) OR type LIKE 'MON\\_%')
+				WHERE ((?1 = '' OR type = ?1) AND type LIKE 'MON\\_%')
 				  AND weight > 0
 				  AND min_level <= ?2
 				  AND NOT has(get_affix_family(cast(?3 AS JSONB)), get_affix_family(id))
