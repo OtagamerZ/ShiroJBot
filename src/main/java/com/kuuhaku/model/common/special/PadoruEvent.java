@@ -28,6 +28,7 @@ import com.kuuhaku.model.records.GuildBuff;
 import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
@@ -72,9 +73,11 @@ public class PadoruEvent extends SpecialEvent {
 		if (content.equalsIgnoreCase(phrase) && users.add(msg.getAuthor().getId())) {
 			stage++;
 
-			Emoji e = Utils.parseEmoji("787012642501689344");
-			if (e != null) {
-				msg.addReaction(e).queue(null, Utils::doNothing);
+			if (msg.getGuild().getSelfMember().hasPermission(msg.getGuildChannel(), Permission.MESSAGE_EXT_EMOJI)) {
+				Emoji e = Utils.parseEmoji("787012642501689344");
+				if (e != null) {
+					msg.addReaction(e).queue(null, Utils::doNothing);
+				}
 			}
 
 			if (isComplete()) {
