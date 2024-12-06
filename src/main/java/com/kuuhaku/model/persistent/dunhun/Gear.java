@@ -321,7 +321,7 @@ public class Gear extends DAO<Gear> {
 
 		GearAffix impl = getImplicit();
 		if (impl != null) {
-			impl.apply(locale, this, owner);
+			impl.apply(locale, this, (Hero) owner.copy());
 		}
 
 		for (GearAffix ga : getAllAffixes()) {
