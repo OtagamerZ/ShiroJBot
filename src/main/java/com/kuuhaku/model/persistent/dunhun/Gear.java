@@ -319,10 +319,10 @@ public class Gear extends DAO<Gear> {
 	public void loadAttr(I18N locale) {
 		attributes = new Attributes();
 
-		GearAffix impl = getImplicit();
-		if (impl != null) {
-			impl.apply(locale, this, (Hero) owner.copy());
-		}
+//		GearAffix impl = getImplicit();
+//		if (impl != null) {
+//			impl.apply(locale, this, (Hero) owner.copy());
+//		}
 
 		for (GearAffix ga : getAllAffixes()) {
 			String eff = ga.getAffix().getEffect();
