@@ -27,16 +27,12 @@ import com.kuuhaku.model.records.id.GearAffixId;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 
@@ -173,15 +169,18 @@ public class GearAffix extends DAO<GearAffix> {
 		if (affix.getEffect() == null) return;
 
 		try {
-			owner.asSenshi(locale);
+			if (owner != null) {
+				owner.asSenshi(locale);
+			}
 
-			Utils.exec(affix.getId(), affix.getEffect(), Map.of(
-					"locale", locale,
-					"gear", target,
-					"actor", owner,
-					"values", getValues(locale),
-					"grant", Utils.getOr(Utils.extract(getDescription(locale), "\"(.+?)\"", 1), "")
-			));
+			Map<String, Object> params = new HashMap<>();
+			params.put("locale", locale);
+			params.put("gear", target);
+			params.put("actor", owner);
+			params.put("values", getValues(locale));
+			params.put("grant", Utils.getOr(Utils.extract(getDescription(locale), "\"(.+?)\"", 1), ""));
+
+			Utils.exec(affix.getId(), affix.getEffect(), params);
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply modifier {}", affix.getId(), e);
 		}

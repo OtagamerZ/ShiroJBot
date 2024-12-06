@@ -282,10 +282,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public Attributes getAttributes() {
-		if (attributes == null) {
-			owner.asSenshi(I18N.EN);
-			loadAttr(I18N.EN);
-		}
+		if (attributes == null) loadAttr(I18N.EN);
 
 		return attributes;
 	}
@@ -320,6 +317,11 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public void loadAttr(I18N locale) {
+		GearAffix impl = getImplicit();
+		if (impl != null) {
+			impl.apply(locale, this);
+		}
+
 		attributes = new Attributes();
 
 		for (GearAffix ga : getAllAffixes()) {
