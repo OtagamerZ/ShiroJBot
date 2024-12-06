@@ -73,7 +73,7 @@ public class PadoruEvent extends SpecialEvent {
 		if (content.equalsIgnoreCase(phrase) && users.add(msg.getAuthor().getId())) {
 			stage++;
 
-			if (msg.getGuild().getSelfMember().hasPermission(msg.getGuildChannel(), Permission.MESSAGE_EXT_EMOJI)) {
+			if (msg.getGuild().getSelfMember().hasPermission(msg.getGuildChannel(), Permission.MESSAGE_EXT_EMOJI, Permission.MESSAGE_ADD_REACTION)) {
 				Emoji e = Utils.parseEmoji("787012642501689344");
 				if (e != null) {
 					msg.addReaction(e).queue(null, Utils::doNothing);
