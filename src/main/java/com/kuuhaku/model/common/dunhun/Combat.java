@@ -470,7 +470,7 @@ public class Combat implements Renderer<BufferedImage> {
 					boolean canAttack = curr.getSenshi().getDmg() > 0;
 					boolean canDefend = curr.getSenshi().getDfs() > 0;
 					Function<Actor, Integer> criteria = a -> {
-						if (a.getTeam() == curr.getTeam()) return 1;
+						if (a.getTeam() == curr.getTeam()) return a.getAggroScore();
 
 						Senshi sen = a.getSenshi();
 						return (int) (a.getAggroScore() * (1 - sen.getDodge() / 100d) * (1 - sen.getParry() / 100d));
