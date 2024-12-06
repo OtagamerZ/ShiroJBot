@@ -282,7 +282,10 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public Attributes getAttributes() {
-		if (attributes == null) load(I18N.EN, owner);
+		if (attributes == null) {
+			owner.asSenshi(I18N.EN);
+			loadAttr(I18N.EN);
+		}
 
 		return attributes;
 	}
