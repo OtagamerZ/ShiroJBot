@@ -96,6 +96,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	private transient List<Skill> skillCache;
 	private transient Senshi senshiCache;
 	private transient Dunhun game;
+	private transient I18N locale;
 	private transient Deck deck;
 	private transient Team team;
 	private transient int ap;
@@ -517,6 +518,15 @@ public class Hero extends DAO<Hero> implements Actor {
 	@Override
 	public void setGame(Dunhun game) {
 		this.game = game;
+		this.locale = game.getLocale();
+	}
+
+	public I18N getLocale() {
+		return locale;
+	}
+
+	public void setLocale(I18N locale) {
+		this.locale = locale;
 	}
 
 	public ContinueMode getContMode() {
@@ -587,6 +597,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	@Override
 	public Senshi getSenshi() {
 		if (senshiCache != null) return senshiCache;
+		if (locale != null) return asSenshi(locale);
 		return asSenshi(game.getLocale());
 	}
 
