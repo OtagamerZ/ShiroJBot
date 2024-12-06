@@ -158,7 +158,7 @@ public class GearAffix extends DAO<GearAffix> {
 				continue;
 			}
 
-			values.add(Calc.rng(min, max, roll + desc.hashCode()));
+			values.add(Calc.rng(min, max, roll));
 		}
 
 		return values;
