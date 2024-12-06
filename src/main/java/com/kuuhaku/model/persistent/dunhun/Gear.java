@@ -350,8 +350,6 @@ public class Gear extends DAO<Gear> {
 		for (GearAffix ga : getAllAffixes()) {
 			ga.apply(locale, this, owner);
 		}
-
-		loadAttr(I18N.EN);
 	}
 
 	@Override
