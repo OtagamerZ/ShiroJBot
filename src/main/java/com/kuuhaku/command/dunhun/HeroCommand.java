@@ -112,7 +112,7 @@ public class HeroCommand implements Executable {
 			Attributes attr = h.getAttributes();
 			Attributes extra = new Attributes();
 			for (Gear g : h.getEquipment()) {
-				extra = extra.merge(g.getAttributes());
+				extra = extra.merge(g.getAttributes(h));
 			}
 
 			eb.addField(Constants.VOID, """

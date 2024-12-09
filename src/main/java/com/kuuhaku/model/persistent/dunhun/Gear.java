@@ -281,7 +281,7 @@ public class Gear extends DAO<Gear> {
 		return effects;
 	}
 
-	public Attributes getAttributes() {
+	public Attributes getAttributes(Hero owner) {
 		if (attributes == null) load(I18N.EN, owner);
 
 		return attributes;
