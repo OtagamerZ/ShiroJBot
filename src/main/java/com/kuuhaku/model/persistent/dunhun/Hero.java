@@ -306,25 +306,6 @@ public class Hero extends DAO<Hero> implements Actor {
 			return gear.get(equipment.getJSONArray(gs.name()).getInt(i));
 		});
 
-		Attributes total = getStats().getAttributes();
-		for (Gear g : equip) {
-			total = total.merge(g.getAttributes());
-		}
-
-		boolean check = true;
-		while (check) {
-			check = false;
-
-			for (Gear g : equip) {
-				if (!total.has(g.getBasetype().getStats().requirements())) {
-					equip.unequip(g);
-					total = total.reduce(g.getAttributes());
-
-					check = true;
-				}
-			}
-		}
-
 		return equipCache = equip;
 	}
 
@@ -553,8 +534,28 @@ public class Hero extends DAO<Hero> implements Actor {
 		int def = 100;
 		int wDmg = 0;
 
-		Attributes a = getAttributes();
-		for (Gear g : getEquipment()) {
+		Attributes total = getStats().getAttributes();
+		Equipment equip = getEquipment();
+
+		for (Gear g : equip) {
+			total = total.merge(g.getAttributes());
+		}
+
+		boolean check = true;
+		while (check) {
+			check = false;
+
+			for (Gear g : equip) {
+				if (!total.has(g.getBasetype().getStats().requirements())) {
+					equip.unequip(g);
+					total = total.reduce(g.getAttributes());
+
+					check = true;
+				}
+			}
+		}
+
+		for (Gear g : equip) {
 			if (g == null) continue;
 
 			if (load) {
@@ -567,11 +568,11 @@ public class Hero extends DAO<Hero> implements Actor {
 			} else {
 				double mult = 1;
 				if (g.getTags().contains("LIGHT")) {
-					mult *= 1 + a.dex() * 0.05f;
+					mult *= 1 + total.dex() * 0.05f;
 				}
 
 				if (g.getTags().contains("HEAVY")) {
-					mult *= 1 + a.str() * 0.05f;
+					mult *= 1 + total.str() * 0.05f;
 				}
 
 				if (g.getTags().contains("OFFHAND")) {
@@ -589,8 +590,8 @@ public class Hero extends DAO<Hero> implements Actor {
 			}
 		}
 
-		base.setAtk((int) ((dmg + wDmg) * (1 + (a.str() + a.dex()) * 0.01)));
-		base.setDfs((int) (def * (1 + a.vit() * 0.1 + a.str() * 0.05)));
+		base.setAtk((int) ((dmg + wDmg) * (1 + (total.str() + total.dex()) * 0.01)));
+		base.setDfs((int) (def * (1 + total.vit() * 0.1 + total.str() * 0.05)));
 
 		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();
 		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750 + effCost);
