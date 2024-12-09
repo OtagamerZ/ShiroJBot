@@ -282,7 +282,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public Attributes getAttributes() {
-		if (attributes == null) loadAttr(I18N.EN);
+		if (attributes == null) load(I18N.EN, owner);
 
 		return attributes;
 	}
@@ -319,10 +319,10 @@ public class Gear extends DAO<Gear> {
 	public void loadAttr(I18N locale) {
 		attributes = new Attributes();
 
-//		GearAffix impl = getImplicit();
-//		if (impl != null) {
-//			impl.apply(locale, this, (Hero) owner.copy());
-//		}
+		GearAffix impl = getImplicit();
+		if (impl != null) {
+			impl.apply(locale, this, (Hero) owner.copy());
+		}
 
 		for (GearAffix ga : getAllAffixes()) {
 			String eff = ga.getAffix().getEffect();
@@ -345,6 +345,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public void load(I18N locale, Hero owner) {
+		attributes = new Attributes();
 		modifiers.clear();
 
 		for (GearAffix ga : getAllAffixes()) {

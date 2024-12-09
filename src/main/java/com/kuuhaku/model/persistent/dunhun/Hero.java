@@ -539,6 +539,10 @@ public class Hero extends DAO<Hero> implements Actor {
 
 	@Override
 	public Senshi asSenshi(I18N locale) {
+		return asSenshi(locale, true);
+	}
+
+	public Senshi asSenshi(I18N locale, boolean load) {
 		if (senshiCache != null) return senshiCache;
 
 		senshiCache = new Senshi(this, locale);
@@ -553,7 +557,10 @@ public class Hero extends DAO<Hero> implements Actor {
 		for (Gear g : getEquipment()) {
 			if (g == null) continue;
 
-			g.load(locale, this);
+			if (load) {
+				g.load(locale, this);
+			}
+
 			if (!g.isWeapon()) {
 				dmg += g.getDmg();
 				def += g.getDfs();
@@ -598,7 +605,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	public Senshi getSenshi() {
 		if (senshiCache != null) return senshiCache;
 		if (locale != null) return asSenshi(locale);
-		return asSenshi(game.getLocale());
+		return asSenshi(game.getLocale(), false);
 	}
 
 	@Override
@@ -608,7 +615,7 @@ public class Hero extends DAO<Hero> implements Actor {
 			deck.setOrigin(Origin.from(false, Race.NONE));
 		}
 
-		return asSenshi(locale).render(locale, deck);
+		return getSenshi().render(locale, deck);
 	}
 
 	@Override
