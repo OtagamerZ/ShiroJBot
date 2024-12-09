@@ -604,7 +604,7 @@ public class Hero extends DAO<Hero> implements Actor {
 	@Override
 	public Senshi getSenshi() {
 		if (senshiCache != null) return senshiCache;
-		if (locale != null) return asSenshi(locale);
+		if (locale != null) return asSenshi(locale, false);
 		return asSenshi(game.getLocale(), false);
 	}
 
