@@ -280,7 +280,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					out += types.stream()
 							.map(String::valueOf)
 							.filter(COLORS::containsKey)
-							.map(t -> display ? Utils.getEmoteString(t) : "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
+							.map(t -> display ? Tag.valueOf(t.toUpperCase()).toString() : "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
 							.collect(Collectors.joining());
 				} else {
 					Pair<Integer, Color> idx = COLORS.get(str);
@@ -288,7 +288,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					if (idx != null) {
 						if (idx.getFirst() != -1) {
 							if (display) {
-								out = Utils.getEmoteString(str);
+								out = Tag.valueOf(str.toUpperCase()).toString();
 							} else {
 								out = "£" + Character.toString(0x2801 + idx.getFirst());
 							}
