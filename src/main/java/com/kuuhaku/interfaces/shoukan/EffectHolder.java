@@ -43,6 +43,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.util.TriConsumer;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -187,8 +188,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	CachedScriptManager getCSM();
 
-	default String parseDescription(Hand h, I18N locale) {
-		boolean demon = h.getOrigins().major() == Race.DEMON;
+	default String parseDescription(@Nullable Hand h, I18N locale) {
+		boolean display = h == null;
+		boolean demon = !display && h.getOrigins().major() == Race.DEMON;
 
 		int equips;
 		EffectHolder<?> source = this;
@@ -200,11 +202,11 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		}
 
 		Map<String, Object> values = Map.ofEntries(
-				Map.entry("php", h.getHP()),
-				Map.entry("bhp", h.getBase().hp()),
-				Map.entry("pmp", h.getMP()),
-				Map.entry("pdg", Math.max(0, -h.getRegDeg().peek())),
-				Map.entry("prg", Math.max(0, h.getRegDeg().peek())),
+				Map.entry("php", display ? 6000 : h.getHP()),
+				Map.entry("bhp", display ? 6000 : h.getBase().hp()),
+				Map.entry("pmp", display ? 5 : h.getMP()),
+				Map.entry("pdg", display ? 0 : Math.max(0, -h.getRegDeg().peek())),
+				Map.entry("prg", display ? 0 : Math.max(0, h.getRegDeg().peek())),
 				Map.entry("mp", demon ? source.getHPCost() : source.getMPCost()),
 				Map.entry("hp", source.getHPCost()),
 				Map.entry("atk", source.getDmg()),
@@ -249,7 +251,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						for (Object type : types) {
 							props.compute(String.valueOf(type), (k, v) -> {
 								double power = getPower();
-								if (h.getOrigins().synergy() == Race.FABLED) {
+								if (!display && h.getOrigins().synergy() == Race.FABLED) {
 									power = 1;
 								}
 
@@ -275,23 +277,37 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						out += "%";
 					}
 
-					out += types.stream()
-							.map(o -> (String) o)
-							.filter(COLORS::containsKey)
-							.map(t -> "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
-							.collect(Collectors.joining());
+					if (display) {
+						out += types.stream()
+								.map(String::valueOf)
+								.filter(COLORS::containsKey)
+								.map(Utils::getEmoteString)
+								.collect(Collectors.joining());
+					} else {
+						out += types.stream()
+								.map(String::valueOf)
+								.filter(COLORS::containsKey)
+								.map(t -> "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
+								.collect(Collectors.joining());
+					}
 				} else {
 					Pair<Integer, Color> idx = COLORS.get(str);
 
 					if (idx != null) {
 						if (idx.getFirst() != -1) {
-							out = "£" + Character.toString(0x2801 + idx.getFirst());
+							if (display) {
+								out = Utils.getEmoteString(str);
+							} else {
+								out = "£" + Character.toString(0x2801 + idx.getFirst());
+							}
 						} else {
-							out = switch (str) {
-								case "b" -> DC1;
-								case "n" -> DC2;
-								default -> "";
-							};
+							if (!display) {
+								out = switch (str) {
+									case "b" -> DC1;
+									case "n" -> DC2;
+									default -> "";
+								};
+							}
 						}
 					}
 				}

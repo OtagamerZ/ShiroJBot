@@ -29,7 +29,6 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.FrameSkin;
@@ -222,7 +221,7 @@ public class CommonSocket extends WebSocketClient {
 									Map.entry("raw", eh.getBase().getDescription(locale)),
 									Map.entry("parsed_md", eh.getReadableDescription(locale)),
 									Map.entry("parsed_html", MDTool.markdown2Html(eh.getReadableDescription(locale))),
-									Map.entry("display", eh.parseDescription(new Hand(new Deck()), locale))
+									Map.entry("display", eh.parseDescription(null, locale))
 							) : new JSONObject()),
 							Map.entry("cost", JSONObject.of(
 									Map.entry("mana", d.getMPCost()),
