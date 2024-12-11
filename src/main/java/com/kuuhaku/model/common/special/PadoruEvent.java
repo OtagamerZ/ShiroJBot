@@ -92,7 +92,7 @@ public class PadoruEvent extends SpecialEvent {
 	public void onCompletion(GuildMessageChannel channel) {
 		EXEC.shutdownNow();
 		File gif = IO.getResourceAsFile("assets/padoru_padoru.gif");
-		if (gif != null) {
+		if (gif != null && channel.getGuild().getSelfMember().hasPermission(channel, Permission.MESSAGE_ATTACH_FILES)) {
 			channel.sendMessage(getLocale().get("success/padoru_complete")).addFiles(FileUpload.fromData(gif)).queue();
 		} else {
 			channel.sendMessage(getLocale().get("success/padoru_complete")).queue();
