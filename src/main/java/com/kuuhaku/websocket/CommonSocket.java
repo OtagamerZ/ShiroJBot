@@ -191,6 +191,10 @@ public class CommonSocket extends WebSocketClient {
 				String id = payload.getString("card");
 				I18N locale = payload.getEnum(I18N.class, "locale");
 				Card c = DAO.find(Card.class, id);
+				if (c == null) {
+					deliver(key, "");
+					return;
+				}
 
 				JSONObject out = JSONObject.of(
 						Map.entry("id", id),
