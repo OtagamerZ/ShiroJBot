@@ -277,19 +277,11 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						out += "%";
 					}
 
-					if (display) {
-						out += types.stream()
-								.map(String::valueOf)
-								.filter(COLORS::containsKey)
-								.map(Utils::getEmoteString)
-								.collect(Collectors.joining());
-					} else {
-						out += types.stream()
-								.map(String::valueOf)
-								.filter(COLORS::containsKey)
-								.map(t -> "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
-								.collect(Collectors.joining());
-					}
+					out += types.stream()
+							.map(String::valueOf)
+							.filter(COLORS::containsKey)
+							.map(t -> display ? Utils.getEmoteString(t) : "§" + Character.toString(0x2801 + COLORS.get(t).getFirst()))
+							.collect(Collectors.joining());
 				} else {
 					Pair<Integer, Color> idx = COLORS.get(str);
 
