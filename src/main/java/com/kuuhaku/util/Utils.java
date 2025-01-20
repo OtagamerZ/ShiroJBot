@@ -819,7 +819,7 @@ public abstract class Utils {
 	public static String didYouMean(String word, Collection<String> options) {
 		String match = "";
 		int threshold = Integer.MAX_VALUE;
-		LevenshteinDistance checker = new LevenshteinDistance();
+		LevenshteinDistance checker = LevenshteinDistance.getDefaultInstance();
 
 		for (String w : options) {
 			if (word.equalsIgnoreCase(w)) {
