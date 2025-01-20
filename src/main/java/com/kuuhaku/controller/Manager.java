@@ -30,10 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 public abstract class Manager {
@@ -65,6 +62,7 @@ public abstract class Manager {
 							.sorted(Comparator.comparing(Path::toString).thenComparing(Path::getNameCount))
 							.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
 							.map(IO::readString)
+							.filter(Objects::nonNull)
 							.forEach(sql -> DAO.applyNative(null, sql));
 				} catch (IOException e) {
 					throw new RuntimeException(e);
