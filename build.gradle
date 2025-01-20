@@ -94,12 +94,12 @@ tasks.register("enforceVersion") {
 
 dependencies {
 	//Core
-	implementation group: "net.dv8tion", name: "JDA", version: "5.2.1"
+	implementation group: "net.dv8tion", name: "JDA", version: "5.2.2"
 	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "4.1.0"
 	implementation group: "com.github.ygimenez", name: "Simple-Moshi", version: "1.1.2"
 
 	//Database
-	implementation group: "org.postgresql", name: "postgresql", version: "42.7.4"
+	implementation group: "org.postgresql", name: "postgresql", version: "42.7.5"
 	implementation group: "jakarta.persistence", name: "jakarta.persistence-api", version: "3.2.0"
 	implementation group: "org.hibernate.orm", name: "hibernate-core", version: "7.0.0.Alpha3"
 	implementation group: "org.hibernate.orm", name: "hibernate-hikaricp", version: "7.0.0.Alpha3"
@@ -107,14 +107,14 @@ dependencies {
 	implementation group: "com.zaxxer", name: "HikariCP", version: "6.2.1"
 
 	//Cache
-	implementation group: "com.github.ben-manes.caffeine", name: "caffeine", version: "3.1.8"
-	implementation group: "com.github.ben-manes.caffeine", name: "jcache", version: "3.1.8"
+	implementation group: "com.github.ben-manes.caffeine", name: "caffeine", version: "3.2.0"
+	implementation group: "com.github.ben-manes.caffeine", name: "jcache", version: "3.2.0"
 
 	//Compiler
 	implementation group: "org.apache.groovy", name: "groovy", version: "4.0.22"
 
 	//Websocket
-	implementation group: "org.java-websocket", name: "Java-WebSocket", version: "1.5.7"
+	implementation group: "org.java-websocket", name: "Java-WebSocket", version: "1.6.0"
 
 	//Wrappers
 	implementation group: "com.graphql-java", name: "graphql-java", version: "22.2"
@@ -122,13 +122,13 @@ dependencies {
 
 	//Apache Commons
 	implementation group: "org.apache.commons", name: "commons-lang3", version: "3.17.0"
-	implementation group: "org.apache.commons", name: "commons-text", version: "1.12.0"
+	implementation group: "org.apache.commons", name: "commons-text", version: "1.13.0"
 	implementation group: "org.apache.commons", name: "commons-math3", version: "3.6.1"
 	implementation group: "org.apache.commons", name: "commons-imaging", version: "1.0.0-alpha5"
 	implementation group: "org.apache.commons", name: "commons-compress", version: "1.27.1"
 	implementation group: "org.apache.httpcomponents.client5", name: "httpclient5", version: "5.4.1"
 	implementation group: "commons-validator", name: "commons-validator", version: "1.9.0"
-	implementation group: "commons-codec", name: "commons-codec", version: "1.17.1"
+	implementation group: "commons-codec", name: "commons-codec", version: "1.17.2"
 	implementation group: "commons-cli", name: "commons-cli", version: "1.9.0"
 	implementation group: "commons-io", name: "commons-io", version: "2.18.0"
 
@@ -145,7 +145,7 @@ dependencies {
 	implementation group: "it.sauronsoftware.cron4j", name: "cron4j", version: "2.2.5"
 	implementation group: "org.swinglabs.swingx", name: "swingx-graphics", version: "1.6.5-1"
 	implementation group: "org.reflections", name: "reflections", version: "0.10.2"
-	implementation group: "com.squareup.okio", name: "okio", version: "3.9.1"
+	implementation group: "com.squareup.okio", name: "okio", version: "3.10.2"
 	implementation group: "io.github.furstenheim", name: "copy_down", version: "1.1"
 	implementation group: "net.jodah", name: "expiringmap", version: "0.5.11"
 	implementation group: "me.xuender", name: "unidecode", version: "0.0.7"
