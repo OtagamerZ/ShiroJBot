@@ -52,8 +52,8 @@ application {
 	]
 }
 
-group "com.kuuhaku"
-version "STANDALONE"
+group = "com.kuuhaku"
+version = "STANDALONE"
 
 def javaVersion = JavaVersion.VERSION_21
 java {
@@ -63,9 +63,9 @@ java {
 
 repositories {
 	mavenCentral()
-	maven { url "https://jitpack.io" }
-	maven { url "https://m2.dv8tion.net/releases" }
-	maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+	maven { url = "https://jitpack.io" }
+	maven { url = "https://m2.dv8tion.net/releases" }
+	maven { url = "https://oss.sonatype.org/content/repositories/releases/" }
 }
 
 run {
@@ -109,9 +109,9 @@ dependencies {
 	//Database
 	implementation group: "org.postgresql", name: "postgresql", version: "42.7.5"
 	implementation group: "jakarta.persistence", name: "jakarta.persistence-api", version: "3.2.0"
-	implementation group: "org.hibernate.orm", name: "hibernate-core", version: "7.0.0.Alpha3"
-	implementation group: "org.hibernate.orm", name: "hibernate-hikaricp", version: "7.0.0.Alpha3"
-	implementation group: "org.hibernate.orm", name: "hibernate-jcache", version: "7.0.0.Alpha3"
+	implementation group: "org.hibernate.orm", name: "hibernate-core", version: "7.0.0.Beta3"
+	implementation group: "org.hibernate.orm", name: "hibernate-hikaricp", version: "7.0.0.Beta3"
+	implementation group: "org.hibernate.orm", name: "hibernate-jcache", version: "7.0.0.Beta3"
 	implementation group: "com.zaxxer", name: "HikariCP", version: "6.2.1"
 
 	//Cache
@@ -190,7 +190,7 @@ sourceSets.main {
 }
 
 jar {
-	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 generateGrammarSource {
