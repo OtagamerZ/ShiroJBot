@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 @Command(
 		name = "hero",
 		path = "innate",
-		category = Category.INFO
+		category = Category.DEV
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class HeroInnateCommand implements Executable {
