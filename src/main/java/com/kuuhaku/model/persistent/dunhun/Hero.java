@@ -612,6 +612,7 @@ public class Hero extends DAO<Hero> implements Actor {
 			deck.setOrigin(Origin.from(false, Race.NONE));
 		}
 
+		setLocale(locale);
 		return getSenshi().render(locale, deck);
 	}
 
