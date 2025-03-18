@@ -37,7 +37,7 @@ public class GameChannel {
 
 	public GameChannel(GuildMessageChannel... channel) {
 		for (GuildMessageChannel chn : channel) {
-			channels.add(new ChannelReference(chn.getGuild(), chn));
+			channels.add(new ChannelReference(chn.getGuild(), chn.getId()));
 		}
 	}
 

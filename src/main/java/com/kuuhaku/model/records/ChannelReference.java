@@ -23,18 +23,22 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 
 import java.util.Objects;
 
-public record ChannelReference(Guild guild, GuildMessageChannel channel) {
+public record ChannelReference(Guild guild, String channelId) {
+	public GuildMessageChannel channel() {
+		return guild.getTextChannelById(channelId);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		ChannelReference that = (ChannelReference) o;
 		return Objects.equals(guild.getId(), that.guild.getId())
-			   && Objects.equals(channel.getId(), that.channel.getId());
+			   && Objects.equals(channelId, that.channelId);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(guild.getId(), channel.getId());
+		return Objects.hash(guild.getId(), channelId);
 	}
 }

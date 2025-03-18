@@ -102,7 +102,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 		return exec = CompletableFuture.runAsync(() -> {
 			try {
-				channels = Stream.of(chns).map(GuildMessageChannel::getId).toArray(String[]::new);
+				channels = getChannel().getChannels().stream().map(GuildMessageChannel::getId).toArray(String[]::new);
 				for (String chn : channels) {
 					if (CHANNELS.contains(chn)) {
 						channel.sendMessage(locale.get("error/channel_occupied_self")).queue();

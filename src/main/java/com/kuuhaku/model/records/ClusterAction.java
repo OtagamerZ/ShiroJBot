@@ -18,8 +18,10 @@
 
 package com.kuuhaku.model.records;
 
+import com.kuuhaku.Constants;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.exceptions.ContextException;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 
@@ -57,18 +59,25 @@ public record ClusterAction(long delay, Map<String, MessageCreateAction> actions
 		queue(null, null);
 	}
 
-	public void queue(Consumer<? super Message> message) {
-		queue(message, null);
+	public void queue(Consumer<? super Message> success) {
+		queue(success, null);
 	}
 
-	public void queue(Consumer<? super Message> message, Consumer<? super Throwable> failure) {
-		Iterator<MessageCreateAction> it = actions.values().iterator();
+	public void queue(Consumer<? super Message> success, Consumer<? super Throwable> failure) {
+		Iterator<Map.Entry<String, MessageCreateAction>> it = actions.entrySet().iterator();
 		while (it.hasNext()) {
-			MessageCreateAction act = it.next();
-			if (delay > 0) {
-				act.delay(delay, TimeUnit.MILLISECONDS).queue(message, failure);
-			} else {
-				act.queue(message, failure);
+			Map.Entry<String, MessageCreateAction> e = it.next();
+
+			try {
+				MessageCreateAction act = e.getValue();
+
+				if (delay > 0) {
+					act.delay(delay, TimeUnit.MILLISECONDS).queue(success, failure);
+				} else {
+					act.queue(success, failure);
+				}
+			} catch (Exception ex) {
+				Constants.LOGGER.error("Failed to queue action for channel {}", e.getKey(), ex);
 			}
 
 			it.remove();
@@ -79,18 +88,25 @@ public record ClusterAction(long delay, Map<String, MessageCreateAction> actions
 		queueAfter(delay, unit, null, null);
 	}
 
-	public void queueAfter(long delay, TimeUnit unit, Consumer<? super Message> message) {
-		queueAfter(delay, unit, message, null);
+	public void queueAfter(long delay, TimeUnit unit, Consumer<? super Message> success) {
+		queueAfter(delay, unit, success, null);
 	}
 
-	public void queueAfter(long delay, TimeUnit unit, Consumer<? super Message> message, Consumer<? super Throwable> failure) {
-		Iterator<MessageCreateAction> it = actions.values().iterator();
+	public void queueAfter(long delay, TimeUnit unit, Consumer<? super Message> success, Consumer<? super Throwable> failure) {
+		Iterator<Map.Entry<String, MessageCreateAction>> it = actions.entrySet().iterator();
 		while (it.hasNext()) {
-			MessageCreateAction act = it.next();
-			if (delay > 0) {
-				act.delay(delay, TimeUnit.MILLISECONDS).queueAfter(delay, unit, message, failure);
-			} else {
-				act.queueAfter(delay, unit, message, failure);
+			Map.Entry<String, MessageCreateAction> e = it.next();
+
+			try {
+				MessageCreateAction act = e.getValue();
+
+				if (delay > 0) {
+					act.delay(delay, TimeUnit.MILLISECONDS).queueAfter(delay, unit, success, failure);
+				} else {
+					act.queueAfter(delay, unit, success, failure);
+				}
+			} catch (Exception ex) {
+				Constants.LOGGER.error("Failed to queue action for channel {}", e.getKey(), ex);
 			}
 
 			it.remove();
