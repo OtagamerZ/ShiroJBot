@@ -32,7 +32,7 @@ import java.util.*;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-@Table(name = "match_history")
+@Table(name = "match_history_2")
 public class MatchHistory extends DAO<MatchHistory> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
