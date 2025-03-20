@@ -22,11 +22,6 @@ import jakarta.persistence.*;
 
 @Embeddable
 public record HistorySlotId(
-		@AttributeOverrides({
-				@AttributeOverride(name = "turnId.matchId", column = @Column(name = "match_id")),
-				@AttributeOverride(name = "turnId.turn", column = @Column(name = "turn")),
-				@AttributeOverride(name = "side", column = @Column(name = "side"))
-		})
 		@Embedded
 		HistorySideId sideId,
 		@Column(name = "slot", nullable = false)
