@@ -39,8 +39,8 @@ public class HistorySlot {
 	@EmbeddedId
 	private HistorySlotId id;
 
-	@OneToOne
-	@PrimaryKeyJoinColumn(name = "id")
+	@ManyToOne
+	@JoinColumn(name = "frontline_id")
 	@Fetch(FetchMode.JOIN)
 	private Card frontline;
 
@@ -49,8 +49,8 @@ public class HistorySlot {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray frontlineEquips = new JSONArray();
 
-	@OneToOne
-	@PrimaryKeyJoinColumn(name = "id")
+	@ManyToOne
+	@JoinColumn(name = "backline_id")
 	@Fetch(FetchMode.JOIN)
 	private Card backline;
 

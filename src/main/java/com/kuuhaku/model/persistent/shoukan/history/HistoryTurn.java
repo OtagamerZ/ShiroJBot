@@ -44,17 +44,17 @@ public class HistoryTurn {
 	private HistoryTurnId id;
 
 	@OneToOne(cascade = ALL, orphanRemoval = true)
-	@PrimaryKeyJoinColumns({
-			@PrimaryKeyJoinColumn(name = "match_id"),
-			@PrimaryKeyJoinColumn(name = "turn")
+	@JoinColumns({
+			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
+			@JoinColumn(name = "turn", referencedColumnName = "turn")
 	})
 	@Fetch(FetchMode.JOIN)
 	private HistorySide top;
 
 	@OneToOne(cascade = ALL, orphanRemoval = true)
-	@PrimaryKeyJoinColumns({
-			@PrimaryKeyJoinColumn(name = "match_id"),
-			@PrimaryKeyJoinColumn(name = "turn")
+	@JoinColumns({
+			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
+			@JoinColumn(name = "turn", referencedColumnName = "turn")
 	})
 	@Fetch(FetchMode.JOIN)
 	private HistorySide bottom;
@@ -64,8 +64,8 @@ public class HistoryTurn {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray banned = new JSONArray();
 
-	@OneToOne
-	@PrimaryKeyJoinColumn(name = "id")
+	@ManyToOne
+	@JoinColumn(name = "field_id")
 	@Fetch(FetchMode.JOIN)
 	private Card field;
 
