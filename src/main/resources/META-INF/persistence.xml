@@ -67,6 +67,11 @@
         <class>com.kuuhaku.model.persistent.shoukan.Field</class>
         <class>com.kuuhaku.model.persistent.shoukan.Senshi</class>
         <class>com.kuuhaku.model.persistent.shoukan.MatchHistory</class>
+        <class>com.kuuhaku.model.persistent.shoukan.history.HistoryInfo</class>
+        <class>com.kuuhaku.model.persistent.shoukan.history.HistoryPlayer</class>
+        <class>com.kuuhaku.model.persistent.shoukan.history.HistoryTurn</class>
+        <class>com.kuuhaku.model.persistent.shoukan.history.HistorySide</class>
+        <class>com.kuuhaku.model.persistent.shoukan.history.HistorySlot</class>
         <class>com.kuuhaku.model.persistent.shoukan.SlotSkin</class>
 
         <!-- DUNGEON HUNTERS -->
