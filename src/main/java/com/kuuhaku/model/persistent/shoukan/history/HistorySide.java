@@ -43,7 +43,7 @@ import java.util.Set;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-@Table(name = "history_side")
+@Table(name = "history_side", schema = "shiro")
 public class HistorySide {
 	@EmbeddedId
 	private HistorySideId id;

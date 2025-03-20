@@ -46,7 +46,7 @@ import java.util.*;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-@Table(name = "guild_settings")
+@Table(name = "guild_settings", schema = "shiro")
 @JavaTypeRegistration(javaType = Role.class, descriptorClass = RoleJavaType.class)
 @JavaTypeRegistration(javaType = GuildMessageChannel.class, descriptorClass = ChannelJavaType.class)
 public class GuildSettings extends DAO<GuildSettings> {

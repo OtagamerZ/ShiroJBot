@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-@Table(name = "history_turn")
+@Table(name = "history_turn", schema = "shiro")
 public class HistoryTurn {
 	@EmbeddedId
 	private HistoryTurnId id;

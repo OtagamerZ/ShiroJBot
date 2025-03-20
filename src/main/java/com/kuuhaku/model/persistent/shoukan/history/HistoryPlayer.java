@@ -33,7 +33,7 @@ import org.hibernate.type.SqlTypes;
 import java.util.Objects;
 
 @Entity
-@Table(name = "history_player")
+@Table(name = "history_player", schema = "shiro")
 public class HistoryPlayer {
 	@EmbeddedId
 	private HistoryPlayerId id;

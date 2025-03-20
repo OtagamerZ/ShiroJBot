@@ -32,7 +32,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 @Entity
-@Table(name = "reminder")
+@Table(name = "reminder", schema = "shiro")
 public class Reminder extends DAO<Reminder> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

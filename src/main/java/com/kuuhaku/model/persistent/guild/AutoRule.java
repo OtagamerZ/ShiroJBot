@@ -28,7 +28,7 @@ import org.hibernate.annotations.FetchMode;
 import java.util.Objects;
 
 @Entity
-@Table(name = "auto_rule")
+@Table(name = "auto_rule", schema = "shiro")
 public class AutoRule extends DAO<AutoRule> {
 	@EmbeddedId
 	private AutoRuleId id;

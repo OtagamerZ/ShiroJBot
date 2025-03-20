@@ -31,7 +31,7 @@ import org.hibernate.type.SqlTypes;
 import java.util.Objects;
 
 @Entity
-@Table(name = "custom_answer")
+@Table(name = "custom_answer", schema = "shiro")
 public class CustomAnswer extends DAO<CustomAnswer> {
 	@EmbeddedId
 	private CustomAnswerId id;

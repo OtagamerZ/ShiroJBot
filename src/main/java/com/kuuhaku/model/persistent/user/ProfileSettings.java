@@ -26,7 +26,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "profile_settings")
+@Table(name = "profile_settings", schema = "shiro")
 public class ProfileSettings extends DAO<ProfileSettings> {
 	@EmbeddedId
 	private ProfileId id;

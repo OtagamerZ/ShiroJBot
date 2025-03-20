@@ -34,7 +34,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "history_slot")
+@Table(name = "history_slot", schema = "shiro")
 public class HistorySlot {
 	@EmbeddedId
 	private HistorySlotId id;

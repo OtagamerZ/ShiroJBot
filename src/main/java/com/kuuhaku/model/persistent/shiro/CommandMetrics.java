@@ -27,7 +27,7 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "command_metrics")
+@Table(name = "command_metrics", schema = "shiro")
 public class CommandMetrics extends DAO<CommandMetrics> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -38,7 +38,7 @@ import java.util.List;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-@Table(name = "guild_config")
+@Table(name = "guild_config", schema = "shiro")
 public class GuildConfig extends DAO<GuildConfig> implements AutoMake<GuildConfig> {
 	@Id
 	@Column(name = "gid", nullable = false)

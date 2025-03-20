@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Entity
-@Table(name = "giftcode")
+@Table(name = "giftcode", schema = "shiro")
 public class Giftcode extends DAO<Giftcode> {
 	@Id
 	@Column(name = "code", nullable = false, length = 32)

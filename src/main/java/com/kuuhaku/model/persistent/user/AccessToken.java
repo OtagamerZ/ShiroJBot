@@ -31,7 +31,7 @@ import java.util.HexFormat;
 import java.util.Objects;
 
 @Entity
-@Table(name = "access_token")
+@Table(name = "access_token", schema = "shiro")
 public class AccessToken extends DAO<AccessToken> {
 	@Id
 	@Column(name = "token", nullable = false)

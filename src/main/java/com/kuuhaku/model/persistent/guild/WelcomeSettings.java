@@ -30,7 +30,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "welcome_settings")
+@Table(name = "welcome_settings", schema = "shiro")
 @JavaTypeRegistration(javaType = GuildMessageChannel.class, descriptorClass = ChannelJavaType.class)
 public class WelcomeSettings extends DAO<WelcomeSettings> {
 	@Id

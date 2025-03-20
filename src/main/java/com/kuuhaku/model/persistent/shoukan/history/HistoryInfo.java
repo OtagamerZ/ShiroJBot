@@ -35,7 +35,7 @@ import java.util.Objects;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-@Table(name = "history_info")
+@Table(name = "history_info", schema = "shiro")
 public class HistoryInfo {
 	@Id
 	@Column(name = "match_id", nullable = false)

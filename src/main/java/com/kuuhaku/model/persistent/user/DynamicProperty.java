@@ -27,7 +27,7 @@ import org.hibernate.annotations.FetchMode;
 import java.util.Objects;
 
 @Entity
-@Table(name = "dynamic_property")
+@Table(name = "dynamic_property", schema = "shiro")
 public class DynamicProperty extends DAO<DynamicProperty> {
 	@EmbeddedId
 	private DynamicPropertyId id;

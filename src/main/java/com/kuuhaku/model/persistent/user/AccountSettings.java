@@ -33,7 +33,7 @@ import org.hibernate.type.SqlTypes;
 import java.awt.*;
 
 @Entity
-@Table(name = "account_settings")
+@Table(name = "account_settings", schema = "shiro")
 public class AccountSettings extends DAO<AccountSettings> {
 	public static final long MAX_BG_SIZE = 4 * 1024 * 1024;
 

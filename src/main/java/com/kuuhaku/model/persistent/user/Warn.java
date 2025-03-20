@@ -30,7 +30,7 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user_warn")
+@Table(name = "user_warn", schema = "shiro")
 public class Warn extends DAO<Warn> {
 	@EmbeddedId
 	private WarnId id;

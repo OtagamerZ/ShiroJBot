@@ -32,7 +32,7 @@ import org.hibernate.annotations.JavaTypeRegistration;
 import java.util.Objects;
 
 @Entity
-@Table(name = "level_role")
+@Table(name = "level_role", schema = "shiro")
 @JavaTypeRegistration(javaType = Role.class, descriptorClass = RoleJavaType.class)
 public class LevelRole extends DAO<LevelRole> {
 	@EmbeddedId

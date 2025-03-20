@@ -27,7 +27,7 @@ import jakarta.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "global_property")
+@Table(name = "global_property", schema = "shiro")
 public class GlobalProperty extends DAO<GlobalProperty> {
 	@Id
 	@Column(name = "id", nullable = false)

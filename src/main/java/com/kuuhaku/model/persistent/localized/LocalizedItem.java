@@ -32,7 +32,7 @@ import java.util.Objects;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "user_item_info")
+@Table(name = "user_item_info", schema = "shiro")
 public class LocalizedItem extends DAO<LocalizedItem> implements Serializable {
 	@EmbeddedId
 	private LocalizedId id;

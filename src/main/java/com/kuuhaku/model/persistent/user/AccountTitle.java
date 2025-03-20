@@ -26,7 +26,7 @@ import org.hibernate.annotations.FetchMode;
 import java.util.Objects;
 
 @Entity
-@Table(name = "account_title")
+@Table(name = "account_title", schema = "shiro")
 public class AccountTitle extends DAO<AccountTitle> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -25,7 +25,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "starred_message")
+@Table(name = "starred_message", schema = "shiro")
 public class StarredMessage extends DAO<StarredMessage> {
 	@Id
 	@Column(name = "id", nullable = false)

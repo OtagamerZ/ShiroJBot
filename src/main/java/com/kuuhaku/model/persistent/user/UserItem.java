@@ -39,7 +39,7 @@ import java.util.Set;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-@Table(name = "user_item")
+@Table(name = "user_item", schema = "shiro")
 public class UserItem extends DAO<UserItem> {
 	@Id
 	@Column(name = "id", nullable = false)
