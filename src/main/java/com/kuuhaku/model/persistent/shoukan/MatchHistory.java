@@ -44,7 +44,7 @@ public class MatchHistory extends DAO<MatchHistory> {
 	@Fetch(FetchMode.JOIN)
 	private HistoryInfo info;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "parent", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<HistoryTurn> turns = new HashSet<>();
 
