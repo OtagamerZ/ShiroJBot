@@ -44,17 +44,17 @@ public class HistoryTurn {
 	private HistoryTurnId id;
 
 	@OneToOne(cascade = ALL, orphanRemoval = true)
-	@JoinColumns({
-			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
-			@JoinColumn(name = "turn", referencedColumnName = "turn")
+	@PrimaryKeyJoinColumns({
+			@PrimaryKeyJoinColumn(name = "match_id"),
+			@PrimaryKeyJoinColumn(name = "turn")
 	})
 	@Fetch(FetchMode.JOIN)
 	private HistorySide top;
 
 	@OneToOne(cascade = ALL, orphanRemoval = true)
-	@JoinColumns({
-			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
-			@JoinColumn(name = "turn", referencedColumnName = "turn")
+	@PrimaryKeyJoinColumns({
+			@PrimaryKeyJoinColumn(name = "match_id"),
+			@PrimaryKeyJoinColumn(name = "turn")
 	})
 	@Fetch(FetchMode.JOIN)
 	private HistorySide bottom;
