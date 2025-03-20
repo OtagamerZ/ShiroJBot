@@ -43,9 +43,9 @@ public class HistorySlot {
 	@Fetch(FetchMode.JOIN)
 	@MapsId("sideId")
 	@JoinColumns({
-			@JoinColumn(name = "parent_parent_match_id", referencedColumnName = "parent_match_id"),
-			@JoinColumn(name = "parent_parent_turn", referencedColumnName = "parent_turn"),
-			@JoinColumn(name = "parent_side", referencedColumnName = "side")
+			@JoinColumn(name = "match_id", referencedColumnName = "parent_turn"),
+			@JoinColumn(name = "turn", referencedColumnName = "parent_turn"),
+			@JoinColumn(name = "side", referencedColumnName = "side")
 	})
 	private HistorySide parent;
 

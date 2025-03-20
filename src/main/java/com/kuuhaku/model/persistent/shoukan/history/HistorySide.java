@@ -52,8 +52,8 @@ public class HistorySide {
 	@Fetch(FetchMode.JOIN)
 	@MapsId("turnId")
 	@JoinColumns({
-			@JoinColumn(name = "parent_match_id", referencedColumnName = "match_id"),
-			@JoinColumn(name = "parent_turn", referencedColumnName = "turn")
+			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
+			@JoinColumn(name = "turn", referencedColumnName = "turn")
 	})
 	private HistoryTurn parent;
 
