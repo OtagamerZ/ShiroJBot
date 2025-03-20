@@ -45,7 +45,7 @@ public class HistoryTurn {
 
 	@ManyToOne(optional = false)
 	@Fetch(FetchMode.JOIN)
-	@MapsId("turnId")
+	@MapsId("matchId")
 	@PrimaryKeyJoinColumn(name = "match_id")
 	private MatchHistory parent;
 
