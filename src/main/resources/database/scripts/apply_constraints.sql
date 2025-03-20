@@ -28,7 +28,8 @@ BEGIN
              , x."table"
              , x.def
              , x.col
-             , x.sch
+             , (SELECT table_schema FROM information_schema.tables WHERE table_name = x.table) AS src_sch
+             , x.tgt_sch
              , x.ref
              , x.tgt
         FROM (
@@ -36,7 +37,7 @@ BEGIN
                   , replace(x.table, '"', '')                    AS "table"
                   , x.def
                   , replace(m[1], '"', '')                       AS col
-                  , replace(coalesce(m[2], x."schema"), '"', '') AS sch
+                  , replace(coalesce(m[2], x."schema"), '"', '') AS tgt_sch
                   , replace(m[3], '"', '')                       AS ref
                   , replace(m[4], '"', '')                       AS tgt
              FROM (
@@ -51,17 +52,17 @@ BEGIN
                 , regexp_match(x.def, 'FOREIGN KEY \(([\w"]+)\) REFERENCES ([\w"]+(?=\.))?([\w"]+)\((\w+?)\)') m
              ) x
         WHERE x.ref = 'card'
-           OR x.sch = 'dunhun'
+           OR x.tgt_sch = 'dunhun'
         LOOP
             EXECUTE format($$
-                        ALTER TABLE %4$I.%1$I
+                        ALTER TABLE %5$I.%1$I
                             DROP CONSTRAINT %2$I;
 
                         ALTER TABLE %4$I.%1$I
                             ADD CONSTRAINT %2$I
-                                FOREIGN KEY (%3$I) REFERENCES %4$I.%5$I(%6$I)
+                                FOREIGN KEY (%3$I) REFERENCES %5$I.%6$I(%6$I)
                                     ON UPDATE CASCADE;
-                        $$, _match.table, _match.name, _match.col, _match.sch, _match.ref,
+                        $$, _match.table, _match.name, _match.col, _match.src_sch, _match.tgt_sch, _match.ref,
                            _match.tgt
                     );
         END LOOP;
