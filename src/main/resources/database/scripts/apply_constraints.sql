@@ -55,12 +55,12 @@ BEGIN
            OR x.tgt_sch = 'dunhun'
         LOOP
             EXECUTE format($$
-                        ALTER TABLE %5$I.%1$I
+                        ALTER TABLE %4$I.%1$I
                             DROP CONSTRAINT %2$I;
 
                         ALTER TABLE %4$I.%1$I
                             ADD CONSTRAINT %2$I
-                                FOREIGN KEY (%3$I) REFERENCES %5$I.%6$I(%6$I)
+                                FOREIGN KEY (%3$I) REFERENCES %5$I.%6$I(%7$I)
                                     ON UPDATE CASCADE;
                         $$, _match.table, _match.name, _match.col, _match.src_sch, _match.tgt_sch, _match.ref,
                            _match.tgt
