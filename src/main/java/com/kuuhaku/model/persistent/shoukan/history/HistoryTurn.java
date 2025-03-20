@@ -43,6 +43,12 @@ public class HistoryTurn {
 	@EmbeddedId
 	private HistoryTurnId id;
 
+	@ManyToOne(optional = false)
+	@Fetch(FetchMode.JOIN)
+	@MapsId("turnId")
+	@PrimaryKeyJoinColumn(name = "match_id")
+	private MatchHistory parent;
+
 	@OneToOne(mappedBy = "parent", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.JOIN)
 	private HistorySide top;
@@ -56,7 +62,7 @@ public class HistoryTurn {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray banned = new JSONArray();
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "field_id")
 	@Fetch(FetchMode.JOIN)
 	private Card field;
@@ -75,6 +81,7 @@ public class HistoryTurn {
 
 	public void parent(MatchHistory parent) {
 		this.id = new HistoryTurnId(parent.getId(), parent.getTurns().size());
+		this.parent = parent;
 	}
 
 	public HistoryTurnId getId() {

@@ -39,7 +39,7 @@ public class HistorySlot {
 	@EmbeddedId
 	private HistorySlotId id;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("sideId")
 	@JoinColumns({
