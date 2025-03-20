@@ -31,14 +31,15 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.persistent.shoukan.MatchHistory;
+import com.kuuhaku.model.persistent.shoukan.history.HistoryPlayer;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.shoukan.CodexEntry;
+import com.kuuhaku.model.records.shoukan.Origin;
 import com.kuuhaku.model.records.shoukan.RaceStats;
-import com.kuuhaku.model.persistent.shoukan.history.Match;
-import com.kuuhaku.model.persistent.shoukan.history.HistoryPlayer;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -77,7 +78,7 @@ public class ShoukanHistoryCommand implements Executable {
 	}
 
 	private void viewMatches(I18N locale, Message msg, Account acc) {
-		List<Match> matches = acc.getMatches();
+		List<MatchHistory> matches = acc.getMatches();
 		if (matches.isEmpty()) {
 			msg.editMessage(locale.get("error/no_matches")).queue();
 			return;
@@ -93,14 +94,16 @@ public class ShoukanHistoryCommand implements Executable {
 
 		List<Page> pages = Utils.generatePages(eb, matches, 10, 5,
 				m -> {
-					String out = Stream.of(m.historyInfo().top(), m.historyInfo().bottom())
+					String out = Stream.of(m.getInfo().getTop(), m.getInfo().getBottom())
 							.map(p -> {
-								Account a = DAO.find(Account.class, p.uid());
+								Account a = DAO.find(Account.class, p.getId().uid());
+								Origin o = p.getOrigin();
+
 								String icon;
-								if (p.origin().isPure()) {
-									icon = Utils.getEmoteString(p.origin().major().name());
+								if (o.isPure()) {
+									icon = Utils.getEmoteString(o.major().name());
 								} else {
-									icon = Utils.getEmoteString(p.origin().synergy().name());
+									icon = Utils.getEmoteString(o.synergy().name());
 								}
 
 								if (icon.isBlank()) return a.getName();
@@ -109,21 +112,21 @@ public class ShoukanHistoryCommand implements Executable {
 							.collect(Collectors.joining(" _VS_ "));
 
 					FieldMimic fm = new FieldMimic(out, "");
-					HistoryPlayer winner = m.historyInfo().getWinnerPlayer();
+					HistoryPlayer winner = m.getInfo().getWinnerPlayer();
 					if (winner == null) {
 						fm.appendLine(locale.get("str/draw"));
-					} else if (winner.uid().equals(acc.getUid())) {
+					} else if (winner.getId().uid().equals(acc.getUid())) {
 						fm.appendLine(locale.get("str/win"));
 					} else {
-						if (m.historyInfo().winCondition().equalsIgnoreCase("wo")) {
+						if (m.getInfo().getWinCondition().equalsIgnoreCase("wo")) {
 							fm.appendLine(locale.get("str/wo"));
 						} else {
 							fm.appendLine(locale.get("str/lose"));
 						}
 					}
 
-					fm.append(" | " + locale.get("str/turns_inline", m.turns().size()));
-					fm.appendLine(Constants.TIMESTAMP_R.formatted(m.historyInfo().timestamp()));
+					fm.append(" | " + locale.get("str/turns_inline", m.getTurns().size()));
+					fm.appendLine(Constants.TIMESTAMP_R.formatted(m.getInfo().getTimestamp().toInstant().getEpochSecond()));
 					return fm.toString();
 				},
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))

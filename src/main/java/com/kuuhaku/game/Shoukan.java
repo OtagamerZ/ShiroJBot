@@ -41,7 +41,6 @@ import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.history.HistoryTurn;
-import com.kuuhaku.model.persistent.shoukan.history.Match;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.ClusterAction;
@@ -364,7 +363,6 @@ public class Shoukan extends GameInstance<Phase> {
 	private boolean debSaveHistory(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
-			Match m = new Match(this, "none");
 			new MatchHistory(this, "none", getTurns()).save();
 
 			reportEvent("SAVE_HISTORY", true, false);

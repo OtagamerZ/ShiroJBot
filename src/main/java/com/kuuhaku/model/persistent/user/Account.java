@@ -29,14 +29,13 @@ import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
 import com.kuuhaku.model.persistent.shoukan.DailyDeck;
-import com.kuuhaku.model.records.id.ProfileId;
 import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.shoukan.history.Match;
+import com.kuuhaku.model.persistent.shoukan.MatchHistory;
+import com.kuuhaku.model.records.id.ProfileId;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -499,16 +498,17 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		return DAO.queryNative(Integer.class, "SELECT user_shoukan_ranking(?1)", uid);
 	}
 
-	public List<Match> getMatches() {
-		return DAO.queryAllUnmapped("""
-						SELECT cast(jsonb_build_object('info', info, 'turns', turns) AS TEXT)
-						FROM v_matches
-						WHERE has(players, ?1)
-						ORDER BY id DESC
-						""", uid
-				).stream()
-				.map(o -> JSONUtils.fromJSON(String.valueOf(o[0]), Match.class))
-				.toList();
+	public List<MatchHistory> getMatches() {
+		return List.of();
+//		return DAO.queryAllUnmapped("""
+//						SELECT cast(jsonb_build_object('info', info, 'turns', turns) AS TEXT)
+//						FROM v_matches
+//						WHERE has(players, ?1)
+//						ORDER BY id DESC
+//						""", uid
+//				).stream()
+//				.map(o -> JSONUtils.fromJSON(String.valueOf(o[0]), Match.class))
+//				.toList();
 	}
 
 	@Override
