@@ -23,7 +23,7 @@ import jakarta.persistence.*;
 
 @Embeddable
 public record HistorySideId(
-		@EmbeddedId
+		@Embedded
 		HistoryTurnId turnId,
 		@Enumerated(EnumType.STRING)
 		@Column(name = "side", nullable = false)

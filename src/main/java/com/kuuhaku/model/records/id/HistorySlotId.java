@@ -20,11 +20,11 @@ package com.kuuhaku.model.records.id;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Embedded;
 
 @Embeddable
 public record HistorySlotId(
-		@EmbeddedId
+		@Embedded
 		HistorySideId sideId,
 		@Column(name = "slot", nullable = false)
 		int slot
