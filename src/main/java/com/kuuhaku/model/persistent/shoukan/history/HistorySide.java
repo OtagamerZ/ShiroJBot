@@ -51,9 +51,9 @@ public class HistorySide {
 	@OneToOne
 	@Fetch(FetchMode.JOIN)
 	@MapsId("turnId")
-	@AttributeOverrides({
-			@AttributeOverride(name = "parent.id.matchId", column = @Column(name = "match_id")),
-			@AttributeOverride(name = "parent.id.turn", column = @Column(name = "turn"))
+	@JoinColumns({
+			@JoinColumn(name = "parent_match_id", referencedColumnName = "match_id"),
+			@JoinColumn(name = "parent_turn", referencedColumnName = "turn")
 	})
 	private HistoryTurn parent;
 

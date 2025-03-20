@@ -42,10 +42,10 @@ public class HistorySlot {
 	@ManyToOne
 	@Fetch(FetchMode.JOIN)
 	@MapsId("sideId")
-	@AttributeOverrides({
-			@AttributeOverride(name = "parent.id.turnId.matchId", column = @Column(name = "match_id")),
-			@AttributeOverride(name = "parent.id.turnId.turn", column = @Column(name = "turn")),
-			@AttributeOverride(name = "parent.id.side", column = @Column(name = "side"))
+	@JoinColumns({
+			@JoinColumn(name = "parent_parent_match_id", referencedColumnName = "match_id"),
+			@JoinColumn(name = "parent_parent_turn", referencedColumnName = "turn"),
+			@JoinColumn(name = "parent_side", referencedColumnName = "turn")
 	})
 	private HistorySide parent;
 
