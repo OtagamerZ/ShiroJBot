@@ -19,22 +19,14 @@
 package com.kuuhaku.model.records.id;
 
 import com.kuuhaku.model.enums.shoukan.Side;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 
 @Embeddable
 public record HistorySideId(
-		@Column(name = "match_id", nullable = false)
-		int matchId,
-		@Column(name = "turn", nullable = false)
-		int turn,
+		@EmbeddedId
+		HistoryTurnId turnId,
 		@Enumerated(EnumType.STRING)
 		@Column(name = "side", nullable = false)
 		Side side
 ) {
-	public HistorySideId(HistoryTurnId parent, Side side) {
-		this(parent.matchId(), parent.turn(), side);
-	}
 }

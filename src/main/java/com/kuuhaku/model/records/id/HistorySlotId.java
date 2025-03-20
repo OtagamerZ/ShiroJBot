@@ -18,25 +18,15 @@
 
 package com.kuuhaku.model.records.id;
 
-import com.kuuhaku.model.enums.shoukan.Side;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.EmbeddedId;
 
 @Embeddable
 public record HistorySlotId(
-		@Column(name = "match_id", nullable = false)
-		int matchId,
-		@Column(name = "turn", nullable = false)
-		int turn,
-		@Enumerated(EnumType.STRING)
-		@Column(name = "side", nullable = false)
-		Side side,
+		@EmbeddedId
+		HistorySideId sideId,
 		@Column(name = "slot", nullable = false)
 		int slot
 ) {
-	public HistorySlotId(HistorySideId parent, int slot) {
-		this(parent.matchId(), parent.turn(), parent.side(), slot);
-	}
 }

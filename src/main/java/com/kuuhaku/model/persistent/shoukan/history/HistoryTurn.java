@@ -43,19 +43,11 @@ public class HistoryTurn {
 	@EmbeddedId
 	private HistoryTurnId id;
 
-	@OneToOne(cascade = ALL, orphanRemoval = true)
-	@PrimaryKeyJoinColumns({
-			@PrimaryKeyJoinColumn(name = "match_id"),
-			@PrimaryKeyJoinColumn(name = "turn")
-	})
+	@OneToOne(mappedBy = "parent", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.JOIN)
 	private HistorySide top;
 
-	@OneToOne(cascade = ALL, orphanRemoval = true)
-	@PrimaryKeyJoinColumns({
-			@PrimaryKeyJoinColumn(name = "match_id"),
-			@PrimaryKeyJoinColumn(name = "turn")
-	})
+	@OneToOne(mappedBy = "parent", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.JOIN)
 	private HistorySide bottom;
 

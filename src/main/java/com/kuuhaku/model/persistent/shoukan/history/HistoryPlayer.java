@@ -25,6 +25,8 @@ import com.kuuhaku.model.records.id.HistoryPlayerId;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -37,6 +39,7 @@ public class HistoryPlayer {
 	private HistoryPlayerId id;
 
 	@OneToOne
+	@Fetch(FetchMode.JOIN)
 	@MapsId("matchId")
 	private HistoryInfo parent;
 

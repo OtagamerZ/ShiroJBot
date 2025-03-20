@@ -48,6 +48,11 @@ public class HistorySide {
 	@EmbeddedId
 	private HistorySideId id;
 
+	@OneToOne
+	@Fetch(FetchMode.JOIN)
+	@MapsId("turnId")
+	private HistoryTurn parent;
+
 	@Column(name = "hp", nullable = false)
 	private int hp;
 
@@ -82,7 +87,7 @@ public class HistorySide {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray discard = new JSONArray();
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "parent", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<HistorySlot> placed = new HashSet<>();
 
@@ -91,6 +96,7 @@ public class HistorySide {
 
 	public HistorySide(HistoryTurn parent, Hand h) {
 		this.id = new HistorySideId(parent.getId(), h.getSide());
+		this.parent = parent;
 		this.hp = h.getHP();
 		this.mp = h.getMP();
 		this.activeDot = h.getRegDeg().peek();
