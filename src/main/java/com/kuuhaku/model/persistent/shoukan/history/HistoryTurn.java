@@ -46,7 +46,6 @@ public class HistoryTurn {
 	@ManyToOne(optional = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("matchId")
-	@PrimaryKeyJoinColumn(name = "match_id")
 	private MatchHistory parent;
 
 	@OneToOne(mappedBy = "parent", cascade = ALL, orphanRemoval = true)
