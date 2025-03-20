@@ -31,7 +31,7 @@ import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
 import com.kuuhaku.model.persistent.shoukan.DailyDeck;
 import com.kuuhaku.model.records.id.ProfileId;
 import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.records.shoukan.history.Match;
+import com.kuuhaku.model.persistent.shoukan.history.Match;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;

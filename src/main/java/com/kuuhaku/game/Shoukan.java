@@ -40,6 +40,8 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
+import com.kuuhaku.model.persistent.shoukan.history.HistoryTurn;
+import com.kuuhaku.model.persistent.shoukan.history.Match;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.ClusterAction;
@@ -47,8 +49,6 @@ import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.model.records.SelectionAction;
 import com.kuuhaku.model.records.SelectionCard;
 import com.kuuhaku.model.records.shoukan.*;
-import com.kuuhaku.model.records.shoukan.history.Match;
-import com.kuuhaku.model.records.shoukan.history.Turn;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
@@ -91,7 +91,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private final Map<String, String> messages = new HashMap<>();
 	private final Set<EffectOverTime> eots = new HashSet<>();
 	private final Set<TriggerBind> bindings = new HashSet<>();
-	private final List<Turn> turns = new TreeList<>();
+	private final List<HistoryTurn> turns = new TreeList<>();
 	private final JSONObject data = new JSONObject();
 
 	private int tick;
@@ -365,7 +365,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			Match m = new Match(this, "none");
-			new MatchHistory(m).save();
+			new MatchHistory(this, "none", getTurns()).save();
 
 			reportEvent("SAVE_HISTORY", true, false);
 			return true;
@@ -1641,7 +1641,7 @@ public class Shoukan extends GameInstance<Phase> {
 		return arena;
 	}
 
-	public List<Turn> getTurns() {
+	public List<HistoryTurn> getTurns() {
 		return turns;
 	}
 
@@ -2083,7 +2083,7 @@ public class Shoukan extends GameInstance<Phase> {
 	public void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, Side winner, String message, Object... args) {
 		if (isClosed()) return;
 
-		turns.add(Turn.from(this));
+		turns.add(new HistoryTurn(this));
 
 		setRestoring(true);
 		for (List<SlotColumn> slts : arena.getSlots().values()) {
@@ -2154,7 +2154,7 @@ public class Shoukan extends GameInstance<Phase> {
 					cond = defeat.key();
 				}
 
-				new MatchHistory(new Match(this, cond)).save();
+				new MatchHistory(this, cond, getTurns()).save();
 			}
 		}
 
@@ -2605,7 +2605,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	public void nextTurn() {
-		turns.add(Turn.from(this));
+		turns.add(new HistoryTurn(this));
 
 		Hand curr = getCurrent();
 		if (getOther().getOrigins().synergy() == Race.ELEMENTAL) {

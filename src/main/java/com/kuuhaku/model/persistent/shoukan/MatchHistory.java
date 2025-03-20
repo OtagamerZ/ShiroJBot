@@ -19,21 +19,17 @@
 package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
-import com.kuuhaku.model.records.shoukan.history.Info;
-import com.kuuhaku.model.records.shoukan.history.Match;
-import com.kuuhaku.model.records.shoukan.history.Turn;
-import com.ygimenez.json.JSONArray;
-import com.ygimenez.json.JSONObject;
+import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.model.persistent.shoukan.history.HistoryInfo;
+import com.kuuhaku.model.persistent.shoukan.history.HistoryTurn;
 import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+
+import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "match_history")
@@ -43,32 +39,35 @@ public class MatchHistory extends DAO<MatchHistory> {
 	@Column(name = "id", nullable = false)
 	private int id;
 
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "info", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONObjectConverter.class)
-	private JSONObject info = new JSONObject();
+	@OneToOne(cascade = ALL, orphanRemoval = true)
+	@PrimaryKeyJoinColumn(name = "match_id")
+	@Fetch(FetchMode.JOIN)
+	private HistoryInfo info;
 
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "turns", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray turns = new JSONArray();
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<HistoryTurn> turns = new HashSet<>();
 
 	public MatchHistory() {
 	}
 
-	public MatchHistory(Match match) {
-		this.info = new JSONObject(match.info());
-		this.turns = new JSONArray(match.turns());
+	public MatchHistory(Shoukan game, String winCondition, List<HistoryTurn> turns) {
+		this.info = new HistoryInfo(this, game, winCondition);
+		this.turns = Set.copyOf(turns);
 	}
 
-	public Info getInfo() {
-		return JSONUtils.fromJSON(info.toString(), Info.class);
+	public int getId() {
+		return id;
 	}
 
-	public List<Turn> getTurns() {
-		List<Turn> out = new ArrayList<>();
+	public HistoryInfo getInfo() {
+		return JSONUtils.fromJSON(info.toString(), HistoryInfo.class);
+	}
+
+	public List<HistoryTurn> getTurns() {
+		List<HistoryTurn> out = new ArrayList<>();
 		for (Object turn : turns) {
-			out.add(JSONUtils.fromJSON(String.valueOf(turn), Turn.class));
+			out.add(JSONUtils.fromJSON(String.valueOf(turn), HistoryTurn.class));
 		}
 
 		return out;

@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2024  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,27 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.shoukan.history;
+package com.kuuhaku.model.records.id;
 
 import com.kuuhaku.model.enums.shoukan.Side;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
-public record Info(Player top, Player bottom, Side winner, String arcade, String winCondition, long timestamp, long seed) {
-	public Player winnerPlayer() {
-		if (winner == null) return null;
-
-		return switch (winner) {
-			case TOP -> top;
-			case BOTTOM -> bottom;
-		};
+@Embeddable
+public record HistorySlotId(
+		@Column(name = "match_id", nullable = false)
+		int matchId,
+		@Column(name = "turn", nullable = false)
+		int turn,
+		@Enumerated(EnumType.STRING)
+		@Column(name = "side", nullable = false)
+		Side side,
+		@Column(name = "slot", nullable = false)
+		int slot
+) {
+	public HistorySlotId(HistorySideId parent, int slot) {
+		this(parent.matchId(), parent.turn(), parent.side(), slot);
 	}
 }

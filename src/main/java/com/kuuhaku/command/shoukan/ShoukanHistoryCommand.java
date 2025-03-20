@@ -37,15 +37,14 @@ import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.shoukan.CodexEntry;
 import com.kuuhaku.model.records.shoukan.RaceStats;
-import com.kuuhaku.model.records.shoukan.history.Match;
-import com.kuuhaku.model.records.shoukan.history.Player;
+import com.kuuhaku.model.persistent.shoukan.history.Match;
+import com.kuuhaku.model.persistent.shoukan.history.HistoryPlayer;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -94,7 +93,7 @@ public class ShoukanHistoryCommand implements Executable {
 
 		List<Page> pages = Utils.generatePages(eb, matches, 10, 5,
 				m -> {
-					String out = Stream.of(m.info().top(), m.info().bottom())
+					String out = Stream.of(m.historyInfo().top(), m.historyInfo().bottom())
 							.map(p -> {
 								Account a = DAO.find(Account.class, p.uid());
 								String icon;
@@ -110,13 +109,13 @@ public class ShoukanHistoryCommand implements Executable {
 							.collect(Collectors.joining(" _VS_ "));
 
 					FieldMimic fm = new FieldMimic(out, "");
-					Player winner = m.info().winnerPlayer();
+					HistoryPlayer winner = m.historyInfo().getWinnerPlayer();
 					if (winner == null) {
 						fm.appendLine(locale.get("str/draw"));
 					} else if (winner.uid().equals(acc.getUid())) {
 						fm.appendLine(locale.get("str/win"));
 					} else {
-						if (m.info().winCondition().equalsIgnoreCase("wo")) {
+						if (m.historyInfo().winCondition().equalsIgnoreCase("wo")) {
 							fm.appendLine(locale.get("str/wo"));
 						} else {
 							fm.appendLine(locale.get("str/lose"));
@@ -124,7 +123,7 @@ public class ShoukanHistoryCommand implements Executable {
 					}
 
 					fm.append(" | " + locale.get("str/turns_inline", m.turns().size()));
-					fm.appendLine(Constants.TIMESTAMP_R.formatted(m.info().timestamp()));
+					fm.appendLine(Constants.TIMESTAMP_R.formatted(m.historyInfo().timestamp()));
 					return fm.toString();
 				},
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))

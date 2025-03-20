@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2024  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +16,16 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.shoukan.history;
+package com.kuuhaku.model.records.id;
 
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
-public record Side(int hp, int mp, int regdeg, Locks locks, List<String> hand, List<String> deck, List<String> graveyard, List<Slot> placed) {
+@Embeddable
+public record HistoryTurnId(
+		@Column(name = "match_id", nullable = false)
+		int matchId,
+		@Column(name = "turn", nullable = false)
+		int turn
+) {
 }

@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2024  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +16,19 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.records.shoukan.history;
+package com.kuuhaku.model.records.id;
 
-import com.kuuhaku.model.enums.shoukan.Lock;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
-import java.util.Map;
-
-public record Locks(Map<Lock, Integer> time) {
-
+@Embeddable
+public record HistoryPlayerId(
+		@Column(name = "match_id", nullable = false)
+		int matchId,
+		@Column(name = "uid", nullable = false)
+		String uid
+) {
+	public HistoryPlayerId {
+		if (uid.isBlank()) throw new IllegalArgumentException("UID cannot be blank");
+	}
 }
