@@ -41,13 +41,11 @@ public class HistoryInfo {
 	@Column(name = "match_id", nullable = false)
 	private int matchId;
 
-	@OneToOne(cascade = ALL, orphanRemoval = true)
-	@JoinColumn(name = "top_id")
+	@OneToOne(mappedBy = "parent", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.JOIN)
 	private HistoryPlayer top;
 
-	@OneToOne(cascade = ALL, orphanRemoval = true)
-	@JoinColumn(name = "bottom_id")
+	@OneToOne(mappedBy = "parent", cascade = ALL, orphanRemoval = true)
 	@Fetch(FetchMode.JOIN)
 	private HistoryPlayer bottom;
 
@@ -73,7 +71,7 @@ public class HistoryInfo {
 
 	public HistoryInfo(MatchHistory match, Shoukan game, String winCondition) {
 		for (Map.Entry<Side, Hand> e : game.getHands().entrySet()) {
-			HistoryPlayer p = new HistoryPlayer(match, e.getValue());
+			HistoryPlayer p = new HistoryPlayer(this, e.getValue());
 
 			if (e.getKey() == Side.TOP) {
 				this.top = p;

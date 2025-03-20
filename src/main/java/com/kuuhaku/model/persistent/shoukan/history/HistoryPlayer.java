@@ -21,7 +21,6 @@ package com.kuuhaku.model.persistent.shoukan.history;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.kuuhaku.model.persistent.shoukan.MatchHistory;
 import com.kuuhaku.model.records.id.HistoryPlayerId;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.ygimenez.json.JSONArray;
@@ -36,6 +35,10 @@ import java.util.Objects;
 public class HistoryPlayer {
 	@EmbeddedId
 	private HistoryPlayerId id;
+
+	@OneToOne
+	@MapsId("matchId")
+	private HistoryInfo parent;
 
 	@Column(name = "hp", nullable = false)
 	private int hp;
@@ -61,8 +64,9 @@ public class HistoryPlayer {
 	public HistoryPlayer() {
 	}
 
-	public HistoryPlayer(MatchHistory match, Hand hand) {
-		this.id = new HistoryPlayerId(match.getId(), hand.getUid());
+	public HistoryPlayer(HistoryInfo parent, Hand hand) {
+		this.id = new HistoryPlayerId(parent.getMatchId(), hand.getUid());
+		this.parent = parent;
 		this.hp = hand.getBase().hp();
 		this.weight = hand.getUserDeck().getEvoWeight();
 		this.divergence = hand.getUserDeck().getMetaDivergence();
