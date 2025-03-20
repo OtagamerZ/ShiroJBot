@@ -42,18 +42,12 @@ public class HistoryInfo {
 	private int matchId;
 
 	@OneToOne(cascade = ALL, orphanRemoval = true)
-	@JoinColumns({
-			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
-			@JoinColumn(name = "top_id")
-	})
+	@JoinColumn(name = "top_id")
 	@Fetch(FetchMode.JOIN)
 	private HistoryPlayer top;
 
 	@OneToOne(cascade = ALL, orphanRemoval = true)
-	@JoinColumns({
-			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
-			@JoinColumn(name = "bottom_id")
-	})
+	@JoinColumn(name = "bottom_id")
 	@Fetch(FetchMode.JOIN)
 	private HistoryPlayer bottom;
 
