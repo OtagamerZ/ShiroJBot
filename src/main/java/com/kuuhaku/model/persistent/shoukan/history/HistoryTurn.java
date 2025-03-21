@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.persistent.shoukan.history;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
@@ -84,9 +83,10 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 		this.field = game.getArena().getField().getCard();
 	}
 
-	public void parent(MatchHistory parent) {
+	public HistoryTurn parent(MatchHistory parent) {
 		this.id = new HistoryTurnId(parent.getId(), parent.getTurns().size());
 		this.parent = parent;
+		return this;
 	}
 
 	public HistoryTurnId getId() {
@@ -115,10 +115,5 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(id);
-	}
-
-	@Override
-	public void beforeSave() {
-		Constants.LOGGER.warn(id);
 	}
 }

@@ -58,8 +58,7 @@ public class MatchHistory extends DAO<MatchHistory> {
 		this.id = DAO.queryNative(Integer.class, "SELECT nextval('history_match_id_seq')");
 		this.info = new HistoryInfo(this, game, winCondition);
 		for (HistoryTurn turn : turns) {
-			turn.parent(this);
-			this.turns.add(turn);
+			this.turns.add(turn.parent(this));
 		}
 	}
 
