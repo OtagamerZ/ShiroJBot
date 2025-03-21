@@ -22,12 +22,14 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.persistent.shoukan.history.HistoryInfo;
 import com.kuuhaku.model.persistent.shoukan.history.HistoryTurn;
-import com.ygimenez.json.JSONUtils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -53,7 +55,7 @@ public class MatchHistory extends DAO<MatchHistory> {
 	public MatchHistory(Shoukan game, String winCondition, List<HistoryTurn> turns) {
 		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS history_match_id_seq");
 
-		this.id = DAO.queryNative(Integer.class, "SELECT nextval('level_role_id_seq')");
+		this.id = DAO.queryNative(Integer.class, "SELECT nextval('history_match_id_seq')");
 		this.info = new HistoryInfo(this, game, winCondition);
 		for (HistoryTurn turn : turns) {
 			turn.parent(this);

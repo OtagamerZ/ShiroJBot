@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.shoukan.history;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Side;
@@ -26,8 +27,6 @@ import com.kuuhaku.model.records.id.HistoryPlayerId;
 import com.kuuhaku.model.records.shoukan.Origin;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -35,7 +34,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "history_player", schema = "shiro")
-public class HistoryPlayer {
+public class HistoryPlayer extends DAO<HistoryPlayer> {
 	@EmbeddedId
 	private HistoryPlayerId id;
 

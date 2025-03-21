@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.shoukan.history;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
@@ -44,7 +45,7 @@ import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "history_side", schema = "shiro")
-public class HistorySide {
+public class HistorySide extends DAO<HistorySide> {
 	@EmbeddedId
 	private HistorySideId id;
 

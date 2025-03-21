@@ -18,21 +18,21 @@
 
 package com.kuuhaku.model.persistent.shoukan.history;
 
-import com.kuuhaku.Constants;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.shoukan.Hand;
-import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.MatchHistory;
 import com.kuuhaku.model.records.id.HistoryTurnId;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -42,7 +42,7 @@ import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "history_turn", schema = "shiro")
-public class HistoryTurn {
+public class HistoryTurn extends DAO<HistoryTurn> {
 	@EmbeddedId
 	private HistoryTurnId id;
 

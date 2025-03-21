@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.shoukan.history;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.Arcade;
@@ -35,7 +36,7 @@ import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "history_info", schema = "shiro")
-public class HistoryInfo {
+public class HistoryInfo extends DAO<HistoryInfo> {
 	@Id
 	@Column(name = "match_id", nullable = false)
 	private int matchId;

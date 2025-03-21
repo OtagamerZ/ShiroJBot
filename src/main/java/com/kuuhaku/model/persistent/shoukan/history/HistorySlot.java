@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.shoukan.history;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "history_slot", schema = "shiro")
-public class HistorySlot {
+public class HistorySlot extends DAO<HistorySlot> {
 	@EmbeddedId
 	private HistorySlotId id;
 
