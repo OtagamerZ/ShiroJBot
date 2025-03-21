@@ -29,10 +29,7 @@ public record HistoryPlayerId(
 		@Column(name = "match_id", nullable = false)
 		int matchId,
 		@Column(name = "uid", nullable = false)
-		String uid,
-		@Enumerated(EnumType.STRING)
-		@Column(name = "side", nullable = false, columnDefinition = "VARCHAR(255)")
-		Side side
+		String uid
 ) {
 	public HistoryPlayerId {
 		if (uid.isBlank()) throw new IllegalArgumentException("UID cannot be blank");
