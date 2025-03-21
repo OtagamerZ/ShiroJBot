@@ -25,6 +25,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.misc.SynthesizeCommand;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.controller.Manager;
 import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
@@ -365,19 +366,14 @@ public class Shoukan extends GameInstance<Phase> {
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			MatchHistory hist = new MatchHistory(this, "none");
 			hist.save();
+			hist = hist.refresh();
 
-			try {
-				hist = hist.refresh();
-
-				for (HistoryTurn turn : getTurns()) {
-					turn.parent(hist);
-					hist.getTurns().add(turn);
-				}
-
-				hist.save();
-			} catch (Exception e) {
-				hist.delete();
+			for (HistoryTurn turn : getTurns()) {
+				turn.parent(hist);
+				hist.getTurns().add(turn);
 			}
+
+			hist.save();
 
 			reportEvent("SAVE_HISTORY", true, false);
 			return true;
