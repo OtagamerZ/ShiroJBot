@@ -43,7 +43,7 @@ public class HistoryInfo {
 
 	@OneToOne(cascade = ALL, orphanRemoval = true)
 	@JoinColumns({
-			@JoinColumn(name = "match_id", referencedColumnName = "parent_match_id"),
+			@JoinColumn(name = "match_id", referencedColumnName = "parent_match_id", insertable = false, updatable = false),
 			@JoinColumn(name = "top_id", referencedColumnName = "uid")
 	})
 	@Fetch(FetchMode.JOIN)
@@ -51,7 +51,7 @@ public class HistoryInfo {
 
 	@OneToOne(cascade = ALL, orphanRemoval = true)
 	@JoinColumns({
-			@JoinColumn(name = "match_id", referencedColumnName = "parent_match_id"),
+			@JoinColumn(name = "match_id", referencedColumnName = "parent_match_id", insertable = false, updatable = false),
 			@JoinColumn(name = "bottom_id", referencedColumnName = "uid")
 	})
 	@Fetch(FetchMode.JOIN)
