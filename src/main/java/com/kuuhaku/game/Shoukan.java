@@ -363,7 +363,21 @@ public class Shoukan extends GameInstance<Phase> {
 	private boolean debSaveHistory(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
-			new MatchHistory(this, "none", getTurns()).save();
+			MatchHistory hist = new MatchHistory(this, "none");
+			hist.save();
+
+			try {
+				hist = hist.refresh();
+
+				for (HistoryTurn turn : getTurns()) {
+					turn.parent(hist);
+					hist.getTurns().add(turn);
+				}
+
+				hist.save();
+			} catch (Exception e) {
+				hist.delete();
+			}
 
 			reportEvent("SAVE_HISTORY", true, false);
 			return true;
@@ -2152,7 +2166,21 @@ public class Shoukan extends GameInstance<Phase> {
 					cond = defeat.key();
 				}
 
-				new MatchHistory(this, cond, getTurns()).save();
+				MatchHistory hist = new MatchHistory(this, cond);
+				hist.save();
+
+				try {
+					hist = hist.refresh();
+
+					for (HistoryTurn turn : getTurns()) {
+						turn.parent(hist);
+						hist.getTurns().add(turn);
+					}
+
+					hist.save();
+				} catch (Exception e) {
+					hist.delete();
+				}
 			}
 		}
 

@@ -51,12 +51,8 @@ public class MatchHistory extends DAO<MatchHistory> {
 	public MatchHistory() {
 	}
 
-	public MatchHistory(Shoukan game, String winCondition, List<HistoryTurn> turns) {
+	public MatchHistory(Shoukan game, String winCondition) {
 		this.info = new HistoryInfo(this, game, winCondition);
-		this.turns = Set.copyOf(turns);
-		for (HistoryTurn turn : this.turns) {
-			turn.parent(this);
-		}
 	}
 
 	public int getId() {
@@ -64,7 +60,7 @@ public class MatchHistory extends DAO<MatchHistory> {
 	}
 
 	public HistoryInfo getInfo() {
-		return JSONUtils.fromJSON(info.toString(), HistoryInfo.class);
+		return info;
 	}
 
 	public Set<HistoryTurn> getTurns() {
