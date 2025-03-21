@@ -40,7 +40,7 @@ public class MatchHistory extends DAO<MatchHistory> {
 	private int id;
 
 	@OneToOne(cascade = ALL, orphanRemoval = true)
-	@PrimaryKeyJoinColumn(name = "match_id")
+	@PrimaryKeyJoinColumn(name = "id")
 	@Fetch(FetchMode.JOIN)
 	private HistoryInfo info;
 
