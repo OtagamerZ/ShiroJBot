@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.persistent.shoukan;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.model.persistent.shoukan.history.HistoryInfo;
@@ -60,7 +59,6 @@ public class MatchHistory extends DAO<MatchHistory> {
 		this.info = new HistoryInfo(this, game, winCondition);
 		for (HistoryTurn turn : turns) {
 			this.turns.add(turn.parent(this));
-			Constants.LOGGER.warn(turn.getId());
 		}
 	}
 

@@ -47,9 +47,9 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 	private HistoryTurnId id;
 
 	@ManyToOne(optional = false)
+	@JoinColumn(name = "match_id", nullable = false, updatable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("matchId")
-	@PrimaryKeyJoinColumn(name = "match_id")
 	private MatchHistory parent;
 
 	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
