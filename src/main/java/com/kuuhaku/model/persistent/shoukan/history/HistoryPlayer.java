@@ -38,7 +38,7 @@ public class HistoryPlayer {
 	@EmbeddedId
 	private HistoryPlayerId id;
 
-	@OneToOne
+	@OneToOne(optional = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("matchId")
 	private HistoryInfo parent;

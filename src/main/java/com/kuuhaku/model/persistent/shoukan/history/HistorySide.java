@@ -48,7 +48,7 @@ public class HistorySide {
 	@EmbeddedId
 	private HistorySideId id;
 
-	@OneToOne
+	@OneToOne(optional = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("turnId")
 	@JoinColumns({
