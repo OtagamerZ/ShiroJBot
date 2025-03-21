@@ -43,7 +43,7 @@ public class HistoryInfo {
 	@OneToOne(cascade = ALL, orphanRemoval = true)
 	@JoinColumnsOrFormulas({
 			@JoinColumnOrFormula(formula = @JoinFormula(value = "match_id", referencedColumnName = "match_id")),
-			@JoinColumnOrFormula(column = @JoinColumn(name = "top_id", referencedColumnName = "uid"))
+			@JoinColumnOrFormula(column = @JoinColumn(name = "top_id", referencedColumnName = "uid", nullable = false))
 	})
 	@Fetch(FetchMode.JOIN)
 	private HistoryPlayer top;
@@ -51,7 +51,7 @@ public class HistoryInfo {
 	@OneToOne(cascade = ALL, orphanRemoval = true)
 	@JoinColumnsOrFormulas({
 			@JoinColumnOrFormula(formula = @JoinFormula(value = "match_id", referencedColumnName = "match_id")),
-			@JoinColumnOrFormula(column = @JoinColumn(name = "bottom_id", referencedColumnName = "uid"))
+			@JoinColumnOrFormula(column = @JoinColumn(name = "bottom_id", referencedColumnName = "uid", nullable = false))
 	})
 	@Fetch(FetchMode.JOIN)
 	private HistoryPlayer bottom;
@@ -77,6 +77,8 @@ public class HistoryInfo {
 	}
 
 	public HistoryInfo(MatchHistory match, Shoukan game, String winCondition) {
+		this.matchId = match.getId();
+
 		if (game.isSingleplayer()) {
 			this.top = this.bottom = new HistoryPlayer(this, game.getHands().get(Side.TOP));
 		} else {
@@ -91,7 +93,6 @@ public class HistoryInfo {
 			}
 		}
 
-		this.matchId = match.getId();
 		this.winner = game.getWinner();
 		this.arcade = game.getArcade();
 		this.winCondition = winCondition;

@@ -63,7 +63,7 @@ public class HistoryPlayer {
 	}
 
 	public HistoryPlayer(HistoryInfo parent, Hand hand) {
-		this.id = new HistoryPlayerId(parent.getMatchId(), hand.getUid());
+		this.id = new HistoryPlayerId(parent.getMatchId(), hand.getUid(), hand.getSide());
 		this.hp = hand.getBase().hp();
 		this.weight = hand.getUserDeck().getEvoWeight();
 		this.divergence = hand.getUserDeck().getMetaDivergence();

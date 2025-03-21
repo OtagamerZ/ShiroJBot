@@ -18,15 +18,21 @@
 
 package com.kuuhaku.model.records.id;
 
+import com.kuuhaku.model.enums.shoukan.Side;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Embeddable
 public record HistoryPlayerId(
 		@Column(name = "match_id", nullable = false)
 		int matchId,
 		@Column(name = "uid", nullable = false)
-		String uid
+		String uid,
+		@Enumerated(EnumType.STRING)
+		@Column(name = "side", nullable = false, columnDefinition = "VARCHAR(255)")
+		Side side
 ) {
 	public HistoryPlayerId {
 		if (uid.isBlank()) throw new IllegalArgumentException("UID cannot be blank");
