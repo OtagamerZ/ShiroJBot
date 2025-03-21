@@ -45,7 +45,7 @@ public class HistorySlot {
 	@JoinColumns({
 			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
 			@JoinColumn(name = "turn", referencedColumnName = "turn"),
-			@JoinColumn(name = "side", referencedColumnName = "side")
+			@JoinColumn(name = "side", referencedColumnName = "side", columnDefinition = "VARCHAR(255)")
 	})
 	private HistorySide parent;
 

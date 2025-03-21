@@ -26,7 +26,7 @@ public record HistorySideId(
 		@Embedded
 		HistoryTurnId turnId,
 		@Enumerated(EnumType.STRING)
-		@Column(name = "side", nullable = false)
+		@Column(name = "side", nullable = false, columnDefinition = "VARCHAR(255)")
 		Side side
 ) {
 }
