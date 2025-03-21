@@ -51,7 +51,7 @@ public class HistoryInfo {
 	@OneToOne(cascade = ALL, orphanRemoval = true)
 	@JoinColumnsOrFormulas({
 			@JoinColumnOrFormula(formula = @JoinFormula(value = "match_id", referencedColumnName = "match_id")),
-			@JoinColumnOrFormula(column = @JoinColumn(name = "top_id", referencedColumnName = "uid"))
+			@JoinColumnOrFormula(column = @JoinColumn(name = "bottom_id", referencedColumnName = "uid"))
 	})
 	@Fetch(FetchMode.JOIN)
 	private HistoryPlayer bottom;
