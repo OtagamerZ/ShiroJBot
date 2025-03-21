@@ -66,7 +66,8 @@ public class HistorySlot extends DAO<HistorySlot> {
 	public HistorySlot() {
 	}
 
-	public HistorySlot(Senshi frontline, Senshi backline, int lockTime) {
+	public HistorySlot(HistorySide parent, Senshi frontline, Senshi backline, int lockTime) {
+		this.id = new HistorySlotId(parent.getId(), parent.getSlots().size());
 		if (frontline != null) {
 			this.frontline = frontline.getCard();
 			this.frontlineEquips = frontline.getEquipments(false).stream()
@@ -85,7 +86,7 @@ public class HistorySlot extends DAO<HistorySlot> {
 	}
 
 	public HistorySlot parent(HistorySide parent) {
-		this.id = new HistorySlotId(parent.getId(), parent.getSlots().size());
+		this.id = new HistorySlotId(parent.getId(), id.slot());
 		return this;
 	}
 

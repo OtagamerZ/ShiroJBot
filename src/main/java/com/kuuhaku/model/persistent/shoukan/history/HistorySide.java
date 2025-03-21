@@ -23,7 +23,6 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.shoukan.Lock;
-import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.records.id.HistorySideId;
@@ -96,7 +95,8 @@ public class HistorySide extends DAO<HistorySide> {
 	public HistorySide() {
 	}
 
-	public HistorySide(Hand h) {
+	public HistorySide(HistoryTurn parent, Hand h) {
+		this.id = new HistorySideId(parent.getId(), h.getSide());
 		this.hp = h.getHP();
 		this.mp = h.getMP();
 		this.activeDot = h.getRegDeg().peek();
@@ -119,12 +119,12 @@ public class HistorySide extends DAO<HistorySide> {
 		}
 
 		for (SlotColumn slot : h.getGame().getSlots(h.getSide())) {
-			slots.add(new HistorySlot(slot.getTop(), slot.getBottom(), slot.getLock()));
+			slots.add(new HistorySlot(this, slot.getTop(), slot.getBottom(), slot.getLock()));
 		}
 	}
 
 	public HistorySide parent(HistoryTurn parent) {
-		this.id = new HistorySideId(parent.getId(), Side.values()[parent.getSides().size()]);
+		this.id = new HistorySideId(parent.getId(), id.side());
 
 		for (HistorySlot slot : slots) {
 			slot.parent(this);

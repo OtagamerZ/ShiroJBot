@@ -75,7 +75,7 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 
 	public HistoryTurn(Shoukan game) {
 		for (Side side : Side.values()) {
-			sides.add(new HistorySide(game.getHands().get(side)));
+			sides.add(new HistorySide(this, game.getHands().get(side)));
 		}
 		this.banned = game.getArena().getBanned(false).stream()
 				.map(Drawable::getId)
