@@ -47,14 +47,12 @@ public class MatchHistory extends DAO<MatchHistory> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<HistoryTurn> turns = new HashSet<>();
 
-	static {
-		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS history_match_id_seq");
-	}
-
 	public MatchHistory() {
 	}
 
 	public MatchHistory(Shoukan game, String winCondition, List<HistoryTurn> turns) {
+		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS history_match_id_seq");
+
 		this.id = DAO.queryNative(Integer.class, "SELECT nextval('level_role_id_seq')");
 		this.info = new HistoryInfo(this, game, winCondition);
 		for (HistoryTurn turn : turns) {

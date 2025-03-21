@@ -29,12 +29,9 @@ public record LevelRoleId(
 		@Column(name = "gid", nullable = false)
 		String gid
 ) {
-	static {
-		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS level_role_id_seq");
-	}
-
 	public LevelRoleId(String gid) {
 		this(DAO.queryNative(Integer.class, "SELECT nextval('level_role_id_seq')"), gid);
+		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS level_role_id_seq");
 	}
 
 	public LevelRoleId {

@@ -31,12 +31,9 @@ public record WarnId(
 		@Column(name = "uid", nullable = false)
 		String uid
 ) {
-	static {
-		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS warn_id_seq");
-	}
-
 	public WarnId(String gid, String uid) {
 		this(DAO.queryNative(Integer.class, "SELECT nextval('warn_id_seq')"), gid, uid);
+		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS warn_id_seq");
 	}
 
 	public WarnId {
