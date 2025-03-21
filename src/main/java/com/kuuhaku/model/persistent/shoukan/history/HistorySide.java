@@ -48,15 +48,6 @@ public class HistorySide {
 	@EmbeddedId
 	private HistorySideId id;
 
-	@OneToOne(optional = false)
-	@Fetch(FetchMode.JOIN)
-	@MapsId("turnId")
-	@JoinColumns({
-			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
-			@JoinColumn(name = "turn", referencedColumnName = "turn")
-	})
-	private HistoryTurn parent;
-
 	@Column(name = "hp", nullable = false)
 	private int hp;
 
@@ -100,7 +91,6 @@ public class HistorySide {
 
 	public HistorySide(HistoryTurn parent, Hand h) {
 		this.id = new HistorySideId(parent.getId(), h.getSide());
-		this.parent = parent;
 		this.hp = h.getHP();
 		this.mp = h.getMP();
 		this.activeDot = h.getRegDeg().peek();

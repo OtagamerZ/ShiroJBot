@@ -28,12 +28,13 @@ import com.kuuhaku.model.persistent.shoukan.MatchHistory;
 import com.kuuhaku.model.records.id.HistoryTurnId;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 
+import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -50,13 +51,13 @@ public class HistoryTurn {
 	@PrimaryKeyJoinColumn(name = "match_id")
 	private MatchHistory parent;
 
-	@OneToOne(mappedBy = "parent", cascade = ALL, orphanRemoval = true)
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@JoinColumns({
+			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
+			@JoinColumn(name = "turn", referencedColumnName = "turn"),
+	})
 	@Fetch(FetchMode.JOIN)
-	private HistorySide top;
-
-	@OneToOne(mappedBy = "parent", cascade = ALL, orphanRemoval = true)
-	@Fetch(FetchMode.JOIN)
-	private HistorySide bottom;
+	private Set<HistorySide> sides = new HashSet<>();
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "banned", nullable = false, columnDefinition = "JSONB")
