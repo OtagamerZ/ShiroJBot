@@ -23,6 +23,7 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.enums.shoukan.Lock;
+import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.records.id.HistorySideId;
@@ -90,13 +91,12 @@ public class HistorySide extends DAO<HistorySide> {
 			@JoinColumn(name = "side", referencedColumnName = "side")
 	})
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<HistorySlot> placed = new HashSet<>();
+	private Set<HistorySlot> slots = new HashSet<>();
 
 	public HistorySide() {
 	}
 
-	public HistorySide(HistoryTurn parent, Hand h) {
-		this.id = new HistorySideId(parent.getId(), h.getSide());
+	public HistorySide(Hand h) {
 		this.hp = h.getHP();
 		this.mp = h.getMP();
 		this.activeDot = h.getRegDeg().peek();
@@ -119,8 +119,18 @@ public class HistorySide extends DAO<HistorySide> {
 		}
 
 		for (SlotColumn slot : h.getGame().getSlots(h.getSide())) {
-			placed.add(new HistorySlot(this, slot.getTop(), slot.getBottom(), slot.getLock()));
+			slots.add(new HistorySlot(slot.getTop(), slot.getBottom(), slot.getLock()));
 		}
+	}
+
+	public HistorySide parent(HistoryTurn parent) {
+		this.id = new HistorySideId(parent.getId(), Side.values()[parent.getSides().size()]);
+
+		for (HistorySlot slot : slots) {
+			slot.parent(this);
+		}
+
+		return this;
 	}
 
 	public HistorySideId getId() {
@@ -155,8 +165,8 @@ public class HistorySide extends DAO<HistorySide> {
 		return graveyard;
 	}
 
-	public Set<HistorySlot> getPlaced() {
-		return placed;
+	public Set<HistorySlot> getSlots() {
+		return slots;
 	}
 
 	@Override
