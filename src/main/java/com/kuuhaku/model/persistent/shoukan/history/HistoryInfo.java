@@ -70,13 +70,17 @@ public class HistoryInfo {
 	}
 
 	public HistoryInfo(MatchHistory match, Shoukan game, String winCondition) {
-		for (Map.Entry<Side, Hand> e : game.getHands().entrySet()) {
-			HistoryPlayer p = new HistoryPlayer(this, e.getValue());
+		if (game.isSingleplayer()) {
+			this.top = this.bottom = new HistoryPlayer(this, game.getHands().get(Side.TOP));
+		} else {
+			for (Map.Entry<Side, Hand> e : game.getHands().entrySet()) {
+				HistoryPlayer p = new HistoryPlayer(this, e.getValue());
 
-			if (e.getKey() == Side.TOP) {
-				this.top = p;
-			} else {
-				this.bottom = p;
+				if (e.getKey() == Side.TOP) {
+					this.top = p;
+				} else {
+					this.bottom = p;
+				}
 			}
 		}
 
