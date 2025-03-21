@@ -19,19 +19,31 @@
 CREATE OR REPLACE FUNCTION user_matches(VARCHAR)
     RETURNS TABLE
             (
-                id    INT,
-                info  JSONB,
-                turns JSONB,
-                side  VARCHAR
+                match_id INT,
+                uid VARCHAR,
+                arcade VARCHAR,
+                seed BIGINT,
+                match_timestamp TIMESTAMP WITH TIME ZONE,
+                win_condition VARCHAR,
+                winner VARCHAR,
+                bottom_id VARCHAR,
+                top_id VARCHAR,
+                side VARCHAR
             )
     LANGUAGE sql
 AS
 $$
-SELECT id
-     , info
-     , turns
-     , iif((info -> 'top' ->> 'uid') = $1, cast('top' AS VARCHAR), cast('bottom' AS VARCHAR))
-FROM match_history
-WHERE has(info, 'winner')
-  AND $1 IN (info -> 'top' ->> 'uid', info -> 'bottom' ->> 'uid')
+SELECT match_id
+     , $1
+     , arcade
+     , seed
+     , match_timestamp
+     , win_condition
+     , winner
+     , bottom_id
+     , top_id
+     , iif(top_id = $1, cast('TOP' AS VARCHAR), cast('BOTTOM' AS VARCHAR))
+FROM history_info
+WHERE winner IS NOT NULL
+  AND $1 IN (top_id, bottom_id)
 $$;

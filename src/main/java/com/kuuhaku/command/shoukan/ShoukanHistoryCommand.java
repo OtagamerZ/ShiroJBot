@@ -146,23 +146,19 @@ public class ShoukanHistoryCommand implements Executable {
 						     , x.played
 						     , x.won
 						FROM (
-						         SELECT cast(x.flag AS INT)         AS flag
-						              , cast(x.variant AS BOOLEAN)  AS variant
-						              , count(1)                    AS played
-						              , count(nullif(x.won, FALSE)) AS won
-						         FROM (
-						                  SELECT race_flag(x.major) | race_flag(x.minor) AS flag
-						                       , x.variant
-						                       , x.won
-						                  FROM (
-						                           SELECT um.info -> um.side -> 'origin' ->> 'major'      AS major
-						                                , um.info -> um.side -> 'origin' -> 'minor' ->> 0 AS minor
-						                                , um.info -> um.side -> 'origin' ->> 'variant'    AS variant
-						                                , (um.info ->> 'winner') = upper(um.side)         AS won
-						                           FROM user_matches(?1) um
-						                       ) x
-						              ) x
-						         GROUP BY flag, x.variant
+						     SELECT cast(x.flag AS INT) AS flag
+						          , x.variant
+						          , count(1)            AS played
+						          , count(x.won)        AS won
+						     FROM (
+						          SELECT cast(race_flag(hp.major_race) | race_flag(hp.minor_races ->> 0) AS INT) AS flag
+						               , hp.using_variant                                                        AS variant
+						               , nullif(um.winner = um.side, FALSE)                                      AS won
+						          FROM user_matches(?1) um
+						                   INNER JOIN history_side hs ON um.match_id = hs.match_id
+						                   INNER JOIN history_player hp ON um.match_id = hp.match_id AND um.uid = hp.uid
+						          ) x
+						     GROUP BY x.flag, x.variant
 						     ) x
 						ORDER BY cast(x.won AS NUMERIC) / x.played DESC, x.played DESC
 						""", acc.getUid()).stream()
@@ -213,8 +209,7 @@ public class ShoukanHistoryCommand implements Executable {
 		Set<Race> races = DAO.queryAllUnmapped("""
 						SELECT cast(flag AS INT) AS flag
 						     , variant
-						FROM v_codex_progress
-						WHERE uid = ?1
+						FROM codex_progress(?1)
 						""", acc.getUid()).stream()
 				.map(o -> Utils.map(CodexEntry.class, o))
 				.filter(Objects::nonNull)

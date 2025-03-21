@@ -29,8 +29,8 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS delete_ghosts ON kawaipon.kawaipon_card;
+DROP TRIGGER IF EXISTS delete_ghosts ON kawaipon_card;
 CREATE TRIGGER delete_ghosts
     AFTER DELETE
-    ON kawaipon.kawaipon_card
+    ON kawaipon_card
 EXECUTE PROCEDURE t_delete_ghosts();

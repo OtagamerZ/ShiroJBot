@@ -37,20 +37,20 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS delete_orphan_details ON kawaipon.card_details;
+DROP TRIGGER IF EXISTS delete_orphan_details ON card_details;
 CREATE TRIGGER delete_orphan_details
     AFTER INSERT OR UPDATE
-    ON kawaipon.card_details
+    ON card_details
 EXECUTE PROCEDURE t_delete_orphan_details();
 
-DROP TRIGGER IF EXISTS delete_orphan_details ON kawaipon.kawaipon_card;
+DROP TRIGGER IF EXISTS delete_orphan_details ON kawaipon_card;
 CREATE TRIGGER delete_orphan_details
     AFTER DELETE
-    ON kawaipon.kawaipon_card
+    ON kawaipon_card
 EXECUTE PROCEDURE t_delete_orphan_details();
 
-DROP TRIGGER IF EXISTS delete_orphan_details ON kawaipon.stashed_card;
+DROP TRIGGER IF EXISTS delete_orphan_details ON stashed_card;
 CREATE TRIGGER delete_orphan_details
     AFTER DELETE
-    ON kawaipon.stashed_card
+    ON stashed_card
 EXECUTE PROCEDURE t_delete_orphan_details();

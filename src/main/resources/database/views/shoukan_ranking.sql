@@ -27,28 +27,22 @@ SELECT rank() OVER (ORDER BY x.winrate * x.match_count - x.penalty DESC) AS pos
 FROM (
      SELECT x.uid
           , x.name
-          , x.match_count
           , round(x.wins * 100.0 / x.match_count, 2) AS winrate
+          , x.match_count
           , x.penalty
      FROM (
-          SELECT x.uid
-               , x.name
-               , sum(iif(x.winner = x.uid, 1, NULL)) AS wins
-               , x.match_count
-               , x.penalty
-          FROM (
-               SELECT acc.uid
-                    , acc.name
-                    , h.info -> lower(h.info ->> 'winner') ->> 'uid'                   AS winner
-                    , count(1) OVER (PARTITION BY acc.uid)                             AS match_count
-                    , coalesce(cast(acc.inventory -> 'LEAVER_TICKET' AS INT), 0) * 250 AS penalty
-               FROM account acc
-                        INNER JOIN account_settings s ON s.uid = acc.uid
-                        INNER JOIN match_history h ON acc.uid IN (h.info -> 'top' ->> 'uid', h.info -> 'bottom' ->> 'uid')
-               WHERE has(h.info, 'winner')
-                 AND NOT s.private
-               ) x
-          GROUP BY x.uid, x.name, x.match_count, x.penalty
+          SELECT acc.uid
+               , acc.name
+               , count(nullif(hp.side = hi.winner, FALSE))                        AS wins
+               , count(1)                                                         AS match_count
+               , coalesce(cast(acc.inventory -> 'LEAVER_TICKET' AS INT), 0) * 250 AS penalty
+          FROM history_info hi
+                   INNER JOIN history_player hp ON hi.match_id = hp.match_id
+                   INNER JOIN account acc ON hp.uid = acc.uid
+                   INNER JOIN account_settings s ON acc.uid = s.uid
+          WHERE hi.winner IS NOT NULL
+            AND NOT s.private
+          GROUP BY acc.uid, acc.name, penalty
           ) x
      ) x
 WHERE x.winrate IS NOT NULL

@@ -31,10 +31,10 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS generate_kawaipon ON kawaipon.stashed_card;
+DROP TRIGGER IF EXISTS generate_kawaipon ON stashed_card;
 CREATE TRIGGER generate_kawaipon
     AFTER INSERT
-    ON kawaipon.stashed_card
+    ON stashed_card
     FOR EACH ROW
     WHEN ( NEW.type = 'KAWAIPON' )
 EXECUTE PROCEDURE t_generate_kawaipon();

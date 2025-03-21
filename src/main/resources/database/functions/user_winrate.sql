@@ -22,11 +22,6 @@ CREATE OR REPLACE FUNCTION user_winrate(VARCHAR)
     LANGUAGE sql
 AS
 $$
-SELECT round(sum(iif(x.uid = $1, 1.0, 0.0)) / count(1) * 100, 2)
-FROM (
-     SELECT info -> lower(info ->> 'winner') ->> 'uid' AS uid
-     FROM match_history
-     WHERE has(info, 'winner')
-       AND $1 IN (info -> 'top' ->> 'uid', info -> 'bottom' ->> 'uid')
-     ) x
+SELECT round(count(nullif(winner = side, false)) * 100.0 / count(1), 2)
+FROM user_matches($1)
 $$;

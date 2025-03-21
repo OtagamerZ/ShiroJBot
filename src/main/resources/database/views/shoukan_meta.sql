@@ -25,34 +25,37 @@ FROM (
      SELECT x.card
           , x.freq
           , x.type
-          , row_number() OVER (PARTITION BY x.type ORDER BY x.freq DESC) AS number
+          , row_number() OVER (PARTITION BY x.type ORDER BY x.freq DESC) AS row
      FROM (
           SELECT x.card
                , count(1)         AS freq
                , get_type(x.card) AS type
-          FROM jsonb_array_elements_text((
-                                         SELECT jsonb_merge(x.deck)
-                                         FROM (
-                                              SELECT x.deck
-                                                   , x.turns
-                                                   , round(geo_mean(turns) OVER ()) AS turn_fac
-                                              FROM (
-                                                   SELECT turns -> 0 -> lower(info ->> 'winner') -> 'deck' AS deck
-                                                        , jsonb_array_length(turns)                        AS turns
-                                                   FROM match_history
-                                                   WHERE has(info, 'winner')
-                                                   ORDER BY id
-                                                   LIMIT 30
-                                                   ) x
-                                              ) x
-                                         WHERE x.turns > x.turn_fac
-                                         )) x(card)
+          FROM jsonb_array_elements_text(
+                       (
+                       SELECT jsonb_merge(x.cards) AS cards
+                       FROM (
+                            SELECT x.cards
+                                 , x.total_turns
+                                 , round(geo_mean(x.total_turns) OVER ()) AS avg_turns
+                            FROM (
+                                 SELECT DISTINCT ON (hi.match_id) hs.hand || hs.deck                       AS cards
+                                                                , count(1) OVER (PARTITION BY hi.match_id) AS total_turns
+                                 FROM history_info hi
+                                          INNER JOIN history_side hs ON hi.match_id = hs.match_id AND hi.winner = hs.side
+                                 ORDER BY hi.match_id, hs.turn
+                                 LIMIT 30
+                                 ) x
+                            ) x
+                       WHERE x.total_turns >= x.avg_turns
+                       )
+               ) x(card)
           GROUP BY x.card
+          ORDER BY freq DESC
           ) x
      ) x
-WHERE x.number <= CASE (x.type)
-                      WHEN 3 THEN 15
-                      WHEN 4 THEN 6
-                      WHEN 8 THEN 2
+WHERE x.row <= CASE (x.type)
+                   WHEN 3 THEN 15
+                   WHEN 4 THEN 6
+                   WHEN 8 THEN 2
     END
-ORDER BY freq DESC, card;
+ORDER BY x.type, x.freq DESC, x.card;

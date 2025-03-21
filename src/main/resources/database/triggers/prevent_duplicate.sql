@@ -47,10 +47,10 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS prevent_duplicate ON kawaipon.stashed_card;
+DROP TRIGGER IF EXISTS prevent_duplicate ON stashed_card;
 CREATE TRIGGER prevent_duplicate
     BEFORE DELETE
-    ON kawaipon.stashed_card
+    ON stashed_card
     FOR EACH ROW
     WHEN ( OLD.price <> -1 )
 EXECUTE PROCEDURE t_prevent_duplicate();

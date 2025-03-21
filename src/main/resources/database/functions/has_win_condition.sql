@@ -23,9 +23,9 @@ CREATE OR REPLACE FUNCTION has_win_condition(VARCHAR, VARCHAR)
 AS
 $$
 SELECT count(1) > 0
-FROM v_match_winner
-WHERE uid = $1
-  AND (match_info ->> 'winCondition') = lower($2)
+FROM user_matches($1)
+WHERE winner = side
+  AND win_condition = lower($2)
 $$;
 
 CREATE OR REPLACE FUNCTION has_win_condition_any(VARCHAR, VARCHAR)
@@ -35,17 +35,6 @@ CREATE OR REPLACE FUNCTION has_win_condition_any(VARCHAR, VARCHAR)
 AS
 $$
 SELECT count(1) > 0
-FROM (
-     SELECT 1
-     FROM v_match_winner
-     WHERE uid = $1
-       AND (match_info ->> 'winCondition') = lower($2)
-
-     UNION ALL
-
-     SELECT 1
-     FROM v_match_loser
-     WHERE uid = $1
-       AND (match_info ->> 'winCondition') = lower($2)
-     ) x
+FROM user_matches($1)
+WHERE win_condition = lower($2)
 $$;

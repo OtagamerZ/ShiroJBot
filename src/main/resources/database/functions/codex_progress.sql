@@ -16,11 +16,14 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_codex_progress;
-CREATE OR REPLACE VIEW v_codex_progress AS
+CREATE OR REPLACE FUNCTION codex_progress(VARCHAR)
+    RETURNS TABLE(uid VARCHAR, race_1 VARCHAR, race_2 VARCHAR, flag BIT, variant BOOLEAN)
+    LANGUAGE sql
+AS
+$$
 SELECT DISTINCT x.uid
-              , x.races[1] AS race_1
-              , x.races[2] AS race_2
+              , x.races[1]                                    AS race_1
+              , x.races[2]                                    AS race_2
               , race_flag(x.races[1]) | race_flag(x.races[2]) AS flag
               , x.variant
 FROM (
@@ -28,13 +31,15 @@ FROM (
           , x.variant
           , ARRAY(SELECT unnest(ARRAY [x.major, x.minor ->> 0]) ORDER BY 1) AS races
      FROM (
-          SELECT w.uid
-               , w.info -> 'origin' ->> 'major'                                    AS major
-               , w.info -> 'origin' -> 'minor'                                     AS minor
-               , coalesce(cast(w.info -> 'origin' -> 'variant' AS BOOLEAN), FALSE) AS variant
-          FROM v_match_winner w
+          SELECT um.uid
+               , hp.major_race    AS major
+               , hp.minor_races   AS minor
+               , hp.using_variant AS variant
+          FROM user_matches($1) um
+                   INNER JOIN history_player hp ON um.match_id = hp.match_id AND um.uid = hp.uid
           ) x
      WHERE x.major NOT IN ('NONE', 'MIXED')
        AND jsonb_array_length(x.minor) > 0
      ) x
-ORDER BY x.uid
+ORDER BY flag, x.variant
+$$;

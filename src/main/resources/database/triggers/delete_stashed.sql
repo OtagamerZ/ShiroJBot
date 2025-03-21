@@ -28,9 +28,9 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS delete_stashed ON kawaipon.kawaipon_card;
+DROP TRIGGER IF EXISTS delete_stashed ON kawaipon_card;
 CREATE TRIGGER delete_stashed
     AFTER DELETE
-    ON kawaipon.kawaipon_card
+    ON kawaipon_card
     FOR EACH ROW
 EXECUTE PROCEDURE t_delete_stashed();

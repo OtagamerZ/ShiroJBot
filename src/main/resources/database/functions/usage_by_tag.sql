@@ -18,31 +18,16 @@
 
 CREATE OR REPLACE FUNCTION usage_by_tag(VARCHAR, VARCHAR[])
     RETURNS TABLE(id INT, total BIGINT)
-    LANGUAGE plpgsql
+    LANGUAGE sql
 AS
-$body$
-BEGIN
-    RETURN QUERY
-    SELECT x.id
-         , count(1) AS used
-    FROM (
-         SELECT x.id
-              , x.front || x.back AS cards
-         FROM (
-              SELECT x.id
-                   , jsonb_path_query_array(x.placed, '$[*].frontline') AS front
-                   , jsonb_path_query_array(x.placed, '$[*].backline')  AS back
-              FROM (
-                   SELECT w.id
-                        , jsonb_path_query_array(w.turns, '$.placed') AS placed
-                   FROM v_match_winner w
-                   WHERE uid = $1
-                   ) x
-              ) x
-         ) x
-             CROSS JOIN jsonb_array_elements_text(x.cards) e(card)
-    WHERE e.card IN (SELECT card_id FROM senshi WHERE tags \?& $2)
-    GROUP BY x.id
-    ORDER BY used DESC;
-END;
-$body$;
+$$
+SELECT um.match_id
+     , count(1) AS used
+FROM user_matches($1) um
+         INNER JOIN history_slot hs ON um.match_id = hs.match_id AND um.side = hs.side
+         INNER JOIN senshi s ON s.card_id IN (hs.frontline_id, hs.backline_id)
+WHERE um.winner = um.side
+  AND s.tags ?& $2
+GROUP BY um.match_id
+ORDER BY used DESC
+$$;

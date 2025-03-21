@@ -30,9 +30,9 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS rename_description ON kawaipon.card;
+DROP TRIGGER IF EXISTS rename_description ON card;
 CREATE TRIGGER rename_description
     BEFORE UPDATE OF id
-    ON kawaipon.card
+    ON card
     FOR EACH ROW
 EXECUTE PROCEDURE t_rename_description();

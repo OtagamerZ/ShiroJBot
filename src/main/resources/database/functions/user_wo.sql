@@ -23,9 +23,8 @@ CREATE OR REPLACE FUNCTION user_wo(VARCHAR)
 AS
 $$
 SELECT cast(count(1) AS INT)
-FROM match_history
-WHERE has(info, 'winner')
-  AND (info ->> 'winner') <> $1
-  AND (info ->> 'winCondition') = 'wo'
-  AND to_timestamp(cast(info ->> 'timestamp' AS BIGINT)) > current_timestamp - INTERVAL '7 days'
+FROM user_matches($1)
+WHERE winner <> side
+  AND win_condition = 'wo'
+  AND match_timestamp > current_timestamp - INTERVAL '7 days'
 $$;

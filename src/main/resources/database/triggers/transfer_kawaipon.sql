@@ -30,10 +30,10 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS transfer_kawaipon ON kawaipon.stashed_card;
+DROP TRIGGER IF EXISTS transfer_kawaipon ON stashed_card;
 CREATE TRIGGER transfer_kawaipon
     BEFORE UPDATE
-    ON kawaipon.stashed_card
+    ON stashed_card
     FOR EACH ROW
     WHEN ( NEW.kawaipon_uid <> OLD.kawaipon_uid )
 EXECUTE PROCEDURE t_transfer_kawaipon();
