@@ -38,11 +38,6 @@ public class HistoryPlayer {
 	@EmbeddedId
 	private HistoryPlayerId id;
 
-	@OneToOne(optional = false)
-	@Fetch(FetchMode.JOIN)
-	@MapsId("matchId")
-	private HistoryInfo parent;
-
 	@Column(name = "hp", nullable = false)
 	private int hp;
 
@@ -69,7 +64,6 @@ public class HistoryPlayer {
 
 	public HistoryPlayer(HistoryInfo parent, Hand hand) {
 		this.id = new HistoryPlayerId(parent.getMatchId(), hand.getUid());
-		this.parent = parent;
 		this.hp = hand.getBase().hp();
 		this.weight = hand.getUserDeck().getEvoWeight();
 		this.divergence = hand.getUserDeck().getMetaDivergence();
