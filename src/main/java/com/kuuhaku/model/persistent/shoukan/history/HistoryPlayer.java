@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.shoukan.history;
 
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.id.HistoryPlayerId;
 import com.kuuhaku.model.records.shoukan.Origin;
@@ -48,6 +49,10 @@ public class HistoryPlayer {
 	private double divergence;
 
 	@Enumerated(EnumType.STRING)
+	@Column(name = "side", nullable = false)
+	private Side side;
+
+	@Enumerated(EnumType.STRING)
 	@Column(name = "major_race", nullable = false)
 	private Race majorRace;
 
@@ -67,6 +72,7 @@ public class HistoryPlayer {
 		this.hp = hand.getBase().hp();
 		this.weight = hand.getUserDeck().getEvoWeight();
 		this.divergence = hand.getUserDeck().getMetaDivergence();
+		this.side = hand.getSide();
 		this.majorRace = hand.getOrigins().major();
 		this.minorRaces = JSONArray.of((Object[]) hand.getOrigins().minor());
 		this.usingVariant = hand.getOrigins().variant();
@@ -86,6 +92,10 @@ public class HistoryPlayer {
 
 	public double getDivergence() {
 		return divergence;
+	}
+
+	public Side getSide() {
+		return side;
 	}
 
 	public Origin getOrigin() {
