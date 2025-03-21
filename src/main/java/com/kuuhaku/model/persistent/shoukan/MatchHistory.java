@@ -26,7 +26,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -47,7 +47,7 @@ public class MatchHistory extends DAO<MatchHistory> {
 
 	@OneToMany(mappedBy = "parent", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<HistoryTurn> turns = new HashSet<>();
+	private Set<HistoryTurn> turns = new LinkedHashSet<>();
 
 	public MatchHistory() {
 	}

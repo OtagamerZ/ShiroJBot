@@ -23,10 +23,15 @@ import jakarta.persistence.*;
 
 @Embeddable
 public record HistorySideId(
-		@Embedded
-		HistoryTurnId turnId,
+		@Column(name = "match_id", nullable = false)
+		int matchId,
+		@Column(name = "turn", nullable = false)
+		int turn,
 		@Enumerated(EnumType.STRING)
 		@Column(name = "side", nullable = false, columnDefinition = "VARCHAR(255)")
 		Side side
 ) {
+	public HistorySideId(HistoryTurnId parent, Side side) {
+		this(parent.matchId(), parent.turn(), side);
+	}
 }

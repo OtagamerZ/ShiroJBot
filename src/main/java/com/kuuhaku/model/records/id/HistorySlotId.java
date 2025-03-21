@@ -18,13 +18,22 @@
 
 package com.kuuhaku.model.records.id;
 
+import com.kuuhaku.model.enums.shoukan.Side;
 import jakarta.persistence.*;
 
 @Embeddable
 public record HistorySlotId(
-		@Embedded
-		HistorySideId sideId,
+		@Column(name = "match_id", nullable = false)
+		int matchId,
+		@Column(name = "turn", nullable = false)
+		int turn,
+		@Enumerated(EnumType.STRING)
+		@Column(name = "side", nullable = false, columnDefinition = "VARCHAR(255)")
+		Side side,
 		@Column(name = "slot", nullable = false)
 		int slot
 ) {
+	public HistorySlotId(HistorySideId parent, int slot) {
+		this(parent.matchId(), parent.turn(), parent.side(), slot);
+	}
 }
