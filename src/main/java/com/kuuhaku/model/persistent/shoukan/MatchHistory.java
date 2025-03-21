@@ -85,4 +85,11 @@ public class MatchHistory extends DAO<MatchHistory> {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
+	@Override
+	public void beforeSave() {
+		for (HistoryTurn turn : turns) {
+			turn.parent(this);
+		}
+	}
 }
