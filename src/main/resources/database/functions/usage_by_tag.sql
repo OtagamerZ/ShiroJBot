@@ -27,7 +27,7 @@ FROM user_matches($1) um
          INNER JOIN history_slot hs ON um.match_id = hs.match_id AND um.side = hs.side
          INNER JOIN senshi s ON s.card_id IN (hs.frontline_id, hs.backline_id)
 WHERE um.winner = um.side
-  AND s.tags ?& $2
+  AND s.tags \?& $2
 GROUP BY um.match_id
 ORDER BY used DESC
 $$;
