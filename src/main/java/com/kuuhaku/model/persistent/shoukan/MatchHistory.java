@@ -57,7 +57,7 @@ public class MatchHistory extends DAO<MatchHistory> {
 		this.info = new HistoryInfo(this, game, winCondition);
 		for (HistoryTurn turn : turns) {
 			turn.parent(this);
-			turns.add(turn);
+			this.turns.add(turn);
 		}
 	}
 
