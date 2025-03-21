@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.shoukan.history;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Side;
@@ -80,6 +81,7 @@ public class HistoryTurn {
 	}
 
 	public void parent(MatchHistory parent) {
+		Constants.LOGGER.info(parent.getId());
 		this.id = new HistoryTurnId(parent.getId(), parent.getTurns().size());
 		this.parent = parent;
 	}
