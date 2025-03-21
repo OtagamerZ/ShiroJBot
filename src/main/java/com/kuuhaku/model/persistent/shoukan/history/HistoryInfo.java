@@ -24,8 +24,7 @@ import com.kuuhaku.model.enums.shoukan.Arcade;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.MatchHistory;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.*;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -42,14 +41,18 @@ public class HistoryInfo {
 	private int matchId;
 
 	@OneToOne(cascade = ALL, orphanRemoval = true)
-	@PrimaryKeyJoinColumn(name = "match_id")
-	@JoinColumn(name = "top_id")
+	@JoinColumnsOrFormulas({
+			@JoinColumnOrFormula(formula = @JoinFormula(value = "match_id", referencedColumnName = "match_id")),
+			@JoinColumnOrFormula(column = @JoinColumn(name = "top_id", referencedColumnName = "uid"))
+	})
 	@Fetch(FetchMode.JOIN)
 	private HistoryPlayer top;
 
 	@OneToOne(cascade = ALL, orphanRemoval = true)
-	@PrimaryKeyJoinColumn(name = "match_id")
-	@JoinColumn(name = "top_id")
+	@JoinColumnsOrFormulas({
+			@JoinColumnOrFormula(formula = @JoinFormula(value = "match_id", referencedColumnName = "match_id")),
+			@JoinColumnOrFormula(column = @JoinColumn(name = "top_id", referencedColumnName = "uid"))
+	})
 	@Fetch(FetchMode.JOIN)
 	private HistoryPlayer bottom;
 
