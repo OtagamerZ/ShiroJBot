@@ -34,7 +34,7 @@ import java.util.Set;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
-@Table(name = "match_history_2", schema = "shiro")
+@Table(name = "match_history", schema = "shiro")
 public class MatchHistory extends DAO<MatchHistory> {
 	@Id
 	@Column(name = "id", nullable = false)
