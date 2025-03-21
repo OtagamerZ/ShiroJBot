@@ -41,11 +41,19 @@ public class HistoryInfo {
 	@Column(name = "match_id", nullable = false)
 	private int matchId;
 
-	@OneToOne(mappedBy = "parent", cascade = ALL, orphanRemoval = true)
+	@OneToOne(cascade = ALL, orphanRemoval = true)
+	@JoinColumns({
+			@JoinColumn(name = "match_id", referencedColumnName = "parent_match_id"),
+			@JoinColumn(name = "top_id")
+	})
 	@Fetch(FetchMode.JOIN)
 	private HistoryPlayer top;
 
-	@OneToOne(mappedBy = "parent", cascade = ALL, orphanRemoval = true)
+	@OneToOne(cascade = ALL, orphanRemoval = true)
+	@JoinColumns({
+			@JoinColumn(name = "match_id", referencedColumnName = "parent_match_id"),
+			@JoinColumn(name = "bottom_id")
+	})
 	@Fetch(FetchMode.JOIN)
 	private HistoryPlayer bottom;
 
