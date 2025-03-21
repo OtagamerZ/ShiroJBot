@@ -39,16 +39,6 @@ public class HistorySlot {
 	@EmbeddedId
 	private HistorySlotId id;
 
-	@ManyToOne(optional = false)
-	@Fetch(FetchMode.JOIN)
-	@MapsId("sideId")
-	@JoinColumns({
-			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
-			@JoinColumn(name = "turn", referencedColumnName = "turn"),
-			@JoinColumn(name = "side", referencedColumnName = "side", columnDefinition = "VARCHAR(255)")
-	})
-	private HistorySide parent;
-
 	@ManyToOne
 	@JoinColumn(name = "frontline_id")
 	@Fetch(FetchMode.JOIN)
@@ -77,7 +67,6 @@ public class HistorySlot {
 
 	public HistorySlot(HistorySide parent, Senshi frontline, Senshi backline, int lockTime) {
 		this.id = new HistorySlotId(parent.getId(), parent.getPlaced().size());
-		this.parent = parent;
 
 		if (frontline != null) {
 			this.frontline = frontline.getCard();

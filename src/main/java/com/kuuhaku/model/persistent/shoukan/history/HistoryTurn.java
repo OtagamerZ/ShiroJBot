@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.shoukan.history;
 import com.kuuhaku.Constants;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -54,9 +55,9 @@ public class HistoryTurn {
 	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumns({
 			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
-			@JoinColumn(name = "turn", referencedColumnName = "turn"),
+			@JoinColumn(name = "turn", referencedColumnName = "turn")
 	})
-	@Fetch(FetchMode.JOIN)
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<HistorySide> sides = new HashSet<>();
 
 	@JdbcTypeCode(SqlTypes.JSON)
@@ -73,8 +74,9 @@ public class HistoryTurn {
 	}
 
 	public HistoryTurn(Shoukan game) {
-		this.top = new HistorySide(this, game.getHands().get(Side.TOP));
-		this.bottom = new HistorySide(this, game.getHands().get(Side.BOTTOM));
+		for (Hand hand : game.getHands().values()) {
+			sides.add(new HistorySide(this, hand));
+		}
 		this.banned = game.getArena().getBanned(false).stream()
 				.map(Drawable::getId)
 				.collect(Collectors.toCollection(JSONArray::new));
@@ -90,12 +92,8 @@ public class HistoryTurn {
 		return id;
 	}
 
-	public HistorySide getTop() {
-		return top;
-	}
-
-	public HistorySide getBottom() {
-		return bottom;
+	public Set<HistorySide> getSides() {
+		return sides;
 	}
 
 	public JSONArray getBanned() {

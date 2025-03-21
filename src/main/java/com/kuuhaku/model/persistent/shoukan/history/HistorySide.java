@@ -82,7 +82,12 @@ public class HistorySide {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray discard = new JSONArray();
 
-	@OneToMany(mappedBy = "parent", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@JoinColumns({
+			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
+			@JoinColumn(name = "turn", referencedColumnName = "turn"),
+			@JoinColumn(name = "side", referencedColumnName = "side")
+	})
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<HistorySlot> placed = new HashSet<>();
 
