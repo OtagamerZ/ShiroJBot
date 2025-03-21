@@ -78,8 +78,12 @@ public abstract class API {
 				HttpEntity ent = res.getEntity();
 
 				if (ent != null) {
-					Constants.LOGGER.info(EntityUtils.toString(ent));
-					return new JSONObject(EntityUtils.toString(ent));
+					String content = EntityUtils.toString(ent);
+					if (!content.isBlank()) {
+						return new JSONObject(EntityUtils.toString(ent));
+					} else {
+						return new JSONObject();
+					}
 				} else {
 					return new JSONObject();
 				}
