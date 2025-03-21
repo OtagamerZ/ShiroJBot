@@ -29,9 +29,12 @@ public record CustomAnswerId(
 		@Column(name = "gid", nullable = false)
 		String gid
 ) {
+	static {
+		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS custom_answer_id_seq");
+	}
+
 	public CustomAnswerId(String gid) {
 		this(DAO.queryNative(Integer.class, "SELECT nextval('custom_answer_id_seq')"), gid);
-		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS custom_answer_id_seq");
 	}
 
 	public CustomAnswerId {

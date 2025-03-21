@@ -29,9 +29,12 @@ public record AutoRuleId(
 		@Column(name = "gid", nullable = false)
 		String gid
 ) {
+	static {
+		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS auto_rule_id_seq");
+	}
+
 	public AutoRuleId(String gid) {
 		this(DAO.queryNative(Integer.class, "SELECT nextval('auto_rule_id_seq')"), gid);
-		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS auto_rule_id_seq");
 	}
 
 	public AutoRuleId {

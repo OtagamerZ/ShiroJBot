@@ -35,7 +35,6 @@ import static jakarta.persistence.CascadeType.ALL;
 @Table(name = "match_history_2", schema = "shiro")
 public class MatchHistory extends DAO<MatchHistory> {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private int id;
 
@@ -48,11 +47,20 @@ public class MatchHistory extends DAO<MatchHistory> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<HistoryTurn> turns = new HashSet<>();
 
+	static {
+		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS history_match_id_seq");
+	}
+
 	public MatchHistory() {
 	}
 
-	public MatchHistory(Shoukan game, String winCondition) {
+	public MatchHistory(Shoukan game, String winCondition, List<HistoryTurn> turns) {
+		this.id = DAO.queryNative(Integer.class, "SELECT nextval('level_role_id_seq')");
 		this.info = new HistoryInfo(this, game, winCondition);
+		for (HistoryTurn turn : turns) {
+			turn.parent(this);
+			turns.add(turn);
+		}
 	}
 
 	public int getId() {
