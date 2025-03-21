@@ -67,10 +67,8 @@ public class MatchHistory extends DAO<MatchHistory> {
 		return JSONUtils.fromJSON(info.toString(), HistoryInfo.class);
 	}
 
-	public List<HistoryTurn> getTurns() {
-		return turns.stream()
-				.sorted(Comparator.comparingInt(t -> t.getId().turn()))
-				.toList();
+	public Set<HistoryTurn> getTurns() {
+		return turns;
 	}
 
 	@Override
