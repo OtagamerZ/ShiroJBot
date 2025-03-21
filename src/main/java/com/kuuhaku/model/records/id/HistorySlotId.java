@@ -28,7 +28,7 @@ public record HistorySlotId(
 		@Column(name = "turn", nullable = false)
 		int turn,
 		@Enumerated(EnumType.STRING)
-		@Column(name = "side", nullable = false, columnDefinition = "VARCHAR(255)")
+		@Column(name = "side", nullable = false)
 		Side side,
 		@Column(name = "slot", nullable = false)
 		int slot
