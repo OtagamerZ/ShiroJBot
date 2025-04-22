@@ -260,19 +260,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public String getDescription(I18N locale) {
-		EffectHolder<?> source = getSource();
-		String out = Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
-		if (hand != null) {
-			if (hand.getOrigins().major() == Race.DEMON) {
-				out = out.replace("$mp", "($hp/($bhp*0.08))");
-			}
-		}
-
-		return out;
-	}
-
-	@Override
 	public int getMPCost(boolean ignoreRace) {
 		int cost = Math.max(0, Calc.round((base.getMana() + stats.getMana().get()) * getCostMult()));
 		if (hand != null && !ignoreRace) {

@@ -502,19 +502,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public String getDescription(I18N locale) {
-		EffectHolder<?> source = getSource();
-		String out = Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
-		if (hand != null) {
-			if (hand.getOrigins().major() == Race.DEMON) {
-				out = out.replace("$mp", "($hp/($bhp*0.08))");
-			}
-		}
-
-		return out;
-	}
-
-	@Override
 	public int getMPCost(boolean ignoreRace) {
 		int cost = Math.max(0, Calc.round((base.getMana() + stats.getMana().get() + (isFusion() ? 5 : 0)) * getCostMult()));
 		if (hand != null && !ignoreRace) {
