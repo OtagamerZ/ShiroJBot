@@ -69,6 +69,7 @@ public class HistorySlot extends DAO<HistorySlot> {
 			this.frontline = new CardReference(frontline);
 			this.frontlineEquips = frontline.getEquipments(false).stream()
 					.map(CardReference::new)
+					.map(CardReference::toJSON)
 					.collect(Collectors.toCollection(JSONArray::new));
 		}
 
@@ -76,6 +77,7 @@ public class HistorySlot extends DAO<HistorySlot> {
 			this.backline = new CardReference(backline);
 			this.backlineEquips = backline.getEquipments(false).stream()
 					.map(CardReference::new)
+					.map(CardReference::toJSON)
 					.collect(Collectors.toCollection(JSONArray::new));
 		}
 

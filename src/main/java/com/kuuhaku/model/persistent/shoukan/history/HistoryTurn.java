@@ -78,6 +78,7 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 		}
 		this.banned = game.getArena().getBanned(false).stream()
 				.map(CardReference::new)
+				.map(CardReference::toJSON)
 				.collect(Collectors.toCollection(JSONArray::new));
 		this.field = new CardReference(game.getArena().getField());
 	}
