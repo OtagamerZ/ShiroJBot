@@ -1,24 +1,23 @@
 package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shiro.Card;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 @Embeddable
 public record CardReference(
+		@Enumerated(EnumType.STRING)
 		@Column(name = "owner")
-		String owner,
+		Side owner,
 		@ManyToOne(optional = false)
 		@JoinColumn(name = "card_id")
 		@Fetch(FetchMode.JOIN)
 		Card card
 ) {
 	public CardReference(Drawable<?> card) {
-		this(card.getHand().getUid(), card.getCard());
+		this(card.getSide(), card.getCard());
 	}
 }
