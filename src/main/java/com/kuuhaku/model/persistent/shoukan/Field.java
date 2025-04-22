@@ -88,8 +88,8 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 	@Column(name = "type", nullable = false)
 	private FieldType type = FieldType.NONE;
 
-	@Column(name = "effect", nullable = false)
-	private boolean effect = false;
+	@Column(name = "effect_only", nullable = false)
+	private boolean effectOnly = false;
 
 	@Embedded
 	private CardAttributes base = new CardAttributes();
@@ -116,12 +116,12 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 	public Field() {
 	}
 
-	public Field(String id, Card card, JSONObject modifiers, FieldType type, boolean effect, CardAttributes base, CardExtra stats, StashedCard stashRef) {
+	public Field(String id, Card card, JSONObject modifiers, FieldType type, boolean effectOnly, CardAttributes base, CardExtra stats, StashedCard stashRef) {
 		this.id = id;
 		this.card = card;
 		this.modifiers = modifiers;
 		this.type = type;
-		this.effect = effect;
+		this.effectOnly = effectOnly;
 		this.base = base;
 		this.stats = stats;
 		this.stashRef = stashRef;
@@ -182,8 +182,8 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 		this.type = type;
 	}
 
-	public boolean isEffect() {
-		return effect;
+	public boolean isEffectOnly() {
+		return effectOnly;
 	}
 
 	@Override
@@ -526,7 +526,7 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 
 	@Override
 	public Field fork() throws CloneNotSupportedException {
-		Field clone = new Field(id, card, modifiers.clone(), type, effect, base.clone(), stats.clone(), stashRef);
+		Field clone = new Field(id, card, modifiers.clone(), type, effectOnly, base.clone(), stats.clone(), stashRef);
 		clone.hand = hand;
 		clone.state = (byte) (state & 0b111);
 

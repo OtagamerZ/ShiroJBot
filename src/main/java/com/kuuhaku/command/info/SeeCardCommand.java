@@ -190,7 +190,7 @@ public class SeeCardCommand implements Executable {
 							false
 					);
 				} else if (d instanceof Field f) {
-					if (f.isEffect()) {
+					if (f.isEffectOnly()) {
 						if (!eb.getDescriptionBuilder().isEmpty()) {
 							eb.appendDescription("\n\n");
 						}

@@ -79,7 +79,7 @@ public class FavorCommand implements Executable {
 				case FIELD -> {
 					Field f = card.asField();
 
-					if (f.isEffect()) {
+					if (f.isEffectOnly()) {
 						event.channel().sendMessage(locale.get("error/cannot_favor")).queue();
 						return;
 					}

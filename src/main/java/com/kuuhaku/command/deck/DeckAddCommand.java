@@ -161,7 +161,7 @@ public class DeckAddCommand implements Executable {
 			case FIELD -> {
 				Field f = sc.getCard().asField();
 
-				if (f.isEffect()) {
+				if (f.isEffectOnly()) {
 					event.channel().sendMessage(locale.get("error/cannot_add_card")).queue();
 					return false;
 				} else if (d.getFieldsRaw().size() >= 3) {
