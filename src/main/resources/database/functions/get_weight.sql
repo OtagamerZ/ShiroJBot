@@ -36,7 +36,7 @@ FROM (
               LEFT JOIN evogear e ON c.id = e.card_id AND e.tier > 0
               LEFT JOIN field f ON c.id = f.card_id
      WHERE C.rarity <> 'ULTIMATE'
-       AND NOT coalesce(f.effect, FALSE)
+       AND NOT coalesce(f.effect_only, FALSE)
      ) x
 WHERE x.id = $1
 $$;
