@@ -24,9 +24,12 @@ import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.AutoEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.guild.GoodbyeSettings;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
+import com.kuuhaku.model.persistent.guild.WelcomeSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.embed.Embed;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
@@ -42,9 +45,19 @@ public class SetEmbedCommand implements Executable {
 		GuildSettings settings = data.config().getSettings();
 
 		try {
-			AutoEmbedBuilder embed = new AutoEmbedBuilder(args.getString("json"));
-			settings.setEmbed(embed.getEmbed());
+			Embed embed = new AutoEmbedBuilder(args.getString("json")).getEmbed();
+			settings.setEmbed(embed);
 			settings.save();
+
+			if (embed.body() != null) {
+				WelcomeSettings ws = data.config().getWelcomeSettings();
+				ws.setMessage(embed.body());
+				ws.save();
+
+				GoodbyeSettings gs = data.config().getGoodbyeSettings();
+				gs.setMessage(embed.body());
+				gs.save();
+			}
 
 			event.channel().sendMessage(locale.get("success/set_embed")).queue();
 		} catch (IllegalArgumentException e) {

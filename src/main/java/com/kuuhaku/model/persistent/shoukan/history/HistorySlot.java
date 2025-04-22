@@ -20,14 +20,12 @@ package com.kuuhaku.model.persistent.shoukan.history;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.id.HistorySlotId;
+import com.kuuhaku.model.records.shoukan.CardReference;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -40,20 +38,24 @@ public class HistorySlot extends DAO<HistorySlot> {
 	@EmbeddedId
 	private HistorySlotId id;
 
-	@ManyToOne
-	@JoinColumn(name = "frontline_id")
-	@Fetch(FetchMode.JOIN)
-	private Card frontline;
+	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name = "owner", column = @Column(name = "frontline_owner")),
+			@AttributeOverride(name = "card_id", column = @Column(name = "frontline_card_id")),
+	})
+	private CardReference frontline;
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "frontline_equips", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray frontlineEquips = new JSONArray();
 
-	@ManyToOne
-	@JoinColumn(name = "backline_id")
-	@Fetch(FetchMode.JOIN)
-	private Card backline;
+	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name = "owner", column = @Column(name = "backline_owner")),
+			@AttributeOverride(name = "card_id", column = @Column(name = "backline_card_id")),
+	})
+	private CardReference backline;
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "backline_equips", nullable = false, columnDefinition = "JSONB")
@@ -69,14 +71,14 @@ public class HistorySlot extends DAO<HistorySlot> {
 	public HistorySlot(HistorySide parent, Senshi frontline, Senshi backline, int lockTime) {
 		this.id = new HistorySlotId(parent.getId(), parent.getSlots().size());
 		if (frontline != null) {
-			this.frontline = frontline.getCard();
+			this.frontline = new CardReference(frontline);
 			this.frontlineEquips = frontline.getEquipments(false).stream()
 					.map(Evogear::getId)
 					.collect(Collectors.toCollection(JSONArray::new));
 		}
 
 		if (backline != null) {
-			this.backline = backline.getCard();
+			this.backline = new CardReference(backline);
 			this.backlineEquips = backline.getEquipments(false).stream()
 					.map(Evogear::getId)
 					.collect(Collectors.toCollection(JSONArray::new));
@@ -94,7 +96,7 @@ public class HistorySlot extends DAO<HistorySlot> {
 		return id;
 	}
 
-	public Card getFrontline() {
+	public CardReference getFrontline() {
 		return frontline;
 	}
 
@@ -102,7 +104,7 @@ public class HistorySlot extends DAO<HistorySlot> {
 		return frontlineEquips;
 	}
 
-	public Card getBackline() {
+	public CardReference getBackline() {
 		return backline;
 	}
 

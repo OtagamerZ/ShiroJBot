@@ -23,9 +23,9 @@ import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.MatchHistory;
 import com.kuuhaku.model.records.id.HistoryTurnId;
+import com.kuuhaku.model.records.shoukan.CardReference;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -65,10 +65,8 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray banned = new JSONArray();
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "field_id")
-	@Fetch(FetchMode.JOIN)
-	private Card field;
+	@Embedded
+	private CardReference field;
 
 	public HistoryTurn() {
 	}
@@ -80,7 +78,7 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 		this.banned = game.getArena().getBanned(false).stream()
 				.map(Drawable::getId)
 				.collect(Collectors.toCollection(JSONArray::new));
-		this.field = game.getArena().getField().getCard();
+		this.field = new CardReference(game.getArena().getField());
 	}
 
 	public HistoryTurn parent(MatchHistory parent) {
@@ -106,7 +104,7 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 		return banned;
 	}
 
-	public Card getField() {
+	public CardReference getField() {
 		return field;
 	}
 

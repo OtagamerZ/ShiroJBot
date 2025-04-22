@@ -95,6 +95,8 @@ public interface Drawable<T extends Drawable<T>> {
 	default void setSlot(SlotColumn slot) {
 	}
 
+	Hand getOriginalHand();
+
 	Hand getHand();
 
 	void setHand(Hand hand);
@@ -222,7 +224,39 @@ public interface Drawable<T extends Drawable<T>> {
 
 	void reset();
 
-	BufferedImage render(I18N locale, Deck deck);
+	default BufferedImage render(I18N locale, Deck deck) {
+		if (getHand() == null) {
+			setHand(new Hand(deck));
+		}
+
+		return render(locale);
+	}
+
+	BufferedImage render(I18N locale);
+
+	default void drawName(Graphics2D g2d) {
+		Deck deck = getOriginalHand().getUserDeck();
+
+		g2d.setFont(FONT);
+		g2d.setColor(deck.getFrame().getPrimaryColor());
+
+		String name = Graph.abbreviate(g2d, getVanity().getName(), MAX_NAME_WIDTH);
+		Graph.drawOutlinedString(g2d, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
+
+		if (this instanceof EffectHolder<T> eh) {
+			if (!eh.getStats().getWrite().isBlank()) {
+				g2d.setColor(Color.ORANGE);
+				g2d.setFont(Fonts.NOTO_SANS_EXTRABOLD.deriveBold(15f));
+
+				String str = eh.getStats().getWrite();
+				FontMetrics fm = g2d.getFontMetrics();
+				Graph.drawOutlinedString(g2d, str,
+						225 / 2 - fm.stringWidth(str) / 2, 39 + fm.getHeight() / 2,
+						2, Color.BLACK
+				);
+			}
+		}
+	}
 
 	default void drawCosts(Graphics2D g2d) {
 		BufferedImage icon;
@@ -379,6 +413,42 @@ public interface Drawable<T extends Drawable<T>> {
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.BLACK);
 				Graph.drawOutlinedString(g2d, val, x - g2d.getFontMetrics().stringWidth(val) - 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.WHITE);
+			}
+		}
+	}
+
+	default void drawOverlay(Graphics2D g2d) {
+		if (getHand() != null && getGame() != null) {
+			boolean legacy = getHand().getUserDeck().getFrame().isLegacy();
+			String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
+
+			if (this instanceof Senshi s) {
+				double mult = s.getFieldMult();
+				if (mult != 1) {
+					BufferedImage indicator = null;
+					if (mult > 1) {
+						indicator = IO.getResourceAsImage(path + "/buffed.png");
+					} else if (mult < 1) {
+						indicator = IO.getResourceAsImage(path + "/nerfed.png");
+					}
+
+					g2d.drawImage(indicator, 0, 0, null);
+				}
+			}
+
+			if (this instanceof EffectHolder<?> eh && eh.hasFlag(Flag.EMPOWERED)) {
+				BufferedImage ovr = IO.getResourceAsImage(path + "/empowered.png");
+				g2d.drawImage(ovr, 0, 0, null);
+			}
+
+			if (isEthereal()) {
+				BufferedImage ovr = IO.getResourceAsImage(path + "/ethereal.png");
+				g2d.drawImage(ovr, 0, 0, null);
+			}
+
+			if (isManipulated()) {
+				BufferedImage ovr = IO.getResourceAsImage("shoukan/states/locked.png");
+				g2d.drawImage(ovr, 15, 15, null);
 			}
 		}
 	}

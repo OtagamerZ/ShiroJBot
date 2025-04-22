@@ -34,7 +34,6 @@ import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.common.shoukan.TagBundle;
-import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -99,10 +98,11 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private JSONArray charms = new JSONArray();
 
 	@Embedded
-	private CardAttributes base = new CardAttributes();
+	private CombatCardAttributes base = new CombatCardAttributes();
 
 	private transient Senshi equipper = null;
 	private transient CardExtra stats = new CardExtra();
+	private transient Hand originalHand = null;
 	private transient Hand hand = null;
 	private final transient CachedScriptManager cachedEffect = new CachedScriptManager();
 	private transient StashedCard stashRef = null;
@@ -124,7 +124,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public Evogear() {
 	}
 
-	public Evogear(String id, Card card, int tier, boolean spell, TargetType targetType, JSONArray charms, CardAttributes base, CardExtra stats, StashedCard stashRef) {
+	public Evogear(String id, Card card, int tier, boolean spell, TargetType targetType, JSONArray charms, CombatCardAttributes base, CardExtra stats, StashedCard stashRef) {
 		this.id = id;
 		this.card = card;
 		this.tier = tier;
@@ -237,12 +237,21 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
+	public Hand getOriginalHand() {
+		return originalHand;
+	}
+
+	@Override
 	public Hand getHand() {
 		return hand;
 	}
 
 	@Override
 	public void setHand(Hand hand) {
+		if (originalHand == null) {
+			this.originalHand = hand;
+		}
+
 		this.hand = hand;
 
 		if (this instanceof Proxy<?> p) {
@@ -668,15 +677,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public BufferedImage render(I18N locale, Deck deck) {
-		if (hand == null) {
-			hand = new Hand(deck);
-		}
-
+	public BufferedImage render(I18N locale) {
 		BufferedImage out = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
+		Deck deck = originalHand.getUserDeck();
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			if (isFlipped()) {
 				g1.drawImage(deck.getFrame().getBack(deck), 0, 0, null);
@@ -688,35 +694,19 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				}
 			} else {
 				String desc = getDescription(locale);
-				BufferedImage img = card.drawCardNoBorder(Utils.getOr(() -> stashRef.isChrome(), false));
+				BufferedImage img = getVanity().drawCardNoBorder(Utils.getOr(() -> stashRef.isChrome(), false));
 
 				g1.setClip(deck.getFrame().getBoundary());
 				g1.drawImage(img, 0, 0, null);
 				g1.setClip(null);
 
-				g1.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
+				g1.drawImage(deck.getFrame().getFront(!desc.isBlank()), 0, 0, null);
 				g1.drawImage(IO.getResourceAsImage("shoukan/icons/tier_" + tier + ".png"), 190, 12, null);
 
-				g1.setFont(FONT);
-				g1.setColor(deck.getFrame().getPrimaryColor());
-				String name = Graph.abbreviate(g1, getVanity().getName(), MAX_NAME_WIDTH);
-				Graph.drawOutlinedString(g1, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
-
-				if (!stats.getWrite().isBlank()) {
-					g1.setColor(Color.ORANGE);
-					g1.setFont(Fonts.NOTO_SANS_EXTRABOLD.deriveBold(15f));
-
-					String str = stats.getWrite();
-					FontMetrics fm = g1.getFontMetrics();
-					Graph.drawOutlinedString(g1, str,
-							225 / 2 - fm.stringWidth(str) / 2, 39 + fm.getHeight() / 2,
-							2, Color.BLACK
-					);
-				}
-
+				drawName(g1);
 				drawDescription(g1, hand, locale);
 				drawCosts(g1);
-				drawAttributes(g1, !desc.isEmpty());
+				drawAttributes(g1, !desc.isBlank());
 
 				if (!getCharms().isEmpty()) {
 					List<BufferedImage> icons = getCharms().stream()
@@ -756,25 +746,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					op.filter(out, out);
 				}
 
-				if (hand != null) {
-					boolean legacy = hand.getUserDeck().getFrame().isLegacy();
-					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
-
-					if (hasFlag(Flag.EMPOWERED)) {
-						BufferedImage ovr = IO.getResourceAsImage(path + "/empowered.png");
-						g2d.drawImage(ovr, 0, 0, null);
-					}
-
-					if (isEthereal()) {
-						BufferedImage ovr = IO.getResourceAsImage(path + "/ethereal.png");
-						g2d.drawImage(ovr, 0, 0, null);
-					}
-
-					if (isManipulated()) {
-						BufferedImage ovr = IO.getResourceAsImage("shoukan/states/locked.png");
-						g2d.drawImage(ovr, 15, 15, null);
-					}
-				}
+				drawOverlay(g1);
 
 				int t = getTier();
 				if (t != tier) {
@@ -819,10 +791,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	@Override
 	public Evogear fork() throws CloneNotSupportedException {
 		Evogear clone = new Evogear(id, card, tier, spell, targetType, charms.clone(), base.clone(), stats.clone(), stashRef);
-		clone.stats = stats.clone();
 		clone.hand = hand;
 		clone.state = (byte) (state & (0b111 | 0xF0));
-		clone.stashRef = stashRef;
 
 		return clone;
 	}

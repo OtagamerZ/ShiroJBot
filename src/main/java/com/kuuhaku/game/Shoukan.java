@@ -25,7 +25,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.command.misc.SynthesizeCommand;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.controller.Manager;
 import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
@@ -146,7 +145,7 @@ public class Shoukan extends GameInstance<Phase> {
 			h.resetDraws();
 			h.manualDraw(h.getRemainingDraws());
 
-			if (!hasCheated()) {
+			if (isNotVoided()) {
 				Deck deck = h.getUserDeck();
 				if (deck.getEvogearRaw().size() >= 5 && !deck.getFieldsRaw().isEmpty()) {
 					if (h.getRealDeck().parallelStream().allMatch(d -> d.getStashRef() != null && d.getStashRef().isChrome())) {
@@ -455,7 +454,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	private boolean putCard(Hand curr, Drawable<?> d, JSONObject args) {
 		if (d instanceof Senshi s) {
-			if (!checkConstraints(curr, s)) return false;
+			if (isInvalidAction(curr, s)) return false;
 		} else {
 			if (d instanceof Evogear e && e.isSpell() && args.getString("mode").equals("b")) {
 				return putCard(curr, new TrapSpell(e), args);
@@ -546,7 +545,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (d instanceof Evogear chosen && !chosen.isSpell()) {
-			if (!checkConstraints(curr, d)) return false;
+			if (isInvalidAction(curr, d)) return false;
 		} else {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
 				curr.getGraveyard().add(d);
@@ -883,7 +882,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (d instanceof Evogear chosen && chosen.isSpell()) {
-			if (!checkConstraints(curr, d)) return false;
+			if (isInvalidAction(curr, d)) return false;
 		} else {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
 				blindFail(curr, d, "str/activate_card_fail", d);
@@ -1154,17 +1153,17 @@ public class Shoukan extends GameInstance<Phase> {
 		return false;
 	}
 
-	private boolean checkConstraints(Hand curr, Drawable<?> card) {
+	private boolean isInvalidAction(Hand curr, Drawable<?> card) {
 		if (card instanceof Evogear e && e.isSpell()) {
 			if (e.isPassive()) {
 				getChannel().sendMessage(getString("error/card_passive")).queue();
-				return false;
+				return true;
 			}
 
 			int locktime = Math.max(curr.getLockTime(Lock.SPELL), curr.getLockTime(Lock.EFFECT));
 			if (locktime > 0 && !e.hasTrueEffect()) {
 				getChannel().sendMessage(getString("error/spell_locked", locktime)).queue();
-				return false;
+				return true;
 			}
 		}
 
@@ -1175,16 +1174,16 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (card.getHPCost() * mult >= curr.getHP()) {
 			getChannel().sendMessage(getString("error/not_enough_hp")).queue();
-			return false;
+			return true;
 		} else if (card.getMPCost() * mult > curr.getMP()) {
 			getChannel().sendMessage(getString("error/not_enough_mp")).queue();
-			return false;
+			return true;
 		} else if (card.getSCCost() * mult > curr.getDiscard().size()) {
 			getChannel().sendMessage(getString("error/not_enough_sc")).queue();
-			return false;
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 	private void blindFail(Hand curr, Drawable<?> card, String message, Object... args) {
@@ -1656,8 +1655,8 @@ public class Shoukan extends GameInstance<Phase> {
 		state = (byte) Bit32.set(state, 0, sp);
 	}
 
-	public boolean hasCheated() {
-		return isSingleplayer() || arcade == Arcade.CASUAL || Bit32.on(state, 1);
+	public boolean isNotVoided() {
+		return !isSingleplayer() && arcade != Arcade.CASUAL && !Bit32.on(state, 1);
 	}
 
 	public void setCheated(boolean cheated) {
@@ -2144,7 +2143,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (Utils.equalsAny(code, GameReport.SUCCESS, GameReport.GAME_TIMEOUT)) {
-			if (!hasCheated() && winner != null) {
+			if (isNotVoided() && winner != null) {
 				String cond = "default";
 				if (code == GameReport.GAME_TIMEOUT) {
 					cond = "wo";
@@ -2491,7 +2490,7 @@ public class Shoukan extends GameInstance<Phase> {
 												d.setFlag(Flag.EMPOWERED);
 											}
 
-											if (!hasCheated() && d.getTier() == 4 && d.hasFlag(Flag.EMPOWERED)) {
+											if (isNotVoided() && d.getTier() == 4 && d.hasFlag(Flag.EMPOWERED)) {
 												curr.getAccount().setDynValue("emp_tier_4", true);
 											}
 

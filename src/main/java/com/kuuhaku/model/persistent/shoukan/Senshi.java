@@ -33,7 +33,6 @@ import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.shoukan.*;
-import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -41,8 +40,8 @@ import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.shoukan.DeferredTrigger;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Target;
-import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.*;
+import com.kuuhaku.util.Graph;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.hibernate.annotations.Cache;
@@ -54,8 +53,8 @@ import org.intellij.lang.annotations.Language;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 import java.util.function.ToIntFunction;
@@ -89,7 +88,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private Race race;
 
 	@Embedded
-	private CardAttributes base = new CardAttributes();
+	private CombatCardAttributes base = new CombatCardAttributes();
 
 	@Transient
 	private final transient BondedList<Evogear> equipments = new BondedList<>((e, it) -> {
@@ -135,6 +134,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	});
 	private transient CardExtra stats = new CardExtra();
 	private transient SlotColumn slot = null;
+	private transient Hand originalHand = null;
 	private transient Hand hand = null;
 	private transient Senshi target = null;
 	private transient Senshi lastInteraction = null;
@@ -175,11 +175,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		this.card = new Card(actor, locale);
 		this.id = card.getId();
 		this.race = actor.getRace();
-		this.base = new CardAttributes();
+		this.base = new CombatCardAttributes();
 		this.stats = new CardExtra();
 	}
 
-	public Senshi(String id, Card card, Race race, CardAttributes base, CardExtra stats, StashedCard stashRef) {
+	public Senshi(String id, Card card, Race race, CombatCardAttributes base, CardExtra stats, StashedCard stashRef) {
 		this.id = id;
 		this.card = card;
 		this.race = race;
@@ -479,12 +479,21 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
+	public Hand getOriginalHand() {
+		return originalHand;
+	}
+
+	@Override
 	public Hand getHand() {
 		return hand;
 	}
 
 	@Override
 	public void setHand(Hand hand) {
+		if (originalHand == null) {
+			this.originalHand = hand;
+		}
+
 		this.hand = hand;
 
 		if (this instanceof Proxy<?> p) {
@@ -1532,15 +1541,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public BufferedImage render(I18N locale, Deck deck) {
-		if (hand == null) {
-			hand = new Hand(deck);
-		}
-
+	public BufferedImage render(I18N locale) {
 		BufferedImage out = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
+		Deck deck = originalHand.getUserDeck();
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			if (isFlipped()) {
 				g1.drawImage(deck.getFrame().getBack(deck), 0, 0, null);
@@ -1566,35 +1572,18 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				g1.drawImage(img, 0, 0, null);
 				g1.setClip(null);
 
-				g1.drawImage(deck.getFrame().getFront(!desc.isEmpty()), 0, 0, null);
+				g1.drawImage(deck.getFrame().getFront(!desc.isBlank()), 0, 0, null);
 				g1.drawImage(card.getRace().getIcon(), 190, 12, null);
 
-				g1.setFont(FONT);
-				g1.setColor(deck.getFrame().getPrimaryColor());
-				String name = Graph.abbreviate(g1, card.getVanity().getName(), MAX_NAME_WIDTH);
-
-				Graph.drawOutlinedString(g1, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
-
-				if (!stats.getWrite().isBlank()) {
-					g1.setColor(Color.ORANGE);
-					g1.setFont(Fonts.NOTO_SANS_EXTRABOLD.deriveBold(15f));
-
-					String str = stats.getWrite();
-					FontMetrics fm = g1.getFontMetrics();
-					Graph.drawOutlinedString(g1, str,
-							225 / 2 - fm.stringWidth(str) / 2, 39 + fm.getHeight() / 2,
-							2, Color.BLACK
-					);
-				}
-
-				if (!desc.isEmpty()) {
+				drawName(g1);
+				if (!desc.isBlank()) {
 					drawDescription(g1, hand, locale);
 				}
 
 				if (!hasFlag(Flag.HIDE_STATS)) {
 					card.drawCosts(g1);
 					if (!isSupporting()) {
-						card.drawAttributes(g1, !desc.isEmpty());
+						card.drawAttributes(g1, !desc.isBlank());
 					}
 				}
 
@@ -1603,37 +1592,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					op.filter(out, out);
 				}
 
-				if (hand != null && getGame() != null) {
-					boolean legacy = hand.getUserDeck().getFrame().isLegacy();
-					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
-
-					double mult = getFieldMult();
-					if (mult != 1) {
-						BufferedImage indicator = null;
-						if (mult > 1) {
-							indicator = IO.getResourceAsImage(path + "/buffed.png");
-						} else if (mult < 1) {
-							indicator = IO.getResourceAsImage(path + "/nerfed.png");
-						}
-
-						g2d.drawImage(indicator, 0, 0, null);
-					}
-
-					if (hasFlag(Flag.EMPOWERED)) {
-						BufferedImage ovr = IO.getResourceAsImage(path + "/empowered.png");
-						g2d.drawImage(ovr, 0, 0, null);
-					}
-
-					if (isEthereal()) {
-						BufferedImage ovr = IO.getResourceAsImage(path + "/ethereal.png");
-						g2d.drawImage(ovr, 0, 0, null);
-					}
-
-					if (isManipulated()) {
-						BufferedImage ovr = IO.getResourceAsImage("shoukan/states/locked.png");
-						g2d.drawImage(ovr, 15, 15, null);
-					}
-				}
+				drawOverlay(g1);
 			}
 
 			boolean over = false;
@@ -1699,10 +1658,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public Senshi fork() throws CloneNotSupportedException {
 		Senshi clone = new Senshi(id, card, race, base.clone(), stats.clone(), stashRef);
-		clone.stats = stats.clone();
 		clone.hand = hand;
 		clone.state = state & (0b1_1111 | 0xF_FFFFF_00);
-		clone.stashRef = stashRef;
 
 		return clone;
 	}

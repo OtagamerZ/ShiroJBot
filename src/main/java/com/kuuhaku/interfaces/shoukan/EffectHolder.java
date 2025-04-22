@@ -96,14 +96,18 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		return getMPCost(false);
 	}
 
-	int getMPCost(boolean ignoreRace);
+	default int getMPCost(boolean ignoreRace) {
+		return 0;
+	}
 
 	@Override
 	default int getHPCost() {
 		return getHPCost(false);
 	}
 
-	int getHPCost(boolean ignoreRace);
+	default int getHPCost(boolean ignoreRace) {
+		return 0;
+	}
 
 	default EffectHolder<?> getSource() {
 		return (EffectHolder<?>) Utils.getOr(getStats().getSource(), this);

@@ -23,27 +23,27 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.TagBundle;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.FieldType;
-import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
+import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.StashedCard;
-import com.kuuhaku.util.Graph;
+import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.*;
-import com.ygimenez.json.JSONArray;
+import com.kuuhaku.util.Graph;
 import com.ygimenez.json.JSONObject;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import kotlin.Pair;
-import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
 import org.hibernate.type.SqlTypes;
 
 import java.awt.*;
@@ -56,11 +56,14 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
+import static com.kuuhaku.model.enums.shoukan.Trigger.*;
+import static com.kuuhaku.model.enums.shoukan.Trigger.ON_REMOVE;
+
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "field", schema = "kawaipon")
-public class Field extends DAO<Field> implements Drawable<Field> {
+public class Field extends DAO<Field> implements EffectHolder<Field> {
 	@Transient
 	public final String KLASS = getClass().getName();
 	@Transient
@@ -88,14 +91,16 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	@Column(name = "effect", nullable = false)
 	private boolean effect = false;
 
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray tags = new JSONArray();
+	@Embedded
+	private CardAttributes base = new CardAttributes();
 
+	private transient Hand originalHand = null;
 	private transient Hand hand = null;
+	private final transient CachedScriptManager cachedEffect = new CachedScriptManager();
+	private transient CardExtra stats = new CardExtra();
 	private transient StashedCard stashRef = null;
 	private transient BondedList<?> currentStack;
+	private transient Trigger currentTrigger = null;
 
 	@Transient
 	private byte state = 0b1;
@@ -111,13 +116,15 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	public Field() {
 	}
 
-	public Field(String id, Card card, JSONObject modifiers, FieldType type, boolean effect, JSONArray tags) {
+	public Field(String id, Card card, JSONObject modifiers, FieldType type, boolean effect, CardAttributes base, CardExtra stats, StashedCard stashRef) {
 		this.id = id;
 		this.card = card;
 		this.modifiers = modifiers;
 		this.type = type;
 		this.effect = effect;
-		this.tags = tags;
+		this.base = base;
+		this.stats = stats;
+		this.stashRef = stashRef;
 	}
 
 	@Override
@@ -180,14 +187,34 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	@Override
+	public boolean hasCharm(Charm charm) {
+		return false;
+	}
+
+	@Override
+	public CardAttributes getBase() {
+		return base;
+	}
+
+	@Override
+	public CardExtra getStats() {
+		return stats;
+	}
+
+	@Override
 	public TagBundle getTagBundle() {
 		TagBundle out = new TagBundle();
 
-		for (Object tag : tags) {
+		for (Object tag : base.getTags()) {
 			out.add("tag", ((String) tag).toLowerCase());
 		}
 
 		return out;
+	}
+
+	@Override
+	public Hand getOriginalHand() {
+		return originalHand;
 	}
 
 	@Override
@@ -197,6 +224,10 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 	@Override
 	public void setHand(Hand hand) {
+		if (originalHand == null) {
+			this.originalHand = hand;
+		}
+
 		this.hand = hand;
 	}
 
@@ -236,6 +267,108 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 		state = (byte) Bit32.set(state, 3, manipulated);
 	}
 
+	public String getEffect() {
+		return Utils.getOr(stats.getEffect(), base.getEffect());
+	}
+
+	@Override
+	public boolean hasEffect() {
+		return !getEffect().isEmpty() && !hasFlag(Flag.NO_EFFECT);
+	}
+
+	@Override
+	public Trigger getCurrentTrigger() {
+		return currentTrigger;
+	}
+
+	@Override
+	public CachedScriptManager getCSM() {
+		return cachedEffect;
+	}
+
+	@Override
+	public boolean execute(EffectParameters ep) {
+		if (!hasEffect()) return false;
+		else if (!hasTrueEffect()) {
+			if (hand.getLockTime(Lock.EFFECT) > 0) return false;
+		}
+
+		if (!getEffect().contains(ep.trigger().name())) {
+			return false;
+		}
+
+		Shoukan game = getGame();
+		if (base.isLocked(ep.trigger()) || ep.trigger() == NONE) {
+			return false;
+		}
+
+		try {
+			base.lock(ep.trigger());
+			if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
+				execute(new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
+			}
+
+			currentTrigger = ep.trigger();
+			CachedScriptManager csm = getCSM();
+			csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
+					.forScript(getEffect())
+					.withConst("game", getGame())
+					.withConst("data", stats.getData())
+					.withVar("ep", ep.forSide(getSide()))
+					.withVar("side", getSide())
+					.withVar("trigger", ep.trigger());
+
+			if (stats.getSource() instanceof Senshi) {
+				csm.withVar("me", stats.getSource());
+			}
+
+			csm.run();
+
+			if (ep.trigger() != ON_TICK) {
+				hasFlag(Flag.EMPOWERED, true);
+			}
+
+			return true;
+		} catch (Exception e) {
+			Drawable<?> source = Utils.getOr(stats.getSource(), this);
+
+			game.getChannel().sendMessage(game.getString("error/effect")).queue();
+			Constants.LOGGER.warn("Failed to execute {} effect\n{}", this, "/* " + source + " */\n" + getEffect(), e);
+			return false;
+		} finally {
+			currentTrigger = null;
+			base.unlock(ep.trigger());
+		}
+	}
+
+	@Override
+	public void executeAssert(Trigger trigger) {
+		if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE) || !hasEffect()) return;
+		else if (!getEffect().contains(trigger.name())) return;
+
+		if (trigger == ON_REMOVE) {
+			getGame().unbind(this);
+		}
+
+		try {
+			CachedScriptManager csm = getCSM();
+			csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
+					.forScript(getEffect())
+					.withConst("game", getGame())
+					.withConst("data", stats.getData())
+					.withVar("ep", new EffectParameters(trigger, getSide()))
+					.withVar("side", getSide())
+					.withVar("trigger", trigger);
+
+			if (stats.getSource() instanceof Senshi) {
+				csm.withVar("me", stats.getSource());
+			}
+
+			csm.run();
+		} catch (Exception ignored) {
+		}
+	}
+
 	public boolean isActive() {
 		return getGame().getArena().getField().equals(this);
 	}
@@ -266,16 +399,12 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	@Override
-	public BufferedImage render(I18N locale, Deck deck) {
-		if (hand == null) {
-			hand = new Hand(deck);
-		}
-
+	public BufferedImage render(I18N locale) {
 		BufferedImage out = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
-		DeckStyling style = deck.getStyling();
+		Deck deck = originalHand.getUserDeck();
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			if (isFlipped()) {
 				g1.drawImage(deck.getFrame().getBack(deck), 0, 0, null);
@@ -285,18 +414,17 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 					op.filter(out, out);
 				}
 			} else {
+				String desc = getDescription(locale);
 				BufferedImage img = getVanity().drawCardNoBorder(Utils.getOr(() -> stashRef.isChrome(), false));
 
 				g1.setClip(deck.getFrame().getBoundary());
 				g1.drawImage(img, 0, 0, null);
 				g1.setClip(null);
 
-				g1.drawImage(deck.getFrame().getFront(false), 0, 0, null);
+				g1.drawImage(deck.getFrame().getFront(!desc.isBlank()), 0, 0, null);
 
-				g1.setFont(FONT);
-				g1.setColor(deck.getFrame().getPrimaryColor());
-				String name = Graph.abbreviate(g1, getVanity().getName(), MAX_NAME_WIDTH);
-				Graph.drawOutlinedString(g1, name, 12, 30, 2, deck.getFrame().getBackgroundColor());
+				drawName(g1);
+				drawDescription(g1, hand, locale);
 
 				if (type != FieldType.NONE) {
 					BufferedImage icon = type.getIcon();
@@ -313,11 +441,9 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 						.sorted(Comparator.comparing(Pair::getSecond))
 						.toList();
 
-				int i = 0;
+				int y = !desc.isBlank() ? 213 : 279;
 				for (Pair<Race, Double> mod : mods) {
 					if (mod.getSecond() == 0) continue;
-
-					int y = 279 - 25 * i++;
 
 					BufferedImage icon = mod.getFirst().getIcon();
 					g1.drawImage(icon, 23, y, null);
@@ -326,6 +452,8 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 							23 + icon.getWidth() + 5, y - 4 + (icon.getHeight() + m.getHeight()) / 2,
 							BORDER_WIDTH, Color.BLACK
 					);
+
+					y -= 25;
 				}
 
 				if (!isAvailable() || isManipulated()) {
@@ -339,12 +467,12 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 
 					if (isEthereal()) {
 						BufferedImage ovr = IO.getResourceAsImage(path + "/ethereal.png");
-						g2d.drawImage(ovr, 0, 0, null);
+						g1.drawImage(ovr, 0, 0, null);
 					}
 
 					if (isManipulated()) {
 						BufferedImage ovr = IO.getResourceAsImage("shoukan/states/locked.png");
-						g2d.drawImage(ovr, 15, 15, null);
+						g1.drawImage(ovr, 15, 15, null);
 					}
 				}
 			}
@@ -397,11 +525,10 @@ public class Field extends DAO<Field> implements Drawable<Field> {
 	}
 
 	@Override
-	public Field fork() {
-		Field clone = new Field(id, card, modifiers.clone(), type, effect, tags.clone());
+	public Field fork() throws CloneNotSupportedException {
+		Field clone = new Field(id, card, modifiers.clone(), type, effect, base.clone(), stats.clone(), stashRef);
 		clone.hand = hand;
 		clone.state = (byte) (state & 0b111);
-		clone.stashRef = stashRef;
 
 		return clone;
 	}
