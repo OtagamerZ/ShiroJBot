@@ -24,10 +24,12 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.id.HistorySlotId;
 import com.kuuhaku.model.records.shoukan.CardReference;
 import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -97,16 +99,20 @@ public class HistorySlot extends DAO<HistorySlot> {
 		return frontline;
 	}
 
-	public JSONArray getFrontlineEquips() {
-		return frontlineEquips;
+	public List<CardReference> getFrontlineEquips() {
+		return frontlineEquips.stream()
+				.map(e -> new CardReference((JSONObject) e))
+				.toList();
 	}
 
 	public CardReference getBackline() {
 		return backline;
 	}
 
-	public JSONArray getBacklineEquips() {
-		return backlineEquips;
+	public List<CardReference> getBacklineEquips() {
+		return backlineEquips.stream()
+				.map(e -> new CardReference((JSONObject) e))
+				.toList();
 	}
 
 	public int getLockTime() {

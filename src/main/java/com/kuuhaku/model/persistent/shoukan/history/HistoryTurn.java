@@ -26,6 +26,7 @@ import com.kuuhaku.model.persistent.shoukan.MatchHistory;
 import com.kuuhaku.model.records.id.HistoryTurnId;
 import com.kuuhaku.model.records.shoukan.CardReference;
 import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -33,6 +34,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -102,8 +104,10 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 		return sides;
 	}
 
-	public JSONArray getBanned() {
-		return banned;
+	public List<CardReference> getBanned() {
+		return banned.stream()
+				.map(e -> new CardReference((JSONObject) e))
+				.toList();
 	}
 
 	public CardReference getField() {
