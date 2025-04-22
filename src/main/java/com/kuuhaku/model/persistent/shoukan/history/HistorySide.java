@@ -26,20 +26,17 @@ import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.records.id.HistorySideId;
+import com.kuuhaku.model.records.shoukan.CardReference;
 import com.kuuhaku.model.records.shoukan.Timed;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
-import kotlin.Pair;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -105,16 +102,16 @@ public class HistorySide extends DAO<HistorySide> {
 			this.locks.put(lock.obj().name(), lock.time());
 		}
 
-		List<Pair<List<Drawable<?>>, JSONArray>> stacks = List.of(
-				new Pair<>(h.getCards(false), this.hand),
-				new Pair<>(h.getRealDeck(false), this.deck),
-				new Pair<>(h.getGraveyard(false), this.graveyard),
-				new Pair<>(h.getDiscard(false), this.discard)
+		Map<List<Drawable<?>>, JSONArray> stacks = Map.of(
+				h.getCards(false), this.hand,
+				h.getRealDeck(false), this.deck,
+				h.getGraveyard(false), this.graveyard,
+				h.getDiscard(false), this.discard
 		);
 
-		for (Pair<List<Drawable<?>>, JSONArray> stack : stacks) {
-			for (Drawable<?> card : stack.getFirst()) {
-				stack.getSecond().add(card.getId());
+		for (Map.Entry<List<Drawable<?>>, JSONArray> stack : stacks.entrySet()) {
+			for (Drawable<?> card : stack.getKey()) {
+				stack.getValue().add(new CardReference(card));
 			}
 		}
 

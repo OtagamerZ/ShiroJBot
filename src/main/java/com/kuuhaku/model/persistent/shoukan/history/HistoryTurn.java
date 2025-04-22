@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent.shoukan.history;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
-import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shoukan.MatchHistory;
@@ -78,7 +77,7 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 			sides.add(new HistorySide(this, hand));
 		}
 		this.banned = game.getArena().getBanned(false).stream()
-				.map(Drawable::getId)
+				.map(CardReference::new)
 				.collect(Collectors.toCollection(JSONArray::new));
 		this.field = new CardReference(game.getArena().getField());
 	}

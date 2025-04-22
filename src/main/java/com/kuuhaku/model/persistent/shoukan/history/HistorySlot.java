@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent.shoukan.history;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.id.HistorySlotId;
 import com.kuuhaku.model.records.shoukan.CardReference;
@@ -69,14 +68,14 @@ public class HistorySlot extends DAO<HistorySlot> {
 		if (frontline != null) {
 			this.frontline = new CardReference(frontline);
 			this.frontlineEquips = frontline.getEquipments(false).stream()
-					.map(Evogear::getId)
+					.map(CardReference::new)
 					.collect(Collectors.toCollection(JSONArray::new));
 		}
 
 		if (backline != null) {
 			this.backline = new CardReference(backline);
 			this.backlineEquips = backline.getEquipments(false).stream()
-					.map(Evogear::getId)
+					.map(CardReference::new)
 					.collect(Collectors.toCollection(JSONArray::new));
 		}
 
