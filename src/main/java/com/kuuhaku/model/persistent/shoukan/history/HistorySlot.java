@@ -39,10 +39,8 @@ public class HistorySlot extends DAO<HistorySlot> {
 	private HistorySlotId id;
 
 	@Embedded
-	@AttributeOverrides({
-			@AttributeOverride(name = "owner", column = @Column(name = "frontline_owner")),
-			@AttributeOverride(name = "card_id", column = @Column(name = "frontline_id")),
-	})
+	@AttributeOverrides(@AttributeOverride(name = "owner", column = @Column(name = "frontline_owner")))
+	@AssociationOverrides(@AssociationOverride(name = "card_id", joinColumns = @JoinColumn(name = "frontline_id")))
 	private CardReference frontline;
 
 	@JdbcTypeCode(SqlTypes.JSON)
@@ -51,10 +49,8 @@ public class HistorySlot extends DAO<HistorySlot> {
 	private JSONArray frontlineEquips = new JSONArray();
 
 	@Embedded
-	@AttributeOverrides({
-			@AttributeOverride(name = "owner", column = @Column(name = "backline_owner")),
-			@AttributeOverride(name = "card_id", column = @Column(name = "backline_id")),
-	})
+	@AttributeOverrides(@AttributeOverride(name = "owner", column = @Column(name = "backline_owner")))
+	@AssociationOverrides(@AssociationOverride(name = "card_id", joinColumns = @JoinColumn(name = "backline_id")))
 	private CardReference backline;
 
 	@JdbcTypeCode(SqlTypes.JSON)

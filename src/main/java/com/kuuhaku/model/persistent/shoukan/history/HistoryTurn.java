@@ -66,10 +66,8 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 	private JSONArray banned = new JSONArray();
 
 	@Embedded
-	@AttributeOverrides({
-			@AttributeOverride(name = "owner", column = @Column(name = "field_owner")),
-			@AttributeOverride(name = "card_id", column = @Column(name = "field_id")),
-	})
+	@AttributeOverrides(@AttributeOverride(name = "owner", column = @Column(name = "field_owner")))
+	@AssociationOverrides(@AssociationOverride(name = "card_id", joinColumns = @JoinColumn(name = "field_id")))
 	private CardReference field;
 
 	public HistoryTurn() {
