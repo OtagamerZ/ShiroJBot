@@ -38,7 +38,7 @@ public class SummonersGacha extends Gacha {
 				  AND (
 				        (get_rarity_index(c.rarity) BETWEEN 1 AND 5 AND NOT has(s.tags, 'FUSION'))
 				        OR e.tier > 0
-				        OR NOT f.effect
+				        OR NOT f.effect_only
 				    )
 				ORDER BY weight, c.id
 				""", u.getId()));

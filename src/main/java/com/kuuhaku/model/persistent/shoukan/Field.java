@@ -540,7 +540,7 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 	}
 
 	public static Field getRandom(RandomGenerator rng) {
-		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM field WHERE NOT effect ORDER BY card_id");
+		List<String> ids = DAO.queryAllNative(String.class, "SELECT card_id FROM field WHERE NOT effect_only ORDER BY card_id");
 		if (ids.isEmpty()) return null;
 
 		return DAO.find(Field.class, Utils.getRandomEntry(rng, ids));
@@ -553,9 +553,9 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 		}
 
 		if (filters.length == 0) {
-			query.appendNewLine("WHERE NOT effect");
+			query.appendNewLine("WHERE NOT effect_only");
 		} else {
-			query.appendNewLine("AND NOT effect");
+			query.appendNewLine("AND NOT effect_only");
 		}
 
 		query.appendNewLine("ORDER BY card_id");

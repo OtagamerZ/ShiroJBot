@@ -47,7 +47,7 @@ public class PremiumGacha extends Gacha {
 				            AND get_rarity_index(c.rarity) BETWEEN 3 AND 5
 				            AND NOT has(s.tags, 'FUSION'))
 				        OR e.tier > 2
-				        OR NOT f.effect
+				        OR NOT f.effect_only
 				    )
 				ORDER BY weight, c.id
 				""", u.getId()));

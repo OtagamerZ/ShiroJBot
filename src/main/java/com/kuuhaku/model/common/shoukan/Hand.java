@@ -334,7 +334,7 @@ public class Hand {
 			List<List<? extends Drawable<?>>> cards = new ArrayList<>();
 			cards.add(DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE cast(get_rarity_index(s.card.rarity) AS INTEGER) BETWEEN 1 AND 5 AND NOT CAST(has(s.base.tags, 'FUSION') AS BOOLEAN)"));
 			cards.add(DAO.queryAll(Evogear.class, "SELECT e FROM Evogear e WHERE e.base.mana > 0"));
-			cards.add(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE NOT f.effect"));
+			cards.add(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE NOT f.effectOnly"));
 
 			toAdd = cards.parallelStream()
 					.flatMap(List::stream)

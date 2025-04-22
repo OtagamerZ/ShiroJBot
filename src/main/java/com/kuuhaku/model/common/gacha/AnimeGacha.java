@@ -41,7 +41,7 @@ public class AnimeGacha extends Gacha {
 				WHERE get_rarity_index(c.rarity) BETWEEN 1 AND 5
 				   OR CASE c.rarity
 				          WHEN 'EVOGEAR' THEN (SELECT e.tier > 0 FROM evogear e WHERE e.card_id = c.id)
-				          WHEN 'FIELD' THEN (SELECT NOT f.effect FROM field f WHERE f.card_id = c.id)
+				          WHEN 'FIELD' THEN (SELECT NOT f.effect_only FROM field f WHERE f.card_id = c.id)
 				   END
 				ORDER BY weight, c.id
 				""", u.getId()));
