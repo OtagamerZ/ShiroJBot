@@ -53,6 +53,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
+import static com.kuuhaku.model.enums.shoukan.Trigger.ON_INITIALIZE;
+
 public class Arena implements Renderer<Future<BufferedImage>> {
 	private final ExecutorService RENDER = Executors.newSingleThreadScheduledExecutor();
 	private final Point MARGIN = new Point(25, 25);
@@ -160,22 +162,23 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 		return Utils.getOr(field, DEFAULT_FIELD);
 	}
 
-	public void setField(Field field) {
-		if (Objects.equals(this.field, field)) return;
-		this.field = Utils.getOr(field, DEFAULT_FIELD);
+	public void setField(Field card) {
+		if (Objects.equals(field, card)) return;
+		field = Utils.getOr(card, DEFAULT_FIELD);
 
-		if (this.field.getHand() == null) {
-			this.field.setHand(game.getCurrent());
+		if (field.getHand() == null) {
+			field.setHand(game.getCurrent());
 		}
 
+		field.executeAssert(ON_INITIALIZE);
 		for (Hand hd : game.getHands().values()) {
-			hd.getCards().remove(this.field);
-			hd.getGraveyard().remove(this.field);
-			hd.getRealDeck().remove(this.field);
-			hd.getDiscard().remove(this.field);
+			hd.getCards().remove(field);
+			hd.getGraveyard().remove(field);
+			hd.getRealDeck().remove(field);
+			hd.getDiscard().remove(field);
 		}
 
-		this.field.getHand().getData().put("last_field", this.field);
+		field.getHand().getData().put("last_field", this.field);
 		game.trigger(Trigger.ON_FIELD_CHANGE);
 	}
 
