@@ -1907,7 +1907,7 @@ public class Shoukan extends GameInstance<Phase> {
 							} catch (ActivationException ignore) {
 							} catch (Exception e) {
 								getChannel().sendMessage(getString("error/effect")).queue();
-								Constants.LOGGER.warn("Failed to execute {} persistent effect", effect.getSource(), e);
+								Constants.LOGGER.warn("Failed to execute {} persistent effect for {}", effect.getSource(), t, e);
 							}
 						}
 					}
@@ -1924,6 +1924,15 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		} finally {
 			getArena().getField().execute(ep);
+			for (Target t : ep.targets()) {
+				try {
+					getArena().getField().execute(new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
+				} catch (ActivationException ignore) {
+				} catch (Exception e) {
+					getChannel().sendMessage(getString("error/effect")).queue();
+					Constants.LOGGER.warn("Failed to execute {} effect for {}", getArena().getField(), t, e);
+				}
+			}
 		}
 	}
 
