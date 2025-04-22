@@ -36,6 +36,7 @@ import com.kuuhaku.model.persistent.guild.*;
 import com.kuuhaku.model.persistent.shiro.CommandMetrics;
 import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.*;
+import com.kuuhaku.model.records.embed.Embed;
 import com.kuuhaku.util.*;
 import com.ygimenez.json.JSONObject;
 import me.xuender.unidecode.Unidecode;
@@ -50,6 +51,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 import net.jodah.expiringmap.ExpiringMap;
@@ -176,7 +178,9 @@ public class GuildListener extends ListenerAdapter {
 		GuildSettings settings = config.getSettings();
 
 		I18N locale = config.getLocale();
-		EmbedBuilder eb = new AutoEmbedBuilder(Utils.replaceTags(locale, mb, mb.getGuild(), settings.getEmbed().toString()))
+		AutoEmbedBuilder auto = new AutoEmbedBuilder(Utils.replaceTags(locale, mb, mb.getGuild(), settings.getEmbed().toString()));
+
+		EmbedBuilder eb = auto
 				.setDescription(Utils.replaceTags(locale, mb, mb.getGuild(), message))
 				.setTitle(Utils.replaceTags(locale, mb, mb.getGuild(), config.getLocale().get(Utils.getRandomEntry(headers))));
 
@@ -191,12 +195,21 @@ public class GuildListener extends ListenerAdapter {
 			eb.setColor(Graph.getColor(mb.getEffectiveAvatarUrl()));
 		}
 
+		MessageCreateAction act = channel.sendMessage("");
+
+		Embed model = auto.getEmbed();
 		Role welcomer = config.getSettings().getWelcomer();
-		if (join && welcomer != null) {
-			channel.sendMessage(welcomer.getAsMention()).setEmbeds(eb.build()).queue();
+		if (join) {
+			if (welcomer != null) {
+				act = act.setContent(welcomer.getAsMention());
+			}
+
+			eb.setImage(model.image().getRandomJoin());
 		} else {
-			channel.sendMessageEmbeds(eb.build()).queue();
+			eb.setImage(model.image().getRandomLeave());
 		}
+
+		act.setEmbeds(eb.build()).queue();
 	}
 
 	@Override
