@@ -54,6 +54,7 @@ import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.ON_INITIALIZE;
+import static com.kuuhaku.model.enums.shoukan.Trigger.ON_REMOVE;
 
 public class Arena implements Renderer<Future<BufferedImage>> {
 	private final ExecutorService RENDER = Executors.newSingleThreadScheduledExecutor();
@@ -164,6 +165,11 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 
 	public void setField(Field card) {
 		if (Objects.equals(field, card)) return;
+
+		if (field != null) {
+			field.executeAssert(ON_REMOVE);
+		}
+
 		field = Utils.getOr(card, DEFAULT_FIELD);
 
 		if (field.getHand() == null) {
