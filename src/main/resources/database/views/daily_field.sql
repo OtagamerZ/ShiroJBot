@@ -26,7 +26,7 @@ FROM (
      FROM (
           SELECT card_id
           FROM field
-          WHERE NOT effect
+          WHERE NOT effect_only
           ORDER BY hashtextextended(card_id, get_seed())
           ) x
      ) x
