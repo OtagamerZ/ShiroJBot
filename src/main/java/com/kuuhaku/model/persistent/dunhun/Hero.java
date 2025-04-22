@@ -35,7 +35,7 @@ import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
-import com.kuuhaku.model.persistent.shoukan.CardAttributes;
+import com.kuuhaku.model.persistent.shoukan.CombatCardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
@@ -527,7 +527,7 @@ public class Hero extends DAO<Hero> implements Actor {
 		if (senshiCache != null) return senshiCache;
 
 		senshiCache = new Senshi(this, locale);
-		CardAttributes base = senshiCache.getBase();
+		CombatCardAttributes base = senshiCache.getBase();
 
 		modifiers.clear(this);
 		int dmg = 100;

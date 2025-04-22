@@ -217,7 +217,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public CardAttributes getBase() {
+	public CombatCardAttributes getBase() {
 		return base;
 	}
 

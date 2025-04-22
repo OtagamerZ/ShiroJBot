@@ -16,6 +16,7 @@ import com.kuuhaku.model.persistent.dunhun.MonsterStats;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
+import com.kuuhaku.model.persistent.shoukan.CombatCardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.dunhun.CombatContext;
@@ -287,7 +288,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 
 		senshiCache = new Senshi(this, locale);
 
-		CardAttributes base = senshiCache.getBase();
+		CombatCardAttributes base = senshiCache.getBase();
 		load(locale);
 
 		if (!id.equalsIgnoreCase("DUMMY")) {

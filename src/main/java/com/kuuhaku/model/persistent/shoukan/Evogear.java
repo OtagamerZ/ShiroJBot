@@ -197,7 +197,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public CardAttributes getBase() {
+	public CombatCardAttributes getBase() {
 		return base;
 	}
 
