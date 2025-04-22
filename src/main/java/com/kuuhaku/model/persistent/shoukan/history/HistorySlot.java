@@ -41,7 +41,7 @@ public class HistorySlot extends DAO<HistorySlot> {
 	@Embedded
 	@AttributeOverrides({
 			@AttributeOverride(name = "owner", column = @Column(name = "frontline_owner")),
-			@AttributeOverride(name = "card_id", column = @Column(name = "frontline_card_id")),
+			@AttributeOverride(name = "card_id", column = @Column(name = "frontline_id")),
 	})
 	private CardReference frontline;
 
@@ -53,7 +53,7 @@ public class HistorySlot extends DAO<HistorySlot> {
 	@Embedded
 	@AttributeOverrides({
 			@AttributeOverride(name = "owner", column = @Column(name = "backline_owner")),
-			@AttributeOverride(name = "card_id", column = @Column(name = "backline_card_id")),
+			@AttributeOverride(name = "card_id", column = @Column(name = "backline_id")),
 	})
 	private CardReference backline;
 
