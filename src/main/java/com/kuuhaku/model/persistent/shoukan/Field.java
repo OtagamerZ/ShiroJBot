@@ -312,6 +312,7 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 			CachedScriptManager csm = getCSM();
 			csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
 					.forScript(getEffect())
+					.withConst("field", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
 					.withVar("ep", ep.forSide(getSide()))
