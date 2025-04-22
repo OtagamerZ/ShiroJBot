@@ -67,7 +67,7 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 
 	@Embedded
 	@AttributeOverride(name = "owner", column = @Column(name = "field_owner"))
-	@AssociationOverride(name = "card_id", joinColumns = @JoinColumn(name = "field_id"))
+	@AssociationOverride(name = "card", joinColumns = @JoinColumn(name = "field_id"))
 	private CardReference field;
 
 	public HistoryTurn() {
