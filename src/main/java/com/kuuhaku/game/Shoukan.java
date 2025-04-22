@@ -1852,74 +1852,78 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void triggerEOTs(EffectParameters ep) {
-		for (EffectOverTime effect : Set.copyOf(eots)) {
-			if (effect.isClosed()) {
-				eots.remove(effect);
-				continue;
-			}
-
-			if (effect.getSide() != null) {
-				Hand h = hands.get(effect.getSide());
-				if (h.getLockTime(Lock.EFFECT) > 0) {
-					if (!(effect.getSource() instanceof EffectHolder<?> e) || !e.hasTrueEffect()) {
-						continue;
-					}
+		try {
+			for (EffectOverTime effect : Set.copyOf(eots)) {
+				if (effect.isClosed()) {
+					eots.remove(effect);
+					continue;
 				}
-			}
 
-			Predicate<Side> checkSide = s -> effect.getSide() == null || effect.getSide() == s;
-			if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
-				effect.decreaseTurn();
-			}
-
-			if (ep.size() == 0) {
-				if (checkSide.test(ep.side()) && effect.hasTrigger(ep.trigger())) {
-					effect.decreaseLimit();
-
-					try {
-						effect.getEffect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
-					} catch (ActivationException ignore) {
-					} catch (Exception e) {
-						getChannel().sendMessage(getString("error/effect")).queue();
-						Constants.LOGGER.warn("Failed to execute {} persistent effect", effect.getSource(), e);
-					}
-				}
-			} else if (ep.source() != null) {
-				if (checkSide.test(ep.source().side()) && effect.hasTrigger(ep.source().trigger())) {
-					effect.decreaseLimit();
-
-					try {
-						effect.getEffect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
-					} catch (ActivationException ignore) {
-					} catch (Exception e) {
-						getChannel().sendMessage(getString("error/effect")).queue();
-						Constants.LOGGER.warn("Failed to execute {} persistent effect", effect.getSource(), e);
+				if (effect.getSide() != null) {
+					Hand h = hands.get(effect.getSide());
+					if (h.getLockTime(Lock.EFFECT) > 0) {
+						if (!(effect.getSource() instanceof EffectHolder<?> e) || !e.hasTrueEffect()) {
+							continue;
+						}
 					}
 				}
 
-				for (Target t : ep.targets()) {
-					if (checkSide.test(t.side()) && effect.hasTrigger(t.trigger())) {
+				Predicate<Side> checkSide = s -> effect.getSide() == null || effect.getSide() == s;
+				if (checkSide.test(getCurrentSide()) && ep.trigger() == ON_TURN_BEGIN) {
+					effect.decreaseTurn();
+				}
+
+				if (ep.size() == 0) {
+					if (checkSide.test(ep.side()) && effect.hasTrigger(ep.trigger())) {
 						effect.decreaseLimit();
 
 						try {
-							effect.getEffect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
+							effect.getEffect().accept(effect, new EffectParameters(ep.trigger(), ep.side()));
 						} catch (ActivationException ignore) {
 						} catch (Exception e) {
 							getChannel().sendMessage(getString("error/effect")).queue();
 							Constants.LOGGER.warn("Failed to execute {} persistent effect", effect.getSource(), e);
 						}
 					}
+				} else if (ep.source() != null) {
+					if (checkSide.test(ep.source().side()) && effect.hasTrigger(ep.source().trigger())) {
+						effect.decreaseLimit();
+
+						try {
+							effect.getEffect().accept(effect, new EffectParameters(ep.source().trigger(), ep.side(), ep.source(), ep.targets()));
+						} catch (ActivationException ignore) {
+						} catch (Exception e) {
+							getChannel().sendMessage(getString("error/effect")).queue();
+							Constants.LOGGER.warn("Failed to execute {} persistent effect", effect.getSource(), e);
+						}
+					}
+
+					for (Target t : ep.targets()) {
+						if (checkSide.test(t.side()) && effect.hasTrigger(t.trigger())) {
+							effect.decreaseLimit();
+
+							try {
+								effect.getEffect().accept(effect, new EffectParameters(t.trigger(), ep.side(), ep.source(), ep.targets()));
+							} catch (ActivationException ignore) {
+							} catch (Exception e) {
+								getChannel().sendMessage(getString("error/effect")).queue();
+								Constants.LOGGER.warn("Failed to execute {} persistent effect", effect.getSource(), e);
+							}
+						}
+					}
+				}
+
+				if (effect.isExpired() || isClosed()) {
+					effect.close();
+					eots.remove(effect);
+
+					if (!isClosed() && !effect.isPermanent() && effect.getSource() != null) {
+						getChannel().sendMessage(getString("str/effect_expiration", effect.getSource())).queue();
+					}
 				}
 			}
-
-			if (effect.isExpired() || isClosed()) {
-				effect.close();
-				eots.remove(effect);
-
-				if (!isClosed() && !effect.isPermanent() && effect.getSource() != null) {
-					getChannel().sendMessage(getString("str/effect_expiration", effect.getSource())).queue();
-				}
-			}
+		} finally {
+			getArena().getField().execute(ep);
 		}
 	}
 
