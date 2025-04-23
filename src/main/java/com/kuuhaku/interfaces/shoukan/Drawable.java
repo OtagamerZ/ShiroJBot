@@ -119,22 +119,6 @@ public interface Drawable<T extends Drawable<T>> {
 		return getSlot().getIndex();
 	}
 
-	default String getDescription(I18N locale) {
-		if (this instanceof EffectHolder<T> eh) {
-			EffectHolder<?> source = eh.getSource();
-			String out = Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
-			if (getHand() != null) {
-				if (getHand().getOrigins().major() == Race.DEMON) {
-					out = out.replace("$mp", "($hp/($bhp*0.08))");
-				}
-			}
-
-			return out;
-		}
-
-		return "";
-	}
-
 	default int getMPCost() {
 		return 0;
 	}
