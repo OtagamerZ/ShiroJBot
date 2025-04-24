@@ -2408,7 +2408,10 @@ public class Shoukan extends GameInstance<Phase> {
 					List<Map.Entry<Integer, Boolean>> targetDisable = new ArrayList<>();
 					List<SlotColumn> other = getSlots(h.getSide().getOther());
 					if (other.parallelStream().noneMatch(sc -> sc.hasTop() || sc.hasBottom())) {
-						attack(h.getSide(), JSONObject.of(Map.entry("inField", i)));
+						if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
+							message.get().editMessageComponents().queue();
+						}
+
 						return;
 					}
 
@@ -2425,24 +2428,27 @@ public class Shoukan extends GameInstance<Phase> {
 					Senshi card = slots.get(i - 1).getTop();
 					if (card.hasFlag(Flag.DIRECT)) {
 						target = makeSelector(h, 5, 2,
-								(child, row, col) -> attack(h.getSide(), JSONObject.of(
-										Map.entry("inField", i),
-										Map.entry("target", col)
-								)),
-								Map.entry(h.getOther().getName(), bw -> attack(h.getSide(), JSONObject.of(
-										Map.entry("inField", i)
-								))),
+								(child, row, col) -> {
+									if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
+										message.get().editMessageComponents().queue();
+									}
+								},
+								Map.entry(h.getOther().getName(), bw -> {
+									if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
+										message.get().editMessageComponents().queue();
+									}
+								}),
 								Map.entry(Utils.parseEmoji(Constants.RETURN), bw ->
 										disableOptions(message, m -> m.editMessage(getString("str/select_source")), parent, sourceDisable)
 								)
 						);
 					} else {
 						target = makeSelector(h, 5, 2,
-								(child, row, col) ->
-										attack(h.getSide(), JSONObject.of(
-												Map.entry("inField", i),
-												Map.entry("target", col)
-										)),
+								(child, row, col) -> {
+									if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
+										message.get().editMessageComponents().queue();
+									}
+								},
 								Map.entry(Utils.parseEmoji(Constants.RETURN), bw ->
 										disableOptions(message, m -> m.editMessage(getString("str/select_source")), parent, sourceDisable)
 								)
