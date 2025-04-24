@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Embeddable
+@MappedSuperclass
 public class CardAttributes implements Serializable, Cloneable {
 	@Serial
 	private static final long serialVersionUID = -8535846175709738591L;
