@@ -31,6 +31,7 @@ import com.kuuhaku.model.records.shoukan.Timed;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
+import kotlin.Pair;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -102,16 +103,16 @@ public class HistorySide extends DAO<HistorySide> {
 			this.locks.put(lock.obj().name(), lock.time());
 		}
 
-		List<Map.Entry<List<Drawable<?>>, JSONArray>> stacks = List.of(
-				Map.entry(h.getCards(false), this.hand),
-				Map.entry(h.getRealDeck(false), this.deck),
-				Map.entry(h.getGraveyard(false), this.graveyard),
-				Map.entry(h.getDiscard(false), this.discard)
+		List<Pair<List<Drawable<?>>, JSONArray>> stacks = List.of(
+				new Pair<>(h.getCards(false), this.hand),
+				new Pair<>(h.getRealDeck(false), this.deck),
+				new Pair<>(h.getGraveyard(false), this.graveyard),
+				new Pair<>(h.getDiscard(false), this.discard)
 		);
 
-		for (Map.Entry<List<Drawable<?>>, JSONArray> stack : stacks) {
-			for (Drawable<?> card : stack.getKey()) {
-				stack.getValue().add(new CardReference(card));
+		for (Pair<List<Drawable<?>>, JSONArray> stack : stacks) {
+			for (Drawable<?> card : stack.getFirst()) {
+				stack.getSecond().add(new CardReference(card));
 			}
 		}
 

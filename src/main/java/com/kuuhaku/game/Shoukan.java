@@ -944,7 +944,20 @@ public class Shoukan extends GameInstance<Phase> {
 			stack.add(chosen);
 		}
 
-		reportEvent("str/activate_card", true, false, curr.getName(), chosen);
+		switch (chosen.getTargetType()) {
+			case NONE -> reportEvent("str/activate_card", true, false, curr.getName(), chosen);
+			case ALLY -> reportEvent("str/activate_card_single", true, false, curr.getName(), chosen,
+					Utils.getOr(tgt.ally(), getString("str/slot", tgt.allyPos()))
+			);
+			case ENEMY -> reportEvent("str/activate_card_single", true, false, curr.getName(), chosen,
+					Utils.getOr(tgt.enemy(), getString("str/slot", tgt.enemyPos()))
+			);
+			case BOTH -> reportEvent("str/activate_card_multi", true, false, curr.getName(), chosen,
+					Utils.getOr(tgt.ally(), getString("str/slot", tgt.allyPos())),
+					Utils.getOr(tgt.enemy(), getString("str/slot", tgt.enemyPos()))
+			);
+		}
+
 		return true;
 	}
 
@@ -1099,7 +1112,20 @@ public class Shoukan extends GameInstance<Phase> {
 			d.setAvailable(false);
 		}
 
-		reportEvent("str/card_special", true, false, curr.getName(), d);
+		switch (d.getTargetType()) {
+			case NONE -> reportEvent("str/card_special", true, false, curr.getName(), d);
+			case ALLY -> reportEvent("str/card_special_single", true, false, curr.getName(), d,
+					Utils.getOr(tgt.ally(), getString("str/slot", tgt.allyPos()))
+			);
+			case ENEMY -> reportEvent("str/card_special_single", true, false, curr.getName(), d,
+					Utils.getOr(tgt.enemy(), getString("str/slot", tgt.enemyPos()))
+			);
+			case BOTH -> reportEvent("str/card_special_multi", true, false, curr.getName(), d,
+					Utils.getOr(tgt.ally(), getString("str/slot", tgt.allyPos())),
+					Utils.getOr(tgt.enemy(), getString("str/slot", tgt.enemyPos()))
+			);
+		}
+
 		return true;
 	}
 
@@ -2181,11 +2207,11 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@SafeVarargs
-	private ButtonizeHelper makeSelector(Hand hand, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action, Map.Entry<Object, ThrowingConsumer<ButtonWrapper>>... extra) {
+	private ButtonizeHelper makeSelector(Hand hand, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action, Pair<Object, ThrowingConsumer<ButtonWrapper>>... extra) {
 		return makeSelector(hand, buttons, rows, action, List.of(extra));
 	}
 
-	private ButtonizeHelper makeSelector(Hand hand, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action, List<Map.Entry<Object, ThrowingConsumer<ButtonWrapper>>> extra) {
+	private ButtonizeHelper makeSelector(Hand hand, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action, List<Pair<Object, ThrowingConsumer<ButtonWrapper>>> extra) {
 		ButtonizeHelper selector = new ButtonizeHelper(true)
 				.setTimeout(5, TimeUnit.MINUTES)
 				.setCanInteract((u, b) -> !isClosed()
@@ -2202,11 +2228,11 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		for (Map.Entry<Object, ThrowingConsumer<ButtonWrapper>> e : extra) {
-			if (e.getKey() instanceof String s) {
-				selector.addAction(s, e.getValue());
-			} else if (e.getKey() instanceof Emoji emj) {
-				selector.addAction(emj, e.getValue());
+		for (Pair<Object, ThrowingConsumer<ButtonWrapper>> e : extra) {
+			if (e.getFirst() instanceof String s) {
+				selector.addAction(s, e.getSecond());
+			} else if (e.getFirst() instanceof Emoji emj) {
+				selector.addAction(emj, e.getSecond());
 			}
 		}
 
@@ -2316,7 +2342,7 @@ public class Shoukan extends GameInstance<Phase> {
 			} else {
 				AtomicReference<Message> message = new AtomicReference<>();
 				ButtonizeHelper source = makeSelector(h, cards.size(), 1, (parent, j, i) -> {
-					List<Map.Entry<Integer, Boolean>> disable = new ArrayList<>();
+					List<Pair<Integer, Boolean>> disable = new ArrayList<>();
 					JSONObject args = JSONObject.of(Map.entry("inHand", i));
 
 					Drawable<?> card = cards.get(i - 1);
@@ -2339,22 +2365,20 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 							return;
 						} else {
-							List<ButtonizeHelper> pages = new ArrayList<>();
-							pages.add(parent);
+							List<Pair<ButtonizeHelper, List<Pair<Integer, Boolean>>>> pages = new ArrayList<>();
+							pages.add(new Pair<>(parent, disable));
 
 							for (int k = 1; k <= passes.size(); k++) {
 								int tgt = k;
-								List<Map.Entry<Integer, Boolean>> passDisable = new ArrayList<>();
+								List<Pair<Integer, Boolean>> passDisable = new ArrayList<>();
 								List<SlotColumn> slots = getSlots(passes.get(k - 1) == TargetType.ENEMY ? h.getSide().getOther() : h.getSide());
 								for (SlotColumn slot : slots) {
-									for (int ii = 0; ii < 2; ii++) {
-										if (slot.getAtRole(ii > 0) == null) {
-											passDisable.add(Map.entry(slot.getIndex(), ii > 0));
-										}
+									if (slot.getUnblocked() == null) {
+										passDisable.add(new Pair<>(slot.getIndex(), false));
 									}
 								}
 
-								pages.add(makeSelector(h, 5, 2,
+								pages.add(new Pair<>(makeSelector(h, 5, 1,
 										(n, r, c) -> {
 											args.put("target" + tgt, c);
 											if (tgt == passes.size()) {
@@ -2362,14 +2386,17 @@ public class Shoukan extends GameInstance<Phase> {
 													message.get().delete().queue();
 												}
 											} else {
-												disableOptions(message, pages.get(tgt + 1), disable);
+												disableOptions(message, pages.get(tgt + 1).getFirst(), pages.get(tgt + 1).getSecond());
 											}
 										},
-										Map.entry(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, pages.get(tgt - 1), passDisable))
-								));
+										new Pair<>(Utils.parseEmoji(Constants.RETURN), bw -> {
+											args.remove("target" + tgt);
+											disableOptions(message, pages.get(tgt - 1).getFirst(), pages.get(tgt - 1).getSecond());
+										})
+								), passDisable));
 							}
 
-							disableOptions(message, pages.get(1), disable);
+							disableOptions(message, pages.get(1).getFirst(), pages.get(1).getSecond());
 						}
 
 						return;
@@ -2380,14 +2407,14 @@ public class Shoukan extends GameInstance<Phase> {
 						for (SlotColumn slot : slots) {
 							for (int k = 0; k < 2; k++) {
 								if (slot.getAtRole(k > 0) != null) {
-									disable.add(Map.entry(slot.getIndex(), k > 0));
+									disable.add(new Pair<>(slot.getIndex(), k > 0));
 								}
 							}
 						}
 					} else if (card instanceof Evogear) {
 						for (SlotColumn slot : slots) {
 							if (slot.getTop() == null) {
-								disable.add(Map.entry(slot.getIndex(), false));
+								disable.add(new Pair<>(slot.getIndex(), false));
 							}
 						}
 					}
@@ -2425,7 +2452,7 @@ public class Shoukan extends GameInstance<Phase> {
 									equipCard(h.getSide(), args);
 								}
 							},
-							Map.entry(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, parent, disable))
+							new Pair<>(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, parent, disable))
 					);
 
 					disableOptions(message, target, disable);
@@ -2457,16 +2484,16 @@ public class Shoukan extends GameInstance<Phase> {
 					return;
 				}
 
-				List<Map.Entry<Integer, Boolean>> sourceDisable = new ArrayList<>();
+				List<Pair<Integer, Boolean>> sourceDisable = new ArrayList<>();
 				for (SlotColumn slot : slots) {
 					if (slot.getTop() == null || !slot.getTop().canAttack()) {
-						sourceDisable.add(Map.entry(slot.getIndex(), false));
+						sourceDisable.add(new Pair<>(slot.getIndex(), false));
 					}
 				}
 
 				AtomicReference<Message> message = new AtomicReference<>();
 				ButtonizeHelper source = makeSelector(h, 5, 1, (parent, j, i) -> {
-					List<Map.Entry<Integer, Boolean>> targetDisable = new ArrayList<>();
+					List<Pair<Integer, Boolean>> targetDisable = new ArrayList<>();
 					List<SlotColumn> other = getSlots(h.getSide().getOther());
 					if (other.parallelStream().noneMatch(sc -> sc.hasTop() || sc.hasBottom())) {
 						if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
@@ -2480,16 +2507,16 @@ public class Shoukan extends GameInstance<Phase> {
 						for (int k = 0; k < 2; k++) {
 							Senshi tgt = slot.getAtRole(k > 0);
 							if (tgt == null || tgt.isStasis() || tgt.getFrontline() != null) {
-								targetDisable.add(Map.entry(slot.getIndex(), k > 0));
+								targetDisable.add(new Pair<>(slot.getIndex(), k > 0));
 							}
 						}
 					}
 
 					ButtonizeHelper target;
 					Senshi card = slots.get(i - 1).getTop();
-					List<Map.Entry<Object, ThrowingConsumer<ButtonWrapper>>> extra = new ArrayList<>();
+					List<Pair<Object, ThrowingConsumer<ButtonWrapper>>> extra = new ArrayList<>();
 					if (arena.isFieldEmpty(h.getSide().getOther()) || card.hasFlag(Flag.DIRECT)) {
-						extra.add(Map.entry(h.getOther().getName(), bw -> {
+						extra.add(new Pair<>(h.getOther().getName(), bw -> {
 							if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
 								message.get().delete().queue();
 							}
@@ -2497,14 +2524,14 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 
 					if (curr.getLockTime(Lock.TAUNT) == 0) {
-						extra.add(Map.entry(h.getOther().getName(), bw -> {
+						extra.add(new Pair<>(h.getOther().getName(), bw -> {
 							if (selfDamage(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
 								message.get().delete().queue();
 							}
 						}));
 					}
 
-					extra.add(Map.entry(Utils.parseEmoji(Constants.RETURN), bw ->
+					extra.add(new Pair<>(Utils.parseEmoji(Constants.RETURN), bw ->
 							disableOptions(message, m -> m.editMessage(getString("str/select_source")), parent, sourceDisable)
 					));
 
@@ -2835,11 +2862,11 @@ public class Shoukan extends GameInstance<Phase> {
 		return helper;
 	}
 
-	private void disableOptions(AtomicReference<Message> message, ButtonizeHelper helper, List<Map.Entry<Integer, Boolean>> toDisable) {
+	private void disableOptions(AtomicReference<Message> message, ButtonizeHelper helper, List<Pair<Integer, Boolean>> toDisable) {
 		disableOptions(message, Message::editMessageComponents, helper, toDisable);
 	}
 
-	private void disableOptions(AtomicReference<Message> message, Function<Message, MessageEditAction> edit, ButtonizeHelper helper, List<Map.Entry<Integer, Boolean>> toDisable) {
+	private void disableOptions(AtomicReference<Message> message, Function<Message, MessageEditAction> edit, ButtonizeHelper helper, List<Pair<Integer, Boolean>> toDisable) {
 		MessageEditAction mea = edit.apply(message.get());
 		List<LayoutComponent> rows = helper.getComponents(mea);
 		for (int ridx = 0; ridx < Math.min(rows.size(), 2); ridx++) {
@@ -2848,7 +2875,7 @@ public class Shoukan extends GameInstance<Phase> {
 				List<ItemComponent> items = ar.getComponents();
 				for (int idx = 0; idx < items.size(); idx++) {
 					ItemComponent item = items.get(idx);
-					if (item instanceof Button b && toDisable.contains(Map.entry(idx, ridx > 0))) {
+					if (item instanceof Button b && toDisable.contains(new Pair<>(idx, ridx > 0))) {
 						items.set(idx, b.asDisabled());
 					}
 				}
