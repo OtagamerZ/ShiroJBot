@@ -2321,7 +2321,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 					Drawable<?> card = cards.get(i - 1);
 					if (card instanceof Field) {
-						placeField(h.getSide(), args);
+						if (placeField(h.getSide(), args)) {
+							message.get().delete().queue();
+						}
 						return;
 					} else if (card instanceof Evogear e && e.isSpell()) {
 						List<TargetType> passes = switch (e.getTargetType()) {
@@ -2332,7 +2334,10 @@ public class Shoukan extends GameInstance<Phase> {
 						};
 
 						if (passes.isEmpty()) {
-							activate(h.getSide(), args);
+							if (activate(h.getSide(), args)) {
+								message.get().delete().queue();
+							}
+							return;
 						} else {
 							List<ButtonizeHelper> pages = new ArrayList<>();
 							pages.add(parent);
@@ -2343,8 +2348,8 @@ public class Shoukan extends GameInstance<Phase> {
 								List<SlotColumn> slots = getSlots(passes.get(k - 1) == TargetType.ENEMY ? h.getSide().getOther() : h.getSide());
 								for (SlotColumn slot : slots) {
 									for (int ii = 0; ii < 2; ii++) {
-										if (slot.getAtRole(k > 0) != null) {
-											passDisable.add(Map.entry(slot.getIndex(), k > 0));
+										if (slot.getAtRole(ii > 0) == null) {
+											passDisable.add(Map.entry(slot.getIndex(), ii > 0));
 										}
 									}
 								}
@@ -2353,7 +2358,9 @@ public class Shoukan extends GameInstance<Phase> {
 										(n, r, c) -> {
 											args.put("target" + tgt, c);
 											if (tgt == passes.size()) {
-												activate(h.getSide(), args);
+												if (activate(h.getSide(), args)) {
+													message.get().delete().queue();
+												}
 											} else {
 												disableOptions(message, pages.get(tgt + 1), disable);
 											}
