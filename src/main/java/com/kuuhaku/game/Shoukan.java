@@ -2188,7 +2188,10 @@ public class Shoukan extends GameInstance<Phase> {
 	private ButtonizeHelper makeSelector(Hand hand, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action, List<Map.Entry<Object, ThrowingConsumer<ButtonWrapper>>> extra) {
 		ButtonizeHelper selector = new ButtonizeHelper(true)
 				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract((u, b) -> u.getId().equals(hand.getUid()))
+				.setCanInteract((u, b) -> !isClosed()
+										  && getCurrentSide() == hand.getSide()
+										  && u.getId().equals(hand.getUid())
+				)
 				.setCancellable(false);
 
 		for (int row = 0; row < rows; row++) {
@@ -2216,7 +2219,10 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract((u, b) -> b != null && (u.getId().equals(curr.getUid()) || allowed.contains(b.getId())))
+				.setCanInteract((u, b) -> !isClosed()
+										  && getCurrentSide() == curr.getSide()
+										  && (u.getId().equals(curr.getUid()) || allowed.contains(b.getId()))
+				)
 				.setCancellable(false);
 
 		helper.addAction(Utils.parseEmoji("▶️"), w -> {
@@ -2333,6 +2339,16 @@ public class Shoukan extends GameInstance<Phase> {
 
 							for (int k = 1; k <= passes.size(); k++) {
 								int tgt = k;
+								List<Map.Entry<Integer, Boolean>> passDisable = new ArrayList<>();
+								List<SlotColumn> slots = getSlots(passes.get(k - 1) == TargetType.ENEMY ? h.getSide().getOther() : h.getSide());
+								for (SlotColumn slot : slots) {
+									for (int ii = 0; ii < 2; ii++) {
+										if (slot.getAtRole(k > 0) != null) {
+											passDisable.add(Map.entry(slot.getIndex(), k > 0));
+										}
+									}
+								}
+
 								pages.add(makeSelector(h, 5, 2,
 										(n, r, c) -> {
 											args.put("target" + tgt, c);
@@ -2342,9 +2358,11 @@ public class Shoukan extends GameInstance<Phase> {
 												disableOptions(message, pages.get(tgt + 1), disable);
 											}
 										},
-										Map.entry(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, pages.get(tgt - 1), disable))
+										Map.entry(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, pages.get(tgt - 1), passDisable))
 								));
 							}
+
+							disableOptions(message, pages.get(1), disable);
 						}
 
 						return;
@@ -2385,7 +2403,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 									ButtonizeHelper mode = new ButtonizeHelper(true)
 											.setTimeout(5, TimeUnit.MINUTES)
-											.setCanInteract((u, b) -> u.getId().equals(h.getUid()))
+											.setCanInteract((u, b) -> !isClosed()
+																	  && getCurrentSide() == h.getSide()
+																	  && u.getId().equals(h.getUid())
+											)
 											.setCancellable(false)
 											.addAction(Utils.parseEmoji("🗡️"), bw -> placeWithMode.accept("a"))
 											.addAction(Utils.parseEmoji("🛡️"), bw -> placeWithMode.accept("d"))
