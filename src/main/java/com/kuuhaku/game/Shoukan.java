@@ -1112,7 +1112,6 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		SlotColumn yourSlot = arena.getSlots(you.getSide()).get(args.getInt("inField") - 1);
-
 		if (!yourSlot.hasTop()) {
 			getChannel().sendMessage(getString("error/missing_card", yourSlot.getIndex() + 1)).queue();
 			return false;
@@ -2360,8 +2359,39 @@ public class Shoukan extends GameInstance<Phase> {
 											.addAction(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, child, disable));
 
 									Pages.buttonize(message.get(), mode);
-								} else if (card instanceof Evogear) {
-									equipCard(h.getSide(), args);
+								} else if (card instanceof Evogear e) {
+									if (e.isSpell()) {
+										List<TargetType> passes = switch (e.getTargetType()) {
+											case NONE -> List.of();
+											case ALLY -> List.of(TargetType.ALLY);
+											case ENEMY -> List.of(TargetType.ENEMY);
+											case BOTH -> List.of(TargetType.ALLY, TargetType.ENEMY);
+										};
+
+										if (passes.isEmpty()) {
+											activate(h.getSide(), args);
+										} else {
+											List<ButtonizeHelper> pages = new ArrayList<>();
+											pages.add(child);
+
+											for (int k = 1; k <= passes.size(); k++) {
+												int tgt = k;
+												pages.add(makeSelector(h, 5, 2,
+														(n, r, c) -> {
+															args.put("target" + tgt, c);
+															if (tgt == passes.size()) {
+																activate(h.getSide(), args);
+															} else {
+																disableOptions(message, pages.get(tgt + 1), disable);
+															}
+														},
+														Map.entry(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, pages.get(tgt - 1), disable))
+												));
+											}
+										}
+									} else {
+										equipCard(h.getSide(), args);
+									}
 								}
 							},
 							Map.entry(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, parent, disable))
@@ -2426,34 +2456,36 @@ public class Shoukan extends GameInstance<Phase> {
 
 					ButtonizeHelper target;
 					Senshi card = slots.get(i - 1).getTop();
+					List<Map.Entry<Object, ThrowingConsumer<ButtonWrapper>>> extra = new ArrayList<>();
 					if (arena.isFieldEmpty(h.getSide().getOther()) || card.hasFlag(Flag.DIRECT)) {
-						target = makeSelector(h, 5, 2,
-								(child, row, col) -> {
-									if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
-										message.get().delete().queue();
-									}
-								},
-								Map.entry(h.getOther().getName(), bw -> {
-									if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
-										message.get().delete().queue();
-									}
-								}),
-								Map.entry(Utils.parseEmoji(Constants.RETURN), bw ->
-										disableOptions(message, m -> m.editMessage(getString("str/select_source")), parent, sourceDisable)
-								)
-						);
-					} else {
-						target = makeSelector(h, 5, 2,
-								(child, row, col) -> {
-									if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
-										message.get().delete().queue();
-									}
-								},
-								Map.entry(Utils.parseEmoji(Constants.RETURN), bw ->
-										disableOptions(message, m -> m.editMessage(getString("str/select_source")), parent, sourceDisable)
-								)
-						);
+						extra.add(Map.entry(h.getOther().getName(), bw -> {
+							if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
+								message.get().delete().queue();
+							}
+						}));
 					}
+
+					if (curr.getLockTime(Lock.TAUNT) == 0) {
+						extra.add(Map.entry(h.getOther().getName(), bw -> {
+							if (selfDamage(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
+								message.get().delete().queue();
+							}
+						}));
+					}
+
+					extra.add(Map.entry(Utils.parseEmoji(Constants.RETURN), bw ->
+							disableOptions(message, m -> m.editMessage(getString("str/select_source")), parent, sourceDisable)
+					));
+
+					//noinspection unchecked
+					target = makeSelector(h, 5, 2,
+							(child, row, col) -> {
+								if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
+									message.get().delete().queue();
+								}
+							},
+							extra.toArray(new Map.Entry[0])
+					);
 
 					disableOptions(message, m -> m.editMessage(getString("str/select_target")), target, targetDisable);
 				});
