@@ -2412,6 +2412,11 @@ public class Shoukan extends GameInstance<Phase> {
 
 				AtomicReference<Message> message = new AtomicReference<>();
 				ButtonizeHelper source = makeSelector(h, null, 5, 1, (parent, j, i) -> {
+					if (arena.isFieldEmpty(h.getSide().getOther())) {
+						attack(h.getSide(), JSONObject.of(Map.entry("inField", i)));
+						return;
+					}
+
 					List<SlotColumn> other = getSlots(h.getSide().getOther());
 					for (SlotColumn slot : other) {
 						for (int k = 0; k < 2; k++) {
