@@ -20,6 +20,8 @@ package com.kuuhaku.game;
 
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
@@ -65,6 +67,7 @@ import net.dv8tion.jda.api.interactions.components.LayoutComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
+import net.dv8tion.jda.api.requests.restaction.WebhookMessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.ArrayUtils;
@@ -2177,7 +2180,8 @@ public class Shoukan extends GameInstance<Phase> {
 		close(code);
 	}
 
-	private ButtonizeHelper makeSelector(Hand hand, ButtonizeHelper parent, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action) {
+	@SafeVarargs
+	private ButtonizeHelper makeSelector(Hand hand, ButtonizeHelper parent, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action, Map.Entry<String, ThrowingConsumer<ButtonWrapper>>... extra) {
 		ButtonizeHelper selector = new ButtonizeHelper(true)
 				.setTimeout(5, TimeUnit.MINUTES)
 				.setCanInteract((u, b) -> u.getId().equals(hand.getUid()))
@@ -2189,6 +2193,10 @@ public class Shoukan extends GameInstance<Phase> {
 				int finalCol = col;
 				selector.addAction(col + StringUtils.repeat(Constants.VOID, row), bw -> action.accept(selector, finalRow, finalCol));
 			}
+		}
+
+		for (Map.Entry<String, ThrowingConsumer<ButtonWrapper>> e : extra) {
+			selector.addAction(e.getKey(), e.getValue());
 		}
 
 		if (parent != null) {
@@ -2272,121 +2280,178 @@ public class Shoukan extends GameInstance<Phase> {
 			});
 		}
 
-		helper.addAction(Utils.parseEmoji("🪪"), w -> {
-			Hand h;
-			if (isSingleplayer()) {
-				h = curr;
-			} else {
-				h = hands.values().stream()
-						.filter(hand -> hand.getUid().equals(w.getUser().getId()))
-						.findFirst().orElse(null);
-			}
+		if (getPhase() == Phase.PLAN) {
+			helper.addAction(Utils.parseEmoji("🪪"), w -> {
+				Hand h;
+				if (isSingleplayer()) {
+					h = curr;
+				} else {
+					h = hands.values().stream()
+							.filter(hand -> hand.getUid().equals(w.getUser().getId()))
+							.findFirst().orElse(null);
+				}
 
-			if (h == null) return;
-			else if (h.selectionPending()) {
-				Objects.requireNonNull(w.getHook())
+				if (h == null) return;
+				else if (h.selectionPending()) {
+					Objects.requireNonNull(w.getHook())
+							.setEphemeral(true)
+							.sendFiles(FileUpload.fromData(IO.getBytes(h.renderChoices(), "png"), "choices.png"))
+							.queue();
+					return;
+				}
+
+				WebhookMessageCreateAction<Message> act = Objects.requireNonNull(w.getHook())
 						.setEphemeral(true)
-						.sendFiles(FileUpload.fromData(IO.getBytes(h.renderChoices(), "png"), "choices.png"))
-						.queue();
-				return;
-			}
+						.sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png"));
 
-			var act = Objects.requireNonNull(w.getHook())
-					.setEphemeral(true)
-					.sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png"));
+				BondedList<Drawable<?>> cards = h.getCards(false);
+				if (cards.isEmpty() || h.getSide() != getCurrentSide()) {
+					act.queue();
+				} else {
+					AtomicReference<Message> message = new AtomicReference<>();
+					ButtonizeHelper source = makeSelector(h, null, cards.size(), 1, (parent, j, i) -> {
+						List<Map.Entry<Integer, Boolean>> disable = new ArrayList<>();
 
-			BondedList<Drawable<?>> cards = h.getCards(false);
-			if (cards.isEmpty() || h.getSide() != getCurrentSide()) {
-				act.queue();
-			} else {
-				AtomicReference<Message> message = new AtomicReference<>();
-
-				ButtonizeHelper source = makeSelector(h, null, cards.size(), 1, (parent, j, i) -> {
-					List<Map.Entry<Integer, Boolean>> disable = new ArrayList<>();
-
-					Drawable<?> card = cards.get(i - 1);
-					if (card instanceof Field) {
-						placeField(h.getSide(), JSONObject.of(Map.entry("inHand", i)));
-						return;
-					}
-
-					List<SlotColumn> slots = getSlots(h.getSide());
-					if (card instanceof Senshi) {
-						for (SlotColumn slot : slots) {
-							for (int k = 0; k < 2; k++) {
-								if (slot.getAtRole(k > 0) != null) {
-									disable.add(Map.entry(slot.getIndex(), k > 0));
-								}
-							}
+						Drawable<?> card = cards.get(i - 1);
+						if (card instanceof Field) {
+							placeField(h.getSide(), JSONObject.of(Map.entry("inHand", i)));
+							return;
 						}
-					} else if (card instanceof Evogear) {
-						for (SlotColumn slot : slots) {
-							if (slot.getTop() == null) {
-								disable.add(Map.entry(slot.getIndex(), false));
-							}
-						}
-					}
 
-					ButtonizeHelper target = makeSelector(h, parent, 5, card instanceof Senshi ? 2 : 1, (n, row, col) -> {
-						JSONObject args = JSONObject.of(
-								Map.entry("inHand", i),
-								Map.entry("inField", col)
-						);
-
+						List<SlotColumn> slots = getSlots(h.getSide());
 						if (card instanceof Senshi) {
-							if (row > 0) {
-								args.put("notCombat", true);
-							}
-
-							Consumer<String> placeWithMode = m -> {
-								args.put("mode", m);
-								if (placeCard(h.getSide(), args)) {
-									message.get().delete().queue();
+							for (SlotColumn slot : slots) {
+								for (int k = 0; k < 2; k++) {
+									if (slot.getAtRole(k > 0) != null) {
+										disable.add(Map.entry(slot.getIndex(), k > 0));
+									}
 								}
-							};
-
-							ButtonizeHelper mode = new ButtonizeHelper(true)
-									.setTimeout(5, TimeUnit.MINUTES)
-									.setCanInteract((u, b) -> u.getId().equals(h.getUid()))
-									.setCancellable(false)
-									.addAction(Utils.parseEmoji("🗡"), bw -> placeWithMode.accept("a"))
-									.addAction(Utils.parseEmoji("🛡"), bw -> placeWithMode.accept("d"))
-									.addAction(Utils.parseEmoji("🎴"), bw -> placeWithMode.accept("b"))
-									.addAction(Utils.parseEmoji(Constants.RETURN), bw -> {
-										MessageEditAction ma = parent.apply(bw.getMessage().editMessageComponents());
-										ma.queue(s -> Pages.buttonize(s, parent));
-									});
-
-							Pages.buttonize(message.get(), mode);
+							}
 						} else if (card instanceof Evogear) {
-							equipCard(h.getSide(), args);
+							for (SlotColumn slot : slots) {
+								if (slot.getTop() == null) {
+									disable.add(Map.entry(slot.getIndex(), false));
+								}
+							}
 						}
+
+						ButtonizeHelper target = makeSelector(h, parent, 5, card instanceof Senshi ? 2 : 1, (child, row, col) -> {
+							JSONObject args = JSONObject.of(
+									Map.entry("inHand", i),
+									Map.entry("inField", col)
+							);
+
+							if (card instanceof Senshi) {
+								if (row > 0) {
+									args.put("notCombat", true);
+								}
+
+								Consumer<String> placeWithMode = m -> {
+									args.put("mode", m);
+									if (placeCard(h.getSide(), args)) {
+										message.get().editMessageComponents().queue();
+									}
+								};
+
+								ButtonizeHelper mode = new ButtonizeHelper(true)
+										.setTimeout(5, TimeUnit.MINUTES)
+										.setCanInteract((u, b) -> u.getId().equals(h.getUid()))
+										.setCancellable(false)
+										.addAction(Utils.parseEmoji("🗡"), bw -> placeWithMode.accept("a"))
+										.addAction(Utils.parseEmoji("🛡"), bw -> placeWithMode.accept("d"))
+										.addAction(Utils.parseEmoji("🎴"), bw -> placeWithMode.accept("b"))
+										.addAction(Utils.parseEmoji(Constants.RETURN), bw -> {
+											MessageEditAction ma = child.apply(bw.getMessage().editMessageComponents());
+											ma.queue(s -> Pages.buttonize(s, child));
+										});
+
+								Pages.buttonize(message.get(), mode);
+							} else if (card instanceof Evogear) {
+								equipCard(h.getSide(), args);
+							}
+						});
+
+						disableOptions(message, target, disable);
 					});
 
-					MessageEditAction mea = message.get().editMessageComponents();
-					List<LayoutComponent> rows = target.getComponents(mea);
-					for (int ridx = 0; ridx < rows.size(); ridx++) {
-						LayoutComponent row = rows.get(ridx);
-						if (row instanceof ActionRow ar) {
-							List<ItemComponent> items = ar.getComponents();
-							for (int idx = 0; idx < items.size(); idx++) {
-								ItemComponent item = items.get(idx);
-								if (item instanceof Button b && disable.contains(Map.entry(idx, ridx > 0))) {
-									items.set(idx, b.asDisabled());
-								}
+					source.apply(act).queue(s -> {
+						message.set(s);
+						Pages.buttonize(s, source);
+					});
+				}
+			});
+		} else {
+			helper.addAction(Utils.parseEmoji("⚔"), w -> {
+				Hand h;
+				if (isSingleplayer()) {
+					h = curr;
+				} else {
+					h = hands.values().stream()
+							.filter(hand -> hand.getUid().equals(w.getUser().getId()))
+							.findFirst().orElse(null);
+				}
+
+				if (h == null) return;
+
+				List<SlotColumn> slots = getSlots(h.getSide());
+				if (slots.parallelStream().map(SlotColumn::getTop).filter(Objects::nonNull).noneMatch(Senshi::canAttack)) {
+					getChannel().sendMessage(getString("error/no_cards")).queue();
+					return;
+				}
+
+				List<Map.Entry<Integer, Boolean>> disable = new ArrayList<>();
+				for (SlotColumn slot : slots) {
+					if (slot.getTop() == null || !slot.getTop().canAttack()) {
+						disable.add(Map.entry(slot.getIndex(), false));
+					}
+				}
+
+				var act = Objects.requireNonNull(w.getHook())
+						.setEphemeral(true)
+						.sendMessage(getString("str/select_source"));
+
+				AtomicReference<Message> message = new AtomicReference<>();
+				ButtonizeHelper source = makeSelector(h, null, 5, 1, (parent, j, i) -> {
+					List<SlotColumn> other = getSlots(h.getSide().getOther());
+					for (SlotColumn slot : other) {
+						for (int k = 0; k < 2; k++) {
+							Senshi tgt = slot.getAtRole(k > 0);
+							if (tgt == null || tgt.isStasis() || tgt.getFrontline() != null) {
+								disable.add(Map.entry(slot.getIndex(), k > 0));
 							}
 						}
 					}
 
-					mea.setComponents(rows).queue(s -> Pages.buttonize(s, target));
+					ButtonizeHelper target;
+					Senshi card = slots.get(i - 1).getTop();
+					if (card.hasFlag(Flag.DIRECT)) {
+						target = makeSelector(h, parent, 5, 2,
+								(child, row, col) -> attack(h.getSide(), JSONObject.of(
+										Map.entry("inField", i),
+										Map.entry("target", col)
+								)),
+								Map.entry(h.getOther().getName(), bw -> attack(h.getSide(), JSONObject.of(
+										Map.entry("inField", i)
+								)))
+						);
+					} else {
+						target = makeSelector(h, parent, 5, 2, (child, row, col) ->
+								attack(h.getSide(), JSONObject.of(
+										Map.entry("inField", i),
+										Map.entry("target", col)
+								))
+						);
+					}
+
+					disableOptions(message, target, disable);
 				});
 
 				source.apply(act).queue(s -> {
 					message.set(s);
 					Pages.buttonize(s, source);
 				});
-			}
-		});
+			});
+		}
 
 		helper.addAction(Utils.parseEmoji("🔍"), w -> {
 			Objects.requireNonNull(w.getHook())
@@ -2691,6 +2756,26 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		return helper;
+	}
+
+	private void disableOptions(AtomicReference<Message> message, ButtonizeHelper helper, List<Map.Entry<Integer, Boolean>> toDisable) {
+		MessageEditAction mea = message.get().editMessageComponents();
+		List<LayoutComponent> rows = helper.getComponents(mea);
+		for (int ridx = 0; ridx < rows.size(); ridx++) {
+			LayoutComponent row = rows.get(ridx);
+			if (row instanceof ActionRow ar) {
+				List<ItemComponent> items = ar.getComponents();
+				for (int idx = 0; idx < items.size(); idx++) {
+					ItemComponent item = items.get(idx);
+					if (item instanceof Button b && toDisable.contains(Map.entry(idx, ridx > 0))) {
+						items.set(idx, b.asDisabled());
+					}
+				}
+			}
+		}
+
+		mea.setComponents(rows).queue(s -> Pages.buttonize(s, helper));
+		;
 	}
 
 	public List<SlotColumn> getOpenSlots(Side side, boolean top) {
