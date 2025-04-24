@@ -2192,7 +2192,10 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (parent != null) {
-			selector.addAction(Utils.parseEmoji(Constants.RETURN), bw -> Pages.buttonize(bw.getMessage(), parent));
+			selector.addAction(Utils.parseEmoji(Constants.RETURN), bw -> {
+				MessageEditAction ma = parent.apply(bw.getMessage().editMessageComponents());
+				ma.queue(s -> Pages.buttonize(s, parent));
+			});
 		}
 
 		return selector;
@@ -2337,8 +2340,9 @@ public class Shoukan extends GameInstance<Phase> {
 
 							Consumer<String> placeWithMode = m -> {
 								args.put("mode", m);
-								placeCard(h.getSide(), args);
-								message.get().delete().queue();
+								if (placeCard(h.getSide(), args)) {
+									message.get().delete().queue();
+								}
 							};
 
 							ButtonizeHelper mode = new ButtonizeHelper(true)
@@ -2348,7 +2352,10 @@ public class Shoukan extends GameInstance<Phase> {
 									.addAction(Utils.parseEmoji("🗡"), bw -> placeWithMode.accept("a"))
 									.addAction(Utils.parseEmoji("🛡"), bw -> placeWithMode.accept("d"))
 									.addAction(Utils.parseEmoji("🎴"), bw -> placeWithMode.accept("b"))
-									.addAction(Utils.parseEmoji(Constants.RETURN), bw -> Pages.buttonize(bw.getMessage(), parent));
+									.addAction(Utils.parseEmoji(Constants.RETURN), bw -> {
+										MessageEditAction ma = parent.apply(bw.getMessage().editMessageComponents());
+										ma.queue(s -> Pages.buttonize(s, parent));
+									});
 
 							Pages.buttonize(message.get(), mode);
 						} else if (card instanceof Evogear) {
