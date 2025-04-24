@@ -2336,7 +2336,7 @@ public class Shoukan extends GameInstance<Phase> {
 					.setEphemeral(true)
 					.sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png"));
 
-			BondedList<Drawable<?>> cards = h.getCards(false);
+			List<Drawable<?>> cards = h.getCards(false);
 			if (cards.isEmpty() || h.getSide() != getCurrentSide()) {
 				act.queue();
 			} else {
@@ -2465,96 +2465,11 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		});
 
-		if (getPhase() == Phase.COMBAT && curr.canAttack()) {
-			helper.addAction(Utils.parseEmoji("⚔️"), w -> {
-				Hand h;
-				if (isSingleplayer()) {
-					h = curr;
-				} else {
-					h = hands.values().stream()
-							.filter(hand -> hand.getUid().equals(w.getUser().getId()))
-							.findFirst().orElse(null);
-				}
-
-				if (h == null) return;
-
-				List<SlotColumn> slots = getSlots(h.getSide());
-				if (slots.parallelStream().map(SlotColumn::getTop).filter(Objects::nonNull).noneMatch(Senshi::canAttack)) {
-					getChannel().sendMessage(getString("error/no_cards")).queue();
-					return;
-				}
-
-				List<Pair<Integer, Boolean>> sourceDisable = new ArrayList<>();
-				for (SlotColumn slot : slots) {
-					if (slot.getTop() == null || !slot.getTop().canAttack()) {
-						sourceDisable.add(new Pair<>(slot.getIndex(), false));
-					}
-				}
-
-				AtomicReference<Message> message = new AtomicReference<>();
-				ButtonizeHelper source = makeSelector(h, 5, 1, (parent, j, i) -> {
-					List<Pair<Integer, Boolean>> targetDisable = new ArrayList<>();
-					List<SlotColumn> other = getSlots(h.getSide().getOther());
-					if (other.parallelStream().noneMatch(sc -> sc.hasTop() || sc.hasBottom())) {
-						if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
-							message.get().delete().queue();
-						}
-
-						return;
-					}
-
-					for (SlotColumn slot : other) {
-						for (int k = 0; k < 2; k++) {
-							Senshi tgt = slot.getAtRole(k > 0);
-							if (tgt == null || tgt.isStasis() || tgt.getFrontline() != null) {
-								targetDisable.add(new Pair<>(slot.getIndex(), k > 0));
-							}
-						}
-					}
-
-					ButtonizeHelper target;
-					Senshi card = slots.get(i - 1).getTop();
-					List<Pair<Object, ThrowingConsumer<ButtonWrapper>>> extra = new ArrayList<>();
-					if (arena.isFieldEmpty(h.getSide().getOther()) || card.hasFlag(Flag.DIRECT)) {
-						extra.add(new Pair<>(h.getOther().getName(), bw -> {
-							if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
-								message.get().delete().queue();
-							}
-						}));
-					}
-
-					if (curr.getLockTime(Lock.TAUNT) == 0) {
-						extra.add(new Pair<>(h.getOther().getName(), bw -> {
-							if (selfDamage(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
-								message.get().delete().queue();
-							}
-						}));
-					}
-
-					extra.add(new Pair<>(Utils.parseEmoji(Constants.RETURN), bw ->
-							disableOptions(message, m -> m.editMessage(getString("str/select_source")), parent, sourceDisable)
-					));
-
-					target = makeSelector(h, 5, 2,
-							(child, row, col) -> {
-								if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
-									message.get().delete().queue();
-								}
-							},
-							extra
-					);
-
-					disableOptions(message, m -> m.editMessage(getString("str/select_target")), target, targetDisable);
-				});
-
-				Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendMessage(getString("str/select_source"))
-						.queue(s -> {
-							message.set(s);
-							disableOptions(message, source, sourceDisable);
-						});
-			});
+		ButtonizeHelper extra = getExtraButtons(helper, curr);
+		if (extra.getContent().size() > 1) {
+			helper.addAction(Utils.parseEmoji("🧰"), w ->
+					extra.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, extra))
+			);
 		}
 
 		helper.addAction(Utils.parseEmoji("🔍"), w -> {
@@ -2858,6 +2773,220 @@ public class Shoukan extends GameInstance<Phase> {
 				});
 			}
 		}
+
+		return helper;
+	}
+
+	private ButtonizeHelper getExtraButtons(ButtonizeHelper parent, Hand curr) {
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(5, TimeUnit.MINUTES)
+				.setCanInteract((u, b) -> !isClosed()
+										  && getCurrentSide() == curr.getSide()
+										  && u.getId().equals(curr.getUid())
+				)
+				.setCancellable(false);
+
+		if (getPhase() == Phase.PLAN) {
+			List<Pair<Integer, Boolean>> disable = new ArrayList<>();
+			List<SlotColumn> slots = getSlots(curr.getSide());
+			for (SlotColumn slot : slots) {
+				for (int k = 0; k < 2; k++) {
+					if (slot.getAtRole(k > 0) == null) {
+						disable.add(new Pair<>(slot.getIndex(), k > 0));
+					}
+				}
+			}
+
+			helper.addAction(Utils.parseEmoji("🔀"), w -> {
+				AtomicReference<Message> message = new AtomicReference<>();
+				ButtonizeHelper source = makeSelector(curr, 5, 2,
+						(n, row, col) -> {
+							JSONObject args = JSONObject.of(Map.entry("inField", col));
+							if (row > 0) {
+								args.put("notCombat", true);
+							}
+
+							if (flipCard(curr.getSide(), args)) {
+								message.get().delete().queue();
+							}
+						},
+						new Pair<>(Utils.parseEmoji(Constants.RETURN), bw ->
+								helper.apply(bw.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, helper))
+						)
+				);
+
+				Objects.requireNonNull(w.getHook())
+						.setEphemeral(true)
+						.sendMessage(getString("str/select_source"))
+						.queue(s -> {
+							message.set(s);
+							disableOptions(message, source, disable);
+						});
+			});
+			helper.addAction(Utils.parseEmoji("⏫"), w -> {
+				List<Pair<Integer, Boolean>> singleDisable = new ArrayList<>();
+				for (SlotColumn slot : slots) {
+					if (slot.getBottom() == null) {
+						singleDisable.add(new Pair<>(slot.getIndex(), false));
+					}
+				}
+
+				AtomicReference<Message> message = new AtomicReference<>();
+				ButtonizeHelper source = makeSelector(curr, 5, 1,
+						(n, row, col) -> {
+							if (promoteCard(curr.getSide(), JSONObject.of(Map.entry("inField", col)))) {
+								message.get().delete().queue();
+							}
+						},
+						new Pair<>(Utils.parseEmoji(Constants.RETURN), bw ->
+								helper.apply(bw.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, helper))
+						)
+				);
+
+				Objects.requireNonNull(w.getHook())
+						.setEphemeral(true)
+						.sendMessage(getString("str/select_source"))
+						.queue(s -> {
+							message.set(s);
+							disableOptions(message, source, singleDisable);
+						});
+			});
+			helper.addAction(Utils.parseEmoji("💀"), w -> {
+				AtomicReference<Message> message = new AtomicReference<>();
+				ButtonizeHelper source = makeSelector(curr, 5, 2,
+						(n, row, col) -> {
+							JSONObject args = JSONObject.of(Map.entry("inField", col));
+							if (row > 0) {
+								args.put("notCombat", true);
+							}
+
+							if (sacrificeCard(curr.getSide(), args)) {
+								message.get().delete().queue();
+							}
+						},
+						new Pair<>(Utils.parseEmoji(Constants.RETURN), bw ->
+								helper.apply(bw.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, helper))
+						)
+				);
+
+				Objects.requireNonNull(w.getHook())
+						.setEphemeral(true)
+						.sendMessage(getString("str/select_source"))
+						.queue(s -> {
+							message.set(s);
+							disableOptions(message, source, disable);
+						});
+			});
+			helper.addAction(Utils.parseEmoji("🗑️"), w -> {
+				List<Drawable<?>> cards = curr.getCards(false);
+				ButtonizeHelper source = makeSelector(curr, cards.size(), 1, (n, j, i) -> {
+					if (discardCard(curr.getSide(), JSONObject.of(Map.entry("inHand", i)))) {
+						w.getMessage().delete().queue();
+					}
+				});
+
+				Objects.requireNonNull(w.getHook())
+						.setEphemeral(true)
+						.sendMessage(getString("str/select_a_card"))
+						.queue(s -> Pages.buttonize(s, source));
+			});
+		}
+
+		if (getPhase() == Phase.COMBAT) {
+			helper.addAction(Utils.parseEmoji("⚔️"), w -> {
+				Hand h;
+				if (isSingleplayer()) {
+					h = curr;
+				} else {
+					h = hands.values().stream()
+							.filter(hand -> hand.getUid().equals(w.getUser().getId()))
+							.findFirst().orElse(null);
+				}
+
+				if (h == null) return;
+
+				List<SlotColumn> slots = getSlots(h.getSide());
+				if (slots.parallelStream().map(SlotColumn::getTop).filter(Objects::nonNull).noneMatch(Senshi::canAttack)) {
+					getChannel().sendMessage(getString("error/no_cards")).queue();
+					return;
+				}
+
+				List<Pair<Integer, Boolean>> sourceDisable = new ArrayList<>();
+				for (SlotColumn slot : slots) {
+					if (slot.getTop() == null || !slot.getTop().canAttack()) {
+						sourceDisable.add(new Pair<>(slot.getIndex(), false));
+					}
+				}
+
+				AtomicReference<Message> message = new AtomicReference<>();
+				ButtonizeHelper source = makeSelector(h, 5, 1, (par, j, i) -> {
+					List<Pair<Integer, Boolean>> targetDisable = new ArrayList<>();
+					List<SlotColumn> other = getSlots(h.getSide().getOther());
+					if (other.parallelStream().noneMatch(sc -> sc.hasTop() || sc.hasBottom())) {
+						if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
+							message.get().delete().queue();
+						}
+
+						return;
+					}
+
+					for (SlotColumn slot : other) {
+						for (int k = 0; k < 2; k++) {
+							Senshi tgt = slot.getAtRole(k > 0);
+							if (tgt == null || tgt.isStasis() || tgt.getFrontline() != null) {
+								targetDisable.add(new Pair<>(slot.getIndex(), k > 0));
+							}
+						}
+					}
+
+					ButtonizeHelper target;
+					Senshi card = slots.get(i - 1).getTop();
+					List<Pair<Object, ThrowingConsumer<ButtonWrapper>>> extra = new ArrayList<>();
+					if (arena.isFieldEmpty(h.getSide().getOther()) || card.hasFlag(Flag.DIRECT)) {
+						extra.add(new Pair<>(h.getOther().getName(), bw -> {
+							if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
+								message.get().delete().queue();
+							}
+						}));
+					}
+
+					if (curr.getLockTime(Lock.TAUNT) == 0) {
+						extra.add(new Pair<>(h.getOther().getName(), bw -> {
+							if (selfDamage(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
+								message.get().delete().queue();
+							}
+						}));
+					}
+
+					extra.add(new Pair<>(Utils.parseEmoji(Constants.RETURN), bw ->
+							disableOptions(message, m -> m.editMessage(getString("str/select_source")), par, sourceDisable)
+					));
+
+					target = makeSelector(h, 5, 2,
+							(child, row, col) -> {
+								if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
+									message.get().delete().queue();
+								}
+							},
+							extra
+					);
+
+					disableOptions(message, m -> m.editMessage(getString("str/select_target")), target, targetDisable);
+				});
+
+				Objects.requireNonNull(w.getHook())
+						.setEphemeral(true)
+						.sendMessage(getString("str/select_source"))
+						.queue(s -> {
+							message.set(s);
+							disableOptions(message, source, sourceDisable);
+						});
+			});
+		}
+
+		helper.addAction(Utils.parseEmoji(Constants.RETURN), w ->
+				parent.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, parent))
+		);
 
 		return helper;
 	}
