@@ -2405,13 +2405,13 @@ public class Shoukan extends GameInstance<Phase> {
 
 				AtomicReference<Message> message = new AtomicReference<>();
 				ButtonizeHelper source = makeSelector(h, 5, 1, (parent, j, i) -> {
-					if (arena.isFieldEmpty(h.getSide().getOther())) {
+					List<Map.Entry<Integer, Boolean>> targetDisable = new ArrayList<>();
+					List<SlotColumn> other = getSlots(h.getSide().getOther());
+					if (other.parallelStream().noneMatch(sc -> sc.hasTop() || sc.hasBottom())) {
 						attack(h.getSide(), JSONObject.of(Map.entry("inField", i)));
 						return;
 					}
 
-					List<Map.Entry<Integer, Boolean>> targetDisable = new ArrayList<>();
-					List<SlotColumn> other = getSlots(h.getSide().getOther());
 					for (SlotColumn slot : other) {
 						for (int k = 0; k < 2; k++) {
 							Senshi tgt = slot.getAtRole(k > 0);
@@ -2433,7 +2433,7 @@ public class Shoukan extends GameInstance<Phase> {
 										Map.entry("inField", i)
 								))),
 								Map.entry(Utils.parseEmoji(Constants.RETURN), bw ->
-										disableOptions(message, m -> m.editMessage(getString("str/select_source")), parent, targetDisable)
+										disableOptions(message, m -> m.editMessage(getString("str/select_source")), parent, sourceDisable)
 								)
 						);
 					} else {
@@ -2444,7 +2444,7 @@ public class Shoukan extends GameInstance<Phase> {
 												Map.entry("target", col)
 										)),
 								Map.entry(Utils.parseEmoji(Constants.RETURN), bw ->
-										disableOptions(message, m -> m.editMessage(getString("str/select_source")), parent, targetDisable)
+										disableOptions(message, m -> m.editMessage(getString("str/select_source")), parent, sourceDisable)
 								)
 						);
 					}
