@@ -110,7 +110,19 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default EffectHolder<?> getSource() {
-		return (EffectHolder<?>) Utils.getOr(getStats().getSource(), this);
+		return Utils.getOr(getStats().getSource(), this);
+	}
+
+	default String getDescription(I18N locale) {
+		EffectHolder<?> source = getSource();
+		String out = Utils.getOr(source.getStats().getDescription(locale), source.getBase().getDescription(locale));
+		if (getHand() != null) {
+			if (getHand().getOrigins().major() == Race.DEMON) {
+				out = out.replace("$mp", "($hp/($bhp*0.08))");
+			}
+		}
+
+		return out;
 	}
 
 	default void trigger(Trigger trigger, Source source, Target... targets) {

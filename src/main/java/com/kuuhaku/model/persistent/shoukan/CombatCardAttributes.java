@@ -2,6 +2,7 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.MappedSuperclass;
 
 @Embeddable
 public class CombatCardAttributes extends CardAttributes {
