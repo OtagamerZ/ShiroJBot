@@ -2369,7 +2369,7 @@ public class Shoukan extends GameInstance<Phase> {
 						LayoutComponent row = rows.get(ridx);
 						if (row instanceof ActionRow ar) {
 							List<ItemComponent> items = ar.getComponents();
-							for (int idx = 0, sz = items.size(); idx < sz; idx++, idx++) {
+							for (int idx = 0; idx < items.size(); idx++) {
 								ItemComponent item = items.get(idx);
 								if (item instanceof Button b && disable.contains(Map.entry(idx, ridx > 0))) {
 									items.set(idx, b.asDisabled());
