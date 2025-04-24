@@ -2181,6 +2181,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@SafeVarargs
 	private ButtonizeHelper makeSelector(Hand hand, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action, Map.Entry<Object, ThrowingConsumer<ButtonWrapper>>... extra) {
+		return makeSelector(hand, buttons, rows, action, List.of(extra));
+	}
+
+	private ButtonizeHelper makeSelector(Hand hand, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action, List<Map.Entry<Object, ThrowingConsumer<ButtonWrapper>>> extra) {
 		ButtonizeHelper selector = new ButtonizeHelper(true)
 				.setTimeout(5, TimeUnit.MINUTES)
 				.setCanInteract((u, b) -> u.getId().equals(hand.getUid()))
@@ -2477,14 +2481,13 @@ public class Shoukan extends GameInstance<Phase> {
 							disableOptions(message, m -> m.editMessage(getString("str/select_source")), parent, sourceDisable)
 					));
 
-					//noinspection unchecked
 					target = makeSelector(h, 5, 2,
 							(child, row, col) -> {
 								if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
 									message.get().delete().queue();
 								}
 							},
-							extra.toArray(new Map.Entry[0])
+							extra
 					);
 
 					disableOptions(message, m -> m.editMessage(getString("str/select_target")), target, targetDisable);
