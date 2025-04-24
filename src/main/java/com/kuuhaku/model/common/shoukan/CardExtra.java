@@ -20,6 +20,7 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.ConditionalVar;
 import com.kuuhaku.model.enums.I18N;
@@ -75,7 +76,7 @@ public class CardExtra implements Cloneable, Iterable<CumValue> {
 	private final ConditionalVar<Card> vanity = new ConditionalVar<>();
 	private final ConditionalVar<Supplier<String>> write = new ConditionalVar<>();
 
-	private Drawable<?> source = null;
+	private EffectHolder<?> source = null;
 	private String description = null;
 	private String effect = null;
 
@@ -227,11 +228,11 @@ public class CardExtra implements Cloneable, Iterable<CumValue> {
 		});
 	}
 
-	public Drawable<?> getSource() {
+	public EffectHolder<?> getSource() {
 		return source;
 	}
 
-	public void setSource(Drawable<?> source) {
+	public void setSource(EffectHolder<?> source) {
 		this.source = source;
 	}
 

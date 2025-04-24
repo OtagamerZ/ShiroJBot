@@ -2,8 +2,10 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.MappedSuperclass;
 
 @Embeddable
+@MappedSuperclass
 public class CombatCardAttributes extends CardAttributes {
 	@Column(name = "mana", nullable = false)
 	private int mana = 0;

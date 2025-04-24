@@ -110,7 +110,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default EffectHolder<?> getSource() {
-		return (EffectHolder<?>) Utils.getOr(getStats().getSource(), this);
+		return Utils.getOr(getStats().getSource(), this);
 	}
 
 	default String getDescription(I18N locale) {
