@@ -70,7 +70,7 @@ public class ShoukanHistoryCommand implements Executable {
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(event.user()::equals)
-				.addAction(Utils.parseEmoji("🗃"), w -> viewMatches(locale, w.getMessage(), acc))
+				.addAction(Utils.parseEmoji("🗃️"), w -> viewMatches(locale, w.getMessage(), acc))
 				.addAction(Utils.parseEmoji("📊"), w -> viewRaces(locale, w.getMessage(), acc))
 				.addAction(Utils.parseEmoji("📔"), w -> codexTracker(locale, w.getMessage(), acc));
 

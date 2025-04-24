@@ -123,7 +123,7 @@ public class DeckListCommand implements Executable {
 					return Utils.getEmoteString(s.getRace().name()) + " " + s;
 				}
 		));
-		pages.put(Utils.parseEmoji("\uD83D\uDEE1️"), Utils.generatePage(eb, Utils.padList(d.getEvogear(), 24), 12,
+		pages.put(Utils.parseEmoji("🛡️"), Utils.generatePage(eb, Utils.padList(d.getEvogear(), 24), 12,
 				e -> {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/evogear")));
 					if (e == null) return "-# *" + locale.get("str/empty") + "*";
@@ -131,7 +131,7 @@ public class DeckListCommand implements Executable {
 					return Utils.getEmoteString("tier_" + e.getTier()) + " " + e;
 				}
 		));
-		pages.put(Utils.parseEmoji("\uD83C\uDFD4️"), Utils.generatePage(eb, Utils.padList(d.getFields(), 3), 12,
+		pages.put(Utils.parseEmoji("🏔️"), Utils.generatePage(eb, Utils.padList(d.getFields(), 3), 12,
 				f -> {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/field")));
 					if (f == null) return "-# *" + locale.get("str/empty") + "*";

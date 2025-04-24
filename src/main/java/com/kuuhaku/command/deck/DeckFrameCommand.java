@@ -119,7 +119,7 @@ public class DeckFrameCommand implements Executable {
             ButtonizeHelper helper = new ButtonizeHelper(true)
 					.setTimeout(1, TimeUnit.MINUTES)
 					.setCanInteract(event.user()::equals)
-					.addAction(Utils.parseEmoji("⏮"), w -> {
+					.addAction(Utils.parseEmoji("⏮️"), w -> {
 						if (i.get() > 0) {
 							w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getFirst())).queue();
 							i.set(0);
@@ -135,7 +135,7 @@ public class DeckFrameCommand implements Executable {
 							w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
 						}
 					})
-					.addAction(Utils.parseEmoji("⏭"), w -> {
+					.addAction(Utils.parseEmoji("⏭️"), w -> {
 						if (i.get() < pages.size() - 1) {
 							w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getLast())).queue();
 							i.set(pages.size() - 1);

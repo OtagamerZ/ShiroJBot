@@ -2210,7 +2210,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private ButtonizeHelper getButtons() {
-		List<String> allowed = List.of("🪪", "🔍", "📑", "🏳");
+		List<String> allowed = List.of("🪪", "🔍", "📑", "🏳️");
 
 		Hand curr = getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
@@ -2218,7 +2218,7 @@ public class Shoukan extends GameInstance<Phase> {
 				.setCanInteract((u, b) -> b != null && (u.getId().equals(curr.getUid()) || allowed.contains(b.getId())))
 				.setCancellable(false);
 
-		helper.addAction(Utils.parseEmoji("▶"), w -> {
+		helper.addAction(Utils.parseEmoji("▶️"), w -> {
 			if (isLocked()) return;
 
 			if (curr.selectionPending()) {
@@ -2356,8 +2356,8 @@ public class Shoukan extends GameInstance<Phase> {
 									.setTimeout(5, TimeUnit.MINUTES)
 									.setCanInteract((u, b) -> u.getId().equals(h.getUid()))
 									.setCancellable(false)
-									.addAction(Utils.parseEmoji("🗡"), bw -> placeWithMode.accept("a"))
-									.addAction(Utils.parseEmoji("🛡"), bw -> placeWithMode.accept("d"))
+									.addAction(Utils.parseEmoji("🗡️"), bw -> placeWithMode.accept("a"))
+									.addAction(Utils.parseEmoji("🛡️"), bw -> placeWithMode.accept("d"))
 									.addAction(Utils.parseEmoji("🎴"), bw -> placeWithMode.accept("b"))
 									.addAction(Utils.parseEmoji(Constants.RETURN), bw -> {
 										MessageEditAction ma = child.apply(bw.getMessage().editMessageComponents());
@@ -2380,8 +2380,8 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		});
 
-		if (curr.canAttack()) {
-			helper.addAction(Utils.parseEmoji("⚔"), w -> {
+		if (getPhase() == Phase.COMBAT && curr.canAttack()) {
+			helper.addAction(Utils.parseEmoji("⚔️"), w -> {
 				Hand h;
 				if (isSingleplayer()) {
 					h = curr;
@@ -2720,7 +2720,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (isSingleplayer() || (getTurn() > 10 && curr.getLockTime(Lock.SURRENDER) == 0)) {
-				helper.addAction(Utils.parseEmoji("🏳"), w -> {
+				helper.addAction(Utils.parseEmoji("🏳️"), w -> {
 					Hand h = null;
 					if (isSingleplayer()) {
 						h = curr;

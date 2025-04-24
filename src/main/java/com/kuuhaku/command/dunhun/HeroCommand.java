@@ -138,7 +138,7 @@ public class HeroCommand implements Executable {
 				.addAction(Utils.parseEmoji("📖"),
 						w -> allocSkills(restore, locale, h, w.getMessage())
 				)
-				.addAction(Utils.parseEmoji("🛡"),
+				.addAction(Utils.parseEmoji("🛡️"),
 						w -> allocGear(restore, locale, h, w.getMessage())
 				);
 
@@ -370,7 +370,7 @@ public class HeroCommand implements Executable {
 			});
 		}
 
-		helper.addAction(Utils.parseEmoji("⏮"), w -> {
+		helper.addAction(Utils.parseEmoji("⏮️"), w -> {
 					if (i.get() > 0) {
 						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getFirst())).queue();
 						i.set(0);
@@ -390,7 +390,7 @@ public class HeroCommand implements Executable {
 						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
 					}
 				})
-				.addAction(Utils.parseEmoji("⏭"), w -> {
+				.addAction(Utils.parseEmoji("⏭️"), w -> {
 					if (i.get() >= pages.size()) i.set(pages.size() - 1);
 
 					if (i.get() < pages.size() - 1) {
@@ -573,7 +573,7 @@ public class HeroCommand implements Executable {
 		);
 
 		Map<ButtonId<?>, ThrowingConsumer<ButtonWrapper>> newActs = new LinkedHashMap<>(acts);
-		newActs.put(new EmojiId(Utils.parseEmoji("⏮")), w -> {
+		newActs.put(new EmojiId(Utils.parseEmoji("⏮️")), w -> {
 			if (i.get() > 0) {
 				w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getFirst())).queue();
 				i.set(0);
@@ -589,7 +589,7 @@ public class HeroCommand implements Executable {
 				w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
 			}
 		});
-		newActs.put(new EmojiId(Utils.parseEmoji("⏭")), w -> {
+		newActs.put(new EmojiId(Utils.parseEmoji("⏭️")), w -> {
 			if (i.get() < pages.size() - 1) {
 				w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getLast())).queue();
 				i.set(pages.size() - 1);

@@ -353,7 +353,7 @@ public class Combat implements Renderer<BufferedImage> {
 					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 					.setCancellable(false);
 
-			helper.addAction(Utils.parseEmoji("🗡"), w -> {
+			helper.addAction(Utils.parseEmoji("🗡️"), w -> {
 				List<Actor> tgts = getActors(h.getTeam().getOther()).stream()
 						.map(a -> a.isOutOfCombat() ? null : a)
 						.toList();
@@ -432,7 +432,7 @@ public class Combat implements Renderer<BufferedImage> {
 				});
 			}
 
-			helper.addAction(Utils.parseEmoji("🛡"), w -> lock.complete(() -> {
+			helper.addAction(Utils.parseEmoji("🛡️"), w -> lock.complete(() -> {
 						h.getSenshi().setDefending(true);
 						h.modAp(-h.getAp());
 
