@@ -2426,7 +2426,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 					ButtonizeHelper target;
 					Senshi card = slots.get(i - 1).getTop();
-					if (card.hasFlag(Flag.DIRECT)) {
+					if (arena.isFieldEmpty(h.getSide().getOther()) || card.hasFlag(Flag.DIRECT)) {
 						target = makeSelector(h, 5, 2,
 								(child, row, col) -> {
 									if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
