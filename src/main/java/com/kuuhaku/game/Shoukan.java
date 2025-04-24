@@ -2403,10 +2403,6 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				var act = Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendMessage(getString("str/select_source"));
-
 				AtomicReference<Message> message = new AtomicReference<>();
 				ButtonizeHelper source = makeSelector(h, 5, 1, (parent, j, i) -> {
 					if (arena.isFieldEmpty(h.getSide().getOther())) {
@@ -2456,10 +2452,13 @@ public class Shoukan extends GameInstance<Phase> {
 					disableOptions(message, m -> m.editMessage(getString("str/select_target")), target, targetDisable);
 				});
 
-				act.queue(s -> {
-					message.set(s);
-					disableOptions(message, source, sourceDisable);
-				});
+				Objects.requireNonNull(w.getHook())
+						.setEphemeral(true)
+						.sendMessage(getString("str/select_source"))
+						.queue(s -> {
+							message.set(s);
+							disableOptions(message, source, sourceDisable);
+						});
 			});
 		}
 
@@ -2775,7 +2774,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private void disableOptions(AtomicReference<Message> message, Function<Message, MessageEditAction> edit, ButtonizeHelper helper, List<Map.Entry<Integer, Boolean>> toDisable) {
 		MessageEditAction mea = edit.apply(message.get());
 		List<LayoutComponent> rows = helper.getComponents(mea);
-		for (int ridx = 0; ridx < 2; ridx++) {
+		for (int ridx = 0; ridx < Math.min(rows.size(), 2); ridx++) {
 			LayoutComponent row = rows.get(ridx);
 			if (row instanceof ActionRow ar) {
 				List<ItemComponent> items = ar.getComponents();
