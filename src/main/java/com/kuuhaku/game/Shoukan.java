@@ -2346,7 +2346,7 @@ public class Shoukan extends GameInstance<Phase> {
 									Consumer<String> placeWithMode = m -> {
 										args.put("mode", m);
 										if (placeCard(h.getSide(), args)) {
-											message.get().editMessageComponents().queue();
+											message.get().delete().queue();
 										}
 									};
 
@@ -2409,7 +2409,7 @@ public class Shoukan extends GameInstance<Phase> {
 					List<SlotColumn> other = getSlots(h.getSide().getOther());
 					if (other.parallelStream().noneMatch(sc -> sc.hasTop() || sc.hasBottom())) {
 						if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
-							message.get().editMessageComponents().queue();
+							message.get().delete().queue();
 						}
 
 						return;
@@ -2430,12 +2430,12 @@ public class Shoukan extends GameInstance<Phase> {
 						target = makeSelector(h, 5, 2,
 								(child, row, col) -> {
 									if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
-										message.get().editMessageComponents().queue();
+										message.get().delete().queue();
 									}
 								},
 								Map.entry(h.getOther().getName(), bw -> {
 									if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
-										message.get().editMessageComponents().queue();
+										message.get().delete().queue();
 									}
 								}),
 								Map.entry(Utils.parseEmoji(Constants.RETURN), bw ->
@@ -2446,7 +2446,7 @@ public class Shoukan extends GameInstance<Phase> {
 						target = makeSelector(h, 5, 2,
 								(child, row, col) -> {
 									if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
-										message.get().editMessageComponents().queue();
+										message.get().delete().queue();
 									}
 								},
 								Map.entry(Utils.parseEmoji(Constants.RETURN), bw ->
