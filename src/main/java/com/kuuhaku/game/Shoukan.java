@@ -2240,7 +2240,12 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private ButtonizeHelper getButtons() {
-		List<String> allowed = List.of("🪪", "🔍", "📑", "🏳️");
+		List<String> allowed = List.of(
+				getString("str/next_turn"),
+				getString("str/view_equips"),
+				getString("str/view_history"),
+				"🏳️"
+		);
 
 		Hand curr = getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
@@ -2251,7 +2256,7 @@ public class Shoukan extends GameInstance<Phase> {
 				)
 				.setCancellable(false);
 
-		helper.addAction(Utils.parseEmoji("▶️"), w -> {
+		helper.addAction(getString("str/next_phase"), w -> {
 			if (isLocked()) return;
 
 			if (curr.selectionPending()) {
@@ -2292,7 +2297,7 @@ public class Shoukan extends GameInstance<Phase> {
 		});
 
 		if (getPhase() == Phase.PLAN && curr.canAttack()) {
-			helper.addAction(Utils.parseEmoji("⏩"), w -> {
+			helper.addAction(getString("str/next_turn"), w -> {
 				if (isLocked()) return;
 
 				if (curr.selectionPending()) {
@@ -2313,7 +2318,7 @@ public class Shoukan extends GameInstance<Phase> {
 			});
 		}
 
-		helper.addAction(Utils.parseEmoji("🪪"), w -> {
+		helper.addAction(getString("str/view_hand"), w -> {
 			Hand h;
 			if (isSingleplayer()) {
 				h = curr;
@@ -2467,19 +2472,19 @@ public class Shoukan extends GameInstance<Phase> {
 
 		ButtonizeHelper extra = getExtraButtons(helper, curr);
 		if (extra.getContent().size() > 1) {
-			helper.addAction(Utils.parseEmoji("🧰"), w ->
+			helper.addAction(getString("str/extra_actions"), w ->
 					extra.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, extra))
 			);
 		}
 
-		helper.addAction(Utils.parseEmoji("🔍"), w -> {
+		helper.addAction(getString("str/view_equips"), w -> {
 			Objects.requireNonNull(w.getHook())
 					.setEphemeral(true)
 					.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png"))
 					.queue();
 		});
 
-		helper.addAction(Utils.parseEmoji("📑"), w -> {
+		helper.addAction(getString("str/view_history"), w -> {
 			if (isLocked()) return;
 
 			XStringBuilder sb = new XStringBuilder(getLocale().get("str/match_history", getTurn()));
@@ -2498,7 +2503,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (getPhase() == Phase.PLAN) {
 			if (!curr.getCards().isEmpty() && (getTurn() == 1 && !curr.hasRerolled()) || curr.getOrigins().synergy() == Race.DJINN) {
-				helper.addAction(Utils.parseEmoji("🔄"), w -> {
+				helper.addAction(getString("str/reroll_hand"), w -> {
 					if (isLocked()) return;
 
 					curr.rerollHand();
@@ -2509,7 +2514,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (!curr.getRealDeck().isEmpty() && arcade != Arcade.DECK_ROYALE) {
 				int rem = curr.getRemainingDraws();
 				if (rem > 0) {
-					helper.addAction(Utils.parseEmoji("📤"), w -> {
+					helper.addAction(getString("str/draw_card"), w -> {
 						if (isLocked()) return;
 
 						if (curr.selectionPending()) {
@@ -2526,11 +2531,11 @@ public class Shoukan extends GameInstance<Phase> {
 								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
 								.queue();
 
-						reportEvent("str/draw_card", true, false, curr.getName(), 1, "");
+						reportEvent("str/drawed_card", true, false, curr.getName(), 1, "");
 					});
 
 					if (rem > 1) {
-						helper.addAction(Utils.parseEmoji("📦"), w -> {
+						helper.addAction(getString("str/draw_many"), w -> {
 							if (isLocked()) return;
 
 							if (curr.selectionPending()) {
@@ -2547,11 +2552,11 @@ public class Shoukan extends GameInstance<Phase> {
 									.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
 									.queue();
 
-							reportEvent("str/draw_card", true, false, curr.getName(), rem, "s");
+							reportEvent("str/drawed_card", true, false, curr.getName(), rem, "s");
 						});
 					}
 				} else if (curr.getOrigins().major() == Race.DIVINITY && !curr.isCritical()) {
-					helper.addAction(Utils.parseEmoji("1212407741046325308"), w -> {
+					helper.addAction(getString("str/draw_ethereal"), w -> {
 						if (isLocked()) return;
 
 						if (curr.selectionPending()) {
@@ -2576,12 +2581,12 @@ public class Shoukan extends GameInstance<Phase> {
 								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
 								.queue();
 
-						reportEvent("str/draw_card", true, false, curr.getName(), 1, "");
+						reportEvent("str/drawed_card", true, false, curr.getName(), 1, "");
 					});
 				}
 
 				if (curr.canUseDestiny() && !Utils.equalsAny(curr.getOrigins().major(), Race.MACHINE, Race.MYSTICAL)) {
-					helper.addAction(Utils.parseEmoji("🧧"), w -> {
+					helper.addAction(getString("str/draw_destiny"), w -> {
 						if (isLocked()) return;
 
 						if (curr.selectionPending()) {
@@ -2622,7 +2627,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (curr.canUseDestiny() && Utils.equalsAny(curr.getOrigins().major(), Race.MACHINE, Race.MYSTICAL)) {
-				helper.addAction(Utils.parseEmoji("⚡"), w -> {
+				helper.addAction(getString("str/race_special"), w -> {
 					if (isLocked()) return;
 
 					if (curr.selectionPending()) {
@@ -2670,7 +2675,7 @@ public class Shoukan extends GameInstance<Phase> {
 							.toList();
 
 					if (!valid.isEmpty()) {
-						helper.addAction(Utils.parseEmoji("🌀"), w -> {
+						helper.addAction(getString("str/race_synth"), w -> {
 							if (isLocked()) return;
 
 							if (curr.selectionPending()) {
@@ -2729,7 +2734,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (curr.getOrigins().synergy() == Race.ORACLE) {
-				helper.addAction(Utils.parseEmoji("🔮"), w -> {
+				helper.addAction(getString("str/race_oracle"), w -> {
 					BufferedImage cards = curr.render(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
 					Objects.requireNonNull(w.getHook())
 							.setEphemeral(true)
@@ -2739,7 +2744,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (isSingleplayer() || (getTurn() > 10 && curr.getLockTime(Lock.SURRENDER) == 0)) {
-				helper.addAction(Utils.parseEmoji("🏳️"), w -> {
+				helper.addAction(getString("str/surrender"), w -> {
 					Hand h = null;
 					if (isSingleplayer()) {
 						h = curr;
