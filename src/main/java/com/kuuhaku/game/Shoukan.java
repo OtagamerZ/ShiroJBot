@@ -2280,107 +2280,107 @@ public class Shoukan extends GameInstance<Phase> {
 			});
 		}
 
-		if (getPhase() == Phase.PLAN) {
-			helper.addAction(Utils.parseEmoji("🪪"), w -> {
-				Hand h;
-				if (isSingleplayer()) {
-					h = curr;
-				} else {
-					h = hands.values().stream()
-							.filter(hand -> hand.getUid().equals(w.getUser().getId()))
-							.findFirst().orElse(null);
-				}
+		helper.addAction(Utils.parseEmoji("🪪"), w -> {
+			Hand h;
+			if (isSingleplayer()) {
+				h = curr;
+			} else {
+				h = hands.values().stream()
+						.filter(hand -> hand.getUid().equals(w.getUser().getId()))
+						.findFirst().orElse(null);
+			}
 
-				if (h == null) return;
-				else if (h.selectionPending()) {
-					Objects.requireNonNull(w.getHook())
-							.setEphemeral(true)
-							.sendFiles(FileUpload.fromData(IO.getBytes(h.renderChoices(), "png"), "choices.png"))
-							.queue();
-					return;
-				}
-
-				WebhookMessageCreateAction<Message> act = Objects.requireNonNull(w.getHook())
+			if (h == null) return;
+			else if (h.selectionPending()) {
+				Objects.requireNonNull(w.getHook())
 						.setEphemeral(true)
-						.sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png"));
+						.sendFiles(FileUpload.fromData(IO.getBytes(h.renderChoices(), "png"), "choices.png"))
+						.queue();
+				return;
+			}
 
-				BondedList<Drawable<?>> cards = h.getCards(false);
-				if (cards.isEmpty() || h.getSide() != getCurrentSide()) {
-					act.queue();
-				} else {
-					AtomicReference<Message> message = new AtomicReference<>();
-					ButtonizeHelper source = makeSelector(h, null, cards.size(), 1, (parent, j, i) -> {
-						List<Map.Entry<Integer, Boolean>> disable = new ArrayList<>();
+			WebhookMessageCreateAction<Message> act = Objects.requireNonNull(w.getHook())
+					.setEphemeral(true)
+					.sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png"));
 
-						Drawable<?> card = cards.get(i - 1);
-						if (card instanceof Field) {
-							placeField(h.getSide(), JSONObject.of(Map.entry("inHand", i)));
-							return;
+			BondedList<Drawable<?>> cards = h.getCards(false);
+			if (cards.isEmpty() || h.getSide() != getCurrentSide()) {
+				act.queue();
+			} else {
+				AtomicReference<Message> message = new AtomicReference<>();
+				ButtonizeHelper source = makeSelector(h, null, cards.size(), 1, (parent, j, i) -> {
+					List<Map.Entry<Integer, Boolean>> disable = new ArrayList<>();
+
+					Drawable<?> card = cards.get(i - 1);
+					if (card instanceof Field) {
+						placeField(h.getSide(), JSONObject.of(Map.entry("inHand", i)));
+						return;
+					}
+
+					List<SlotColumn> slots = getSlots(h.getSide());
+					if (card instanceof Senshi) {
+						for (SlotColumn slot : slots) {
+							for (int k = 0; k < 2; k++) {
+								if (slot.getAtRole(k > 0) != null) {
+									disable.add(Map.entry(slot.getIndex(), k > 0));
+								}
+							}
 						}
+					} else if (card instanceof Evogear) {
+						for (SlotColumn slot : slots) {
+							if (slot.getTop() == null) {
+								disable.add(Map.entry(slot.getIndex(), false));
+							}
+						}
+					}
 
-						List<SlotColumn> slots = getSlots(h.getSide());
+					ButtonizeHelper target = makeSelector(h, parent, 5, card instanceof Senshi ? 2 : 1, (child, row, col) -> {
+						JSONObject args = JSONObject.of(
+								Map.entry("inHand", i),
+								Map.entry("inField", col)
+						);
+
 						if (card instanceof Senshi) {
-							for (SlotColumn slot : slots) {
-								for (int k = 0; k < 2; k++) {
-									if (slot.getAtRole(k > 0) != null) {
-										disable.add(Map.entry(slot.getIndex(), k > 0));
-									}
-								}
+							if (row > 0) {
+								args.put("notCombat", true);
 							}
+
+							Consumer<String> placeWithMode = m -> {
+								args.put("mode", m);
+								if (placeCard(h.getSide(), args)) {
+									message.get().editMessageComponents().queue();
+								}
+							};
+
+							ButtonizeHelper mode = new ButtonizeHelper(true)
+									.setTimeout(5, TimeUnit.MINUTES)
+									.setCanInteract((u, b) -> u.getId().equals(h.getUid()))
+									.setCancellable(false)
+									.addAction(Utils.parseEmoji("🗡"), bw -> placeWithMode.accept("a"))
+									.addAction(Utils.parseEmoji("🛡"), bw -> placeWithMode.accept("d"))
+									.addAction(Utils.parseEmoji("🎴"), bw -> placeWithMode.accept("b"))
+									.addAction(Utils.parseEmoji(Constants.RETURN), bw -> {
+										MessageEditAction ma = child.apply(bw.getMessage().editMessageComponents());
+										ma.queue(s -> Pages.buttonize(s, child));
+									});
+
+							Pages.buttonize(message.get(), mode);
 						} else if (card instanceof Evogear) {
-							for (SlotColumn slot : slots) {
-								if (slot.getTop() == null) {
-									disable.add(Map.entry(slot.getIndex(), false));
-								}
-							}
+							equipCard(h.getSide(), args);
 						}
-
-						ButtonizeHelper target = makeSelector(h, parent, 5, card instanceof Senshi ? 2 : 1, (child, row, col) -> {
-							JSONObject args = JSONObject.of(
-									Map.entry("inHand", i),
-									Map.entry("inField", col)
-							);
-
-							if (card instanceof Senshi) {
-								if (row > 0) {
-									args.put("notCombat", true);
-								}
-
-								Consumer<String> placeWithMode = m -> {
-									args.put("mode", m);
-									if (placeCard(h.getSide(), args)) {
-										message.get().editMessageComponents().queue();
-									}
-								};
-
-								ButtonizeHelper mode = new ButtonizeHelper(true)
-										.setTimeout(5, TimeUnit.MINUTES)
-										.setCanInteract((u, b) -> u.getId().equals(h.getUid()))
-										.setCancellable(false)
-										.addAction(Utils.parseEmoji("🗡"), bw -> placeWithMode.accept("a"))
-										.addAction(Utils.parseEmoji("🛡"), bw -> placeWithMode.accept("d"))
-										.addAction(Utils.parseEmoji("🎴"), bw -> placeWithMode.accept("b"))
-										.addAction(Utils.parseEmoji(Constants.RETURN), bw -> {
-											MessageEditAction ma = child.apply(bw.getMessage().editMessageComponents());
-											ma.queue(s -> Pages.buttonize(s, child));
-										});
-
-								Pages.buttonize(message.get(), mode);
-							} else if (card instanceof Evogear) {
-								equipCard(h.getSide(), args);
-							}
-						});
-
-						disableOptions(message, target, disable);
 					});
 
-					source.apply(act).queue(s -> {
-						message.set(s);
-						Pages.buttonize(s, source);
-					});
-				}
-			});
-		} else {
+					disableOptions(message, target, disable);
+				});
+
+				source.apply(act).queue(s -> {
+					message.set(s);
+					Pages.buttonize(s, source);
+				});
+			}
+		});
+
+		if (curr.canAttack()) {
 			helper.addAction(Utils.parseEmoji("⚔"), w -> {
 				Hand h;
 				if (isSingleplayer()) {
