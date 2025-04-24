@@ -89,6 +89,7 @@ import java.util.function.*;
 import java.util.stream.Stream;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
+import static com.kuuhaku.model.enums.shoukan.Trigger.NONE;
 
 public class Shoukan extends GameInstance<Phase> {
 	public static final String GIF_PATH = Constants.SHOUKAN_ASSETS + "gifs/";
@@ -2310,10 +2311,42 @@ public class Shoukan extends GameInstance<Phase> {
 				AtomicReference<Message> message = new AtomicReference<>();
 				ButtonizeHelper source = makeSelector(h, cards.size(), 1, (parent, j, i) -> {
 					List<Map.Entry<Integer, Boolean>> disable = new ArrayList<>();
+					JSONObject args = JSONObject.of(Map.entry("inHand", i));
 
 					Drawable<?> card = cards.get(i - 1);
 					if (card instanceof Field) {
-						placeField(h.getSide(), JSONObject.of(Map.entry("inHand", i)));
+						placeField(h.getSide(), args);
+						return;
+					} else if (card instanceof Evogear e && e.isSpell()) {
+						List<TargetType> passes = switch (e.getTargetType()) {
+							case NONE -> List.of();
+							case ALLY -> List.of(TargetType.ALLY);
+							case ENEMY -> List.of(TargetType.ENEMY);
+							case BOTH -> List.of(TargetType.ALLY, TargetType.ENEMY);
+						};
+
+						if (passes.isEmpty()) {
+							activate(h.getSide(), args);
+						} else {
+							List<ButtonizeHelper> pages = new ArrayList<>();
+							pages.add(parent);
+
+							for (int k = 1; k <= passes.size(); k++) {
+								int tgt = k;
+								pages.add(makeSelector(h, 5, 2,
+										(n, r, c) -> {
+											args.put("target" + tgt, c);
+											if (tgt == passes.size()) {
+												activate(h.getSide(), args);
+											} else {
+												disableOptions(message, pages.get(tgt + 1), disable);
+											}
+										},
+										Map.entry(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, pages.get(tgt - 1), disable))
+								));
+							}
+						}
+
 						return;
 					}
 
@@ -2336,10 +2369,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 					ButtonizeHelper target = makeSelector(h, 5, card instanceof Senshi ? 2 : 1,
 							(child, row, col) -> {
-								JSONObject args = JSONObject.of(
-										Map.entry("inHand", i),
-										Map.entry("inField", col)
-								);
+								args.put("inField", col);
 
 								if (card instanceof Senshi) {
 									if (row > 0) {
@@ -2364,38 +2394,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 									Pages.buttonize(message.get(), mode);
 								} else if (card instanceof Evogear e) {
-									if (e.isSpell()) {
-										List<TargetType> passes = switch (e.getTargetType()) {
-											case NONE -> List.of();
-											case ALLY -> List.of(TargetType.ALLY);
-											case ENEMY -> List.of(TargetType.ENEMY);
-											case BOTH -> List.of(TargetType.ALLY, TargetType.ENEMY);
-										};
-
-										if (passes.isEmpty()) {
-											activate(h.getSide(), args);
-										} else {
-											List<ButtonizeHelper> pages = new ArrayList<>();
-											pages.add(child);
-
-											for (int k = 1; k <= passes.size(); k++) {
-												int tgt = k;
-												pages.add(makeSelector(h, 5, 2,
-														(n, r, c) -> {
-															args.put("target" + tgt, c);
-															if (tgt == passes.size()) {
-																activate(h.getSide(), args);
-															} else {
-																disableOptions(message, pages.get(tgt + 1), disable);
-															}
-														},
-														Map.entry(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, pages.get(tgt - 1), disable))
-												));
-											}
-										}
-									} else {
-										equipCard(h.getSide(), args);
-									}
+									equipCard(h.getSide(), args);
 								}
 							},
 							Map.entry(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, parent, disable))

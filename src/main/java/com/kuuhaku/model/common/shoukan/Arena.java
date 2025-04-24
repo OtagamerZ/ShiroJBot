@@ -425,8 +425,6 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 				double h = 1 - 2d / BAR_SIZE.height;
 				double w = 1 - 2d / BAR_SIZE.width;
 				Polygon boundaries = Graph.makePoly(BAR_SIZE,
-						1 - w, h / 3d,
-						w / 30d, 1 - h,
 						lOffPercent + w / 1.5, 1 - h,
 						lOffPercent + w / 1.4, h / 3d,
 						lOffPercent + w / 1.1, h / 3d,
