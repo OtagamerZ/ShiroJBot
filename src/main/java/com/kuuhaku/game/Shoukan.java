@@ -30,6 +30,7 @@ import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.PhaseConstraint;
 import com.kuuhaku.game.engine.PlayerAction;
+import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedList;
@@ -58,10 +59,17 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.ItemComponent;
+import net.dv8tion.jda.api.interactions.components.LayoutComponent;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.function.TriConsumer;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,9 +81,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.*;
 import java.util.stream.Stream;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
@@ -2155,30 +2162,49 @@ public class Shoukan extends GameInstance<Phase> {
 			this.winner = winner;
 		}
 
-		if (Utils.equalsAny(code, GameReport.SUCCESS, GameReport.GAME_TIMEOUT)) {
-			if (isNotVoided() && winner != null) {
-				String cond = "default";
-				if (code == GameReport.GAME_TIMEOUT) {
-					cond = "wo";
-					hands.get(winner.getOther()).getAccount().addItem("LEAVER_TICKER", 1);
-				} else if (defeat != null) {
-					cond = defeat.key();
-				}
-
-				new MatchHistory(this, cond, getTurns()).save();
+		if (Utils.equalsAny(code, GameReport.SUCCESS, GameReport.GAME_TIMEOUT) && isNotVoided() && winner != null) {
+			String cond = "default";
+			if (code == GameReport.GAME_TIMEOUT) {
+				cond = "wo";
+				hands.get(winner.getOther()).getAccount().addItem("LEAVER_TICKER", 1);
+			} else if (defeat != null) {
+				cond = defeat.key();
 			}
+
+			new MatchHistory(this, cond, getTurns()).save();
 		}
 
 		close(code);
 	}
 
+	private ButtonizeHelper makeSelector(Hand hand, ButtonizeHelper parent, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action) {
+		ButtonizeHelper selector = new ButtonizeHelper(true)
+				.setTimeout(5, TimeUnit.MINUTES)
+				.setCanInteract((u, b) -> u.getId().equals(hand.getUid()))
+				.setCancellable(false);
+
+		for (int row = 0; row < rows; row++) {
+			for (int col = 1; col <= buttons; col++) {
+				int finalRow = row;
+				int finalCol = col;
+				selector.addAction(col + StringUtils.repeat(Constants.VOID, row), bw -> action.accept(selector, finalRow, finalCol));
+			}
+		}
+
+		if (parent != null) {
+			selector.addAction(Utils.parseEmoji(Constants.RETURN), bw -> Pages.buttonize(bw.getMessage(), parent));
+		}
+
+		return selector;
+	}
+
 	private ButtonizeHelper getButtons() {
-		List<String> allowed = List.of("\uD83E\uDEAA", "\uD83D\uDD0D", "\uD83D\uDCD1", "\uD83C\uDFF3");
+		List<String> allowed = List.of("🪪", "🔍", "📑", "🏳");
 
 		Hand curr = getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract((u, b) -> b != null && u.getId().equals(curr.getUid()) || allowed.contains(b.getId()))
+				.setCanInteract((u, b) -> b != null && (u.getId().equals(curr.getUid()) || allowed.contains(b.getId())))
 				.setCancellable(false);
 
 		helper.addAction(Utils.parseEmoji("▶"), w -> {
@@ -2243,17 +2269,14 @@ public class Shoukan extends GameInstance<Phase> {
 			});
 		}
 
-		helper.addAction(Utils.parseEmoji("\uD83E\uDEAA"), w -> {
-			Hand h = null;
+		helper.addAction(Utils.parseEmoji("🪪"), w -> {
+			Hand h;
 			if (isSingleplayer()) {
 				h = curr;
 			} else {
-				for (Hand hand : hands.values()) {
-					if (hand.getUid().equals(w.getUser().getId())) {
-						h = hand;
-						break;
-					}
-				}
+				h = hands.values().stream()
+						.filter(hand -> hand.getUid().equals(w.getUser().getId()))
+						.findFirst().orElse(null);
 			}
 
 			if (h == null) return;
@@ -2265,20 +2288,107 @@ public class Shoukan extends GameInstance<Phase> {
 				return;
 			}
 
-			Objects.requireNonNull(w.getHook())
+			var act = Objects.requireNonNull(w.getHook())
 					.setEphemeral(true)
-					.sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png"))
-					.queue();
+					.sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png"));
+
+			BondedList<Drawable<?>> cards = h.getCards(false);
+			if (cards.isEmpty() || h.getSide() != getCurrentSide()) {
+				act.queue();
+			} else {
+				AtomicReference<Message> message = new AtomicReference<>();
+
+				ButtonizeHelper source = makeSelector(h, null, cards.size(), 1, (parent, j, i) -> {
+					List<Map.Entry<Integer, Boolean>> disable = new ArrayList<>();
+
+					Drawable<?> card = cards.get(i - 1);
+					if (card instanceof Field) {
+						placeField(h.getSide(), JSONObject.of(Map.entry("inHand", i)));
+						return;
+					}
+
+					List<SlotColumn> slots = getSlots(h.getSide());
+					if (card instanceof Senshi) {
+						for (SlotColumn slot : slots) {
+							for (int k = 0; k < 2; k++) {
+								if (slot.getAtRole(k > 0) != null) {
+									disable.add(Map.entry(slot.getIndex(), k > 0));
+								}
+							}
+						}
+					} else if (card instanceof Evogear) {
+						for (SlotColumn slot : slots) {
+							if (slot.getTop() == null) {
+								disable.add(Map.entry(slot.getIndex(), false));
+							}
+						}
+					}
+
+					ButtonizeHelper target = makeSelector(h, parent, 5, card instanceof Senshi ? 2 : 1, (n, row, col) -> {
+						JSONObject args = JSONObject.of(
+								Map.entry("inHand", i),
+								Map.entry("inField", col)
+						);
+
+						if (card instanceof Senshi) {
+							if (row > 0) {
+								args.put("notCombat", true);
+							}
+
+							Consumer<String> placeWithMode = m -> {
+								args.put("mode", m);
+								placeCard(h.getSide(), args);
+								message.get().delete().queue();
+							};
+
+							ButtonizeHelper mode = new ButtonizeHelper(true)
+									.setTimeout(5, TimeUnit.MINUTES)
+									.setCanInteract((u, b) -> u.getId().equals(h.getUid()))
+									.setCancellable(false)
+									.addAction(Utils.parseEmoji("🗡"), bw -> placeWithMode.accept("a"))
+									.addAction(Utils.parseEmoji("🛡"), bw -> placeWithMode.accept("d"))
+									.addAction(Utils.parseEmoji("🎴"), bw -> placeWithMode.accept("b"))
+									.addAction(Utils.parseEmoji(Constants.RETURN), bw -> Pages.buttonize(bw.getMessage(), parent));
+
+							Pages.buttonize(message.get(), mode);
+						} else if (card instanceof Evogear) {
+							equipCard(h.getSide(), args);
+						}
+					});
+
+					MessageEditAction mea = message.get().editMessageComponents();
+					List<LayoutComponent> rows = target.getComponents(mea);
+					for (int ridx = 0; ridx < rows.size(); ridx++) {
+						LayoutComponent row = rows.get(ridx);
+						if (row instanceof ActionRow ar) {
+							List<ItemComponent> items = ar.getComponents();
+							for (int idx = 0, sz = items.size(); idx < sz; idx++, idx++) {
+								ItemComponent item = items.get(idx);
+								if (item instanceof Button b && disable.contains(Map.entry(idx, ridx > 0))) {
+									items.set(idx, b.asDisabled());
+								}
+							}
+						}
+					}
+
+					mea.setComponents(rows).queue(s -> Pages.buttonize(s, target));
+				});
+
+				source.apply(act).queue(s -> {
+					message.set(s);
+					Pages.buttonize(s, source);
+				});
+			}
 		});
 
-		helper.addAction(Utils.parseEmoji("\uD83D\uDD0D"), w -> {
+		helper.addAction(Utils.parseEmoji("🔍"), w -> {
 			Objects.requireNonNull(w.getHook())
 					.setEphemeral(true)
 					.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png"))
 					.queue();
 		});
 
-		helper.addAction(Utils.parseEmoji("\uD83D\uDCD1"), w -> {
+		helper.addAction(Utils.parseEmoji("📑"), w -> {
 			if (isLocked()) return;
 
 			XStringBuilder sb = new XStringBuilder(getLocale().get("str/match_history", getTurn()));
@@ -2297,7 +2407,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		if (getPhase() == Phase.PLAN) {
 			if (!curr.getCards().isEmpty() && (getTurn() == 1 && !curr.hasRerolled()) || curr.getOrigins().synergy() == Race.DJINN) {
-				helper.addAction(Utils.parseEmoji("\uD83D\uDD04"), w -> {
+				helper.addAction(Utils.parseEmoji("🔄"), w -> {
 					if (isLocked()) return;
 
 					curr.rerollHand();
@@ -2380,7 +2490,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				if (curr.canUseDestiny() && !Utils.equalsAny(curr.getOrigins().major(), Race.MACHINE, Race.MYSTICAL)) {
-					helper.addAction(Utils.parseEmoji("\uD83E\uDDE7"), w -> {
+					helper.addAction(Utils.parseEmoji("🧧"), w -> {
 						if (isLocked()) return;
 
 						if (curr.selectionPending()) {
@@ -2469,7 +2579,7 @@ public class Shoukan extends GameInstance<Phase> {
 							.toList();
 
 					if (!valid.isEmpty()) {
-						helper.addAction(Utils.parseEmoji("\uD83C\uDF00"), w -> {
+						helper.addAction(Utils.parseEmoji("🌀"), w -> {
 							if (isLocked()) return;
 
 							if (curr.selectionPending()) {
@@ -2528,7 +2638,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (curr.getOrigins().synergy() == Race.ORACLE) {
-				helper.addAction(Utils.parseEmoji("\uD83D\uDD2E"), w -> {
+				helper.addAction(Utils.parseEmoji("🔮"), w -> {
 					BufferedImage cards = curr.render(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
 					Objects.requireNonNull(w.getHook())
 							.setEphemeral(true)
@@ -2538,7 +2648,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (isSingleplayer() || (getTurn() > 10 && curr.getLockTime(Lock.SURRENDER) == 0)) {
-				helper.addAction(Utils.parseEmoji("\uD83C\uDFF3"), w -> {
+				helper.addAction(Utils.parseEmoji("🏳"), w -> {
 					Hand h = null;
 					if (isSingleplayer()) {
 						h = curr;

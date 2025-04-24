@@ -102,14 +102,14 @@ public class HistorySide extends DAO<HistorySide> {
 			this.locks.put(lock.obj().name(), lock.time());
 		}
 
-		Map<List<Drawable<?>>, JSONArray> stacks = Map.of(
-				h.getCards(false), this.hand,
-				h.getRealDeck(false), this.deck,
-				h.getGraveyard(false), this.graveyard,
-				h.getDiscard(false), this.discard
+		List<Map.Entry<List<Drawable<?>>, JSONArray>> stacks = List.of(
+				Map.entry(h.getCards(false), this.hand),
+				Map.entry(h.getRealDeck(false), this.deck),
+				Map.entry(h.getGraveyard(false), this.graveyard),
+				Map.entry(h.getDiscard(false), this.discard)
 		);
 
-		for (Map.Entry<List<Drawable<?>>, JSONArray> stack : stacks.entrySet()) {
+		for (Map.Entry<List<Drawable<?>>, JSONArray> stack : stacks) {
 			for (Drawable<?> card : stack.getKey()) {
 				stack.getValue().add(new CardReference(card));
 			}

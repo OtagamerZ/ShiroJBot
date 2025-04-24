@@ -404,7 +404,7 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 
 			if (!h.getConsumables().isEmpty()) {
-				helper.addAction(Utils.parseEmoji("\uD83E\uDED9"), w -> {
+				helper.addAction(Utils.parseEmoji("🫙"), w -> {
 					EventHandler handle = Pages.getHandler();
 					List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("consumables");
 					if (selected == null || selected.isEmpty()) {
@@ -762,7 +762,7 @@ public class Combat implements Renderer<BufferedImage> {
 		for (int i = 0; i < targets.size(); i++) {
 			Actor tgt = targets.get(i);
 			helper.addAction(
-					Utils.parseEmoji(Utils.fancyNumber(i + 1)),
+					String.valueOf(i + 1),
 					w -> {
 						if (tgt != null) {
 							action.accept(tgt);
