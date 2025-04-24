@@ -251,7 +251,7 @@ public class Shoukan extends GameInstance<Phase> {
 			reportEvent("SET_NAME -> " + name, false, false);
 		}
 
-		return false;
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -265,7 +265,7 @@ public class Shoukan extends GameInstance<Phase> {
 			reportEvent("SET_HP -> " + val, false, false);
 		}
 
-		return false;
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -279,7 +279,7 @@ public class Shoukan extends GameInstance<Phase> {
 			reportEvent("SET_MP -> " + val, false, false);
 		}
 
-		return false;
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -302,7 +302,7 @@ public class Shoukan extends GameInstance<Phase> {
 			reportEvent("SET_ORIGIN -> " + curr.getOrigins(), false, false);
 		}
 
-		return false;
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -334,7 +334,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -353,7 +353,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return true;
 		}
 
-		return false;
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -365,7 +365,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return true;
 		}
 
-		return false;
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -379,7 +379,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return true;
 		}
 
-		return false;
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -390,7 +390,7 @@ public class Shoukan extends GameInstance<Phase> {
 			reportResult(GameReport.SUCCESS, null, "GAME_TERMINATE");
 		}
 
-		return false;
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -400,14 +400,14 @@ public class Shoukan extends GameInstance<Phase> {
 		if (Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			String key = args.getString("key");
 			String value = args.getString("value");
-			if (key.isBlank() || value.isBlank()) return false;
+			if (key.isBlank() || value.isBlank()) return true;
 
 			data.put(key, value);
 			reportEvent("SET_VAL -> " + key + " = " + value, true, false);
 			return true;
 		}
 
-		return false;
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -434,7 +434,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	// DEBUG END
@@ -980,7 +980,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -1014,7 +1014,7 @@ public class Shoukan extends GameInstance<Phase> {
 					return t;
 				})
 				.process(cards);
-		return false;
+		return true;
 	}
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
@@ -1099,7 +1099,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		reportEvent("str/card_special", true, false, curr.getName(), d);
-		return !curr.selectionPending();
+		return true;
 	}
 
 	@PhaseConstraint("COMBAT")
@@ -1121,7 +1121,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Senshi ally = yourSlot.getTop();
 		attack(ally, you, SendMode.REGULAR, SendMode.SEND);
 
-		return false;
+		return true;
 	}
 
 	@PhaseConstraint("COMBAT")
@@ -1160,7 +1160,7 @@ public class Shoukan extends GameInstance<Phase> {
 			attack(ally, enemy, SendMode.REGULAR, SendMode.SEND);
 		}
 
-		return false;
+		return true;
 	}
 
 	private boolean isInvalidAction(Hand curr, Drawable<?> card) {
