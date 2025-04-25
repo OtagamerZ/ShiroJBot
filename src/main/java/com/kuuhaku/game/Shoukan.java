@@ -3023,7 +3023,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
-			ButtonizeHelper source = makeSelector(curr, 5, 2, (par, j, i) -> {
+			ButtonizeHelper source = makeSelector(curr, 5, 1, (par, j, i) -> {
 				JSONObject args = JSONObject.of(Map.entry("inField", i));
 
 				Senshi card = slots.get(i - 1).getTop();
