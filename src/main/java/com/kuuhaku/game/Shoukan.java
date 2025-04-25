@@ -2892,6 +2892,11 @@ public class Shoukan extends GameInstance<Phase> {
 			});
 			helper.addAction(getString("str/discard_card"), w -> {
 				List<Drawable<?>> cards = curr.getCards(false);
+				if (cards.isEmpty()) {
+					getChannel().sendMessage(getString("error/no_cards")).queue();
+					return;
+				}
+
 				ButtonizeHelper source = makeSelector(curr, cards.size(), 1, (n, j, i) -> {
 					if (discardCard(curr.getSide(), JSONObject.of(Map.entry("inHand", i)))) {
 						w.getMessage().delete().queue(null, Utils::doNothing);
