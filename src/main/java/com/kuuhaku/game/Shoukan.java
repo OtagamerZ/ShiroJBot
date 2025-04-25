@@ -2353,7 +2353,7 @@ public class Shoukan extends GameInstance<Phase> {
 					Drawable<?> card = cards.get(i - 1);
 					if (card instanceof Field) {
 						if (placeField(h.getSide(), args)) {
-							message.get().delete().queue();
+							message.get().delete().queue(null, Utils::doNothing);
 						}
 						return;
 					} else if (card instanceof Evogear e && e.isSpell()) {
@@ -2366,7 +2366,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 						if (passes.isEmpty()) {
 							if (activate(h.getSide(), args)) {
-								message.get().delete().queue();
+								message.get().delete().queue(null, Utils::doNothing);
 							}
 							return;
 						} else {
@@ -2393,7 +2393,7 @@ public class Shoukan extends GameInstance<Phase> {
 											args.put("target" + tgt, c);
 											if (tgt == passes.size()) {
 												if (activate(h.getSide(), args)) {
-													message.get().delete().queue();
+													message.get().delete().queue(null, Utils::doNothing);
 												}
 											} else {
 												disableOptions(message,
@@ -2453,7 +2453,7 @@ public class Shoukan extends GameInstance<Phase> {
 									Consumer<String> placeWithMode = m -> {
 										args.put("mode", m);
 										if (placeCard(h.getSide(), args)) {
-											message.get().delete().queue();
+											message.get().delete().queue(null, Utils::doNothing);
 										}
 									};
 
@@ -2829,7 +2829,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							if (flipCard(curr.getSide(), args)) {
-								message.get().delete().queue();
+								message.get().delete().queue(null, Utils::doNothing);
 							}
 						},
 						new Pair<>(Utils.parseEmoji(Constants.RETURN), bw ->
@@ -2857,7 +2857,7 @@ public class Shoukan extends GameInstance<Phase> {
 				ButtonizeHelper source = makeSelector(curr, 5, 1,
 						(n, row, col) -> {
 							if (promoteCard(curr.getSide(), JSONObject.of(Map.entry("inField", col)))) {
-								message.get().delete().queue();
+								message.get().delete().queue(null, Utils::doNothing);
 							}
 						},
 						new Pair<>(Utils.parseEmoji(Constants.RETURN), bw ->
@@ -2883,7 +2883,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							if (sacrificeCard(curr.getSide(), args)) {
-								message.get().delete().queue();
+								message.get().delete().queue(null, Utils::doNothing);
 							}
 						},
 						new Pair<>(Utils.parseEmoji(Constants.RETURN), bw ->
@@ -2903,7 +2903,7 @@ public class Shoukan extends GameInstance<Phase> {
 				List<Drawable<?>> cards = curr.getCards(false);
 				ButtonizeHelper source = makeSelector(curr, cards.size(), 1, (n, j, i) -> {
 					if (discardCard(curr.getSide(), JSONObject.of(Map.entry("inHand", i)))) {
-						w.getMessage().delete().queue();
+						w.getMessage().delete().queue(null, Utils::doNothing);
 					}
 				});
 
@@ -2947,7 +2947,7 @@ public class Shoukan extends GameInstance<Phase> {
 					List<SlotColumn> other = getSlots(h.getSide().getOther());
 					if (other.parallelStream().noneMatch(sc -> sc.hasTop() || sc.hasBottom())) {
 						if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
-							message.get().delete().queue();
+							message.get().delete().queue(null, Utils::doNothing);
 						}
 
 						return;
@@ -2968,7 +2968,7 @@ public class Shoukan extends GameInstance<Phase> {
 					if (arena.isFieldEmpty(h.getSide().getOther()) || card.hasFlag(Flag.DIRECT)) {
 						extra.add(new Pair<>(h.getOther().getName(), bw -> {
 							if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
-								message.get().delete().queue();
+								message.get().delete().queue(null, Utils::doNothing);
 							}
 						}));
 					}
@@ -2976,7 +2976,7 @@ public class Shoukan extends GameInstance<Phase> {
 					if (curr.getLockTime(Lock.TAUNT) == 0) {
 						extra.add(new Pair<>(h.getOther().getName(), bw -> {
 							if (selfDamage(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
-								message.get().delete().queue();
+								message.get().delete().queue(null, Utils::doNothing);
 							}
 						}));
 					}
@@ -2988,7 +2988,7 @@ public class Shoukan extends GameInstance<Phase> {
 					target = makeSelector(h, 5, 2,
 							(child, row, col) -> {
 								if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
-									message.get().delete().queue();
+									message.get().delete().queue(null, Utils::doNothing);
 								}
 							},
 							extra
@@ -3036,7 +3036,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 				if (passes.isEmpty()) {
 					if (special(curr.getSide(), args)) {
-						message.get().delete().queue();
+						message.get().delete().queue(null, Utils::doNothing);
 					}
 				} else {
 					List<String> labels = new ArrayList<>();
@@ -3062,7 +3062,7 @@ public class Shoukan extends GameInstance<Phase> {
 									args.put("target" + tgt, c);
 									if (tgt == passes.size()) {
 										if (special(curr.getSide(), args)) {
-											message.get().delete().queue();
+											message.get().delete().queue(null, Utils::doNothing);
 										}
 									} else {
 										disableOptions(message,
