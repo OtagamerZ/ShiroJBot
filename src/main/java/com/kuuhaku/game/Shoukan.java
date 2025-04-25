@@ -2831,10 +2831,7 @@ public class Shoukan extends GameInstance<Phase> {
 							if (flipCard(curr.getSide(), args)) {
 								message.get().delete().queue(null, Utils::doNothing);
 							}
-						},
-						new Pair<>(Utils.parseEmoji(Constants.RETURN), bw ->
-								helper.apply(bw.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, helper))
-						)
+						}
 				);
 
 				Objects.requireNonNull(w.getHook())
@@ -2859,10 +2856,7 @@ public class Shoukan extends GameInstance<Phase> {
 							if (promoteCard(curr.getSide(), JSONObject.of(Map.entry("inField", col)))) {
 								message.get().delete().queue(null, Utils::doNothing);
 							}
-						},
-						new Pair<>(Utils.parseEmoji(Constants.RETURN), bw ->
-								helper.apply(bw.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, helper))
-						)
+						}
 				);
 
 				Objects.requireNonNull(w.getHook())
@@ -2885,10 +2879,7 @@ public class Shoukan extends GameInstance<Phase> {
 							if (sacrificeCard(curr.getSide(), args)) {
 								message.get().delete().queue(null, Utils::doNothing);
 							}
-						},
-						new Pair<>(Utils.parseEmoji(Constants.RETURN), bw ->
-								helper.apply(bw.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, helper))
-						)
+						}
 				);
 
 				Objects.requireNonNull(w.getHook())
