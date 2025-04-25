@@ -2244,7 +2244,7 @@ public class Shoukan extends GameInstance<Phase> {
 				getString("str/next_turn"),
 				getString("str/view_equips"),
 				getString("str/view_history"),
-				"🏳️"
+				getString("str/surrender")
 		);
 
 		Hand curr = getCurrent();
@@ -2477,12 +2477,12 @@ public class Shoukan extends GameInstance<Phase> {
 			);
 		}
 
-		helper.addAction(getString("str/view_equips"), w -> {
+		helper.addAction(getString("str/view_equips"), w ->
 			Objects.requireNonNull(w.getHook())
 					.setEphemeral(true)
 					.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png"))
 					.queue();
-		});
+		);
 
 		helper.addAction(getString("str/view_history"), w -> {
 			if (isLocked()) return;
