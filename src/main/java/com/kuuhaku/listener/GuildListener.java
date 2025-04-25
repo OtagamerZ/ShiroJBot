@@ -199,14 +199,13 @@ public class GuildListener extends ListenerAdapter {
 
 		Embed model = auto.getEmbed();
 		Role welcomer = config.getSettings().getWelcomer();
-		if (join) {
-			if (welcomer != null) {
-				act = act.setContent(welcomer.getAsMention());
-			}
+		if (join && welcomer != null) {
+			act = act.setContent(welcomer.getAsMention());
+		}
 
-			eb.setImage(model.image().getRandomJoin());
-		} else {
-			eb.setImage(model.image().getRandomLeave());
+		if (model.image() != null) {
+			if (join) eb.setImage(model.image().getRandomJoin());
+			else eb.setImage(model.image().getRandomLeave());
 		}
 
 		act.setEmbeds(eb.build()).queue();

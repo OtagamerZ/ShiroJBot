@@ -33,7 +33,6 @@ public record Embed(Title title,
 					Footer footer,
 					List<Field> fields
 ) {
-
 	public Color getParsedColor() {
 		try {
 			return color == null ? null : Color.decode(color);
