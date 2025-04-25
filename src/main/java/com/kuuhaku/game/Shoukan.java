@@ -2481,7 +2481,7 @@ public class Shoukan extends GameInstance<Phase> {
 			Objects.requireNonNull(w.getHook())
 					.setEphemeral(true)
 					.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png"))
-					.queue();
+					.queue()
 		);
 
 		helper.addAction(getString("str/view_history"), w -> {
