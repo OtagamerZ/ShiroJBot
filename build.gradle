@@ -55,7 +55,7 @@ application {
 group = "com.kuuhaku"
 version = "STANDALONE"
 
-def javaVersion = JavaVersion.VERSION_24
+def javaVersion = JavaVersion.VERSION_21
 java {
 	sourceCompatibility = javaVersion
 	targetCompatibility = javaVersion
