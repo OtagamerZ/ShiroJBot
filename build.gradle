@@ -94,9 +94,9 @@ tasks.register("enforceVersion") {
 
 configurations.configureEach {
 	resolutionStrategy {
-		force group: 'org.json', name: 'json', version: "20231013"
-		force group: 'org.jsoup', name: 'jsoup', version: "1.15.3"
-		force group: 'com.google.protobuf', name: 'protobuf-java', version: "4.28.2"
+		force group: 'org.json', name: 'json', version: "20250517"
+		force group: 'org.jsoup', name: 'jsoup', version: "1.20.1"
+		force group: 'com.google.protobuf', name: 'protobuf-java', version: "4.31.1"
 	}
 }
 
