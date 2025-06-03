@@ -44,7 +44,6 @@ import org.apache.commons.collections4.bag.HashBag;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -210,7 +209,7 @@ public class StashScrapCommand implements Executable {
 			if (sc.getType() == CardType.KAWAIPON) {
 				KawaiponCard kc = sc.getKawaiponCard();
 				if (kc != null) {
-					value += (int) (kc.getSuggestedPrice() / 3 * mult);
+					value += (int) (kc.getSuggestedPrice() / 3.0 * mult);
 				}
 			} else {
 				if (sc.getType() == CardType.EVOGEAR) {

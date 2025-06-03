@@ -21,7 +21,7 @@ package com.kuuhaku.util;
 import java.util.EnumSet;
 import java.util.Set;
 
-public abstract class Bit32 {
+public abstract class Bit32 extends BitOp<Integer> {
 	public static int set(int bits, int index, boolean value) {
 		return set(bits, index, Utils.toNum(value), 1);
 	}

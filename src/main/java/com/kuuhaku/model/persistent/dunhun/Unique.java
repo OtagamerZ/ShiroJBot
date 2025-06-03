@@ -25,7 +25,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedUnique;
 import com.ygimenez.json.JSONArray;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
@@ -123,8 +122,8 @@ public class Unique extends DAO<Unique> {
 		RandomList<String> rl = new RandomList<>();
 		List<Object[]> affs = DAO.queryAllUnmapped("""
 				SELECT u.id
-				     , u.weight 
-				FROM \"unique\" u
+				     , u.weight
+				FROM "unique" u
 				INNER JOIN basetype b ON u.basetype_id = b.id
 				WHERE u.weight > 0
 				  AND b.req_level <= ?1

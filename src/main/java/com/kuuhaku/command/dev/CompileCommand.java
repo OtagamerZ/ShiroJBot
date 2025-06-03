@@ -102,7 +102,7 @@ public class CompileCommand implements Executable {
 					).queue();
 				}
 			} catch (Exception e) {
-				logger().error(e, e);
+				LOGGER.error(e, e);
 			}
 		});
 	}

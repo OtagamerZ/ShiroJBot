@@ -69,7 +69,7 @@ public class HistoryInfo extends DAO<HistoryInfo> {
 	private String winCondition;
 
 	@Column(name = "match_timestamp", nullable = false)
-	private ZonedDateTime timestamp = ZonedDateTime.now(ZoneId.of("GMT-3"));;
+	private ZonedDateTime timestamp = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	@Column(name = "seed", nullable = false)
 	private long seed;

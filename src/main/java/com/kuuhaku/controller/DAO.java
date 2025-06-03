@@ -109,14 +109,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T> T queryNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
-			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
-			q.setMaxResults(1);
-
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
+			Query q = prepareQuery(query, em, null, true, params);
 
 			T t;
 			try {
@@ -140,14 +133,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static Object[] queryUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
-			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
-			q.setMaxResults(1);
-
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
+			Query q = prepareQuery(query, em, null, true, params);
 
 			try {
 				Object obj = q.getSingleResult();
@@ -197,13 +183,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T> List<T> queryAllNative(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
-			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
-
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
+			Query q = prepareQuery(query, em, null, false, params);
 
 			if (klass.isInstance(Blacklistable.class)) {
 				return ((Stream<?>) q.getResultStream())
@@ -224,13 +204,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static List<Object[]> queryAllUnmapped(@NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
-			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
-
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
+			Query q = prepareQuery(query, em, null, false, params);
 
 			return ((Stream<?>) q.getResultStream())
 					.map(o -> {
@@ -271,21 +245,9 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	}
 
 	public static <T extends DAO<T>> void applyNative(Class<T> klass, @NotNull @Language("PostgreSQL") String query, @NotNull Object... params) {
-		Manager.getFactory().runInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
-			if (klass != null) {
-				q.unwrap(NativeQuery.class).addSynchronizedEntityClass(klass);
-			} else {
-				q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
-			}
-
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
-
-			q.executeUpdate();
-		});
+		Manager.getFactory().runInTransaction(em ->
+				prepareQuery(query, em, klass, false, params).executeUpdate()
+		);
 	}
 
 	public static <T extends DAO<T>> List<T> queryBuilder(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, Function<TypedQuery<T>, List<T>> processor, @NotNull Object... params) {
@@ -309,17 +271,10 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 
 	public static <T> List<T> nativeQueryBuilder(@NotNull Class<T> klass, @NotNull @Language("PostgreSQL") String query, Function<Query, List<T>> processor, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
-			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
-
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
+			Query q = prepareQuery(query, em, null, false, params);
 
 			if (klass.isInstance(Blacklistable.class)) {
 				return processor.apply(q).stream()
-						.map(klass::cast)
 						.filter(o -> !((Blacklistable) o).isBlacklisted())
 						.toList();
 			} else if (Number.class.isAssignableFrom(klass)) {
@@ -327,22 +282,14 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 						.map(o -> klass.cast(Utils.fromNumber(klass, (Number) o)))
 						.toList();
 			} else {
-				return processor.apply(q).stream()
-						.map(klass::cast)
-						.toList();
+				return processor.apply(q);
 			}
 		});
 	}
 
 	public static List<Object[]> unmappedQueryBuilder(@NotNull @Language("PostgreSQL") String query, Function<Query, List<Object>> processor, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
-			Query q = em.createNativeQuery(query);
-			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
-
-			int paramSize = Objects.requireNonNull(params).length;
-			for (int i = 0; i < paramSize; i++) {
-				q.setParameter(i + 1, params[i]);
-			}
+			Query q = prepareQuery(query, em, null, false, params);
 
 			return processor.apply(q).stream()
 					.map(o -> {
@@ -458,5 +405,25 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 				afterDelete();
 			}
 		});
+	}
+
+	private static @NotNull Query prepareQuery(@Language("PostgreSQL") @NotNull String query, EntityManager em, Class<?> klass, boolean singleResult, Object... params) {
+		Query q = em.createNativeQuery(query);
+		if (klass != null) {
+			q.unwrap(NativeQuery.class).addSynchronizedEntityClass(klass);
+		} else {
+			q.unwrap(NativeQuery.class).addSynchronizedQuerySpace("");
+		}
+
+		if (singleResult) {
+			q.setMaxResults(1);
+		}
+
+		int paramSize = Objects.requireNonNull(params).length;
+		for (int i = 0; i < paramSize; i++) {
+			q.setParameter(i + 1, params[i]);
+		}
+
+		return q;
 	}
 }

@@ -231,7 +231,7 @@ public interface Actor {
 
 	void setGame(Dunhun game);
 
-	Actor fork() throws CloneNotSupportedException;
+	Actor fork();
 
 	default Actor copy() {
 		try {

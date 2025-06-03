@@ -25,6 +25,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceConfiguration;
 import org.apache.commons.io.FilenameUtils;
+import org.intellij.lang.annotations.Language;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,7 +64,7 @@ public abstract class Manager {
 							.peek(s -> scripts.add(FilenameUtils.removeExtension(s.getFileName().toString())))
 							.map(IO::readString)
 							.filter(Objects::nonNull)
-							.forEach(sql -> DAO.applyNative(null, sql));
+							.forEach((@Language("PostgreSQL") String sql) -> DAO.applyNative(null, sql));
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}

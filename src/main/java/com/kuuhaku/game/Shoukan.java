@@ -89,7 +89,6 @@ import java.util.function.*;
 import java.util.stream.Stream;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
-import static com.kuuhaku.model.enums.shoukan.Trigger.NONE;
 
 public class Shoukan extends GameInstance<Phase> {
 	public static final String GIF_PATH = Constants.SHOUKAN_ASSETS + "gifs/";
@@ -635,7 +634,7 @@ public class Shoukan extends GameInstance<Phase> {
 				curr.getGraveyard().add(d);
 				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
-				reportEvent("str/equip_card_fail", true, false, curr.getName(), d);
+				reportEvent("str/place_field_fail", true, false, curr.getName(), d);
 				return true;
 			}
 

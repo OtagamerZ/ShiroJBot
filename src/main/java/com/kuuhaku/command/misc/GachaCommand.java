@@ -75,6 +75,7 @@ public class GachaCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder();
 			for (Class<?> gacha : Gacha.getGachas()) {
 				GachaType type = gacha.getAnnotation(GachaType.class);
+				if (type == null) continue;
 
 				String price;
 				if (type.currency() == Currency.ITEM) {
@@ -91,7 +92,7 @@ public class GachaCommand implements Executable {
 				pages.add(InteractPage.of(eb.build()));
 			}
 
-			pages.sort(Comparator.comparing(p -> ((MessageEmbed) p.getContent()).getTitle()));
+			pages.sort(Comparator.comparing(p -> Utils.getOr(((MessageEmbed) p.getContent()).getTitle(), "")));
 			Utils.paginate(pages, event.channel(), event.user());
 			return;
 		}
@@ -101,6 +102,8 @@ public class GachaCommand implements Executable {
 		Set<String> types = new HashSet<>();
 		for (Class<?> gacha : Gacha.getGachas()) {
 			GachaType type = gacha.getAnnotation(GachaType.class);
+			if (type == null) continue;
+
 			if (type.value().equalsIgnoreCase(id)) {
 				chosen = (Class<? extends Gacha>) gacha;
 				break;
@@ -120,6 +123,8 @@ public class GachaCommand implements Executable {
 		}
 
 		GachaType type = chosen.getAnnotation(GachaType.class);
+		assert type != null;
+
 		if (!acc.hasEnough(type.price(), type.currency(), type.itemCostId())) {
 			event.channel().sendMessage(locale.get("error/insufficient_" + type.currency())).queue();
 			return;

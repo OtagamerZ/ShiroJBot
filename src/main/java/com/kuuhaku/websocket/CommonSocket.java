@@ -211,6 +211,7 @@ public class CommonSocket extends WebSocketClient {
 						default -> c.asSenshi();
 					};
 
+					EffectHolder<?> eh = (EffectHolder<?>) d;
 					out.put("shoukan", JSONObject.of(
 							Map.entry("type_id", type.name()),
 							Map.entry("type", locale.get("type/" + type)),
@@ -221,12 +222,12 @@ public class CommonSocket extends WebSocketClient {
 									Map.entry("description", locale.get("field/" + f.getType() + "_desc")),
 									Map.entry("modifiers", f.getModifiers())
 							) : new JSONObject()),
-							Map.entry("description", d instanceof EffectHolder<?> eh ? JSONObject.of(
+							Map.entry("description", JSONObject.of(
 									Map.entry("raw", eh.getBase().getDescription(locale)),
 									Map.entry("parsed_md", eh.getReadableDescription(locale)),
 									Map.entry("parsed_html", MDTool.markdown2Html(eh.getReadableDescription(locale))),
 									Map.entry("display", eh.parseDescription(null, locale))
-							) : new JSONObject()),
+							)),
 							Map.entry("cost", JSONObject.of(
 									Map.entry("mana", d.getMPCost()),
 									Map.entry("life", d.getHPCost()),

@@ -354,7 +354,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 
 	public void addTransaction(long value, boolean input, String reason, Currency currency) {
 		DAO.applyNative(Transaction.class, """
-				INSERT INTO transaction (account_uid, date, input, reason, value, currency) 
+				INSERT INTO transaction (account_uid, date, input, reason, value, currency)
 				VALUES (?1, current_timestamp AT TIME ZONE 'BRT', ?2, ?3, ?4, ?5)
 				""", uid, input, reason, value, currency.name());
 	}
@@ -499,16 +499,12 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	}
 
 	public List<MatchHistory> getMatches() {
-		return List.of();
-//		return DAO.queryAllUnmapped("""
-//						SELECT cast(jsonb_build_object('info', info, 'turns', turns) AS TEXT)
-//						FROM v_matches
-//						WHERE has(players, ?1)
-//						ORDER BY id DESC
-//						""", uid
-//				).stream()
-//				.map(o -> JSONUtils.fromJSON(String.valueOf(o[0]), Match.class))
-//				.toList();
+		return DAO.queryAll(MatchHistory.class, """
+				SELECT mh
+				FROM MatchHistory mh
+				WHERE ?1 IN (mh.info.top.id.uid, mh.info.bottom.id.uid)
+				ORDER BY mh.id DESC
+				""");
 	}
 
 	@Override

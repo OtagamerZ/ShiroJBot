@@ -57,7 +57,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
-import static com.kuuhaku.model.enums.shoukan.Trigger.ON_REMOVE;
 
 @Entity
 @Cacheable

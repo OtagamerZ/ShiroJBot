@@ -32,7 +32,6 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.hibernate.annotations.Cache;

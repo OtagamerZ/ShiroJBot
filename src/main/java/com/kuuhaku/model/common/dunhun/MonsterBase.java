@@ -15,7 +15,6 @@ import com.kuuhaku.model.persistent.dunhun.Monster;
 import com.kuuhaku.model.persistent.dunhun.MonsterStats;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
-import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.CombatCardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Senshi;

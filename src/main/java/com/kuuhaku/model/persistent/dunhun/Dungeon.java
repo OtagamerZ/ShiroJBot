@@ -27,7 +27,6 @@ import com.kuuhaku.model.persistent.localized.LocalizedDungeon;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
-import jakarta.persistence.Table;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.type.SqlTypes;

@@ -28,7 +28,6 @@ import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedAffix;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;

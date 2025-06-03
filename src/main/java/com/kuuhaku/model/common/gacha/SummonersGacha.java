@@ -23,7 +23,7 @@ import com.kuuhaku.interfaces.annotations.GachaType;
 import com.kuuhaku.model.enums.Currency;
 import net.dv8tion.jda.api.entities.User;
 
-@GachaType(value = "summoner", price = 6200, currency = Currency.CR)
+@GachaType(value = "summoner", price = 6200, prizes = 3, currency = Currency.CR)
 public class SummonersGacha extends Gacha {
 	public SummonersGacha(User u) {
 		super(DAO.queryAllUnmapped("""

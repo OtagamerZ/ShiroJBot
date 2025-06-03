@@ -129,6 +129,7 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public Hero getHero() {
+		//noinspection ConstantValue
 		if (true) return null;
 
 		return DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1 AND h.stats.evil = FALSE", account.getUid());
@@ -447,20 +448,20 @@ public class Deck extends DAO<Deck> {
 			g2d.setColor(Color.WHITE);
 			Graph.drawMultilineString(g2d, locale.get("str/deck_analysis"), 600, 45, 400);
 			Graph.drawMultilineString(g2d, """
-						%s
-						%s
-						%s-(%s/%s/%s)
-						{%s%%;0x%s}
-						%s%%
-						%s
-						%s
-						%s
-						%s
-											 
-						%s
-						%s-(T4:-%s)
-						%s
-						""".formatted(
+							%s
+							%s
+							%s-(%s/%s/%s)
+							{%s%%;0x%s}
+							%s%%
+							%s
+							%s
+							%s
+							%s
+							
+							%s
+							%s-(T4:-%s)
+							%s
+							""".formatted(
 							base.hp(),
 							Utils.roundToString(mp, 1),
 							allCards.size(), getSenshi().size(), getEvogear().size(), getFields().size(),

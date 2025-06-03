@@ -59,6 +59,8 @@ public class GachaPoolCommand implements Executable {
 		Set<String> types = new HashSet<>();
 		for (Class<?> gacha : Gacha.getGachas()) {
 			GachaType type = gacha.getAnnotation(GachaType.class);
+			if (type == null) continue;
+
 			if (type.value().equalsIgnoreCase(id)) {
 				chosen = (Class<? extends Gacha>) gacha;
 				break;
@@ -78,6 +80,8 @@ public class GachaPoolCommand implements Executable {
 		}
 
 		GachaType type = chosen.getAnnotation(GachaType.class);
+		assert type != null;
+
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/gacha_pool", locale.get("gacha/" + type.value()).toLowerCase()));
 

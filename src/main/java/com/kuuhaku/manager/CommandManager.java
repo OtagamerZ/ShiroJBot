@@ -41,6 +41,8 @@ public class CommandManager {
 	public CommandManager() {
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
+			if (params == null) continue;
+
 			String full = params.name();
 			if (params.path().length > 0) {
 				full += "." + String.join(".", params.path());
@@ -55,6 +57,8 @@ public class CommandManager {
 
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
+			if (params == null) continue;
+
 			String parent = params.name();
 
 			if (!names.contains(parent) && !surrogate.containsKey(parent)) {
@@ -69,7 +73,9 @@ public class CommandManager {
 
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
-			extractCommand(commands, cmd, params);
+			if (params != null) {
+				extractCommand(commands, cmd, params);
+			}
 		}
 
 		return commands;
@@ -98,6 +104,8 @@ public class CommandManager {
 		else {
 			for (Class<?> cmd : cmds) {
 				Command params = cmd.getDeclaredAnnotation(Command.class);
+				if (params == null) continue;
+
 				String full = params.name();
 				if (params.path().length > 0) {
 					full += "." + String.join(".", params.path());
@@ -127,7 +135,7 @@ public class CommandManager {
 
 		for (Class<?> cmd : cmds) {
 			Command params = cmd.getDeclaredAnnotation(Command.class);
-			if (params.path().length == 0 || !params.name().equals(parent)) continue;
+			if (params == null || params.path().length == 0 || !params.name().equals(parent)) continue;
 
 			extractCommand(out, cmd, params);
 		}

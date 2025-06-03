@@ -261,7 +261,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				WHERE s.kawaipon.uid = ?1
 				  AND s.deck.id IS NULL
 				  AND s.price = 0
-  				  AND s.locked = FALSE
+				  AND s.locked = FALSE
 				""", uid);
 	}
 

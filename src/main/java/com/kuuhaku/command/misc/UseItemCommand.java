@@ -38,7 +38,6 @@ import net.dv8tion.jda.api.JDA;
 
 import java.util.List;
 import java.util.Map;
-import java.util.MissingFormatArgumentException;
 
 @Command(
 		name = "items",

@@ -36,6 +36,7 @@ public class ScheduleManager extends Scheduler {
 				for (Class<?> sched : scheds) {
 					if (Runnable.class.isAssignableFrom(sched)) {
 						Schedule info = sched.getDeclaredAnnotation(Schedule.class);
+						if (info == null) continue;
 
 						Runnable task = (Runnable) sched.getConstructor().newInstance();
 						schedule(info.value(), task);

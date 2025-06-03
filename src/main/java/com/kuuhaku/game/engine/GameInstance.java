@@ -44,7 +44,6 @@ import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public abstract class GameInstance<T extends Enum<T>> {
 	public static final Set<String> CHANNELS = ConcurrentHashMap.newKeySet();

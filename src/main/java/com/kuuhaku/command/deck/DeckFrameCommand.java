@@ -102,14 +102,16 @@ public class DeckFrameCommand implements Executable {
                     pages.add(InteractPage.of(eb.build()));
                 } else {
                     EmbedCluster embeds = new EmbedCluster();
+					String frontUrl = URL.formatted("front", fc.name().toLowerCase());
+					String backUrl = URL.formatted("back", fc.name().toLowerCase());
 
                     eb.setThumbnail(null)
-							.setTitle(fc.getName(locale), URL.formatted("front", fc.name().toLowerCase()))
+							.setTitle(fc.getName(locale), frontUrl)
                             .setDescription(fc.getDescription(locale))
                             .setFooter(locale.get("str/page", i + 1, frames.size()));
 
-                    embeds.getEmbeds().add(eb.setImage(URL.formatted("front", fc.name().toLowerCase())).build());
-                    embeds.getEmbeds().add(eb.setImage(URL.formatted("back", fc.name().toLowerCase())).build());
+                    embeds.getEmbeds().add(eb.setImage(frontUrl).build());
+                    embeds.getEmbeds().add(eb.setImage(backUrl).build());
 
                     pages.add(InteractPage.of(embeds));
                 }

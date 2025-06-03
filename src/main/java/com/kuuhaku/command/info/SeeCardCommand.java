@@ -156,50 +156,53 @@ public class SeeCardCommand implements Executable {
 				}
 
 				bi = d.render(locale, dk);
+				eb.setDescription(((EffectHolder<?>) d).getReadableDescription(locale));
 
-				if (d instanceof EffectHolder<?> eh) {
-					eb.setDescription(eh.getReadableDescription(locale));
-				}
+				switch (d) {
+					case Senshi s -> {
+						if (s.getCard().getRarity() == Rarity.NONE) {
+							if (!eb.getDescriptionBuilder().isEmpty()) {
+								eb.appendDescription("\n\n");
+							}
 
-				if (d instanceof Senshi s) {
-					if (s.getCard().getRarity() == Rarity.NONE) {
-						if (!eb.getDescriptionBuilder().isEmpty()) {
-							eb.appendDescription("\n\n");
+							eb.appendDescription("**" + locale.get("str/effect_only") + "**");
 						}
 
-						eb.appendDescription("**" + locale.get("str/effect_only") + "**");
+						if (s.isFusion()) {
+							eb.setAuthor(null);
+						}
 					}
+					case Evogear e when !e.getCharms().isEmpty() -> {
+						if (e.getTier() < 0) {
+							if (!eb.getDescriptionBuilder().isEmpty()) {
+								eb.appendDescription("\n\n");
+							}
 
-					if (s.isFusion()) {
-						eb.setAuthor(null);
-					}
-				} else if (d instanceof Evogear e && !e.getCharms().isEmpty()) {
-					if (e.getTier() < 0) {
-						if (!eb.getDescriptionBuilder().isEmpty()) {
-							eb.appendDescription("\n\n");
+							eb.appendDescription("**" + locale.get("str/effect_only") + "**");
 						}
 
-						eb.appendDescription("**" + locale.get("str/effect_only") + "**");
+						eb.addField(locale.get("str/charms"),
+								e.getCharms().stream()
+										.map(c -> Charm.valueOf(String.valueOf(c)))
+										.map(c -> "**" + c.getName(locale) + ":** " + c.getDescription(locale, e.getTier()))
+										.collect(Collectors.joining("\n")),
+								false
+						);
 					}
+					case Field f -> {
+						if (f.isEffectOnly()) {
+							if (!eb.getDescriptionBuilder().isEmpty()) {
+								eb.appendDescription("\n\n");
+							}
 
-					eb.addField(locale.get("str/charms"),
-							e.getCharms().stream()
-									.map(c -> Charm.valueOf(String.valueOf(c)))
-									.map(c -> "**" + c.getName(locale) + ":** " + c.getDescription(locale, e.getTier()))
-									.collect(Collectors.joining("\n")),
-							false
-					);
-				} else if (d instanceof Field f) {
-					if (f.isEffectOnly()) {
-						if (!eb.getDescriptionBuilder().isEmpty()) {
-							eb.appendDescription("\n\n");
+							eb.appendDescription("**" + locale.get("str/effect_only") + "**");
 						}
 
-						eb.appendDescription("**" + locale.get("str/effect_only") + "**");
+						if (f.getType() != FieldType.NONE) {
+							eb.addField(locale.get("field/" + f.getType()), locale.get("field/" + f.getType() + "_desc"), false);
+						}
 					}
-
-					if (f.getType() != FieldType.NONE) {
-						eb.addField(locale.get("field/" + f.getType()), locale.get("field/" + f.getType() + "_desc"), false);
+					default -> {
 					}
 				}
 

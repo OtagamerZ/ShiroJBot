@@ -349,10 +349,6 @@ public abstract class Utils {
 		return out;
 	}
 
-	public static String underline(String text) {
-		return text.replaceAll("([A-OR-XZa-or-xz])", "$1\u0332");
-	}
-
 	public static <T> Page generatePage(EmbedBuilder eb, Collection<T> list, int itemsPerColumn, Function<T, String> mapper) {
 		if (list.isEmpty()) return null;
 		eb.clearFields();
@@ -656,6 +652,7 @@ public abstract class Utils {
 		return Emoji.fromFormatted(in);
 	}
 
+	@SuppressWarnings("EmptyMethod")
 	public static void doNothing(Object... ignored) {
 
 	}

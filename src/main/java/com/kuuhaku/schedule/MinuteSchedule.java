@@ -22,7 +22,6 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
 import com.kuuhaku.model.persistent.user.Profile;
-import com.kuuhaku.model.persistent.user.Transaction;
 import com.ygimenez.json.JSONArray;
 import kotlin.Pair;
 

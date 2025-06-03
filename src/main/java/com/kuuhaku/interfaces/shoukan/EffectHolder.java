@@ -30,7 +30,6 @@ import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
-import com.kuuhaku.model.common.shoukan.PropValue;
 import com.kuuhaku.model.records.shoukan.Source;
 import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.Calc;

@@ -31,7 +31,6 @@ import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONArray;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;

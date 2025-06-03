@@ -18,11 +18,8 @@
 
 package com.kuuhaku.model.records.id;
 
-import com.kuuhaku.model.enums.shoukan.Side;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 
 @Embeddable
 public record HistoryPlayerId(

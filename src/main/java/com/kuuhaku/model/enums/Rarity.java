@@ -37,7 +37,7 @@ public enum Rarity {
 	LEGENDARY(5, 0xDC9018, "<:legendary:726171819945623682> "),
 	ULTIMATE(-1, 0xD400AA, "<:ultimate:1002748864643743774> "),
 	EVOGEAR,
-	FIELD("\uD83C\uDFD4️ "),
+	FIELD("⛰️ "),
 	FUSION,
 	HERO,
 	MONSTER,

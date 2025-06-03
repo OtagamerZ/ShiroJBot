@@ -45,7 +45,6 @@ import com.kuuhaku.model.records.shoukan.Targeting;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.*;
 import com.ygimenez.json.JSONArray;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.hibernate.annotations.Cache;
