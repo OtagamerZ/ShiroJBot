@@ -12,7 +12,7 @@ import org.hibernate.annotations.FetchMode;
 @Embeddable
 public record CardReference(
 		@Enumerated(EnumType.STRING)
-		@Column(name = "owner")
+		@Column(name = "owner", nullable = false, columnDefinition = "VARCHAR(255)")
 		Side owner,
 		@ManyToOne(optional = false)
 		@JoinColumn(name = "card_id")
