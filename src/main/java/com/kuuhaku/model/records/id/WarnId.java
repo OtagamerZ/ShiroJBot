@@ -22,6 +22,8 @@ import com.kuuhaku.controller.DAO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.io.Serializable;
+
 @Embeddable
 public record WarnId(
 		@Column(name = "id", nullable = false)
@@ -30,7 +32,7 @@ public record WarnId(
 		String gid,
 		@Column(name = "uid", nullable = false)
 		String uid
-) {
+) implements Serializable {
 	public WarnId(String gid, String uid) {
 		this(DAO.queryNative(Integer.class, "SELECT nextval('warn_id_seq')"), gid, uid);
 		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS warn_id_seq");

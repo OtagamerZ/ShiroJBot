@@ -120,3 +120,4 @@ gradle-app.setting
 
 src/main/antlr/com/kuuhaku/generated
 crowdin.properties
+no_git/

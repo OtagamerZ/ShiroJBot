@@ -28,11 +28,12 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
 @Embeddable
-public class HeroStats {
+public class HeroStats implements Serializable {
 	private static final NavigableMap<Integer, Integer> xpTable = new TreeMap<>();
 
 	static {

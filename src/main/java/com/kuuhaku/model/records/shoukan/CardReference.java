@@ -9,16 +9,18 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.io.Serializable;
+
 @Embeddable
 public record CardReference(
 		@Enumerated(EnumType.STRING)
-		@Column(name = "owner", nullable = false, columnDefinition = "VARCHAR(255)")
+		@Column(name = "owner")
 		Side owner,
 		@ManyToOne(optional = false)
 		@JoinColumn(name = "card_id")
 		@Fetch(FetchMode.JOIN)
 		Card card
-) {
+) implements Serializable {
 	public CardReference(Drawable<?> card) {
 		this(card.getSide(), card.getCard());
 	}

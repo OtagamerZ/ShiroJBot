@@ -21,11 +21,13 @@ package com.kuuhaku.model.records.id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.io.Serializable;
+
 @Embeddable
 public record GearAffixId(
 		@Column(name = "gear_id", nullable = false)
 		int gearId,
 		@Column(name = "affix_id", nullable = false)
 		String affixId
-) {
+) implements Serializable {
 }

@@ -22,13 +22,15 @@ import com.kuuhaku.controller.DAO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.io.Serializable;
+
 @Embeddable
 public record LevelRoleId(
 		@Column(name = "id", nullable = false)
 		int id,
 		@Column(name = "gid", nullable = false)
 		String gid
-) {
+) implements Serializable {
 	public LevelRoleId(String gid) {
 		this(DAO.queryNative(Integer.class, "SELECT nextval('level_role_id_seq')"), gid);
 		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS level_role_id_seq");

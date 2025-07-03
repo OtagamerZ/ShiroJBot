@@ -21,12 +21,14 @@ package com.kuuhaku.model.records.id;
 import com.kuuhaku.model.enums.shoukan.Side;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Embeddable
 public record HistorySideId(
 		@Embedded
 		HistoryTurnId turnId,
 		@Enumerated(EnumType.STRING)
-		@Column(name = "side", nullable = false, columnDefinition = "VARCHAR(255)")
+		@Column(name = "side", nullable = false)
 		Side side
-) {
+) implements Serializable {
 }

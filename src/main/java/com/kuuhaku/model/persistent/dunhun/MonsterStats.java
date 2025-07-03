@@ -31,10 +31,11 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
+import java.io.Serializable;
 import java.util.Map;
 
 @Embeddable
-public class MonsterStats {
+public class MonsterStats implements Serializable {
 	@Column(name = "base_hp", nullable = false)
 	private int baseHp;
 

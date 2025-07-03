@@ -20,11 +20,13 @@ package com.kuuhaku.model.records.id;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Embeddable
 public record HistorySlotId(
 		@Embedded
 		HistorySideId sideId,
 		@Column(name = "slot", nullable = false)
 		int slot
-) {
+) implements Serializable {
 }

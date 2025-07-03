@@ -21,13 +21,15 @@ package com.kuuhaku.model.records.id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.io.Serializable;
+
 @Embeddable
 public record DynamicPropertyId(
 		@Column(name = "uid", nullable = false)
 		String uid,
 		@Column(name = "id", nullable = false)
 		String id
-) {
+) implements Serializable {
 	public DynamicPropertyId {
 		if (uid.isBlank() || id.isBlank()) throw new IllegalArgumentException("UID and ID cannot be blank");
 	}

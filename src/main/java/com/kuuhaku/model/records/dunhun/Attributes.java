@@ -25,11 +25,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import kotlin.Pair;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
 @Embeddable
-public record Attributes(@Column(name = "attributes", nullable = false) int attributes) {
+public record Attributes(@Column(name = "attributes", nullable = false) int attributes) implements Serializable {
 	public Attributes() {
 		this(0);
 	}

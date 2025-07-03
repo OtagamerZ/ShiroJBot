@@ -21,13 +21,15 @@ package com.kuuhaku.model.records.id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.io.Serializable;
+
 @Embeddable
 public record ProfileId(
 		@Column(name = "uid", nullable = false)
 		String uid,
 		@Column(name = "gid", nullable = false)
 		String gid
-) {
+) implements Serializable {
 	public ProfileId {
 		if (uid.isBlank() || gid.isBlank()) throw new IllegalArgumentException("UID and GID cannot be blank");
 	}

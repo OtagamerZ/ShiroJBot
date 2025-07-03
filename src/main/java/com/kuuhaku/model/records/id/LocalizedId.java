@@ -24,6 +24,8 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
+import java.io.Serializable;
+
 @Embeddable
 public record LocalizedId(
 		@Column(name = "id", nullable = false)
@@ -31,7 +33,7 @@ public record LocalizedId(
 		@Enumerated(EnumType.STRING)
 		@Column(name = "locale", nullable = false, length = 2)
 		I18N locale
-) {
+) implements Serializable {
 	public LocalizedId {
 		if (id.isBlank()) throw new IllegalArgumentException("ID cannot be blank");
 	}

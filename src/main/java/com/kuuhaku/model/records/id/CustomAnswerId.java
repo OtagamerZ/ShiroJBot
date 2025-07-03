@@ -22,13 +22,15 @@ import com.kuuhaku.controller.DAO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.io.Serializable;
+
 @Embeddable
 public record CustomAnswerId(
 		@Column(name = "id", nullable = false)
 		int id,
 		@Column(name = "gid", nullable = false)
 		String gid
-) {
+) implements Serializable {
 	public CustomAnswerId(String gid) {
 		this(DAO.queryNative(Integer.class, "SELECT nextval('custom_answer_id_seq')"), gid);
 		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS custom_answer_id_seq");

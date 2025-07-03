@@ -21,13 +21,15 @@ package com.kuuhaku.model.records.id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.io.Serializable;
+
 @Embeddable
 public record HistoryPlayerId(
 		@Column(name = "match_id", nullable = false)
 		int matchId,
 		@Column(name = "uid", nullable = false)
 		String uid
-) {
+) implements Serializable {
 	public HistoryPlayerId {
 		if (uid.isBlank()) throw new IllegalArgumentException("UID cannot be blank");
 	}

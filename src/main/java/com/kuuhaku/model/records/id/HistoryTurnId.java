@@ -21,11 +21,13 @@ package com.kuuhaku.model.records.id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.io.Serializable;
+
 @Embeddable
 public record HistoryTurnId(
 		@Column(name = "match_id", nullable = false)
 		int matchId,
 		@Column(name = "turn", nullable = false)
 		int turn
-) {
+) implements Serializable {
 }

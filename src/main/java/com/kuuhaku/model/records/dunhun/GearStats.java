@@ -26,6 +26,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
+
 @Embeddable
 public record GearStats(
 		@Column(name = "req_level", nullable = false)
@@ -50,7 +52,7 @@ public record GearStats(
 		Affix implicit,
 		@Column(name = "weight", nullable = false)
 		int weight
-) {
+) implements Serializable {
 	public JSONArray allTags() {
 		JSONArray tags = new JSONArray();
 		tags.addAll(gearType.getTags());
