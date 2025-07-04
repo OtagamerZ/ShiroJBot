@@ -16,7 +16,7 @@ public record CardReference(
 		@Enumerated(EnumType.STRING)
 		@Column(name = "owner")
 		Side owner,
-		@ManyToOne(optional = false)
+		@ManyToOne
 		@JoinColumn(name = "card_id")
 		@Fetch(FetchMode.JOIN)
 		Card card
@@ -33,7 +33,7 @@ public record CardReference(
 		JSONObject out = new JSONObject();
 
 		if (owner != null) out.put("owner", owner);
-		out.put("card", card.getId());
+		if (card != null) out.put("card", card.getId());
 
 		return out;
 	}
