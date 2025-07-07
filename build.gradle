@@ -102,7 +102,7 @@ configurations.configureEach {
 dependencies {
 	//Core
 	implementation group: "net.dv8tion", name: "JDA", version: "5.6.1"
-	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "66e2b86"
+	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "f2f5304"
 	implementation group: "com.github.ygimenez", name: "Simple-Moshi", version: "1.1.2"
 
 	//Database
