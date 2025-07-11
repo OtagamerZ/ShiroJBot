@@ -133,8 +133,7 @@ public class SelectTitleCommand implements Executable {
 		if (title == null) {
 			String sug = Utils.didYouMean(
 					args.getString("name"),
-					"SELECT t.title_id AS value FROM account_title t WHERE t.account_uid = ?1",
-					acc.getUid()
+					"SELECT t.title_id AS value FROM account_title t WHERE t.account_uid = '%1$s'".formatted(acc.getUid())
 			);
 			if (sug == null) {
 				event.channel().sendMessage(locale.get("error/unknown_title_none")).queue();
