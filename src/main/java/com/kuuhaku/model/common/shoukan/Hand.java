@@ -55,12 +55,11 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
+import java.util.*;
 import java.util.List;
 import java.util.Queue;
-import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -760,8 +759,8 @@ public class Hand {
 		while (it.hasNext()) {
 			Timed<Lock> lk = it.next();
 
-			if (lk.obj() == lock) {
-				if (lk.time().addAndGet(time) <= 0) {
+			if (lk.getValue() == lock) {
+				if (lk.addTime(time) <= 0) {
 					it.remove();
 				}
 
@@ -775,7 +774,7 @@ public class Hand {
 	}
 
 	public int getLockTime(Lock lock) {
-		return locks.stream().filter(t -> t.obj().equals(lock)).map(Timed::time).mapToInt(AtomicInteger::get).sum();
+		return locks.stream().filter(t -> t.getValue().equals(lock)).mapToInt(Timed::getTime).sum();
 	}
 
 	public BaseValues getBase() {

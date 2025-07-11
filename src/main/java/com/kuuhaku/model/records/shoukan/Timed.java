@@ -18,24 +18,32 @@
 
 package com.kuuhaku.model.records.shoukan;
 
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
+public final class Timed<T> {
+	private final T value;
+	private int time;
 
-public record Timed<T>(T obj, AtomicInteger time) {
-	public Timed(T t, int time) {
-		this(t, new AtomicInteger(time));
+	public Timed(T value, int time) {
+		this.value = value;
+		this.time = time;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Timed<?> timed = (Timed<?>) o;
-		return Objects.equals(obj, timed.obj);
+	public T getValue() {
+		return value;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(obj);
+	public int getTime() {
+		return time;
+	}
+
+	public int addTime(int extra) {
+		return time += extra;
+	}
+
+	public int reduceTime(int extra) {
+		return time -= extra;
+	}
+
+	public void setTime(int time) {
+		this.time = time;
 	}
 }

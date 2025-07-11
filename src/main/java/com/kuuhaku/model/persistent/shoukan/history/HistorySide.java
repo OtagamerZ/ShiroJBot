@@ -100,7 +100,7 @@ public class HistorySide extends DAO<HistorySide> {
 		this.activeDot = h.getRegDeg().peek();
 
 		for (Timed<Lock> lock : h.getLocks()) {
-			this.locks.put(lock.obj().name(), lock.time());
+			this.locks.put(lock.getValue().name(), lock.getTime());
 		}
 
 		List<Pair<List<Drawable<?>>, JSONArray>> stacks = List.of(

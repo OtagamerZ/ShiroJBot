@@ -608,10 +608,10 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 
 					g1.setColor(Color.RED);
 					g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(rad));
-					String text = String.valueOf(lock.time());
+					String text = String.valueOf(lock.getTime());
 
 					FontMetrics fm = g1.getFontMetrics();
-					g1.drawImage(lock.obj().getImage(true),
+					g1.drawImage(lock.getValue().getImage(true),
 							(rad + 5 + fm.stringWidth("00")) * (i % 3), yOffset * row,
 							rad, rad,
 							null

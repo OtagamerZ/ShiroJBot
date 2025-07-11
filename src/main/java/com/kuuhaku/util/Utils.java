@@ -833,17 +833,17 @@ public abstract class Utils {
 		return match;
 	}
 
-	public static String didYouMean(String word, @Language("PostgreSQL") String query, Object... params) {
+	public static String didYouMean(String word, @Language("PostgreSQL") String query) {
 		return DAO.queryNative(String.class, """
 				SELECT x."value"
 				FROM (
 				     SELECT x."value"
-				      	  , levenshtein_less_equal(substring(x."value" FOR length('%1$S')), '%1$S', 5) AS dist
-				     FROM (%2$s) x
+				      	  , levenshtein_less_equal(substring(x."value" FOR length(?1)), ?1, 5) AS dist
+				     FROM (%1$s) x
 				     ) x
 				WHERE x.dist <= 5
 				ORDER BY x.dist
-				""".formatted(word, query), params);
+				""".formatted(query), word);
 	}
 
 	public static Pair<CommandLine, Options> getCardCLI(I18N locale, String[] args, boolean market) {
