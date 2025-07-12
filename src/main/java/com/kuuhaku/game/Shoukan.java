@@ -2199,7 +2199,11 @@ public class Shoukan extends GameInstance<Phase> {
 				cond = defeat.key();
 			}
 
-			new MatchHistory(this, cond, getTurns()).save();
+			try {
+				new MatchHistory(this, cond, getTurns()).save();
+			} catch (Exception e) {
+				Constants.LOGGER.error(e, e);
+			}
 		}
 
 		close(code);
