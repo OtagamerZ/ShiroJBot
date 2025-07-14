@@ -2244,7 +2244,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 	private ButtonizeHelper getButtons() {
 		List<String> allowed = List.of(
-				getString("str/next_turn"),
 				getString("str/view_equips"),
 				getString("str/view_history"),
 				getString("str/surrender")
@@ -2344,7 +2343,7 @@ public class Shoukan extends GameInstance<Phase> {
 					.setEphemeral(true)
 					.sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png"));
 
-			List<Drawable<?>> cards = h.getCards(false);
+			List<Drawable<?>> cards = List.copyOf(h.getCards(false));
 			if (cards.isEmpty() || h.getSide() != getCurrentSide()) {
 				act.queue();
 			} else {
