@@ -2127,86 +2127,88 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, Side winner, String message, Object... args) {
-		if (isClosed()) return;
+		try {
+			if (isClosed()) return;
 
-		turns.add(new HistoryTurn(this));
+			turns.add(new HistoryTurn(this));
 
-		setRestoring(true);
-		for (List<SlotColumn> slts : arena.getSlots().values()) {
-			for (SlotColumn slt : slts) {
-				for (Senshi card : slt.getCards()) {
-					if (card != null) {
-						card.setFlipped(false);
+			setRestoring(true);
+			for (List<SlotColumn> slts : arena.getSlots().values()) {
+				for (SlotColumn slt : slts) {
+					for (Senshi card : slt.getCards()) {
+						if (card != null) {
+							card.setFlipped(false);
+						}
 					}
 				}
 			}
-		}
-		setRestoring(false);
+			setRestoring(false);
 
-		ClusterAction msg;
-		SpecialDefeat defeat = null;
-		if (winner != null) {
-			defeat = hands.get(winner.getOther()).getDefeat();
-		}
-
-		if (defeat != null) {
-			String special = getString(defeat.key(), defeat.args());
-			msg = getChannel().sendMessage(getString(message, ArrayUtils.addFirst(args, special)));
-		} else {
-			msg = getChannel().sendMessage(getString(message, args));
-		}
-
-		AtomicBoolean registered = new AtomicBoolean();
-
-		try {
-			BufferedImage img = arena.render(getLocale()).get();
-			byte[] bytes = IO.getBytes(img, "jpg");
-			msg.addFile(bytes, "game.jpg");
-		} catch (Exception ignore) {
-		}
-
-		msg.queue(m -> {
-			if (!registered.get()) {
-				getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
-				registered.set(true);
+			ClusterAction msg;
+			SpecialDefeat defeat = null;
+			if (winner != null) {
+				defeat = hands.get(winner.getOther()).getDefeat();
 			}
-		}, Utils::doNothing);
 
-		List<RestAction<?>> acts = new ArrayList<>();
-		for (Map.Entry<String, String> tuple : messages.entrySet()) {
-			if (tuple != null) {
-				GuildMessageChannel channel = Main.getApp().getMessageChannelById(tuple.getKey());
-				if (channel != null) {
-					acts.add(channel.retrieveMessageById(tuple.getValue()).flatMap(Objects::nonNull, Message::delete));
-				}
+			if (defeat != null) {
+				String special = getString(defeat.key(), defeat.args());
+				msg = getChannel().sendMessage(getString(message, ArrayUtils.addFirst(args, special)));
+			} else {
+				msg = getChannel().sendMessage(getString(message, args));
 			}
-		}
 
-		if (!acts.isEmpty()) {
-			Pages.subGet(RestAction.allOf(acts));
-		}
-
-		if (winner != null) {
-			this.winner = winner;
-		}
-
-		if (Utils.equalsAny(code, GameReport.SUCCESS, GameReport.GAME_TIMEOUT) && isNotVoided() && winner != null) {
-			String cond = "default";
-			if (code == GameReport.GAME_TIMEOUT) {
-				cond = "wo";
-				hands.get(winner.getOther()).getAccount().addItem("LEAVER_TICKER", 1);
-			} else if (defeat != null) {
-				cond = defeat.key();
-			}
+			AtomicBoolean registered = new AtomicBoolean();
 
 			try {
-				new MatchHistory(this, cond, getTurns()).save();
-			} catch (Exception e) {
-				Constants.LOGGER.error(e, e);
+				BufferedImage img = arena.render(getLocale()).get();
+				byte[] bytes = IO.getBytes(img, "jpg");
+				msg.addFile(bytes, "game.jpg");
+			} catch (Exception ignore) {
 			}
-		}
 
-		close(code);
+			msg.queue(m -> {
+				if (!registered.get()) {
+					getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+					registered.set(true);
+				}
+			}, Utils::doNothing);
+
+			List<RestAction<?>> acts = new ArrayList<>();
+			for (Map.Entry<String, String> tuple : messages.entrySet()) {
+				if (tuple != null) {
+					GuildMessageChannel channel = Main.getApp().getMessageChannelById(tuple.getKey());
+					if (channel != null) {
+						acts.add(channel.retrieveMessageById(tuple.getValue()).flatMap(Objects::nonNull, Message::delete));
+					}
+				}
+			}
+
+			if (!acts.isEmpty()) {
+				Pages.subGet(RestAction.allOf(acts));
+			}
+
+			if (winner != null) {
+				this.winner = winner;
+			}
+
+			if (Utils.equalsAny(code, GameReport.SUCCESS, GameReport.GAME_TIMEOUT) && isNotVoided() && winner != null) {
+				String cond = "default";
+				if (code == GameReport.GAME_TIMEOUT) {
+					cond = "wo";
+					hands.get(winner.getOther()).getAccount().addItem("LEAVER_TICKER", 1);
+				} else if (defeat != null) {
+					cond = defeat.key();
+				}
+
+				try {
+					new MatchHistory(this, cond, getTurns()).save();
+				} catch (Exception e) {
+					Constants.LOGGER.error(e, e);
+				}
+			}
+		} finally {
+			close(code);
+		}
 	}
 
 	@SafeVarargs

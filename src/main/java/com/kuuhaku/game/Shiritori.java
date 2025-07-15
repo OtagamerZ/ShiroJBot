@@ -192,20 +192,24 @@ public class Shiritori extends GameInstance<NullPhase> {
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
-		getChannel().sendMessage(getString(msg, args))
-				.queue(m -> {
-					if (message != null) {
-						GuildMessageChannel channel = Main.getApp().getMessageChannelById(message.getFirst());
-						if (channel != null) {
-							channel.retrieveMessageById(message.getSecond())
-									.flatMap(Objects::nonNull, Message::delete)
-									.queue(null, Utils::doNothing);
-							message = null;
-						}
-					}
-				}, Utils::doNothing);
+		try {
+			if (isClosed()) return;
 
-		close(code);
+			getChannel().sendMessage(getString(msg, args))
+					.queue(m -> {
+						if (message != null) {
+							GuildMessageChannel channel = Main.getApp().getMessageChannelById(message.getFirst());
+							if (channel != null) {
+								channel.retrieveMessageById(message.getSecond())
+										.flatMap(Objects::nonNull, Message::delete)
+										.queue(null, Utils::doNothing);
+								message = null;
+							}
+						}
+					}, Utils::doNothing);
+		} finally {
+			close(code);
+		}
 	}
 
 	@Override
