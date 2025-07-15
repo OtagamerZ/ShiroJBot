@@ -102,20 +102,20 @@ configurations.configureEach {
 dependencies {
 	//Core
 	implementation group: "net.dv8tion", name: "JDA", version: "5.6.1"
-	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "7b44209"
+	implementation group: "com.github.ygimenez", name: "Pagination-Utils", version: "4.1.4b"
 	implementation group: "com.github.ygimenez", name: "Simple-Moshi", version: "1.1.2"
 
 	//Database
 	implementation group: "org.postgresql", name: "postgresql", version: "42.7.7"
 	implementation group: "jakarta.persistence", name: "jakarta.persistence-api", version: "3.2.0"
-	implementation group: "org.hibernate.orm", name: "hibernate-core", version: "7.0.4.Final"
-	implementation group: "org.hibernate.orm", name: "hibernate-hikaricp", version: "7.0.4.Final"
-	implementation group: "org.hibernate.orm", name: "hibernate-jcache", version: "7.0.4.Final"
+	implementation group: "org.hibernate.orm", name: "hibernate-core", version: "7.0.6.Final"
+	implementation group: "org.hibernate.orm", name: "hibernate-hikaricp", version: "7.0.6.Final"
+	implementation group: "org.hibernate.orm", name: "hibernate-jcache", version: "7.0.6.Final"
 	implementation group: "com.zaxxer", name: "HikariCP", version: "6.3.0"
 
 	//Cache
-	implementation group: "com.github.ben-manes.caffeine", name: "caffeine", version: "3.2.1"
-	implementation group: "com.github.ben-manes.caffeine", name: "jcache", version: "3.2.1"
+	implementation group: "com.github.ben-manes.caffeine", name: "caffeine", version: "3.2.2"
+	implementation group: "com.github.ben-manes.caffeine", name: "jcache", version: "3.2.2"
 
 	//Compiler
 	implementation group: "org.apache.groovy", name: "groovy", version: "4.0.27"
@@ -128,13 +128,13 @@ dependencies {
 	implementation group: "club.minnced", name: "discord-webhooks", version: "0.8.4"
 
 	//Apache Commons
-	implementation group: "org.apache.commons", name: "commons-lang3", version: "3.17.0"
+	implementation group: "org.apache.commons", name: "commons-lang3", version: "3.18.0"
 	implementation group: "org.apache.commons", name: "commons-text", version: "1.13.1"
 	implementation group: "org.apache.commons", name: "commons-math3", version: "3.6.1"
 	implementation group: "org.apache.commons", name: "commons-imaging", version: "1.0.0-alpha6"
 	implementation group: "org.apache.commons", name: "commons-compress", version: "1.27.1"
 	implementation group: "org.apache.httpcomponents.client5", name: "httpclient5", version: "5.5"
-	implementation group: "commons-validator", name: "commons-validator", version: "1.9.0"
+	implementation group: "commons-validator", name: "commons-validator", version: "1.10.0"
 	implementation group: "commons-codec", name: "commons-codec", version: "1.18.0"
 	implementation group: "commons-cli", name: "commons-cli", version: "1.9.0"
 	implementation group: "commons-io", name: "commons-io", version: "2.19.0"
@@ -142,10 +142,10 @@ dependencies {
 	//Logger
 	implementation group: "org.slf4j", name: "slf4j-api", version: "2.0.17"
 	implementation group: "org.slf4j", name: "slf4j-log4j12", version: "2.0.17"
-	implementation group: "org.apache.logging.log4j", name: "log4j-api", version: "2.25.0"
-	implementation group: "org.apache.logging.log4j", name: "log4j-1.2-api", version: "2.25.0"
-	implementation group: "org.apache.logging.log4j", name: "log4j-core", version: "2.25.0"
-	implementation group: "org.apache.logging.log4j", name: "log4j-slf4j-impl", version: "2.25.0"
+	implementation group: "org.apache.logging.log4j", name: "log4j-api", version: "2.25.1"
+	implementation group: "org.apache.logging.log4j", name: "log4j-1.2-api", version: "2.25.1"
+	implementation group: "org.apache.logging.log4j", name: "log4j-core", version: "2.25.1"
+	implementation group: "org.apache.logging.log4j", name: "log4j-slf4j-impl", version: "2.25.1"
 	implementation group: "com.lmax", name: "disruptor", version: "4.0.0"
 
 	//Util
