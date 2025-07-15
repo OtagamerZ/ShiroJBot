@@ -504,7 +504,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 				FROM MatchHistory mh
 				WHERE ?1 IN (mh.info.top.id.uid, mh.info.bottom.id.uid)
 				ORDER BY mh.id DESC
-				""");
+				""", uid);
 	}
 
 	@Override
