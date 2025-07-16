@@ -61,6 +61,9 @@ public class MonsterStats implements Serializable {
 	@Column(name = "initiative", nullable = false)
 	private int initiative;
 
+	@Column(name = "kill_xp", nullable = false)
+	private int killXp;
+
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
@@ -75,7 +78,7 @@ public class MonsterStats implements Serializable {
 	public MonsterStats() {
 	}
 
-	public MonsterStats(int baseHp, Race race, int attack, int defense, int dodge, int parry, int maxAp, int initiative) {
+	public MonsterStats(int baseHp, Race race, int attack, int defense, int dodge, int parry, int maxAp, int initiative, int killXp) {
 		this.baseHp = baseHp;
 		this.race = race;
 		this.attack = attack;
@@ -84,6 +87,7 @@ public class MonsterStats implements Serializable {
 		this.parry = parry;
 		this.maxAp = maxAp;
 		this.initiative = initiative;
+		this.killXp = killXp;
 	}
 
 	public int getBaseHp() {
@@ -120,6 +124,10 @@ public class MonsterStats implements Serializable {
 
 	public int getInitiative() {
 		return initiative;
+	}
+
+	public int getKillXp() {
+		return killXp;
 	}
 
 	public boolean isMinion() {

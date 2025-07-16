@@ -309,7 +309,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 									int lvl = n.getStats().getLevel();
 									int diff = Math.abs(getAreaLevel() - lvl) - 5;
 
-									if (diff > 5) {
+									if (diff > 0) {
 										gain = (int) (gain * Math.min(Math.pow(0.8, diff), 1));
 									}
 

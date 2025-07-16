@@ -236,18 +236,16 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		if (stats.isMinion()) return 0;
 
 		double mult = switch (getRarityClass()) {
-			case NORMAL -> 1;
+			case NORMAL, UNIQUE -> 1;
 			case MAGIC -> 1.5;
 			case RARE -> 2.25;
-			case UNIQUE -> 10;
 		};
 
-		double xp = getMaxHp() / 500d + getSenshi().getDmg() / 175d + getSenshi().getDfs() / 250d;
 		if (game != null) {
-			xp *= 1 + game.getAreaLevel() * 0.1;
+			mult *= 1 + game.getAreaLevel() / 10d;
 		}
 
-		return (int) (xp * mult);
+		return (int) (stats.getKillXp() * mult);
 	}
 
 	@Override
@@ -351,7 +349,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends DAO<T> imple
 		dummy.stats = new MonsterStats(
 				of.getMaxHp(), of.getRace(),
 				sof.getDmg(), sof.getDfs(), sof.getDodge(), sof.getParry(),
-				of.getMaxAp(), of.getInitiative()
+				of.getMaxAp(), of.getInitiative(), 0
 		);
 
 		return (Monster) dummy;
