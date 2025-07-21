@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
+	private T current;
 	private int index = -1;
 
 	public InfiniteList() {
@@ -48,13 +49,13 @@ public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
 	public T getNext() {
 		if (isEmpty()) throw new IllegalStateException("This collection is empty");
 
-		return get(index = next());
+		return current = get(index = next());
 	}
 
 	public T getPrevious() {
 		if (isEmpty()) throw new IllegalStateException("This collection is empty");
 
-		return get(index = previous());
+		return current = get(index = previous());
 	}
 
 	public T peekNext() {
@@ -69,17 +70,14 @@ public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
 		return get(previous());
 	}
 
-	public T get() {
-		if (isEmpty()) return null;
-		else if (index == -1 || index >= size()) index = 0;
-
-		return get(index);
+	public T getCurrent() {
+		return current;
 	}
 
 	public T remove() {
 		if (isEmpty()) return null;
 
-		return remove(index);
+		return remove(current) ? current : null;
 	}
 
 	public int getIndex() {

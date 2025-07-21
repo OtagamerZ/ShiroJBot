@@ -54,10 +54,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -95,7 +92,7 @@ public class HeroCommand implements Executable {
 					.setAuthor(locale.get("str/hero_info", h.getName()))
 					.setImage("attachment://card.png");
 
-			h.asSenshi(locale);
+			h.createSenshi(locale);
 			eb.addField(Constants.VOID, """
 					HP: %s (%s)
 					%s/%s (%s)
@@ -234,7 +231,7 @@ public class HeroCommand implements Executable {
 				.setThumbnail("attachment://card.png");
 
 		List<Skill> skills = h.getSkills();
-		skills.removeIf(s -> s == null || s.getReqRace() != null);
+		skills.removeIf(Objects::isNull);
 
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
@@ -253,13 +250,13 @@ public class HeroCommand implements Executable {
 						String prefix;
 						if (idx > -1) {
 							prefix = Utils.fancyNumber(idx + 1);
-						} else if (!(s.isFree() || h.getStats().getUnlockedSkills().contains(s.getId()))) {
+						} else if (!h.getStats().getUnlockedSkills().contains(s.getId())) {
 							prefix = "🔒";
 						} else {
 							prefix = "";
 						}
 
-						Attributes reqs = s.getRequirements();
+						Attributes reqs = s.getRequirements().attributes();
 						List<String> reqLine = new ArrayList<>();
 						if (reqs.str() > 0) reqLine.add("STR: " + reqs.str());
 						if (reqs.dex() > 0) reqLine.add("DEX: " + reqs.dex());
@@ -267,7 +264,7 @@ public class HeroCommand implements Executable {
 						if (reqs.vit() > 0) reqLine.add("VIT: " + reqs.vit());
 
 						String reqTags = Utils.properlyJoin(locale.get("str/and")).apply(
-								s.getReqTags().stream()
+								s.getRequirements().tags().stream()
 										.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
 										.toList()
 						);
@@ -280,7 +277,7 @@ public class HeroCommand implements Executable {
 								? ("- " + (attr.has(reqs) ? "" : "\\❌ ") + String.join(" | ", reqLine) + "\n")
 								: "";
 						return new FieldMimic(
-								prefix + " " + s.getName(locale) + " " + StringUtils.repeat('◈', s.getApCost()),
+								prefix + " " + s.getName(locale) + " " + StringUtils.repeat('◈', s.getStats().getCost()),
 								"-# ID: `" + s.getId() + "`\n" +
 								(req + s.getDescription(locale, h)).lines()
 										.map(l -> "-# " + l)
@@ -327,15 +324,12 @@ public class HeroCommand implements Executable {
 						w.getChannel().sendMessage(locale.get("error/unknown_skill", sug)).queue();
 					}
 					return;
-				} else if (s.getReqRace() != null) {
-					w.getChannel().sendMessage(locale.get("error/innate_skill")).queue();
-					return;
-				} else if (!h.getAttributes().has(s.getRequirements())) {
+				} else if (!h.getAttributes().has(s.getRequirements().attributes())) {
 					w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 					return;
 				}
 
-				if (!(s.isFree() || h.getStats().getUnlockedSkills().contains(s.getId()))) {
+				if (!h.getStats().getUnlockedSkills().contains(s.getId())) {
 					if (h.getStats().getPointsLeft() <= 0) {
 						w.getChannel().sendMessage(locale.get("error/insufficient_points")).queue();
 						return;
@@ -402,7 +396,7 @@ public class HeroCommand implements Executable {
 				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
 					Hero nh = h.refresh();
 					nh.getStats().setUnlockedSkills(h.getStats().getUnlockedSkills());
-					nh.setSkills(skills);
+					nh.getCache().setSkills(skills);
 					nh.save();
 
 					w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();
@@ -455,7 +449,7 @@ public class HeroCommand implements Executable {
 				return;
 			} else {
 				GearStats stats = g.getBasetype().getStats();
-				if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes().has(stats.requirements())) {
+				if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes().has(stats.requirements().attributes())) {
 					w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 					return;
 				}
@@ -502,7 +496,7 @@ public class HeroCommand implements Executable {
 		acts.put(new EmojiId(Utils.parseEmoji(Constants.RETURN)), w -> restore.accept(w.getMessage()));
 		acts.put(new EmojiId(Utils.parseEmoji(Constants.ACCEPT)), w -> {
 			Hero nh = h.refresh();
-			nh.setEquipment(h.getEquipment());
+			nh.getCache().setEquipment(h.getEquipment());
 			nh.save();
 
 			w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();

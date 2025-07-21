@@ -33,6 +33,16 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
 public abstract class Calc {
+	public static int trunc(double value) {
+		return (int) trunc(value, 0);
+	}
+
+	public static double trunc(double value, int places) {
+		if (places < 0) throw new IllegalArgumentException();
+
+		return Precision.round(value, places, RoundingMode.DOWN.ordinal());
+	}
+
 	public static int round(double value) {
 		return (int) round(value, 0);
 	}

@@ -66,11 +66,11 @@ public class Shiritori extends GameInstance<NullPhase> {
 		this.dict = IO.getResourceAsFile("shiritori/" + locale.name().toLowerCase() + ".dict");
 
 		setTimeout(turn -> {
-			getChannel().sendMessage(locale.get("str/game_wo_alt", "<@" + inGame.get() + ">", "<@" + inGame.peekNext() + ">")).queue();
+			getChannel().sendMessage(locale.get("str/game_wo_alt", "<@" + inGame.getCurrent() + ">", "<@" + inGame.peekNext() + ">")).queue();
 			inGame.remove();
 
 			if (inGame.size() == 1) {
-				reportResult(GameReport.SUCCESS, "str/game_end_alt", "<@" + inGame.get() + ">");
+				reportResult(GameReport.SUCCESS, "str/game_end_alt", "<@" + inGame.getCurrent() + ">");
 				return;
 			}
 
@@ -80,7 +80,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 	@Override
 	protected boolean validate(Message message) {
-		return message.getAuthor().getId().equals(inGame.get());
+		return message.getAuthor().getId().equals(inGame.getCurrent());
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 			return;
 		}
 
-		reportEvent("str/game_start_shiritori", "<@" + inGame.get() + ">");
+		reportEvent("str/game_start_shiritori", "<@" + inGame.getCurrent() + ">");
 	}
 
 	@Override
@@ -109,11 +109,11 @@ public class Shiritori extends GameInstance<NullPhase> {
 		try {
 			if (scanWord(word)) {
 				if (used.contains(word)) {
-					getChannel().sendMessage(getString("str/game_out_shiritori", "<@" + inGame.get() + ">")).queue();
+					getChannel().sendMessage(getString("str/game_out_shiritori", "<@" + inGame.getCurrent() + ">")).queue();
 					inGame.remove();
 
 					if (inGame.size() == 1) {
-						reportResult(GameReport.SUCCESS, "str/game_end_alt", "<@" + inGame.get() + ">");
+						reportResult(GameReport.SUCCESS, "str/game_end_alt", "<@" + inGame.getCurrent() + ">");
 						return;
 					}
 
@@ -226,11 +226,11 @@ public class Shiritori extends GameInstance<NullPhase> {
 			if (getTurn() == 50) {
 				getChannel().sendMessage(getString("alert/shiritori_sudden_death")).queue();
 				setTimeout(turn -> {
-					getChannel().sendMessage(getString("str/game_wo_alt", "<@" + inGame.get() + ">", "<@" + inGame.peekNext() + ">")).queue();
+					getChannel().sendMessage(getString("str/game_wo_alt", "<@" + inGame.getCurrent() + ">", "<@" + inGame.peekNext() + ">")).queue();
 					inGame.remove();
 
 					if (inGame.size() == 1) {
-						reportResult(GameReport.SUCCESS, "str/game_end_alt", "<@" + inGame.get() + ">");
+						reportResult(GameReport.SUCCESS, "str/game_end_alt", "<@" + inGame.getCurrent() + ">");
 						return;
 					}
 

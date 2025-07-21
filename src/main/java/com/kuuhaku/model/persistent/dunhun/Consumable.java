@@ -21,8 +21,8 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
-import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.CpuRule;
 import com.kuuhaku.model.persistent.localized.LocalizedConsumable;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
@@ -30,7 +30,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.intellij.lang.annotations.Language;
 
 import java.util.*;
 
@@ -45,24 +44,25 @@ public class Consumable extends DAO<Consumable> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
+	@Embedded
+	private SkillStats stats = new SkillStats();
+
 	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedConsumable> infos = new HashSet<>();
 
-	@Language("Groovy")
-	@Column(name = "effect", columnDefinition = "TEXT")
-	private String effect;
-
-	@Language("Groovy")
-	@Column(name = "targeter", columnDefinition = "TEXT")
-	private String targeter;
-
 	@Column(name = "price")
 	private Integer price;
 
+	private transient int count;
+
 	public String getId() {
 		return id;
+	}
+
+	public SkillStats getStats() {
+		return stats;
 	}
 
 	public String getName(I18N locale) {
@@ -73,45 +73,50 @@ public class Consumable extends DAO<Consumable> {
 		return getInfo(locale).setUwu(locale.isUwu()).getDescription();
 	}
 
-	public int getPrice() {
-		return price;
-	}
-
-	public void execute(I18N locale, Combat combat, Actor source, Actor target) {
-		try {
-			Utils.exec(id, effect, Map.of(
-					"locale", locale,
-					"combat", combat,
-					"actor", source,
-					"target", target
-			));
-		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to execute skill {}", id, e);
-		}
-	}
-
-	public List<Actor> getTargets(Combat combat, Actor source) {
-		if (targeter == null) return List.of(source);
-
-		List<Actor> out = new ArrayList<>();
-		try {
-			Utils.exec(id, targeter, Map.of(
-					"combat", combat,
-					"actor", source,
-					"targets", out
-			));
-		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to load targets {}", id, e);
-		}
-
-		return out;
-	}
-
 	public LocalizedConsumable getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.map(ld -> ld.setUwu(locale.isUwu()))
 				.findAny().orElseThrow();
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void add(int amount) {
+		count += amount;
+	}
+
+	public void consume(int amount) {
+		count = Math.max(0, count - amount);
+	}
+
+	public List<Actor<?>> getTargets(Actor<?> source) {
+		return stats.getTargets(id, source);
+	}
+
+	public CpuRule canCpuUse(Actor<?> source, Actor<?> target) {
+		return stats.canCpuUse(id, source, target);
+	}
+
+	public void execute(Actor<?> source, Actor<?> target) {
+		try {
+			if (count <= 0) return;
+			Utils.exec(id, stats.getEffect(), Map.of(
+					"game", source.getGame(),
+					"actor", source,
+					"target", target
+			));
+
+			count--;
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to execute consumable {}", id, e);
+		}
 	}
 
 	@Override

@@ -21,23 +21,18 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
-import com.kuuhaku.model.common.dunhun.Combat;
-import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
+import com.kuuhaku.model.enums.dunhun.CpuRule;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
-import com.kuuhaku.model.records.dunhun.Attributes;
-import com.kuuhaku.util.Calc;
+import com.kuuhaku.model.records.dunhun.Requirements;
 import com.kuuhaku.util.Utils;
-import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.*;
-import org.hibernate.type.SqlTypes;
-import org.intellij.lang.annotations.Language;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.slf4j.helpers.MessageFormatter;
 
 import java.util.*;
 
@@ -52,40 +47,16 @@ public class Skill extends DAO<Skill> implements Cloneable {
 	@Column(name = "id", nullable = false)
 	private String id;
 
+	@Embedded
+	private SkillStats stats = new SkillStats();
+
 	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedSkill> infos = new HashSet<>();
 
-	@Column(name = "ap_cost", nullable = false)
-	private int apCost;
-
-	@Column(name = "cooldown", nullable = false)
-	private int cooldown;
-
-	@Language("Groovy")
-	@Column(name = "effect", nullable = false, columnDefinition = "TEXT")
-	private String effect;
-
-	@Language("Groovy")
-	@Column(name = "targeter", columnDefinition = "TEXT")
-	private String targeter;
-
-	@Language("Groovy")
-	@Column(name = "cpu_rule", columnDefinition = "TEXT")
-	private String cpuRule;
-
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "req_tags", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray reqTags;
-
 	@Embedded
-	private Attributes requirements;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "req_race")
-	private Race reqRace;
+	private Requirements requirements;
 
 	@Transient
 	private transient JSONObject ctxVar = new JSONObject();
@@ -95,52 +66,34 @@ public class Skill extends DAO<Skill> implements Cloneable {
 		return id;
 	}
 
+	public SkillStats getStats() {
+		return stats;
+	}
+
 	public String getName(I18N locale) {
 		return getInfo(locale).getName();
 	}
 
 	public String getDescription(I18N locale) {
-		return getInfo(locale).getDescription().replaceAll("\\{(\\d+)(?:-\\d+)?}(%)?", "**$1$2**");
+		return getDescription(locale, null);
 	}
 
-	public String getDescription(I18N locale, Actor source) {
-		return getDescription(locale, source, new ArrayList<>());
-	}
-
-	public String getDescription(I18N locale, Actor source, List<Integer> values) {
-		String desc = getInfo(locale).setUwu(false).getDescription();
-
-		int level;
-		double mult;
-		if (source instanceof Hero h) {
-			level = h.getStats().getLevel();
-			mult = h.asSenshi(locale).getPower() + h.getAttributes().wis() / 100d;
-		} else {
-			MonsterBase<?> m = (MonsterBase<?>) source;
-			level = m.getGame().getAreaLevel();
-
-			mult = switch (m.getRarityClass()) {
-				case RARE -> 2;
-				case MAGIC -> 1.25;
-				default -> 1;
-			} * (m.asSenshi(locale).getPower() + level / 200d);
+	public String getDescription(I18N locale, Actor<?> source) {
+		if (source == null) {
+			return MessageFormatter.basicArrayFormat(
+					getInfo(locale).getDescription(),
+					stats.getValues().stream()
+							.map("**(%s)**"::formatted)
+							.toArray()
+			);
 		}
 
-		desc = Utils.regex(desc, "\\{(\\d+)(?:-(\\d+))?(?::\\((\\d+)\\))?}(%)?").replaceAll(v -> {
-			int min = Integer.parseInt(v.group(1));
-			int max = NumberUtils.toInt(v.group(2), min);
-			int cap = NumberUtils.toInt(v.group(3), 0);
-
-			int val = (int) (min + (max - min) / 100d * level * mult);
-			if (cap != 0) {
-				val = Calc.clamp(val, -cap, cap);
-			}
-
-			values.add(val);
-			return "**" + val + Utils.getOr(v.group(4), "") + "**";
-		});
-
-		return desc;
+		return MessageFormatter.basicArrayFormat(
+				getInfo(locale).getDescription(),
+				stats.getValues().stream()
+						.map(v -> "**%s**".formatted(v.valueFor(this, source)))
+						.toArray()
+		);
 	}
 
 	public LocalizedSkill getInfo(I18N locale) {
@@ -150,29 +103,21 @@ public class Skill extends DAO<Skill> implements Cloneable {
 				.findAny().orElseThrow();
 	}
 
-	public int getApCost() {
-		return apCost;
+	public List<Actor<?>> getTargets(Actor<?> source) {
+		return stats.getTargets(id, source);
 	}
 
-	public int getCooldown() {
-		return cooldown;
+	public CpuRule canCpuUse(Actor<?> source, Actor<?> target) {
+		return stats.canCpuUse(id, source, target);
 	}
 
-	public boolean isFree() {
-		return reqRace != null || id.equalsIgnoreCase("CHANNEL");
-	}
-
-	public void execute(I18N locale, Combat combat, Actor source, Actor target) {
-		List<Integer> values = new ArrayList<>();
-		getDescription(locale, source, values);
-
+	public void execute(Actor<?> source, Actor<?> target) {
 		try {
-			Utils.exec(id, effect, Map.of(
-					"locale", locale,
-					"combat", combat,
+			Utils.exec(id, stats.getEffect(), Map.of(
+					"game", source.getGame(),
 					"actor", source,
 					"target", target,
-					"values", values,
+					"values", getValues(source),
 					"context", ctxVar
 			));
 		} catch (Exception e) {
@@ -180,59 +125,21 @@ public class Skill extends DAO<Skill> implements Cloneable {
 		}
 	}
 
-	public List<Actor> getTargets(Combat combat, Actor source) {
-		if (targeter == null) return List.of(source);
-
-		List<Actor> out = new ArrayList<>();
-		try {
-			Utils.exec(id, targeter, Map.of(
-					"combat", combat,
-					"actor", source,
-					"targets", out
-			));
-		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to load targets {}", id, e);
-		}
-
-		return out;
+	public List<Integer> getValues(Actor<?> source) {
+		return stats.getValues().stream()
+				.map(v -> v.valueFor(this, source))
+				.toList();
 	}
 
-	public Boolean canCpuUse(Combat combat, Actor source, Actor target) {
-		if (cpuRule == null) return null;
-
-		try {
-			JSONObject jo = new JSONObject();
-			jo.put("combat", combat);
-			jo.put("actor", source);
-			jo.put("target", target);
-
-			Object out = Utils.exec(id, cpuRule, jo);
-
-			if (out instanceof Boolean b) return b;
-		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to check CPU rule {}", id, e);
-		}
-
-		return null;
-	}
-
-	public Attributes getRequirements() {
+	public Requirements getRequirements() {
 		return requirements;
 	}
 
-	public JSONArray getReqTags() {
-		return reqTags;
-	}
-
-	public Race getReqRace() {
-		return reqRace;
-	}
-
-	public int getCd() {
+	public int getCooldown() {
 		return cd;
 	}
 
-	public void setCd(int cd) {
+	public void setCooldown(int cd) {
 		this.cd = Math.max(this.cd, cd);
 	}
 
@@ -257,7 +164,6 @@ public class Skill extends DAO<Skill> implements Cloneable {
 	public Skill clone() {
 		try {
 			Skill clone = (Skill) super.clone();
-			clone.reqTags = new JSONArray(reqTags);
 			clone.ctxVar = new JSONObject(ctxVar);
 
 			return clone;

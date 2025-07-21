@@ -30,8 +30,6 @@ import java.io.Serializable;
 
 @Embeddable
 public record GearStats(
-		@Column(name = "req_level", nullable = false)
-		int reqLevel,
 		@Column(name = "attack", nullable = false)
 		int attack,
 		@Column(name = "defense", nullable = false)
@@ -39,7 +37,7 @@ public record GearStats(
 		@Column(name = "critical", nullable = false)
 		float critical,
 		@Embedded
-		Attributes requirements,
+		Requirements requirements,
 		@ManyToOne
 		@JoinColumn(name = "gear_type", nullable = false)
 		GearType gearType,

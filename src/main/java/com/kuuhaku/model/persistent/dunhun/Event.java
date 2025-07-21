@@ -46,7 +46,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "event", schema = "dunhun")
-public class 	Event extends DAO<Event> {
+public class Event extends DAO<Event> {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -65,7 +65,6 @@ public class 	Event extends DAO<Event> {
 
 	private transient final Map<String, Supplier<String>> actions = new HashMap<>();
 	private transient String result;
-	private transient I18N locale;
 
 	public String getId() {
 		return id;
@@ -86,9 +85,8 @@ public class 	Event extends DAO<Event> {
 		this.result = result;
 	}
 
-	public EventDescription parse(I18N locale, Dunhun game) {
-		String desc = getInfo(locale).getDescription();
-		this.locale = locale;
+	public EventDescription parse(Dunhun game) {
+		String desc = getInfo(game.getLocale()).getDescription();
 
 		List<EventAction> out = new ArrayList<>();
 		desc = Utils.regex(desc, "\\[([^\\[\\]]+?)]\\{([^{}]+?)}").replaceAll(m -> {
@@ -100,8 +98,7 @@ public class 	Event extends DAO<Event> {
 
 		try {
 			Utils.exec(id, effect, Map.of(
-					"locale", locale,
-					"dungeon", game,
+					"game", game,
 					"event", this
 			));
 		} catch (Exception e) {
@@ -120,15 +117,15 @@ public class 	Event extends DAO<Event> {
 	}
 
 	public String getEvent(Dunhun game, String key) {
-		return game.parsePlural(LocalizedString.get(locale, "event/" + key));
+		return game.parsePlural(LocalizedString.get(game.getLocale(), "event/" + key));
 	}
 
-	public String getOutcome(String key, Object... args) {
-		return LocalizedString.get(locale, "outcome/" + key).formatted(args);
+	public String getOutcome(Dunhun game, String key, Object... args) {
+		return LocalizedString.get(game.getLocale(), "outcome/" + key).formatted(args);
 	}
 
 	public String getEvent(Dunhun game, String key, String outcome, Object... args) {
-		return getEvent(game, key) + "\n\n" + getOutcome(outcome, args);
+		return getEvent(game, key) + "\n\n" + getOutcome(game, outcome, args);
 	}
 
 	@Override
@@ -145,7 +142,6 @@ public class 	Event extends DAO<Event> {
 	}
 
 	public static Event getRandom() {
-		RandomList<String> rl = new RandomList<>();
 		List<Object[]> evts = DAO.queryAllUnmapped("""
 				SELECT id
 				     , weight
@@ -153,6 +149,7 @@ public class 	Event extends DAO<Event> {
 				WHERE weight > 0
 				""");
 
+		RandomList<String> rl = new RandomList<>();
 		for (Object[] a : evts) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}

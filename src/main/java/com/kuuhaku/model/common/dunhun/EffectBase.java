@@ -11,32 +11,43 @@ import java.util.function.BiConsumer;
 
 public abstract class EffectBase {
 	public final long SERIAL = ThreadLocalRandom.current().nextLong();
-	private final Actor owner;
+	private final Actor<?> owner;
 	private final BiConsumer<EffectBase, CombatContext> effect;
-	private int duration;
+	private boolean closed = false;
+	private boolean lock = false;
 
-	public EffectBase(Actor owner, int duration, ThrowingBiConsumer<EffectBase, CombatContext> effect) {
+	public EffectBase(Actor<?> owner, ThrowingBiConsumer<EffectBase, CombatContext> effect) {
 		this.owner = owner;
-		this.duration = duration;
 		this.effect = effect;
 	}
 
 	@Nullable
-	public Actor getOwner() {
+	public Actor<?> getOwner() {
 		return owner;
-	}
-
-	public int getDuration() {
-		return duration;
-	}
-
-	public boolean decDuration() {
-		if (duration > 0) duration--;
-		return duration == 0;
 	}
 
 	public BiConsumer<EffectBase, CombatContext> getEffect() {
 		return effect;
+	}
+
+	public boolean isClosed() {
+		return closed || !owner.getBinding().isBound();
+	}
+
+	public void close() {
+		closed = true;
+	}
+
+	public boolean isLocked() {
+		return lock || isClosed();
+	}
+
+	public void lock() {
+		lock = true;
+	}
+
+	public void unlock() {
+		lock = false;
 	}
 
 	@Override

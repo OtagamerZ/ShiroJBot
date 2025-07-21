@@ -129,10 +129,7 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public Hero getHero() {
-		//noinspection ConstantValue
-		if (true) return null;
-
-		return DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1 AND h.stats.evil = FALSE", account.getUid());
+		return DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1", account.getUid());
 	}
 
 	public FrameSkin getFrame() {

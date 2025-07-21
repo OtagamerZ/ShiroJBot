@@ -311,6 +311,12 @@ public enum Trigger {
 	ON_DEFER_BINDING,
 
 	/**
+	 * Triggers when the actor revives<br>
+	 * <i>Only in DunHun</i>
+	 */
+	ON_REVIVE,
+
+	/**
 	 * Nothing <b>(DO NOT USE)</b>
 	 **/
 	NONE;

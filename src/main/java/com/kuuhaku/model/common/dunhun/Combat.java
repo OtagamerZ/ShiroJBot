@@ -52,9 +52,10 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class Combat implements Renderer<BufferedImage> {
 	private final ScheduledExecutorService cpu = Executors.newSingleThreadScheduledExecutor();
@@ -62,39 +63,20 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private final Dunhun game;
 	private final I18N locale;
-	private final InfiniteList<Actor> actors = new InfiniteList<>();
-	private final BondedList<Actor> hunters = new BondedList<>((a, it) -> {
-		if (getActors(Team.HUNTERS).size() >= 6) return false;
-
-		a.setFleed(false);
-		a.setTeam(Team.HUNTERS);
-		a.setGame(getGame());
-		getActors(Team.KEEPERS).remove(a);
-		actors.add(a);
-
-		a.getSenshi().setAvailable(true);
-		return true;
-	}, actors::remove);
-	private final BondedList<Actor> keepers = new BondedList<>((a, it) -> {
-		if (getActors(Team.KEEPERS).size() >= 6) return false;
-
-		a.setFleed(false);
-		a.setTeam(Team.KEEPERS);
-		a.setGame(getGame());
-		getActors(Team.HUNTERS).remove(a);
-		actors.add(a);
-
-		a.getSenshi().setAvailable(true);
-		return true;
-	}, actors::remove);
+	private final InfiniteList<Actor<?>> actors = new InfiniteList<>();
+	private final BondedList<Actor<?>> hunters = new BondedList<>(
+			(a, it) -> onAddActor(a, Team.HUNTERS), this::onRemoveActor
+	);
+	private final BondedList<Actor<?>> keepers = new BondedList<>(
+			(a, it) -> onAddActor(a, Team.KEEPERS), this::onRemoveActor
+	);
 	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
-	private final RandomList<Actor> rngList = new RandomList<>();
-	private final Set<EffectBase> effects = new HashSet<>();
+	private final RandomList<Actor<?>> rngList = new RandomList<>();
+	private final TimedMap<EffectBase> effects = new TimedMap<>();
 	private final Loot loot = new Loot();
 
 	private CompletableFuture<Runnable> lock;
 	private boolean done;
-	private Actor current;
 
 	public Combat(Dunhun game, MonsterBase<?>... enemies) {
 		this.game = game;
@@ -103,17 +85,12 @@ public class Combat implements Renderer<BufferedImage> {
 		hunters.addAll(game.getHeroes().values());
 		keepers.addAll(List.of(enemies));
 
-		for (Actor a : hunters) {
-			if (a instanceof Hero h) {
-				h.clearMindControl();
+		for (Actor<?> a : hunters) {
+			a.setAp(0);
+			if (a.getHp() <= 0) {
+				a.setHp(1);
 			}
-
-			a.modAp(-a.getAp());
-			a.revive(1);
-			a.setFleed(false);
 		}
-
-		effects.addAll(game.getEffects());
 	}
 
 	public Combat(Dunhun game, Collection<Hero> duelists) {
@@ -121,20 +98,34 @@ public class Combat implements Renderer<BufferedImage> {
 		this.locale = game.getLocale();
 
 		List<Hero> sides = List.copyOf(duelists);
-		List<Actor> team = hunters;
+		List<Actor<?>> team = hunters;
 		for (List<Hero> hs : ListUtils.partition(sides, sides.size() / 2)) {
 			team.addAll(hs);
 			team = keepers;
 
 			for (Hero h : hs) {
-				h.clearMindControl();
 				h.getSenshi().setFlag(Flag.NO_STASIS);
 				h.getSenshi().setFlag(Flag.NO_PARALYSIS);
 				h.getSenshi().setFlag(Flag.NO_SLEEP);
 			}
 		}
+	}
 
-		effects.addAll(game.getEffects());
+	public boolean onAddActor(Actor<?> actor, Team team) {
+		if (getActors(team).size() >= 6) return false;
+
+		actor.setFleed(false);
+		actor.getBinding().bind(getGame(), team);
+		getActors(team.getOther()).remove(actor);
+		actors.add(actor);
+
+		actor.getSenshi().setAvailable(true);
+		return true;
+	}
+
+	public void onRemoveActor(Actor<?> actor) {
+		actor.getBinding().unbind();
+		actors.remove(actor);
 	}
 
 	@Override
@@ -146,20 +137,20 @@ public class Combat implements Renderer<BufferedImage> {
 
 		int offset = 0;
 		boolean divided = false;
-		for (List<Actor> acts : List.of(hunters, keepers)) {
-			for (Actor a : acts) {
+		for (List<Actor<?>> acts : List.of(hunters, keepers)) {
+			for (Actor<?> a : acts) {
 				BufferedImage card;
 				if (a.isOutOfCombat()) {
 					a.getSenshi().setAvailable(false);
 					BufferedImage overlay = IO.getResourceAsImage("shoukan/states/" + (a.getHp() <= 0 ? "dead" : "flee") + ".png");
 
-					card = a.render(locale);
+					card = a.render();
 					Graph.overlay(card, overlay);
 				} else {
-					card = a.render(locale);
+					card = a.render();
 				}
 
-				if (Objects.equals(a, current)) {
+				if (Objects.equals(a, getCurrent())) {
 					boolean legacy = a.getSenshi().getHand().getUserDeck().getFrame().isLegacy();
 					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
 
@@ -193,7 +184,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public MessageEmbed getEmbed() {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/actor_turn", current.getName(locale)))
+				.setTitle(locale.get("str/actor_turn", getCurrent().getName(locale)))
 				.setDescription(String.join("\n", history))
 				.setFooter(locale.get("str/combat_footer"));
 
@@ -203,9 +194,9 @@ public class Combat implements Renderer<BufferedImage> {
 
 		String title = locale.get("str/hunters");
 		XStringBuilder sb = new XStringBuilder();
-		for (List<Actor> acts : List.of(hunters, keepers)) {
+		for (List<Actor<?>> acts : List.of(hunters, keepers)) {
 			sb.clear();
-			for (Actor a : acts) {
+			for (Actor<?> a : acts) {
 				if (!sb.isEmpty()) sb.nextLine();
 				sb.appendNewLine(a.getName(locale));
 				a.addHpBar(sb);
@@ -226,83 +217,48 @@ public class Combat implements Renderer<BufferedImage> {
 
 		trigger(Trigger.ON_COMBAT);
 		actors.sort(Comparator
-				.comparingInt(Actor::getInitiative).reversed()
+				.<Actor<?>>comparingInt(Actor::getInitiative).reversed()
 				.thenComparingInt(n -> Calc.rng(20, seed - n.hashCode()))
 		);
 
-		loop:
-		for (Actor turn : actors) {
+		for (Actor<?> actor : actors) {
 			if (game.isClosed()) break;
 			else if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
 			else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
 
-			current = turn;
-
 			try {
 				try {
-					Supplier<Boolean> skip = () -> !current.getSenshi().isAvailable()
-												   || current.getSenshi().isStasis()
-												   || current.isOutOfCombat();
-					boolean skipped = skip.get();
-
-					current.getSenshi().reduceDebuffs(1);
-					current.getSenshi().reduceStasis(1);
-					for (Skill s : current.getSkills()) {
+					actor.getSenshi().reduceDebuffs(1);
+					actor.getSenshi().reduceStasis(1);
+					for (Skill s : actor.getSkills()) {
 						s.reduceCd();
 					}
 
-					if (skipped) {
+					actor.setAp(actor.getMaxAp());
+					actor.getSenshi().setDefending(false);
+					actor.getModifiers().expireMods(actor);
+
+					trigger(Trigger.ON_TURN_BEGIN, actor, actor, new AtomicInteger());
+
+					while (actor == getCurrent() && actor.getAp() > 0) {
+						if (!actor.getSenshi().isAvailable() || actor.isOutOfCombat()) break;
+
 						if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
 						else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
-						continue;
-					}
 
-					current.modAp(current.getMaxAp());
-					current.getSenshi().setDefending(false);
-					if (current instanceof Hero h) {
-						h.decMindControl();
-					}
-
-					trigger(Trigger.ON_TURN_BEGIN, current, current);
-					current.getModifiers().expireMods(current);
-
-					for (EffectBase e : Set.copyOf(effects)) {
-						if (e.getOwner() != null && !e.getOwner().equals(current)) {
-							if (!getActors().contains(e.getOwner())) effects.remove(e);
-							continue;
-						}
-
-						if (e.decDuration()) effects.remove(e);
-						if (e instanceof PersistentEffect pe) {
-							pe.getEffect().accept(e, new CombatContext(Trigger.ON_TURN_BEGIN, current, current));
-						}
-					}
-
-					if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
-					else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
-
-					while (current == actors.get() && !skip.get() && current.getAp() > 0) {
 						trigger(Trigger.ON_TICK);
-
 						Runnable action = reload().join();
 						if (action != null) {
 							action.run();
 						}
-
-						if (hunters.stream().allMatch(Actor::isOutOfCombat)) break loop;
-						else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break loop;
 					}
 
-					trigger(Trigger.ON_TURN_END, current, current);
+					trigger(Trigger.ON_TURN_END, actor, actor, new AtomicInteger());
 				} finally {
-					current.getSenshi().setAvailable(true);
+					actor.getSenshi().setAvailable(true);
 
-					if (!current.getSenshi().isStasis()) {
-						int dg = current.getRegDeg().next();
-						if (dg < 0) {
-							current.modHp(dg, false);
-							trigger(Trigger.ON_DEGEN, current, current);
-						}
+					if (!actor.getSenshi().isStasis()) {
+						actor.applyRegDeg();
 					}
 				}
 			} catch (Exception e) {
@@ -311,13 +267,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		trigger(Trigger.ON_VICTORY);
-
 		done = true;
-		for (EffectBase e : effects) {
-			if (e.getOwner() == null || e.getOwner() instanceof Hero) {
-				game.getEffects().add(e);
-			}
-		}
 
 		Pair<String, String> previous = game.getMessage();
 		if (previous != null) {
@@ -337,26 +287,28 @@ public class Combat implements Renderer<BufferedImage> {
 		lock = new CompletableFuture<>();
 
 		ClusterAction ca;
-		if (current instanceof Hero h) {
+		if (getCurrent() instanceof Hero h) {
 			ca = game.getChannel().sendMessage("<@" + h.getAccount().getUid() + ">").embed(getEmbed());
 		} else {
 			ca = game.getChannel().sendEmbed(getEmbed());
 		}
 
 		ButtonizeHelper helper;
-		for (Actor a : getActors()) {
+		for (Actor<?> a : getActors()) {
 			a.getModifiers().removeIf(a, m -> m.getExpiration() == 0);
 		}
 
-		if (current instanceof Hero h && !h.isMindControlled()) {
+		if (getCurrent() instanceof Hero h) {
 			helper = new ButtonizeHelper(true)
 					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 					.setCancellable(false);
 
 			helper.addAction(Utils.parseEmoji("🗡️"), w -> {
-				List<Actor> tgts = getActors(h.getTeam().getOther()).stream()
-						.map(a -> a.isOutOfCombat() ? null : a)
-						.toList();
+				List<Actor<?>> tgts = new ArrayList<>();
+				for (Actor<?> a : getActors(h.getTeam().getOther())) {
+					Actor<?> actor = a.isOutOfCombat() ? null : a;
+					tgts.add(actor);
+				}
 
 				addSelector(w.getMessage(), helper, tgts,
 						t -> lock.complete(() -> attack(h, t, null))
@@ -383,21 +335,21 @@ public class Combat implements Renderer<BufferedImage> {
 					if (skill == null) {
 						game.getChannel().sendMessage(locale.get("error/invalid_skill")).queue();
 						return;
-					} else if (skill.getApCost() > h.getAp()) {
+					} else if (skill.getStats().getCost() > h.getAp()) {
 						game.getChannel().sendMessage(locale.get("error/not_enough_ap")).queue();
 						return;
-					} else if (skill.getCd() > 0) {
+					} else if (skill.getCooldown() > 0) {
 						game.getChannel().sendMessage(locale.get("error/skill_cooldown")).queue();
 						return;
 					}
 
-					JSONArray tags = h.getWeaponTags();
-					if (!tags.containsAll(skill.getReqTags())) {
+					JSONArray tags = h.getEquipment().getWeaponTags();
+					if (!tags.containsAll(skill.getRequirements().tags())) {
 						game.getChannel().sendMessage(locale.get("error/invalid_weapon")).queue();
 						return;
 					}
 
-					addSelector(w.getMessage(), helper, skill.getTargets(this, h),
+					addSelector(w.getMessage(), helper, skill.getTargets(h),
 							t -> lock.complete(() -> skill(skill, h, t))
 					);
 				});
@@ -418,11 +370,10 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					addSelector(w.getMessage(), helper, con.getTargets(this, h),
+					addSelector(w.getMessage(), helper, con.getTargets(h),
 							t -> lock.complete(() -> {
-								con.execute(locale, this, h, t);
-								h.getSpentConsumables().compute(con, (k, v) -> v == null ? 1 : v + 1);
-								h.modAp(-1);
+								con.execute(h, t);
+								h.consumeAp(1);
 
 								history.add(locale.get(t.equals(h) ? "str/used_self" : "str/used",
 										h.getName(), con.getName(locale), t.getName(locale))
@@ -434,7 +385,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			helper.addAction(Utils.parseEmoji("🛡️"), w -> lock.complete(() -> {
 						h.getSenshi().setDefending(true);
-						h.modAp(-h.getAp());
+						h.setAp(0);
 
 						history.add(locale.get("str/actor_defend", h.getName()));
 					}))
@@ -444,7 +395,7 @@ public class Combat implements Renderer<BufferedImage> {
 								.setCancellable(false)
 								.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() -> {
 									h.setFleed(true);
-									h.modAp(-h.getAp());
+									h.setAp(0);
 								}))
 								.addAction(Utils.parseEmoji(Constants.RETURN), v -> {
 									MessageEditAction ma = helper.apply(v.getMessage().editMessageComponents());
@@ -464,24 +415,24 @@ public class Combat implements Renderer<BufferedImage> {
 		} else {
 			helper = null;
 
-			Actor curr = current;
+			Actor<?> curr = getCurrent();
 			cpu.schedule(() -> {
 				try {
 					boolean canAttack = curr.getSenshi().getDmg() > 0;
 					boolean canDefend = curr.getSenshi().getDfs() > 0;
-					Function<Actor, Integer> criteria = a -> {
+					Function<Actor<?>, Integer> criteria = a -> {
 						if (a.getTeam() == curr.getTeam()) return a.getAggroScore();
 
 						Senshi sen = a.getSenshi();
 						return (int) (a.getAggroScore() * (1 - sen.getDodge() / 100d) * (1 - sen.getParry() / 100d));
 					};
 
-					List<Actor> tgts = getActors(curr.getTeam().getOther()).stream()
+					List<Actor<?>> attackTgts = getActors(curr.getTeam().getOther()).stream()
 							.filter(a -> !a.isOutOfCombat())
 							.toList();
 
 					if (curr.getAp() == 1) {
-						double threat = tgts.stream()
+						double threat = attackTgts.stream()
 								.mapToInt(a -> a.getHp() * a.getAggroScore() / a.getMaxHp())
 								.average()
 								.orElse(1);
@@ -496,59 +447,42 @@ public class Combat implements Renderer<BufferedImage> {
 
 						if (canDefend && Calc.chance(5 * risk)) {
 							curr.getSenshi().setDefending(true);
-							curr.modAp(-curr.getAp());
+							curr.setAp(0);
 
 							history.add(locale.get("str/actor_defend", curr.getName(locale)));
 							return;
 						}
 					}
 
-					boolean forcing = false;
-					List<Skill> skills = new ArrayList<>();
-					for (Skill s : curr.getSkills()) {
-						if (s.getApCost() > curr.getAp() || s.getCd() > 0) continue;
-
-						Boolean canUse = s.canCpuUse(this, curr, null);
-						if (canUse == null) {
-							if (!forcing) skills.add(s);
-						} else if (canUse) {
-							if (!forcing) skills.clear();
-							forcing = true;
-							skills.add(s);
-						}
-					}
+					AtomicBoolean force = new AtomicBoolean();
+					List<Skill> skills = collectCpuSkills(curr, force);
 
 					if (!skills.isEmpty()) {
 						Skill skill = Utils.getRandomEntry(skills);
 
-						tgts = skill.getTargets(this, curr).stream()
-								.filter(a -> a != null && skill.canCpuUse(this, curr, a) != Boolean.FALSE)
+						List<Actor<?>> spellTgts = skill.getTargets(curr).stream()
+								.filter(Objects::nonNull)
 								.toList();
 
-						if (!tgts.isEmpty()) {
-							Actor t = Utils.getWeightedEntry(rngList, criteria, tgts);
+						if (!spellTgts.isEmpty()) {
+							Actor<?> t = Utils.getWeightedEntry(rngList, criteria, spellTgts);
 
-							if (t.getTeam() == curr.getTeam()) {
-								skill(skill, curr, t);
-								return;
-							}
-
-							if (t.equals(curr) || (forcing || !canAttack || Calc.chance(50))) {
+							if (force.get() || !canAttack || Calc.chance(50)) {
 								skill(skill, curr, t);
 								return;
 							}
 						}
 					}
 
-					if (tgts.isEmpty()) {
+					if (attackTgts.isEmpty()) {
 						curr.getSenshi().setDefending(true);
-						curr.modAp(-curr.getAp());
+						curr.setAp(0);
 
 						history.add(locale.get("str/actor_defend", curr.getName(locale)));
 						return;
 					}
 
-					attack(curr, Utils.getWeightedEntry(rngList, criteria, tgts), null);
+					attack(curr, Utils.getWeightedEntry(rngList, criteria, attackTgts), null);
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 				} finally {
@@ -580,6 +514,25 @@ public class Combat implements Renderer<BufferedImage> {
 		return lock;
 	}
 
+	private List<Skill> collectCpuSkills(Actor<?> source, AtomicBoolean force) {
+		List<Skill> skills = new ArrayList<>();
+		for (Skill s : source.getSkills()) {
+			if (s.getStats().getCost() > source.getAp() || s.getCooldown() > 0) continue;
+
+			switch (s.canCpuUse(source, null)) {
+				case ANY -> skills.add(s);
+				case FORCE -> {
+					skills.clear();
+					skills.add(s);
+					force.set(true);
+					return skills;
+				}
+			}
+		}
+
+		return skills;
+	}
+
 	private void addDropdowns(Hero h, MessageRequest<?> ma) {
 		List<LayoutComponent> comps = new ArrayList<>(ma.getComponents());
 
@@ -592,12 +545,12 @@ public class Combat implements Renderer<BufferedImage> {
 			for (Skill s : skills) {
 				String cdText = "";
 				String reqTags = Utils.properlyJoin(locale.get("str/and")).apply(
-						s.getReqTags().stream()
+						s.getRequirements().tags().stream()
 								.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
 								.toList()
 				);
 
-				int cd = s.getCd();
+				int cd = s.getCooldown();
 				if (cd > 0) {
 					cdText = " (CD: " + locale.get("str/turns_inline", cd) + ")";
 				}
@@ -607,7 +560,7 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				b.addOption(
-						s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getApCost()) + cdText + reqTags,
+						s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getStats().getCost()) + cdText + reqTags,
 						s.getId(),
 						StringUtils.abbreviate(s.getDescription(locale, h).replace("*", ""), 100)
 				);
@@ -616,15 +569,15 @@ public class Combat implements Renderer<BufferedImage> {
 			comps.add(ActionRow.of(b.build()));
 		}
 
-		Map<Consumable, Integer> cons = h.getConsumables();
+		Set<Consumable> cons = h.getConsumables();
 		if (!cons.isEmpty()) {
 			StringSelectMenu.Builder b = StringSelectMenu.create("consumables")
 					.setPlaceholder(locale.get("str/use_a_consumable"))
 					.setMaxValues(1);
 
-			for (Consumable c : cons.keySet()) {
+			for (Consumable c : cons) {
 				b.addOption(
-						c.getName(locale) + " (x" + cons.getOrDefault(c, 0) + ")",
+						c.getName(locale) + " (x" + c.getCount() + ")",
 						c.getId(),
 						StringUtils.abbreviate(c.getDescription(locale), 100)
 				);
@@ -636,13 +589,13 @@ public class Combat implements Renderer<BufferedImage> {
 		ma.setComponents(comps);
 	}
 
-	public void attack(Actor source, Actor target) {
+	public void attack(Actor<?> source, Actor<?> target) {
 		attack(source, target, null);
 	}
 
-	public void attack(Actor source, Actor target, Double damageMult) {
+	public void attack(Actor<?> source, Actor<?> target, Double damageMult) {
 		if (damageMult == null) {
-			source.modAp(-1);
+			source.consumeAp(-1);
 			history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale)));
 		}
 
@@ -677,17 +630,19 @@ public class Combat implements Renderer<BufferedImage> {
 			damageMult = 1d;
 		}
 
-		trigger(Trigger.ON_ATTACK, source, target);
-		target.modHp((int) -(srcSen.getDmg() * damageMult), Calc.chance(source.getCritical()));
-		trigger(Trigger.ON_HIT, source, target);
+		AtomicInteger dmg = new AtomicInteger((int) (srcSen.getDmg() * damageMult));
+
+		trigger(Trigger.ON_ATTACK, source, target, dmg);
+		target.modHp(source, dmg.get(), source.getCritical());
+		trigger(Trigger.ON_HIT, source, target, dmg);
 
 		if (target.getHp() == 0) {
-			trigger(Trigger.ON_KILL, source, target);
+			trigger(Trigger.ON_KILL, source, target, dmg);
 		}
 	}
 
-	public void skill(Skill skill, Actor source, Actor target) {
-		source.modAp(-skill.getApCost());
+	public void skill(Skill skill, Actor<?> source, Actor<?> target) {
+		source.consumeAp(skill.getStats().getCost());
 
 		trigger(Trigger.ON_SPELL, source, target);
 		trigger(Trigger.ON_SPELL_TARGET, target, source);
@@ -722,10 +677,10 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 			}
 
-			skill.execute(locale, this, source, target);
+			skill.execute(source, target);
 		} finally {
 			if (skill.getCooldown() > 0) {
-				skill.setCd(skill.getCooldown());
+				skill.setCooldown(skill.getCooldown());
 			}
 
 			if (target.getHp() == 0) {
@@ -734,14 +689,14 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 	}
 
-	public void addSelector(Message msg, ButtonizeHelper root, List<Actor> targets, Consumer<Actor> action) {
+	public void addSelector(Message msg, ButtonizeHelper root, List<Actor<?>> targets, Consumer<Actor<?>> action) {
 		if (targets.stream().allMatch(Objects::isNull)) {
 			game.getChannel().sendMessage(locale.get("error/no_targets")).queue();
 			return;
 		}
 
-		Actor single = null;
-		for (Actor a : targets) {
+		Actor<?> single = null;
+		for (Actor<?> a : targets) {
 			if (single == null) single = a;
 			else if (a != null) {
 				single = null;
@@ -754,13 +709,13 @@ public class Combat implements Renderer<BufferedImage> {
 			return;
 		}
 
-		Hero h = (Hero) current;
+		Hero h = (Hero) getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 				.setCancellable(false);
 
 		for (int i = 0; i < targets.size(); i++) {
-			Actor tgt = targets.get(i);
+			Actor<?> tgt = targets.get(i);
 			helper.addAction(
 					String.valueOf(i + 1),
 					w -> {
@@ -790,7 +745,7 @@ public class Combat implements Renderer<BufferedImage> {
 				for (int i = 0, sz = items.size(); i < sz; i++, idx++) {
 					if (idx >= targets.size()) break loop;
 
-					Actor tgt = targets.get(idx);
+					Actor<?> tgt = targets.get(idx);
 					ItemComponent item = items.get(i);
 					if (item instanceof Button b && tgt == null) {
 						items.set(i, b.asDisabled());
@@ -806,30 +761,30 @@ public class Combat implements Renderer<BufferedImage> {
 		return lock;
 	}
 
-	public Set<EffectBase> getEffects() {
+	public TimedMap<EffectBase> getEffects() {
 		return effects;
 	}
 
-	public InfiniteList<Actor> getTuns() {
+	public InfiniteList<Actor<?>> getTurns() {
 		return actors;
 	}
 
-	public List<Actor> getActors() {
+	public List<Actor<?>> getActors() {
 		return getActors(false);
 	}
 
-	public List<Actor> getActors(boolean removeDead) {
+	public List<Actor<?>> getActors(boolean removeDead) {
 		return actors.values().stream()
 				.filter(a -> !(removeDead || a.isOutOfCombat()))
 				.toList();
 	}
 
-	public List<Actor> getActors(Team team) {
+	public List<Actor<?>> getActors(Team team) {
 		return getActors(team, false);
 	}
 
-	public List<Actor> getActors(Team team, boolean removeDead) {
-		List<Actor> out = switch (team) {
+	public List<Actor<?>> getActors(Team team, boolean removeDead) {
+		List<Actor<?>> out = switch (team) {
 			case HUNTERS -> hunters;
 			case KEEPERS -> keepers;
 		};
@@ -855,8 +810,8 @@ public class Combat implements Renderer<BufferedImage> {
 		return history;
 	}
 
-	public Actor getCurrent() {
-		return current;
+	public Actor<?> getCurrent() {
+		return actors.getCurrent();
 	}
 
 	public Loot getLoot() {
@@ -868,36 +823,40 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void trigger(Trigger t) {
-		for (Actor a : actors.values()) {
+		for (Actor<?> a : actors.values()) {
 			trigger(t, a, a);
 		}
 	}
 
-	public void trigger(Trigger t, Actor from, Actor to) {
+	public void trigger(Trigger t, Actor<?> source, Actor<?> target) {
+		trigger(t, source, target, new AtomicInteger());
+	}
+
+	public void trigger(Trigger t, Actor<?> source, Actor<?> target, AtomicInteger value) {
 		if (t == Trigger.ON_TICK) {
-			from.getModifiers().removeIf(from, ValueMod::isExpired);
+			source.getModifiers().removeIf(source, ValueMod::isExpired);
 		}
 
-		for (EffectBase e : Set.copyOf(effects)) {
-			if (!(e instanceof TriggeredEffect te) || te.isLocked() || !Utils.equalsAny(t, te.getTriggers())) {
-				continue;
-			} else if (e.getOwner() != null && !e.getOwner().equals(from)) {
-				if (!getActors().contains(e.getOwner())) effects.remove(e);
-				continue;
+		CombatContext context = new CombatContext(t, source, target, value);
+		effects.getValues().removeIf(EffectBase::isClosed);
+		for (EffectBase e : Set.copyOf(effects.getValues())) {
+			if (e.isLocked()) continue;
+			else if (e instanceof TriggeredEffect te) {
+				if (!Utils.equalsAny(t, te.getTriggers())) continue;
+				te.decLimit();
 			}
-
-			if (te.decLimit()) effects.remove(e);
 
 			try {
-				te.lock();
-				te.getEffect().accept(e, new CombatContext(t, from, to));
+				e.lock();
+				e.getEffect().accept(e, context);
 			} finally {
-				te.unlock();
+				e.unlock();
 			}
 		}
+		effects.reduceTime();
 
-		if (from != null) {
-			from.trigger(t, Utils.getOr(to, from));
+		if (source != null) {
+			source.trigger(t, Utils.getOr(target, source), context.value());
 		}
 	}
 }

@@ -20,9 +20,11 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.AffixModifiers;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
+import com.kuuhaku.model.records.dunhun.ValueRange;
 import com.kuuhaku.model.records.id.GearAffixId;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
@@ -31,13 +33,11 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.slf4j.helpers.MessageFormatter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
 
 @Entity
 @Cacheable
@@ -90,10 +90,6 @@ public class GearAffix extends DAO<GearAffix> {
 		return affix;
 	}
 
-	public int getRoll() {
-		return roll;
-	}
-
 	public void reroll() {
 		this.roll = Calc.rng(Integer.MAX_VALUE);
 	}
@@ -117,69 +113,51 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	public String getDescription(I18N locale, boolean showScaling) {
-		List<Integer> vals = getValues(locale);
-		double mult = gear.getRarityClass() == RarityClass.MAGIC ? 1.2 : 1;
-
-		AtomicInteger i = new AtomicInteger();
-		return Utils.regex(affix.getInfo(locale).getDescription(), "\\[(-?\\d+)(?:-(-?\\d+))?](%)?")
-				.replaceAll(r -> {
-					String out;
-					if (r.group(3) != null) {
-						out = vals.get(i.getAndIncrement()) + "%";
-					} else {
-						out = Utils.sign(vals.get(i.getAndIncrement()));
-					}
-
-					if (showScaling) {
-						int min = (int) (Integer.parseInt(r.group(1)) * mult * modifiers.getMinMult());
-						int max = (int) (Integer.parseInt(Utils.getOr(r.group(2), r.group(1))) * mult * modifiers.getMaxMult());
-
-						if (min != max) {
-							out += " (" + min + " - " + max + ")";
-						}
-					}
-
-					return out;
-				});
-	}
-
-	public List<Integer> getValues(I18N locale) {
-		List<Integer> values = new ArrayList<>();
-		String desc = affix.getInfo(locale).getDescription();
-		double mult = gear.getRarityClass() == RarityClass.MAGIC ? 1.2 : 1;
-
-		Matcher m = Utils.regex(desc, "\\[(-?\\d+)(?:-(-?\\d+))?]");
-		while (m.find()) {
-			int min = (int) (Integer.parseInt(m.group(1)) * mult * modifiers.getMinMult());
-			int max = (int) (Integer.parseInt(Utils.getOr(m.group(2), m.group(1))) * mult * modifiers.getMaxMult());
-
-			if (min == max) {
-				values.add(min);
-				continue;
-			}
-
-			values.add(Calc.rng(min, max, roll));
+		if (!showScaling) {
+			return MessageFormatter.basicArrayFormat(
+					affix.getInfo(locale).getDescription(),
+					getValues().stream()
+							.map("**%s**"::formatted)
+							.toArray()
+			);
 		}
 
-		return values;
+		return MessageFormatter.basicArrayFormat(
+				affix.getInfo(locale).getDescription(),
+				getRanges().stream()
+						.map(r -> "**%s (%s)**".formatted(
+								r.withRoll(Calc.rng(r.min(), r.max(), roll)), r
+						))
+						.toArray()
+		);
+	}
+
+	public List<ValueRange> getRanges() {
+		double mult = gear.getRarityClass() == RarityClass.MAGIC ? 1.2 : 1;
+		return affix.getRanges().stream()
+				.map(r -> r.multiply(mult * modifiers.getMinMult(), mult * modifiers.getMaxMult()))
+				.toList();
+	}
+
+	public List<Integer> getValues() {
+		return getRanges().stream()
+				.map(r -> r.withRoll(Calc.rng(r.min(), r.max(), roll)))
+				.toList();
 	}
 
 	public AffixModifiers getModifiers() {
 		return modifiers;
 	}
 
-	public void apply(I18N locale, Gear target, Hero owner) {
+	public void apply(Gear target, Actor<?> owner) {
 		if (affix.getEffect() == null) return;
 
 		try {
-			owner.setLocale(locale);
-
 			Utils.exec(affix.getId(), affix.getEffect(), Map.of(
-					"locale", locale,
+					"game", owner.getGame(),
 					"gear", target,
 					"actor", owner,
-					"values", getValues(locale),
-					"grant", Utils.getOr(Utils.extract(getDescription(locale), "\"(.+?)\"", 1), "")
+					"values", getValues()
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply modifier {}", affix.getId(), e);

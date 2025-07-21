@@ -33,9 +33,11 @@ import com.kuuhaku.util.Utils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Entity
@@ -44,10 +46,7 @@ public class Monster extends MonsterBase<Monster> {
 	@Column(name = "weight", nullable = false)
 	private int weight;
 
-	@Transient
 	private transient final Set<Affix> affixes = new LinkedHashSet<>();
-
-	@Transient
 	private transient String nameCache;
 
 	public Monster() {
@@ -116,8 +115,8 @@ public class Monster extends MonsterBase<Monster> {
 	public int getMaxHp() {
 		double flat = getStats().getBaseHp() + getModifiers().getMaxHp().get() + getGame().getAreaLevel() * 5;
 		double mult = switch (getRarityClass()) {
-			case RARE -> 2.25;
 			case MAGIC -> 1.5;
+			case RARE -> 2.25;
 			default -> 1;
 		} * hpTable[getGame().getAreaLevel()];
 
@@ -146,31 +145,32 @@ public class Monster extends MonsterBase<Monster> {
 	}
 
 	@Override
-	protected void load(I18N locale) {
+	public void load() {
 		getModifiers().clear(this);
 
 		for (Affix a : affixes) {
-			a.apply(locale, this);
+			a.apply(this);
 		}
 	}
 
 	@Override
-	public Actor fork() {
+	public Actor<?> fork() {
 		Monster clone = new Monster(getId());
 		clone.stats = stats;
 		clone.infos = infos;
-		clone.skillCache = skillCache;
-		clone.setTeam(getTeam());
-		clone.setGame(getGame());
 		clone.affixes.addAll(affixes);
+		clone.getModifiers().copyFrom(getModifiers());
+		clone.getBinding().bind(getBinding());
+		clone.setHp(getHp());
+		clone.setAp(getAp());
 
 		return clone;
 	}
 
 	public static Monster getRandom(Dunhun game) {
-		RandomList<String> rl = new RandomList<>();
 		List<Object[]> mons = DAO.queryAllUnmapped("SELECT id, weight FROM monster WHERE weight > 0");
 
+		RandomList<String> rl = new RandomList<>();
 		for (Object[] a : mons) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}

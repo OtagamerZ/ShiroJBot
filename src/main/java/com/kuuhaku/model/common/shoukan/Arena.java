@@ -33,7 +33,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.records.shoukan.Origin;
-import com.kuuhaku.model.records.shoukan.Timed;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -603,15 +602,17 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 			Graph.applyTransformed(g, reversed ? 1860 : 5, BAR_SIZE.height + (reversed ? SIZE.height - rad - 10 : 5), g1 -> {
 				int i = 0;
 				int yOffset = reversed ? -(rad + 10) : rad + 10;
-				for (Timed<Lock> lock : hand.getLocks()) {
+
+
+				for (Map.Entry<Lock, Integer> lock : hand.getLocks()) {
 					int row = i / 3;
 
 					g1.setColor(Color.RED);
 					g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(rad));
-					String text = String.valueOf(lock.getTime());
+					String text = String.valueOf(lock.getValue());
 
 					FontMetrics fm = g1.getFontMetrics();
-					g1.drawImage(lock.getValue().getImage(true),
+					g1.drawImage(lock.getKey().getImage(true),
 							(rad + 5 + fm.stringWidth("00")) * (i % 3), yOffset * row,
 							rad, rad,
 							null

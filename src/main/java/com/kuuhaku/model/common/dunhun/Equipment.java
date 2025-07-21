@@ -165,6 +165,31 @@ public class Equipment implements Iterable<Gear> {
 		}
 	}
 
+	public JSONArray getWeaponTags() {
+		JSONArray out = new JSONArray();
+
+		int weapons = 0;
+		boolean unarmed = true;
+		for (Gear g : getWeapons().getEntries()) {
+			if (g.isWeapon()) {
+				if (!g.getTags().contains("UNARMED")) unarmed = false;
+				weapons++;
+			}
+
+			out.addAll(g.getTags());
+		}
+
+		if (unarmed) {
+			out.add("UNARMED");
+		}
+
+		if (weapons >= 2) {
+			out.add("DUAL_WIELD");
+		}
+
+		return out;
+	}
+
 	@Override
 	public String toString() {
 		JSONObject jo = new JSONObject();

@@ -6,14 +6,12 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import org.intellij.lang.annotations.Language;
 
 import java.util.Map;
@@ -25,7 +23,6 @@ public class Boss extends MonsterBase<Boss> {
 	@Column(name = "on_enrage", columnDefinition = "TEXT")
 	private String onEnrage;
 
-	@Transient
 	private transient boolean enraged;
 
 	public Boss() {
@@ -41,11 +38,6 @@ public class Boss extends MonsterBase<Boss> {
 	}
 
 	@Override
-	public RarityClass getRarityClass() {
-		return RarityClass.UNIQUE;
-	}
-
-	@Override
 	public int getHp() {
 		int hp = super.getHp();
 		if (hp <= getMaxHp() / 2 && !enraged) {
@@ -53,9 +45,8 @@ public class Boss extends MonsterBase<Boss> {
 				enraged = true;
 				if (onEnrage != null) {
 					Utils.exec(getId(), onEnrage, Map.of(
-							"locale", getGame().getLocale(),
-							"actor", this,
-							"self", getSenshi()
+							"game", getGame(),
+							"actor", this
 					));
 				}
 
@@ -75,10 +66,13 @@ public class Boss extends MonsterBase<Boss> {
 	}
 
 	@Override
-	public void setHp(int value, boolean bypass) {
-		if (onEnrage != null && value < getMaxHp() / 2 && !enraged) value = getMaxHp() / 2;
+	public void setHp(int value) {
+		int half = getMaxHp() / 2;
+		if (onEnrage != null && getHp() > half && value <= half && !enraged) {
+			value = getMaxHp() / 2;
+		}
 
-		super.setHp(value, bypass);
+		super.setHp(value);
 	}
 
 	@Override
@@ -87,14 +81,15 @@ public class Boss extends MonsterBase<Boss> {
 	}
 
 	@Override
-	public Actor fork() {
+	public Actor<?> fork() {
 		Boss clone = new Boss(getId());
 		clone.stats = stats;
 		clone.infos = infos;
-		clone.skillCache = skillCache;
-		clone.setTeam(getTeam());
-		clone.setGame(getGame());
 		clone.onEnrage = onEnrage;
+		clone.getModifiers().copyFrom(getModifiers());
+		clone.getBinding().bind(getBinding());
+		clone.setHp(getHp());
+		clone.setAp(getAp());
 
 		return clone;
 	}

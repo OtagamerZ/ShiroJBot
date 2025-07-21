@@ -30,6 +30,7 @@ import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.SupplyChain;
+import com.kuuhaku.model.common.TimedMap;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -249,7 +250,7 @@ public class Hand {
 
 		return !d.isEthereal() && !(d instanceof EffectHolder<?> eh && eh.hasFlag(Flag.DESTROY));
 	}, d -> d.setCurrentStack(getGraveyard(false)), Utils::doNothing);
-	private final Set<Timed<Lock>> locks = new HashSet<>();
+	private final TimedMap<Lock> locks = new TimedMap<>();
 
 	private final RegDeg regdeg = new RegDeg(this);
 	private final JSONObject data = new JSONObject();
@@ -353,8 +354,8 @@ public class Hand {
 
 		Hero h = userDeck.getHero();
 		if (h != null) {
-			Senshi hero = h.asSenshi(game.getLocale());
-			hero.getStats().getPower().set(h.getAttributes().wis() * 0.075);
+			Senshi hero = h.createSenshi(game.getLocale());
+			hero.getStats().getPower().set(h.getAttributes().wis() * 0.05);
 
 			deck.add(hero);
 		}
@@ -748,33 +749,17 @@ public class Hand {
 		discard.clear();
 	}
 
-	public Set<Timed<Lock>> getLocks() {
+	public TimedMap<Lock> getLocks() {
 		return locks;
 	}
 
 	public void modLockTime(Lock lock, int time) {
 		if (time == 0) return;
-
-		Iterator<Timed<Lock>> it = locks.iterator();
-		while (it.hasNext()) {
-			Timed<Lock> lk = it.next();
-
-			if (lk.getValue() == lock) {
-				if (lk.addTime(time) <= 0) {
-					it.remove();
-				}
-
-				return;
-			}
-		}
-
-		if (time > 0) {
-			locks.add(new Timed<>(lock, time));
-		}
+		locks.reduceTime(lock, time);
 	}
 
 	public int getLockTime(Lock lock) {
-		return locks.stream().filter(t -> t.getValue().equals(lock)).mapToInt(Timed::getTime).sum();
+		return locks.getTime(lock);
 	}
 
 	public BaseValues getBase() {

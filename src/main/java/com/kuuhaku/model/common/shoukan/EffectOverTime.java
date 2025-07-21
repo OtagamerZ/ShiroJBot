@@ -32,7 +32,7 @@ import java.util.EnumSet;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-public final class EffectOverTime implements Closeable {
+public class EffectOverTime implements Closeable {
 	private final @Nullable Drawable<?> source;
 	private final Side side;
 	private final BiConsumer<EffectOverTime, EffectParameters> effect;

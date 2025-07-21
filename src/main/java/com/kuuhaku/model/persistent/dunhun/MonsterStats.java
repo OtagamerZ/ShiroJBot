@@ -138,9 +138,9 @@ public class MonsterStats implements Serializable {
 		minion = true;
 	}
 
-	public Loot generateLoot(Actor self) {
+	public Loot generateLoot(Actor<?> self) {
 		Loot loot = new Loot();
-		if (minion || lootGenerator == null) return loot;
+		if (!(self instanceof Monster m) || minion || lootGenerator == null) return loot;
 
 		double mult = switch (self.getRarityClass()) {
 			case NORMAL -> 1;
@@ -151,13 +151,13 @@ public class MonsterStats implements Serializable {
 
 		try {
 			Utils.exec(getClass().getSimpleName(), lootGenerator, Map.of(
+					"game", self.getGame(),
 					"actor", self,
 					"loot", loot,
-					"dungeon", self.getGame(),
 					"mult", mult
 			));
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to generate loot for {}", self.getName(I18N.EN), e);
+			Constants.LOGGER.warn("Failed to generate loot for {}", m.getName(I18N.EN), e);
 		}
 
 		return loot;

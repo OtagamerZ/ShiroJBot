@@ -5,13 +5,12 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 
-public final class TriggeredEffect extends EffectBase {
+public class TriggeredEffect extends EffectBase {
 	private final Trigger[] triggers;
 	private int limit;
-	private boolean lock;
 
-	public TriggeredEffect(Actor owner, int duration, int limit, ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
-		super(owner, duration, effect);
+	public TriggeredEffect(Actor<?> owner, int limit, ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
+		super(owner, effect);
 		this.triggers = triggers;
 		this.limit = limit;
 	}
@@ -29,15 +28,8 @@ public final class TriggeredEffect extends EffectBase {
 		return limit == 0;
 	}
 
-	public boolean isLocked() {
-		return lock;
-	}
-
-	public void lock() {
-		lock = true;
-	}
-
-	public void unlock() {
-		lock = false;
+	@Override
+	public boolean isClosed() {
+		return super.isClosed() || limit == 0;
 	}
 }

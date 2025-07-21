@@ -83,7 +83,7 @@ public class HeroInspectCommand implements Executable {
 			return;
 		}
 
-		g.load(locale, h);
+		g.load(h);
 		GearType type = g.getBasetype().getStats().gearType();
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setThumbnail("attachment://thumb.png");
@@ -111,26 +111,14 @@ public class HeroInspectCommand implements Executable {
 			eb.appendDescription("-# " + String.join(", ", tgs) + "\n\n");
 		}
 
-		double mult = 1;
-		Attributes a = h.getAttributes();
-		if (g.isWeapon()) {
-			if (g.getTags().contains("LIGHT")) {
-				mult *= 1 + a.dex() * 0.05f;
-			}
-
-			if (g.getTags().contains("HEAVY")) {
-				mult *= 1 + a.str() * 0.05f;
-			}
-		}
-
 		boolean hasStats = false;
 		GearStats stats = g.getBasetype().getStats();
 		if (g.getDmg() != 0) {
-			eb.appendDescription(locale.get("str/attack") + ": " + (int) (g.getDmg() * mult) + "\n");
+			eb.appendDescription(locale.get("str/attack") + ": " + g.getDmg() + "\n");
 			hasStats = true;
 		}
 		if (g.getDfs() != 0) {
-			eb.appendDescription(locale.get("str/defense") + ": " + (int) (g.getDfs() * mult) + "\n");
+			eb.appendDescription(locale.get("str/defense") + ": " + g.getDfs() + "\n");
 			hasStats = true;
 		}
 		if (g.getCritical() != 0) {
@@ -142,7 +130,7 @@ public class HeroInspectCommand implements Executable {
 			eb.appendDescription("\n");
 		}
 
-		Attributes reqs = stats.requirements();
+		Attributes reqs = stats.requirements().attributes();
 		if (reqs.str() + reqs.dex() + reqs.wis() + reqs.vit() > 0) {
 			eb.appendDescription("-# " + locale.get("str/required_attributes") + "\n");
 		}

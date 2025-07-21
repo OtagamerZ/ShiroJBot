@@ -49,9 +49,6 @@ public class HeroStats implements Serializable {
 	@Column(name = "race", nullable = false)
 	private Race race;
 
-	@Column(name = "evil", nullable = false)
-	private boolean evil;
-
 	@Embedded
 	private Attributes attributes = new Attributes();
 

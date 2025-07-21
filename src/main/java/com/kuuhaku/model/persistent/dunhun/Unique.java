@@ -113,13 +113,18 @@ public class Unique extends DAO<Unique> {
 		return Objects.hashCode(id);
 	}
 
-	public static Unique getRandom(Actor source) {
+	public static Unique getRandom(Actor<?> source) {
 		int dropLevel = Integer.MAX_VALUE;
 		if (source != null && source.getGame() != null) {
-			dropLevel = source.getGame().getAreaLevel() + 1;
+			int area = source.getGame().getAreaLevel();
+			dropLevel = area + switch (source.getRarityClass()) {
+				case NORMAL -> 0;
+				case MAGIC -> 1;
+				case RARE -> 2;
+				case UNIQUE -> 5;
+			};
 		}
 
-		RandomList<String> rl = new RandomList<>();
 		List<Object[]> affs = DAO.queryAllUnmapped("""
 				SELECT u.id
 				     , u.weight
@@ -129,6 +134,7 @@ public class Unique extends DAO<Unique> {
 				  AND b.req_level <= ?1
 				""", dropLevel);
 
+		RandomList<String> rl = new RandomList<>();
 		for (Object[] a : affs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}

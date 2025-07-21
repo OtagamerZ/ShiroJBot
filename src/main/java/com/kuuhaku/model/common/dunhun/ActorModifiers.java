@@ -18,17 +18,19 @@
 
 package com.kuuhaku.model.common.dunhun;
 
+import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.TimedMap;
 import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.ValueMod;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.persistent.dunhun.Hero;
+import com.kuuhaku.model.records.dunhun.CombatContext;
+import org.apache.commons.collections4.SetUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class ActorModifiers implements Iterable<CumValue> {
@@ -39,8 +41,11 @@ public class ActorModifiers implements Iterable<CumValue> {
 	private final CumValue critical = CumValue.flat();
 	private final CumValue aggroMult = CumValue.flat();
 	private final CumValue magicFind = CumValue.flat();
+	private final CumValue spellDamage = CumValue.flat();
 
-	private Actor channeled;
+	private final Set<EffectBase> permEffects = new HashSet<>();
+	private final TimedMap<EffectBase> tempEffects = new TimedMap<>();
+	private Actor<?> channeled;
 
 	private Field[] fieldCache = null;
 
@@ -72,15 +77,46 @@ public class ActorModifiers implements Iterable<CumValue> {
 		return magicFind;
 	}
 
-	public Actor getChanneled() {
+	public CumValue getSpellDamage() {
+		return spellDamage;
+	}
+
+	public void addEffect(Actor<?> source, ThrowingBiConsumer<EffectBase, CombatContext> effect) {
+		addEffect(source, effect, -1, -1);
+	}
+
+	public void addEffect(Actor<?> source, ThrowingBiConsumer<EffectBase, CombatContext> effect, int duration, int limit, Trigger... triggers) {
+		if (triggers.length == 0 && duration < 0) {
+			permEffects.add(new PersistentEffect(source, effect));
+			return;
+		}
+
+		tempEffects.add(new TriggeredEffect(source, limit, effect, triggers), duration);
+	}
+
+	public Set<EffectBase> getEffects() {
+		return SetUtils.union(permEffects, tempEffects.getValues());
+	}
+
+	public Set<EffectBase> getPermEffects() {
+		return permEffects;
+	}
+
+	public TimedMap<EffectBase> getTempEffects() {
+		return tempEffects;
+	}
+
+	public Actor<?> getChanneled() {
 		return channeled;
 	}
 
-	public void setChanneled(Actor channeled) {
+	public void setChanneled(Actor<?> channeled) {
 		this.channeled = channeled;
 	}
 
-	public void expireMods(Actor act) {
+	public void expireMods(Actor<?> act) {
+		tempEffects.reduceTime();
+
 		removeIf(act, mod -> {
 			if (mod.getExpiration() > 0) {
 				mod.decExpiration();
@@ -90,17 +126,17 @@ public class ActorModifiers implements Iterable<CumValue> {
 		});
 	}
 
-	public void clear(Actor act) {
+	public void clear(Actor<?> act) {
 		removeIf(act, o -> true);
 	}
 
-	public void removeIf(Actor act, Predicate<ValueMod> check) {
-		act.getSenshi().getStats().removeIf(check);
+	public void removeIf(Actor<?> act, Predicate<ValueMod> check) {
+		act.getCache().getSenshi().getStats().removeIf(check);
+		permEffects.removeIf(EffectBase::isClosed);
+		tempEffects.getValues().removeIf(EffectBase::isClosed);
 
-		if (act instanceof Hero h) {
-			for (Gear g : h.getInventory()) {
-				g.getModifiers().removeIf(check);
-			}
+		for (Gear g : act.getEquipment()) {
+			g.getModifiers().removeIf(check);
 		}
 
 		if (fieldCache == null) {
@@ -136,5 +172,21 @@ public class ActorModifiers implements Iterable<CumValue> {
 				})
 				.filter(Objects::nonNull)
 				.iterator();
+	}
+
+	public void copyFrom(ActorModifiers modifiers) {
+		Iterator<CumValue> origMods = modifiers.iterator();
+		for (CumValue mod : this) {
+			origMods.next().copyTo(mod);
+		}
+
+		permEffects.addAll(modifiers.getPermEffects());
+		for (Map.Entry<EffectBase, Integer> e : modifiers.getTempEffects()) {
+			tempEffects.add(e.getKey(), e.getValue());
+		}
+
+		if (modifiers.getChanneled() != null) {
+			this.channeled = modifiers.getChanneled();
+		}
 	}
 }

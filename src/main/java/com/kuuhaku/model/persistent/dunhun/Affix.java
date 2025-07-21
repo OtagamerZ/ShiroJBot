@@ -26,6 +26,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedAffix;
+import com.kuuhaku.model.records.dunhun.ValueRange;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
@@ -71,14 +72,14 @@ public class Affix extends DAO<Affix> {
 	private String effect;
 
 	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "ranges", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray ranges;
+
+	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags;
-
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "req_tags", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray reqTags;
 
 	public String getId() {
 		return id;
@@ -125,24 +126,28 @@ public class Affix extends DAO<Affix> {
 		return effect;
 	}
 
-	public void apply(I18N locale, Actor target) {
+	public void apply(Actor<?> target) {
 		try {
 			Utils.exec(id, effect, Map.of(
-					"locale", locale,
-					"actor", target,
-					"self", target.asSenshi(locale)
+					"game", target.getGame(),
+					"actor", target
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply modifier {}", id, e);
 		}
 	}
 
-	public JSONArray getTags() {
-		return tags;
+	public List<ValueRange> getRanges() {
+		List<ValueRange> out = new ArrayList<>();
+		for (Object e : ranges) {
+			out.add(ValueRange.parse(String.valueOf(e)));
+		}
+
+		return out;
 	}
 
-	public JSONArray getReqTags() {
-		return reqTags;
+	public JSONArray getTags() {
+		return tags;
 	}
 
 	@Override
@@ -186,7 +191,6 @@ public class Affix extends DAO<Affix> {
 		});
 
 		String tp = type != null ? type.name() : "";
-		RandomList<String> rl = new RandomList<>();
 		List<Object[]> affs = new ArrayList<>(
 				DAO.queryAllUnmapped("""
 				SELECT id
@@ -225,6 +229,7 @@ public class Affix extends DAO<Affix> {
 			affs.removeIf(o -> !o[2].equals(chosen.name()));
 		}
 
+		RandomList<String> rl = new RandomList<>();
 		for (Object[] a : affs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}
@@ -245,7 +250,6 @@ public class Affix extends DAO<Affix> {
 		}
 
 		String tp = type != null ? type.name() : "";
-		RandomList<String> rl = new RandomList<>();
 		List<Object[]> affs = DAO.queryAllUnmapped("""
 				SELECT id
 				     , weight
@@ -279,6 +283,7 @@ public class Affix extends DAO<Affix> {
 			affs.removeIf(o -> !o[2].equals(chosen.name()));
 		}
 
+		RandomList<String> rl = new RandomList<>();
 		for (Object[] a : affs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}

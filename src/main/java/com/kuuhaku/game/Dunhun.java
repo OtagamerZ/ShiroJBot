@@ -15,7 +15,6 @@ import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.Combat;
-import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.ContinueMode;
@@ -57,7 +56,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
 	private final AtomicReference<Pair<Message, ButtonizeHelper>> event = new AtomicReference<>();
 	private final Loot loot = new Loot();
-	private final Set<EffectBase> effects = new HashSet<>();
 	private final boolean duel;
 	private CompletableFuture<Void> lock;
 	private Pair<String, String> message;
@@ -88,8 +86,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				throw new GameReport(GameReport.UNDERLEVELLED, h.getName());
 			}
 
-			h.setGame(this);
-			h.asSenshi(locale);
+			h.getBinding().bind(this, Team.HUNTERS);
 			heroes.put(p, h);
 		}
 
@@ -98,11 +95,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 		} else {
 			setTimeout(turn -> {
 				if (getCombat() != null) {
-					Actor current = getCombat().getCurrent();
+					Actor<?> current = getCombat().getCurrent();
 					if (current != null) {
 						getCombat().getLock().complete(() -> {
 							current.setFleed(true);
-							current.modAp(-current.getAp());
+							current.setAp(0);
 						});
 					} else {
 						getCombat().getLock().complete(null);
@@ -133,7 +130,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@Override
 	protected void begin() {
-		dungeon.init(getLocale(), this);
+		dungeon.init(this);
 
 		CompletableFuture.runAsync(() -> {
 			while (!isClosed()) {
@@ -209,7 +206,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					Collection<Hero> hs = heroes.values();
-					if (hs.stream().allMatch(a -> a.isOutOfCombat() || a.isMindControlled())) {
+					if (hs.stream().allMatch(a -> a.isOutOfCombat())) {
 						for (Hero h : hs) {
 							if (h.getHp() > 0) continue;
 
@@ -231,7 +228,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 							Loot loot = getCombat().getLoot();
 							XStringBuilder sb = new XStringBuilder();
-							for (Actor a : getCombat().getActors(Team.KEEPERS)) {
+							for (Actor<?> a : getCombat().getActors(Team.KEEPERS)) {
 								if (a instanceof MonsterBase<?> m && m.getHp() == 0) {
 									if (m.getStats().isMinion()) continue;
 									xpGained += m.getKillXp();
@@ -361,7 +358,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	public void runCombat(String... pool) {
 		combat.set(new Combat(this));
 		for (int i = 0; i < 4; i++) {
-			List<Actor> keepers = getCombat().getActors(Team.KEEPERS);
+			List<Actor<?>> keepers = getCombat().getActors(Team.KEEPERS);
 			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size())) break;
 
 			if (pool.length > 0) keepers.add(Monster.getRandom(this, Utils.getRandomEntry(pool)));
@@ -382,7 +379,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		lock = new CompletableFuture<>();
-		EventDescription ed = evt.parse(getLocale(), this);
+		EventDescription ed = evt.parse(this);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setDescription(ed.description());
@@ -543,7 +540,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		for (Actor a : getCombat().getActors()) {
+		for (Actor<?> a : getCombat().getActors()) {
 			if (a.getTeam() != team) continue;
 
 			XStringBuilder sb = new XStringBuilder("#-# " + a.getName(getLocale()));
@@ -562,7 +559,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 			List<String> skills = a.getSkills().stream()
 					.map(s ->
-							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getApCost()) +
+							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getStats().getCost()) +
 							"\n" + s.getDescription(getLocale(), a).lines()
 									.map(l -> "-# " + l)
 									.collect(Collectors.joining("\n"))
@@ -623,8 +620,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		for (Hero h : heroes.values()) {
 			DAO.apply(Hero.class, h.getId(), n -> {
-				for (Map.Entry<Consumable, Integer> e : h.getSpentConsumables().entrySet()) {
-					n.consume(e.getKey().getId(), e.getValue());
+				for (Consumable c : h.getConsumables()) {
+					n.setConsumableCount(c.getId(), c.getCount());
 				}
 			});
 		}
@@ -638,10 +635,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public Map<String, Hero> getHeroes() {
 		return heroes;
-	}
-
-	public Set<EffectBase> getEffects() {
-		return effects;
 	}
 
 	public Pair<String, String> getMessage() {

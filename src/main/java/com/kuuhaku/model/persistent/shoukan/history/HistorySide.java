@@ -27,7 +27,6 @@ import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.records.id.HistorySideId;
 import com.kuuhaku.model.records.shoukan.CardReference;
-import com.kuuhaku.model.records.shoukan.Timed;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -99,8 +98,8 @@ public class HistorySide extends DAO<HistorySide> {
 		this.mp = h.getMP();
 		this.activeDot = h.getRegDeg().peek();
 
-		for (Timed<Lock> lock : h.getLocks()) {
-			this.locks.put(lock.getValue().name(), lock.getTime());
+		for (Map.Entry<Lock, Integer> lock : h.getLocks()) {
+			this.locks.put(lock.getKey().name(), lock.getValue());
 		}
 
 		List<Pair<List<Drawable<?>>, JSONArray>> stacks = List.of(

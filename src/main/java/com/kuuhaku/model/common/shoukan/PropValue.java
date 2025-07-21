@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public final class PropValue extends Number {
+public class PropValue extends Number {
 	private final List<Number> values;
 
 	public PropValue(List<Number> values) {

@@ -23,10 +23,9 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.GearModifiers;
-import com.kuuhaku.model.common.dunhun.SelfEffect;
+import com.kuuhaku.model.common.dunhun.TriggeredEffect;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
-import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.shoukan.Trigger;
@@ -87,7 +86,7 @@ public class Gear extends DAO<Gear> {
 	private int seed = Calc.rng(Integer.MAX_VALUE);
 
 	private transient final GearModifiers modifiers = new GearModifiers();
-	private transient final Set<SelfEffect> effects = new HashSet<>();
+	private transient final Set<EffectBase> effects = new HashSet<>();
 	private transient Attributes attributes;
 
 	public Gear() {
@@ -113,10 +112,11 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public int getReqLevel() {
-		return Math.max(
-				affixes.stream().mapToInt(ga -> ga.getAffix().getMinLevel()).max().orElse(0),
-				basetype.getStats().reqLevel()
-		);
+		int minAffix = affixes.parallelStream()
+				.mapToInt(ga -> ga.getAffix().getMinLevel())
+				.max().orElse(0);
+
+		return Math.max(minAffix, basetype.getStats().requirements().level());
 	}
 
 	public boolean isWeapon() {
@@ -277,18 +277,18 @@ public class Gear extends DAO<Gear> {
 		return modifiers;
 	}
 
-	public Set<SelfEffect> getEffects() {
+	public Set<EffectBase> getEffects() {
 		return effects;
 	}
 
-	public Attributes getAttributes(Hero owner) {
-		if (attributes == null) load(I18N.EN, owner);
+	public Attributes getAttributes(Actor<?> owner) {
+		if (attributes == null) load(owner);
 
 		return attributes;
 	}
 
 	public void addEffect(ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
-		effects.add(new SelfEffect(owner, effect, triggers));
+		effects.add(new TriggeredEffect(owner, -1, effect, triggers));
 	}
 
 	public JSONArray getTags() {
@@ -316,40 +316,12 @@ public class Gear extends DAO<Gear> {
 		return Calc.clamp(base * (1 + modifiers.getCriticalMult().get()), 0, 100);
 	}
 
-	public void loadAttr(I18N locale) {
-		attributes = new Attributes();
-
-		GearAffix impl = getImplicit();
-		if (impl != null) {
-			impl.apply(locale, this, (Hero) owner.copy());
-		}
-
-		for (GearAffix ga : getAllAffixes()) {
-			String eff = ga.getAffix().getEffect();
-			if (eff == null) continue;
-
-			List<Integer> values = ga.getValues(locale);
-			Utils.regex(eff, "(?<=//)(STR|DEX|WIS|VIT)=(-?\\d+|\\$\\d)").results().forEach(r -> {
-				AttrType a = AttrType.valueOf(r.group(1));
-
-				int val;
-				if (r.group(2).startsWith("$")) {
-					val = values.get(Integer.parseInt(r.group(2).substring(1)));
-				} else {
-					val = Integer.parseInt(r.group(2));
-				}
-
-				attributes = attributes.set(a, val);
-			});
-		}
-	}
-
-	public void load(I18N locale, Hero owner) {
+	public void load(Actor<?> owner) {
 		attributes = new Attributes();
 		modifiers.clear();
 
 		for (GearAffix ga : getAllAffixes()) {
-			ga.apply(locale, this, owner);
+			ga.apply(this, owner);
 		}
 	}
 
@@ -366,19 +338,19 @@ public class Gear extends DAO<Gear> {
 		return Objects.hashCode(id);
 	}
 
-	public static Gear getRandom(Actor source, Hero hero) {
+	public static Gear getRandom(Actor<?> source, Hero hero) {
 		return getRandom(source, hero, (RarityClass) null);
 	}
 
-	public static Gear getRandom(Actor source, Hero hero, Basetype base) {
+	public static Gear getRandom(Actor<?> source, Hero hero, Basetype base) {
 		return getRandom(source, hero, base, null);
 	}
 
-	public static Gear getRandom(Actor source, Hero hero, RarityClass rarity) {
+	public static Gear getRandom(Actor<?> source, Hero hero, RarityClass rarity) {
 		return getRandom(source, hero, Basetype.getRandom(source), rarity);
 	}
 
-	public static Gear getRandom(Actor source, Hero hero, Basetype base, RarityClass rarity) {
+	public static Gear getRandom(Actor<?> source, Hero hero, Basetype base, RarityClass rarity) {
 		double mult = 1;
 		if (source != null && source.getGame() != null) {
 			mult = switch (source.getRarityClass()) {

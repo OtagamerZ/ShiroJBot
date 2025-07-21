@@ -18,26 +18,21 @@
 
 package com.kuuhaku.command.dunhun;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
-import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.dunhun.Hero;
-import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.utils.FileUpload;
@@ -121,21 +116,13 @@ public class CreateHeroCommand implements Executable {
 		try {
 			Hero h = new Hero(data.profile().getAccount(), name, race);
 
-			EmbedBuilder eb = new ColorlessEmbedBuilder();
-			Skill innate = DAO.query(Skill.class, "SELECT s FROM Skill s WHERE s.reqRace = ?1", h.getRace());
-			if (innate != null) {
-				eb.addField(locale.get("str/innate_skill", innate.getName(locale)), innate.getDescription(locale), false);
-			} else {
-				eb.addField(locale.get("str/innate_skill", locale.get("str/none")), Constants.VOID, false);
-			}
-
 			String finalUrl = url;
 			Utils.confirm(locale.get("question/hero_creation", h.getName()), event.channel(), w -> {
 						BufferedImage img = IO.getImage(finalUrl);
 						h.setImage(img);
+						h.createSenshi(locale);
 						h.save();
 
-						Senshi s = h.asSenshi(locale);
 						event.channel().sendMessage(locale.get("success/hero_created"))
 								.addFiles(FileUpload.fromData(IO.getBytes(h.render(locale), "png"), "hero.png"))
 								.queue();

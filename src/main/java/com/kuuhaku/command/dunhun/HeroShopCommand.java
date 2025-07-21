@@ -43,7 +43,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
-import java.util.Map;
+import java.util.TreeSet;
 
 @Command(
 		name = "hero",
@@ -68,7 +68,7 @@ public class HeroShopCommand implements Executable {
 			return;
 		}
 
-		Map<Consumable, Integer> items = h.getConsumables();
+		TreeSet<Consumable> items = h.getConsumables();
 
 		if (!args.has("id")) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -78,14 +78,12 @@ public class HeroShopCommand implements Executable {
 
 			List<Page> pages = Utils.generatePages(eb, catalogue, 10, 5,
 					c -> {
-						int has = items.getOrDefault(c, 0);
-
 						FieldMimic fm = new FieldMimic(c.getName(locale), "");
 						if (c.getPrice() > 0) {
 							fm.appendLine(locale.get("str/price", locale.get("currency/cr", c.getPrice())));
 						}
 
-						fm.appendLine(locale.get("str/item_has", has));
+						fm.appendLine(locale.get("str/item_has", c.getCount()));
 						fm.appendLine(c.getDescription(locale));
 						fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "hero.buy " + c.getId()));
 
@@ -136,7 +134,7 @@ public class HeroShopCommand implements Executable {
 						}
 
 						Hero n = h.refresh();
-						n.addConsumable(item, amount);
+						n.modConsumableCount(item, amount);
 						n.save();
 
 						acc.consumeCR(value, "Consumable " + amount + "x " + item.getName(locale));

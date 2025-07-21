@@ -94,14 +94,13 @@ public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
 		return monsterPool;
 	}
 
-	public void init(I18N locale, Dunhun dungeon) {
+	public void init(Dunhun game) {
 		if (script == null) return;
 
 		try {
 			floors.clear();
 			Utils.exec(id, script, Map.of(
-					"locale", locale,
-					"dungeon", dungeon,
+					"game", game,
 					"floors", floors,
 					"pool", monsterPool
 			));
