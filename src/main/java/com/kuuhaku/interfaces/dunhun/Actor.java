@@ -61,7 +61,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public String getName() {
-		return getName(getGame().getLocale());
+		return getName(binding.getLocale());
 	}
 
 	public abstract String getName(I18N locale);
@@ -191,7 +191,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public void setFleed(boolean fleed) {
 		if (getGame() != null && !this.fleed && fleed) {
-			getGame().getChannel().sendMessage(getGame().getLocale().get("str/actor_flee", getName(getGame().getLocale())));
+			getGame().getChannel().sendMessage(getGame().getLocale().get("str/actor_flee", getName()));
 		}
 
 		this.fleed = fleed;
@@ -328,8 +328,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				.findFirst().orElse(null);
 	}
 
-	public Senshi createSenshi(I18N locale) {
-		Senshi senshi = new Senshi(this, locale);
+	public Senshi createSenshi() {
+		Senshi senshi = new Senshi(this);
 		CombatCardAttributes base = senshi.getBase();
 
 		modifiers.clear(this);
@@ -423,7 +423,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public BufferedImage render() {
-		return render(getGame().getLocale());
+		return render(binding.getLocale());
 	}
 
 	public BufferedImage render(I18N locale) {

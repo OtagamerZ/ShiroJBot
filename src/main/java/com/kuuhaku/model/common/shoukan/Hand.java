@@ -352,9 +352,9 @@ public class Hand {
 			}
 		}).toList());
 
-		Hero h = userDeck.getHero();
+		Hero h = userDeck.getHero(game.getLocale());
 		if (h != null) {
-			Senshi hero = h.createSenshi(game.getLocale());
+			Senshi hero = h.createSenshi();
 			hero.getStats().getPower().set(h.getAttributes().wis() * 0.05);
 
 			deck.add(hero);

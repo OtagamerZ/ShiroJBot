@@ -77,7 +77,7 @@ public class HeroCommand implements Executable {
 			return;
 		}
 
-		Hero h = d.getHero();
+		Hero h = d.getHero(locale);
 		if (h == null) {
 			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
 			return;
@@ -92,7 +92,6 @@ public class HeroCommand implements Executable {
 					.setAuthor(locale.get("str/hero_info", h.getName()))
 					.setImage("attachment://card.png");
 
-			h.createSenshi(locale);
 			eb.addField(Constants.VOID, """
 					HP: %s (%s)
 					%s/%s (%s)

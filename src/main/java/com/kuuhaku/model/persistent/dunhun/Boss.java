@@ -56,7 +56,7 @@ public class Boss extends MonsterBase<Boss> {
 				s.setFlag(Flag.NO_STASIS);
 
 				Combat comb = getGame().getCombat();
-				comb.getHistory().add(getGame().getLocale().get("str/boss_enraged", getName(getGame().getLocale())));
+				comb.getHistory().add(getGame().getLocale().get("str/boss_enraged", getName()));
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to enrage {}", getId(), e);
 			}

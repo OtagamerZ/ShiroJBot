@@ -171,8 +171,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public Senshi() {
 	}
 
-	public Senshi(Actor actor, I18N locale) {
-		this.card = new Card(actor, locale);
+	public Senshi(Actor<?> actor) {
+		this.card = new Card(actor);
 		this.id = card.getId();
 		this.race = actor.getRace();
 		this.base = new CombatCardAttributes();

@@ -69,13 +69,13 @@ public class TransferGearCommand implements Executable {
 			return;
 		}
 
-		Hero from = d.getHero();
+		Hero from = d.getHero(locale);
 		if (from == null) {
 			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
 			return;
 		}
 
-		Hero to = tgt.getHero();
+		Hero to = tgt.getHero(locale);
 		if (to == null) {
 			event.channel().sendMessage(locale.get("error/no_hero_target", target.getAsMention(), data.config().getPrefix())).queue();
 			return;

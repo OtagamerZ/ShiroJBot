@@ -543,7 +543,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		for (Actor<?> a : getCombat().getActors()) {
 			if (a.getTeam() != team) continue;
 
-			XStringBuilder sb = new XStringBuilder("#-# " + a.getName(getLocale()));
+			XStringBuilder sb = new XStringBuilder("#-# " + a.getName());
 
 			if (a instanceof Monster m) {
 				List<String> affs = m.getAffixes().stream()
@@ -579,7 +579,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			if (a instanceof Hero h) {
 				eb.addField((h.getContMode() == ContinueMode.CONTINUE ? "🆗 " : "🚪 ") + h.getName(), desc, true);
 			} else {
-				eb.addField(a.getName(getLocale()), desc, true);
+				eb.addField(a.getName(), desc, true);
 			}
 		}
 

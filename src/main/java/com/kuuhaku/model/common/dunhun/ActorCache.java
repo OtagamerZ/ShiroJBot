@@ -113,7 +113,7 @@ public class ActorCache {
 
 	public Senshi getSenshi() {
 		if (senshi == null) {
-			actor.createSenshi(actor.getGame().getLocale());
+			actor.createSenshi();
 		}
 
 		return senshi;

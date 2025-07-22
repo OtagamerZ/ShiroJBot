@@ -56,7 +56,7 @@ public class CreateHeroCommand implements Executable {
 		if (d == null) {
 			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
 			return;
-		} else if (d.getHero() != null) {
+		} else if (d.getHero(locale) != null) {
 			event.channel().sendMessage(locale.get("error/has_hero", data.config().getPrefix())).queue();
 			return;
 		}
@@ -120,7 +120,6 @@ public class CreateHeroCommand implements Executable {
 			Utils.confirm(locale.get("question/hero_creation", h.getName()), event.channel(), w -> {
 						BufferedImage img = IO.getImage(finalUrl);
 						h.setImage(img);
-						h.createSenshi(locale);
 						h.save();
 
 						event.channel().sendMessage(locale.get("success/hero_created"))

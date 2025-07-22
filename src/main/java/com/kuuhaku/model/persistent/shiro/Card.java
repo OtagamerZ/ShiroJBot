@@ -72,9 +72,9 @@ public class Card extends DAO<Card> implements Serializable {
 	public Card() {
 	}
 
-	public Card(Actor act, I18N locale) {
+	public Card(Actor<?> act) {
 		this.id = (act instanceof Hero ? "H" : "M") + ":" + act.getId();
-		this.name = act.getName(locale);
+		this.name = act.getName();
 		this.anime = DAO.find(Anime.class, "NO_SYNC");
 		this.rarity = act instanceof Hero ? Rarity.HERO : Rarity.MONSTER;
 	}

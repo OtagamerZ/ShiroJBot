@@ -62,7 +62,6 @@ public class Combat implements Renderer<BufferedImage> {
 	private final long seed = ThreadLocalRandom.current().nextLong();
 
 	private final Dunhun game;
-	private final I18N locale;
 	private final InfiniteList<Actor<?>> actors = new InfiniteList<>();
 	private final BondedList<Actor<?>> hunters = new BondedList<>(
 			(a, it) -> onAddActor(a, Team.HUNTERS), this::onRemoveActor
@@ -80,7 +79,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public Combat(Dunhun game, MonsterBase<?>... enemies) {
 		this.game = game;
-		this.locale = game.getLocale();
 
 		hunters.addAll(game.getHeroes().values());
 		keepers.addAll(List.of(enemies));
@@ -95,7 +93,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public Combat(Dunhun game, Collection<Hero> duelists) {
 		this.game = game;
-		this.locale = game.getLocale();
 
 		List<Hero> sides = List.copyOf(duelists);
 		List<Actor<?>> team = hunters;
@@ -184,27 +181,27 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public MessageEmbed getEmbed() {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/actor_turn", getCurrent().getName(locale)))
+				.setTitle(getLocale().get("str/actor_turn", getCurrent().getName()))
 				.setDescription(String.join("\n", history))
-				.setFooter(locale.get("str/combat_footer"));
+				.setFooter(getLocale().get("str/combat_footer"));
 
 		if (!game.isDuel()) {
-			eb.setAuthor(locale.get("str/dungeon_floor", game.getTurn()));
+			eb.setAuthor(getLocale().get("str/dungeon_floor", game.getTurn()));
 		}
 
-		String title = locale.get("str/hunters");
+		String title = getLocale().get("str/hunters");
 		XStringBuilder sb = new XStringBuilder();
 		for (List<Actor<?>> acts : List.of(hunters, keepers)) {
 			sb.clear();
 			for (Actor<?> a : acts) {
 				if (!sb.isEmpty()) sb.nextLine();
-				sb.appendNewLine(a.getName(locale));
+				sb.appendNewLine(a.getName());
 				a.addHpBar(sb);
 				a.addApBar(sb);
 			}
 
 			eb.addField(title, sb.toString(), true);
-			title = locale.get("str/keepers");
+			title = getLocale().get("str/keepers");
 		}
 
 		eb.setImage("attachment://cards.png");
@@ -321,31 +318,31 @@ public class Combat implements Renderer<BufferedImage> {
 					EventHandler handle = Pages.getHandler();
 					Map<String, List<?>> values = handle.getDropdownValues(handle.getEventId(w.getMessage()));
 					if (values == null) {
-						game.getChannel().sendMessage(locale.get("error/no_values")).queue();
+						game.getChannel().sendMessage(getLocale().get("error/no_values")).queue();
 						return;
 					}
 
 					List<?> selected = values.get("skills");
 					if (selected == null || selected.isEmpty()) {
-						game.getChannel().sendMessage(locale.get("error/no_skill_selected")).queue();
+						game.getChannel().sendMessage(getLocale().get("error/no_skill_selected")).queue();
 						return;
 					}
 
 					Skill skill = h.getSkill(String.valueOf(selected.getFirst()));
 					if (skill == null) {
-						game.getChannel().sendMessage(locale.get("error/invalid_skill")).queue();
+						game.getChannel().sendMessage(getLocale().get("error/invalid_skill")).queue();
 						return;
 					} else if (skill.getStats().getCost() > h.getAp()) {
-						game.getChannel().sendMessage(locale.get("error/not_enough_ap")).queue();
+						game.getChannel().sendMessage(getLocale().get("error/not_enough_ap")).queue();
 						return;
 					} else if (skill.getCooldown() > 0) {
-						game.getChannel().sendMessage(locale.get("error/skill_cooldown")).queue();
+						game.getChannel().sendMessage(getLocale().get("error/skill_cooldown")).queue();
 						return;
 					}
 
 					JSONArray tags = h.getEquipment().getWeaponTags();
 					if (!tags.containsAll(skill.getRequirements().tags())) {
-						game.getChannel().sendMessage(locale.get("error/invalid_weapon")).queue();
+						game.getChannel().sendMessage(getLocale().get("error/invalid_weapon")).queue();
 						return;
 					}
 
@@ -360,13 +357,13 @@ public class Combat implements Renderer<BufferedImage> {
 					EventHandler handle = Pages.getHandler();
 					List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("consumables");
 					if (selected == null || selected.isEmpty()) {
-						game.getChannel().sendMessage(locale.get("error/no_consumable_selected")).queue();
+						game.getChannel().sendMessage(getLocale().get("error/no_consumable_selected")).queue();
 						return;
 					}
 
 					Consumable con = DAO.find(Consumable.class, String.valueOf(selected.getFirst()));
 					if (con == null) {
-						game.getChannel().sendMessage(locale.get("error/invalid_consumable")).queue();
+						game.getChannel().sendMessage(getLocale().get("error/invalid_consumable")).queue();
 						return;
 					}
 
@@ -375,8 +372,8 @@ public class Combat implements Renderer<BufferedImage> {
 								con.execute(h, t);
 								h.consumeAp(1);
 
-								history.add(locale.get(t.equals(h) ? "str/used_self" : "str/used",
-										h.getName(), con.getName(locale), t.getName(locale))
+								history.add(getLocale().get(t.equals(h) ? "str/used_self" : "str/used",
+										h.getName(), con.getName(getLocale()), t.getName())
 								);
 							})
 					);
@@ -387,7 +384,7 @@ public class Combat implements Renderer<BufferedImage> {
 						h.getSenshi().setDefending(true);
 						h.setAp(0);
 
-						history.add(locale.get("str/actor_defend", h.getName()));
+						history.add(getLocale().get("str/actor_defend", h.getName()));
 					}))
 					.addAction(Utils.parseEmoji("💨"), w -> {
 						ButtonizeHelper confirm = new ButtonizeHelper(true)
@@ -441,7 +438,7 @@ public class Combat implements Renderer<BufferedImage> {
 						if (curr instanceof Monster && risk > 5 && Calc.chance(20)) {
 							curr.setFleed(true);
 
-							game.getChannel().sendMessage(locale.get("str/actor_flee", curr.getName(locale))).queue();
+							game.getChannel().sendMessage(getLocale().get("str/actor_flee", curr.getName())).queue();
 							return;
 						}
 
@@ -449,7 +446,7 @@ public class Combat implements Renderer<BufferedImage> {
 							curr.getSenshi().setDefending(true);
 							curr.setAp(0);
 
-							history.add(locale.get("str/actor_defend", curr.getName(locale)));
+							history.add(getLocale().get("str/actor_defend", curr.getName()));
 							return;
 						}
 					}
@@ -478,7 +475,7 @@ public class Combat implements Renderer<BufferedImage> {
 						curr.getSenshi().setDefending(true);
 						curr.setAp(0);
 
-						history.add(locale.get("str/actor_defend", curr.getName(locale)));
+						history.add(getLocale().get("str/actor_defend", curr.getName()));
 						return;
 					}
 
@@ -491,7 +488,7 @@ public class Combat implements Renderer<BufferedImage> {
 			}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
 		}
 
-		ca.addFile(IO.getBytes(render(game.getLocale()), "png"), "cards.png")
+		ca.addFile(IO.getBytes(render(getLocale()), "png"), "cards.png")
 				.queue(m -> {
 					if (helper != null) {
 						Pages.buttonize(m, helper);
@@ -539,30 +536,30 @@ public class Combat implements Renderer<BufferedImage> {
 		List<Skill> skills = h.getSkills();
 		if (!skills.isEmpty()) {
 			StringSelectMenu.Builder b = StringSelectMenu.create("skills")
-					.setPlaceholder(locale.get("str/use_a_skill"))
+					.setPlaceholder(getLocale().get("str/use_a_skill"))
 					.setMaxValues(1);
 
 			for (Skill s : skills) {
 				String cdText = "";
-				String reqTags = Utils.properlyJoin(locale.get("str/and")).apply(
+				String reqTags = Utils.properlyJoin(getLocale().get("str/and")).apply(
 						s.getRequirements().tags().stream()
-								.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
+								.map(t -> LocalizedString.get(getLocale(), "tag/" + t, "???"))
 								.toList()
 				);
 
 				int cd = s.getCooldown();
 				if (cd > 0) {
-					cdText = " (CD: " + locale.get("str/turns_inline", cd) + ")";
+					cdText = " (CD: " + getLocale().get("str/turns_inline", cd) + ")";
 				}
 
 				if (!reqTags.isBlank()) {
-					reqTags = " [" + locale.get("str/requires", reqTags) + "]";
+					reqTags = " [" + getLocale().get("str/requires", reqTags) + "]";
 				}
 
 				b.addOption(
-						s.getInfo(locale).getName() + " " + StringUtils.repeat('◈', s.getStats().getCost()) + cdText + reqTags,
+						s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getStats().getCost()) + cdText + reqTags,
 						s.getId(),
-						StringUtils.abbreviate(s.getDescription(locale, h).replace("*", ""), 100)
+						StringUtils.abbreviate(s.getDescription(getLocale(), h).replace("*", ""), 100)
 				);
 			}
 
@@ -572,14 +569,14 @@ public class Combat implements Renderer<BufferedImage> {
 		Set<Consumable> cons = h.getConsumables();
 		if (!cons.isEmpty()) {
 			StringSelectMenu.Builder b = StringSelectMenu.create("consumables")
-					.setPlaceholder(locale.get("str/use_a_consumable"))
+					.setPlaceholder(getLocale().get("str/use_a_consumable"))
 					.setMaxValues(1);
 
 			for (Consumable c : cons) {
 				b.addOption(
-						c.getName(locale) + " (x" + c.getCount() + ")",
+						c.getName(getLocale()) + " (x" + c.getCount() + ")",
 						c.getId(),
-						StringUtils.abbreviate(c.getDescription(locale), 100)
+						StringUtils.abbreviate(c.getDescription(getLocale()), 100)
 				);
 			}
 
@@ -596,7 +593,7 @@ public class Combat implements Renderer<BufferedImage> {
 	public void attack(Actor<?> source, Actor<?> target, Double damageMult) {
 		if (damageMult == null) {
 			source.consumeAp(-1);
-			history.add(locale.get("str/actor_combat", source.getName(locale), target.getName(locale)));
+			history.add(getLocale().get("str/actor_combat", source.getName(), target.getName()));
 		}
 
 		trigger(Trigger.ON_DEFEND, target, source);
@@ -608,19 +605,19 @@ public class Combat implements Renderer<BufferedImage> {
 				if (srcSen.isBlinded(true) && Calc.chance(50)) {
 					trigger(Trigger.ON_MISS, source, target);
 
-					history.add(locale.get("str/actor_miss", source.getName(locale)));
+					history.add(getLocale().get("str/actor_miss", source.getName()));
 					return;
 				} else if (!srcSen.hasFlag(Flag.TRUE_STRIKE, true) && !tgtSen.isSleeping() && !tgtSen.isStasis()) {
 					if (Calc.chance(tgtSen.getDodge())) {
 						trigger(Trigger.ON_MISS, source, target);
 						trigger(Trigger.ON_DODGE, target, source);
 
-						history.add(locale.get("str/actor_dodge", target.getName(locale)));
+						history.add(getLocale().get("str/actor_dodge", target.getName()));
 						return;
 					} else if (Calc.chance(tgtSen.getParry())) {
 						trigger(Trigger.ON_PARRY, target, source);
 
-						history.add(locale.get("str/actor_parry", target.getName(locale)));
+						history.add(getLocale().get("str/actor_parry", target.getName()));
 						attack(target, source, null);
 						return;
 					}
@@ -647,8 +644,8 @@ public class Combat implements Renderer<BufferedImage> {
 		trigger(Trigger.ON_SPELL, source, target);
 		trigger(Trigger.ON_SPELL_TARGET, target, source);
 
-		history.add(locale.get(target.equals(source) ? "str/used_self" : "str/used",
-				source.getName(locale), skill.getInfo(locale).getName(), target.getName(locale))
+		history.add(getLocale().get(target.equals(source) ? "str/used_self" : "str/used",
+				source.getName(), skill.getInfo(getLocale()).getName(), target.getName())
 		);
 
 		try {
@@ -658,19 +655,19 @@ public class Combat implements Renderer<BufferedImage> {
 				if (srcSen.isBlinded(true) && Calc.chance(50)) {
 					trigger(Trigger.ON_MISS, source, target);
 
-					history.add(locale.get("str/actor_miss", source.getName(locale)));
+					history.add(getLocale().get("str/actor_miss", source.getName()));
 					return;
 				} else if (!srcSen.hasFlag(Flag.TRUE_STRIKE, true) && !tgtSen.isSleeping() && !tgtSen.isStasis()) {
 					if (Calc.chance(tgtSen.getDodge())) {
 						trigger(Trigger.ON_MISS, source, target);
 						trigger(Trigger.ON_DODGE, target, source);
 
-						history.add(locale.get("str/actor_dodge", target.getName(locale)));
+						history.add(getLocale().get("str/actor_dodge", target.getName()));
 						return;
 					} else if (Calc.chance(tgtSen.getParry())) {
 						trigger(Trigger.ON_PARRY, target, source);
 
-						history.add(locale.get("str/actor_parry", target.getName(locale)));
+						history.add(getLocale().get("str/actor_parry", target.getName()));
 						attack(target, source, null);
 						return;
 					}
@@ -691,7 +688,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public void addSelector(Message msg, ButtonizeHelper root, List<Actor<?>> targets, Consumer<Actor<?>> action) {
 		if (targets.stream().allMatch(Objects::isNull)) {
-			game.getChannel().sendMessage(locale.get("error/no_targets")).queue();
+			game.getChannel().sendMessage(getLocale().get("error/no_targets")).queue();
 			return;
 		}
 
@@ -799,7 +796,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public I18N getLocale() {
-		return locale;
+		return game.getLocale();
 	}
 
 	public Dunhun getGame() {
