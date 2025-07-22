@@ -16,8 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_collection_counter;
-CREATE OR REPLACE VIEW v_collection_counter AS
+-- DROP VIEW IF EXISTS kawaipon.v_collection_counter;
+CREATE OR REPLACE VIEW kawaipon.v_collection_counter AS
 SELECT kc.kawaipon_uid                       AS uid
      , c.anime_id
      , count(1) FILTER (WHERE NOT cd.chrome) AS normal

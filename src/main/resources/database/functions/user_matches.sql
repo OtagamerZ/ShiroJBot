@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION user_matches(VARCHAR)
+CREATE OR REPLACE FUNCTION shiro.user_matches(VARCHAR)
     RETURNS TABLE
             (
                 match_id INT,

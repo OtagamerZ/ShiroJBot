@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION user_wo(VARCHAR)
+CREATE OR REPLACE FUNCTION shiro.user_wo(VARCHAR)
     RETURNS INTEGER
     IMMUTABLE
     LANGUAGE sql

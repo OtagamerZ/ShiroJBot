@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION card_winrate(VARCHAR)
+CREATE OR REPLACE FUNCTION shiro.card_winrate(VARCHAR)
     RETURNS NUMERIC
     IMMUTABLE
     LANGUAGE sql

@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION user_shoukan_ranking(VARCHAR)
+CREATE OR REPLACE FUNCTION shiro.user_shoukan_ranking(VARCHAR)
     RETURNS INT
     IMMUTABLE
     LANGUAGE sql

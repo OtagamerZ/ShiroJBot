@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION is_valid_rarity(VARCHAR)
+CREATE OR REPLACE FUNCTION kawaipon.is_valid_rarity(VARCHAR)
     RETURNS BOOLEAN
     IMMUTABLE
     LANGUAGE sql

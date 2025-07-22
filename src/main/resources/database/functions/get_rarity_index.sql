@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION get_rarity_index(VARCHAR)
+CREATE OR REPLACE FUNCTION kawaipon.get_rarity_index(VARCHAR)
     RETURNS INT
     IMMUTABLE
     LANGUAGE sql

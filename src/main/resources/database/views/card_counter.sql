@@ -16,8 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_card_counter;
-CREATE OR REPLACE VIEW v_card_counter AS
+-- DROP VIEW IF EXISTS kawaipon.v_card_counter;
+CREATE OR REPLACE VIEW kawaipon.v_card_counter AS
 SELECT c.anime_id,
        count(1) AS count
 FROM card c

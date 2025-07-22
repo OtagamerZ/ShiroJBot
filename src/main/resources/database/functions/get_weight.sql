@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION get_weight(VARCHAR)
+CREATE OR REPLACE FUNCTION kawaipon.get_weight(VARCHAR)
     RETURNS INT
     IMMUTABLE
     LANGUAGE sql

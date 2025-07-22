@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION jsonb_pair(JSONB, VARCHAR)
+CREATE OR REPLACE FUNCTION shiro.jsonb_pair(JSONB, VARCHAR)
     RETURNS JSONB
     LANGUAGE sql
 AS

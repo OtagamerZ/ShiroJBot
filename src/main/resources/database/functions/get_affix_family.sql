@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION get_affix_family(VARCHAR)
+CREATE OR REPLACE FUNCTION dunhun.get_affix_family(VARCHAR)
     RETURNS VARCHAR
     LANGUAGE sql
 AS
@@ -24,7 +24,7 @@ $$
 SELECT regexp_replace($1, '(?<=.+)_[IVX]+$', '')
 $$;
 
-CREATE OR REPLACE FUNCTION get_affix_family(JSONB)
+CREATE OR REPLACE FUNCTION dunhun.get_affix_family(JSONB)
     RETURNS JSONB
     LANGUAGE sql
 AS

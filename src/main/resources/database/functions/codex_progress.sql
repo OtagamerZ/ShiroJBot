@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION codex_progress(VARCHAR)
+CREATE OR REPLACE FUNCTION shiro.codex_progress(VARCHAR)
     RETURNS TABLE(uid VARCHAR, race_1 VARCHAR, race_2 VARCHAR, flag BIT, variant BOOLEAN)
     LANGUAGE sql
 AS

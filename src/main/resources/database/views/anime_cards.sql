@@ -16,8 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_anime_cards;
-CREATE OR REPLACE VIEW v_anime_cards AS
+-- DROP VIEW IF EXISTS kawaipon.v_anime_cards;
+CREATE OR REPLACE VIEW kawaipon.v_anime_cards AS
 SELECT x.id
      , x.name
      , x.rarity

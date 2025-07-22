@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE PROCEDURE refresh_all_views(TEXT DEFAULT 'public')
+CREATE OR REPLACE PROCEDURE shiro.refresh_all_views(TEXT DEFAULT 'public')
     LANGUAGE plpgsql
 AS
 $$

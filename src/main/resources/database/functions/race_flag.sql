@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION race_flag(VARCHAR)
+CREATE OR REPLACE FUNCTION kawaipon.race_flag(VARCHAR)
     RETURNS BIT
     LANGUAGE sql
 AS

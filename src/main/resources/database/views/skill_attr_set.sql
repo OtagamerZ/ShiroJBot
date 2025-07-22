@@ -16,8 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_skill_attr_set;
-CREATE OR REPLACE VIEW v_skill_attr_set AS
+-- DROP VIEW IF EXISTS kawaipon.v_skill_attr_set;
+CREATE OR REPLACE VIEW kawaipon.v_skill_attr_set AS
 SELECT id
      , req_race
      , req_tags

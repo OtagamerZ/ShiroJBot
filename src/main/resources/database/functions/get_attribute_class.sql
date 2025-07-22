@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION get_attribute_class(INT)
+CREATE OR REPLACE FUNCTION dunhun.get_attribute_class(INT)
     RETURNS VARCHAR
     LANGUAGE sql
 AS

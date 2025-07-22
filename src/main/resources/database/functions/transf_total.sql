@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION transf_total(VARCHAR)
+CREATE OR REPLACE FUNCTION shiro.transf_total(VARCHAR)
     RETURNS BIGINT
     IMMUTABLE
     LANGUAGE sql

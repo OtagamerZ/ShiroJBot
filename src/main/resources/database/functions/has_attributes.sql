@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION has_attributes(a INT, b INT)
+CREATE OR REPLACE FUNCTION dunhun.has_attributes(a INT, b INT)
     RETURNS BOOLEAN
     LANGUAGE sql
 AS

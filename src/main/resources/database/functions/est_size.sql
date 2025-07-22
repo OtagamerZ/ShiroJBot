@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION est_size(VARCHAR)
+CREATE OR REPLACE FUNCTION shiro.est_size(VARCHAR)
     RETURNS BIGINT
     LANGUAGE sql
 AS

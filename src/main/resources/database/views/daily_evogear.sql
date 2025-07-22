@@ -16,8 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_daily_evogear;
-CREATE OR REPLACE VIEW v_daily_evogear AS
+-- DROP VIEW IF EXISTS kawaipon.v_daily_evogear;
+CREATE OR REPLACE VIEW kawaipon.v_daily_evogear AS
 SELECT cast(setseed(extract(DOY FROM current_date) / 365) AS VARCHAR) AS card_id
 UNION ALL
 SELECT x.card_id

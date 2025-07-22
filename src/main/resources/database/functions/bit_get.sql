@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION bit_get(bitfield INT, size INT, index INT)
+CREATE OR REPLACE FUNCTION shiro.bit_get(bitfield INT, size INT, index INT)
     RETURNS INT
     LANGUAGE sql
 AS

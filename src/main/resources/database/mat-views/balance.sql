@@ -17,7 +17,7 @@
  */
 
 -- DROP MATERIALIZED VIEW IF EXISTS v_balance;
-CREATE MATERIALIZED VIEW IF NOT EXISTS v_balance AS
+CREATE MATERIALIZED VIEW IF NOT EXISTS shiro.v_balance AS
 WITH ranking AS (
                 SELECT uid, balance
                 FROM account

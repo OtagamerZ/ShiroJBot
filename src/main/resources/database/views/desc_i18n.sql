@@ -16,8 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_desc_i18n;
-CREATE OR REPLACE VIEW v_desc_i18n AS
+-- DROP VIEW IF EXISTS kawaipon.v_desc_i18n;
+CREATE OR REPLACE VIEW kawaipon.v_desc_i18n AS
 SELECT coalesce(pt.id, en.id) AS id
      , pt.description AS desc_pt
      , en.description AS desc_en

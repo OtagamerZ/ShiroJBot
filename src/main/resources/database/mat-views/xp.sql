@@ -17,7 +17,7 @@
  */
 
 -- DROP MATERIALIZED VIEW IF EXISTS v_xp;
-CREATE MATERIALIZED VIEW IF NOT EXISTS v_xp AS
+CREATE MATERIALIZED VIEW IF NOT EXISTS shiro.v_xp AS
 WITH ranking AS (
                 SELECT uid, xp
                 FROM profile

@@ -17,7 +17,7 @@
  */
 
 -- DROP MATERIALIZED VIEW IF EXISTS v_senshi_roles;
-CREATE MATERIALIZED VIEW IF NOT EXISTS v_senshi_roles AS
+CREATE MATERIALIZED VIEW IF NOT EXISTS shiro.v_senshi_roles AS
 WITH placed_cards AS (
                      SELECT match_id
                           , side

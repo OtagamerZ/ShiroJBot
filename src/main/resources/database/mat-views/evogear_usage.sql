@@ -17,7 +17,7 @@
  */
 
 -- DROP MATERIALIZED VIEW IF EXISTS v_evogear_usage;
-CREATE MATERIALIZED VIEW IF NOT EXISTS v_evogear_usage AS
+CREATE MATERIALIZED VIEW IF NOT EXISTS shiro.v_evogear_usage AS
 WITH equipped_evo AS (
                      SELECT match_id
                           , side

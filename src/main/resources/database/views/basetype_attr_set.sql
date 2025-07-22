@@ -16,8 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_basetype_attr_set;
-CREATE OR REPLACE VIEW v_basetype_attr_set AS
+-- DROP VIEW IF EXISTS dunhun.v_basetype_attr_set;
+CREATE OR REPLACE VIEW dunhun.v_basetype_attr_set AS
 SELECT id
      , gear_type
      , str

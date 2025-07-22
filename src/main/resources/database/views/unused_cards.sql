@@ -16,8 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_unused_cards;
-CREATE OR REPLACE VIEW v_unused_cards AS
+-- DROP VIEW IF EXISTS kawaipon.v_unused_cards;
+CREATE OR REPLACE VIEW kawaipon.v_unused_cards AS
 SELECT c.id, c.rarity, c.anime_id
 FROM card c
          LEFT JOIN senshi s ON c.id = s.card_id

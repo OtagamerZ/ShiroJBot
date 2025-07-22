@@ -16,8 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_monster_odds;
-CREATE OR REPLACE VIEW v_monster_odds AS
+-- DROP VIEW IF EXISTS kawaipon.v_monster_odds;
+CREATE OR REPLACE VIEW kawaipon.v_monster_odds AS
 SELECT id
      , weight
      , round(weight * 100.0 / sum(weight) OVER (), 2) || '%' AS chance

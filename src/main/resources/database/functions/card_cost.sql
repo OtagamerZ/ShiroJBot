@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION card_cost(VARCHAR)
+CREATE OR REPLACE FUNCTION kawaipon.card_cost(VARCHAR)
     RETURNS TABLE(id VARCHAR, mp_cost INT, hp_cost INT, sc_cost INT)
     LANGUAGE sql
 AS

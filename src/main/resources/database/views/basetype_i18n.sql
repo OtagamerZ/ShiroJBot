@@ -16,8 +16,8 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
--- DROP VIEW IF EXISTS v_basetype_i18n;
-CREATE OR REPLACE VIEW v_basetype_i18n AS
+-- DROP VIEW IF EXISTS dunhun.v_basetype_i18n;
+CREATE OR REPLACE VIEW dunhun.v_basetype_i18n AS
 SELECT coalesce(pt.id, en.id) AS id
      , pt.name AS name_pt
      , en.name AS name_en

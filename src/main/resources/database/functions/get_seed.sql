@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION get_seed()
+CREATE OR REPLACE FUNCTION shiro.get_seed()
     RETURNS INT
     LANGUAGE sql
 AS

@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION iif(BOOLEAN, ANYELEMENT, ANYELEMENT)
+CREATE OR REPLACE FUNCTION shiro.iif(BOOLEAN, ANYELEMENT, ANYELEMENT)
     RETURNS ANYELEMENT
     LANGUAGE sql
 AS

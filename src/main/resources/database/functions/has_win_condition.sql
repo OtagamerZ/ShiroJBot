@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION has_win_condition(VARCHAR, VARCHAR)
+CREATE OR REPLACE FUNCTION shiro.has_win_condition(VARCHAR, VARCHAR)
     RETURNS BOOLEAN
     IMMUTABLE
     LANGUAGE sql
@@ -28,7 +28,7 @@ WHERE winner = side
   AND win_condition = lower($2)
 $$;
 
-CREATE OR REPLACE FUNCTION has_win_condition_any(VARCHAR, VARCHAR)
+CREATE OR REPLACE FUNCTION shiro.has_win_condition_any(VARCHAR, VARCHAR)
     RETURNS BOOLEAN
     IMMUTABLE
     LANGUAGE sql
