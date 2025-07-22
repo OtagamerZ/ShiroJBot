@@ -51,16 +51,16 @@ public class DeckCommand implements Executable {
 		}
 
 		if (args.containsKey("private")) {
-			Utils.sendLoading(data, locale.get("str/generating"), m ->
-				event.user().openPrivateChannel()
+			Utils.sendLoading(data, locale.get("str/generating"), m -> {
+				return event.user().openPrivateChannel()
 						.flatMap(s -> s.sendFiles(FileUpload.fromData(IO.getBytes(d.render(locale), "png"), "deck.png")))
-						.flatMap(s -> m.editMessage(locale.get("str/sent_in_private")))
-			);
+						.flatMap(s -> m.editMessage(locale.get("str/sent_in_private")));
+			});
 		} else {
-			Utils.sendLoading(data, locale.get("str/generating"), m ->
-					m.editMessage(event.user().getAsMention())
-							.setFiles(FileUpload.fromData(IO.getBytes(d.render(locale), "png"), "deck.png"))
-			);
+			Utils.sendLoading(data, locale.get("str/generating"), m -> {
+				return m.editMessage(event.user().getAsMention())
+						.setFiles(FileUpload.fromData(IO.getBytes(d.render(locale), "png"), "deck.png"));
+			});
 		}
 	}
 }
