@@ -115,6 +115,7 @@ public class CreateHeroCommand implements Executable {
 
 		try {
 			Hero h = new Hero(data.profile().getAccount(), name, race);
+			h.getBinding().setLocale(locale);
 
 			String finalUrl = url;
 			Utils.confirm(locale.get("question/hero_creation", h.getName()), event.channel(), w -> {
