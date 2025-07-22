@@ -24,6 +24,7 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -122,17 +123,19 @@ public class CreateHeroCommand implements Executable {
 			h.getBinding().setLocale(locale);
 
 			RaceValues bonus = h.getStats().getRaceBonus();
+
+			XStringBuilder sb = new XStringBuilder();
+			if (bonus.hp() != 0) sb.appendNewLine(locale.get("str/bonus_hp", Utils.sign(bonus.hp())));
+			if (bonus.attack() != 0) sb.appendNewLine(locale.get("str/bonus_attack", Utils.sign(bonus.attack())));
+			if (bonus.defense() != 0) sb.appendNewLine(locale.get("str/bonus_defense", Utils.sign(bonus.defense())));
+			if (bonus.dodge() != 0) sb.appendNewLine(locale.get("str/bonus_dodge", Utils.sign(bonus.dodge())));
+			if (bonus.parry() != 0) sb.appendNewLine(locale.get("str/bonus_parry", Utils.sign(bonus.parry())));
+			if (bonus.critical() != 0) sb.appendNewLine(locale.get("str/bonus_critical", Utils.sign(bonus.critical())));
+			if (bonus.power() != 0) sb.appendNewLine(locale.get("str/bonus_power", Utils.sign(bonus.power())));
+
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.addField(
-							locale.get("str/innate_skill"),
-							locale.get("str/race_bonuses",
-									Utils.sign(bonus.hp()),
-									Utils.sign(bonus.attack()), Utils.sign(bonus.defense()),
-									Utils.sign(bonus.dodge()) + "%", Utils.sign(bonus.parry()) + "%",
-									Utils.sign(bonus.critical()) + "%", Utils.sign(bonus.power()) + "%"
-							),
-							false
-					);
+					.setAuthor(locale.get("str/race_bonus"))
+					.setDescription(sb.toString());
 
 			String finalUrl = url;
 			Utils.confirm(locale.get("question/hero_creation", h.getName()), eb.build(), event.channel(), w -> {
