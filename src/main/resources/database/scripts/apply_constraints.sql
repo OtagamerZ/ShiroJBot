@@ -28,7 +28,7 @@ BEGIN
              , x."table"
              , x.def
              , x.col
-             , (SELECT table_schema FROM information_schema.tables WHERE table_name = x.table) AS src_sch
+             , (SELECT table_schema FROM information_schema.tables WHERE table_name = x.table AND table_schema NOT LIKE '%_old') AS src_sch
              , x.tgt_sch
              , x.ref
              , x.tgt
