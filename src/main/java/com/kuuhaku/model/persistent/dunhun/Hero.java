@@ -109,7 +109,7 @@ public class Hero extends Actor<Hero> {
 
 	@Override
 	public int getMaxHp() {
-		double flat = 300 + getModifiers().getMaxHp().get() + stats.getLevel() * 20;
+		double flat = 280 + getModifiers().getMaxHp().get() + stats.getRaceBonus().hp() + stats.getLevel() * 20;
 
 		return (int) Math.max(1, flat * getModifiers().getHpMult().get() * (1 + getAttributes().vit() * 0.1));
 	}
@@ -133,7 +133,7 @@ public class Hero extends Actor<Hero> {
 		double crit = getEquipment().getWeaponList().stream()
 				.filter(Gear::isWeapon)
 				.mapToDouble(Gear::getCritical)
-				.average().orElse(0);
+				.average().orElse(0) + stats.getRaceBonus().critical();
 
 		return Calc.clamp(crit * (1 + getModifiers().getCritical().get()), 0, 100);
 	}

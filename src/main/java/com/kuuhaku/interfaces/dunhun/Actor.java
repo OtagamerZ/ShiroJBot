@@ -18,6 +18,7 @@ import com.kuuhaku.model.persistent.shoukan.CombatCardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.CombatContext;
+import com.kuuhaku.model.records.dunhun.RaceValues;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.Column;
@@ -335,6 +336,24 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		modifiers.clear(this);
 		int dmg = this instanceof MonsterBase<?> m ? m.getStats().getAttack() : 100;
 		int def = this instanceof MonsterBase<?> m ? m.getStats().getDefense() : 100;
+		int ddg = this instanceof MonsterBase<?> m ? m.getStats().getDodge() : 0;
+		int pry = this instanceof MonsterBase<?> m ? m.getStats().getParry() : 0;
+		double pow = 0;
+
+		if (this instanceof Hero h) {
+			RaceValues bonus = h.getStats().getRaceBonus();
+			dmg += bonus.attack();
+			def += bonus.defense();
+			ddg += bonus.dodge();
+			pry += bonus.parry();
+			pow += bonus.power() + h.getAttributes().wis() * 0.05;
+		} else {
+			pow = switch (getRarityClass()) {
+				case MAGIC -> 0.25;
+				case RARE -> 1;
+				default -> 0;
+			};
+		}
 
 		Attributes total = this instanceof Hero h ? h.getAttributes() : new Attributes();
 		Equipment equip = getEquipment();
@@ -407,7 +426,9 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		CombatCardAttributes base = senshi.getBase();
 		base.setAtk((int) ((dmg + wDmg) * mult));
 		base.setDfs((int) ((def * (1 + total.str() * 0.01)) * mult));
-		base.setDodge(total.dex() / 2);
+		base.setDodge(ddg + total.dex() / 2);
+		base.setParry(pry);
+		senshi.getStats().getPower().set(pow);
 
 		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();
 		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750 + effCost);

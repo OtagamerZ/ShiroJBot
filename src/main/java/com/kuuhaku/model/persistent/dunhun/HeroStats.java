@@ -18,10 +18,12 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.records.dunhun.Attributes;
+import com.kuuhaku.model.records.dunhun.RaceValues;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -66,6 +68,8 @@ public class HeroStats implements Serializable {
 	@Column(name = "consumables", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject consumables = new JSONObject();
+
+	private transient RaceValues raceBonus;
 
 	public int getLevel() {
 		return xpTable.floorEntry(xp).getValue();
@@ -133,5 +137,23 @@ public class HeroStats implements Serializable {
 
 	public JSONObject getConsumables() {
 		return consumables;
+	}
+
+	public RaceValues getRaceBonus() {
+		if (raceBonus == null) {
+			for (Race race : race.split()) {
+				RaceBonus rb = DAO.find(RaceBonus.class, race);
+				if (rb != null) {
+					if (raceBonus == null) raceBonus = rb.getValues();
+					else raceBonus = raceBonus.mix(rb.getValues());
+				}
+			}
+
+			if (raceBonus == null) {
+				raceBonus = new RaceValues();
+			}
+		}
+
+		return raceBonus;
 	}
 }

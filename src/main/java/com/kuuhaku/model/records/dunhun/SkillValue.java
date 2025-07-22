@@ -33,15 +33,10 @@ public record SkillValue(int min, int max, boolean withAdded) {
 		double mult;
 		if (source instanceof Hero h) {
 			level = h.getStats().getLevel();
-			mult = h.getSenshi().getPower() + h.getAttributes().wis() * 0.05;
+			mult = h.getSenshi().getPower();
 		} else {
 			level = source.getGame().getAreaLevel();
-
-			mult = switch (source.getRarityClass()) {
-				case MAGIC -> 1.25;
-				case RARE -> 2;
-				default -> 1;
-			} * (source.getSenshi().getPower() + level * 0.025);
+			mult = source.getSenshi().getPower() + level * 0.025;
 		}
 
 		int added = 0;

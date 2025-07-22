@@ -90,6 +90,7 @@
         <class>com.kuuhaku.model.persistent.dunhun.Consumable</class>
         <class>com.kuuhaku.model.persistent.dunhun.GlobalDrops</class>
         <class>com.kuuhaku.model.persistent.dunhun.GearType</class>
+        <class>com.kuuhaku.model.persistent.dunhun.RaceBonus</class>
 
         <!-- LOCALIZED -->
         <class>com.kuuhaku.model.persistent.localized.LocalizedItem</class>
