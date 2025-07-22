@@ -111,7 +111,7 @@ dependencies {
 	implementation group: "org.hibernate.orm", name: "hibernate-core", version: "7.0.6.Final"
 	implementation group: "org.hibernate.orm", name: "hibernate-hikaricp", version: "7.0.6.Final"
 	implementation group: "org.hibernate.orm", name: "hibernate-jcache", version: "7.0.6.Final"
-	implementation group: "com.zaxxer", name: "HikariCP", version: "6.3.0"
+	implementation group: "com.zaxxer", name: "HikariCP", version: "6.3.1"
 
 	//Cache
 	implementation group: "com.github.ben-manes.caffeine", name: "caffeine", version: "3.2.2"
@@ -137,7 +137,7 @@ dependencies {
 	implementation group: "commons-validator", name: "commons-validator", version: "1.10.0"
 	implementation group: "commons-codec", name: "commons-codec", version: "1.18.0"
 	implementation group: "commons-cli", name: "commons-cli", version: "1.9.0"
-	implementation group: "commons-io", name: "commons-io", version: "2.19.0"
+	implementation group: "commons-io", name: "commons-io", version: "2.20.0"
 
 	//Logger
 	implementation group: "org.slf4j", name: "slf4j-api", version: "2.0.17"
