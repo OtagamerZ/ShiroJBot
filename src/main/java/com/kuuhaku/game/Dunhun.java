@@ -390,33 +390,40 @@ public class Dunhun extends GameInstance<NullPhase> {
 				.setCancellable(false);
 
 		Map<String, String> votes = new HashMap<>();
-		for (EventAction act : ed.actions()) {
-			helper.addAction(act.label(), w -> {
-				if (votes.containsKey(w.getUser().getId())) return;
-				votes.put(w.getUser().getId(), act.action());
+		if (!ed.actions().isEmpty()) {
+			for (EventAction act : ed.actions()) {
+				helper.addAction(act.label(), w -> {
+					if (votes.containsKey(w.getUser().getId())) return;
+					votes.put(w.getUser().getId(), act.action());
 
-				getChannel().sendMessage(getLocale().get("str/actor_chose",
-						heroes.get(w.getUser().getId()).getName(), act.label())
-				).queue();
+					getChannel().sendMessage(getLocale().get("str/actor_chose",
+							heroes.get(w.getUser().getId()).getName(), act.label())
+					).queue();
 
-				if (votes.size() >= getPartySize()) {
-					eb.setDescription(Utils.getOr(evt.getAction(Utils.getRandomEntry(votes.values())).get(), "PLACEHOLDER"));
+					if (votes.size() >= getPartySize()) {
+						eb.setDescription(Utils.getOr(evt.getAction(Utils.getRandomEntry(votes.values())).get(), "PLACEHOLDER"));
 
-					ButtonizeHelper fin = new ButtonizeHelper(true)
-							.setTimeout(5, TimeUnit.MINUTES)
-							.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
-							.setCancellable(false)
-							.addAction(getLocale().get("str/continue"), s -> {
-								lock.complete(null);
-								Pages.finalizeEvent(s.getMessage(), Utils::doNothing);
-							});
+						ButtonizeHelper fin = new ButtonizeHelper(true)
+								.setTimeout(5, TimeUnit.MINUTES)
+								.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
+								.setCancellable(false)
+								.addAction(getLocale().get("str/continue"), s -> {
+									lock.complete(null);
+									Pages.finalizeEvent(s.getMessage(), Utils::doNothing);
+								});
 
-					fin.apply(w.getMessage().editMessageEmbeds(eb.build()))
-							.queue(s -> {
-								event.set(new Pair<>(s, fin));
-								Pages.buttonize(s, fin);
-							});
-				}
+						fin.apply(w.getMessage().editMessageEmbeds(eb.build()))
+								.queue(s -> {
+									event.set(new Pair<>(s, fin));
+									Pages.buttonize(s, fin);
+								});
+					}
+				});
+			}
+		} else {
+			helper.addAction(getLocale().get("str/continue"), s -> {
+				lock.complete(null);
+				Pages.finalizeEvent(s.getMessage(), Utils::doNothing);
 			});
 		}
 

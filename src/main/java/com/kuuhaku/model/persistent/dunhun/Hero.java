@@ -93,7 +93,6 @@ public class Hero extends Actor<Hero> {
 		File parent = new File(Constants.CARDS_ROOT + "../heroes");
 		if (!parent.exists()) parent.mkdir();
 
-
 		File f = new File(parent, getId() + ".png");
 		img = Graph.scaleAndCenterImage(Graph.toColorSpace(img, BufferedImage.TYPE_INT_ARGB), 225, 350);
 		Main.getCacheManager().getResourceCache().invalidate("H:" + getId());
