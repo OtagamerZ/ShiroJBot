@@ -135,13 +135,12 @@ public class CreateHeroCommand implements Executable {
 					);
 
 			String finalUrl = url;
-			Utils.confirm(locale.get("question/hero_creation", h.getName()), event.channel(), w -> {
+			Utils.confirm(locale.get("question/hero_creation", h.getName()), eb.build(), event.channel(), w -> {
 						BufferedImage img = IO.getImage(finalUrl);
 						h.setImage(img);
 						h.save();
 
 						event.channel().sendMessage(locale.get("success/hero_created"))
-								.setEmbeds(eb.build())
 								.addFiles(FileUpload.fromData(IO.getBytes(h.render(locale), "png"), "hero.png"))
 								.queue();
 						return true;
