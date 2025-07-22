@@ -23,16 +23,20 @@ import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.dunhun.Hero;
+import com.kuuhaku.model.persistent.dunhun.RaceBonus;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.dunhun.RaceValues;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.utils.FileUpload;
@@ -117,6 +121,19 @@ public class CreateHeroCommand implements Executable {
 			Hero h = new Hero(data.profile().getAccount(), name, race);
 			h.getBinding().setLocale(locale);
 
+			RaceValues bonus = h.getStats().getRaceBonus();
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.addField(
+							locale.get("str/innate_skill"),
+							locale.get("str/race_bonuses",
+									Utils.sign(bonus.hp()),
+									Utils.sign(bonus.attack()), Utils.sign(bonus.defense()),
+									Utils.sign(bonus.dodge()) + "%", Utils.sign(bonus.parry()) + "%",
+									Utils.sign(bonus.critical()) + "%", Utils.sign(bonus.power()) + "%"
+							),
+							false
+					);
+
 			String finalUrl = url;
 			Utils.confirm(locale.get("question/hero_creation", h.getName()), event.channel(), w -> {
 						BufferedImage img = IO.getImage(finalUrl);
@@ -124,6 +141,7 @@ public class CreateHeroCommand implements Executable {
 						h.save();
 
 						event.channel().sendMessage(locale.get("success/hero_created"))
+								.setEmbeds(eb.build())
 								.addFiles(FileUpload.fromData(IO.getBytes(h.render(locale), "png"), "hero.png"))
 								.queue();
 						return true;
