@@ -130,9 +130,11 @@ public class GuildListener extends ListenerAdapter {
 						eb.setImage(img.getUrl());
 					}
 
-					channel.sendMessage(":star: | " + author.getAsMention() + " " + event.getChannel().getAsMention())
-							.setEmbeds(eb.build())
-							.queue();
+					if (!eb.isEmpty()) {
+						channel.sendMessage(":star: | " + author.getAsMention() + " " + event.getChannel().getAsMention())
+								.setEmbeds(eb.build())
+								.queue();
+					}
 				}
 			}
 		}
