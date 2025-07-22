@@ -52,8 +52,8 @@ import java.util.stream.Stream;
 @Syntax(
 		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>(?=\\s|$))+"),
 		value = {
-				"<dungeon:word> <users:custom:r>[users]",
-				"<dungeon:word>"
+				"<dungeon:word:r> <users:custom:r>[users]",
+				"<dungeon:word:r>"
 		}
 )
 @Requires(Permission.MESSAGE_ATTACH_FILES)
@@ -81,20 +81,15 @@ public class DunhunCommand implements Executable {
 			}
 		}
 
-		Dungeon dungeon;
-		if (args.has("dungeon")) {
-			dungeon = DAO.find(Dungeon.class, args.getString("dungeon").toUpperCase());
-			if (dungeon == null) {
-				String sug = Utils.didYouMean(args.getString("dungeon"), "SELECT id AS value FROM dungeon");
-				if (sug == null) {
-					event.channel().sendMessage(locale.get("error/unknown_dungeon_none")).queue();
-				} else {
-					event.channel().sendMessage(locale.get("error/unknown_dungeon", sug)).queue();
-				}
-				return;
+		Dungeon dungeon = DAO.find(Dungeon.class, args.getString("dungeon").toUpperCase());
+		if (dungeon == null) {
+			String sug = Utils.didYouMean(args.getString("dungeon"), "SELECT id AS value FROM dungeon");
+			if (sug == null) {
+				event.channel().sendMessage(locale.get("error/unknown_dungeon_none")).queue();
+			} else {
+				event.channel().sendMessage(locale.get("error/unknown_dungeon", sug)).queue();
 			}
-		} else {
-			dungeon = DAO.find(Dungeon.class, "INFINITE");
+			return;
 		}
 
 		Set<User> pending = new HashSet<>(others);
