@@ -19,7 +19,6 @@
 -- DROP VIEW IF EXISTS dunhun.v_skill_attr_set;
 CREATE OR REPLACE VIEW dunhun.v_skill_attr_set AS
 SELECT id
-     , req_race
      , req_tags
      , str
      , dex
@@ -29,7 +28,6 @@ SELECT id
      , x.class
 FROM (
      SELECT id
-          , req_race
           , req_tags
           , bit_get(req_attributes, 8, 0) AS str
           , bit_get(req_attributes, 8, 1) AS dex
