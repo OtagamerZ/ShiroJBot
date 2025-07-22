@@ -189,7 +189,7 @@ public class Hero extends Actor<Hero> {
 		return DAO.queryAll(Skill.class, """
 						SELECT s
 						FROM Skill s
-						WHERE s.requirements.attributes != -1
+						WHERE s.requirements.attributes.attributes != -1
 						ORDER BY s.id
 						""").stream()
 				.sorted(Comparator
