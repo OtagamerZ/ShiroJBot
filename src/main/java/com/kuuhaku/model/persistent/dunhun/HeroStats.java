@@ -37,8 +37,8 @@ public class HeroStats implements Serializable {
 	private static final NavigableMap<Integer, Integer> xpTable = new TreeMap<>();
 
 	static {
-		for (int i = 1; i <= 1000; i++) {
-			xpTable.put((int) (Math.pow(i - 1, 2.5) * 10), i);
+		for (int i = 0; i < 1000; i++) {
+			xpTable.put((int) (Math.pow(i, 2.5) * 10), i + 1);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class HeroStats implements Serializable {
 	}
 
 	public int getXpToNext() {
-		return xpTable.ceilingKey(xp);
+		return xpTable.ceilingKey(xp + 1);
 	}
 
 	public int getLosableXp() {
