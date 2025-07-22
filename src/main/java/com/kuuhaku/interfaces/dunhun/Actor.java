@@ -330,7 +330,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public Senshi createSenshi() {
 		Senshi senshi = new Senshi(this);
-		CombatCardAttributes base = senshi.getBase();
+		cache.setSenshi(senshi);
 
 		modifiers.clear(this);
 		int dmg = this instanceof MonsterBase<?> m ? m.getStats().getAttack() : 100;
@@ -404,6 +404,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			}
 		}
 
+		CombatCardAttributes base = senshi.getBase();
 		base.setAtk((int) ((dmg + wDmg) * mult));
 		base.setDfs((int) ((def * (1 + total.str() * 0.01)) * mult));
 		base.setDodge(total.dex() / 2);
@@ -418,7 +419,6 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			base.getTags().add("MONSTER");
 		}
 
-		cache.setSenshi(senshi);
 		return senshi;
 	}
 

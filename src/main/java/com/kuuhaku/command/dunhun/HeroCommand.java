@@ -138,7 +138,7 @@ public class HeroCommand implements Executable {
 						w -> allocGear(restore, locale, h, w.getMessage())
 				);
 
-		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating"))).queue(restore);
+		Utils.sendLoading(data, locale.get("str/generating"), restore);
 	}
 
 	private void allocAttributes(Consumer<Message> restore, I18N locale, Hero h, Message msg) {

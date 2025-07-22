@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.dev;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
@@ -39,7 +38,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.function.Supplier;
 
 @Command(
 		name = "eval",
@@ -49,61 +47,59 @@ import java.util.function.Supplier;
 public class CompileCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/compiling"))).queue(m -> {
-			Supplier<Pair<String, Long>> execute = () -> {
-				StopWatch time = new StopWatch();
+		Utils.sendLoading(data, locale.get("str/compiling"), m -> {
+			Pair<String, Long> out = executeSnippet(
+					locale, event,
+					args.getString("code").replaceAll("```(?:.*\n)?", "").trim()
+			);
 
-				try {
-					@Language("Groovy") String code = args.getString("code").replaceAll("```(?:.*\n)?", "").trim();
-
-					Future<?> fut = CompletableFuture.supplyAsync(() -> {
-						time.start();
-						Object out = Utils.exec(getClass().getSimpleName(), code, Map.of("msg", event.message()));
-						time.stop();
-
-						return out;
-					});
-
-					return new Pair<>(String.valueOf(fut.get(1, TimeUnit.MINUTES)), time.getTime(TimeUnit.MILLISECONDS));
-				} catch (TimeoutException e) {
-					return new Pair<>(locale.get("error/timeout"), -1L);
-				} catch (Exception e) {
-					Throwable t = e;
-					while (t.getCause() != null) {
-						t = t.getCause();
-					}
-
-					XStringBuilder sb = new XStringBuilder(t.toString());
-					for (StackTraceElement element : t.getStackTrace()) {
-						if (element.toString().startsWith("com.kuuhaku")) {
-							sb.appendNewLine("at " + element);
-						}
-					}
-
-					return new Pair<>(sb.toString(), -1L);
-				}
-			};
-
-			try {
-				Pair<String, Long> out = execute.get();
-				if (out.getSecond() > -1) {
-					m.editMessage("""
-							```
-							(%s ms) Out -> %s
-							```
-							""".formatted(out.getSecond(), out.getFirst().replace("`", "'"))
-					).queue();
-				} else {
-					m.editMessage("""
-							```
-							Err -> %s
-							```
-							""".formatted(out.getFirst().replace("`", "'"))
-					).queue();
-				}
-			} catch (Exception e) {
-				LOGGER.error(e, e);
+			if (out.getSecond() > -1) {
+				return m.editMessage("""
+						```
+						(%s ms) Out -> %s
+						```
+						""".formatted(out.getSecond(), out.getFirst().replace("`", "'"))
+				);
+			} else {
+				return m.editMessage("""
+						```
+						Err -> %s
+						```
+						""".formatted(out.getFirst().replace("`", "'"))
+				);
 			}
 		});
+	}
+
+	public Pair<String, Long> executeSnippet(I18N locale, MessageData.Guild event, @Language("Groovy") String code) {
+		StopWatch time = new StopWatch();
+
+		try {
+			Future<?> fut = CompletableFuture.supplyAsync(() -> {
+				time.start();
+				Object out = Utils.exec(getClass().getSimpleName(), code, Map.of("msg", event.message()));
+				time.stop();
+
+				return out;
+			});
+
+			return new Pair<>(String.valueOf(fut.get(1, TimeUnit.MINUTES)), time.getTime(TimeUnit.MILLISECONDS));
+		} catch (TimeoutException e) {
+			return new Pair<>(locale.get("error/timeout"), -1L);
+		} catch (Exception e) {
+			Throwable t = e;
+			while (t.getCause() != null) {
+				t = t.getCause();
+			}
+
+			XStringBuilder sb = new XStringBuilder(t.toString());
+			for (StackTraceElement element : t.getStackTrace()) {
+				if (element.toString().startsWith("com.kuuhaku")) {
+					sb.appendNewLine("at " + element);
+				}
+			}
+
+			return new Pair<>(sb.toString(), -1L);
+		}
 	}
 }

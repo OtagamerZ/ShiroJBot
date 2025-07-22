@@ -29,6 +29,7 @@ import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
@@ -50,15 +51,16 @@ public class DeckCommand implements Executable {
 		}
 
 		if (args.containsKey("private")) {
-			event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image")))
-					.flatMap(m -> event.user().openPrivateChannel()
-							.flatMap(s -> s.sendFiles(FileUpload.fromData(IO.getBytes(d.render(locale), "png"), "deck.png")))
-							.flatMap(s -> m.editMessage(locale.get("str/sent_in_private")))
-					).queue();
+			Utils.sendLoading(data, locale.get("str/generating"), m ->
+				event.user().openPrivateChannel()
+						.flatMap(s -> s.sendFiles(FileUpload.fromData(IO.getBytes(d.render(locale), "png"), "deck.png")))
+						.flatMap(s -> m.editMessage(locale.get("str/sent_in_private")))
+			);
 		} else {
-			event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image")))
-					.flatMap(m -> m.editMessage(event.user().getAsMention()).setFiles(FileUpload.fromData(IO.getBytes(d.render(locale), "png"), "deck.png")))
-					.queue();
+			Utils.sendLoading(data, locale.get("str/generating"), m ->
+					m.editMessage(event.user().getAsMention())
+							.setFiles(FileUpload.fromData(IO.getBytes(d.render(locale), "png"), "deck.png"))
+			);
 		}
 	}
 }

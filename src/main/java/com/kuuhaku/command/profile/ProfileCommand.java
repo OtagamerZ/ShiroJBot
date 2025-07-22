@@ -48,25 +48,22 @@ import net.dv8tion.jda.api.utils.FileUpload;
 public class ProfileCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/generating_image"))).queue(m -> {
+		Utils.sendLoading(data, locale.get("str/generating"), m -> {
 			User usr = Utils.getOr(event.users(0), event.user());
 			if (usr.isBot()) {
-				m.editMessage(locale.get("error/no_profile")).queue();
-				return;
+				return m.editMessage(locale.get("error/no_profile"));
 			}
 
 			Profile p = DAO.find(Profile.class, new ProfileId(usr.getId(), event.guild().getId()));
 			Account acc = p.getAccount();
 			if (!usr.equals(event.user()) && acc.getSettings().isPrivate()) {
-				m.editMessage(locale.get("error/profile_private")).queue();
-				return;
+				return m.editMessage(locale.get("error/profile_private"));
 			}
 
-			event.channel()
+			return event.channel()
 					.sendMessage(usr.getAsMention())
 					.addFiles(FileUpload.fromData(IO.getBytes(p.render(locale), "png"), "profile.png"))
-					.flatMap(s -> m.delete())
-					.queue(null, Utils::doNothing);
+					.flatMap(s -> m.delete());
 		});
 	}
 }

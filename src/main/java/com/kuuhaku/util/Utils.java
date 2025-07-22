@@ -37,6 +37,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shiro.ScriptMetrics;
 import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.StashItem;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
@@ -55,7 +56,9 @@ import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
+import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
@@ -1371,5 +1374,27 @@ public abstract class Utils {
 
 	public static String fancyLetter(char l) {
 		return new String(new char[]{0xD83C, (char) (0xDDE5 + (l - (Character.isUpperCase(l) ? 64 : 96)))});
+	}
+
+	public static void sendLoading(EventData data, String message, Consumer<Message> action) {
+		data.channel().sendMessage("<a:loading:697879726630502401> | " + message).queue(m -> {
+			try {
+				action.accept(m);
+			} catch (Exception e) {
+				Constants.LOGGER.error(e, e);
+				m.editMessage(data.config().getLocale().get("error/error", e)).queue();
+			}
+		});
+	}
+
+	public static void sendLoading(EventData data, String message, Function<Message, RestAction<?>> action) {
+		data.channel().sendMessage("<a:loading:697879726630502401> | " + message).queue(m -> {
+			try {
+				action.apply(m).queue(null, Utils::doNothing);
+			} catch (Exception e) {
+				Constants.LOGGER.error(e, e);
+				m.editMessage(data.config().getLocale().get("error/error", e)).queue();
+			}
+		});
 	}
 }
