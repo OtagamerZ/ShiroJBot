@@ -359,7 +359,6 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 			if (!g.isWeapon()) {
 				dmg += g.getDmg();
-				def += g.getDfs();
 			} else {
 				double mult = 1;
 				if (g.getTags().contains("LIGHT")) {
@@ -381,8 +380,9 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 					}
 				}
 
-				def += g.getDfs();
 			}
+
+			def += g.getDfs();
 		}
 
 		double mult = 1;
