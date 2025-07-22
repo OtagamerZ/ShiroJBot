@@ -16,9 +16,9 @@ public record RaceValues(
 		@Column(name = "parry", nullable = false)
 		int parry,
 		@Column(name = "critical", nullable = false)
-		double critical,
+		int critical,
 		@Column(name = "power", nullable = false)
-		double power
+		int power
 ) {
 	public RaceValues() {
 		this(0, 0, 0, 0, 0, 0, 0);

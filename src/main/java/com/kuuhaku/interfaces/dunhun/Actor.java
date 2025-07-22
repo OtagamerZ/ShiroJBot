@@ -346,7 +346,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			def += bonus.defense();
 			ddg += bonus.dodge();
 			pry += bonus.parry();
-			pow += bonus.power() + h.getAttributes().wis() * 0.05;
+			pow += (bonus.power() / 100d) + h.getAttributes().wis() * 0.05;
 		} else {
 			pow = switch (getRarityClass()) {
 				case MAGIC -> 0.25;
