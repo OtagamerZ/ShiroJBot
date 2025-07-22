@@ -23,6 +23,8 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.EventType;
+import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.localized.LocalizedEvent;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.records.dunhun.EventAction;
@@ -56,15 +58,18 @@ public class Event extends DAO<Event> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedEvent> infos = new HashSet<>();
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type", nullable = false)
+	private EventType type;
+
 	@Language("Groovy")
-	@Column(name = "effect", columnDefinition = "TEXT")
-	private String effect;
+	@Column(name = "script", columnDefinition = "TEXT")
+	private String script;
 
 	@Column(name = "weight", nullable = false)
 	private int weight;
 
 	private transient final Map<String, Supplier<String>> actions = new HashMap<>();
-	private transient String result;
 
 	public String getId() {
 		return id;
@@ -77,12 +82,8 @@ public class Event extends DAO<Event> {
 				.findAny().orElseThrow();
 	}
 
-	public String getResult() {
-		return result;
-	}
-
-	public void setResult(String result) {
-		this.result = result;
+	public EventType getType() {
+		return type;
 	}
 
 	public EventDescription parse(Dunhun game) {
@@ -97,7 +98,7 @@ public class Event extends DAO<Event> {
 		});
 
 		try {
-			Utils.exec(id, effect, Map.of(
+			Utils.exec(id, script, Map.of(
 					"game", game,
 					"event", this
 			));
@@ -116,16 +117,8 @@ public class Event extends DAO<Event> {
 		return actions.getOrDefault(action, () -> "");
 	}
 
-	public String getEvent(Dunhun game, String key) {
-		return game.parsePlural(LocalizedString.get(game.getLocale(), "event/" + key));
-	}
-
-	public String getOutcome(Dunhun game, String key, Object... args) {
-		return LocalizedString.get(game.getLocale(), "outcome/" + key).formatted(args);
-	}
-
-	public String getEvent(Dunhun game, String key, String outcome, Object... args) {
-		return getEvent(game, key) + "\n\n" + getOutcome(game, outcome, args);
+	public String getString(Dunhun game, String key, Object... args) {
+		return game.parsePlural(LocalizedString.get(game.getLocale(), "event/" + key).formatted(args));
 	}
 
 	@Override
@@ -142,12 +135,17 @@ public class Event extends DAO<Event> {
 	}
 
 	public static Event getRandom() {
+		return getRandom(EventType.NONE);
+	}
+
+	public static Event getRandom(EventType type) {
 		List<Object[]> evts = DAO.queryAllUnmapped("""
 				SELECT id
 				     , weight
 				FROM event
 				WHERE weight > 0
-				""");
+				  AND (type = ?1 OR ?1 = 'NONE')
+				""", type.name());
 
 		RandomList<String> rl = new RandomList<>();
 		for (Object[] a : evts) {
