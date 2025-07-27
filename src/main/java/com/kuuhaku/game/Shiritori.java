@@ -74,7 +74,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 				return;
 			}
 
-			nextTurn();
+			nextTurn(true);
 		}, 1, TimeUnit.MINUTES);
 	}
 
@@ -239,7 +239,11 @@ public class Shiritori extends GameInstance<NullPhase> {
 			}
 
 			if (!same) {
-				reportEvent("alert/game_turn_change_shiritori", "<@" + inGame.getNext() + ">", current);
+				if (current != null) {
+					reportEvent("alert/game_turn_change_shiritori", "<@" + inGame.getNext() + ">", current);
+				} else {
+					reportEvent("alert/game_turn_change_shiritori_no_word", "<@" + inGame.getNext() + ">");
+				}
 			}
 		} else if (!same) {
 			reportEvent("str/game_turn_change_shiritori", "<@" + inGame.getNext() + ">", current);

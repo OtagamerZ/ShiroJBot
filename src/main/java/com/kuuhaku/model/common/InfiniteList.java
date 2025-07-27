@@ -27,7 +27,7 @@ import java.util.List;
 
 public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
 	private T current;
-	private int index = -1;
+	private int index = 0;
 
 	public InfiniteList() {
 	}
@@ -77,7 +77,12 @@ public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
 	public T remove() {
 		if (isEmpty()) return null;
 
-		return remove(current) ? current : null;
+		if (remove(current)) {
+			getNext();
+			return current;
+		}
+
+		return null;
 	}
 
 	public int getIndex() {
