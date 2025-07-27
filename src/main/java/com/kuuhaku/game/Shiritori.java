@@ -239,11 +239,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 			}
 
 			if (!same) {
-				if (current != null) {
-					reportEvent("alert/game_turn_change_shiritori", "<@" + inGame.getNext() + ">", current);
-				} else {
-					reportEvent("alert/game_turn_change_shiritori_no_word", "<@" + inGame.getNext() + ">");
-				}
+				reportEvent("alert/game_turn_change_shiritori", "<@" + inGame.getNext() + ">", current);
 			}
 		} else if (!same) {
 			reportEvent("str/game_turn_change_shiritori", "<@" + inGame.getNext() + ">", current);
