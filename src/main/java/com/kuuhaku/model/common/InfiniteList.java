@@ -71,13 +71,22 @@ public class InfiniteList<T> extends ArrayList<T> implements Iterable<T> {
 	}
 
 	public T getCurrent() {
+		if (index == -1) {
+			return getNext();
+		}
+
 		return current;
 	}
 
 	public T remove() {
 		if (isEmpty()) return null;
 
-		return remove(current) ? current : null;
+		if (remove(current)) {
+			getNext();
+			return current;
+		}
+
+		return null;
 	}
 
 	public int getIndex() {

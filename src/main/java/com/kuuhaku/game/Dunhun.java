@@ -206,7 +206,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					Collection<Hero> hs = heroes.values();
-					if (hs.stream().allMatch(a -> a.isOutOfCombat())) {
+					if (hs.stream().allMatch(Actor::isOutOfCombat)) {
 						for (Hero h : hs) {
 							if (h.getHp() > 0) continue;
 

@@ -74,7 +74,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 				return;
 			}
 
-			nextTurn();
+			nextTurn(true);
 		}, 1, TimeUnit.MINUTES);
 	}
 
