@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Sublevel {
-	public static final int MAX_NODES = 5;
+	public static final int MAX_NODES = 7;
 
 	private final Floor floor;
 	private final int sublevel;

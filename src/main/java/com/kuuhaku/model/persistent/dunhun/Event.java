@@ -22,9 +22,8 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.common.dunhun.Node;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.EventType;
-import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.localized.LocalizedEvent;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.records.dunhun.EventAction;
@@ -58,13 +57,12 @@ public class Event extends DAO<Event> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedEvent> infos = new HashSet<>();
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "type", nullable = false)
-	private EventType type;
-
 	@Language("Groovy")
 	@Column(name = "script", columnDefinition = "TEXT")
 	private String script;
+
+	@Column(name = "min_paths", nullable = false)
+	private int minPaths;
 
 	@Column(name = "weight", nullable = false)
 	private int weight;
@@ -80,10 +78,6 @@ public class Event extends DAO<Event> {
 				.filter(ld -> ld.getLocale().is(locale))
 				.map(ld -> ld.setUwu(locale.isUwu()))
 				.findAny().orElseThrow();
-	}
-
-	public EventType getType() {
-		return type;
 	}
 
 	public EventDescription parse(Dunhun game) {
@@ -134,25 +128,25 @@ public class Event extends DAO<Event> {
 		return Objects.hashCode(id);
 	}
 
-	public static Event getRandom() {
-		return getRandom(EventType.NONE);
-	}
-
-	public static Event getRandom(EventType type) {
+	public static Event getRandom(Node node) {
 		List<Object[]> evts = DAO.queryAllUnmapped("""
 				SELECT id
 				     , weight
 				FROM event
 				WHERE weight > 0
-				  AND (type = ?1 OR ?1 = 'NONE')
-				""", type.name());
+				  AND min_paths >= ?1
+				""", node.getChildren().size());
 
-		RandomList<String> rl = new RandomList<>();
-		for (Object[] a : evts) {
-			rl.add((String) a[0], ((Number) a[1]).intValue());
-		}
+		return Utils.withUnsafeRng(rng -> {
+			rng.setSeed(node.getSeed());
 
-		if (rl.entries().isEmpty()) return null;
-		return DAO.find(Event.class, rl.get());
+			RandomList<String> rl = new RandomList<>(rng);
+			for (Object[] a : evts) {
+				rl.add((String) a[0], ((Number) a[1]).intValue());
+			}
+
+			if (rl.entries().isEmpty()) return null;
+			return DAO.find(Event.class, rl.get());
+		});
 	}
 }

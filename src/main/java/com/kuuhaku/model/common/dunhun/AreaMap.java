@@ -1,8 +1,6 @@
 package com.kuuhaku.model.common.dunhun;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.model.enums.dunhun.NodeType;
-import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.WobbleStroke;
 
 import java.awt.*;
@@ -10,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
@@ -27,6 +24,11 @@ public class AreaMap {
 	private CompletableFuture<Void> generated;
 
 	public AreaMap(Consumer<AreaMap> generator) {
+		this(0, generator);
+	}
+
+	public AreaMap(int floor, Consumer<AreaMap> generator) {
+		this.renderFloor.set(floor);
 		this.generator = generator;
 	}
 
@@ -211,8 +213,11 @@ public class AreaMap {
 	}
 
 	public static void generateRandom(AreaMap m) {
-		for (int i = -1; i <= RENDER_FLOORS; i++) {
-			Floor fl = new Floor(m.getRenderFloor() + i);
+		for (int i = -RENDER_FLOORS; i <= RENDER_FLOORS; i++) {
+			int depth = m.getRenderFloor() + i;
+			if (depth < -1) continue;
+
+			Floor fl = new Floor(depth);
 			m.addFloor(fl);
 
 			List<Sublevel> sublevels = fl.getSublevels();
@@ -240,7 +245,13 @@ public class AreaMap {
 					if (sub.getSublevel() == 0 || sub.getSublevel() == fl.size() - 1) {
 						nodeCount = 1;
 					} else {
-						nodeCount = fl.getRng().nextInt(prev.size() == 1 ? 2 : 1, Sublevel.MAX_NODES + 1);
+						int min = Math.min(1 + fl.getFloor() / 20, Sublevel.MAX_NODES / 3);
+						int max = Math.min(3 + fl.getFloor() / 10, Sublevel.MAX_NODES);
+						if (max > 5 && 5d / prev.size() > 1) {
+							max = 5;
+						}
+
+						nodeCount = fl.getRng().nextInt(min, max + 1);
 					}
 
 					float part = ((float) prev.size() / nodeCount);
@@ -277,7 +288,7 @@ public class AreaMap {
 										}
 									}
 
-									if (leapNode != null && leapNode.getChildren().size() < Sublevel.MAX_NODES) {
+									if (leapNode != null && leapNode.getChildren().size() < 5) {
 										parents.add(leapNode);
 									}
 								}
