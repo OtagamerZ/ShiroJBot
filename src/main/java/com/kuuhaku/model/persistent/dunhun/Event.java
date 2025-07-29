@@ -134,7 +134,7 @@ public class Event extends DAO<Event> {
 				     , weight
 				FROM event
 				WHERE weight > 0
-				  AND min_paths >= ?1
+				  AND min_paths <= ?1
 				""", node.getChildren().size());
 
 		return Utils.withUnsafeRng(rng -> {

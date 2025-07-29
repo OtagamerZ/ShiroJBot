@@ -2,6 +2,8 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.Utils;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -14,7 +16,6 @@ import java.util.*;
 import java.util.List;
 
 public class Node {
-	public static final MessageDigest DIGEST;
 	public static final int NODE_RADIUS = 64;
 	public static final BufferedImage ICON_PLAIN = new Node(null, NodeType.NONE).getIcon();
 	public static final BufferedImage ICON_PLAYER = new Node(null, NodeType.PLAYER).getIcon();
@@ -32,14 +33,6 @@ public class Node {
 	private NodeType type = NodeType.NONE;
 	private int pathColor = -1;
 
-	static {
-		try {
-			DIGEST = MessageDigest.getInstance("md5");
-		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	public Node(Sublevel sublevel, NodeType type) {
 		this(sublevel, type, List.of());
 	}
@@ -47,13 +40,11 @@ public class Node {
 	public Node(Sublevel sublevel, List<Node> parents) {
 		this.sublevel = sublevel;
 		this.path = sublevel.size();
-
-		DIGEST.reset();
-		DIGEST.update(String.valueOf(sublevel.getFloor().getFloor()).getBytes());
-		DIGEST.update(String.valueOf(sublevel.getSublevel()).getBytes());
-		DIGEST.update(String.valueOf(path).getBytes());
-
-		this.seed = Arrays.hashCode(DIGEST.digest());
+		this.seed = Utils.generateSeed(DigestUtils.getMd5Digest(),
+				sublevel.getFloor().getSeed(),
+				sublevel.getSublevel(),
+				path
+		);
 
 		this.parents = parents;
 		for (Node parent : parents) {

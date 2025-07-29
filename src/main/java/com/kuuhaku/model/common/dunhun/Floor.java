@@ -1,7 +1,12 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.enums.dunhun.NodeType;
+import com.kuuhaku.util.Utils;
+import org.apache.commons.codec.digest.DigestUtils;
 
+import java.awt.geom.Area;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -9,23 +14,31 @@ import java.util.stream.Stream;
 public class Floor {
 	public static final int AREAS_PER_FLOOR = 10;
 
+	private final AreaMap map;
 	private final int floor;
+	private final int seed;
 	private final Random rng;
 	private final Sublevel[] sublevels;
 	private final Set<Node> eventNodes = new HashSet<>();
 
-	public Floor(int floor) {
-		this(floor, floor <= 0 ? 1 : AREAS_PER_FLOOR);
+	public Floor(AreaMap map, int floor) {
+		this(map, floor, floor <= 0 ? 1 : AREAS_PER_FLOOR);
 	}
 
-	public Floor(int floor, int levels) {
+	public Floor(AreaMap map, int floor, int sublevels) {
+		this.map = map;
 		this.floor = floor;
-		this.rng = new Random(this.floor);
-		this.sublevels = new Sublevel[levels];
+		this.seed = Utils.generateSeed(DigestUtils.getMd5Digest(), map.getSeed(), floor);
+		this.rng = new Random();
+		this.sublevels = new Sublevel[sublevels];
 
-		for (int i = 0; i < sublevels.length; i++) {
-			sublevels[i] = new Sublevel(this, i);
+		for (int i = 0; i < this.sublevels.length; i++) {
+			this.sublevels[i] = new Sublevel(this, i);
 		}
+	}
+
+	public AreaMap getMap() {
+		return map;
 	}
 
 	public Sublevel getSublevel(int sublevel) {
@@ -86,6 +99,10 @@ public class Floor {
 
 	public int getFloor() {
 		return floor;
+	}
+
+	public int getSeed() {
+		return seed;
 	}
 
 	public Random getRng() {

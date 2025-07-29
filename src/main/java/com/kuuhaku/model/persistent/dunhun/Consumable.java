@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
 import com.kuuhaku.model.persistent.localized.LocalizedConsumable;
@@ -54,6 +55,9 @@ public class Consumable extends DAO<Consumable> {
 
 	@Column(name = "price")
 	private Integer price;
+
+	@Column(name = "weight", nullable = false)
+	private int weight;
 
 	private transient int count;
 
@@ -133,6 +137,19 @@ public class Consumable extends DAO<Consumable> {
 	}
 
 	public static Consumable getRandom() {
-		return DAO.query(Consumable.class, "SELECT c FROM Consumable c ORDER BY random()");
+		List<Object[]> affs = DAO.queryAllUnmapped("""
+				SELECT id
+				     , weight
+				FROM consumable
+				WHERE weight > 0
+				""");
+
+		RandomList<String> rl = new RandomList<>();
+		for (Object[] a : affs) {
+			rl.add((String) a[0], ((Number) a[1]).intValue());
+		}
+
+		if (rl.entries().isEmpty()) return null;
+		return DAO.find(Consumable.class, rl.get());
 	}
 }

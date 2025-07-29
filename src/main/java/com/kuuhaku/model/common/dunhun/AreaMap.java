@@ -16,6 +16,7 @@ public class AreaMap {
 	public static final int RENDER_FLOORS = 1;
 	private static final Point ZERO = new Point();
 
+	private final int seed;
 	private final Consumer<AreaMap> generator;
 	private final TreeMap<Integer, Floor> floors = new TreeMap<>();
 	private final AtomicInteger renderFloor = new AtomicInteger(0);
@@ -24,12 +25,17 @@ public class AreaMap {
 	private CompletableFuture<Void> generated;
 
 	public AreaMap(Consumer<AreaMap> generator) {
-		this(0, generator);
+		this(0, 0, generator);
 	}
 
-	public AreaMap(int floor, Consumer<AreaMap> generator) {
+	public AreaMap(int seed, int floor, Consumer<AreaMap> generator) {
+		this.seed = seed;
 		this.renderFloor.set(floor);
 		this.generator = generator;
+	}
+
+	public int getSeed() {
+		return seed;
 	}
 
 	public List<Floor> getFloors() {
@@ -217,7 +223,7 @@ public class AreaMap {
 			int depth = m.getRenderFloor() + i;
 			if (depth < -1) continue;
 
-			Floor fl = new Floor(depth);
+			Floor fl = new Floor(m, depth);
 			m.addFloor(fl);
 
 			List<Sublevel> sublevels = fl.getSublevels();

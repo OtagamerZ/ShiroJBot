@@ -1086,6 +1086,14 @@ public abstract class Utils {
 		return true;
 	}
 
+	public static int generateSeed(MessageDigest md, Object... params) {
+		md.reset();
+		for (Object param : params) {
+			DigestUtils.updateDigest(md, String.valueOf(param));
+		}
+		return Arrays.hashCode(md.digest());
+	}
+
 	public static String generateRandomHash(int length) {
 		MessageDigest md;
 

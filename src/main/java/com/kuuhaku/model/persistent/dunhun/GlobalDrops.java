@@ -39,10 +39,6 @@ public class GlobalDrops extends DAO<GlobalDrops> {
 		return consumable;
 	}
 
-	public int getWeight() {
-		return weight;
-	}
-
 	public int getMinLevel() {
 		return minLevel;
 	}

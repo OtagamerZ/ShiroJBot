@@ -91,6 +91,8 @@
         <class>com.kuuhaku.model.persistent.dunhun.GlobalDrops</class>
         <class>com.kuuhaku.model.persistent.dunhun.GearType</class>
         <class>com.kuuhaku.model.persistent.dunhun.RaceBonus</class>
+        <class>com.kuuhaku.model.persistent.dunhun.DungeonRun</class>
+        <class>com.kuuhaku.model.persistent.dunhun.RunModifier</class>
 
         <!-- LOCALIZED -->
         <class>com.kuuhaku.model.persistent.localized.LocalizedItem</class>
@@ -107,6 +109,7 @@
         <class>com.kuuhaku.model.persistent.localized.LocalizedConsumable</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedUnique</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedGearType</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedRunModifier</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
