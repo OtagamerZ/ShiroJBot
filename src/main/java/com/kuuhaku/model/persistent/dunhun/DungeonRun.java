@@ -44,7 +44,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Column(name = "path", nullable = false)
 	private int path = 0;
 
-	@ManyToMany(cascade = ALL, fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "dungeon_run_modifier",
 			schema = "dunhun",
 			joinColumns = {
