@@ -43,6 +43,14 @@ public class DungeonRun extends DAO<DungeonRun> {
 	private int path = 0;
 
 	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "dungeon_run_modifier",
+			schema = "dunhun",
+			joinColumns = {
+					@JoinColumn(name = "hero_id", referencedColumnName = "hero_id"),
+					@JoinColumn(name = "dungeon_id", referencedColumnName = "dungeon_id")
+			},
+			inverseJoinColumns = @JoinColumn(name = "modifier_id")
+	)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<RunModifier> modifiers = new HashSet<>();
 
