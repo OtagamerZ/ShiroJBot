@@ -1,7 +1,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.persistent.shiro.Card;
+import com.kuuhaku.model.persistent.user.UserItem;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -16,14 +16,14 @@ import java.util.Objects;
 @Table(name = "global_drops", schema = "dunhun")
 public class GlobalDrops extends DAO<GlobalDrops> {
 	@Id
-	@Column(name = "consumable_id", nullable = false)
+	@Column(name = "item_id", nullable = false)
 	private String id;
 
 	@OneToOne(optional = false)
-	@PrimaryKeyJoinColumn(name = "consumable_id")
+	@PrimaryKeyJoinColumn(name = "item_id")
 	@Fetch(FetchMode.JOIN)
 	@MapsId("id")
-	private Consumable consumable;
+	private UserItem item;
 
 	@Column(name = "weight", nullable = false)
 	private int weight;
@@ -35,8 +35,8 @@ public class GlobalDrops extends DAO<GlobalDrops> {
 		return id;
 	}
 
-	public Consumable getConsumable() {
-		return consumable;
+	public UserItem getItem() {
+		return item;
 	}
 
 	public int getMinLevel() {
