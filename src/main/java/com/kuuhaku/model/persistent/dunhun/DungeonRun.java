@@ -12,6 +12,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 @Entity
 @Table(name = "dungeon_run", schema = "dunhun")
 public class DungeonRun extends DAO<DungeonRun> {
@@ -42,7 +44,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Column(name = "path", nullable = false)
 	private int path = 0;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(cascade = ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "dungeon_run_modifier",
 			schema = "dunhun",
 			joinColumns = {
