@@ -49,7 +49,7 @@ BEGIN
                            INNER JOIN pg_class c ON c.oid = r.confrelid
                   WHERE r.contype = 'f'
                   ) x
-                , regexp_match(x.def, 'FOREIGN KEY \(([\w"]+)\) REFERENCES ([\w"]+(?=\.))?([\w"]+)\((\w+?)\)') m
+                , regexp_match(x.def, 'FOREIGN KEY \(([\w", ]+)\) REFERENCES ([\w"]+(?=\.))?([\w"]+)\(([\w", ]+?)\)') m
              WHERE x.schema NOT LIKE '%\_old'
              ) x
         WHERE x.ref = 'card'
