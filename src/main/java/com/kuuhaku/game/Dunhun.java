@@ -185,7 +185,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 								if (!skipped) {
 									if (Calc.chance(10)) {
-										runEvent();
+//										runEvent();
 									} else {
 										runCombat();
 									}
@@ -366,10 +366,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		getCombat().process();
-	}
-
-	public void runEvent() {
-		runEvent(Event.getRandom());
 	}
 
 	public void runEvent(Event evt) {
