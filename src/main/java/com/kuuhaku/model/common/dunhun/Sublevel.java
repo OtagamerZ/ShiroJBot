@@ -11,7 +11,7 @@ public class Sublevel {
 
 	private final Floor floor;
 	private final int sublevel;
-	private final List<Node> nodes = new ArrayList<>(MAX_NODES);;
+	private final List<Node> nodes = new ArrayList<>(MAX_NODES);
 
 	public Sublevel(Floor floor, int sublevel) {
 		this.floor = floor;
@@ -52,6 +52,10 @@ public class Sublevel {
 
 	public int size() {
 		return nodes.size();
+	}
+
+	public int depth() {
+		return floor.depth() + sublevel + 1;
 	}
 
 	public boolean hasLeapNode() {

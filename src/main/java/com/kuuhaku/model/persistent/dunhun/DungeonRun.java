@@ -7,12 +7,10 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "dungeon_run", schema = "dunhun")
@@ -54,7 +52,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 			inverseJoinColumns = @JoinColumn(name = "modifier_id")
 	)
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<RunModifier> modifiers = new HashSet<>();
+	private List<RunModifier> modifiers = new ArrayList<>();
 
 	public DungeonRun() {
 	}
@@ -77,7 +75,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 		return dungeon;
 	}
 
-	public long getSeed() {
+	public int getSeed() {
 		return seed;
 	}
 
@@ -105,12 +103,12 @@ public class DungeonRun extends DAO<DungeonRun> {
 		this.path = path;
 	}
 
-	public Set<RunModifier> getModifiers() {
+	public List<RunModifier> getModifiers() {
 		return modifiers;
 	}
 
 	public AreaMap getMap() {
-		return new AreaMap(seed, floor, AreaMap::generate);
+		return new AreaMap(seed, floor);
 	}
 
 	@Override

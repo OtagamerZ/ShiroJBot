@@ -1,5 +1,7 @@
 package com.kuuhaku.model.common.dunhun;
 
+import com.kuuhaku.model.persistent.dunhun.DungeonRun;
+
 public class PlayerPos {
 	private int floor;
 	private int sublevel;
@@ -39,5 +41,17 @@ public class PlayerPos {
 
 	public void movePath(int step) {
 		this.path += step;
+	}
+
+	public void setNode(Node node) {
+		floor = node.getSublevel().getFloor().getFloor();
+		sublevel = node.getSublevel().getSublevel();
+		path = node.getPath();
+	}
+
+	public void restore(DungeonRun run) {
+		floor = run.getFloor();
+		sublevel = run.getSublevel();
+		path = run.getPath();
 	}
 }

@@ -10,8 +10,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.List;
 
@@ -130,6 +128,10 @@ public class Node {
 		} catch (IOException e) {
 			return null;
 		}
+	}
+
+	public int depth() {
+		return sublevel.depth();
 	}
 
 	public boolean isOccluded(int width, int height) {

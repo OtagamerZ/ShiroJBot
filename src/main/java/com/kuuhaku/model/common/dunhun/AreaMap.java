@@ -1,6 +1,7 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.enums.dunhun.NodeType;
+import com.kuuhaku.model.persistent.dunhun.DungeonRun;
 import com.kuuhaku.util.WobbleStroke;
 
 import java.awt.*;
@@ -23,15 +24,17 @@ public class AreaMap {
 	private final AtomicInteger renderSublevel = new AtomicInteger(0);
 	private final PlayerPos playerPos = new PlayerPos();
 	private CompletableFuture<Void> generated;
+	private DungeonRun run;
 
 	public AreaMap(Consumer<AreaMap> generator) {
-		this(0, 0, generator);
+		this.seed = 0;
+		this.generator = generator;
 	}
 
-	public AreaMap(int seed, int floor, Consumer<AreaMap> generator) {
+	public AreaMap(int seed, int floor) {
 		this.seed = seed;
 		this.renderFloor.set(floor);
-		this.generator = generator;
+		this.generator = AreaMap::generateRandom;
 	}
 
 	public int getSeed() {
@@ -44,6 +47,10 @@ public class AreaMap {
 
 	public void addFloor(Floor floor) {
 		floors.put(floor.getFloor(), floor);
+	}
+
+	public Floor getFloor() {
+		return getFloor(renderFloor.get());
 	}
 
 	public Floor getFloor(int depth) {
@@ -86,6 +93,15 @@ public class AreaMap {
 
 	public PlayerPos getPlayerPos() {
 		return playerPos;
+	}
+
+	public DungeonRun getRun() {
+		return run;
+	}
+
+	public void setRun(DungeonRun run) {
+		this.run = run;
+		playerPos.restore(run);
 	}
 
 	public void generate() {

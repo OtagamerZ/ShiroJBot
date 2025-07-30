@@ -186,7 +186,7 @@ public class Combat implements Renderer<BufferedImage> {
 				.setFooter(getLocale().get("str/combat_footer"));
 
 		if (!game.isDuel()) {
-			eb.setAuthor(getLocale().get("str/dungeon_floor", game.getTurn()));
+			eb.setAuthor(getLocale().get("str/dungeon_area", game.getTurn()));
 		}
 
 		String title = getLocale().get("str/hunters");

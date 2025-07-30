@@ -14,18 +14,18 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.XStringBuilder;
-import com.kuuhaku.model.common.dunhun.Combat;
-import com.kuuhaku.model.common.dunhun.MonsterBase;
+import com.kuuhaku.model.common.dunhun.*;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.ContinueMode;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.user.DynamicProperty;
 import com.kuuhaku.model.persistent.user.UserItem;
+import com.kuuhaku.model.records.dunhun.Choice;
 import com.kuuhaku.model.records.dunhun.EventAction;
 import com.kuuhaku.model.records.dunhun.EventDescription;
 import com.kuuhaku.model.records.dunhun.Loot;
+import com.kuuhaku.model.records.id.DungeonRunId;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
@@ -38,6 +38,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
+import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
@@ -56,8 +57,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
 	private final AtomicReference<Pair<Message, ButtonizeHelper>> event = new AtomicReference<>();
 	private final Loot loot = new Loot();
+	private final AreaMap map;
 	private final boolean duel;
-	private CompletableFuture<Void> lock;
 	private Pair<String, String> message;
 
 	public Dunhun(I18N locale, Dungeon dungeon, User... players) {
@@ -69,9 +70,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		this.dungeon = dungeon;
 		this.duel = dungeon.equals(Dungeon.DUEL);
 		if (duel && players.length % 2 != 0) {
-			getChannel().sendMessage(getString("error/invalid_duel")).queue();
-			close(GameReport.OTHER);
-			return;
+			throw new GameReport(GameReport.INVALID_DUEL);
 		}
 
 		for (String p : players) {
@@ -91,8 +90,37 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		if (duel) {
+			this.map = null;
 			setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/versus_end_timeout"), 5, TimeUnit.MINUTES);
 		} else {
+			if (dungeon.getFloors().isEmpty()) {
+				Hero leader = heroes.get(players[0]);
+				DungeonRun run = DAO.find(DungeonRun.class, new DungeonRunId(leader.getId(), dungeon.getId()));
+				if (run == null) {
+					run = new DungeonRun(leader, dungeon);
+				}
+
+				this.map = new AreaMap(run.getSeed(), run.getFloor());
+
+				Floor fl = this.map.getFloor();
+				if (run.getSublevel() >= fl.size()) {
+					run.setSublevel(fl.size() - 1);
+				}
+
+				Sublevel sub = fl.getSublevel(run.getSublevel());
+				if (run.getPath() >= sub.size()) {
+					run.setPath(sub.size() - 1);
+				}
+
+				this.map.setRun(run);
+				for (RunModifier mod : run.getModifiers()) {
+					mod.apply(this);
+				}
+			} else {
+				// TODO Pre-generated maps
+				this.map = new AreaMap(0, 0);
+			}
+
 			setTimeout(turn -> {
 				if (getCombat() != null) {
 					Actor<?> current = getCombat().getCurrent();
@@ -113,8 +141,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 						Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
 						getTurn()
 				);
-
-				lock.complete(null);
 			}, 5, TimeUnit.MINUTES);
 		}
 	}
@@ -167,38 +193,77 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 							floors.get(floor).run();
 						} else {
-							if (getTurn() % 10 == 0) {
-								beginCombat(Boss.getRandom());
-							} else {
-								boolean skipped = false;
-								if (dungeon.getMonsterPool().isEmpty()) {
-									int skip = heroes.values().stream()
-											.map(h -> h.getAccount().getDynValue("skip_floor_" + dungeon.getId().toLowerCase(), "0"))
-											.mapToInt(Integer::parseInt)
-											.max().orElse(0);
+							map.generate();
+							PlayerPos pos = map.getPlayerPos();
 
-									if (skip > 0 && getTurn() == 1) {
-										runEvent(DAO.find(Event.class, "CHECKPOINT"));
-										skipped = true;
-									}
-								}
-
-								if (!skipped) {
-									if (Calc.chance(10)) {
-//										runEvent();
-									} else {
-										runCombat();
-									}
-								}
+							XStringBuilder sb = new XStringBuilder();
+							for (RunModifier mod : map.getRun().getModifiers()) {
+								sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
 							}
+
+							BufferedImage bi = map.render(600, 800);
+							EmbedBuilder eb = new ColorlessEmbedBuilder()
+									.setTitle(dungeon.getInfo(getLocale()).getName())
+									.addField(getLocale().get("str/dungeon_modifiers"), sb.toString(), false)
+									.setImage("attachment://dungeon.png")
+									.setFooter(getLocale().get("str/dungeon_area", pos.getFloor(), pos.getSublevel()), null);
+
+							ButtonizeHelper helper = new ButtonizeHelper(true)
+									.setTimeout(5, TimeUnit.MINUTES)
+									.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
+									.setCancellable(false);
+
+							Node pn = map.getPlayerNode();
+							Set<Choice> choices = new LinkedHashSet<>();
+							for (Node node : pn.getChildren()) {
+								choices.add(new Choice(
+										"path-" + node.getPath(),
+										Utils.fancyNumber(node.getPath()),
+										w -> {
+											pos.setNode(node);
+											return null;
+										}
+								));
+							}
+
+							choices.add(new Choice("leave", "", w -> {
+								finish();
+								reportResult(GameReport.SUCCESS, "str/dungeon_leave",
+										Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
+										getTurn()
+								);
+								return null;
+							}));
+
+							requestChoice(eb, helper, choices);
+
+
+							if (!isClosed()) {
+
+								getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area", getTurn()))).queue();
+							} else {
+								finish();
+								reportResult(GameReport.SUCCESS, "str/dungeon_leave",
+										Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
+										getTurn()
+								);
+							}
+
+							// TODO Continue
+
+							pn = map.getPlayerNode();
+							switch (pn.getType()) {
+								case NONE -> runCombat();
+								case EVENT -> runEvent(Event.getRandom(pn));
+								case REST -> runEvent(Event.find(Event.class, "REST"));
+								// TODO case DANGER -> ;
+								case BOSS -> beginCombat(Boss.getRandom());
+							}
+
+							nextTurn();
 						}
 					} catch (Exception e) {
 						Constants.LOGGER.error(e, e);
-					}
-
-					if (lock != null) {
-						lock.join();
-						event.set(null);
 					}
 
 					if (getCombat() != null) {
@@ -221,125 +286,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						break;
 					} else {
 						if (getCombat() != null && getCombat().isDone()) {
-							int xpGained = 0;
-							double mf = 1 + heroes.values().stream()
-									.mapToDouble(h -> h.getModifiers().getMagicFind().get())
-									.sum() + (getAreaLevel() * 0.02);
-
-							Loot loot = getCombat().getLoot();
-							XStringBuilder sb = new XStringBuilder();
-							for (Actor<?> a : getCombat().getActors(Team.KEEPERS)) {
-								if (a instanceof MonsterBase<?> m && m.getHp() == 0) {
-									if (m.getStats().isMinion()) continue;
-									xpGained += m.getKillXp();
-
-									Loot lt = m.getStats().generateLoot(m);
-									double dropFac = 10 * switch (m.getRarityClass()) {
-										case NORMAL -> 1;
-										case MAGIC -> 1.2;
-										case RARE -> 1.5;
-										case UNIQUE -> 2.5;
-									} * mf;
-
-									while (Calc.chance(dropFac)) {
-										lt.gear().add(Gear.getRandom(m, null));
-										dropFac /= 2;
-									}
-
-									List<Object[]> bases = DAO.queryAllUnmapped("""
-											SELECT id
-											     , weight
-											FROM v_dunhun_global_drops
-											WHERE weight > 0
-											"""
-									);
-
-									RandomList<String> rl = new RandomList<>();
-									for (Object[] i : bases) {
-										rl.add((String) i[0], ((Number) i[1]).intValue());
-									}
-
-									if (!rl.entries().isEmpty()) {
-										dropFac = 5 * switch (m.getRarityClass()) {
-											case NORMAL -> 1;
-											case MAGIC -> 1.2;
-											case RARE -> 1.5;
-											case UNIQUE -> 2.5;
-										} * mf;
-
-										while (Calc.chance(dropFac)) {
-											lt.items().add(DAO.find(UserItem.class, rl.get()));
-											dropFac /= 2;
-										}
-									}
-
-									loot.add(lt);
-								}
-							}
-
-							if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
-								this.loot.add(loot);
-
-								for (Gear g : loot.gear()) {
-									String name = g.getName(getLocale());
-									if (g.getRarityClass() == RarityClass.RARE) {
-										name += ", " + g.getBasetype().getInfo(getLocale()).getName();
-									}
-
-									sb.appendNewLine("- " + name);
-								}
-
-								for (UserItem i : loot.items().uniqueSet()) {
-									sb.appendNewLine("- " + i.getName(getLocale()) + " (x" + loot.items().getCount(i) + ")");
-								}
-							}
-
-							if (!sb.isBlank()) {
-								getChannel().buffer(getLocale().get("str/dungeon_loot") + "\n" + sb);
-							}
-
-							for (Hero h : heroes.values()) {
-								int xp = Math.max(1, xpGained);
-								DAO.apply(Hero.class, h.getId(), n -> {
-									int gain = xp;
-
-									int lvl = n.getStats().getLevel();
-									int diff = Math.abs(getAreaLevel() - lvl) - 5;
-
-									if (diff > 0) {
-										gain = (int) (gain * Math.min(Math.pow(0.8, diff), 1));
-									}
-
-									n.getStats().addXp(Math.max(1, gain));
-									if (n.getStats().getLevel() > lvl) {
-										getChannel().sendMessage(getLocale().get("str/actor_level_up", n.getName(), n.getStats().getLevel())).queue();
-									}
-								});
-
-								if (dungeon.getMonsterPool().isEmpty() && getTurn() % 10 == 0) {
-									DynamicProperty prop = h.getAccount().getDynamicProperty("skip_floor_" + dungeon.getId().toLowerCase());
-									prop.setValue(Math.max(NumberUtils.toInt(prop.getValue()), getTurn()));
-									prop.save();
-								}
-							}
-
-							combat.set(null);
-						}
-
-						ContinueMode mode = heroes.values().stream()
-								.map(Hero::getContMode)
-								.reduce((a, b) -> Calc.chance(50) ? a : b)
-								.orElse(ContinueMode.CONTINUE);
-
-						if (!isClosed() && mode == ContinueMode.CONTINUE) {
-							nextTurn();
-							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor", getTurn()))).queue();
-						} else {
-							finish();
-							reportResult(GameReport.SUCCESS, "str/dungeon_leave",
-									Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-									getTurn()
-							);
+							grantCombatLoot();
 						}
 					}
 				} catch (Exception e) {
@@ -349,6 +296,112 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 			}
 		}, main);
+	}
+
+	private void grantCombatLoot() {
+		int xpGained = 0;
+		double mf = 1 + heroes.values().stream()
+				.mapToDouble(h -> h.getModifiers().getMagicFind().get())
+				.sum() + (getAreaLevel() * 0.02);
+
+		Loot loot = getCombat().getLoot();
+		XStringBuilder sb = new XStringBuilder();
+		for (Actor<?> a : getCombat().getActors(Team.KEEPERS)) {
+			if (a instanceof MonsterBase<?> m && m.getHp() == 0) {
+				if (m.getStats().isMinion()) continue;
+				xpGained += m.getKillXp();
+
+				Loot lt = m.getStats().generateLoot(m);
+				double dropFac = 10 * switch (m.getRarityClass()) {
+					case NORMAL -> 1;
+					case MAGIC -> 1.2;
+					case RARE -> 1.5;
+					case UNIQUE -> 2.5;
+				} * mf;
+
+				while (Calc.chance(dropFac)) {
+					lt.gear().add(Gear.getRandom(m, null));
+					dropFac /= 2;
+				}
+
+				List<Object[]> bases = DAO.queryAllUnmapped("""
+						SELECT id
+							 , weight
+						FROM v_dunhun_global_drops
+						WHERE weight > 0
+						"""
+				);
+
+				RandomList<String> rl = new RandomList<>();
+				for (Object[] i : bases) {
+					rl.add((String) i[0], ((Number) i[1]).intValue());
+				}
+
+				if (!rl.entries().isEmpty()) {
+					dropFac = 5 * switch (m.getRarityClass()) {
+						case NORMAL -> 1;
+						case MAGIC -> 1.2;
+						case RARE -> 1.5;
+						case UNIQUE -> 2.5;
+					} * mf;
+
+					while (Calc.chance(dropFac)) {
+						lt.items().add(DAO.find(UserItem.class, rl.get()));
+						dropFac /= 2;
+					}
+				}
+
+				loot.add(lt);
+			}
+		}
+
+		if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
+			this.loot.add(loot);
+
+			for (Gear g : loot.gear()) {
+				String name = g.getName(getLocale());
+				if (g.getRarityClass() == RarityClass.RARE) {
+					name += ", " + g.getBasetype().getInfo(getLocale()).getName();
+				}
+
+				sb.appendNewLine("- " + name);
+			}
+
+			for (UserItem i : loot.items().uniqueSet()) {
+				sb.appendNewLine("- " + i.getName(getLocale()) + " (x" + loot.items().getCount(i) + ")");
+			}
+		}
+
+		if (!sb.isBlank()) {
+			getChannel().buffer(getLocale().get("str/dungeon_loot") + "\n" + sb);
+		}
+
+		for (Hero h : heroes.values()) {
+			int xp = Math.max(1, xpGained);
+			DAO.apply(Hero.class, h.getId(), n -> {
+				int gain = xp;
+
+				int lvl = n.getStats().getLevel();
+				int diff = Math.abs(getAreaLevel() - lvl) - 5;
+
+				if (diff > 0) {
+					gain = (int) (gain * Math.min(Math.pow(0.8, diff), 1));
+				}
+
+				n.getStats().addXp(Math.max(1, gain));
+				if (n.getStats().getLevel() > lvl) {
+					getChannel().sendMessage(getLocale().get("str/actor_level_up", n.getName(), n.getStats().getLevel())).queue();
+				}
+			});
+
+			if (dungeon.getMonsterPool().isEmpty() && getTurn() % 10 == 0) {
+				DynamicProperty prop = h.getAccount().getDynamicProperty("skip_floor_" + dungeon.getId().toLowerCase());
+				prop.setValue(Math.max(NumberUtils.toInt(prop.getValue()), getTurn()));
+				prop.save();
+			}
+		}
+
+		combat.set(null);
 	}
 
 	public void runCombat(Collection<String> pool) {
@@ -374,7 +427,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 			return;
 		}
 
-		lock = new CompletableFuture<>();
 		EventDescription ed = evt.parse(this);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -385,19 +437,58 @@ public class Dunhun extends GameInstance<NullPhase> {
 				.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
 				.setCancellable(false);
 
-		Map<String, String> votes = new HashMap<>();
-		if (!ed.actions().isEmpty()) {
-			for (EventAction act : ed.actions()) {
-				helper.addAction(act.label(), w -> {
-					if (votes.containsKey(w.getUser().getId())) return;
-					votes.put(w.getUser().getId(), act.action());
+		Set<Choice> choices = new LinkedHashSet<>();
+		for (EventAction act : ed.actions()) {
+			choices.add(new Choice(act.action(), act.label(), w ->
+					evt.getAction(act.action()).get()
+			));
+		}
 
-					getChannel().sendMessage(getLocale().get("str/actor_chose",
-							heroes.get(w.getUser().getId()).getName(), act.label())
-					).queue();
+		requestChoice(eb, helper, choices);
+	}
 
-					if (votes.size() >= getPartySize()) {
-						eb.setDescription(Utils.getOr(evt.getAction(Utils.getRandomEntry(votes.values())).get(), "PLACEHOLDER"));
+	public void requestChoice(EmbedBuilder eb, ButtonizeHelper helper, Set<Choice> choices) {
+		CompletableFuture<Void> lock = new CompletableFuture<>();
+
+		helper.clearActions();
+		if (choices.isEmpty()) {
+			helper.addAction(getLocale().get("str/continue"), s -> {
+				lock.complete(null);
+				Pages.finalizeEvent(s.getMessage(), Utils::doNothing);
+			});
+		} else {
+			Map<String, String> votes = new HashMap<>();
+
+			for (Choice c : choices) {
+				helper.addAction(c.label(), w -> {
+					if (getPartySize() <= 1) {
+						votes.put(w.getUser().getId(), c.id());
+					} else {
+						if (votes.containsKey(w.getUser().getId())) return;
+						votes.put(w.getUser().getId(), c.id());
+
+						getChannel().sendMessage(getLocale().get("str/actor_chose",
+								heroes.get(w.getUser().getId()).getName(), c.label()
+						)).queue();
+
+						if (votes.size() < getPartySize()) return;
+					}
+
+					String chosen = Utils.getRandomEntry(votes.values());
+					Choice choice = choices.parallelStream()
+							.filter(i -> i.id().equals(chosen))
+							.findAny().orElse(null);
+
+					eb.clear();
+					String outcome;
+					if (choice == null) {
+						outcome = "UNKNOWN_CHOICE";
+					} else {
+						outcome = choice.action().apply(w);
+					}
+
+					if (outcome != null) {
+						eb.setDescription(Utils.getOr(outcome, "PLACEHOLDER"));
 
 						ButtonizeHelper fin = new ButtonizeHelper(true)
 								.setTimeout(5, TimeUnit.MINUTES)
@@ -408,19 +499,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 									Pages.finalizeEvent(s.getMessage(), Utils::doNothing);
 								});
 
-						fin.apply(w.getMessage().editMessageEmbeds(eb.build()))
-								.queue(s -> {
-									event.set(new Pair<>(s, fin));
-									Pages.buttonize(s, fin);
-								});
+						fin.apply(w.getMessage().editMessageEmbeds(eb.build())).queue(s -> {
+							event.set(new Pair<>(s, fin));
+							Pages.buttonize(s, fin);
+						});
+					} else {
+						lock.complete(null);
+						Pages.finalizeEvent(w.getMessage(), Utils::doNothing);
 					}
 				});
 			}
-		} else {
-			helper.addAction(getLocale().get("str/continue"), s -> {
-				lock.complete(null);
-				Pages.finalizeEvent(s.getMessage(), Utils::doNothing);
-			});
 		}
 
 		getChannel().sendEmbed(eb.build())
@@ -429,6 +517,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 					Pages.buttonize(s, helper);
 					event.set(new Pair<>(s, helper));
 				});
+
+		lock.join();
+		event.set(null);
 	}
 
 	private void finish() {
@@ -579,32 +670,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 					.map(l -> l.startsWith("#") ? l.substring(1) : "> " + l)
 					.collect(Collectors.joining("\n"));
 
-			if (a instanceof Hero h) {
-				eb.addField((h.getContMode() == ContinueMode.CONTINUE ? "🆗 " : "🚪 ") + h.getName(), desc, true);
-			} else {
-				eb.addField(a.getName(), desc, true);
-			}
+			eb.addField(a.getName(), desc, true);
 		}
 
 		getChannel().sendEmbed(eb.build()).queue();
-	}
-
-	@PlayerAction("continue")
-	private void modeContinue(JSONObject args, User u) {
-		Hero h = heroes.get(u.getId());
-		if (h.getContMode() == ContinueMode.CONTINUE) return;
-
-		h.setContMode(ContinueMode.CONTINUE);
-		getChannel().sendMessage(getLocale().get("str/actor_continue", h.getName())).queue();
-	}
-
-	@PlayerAction("leave")
-	private void modeLeave(JSONObject args, User u) {
-		Hero h = heroes.get(u.getId());
-		if (h.getContMode() == ContinueMode.LEAVE) return;
-
-		h.setContMode(ContinueMode.LEAVE);
-		getChannel().sendMessage(getLocale().get("str/actor_leave", h.getName())).queue();
 	}
 
 	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
@@ -660,6 +729,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 		return loot;
 	}
 
+	public AreaMap getMap() {
+		return map;
+	}
+
 	public boolean isDuel() {
 		return duel;
 	}
@@ -674,7 +747,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 					.mapToInt(h -> h.getStats().getLevel())
 					.average().orElse(1);
 		} else if (dungeon.getAreaLevel() == 0) {
-			return 1 + Math.max(0, (getTurn() - 1) / 10 * 5);
+			Node pn = map.getPlayerNode();
+			return 1 + Math.max(0, pn.depth() / Floor.AREAS_PER_FLOOR * 5);
 		}
 
 		return dungeon.getAreaLevel();

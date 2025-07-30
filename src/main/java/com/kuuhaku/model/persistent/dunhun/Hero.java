@@ -24,7 +24,6 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.ContinueMode;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.user.Account;
@@ -67,8 +66,6 @@ public class Hero extends Actor<Hero> {
 	@Column(name = "equipment", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject equipment = new JSONObject();
-
-	private transient ContinueMode contMode = ContinueMode.CONTINUE;
 
 	public Hero() {
 	}
@@ -231,14 +228,6 @@ public class Hero extends Actor<Hero> {
 				})
 				.filter(Objects::nonNull)
 				.collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Consumable::getId))));
-	}
-
-	public ContinueMode getContMode() {
-		return contMode;
-	}
-
-	public void setContMode(ContinueMode contMode) {
-		this.contMode = contMode;
 	}
 
 	@Override

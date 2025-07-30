@@ -29,6 +29,7 @@ public class GameReport extends RuntimeException {
 	public static final byte OVERBURDENED = 7;
 	public static final byte UNDERLEVELLED = 8;
 	public static final byte STACK_OVERFLOW = 9;
+	public static final byte INVALID_DUEL = 10;
 	public static final byte OTHER = Byte.MAX_VALUE;
 
 	private final byte code;
@@ -64,6 +65,7 @@ public class GameReport extends RuntimeException {
 			case OVERBURDENED -> "OVERBURDENED";
 			case UNDERLEVELLED -> "UNDERLEVELLED";
 			case STACK_OVERFLOW -> "STACK_OVERFLOW";
+			case INVALID_DUEL -> "INVALID_DUEL";
 			case OTHER -> "OTHER";
 			default -> "UNKNOWN_CODE";
 		};

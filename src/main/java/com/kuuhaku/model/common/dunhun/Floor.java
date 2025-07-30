@@ -4,9 +4,6 @@ import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.util.Utils;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.awt.geom.Area;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,15 +19,11 @@ public class Floor {
 	private final Set<Node> eventNodes = new HashSet<>();
 
 	public Floor(AreaMap map, int floor) {
-		this(map, floor, floor <= 0 ? 1 : AREAS_PER_FLOOR);
-	}
-
-	public Floor(AreaMap map, int floor, int sublevels) {
 		this.map = map;
 		this.floor = floor;
 		this.seed = Utils.generateSeed(DigestUtils.getMd5Digest(), map.getSeed(), floor);
 		this.rng = new Random();
-		this.sublevels = new Sublevel[sublevels];
+		this.sublevels = new Sublevel[floor <= 0 ? 1 : AREAS_PER_FLOOR];
 
 		for (int i = 0; i < this.sublevels.length; i++) {
 			this.sublevels[i] = new Sublevel(this, i);
@@ -111,6 +104,11 @@ public class Floor {
 
 	public int size() {
 		return sublevels.length;
+	}
+
+	public int depth() {
+		if (floor < 0) return 0;
+		return (floor - 1) * AREAS_PER_FLOOR;
 	}
 
 	@Override
