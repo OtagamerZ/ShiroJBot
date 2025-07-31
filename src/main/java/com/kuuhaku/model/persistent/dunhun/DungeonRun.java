@@ -2,6 +2,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.AreaMap;
+import com.kuuhaku.model.common.dunhun.Node;
 import com.kuuhaku.model.records.id.DungeonRunId;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -103,12 +104,18 @@ public class DungeonRun extends DAO<DungeonRun> {
 		this.path = path;
 	}
 
+	public void setNode(Node node) {
+		floor = node.getSublevel().getFloor().getFloor();
+		sublevel = node.getSublevel().getSublevel();
+		path = node.getPath();
+	}
+
 	public List<RunModifier> getModifiers() {
 		return modifiers;
 	}
 
 	public AreaMap getMap() {
-		return new AreaMap(seed, floor);
+		return new AreaMap(this);
 	}
 
 	@Override

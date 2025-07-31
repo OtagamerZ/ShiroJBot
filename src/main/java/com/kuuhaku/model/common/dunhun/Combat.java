@@ -17,10 +17,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Trigger;
-import com.kuuhaku.model.persistent.dunhun.Consumable;
-import com.kuuhaku.model.persistent.dunhun.Hero;
-import com.kuuhaku.model.persistent.dunhun.Monster;
-import com.kuuhaku.model.persistent.dunhun.Skill;
+import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.ClusterAction;
@@ -186,8 +183,8 @@ public class Combat implements Renderer<BufferedImage> {
 				.setFooter(getLocale().get("str/combat_footer"));
 
 		if (!game.isDuel()) {
-			PlayerPos pos = game.getMap().getPlayerPos();
-			eb.setAuthor(getLocale().get("str/dungeon_area", pos.getFloor(), pos.getSublevel()));
+			DungeonRun run = game.getMap().getRun();
+			eb.setAuthor(getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel()));
 		} else {
 			String teamA = Utils.properlyJoin(getLocale().get("str/and")).apply(hunters.stream().map(Actor::getName).toList());
 			String teamB = Utils.properlyJoin(getLocale().get("str/and")).apply(keepers.stream().map(Actor::getName).toList());

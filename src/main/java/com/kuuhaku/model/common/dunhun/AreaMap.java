@@ -19,21 +19,22 @@ public class AreaMap {
 
 	private final int seed;
 	private final Consumer<AreaMap> generator;
+	private final DungeonRun run;
 	private final TreeMap<Integer, Floor> floors = new TreeMap<>();
 	private final AtomicInteger renderFloor = new AtomicInteger(0);
 	private final AtomicInteger renderSublevel = new AtomicInteger(0);
-	private final PlayerPos playerPos = new PlayerPos();
-	private DungeonRun run;
 
-	public AreaMap(Consumer<AreaMap> generator) {
+	public AreaMap(Consumer<AreaMap> generator, DungeonRun run) {
 		this.seed = 0;
 		this.generator = generator;
+		this.run = run;
 	}
 
-	public AreaMap(int seed, int floor) {
-		this.seed = seed;
-		this.renderFloor.set(floor);
+	public AreaMap(DungeonRun run) {
+		this.seed = run.getSeed();
+		this.renderFloor.set(run.getFloor());
 		this.generator = AreaMap::generateRandom;
+		this.run = run;
 	}
 
 	public int getSeed() {
@@ -57,11 +58,11 @@ public class AreaMap {
 	}
 
 	public Node getPlayerNode() {
-		if (!floors.containsKey(playerPos.getFloor())) return null;
+		if (!floors.containsKey(run.getFloor())) return null;
 
-		return getFloor(playerPos.getFloor())
-				.getSublevel(playerPos.getSublevel())
-				.getNode(playerPos.getPath());
+		return getFloor(run.getFloor())
+				.getSublevel(run.getSublevel())
+				.getNode(run.getPath());
 	}
 
 	public int getRenderFloor() {
@@ -90,17 +91,8 @@ public class AreaMap {
 		}
 	}
 
-	public PlayerPos getPlayerPos() {
-		return playerPos;
-	}
-
 	public DungeonRun getRun() {
 		return run;
-	}
-
-	public void setRun(DungeonRun run) {
-		this.run = run;
-		playerPos.restore(run);
 	}
 
 	public void generate() {

@@ -100,7 +100,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					run = new DungeonRun(leader, dungeon);
 				}
 
-				this.map = new AreaMap(run.getSeed(), run.getFloor());
+				this.map = new AreaMap(run);
 				this.map.generate();
 
 				Floor fl = this.map.getFloor();
@@ -113,13 +113,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 					run.setPath(sub.size() - 1);
 				}
 
-				this.map.setRun(run);
 				for (RunModifier mod : run.getModifiers()) {
 					mod.apply(this);
 				}
 			} else {
 				// TODO Pre-generated maps
-				this.map = new AreaMap(0, 0);
+				this.map = new AreaMap(null);
 			}
 
 			setTimeout(turn -> {
@@ -195,14 +194,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 							floors.get(floor).run();
 						} else {
 							map.generate();
-							PlayerPos pos = map.getPlayerPos();
+							DungeonRun run = map.getRun();
 
 							XStringBuilder sb = new XStringBuilder();
 							for (RunModifier mod : map.getRun().getModifiers()) {
 								sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
 							}
 
-							String area = getLocale().get("str/dungeon_area", pos.getFloor(), pos.getSublevel());
+							String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel());
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
 									.setTitle(dungeon.getInfo(getLocale()).getName() + "(" + area + ")")
 									.addField(getLocale().get("str/dungeon_modifiers"), sb.toString(), false)
@@ -218,9 +217,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 							for (Node node : pn.getChildren()) {
 								choices.add(new Choice(
 										"path-" + node.getPath(),
-										Utils.fancyNumber(node.getPath()),
+										String.valueOf(node.getPath()),
 										w -> {
-											pos.setNode(node);
+											run.setNode(node);
 											return null;
 										}
 								));
@@ -228,8 +227,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 							choices.add(new Choice("leave", getLocale().get("str/leave_dungeon"), w -> {
 								finish();
-
-								DungeonRun run = map.getRun();
 								reportResult(GameReport.SUCCESS, "str/dungeon_leave",
 										Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
 										run.getFloor(), run.getSublevel()
@@ -242,7 +239,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							if (isClosed()) return;
 
 							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
-									getLocale().get("str/" + (pos.getPath() > 3 ? "n" : pos.getPath()) + "_suffix")
+									getLocale().get("str/" + (run.getPath() > 3 ? "n" : run.getPath()) + "_suffix")
 							))).queue();
 
 							pn = map.getPlayerNode();
