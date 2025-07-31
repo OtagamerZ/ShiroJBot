@@ -54,6 +54,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
 	private final AtomicReference<Pair<Message, ButtonizeHelper>> event = new AtomicReference<>();
+	private final Set<EffectBase> effects = new HashSet<>();
 	private final Random nodeRng = new Random();
 	private final Loot loot = new Loot();
 	private final AreaMap map;
@@ -790,6 +791,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public Pair<Message, ButtonizeHelper> getEvent() {
 		return event.get();
+	}
+
+	public Set<EffectBase> getEffects() {
+		return effects;
 	}
 
 	public Random getNodeRng() {

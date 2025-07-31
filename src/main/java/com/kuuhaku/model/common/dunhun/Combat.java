@@ -120,10 +120,12 @@ public class Combat implements Renderer<BufferedImage> {
 
 		actor.setFleed(false);
 		actor.getSenshi().setAvailable(true);
+		trigger(Trigger.ON_INITIALIZE, actor, actor);
 		return true;
 	}
 
 	public void onRemoveActor(Actor<?> actor) {
+		trigger(Trigger.ON_REMOVE, actor, actor);
 		actor.getBinding().unbind();
 		actors.remove(actor);
 	}
@@ -857,8 +859,11 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		CombatContext context = new CombatContext(t, source, target, value);
-		effects.getValues().removeIf(EffectBase::isClosed);
-		for (EffectBase e : Set.copyOf(effects.getValues())) {
+		Set<EffectBase> effects = new HashSet<>(this.effects.getValues());
+		effects.addAll(game.getEffects());
+		effects.removeIf(EffectBase::isClosed);
+
+		for (EffectBase e : effects) {
 			if (e.isLocked()) continue;
 			else if (e instanceof TriggeredEffect te) {
 				if (!Utils.equalsAny(t, te.getTriggers())) continue;
@@ -872,8 +877,8 @@ public class Combat implements Renderer<BufferedImage> {
 				e.unlock();
 			}
 		}
-		effects.reduceTime();
 
+		this.effects.reduceTime();
 		if (source != null) {
 			source.trigger(t, Utils.getOr(target, source), context.value());
 		}
