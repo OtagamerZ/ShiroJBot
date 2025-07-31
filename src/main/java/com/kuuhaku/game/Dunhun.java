@@ -92,7 +92,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			this.map = null;
 			setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/versus_end_timeout"), 5, TimeUnit.MINUTES);
 		} else {
-			if (dungeon.getFloors().isEmpty()) {
+			if (dungeon.isInfinite()) {
 				Hero leader = heroes.get(players[0]);
 				DungeonRun run = DAO.find(DungeonRun.class, new DungeonRunId(leader.getId(), dungeon.getId()));
 				if (run == null) {
@@ -172,123 +172,131 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					try {
-						List<Runnable> floors = dungeon.getFloors();
-						if (!floors.isEmpty()) {
-							//TODO Pre-generated layout
-							int floor = getTurn() - 1;
-							if (floor >= floors.size()) {
-								finish("str/dungeon_end", getHeroNames());
-								break;
+						map.generate();
+
+//						if (!floors.isEmpty()) {
+//							//TODO Pre-generated layout
+//							int floor = getTurn() - 1;
+//							if (floor >= floors.size()) {
+//								finish("str/dungeon_end", getHeroNames());
+//								break;
+//							}
+//
+//							floors.get(floor).run();
+//						}
+
+						DungeonRun run = map.getRun();
+						String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel() + 1);
+						EmbedBuilder eb = new ColorlessEmbedBuilder()
+								.setTitle(dungeon.getInfo(getLocale()).getName() + " (" + area + ")")
+								.setImage("attachment://dungeon.png");
+
+						if (!map.getRun().getModifiers().isEmpty()) {
+							XStringBuilder sb = new XStringBuilder();
+							for (RunModifier mod : map.getRun().getModifiers()) {
+								sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
 							}
 
-							floors.get(floor).run();
+							eb.addField(getLocale().get("str/dungeon_run_modifiers"), sb.toString(), false);
+						}
+
+						Floor fl = map.getFloor();
+						if (!fl.getModifiers().isEmpty()) {
+							XStringBuilder sb = new XStringBuilder();
+							for (RunModifier mod : fl.getModifiers()) {
+								sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
+							}
+
+							eb.addField(getLocale().get("str/dungeon_floor_modifiers"), sb.toString(), false);
+						}
+
+						ButtonizeHelper helper = new ButtonizeHelper(true)
+								.setTimeout(5, TimeUnit.MINUTES)
+								.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
+								.setCancellable(false);
+
+						Node currNode = map.getPlayerNode();
+						List<Node> children = currNode.getChildren();
+						Set<Choice> choices = new LinkedHashSet<>();
+						AtomicInteger chosenPath = new AtomicInteger();
+						for (int i = 0; i < children.size(); i++) {
+							int path = i + 1;
+							Node node = children.get(i);
+							choices.add(new Choice(
+									"path-" + path,
+									String.valueOf(path),
+									w -> {
+										run.setNode(node);
+										nodeRng.setSeed(node.getSeed());
+										chosenPath.set(path);
+										return null;
+									}
+							));
+						}
+
+						choices.add(new Choice("leave", getLocale().get("str/leave_dungeon"), w -> {
+							finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
+							return null;
+						}));
+
+						try {
+							BufferedImage bi = map.render(getLocale(), 700, 900);
+							requestChoice(eb, bi, helper, choices);
+							if (isClosed()) return;
+						} catch (Exception ignore) {
+							return;
+						}
+
+						int path = chosenPath.get();
+						int floor = run.getFloor();
+						if (floor != fl.getFloor()) {
+							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor",
+									path, getLocale().get("str/" + (path > 3 ? "n" : path) + "_suffix"),
+									floor, getLocale().get("str/" + (floor > 3 ? "n" : path) + "_suffix")
+							))).queue();
 						} else {
-							map.generate();
-							DungeonRun run = map.getRun();
+							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
+									path, getLocale().get("str/" + (path > 3 ? "n" : path) + "_suffix")
+							))).queue();
+						}
 
-							String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel() + 1);
-							EmbedBuilder eb = new ColorlessEmbedBuilder()
-									.setTitle(dungeon.getInfo(getLocale()).getName() + " (" + area + ")")
-									.setImage("attachment://dungeon.png");
+						Node nextNode = map.getPlayerNode();
+						switch (nextNode.getType()) {
+							case NONE -> runCombat(nextNode);
+							case EVENT -> runEvent(nextNode, Event.getRandom(nextNode));
+							case REST -> runEvent(nextNode, Event.find(Event.class, "REST"));
+							// TODO case DANGER -> ;
+							case BOSS -> beginCombat(nextNode, Boss.getRandom());
+						}
 
-							if (!map.getRun().getModifiers().isEmpty()) {
-								XStringBuilder sb = new XStringBuilder();
-								for (RunModifier mod : map.getRun().getModifiers()) {
-									sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
-								}
-
-								eb.addField(getLocale().get("str/dungeon_run_modifiers"), sb.toString(), false);
-							}
-
-							Floor fl = map.getFloor();
-							if (!fl.getModifiers().isEmpty()) {
-								XStringBuilder sb = new XStringBuilder();
-								for (RunModifier mod : fl.getModifiers()) {
-									sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
-								}
-
-								eb.addField(getLocale().get("str/dungeon_floor_modifiers"), sb.toString(), false);
-							}
-
-							ButtonizeHelper helper = new ButtonizeHelper(true)
-									.setTimeout(5, TimeUnit.MINUTES)
-									.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
-									.setCancellable(false);
-
-							Node pn = map.getPlayerNode();
-							List<Node> children = pn.getChildren();
-							Set<Choice> choices = new LinkedHashSet<>();
-							AtomicInteger chosenPath = new AtomicInteger();
-							for (int i = 0; i < children.size(); i++) {
-								int path = i + 1;
-								Node node = children.get(i);
-								choices.add(new Choice(
-										"path-" + path,
-										String.valueOf(path),
-										w -> {
-											run.setNode(node);
-											nodeRng.setSeed(node.getSeed());
-											chosenPath.set(path);
-											return null;
-										}
-								));
-							}
-
-							choices.add(new Choice("leave", getLocale().get("str/leave_dungeon"), w -> {
-								finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
-								return null;
-							}));
-
-							try {
-								BufferedImage bi = map.render(getLocale(), 700, 900);
-								requestChoice(eb, bi, helper, choices);
-								if (isClosed()) return;
-							} catch (Exception ignore) {
-								return;
-							}
-
-							int path = chosenPath.get();
-							int floor = run.getFloor();
-							if (floor != fl.getFloor()) {
-								getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor",
-										path, getLocale().get("str/" + (path > 3 ? "n" : path) + "_suffix"),
-										floor, getLocale().get("str/" + (floor > 3 ? "n" : path) + "_suffix")
-								))).queue();
+						if (getCombat() != null && getCombat().isDone()) {
+							if (getCombat().isWin()) {
+								grantCombatLoot();
 							} else {
-								getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
-										path, getLocale().get("str/" + (path > 3 ? "n" : path) + "_suffix")
-								))).queue();
-							}
+								Collection<Hero> hs = heroes.values();
+								if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
+									for (Hero h : hs) {
+										double xpPrcnt = 0;
+										if (getAreaLevel() >= 56) {
+											xpPrcnt = 0.4;
+										} else if (getAreaLevel() >= 28) {
+											xpPrcnt = 0.2;
+										}
 
-							pn = map.getPlayerNode();
-							switch (pn.getType()) {
-								case NONE -> runCombat(pn);
-								case EVENT -> runEvent(pn, Event.getRandom(pn));
-								case REST -> runEvent(pn, Event.find(Event.class, "REST"));
-								// TODO case DANGER -> ;
-								case BOSS -> beginCombat(pn, Boss.getRandom());
+										h.getStats().loseXp((int) (h.getStats().getLosableXp() * xpPrcnt));
+										h.save();
+									}
+
+									reportResult(GameReport.SUCCESS, "str/dungeon_fail",
+											getHeroNames(), run.getFloor(), run.getSublevel() + 1
+									);
+								}
+
+								run.setNode(currNode);
 							}
 						}
 					} catch (Exception e) {
 						Constants.LOGGER.error(e, e);
-					}
-
-					Collection<Hero> hs = heroes.values();
-					if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
-						for (Hero h : hs) {
-							if (h.getHp() > 0) continue;
-
-							h.getStats().loseXp(h.getStats().getLosableXp() * getAreaLevel() / 100);
-							h.save();
-						}
-
-						DungeonRun run = map.getRun();
-						reportResult(GameReport.SUCCESS, "str/dungeon_fail",
-								getHeroNames(), run.getFloor(), run.getSublevel() + 1
-						);
-						break;
-					} else if (getCombat() != null && getCombat().isDone()) {
-						grantCombatLoot();
 					}
 
 					map.getRun().save();
@@ -792,8 +800,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 					.mapToInt(h -> h.getStats().getLevel())
 					.average().orElse(1);
 		} else if (dungeon.getAreaLevel() == 0) {
-			Node pn = map.getPlayerNode();
-			return 1 + Math.max(0, pn.depth() / map.getAreasPerFloor() * 5);
+			Floor fl = map.getFloor();
+			return Math.min(fl.getFloor() * 84 / 25 * (1 - fl.getFloor() / (fl.getFloor() + 50)), 84);
 		}
 
 		return dungeon.getAreaLevel();

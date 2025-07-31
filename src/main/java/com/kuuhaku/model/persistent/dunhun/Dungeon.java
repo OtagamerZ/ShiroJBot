@@ -31,9 +31,11 @@ import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -41,7 +43,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "dungeon", schema = "dunhun")
-public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
+public class Dungeon extends DAO<Dungeon> {
 	public static final Dungeon DUEL = new Dungeon("DUEL", 1);
 
 	@Id
@@ -64,8 +66,6 @@ public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
 
 	@Column(name = "area_level")
 	private int areaLevel = 1;
-
-	private transient final List<Runnable> floors = new ArrayList<>();
 
 	public Dungeon() {
 	}
@@ -94,23 +94,21 @@ public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
 		return monsterPool;
 	}
 
+	public boolean isInfinite() {
+		return script == null || script.isBlank();
+	}
+
 	public void init(Dunhun game) {
 		if (script == null) return;
 
 		try {
-			floors.clear();
 			Utils.exec(id, script, Map.of(
 					"game", game,
-					"floors", floors,
 					"pool", monsterPool
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to process dungeon {}", id, e);
 		}
-	}
-
-	public List<Runnable> getFloors() {
-		return floors;
 	}
 
 	@Override
@@ -124,10 +122,5 @@ public class Dungeon extends DAO<Dungeon> implements Iterable<Runnable> {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(id);
-	}
-
-	@Override
-	public @NotNull Iterator<Runnable> iterator() {
-		return floors.iterator();
 	}
 }

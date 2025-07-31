@@ -73,7 +73,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final Loot loot = new Loot();
 
 	private CompletableFuture<Runnable> lock;
-	private boolean done;
+	private boolean done, win;
 
 	public Combat(Dunhun game, Node node, MonsterBase<?>... enemies) {
 		this.game = game;
@@ -228,10 +228,9 @@ public class Combat implements Renderer<BufferedImage> {
 				.thenComparingInt(n -> Calc.rng(20, node.getSeed() - n.hashCode()))
 		);
 
+		combat:
 		for (Actor<?> actor : actors) {
-			if (game.isClosed()) break;
-			else if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
-			else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
+			if (checkCombatEnd()) break;
 
 			try {
 				try {
@@ -249,9 +248,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 					while (actor == getCurrent() && actor.getAp() > 0) {
 						if (!actor.getSenshi().isAvailable() || actor.isOutOfCombat()) break;
-
-						if (hunters.stream().allMatch(Actor::isOutOfCombat)) break;
-						else if (keepers.stream().allMatch(Actor::isOutOfCombat)) break;
+						else if (checkCombatEnd()) break combat;
 
 						trigger(Trigger.ON_TICK);
 						Runnable action = reload().join();
@@ -273,7 +270,7 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 		}
 
-		trigger(Trigger.ON_VICTORY);
+		trigger(win ? Trigger.ON_VICTORY : Trigger.ON_DEFEAT);
 		done = true;
 
 		Pair<String, String> previous = game.getMessage();
@@ -286,6 +283,17 @@ public class Combat implements Renderer<BufferedImage> {
 				game.setMessage(null);
 			}
 		}
+	}
+
+	private boolean checkCombatEnd() {
+		if (game.isClosed()) return true;
+		else if (hunters.stream().allMatch(Actor::isOutOfCombat)) return true;
+		else if (keepers.stream().allMatch(Actor::isOutOfCombat)) {
+			win = true;
+			return true;
+		}
+
+		return false;
 	}
 
 	public synchronized CompletableFuture<Runnable> reload() {
@@ -825,6 +833,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public boolean isDone() {
 		return done;
+	}
+
+	public boolean isWin() {
+		return win;
 	}
 
 	public void trigger(Trigger t) {
