@@ -126,10 +126,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				if (getCombat() != null) {
 					Actor<?> current = getCombat().getCurrent();
 					if (current != null) {
-						getCombat().getLock().complete(() -> {
-							current.setFleed(true);
-							current.setAp(0);
-						});
+						getCombat().getLock().complete(() -> current.setFleed(true));
 					} else {
 						getCombat().getLock().complete(null);
 					}
@@ -261,7 +258,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					Collection<Hero> hs = heroes.values();
-					if (hs.stream().allMatch(Actor::isOutOfCombat)) {
+					if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
 						for (Hero h : hs) {
 							if (h.getHp() > 0) continue;
 

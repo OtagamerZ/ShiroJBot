@@ -391,10 +391,9 @@ public class Combat implements Renderer<BufferedImage> {
 						ButtonizeHelper confirm = new ButtonizeHelper(true)
 								.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 								.setCancellable(false)
-								.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() -> {
-									h.setFleed(true);
-									h.setAp(0);
-								}))
+								.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() ->
+										h.setFleed(true)
+								))
 								.addAction(Utils.parseEmoji(Constants.RETURN), v -> {
 									MessageEditAction ma = helper.apply(v.getMessage().editMessageComponents());
 									addDropdowns(h, ma);
@@ -438,7 +437,6 @@ public class Combat implements Renderer<BufferedImage> {
 						double risk = threat / (curr.getHp() * (double) curr.getAggroScore() / curr.getMaxHp());
 						if (curr instanceof Monster && risk > 5 && Calc.chance(20)) {
 							curr.setFleed(true);
-
 							game.getChannel().sendMessage(getLocale().get("str/actor_flee", curr.getName())).queue();
 							return;
 						}

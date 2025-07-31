@@ -195,6 +195,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			getGame().getChannel().sendMessage(getGame().getLocale().get("str/actor_flee", getName()));
 		}
 
+		setAp(0);
 		this.fleed = fleed;
 	}
 
