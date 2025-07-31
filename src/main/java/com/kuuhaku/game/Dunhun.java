@@ -235,7 +235,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							}
 
 							choices.add(new Choice("leave", getLocale().get("str/leave_dungeon"), w -> {
-								finish(getHeroNames(), run.getFloor(), run.getSublevel() + 1);
+								finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
 								return null;
 							}));
 
