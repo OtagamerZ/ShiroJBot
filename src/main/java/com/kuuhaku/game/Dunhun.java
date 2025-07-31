@@ -56,6 +56,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
 	private final AtomicReference<Pair<Message, ButtonizeHelper>> event = new AtomicReference<>();
+	private final Random nodeRng = new Random();
 	private final Loot loot = new Loot();
 	private final AreaMap map;
 	private final boolean duel;
@@ -161,7 +162,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			while (!isClosed()) {
 				try {
 					if (duel) {
-						combat.set(new Combat(this, heroes.values()));
+						combat.set(new Combat(this, map.getPlayerNode(), heroes.values()));
 						getCombat().process();
 
 						Hero winner = heroes.values().stream()
@@ -235,6 +236,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 										String.valueOf(i + 1),
 										w -> {
 											run.setNode(node);
+											nodeRng.setSeed(node.getSeed());
 											return null;
 										}
 								));
@@ -268,11 +270,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 							pn = map.getPlayerNode();
 							switch (pn.getType()) {
-								case NONE -> runCombat();
-								case EVENT -> runEvent(Event.getRandom(pn));
-								case REST -> runEvent(Event.find(Event.class, "REST"));
+								case NONE -> runCombat(pn);
+								case EVENT -> runEvent(pn, Event.getRandom(pn));
+								case REST -> runEvent(pn, Event.find(Event.class, "REST"));
 								// TODO case DANGER -> ;
-								case BOSS -> beginCombat(Boss.getRandom());
+								case BOSS -> beginCombat(pn, Boss.getRandom());
 							}
 						}
 					} catch (Exception e) {
@@ -347,7 +349,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				);
 				if (bases.isEmpty()) continue;
 
-				RandomList<String> rl = new RandomList<>();
+				RandomList<String> rl = new RandomList<>(nodeRng);
 				for (Object[] i : bases) {
 					rl.add((String) i[0], ((Number) i[1]).intValue());
 				}
@@ -413,18 +415,19 @@ public class Dunhun extends GameInstance<NullPhase> {
 		combat.set(null);
 	}
 
-	public void runCombat(Collection<String> pool) {
-		runCombat(pool.toArray(String[]::new));
+	public void runCombat(Node node, Collection<String> pool) {
+		runCombat(node, pool.toArray(String[]::new));
 	}
 
-	public void runCombat(String... pool) {
-		combat.set(new Combat(this));
+	public void runCombat(Node node, String... pool) {
+		combat.set(new Combat(this, node));
+
 		for (int i = 0; i < 4; i++) {
 			List<Actor<?>> keepers = getCombat().getActors(Team.KEEPERS);
 			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size())) break;
 
 			Monster chosen;
-			if (pool.length > 0) chosen = Monster.getRandom(this, Utils.getRandomEntry(pool));
+			if (pool.length > 0) chosen = Monster.getRandom(this, Utils.getRandomEntry(nodeRng, pool));
 			else chosen = Monster.getRandom(this);
 
 			if (chosen != null) {
@@ -440,9 +443,19 @@ public class Dunhun extends GameInstance<NullPhase> {
 		getCombat().process();
 	}
 
-	public void runEvent(Event evt) {
+	@SafeVarargs
+	public final <T extends MonsterBase<T>> void beginCombat(Node node, MonsterBase<T>... enemies) {
+		if (combat.get() != null) return;
+		combat.set(new Combat(this, node, enemies));
+
+		if (getCombat().getActors(Team.KEEPERS).isEmpty()) {
+			combat.set(null);
+		}
+	}
+
+	public void runEvent(Node node, Event evt) {
 		if (evt == null) {
-			runCombat();
+			runCombat(node);
 			return;
 		}
 
@@ -752,6 +765,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 		return event.get();
 	}
 
+	public Random getNodeRng() {
+		return nodeRng;
+	}
+
 	public Loot getLoot() {
 		return loot;
 	}
@@ -779,16 +796,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		return dungeon.getAreaLevel();
-	}
-
-	@SafeVarargs
-	public final <T extends MonsterBase<T>> void beginCombat(MonsterBase<T>... enemies) {
-		if (combat.get() != null) return;
-		combat.set(new Combat(this, enemies));
-
-		if (getCombat().getActors(Team.KEEPERS).isEmpty()) {
-			combat.set(null);
-		}
 	}
 
 	public String parsePlural(String text) {

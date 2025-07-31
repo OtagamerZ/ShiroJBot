@@ -57,9 +57,9 @@ import java.util.stream.Stream;
 
 public class Combat implements Renderer<BufferedImage> {
 	private final ScheduledExecutorService cpu = Executors.newSingleThreadScheduledExecutor();
-	private final long seed = ThreadLocalRandom.current().nextLong();
 
 	private final Dunhun game;
+	private final Node node;
 	private final InfiniteList<Actor<?>> actors = new InfiniteList<>();
 	private final BondedList<Actor<?>> hunters = new BondedList<>(
 			(a, it) -> onAddActor(a, Team.HUNTERS), this::onRemoveActor
@@ -75,8 +75,9 @@ public class Combat implements Renderer<BufferedImage> {
 	private CompletableFuture<Runnable> lock;
 	private boolean done;
 
-	public Combat(Dunhun game, MonsterBase<?>... enemies) {
+	public Combat(Dunhun game, Node node, MonsterBase<?>... enemies) {
 		this.game = game;
+		this.node = node;
 
 		hunters.addAll(game.getHeroes().values());
 		keepers.addAll(Stream.of(enemies)
@@ -92,8 +93,9 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 	}
 
-	public Combat(Dunhun game, Collection<Hero> duelists) {
+	public Combat(Dunhun game, Node node, Collection<Hero> duelists) {
 		this.game = game;
+		this.node = node;
 
 		List<Hero> sides = List.copyOf(duelists);
 		List<Actor<?>> team = hunters;
@@ -187,8 +189,9 @@ public class Combat implements Renderer<BufferedImage> {
 				.setFooter(getLocale().get("str/combat_footer"));
 
 		if (!game.isDuel()) {
-			DungeonRun run = game.getMap().getRun();
-			eb.setAuthor(getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel() + 1));
+			eb.setAuthor(getLocale().get("str/dungeon_area",
+					node.getSublevel().getFloor().getFloor(), node.getSublevel().getSublevel() + 1
+			));
 		} else {
 			String teamA = Utils.properlyJoin(getLocale().get("str/and")).apply(hunters.stream().map(Actor::getName).toList());
 			String teamB = Utils.properlyJoin(getLocale().get("str/and")).apply(keepers.stream().map(Actor::getName).toList());
@@ -222,7 +225,7 @@ public class Combat implements Renderer<BufferedImage> {
 		trigger(Trigger.ON_COMBAT);
 		actors.sort(Comparator
 				.<Actor<?>>comparingInt(Actor::getInitiative).reversed()
-				.thenComparingInt(n -> Calc.rng(20, seed - n.hashCode()))
+				.thenComparingInt(n -> Calc.rng(20, node.getSeed() - n.hashCode()))
 		);
 
 		for (Actor<?> actor : actors) {

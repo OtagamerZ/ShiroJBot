@@ -171,7 +171,7 @@ public class Monster extends MonsterBase<Monster> {
 		List<Object[]> mons = DAO.queryAllUnmapped("SELECT id, weight FROM monster WHERE weight > 0");
 		if (mons.isEmpty()) return null;
 
-		RandomList<String> rl = new RandomList<>();
+		RandomList<String> rl = new RandomList<>(game.getNodeRng());
 		for (Object[] a : mons) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}

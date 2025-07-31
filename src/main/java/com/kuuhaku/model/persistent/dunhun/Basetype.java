@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.I18N;
@@ -87,9 +88,11 @@ public class Basetype extends DAO<Basetype> {
 	}
 
 	public static Basetype getRandom(Actor<?> source) {
+		Dunhun game = null;
 		int dropLevel = Integer.MAX_VALUE;
 		if (source != null && source.getGame() != null) {
 			int area = source.getGame().getAreaLevel();
+			game = source.getGame();
 			dropLevel = area + switch (source.getRarityClass()) {
 				case NORMAL -> 0;
 				case MAGIC -> 1;
@@ -108,7 +111,7 @@ public class Basetype extends DAO<Basetype> {
 		);
 		if (bases.isEmpty()) return null;
 
-		RandomList<String> rl = new RandomList<>();
+		RandomList<String> rl = game == null ? new RandomList<>() : new RandomList<>(game.getNodeRng());
 		for (Object[] a : bases) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}

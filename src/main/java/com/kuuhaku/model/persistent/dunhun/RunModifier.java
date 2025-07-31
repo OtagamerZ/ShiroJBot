@@ -74,17 +74,17 @@ public class RunModifier extends DAO<RunModifier> {
 		return Objects.hashCode(id);
 	}
 
-	public static RunModifier getRandom(Floor floor) {
+	public static RunModifier getRandom(Dunhun game) {
 		List<Object[]> mods = DAO.queryAllUnmapped("""
 				SELECT id
 				     , weight
 				FROM run_modifier
 				WHERE weight > 0
 				  AND min_floor <= ?1
-				""", floor.getFloor());
+				""", game.getMap().getFloor().getFloor());
 		if (mods.isEmpty()) return null;
 
-		RandomList<String> rl = new RandomList<>();
+		RandomList<String> rl = new RandomList<>(game.getNodeRng());
 		for (Object[] a : mods) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}
