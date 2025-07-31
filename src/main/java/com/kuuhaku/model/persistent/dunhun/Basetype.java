@@ -111,7 +111,13 @@ public class Basetype extends DAO<Basetype> {
 		);
 		if (bases.isEmpty()) return null;
 
-		RandomList<String> rl = game == null ? new RandomList<>() : new RandomList<>(game.getNodeRng());
+		RandomList<String> rl;
+		if (game != null) {
+			rl = new RandomList<>(game.getNodeRng());
+		} else {
+			rl = new RandomList<>();
+		}
+
 		for (Object[] a : bases) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}
