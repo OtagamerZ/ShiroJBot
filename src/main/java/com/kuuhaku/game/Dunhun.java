@@ -255,7 +255,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 							int path = run.getPath() + 1;
 							int floor = run.getFloor() + 1;
-							if (floor != fl.getFloor()) {
+							if (floor != fl.getFloor() + 1) {
 								getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor",
 										path, getLocale().get("str/" + (path > 3 ? "n" : path) + "_suffix"),
 										floor, getLocale().get("str/" + (floor > 3 ? "n" : path) + "_suffix")
