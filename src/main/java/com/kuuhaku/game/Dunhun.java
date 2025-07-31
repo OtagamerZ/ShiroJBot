@@ -217,7 +217,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 								.setCancellable(false);
 
 						Node currNode = map.getPlayerNode();
-						List<Node> children = currNode.getChildren();
+						List<Node> children = currNode.getChildren().stream()
+								.sorted(Comparator.comparingInt(n -> n.getRenderPos().x))
+								.toList();
+
+
 						Set<Choice> choices = new LinkedHashSet<>();
 						AtomicInteger chosenPath = new AtomicInteger();
 						for (int i = 0; i < children.size(); i++) {
