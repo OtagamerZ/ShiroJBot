@@ -257,7 +257,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 							choices.add(new Choice(
 									"path-" + i,
-									pair.getFirst(),
+									Utils.parseEmoji(pair.getFirst()),
 									w -> {
 										run.setNode(node);
 										nodeRng.setSeed(node.getSeed());
