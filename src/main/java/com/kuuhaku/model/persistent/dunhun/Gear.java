@@ -351,6 +351,8 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public static Gear getRandom(Actor<?> source, Hero hero, Basetype base, RarityClass rarity) {
+		if (base == null) return null;
+
 		double mult = 1;
 		if (source != null && source.getGame() != null) {
 			mult = switch (source.getRarityClass()) {

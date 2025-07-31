@@ -136,6 +136,7 @@ public class Event extends DAO<Event> {
 				WHERE weight > 0
 				  AND min_paths <= ?1
 				""", node.getChildren().size());
+		if (evts.isEmpty()) return null;
 
 		return Utils.withUnsafeRng(rng -> {
 			rng.setSeed(node.getSeed());

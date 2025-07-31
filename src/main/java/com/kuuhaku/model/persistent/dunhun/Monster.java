@@ -169,6 +169,7 @@ public class Monster extends MonsterBase<Monster> {
 
 	public static Monster getRandom(Dunhun game) {
 		List<Object[]> mons = DAO.queryAllUnmapped("SELECT id, weight FROM monster WHERE weight > 0");
+		if (mons.isEmpty()) return null;
 
 		RandomList<String> rl = new RandomList<>();
 		for (Object[] a : mons) {
@@ -183,6 +184,8 @@ public class Monster extends MonsterBase<Monster> {
 	}
 
 	public static Monster getRandom(Dunhun game, String id, RarityClass rarity) {
+		if (id == null) return null;
+
 		int dropLevel = Integer.MAX_VALUE;
 		if (game != null) {
 			dropLevel = game.getAreaLevel() + 1;

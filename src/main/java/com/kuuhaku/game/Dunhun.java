@@ -307,17 +307,22 @@ public class Dunhun extends GameInstance<NullPhase> {
 				} * mf;
 
 				while (Calc.chance(dropFac)) {
-					lt.gear().add(Gear.getRandom(m, null));
+					Gear drop = Gear.getRandom(m, null);
+					if (drop != null) {
+						lt.gear().add(drop);
+					}
+
 					dropFac /= 2;
 				}
 
 				List<Object[]> bases = DAO.queryAllUnmapped("""
-						SELECT id
+						SELECT item_id
 							 , weight
-						FROM v_dunhun_global_drops
+						FROM global_drops
 						WHERE weight > 0
 						"""
 				);
+				if (bases.isEmpty()) continue;
 
 				RandomList<String> rl = new RandomList<>();
 				for (Object[] i : bases) {
@@ -395,8 +400,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 			List<Actor<?>> keepers = getCombat().getActors(Team.KEEPERS);
 			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size())) break;
 
-			if (pool.length > 0) keepers.add(Monster.getRandom(this, Utils.getRandomEntry(pool)));
-			else keepers.add(Monster.getRandom(this));
+			Monster chosen;
+			if (pool.length > 0) chosen = Monster.getRandom(this, Utils.getRandomEntry(pool));
+			else chosen = Monster.getRandom(this);
+
+			if (chosen != null) {
+				keepers.add(chosen);
+			}
 		}
 
 		if (getCombat().getActors(Team.KEEPERS).isEmpty()) {

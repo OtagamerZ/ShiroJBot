@@ -125,7 +125,7 @@ public class Unique extends DAO<Unique> {
 			};
 		}
 
-		List<Object[]> affs = DAO.queryAllUnmapped("""
+		List<Object[]> uqs = DAO.queryAllUnmapped("""
 				SELECT u.id
 				     , u.weight
 				FROM "unique" u
@@ -133,9 +133,10 @@ public class Unique extends DAO<Unique> {
 				WHERE u.weight > 0
 				  AND b.req_level <= ?1
 				""", dropLevel);
+		if (uqs.isEmpty()) return null;
 
 		RandomList<String> rl = new RandomList<>();
-		for (Object[] a : affs) {
+		for (Object[] a : uqs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}
 

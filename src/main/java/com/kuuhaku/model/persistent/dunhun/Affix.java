@@ -203,6 +203,7 @@ public class Affix extends DAO<Affix> {
 				  AND (cast(?6 AS VARCHAR) IS NULL OR has(tags, ?6))
 				""", tp, gear.getReqLevel(), tags.toString(), affixes.toString(), groups, only.get())
 		);
+		if (affs.isEmpty()) return null;
 
 		if (type == null) {
 			List<AffixType> left = new ArrayList<>();
@@ -257,6 +258,7 @@ public class Affix extends DAO<Affix> {
 				  AND NOT has(get_affix_family(cast(?3 AS JSONB)), get_affix_family(id))
 				  AND (affix_group IS NULL OR affix_group NOT IN ?4)
 				""", tp, level, affixes.toString(), groups);
+		if (affs.isEmpty()) return null;
 
 		if (type == null) {
 			List<AffixType> left = new ArrayList<>();

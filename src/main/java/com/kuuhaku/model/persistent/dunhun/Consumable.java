@@ -143,6 +143,7 @@ public class Consumable extends DAO<Consumable> {
 				FROM consumable
 				WHERE weight > 0
 				""");
+		if (affs.isEmpty()) return null;
 
 		RandomList<String> rl = new RandomList<>();
 		for (Object[] a : affs) {

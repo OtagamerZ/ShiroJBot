@@ -106,6 +106,7 @@ public class Basetype extends DAO<Basetype> {
 				  AND req_level <= ?1
 				""", dropLevel
 		);
+		if (bases.isEmpty()) return null;
 
 		RandomList<String> rl = new RandomList<>();
 		for (Object[] a : bases) {
