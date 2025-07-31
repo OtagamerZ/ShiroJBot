@@ -23,7 +23,6 @@ public class AreaMap {
 	private final AtomicInteger renderFloor = new AtomicInteger(0);
 	private final AtomicInteger renderSublevel = new AtomicInteger(0);
 	private final PlayerPos playerPos = new PlayerPos();
-	private CompletableFuture<Void> generated;
 	private DungeonRun run;
 
 	public AreaMap(Consumer<AreaMap> generator) {
@@ -105,17 +104,11 @@ public class AreaMap {
 	}
 
 	public void generate() {
-		generated = CompletableFuture.runAsync(() -> {
-			floors.clear();
-			generator.accept(this);
-		});
+		floors.clear();
+		generator.accept(this);
 	}
 
 	public BufferedImage render(int width, int height) {
-		if (generated != null) {
-			generated.join();
-		}
-
 		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
