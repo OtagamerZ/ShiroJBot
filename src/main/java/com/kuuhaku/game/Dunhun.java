@@ -237,19 +237,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 							requestChoice(eb, helper, choices);
 
-
-							if (!isClosed()) {
-
-								getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area", getTurn()))).queue();
-							} else {
-								finish();
-								reportResult(GameReport.SUCCESS, "str/dungeon_leave",
-										Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-										getTurn()
-								);
-							}
-
-							// TODO Continue
+							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
+									getLocale().get("str/" + (pos.getPath() > 3 ? "n" : pos.getPath()) + "_suffix")
+							))).queue();
 
 							pn = map.getPlayerNode();
 							switch (pn.getType()) {
@@ -284,11 +274,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 								getTurn()
 						);
 						break;
-					} else {
-						if (getCombat() != null && getCombat().isDone()) {
-							grantCombatLoot();
-						}
+					} else if (getCombat() != null && getCombat().isDone()) {
+						grantCombatLoot();
 					}
+
+					map.getRun().save();
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 					getChannel().sendMessage(getLocale().get("error/error", e)).queue();

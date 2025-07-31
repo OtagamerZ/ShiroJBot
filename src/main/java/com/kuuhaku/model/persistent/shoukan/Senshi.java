@@ -1374,6 +1374,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			return false;
 		} catch (ActivationException e) {
 			if (e instanceof SelectionException && trigger != ON_ACTIVATE) return false;
+			else if (trigger == ON_TICK) return false;
 
 			game.getChannel().sendMessage(game.getString("error/activation", game.getString(e.getMessage()))).queue();
 			return false;
