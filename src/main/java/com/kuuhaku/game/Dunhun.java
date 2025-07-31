@@ -211,6 +211,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							eb.addField(getLocale().get("str/dungeon_floor_modifiers"), sb.toString(), false);
 						}
 
+						BufferedImage bi = map.render(getLocale(), 700, 900);
 						ButtonizeHelper helper = new ButtonizeHelper(true)
 								.setTimeout(5, TimeUnit.MINUTES)
 								.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
@@ -221,12 +222,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 								.sorted(Comparator.comparingInt(n -> n.getRenderPos().x))
 								.toList();
 
-
 						Set<Choice> choices = new LinkedHashSet<>();
 						AtomicInteger chosenPath = new AtomicInteger();
 						for (int i = 0; i < children.size(); i++) {
-							int path = i + 1;
 							Node node = children.get(i);
+
+							int path = i + 1;
 							choices.add(new Choice(
 									"path-" + path,
 									String.valueOf(path),
@@ -245,7 +246,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}));
 
 						try {
-							BufferedImage bi = map.render(getLocale(), 700, 900);
 							requestChoice(eb, bi, helper, choices);
 							if (isClosed()) return;
 						} catch (Exception ignore) {

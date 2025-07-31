@@ -77,6 +77,7 @@ public class Sublevel {
 			int space = Node.NODE_RADIUS + spacing;
 			int offset = space * i - (nodes.size() - 1) * space / 2;
 			int x = width / 2 + offset;
+
 			node.getRenderPos().move(x, y);
 			node.setRendered(false);
 		}
