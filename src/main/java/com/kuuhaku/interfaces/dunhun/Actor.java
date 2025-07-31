@@ -173,12 +173,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		if (raw < 0 || game == null) return raw;
 
 		Senshi sen = getSenshi();
-		double fac = sen.isDefending() ? 2 : 1;
-		if (game.isDuel()) {
-			fac *= 25;
-		}
+		double fac = sen.isDefending() ? 3 : 1;
+		double mit = 1 - Math.min(sen.getDfs() / (sen.getDfs() + 1000 / fac), 0.9);
 
-		return (int) Math.max(raw / (5 * fac), ((5 / fac) * Math.pow(raw, 2)) / (sen.getDfs() + (5 / fac) * raw));
+		return (int) Math.ceil(raw * mit);
 	}
 
 	public boolean hasFleed() {
