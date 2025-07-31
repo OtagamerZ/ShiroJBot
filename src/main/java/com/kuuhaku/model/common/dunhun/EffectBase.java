@@ -31,7 +31,7 @@ public abstract class EffectBase {
 	}
 
 	public boolean isClosed() {
-		return closed || !owner.getBinding().isBound();
+		return closed || (owner != null && !owner.getBinding().isBound());
 	}
 
 	public void close() {
