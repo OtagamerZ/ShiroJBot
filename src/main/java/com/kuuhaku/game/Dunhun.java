@@ -19,7 +19,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.*;
-import com.kuuhaku.model.persistent.user.DynamicProperty;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.dunhun.Choice;
 import com.kuuhaku.model.records.dunhun.EventAction;
@@ -35,7 +34,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.awt.image.BufferedImage;
@@ -137,9 +135,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				finish();
+
+				DungeonRun run = map.getRun();
 				reportResult(GameReport.SUCCESS, "str/dungeon_leave",
 						Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-						getTurn()
+						run.getFloor(), run.getSublevel()
 				);
 			}, 5, TimeUnit.MINUTES);
 		}
@@ -181,6 +181,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					try {
 						List<Runnable> floors = dungeon.getFloors();
 						if (!floors.isEmpty()) {
+							//TODO Pre-generated layout
 							int floor = getTurn() - 1;
 							if (floor >= floors.size()) {
 								finish();
@@ -228,9 +229,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 							choices.add(new Choice("leave", "", w -> {
 								finish();
+
+								DungeonRun run = map.getRun();
 								reportResult(GameReport.SUCCESS, "str/dungeon_leave",
 										Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-										getTurn()
+										run.getFloor(), run.getSublevel()
 								);
 								return null;
 							}));
@@ -249,15 +252,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 								// TODO case DANGER -> ;
 								case BOSS -> beginCombat(Boss.getRandom());
 							}
-
-							nextTurn();
 						}
 					} catch (Exception e) {
 						Constants.LOGGER.error(e, e);
-					}
-
-					if (getCombat() != null) {
-						getCombat().process();
 					}
 
 					Collection<Hero> hs = heroes.values();
@@ -269,9 +266,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 							h.save();
 						}
 
+						DungeonRun run = map.getRun();
 						reportResult(GameReport.SUCCESS, "str/dungeon_fail",
 								Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-								getTurn()
+								run.getFloor(), run.getSublevel()
 						);
 						break;
 					} else if (getCombat() != null && getCombat().isDone()) {
@@ -383,12 +381,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 					getChannel().sendMessage(getLocale().get("str/actor_level_up", n.getName(), n.getStats().getLevel())).queue();
 				}
 			});
-
-			if (dungeon.getMonsterPool().isEmpty() && getTurn() % 10 == 0) {
-				DynamicProperty prop = h.getAccount().getDynamicProperty("skip_floor_" + dungeon.getId().toLowerCase());
-				prop.setValue(Math.max(NumberUtils.toInt(prop.getValue()), getTurn()));
-				prop.save();
-			}
 		}
 
 		combat.set(null);
@@ -435,6 +427,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		requestChoice(eb, helper, choices);
+
+		if (getCombat() != null) {
+			getCombat().process();
+		}
 	}
 
 	public void requestChoice(EmbedBuilder eb, ButtonizeHelper helper, Set<Choice> choices) {
