@@ -226,7 +226,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								));
 							}
 
-							choices.add(new Choice("leave", "", w -> {
+							choices.add(new Choice("leave", getLocale().get("str/leave_dungeon"), w -> {
 								finish();
 
 								DungeonRun run = map.getRun();

@@ -51,6 +51,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	private transient boolean fleed;
 
 	public Actor() {
+		this.hp = getMaxHp();
 	}
 
 	public Actor(String id) {
