@@ -100,7 +100,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					run = new DungeonRun(leader, dungeon);
 				}
 
-				this.map = new AreaMap(run);
+				this.map = run.getMap();
 				this.map.generate();
 
 				Floor fl = this.map.getFloor();

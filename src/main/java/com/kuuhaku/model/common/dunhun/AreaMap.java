@@ -17,7 +17,6 @@ public class AreaMap {
 	public static final int AREAS_PER_FLOOR = 10;
 	private static final Point ZERO = new Point();
 
-	private final int seed;
 	private final int areasPerFloor;
 	private final Consumer<AreaMap> generator;
 	private final DungeonRun run;
@@ -26,14 +25,12 @@ public class AreaMap {
 	private final AtomicInteger renderSublevel = new AtomicInteger(0);
 
 	public AreaMap(int areasPerFloor, Consumer<AreaMap> generator, DungeonRun run) {
-		this.seed = 0;
 		this.areasPerFloor = areasPerFloor;
 		this.generator = generator;
 		this.run = run;
 	}
 
 	public AreaMap(DungeonRun run) {
-		this.seed = run.getSeed();
 		this.areasPerFloor = AREAS_PER_FLOOR;
 		this.renderFloor.set(run.getFloor());
 		this.generator = AreaMap::generateRandom;
@@ -41,7 +38,7 @@ public class AreaMap {
 	}
 
 	public int getSeed() {
-		return seed;
+		return run.getSeed();
 	}
 
 	public int getAreasPerFloor() {
