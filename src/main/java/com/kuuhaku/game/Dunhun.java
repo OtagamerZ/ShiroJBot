@@ -99,6 +99,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				this.map = new AreaMap(run.getSeed(), run.getFloor());
+				this.map.generate();
 
 				Floor fl = this.map.getFloor();
 				if (run.getSublevel() >= fl.size()) {
