@@ -43,10 +43,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -134,13 +131,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 					return;
 				}
 
-				finish();
-
 				DungeonRun run = map.getRun();
-				reportResult(GameReport.SUCCESS, "str/dungeon_leave",
-						Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-						run.getFloor(), run.getSublevel() + 1
-				);
+				finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
 			}, 5, TimeUnit.MINUTES);
 		}
 	}
@@ -184,11 +176,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							//TODO Pre-generated layout
 							int floor = getTurn() - 1;
 							if (floor >= floors.size()) {
-								finish();
-								reportResult(GameReport.SUCCESS, "str/dungeon_end",
-										Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList())
-								);
-
+								finish("str/dungeon_end", getHeroNames());
 								break;
 							}
 
@@ -243,11 +231,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							}
 
 							choices.add(new Choice("leave", getLocale().get("str/leave_dungeon"), w -> {
-								finish();
-								reportResult(GameReport.SUCCESS, "str/dungeon_leave",
-										Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-										run.getFloor(), run.getSublevel() + 1
-								);
+								finish(getHeroNames(), run.getFloor(), run.getSublevel() + 1);
 								return null;
 							}));
 
@@ -292,8 +276,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 						DungeonRun run = map.getRun();
 						reportResult(GameReport.SUCCESS, "str/dungeon_fail",
-								Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-								run.getFloor(), run.getSublevel() + 1
+								getHeroNames(), run.getFloor(), run.getSublevel() + 1
 						);
 						break;
 					} else if (getCombat() != null && getCombat().isDone()) {
@@ -557,12 +540,18 @@ public class Dunhun extends GameInstance<NullPhase> {
 			event.set(new Pair<>(s, helper));
 		});
 
-		lock.join();
+		try {
+			lock.get(5, TimeUnit.MINUTES);
+		} catch (Exception e) {
+			DungeonRun run = map.getRun();
+			finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
+		}
+
 		event.get().getFirst().delete().queue(null, Utils::doNothing);
 		event.set(null);
 	}
 
-	private void finish() {
+	private void finish(String message, Object... args) {
 		getChannel().clearBuffer();
 
 		if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
@@ -582,8 +571,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 					names.add(i.getName(getLocale()) + " (x" + loot.items().getCount(i) + ")");
 				}
 
-				getChannel().buffer(getLocale().get(
-						"str/dungeon_loot_single") + "\n" + "```" + Utils.properlyJoin(getLocale().get("str/and")).apply(names) + "```"
+				getChannel().buffer(
+						getLocale().get("str/dungeon_loot_single") +
+						"\n```" + Utils.properlyJoin(getLocale().get("str/and")).apply(names) + "```"
 				);
 			} else {
 				InfiniteList<Hero> robin = new InfiniteList<>(heroes.values());
@@ -639,6 +629,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 			}
 		}
+
+		reportResult(GameReport.SUCCESS, message, args);
 	}
 
 	@Override
@@ -747,6 +739,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public Map<String, Hero> getHeroes() {
 		return heroes;
+	}
+
+	public String getHeroNames() {
+		return Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList());
 	}
 
 	public Pair<String, String> getMessage() {
