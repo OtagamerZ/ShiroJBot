@@ -597,7 +597,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public void attack(Actor<?> source, Actor<?> target, Double damageMult) {
 		if (damageMult == null) {
-			source.consumeAp(-1);
+			source.consumeAp(1);
 			history.add(getLocale().get("str/actor_combat", source.getName(), target.getName()));
 		}
 
