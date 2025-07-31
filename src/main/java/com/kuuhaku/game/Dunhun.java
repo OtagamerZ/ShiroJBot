@@ -239,9 +239,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 								return null;
 							}));
 
-							BufferedImage bi = map.render(getLocale(), 700, 900);
-							requestChoice(eb, bi, helper, choices);
-							if (isClosed()) return;
+							try {
+								BufferedImage bi = map.render(getLocale(), 700, 900);
+								requestChoice(eb, bi, helper, choices);
+								if (isClosed()) return;
+							} catch (Exception ignore) {
+								return;
+							}
 
 							int path = chosenPath.get();
 							int floor = run.getFloor();
@@ -463,14 +467,17 @@ public class Dunhun extends GameInstance<NullPhase> {
 			));
 		}
 
-		requestChoice(eb, null, helper, choices);
+		try {
+			requestChoice(eb, null, helper, choices);
+		} catch (Exception ignore) {
+		}
 
 		if (getCombat() != null) {
 			getCombat().process();
 		}
 	}
 
-	public void requestChoice(EmbedBuilder eb, BufferedImage img, ButtonizeHelper helper, Set<Choice> choices) {
+	public void requestChoice(EmbedBuilder eb, BufferedImage img, ButtonizeHelper helper, Set<Choice> choices) throws Exception {
 		CompletableFuture<Void> lock = new CompletableFuture<>();
 
 		helper.clearActions();
@@ -544,13 +551,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			event.set(new Pair<>(s, helper));
 		});
 
-		try {
-			lock.get(5, TimeUnit.MINUTES);
-		} catch (Exception e) {
-			DungeonRun run = map.getRun();
-			finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
-		}
-
+		lock.get(5, TimeUnit.MINUTES);
 		event.get().getFirst().delete().queue(null, Utils::doNothing);
 		event.set(null);
 	}
