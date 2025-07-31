@@ -34,10 +34,6 @@ public class DungeonRunPlayer extends DAO<DungeonRunPlayer> {
 		return hp;
 	}
 
-	public void setHp(int hp) {
-		this.hp = hp;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
