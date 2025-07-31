@@ -203,7 +203,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 							String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel());
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
-									.setTitle(dungeon.getInfo(getLocale()).getName() + "(" + area + ")")
+									.setTitle(dungeon.getInfo(getLocale()).getName() + " (" + area + ")")
 									.addField(getLocale().get("str/dungeon_modifiers"), sb.toString(), false)
 									.setImage("attachment://dungeon.png");
 
