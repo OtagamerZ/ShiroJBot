@@ -64,9 +64,17 @@ public class AreaMap {
 	public Node getPlayerNode() {
 		if (!floors.containsKey(run.getFloor())) return null;
 
-		return getFloor(run.getFloor())
-				.getSublevel(run.getSublevel())
-				.getNode(run.getPath());
+		Floor fl = getFloor(run.getFloor());
+		if (run.getSublevel() >= fl.size()) {
+			run.setSublevel(fl.size() - 1);
+		}
+
+		Sublevel sub = fl.getSublevel(run.getSublevel());
+		if (run.getPath() >= sub.size()) {
+			run.setPath(sub.size() - 1);
+		}
+
+		return sub.getNode(run.getPath());
 	}
 
 	public AtomicInteger getRenderFloor() {
