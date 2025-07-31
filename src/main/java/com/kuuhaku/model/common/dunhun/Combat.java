@@ -635,7 +635,7 @@ public class Combat implements Renderer<BufferedImage> {
 		AtomicInteger dmg = new AtomicInteger((int) (srcSen.getDmg() * damageMult));
 
 		trigger(Trigger.ON_ATTACK, source, target, dmg);
-		target.modHp(source, dmg.get(), source.getCritical());
+		target.modHp(source, -dmg.get(), source.getCritical());
 		trigger(Trigger.ON_HIT, source, target, dmg);
 
 		if (target.getHp() == 0) {
