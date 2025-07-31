@@ -20,12 +20,14 @@ import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.user.UserItem;
+import com.kuuhaku.model.records.ClusterAction;
 import com.kuuhaku.model.records.dunhun.Choice;
 import com.kuuhaku.model.records.dunhun.EventAction;
 import com.kuuhaku.model.records.dunhun.EventDescription;
 import com.kuuhaku.model.records.dunhun.Loot;
 import com.kuuhaku.model.records.id.DungeonRunId;
 import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
@@ -203,7 +205,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 								sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
 							}
 
-							BufferedImage bi = map.render(600, 800);
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
 									.setTitle(dungeon.getInfo(getLocale()).getName())
 									.addField(getLocale().get("str/dungeon_modifiers"), sb.toString(), false)
@@ -239,7 +240,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 								return null;
 							}));
 
-							requestChoice(eb, helper, choices);
+							BufferedImage bi = map.render(600, 800);
+							requestChoice(eb, bi, helper, choices);
 
 							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
 									getLocale().get("str/" + (pos.getPath() > 3 ? "n" : pos.getPath()) + "_suffix")
@@ -432,14 +434,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 			));
 		}
 
-		requestChoice(eb, helper, choices);
+		requestChoice(eb, null, helper, choices);
 
 		if (getCombat() != null) {
 			getCombat().process();
 		}
 	}
 
-	public void requestChoice(EmbedBuilder eb, ButtonizeHelper helper, Set<Choice> choices) {
+	public void requestChoice(EmbedBuilder eb, BufferedImage img, ButtonizeHelper helper, Set<Choice> choices) {
 		CompletableFuture<Void> lock = new CompletableFuture<>();
 
 		helper.clearActions();
@@ -503,12 +505,15 @@ public class Dunhun extends GameInstance<NullPhase> {
 			}
 		}
 
-		getChannel().sendEmbed(eb.build())
-				.apply(helper::apply)
-				.queue(s -> {
-					Pages.buttonize(s, helper);
-					event.set(new Pair<>(s, helper));
-				});
+		ClusterAction ca = getChannel().sendEmbed(eb.build()).apply(helper::apply);
+		if (img != null) {
+			ca.addFile(IO.getBytes(img), "dungeon.png");
+		}
+
+		ca.queue(s -> {
+			Pages.buttonize(s, helper);
+			event.set(new Pair<>(s, helper));
+		});
 
 		lock.join();
 		event.set(null);
