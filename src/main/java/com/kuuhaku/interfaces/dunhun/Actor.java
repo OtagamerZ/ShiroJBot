@@ -55,6 +55,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public Actor(String id) {
 		this.id = id;
+		this.hp = getMaxHp();
 	}
 
 	public String getId() {
