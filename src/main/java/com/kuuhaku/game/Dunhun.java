@@ -226,12 +226,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 									.setCancellable(false);
 
 							Node pn = map.getPlayerNode();
-							System.out.println(pn.getChildren());
+							List<Node> children = pn.getChildren();
 							Set<Choice> choices = new LinkedHashSet<>();
-							for (Node node : pn.getChildren()) {
+							for (int i = 0; i < children.size(); i++) {
+								Node node = children.get(i);
 								choices.add(new Choice(
-										"path-" + node.getPath(),
-										String.valueOf(node.getPath() + 1),
+										"path-" + i,
+										String.valueOf(i + 1),
 										w -> {
 											run.setNode(node);
 											return null;
