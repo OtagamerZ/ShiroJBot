@@ -802,7 +802,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 					.average().orElse(1);
 		} else if (dungeon.getAreaLevel() == 0) {
 			Floor fl = map.getFloor();
-			return Math.min(fl.getFloor() * 84 / 25 * (1 - fl.getFloor() / (fl.getFloor() + 50)), 84);
+			int floor = fl.getFloor();
+
+			return 1 + Math.min(floor * 83 / 25 * floor / (floor + 50), 83);
 		}
 
 		return dungeon.getAreaLevel();
