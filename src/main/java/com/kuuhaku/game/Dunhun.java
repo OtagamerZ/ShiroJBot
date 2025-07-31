@@ -226,6 +226,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 									.setCancellable(false);
 
 							Node pn = map.getPlayerNode();
+							System.out.println(pn.getChildren());
 							Set<Choice> choices = new LinkedHashSet<>();
 							for (Node node : pn.getChildren()) {
 								choices.add(new Choice(
@@ -252,9 +253,17 @@ public class Dunhun extends GameInstance<NullPhase> {
 							if (isClosed()) return;
 
 							int path = run.getPath() + 1;
-							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
-									path, getLocale().get("str/" + (path > 3 ? "n" : path) + "_suffix")
-							))).queue();
+							int floor = run.getFloor() + 1;
+							if (floor != fl.getFloor()) {
+								getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor",
+										path, getLocale().get("str/" + (path > 3 ? "n" : path) + "_suffix"),
+										floor, getLocale().get("str/" + (floor > 3 ? "n" : path) + "_suffix")
+								))).queue();
+							} else {
+								getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
+										path, getLocale().get("str/" + (path > 3 ? "n" : path) + "_suffix")
+								))).queue();
+							}
 
 							pn = map.getPlayerNode();
 							switch (pn.getType()) {
