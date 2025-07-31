@@ -240,26 +240,26 @@ public class Dunhun extends GameInstance<NullPhase> {
 								.toList();
 
 						int size = children.size();
-						Queue<String> emojis = new LinkedList<>();
-						if (size >= 4) emojis.add("⬅️");
-						if (size >= 2) emojis.add("↙️");
-						if (size % 2 == 1) emojis.add("⬇️");
-						if (size >= 2) emojis.add("↘️");
-						if (size >= 5) emojis.add("➡️");
+						Queue<Pair<String, String>> emojis = new LinkedList<>();
+						if (size >= 4) emojis.add(new Pair<>("⬅️", "leftmost"));
+						if (size >= 2) emojis.add(new Pair<>("↙️", "left"));
+						if (size % 2 == 1) emojis.add(new Pair<>("⬇️", "center"));
+						if (size >= 2) emojis.add(new Pair<>("↘️", "right"));
+						if (size >= 5) emojis.add(new Pair<>("➡️", "rightmost"));
 
 						Set<Choice> choices = new LinkedHashSet<>();
-						AtomicInteger chosenPath = new AtomicInteger();
+						AtomicReference<String> chosenPath = new AtomicReference<>();
 						for (int i = 0; i < size; i++) {
 							Node node = children.get(i);
 
-							int path = i + 1;
+							Pair<String, String> pair = emojis.poll();
 							choices.add(new Choice(
-									"path-" + path,
-									emojis.poll(),
+									"path-" + i,
+									pair.getFirst(),
 									w -> {
 										run.setNode(node);
 										nodeRng.setSeed(node.getSeed());
-										chosenPath.set(path);
+										chosenPath.set(getLocale().get("str/" + pair.getSecond()));
 										return null;
 									}
 							));
@@ -277,16 +277,15 @@ public class Dunhun extends GameInstance<NullPhase> {
 							return;
 						}
 
-						int path = chosenPath.get();
 						int floor = run.getFloor();
 						if (floor != fl.getFloor()) {
 							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor",
-									path, getLocale().get("str/" + (path > 3 ? "n" : path) + "_suffix"),
-									floor, getLocale().get("str/" + (floor > 3 ? "n" : path) + "_suffix")
+									chosenPath.get(),
+									floor, getLocale().get("str/" + (floor > 3 ? "n" : floor) + "_suffix")
 							))).queue();
 						} else {
 							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
-									path, getLocale().get("str/" + (path > 3 ? "n" : path) + "_suffix")
+									chosenPath.get()
 							))).queue();
 						}
 
