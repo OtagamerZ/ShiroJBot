@@ -309,7 +309,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					for (DungeonRunPlayer p : map.getRun().getPlayers()) {
-						p.setHp(heroes.get(p.getId()).getHp());
+						p.setHp(heroes.get(p.getId().playerId()).getHp());
 					}
 
 					map.getRun().save();
