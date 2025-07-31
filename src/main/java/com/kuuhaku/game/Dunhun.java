@@ -100,6 +100,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 					run = new DungeonRun(leader, dungeon);
 				}
 
+				for (RunModifier mod : run.getModifiers()) {
+					mod.apply(this);
+				}
+
 				Map<String, Integer> hps = new HashMap<>();
 				for (DungeonRunPlayer p : run.getPlayers()) {
 					hps.put(p.getId().playerId(), p.getHp());
