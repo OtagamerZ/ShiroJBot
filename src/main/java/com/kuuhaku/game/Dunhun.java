@@ -239,7 +239,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							if (isClosed()) return;
 
 							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
-									getLocale().get("str/" + (run.getPath() > 3 ? "n" : run.getPath()) + "_suffix")
+									run.getPath(), getLocale().get("str/" + (run.getPath() > 3 ? "n" : run.getPath()) + "_suffix")
 							))).queue();
 
 							pn = map.getPlayerNode();
