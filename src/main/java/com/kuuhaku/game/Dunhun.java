@@ -511,6 +511,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		});
 
 		lock.join();
+		event.get().getFirst().delete().queue(null, Utils::doNothing);
 		event.set(null);
 	}
 
