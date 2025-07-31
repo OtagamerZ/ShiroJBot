@@ -47,16 +47,14 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	private transient final ActorBinding binding = new ActorBinding();
 	private transient final ActorCache cache = new ActorCache(this);
 	private transient final RegDeg regDeg = new RegDeg(null);
-	private transient int hp, ap;
+	private transient int hp = -1, ap;
 	private transient boolean fleed;
 
 	public Actor() {
-		this.hp = getMaxHp();
 	}
 
 	public Actor(String id) {
 		this.id = id;
-		this.hp = getMaxHp();
 	}
 
 	public String getId() {
@@ -105,8 +103,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public int getHp() {
 		int max = getMaxHp();
-		if (hp > max) hp = max;
-		else if (hp < 0) hp = 0;
+		if (hp > max || hp == -1) hp = max;
 
 		return hp;
 	}
