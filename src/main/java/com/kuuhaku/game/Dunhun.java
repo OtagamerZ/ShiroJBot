@@ -1,6 +1,8 @@
 package com.kuuhaku.game;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
@@ -35,6 +37,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
@@ -236,15 +239,23 @@ public class Dunhun extends GameInstance<NullPhase> {
 								.sorted(Comparator.comparingInt(n -> n.getRenderPos().x))
 								.toList();
 
+						int size = children.size();
+						Queue<String> emojis = new LinkedList<>();
+						if (size >= 4) emojis.add("⬅️");
+						if (size >= 2) emojis.add("↙️");
+						if (size % 2 == 1) emojis.add("⬇️");
+						if (size >= 2) emojis.add("↘️");
+						if (size >= 5) emojis.add("➡️");
+
 						Set<Choice> choices = new LinkedHashSet<>();
 						AtomicInteger chosenPath = new AtomicInteger();
-						for (int i = 0; i < children.size(); i++) {
+						for (int i = 0; i < size; i++) {
 							Node node = children.get(i);
 
 							int path = i + 1;
 							choices.add(new Choice(
 									"path-" + path,
-									String.valueOf(path),
+									emojis.poll(),
 									w -> {
 										run.setNode(node);
 										nodeRng.setSeed(node.getSeed());
@@ -521,7 +532,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			Map<String, String> votes = new HashMap<>();
 
 			for (Choice c : choices) {
-				helper.addAction(c.label(), w -> {
+				ThrowingConsumer<ButtonWrapper> act = w -> {
 					if (getPartySize() <= 1) {
 						votes.put(w.getUser().getId(), c.id());
 					} else {
@@ -568,7 +579,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 						lock.complete(null);
 						Pages.finalizeEvent(w.getMessage(), Utils::doNothing);
 					}
-				});
+				};
+
+				if (c.label() instanceof Emoji e) {
+					helper.addAction(e, act);
+				} else {
+					helper.addAction(String.valueOf(c.label()), act);
+				}
 			}
 		}
 

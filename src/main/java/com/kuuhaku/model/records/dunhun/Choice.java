@@ -5,7 +5,7 @@ import com.github.ygimenez.model.ThrowingFunction;
 
 import java.util.Objects;
 
-public record Choice(String id, String label, ThrowingFunction<ButtonWrapper, String> action) {
+public record Choice(String id, Object label, ThrowingFunction<ButtonWrapper, String> action) {
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
