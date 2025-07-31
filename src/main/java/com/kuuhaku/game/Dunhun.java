@@ -99,6 +99,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 					run = new DungeonRun(leader, dungeon);
 				}
 
+				for (Hero h : heroes.values()) {
+					run.getPlayers().add(new DungeonRunPlayer(run, h));
+				}
+
 				this.map = run.getMap();
 				this.map.generate();
 
@@ -302,6 +306,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}
 					} catch (Exception e) {
 						Constants.LOGGER.error(e, e);
+					}
+
+					for (DungeonRunPlayer p : map.getRun().getPlayers()) {
+						p.setHp(heroes.get(p.getId()).getHp());
 					}
 
 					map.getRun().save();

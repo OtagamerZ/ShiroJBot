@@ -123,6 +123,8 @@ public class Affix extends DAO<Affix> {
 	}
 
 	public void apply(Actor<?> target) {
+		if (effect == null) return;
+
 		try {
 			Utils.exec(id, effect, Map.of(
 					"game", target.getGame(),

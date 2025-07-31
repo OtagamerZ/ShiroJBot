@@ -852,6 +852,8 @@ public class Combat implements Renderer<BufferedImage> {
 	public void trigger(Trigger t, Actor<?> source, Actor<?> target, AtomicInteger value) {
 		if (t == Trigger.ON_TICK) {
 			source.getModifiers().removeIf(source, ValueMod::isExpired);
+		} else if (Utils.equalsAny(t, Trigger.ON_VICTORY, Trigger.ON_DEFEAT)) {
+			source.getRegDeg().clear();
 		}
 
 		CombatContext context = new CombatContext(t, source, target, value);

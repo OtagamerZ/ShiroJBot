@@ -8,10 +8,13 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "dungeon_run", schema = "dunhun")
@@ -43,6 +46,14 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Column(name = "path", nullable = false)
 	private int path = 0;
 
+	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@JoinColumns({
+			@JoinColumn(name = "hero_id", referencedColumnName = "hero_id"),
+			@JoinColumn(name = "dungeon_id", referencedColumnName = "dungeon_id"),
+	})
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<DungeonRunPlayer> players = new HashSet<>();
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "dungeon_run_modifier",
 			schema = "dunhun",
@@ -53,7 +64,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 			inverseJoinColumns = @JoinColumn(name = "modifier_id")
 	)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<RunModifier> modifiers = new ArrayList<>();
+	private Set<RunModifier> modifiers = new LinkedHashSet<>();
 
 	public DungeonRun() {
 	}
@@ -116,7 +127,11 @@ public class DungeonRun extends DAO<DungeonRun> {
 		map.getRenderSublevel().set(subOffset * map.getAreasPerFloor());
 	}
 
-	public List<RunModifier> getModifiers() {
+	public Set<DungeonRunPlayer> getPlayers() {
+		return players;
+	}
+
+	public Set<RunModifier> getModifiers() {
 		return modifiers;
 	}
 

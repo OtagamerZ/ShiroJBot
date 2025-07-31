@@ -4,7 +4,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
-import com.kuuhaku.model.common.dunhun.Floor;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedRunModifier;
 import com.kuuhaku.util.Utils;
@@ -55,6 +54,8 @@ public class RunModifier extends DAO<RunModifier> {
 	}
 
 	public void apply(Dunhun game) {
+		if (effect == null) return;
+
 		try {
 			Utils.exec(id, effect, Map.of("game", game));
 		} catch (Exception e) {

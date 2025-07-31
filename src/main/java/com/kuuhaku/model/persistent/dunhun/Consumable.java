@@ -109,8 +109,9 @@ public class Consumable extends DAO<Consumable> {
 	}
 
 	public void execute(Actor<?> source, Actor<?> target) {
+		if (count <= 0 || stats.getEffect() == null) return;
+
 		try {
-			if (count <= 0) return;
 			Utils.exec(id, stats.getEffect(), Map.of(
 					"game", source.getGame(),
 					"actor", source,

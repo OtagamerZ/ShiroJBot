@@ -91,13 +91,15 @@ public class Event extends DAO<Event> {
 			return Matcher.quoteReplacement(hide ? "" : "**" + m.group(1) + "**");
 		});
 
-		try {
-			Utils.exec(id, script, Map.of(
-					"game", game,
-					"event", this
-			));
-		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to execute event {}", id, e);
+		if (script != null) {
+			try {
+				Utils.exec(id, script, Map.of(
+						"game", game,
+						"event", this
+				));
+			} catch (Exception e) {
+				Constants.LOGGER.warn("Failed to execute event {}", id, e);
+			}
 		}
 
 		return new EventDescription(game.parsePlural(desc), out);

@@ -112,6 +112,8 @@ public class Skill extends DAO<Skill> implements Cloneable {
 	}
 
 	public void execute(Actor<?> source, Actor<?> target) {
+		if (stats.getEffect() == null) return;
+
 		try {
 			Utils.exec(id, stats.getEffect(), Map.of(
 					"game", source.getGame(),
