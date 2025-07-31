@@ -53,6 +53,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class Combat implements Renderer<BufferedImage> {
 	private final ScheduledExecutorService cpu = Executors.newSingleThreadScheduledExecutor();
@@ -78,7 +79,10 @@ public class Combat implements Renderer<BufferedImage> {
 		this.game = game;
 
 		hunters.addAll(game.getHeroes().values());
-		keepers.addAll(List.of(enemies));
+		keepers.addAll(Stream.of(enemies)
+				.filter(Objects::nonNull)
+				.toList()
+		);
 
 		for (Actor<?> a : hunters) {
 			a.setAp(0);

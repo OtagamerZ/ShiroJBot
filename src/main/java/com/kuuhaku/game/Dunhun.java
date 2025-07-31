@@ -783,8 +783,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@SafeVarargs
 	public final <T extends MonsterBase<T>> void beginCombat(MonsterBase<T>... enemies) {
-		if (this.combat.get() != null) return;
-		this.combat.set(new Combat(this, enemies));
+		if (combat.get() != null) return;
+		combat.set(new Combat(this, enemies));
+
+		if (getCombat().getActors(Team.KEEPERS).isEmpty()) {
+			combat.set(null);
+		}
 	}
 
 	public String parsePlural(String text) {
