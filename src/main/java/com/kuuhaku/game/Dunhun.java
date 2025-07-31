@@ -253,6 +253,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 							Node node = children.get(i);
 
 							Pair<String, String> pair = emojis.poll();
+							assert pair != null;
+
 							choices.add(new Choice(
 									"path-" + i,
 									pair.getFirst(),
