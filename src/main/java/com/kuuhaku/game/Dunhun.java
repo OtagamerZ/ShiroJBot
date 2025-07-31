@@ -238,7 +238,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								));
 							}
 
-							choices.add(new Choice("leave", getLocale().get("str/	leave_dungeon"), w -> {
+							choices.add(new Choice("leave", getLocale().get("str/leave_dungeon"), w -> {
 								finish();
 								reportResult(GameReport.SUCCESS, "str/dungeon_leave",
 										Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
