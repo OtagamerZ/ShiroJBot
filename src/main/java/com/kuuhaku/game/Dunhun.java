@@ -400,6 +400,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 			else keepers.add(Monster.getRandom(this));
 		}
 
+		if (getCombat().getActors(Team.KEEPERS).isEmpty()) {
+			combat.set(null);
+			return;
+		}
+
 		getCombat().process();
 	}
 
