@@ -161,12 +161,14 @@ public enum Trigger {
 	ON_FIELD_CHANGE,
 
 	/**
-	 * On being placed <b>(Asserted)</b>
+	 * On being placed <b>(Asserted)</b><br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_INITIALIZE,
 
 	/**
-	 * On being removed <b>(Asserted)</b>
+	 * On being removed <b>(Asserted)</b><br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_REMOVE,
 
