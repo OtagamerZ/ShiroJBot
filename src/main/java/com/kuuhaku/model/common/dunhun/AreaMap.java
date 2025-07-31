@@ -1,5 +1,6 @@
 package com.kuuhaku.model.common.dunhun;
 
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.DungeonRun;
 import com.kuuhaku.util.WobbleStroke;
@@ -8,7 +9,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
@@ -108,7 +108,7 @@ public class AreaMap {
 		generator.accept(this);
 	}
 
-	public BufferedImage render(int width, int height) {
+	public BufferedImage render(I18N locale, int width, int height) {
 		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -132,7 +132,8 @@ public class AreaMap {
 					g2d.drawLine(0, y, width, y);
 
 					g2d.setFont(new Font("Arial", Font.BOLD, 25));
-					g2d.drawString("Floor " + fl.getFloor() + " ", 5, y + g2d.getFontMetrics().getHeight());
+
+					g2d.drawString(locale.get("str/dungeon_floor", fl.getFloor()), 5, y + g2d.getFontMetrics().getHeight());
 					y += 50;
 				} else {
 					g2d.setColor(new Color(138, 168, 179));

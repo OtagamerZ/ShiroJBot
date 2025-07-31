@@ -188,6 +188,11 @@ public class Combat implements Renderer<BufferedImage> {
 		if (!game.isDuel()) {
 			PlayerPos pos = game.getMap().getPlayerPos();
 			eb.setAuthor(getLocale().get("str/dungeon_area", pos.getFloor(), pos.getSublevel()));
+		} else {
+			String teamA = Utils.properlyJoin(getLocale().get("str/and")).apply(hunters.stream().map(Actor::getName).toList());
+			String teamB = Utils.properlyJoin(getLocale().get("str/and")).apply(keepers.stream().map(Actor::getName).toList());
+
+			eb.setAuthor(getLocale().get("str/dungeon_duel", teamA, teamB));
 		}
 
 		String title = getLocale().get("str/hunters");

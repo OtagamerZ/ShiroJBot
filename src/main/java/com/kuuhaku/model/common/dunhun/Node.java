@@ -2,14 +2,12 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -122,12 +120,7 @@ public class Node {
 	}
 
 	public BufferedImage getIcon() {
-		File f = new File("node_" + getType().name().toLowerCase() + ".png");
-		try {
-			return ImageIO.read(f);
-		} catch (IOException e) {
-			return null;
-		}
+		return IO.getResourceAsImage("dunhun/icons/node_" + getType().name().toLowerCase() + ".png");
 	}
 
 	public int depth() {

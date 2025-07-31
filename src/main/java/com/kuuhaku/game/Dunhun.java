@@ -202,11 +202,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 								sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
 							}
 
+							String area = getLocale().get("str/dungeon_area", pos.getFloor(), pos.getSublevel());
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
-									.setTitle(dungeon.getInfo(getLocale()).getName())
+									.setTitle(dungeon.getInfo(getLocale()).getName() + "(" + area + ")")
 									.addField(getLocale().get("str/dungeon_modifiers"), sb.toString(), false)
-									.setImage("attachment://dungeon.png")
-									.setFooter(getLocale().get("str/dungeon_area", pos.getFloor(), pos.getSublevel()), null);
+									.setImage("attachment://dungeon.png");
 
 							ButtonizeHelper helper = new ButtonizeHelper(true)
 									.setTimeout(5, TimeUnit.MINUTES)
@@ -237,7 +237,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								return null;
 							}));
 
-							BufferedImage bi = map.render(600, 800);
+							BufferedImage bi = map.render(getLocale(), 600, 800);
 							requestChoice(eb, bi, helper, choices);
 
 							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
