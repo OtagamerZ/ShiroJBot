@@ -44,6 +44,7 @@ import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -217,14 +218,17 @@ public class Dunhun extends GameInstance<NullPhase> {
 							Node pn = map.getPlayerNode();
 							List<Node> children = pn.getChildren();
 							Set<Choice> choices = new LinkedHashSet<>();
+							AtomicInteger chosenPath = new AtomicInteger();
 							for (int i = 0; i < children.size(); i++) {
+								int path = i + 1;
 								Node node = children.get(i);
 								choices.add(new Choice(
-										"path-" + i,
-										String.valueOf(i + 1),
+										"path-" + path,
+										String.valueOf(path),
 										w -> {
 											run.setNode(node);
 											nodeRng.setSeed(node.getSeed());
+											chosenPath.set(path);
 											return null;
 										}
 								));
@@ -239,7 +243,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							requestChoice(eb, bi, helper, choices);
 							if (isClosed()) return;
 
-							int path = run.getPath() + 1;
+							int path = chosenPath.get();
 							int floor = run.getFloor();
 							if (floor != fl.getFloor()) {
 								getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor",
