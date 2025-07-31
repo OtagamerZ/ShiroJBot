@@ -196,16 +196,29 @@ public class Dunhun extends GameInstance<NullPhase> {
 							map.generate();
 							DungeonRun run = map.getRun();
 
-							XStringBuilder sb = new XStringBuilder();
-							for (RunModifier mod : map.getRun().getModifiers()) {
-								sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
-							}
-
 							String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel() + 1);
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
 									.setTitle(dungeon.getInfo(getLocale()).getName() + " (" + area + ")")
-									.addField(getLocale().get("str/dungeon_modifiers"), sb.toString(), false)
 									.setImage("attachment://dungeon.png");
+
+							if (!map.getRun().getModifiers().isEmpty()) {
+								XStringBuilder sb = new XStringBuilder();
+								for (RunModifier mod : map.getRun().getModifiers()) {
+									sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
+								}
+
+								eb.addField(getLocale().get("str/dungeon_run_modifiers"), sb.toString(), false);
+							}
+
+							Floor fl = map.getFloor();
+							if (!fl.getModifiers().isEmpty()) {
+								XStringBuilder sb = new XStringBuilder();
+								for (RunModifier mod : fl.getModifiers()) {
+									sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
+								}
+
+								eb.addField(getLocale().get("str/dungeon_floor_modifiers"), sb.toString(), false);
+							}
 
 							ButtonizeHelper helper = new ButtonizeHelper(true)
 									.setTimeout(5, TimeUnit.MINUTES)

@@ -1,6 +1,7 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.enums.dunhun.NodeType;
+import com.kuuhaku.model.persistent.dunhun.RunModifier;
 import com.kuuhaku.util.Utils;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -15,6 +16,7 @@ public class Floor {
 	private final Random rng;
 	private final Sublevel[] sublevels;
 	private final Set<Node> eventNodes = new HashSet<>();
+	private final List<RunModifier> modifiers = new ArrayList<>();
 
 	public Floor(AreaMap map, int floor) {
 		this.map = map;
@@ -42,6 +44,10 @@ public class Floor {
 
 	public Set<Node> getEventNodes() {
 		return eventNodes;
+	}
+
+	public List<RunModifier> getModifiers() {
+		return modifiers;
 	}
 
 	public void generateEvents(double eventRatio, int restSpots) {
