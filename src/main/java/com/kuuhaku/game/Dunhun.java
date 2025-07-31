@@ -217,7 +217,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							for (Node node : pn.getChildren()) {
 								choices.add(new Choice(
 										"path-" + node.getPath(),
-										String.valueOf(node.getPath()),
+										String.valueOf(node.getPath() + 1),
 										w -> {
 											run.setNode(node);
 											return null;
@@ -239,7 +239,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							if (isClosed()) return;
 
 							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
-									run.getPath(), getLocale().get("str/" + (run.getPath() > 3 ? "n" : run.getPath()) + "_suffix")
+									run.getPath(), getLocale().get("str/" + ((run.getPath() + 1) > 3 ? "n" : run.getPath()) + "_suffix")
 							))).queue();
 
 							pn = map.getPlayerNode();

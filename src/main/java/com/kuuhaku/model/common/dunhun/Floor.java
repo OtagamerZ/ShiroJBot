@@ -20,7 +20,7 @@ public class Floor {
 		this.map = map;
 		this.floor = floor;
 		this.seed = Utils.generateSeed(DigestUtils.getMd5Digest(), map.getSeed(), floor);
-		this.rng = new Random();
+		this.rng = new Random(this.seed);
 		this.sublevels = new Sublevel[floor <= 0 ? 1 : map.getAreasPerFloor()];
 
 		for (int i = 0; i < this.sublevels.length; i++) {
