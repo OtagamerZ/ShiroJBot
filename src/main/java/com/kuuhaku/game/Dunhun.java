@@ -138,7 +138,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				DungeonRun run = map.getRun();
 				reportResult(GameReport.SUCCESS, "str/dungeon_leave",
 						Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-						run.getFloor(), run.getSublevel()
+						run.getFloor(), run.getSublevel() + 1
 				);
 			}, 5, TimeUnit.MINUTES);
 		}
@@ -201,7 +201,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
 							}
 
-							String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel());
+							String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel() + 1);
 							EmbedBuilder eb = new ColorlessEmbedBuilder()
 									.setTitle(dungeon.getInfo(getLocale()).getName() + " (" + area + ")")
 									.addField(getLocale().get("str/dungeon_modifiers"), sb.toString(), false)
@@ -229,7 +229,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								finish();
 								reportResult(GameReport.SUCCESS, "str/dungeon_leave",
 										Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-										run.getFloor(), run.getSublevel()
+										run.getFloor(), run.getSublevel() + 1
 								);
 								return null;
 							}));
@@ -238,8 +238,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 							requestChoice(eb, bi, helper, choices);
 							if (isClosed()) return;
 
+							int path = run.getPath() + 1;
 							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
-									run.getPath(), getLocale().get("str/" + ((run.getPath() + 1) > 3 ? "n" : run.getPath()) + "_suffix")
+									run.getPath(), getLocale().get("str/" + (path > 3 ? "n" : path) + "_suffix")
 							))).queue();
 
 							pn = map.getPlayerNode();
@@ -267,7 +268,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						DungeonRun run = map.getRun();
 						reportResult(GameReport.SUCCESS, "str/dungeon_fail",
 								Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList()),
-								run.getFloor(), run.getSublevel()
+								run.getFloor(), run.getSublevel() + 1
 						);
 						break;
 					} else if (getCombat() != null && getCombat().isDone()) {
