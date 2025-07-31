@@ -108,6 +108,12 @@ public class DungeonRun extends DAO<DungeonRun> {
 		floor = node.getSublevel().getFloor().getFloor();
 		sublevel = node.getSublevel().getSublevel();
 		path = node.getPath();
+
+		AreaMap map = node.getSublevel().getFloor().getMap();
+		map.getRenderFloor().set(floor);
+
+		int subOffset = sublevel / map.getAreasPerFloor();
+		map.getRenderSublevel().set(subOffset * map.getAreasPerFloor());
 	}
 
 	public List<RunModifier> getModifiers() {

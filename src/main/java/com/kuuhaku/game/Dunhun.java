@@ -740,7 +740,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					.average().orElse(1);
 		} else if (dungeon.getAreaLevel() == 0) {
 			Node pn = map.getPlayerNode();
-			return 1 + Math.max(0, pn.depth() / Floor.AREAS_PER_FLOOR * 5);
+			return 1 + Math.max(0, pn.depth() / map.getAreasPerFloor() * 5);
 		}
 
 		return dungeon.getAreaLevel();

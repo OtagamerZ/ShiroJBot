@@ -13,25 +13,28 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public class AreaMap {
-	public static final int RENDER_NODES = 10;
 	public static final int RENDER_FLOORS = 1;
+	public static final int AREAS_PER_FLOOR = 10;
 	private static final Point ZERO = new Point();
 
 	private final int seed;
+	private final int areasPerFloor;
 	private final Consumer<AreaMap> generator;
 	private final DungeonRun run;
 	private final TreeMap<Integer, Floor> floors = new TreeMap<>();
 	private final AtomicInteger renderFloor = new AtomicInteger(0);
 	private final AtomicInteger renderSublevel = new AtomicInteger(0);
 
-	public AreaMap(Consumer<AreaMap> generator, DungeonRun run) {
+	public AreaMap(int areasPerFloor, Consumer<AreaMap> generator, DungeonRun run) {
 		this.seed = 0;
+		this.areasPerFloor = areasPerFloor;
 		this.generator = generator;
 		this.run = run;
 	}
 
 	public AreaMap(DungeonRun run) {
 		this.seed = run.getSeed();
+		this.areasPerFloor = AREAS_PER_FLOOR;
 		this.renderFloor.set(run.getFloor());
 		this.generator = AreaMap::generateRandom;
 		this.run = run;
@@ -39,6 +42,10 @@ public class AreaMap {
 
 	public int getSeed() {
 		return seed;
+	}
+
+	public int getAreasPerFloor() {
+		return areasPerFloor;
 	}
 
 	public List<Floor> getFloors() {
@@ -65,12 +72,12 @@ public class AreaMap {
 				.getNode(run.getPath());
 	}
 
-	public int getRenderFloor() {
-		return renderFloor.get();
+	public AtomicInteger getRenderFloor() {
+		return renderFloor;
 	}
 
-	public int getRenderSublevel() {
-		return renderSublevel.get();
+	public AtomicInteger getRenderSublevel() {
+		return renderSublevel;
 	}
 
 	public void pan(int dy) {
@@ -108,7 +115,7 @@ public class AreaMap {
 		int floorCount = floors.size();
 		if (floorCount == 0) return bi;
 
-		int sliceHeight = height / RENDER_NODES;
+		int sliceHeight = height / areasPerFloor;
 		{
 			int y = -sliceHeight * renderSublevel.get();
 			if (renderFloor.get() == 0) {
@@ -222,7 +229,7 @@ public class AreaMap {
 
 	public static void generateRandom(AreaMap m) {
 		for (int i = -RENDER_FLOORS; i <= RENDER_FLOORS; i++) {
-			int depth = m.getRenderFloor() + i;
+			int depth = m.renderFloor.get() + i;
 			if (depth < -1) continue;
 
 			Floor fl = new Floor(m, depth);

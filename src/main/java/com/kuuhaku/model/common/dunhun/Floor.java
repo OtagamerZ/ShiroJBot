@@ -9,8 +9,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Floor {
-	public static final int AREAS_PER_FLOOR = 10;
-
 	private final AreaMap map;
 	private final int floor;
 	private final int seed;
@@ -23,7 +21,7 @@ public class Floor {
 		this.floor = floor;
 		this.seed = Utils.generateSeed(DigestUtils.getMd5Digest(), map.getSeed(), floor);
 		this.rng = new Random();
-		this.sublevels = new Sublevel[floor <= 0 ? 1 : AREAS_PER_FLOOR];
+		this.sublevels = new Sublevel[floor <= 0 ? 1 : map.getAreasPerFloor()];
 
 		for (int i = 0; i < this.sublevels.length; i++) {
 			this.sublevels[i] = new Sublevel(this, i);
@@ -108,7 +106,7 @@ public class Floor {
 
 	public int depth() {
 		if (floor < 0) return 0;
-		return (floor - 1) * AREAS_PER_FLOOR;
+		return (floor - 1) * map.getAreasPerFloor();
 	}
 
 	@Override
