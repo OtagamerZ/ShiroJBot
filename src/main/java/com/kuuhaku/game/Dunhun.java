@@ -239,6 +239,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 							BufferedImage bi = map.render(getLocale(), 600, 800);
 							requestChoice(eb, bi, helper, choices);
+							if (isClosed()) return;
 
 							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
 									getLocale().get("str/" + (pos.getPath() > 3 ? "n" : pos.getPath()) + "_suffix")
