@@ -122,9 +122,14 @@ public class AreaMap {
 		int floorCount = floors.size();
 		if (floorCount == 0) return bi;
 
-		Map<Integer, List<DungeonRun>> runs = DAO.queryAll(DungeonRun.class,
-				"SELECT r FROM DungeonRun r WHERE id = ?1 AND floor = ?2",
-				run.getId(), run.getFloor()
+		Map<Integer, List<DungeonRun>> runs = DAO.queryAll(DungeonRun.class, """
+						SELECT r
+						FROM DungeonRun r
+						WHERE id.dungeonId = ?1
+						  AND id.heroId <> ?2
+						  AND floor = ?3
+						""",
+				run.getId().dungeonId(), run.getId().heroId(), run.getFloor()
 		).stream().collect(Collectors.groupingBy(DungeonRun::getSublevel));
 
 		int sliceHeight = height / areasPerFloor;
