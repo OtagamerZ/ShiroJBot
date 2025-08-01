@@ -172,7 +172,7 @@ public class AreaMap {
 						for (int i = 0; i < runsHere.size(); i++) {
 							DungeonRun run = runsHere.get(i);
 							Ellipse2D.Double crop = new Ellipse2D.Double(
-									0 - AVATAR_RADIUS + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2d,
+									5 + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2d,
 									AVATAR_RADIUS, AVATAR_RADIUS
 							);
 							g2d.draw(crop);
