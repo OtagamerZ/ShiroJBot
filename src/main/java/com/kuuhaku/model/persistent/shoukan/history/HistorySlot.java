@@ -48,7 +48,6 @@ public class HistorySlot extends DAO<HistorySlot> {
 			@JoinColumn(name = "side", referencedColumnName = "side", nullable = false, updatable = false)
 	})
 	@Fetch(FetchMode.JOIN)
-	@MapsId("sideId")
 	private HistorySide parent;
 
 	@Embedded
@@ -107,6 +106,10 @@ public class HistorySlot extends DAO<HistorySlot> {
 
 	public HistorySlotId getId() {
 		return id;
+	}
+
+	public HistorySide getParent() {
+		return parent;
 	}
 
 	public CardReference getFrontline() {

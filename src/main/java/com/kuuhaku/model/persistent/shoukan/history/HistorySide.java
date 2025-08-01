@@ -52,8 +52,11 @@ public class HistorySide extends DAO<HistorySide> {
 			@JoinColumn(name = "turn", referencedColumnName = "turn", nullable = false, updatable = false)
 	})
 	@Fetch(FetchMode.JOIN)
-	@MapsId("turnId")
 	private HistoryTurn parent;
+
+	@OneToMany(mappedBy = "parent", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<HistorySlot> slots = new HashSet<>();
 
 	@Column(name = "hp", nullable = false)
 	private int hp;
@@ -88,10 +91,6 @@ public class HistorySide extends DAO<HistorySide> {
 	@Column(name = "discard", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray discard = new JSONArray();
-
-	@OneToMany(mappedBy = "parent", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<HistorySlot> slots = new HashSet<>();
 
 	public HistorySide() {
 	}
@@ -139,6 +138,14 @@ public class HistorySide extends DAO<HistorySide> {
 		return id;
 	}
 
+	public HistoryTurn getParent() {
+		return parent;
+	}
+
+	public Set<HistorySlot> getSlots() {
+		return slots;
+	}
+
 	public int getHp() {
 		return hp;
 	}
@@ -165,10 +172,6 @@ public class HistorySide extends DAO<HistorySide> {
 
 	public JSONArray getGraveyard() {
 		return graveyard;
-	}
-
-	public Set<HistorySlot> getSlots() {
-		return slots;
 	}
 
 	@Override

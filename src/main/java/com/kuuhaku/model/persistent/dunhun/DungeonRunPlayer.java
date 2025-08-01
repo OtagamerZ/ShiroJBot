@@ -20,7 +20,6 @@ public class DungeonRunPlayer extends DAO<DungeonRunPlayer> {
 			@JoinColumn(name = "dungeon_id", referencedColumnName = "dungeon_id", nullable = false, updatable = false)
 	})
 	@Fetch(FetchMode.JOIN)
-	@MapsId("runId")
 	private DungeonRun parent;
 
 	@Column(name = "hp", nullable = false)
@@ -37,6 +36,10 @@ public class DungeonRunPlayer extends DAO<DungeonRunPlayer> {
 
 	public DungeonRunPlayerId getId() {
 		return id;
+	}
+
+	public DungeonRun getParent() {
+		return parent;
 	}
 
 	public int getHp() {

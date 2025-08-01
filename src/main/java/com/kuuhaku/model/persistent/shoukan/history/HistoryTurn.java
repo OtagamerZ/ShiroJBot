@@ -96,6 +96,10 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 		return id;
 	}
 
+	public MatchHistory getParent() {
+		return parent;
+	}
+
 	public Set<HistorySide> getSides() {
 		return sides;
 	}
