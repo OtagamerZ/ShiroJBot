@@ -1,6 +1,8 @@
 package com.kuuhaku.game;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.ThrowingConsumer;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
@@ -35,6 +37,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
@@ -241,19 +244,29 @@ public class Dunhun extends GameInstance<NullPhase> {
 								.sorted(Comparator.comparingInt(n -> n.getRenderPos().x))
 								.toList();
 
+						int size = children.size();
+						Queue<Pair<String, String>> emojis = new LinkedList<>();
+						if (size >= 4) emojis.add(new Pair<>("⬅️", "leftmost"));
+						if (size >= 2) emojis.add(new Pair<>("↙️", "left"));
+						if (size % 2 == 1) emojis.add(new Pair<>("⬇️", "center"));
+						if (size >= 2) emojis.add(new Pair<>("↘️", "right"));
+						if (size >= 5) emojis.add(new Pair<>("➡️", "rightmost"));
+
 						Set<Choice> choices = new LinkedHashSet<>();
-						AtomicInteger chosenPath = new AtomicInteger();
-						for (int i = 0; i < children.size(); i++) {
+						AtomicReference<String> chosenPath = new AtomicReference<>();
+						for (int i = 0; i < size; i++) {
 							Node node = children.get(i);
 
-							int path = i + 1;
+							Pair<String, String> pair = emojis.poll();
+							assert pair != null;
+
 							choices.add(new Choice(
-									"path-" + path,
-									String.valueOf(path),
+									"path-" + i,
+									Utils.parseEmoji(pair.getFirst()),
 									w -> {
 										run.setNode(node);
 										nodeRng.setSeed(node.getSeed());
-										chosenPath.set(path);
+										chosenPath.set(getLocale().get("str/" + pair.getSecond()));
 										return null;
 									}
 							));
@@ -271,16 +284,15 @@ public class Dunhun extends GameInstance<NullPhase> {
 							return;
 						}
 
-						int path = chosenPath.get();
 						int floor = run.getFloor();
 						if (floor != fl.getFloor()) {
 							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor",
-									path, getLocale().get("str/" + (path > 3 ? "n" : path) + "_suffix"),
-									floor, getLocale().get("str/" + (floor > 3 ? "n" : path) + "_suffix")
+									chosenPath.get(),
+									floor, getLocale().get("str/" + (floor > 3 ? "n" : floor) + "_suffix")
 							))).queue();
 						} else {
 							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
-									path, getLocale().get("str/" + (path > 3 ? "n" : path) + "_suffix")
+									chosenPath.get()
 							))).queue();
 						}
 
@@ -526,7 +538,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			Map<String, String> votes = new HashMap<>();
 
 			for (Choice c : choices) {
-				helper.addAction(c.label(), w -> {
+				ThrowingConsumer<ButtonWrapper> act = w -> {
 					if (getPartySize() <= 1) {
 						votes.put(w.getUser().getId(), c.id());
 					} else {
@@ -573,7 +585,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 						lock.complete(null);
 						Pages.finalizeEvent(w.getMessage(), Utils::doNothing);
 					}
-				});
+				};
+
+				if (c.label() instanceof Emoji e) {
+					helper.addAction(e, act);
+				} else {
+					helper.addAction(String.valueOf(c.label()), act);
+				}
 			}
 		}
 
