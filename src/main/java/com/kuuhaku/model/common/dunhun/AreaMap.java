@@ -1,16 +1,19 @@
 package com.kuuhaku.model.common.dunhun;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.DungeonRun;
 import com.kuuhaku.util.WobbleStroke;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class AreaMap {
 	public static final int RENDER_FLOORS = 1;
@@ -120,6 +123,11 @@ public class AreaMap {
 		int floorCount = floors.size();
 		if (floorCount == 0) return bi;
 
+		Map<Integer, List<DungeonRun>> runs = DAO.queryAll(DungeonRun.class,
+				"SELECT r FROM DungeonRun r WHERE id = ?1 AND floor = ?2",
+				run.getId(), run.getFloor()
+		).stream().collect(Collectors.groupingBy(DungeonRun::getSublevel));
+
 		int sliceHeight = height / areasPerFloor;
 		{
 			int y = -sliceHeight * renderSublevel.get();
@@ -155,6 +163,27 @@ public class AreaMap {
 
 				for (Sublevel sub : fl.getSublevels()) {
 					sub.placeNodes(width, y + ((fl.getFloor() == 0 ? 25 : 0)));
+
+					List<DungeonRun> runsHere = runs.get(sub.getSublevel());
+					if (runsHere != null) {
+						g2d.setColor(Color.WHITE);
+
+						int AVATAR_RADIUS = 20;
+						for (int i = 0; i < runsHere.size(); i++) {
+							DungeonRun run = runsHere.get(i);
+							Ellipse2D.Double crop = new Ellipse2D.Double(
+									0 - AVATAR_RADIUS + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2d,
+									AVATAR_RADIUS, AVATAR_RADIUS
+							);
+							g2d.draw(crop);
+
+//							BufferedImage avatar = IO.getImage(run.getHero().getAccount().getUser().getEffectiveAvatarUrl());
+//							if (avatar != null) {
+//								g2d.drawImage(avatar, width - 50 - avatar.getWidth(), y + sliceHeight / 2 - avatar.getHeight() / 2, null);
+//							}
+						}
+					}
+
 					y += sliceHeight;
 				}
 			}
