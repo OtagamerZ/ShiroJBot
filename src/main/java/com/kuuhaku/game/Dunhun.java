@@ -21,6 +21,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.*;
+import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.ClusterAction;
 import com.kuuhaku.model.records.dunhun.Choice;
@@ -331,32 +332,62 @@ public class Dunhun extends GameInstance<NullPhase> {
 										);
 
 										if (dungeon.isHardcore()) {
-											if (hs.size() == 1) {
-												Hero h = hs.iterator().next();
-												int rank = DAO.queryNative(Integer.class,
-														"SELECT rank FROM dungeon_ranking(?1) WHERE hero_id = ?2",
-														dungeon.getId(), h.getId()
-												);
+											try {
+												if (hs.size() == 1) {
+													Hero h = hs.iterator().next();
+													int rank = DAO.queryNative(Integer.class,
+															"SELECT rank FROM dungeon_ranking(?1) WHERE hero_id = ?2",
+															dungeon.getId(), h.getId()
+													);
 
-												if (rank > 0) {
-													Main.getApp().getMessageChannelById("971503733202628698")
-															.sendMessage(getLocale().get("loss/dungeon_death",
-																	h.getName(), rank, map.getRun().getFloor(), dungeon.getInfo(getLocale()).getName()
-															))
-															.queue();
-//													Utils.broadcast("loss/dungeon_death", loc -> List.of(
-//															h.getName(), rank, map.getRun().getFloor(), dungeon.getInfo(loc).getName()
-//													));
+													if (rank > 0) {
+														Main.getApp().getMessageChannelById("971503733202628698")
+																.sendMessage(getLocale().get("loss/dungeon_death",
+																		h.getName(), rank, map.getRun().getFloor(), dungeon.getInfo(getLocale()).getName()
+																))
+																.queue();
+//														Utils.broadcast("loss/dungeon_death", loc -> List.of(
+//																h.getName(), rank, map.getRun().getFloor(), dungeon.getInfo(loc).getName()
+//														));
+													}
 												}
+											} catch (Exception ignore) {
+											} finally {
+												map.getRun().delete();
 											}
 
-											map.getRun().delete();
 											return;
 										}
 									}
 								} finally {
 									run.setNode(currNode);
 								}
+							}
+						}
+
+						if (dungeon.isInfinite() && floor % 10 == 0 && heroes.size() == 1) {
+							Hero h = heroes.values().iterator().next();
+
+							try {
+								GlobalProperty gp = DAO.find(GlobalProperty.class, "highest_floor_" + dungeon.getId().toLowerCase());
+								if (gp == null) {
+									gp = new GlobalProperty("highest_floor_" + dungeon.getId().toLowerCase(), 0);
+								}
+
+								if (floor > Integer.parseInt(gp.getValue())) {
+									gp.setValue(floor);
+									gp.save();
+
+									Main.getApp().getMessageChannelById("971503733202628698")
+											.sendMessage(getLocale().get("achievement/dungeon_floor",
+													h.getName(), h.getAccount().getName(), floor, dungeon.getInfo(getLocale()).getName()
+											))
+											.queue();
+//									Utils.broadcast("achievement/dungeon_floor", loc -> List.of(
+//											h.getName(), h.getAccount().getName(), floor, dungeon.getInfo(loc).getName()
+//									));
+								}
+							} catch (Exception ignore) {
 							}
 						}
 					} catch (Exception e) {

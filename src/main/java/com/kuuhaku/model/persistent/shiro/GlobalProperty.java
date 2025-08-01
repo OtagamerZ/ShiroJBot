@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.shiro;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.persistent.user.DynamicProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -65,6 +66,15 @@ public class GlobalProperty extends DAO<GlobalProperty> {
 		if (gp == null) return defaultValue;
 
 		return gp.getValue();
+	}
+
+	public static void update(String key, Object value) {
+		DAO.applyNative(DynamicProperty.class, """
+				INSERT INTO global_property (id, value)
+				VALUES (?1, ?2)
+				ON CONFLICT (id) DO UPDATE
+				SET value = ?2
+				""", key, value);
 	}
 
 	@Override
