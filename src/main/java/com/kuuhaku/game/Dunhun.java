@@ -472,7 +472,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		for (int i = 0; i < 4; i++) {
 			List<Actor<?>> keepers = getCombat().getActors(Team.KEEPERS);
-			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size())) break;
+			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size(), nodeRng)) break;
 
 			Monster chosen;
 			if (pool.length > 0) chosen = Monster.getRandom(this, Utils.getRandomEntry(nodeRng, pool));
