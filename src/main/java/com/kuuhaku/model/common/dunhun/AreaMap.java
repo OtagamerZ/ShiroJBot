@@ -128,8 +128,7 @@ public class AreaMap {
 						WHERE id.dungeonId = ?1
 						  AND id.heroId <> ?2
 						  AND floor = ?3
-						""",
-				run.getId().dungeonId(), run.getId().heroId(), run.getFloor()
+						""", run.getId().dungeonId(), run.getId().heroId(), run.getFloor()
 		).stream().collect(Collectors.groupingBy(DungeonRun::getSublevel));
 
 		int sliceHeight = height / areasPerFloor;
