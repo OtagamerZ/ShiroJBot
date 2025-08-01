@@ -49,6 +49,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class Dunhun extends GameInstance<NullPhase> {
+	public static final int LEVEL_HARD = 28;
+	public static final int LEVEL_BRUTAL = 56;
+
 	private final ExecutorService main = Executors.newSingleThreadExecutor();
 	private final Dungeon dungeon;
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
@@ -216,6 +219,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}
 
 						Floor fl = map.getFloor();
+						fl.generateModifiers(this);
+
 						if (!fl.getModifiers().isEmpty()) {
 							XStringBuilder sb = new XStringBuilder();
 							for (RunModifier mod : fl.getModifiers()) {
@@ -296,9 +301,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 								if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
 									for (Hero h : hs) {
 										double xpPrcnt = 0;
-										if (getAreaLevel() >= 56) {
+										if (getAreaLevel() >= LEVEL_BRUTAL) {
 											xpPrcnt = 0.4;
-										} else if (getAreaLevel() >= 28) {
+										} else if (getAreaLevel() >= LEVEL_HARD) {
 											xpPrcnt = 0.2;
 										}
 

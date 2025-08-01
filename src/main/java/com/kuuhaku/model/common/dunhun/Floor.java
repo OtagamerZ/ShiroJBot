@@ -1,7 +1,9 @@
 package com.kuuhaku.model.common.dunhun;
 
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.RunModifier;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -16,7 +18,7 @@ public class Floor {
 	private final Random rng;
 	private final Sublevel[] sublevels;
 	private final Set<Node> eventNodes = new HashSet<>();
-	private final List<RunModifier> modifiers = new ArrayList<>();
+	private final Set<RunModifier> modifiers = new LinkedHashSet<>();
 
 	public Floor(AreaMap map, int floor) {
 		this.map = map;
@@ -46,7 +48,7 @@ public class Floor {
 		return eventNodes;
 	}
 
-	public List<RunModifier> getModifiers() {
+	public Set<RunModifier> getModifiers() {
 		return modifiers;
 	}
 
@@ -85,6 +87,24 @@ public class Floor {
 
 			Node chosen = eNodes.remove(rng.nextInt(eNodes.size()));
 			chosen.setType(NodeType.REST);
+		}
+	}
+
+	public void generateModifiers(Dunhun game) {
+		modifiers.clear();
+
+		int mods = 0;
+		if (game.getAreaLevel() >= Dunhun.LEVEL_BRUTAL) {
+			mods = 4;
+		} else if (game.getAreaLevel() >= Dunhun.LEVEL_HARD) {
+			mods = 2;
+		}
+
+		for (int i = 0; i < mods && Calc.chance(100d / (modifiers.size() + 1), rng); i++) {
+			RunModifier mod = RunModifier.getRandom(game, this);
+			if (mod == null) break;
+
+			modifiers.add(mod);
 		}
 	}
 

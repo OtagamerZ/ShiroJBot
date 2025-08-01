@@ -4,9 +4,11 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.common.dunhun.Floor;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedRunModifier;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -76,13 +78,25 @@ public class RunModifier extends DAO<RunModifier> {
 	}
 
 	public static RunModifier getRandom(Dunhun game) {
+		return getRandom(game, null);
+	}
+
+	public static RunModifier getRandom(Dunhun game, Floor floor) {
+		JSONArray modifiers = new JSONArray();
+		if (floor != null) {
+			for (RunModifier m : floor.getModifiers()) {
+				modifiers.add(m.getId());
+			}
+		}
+
 		List<Object[]> mods = DAO.queryAllUnmapped("""
 				SELECT id
 				     , weight
 				FROM run_modifier
 				WHERE weight > 0
 				  AND min_floor <= ?1
-				""", game.getMap().getFloor().getFloor());
+				  AND NOT has(get_affix_family(cast(?2 AS JSONB)), get_affix_family(id))
+				""", game.getMap().getFloor().getFloor(), modifiers.toString());
 		if (mods.isEmpty()) return null;
 
 		RandomList<String> rl = new RandomList<>(game.getNodeRng());
