@@ -167,14 +167,15 @@ public class AreaMap {
 
 					List<DungeonRun> runsHere = runs.get(sub.getSublevel());
 					if (runsHere != null) {
-						int AVATAR_RADIUS = 20;
+						int AVATAR_RADIUS = 32;
 						for (int i = 0; i < runsHere.size(); i++) {
 							DungeonRun run = runsHere.get(i);
 							Graph.applyTransformed(g2d, 5 + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2d, g -> {
 								Ellipse2D.Double crop = new Ellipse2D.Double(0, 0, AVATAR_RADIUS, AVATAR_RADIUS);
 
 								g.setClip(crop);
-								BufferedImage avatar = IO.getImage(run.getHero().getAccount().getUser().getEffectiveAvatarUrl());
+								String url = run.getHero().getAccount().getUser().getEffectiveAvatar().getUrl(32);
+								BufferedImage avatar = IO.getImage(url);
 								if (avatar != null) {
 									g.drawImage(avatar, 0, -avatar.getHeight() / 2, null);
 								}
