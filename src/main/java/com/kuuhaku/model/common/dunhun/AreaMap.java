@@ -144,7 +144,11 @@ public class AreaMap {
 
 					g2d.setFont(new Font("Arial", Font.BOLD, 25));
 
-					g2d.drawString(locale.get("str/dungeon_floor", fl.getFloor()), 5, y + g2d.getFontMetrics().getHeight());
+					String text = locale.get("str/dungeon_floor", fl.getFloor());
+					g2d.drawString(text,
+							width - g2d.getFontMetrics().stringWidth(text) - 5,
+							y + g2d.getFontMetrics().getHeight()
+					);
 					y += 50;
 				} else {
 					g2d.setColor(new Color(138, 168, 179));
@@ -165,7 +169,7 @@ public class AreaMap {
 
 					List<DungeonRun> runsHere = runs.get(sub.getSublevel());
 					if (runsHere != null) {
-						int AVATAR_RADIUS = 100;
+						int AVATAR_RADIUS = 75;
 						for (int i = 0; i < runsHere.size(); i++) {
 							DungeonRun run = runsHere.get(i);
 							Graph.applyTransformed(g2d, 5 + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2, g -> {
