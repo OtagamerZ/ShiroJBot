@@ -4,6 +4,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.DungeonRun;
+import com.kuuhaku.util.IO;
 import com.kuuhaku.util.WobbleStroke;
 
 import java.awt.*;
@@ -166,21 +167,18 @@ public class AreaMap {
 
 					List<DungeonRun> runsHere = runs.get(sub.getSublevel());
 					if (runsHere != null) {
-						g2d.setColor(Color.WHITE);
-
 						int AVATAR_RADIUS = 20;
 						for (int i = 0; i < runsHere.size(); i++) {
 							DungeonRun run = runsHere.get(i);
-							Ellipse2D.Double crop = new Ellipse2D.Double(
-									5 + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2d,
-									AVATAR_RADIUS, AVATAR_RADIUS
-							);
-							g2d.draw(crop);
+							Graph.applyTransformed(g2d, 5 + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2d, g -> {
+								Ellipse2D.Double crop = new Ellipse2D.Double(0, 0, AVATAR_RADIUS, AVATAR_RADIUS);
 
-//							BufferedImage avatar = IO.getImage(run.getHero().getAccount().getUser().getEffectiveAvatarUrl());
-//							if (avatar != null) {
-//								g2d.drawImage(avatar, width - 50 - avatar.getWidth(), y + sliceHeight / 2 - avatar.getHeight() / 2, null);
-//							}
+								g.setClip(crop);
+								BufferedImage avatar = IO.getImage(run.getHero().getAccount().getUser().getEffectiveAvatarUrl());
+								if (avatar != null) {
+									g.drawImage(avatar, 0, -avatar.getHeight() / 2, null);
+								}
+							});
 						}
 					}
 

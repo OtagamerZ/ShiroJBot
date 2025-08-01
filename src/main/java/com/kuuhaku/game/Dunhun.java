@@ -212,7 +212,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel() + 1);
 						EmbedBuilder eb = new ColorlessEmbedBuilder()
 								.setTitle(dungeon.getInfo(getLocale()).getName() + " (" + area + ")")
-								.setImage("attachment://dungeon.png")
+								.setImage("attachment://dungeon.jpg")
 								.setFooter(getLocale().get("str/dungeon_level", getAreaLevel()));
 
 						if (!run.getModifiers().isEmpty()) {
@@ -236,7 +236,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							eb.addField(getLocale().get("str/dungeon_floor_modifiers"), sb.toString(), false);
 						}
 
-						BufferedImage bi = map.render(getLocale(), 700, 900);
+						BufferedImage bi = map.render(getLocale(), 900, 900);
 						ButtonizeHelper helper = new ButtonizeHelper(true)
 								.setTimeout(5, TimeUnit.MINUTES)
 								.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
@@ -658,7 +658,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		ClusterAction ca = getChannel().sendEmbed(eb.build()).apply(helper::apply);
 		if (img != null) {
-			ca.addFile(IO.getBytes(img), "dungeon.png");
+			ca.addFile(IO.getBytes(img), "dungeon.jpg");
 		}
 
 		ca.queue(s -> {
