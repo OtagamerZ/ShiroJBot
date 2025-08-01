@@ -245,7 +245,7 @@ public class Gear extends DAO<Gear> {
 		if (getRarityClass() == RarityClass.RARE) {
 			String loc = locale.getParent().name().toLowerCase();
 			String prefix = IO.getLine("dunhun/item/prefix/" + loc + ".dict", Calc.rng(0, 32, seed));
-			String suffix = IO.getLine("dunhun/item/suffix/" + loc + ".dict", Calc.rng(0, 32, seed - prefix.hashCode()));
+			String suffix = IO.getLine("dunhun/item/suffix/" + loc + ".dict", Calc.rng(0, 32, -seed));
 
 			AtomicReference<String> ending = new AtomicReference<>("M");
 			prefix = Utils.regex(prefix, "\\[([FM])]").replaceAll(m -> {
