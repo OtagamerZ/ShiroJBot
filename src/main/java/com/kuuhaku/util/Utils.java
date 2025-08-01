@@ -38,6 +38,7 @@ import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shiro.ScriptMetrics;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
+import com.kuuhaku.model.records.NotificationChannel;
 import com.kuuhaku.model.records.StashItem;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
@@ -58,7 +59,7 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
-import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
+import net.dv8tion.jda.api.sharding.ShardManager;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
@@ -84,8 +85,8 @@ import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.*;
@@ -1404,5 +1405,29 @@ public abstract class Utils {
 				m.editMessage(data.config().getLocale().get("error/error", e)).queue();
 			}
 		});
+	}
+
+	public static void broadcast(String message, Function<I18N, List<Object>> argGen) {
+		List<NotificationChannel> channels = DAO.queryAllUnmapped("""
+						SELECT gc.gid
+						     , gs.notifications_channel
+						     , gc.locale
+						FROM guild_config gc
+						INNER JOIN guild_settings gs ON gs.gid = gc.gid
+						WHERE gs.notifications_channel IS NOT NULL;
+						""").stream()
+				.map(o -> Utils.map(NotificationChannel.class, o))
+				.toList();
+
+		ShardManager sm = Main.getApp().getShiro();
+		for (NotificationChannel chn : channels) {
+			Guild g = sm.getGuildById(chn.guild());
+			if (g == null) continue;
+
+			GuildMessageChannel c = g.getChannelById(GuildMessageChannel.class, chn.channel());
+			if (c == null) continue;
+
+			c.sendMessage(chn.locale().get(message, argGen.apply(chn.locale()).toArray())).queue();
+		}
 	}
 }

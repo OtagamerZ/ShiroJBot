@@ -331,6 +331,25 @@ public class Dunhun extends GameInstance<NullPhase> {
 										);
 
 										if (dungeon.isHardcore()) {
+											if (hs.size() == 1) {
+												Hero h = hs.iterator().next();
+												int rank = DAO.queryNative(Integer.class,
+														"SELECT rank FROM dungeon_ranking(?1) WHERE hero_id = ?2",
+														dungeon.getId(), h.getId()
+												);
+
+												if (rank > 0) {
+													Main.getApp().getMessageChannelById("971503733202628698")
+															.sendMessage(getLocale().get("loss/dungeon_death",
+																	h.getName(), rank, map.getRun().getFloor(), dungeon.getInfo(getLocale()).getName()
+															))
+															.queue();
+//													Utils.broadcast("loss/dungeon_death", loc -> List.of(
+//															h.getName(), rank, map.getRun().getFloor(), dungeon.getInfo(loc).getName()
+//													));
+												}
+											}
+
 											map.getRun().delete();
 											return;
 										}

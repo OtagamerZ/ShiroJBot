@@ -19,7 +19,7 @@
 CREATE OR REPLACE FUNCTION dunhun.dungeon_ranking(VARCHAR)
     RETURNS TABLE
             (
-                card_id  VARCHAR,
+                hero_id  VARCHAR,
                 floor    INT,
                 sublevel INT,
                 rank     INT
@@ -27,12 +27,21 @@ CREATE OR REPLACE FUNCTION dunhun.dungeon_ranking(VARCHAR)
     LANGUAGE sql
 AS
 $body$
-SELECT hero_id
-     , floor
-     , sublevel
-     , rank() OVER (ORDER BY floor DESC, sublevel DESC)
-FROM dungeon_run
-WHERE dungeon_id = $1
-ORDER BY floor DESC, sublevel DESC
+SELECT x.hero_id
+     , x.floor
+     , x.sublevel
+     , rank() OVER (ORDER BY x.floor DESC, x.sublevel DESC)
+FROM (
+     SELECT r.hero_id
+          , r.floor
+          , r.sublevel
+          , count(1) AS party_size
+     FROM dungeon_run r
+              INNER JOIN dungeon_run_player rp ON rp.dungeon_id = r.dungeon_id
+     WHERE r.dungeon_id = $1
+     GROUP BY r.hero_id, r.floor, r.sublevel
+     ) x
+WHERE x.party_size = 1
+ORDER BY x.floor DESC, x.sublevel DESC
 LIMIT 10
 $body$;
