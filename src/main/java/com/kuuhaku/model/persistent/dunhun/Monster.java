@@ -33,6 +33,7 @@ import com.kuuhaku.util.Utils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -63,9 +64,15 @@ public class Monster extends MonsterBase<Monster> {
 		AtomicReference<String> ending = new AtomicReference<>(Utils.getOr(getInfo(locale).getEnding(), "M"));
 		if (affixes.isEmpty()) return nameCache = getInfo(locale).getName();
 		else if (getRarityClass() == RarityClass.RARE) {
+			int seed = getBinding().getGame().getMap().getPlayerNode().getSeed();
+
 			String loc = locale.getParent().name().toLowerCase();
-			String prefix = IO.getLine("dunhun/monster/prefix/" + loc + ".dict", Calc.rng(0, 32, SERIAL + affixes.hashCode()));
-			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict", Calc.rng(0, 32, SERIAL - prefix.hashCode()));
+			String prefix = IO.getLine("dunhun/monster/prefix/" + loc + ".dict",
+					Calc.rng(0, 32, Utils.generateSeed(DigestUtils.getMd5Digest(), seed, SERIAL))
+			);
+			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict",
+					Calc.rng(0, 32, Utils.generateSeed(DigestUtils.getMd5Digest(), seed, -SERIAL))
+			);
 
 			prefix = Utils.regex(prefix, "\\[(?<F>[^\\[\\]]*?)\\|(?<M>[^\\[\\]]*?)]")
 					.replaceAll(r -> r.group(ending.get()));
