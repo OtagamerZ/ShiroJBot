@@ -253,7 +253,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			rdClosed = false;
 		}
 
-		int steps = maxHp / part;
+		int steps = (int) Math.ceil((double) maxHp / part);
 		for (int i = 0; i < steps; i++) {
 			if (i > 0 && i % 10 == 0) sb.nextLine();
 			int threshold = i * part;
