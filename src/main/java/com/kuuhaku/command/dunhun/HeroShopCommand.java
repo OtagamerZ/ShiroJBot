@@ -48,7 +48,7 @@ import java.util.TreeSet;
 @Command(
 		name = "hero",
 		path = "buy",
-		category = Category.DEV
+		category = Category.STAFF
 )
 @Syntax(allowEmpty = true, value = "<id:word:r> <amount:number>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)

@@ -51,7 +51,7 @@ import java.util.Arrays;
 @Command(
 		name = "hero",
 		path = "new",
-		category = Category.DEV
+		category = Category.STAFF
 )
 @Syntax("<name:word:r> <race:word:r> <url:text>")
 public class CreateHeroCommand implements Executable {

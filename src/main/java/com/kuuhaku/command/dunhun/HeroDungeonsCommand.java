@@ -49,7 +49,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Command(
 		name = "hero",
 		path = "dungeons",
-		category = Category.DEV
+		category = Category.STAFF
 )
 public class HeroDungeonsCommand implements Executable {
 	@Override
