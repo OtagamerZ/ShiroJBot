@@ -46,6 +46,15 @@ public class HistorySide extends DAO<HistorySide> {
 	@EmbeddedId
 	private HistorySideId id;
 
+	@ManyToOne(optional = false)
+	@JoinColumns({
+			@JoinColumn(name = "match_id", referencedColumnName = "match_id", nullable = false, updatable = false),
+			@JoinColumn(name = "turn", referencedColumnName = "turn", nullable = false, updatable = false)
+	})
+	@Fetch(FetchMode.JOIN)
+	@MapsId("turnId")
+	private HistoryTurn parent;
+
 	@Column(name = "hp", nullable = false)
 	private int hp;
 
@@ -80,12 +89,7 @@ public class HistorySide extends DAO<HistorySide> {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray discard = new JSONArray();
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumns({
-			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
-			@JoinColumn(name = "turn", referencedColumnName = "turn"),
-			@JoinColumn(name = "side", referencedColumnName = "side")
-	})
+	@OneToMany(mappedBy = "parent", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<HistorySlot> slots = new HashSet<>();
 
@@ -122,6 +126,7 @@ public class HistorySide extends DAO<HistorySide> {
 
 	public HistorySide parent(HistoryTurn parent) {
 		this.id = new HistorySideId(parent.getId(), id.side());
+		this.parent = parent;
 
 		for (HistorySlot slot : slots) {
 			slot.parent(this);

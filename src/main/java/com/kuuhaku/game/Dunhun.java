@@ -311,31 +311,33 @@ public class Dunhun extends GameInstance<NullPhase> {
 							if (getCombat().isWin()) {
 								grantCombatLoot();
 							} else {
-								Collection<Hero> hs = heroes.values();
-								if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
-									for (Hero h : hs) {
-										double xpPrcnt = 0;
-										if (getAreaLevel() >= LEVEL_BRUTAL) {
-											xpPrcnt = 0.4;
-										} else if (getAreaLevel() >= LEVEL_HARD) {
-											xpPrcnt = 0.2;
+								try {
+									Collection<Hero> hs = heroes.values();
+									if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
+										for (Hero h : hs) {
+											double xpPrcnt = 0;
+											if (getAreaLevel() >= LEVEL_BRUTAL) {
+												xpPrcnt = 0.4;
+											} else if (getAreaLevel() >= LEVEL_HARD) {
+												xpPrcnt = 0.2;
+											}
+
+											h.getStats().loseXp((int) (h.getStats().getLosableXp() * xpPrcnt));
+											h.save();
 										}
 
-										h.getStats().loseXp((int) (h.getStats().getLosableXp() * xpPrcnt));
-										h.save();
-									}
+										reportResult(GameReport.SUCCESS, "str/dungeon_fail",
+												getHeroNames(), run.getFloor(), run.getSublevel() + 1
+										);
 
-									reportResult(GameReport.SUCCESS, "str/dungeon_fail",
-											getHeroNames(), run.getFloor(), run.getSublevel() + 1
-									);
-
-									if (dungeon.isHardcore()) {
-										map.getRun().delete();
-										return;
+										if (dungeon.isHardcore()) {
+											map.getRun().delete();
+											return;
+										}
 									}
+								} finally {
+									run.setNode(currNode);
 								}
-
-								run.setNode(currNode);
 							}
 						}
 					} catch (Exception e) {

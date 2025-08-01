@@ -53,11 +53,7 @@ public class HistoryTurn extends DAO<HistoryTurn> {
 	@MapsId("matchId")
 	private MatchHistory parent;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumns({
-			@JoinColumn(name = "match_id", referencedColumnName = "match_id"),
-			@JoinColumn(name = "turn", referencedColumnName = "turn")
-	})
+	@OneToMany(mappedBy = "parent", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<HistorySide> sides = new HashSet<>();
 

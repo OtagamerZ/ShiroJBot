@@ -46,11 +46,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Column(name = "path", nullable = false)
 	private int path = 0;
 
-	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumns({
-			@JoinColumn(name = "hero_id", referencedColumnName = "hero_id"),
-			@JoinColumn(name = "dungeon_id", referencedColumnName = "dungeon_id"),
-	})
+	@OneToMany(mappedBy = "parent", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DungeonRunPlayer> players = new HashSet<>();
 

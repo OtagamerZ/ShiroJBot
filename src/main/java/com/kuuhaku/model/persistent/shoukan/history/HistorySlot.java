@@ -26,6 +26,8 @@ import com.kuuhaku.model.records.shoukan.CardReference;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -38,6 +40,16 @@ import java.util.stream.Collectors;
 public class HistorySlot extends DAO<HistorySlot> {
 	@EmbeddedId
 	private HistorySlotId id;
+
+	@ManyToOne(optional = false)
+	@JoinColumns({
+			@JoinColumn(name = "match_id", referencedColumnName = "match_id", nullable = false, updatable = false),
+			@JoinColumn(name = "turn", referencedColumnName = "turn", nullable = false, updatable = false),
+			@JoinColumn(name = "side", referencedColumnName = "side", nullable = false, updatable = false)
+	})
+	@Fetch(FetchMode.JOIN)
+	@MapsId("sideId")
+	private HistorySide parent;
 
 	@Embedded
 	@AttributeOverride(name = "owner", column = @Column(name = "frontline_owner"))
@@ -88,6 +100,8 @@ public class HistorySlot extends DAO<HistorySlot> {
 
 	public HistorySlot parent(HistorySide parent) {
 		this.id = new HistorySlotId(parent.getId(), id.slot());
+		this.parent = parent;
+
 		return this;
 	}
 
