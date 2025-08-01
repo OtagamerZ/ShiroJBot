@@ -46,8 +46,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -336,7 +338,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					for (Hero h : heroes.values()) {
-						map.getRun().getPlayers().add(new DungeonRunPlayer(map.getRun(), h));
+						DungeonRunPlayer p = new DungeonRunPlayer(map.getRun(), h);
+						map.getRun().getPlayers().remove(p);
+						map.getRun().getPlayers().add(p);
 					}
 
 					map.getRun().save();
