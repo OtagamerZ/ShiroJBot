@@ -4,11 +4,9 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.DungeonRun;
-import com.kuuhaku.util.IO;
 import com.kuuhaku.util.WobbleStroke;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
@@ -167,17 +165,16 @@ public class AreaMap {
 
 					List<DungeonRun> runsHere = runs.get(sub.getSublevel());
 					if (runsHere != null) {
-						int AVATAR_RADIUS = 32;
+						int AVATAR_RADIUS = 100;
 						for (int i = 0; i < runsHere.size(); i++) {
 							DungeonRun run = runsHere.get(i);
 							Graph.applyTransformed(g2d, 5 + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2, g -> {
-								Ellipse2D.Double crop = new Ellipse2D.Double(0, 0, AVATAR_RADIUS, AVATAR_RADIUS);
-
-								g.setClip(crop);
-								String url = run.getHero().getAccount().getUser().getEffectiveAvatar().getUrl(32);
-								BufferedImage avatar = IO.getImage(url);
+								BufferedImage avatar = run.getHero().getImage();
 								if (avatar != null) {
-									g.drawImage(avatar, 0, -avatar.getHeight() / 2, null);
+									g.drawImage(avatar, 0, 0,
+											AVATAR_RADIUS * avatar.getWidth() / 350, AVATAR_RADIUS,
+											null
+									);
 								}
 							});
 						}

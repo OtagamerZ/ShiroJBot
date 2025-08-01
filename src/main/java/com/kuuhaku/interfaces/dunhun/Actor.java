@@ -14,6 +14,7 @@ import com.kuuhaku.model.persistent.dunhun.Boss;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Skill;
+import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.CombatCardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.dunhun.Attributes;
@@ -68,6 +69,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	public abstract String getName(I18N locale);
 
 	public abstract Race getRace();
+
+	public BufferedImage getImage() {
+		return new Card(this).drawCardNoBorder();
+	}
 
 	public abstract int getMaxHp();
 
