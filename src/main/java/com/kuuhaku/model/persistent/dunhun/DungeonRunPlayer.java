@@ -16,8 +16,8 @@ public class DungeonRunPlayer extends DAO<DungeonRunPlayer> {
 
 	@ManyToOne(optional = false)
 	@JoinColumns({
-			@JoinColumn(name = "hero_id", referencedColumnName = "hero_id", nullable = false, updatable = false),
-			@JoinColumn(name = "dungeon_id", referencedColumnName = "dungeon_id", nullable = false, updatable = false)
+			@JoinColumn(name = "hero_id", referencedColumnName = "hero_id", insertable = false, updatable = false),
+			@JoinColumn(name = "dungeon_id", referencedColumnName = "dungeon_id", insertable = false, updatable = false)
 	})
 	@Fetch(FetchMode.JOIN)
 	private DungeonRun parent;

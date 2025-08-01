@@ -43,9 +43,9 @@ public class HistorySlot extends DAO<HistorySlot> {
 
 	@ManyToOne(optional = false)
 	@JoinColumns({
-			@JoinColumn(name = "match_id", referencedColumnName = "match_id", nullable = false, updatable = false),
-			@JoinColumn(name = "turn", referencedColumnName = "turn", nullable = false, updatable = false),
-			@JoinColumn(name = "side", referencedColumnName = "side", nullable = false, updatable = false)
+			@JoinColumn(name = "match_id", referencedColumnName = "match_id", insertable = false, updatable = false),
+			@JoinColumn(name = "turn", referencedColumnName = "turn", insertable = false, updatable = false),
+			@JoinColumn(name = "side", referencedColumnName = "side", insertable = false, updatable = false)
 	})
 	@Fetch(FetchMode.JOIN)
 	private HistorySide parent;

@@ -48,8 +48,8 @@ public class HistorySide extends DAO<HistorySide> {
 
 	@ManyToOne(optional = false)
 	@JoinColumns({
-			@JoinColumn(name = "match_id", referencedColumnName = "match_id", nullable = false, updatable = false),
-			@JoinColumn(name = "turn", referencedColumnName = "turn", nullable = false, updatable = false)
+			@JoinColumn(name = "match_id", referencedColumnName = "match_id", insertable = false, updatable = false),
+			@JoinColumn(name = "turn", referencedColumnName = "turn", insertable = false, updatable = false)
 	})
 	@Fetch(FetchMode.JOIN)
 	private HistoryTurn parent;
