@@ -328,6 +328,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 									reportResult(GameReport.SUCCESS, "str/dungeon_fail",
 											getHeroNames(), run.getFloor(), run.getSublevel() + 1
 									);
+
+									if (dungeon.isHardcore()) {
+										map.getRun().delete();
+										return;
+									}
 								}
 
 								run.setNode(currNode);

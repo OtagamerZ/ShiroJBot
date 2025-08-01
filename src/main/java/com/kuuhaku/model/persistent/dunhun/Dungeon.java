@@ -67,6 +67,9 @@ public class Dungeon extends DAO<Dungeon> {
 	@Column(name = "area_level")
 	private int areaLevel = 1;
 
+	@Column(name = "hardcore")
+	private boolean hardcore;
+
 	public Dungeon() {
 	}
 
@@ -86,12 +89,16 @@ public class Dungeon extends DAO<Dungeon> {
 				.findAny().orElseThrow();
 	}
 
+	public JSONArray getMonsterPool() {
+		return monsterPool;
+	}
+
 	public int getAreaLevel() {
 		return areaLevel;
 	}
 
-	public JSONArray getMonsterPool() {
-		return monsterPool;
+	public boolean isHardcore() {
+		return hardcore;
 	}
 
 	public boolean isInfinite() {
