@@ -19,6 +19,7 @@
 package com.kuuhaku.model.enums;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.text.Uwuifier;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -30,6 +31,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
 
 public enum I18N {
 	PT(ZoneId.of("GMT-3"), "🇧🇷"),
@@ -89,6 +91,14 @@ public enum I18N {
 					icon = ResourceBundle.getBundle("locale/lang", parent.locale).getString("icon/" + key.split("/")[0]);
 				} catch (MissingResourceException e) {
 					icon = "";
+				}
+
+				if (!icon.isBlank()) {
+					Matcher m = Utils.regex(message, "^#{1,3} (?=.*)");
+					if (m.find()) {
+						String md = m.group();
+						return md + icon + " | " + message.substring(md.length());
+					}
 				}
 
 				return icon.isBlank() ? message : icon + " | " + message;

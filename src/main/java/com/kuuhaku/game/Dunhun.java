@@ -215,9 +215,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 								.setImage("attachment://dungeon.png")
 								.setFooter(getLocale().get("str/dungeon_level", getAreaLevel()));
 
-						if (!map.getRun().getModifiers().isEmpty()) {
+						if (!run.getModifiers().isEmpty()) {
 							XStringBuilder sb = new XStringBuilder();
-							for (RunModifier mod : map.getRun().getModifiers()) {
+							for (RunModifier mod : run.getModifiers()) {
 								sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
 							}
 
@@ -343,17 +343,17 @@ public class Dunhun extends GameInstance<NullPhase> {
 													if (rank > 0) {
 														Main.getApp().getMessageChannelById("971503733202628698")
 																.sendMessage(getLocale().get("loss/dungeon_death",
-																		h.getName(), rank, map.getRun().getFloor(), dungeon.getInfo(getLocale()).getName()
+																		h.getName(), rank, run.getFloor(), dungeon.getInfo(getLocale()).getName()
 																))
 																.queue();
 //														Utils.broadcast("loss/dungeon_death", loc -> List.of(
-//																h.getName(), rank, map.getRun().getFloor(), dungeon.getInfo(loc).getName()
+//																h.getName(), rank, run.getFloor(), dungeon.getInfo(loc).getName()
 //														));
 													}
 												}
 											} catch (Exception ignore) {
 											} finally {
-												map.getRun().delete();
+												run.delete();
 											}
 
 											return;
@@ -365,7 +365,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							}
 						}
 
-						if (dungeon.isInfinite() && floor % 10 == 0 && heroes.size() == 1) {
+						if (dungeon.isInfinite() && run.getFloor() % 10 == 0 && heroes.size() == 1) {
 							Hero h = heroes.values().iterator().next();
 
 							try {
@@ -374,17 +374,17 @@ public class Dunhun extends GameInstance<NullPhase> {
 									gp = new GlobalProperty("highest_floor_" + dungeon.getId().toLowerCase(), 0);
 								}
 
-								if (floor > Integer.parseInt(gp.getValue())) {
-									gp.setValue(floor);
+								if (run.getFloor() > Integer.parseInt(gp.getValue())) {
+									gp.setValue(run.getFloor());
 									gp.save();
 
 									Main.getApp().getMessageChannelById("971503733202628698")
 											.sendMessage(getLocale().get("achievement/dungeon_floor",
-													h.getName(), h.getAccount().getName(), floor, dungeon.getInfo(getLocale()).getName()
+													h.getName(), h.getAccount().getName(), run.getFloor(), dungeon.getInfo(getLocale()).getName()
 											))
 											.queue();
 //									Utils.broadcast("achievement/dungeon_floor", loc -> List.of(
-//											h.getName(), h.getAccount().getName(), floor, dungeon.getInfo(loc).getName()
+//											h.getName(), h.getAccount().getName(), run.getFloor(), dungeon.getInfo(loc).getName()
 //									));
 								}
 							} catch (Exception ignore) {
