@@ -111,14 +111,14 @@ dependencies {
 	implementation group: "org.hibernate.orm", name: "hibernate-core", version: "7.0.6.Final"
 	implementation group: "org.hibernate.orm", name: "hibernate-hikaricp", version: "7.0.6.Final"
 	implementation group: "org.hibernate.orm", name: "hibernate-jcache", version: "7.0.6.Final"
-	implementation group: "com.zaxxer", name: "HikariCP", version: "6.3.1"
+	implementation group: "com.zaxxer", name: "HikariCP", version: "7.0.0"
 
 	//Cache
 	implementation group: "com.github.ben-manes.caffeine", name: "caffeine", version: "3.2.2"
 	implementation group: "com.github.ben-manes.caffeine", name: "jcache", version: "3.2.2"
 
 	//Compiler
-	implementation group: "org.apache.groovy", name: "groovy", version: "4.0.27"
+	implementation group: "org.apache.groovy", name: "groovy", version: "4.0.28"
 
 	//Websocket
 	implementation group: "org.java-websocket", name: "Java-WebSocket", version: "1.6.0"
@@ -129,14 +129,14 @@ dependencies {
 
 	//Apache Commons
 	implementation group: "org.apache.commons", name: "commons-lang3", version: "3.18.0"
-	implementation group: "org.apache.commons", name: "commons-text", version: "1.13.1"
+	implementation group: "org.apache.commons", name: "commons-text", version: "1.14.0"
 	implementation group: "org.apache.commons", name: "commons-math3", version: "3.6.1"
 	implementation group: "org.apache.commons", name: "commons-imaging", version: "1.0.0-alpha6"
-	implementation group: "org.apache.commons", name: "commons-compress", version: "1.27.1"
+	implementation group: "org.apache.commons", name: "commons-compress", version: "1.28.0"
 	implementation group: "org.apache.httpcomponents.client5", name: "httpclient5", version: "5.5"
 	implementation group: "commons-validator", name: "commons-validator", version: "1.10.0"
-	implementation group: "commons-codec", name: "commons-codec", version: "1.18.0"
-	implementation group: "commons-cli", name: "commons-cli", version: "1.9.0"
+	implementation group: "commons-codec", name: "commons-codec", version: "1.19.0"
+	implementation group: "commons-cli", name: "commons-cli", version: "1.10.0"
 	implementation group: "commons-io", name: "commons-io", version: "2.20.0"
 
 	//Logger
@@ -152,7 +152,7 @@ dependencies {
 	implementation group: "it.sauronsoftware.cron4j", name: "cron4j", version: "2.2.5"
 	implementation group: "org.swinglabs.swingx", name: "swingx-graphics", version: "1.6.5-1"
 	implementation group: "org.reflections", name: "reflections", version: "0.10.2"
-	implementation group: "com.squareup.okio", name: "okio", version: "3.15.0"
+	implementation group: "com.squareup.okio", name: "okio", version: "3.16.0"
 	implementation group: "io.github.furstenheim", name: "copy_down", version: "1.1"
 	implementation group: "net.jodah", name: "expiringmap", version: "0.5.11"
 	implementation group: "me.xuender", name: "unidecode", version: "0.0.7"
