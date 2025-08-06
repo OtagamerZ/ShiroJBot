@@ -409,7 +409,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		int xpGained = 0;
 		double mf = 1 + heroes.values().stream()
 				.mapToDouble(h -> h.getModifiers().getMagicFind().get())
-				.sum() + (getAreaLevel() * 0.02);
+				.sum();
 
 		Loot loot = getCombat().getLoot();
 		XStringBuilder sb = new XStringBuilder();
@@ -426,13 +426,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 					case UNIQUE -> 2.5;
 				} * mf;
 
+				System.out.println(dropFac);
 				while (Calc.chance(dropFac)) {
 					Gear drop = Gear.getRandom(m, null);
 					if (drop != null) {
+						System.out.println("drop");
 						lt.gear().add(drop);
 					}
 
 					dropFac /= 2;
+					System.out.println(dropFac);
 				}
 
 				List<Object[]> global = DAO.queryAllUnmapped("""
