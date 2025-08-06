@@ -53,6 +53,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Dunhun extends GameInstance<NullPhase> {
 	public static final int LEVEL_HARD = 28;
@@ -221,6 +222,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 						Floor fl = map.getFloor();
 						fl.generateModifiers(this);
+						for (RunModifier mod : getModifiers()) {
+							mod.toEffect(this);
+						}
 
 						if (!fl.getModifiers().isEmpty()) {
 							XStringBuilder sb = new XStringBuilder();
@@ -895,6 +899,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public int getPartySize() {
 		return heroes.size();
+	}
+
+	public Set<RunModifier> getModifiers() {
+		return Stream.concat(
+						map.getFloor().getModifiers().stream(),
+						map.getRun().getModifiers().stream()
+				)
+				.collect(Collectors.toSet());
 	}
 
 	public int getAreaLevel() {
