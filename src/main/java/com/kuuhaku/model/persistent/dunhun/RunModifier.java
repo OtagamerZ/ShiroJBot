@@ -4,6 +4,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.Floor;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedRunModifier;
@@ -40,6 +41,8 @@ public class RunModifier extends DAO<RunModifier> {
 	@Column(name = "min_floor", nullable = false)
 	private int minFloor;
 
+	private transient EffectBase effectCache;
+
 	public String getId() {
 		return id;
 	}
@@ -55,14 +58,20 @@ public class RunModifier extends DAO<RunModifier> {
 		return minFloor;
 	}
 
-	public void apply(Dunhun game) {
-		if (effect == null) return;
+	public EffectBase toEffect(Dunhun game) {
+		if (effect == null) return null;
+		else if (effectCache != null) return effectCache;
 
 		try {
-			Utils.exec(id, effect, Map.of("game", game));
+			Object out = Utils.exec(id, effect, Map.of("game", game));
+			if (out instanceof EffectBase e) {
+				return effectCache = e;
+			}
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply modifier {}", id, e);
 		}
+
+		return null;
 	}
 
 	@Override

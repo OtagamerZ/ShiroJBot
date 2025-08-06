@@ -63,7 +63,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
 	private final AtomicReference<Pair<Message, ButtonizeHelper>> event = new AtomicReference<>();
-	private final Set<EffectBase> effects = new HashSet<>();
 	private final Random nodeRng = new Random();
 	private final Loot loot = new Loot();
 	private final AreaMap map;
@@ -109,10 +108,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 					run = new DungeonRun(leader, dungeon);
 				}
 
-				for (RunModifier mod : run.getModifiers()) {
-					mod.apply(this);
-				}
-
 				Map<String, Integer> hps = new HashMap<>();
 				for (DungeonRunPlayer p : run.getPlayers()) {
 					hps.put(p.getId().playerId(), p.getHp());
@@ -136,7 +131,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				for (RunModifier mod : run.getModifiers()) {
-					mod.apply(this);
+					mod.toEffect(this);
 				}
 			} else {
 				// TODO Pre-generated maps
@@ -879,10 +874,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public Pair<Message, ButtonizeHelper> getEvent() {
 		return event.get();
-	}
-
-	public Set<EffectBase> getEffects() {
-		return effects;
 	}
 
 	public Random getNodeRng() {

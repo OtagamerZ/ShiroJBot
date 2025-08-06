@@ -860,7 +860,16 @@ public class Combat implements Renderer<BufferedImage> {
 
 		CombatContext context = new CombatContext(t, source, target, value);
 		Set<EffectBase> effects = new HashSet<>(this.effects.getValues());
-		effects.addAll(game.getEffects());
+
+		AreaMap map = game.getMap();
+		for (RunModifier mod : map.getFloor().getModifiers()) {
+			effects.add(mod.toEffect(game));
+		}
+
+		for (RunModifier mod : map.getRun().getModifiers()) {
+			effects.add(mod.toEffect(game));
+		}
+
 		effects.removeIf(EffectBase::isClosed);
 
 		for (EffectBase e : effects) {
