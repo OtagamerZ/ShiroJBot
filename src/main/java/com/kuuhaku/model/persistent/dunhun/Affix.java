@@ -29,9 +29,10 @@ import com.kuuhaku.model.persistent.localized.LocalizedAffix;
 import com.kuuhaku.model.records.dunhun.ValueRange;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
 import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
@@ -126,10 +127,11 @@ public class Affix extends DAO<Affix> {
 		if (effect == null) return;
 
 		try {
-			Utils.exec(id, effect, Map.of(
-					"game", target.getGame(),
-					"actor", target
-			));
+			JSONObject jo = new JSONObject();
+			jo.put("game", target.getGame());
+			jo.put("actor", target);
+
+			Utils.exec(id, effect, jo);
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply modifier {}", id, e);
 		}
@@ -208,10 +210,11 @@ public class Affix extends DAO<Affix> {
 		if (affs.isEmpty()) return null;
 
 		if (type == null) {
+			int prefs = maxMods / 2 + (int) gear.getModifiers().getPrefixes().get();
+			int suffs = maxMods / 2 + (int) gear.getModifiers().getSuffixes().get();
 			List<AffixType> left = new ArrayList<>();
-			for (int i = 0; i < maxMods / 2; i++) {
-				left.addAll(List.of(AffixType.itemValues()));
-			}
+			left.addAll(Utils.generate(prefs, (i) -> AffixType.PREFIX));
+			left.addAll(Utils.generate(suffs, (i) -> AffixType.SUFFIX));
 
 			left.removeIf(a -> affs.stream().noneMatch(o -> o[2].equals(a.name())));
 

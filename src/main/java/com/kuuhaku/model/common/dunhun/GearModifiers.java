@@ -33,6 +33,8 @@ public class GearModifiers {
 	private final CumValue defenseMult = CumValue.flat();
 	private final CumValue critical = CumValue.flat();
 	private final CumValue criticalMult = CumValue.flat();
+	private final CumValue prefixes = CumValue.flat();
+	private final CumValue suffixes = CumValue.flat();
 
 	private final Set<String> addedTags = new HashSet<>();
 
@@ -60,6 +62,14 @@ public class GearModifiers {
 
 	public CumValue getCriticalMult() {
 		return criticalMult;
+	}
+
+	public CumValue getPrefixes() {
+		return prefixes;
+	}
+
+	public CumValue getSuffixes() {
+		return suffixes;
 	}
 
 	public Set<String> getAddedTags() {

@@ -92,15 +92,19 @@ public class Gear extends DAO<Gear> {
 	public Gear() {
 	}
 
+	public Gear(Hero owner, Unique unique) {
+		this(owner, unique.getBasetype());
+		this.unique = unique;
+	}
+
 	public Gear(Hero owner, Basetype basetype) {
 		this.basetype = basetype;
 		this.owner = owner;
-	}
 
-	public Gear(Hero owner, Unique unique) {
-		this.basetype = unique.getBasetype();
-		this.owner = owner;
-		this.unique = unique;
+		Affix imp = basetype.getStats().implicit();
+		if (imp != null && imp.getTags().contains("META")) {
+			imp.apply(null);
+		}
 	}
 
 	public int getId() {
