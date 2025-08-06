@@ -197,6 +197,7 @@ public class AreaMap {
 
 		Random bgRng = new Random(floors.hashCode());
 		Node playerNode = getPlayerNode();
+		int visionLimit = playerNode.getSublevel().getFloor().getVisionLimit();
 
 		List<Floor> floors = List.copyOf(this.floors.values());
 		Map<Floor, List<Node>> nodes = new TreeMap<>(Comparator.comparingInt(Floor::getFloor));
@@ -205,7 +206,7 @@ public class AreaMap {
 				List<Node> nds = nodes.computeIfAbsent(fl, f -> fl.getNodes());
 				if (i == 0) {
 					for (Node node : nds) {
-						if (node.getRenderPos().equals(ZERO) || node.isOccluded(width, height)) {
+						if (node.getRenderPos().equals(ZERO) || node.isOccluded(width, height) || node.depth() > playerNode.depth() + visionLimit) {
 							continue;
 						}
 
@@ -261,6 +262,23 @@ public class AreaMap {
 					}
 				}
 			}
+		}
+
+		if (visionLimit > 0) {
+			Node boundary = playerNode.getChildren().getFirst();
+			for (int i = 0; i < visionLimit; i++) {
+				boundary = boundary.getChildren().getFirst();
+			}
+
+			Node prev = boundary.getParents().getFirst();
+			float rangeFrom = prev.getRenderPos().y + 25;
+			float rangeTo = Math.max(rangeFrom + 1, prev.getRenderPos().y + (boundary.getRenderPos().y - prev.getRenderPos().y) / 2f);
+
+			g2d.setPaint(new GradientPaint(
+					0, rangeFrom, new Color(0, true),
+					0, rangeTo, Color.BLACK
+			));
+			g2d.fillRect(0, 0, width, height);
 		}
 
 		g2d.dispose();

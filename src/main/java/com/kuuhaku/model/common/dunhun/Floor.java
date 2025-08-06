@@ -19,6 +19,7 @@ public class Floor {
 	private final Sublevel[] sublevels;
 	private final Set<Node> eventNodes = new HashSet<>();
 	private final Set<RunModifier> modifiers = new LinkedHashSet<>();
+	private int visionLimit;
 
 	public Floor(AreaMap map, int floor) {
 		this.map = map;
@@ -106,6 +107,14 @@ public class Floor {
 
 			modifiers.add(mod);
 		}
+	}
+
+	public int getVisionLimit() {
+		return visionLimit;
+	}
+
+	public void setVisionLimit(int visionLimit) {
+		this.visionLimit = visionLimit;
 	}
 
 	public List<Node> getNodes() {
