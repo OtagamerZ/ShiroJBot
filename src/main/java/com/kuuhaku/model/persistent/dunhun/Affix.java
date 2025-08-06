@@ -123,13 +123,18 @@ public class Affix extends DAO<Affix> {
 		return effect;
 	}
 
-	public void apply(Actor<?> target) {
+	public void apply(Actor<?> actor, Gear gear) {
 		if (effect == null) return;
 
 		try {
 			JSONObject jo = new JSONObject();
-			jo.put("game", target.getGame());
-			jo.put("actor", target);
+			if (actor != null) {
+				jo.put("game", actor.getGame());
+				jo.put("actor", actor);
+			}
+			if (gear != null) {
+				jo.put("gear", gear);
+			}
 
 			Utils.exec(id, effect, jo);
 		} catch (Exception e) {
