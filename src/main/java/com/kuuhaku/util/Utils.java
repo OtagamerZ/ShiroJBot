@@ -864,7 +864,7 @@ public abstract class Utils {
 		try {
 			return new Pair<>(parser.parse(opt, args, true), opt);
 		} catch (ParseException e) {
-			return new Pair<>(new CommandLine.Builder().build(), opt);
+			return new Pair<>(CommandLine.builder().get(), opt);
 		}
 	}
 
