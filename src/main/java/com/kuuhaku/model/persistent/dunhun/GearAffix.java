@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.AffixModifiers;
+import com.kuuhaku.model.common.dunhun.context.GearContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.records.dunhun.ValueRange;
@@ -149,15 +150,12 @@ public class GearAffix extends DAO<GearAffix> {
 		return modifiers;
 	}
 
-	public void apply(Gear target, Actor<?> owner) {
+	public void apply(Actor<?> owner) {
 		if (affix.getEffect() == null) return;
 
 		try {
 			Utils.exec(affix.getId(), affix.getEffect(), Map.of(
-					"game", owner.getGame(),
-					"gear", target,
-					"actor", owner,
-					"values", getValues()
+					"ctx", new GearContext(owner, gear, getValues())
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply modifier {}", affix.getId(), e);

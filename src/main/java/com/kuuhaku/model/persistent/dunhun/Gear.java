@@ -331,7 +331,7 @@ public class Gear extends DAO<Gear> {
 		modifiers.clear();
 
 		for (GearAffix ga : getAllAffixes()) {
-			ga.apply(this, owner);
+			ga.apply(owner);
 		}
 	}
 

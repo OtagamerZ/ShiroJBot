@@ -5,6 +5,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
+import com.kuuhaku.model.common.dunhun.context.ActorContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -45,8 +46,7 @@ public class Boss extends MonsterBase<Boss> {
 				enraged = true;
 				if (onEnrage != null) {
 					Utils.exec(getId(), onEnrage, Map.of(
-							"game", getGame(),
-							"actor", this
+							"ctx", new ActorContext(this)
 					));
 				}
 

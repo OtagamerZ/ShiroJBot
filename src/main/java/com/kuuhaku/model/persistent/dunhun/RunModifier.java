@@ -6,6 +6,7 @@ import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.Floor;
+import com.kuuhaku.model.common.dunhun.context.EffectContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedRunModifier;
 import com.kuuhaku.util.Utils;
@@ -63,7 +64,9 @@ public class RunModifier extends DAO<RunModifier> {
 		else if (effectCache != null) return effectCache;
 
 		try {
-			Object out = Utils.exec(id, effect, Map.of("game", game));
+			Object out = Utils.exec(id, effect, Map.of(
+					"ctx", new EffectContext(game)
+			));
 			if (out instanceof EffectBase e) {
 				return effectCache = e;
 			}

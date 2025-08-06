@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.dunhun.SkillValue;
@@ -103,9 +104,7 @@ public class SkillStats implements Serializable {
 		List<Actor<?>> out = new ArrayList<>();
 		try {
 			Utils.exec(id, targeter, Map.of(
-					"game", source.getGame(),
-					"actor", source,
-					"targets", out
+					"ctx", new SkillContext(source, null)
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to load targets {}", id, e);
@@ -123,7 +122,9 @@ public class SkillStats implements Serializable {
 			jo.put("actor", source);
 			jo.put("target", target);
 
-			Object out = Utils.exec(id, cpuRule, jo);
+			Object out = Utils.exec(id, cpuRule, Map.of(
+					"ctx", new SkillContext(source, target)
+			));
 
 			if (out instanceof Boolean b) {
 				return b ? CpuRule.FORCE : CpuRule.PREVENT;

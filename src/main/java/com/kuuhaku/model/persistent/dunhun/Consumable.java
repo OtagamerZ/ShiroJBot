@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
 import com.kuuhaku.model.persistent.localized.LocalizedConsumable;
@@ -113,11 +114,8 @@ public class Consumable extends DAO<Consumable> {
 
 		try {
 			Utils.exec(id, stats.getEffect(), Map.of(
-					"game", source.getGame(),
-					"actor", source,
-					"target", target
+					"ctx", new SkillContext(source, target)
 			));
-
 			count--;
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute consumable {}", id, e);

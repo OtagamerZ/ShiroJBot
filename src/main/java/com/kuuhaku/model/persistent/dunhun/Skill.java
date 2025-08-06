@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
@@ -116,11 +117,7 @@ public class Skill extends DAO<Skill> implements Cloneable {
 
 		try {
 			Utils.exec(id, stats.getEffect(), Map.of(
-					"game", source.getGame(),
-					"actor", source,
-					"target", target,
-					"values", getValues(source),
-					"context", ctxVar
+					"ctx", new SkillContext(source, target, getValues(source), ctxVar)
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute skill {}", id, e);

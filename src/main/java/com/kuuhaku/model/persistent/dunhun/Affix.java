@@ -22,6 +22,8 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.common.dunhun.context.ActorContext;
+import com.kuuhaku.model.common.dunhun.context.GearContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -136,8 +138,7 @@ public class Affix extends DAO<Affix> {
 
 		try {
 			Utils.exec(id, effect, Map.of(
-					"game", actor.getGame(),
-					"actor", actor
+					"ctx", new ActorContext(actor)
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply monster modifier {}", id, e);
@@ -148,7 +149,9 @@ public class Affix extends DAO<Affix> {
 		if (effect == null || !Utils.equalsAny(type, AffixType.itemValues())) return;
 
 		try {
-			Utils.exec(id, effect, Map.of("gear", gear));
+			Utils.exec(id, effect, Map.of(
+					"ctx", new GearContext(gear)
+			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply item modifier {}", id, e);
 		}

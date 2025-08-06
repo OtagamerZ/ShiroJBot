@@ -23,6 +23,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.Node;
+import com.kuuhaku.model.common.dunhun.context.EventContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedEvent;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
@@ -94,8 +95,7 @@ public class Event extends DAO<Event> {
 		if (script != null) {
 			try {
 				Utils.exec(id, script, Map.of(
-						"game", game,
-						"event", this
+						"ctx", new EventContext(game, this)
 				));
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to execute event {}", id, e);

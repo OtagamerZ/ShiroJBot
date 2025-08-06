@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
+import com.kuuhaku.model.common.dunhun.context.DungeonContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedDungeon;
@@ -110,8 +111,7 @@ public class Dungeon extends DAO<Dungeon> {
 
 		try {
 			Utils.exec(id, script, Map.of(
-					"game", game,
-					"pool", monsterPool
+					"ctx", new DungeonContext(game, this)
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to process dungeon {}", id, e);
