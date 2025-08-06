@@ -207,7 +207,8 @@ public class AreaMap {
 				for (Node node : nds) {
 					if (i == 1) node.calcColor();
 
-					if (node.getRenderPos().equals(ZERO) || node.isOccluded(width, height) || node.depth() > playerNode.depth() + visionLimit) {
+					boolean occluded = node.isOccluded(width, height) || (visionLimit > 0 && node.depth() > playerNode.depth() + visionLimit);
+					if (node.getRenderPos().equals(ZERO) || occluded) {
 						continue;
 					}
 
