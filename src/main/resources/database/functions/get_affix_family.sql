@@ -21,7 +21,7 @@ CREATE OR REPLACE FUNCTION dunhun.get_affix_family(VARCHAR)
     LANGUAGE sql
 AS
 $$
-SELECT regexp_replace($1, '(?<=.+)_[IVX]+$', '')
+SELECT regexp_replace($1, '_[IVX]+$', '')
 $$;
 
 CREATE OR REPLACE FUNCTION dunhun.get_affix_family(JSONB)

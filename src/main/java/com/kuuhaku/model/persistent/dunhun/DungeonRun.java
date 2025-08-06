@@ -8,10 +8,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -129,6 +126,25 @@ public class DungeonRun extends DAO<DungeonRun> {
 
 	public Set<RunModifier> getModifiers() {
 		return modifiers;
+	}
+
+	public void addModifier(RunModifier modifier) {
+		String family = modifier.getModFamily();
+
+		Iterator<RunModifier> it = modifiers.iterator();
+		while (it.hasNext()) {
+			RunModifier mod = it.next();
+			if (mod.getModFamily().equals(family)) {
+				if (mod.getWeight() > modifier.getWeight()) {
+					it.remove();
+					break;
+				} else {
+					return;
+				}
+			}
+		}
+
+		modifiers.add(modifier);
 	}
 
 	public AreaMap getMap() {

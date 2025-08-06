@@ -55,8 +55,16 @@ public class RunModifier extends DAO<RunModifier> {
 				.findAny().orElseThrow();
 	}
 
+	public int getWeight() {
+		return weight;
+	}
+
 	public int getMinFloor() {
 		return minFloor;
+	}
+
+	public String getModFamily() {
+		return Utils.regex(id, "_[IVX]+$").replaceAll("");
 	}
 
 	public EffectBase toEffect(Dunhun game) {

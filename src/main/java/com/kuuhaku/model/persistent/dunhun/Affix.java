@@ -133,6 +133,10 @@ public class Affix extends DAO<Affix> {
 		return effect;
 	}
 
+	public String getModFamily() {
+		return Utils.regex(id, "_[IVX]+$").replaceAll("");
+	}
+
 	public void apply(Actor<?> actor) {
 		if (effect == null || !Utils.equalsAny(type, AffixType.monsterValues())) return;
 
