@@ -149,7 +149,7 @@ public class Monster extends MonsterBase<Monster> {
 		getModifiers().clear(this);
 
 		for (Affix a : affixes) {
-			a.apply(this);
+			a.apply(this, null);
 		}
 	}
 
