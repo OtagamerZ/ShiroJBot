@@ -53,7 +53,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Dunhun extends GameInstance<NullPhase> {
 	public static final int LEVEL_HARD = 28;
@@ -902,11 +901,23 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public Set<RunModifier> getModifiers() {
-		return Stream.concat(
-						map.getFloor().getModifiers().stream(),
-						map.getRun().getModifiers().stream()
-				)
-				.collect(Collectors.toSet());
+		Set<RunModifier> modifiers = new HashSet<>();
+		Map<String, Integer> families = new HashMap<>();
+
+		for (RunModifier mod : map.getRun().getModifiers()) {
+			modifiers.add(mod);
+			families.put(mod.getModFamily(), mod.getWeight());
+		}
+
+		for (RunModifier mod : map.getFloor().getModifiers()) {
+			int exWeight = families.getOrDefault(mod.getModFamily(), -1);
+			if (exWeight > -1 && mod.getWeight() > exWeight) continue;
+
+			modifiers.add(mod);
+			families.put(mod.getModFamily(), mod.getWeight());
+		}
+
+		return modifiers;
 	}
 
 	public int getAreaLevel() {

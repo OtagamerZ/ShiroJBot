@@ -43,6 +43,7 @@ public class RunModifier extends DAO<RunModifier> {
 	private int minFloor;
 
 	private transient EffectBase effectCache;
+	private transient String familyCache;
 
 	public String getId() {
 		return id;
@@ -64,7 +65,9 @@ public class RunModifier extends DAO<RunModifier> {
 	}
 
 	public String getModFamily() {
-		return Utils.regex(id, "_[IVX]+$").replaceAll("");
+		if (familyCache != null) return familyCache;
+
+		return familyCache = Utils.regex(id, "_[IVX]+$").replaceAll("");
 	}
 
 	public EffectBase toEffect(Dunhun game) {
