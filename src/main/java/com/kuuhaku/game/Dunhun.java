@@ -486,7 +486,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		if (!sb.isBlank()) {
-			getChannel().buffer(getLocale().get("str/dungeon_loot") + "\n" + sb);
+			getChannel().sendMessage(getLocale().get("str/dungeon_loot") + "\n" + sb);
 		}
 
 		for (Hero h : heroes.values()) {
