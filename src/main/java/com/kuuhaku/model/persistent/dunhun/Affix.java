@@ -58,6 +58,11 @@ public class Affix extends DAO<Affix> {
 	@Column(name = "type", nullable = false)
 	private AffixType type;
 
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "req_tags", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray reqTags;
+
 	@Column(name = "min_level", nullable = false)
 	private int minLevel;
 
@@ -94,6 +99,10 @@ public class Affix extends DAO<Affix> {
 
 	public AffixType getType() {
 		return type;
+	}
+
+	public JSONArray getReqTags() {
+		return reqTags;
 	}
 
 	public int getMinLevel() {

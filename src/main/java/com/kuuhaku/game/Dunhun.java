@@ -440,17 +440,17 @@ public class Dunhun extends GameInstance<NullPhase> {
 					dropFac /= 2;
 				}
 
-				List<Object[]> bases = DAO.queryAllUnmapped("""
+				List<Object[]> global = DAO.queryAllUnmapped("""
 						SELECT item_id
 							 , weight
 						FROM global_drops
 						WHERE weight > 0
 						"""
 				);
-				if (bases.isEmpty()) continue;
+				if (global.isEmpty()) continue;
 
 				RandomList<String> rl = new RandomList<>(nodeRng);
-				for (Object[] i : bases) {
+				for (Object[] i : global) {
 					rl.add((String) i[0], ((Number) i[1]).intValue());
 				}
 
