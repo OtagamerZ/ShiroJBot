@@ -127,7 +127,7 @@ public class GearAffix extends DAO<GearAffix> {
 				affix.getInfo(locale).getDescription(),
 				getRanges().stream()
 						.map(r -> "**%s (%s)**".formatted(
-								r.withRoll(Calc.rng(r.min(), r.max(), roll)), r
+								r.withRoll(Calc.rng(1d, roll)), r
 						))
 						.toArray()
 		);
@@ -142,7 +142,7 @@ public class GearAffix extends DAO<GearAffix> {
 
 	public List<Integer> getValues() {
 		return getRanges().stream()
-				.map(r -> r.withRoll(Calc.rng(r.min(), r.max(), roll)))
+				.map(r -> r.withRoll(Calc.rng(1d, roll)))
 				.toList();
 	}
 
