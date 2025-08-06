@@ -412,7 +412,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 				.sum();
 
 		Loot loot = getCombat().getLoot();
-		XStringBuilder sb = new XStringBuilder();
 		for (Actor<?> a : getCombat().getActors(Team.KEEPERS)) {
 			if (a instanceof MonsterBase<?> m && m.getHp() == 0) {
 				if (m.getStats().isMinion()) continue;
@@ -468,6 +467,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			}
 		}
 
+		XStringBuilder sb = new XStringBuilder();
 		if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
 			this.loot.add(loot);
 
@@ -486,7 +486,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		if (!sb.isBlank()) {
-			getChannel().sendMessage(getLocale().get("str/dungeon_loot") + "\n" + sb);
+			getChannel().sendMessage(getLocale().get("str/dungeon_loot") + "\n" + sb).queue();
 		}
 
 		for (Hero h : heroes.values()) {
