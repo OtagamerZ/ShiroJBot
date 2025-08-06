@@ -204,12 +204,14 @@ public class AreaMap {
 		for (int i = 0; i < 2; i++) {
 			for (Floor fl : floors) {
 				List<Node> nds = nodes.computeIfAbsent(fl, f -> fl.getNodes());
-				if (i == 0) {
-					for (Node node : nds) {
-						if (node.getRenderPos().equals(ZERO) || node.isOccluded(width, height) || node.depth() > playerNode.depth() + visionLimit) {
-							continue;
-						}
+				for (Node node : nds) {
+					if (i == 1) node.calcColor();
 
+					if (node.getRenderPos().equals(ZERO) || node.isOccluded(width, height) || node.depth() > playerNode.depth() + visionLimit) {
+						continue;
+					}
+
+					if (i == 0) {
 						if (fl.getFloor() > 0) {
 							Composite comp = g2d.getComposite();
 							if (!node.canReach(playerNode)) {
@@ -244,14 +246,7 @@ public class AreaMap {
 							g2d.setStroke(new BasicStroke(Node.NODE_RADIUS, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
 							g2d.drawLine(node.getRenderPos().x, 10, node.getRenderPos().x, ground);
 						}
-					}
-				} else {
-					for (Node node : nds) {
-						node.calcColor();
-						if (node.getRenderPos().equals(ZERO) || node.isOccluded(width, height)) {
-							continue;
-						}
-
+					} else {
 						for (Node parent : node.getParents()) {
 							if (!parent.isRendered() && parent.isOccluded(width, height)) {
 								parent.render(g2d, playerNode);
