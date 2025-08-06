@@ -285,6 +285,12 @@ public class Gear extends DAO<Gear> {
 		return effects;
 	}
 
+	public Attributes getAttributes() {
+		if (attributes == null) attributes = new Attributes();
+
+		return attributes;
+	}
+
 	public Attributes getAttributes(Actor<?> owner) {
 		if (attributes == null) load(owner);
 
