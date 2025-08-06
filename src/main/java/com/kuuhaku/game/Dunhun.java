@@ -426,16 +426,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 					case UNIQUE -> 2.5;
 				} * mf;
 
-				System.out.println(dropFac);
 				while (Calc.chance(dropFac)) {
 					Gear drop = Gear.getRandom(m, null);
 					if (drop != null) {
-						System.out.println("drop");
 						lt.gear().add(drop);
 					}
 
 					dropFac /= 2;
-					System.out.println(dropFac);
 				}
 
 				List<Object[]> global = DAO.queryAllUnmapped("""
@@ -445,24 +442,25 @@ public class Dunhun extends GameInstance<NullPhase> {
 						WHERE weight > 0
 						"""
 				);
-				if (global.isEmpty()) continue;
 
-				RandomList<String> rl = new RandomList<>(nodeRng);
-				for (Object[] i : global) {
-					rl.add((String) i[0], ((Number) i[1]).intValue());
-				}
+				if (!global.isEmpty()) {
+					RandomList<String> rl = new RandomList<>(nodeRng);
+					for (Object[] i : global) {
+						rl.add((String) i[0], ((Number) i[1]).intValue());
+					}
 
-				if (!rl.entries().isEmpty()) {
-					dropFac = 5 * switch (m.getRarityClass()) {
-						case NORMAL -> 1;
-						case MAGIC -> 1.2;
-						case RARE -> 1.5;
-						case UNIQUE -> 2.5;
-					} * mf;
+					if (!rl.entries().isEmpty()) {
+						dropFac = 5 * switch (m.getRarityClass()) {
+							case NORMAL -> 1;
+							case MAGIC -> 1.2;
+							case RARE -> 1.5;
+							case UNIQUE -> 2.5;
+						} * mf;
 
-					while (Calc.chance(dropFac)) {
-						lt.items().add(DAO.find(UserItem.class, rl.get()));
-						dropFac /= 2;
+						while (Calc.chance(dropFac)) {
+							lt.items().add(DAO.find(UserItem.class, rl.get()));
+							dropFac /= 2;
+						}
 					}
 				}
 
