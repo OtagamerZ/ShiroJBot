@@ -29,7 +29,6 @@ import com.kuuhaku.model.persistent.localized.LocalizedAffix;
 import com.kuuhaku.model.records.dunhun.ValueRange;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
-import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
@@ -123,22 +122,26 @@ public class Affix extends DAO<Affix> {
 		return effect;
 	}
 
-	public void apply(Actor<?> actor, Gear gear) {
-		if (effect == null) return;
+	public void apply(Actor<?> actor) {
+		if (effect == null || !Utils.equalsAny(type, AffixType.monsterValues())) return;
 
 		try {
-			JSONObject jo = new JSONObject();
-			if (actor != null) {
-				jo.put("game", actor.getGame());
-				jo.put("actor", actor);
-			}
-			if (gear != null) {
-				jo.put("gear", gear);
-			}
-
-			Utils.exec(id, effect, jo);
+			Utils.exec(id, effect, Map.of(
+					"game", actor.getGame(),
+					"actor", actor
+			));
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to apply modifier {}", id, e);
+			Constants.LOGGER.warn("Failed to apply monster modifier {}", id, e);
+		}
+	}
+
+	public void apply(Gear gear) {
+		if (effect == null || !Utils.equalsAny(type, AffixType.itemValues())) return;
+
+		try {
+			Utils.exec(id, effect, Map.of("gear", gear));
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to apply item modifier {}", id, e);
 		}
 	}
 

@@ -103,7 +103,7 @@ public class Gear extends DAO<Gear> {
 
 		Affix imp = basetype.getStats().implicit();
 		if (imp != null && imp.getTags().contains("META")) {
-			imp.apply(null, this);
+			imp.apply(this);
 		}
 	}
 
