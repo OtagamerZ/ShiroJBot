@@ -15,14 +15,6 @@ public class DungeonRunModifier extends DAO<DungeonRunModifier> {
 	private DungeonRunModifierId id;
 
 	@ManyToOne(optional = false)
-	@AttributeOverrides({
-			@AttributeOverride(name = "parent_hero_id", column = @Column(name = "hero_id", nullable = false)),
-			@AttributeOverride(name = "parent_dungeon_id", column = @Column(name = "dungeon_id", nullable = false))
-	})
-	@MapsId("runId")
-	private DungeonRun parent;
-
-	@ManyToOne(optional = false)
 	@JoinColumn(name = "modifier_id", nullable = false, updatable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("modifierId")
@@ -33,16 +25,11 @@ public class DungeonRunModifier extends DAO<DungeonRunModifier> {
 
 	public DungeonRunModifier(DungeonRun parent, RunModifier modifier) {
 		this.id = new DungeonRunModifierId(parent.getId(), modifier.getId());
-		this.parent = parent;
 		this.modifier = modifier;
 	}
 
 	public DungeonRunModifierId getId() {
 		return id;
-	}
-
-	public DungeonRun getParent() {
-		return parent;
 	}
 
 	public RunModifier getModifier() {
