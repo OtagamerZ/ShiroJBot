@@ -128,7 +128,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 		return modifiers;
 	}
 
-	public void addModifier(RunModifier modifier) {
+	public boolean addModifier(RunModifier modifier) {
 		String family = modifier.getModFamily();
 
 		Iterator<RunModifier> it = modifiers.iterator();
@@ -139,12 +139,12 @@ public class DungeonRun extends DAO<DungeonRun> {
 					it.remove();
 					break;
 				} else {
-					return;
+					return false;
 				}
 			}
 		}
 
-		modifiers.add(modifier);
+		return modifiers.add(modifier);
 	}
 
 	public AreaMap getMap() {
