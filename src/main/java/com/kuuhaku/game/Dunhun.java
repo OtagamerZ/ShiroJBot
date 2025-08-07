@@ -398,8 +398,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						map.getRun().getPlayers().add(p);
 					}
 
-					System.out.println(map.getRun().getModifiers());
-					// map.getRun().save();
+					map.getRun().save();
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 					getChannel().sendMessage(getLocale().get("error/error", e)).queue();

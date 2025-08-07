@@ -134,7 +134,8 @@ public class DungeonRun extends DAO<DungeonRun> {
 		Iterator<RunModifier> it = modifiers.iterator();
 		while (it.hasNext()) {
 			RunModifier mod = it.next();
-			if (mod.getModFamily().equals(family)) {
+			if (mod.getId().equals(modifier.getId())) return false;
+			else if (mod.getModFamily().equals(family)) {
 				if (mod.getWeight() > modifier.getWeight()) {
 					it.remove();
 					break;
