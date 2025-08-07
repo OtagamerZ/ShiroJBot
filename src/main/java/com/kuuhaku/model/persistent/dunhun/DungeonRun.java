@@ -46,7 +46,11 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DungeonRunPlayer> players = new HashSet<>();
 
-	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@JoinColumns({
+			@JoinColumn(name = "hero_id", referencedColumnName = "hero_id"),
+			@JoinColumn(name = "dungeon_id", referencedColumnName = "dungeon_id")
+	})
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DungeonRunModifier> modifiers = new LinkedHashSet<>();
 
@@ -126,7 +130,8 @@ public class DungeonRun extends DAO<DungeonRun> {
 		while (it.hasNext()) {
 			RunModifier mod = it.next().getModifier();
 			if (mod.getId().equals(modifier.getId())) return false;
-			else if (mod.getModFamily().equals(family)) {
+
+			if (mod.getModFamily().equals(family)) {
 				if (mod.getWeight() > modifier.getWeight()) {
 					it.remove();
 					break;
