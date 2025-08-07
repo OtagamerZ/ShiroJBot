@@ -15,6 +15,10 @@ public class DungeonRunModifier extends DAO<DungeonRunModifier> {
 	private DungeonRunModifierId id;
 
 	@ManyToOne(optional = false)
+	@AttributeOverrides({
+			@AttributeOverride(name = "parent_hero_id", column = @Column(name = "hero_id", nullable = false)),
+			@AttributeOverride(name = "parent_dungeon_id", column = @Column(name = "dungeon_id", nullable = false))
+	})
 	@MapsId("runId")
 	private DungeonRun parent;
 
