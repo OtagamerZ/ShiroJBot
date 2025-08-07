@@ -46,7 +46,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DungeonRunPlayer> players = new HashSet<>();
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "dungeon_run_modifier",
 			schema = "dunhun",
 			joinColumns = {

@@ -399,7 +399,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 						pls.add(p);
 					}
 
-					map.getRun().save();
+					try {
+						map.getRun().save();
+					} catch (Exception e) {
+						System.out.println(map.getRun().getModifiers());
+					}
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 					getChannel().sendMessage(getLocale().get("error/error", e)).queue();
