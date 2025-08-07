@@ -94,6 +94,7 @@
         <class>com.kuuhaku.model.persistent.dunhun.DungeonRun</class>
         <class>com.kuuhaku.model.persistent.dunhun.RunModifier</class>
         <class>com.kuuhaku.model.persistent.dunhun.DungeonRunPlayer</class>
+        <class>com.kuuhaku.model.persistent.dunhun.DungeonRunModifier</class>
 
         <!-- LOCALIZED -->
         <class>com.kuuhaku.model.persistent.localized.LocalizedItem</class>
