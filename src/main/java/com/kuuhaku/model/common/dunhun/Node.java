@@ -154,15 +154,15 @@ public class Node {
 	public String getPathIcon(Node parent) {
 		if (!parents.contains(parent)) return null;
 
-		int idx = parent.children.indexOf(this);
+		int idx = parent.children.indexOf(this) + 1;
 		int sibls = parent.children.size();
 
-		if (idx == sibls / 2d) return "center";
-		else if (idx < sibls / 2d) {
-			if (idx == 0 && sibls == 5) return "leftmost";
+		if (sibls % 2 == 1 && idx == sibls / 2 + 1) return "center";
+		else if (idx <= sibls / 2) {
+			if (idx == 1 && sibls == 5) return "leftmost";
 			return "left";
 		} else {
-			if (idx == sibls - 1 && sibls == 5) return "rightmost";
+			if (idx == sibls && sibls == 5) return "rightmost";
 			return "right";
 		}
 	}
