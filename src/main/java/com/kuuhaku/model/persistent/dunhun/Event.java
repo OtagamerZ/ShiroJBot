@@ -26,7 +26,6 @@ import com.kuuhaku.model.common.dunhun.Node;
 import com.kuuhaku.model.common.dunhun.context.EventContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedEvent;
-import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.records.dunhun.EventAction;
 import com.kuuhaku.model.records.dunhun.EventDescription;
 import com.kuuhaku.util.Utils;
@@ -114,7 +113,7 @@ public class Event extends DAO<Event> {
 	}
 
 	public String getString(Dunhun game, String key, Object... args) {
-		return game.parsePlural(LocalizedString.get(game.getLocale(), key).formatted(args));
+		return game.parsePlural(game.getString(key, args));
 	}
 
 	@Override
