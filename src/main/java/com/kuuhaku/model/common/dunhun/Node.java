@@ -157,8 +157,8 @@ public class Node {
 		int idx = parent.children.indexOf(this);
 		int sibls = parent.children.size();
 
-		if (idx == sibls / 2) return "center";
-		else if (idx < sibls / 2) {
+		if (idx == sibls / 2d) return "center";
+		else if (idx < sibls / 2d) {
 			if (idx == 0 && sibls == 5) return "leftmost";
 			return "left";
 		} else {
