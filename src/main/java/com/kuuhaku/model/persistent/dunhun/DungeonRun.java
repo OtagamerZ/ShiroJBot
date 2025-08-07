@@ -11,7 +11,6 @@ import org.hibernate.annotations.FetchMode;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "dungeon_run", schema = "dunhun")
@@ -43,11 +42,11 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Column(name = "path", nullable = false)
 	private int path = 0;
 
-	@OneToMany(mappedBy = "parent", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DungeonRunPlayer> players = new HashSet<>();
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinTable(name = "dungeon_run_modifier",
 			schema = "dunhun",
 			joinColumns = {

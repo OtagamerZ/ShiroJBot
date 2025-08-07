@@ -392,10 +392,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 						Constants.LOGGER.error(e, e);
 					}
 
+					Set<DungeonRunPlayer> pls = map.getRun().getPlayers();
 					for (Hero h : heroes.values()) {
 						DungeonRunPlayer p = new DungeonRunPlayer(map.getRun(), h);
-						map.getRun().getPlayers().remove(p);
-						map.getRun().getPlayers().add(p);
+						pls.remove(p);
+						pls.add(p);
 					}
 
 					map.getRun().save();

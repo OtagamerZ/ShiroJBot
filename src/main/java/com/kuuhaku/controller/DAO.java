@@ -22,7 +22,6 @@ import com.antkorwin.xsync.XSync;
 import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
-import com.kuuhaku.interfaces.DAOListener;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -37,7 +36,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public abstract class DAO<T extends DAO<T>> implements DAOListener {
+@MappedSuperclass
+public abstract class DAO<T extends DAO<T>> {
 	private static final XSync<Object> MUTEX = new XSync<>();
 
 	public static <T extends DAO<T>, ID> T find(@NotNull Class<T> klass, @NotNull ID id) {
@@ -311,13 +311,7 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 					em.clear();
 				}
 
-				entry.beforeSave();
-				try {
-					em.persist(entry);
-				} finally {
-					entry.afterSave();
-				}
-
+				em.persist(entry);
 				i++;
 			}
 		});
@@ -326,84 +320,64 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 	public static <T extends DAO<T>> void deleteBatch(Collection<T> entries) {
 		Manager.getFactory().runInTransaction(em -> {
 			for (DAO<?> entry : entries) {
-				entry.beforeDelete();
-				try {
-					DAO<?> ent = entry;
-					if (!em.contains(entry)) {
-						Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entry);
-						ent = em.find(entry.getClass(), key);
+				DAO<?> ent = entry;
+				if (!em.contains(entry)) {
+					Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entry);
+					ent = em.find(entry.getClass(), key);
 
-						if (ent == null) {
-							throw new EntityNotFoundException("Could not delete entity of class " + entry.getClass().getSimpleName() + " [" + key + "]");
-						}
+					if (ent == null) {
+						throw new EntityNotFoundException("Could not delete entity of class " + entry.getClass().getSimpleName() + " [" + key + "]");
 					}
-
-					em.remove(ent);
-				} finally {
-					entry.afterDelete();
 				}
+
+				em.remove(ent);
 			}
 		});
 	}
 
 	public final void save() {
-		try {
-			beforeSave();
-			Manager.getFactory().runInTransaction(em -> {
-				if (this instanceof Blacklistable lock) {
-					if (lock.isBlacklisted()) return;
-				}
+		Manager.getFactory().runInTransaction(em -> {
+			if (this instanceof Blacklistable lock) {
+				if (lock.isBlacklisted()) return;
+			}
 
-				em.merge(this);
-			});
-		} finally {
-			afterSave();
-		}
+			em.merge(this);
+		});
 	}
 
 	@SuppressWarnings("unchecked")
 	public final T refresh() {
 		return Manager.getFactory().callInTransaction(em -> {
-			try {
-				beforeRefresh();
-				if (em.contains(this)) {
-					em.refresh(this);
-					return (T) this;
-				} else {
-					Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-					T t = (T) em.find(getClass(), key);
-					if (t != null) {
-						em.refresh(t);
-					}
-
-					return (T) Utils.getOr(t, this);
+			if (em.contains(this)) {
+				em.refresh(this);
+				return (T) this;
+			} else {
+				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+				T t = (T) em.find(getClass(), key);
+				if (t != null) {
+					em.refresh(t);
 				}
-			} finally {
-				afterRefresh();
+
+				return (T) Utils.getOr(t, this);
 			}
 		});
 	}
 
 	public final void delete() {
 		Manager.getFactory().runInTransaction(em -> {
-			beforeDelete();
-			try {
-				DAO<?> ent;
-				if (em.contains(this)) {
-					ent = this;
-				} else {
-					Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-					ent = em.find(getClass(), key);
+			DAO<?> ent;
+			if (em.contains(this)) {
+				ent = this;
+			} else {
+				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+				ent = em.find(getClass(), key);
 
-					if (ent == null) {
-						throw new EntityNotFoundException("Could not delete entity of class " + getClass().getSimpleName() + " [" + key + "]");
-					}
+				if (ent == null) {
+					throw new EntityNotFoundException("Could not delete entity of class " + getClass().getSimpleName() + " [" + key + "]");
 				}
-
-				em.remove(ent);
-			} finally {
-				afterDelete();
 			}
+
+			em.remove(ent);
 		});
 	}
 
@@ -425,5 +399,23 @@ public abstract class DAO<T extends DAO<T>> implements DAOListener {
 		}
 
 		return q;
+	}
+
+	@PrePersist
+	@PreUpdate
+	public void beforeSave() {
+	}
+
+	@PostPersist
+	@PostUpdate
+	public void afterSave() {
+	}
+
+	@PreRemove
+	public void beforeDelete() {
+	}
+
+	@PostRemove
+	public void afterDelete() {
 	}
 }
