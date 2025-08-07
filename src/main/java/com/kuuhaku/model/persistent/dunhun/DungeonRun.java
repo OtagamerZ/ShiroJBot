@@ -46,17 +46,9 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DungeonRunPlayer> players = new HashSet<>();
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "dungeon_run_modifier",
-			schema = "dunhun",
-			joinColumns = {
-					@JoinColumn(name = "hero_id", referencedColumnName = "hero_id"),
-					@JoinColumn(name = "dungeon_id", referencedColumnName = "dungeon_id")
-			},
-			inverseJoinColumns = @JoinColumn(name = "modifier_id")
-	)
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<RunModifier> modifiers = new LinkedHashSet<>();
+	private Set<DungeonRunModifier> modifiers = new LinkedHashSet<>();
 
 	public DungeonRun() {
 	}
@@ -123,16 +115,16 @@ public class DungeonRun extends DAO<DungeonRun> {
 		return players;
 	}
 
-	public Set<RunModifier> getModifiers() {
+	public Set<DungeonRunModifier> getModifiers() {
 		return modifiers;
 	}
 
 	public boolean addModifier(RunModifier modifier) {
 		String family = modifier.getModFamily();
 
-		Iterator<RunModifier> it = modifiers.iterator();
+		Iterator<DungeonRunModifier> it = modifiers.iterator();
 		while (it.hasNext()) {
-			RunModifier mod = it.next();
+			RunModifier mod = it.next().getModifier();
 			if (mod.getId().equals(modifier.getId())) return false;
 			else if (mod.getModFamily().equals(family)) {
 				if (mod.getWeight() > modifier.getWeight()) {
@@ -144,7 +136,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 			}
 		}
 
-		return modifiers.add(modifier);
+		return modifiers.add(new DungeonRunModifier(this, modifier));
 	}
 
 	public AreaMap getMap() {

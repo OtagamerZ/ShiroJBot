@@ -130,8 +130,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 					run.setPath(sub.size() - 1);
 				}
 
-				for (RunModifier mod : run.getModifiers()) {
-					mod.toEffect(this);
+				for (DungeonRunModifier mod : run.getModifiers()) {
+					mod.getModifier().toEffect(this);
 				}
 			} else {
 				// TODO Pre-generated maps
@@ -212,8 +212,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 						if (!run.getModifiers().isEmpty()) {
 							XStringBuilder sb = new XStringBuilder();
-							for (RunModifier mod : run.getModifiers()) {
-								sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
+							for (DungeonRunModifier mod : run.getModifiers()) {
+								sb.appendNewLine(mod.getModifier().getInfo(getLocale()).getDescription());
 							}
 
 							eb.addField(getLocale().get("str/dungeon_run_modifiers"), sb.toString(), false);
@@ -399,11 +399,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						pls.add(p);
 					}
 
-					try {
-						map.getRun().save();
-					} catch (Exception e) {
-						System.out.println(map.getRun().getModifiers());
-					}
+					map.getRun().save();
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 					getChannel().sendMessage(getLocale().get("error/error", e)).queue();
@@ -908,7 +904,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 	public Set<RunModifier> getModifiers() {
 		Map<String, RunModifier> modifiers = new HashMap<>();
 
-		for (RunModifier mod : map.getRun().getModifiers()) {
+		for (DungeonRunModifier drm : map.getRun().getModifiers()) {
+			RunModifier mod = drm.getModifier();
 			modifiers.put(mod.getModFamily(), mod);
 		}
 

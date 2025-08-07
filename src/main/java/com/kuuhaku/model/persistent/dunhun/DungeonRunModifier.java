@@ -1,7 +1,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.records.id.DungeonRunPlayerId;
+import com.kuuhaku.model.records.id.DungeonRunModifierId;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -9,10 +9,10 @@ import org.hibernate.annotations.FetchMode;
 import java.util.Objects;
 
 @Entity
-@Table(name = "dungeon_run_player", schema = "dunhun")
-public class DungeonRunPlayer extends DAO<DungeonRunPlayer> {
+@Table(name = "dungeon_run_modifier", schema = "dunhun")
+public class DungeonRunModifier extends DAO<DungeonRunModifier> {
 	@EmbeddedId
-	private DungeonRunPlayerId id;
+	private DungeonRunModifierId id;
 
 	@ManyToOne(optional = false)
 	@JoinColumns({
@@ -23,25 +23,21 @@ public class DungeonRunPlayer extends DAO<DungeonRunPlayer> {
 	private DungeonRun parent;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "player_id", nullable = false, updatable = false)
+	@JoinColumn(name = "modifier_id", nullable = false, updatable = false)
 	@Fetch(FetchMode.JOIN)
-	@MapsId("playerId")
-	private Hero player;
+	@MapsId("modifierId")
+	private RunModifier modifier;
 
-	@Column(name = "hp", nullable = false)
-	private int hp;
-
-	public DungeonRunPlayer() {
+	public DungeonRunModifier() {
 	}
 
-	public DungeonRunPlayer(DungeonRun parent, Hero player) {
-		this.id = new DungeonRunPlayerId(parent.getId(), player.getId());
+	public DungeonRunModifier(DungeonRun parent, RunModifier modifier) {
+		this.id = new DungeonRunModifierId(parent.getId(), modifier.getId());
 		this.parent = parent;
-		this.player = player;
-		this.hp = player.getHp();
+		this.modifier = modifier;
 	}
 
-	public DungeonRunPlayerId getId() {
+	public DungeonRunModifierId getId() {
 		return id;
 	}
 
@@ -49,18 +45,14 @@ public class DungeonRunPlayer extends DAO<DungeonRunPlayer> {
 		return parent;
 	}
 
-	public Hero getPlayer() {
-		return player;
-	}
-
-	public int getHp() {
-		return hp;
+	public RunModifier getModifier() {
+		return modifier;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
-		DungeonRunPlayer that = (DungeonRunPlayer) o;
+		DungeonRunModifier that = (DungeonRunModifier) o;
 		return Objects.equals(id, that.id);
 	}
 
