@@ -107,7 +107,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 		};
 
 		if (getGame() != null) {
-			mult *= 1 + getGame().getAreaLevel() / 10d;
+			mult *= (1 + getGame().getAreaLevel() / 10d) * Math.pow(1.1, getGame().getModifiers().size());
 		}
 
 		return (int) (stats.getKillXp() * mult);

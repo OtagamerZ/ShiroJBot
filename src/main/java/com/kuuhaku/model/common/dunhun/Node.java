@@ -216,7 +216,14 @@ public class Node {
 			}
 		}
 
-		g2d.drawImage(equals(playerNode) ? ICON_PLAYER : nodeIcon,
+		BufferedImage icon = nodeIcon;
+		if (sublevel.getFloor().areNodesHidden()) {
+			icon = ICON_PLAIN;
+		} else if (equals(playerNode)) {
+			icon = ICON_PLAYER;
+		}
+
+		g2d.drawImage(icon,
 				renderPos.x - Node.NODE_RADIUS / 2, renderPos.y - Node.NODE_RADIUS / 2,
 				Node.NODE_RADIUS, Node.NODE_RADIUS,
 				null

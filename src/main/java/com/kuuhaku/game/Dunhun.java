@@ -426,7 +426,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					case MAGIC -> 1.2;
 					case RARE -> 1.5;
 					case UNIQUE -> 2.5;
-				} * mf;
+				} * mf * Math.pow(1.2, getModifiers().size());
 
 				while (Calc.chance(dropFac)) {
 					Gear drop = Gear.getRandom(m, null);

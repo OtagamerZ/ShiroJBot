@@ -20,6 +20,7 @@ public class Floor {
 	private final Set<Node> eventNodes = new HashSet<>();
 	private final Set<RunModifier> modifiers = new LinkedHashSet<>();
 	private int visionLimit;
+	private boolean hiddenNodes;
 
 	public Floor(AreaMap map, int floor) {
 		this.map = map;
@@ -115,6 +116,14 @@ public class Floor {
 
 	public void setVisionLimit(int visionLimit) {
 		this.visionLimit = visionLimit;
+	}
+
+	public boolean areNodesHidden() {
+		return hiddenNodes;
+	}
+
+	public void setHiddenNodes(boolean hiddenNodes) {
+		this.hiddenNodes = hiddenNodes;
 	}
 
 	public List<Node> getNodes() {

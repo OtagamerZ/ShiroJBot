@@ -138,7 +138,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public int damage(Actor<?> source, int value) {
-		return modHp(source, -Math.max(0, applyMitigation(value)), source.getCritical());
+		return modHp(source, -Math.max(0, applyMitigation(value)), source != null ? source.getCritical() : 0);
 	}
 
 	public int modHp(Actor<?> source, int value, double critChance) {
@@ -148,13 +148,15 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		AtomicInteger val = new AtomicInteger(value);
 		Combat cbt = binding.getGame().getCombat();
 		if (cbt != null) {
-			if (hp > 0) {
-				cbt.trigger(value < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, val);
-				if (hp + value <= 0) {
-					cbt.trigger(Trigger.ON_GRAVEYARD, source, this, val);
+			if (source != null) {
+				if (hp > 0) {
+					cbt.trigger(value < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, val);
+					if (hp + value <= 0) {
+						cbt.trigger(Trigger.ON_GRAVEYARD, source, this, val);
+					}
+				} else if (hp + value > 0) {
+					cbt.trigger(Trigger.ON_REVIVE, source, this, val);
 				}
-			} else if (hp + value > 0) {
-				cbt.trigger(Trigger.ON_REVIVE, source, this, val);
 			}
 
 			I18N locale = cbt.getLocale();
