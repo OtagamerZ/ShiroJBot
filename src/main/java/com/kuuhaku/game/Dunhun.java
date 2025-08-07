@@ -245,7 +245,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 								.sorted(Comparator.comparingInt(n -> n.getRenderPos().x))
 								.toList();
 
-						int size = children.size();
 						Map<String, String> icons = Map.of(
 								"leftmost", "⬅️",
 								"left", "↙️",
@@ -256,12 +255,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 						Set<Choice> choices = new LinkedHashSet<>();
 						AtomicReference<String> chosenPath = new AtomicReference<>();
-						for (int i = 0; i < size; i++) {
-							Node node = children.get(i);
-
-							String path = node.getPathIcon(currNode);
+						for (Node node : children) {
+							String path = node.getPathIcon(children);
 							choices.add(new Choice(
-									"path-" + i,
+									"path-" + path,
 									Utils.parseEmoji(icons.get(path)),
 									w -> {
 										run.setNode(node);

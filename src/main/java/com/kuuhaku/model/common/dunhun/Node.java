@@ -151,11 +151,9 @@ public class Node {
 		}
 	}
 
-	public String getPathIcon(Node parent) {
-		if (!parents.contains(parent)) return null;
-
-		int idx = parent.children.indexOf(this) + 1;
-		int sibls = parent.children.size();
+	public String getPathIcon(List<Node> children) {
+		int idx = children.indexOf(this) + 1;
+		int sibls = children.size();
 
 		if (sibls % 2 == 1 && idx == sibls / 2 + 1) return "center";
 		else if (idx <= sibls / 2) {
