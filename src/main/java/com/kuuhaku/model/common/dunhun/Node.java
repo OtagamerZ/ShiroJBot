@@ -159,10 +159,10 @@ public class Node {
 
 		if (sibls % 2 == 1 && idx == sibls / 2 + 1) return "center";
 		else if (idx <= sibls / 2) {
-			if (idx == 1 && sibls == 5) return "leftmost";
+			if (idx == 1 && sibls > 3) return "leftmost";
 			return "left";
 		} else {
-			if (idx == sibls && sibls == 5) return "rightmost";
+			if (idx == sibls && sibls > 3) return "rightmost";
 			return "right";
 		}
 	}
