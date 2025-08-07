@@ -114,7 +114,7 @@ public class Event extends DAO<Event> {
 	}
 
 	public String getString(Dunhun game, String key, Object... args) {
-		return game.parsePlural(LocalizedString.get(game.getLocale(), "event/" + key).formatted(args));
+		return game.parsePlural(LocalizedString.get(game.getLocale(), key).formatted(args));
 	}
 
 	@Override
