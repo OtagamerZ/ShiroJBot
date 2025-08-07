@@ -398,7 +398,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 						map.getRun().getPlayers().add(p);
 					}
 
-					map.getRun().save();
+					System.out.println(map.getRun().getModifiers());
+					// map.getRun().save();
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 					getChannel().sendMessage(getLocale().get("error/error", e)).queue();
@@ -901,23 +902,20 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public Set<RunModifier> getModifiers() {
-		Set<RunModifier> modifiers = new HashSet<>();
-		Map<String, Integer> families = new HashMap<>();
+		Map<String, RunModifier> modifiers = new HashMap<>();
 
 		for (RunModifier mod : map.getRun().getModifiers()) {
-			modifiers.add(mod);
-			families.put(mod.getModFamily(), mod.getWeight());
+			modifiers.put(mod.getModFamily(), mod);
 		}
 
 		for (RunModifier mod : map.getFloor().getModifiers()) {
-			int exWeight = families.getOrDefault(mod.getModFamily(), -1);
-			if (exWeight > -1 && mod.getWeight() > exWeight) continue;
+			RunModifier curr = modifiers.get(mod.getModFamily());
+			if (curr != null && curr.getWeight() > mod.getWeight()) continue;
 
-			modifiers.add(mod);
-			families.put(mod.getModFamily(), mod.getWeight());
+			modifiers.put(mod.getModFamily(), mod);
 		}
 
-		return modifiers;
+		return Set.copyOf(modifiers.values());
 	}
 
 	public int getAreaLevel() {
