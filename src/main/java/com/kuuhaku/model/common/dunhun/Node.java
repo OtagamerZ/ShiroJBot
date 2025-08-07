@@ -151,6 +151,22 @@ public class Node {
 		}
 	}
 
+	public String getPathIcon(Node parent) {
+		if (!parents.contains(parent)) return null;
+
+		int idx = parent.children.indexOf(this);
+		int sibls = parent.children.size();
+
+		if (idx == sibls / 2) return "center";
+		else if (idx < sibls / 2) {
+			if (idx == 0 && sibls == 5) return "leftmost";
+			return "left";
+		} else {
+			if (idx == sibls - 1 && sibls == 5) return "rightmost";
+			return "right";
+		}
+	}
+
 	public void render(Graphics2D g2d, Node playerNode) {
 		boolean reachable = canReach(playerNode);
 

@@ -246,28 +246,27 @@ public class Dunhun extends GameInstance<NullPhase> {
 								.toList();
 
 						int size = children.size();
-						Queue<Pair<String, String>> emojis = new LinkedList<>();
-						if (size >= 4) emojis.add(new Pair<>("⬅️", "leftmost"));
-						if (size >= 2) emojis.add(new Pair<>("↙️", "left"));
-						if (size % 2 == 1) emojis.add(new Pair<>("⬇️", "center"));
-						if (size >= 2) emojis.add(new Pair<>("↘️", "right"));
-						if (size >= 5) emojis.add(new Pair<>("➡️", "rightmost"));
+						Map<String, String> icons = Map.of(
+								"leftmost", "⬅️",
+								"left", "↙️",
+								"center", "⬇️",
+								"right", "↘️",
+								"rightmost", "➡️"
+						);
 
 						Set<Choice> choices = new LinkedHashSet<>();
 						AtomicReference<String> chosenPath = new AtomicReference<>();
 						for (int i = 0; i < size; i++) {
 							Node node = children.get(i);
 
-							Pair<String, String> pair = emojis.poll();
-							assert pair != null;
-
+							String path = node.getPathIcon(currNode);
 							choices.add(new Choice(
 									"path-" + i,
-									Utils.parseEmoji(pair.getFirst()),
+									Utils.parseEmoji(icons.get(path)),
 									w -> {
 										run.setNode(node);
 										nodeRng.setSeed(node.getSeed());
-										chosenPath.set(getLocale().get("str/" + pair.getSecond()));
+										chosenPath.set(getLocale().get("str/" + path));
 										return null;
 									}
 							));
