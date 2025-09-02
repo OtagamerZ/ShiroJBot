@@ -266,19 +266,20 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 	}
 
 	public List<StashedCard> getRemovable() {
-		return DAO.queryAll(StashedCard.class, """
-				SELECT x.card
+		List<String> cards = DAO.queryAllNative(String.class, """
+				SELECT x.uuid
 				FROM (
-				  SELECT s AS card
-						, row_number() OVER (PARTITION BY kc.card.id, cd.chrome ORDER BY kc.id) AS copy
-				  FROM KawaiponCard kc
-				  			INNER JOIN CardDetails cd ON cd.uuid = kc.uuid
-							LEFT JOIN StashedCard s ON s.uuid = kc.uuid
-				  WHERE kc.kawaipon.uid = ?1
-				  ) x
+					 SELECT kc.uuid
+						  , row_number() OVER (PARTITION BY kc.card_id, cd.chrome ORDER BY kc.id) AS copy
+					 FROM kawaipon_card kc
+							  INNER JOIN card_details cd ON cd.card_uuid = kc.uuid
+							  LEFT JOIN stashed_card s ON s.uuid = kc.uuid
+					 WHERE kc.kawaipon_uid = ?1
+					 ) x
 				WHERE x.copy = 1
-				  AND x.card.id IS NOT NULL
 				""", uid);
+
+		return DAO.queryAll(StashedCard.class, "SELECT s FROM StashedCard s WHERE s.uuid IN ?1", cards);
 	}
 
 	public List<StashedCard> getTradeable() {
