@@ -191,7 +191,8 @@ public class Shiritori extends GameInstance<NullPhase> {
 				}, Utils::doNothing);
 	}
 
-	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
+	@Override
+	public void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
 		try {
 			if (isClosed()) return;
 

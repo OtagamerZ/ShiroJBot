@@ -824,7 +824,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 		getChannel().sendEmbed(eb.build()).queue();
 	}
 
-	private void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
+	@Override
+	public void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
 		getChannel().sendMessage(parsePlural(getString(msg, args)))
 				.queue(m -> {
 					if (message != null) {

@@ -49,7 +49,7 @@ public class GameTerminateCommand implements Executable {
 			return;
 		}
 
-		game.close(GameReport.OTHER);
+		game.reportResult(GameReport.SUCCESS, "GAME_TERMINATE");
 		data.channel().sendMessage(locale.get("success/game_terminated")).queue();
 	}
 }

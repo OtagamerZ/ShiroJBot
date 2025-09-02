@@ -281,6 +281,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 		this.rng = rng;
 	}
 
+	public abstract void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args);
+
 	public final boolean isClosed() {
 		return exec.isDone();
 	}
