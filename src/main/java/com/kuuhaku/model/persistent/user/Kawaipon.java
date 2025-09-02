@@ -265,6 +265,19 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				""", uid);
 	}
 
+	public List<StashedCard> getRemovable() {
+		return DAO.queryAll(StashedCard.class, """
+				SELECT s
+				FROM StashedCard s
+				LEFT JOIN KawaiponCard kc ON kc.card.id = s.card.id AND kc.kawaipon.uid = ?1
+				WHERE s.kawaipon.uid = ?1
+				  AND kc.id IS NULL
+				  AND s.deck.id IS NULL
+				  AND s.price = 0
+				  AND s.locked = FALSE
+				""", uid);
+	}
+
 	public List<StashedCard> getTradeable() {
 		return DAO.queryAll(StashedCard.class, """
 				SELECT s
