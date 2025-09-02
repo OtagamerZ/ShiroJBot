@@ -33,7 +33,7 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
-import java.util.List;
+import java.util.Set;
 
 @Command(
 		name = "stash",
@@ -45,7 +45,7 @@ public class StashAddAllCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
 
-		List<KawaiponCard> addable = kp.getCards();
+		Set<KawaiponCard> addable = kp.getCollection();
 		if (addable.isEmpty()) {
 			event.channel().sendMessage(locale.get("error/kawaipon_empty")).queue();
 			return;
