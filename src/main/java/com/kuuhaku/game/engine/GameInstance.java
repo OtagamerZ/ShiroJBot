@@ -240,12 +240,13 @@ public abstract class GameInstance<T extends Enum<T>> {
 	public void setModerator(String moderator) {
 		if (moderator == null) {
 			channel.sendMessage(locale.get("str/game_moderator_leave", "<@" + this.moderator + ">")).queue();
+			MODERATORS.remove(this.moderator);
 		} else {
 			channel.sendMessage(locale.get("str/game_moderator_join", "<@" + moderator + ">")).queue();
+			MODERATORS.put(moderator, this);
 		}
 
 		this.moderator = moderator;
-		MODERATORS.put(moderator, this);
 	}
 
 	protected Pair<Method, JSONObject> toAction(String args) {
