@@ -201,6 +201,7 @@ public class Shoukan extends GameInstance<Phase> {
 					 || m.getName().startsWith("deb")
 		);
 
+		action.getSecond().put("is_mod", user.getId().equals(getModerator()));
 		execAction(hand, action);
 	}
 
@@ -245,7 +246,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("set_name,(?<name>\\S+)")
 	private boolean debSetName(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (getModerator() != null || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+		if (args.getBoolean("is_mod", false) || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			String name = args.getString("name");
 			curr.setName(name);
 
@@ -259,7 +260,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("set_hp,(?<value>\\d+)")
 	private boolean debSetHp(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (getModerator() != null || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+		if (args.getBoolean("is_mod", false) || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			int val = args.getInt("value");
 			curr.setHP(val);
 
@@ -273,7 +274,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("set_mp,(?<value>\\d+)")
 	private boolean debSetMp(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (getModerator() != null || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+		if (args.getBoolean("is_mod", false) || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			int val = args.getInt("value");
 			curr.setMP(val);
 
@@ -287,7 +288,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("set_origin,(?<major>\\w+)(?:,(?<minor>[\\w,]+))?")
 	private boolean debSetOrigin(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (getModerator() != null || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+		if (args.getBoolean("is_mod", false) || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			Race major = args.getEnum(Race.class, "major", Race.NONE);
 
 			Set<Race> minors = new HashSet<>();
@@ -310,7 +311,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("add(?<cards>(,[\\w-]+)+)")
 	private boolean debAddCard(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (getModerator() != null || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+		if (args.getBoolean("is_mod", false) || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			String ids = args.getString("cards").toUpperCase();
 			List<String> added = new ArrayList<>();
 
@@ -342,7 +343,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("undraw(?:,(?<amount>\\d+))?")
 	private boolean debUndraw(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (getModerator() != null || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+		if (args.getBoolean("is_mod", false) || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			int valid = (int) curr.getCards().parallelStream().filter(Drawable::isAvailable).count();
 
 			int amount = Math.min(args.getInt("amount", 1), valid);
@@ -361,7 +362,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("next_tick")
 	private boolean debApplyTick(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (getModerator() != null || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+		if (args.getBoolean("is_mod", false) || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			reportEvent("NEXT_TICK", true, false);
 			return true;
 		}
@@ -373,7 +374,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("save_history")
 	private boolean debSaveHistory(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (getModerator() != null || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+		if (args.getBoolean("is_mod", false) || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			new MatchHistory(this, "none", getTurns()).save();
 
 			reportEvent("SAVE_HISTORY", true, false);
@@ -387,7 +388,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("terminate")
 	private boolean debTerminate(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (getModerator() != null || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+		if (args.getBoolean("is_mod", false) || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			reportResult(GameReport.SUCCESS, "GAME_TERMINATE");
 		}
 
@@ -398,7 +399,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("set_val,(?<key>\\w+)=(?<value>.+)")
 	private boolean debSetVal(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (getModerator() != null || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+		if (args.getBoolean("is_mod", false) || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			String key = args.getString("key");
 			String value = args.getString("value");
 			if (key.isBlank() || value.isBlank()) return true;
@@ -415,7 +416,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@PlayerAction("empower,(?<indexes>\\d+(,\\d+)*)")
 	private boolean debEmpower(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
-		if (getModerator() != null || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
+		if (args.getBoolean("is_mod", false) || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
 			String ids = args.getString("indexes");
 			List<String> added = new ArrayList<>();
 
