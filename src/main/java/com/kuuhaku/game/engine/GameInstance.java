@@ -245,6 +245,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 		}
 
 		this.moderator = moderator;
+		MODERATORS.put(moderator, this);
 	}
 
 	protected Pair<Method, JSONObject> toAction(String args) {
