@@ -142,6 +142,7 @@ public class Shoukan extends GameInstance<Phase> {
 	@Override
 	protected boolean validate(Message message) {
 		return isSingleplayer()
+			   || message.getAuthor().getId().equals(getModerator())
 			   || getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), message.getAuthor().getId())
 			   || hands.values().stream().anyMatch(h -> h.getUid().equals(message.getAuthor().getId()) && h.selectionPending());
 	}
@@ -192,13 +193,14 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected void runtime(User user, String value) {
-		Side current = getCurrentSide();
-		Hand hand = hands.values().stream()
-				.sorted(Comparator.comparing(h -> h.getSide() == current, Comparator.reverseOrder()))
-				.filter(h -> h.getUid().equals(user.getId()))
-				.findFirst().orElseThrow();
+		Hand hand = getCurrent();
 
-		Pair<Method, JSONObject> action = toAction(value.toLowerCase().replace(" ", ""), m -> (!isLocked() || (hand.selectionPending() && m.getName().startsWith("sel"))) && hand.selectionPending() == m.getName().startsWith("sel") || m.getName().startsWith("deb"));
+		Pair<Method, JSONObject> action = toAction(
+				value.toLowerCase().replace(" ", ""),
+				m -> (!isLocked() || (hand.selectionPending() && m.getName().startsWith("sel")))
+					 && hand.selectionPending() == m.getName().startsWith("sel")
+					 || m.getName().startsWith("deb")
+		);
 
 		execAction(hand, action);
 	}
@@ -2217,12 +2219,10 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private ButtonizeHelper makeSelector(Hand hand, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action, List<Pair<Object, ThrowingConsumer<ButtonWrapper>>> extra) {
+		Hand curr = getCurrent();
 		ButtonizeHelper selector = new ButtonizeHelper(true)
 				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract((u, b) -> !isClosed()
-										  && getCurrentSide() == hand.getSide()
-										  && u.getId().equals(hand.getUid())
-				)
+				.setCanInteract((u, b) -> canInteract(curr, u, b, List.of()))
 				.setCancellable(false);
 
 		for (int row = 0; row < rows; row++) {
@@ -2244,6 +2244,14 @@ public class Shoukan extends GameInstance<Phase> {
 		return selector;
 	}
 
+	private boolean canInteract(Hand current, User u, Button b, List<String> allowed) {
+		if (u.getId().equals(getModerator())) return true;
+
+		return !isClosed() && getCurrentSide() == current.getSide() && (
+				u.getId().equals(current.getUid()) || allowed.contains(b.getId())
+		);
+	}
+
 	private ButtonizeHelper getButtons() {
 		List<String> allowed = List.of(
 				getString("str/view_equips"),
@@ -2254,10 +2262,7 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract((u, b) -> !isClosed()
-										  && getCurrentSide() == curr.getSide()
-										  && (u.getId().equals(curr.getUid()) || allowed.contains(b.getId()))
-				)
+				.setCanInteract((u, b) -> canInteract(curr, u, b, allowed))
 				.setCancellable(false);
 
 		helper.addAction(getString("str/next_phase"), w -> {
@@ -2324,7 +2329,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		helper.addAction(getString("str/view_hand"), w -> {
 			Hand h;
-			if (isSingleplayer()) {
+			if (isSingleplayer() || w.getUser().getId().equals(getModerator())) {
 				h = curr;
 			} else {
 				h = hands.values().stream()
@@ -2463,10 +2468,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 									ButtonizeHelper mode = new ButtonizeHelper(true)
 											.setTimeout(5, TimeUnit.MINUTES)
-											.setCanInteract((u, b) -> !isClosed()
-																	  && getCurrentSide() == h.getSide()
-																	  && u.getId().equals(h.getUid())
-											)
+											.setCanInteract((u, b) -> canInteract(curr, u, b, List.of()))
 											.setCancellable(false)
 											.addAction(StringUtils.capitalize(getString("str/attack_mode")), bw -> placeWithMode.accept("a"))
 											.addAction(StringUtils.capitalize(getString("str/defense_mode")), bw -> placeWithMode.accept("d"))
@@ -2499,10 +2501,10 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		helper.addAction(getString("str/view_equips"), w ->
-			Objects.requireNonNull(w.getHook())
-					.setEphemeral(true)
-					.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png"))
-					.queue()
+				Objects.requireNonNull(w.getHook())
+						.setEphemeral(true)
+						.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png"))
+						.queue()
 		);
 
 		helper.addAction(getString("str/view_history"), w -> {
@@ -2767,7 +2769,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (isSingleplayer() || (getTurn() > 10 && curr.getLockTime(Lock.SURRENDER) == 0)) {
 				helper.addAction(getString("str/surrender"), w -> {
 					Hand h = null;
-					if (isSingleplayer()) {
+					if (isSingleplayer() || w.getUser().getId().equals(getModerator())) {
 						h = curr;
 					} else {
 						for (Hand hand : hands.values()) {
@@ -2806,10 +2808,7 @@ public class Shoukan extends GameInstance<Phase> {
 	private ButtonizeHelper getExtraButtons(ButtonizeHelper parent, Hand curr) {
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract((u, b) -> !isClosed()
-										  && getCurrentSide() == curr.getSide()
-										  && u.getId().equals(curr.getUid())
-				)
+				.setCanInteract((u, b) -> canInteract(curr, u, b, List.of()))
 				.setCancellable(false);
 
 		if (getPhase() == Phase.PLAN) {
@@ -2917,7 +2916,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (getPhase() == Phase.COMBAT) {
 			helper.addAction(getString("str/attack_card"), w -> {
 				Hand h;
-				if (isSingleplayer()) {
+				if (isSingleplayer() || w.getUser().getId().equals(getModerator())) {
 					h = curr;
 				} else {
 					h = hands.values().stream()

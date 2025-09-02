@@ -16,12 +16,13 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.dev;
+package com.kuuhaku.command.staff;
 
-import com.kuuhaku.Main;
+import com.kuuhaku.game.engine.GameInstance;
+import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.manager.CacheManager;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
@@ -30,18 +31,25 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
-		name = "clearcache",
+		name = "game",
+		path = "terminate",
 		category = Category.STAFF
 )
-public class ClearCacheCommand implements Executable {
+@Syntax(allowEmpty = true, value = {
+		"<user:user:r>",
+		"<channel:channel:r>"
+})
+public class GameTerminateCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		CacheManager man = Main.getCacheManager();
-		man.getResourceCache().invalidateAll();
-		man.getLocaleCache().invalidateAll();
-		man.getScriptCache().invalidateAll();
-		man.getPatternCache().invalidateAll();
+		GameInstance<?> game = GameInstance.CHANNELS.get(args.getString("channel"));
 
-		event.channel().sendMessage(locale.get("success/cache_clear")).queue();
+		if (game == null) {
+			data.channel().sendMessage(locale.get("error/game_not_found")).queue();
+			return;
+		}
+
+		game.close(GameReport.OTHER);
+		data.channel().sendMessage(locale.get("success/game_terminated")).queue();
 	}
 }

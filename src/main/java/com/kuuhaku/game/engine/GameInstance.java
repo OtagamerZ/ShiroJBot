@@ -46,8 +46,9 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public abstract class GameInstance<T extends Enum<T>> {
-	public static final Set<String> CHANNELS = ConcurrentHashMap.newKeySet();
-	public static final Set<String> PLAYERS = ConcurrentHashMap.newKeySet();
+	public static final Map<String, GameInstance<?>> CHANNELS = new ConcurrentHashMap<>();
+	public static final Map<String, GameInstance<?>> PLAYERS = new ConcurrentHashMap<>();
+	public static final Map<String, GameInstance<?>> MODERATORS = new ConcurrentHashMap<>();
 
 	private final ExecutorService worker = Executors.newSingleThreadExecutor();
 	private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
@@ -65,6 +66,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 	private final String[] players;
 	private final Deque<HistoryLog> history = new ArrayDeque<>();
 	private String[] channels;
+
+	private String moderator;
 
 	public GameInstance(I18N locale, String[] players) {
 		this.locale = locale;
@@ -103,14 +106,19 @@ public abstract class GameInstance<T extends Enum<T>> {
 			try {
 				channels = getChannel().getChannels().stream().map(GuildMessageChannel::getId).toArray(String[]::new);
 				for (String chn : channels) {
-					if (CHANNELS.contains(chn)) {
+					if (CHANNELS.containsKey(chn)) {
 						channel.sendMessage(locale.get("error/channel_occupied_self")).queue();
 						return;
 					}
 				}
 
-				PLAYERS.addAll(Arrays.asList(players));
-				CHANNELS.addAll(Arrays.asList(channels));
+				for (String p : players) {
+					PLAYERS.put(p, this);
+				}
+
+				for (String c : channels) {
+					CHANNELS.put(c, this);
+				}
 
 				begin();
 				GuildListener.addHandler(guild, sml);
@@ -130,6 +138,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 			} finally {
 				Arrays.asList(players).forEach(PLAYERS::remove);
 				Arrays.asList(channels).forEach(CHANNELS::remove);
+				MODERATORS.remove(moderator);
 
 				sml.close();
 				if (timeout != null) {
@@ -222,6 +231,14 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 	public Deque<HistoryLog> getHistory() {
 		return history;
+	}
+
+	public String getModerator() {
+		return moderator;
+	}
+
+	public void setModerator(String moderator) {
+		this.moderator = moderator;
 	}
 
 	protected Pair<Method, JSONObject> toAction(String args) {

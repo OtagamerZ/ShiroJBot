@@ -61,7 +61,7 @@ import java.util.stream.Stream;
 public class DunhunDuelCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		if (GameInstance.PLAYERS.contains(event.user().getId())) {
+		if (GameInstance.PLAYERS.containsKey(event.user().getId())) {
 			event.channel().sendMessage(locale.get("error/in_game_self")).queue();
 			return;
 		}
@@ -76,7 +76,7 @@ public class DunhunDuelCommand implements Executable {
 		}
 
 		for (User other : others) {
-			if (GameInstance.PLAYERS.contains(other.getId())) {
+			if (GameInstance.PLAYERS.containsKey(other.getId())) {
 				event.channel().sendMessage(locale.get("error/in_game_target", other.getEffectiveName())).queue();
 				return;
 			}

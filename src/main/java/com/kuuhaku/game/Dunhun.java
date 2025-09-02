@@ -158,11 +158,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@Override
 	protected boolean validate(Message message) {
-		return !duel || (
-				getCombat() != null
-				&& getCombat().getCurrent() instanceof Hero h
-				&& h.getTeam() == heroes.get(message.getAuthor().getId()).getTeam()
-		);
+		return !duel
+			   || message.getAuthor().getId().equals(getModerator())
+			   || (getCombat() != null
+				   && getCombat().getCurrent() instanceof Hero h
+				   && h.getTeam() == heroes.get(message.getAuthor().getId()).getTeam());
 	}
 
 	@Override
@@ -237,7 +237,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						BufferedImage bi = map.render(getLocale(), 900, 900);
 						ButtonizeHelper helper = new ButtonizeHelper(true)
 								.setTimeout(5, TimeUnit.MINUTES)
-								.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
+								.setCanInteract(u -> u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers()))
 								.setCancellable(false);
 
 						Node currNode = map.getPlayerNode();
@@ -562,7 +562,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
+				.setCanInteract(u -> u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers()))
 				.setCancellable(false);
 
 		Set<Choice> choices = new LinkedHashSet<>();
@@ -627,7 +627,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 						ButtonizeHelper fin = new ButtonizeHelper(true)
 								.setTimeout(5, TimeUnit.MINUTES)
-								.setCanInteract(u -> Utils.equalsAny(u.getId(), getPlayers()))
+								.setCanInteract(u -> u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers()))
 								.setCancellable(false)
 								.addAction(getLocale().get("str/continue"), s -> {
 									lock.complete(null);

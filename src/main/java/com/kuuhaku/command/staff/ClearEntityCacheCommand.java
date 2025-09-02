@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.dev;
+package com.kuuhaku.command.staff;
 
 import com.kuuhaku.controller.Manager;
 import com.kuuhaku.interfaces.Executable;

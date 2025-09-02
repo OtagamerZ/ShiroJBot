@@ -71,7 +71,7 @@ public abstract class Gacha {
 
 		List<String> out = new ArrayList<>();
 		String fav = acc.getKawaipon().getFavCardId();
-		int extra = acc.getItemCount("extra_draw");
+		int extra = Math.max(0, acc.getItemCount("extra_draw"));
 		boolean lucky = acc.consumeItem("lucky_lodestone");
 		for (int i = 0; i < type.prizes() + extra; i++) {
 			if (lucky) {
