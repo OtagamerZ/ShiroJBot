@@ -201,13 +201,13 @@ public class Shoukan extends GameInstance<Phase> {
 					 || m.getName().startsWith("deb")
 		);
 
-		action.getSecond().put("is_mod", user.getId().equals(getModerator()));
-		execAction(hand, action);
+		if (action != null) {
+			action.getSecond().put("is_mod", user.getId().equals(getModerator()));
+			execAction(hand, action);
+		}
 	}
 
 	private void execAction(Hand hand, Pair<Method, JSONObject> action) {
-		if (action == null) return;
-
 		Method m = action.getFirst();
 		try {
 			if (isLocked() && (!m.getName().startsWith("sel") && !m.getName().startsWith("deb"))) {
