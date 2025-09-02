@@ -125,7 +125,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				WHERE sc.id IS NULL
 				  AND kc.kawaipon.uid = ?1
 				  AND kc.card.anime.id = ?2
-						  AND cd.chrome = ?3
+				  AND cd.chrome = ?3
 				""", uid, a.getId(), chrome));
 	}
 
@@ -267,14 +267,17 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 
 	public List<StashedCard> getRemovable() {
 		return DAO.queryAll(StashedCard.class, """
-				SELECT s
-				FROM StashedCard s
-				LEFT JOIN KawaiponCard kc ON kc.card.id = s.card.id AND kc.kawaipon.uid = ?1
-				WHERE s.kawaipon.uid = ?1
-				  AND kc.id IS NULL
-				  AND s.deck.id IS NULL
-				  AND s.price = 0
-				  AND s.locked = FALSE
+				SELECT x.card
+				FROM (
+				  SELECT s AS card
+						, row_number() OVER (PARTITION BY kc.card.id, cd.chrome ORDER BY kc.id) AS copy
+				  FROM KawaiponCard kc
+				  			INNER JOIN CardDetails cd ON cd.uuid = kc.uuid
+							LEFT JOIN StashedCard s ON s.uuid = kc.uuid
+				  WHERE kc.kawaipon.uid = ?1
+				  ) x
+				WHERE x.copy = 1
+				  AND x.card.id IS NOT NULL
 				""", uid);
 	}
 
