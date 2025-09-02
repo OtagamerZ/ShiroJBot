@@ -42,7 +42,12 @@ import net.dv8tion.jda.api.JDA;
 public class GameTerminateCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		GameInstance<?> game = GameInstance.CHANNELS.get(args.getString("channel"));
+		GameInstance<?> game;
+		if (args.has("user")) {
+			game = GameInstance.PLAYERS.get(args.getString("user"));
+		} else {
+			game = GameInstance.CHANNELS.get(args.getString("channel"));
+		}
 
 		if (game == null) {
 			data.channel().sendMessage(locale.get("error/game_not_found")).queue();
