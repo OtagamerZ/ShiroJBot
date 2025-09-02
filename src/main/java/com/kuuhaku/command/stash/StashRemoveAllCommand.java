@@ -55,7 +55,7 @@ public class StashRemoveAllCommand implements Executable {
 		}
 
 		try {
-			Utils.confirm(locale.get("question/stash_remove_all"), event.channel(), w -> {
+			Utils.confirm(locale.get("question/stash_remove_all", removable.size()), event.channel(), w -> {
 						DAO.deleteBatch(removable);
 						event.channel().sendMessage(locale.get("success/cards_retrieved")).queue();
 						return true;

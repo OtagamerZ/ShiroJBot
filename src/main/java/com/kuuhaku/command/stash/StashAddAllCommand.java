@@ -55,7 +55,7 @@ public class StashAddAllCommand implements Executable {
 		}
 
 		try {
-			Utils.confirm(locale.get("question/stash_add_all"), event.channel(), w -> {
+			Utils.confirm(locale.get("question/stash_add_all", addable.size()), event.channel(), w -> {
 						DAO.insertBatch(addable.stream()
 								.map(c -> new StashedCard(kp, c))
 								.toList()
