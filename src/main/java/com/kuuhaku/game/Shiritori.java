@@ -80,7 +80,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 	@Override
 	protected boolean validate(Message message) {
-		return Utils.equalsAny(message.getAuthor().getId(), inGame.getCurrent(), getModerator());
+		return message.getAuthor().getId().equals(inGame.getCurrent());
 	}
 
 	@Override

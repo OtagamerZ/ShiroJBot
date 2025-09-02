@@ -142,7 +142,6 @@ public class Shoukan extends GameInstance<Phase> {
 	@Override
 	protected boolean validate(Message message) {
 		return isSingleplayer()
-			   || message.getAuthor().getId().equals(getModerator())
 			   || getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), message.getAuthor().getId())
 			   || hands.values().stream().anyMatch(h -> h.getUid().equals(message.getAuthor().getId()) && h.selectionPending());
 	}

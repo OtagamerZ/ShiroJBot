@@ -89,10 +89,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 			protected void onMessageReceived(@NotNull MessageReceivedEvent event) {
 				if (!getChannel().isCooldownOver()) return;
 
-				if (checkChannel(event.getGuildChannel())
-					&& Utils.equalsAny(event.getAuthor().getId(), players)
-					&& validate(event.getMessage())
-				) {
+				if (checkChannel(event.getGuildChannel()) && (
+						event.getAuthor().getId().equals(moderator)
+						|| (Utils.equalsAny(event.getAuthor().getId(), players) && validate(event.getMessage()))
+				)) {
 					try {
 						runtime(event.getAuthor(), event.getMessage().getContentRaw());
 					} catch (InvocationTargetException | IllegalAccessException e) {
