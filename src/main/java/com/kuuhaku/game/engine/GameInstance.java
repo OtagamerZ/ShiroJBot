@@ -238,6 +238,12 @@ public abstract class GameInstance<T extends Enum<T>> {
 	}
 
 	public void setModerator(String moderator) {
+		if (moderator == null) {
+			channel.sendMessage(locale.get("str/game_moderator_leave", "<@" + this.moderator + ">")).queue();
+		} else {
+			channel.sendMessage(locale.get("str/game_moderator_join", "<@" + moderator + ">")).queue();
+		}
+
 		this.moderator = moderator;
 	}
 
