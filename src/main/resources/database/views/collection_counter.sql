@@ -22,7 +22,9 @@ SELECT sc.kawaipon_uid                       AS uid
      , c.anime_id
      , count(1) FILTER (WHERE NOT sc.chrome) AS normal
      , count(1) FILTER (WHERE sc.chrome)     AS chrome
-FROM stashed_card sc
-         INNER JOIN card c ON c.id = sc.card_id
-WHERE sc.in_collection
-GROUP BY sc.kawaipon_uid, c.anime_id;
+FROM anime a
+    INNER JOIN card c ON c.anime_id = a.id
+    INNER JOIN stashed_card sc ON sc.card_id = c.id
+WHERE a.visible
+  AND sc.in_collection
+GROUP BY sc.kawaipon_uid, c.anime_id, c.id, sc.chrome;

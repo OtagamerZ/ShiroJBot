@@ -143,10 +143,18 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 
 	public Pair<Integer, Integer> countCards() {
 		Object[] vals = DAO.queryUnmapped("""
-				SELECT coalesce(sum(normal), 0)
-				     , coalesce(sum(chrome), 0)
-				FROM v_collection_counter
-				WHERE uid = ?1
+				SELECT count(1) FILTER (WHERE NOT x.chrome)
+				     , count(1) FILTER (WHERE x.chrome)
+				FROM (
+				     SELECT sc.chrome
+				     FROM anime a
+				              INNER JOIN card c ON c.anime_id = a.id
+				              INNER JOIN stashed_card sc ON sc.card_id = c.id
+				     WHERE a.visible
+				       AND sc.kawaipon_uid = ?1
+				       AND sc.in_collection
+				     GROUP BY sc.card_id, sc.chrome
+				     ) x
 				""", uid);
 
 		if (vals == null) {
@@ -158,11 +166,19 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 
 	public Pair<Integer, Integer> countCards(Anime anime) {
 		Object[] vals = DAO.queryUnmapped("""
-				SELECT coalesce(normal, 0)
-				     , coalesce(chrome, 0)
-				FROM v_collection_counter
-				WHERE uid = ?1
-				  AND anime_id = ?2
+				SELECT count(1) FILTER (WHERE NOT x.chrome)
+				     , count(1) FILTER (WHERE x.chrome)
+				FROM (
+				     SELECT sc.chrome
+				     FROM anime a
+				              INNER JOIN card c ON c.anime_id = a.id
+				              INNER JOIN stashed_card sc ON sc.card_id = c.id
+				     WHERE a.visible
+				       AND sc.kawaipon_uid = ?1
+				       AND a.id = ?2
+				       AND sc.in_collection
+				     GROUP BY sc.card_id, sc.chrome
+				     ) x
 				""", uid, anime.getId());
 
 		if (vals == null) {
@@ -177,13 +193,15 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				SELECT count(1) FILTER (WHERE NOT x.chrome)
 				     , count(1) FILTER (WHERE x.chrome)
 				FROM (
-				         SELECT sc.chrome
-				         FROM stashed_card sc
-				                  INNER JOIN card c ON c.id = sc.card_id
-				         WHERE sc.kawaipon_uid = ?1
-				           AND c.rarity = ?2
-				           AND sc.in_collection
-				         GROUP BY sc.card_id, sc.chrome
+				     SELECT sc.chrome
+				     FROM anime a
+				              INNER JOIN card c ON c.anime_id = a.id
+				              INNER JOIN stashed_card sc ON sc.card_id = c.id
+				     WHERE a.visible
+				       AND sc.kawaipon_uid = ?1
+				       AND c.rarity = ?2
+				       AND sc.in_collection
+				     GROUP BY sc.card_id, sc.chrome
 				     ) x
 				""", uid, rarity.name());
 
