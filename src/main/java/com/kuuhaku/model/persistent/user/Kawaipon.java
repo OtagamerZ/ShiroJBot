@@ -143,8 +143,8 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 
 	public Pair<Integer, Integer> countCards() {
 		Object[] vals = DAO.queryUnmapped("""
-				SELECT sum(normal)
-				     , sum(chrome)
+				SELECT coalesce(sum(normal), 0)
+				     , coalesce(sum(chrome), 0)
 				FROM v_collection_counter
 				WHERE uid = ?1
 				""", uid);
@@ -158,8 +158,8 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 
 	public Pair<Integer, Integer> countCards(Anime anime) {
 		Object[] vals = DAO.queryUnmapped("""
-				SELECT normal
-				     , chrome
+				SELECT coalesce(normal, 0)
+				     , coalesce(chrome, 0)
 				FROM v_collection_counter
 				WHERE uid = ?1
 				  AND anime_id = ?2
