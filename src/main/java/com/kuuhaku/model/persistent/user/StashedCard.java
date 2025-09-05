@@ -42,6 +42,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -93,6 +95,9 @@ public class StashedCard extends DAO<StashedCard> {
 	@Column(name = "quality", nullable = false)
 	private double quality = rollQuality();
 
+	@Column(name = "last_change", nullable = true)
+	private ZonedDateTime last_change = ZonedDateTime.now(ZoneId.of("GMT-3"));
+
 	public StashedCard() {
 	}
 
@@ -126,26 +131,6 @@ public class StashedCard extends DAO<StashedCard> {
 
 	public String getUUID() {
 		return uuid;
-	}
-
-	public boolean isChrome() {
-		return chrome;
-	}
-
-	public void setChrome(boolean chrome) {
-		this.chrome = chrome;
-	}
-
-	public double getQuality() {
-		return quality;
-	}
-
-	public void setQuality(double quality) {
-		this.quality = quality;
-	}
-
-	public double rollQuality() {
-		return Calc.round(Math.max(0, Math.pow(ThreadLocalRandom.current().nextDouble(), 5) * 40 - 20), 1);
 	}
 
 	public Card getCard() {
@@ -229,6 +214,30 @@ public class StashedCard extends DAO<StashedCard> {
 
 	public void setInCollection(boolean inCollection) {
 		this.inCollection = inCollection;
+	}
+
+	public boolean isChrome() {
+		return chrome;
+	}
+
+	public void setChrome(boolean chrome) {
+		this.chrome = chrome;
+	}
+
+	public double getQuality() {
+		return quality;
+	}
+
+	public void setQuality(double quality) {
+		this.quality = quality;
+	}
+
+	public double rollQuality() {
+		return Calc.round(Math.max(0, Math.pow(ThreadLocalRandom.current().nextDouble(), 5) * 40 - 20), 1);
+	}
+
+	public ZonedDateTime getLast_change() {
+		return last_change;
 	}
 
 	public BufferedImage render() {

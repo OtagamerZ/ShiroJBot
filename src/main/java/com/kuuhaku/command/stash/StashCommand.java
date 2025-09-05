@@ -108,7 +108,7 @@ public class StashCommand implements Executable {
 			query.appendNewLine(filter);
 		}
 
-		query.appendNewLine("ORDER BY c.id DESC");
+		query.appendNewLine("ORDER BY c.lastChange DESC");
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 		ThrowingFunction<Integer, Page> loader = p -> {

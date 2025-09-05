@@ -24,6 +24,10 @@ $$
 DECLARE
     card_id VARCHAR;
 BEGIN
+    IF (NOT NEW.in_collection) THEN
+        RETURN NEW;
+    END IF;
+
     SELECT sc.card_id
     FROM stashed_card sc
     WHERE sc.uuid <> NEW.uuid
@@ -46,5 +50,5 @@ CREATE TRIGGER prevent_duplicate
     BEFORE UPDATE
     ON stashed_card
     FOR EACH ROW
-    WHEN ( OLD.price <> -1 )
+    WHEN ( NEW.price <> -1 )
 EXECUTE PROCEDURE t_prevent_duplicate();
