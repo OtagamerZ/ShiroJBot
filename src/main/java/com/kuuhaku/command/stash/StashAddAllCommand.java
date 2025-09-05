@@ -25,7 +25,6 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
@@ -33,6 +32,7 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
+import java.util.List;
 import java.util.Set;
 
 @Command(
@@ -45,7 +45,7 @@ public class StashAddAllCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Kawaipon kp = DAO.find(Kawaipon.class, event.user().getId());
 
-		Set<KawaiponCard> addable = kp.getCollection();
+		Set<StashedCard> addable = kp.getCollection();
 		if (addable.isEmpty()) {
 			event.channel().sendMessage(locale.get("error/kawaipon_empty")).queue();
 			return;
@@ -56,11 +56,11 @@ public class StashAddAllCommand implements Executable {
 
 		try {
 			Utils.confirm(locale.get("question/stash_add_all", addable.size()), event.channel(), w -> {
-						DAO.insertBatch(addable.stream()
-								.map(c -> new StashedCard(kp, c))
-								.toList()
-						);
+						List<String> uuids = addable.stream()
+								.map(StashedCard::getUUID)
+								.toList();
 
+						DAO.applyNative(StashedCard.class, "UPDATE stashed_card SET in_collection = FALSE WHERE uuid IN ?1", uuids);
 						event.channel().sendMessage(locale.get("success/cards_stored")).queue();
 						return true;
 					}, event.user()

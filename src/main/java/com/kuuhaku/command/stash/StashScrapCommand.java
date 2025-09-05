@@ -148,21 +148,17 @@ public class StashScrapCommand implements Executable {
 							}
 
 							if (sc.getType() == CardType.KAWAIPON) {
-								KawaiponCard kc = sc.getKawaiponCard();
-								if (kc != null) {
-									batchKC.add(kc.getUUID());
+								batchKC.add(sc.getUUID());
 
-									Rarity rarity = kc.getCard().getRarity();
-									if (Calc.chance(Math.pow(2.15, 7 - rarity.getIndex()))) {
-										items.add(rarity.name() + "_SHARD", 1);
-									}
-									continue;
+								Rarity rarity = sc.getCard().getRarity();
+								if (Calc.chance(Math.pow(2.15, 7 - rarity.getIndex()))) {
+									items.add(rarity.name() + "_SHARD", 1);
 								}
+								continue;
 							}
 
 							batchSC.add(sc.getUUID());
 						}
-						DAO.applyNative(null, "DELETE FROM kawaipon_card WHERE uuid IN ?1", batchKC);
 						DAO.applyNative(null, "DELETE FROM stashed_card WHERE uuid IN ?1", batchSC);
 
 						if (!items.isEmpty()) {
@@ -207,10 +203,7 @@ public class StashScrapCommand implements Executable {
 		for (StashedCard sc : cards) {
 			double mult = Calc.rng(0.5, 0.8, sc.getId());
 			if (sc.getType() == CardType.KAWAIPON) {
-				KawaiponCard kc = sc.getKawaiponCard();
-				if (kc != null) {
-					value += (int) (kc.getSuggestedPrice() / 3.0 * mult);
-				}
+				value += (int) (sc.getSuggestedPrice() / 3.0 * mult);
 			} else {
 				if (sc.getType() == CardType.EVOGEAR) {
 					Evogear e = sc.getCard().asEvogear();

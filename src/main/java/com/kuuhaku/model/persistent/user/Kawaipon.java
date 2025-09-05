@@ -74,10 +74,6 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 		return DAO.find(Account.class, uid);
 	}
 
-	public List<KawaiponCard> getCards() {
-		return DAO.queryAll(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.kawaipon.uid = ?1", uid);
-	}
-
 	public List<StashedCard> getStash() {
 		return DAO.queryAll(StashedCard.class, "SELECT sc FROM StashedCard sc WHERE sc.kawaipon.uid = ?1", uid);
 	}
@@ -106,43 +102,38 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 		return getMaxCapacity() - getStashUsage();
 	}
 
-	public Set<KawaiponCard> getCollection() {
-		return Set.copyOf(DAO.queryAll(KawaiponCard.class, """
-				SELECT kc
-				FROM KawaiponCard kc
-				LEFT JOIN StashedCard sc ON kc.uuid = sc.uuid
-				WHERE sc.id IS NULL
-				  AND kc.kawaipon.uid = ?1
+	public Set<StashedCard> getCollection() {
+		return Set.copyOf(DAO.queryAll(StashedCard.class, """
+				SELECT sc
+				FROM StashedCard sc
+				WHERE sc.inCollection
+				  AND sc.kawaipon.uid = ?1
 				""", uid));
 	}
 
-	public Set<KawaiponCard> getCollection(Anime a, boolean chrome) {
-		return Set.copyOf(DAO.queryAll(KawaiponCard.class, """
-				SELECT kc
-				FROM KawaiponCard kc
-				INNER JOIN CardDetails cd ON cd.uuid = kc.uuid
-				LEFT JOIN StashedCard sc ON kc.uuid = sc.uuid
-				WHERE sc.id IS NULL
-				  AND kc.kawaipon.uid = ?1
-				  AND kc.card.anime.id = ?2
-				  AND cd.chrome = ?3
+	public Set<StashedCard> getCollection(Anime a, boolean chrome) {
+		return Set.copyOf(DAO.queryAll(StashedCard.class, """
+				SELECT sc
+				FROM StashedCard sc
+				WHERE sc.inCollection
+				  AND sc.kawaipon.uid = ?1
+				  AND sc.card.anime.id = ?2
+				  AND sc.chrome = ?3
 				""", uid, a.getId(), chrome));
 	}
 
-	public KawaiponCard getCard(Card card, boolean chrome) {
-		return DAO.query(KawaiponCard.class, """
-				SELECT kc
-				FROM KawaiponCard kc
-				INNER JOIN CardDetails cd ON cd.uuid = kc.uuid
-				LEFT JOIN StashedCard sc ON kc.uuid = sc.uuid
-				WHERE sc.id IS NULL
-				  AND kc.kawaipon.uid = ?1
-				  AND kc.card = ?2
-				  AND cd.chrome = ?3
+	public StashedCard getCard(Card card, boolean chrome) {
+		return DAO.query(StashedCard.class, """
+				SELECT sc
+				FROM StashedCard sc
+				WHERE sc.inCollection
+				  AND sc.kawaipon.uid = ?1
+				  AND sc.card = ?2
+				  AND sc.chrome = ?3
 				""", uid, card, chrome);
 	}
 
-	public boolean hasCard(KawaiponCard card) {
+	public boolean hasCard(StashedCard card) {
 		return getCard(card.getCard(), card.isChrome()) != null;
 	}
 
@@ -152,17 +143,10 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 
 	public Pair<Integer, Integer> countCards() {
 		Object[] vals = DAO.queryUnmapped("""
-				SELECT count(1) FILTER (WHERE NOT x.chrome)
-				     , count(1) FILTER (WHERE x.chrome)
-				FROM (
-				         SELECT cd.chrome
-				         FROM kawaipon_card kc
-				                  INNER JOIN card_details cd ON cd.card_uuid = kc.uuid
-				                  LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
-				         WHERE kc.kawaipon_uid = ?1
-				           AND sc.id IS NULL
-				         GROUP BY kc.card_id, cd.chrome
-				     ) x
+				SELECT sum(normal)
+				     , sum(chrome)
+				FROM v_collection_counter
+				WHERE uid = ?1
 				""", uid);
 
 		if (vals == null) {
@@ -174,19 +158,11 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 
 	public Pair<Integer, Integer> countCards(Anime anime) {
 		Object[] vals = DAO.queryUnmapped("""
-				SELECT count(1) FILTER (WHERE NOT x.chrome)
-				     , count(1) FILTER (WHERE x.chrome)
-								FROM (
-				         SELECT cd.chrome
-				         FROM kawaipon_card kc
-				                  INNER JOIN card c ON c.id = kc.card_id
-				         		  INNER JOIN card_details cd ON cd.card_uuid = kc.uuid
-				                  LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
-				         WHERE kc.kawaipon_uid = ?1
-				           AND c.anime_id = ?2
-				           AND sc.id IS NULL
-				         GROUP BY kc.card_id, cd.chrome
-				     ) x
+				SELECT normal
+				     , chrome
+				FROM v_collection_counter
+				WHERE uid = ?1
+				  AND anime_id = ?2
 				""", uid, anime.getId());
 
 		if (vals == null) {
@@ -200,16 +176,14 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 		Object[] vals = DAO.queryUnmapped("""
 				SELECT count(1) FILTER (WHERE NOT x.chrome)
 				     , count(1) FILTER (WHERE x.chrome)
-								FROM (
-				         SELECT cd.chrome
-				         FROM kawaipon_card kc
-				                  INNER JOIN card c ON c.id = kc.card_id
-				         		  INNER JOIN card_details cd ON cd.card_uuid = kc.uuid
-				                  LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
-				         WHERE kc.kawaipon_uid = ?1
+				FROM (
+				         SELECT sc.chrome
+				         FROM stashed_card sc
+				                  INNER JOIN card c ON c.id = sc.card_id
+				         WHERE sc.kawaipon_uid = ?1
 				           AND c.rarity = ?2
-				           AND sc.id IS NULL
-				         GROUP BY kc.card_id, cd.chrome
+				           AND sc.in_collection
+				         GROUP BY sc.card_id, sc.chrome
 				     ) x
 				""", uid, rarity.name());
 
@@ -239,14 +213,13 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				SELECT x.id
 				FROM (
 				         SELECT sc.id
-				              , row_number() OVER (PARTITION BY sc.card_id ORDER BY cd.quality DESC) AS copy
+				              , row_number() OVER (PARTITION BY sc.card_id ORDER BY sc.quality DESC) AS copy
 				         FROM stashed_card sc
-				         		  INNER JOIN card_details cd ON cd.card_uuid = sc.uuid
-				                  LEFT JOIN kawaipon_card kc ON kc.uuid = sc.uuid
 				         WHERE sc.kawaipon_uid = ?1
 				           AND sc.deck_id IS NULL
 				           AND sc.price = 0
 				           AND NOT sc.locked
+				           AND NOT sc.in_collection
 				     ) x
 				WHERE x.copy > 3
 				""", uid);
@@ -269,12 +242,10 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 		List<String> cards = DAO.queryAllNative(String.class, """
 				SELECT x.uuid
 				FROM (
-					 SELECT kc.uuid
-						  , row_number() OVER (PARTITION BY kc.card_id, cd.chrome ORDER BY kc.id) AS copy
-					 FROM kawaipon_card kc
-							  INNER JOIN card_details cd ON cd.card_uuid = kc.uuid
-							  LEFT JOIN stashed_card s ON s.uuid = kc.uuid
-					 WHERE kc.kawaipon_uid = ?1
+					 SELECT sc.uuid
+						  , row_number() OVER (PARTITION BY sc.card_id, sc.chrome ORDER BY sc.id) AS copy
+					 FROM stashed_card sc
+					 WHERE sc.kawaipon_uid = ?1
 					 ) x
 				WHERE x.copy = 1
 				""", uid);

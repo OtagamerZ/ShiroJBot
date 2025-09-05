@@ -18,23 +18,33 @@
 
 package com.kuuhaku.model.persistent.user;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.CardType;
+import com.kuuhaku.model.enums.Quality;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
+import okio.Buffer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Entity
 @Table(name = "stashed_card", schema = "kawaipon")
@@ -74,23 +84,32 @@ public class StashedCard extends DAO<StashedCard> {
 	@Column(name = "account_bound", nullable = false)
 	private boolean accountBound = false;
 
-	private transient CardDetails details;
+	@Column(name = "in_collection", nullable = false)
+	private boolean inCollection = false;
+
+	@Column(name = "chrome", nullable = false)
+	private boolean chrome;
+
+	@Column(name = "quality", nullable = false)
+	private double quality = rollQuality();
 
 	public StashedCard() {
 	}
 
-	public StashedCard(Kawaipon kawaipon, KawaiponCard card) {
-		this.uuid = card.getUUID();
-		this.card = card.getCard();
+	public StashedCard(Card card, boolean chrome) {
+		this(null, card, chrome);
+	}
+
+	public StashedCard(Kawaipon kawaipon, Card card, boolean chrome) {
+		this.card = card;
+		this.chrome = chrome;
 		this.type = CardType.KAWAIPON;
 		this.kawaipon = kawaipon;
-		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(uuid, false));
 	}
 
 	public StashedCard(Kawaipon kawaipon, Drawable<?> card) {
 		this.card = card.getCard();
 		this.kawaipon = kawaipon;
-		this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(uuid, false));
 
 		if (card instanceof Senshi) {
 			this.type = CardType.KAWAIPON;
@@ -109,36 +128,32 @@ public class StashedCard extends DAO<StashedCard> {
 		return uuid;
 	}
 
-	public CardDetails getDetails() {
-		if (details == null) {
-			this.details = Utils.getOr(DAO.find(CardDetails.class, uuid), new CardDetails(uuid, false));
-		}
-
-		return details;
-	}
-
 	public boolean isChrome() {
-		return getDetails().isChrome();
+		return chrome;
 	}
 
 	public void setChrome(boolean chrome) {
-		this.getDetails().setChrome(chrome);
+		this.chrome = chrome;
 	}
 
 	public double getQuality() {
-		return getDetails().getQuality();
+		return quality;
 	}
 
 	public void setQuality(double quality) {
-		this.getDetails().setQuality(quality);
+		this.quality = quality;
+	}
+
+	public double rollQuality() {
+		return Calc.round(Math.max(0, Math.pow(ThreadLocalRandom.current().nextDouble(), 5) * 40 - 20), 1);
 	}
 
 	public Card getCard() {
 		return card;
 	}
 
-	public KawaiponCard getKawaiponCard() {
-		return DAO.query(KawaiponCard.class, "SELECT kc FROM KawaiponCard kc WHERE kc.uuid = ?1", uuid);
+	public String getName() {
+		return (isChrome() ? "« %s »" : "%s").formatted(card.getName());
 	}
 
 	public CardType getType() {
@@ -180,6 +195,14 @@ public class StashedCard extends DAO<StashedCard> {
 		this.price = price;
 	}
 
+	public int getCollectPrice() {
+		return Math.max(0, card.getRarity().getIndex() * 200);
+	}
+
+	public int getSuggestedPrice() {
+		return (int) (Math.max(1, card.getRarity().getIndex() * 500) * Math.pow(1.0025, Math.pow(getQuality(), 2)));
+	}
+
 	public boolean isLocked() {
 		return locked;
 	}
@@ -200,6 +223,42 @@ public class StashedCard extends DAO<StashedCard> {
 		return accountBound;
 	}
 
+	public boolean isInCollection() {
+		return inCollection;
+	}
+
+	public void setInCollection(boolean inCollection) {
+		this.inCollection = inCollection;
+	}
+
+	public BufferedImage render() {
+		BufferedImage bi = card.drawCard(isChrome());
+		Quality q = Quality.get(getQuality());
+
+		if (q.ordinal() > 0) {
+			try {
+				try (Buffer buf = new Buffer(); InputStream is = buf.inputStream()) {
+					buf.write(q.getOverlayBytes());
+					BufferedImage img = ImageIO.read(is);
+
+					Graphics2D g2d = bi.createGraphics();
+					g2d.setRenderingHints(Constants.HD_HINTS);
+
+					if (isChrome()) {
+						card.chrome(img, true);
+					}
+
+					g2d.drawImage(img, 0, 0, null);
+					g2d.dispose();
+				}
+			} catch (IOException e) {
+				throw new RuntimeException("Error when generating card", e);
+			}
+		}
+
+		return bi;
+	}
+
 	@Override
 	public void afterSave() {
 		if (price > 0) {
@@ -209,15 +268,11 @@ public class StashedCard extends DAO<StashedCard> {
 				m.buy(mo, id);
 			}
 		}
-
-		if (details != null) {
-			details.save();
-		}
 	}
 
 	@Override
 	public String toString() {
-		return Utils.getOr(getKawaiponCard(), (Object) card).toString();
+		return getName();
 	}
 
 	@Override
@@ -225,11 +280,11 @@ public class StashedCard extends DAO<StashedCard> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		StashedCard that = (StashedCard) o;
-		return id == that.id && Objects.equals(card, that.card) && type == that.type;
+		return chrome == that.chrome && Objects.equals(card, that.card) && !inCollection;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, card, type);
+		return Objects.hash(chrome, card);
 	}
 }

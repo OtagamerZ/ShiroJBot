@@ -86,10 +86,9 @@ public abstract class Drop {
 							SELECT round(geo_mean(x.count))
 							FROM (
 							     SELECT count(1) AS count
-							     FROM kawaipon_card kc
-							              LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
-							     WHERE sc.id IS NULL
-							     GROUP BY kc.kawaipon_uid
+							     FROM stashed_card
+							     WHERE in_collection
+							     GROUP BY kawaipon_uid
 							     ) AS x
 							WHERE x.count > 0
 							""");

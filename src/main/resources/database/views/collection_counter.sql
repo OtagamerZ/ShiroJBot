@@ -18,13 +18,11 @@
 
 -- DROP VIEW IF EXISTS kawaipon.v_collection_counter;
 CREATE OR REPLACE VIEW kawaipon.v_collection_counter AS
-SELECT kc.kawaipon_uid                       AS uid
+SELECT sc.kawaipon_uid                       AS uid
      , c.anime_id
-     , count(1) FILTER (WHERE NOT cd.chrome) AS normal
-     , count(1) FILTER (WHERE cd.chrome)     AS chrome
-FROM kawaipon_card kc
-         INNER JOIN card_details cd ON cd.card_uuid = kc.uuid
-         INNER JOIN card c ON c.id = kc.card_id
-         LEFT JOIN stashed_card sc ON kc.uuid = sc.uuid
-WHERE sc.id IS NULL
-GROUP BY kc.kawaipon_uid, c.anime_id;
+     , count(1) FILTER (WHERE NOT sc.chrome) AS normal
+     , count(1) FILTER (WHERE sc.chrome)     AS chrome
+FROM stashed_card sc
+         INNER JOIN card c ON c.id = sc.card_id
+WHERE sc.in_collection
+GROUP BY sc.kawaipon_uid, c.anime_id;

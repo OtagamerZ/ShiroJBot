@@ -458,17 +458,17 @@ public class GuildListener extends ListenerAdapter {
 			GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 			if (!chosen.canTalk()) return;
 
-			KawaiponCard kc = Spawn.getKawaipon(locale, gb, chosen, u);
-			if (kc != null) {
+			StashedCard sc = Spawn.getKawaipon(locale, gb, chosen, u);
+			if (sc != null) {
 				EmbedBuilder eb = new EmbedBuilder()
-						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + kc.getCard().getRarity())))
-						.setTitle(kc + " (" + kc.getCard().getAnime() + ")")
-						.setColor(kc.getCard().getRarity().getColor(kc.isChrome()))
+						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + sc.getCard().getRarity())))
+						.setTitle(sc + " (" + sc.getCard().getAnime() + ")")
+						.setColor(sc.getCard().getRarity().getColor(sc.isChrome()))
 						.setImage("attachment://card.png")
-						.setFooter(locale.get("str/card_instructions", config.getPrefix(), kc.getPrice()));
+						.setFooter(locale.get("str/card_instructions", config.getPrefix(), sc.getCollectPrice()));
 
 				chosen.sendMessageEmbeds(eb.build())
-						.addFiles(FileUpload.fromData(IO.getBytes(kc.render(), "png"), "card.png"))
+						.addFiles(FileUpload.fromData(IO.getBytes(sc.render(), "png"), "card.png"))
 						.delay((long) (60 / Spawn.getQuantityMult()), TimeUnit.SECONDS)
 						.flatMap(Message::delete)
 						.queue(null, Utils::doNothing);

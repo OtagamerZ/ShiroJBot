@@ -60,7 +60,7 @@ public class StashRemoveAllCommand implements Executable {
 								.map(StashedCard::getUUID)
 								.toList();
 
-						DAO.applyNative(StashedCard.class, "DELETE FROM stashed_card WHERE uuid IN ?1", uuids);
+						DAO.applyNative(StashedCard.class, "UPDATE stashed_card SET in_collection = TRUE WHERE uuid IN ?1", uuids);
 						event.channel().sendMessage(locale.get("success/cards_retrieved")).queue();
 						return true;
 					}, event.user()

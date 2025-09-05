@@ -47,8 +47,6 @@
         <class>com.kuuhaku.model.persistent.user.DynamicProperty</class>
         <class>com.kuuhaku.model.persistent.user.UserItem</class>
         <class>com.kuuhaku.model.persistent.user.Kawaipon</class>
-        <class>com.kuuhaku.model.persistent.user.KawaiponCard</class>
-        <class>com.kuuhaku.model.persistent.user.CardDetails</class>
         <class>com.kuuhaku.model.persistent.user.Profile</class>
         <class>com.kuuhaku.model.persistent.user.ProfileSettings</class>
         <class>com.kuuhaku.model.persistent.user.Transaction</class>

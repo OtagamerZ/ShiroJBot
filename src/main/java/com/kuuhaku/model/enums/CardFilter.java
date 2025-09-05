@@ -28,7 +28,7 @@ public enum CardFilter {
 	RARITY("r", "AND cast(c.card.rarity AS STRING) LIKE '%%'||?%s||'%%'"),
 	TIER("t", "AND e.tier = ?%s"),
 	ANIME("a", "AND c.card.anime.id LIKE '%%'||?%s||'%%'"),
-	CHROME("c", "AND cd.chrome = TRUE"),
+	CHROME("c", "AND c.chrome = TRUE"),
 	KAWAIPON("k", "AND c.type = 'KAWAIPON'"),
 	SENSHI("s", "AND s.id IS NOT NULL"),
 	EVOGEAR("e", "AND e.id IS NOT NULL"),
@@ -46,8 +46,6 @@ public enum CardFilter {
 	@Language("JPAQL")
 	public static final String BASE_QUERY = """
 			SELECT c FROM StashedCard c
-			INNER JOIN CardDetails cd ON cd.uuid = c.uuid
-			LEFT JOIN KawaiponCard kc ON kc.uuid = c.uuid
 			LEFT JOIN Senshi s ON s.card = c.card
 			LEFT JOIN Evogear e ON e.card = c.card
 			LEFT JOIN Field f ON f.card = c.card

@@ -40,7 +40,7 @@ import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.*;
@@ -102,19 +102,19 @@ public class SeeCardCommand implements Executable {
 				}
 
 				boolean chrome = type.equals("c");
-				KawaiponCard kc = kp.getCard(card, chrome);
-				if (kc == null) {
+				StashedCard sc = kp.getCard(card, chrome);
+				if (sc == null) {
 					bi = card.drawCard(false);
 					ImageFilters.silhouette(bi);
 					Graph.overlay(bi, IO.getResourceAsImage("kawaipon/missing.png"));
 				} else {
-					bi = kc.render();
+					bi = sc.render();
 				}
 
-				if (kc != null) {
+				if (sc != null) {
 					XStringBuilder sb = new XStringBuilder();
-					sb.appendNewLine(locale.get("str/quality", Utils.roundToString(kc.getQuality(), 1)));
-					sb.appendNewLine(locale.get("str/suggested_price", kc.getSuggestedPrice()));
+					sb.appendNewLine(locale.get("str/quality", Utils.roundToString(sc.getQuality(), 1)));
+					sb.appendNewLine(locale.get("str/suggested_price", sc.getSuggestedPrice()));
 
 					eb.addField(locale.get("str/information"), sb.toString(), true);
 				}

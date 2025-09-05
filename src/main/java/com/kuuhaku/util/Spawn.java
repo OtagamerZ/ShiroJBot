@@ -27,7 +27,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.GuildBuff;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.User;
@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public abstract class Spawn {
-	private static final ExpiringMap<String, SingleUseReference<KawaiponCard>> spawnedCards = ExpiringMap.builder()
+	private static final ExpiringMap<String, SingleUseReference<StashedCard>> spawnedCards = ExpiringMap.builder()
 			.variableExpiration()
 			.build();
 	private static final ExpiringMap<String, SingleUseReference<Drop>> spawnedDrops = ExpiringMap.builder()
@@ -53,13 +53,13 @@ public abstract class Spawn {
 	private static final FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(3);
 	private static final FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(15);
 
-	public synchronized static KawaiponCard getKawaipon(I18N locale, GuildBuff gb, GuildMessageChannel channel, User u) {
+	public synchronized static StashedCard getKawaipon(I18N locale, GuildBuff gb, GuildMessageChannel channel, User u) {
 		if (u == null || spawnedCards.containsKey(channel.getId())) return null;
 
 		double dropRate = 8 * (1.2 * Math.pow(Math.E, -0.001 * Math.min(channel.getGuild().getMemberCount(), 1000))) * (1 + gb.card()) * getQuantityMult();
 		double rarityBonus = 1 * (1 + gb.rarity()) * getRarityMult();
 
-		KawaiponCard card = null;
+		StashedCard card = null;
 		if (Calc.chance(dropRate)) {
 			RandomList<Rarity> rarities = new RandomList<>(rarityBonus);
 			for (Rarity r : Rarity.getActualRarities()) {
@@ -99,7 +99,7 @@ public abstract class Spawn {
 			if (chosen == null) return null;
 
 			lastCards.add(chosen);
-			card = new KawaiponCard(chosen, Calc.chance(0.1 * rarityBonus));
+			card = new StashedCard(chosen, Calc.chance(0.1 * rarityBonus));
 			spawnedCards.put(
 					channel.getId(),
 					new SingleUseReference<>(card),
@@ -144,7 +144,7 @@ public abstract class Spawn {
 		return drop;
 	}
 
-	public static SingleUseReference<KawaiponCard> getSpawnedCard(GuildMessageChannel channel) {
+	public static SingleUseReference<StashedCard> getSpawnedCard(GuildMessageChannel channel) {
 		return spawnedCards.getOrDefault(channel.getId(), new SingleUseReference<>(null));
 	}
 

@@ -98,8 +98,7 @@ public class SynthesizeFastCommand implements Executable {
 		int field = (int) Math.round(
 				cards.stream()
 						.mapToDouble(sc -> {
-							KawaiponCard kc = sc.getKawaiponCard();
-							if (sc.getType() == CardType.FIELD || (kc != null && kc.isChrome())) {
+							if (sc.getType() == CardType.FIELD || sc.isChrome()) {
 								return 100 / 5d;
 							}
 
@@ -120,18 +119,14 @@ public class SynthesizeFastCommand implements Executable {
 			}
 
 			if (sc.getType() == CardType.KAWAIPON) {
-				KawaiponCard kc = sc.getKawaiponCard();
-				if (kc != null) {
-					rarities.add(kc.getCard().getRarity());
-					totalQ += sc.getQuality();
-					delKc.add(kc.getId());
-				}
+				rarities.add(sc.getCard().getRarity());
+				totalQ += sc.getQuality();
+				delKc.add(sc.getId());
 			}
 
 			delSc.add(sc.getId());
 		}
 
-		DAO.applyNative(KawaiponCard.class, "DELETE FROM kawaipon_card WHERE id IN ?1", delKc);
 		DAO.applyNative(StashedCard.class, "DELETE FROM stashed_card WHERE id IN ?1", delSc);
 
 		if (rarities.size() >= 5) {
@@ -144,7 +139,7 @@ public class SynthesizeFastCommand implements Executable {
 		}
 
 		if (Calc.chance(field)) {
-			Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
+			Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effectOnly = FALSE"));
 			StashedCard sc = new StashedCard(kp, f);
 			if (Calc.chance(0.05 * chromas)) {
 				sc.setChrome(true);

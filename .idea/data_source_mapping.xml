@@ -2,7 +2,15 @@
 <project version="4">
   <component name="DataSourcePerFileMappings">
     <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/ef932869-5e04-4cae-90a4-37704a9c4e71/console.sql" value="ef932869-5e04-4cae-90a4-37704a9c4e71" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/kuuhaku/command/misc/SynthesizeCommand.java" value="ef932869-5e04-4cae-90a4-37704a9c4e71" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/kuuhaku/command/misc/SynthesizeFastCommand.java" value="ef932869-5e04-4cae-90a4-37704a9c4e71" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/kuuhaku/command/stash/StashAddAllCommand.java" value="ef932869-5e04-4cae-90a4-37704a9c4e71" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/kuuhaku/command/stash/StashRemoveAllCommand.java" value="ef932869-5e04-4cae-90a4-37704a9c4e71" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/kuuhaku/model/common/drop/Drop.java" value="ef932869-5e04-4cae-90a4-37704a9c4e71" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/dunhun/Affix.java" value="ef932869-5e04-4cae-90a4-37704a9c4e71" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/kuuhaku/model/persistent/user/Kawaipon.java" value="ef932869-5e04-4cae-90a4-37704a9c4e71" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/scripts/fix_card_duplicates.sql" value="ef932869-5e04-4cae-90a4-37704a9c4e71" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/prevent_duplicate.sql" value="ef932869-5e04-4cae-90a4-37704a9c4e71" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/views/collection_counter.sql" value="ef932869-5e04-4cae-90a4-37704a9c4e71" />
   </component>
 </project>

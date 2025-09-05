@@ -149,8 +149,7 @@ public class SynthesizeCommand implements Executable {
 			int field = (int) Math.round(
 					cards.stream()
 							.mapToDouble(sc -> {
-								KawaiponCard kc = sc.getKawaiponCard();
-								if (sc.getType() == CardType.FIELD || (kc != null && kc.isChrome())) {
+								if (sc.getType() == CardType.FIELD || sc.isChrome()) {
 									return 100 / 5d;
 								}
 
@@ -202,7 +201,6 @@ public class SynthesizeCommand implements Executable {
 
 							double totalQ = 1;
 							int chromas = 0;
-							Set<Integer> delKc = new HashSet<>();
 							Set<Integer> delSc = new HashSet<>();
 							Set<Rarity> rarities = EnumSet.noneOf(Rarity.class);
 							for (StashedCard sc : cards) {
@@ -211,18 +209,13 @@ public class SynthesizeCommand implements Executable {
 								}
 
 								if (sc.getType() == CardType.KAWAIPON) {
-									KawaiponCard kc = sc.getKawaiponCard();
-									if (kc != null) {
-										rarities.add(kc.getCard().getRarity());
-										totalQ += sc.getQuality();
-										delKc.add(kc.getId());
-									}
+									rarities.add(sc.getCard().getRarity());
+									totalQ += sc.getQuality();
 								}
 
 								delSc.add(sc.getId());
 							}
 
-							DAO.applyNative(KawaiponCard.class, "DELETE FROM kawaipon_card WHERE id IN ?1", delKc);
 							DAO.applyNative(StashedCard.class, "DELETE FROM stashed_card WHERE id IN ?1", delSc);
 
 							if (rarities.size() >= 5) {
@@ -239,7 +232,7 @@ public class SynthesizeCommand implements Executable {
 							}
 
 							if (Calc.chance(field)) {
-								Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effect = FALSE"));
+								Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effectOnly = FALSE"));
 								StashedCard sc = new StashedCard(k, f);
 								if (Calc.chance(0.05 * chromas)) {
 									sc.setChrome(true);
@@ -291,14 +284,14 @@ public class SynthesizeCommand implements Executable {
 	private static void synthCollection(I18N locale, MessageChannel channel, Account acc, User u, Anime anime) {
 		try {
 			Kawaipon kp = acc.getKawaipon();
-			Set<KawaiponCard> collection = kp.getCollection(anime, false);
+			Set<StashedCard> collection = kp.getCollection(anime, false);
 
 			Utils.confirm(locale.get("question/synth_collection", anime.toString(), collection.size()), channel, w -> {
 						UserItem item = DAO.find(UserItem.class, "MASTERY_TOKEN");
 						acc.addItem(item, collection.size());
 
-						for (KawaiponCard kc : collection) {
-							kc.delete();
+						for (StashedCard sc : collection) {
+							sc.delete();
 						}
 
 						channel.sendMessage(locale.get("str/received_item", collection.size(), item.getName(locale))).queue();
@@ -341,10 +334,7 @@ public class SynthesizeCommand implements Executable {
 
 		for (StashedCard sc : cards) {
 			double value = switch (sc.getType()) {
-				case KAWAIPON, SENSHI -> {
-					KawaiponCard kc = sc.getKawaiponCard();
-					yield sc.getCard().getRarity().getIndex();
-				}
+				case KAWAIPON, SENSHI -> sc.getCard().getRarity().getIndex();
 				case EVOGEAR -> {
 					Evogear ev = sc.getCard().asEvogear();
 					yield ev.getTier() * 2;

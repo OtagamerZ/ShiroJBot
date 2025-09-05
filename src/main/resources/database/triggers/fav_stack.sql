@@ -44,13 +44,6 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS fav_stack ON kawaipon_card;
-CREATE TRIGGER fav_stack
-    BEFORE INSERT
-    ON kawaipon_card
-    FOR EACH ROW
-EXECUTE PROCEDURE t_fav_stack();
-
 DROP TRIGGER IF EXISTS fav_stack ON stashed_card;
 CREATE TRIGGER fav_stack
     BEFORE INSERT

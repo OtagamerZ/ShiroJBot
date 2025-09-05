@@ -20,23 +20,26 @@ CREATE OR REPLACE PROCEDURE fix_card_duplicates()
     LANGUAGE sql
 AS
 $$
-INSERT INTO stashed_card (type, card_id, deck_id, kawaipon_uid, price, uuid, locked, account_bound)
-SELECT 'KAWAIPON',
-       x.card_id,
-       null,
-       x.kawaipon_uid,
-       0,
-       x.uuid,
-       false,
-       false
-FROM (
-         SELECT kc.kawaipon_uid
-              , kc.card_id
-              , kc.uuid
-              , row_number() over (PARTITION BY kc.kawaipon_uid, kc.card_id) AS row
-         FROM kawaipon_card kc
-                  LEFT JOIN stashed_card sc ON sc.uuid = kc.uuid
-         WHERE sc.id IS NULL
-     ) x
-WHERE x.row > 1
+UPDATE stashed_card sc
+    SET in_collection = FALSE
+    FROM (
+         SELECT 'KAWAIPON',
+             x.card_id,
+             null,
+             x.kawaipon_uid,
+             0,
+             x.uuid,
+             false,
+             false
+         FROM (
+              SELECT sc.kawaipon_uid
+                   , sc.card_id
+                   , sc.uuid
+                   , row_number() over (PARTITION BY sc.kawaipon_uid, sc.card_id) AS row
+              FROM stashed_card sc
+              WHERE sc.in_collection
+              ) x
+         WHERE x.row > 1
+         ) x
+    WHERE x.uuid = sc.uuid;
 $$;

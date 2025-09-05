@@ -26,7 +26,7 @@ import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.KawaiponCard;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Spawn;
@@ -43,7 +43,7 @@ public class CollectCommand implements Executable {
 		Account acc = data.profile().getAccount();
 		Kawaipon kp = acc.getKawaipon();
 
-		SingleUseReference<KawaiponCard> card = Spawn.getSpawnedCard(event.channel());
+		SingleUseReference<StashedCard> card = Spawn.getSpawnedCard(event.channel());
 		try {
 			if (!card.isValid()) {
 				event.channel().sendMessage(locale.get("error/no_card")).queue();
@@ -56,16 +56,16 @@ public class CollectCommand implements Executable {
 				return;
 			}
 
-			KawaiponCard kc = card.get();
-			kc.setKawaipon(kp);
+			StashedCard sc = card.get();
+			sc.setKawaipon(kp);
 			if (acc.consumeItem("special_spice")) {
-				kc.setChrome(true);
+				sc.setChrome(true);
 			}
-			kc.save();
+			sc.save();
 
-			acc.consumeCR(kc.getPrice(), "Collected " + kc);
+			acc.consumeCR(sc.getPrice(), "Collected " + sc);
 			acc.setDynValue("collected", Integer.parseInt(acc.getDynValue("collected", "0")) + 1);
-			event.channel().sendMessage(locale.get("success/collected", event.user().getAsMention(), kc)).queue();
+			event.channel().sendMessage(locale.get("success/collected", event.user().getAsMention(), sc)).queue();
 		} catch (NullPointerException e) {
 			event.channel().sendMessage(locale.get("error/no_card")).queue();
 		}
