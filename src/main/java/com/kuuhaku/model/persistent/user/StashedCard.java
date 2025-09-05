@@ -95,7 +95,7 @@ public class StashedCard extends DAO<StashedCard> {
 	@Column(name = "quality", nullable = false)
 	private double quality = rollQuality();
 
-	@Column(name = "last_change", nullable = true)
+	@Column(name = "last_change", nullable = false)
 	private ZonedDateTime last_change = ZonedDateTime.now(ZoneId.of("GMT-3"));
 
 	public StashedCard() {
