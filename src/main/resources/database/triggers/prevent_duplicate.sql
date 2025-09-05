@@ -37,7 +37,7 @@ BEGIN
         RAISE EXCEPTION 'Attempt to insert duplicate card: %', OLD.uuid;
     END IF;
 
-    RETURN OLD;
+    RETURN NEW;
 END;
 $$;
 
