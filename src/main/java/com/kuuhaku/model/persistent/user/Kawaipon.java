@@ -153,6 +153,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				     WHERE a.visible
 				       AND sc.kawaipon_uid = ?1
 				       AND sc.in_collection
+				       AND get_rarity_index(c.rarity) BETWEEN 1 AND 5
 				     GROUP BY sc.card_id, sc.chrome
 				     ) x
 				""", uid);
@@ -177,6 +178,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				       AND sc.kawaipon_uid = ?1
 				       AND a.id = ?2
 				       AND sc.in_collection
+				       AND get_rarity_index(c.rarity) BETWEEN 1 AND 5
 				     GROUP BY sc.card_id, sc.chrome
 				     ) x
 				""", uid, anime.getId());
@@ -201,6 +203,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				       AND sc.kawaipon_uid = ?1
 				       AND c.rarity = ?2
 				       AND sc.in_collection
+				       AND get_rarity_index(c.rarity) BETWEEN 1 AND 5
 				     GROUP BY sc.card_id, sc.chrome
 				     ) x
 				""", uid, rarity.name());
