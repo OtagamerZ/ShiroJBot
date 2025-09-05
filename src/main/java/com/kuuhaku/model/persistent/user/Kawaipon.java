@@ -256,7 +256,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				  AND s.deck.id IS NULL
 				  AND s.price = 0
 				  AND s.locked = FALSE
-				  AND s.inCollection = TRUE
+				  AND s.inCollection = FALSE
 				""", uid);
 	}
 
@@ -284,7 +284,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				  AND s.price = 0
 				  AND s.locked = FALSE
 				  AND s.accountBound = FALSE
-				  AND s.inCollection = TRUE
+				  AND s.inCollection = FALSE
 				""", uid);
 	}
 
