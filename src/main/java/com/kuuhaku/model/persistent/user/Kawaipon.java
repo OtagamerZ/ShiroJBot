@@ -93,7 +93,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 
 	public int getStashUsage() {
 		return DAO.queryNative(Integer.class, """
-				SELECT (SELECT count(1) FROM stashed_card WHERE kawaipon_uid = ?1)
+				SELECT (SELECT count(1) FROM stashed_card WHERE kawaipon_uid = ?1 AND NOT in_collection)
 				     + (SELECT count(1) FROM market_order WHERE kawaipon_uid = ?1)
 				""", uid);
 	}
