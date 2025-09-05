@@ -26,15 +26,15 @@ DECLARE
 BEGIN
     SELECT sc.card_id
     FROM stashed_card sc
-    WHERE sc.uuid <> OLD.uuid
-      AND sc.kawaipon_uid = OLD.kawaipon_uid
-      AND sc.card_id = OLD.card_id
-      AND sc.chrome = OLD.chrome
+    WHERE sc.uuid <> NEW.uuid
+      AND sc.kawaipon_uid = NEW.kawaipon_uid
+      AND sc.card_id = NEW.card_id
+      AND sc.chrome = NEW.chrome
       AND sc.in_collection
     INTO card_id;
 
     IF (card_id IS NOT NULL) THEN
-        RAISE EXCEPTION 'Attempt to insert duplicate card: %', OLD.uuid;
+        RAISE EXCEPTION 'Attempt to insert duplicate card: %', NEW.uuid;
     END IF;
 
     RETURN NEW;
