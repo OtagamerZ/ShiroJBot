@@ -56,11 +56,11 @@ public class StashRemoveAllCommand implements Executable {
 
 		try {
 			Utils.confirm(locale.get("question/stash_remove_all", removable.size()), event.channel(), w -> {
-						List<String> uuids = removable.stream()
-								.map(StashedCard::getUUID)
+						List<Integer> ids = removable.stream()
+								.map(StashedCard::getId)
 								.toList();
 
-						DAO.applyNative(StashedCard.class, "UPDATE stashed_card SET in_collection = TRUE WHERE uuid IN ?1", uuids);
+						DAO.applyNative(StashedCard.class, "UPDATE stashed_card SET in_collection = TRUE WHERE id IN ?1", ids);
 						event.channel().sendMessage(locale.get("success/cards_retrieved")).queue();
 						return true;
 					}, event.user()

@@ -56,11 +56,11 @@ public class StashAddAllCommand implements Executable {
 
 		try {
 			Utils.confirm(locale.get("question/stash_add_all", addable.size()), event.channel(), w -> {
-						List<String> uuids = addable.stream()
-								.map(StashedCard::getUUID)
+						List<Integer> ids = addable.stream()
+								.map(StashedCard::getId)
 								.toList();
 
-						DAO.applyNative(StashedCard.class, "UPDATE stashed_card SET in_collection = FALSE WHERE uuid IN ?1", uuids);
+						DAO.applyNative(StashedCard.class, "UPDATE stashed_card SET in_collection = FALSE WHERE id IN ?1", ids);
 						event.channel().sendMessage(locale.get("success/cards_stored")).queue();
 						return true;
 					}, event.user()

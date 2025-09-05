@@ -265,11 +265,13 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 				SELECT x.uuid
 				FROM (
 					 SELECT sc.uuid
+					      , sc.in_collection
 						  , row_number() OVER (PARTITION BY sc.card_id, sc.chrome ORDER BY sc.id) AS copy
 					 FROM stashed_card sc
 					 WHERE sc.kawaipon_uid = ?1
 					 ) x
 				WHERE x.copy = 1
+				  AND NOT x.in_collection
 				""", uid);
 
 		return DAO.queryAll(StashedCard.class, "SELECT s FROM StashedCard s WHERE s.uuid IN ?1", cards);
