@@ -49,7 +49,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Entity
-@Table(name = "stashed_card", schema = "kawaipon")
+@Table(name = "stashed_card", schema = "kawaipon", indexes = @Index(columnList = "last_change DESC"))
 public class StashedCard extends DAO<StashedCard> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
