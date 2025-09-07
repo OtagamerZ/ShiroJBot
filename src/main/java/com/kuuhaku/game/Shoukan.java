@@ -1696,6 +1696,10 @@ public class Shoukan extends GameInstance<Phase> {
 		return !isSingleplayer() && arcade != Arcade.CASUAL && !Bit32.on(state, 1);
 	}
 
+	public boolean hasCheated() {
+		return Bit32.on(state, 1);
+	}
+
 	public void setCheated(boolean cheated) {
 		state = (byte) Bit32.set(state, 1, cheated);
 	}
