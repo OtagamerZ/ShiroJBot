@@ -269,6 +269,7 @@ public class Kawaipon extends DAO<Kawaipon> implements AutoMake<Kawaipon> {
 						  , row_number() OVER (PARTITION BY sc.card_id, sc.chrome ORDER BY sc.id) AS copy
 					 FROM stashed_card sc
 					 WHERE sc.kawaipon_uid = ?1
+					   AND type = 'KAWAIPON'
 					 ) x
 				WHERE x.copy = 1
 				  AND NOT x.in_collection
