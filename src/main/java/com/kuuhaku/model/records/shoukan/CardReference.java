@@ -2,6 +2,7 @@ package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.ygimenez.json.JSONObject;
@@ -22,7 +23,12 @@ public record CardReference(
 		Card card
 ) implements Serializable {
 	public CardReference(Drawable<?> card) {
-		this(card.getSide(), card.getCard());
+		this(
+				card.getSide(),
+				card.getCard().getRarity().ordinal() >= Rarity.HERO.ordinal()
+						? DAO.find(Card.class, "ACTOR")
+						: card.getCard()
+				);
 	}
 
 	public CardReference(JSONObject json) {
