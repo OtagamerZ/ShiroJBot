@@ -47,7 +47,7 @@ $$;
 
 DROP TRIGGER IF EXISTS prevent_duplicate ON stashed_card;
 CREATE TRIGGER prevent_duplicate
-    BEFORE UPDATE
+    BEFORE UPDATE OR INSERT
     ON stashed_card
     FOR EACH ROW
     WHEN ( NEW.price <> -1 )
