@@ -132,15 +132,11 @@ public abstract class GameInstance<T extends Enum<T>> {
 			} finally {
 				try {
 					System.out.println("Removing game instance");
-					for (String player : players) {
-						PLAYERS.remove(player);
+					Arrays.stream(players).forEach(PLAYERS::remove);
+					Arrays.stream(channels).forEach(CHANNELS::remove);
+					if (moderator != null) {
+						MODERATORS.remove(moderator);
 					}
-
-					for (String channel : channels) {
-						CHANNELS.remove(channel);
-					}
-
-					MODERATORS.remove(moderator);
 					System.out.println("Removed");
 
 					System.out.println("Closing listener");
