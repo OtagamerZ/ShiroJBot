@@ -46,8 +46,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class Shiritori extends GameInstance<NullPhase> {
-	private static final String[] blacklisted = {};
-
 	private final long seed = ThreadLocalRandom.current().nextLong();
 	private final InfiniteList<String> inGame;
 	private final File dict;
@@ -123,10 +121,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 
 				if (current != null) {
 					String end = current.substring(current.length() - 2);
-					if (Utils.equalsAny(end, blacklisted)) {
-						getChannel().sendMessage(getString("error/blacklisted_ending")).queue();
-						return;
-					} else if (!end.equals(word.substring(0, 2))) {
+					if (!end.equals(word.substring(0, 2))) {
 						getChannel().sendMessage(getString("error/invalid_word")).queue();
 						return;
 					}

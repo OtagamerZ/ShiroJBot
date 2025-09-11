@@ -53,9 +53,9 @@ public abstract class GameInstance<T extends Enum<T>> {
 	private final ExecutorService worker = Executors.newSingleThreadExecutor();
 	private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 	private final long seed = ThreadLocalRandom.current().nextLong();
+	private final CompletableFuture<Void> exec = new CompletableFuture<>();
 
 	private SplittableRandom rng = new SplittableRandom(seed);
-	private CompletableFuture<Void> exec;
 	private DelayedAction timeout;
 	private GameChannel channel;
 	private int turn = 1;
@@ -99,7 +99,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 			}
 		};
 
-		return exec = CompletableFuture.runAsync(() -> {
+		return CompletableFuture.runAsync(() -> {
 			try {
 				channels = getChannel().getChannels().stream().map(GuildMessageChannel::getId).toArray(String[]::new);
 				for (String chn : channels) {
@@ -120,10 +120,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 				begin();
 				GuildListener.addHandler(guild, sml);
 				initialized = true;
-
-				if (exec != null) {
-					exec.join();
-				}
+				exec.join();
 			} catch (GameReport e) {
 				initialized = true;
 				//noinspection MagicConstant
@@ -133,20 +130,27 @@ public abstract class GameInstance<T extends Enum<T>> {
 				Constants.LOGGER.error(e, e);
 				close(GameReport.INITIALIZATION_ERROR);
 			} finally {
+				System.out.println("Removing game instance");
 				Arrays.asList(players).forEach(PLAYERS::remove);
 				Arrays.asList(channels).forEach(CHANNELS::remove);
 				MODERATORS.remove(moderator);
+				System.out.println("Removed");
 
+				System.out.println("Closing listener");
 				sml.close();
+				System.out.println("Closed");
+
+				System.out.println("Stopping timeout");
 				if (timeout != null) {
 					timeout.stop();
 				}
+				System.out.println("Stopped");
 
-				service.shutdownNow();
+				System.out.println("Closing service thread");
 				service.close();
-
-				worker.shutdownNow();
+				System.out.println("Closing worker thread");
 				worker.close();
+				System.out.println("Finished");
 			}
 		}, worker);
 	}

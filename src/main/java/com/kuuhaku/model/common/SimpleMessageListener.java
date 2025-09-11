@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class SimpleMessageListener {
 	private final GameChannel channel;
-	public Object mutex = new Object();
+	public boolean closed = false;
 
 	public SimpleMessageListener(GuildMessageChannel... channels) {
 		this.channel = new GameChannel(channels);
@@ -57,10 +57,10 @@ public abstract class SimpleMessageListener {
 	}
 
 	public boolean isClosed() {
-		return mutex == null;
+		return closed;
 	}
 
 	public void close() {
-		mutex = null;
+		closed = true;
 	}
 }
