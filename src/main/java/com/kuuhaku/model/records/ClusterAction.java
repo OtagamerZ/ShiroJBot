@@ -19,6 +19,7 @@
 package com.kuuhaku.model.records;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
@@ -55,11 +56,11 @@ public record ClusterAction(long delay, Map<String, MessageCreateAction> actions
 	}
 
 	public void queue() {
-		queue(null, null);
+		queue(null);
 	}
 
 	public void queue(Consumer<? super Message> success) {
-		queue(success, null);
+		queue(success, Utils::doNothing);
 	}
 
 	public void queue(Consumer<? super Message> success, Consumer<? super Throwable> failure) {
@@ -84,11 +85,11 @@ public record ClusterAction(long delay, Map<String, MessageCreateAction> actions
 	}
 
 	public void queueAfter(long delay, TimeUnit unit) {
-		queueAfter(delay, unit, null, null);
+		queueAfter(delay, unit, null);
 	}
 
 	public void queueAfter(long delay, TimeUnit unit, Consumer<? super Message> success) {
-		queueAfter(delay, unit, success, null);
+		queueAfter(delay, unit, success, Utils::doNothing);
 	}
 
 	public void queueAfter(long delay, TimeUnit unit, Consumer<? super Message> success, Consumer<? super Throwable> failure) {
