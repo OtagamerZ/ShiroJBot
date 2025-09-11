@@ -131,8 +131,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 				close(GameReport.INITIALIZATION_ERROR);
 			} finally {
 				System.out.println("Removing game instance");
-				Arrays.asList(players).forEach(PLAYERS::remove);
-				Arrays.asList(channels).forEach(CHANNELS::remove);
+				Arrays.stream(players).forEach(PLAYERS::remove);
+				Arrays.stream(channels).forEach(CHANNELS::remove);
 				MODERATORS.remove(moderator);
 				System.out.println("Removed");
 
