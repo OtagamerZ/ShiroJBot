@@ -130,27 +130,37 @@ public abstract class GameInstance<T extends Enum<T>> {
 				Constants.LOGGER.error(e, e);
 				close(GameReport.INITIALIZATION_ERROR);
 			} finally {
-				System.out.println("Removing game instance");
-				Arrays.stream(players).forEach(PLAYERS::remove);
-				Arrays.stream(channels).forEach(CHANNELS::remove);
-				MODERATORS.remove(moderator);
-				System.out.println("Removed");
+				try {
+					System.out.println("Removing game instance");
+					for (String player : players) {
+						PLAYERS.remove(player);
+					}
 
-				System.out.println("Closing listener");
-				sml.close();
-				System.out.println("Closed");
+					for (String channel : channels) {
+						CHANNELS.remove(channel);
+					}
 
-				System.out.println("Stopping timeout");
-				if (timeout != null) {
-					timeout.stop();
+					MODERATORS.remove(moderator);
+					System.out.println("Removed");
+
+					System.out.println("Closing listener");
+					sml.close();
+					System.out.println("Closed");
+
+					System.out.println("Stopping timeout");
+					if (timeout != null) {
+						timeout.stop();
+					}
+					System.out.println("Stopped");
+
+					System.out.println("Closing service thread");
+					service.close();
+					System.out.println("Closing worker thread");
+					worker.close();
+					System.out.println("Finished");
+				} catch (Exception e) {
+					Constants.LOGGER.error("Failed to properly close game instance: {}", e, e);
 				}
-				System.out.println("Stopped");
-
-				System.out.println("Closing service thread");
-				service.close();
-				System.out.println("Closing worker thread");
-				worker.close();
-				System.out.println("Finished");
 			}
 		}, worker);
 	}
