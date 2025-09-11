@@ -79,9 +79,13 @@ public class SeeCardCommand implements Executable {
 			return;
 		}
 
-		int stored = DAO.queryNative(Integer.class, "SELECT count(1) FROM stashed_card WHERE kawaipon_uid = ?1 AND card_id = ?2",
-				event.user().getId(),
-				card.getId()
+		int stored = DAO.queryNative(Integer.class, """
+				SELECT count(1)
+				FROM stashed_card
+				WHERE kawaipon_uid = ?1
+				  AND card_id = ?2
+				  AND NOT in_collection
+				""", event.user().getId(), card.getId()
 		);
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setAuthor(locale.get("str/in_stash", stored))

@@ -102,7 +102,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 		}
 	}
 
-	@PlayerAction("(?<word>[a-zA-Z]{3,})")
+	@PlayerAction("^(?<word>[a-zA-Z]{3,})$")
 	private void nextWord(JSONObject args) {
 		String word = args.getString("word").toLowerCase();
 
