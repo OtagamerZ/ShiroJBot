@@ -143,6 +143,11 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@MapKeyColumn(name = "id")
 	private Map<AutoModType, String> automodEntries = new HashMap<>();
 
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "channel_locales", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONObjectConverter.class)
+	private JSONObject channelLocales = new JSONObject();
+
 	public GuildSettings() {
 	}
 
@@ -262,5 +267,9 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public Map<AutoModType, String> getAutoModEntries() {
 		return automodEntries;
+	}
+
+	public JSONObject getChannelLocales() {
+		return channelLocales;
 	}
 }

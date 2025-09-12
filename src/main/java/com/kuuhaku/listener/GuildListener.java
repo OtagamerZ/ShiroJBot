@@ -249,7 +249,7 @@ public class GuildListener extends ListenerAdapter {
 		}
 
 		GuildConfig config = DAO.find(GuildConfig.class, data.guild().getId());
-		I18N locale = config.getLocale();
+		I18N locale = config.getLocale(event.getGuildChannel());
 		if (!Objects.equals(config.getName(), data.guild().getName())) {
 			config.setName(data.guild().getName());
 			config.save();

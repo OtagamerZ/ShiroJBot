@@ -28,6 +28,7 @@ import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.model.records.GuildBuff;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -102,6 +103,17 @@ public class GuildConfig extends DAO<GuildConfig> implements AutoMake<GuildConfi
 	}
 
 	public I18N getLocale() {
+		return getLocale(null);
+	}
+
+	public I18N getLocale(GuildMessageChannel channel) {
+		I18N locale;
+		if (channel != null) {
+			locale = settings.getChannelLocales().getEnum(I18N.class, channel.getId(), this.locale);
+		} else {
+			locale = this.locale;
+		}
+
 		if (settings != null && settings.isFeatureEnabled(GuildFeature.UWU_MODE)) {
 			return I18N.valueOf("UWU_" + locale);
 		}
