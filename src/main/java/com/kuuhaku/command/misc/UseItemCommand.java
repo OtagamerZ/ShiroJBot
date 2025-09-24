@@ -70,6 +70,11 @@ public class UseItemCommand implements Executable {
 
 		try {
 			Utils.confirm(locale.get("question/item_use", item.getName(locale), items.getOrDefault(item, 0)), event.channel(), w -> {
+						if (acc.hasChanged()) {
+							event.channel().sendMessage(locale.get("error/account_state_changed")).queue();
+							return true;
+						}
+
 						try {
 							JSONObject params;
 							if (item.getSyntax() == null) params = new JSONObject();

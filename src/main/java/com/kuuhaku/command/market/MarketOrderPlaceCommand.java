@@ -78,6 +78,11 @@ public class MarketOrderPlaceCommand implements Executable {
 
 		try {
 			Utils.confirm(locale.get("question/market_order", card, price), event.channel(), w -> {
+						if (acc.hasChanged()) {
+							event.channel().sendMessage(locale.get("error/account_state_changed")).queue();
+							return true;
+						}
+
 						MarketOrder order = new MarketOrder(kp, card, price);
 
 						StashedCard offer = order.search();

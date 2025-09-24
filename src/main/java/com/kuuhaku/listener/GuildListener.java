@@ -564,16 +564,25 @@ public class GuildListener extends ListenerAdapter {
 
 			int month = Calendar.getInstance().get(Calendar.MONTH);
 			Seasonal season = pc.command().getClass().getDeclaredAnnotation(Seasonal.class);
-			if (season != null && !ArrayUtils.contains(season.months(), month)) {
-				List<String> months = Arrays.stream(season.months())
-						.mapToObj(m -> Month.of(m + 1))
-						.map(m -> locale.get("month/" + m))
-						.toList();
+			if (season != null) {
+				String error = null;
+				if (!ArrayUtils.contains(season.months(), month)) {
+					error = "out_of_season";
+				} else if (ArrayUtils.contains(season.exclude(), month)) {
+					error = "in_season";
+				}
 
-				data.channel().sendMessage(locale.get("error/out_of_season",
-						Utils.properlyJoin(locale.get("str/or")).apply(months)
-				)).queue();
-				return;
+				if (error != null) {
+					List<String> months = Arrays.stream(season.months())
+							.mapToObj(m -> Month.of(m + 1))
+							.map(m -> locale.get("month/" + m))
+							.toList();
+
+					data.channel().sendMessage(locale.get("error/" + error,
+							Utils.properlyJoin(locale.get("str/or")).apply(months)
+					)).queue();
+					return;
+				}
 			}
 
 			Permission[] missing = pc.getMissingPerms(data.channel());

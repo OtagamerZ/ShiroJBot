@@ -154,8 +154,8 @@ public class DeckSkinCommand implements Executable {
 								return;
 							}
 
-							if (!acc.isTrueState()) {
-								event.channel().sendMessage(locale.get("error/account_state_changed", 0)).queue();
+							if (acc.hasChanged()) {
+								event.channel().sendMessage(locale.get("error/account_state_changed")).queue();
 								return;
 							}
 

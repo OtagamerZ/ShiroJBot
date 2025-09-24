@@ -197,6 +197,12 @@ public class SynthesizeCommand implements Executable {
 					})
 					.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
 						if (!lock.get()) {
+							if (acc.hasChanged()) {
+								event.channel().sendMessage(locale.get("error/account_state_changed")).queue();
+								return;
+							}
+
+							lock.set(true);
 							Kawaipon k = kp.refresh();
 
 							double totalQ = 1;
@@ -265,7 +271,6 @@ public class SynthesizeCommand implements Executable {
 										.queue();
 							}
 
-							lock.set(true);
 							Objects.requireNonNull(w.getHook())
 									.deleteOriginal()
 									.queue(null, Utils::doNothing);
@@ -287,6 +292,11 @@ public class SynthesizeCommand implements Executable {
 			Set<StashedCard> collection = kp.getCollection(anime, false);
 
 			Utils.confirm(locale.get("question/synth_collection", anime.toString(), collection.size()), channel, w -> {
+						if (acc.hasChanged()) {
+							channel.sendMessage(locale.get("error/account_state_changed")).queue();
+							return true;
+						}
+
 						UserItem item = DAO.find(UserItem.class, "MASTERY_TOKEN");
 						acc.addItem(item, collection.size());
 

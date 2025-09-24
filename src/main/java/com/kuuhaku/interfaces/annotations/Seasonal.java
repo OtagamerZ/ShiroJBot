@@ -29,5 +29,6 @@ import java.util.Calendar;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Seasonal {
-	@MagicConstant(valuesFromClass = Calendar.class) int[] months();
+	@MagicConstant(valuesFromClass = Calendar.class) int[] months() default {};
+	@MagicConstant(valuesFromClass = Calendar.class) int[] exclude() default {};
 }

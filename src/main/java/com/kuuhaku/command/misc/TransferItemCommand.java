@@ -94,8 +94,8 @@ public class TransferItemCommand implements Executable {
 
 		try {
 			Utils.confirm(locale.get("question/transfer", item.getInfo(locale).getName(), target.getName()), event.channel(), w -> {
-						if (!acc.isTrueState()) {
-							event.channel().sendMessage(locale.get("error/account_state_changed", 0)).queue();
+						if (acc.hasChanged()) {
+							event.channel().sendMessage(locale.get("error/account_state_changed")).queue();
 							return true;
 						}
 

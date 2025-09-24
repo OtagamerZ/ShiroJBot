@@ -194,14 +194,15 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		return DAO.queryNative(Long.class, "SELECT transf_total(?1)", uid);
 	}
 
-	public boolean isTrueState() {
-		return DAO.queryNative(Boolean.class, """
+	public boolean hasChanged() {
+		return !DAO.queryNative(Boolean.class, """
 				SELECT balance = ?2
 				   AND debit = ?3
 				   AND gems = ?4
+				   AND (inventory @> cast(?5 AS JSONB) AND inventory <@ cast(?5 AS JSONB))
 				FROM account
 				WHERE uid = ?1
-				""", uid, balance, debit, gems
+				""", uid, balance, debit, gems, inventory.toString()
 		);
 	}
 

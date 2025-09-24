@@ -83,6 +83,11 @@ public class MarketBuyCommand implements Executable {
 
 		try {
 			Utils.confirm(locale.get("question/purchase", sc, price), event.channel(), w -> {
+						if (acc.hasChanged()) {
+							event.channel().sendMessage(locale.get("error/account_state_changed")).queue();
+							return true;
+						}
+
 						if (m.buy(id)) {
 							event.channel().sendMessage(locale.get("success/market_purchase", sc)).queue();
 						} else {

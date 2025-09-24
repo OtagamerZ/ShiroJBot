@@ -145,8 +145,8 @@ public class GachaCommand implements Executable {
 
 			Utils.confirm(locale.get("question/gacha", locale.get("gacha/" + type.value()).toLowerCase(), price), event.channel(),
 					w -> {
-						if (!acc.isTrueState()) {
-							event.channel().sendMessage(locale.get("error/account_state_changed", 0)).queue();
+						if (acc.hasChanged()) {
+							event.channel().sendMessage(locale.get("error/account_state_changed")).queue();
 							return true;
 						}
 

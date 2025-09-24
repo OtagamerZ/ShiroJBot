@@ -116,8 +116,8 @@ public class FavorCommand implements Executable {
 
 		try {
 			Utils.confirm(locale.get("question/card_favor", card, price), event.channel(), w -> {
-						if (!acc.isTrueState()) {
-							event.channel().sendMessage(locale.get("error/account_state_changed", 0)).queue();
+						if (acc.hasChanged()) {
+							event.channel().sendMessage(locale.get("error/account_state_changed")).queue();
 							return true;
 						}
 

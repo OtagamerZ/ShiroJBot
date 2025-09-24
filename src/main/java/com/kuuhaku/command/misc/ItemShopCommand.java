@@ -137,9 +137,9 @@ public class ItemShopCommand implements Executable {
 				price = locale.get("currency/" + item.getCurrency(), value);
 			}
 
-			Utils.confirm(locale.get("question/item_buy", amount, item.getName(locale), price), event.channel(), w -> {
-						if (!acc.isTrueState()) {
-							event.channel().sendMessage(locale.get("error/account_state_changed", 0)).queue();
+			Utils.confirm(locale.get("question/item_buy", amount + " " + item.getName(locale), price), event.channel(), w -> {
+						if (acc.hasChanged()) {
+							event.channel().sendMessage(locale.get("error/account_state_changed")).queue();
 							return true;
 						}
 

@@ -110,7 +110,6 @@ public class SynthesizeFastCommand implements Executable {
 
 		double totalQ = 1;
 		int chromas = 0;
-		Set<Integer> delKc = new HashSet<>();
 		Set<Integer> delSc = new HashSet<>();
 		Set<Rarity> rarities = EnumSet.noneOf(Rarity.class);
 		for (StashedCard sc : cards) {
@@ -121,7 +120,6 @@ public class SynthesizeFastCommand implements Executable {
 			if (sc.getType() == CardType.KAWAIPON) {
 				rarities.add(sc.getCard().getRarity());
 				totalQ += sc.getQuality();
-				delKc.add(sc.getId());
 			}
 
 			delSc.add(sc.getId());

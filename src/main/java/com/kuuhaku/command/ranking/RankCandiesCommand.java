@@ -22,6 +22,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.Seasonal;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -43,14 +44,10 @@ import java.util.List;
 		category = Category.INFO
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
+@Seasonal(exclude = Calendar.OCTOBER)
 public class RankCandiesCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.OCTOBER) {
-			event.channel().sendMessage(locale.get("error/command_unavailable_during", locale.get("month/october"))).queue();
-			return;
-		}
-
 		List<RankCandiesEntry> rank = DAO.queryAllUnmapped("""
 						SELECT rank() OVER (ORDER BY x.candies DESC) AS rank
 						     , x.uid

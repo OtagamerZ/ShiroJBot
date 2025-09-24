@@ -18,62 +18,49 @@
 
 package com.kuuhaku.command.misc;
 
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Requires;
-import com.kuuhaku.interfaces.annotations.Syntax;
+import com.kuuhaku.interfaces.annotations.Seasonal;
 import com.kuuhaku.model.enums.Category;
-import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.User;
+
+import java.util.Calendar;
 
 @Command(
-		name = "transfer",
-		path = "cr",
+		name = "convert",
+		path = "candy",
 		category = Category.MISC
 )
-@Syntax("<user:user:r> <value:number:r>")
-@Requires(Permission.MESSAGE_EMBED_LINKS)
-public class TransferCrCommand implements Executable {
+@Seasonal(exclude = Calendar.OCTOBER)
+public class ConvertCandyCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		User target = event.users(0);
-		if (target == null) {
-			event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
-			return;
-		} else if (target.equals(event.user())) {
-			event.channel().sendMessage(locale.get("error/self_not_allowed")).queue();
-			return;
-		}
-
 		Account acc = data.profile().getAccount();
 
-		int value = args.getInt("value");
-		if (value <= 0) {
-			event.channel().sendMessage(locale.get("error/invalid_value_low", 0)).queue();
-			return;
-		} else if (!acc.hasEnough(value, Currency.CR)) {
-			event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
-			return;
-		}
+		UserItem item = DAO.find(UserItem.class, "SPOOKY_CANDY");
+		int candies = acc.getItemCount("spooky_candy");
 
 		try {
-			Utils.confirm(locale.get("question/transfer", locale.separate(value) + " ₵R", target.getName()), event.channel(), w -> {
+			String cr = locale.get("currency/cr", candies * 100);
+			Utils.confirm(locale.get("question/item_convert", candies + " " + item.getName(locale), cr), event.channel(), w -> {
 						if (acc.hasChanged()) {
 							event.channel().sendMessage(locale.get("error/account_state_changed")).queue();
 							return true;
 						}
 
-						acc.transfer(value, target.getId());
-						event.channel().sendMessage(locale.get("success/transfer")).queue();
+						acc.consumeItem(item.getId(), candies, true);
+						acc.addCR(candies * 100L, "Converted " + candies);
+
+						event.channel().sendMessage(locale.get("success/item_convert")).queue();
 						return true;
 					}, event.user()
 			);
