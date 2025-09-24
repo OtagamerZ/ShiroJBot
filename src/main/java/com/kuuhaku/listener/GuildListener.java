@@ -566,9 +566,9 @@ public class GuildListener extends ListenerAdapter {
 			Seasonal season = pc.command().getClass().getDeclaredAnnotation(Seasonal.class);
 			if (season != null) {
 				String error = null;
-				if (!ArrayUtils.contains(season.months(), month)) {
+				if (season.months().length > 0 && !ArrayUtils.contains(season.months(), month)) {
 					error = "out_of_season";
-				} else if (ArrayUtils.contains(season.exclude(), month)) {
+				} else if (season.exclude().length > 0 && ArrayUtils.contains(season.exclude(), month)) {
 					error = "in_season";
 				}
 
