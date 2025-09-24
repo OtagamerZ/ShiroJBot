@@ -33,6 +33,7 @@ import com.kuuhaku.util.Spawn;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -69,7 +70,7 @@ public class OpenCommand implements Executable {
 
 			Drop dp = drop.get();
 			dp.award(acc);
-			acc.setDynValue("drops", Integer.parseInt(acc.getDynValue("drops", "0")) + 1);
+			acc.setDynValue("drops", NumberUtils.toInt(acc.getDynValue("drops", "0")) + 1);
 
 			event.channel().sendMessage(locale.get("success/claimed", event.user().getAsMention()))
 					.setEmbeds(

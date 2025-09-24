@@ -33,6 +33,7 @@ import com.kuuhaku.model.common.special.SpecialEvent;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;
+import com.kuuhaku.model.persistent.localized.LocalizedTitle;
 import com.kuuhaku.model.persistent.shiro.CommandMetrics;
 import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.*;
@@ -666,7 +667,11 @@ public class GuildListener extends ListenerAdapter {
 				DAO.apply(Account.class, data.user().getId(), acc -> {
 					Title t = acc.checkTitles(locale);
 					if (t != null) {
-						event.notify(locale.get("achievement/title", data.user().getAsMention(), t.getInfo(locale).getName()));
+						LocalizedTitle info = t.getInfo(locale);
+						event.notify(
+								locale.get("achievement/title", data.user().getAsMention(), info.getName())
+								+ "\n> " + info.getDescription()
+						);
 					}
 				});
 			}

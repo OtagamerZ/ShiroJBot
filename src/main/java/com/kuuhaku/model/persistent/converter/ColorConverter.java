@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.awt.*;
 
@@ -35,8 +36,8 @@ public class ColorConverter implements AttributeConverter<Color, String> {
 		if (hex == null) return new Color(0);
 
 		return switch (hex.length()) {
-			case 6 -> new Color(Integer.parseInt(hex, 16));
-			case 8 -> new Color(Integer.parseInt(hex.substring(2), 16));
+			case 6 -> new Color(NumberUtils.toInt(hex, 16));
+			case 8 -> new Color(NumberUtils.toInt(hex.substring(2), 16));
 			default -> new Color(0);
 		};
 	}

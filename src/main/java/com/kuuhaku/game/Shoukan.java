@@ -73,6 +73,7 @@ import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.function.TriConsumer;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,7 +86,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
@@ -421,7 +425,7 @@ public class Shoukan extends GameInstance<Phase> {
 			List<String> added = new ArrayList<>();
 
 			for (String idx : ids.split(",")) {
-				int i = Integer.parseInt(idx) - 1;
+				int i = NumberUtils.toInt(idx) - 1;
 				if (Utils.between(i, 0, curr.getCards().size())) {
 					if (curr.getCards().get(i) instanceof EffectHolder<?> eh) {
 						eh.setFlag(Flag.EMPOWERED);
@@ -973,7 +977,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		List<Integer> indexes = new ArrayList<>();
 		for (String choice : choices) {
-			int idx = Integer.parseInt(choice) - 1;
+			int idx = NumberUtils.toInt(choice) - 1;
 			if (!Utils.between(idx, 0, selection.cards().size() - 1)) {
 				getChannel().sendMessage(getString("error/invalid_selection_index")).queue();
 				return false;

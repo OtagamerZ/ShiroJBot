@@ -33,6 +33,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.io.File;
@@ -148,12 +149,12 @@ public class Shiritori extends GameInstance<NullPhase> {
 				String line = s.nextLine();
 
 				if (idx == 0) {
-					padSize = Integer.parseInt(line);
+					padSize = NumberUtils.toInt(line);
 				} else if (idx == 1) {
 					int charIndex = line.indexOf(c);
 					if (charIndex == -1) return false;
 
-					lookupIndex = Integer.parseInt(line.substring(charIndex + 1, charIndex + 1 + padSize));
+					lookupIndex = NumberUtils.toInt(line.substring(charIndex + 1, charIndex + 1 + padSize));
 				} else if (idx > lookupIndex) {
 					if (line.charAt(0) != c) {
 						return false;

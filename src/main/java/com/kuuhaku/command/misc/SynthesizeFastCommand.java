@@ -160,9 +160,9 @@ public class SynthesizeFastCommand implements Executable {
 			sc.save();
 
 			if (sc.isChrome()) {
-				DynamicProperty prop = kp.getAccount().getDynamicProperty("highest_chrome");
-				prop.setValue(Math.max(NumberUtils.toInt(prop.getValue()), e.getTier()));
-				prop.save();
+				kp.getAccount().setDynValue("highest_chrome", v ->
+						Math.max(NumberUtils.toInt(v), e.getTier())
+				);
 			}
 
 			event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))

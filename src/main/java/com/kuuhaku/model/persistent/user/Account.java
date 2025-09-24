@@ -31,6 +31,7 @@ import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
 import com.kuuhaku.model.persistent.shoukan.DailyDeck;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.MatchHistory;
+import com.kuuhaku.model.records.id.DynamicPropertyId;
 import com.kuuhaku.model.records.id.ProfileId;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
@@ -53,9 +54,10 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -361,8 +363,12 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	}
 
 	public DynamicProperty getDynamicProperty(String id) {
-		String value = DAO.queryNative(String.class, "SELECT value FROM dynamic_property WHERE uid = ?1 AND id = ?2", uid, id);
-		return new DynamicProperty(this, id, Utils.getOr(value, ""));
+		DynamicProperty prop = DAO.query(DynamicProperty.class, "SELECT dp FROM DynamicProperty dp WHERE id = ?1", new DynamicPropertyId(uid, id));
+		if (prop == null) {
+			return new DynamicProperty(this, id, "");
+		}
+
+		return prop;
 	}
 
 	public String getDynValue(String id) {
@@ -375,6 +381,12 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 
 	public void setDynValue(String id, Object value) {
 		DynamicProperty.update(uid, id, value);
+	}
+
+	public void setDynValue(String id, Function<String, Object> value) {
+		DynamicProperty prop = getDynamicProperty(id);
+		prop.setValue(value.apply(getDynValue(id)));
+		prop.save();
 	}
 
 	public AccountTitle getTitle() {

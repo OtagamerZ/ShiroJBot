@@ -97,7 +97,7 @@ public class Title extends DAO<Title> {
 	public String track(Account acc) {
 		if (tracker == null) return null;
 
-		return Utils.getOr(acc.getDynamicProperty(tracker).getValue(), "N/A");
+		return acc.getDynValue(tracker, "N/A");
 	}
 
 	public boolean isUnlockable() {

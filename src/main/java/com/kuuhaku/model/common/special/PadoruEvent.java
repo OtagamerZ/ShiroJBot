@@ -23,7 +23,6 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.DynamicProperty;
 import com.kuuhaku.model.records.GuildBuff;
 import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.util.IO;
@@ -100,9 +99,7 @@ public class PadoruEvent extends SpecialEvent {
 
 		for (String id : users) {
 			Account acc = DAO.find(Account.class, id);
-			DynamicProperty dp = acc.getDynamicProperty("padoru");
-			dp.setValue(NumberUtils.toInt(dp.getValue()) + 1);
-			dp.save();
+			acc.setDynValue("padoru", v -> NumberUtils.toInt(v) + 1);
 		}
 
 		DAO.apply(GuildConfig.class, channel.getGuild().getId(), gc -> {

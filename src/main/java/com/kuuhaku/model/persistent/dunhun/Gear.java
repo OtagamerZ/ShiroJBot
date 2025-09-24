@@ -37,6 +37,7 @@ import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.text.Uwuifier;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
@@ -204,7 +205,7 @@ public class Gear extends DAO<Gear> {
 			String base = pat
 					.matcher(l.replace("%", "%%"))
 					.replaceAll(m -> {
-						vals.add(Integer.parseInt(m.group()));
+						vals.add(NumberUtils.toInt(m.group()));
 						return Matcher.quoteReplacement("%s");
 					});
 
@@ -232,7 +233,7 @@ public class Gear extends DAO<Gear> {
 						return m.group(1) + "%";
 					}
 
-					return Utils.sign(Integer.parseInt(m.group(1)));
+					return Utils.sign(NumberUtils.toInt(m.group(1)));
 				}))
 				.map(s -> locale.isUwu() ? Uwuifier.INSTANCE.uwu(locale, s) : s)
 				.toList();

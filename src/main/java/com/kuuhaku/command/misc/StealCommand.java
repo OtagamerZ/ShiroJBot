@@ -33,6 +33,7 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -85,21 +86,27 @@ public class StealCommand implements Executable {
 			if (them.consumeItem("hallowed_card") || Calc.chance(Math.min(Math.pow(current / 200d, 2), 50))) {
 				acc.consumeItem("spooky_candy", current, true);
 				acc.setDynValue("last_steal", now.toString());
+				acc.setDynValue("steal_streak", 0);
 
 				event.channel().sendMessage(locale.get("str/steal_caught")).queue();
 				return;
 			}
 
 			if (them.consumeItem("spooky_candy", stolen)) {
+				them.setDynValue("last_stolen", now.toString());
+
 				acc.addItem("spooky_candy", stolen);
 				acc.setDynValue("last_steal", now.toString());
-				them.setDynValue("last_stolen", now.toString());
+				acc.setDynValue("steal_streak", v -> NumberUtils.toInt(v) + 1);
+				acc.setDynValue("total_stolen", v -> NumberUtils.toInt(v) + stolen);
+				acc.setDynValue("most_stolen", v -> Math.max(NumberUtils.toInt(v), stolen));
 
 				event.channel().sendMessage(locale.get("success/candy_stolen", stolen, target.getAsMention())).queue();
 				return;
 			}
 		}
 
+		acc.setDynValue("poor_stolen", true);
 		event.channel().sendMessage(locale.get("error/could_not_steal")).queue();
 	}
 }

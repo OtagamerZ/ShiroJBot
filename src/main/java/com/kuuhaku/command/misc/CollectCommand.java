@@ -32,6 +32,7 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Spawn;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
+import org.apache.commons.lang3.math.NumberUtils;
 
 @Command(
 		name = "collect",
@@ -64,7 +65,7 @@ public class CollectCommand implements Executable {
 			sc.save();
 
 			acc.consumeCR(sc.getPrice(), "Collected " + sc);
-			acc.setDynValue("collected", Integer.parseInt(acc.getDynValue("collected", "0")) + 1);
+			acc.setDynValue("collected", NumberUtils.toInt(acc.getDynValue("collected", "0")) + 1);
 			event.channel().sendMessage(locale.get("success/collected", event.user().getAsMention(), sc)).queue();
 		} catch (NullPointerException e) {
 			event.channel().sendMessage(locale.get("error/no_card")).queue();

@@ -40,6 +40,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.awt.image.BufferedImage;
@@ -368,7 +369,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 									gp = new GlobalProperty("highest_floor_" + dungeon.getId().toLowerCase(), 0);
 								}
 
-								if (run.getFloor() > Integer.parseInt(gp.getValue())) {
+								if (run.getFloor() > NumberUtils.toInt(gp.getValue())) {
 									gp.setValue(run.getFloor());
 									gp.save();
 

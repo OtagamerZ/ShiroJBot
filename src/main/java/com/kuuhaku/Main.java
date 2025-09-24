@@ -25,6 +25,7 @@ import com.kuuhaku.manager.ScheduleManager;
 import com.kuuhaku.model.common.ExecChain;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.sun.management.OperatingSystemMXBean;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.StopWatch;
 
 import javax.imageio.ImageIO;
@@ -83,7 +84,7 @@ public class Main {
 			ver = new GlobalProperty("build_number", "0");
 		}
 
-		ver.setValue(Integer.parseInt(ver.getValue()) + 1);
+		ver.setValue(NumberUtils.toInt(ver.getValue()) + 1);
 		ver.save();
 
 		ImageIO.setUseCache(false);

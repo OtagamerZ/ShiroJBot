@@ -68,6 +68,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.intellij.lang.annotations.Language;
 import org.jdesktop.swingx.graphics.ColorUtilities;
@@ -127,7 +128,7 @@ public abstract class Utils {
 
 		long millis = 0;
 		for (Map.Entry<String, Object> e : groups.entrySet()) {
-			int val = Integer.parseInt(String.valueOf(e.getValue()));
+			int val = NumberUtils.toInt(String.valueOf(e.getValue()));
 
 			switch (e.getKey().toLowerCase()) {
 				case "days" -> millis += val * Constants.MILLIS_IN_DAY;
@@ -803,7 +804,7 @@ public abstract class Utils {
 					if (!StringUtils.isNumeric(m.getContentRaw())) return false;
 
 					try {
-						int indx = Integer.parseInt(m.getContentRaw());
+						int indx = NumberUtils.toInt(m.getContentRaw());
 						out.complete(matches.get(indx));
 					} catch (RuntimeException e) {
 						out.complete(null);

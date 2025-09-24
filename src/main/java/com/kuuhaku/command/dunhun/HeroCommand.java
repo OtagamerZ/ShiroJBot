@@ -53,6 +53,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -190,7 +191,7 @@ public class HeroCommand implements Executable {
 				return;
 			}
 
-			int v = Integer.parseInt(m.getContentRaw());
+			int v = NumberUtils.toInt(m.getContentRaw());
 			int max = Math.min(remaining.get(), 127);
 			if (!Utils.between(v, 0, max)) {
 				w.getChannel().sendMessage(locale.get("error/invalid_value_range", 0, max)).queue();
@@ -442,7 +443,7 @@ public class HeroCommand implements Executable {
 				return;
 			}
 
-			Gear g = h.getInvGear(Integer.parseInt(s.getContentRaw()));
+			Gear g = h.getInvGear(NumberUtils.toInt(s.getContentRaw()));
 			if (g == null) {
 				w.getChannel().sendMessage(locale.get("error/gear_not_found")).queue();
 				return;
@@ -477,7 +478,7 @@ public class HeroCommand implements Executable {
 				return;
 			}
 
-			Gear g = h.getInvGear(Integer.parseInt(s.getContentRaw()));
+			Gear g = h.getInvGear(NumberUtils.toInt(s.getContentRaw()));
 			if (g == null) {
 				w.getChannel().sendMessage(locale.get("error/gear_not_found")).queue();
 				return;
