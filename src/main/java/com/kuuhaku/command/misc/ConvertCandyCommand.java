@@ -48,6 +48,10 @@ public class ConvertCandyCommand implements Executable {
 
 		UserItem item = DAO.find(UserItem.class, "SPOOKY_CANDY");
 		int candies = acc.getItemCount("spooky_candy");
+		if (candies <= 0) {
+			event.channel().sendMessage(locale.get("error/item_not_have")).queue();
+			return;
+		}
 
 		try {
 			String cr = locale.get("currency/cr", candies * 100);
