@@ -25,6 +25,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import java.util.List;
+import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
 public class Uwuifier {
@@ -70,38 +71,41 @@ public class Uwuifier {
     }
 
     public String uwu(I18N locale, String text) {
-        return text.lines()
-                .map(l -> {
-                    String[] words = l.split("(?<=\\S) +");
-                    for (int j = 0; j < words.length; j++) {
-                        String word = words[j];
-                        if (UrlValidator.getInstance().isValid(word) || word.contains("://")) continue;
-                        else if (word.matches(":.+:|<.+>|\\{.+}|`.+`")) continue;
+		return Utils.withUnsafeRng(rng -> {
+			rng.setSeed(text.hashCode());
+			return text.lines()
+					.map(l -> {
+						String[] words = l.split("(?<=\\S) +");
+						for (int j = 0; j < words.length; j++) {
+							String word = words[j];
+							if (UrlValidator.getInstance().isValid(word) || word.contains("://")) continue;
+							else if (word.matches(":.+:|<.+>|\\{.+}|`.+`")) continue;
 
-                        for (Pair<String, String> p : exp) {
-                            word = word.replaceAll(p.getLeft(), p.getRight());
-                        }
+							for (Pair<String, String> p : exp) {
+								word = word.replaceAll(p.getLeft(), p.getRight());
+							}
 
-                        words[j] = word.replaceAll("[!?.]", Utils.getRandomEntry(punctuation));
-                    }
+							words[j] = word.replaceAll("[!?.]", Utils.getRandomEntry(rng, punctuation));
+						}
 
-                    String out = String.join(" ", words);
-                    while (Utils.regex(out, " [A-z]").find()) {
-                        out = out.replaceFirst(" ([A-z])", replaceSpace(locale.getParent()));
-                    }
+						String out = String.join(" ", words);
+						while (Utils.regex(out, " [A-z]").find()) {
+							out = out.replaceFirst(" ([A-z])", replaceSpace(locale.getParent(), rng));
+						}
 
-                    return out.replace("§", " ");
-                })
-                .collect(Collectors.joining("\n"));
+						return out.replace("§", " ");
+					})
+					.collect(Collectors.joining("\n"));
+		});
     }
 
-    private String replaceSpace(I18N locale) {
+    private String replaceSpace(I18N locale, RandomGenerator rng) {
         if (Calc.chance(faceFac * 100)) {
-            return "§" + Utils.getRandomEntry(faces) + "§$1";
+            return "§" + Utils.getRandomEntry(rng, faces) + "§$1";
         } else if (Calc.chance(actionFac * 100)) {
-            return "§" + locale.get(Utils.getRandomEntry(actions)) + "§$1";
+            return "§" + locale.get(Utils.getRandomEntry(rng, actions)) + "§$1";
         } else if (Calc.chance(stutterFac * 100)) {
-            return "§" + ("$1" + "-").repeat(Calc.rng(2)) + "$1";
+            return "§" + ("$1" + "-").repeat(Calc.rng(2, rng)) + "$1";
         }
 
         return "§$1";
