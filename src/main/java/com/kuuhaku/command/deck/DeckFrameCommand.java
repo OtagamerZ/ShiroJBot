@@ -74,8 +74,7 @@ public class DeckFrameCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/all_frames"))
-				.setFooter(acc.getBalanceFooter(locale));
+				.setAuthor(locale.get("str/all_frames"));
 
 		List<FrameSkin> frames = DAO.findAll(FrameSkin.class).stream()
 				.filter(f -> {
@@ -111,19 +110,19 @@ public class DeckFrameCommand implements Executable {
 							.setDescription(locale.get("str/requires_titles", req));
 				} else {
 					eb.setThumbnail("https://i.imgur.com/PXNqRvA.png")
-							.setTitle(locale.get("str/frame_locked"))
+							.setTitle(locale.get("str/frame_locked"), frontUrl)
 							.setDescription(locale.get("str/price", locale.get("currency/" + frame.getCurrency(), frame.getPrice())));
 
 					addImages = true;
 				}
 			} else {
 				eb.setThumbnail(null)
-						.setTitle(frame.getInfo(locale).getName())
+						.setTitle(frame.getInfo(locale).getName(), frontUrl)
 						.setDescription(frame.getInfo(locale).getDescription());
 
 				addImages = true;
 			}
-			eb.setFooter(locale.get("str/page", i + 1, frames.size()));
+			eb.setFooter(acc.getBalanceFooter(locale) + " | " + locale.get("str/page", i + 1, frames.size()));
 
 			if (addImages) {
 				embeds.getEmbeds().add(eb.setImage(frontUrl).build());

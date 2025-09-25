@@ -74,8 +74,7 @@ public class DeckSkinCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setAuthor(locale.get("str/all_skins"))
-				.setFooter(acc.getBalanceFooter(locale));
+				.setAuthor(locale.get("str/all_skins"));
 
 		List<SlotSkin> skins = DAO.findAll(SlotSkin.class);
 		List<Page> pages = new ArrayList<>();
@@ -109,7 +108,7 @@ public class DeckSkinCommand implements Executable {
 						.setTitle(skin.getInfo(locale).getName())
 						.setDescription(skin.getInfo(locale).getDescription());
 			}
-			eb.setFooter(locale.get("str/page", i + 1, skins.size()));
+			eb.setFooter(acc.getBalanceFooter(locale) + " | " + locale.get("str/page", i + 1, skins.size()));
 
 			pages.add(InteractPage.of(eb.build()));
 		}
