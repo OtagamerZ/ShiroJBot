@@ -142,6 +142,7 @@ public class DeckFrameCommand implements Executable {
 				.addAction(Utils.parseEmoji("⏮️"), w -> {
 					if (i.get() > 0) {
 						confirm.set(false);
+						i.set(0);
 						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getFirst())).queue();
 					}
 				})
@@ -209,6 +210,7 @@ public class DeckFrameCommand implements Executable {
 				.addAction(Utils.parseEmoji("⏭️"), w -> {
 					if (i.get() < frames.size() - 1) {
 						confirm.set(false);
+						i.set(frames.size() - 1);
 						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getLast())).queue();
 					}
 				});

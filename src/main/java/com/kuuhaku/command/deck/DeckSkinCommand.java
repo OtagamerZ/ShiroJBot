@@ -121,6 +121,7 @@ public class DeckSkinCommand implements Executable {
 				.addAction(Utils.parseEmoji("⏮️"), w -> {
 					if (i.get() > 0) {
 						confirm.set(false);
+						i.set(0);
 						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getFirst())).queue();
 					}
 				})
@@ -188,6 +189,7 @@ public class DeckSkinCommand implements Executable {
 				.addAction(Utils.parseEmoji("⏭️"), w -> {
 					if (i.get() < skins.size() - 1) {
 						confirm.set(false);
+						i.set(skins.size() - 1);
 						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getLast())).queue();
 					}
 				});
