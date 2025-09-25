@@ -175,6 +175,7 @@ public class DeckSkinCommand implements Executable {
 
 					d.getStyling().setSkin(skin);
 					d.save();
+
 					event.channel().sendMessage(locale.get("success/skin_selected", d.getName()))
 							.flatMap(ms -> w.getMessage().delete())
 							.queue();
