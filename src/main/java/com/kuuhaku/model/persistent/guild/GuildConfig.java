@@ -114,10 +114,6 @@ public class GuildConfig extends DAO<GuildConfig> implements AutoMake<GuildConfi
 			locale = this.locale;
 		}
 
-		if (settings != null && settings.isFeatureEnabled(GuildFeature.UWU_MODE)) {
-			return I18N.valueOf("UWU_" + locale);
-		}
-
 		return locale;
 	}
 

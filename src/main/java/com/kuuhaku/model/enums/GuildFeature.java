@@ -26,6 +26,6 @@ public enum GuildFeature {
 
 	NQN_MODE,      //0x10
 	NOTIFICATIONS, //0x20
-	UWU_MODE,      //0x40
+	UWU_MODE,      //0x40 UNUSED - UwU mode is now enabled by setting locale
 	NO_SEASON,      //0x80
 }
