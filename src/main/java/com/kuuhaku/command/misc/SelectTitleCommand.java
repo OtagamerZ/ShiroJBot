@@ -27,8 +27,10 @@ import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.localized.LocalizedTitle;
-import com.kuuhaku.model.persistent.user.*;
+import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.AccountSettings;
+import com.kuuhaku.model.persistent.user.AccountTitle;
+import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
@@ -89,7 +91,6 @@ public class SelectTitleCommand implements Executable {
 				StringBuilder sb = new StringBuilder();
 
 				Title current = ts.getFirst();
-				LocalizedTitle info = current.getInfo(locale);
 				boolean has = acc.hasTitle(current.getId());
 				sb.append("`ID: ");
 				if (has) {
@@ -97,7 +98,7 @@ public class SelectTitleCommand implements Executable {
 				} else {
 					sb.append(current.getId().replaceAll("[A-Z\\d-]", "?"));
 				}
-				sb.append("`\n").append(info.getDescription());
+				sb.append("`\n").append(current.getInfo(locale).getDescription());
 
 				if (has) {
 					Title next = Utils.getNext(current, ts);
@@ -111,7 +112,8 @@ public class SelectTitleCommand implements Executable {
 					sb.append("\n").append(locale.get("str/current_tracker", track));
 				}
 
-				return new FieldMimic(current.getRarity().getEmote(null) + info.getName(), sb.toString()).toString();
+				I18N loc = Utils.getOr(acc.getSettings().getTitleLocale(), locale);
+				return new FieldMimic(current.getRarity().getEmote(null) + current.getInfo(loc).getName(), sb.toString()).toString();
 			});
 
 			Utils.paginate(pages, event.channel(), event.user());

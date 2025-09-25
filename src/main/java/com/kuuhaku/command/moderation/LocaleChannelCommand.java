@@ -35,7 +35,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 		path = "channel",
 		category = Category.MODERATION
 )
-@Syntax("<channel:channel> <locale:word>[pt,en]")
+@Syntax("<channel:channel> <locale:word>")
 public class LocaleChannelCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -52,13 +52,19 @@ public class LocaleChannelCommand implements Executable {
 
 		GuildSettings settings = data.config().getSettings();
 		if (args.has("locale")) {
-			locale = I18N.valueOf(args.getString("locale").toUpperCase());
-			settings.getChannelLocales().put(channel.getId(), locale);
+			I18N loc = args.getEnum(I18N.class, "locale");
+			if (loc == null) {
+				event.channel().sendMessage(locale.get("error/invalid_locale")).queue();
+				return;
+			}
+
+			settings.getChannelLocales().put(channel.getId(), loc);
+			event.channel().sendMessage(locale.get("success/locale_changed")).queue();
 		} else {
 			settings.getChannelLocales().remove(channel.getId());
+			event.channel().sendMessage(locale.get("success/channel_locale_reset")).queue();
 		}
 
 		data.config().save();
-		event.channel().sendMessage(locale.get("success/locale_change")).queue();
 	}
 }

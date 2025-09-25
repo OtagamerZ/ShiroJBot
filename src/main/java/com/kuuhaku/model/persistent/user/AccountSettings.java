@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.user;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.ProfileEffect;
 import com.kuuhaku.model.persistent.converter.ColorConverter;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -76,6 +77,10 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	@Column(name = "private", nullable = false)
 	private boolean privt;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "title_locale")
+	private I18N titleLocale;
 
 	public AccountSettings() {
 	}
@@ -158,5 +163,13 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	public void setPrivate(boolean privt) {
 		this.privt = privt;
+	}
+
+	public I18N getTitleLocale() {
+		return titleLocale;
+	}
+
+	public void setTitleLocale(I18N titleLocale) {
+		this.titleLocale = titleLocale;
 	}
 }

@@ -16,35 +16,43 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.moderation;
+package com.kuuhaku.command.misc;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
-		name = "locale",
+		name = "title",
+		path = "locale",
 		category = Category.MODERATION
 )
-@Syntax("<locale:word:r>")
-public class LocaleCommand implements Executable {
+@Syntax("<locale:word>")
+public class TitleLocaleCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		I18N loc = args.getEnum(I18N.class, "locale");
-		if (loc == null) {
-			event.channel().sendMessage(locale.get("error/invalid_locale")).queue();
-			return;
+		AccountSettings settings = data.profile().getAccount().getSettings();
+		if (args.has("locale")) {
+			I18N loc = args.getEnum(I18N.class, "locale");
+			if (loc == null) {
+				event.channel().sendMessage(locale.get("error/invalid_locale")).queue();
+				return;
+			}
+
+			settings.setTitleLocale(loc);
+			event.channel().sendMessage(locale.get("success/locale_changed")).queue();
+		} else {
+			settings.setTitleLocale(null);
+			event.channel().sendMessage(locale.get("success/channel_locale_reset")).queue();
 		}
 
-		data.config().setLocale(locale = loc);
-		data.config().save();
-
-		event.channel().sendMessage(locale.get("success/locale_changed")).queue();
+		settings.save();
 	}
 }

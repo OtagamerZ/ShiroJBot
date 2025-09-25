@@ -467,7 +467,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 			g2d.setColor(title.getTitle().getRarity().getColor(false));
 			g2d.setFont(Fonts.DOREKING.deriveBold(35));
 
-			String str = title.getTitle().getInfo(locale).getName();
+			String str = title.getTitle().getInfo(Utils.getOr(account.getSettings().getTitleLocale(), locale)).getName();
 			Graph.drawOutlinedString(g2d, str, 524 + (374 - g2d.getFontMetrics().stringWidth(str)) / 2, 70, 5, Color.BLACK);
 		}
 
