@@ -29,7 +29,6 @@ import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Arcade;
 import com.kuuhaku.model.enums.shoukan.FieldType;
-import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shiro.Anime;
@@ -138,8 +137,9 @@ public class Deck extends DAO<Deck> {
 	}
 
 	public FrameSkin getFrame() {
-		if (account != null && !styling.getFrame().canUse(account)) {
-			styling.setFrame(FrameSkin.PINK);
+		FrameSkin defFrame = DAO.find(FrameSkin.class, "PINK");
+		if (styling.getFrame() == null || !styling.getFrame().canUse(account)) {
+			styling.setFrame(defFrame);
 		}
 
 		return styling.getFrame();

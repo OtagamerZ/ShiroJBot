@@ -31,12 +31,8 @@ import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.shoukan.*;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.IO;
@@ -183,7 +179,7 @@ public class CommonSocket extends WebSocketClient {
 				};
 
 				Deck dk = new Deck();
-				dk.getStyling().setFrame(payload.getEnum(FrameSkin.class, "frame"));
+				dk.getStyling().setFrame(DAO.find(FrameSkin.class, payload.getString("frame")));
 
 				deliver(key, IO.getBytes(d.render(payload.getEnum(I18N.class, "locale"), dk), "png"));
 			}

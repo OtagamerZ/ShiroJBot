@@ -24,15 +24,16 @@ import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.persistent.shoukan.DailyDeck;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.FrameSkin;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.model.records.EventData;
@@ -43,7 +44,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -72,7 +74,7 @@ public class DeckFrameCommand implements Executable {
             EmbedBuilder eb = new ColorlessEmbedBuilder()
                     .setAuthor(locale.get("str/all_frames"));
 
-            List<FrameSkin> frames = Arrays.stream(FrameSkin.values())
+            List<FrameSkin> frames = DAO.findAll(FrameSkin.class).stream()
 					.filter(f -> {
 						boolean can = f.canUse(acc);
 						return f.getTitles().stream().noneMatch(t -> t == null || (!t.isUnlockable() && !can));
@@ -102,12 +104,12 @@ public class DeckFrameCommand implements Executable {
                     pages.add(InteractPage.of(eb.build()));
                 } else {
                     EmbedCluster embeds = new EmbedCluster();
-					String frontUrl = URL.formatted("front", fc.name().toLowerCase());
-					String backUrl = URL.formatted("back", fc.name().toLowerCase());
+					String frontUrl = URL.formatted("front", fc.getId().toLowerCase());
+					String backUrl = URL.formatted("back", fc.getId().toLowerCase());
 
                     eb.setThumbnail(null)
-							.setTitle(fc.getName(locale), frontUrl)
-                            .setDescription(fc.getDescription(locale))
+							.setTitle(fc.getInfo(locale).getName(), frontUrl)
+                            .setDescription(fc.getInfo(locale).getDescription())
                             .setFooter(locale.get("str/page", i + 1, frames.size()));
 
                     embeds.getEmbeds().add(eb.setImage(frontUrl).build());

@@ -70,6 +70,7 @@
         <class>com.kuuhaku.model.persistent.shoukan.history.HistoryTurn</class>
         <class>com.kuuhaku.model.persistent.shoukan.history.HistorySide</class>
         <class>com.kuuhaku.model.persistent.shoukan.history.HistorySlot</class>
+        <class>com.kuuhaku.model.persistent.shoukan.FrameSkin</class>
         <class>com.kuuhaku.model.persistent.shoukan.SlotSkin</class>
 
         <!-- DUNGEON HUNTERS -->
@@ -99,7 +100,7 @@
         <class>com.kuuhaku.model.persistent.localized.LocalizedTitle</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedDescription</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedString</class>
-        <class>com.kuuhaku.model.persistent.localized.LocalizedSkin</class>
+        <class>com.kuuhaku.model.persistent.localized.LocalizedSlotSkin</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedBasetype</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedAffix</class>
         <class>com.kuuhaku.model.persistent.localized.LocalizedSkill</class>

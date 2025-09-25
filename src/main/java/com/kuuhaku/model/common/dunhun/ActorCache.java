@@ -2,11 +2,11 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Actor;
-import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.FrameSkin;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
@@ -102,9 +102,9 @@ public class ActorCache {
 		if (deck == null) {
 			deck = new Deck();
 			if (actor instanceof Hero h) {
-				deck.getStyling().setFrame(h.getAccount().getDeck().getStyling().getFrame());
+				deck.getStyling().setFrame(h.getAccount().getDeck().getFrame());
 			} else {
-				deck.getStyling().setFrame(FrameSkin.GLITCH);
+				deck.getStyling().setFrame(DAO.find(FrameSkin.class, "GLITCH"));
 			}
 		}
 

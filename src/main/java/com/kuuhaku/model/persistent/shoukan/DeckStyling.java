@@ -19,9 +19,7 @@
 package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.model.enums.DeckOrder;
-import com.kuuhaku.model.enums.shoukan.FrameSkin;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -35,16 +33,17 @@ public class DeckStyling implements Serializable {
 	private static final long serialVersionUID = -3791252523071567880L;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "frame", nullable = false)
-	private FrameSkin frame = FrameSkin.PINK;
-
-	@Enumerated(EnumType.STRING)
 	@Column(name = "senshi_order", nullable = false)
 	private DeckOrder senshiOrder = DeckOrder.NAME;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "evogear_order", nullable = false)
 	private DeckOrder evogearOrder = DeckOrder.NAME;
+
+	@ManyToOne
+	@JoinColumn(name = "frame_id")
+	@Fetch(FetchMode.JOIN)
+	private FrameSkin frame;
 
 	@ManyToOne
 	@JoinColumn(name = "skin_id")
@@ -60,7 +59,7 @@ public class DeckStyling implements Serializable {
 	private boolean useChrome;
 
 	public FrameSkin getFrame() {
-		return Utils.getOr(frame, FrameSkin.PINK);
+		return frame;
 	}
 
 	public void setFrame(FrameSkin frame) {

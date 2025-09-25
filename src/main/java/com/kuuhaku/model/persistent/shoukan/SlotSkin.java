@@ -25,7 +25,7 @@ import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.kuuhaku.model.persistent.localized.LocalizedSkin;
+import com.kuuhaku.model.persistent.localized.LocalizedSlotSkin;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.util.Graph;
@@ -57,7 +57,7 @@ public class SlotSkin extends DAO<SlotSkin> {
 	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<LocalizedSkin> infos = new HashSet<>();
+	private Set<LocalizedSlotSkin> infos = new HashSet<>();
 
 	@Column(name = "price")
 	private int price;
@@ -82,7 +82,7 @@ public class SlotSkin extends DAO<SlotSkin> {
 		return id;
 	}
 
-	public LocalizedSkin getInfo(I18N locale) {
+	public LocalizedSlotSkin getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.map(ld -> ld.setUwu(locale.isUwu()))
