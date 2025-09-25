@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.converter.ColorConverter;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedFrameSkin;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -74,16 +75,20 @@ public class FrameSkin extends DAO<FrameSkin> {
 	private boolean legacy = false;
 
 	@Column(name = "theme_color", length = 6)
-	private String themeColor;
+	@Convert(converter = ColorConverter.class)
+	private Color themeColor;
 
 	@Column(name = "background_color", length = 6)
-	private String backgroundColor;
+	@Convert(converter = ColorConverter.class)
+	private Color backgroundColor;
 
 	@Column(name = "primary_color", nullable = false, length = 6)
-	private String primaryColor = "000000";
+	@Convert(converter = ColorConverter.class)
+	private Color primaryColor;
 
 	@Column(name = "secondary_color", nullable = false, length = 6)
-	private String secondaryColor = "000000";
+	@Convert(converter = ColorConverter.class)
+	private Color secondaryColor;
 
 	private transient Color themeCache;
 
@@ -153,7 +158,7 @@ public class FrameSkin extends DAO<FrameSkin> {
 			return themeCache = Graph.rotate(Color.ORANGE, Calc.rng(360));
 		}
 
-		return themeCache = Color.decode(themeColor);
+		return themeCache = themeColor;
 	}
 
 	public Color getBackgroundColor() {
@@ -162,15 +167,15 @@ public class FrameSkin extends DAO<FrameSkin> {
 			return Graph.rotate(themeCache, 90);
 		}
 
-		return Color.decode(backgroundColor);
+		return backgroundColor;
 	}
 
 	public Color getPrimaryColor() {
-		return Color.decode(primaryColor);
+		return primaryColor;
 	}
 
 	public Color getSecondaryColor() {
-		return Color.decode(secondaryColor);
+		return secondaryColor;
 	}
 
 	public int getPrice() {
