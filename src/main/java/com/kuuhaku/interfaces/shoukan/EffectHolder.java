@@ -20,6 +20,7 @@ package com.kuuhaku.interfaces.shoukan;
 
 import com.kuuhaku.ExpressionListener;
 import com.kuuhaku.Tag;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.generated.ShoukanExprLexer;
 import com.kuuhaku.generated.ShoukanExprParser;
 import com.kuuhaku.model.common.CachedScriptManager;
@@ -29,6 +30,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.shoukan.CardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.FrameSkin;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.model.records.shoukan.Source;
 import com.kuuhaku.model.records.shoukan.Target;
@@ -327,7 +329,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d, boolean legacy) {
-		FrameSkin frame = getHand() == null ? FrameSkin.PINK : getHand().getUserDeck().getFrame();
+		FrameSkin frame = getHand() == null ? DAO.find(FrameSkin.class, "PINK") : getHand().getUserDeck().getFrame();
 		AtomicInteger lastVal = new AtomicInteger();
 		AtomicInteger line = new AtomicInteger();
 		TagBundle tags = getTagBundle();
@@ -424,7 +426,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default void drawDescription(Graphics2D g2d, Hand h, I18N locale) {
-		FrameSkin frame = getHand() == null ? FrameSkin.PINK : getHand().getUserDeck().getFrame();
+		FrameSkin frame = getHand() == null ? DAO.find(FrameSkin.class, "PINK") : getHand().getUserDeck().getFrame();
 
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(11));
 		g2d.setColor(frame.getSecondaryColor());
