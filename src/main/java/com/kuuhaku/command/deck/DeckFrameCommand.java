@@ -139,16 +139,16 @@ public class DeckFrameCommand implements Executable {
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(event.user()::equals)
+				.addAction(Utils.parseEmoji("⏮️"), w -> {
+					if (i.get() > 0) {
+						confirm.set(false);
+						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getFirst())).queue();
+					}
+				})
 				.addAction(Utils.parseEmoji("◀️"), w -> {
 					if (i.get() > 0) {
 						confirm.set(false);
 						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.decrementAndGet()))).queue();
-					}
-				})
-				.addAction(Utils.parseEmoji("▶️"), w -> {
-					if (i.get() < frames.size() - 1) {
-						confirm.set(false);
-						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
 					}
 				})
 				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
@@ -199,6 +199,18 @@ public class DeckFrameCommand implements Executable {
 					event.channel().sendMessage(locale.get("success/frame_selected", d.getName()))
 							.flatMap(ms -> w.getMessage().delete())
 							.queue();
+				})
+				.addAction(Utils.parseEmoji("▶️"), w -> {
+					if (i.get() < frames.size() - 1) {
+						confirm.set(false);
+						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.get(i.incrementAndGet()))).queue();
+					}
+				})
+				.addAction(Utils.parseEmoji("⏭️"), w -> {
+					if (i.get() < frames.size() - 1) {
+						confirm.set(false);
+						w.getMessage().editMessageEmbeds(Utils.getEmbeds(pages.getLast())).queue();
+					}
 				});
 
 		helper.apply(Utils.sendPage(event.channel(), pages.getFirst())).queue(s -> Pages.buttonize(s, helper));
