@@ -38,9 +38,9 @@ public class ColorConverter implements AttributeConverter<Color, String> {
 		if (hex == null) return null;
 
 		return switch (hex.length()) {
-			case 6 -> new Color(NumberUtils.toInt(hex, 16));
-			case 8 -> new Color(NumberUtils.toInt(hex.substring(2), 16));
-			default -> new Color(0);
+			case 6 -> new Color(Integer.parseInt(hex, 16));
+			case 8 -> new Color(Integer.parseInt(hex.substring(2), 16));
+			default -> new Color(0xDEADBEEF);
 		};
 	}
 }
