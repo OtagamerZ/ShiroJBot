@@ -28,12 +28,14 @@ import java.awt.*;
 public class ColorConverter implements AttributeConverter<Color, String> {
 	@Override
 	public String convertToDatabaseColumn(Color color) {
+		if (color == null) return null;
+
 		return "%06X".formatted(0x00FFFFFF & color.getRGB());
 	}
 
 	@Override
 	public Color convertToEntityAttribute(String hex) {
-		if (hex == null) return new Color(0);
+		if (hex == null) return null;
 
 		return switch (hex.length()) {
 			case 6 -> new Color(NumberUtils.toInt(hex, 16));
