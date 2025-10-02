@@ -66,8 +66,8 @@ public class StealCommand implements Executable {
 
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime lastSteal = LocalDateTime.parse(acc.getDynValue("last_steal", LocalDateTime.ofInstant(Instant.EPOCH, ZoneId.of("GMT-3")).toString()));
-		if (lastSteal.isAfter(now.minusHours(6))) {
-			event.channel().sendMessage(locale.get("error/stole_recent", Utils.toStringDuration(locale, now.minusHours(6).until(lastSteal, ChronoUnit.MILLIS)))).queue();
+		if (lastSteal.isAfter(now.minusHours(1))) {
+			event.channel().sendMessage(locale.get("error/stole_recent", Utils.toStringDuration(locale, now.minusHours(1).until(lastSteal, ChronoUnit.MILLIS)))).queue();
 			return;
 		}
 
@@ -79,7 +79,7 @@ public class StealCommand implements Executable {
 		}
 
 		int total = them.getItemCount("spooky_candy");
-		int stolen = Calc.rng(total / 5, total / 3);
+		int stolen = Calc.rng(total / 8, total / 4);
 
 		if (stolen > 0) {
 			int current = acc.getItemCount("spooky_candy");
