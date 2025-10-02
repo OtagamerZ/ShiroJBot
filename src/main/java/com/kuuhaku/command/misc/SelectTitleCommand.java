@@ -73,7 +73,7 @@ public class SelectTitleCommand implements Executable {
 								boolean has = acc.hasTitle(t.getId());
 
 								if (!has || lst.isEmpty()) {
-									if (!has && Utils.equalsAny(t.getId(), "VETERAN", "TEST_DUMMY")) {
+									if (!has && !t.isUnlockable()) {
 										return;
 									}
 
