@@ -755,7 +755,7 @@ public class Hand {
 
 	public void modLockTime(Lock lock, int time) {
 		if (time == 0) return;
-		locks.reduceTime(lock, time);
+		locks.add(lock, time);
 	}
 
 	public int getLockTime(Lock lock) {

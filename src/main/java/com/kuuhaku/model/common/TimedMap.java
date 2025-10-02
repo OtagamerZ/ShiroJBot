@@ -11,11 +11,25 @@ public class TimedMap<V> implements Iterable<Map.Entry<V, Integer>> {
 	private final Map<V, Integer> values = new HashMap<>();
 
 	public void set(V value, int time) {
-		values.compute(value, (k, v) -> v == null ? time : v + time);
+		values.compute(value, (k, v) -> {
+			int newTime = v == null ? time : Math.max(v, time);
+			if (newTime <= 0) {
+				return null;
+			}
+
+			return newTime;
+		});
 	}
 
 	public void add(V value, int time) {
-		values.compute(value, (k, v) -> v == null ? time : Math.max(v, time));
+		values.compute(value, (k, v) -> {
+			int newTime = v == null ? time : v + time;
+			if (newTime <= 0) {
+				return null;
+			}
+
+			return newTime;
+		});
 	}
 
 	public Set<V> getValues() {
