@@ -20,6 +20,8 @@ public class Node {
 	private final int path;
 	private final int seed;
 	private final List<Node> parents;
+	private final Set<String> eventPool = new HashSet<>();
+	private final Set<String> enemyPool = new HashSet<>();
 
 	private final List<Node> children = new ArrayList<>();
 	private final Set<Node> blocked = new HashSet<>();
@@ -77,12 +79,12 @@ public class Node {
 		return seed;
 	}
 
-	public NodeType getType() {
-		return type;
+	public Set<String> getEventPool() {
+		return eventPool;
 	}
 
-	public void setType(NodeType type) {
-		this.type = type;
+	public Set<String> getEnemyPool() {
+		return enemyPool;
 	}
 
 	public List<Node> getParents() {
@@ -117,6 +119,18 @@ public class Node {
 
 	public void setRendered(boolean rendered) {
 		this.rendered = rendered;
+	}
+
+	public NodeType getType() {
+		return type;
+	}
+
+	public void setType(NodeType type) {
+		this.type = type;
+	}
+
+	public int getNodeLevel() {
+		return type == NodeType.DANGER ? 5 : 0;
 	}
 
 	public BufferedImage getIcon() {

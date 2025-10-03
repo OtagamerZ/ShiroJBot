@@ -295,11 +295,17 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 						Node nextNode = map.getPlayerNode();
 						switch (nextNode.getType()) {
-							case NONE -> runCombat(nextNode);
+							case NONE, DANGER -> runCombat(nextNode);
 							case EVENT -> runEvent(nextNode, Event.getRandom(nextNode));
 							case REST -> runEvent(nextNode, Event.find(Event.class, "REST"));
-							// TODO case DANGER -> ;
-							case BOSS -> beginCombat(nextNode, Boss.getRandom());
+							case BOSS -> {
+								Set<String> pool = nextNode.getEnemyPool();
+								if (!pool.isEmpty()) {
+									beginCombat(nextNode, DAO.find(Boss.class, Utils.getRandomEntry(nodeRng, pool)));
+								} else {
+									beginCombat(nextNode, Boss.getRandom());
+								}
+							}
 						}
 
 						if (getCombat() != null && getCombat().isDone()) {
@@ -513,19 +519,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 		combat.set(null);
 	}
 
-	public void runCombat(Node node, Collection<String> pool) {
-		runCombat(node, pool.toArray(String[]::new));
-	}
-
-	public void runCombat(Node node, String... pool) {
+	public void runCombat(Node node) {
 		combat.set(new Combat(this, node));
 
+		Set<String> pool = node.getEnemyPool();
 		for (int i = 0; i < 4; i++) {
 			List<Actor<?>> keepers = getCombat().getActors(Team.KEEPERS);
 			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size(), nodeRng)) break;
 
 			Monster chosen;
-			if (pool.length > 0) chosen = Monster.getRandom(this, Utils.getRandomEntry(nodeRng, pool));
+			if (!pool.isEmpty()) chosen = Monster.getRandom(this, Utils.getRandomEntry(nodeRng, pool));
 			else chosen = Monster.getRandom(this);
 
 			if (chosen != null) {
@@ -923,14 +926,19 @@ public class Dunhun extends GameInstance<NullPhase> {
 			return (int) heroes.values().stream()
 					.mapToInt(h -> h.getStats().getLevel())
 					.average().orElse(1);
-		} else if (dungeon.getAreaLevel() == 0) {
+		}
+
+		Node node = map.getPlayerNode();
+		int extraLevel = node != null ? node.getNodeLevel() : 0;
+
+		if (dungeon.getAreaLevel() == 0) {
 			Floor fl = map.getFloor();
 			int floor = fl.getFloor();
 
-			return 1 + Math.min(floor * 83 / 25 * floor / (floor + 50), 83);
+			return 1 + Math.min(floor * 83 / 25 * floor / (floor + 50), 83) + extraLevel;
 		}
 
-		return dungeon.getAreaLevel();
+		return dungeon.getAreaLevel() + extraLevel;
 	}
 
 	public String parsePlural(String text) {

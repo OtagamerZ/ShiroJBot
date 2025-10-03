@@ -137,6 +137,12 @@ public class Event extends DAO<Event> {
 				WHERE weight > 0
 				  AND min_paths <= ?1
 				""", node.getChildren().size());
+
+		Set<String> pool = node.getEventPool();
+		if (!pool.isEmpty()) {
+			evts.removeIf(a -> !pool.contains(String.valueOf(a[0])));
+		}
+
 		if (evts.isEmpty()) return null;
 
 		return Utils.withUnsafeRng(rng -> {
