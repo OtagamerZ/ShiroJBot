@@ -236,11 +236,6 @@ public class Combat implements Renderer<BufferedImage> {
 			actors.add(rngList.remove());
 		}
 
-		actors.sort(Comparator
-				.<Actor<?>>comparingInt(Actor::getInitiative).reversed()
-				.thenComparingInt(n -> Calc.rng(20, node.getSeed() - n.hashCode()))
-		);
-
 		combat:
 		for (Actor<?> actor : actors) {
 			if (checkCombatEnd()) break;
