@@ -5,7 +5,6 @@ import com.kuuhaku.model.enums.dunhun.NodeType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 public class Sublevel {
 	public static final int MAX_NODES = 7;
@@ -35,14 +34,14 @@ public class Sublevel {
 		return nodes;
 	}
 
-	public void newNode(NodeType type, Consumer<Node> generator) {
-		newNode(type, List.of(), generator);
+	public Node newNode(NodeType type) {
+		return newNode(type, List.of());
 	}
 
-	public void newNode(NodeType type, List<Node> parents, Consumer<Node> generator) {
+	public Node newNode(NodeType type, List<Node> parents) {
 		Node node = new Node(this, type, parents);
-		generator.accept(node);
 		nodes.add(node);
+		return node;
 	}
 
 	public void addNode(Node... parents) {

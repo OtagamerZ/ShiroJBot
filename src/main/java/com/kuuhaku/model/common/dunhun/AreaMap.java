@@ -54,10 +54,10 @@ public class AreaMap {
 		return List.copyOf(floors.values());
 	}
 
-	public void newFloor(Consumer<Floor> generator) {
+	public Floor newFloor() {
 		Floor floor = new Floor(this, floors.size());
-		generator.accept(floor);
 		addFloor(floor);
+		return floor;
 	}
 
 	public void addFloor(Floor floor) {
