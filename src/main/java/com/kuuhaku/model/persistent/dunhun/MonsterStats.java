@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.MonsterContext;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.dunhun.Loot;
@@ -128,7 +129,16 @@ public class MonsterStats implements Serializable {
 	}
 
 	public int getKillXp() {
-		return killXp;
+		return !minion ? killXp : 0;
+	}
+
+	public double getLootMultiplier(Actor<?> self) {
+		if (minion)	return 0;
+		else if (self.getRarityClass() == RarityClass.UNIQUE) {
+			return 2.5;
+		}
+
+		return 1 + self.getModifiers().getEffects().size() * 0.15;
 	}
 
 	public boolean isMinion() {
@@ -143,16 +153,9 @@ public class MonsterStats implements Serializable {
 		Loot loot = new Loot();
 		if (!(self instanceof Monster m) || minion || lootGenerator == null) return loot;
 
-		double mult = switch (self.getRarityClass()) {
-			case NORMAL -> 1;
-			case MAGIC -> 1.2;
-			case RARE -> 1.5;
-			case UNIQUE -> 2.5;
-		};
-
 		try {
 			Utils.exec(getClass().getSimpleName(), lootGenerator, Map.of(
-					"ctx", new MonsterContext(self, loot, mult)
+					"ctx", new MonsterContext(self, loot, getLootMultiplier(self))
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to generate loot for {}", m.getName(I18N.EN), e);

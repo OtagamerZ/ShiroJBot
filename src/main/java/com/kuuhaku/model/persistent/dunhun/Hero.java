@@ -123,7 +123,7 @@ public class Hero extends Actor<Hero> {
 
 	@Override
 	public int getInitiative() {
-		return stats.getLevel() / 3 + (int) getModifiers().getInitiative().get();
+		return Math.max(1, stats.getLevel() / 3 + (int) getModifiers().getInitiative().get());
 	}
 
 	@Override

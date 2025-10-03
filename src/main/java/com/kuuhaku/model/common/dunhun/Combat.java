@@ -225,6 +225,17 @@ public class Combat implements Renderer<BufferedImage> {
 		if (done) return;
 
 		trigger(Trigger.ON_COMBAT);
+
+		rngList.clear();
+		for (Actor<?> actor : actors.values()) {
+			rngList.add(actor, actor.getInitiative());
+		}
+
+		actors.clear();
+		while (!rngList.isEmpty()) {
+			actors.add(rngList.remove());
+		}
+
 		actors.sort(Comparator
 				.<Actor<?>>comparingInt(Actor::getInitiative).reversed()
 				.thenComparingInt(n -> Calc.rng(20, node.getSeed() - n.hashCode()))

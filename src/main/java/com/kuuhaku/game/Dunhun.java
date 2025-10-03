@@ -411,13 +411,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 				if (m.getStats().isMinion()) continue;
 				xpGained += m.getKillXp();
 
-				Loot lt = m.getStats().generateLoot(m);
-				double dropFac = 20 * switch (m.getRarityClass()) {
-					case NORMAL -> 1;
-					case MAGIC -> 1.2;
-					case RARE -> 1.5;
-					case UNIQUE -> 2.5;
-				} * mf * Math.pow(1.2, getModifiers().size());
+				MonsterStats stats = m.getStats();
+				Loot lt = stats.generateLoot(m);
+
+				double dropFac = 20 * stats.getLootMultiplier(m) * mf * Math.pow(1.2, getModifiers().size());
 
 				if (getAreaType() == NodeType.DANGER) {
 					dropFac *= 1.5;

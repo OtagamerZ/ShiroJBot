@@ -6,6 +6,7 @@ import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.dunhun.MonsterStats;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
+import com.kuuhaku.model.records.dunhun.Loot;
 import com.kuuhaku.util.Calc;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -76,7 +77,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 
 	@Override
 	public int getInitiative() {
-		return getGame().getAreaLevel() / 3 + stats.getInitiative() + (int) getModifiers().getInitiative().get();
+		return Math.max(1, getGame().getAreaLevel() / 3 + stats.getInitiative() + (int) getModifiers().getInitiative().get());
 	}
 
 	@Override
@@ -111,6 +112,10 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 		}
 
 		return (int) (stats.getKillXp() * mult);
+	}
+
+	public Loot generateLoot() {
+		return stats.generateLoot(this);
 	}
 
 	public void load() {
