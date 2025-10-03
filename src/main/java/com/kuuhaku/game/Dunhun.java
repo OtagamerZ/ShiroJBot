@@ -101,7 +101,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		if (duel) {
 			this.map = null;
-			setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/versus_end_timeout"), 5, TimeUnit.MINUTES);
 		} else {
 			Hero leader = heroes.get(players[0]);
 
@@ -140,23 +139,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 				this.map = dungeon.init(this, new DungeonRun(leader, dungeon));
 				this.map.generate();
 			}
-
-			setTimeout(turn -> {
-				if (getCombat() != null) {
-					Actor<?> current = getCombat().getCurrent();
-					if (current != null) {
-						getCombat().getLock().complete(() -> current.setFleed(true));
-					} else {
-						getCombat().getLock().complete(null);
-					}
-
-					return;
-				}
-
-				DungeonRun run = map.getRun();
-				finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
-			}, 5, TimeUnit.MINUTES);
 		}
+
+		setTimeout(this::onTimeout, 5, TimeUnit.MINUTES);
 	}
 
 	@Override
@@ -956,5 +941,27 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		return Utils.regex(getString(text), "\\[(?<S>[^\\[\\]]*?)\\|(?<P>.*?)]")
 				.replaceAll(r -> r.group(plural));
+	}
+
+	private void onTimeout(int turn) {
+		if (isDuel()) {
+			reportResult(GameReport.GAME_TIMEOUT, "str/versus_end_timeout");
+			return;
+		}
+
+		if (getCombat() != null) {
+			Actor<?> current = getCombat().getCurrent();
+			if (current != null) {
+				getCombat().getLock().complete(() -> current.setFleed(true));
+			} else {
+				getCombat().getLock().complete(null);
+			}
+
+			setTimeout(this::onTimeout, 5, TimeUnit.MINUTES);
+			return;
+		}
+
+		DungeonRun run = map.getRun();
+		finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
 	}
 }
