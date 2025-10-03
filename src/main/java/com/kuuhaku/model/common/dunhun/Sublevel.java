@@ -27,6 +27,10 @@ public class Sublevel {
 		return nodes.get(index);
 	}
 
+	public Node getAt(int index) {
+		return getNode(index);
+	}
+
 	public List<Node> getNodes() {
 		return nodes;
 	}
