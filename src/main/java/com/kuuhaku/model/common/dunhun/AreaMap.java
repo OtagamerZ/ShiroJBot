@@ -33,7 +33,6 @@ public class AreaMap {
 		this.generator = generator;
 		this.areasPerFloor = areasPerFloor;
 		this.run = run;
-		newFloor();
 	}
 
 	public AreaMap(DungeonRun run) {
