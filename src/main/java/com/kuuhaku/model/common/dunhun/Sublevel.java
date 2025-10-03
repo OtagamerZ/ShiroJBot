@@ -35,8 +35,8 @@ public class Sublevel {
 		return nodes;
 	}
 
-	public void newNode(NodeType type, Consumer<Node> generator, Node... parents) {
-		Node node = new Node(this, type, List.of(parents));
+	public void newNode(NodeType type, List<Node> parents, Consumer<Node> generator) {
+		Node node = new Node(this, type, parents);
 		generator.accept(node);
 		nodes.add(node);
 	}
