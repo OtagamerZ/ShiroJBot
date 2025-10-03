@@ -26,9 +26,9 @@ public class AreaMap {
 	private final AtomicInteger renderFloor = new AtomicInteger(0);
 	private final AtomicInteger renderSublevel = new AtomicInteger(0);
 
-	public AreaMap(int areasPerFloor, Consumer<AreaMap> generator, DungeonRun run) {
-		this.areasPerFloor = areasPerFloor;
+	public AreaMap(Consumer<AreaMap> generator, int areasPerFloor, DungeonRun run) {
 		this.generator = generator;
+		this.areasPerFloor = areasPerFloor;
 		this.run = run;
 	}
 

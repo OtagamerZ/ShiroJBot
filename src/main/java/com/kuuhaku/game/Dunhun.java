@@ -102,8 +102,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 			this.map = null;
 			setTimeout(turn -> reportResult(GameReport.GAME_TIMEOUT, "str/versus_end_timeout"), 5, TimeUnit.MINUTES);
 		} else {
+			Hero leader = heroes.get(players[0]);
+
 			if (dungeon.isInfinite()) {
-				Hero leader = heroes.get(players[0]);
 				DungeonRun run = DAO.find(DungeonRun.class, new DungeonRunId(leader.getId(), dungeon.getId()));
 				if (run == null) {
 					run = new DungeonRun(leader, dungeon);
@@ -135,8 +136,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 					mod.getModifier().toEffect(this);
 				}
 			} else {
-				// TODO Pre-generated maps
-				this.map = new AreaMap(null);
+				this.map = dungeon.init(this, new DungeonRun(leader, dungeon));
+				this.map.generate();
 			}
 
 			setTimeout(turn -> {
@@ -168,8 +169,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@Override
 	protected void begin() {
-		dungeon.init(this);
-
 		CompletableFuture.runAsync(() -> {
 			while (!isClosed()) {
 				try {
@@ -389,14 +388,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 						Constants.LOGGER.error(e, e);
 					}
 
-					Set<DungeonRunPlayer> pls = map.getRun().getPlayers();
-					for (Hero h : heroes.values()) {
-						DungeonRunPlayer p = new DungeonRunPlayer(map.getRun(), h);
-						pls.remove(p);
-						pls.add(p);
-					}
+					if (dungeon.isInfinite()) {
+						Set<DungeonRunPlayer> pls = map.getRun().getPlayers();
+						for (Hero h : heroes.values()) {
+							DungeonRunPlayer p = new DungeonRunPlayer(map.getRun(), h);
+							pls.remove(p);
+							pls.add(p);
+						}
 
-					map.getRun().save();
+						map.getRun().save();
+					}
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 					getChannel().sendMessage(getLocale().get("error/error", e)).queue();

@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
+import com.kuuhaku.model.common.dunhun.AreaMap;
 import com.kuuhaku.model.common.dunhun.context.DungeonContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -68,6 +69,9 @@ public class Dungeon extends DAO<Dungeon> {
 	@Column(name = "area_level")
 	private int areaLevel = 1;
 
+	@Column(name = "areas_per_floor")
+	private int areasPerFloor = AreaMap.AREAS_PER_FLOOR;
+
 	@Column(name = "hardcore")
 	private boolean hardcore;
 
@@ -98,6 +102,10 @@ public class Dungeon extends DAO<Dungeon> {
 		return areaLevel;
 	}
 
+	public int getAreasPerFloor() {
+		return areasPerFloor;
+	}
+
 	public boolean isHardcore() {
 		return hardcore;
 	}
@@ -106,15 +114,17 @@ public class Dungeon extends DAO<Dungeon> {
 		return script == null || script.isBlank();
 	}
 
-	public void init(Dunhun game) {
-		if (script == null) return;
+	public AreaMap init(Dunhun game, DungeonRun run) {
+		if (script == null) return null;
 
 		try {
-			Utils.exec(id, script, Map.of(
-					"ctx", new DungeonContext(game, this)
-			));
+			return new AreaMap(
+					m -> Utils.exec(id, script, Map.of("ctx", new DungeonContext(game, this, m))),
+					areasPerFloor, run
+			);
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to process dungeon {}", id, e);
+			return null;
 		}
 	}
 
