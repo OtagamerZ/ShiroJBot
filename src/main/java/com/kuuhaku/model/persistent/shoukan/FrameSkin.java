@@ -187,7 +187,7 @@ public class FrameSkin extends DAO<FrameSkin> {
 	}
 
 	public boolean canUse(Account acc) {
-		if (titles == null) return true;
+		if (acc == null || titles == null) return true;
 
 		for (Object title : titles) {
 			if (title instanceof String s) {
