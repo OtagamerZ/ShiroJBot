@@ -419,6 +419,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 					case UNIQUE -> 2.5;
 				} * mf * Math.pow(1.2, getModifiers().size());
 
+				if (getAreaType() == NodeType.DANGER) {
+					dropFac *= 1.5;
+				}
+
 				while (Calc.chance(dropFac)) {
 					Gear drop = Gear.getRandom(m, null);
 					if (drop != null) {
