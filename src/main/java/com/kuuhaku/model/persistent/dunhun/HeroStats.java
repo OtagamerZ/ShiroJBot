@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
@@ -39,7 +40,7 @@ public class HeroStats implements Serializable {
 	private static final NavigableMap<Integer, Integer> xpTable = new TreeMap<>();
 
 	static {
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < Actor.MAX_LEVEL; i++) {
 			xpTable.put((int) (Math.pow(i, 2.5) * 10), i + 1);
 		}
 	}
@@ -76,7 +77,7 @@ public class HeroStats implements Serializable {
 	}
 
 	public int getPointsLeft() {
-		return (4 + Math.min(100, getLevel())) - attributes.count() - unlockedSkills.size();
+		return (4 + Math.min(Actor.MAX_LEVEL, getLevel())) - attributes.count() - unlockedSkills.size();
 	}
 
 	public int getXpToCurrent() {

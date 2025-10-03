@@ -37,6 +37,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @MappedSuperclass
 public abstract class Actor<T extends Actor<T>> extends DAO<T> {
+	public static final int MAX_LEVEL = 100;
+
 	@Transient
 	public final long SERIAL = ThreadLocalRandom.current().nextLong();
 

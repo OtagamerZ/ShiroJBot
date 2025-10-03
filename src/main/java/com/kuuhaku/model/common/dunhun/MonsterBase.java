@@ -18,11 +18,11 @@ import static jakarta.persistence.CascadeType.ALL;
 
 @MappedSuperclass
 public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
-	public static final double[] hpTable = new double[1000];
-	public static final double[] statTable = new double[1000];
+	public static final double[] hpTable = new double[MAX_LEVEL];
+	public static final double[] statTable = new double[MAX_LEVEL];
 
 	static {
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < MAX_LEVEL; i++) {
 			hpTable[i] = 1 + i / 10d;
 			statTable[i] = Math.pow(1.26, i / 10d);
 		}
