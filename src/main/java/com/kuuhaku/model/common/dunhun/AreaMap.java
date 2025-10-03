@@ -54,11 +54,11 @@ public class AreaMap {
 		return List.copyOf(floors.values());
 	}
 
-	public Floor newRoot() {
+	public Node newRoot() {
 		Floor floor = new Floor(this, 0);
-		floor.getSublevel(0).addNode(NodeType.NONE);
+		Node root = floor.getSublevel(0).newNode(NodeType.NONE);
 		addFloor(floor);
-		return floor;
+		return root;
 	}
 
 	public Floor newFloor() {
