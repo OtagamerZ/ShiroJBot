@@ -38,7 +38,7 @@ public class GearModifiers {
 
 	private final Set<String> addedTags = new HashSet<>();
 
-	private Field[] fieldCache = null;
+	private final Field[] fieldCache = getClass().getDeclaredFields();
 
 	public CumValue getAttack() {
 		return attack;
@@ -92,10 +92,6 @@ public class GearModifiers {
 
 	public void removeIf(Predicate<ValueMod> check) {
 		addedTags.clear();
-
-		if (fieldCache == null) {
-			fieldCache = getClass().getDeclaredFields();
-		}
 
 		for (Field f : fieldCache) {
 			try {

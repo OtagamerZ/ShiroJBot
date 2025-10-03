@@ -181,12 +181,15 @@ public class CardAttributes implements Serializable, Cloneable {
 		lock.clear();
 	}
 
-	@Override
-	public CardAttributes clone() throws CloneNotSupportedException {
-		CardAttributes clone = (CardAttributes) super.clone();
-		clone.tags = new JSONArray(tags);
-		clone.descriptions = new HashSet<>(descriptions);
+	public CardAttributes copy() {
+		try {
+			CardAttributes clone = (CardAttributes) super.clone();
+			clone.tags = new JSONArray(tags);
+			clone.descriptions = new HashSet<>(descriptions);
 
-		return clone;
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new AssertionError(e);
+		}
 	}
 }

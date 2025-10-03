@@ -456,7 +456,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		return getSenshi().render(locale, cache.getDeck());
 	}
 
-	public abstract Actor<?> fork();
+	public abstract Actor<?> copy();
 
 	@Override
 	public boolean equals(Object o) {

@@ -160,7 +160,7 @@ public class CumValue implements Iterable<ValueMod> {
 
 	public void copyTo(CumValue to) {
 		for (ValueMod v : this) {
-			to.values.add(v.clone());
+			to.values.add(v.copy());
 		}
 	}
 }

@@ -81,6 +81,7 @@ public abstract class DAO<T extends DAO<T>> {
 		}));
 	}
 
+	@SuppressWarnings("SqlSourceToSinkFlow")
 	public static <T extends DAO<T>> T query(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
 			TypedQuery<T> q = em.createQuery(query, klass);
@@ -162,6 +163,7 @@ public abstract class DAO<T extends DAO<T>> {
 		});
 	}
 
+	@SuppressWarnings("SqlSourceToSinkFlow")
 	public static <T extends DAO<T>> List<T> queryAll(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
 			TypedQuery<T> q = em.createQuery(query, klass);
@@ -231,6 +233,7 @@ public abstract class DAO<T extends DAO<T>> {
 		});
 	}
 
+	@SuppressWarnings("SqlSourceToSinkFlow")
 	public static void apply(@NotNull @Language("JPAQL") String query, @NotNull Object... params) {
 		Manager.getFactory().runInTransaction(em -> {
 			Query q = em.createQuery(query);
@@ -250,6 +253,7 @@ public abstract class DAO<T extends DAO<T>> {
 		);
 	}
 
+	@SuppressWarnings("SqlSourceToSinkFlow")
 	public static <T extends DAO<T>> List<T> queryBuilder(@NotNull Class<T> klass, @NotNull @Language("JPAQL") String query, Function<TypedQuery<T>, List<T>> processor, @NotNull Object... params) {
 		return Manager.getFactory().callInTransaction(em -> {
 			TypedQuery<T> q = em.createQuery(query, klass);

@@ -525,8 +525,8 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 	}
 
 	@Override
-	public Field fork() throws CloneNotSupportedException {
-		Field clone = new Field(id, card, modifiers.clone(), type, effectOnly, base.clone(), stats.clone(), stashRef);
+	public Field copy() {
+		Field clone = new Field(id, card, modifiers.clone(), type, effectOnly, base.copy(), stats.copy(), stashRef);
 		clone.hand = hand;
 		clone.state = (byte) (state & 0b111);
 

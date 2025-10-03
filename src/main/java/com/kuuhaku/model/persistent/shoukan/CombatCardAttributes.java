@@ -82,8 +82,7 @@ public class CombatCardAttributes extends CardAttributes {
 		this.parry = parry;
 	}
 
-	@Override
-	public CombatCardAttributes clone() throws CloneNotSupportedException {
-		return (CombatCardAttributes) super.clone();
+	public CombatCardAttributes copy() {
+		return (CombatCardAttributes) super.copy();
 	}
 }

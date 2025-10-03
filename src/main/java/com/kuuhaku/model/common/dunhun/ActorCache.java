@@ -8,6 +8,7 @@ import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.FrameSkin;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.user.Account;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 
@@ -100,10 +101,13 @@ public class ActorCache {
 
 	public Deck getDeck() {
 		if (deck == null) {
-			deck = new Deck();
 			if (actor instanceof Hero h) {
-				deck.getStyling().setFrame(h.getAccount().getDeck().getFrame());
+				Account acc = h.getAccount();
+
+				deck = new Deck(acc);
+				deck.getStyling().setFrame(acc.getDeck().getFrame());
 			} else {
+				deck = new Deck();
 				deck.getStyling().setFrame(DAO.find(FrameSkin.class, "GLITCH"));
 			}
 		}

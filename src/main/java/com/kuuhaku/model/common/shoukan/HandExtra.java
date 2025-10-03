@@ -30,7 +30,7 @@ public class HandExtra {
 	private final CumValue regenMult = CumValue.mult();
 	private final CumValue degenMult = CumValue.mult();
 
-	private transient Field[] fieldCache = null;
+	private final Field[] fieldCache = getClass().getDeclaredFields();
 
 	public CumValue getHealMult() {
 		return healMult;
@@ -59,10 +59,6 @@ public class HandExtra {
 	}
 
 	public void removeIf(Predicate<ValueMod> check) {
-		if (fieldCache == null) {
-			fieldCache = getClass().getDeclaredFields();
-		}
-
 		for (Field f : fieldCache) {
 			try {
 				if (f.get(this) instanceof CumValue cv) {

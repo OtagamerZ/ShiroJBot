@@ -111,12 +111,11 @@ public class ValueMod implements Cloneable {
 		return Objects.hash(source, side);
 	}
 
-	@Override
-	public ValueMod clone() {
+	public ValueMod copy() {
 		try {
 			return (ValueMod) super.clone();
 		} catch (CloneNotSupportedException e) {
-			throw new AssertionError();
+			throw new AssertionError(e);
 		}
 	}
 }

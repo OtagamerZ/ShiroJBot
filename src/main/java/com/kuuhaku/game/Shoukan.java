@@ -296,9 +296,8 @@ public class Shoukan extends GameInstance<Phase> {
 			Race major = args.getEnum(Race.class, "major", Race.NONE);
 
 			Set<Race> minors = new HashSet<>();
-			JSONArray races = new JSONArray(Arrays.asList(args.getString("minor").split(",")));
-			for (int i = 0; i < races.size(); i++) {
-				Race minor = races.getEnum(Race.class, i);
+			for (String race : args.getString("minor").split(",")) {
+				Race minor = Utils.safeEnum(Race.class, race);
 				if (minor != null) {
 					minors.add(minor);
 				}
@@ -763,9 +762,8 @@ public class Shoukan extends GameInstance<Phase> {
 		int mp = 0;
 
 		List<Drawable<?>> cards = new ArrayList<>();
-		JSONArray batch = new JSONArray(args.getString("inField"));
-		for (Object o : batch) {
-			int idx = ((Number) o).intValue();
+		for (String v : args.getString("inField").split(",")) {
+			int idx = NumberUtils.toInt(v);
 			SlotColumn slot = arena.getSlots(curr.getSide()).get(idx - 1);
 
 			boolean nc = args.has("notCombat");
@@ -847,9 +845,8 @@ public class Shoukan extends GameInstance<Phase> {
 		Hand curr = hands.get(side);
 
 		List<Drawable<?>> cards = new ArrayList<>();
-		JSONArray batch = new JSONArray(args.getString("inHand"));
-		for (Object o : batch) {
-			int idx = ((Number) o).intValue();
+		for (String v : args.getString("inHand").split(",")) {
+			int idx = NumberUtils.toInt(v);
 			if (!Utils.between(idx, 1, curr.getCards().size())) {
 				getChannel().sendMessage(getString("error/invalid_hand_index")).queue();
 				return false;

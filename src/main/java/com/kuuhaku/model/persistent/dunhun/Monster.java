@@ -154,7 +154,7 @@ public class Monster extends MonsterBase<Monster> {
 	}
 
 	@Override
-	public Actor<?> fork() {
+	public Actor<?> copy() {
 		Monster clone = new Monster(getId());
 		clone.stats = stats;
 		clone.infos = infos;

@@ -775,8 +775,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public Evogear fork() throws CloneNotSupportedException {
-		Evogear clone = new Evogear(id, card, tier, spell, targetType, charms.clone(), base.clone(), stats.clone(), stashRef);
+	public Evogear copy() {
+		Evogear clone = new Evogear(id, card, tier, spell, targetType, charms.clone(), base.copy(), stats.copy(), stashRef);
 		clone.hand = hand;
 		clone.state = (byte) (state & (0b111 | 0xF0));
 

@@ -159,15 +159,14 @@ public class Skill extends DAO<Skill> implements Cloneable {
 		return Objects.hashCode(id);
 	}
 
-	@Override
-	public Skill clone() {
+	public Skill copy() {
 		try {
 			Skill clone = (Skill) super.clone();
 			clone.ctxVar = new JSONObject(ctxVar);
 
 			return clone;
 		} catch (CloneNotSupportedException e) {
-			throw new AssertionError();
+			throw new AssertionError(e);
 		}
 	}
 }

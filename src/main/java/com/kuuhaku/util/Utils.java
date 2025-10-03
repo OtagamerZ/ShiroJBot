@@ -141,43 +141,19 @@ public abstract class Utils {
 		return millis;
 	}
 
-	public static <T> T getOr(T get, T or) {
+	@NotNull
+	public static <T> T getOr(T get, @NotNull T or) {
 		if (get instanceof String s && s.isBlank()) return or;
 		else return get == null ? or : get;
 	}
 
-	public static <T> T getOr(Supplier<T> get, T or) {
+	@NotNull
+	public static <T> T getOr(Supplier<T> get, @NotNull T or) {
 		try {
-			Object obj = get.get();
-			if (obj instanceof String s && s.isBlank()) return or;
-			else return obj == null ? or : get.get();
+			return getOr(get.get(), or);
 		} catch (Exception e) {
 			return or;
 		}
-	}
-
-	@SafeVarargs
-	public static <T> T getOrMany(T get, T... or) {
-		T out = null;
-
-		for (T t : or) {
-			out = getOr(get, t);
-			if (out != null && !(out instanceof String s && s.isBlank())) break;
-		}
-
-		return out;
-	}
-
-	@SafeVarargs
-	public static <T> T getOrMany(Supplier<T> get, T... or) {
-		T out = null;
-
-		for (T t : or) {
-			out = getOr(get, t);
-			if (out != null && !(out instanceof String s && s.isBlank())) break;
-		}
-
-		return out;
 	}
 
 	@SafeVarargs
@@ -1127,6 +1103,18 @@ public abstract class Utils {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	public static <T extends Enum<T>> T safeEnum(Class<T> klass, String name) {
+		return safeEnum(klass, name, null);
+	}
+
+	public static <T extends Enum<T>> T safeEnum(Class<T> klass, String name, T or) {
+		if (!klass.isEnum()) return null;
+		return Arrays.stream(klass.getEnumConstants())
+				.filter(e -> e.name().equalsIgnoreCase(name))
+				.findFirst()
+				.orElse(or);
 	}
 
 	public static <T> T with(T t, Consumer<T> act) {

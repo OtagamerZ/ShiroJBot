@@ -1644,8 +1644,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public Senshi fork() throws CloneNotSupportedException {
-		Senshi clone = new Senshi(id, card, race, base.clone(), stats.clone(), stashRef);
+	public Senshi copy() {
+		Senshi clone = new Senshi(id, card, race, base.copy(), stats.copy(), stashRef);
 		clone.hand = hand;
 		clone.state = state & (0b1_1111 | 0xF_FFFFF_00);
 

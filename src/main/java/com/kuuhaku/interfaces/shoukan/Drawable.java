@@ -472,16 +472,7 @@ public interface Drawable<T extends Drawable<T>> {
 		return out.toString();
 	}
 
-	T fork() throws CloneNotSupportedException;
-
-	@SuppressWarnings("unchecked")
-	default T copy() {
-		try {
-			return fork();
-		} catch (Exception e) {
-			return (T) this;
-		}
-	}
+	T copy();
 
 	default T withCopy(Consumer<T> act) {
 		T t = copy();

@@ -42,7 +42,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class CardExtra implements Cloneable, Iterable<CumValue> {
+public class CardExtra implements Iterable<CumValue> {
 	private final CumValue mana = CumValue.flat();
 	private final CumValue blood = CumValue.flat();
 	private final CumValue sacrifices = CumValue.flat();
@@ -80,7 +80,7 @@ public class CardExtra implements Cloneable, Iterable<CumValue> {
 	private String description = null;
 	private String effect = null;
 
-	private transient Field[] fieldCache = null;
+	private final Field[] fieldCache = getClass().getDeclaredFields();
 
 	public CumValue getMana() {
 		return mana;
@@ -274,10 +274,6 @@ public class CardExtra implements Cloneable, Iterable<CumValue> {
 	}
 
 	public void removeIf(Predicate<ValueMod> check) {
-		if (fieldCache == null) {
-			fieldCache = getClass().getDeclaredFields();
-		}
-
 		for (Field f : fieldCache) {
 			try {
 				if (f.get(this) instanceof CumValue cv) {
@@ -299,13 +295,8 @@ public class CardExtra implements Cloneable, Iterable<CumValue> {
 		return Calc.round(out, 2);
 	}
 
-	@Override
-	public CardExtra clone() {
+	public CardExtra copy() {
 		CardExtra clone = new CardExtra();
-
-		if (fieldCache == null) {
-			fieldCache = getClass().getDeclaredFields();
-		}
 
 		for (Field f : fieldCache) {
 			try {
@@ -329,10 +320,6 @@ public class CardExtra implements Cloneable, Iterable<CumValue> {
 
 	@Override
 	public @NotNull Iterator<CumValue> iterator() {
-		if (fieldCache == null) {
-			fieldCache = getClass().getDeclaredFields();
-		}
-
 		return Arrays.stream(fieldCache)
 				.map(f -> {
 					try {

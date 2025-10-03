@@ -47,7 +47,7 @@ public class ActorModifiers implements Iterable<CumValue> {
 	private final TimedMap<EffectBase> tempEffects = new TimedMap<>();
 	private Actor<?> channeled;
 
-	private Field[] fieldCache = null;
+	private final Field[] fieldCache = getClass().getDeclaredFields();
 
 	public CumValue getMaxHp() {
 		return maxHp;
@@ -139,10 +139,6 @@ public class ActorModifiers implements Iterable<CumValue> {
 			g.getModifiers().removeIf(check);
 		}
 
-		if (fieldCache == null) {
-			fieldCache = getClass().getDeclaredFields();
-		}
-
 		for (Field f : fieldCache) {
 			try {
 				if (f.get(this) instanceof CumValue cv) {
@@ -155,10 +151,6 @@ public class ActorModifiers implements Iterable<CumValue> {
 
 	@Override
 	public @NotNull Iterator<CumValue> iterator() {
-		if (fieldCache == null) {
-			fieldCache = getClass().getDeclaredFields();
-		}
-
 		return Arrays.stream(fieldCache)
 				.map(f -> {
 					try {

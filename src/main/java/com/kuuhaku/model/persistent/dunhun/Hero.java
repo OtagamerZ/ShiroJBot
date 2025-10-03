@@ -88,7 +88,9 @@ public class Hero extends Actor<Hero> {
 
 	public boolean setImage(BufferedImage img) {
 		File parent = new File(Constants.CARDS_ROOT + "../heroes");
-		if (!parent.exists()) parent.mkdir();
+		if (!parent.exists()) {
+			if (!parent.mkdir()) throw new RuntimeException("Failed to create heroes directory");
+		}
 
 		File f = new File(parent, getId() + ".png");
 		img = Graph.scaleAndCenterImage(Graph.toColorSpace(img, BufferedImage.TYPE_INT_ARGB), 225, 350);
@@ -262,7 +264,7 @@ public class Hero extends Actor<Hero> {
 	}
 
 	@Override
-	public Actor<?> fork() {
+	public Actor<?> copy() {
 		Hero clone = new Hero(account, getId(), stats.getRace());
 		clone.stats = stats;
 		clone.equipment = new JSONObject(equipment);

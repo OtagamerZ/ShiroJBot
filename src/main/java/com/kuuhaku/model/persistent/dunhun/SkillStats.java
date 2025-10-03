@@ -117,11 +117,6 @@ public class SkillStats implements Serializable {
 		if (cpuRule == null) return CpuRule.ANY;
 
 		try {
-			JSONObject jo = new JSONObject();
-			jo.put("game", source.getGame());
-			jo.put("actor", source);
-			jo.put("target", target);
-
 			Object out = Utils.exec(id, cpuRule, Map.of(
 					"ctx", new SkillContext(source, target)
 			));
