@@ -25,6 +25,7 @@ import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.util.Calc;
@@ -192,8 +193,13 @@ public class Monster extends MonsterBase<Monster> {
 		}
 
 		if (rarity == null) {
-			if (Calc.chance(5)) rarity = RarityClass.RARE;
-			else if (Calc.chance(35)) rarity = RarityClass.MAGIC;
+			int rarityMult = 1;
+			if (game != null && game.getAreaType() == NodeType.DANGER) {
+				rarityMult = 2;
+			}
+
+			if (Calc.chance(5 * rarityMult)) rarity = RarityClass.RARE;
+			else if (Calc.chance(35 * rarityMult)) rarity = RarityClass.MAGIC;
 			else rarity = RarityClass.NORMAL;
 		}
 

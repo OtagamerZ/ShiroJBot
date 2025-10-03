@@ -18,6 +18,7 @@ import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.*;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.persistent.dunhun.*;
@@ -919,6 +920,15 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		return Set.copyOf(modifiers.values());
+	}
+
+	public NodeType getAreaType() {
+		Node node = map.getPlayerNode();
+		if (node != null) {
+			return node.getType();
+		}
+
+		return NodeType.NONE;
 	}
 
 	public int getAreaLevel() {

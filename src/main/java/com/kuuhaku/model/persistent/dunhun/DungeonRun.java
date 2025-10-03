@@ -103,6 +103,10 @@ public class DungeonRun extends DAO<DungeonRun> {
 		this.path = path;
 	}
 
+	public int getPathHash() {
+		return Objects.hash(floor, sublevel, path);
+	}
+
 	public void setNode(Node node) {
 		floor = node.getSublevel().getFloor().getFloor();
 		sublevel = node.getSublevel().getSublevel();

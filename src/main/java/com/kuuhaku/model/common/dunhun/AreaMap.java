@@ -5,6 +5,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.DungeonRun;
 import com.kuuhaku.util.WobbleStroke;
+import kotlin.Pair;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -25,6 +26,8 @@ public class AreaMap {
 	private final TreeMap<Integer, Floor> floors = new TreeMap<>();
 	private final AtomicInteger renderFloor = new AtomicInteger(0);
 	private final AtomicInteger renderSublevel = new AtomicInteger(0);
+
+	private Pair<Integer, Node> pnCache;
 
 	public AreaMap(Consumer<AreaMap> generator, int areasPerFloor, DungeonRun run) {
 		this.generator = generator;
@@ -66,6 +69,12 @@ public class AreaMap {
 	public Node getPlayerNode() {
 		if (!floors.containsKey(run.getFloor())) return null;
 
+		if (pnCache != null) {
+			if (pnCache.getFirst() == run.getPathHash()) {
+				return pnCache.getSecond();
+			}
+		}
+
 		Floor fl = getFloor(run.getFloor());
 		if (run.getSublevel() >= fl.size()) {
 			run.setSublevel(fl.size() - 1);
@@ -76,7 +85,8 @@ public class AreaMap {
 			run.setPath(sub.size() - 1);
 		}
 
-		return sub.getNode(run.getPath());
+		pnCache = new Pair<>(run.getPathHash(), sub.getNode(run.getPath()));
+		return pnCache.getSecond();
 	}
 
 	public AtomicInteger getRenderFloor() {
