@@ -42,6 +42,10 @@ public class Floor {
 		return sublevels[sublevel];
 	}
 
+	public Sublevel getAt(int sublevel) {
+		return getSublevel(sublevel);
+	}
+
 	public List<Sublevel> getSublevels() {
 		return List.of(sublevels);
 	}
