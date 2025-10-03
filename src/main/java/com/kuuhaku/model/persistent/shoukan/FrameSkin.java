@@ -19,13 +19,13 @@
 package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.TitleLocked;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.ColorConverter;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedFrameSkin;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
@@ -49,7 +49,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "frame_skin", schema = "shiro")
-public class FrameSkin extends DAO<FrameSkin> {
+public class FrameSkin extends DAO<FrameSkin> implements TitleLocked {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -90,6 +90,7 @@ public class FrameSkin extends DAO<FrameSkin> {
 	@Convert(converter = ColorConverter.class)
 	private Color secondaryColor;
 
+	private transient List<Title> titleCache;
 	private transient Color themeCache;
 
 	public FrameSkin() {
@@ -99,6 +100,7 @@ public class FrameSkin extends DAO<FrameSkin> {
 		this.id = id;
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -133,20 +135,23 @@ public class FrameSkin extends DAO<FrameSkin> {
 		return canvas;
 	}
 
+	@Override
 	public List<Title> getTitles() {
-		if (titles == null) return List.of();
+		if (titleCache != null) return titleCache;
 
 		List<Title> out = new ArrayList<>();
-		for (Object title : titles) {
-			if (title instanceof String s) {
-				Title t = DAO.find(Title.class, s);
-				if (t != null) {
-					out.add(t);
+		if (titles != null) {
+			for (Object title : titles) {
+				if (title instanceof String s) {
+					Title t = DAO.find(Title.class, s);
+					if (t != null) {
+						out.add(t);
+					}
 				}
 			}
 		}
 
-		return out;
+		return titleCache = out;
 	}
 
 	public boolean isLegacy() {
@@ -184,22 +189,6 @@ public class FrameSkin extends DAO<FrameSkin> {
 
 	public Currency getCurrency() {
 		return currency;
-	}
-
-	public boolean canUse(Account acc) {
-		if (acc == null || titles == null) return true;
-
-		for (Object title : titles) {
-			if (title instanceof String s) {
-				if (!acc.hasTitle(s)) return false;
-			}
-		}
-
-		if (price > 0) {
-			return !acc.getDynValue("ss_" + id.toLowerCase()).isBlank();
-		}
-
-		return true;
 	}
 
 	public Shape getBoundary() {

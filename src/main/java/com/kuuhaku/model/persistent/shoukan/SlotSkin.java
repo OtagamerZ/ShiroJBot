@@ -21,19 +21,19 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Shoukan;
+import com.kuuhaku.interfaces.TitleLocked;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedSlotSkin;
-import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
 import org.hibernate.type.SqlTypes;
 
 import java.awt.*;
@@ -49,7 +49,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "slot_skin", schema = "shiro")
-public class SlotSkin extends DAO<SlotSkin> {
+public class SlotSkin extends DAO<SlotSkin> implements TitleLocked {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -71,6 +71,8 @@ public class SlotSkin extends DAO<SlotSkin> {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray titles;
 
+	private transient List<Title> titleCache;
+
 	public SlotSkin() {
 	}
 
@@ -78,6 +80,7 @@ public class SlotSkin extends DAO<SlotSkin> {
 		this.id = id;
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -108,20 +111,23 @@ public class SlotSkin extends DAO<SlotSkin> {
 		return bi;
 	}
 
+	@Override
 	public List<Title> getTitles() {
-		if (titles == null) return List.of();
+		if (titleCache != null) return titleCache;
 
 		List<Title> out = new ArrayList<>();
-		for (Object title : titles) {
-			if (title instanceof String s) {
-				Title t = DAO.find(Title.class, s);
-				if (t != null) {
-					out.add(t);
+		if (titles != null) {
+			for (Object title : titles) {
+				if (title instanceof String s) {
+					Title t = DAO.find(Title.class, s);
+					if (t != null) {
+						out.add(t);
+					}
 				}
 			}
 		}
 
-		return out;
+		return titleCache = out;
 	}
 
 	public int getPrice() {
@@ -130,21 +136,5 @@ public class SlotSkin extends DAO<SlotSkin> {
 
 	public Currency getCurrency() {
 		return currency;
-	}
-
-	public boolean canUse(Account acc) {
-		if (titles == null) return true;
-
-		for (Object title : titles) {
-			if (title instanceof String s) {
-				if (!acc.hasTitle(s)) return false;
-			}
-		}
-
-		if (price > 0) {
-			return !acc.getDynValue("ss_" + id.toLowerCase()).isBlank();
-		}
-
-		return true;
 	}
 }
