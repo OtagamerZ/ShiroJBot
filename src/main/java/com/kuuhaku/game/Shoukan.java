@@ -754,7 +754,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint("PLAN")
-	@PlayerAction("(?<inField>\\[[1-5](,[1-5])*]),s(?<notCombat>,nc)?")
+	@PlayerAction("\\[(?<inField>[1-5](,[1-5])*)],s(?<notCombat>,nc)?")
 	private boolean sacrificeBatch(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 
@@ -840,7 +840,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@PhaseConstraint("PLAN")
-	@PlayerAction("(?<inHand>\\[\\d+(,\\d+)*]),d")
+	@PlayerAction("\\[(?<inHand>\\d+(,\\d+)*)],d")
 	private boolean discardBatch(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 
