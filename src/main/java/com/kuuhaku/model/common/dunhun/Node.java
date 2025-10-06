@@ -172,6 +172,8 @@ public class Node {
 	public String getPathVerb(Node to) {
 		Point fromPos = getRenderPos();
 		Point toPos = to.getRenderPos();
+		System.out.println(fromPos);
+		System.out.println(toPos);
 
 		if (fromPos.equals(toPos)) return "centercenter";
 
