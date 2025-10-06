@@ -37,18 +37,7 @@ public class Node {
 	}
 
 	public Node(Sublevel sublevel, List<Node> parents) {
-		this.sublevel = sublevel;
-		this.path = sublevel.size();
-		this.seed = Utils.generateSeed(DigestUtils.getMd5Digest(),
-				sublevel.getFloor().getSeed(),
-				sublevel.getSublevel(),
-				path
-		);
-
-		this.parents = parents;
-		for (Node parent : parents) {
-			parent.children.add(this);
-		}
+		this(sublevel, NodeType.NONE, parents);
 
 		if (getParents().stream().anyMatch(p -> p.getType() == NodeType.BOSS)) {
 			this.type = NodeType.REST;
@@ -59,9 +48,14 @@ public class Node {
 
 	public Node(Sublevel sublevel, NodeType type, List<Node> parents) {
 		this.sublevel = sublevel;
-		this.path = 0;
-		this.seed = 0;
+		this.path = sublevel.size();
 		this.type = type;
+		this.seed = Utils.generateSeed(DigestUtils.getMd5Digest(),
+				sublevel.getFloor().getSeed(),
+				sublevel.getSublevel(),
+				path
+		);
+
 		this.parents = parents;
 		for (Node parent : parents) {
 			parent.children.add(this);
