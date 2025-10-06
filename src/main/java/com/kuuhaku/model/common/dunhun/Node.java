@@ -172,16 +172,13 @@ public class Node {
 	public String getPathVerb(Node to) {
 		Point fromPos = getRenderPos();
 		Point toPos = to.getRenderPos();
-		System.out.println(fromPos);
-		System.out.println(toPos);
 
 		if (fromPos.equals(toPos)) return "centercenter";
 
 		Point dir = new Point(toPos.x - fromPos.x, toPos.y - fromPos.y);
-		double len = Math.max(Math.abs(toPos.x), Math.abs(toPos.y));
+		double len = Math.max(Math.abs(dir.x), Math.abs(dir.y));
 		Point2D.Double normal = new Point2D.Double(dir.x / len, dir.y / len);
 
-		System.out.println(normal);
 		String icon;
 		if (normal.x <= -0.25) {
 			icon = "left";
