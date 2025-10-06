@@ -59,6 +59,17 @@ import java.util.stream.Collectors;
 public class Dunhun extends GameInstance<NullPhase> {
 	public static final int LEVEL_HARD = 28;
 	public static final int LEVEL_BRUTAL = 56;
+	public static final Map<String, String> ICONS = Utils.with(new LinkedHashMap<>(9), m -> {
+		m.put("centertop", "⬆️");
+		m.put("lefttop", "↖️");
+		m.put("leftcenter", "⬅️");
+		m.put("leftbottom", "↙️");
+		m.put("centerbottom", "⬇️");
+		m.put("rightbottom", "↘️");
+		m.put("rightcenter", "➡️");
+		m.put("righttop", "↗️");
+		m.put("centercenter", "*️⃣");
+	});
 
 	private final ExecutorService main = Executors.newSingleThreadExecutor();
 	private final Dungeon dungeon;
@@ -225,25 +236,21 @@ public class Dunhun extends GameInstance<NullPhase> {
 								.setCancellable(false);
 
 						Node currNode = map.getPlayerNode();
-						List<Node> children = currNode.getChildren().stream()
-								.sorted(Comparator.comparingInt(n -> n.getRenderPos().x))
+						List<String> order = List.copyOf(ICONS.keySet());
+						List<Map.Entry<String, Node>> children = currNode.getChildren().stream()
+								.map(n -> Map.entry(currNode.getPathVerb(n), n))
+								.sorted(Comparator.comparingInt(e -> order.indexOf(e.getKey())))
 								.toList();
-
-						Map<String, String> icons = Map.of(
-								"leftmost", "⬅️",
-								"left", "↙️",
-								"center", "⬇️",
-								"right", "↘️",
-								"rightmost", "➡️"
-						);
 
 						Set<Choice> choices = new LinkedHashSet<>();
 						AtomicReference<String> chosenPath = new AtomicReference<>();
-						for (Node node : children) {
-							String path = node.getPathIcon(children);
+						for (Map.Entry<String, Node> entry : children) {
+							String path = entry.getKey();
+							Node node = entry.getValue();
+
 							choices.add(new Choice(
 									"path-" + path,
-									Utils.parseEmoji(icons.get(path)),
+									Utils.parseEmoji(ICONS.get(path)),
 									w -> {
 										run.setNode(node);
 										nodeRng.setSeed(node.getSeed());

@@ -7,6 +7,7 @@ import com.kuuhaku.util.Utils;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
@@ -163,6 +164,36 @@ public class Node {
 			int colorAdd = split ? child.path - this.path : 0;
 			child.pathColor = pathColor + colorAdd;
 		}
+	}
+
+	public String getPathVerb(Node to) {
+		Point fromPos = getRenderPos();
+		Point toPos = to.getRenderPos();
+
+		if (fromPos.equals(toPos)) return "centercenter";
+
+		Point dir = new Point(toPos.x - fromPos.x, toPos.y - fromPos.y);
+		double len = Math.max(Math.abs(toPos.x), Math.abs(toPos.y));
+		Point2D.Double normal = new Point2D.Double(dir.x / len, dir.y / len);
+
+		String icon;
+		if (normal.x <= 0.25) {
+			icon = "left";
+		} else if (normal.x >= 0.75) {
+			icon = "right";
+		} else {
+			icon = "center";
+		}
+
+		if (normal.y <= 0.25) {
+			icon += "top";
+		} else if (normal.y >= 0.75) {
+			icon += "bottom";
+		} else {
+			icon += "center";
+		}
+
+		return icon;
 	}
 
 	public String getPathIcon(List<Node> children) {
