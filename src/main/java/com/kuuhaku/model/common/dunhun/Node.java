@@ -179,6 +179,7 @@ public class Node {
 		double len = Math.max(Math.abs(toPos.x), Math.abs(toPos.y));
 		Point2D.Double normal = new Point2D.Double(dir.x / len, dir.y / len);
 
+		System.out.println(normal);
 		String icon;
 		if (normal.x <= -0.25) {
 			icon = "left";
