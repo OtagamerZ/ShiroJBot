@@ -187,17 +187,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					try {
-//						if (!floors.isEmpty()) {
-//							//TODO Pre-generated layout
-//							int floor = getTurn() - 1;
-//							if (floor >= floors.size()) {
-//								finish("str/dungeon_end", getHeroNames());
-//								break;
-//							}
-//
-//							floors.get(floor).run();
-//						}
-
 						DungeonRun run = map.getRun();
 						String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel() + 1);
 						EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -398,6 +387,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}
 
 						map.getRun().save();
+					} else if (map.getPlayerNode().getChildren().isEmpty()) {
+						if (getAreaType() != NodeType.BOSS) {
+							finish("str/dungeon_end", getHeroNames());
+							return;
+						}
+
+						finish("str/dungeon_end", getHeroNames());
+						return;
 					}
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);

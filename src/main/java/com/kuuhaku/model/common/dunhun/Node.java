@@ -30,7 +30,7 @@ public class Node {
 	private boolean renderedPath = false;
 	private boolean renderedNode = false;
 
-	private NodeType type = NodeType.NONE;
+	private NodeType type;
 	private int pathColor = -1;
 
 	public Node(Sublevel sublevel, NodeType type) {
