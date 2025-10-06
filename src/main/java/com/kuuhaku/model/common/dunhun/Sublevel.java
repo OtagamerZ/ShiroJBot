@@ -93,7 +93,8 @@ public class Sublevel {
 			int x = width / 2 + offset;
 
 			node.getRenderPos().move(x, y);
-			node.setRenderedPath(false);
+			node.setPathRendered(false);
+			node.setNodeRendered(false);
 		}
 	}
 
