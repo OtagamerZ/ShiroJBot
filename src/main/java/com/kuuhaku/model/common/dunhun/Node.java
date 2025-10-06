@@ -177,17 +177,17 @@ public class Node {
 		Point2D.Double normal = new Point2D.Double(dir.x / len, dir.y / len);
 
 		String icon;
-		if (normal.x <= 0.25) {
+		if (normal.x <= -0.25) {
 			icon = "left";
-		} else if (normal.x >= 0.75) {
+		} else if (normal.x >= 0.25) {
 			icon = "right";
 		} else {
 			icon = "center";
 		}
 
-		if (normal.y <= 0.25) {
+		if (normal.y <= -0.25) {
 			icon += "top";
-		} else if (normal.y >= 0.75) {
+		} else if (normal.y >= 0.25) {
 			icon += "bottom";
 		} else {
 			icon += "center";
