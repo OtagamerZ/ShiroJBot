@@ -389,8 +389,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 						map.getRun().save();
 					} else if (map.getPlayerNode().getChildren().isEmpty()) {
 						if (getAreaType() != NodeType.BOSS) {
-							finish("str/dungeon_end", getHeroNames());
+							finish("str/dungeon_lost", getHeroNames());
 							return;
+						}
+
+						for (Hero h : heroes.values()) {
+							h.getAccount().setDynValue("dg_completed_" + dungeon.getId().toLowerCase(), true);
 						}
 
 						finish("str/dungeon_end", getHeroNames());
