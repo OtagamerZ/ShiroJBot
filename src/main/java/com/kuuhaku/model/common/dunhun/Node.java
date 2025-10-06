@@ -83,18 +83,22 @@ public class Node {
 		return enemyPool;
 	}
 
-	public void addParent(Node node) {
-		parents.add(node);
-		node.children.add(this);
+	public void addParents(Node... nodes) {
+		for (Node node : nodes) {
+			parents.add(node);
+			node.children.add(this);
+		}
 	}
 
 	public LinkedHashSet<Node> getParents() {
 		return parents;
 	}
 
-	public void addChild(Node node) {
-		children.add(node);
-		node.parents.add(this);
+	public void addChildren(Node... nodes) {
+		for (Node node : nodes) {
+			children.add(node);
+			node.parents.add(this);
+		}
 	}
 
 	public LinkedHashSet<Node> getChildren() {
