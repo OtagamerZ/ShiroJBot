@@ -27,7 +27,8 @@ public class Node {
 	private final List<Node> children = new ArrayList<>();
 	private final Set<Node> blocked = new HashSet<>();
 	private final Point renderPos = new Point();
-	private boolean rendered = false;
+	private boolean renderedPath = false;
+	private boolean renderedNode = false;
 
 	private NodeType type = NodeType.NONE;
 	private int pathColor = -1;
@@ -108,12 +109,20 @@ public class Node {
 		return renderPos;
 	}
 
-	public boolean isRendered() {
-		return rendered;
+	public boolean isPathRendered() {
+		return renderedPath;
 	}
 
-	public void setRendered(boolean rendered) {
-		this.rendered = rendered;
+	public void setPathRendered(boolean rendered) {
+		this.renderedPath = rendered;
+	}
+
+	public boolean isNodeRendered() {
+		return renderedNode;
+	}
+
+	public void setNodeRendered(boolean rendered) {
+		this.renderedNode = rendered;
 	}
 
 	public NodeType getType() {
@@ -204,24 +213,8 @@ public class Node {
 		}
 	}
 
-	public void render(Graphics2D g2d, Node playerNode) {
+	public void renderPath(Graphics2D g2d, Node playerNode) {
 		boolean reachable = canReach(playerNode);
-
-		Composite comp = g2d.getComposite();
-		BufferedImage nodeIcon = getIcon();
-		if (!reachable) {
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-
-			for (int y = 0; y < nodeIcon.getHeight(); y++) {
-				for (int x = 0; x < nodeIcon.getWidth(); x++) {
-					int rgb = ICON_PLAIN.getRGB(x, y);
-					int alpha = (rgb >> 24) & 0xFF;
-					int tone = (rgb & 0xFF) / 3;
-
-					nodeIcon.setRGB(x, y, (alpha << 24) | tone << 16 | tone << 8 | tone);
-				}
-			}
-		}
 
 		for (Node child : children) {
 			Point to = child.getRenderPos();
@@ -269,6 +262,25 @@ public class Node {
 			}
 		}
 
+		renderedPath = true;
+	}
+
+	public void renderNode(Graphics2D g2d, Node playerNode) {
+		boolean reachable = canReach(playerNode);
+
+		BufferedImage nodeIcon = getIcon();
+		if (!reachable) {
+			for (int y = 0; y < nodeIcon.getHeight(); y++) {
+				for (int x = 0; x < nodeIcon.getWidth(); x++) {
+					int rgb = ICON_PLAIN.getRGB(x, y);
+					int alpha = ((rgb >> 24) & 0xFF) / 2;
+					int tone = (rgb & 0xFF) / 3;
+
+					nodeIcon.setRGB(x, y, (alpha << 24) | tone << 16 | tone << 8 | tone);
+				}
+			}
+		}
+
 		BufferedImage icon = nodeIcon;
 		if (sublevel.getFloor().areNodesHidden()) {
 			icon = ICON_PLAIN;
@@ -282,8 +294,7 @@ public class Node {
 				null
 		);
 
-		g2d.setComposite(comp);
-		rendered = true;
+		renderedNode = true;
 	}
 
 	@Override

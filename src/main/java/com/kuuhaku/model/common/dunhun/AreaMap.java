@@ -224,7 +224,7 @@ public class AreaMap {
 
 		List<Floor> floors = List.copyOf(this.floors.values());
 		Map<Floor, List<Node>> nodes = new TreeMap<>(Comparator.comparingInt(Floor::getFloor));
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 3; i++) {
 			for (Floor fl : floors) {
 				List<Node> nds = nodes.computeIfAbsent(fl, f -> fl.getNodes());
 				for (Node node : nds) {
@@ -235,49 +235,59 @@ public class AreaMap {
 						continue;
 					}
 
-					if (i == 0) {
-						if (fl.getFloor() > 0) {
-							Composite comp = g2d.getComposite();
-							if (!node.canReach(playerNode)) {
-								g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
-								g2d.setColor(Color.DARK_GRAY);
+					switch (i) {
+						case 0 -> {
+							if (fl.getFloor() > 0) {
+								Composite comp = g2d.getComposite();
+								if (!node.canReach(playerNode)) {
+									g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
+									g2d.setColor(Color.DARK_GRAY);
+								} else {
+									float hue = switch (node.getType()) {
+										case EVENT -> 50;
+										case REST -> 100;
+										case DANGER -> 20;
+										case BOSS -> 360;
+										default -> 0;
+									} / 360f;
+
+									g2d.setColor(Color.getHSBColor(hue, hue == 0 ? 0 : 0.8f, 0.2f));
+								}
+
+								g2d.setStroke(new WobbleStroke(bgRng, Node.NODE_RADIUS / 3 * 2));
+								g2d.drawLine(
+										node.getRenderPos().x - Node.NODE_RADIUS / 3, node.getRenderPos().y,
+										node.getRenderPos().x + Node.NODE_RADIUS / 3, node.getRenderPos().y
+								);
+								g2d.setComposite(comp);
 							} else {
-								float hue = switch (node.getType()) {
-									case EVENT -> 50;
-									case REST -> 100;
-									case DANGER -> 20;
-									case BOSS -> 360;
-									default -> 0;
-								} / 360f;
+								int ground = sliceHeight + 50;
 
-								g2d.setColor(Color.getHSBColor(hue, hue == 0 ? 0 : 0.8f, 0.2f));
-							}
+								g2d.setColor(new Color(41, 90, 24));
+								g2d.setStroke(new BasicStroke(6));
+								g2d.drawLine(0, ground, width, ground);
 
-							g2d.setStroke(new WobbleStroke(bgRng, Node.NODE_RADIUS / 3 * 2));
-							g2d.drawLine(
-									node.getRenderPos().x - Node.NODE_RADIUS / 3, node.getRenderPos().y,
-									node.getRenderPos().x + Node.NODE_RADIUS / 3, node.getRenderPos().y
-							);
-							g2d.setComposite(comp);
-						} else {
-							int ground = sliceHeight + 50;
-
-							g2d.setColor(new Color(41, 90, 24));
-							g2d.setStroke(new BasicStroke(6));
-							g2d.drawLine(0, ground, width, ground);
-
-							g2d.setColor(Color.DARK_GRAY);
-							g2d.setStroke(new BasicStroke(Node.NODE_RADIUS, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
-							g2d.drawLine(node.getRenderPos().x, 10, node.getRenderPos().x, ground);
-						}
-					} else {
-						for (Node parent : node.getParents()) {
-							if (!parent.isRendered() && parent.isOccluded(width, height)) {
-								parent.render(g2d, playerNode);
+								g2d.setColor(Color.DARK_GRAY);
+								g2d.setStroke(new BasicStroke(Node.NODE_RADIUS, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
+								g2d.drawLine(node.getRenderPos().x, 10, node.getRenderPos().x, ground);
 							}
 						}
+						case 1 -> {
+							for (Node parent : node.getParents()) {
+								if (!parent.isPathRendered() && parent.isOccluded(width, height)) {
+									parent.renderPath(g2d, playerNode);
+								}
+							}
 
-						node.render(g2d, playerNode);
+							if (!node.isPathRendered()) {
+								node.renderPath(g2d, playerNode);
+							}
+						}
+						case 2 -> {
+							if (!node.isNodeRendered()) {
+								node.renderNode(g2d, playerNode);
+							}
+						}
 					}
 				}
 			}
