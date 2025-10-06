@@ -154,7 +154,7 @@ public class AreaMap {
 				.filter(r -> r.getPlayers().size() == 1)
 				.collect(Collectors.groupingBy(DungeonRun::getSublevel));
 
-		int sliceHeight = height / areasPerFloor;
+		int sliceHeight = height / Sublevel.MAX_NODES;
 		{
 			int y = -sliceHeight * renderSublevel.get();
 			if (renderFloor.get() == 0) {
