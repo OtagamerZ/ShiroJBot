@@ -48,9 +48,9 @@ public class Node {
 
 	public Node(Sublevel sublevel, NodeType type, List<Node> parents) {
 		this.sublevel = sublevel;
-		this.path = sublevel.size();
+		this.path = sublevel == null ? 0 : sublevel.size();
 		this.type = type;
-		this.seed = Utils.generateSeed(DigestUtils.getMd5Digest(),
+		this.seed = sublevel == null ? 0 : Utils.generateSeed(DigestUtils.getMd5Digest(),
 				sublevel.getFloor().getSeed(),
 				sublevel.getSublevel(),
 				path
