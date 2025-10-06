@@ -92,7 +92,7 @@ public class Node {
 		return parents;
 	}
 
-	public void addChildren(Node node) {
+	public void addChild(Node node) {
 		children.add(node);
 		node.parents.add(this);
 	}
