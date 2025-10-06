@@ -29,17 +29,15 @@ public class AreaMap {
 
 	private Pair<Integer, Node> pnCache;
 
-	public AreaMap(Consumer<AreaMap> generator, int areasPerFloor, DungeonRun run) {
+	public AreaMap(DungeonRun run, int areasPerFloor, Consumer<AreaMap> generator) {
 		this.generator = generator;
 		this.areasPerFloor = areasPerFloor;
 		this.run = run;
 	}
 
 	public AreaMap(DungeonRun run) {
-		this.areasPerFloor = AREAS_PER_FLOOR;
+		this(run, AREAS_PER_FLOOR, AreaMap::generateRandom);
 		this.renderFloor.set(run.getFloor());
-		this.generator = AreaMap::generateRandom;
-		this.run = run;
 	}
 
 	public int getSeed() {

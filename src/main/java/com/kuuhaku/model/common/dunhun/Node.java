@@ -20,11 +20,11 @@ public class Node {
 	private final Sublevel sublevel;
 	private final int path;
 	private final int seed;
-	private final List<Node> parents;
+	private final LinkedHashSet<Node> parents;
+	private final LinkedHashSet<Node> children = new LinkedHashSet<>();
+
 	private final Set<String> eventPool = new HashSet<>();
 	private final Set<String> enemyPool = new HashSet<>();
-
-	private final List<Node> children = new ArrayList<>();
 	private final Set<Node> blocked = new HashSet<>();
 	private final Point renderPos = new Point();
 	private boolean renderedPath = false;
@@ -47,7 +47,7 @@ public class Node {
 		}
 	}
 
-	public Node(Sublevel sublevel, NodeType type, List<Node> parents) {
+	public Node(Sublevel sublevel, NodeType type, Collection<Node> parents) {
 		this.sublevel = sublevel;
 		this.path = sublevel == null ? 0 : sublevel.size();
 		this.type = type;
@@ -57,7 +57,7 @@ public class Node {
 				path
 		);
 
-		this.parents = parents;
+		this.parents = new LinkedHashSet<>(parents);
 		for (Node parent : parents) {
 			parent.children.add(this);
 		}
@@ -83,11 +83,21 @@ public class Node {
 		return enemyPool;
 	}
 
-	public List<Node> getParents() {
+	public void addParent(Node node) {
+		parents.add(node);
+		node.children.add(this);
+	}
+
+	public LinkedHashSet<Node> getParents() {
 		return parents;
 	}
 
-	public List<Node> getChildren() {
+	public void addChildren(Node node) {
+		children.add(node);
+		node.parents.add(this);
+	}
+
+	public LinkedHashSet<Node> getChildren() {
 		return children;
 	}
 

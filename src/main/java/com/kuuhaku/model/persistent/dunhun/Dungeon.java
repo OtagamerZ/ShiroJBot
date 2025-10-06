@@ -119,8 +119,8 @@ public class Dungeon extends DAO<Dungeon> {
 
 		try {
 			return new AreaMap(
-					m -> Utils.exec(id, script, Map.of("ctx", new DungeonContext(game, this, m))),
-					areasPerFloor, run
+					run, areasPerFloor,
+					m -> Utils.exec(id, script, Map.of("ctx", new DungeonContext(game, this, m)))
 			);
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to process dungeon {}", id, e);
