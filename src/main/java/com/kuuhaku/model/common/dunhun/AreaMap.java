@@ -229,7 +229,7 @@ public class AreaMap {
 					if (i == 1) node.calcColor();
 
 					int distance = node.travelDistance(playerNode);
-					boolean outsideView = visionLimit > 0 && (distance > visionLimit || (distance == -1 && !run.getVisitedNodes().contains(node.getSeed())));
+					boolean outsideView = visionLimit > 0 && (distance > visionLimit || (distance == -1 && !run.getVisitedNodes().contains(node.getId())));
 					boolean occluded = node.isOccluded(width, height) || outsideView;
 					if (node.getRenderPos().equals(ZERO) || occluded) {
 						continue;

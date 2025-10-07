@@ -379,14 +379,17 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					if (dungeon.isInfinite()) {
-						Set<DungeonRunPlayer> pls = map.getRun().getPlayers();
+						DungeonRun run = map.getRun();
+
+						Set<DungeonRunPlayer> pls = run.getPlayers();
 						for (Hero h : heroes.values()) {
-							DungeonRunPlayer p = new DungeonRunPlayer(map.getRun(), h);
+							DungeonRunPlayer p = new DungeonRunPlayer(run, h);
 							pls.remove(p);
 							pls.add(p);
 						}
 
-						map.getRun().save();
+						run.getVisitedNodes().add(map.getPlayerNode().getId());
+						run.save();
 					} else if (map.getPlayerNode().getChildren().isEmpty()) {
 						if (getAreaType() != NodeType.BOSS) {
 							finish("str/dungeon_lost", getHeroNames());

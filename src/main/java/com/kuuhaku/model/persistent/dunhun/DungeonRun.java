@@ -60,7 +60,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 			@JoinColumn(name = "hero_id"),
 			@JoinColumn(name = "dungeon_id")
 	})
-	private Set<Integer> visitedNodes = new LinkedHashSet<>();
+	private Set<Long> visitedNodes = new LinkedHashSet<>();
 
 	public DungeonRun() {
 	}
@@ -83,7 +83,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 		return dungeon;
 	}
 
-	public Set<Integer> getVisitedNodes() {
+	public Set<Long> getVisitedNodes() {
 		return visitedNodes;
 	}
 
