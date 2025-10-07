@@ -1,6 +1,7 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.enums.dunhun.NodeType;
+import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -28,8 +29,14 @@ public class Node {
 	private final Set<String> enemyPool = new HashSet<>();
 	private final Set<Node> blocked = new HashSet<>();
 	private final Point renderPos = new Point();
-	private boolean renderedPath = false;
-	private boolean renderedNode = false;
+	private byte renderState = 0b1;
+	/*
+	0xF
+	  └ 000 0111
+	         ││└─ will not be rendered
+	         │└── path rendered
+	         └─── node rendered
+	 */
 
 	private NodeType type;
 	private int pathColor = -1;
@@ -130,20 +137,28 @@ public class Node {
 		return renderPos;
 	}
 
+	public boolean willBeRendered() {
+		return Bit32.on(renderState, 0);
+	}
+
+	public void setWillBeRendered(boolean will) {
+		renderState = (byte) Bit32.set(renderState, 0, will);
+	}
+
 	public boolean isPathRendered() {
-		return renderedPath;
+		return Bit32.on(renderState, 1);
 	}
 
 	public void setPathRendered(boolean rendered) {
-		this.renderedPath = rendered;
+		renderState = (byte) Bit32.set(renderState, 1, rendered);
 	}
 
 	public boolean isNodeRendered() {
-		return renderedNode;
+		return Bit32.on(renderState, 2);
 	}
 
 	public void setNodeRendered(boolean rendered) {
-		this.renderedNode = rendered;
+		renderState = (byte) Bit32.set(renderState, 2, rendered);
 	}
 
 	public NodeType getType() {
@@ -267,7 +282,13 @@ public class Node {
 				g2d.setStroke(new BasicStroke(strokeWidth + 3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 1, new float[]{17}, 0));
 				g2d.drawPolyline(arrX, arrY, 3);
 
-				g2d.setColor(color);
+				if (child.willBeRendered()) {
+					g2d.setColor(color);
+				} else {
+					assert color != null;
+					g2d.setPaint(new GradientPaint(renderPos, color, to, Color.BLACK));
+				}
+
 				g2d.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 1, new float[]{17}, 0));
 				g2d.drawPolyline(arrX, arrY, 3);
 			} else {
@@ -275,13 +296,19 @@ public class Node {
 				g2d.setStroke(new BasicStroke(strokeWidth + 3));
 				g2d.drawLine(renderPos.x, renderPos.y, to.x, to.y);
 
-				g2d.setColor(color);
+				if (child.willBeRendered()) {
+					g2d.setColor(color);
+				} else {
+					assert color != null;
+					g2d.setPaint(new GradientPaint(renderPos, color, to, Color.BLACK));
+				}
+
 				g2d.setStroke(new BasicStroke(strokeWidth));
 				g2d.drawLine(renderPos.x, renderPos.y, to.x, to.y);
 			}
 		}
 
-		renderedPath = true;
+		setPathRendered(true);
 	}
 
 	public void renderNode(Graphics2D g2d, Node playerNode, boolean reachable) {
@@ -311,7 +338,7 @@ public class Node {
 				null
 		);
 
-		renderedNode = true;
+		setNodeRendered(true);
 	}
 
 	@Override

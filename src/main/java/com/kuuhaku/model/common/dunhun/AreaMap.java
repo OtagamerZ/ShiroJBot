@@ -232,9 +232,11 @@ public class AreaMap {
 					boolean outsideView = visionLimit > 0 && (distance > visionLimit || (distance == -1 && !run.getVisitedNodes().contains(node.getId())));
 					boolean occluded = node.isOccluded(width, height) || outsideView;
 					if (node.getRenderPos().equals(ZERO) || occluded) {
+						node.setWillBeRendered(false);
 						continue;
 					}
 
+					node.setWillBeRendered(true);
 					switch (i) {
 						case 0 -> {
 							if (fl.getFloor() > 0) {
