@@ -228,9 +228,7 @@ public class Node {
 		}
 	}
 
-	public void renderPath(Graphics2D g2d, Node playerNode) {
-		boolean reachable = travelDistance(playerNode);
-
+	public void renderPath(Graphics2D g2d, boolean reachable) {
 		for (Node child : children) {
 			Point to = child.getRenderPos();
 			boolean leap = child.getSublevel().getSublevel() - sublevel.getSublevel() > 1;
@@ -280,9 +278,7 @@ public class Node {
 		renderedPath = true;
 	}
 
-	public void renderNode(Graphics2D g2d, Node playerNode) {
-		boolean reachable = travelDistance(playerNode);
-
+	public void renderNode(Graphics2D g2d, Node playerNode, boolean reachable) {
 		BufferedImage nodeIcon = getIcon();
 		if (!reachable) {
 			for (int y = 0; y < nodeIcon.getHeight(); y++) {

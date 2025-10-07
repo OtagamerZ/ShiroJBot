@@ -274,17 +274,17 @@ public class AreaMap {
 						case 1 -> {
 							for (Node parent : node.getParents()) {
 								if (!parent.isPathRendered() && parent.isOccluded(width, height)) {
-									parent.renderPath(g2d, playerNode);
+									parent.renderPath(g2d, distance >= 0);
 								}
 							}
 
 							if (!node.isPathRendered()) {
-								node.renderPath(g2d, playerNode);
+								node.renderPath(g2d, distance >= 0);
 							}
 						}
 						case 2 -> {
 							if (!node.isNodeRendered()) {
-								node.renderNode(g2d, playerNode);
+								node.renderNode(g2d, playerNode, distance >= 0);
 							}
 						}
 					}
