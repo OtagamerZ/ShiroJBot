@@ -292,7 +292,7 @@ public class AreaMap {
 			}
 		}
 
-		if (visionLimit > 0) {
+		if (false && visionLimit > 0) {
 			Node boundary = playerNode.getChildren().getFirst();
 			for (int i = 0; i < visionLimit; i++) {
 				boundary = boundary.getChildren().getFirst();
