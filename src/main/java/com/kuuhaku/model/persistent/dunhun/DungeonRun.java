@@ -133,6 +133,8 @@ public class DungeonRun extends DAO<DungeonRun> {
 
 		int subOffset = sublevel / map.getAreasPerFloor();
 		map.getRenderSublevel().set(subOffset * map.getAreasPerFloor());
+
+		visitedNodes.add(node.getId());
 	}
 
 	public Set<DungeonRunPlayer> getPlayers() {

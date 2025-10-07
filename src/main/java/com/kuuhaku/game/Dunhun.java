@@ -388,7 +388,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 							pls.add(p);
 						}
 
-						run.getVisitedNodes().add(map.getPlayerNode().getId());
 						run.save();
 					} else if (map.getPlayerNode().getChildren().isEmpty()) {
 						if (getAreaType() != NodeType.BOSS) {
