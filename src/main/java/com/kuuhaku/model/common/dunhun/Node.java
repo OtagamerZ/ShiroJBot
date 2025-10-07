@@ -109,14 +109,15 @@ public class Node {
 		return blocked;
 	}
 
-	public boolean canReach(Node node) {
-		if (node == null || equals(node)) return true;
+	public int travelDistance(Node node) {
+		if (node == null || equals(node)) return 0;
 
 		for (Node parent : parents) {
-			if (parent.canReach(node)) return true;
+			int dist = parent.travelDistance(node) + 1;
+			if (dist > 0) return dist;
 		}
 
-		return false;
+		return -1;
 	}
 
 	public Point getRenderPos() {
@@ -228,7 +229,7 @@ public class Node {
 	}
 
 	public void renderPath(Graphics2D g2d, Node playerNode) {
-		boolean reachable = canReach(playerNode);
+		boolean reachable = travelDistance(playerNode);
 
 		for (Node child : children) {
 			Point to = child.getRenderPos();
@@ -280,7 +281,7 @@ public class Node {
 	}
 
 	public void renderNode(Graphics2D g2d, Node playerNode) {
-		boolean reachable = canReach(playerNode);
+		boolean reachable = travelDistance(playerNode);
 
 		BufferedImage nodeIcon = getIcon();
 		if (!reachable) {

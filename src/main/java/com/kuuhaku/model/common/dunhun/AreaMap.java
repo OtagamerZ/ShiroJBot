@@ -228,7 +228,8 @@ public class AreaMap {
 				for (Node node : nds) {
 					if (i == 1) node.calcColor();
 
-					boolean occluded = node.isOccluded(width, height) || (visionLimit > 0 && node.depth() > playerNode.depth() + visionLimit);
+					int distance = node.travelDistance(playerNode);
+					boolean occluded = node.isOccluded(width, height) || (visionLimit > 0 && distance > visionLimit);
 					if (node.getRenderPos().equals(ZERO) || occluded) {
 						continue;
 					}
@@ -237,7 +238,7 @@ public class AreaMap {
 						case 0 -> {
 							if (fl.getFloor() > 0) {
 								Composite comp = g2d.getComposite();
-								if (!node.canReach(playerNode)) {
+								if (distance == -1) {
 									g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
 									g2d.setColor(Color.DARK_GRAY);
 								} else {
