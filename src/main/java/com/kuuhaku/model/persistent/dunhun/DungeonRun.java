@@ -56,10 +56,14 @@ public class DungeonRun extends DAO<DungeonRun> {
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "node_id", nullable = false)
-	@CollectionTable(name = "dungeon_run_visited_node", joinColumns = {
-			@JoinColumn(name = "hero_id"),
-			@JoinColumn(name = "dungeon_id")
-	})
+	@CollectionTable(
+			schema = "dunhun",
+			name = "dungeon_run_visited_node",
+			joinColumns = {
+					@JoinColumn(name = "hero_id"),
+					@JoinColumn(name = "dungeon_id")
+			}
+	)
 	private Set<Long> visitedNodes = new LinkedHashSet<>();
 
 	public DungeonRun() {

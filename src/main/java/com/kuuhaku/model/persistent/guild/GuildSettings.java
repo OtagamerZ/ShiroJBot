@@ -57,19 +57,31 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "channel", nullable = false)
 	@Convert(converter = ChannelConverter.class)
-	@CollectionTable(name = "guild_settings_kawaipon_channel", joinColumns = @JoinColumn(name = "gid"))
+	@CollectionTable(
+			schema = "shiro",
+			name = "guild_settings_kawaipon_channel",
+			joinColumns = @JoinColumn(name = "gid")
+	)
 	private Set<TextChannelImpl> kawaiponChannels = new LinkedHashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "channel", nullable = false)
 	@Convert(converter = ChannelConverter.class)
-	@CollectionTable(name = "guild_settings_drop_channel", joinColumns = @JoinColumn(name = "gid"))
+	@CollectionTable(
+			schema = "shiro",
+			name = "guild_settings_drop_channel",
+			joinColumns = @JoinColumn(name = "gid")
+	)
 	private Set<TextChannelImpl> dropChannels = new LinkedHashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "channel", nullable = false)
 	@Convert(converter = ChannelConverter.class)
-	@CollectionTable(name = "guild_settings_denied_channel", joinColumns = @JoinColumn(name = "gid"))
+	@CollectionTable(
+			schema = "shiro",
+			name = "guild_settings_denied_channel",
+			joinColumns = @JoinColumn(name = "gid")
+	)
 	private Set<TextChannelImpl> deniedChannels = new LinkedHashSet<>();
 
 	@Column(name = "notifications_channel")
@@ -109,12 +121,20 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "category", nullable = false)
-	@CollectionTable(name = "guild_settings_disabled_category", joinColumns = @JoinColumn(name = "gid"))
+	@CollectionTable(
+			schema = "shiro",
+			name = "guild_settings_disabled_category",
+			joinColumns = @JoinColumn(name = "gid")
+	)
 	private Set<Category> disabledCategories = new HashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "command", nullable = false)
-	@CollectionTable(name = "guild_settings_disabled_command", joinColumns = @JoinColumn(name = "gid"))
+	@CollectionTable(
+			schema = "shiro",
+			name = "guild_settings_disabled_command",
+			joinColumns = @JoinColumn(name = "gid")
+	)
 	private Set<String> disabledCommands = new HashSet<>();
 
 	@Column(name = "starboard_threshold", nullable = false)
@@ -136,6 +156,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Enumerated(EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
+			schema = "shiro",
 			name = "automod_entry",
 			joinColumns = @JoinColumn(name = "gid", referencedColumnName = "gid")
 	)
