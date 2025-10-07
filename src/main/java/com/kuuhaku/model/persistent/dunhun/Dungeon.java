@@ -64,7 +64,7 @@ public class Dungeon extends DAO<Dungeon> {
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "monster_pool", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray monsterPool;
+	private JSONArray monsterPool = new JSONArray();
 
 	@Column(name = "area_level")
 	private int areaLevel = 1;

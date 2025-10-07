@@ -229,7 +229,8 @@ public class AreaMap {
 					if (i == 1) node.calcColor();
 
 					int distance = node.travelDistance(playerNode);
-					boolean occluded = node.isOccluded(width, height) || (visionLimit > 0 && distance > visionLimit);
+					boolean outsideView = visionLimit > 0 && (distance > visionLimit || (distance == -1 && !run.getVisitedNodes().contains(node.getSeed())));
+					boolean occluded = node.isOccluded(width, height) || outsideView;
 					if (node.getRenderPos().equals(ZERO) || occluded) {
 						continue;
 					}
@@ -274,7 +275,7 @@ public class AreaMap {
 						case 1 -> {
 							for (Node parent : node.getParents()) {
 								if (!parent.isPathRendered() && parent.isOccluded(width, height)) {
-									parent.renderPath(g2d, distance >= 0);
+									parent.renderPath(g2d, distance > 0);
 								}
 							}
 
@@ -290,23 +291,6 @@ public class AreaMap {
 					}
 				}
 			}
-		}
-
-		if (false && visionLimit > 0) {
-			Node boundary = playerNode.getChildren().getFirst();
-			for (int i = 0; i < visionLimit; i++) {
-				boundary = boundary.getChildren().getFirst();
-			}
-
-			Node prev = boundary.getParents().getFirst();
-			float rangeFrom = prev.getRenderPos().y + 25;
-			float rangeTo = Math.max(rangeFrom + 1, prev.getRenderPos().y + (boundary.getRenderPos().y - prev.getRenderPos().y) / 2f);
-
-			g2d.setPaint(new GradientPaint(
-					0, rangeFrom, new Color(0, true),
-					0, rangeTo, Color.BLACK
-			));
-			g2d.fillRect(0, 0, width, height);
 		}
 
 		g2d.dispose();

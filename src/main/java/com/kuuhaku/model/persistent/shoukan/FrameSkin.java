@@ -69,7 +69,7 @@ public class FrameSkin extends DAO<FrameSkin> implements TitleLocked {
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "titles", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray titles;
+	private JSONArray titles = new JSONArray();
 
 	@Column(name = "is_legacy", nullable = false)
 	private boolean legacy = false;

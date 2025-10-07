@@ -69,7 +69,7 @@ public class SlotSkin extends DAO<SlotSkin> implements TitleLocked {
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "titles", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray titles;
+	private JSONArray titles = new JSONArray();
 
 	private transient List<Title> titleCache;
 

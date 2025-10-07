@@ -38,8 +38,8 @@ public class WelcomeSettings extends DAO<WelcomeSettings> {
 	private String gid;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@Column(name = "header")
-	@CollectionTable(name = "welcome_settings_headers", joinColumns = @JoinColumn(name = "gid"))
+	@Column(name = "header", nullable = false)
+	@CollectionTable(name = "welcome_settings_header", joinColumns = @JoinColumn(name = "gid"))
 	private Set<String> headers = new LinkedHashSet<>();
 
 	@Column(name = "message", nullable = false, columnDefinition = "TEXT")

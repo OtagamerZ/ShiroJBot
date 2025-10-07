@@ -56,7 +56,7 @@ public class SkillStats implements Serializable {
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "values", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray values;
+	private JSONArray values = new JSONArray();
 
 	@Language("Groovy")
 	@Column(name = "targeter", columnDefinition = "TEXT")
