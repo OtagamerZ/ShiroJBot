@@ -155,6 +155,19 @@ public class AreaMap {
 				.collect(Collectors.groupingBy(DungeonRun::getSublevel));
 
 		int sliceHeight = height / Sublevel.MAX_NODES;
+		int missingHeight = Math.max(0, (sliceHeight * areasPerFloor) - height);
+
+		Random bgRng = new Random(floors.hashCode());
+		Node playerNode = getPlayerNode();
+		int visionLimit = playerNode.getSublevel().getFloor().getVisionLimit();
+
+		if (missingHeight > 0) {
+			int floorSize = playerNode.getSublevel().getFloor().size();
+			if (floorSize == areasPerFloor) {
+				g2d.translate(0, playerNode.getSublevel().getSublevel() * missingHeight / (floorSize - 1));
+			}
+		}
+
 		{
 			int y = -sliceHeight * renderSublevel.get();
 			if (renderFloor.get() == 0) {
@@ -215,10 +228,6 @@ public class AreaMap {
 				}
 			}
 		}
-
-		Random bgRng = new Random(floors.hashCode());
-		Node playerNode = getPlayerNode();
-		int visionLimit = playerNode.getSublevel().getFloor().getVisionLimit();
 
 		List<Floor> floors = List.copyOf(this.floors.values());
 		Map<Floor, List<Node>> nodes = new TreeMap<>(Comparator.comparingInt(Floor::getFloor));
