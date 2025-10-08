@@ -161,17 +161,17 @@ public class AreaMap {
 		Node playerNode = getPlayerNode();
 		int visionLimit = playerNode.getSublevel().getFloor().getVisionLimit();
 
-		if (missingHeight > 0) {
-			int floorSize = playerNode.getSublevel().getFloor().size();
-			if (floorSize == areasPerFloor) {
-				g2d.translate(0, -playerNode.getSublevel().getSublevel() * missingHeight / (floorSize - 1));
-			}
-		}
-
 		{
 			int y = -sliceHeight * renderSublevel.get();
 			if (renderFloor.get() == 0) {
 				y += 25;
+			}
+
+			if (missingHeight > 0) {
+				int floorSize = playerNode.getSublevel().getFloor().size();
+				if (floorSize == areasPerFloor) {
+					y -= playerNode.getSublevel().getSublevel() * missingHeight / (floorSize - 1);
+				}
 			}
 
 			for (Floor fl : floors.values()) {
