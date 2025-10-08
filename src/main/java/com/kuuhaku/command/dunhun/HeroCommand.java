@@ -263,7 +263,7 @@ public class HeroCommand implements Executable {
 						if (reqs.wis() > 0) reqLine.add("WIS: " + reqs.wis());
 						if (reqs.vit() > 0) reqLine.add("VIT: " + reqs.vit());
 
-						String reqTags = Utils.properlyJoin(locale.get("str/and")).apply(
+						String reqTags = Utils.properlyJoin(locale,
 								s.getRequirements().tags().stream()
 										.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
 										.toList()

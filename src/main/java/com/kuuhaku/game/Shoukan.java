@@ -806,7 +806,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.getGraveyard().addAll(cards);
 
-		reportEvent("str/sacrificed_card", true, false, curr.getName(), Utils.properlyJoin(getString("str/and")).apply(cards.stream().map(Drawable::toString).toList()));
+		reportEvent("str/sacrificed_card", true, false, curr.getName(), Utils.properlyJoin(getLocale(), cards.stream().map(Drawable::toString).toList()));
 		return true;
 	}
 
@@ -875,7 +875,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 		}
 
-		reportEvent("str/discarded_card", true, false, curr.getName(), Utils.properlyJoin(getString("str/and")).apply(cards.stream().map(Drawable::toString).toList()));
+		reportEvent("str/discarded_card", true, false, curr.getName(), Utils.properlyJoin(getLocale(), cards.stream().map(Drawable::toString).toList()));
 		return true;
 	}
 

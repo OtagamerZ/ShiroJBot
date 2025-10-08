@@ -53,7 +53,7 @@ import java.util.concurrent.TimeUnit;
 )
 @Syntax(allowEmpty = true, value = {
 		"<user:user:r> <arcade:word>",
-		"<arcade:word>"
+		"<arcade:word:r>"
 })
 @Requires(Permission.MESSAGE_ATTACH_FILES)
 public class ShoukanCommand implements Executable {

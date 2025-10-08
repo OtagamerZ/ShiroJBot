@@ -86,7 +86,7 @@ public class DeckSkinCommand implements Executable {
 						.toList();
 
 				if (!remaining.isEmpty()) {
-					String req = Utils.properlyJoin(locale.get("str/and")).apply(
+					String req = Utils.properlyJoin(locale,
 							remaining.stream()
 									.map(t -> "**`" + t.getInfo(locale).getName() + "`**")
 									.toList()

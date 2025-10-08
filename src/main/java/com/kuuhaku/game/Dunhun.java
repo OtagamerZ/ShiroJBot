@@ -397,16 +397,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					if (deadEnd) {
-						if (getAreaType() != NodeType.BOSS) {
-							finish("str/dungeon_lost", getHeroNames());
+						if (getAreaType() == NodeType.BOSS) {
+							for (Hero h : heroes.values()) {
+								new DungeonCompletion(h, dungeon).save();
+							}
+
+							finish("str/dungeon_end", getHeroNames());
 							return;
 						}
 
-						for (Hero h : heroes.values()) {
-							h.getAccount().setDynValue("dg_completed_" + dungeon.getId().toLowerCase(), true);
-						}
-
-						finish("str/dungeon_end", getHeroNames());
+						finish("str/dungeon_lost", getHeroNames());
 						return;
 					}
 				} catch (Exception e) {
@@ -700,7 +700,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 				getChannel().buffer(
 						getLocale().get("str/dungeon_loot_single") +
-						"\n```" + Utils.properlyJoin(getLocale().get("str/and")).apply(names) + "```"
+						"\n```" + Utils.properlyJoin(getLocale(), names) + "```"
 				);
 			} else {
 				InfiniteList<Hero> robin = new InfiniteList<>(heroes.values());
@@ -734,7 +734,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				XStringBuilder sb = new XStringBuilder();
 				for (Map.Entry<String, List<String>> e : dist.entrySet()) {
 					sb.appendNewLine(e.getKey() + ":").appendNewLine("```%s```".formatted(
-							Utils.properlyJoin(getLocale().get("str/and")).apply(e.getValue())
+							Utils.properlyJoin(getLocale(), e.getValue())
 					));
 				}
 
@@ -870,7 +870,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public String getHeroNames() {
-		return Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList());
+		return Utils.properlyJoin(getLocale(), heroes.values().stream().map(Hero::getName).toList());
 	}
 
 	public Pair<String, String> getMessage() {

@@ -688,6 +688,10 @@ public abstract class Utils {
 		};
 	}
 
+	public static <T extends Collection<String>> String properlyJoin(I18N locale, T parts) {
+		return properlyJoin(locale.get("str/and")).apply(parts);
+	}
+
 	public static InputStream getImage(String link) throws IOException {
 		return URI.create(link).toURL().openStream();
 	}

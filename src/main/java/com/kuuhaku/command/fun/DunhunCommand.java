@@ -18,6 +18,10 @@
 
 package com.kuuhaku.command.fun;
 
+import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.InteractPage;
+import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
@@ -29,20 +33,29 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.SigPattern;
 import com.kuuhaku.interfaces.annotations.Syntax;
+import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Dungeon;
+import com.kuuhaku.model.persistent.dunhun.Hero;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.utils.FileUpload;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 @Command(
@@ -50,6 +63,7 @@ import java.util.stream.Stream;
 		category = Category.STAFF
 )
 @Syntax(
+		allowEmpty = true,
 		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>(?=\\s|$))+"),
 		value = {
 				"<dungeon:word:r> <users:custom:r>[users]",
@@ -60,6 +74,97 @@ import java.util.stream.Stream;
 public class DunhunCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		Deck d = data.profile().getAccount().getDeck();
+		if (d == null) {
+			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
+			return;
+		}
+
+		Hero h = d.getHero(locale);
+		if (h == null) {
+			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
+			return;
+		}
+
+		if (!args.has("dungeon")) {
+			List<Dungeon> dgs = DAO.queryAll(Dungeon.class, "SELECT d FROM Dungeon d ORDER BY d.areaLevel, d.id");
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.setAuthor(locale.get("str/dungeons"))
+					.setImage("attachment://image.png");
+
+			List<Page> pages = new ArrayList<>();
+			for (Dungeon dg : dgs) {
+				String name = dg.getInfo(locale).getName() + " (`" + dg.getId() + "`)";
+				if (h.hasCompleted(dg)) {
+					name += " - " + Constants.ACCEPT;
+				}
+
+				eb.clearFields()
+						.setTitle(name);
+
+				if (h.canEnter(dg)) {
+					eb.setDescription(dg.getInfo(locale).getDescription());
+				} else {
+					List<String> rem = h.remainingDungeonsFor(dg).stream()
+							.map(id -> DAO.find(Dungeon.class, id))
+							.map(dun -> dun.getInfo(locale).getName())
+							.toList();
+
+					eb.setDescription(locale.get("str/dungeon_requirement", Utils.properlyJoin(locale, rem)));
+				}
+
+				if (!dg.getMonsterPool().isEmpty()) {
+					List<String> mobs = DAO.queryAllNative(String.class, "SELECT regexp_replace(name, '\\[.+]', '') FROM monster_info WHERE locale = ?1 AND id IN ?2",
+							locale.name(), dg.getMonsterPool()
+					);
+					eb.addField(locale.get("str/monster_pool"), Utils.properlyJoin(locale, mobs), true);
+				} else {
+					eb.addField(locale.get("str/monster_pool"), locale.get("str/unknown"), true);
+				}
+
+				if (dg.getAreaLevel() > 0) {
+					eb.addField(locale.get("str/area_level"), String.valueOf(dg.getAreaLevel()), true);
+				} else {
+					eb.addField(locale.get("str/area_level"), locale.get("str/unknown"), true);
+				}
+
+				pages.add(InteractPage.of(eb.build()));
+			}
+
+			AtomicInteger i = new AtomicInteger();
+			ButtonizeHelper helper = new ButtonizeHelper(true)
+					.setTimeout(1, TimeUnit.MINUTES)
+					.setCanInteract(event.user()::equals)
+					.addAction(Utils.parseEmoji("◀️"), w -> {
+						if (i.get() > 0) {
+							int it = i.decrementAndGet();
+							File img = new File(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
+
+							w.getMessage()
+									.editMessageEmbeds(Utils.getEmbeds(pages.get(it)))
+									.setFiles(FileUpload.fromData(img, "image.png"))
+									.queue();
+						}
+					})
+					.addAction(Utils.parseEmoji("▶️"), w -> {
+						if (i.get() < pages.size() - 1) {
+							int it = i.incrementAndGet();
+							File img = new File(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
+
+							w.getMessage()
+									.editMessageEmbeds(Utils.getEmbeds(pages.get(it)))
+									.setFiles(FileUpload.fromData(img, "image.png"))
+									.queue();
+						}
+					});
+
+			File img = new File(Constants.CARDS_ROOT + "../dungeons/" + dgs.getFirst().getId() + ".png");
+			helper.apply(Utils.sendPage(event.channel(), pages.getFirst()))
+					.addFiles(FileUpload.fromData(img, "image.png"))
+					.queue(s -> Pages.buttonize(s, helper));
+			return;
+		}
+
 		if (GameInstance.PLAYERS.containsKey(event.user().getId())) {
 			event.channel().sendMessage(locale.get("error/in_game_self")).queue();
 			return;
@@ -107,9 +212,12 @@ public class DunhunCommand implements Executable {
 				} catch (GameReport e) {
 					switch (e.getCode()) {
 						case GameReport.NO_HERO -> event.channel().sendMessage(locale.get("error/no_hero")).queue();
-						case GameReport.OVERBURDENED -> event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
-						case GameReport.UNDERLEVELLED -> event.channel().sendMessage(locale.get("error/underlevelled", e.getContent())).queue();
-						case GameReport.INVALID_DUEL -> event.channel().sendMessage(locale.get("error/invalid_duel")).queue();
+						case GameReport.OVERBURDENED ->
+								event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
+						case GameReport.UNDERLEVELLED ->
+								event.channel().sendMessage(locale.get("error/underlevelled", e.getContent())).queue();
+						case GameReport.INVALID_DUEL ->
+								event.channel().sendMessage(locale.get("error/invalid_duel")).queue();
 					}
 				}
 
@@ -117,7 +225,7 @@ public class DunhunCommand implements Executable {
 			}
 
 			Utils.confirm(locale.get("question/dunhun",
-							Utils.properlyJoin(locale.get("str/and")).apply(others.stream().map(User::getAsMention).toList()),
+							Utils.properlyJoin(locale, others.stream().map(User::getAsMention).toList()),
 							event.user().getAsMention(),
 							dungeon.getInfo(locale).getName()
 					), event.channel(), w -> {

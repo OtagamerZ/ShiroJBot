@@ -66,6 +66,11 @@ public class Dungeon extends DAO<Dungeon> {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray monsterPool = new JSONArray();
 
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "required_dungeons", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray requiredDungeons = new JSONArray();
+
 	@Column(name = "area_level")
 	private int areaLevel = 1;
 
@@ -96,6 +101,10 @@ public class Dungeon extends DAO<Dungeon> {
 
 	public JSONArray getMonsterPool() {
 		return monsterPool;
+	}
+
+	public JSONArray getRequiredDungeons() {
+		return requiredDungeons;
 	}
 
 	public int getAreaLevel() {

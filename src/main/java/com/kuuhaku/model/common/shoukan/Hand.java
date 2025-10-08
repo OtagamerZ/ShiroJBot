@@ -706,9 +706,7 @@ public class Hand {
 					this.cards.removeAll(ds);
 
 					game.reportEvent("str/discarded_card", true, false, getName(),
-							Utils.properlyJoin(game.getString("str/and")).apply(
-									ds.stream().map(Drawable::toString).toList()
-							)
+							Utils.properlyJoin(game.getLocale(), ds.stream().map(Drawable::toString).toList())
 					);
 				}
 		);

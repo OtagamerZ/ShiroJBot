@@ -356,7 +356,7 @@ public class GuildListener extends ListenerAdapter {
 
 					if (!toAnnounce.isEmpty() && profile.getLevel() > lvl) {
 						ed.notify(locale.get("str/level_role_earn",
-								Utils.properlyJoin(locale.get("str/and")).apply(toAnnounce.stream().map(Role::getAsMention).toList()))
+								Utils.properlyJoin(locale, toAnnounce.stream().map(Role::getAsMention).toList()))
 						);
 					}
 

@@ -195,8 +195,8 @@ public class Combat implements Renderer<BufferedImage> {
 					node.getSublevel().getFloor().getFloor(), node.getSublevel().getSublevel() + 1
 			));
 		} else {
-			String teamA = Utils.properlyJoin(getLocale().get("str/and")).apply(hunters.stream().map(Actor::getName).toList());
-			String teamB = Utils.properlyJoin(getLocale().get("str/and")).apply(keepers.stream().map(Actor::getName).toList());
+			String teamA = Utils.properlyJoin(getLocale(), hunters.stream().map(Actor::getName).toList());
+			String teamB = Utils.properlyJoin(getLocale(), keepers.stream().map(Actor::getName).toList());
 
 			eb.setAuthor(getLocale().get("str/dungeon_duel", teamA, teamB));
 		}
@@ -565,7 +565,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			for (Skill s : skills) {
 				String cdText = "";
-				String reqTags = Utils.properlyJoin(getLocale().get("str/and")).apply(
+				String reqTags = Utils.properlyJoin(getLocale(),
 						s.getRequirements().tags().stream()
 								.map(t -> LocalizedString.get(getLocale(), "tag/" + t, "???"))
 								.toList()

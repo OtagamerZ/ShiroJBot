@@ -64,11 +64,11 @@ public class LevelRoleCommand implements Executable {
 				.collect(Collectors.groupingBy(LevelRole::getLevel))
 				.entrySet().stream()
 				.sorted(Map.Entry.comparingByKey())
-				.map(e -> locale.get("str/level", e.getKey()) + ": " + Utils.properlyJoin(locale.get("str/and"))
-						.apply(e.getValue().stream()
-								.map(LevelRole::getRole)
-								.map(r -> r == null ? locale.get("str/unknown") : r.getAsMention())
-								.toList()
+				.map(e -> locale.get("str/level", e.getKey()) + ": " + Utils.properlyJoin(locale,
+								e.getValue().stream()
+										.map(LevelRole::getRole)
+										.map(r -> r == null ? locale.get("str/unknown") : r.getAsMention())
+										.toList()
 						)
 				).toList();
 
