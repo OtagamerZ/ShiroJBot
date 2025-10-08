@@ -378,6 +378,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						Constants.LOGGER.error(e, e);
 					}
 
+					boolean deadEnd = map.getPlayerNode().getChildren().isEmpty();
 					if (dungeon.isInfinite()) {
 						DungeonRun run = map.getRun();
 
@@ -388,8 +389,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 							pls.add(p);
 						}
 
-						run.save();
-					} else if (map.getPlayerNode().getChildren().isEmpty()) {
+						if (deadEnd) {
+							run.delete();
+						} else {
+							run.save();
+						}
+					}
+
+					if (deadEnd) {
 						if (getAreaType() != NodeType.BOSS) {
 							finish("str/dungeon_lost", getHeroNames());
 							return;
