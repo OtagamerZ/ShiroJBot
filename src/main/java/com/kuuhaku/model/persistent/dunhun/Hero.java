@@ -66,10 +66,7 @@ public class Hero extends Actor<Hero> {
 	private JSONObject equipment = new JSONObject();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumns({
-			@JoinColumn(name = "hero_id", referencedColumnName = "hero_id"),
-			@JoinColumn(name = "dungeon_id", referencedColumnName = "dungeon_id")
-	})
+	@JoinColumn(name = "id", referencedColumnName = "hero_id")
 	@Fetch(FetchMode.SUBSELECT)
 	private final List<DungeonCompletion> completedDungeons = new ArrayList<>();
 
