@@ -154,6 +154,8 @@ public class DunhunCommand implements Executable {
 			File img = new File(Constants.CARDS_ROOT + "../dungeons/" + dgs.getFirst().getId() + ".png");
 			if (img.exists()) {
 				act.setFiles(FileUpload.fromData(img, "image.png"));
+			} else {
+				act.setFiles();
 			}
 
 			helper.apply(act).queue(s -> Pages.buttonize(s, helper));
@@ -276,6 +278,8 @@ public class DunhunCommand implements Executable {
 		File img = new File(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
 		if (img.exists()) {
 			act.setFiles(FileUpload.fromData(img, "image.png"));
+		} else {
+			act.setFiles();
 		}
 
 		act.queue();
