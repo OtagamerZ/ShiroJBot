@@ -94,7 +94,7 @@ public class DeckFrameCommand implements Executable {
 
 			if (!frame.canUse(acc)) {
 				List<Title> remaining = frame.getTitles().stream()
-						.filter(t -> !acc.hasTitle(t.getId()))
+						.filter(t -> !acc.hasTitle(t))
 						.toList();
 
 				if (!remaining.isEmpty()) {
@@ -156,7 +156,7 @@ public class DeckFrameCommand implements Executable {
 					FrameSkin frame = frames.get(i.get());
 					if (!frame.canUse(acc)) {
 						List<Title> remaining = frame.getTitles().stream()
-								.filter(t -> !acc.hasTitle(t.getId()))
+								.filter(t -> !acc.hasTitle(t))
 								.toList();
 
 						if (!remaining.isEmpty()) {

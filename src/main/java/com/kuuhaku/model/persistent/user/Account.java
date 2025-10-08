@@ -419,10 +419,8 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		return null;
 	}
 
-	public boolean hasTitle(String title) {
-		return titles.parallelStream()
-				.map(AccountTitle::getTitle)
-				.anyMatch(t -> t.getId().equals(title));
+	public boolean hasTitle(Title title) {
+		return titles.parallelStream().anyMatch(t -> t.getTitle().equals(title));
 	}
 
 	public boolean addTitle(String title) {
