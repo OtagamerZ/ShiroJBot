@@ -164,7 +164,7 @@ public class AreaMap {
 		if (missingHeight > 0) {
 			int floorSize = playerNode.getSublevel().getFloor().size();
 			if (floorSize == areasPerFloor) {
-				g2d.translate(0, playerNode.getSublevel().getSublevel() * missingHeight / (floorSize - 1));
+				g2d.translate(0, -playerNode.getSublevel().getSublevel() * missingHeight / (floorSize - 1));
 			}
 		}
 
