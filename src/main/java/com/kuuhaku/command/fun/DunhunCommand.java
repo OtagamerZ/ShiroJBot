@@ -19,6 +19,7 @@
 package com.kuuhaku.command.fun;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
@@ -47,6 +48,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
+import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.File;
@@ -137,31 +140,23 @@ public class DunhunCommand implements Executable {
 					.setCanInteract(event.user()::equals)
 					.addAction(Utils.parseEmoji("◀️"), w -> {
 						if (i.get() > 0) {
-							int it = i.decrementAndGet();
-							File img = new File(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
-
-							w.getMessage()
-									.editMessageEmbeds(Utils.getEmbeds(pages.get(it)))
-									.setFiles(FileUpload.fromData(img, "image.png"))
-									.queue();
+							setDungeonEmbed(dgs, pages, w, i.decrementAndGet());
 						}
 					})
 					.addAction(Utils.parseEmoji("▶️"), w -> {
 						if (i.get() < pages.size() - 1) {
-							int it = i.incrementAndGet();
-							File img = new File(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
-
-							w.getMessage()
-									.editMessageEmbeds(Utils.getEmbeds(pages.get(it)))
-									.setFiles(FileUpload.fromData(img, "image.png"))
-									.queue();
+							setDungeonEmbed(dgs, pages, w, i.incrementAndGet());
 						}
 					});
 
+			MessageCreateAction act = Utils.sendPage(event.channel(), pages.getFirst());
+
 			File img = new File(Constants.CARDS_ROOT + "../dungeons/" + dgs.getFirst().getId() + ".png");
-			helper.apply(Utils.sendPage(event.channel(), pages.getFirst()))
-					.addFiles(FileUpload.fromData(img, "image.png"))
-					.queue(s -> Pages.buttonize(s, helper));
+			if (img.exists()) {
+				act.setFiles(FileUpload.fromData(img, "image.png"));
+			}
+
+			helper.apply(act).queue(s -> Pages.buttonize(s, helper));
 			return;
 		}
 
@@ -272,5 +267,17 @@ public class DunhunCommand implements Executable {
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
 		}
+	}
+
+	private void setDungeonEmbed(List<Dungeon> dgs, List<Page> pages, ButtonWrapper w, int it) {
+		MessageEditAction act = w.getMessage()
+				.editMessageEmbeds(Utils.getEmbeds(pages.get(it)));
+
+		File img = new File(Constants.CARDS_ROOT + "../dungeons/" + dgs.get(it).getId() + ".png");
+		if (img.exists()) {
+			act.setFiles(FileUpload.fromData(img, "image.png"));
+		}
+
+		act.queue();
 	}
 }
