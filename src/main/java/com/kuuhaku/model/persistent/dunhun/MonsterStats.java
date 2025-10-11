@@ -69,7 +69,7 @@ public class MonsterStats implements Serializable {
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "skills", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray skills;
+	private JSONArray skills = new JSONArray();
 
 	@Language("Groovy")
 	@Column(name = "loot_generator", columnDefinition = "TEXT")

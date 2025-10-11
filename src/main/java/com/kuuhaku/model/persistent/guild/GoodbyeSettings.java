@@ -38,8 +38,12 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 	private String gid;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@Column(name = "header")
-	@CollectionTable(name = "goodbye_settings_headers", joinColumns = @JoinColumn(name = "gid"))
+	@Column(name = "header", nullable = false)
+	@CollectionTable(
+			schema = "shiro",
+			name = "goodbye_settings_headers",
+			joinColumns = @JoinColumn(name = "gid")
+	)
 	private Set<String> headers = new LinkedHashSet<>();
 
 	@Column(name = "message", nullable = false, columnDefinition = "TEXT")

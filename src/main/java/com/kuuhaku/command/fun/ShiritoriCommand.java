@@ -77,7 +77,7 @@ public class ShiritoriCommand implements Executable {
 		Set<User> pending = new HashSet<>(others);
 		try {
 			Utils.confirm(locale.get("question/shiritori",
-							Utils.properlyJoin(locale.get("str/and")).apply(others.stream().map(User::getAsMention).toList()),
+							Utils.properlyJoin(locale, others.stream().map(User::getAsMention).toList()),
 							event.user().getAsMention()
 					), event.channel(), w -> {
 						if (pending.remove(w.getUser())) {

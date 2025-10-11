@@ -17,10 +17,8 @@ public interface TitleLocked {
 	default boolean canUse(Account acc, int price) {
 		if (acc == null || getTitles() == null) return true;
 
-		for (Object title : getTitles()) {
-			if (title instanceof String s) {
-				if (!acc.hasTitle(s)) return false;
-			}
+		for (Title title : getTitles()) {
+			if (!acc.hasTitle(title)) return false;
 		}
 
 		if (price > 0) {

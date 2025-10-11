@@ -70,7 +70,7 @@ public class SelectTitleCommand implements Executable {
 					.map(ts -> ts.stream()
 							.sorted(Comparator.comparing(t -> t.getRarity().ordinal()))
 							.collect(ArrayList<Title>::new, (lst, t) -> {
-								boolean has = acc.hasTitle(t.getId());
+								boolean has = acc.hasTitle(t);
 
 								if (!has || lst.isEmpty()) {
 									if (!has && !t.isUnlockable()) {
@@ -91,7 +91,7 @@ public class SelectTitleCommand implements Executable {
 				StringBuilder sb = new StringBuilder();
 
 				Title current = ts.getFirst();
-				boolean has = acc.hasTitle(current.getId());
+				boolean has = acc.hasTitle(current);
 				sb.append("`ID: ");
 				if (has) {
 					sb.append(current.getId());

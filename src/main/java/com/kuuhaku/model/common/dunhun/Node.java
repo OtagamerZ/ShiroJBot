@@ -1,12 +1,14 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.enums.dunhun.NodeType;
+import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
@@ -16,19 +18,27 @@ public class Node {
 	public static final BufferedImage ICON_PLAIN = new Node(null, NodeType.NONE).getIcon();
 	public static final BufferedImage ICON_PLAYER = new Node(null, NodeType.PLAYER).getIcon();
 
+	private final long id;
 	private final Sublevel sublevel;
 	private final int path;
 	private final int seed;
-	private final List<Node> parents;
+	private final LinkedHashSet<Node> parents;
+	private final LinkedHashSet<Node> children = new LinkedHashSet<>();
+
 	private final Set<String> eventPool = new HashSet<>();
 	private final Set<String> enemyPool = new HashSet<>();
-
-	private final List<Node> children = new ArrayList<>();
 	private final Set<Node> blocked = new HashSet<>();
 	private final Point renderPos = new Point();
-	private boolean rendered = false;
+	private byte renderState = 0b1;
+	/*
+	0xF
+	  └ 000 0111
+	         ││└─ will not be rendered
+	         │└── path rendered
+	         └─── node rendered
+	 */
 
-	private NodeType type = NodeType.NONE;
+	private NodeType type;
 	private int pathColor = -1;
 
 	public Node(Sublevel sublevel, NodeType type) {
@@ -36,18 +46,7 @@ public class Node {
 	}
 
 	public Node(Sublevel sublevel, List<Node> parents) {
-		this.sublevel = sublevel;
-		this.path = sublevel.size();
-		this.seed = Utils.generateSeed(DigestUtils.getMd5Digest(),
-				sublevel.getFloor().getSeed(),
-				sublevel.getSublevel(),
-				path
-		);
-
-		this.parents = parents;
-		for (Node parent : parents) {
-			parent.children.add(this);
-		}
+		this(sublevel, NodeType.NONE, parents);
 
 		if (getParents().stream().anyMatch(p -> p.getType() == NodeType.BOSS)) {
 			this.type = NodeType.REST;
@@ -56,15 +55,25 @@ public class Node {
 		}
 	}
 
-	public Node(Sublevel sublevel, NodeType type, List<Node> parents) {
+	public Node(Sublevel sublevel, NodeType type, Collection<Node> parents) {
+		this.id = sublevel == null ? 0 : sublevel.getFloor().getRng().nextLong();
 		this.sublevel = sublevel;
-		this.path = 0;
-		this.seed = 0;
+		this.path = sublevel == null ? 0 : sublevel.size();
 		this.type = type;
-		this.parents = parents;
+		this.seed = sublevel == null ? 0 : Utils.generateSeed(DigestUtils.getMd5Digest(),
+				sublevel.getFloor().getSeed(),
+				sublevel.getSublevel(),
+				path
+		);
+
+		this.parents = new LinkedHashSet<>(parents);
 		for (Node parent : parents) {
 			parent.children.add(this);
 		}
+	}
+
+	public long getId() {
+		return id;
 	}
 
 	public Sublevel getSublevel() {
@@ -87,11 +96,25 @@ public class Node {
 		return enemyPool;
 	}
 
-	public List<Node> getParents() {
+	public void addParents(Node... nodes) {
+		for (Node node : nodes) {
+			parents.add(node);
+			node.children.add(this);
+		}
+	}
+
+	public LinkedHashSet<Node> getParents() {
 		return parents;
 	}
 
-	public List<Node> getChildren() {
+	public void addChildren(Node... nodes) {
+		for (Node node : nodes) {
+			children.add(node);
+			node.parents.add(this);
+		}
+	}
+
+	public LinkedHashSet<Node> getChildren() {
 		return children;
 	}
 
@@ -99,26 +122,43 @@ public class Node {
 		return blocked;
 	}
 
-	public boolean canReach(Node node) {
-		if (node == null || equals(node)) return true;
+	public int travelDistance(Node node) {
+		if (node == null || equals(node)) return 0;
 
 		for (Node parent : parents) {
-			if (parent.canReach(node)) return true;
+			int dist = parent.travelDistance(node) + 1;
+			if (dist > 0) return dist;
 		}
 
-		return false;
+		return -1;
 	}
 
 	public Point getRenderPos() {
 		return renderPos;
 	}
 
-	public boolean isRendered() {
-		return rendered;
+	public boolean willBeRendered() {
+		return Bit32.on(renderState, 0);
 	}
 
-	public void setRendered(boolean rendered) {
-		this.rendered = rendered;
+	public void setWillBeRendered(boolean will) {
+		renderState = (byte) Bit32.set(renderState, 0, will);
+	}
+
+	public boolean isPathRendered() {
+		return Bit32.on(renderState, 1);
+	}
+
+	public void setPathRendered(boolean rendered) {
+		renderState = (byte) Bit32.set(renderState, 1, rendered);
+	}
+
+	public boolean isNodeRendered() {
+		return Bit32.on(renderState, 2);
+	}
+
+	public void setNodeRendered(boolean rendered) {
+		renderState = (byte) Bit32.set(renderState, 2, rendered);
 	}
 
 	public NodeType getType() {
@@ -165,6 +205,36 @@ public class Node {
 		}
 	}
 
+	public String getPathVerb(Node to) {
+		Point fromPos = getRenderPos();
+		Point toPos = to.getRenderPos();
+
+		if (fromPos.equals(toPos)) return "centercenter";
+
+		Point dir = new Point(toPos.x - fromPos.x, toPos.y - fromPos.y);
+		double len = Math.max(Math.abs(dir.x), Math.abs(dir.y));
+		Point2D.Double normal = new Point2D.Double(dir.x / len, dir.y / len);
+
+		String icon;
+		if (normal.x <= -0.25) {
+			icon = "left";
+		} else if (normal.x >= 0.25) {
+			icon = "right";
+		} else {
+			icon = "center";
+		}
+
+		if (normal.y <= -0.25) {
+			icon += "top";
+		} else if (normal.y >= 0.25) {
+			icon += "bottom";
+		} else {
+			icon += "center";
+		}
+
+		return icon;
+	}
+
 	public String getPathIcon(List<Node> children) {
 		int idx = children.indexOf(this) + 1;
 		int sibls = children.size();
@@ -179,25 +249,7 @@ public class Node {
 		}
 	}
 
-	public void render(Graphics2D g2d, Node playerNode) {
-		boolean reachable = canReach(playerNode);
-
-		Composite comp = g2d.getComposite();
-		BufferedImage nodeIcon = getIcon();
-		if (!reachable) {
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-
-			for (int y = 0; y < nodeIcon.getHeight(); y++) {
-				for (int x = 0; x < nodeIcon.getWidth(); x++) {
-					int rgb = ICON_PLAIN.getRGB(x, y);
-					int alpha = (rgb >> 24) & 0xFF;
-					int tone = (rgb & 0xFF) / 3;
-
-					nodeIcon.setRGB(x, y, (alpha << 24) | tone << 16 | tone << 8 | tone);
-				}
-			}
-		}
-
+	public void renderPath(Graphics2D g2d, boolean reachable) {
 		for (Node child : children) {
 			Point to = child.getRenderPos();
 			boolean leap = child.getSublevel().getSublevel() - sublevel.getSublevel() > 1;
@@ -230,7 +282,13 @@ public class Node {
 				g2d.setStroke(new BasicStroke(strokeWidth + 3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 1, new float[]{17}, 0));
 				g2d.drawPolyline(arrX, arrY, 3);
 
-				g2d.setColor(color);
+				if (child.willBeRendered()) {
+					g2d.setColor(color);
+				} else {
+					assert color != null;
+					g2d.setPaint(new GradientPaint(renderPos, color, to, Color.BLACK));
+				}
+
 				g2d.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 1, new float[]{17}, 0));
 				g2d.drawPolyline(arrX, arrY, 3);
 			} else {
@@ -238,9 +296,32 @@ public class Node {
 				g2d.setStroke(new BasicStroke(strokeWidth + 3));
 				g2d.drawLine(renderPos.x, renderPos.y, to.x, to.y);
 
-				g2d.setColor(color);
+				if (child.willBeRendered()) {
+					g2d.setColor(color);
+				} else {
+					assert color != null;
+					g2d.setPaint(new GradientPaint(renderPos, color, to, Color.BLACK));
+				}
+
 				g2d.setStroke(new BasicStroke(strokeWidth));
 				g2d.drawLine(renderPos.x, renderPos.y, to.x, to.y);
+			}
+		}
+
+		setPathRendered(true);
+	}
+
+	public void renderNode(Graphics2D g2d, Node playerNode, boolean reachable) {
+		BufferedImage nodeIcon = getIcon();
+		if (!reachable) {
+			for (int y = 0; y < nodeIcon.getHeight(); y++) {
+				for (int x = 0; x < nodeIcon.getWidth(); x++) {
+					int rgb = ICON_PLAIN.getRGB(x, y);
+					int alpha = ((rgb >> 24) & 0xFF) / 2;
+					int tone = (rgb & 0xFF) / 3;
+
+					nodeIcon.setRGB(x, y, (alpha << 24) | tone << 16 | tone << 8 | tone);
+				}
 			}
 		}
 
@@ -257,8 +338,7 @@ public class Node {
 				null
 		);
 
-		g2d.setComposite(comp);
-		rendered = true;
+		setNodeRendered(true);
 	}
 
 	@Override

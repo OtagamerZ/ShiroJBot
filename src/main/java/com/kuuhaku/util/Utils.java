@@ -380,7 +380,7 @@ public abstract class Utils {
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setSkipAmount(skip)
 				.setFastForward(fast)
-				.setCanInteract(Arrays.asList(allowed)::contains);
+				.setCanInteract(List.of(allowed)::contains);
 
 		Message msg = Pages.subGet(helper.apply(sendPage(channel, pages.getFirst())));
 		Pages.paginate(msg, helper);
@@ -391,7 +391,7 @@ public abstract class Utils {
 	public static Message paginate(ThrowingFunction<Integer, Page> loader, MessageChannel channel, User... allowed) {
 		LazyPaginateHelper helper = new LazyPaginateHelper(loader, true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(Arrays.asList(allowed)::contains);
+				.setCanInteract(List.of(allowed)::contains);
 
 		Message msg = Pages.subGet(helper.apply(sendPage(channel, loader.apply(0))));
 		Pages.lazyPaginate(msg, helper);
@@ -450,7 +450,7 @@ public abstract class Utils {
 		CompletableFuture<Boolean> lock = new CompletableFuture<>();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(Arrays.asList(allowed)::contains)
+				.setCanInteract(List.of(allowed)::contains)
 				.setOnFinalization(c -> onCancel.andThen(m -> {
 					unlock(allowed);
 					lock.complete(false);
@@ -686,6 +686,10 @@ public abstract class Utils {
 
 			return sb.toString();
 		};
+	}
+
+	public static <T extends Collection<String>> String properlyJoin(I18N locale, T parts) {
+		return properlyJoin(locale.get("str/and")).apply(parts);
 	}
 
 	public static InputStream getImage(String link) throws IOException {

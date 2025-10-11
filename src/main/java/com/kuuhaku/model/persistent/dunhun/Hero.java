@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.dunhun.Attributes;
+import com.kuuhaku.model.records.id.DungeonRunId;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.ygimenez.json.JSONArray;
@@ -43,10 +44,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -66,6 +64,11 @@ public class Hero extends Actor<Hero> {
 	@Column(name = "equipment", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject equipment = new JSONObject();
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@JoinColumn(name = "hero_id", referencedColumnName = "id")
+	@Fetch(FetchMode.SUBSELECT)
+	private final List<DungeonCompletion> completedDungeons = new ArrayList<>();
 
 	public Hero() {
 	}
@@ -129,9 +132,9 @@ public class Hero extends Actor<Hero> {
 	@Override
 	public double getCritical() {
 		double crit = getEquipment().getWeaponList().stream()
-				.filter(Gear::isWeapon)
-				.mapToDouble(Gear::getCritical)
-				.average().orElse(0) + stats.getRaceBonus().critical();
+							  .filter(Gear::isWeapon)
+							  .mapToDouble(Gear::getCritical)
+							  .average().orElse(0) + stats.getRaceBonus().critical();
 
 		return Calc.clamp(crit * (1 + getModifiers().getCritical().get()), 0, 100);
 	}
@@ -161,6 +164,35 @@ public class Hero extends Actor<Hero> {
 
 	public JSONObject getEquipmentRefs() {
 		return equipment;
+	}
+
+	public List<DungeonCompletion> getCompletedDungeons() {
+		return completedDungeons;
+	}
+
+	public boolean hasCompleted(Dungeon dungeon) {
+		return hasCompleted(dungeon.getId());
+	}
+
+	public boolean hasCompleted(String dungeon) {
+		return completedDungeons.parallelStream()
+				.anyMatch(d -> d.getId().dungeonId().equalsIgnoreCase(dungeon));
+	}
+
+	public List<String> remainingDungeonsFor(Dungeon dungeon) {
+		Set<String> completed = completedDungeons.parallelStream()
+				.map(DungeonCompletion::getId)
+				.map(DungeonRunId::dungeonId)
+				.collect(Collectors.toSet());
+
+		return dungeon.getRequiredDungeons().stream()
+				.map(String::valueOf)
+				.filter(dg -> !completed.contains(dg))
+				.toList();
+	}
+
+	public boolean canEnter(Dungeon dungeon) {
+		return remainingDungeonsFor(dungeon).isEmpty();
 	}
 
 	public int getInventoryCapacity() {

@@ -57,7 +57,7 @@ public class GearType extends DAO<GearType> {
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray tags;
+	private JSONArray tags = new JSONArray();
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "slot", nullable = false)

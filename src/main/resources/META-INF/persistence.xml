@@ -90,10 +90,11 @@
         <class>com.kuuhaku.model.persistent.dunhun.GlobalDrops</class>
         <class>com.kuuhaku.model.persistent.dunhun.GearType</class>
         <class>com.kuuhaku.model.persistent.dunhun.RaceBonus</class>
-        <class>com.kuuhaku.model.persistent.dunhun.DungeonRun</class>
         <class>com.kuuhaku.model.persistent.dunhun.RunModifier</class>
+        <class>com.kuuhaku.model.persistent.dunhun.DungeonRun</class>
         <class>com.kuuhaku.model.persistent.dunhun.DungeonRunPlayer</class>
         <class>com.kuuhaku.model.persistent.dunhun.DungeonRunModifier</class>
+        <class>com.kuuhaku.model.persistent.dunhun.DungeonCompletion</class>
 
         <!-- LOCALIZED -->
         <class>com.kuuhaku.model.persistent.localized.LocalizedItem</class>

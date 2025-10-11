@@ -54,6 +54,18 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DungeonRunModifier> modifiers = new LinkedHashSet<>();
 
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Column(name = "node_id", nullable = false)
+	@CollectionTable(
+			schema = "dunhun",
+			name = "dungeon_run_visited_node",
+			joinColumns = {
+					@JoinColumn(name = "hero_id"),
+					@JoinColumn(name = "dungeon_id")
+			}
+	)
+	private Set<Long> visitedNodes = new LinkedHashSet<>();
+
 	public DungeonRun() {
 	}
 
@@ -73,6 +85,10 @@ public class DungeonRun extends DAO<DungeonRun> {
 
 	public Dungeon getDungeon() {
 		return dungeon;
+	}
+
+	public Set<Long> getVisitedNodes() {
+		return visitedNodes;
 	}
 
 	public int getSeed() {
@@ -117,6 +133,8 @@ public class DungeonRun extends DAO<DungeonRun> {
 
 		int subOffset = sublevel / map.getAreasPerFloor();
 		map.getRenderSublevel().set(subOffset * map.getAreasPerFloor());
+
+		visitedNodes.add(node.getId());
 	}
 
 	public Set<DungeonRunPlayer> getPlayers() {

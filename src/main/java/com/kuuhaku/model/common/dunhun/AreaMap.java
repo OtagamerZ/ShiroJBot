@@ -29,17 +29,15 @@ public class AreaMap {
 
 	private Pair<Integer, Node> pnCache;
 
-	public AreaMap(Consumer<AreaMap> generator, int areasPerFloor, DungeonRun run) {
+	public AreaMap(DungeonRun run, int areasPerFloor, Consumer<AreaMap> generator) {
 		this.generator = generator;
 		this.areasPerFloor = areasPerFloor;
 		this.run = run;
 	}
 
 	public AreaMap(DungeonRun run) {
-		this.areasPerFloor = AREAS_PER_FLOOR;
+		this(run, AREAS_PER_FLOOR, AreaMap::generateRandom);
 		this.renderFloor.set(run.getFloor());
-		this.generator = AreaMap::generateRandom;
-		this.run = run;
 	}
 
 	public int getSeed() {
@@ -156,11 +154,24 @@ public class AreaMap {
 				.filter(r -> r.getPlayers().size() == 1)
 				.collect(Collectors.groupingBy(DungeonRun::getSublevel));
 
-		int sliceHeight = height / areasPerFloor;
+		int sliceHeight = height / Sublevel.MAX_NODES;
+		int missingHeight = Math.max(0, (sliceHeight * areasPerFloor) - height);
+
+		Random bgRng = new Random(floors.hashCode());
+		Node playerNode = getPlayerNode();
+		int visionLimit = playerNode.getSublevel().getFloor().getVisionLimit();
+
 		{
 			int y = -sliceHeight * renderSublevel.get();
 			if (renderFloor.get() == 0) {
 				y += 25;
+			}
+
+			if (missingHeight > 0) {
+				int floorSize = playerNode.getSublevel().getFloor().size();
+				if (floorSize == areasPerFloor) {
+					y -= playerNode.getSublevel().getSublevel() * missingHeight / (floorSize - 1);
+				}
 			}
 
 			for (Floor fl : floors.values()) {
@@ -218,86 +229,79 @@ public class AreaMap {
 			}
 		}
 
-		Random bgRng = new Random(floors.hashCode());
-		Node playerNode = getPlayerNode();
-		int visionLimit = playerNode.getSublevel().getFloor().getVisionLimit();
-
 		List<Floor> floors = List.copyOf(this.floors.values());
 		Map<Floor, List<Node>> nodes = new TreeMap<>(Comparator.comparingInt(Floor::getFloor));
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 3; i++) {
 			for (Floor fl : floors) {
 				List<Node> nds = nodes.computeIfAbsent(fl, f -> fl.getNodes());
 				for (Node node : nds) {
 					if (i == 1) node.calcColor();
 
-					boolean occluded = node.isOccluded(width, height) || (visionLimit > 0 && node.depth() > playerNode.depth() + visionLimit);
+					int distance = node.travelDistance(playerNode);
+					boolean outsideView = visionLimit > 0 && (distance > visionLimit || (distance == -1 && !run.getVisitedNodes().contains(node.getId())));
+					boolean occluded = node.isOccluded(width, height) || outsideView;
 					if (node.getRenderPos().equals(ZERO) || occluded) {
+						node.setWillBeRendered(false);
 						continue;
 					}
 
-					if (i == 0) {
-						if (fl.getFloor() > 0) {
-							Composite comp = g2d.getComposite();
-							if (!node.canReach(playerNode)) {
-								g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
-								g2d.setColor(Color.DARK_GRAY);
+					node.setWillBeRendered(true);
+					switch (i) {
+						case 0 -> {
+							if (fl.getFloor() > 0) {
+								Composite comp = g2d.getComposite();
+								if (distance == -1) {
+									g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
+									g2d.setColor(Color.DARK_GRAY);
+								} else {
+									float hue = switch (node.getType()) {
+										case EVENT -> 50;
+										case REST -> 100;
+										case DANGER -> 20;
+										case BOSS -> 360;
+										default -> 0;
+									} / 360f;
+
+									g2d.setColor(Color.getHSBColor(hue, hue == 0 ? 0 : 0.8f, 0.2f));
+								}
+
+								g2d.setStroke(new WobbleStroke(bgRng, Node.NODE_RADIUS / 3 * 2));
+								g2d.drawLine(
+										node.getRenderPos().x - Node.NODE_RADIUS / 3, node.getRenderPos().y,
+										node.getRenderPos().x + Node.NODE_RADIUS / 3, node.getRenderPos().y
+								);
+								g2d.setComposite(comp);
 							} else {
-								float hue = switch (node.getType()) {
-									case EVENT -> 50;
-									case REST -> 100;
-									case DANGER -> 20;
-									case BOSS -> 360;
-									default -> 0;
-								} / 360f;
+								int ground = sliceHeight + 50;
 
-								g2d.setColor(Color.getHSBColor(hue, hue == 0 ? 0 : 0.8f, 0.2f));
-							}
+								g2d.setColor(new Color(41, 90, 24));
+								g2d.setStroke(new BasicStroke(6));
+								g2d.drawLine(0, ground, width, ground);
 
-							g2d.setStroke(new WobbleStroke(bgRng, Node.NODE_RADIUS / 3 * 2));
-							g2d.drawLine(
-									node.getRenderPos().x - Node.NODE_RADIUS / 3, node.getRenderPos().y,
-									node.getRenderPos().x + Node.NODE_RADIUS / 3, node.getRenderPos().y
-							);
-							g2d.setComposite(comp);
-						} else {
-							int ground = sliceHeight + 50;
-
-							g2d.setColor(new Color(41, 90, 24));
-							g2d.setStroke(new BasicStroke(6));
-							g2d.drawLine(0, ground, width, ground);
-
-							g2d.setColor(Color.DARK_GRAY);
-							g2d.setStroke(new BasicStroke(Node.NODE_RADIUS, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
-							g2d.drawLine(node.getRenderPos().x, 10, node.getRenderPos().x, ground);
-						}
-					} else {
-						for (Node parent : node.getParents()) {
-							if (!parent.isRendered() && parent.isOccluded(width, height)) {
-								parent.render(g2d, playerNode);
+								g2d.setColor(Color.DARK_GRAY);
+								g2d.setStroke(new BasicStroke(Node.NODE_RADIUS, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
+								g2d.drawLine(node.getRenderPos().x, 10, node.getRenderPos().x, ground);
 							}
 						}
+						case 1 -> {
+							for (Node parent : node.getParents()) {
+								if (!parent.isPathRendered() && parent.isOccluded(width, height)) {
+									parent.renderPath(g2d, distance > 0);
+								}
+							}
 
-						node.render(g2d, playerNode);
+							if (!node.isPathRendered()) {
+								node.renderPath(g2d, distance >= 0);
+							}
+						}
+						case 2 -> {
+							if (!node.isNodeRendered()) {
+								node.renderNode(g2d, playerNode, distance >= 0);
+							}
+						}
 					}
 				}
 			}
-		}
-
-		if (visionLimit > 0) {
-			Node boundary = playerNode.getChildren().getFirst();
-			for (int i = 0; i < visionLimit; i++) {
-				boundary = boundary.getChildren().getFirst();
-			}
-
-			Node prev = boundary.getParents().getFirst();
-			float rangeFrom = prev.getRenderPos().y + 25;
-			float rangeTo = Math.max(rangeFrom + 1, prev.getRenderPos().y + (boundary.getRenderPos().y - prev.getRenderPos().y) / 2f);
-
-			g2d.setPaint(new GradientPaint(
-					0, rangeFrom, new Color(0, true),
-					0, rangeTo, Color.BLACK
-			));
-			g2d.fillRect(0, 0, width, height);
 		}
 
 		g2d.dispose();

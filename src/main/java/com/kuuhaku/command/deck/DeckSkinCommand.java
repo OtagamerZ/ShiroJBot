@@ -82,11 +82,11 @@ public class DeckSkinCommand implements Executable {
 			SlotSkin skin = skins.get(i);
 			if (!skin.canUse(acc)) {
 				List<Title> remaining = skin.getTitles().stream()
-						.filter(t -> !acc.hasTitle(t.getId()))
+						.filter(t -> !acc.hasTitle(t))
 						.toList();
 
 				if (!remaining.isEmpty()) {
-					String req = Utils.properlyJoin(locale.get("str/and")).apply(
+					String req = Utils.properlyJoin(locale,
 							remaining.stream()
 									.map(t -> "**`" + t.getInfo(locale).getName() + "`**")
 									.toList()
@@ -135,7 +135,7 @@ public class DeckSkinCommand implements Executable {
 					SlotSkin skin = skins.get(i.get());
 					if (!skin.canUse(acc)) {
 						List<Title> remaining = skin.getTitles().stream()
-								.filter(t -> !acc.hasTitle(t.getId()))
+								.filter(t -> !acc.hasTitle(t))
 								.toList();
 
 						if (!remaining.isEmpty()) {

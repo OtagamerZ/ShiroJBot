@@ -116,7 +116,7 @@ public abstract class Drop {
 		), 15);
 		pool.add(new DropCondition("title",
 				(rng) -> new Object[]{Utils.getRandomEntry(rng, DAO.queryAll(Title.class, "SELECT t FROM Title t WHERE t.unlockable = TRUE"))},
-				(vals, acc) -> acc.hasTitle(((Title) vals[0]).getId())
+				(vals, acc) -> acc.hasTitle((Title) vals[0])
 		), 5);
 
 		this.conditions = Arrays.asList(new DropCondition[getConditionCount()]);

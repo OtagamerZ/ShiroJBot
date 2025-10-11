@@ -60,7 +60,7 @@ public class Unique extends DAO<Unique> {
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "affixes", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray affixes;
+	private JSONArray affixes = new JSONArray();
 
 	@Column(name = "weight", nullable = false)
 	private int weight;

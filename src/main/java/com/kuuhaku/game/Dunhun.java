@@ -59,6 +59,17 @@ import java.util.stream.Collectors;
 public class Dunhun extends GameInstance<NullPhase> {
 	public static final int LEVEL_HARD = 28;
 	public static final int LEVEL_BRUTAL = 56;
+	public static final Map<String, String> ICONS = Utils.with(new LinkedHashMap<>(9), m -> {
+		m.put("centertop", "⬆️");
+		m.put("lefttop", "↖️");
+		m.put("leftcenter", "⬅️");
+		m.put("leftbottom", "↙️");
+		m.put("centerbottom", "⬇️");
+		m.put("rightbottom", "↘️");
+		m.put("rightcenter", "➡️");
+		m.put("righttop", "↗️");
+		m.put("centercenter", "*️⃣");
+	});
 
 	private final ExecutorService main = Executors.newSingleThreadExecutor();
 	private final Dungeon dungeon;
@@ -176,17 +187,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					try {
-//						if (!floors.isEmpty()) {
-//							//TODO Pre-generated layout
-//							int floor = getTurn() - 1;
-//							if (floor >= floors.size()) {
-//								finish("str/dungeon_end", getHeroNames());
-//								break;
-//							}
-//
-//							floors.get(floor).run();
-//						}
-
 						DungeonRun run = map.getRun();
 						String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel() + 1);
 						EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -225,25 +225,21 @@ public class Dunhun extends GameInstance<NullPhase> {
 								.setCancellable(false);
 
 						Node currNode = map.getPlayerNode();
-						List<Node> children = currNode.getChildren().stream()
-								.sorted(Comparator.comparingInt(n -> n.getRenderPos().x))
+						List<String> order = List.copyOf(ICONS.keySet());
+						List<Map.Entry<String, Node>> children = currNode.getChildren().stream()
+								.map(n -> Map.entry(currNode.getPathVerb(n), n))
+								.sorted(Comparator.comparingInt(e -> order.indexOf(e.getKey())))
 								.toList();
-
-						Map<String, String> icons = Map.of(
-								"leftmost", "⬅️",
-								"left", "↙️",
-								"center", "⬇️",
-								"right", "↘️",
-								"rightmost", "➡️"
-						);
 
 						Set<Choice> choices = new LinkedHashSet<>();
 						AtomicReference<String> chosenPath = new AtomicReference<>();
-						for (Node node : children) {
-							String path = node.getPathIcon(children);
+						for (Map.Entry<String, Node> entry : children) {
+							String path = entry.getKey();
+							Node node = entry.getValue();
+
 							choices.add(new Choice(
 									"path-" + path,
-									Utils.parseEmoji(icons.get(path)),
+									Utils.parseEmoji(ICONS.get(path)),
 									w -> {
 										run.setNode(node);
 										nodeRng.setSeed(node.getSeed());
@@ -382,15 +378,36 @@ public class Dunhun extends GameInstance<NullPhase> {
 						Constants.LOGGER.error(e, e);
 					}
 
+					boolean deadEnd = map.getPlayerNode().getChildren().isEmpty();
 					if (dungeon.isInfinite()) {
-						Set<DungeonRunPlayer> pls = map.getRun().getPlayers();
+						DungeonRun run = map.getRun();
+
+						Set<DungeonRunPlayer> pls = run.getPlayers();
 						for (Hero h : heroes.values()) {
-							DungeonRunPlayer p = new DungeonRunPlayer(map.getRun(), h);
+							DungeonRunPlayer p = new DungeonRunPlayer(run, h);
 							pls.remove(p);
 							pls.add(p);
 						}
 
-						map.getRun().save();
+						if (deadEnd) {
+							run.delete();
+						} else {
+							run.save();
+						}
+					}
+
+					if (deadEnd) {
+						if (getAreaType() == NodeType.BOSS) {
+							for (Hero h : heroes.values()) {
+								new DungeonCompletion(h, dungeon).save();
+							}
+
+							finish("str/dungeon_end", getHeroNames());
+							return;
+						}
+
+						finish("str/dungeon_lost", getHeroNames());
+						return;
 					}
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
@@ -683,7 +700,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 				getChannel().buffer(
 						getLocale().get("str/dungeon_loot_single") +
-						"\n```" + Utils.properlyJoin(getLocale().get("str/and")).apply(names) + "```"
+						"\n```" + Utils.properlyJoin(getLocale(), names) + "```"
 				);
 			} else {
 				InfiniteList<Hero> robin = new InfiniteList<>(heroes.values());
@@ -717,7 +734,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				XStringBuilder sb = new XStringBuilder();
 				for (Map.Entry<String, List<String>> e : dist.entrySet()) {
 					sb.appendNewLine(e.getKey() + ":").appendNewLine("```%s```".formatted(
-							Utils.properlyJoin(getLocale().get("str/and")).apply(e.getValue())
+							Utils.properlyJoin(getLocale(), e.getValue())
 					));
 				}
 
@@ -853,7 +870,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public String getHeroNames() {
-		return Utils.properlyJoin(getLocale().get("str/and")).apply(heroes.values().stream().map(Hero::getName).toList());
+		return Utils.properlyJoin(getLocale(), heroes.values().stream().map(Hero::getName).toList());
 	}
 
 	public Pair<String, String> getMessage() {

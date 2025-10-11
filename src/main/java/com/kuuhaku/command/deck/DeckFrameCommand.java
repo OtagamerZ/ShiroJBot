@@ -53,16 +53,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
-        name = "deck",
-        path = "frame",
-        category = Category.MISC
+		name = "deck",
+		path = "frame",
+		category = Category.MISC
 )
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class DeckFrameCommand implements Executable {
-    private static final String URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/rewrite/src/main/resources/shoukan/frames/%s/%s.png";
+	private static final String URL = "https://raw.githubusercontent.com/OtagamerZ/ShiroJBot/rewrite/src/main/resources/shoukan/frames/%s/%s.png";
 
-    @Override
-    public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+	@Override
+	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
 		Deck d = data.profile().getAccount().getDeck();
 		if (d == null) {
@@ -94,11 +94,11 @@ public class DeckFrameCommand implements Executable {
 
 			if (!frame.canUse(acc)) {
 				List<Title> remaining = frame.getTitles().stream()
-						.filter(t -> !acc.hasTitle(t.getId()))
+						.filter(t -> !acc.hasTitle(t))
 						.toList();
 
 				if (!remaining.isEmpty()) {
-					String req = Utils.properlyJoin(locale.get("str/and")).apply(
+					String req = Utils.properlyJoin(locale,
 							remaining.stream()
 									.map(t -> "**`" + t.getInfo(locale).getName() + "`**")
 									.toList()
@@ -156,7 +156,7 @@ public class DeckFrameCommand implements Executable {
 					FrameSkin frame = frames.get(i.get());
 					if (!frame.canUse(acc)) {
 						List<Title> remaining = frame.getTitles().stream()
-								.filter(t -> !acc.hasTitle(t.getId()))
+								.filter(t -> !acc.hasTitle(t))
 								.toList();
 
 						if (!remaining.isEmpty()) {
@@ -216,5 +216,5 @@ public class DeckFrameCommand implements Executable {
 				});
 
 		helper.apply(Utils.sendPage(event.channel(), pages.getFirst())).queue(s -> Pages.buttonize(s, helper));
-    }
+	}
 }

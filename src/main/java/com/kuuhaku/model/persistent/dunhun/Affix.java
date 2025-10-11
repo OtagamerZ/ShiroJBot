@@ -63,7 +63,7 @@ public class Affix extends DAO<Affix> {
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "req_tags", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray reqTags;
+	private JSONArray reqTags = new JSONArray();
 
 	@Column(name = "min_level", nullable = false)
 	private int minLevel;
@@ -81,12 +81,12 @@ public class Affix extends DAO<Affix> {
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "ranges", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray ranges;
+	private JSONArray ranges = new JSONArray();
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray tags;
+	private JSONArray tags = new JSONArray();
 
 	public String getId() {
 		return id;
