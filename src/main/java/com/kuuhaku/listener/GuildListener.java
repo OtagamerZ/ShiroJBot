@@ -574,7 +574,7 @@ public class GuildListener extends ListenerAdapter {
 				}
 
 				if (error != null) {
-					List<String> months = Arrays.stream(season.months())
+					List<String> months = Arrays.stream(error.equals("in_season") ? season.exclude() : season.months())
 							.mapToObj(m -> Month.of(m + 1))
 							.map(m -> locale.get("month/" + m))
 							.toList();
