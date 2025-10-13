@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SkillContext extends EffectContext {
-	private final List<Actor<?>> targets = new ArrayList<>();
-
 	private final Actor<?> source;
 	private final Actor<?> target;
 	private final List<Integer> values;
@@ -40,9 +38,5 @@ public class SkillContext extends EffectContext {
 
 	public JSONObject getVars() {
 		return vars;
-	}
-
-	public List<Actor<?>> getTargets() {
-		return targets;
 	}
 }
