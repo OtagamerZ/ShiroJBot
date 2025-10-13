@@ -166,6 +166,10 @@ public class Hero extends Actor<Hero> {
 		return equipment;
 	}
 
+	public void setEquipmentRefs(JSONObject equipment) {
+		this.equipment = equipment;
+	}
+
 	public List<DungeonCompletion> getCompletedDungeons() {
 		return completedDungeons;
 	}
