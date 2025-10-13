@@ -267,8 +267,9 @@ public class HeroCommand implements Executable {
 							if (reqs.get(t) > 0) reqLine.add(t + ": " + reqs.get(t) + " ");
 						}
 
+						boolean canUse = h.getStats().getLevel() >= s.getRequirements().level() && attr.has(reqs);
 						String req = !reqLine.isEmpty()
-								? ("- " + (attr.has(reqs) ? "" : "\\❌ ") + String.join(" | ", reqLine) + "\n")
+								? ("- " + (canUse ? "" : "\\❌ ") + String.join(" | ", reqLine) + "\n")
 								: "";
 						return new FieldMimic(
 								prefix + " " + s.getName(locale) + " " + StringUtils.repeat('◈', s.getStats().getCost()),
