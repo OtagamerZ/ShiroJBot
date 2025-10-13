@@ -18,7 +18,6 @@ public class Node {
 	public static final BufferedImage ICON_PLAIN = new Node(null, NodeType.NONE).getIcon();
 	public static final BufferedImage ICON_PLAYER = new Node(null, NodeType.PLAYER).getIcon();
 
-	private final long id;
 	private final Sublevel sublevel;
 	private final int path;
 	private final int seed;
@@ -56,7 +55,6 @@ public class Node {
 	}
 
 	public Node(Sublevel sublevel, NodeType type, Collection<Node> parents) {
-		this.id = sublevel == null ? 0 : sublevel.getFloor().getRng().nextLong();
 		this.sublevel = sublevel;
 		this.path = sublevel == null ? 0 : sublevel.size();
 		this.type = type;
@@ -72,8 +70,8 @@ public class Node {
 		}
 	}
 
-	public long getId() {
-		return id;
+	public String getId() {
+		return sublevel.getFloor().getFloor() + "-" + sublevel.getSublevel() + "-" + path;
 	}
 
 	public Sublevel getSublevel() {
