@@ -67,7 +67,7 @@ public class HeroSkillCommand implements Executable {
 			return;
 		}
 
-		Skill s = DAO.find(Skill.class, args.getString("skill"));
+		Skill s = DAO.find(Skill.class, args.getString("skill").toUpperCase());
 		if (s == null) {
 			String sug = Utils.didYouMean(args.getString("skill"), "SELECT id AS value FROM skill");
 			if (sug == null) {
