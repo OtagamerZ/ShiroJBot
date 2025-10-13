@@ -87,12 +87,15 @@ public class HeroSkillCommand implements Executable {
 				.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
 				.toList());
 
-		String eff = Utils.roundToString(s.getStats().getEfficiency() * 100, 0) + "%";
 		eb.setTitle(s.getName(locale))
 				.appendDescription("-# " + String.join(", ", tags) + "\n")
 				.appendDescription("-# " + locale.get("str/cost", StringUtils.repeat('◈', s.getStats().getCost())) + "\n")
-				.appendDescription("-# " + locale.get("str/cooldown", locale.get("str/turns_inline", s.getStats().getCooldown())) + "\n")
-				.appendDescription("-# " + locale.get("str/added_efficiency", eff) + "\n\n");
+				.appendDescription("-# " + locale.get("str/cooldown", locale.get("str/turns_inline", s.getStats().getCooldown())) + "\n");
+
+		if (s.getStats().getEfficiency() > 0) {
+			String eff = Utils.roundToString(s.getStats().getEfficiency() * 100, 0) + "%";
+			eb.appendDescription("-# " + locale.get("str/added_efficiency", eff) + "\n\n");
+		}
 
 		Attributes reqs = s.getRequirements().attributes();
 		if (reqs.str() + reqs.dex() + reqs.wis() + reqs.vit() > 0) {

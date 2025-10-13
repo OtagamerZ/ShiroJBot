@@ -40,15 +40,16 @@ public record SkillValue(int min, int max, boolean withAdded) {
 		}
 
 		int added = 0;
-		if (withAdded) {
+		if (withAdded && skill.getStats().getEfficiency() > 0) {
+			double eff = skill.getStats().getEfficiency();
 			if (skill.getStats().isSpell()) {
-				added = (int) source.getModifiers().getSpellDamage().get();
+				added = (int) (source.getModifiers().getSpellDamage().get() * eff);
 			} else {
-				added = source.getSenshi().getDmg();
+				added = (int) (source.getSenshi().getDmg() * eff);
 			}
 		}
 
-		return (int) ((withLevel(level) + added * skill.getStats().getEfficiency()) * mult);
+		return (int) ((withLevel(level) + added) * mult);
 	}
 
 	@Override
