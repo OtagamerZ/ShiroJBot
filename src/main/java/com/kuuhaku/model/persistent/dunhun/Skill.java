@@ -134,7 +134,7 @@ public class Skill extends DAO<Skill> implements Cloneable {
 		return requirements;
 	}
 
-	public int getCooldown() {
+	public int getRemainingCooldown() {
 		return cd;
 	}
 

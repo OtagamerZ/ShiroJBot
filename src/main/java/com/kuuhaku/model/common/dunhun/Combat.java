@@ -361,7 +361,7 @@ public class Combat implements Renderer<BufferedImage> {
 					} else if (skill.getStats().getCost() > h.getAp()) {
 						game.getChannel().sendMessage(getLocale().get("error/not_enough_ap")).queue();
 						return;
-					} else if (skill.getCooldown() > 0) {
+					} else if (skill.getRemainingCooldown() > 0) {
 						game.getChannel().sendMessage(getLocale().get("error/skill_cooldown")).queue();
 						return;
 					}
@@ -538,7 +538,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private List<Skill> collectCpuSkills(Actor<?> source, AtomicBoolean force) {
 		List<Skill> skills = new ArrayList<>();
 		for (Skill s : source.getSkills()) {
-			if (s.getStats().getCost() > source.getAp() || s.getCooldown() > 0) continue;
+			if (s.getStats().getCost() > source.getAp() || s.getRemainingCooldown() > 0) continue;
 
 			switch (s.canCpuUse(source, null)) {
 				case ANY -> skills.add(s);
@@ -571,7 +571,7 @@ public class Combat implements Renderer<BufferedImage> {
 								.toList()
 				);
 
-				int cd = s.getCooldown();
+				int cd = s.getRemainingCooldown();
 				if (cd > 0) {
 					cdText = " (CD: " + getLocale().get("str/turns_inline", cd) + ")";
 				}
@@ -700,8 +700,8 @@ public class Combat implements Renderer<BufferedImage> {
 
 			skill.execute(source, target);
 		} finally {
-			if (skill.getCooldown() > 0) {
-				skill.setCooldown(skill.getCooldown());
+			if (skill.getStats().getCooldown() > 0) {
+				skill.setCooldown(skill.getStats().getCooldown());
 			}
 
 			if (target.getHp() == 0) {
