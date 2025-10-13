@@ -181,6 +181,9 @@ public class Equipment implements Iterable<Gear> {
 
 		if (unarmed) {
 			out.add("UNARMED");
+			if (!out.contains("MELEE")) {
+				out.add("MELEE");
+			}
 		}
 
 		if (weapons >= 2) {
