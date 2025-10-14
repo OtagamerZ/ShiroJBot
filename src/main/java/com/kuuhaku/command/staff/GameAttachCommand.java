@@ -21,7 +21,6 @@ package com.kuuhaku.command.staff;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.SigPattern;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -35,33 +34,11 @@ import net.dv8tion.jda.api.JDA;
 		path = "attach",
 		category = Category.STAFF
 )
-@Syntax(
-		allowEmpty = true,
-		patterns = {
-				@SigPattern(id = "user", value = "<@!?(\\d+)>(?=\\s|$)"),
-				@SigPattern(id = "id", value = "(\\d+)(?=\\s|$)")
-		},
-		value = {
-				"<channel:custom:r>",
-				"<user:custom:r>[user]",
-				"<id:custom:r>[id]"
-		}
-)
+@Syntax(allowEmpty = true, value = "<channel:channel:r>")
 public class GameAttachCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		GameInstance<?> game;
-		if (args.isEmpty()) {
-			game = GameInstance.CHANNELS.get(event.channel().getId());
-		} else if (args.has("channel")) {
-			game = GameInstance.CHANNELS.get(args.getString("channel"));
-		} else {
-			if (args.has("user")) {
-				game = GameInstance.PLAYERS.get(event.message().getMentions().getUsers().getFirst().getId());
-			} else {
-				game = GameInstance.PLAYERS.get(args.getString("id"));
-			}
-		}
+		GameInstance<?> game = GameInstance.CHANNELS.get(args.getString("channel"));
 
 		if (game == null) {
 			data.channel().sendMessage(locale.get("error/game_not_found")).queue();
