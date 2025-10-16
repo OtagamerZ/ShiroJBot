@@ -88,19 +88,25 @@ public class ShiritoriCommand implements Executable {
 							return false;
 						}
 
-						Shiritori shi = new Shiritori(locale,
-								Stream.concat(Stream.of(event.user()), others.stream())
-										.map(User::getId)
-										.sorted(Collections.reverseOrder())
-										.toArray(String[]::new)
-						);
-						shi.start(event.guild(), event.channel())
-								.whenComplete((v, e) -> {
-									if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
-										Constants.LOGGER.error(e, e);
-										event.channel().sendMessage(locale.get("error/error", e)).queue();
-									}
-								});
+						try {
+							Shiritori shi = new Shiritori(locale,
+									Stream.concat(Stream.of(event.user()), others.stream())
+											.map(User::getId)
+											.sorted(Collections.reverseOrder())
+											.toArray(String[]::new)
+							);
+							shi.start(event.guild(), event.channel())
+									.whenComplete((v, e) -> {
+										if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
+											Constants.LOGGER.error(e, e);
+											event.channel().sendMessage(locale.get("error/error", e)).queue();
+										}
+									});
+						} catch (GameReport e) {
+							if (e.getCode() == GameReport.DICT_NOT_FOUND) {
+								event.channel().sendMessage(locale.get("error/dict_not_found")).queue();
+							}
+						}
 
 						return true;
 					}, others.toArray(User[]::new)

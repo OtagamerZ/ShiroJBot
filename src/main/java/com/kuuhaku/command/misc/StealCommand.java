@@ -65,13 +65,9 @@ public class StealCommand implements Executable {
 		Account acc = data.profile().getAccount();
 
 		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime lastSteal = LocalDateTime.parse(acc.getDynValue("last_steal", LocalDateTime.ofInstant(Instant.EPOCH, ZoneId.of("GMT-3")).toString()));
-		if (lastSteal.isAfter(now.minusHours(1))) {
-			event.channel().sendMessage(locale.get("error/stole_recent", Utils.toStringDuration(locale, now.minusHours(1).until(lastSteal, ChronoUnit.MILLIS)))).queue();
-			return;
-		}
-
 		Account them = DAO.find(Account.class, target.getId());
+
+		LocalDateTime lastSteal = LocalDateTime.parse(acc.getDynValue("last_steal", LocalDateTime.ofInstant(Instant.EPOCH, ZoneId.of("GMT-3")).toString()));
 		LocalDateTime lastStolen = LocalDateTime.parse(them.getDynValue("last_stolen", LocalDateTime.ofInstant(Instant.EPOCH, ZoneId.of("GMT-3")).toString()));
 		if (lastStolen.isAfter(now.minusHours(4))) {
 			event.channel().sendMessage(locale.get("error/stolen_recent", target.getAsMention(), Utils.toStringDuration(locale, now.minusHours(4).until(lastStolen, ChronoUnit.MILLIS)))).queue();
@@ -83,7 +79,10 @@ public class StealCommand implements Executable {
 
 		if (stolen > 0) {
 			int current = acc.getItemCount("spooky_candy");
-			if (them.consumeItem("hallowed_card") || Calc.chance(Math.min(Math.pow(current / 200d, 2), 50))) {
+			int minutes = (int) Math.max(0, lastSteal.until(now, ChronoUnit.MINUTES));
+			double guardChance = minutes == 0 ? 100 : Math.min(Math.pow(current / 1000d, 2) * 60 / minutes, 100);
+
+			if (them.consumeItem("hallowed_card") || Calc.chance(guardChance)) {
 				acc.consumeItem("spooky_candy", current, true);
 				acc.setDynValue("last_steal", now.toString());
 				acc.setDynValue("steal_streak", 0);
