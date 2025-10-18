@@ -26,7 +26,6 @@ import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.dunhun.SkillValue;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
-import com.ygimenez.json.JSONObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
@@ -101,16 +100,14 @@ public class SkillStats implements Serializable {
 	public List<Actor<?>> getTargets(String id, Actor<?> source) {
 		if (targeter == null) return List.of(source);
 
-		List<Actor<?>> out = new ArrayList<>();
+		SkillContext ctx = new SkillContext(source, null);
 		try {
-			Utils.exec(id, targeter, Map.of(
-					"ctx", new SkillContext(source, null)
-			));
+			Utils.exec(id, targeter, Map.of("ctx", ctx));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to load targets {}", id, e);
 		}
 
-		return out;
+		return ctx.getTargets();
 	}
 
 	public CpuRule canCpuUse(String id, Actor<?> source, Actor<?> target) {

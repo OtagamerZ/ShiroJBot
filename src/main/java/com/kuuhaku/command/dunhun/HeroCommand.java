@@ -36,13 +36,13 @@ import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Skill;
-import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.GearStats;
+import com.kuuhaku.model.records.dunhun.Requirements;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
@@ -258,23 +258,18 @@ public class HeroCommand implements Executable {
 
 						Attributes reqs = s.getRequirements().attributes();
 						List<String> reqLine = new ArrayList<>();
-						if (reqs.str() > 0) reqLine.add("STR: " + reqs.str());
-						if (reqs.dex() > 0) reqLine.add("DEX: " + reqs.dex());
-						if (reqs.wis() > 0) reqLine.add("WIS: " + reqs.wis());
-						if (reqs.vit() > 0) reqLine.add("VIT: " + reqs.vit());
 
-						String reqTags = Utils.properlyJoin(locale,
-								s.getRequirements().tags().stream()
-										.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
-										.toList()
-						);
+						if (s.getRequirements().level() > 0) reqLine.add(locale.get("str/level", s.getRequirements().level()));
 
-						if (!reqTags.isBlank()) {
-							reqLine.add(reqTags);
+						for (AttrType t : AttrType.values()) {
+							if (t.ordinal() >= AttrType.LVL.ordinal()) break;
+
+							if (reqs.get(t) > 0) reqLine.add(t + ": " + reqs.get(t) + " ");
 						}
 
+						boolean canUse = h.getStats().getLevel() >= s.getRequirements().level() && attr.has(reqs);
 						String req = !reqLine.isEmpty()
-								? ("- " + (attr.has(reqs) ? "" : "\\❌ ") + String.join(" | ", reqLine) + "\n")
+								? ("- " + (canUse ? "" : "\\❌ ") + String.join(" | ", reqLine) + "\n")
 								: "";
 						return new FieldMimic(
 								prefix + " " + s.getName(locale) + " " + StringUtils.repeat('◈', s.getStats().getCost()),
@@ -324,9 +319,12 @@ public class HeroCommand implements Executable {
 						w.getChannel().sendMessage(locale.get("error/unknown_skill", sug)).queue();
 					}
 					return;
-				} else if (!h.getAttributes().has(s.getRequirements().attributes())) {
-					w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
-					return;
+				} else {
+					Requirements reqs = s.getRequirements();
+					if (h.getStats().getLevel() < reqs.level() || !h.getAttributes().has(reqs.attributes())) {
+						w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
+						return;
+					}
 				}
 
 				if (!h.getStats().getUnlockedSkills().contains(s.getId())) {

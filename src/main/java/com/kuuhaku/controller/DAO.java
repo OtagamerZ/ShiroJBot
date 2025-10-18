@@ -345,7 +345,12 @@ public abstract class DAO<T extends DAO<T>> {
 				if (lock.isBlacklisted()) return;
 			}
 
-			em.merge(this);
+			try {
+				beforeSave();
+				em.merge(this);
+			} finally {
+				afterSave();
+			}
 		});
 	}
 
@@ -381,7 +386,12 @@ public abstract class DAO<T extends DAO<T>> {
 				}
 			}
 
-			em.remove(ent);
+			try {
+				beforeDelete();
+				em.remove(ent);
+			} finally {
+				afterDelete();
+			}
 		});
 	}
 
@@ -405,21 +415,15 @@ public abstract class DAO<T extends DAO<T>> {
 		return q;
 	}
 
-	@PrePersist
-	@PreUpdate
 	public void beforeSave() {
 	}
 
-	@PostPersist
-	@PostUpdate
 	public void afterSave() {
 	}
 
-	@PreRemove
 	public void beforeDelete() {
 	}
 
-	@PostRemove
 	public void afterDelete() {
 	}
 }

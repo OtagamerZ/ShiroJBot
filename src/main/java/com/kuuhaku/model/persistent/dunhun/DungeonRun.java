@@ -55,7 +55,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 	private Set<DungeonRunModifier> modifiers = new LinkedHashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@Column(name = "node_id", nullable = false)
+	@Column(name = "node", nullable = false)
 	@CollectionTable(
 			schema = "dunhun",
 			name = "dungeon_run_visited_node",
@@ -64,7 +64,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 					@JoinColumn(name = "dungeon_id")
 			}
 	)
-	private Set<Long> visitedNodes = new LinkedHashSet<>();
+	private Set<String> visitedNodes = new LinkedHashSet<>();
 
 	public DungeonRun() {
 	}
@@ -87,7 +87,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 		return dungeon;
 	}
 
-	public Set<Long> getVisitedNodes() {
+	public Set<String> getVisitedNodes() {
 		return visitedNodes;
 	}
 

@@ -98,14 +98,12 @@ public class DunhunCommand implements Executable {
 			List<Page> pages = new ArrayList<>();
 			for (Dungeon dg : dgs) {
 				String name = dg.getInfo(locale).getName() + " (`" + dg.getId() + "`)";
-				if (h.hasCompleted(dg)) {
-					name += " - " + Constants.ACCEPT;
-				}
-
-				eb.clearFields()
-						.setTitle(name);
 
 				if (h.canEnter(dg)) {
+					if (h.hasCompleted(dg)) {
+						name += " " + Constants.ACCEPT;
+					}
+
 					eb.setDescription(dg.getInfo(locale).getDescription());
 				} else {
 					List<String> rem = h.remainingDungeonsFor(dg).stream()
@@ -113,8 +111,12 @@ public class DunhunCommand implements Executable {
 							.map(dun -> dun.getInfo(locale).getName())
 							.toList();
 
+					name += " 🔒";
 					eb.setDescription(locale.get("str/dungeon_requirement", Utils.properlyJoin(locale, rem)));
 				}
+
+				eb.clearFields()
+						.setTitle(name);
 
 				if (!dg.getMonsterPool().isEmpty()) {
 					List<String> mobs = DAO.queryAllNative(String.class, "SELECT regexp_replace(name, '\\[.+]', '') FROM monster_info WHERE locale = ?1 AND id IN ?2",

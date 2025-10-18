@@ -491,7 +491,7 @@ public class GuildListener extends ListenerAdapter {
 						.setDescription(drop.getContent(locale))
 						.setFooter(locale.get("str/drop_instructions", config.getPrefix(), drop.getCaptcha(true)))
 						.addField(
-								locale.get("str/drop_requirements"),
+								locale.get("str/requirements"),
 								drop.getConditions().stream()
 										.map(dc -> dc.toString(locale, rng))
 										.collect(Collectors.joining("\n")),
