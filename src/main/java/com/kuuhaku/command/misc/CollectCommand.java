@@ -49,9 +49,6 @@ public class CollectCommand implements Executable {
 			if (!card.isValid()) {
 				event.channel().sendMessage(locale.get("error/no_card")).queue();
 				return;
-			} else if (card.peekProperty(kp::hasCard)) {
-				event.channel().sendMessage(locale.get("error/owned")).queue();
-				return;
 			} else if (card.peekProperty(kc -> !acc.hasEnough(kc.getPrice(), Currency.CR))) {
 				event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
 				return;
