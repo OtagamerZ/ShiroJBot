@@ -1313,7 +1313,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int dmg = damage;
-		int direct = 0;
+		int direct = (int) (damage * source.getStats().getPiercing().get() / 100);
 		int lifesteal = you.getBase().lifesteal() + (int) source.getStats().getLifesteal().get();
 		if (you.getOrigins().synergy() == Race.VAMPIRE && you.isLowLife()) {
 			lifesteal += 7;

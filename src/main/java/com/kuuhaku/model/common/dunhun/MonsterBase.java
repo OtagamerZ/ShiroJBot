@@ -95,7 +95,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 			case UNIQUE -> 10;
 		};
 
-		return (int) Math.max(1, flat * (1 + getModifiers().getAggroMult().get()) * (getGame().getAreaLevel() + 1) * mult);
+		return (int) Math.max(1, flat * (1 + getModifiers().getAggro().get()) * (getGame().getAreaLevel() + 1) * mult);
 	}
 
 	public int getKillXp() {

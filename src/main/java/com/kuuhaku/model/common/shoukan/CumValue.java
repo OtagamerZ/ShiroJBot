@@ -48,6 +48,10 @@ public class CumValue implements Iterable<ValueMod> {
 		return new CumValue(false);
 	}
 
+	public static CumStack stack() {
+		return new CumStack();
+	}
+
 	public double raw() {
 		return values.parallelStream()
 				.mapToDouble(ValueMod::getValue)

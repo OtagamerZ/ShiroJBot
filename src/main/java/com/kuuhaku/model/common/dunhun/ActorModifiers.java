@@ -21,6 +21,7 @@ package com.kuuhaku.model.common.dunhun;
 import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.TimedMap;
+import com.kuuhaku.model.common.shoukan.CumStack;
 import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.enums.shoukan.Trigger;
@@ -32,16 +33,17 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class ActorModifiers implements Iterable<CumValue> {
-	private final CumValue maxHp = CumValue.flat();
-	private final CumValue hpMult = CumValue.mult();
-	private final CumValue maxAp = CumValue.flat();
-	private final CumValue initiative = CumValue.flat();
-	private final CumValue critical = CumValue.flat();
-	private final CumValue aggroMult = CumValue.flat();
+	private final CumStack maxHp = CumValue.stack();
+	private final CumStack maxAp = CumValue.stack();
+	private final CumStack initiative = CumValue.stack();
+	private final CumStack critical = CumValue.stack();
+	private final CumStack spellDamage = CumValue.stack();
+
+	private final CumValue aggro = CumValue.flat();
 	private final CumValue magicFind = CumValue.flat();
-	private final CumValue spellDamage = CumValue.flat();
 
 	private final Set<EffectBase> permEffects = new HashSet<>();
 	private final TimedMap<EffectBase> tempEffects = new TimedMap<>();
@@ -49,36 +51,32 @@ public class ActorModifiers implements Iterable<CumValue> {
 
 	private final Field[] fieldCache = getClass().getDeclaredFields();
 
-	public CumValue getMaxHp() {
+	public CumStack getMaxHp() {
 		return maxHp;
 	}
 
-	public CumValue getHpMult() {
-		return hpMult;
-	}
-
-	public CumValue getMaxAp() {
+	public CumStack getMaxAp() {
 		return maxAp;
 	}
 
-	public CumValue getInitiative() {
+	public CumStack getInitiative() {
 		return initiative;
 	}
 
-	public CumValue getCritical() {
+	public CumStack getCritical() {
 		return critical;
 	}
 
-	public CumValue getAggroMult() {
-		return aggroMult;
+	public CumStack getSpellDamage() {
+		return spellDamage;
+	}
+
+	public CumValue getAggro() {
+		return aggro;
 	}
 
 	public CumValue getMagicFind() {
 		return magicFind;
-	}
-
-	public CumValue getSpellDamage() {
-		return spellDamage;
 	}
 
 	public void addEffect(Actor<?> source, ThrowingBiConsumer<EffectBase, CombatContext> effect) {
@@ -143,6 +141,8 @@ public class ActorModifiers implements Iterable<CumValue> {
 			try {
 				if (f.get(this) instanceof CumValue cv) {
 					cv.values().removeIf(check);
+				} else if (f.get(this) instanceof CumStack cs) {
+					cs.values().removeIf(check);
 				}
 			} catch (IllegalAccessException ignore) {
 			}
@@ -152,10 +152,12 @@ public class ActorModifiers implements Iterable<CumValue> {
 	@Override
 	public @NotNull Iterator<CumValue> iterator() {
 		return Arrays.stream(fieldCache)
-				.map(f -> {
+				.flatMap(f -> {
 					try {
 						if (f.get(this) instanceof CumValue cv) {
-							return cv;
+							return Stream.of(cv);
+						} else if (f.get(this) instanceof CumStack cs) {
+							return Stream.of(cs.getFlat(), cs.getIncreased(), cs.getMore());
 						}
 					} catch (IllegalAccessException ignore) {
 					}

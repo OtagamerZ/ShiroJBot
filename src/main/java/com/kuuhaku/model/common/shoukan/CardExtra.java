@@ -47,10 +47,10 @@ public class CardExtra implements Iterable<CumValue> {
 	private final CumValue blood = CumValue.flat();
 	private final CumValue sacrifices = CumValue.flat();
 
-	private final CumValue atk = CumValue.flat();
-	private final CumValue dfs = CumValue.flat();
-	private final CumValue dodge = CumValue.flat();
-	private final CumValue parry = CumValue.flat();
+	private final CumStack atk = CumValue.stack();
+	private final CumStack dfs = CumValue.stack();
+	private final CumStack dodge = CumValue.stack();
+	private final CumStack parry = CumValue.stack();
 
 	private final CumValue piercing = CumValue.flat();
 	private final CumValue lifesteal = CumValue.flat();
@@ -58,8 +58,6 @@ public class CardExtra implements Iterable<CumValue> {
 
 	private final CumValue costMult = CumValue.mult();
 	private final CumValue attrMult = CumValue.mult();
-	private final CumValue atkMult = CumValue.mult();
-	private final CumValue dfsMult = CumValue.mult();
 	private final CumValue power = CumValue.mult();
 
 	private final CumValue attacks = CumValue.flat();
@@ -94,19 +92,19 @@ public class CardExtra implements Iterable<CumValue> {
 		return sacrifices;
 	}
 
-	public CumValue getAtk() {
+	public CumStack getAtk() {
 		return atk;
 	}
 
-	public CumValue getDfs() {
+	public CumStack getDfs() {
 		return dfs;
 	}
 
-	public CumValue getDodge() {
+	public CumStack getDodge() {
 		return dodge;
 	}
 
-	public CumValue getParry() {
+	public CumStack getParry() {
 		return parry;
 	}
 
@@ -128,14 +126,6 @@ public class CardExtra implements Iterable<CumValue> {
 
 	public CumValue getAttrMult() {
 		return attrMult;
-	}
-
-	public CumValue getAtkMult() {
-		return atkMult;
-	}
-
-	public CumValue getDfsMult() {
-		return dfsMult;
 	}
 
 	public CumValue getPower() {

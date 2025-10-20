@@ -114,7 +114,7 @@ public class Monster extends MonsterBase<Monster> {
 
 	@Override
 	public int getMaxHp() {
-		double flat = getStats().getBaseHp() + getModifiers().getMaxHp().get() + getGame().getAreaLevel() * 5;
+		double flat = getStats().getBaseHp() + getGame().getAreaLevel() * 5;
 		double mult = switch (getRarityClass()) {
 			case MAGIC -> 1.5;
 			case RARE -> 2.25;
@@ -125,7 +125,7 @@ public class Monster extends MonsterBase<Monster> {
 			mult *= 1 + getGame().getPartySize() * 0.5;
 		}
 
-		return (int) Math.max(1, flat * mult * getModifiers().getHpMult().get());
+		return (int) Math.max(1, getModifiers().getMaxHp().get(flat) * mult);
 	}
 
 	public Set<Affix> getAffixes() {
