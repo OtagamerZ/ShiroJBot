@@ -78,6 +78,7 @@ tasks.withType(JavaCompile).configureEach {
 			<< "-Xlint:deprecation"
 
 	dependsOn enforceVersion
+	dependsOn generateGrammarSource
 }
 
 tasks.withType(GroovyCompile).configureEach {
