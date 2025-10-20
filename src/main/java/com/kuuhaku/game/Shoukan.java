@@ -556,7 +556,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			EquippableSenshi es = (EquippableSenshi) d;
 			es.getStats().getData().put("_shiki", true);
-			es.getStats().getAttrMult().set(-0.4);
+			es.getStats().getAttr().set(new MultMod(-0.4));
 		}
 
 		if (d instanceof Evogear chosen && !chosen.isSpell()) {
@@ -830,7 +830,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (curr.getOrigins().synergy() == Race.FAMILIAR && d instanceof Senshi s) {
 			for (Drawable<?> c : curr.getCards()) {
 				if (c.isAvailable() && c instanceof Senshi it && it.getElement() == s.getElement()) {
-					it.getStats().getMana().set(-1);
+					it.getStats().getMana().set(new FlatMod(-1));
 				}
 			}
 		}
@@ -868,7 +868,7 @@ public class Shoukan extends GameInstance<Phase> {
 				if (c instanceof Senshi s) {
 					for (Drawable<?> d : curr.getCards()) {
 						if (d.isAvailable() && d instanceof Senshi it && it.getElement() == s.getElement()) {
-							it.getStats().getMana().set(-1);
+							it.getStats().getMana().set(new FlatMod(-1));
 						}
 					}
 				}
@@ -3222,7 +3222,7 @@ public class Shoukan extends GameInstance<Phase> {
 					s.setSwitched(false);
 
 					if (arcade == Arcade.DECAY) {
-						s.getStats().getMana().set(-1);
+						s.getStats().getMana().set(new FlatMod(-1));
 						if (s.getMPCost() == 0) {
 							s.getHand().getGraveyard().add(s);
 						}

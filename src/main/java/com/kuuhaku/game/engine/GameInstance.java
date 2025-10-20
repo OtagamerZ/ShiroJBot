@@ -247,7 +247,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 	}
 
 	protected Pair<Method, JSONObject> toAction(String args) {
-		return toAction(args, m -> true);
+		return toAction(args, _ -> true);
 	}
 
 	protected Pair<Method, JSONObject> toAction(String args, Predicate<Method> condition) {

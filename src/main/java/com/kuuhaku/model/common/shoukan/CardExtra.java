@@ -43,32 +43,30 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class CardExtra implements Iterable<CumValue> {
-	private final CumValue mana = CumValue.flat();
-	private final CumValue blood = CumValue.flat();
-	private final CumValue sacrifices = CumValue.flat();
+	private final CumValue mana = new CumValue();
+	private final CumValue blood = new CumValue();
+	private final CumValue sacrifices = new CumValue();
+	private final CumValue cost = new CumValue();
 
-	private final CumValue atk = CumValue.flat();
-	private final CumValue dfs = CumValue.flat();
-	private final CumValue dodge = CumValue.flat();
-	private final CumValue parry = CumValue.flat();
+	private final CumValue atk = new CumValue();
+	private final CumValue dfs = new CumValue();
+	private final CumValue attr = new CumValue();
 
-	private final CumValue piercing = CumValue.flat();
-	private final CumValue lifesteal = CumValue.flat();
-	private final CumValue thorns = CumValue.flat();
+	private final CumValue dodge = new CumValue();
+	private final CumValue parry = new CumValue();
+	private final CumValue power = new CumValue();
 
-	private final CumValue costMult = CumValue.mult();
-	private final CumValue attrMult = CumValue.mult();
-	private final CumValue atkMult = CumValue.mult();
-	private final CumValue dfsMult = CumValue.mult();
-	private final CumValue power = CumValue.mult();
+	private final CumValue piercing = new CumValue();
+	private final CumValue lifesteal = new CumValue();
+	private final CumValue thorns = new CumValue();
 
-	private final CumValue attacks = CumValue.flat();
-	private final CumValue tier = CumValue.flat();
+	private final CumValue attacks = new CumValue();
+	private final CumValue tier = new CumValue();
 
 	private final Flags flags = new Flags();
 
 	private final JSONObject data = new JSONObject();
-	private final ListOrderedSet<String> curses = ListOrderedSet.listOrderedSet(BondedList.withBind((s, it) -> !s.isBlank()));
+	private final ListOrderedSet<String> curses = ListOrderedSet.listOrderedSet(BondedList.withBind((s, _) -> !s.isBlank()));
 
 	private Race race = null;
 	private Senshi disguise = null;
@@ -94,6 +92,10 @@ public class CardExtra implements Iterable<CumValue> {
 		return sacrifices;
 	}
 
+	public CumValue getCost() {
+		return cost;
+	}
+
 	public CumValue getAtk() {
 		return atk;
 	}
@@ -102,12 +104,20 @@ public class CardExtra implements Iterable<CumValue> {
 		return dfs;
 	}
 
+	public CumValue getAttr() {
+		return attr;
+	}
+
 	public CumValue getDodge() {
 		return dodge;
 	}
 
 	public CumValue getParry() {
 		return parry;
+	}
+
+	public CumValue getPower() {
+		return power;
 	}
 
 	public CumValue getPiercing() {
@@ -120,26 +130,6 @@ public class CardExtra implements Iterable<CumValue> {
 
 	public CumValue getThorns() {
 		return thorns;
-	}
-
-	public CumValue getCostMult() {
-		return costMult;
-	}
-
-	public CumValue getAttrMult() {
-		return attrMult;
-	}
-
-	public CumValue getAtkMult() {
-		return atkMult;
-	}
-
-	public CumValue getDfsMult() {
-		return dfsMult;
-	}
-
-	public CumValue getPower() {
-		return power;
 	}
 
 	public CumValue getAttacks() {

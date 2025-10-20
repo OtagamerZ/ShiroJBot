@@ -27,14 +27,11 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class GearModifiers {
-	private final CumValue attack = CumValue.flat();
-	private final CumValue attackMult = CumValue.flat();
-	private final CumValue defense = CumValue.flat();
-	private final CumValue defenseMult = CumValue.flat();
-	private final CumValue critical = CumValue.flat();
-	private final CumValue criticalMult = CumValue.flat();
-	private final CumValue prefixes = CumValue.flat();
-	private final CumValue suffixes = CumValue.flat();
+	private final CumValue attack = new CumValue();
+	private final CumValue defense = new CumValue();
+	private final CumValue critical = new CumValue();
+	private final CumValue prefixes = new CumValue();
+	private final CumValue suffixes = new CumValue();
 
 	private final Set<String> addedTags = new HashSet<>();
 
@@ -44,24 +41,12 @@ public class GearModifiers {
 		return attack;
 	}
 
-	public CumValue getAttackMult() {
-		return attackMult;
-	}
-
 	public CumValue getDefense() {
 		return defense;
 	}
 
-	public CumValue getDefenseMult() {
-		return defenseMult;
-	}
-
 	public CumValue getCritical() {
 		return critical;
-	}
-
-	public CumValue getCriticalMult() {
-		return criticalMult;
 	}
 
 	public CumValue getPrefixes() {

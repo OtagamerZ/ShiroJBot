@@ -153,14 +153,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public int getTier() {
-		int sum = tier;
+		int flat = tier;
 		if (hand != null) {
 			if (hand.getOrigins().isPure(Race.MACHINE)) {
-				sum += 1;
+				flat += 1;
 			}
 		}
 
-		return sum + (int) stats.getTier().get();
+		return flat + (int) stats.getTier().get();
 	}
 
 	public boolean isSpell() {
@@ -297,49 +297,49 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public int getDmg() {
-		int sum = base.getAtk() + (int) stats.getAtk().get();
+		int flat = base.getAtk();
 
 		if (hand != null && hand.getOrigins().synergy() == Race.CYBERBEAST) {
-			sum += getCards(getSide()).stream().mapToInt(Senshi::getParry).sum();
+			flat += getCards(getSide()).stream().mapToInt(Senshi::getParry).sum();
 		}
 
-		return Calc.round(sum * getAttrMult() * stats.getAtkMult().get());
+		return Calc.round(stats.getAtk().get(flat) * getAttrMult());
 	}
 
 	@Override
 	public int getDfs() {
-		int sum = base.getDfs() + (int) stats.getDfs().get();
+		int flat = base.getDfs();
 
-		return Calc.round(sum * getAttrMult() * stats.getDfsMult().get());
+		return Calc.round(stats.getDfs().get(flat) * getAttrMult());
 	}
 
 	@Override
 	public int getDodge() {
-		int sum = base.getDodge() + (int) stats.getDodge().get();
+		int flat = base.getDodge();
 
 		int min = 0;
 		if (hand != null && hand.getOrigins().synergy() == Race.GEIST) {
 			min += 10;
 		}
 
-		return Utils.clamp(min + sum, min, 100);
+		return (int) Utils.clamp(stats.getDodge().get(flat), min, 100);
 	}
 
 	@Override
 	public int getParry() {
-		int sum = base.getParry() + (int) stats.getParry().get();
+		int flat = base.getParry();
 
 		int min = 0;
 		if (hand != null && hand.getOrigins().synergy() == Race.CYBORG) {
 			min += 10;
 		}
 
-		return Utils.clamp(min + sum, min, 100);
+		return (int) Utils.clamp(stats.getParry().get(flat), min, 100);
 	}
 
 	@Override
 	public double getCostMult() {
-		double mult = stats.getCostMult().get();
+		double mult = stats.getCost().get();
 		if (hand != null) {
 			if ((!spell && hand.getOrigins().hasMinor(Race.MACHINE)) || (spell && hand.getOrigins().hasMinor(Race.MYSTICAL))) {
 				mult *= 0.8;
@@ -355,7 +355,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public double getAttrMult() {
-		double mult = stats.getAttrMult().get();
+		double mult = stats.getAttr().get();
 		if (hand != null) {
 			if (!spell && hand.getOrigins().hasMinor(Race.MACHINE)) {
 				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MACHINE) * 0.02);

@@ -234,7 +234,7 @@ public class AreaMap {
 		Map<Floor, List<Node>> nodes = new TreeMap<>(Comparator.comparingInt(Floor::getFloor));
 		for (int i = 0; i < 3; i++) {
 			for (Floor fl : floors) {
-				List<Node> nds = nodes.computeIfAbsent(fl, f -> fl.getNodes());
+				List<Node> nds = nodes.computeIfAbsent(fl, _ -> fl.getNodes());
 				for (Node node : nds) {
 					if (i == 1) node.calcColor();
 

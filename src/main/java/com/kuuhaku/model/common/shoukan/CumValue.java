@@ -30,130 +30,82 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
 
 public class CumValue implements Iterable<ValueMod> {
 	private final Set<ValueMod> values = Collections.newSetFromMap(new ConcurrentHashMap<>());
-	private final boolean flat;
-
-	private CumValue(boolean flat) {
-		this.flat = flat;
-	}
-
-	public static CumValue flat() {
-		return new CumValue(true);
-	}
-
-	public static CumValue mult() {
-		return new CumValue(false);
-	}
-
-	public static CumStack stack() {
-		return new CumStack();
-	}
-
-	public double raw() {
-		return values.parallelStream()
-				.mapToDouble(ValueMod::getValue)
-				.sum();
-	}
 
 	public double get() {
-		return accumulate(values);
+		return get(0);
 	}
 
-	public ValueMod get(Drawable<?> source) {
+	public double get(double base) {
+		double flat = base;
+		double inc = 0;
+		double mult = 1;
+
 		for (ValueMod mod : values) {
-			if (Objects.equals(source, mod.getSource())) {
-				return mod;
-			}
-		}
-
-		return new ValueMod(source, 0);
-	}
-
-	public <T extends Number> T asType(Class<T> klass) {
-		return Utils.fromNumber(klass, get());
-	}
-
-	public ValueMod rightShift(Drawable<?> source) {
-		return get(source);
-	}
-
-	public ValueMod set(double value) {
-		for (ValueMod mod : this.values) {
-			if (mod.isPermanent() && mod.getClass() == ValueMod.class) {
-				mod.setValue(mod.getValue() + value);
-				return mod;
-			}
-		}
-
-		ValueMod mod = new ValueMod(value);
-		this.values.add(mod);
-		return mod;
-	}
-
-	public ValueMod set(Drawable<?> source, double value) {
-		return set(source, value, -1);
-	}
-
-	public ValueMod set(Drawable<?> source, double value, int expiration) {
-		ValueMod mod = new ValueMod(source, value, expiration);
-		this.values.remove(mod);
-		this.values.add(mod);
-		return mod;
-	}
-
-	public ValueMod leftShift(Number value) {
-		return set(value.doubleValue());
-	}
-
-	public ValueMod set(Supplier<Number> supplier) {
-		for (ValueMod mod : this.values) {
-			if (mod.isPermanent() && mod.getClass() == DynamicMod.class) {
-				((DynamicMod) mod).addSupplier(supplier);
-				return mod;
-			}
-		}
-
-		DynamicMod mod = new DynamicMod(supplier);
-		this.values.add(mod);
-		return mod;
-	}
-
-	public ValueMod set(Drawable<?> source, Supplier<Number> supplier) {
-		return set(source, supplier, -1);
-	}
-
-	public ValueMod set(Drawable<?> source, Supplier<Number> supplier, int expiration) {
-		DynamicMod mod = new DynamicMod(source, supplier, expiration);
-		this.values.remove(mod);
-		this.values.add(mod);
-		return mod;
-	}
-
-	public ValueMod leftShift(Supplier<Number> supplier) {
-		return set(supplier);
-	}
-
-	public Set<ValueMod> values() {
-		return values;
-	}
-
-	private double accumulate(Set<ValueMod> mods) {
-		double out = flat ? 0 : 1;
-		for (ValueMod mod : mods) {
 			if (mod.getSource() instanceof EffectHolder<?> eh) {
 				if (!eh.hasEffect() || eh.getHand().getLockTime(Lock.EFFECT) > 0) {
 					continue;
 				}
 			}
 
-			if (flat) out += mod.getValue();
-			else out *= 1 + mod.getValue();
+			switch (mod) {
+				case FlatMod _, DynamicMod _ -> flat += mod.getValue();
+				case IncMod _ -> inc += mod.getValue();
+				case MultMod _ -> mult *= 1 + mod.getValue();
+				default -> throw new IllegalStateException("Unexpected value: " + mod);
+			}
 		}
 
-		return Calc.round(out, 2);
+		return Calc.round(flat * (1 + inc) * mult, 2);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends ValueMod> T get(Drawable<?> source, Class<T> klass) {
+		for (ValueMod mod : values) {
+			if (mod.getClass() == klass && Objects.equals(source, mod.getSource())) {
+				return (T) mod;
+			}
+		}
+
+		if (klass == FlatMod.class) {
+			return (T) new FlatMod(source, 0);
+		} else if (klass == IncMod.class) {
+			return (T) new IncMod(source, 0);
+		} else if (klass == MultMod.class) {
+			return (T) new MultMod(source, 0);
+		} else if (klass == DynamicMod.class) {
+			return (T) new DynamicMod(source, () -> 0);
+		}
+
+		throw new IllegalStateException("Unexpected value: " + klass);
+	}
+
+	public <T extends Number> T asType(Class<T> klass) {
+		return Utils.fromNumber(klass, get());
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends ValueMod> T set(T value) {
+		for (ValueMod mod : values) {
+			if (mod.isPermanent() && mod.getClass() == value.getClass()) {
+				mod.setValue(mod.getValue() + value.getValue());
+				return (T) mod;
+			}
+		}
+
+		values.remove(value);
+		values.add(value);
+		return value;
+	}
+
+	public <T extends ValueMod> ValueMod leftShift(T value) {
+		return set(value);
+	}
+
+	public Set<ValueMod> values() {
+		return values;
 	}
 
 	@NotNull

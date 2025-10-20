@@ -240,7 +240,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							choices.add(new Choice(
 									"path-" + path,
 									Utils.parseEmoji(ICONS.get(path)),
-									w -> {
+									_ -> {
 										run.setNode(node);
 										nodeRng.setSeed(node.getSeed());
 										chosenPath.set(getLocale().get("str/" + path));
@@ -711,22 +711,22 @@ public class Dunhun extends GameInstance<NullPhase> {
 					Hero h = robin.getNext();
 					g.setOwner(h);
 
-					dist.computeIfAbsent(h.getName(), k -> new ArrayList<>()).add(g.getName(getLocale()));
+					dist.computeIfAbsent(h.getName(), _ -> new ArrayList<>()).add(g.getName(getLocale()));
 				}
 				DAO.insertBatch(loot.gear());
 
 				Map<Hero, Map<UserItem, Integer>> split = new HashMap<>();
 				for (UserItem i : loot.items()) {
 					Hero h = robin.getNext();
-					split.computeIfAbsent(h, k -> new HashMap<>())
-							.compute(i, (k, v) -> v == null ? 1 : v + 1);
+					split.computeIfAbsent(h, _ -> new HashMap<>())
+							.compute(i, (_, v) -> v == null ? 1 : v + 1);
 				}
 
 				for (Map.Entry<Hero, Map<UserItem, Integer>> e : split.entrySet()) {
 					Hero h = e.getKey();
 					for (Map.Entry<UserItem, Integer> i : e.getValue().entrySet()) {
 						h.getAccount().addItem(i.getKey(), i.getValue());
-						dist.computeIfAbsent(h.getName(), k -> new ArrayList<>())
+						dist.computeIfAbsent(h.getName(), _ -> new ArrayList<>())
 								.add(i.getKey().getName(getLocale()) + " (x" + i.getValue() + ")");
 					}
 				}
@@ -838,7 +838,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	@Override
 	public void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
 		getChannel().sendMessage(parsePlural(getString(msg, args)))
-				.queue(m -> {
+				.queue(_ -> {
 					if (message != null) {
 						GuildMessageChannel channel = Main.getApp().getMessageChannelById(message.getFirst());
 						if (channel != null) {

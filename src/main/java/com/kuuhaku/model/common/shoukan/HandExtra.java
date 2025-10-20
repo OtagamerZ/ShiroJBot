@@ -25,10 +25,10 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class HandExtra {
-	private final CumValue healMult = CumValue.mult();
-	private final CumValue damageMult = CumValue.mult();
-	private final CumValue regenMult = CumValue.mult();
-	private final CumValue degenMult = CumValue.mult();
+	private final CumValue healMult = new CumValue();
+	private final CumValue damageMult = new CumValue();
+	private final CumValue regenMult = new CumValue();
+	private final CumValue degenMult = new CumValue();
 
 	private final Field[] fieldCache = getClass().getDeclaredFields();
 

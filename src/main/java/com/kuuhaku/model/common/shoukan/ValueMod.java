@@ -27,7 +27,7 @@ import com.kuuhaku.util.Utils;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ValueMod implements Cloneable {
+public abstract class ValueMod implements Cloneable {
 	private final int SERIAL = ThreadLocalRandom.current().nextInt();
 	private final Drawable<?> source;
 	private final boolean permanent;
@@ -36,12 +36,16 @@ public class ValueMod implements Cloneable {
 	private double value;
 	private int expiration;
 
-	protected ValueMod(double value) {
+	public ValueMod(double value) {
 		this(null, value);
 	}
 
 	public ValueMod(Drawable<?> source, double value) {
 		this(source, value, -1);
+	}
+
+	public ValueMod(double value, int expiration) {
+		this(null, value, expiration);
 	}
 
 	public ValueMod(Drawable<?> source, double value, int expiration) {

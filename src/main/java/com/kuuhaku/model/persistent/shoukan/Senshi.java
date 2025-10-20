@@ -106,17 +106,17 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (e.hasCharm(Charm.TIMEWARP)) {
 			int times = Charm.TIMEWARP.getValue(e.getTier());
 			for (int i = 0; i < times; i++) {
-				getStats().getPower().set(e, -0.1 * (i + 1));
+				getStats().getPower().set(new IncMod(e, -0.1 * (i + 1)));
 				game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
 				game.trigger(ON_TURN_END, asSource(ON_TURN_END));
 			}
 
-			getStats().getPower().set(e, 0);
+			getStats().getPower().set(new IncMod(e, 0));
 		}
 
 		if (e.hasCharm(Charm.CLONE)) {
 			game.putAtOpenSlot(getSide(), true, withCopy(s -> {
-				s.getStats().getAttrMult().set(-1 + (0.25 * e.getTier()));
+				s.getStats().getAttr().set(new MultMod(e, -1 + (0.25 * e.getTier())));
 				s.getStats().getData().put("cloned", true);
 
 				if (s.hasAbility()) {
@@ -552,9 +552,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int getDmg() {
-		int sum = base.getAtk() + (int) stats.getAtk().get() + getEquipDmg();
+		int flat = base.getAtk() + getEquipDmg();
 
-		double mult = stats.getAtkMult().get();
+		double mult = 1;
 		if (hand != null) {
 			switch (hand.getOrigins().synergy()) {
 				case ONI -> {
@@ -564,7 +564,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 				case CYBERBEAST -> {
 					if (getGame() != null) {
-						sum += getGame().getCards(getSide()).stream().mapToInt(Senshi::getParry).sum();
+						flat += getGame().getCards(getSide()).stream().mapToInt(Senshi::getParry).sum();
 					}
 				}
 			}
@@ -576,14 +576,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			mult /= 2;
 		}
 
-		return Math.max(0, Calc.round(sum * mult * getAttrMult()));
+		return Math.max(0, Calc.round(stats.getAtk().get(flat) * mult * getAttrMult()));
 	}
 
 	@Override
 	public int getDfs() {
-		int sum = base.getDfs() + (int) stats.getDfs().get() + getEquipDfs();
+		int flat = base.getDfs() + getEquipDfs();
 
-		double mult = stats.getDfsMult().get();
+		double mult = 1;
 		if (hand != null) {
 			mult *= getFieldMult();
 
@@ -596,7 +596,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			mult /= 2;
 		}
 
-		return Math.max(0, Calc.round(sum * mult * getAttrMult()));
+		return Math.max(0, Calc.round(stats.getDfs().get(flat) * mult * getAttrMult()));
 	}
 
 	public double getFieldMult() {
@@ -648,10 +648,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (isSleeping() || isStunned()) return 0;
 
 		int min = 0;
-		int sum = base.getDodge() + (int) stats.getDodge().get() + getEquipDodge();
+		int max = 100;
+		int flat = base.getDodge() + getEquipDodge();
 
 		if (isBlinded()) {
-			sum /= 2;
+			flat /= 2;
 		}
 
 		if (hand != null) {
@@ -665,21 +666,21 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						.count();
 
 				if (wind >= 4) {
-					sum += 20 * getNearby().size();
+					flat += 20 * getNearby().size();
 				}
 			}
 
 			if (getGame() != null && getGame().getArena().getField().getType() == FieldType.DUNGEON) {
-				return Utils.clamp(sum, min, 50);
+				max = 50;
 			}
 		}
 
-		return Utils.clamp(min + sum, min, 100);
+		return (int) Utils.clamp(stats.getDodge().get(flat), min, max);
 	}
 
 	@Override
 	public int getParry() {
-		int sum = base.getParry() + (int) stats.getParry().get() + getEquipParry();
+		int flat = base.getParry() + getEquipParry();
 
 		int min = 0;
 		if (hand != null) {
@@ -688,12 +689,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 		}
 
-		return Utils.clamp(min + sum, min, 100);
+		return (int) Utils.clamp(stats.getParry().get(flat), min, 100);
 	}
 
 	@Override
 	public double getCostMult() {
-		double mult = stats.getCostMult().get();
+		double mult = stats.getCost().get();
 		if (hand != null) {
 			if (hand.getOrigins().synergy() == Race.PIXIE) {
 				mult *= getFieldMult();
@@ -709,7 +710,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public double getAttrMult() {
-		double mult = stats.getAttrMult().get();
+		double mult = stats.getAttr().get();
 		if (hand != null) {
 			if (hand.getOrigins().isPure() && race != hand.getOrigins().major()) {
 				mult *= 0.5;
@@ -770,19 +771,19 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private int getEquipValue(ToIntFunction<EffectHolder<?>> extractor) {
 		if (hasFlag(Flag.NO_EQUIP)) return 0;
 
-		int sum = equipments.stream().filter(Evogear::isAvailable).mapToInt(extractor).sum();
+		int flat = equipments.stream().filter(Evogear::isAvailable).mapToInt(extractor).sum();
 		if (hand != null) {
 			if (Utils.equalsAny(Race.SLIME, hand.getOrigins().synergy(), hand.getOther().getOrigins().synergy())) {
 				return 0;
 			} else if (hand.getOrigins().synergy() == Race.EX_MACHINA) {
 				Senshi sup = getSupport();
 				if (sup != null) {
-					sum += extractor.applyAsInt(sup);
+					flat += extractor.applyAsInt(sup);
 				}
 			}
 		}
 
-		return sum;
+		return flat;
 	}
 
 	public int getEquipDmg() {

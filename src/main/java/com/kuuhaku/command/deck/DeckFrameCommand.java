@@ -187,7 +187,7 @@ public class DeckFrameCommand implements Executable {
 
 							DynamicProperty.update(acc.getUid(), "ss_" + frame.getId().toLowerCase(), true);
 							event.channel().sendMessage(locale.get("success/frame_bought", d.getName()))
-									.flatMap(ms -> w.getMessage().delete())
+									.flatMap(_ -> w.getMessage().delete())
 									.queue();
 						}
 
@@ -198,7 +198,7 @@ public class DeckFrameCommand implements Executable {
 					d.save();
 
 					event.channel().sendMessage(locale.get("success/frame_selected", d.getName()))
-							.flatMap(ms -> w.getMessage().delete())
+							.flatMap(_ -> w.getMessage().delete())
 							.queue();
 				})
 				.addAction(Utils.parseEmoji("▶️"), w -> {

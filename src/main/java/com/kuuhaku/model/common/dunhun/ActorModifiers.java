@@ -21,7 +21,6 @@ package com.kuuhaku.model.common.dunhun;
 import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.TimedMap;
-import com.kuuhaku.model.common.shoukan.CumStack;
 import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.enums.shoukan.Trigger;
@@ -36,14 +35,14 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class ActorModifiers implements Iterable<CumValue> {
-	private final CumStack maxHp = CumValue.stack();
-	private final CumStack maxAp = CumValue.stack();
-	private final CumStack initiative = CumValue.stack();
-	private final CumStack critical = CumValue.stack();
-	private final CumStack spellDamage = CumValue.stack();
+	private final CumValue maxHp = new CumValue();
+	private final CumValue maxAp = new CumValue();
+	private final CumValue initiative = new CumValue();
+	private final CumValue critical = new CumValue();
+	private final CumValue spellDamage = new CumValue();
 
-	private final CumValue aggro = CumValue.flat();
-	private final CumValue magicFind = CumValue.flat();
+	private final CumValue aggro = new CumValue();
+	private final CumValue magicFind = new CumValue();
 
 	private final Set<EffectBase> permEffects = new HashSet<>();
 	private final TimedMap<EffectBase> tempEffects = new TimedMap<>();
@@ -51,23 +50,23 @@ public class ActorModifiers implements Iterable<CumValue> {
 
 	private final Field[] fieldCache = getClass().getDeclaredFields();
 
-	public CumStack getMaxHp() {
+	public CumValue getMaxHp() {
 		return maxHp;
 	}
 
-	public CumStack getMaxAp() {
+	public CumValue getMaxAp() {
 		return maxAp;
 	}
 
-	public CumStack getInitiative() {
+	public CumValue getInitiative() {
 		return initiative;
 	}
 
-	public CumStack getCritical() {
+	public CumValue getCritical() {
 		return critical;
 	}
 
-	public CumStack getSpellDamage() {
+	public CumValue getSpellDamage() {
 		return spellDamage;
 	}
 
@@ -141,8 +140,6 @@ public class ActorModifiers implements Iterable<CumValue> {
 			try {
 				if (f.get(this) instanceof CumValue cv) {
 					cv.values().removeIf(check);
-				} else if (f.get(this) instanceof CumStack cs) {
-					cs.values().removeIf(check);
 				}
 			} catch (IllegalAccessException ignore) {
 			}
@@ -156,8 +153,6 @@ public class ActorModifiers implements Iterable<CumValue> {
 					try {
 						if (f.get(this) instanceof CumValue cv) {
 							return Stream.of(cv);
-						} else if (f.get(this) instanceof CumStack cs) {
-							return Stream.of(cs.getFlat(), cs.getIncreased(), cs.getMore());
 						}
 					} catch (IllegalAccessException ignore) {
 					}
