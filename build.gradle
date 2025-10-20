@@ -103,7 +103,7 @@ configurations.configureEach {
 dependencies {
 	//Core
 	implementation "net.dv8tion:JDA:6.1.0"
-	implementation "com.github.ygimenez:Pagination-Utils:d3af058551"
+	implementation "com.github.ygimenez:Pagination-Utils:6f2285e7f1"
 	implementation "com.github.ygimenez:Simple-Moshi:1.1.2"
 
 	//Database
