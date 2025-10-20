@@ -624,7 +624,7 @@ public class Hand {
 							List.of(
 									new SelectionCard(out, false),
 									new SelectionCard(out.withCopy(c -> {
-										((Evogear) c).getStats().getAttrMult().set(0.3);
+										((Evogear) c).getStats().getAttr().set(new MultMod(0.3));
 										c.getCurses().add(curse.getEffect());
 									}), false)
 							),
