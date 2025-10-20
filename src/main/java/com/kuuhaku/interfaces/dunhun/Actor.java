@@ -5,6 +5,7 @@ import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.*;
 import com.kuuhaku.model.common.shoukan.IncMod;
+import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
@@ -436,7 +437,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		base.setDfs((int) ((def * (1 + total.str() * 0.01)) * mult));
 		base.setDodge(ddg + total.dex() / 2);
 		base.setParry(pry);
-		senshi.getStats().getPower().set(new IncMod(pow));
+		senshi.getStats().getPower().set(new MultMod(pow));
 
 		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();
 		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750 + effCost);

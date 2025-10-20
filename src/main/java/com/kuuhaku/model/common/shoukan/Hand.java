@@ -355,7 +355,7 @@ public class Hand {
 		Hero h = userDeck.getHero(game.getLocale());
 		if (h != null) {
 			Senshi hero = h.createSenshi();
-			hero.getStats().getPower().set(h.getAttributes().wis() * 0.05);
+			hero.getStats().getPower().set(new MultMod(h.getAttributes().wis() * 0.05));
 
 			deck.add(hero);
 		}
