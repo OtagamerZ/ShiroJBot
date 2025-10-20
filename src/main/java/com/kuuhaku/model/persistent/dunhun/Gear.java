@@ -310,21 +310,21 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public int getDmg() {
-		int base = (int) (basetype.getStats().attack() + modifiers.getAttack().get());
+		int base = basetype.getStats().attack();
 
-		return (int) (base * (1 + modifiers.getAttackMult().get()));
+		return (int) (modifiers.getAttack().get(base));
 	}
 
 	public int getDfs() {
-		int base = (int) (basetype.getStats().defense() + modifiers.getDefense().get());
+		int base = basetype.getStats().defense();
 
-		return (int) (base * (1 + modifiers.getDefenseMult().get()));
+		return (int) (modifiers.getDefense().get(base));
 	}
 
 	public double getCritical() {
-		int base = (int) (basetype.getStats().critical() + modifiers.getCritical().get());
+		int base = (int) basetype.getStats().critical();
 
-		return Calc.clamp(base * (1 + modifiers.getCriticalMult().get()), 0, 100);
+		return Calc.clamp(modifiers.getCritical().get(base), 0, 100);
 	}
 
 	public void load(Actor<?> owner) {
