@@ -16,10 +16,11 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
+package com.kuuhaku.model.records;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.CardFilter;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.Account;
@@ -35,13 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Market {
-	private final String uid;
-
-	public Market(String uid) {
-		this.uid = uid;
-	}
-
+public record Market(String uid) {
 	public List<StashedCard> getOffers(Option[] opts, int page) {
 		List<Object> params = new ArrayList<>();
 		XStringBuilder query = new XStringBuilder(CardFilter.BASE_QUERY);

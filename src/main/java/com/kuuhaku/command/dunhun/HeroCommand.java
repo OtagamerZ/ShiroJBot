@@ -48,9 +48,9 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.components.buttons.Button;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -354,9 +354,9 @@ public class HeroCommand implements Executable {
 				}
 
 				Button btn = w.getButton();
-				if (btn != null && btn.getId() != null) {
+				if (btn != null && btn.getCustomId() != null) {
 					Pages.modifyButtons(w.getMessage(), pages.get(i.get()), Map.of(
-							btn.getId(), b -> b.withLabel(getButtonLabel.apply(fi))
+							btn.getCustomId(), b -> b.withLabel(getButtonLabel.apply(fi))
 					));
 				}
 			});

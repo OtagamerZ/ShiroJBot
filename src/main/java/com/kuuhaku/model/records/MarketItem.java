@@ -18,20 +18,20 @@
 
 package com.kuuhaku.model.records;
 
-import com.kuuhaku.model.common.Market;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.util.Utils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
 
 public record MarketItem(I18N locale, Market market, StashedCard sc) {
 
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		String rarity = locale.get("type/" + sc.getType());
 		if (Utils.equalsAny(sc.getType(), CardType.KAWAIPON, CardType.SENSHI)) {
 			rarity += " " + locale.get("rarity/" + sc.getCard().getRarity()).toLowerCase();

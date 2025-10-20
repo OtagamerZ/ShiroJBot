@@ -23,7 +23,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.id.LocalizedId;
 import com.kuuhaku.util.text.Uwuifier;
 import jakarta.persistence.*;
-import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
+import net.dv8tion.jda.api.components.selections.SelectOption;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 

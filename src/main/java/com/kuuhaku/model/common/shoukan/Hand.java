@@ -287,7 +287,7 @@ public class Hand {
 	   └───── (0 - 255) cards spent
 	 */
 
-	private transient Queue<SelectionAction> selection = new ArrayDeque<>();
+	private final transient Queue<SelectionAction> selection = new ArrayDeque<>();
 
 	public Hand(Deck deck) {
 		this.game = null;

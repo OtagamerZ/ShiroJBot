@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2024  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,17 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
+package com.kuuhaku.model.records;
 
-import java.io.Closeable;
-import java.util.Collections;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import net.coobird.thumbnailator.filters.ImageFilter;
+import org.jdesktop.swingx.image.GaussianBlurFilter;
 
-public class Mutex<T> implements Closeable {
-	private static final Set<Object> locks = Collections.newSetFromMap(new ConcurrentHashMap<>());
-	private final T ref;
+import java.awt.image.BufferedImage;
 
-	public Mutex(T ref) {
-		this.ref = ref;
-		locks.add(ref);
-	}
-
-	public static synchronized boolean isLocked(Object ref) {
-		return locks.contains(ref);
-	}
-
+public record BlurFilter(int radius) implements ImageFilter {
 	@Override
-	public void close() {
-		locks.remove(ref);
+	public BufferedImage apply(BufferedImage img) {
+		GaussianBlurFilter op = new GaussianBlurFilter(radius);
+		return op.filter(img, null);
 	}
 }

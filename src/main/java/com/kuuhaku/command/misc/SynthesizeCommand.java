@@ -39,7 +39,10 @@ import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.user.*;
+import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.Kawaipon;
+import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.SynthResult;
@@ -52,9 +55,9 @@ import jakarta.persistence.NoResultException;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.components.buttons.Button;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -175,7 +178,7 @@ public class SynthesizeCommand implements Executable {
 						Button btn = w.getButton();
 						assert btn != null;
 
-						String id = btn.getId();
+						String id = btn.getCustomId();
 						assert id != null;
 
 						if (acc.getItemCount("chromatic_essence") == 0) {
@@ -192,7 +195,7 @@ public class SynthesizeCommand implements Executable {
 						);
 
 						Pages.modifyButtons(w.getMessage(), p, Map.of(
-								btn.getId(), Button::asDisabled
+								btn.getCustomId(), Button::asDisabled
 						));
 					})
 					.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {

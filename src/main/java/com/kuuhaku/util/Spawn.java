@@ -21,7 +21,7 @@ package com.kuuhaku.util;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.FixedSizeDeque;
 import com.kuuhaku.model.common.RandomList;
-import com.kuuhaku.model.common.SingleUseReference;
+import com.kuuhaku.model.records.SingleUseReference;
 import com.kuuhaku.model.common.drop.*;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;

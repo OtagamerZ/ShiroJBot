@@ -27,7 +27,7 @@ import net.dv8tion.jda.api.JDA;
 import org.apache.logging.log4j.Logger;
 
 public interface Executable {
-	public Logger LOGGER = Constants.LOGGER;
+	Logger LOGGER = Constants.LOGGER;
 
 	default Executable getExecutable() {
 		return this;

@@ -21,6 +21,7 @@ package com.kuuhaku.model.records.shoukan;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.util.Utils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public record Origin(boolean variant, Race major, Race[] minor) {
 	}
 
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return "{ major: " + major + ", minor: " + Arrays.toString(minor) + " }";
 	}
 }

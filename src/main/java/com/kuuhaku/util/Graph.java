@@ -20,7 +20,7 @@ package com.kuuhaku.util;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.exceptions.InvalidValueException;
-import com.kuuhaku.model.common.MultiProcessor;
+import com.kuuhaku.model.records.MultiProcessor;
 import com.trickl.palette.Palette;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;

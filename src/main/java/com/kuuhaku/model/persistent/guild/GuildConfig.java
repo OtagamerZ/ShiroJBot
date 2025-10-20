@@ -21,7 +21,6 @@ package com.kuuhaku.model.persistent.guild;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.AutoMake;
-import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.user.Profile;

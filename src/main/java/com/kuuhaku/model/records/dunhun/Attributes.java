@@ -24,6 +24,7 @@ import com.kuuhaku.util.Calc;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import kotlin.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -157,7 +158,7 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 	}
 
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return "Attributes[str=" + str() + ", dex=" + dex() + ", wis=" + wis() + ", vit=" + vit() + "]";
 	}
 }

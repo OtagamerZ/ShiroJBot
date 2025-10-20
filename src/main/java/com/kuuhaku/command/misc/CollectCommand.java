@@ -20,7 +20,7 @@ package com.kuuhaku.command.misc;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.model.common.SingleUseReference;
+import com.kuuhaku.model.records.SingleUseReference;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;

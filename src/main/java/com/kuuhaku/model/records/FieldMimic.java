@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.records;
 
+import org.jetbrains.annotations.NotNull;
+
 public record FieldMimic(String title, StringBuilder sb) {
 	public FieldMimic(String title, String value) {
 		this(title, new StringBuilder(value));
@@ -37,7 +39,7 @@ public record FieldMimic(String title, StringBuilder sb) {
 	}
 
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return "**" + title + "**\n" + sb + "\n";
 	}
 }

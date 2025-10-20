@@ -16,23 +16,18 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.shoukan;
+package com.kuuhaku.model.records.shoukan;
 
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.enums.shoukan.Trigger;
-import com.kuuhaku.model.records.shoukan.EffectParameters;
 import org.apache.commons.collections4.SetUtils;
 
 import java.util.*;
 
-public class TriggerBind {
+public record TriggerBind(EffectHolder<?> holder, EnumMap<Target, EnumSet<Trigger>> binds, boolean permanent) {
 	public enum Target {
 		SAME, OTHER, BOTH
 	}
-
-	private final EffectHolder<?> holder;
-	private final EnumMap<Target, EnumSet<Trigger>> binds;
-	private final boolean permanent;
 
 	public TriggerBind(EffectHolder<?> holder, EnumMap<Target, EnumSet<Trigger>> binds) {
 		this(holder, binds, false);
@@ -56,9 +51,6 @@ public class TriggerBind {
 		}
 	}
 
-	public EffectHolder<?> getHolder() {
-		return holder;
-	}
 
 	public boolean isBound(EffectParameters ep) {
 		Target tgt = ep.side() == holder.getSide() ? Target.SAME : Target.OTHER;
@@ -67,9 +59,6 @@ public class TriggerBind {
 		return trigs.contains(ep.trigger());
 	}
 
-	public boolean isPermanent() {
-		return permanent;
-	}
 
 	@Override
 	public boolean equals(Object o) {

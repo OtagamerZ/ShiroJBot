@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
+package com.kuuhaku.model.records;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +24,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Function;
 
-public class MultiProcessor<In, Out> {
-	private final List<In> tasks;
-	private final ExecutorService exec;
-
-	private MultiProcessor(List<In> tasks, ExecutorService executor) {
-		this.tasks = tasks;
-		this.exec = executor;
-	}
-
+public record MultiProcessor<In, Out>(List<In> tasks, ExecutorService exec) {
 	public static <In> MultiProcessor<In, ?> with(ExecutorService executor, List<In> tasks) {
 		return new MultiProcessor<>(tasks, executor);
 	}

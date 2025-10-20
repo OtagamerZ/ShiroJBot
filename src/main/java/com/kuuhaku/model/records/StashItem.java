@@ -24,11 +24,12 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.util.Utils;
+import org.jetbrains.annotations.NotNull;
 
 public record StashItem(I18N locale, StashedCard sc) {
 
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		String uid = sc.getKawaipon().getUid();
 
 		Trade t = Trade.getPending().get(uid);

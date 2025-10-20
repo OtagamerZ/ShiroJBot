@@ -31,10 +31,10 @@ public class ValueMod implements Cloneable {
 	private final int SERIAL = ThreadLocalRandom.current().nextInt();
 	private final Drawable<?> source;
 	private final boolean permanent;
+	private final Side side;
+
 	private double value;
 	private int expiration;
-
-	private final Side side;
 
 	protected ValueMod(double value) {
 		this(null, value);

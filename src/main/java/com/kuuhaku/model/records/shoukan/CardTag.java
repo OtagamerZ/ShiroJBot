@@ -18,6 +18,8 @@
 
 package com.kuuhaku.model.records.shoukan;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 
 public record CardTag(String prefix, String name) {
@@ -35,7 +37,7 @@ public record CardTag(String prefix, String name) {
 	}
 
 	@Override
-	public String toString() {
+	public @NotNull String toString() {
 		return prefix + "/" + name;
 	}
 }

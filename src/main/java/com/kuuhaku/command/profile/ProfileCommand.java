@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.profile;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;

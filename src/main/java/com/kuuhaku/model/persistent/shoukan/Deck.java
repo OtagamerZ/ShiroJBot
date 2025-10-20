@@ -22,7 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
-import com.kuuhaku.model.common.MultiProcessor;
+import com.kuuhaku.model.records.MultiProcessor;
 import com.kuuhaku.model.common.SupplyChain;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;

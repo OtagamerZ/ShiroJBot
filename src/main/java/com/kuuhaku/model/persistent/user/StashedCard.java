@@ -21,7 +21,7 @@ package com.kuuhaku.model.persistent.user;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
-import com.kuuhaku.model.common.Market;
+import com.kuuhaku.model.records.Market;
 import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.Quality;
 import com.kuuhaku.model.persistent.shiro.Card;

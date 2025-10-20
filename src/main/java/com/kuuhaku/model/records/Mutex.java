@@ -16,33 +16,27 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common;
+package com.kuuhaku.model.records;
 
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
+import java.io.Closeable;
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class SingleUseReference<T> {
-	private final AtomicReference<T> ref;
+public record Mutex<T>(T ref) implements Closeable {
+	private static final Set<Object> locks = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
-	public SingleUseReference(T obj) {
-		ref = new AtomicReference<>(obj);
+	public Mutex(T ref) {
+		this.ref = ref;
+		locks.add(ref);
 	}
 
-	public synchronized <R> R peekProperty(Function<T, R> retriever) {
-		if (ref.get() == null) return null;
-
-		return retriever.apply(ref.get());
+	public static synchronized boolean isLocked(Object ref) {
+		return locks.contains(ref);
 	}
 
-	public synchronized boolean isValid() {
-		return ref.get() != null;
-	}
-
-	public synchronized T get() {
-		try {
-			return ref.get();
-		} finally {
-			ref.set(null);
-		}
+	@Override
+	public void close() {
+		locks.remove(ref);
 	}
 }

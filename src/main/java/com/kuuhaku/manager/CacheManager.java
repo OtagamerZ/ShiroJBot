@@ -21,34 +21,35 @@ package com.kuuhaku.manager;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import groovy.lang.Script;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 
 public class CacheManager {
-	private final Cache<String, byte[]> resource = Caffeine.newBuilder()
+	private final Cache<@NotNull String, byte[]> resource = Caffeine.newBuilder()
 			.expireAfterAccess(30, TimeUnit.MINUTES)
 			.maximumWeight(512 * 1024 * 1024)
 			.<String, byte[]>weigher((k, v) -> v.length)
 			.build();
 
-	private final Cache<String, String> locale = Caffeine.newBuilder()
+	private final Cache<@NotNull String, String> locale = Caffeine.newBuilder()
 			.expireAfterAccess(30, TimeUnit.MINUTES)
 			.maximumSize(128)
 			.build();
 
-	private final Cache<String, Class<? extends Script>> script = Caffeine.newBuilder()
+	private final Cache<@NotNull String, Class<? extends Script>> script = Caffeine.newBuilder()
 			.expireAfterAccess(30, TimeUnit.MINUTES)
 			.maximumSize(128)
 			.build();
 
-	private final Cache<String, Pattern> pattern = Caffeine.newBuilder()
+	private final Cache<@NotNull String, Pattern> pattern = Caffeine.newBuilder()
 			.expireAfterAccess(1, TimeUnit.HOURS)
 			.maximumSize(128)
 			.build();
 
-	public Cache<String, byte[]> getResourceCache() {
+	public Cache<@NotNull String, byte[]> getResourceCache() {
 		return resource;
 	}
 
@@ -60,7 +61,7 @@ public class CacheManager {
 		return bytes;
 	}
 
-	public Cache<String, String> getLocaleCache() {
+	public Cache<@NotNull String, String> getLocaleCache() {
 		return locale;
 	}
 
@@ -72,7 +73,7 @@ public class CacheManager {
 		return value;
 	}
 
-	public Cache<String, Class<? extends Script>> getScriptCache() {
+	public Cache<@NotNull String, Class<? extends Script>> getScriptCache() {
 		return script;
 	}
 
@@ -84,7 +85,7 @@ public class CacheManager {
 		return value;
 	}
 
-	public Cache<String, Pattern> getPatternCache() {
+	public Cache<@NotNull String, Pattern> getPatternCache() {
 		return pattern;
 	}
 

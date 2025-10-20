@@ -57,14 +57,13 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
+import net.dv8tion.jda.api.components.Component;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.buttons.Button;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.ItemComponent;
-import net.dv8tion.jda.api.interactions.components.LayoutComponent;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.requests.restaction.WebhookMessageCreateAction;
@@ -85,6 +84,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -1877,13 +1877,13 @@ public class Shoukan extends GameInstance<Phase> {
 
 	public void triggerBindings(EffectParameters ep) {
 		var binds = bindings.stream()
-				.sorted(Comparator.comparing(b -> b.getHolder().getSide() == getCurrentSide(), Comparator.reverseOrder()))
+				.sorted(Comparator.comparing(b -> b.holder().getSide() == getCurrentSide(), Comparator.reverseOrder()))
 				.toList();
 
 		for (TriggerBind binding : binds) {
 			if (binding.isBound(ep)) {
-				EffectHolder<?> holder = binding.getHolder();
-				if (holder.getIndex() == -1 && !binding.isPermanent()) {
+				EffectHolder<?> holder = binding.holder();
+				if (holder.getIndex() == -1 && !binding.permanent()) {
 					bindings.remove(binding);
 					continue;
 				}
@@ -1991,7 +1991,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void unbind(EffectHolder<?> self) {
-		bindings.removeIf(b -> !b.isPermanent() && b.getHolder().equals(self));
+		bindings.removeIf(b -> !b.permanent() && b.holder().equals(self));
 	}
 
 	private BiFunction<String, String, String> replaceMessages(Message message) {
@@ -2258,7 +2258,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (u.getId().equals(getModerator())) return true;
 
 		return !isClosed() && getCurrentSide() == current.getSide() && (
-				u.getId().equals(current.getUid()) || allowed.contains(b.getId())
+				u.getId().equals(current.getUid()) || allowed.contains(b.getCustomId())
 		);
 	}
 
@@ -3122,21 +3122,21 @@ public class Shoukan extends GameInstance<Phase> {
 
 	private void disableOptions(AtomicReference<Message> message, Function<Message, MessageEditAction> edit, ButtonizeHelper helper, List<Pair<Integer, Boolean>> toDisable) {
 		MessageEditAction mea = edit.apply(message.get());
-		List<LayoutComponent> rows = helper.getComponents(mea);
-		for (int ridx = 0; ridx < Math.min(rows.size(), 2); ridx++) {
-			LayoutComponent row = rows.get(ridx);
-			if (row instanceof ActionRow ar) {
-				List<ItemComponent> items = ar.getComponents();
-				for (int idx = 0; idx < items.size(); idx++) {
-					ItemComponent item = items.get(idx);
-					if (item instanceof Button b && toDisable.contains(new Pair<>(idx, ridx > 0))) {
-						items.set(idx, b.asDisabled());
-					}
+
+		AtomicInteger row = new AtomicInteger(-1);
+		AtomicInteger col = new AtomicInteger();
+		mea.setComponents(message.get().getComponentTree().replace(c -> {
+			if (c instanceof ActionRow) {
+				row.incrementAndGet();
+			} else if (row.get() >= 0) {
+				Pair<Integer, Boolean> pair = new Pair<>(col.getAndIncrement(), row.get() > 0);
+				if (c instanceof Button b && toDisable.contains(pair)) {
+					return b.asDisabled();
 				}
 			}
-		}
 
-		mea.setComponents(rows).queue(s -> {
+			return c;
+		})).queue(s -> {
 			message.set(s);
 			Pages.buttonize(s, helper);
 		});

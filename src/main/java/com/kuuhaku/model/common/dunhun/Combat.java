@@ -30,14 +30,13 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.components.MessageTopLevelComponent;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.buttons.Button;
+import net.dv8tion.jda.api.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.ItemComponent;
-import net.dv8tion.jda.api.interactions.components.LayoutComponent;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.messages.MessageRequest;
@@ -46,9 +45,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -555,7 +557,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	private void addDropdowns(Hero h, MessageRequest<?> ma) {
-		List<LayoutComponent> comps = new ArrayList<>(ma.getComponents());
+		List<MessageTopLevelComponent> comps = new ArrayList<>(ma.getComponents());
 
 		List<Skill> skills = h.getSkills();
 		if (!skills.isEmpty()) {
@@ -755,27 +757,20 @@ public class Combat implements Renderer<BufferedImage> {
 			ma.queue(s -> Pages.buttonize(s, root));
 		});
 
-		MessageEditAction act = msg.editMessageComponents();
-		List<LayoutComponent> rows = helper.getComponents(act);
+		AtomicInteger i = new AtomicInteger();
+		msg.editMessageComponents(msg.getComponentTree().replace(c -> {
+			if (c instanceof Button b) {
+				int idx = i.getAndIncrement();
+				if (idx >= targets.size()) return b;
 
-		int idx = 0;
-		loop:
-		for (LayoutComponent row : rows) {
-			if (row instanceof ActionRow ar) {
-				List<ItemComponent> items = ar.getComponents();
-				for (int i = 0, sz = items.size(); i < sz; i++, idx++) {
-					if (idx >= targets.size()) break loop;
-
-					Actor<?> tgt = targets.get(idx);
-					ItemComponent item = items.get(i);
-					if (item instanceof Button b && tgt == null) {
-						items.set(i, b.asDisabled());
-					}
+				Actor<?> tgt = targets.get(idx);
+				if (tgt != null) {
+					return b.asDisabled();
 				}
 			}
-		}
 
-		act.setComponents(rows).queue(s -> Pages.buttonize(s, helper));
+			return c;
+		})).queue();
 	}
 
 	public CompletableFuture<Runnable> getLock() {

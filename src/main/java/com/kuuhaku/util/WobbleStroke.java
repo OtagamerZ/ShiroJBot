@@ -1,4 +1,4 @@
-package com.kuuhaku.util;/*
+/*
 Copyright 2006 Jerry Huxtable
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,22 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+package com.kuuhaku.util;
+
 import java.awt.*;
 import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
 import java.util.Random;
 
-public class WobbleStroke implements Stroke {
+public record WobbleStroke(Random rng, int width) implements Stroke {
 	private static final float FLATNESS = 1;
-
-	private final Random rng;
-	private final int width;
-
-	public WobbleStroke(Random rng, int width) {
-		this.rng = rng;
-		this.width = width;
-	}
 
 	@Override
 	public Shape createStrokedShape(Shape shape) {

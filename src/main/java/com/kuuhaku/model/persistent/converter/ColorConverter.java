@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.awt.*;
 

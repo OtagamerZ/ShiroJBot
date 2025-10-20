@@ -23,7 +23,7 @@ import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
-import com.kuuhaku.model.common.Market;
+import com.kuuhaku.model.records.Market;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
