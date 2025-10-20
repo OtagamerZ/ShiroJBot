@@ -59,6 +59,7 @@ public class CollectCommand implements Executable {
 
 			StashedCard sc = card.get();
 			sc.setKawaipon(kp);
+			sc.setInCollection(true);
 			if (acc.consumeItem("special_spice")) {
 				sc.setChrome(true);
 			}
