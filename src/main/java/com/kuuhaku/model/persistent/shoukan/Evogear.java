@@ -151,14 +151,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public int getTier() {
-		int flat = tier;
+		int sum = tier;
 		if (hand != null) {
 			if (hand.getOrigins().isPure(Race.MACHINE)) {
-				flat += 1;
+				sum += 1;
 			}
 		}
 
-		return flat + (int) stats.getTier().get();
+		return sum + (int) stats.getTier().get();
 	}
 
 	public boolean isSpell() {
@@ -295,43 +295,44 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public int getDmg() {
-		int flat = base.getAtk();
+		int sum = base.getAtk() + (int) stats.getAtk().get();
+
 		if (hand != null && hand.getOrigins().synergy() == Race.CYBERBEAST) {
-			flat += getCards(getSide()).stream().mapToInt(Senshi::getParry).sum();
+			sum += getCards(getSide()).stream().mapToInt(Senshi::getParry).sum();
 		}
 
-		return Calc.round(stats.getAtk().get(flat) * getAttrMult());
+		return Calc.round(sum * getAttrMult() * stats.getAtkMult().get());
 	}
 
 	@Override
 	public int getDfs() {
-		int flat = base.getDfs();
+		int sum = base.getDfs() + (int) stats.getDfs().get();
 
-		return Calc.round(stats.getDfs().get(flat) * getAttrMult());
+		return Calc.round(sum * getAttrMult() * stats.getDfsMult().get());
 	}
 
 	@Override
 	public int getDodge() {
-		int flat = base.getDodge();
+		int sum = base.getDodge() + (int) stats.getDodge().get();
 
 		int min = 0;
 		if (hand != null && hand.getOrigins().synergy() == Race.GEIST) {
 			min += 10;
 		}
 
-		return Utils.clamp(min + (int) stats.getDodge().get(flat), min, 100);
+		return Utils.clamp(min + sum, min, 100);
 	}
 
 	@Override
 	public int getParry() {
-		int flat = base.getParry();
+		int sum = base.getParry() + (int) stats.getParry().get();
 
 		int min = 0;
 		if (hand != null && hand.getOrigins().synergy() == Race.CYBORG) {
 			min += 10;
 		}
 
-		return Utils.clamp(min + (int) stats.getParry().get(flat), min, 100);
+		return Utils.clamp(min + sum, min, 100);
 	}
 
 	@Override
