@@ -62,6 +62,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 			name = "guild_settings_kawaipon_channel",
 			joinColumns = @JoinColumn(name = "gid")
 	)
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<TextChannelImpl> kawaiponChannels = new LinkedHashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -72,6 +73,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 			name = "guild_settings_drop_channel",
 			joinColumns = @JoinColumn(name = "gid")
 	)
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<TextChannelImpl> dropChannels = new LinkedHashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -82,6 +84,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 			name = "guild_settings_denied_channel",
 			joinColumns = @JoinColumn(name = "gid")
 	)
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<TextChannelImpl> deniedChannels = new LinkedHashSet<>();
 
 	@Column(name = "notifications_channel")
@@ -126,6 +129,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 			name = "guild_settings_disabled_category",
 			joinColumns = @JoinColumn(name = "gid")
 	)
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<Category> disabledCategories = new HashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -135,6 +139,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 			name = "guild_settings_disabled_command",
 			joinColumns = @JoinColumn(name = "gid")
 	)
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<String> disabledCommands = new HashSet<>();
 
 	@Column(name = "starboard_threshold", nullable = false)
@@ -155,13 +160,14 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	@Enumerated(EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
+	@Column(name = "type", nullable = false)
+	@MapKeyColumn(name = "id")
 	@CollectionTable(
 			schema = "shiro",
 			name = "automod_entry",
 			joinColumns = @JoinColumn(name = "gid", referencedColumnName = "gid")
 	)
-	@Column(name = "type", nullable = false)
-	@MapKeyColumn(name = "id")
+	@Fetch(FetchMode.SUBSELECT)
 	private Map<AutoModType, String> automodEntries = new HashMap<>();
 
 	@JdbcTypeCode(SqlTypes.JSON)

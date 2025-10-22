@@ -64,6 +64,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 					@JoinColumn(name = "dungeon_id")
 			}
 	)
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<String> visitedNodes = new LinkedHashSet<>();
 
 	public DungeonRun() {
