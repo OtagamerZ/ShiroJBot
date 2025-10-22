@@ -55,7 +55,6 @@ import org.hibernate.type.SqlTypes;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
@@ -553,7 +552,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			return true;
 		} catch (TargetException e) {
 			if (targetType != TargetType.NONE && ep.trigger() == Trigger.ON_ACTIVATE) {
-				if (Arrays.stream(ep.targets()).allMatch(t -> t.skip().get())) {
+				if (ep.targets().stream().allMatch(t -> t.skip().get())) {
 					setAvailable(false);
 					return false;
 				}

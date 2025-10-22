@@ -1365,7 +1365,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			return true;
 		} catch (TargetException e) {
 			if (targetType != TargetType.NONE && trigger == ON_ACTIVATE) {
-				if (Arrays.stream(ep.targets()).allMatch(t -> t.skip().get())) {
+				if (ep.targets().stream().allMatch(t -> t.skip().get())) {
 					setAvailable(false);
 					return false;
 				}

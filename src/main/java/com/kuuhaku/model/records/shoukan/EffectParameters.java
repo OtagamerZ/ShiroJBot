@@ -32,20 +32,32 @@ import com.kuuhaku.util.Utils;
 import java.util.*;
 import java.util.stream.Stream;
 
-public record EffectParameters(Trigger trigger, Side side, DeferredTrigger referee, Source source, Target... targets) {
+public record EffectParameters(Trigger trigger, Side side, DeferredTrigger referee, Source source, List<Target> targets) {
 	public EffectParameters(Trigger trigger, Side side) {
 		this(trigger, side, new Source());
 	}
 
 	public EffectParameters(Trigger trigger, Side side, Target... targets) {
+		this(trigger, side, List.of(targets));
+	}
+
+	public EffectParameters(Trigger trigger, Side side, List<Target> targets) {
 		this(trigger, side, new Source(), targets);
 	}
 
 	public EffectParameters(Trigger trigger, Side side, Source source, Target... targets) {
+		this(trigger, side, source, List.of(targets));
+	}
+
+	public EffectParameters(Trigger trigger, Side side, Source source, List<Target> targets) {
 		this(trigger, side, null, source, targets);
 	}
 
 	public EffectParameters(Trigger trigger, Side side, DeferredTrigger referee, Source source, Target... targets) {
+		this(trigger, side, referee, source, List.of(targets));
+	}
+
+	public EffectParameters(Trigger trigger, Side side, DeferredTrigger referee, Source source, List<Target> targets) {
 		this.trigger = trigger;
 		this.side = side;
 		this.referee = referee;
@@ -75,17 +87,17 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 	}
 
 	public int size() {
-		int i = targets.length;
+		int i = targets.size();
 		if (source.card() != null) i++;
 
 		return i;
 	}
 
 	public boolean isTarget(Senshi card) {
-		return Arrays.stream(targets).anyMatch(t -> Objects.equals(t.card(), card));
+		return targets.stream().anyMatch(t -> Objects.equals(t.card(), card));
 	}
 
-	public Target[] targets() {
+	public List<Target> targets() {
 		for (Target t : targets) {
 			if (t.card() != null && t.card().getIndex() != t.index()) {
 				t.skip().set(true);
@@ -93,73 +105,73 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 		}
 
 		if (source.card() instanceof EffectHolder<?> eh && eh.hasFlag(Flag.EMPOWERED)) {
-			return Stream.of(targets)
+			return targets.stream()
 					.flatMap(t -> Stream.concat(
 							Stream.of(t),
 							t.card().getNearby().stream().map(n -> n.asTarget(t.trigger(), t.type()))
 					))
-					.toArray(Target[]::new);
+					.toList();
 		}
 
 		return targets;
 	}
 
-	public Target[] targets(Trigger trigger) {
-		if (targets.length == 0) throw new TargetException();
+	public List<Target> targets(Trigger trigger) {
+		if (targets.isEmpty()) throw new TargetException();
 
 		consumeShields();
-		Target[] out = Arrays.stream(targets())
+		List<Target> out = targets().stream()
 				.filter(t -> !t.skip().get())
 				.filter(t -> t.index() > -1 && t.trigger() == trigger)
 				.filter(t -> t.card() != null)
-				.toArray(Target[]::new);
+				.toList();
 
-		if (out.length == 0) throw new TargetException();
+		if (out.isEmpty()) throw new TargetException();
 		return out;
 	}
 
-	public Target[] allies() {
-		if (targets.length == 0) throw new TargetException();
+	public List<Target> allies() {
+		if (targets.isEmpty()) throw new TargetException();
 
-		Target[] out = Arrays.stream(targets())
+		List<Target> out = targets().stream()
 				.filter(t -> !t.skip().get())
 				.filter(t -> t.index() > -1 && t.side() == source.side())
 				.filter(t -> t.card() != null)
-				.toArray(Target[]::new);
+				.toList();
 
-		if (out.length == 0) throw new TargetException();
+		if (out.isEmpty()) throw new TargetException();
 		return out;
 	}
 
-	public Target[] enemies() {
-		if (targets.length == 0) throw new TargetException();
+	public List<Target> enemies() {
+		if (targets.isEmpty()) throw new TargetException();
 
 		consumeShields();
-		Target[] out = Arrays.stream(targets())
+		List<Target> out = targets().stream()
 				.filter(t -> !t.skip().get())
 				.filter(t -> t.index() > -1 && t.side() != source.side())
 				.filter(t -> t.card() != null)
-				.toArray(Target[]::new);
+				.toList();
 
-		if (out.length == 0) throw new TargetException();
+		if (out.isEmpty()) throw new TargetException();
 		return out;
 	}
 
-	public Target[] slots(TargetType type) {
-		if (targets.length == 0) throw new TargetException();
+	public List<Target> slots(TargetType type) {
+		if (targets.isEmpty()) throw new TargetException();
 
-		Target[] out = Arrays.stream(targets())
+		List<Target> out = targets().stream()
 				.filter(t -> t.index() > -1 && t.type() == type)
-				.toArray(Target[]::new);
+				.toList();
 
-		if (out.length == 0) throw new TargetException();
+		if (out.isEmpty()) throw new TargetException();
 		return out;
 	}
 
 	public List<BondedList<Evogear>> equipments(TargetType type) {
-		if (targets.length == 0) throw new TargetException();
+		if (targets.isEmpty()) throw new TargetException();
 
-		List<BondedList<Evogear>> out = Arrays.stream(targets())
+		List<BondedList<Evogear>> out = targets().stream()
 				.filter(t -> !t.skip().get())
 				.filter(t -> t.index() > -1 && t.type() == type)
 				.filter(t -> t.card() != null)
