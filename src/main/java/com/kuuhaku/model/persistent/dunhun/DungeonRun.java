@@ -144,7 +144,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 	public boolean addModifier(RunModifier modifier) {
 		String family = modifier.getModFamily();
 
-		Iterator<DungeonRunModifier> it = modifiers.iterator();
+		Iterator<DungeonRunModifier> it = getModifiers().iterator();
 		while (it.hasNext()) {
 			RunModifier mod = it.next().getModifier();
 			if (mod.getId().equals(modifier.getId())) return false;
@@ -159,7 +159,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 			}
 		}
 
-		return modifiers.add(new DungeonRunModifier(this, modifier));
+		return getModifiers().add(new DungeonRunModifier(this, modifier));
 	}
 
 	public AreaMap getMap() {
