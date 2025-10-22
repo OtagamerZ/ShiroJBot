@@ -21,7 +21,6 @@ package com.kuuhaku.model.persistent.localized;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.id.LocalizedId;
-import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.text.Uwuifier;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
@@ -55,11 +54,13 @@ public class LocalizedAffix extends DAO<LocalizedAffix> implements Serializable 
 	}
 
 	public String getName() {
+		if (name == null) return "";
+
 		if (uwu) {
-			return Uwuifier.INSTANCE.uwu(getLocale(), Utils.getOr(name, ""));
+			return Uwuifier.INSTANCE.uwu(getLocale(), name);
 		}
 
-		return Utils.getOr(name, "");
+		return name;
 	}
 
 	public String getDescription() {
