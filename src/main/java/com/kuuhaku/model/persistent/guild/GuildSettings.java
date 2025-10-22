@@ -35,6 +35,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.internal.entities.RoleImpl;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
@@ -181,14 +182,17 @@ public class GuildSettings extends DAO<GuildSettings> {
 	}
 
 	public Set<TextChannelImpl> getKawaiponChannels() {
+		Hibernate.initialize(kawaiponChannels);
 		return kawaiponChannels;
 	}
 
 	public Set<TextChannelImpl> getDropChannels() {
+		Hibernate.initialize(dropChannels);
 		return dropChannels;
 	}
 
 	public Set<TextChannelImpl> getDeniedChannels() {
+		Hibernate.initialize(deniedChannels);
 		return deniedChannels;
 	}
 
@@ -251,10 +255,12 @@ public class GuildSettings extends DAO<GuildSettings> {
 	}
 
 	public Set<Category> getDisabledCategories() {
+		Hibernate.initialize(disabledCategories);
 		return disabledCategories;
 	}
 
 	public Set<String> getDisabledCommands() {
+		Hibernate.initialize(disabledCommands);
 		return disabledCommands;
 	}
 
@@ -287,6 +293,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 	}
 
 	public Map<AutoModType, String> getAutoModEntries() {
+		Hibernate.initialize(automodEntries);
 		return automodEntries;
 	}
 

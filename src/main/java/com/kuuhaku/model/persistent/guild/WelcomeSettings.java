@@ -24,12 +24,10 @@ import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.JavaTypeRegistration;
 
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -69,6 +67,7 @@ public class WelcomeSettings extends DAO<WelcomeSettings> {
 	}
 
 	public Set<String> getHeaders() {
+		Hibernate.initialize(headers);
 		if (headers.isEmpty()) {
 			return Set.of(
 					"default/welcome_header_1",
