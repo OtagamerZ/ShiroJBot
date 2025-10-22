@@ -32,8 +32,8 @@ public record LevelRoleId(
 		String gid
 ) implements Serializable {
 	public LevelRoleId(String gid) {
-		this(DAO.queryNative(Integer.class, "SELECT nextval('level_role_id_seq')"), gid);
 		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS level_role_id_seq");
+		this(DAO.queryNative(Integer.class, "SELECT nextval('level_role_id_seq')"), gid);
 	}
 
 	public LevelRoleId {

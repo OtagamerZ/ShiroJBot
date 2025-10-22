@@ -32,8 +32,8 @@ public record AutoRuleId(
 		String gid
 ) implements Serializable {
 	public AutoRuleId(String gid) {
-		this(DAO.queryNative(Integer.class, "SELECT nextval('auto_rule_id_seq')"), gid);
 		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS auto_rule_id_seq");
+		this(DAO.queryNative(Integer.class, "SELECT nextval('auto_rule_id_seq')"), gid);
 	}
 
 	public AutoRuleId {

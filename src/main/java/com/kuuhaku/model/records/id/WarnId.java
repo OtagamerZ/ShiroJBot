@@ -34,8 +34,8 @@ public record WarnId(
 		String uid
 ) implements Serializable {
 	public WarnId(String gid, String uid) {
-		this(DAO.queryNative(Integer.class, "SELECT nextval('warn_id_seq')"), gid, uid);
 		DAO.applyNative(null, "CREATE SEQUENCE IF NOT EXISTS warn_id_seq");
+		this(DAO.queryNative(Integer.class, "SELECT nextval('warn_id_seq')"), gid, uid);
 	}
 
 	public WarnId {
