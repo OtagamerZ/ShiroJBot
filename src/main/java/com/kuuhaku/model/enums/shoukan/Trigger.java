@@ -272,6 +272,12 @@ public enum Trigger {
 	ON_SPELL,
 
 	/**
+	 * On using a consumable<br>
+	 * <i>Implemented in DunHun</i>
+	 **/
+	ON_CONSUMABLE,
+
+	/**
 	 * On using an ability
 	 **/
 	ON_ABILITY,

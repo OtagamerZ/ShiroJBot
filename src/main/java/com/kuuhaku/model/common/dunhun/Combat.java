@@ -400,6 +400,8 @@ public class Combat implements Renderer<BufferedImage> {
 								con.execute(h, t);
 								h.consumeAp(1);
 
+								trigger(Trigger.ON_CONSUMABLE, h, t);
+
 								history.add(getLocale().get(t.equals(h) ? "str/used_self" : "str/used",
 										h.getName(), con.getName(getLocale()), t.getName())
 								);
