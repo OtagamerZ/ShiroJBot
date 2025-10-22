@@ -467,8 +467,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	public String getEffect() {
-		EffectHolder<?> source = getSource();
-		return Utils.getOr(source.getStats().getEffect(), source.getBase().getEffect());
+		Drawable<?> source = getSource();
+		if (source instanceof EffectHolder<?> eh) {
+			return Utils.getOr(eh.getStats().getEffect(), eh.getBase().getEffect());
+		}
+
+		return null;
 	}
 
 	@Override

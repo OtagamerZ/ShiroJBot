@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.interfaces.shoukan.EffectHolder;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.shoukan.Props;
 import com.kuuhaku.util.Utils;
 import org.intellij.lang.annotations.Language;
@@ -35,7 +35,7 @@ public class CachedScriptManager {
 
 	@Language("Groovy")
 	private String code;
-	private EffectHolder<?> owner;
+	private Drawable<?> owner;
 
 	public CachedScriptManager() {
 		context.put("props", storedProps);
@@ -56,7 +56,7 @@ public class CachedScriptManager {
 		return this;
 	}
 
-	public CachedScriptManager assertOwner(EffectHolder<?> owner, Runnable elseDo) {
+	public CachedScriptManager assertOwner(Drawable<?> owner, Runnable elseDo) {
 		if (!Objects.equals(this.owner, owner)) {
 			storedProps.clear();
 			propHash.set(0);
