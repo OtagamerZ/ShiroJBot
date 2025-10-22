@@ -46,11 +46,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DungeonRunPlayer> players = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumns({
-			@JoinColumn(name = "hero_id", referencedColumnName = "hero_id"),
-			@JoinColumn(name = "dungeon_id", referencedColumnName = "dungeon_id")
-	})
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DungeonRunModifier> modifiers = new LinkedHashSet<>();
 
