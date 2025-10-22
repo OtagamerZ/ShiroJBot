@@ -38,7 +38,13 @@ import net.dv8tion.jda.api.JDA;
 public class GameAttachCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		GameInstance<?> game = GameInstance.CHANNELS.get(args.getString("channel"));
+		GameInstance<?> game;
+		if (args.has("channel")) {
+			game = GameInstance.CHANNELS.get(args.getString("channel"));
+		} else {
+			game = GameInstance.CHANNELS.get(event.channel().getId());
+		}
+
 
 		if (game == null) {
 			data.channel().sendMessage(locale.get("error/game_not_found")).queue();

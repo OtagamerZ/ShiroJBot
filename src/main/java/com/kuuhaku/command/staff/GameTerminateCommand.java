@@ -46,7 +46,11 @@ public class GameTerminateCommand implements Executable {
 		if (args.has("user")) {
 			game = GameInstance.PLAYERS.get(args.getString("user"));
 		} else {
-			game = GameInstance.CHANNELS.get(args.getString("channel"));
+			if (args.has("channel")) {
+				game = GameInstance.CHANNELS.get(args.getString("channel"));
+			} else {
+				game = GameInstance.CHANNELS.get(event.channel().getId());
+			}
 		}
 
 		if (game == null) {
