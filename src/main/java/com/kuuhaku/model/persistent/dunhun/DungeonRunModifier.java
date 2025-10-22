@@ -15,6 +15,14 @@ public class DungeonRunModifier extends DAO<DungeonRunModifier> {
 	private DungeonRunModifierId id;
 
 	@ManyToOne(optional = false)
+	@JoinColumns({
+			@JoinColumn(name = "hero_id", referencedColumnName = "hero_id", insertable = false, updatable = false),
+			@JoinColumn(name = "dungeon_id", referencedColumnName = "dungeon_id", insertable = false, updatable = false)
+	})
+	@Fetch(FetchMode.JOIN)
+	private DungeonRun parent;
+
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "modifier_id", nullable = false, updatable = false)
 	@Fetch(FetchMode.JOIN)
 	@MapsId("modifierId")
@@ -25,11 +33,16 @@ public class DungeonRunModifier extends DAO<DungeonRunModifier> {
 
 	public DungeonRunModifier(DungeonRun parent, RunModifier modifier) {
 		this.id = new DungeonRunModifierId(parent.getId(), modifier.getId());
+		this.parent = parent;
 		this.modifier = modifier;
 	}
 
 	public DungeonRunModifierId getId() {
 		return id;
+	}
+
+	public DungeonRun getParent() {
+		return parent;
 	}
 
 	public RunModifier getModifier() {
