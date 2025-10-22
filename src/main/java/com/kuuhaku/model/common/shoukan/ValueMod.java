@@ -36,21 +36,21 @@ public abstract class ValueMod implements Cloneable {
 	private double value;
 	private int expiration;
 
-	public ValueMod(double value) {
+	public ValueMod(Number value) {
 		this(null, value);
 	}
 
-	public ValueMod(Drawable<?> source, double value) {
+	public ValueMod(Drawable<?> source, Number value) {
 		this(source, value, -1);
 	}
 
-	public ValueMod(double value, int expiration) {
+	public ValueMod(Number value, int expiration) {
 		this(null, value, expiration);
 	}
 
-	public ValueMod(Drawable<?> source, double value, int expiration) {
+	public ValueMod(Drawable<?> source, Number value, int expiration) {
 		this.source = source;
-		this.value = value;
+		this.value = value.doubleValue();
 		this.expiration = expiration;
 		this.side = source == null ? null : source.getSide();
 
