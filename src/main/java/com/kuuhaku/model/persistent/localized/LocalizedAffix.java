@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.localized;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.id.LocalizedId;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.text.Uwuifier;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
@@ -32,12 +33,12 @@ import java.util.Objects;
 @Entity
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "affix_info", schema = "dunhun")
+@Table(name = "affix_info", schema = "dunhun", uniqueConstraints = @UniqueConstraint(columnNames = {"locale", "name"}))
 public class LocalizedAffix extends DAO<LocalizedAffix> implements Serializable {
 	@EmbeddedId
 	private LocalizedId id;
 
-	@Column(name = "name", nullable = false, unique = true)
+	@Column(name = "name")
 	private String name;
 
 	@Column(name = "description", nullable = false)
@@ -55,10 +56,10 @@ public class LocalizedAffix extends DAO<LocalizedAffix> implements Serializable 
 
 	public String getName() {
 		if (uwu) {
-			return Uwuifier.INSTANCE.uwu(getLocale(), name);
+			return Uwuifier.INSTANCE.uwu(getLocale(), Utils.getOr(name, ""));
 		}
 
-		return name;
+		return Utils.getOr(name, "");
 	}
 
 	public String getDescription() {
