@@ -182,17 +182,14 @@ public class GuildSettings extends DAO<GuildSettings> {
 	}
 
 	public Set<TextChannelImpl> getKawaiponChannels() {
-		Hibernate.initialize(kawaiponChannels);
 		return kawaiponChannels;
 	}
 
 	public Set<TextChannelImpl> getDropChannels() {
-		Hibernate.initialize(dropChannels);
 		return dropChannels;
 	}
 
 	public Set<TextChannelImpl> getDeniedChannels() {
-		Hibernate.initialize(deniedChannels);
 		return deniedChannels;
 	}
 
@@ -255,12 +252,10 @@ public class GuildSettings extends DAO<GuildSettings> {
 	}
 
 	public Set<Category> getDisabledCategories() {
-		Hibernate.initialize(disabledCategories);
 		return disabledCategories;
 	}
 
 	public Set<String> getDisabledCommands() {
-		Hibernate.initialize(disabledCommands);
 		return disabledCommands;
 	}
 
@@ -293,7 +288,6 @@ public class GuildSettings extends DAO<GuildSettings> {
 	}
 
 	public Map<AutoModType, String> getAutoModEntries() {
-		Hibernate.initialize(automodEntries);
 		return automodEntries;
 	}
 

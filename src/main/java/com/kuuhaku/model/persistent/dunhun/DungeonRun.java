@@ -5,7 +5,6 @@ import com.kuuhaku.model.common.dunhun.AreaMap;
 import com.kuuhaku.model.common.dunhun.Node;
 import com.kuuhaku.model.records.id.DungeonRunId;
 import jakarta.persistence.*;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -88,7 +87,6 @@ public class DungeonRun extends DAO<DungeonRun> {
 	}
 
 	public Set<String> getVisitedNodes() {
-		Hibernate.initialize(visitedNodes);
 		return visitedNodes;
 	}
 
@@ -135,7 +133,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 		int subOffset = sublevel / map.getAreasPerFloor();
 		map.getRenderSublevel().set(subOffset * map.getAreasPerFloor());
 
-		visitedNodes.add(node.getId());
+		getVisitedNodes().add(node.getId());
 	}
 
 	public Set<DungeonRunPlayer> getPlayers() {

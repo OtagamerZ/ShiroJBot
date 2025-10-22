@@ -67,7 +67,6 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 	}
 
 	public Set<String> getHeaders() {
-		Hibernate.initialize(headers);
 		if (headers.isEmpty()) {
 			return Set.of(
 					"default/goodbye_header_1",
