@@ -20,16 +20,15 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
-import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.ConditionalVar;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.records.id.LocalizedId;
-import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.localized.LocalizedDescription;
+import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.records.id.LocalizedId;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
@@ -74,7 +73,7 @@ public class CardExtra implements Iterable<CumValue> {
 	private final ConditionalVar<Card> vanity = new ConditionalVar<>();
 	private final ConditionalVar<Supplier<String>> write = new ConditionalVar<>();
 
-	private EffectHolder<?> source = null;
+	private Drawable<?> source = null;
 	private String description = null;
 	private String effect = null;
 
@@ -218,11 +217,11 @@ public class CardExtra implements Iterable<CumValue> {
 		});
 	}
 
-	public EffectHolder<?> getSource() {
+	public Drawable<?> getSource() {
 		return source;
 	}
 
-	public void setSource(EffectHolder<?> source) {
+	public void setSource(Drawable<?> source) {
 		this.source = source;
 	}
 
