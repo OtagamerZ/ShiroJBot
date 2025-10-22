@@ -759,20 +759,32 @@ public class Combat implements Renderer<BufferedImage> {
 			ma.queue(s -> Pages.buttonize(s, root));
 		});
 
-		AtomicInteger i = new AtomicInteger();
-		msg.editMessageComponents(msg.getComponentTree().replace(c -> {
-			if (c instanceof Button b) {
-				int idx = i.getAndIncrement();
-				if (idx >= targets.size()) return b;
+		MessageEditAction act = msg.editMessageComponents();
+		List<MessageTopLevelComponent> rows = helper.getComponents(act);
+
+		int idx = 0;
+		ListIterator<MessageTopLevelComponent> it = rows.listIterator();
+
+		loop:
+		while (it.hasNext()) {
+			MessageTopLevelComponent row = it.next();
+			if (!(row instanceof ActionRow ar)) continue;
+
+			List<Button> btns = new ArrayList<>();
+			for (Button b : ar.getButtons()) {
+				if (idx++ >= targets.size()) break loop;
 
 				Actor<?> tgt = targets.get(idx);
-				if (tgt != null) {
-					return b.asDisabled();
+				if (tgt == null) {
+					btns.add(b.asDisabled());
+				} else {
+					btns.add(b);
 				}
 			}
+			it.set(ActionRow.of(btns));
+		}
 
-			return c;
-		})).queue();
+		act.setComponents(rows).queue(s -> Pages.buttonize(s, helper));
 	}
 
 	public CompletableFuture<Runnable> getLock() {
