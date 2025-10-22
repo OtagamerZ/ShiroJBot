@@ -37,7 +37,7 @@ public class LocalizedAffix extends DAO<LocalizedAffix> implements Serializable 
 	@EmbeddedId
 	private LocalizedId id;
 
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", nullable = false, unique = true)
 	private String name;
 
 	@Column(name = "description", nullable = false)
