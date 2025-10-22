@@ -28,6 +28,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -46,8 +47,7 @@ public class WelcomeSettings extends DAO<WelcomeSettings> {
 			name = "welcome_settings_header",
 			joinColumns = @JoinColumn(name = "gid")
 	)
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<String> headers = new LinkedHashSet<>();
+	private Set<String> headers = new HashSet<>();
 
 	@Column(name = "message", nullable = false, columnDefinition = "TEXT")
 	private String message;

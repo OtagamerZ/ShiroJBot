@@ -24,11 +24,9 @@ import com.kuuhaku.model.persistent.javatype.ChannelJavaType;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -46,8 +44,7 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 			name = "goodbye_settings_header",
 			joinColumns = @JoinColumn(name = "gid")
 	)
-	@Fetch(FetchMode.SUBSELECT)
-	private Set<String> headers = new LinkedHashSet<>();
+	private Set<String> headers = new HashSet<>();
 
 	@Column(name = "message", nullable = false, columnDefinition = "TEXT")
 	private String message;
