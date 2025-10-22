@@ -62,17 +62,16 @@ public class RegDeg {
 					mult *= 1.5;
 				}
 
+				mult = parent.getStats().getDegenMult().apply(mult);
 				if (parent.getOther().getOrigins().synergy() == Race.GHOUL) {
-					int split = (int) (-value * parent.getStats().getDegenMult().get()) / 2;
+					int split = -value / 2;
 					values.add(new Degen(split, mult));
 					values.add(new Degen(split, mult));
 					return;
 				}
-
-				values.add(new Degen(-value, mult * parent.getStats().getDegenMult().get()));
-			} else {
-				values.add(new Degen(-value, mult));
 			}
+
+			values.add(new Degen(-value, mult));
 		} else if (value > 0) {
 			if (parent != null) {
 				if (parent.getOrigins().major() == Race.HUMAN) {
@@ -88,10 +87,10 @@ public class RegDeg {
 					mult /= 2;
 				}
 
-				values.add(new Regen(value, mult * parent.getStats().getRegenMult().get()));
-			} else {
-				values.add(new Regen(value, mult));
+				mult = parent.getStats().getRegenMult().apply(mult);
 			}
+
+			values.add(new Regen(value, mult));
 		}
 	}
 

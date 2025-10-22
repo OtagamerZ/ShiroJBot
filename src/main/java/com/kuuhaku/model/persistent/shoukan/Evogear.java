@@ -159,7 +159,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 		}
 
-		return flat + (int) stats.getTier().get();
+		return (int) stats.getTier().apply(flat);
 	}
 
 	public boolean isSpell() {
@@ -261,37 +261,39 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public int getMPCost(boolean ignoreRace) {
-		int cost = Math.max(0, Calc.round((base.getMana() + stats.getMana().get()) * getCostMult()));
+		int flat = base.getMana();
 		if (hand != null && !ignoreRace) {
 			if (hand.getOrigins().synergy() == Race.CELESTIAL) {
-				cost -= hand.getCards().size() / 2;
+				flat -= hand.getCards().size() / 2;
 			}
 
 			if (hand.getOrigins().major() == Race.DEMON) {
-				cost = 0;
+				return flat;
 			}
 		}
 
-		return cost;
+		return Calc.round(Math.max(0, stats.getMana().apply(flat) * getCostMult()));
 	}
 
 	@Override
 	public int getHPCost(boolean ignoreRace) {
-		int cost = Math.max(0, Calc.round((base.getBlood() + stats.getBlood().get()) * getCostMult()));
+		int flat = base.getBlood();
 		if (hand != null) {
 			int mp = getMPCost(true);
 
 			if (hand.getOrigins().major() == Race.DEMON) {
-				cost += (int) (hand.getBase().hp() * 0.08 * mp);
+				flat += (int) (hand.getBase().hp() * 0.08 * mp);
 			}
 		}
 
-		return cost;
+		return Calc.round(Math.max(0, stats.getBlood().apply(flat) * getCostMult()));
 	}
 
 	@Override
 	public int getSCCost() {
-		return Math.max(0, Calc.round((base.getSacrifices() + stats.getSacrifices().get()) * getCostMult()));
+		int flat = base.getSacrifices();
+
+		return Calc.round(Math.max(0, stats.getSacrifices().apply(flat) * getCostMult()));
 	}
 
 	@Override
@@ -302,14 +304,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			flat += getCards(getSide()).stream().mapToInt(Senshi::getParry).sum();
 		}
 
-		return Calc.round(stats.getAtk().get(flat) * getAttrMult());
+		return Calc.round(stats.getAtk().apply(flat) * getAttrMult());
 	}
 
 	@Override
 	public int getDfs() {
 		int flat = base.getDfs();
 
-		return Calc.round(stats.getDfs().get(flat) * getAttrMult());
+		return Calc.round(stats.getDfs().apply(flat) * getAttrMult());
 	}
 
 	@Override
@@ -321,7 +323,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			min += 10;
 		}
 
-		return (int) Utils.clamp(stats.getDodge().get(flat), min, 100);
+		return (int) Utils.clamp(stats.getDodge().apply(flat), min, 100);
 	}
 
 	@Override
@@ -333,12 +335,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			min += 10;
 		}
 
-		return (int) Utils.clamp(stats.getParry().get(flat), min, 100);
+		return (int) Utils.clamp(stats.getParry().apply(flat), min, 100);
 	}
 
 	@Override
 	public double getCostMult() {
-		double mult = stats.getCost().get();
+		double mult = stats.getCost().multiplier();
 		if (hand != null) {
 			if ((!spell && hand.getOrigins().hasMinor(Race.MACHINE)) || (spell && hand.getOrigins().hasMinor(Race.MYSTICAL))) {
 				mult *= 0.8;
@@ -354,7 +356,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public double getAttrMult() {
-		double mult = stats.getAttr().get();
+		double mult = stats.getAttr().multiplier();
 		if (hand != null) {
 			if (!spell && hand.getOrigins().hasMinor(Race.MACHINE)) {
 				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MACHINE) * 0.02);
@@ -378,7 +380,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public double getPower() {
-		double mult = stats.getPower().get() * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
+		double mult = stats.getPower().multiplier() * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
 		if (hand != null) {
 			if (spell) {
 				if (hand.getOrigins().hasMinor(Race.MYSTICAL)) {

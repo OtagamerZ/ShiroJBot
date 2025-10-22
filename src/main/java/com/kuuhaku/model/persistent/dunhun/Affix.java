@@ -234,11 +234,11 @@ public class Affix extends DAO<Affix> {
 		if (affs.isEmpty()) return null;
 
 		if (type == null) {
-			int prefs = maxMods / 2 + (int) gear.getModifiers().getPrefixes().get();
-			int suffs = maxMods / 2 + (int) gear.getModifiers().getSuffixes().get();
+			int prefs = (int) gear.getModifiers().getPrefixes().apply(maxMods / 2d);
+			int suffs = (int) gear.getModifiers().getSuffixes().apply(maxMods / 2d);
 			List<AffixType> left = new ArrayList<>();
-			left.addAll(Utils.generate(prefs, (i) -> AffixType.PREFIX));
-			left.addAll(Utils.generate(suffs, (i) -> AffixType.SUFFIX));
+			left.addAll(Utils.generate(prefs, (_) -> AffixType.PREFIX));
+			left.addAll(Utils.generate(suffs, (_) -> AffixType.SUFFIX));
 
 			left.removeIf(a -> affs.stream().noneMatch(o -> o[2].equals(a.name())));
 

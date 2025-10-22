@@ -94,13 +94,13 @@ public class HeroCommand implements Executable {
 					.setImage("attachment://card.png");
 
 			eb.addField(Constants.VOID, """
-					HP: %s (%s)
-					%s/%s (%s)
+					HP: %s
+					%s/%s
 					%s
 					%s (%s/%s)
 					""".formatted(
-					h.getMaxHp(), Utils.sign((int) h.getModifiers().getMaxHp().get()),
-					locale.get("str/ap", h.getMaxAp()), h.getApCap(), Utils.sign((int) h.getModifiers().getMaxAp().get()),
+					h.getMaxHp(),
+					locale.get("str/ap", h.getMaxAp()), h.getApCap(),
 					locale.get("str/critical", Utils.roundToString(h.getCritical(), 2)),
 					locale.get("str/level", h.getStats().getLevel()),
 					h.getStats().getXp(), h.getStats().getXpToNext()

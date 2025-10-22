@@ -504,50 +504,50 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public int getMPCost(boolean ignoreRace) {
-		int cost = Math.max(0, Calc.round((base.getMana() + stats.getMana().get() + (isFusion() ? 5 : 0)) * getCostMult()));
+		int flat = base.getMana() + (isFusion() ? 5 : 0);
 		if (hand != null && !ignoreRace) {
 			if (hand.getOrigins().synergy() == Race.CELESTIAL) {
-				cost -= hand.getCards().size() / 2;
+				flat -= hand.getCards().size() / 2;
 			}
 
-			if (hand.getOrigins().synergy() == Race.HOMUNCULUS && cost > hand.getMP()) {
-				cost = hand.getMP();
+			if (hand.getOrigins().synergy() == Race.HOMUNCULUS && flat > hand.getMP()) {
+				flat = hand.getMP();
 			}
 
 			if (hand.getOrigins().major() == Race.DEMON) {
-				cost = 0;
+				return 0;
 			}
 		}
 
-		return cost;
+		return Calc.round(Math.max(0, stats.getMana().apply(flat) * getCostMult()));
 	}
 
 	@Override
 	public int getHPCost(boolean ignoreRace) {
-		int cost = Math.max(0, Calc.round((base.getBlood() + stats.getBlood().get()) * getCostMult()));
+		int flat = base.getBlood();
 		if (hand != null) {
 			int mp = getMPCost(true);
 
 			if (hand.getOrigins().major() == Race.DEMON) {
-				cost += (int) (hand.getBase().hp() * 0.08 * mp);
+				flat += (int) (hand.getBase().hp() * 0.08 * mp);
 			}
 		}
 
-		return cost;
+		return Calc.round(Math.max(0, stats.getBlood().apply(flat) * getCostMult()));
 	}
 
 	@Override
 	public int getSCCost() {
-		int cost = Math.max(0, Calc.round((base.getSacrifices() + stats.getSacrifices().get()) * getCostMult()));
+		int flat = base.getSacrifices();
 		if (hand != null) {
 			int mp = getMPCost(true);
 
 			if (hand.getOrigins().synergy() == Race.HOMUNCULUS && mp > hand.getMP()) {
-				cost += mp - hand.getMP();
+				flat += mp - hand.getMP();
 			}
 		}
 
-		return cost;
+		return Calc.round(Math.max(0, stats.getSacrifices().apply(flat) * getCostMult()));
 	}
 
 	@Override
@@ -576,7 +576,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			mult /= 2;
 		}
 
-		return Math.max(0, Calc.round(stats.getAtk().get(flat) * mult * getAttrMult()));
+		return Math.max(0, Calc.round(stats.getAtk().apply(flat) * mult * getAttrMult()));
 	}
 
 	@Override
@@ -596,7 +596,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			mult /= 2;
 		}
 
-		return Math.max(0, Calc.round(stats.getDfs().get(flat) * mult * getAttrMult()));
+		return Math.max(0, Calc.round(stats.getDfs().apply(flat) * mult * getAttrMult()));
 	}
 
 	public double getFieldMult() {
@@ -675,7 +675,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 		}
 
-		return (int) Utils.clamp(stats.getDodge().get(flat), min, max);
+		return (int) Utils.clamp(stats.getDodge().apply(flat), min, max);
 	}
 
 	@Override
@@ -689,12 +689,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 		}
 
-		return (int) Utils.clamp(stats.getParry().get(flat), min, 100);
+		return (int) Utils.clamp(stats.getParry().apply(flat), min, 100);
 	}
 
 	@Override
 	public double getCostMult() {
-		double mult = stats.getCost().get();
+		double mult = stats.getCost().multiplier();
 		if (hand != null) {
 			if (hand.getOrigins().synergy() == Race.PIXIE) {
 				mult *= getFieldMult();
@@ -710,7 +710,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public double getAttrMult() {
-		double mult = stats.getAttr().get();
+		double mult = stats.getAttr().multiplier();
 		if (hand != null) {
 			if (hand.getOrigins().isPure() && race != hand.getOrigins().major()) {
 				mult *= 0.5;
@@ -736,7 +736,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public double getPower() {
-		double mult = stats.getPower().get() * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
+		double mult = stats.getPower().multiplier() * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
 		if (hand != null && getGame() != null) {
 			if (hand.getOrigins().major() == Race.MIXED) {
 				mult *= 1 - 0.07 * hand.getOrigins().minor().length;
@@ -1069,15 +1069,15 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public int getRemAttacks() {
-		int base = 1 + (int) stats.getAttacks().get();
+		int flat = 1;
 		for (Evogear e : equipments) {
-			base += (int) e.getStats().getAttacks().get();
+			flat += (int) e.getStats().getAttacks().get();
 			if (e.hasCharm(Charm.BARRAGE)) {
-				base += Charm.BARRAGE.getValue(e.getTier());
+				flat += Charm.BARRAGE.getValue(e.getTier());
 			}
 		}
 
-		return base - getAttacks();
+		return Calc.round(stats.getAttacks().apply(flat - getAttacks()));
 	}
 
 	public boolean canAttack() {

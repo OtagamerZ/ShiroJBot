@@ -22,7 +22,6 @@ import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.model.enums.shoukan.Lock;
 import com.kuuhaku.util.Calc;
-import com.kuuhaku.util.Utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -34,12 +33,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CumValue implements Iterable<ValueMod> {
 	private final Set<ValueMod> values = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
-	public double get() {
-		return get(0);
+	public double multiplier() {
+		return 1 + offset();
 	}
 
-	public double get(double base) {
-		double flat = base;
+	public double offset() {
 		double inc = 0;
 		double mult = 1;
 
@@ -51,14 +49,33 @@ public class CumValue implements Iterable<ValueMod> {
 			}
 
 			switch (mod) {
-				case FlatMod _, DynamicMod _ -> flat += mod.getValue();
 				case IncMod _ -> inc += mod.getValue();
 				case MultMod _ -> mult *= 1 + mod.getValue();
 				default -> throw new IllegalStateException("Unexpected value: " + mod);
 			}
 		}
 
-		return Calc.round(flat * (1 + inc) * mult, 2);
+		return Calc.round(1 * (1 + inc) * mult - 1, 2);
+	}
+
+	public double get() {
+		return apply(0);
+	}
+
+	public double apply(double base) {
+		for (ValueMod mod : values) {
+			if (mod.getSource() instanceof EffectHolder<?> eh) {
+				if (!eh.hasEffect() || eh.getHand().getLockTime(Lock.EFFECT) > 0) {
+					continue;
+				}
+			}
+
+			if (mod instanceof FlatMod || mod instanceof DynamicMod) {
+				base += mod.getValue();
+			}
+		}
+
+		return Calc.round(base * multiplier(), 2);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -80,10 +97,6 @@ public class CumValue implements Iterable<ValueMod> {
 		}
 
 		throw new IllegalStateException("Unexpected value: " + klass);
-	}
-
-	public <T extends Number> T asType(Class<T> klass) {
-		return Utils.fromNumber(klass, get());
 	}
 
 	@SuppressWarnings("unchecked")

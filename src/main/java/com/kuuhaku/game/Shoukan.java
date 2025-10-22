@@ -57,7 +57,6 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
-import net.dv8tion.jda.api.components.Component;
 import net.dv8tion.jda.api.components.actionrow.ActionRow;
 import net.dv8tion.jda.api.components.buttons.Button;
 import net.dv8tion.jda.api.entities.Message;
@@ -1313,15 +1312,15 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int dmg = damage;
-		int direct = (int) (damage * source.getStats().getPiercing().get() / 100);
-		int lifesteal = you.getBase().lifesteal() + (int) source.getStats().getLifesteal().get();
+		int direct = (int) (damage * source.getStats().getPiercing().offset());
+		int lifesteal = you.getBase().lifesteal() + (int) (100 * source.getStats().getLifesteal().offset());
 		if (you.getOrigins().synergy() == Race.VAMPIRE && you.isLowLife()) {
 			lifesteal += 7;
 		}
 
 		int thorns = (you.getLockTime(Lock.CHARM) > 0 ? 20 : 0);
 		if (target != null) {
-			thorns += (int) target.getStats().getThorns().get();
+			thorns += (int) (100 * target.getStats().getThorns().offset());
 		}
 
 		double dmgMult = 1;
@@ -1580,7 +1579,7 @@ public class Shoukan extends GameInstance<Phase> {
 			int val = eHP - op.getHP();
 			outcome += "\n" + getString(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
 
-			double mult = (val > 0 ? dmgMult : op.getStats().getHealMult().get());
+			double mult = val > 0 ? dmgMult : (100 * op.getStats().getHealMult().offset());
 			if (mult != 1) {
 				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString((1 - mult) * 100, 2)) + ")";
 			}
@@ -1589,7 +1588,7 @@ public class Shoukan extends GameInstance<Phase> {
 			int val = pHP - you.getHP();
 			outcome += "\n" + getString(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(val));
 
-			double mult = (val > 0 ? you.getStats().getDamageMult() : you.getStats().getHealMult()).get();
+			double mult = (val > 0 ? you.getStats().getDamageMult() : you.getStats().getHealMult()).multiplier();
 			if (mult != 1) {
 				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString((1 - mult) * 100, 2)) + ")";
 			}

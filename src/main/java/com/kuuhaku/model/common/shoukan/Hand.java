@@ -836,11 +836,7 @@ public class Hand {
 				}
 			}
 
-			if (value < 0) {
-				value *= Math.max(0, stats.getDamageMult().get());
-			} else {
-				value *= Math.max(0, stats.getHealMult().get());
-			}
+			value = (value < 0 ? stats.getDamageMult() : stats.getHealMult()).apply(value);
 
 			Hand op = getOther();
 			if (value < 0) {

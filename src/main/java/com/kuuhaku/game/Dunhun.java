@@ -421,7 +421,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private void grantCombatLoot() {
 		int xpGained = 0;
 		double mf = 1 + heroes.values().stream()
-				.mapToDouble(h -> h.getModifiers().getMagicFind().get())
+				.mapToDouble(h -> h.getModifiers().getMagicFind().offset())
 				.sum();
 
 		Loot loot = getCombat().getLoot();
