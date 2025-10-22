@@ -772,7 +772,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			List<Button> btns = new ArrayList<>();
 			for (Button b : ar.getButtons()) {
-				if (idx++ >= targets.size()) break loop;
+				if (idx >= targets.size()) break loop;
 
 				Actor<?> tgt = targets.get(idx);
 				if (tgt == null) {
@@ -780,6 +780,8 @@ public class Combat implements Renderer<BufferedImage> {
 				} else {
 					btns.add(b);
 				}
+
+				idx++;
 			}
 			it.set(ActionRow.of(btns));
 		}
