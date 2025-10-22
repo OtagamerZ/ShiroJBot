@@ -62,13 +62,6 @@ public class WelcomeSettings extends DAO<WelcomeSettings> {
 	public WelcomeSettings(GuildConfig config) {
 		this.gid = config.getGid();
 		this.message = config.getLocale().get("default/welcome_message");
-		this.headers.addAll(Set.of(
-				"default/welcome_header_1",
-				"default/welcome_header_2",
-				"default/welcome_header_3",
-				"default/welcome_header_4",
-				"default/welcome_header_5"
-		));
 	}
 
 	public String getGid() {
@@ -76,6 +69,16 @@ public class WelcomeSettings extends DAO<WelcomeSettings> {
 	}
 
 	public Set<String> getHeaders() {
+		if (headers.isEmpty()) {
+			return Set.of(
+					"default/welcome_header_1",
+					"default/welcome_header_2",
+					"default/welcome_header_3",
+					"default/welcome_header_4",
+					"default/welcome_header_5"
+			);
+		}
+
 		return headers;
 	}
 

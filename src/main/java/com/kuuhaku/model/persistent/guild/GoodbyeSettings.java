@@ -62,13 +62,6 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 	public GoodbyeSettings(GuildConfig config) {
 		this.gid = config.getGid();
 		this.message = config.getLocale().get("default/goodbye_message");
-		this.headers.addAll(Set.of(
-				"default/goodbye_header_1",
-				"default/goodbye_header_2",
-				"default/goodbye_header_3",
-				"default/goodbye_header_4",
-				"default/goodbye_header_5"
-		));
 	}
 
 	public String getGid() {
@@ -76,6 +69,16 @@ public class GoodbyeSettings extends DAO<GoodbyeSettings> {
 	}
 
 	public Set<String> getHeaders() {
+		if (headers.isEmpty()) {
+			return Set.of(
+					"default/goodbye_header_1",
+					"default/goodbye_header_2",
+					"default/goodbye_header_3",
+					"default/goodbye_header_4",
+					"default/goodbye_header_5"
+			);
+		}
+
 		return headers;
 	}
 
