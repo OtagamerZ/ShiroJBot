@@ -48,7 +48,8 @@ public class DungeonRun extends DAO<DungeonRun> {
 
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<DungeonRunModifier> modifiers = new LinkedHashSet<>();
+	@OrderBy("id.modifierId DESC")
+	private List<DungeonRunModifier> modifiers = new ArrayList<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "node", nullable = false)
@@ -137,7 +138,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 		return players;
 	}
 
-	public Set<DungeonRunModifier> getModifiers() {
+	public List<DungeonRunModifier> getModifiers() {
 		return modifiers;
 	}
 

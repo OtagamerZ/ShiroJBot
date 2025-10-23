@@ -68,7 +68,7 @@ public class Hero extends Actor<Hero> {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "hero_id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
-	private final List<DungeonCompletion> completedDungeons = new ArrayList<>();
+	private List<DungeonCompletion> completedDungeons = new ArrayList<>();
 
 	public Hero() {
 	}

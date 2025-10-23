@@ -35,7 +35,6 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.internal.entities.RoleImpl;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JavaTypeRegistration;
@@ -109,16 +108,16 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("level")
-	private final List<LevelRole> levelRoles = new ArrayList<>();
+	private List<LevelRole> levelRoles = new ArrayList<>();
 
 	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private final List<CustomAnswer> customAnswers = new ArrayList<>();
+	private Set<CustomAnswer> customAnswers = new HashSet<>();
 
 	@OneToMany(mappedBy = "settings", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("threshold")
-	private final List<AutoRule> autoRules = new ArrayList<>();
+	private List<AutoRule> autoRules = new ArrayList<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "category", nullable = false)
@@ -243,7 +242,7 @@ public class GuildSettings extends DAO<GuildSettings> {
 				.toList();
 	}
 
-	public List<CustomAnswer> getCustomAnswers() {
+	public Set<CustomAnswer> getCustomAnswers() {
 		return customAnswers;
 	}
 

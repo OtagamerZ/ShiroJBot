@@ -93,11 +93,11 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private final Set<Deck> decks = new HashSet<>();
+	private Set<Deck> decks = new HashSet<>();
 
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private final Set<AccountTitle> titles = new HashSet<>();
+	private Set<AccountTitle> titles = new HashSet<>();
 
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "inventory", nullable = false, columnDefinition = "JSONB")
