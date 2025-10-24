@@ -68,7 +68,7 @@ public class Hero extends Actor<Hero> {
 	@JoinTable(
 			schema = "dunhun",
 			name = "hero_dungeon_completion",
-			joinColumns = {@JoinColumn(name = "hero_id"), @JoinColumn(name = "dungeon_id")},
+			joinColumns = @JoinColumn(name = "hero_id"),
 			inverseJoinColumns = @JoinColumn(name = "dungeon_id")
 	)
 	private Set<Dungeon> completedDungeons = new HashSet<>();
