@@ -28,7 +28,6 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.dunhun.Attributes;
-import com.kuuhaku.model.records.id.DungeonRunId;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.ygimenez.json.JSONArray;
@@ -65,10 +64,14 @@ public class Hero extends Actor<Hero> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject equipment = new JSONObject();
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@JoinColumn(name = "hero_id", referencedColumnName = "id")
-	@Fetch(FetchMode.SUBSELECT)
-	private List<DungeonCompletion> completedDungeons = new ArrayList<>();
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			schema = "dunhun",
+			name = "hero_dungeon_completion",
+			joinColumns = {@JoinColumn(name = "hero_id"), @JoinColumn(name = "dungeon_id")},
+			inverseJoinColumns = @JoinColumn(name = "dungeon_id")
+	)
+	private Set<Dungeon> completedDungeons = new HashSet<>();
 
 	public Hero() {
 	}
@@ -175,7 +178,7 @@ public class Hero extends Actor<Hero> {
 		this.equipment = equipment;
 	}
 
-	public List<DungeonCompletion> getCompletedDungeons() {
+	public Set<Dungeon> getCompletedDungeons() {
 		return completedDungeons;
 	}
 
@@ -185,13 +188,12 @@ public class Hero extends Actor<Hero> {
 
 	public boolean hasCompleted(String dungeon) {
 		return completedDungeons.parallelStream()
-				.anyMatch(d -> d.getId().dungeonId().equalsIgnoreCase(dungeon));
+				.anyMatch(d -> d.getId().equalsIgnoreCase(dungeon));
 	}
 
 	public List<String> remainingDungeonsFor(Dungeon dungeon) {
 		Set<String> completed = completedDungeons.parallelStream()
-				.map(DungeonCompletion::getId)
-				.map(DungeonRunId::dungeonId)
+				.map(Dungeon::getId)
 				.collect(Collectors.toSet());
 
 		return dungeon.getRequiredDungeons().stream()

@@ -399,7 +399,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 					if (deadEnd) {
 						if (getAreaType() == NodeType.BOSS) {
 							for (Hero h : heroes.values()) {
-								new DungeonCompletion(h, dungeon).save();
+								h.getCompletedDungeons().add(dungeon);
+								h.save();
 							}
 
 							finish("str/dungeon_end", getHeroNames());
