@@ -67,7 +67,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 			throw new GameReport(GameReport.DICT_NOT_FOUND);
 		}
 
-		setTimeout(turn -> {
+		setTimeout(_ -> {
 			getChannel().sendMessage(locale.get("str/game_wo_alt", "<@" + inGame.getCurrent() + ">", "<@" + inGame.peekNext() + ">")).queue();
 			inGame.remove();
 
@@ -219,7 +219,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 		if (getTurn() >= 50) {
 			if (getTurn() == 50) {
 				getChannel().sendMessage(getString("alert/shiritori_sudden_death")).queue();
-				setTimeout(turn -> {
+				setTimeout(_ -> {
 					getChannel().sendMessage(getString("str/game_wo_alt", "<@" + inGame.getCurrent() + ">", "<@" + inGame.peekNext() + ">")).queue();
 					inGame.remove();
 

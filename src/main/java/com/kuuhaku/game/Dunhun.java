@@ -389,6 +389,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							pls.add(p);
 						}
 
+						System.out.println(run.getModifiers().stream().map(DungeonRunModifier::getId).toList());
 						if (deadEnd) {
 							run.delete();
 						} else {
@@ -578,7 +579,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		Set<Choice> choices = new LinkedHashSet<>();
 		for (EventAction act : ed.actions()) {
-			choices.add(new Choice(act.action(), act.label(), w ->
+			choices.add(new Choice(act.action(), act.label(), _ ->
 					evt.getAction(act.action()).get()
 			));
 		}

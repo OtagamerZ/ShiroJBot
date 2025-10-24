@@ -131,7 +131,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 		int subOffset = sublevel / map.getAreasPerFloor();
 		map.getRenderSublevel().set(subOffset * map.getAreasPerFloor());
 
-		getVisitedNodes().add(node.getId());
+		visitedNodes.add(node.getId());
 	}
 
 	public Set<DungeonRunPlayer> getPlayers() {
@@ -145,7 +145,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 	public boolean addModifier(RunModifier modifier) {
 		String family = modifier.getModFamily();
 
-		Iterator<DungeonRunModifier> it = getModifiers().iterator();
+		Iterator<DungeonRunModifier> it = modifiers.iterator();
 		while (it.hasNext()) {
 			RunModifier mod = it.next().getModifier();
 			if (mod.getId().equals(modifier.getId())) return false;
@@ -160,7 +160,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 			}
 		}
 
-		return getModifiers().add(new DungeonRunModifier(this, modifier));
+		return modifiers.add(new DungeonRunModifier(this, modifier));
 	}
 
 	public AreaMap getMap() {

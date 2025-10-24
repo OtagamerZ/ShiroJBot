@@ -133,7 +133,7 @@ public class Shoukan extends GameInstance<Phase> {
 		setSingleplayer(p1.equals(p2));
 		this.hands = Map.of(Side.TOP, new Hand(p1, this, Side.TOP), Side.BOTTOM, new Hand(p2, this, Side.BOTTOM));
 
-		setTimeout(turn -> {
+		setTimeout(_ -> {
 			if (getCurrent().selectionPending() && isLocked()) {
 				reportResult(GameReport.GAME_TIMEOUT, getCurrentSide(), "str/game_wo", "<@" + getOther().getUid() + ">");
 			}
