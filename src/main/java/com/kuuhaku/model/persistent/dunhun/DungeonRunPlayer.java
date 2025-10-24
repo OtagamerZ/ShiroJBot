@@ -20,6 +20,7 @@ public class DungeonRunPlayer extends DAO<DungeonRunPlayer> {
 			@JoinColumn(name = "dungeon_id", referencedColumnName = "dungeon_id", insertable = false, updatable = false)
 	})
 	@Fetch(FetchMode.JOIN)
+	@MapsId("runId")
 	private DungeonRun parent;
 
 	@ManyToOne(optional = false)

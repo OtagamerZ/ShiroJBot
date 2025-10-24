@@ -389,7 +389,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 							pls.add(p);
 						}
 
-						System.out.println(run.getModifiers().stream().map(DungeonRunModifier::getId).toList());
 						if (deadEnd) {
 							run.delete();
 						} else {

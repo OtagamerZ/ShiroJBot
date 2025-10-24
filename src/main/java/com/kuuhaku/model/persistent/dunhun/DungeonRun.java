@@ -46,10 +46,15 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DungeonRunPlayer> players = new HashSet<>();
 
-	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SUBSELECT)
-	@OrderBy("id.modifierId DESC")
-	private List<DungeonRunModifier> modifiers = new ArrayList<>();
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			schema = "dunhun",
+			name = "dungeon_run_modifier",
+			joinColumns = {@JoinColumn(name = "hero_id"), @JoinColumn(name = "dungeon_id")},
+			inverseJoinColumns = @JoinColumn(name = "modifier_id")
+	)
+	@OrderBy("id")
+	private List<RunModifier> modifiers = new ArrayList<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "node", nullable = false)
@@ -138,16 +143,16 @@ public class DungeonRun extends DAO<DungeonRun> {
 		return players;
 	}
 
-	public List<DungeonRunModifier> getModifiers() {
+	public List<RunModifier> getModifiers() {
 		return modifiers;
 	}
 
 	public boolean addModifier(RunModifier modifier) {
 		String family = modifier.getModFamily();
 
-		Iterator<DungeonRunModifier> it = modifiers.iterator();
+		Iterator<RunModifier> it = modifiers.iterator();
 		while (it.hasNext()) {
-			RunModifier mod = it.next().getModifier();
+			RunModifier mod = it.next();
 			if (mod.getId().equals(modifier.getId())) return false;
 
 			if (mod.getModFamily().equals(family)) {
@@ -160,7 +165,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 			}
 		}
 
-		return modifiers.add(new DungeonRunModifier(this, modifier));
+		return modifiers.add(modifier);
 	}
 
 	public AreaMap getMap() {
