@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.model.records.ChannelReference;
 import com.kuuhaku.model.records.ClusterAction;
 import net.dv8tion.jda.api.entities.Guild;
@@ -69,8 +70,12 @@ public class GameChannel {
 
 		Map<String, MessageCreateAction> acts = new HashMap<>();
 		for (GuildMessageChannel chn : getChannels()) {
-			if (!chn.canTalk()) continue;
-			acts.put(chn.getId(), chn.sendFiles(FileUpload.fromData(bytes, filename)));
+			try {
+				if (!chn.canTalk()) continue;
+				acts.put(chn.getId(), chn.sendFiles(FileUpload.fromData(bytes, filename)));
+			} catch (Exception e) {
+				Constants.LOGGER.error("Failed to send file: {}", e, e);
+			}
 		}
 
 		lastAction = System.currentTimeMillis();
@@ -82,18 +87,22 @@ public class GameChannel {
 
 		Map<String, MessageCreateAction> acts = new HashMap<>();
 		for (GuildMessageChannel chn : getChannels()) {
-			if (!chn.canTalk()) continue;
-			List<String> buf = buffer.remove(chn.getId());
+			try {
+				if (!chn.canTalk()) continue;
+				List<String> buf = buffer.remove(chn.getId());
 
-			if (buf != null) {
-				XStringBuilder sb = new XStringBuilder(message);
-				for (int i = buf.size() - 1; i >= 0; i--) {
-					sb.appendNewLine(buf.get(i));
+				if (buf != null) {
+					XStringBuilder sb = new XStringBuilder(message);
+					for (int i = buf.size() - 1; i >= 0; i--) {
+						sb.appendNewLine(buf.get(i));
+					}
+
+					acts.put(chn.getId(), chn.sendMessage(sb.toString()));
+				} else {
+					acts.put(chn.getId(), chn.sendMessage(message));
 				}
-
-				acts.put(chn.getId(), chn.sendMessage(sb.toString()));
-			} else {
-				acts.put(chn.getId(), chn.sendMessage(message));
+			} catch (Exception e) {
+				Constants.LOGGER.error("Failed to send message: {}", e, e);
 			}
 		}
 
@@ -106,8 +115,12 @@ public class GameChannel {
 
 		Map<String, MessageCreateAction> acts = new HashMap<>();
 		for (GuildMessageChannel chn : getChannels()) {
-			if (!chn.canTalk()) continue;
-			acts.put(chn.getId(), chn.sendMessageEmbeds(embed));
+			try {
+				if (!chn.canTalk()) continue;
+				acts.put(chn.getId(), chn.sendMessageEmbeds(embed));
+			} catch (Exception e) {
+				Constants.LOGGER.error("Failed to send embed: {}", e, e);
+			}
 		}
 
 		lastAction = System.currentTimeMillis();
@@ -129,11 +142,15 @@ public class GameChannel {
 
 		Map<String, MessageCreateAction> acts = new HashMap<>();
 		for (GuildMessageChannel chn : getChannels()) {
-			if (!chn.canTalk()) continue;
+			try {
+				if (!chn.canTalk()) continue;
 
-			String msg = buffer.remove(chn.getId()).toString();
-			if (!msg.isBlank()) {
-				acts.put(chn.getId(), chn.sendMessage(msg));
+				String msg = buffer.remove(chn.getId()).toString();
+				if (!msg.isBlank()) {
+					acts.put(chn.getId(), chn.sendMessage(msg));
+				}
+			} catch (Exception e) {
+				Constants.LOGGER.error("Failed to flush message: {}", e, e);
 			}
 		}
 

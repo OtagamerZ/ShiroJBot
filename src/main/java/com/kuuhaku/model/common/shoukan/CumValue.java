@@ -51,7 +51,8 @@ public class CumValue implements Iterable<ValueMod> {
 			switch (mod) {
 				case IncMod _ -> inc += mod.getValue();
 				case MultMod _ -> mult *= 1 + mod.getValue();
-				default -> throw new IllegalStateException("Unexpected value: " + mod);
+				default -> {
+				}
 			}
 		}
 
