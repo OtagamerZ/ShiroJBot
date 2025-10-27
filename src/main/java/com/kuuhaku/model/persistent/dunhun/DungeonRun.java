@@ -3,10 +3,14 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.AreaMap;
 import com.kuuhaku.model.common.dunhun.Node;
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.id.DungeonRunId;
+import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -56,17 +60,10 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@OrderBy("id")
 	private List<RunModifier> modifiers = new ArrayList<>();
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@Column(name = "node", nullable = false)
-	@CollectionTable(
-			schema = "dunhun",
-			name = "dungeon_run_visited_node",
-			joinColumns = {
-					@JoinColumn(name = "hero_id"),
-					@JoinColumn(name = "dungeon_id")
-			}
-	)
-	private Set<String> visitedNodes = new HashSet<>();
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "visited_nodes", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray visitedNodes = new JSONArray();
 
 	public DungeonRun() {
 	}
@@ -89,7 +86,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 		return dungeon;
 	}
 
-	public Set<String> getVisitedNodes() {
+	public JSONArray getVisitedNodes() {
 		return visitedNodes;
 	}
 
@@ -126,9 +123,19 @@ public class DungeonRun extends DAO<DungeonRun> {
 	}
 
 	public void setNode(Node node) {
-		floor = node.getSublevel().getFloor().getFloor();
-		sublevel = node.getSublevel().getSublevel();
-		path = node.getPath();
+		int newFloor = node.getSublevel().getFloor().getFloor();
+		int newSublevel = node.getSublevel().getSublevel();
+		int newPath = node.getPath();
+
+		if (newFloor != floor || newSublevel != sublevel || newPath != path) {
+			if (!visitedNodes.contains(node.getId())) {
+				visitedNodes.add(node.getId());
+			}
+		}
+
+		floor = newFloor;
+		sublevel = newSublevel;
+		path = newPath;
 
 		AreaMap map = node.getSublevel().getFloor().getMap();
 		map.getRenderFloor().set(floor);

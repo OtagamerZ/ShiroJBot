@@ -50,6 +50,8 @@ import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -388,7 +390,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 					if (deadEnd) {
 						run.delete();
 					} else {
-						run.getVisitedNodes().add(map.getPlayerNode().getId());
 						run.save();
 					}
 				}
