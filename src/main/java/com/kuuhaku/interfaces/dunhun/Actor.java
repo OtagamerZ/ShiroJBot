@@ -156,6 +156,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		boolean crit = Calc.chance(critChance);
 		if (crit) value *= 2;
 
+		value = (int) (value < 0 ? modifiers.getDamageMult() : modifiers.getHealMult()).apply(value);
+
 		AtomicInteger val = new AtomicInteger(value);
 		Combat cbt = binding.getGame().getCombat();
 		if (cbt != null) {

@@ -44,6 +44,9 @@ public class ActorModifiers implements Iterable<CumValue> {
 	private final CumValue aggro = new CumValue();
 	private final CumValue magicFind = new CumValue();
 
+	private final CumValue healMult = new CumValue();
+	private final CumValue damageMult = new CumValue();
+
 	private final Set<EffectBase> permEffects = new HashSet<>();
 	private final TimedMap<EffectBase> tempEffects = new TimedMap<>();
 	private Actor<?> channeled;
@@ -76,6 +79,14 @@ public class ActorModifiers implements Iterable<CumValue> {
 
 	public CumValue getMagicFind() {
 		return magicFind;
+	}
+
+	public CumValue getHealMult() {
+		return healMult;
+	}
+
+	public CumValue getDamageMult() {
+		return damageMult;
 	}
 
 	public void addEffect(Actor<?> source, ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
