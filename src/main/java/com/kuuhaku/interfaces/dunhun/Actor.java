@@ -161,12 +161,16 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		if (cbt != null) {
 			if (source != null) {
 				if (hp > 0) {
+					if (value < 0) {
+						cbt.trigger(Trigger.ON_HIT, source, this);
+					}
+
 					cbt.trigger(value < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, val);
 					if (hp + value <= 0) {
-						cbt.trigger(Trigger.ON_GRAVEYARD, source, this, val);
+						cbt.trigger(Trigger.ON_GRAVEYARD, source, this);
 					}
 				} else if (hp + value > 0) {
-					cbt.trigger(Trigger.ON_REVIVE, source, this, val);
+					cbt.trigger(Trigger.ON_REVIVE, source, this);
 				}
 			}
 

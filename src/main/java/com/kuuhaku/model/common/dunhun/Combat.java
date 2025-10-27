@@ -254,7 +254,7 @@ public class Combat implements Renderer<BufferedImage> {
 					actor.getSenshi().setDefending(false);
 					actor.getModifiers().expireMods(actor);
 
-					trigger(Trigger.ON_TURN_BEGIN, actor, actor, new AtomicInteger());
+					trigger(Trigger.ON_TURN_BEGIN, actor, actor);
 
 					while (actor == getCurrent() && actor.getAp() > 0) {
 						if (!actor.getSenshi().isAvailable() || actor.isOutOfCombat()) break;
@@ -267,7 +267,7 @@ public class Combat implements Renderer<BufferedImage> {
 						}
 					}
 
-					trigger(Trigger.ON_TURN_END, actor, actor, new AtomicInteger());
+					trigger(Trigger.ON_TURN_END, actor, actor);
 				} finally {
 					actor.getSenshi().setAvailable(true);
 
@@ -659,7 +659,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 		trigger(Trigger.ON_ATTACK, source, target, dmg);
 		target.modHp(source, -dmg.get(), source.getCritical());
-		trigger(Trigger.ON_HIT, source, target, dmg);
 
 		if (target.getHp() == 0) {
 			trigger(Trigger.ON_KILL, source, target, dmg);
