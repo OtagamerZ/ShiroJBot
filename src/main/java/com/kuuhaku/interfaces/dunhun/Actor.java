@@ -136,8 +136,16 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		setAp(getAp() - value);
 	}
 
+	public int heal(int value) {
+		return heal(this, value);
+	}
+
 	public int heal(Actor<?> source, int value) {
 		return modHp(source, Math.max(0, value), 0);
+	}
+
+	public int damage(int value) {
+		return damage(this, value);
 	}
 
 	public int damage(Actor<?> source, int value) {
