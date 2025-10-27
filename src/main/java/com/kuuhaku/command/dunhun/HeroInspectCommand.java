@@ -105,6 +105,7 @@ public class HeroInspectCommand implements Executable {
 
 			tgs.addAll(tags.stream()
 					.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
+					.filter(t -> !t.isEmpty())
 					.toList()
 			);
 
@@ -168,7 +169,7 @@ public class HeroInspectCommand implements Executable {
 			eb.appendDescription("-# %s - %s - %s%s\n".formatted(
 					locale.get("str/" + ga.getAffix().getType()),
 					locale.get("str/tier", ga.getAffix().getTier()), ga.getName(locale),
-					ga.getAffix().getTags().isEmpty() ? "" : ga.getAffix().getTags().stream()
+					ga.getAffix().getTags().isEmpty() ? "" : " - " + ga.getAffix().getTags().stream()
 							.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
 							.collect(Collectors.joining(", "))
 			));
