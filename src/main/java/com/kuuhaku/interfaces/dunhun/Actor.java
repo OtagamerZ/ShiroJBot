@@ -137,7 +137,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public int heal(int value) {
-		return heal(this, value);
+		return heal(null, value);
 	}
 
 	public int heal(Actor<?> source, int value) {
@@ -145,7 +145,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public int damage(int value) {
-		return damage(this, value);
+		return damage(null, value);
 	}
 
 	public int damage(Actor<?> source, int value) {
