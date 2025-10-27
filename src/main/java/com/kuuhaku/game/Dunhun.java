@@ -71,7 +71,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 		m.put("centercenter", "*️⃣");
 	});
 
-	private final ExecutorService main = Executors.newSingleThreadExecutor();
 	private final Dungeon dungeon;
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
@@ -166,257 +165,255 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@Override
 	protected void begin() {
-		CompletableFuture.runAsync(() -> {
-			while (!isClosed()) {
-				try {
-					if (duel) {
-						combat.set(new Combat(this, map.getPlayerNode(), heroes.values()));
-						getCombat().process();
+		while (!isClosed()) {
+			try {
+				if (duel) {
+					combat.set(new Combat(this, map.getPlayerNode(), heroes.values()));
+					getCombat().process();
 
-						Hero winner = heroes.values().stream()
-								.filter(h -> !h.isOutOfCombat())
-								.findFirst().orElse(null);
+					Hero winner = heroes.values().stream()
+							.filter(h -> !h.isOutOfCombat())
+							.findFirst().orElse(null);
 
-						if (winner != null) {
-							reportResult(GameReport.SUCCESS, "str/versus_end_win", winner.getName());
-						} else {
-							reportResult(GameReport.SUCCESS, "str/versus_end_draw");
-						}
-
-						break;
+					if (winner != null) {
+						reportResult(GameReport.SUCCESS, "str/versus_end_win", winner.getName());
+					} else {
+						reportResult(GameReport.SUCCESS, "str/versus_end_draw");
 					}
 
-					try {
-						DungeonRun run = map.getRun();
-						String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel() + 1);
-						EmbedBuilder eb = new ColorlessEmbedBuilder()
-								.setTitle(dungeon.getInfo(getLocale()).getName() + " (" + area + ")")
-								.setImage("attachment://dungeon.jpg")
-								.setFooter(getLocale().get("str/dungeon_level", getAreaLevel()));
+					break;
+				}
 
-						if (!run.getModifiers().isEmpty()) {
-							XStringBuilder sb = new XStringBuilder();
-							for (RunModifier mod : run.getModifiers()) {
-								sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
-							}
+				try {
+					DungeonRun run = map.getRun();
+					String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel() + 1);
+					EmbedBuilder eb = new ColorlessEmbedBuilder()
+							.setTitle(dungeon.getInfo(getLocale()).getName() + " (" + area + ")")
+							.setImage("attachment://dungeon.jpg")
+							.setFooter(getLocale().get("str/dungeon_level", getAreaLevel()));
 
-							eb.addField(getLocale().get("str/dungeon_run_modifiers"), sb.toString(), false);
+					if (!run.getModifiers().isEmpty()) {
+						XStringBuilder sb = new XStringBuilder();
+						for (RunModifier mod : run.getModifiers()) {
+							sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
 						}
 
-						Floor fl = map.getFloor();
-						fl.generateModifiers(this);
-						for (RunModifier mod : getModifiers()) {
-							mod.toEffect(this);
+						eb.addField(getLocale().get("str/dungeon_run_modifiers"), sb.toString(), false);
+					}
+
+					Floor fl = map.getFloor();
+					fl.generateModifiers(this);
+					for (RunModifier mod : getModifiers()) {
+						mod.toEffect(this);
+					}
+
+					if (!fl.getModifiers().isEmpty()) {
+						XStringBuilder sb = new XStringBuilder();
+						for (RunModifier mod : fl.getModifiers()) {
+							sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
 						}
 
-						if (!fl.getModifiers().isEmpty()) {
-							XStringBuilder sb = new XStringBuilder();
-							for (RunModifier mod : fl.getModifiers()) {
-								sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
-							}
+						eb.addField(getLocale().get("str/dungeon_floor_modifiers"), sb.toString(), false);
+					}
 
-							eb.addField(getLocale().get("str/dungeon_floor_modifiers"), sb.toString(), false);
-						}
+					BufferedImage bi = map.render(getLocale(), 900, 900);
+					ButtonizeHelper helper = new ButtonizeHelper(true)
+							.setTimeout(5, TimeUnit.MINUTES)
+							.setCanInteract(u -> u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers()))
+							.setCancellable(false);
 
-						BufferedImage bi = map.render(getLocale(), 900, 900);
-						ButtonizeHelper helper = new ButtonizeHelper(true)
-								.setTimeout(5, TimeUnit.MINUTES)
-								.setCanInteract(u -> u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers()))
-								.setCancellable(false);
+					Node currNode = map.getPlayerNode();
+					List<String> order = List.copyOf(ICONS.keySet());
+					List<Map.Entry<String, Node>> children = currNode.getChildren().stream()
+							.map(n -> Map.entry(currNode.getPathVerb(n), n))
+							.sorted(Comparator.comparingInt(e -> order.indexOf(e.getKey())))
+							.toList();
 
-						Node currNode = map.getPlayerNode();
-						List<String> order = List.copyOf(ICONS.keySet());
-						List<Map.Entry<String, Node>> children = currNode.getChildren().stream()
-								.map(n -> Map.entry(currNode.getPathVerb(n), n))
-								.sorted(Comparator.comparingInt(e -> order.indexOf(e.getKey())))
-								.toList();
+					Set<Choice> choices = new LinkedHashSet<>();
+					AtomicReference<String> chosenPath = new AtomicReference<>();
+					for (Map.Entry<String, Node> entry : children) {
+						String path = entry.getKey();
+						Node node = entry.getValue();
 
-						Set<Choice> choices = new LinkedHashSet<>();
-						AtomicReference<String> chosenPath = new AtomicReference<>();
-						for (Map.Entry<String, Node> entry : children) {
-							String path = entry.getKey();
-							Node node = entry.getValue();
-
-							choices.add(new Choice(
-									"path-" + path,
-									Utils.parseEmoji(ICONS.get(path)),
-									_ -> {
-										run.setNode(node);
-										nodeRng.setSeed(node.getSeed());
-										chosenPath.set(getLocale().get("str/" + path));
-										return null;
-									}
-							));
-						}
-
-						choices.add(new Choice("leave", getLocale().get("str/leave_dungeon"), w -> {
-							finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
-							return null;
-						}));
-
-						try {
-							requestChoice(eb, bi, helper, choices);
-							if (isClosed()) return;
-						} catch (Exception ignore) {
-							return;
-						}
-
-						int floor = run.getFloor();
-						if (floor != fl.getFloor()) {
-							if (dungeon.isInfinite()) {
-								map.generate();
-							}
-
-							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor",
-									chosenPath.get(),
-									floor, getLocale().get("str/" + (floor > 3 ? "n" : floor) + "_suffix")
-							))).queue();
-						} else {
-							getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
-									chosenPath.get()
-							))).queue();
-						}
-
-						Node nextNode = map.getPlayerNode();
-						switch (nextNode.getType()) {
-							case NONE, DANGER -> runCombat(nextNode);
-							case EVENT -> runEvent(nextNode, Event.getRandom(nextNode));
-							case REST -> runEvent(nextNode, Event.find(Event.class, "REST"));
-							case BOSS -> {
-								Set<String> pool = nextNode.getEnemyPool();
-								if (!pool.isEmpty()) {
-									beginCombat(nextNode, DAO.find(Boss.class, Utils.getRandomEntry(nodeRng, pool)));
-								} else {
-									beginCombat(nextNode, Boss.getRandom());
+						choices.add(new Choice(
+								"path-" + path,
+								Utils.parseEmoji(ICONS.get(path)),
+								_ -> {
+									run.setNode(node);
+									nodeRng.setSeed(node.getSeed());
+									chosenPath.set(getLocale().get("str/" + path));
+									return null;
 								}
-							}
+						));
+					}
+
+					choices.add(new Choice("leave", getLocale().get("str/leave_dungeon"), w -> {
+						finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
+						return null;
+					}));
+
+					try {
+						requestChoice(eb, bi, helper, choices);
+						if (isClosed()) return;
+					} catch (Exception ignore) {
+						return;
+					}
+
+					int floor = run.getFloor();
+					if (floor != fl.getFloor()) {
+						if (dungeon.isInfinite()) {
+							map.generate();
 						}
 
-						if (getCombat() != null && getCombat().isDone()) {
-							if (getCombat().isWin()) {
-								grantCombatLoot();
-							} else {
-								try {
-									Collection<Hero> hs = heroes.values();
-									if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
-										for (Hero h : hs) {
-											double xpPrcnt = 0;
-											if (getAreaLevel() >= LEVEL_BRUTAL) {
-												xpPrcnt = 0.4;
-											} else if (getAreaLevel() >= LEVEL_HARD) {
-												xpPrcnt = 0.2;
-											}
+						getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor",
+								chosenPath.get(),
+								floor, getLocale().get("str/" + (floor > 3 ? "n" : floor) + "_suffix")
+						))).queue();
+					} else {
+						getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_area",
+								chosenPath.get()
+						))).queue();
+					}
 
-											h.getStats().loseXp((int) (h.getStats().getLosableXp() * xpPrcnt));
-											h.save();
+					Node nextNode = map.getPlayerNode();
+					switch (nextNode.getType()) {
+						case NONE, DANGER -> runCombat(nextNode);
+						case EVENT -> runEvent(nextNode, Event.getRandom(nextNode));
+						case REST -> runEvent(nextNode, Event.find(Event.class, "REST"));
+						case BOSS -> {
+							Set<String> pool = nextNode.getEnemyPool();
+							if (!pool.isEmpty()) {
+								beginCombat(nextNode, DAO.find(Boss.class, Utils.getRandomEntry(nodeRng, pool)));
+							} else {
+								beginCombat(nextNode, Boss.getRandom());
+							}
+						}
+					}
+
+					if (getCombat() != null && getCombat().isDone()) {
+						if (getCombat().isWin()) {
+							grantCombatLoot();
+						} else {
+							try {
+								Collection<Hero> hs = heroes.values();
+								if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
+									for (Hero h : hs) {
+										double xpPrcnt = 0;
+										if (getAreaLevel() >= LEVEL_BRUTAL) {
+											xpPrcnt = 0.4;
+										} else if (getAreaLevel() >= LEVEL_HARD) {
+											xpPrcnt = 0.2;
 										}
 
-										reportResult(GameReport.SUCCESS, "str/dungeon_fail",
-												getHeroNames(), run.getFloor(), run.getSublevel() + 1
-										);
+										h.getStats().loseXp((int) (h.getStats().getLosableXp() * xpPrcnt));
+										h.save();
+									}
 
-										if (dungeon.isHardcore()) {
-											try {
-												if (hs.size() == 1) {
-													Hero h = hs.iterator().next();
-													int rank = DAO.queryNative(Integer.class,
-															"SELECT rank FROM dungeon_ranking(?1) WHERE hero_id = ?2",
-															dungeon.getId(), h.getId()
-													);
+									reportResult(GameReport.SUCCESS, "str/dungeon_fail",
+											getHeroNames(), run.getFloor(), run.getSublevel() + 1
+									);
 
-													if (rank > 0) {
-														Main.getApp().getMessageChannelById("971503733202628698")
-																.sendMessage(getLocale().get("loss/dungeon_death",
-																		h.getName(), rank, run.getFloor(), dungeon.getInfo(getLocale()).getName()
-																))
-																.queue();
+									if (dungeon.isHardcore()) {
+										try {
+											if (hs.size() == 1) {
+												Hero h = hs.iterator().next();
+												int rank = DAO.queryNative(Integer.class,
+														"SELECT rank FROM dungeon_ranking(?1) WHERE hero_id = ?2",
+														dungeon.getId(), h.getId()
+												);
+
+												if (rank > 0) {
+													Main.getApp().getMessageChannelById("971503733202628698")
+															.sendMessage(getLocale().get("loss/dungeon_death",
+																	h.getName(), rank, run.getFloor(), dungeon.getInfo(getLocale()).getName()
+															))
+															.queue();
 //														Utils.broadcast("loss/dungeon_death", loc -> List.of(
 //																h.getName(), rank, run.getFloor(), dungeon.getInfo(loc).getName()
 //														));
-													}
 												}
-											} catch (Exception ignore) {
-											} finally {
-												run.delete();
 											}
-
-											return;
+										} catch (Exception ignore) {
+										} finally {
+											run.delete();
 										}
+
+										return;
 									}
-								} finally {
-									run.setNode(currNode);
 								}
+							} finally {
+								run.setNode(currNode);
 							}
 						}
+					}
 
-						if (dungeon.isInfinite() && run.getFloor() % 10 == 0 && heroes.size() == 1) {
-							Hero h = heroes.values().iterator().next();
+					if (dungeon.isInfinite() && run.getFloor() % 10 == 0 && heroes.size() == 1) {
+						Hero h = heroes.values().iterator().next();
 
-							try {
-								GlobalProperty gp = DAO.find(GlobalProperty.class, "highest_floor_" + dungeon.getId().toLowerCase());
-								if (gp == null) {
-									gp = new GlobalProperty("highest_floor_" + dungeon.getId().toLowerCase(), 0);
-								}
+						try {
+							GlobalProperty gp = DAO.find(GlobalProperty.class, "highest_floor_" + dungeon.getId().toLowerCase());
+							if (gp == null) {
+								gp = new GlobalProperty("highest_floor_" + dungeon.getId().toLowerCase(), 0);
+							}
 
-								if (run.getFloor() > NumberUtils.toInt(gp.getValue())) {
-									gp.setValue(run.getFloor());
-									gp.save();
+							if (run.getFloor() > NumberUtils.toInt(gp.getValue())) {
+								gp.setValue(run.getFloor());
+								gp.save();
 
-									Main.getApp().getMessageChannelById("971503733202628698")
-											.sendMessage(getLocale().get("achievement/dungeon_floor",
-													h.getName(), h.getAccount().getName(), run.getFloor(), dungeon.getInfo(getLocale()).getName()
-											))
-											.queue();
+								Main.getApp().getMessageChannelById("971503733202628698")
+										.sendMessage(getLocale().get("achievement/dungeon_floor",
+												h.getName(), h.getAccount().getName(), run.getFloor(), dungeon.getInfo(getLocale()).getName()
+										))
+										.queue();
 //									Utils.broadcast("achievement/dungeon_floor", loc -> List.of(
 //											h.getName(), h.getAccount().getName(), run.getFloor(), dungeon.getInfo(loc).getName()
 //									));
-								}
-							} catch (Exception ignore) {
 							}
+						} catch (Exception ignore) {
 						}
-					} catch (Exception e) {
-						Constants.LOGGER.error(e, e);
-					}
-
-					boolean deadEnd = map.getPlayerNode().getChildren().isEmpty();
-					if (dungeon.isInfinite()) {
-						DungeonRun run = map.getRun();
-
-						Set<DungeonRunPlayer> pls = run.getPlayers();
-						for (Hero h : heroes.values()) {
-							DungeonRunPlayer p = new DungeonRunPlayer(run, h);
-							pls.remove(p);
-							pls.add(p);
-						}
-
-						if (deadEnd) {
-							run.delete();
-						} else {
-							run.save();
-						}
-					}
-
-					if (deadEnd) {
-						if (getAreaType() == NodeType.BOSS) {
-							for (Hero h : heroes.values()) {
-								h.getCompletedDungeons().add(dungeon);
-								h.save();
-							}
-
-							finish("str/dungeon_end", getHeroNames());
-							return;
-						}
-
-						finish("str/dungeon_lost", getHeroNames());
-						return;
 					}
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
-					getChannel().sendMessage(getLocale().get("error/error", e)).queue();
-					close(GameReport.OTHER);
 				}
+
+				boolean deadEnd = map.getPlayerNode().getChildren().isEmpty();
+				if (dungeon.isInfinite()) {
+					DungeonRun run = map.getRun();
+
+					Set<DungeonRunPlayer> pls = run.getPlayers();
+					for (Hero h : heroes.values()) {
+						DungeonRunPlayer p = new DungeonRunPlayer(run, h);
+						pls.remove(p);
+						pls.add(p);
+					}
+
+					if (deadEnd) {
+						run.delete();
+					} else {
+						run.save();
+					}
+				}
+
+				if (deadEnd) {
+					if (getAreaType() == NodeType.BOSS) {
+						for (Hero h : heroes.values()) {
+							h.getCompletedDungeons().add(dungeon);
+							h.save();
+						}
+
+						finish("str/dungeon_end", getHeroNames());
+						return;
+					}
+
+					finish("str/dungeon_lost", getHeroNames());
+					return;
+				}
+			} catch (Exception e) {
+				Constants.LOGGER.error(e, e);
+				getChannel().sendMessage(getLocale().get("error/error", e)).queue();
+				close(GameReport.OTHER);
 			}
-		}, main);
+		}
 	}
 
 	private void grantCombatLoot() {

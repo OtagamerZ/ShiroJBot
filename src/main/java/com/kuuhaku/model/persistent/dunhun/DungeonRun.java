@@ -126,9 +126,17 @@ public class DungeonRun extends DAO<DungeonRun> {
 	}
 
 	public void setNode(Node node) {
-		floor = node.getSublevel().getFloor().getFloor();
-		sublevel = node.getSublevel().getSublevel();
-		path = node.getPath();
+		int newFloor = node.getSublevel().getFloor().getFloor();
+		int newSublevel = node.getSublevel().getSublevel();
+		int newPath = node.getPath();
+
+		if (newFloor != floor || newSublevel != sublevel || newPath != path) {
+			visitedNodes.add(node.getId());
+		}
+
+		floor = newFloor;
+		sublevel = newSublevel;
+		path = newPath;
 
 		AreaMap map = node.getSublevel().getFloor().getMap();
 		map.getRenderFloor().set(floor);
@@ -136,7 +144,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 		int subOffset = sublevel / map.getAreasPerFloor();
 		map.getRenderSublevel().set(subOffset * map.getAreasPerFloor());
 
-		visitedNodes.add(node.getId());
+
 	}
 
 	public Set<DungeonRunPlayer> getPlayers() {
