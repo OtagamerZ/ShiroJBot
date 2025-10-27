@@ -145,7 +145,7 @@ public class Affix extends DAO<Affix> {
 					"ctx", new ActorContext(actor)
 			));
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to apply monster modifier {}", id, e);
+			Constants.LOGGER.warn("Failed to apply actor modifier {}", id, e);
 		}
 	}
 

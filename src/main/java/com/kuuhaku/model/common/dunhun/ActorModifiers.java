@@ -78,12 +78,12 @@ public class ActorModifiers implements Iterable<CumValue> {
 		return magicFind;
 	}
 
-	public void addEffect(Actor<?> source, ThrowingBiConsumer<EffectBase, CombatContext> effect) {
-		addEffect(source, effect, -1, -1);
+	public void addEffect(Actor<?> source, ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
+		addEffect(source, effect, -1, -1, triggers);
 	}
 
 	public void addEffect(Actor<?> source, ThrowingBiConsumer<EffectBase, CombatContext> effect, int duration, int limit, Trigger... triggers) {
-		if (triggers.length == 0 && duration < 0) {
+		if (triggers.length == 0 && duration < 0 && limit < 0) {
 			permEffects.add(new PersistentEffect(source, effect));
 			return;
 		}
