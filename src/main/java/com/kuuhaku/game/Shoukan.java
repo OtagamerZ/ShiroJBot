@@ -194,7 +194,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	@Override
-	protected void runtime(User user, String value) {
+	protected void onMessage(User user, String value) {
 		Hand hand = getCurrent();
 
 		Pair<Method, JSONObject> action = toAction(

@@ -91,7 +91,7 @@ public class Shiritori extends GameInstance<NullPhase> {
 	}
 
 	@Override
-	protected void runtime(User user, String value) throws InvocationTargetException, IllegalAccessException {
+	protected void onMessage(User user, String value) throws InvocationTargetException, IllegalAccessException {
 		Pair<Method, JSONObject> action = toAction(StringUtils.stripAccents(value).toLowerCase());
 		if (action != null) {
 			action.getFirst().invoke(this, action.getSecond());

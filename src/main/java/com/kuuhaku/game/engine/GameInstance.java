@@ -91,7 +91,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 				if (event.getAuthor().getId().equals(moderator) || (Utils.equalsAny(event.getAuthor().getId(), players) && validate(event.getMessage()))) {
 					try {
-						runtime(event.getAuthor(), event.getMessage().getContentRaw());
+						onMessage(event.getAuthor(), event.getMessage().getContentRaw());
 					} catch (InvocationTargetException | IllegalAccessException e) {
 						Constants.LOGGER.error(e, e);
 					}
@@ -120,7 +120,9 @@ public abstract class GameInstance<T extends Enum<T>> {
 				begin();
 				GuildListener.addHandler(guild, sml);
 				initialized = true;
+				runtime();
 				exec.join();
+				dispose();
 			} catch (GameReport e) {
 				initialized = true;
 				//noinspection MagicConstant
@@ -153,9 +155,16 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 	protected abstract boolean validate(Message message);
 
-	protected abstract void begin();
+	protected abstract void onMessage(User user, String value) throws InvocationTargetException, IllegalAccessException;
 
-	protected abstract void runtime(User user, String value) throws InvocationTargetException, IllegalAccessException;
+	protected void begin() {
+	}
+
+	protected void runtime() {
+	}
+
+	protected void dispose() {
+	}
 
 	public I18N getLocale() {
 		return locale;

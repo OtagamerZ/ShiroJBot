@@ -50,8 +50,6 @@ import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -164,7 +162,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	@Override
-	protected void begin() {
+	protected void runtime() {
 		while (!isClosed()) {
 			try {
 				if (duel) {
@@ -416,6 +414,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 	}
 
+	@Override
+	protected void onMessage(User user, String value) throws InvocationTargetException, IllegalAccessException {
+		Pair<Method, JSONObject> action = toAction(StringUtils.stripAccents(value).toLowerCase());
+		if (action != null) {
+			action.getFirst().invoke(this, action.getSecond(), user);
+		}
+	}
+
 	private void grantCombatLoot() {
 		int xpGained = 0;
 		double mf = 1 + heroes.values().stream()
@@ -605,6 +611,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 			for (Choice c : choices) {
 				ThrowingConsumer<ButtonWrapper> act = w -> {
+					if (isClosed()) {
+						lock.complete(null);
+						return;
+					}
+
 					if (getPartySize() <= 1) {
 						votes.put(w.getUser().getId(), c.id());
 					} else {
@@ -756,14 +767,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		reportResult(GameReport.SUCCESS, message, args);
-	}
-
-	@Override
-	protected void runtime(User user, String value) throws InvocationTargetException, IllegalAccessException {
-		Pair<Method, JSONObject> action = toAction(StringUtils.stripAccents(value).toLowerCase());
-		if (action != null) {
-			action.getFirst().invoke(this, action.getSecond(), user);
-		}
 	}
 
 	@PlayerAction("reload")
