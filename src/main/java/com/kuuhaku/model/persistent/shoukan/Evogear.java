@@ -572,9 +572,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			return false;
 		} catch (Exception e) {
 			Drawable<?> source = Utils.getOr(stats.getSource(), this);
+			String name = source.getVanity().getName();
 
 			game.getChannel().sendMessage(game.getString("error/effect")).queue();
-			Constants.LOGGER.warn("Failed to execute {} effect\n{}", this, "/* " + source + " */\n" + getEffect(), e);
+			Constants.LOGGER.warn("Failed to execute {} effect\n{}", getVanity().getName(), "/* " + name + " */\n" + getEffect(), e);
 			return false;
 		} finally {
 			currentTrigger = null;
