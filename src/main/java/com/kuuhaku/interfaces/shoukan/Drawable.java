@@ -215,7 +215,7 @@ public interface Drawable<T extends Drawable<T>> {
 	default boolean checkRemoval(Hand h, boolean allowEth, BondedList<Drawable<?>> stack) {
 		return (!allowEth && isEthereal())
 			   || !Objects.equals(getHand(), h)
-			   || stack != getCurrentStack()
+			   || (stack != null && stack != getCurrentStack())
 			   || (this instanceof EffectHolder<?> eh && eh.hasFlag(Flag.DESTROY));
 	}
 
