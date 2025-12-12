@@ -2586,24 +2586,24 @@ public class Shoukan extends GameInstance<Phase> {
 							reportEvent("str/drawn_card", true, false, curr.getName(), rem, "s");
 						});
 					}
+				} else if (curr.getOrigins().major() == Race.DIVINITY && !curr.isCritical()) {
+					helper.addAction(getString("str/draw_ethereal"), w -> {
+						if (isLocked()) return;
 
-					if (curr.getOrigins().major() == Race.DIVINITY && !curr.isCritical()) {
-						helper.addAction(getString("str/draw_ethereal"), w -> {
-							if (isLocked()) return;
+						if (curr.selectionPending()) {
+							getChannel().sendMessage(getString("error/pending_choice")).queue();
+							return;
+						} else if (curr.selectionPending()) {
+							getChannel().sendMessage(getString("error/pending_action")).queue();
+							return;
+						}
 
-							if (curr.selectionPending()) {
-								getChannel().sendMessage(getString("error/pending_choice")).queue();
-								return;
-							} else if (curr.selectionPending()) {
-								getChannel().sendMessage(getString("error/pending_action")).queue();
-								return;
-							}
+						int eths = (int) curr.getCards().stream()
+								.filter(Drawable::isEthereal)
+								.count();
 
-							int eths = (int) curr.getCards().stream()
-									.filter(Drawable::isEthereal)
-									.count();
-
-							Drawable<?> d = curr.manualDraw();
+						Drawable<?> d = curr.manualDraw();
+						if (d != null) {
 							d.setEthereal(true);
 
 							int loss = (int) Math.max(2, curr.getBase().hp() * 0.06) * eths;
@@ -2614,8 +2614,8 @@ public class Shoukan extends GameInstance<Phase> {
 									.queue();
 
 							reportEvent("str/drawn_card", true, false, curr.getName(), 1, "");
-						});
-					}
+						}
+					});
 				}
 
 				if (curr.canUseDestiny() && !Utils.equalsAny(curr.getOrigins().major(), Race.MACHINE, Race.MYSTICAL)) {
