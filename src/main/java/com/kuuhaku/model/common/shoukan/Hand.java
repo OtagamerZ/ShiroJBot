@@ -115,7 +115,7 @@ public class Hand {
 			return false;
 		}
 
-		return !(d instanceof EffectHolder<?> eh && eh.hasFlag(Flag.DESTROY));
+		return !d.checkRemoval(this, true, getCards(false));
 	}, d -> d.setCurrentStack(getCards(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getDiscard(false).contains(d)) return false;
@@ -139,7 +139,7 @@ public class Hand {
 			return false;
 		}
 
-		return !(d instanceof EffectHolder<?> eh && eh.hasFlag(Flag.DESTROY));
+		return !d.checkRemoval(this, true, getDiscard(false));
 	}, d -> d.setCurrentStack(getDiscard(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> deck = new BondedList<>((d, it) -> {
 		if (getLockTime(Lock.DECK) > 0) return false;
@@ -173,7 +173,7 @@ public class Hand {
 			return false;
 		}
 
-		return !d.isEthereal() && !(d instanceof EffectHolder<?> eh && eh.hasFlag(Flag.DESTROY));
+		return !d.checkRemoval(this, false, getRealDeck(false));
 	}, d -> d.setCurrentStack(getRealDeck(false)), Utils::doNothing);
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
 		if (getGraveyard(false).contains(d)) return false;
@@ -248,7 +248,7 @@ public class Hand {
 			return false;
 		}
 
-		return !d.isEthereal() && !(d instanceof EffectHolder<?> eh && eh.hasFlag(Flag.DESTROY));
+		return !d.checkRemoval(this, false, getGraveyard(false));
 	}, d -> d.setCurrentStack(getGraveyard(false)), Utils::doNothing);
 	private final TimedMap<Lock> locks = new TimedMap<>();
 
