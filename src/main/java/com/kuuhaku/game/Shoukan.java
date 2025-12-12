@@ -2228,10 +2228,9 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private ButtonizeHelper makeSelector(Hand hand, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action, List<Pair<Object, ThrowingConsumer<ButtonWrapper>>> extra) {
-		Hand curr = getCurrent();
 		ButtonizeHelper selector = new ButtonizeHelper(true)
 				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract((u, b) -> canInteract(curr, u, b, List.of()))
+				.setCanInteract((u, b) -> canInteract(hand, u, b, List.of()))
 				.setCancellable(false);
 
 		for (int row = 0; row < rows; row++) {
@@ -2587,34 +2586,36 @@ public class Shoukan extends GameInstance<Phase> {
 							reportEvent("str/drawn_card", true, false, curr.getName(), rem, "s");
 						});
 					}
-				} else if (curr.getOrigins().major() == Race.DIVINITY && !curr.isCritical()) {
-					helper.addAction(getString("str/draw_ethereal"), w -> {
-						if (isLocked()) return;
 
-						if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_choice")).queue();
-							return;
-						} else if (curr.selectionPending()) {
-							getChannel().sendMessage(getString("error/pending_action")).queue();
-							return;
-						}
+					if (curr.getOrigins().major() == Race.DIVINITY && !curr.isCritical()) {
+						helper.addAction(getString("str/draw_ethereal"), w -> {
+							if (isLocked()) return;
 
-						int eths = (int) curr.getCards().stream()
-								.filter(Drawable::isEthereal)
-								.count();
+							if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_choice")).queue();
+								return;
+							} else if (curr.selectionPending()) {
+								getChannel().sendMessage(getString("error/pending_action")).queue();
+								return;
+							}
 
-						Drawable<?> d = curr.manualDraw();
-						d.setEthereal(true);
+							int eths = (int) curr.getCards().stream()
+									.filter(Drawable::isEthereal)
+									.count();
 
-						int loss = (int) Math.max(2, curr.getBase().hp() * 0.06) * eths;
-						curr.setHP(Math.max(1, curr.getHP() - loss));
-						Objects.requireNonNull(w.getHook())
-								.setEphemeral(true)
-								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
-								.queue();
+							Drawable<?> d = curr.manualDraw();
+							d.setEthereal(true);
 
-						reportEvent("str/drawn_card", true, false, curr.getName(), 1, "");
-					});
+							int loss = (int) Math.max(2, curr.getBase().hp() * 0.06) * eths;
+							curr.setHP(Math.max(1, curr.getHP() - loss));
+							Objects.requireNonNull(w.getHook())
+									.setEphemeral(true)
+									.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
+									.queue();
+
+							reportEvent("str/drawn_card", true, false, curr.getName(), 1, "");
+						});
+					}
 				}
 
 				if (curr.canUseDestiny() && !Utils.equalsAny(curr.getOrigins().major(), Race.MACHINE, Race.MYSTICAL)) {
@@ -2951,6 +2952,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 				AtomicReference<Message> message = new AtomicReference<>();
 				ButtonizeHelper source = makeSelector(h, 5, 1, (par, j, i) -> {
+					Senshi card = slots.get(i - 1).getTop();
+					if (card == null) {
+						getChannel().sendMessage(getString("error/invalid_selection_index")).queue();
+						return;
+					}
+
 					List<Pair<Integer, Boolean>> targetDisable = new ArrayList<>();
 					List<SlotColumn> other = getSlots(h.getSide().getOther());
 					if (other.parallelStream().noneMatch(sc -> sc.hasTop() || sc.hasBottom())) {
@@ -2971,7 +2978,6 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 
 					ButtonizeHelper target;
-					Senshi card = slots.get(i - 1).getTop();
 					List<Pair<Object, ThrowingConsumer<ButtonWrapper>>> extra = new ArrayList<>();
 					if (arena.isFieldEmpty(h.getSide().getOther()) || card.hasFlag(Flag.DIRECT)) {
 						extra.add(new Pair<>(h.getOther().getName(), bw -> {
@@ -3018,7 +3024,7 @@ public class Shoukan extends GameInstance<Phase> {
 		helper.addAction(getString("str/card_skill"), w -> {
 			AtomicReference<Message> message = new AtomicReference<>();
 			List<SlotColumn> slots = getSlots(curr.getSide());
-			if (slots.parallelStream().map(SlotColumn::getTop).filter(Objects::nonNull).noneMatch(Senshi::isAvailable)) {
+			if (slots.parallelStream().map(SlotColumn::getTop).noneMatch(s -> s != null && s.isAvailable())) {
 				getChannel().sendMessage(getString("error/no_cards")).queue();
 				return;
 			}
@@ -3032,9 +3038,13 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			ButtonizeHelper source = makeSelector(curr, 5, 1, (par, j, i) -> {
-				JSONObject args = JSONObject.of(Map.entry("inField", i));
-
 				Senshi card = slots.get(i - 1).getTop();
+				if (card == null) {
+					getChannel().sendMessage(getString("error/invalid_selection_index")).queue();
+					return;
+				}
+
+				JSONObject args = JSONObject.of(Map.entry("inField", i));
 				List<TargetType> passes = switch (card.getTargetType()) {
 					case NONE -> List.of();
 					case ALLY -> List.of(TargetType.ALLY);
