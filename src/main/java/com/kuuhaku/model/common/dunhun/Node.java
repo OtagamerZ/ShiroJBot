@@ -123,9 +123,11 @@ public class Node {
 	public int travelDistance(Node node) {
 		if (node == null || equals(node)) return 0;
 
-		for (Node parent : parents) {
-			int dist = parent.travelDistance(node) + 1;
-			if (dist > 0) return dist;
+		if (sublevel.getSublevel() > node.getSublevel().getSublevel()) {
+			for (Node parent : parents) {
+				int dist = parent.travelDistance(node) + 1;
+				if (dist > 0) return dist;
+			}
 		}
 
 		return -1;
