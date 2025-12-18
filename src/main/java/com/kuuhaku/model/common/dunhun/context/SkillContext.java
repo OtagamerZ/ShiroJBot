@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SkillContext extends EffectContext {
-	private final List<Actor<?>> targets = new ArrayList<>();
+	private final List<Actor<?>> validTargets = new ArrayList<>();
 
 	private final Actor<?> source;
 	private final Actor<?> target;
@@ -42,7 +42,7 @@ public class SkillContext extends EffectContext {
 		return vars;
 	}
 
-	public List<Actor<?>> getTargets() {
-		return targets;
+	public List<Actor<?>> getValidTargets() {
+		return validTargets;
 	}
 }

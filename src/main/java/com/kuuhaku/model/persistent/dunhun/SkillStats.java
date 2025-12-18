@@ -107,7 +107,7 @@ public class SkillStats implements Serializable {
 			Constants.LOGGER.warn("Failed to load targets {}", id, e);
 		}
 
-		return ctx.getTargets();
+		return ctx.getValidTargets();
 	}
 
 	public CpuRule canCpuUse(String id, Actor<?> source, Actor<?> target) {
