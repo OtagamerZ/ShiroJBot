@@ -224,7 +224,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 					List<String> order = List.copyOf(ICONS.keySet());
 					List<Map.Entry<String, Node>> children = currNode.getChildren().stream()
 							.map(n -> Map.entry(currNode.getPathVerb(n), n))
-							.sorted(Comparator.comparingInt(e -> order.indexOf(e.getKey())))
+							.sorted(Comparator
+									.<Map.Entry<String, Node>>comparingInt(e -> order.indexOf(e.getKey()))
+									.thenComparingInt(e -> e.getValue().getPath())
+							)
 							.toList();
 
 					Set<Choice> choices = new LinkedHashSet<>();

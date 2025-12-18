@@ -235,20 +235,6 @@ public class Node {
 		return icon;
 	}
 
-	public String getPathIcon(List<Node> children) {
-		int idx = children.indexOf(this) + 1;
-		int sibls = children.size();
-
-		if (sibls % 2 == 1 && idx == sibls / 2 + 1) return "center";
-		else if (idx <= sibls / 2) {
-			if (idx == 1 && sibls > 3) return "leftmost";
-			return "left";
-		} else {
-			if (idx == sibls && sibls > 3) return "rightmost";
-			return "right";
-		}
-	}
-
 	public void renderPath(Graphics2D g2d, boolean reachable) {
 		for (Node child : children) {
 			Point to = child.getRenderPos();
