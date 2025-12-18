@@ -154,7 +154,7 @@ public class HeroInspectCommand implements Executable {
 			eb.appendDescription("-# " + locale.get("str/implicit") + "\n");
 			eb.appendDescription(imp.getDescription(locale, true) + "\n");
 			if (!g.getAffixes().isEmpty()) {
-				eb.appendDescription("──────────────────\n");
+				eb.appendDescription("────────────────\n");
 			}
 		}
 

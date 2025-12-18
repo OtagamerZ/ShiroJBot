@@ -523,7 +523,7 @@ public class HeroCommand implements Executable {
 								.map(l -> "-# " + l)
 								.forEach(sb::appendNewLine);
 
-						sb.appendNewLine("-# ──────────────────");
+						sb.appendNewLine("-# ────────────────");
 					}
 
 					for (String l : g.getAffixLines(locale)) {
