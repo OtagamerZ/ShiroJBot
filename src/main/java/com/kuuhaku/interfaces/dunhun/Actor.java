@@ -164,36 +164,35 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		if (cbt != null) {
 			if (source != null) {
 				if (hp > 0) {
-					if (value < 0) {
+					if (val.get() < 0) {
 						cbt.trigger(Trigger.ON_HIT, source, this);
 						if (crit) {
 							cbt.trigger(Trigger.ON_CRITICAL, source, this);
 						}
 					}
 
-					cbt.trigger(value < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, val);
-					if (hp + value <= 0) {
+					cbt.trigger(val.get() < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, val);
+					if (hp + val.get() <= 0) {
 						cbt.trigger(Trigger.ON_GRAVEYARD, source, this);
 					}
-				} else if (hp + value > 0) {
+				} else if (hp + val.get() > 0) {
 					cbt.trigger(Trigger.ON_REVIVE, source, this);
 				}
 			}
 
 			I18N locale = cbt.getLocale();
-			cbt.getHistory().add(locale.get(value < 0 ? "str/actor_damage" : "str/actor_heal",
-					getName(), Math.abs(value), crit ? ("**(" + locale.get("str/critical_hit") + ")**") : ""
+			cbt.getHistory().add(locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal",
+					getName(), Math.abs(val.get()), crit ? ("**(" + locale.get("str/critical_hit") + ")**") : ""
 			));
 
-			if (value < 0) {
+			if (val.get() < 0) {
 				getSenshi().reduceSleep(999);
 			}
 		}
 
-		value = val.get();
-		setHp(getHp() + value);
+		setHp(getHp() + val.get());
 
-		return Tuple2.tuple(value, crit);
+		return Tuple2.tuple(val.get(), crit);
 	}
 
 	public int applyMitigation(int raw) {
