@@ -23,6 +23,7 @@ import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.model.records.dunhun.RaceValues;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
+import groovy.lang.Tuple2;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
@@ -136,23 +137,23 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		setAp(getAp() - value);
 	}
 
-	public int heal(int value) {
+	public Tuple2<Integer, Boolean> heal(int value) {
 		return heal(null, value);
 	}
 
-	public int heal(Actor<?> source, int value) {
+	public Tuple2<Integer, Boolean> heal(Actor<?> source, int value) {
 		return modHp(source, Math.max(0, value), 0);
 	}
 
-	public int damage(int value) {
+	public Tuple2<Integer, Boolean> damage(int value) {
 		return damage(null, value);
 	}
 
-	public int damage(Actor<?> source, int value) {
+	public Tuple2<Integer, Boolean> damage(Actor<?> source, int value) {
 		return modHp(source, -Math.max(0, applyMitigation(value)), source != null ? source.getCritical() : 0);
 	}
 
-	public int modHp(Actor<?> source, int value, double critChance) {
+	public Tuple2<Integer, Boolean> modHp(Actor<?> source, int value, double critChance) {
 		boolean crit = Calc.chance(critChance);
 		if (crit) value *= 2;
 
@@ -192,7 +193,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		value = val.get();
 		setHp(getHp() + value);
 
-		return value;
+		return Tuple2.tuple(value, crit);
 	}
 
 	public int applyMitigation(int raw) {
