@@ -11,16 +11,13 @@ public class GearContext extends EffectContext {
 	private final List<Integer> values;
 
 	public GearContext(Gear gear) {
-		super(null);
-		this.gear = gear;
-		this.actor = null;
-		this.values = List.of();
+		this(gear, List.of());
 	}
 
-	public GearContext(Actor<?> actor, Gear gear, List<Integer> values) {
-		super(actor.getGame());
+	public GearContext(Gear gear, List<Integer> values) {
+		super(gear.getOwner() != null ? gear.getOwner().getGame() : null);
 		this.gear = gear;
-		this.actor = actor;
+		this.actor = gear.getOwner();
 		this.values = values;
 	}
 

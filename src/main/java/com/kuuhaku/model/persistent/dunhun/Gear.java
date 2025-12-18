@@ -337,12 +337,12 @@ public class Gear extends DAO<Gear> {
 				continue;
 			}
 
-			ga.apply(owner);
+			ga.apply();
 		}
 
 		if (!meta.isEmpty()) {
 			for (GearAffix ga : meta) {
-				ga.apply(owner);
+				ga.apply();
 			}
 		}
 	}

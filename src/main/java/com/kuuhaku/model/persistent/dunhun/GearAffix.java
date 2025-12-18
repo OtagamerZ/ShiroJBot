@@ -20,7 +20,6 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.AffixModifiers;
 import com.kuuhaku.model.common.dunhun.context.GearContext;
 import com.kuuhaku.model.enums.I18N;
@@ -150,12 +149,12 @@ public class GearAffix extends DAO<GearAffix> {
 		return modifiers;
 	}
 
-	public void apply(Actor<?> owner) {
+	public void apply() {
 		if (affix.getEffect() == null) return;
 
 		try {
 			Utils.exec(affix.getId(), affix.getEffect(), Map.of(
-					"ctx", new GearContext(owner, gear, getValues())
+					"ctx", new GearContext(gear, getValues())
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply modifier {}", affix.getId(), e);
