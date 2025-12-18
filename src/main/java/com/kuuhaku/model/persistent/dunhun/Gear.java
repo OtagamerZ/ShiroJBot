@@ -101,6 +101,10 @@ public class Gear extends DAO<Gear> {
 	public Gear(Hero owner, Basetype basetype) {
 		this.basetype = basetype;
 		this.owner = owner;
+
+		if (basetype.getStats().implicit() != null) {
+			load(owner);
+		}
 	}
 
 	public int getId() {
