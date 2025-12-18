@@ -229,12 +229,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 					Set<Choice> choices = new LinkedHashSet<>();
 					AtomicReference<String> chosenPath = new AtomicReference<>();
-					for (Map.Entry<String, Node> entry : children) {
+					for (int i = 0; i < children.size(); i++) {
+						Map.Entry<String, Node> entry = children.get(i);
 						String path = entry.getKey();
 						Node node = entry.getValue();
 
 						choices.add(new Choice(
-								"path-" + path,
+								"path-" + path + '-' + i,
 								Utils.parseEmoji(ICONS.get(path)),
 								_ -> {
 									run.setNode(node);
