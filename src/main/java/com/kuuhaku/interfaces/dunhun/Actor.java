@@ -4,6 +4,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.*;
+import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
@@ -150,16 +151,15 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public Tuple2<Integer, Boolean> damage(Actor<?> source, int value) {
-		return modHp(source, -Math.max(0, applyMitigation(value)), source != null ? source.getCritical() : 0);
+		return modHp(source, -Math.max(1, applyMitigation(value)), source != null ? source.getCritical() : 0);
 	}
 
 	public Tuple2<Integer, Boolean> modHp(Actor<?> source, int value, double critChance) {
 		boolean crit = Calc.chance(critChance);
 		if (crit) value *= 2;
 
-		value = (int) (value < 0 ? modifiers.getDamageMult() : modifiers.getHealMult()).apply(value);
-
-		AtomicInteger val = new AtomicInteger(value);
+		CumValue mult = value < 0 ? modifiers.getDamageMult() : modifiers.getHealMult();
+		AtomicInteger val = new AtomicInteger((int) mult.apply(value));
 		Combat cbt = binding.getGame().getCombat();
 		if (cbt != null) {
 			if (source != null) {
