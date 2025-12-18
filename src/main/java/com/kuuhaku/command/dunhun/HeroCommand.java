@@ -447,7 +447,10 @@ public class HeroCommand implements Executable {
 				return;
 			} else {
 				GearStats stats = g.getBasetype().getStats();
-				if (h.getStats().getLevel() < g.getReqLevel() || !h.getAttributes().has(stats.requirements().attributes())) {
+				if (h.getStats().getLevel() < g.getReqLevel()) {
+					w.getChannel().sendMessage(locale.get("error/insufficient_level")).queue();
+					return;
+				} else if (!h.getAttributes().has(stats.requirements().attributes())) {
 					w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 					return;
 				}
