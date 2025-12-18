@@ -4,6 +4,7 @@ import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class GearContext extends EffectContext {
 	private final Gear gear;
@@ -25,8 +26,10 @@ public class GearContext extends EffectContext {
 		return gear;
 	}
 
-	public Actor<?> getActor() {
-		return actor;
+	public void withActor(Consumer<Actor<?>> action) {
+		if (actor != null) {
+			action.accept(actor);
+		}
 	}
 
 	public List<Integer> getValues() {
