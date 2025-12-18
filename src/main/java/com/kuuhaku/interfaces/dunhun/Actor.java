@@ -165,6 +165,9 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				if (hp > 0) {
 					if (value < 0) {
 						cbt.trigger(Trigger.ON_HIT, source, this);
+						if (crit) {
+							cbt.trigger(Trigger.ON_CRITICAL, source, this);
+						}
 					}
 
 					cbt.trigger(value < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, val);

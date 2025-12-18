@@ -81,6 +81,12 @@ public enum Trigger {
 	ON_HIT,
 
 	/**
+	 * On landing a critical hit<br>
+	 * <i>Implemented in DunHun</i>
+	 **/
+	ON_CRITICAL,
+
+	/**
 	 * On sending a card to the graveyard<br>
 	 * <i>Implemented in DunHun</i>
 	 **/

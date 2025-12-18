@@ -331,8 +331,20 @@ public class Gear extends DAO<Gear> {
 		attributes = new Attributes();
 		modifiers.clear();
 
+		Set<GearAffix> meta = new HashSet<>();
 		for (GearAffix ga : getAllAffixes()) {
+			if (ga.getAffix().getTags().contains("META")) {
+				meta.add(ga);
+				continue;
+			}
+
 			ga.apply(owner);
+		}
+
+		if (!meta.isEmpty()) {
+			for (GearAffix ga : meta) {
+				ga.apply(owner);
+			}
 		}
 	}
 
