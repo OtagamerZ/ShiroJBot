@@ -75,7 +75,8 @@ public class GearType extends DAO<GearType> {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.map(ld -> ld.setUwu(locale.isUwu()))
-				.findAny().orElseThrow();
+				.findAny()
+				.orElseGet(() -> new LocalizedGearType(locale, id, id + ":" + locale));
 	}
 
 	public JSONArray getTags() {

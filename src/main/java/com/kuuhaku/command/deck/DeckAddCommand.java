@@ -94,7 +94,7 @@ public class DeckAddCommand implements Executable {
 			for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
 				StashedCard sc = stash.get(i);
 				if (sc.getCard().equals(card)) {
-					if (!addToDeck(event, locale, dk, sc)) {
+					if (!addToDeck(locale, event, dk, sc)) {
 						if (j == 0) {
 							event.channel().sendMessage(locale.get("error/not_owned")).queue();
 							return;
@@ -114,7 +114,7 @@ public class DeckAddCommand implements Executable {
 		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
 					Deck dk = d.refresh();
-					if (!addToDeck(event, locale, dk, sc)) return;
+					if (!addToDeck(locale, event, dk, sc)) return;
 					dk.save();
 
 					event.channel().sendMessage(locale.get("success/deck_add")).queue();
@@ -129,7 +129,7 @@ public class DeckAddCommand implements Executable {
 				});
 	}
 
-	private boolean addToDeck(MessageData.Guild event, I18N locale, Deck d, StashedCard sc) {
+	private boolean addToDeck(I18N locale, MessageData.Guild event, Deck d, StashedCard sc) {
 		if (sc == null) {
 			event.channel().sendMessage(locale.get("error/invalid_value")).queue();
 			return false;

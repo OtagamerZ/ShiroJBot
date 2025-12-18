@@ -42,6 +42,14 @@ public class LocalizedGearType extends DAO<LocalizedGearType> implements Seriali
 
 	private transient boolean uwu = false;
 
+	public LocalizedGearType() {
+	}
+
+	public LocalizedGearType(I18N locale, String id, String name) {
+		this.id = new LocalizedId(id, locale);
+		this.name = name;
+	}
+
 	public LocalizedId getId() {
 		return id;
 	}

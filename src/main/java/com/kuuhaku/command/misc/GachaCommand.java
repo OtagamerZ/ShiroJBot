@@ -167,7 +167,7 @@ public class GachaCommand implements Executable {
 						g2d.setFont(Fonts.OPEN_SANS.deriveBold(20));
 
 						for (String s : result) {
-							drawCard(g2d, locale, acc, type, s);
+							drawCard(locale, g2d, acc, type, s);
 						}
 
 						switch (type.currency()) {
@@ -194,7 +194,7 @@ public class GachaCommand implements Executable {
 		}
 	}
 
-	private void drawCard(Graphics2D g2d, I18N locale, Account acc, GachaType type, String id) {
+	private void drawCard(I18N locale, Graphics2D g2d, Account acc, GachaType type, String id) {
 		Kawaipon kp = acc.getKawaipon();
 		Deck deck = acc.getDeck();
 		String hPath = deck.getFrame().isLegacy() ? "old" : "new";

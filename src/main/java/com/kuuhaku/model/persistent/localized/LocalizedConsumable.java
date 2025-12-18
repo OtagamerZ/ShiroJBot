@@ -46,6 +46,15 @@ public class LocalizedConsumable extends DAO<LocalizedConsumable> implements Ser
 
 	private transient boolean uwu = false;
 
+	public LocalizedConsumable() {
+	}
+
+	public LocalizedConsumable(I18N locale, String id, String name, String description) {
+		this.id = new LocalizedId(id, locale);
+		this.name = name;
+		this.description = description;
+	}
+
 	public LocalizedId getId() {
 		return id;
 	}

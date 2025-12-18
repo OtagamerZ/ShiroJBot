@@ -45,6 +45,15 @@ public class LocalizedDungeon extends DAO<LocalizedDungeon> implements Serializa
 
 	private transient boolean uwu = false;
 
+	public LocalizedDungeon() {
+	}
+
+	public LocalizedDungeon(I18N locale, String id, String name, String description) {
+		this.id = new LocalizedId(id, locale);
+		this.name = name;
+		this.description = description;
+	}
+
 	public LocalizedId getId() {
 		return id;
 	}

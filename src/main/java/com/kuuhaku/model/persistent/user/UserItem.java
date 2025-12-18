@@ -140,7 +140,8 @@ public class UserItem extends DAO<UserItem> {
 	public LocalizedItem getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
-				.findAny().orElseThrow();
+				.findAny()
+				.orElseGet(() -> new LocalizedItem(locale, id, id + ":" + locale, id + ":" + locale));
 	}
 
 	@Override

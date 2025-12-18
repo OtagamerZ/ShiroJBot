@@ -45,6 +45,15 @@ public class LocalizedItem extends DAO<LocalizedItem> implements Serializable {
 
 	private transient boolean uwu = false;
 
+	public LocalizedItem() {
+	}
+
+	public LocalizedItem(I18N locale, String id, String name, String description) {
+		this.id = new LocalizedId(id, locale);
+		this.name = name;
+		this.description = description;
+	}
+
 	public LocalizedId getId() {
 		return id;
 	}

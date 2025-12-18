@@ -43,6 +43,14 @@ public class LocalizedBasetype extends DAO<LocalizedBasetype> implements Seriali
 
 	private transient boolean uwu = false;
 
+	public LocalizedBasetype() {
+	}
+
+	public LocalizedBasetype(I18N locale, String id, String name) {
+		this.id = new LocalizedId(id, locale);
+		this.name = name;
+	}
+
 	public LocalizedId getId() {
 		return id;
 	}

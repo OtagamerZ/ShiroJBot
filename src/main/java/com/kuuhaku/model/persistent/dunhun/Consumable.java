@@ -82,7 +82,8 @@ public class Consumable extends DAO<Consumable> {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.map(ld -> ld.setUwu(locale.isUwu()))
-				.findAny().orElseThrow();
+				.findAny()
+				.orElseGet(() -> new LocalizedConsumable(locale, id, id + ":" + locale, id + ":" + locale));
 	}
 
 	public int getPrice() {

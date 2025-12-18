@@ -63,7 +63,8 @@ public class Basetype extends DAO<Basetype> {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.map(ld -> ld.setUwu(locale.isUwu()))
-				.findAny().orElseThrow();
+				.findAny()
+				.orElseGet(() -> new LocalizedBasetype(locale, this.id, this.id + ":" + locale));
 	}
 
 	public String getIcon() {

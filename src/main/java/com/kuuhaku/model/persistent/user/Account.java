@@ -410,7 +410,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		);
 
 		for (Title title : titles) {
-			if (title.check(this, locale)) {
+			if (title.check(locale, this)) {
 				this.titles.add(new AccountTitle(this, title));
 				return title;
 			}

@@ -89,7 +89,8 @@ public class SlotSkin extends DAO<SlotSkin> implements TitleLocked {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.map(ld -> ld.setUwu(locale.isUwu()))
-				.findAny().orElseThrow();
+				.findAny()
+				.orElseGet(() -> new LocalizedSlotSkin(locale, id, id + ":" + locale, id + ":" + locale));
 	}
 
 	public BufferedImage getImage(Side side, boolean legacy) {

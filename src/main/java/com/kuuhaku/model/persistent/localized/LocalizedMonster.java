@@ -46,8 +46,8 @@ public class LocalizedMonster extends DAO<LocalizedMonster> implements Serializa
 	public LocalizedMonster() {
 	}
 
-	public LocalizedMonster(LocalizedId id, String name) {
-		this.id = id;
+	public LocalizedMonster(I18N locale, String id, String name) {
+		this.id = new LocalizedId(id, locale);
 		this.name = name;
 	}
 

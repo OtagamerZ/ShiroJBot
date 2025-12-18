@@ -45,6 +45,15 @@ public class LocalizedUnique extends DAO<LocalizedUnique> implements Serializabl
 
 	private transient boolean uwu = false;
 
+	public LocalizedUnique() {
+	}
+
+	public LocalizedUnique(I18N locale, String id, String name, String description) {
+		this.id = new LocalizedId(id, locale);
+		this.name = name;
+		this.description = description;
+	}
+
 	public LocalizedId getId() {
 		return id;
 	}

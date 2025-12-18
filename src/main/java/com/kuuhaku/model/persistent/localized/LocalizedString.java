@@ -39,6 +39,14 @@ public class LocalizedString extends DAO<LocalizedString> implements Serializabl
 	@Column(name = "value", nullable = false, columnDefinition = "TEXT")
 	private String value;
 
+	public LocalizedString() {
+	}
+
+	public LocalizedString(I18N locale, String id, String value) {
+		this.id = new LocalizedId(id, locale);
+		this.value = value;
+	}
+
 	public LocalizedId getId() {
 		return id;
 	}

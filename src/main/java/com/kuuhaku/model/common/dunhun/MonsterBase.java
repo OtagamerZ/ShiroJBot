@@ -52,7 +52,8 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.map(ld -> ld.setUwu(locale.isUwu()))
-				.findAny().orElseThrow();
+				.findAny()
+				.orElseGet(() -> new LocalizedMonster(locale, getId(), getId() + ":" + locale));
 	}
 
 	@Override

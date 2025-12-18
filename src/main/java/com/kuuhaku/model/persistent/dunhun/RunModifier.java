@@ -53,7 +53,8 @@ public class RunModifier extends DAO<RunModifier> {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.map(ld -> ld.setUwu(locale.isUwu()))
-				.findAny().orElseThrow();
+				.findAny()
+				.orElseGet(() -> new LocalizedRunModifier(locale, id, id + ":" + locale));
 	}
 
 	public int getWeight() {

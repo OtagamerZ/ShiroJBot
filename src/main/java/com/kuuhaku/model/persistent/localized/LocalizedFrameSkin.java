@@ -45,6 +45,15 @@ public class LocalizedFrameSkin extends DAO<LocalizedFrameSkin> implements Seria
 
 	private transient boolean uwu = false;
 
+	public LocalizedFrameSkin() {
+	}
+
+	public LocalizedFrameSkin(I18N locale, String id, String name, String description) {
+		this.id = new LocalizedId(id, locale);
+		this.name = name;
+		this.description = description;
+	}
+
 	public LocalizedId getId() {
 		return id;
 	}

@@ -109,7 +109,8 @@ public class FrameSkin extends DAO<FrameSkin> implements TitleLocked {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.map(ld -> ld.setUwu(locale.isUwu()))
-				.findAny().orElseThrow();
+				.findAny()
+				.orElseGet(() -> new LocalizedFrameSkin(locale, id, id + ":" + locale, id + ":" + locale));
 	}
 
 	public BufferedImage getFront(boolean desc) {

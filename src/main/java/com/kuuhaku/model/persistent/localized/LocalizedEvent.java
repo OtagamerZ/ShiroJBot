@@ -42,6 +42,14 @@ public class LocalizedEvent extends DAO<LocalizedEvent> implements Serializable 
 
 	private transient boolean uwu = false;
 
+	public LocalizedEvent() {
+	}
+
+	public LocalizedEvent(I18N locale, String id, String description) {
+		this.id = new LocalizedId(id, locale);
+		this.description = description;
+	}
+
 	public LocalizedId getId() {
 		return id;
 	}

@@ -130,19 +130,19 @@ public class HeroCommand implements Executable {
 		};
 
 		helper.addAction(Utils.parseEmoji("🧮"),
-						w -> allocAttributes(restore, locale, h, w.getMessage())
+						w -> allocAttributes(locale, restore, h, w.getMessage())
 				)
 				.addAction(Utils.parseEmoji("📖"),
-						w -> allocSkills(restore, locale, h, w.getMessage())
+						w -> allocSkills(locale, restore, h, w.getMessage())
 				)
 				.addAction(Utils.parseEmoji("🛡️"),
-						w -> allocGear(restore, locale, h, w.getMessage())
+						w -> allocGear(locale, restore, h, w.getMessage())
 				);
 
 		Utils.sendLoading(data, locale.get("str/generating"), restore);
 	}
 
-	private void allocAttributes(Consumer<Message> restore, I18N locale, Hero h, Message msg) {
+	private void allocAttributes(I18N locale, Consumer<Message> restore, Hero h, Message msg) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(locale.get("str/attributes"))
 				.setThumbnail("attachment://card.png");
@@ -215,7 +215,7 @@ public class HeroCommand implements Executable {
 		helper.apply(msg.editMessageEmbeds(eb.build())).queue(s -> Pages.buttonize(s, helper));
 	}
 
-	private void allocSkills(Consumer<Message> restore, I18N locale, Hero h, Message msg) {
+	private void allocSkills(I18N locale, Consumer<Message> restore, Hero h, Message msg) {
 		Map<String, Skill> all = new LinkedHashMap<>();
 		for (Skill s : h.getAllSkills()) {
 			all.put(s.getId(), s);
@@ -259,7 +259,8 @@ public class HeroCommand implements Executable {
 						Attributes reqs = s.getRequirements().attributes();
 						List<String> reqLine = new ArrayList<>();
 
-						if (s.getRequirements().level() > 0) reqLine.add(locale.get("str/level", s.getRequirements().level()));
+						if (s.getRequirements().level() > 0)
+							reqLine.add(locale.get("str/level", s.getRequirements().level()));
 
 						for (AttrType t : AttrType.values()) {
 							if (t.ordinal() >= AttrType.LVL.ordinal()) break;
@@ -414,7 +415,7 @@ public class HeroCommand implements Executable {
 				});
 	}
 
-	private void allocGear(Consumer<Message> restore, I18N locale, Hero h, Message msg) {
+	private void allocGear(I18N locale, Consumer<Message> restore, Hero h, Message msg) {
 		Map<ButtonId<?>, ThrowingConsumer<ButtonWrapper>> acts = new LinkedHashMap<>();
 		AtomicReference<Runnable> ctx = new AtomicReference<>(() -> viewGear(locale, h, msg, acts));
 

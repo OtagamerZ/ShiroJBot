@@ -77,7 +77,8 @@ public class Event extends DAO<Event> {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.map(ld -> ld.setUwu(locale.isUwu()))
-				.findAny().orElseThrow();
+				.findAny()
+				.orElseGet(() -> new LocalizedEvent(locale, id, id + ":" + locale));
 	}
 
 	public EventDescription parse(Dunhun game) {

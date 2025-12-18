@@ -42,6 +42,11 @@ public class LocalizedDescription extends DAO<LocalizedDescription> implements S
 	public LocalizedDescription() {
 	}
 
+	public LocalizedDescription(I18N locale, String id, String description) {
+		this.id = new LocalizedId(id, locale);
+		this.description = description;
+	}
+
 	public LocalizedDescription(I18N locale, String description) {
 		this.id = new LocalizedId("GEN_" + locale, locale);
 		this.description = description;

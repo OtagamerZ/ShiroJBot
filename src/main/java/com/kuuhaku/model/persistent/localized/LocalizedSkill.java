@@ -46,6 +46,15 @@ public class LocalizedSkill extends DAO<LocalizedSkill> implements Serializable 
 
 	private transient boolean uwu = false;
 
+	public LocalizedSkill() {
+	}
+
+	public LocalizedSkill(I18N locale, String id, String name, String description) {
+		this.id = new LocalizedId(id, locale);
+		this.name = name;
+		this.description = description;
+	}
+
 	public LocalizedId getId() {
 		return id;
 	}

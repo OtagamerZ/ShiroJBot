@@ -42,6 +42,14 @@ public class LocalizedRunModifier extends DAO<LocalizedRunModifier> implements S
 
 	private transient boolean uwu = false;
 
+	public LocalizedRunModifier() {
+	}
+
+	public LocalizedRunModifier(I18N locale, String id, String description) {
+		this.id = new LocalizedId(id, locale);
+		this.description = description;
+	}
+
 	public LocalizedId getId() {
 		return id;
 	}

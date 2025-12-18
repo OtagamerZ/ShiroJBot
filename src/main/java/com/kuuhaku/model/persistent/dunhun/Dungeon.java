@@ -96,7 +96,8 @@ public class Dungeon extends DAO<Dungeon> {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
 				.map(ld -> ld.setUwu(locale.isUwu()))
-				.findAny().orElseThrow();
+				.findAny()
+				.orElseGet(() -> new LocalizedDungeon(locale, id, id + ":" + locale, id + ":" + locale));
 	}
 
 	public JSONArray getMonsterPool() {
