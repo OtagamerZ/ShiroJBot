@@ -104,11 +104,11 @@ public class Consumable extends DAO<Consumable> implements Usable {
 	}
 
 	public List<Actor<?>> getTargets(Actor<?> source) {
-		return stats.getTargets(id, source);
+		return stats.getTargets(this, source);
 	}
 
 	public CpuRule canCpuUse(Actor<?> source, Actor<?> target) {
-		return stats.canCpuUse(id, source, target);
+		return stats.canCpuUse(this, source, target);
 	}
 
 	public void execute(Actor<?> source, Actor<?> target) {
@@ -116,7 +116,7 @@ public class Consumable extends DAO<Consumable> implements Usable {
 
 		try {
 			Utils.exec(id, stats.getEffect(), Map.of(
-					"ctx", new SkillContext(source, target)
+					"ctx", new SkillContext(source, target, this)
 			));
 			count--;
 		} catch (Exception e) {

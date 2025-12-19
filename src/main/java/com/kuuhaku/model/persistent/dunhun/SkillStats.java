@@ -19,6 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
+import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
@@ -112,32 +113,32 @@ public class SkillStats implements Serializable {
 		return out;
 	}
 
-	public List<Actor<?>> getTargets(String id, Actor<?> source) {
+	public List<Actor<?>> getTargets(Usable usable, Actor<?> source) {
 		if (targeter == null) return List.of(source);
 
-		SkillContext ctx = new SkillContext(source, null);
+		SkillContext ctx = new SkillContext(source, null, usable);
 		try {
-			Utils.exec(id, targeter, Map.of("ctx", ctx));
+			Utils.exec(usable.getId(), targeter, Map.of("ctx", ctx));
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to load targets {}", id, e);
+			Constants.LOGGER.warn("Failed to load targets {}", usable.getId(), e);
 		}
 
 		return ctx.getValidTargets();
 	}
 
-	public CpuRule canCpuUse(String id, Actor<?> source, Actor<?> target) {
+	public CpuRule canCpuUse(Usable usable, Actor<?> source, Actor<?> target) {
 		if (cpuRule == null) return CpuRule.ANY;
 
 		try {
-			Object out = Utils.exec(id, cpuRule, Map.of(
-					"ctx", new SkillContext(source, target)
+			Object out = Utils.exec(usable.getId(), cpuRule, Map.of(
+					"ctx", new SkillContext(source, target, usable)
 			));
 
 			if (out instanceof Boolean b) {
 				return b ? CpuRule.FORCE : CpuRule.PREVENT;
 			}
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to check CPU rule {}", id, e);
+			Constants.LOGGER.warn("Failed to check CPU rule {}", usable.getId(), e);
 		}
 
 		return CpuRule.ANY;

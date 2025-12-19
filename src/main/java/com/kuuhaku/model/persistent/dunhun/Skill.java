@@ -116,11 +116,11 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 	}
 
 	public List<Actor<?>> getTargets(Actor<?> source) {
-		return stats.getTargets(id, source);
+		return stats.getTargets(this, source);
 	}
 
 	public CpuRule canCpuUse(Actor<?> source, Actor<?> target) {
-		return stats.canCpuUse(id, source, target);
+		return stats.canCpuUse(this, source, target);
 	}
 
 	public void execute(Actor<?> source, Actor<?> target) {
@@ -128,7 +128,7 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 
 		try {
 			Utils.exec(id, stats.getEffect(), Map.of(
-					"ctx", new SkillContext(source, target, getValues(source), ctxVar)
+					"ctx", new SkillContext(source, target, this, getValues(source), ctxVar)
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute skill {}", id, e);
