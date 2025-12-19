@@ -438,10 +438,10 @@ public class Combat implements Renderer<BufferedImage> {
 					boolean canAttack = curr.getSenshi().getDmg() > 0;
 					boolean canDefend = curr.getSenshi().getDfs() > 0;
 					Function<Actor<?>, Integer> criteria = a -> {
-						if (a.getTeam() == curr.getTeam()) return a.getAggroScore();
+						if (a.getTeam() == curr.getTeam()) return a.getThreatScore();
 
 						Senshi sen = a.getSenshi();
-						return (int) (a.getAggroScore() * (1 - sen.getDodge() / 100d) * (1 - sen.getParry() / 100d));
+						return (int) (a.getThreatScore() * (1 - sen.getDodge() / 100d) * (1 - sen.getParry() / 100d));
 					};
 
 					List<Actor<?>> attackTgts = getActors(curr.getTeam().getOther()).stream()
@@ -450,11 +450,11 @@ public class Combat implements Renderer<BufferedImage> {
 
 					if (curr.getAp() == 1) {
 						double threat = attackTgts.stream()
-								.mapToInt(a -> a.getHp() * a.getAggroScore() / a.getMaxHp())
+								.mapToInt(a -> a.getHp() * a.getThreatScore() / a.getMaxHp())
 								.average()
 								.orElse(1);
 
-						double risk = threat / (curr.getHp() * (double) curr.getAggroScore() / curr.getMaxHp());
+						double risk = threat / (curr.getHp() * (double) curr.getThreatScore() / curr.getMaxHp());
 						if (curr instanceof Monster && risk > 5 && Calc.chance(20)) {
 							curr.setFleed(true);
 							game.getChannel().sendMessage(getLocale().get("str/actor_flee", curr.getName())).queue();

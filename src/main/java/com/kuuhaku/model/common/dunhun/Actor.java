@@ -90,7 +90,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public abstract double getCritical();
 
-	public abstract int getAggroScore();
+	public abstract int getThreatScore();
 
 	public RarityClass getRarityClass() {
 		if (this instanceof Hero || this instanceof Boss) {

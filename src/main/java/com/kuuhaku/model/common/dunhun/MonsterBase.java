@@ -88,7 +88,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 	}
 
 	@Override
-	public int getAggroScore() {
+	public int getThreatScore() {
 		int flat = getSenshi().getDmg() / 10 + getSenshi().getDfs() / 20 + getHp() / 150;
 		double mult = switch (getRarityClass()) {
 			case NORMAL -> 1;
@@ -97,7 +97,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 			case UNIQUE -> 10;
 		};
 
-		return (int) Math.max(1, getModifiers().getAggro().apply(flat) * (getGame().getAreaLevel() + 1) * mult);
+		return (int) Math.max(1, getModifiers().getAggro().apply(flat * (getGame().getAreaLevel() + 1) * mult));
 	}
 
 	public int getKillXp() {
