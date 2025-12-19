@@ -159,8 +159,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 	protected boolean validate(Message message) {
 		return !duel || (
 				getCombat() != null
-				&& getCombat().getCurrent() instanceof Hero h
-				&& h.getTeam() == heroes.get(message.getAuthor().getId()).getTeam()
+						&& getCombat().getCurrent() instanceof Hero h
+						&& h.getTeam() == heroes.get(message.getAuthor().getId()).getTeam()
 		);
 	}
 
@@ -716,7 +716,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 				getChannel().buffer(
 						getLocale().get("str/dungeon_loot_single") +
-						"\n```" + Utils.properlyJoin(getLocale(), names) + "```"
+								"\n```" + Utils.properlyJoin(getLocale(), names) + "```"
 				);
 			} else {
 				InfiniteList<Hero> robin = new InfiniteList<>(heroes.values());
@@ -821,7 +821,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			List<String> skills = a.getSkills().stream()
 					.map(s ->
 							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getStats().getCost()) +
-							"\n" + s.getDescription(getLocale(), a).lines()
+									"\n" + s.getDescription(getLocale(), a).lines()
 									.map(l -> "-# " + l)
 									.collect(Collectors.joining("\n"))
 					)
@@ -953,14 +953,15 @@ public class Dunhun extends GameInstance<NullPhase> {
 		Node node = map.getPlayerNode();
 		int extraLevel = node != null ? node.getNodeLevel() : 0;
 
-		if (dungeon.getAreaLevel() == 0) {
-			Floor fl = map.getFloor();
-			int floor = fl.getFloor();
-
-			return 1 + Math.min(floor * 83 / 25 * floor / (floor + 50), 83) + extraLevel;
-		}
-
 		return dungeon.getAreaLevel() + extraLevel;
+	}
+
+	public int getAreaLevel(Floor fl) {
+		int base = getAreaLevel();
+		if (duel) return base;
+
+		int floor = fl.getFloor();
+		return base + 1 + Math.min(floor * 83 / 25 * floor / (floor + 50), 83);
 	}
 
 	public String parsePlural(String text) {

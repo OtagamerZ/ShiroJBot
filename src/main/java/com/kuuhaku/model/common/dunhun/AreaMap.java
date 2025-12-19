@@ -400,7 +400,7 @@ public class AreaMap {
 			}
 
 			int rests;
-			int areaLevel = game.getAreaLevel();
+			int areaLevel = game.getAreaLevel(fl);
 			if (areaLevel > Dunhun.LEVEL_BRUTAL) {
 				rests = Calc.chance(50, fl.getRng()) ? 1 : 0;
 			} else if (areaLevel > Dunhun.LEVEL_HARD) {
