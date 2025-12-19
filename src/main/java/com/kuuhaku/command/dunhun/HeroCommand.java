@@ -545,7 +545,7 @@ public class HeroCommand implements Executable {
 		msg.editMessageComponents()
 				.setEmbeds(eb.build())
 				.queue(s -> Pages.buttonize(
-						s, () -> acts, true, true,
+						s, acts, true, true,
 						1, TimeUnit.MINUTES,
 						u -> u.getId().equals(h.getAccount().getUid())
 				));
@@ -595,7 +595,7 @@ public class HeroCommand implements Executable {
 		msg.editMessageComponents()
 				.setEmbeds(Utils.getEmbeds(pages.getFirst()))
 				.queue(s -> Pages.buttonize(
-						s, () -> newActs, true, true,
+						s, newActs, true, true,
 						1, TimeUnit.MINUTES,
 						u -> u.getId().equals(h.getAccount().getUid())
 				));
