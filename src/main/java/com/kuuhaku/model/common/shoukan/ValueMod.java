@@ -28,8 +28,7 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class ValueMod implements Cloneable {
-	private final int SERIAL = ThreadLocalRandom.current().nextInt();
-	private final Drawable<?> source;
+	private final Object source;
 	private final boolean permanent;
 	private final Side side;
 
@@ -37,27 +36,27 @@ public abstract class ValueMod implements Cloneable {
 	private int expiration;
 
 	public ValueMod(Number value) {
-		this(null, value);
+		this(ThreadLocalRandom.current().nextInt(), value);
 	}
 
-	public ValueMod(Drawable<?> source, Number value) {
+	public ValueMod(Object source, Number value) {
 		this(source, value, -1);
 	}
 
 	public ValueMod(Number value, int expiration) {
-		this(null, value, expiration);
+		this(ThreadLocalRandom.current().nextInt(), value, expiration);
 	}
 
-	public ValueMod(Drawable<?> source, Number value, int expiration) {
+	public ValueMod(Object source, Number value, int expiration) {
 		this.source = source;
 		this.value = value.doubleValue();
 		this.expiration = expiration;
-		this.side = source == null ? null : source.getSide();
+		this.side = source instanceof Drawable<?> d ? d.getSide() : null;
 
 		permanent = source == null && expiration == -1;
 	}
 
-	public Drawable<?> getSource() {
+	public Object getSource() {
 		return source;
 	}
 
@@ -101,17 +100,13 @@ public abstract class ValueMod implements Cloneable {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		ValueMod valueMod = (ValueMod) o;
-		if (source == null) return SERIAL == valueMod.SERIAL;
-
 		return Objects.equals(source, valueMod.source) && side == valueMod.side;
 	}
 
 	@Override
 	public int hashCode() {
-		if (source == null) return SERIAL;
 		return Objects.hash(source, side);
 	}
 
