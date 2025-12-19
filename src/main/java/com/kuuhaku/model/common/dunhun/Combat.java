@@ -4,7 +4,6 @@ import com.github.ygimenez.listener.EventHandler;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
-import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.Renderer;
@@ -28,7 +27,6 @@ import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
-import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.components.MessageTopLevelComponent;
 import net.dv8tion.jda.api.components.actionrow.ActionRow;
@@ -36,7 +34,6 @@ import net.dv8tion.jda.api.components.buttons.Button;
 import net.dv8tion.jda.api.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.messages.MessageRequest;
@@ -283,15 +280,9 @@ public class Combat implements Renderer<BufferedImage> {
 		trigger(win ? Trigger.ON_VICTORY : Trigger.ON_DEFEAT);
 		done = true;
 
-		Pair<String, String> previous = game.getMessage();
-		if (previous != null) {
-			GuildMessageChannel channel = Main.getApp().getMessageChannelById(previous.getFirst());
-			if (channel != null) {
-				channel.retrieveMessageById(previous.getSecond())
-						.flatMap(Objects::nonNull, Message::delete)
-						.queue(null, Utils::doNothing);
-				game.setMessage(null);
-			}
+		if (game.getMessage() != null) {
+			game.getMessage().getFirst().delete().queue(null, Utils::doNothing);
+			game.clearMessage();
 		}
 	}
 
@@ -518,22 +509,15 @@ public class Combat implements Renderer<BufferedImage> {
 
 		ca.addFile(IO.getBytes(render(getLocale()), "png"), "cards.png")
 				.queue(m -> {
+					if (game.getMessage() != null) {
+						game.getMessage().getFirst().delete().queue(null, Utils::doNothing);
+					}
+
 					if (helper != null) {
 						Pages.buttonize(m, helper);
 					}
 
-					Pair<String, String> previous = game.getMessage();
-					if (previous != null) {
-						GuildMessageChannel channel = Main.getApp().getMessageChannelById(previous.getFirst());
-						if (channel != null) {
-							channel.retrieveMessageById(previous.getSecond())
-									.flatMap(Objects::nonNull, Message::delete)
-									.queue(null, Utils::doNothing);
-							game.setMessage(null);
-						}
-					}
-
-					game.setMessage(new Pair<>(m.getChannel().getId(), m.getId()));
+					game.setMessage(m, helper);
 				});
 
 		return lock;

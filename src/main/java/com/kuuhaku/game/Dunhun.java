@@ -41,7 +41,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.components.buttons.ButtonStyle;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -75,12 +74,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final Dungeon dungeon;
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
-	private final AtomicReference<Pair<Message, ButtonizeHelper>> event = new AtomicReference<>();
+	private final AtomicReference<Pair<Message, ButtonizeHelper>> message = new AtomicReference<>();
 	private final Random nodeRng = new Random();
 	private final Loot loot = new Loot();
 	private final AreaMap map;
 	private final boolean duel;
-	private Pair<String, String> message;
 
 	public Dunhun(I18N locale, Dungeon dungeon, User... players) {
 		this(locale, dungeon, Arrays.stream(players).map(User::getId).toArray(String[]::new));
@@ -662,8 +660,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 								});
 
 						fin.apply(w.getMessage().editMessageEmbeds(eb.build())).queue(s -> {
-							event.set(new Pair<>(s, fin));
 							Pages.buttonize(s, fin);
+							message.set(new Pair<>(s, fin));
 						});
 					} else {
 						lock.complete(null);
@@ -686,12 +684,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		ca.queue(s -> {
 			Pages.buttonize(s, helper);
-			event.set(new Pair<>(s, helper));
+			message.set(new Pair<>(s, helper));
 		});
 
 		lock.get(5, TimeUnit.MINUTES);
-		event.get().getFirst().delete().queue(null, Utils::doNothing);
-		event.set(null);
+		message.get().getFirst().delete().queue(null, Utils::doNothing);
+		message.set(null);
 	}
 
 	private void finish(String message, Object... args) {
@@ -779,10 +777,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 	@PlayerAction("reload")
 	private void reload(JSONObject args, User u) {
 		if (getCombat() != null) getCombat().getLock().complete(null);
-		if (getEvent() != null) {
-			ButtonizeHelper helper = getEvent().getSecond();
-			helper.apply(getEvent().getFirst().editMessageComponents())
-					.queue(s -> Pages.buttonize(s, helper));
+		if (getMessage() != null) {
+			ButtonizeHelper helper = getMessage().getSecond();
+			if (helper != null) {
+				helper.apply(getMessage().getFirst().editMessageComponents())
+						.queue(s -> Pages.buttonize(s, helper));
+			}
 		}
 	}
 
@@ -847,14 +847,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 	public void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
 		getChannel().sendMessage(parsePlural(getString(msg, args)))
 				.queue(_ -> {
-					if (message != null) {
-						GuildMessageChannel channel = Main.getApp().getMessageChannelById(message.getFirst());
-						if (channel != null) {
-							channel.retrieveMessageById(message.getSecond())
-									.flatMap(Objects::nonNull, Message::delete)
-									.queue(null, Utils::doNothing);
-							message = null;
-						}
+					if (message.get() != null) {
+						message.get().getFirst().delete().queue(null, Utils::doNothing);
 					}
 				}, Utils::doNothing);
 
@@ -881,20 +875,20 @@ public class Dunhun extends GameInstance<NullPhase> {
 		return Utils.properlyJoin(getLocale(), heroes.values().stream().map(Hero::getName).toList());
 	}
 
-	public Pair<String, String> getMessage() {
-		return message;
+	public Pair<Message, ButtonizeHelper> getMessage() {
+		return message.get();
 	}
 
-	public void setMessage(Pair<String, String> message) {
-		this.message = message;
+	public void setMessage(Message msg, ButtonizeHelper helper) {
+		message.set(new Pair<>(msg, helper));
+	}
+
+	public void clearMessage() {
+		message.set(null);
 	}
 
 	public Combat getCombat() {
 		return combat.get();
-	}
-
-	public Pair<Message, ButtonizeHelper> getEvent() {
-		return event.get();
 	}
 
 	public Random getNodeRng() {
