@@ -155,7 +155,7 @@ public class AreaMap {
 				.filter(r -> r.getPlayers().size() == 1)
 				.collect(Collectors.groupingBy(DungeonRun::getSublevel));
 
-		int sliceHeight = height / Sublevel.MAX_NODES;
+		int sliceHeight = height / AREAS_PER_FLOOR;
 		int missingHeight = Math.max(0, (sliceHeight * areasPerFloor) - height);
 
 		Random bgRng = new Random(floors.hashCode());
