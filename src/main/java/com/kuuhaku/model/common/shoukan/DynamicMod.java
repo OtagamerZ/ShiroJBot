@@ -18,8 +18,6 @@
 
 package com.kuuhaku.model.common.shoukan;
 
-import com.kuuhaku.interfaces.shoukan.Drawable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -31,11 +29,11 @@ public class DynamicMod extends ValueMod {
 		this(null, supplier);
 	}
 
-	public DynamicMod(Drawable<?> source, Supplier<Number> supplier) {
+	public DynamicMod(Object source, Supplier<Number> supplier) {
 		this(source, supplier, -1);
 	}
 
-	public DynamicMod(Drawable<?> source, Supplier<Number> supplier, int expiration) {
+	public DynamicMod(Object source, Supplier<Number> supplier, int expiration) {
 		super(source, 0, expiration);
 		this.suppliers.add(supplier);
 	}

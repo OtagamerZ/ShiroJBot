@@ -1,13 +1,11 @@
 package com.kuuhaku.model.common.shoukan;
 
-import com.kuuhaku.interfaces.shoukan.Drawable;
-
 public class FlatMod extends ValueMod {
 	public FlatMod(Number value) {
 		super(value);
 	}
 
-	public FlatMod(Drawable<?> source, Number value) {
+	public FlatMod(Object source, Number value) {
 		super(source, value);
 	}
 
@@ -15,7 +13,7 @@ public class FlatMod extends ValueMod {
 		super(value, expiration);
 	}
 
-	public FlatMod(Drawable<?> source, Number value, int expiration) {
+	public FlatMod(Object source, Number value, int expiration) {
 		super(source, value, expiration);
 	}
 }
