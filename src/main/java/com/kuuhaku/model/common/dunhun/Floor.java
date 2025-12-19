@@ -69,33 +69,28 @@ public class Floor {
 				.collect(Collectors.toCollection(ArrayList::new));
 
 		int events = (int) (nodes.size() * eventRatio);
-		for (int i = 0; i < events; i++) {
-			Node chosen = nodes.get(rng.nextInt(nodes.size()));
-			if (chosen.getParents().stream().anyMatch(p -> p.getType() != NodeType.NONE && p.getChildren().size() == 1)) {
-				continue;
-			}
-
-			if (chosen.getParents().stream().anyMatch(p -> chosen.depth() - p.depth() > 1)) {
-				chosen.setType(NodeType.DANGER);
+		List<Node> eNodes = Utils.getRandomN(nodes, events, 1, rng);
+		for (Node n : eNodes) {
+			if (n.getParents().stream().anyMatch(p -> n.depth() - p.depth() > 1)) {
+				n.setType(NodeType.DANGER);
 			} else {
-				chosen.setType(NodeType.EVENT);
-				eventNodes.add(chosen);
+				n.setType(NodeType.EVENT);
+				eventNodes.add(n);
 			}
-
-			nodes.remove(chosen);
 		}
 
-		List<List<Node>> eNodes = eventNodes.stream()
+		List<Node> rNodes = nodes.stream()
 				.collect(Collectors.collectingAndThen(Collectors.groupingBy(Node::depth), m ->
 						ListUtils.partition(List.copyOf(m.values()), restSpots).stream()
 								.flatMap(Collection::stream)
+								.filter(l -> !l.isEmpty())
 								.limit(restSpots)
+								.map(l -> Utils.getRandomEntry(rng, l))
 								.toList()
 				));
 
-		for (List<Node> nds : eNodes) {
-			if (nds.isEmpty()) continue;
-			Utils.getRandomEntry(rng, nds).setType(NodeType.REST);
+		for (Node n : rNodes) {
+			n.setType(NodeType.REST);
 		}
 	}
 
