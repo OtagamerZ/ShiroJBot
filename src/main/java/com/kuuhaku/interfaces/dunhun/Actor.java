@@ -54,6 +54,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	private transient final ActorCache cache = new ActorCache(this);
 	private transient final RegDeg regDeg = new RegDeg(null);
 	private transient int hp = -1, ap;
+	private transient int maxHp = -1, maxAp = -1;
 	private transient boolean fleed;
 
 	public Actor() {
@@ -113,7 +114,13 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public int getHp() {
 		int max = getMaxHp();
+		if (maxHp != -1 && maxHp != max) {
+			hp = max * hp / maxHp;
+		}
+
+		maxHp = max;
 		if (hp > max || hp == -1) hp = max;
+		else if (hp < 0) hp = 0;
 
 		return hp;
 	}
@@ -124,6 +131,11 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public int getAp() {
 		int max = getMaxAp();
+		if (maxAp != -1 && maxAp != max) {
+			ap = max * ap / maxAp;
+		}
+
+		maxAp = max;
 		if (ap > max) ap = max;
 		else if (ap < 0) ap = 0;
 
