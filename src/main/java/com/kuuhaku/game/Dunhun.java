@@ -2,6 +2,8 @@ package com.kuuhaku.game;
 
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.EmojiId;
+import com.github.ygimenez.model.TextId;
 import com.github.ygimenez.model.ThrowingConsumer;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
@@ -36,6 +38,7 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.components.buttons.ButtonStyle;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
@@ -669,9 +672,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 				};
 
 				if (c.label() instanceof Emoji e) {
-					helper.addAction(e, act);
+					helper.addAction(new EmojiId(c.id(), e, null, ButtonStyle.SECONDARY), act);
 				} else {
-					helper.addAction(String.valueOf(c.label()), act);
+					helper.addAction(new TextId(c.id(), String.valueOf(c.label())), act);
 				}
 			}
 		}
