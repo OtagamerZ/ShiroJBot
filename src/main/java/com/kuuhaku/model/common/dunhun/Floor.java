@@ -6,7 +6,6 @@ import com.kuuhaku.model.persistent.dunhun.RunModifier;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.collections4.ListUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -79,18 +78,24 @@ public class Floor {
 			}
 		}
 
-		List<Node> rNodes = nodes.stream()
-				.collect(Collectors.collectingAndThen(Collectors.groupingBy(Node::depth), m ->
-						ListUtils.partition(List.copyOf(m.values()), restSpots).stream()
-								.flatMap(Collection::stream)
-								.filter(l -> !l.isEmpty())
-								.limit(restSpots)
-								.map(l -> Utils.getRandomEntry(rng, l))
-								.toList()
-				));
+		List<List<Node>> parts = new ArrayList<>(restSpots);
+		for (int i = 0, j = 0; i < restSpots; i++) {
+			List<Node> group = new ArrayList<>();
+			for (; j < nodes.size(); j++) {
+				Node n = nodes.get(j);
+				if (n.getSublevel().getSublevel() / restSpots > i) {
+					break;
+				}
 
-		for (Node n : rNodes) {
-			n.setType(NodeType.REST);
+				group.add(n);
+			}
+
+			parts.add(group);
+		}
+
+		for (List<Node> group : parts) {
+			if (group.isEmpty()) continue;
+			Utils.getRandomEntry(rng, group).setType(NodeType.REST);
 		}
 	}
 
