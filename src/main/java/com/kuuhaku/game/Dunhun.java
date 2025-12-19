@@ -944,6 +944,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public int getAreaLevel() {
+		return getAreaLevel(map.getFloor());
+	}
+
+	public int getAreaLevel(Floor fl) {
 		if (duel) {
 			return (int) heroes.values().stream()
 					.mapToInt(h -> h.getStats().getLevel())
@@ -953,15 +957,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 		Node node = map.getPlayerNode();
 		int extraLevel = node != null ? node.getNodeLevel() : 0;
 
+		if (dungeon.getAreaLevel() == 0) {
+			int floor = fl.getFloor();
+			return 1 + Math.min(floor * 83 / 25 * floor / (floor + 50), 83) + extraLevel;
+		}
+
 		return dungeon.getAreaLevel() + extraLevel;
-	}
-
-	public int getAreaLevel(Floor fl) {
-		int base = getAreaLevel();
-		if (duel) return base;
-
-		int floor = fl.getFloor();
-		return base + 1 + Math.min(floor * 83 / 25 * floor / (floor + 50), 83);
 	}
 
 	public String parsePlural(String text) {
