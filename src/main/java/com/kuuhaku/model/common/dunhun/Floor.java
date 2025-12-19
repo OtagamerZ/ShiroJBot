@@ -75,7 +75,7 @@ public class Floor {
 				continue;
 			}
 
-			if (chosen.getParents().stream().anyMatch(p -> chosen.getSublevel().getSublevel() - p.getSublevel().getSublevel() > 1)) {
+			if (chosen.getParents().stream().anyMatch(p -> chosen.depth() - p.depth() > 1)) {
 				chosen.setType(NodeType.DANGER);
 			} else {
 				chosen.setType(NodeType.EVENT);
@@ -85,13 +85,12 @@ public class Floor {
 			nodes.remove(chosen);
 		}
 
-		Map<Integer, List<Node>> nodesPerLevel = eventNodes.stream()
-				.collect(Collectors.groupingBy(n -> n.getSublevel().getSublevel()));
-
-		List<List<Node>> eNodes = ListUtils.partition(nodesPerLevel.values().stream()
-				.flatMap(Collection::stream)
-				.toList(), restSpots
-		);
+		List<List<Node>> eNodes = eventNodes.stream()
+				.collect(Collectors.collectingAndThen(Collectors.groupingBy(Node::depth), m ->
+						ListUtils.partition(List.copyOf(m.values()), restSpots).stream()
+								.flatMap(Collection::stream)
+								.toList()
+				));
 
 		for (List<Node> nds : eNodes) {
 			if (nds.isEmpty()) continue;

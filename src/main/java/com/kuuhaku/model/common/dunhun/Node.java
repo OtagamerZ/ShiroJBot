@@ -195,7 +195,7 @@ public class Node {
 
 		boolean split = children.size() > 1;
 		for (Node child : children) {
-			boolean leap = child.getSublevel().getSublevel() - sublevel.getSublevel() > 1;
+			boolean leap = child.depth() - depth() > 1;
 			if (leap || child.pathColor != -1) continue;
 
 			int colorAdd = split ? child.path - this.path : 0;
@@ -236,7 +236,7 @@ public class Node {
 	public void renderPath(Graphics2D g2d, boolean reachable) {
 		for (Node child : children) {
 			Point to = child.getRenderPos();
-			boolean leap = child.getSublevel().getSublevel() - sublevel.getSublevel() > 1;
+			boolean leap = child.depth() - depth() > 1;
 			boolean blocked = this.blocked.contains(child);
 
 			Color color = colorForIndex(child.pathColor);

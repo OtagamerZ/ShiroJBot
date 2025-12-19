@@ -75,7 +75,7 @@ public class Sublevel {
 	public boolean hasLeapNode() {
 		for (Node node : nodes) {
 			for (Node parent : node.getParents()) {
-				if (sublevel - parent.getSublevel().getSublevel() > 1) {
+				if (depth() - parent.depth() > 1) {
 					return true;
 				}
 			}
