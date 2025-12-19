@@ -100,12 +100,11 @@ public class HeroSkillCommand implements Executable {
 
 		if (s.getStats().getEfficiency() > 0) {
 			String eff = Utils.roundToString(s.getStats().getEfficiency() * 100, 0) + "%";
-			eb.appendDescription("-# " + locale.get("str/added_efficiency", eff) + "\n\n");
+			eb.appendDescription("-# " + locale.get("str/added_efficiency", eff) + "\n");
 		}
 
 		if (s.getStats().getCritical() > 0) {
-			String crit = s.getStats().getCritical() + "%";
-			eb.appendDescription("-# " + locale.get("str/critical", crit) + "\n\n");
+			eb.appendDescription("-# " + locale.get("str/critical", s.getStats().getCritical()) + "\n");
 		}
 
 		Attributes reqs = s.getRequirements().attributes();
@@ -123,10 +122,10 @@ public class HeroSkillCommand implements Executable {
 		}
 
 		if (!attrs.isEmpty()) {
-			eb.appendDescription(String.join(" | ", attrs) + "\n\n");
+			eb.appendDescription(String.join(" | ", attrs) + "\n");
 		}
 
-		eb.appendDescription(s.getDescription(locale, h));
+		eb.appendDescription("\n" + s.getDescription(locale, h));
 
 		MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
 
