@@ -89,6 +89,7 @@ public class Floor {
 				.collect(Collectors.collectingAndThen(Collectors.groupingBy(Node::depth), m ->
 						ListUtils.partition(List.copyOf(m.values()), restSpots).stream()
 								.flatMap(Collection::stream)
+								.limit(restSpots)
 								.toList()
 				));
 
