@@ -42,7 +42,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "consumable", schema = "dunhun")
-public class Consumable extends DAO<Consumable> implements Usable {
+public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -135,6 +135,22 @@ public class Consumable extends DAO<Consumable> implements Usable {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(id);
+	}
+
+	public Consumable copy() {
+		try {
+			return (Consumable) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new AssertionError(e);
+		}
+	}
+
+	@Override
+	public Consumable copyWith(double efficiency, double critical) {
+		Consumable clone = copy();
+		clone.stats = stats.copyWith(efficiency, critical);
+
+		return clone;
 	}
 
 	public static Consumable getRandom() {

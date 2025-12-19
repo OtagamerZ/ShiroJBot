@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 @Embeddable
-public class SkillStats implements Serializable {
+public class SkillStats implements Serializable, Cloneable {
 	@Column(name = "cost", nullable = false)
 	private int cost;
 
@@ -146,5 +146,18 @@ public class SkillStats implements Serializable {
 
 	public String getEffect() {
 		return effect;
+	}
+
+	public SkillStats copyWith(double efficiency, double critical) {
+		try {
+			SkillStats clone = (SkillStats) clone();
+			clone.efficiency = efficiency;
+			clone.critical = critical;
+			clone.values = values.clone();
+
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

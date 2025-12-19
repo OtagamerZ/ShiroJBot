@@ -173,11 +173,19 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 	public Skill copy() {
 		try {
 			Skill clone = (Skill) super.clone();
-			clone.ctxVar = new JSONObject(ctxVar);
+			clone.ctxVar = ctxVar.clone();
 
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new AssertionError(e);
 		}
+	}
+
+	@Override
+	public Skill copyWith(double efficiency, double critical) {
+		Skill clone = copy();
+		clone.stats = stats.copyWith(efficiency, critical);
+
+		return clone;
 	}
 }
