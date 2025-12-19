@@ -19,9 +19,7 @@
 package com.kuuhaku.command.info;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.EmojiMapping;
-import com.github.ygimenez.model.InteractPage;
-import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.*;
 import com.github.ygimenez.model.helper.CategorizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
@@ -162,7 +160,7 @@ public class HelpCommand implements Executable {
 				.appendDescription(locale.get("str/command_counter", categories.stream().map(Category::getCommands).mapToInt(Set::size).sum()))
 				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.get());
 
-		EmojiMapping<Page> pages = new EmojiMapping<>();
+		Map<ButtonId<?>, Page> pages = new LinkedHashMap<>();
 		for (Category cat : categories) {
 			CustomEmoji emt = cat.getEmote();
 			if (emt == null) continue;
@@ -173,7 +171,7 @@ public class HelpCommand implements Executable {
 		CustomEmoji home = bot.getEmojiById("674261700366827539");
 		if (home != null) {
 			index.setThumbnail(home.getImageUrl());
-			pages.put(Utils.parseEmoji(home.getId()), InteractPage.of(index.build()));
+			pages.put(new EmojiId(Utils.parseEmoji(home.getId())), InteractPage.of(index.build()));
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -195,7 +193,7 @@ public class HelpCommand implements Executable {
 				cmds.add(cmd.name().split("\\.")[0]);
 			}
 
-			pages.put(Utils.parseEmoji(emt.getId()), Utils.generatePage(eb, cmds, 10, cmd -> {
+			pages.put(new EmojiId(Utils.parseEmoji(emt.getId())), Utils.generatePage(eb, cmds, 10, cmd -> {
 				int subs = Main.getCommandManager().getSubCommands(cmd).size();
 				if (subs > 0) {
 					return "`" + cmd + "` **(+" + subs + ")**";

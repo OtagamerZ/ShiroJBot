@@ -19,9 +19,7 @@
 package com.kuuhaku.websocket;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.EmojiMapping;
-import com.github.ygimenez.model.InteractPage;
-import com.github.ygimenez.model.Page;
+import com.github.ygimenez.model.*;
 import com.github.ygimenez.model.helper.CategorizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
@@ -55,6 +53,7 @@ import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HexFormat;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -118,12 +117,12 @@ public class CommonSocket extends WebSocketClient {
 					if (!StringUtils.isNumeric(id)) return;
 
 					EmbedBuilder eb = new ColorlessEmbedBuilder();
-					EmojiMapping<Page> cats = new EmojiMapping<>();
+					Map<ButtonId<?>, Page> cats = new LinkedHashMap<>();
 					MessageEmbed first = null;
 
 					for (I18N loc : I18N.validValues()) {
 						eb.setDescription(loc.get("welcome/message", Constants.DEFAULT_PREFIX));
-						cats.put(Emoji.fromFormatted(loc.getEmoji()), InteractPage.of(eb.build()));
+						cats.put(new EmojiId(Emoji.fromFormatted(loc.getEmoji())), InteractPage.of(eb.build()));
 
 						if (first == null) {
 							first = eb.build();
