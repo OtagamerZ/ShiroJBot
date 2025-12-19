@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class AreaMap {
 	public static final int RENDER_FLOORS = 1;
 	public static final int AREAS_PER_FLOOR = 10;
+	public static final int RENDER_DEPTH = 8;
 	private static final Point ZERO = new Point();
 
 	private final int areasPerFloor;
@@ -157,7 +158,7 @@ public class AreaMap {
 				.filter(r -> r.getPlayers().size() == 1)
 				.collect(Collectors.groupingBy(DungeonRun::getSublevel));
 
-		int sliceHeight = height / AREAS_PER_FLOOR;
+		int sliceHeight = height / RENDER_DEPTH;
 		int missingHeight = Math.max(0, (sliceHeight * areasPerFloor) - height);
 
 		Random bgRng = new Random(floors.hashCode());
