@@ -104,7 +104,7 @@ public class HeroSkillCommand implements Executable {
 		}
 
 		if (s.getStats().getCritical() > 0) {
-			String crit = Utils.roundToString(s.getStats().getCritical() * 100, 0) + "%";
+			String crit = s.getStats().getCritical() + "%";
 			eb.appendDescription("-# " + locale.get("str/critical", crit) + "\n\n");
 		}
 
