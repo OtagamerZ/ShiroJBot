@@ -160,7 +160,6 @@ public class HelpCommand implements Executable {
 				.appendDescription(locale.get("str/command_counter", categories.stream().map(Category::getCommands).mapToInt(Set::size).sum()))
 				.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.get());
 
-		Map<ButtonId<?>, Page> pages = new LinkedHashMap<>();
 		for (Category cat : categories) {
 			CustomEmoji emt = cat.getEmote();
 			if (emt == null) continue;
@@ -169,9 +168,13 @@ public class HelpCommand implements Executable {
 		}
 
 		CustomEmoji home = bot.getEmojiById("674261700366827539");
+		CategorizeHelper helper = new CategorizeHelper(true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(event.user()::equals);
+
 		if (home != null) {
 			index.setThumbnail(home.getImageUrl());
-			pages.put(new EmojiId(Utils.parseEmoji(home.getId())), InteractPage.of(index.build()));
+			helper.addCategory(Utils.parseEmoji(home.getId()), InteractPage.of(index.build()));
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -193,7 +196,7 @@ public class HelpCommand implements Executable {
 				cmds.add(cmd.name().split("\\.")[0]);
 			}
 
-			pages.put(new EmojiId(Utils.parseEmoji(emt.getId())), Utils.generatePage(eb, cmds, 10, cmd -> {
+			helper.addCategory(Utils.parseEmoji(emt.getId()), Utils.generatePage(eb, cmds, 10, cmd -> {
 				int subs = Main.getCommandManager().getSubCommands(cmd).size();
 				if (subs > 0) {
 					return "`" + cmd + "` **(+" + subs + ")**";
@@ -203,11 +206,6 @@ public class HelpCommand implements Executable {
 			}));
 		}
 
-		CategorizeHelper helper = new CategorizeHelper(pages, true)
-				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(event.user()::equals);
-
-		assert home != null;
 		helper.apply(event.channel().sendMessageEmbeds(index.build())).queue(s -> Pages.categorize(s, helper));
 	}
 }

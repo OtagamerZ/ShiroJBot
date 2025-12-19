@@ -19,7 +19,7 @@
 package com.kuuhaku.websocket;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.*;
+import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.helper.CategorizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
@@ -53,7 +53,6 @@ import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HexFormat;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -117,12 +116,13 @@ public class CommonSocket extends WebSocketClient {
 					if (!StringUtils.isNumeric(id)) return;
 
 					EmbedBuilder eb = new ColorlessEmbedBuilder();
-					Map<ButtonId<?>, Page> cats = new LinkedHashMap<>();
-					MessageEmbed first = null;
+					CategorizeHelper helper = new CategorizeHelper(true)
+							.setTimeout(1, TimeUnit.MINUTES);
 
+					MessageEmbed first = null;
 					for (I18N loc : I18N.validValues()) {
 						eb.setDescription(loc.get("welcome/message", Constants.DEFAULT_PREFIX));
-						cats.put(new EmojiId(Emoji.fromFormatted(loc.getEmoji())), InteractPage.of(eb.build()));
+						helper.addCategory(Emoji.fromFormatted(loc.getEmoji()), InteractPage.of(eb.build()));
 
 						if (first == null) {
 							first = eb.build();
@@ -133,9 +133,6 @@ public class CommonSocket extends WebSocketClient {
 					if (user == null) return;
 
 					MessageEmbed toSend = first;
-					CategorizeHelper helper = new CategorizeHelper(cats, true)
-							.setTimeout(1, TimeUnit.MINUTES);
-
 					user.openPrivateChannel()
 							.flatMap(c -> helper.apply(c.sendMessageEmbeds(toSend)))
 							.queue(s -> Pages.categorize(s, helper), Utils::doNothing);

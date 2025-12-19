@@ -19,8 +19,6 @@
 package com.kuuhaku.command.deck;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.ButtonId;
-import com.github.ygimenez.model.EmojiId;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.helper.CategorizeHelper;
 import com.kuuhaku.interfaces.Executable;
@@ -44,8 +42,6 @@ import net.dv8tion.jda.api.Permission;
 import org.apache.commons.collections4.bag.HashBag;
 
 import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Command(
@@ -116,43 +112,41 @@ public class DeckListCommand implements Executable {
 			));
 		}
 
-		Page home;
-		Map<ButtonId<?>, Page> pages = new LinkedHashMap<>();
-		pages.put(new EmojiId(Utils.parseEmoji("⚔️")), home = Utils.generatePage(eb, Utils.padList(d.getSenshi(), 36), 12,
+		Page home = Utils.generatePage(eb, Utils.padList(d.getSenshi(), 36), 12,
 				s -> {
 					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/senshi")));
 					if (s == null) return "-# *" + locale.get("str/empty") + "*";
 
 					return Utils.getEmoteString(s.getRace().name()) + " " + s;
 				}
-		));
-		pages.put(new EmojiId(Utils.parseEmoji("🛡️")), Utils.generatePage(eb, Utils.padList(d.getEvogear(), 24), 12,
-				e -> {
-					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/evogear")));
-					if (e == null) return "-# *" + locale.get("str/empty") + "*";
+		);
 
-					return Utils.getEmoteString("tier_" + e.getTier()) + " " + e;
-				}
-		));
-		pages.put(new EmojiId(Utils.parseEmoji("🏔️")), Utils.generatePage(eb, Utils.padList(d.getFields(), 3), 12,
-				f -> {
-					eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/field")));
-					if (f == null) return "-# *" + locale.get("str/empty") + "*";
-
-					return switch (f.getType()) {
-						case NONE -> f.toString();
-						case DAY -> ":sunny: " + f;
-						case NIGHT -> ":crescent_moon: " + f;
-						case DUNGEON -> ":japanese_castle: " + f;
-					};
-				}
-		));
-
-		CategorizeHelper helper = new CategorizeHelper(pages, true)
+		CategorizeHelper helper = new CategorizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(event.user()::equals);
+				.setCanInteract(event.user()::equals)
+				.addCategory(Utils.parseEmoji("⚔️"), home)
+				.addCategory(Utils.parseEmoji("🛡️"), Utils.generatePage(eb, Utils.padList(d.getEvogear(), 24), 12,
+						e -> {
+							eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/evogear")));
+							if (e == null) return "-# *" + locale.get("str/empty") + "*";
 
-		assert home != null;
+							return Utils.getEmoteString("tier_" + e.getTier()) + " " + e;
+						}
+				))
+				.addCategory(Utils.parseEmoji("🏔️"), Utils.generatePage(eb, Utils.padList(d.getFields(), 3), 12,
+						f -> {
+							eb.setTitle(locale.get("str/deck_title", event.member().getEffectiveName(), locale.get("type/field")));
+							if (f == null) return "-# *" + locale.get("str/empty") + "*";
+
+							return switch (f.getType()) {
+								case NONE -> f.toString();
+								case DAY -> ":sunny: " + f;
+								case NIGHT -> ":crescent_moon: " + f;
+								case DUNGEON -> ":japanese_castle: " + f;
+							};
+						}
+				));
+
 		helper.apply(Utils.sendPage(event.channel(), home)).queue(s -> Pages.categorize(s, helper));
 	}
 }

@@ -331,7 +331,6 @@ public abstract class Utils {
 	}
 
 	public static <T> Page generatePage(EmbedBuilder eb, Collection<T> list, int itemsPerColumn, Function<T, String> mapper) {
-		if (list.isEmpty()) return null;
 		eb.clearFields();
 
 		XStringBuilder sb = new XStringBuilder();
