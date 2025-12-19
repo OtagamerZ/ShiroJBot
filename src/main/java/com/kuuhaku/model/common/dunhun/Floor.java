@@ -6,6 +6,7 @@ import com.kuuhaku.model.persistent.dunhun.RunModifier;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.collections4.ListUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -63,7 +64,7 @@ public class Floor {
 		eventNodes.clear();
 
 		List<Node> nodes = Stream.of(sublevels)
-				.skip(1).limit(sublevels.length - 2)
+				.limit(sublevels.length - 2)
 				.flatMap(sl -> sl.getNodes().stream())
 				.collect(Collectors.toCollection(ArrayList::new));
 
@@ -84,15 +85,17 @@ public class Floor {
 			nodes.remove(chosen);
 		}
 
-		List<Node> eNodes = eventNodes.stream()
-				.filter(n -> n.getSublevel().getSublevel() >= n.getSublevel().getFloor().size() / 2)
-				.collect(Collectors.toCollection(ArrayList::new));
+		Map<Integer, List<Node>> nodesPerLevel = eventNodes.stream()
+				.collect(Collectors.groupingBy(n -> n.getSublevel().getSublevel()));
 
-		for (int i = 0; i < restSpots; i++) {
-			if (eNodes.isEmpty()) break;
+		List<List<Node>> eNodes = ListUtils.partition(nodesPerLevel.values().stream()
+				.flatMap(Collection::stream)
+				.toList(), restSpots
+		);
 
-			Node chosen = eNodes.remove(rng.nextInt(eNodes.size()));
-			chosen.setType(NodeType.REST);
+		for (List<Node> nds : eNodes) {
+			if (nds.isEmpty()) continue;
+			Utils.getRandomEntry(rng, nds).setType(NodeType.REST);
 		}
 	}
 

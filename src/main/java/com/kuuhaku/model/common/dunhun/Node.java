@@ -47,9 +47,7 @@ public class Node {
 	public Node(Sublevel sublevel, List<Node> parents) {
 		this(sublevel, NodeType.NONE, parents);
 
-		if (getParents().stream().anyMatch(p -> p.getType() == NodeType.BOSS)) {
-			this.type = NodeType.REST;
-		} else if (sublevel.getSublevel() == sublevel.getFloor().size() - 1) {
+		if (sublevel.getSublevel() == sublevel.getFloor().size() - 1) {
 			this.type = NodeType.BOSS;
 		}
 	}

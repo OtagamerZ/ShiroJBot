@@ -1,9 +1,11 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.DungeonRun;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.WobbleStroke;
 import kotlin.Pair;
@@ -13,7 +15,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 public class AreaMap {
@@ -22,7 +24,7 @@ public class AreaMap {
 	private static final Point ZERO = new Point();
 
 	private final int areasPerFloor;
-	private final Consumer<AreaMap> generator;
+	private final BiConsumer<Dunhun, AreaMap> generator;
 	private final DungeonRun run;
 	private final TreeMap<Integer, Floor> floors = new TreeMap<>();
 	private final AtomicInteger renderFloor = new AtomicInteger(0);
@@ -30,7 +32,7 @@ public class AreaMap {
 
 	private Pair<Integer, Node> pnCache;
 
-	public AreaMap(DungeonRun run, int areasPerFloor, Consumer<AreaMap> generator) {
+	public AreaMap(DungeonRun run, int areasPerFloor, BiConsumer<Dunhun, AreaMap> generator) {
 		this.generator = generator;
 		this.areasPerFloor = areasPerFloor;
 		this.run = run;
@@ -131,9 +133,9 @@ public class AreaMap {
 		return run;
 	}
 
-	public void generate() {
+	public void generate(Dunhun game) {
 		floors.clear();
-		generator.accept(this);
+		generator.accept(game, this);
 	}
 
 	public BufferedImage render(I18N locale, int width, int height) {
@@ -309,7 +311,7 @@ public class AreaMap {
 		return bi;
 	}
 
-	public static void generateRandom(AreaMap m) {
+	public static void generateRandom(Dunhun game, AreaMap m) {
 		for (int i = -RENDER_FLOORS; i <= RENDER_FLOORS; i++) {
 			int depth = m.renderFloor.get() + i;
 			if (depth < -1) continue;
@@ -397,7 +399,17 @@ public class AreaMap {
 				}
 			}
 
-			fl.generateEvents(1 / 3d, 1);
+			int rests;
+			int areaLevel = game.getAreaLevel();
+			if (areaLevel > Dunhun.LEVEL_BRUTAL) {
+				rests = Calc.chance(50, fl.getRng()) ? 1 : 0;
+			} else if (areaLevel > Dunhun.LEVEL_HARD) {
+				rests = Calc.rng(1, 2, fl.getRng());
+			} else {
+				rests = 3;
+			}
+
+			fl.generateEvents(1 / 3d, rests);
 		}
 	}
 }

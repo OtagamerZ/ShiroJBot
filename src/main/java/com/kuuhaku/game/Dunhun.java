@@ -131,7 +131,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				this.map = run.getMap();
-				this.map.generate();
+				this.map.generate(this);
 
 				Floor fl = this.map.getFloor();
 				if (run.getSublevel() >= fl.size()) {
@@ -148,7 +148,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 			} else {
 				this.map = dungeon.init(this, new DungeonRun(leader, dungeon));
-				this.map.generate();
+				this.map.generate(this);
 			}
 		}
 
@@ -267,7 +267,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					int floor = run.getFloor();
 					if (floor != fl.getFloor()) {
 						if (dungeon.isInfinite()) {
-							map.generate();
+							map.generate(this);
 						}
 
 						getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor",
