@@ -1,7 +1,6 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Skill;

@@ -19,7 +19,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
-import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -49,6 +49,9 @@ public class SkillStats implements Serializable {
 	@Column(name = "efficiency", nullable = false)
 	private double efficiency;
 
+	@Column(name = "critical", nullable = false)
+	private double critical;
+
 	@Column(name = "spell", nullable = false)
 	private boolean spell;
 
@@ -72,6 +75,14 @@ public class SkillStats implements Serializable {
 	public SkillStats() {
 	}
 
+	public SkillStats(int cost, int cooldown, double efficiency, double critical, boolean spell) {
+		this.cost = cost;
+		this.cooldown = cooldown;
+		this.efficiency = efficiency;
+		this.critical = critical;
+		this.spell = spell;
+	}
+
 	public int getCost() {
 		return cost;
 	}
@@ -82,6 +93,10 @@ public class SkillStats implements Serializable {
 
 	public double getEfficiency() {
 		return efficiency;
+	}
+
+	public double getCritical() {
+		return critical;
 	}
 
 	public boolean isSpell() {

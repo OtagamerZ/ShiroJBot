@@ -1,6 +1,5 @@
 package com.kuuhaku.model.common.dunhun;
 
-import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;

@@ -20,8 +20,9 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
@@ -41,7 +42,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "consumable", schema = "dunhun")
-public class Consumable extends DAO<Consumable> {
+public class Consumable extends DAO<Consumable> implements Usable {
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;

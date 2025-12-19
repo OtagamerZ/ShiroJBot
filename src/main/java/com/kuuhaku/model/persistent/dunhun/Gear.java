@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.GearModifiers;
 import com.kuuhaku.model.common.dunhun.TriggeredEffect;

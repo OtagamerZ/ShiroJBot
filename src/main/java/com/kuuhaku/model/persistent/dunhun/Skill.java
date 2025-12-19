@@ -20,7 +20,8 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.interfaces.dunhun.Usable;
+import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
@@ -43,7 +44,9 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "skill", schema = "dunhun")
-public class Skill extends DAO<Skill> implements Cloneable {
+public class Skill extends DAO<Skill> implements Usable, Cloneable {
+	public static final Skill DEFAULT_ATTACK = new Skill(1, 0, 1, 0, false);
+
 	@Id
 	@Column(name = "id", nullable = false)
 	private String id;
@@ -62,6 +65,13 @@ public class Skill extends DAO<Skill> implements Cloneable {
 	@Transient
 	private transient JSONObject ctxVar = new JSONObject();
 	private transient int cd = 0;
+
+	public Skill() {
+	}
+
+	public Skill(int cost, int cooldown, double efficiency, double critical, boolean spell) {
+		this.stats = new SkillStats(cost, cooldown, efficiency, critical, spell);
+	}
 
 	public String getId() {
 		return id;

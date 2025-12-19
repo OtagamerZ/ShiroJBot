@@ -19,7 +19,6 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.github.ygimenez.model.ThrowingBiConsumer;
-import com.kuuhaku.interfaces.dunhun.Actor;
 import com.kuuhaku.model.common.TimedMap;
 import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.ValueMod;

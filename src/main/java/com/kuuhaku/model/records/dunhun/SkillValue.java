@@ -1,6 +1,6 @@
 package com.kuuhaku.model.records.dunhun;
 
-import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.util.Calc;

@@ -1,9 +1,9 @@
-package com.kuuhaku.interfaces.dunhun;
+package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
+import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.XStringBuilder;
-import com.kuuhaku.model.common.dunhun.*;
 import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.RegDeg;
@@ -151,22 +151,35 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public Tuple2<Integer, Boolean> heal(int value) {
-		return heal(null, value);
+		return heal(null, null, value);
 	}
 
-	public Tuple2<Integer, Boolean> heal(Actor<?> source, int value) {
-		return modHp(source, Math.max(0, value), 0);
+	public Tuple2<Integer, Boolean> heal(Actor<?> source, Usable usable, int value) {
+		double crit = 0;
+		if (usable != null) {
+			crit += usable.getStats().getCritical();
+		}
+
+		return modHp(source, usable, Math.max(0, value), crit);
 	}
 
 	public Tuple2<Integer, Boolean> damage(int value) {
-		return damage(null, value);
+		return damage(null, null, value);
 	}
 
-	public Tuple2<Integer, Boolean> damage(Actor<?> source, int value) {
-		return modHp(source, -Math.max(1, applyMitigation(value)), source != null ? source.getCritical() : 0);
+	public Tuple2<Integer, Boolean> damage(Actor<?> source, Usable usable, int value) {
+		double crit = 0;
+		if (source != null) {
+			crit += source.getCritical();
+		}
+		if (usable != null) {
+			crit += usable.getStats().getCritical();
+		}
+
+		return modHp(source, usable, -Math.max(1, applyMitigation(value)), crit);
 	}
 
-	public Tuple2<Integer, Boolean> modHp(Actor<?> source, int value, double critChance) {
+	public Tuple2<Integer, Boolean> modHp(Actor<?> source, Usable usable, int value, double critChance) {
 		boolean crit = Calc.chance(critChance);
 		if (crit) value *= 2;
 
@@ -177,18 +190,18 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			if (source != null) {
 				if (hp > 0) {
 					if (val.get() < 0) {
-						cbt.trigger(Trigger.ON_HIT, source, this);
+						cbt.trigger(Trigger.ON_HIT, source, this, usable);
 						if (crit) {
-							cbt.trigger(Trigger.ON_CRITICAL, source, this);
+							cbt.trigger(Trigger.ON_CRITICAL, source, this, usable);
 						}
 					}
 
-					cbt.trigger(val.get() < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, val);
+					cbt.trigger(val.get() < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, usable, val);
 					if (hp + val.get() <= 0) {
-						cbt.trigger(Trigger.ON_GRAVEYARD, source, this);
+						cbt.trigger(Trigger.ON_GRAVEYARD, source, this, usable);
 					}
 				} else if (hp + val.get() > 0) {
-					cbt.trigger(Trigger.ON_REVIVE, source, this);
+					cbt.trigger(Trigger.ON_REVIVE, source, this, usable);
 				}
 			}
 
@@ -256,7 +269,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		Combat cbt = binding.getGame().getCombat();
 		if (cbt != null) {
-			cbt.trigger(val.get() < 0 ? Trigger.ON_DEGEN : Trigger.ON_REGEN, null, this, val);
+			cbt.trigger(val.get() < 0 ? Trigger.ON_DEGEN : Trigger.ON_REGEN, null, this, null, val);
 		}
 
 		setHp(getHp() + val.get());
@@ -315,8 +328,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		sb.appendNewLine(Utils.makeProgressBar(getAp(), getMaxAp(), getMaxAp(), '◇', '◈'));
 	}
 
-	public void trigger(Trigger trigger, Actor<?> target, AtomicInteger value) {
-		CombatContext context = new CombatContext(trigger, this, target, value);
+	public void trigger(Trigger trigger, Actor<?> target, Usable usable, AtomicInteger value) {
+		CombatContext context = new CombatContext(trigger, this, target, usable, value);
 
 		List<EffectBase> queue = new ArrayList<>();
 		for (Gear g : getEquipment()) {

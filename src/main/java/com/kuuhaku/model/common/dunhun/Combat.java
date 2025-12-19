@@ -7,7 +7,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.Renderer;
-import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.*;
 import com.kuuhaku.model.common.shoukan.ValueMod;
@@ -119,12 +119,12 @@ public class Combat implements Renderer<BufferedImage> {
 
 		actor.setFleed(false);
 		actor.getSenshi().setAvailable(true);
-		trigger(Trigger.ON_INITIALIZE, actor, actor);
+		trigger(Trigger.ON_INITIALIZE, actor, actor, null);
 		return true;
 	}
 
 	public void onRemoveActor(Actor<?> actor) {
-		trigger(Trigger.ON_REMOVE, actor, actor);
+		trigger(Trigger.ON_REMOVE, actor, actor, null);
 		actor.getBinding().unbind();
 		actors.remove(actor);
 	}
@@ -251,7 +251,7 @@ public class Combat implements Renderer<BufferedImage> {
 					actor.getSenshi().setDefending(false);
 					actor.getModifiers().expireMods(actor);
 
-					trigger(Trigger.ON_TURN_BEGIN, actor, actor);
+					trigger(Trigger.ON_TURN_BEGIN, actor, actor, null);
 
 					while (actor == getCurrent() && actor.getAp() > 0) {
 						if (!actor.getSenshi().isAvailable() || actor.isOutOfCombat()) break;
@@ -264,7 +264,7 @@ public class Combat implements Renderer<BufferedImage> {
 						}
 					}
 
-					trigger(Trigger.ON_TURN_END, actor, actor);
+					trigger(Trigger.ON_TURN_END, actor, actor, null);
 				} finally {
 					actor.getSenshi().setAvailable(true);
 
@@ -391,7 +391,7 @@ public class Combat implements Renderer<BufferedImage> {
 								con.execute(h, t);
 								h.consumeAp(1);
 
-								trigger(Trigger.ON_CONSUMABLE, h, t);
+								trigger(Trigger.ON_CONSUMABLE, h, t, con);
 
 								history.add(getLocale().get(t.equals(h) ? "str/used_self" : "str/used",
 										h.getName(), con.getName(getLocale()), t.getName())
@@ -608,26 +608,26 @@ public class Combat implements Renderer<BufferedImage> {
 			history.add(getLocale().get("str/actor_combat", source.getName(), target.getName()));
 		}
 
-		trigger(Trigger.ON_DEFEND, target, source);
+		trigger(Trigger.ON_DEFEND, target, source, Skill.DEFAULT_ATTACK);
 
 		Senshi srcSen = source.getSenshi();
 		Senshi tgtSen = target.getSenshi();
 		if (damageMult == null) {
 			if (source.getTeam() != target.getTeam()) {
 				if (srcSen.isBlinded(true) && Calc.chance(50)) {
-					trigger(Trigger.ON_MISS, source, target);
+					trigger(Trigger.ON_MISS, source, target, Skill.DEFAULT_ATTACK);
 
 					history.add(getLocale().get("str/actor_miss", source.getName()));
 					return;
 				} else if (!srcSen.hasFlag(Flag.TRUE_STRIKE, true) && !tgtSen.isSleeping() && !tgtSen.isStasis()) {
 					if (Calc.chance(tgtSen.getDodge())) {
-						trigger(Trigger.ON_MISS, source, target);
-						trigger(Trigger.ON_DODGE, target, source);
+						trigger(Trigger.ON_MISS, source, target, Skill.DEFAULT_ATTACK);
+						trigger(Trigger.ON_DODGE, target, source, Skill.DEFAULT_ATTACK);
 
 						history.add(getLocale().get("str/actor_dodge", target.getName()));
 						return;
 					} else if (Calc.chance(tgtSen.getParry())) {
-						trigger(Trigger.ON_PARRY, target, source);
+						trigger(Trigger.ON_PARRY, target, source, Skill.DEFAULT_ATTACK);
 
 						history.add(getLocale().get("str/actor_parry", target.getName()));
 						attack(target, source, null);
@@ -641,19 +641,19 @@ public class Combat implements Renderer<BufferedImage> {
 
 		AtomicInteger dmg = new AtomicInteger((int) (srcSen.getDmg() * damageMult));
 
-		trigger(Trigger.ON_ATTACK, source, target, dmg);
-		target.modHp(source, -dmg.get(), source.getCritical());
+		trigger(Trigger.ON_ATTACK, source, target, Skill.DEFAULT_ATTACK, dmg);
+		target.modHp(source, Skill.DEFAULT_ATTACK, -dmg.get(), source.getCritical());
 
 		if (target.getHp() == 0) {
-			trigger(Trigger.ON_KILL, source, target, dmg);
+			trigger(Trigger.ON_KILL, source, target, Skill.DEFAULT_ATTACK, dmg);
 		}
 	}
 
 	public void skill(Skill skill, Actor<?> source, Actor<?> target) {
 		source.consumeAp(skill.getStats().getCost());
 
-		trigger(Trigger.ON_SPELL, source, target);
-		trigger(Trigger.ON_SPELL_TARGET, target, source);
+		trigger(Trigger.ON_SPELL, source, target, skill);
+		trigger(Trigger.ON_SPELL_TARGET, target, source, skill);
 
 		history.add(getLocale().get(target.equals(source) ? "str/used_self" : "str/used",
 				source.getName(), skill.getInfo(getLocale()).getName(), target.getName())
@@ -664,19 +664,19 @@ public class Combat implements Renderer<BufferedImage> {
 			Senshi tgtSen = target.getSenshi();
 			if (source.getTeam() != target.getTeam()) {
 				if (srcSen.isBlinded(true) && Calc.chance(50)) {
-					trigger(Trigger.ON_MISS, source, target);
+					trigger(Trigger.ON_MISS, source, target, skill);
 
 					history.add(getLocale().get("str/actor_miss", source.getName()));
 					return;
 				} else if (!srcSen.hasFlag(Flag.TRUE_STRIKE, true) && !tgtSen.isSleeping() && !tgtSen.isStasis()) {
 					if (Calc.chance(tgtSen.getDodge())) {
-						trigger(Trigger.ON_MISS, source, target);
-						trigger(Trigger.ON_DODGE, target, source);
+						trigger(Trigger.ON_MISS, source, target, skill);
+						trigger(Trigger.ON_DODGE, target, source, skill);
 
 						history.add(getLocale().get("str/actor_dodge", target.getName()));
 						return;
 					} else if (Calc.chance(tgtSen.getParry())) {
-						trigger(Trigger.ON_PARRY, target, source);
+						trigger(Trigger.ON_PARRY, target, source, skill);
 
 						history.add(getLocale().get("str/actor_parry", target.getName()));
 						attack(target, source, null);
@@ -692,7 +692,7 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 
 			if (target.getHp() == 0) {
-				trigger(Trigger.ON_KILL, source, target);
+				trigger(Trigger.ON_KILL, source, target, skill);
 			}
 		}
 	}
@@ -843,22 +843,22 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public void trigger(Trigger t) {
 		for (Actor<?> a : actors.values()) {
-			trigger(t, a, a);
+			trigger(t, a, a, null);
 		}
 	}
 
-	public void trigger(Trigger t, Actor<?> source, Actor<?> target) {
-		trigger(t, source, target, new AtomicInteger());
+	public void trigger(Trigger t, Actor<?> source, Actor<?> target, Usable usable) {
+		trigger(t, source, target, usable, new AtomicInteger());
 	}
 
-	public void trigger(Trigger t, Actor<?> source, Actor<?> target, AtomicInteger value) {
+	public void trigger(Trigger t, Actor<?> source, Actor<?> target, Usable usable, AtomicInteger value) {
 		if (t == Trigger.ON_TICK) {
 			source.getModifiers().removeIf(source, ValueMod::isExpired);
 		} else if (Utils.equalsAny(t, Trigger.ON_VICTORY, Trigger.ON_DEFEAT)) {
 			source.getRegDeg().clear();
 		}
 
-		CombatContext context = new CombatContext(t, source, target, value);
+		CombatContext context = new CombatContext(t, source, target, usable, value);
 		Set<EffectBase> effects = new HashSet<>(this.effects.getValues());
 		for (RunModifier mod : game.getModifiers()) {
 			EffectBase e = mod.toEffect(game);
@@ -885,7 +885,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		this.effects.reduceTime();
 		if (source != null) {
-			source.trigger(t, Utils.getOr(target, source), context.value());
+			source.trigger(t, Utils.getOr(target, source), usable, context.value());
 		}
 	}
 }

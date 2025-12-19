@@ -1,6 +1,6 @@
 package com.kuuhaku.model.common.dunhun.context;
 
-import com.kuuhaku.interfaces.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.Actor;
 
 public class ActorContext extends EffectContext {
 	private final Actor<?> actor;
