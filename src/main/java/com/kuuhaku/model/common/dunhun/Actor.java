@@ -156,7 +156,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public Tuple2<Integer, Boolean> heal(Actor<?> source, Usable usable, int value) {
 		double crit = 0;
-		if (usable != null) {
+		if (usable != null && usable.getStats().isSpell()) {
 			crit += usable.getStats().getCritical();
 		}
 
@@ -169,11 +169,14 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public Tuple2<Integer, Boolean> damage(Actor<?> source, Usable usable, int value) {
 		double crit = 0;
-		if (source != null) {
-			crit += source.getCritical();
-		}
 		if (usable != null) {
-			crit += usable.getStats().getCritical();
+			if (usable.getStats().isSpell()) {
+				crit += usable.getStats().getCritical();
+			} else {
+				if (source != null) {
+					crit += source.getCritical();
+				}
+			}
 		}
 
 		return modHp(source, usable, -Math.max(1, applyMitigation(value)), crit);
