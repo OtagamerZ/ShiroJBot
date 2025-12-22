@@ -95,7 +95,7 @@ public class HeroSkillCommand implements Executable {
 		}
 
 		if (s.getStats().getReservation() > 0) {
-			eb.appendDescription("-# " + locale.get("str/reservation", "~~" + StringUtils.repeat('◇', s.getStats().getReservation())) + "~~\n");
+			eb.appendDescription("-# " + locale.get("str/reservation", "~~" + StringUtils.repeat('◇', s.getStats().getReservation()) + "~~") + "\n");
 		}
 
 		if (s.getStats().getCooldown() > 0) {
