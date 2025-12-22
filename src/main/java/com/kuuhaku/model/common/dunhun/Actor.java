@@ -10,6 +10,7 @@ import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
+import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Boss;
@@ -193,6 +194,34 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			if (source != null) {
 				if (hp > 0) {
 					if (val.get() < 0) {
+						Senshi srcSen = source.getSenshi();
+						Senshi tgtSen = getSenshi();
+						if (source.getTeam() != getTeam()) {
+							String outcome = null;
+							if (srcSen.isBlinded(true) && Calc.chance(50)) {
+								cbt.trigger(Trigger.ON_MISS, source, this, usable);
+
+								outcome = cbt.getLocale().get("str/actor_miss", source.getName());
+							} else if (!srcSen.hasFlag(Flag.TRUE_STRIKE, true) && !tgtSen.isSleeping() && !tgtSen.isStasis()) {
+								if (Calc.chance(tgtSen.getDodge())) {
+									cbt.trigger(Trigger.ON_MISS, source, this, usable);
+									cbt.trigger(Trigger.ON_DODGE, this, source, usable);
+
+									outcome = cbt.getLocale().get("str/actor_dodge", this.getName());
+								} else if (Calc.chance(tgtSen.getParry())) {
+									cbt.trigger(Trigger.ON_PARRY, this, source, usable);
+
+									outcome = cbt.getLocale().get("str/actor_parry", this.getName());
+									cbt.attack(this, source);
+								}
+							}
+
+							if (outcome != null) {
+								cbt.getHistory().add(outcome);
+								return Tuple2.tuple(0, false);
+							}
+						}
+
 						cbt.trigger(Trigger.ON_HIT, source, this, usable);
 						if (crit) {
 							cbt.trigger(Trigger.ON_CRITICAL, source, this, usable);
@@ -201,10 +230,11 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 					cbt.trigger(val.get() < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, usable, val);
 					if (hp + val.get() <= 0) {
-						cbt.trigger(Trigger.ON_GRAVEYARD, source, this, usable);
+						cbt.trigger(Trigger.ON_GRAVEYARD, this, this, usable);
+						cbt.trigger(Trigger.ON_KILL, source, this, usable);
 					}
 				} else if (hp + val.get() > 0) {
-					cbt.trigger(Trigger.ON_REVIVE, source, this, usable);
+					cbt.trigger(Trigger.ON_REVIVE, this, this, usable);
 				}
 			}
 
@@ -344,8 +374,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		}
 
 		for (Skill s : getSkills()) {
-			if (s.getToggle() != null) continue;
-			queue.add(s.getToggle());
+			if (s.getToggledEffect() != null) continue;
+			queue.add(s.getToggledEffect().effect());
 		}
 
 		Set<EffectBase> effects = getModifiers().getEffects();

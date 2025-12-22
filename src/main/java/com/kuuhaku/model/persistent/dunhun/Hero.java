@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.dunhun.Attributes;
+import com.kuuhaku.model.records.dunhun.ToggledEffect;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.ygimenez.json.JSONArray;
@@ -121,8 +122,13 @@ public class Hero extends Actor<Hero> {
 	@Override
 	public int getMaxAp() {
 		int flat = 2 + stats.getLevel() / 8;
+		int reserved = getSkills().stream()
+				.map(Skill::getToggledEffect)
+				.filter(Objects::nonNull)
+				.mapToInt(ToggledEffect::reservation)
+				.sum();
 
-		return (int) Calc.clamp(getModifiers().getMaxAp().apply(flat), 1, getApCap());
+		return (int) Calc.clamp(getModifiers().getMaxAp().apply(flat) - reserved, 1, getApCap());
 	}
 
 	@Override

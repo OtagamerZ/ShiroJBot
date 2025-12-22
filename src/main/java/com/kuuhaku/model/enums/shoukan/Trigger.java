@@ -295,7 +295,6 @@ public enum Trigger {
 
 	/**
 	 * When targeted by a spell<br>
-	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_SPELL_TARGET,
 

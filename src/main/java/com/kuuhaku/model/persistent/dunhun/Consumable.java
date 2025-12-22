@@ -20,6 +20,8 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.ActivationException;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.Actor;
@@ -111,17 +113,24 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 		return stats.canCpuUse(this, source, target);
 	}
 
-	public void execute(Actor<?> source, Actor<?> target) {
-		if (count <= 0 || stats.getEffect() == null) return;
+	@Override
+	public boolean execute(Dunhun game, Actor<?> source, Actor<?> target) {
+		if (count <= 0 || stats.getEffect() == null) return false;
 
 		try {
 			Utils.exec(id, stats.getEffect(), Map.of(
 					"ctx", new SkillContext(source, target, this)
 			));
 			count--;
+
+			return true;
+		} catch (ActivationException e) {
+			game.getChannel().sendMessage(game.getString(e.getMessage())).queue();
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute consumable {}", id, e);
 		}
+
+		return false;
 	}
 
 	@Override

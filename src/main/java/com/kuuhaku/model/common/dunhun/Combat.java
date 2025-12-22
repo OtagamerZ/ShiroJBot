@@ -66,7 +66,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final BondedList<Actor<?>> keepers = new BondedList<>(
 			(a, it) -> onAddActor(a, Team.KEEPERS), this::onRemoveActor
 	);
-	private final FixedSizeDeque<String> history = new FixedSizeDeque<>(8);
+	private final List<String> history = new ArrayList<>();
 	private final RandomList<Actor<?>> rngList = new RandomList<>();
 	private final TimedMap<EffectBase> effects = new TimedMap<>();
 	private final Loot loot = new Loot();
@@ -327,7 +327,7 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				addSelector(w.getMessage(), helper, tgts,
-						t -> lock.complete(() -> attack(h, t, null))
+						t -> lock.complete(() -> attack(h, t))
 				);
 			});
 
@@ -388,14 +388,14 @@ public class Combat implements Renderer<BufferedImage> {
 
 					addSelector(w.getMessage(), helper, con.getTargets(h),
 							t -> lock.complete(() -> {
-								con.execute(h, t);
-								h.consumeAp(1);
+								if (con.execute(game, h, t)) {
+									h.consumeAp(1);
+									trigger(Trigger.ON_CONSUMABLE, h, t, con);
 
-								trigger(Trigger.ON_CONSUMABLE, h, t, con);
-
-								history.add(getLocale().get(t.equals(h) ? "str/used_self" : "str/used",
-										h.getName(), con.getName(getLocale()), t.getName())
-								);
+									history.add(getLocale().get(t.equals(h) ? "str/used_self" : "str/used",
+											h.getName(), con.getName(getLocale()), t.getName())
+									);
+								}
 							})
 					);
 				});
@@ -498,7 +498,7 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					attack(curr, Utils.getWeightedEntry(rngList, criteria, attackTgts), null);
+					attack(curr, Utils.getWeightedEntry(rngList, criteria, attackTgts));
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 				} finally {
@@ -559,7 +559,7 @@ public class Combat implements Renderer<BufferedImage> {
 								.toList()
 				);
 
-				if (s.getToggle() != null) {
+				if (s.getToggledEffect() != null) {
 					extra += "[" + getLocale().get("str/active").toUpperCase() + "]";
 				} else {
 					int cd = s.getRemainingCooldown();
@@ -604,99 +604,27 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void attack(Actor<?> source, Actor<?> target) {
-		attack(source, target, null);
-	}
+		source.consumeAp(1);
+		history.add(getLocale().get("str/actor_combat", source.getName(), target.getName()));
 
-	public void attack(Actor<?> source, Actor<?> target, Double damageMult) {
-		if (damageMult == null) {
-			source.consumeAp(1);
-			history.add(getLocale().get("str/actor_combat", source.getName(), target.getName()));
-		}
-
-		trigger(Trigger.ON_DEFEND, target, source, Skill.DEFAULT_ATTACK);
-
-		Senshi srcSen = source.getSenshi();
-		Senshi tgtSen = target.getSenshi();
-		if (damageMult == null) {
-			if (source.getTeam() != target.getTeam()) {
-				if (srcSen.isBlinded(true) && Calc.chance(50)) {
-					trigger(Trigger.ON_MISS, source, target, Skill.DEFAULT_ATTACK);
-
-					history.add(getLocale().get("str/actor_miss", source.getName()));
-					return;
-				} else if (!srcSen.hasFlag(Flag.TRUE_STRIKE, true) && !tgtSen.isSleeping() && !tgtSen.isStasis()) {
-					if (Calc.chance(tgtSen.getDodge())) {
-						trigger(Trigger.ON_MISS, source, target, Skill.DEFAULT_ATTACK);
-						trigger(Trigger.ON_DODGE, target, source, Skill.DEFAULT_ATTACK);
-
-						history.add(getLocale().get("str/actor_dodge", target.getName()));
-						return;
-					} else if (Calc.chance(tgtSen.getParry())) {
-						trigger(Trigger.ON_PARRY, target, source, Skill.DEFAULT_ATTACK);
-
-						history.add(getLocale().get("str/actor_parry", target.getName()));
-						attack(target, source, null);
-						return;
-					}
-				}
-			}
-
-			damageMult = 1d;
-		}
-
-		AtomicInteger dmg = new AtomicInteger((int) (srcSen.getDmg() * damageMult));
+		AtomicInteger dmg = new AtomicInteger(source.getSenshi().getDmg());
 
 		trigger(Trigger.ON_ATTACK, source, target, Skill.DEFAULT_ATTACK, dmg);
-		target.modHp(source, Skill.DEFAULT_ATTACK, -dmg.get(), source.getCritical());
+		trigger(Trigger.ON_DEFEND, target, source, Skill.DEFAULT_ATTACK);
 
-		if (target.getHp() == 0) {
-			trigger(Trigger.ON_KILL, source, target, Skill.DEFAULT_ATTACK, dmg);
-		}
+		target.damage(source, Skill.DEFAULT_ATTACK, dmg.get());
 	}
 
 	public void skill(Skill skill, Actor<?> source, Actor<?> target) {
-		source.consumeAp(skill.getStats().getCost());
+		int lastHistor = history.size();
+		boolean wasToggle = skill.getToggledEffect() != null;
+		if (skill.execute(game, source, target)) {
+			source.consumeAp(skill.getStats().getCost());
+			trigger(Trigger.ON_SPELL, source, source, skill);
 
-		trigger(Trigger.ON_SPELL, source, target, skill);
-		trigger(Trigger.ON_SPELL_TARGET, target, source, skill);
-
-		boolean wasToggle = skill.getToggle() != null;
-		String outcome = null;
-		try {
-			Senshi srcSen = source.getSenshi();
-			Senshi tgtSen = target.getSenshi();
-			if (source.getTeam() != target.getTeam()) {
-				if (srcSen.isBlinded(true) && Calc.chance(50)) {
-					trigger(Trigger.ON_MISS, source, target, skill);
-
-					outcome = getLocale().get("str/actor_miss", source.getName());
-					return;
-				} else if (!srcSen.hasFlag(Flag.TRUE_STRIKE, true) && !tgtSen.isSleeping() && !tgtSen.isStasis()) {
-					if (Calc.chance(tgtSen.getDodge())) {
-						trigger(Trigger.ON_MISS, source, target, skill);
-						trigger(Trigger.ON_DODGE, target, source, skill);
-
-						outcome = getLocale().get("str/actor_dodge", target.getName());
-						return;
-					} else if (Calc.chance(tgtSen.getParry())) {
-						trigger(Trigger.ON_PARRY, target, source, skill);
-
-						outcome = getLocale().get("str/actor_parry", target.getName());
-						attack(target, source, null);
-						return;
-					}
-				}
-			}
-
-			skill.execute(source, target);
-		} finally {
 			String action = target.equals(source) ? "str/used_self" : "str/used";
-			if (skill.getToggle() == null) {
+			if (skill.getToggledEffect() == null) {
 				if (wasToggle) action = "str/toggle_deactivate";
-
-				history.add(getLocale().get(action,
-						source.getName(), skill.getInfo(getLocale()).getName(), target.getName())
-				);
 
 				if (skill.getStats().getCooldown() > 0) {
 					skill.setCooldown(skill.getStats().getCooldown());
@@ -705,12 +633,7 @@ public class Combat implements Renderer<BufferedImage> {
 				action = "str/toggle_activate";
 			}
 
-			history.add(getLocale().get(action, source.getName(), skill.getInfo(getLocale()).getName(), target.getName()));
-			if (outcome != null) history.add(outcome);
-
-			if (target.getHp() == 0) {
-				trigger(Trigger.ON_KILL, source, target, skill);
-			}
+			history.add(lastHistor, getLocale().get(action, source.getName(), skill.getInfo(getLocale()).getName(), target.getName()));
 		}
 	}
 
@@ -838,7 +761,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return game;
 	}
 
-	public FixedSizeDeque<String> getHistory() {
+	public List<String> getHistory() {
 		return history;
 	}
 

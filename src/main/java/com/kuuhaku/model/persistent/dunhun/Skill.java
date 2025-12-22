@@ -20,6 +20,8 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.ActivationException;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.EffectBase;
@@ -28,6 +30,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
 import com.kuuhaku.model.records.dunhun.Requirements;
+import com.kuuhaku.model.records.dunhun.ToggledEffect;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -65,7 +68,7 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 
 	@Transient
 	private transient JSONObject ctxVar = new JSONObject();
-	private transient EffectBase toggle = null;
+	private transient ToggledEffect toggle = null;
 	private transient int cd = 0;
 
 	public Skill() {
@@ -125,16 +128,23 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 		return stats.canCpuUse(this, source, target);
 	}
 
-	public void execute(Actor<?> source, Actor<?> target) {
-		if (stats.getEffect() == null) return;
+	@Override
+	public boolean execute(Dunhun game, Actor<?> source, Actor<?> target) {
+		if (stats.getEffect() == null) return false;
 
 		try {
 			Utils.exec(id, stats.getEffect(), Map.of(
 					"ctx", new SkillContext(source, target, this, getValues(source), ctxVar)
 			));
+
+			return true;
+		} catch (ActivationException e) {
+			game.getChannel().sendMessage(game.getString(e.getMessage())).queue();
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute skill {}", id, e);
 		}
+
+		return false;
 	}
 
 	public List<Integer> getValues(Actor<?> source) {
@@ -147,15 +157,15 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 		return requirements;
 	}
 
-	public EffectBase getToggle() {
+	public ToggledEffect getToggledEffect() {
 		return toggle;
 	}
 
-	public void setToggle(EffectBase toggle) {
-		if (this.toggle == null) {
-			this.toggle = toggle;
+	public void toggle(EffectBase effect, int reservation) {
+		if (toggle == null) {
+			toggle = new ToggledEffect(effect, reservation);
 		} else {
-			this.toggle = null;
+			toggle = null;
 			setCooldown(stats.getCooldown());
 		}
 	}
