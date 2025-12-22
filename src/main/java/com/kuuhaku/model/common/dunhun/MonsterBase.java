@@ -4,17 +4,14 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.dunhun.MonsterStats;
-import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.records.dunhun.Loot;
-import com.kuuhaku.model.records.dunhun.ToggledEffect;
 import com.kuuhaku.util.Calc;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -70,13 +67,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 			flat += getGame().getPartySize() / 2;
 		}
 
-		int reserved = getSkills().stream()
-				.map(Skill::getToggledEffect)
-				.filter(Objects::nonNull)
-				.mapToInt(ToggledEffect::reservation)
-				.sum();
-
-		return (int) Calc.clamp(getModifiers().getMaxAp().apply(flat) - reserved, 1, getApCap() + flat);
+		return (int) Calc.clamp(getModifiers().getMaxAp().apply(flat), 1, getApCap() + flat);
 	}
 
 	@Override

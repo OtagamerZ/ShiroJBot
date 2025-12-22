@@ -23,6 +23,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.model.records.dunhun.RaceValues;
+import com.kuuhaku.model.records.dunhun.ToggledEffect;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import groovy.lang.Tuple2;
@@ -55,7 +56,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	private transient final ActorCache cache = new ActorCache(this);
 	private transient final RegDeg regDeg = new RegDeg(null);
 	private transient int hp = -1, ap;
-	private transient int maxHp = -1, maxAp = -1;
+	private transient int maxHp = -1;
 	private transient boolean fleed;
 
 	public Actor() {
@@ -84,6 +85,14 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	public abstract int getMaxHp();
 
 	public abstract int getMaxAp();
+
+	public int getReservedAp() {
+		return getSkills().stream()
+				.map(Skill::getToggledEffect)
+				.filter(Objects::nonNull)
+				.mapToInt(ToggledEffect::reservation)
+				.sum();
+	}
 
 	public abstract int getApCap();
 
@@ -131,12 +140,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public int getAp() {
-		int max = getMaxAp();
-		if (maxAp != -1 && maxAp != max) {
-			ap = max * ap / maxAp;
-		}
+		int max = getMaxAp() - getReservedAp();
 
-		maxAp = max;
 		if (ap > max) ap = max;
 		else if (ap < 0) ap = 0;
 
@@ -358,7 +363,15 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public void addApBar(XStringBuilder sb) {
-		sb.appendNewLine(Utils.makeProgressBar(getAp(), getMaxAp(), getMaxAp(), '◇', '◈'));
+		int max = getMaxAp();
+		String bar = Utils.makeProgressBar(getAp(), max, max, '◇', '◈');
+
+		int reserved = getReservedAp();
+		if (reserved > 0) {
+			bar = bar.substring(0, max - reserved) + "||" + bar.substring(max - reserved) + "||";
+		}
+
+		sb.appendNewLine(bar);
 	}
 
 	public void trigger(Trigger trigger, Actor<?> target, Usable usable, AtomicInteger value) {
@@ -371,11 +384,6 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 			effects.removeIf(EffectBase::isClosed);
 			queue.addAll(effects);
-		}
-
-		for (Skill s : getSkills()) {
-			if (s.getToggledEffect() != null) continue;
-			queue.add(s.getToggledEffect().effect());
 		}
 
 		Set<EffectBase> effects = getModifiers().getEffects();
