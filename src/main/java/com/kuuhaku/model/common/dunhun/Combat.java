@@ -660,10 +660,8 @@ public class Combat implements Renderer<BufferedImage> {
 		trigger(Trigger.ON_SPELL, source, target, skill);
 		trigger(Trigger.ON_SPELL_TARGET, target, source, skill);
 
-		history.add(getLocale().get(target.equals(source) ? "str/used_self" : "str/used",
-				source.getName(), skill.getInfo(getLocale()).getName(), target.getName())
-		);
-
+		boolean wasToggle = skill.getToggle() != null;
+		String outcome = null;
 		try {
 			Senshi srcSen = source.getSenshi();
 			Senshi tgtSen = target.getSenshi();
@@ -671,19 +669,19 @@ public class Combat implements Renderer<BufferedImage> {
 				if (srcSen.isBlinded(true) && Calc.chance(50)) {
 					trigger(Trigger.ON_MISS, source, target, skill);
 
-					history.add(getLocale().get("str/actor_miss", source.getName()));
+					outcome = getLocale().get("str/actor_miss", source.getName());
 					return;
 				} else if (!srcSen.hasFlag(Flag.TRUE_STRIKE, true) && !tgtSen.isSleeping() && !tgtSen.isStasis()) {
 					if (Calc.chance(tgtSen.getDodge())) {
 						trigger(Trigger.ON_MISS, source, target, skill);
 						trigger(Trigger.ON_DODGE, target, source, skill);
 
-						history.add(getLocale().get("str/actor_dodge", target.getName()));
+						outcome = getLocale().get("str/actor_dodge", target.getName());
 						return;
 					} else if (Calc.chance(tgtSen.getParry())) {
 						trigger(Trigger.ON_PARRY, target, source, skill);
 
-						history.add(getLocale().get("str/actor_parry", target.getName()));
+						outcome = getLocale().get("str/actor_parry", target.getName());
 						attack(target, source, null);
 						return;
 					}
@@ -692,9 +690,23 @@ public class Combat implements Renderer<BufferedImage> {
 
 			skill.execute(source, target);
 		} finally {
-			if (skill.getToggle() == null && skill.getStats().getCooldown() > 0) {
-				skill.setCooldown(skill.getStats().getCooldown());
+			String action = target.equals(source) ? "str/used_self" : "str/used";
+			if (skill.getToggle() == null) {
+				if (wasToggle) action = "str/toggle_deactivate";
+
+				history.add(getLocale().get(action,
+						source.getName(), skill.getInfo(getLocale()).getName(), target.getName())
+				);
+
+				if (skill.getStats().getCooldown() > 0) {
+					skill.setCooldown(skill.getStats().getCooldown());
+				}
+			} else {
+				action = "str/toggle_activate";
 			}
+
+			history.add(getLocale().get(action, source.getName(), skill.getInfo(getLocale()).getName(), target.getName()));
+			if (outcome != null) history.add(outcome);
 
 			if (target.getHp() == 0) {
 				trigger(Trigger.ON_KILL, source, target, skill);

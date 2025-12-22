@@ -152,8 +152,10 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 	}
 
 	public void setToggle(EffectBase toggle) {
-		this.toggle = toggle;
-		if (toggle == null) {
+		if (this.toggle == null) {
+			this.toggle = toggle;
+		} else {
+			this.toggle = null;
 			setCooldown(stats.getCooldown());
 		}
 	}
