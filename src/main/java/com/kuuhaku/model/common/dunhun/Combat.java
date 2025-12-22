@@ -184,9 +184,13 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public MessageEmbed getEmbed() {
+		List<String> recent = history.size() > 8
+				? history.subList(history.size() - 8, history.size())
+				: history;
+
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setTitle(getLocale().get("str/actor_turn", getCurrent().getName()))
-				.setDescription(String.join("\n", history))
+				.setDescription(String.join("\n", recent))
 				.setFooter(getLocale().get("str/combat_footer"));
 
 		if (!game.isDuel()) {
