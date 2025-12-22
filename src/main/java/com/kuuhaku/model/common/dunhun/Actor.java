@@ -343,6 +343,11 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			queue.addAll(effects);
 		}
 
+		for (Skill s : getSkills()) {
+			if (s.getToggle() != null) continue;
+			queue.add(s.getToggle());
+		}
+
 		Set<EffectBase> effects = getModifiers().getEffects();
 		if (!effects.isEmpty()) {
 			effects.removeIf(EffectBase::isClosed);

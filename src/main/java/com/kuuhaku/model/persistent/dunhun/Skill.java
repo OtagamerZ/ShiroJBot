@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
@@ -64,6 +65,7 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 
 	@Transient
 	private transient JSONObject ctxVar = new JSONObject();
+	private transient EffectBase toggle = null;
 	private transient int cd = 0;
 
 	public Skill() {
@@ -143,6 +145,17 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 
 	public Requirements getRequirements() {
 		return requirements;
+	}
+
+	public EffectBase getToggle() {
+		return toggle;
+	}
+
+	public void setToggle(EffectBase toggle) {
+		this.toggle = toggle;
+		if (toggle == null) {
+			setCooldown(stats.getCooldown());
+		}
 	}
 
 	public int getRemainingCooldown() {

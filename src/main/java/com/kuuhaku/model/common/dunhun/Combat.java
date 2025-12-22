@@ -552,24 +552,29 @@ public class Combat implements Renderer<BufferedImage> {
 					.setMaxValues(1);
 
 			for (Skill s : skills) {
-				String cdText = "";
+				String extra = "";
 				String reqTags = Utils.properlyJoin(getLocale(),
 						s.getRequirements().tags().stream()
 								.map(t -> LocalizedString.get(getLocale(), "tag/" + t, "???"))
 								.toList()
 				);
 
-				int cd = s.getRemainingCooldown();
-				if (cd > 0) {
-					cdText = " (CD: " + getLocale().get("str/turns_inline", cd) + ")";
+				if (s.getToggle() != null) {
+					extra += "[" + getLocale().get("str/active").toUpperCase() + "]";
+				} else {
+					int cd = s.getRemainingCooldown();
+					if (cd > 0) {
+						extra += " (CD: " + getLocale().get("str/turns_inline", cd) + ")";
+					}
 				}
 
 				if (!reqTags.isBlank()) {
-					reqTags = " [" + getLocale().get("str/requires", reqTags) + "]";
+					extra += " [" + getLocale().get("str/requires", reqTags) + "]";
 				}
 
+				String cost = " " + StringUtils.repeat('◈', s.getStats().getCost());
 				b.addOption(
-						s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getStats().getCost()) + cdText + reqTags,
+						s.getInfo(getLocale()).getName() + cost + extra,
 						s.getId(),
 						StringUtils.abbreviate(s.getDescription(getLocale(), h).replace("*", ""), 100)
 				);
@@ -687,7 +692,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			skill.execute(source, target);
 		} finally {
-			if (skill.getStats().getCooldown() > 0) {
+			if (skill.getToggle() == null && skill.getStats().getCooldown() > 0) {
 				skill.setCooldown(skill.getStats().getCooldown());
 			}
 
