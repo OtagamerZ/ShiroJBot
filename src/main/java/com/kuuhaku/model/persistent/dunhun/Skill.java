@@ -24,7 +24,6 @@ import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
-import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
@@ -161,10 +160,12 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 		return toggle;
 	}
 
-	public void toggle(EffectBase effect, int reservation) {
+	public void setToggledEffect(ToggledEffect effect) {
 		if (toggle == null) {
-			toggle = new ToggledEffect(effect, reservation);
+			toggle = effect;
+			effect.onEnable().run();
 		} else {
+			effect.onDisable().run();
 			toggle = null;
 			setCooldown(stats.getCooldown());
 		}
