@@ -372,7 +372,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		int reserved = getReservedAp();
 		if (reserved > 0) {
-			bar = bar.substring(0, max - reserved) + "||" + bar.substring(max - reserved) + "||";
+			bar = bar.substring(0, max - reserved) + "~~" + bar.substring(max - reserved) + "~~";
 		}
 
 		sb.appendNewLine(bar);
