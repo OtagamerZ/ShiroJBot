@@ -26,7 +26,7 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS allow_cost_or_reservation ON stashed_card;
+DROP TRIGGER IF EXISTS allow_cost_or_reservation ON skill;
 CREATE TRIGGER allow_cost_or_reservation
     BEFORE UPDATE
     ON skill
