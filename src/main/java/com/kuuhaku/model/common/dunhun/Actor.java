@@ -94,6 +94,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				.sum();
 	}
 
+	public int getUsableAp() {
+		return getMaxAp() - getReservedAp();
+	}
+
 	public abstract int getApCap();
 
 	public abstract int getInitiative();
@@ -140,7 +144,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public int getAp() {
-		int max = getMaxAp() - getReservedAp();
+		int max = getUsableAp();
 
 		if (ap > max) ap = max;
 		else if (ap < 0) ap = 0;
