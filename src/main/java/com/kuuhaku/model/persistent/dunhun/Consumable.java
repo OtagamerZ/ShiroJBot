@@ -27,7 +27,6 @@ import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.CpuRule;
 import com.kuuhaku.model.persistent.localized.LocalizedConsumable;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
@@ -50,7 +49,7 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 	private String id;
 
 	@Embedded
-	private SkillStats stats = new SkillStats();
+	private UsableStats stats = new UsableStats();
 
 	@OneToMany(cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id", referencedColumnName = "id")
@@ -69,7 +68,7 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 		return id;
 	}
 
-	public SkillStats getStats() {
+	public UsableStats getStats() {
 		return stats;
 	}
 
@@ -107,10 +106,6 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 
 	public List<Actor<?>> getTargets(Actor<?> source) {
 		return stats.getTargets(this, source);
-	}
-
-	public CpuRule canCpuUse(Actor<?> source, Actor<?> target) {
-		return stats.canCpuUse(this, source, target);
 	}
 
 	@Override
@@ -157,7 +152,7 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 	@Override
 	public Consumable copyWith(double efficiency, double critical) {
 		Consumable clone = copy();
-		clone.stats = stats.copyWith(efficiency, critical);
+		clone.stats = stats.copy();
 
 		return clone;
 	}

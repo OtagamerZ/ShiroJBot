@@ -13,6 +13,7 @@
     <file url="file://$PROJECT_DIR$/src/main/resources/database/mat-views/evogear_usage.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/mat-views/senshi_roles.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/scripts/fix_card_duplicates.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/allow_cost_or_reservation.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/apply_affix_levels.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/editable_basetype_attr_set.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/database/triggers/editable_basetype_i18n.sql" dialect="PostgreSQL" />

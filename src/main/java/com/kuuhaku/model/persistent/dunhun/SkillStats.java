@@ -23,27 +23,15 @@ import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
-import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.kuuhaku.model.records.dunhun.SkillValue;
 import com.kuuhaku.util.Utils;
-import com.ygimenez.json.JSONArray;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Embeddable
-public class SkillStats implements Serializable, Cloneable {
-	@Column(name = "cost", nullable = false)
-	private int cost;
-
+public class SkillStats extends UsableStats {
 	@Column(name = "reservation", nullable = false)
 	private int reservation;
 
@@ -59,36 +47,19 @@ public class SkillStats implements Serializable, Cloneable {
 	@Column(name = "spell", nullable = false)
 	private boolean spell;
 
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "values", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray values = new JSONArray();
-
-	@Language("Groovy")
-	@Column(name = "targeter", columnDefinition = "TEXT")
-	private String targeter;
-
 	@Language("Groovy")
 	@Column(name = "cpu_rule", columnDefinition = "TEXT")
 	private String cpuRule;
-
-	@Language("Groovy")
-	@Column(name = "effect", nullable = false, columnDefinition = "TEXT")
-	private String effect;
 
 	public SkillStats() {
 	}
 
 	public SkillStats(int cost, int cooldown, double efficiency, double critical, boolean spell) {
-		this.cost = cost;
+		super(cost);
 		this.cooldown = cooldown;
 		this.efficiency = efficiency;
 		this.critical = critical;
 		this.spell = spell;
-	}
-
-	public int getCost() {
-		return cost;
 	}
 
 	public int getReservation() {
@@ -111,28 +82,6 @@ public class SkillStats implements Serializable, Cloneable {
 		return spell;
 	}
 
-	public List<SkillValue> getValues() {
-		List<SkillValue> out = new ArrayList<>();
-		for (Object e : values) {
-			out.add(SkillValue.parse(String.valueOf(e)));
-		}
-
-		return out;
-	}
-
-	public List<Actor<?>> getTargets(Usable usable, Actor<?> source) {
-		if (targeter == null) return List.of(source);
-
-		SkillContext ctx = new SkillContext(source, null, usable);
-		try {
-			Utils.exec(usable.getId(), targeter, Map.of("ctx", ctx));
-		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to load targets {}", usable.getId(), e);
-		}
-
-		return ctx.getValidTargets();
-	}
-
 	public CpuRule canCpuUse(Usable usable, Actor<?> source, Actor<?> target) {
 		if (cpuRule == null) return CpuRule.ANY;
 
@@ -151,20 +100,11 @@ public class SkillStats implements Serializable, Cloneable {
 		return CpuRule.ANY;
 	}
 
-	public String getEffect() {
-		return effect;
-	}
-
 	public SkillStats copyWith(double efficiency, double critical) {
-		try {
-			SkillStats clone = (SkillStats) clone();
-			clone.efficiency = efficiency;
-			clone.critical = critical;
-			clone.values = values.clone();
+		SkillStats clone = (SkillStats) super.copy();
+		clone.efficiency = efficiency;
+		clone.critical = critical;
 
-			return clone;
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+		return clone;
 	}
 }
