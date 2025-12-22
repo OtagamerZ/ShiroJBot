@@ -44,6 +44,9 @@ public class SkillStats implements Serializable, Cloneable {
 	@Column(name = "cost", nullable = false)
 	private int cost;
 
+	@Column(name = "reservation", nullable = false)
+	private int reservation;
+
 	@Column(name = "cooldown", nullable = false)
 	private int cooldown;
 
@@ -86,6 +89,10 @@ public class SkillStats implements Serializable, Cloneable {
 
 	public int getCost() {
 		return cost;
+	}
+
+	public int getReservation() {
+		return reservation;
 	}
 
 	public int getCooldown() {

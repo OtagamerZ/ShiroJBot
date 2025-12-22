@@ -162,7 +162,7 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 
 	public void setToggledEffect(Actor<?> holder, ToggledEffect effect) {
 		if (toggle == null) {
-			if (holder.getUsableAp() <= effect.reservation()) {
+			if (holder.getUsableAp() <= stats.getReservation()) {
 				throw new ActivationException("error/not_enough_ap_reserve");
 			}
 

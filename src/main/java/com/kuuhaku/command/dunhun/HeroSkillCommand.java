@@ -94,6 +94,10 @@ public class HeroSkillCommand implements Executable {
 			eb.appendDescription("-# " + locale.get("str/cost", StringUtils.repeat('◈', s.getStats().getCost())) + "\n");
 		}
 
+		if (s.getStats().getReservation() > 0) {
+			eb.appendDescription("-# " + locale.get("str/reservation", "~~" + StringUtils.repeat('◇', s.getStats().getReservation())) + "~~\n");
+		}
+
 		if (s.getStats().getCooldown() > 0) {
 			eb.appendDescription("-# " + locale.get("str/cooldown", locale.get("str/turns_inline", s.getStats().getCooldown())) + "\n");
 		}

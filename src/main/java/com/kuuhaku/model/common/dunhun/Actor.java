@@ -13,17 +13,13 @@ import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Trigger;
-import com.kuuhaku.model.persistent.dunhun.Boss;
-import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.persistent.dunhun.Hero;
-import com.kuuhaku.model.persistent.dunhun.Skill;
+import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.CombatCardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.model.records.dunhun.RaceValues;
-import com.kuuhaku.model.records.dunhun.ToggledEffect;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import groovy.lang.Tuple2;
@@ -88,9 +84,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public int getReservedAp() {
 		return getSkills().stream()
-				.map(Skill::getToggledEffect)
-				.filter(Objects::nonNull)
-				.mapToInt(ToggledEffect::reservation)
+				.map(Skill::getStats)
+				.mapToInt(SkillStats::getReservation)
 				.sum();
 	}
 

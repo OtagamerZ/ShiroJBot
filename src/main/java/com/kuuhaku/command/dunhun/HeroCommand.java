@@ -19,7 +19,7 @@
 package com.kuuhaku.command.dunhun;
 
 import com.github.ygimenez.method.Pages;
-import com.github.ygimenez.model.*;
+import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.exceptions.PendingConfirmationException;
@@ -32,10 +32,7 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
-import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.persistent.dunhun.GearAffix;
-import com.kuuhaku.model.persistent.dunhun.Hero;
-import com.kuuhaku.model.persistent.dunhun.Skill;
+import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
@@ -249,20 +246,28 @@ public class HeroCommand implements Executable {
 			pages.addAll(Utils.generatePages(eb, all.values(), 10, 5,
 					s -> {
 						int idx = skills.indexOf(s);
-						String prefix;
+						String title = s.getName(locale);
+
 						if (idx > -1) {
-							prefix = Utils.fancyNumber(idx + 1);
+							title = Utils.fancyNumber(idx + 1) + " " + title;
 						} else if (!h.getStats().getUnlockedSkills().contains(s.getId())) {
-							prefix = "🔒";
-						} else {
-							prefix = "";
+							title = "🔒 " + title;
+						}
+
+						SkillStats stats = s.getStats();
+						if (stats.getCost() > 0) {
+							title += " " + StringUtils.repeat('◈', s.getStats().getCost());
+						}
+						if (stats.getReservation() > 0) {
+							title += " ~~" + StringUtils.repeat('◇', s.getStats().getReservation()) + "~~";
 						}
 
 						Attributes reqs = s.getRequirements().attributes();
 						List<String> reqLine = new ArrayList<>();
 
-						if (s.getRequirements().level() > 0)
+						if (s.getRequirements().level() > 0) {
 							reqLine.add(locale.get("str/level", s.getRequirements().level()));
+						}
 
 						for (AttrType t : AttrType.values()) {
 							if (t.ordinal() >= AttrType.LVL.ordinal()) break;
@@ -274,12 +279,11 @@ public class HeroCommand implements Executable {
 						String req = !reqLine.isEmpty()
 								? ("\n- " + (canUse ? "" : "\\❌ ") + String.join(" | ", reqLine))
 								: "";
-						return new FieldMimic(
-								prefix + " " + s.getName(locale) + " " + StringUtils.repeat('◈', s.getStats().getCost()),
-								"-# ID: `" + s.getId() + "`" + req + "\n" +
-										s.getDescription(locale, h).lines()
-												.map(l -> "-# " + l)
-												.collect(Collectors.joining("\n"))
+
+						return new FieldMimic(title, "-# ID: `" + s.getId() + "`" + req + "\n" +
+								s.getDescription(locale, h).lines()
+										.map(l -> "-# " + l)
+										.collect(Collectors.joining("\n"))
 						).toString();
 					},
 					(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
