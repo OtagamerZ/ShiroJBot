@@ -44,7 +44,7 @@ public class Main {
 
 	private static Application app;
 
-	static void main(String[] args) {
+	static void main() {
 		boot.start();
 		Constants.LOGGER.info("""
 						
