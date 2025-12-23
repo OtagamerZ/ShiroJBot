@@ -134,11 +134,11 @@ public class ActorModifiers implements Iterable<CumValue> {
 	}
 
 	public void clear(Actor<?> act) {
-		removeIf(act, o -> true);
+		removeIf(act, _ -> true);
 	}
 
 	public void removeIf(Actor<?> act, Predicate<ValueMod> check) {
-		act.getCache().getSenshi().getStats().removeIf(check);
+		act.getSenshi().getStats().removeIf(check);
 		permEffects.removeIf(EffectBase::isClosed);
 		tempEffects.getValues().removeIf(EffectBase::isClosed);
 

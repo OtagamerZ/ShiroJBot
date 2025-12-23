@@ -443,25 +443,27 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		cache.setSenshi(senshi);
 
 		modifiers.clear(this);
-		int dmg = this instanceof MonsterBase<?> m ? m.getStats().getAttack() : 100;
-		int def = this instanceof MonsterBase<?> m ? m.getStats().getDefense() : 100;
-		int ddg = this instanceof MonsterBase<?> m ? m.getStats().getDodge() : 0;
-		int pry = this instanceof MonsterBase<?> m ? m.getStats().getParry() : 0;
-		double pow = 0;
+		int dmg, def, ddg, pry;
+		double pow;
 
 		if (this instanceof Hero h) {
 			RaceValues bonus = h.getStats().getRaceBonus();
-			dmg += bonus.attack();
-			def += bonus.defense();
-			ddg += bonus.dodge();
-			pry += bonus.parry();
-			pow += (bonus.power() / 100d) + h.getAttributes().wis() * 0.05;
+			dmg = 100 + bonus.attack();
+			def = 100 + bonus.defense();
+			ddg = bonus.dodge();
+			pry = bonus.parry();
+			pow = (bonus.power() / 100d) + h.getAttributes().wis() * 0.05;
 		} else {
+			MonsterBase<?> m = (MonsterBase<?>) this;
+			dmg = m.getStats().getAttack();
+			def = m.getStats().getDefense();
+			ddg = m.getStats().getDodge();
+			pry = m.getStats().getParry();
 			pow = switch (getRarityClass()) {
 				case MAGIC -> 0.25;
 				case RARE -> 1;
 				default -> 0;
-			};
+			} + getLevel() * 0.025;
 		}
 
 		Attributes total = this instanceof Hero h ? h.getAttributes() : new Attributes();

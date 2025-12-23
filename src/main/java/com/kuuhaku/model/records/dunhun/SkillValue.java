@@ -1,7 +1,6 @@
 package com.kuuhaku.model.records.dunhun;
 
 import com.kuuhaku.model.common.dunhun.Actor;
-import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
@@ -29,11 +28,7 @@ public record SkillValue(int min, int max, boolean withAdded) {
 	}
 
 	public int valueFor(Skill skill, Actor<?> source) {
-		int level = source.getLevel();
 		double mult = source.getSenshi().getPower();
-		if (!(source instanceof Hero)) {
-			mult += level * 0.025;
-		}
 
 		int added = 0;
 		if (withAdded && skill.getStats().getEfficiency() > 0) {
@@ -45,7 +40,7 @@ public record SkillValue(int min, int max, boolean withAdded) {
 			}
 		}
 
-		return (int) ((withLevel(level) + added) * mult);
+		return (int) ((withLevel(source.getLevel()) + added) * mult);
 	}
 
 	@Override
