@@ -251,9 +251,13 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			}
 
 			I18N locale = cbt.getLocale();
-			cbt.getHistory().add(locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal",
-					getName(), Math.abs(val.get()), crit ? ("**(" + locale.get("str/critical_hit") + ")**") : ""
-			));
+			if (crit) {
+				cbt.getHistory().add("**" + locale.get("str/critical_hit") + "**");
+			}
+
+			if (val.get() != 0) {
+				cbt.getHistory().add(locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal", getName(), Math.abs(val.get())));
+			}
 
 			if (val.get() < 0) {
 				getSenshi().reduceSleep(999);
@@ -349,7 +353,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		boolean rdClosed = true;
 		int rd = -getRegDeg().peek();
-		if (rd >= part) {
+		if (rd > 0) {
 			sb.append("__");
 			rdClosed = false;
 		}
@@ -359,7 +363,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			if (i > 0 && i % 10 == 0) sb.nextLine();
 			int threshold = i * part;
 
-			if (!rdClosed && threshold > rd) {
+			if (!rdClosed && rd < threshold) {
 				sb.append("__");
 				rdClosed = true;
 			}
@@ -368,7 +372,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			else sb.append('▱');
 		}
 
-		if (rd >= maxHp && !rdClosed) {
+		if (!rdClosed && rd >= maxHp) {
 			sb.append("__");
 		}
 	}
