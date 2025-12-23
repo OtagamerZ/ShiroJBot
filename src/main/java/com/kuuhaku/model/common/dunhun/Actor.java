@@ -397,14 +397,12 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			Set<EffectBase> effects = g.getEffects();
 			if (effects.isEmpty()) continue;
 
-			effects.removeIf(EffectBase::isClosed);
-			queue.addAll(effects);
+			queue.addAll(effects.stream().filter(e -> !e.isClosed()).toList());
 		}
 
 		Set<EffectBase> effects = getModifiers().getEffects();
 		if (!effects.isEmpty()) {
-			effects.removeIf(EffectBase::isClosed);
-			queue.addAll(effects);
+			queue.addAll(effects.stream().filter(e -> !e.isClosed()).toList());
 		}
 
 		for (EffectBase e : queue) {
