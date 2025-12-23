@@ -227,6 +227,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							.map(n -> Map.entry(currNode.getPathVerb(n), n))
 							.sorted(Comparator
 									.<Map.Entry<String, Node>>comparingInt(e -> order.indexOf(e.getKey()))
+									.thenComparingInt(e -> -e.getValue().depth())
 									.thenComparingInt(e -> e.getValue().getPath())
 							)
 							.toList();
