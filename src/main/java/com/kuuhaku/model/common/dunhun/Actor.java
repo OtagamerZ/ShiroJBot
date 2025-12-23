@@ -330,7 +330,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	public void addHpBar(XStringBuilder sb) {
 		sb.appendNewLine("HP: " + Utils.shorten(getHp()) + "/" + Utils.shorten(getMaxHp()));
 
-		int rd = -getRegDeg().peek();
+		int rd = getRegDeg().peek();
 		if (rd != 0) {
 			String icon = Utils.getEmoteString(rd > 0 ? "regen" : "degen");
 			sb.append(" (" + icon + Utils.shorten(Math.abs(rd)) + ")");
