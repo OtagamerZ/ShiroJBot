@@ -142,11 +142,6 @@ public class Combat implements Renderer<BufferedImage> {
 		boolean divided = false;
 		for (List<Actor<?>> acts : List.of(hunters, keepers)) {
 			for (Actor<?> a : acts) {
-				if (a instanceof MonsterBase<?> m && m.getMaster() != null && m.getHp() == 0) {
-					acts.remove(a);
-					continue;
-				}
-
 				BufferedImage card;
 				if (a.isOutOfCombat()) {
 					a.getSenshi().setAvailable(false);
