@@ -328,50 +328,17 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public void addHpBar(XStringBuilder sb) {
-		int[] blocks = {1000, 2500, 5000};
-
-		int part = 0;
-		int maxHp = getMaxHp();
-		for (int i = 0, mult = 1; i < blocks.length; i++) {
-			part = blocks[i] * mult;
-			if (maxHp <= part) {
-				part /= 20;
-				break;
-			}
-
-			if (i == blocks.length - 1) {
-				mult *= 10;
-				i = -1;
-			}
-		}
-
 		sb.appendNewLine("HP: " + Utils.shorten(getHp()) + "/" + Utils.shorten(getMaxHp()));
-		sb.nextLine();
 
-		boolean rdClosed = true;
 		int rd = -getRegDeg().peek();
-		if (rd > 0) {
-			sb.append("__");
-			rdClosed = false;
+		if (rd != 0) {
+			String icon = Utils.getEmoteString(rd > 0 ? "regen" : "degen");
+			sb.append(" (" + icon + Utils.shorten(Math.abs(rd)) + ")");
 		}
 
-		int steps = (int) Math.ceil((double) maxHp / part);
-		for (int i = 0; i < steps; i++) {
-			if (i > 0 && i % 10 == 0) sb.nextLine();
-			int threshold = i * part;
-
-			if (!rdClosed && rd < threshold) {
-				sb.append("__");
-				rdClosed = true;
-			}
-
-			if (getHp() > 0 && getHp() >= threshold) sb.append('▰');
-			else sb.append('▱');
-		}
-
-		if (!rdClosed && rd >= maxHp) {
-			sb.append("__");
-		}
+		int max = getMaxHp();
+		String bar = Utils.makeProgressBar(getHp(), max, Calc.clamp(max / 100, 1, 10), '▱', '▰');
+		sb.appendNewLine("-# " + bar);
 	}
 
 	public void addApBar(XStringBuilder sb) {
@@ -383,7 +350,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			bar = bar.substring(0, max - reserved) + "~~" + bar.substring(max - reserved) + "~~";
 		}
 
-		sb.appendNewLine(bar);
+		sb.appendNewLine("-# " + bar);
 	}
 
 	public void trigger(Trigger trigger, Actor<?> target, Usable usable, AtomicInteger value) {
