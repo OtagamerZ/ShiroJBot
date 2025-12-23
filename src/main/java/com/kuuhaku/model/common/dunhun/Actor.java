@@ -560,6 +560,24 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public abstract Actor<?> copy();
 
+	public List<Actor<?>> getNearby() {
+		Combat cbt = getGame().getCombat();
+		if (cbt == null) return List.of();
+
+		List<Actor<?>> actors = cbt.getActors(getTeam());
+
+		int idx = actors.indexOf(this);
+		if (idx > -1) {
+			List<Actor<?>> nearby = new ArrayList<>(2);
+			if (idx > 0) nearby.add(actors.get(idx - 1));
+			if (idx < actors.size() - 2) nearby.add(actors.get(idx + 1));
+
+			return nearby;
+		}
+
+		return List.of();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
