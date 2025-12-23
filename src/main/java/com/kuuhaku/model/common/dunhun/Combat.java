@@ -443,7 +443,13 @@ public class Combat implements Renderer<BufferedImage> {
 					boolean canAttack = curr.getSenshi().getDmg() > 0;
 					boolean canDefend = curr.getSenshi().getDfs() > 0;
 					Function<Actor<?>, Integer> criteria = a -> {
-						if (a.getTeam() == curr.getTeam()) return a.getThreatScore();
+						if (a.getTeam() == curr.getTeam()) {
+							if (curr instanceof MonsterBase<?> m && Objects.equals(m.getMaster(), a)) {
+								return a.getThreatScore() * 5;
+							}
+
+							return a.getThreatScore();
+						}
 
 						Senshi sen = a.getSenshi();
 						return (int) (a.getThreatScore() * (1 - sen.getDodge() / 100d) * (1 - sen.getParry() / 100d));
