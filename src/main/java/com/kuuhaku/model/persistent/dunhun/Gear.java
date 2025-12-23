@@ -102,8 +102,9 @@ public class Gear extends DAO<Gear> {
 		this.basetype = basetype;
 		this.owner = owner;
 
-		if (basetype.getStats().implicit() != null) {
-			load(null);
+		GearAffix impl = getImplicit();
+		if (impl != null) {
+			impl.apply(null);
 		}
 	}
 
