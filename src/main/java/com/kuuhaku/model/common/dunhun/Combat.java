@@ -614,9 +614,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 		AtomicInteger dmg = new AtomicInteger(source.getSenshi().getDmg());
 
-		trigger(Trigger.ON_ATTACK, source, target, Skill.DEFAULT_ATTACK, dmg);
-		trigger(Trigger.ON_DEFEND, target, source, Skill.DEFAULT_ATTACK);
-
 		target.damage(source, Skill.DEFAULT_ATTACK, dmg.get());
 	}
 
@@ -625,7 +622,7 @@ public class Combat implements Renderer<BufferedImage> {
 		boolean wasToggle = skill.getToggledEffect() != null;
 		if (skill.execute(game, source, target)) {
 			source.consumeAp(skill.getStats().getCost());
-			trigger(Trigger.ON_SPELL, source, source, skill);
+			trigger(Trigger.ON_SPELL, source, target, skill);
 
 			String action = target.equals(source) ? "str/used_self" : "str/used";
 			if (skill.getToggledEffect() == null) {

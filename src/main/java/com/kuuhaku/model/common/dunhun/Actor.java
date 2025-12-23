@@ -198,7 +198,13 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		if (cbt != null) {
 			if (source != null) {
 				if (hp > 0) {
+					if (usable instanceof Skill s && !s.getStats().isSpell()) {
+						cbt.trigger(Trigger.ON_ATTACK, source, this, usable, val);
+					}
+
 					if (val.get() < 0) {
+						cbt.trigger(Trigger.ON_DEFEND, this, source, usable, val);
+
 						Senshi srcSen = source.getSenshi();
 						Senshi tgtSen = getSenshi();
 						if (source.getTeam() != getTeam()) {
@@ -307,7 +313,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		Combat cbt = binding.getGame().getCombat();
 		if (cbt != null) {
-			cbt.trigger(val.get() < 0 ? Trigger.ON_DEGEN : Trigger.ON_REGEN, null, this, null, val);
+			cbt.trigger(val.get() < 0 ? Trigger.ON_DEGEN : Trigger.ON_REGEN, this, this, null, val);
 		}
 
 		setHp(getHp() + val.get());
