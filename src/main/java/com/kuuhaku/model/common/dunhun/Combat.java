@@ -612,9 +612,7 @@ public class Combat implements Renderer<BufferedImage> {
 		source.consumeAp(1);
 		history.add(getLocale().get("str/actor_combat", source.getName(), target.getName()));
 
-		AtomicInteger dmg = new AtomicInteger(source.getSenshi().getDmg());
-
-		target.damage(source, Skill.DEFAULT_ATTACK, dmg.get());
+		target.damage(source, Skill.DEFAULT_ATTACK, source.getSenshi().getDmg());
 	}
 
 	public void skill(Skill skill, Actor<?> source, Actor<?> target) {
