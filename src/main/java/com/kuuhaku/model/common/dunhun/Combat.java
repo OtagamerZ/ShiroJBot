@@ -240,21 +240,22 @@ public class Combat implements Renderer<BufferedImage> {
 			if (checkCombatEnd()) break;
 
 			try {
+				Senshi sen = actor.getSenshi();
 				try {
-					actor.getSenshi().reduceDebuffs(1);
-					actor.getSenshi().reduceStasis(1);
+					sen.reduceDebuffs(1);
+					sen.reduceStasis(1);
 					for (Skill s : actor.getSkills()) {
 						s.reduceCd();
 					}
 
 					actor.setAp(actor.getMaxAp());
-					actor.getSenshi().setDefending(false);
+					sen.setDefending(false);
 					actor.getModifiers().expireMods(actor);
 
 					trigger(Trigger.ON_TURN_BEGIN, actor, actor, null);
 
 					while (actor == getCurrent() && actor.getAp() > 0) {
-						if (!actor.getSenshi().isAvailable() || actor.isOutOfCombat()) break;
+						if (!sen.isAvailable() || actor.isOutOfCombat()) break;
 						else if (checkCombatEnd()) break combat;
 
 						trigger(Trigger.ON_TICK);
@@ -266,9 +267,9 @@ public class Combat implements Renderer<BufferedImage> {
 
 					trigger(Trigger.ON_TURN_END, actor, actor, null);
 				} finally {
-					actor.getSenshi().setAvailable(true);
+					sen.setAvailable(true);
 
-					if (!actor.getSenshi().isStasis()) {
+					if (!sen.isStasis()) {
 						actor.applyRegDeg();
 					}
 				}

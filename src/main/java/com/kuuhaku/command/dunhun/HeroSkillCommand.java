@@ -110,7 +110,7 @@ public class HeroSkillCommand implements Executable {
 		if (s.getStats().getCritical() > 0) {
 			double crit = h.getModifiers().getCritical().apply(s.getStats().getCritical());
 			String text = "**" + Utils.roundToString(crit, 1) + "**";
-			eb.appendDescription("-# " + locale.get("str/critical", crit) + "\n");
+			eb.appendDescription("-# " + locale.get("str/bonus_critical", crit) + "\n");
 		}
 
 		Attributes reqs = s.getRequirements().attributes();

@@ -81,6 +81,17 @@ public class Boss extends MonsterBase<Boss> {
 	}
 
 	@Override
+	public Senshi createSenshi() {
+		Senshi senshi = super.createSenshi();
+		senshi.setFlag(Flag.NO_PARALYSIS);
+		senshi.setFlag(Flag.NO_SLEEP);
+		senshi.setFlag(Flag.NO_STUN);
+		senshi.setFlag(Flag.NO_STASIS);
+
+		return senshi;
+	}
+
+	@Override
 	public Actor<?> copy() {
 		Boss clone = new Boss(getId());
 		clone.stats = stats;
