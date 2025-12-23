@@ -571,7 +571,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		if (idx > -1) {
 			List<Actor<?>> nearby = new ArrayList<>(2);
 			if (idx > 0) nearby.add(actors.get(idx - 1));
-			if (idx < actors.size() - 2) nearby.add(actors.get(idx + 1));
+			if (idx < actors.size() - 1) nearby.add(actors.get(idx + 1));
 
 			return nearby;
 		}
