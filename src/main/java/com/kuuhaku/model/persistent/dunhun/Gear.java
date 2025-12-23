@@ -103,7 +103,7 @@ public class Gear extends DAO<Gear> {
 		this.owner = owner;
 
 		if (basetype.getStats().implicit() != null) {
-			load(owner);
+			load(null);
 		}
 	}
 
@@ -292,7 +292,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public Attributes getAttributes(Actor<?> owner) {
-		if (attributes == null) load(owner);
+		if (attributes == null) load(null);
 
 		return attributes;
 	}
