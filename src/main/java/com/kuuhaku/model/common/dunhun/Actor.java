@@ -474,7 +474,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			for (Gear g : equip) {
 				if (!total.has(g.getBasetype().getStats().requirements().attributes())) {
 					equip.unequip(g);
-					total = total.reduce(g.getAttributes(this));
+					total = total.reduce(g.getAttributes());
 					continue attrCheck;
 				}
 			}

@@ -161,7 +161,7 @@ public class Hero extends Actor<Hero> {
 	public Attributes getAttributes() {
 		Attributes total = getStats().getAttributes();
 		for (Gear g : getEquipment()) {
-			total = total.merge(g.getAttributes(this));
+			total = total.merge(g.getAttributes());
 		}
 
 		return total;
