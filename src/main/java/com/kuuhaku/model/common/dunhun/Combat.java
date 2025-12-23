@@ -270,9 +270,9 @@ public class Combat implements Renderer<BufferedImage> {
 							break;
 						}
 
-						trigger(Trigger.ON_TICK);
 						Runnable action = reload().join();
 						if (action != null) {
+							trigger(Trigger.ON_TICK);
 							action.run();
 						}
 					}
