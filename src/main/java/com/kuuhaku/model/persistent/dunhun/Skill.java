@@ -167,9 +167,9 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 			}
 
 			toggle = effect;
-			effect.onEnable().run();
+			toggle.onEnable().run();
 		} else {
-			effect.onDisable().run();
+			toggle.onDisable().run();
 			toggle = null;
 			setCooldown(stats.getCooldown());
 		}
