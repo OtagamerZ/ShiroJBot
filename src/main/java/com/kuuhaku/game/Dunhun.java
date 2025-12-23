@@ -100,7 +100,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 			if (h.getInventory().size() > h.getInventoryCapacity()) {
 				throw new GameReport(GameReport.OVERBURDENED, h.getName());
-			} else if (h.getStats().getLevel() < dungeon.getAreaLevel()) {
+			} else if (h.getLevel() < dungeon.getAreaLevel()) {
 				throw new GameReport(GameReport.UNDERLEVELLED, h.getName());
 			}
 
@@ -436,7 +436,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		Loot loot = getCombat().getLoot();
 		for (Actor<?> a : getCombat().getActors(Team.KEEPERS)) {
 			if (a instanceof MonsterBase<?> m && m.getHp() == 0) {
-				if (m.getStats().isMinion()) continue;
+				if (m.isMinion()) continue;
 				xpGained += m.getKillXp();
 
 				MonsterStats stats = m.getStats();
@@ -517,7 +517,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			DAO.apply(Hero.class, h.getId(), n -> {
 				int gain = xp;
 
-				int lvl = n.getStats().getLevel();
+				int lvl = n.getLevel();
 				int diff = Math.abs(getAreaLevel() - lvl) - 5;
 
 				if (diff > 0) {
@@ -525,8 +525,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				n.getStats().addXp(Math.max(1, gain));
-				if (n.getStats().getLevel() > lvl) {
-					getChannel().sendMessage(getLocale().get("str/actor_level_up", n.getName(), n.getStats().getLevel())).queue();
+				if (n.getLevel() > lvl) {
+					getChannel().sendMessage(getLocale().get("str/actor_level_up", n.getName(), n.getLevel())).queue();
 				}
 			});
 		}
@@ -944,7 +944,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	public int getAreaLevel(Floor fl) {
 		if (duel) {
 			return (int) heroes.values().stream()
-					.mapToInt(h -> h.getStats().getLevel())
+					.mapToInt(Hero::getLevel)
 					.average().orElse(1);
 		}
 

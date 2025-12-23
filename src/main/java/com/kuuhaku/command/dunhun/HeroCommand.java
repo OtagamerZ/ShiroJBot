@@ -101,7 +101,7 @@ public class HeroCommand implements Executable {
 					locale.get("str/ap", h.getMaxAp()), h.getApCap(),
 					locale.get("str/threat", h.getThreatScore()),
 					locale.get("str/bonus_critical", Utils.roundToString(h.getCritical(), 2)),
-					locale.get("str/level", h.getStats().getLevel()),
+					locale.get("str/level", h.getLevel()),
 					h.getStats().getXp(), h.getStats().getXpToNext()
 			), true);
 
@@ -275,7 +275,7 @@ public class HeroCommand implements Executable {
 							if (reqs.get(t) > 0) reqLine.add(t + ": " + reqs.get(t) + " ");
 						}
 
-						boolean canUse = h.getStats().getLevel() >= s.getRequirements().level() && attr.has(reqs);
+						boolean canUse = h.getLevel() >= s.getRequirements().level() && attr.has(reqs);
 						String req = !reqLine.isEmpty()
 								? ("\n- " + (canUse ? "" : "\\❌ ") + String.join(" | ", reqLine))
 								: "";
@@ -328,7 +328,7 @@ public class HeroCommand implements Executable {
 					return;
 				} else {
 					Requirements reqs = s.getRequirements();
-					if (h.getStats().getLevel() < reqs.level() || !h.getAttributes().has(reqs.attributes())) {
+					if (h.getLevel() < reqs.level() || !h.getAttributes().has(reqs.attributes())) {
 						w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 						return;
 					}
@@ -457,7 +457,7 @@ public class HeroCommand implements Executable {
 						return;
 					} else {
 						GearStats stats = g.getBasetype().getStats();
-						if (h.getStats().getLevel() < g.getReqLevel()) {
+						if (h.getLevel() < g.getReqLevel()) {
 							w.getChannel().sendMessage(locale.get("error/insufficient_level")).queue();
 							return;
 						} else if (!h.getAttributes().has(stats.requirements().attributes())) {

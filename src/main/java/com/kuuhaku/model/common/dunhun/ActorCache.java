@@ -49,7 +49,7 @@ public class ActorCache {
 
 				Map<Integer, Gear> gear = DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.id IN ?1", ids)
 						.parallelStream()
-						.filter(g -> h.getStats().getLevel() >= g.getBasetype().getStats().requirements().level())
+						.filter(g -> h.getLevel() >= g.getBasetype().getStats().requirements().level())
 						.collect(Collectors.toMap(Gear::getId, Function.identity()));
 
 				equipment = new Equipment((gs, i) -> {

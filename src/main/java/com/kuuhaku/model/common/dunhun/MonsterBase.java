@@ -36,6 +36,8 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 	@Fetch(FetchMode.SUBSELECT)
 	protected Set<LocalizedMonster> infos = new HashSet<>();
 
+	private transient Actor<?> master;
+
 	public MonsterBase() {
 	}
 
@@ -61,8 +63,17 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 	}
 
 	@Override
+	public int getLevel() {
+		if (isMinion()) {
+			return master.getLevel();
+		}
+
+		return getGame().getAreaLevel();
+	}
+
+	@Override
 	public int getMaxAp() {
-		int flat = getStats().getMaxAp() + getGame().getAreaLevel() / 5;
+		int flat = getStats().getMaxAp() + getLevel() / 5;
 		if (getGame().getPartySize() > 1 && getTeam() == Team.KEEPERS) {
 			flat += getGame().getPartySize() / 2;
 		}
@@ -77,7 +88,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 
 	@Override
 	public int getInitiative() {
-		int flat = stats.getInitiative() * getGame().getAreaLevel() / 3;
+		int flat = stats.getInitiative() * getLevel() / 3;
 
 		return (int) Math.max(1, getModifiers().getInitiative().apply(flat));
 	}
@@ -97,11 +108,11 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 			case UNIQUE -> 10;
 		};
 
-		return (int) Math.max(1, getModifiers().getAggro().apply(flat * (getGame().getAreaLevel() + 1) * mult));
+		return (int) Math.max(1, getModifiers().getAggro().apply(flat * (getLevel() + 1) * mult));
 	}
 
 	public int getKillXp() {
-		if (stats.isMinion()) return 0;
+		if (isMinion()) return 0;
 
 		double mult = switch (getRarityClass()) {
 			case MAGIC -> 1.5;
@@ -110,7 +121,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 		};
 
 		if (getGame() != null) {
-			mult *= (1 + getGame().getAreaLevel() / 10d) * Math.pow(1.1, getGame().getModifiers().size());
+			mult *= (1 + getLevel() / 10d) * Math.pow(1.1, getGame().getModifiers().size());
 		}
 
 		return (int) (stats.getKillXp() * mult);
@@ -118,6 +129,24 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 
 	public Loot generateLoot() {
 		return stats.generateLoot(this);
+	}
+
+	public Actor<?> getMaster() {
+		return master;
+	}
+
+	public void setMaster(Actor<?> master) {
+		if (master instanceof MonsterBase<?> m) {
+			if (m.getMaster().equals(this)) {
+				m.master = null;
+			}
+		}
+
+		this.master = master;
+	}
+
+	public boolean isMinion() {
+		return master != null;
 	}
 
 	public void load() {

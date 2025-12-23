@@ -112,15 +112,20 @@ public class Hero extends Actor<Hero> {
 	}
 
 	@Override
+	public int getLevel() {
+		return stats.getLevel();
+	}
+
+	@Override
 	public int getMaxHp() {
-		int flat = 280 + stats.getRaceBonus().hp() + stats.getLevel() * 20;
+		int flat = 280 + stats.getRaceBonus().hp() + getLevel() * 20;
 
 		return (int) Math.max(1, getModifiers().getMaxHp().apply(flat) * (1 + getAttributes().vit() * 0.1));
 	}
 
 	@Override
 	public int getMaxAp() {
-		int flat = 2 + stats.getLevel() / 8;
+		int flat = 2 + getLevel() / 8;
 
 		return (int) Calc.clamp(getModifiers().getMaxAp().apply(flat), 1, getApCap());
 	}
@@ -132,7 +137,7 @@ public class Hero extends Actor<Hero> {
 
 	@Override
 	public int getInitiative() {
-		double flat = stats.getLevel() / 3.0;
+		double flat = getLevel() / 3.0;
 
 		return (int) Math.max(1, getModifiers().getInitiative().apply(flat));
 	}
@@ -150,7 +155,7 @@ public class Hero extends Actor<Hero> {
 	@Override
 	public int getThreatScore() {
 		int flat = getSenshi().getDmg() / 10 + getSenshi().getDfs() / 20 + getHp() / 200;
-		return (int) Math.max(1, getModifiers().getAggro().apply(flat * stats.getLevel() / 2d));
+		return (int) Math.max(1, getModifiers().getAggro().apply(flat * getLevel() / 2d));
 	}
 
 	public Attributes getAttributes() {

@@ -119,9 +119,8 @@ public class Unique extends DAO<Unique> {
 		Dunhun game = null;
 		int dropLevel = Integer.MAX_VALUE;
 		if (source != null && source.getGame() != null) {
-			int area = source.getGame().getAreaLevel();
 			game = source.getGame();
-			dropLevel = area + switch (source.getRarityClass()) {
+			dropLevel = source.getLevel() + switch (source.getRarityClass()) {
 				case NORMAL -> 0;
 				case MAGIC -> 1;
 				case RARE -> 2;

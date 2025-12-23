@@ -78,6 +78,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		return new Card(this).drawCardNoBorder();
 	}
 
+	public abstract int getLevel();
+
 	public abstract int getMaxHp();
 
 	public abstract int getMaxAp();
@@ -510,7 +512,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		if (getGame() != null && this instanceof MonsterBase<?> m) {
 			m.load();
 
-			int level = getGame().getAreaLevel();
+			int level = m.getLevel();
 			mult = switch (getRarityClass()) {
 				case RARE -> {
 					cache.getSenshi().setHueOffset(Calc.rng(90, 270, SERIAL));

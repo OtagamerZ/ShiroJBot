@@ -20,6 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.model.common.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.common.dunhun.context.MonsterContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
@@ -75,8 +76,6 @@ public class MonsterStats implements Serializable {
 	@Column(name = "loot_generator", columnDefinition = "TEXT")
 	private String lootGenerator;
 
-	private transient boolean minion;
-
 	public MonsterStats() {
 	}
 
@@ -129,11 +128,11 @@ public class MonsterStats implements Serializable {
 	}
 
 	public int getKillXp() {
-		return !minion ? killXp : 0;
+		return killXp;
 	}
 
 	public double getLootMultiplier(Actor<?> self) {
-		if (minion)	return 0;
+		if (self instanceof MonsterBase<?> m && m.isMinion()) return 0;
 		else if (self.getRarityClass() == RarityClass.UNIQUE) {
 			return 2.5;
 		}
@@ -141,17 +140,9 @@ public class MonsterStats implements Serializable {
 		return 1 + self.getModifiers().getEffects().size() * 0.15;
 	}
 
-	public boolean isMinion() {
-		return minion;
-	}
-
-	public void makeMinion() {
-		minion = true;
-	}
-
 	public Loot generateLoot(Actor<?> self) {
 		Loot loot = new Loot();
-		if (!(self instanceof Monster m) || minion || lootGenerator == null) return loot;
+		if (!(self instanceof Monster m) || m.isMinion() || lootGenerator == null) return loot;
 
 		try {
 			Utils.exec(getClass().getSimpleName(), lootGenerator, Map.of(

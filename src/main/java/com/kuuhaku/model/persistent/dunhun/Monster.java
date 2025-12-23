@@ -114,12 +114,12 @@ public class Monster extends MonsterBase<Monster> {
 
 	@Override
 	public int getMaxHp() {
-		int flat = getStats().getBaseHp() + getGame().getAreaLevel() * 5;
+		int flat = getStats().getBaseHp() + getLevel() * 5;
 		double mult = switch (getRarityClass()) {
 			case MAGIC -> 1.5;
 			case RARE -> 2.25;
 			default -> 1;
-		} * hpTable[getGame().getAreaLevel()];
+		} * hpTable[getLevel()];
 
 		if (getGame().getPartySize() > 1 && getTeam() == Team.KEEPERS) {
 			mult *= 1 + getGame().getPartySize() * 0.5;

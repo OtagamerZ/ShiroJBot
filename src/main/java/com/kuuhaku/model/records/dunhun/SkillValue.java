@@ -29,14 +29,10 @@ public record SkillValue(int min, int max, boolean withAdded) {
 	}
 
 	public int valueFor(Skill skill, Actor<?> source) {
-		int level;
-		double mult;
-		if (source instanceof Hero h) {
-			level = h.getStats().getLevel();
-			mult = h.getSenshi().getPower();
-		} else {
-			level = source.getGame().getAreaLevel();
-			mult = source.getSenshi().getPower() + level * 0.025;
+		int level = source.getLevel();
+		double mult = source.getSenshi().getPower();
+		if (!(source instanceof Hero)) {
+			mult += level * 0.025;
 		}
 
 		int added = 0;
