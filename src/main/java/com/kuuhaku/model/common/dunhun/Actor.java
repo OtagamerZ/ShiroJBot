@@ -84,6 +84,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public int getReservedAp() {
 		return getSkills().stream()
+				.filter(s -> s.getToggledEffect() != null)
 				.map(Skill::getStats)
 				.mapToInt(SkillStats::getReservation)
 				.sum();
