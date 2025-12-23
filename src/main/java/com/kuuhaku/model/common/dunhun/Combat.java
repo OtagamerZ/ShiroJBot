@@ -79,6 +79,8 @@ public class Combat implements Renderer<BufferedImage> {
 		this.node = node;
 
 		hunters.addAll(game.getHeroes().values());
+		hunters.addAll(hunters.stream().flatMap(a -> a.getMinions().stream()).toList());
+
 		keepers.addAll(Stream.of(enemies)
 				.filter(Objects::nonNull)
 				.toList()
@@ -259,8 +261,14 @@ public class Combat implements Renderer<BufferedImage> {
 					trigger(Trigger.ON_TURN_BEGIN, actor, actor, null);
 
 					while (actor == getCurrent() && actor.getAp() > 0) {
-						if (!sen.isAvailable() || actor.isOutOfCombat()) break;
-						else if (checkCombatEnd()) break combat;
+						if (checkCombatEnd()) break combat;
+						else if (!sen.isAvailable() || actor.isOutOfCombat()) {
+							if (actor.isOutOfCombat() && actor instanceof MonsterBase<?> m && m.isMinion()) {
+								actors.remove(actor);
+							}
+
+							break;
+						}
 
 						trigger(Trigger.ON_TICK);
 						Runnable action = reload().join();

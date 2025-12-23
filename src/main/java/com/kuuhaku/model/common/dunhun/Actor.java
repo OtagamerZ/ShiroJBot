@@ -29,16 +29,14 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @MappedSuperclass
 public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	public static final int MAX_LEVEL = 100;
+	public static final int MAX_SUMMONS = 1;
 
 	@Transient
 	public final long SERIAL = ThreadLocalRandom.current().nextLong();
@@ -51,6 +49,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	private transient final ActorBinding binding = new ActorBinding();
 	private transient final ActorCache cache = new ActorCache(this);
 	private transient final RegDeg regDeg = new RegDeg(null);
+	private transient final Deque<Actor<?>> minions = new ArrayDeque<>(MAX_SUMMONS);
 	private transient int hp = -1, ap;
 	private transient int maxHp = -1;
 	private transient boolean fleed;
@@ -321,6 +320,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		setHp(getHp() + val.get());
 
 		return 0;
+	}
+
+	public Deque<Actor<?>> getMinions() {
+		return minions;
 	}
 
 	public void addHpBar(XStringBuilder sb) {

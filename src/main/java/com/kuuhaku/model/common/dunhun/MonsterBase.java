@@ -143,6 +143,14 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 		}
 
 		this.master = master;
+		if (master != null) {
+			//noinspection SizeReplaceableByIsEmpty
+			while (master.getMinions().size() >= Actor.MAX_SUMMONS) {
+				master.getMinions().removeFirst().setHp(0);
+			}
+
+			master.getMinions().add(this);
+		}
 	}
 
 	public boolean isMinion() {
