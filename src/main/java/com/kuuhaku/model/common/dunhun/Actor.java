@@ -247,6 +247,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 					}
 				} else if (hp + val.get() > 0) {
 					cbt.trigger(Trigger.ON_REVIVE, this, this, usable);
+					getSenshi().setAvailable(true);
 				}
 			}
 

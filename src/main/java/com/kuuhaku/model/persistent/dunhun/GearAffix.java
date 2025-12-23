@@ -154,7 +154,6 @@ public class GearAffix extends DAO<GearAffix> {
 		if (affix.getEffect() == null) return;
 
 		try {
-			System.out.println("Generating loot for " + this);
 			Utils.exec(affix.getId(), affix.getEffect(), Map.of(
 					"ctx", new GearContext(gear, owner, getValues())
 			));
