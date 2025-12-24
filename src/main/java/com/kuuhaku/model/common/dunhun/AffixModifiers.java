@@ -18,27 +18,17 @@
 
 package com.kuuhaku.model.common.dunhun;
 
-public class AffixModifiers {
-	private float minMult = 1;
-	private float maxMult = 1;
+import com.kuuhaku.model.common.shoukan.CumValue;
 
-	public float getMinMult() {
+public class AffixModifiers {
+	private final CumValue minMult = new CumValue();
+	private final CumValue maxMult = new CumValue();
+
+	public CumValue getMinMult() {
 		return minMult;
 	}
 
-	public void addMinMult(float value) {
-		minMult += value;
-	}
-
-	public float getMaxMult() {
+	public CumValue getMaxMult() {
 		return maxMult;
-	}
-
-	public void addMaxMult(float mult) {
-		maxMult += mult;
-	}
-
-	public void reset() {
-		minMult = maxMult = 1;
 	}
 }

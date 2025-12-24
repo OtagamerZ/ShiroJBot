@@ -136,7 +136,10 @@ public class GearAffix extends DAO<GearAffix> {
 	public List<ValueRange> getRanges() {
 		double mult = gear.getRarityClass() == RarityClass.MAGIC ? 1.2 : 1;
 		return affix.getRanges().stream()
-				.map(r -> r.multiply(mult * modifiers.getMinMult(), mult * modifiers.getMaxMult()))
+				.map(r -> r.multiply(
+						modifiers.getMinMult().multiplier() * mult,
+						modifiers.getMaxMult().multiplier() * mult
+				))
 				.toList();
 	}
 
