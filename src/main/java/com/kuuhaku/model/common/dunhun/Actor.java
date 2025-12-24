@@ -193,7 +193,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		boolean crit = Calc.chance(critChance);
 		if (crit) value *= 2;
 
-		CumValue mult = value < 0 ? modifiers.getDamageMult() : modifiers.getHealMult();
+		CumValue mult = value < 0 ? modifiers.getDamageTaken() : modifiers.getHealing();
 		AtomicInteger val = new AtomicInteger((int) mult.apply(value));
 		Combat cbt = binding.getGame().getCombat();
 		if (cbt != null) {
