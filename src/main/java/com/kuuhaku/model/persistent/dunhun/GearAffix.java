@@ -101,10 +101,15 @@ public class GearAffix extends DAO<GearAffix> {
 		return switch (affix.getType()) {
 			case PREFIX, MON_PREFIX -> gear.hasAffix("PREFIX_LOCK");
 			case SUFFIX, MON_SUFFIX -> gear.hasAffix("SUFFIX_LOCK");
+			default -> true;
 		};
 	}
 
 	public String getName(I18N locale) {
+		if (affix.getType() == AffixType.UNIQUE) {
+			return locale.get("str/unique");
+		}
+
 		String ending = Utils.getOr(gear.getBasetype().getInfo(locale).getEnding(), "M");
 
 		return Utils.regex(affix.getInfo(locale).getName(), "\\[(?<F>[^\\[\\]]*?)\\|(?<M>[^\\[\\]]*?)]")
