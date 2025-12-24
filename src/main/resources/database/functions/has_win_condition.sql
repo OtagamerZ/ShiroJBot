@@ -28,6 +28,18 @@ WHERE winner = side
   AND win_condition = lower($2)
 $$;
 
+CREATE OR REPLACE FUNCTION shiro.has_lose_condition(VARCHAR, VARCHAR)
+    RETURNS BOOLEAN
+    IMMUTABLE
+    LANGUAGE sql
+AS
+$$
+SELECT count(1) > 0
+FROM user_matches($1)
+WHERE winner <> side
+  AND win_condition = lower($2)
+$$;
+
 CREATE OR REPLACE FUNCTION shiro.has_win_condition_any(VARCHAR, VARCHAR)
     RETURNS BOOLEAN
     IMMUTABLE
