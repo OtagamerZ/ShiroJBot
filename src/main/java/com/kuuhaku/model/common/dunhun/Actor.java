@@ -50,9 +50,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	private transient final ActorCache cache = new ActorCache(this);
 	private transient final RegDeg regDeg = new RegDeg(null);
 	private transient final Deque<Actor<?>> minions = new ArrayDeque<>(MAX_SUMMONS);
+	private transient Actor<?> killer;
 	private transient int hp = -1, ap;
 	private transient int maxHp = -1;
-	private transient boolean fleed, initialized;
+	private transient boolean fleed;
 
 	public Actor() {
 	}
@@ -121,6 +122,14 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public ActorCache getCache() {
 		return cache;
+	}
+
+	public Actor<?> getKiller() {
+		return killer;
+	}
+
+	public void setKiller(Actor<?> killer) {
+		this.killer = killer;
 	}
 
 	public int getHp() {
@@ -244,6 +253,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 					if (hp + val.get() <= 0) {
 						cbt.trigger(Trigger.ON_GRAVEYARD, this, this, usable);
 						cbt.trigger(Trigger.ON_KILL, source, this, usable);
+						setKiller(source);
 					}
 				} else if (hp + val.get() > 0) {
 					cbt.trigger(Trigger.ON_REVIVE, this, this, usable);

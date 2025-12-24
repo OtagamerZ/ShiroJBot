@@ -355,24 +355,28 @@ public class Gear extends DAO<Gear> {
 		return Objects.hashCode(id);
 	}
 
-	public static Gear getRandom(Actor<?> source, Hero hero) {
-		return getRandom(source, hero, (RarityClass) null);
+	public static Gear getRandom(Actor<?> source) {
+		return getRandom(source, (RarityClass) null);
 	}
 
-	public static Gear getRandom(Actor<?> source, Hero hero, Basetype base) {
-		return getRandom(source, hero, base, null);
+	public static Gear getRandom(Actor<?> source, Basetype base) {
+		return getRandom(source, base, null);
 	}
 
-	public static Gear getRandom(Actor<?> source, Hero hero, RarityClass rarity) {
-		return getRandom(source, hero, Basetype.getRandom(source), rarity);
+	public static Gear getRandom(Actor<?> source, RarityClass rarity) {
+		return getRandom(source, Basetype.getRandom(source), rarity);
 	}
 
-	public static Gear getRandom(Actor<?> source, Hero hero, Basetype base, RarityClass rarity) {
+	public static Gear getRandom(Actor<?> source, Basetype base, RarityClass rarity) {
 		if (base == null) return null;
 
 		double mult = 1;
 		if (source != null && source.getGame() != null) {
-			mult = switch (source.getRarityClass()) {
+			if (source.getKiller() instanceof Hero h) {
+				mult *= h.getModifiers().getMagicFind().multiplier();
+			}
+
+			mult *= switch (source.getRarityClass()) {
 				case NORMAL -> 1;
 				case MAGIC -> 1.2;
 				case RARE -> 1.5;
@@ -390,13 +394,13 @@ public class Gear extends DAO<Gear> {
 		if (rarity == RarityClass.UNIQUE) {
 			Unique u = Unique.getRandom(source);
 			if (u != null) {
-				return u.asGear(hero);
+				return u.asGear();
 			}
 
 			rarity = RarityClass.RARE;
 		}
 
-		Gear out = new Gear(hero, base);
+		Gear out = new Gear(null, base);
 		if (rarity == RarityClass.NORMAL) return out;
 
 		int mods = Calc.rng(1, rarity.getMaxMods());

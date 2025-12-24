@@ -450,7 +450,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				while (Calc.chance(dropFac)) {
-					Gear drop = Gear.getRandom(m, null);
+					Gear drop = Gear.getRandom(m);
 					if (drop != null) {
 						lt.gear().add(drop);
 					}

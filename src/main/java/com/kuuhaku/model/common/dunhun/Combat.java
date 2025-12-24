@@ -271,8 +271,11 @@ public class Combat implements Renderer<BufferedImage> {
 						}
 
 						Runnable action = reload().join();
-						if (action != null) {
+						if (actor instanceof MonsterBase<?> || action != null) {
 							trigger(Trigger.ON_TICK);
+						}
+
+						if (action != null) {
 							action.run();
 						}
 					}
