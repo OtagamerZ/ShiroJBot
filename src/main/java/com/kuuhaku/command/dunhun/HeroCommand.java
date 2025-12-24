@@ -91,13 +91,13 @@ public class HeroCommand implements Executable {
 					.setImage("attachment://card.png");
 
 			eb.addField(Constants.VOID, """
-					HP: %s
+					%s
 					%s/%s
 					%s
 					%s
 					%s (%s/%s)
 					""".formatted(
-					h.getMaxHp(),
+					locale.get("str/bonus_hp", h.getMaxHp()),
 					locale.get("str/ap", h.getMaxAp()), h.getApCap(),
 					locale.get("str/threat", h.getThreatScore()),
 					locale.get("str/bonus_critical", Utils.roundToString(h.getCritical(), 2)),
@@ -112,10 +112,10 @@ public class HeroCommand implements Executable {
 			}
 
 			eb.addField(Constants.VOID, """
-					STR: %s (%s)
-					DEX: %s (%s)
-					WIS: %s (%s)
-					VIT: %s (%s)
+					STR: **%s** (%s)
+					DEX: **%s** (%s)
+					WIS: **%s** (%s)
+					VIT: **%s** (%s)
 					""".formatted(
 					attr.str(), Utils.sign(extra.str()),
 					attr.dex(), Utils.sign(extra.dex()),
