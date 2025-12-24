@@ -117,9 +117,12 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public int getReqLevel() {
-		int minAffix = affixes.parallelStream()
-				.mapToInt(ga -> ga.getAffix().getMinLevel())
-				.max().orElse(0);
+		int minAffix = 0;
+		if (getRarityClass() != RarityClass.UNIQUE) {
+			minAffix = affixes.parallelStream()
+					.mapToInt(ga -> ga.getAffix().getMinLevel())
+					.max().orElse(0);
+		}
 
 		return Math.max(minAffix, basetype.getStats().requirements().level());
 	}
