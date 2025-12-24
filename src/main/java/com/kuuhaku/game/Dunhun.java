@@ -430,9 +430,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	private void grantCombatLoot() {
 		int xpGained = 0;
-		double mf = 1 + heroes.values().stream()
-				.mapToDouble(h -> h.getModifiers().getMagicFind().offset())
-				.sum();
 
 		Loot loot = getCombat().getLoot();
 		for (Actor<?> a : getCombat().getActors(Team.KEEPERS)) {
@@ -442,6 +439,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 				MonsterStats stats = m.getStats();
 				Loot lt = stats.generateLoot(m);
+
+				double mf = m.getKiller() != null
+						? m.getKiller().getModifiers().getMagicFind().multiplier()
+						: 1;
 
 				double dropFac = 20 * stats.getLootMultiplier(m) * mf * Math.pow(1.2, getModifiers().size());
 
