@@ -1,5 +1,6 @@
 package com.kuuhaku.model.records.dunhun;
 
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,7 @@ public record ValueRange(int min, int max) {
 	}
 
 	public int withRoll(double roll) {
-		return (int) (min + (max - min) * roll);
+		return Calc.round(min + (max - min) * roll);
 	}
 
 	public ValueRange multiply(double mult) {
