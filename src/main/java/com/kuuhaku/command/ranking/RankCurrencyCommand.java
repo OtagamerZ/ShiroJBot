@@ -92,7 +92,7 @@ public class RankCurrencyCommand implements Executable {
 				case 1 -> "\uD83E\uDD48";
 				case 2 -> "\uD83E\uDD49";
 				default -> i + 1;
-			} + " - " + e.name() + "`💰" + e.cr() + " - 💎" + e.gems() + "`");
+			} + " - " + e.name() + " `💰" + e.cr() + " - 💎" + e.gems() + "`");
 
 			if (e.uid().equals(event.user().getId())) {
 				eb.appendDescription("__");
