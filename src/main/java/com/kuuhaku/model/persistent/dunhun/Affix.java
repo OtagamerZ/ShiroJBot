@@ -225,7 +225,7 @@ public class Affix extends DAO<Affix> {
 				WHERE ((?1 = '' OR type = ?1) AND type NOT LIKE 'MON\\_%')
 				  AND weight > 0
 				  AND (min_level <= ?2 OR has(cast(?3 AS JSONB), 'ACCESSORY'))
-				  AND jsonb_array_length(req_tags && cast(?3 AS JSONB)) > 0
+				  AND req_tags <@ cast(?3 AS JSONB)
 				  AND NOT (has(req_tags, 'WEAPON') AND has(cast(?3 AS JSONB), 'OFFHAND'))
 				  AND NOT has(get_affix_family(cast(?4 AS JSONB)), get_affix_family(id))
 				  AND (affix_group IS NULL OR affix_group NOT IN ?5)
