@@ -253,7 +253,13 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 					if (hp + val.get() <= 0) {
 						cbt.trigger(Trigger.ON_GRAVEYARD, this, this, usable);
 						cbt.trigger(Trigger.ON_KILL, source, this, usable);
-						setKiller(source);
+
+						Actor<?> killer = source;
+						if (source instanceof MonsterBase<?> m && m.getMaster() != null) {
+							killer = m.getMaster();
+						}
+
+						setKiller(killer);
 					}
 				} else if (hp + val.get() > 0) {
 					cbt.trigger(Trigger.ON_REVIVE, this, this, usable);
