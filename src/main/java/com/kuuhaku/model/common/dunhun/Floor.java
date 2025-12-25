@@ -59,72 +59,62 @@ public class Floor {
 	}
 
 	public void generateEvents(double eventRatio, int restSpots) {
-		Utils.withUnsafeRng(rng -> {
-			rng.setSeed(seed);
-			if (sublevels.length < 3) return null;
-			eventNodes.clear();
+		if (sublevels.length < 3) return;
+		eventNodes.clear();
 
-			List<Node> nodes = Stream.of(sublevels)
-					.limit(sublevels.length - 2)
-					.flatMap(sl -> sl.getNodes().stream())
-					.collect(Collectors.toCollection(ArrayList::new));
+		List<Node> nodes = Stream.of(sublevels)
+				.limit(sublevels.length - 2)
+				.flatMap(sl -> sl.getNodes().stream())
+				.collect(Collectors.toCollection(ArrayList::new));
 
-			int events = (int) (nodes.size() * eventRatio);
-			List<Node> eNodes = Utils.getRandomN(nodes, events, 1, rng);
-			for (Node n : eNodes) {
-				if (n.getParents().stream().anyMatch(p -> n.depth() - p.depth() > 1)) {
-					n.setType(NodeType.DANGER);
-				} else {
-					n.setType(NodeType.EVENT);
-					eventNodes.add(n);
-				}
+		int events = (int) (nodes.size() * eventRatio);
+		List<Node> eNodes = Utils.getRandomN(nodes, events, 1, rng);
+		for (Node n : eNodes) {
+			if (n.getParents().stream().anyMatch(p -> n.depth() - p.depth() > 1)) {
+				n.setType(NodeType.DANGER);
+			} else {
+				n.setType(NodeType.EVENT);
+				eventNodes.add(n);
 			}
+		}
 
-			List<List<Node>> parts = new ArrayList<>(restSpots);
-			for (int i = 0, j = 0; i < restSpots; i++) {
-				List<Node> group = new ArrayList<>();
-				for (; j < nodes.size(); j++) {
-					Node n = nodes.get(j);
-					if (n.getSublevel().getSublevel() / restSpots > i) {
-						break;
-					}
-
-					group.add(n);
+		List<List<Node>> parts = new ArrayList<>(restSpots);
+		for (int i = 0, j = 0; i < restSpots; i++) {
+			List<Node> group = new ArrayList<>();
+			for (; j < nodes.size(); j++) {
+				Node n = nodes.get(j);
+				if (n.getSublevel().getSublevel() / restSpots > i) {
+					break;
 				}
 
-				parts.add(group);
+				group.add(n);
 			}
 
-			for (List<Node> group : parts) {
-				if (group.isEmpty()) continue;
-				Utils.getRandomEntry(rng, group).setType(NodeType.REST);
-			}
+			parts.add(group);
+		}
 
-			return null;
-		});
+		for (List<Node> group : parts) {
+			if (group.isEmpty()) continue;
+			Utils.getRandomEntry(rng, group).setType(NodeType.REST);
+		}
 	}
 
 	public void generateModifiers(Dunhun game) {
-		Utils.withUnsafeRng(rng -> {
-			rng.setSeed(seed);
-			modifiers.clear();
+		modifiers.clear();
 
-			int mods = 0;
-			if (game.getAreaLevel() >= Dunhun.LEVEL_BRUTAL) {
-				mods = 4;
-			} else if (game.getAreaLevel() >= Dunhun.LEVEL_HARD) {
-				mods = 2;
-			}
+		int mods = 0;
+		if (game.getAreaLevel() >= Dunhun.LEVEL_BRUTAL) {
+			mods = 4;
+		} else if (game.getAreaLevel() >= Dunhun.LEVEL_HARD) {
+			mods = 2;
+		}
 
-			for (int i = 0; i < mods && Calc.chance(100d / (modifiers.size() + 1), rng); i++) {
-				RunModifier mod = RunModifier.getRandom(game, this);
-				if (mod == null) break;
+		for (int i = 0; i < mods && Calc.chance(100d / (modifiers.size() + 1), rng); i++) {
+			RunModifier mod = RunModifier.getRandom(game, this);
+			if (mod == null) break;
 
-				modifiers.add(mod);
-			}
-
-			return null;
-		});
+			modifiers.add(mod);
+		}
 	}
 
 	public int getVisionLimit() {

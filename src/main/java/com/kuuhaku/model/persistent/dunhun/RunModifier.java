@@ -123,7 +123,14 @@ public class RunModifier extends DAO<RunModifier> {
 				""", game.getMap().getFloor().getFloor(), modifiers.toString());
 		if (mods.isEmpty()) return null;
 
-		RandomList<String> rl = new RandomList<>(game.getNodeRng());
+		Random rng;
+		if (floor != null) {
+			rng = floor.getRng();
+		} else {
+			rng = game.getNodeRng();
+		}
+
+		RandomList<String> rl = new RandomList<>(rng);
 		for (Object[] a : mods) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}
