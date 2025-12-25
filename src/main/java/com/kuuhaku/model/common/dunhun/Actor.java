@@ -186,16 +186,16 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	public Tuple2<Integer, Boolean> damage(Actor<?> source, Usable usable, int value) {
 		AtomicInteger val = new AtomicInteger(value);
 
-		Combat cbt = binding.getGame().getCombat();
-		if (cbt != null && usable instanceof Skill s && !s.getStats().isSpell()) {
-			cbt.trigger(Trigger.ON_ATTACK, source, this, usable, val);
-		}
-
 		double crit = 0;
 		if (usable != null) {
 			if (usable instanceof Skill s && s.getStats().isSpell()) {
 				crit = source.getModifiers().getCritical().apply(s.getStats().getCritical());
 			} else {
+				Combat cbt = binding.getGame().getCombat();
+				if (cbt != null) {
+					cbt.trigger(Trigger.ON_ATTACK, source, this, usable, val);
+				}
+
 				if (source != null) {
 					crit = source.getCritical();
 				}
