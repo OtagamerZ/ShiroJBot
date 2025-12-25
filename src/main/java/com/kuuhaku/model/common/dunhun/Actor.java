@@ -373,24 +373,25 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		List<EffectBase> queue = new ArrayList<>();
 		for (Gear g : getEquipment()) {
-			Set<EffectBase> effects = g.getEffects();
-			if (effects.isEmpty()) continue;
-
-			queue.addAll(effects.stream().filter(e -> !e.isClosed()).toList());
+			queue.addAll(g.getEffects().stream()
+					.filter(e -> !e.isClosed())
+					.toList()
+			);
 		}
 
-		Set<EffectBase> effects = getModifiers().getEffects();
-		if (!effects.isEmpty()) {
-			queue.addAll(effects.stream().filter(e -> !e.isClosed()).toList());
-		}
+		queue.addAll(getModifiers().getEffects().stream()
+				.filter(e -> !e.isClosed())
+				.toList()
+		);
 
 		for (EffectBase e : queue) {
-			try {
-				if (e instanceof TriggeredEffect te) {
-					if (!Utils.equalsAny(trigger, te.getTriggers())) continue;
-					te.decLimit();
-				}
+			if (e.isLocked()) continue;
+			else if (e instanceof TriggeredEffect te) {
+				if (!Utils.equalsAny(trigger, te.getTriggers())) continue;
+				te.decLimit();
+			}
 
+			try {
 				e.lock();
 				e.getEffect().accept(e, context);
 			} finally {
