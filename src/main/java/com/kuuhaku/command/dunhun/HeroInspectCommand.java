@@ -169,10 +169,11 @@ public class HeroInspectCommand implements Executable {
 		XStringBuilder sb = new XStringBuilder();
 		for (GearAffix ga : affs) {
 			sb.clear();
-			sb.append("-# %s - %s".formatted(
-					locale.get("str/" + ga.getAffix().getType()),
-					locale.get("str/tier", ga.getAffix().getTier())
-			));
+			sb.append("-# " + locale.get("str/" + ga.getAffix().getType()));
+
+			if (ga.getAffix().getType() != AffixType.UNIQUE) {
+				sb.append(" - " + locale.get("str/tier", ga.getAffix().getTier()));
+			}
 
 			String name = ga.getName(locale);
 			if (name != null) {
