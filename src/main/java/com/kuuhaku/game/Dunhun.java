@@ -262,9 +262,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}
 
 						if (!currNode.isSafeNode()) {
-							reportResult(GameReport.SUCCESS, "str/dungeon_fail",
-									getHeroNames(), run.getFloor(), run.getSublevel() + 1
-							);
+							if (defeat()) {
+								run.setNode(currNode);
+								run.save();
+							}
+
 							return null;
 						}
 
@@ -317,49 +319,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							try {
 								Collection<Hero> hs = heroes.values();
 								if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
-									for (Hero h : hs) {
-										double xpPrcnt = 0;
-										if (getAreaLevel() >= LEVEL_BRUTAL) {
-											xpPrcnt = 0.4;
-										} else if (getAreaLevel() >= LEVEL_HARD) {
-											xpPrcnt = 0.2;
-										}
-
-										h.getStats().loseXp((int) (h.getStats().getLosableXp() * xpPrcnt));
-										h.save();
-									}
-
-									reportResult(GameReport.SUCCESS, "str/dungeon_fail",
-											getHeroNames(), run.getFloor(), run.getSublevel() + 1
-									);
-
-									if (dungeon.isHardcore()) {
-										try {
-											if (hs.size() == 1) {
-												Hero h = hs.iterator().next();
-												int rank = DAO.queryNative(Integer.class,
-														"SELECT rank FROM dungeon_ranking(?1) WHERE hero_id = ?2",
-														dungeon.getId(), h.getId()
-												);
-
-												if (rank > 0) {
-													Main.getApp().getMessageChannelById("971503733202628698")
-															.sendMessage(getLocale().get("loss/dungeon_death",
-																	h.getName(), rank, run.getFloor(), dungeon.getInfo(getLocale()).getName()
-															))
-															.queue();
-//														Utils.broadcast("loss/dungeon_death", loc -> List.of(
-//																h.getName(), rank, run.getFloor(), dungeon.getInfo(loc).getName()
-//														));
-												}
-											}
-										} catch (Exception ignore) {
-										} finally {
-											run.delete();
-										}
-
-										return;
-									}
+									if (!defeat()) return;
 								}
 							} finally {
 								run.setNode(currNode);
@@ -434,6 +394,57 @@ public class Dunhun extends GameInstance<NullPhase> {
 				close(GameReport.OTHER);
 			}
 		}
+	}
+
+	private boolean defeat() {
+		Collection<Hero> hs = heroes.values();
+		for (Hero h : hs) {
+			double xpPrcnt = 0;
+			if (getAreaLevel() >= LEVEL_BRUTAL) {
+				xpPrcnt = 0.4;
+			} else if (getAreaLevel() >= LEVEL_HARD) {
+				xpPrcnt = 0.2;
+			}
+
+			h.getStats().loseXp((int) (h.getStats().getLosableXp() * xpPrcnt));
+			h.save();
+		}
+
+		DungeonRun run = map.getRun();
+		reportResult(GameReport.SUCCESS, "str/dungeon_fail",
+				getHeroNames(), run.getFloor(), run.getSublevel() + 1
+		);
+
+		if (dungeon.isHardcore()) {
+			try {
+				if (hs.size() == 1) {
+					Hero h = hs.iterator().next();
+					int rank = DAO.queryNative(Integer.class,
+							"SELECT rank FROM dungeon_ranking(?1) WHERE hero_id = ?2",
+							dungeon.getId(), h.getId()
+					);
+
+					if (rank > 0) {
+						Main.getApp().getMessageChannelById("971503733202628698")
+								.sendMessage(getLocale().get("loss/dungeon_death",
+										h.getName(), rank, run.getFloor(), dungeon.getInfo(getLocale()).getName()
+								))
+								.queue();
+//						Utils.broadcast("loss/dungeon_death", loc -> List.of(
+//								h.getName(), rank, run.getFloor(), dungeon.getInfo(loc).getName()
+//						));
+					}
+				}
+			} catch (Exception ignore) {
+			} finally {
+				run.delete();
+			}
+
+			return false;
+		}
+
+
+		return true;
 	}
 
 	@Override
