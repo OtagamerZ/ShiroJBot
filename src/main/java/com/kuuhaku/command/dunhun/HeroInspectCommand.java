@@ -187,6 +187,7 @@ public class HeroInspectCommand implements Executable {
 				);
 			}
 
+			eb.appendDescription(sb.toString());
 			eb.appendDescription(ga.getDescription(locale, true) + "\n\n");
 		}
 
