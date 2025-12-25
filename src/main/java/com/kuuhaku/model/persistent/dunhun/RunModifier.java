@@ -6,6 +6,7 @@ import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.Floor;
+import com.kuuhaku.model.common.dunhun.Node;
 import com.kuuhaku.model.common.dunhun.context.EffectContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedRunModifier;
@@ -101,16 +102,24 @@ public class RunModifier extends DAO<RunModifier> {
 		return Objects.hashCode(id);
 	}
 
-	public static RunModifier getRandom(Dunhun game) {
-		return getRandom(game, null);
+	public static RunModifier getRandom(Node node) {
+		return Utils.withUnsafeRng(rng -> {
+			rng.setSeed(node.getSeed());
+			return getRandom(rng, node.getSublevel().getFloor());
+		});
 	}
 
-	public static RunModifier getRandom(Dunhun game, Floor floor) {
+	public static RunModifier getRandom(Floor floor) {
+		return Utils.withUnsafeRng(rng -> {
+			rng.setSeed(floor.getSeed());
+			return getRandom(rng, floor);
+		});
+	}
+
+	private static RunModifier getRandom(Random rng, Floor floor) {
 		JSONArray modifiers = new JSONArray();
-		if (floor != null) {
-			for (RunModifier m : floor.getModifiers()) {
-				modifiers.add(m.getId());
-			}
+		for (RunModifier m : floor.getModifiers()) {
+			modifiers.add(m.getId());
 		}
 
 		List<Object[]> mods = DAO.queryAllUnmapped("""
@@ -120,15 +129,8 @@ public class RunModifier extends DAO<RunModifier> {
 				WHERE weight > 0
 				  AND min_floor <= ?1
 				  AND NOT has(get_affix_family(cast(?2 AS JSONB)), get_affix_family(id))
-				""", game.getMap().getFloor().getFloor(), modifiers.toString());
+				""", floor.getFloor(), modifiers.toString());
 		if (mods.isEmpty()) return null;
-
-		Random rng;
-		if (floor != null) {
-			rng = floor.getRng();
-		} else {
-			rng = game.getNodeRng();
-		}
 
 		RandomList<String> rl = new RandomList<>(rng);
 		for (Object[] a : mods) {

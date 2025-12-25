@@ -108,7 +108,6 @@ public class Floor {
 	public void generateModifiers(Dunhun game) {
 		Utils.withUnsafeRng(rng -> {
 			rng.setSeed(seed);
-			System.out.println(seed);
 			modifiers.clear();
 
 			int mods = 0;
@@ -119,7 +118,7 @@ public class Floor {
 			}
 
 			for (int i = 0; i < mods && Calc.chance(100d / (modifiers.size() + 1), rng); i++) {
-				RunModifier mod = RunModifier.getRandom(game, this);
+				RunModifier mod = RunModifier.getRandom(this);
 				if (mod == null) break;
 
 				modifiers.add(mod);
