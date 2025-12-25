@@ -573,13 +573,9 @@ public class Combat implements Renderer<BufferedImage> {
 					.setPlaceholder(getLocale().get("str/use_a_skill"))
 					.setMaxValues(1);
 
+			JSONArray tags = h.getEquipment().getWeaponTags();
 			for (Skill s : skills) {
 				String extra = "";
-				String reqTags = Utils.properlyJoin(getLocale(),
-						s.getRequirements().tags().stream()
-								.map(t -> LocalizedString.get(getLocale(), "tag/" + t, "???"))
-								.toList()
-				);
 
 				if (s.getToggledEffect() != null) {
 					extra += "[" + getLocale().get("str/active").toUpperCase() + "]";
@@ -590,7 +586,13 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 				}
 
-				if (!reqTags.isBlank()) {
+				JSONArray req = s.getRequirements().tags();
+				if (req.isEmpty() && !tags.containsAll(req)) {
+					String reqTags = Utils.properlyJoin(getLocale(), req.stream()
+							.map(t -> LocalizedString.get(getLocale(), "tag/" + t, "???"))
+							.toList()
+					);
+
 					extra += " [" + getLocale().get("str/requires", reqTags) + "]";
 				}
 
