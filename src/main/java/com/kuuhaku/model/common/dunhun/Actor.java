@@ -202,7 +202,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			}
 		}
 
-		return modHp(source, usable, -Math.max(1, applyMitigation(val.get())), crit);
+		return modHp(source, usable, -Math.max(0, applyMitigation(val.get())), crit);
 	}
 
 	public Tuple2<Integer, Boolean> modHp(Actor<?> source, Usable usable, int value, double critChance) {
