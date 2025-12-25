@@ -78,7 +78,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 			flat += getGame().getPartySize() / 2;
 		}
 
-		return (int) Calc.clamp(getModifiers().getMaxAp().apply(flat), 1, getApCap() + flat);
+		return (int) Calc.clamp(getModifiers().getMaxAp().apply(flat), 1, getApCap());
 	}
 
 	@Override
