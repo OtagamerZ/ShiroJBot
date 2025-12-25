@@ -104,7 +104,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 				throw new GameReport(GameReport.UNDERLEVELLED, h.getName());
 			}
 
-			h.getBinding().bind(this, Team.HUNTERS);
 			heroes.put(p, h);
 		}
 
@@ -180,6 +179,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				try {
+					for (Hero h : heroes.values()) {
+						h.getBinding().bind(this, Team.HUNTERS);
+					}
+
 					DungeonRun run = map.getRun();
 					String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel() + 1);
 					EmbedBuilder eb = new ColorlessEmbedBuilder()
