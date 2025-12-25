@@ -132,7 +132,7 @@ public class Floor {
 	}
 
 	public void setVisionLimit(int visionLimit) {
-		this.visionLimit = visionLimit;
+		this.visionLimit = Math.min(visionLimit, this.visionLimit);
 	}
 
 	public boolean areNodesHidden() {
