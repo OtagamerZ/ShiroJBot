@@ -108,6 +108,7 @@ public class Floor {
 	public void generateModifiers(Dunhun game) {
 		Utils.withUnsafeRng(rng -> {
 			rng.setSeed(seed);
+			System.out.println(seed);
 			modifiers.clear();
 
 			int mods = 0;
