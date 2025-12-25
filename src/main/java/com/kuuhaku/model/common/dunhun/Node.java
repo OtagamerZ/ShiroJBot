@@ -294,7 +294,13 @@ public class Node {
 	}
 
 	public void renderNode(Graphics2D g2d, Node playerNode, boolean reachable) {
-		BufferedImage nodeIcon = getIcon();
+		BufferedImage nodeIcon;
+		if (sublevel.getFloor().areNodesHidden()) {
+			nodeIcon = ICON_PLAIN;
+		} else {
+			nodeIcon = getIcon();
+		}
+
 		if (!reachable) {
 			for (int y = 0; y < nodeIcon.getHeight(); y++) {
 				for (int x = 0; x < nodeIcon.getWidth(); x++) {
@@ -308,9 +314,7 @@ public class Node {
 		}
 
 		BufferedImage icon = nodeIcon;
-		if (sublevel.getFloor().areNodesHidden()) {
-			icon = ICON_PLAIN;
-		} else if (equals(playerNode)) {
+		if (equals(playerNode)) {
 			icon = ICON_PLAYER;
 		}
 
