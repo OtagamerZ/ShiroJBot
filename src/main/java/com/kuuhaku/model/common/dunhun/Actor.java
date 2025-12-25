@@ -184,6 +184,13 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public Tuple2<Integer, Boolean> damage(Actor<?> source, Usable usable, int value) {
+		AtomicInteger val = new AtomicInteger(value);
+
+		Combat cbt = binding.getGame().getCombat();
+		if (cbt != null && usable instanceof Skill s && !s.getStats().isSpell()) {
+			cbt.trigger(Trigger.ON_ATTACK, source, this, usable, val);
+		}
+
 		double crit = 0;
 		if (usable != null) {
 			if (usable instanceof Skill s && s.getStats().isSpell()) {
@@ -195,7 +202,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			}
 		}
 
-		return modHp(source, usable, -Math.max(1, applyMitigation(value)), crit);
+		return modHp(source, usable, -Math.max(1, applyMitigation(val.get())), crit);
 	}
 
 	public Tuple2<Integer, Boolean> modHp(Actor<?> source, Usable usable, int value, double critChance) {
@@ -208,10 +215,6 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		if (cbt != null) {
 			if (source != null) {
 				if (hp > 0) {
-					if (usable instanceof Skill s && !s.getStats().isSpell()) {
-						cbt.trigger(Trigger.ON_ATTACK, source, this, usable, val);
-					}
-
 					if (val.get() < 0) {
 						cbt.trigger(Trigger.ON_DEFEND, this, source, usable, val);
 
