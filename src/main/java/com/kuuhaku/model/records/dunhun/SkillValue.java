@@ -28,7 +28,10 @@ public record SkillValue(int min, int max, boolean withAdded) {
 	}
 
 	public int valueFor(Skill skill, Actor<?> source) {
-		double mult = source.getSenshi().getPower();
+		double mult = 0;
+		if (skill.getStats().isSpell()) {
+			mult = source.getSenshi().getPower();
+		}
 
 		int added = 0;
 		if (withAdded && skill.getStats().getEfficiency() > 0) {
