@@ -301,21 +301,19 @@ public class Node {
 			nodeIcon = getIcon();
 		}
 
-		if (!reachable) {
-			for (int y = 0; y < nodeIcon.getHeight(); y++) {
-				for (int x = 0; x < nodeIcon.getWidth(); x++) {
-					int rgb = ICON_PLAIN.getRGB(x, y);
-					int alpha = ((rgb >> 24) & 0xFF) / 2;
-					int tone = (rgb & 0xFF) / 3;
-
-					nodeIcon.setRGB(x, y, (alpha << 24) | tone << 16 | tone << 8 | tone);
-				}
-			}
-		}
-
 		BufferedImage icon = nodeIcon;
 		if (equals(playerNode)) {
 			icon = ICON_PLAYER;
+		} else if (!reachable) {
+			for (int y = 0; y < icon.getHeight(); y++) {
+				for (int x = 0; x < icon.getWidth(); x++) {
+					int rgb = nodeIcon.getRGB(x, y);
+					int alpha = ((rgb >> 24) & 0xFF) / 2;
+					int tone = (rgb & 0xFF) / 3;
+
+					icon.setRGB(x, y, (alpha << 24) | tone << 16 | tone << 8 | tone);
+				}
+			}
 		}
 
 		g2d.drawImage(icon,
