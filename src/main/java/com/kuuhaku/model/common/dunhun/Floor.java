@@ -122,6 +122,11 @@ public class Floor {
 	}
 
 	public void setVisionLimit(int visionLimit) {
+		if (this.visionLimit == 0) {
+			this.visionLimit = visionLimit;
+			return;
+		}
+
 		this.visionLimit = Math.min(visionLimit, this.visionLimit);
 	}
 
