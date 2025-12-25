@@ -295,10 +295,6 @@ public class Gear extends DAO<Gear> {
 		return attributes;
 	}
 
-	public void addEffect(ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
-		effects.add(new TriggeredEffect(owner, -1, effect, triggers));
-	}
-
 	public JSONArray getTags() {
 		JSONArray out = new JSONArray(basetype.getStats().allTags());
 		out.addAll(modifiers.getAddedTags());

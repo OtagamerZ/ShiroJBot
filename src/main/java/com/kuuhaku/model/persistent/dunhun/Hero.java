@@ -224,12 +224,7 @@ public class Hero extends Actor<Hero> {
 				  AND NOT jsonb_path_exists(h.equipment, '$.* ? (@ == $val)', cast('{"val": ' || g.id || '}' AS JSONB))
 				""", getId());
 
-		List<Gear> gear = DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.id IN ?1 ORDER BY g.id DESC", ids);
-		for (Gear g : gear) {
-			g.setOwner(this);
-		}
-
-		return gear;
+		return DAO.queryAll(Gear.class, "SELECT g FROM Gear g WHERE g.id IN ?1 ORDER BY g.id DESC", ids);
 	}
 
 	public Gear getInvGear(int id) {
