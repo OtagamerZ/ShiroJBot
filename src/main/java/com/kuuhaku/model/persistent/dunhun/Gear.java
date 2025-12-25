@@ -327,6 +327,7 @@ public class Gear extends DAO<Gear> {
 	public void load(Actor<?> owner) {
 		attributes = new Attributes();
 		modifiers.clear();
+		effects.clear();
 
 		Set<GearAffix> meta = new HashSet<>();
 		for (GearAffix ga : getAllAffixes()) {

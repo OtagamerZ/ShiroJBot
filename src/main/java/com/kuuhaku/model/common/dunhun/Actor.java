@@ -385,6 +385,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		);
 
 		for (EffectBase e : queue) {
+			System.out.println(e);
+
 			if (e.isLocked()) continue;
 			else if (e instanceof TriggeredEffect te) {
 				if (!Utils.equalsAny(trigger, te.getTriggers())) continue;
