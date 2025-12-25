@@ -23,6 +23,7 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
@@ -165,14 +166,27 @@ public class HeroInspectCommand implements Executable {
 				)
 				.toList();
 
+		XStringBuilder sb = new XStringBuilder();
 		for (GearAffix ga : affs) {
-			eb.appendDescription("-# %s - %s - %s%s\n".formatted(
+			sb.clear();
+			sb.append("-# %s - %s".formatted(
 					locale.get("str/" + ga.getAffix().getType()),
-					locale.get("str/tier", ga.getAffix().getTier()), ga.getName(locale),
-					ga.getAffix().getTags().isEmpty() ? "" : " - " + ga.getAffix().getTags().stream()
-							.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
-							.collect(Collectors.joining(", "))
+					locale.get("str/tier", ga.getAffix().getTier())
 			));
+
+			String name = ga.getName(locale);
+			if (name != null) {
+				sb.append(" - " + name);
+			}
+
+			JSONArray tgs = ga.getAffix().getTags();
+			if (!tgs.isEmpty()) {
+				sb.append(" - " + tgs.stream()
+						.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
+						.collect(Collectors.joining(", "))
+				);
+			}
+
 			eb.appendDescription(ga.getDescription(locale, true) + "\n\n");
 		}
 

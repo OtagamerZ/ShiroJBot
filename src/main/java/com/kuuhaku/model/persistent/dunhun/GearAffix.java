@@ -107,7 +107,7 @@ public class GearAffix extends DAO<GearAffix> {
 
 	public String getName(I18N locale) {
 		if (affix.getType() == AffixType.UNIQUE) {
-			return locale.get("str/unique");
+			return null;
 		}
 
 		String ending = Utils.getOr(gear.getBasetype().getInfo(locale).getEnding(), "M");

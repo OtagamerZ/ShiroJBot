@@ -326,7 +326,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		return regDeg;
 	}
 
-	public int applyRegDeg() {
+	public void applyRegDeg() {
 		AtomicInteger val = new AtomicInteger(getRegDeg().next());
 
 		Combat cbt = binding.getGame().getCombat();
@@ -335,8 +335,6 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		}
 
 		setHp(getHp() + val.get());
-
-		return 0;
 	}
 
 	public Deque<Actor<?>> getMinions() {
