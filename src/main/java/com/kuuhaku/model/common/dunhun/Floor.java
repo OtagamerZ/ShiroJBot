@@ -21,6 +21,7 @@ public class Floor {
 	private final Set<RunModifier> modifiers = new LinkedHashSet<>();
 	private int visionLimit;
 	private boolean hiddenNodes;
+	private boolean unsafeArea;
 
 	public Floor(AreaMap map, int floor) {
 		this.map = map;
@@ -147,6 +148,14 @@ public class Floor {
 
 	public void setHiddenNodes(boolean hiddenNodes) {
 		this.hiddenNodes = hiddenNodes;
+	}
+
+	public boolean isUnsafeArea() {
+		return unsafeArea;
+	}
+
+	public void setUnsafeArea(boolean unsafeArea) {
+		this.unsafeArea = unsafeArea;
 	}
 
 	public List<Node> getNodes() {

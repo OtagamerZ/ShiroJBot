@@ -169,6 +169,10 @@ public class Node {
 		return type == NodeType.DANGER ? 5 : 0;
 	}
 
+	public boolean isSafeNode() {
+		return type == NodeType.BOSS || !sublevel.getFloor().isUnsafeArea();
+	}
+
 	public BufferedImage getIcon() {
 		return IO.getResourceAsImage("dunhun/icons/node_" + getType().name().toLowerCase() + ".png");
 	}

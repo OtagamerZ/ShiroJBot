@@ -54,6 +54,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -252,7 +253,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 						));
 					}
 
+					AtomicBoolean confirm = new  AtomicBoolean(currNode.isSafeNode());
 					choices.add(new Choice("leave", getLocale().get("str/leave_dungeon"), w -> {
+						if (!confirm.get()) {
+							getChannel().sendMessage(getLocale().get("alert/unsafe_area")).queue();
+							confirm.set(true);
+							return "CONFIRM";
+						}
+
 						finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
 						return null;
 					}));
@@ -648,6 +656,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						outcome = "UNKNOWN_CHOICE";
 					} else {
 						outcome = choice.action().apply(w);
+						if (Objects.equals(outcome, "CONFIRM")) return;
 					}
 
 					if (outcome != null) {
@@ -698,7 +707,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private void finish(String message, Object... args) {
 		getChannel().clearBuffer();
 
-		if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
+		if (map.getPlayerNode().isSafeNode() && (!loot.gear().isEmpty() || !loot.items().isEmpty())) {
 			if (getPartySize() == 1) {
 				Hero h = List.copyOf(heroes.values()).getFirst();
 
