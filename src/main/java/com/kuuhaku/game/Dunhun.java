@@ -261,6 +261,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 							return "CONFIRM";
 						}
 
+						if (!currNode.isSafeNode()) {
+							reportResult(GameReport.SUCCESS, "str/dungeon_fail",
+									getHeroNames(), run.getFloor(), run.getSublevel() + 1
+							);
+							return null;
+						}
+
 						finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
 						return null;
 					}));
@@ -707,7 +714,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private void finish(String message, Object... args) {
 		getChannel().clearBuffer();
 
-		if (map.getPlayerNode().isSafeNode() && (!loot.gear().isEmpty() || !loot.items().isEmpty())) {
+		if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
 			if (getPartySize() == 1) {
 				Hero h = List.copyOf(heroes.values()).getFirst();
 
