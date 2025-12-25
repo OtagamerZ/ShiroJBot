@@ -140,10 +140,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 				if (run.getPath() >= sub.size()) {
 					run.setPath(sub.size() - 1);
 				}
-
-				for (RunModifier mod : run.getModifiers()) {
-					mod.toEffect(this);
-				}
 			} else {
 				this.map = dungeon.init(this, new DungeonRun(leader, dungeon));
 				this.map.generate(this);
@@ -194,6 +190,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					if (!run.getModifiers().isEmpty()) {
 						XStringBuilder sb = new XStringBuilder();
 						for (RunModifier mod : run.getModifiers()) {
+							mod.toEffect(this);
 							sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
 						}
 
