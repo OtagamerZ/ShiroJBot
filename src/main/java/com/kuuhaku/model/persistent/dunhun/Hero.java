@@ -120,26 +120,26 @@ public class Hero extends Actor<Hero> {
 	public int getMaxHp() {
 		int flat = 280 + stats.getRaceBonus().hp() + getLevel() * 20;
 
-		return (int) Math.max(1, getModifiers().getMaxHp().apply(flat) * (1 + getAttributes().vit() * 0.1));
+		return (int) Math.max(1, getModifiers().getMaxHp(flat) * (1 + getAttributes().vit() * 0.1));
 	}
 
 	@Override
 	public int getMaxAp() {
 		int flat = 2 + getLevel() / 8;
 
-		return (int) Calc.clamp(getModifiers().getMaxAp().apply(flat), 1, getApCap());
+		return (int) Calc.clamp(getModifiers().getMaxAp(flat), 1, getApCap());
 	}
 
 	@Override
 	public int getApCap() {
-		return (int) getModifiers().getMaxAp().apply(5);
+		return (int) getModifiers().getMaxAp(5);
 	}
 
 	@Override
 	public int getInitiative() {
 		double flat = getLevel() / 3.0;
 
-		return (int) Math.max(1, getModifiers().getInitiative().apply(flat));
+		return (int) Math.max(1, getModifiers().getInitiative(flat));
 	}
 
 	@Override
@@ -149,13 +149,13 @@ public class Hero extends Actor<Hero> {
 							  .mapToDouble(Gear::getCritical)
 							  .average().orElse(0) + stats.getRaceBonus().critical();
 
-		return Calc.clamp(getModifiers().getCritical().apply(flat), 0, 100);
+		return Calc.clamp(getModifiers().getCritical(flat), 0, 100);
 	}
 
 	@Override
 	public int getThreatScore() {
 		int flat = getSenshi().getDmg() / 10 + getSenshi().getDfs() / 20 + getHp() / 200;
-		return (int) Math.max(1, getModifiers().getAggro().apply(flat * getLevel() / 2d));
+		return (int) Math.max(1, getModifiers().getAggro(flat * getLevel() / 2d));
 	}
 
 	public Attributes getAttributes() {

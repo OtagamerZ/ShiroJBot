@@ -78,24 +78,24 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 			flat += getGame().getPartySize() / 2;
 		}
 
-		return (int) Calc.clamp(getModifiers().getMaxAp().apply(flat), 1, getApCap());
+		return (int) Calc.clamp(getModifiers().getMaxAp(flat), 1, getApCap());
 	}
 
 	@Override
 	public int getApCap() {
-		return (int) getModifiers().getMaxAp().apply(4 + getStats().getMaxAp());
+		return (int) getModifiers().getMaxAp(4 + getStats().getMaxAp());
 	}
 
 	@Override
 	public int getInitiative() {
 		int flat = stats.getInitiative() * getLevel() / 3;
 
-		return (int) Math.max(1, getModifiers().getInitiative().apply(flat));
+		return (int) Math.max(1, getModifiers().getInitiative(flat));
 	}
 
 	@Override
 	public double getCritical() {
-		return getModifiers().getCritical().apply(5);
+		return getModifiers().getCritical(5);
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 			case UNIQUE -> 10;
 		};
 
-		return (int) Math.max(1, getModifiers().getAggro().apply(flat * (getLevel() + 1) * mult));
+		return (int) Math.max(1, getModifiers().getAggro(flat * (getLevel() + 1) * mult));
 	}
 
 	public int getKillXp() {

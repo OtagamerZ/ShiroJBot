@@ -18,19 +18,15 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
-import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.GearModifiers;
-import com.kuuhaku.model.common.dunhun.TriggeredEffect;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
-import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.records.dunhun.Attributes;
-import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -373,7 +369,7 @@ public class Gear extends DAO<Gear> {
 		double mult = 1;
 		if (source != null && source.getGame() != null) {
 			if (source.getKiller() instanceof Hero h) {
-				mult *= h.getModifiers().getMagicFind().multiplier();
+				mult *= h.getModifiers().getMagicFind(1);
 			}
 
 			mult *= switch (source.getRarityClass()) {

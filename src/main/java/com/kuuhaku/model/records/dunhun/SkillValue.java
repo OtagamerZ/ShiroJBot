@@ -37,7 +37,7 @@ public record SkillValue(int min, int max, boolean withAdded) {
 		if (withAdded && skill.getStats().getEfficiency() > 0) {
 			double eff = skill.getStats().getEfficiency();
 			if (skill.getStats().isSpell()) {
-				added = (int) (source.getModifiers().getSpellDamage().get() * eff);
+				added = (int) (source.getModifiers().getSpellDamage() * eff);
 			} else {
 				added = (int) (source.getSenshi().getDmg() * eff);
 			}

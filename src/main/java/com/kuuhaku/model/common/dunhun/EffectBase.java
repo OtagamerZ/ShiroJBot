@@ -9,6 +9,9 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 
 public abstract class EffectBase {
+	private static final BiConsumer<EffectBase, CombatContext> NOTHING = (_, _) -> {
+	};
+
 	private final EffectContext<?> source;
 	private final Actor<?> owner;
 	private final BiConsumer<EffectBase, CombatContext> effect;
@@ -31,6 +34,8 @@ public abstract class EffectBase {
 	}
 
 	public BiConsumer<EffectBase, CombatContext> getEffect() {
+		if (isClosed()) return NOTHING;
+
 		return effect;
 	}
 

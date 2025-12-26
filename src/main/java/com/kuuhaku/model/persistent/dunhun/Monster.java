@@ -125,7 +125,7 @@ public class Monster extends MonsterBase<Monster> {
 			mult *= 1 + getGame().getPartySize() * 0.5;
 		}
 
-		return (int) Math.max(1, getModifiers().getMaxHp().apply(flat) * mult);
+		return (int) Math.max(1, getModifiers().getMaxHp(flat) * mult);
 	}
 
 	public Set<Affix> getAffixes() {

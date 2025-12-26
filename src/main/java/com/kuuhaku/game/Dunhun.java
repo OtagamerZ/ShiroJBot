@@ -13,7 +13,6 @@ import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.NullPhase;
 import com.kuuhaku.game.engine.PlayerAction;
-import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.common.RandomList;
@@ -23,7 +22,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
-import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.UserItem;
@@ -468,7 +466,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				Loot lt = stats.generateLoot(m);
 
 				double mf = m.getKiller() != null
-						? m.getKiller().getModifiers().getMagicFind().multiplier()
+						? m.getKiller().getModifiers().getMagicFind(1)
 						: 1;
 
 				double dropFac = 20 * stats.getLootMultiplier(m) * mf * Math.pow(1.2, getModifiers().size());

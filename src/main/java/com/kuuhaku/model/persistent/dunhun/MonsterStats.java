@@ -137,7 +137,7 @@ public class MonsterStats implements Serializable {
 			return 2.5;
 		}
 
-		return 1 + self.getModifiers().getEffects().size() * 0.15;
+		return 1 + self.getModifiers().getAllEffects().size() * 0.15;
 	}
 
 	public Loot generateLoot(Actor<?> self) {

@@ -18,108 +18,137 @@
 
 package com.kuuhaku.model.common.dunhun;
 
-import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.model.common.TimedMap;
-import com.kuuhaku.model.common.dunhun.context.EffectContext;
-import com.kuuhaku.model.common.shoukan.CumValue;
+import com.kuuhaku.model.common.shoukan.FlatMod;
+import com.kuuhaku.model.common.shoukan.IncMod;
+import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.ValueMod;
-import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.records.dunhun.CombatContext;
-import org.apache.commons.collections4.SetUtils;
-import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ActorModifiers implements Iterable<CumValue> {
-	private final CumValue maxHp = new CumValue();
-	private final CumValue maxAp = new CumValue();
-	private final CumValue initiative = new CumValue();
-	private final CumValue critical = new CumValue();
-	private final CumValue spellDamage = new CumValue();
+public class ActorModifiers {
+	private final Set<EffectProperties<?>> effects = new HashSet<>();
+	private final TimedMap<EffectProperties<?>> tempEffects = new TimedMap<>();
 
-	private final CumValue aggro = new CumValue();
-	private final CumValue magicFind = new CumValue();
+	private final Map<String, Double> cache = new HashMap<>();
+	private int cacheHash = 0;
 
-	private final CumValue healing = new CumValue();
-	private final CumValue damageTaken = new CumValue();
-
-	private final Set<EffectBase> permEffects = new HashSet<>();
-	private final TimedMap<EffectBase> tempEffects = new TimedMap<>();
-	private Actor<?> channeled;
-
-	private final Field[] fieldCache = getClass().getDeclaredFields();
-
-	public CumValue getMaxHp() {
-		return maxHp;
-	}
-
-	public CumValue getMaxAp() {
-		return maxAp;
-	}
-
-	public CumValue getInitiative() {
-		return initiative;
-	}
-
-	public CumValue getCritical() {
-		return critical;
-	}
-
-	public CumValue getSpellDamage() {
-		return spellDamage;
-	}
-
-	public CumValue getAggro() {
-		return aggro;
-	}
-
-	public CumValue getMagicFind() {
-		return magicFind;
-	}
-
-	public CumValue getHealing() {
-		return healing;
-	}
-
-	public CumValue getDamageTaken() {
-		return damageTaken;
-	}
-
-	public void addEffect(EffectContext<?> source, Actor<?> owner, ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
-		addEffect(source, owner, effect, -1, -1, triggers);
-	}
-
-	public void addEffect(EffectContext<?> source, Actor<?> owner, ThrowingBiConsumer<EffectBase, CombatContext> effect, int duration, int limit, Trigger... triggers) {
-		if (triggers.length == 0 && duration < 0 && limit < 0) {
-			permEffects.add(new PersistentEffect(source, owner, effect));
-			return;
+	private double fetch(String field, double base, Function<EffectProperties<?>, ValueMod> extractor) {
+		if (Objects.hash(effects, tempEffects) != cacheHash) {
+			cache.clear();
+			cacheHash = Objects.hash(effects, tempEffects);
 		}
 
-		tempEffects.add(new TriggeredEffect(source, owner, limit, effect, triggers), duration);
+		return cache.computeIfAbsent(field, _ -> {
+			double flat = 0, inc = 1, mult = 1;
+			Iterator<ValueMod> it = Stream.of(effects, tempEffects.getValues())
+					.flatMap(Set::stream)
+					.map(extractor)
+					.iterator();
+
+			while (it.hasNext()) {
+				switch (it.next()) {
+					case FlatMod m -> flat += m.getValue();
+					case IncMod m -> inc += m.getValue();
+					case MultMod m -> mult *= m.getValue();
+					default -> {
+					}
+				}
+			}
+
+			return (base + flat) * (1 + inc) * mult;
+		});
 	}
 
-	public Set<EffectBase> getEffects() {
-		return SetUtils.union(permEffects, tempEffects.getValues());
+	public double getMaxHp() {
+		return getMaxHp(0);
 	}
 
-	public Set<EffectBase> getPermEffects() {
-		return permEffects;
+	public double getMaxHp(double base) {
+		return fetch("maxhp", base, EffectProperties::getMaxHp);
 	}
 
-	public TimedMap<EffectBase> getTempEffects() {
+	public double getMaxAp() {
+		return getMaxAp(0);
+	}
+
+	public double getMaxAp(double base) {
+		return fetch("maxap", base, EffectProperties::getMaxAp);
+	}
+
+	public double getInitiative() {
+		return getInitiative(0);
+	}
+
+	public double getInitiative(double base) {
+		return fetch("initiative", base, EffectProperties::getInitiative);
+	}
+
+	public double getCritical() {
+		return getCritical(0);
+	}
+
+	public double getCritical(double base) {
+		return fetch("critical", base, EffectProperties::getCritical);
+	}
+
+	public double getSpellDamage() {
+		return getSpellDamage(0);
+	}
+
+	public double getSpellDamage(double base) {
+		return fetch("spelldamage", base, EffectProperties::getSpellDamage);
+	}
+
+	public double getAggro() {
+		return getAggro(0);
+	}
+
+	public double getAggro(double base) {
+		return fetch("aggro", base, EffectProperties::getAggro);
+	}
+
+	public double getMagicFind() {
+		return getMagicFind(0);
+	}
+
+	public double getMagicFind(double base) {
+		return fetch("magicfind", base, EffectProperties::getMagicFind);
+	}
+
+	public double getHealing() {
+		return getHealing(0);
+	}
+
+	public double getHealing(double base) {
+		return fetch("healing", base, EffectProperties::getHealing);
+	}
+
+	public double getDamageTaken() {
+		return getDamageTaken(0);
+	}
+
+	public double getDamageTaken(double base) {
+		return fetch("damagetaken", base, EffectProperties::getDamageTaken);
+	}
+
+	public Set<EffectProperties<?>> getEffects() {
+		return effects;
+	}
+
+	public TimedMap<EffectProperties<?>> getTempEffects() {
 		return tempEffects;
 	}
 
-	public Actor<?> getChanneled() {
-		return channeled;
-	}
-
-	public void setChanneled(Actor<?> channeled) {
-		this.channeled = channeled;
+	public Set<EffectProperties<?>> getAllEffects() {
+		return Stream.of(effects, tempEffects.getValues())
+				.flatMap(Set::stream)
+				.collect(Collectors.toSet());
 	}
 
 	public void expireMods(Actor<?> act) {
@@ -140,53 +169,26 @@ public class ActorModifiers implements Iterable<CumValue> {
 
 	public void removeIf(Actor<?> act, Predicate<ValueMod> check) {
 		act.getSenshi().getStats().removeIf(check);
-		permEffects.removeIf(EffectBase::isClosed);
-		tempEffects.getValues().removeIf(EffectBase::isClosed);
+		List<Iterator<EffectProperties<?>>> sets = List.of(
+				effects.iterator(), tempEffects.getValues().iterator()
+		);
 
 		for (Gear g : act.getEquipment()) {
 			g.getModifiers().removeIf(check);
 		}
 
-		for (Field f : fieldCache) {
-			try {
-				if (f.get(this) instanceof CumValue cv) {
-					cv.values().removeIf(check);
+		for (Iterator<EffectProperties<?>> set : sets) {
+			while (set.hasNext()) {
+				EffectProperties<?> prop = set.next();
+				if (prop.isSafeToRemove()) {
+					set.remove();
 				}
-			} catch (IllegalAccessException ignore) {
 			}
 		}
 	}
 
-	@Override
-	public @NotNull Iterator<CumValue> iterator() {
-		return Arrays.stream(fieldCache)
-				.flatMap(f -> {
-					try {
-						if (f.get(this) instanceof CumValue cv) {
-							return Stream.of(cv);
-						}
-					} catch (IllegalAccessException ignore) {
-					}
-
-					return null;
-				})
-				.filter(Objects::nonNull)
-				.iterator();
-	}
-
 	public void copyFrom(ActorModifiers modifiers) {
-		Iterator<CumValue> origMods = modifiers.iterator();
-		for (CumValue mod : this) {
-			origMods.next().copyTo(mod);
-		}
-
-		permEffects.addAll(modifiers.getPermEffects());
-		for (Map.Entry<EffectBase, Integer> e : modifiers.getTempEffects()) {
-			tempEffects.add(e.getKey(), e.getValue());
-		}
-
-		if (modifiers.getChanneled() != null) {
-			this.channeled = modifiers.getChanneled();
-		}
+		effects.addAll(modifiers.getEffects());
+		tempEffects.addAll(modifiers.getTempEffects());
 	}
 }

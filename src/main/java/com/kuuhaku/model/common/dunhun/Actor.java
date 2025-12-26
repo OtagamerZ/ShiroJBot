@@ -4,7 +4,6 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.XStringBuilder;
-import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
@@ -173,7 +172,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	public Tuple2<Integer, Boolean> heal(Actor<?> source, Usable usable, int value) {
 		double crit = 0;
 		if (usable instanceof Skill s && s.getStats().isSpell()) {
-			crit = source.getModifiers().getCritical().apply(s.getStats().getCritical());
+			crit = source.getModifiers().getCritical(s.getStats().getCritical());
 		}
 
 		return modHp(source, usable, Math.max(0, value), crit);
@@ -189,7 +188,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		double crit = 0;
 		if (usable instanceof Skill s && source != null) {
 			if (s.getStats().isSpell()) {
-				crit = source.getModifiers().getCritical().apply(s.getStats().getCritical());
+				crit = source.getModifiers().getCritical(s.getStats().getCritical());
 			} else {
 				Combat cbt = source.getGame().getCombat();
 				if (cbt != null) {
@@ -207,8 +206,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		boolean crit = Calc.chance(critChance);
 		if (crit) value *= 2;
 
-		CumValue mult = value < 0 ? modifiers.getDamageTaken() : modifiers.getHealing();
-		AtomicInteger val = new AtomicInteger((int) mult.apply(value));
+		value = (int) (value < 0 ? modifiers.getDamageTaken(value) : modifiers.getHealing(value));
+		AtomicInteger val = new AtomicInteger(value);
 		Combat cbt = binding.getGame().getCombat();
 		if (cbt != null) {
 			if (source != null) {
@@ -379,7 +378,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			);
 		}
 
-		queue.addAll(getModifiers().getEffects().stream()
+		queue.addAll(getModifiers().getAllEffects().stream()
+				.map(EffectProperties::getEffect)
 				.filter(e -> !e.isClosed())
 				.toList()
 		);
