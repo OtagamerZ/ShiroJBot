@@ -19,7 +19,6 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
-import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.common.dunhun.context.MonsterContext;
 import com.kuuhaku.model.enums.I18N;
@@ -131,16 +130,18 @@ public class MonsterStats implements Serializable {
 		return killXp;
 	}
 
-	public double getLootMultiplier(Actor<?> self) {
-		if (self instanceof MonsterBase<?> m && m.isMinion()) return 0;
+	public double getLootMultiplier(MonsterBase<?> self) {
+		if (self == null || self.isMinion()) return 0;
 		else if (self.getRarityClass() == RarityClass.UNIQUE) {
 			return 2.5;
+		} else if (self instanceof Monster m) {
+			return 1 + m.getAffixes().size() * 0.15;
 		}
 
-		return 1 + self.getModifiers().getEffects().size() * 0.15;
+		return 1;
 	}
 
-	public Loot generateLoot(Actor<?> self) {
+	public Loot generateLoot(MonsterBase<?> self) {
 		Loot loot = new Loot();
 		if (!(self instanceof Monster m) || m.isMinion() || lootGenerator == null) return loot;
 
