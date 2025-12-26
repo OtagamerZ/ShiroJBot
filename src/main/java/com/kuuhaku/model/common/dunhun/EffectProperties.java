@@ -14,6 +14,7 @@ public class EffectProperties<T> {
 	private ValueMod defense;
 	private ValueMod dodge;
 	private ValueMod parry;
+	private ValueMod power;
 	private ValueMod initiative;
 	private ValueMod critical;
 	private ValueMod spellDamage;
@@ -85,6 +86,14 @@ public class EffectProperties<T> {
 
 	public void setParry(ValueMod parry) {
 		this.parry = parry;
+	}
+
+	public ValueMod getPower() {
+		return power;
+	}
+
+	public void setPower(ValueMod power) {
+		this.power = power;
 	}
 
 	public ValueMod getInitiative() {

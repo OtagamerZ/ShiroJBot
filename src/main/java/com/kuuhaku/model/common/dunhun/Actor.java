@@ -519,7 +519,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		base.setDfs((int) (modifiers.getDefense(def * (1 + total.str() * 0.01)) * mult));
 		base.setDodge((int) modifiers.getDodge(ddg + total.dex() / 2d));
 		base.setParry((int) modifiers.getParry(pry));
-		senshi.getStats().getPower().set(new MultMod(pow));
+		senshi.getStats().getPower().set(new MultMod(modifiers.getPower(pow)));
 
 		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();
 		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750 + effCost);

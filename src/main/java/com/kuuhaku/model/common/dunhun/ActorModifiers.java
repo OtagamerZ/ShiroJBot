@@ -108,6 +108,14 @@ public class ActorModifiers {
 		return fetch("parry", base, EffectProperties::getParry);
 	}
 
+	public double getPower() {
+		return getPower(0);
+	}
+
+	public double getPower(double base) {
+		return fetch("power", base, EffectProperties::getPower);
+	}
+
 	public double getInitiative() {
 		return getInitiative(0);
 	}
