@@ -378,7 +378,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			);
 		}
 
-		queue.addAll(getModifiers().getAllEffects().stream()
+		queue.addAll(getModifiers().getEffects().stream()
 				.map(EffectProperties::getEffect)
 				.filter(e -> !e.isClosed())
 				.toList()
@@ -515,10 +515,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		}
 
 		CombatCardAttributes base = senshi.getBase();
-		base.setAtk((int) ((dmg + wDmg) * mult));
-		base.setDfs((int) ((def * (1 + total.str() * 0.01)) * mult));
-		base.setDodge(ddg + total.dex() / 2);
-		base.setParry(pry);
+		base.setAtk((int) (modifiers.getDamage(dmg + wDmg) * mult));
+		base.setDfs((int) (modifiers.getDefense(def * (1 + total.str() * 0.01)) * mult));
+		base.setDodge((int) modifiers.getDodge(ddg + total.dex() / 2d));
+		base.setParry((int) modifiers.getParry(pry));
 		senshi.getStats().getPower().set(new MultMod(pow));
 
 		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();

@@ -10,6 +10,10 @@ public class EffectProperties<T> {
 	private final EffectContext<T> owner;
 	private ValueMod maxHp;
 	private ValueMod maxAp;
+	private ValueMod damage;
+	private ValueMod defense;
+	private ValueMod dodge;
+	private ValueMod parry;
 	private ValueMod initiative;
 	private ValueMod critical;
 	private ValueMod spellDamage;
@@ -49,6 +53,38 @@ public class EffectProperties<T> {
 
 	public void setMaxAp(ValueMod maxAp) {
 		this.maxAp = maxAp;
+	}
+
+	public ValueMod getDamage() {
+		return damage;
+	}
+
+	public void setDamage(ValueMod damage) {
+		this.damage = damage;
+	}
+
+	public ValueMod getDefense() {
+		return defense;
+	}
+
+	public void setDefense(ValueMod defense) {
+		this.defense = defense;
+	}
+
+	public ValueMod getDodge() {
+		return dodge;
+	}
+
+	public void setDodge(ValueMod dodge) {
+		this.dodge = dodge;
+	}
+
+	public ValueMod getParry() {
+		return parry;
+	}
+
+	public void setParry(ValueMod parry) {
+		this.parry = parry;
 	}
 
 	public ValueMod getInitiative() {

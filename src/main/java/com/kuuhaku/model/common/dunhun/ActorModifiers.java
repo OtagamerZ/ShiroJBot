@@ -76,6 +76,38 @@ public class ActorModifiers {
 		return fetch("maxap", base, EffectProperties::getMaxAp);
 	}
 
+	public double getDamage() {
+		return getDamage(0);
+	}
+
+	public double getDamage(double base) {
+		return fetch("damage", base, EffectProperties::getDamage);
+	}
+
+	public double getDefense() {
+		return getDefense(0);
+	}
+
+	public double getDefense(double base) {
+		return fetch("defense", base, EffectProperties::getDefense);
+	}
+
+	public double getDodge() {
+		return getDodge(0);
+	}
+
+	public double getDodge(double base) {
+		return fetch("dodge", base, EffectProperties::getDodge);
+	}
+
+	public double getParry() {
+		return getParry(0);
+	}
+
+	public double getParry(double base) {
+		return fetch("parry", base, EffectProperties::getParry);
+	}
+
 	public double getInitiative() {
 		return getInitiative(0);
 	}
