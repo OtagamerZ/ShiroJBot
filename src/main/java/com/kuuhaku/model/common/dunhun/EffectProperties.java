@@ -4,7 +4,6 @@ import com.kuuhaku.model.common.dunhun.context.EffectContext;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 
 import java.lang.reflect.Field;
-import java.util.Objects;
 
 public class EffectProperties<T> {
 	private final EffectContext<T> owner;
@@ -183,17 +182,5 @@ public class EffectProperties<T> {
 		}
 
 		return safe;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (o == null || getClass() != o.getClass()) return false;
-		EffectProperties<?> that = (EffectProperties<?>) o;
-		return Objects.equals(owner, that.owner);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(owner);
 	}
 }
