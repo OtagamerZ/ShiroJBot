@@ -837,6 +837,8 @@ public class Combat implements Renderer<BufferedImage> {
 			try {
 				e.lock();
 				e.getEffect().accept(e, context);
+			} catch (Exception ex) {
+				Constants.LOGGER.warn("Failed to execute {} persistent effect", e.getSource().getSource(), ex);
 			} finally {
 				e.unlock();
 			}
