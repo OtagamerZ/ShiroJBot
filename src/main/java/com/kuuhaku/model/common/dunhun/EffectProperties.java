@@ -159,14 +159,6 @@ public class EffectProperties<T> {
 		this.effect = effect;
 	}
 
-	public int getDuration() {
-		return duration;
-	}
-
-	public void setDuration(int duration) {
-		this.duration = duration;
-	}
-
 	public boolean isSafeToRemove() {
 		if (duration > 0) duration--;
 		if (duration == 0) return true;
