@@ -7,6 +7,14 @@ import java.util.Objects;
 public class UniqueProperties<T> extends EffectProperties<T> {
 	private final Object identifier;
 
+	public UniqueProperties(EffectContext<T> owner) {
+		this(owner, owner);
+	}
+
+	public UniqueProperties(EffectContext<T> owner, int duration) {
+		this(owner, owner, duration);
+	}
+
 	public UniqueProperties(Object identifier, EffectContext<T> owner) {
 		super(owner);
 		this.identifier = identifier;
