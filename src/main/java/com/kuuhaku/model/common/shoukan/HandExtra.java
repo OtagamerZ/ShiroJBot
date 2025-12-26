@@ -30,7 +30,7 @@ public class HandExtra {
 	private final CumValue regenMult = new CumValue();
 	private final CumValue degenMult = new CumValue();
 
-	private final Field[] fieldCache = getClass().getDeclaredFields();
+	private static final Field[] fieldCache = HandExtra.class.getDeclaredFields();
 
 	public CumValue getHealMult() {
 		return healMult;

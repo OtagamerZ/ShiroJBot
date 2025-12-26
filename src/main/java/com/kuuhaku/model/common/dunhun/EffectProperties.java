@@ -23,7 +23,7 @@ public class EffectProperties<T> {
 	private ValueMod damageTaken;
 	private EffectBase effect;
 
-	private final Field[] fieldCache = getClass().getDeclaredFields();
+	private static final Field[] fieldCache = EffectProperties.class.getDeclaredFields();
 	private int duration;
 
 	public EffectProperties(EffectContext<T> owner) {
@@ -157,6 +157,14 @@ public class EffectProperties<T> {
 
 	public void setEffect(EffectBase effect) {
 		this.effect = effect;
+	}
+
+	public int getDuration() {
+		return duration;
+	}
+
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
 
 	public boolean isSafeToRemove() {
