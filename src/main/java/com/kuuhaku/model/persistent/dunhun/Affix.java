@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.common.dunhun.EffectProperties;
 import com.kuuhaku.model.common.dunhun.context.ActorContext;
 import com.kuuhaku.model.common.dunhun.context.GearContext;
 import com.kuuhaku.model.enums.I18N;
@@ -142,9 +143,13 @@ public class Affix extends DAO<Affix> {
 		if (effect == null || !Utils.equalsAny(type, AffixType.monsterValues())) return;
 
 		try {
-			Utils.exec(id, effect, Map.of(
+			Object out = Utils.exec(id, effect, Map.of(
 					"ctx", new ActorContext(actor)
 			));
+
+			if (out instanceof EffectProperties<?> e) {
+				actor.getModifiers().getEffects().add(e);
+			}
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply actor modifier {}", id, e);
 		}
