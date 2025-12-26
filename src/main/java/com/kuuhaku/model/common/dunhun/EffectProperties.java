@@ -24,6 +24,7 @@ public class EffectProperties<T> {
 	private EffectBase effect;
 
 	private static final Field[] fieldCache = EffectProperties.class.getDeclaredFields();
+	private int priority;
 	private int duration;
 
 	public EffectProperties(EffectContext<T> owner) {
@@ -157,6 +158,14 @@ public class EffectProperties<T> {
 
 	public void setEffect(EffectBase effect) {
 		this.effect = effect;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public int getDuration() {
+		return duration;
 	}
 
 	public boolean isSafeToRemove() {

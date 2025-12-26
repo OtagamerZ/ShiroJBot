@@ -176,6 +176,19 @@ public class ActorModifiers {
 		return effects;
 	}
 
+	public void addEffect(EffectProperties<?> effect) {
+		EffectProperties<?> curr = effects.stream()
+				.filter(e -> Objects.equals(e, effect))
+				.findFirst().orElse(null);
+
+		if (curr != null) {
+			if (curr.getPriority() > effect.getPriority()) return;
+
+			effects.remove(effect);
+			effects.add(effect);
+		}
+	}
+
 	public void expireMods(Actor<?> act) {
 		removeIf(act, mod -> {
 			if (mod.getExpiration() > 0) {
