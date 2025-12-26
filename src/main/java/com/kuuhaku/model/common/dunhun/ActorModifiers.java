@@ -44,6 +44,7 @@ public class ActorModifiers {
 			double flat = 0, inc = 1, mult = 1;
 			Iterator<ValueMod> it = effects.stream()
 					.map(extractor)
+					.filter(Objects::nonNull)
 					.iterator();
 
 			while (it.hasNext()) {
