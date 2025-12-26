@@ -18,7 +18,6 @@
 
 package com.kuuhaku.model.common.dunhun;
 
-import com.kuuhaku.model.common.TimedMap;
 import com.kuuhaku.model.common.shoukan.FlatMod;
 import com.kuuhaku.model.common.shoukan.IncMod;
 import com.kuuhaku.model.common.shoukan.MultMod;
@@ -28,26 +27,22 @@ import com.kuuhaku.model.persistent.dunhun.Gear;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ActorModifiers {
 	private final Set<EffectProperties<?>> effects = new HashSet<>();
-	private final TimedMap<EffectProperties<?>> tempEffects = new TimedMap<>();
 
 	private final Map<String, Double> cache = new HashMap<>();
 	private int cacheHash = 0;
 
 	private double fetch(String field, double base, Function<EffectProperties<?>, ValueMod> extractor) {
-		if (Objects.hash(effects, tempEffects) != cacheHash) {
+		if (effects.hashCode() != cacheHash) {
 			cache.clear();
-			cacheHash = Objects.hash(effects, tempEffects);
+			cacheHash = effects.hashCode();
 		}
 
 		return cache.computeIfAbsent(field, _ -> {
 			double flat = 0, inc = 1, mult = 1;
-			Iterator<ValueMod> it = Stream.of(effects, tempEffects.getValues())
-					.flatMap(Set::stream)
+			Iterator<ValueMod> it = effects.stream()
 					.map(extractor)
 					.iterator();
 
@@ -141,19 +136,7 @@ public class ActorModifiers {
 		return effects;
 	}
 
-	public TimedMap<EffectProperties<?>> getTempEffects() {
-		return tempEffects;
-	}
-
-	public Set<EffectProperties<?>> getAllEffects() {
-		return Stream.of(effects, tempEffects.getValues())
-				.flatMap(Set::stream)
-				.collect(Collectors.toSet());
-	}
-
 	public void expireMods(Actor<?> act) {
-		tempEffects.reduceTime();
-
 		removeIf(act, mod -> {
 			if (mod.getExpiration() > 0) {
 				mod.decExpiration();
@@ -169,26 +152,15 @@ public class ActorModifiers {
 
 	public void removeIf(Actor<?> act, Predicate<ValueMod> check) {
 		act.getSenshi().getStats().removeIf(check);
-		List<Iterator<EffectProperties<?>>> sets = List.of(
-				effects.iterator(), tempEffects.getValues().iterator()
-		);
 
 		for (Gear g : act.getEquipment()) {
 			g.getModifiers().removeIf(check);
 		}
 
-		for (Iterator<EffectProperties<?>> set : sets) {
-			while (set.hasNext()) {
-				EffectProperties<?> prop = set.next();
-				if (prop.isSafeToRemove()) {
-					set.remove();
-				}
-			}
-		}
+		effects.removeIf(EffectProperties::isSafeToRemove);
 	}
 
 	public void copyFrom(ActorModifiers modifiers) {
 		effects.addAll(modifiers.getEffects());
-		tempEffects.addAll(modifiers.getTempEffects());
 	}
 }

@@ -20,9 +20,15 @@ public class EffectProperties<T> {
 	private EffectBase effect;
 
 	private final Field[] fieldCache = getClass().getDeclaredFields();
+	private int duration;
 
 	public EffectProperties(EffectContext<T> owner) {
+		this(owner, -1);
+	}
+
+	public EffectProperties(EffectContext<T> owner, int duration) {
 		this.owner = owner;
+		this.duration = duration;
 	}
 
 	public EffectContext<T> getOwner() {
@@ -110,6 +116,9 @@ public class EffectProperties<T> {
 	}
 
 	public boolean isSafeToRemove() {
+		if (duration > 0) duration--;
+		if (duration == 0) return true;
+
 		boolean safe = true;
 		for (Field f : fieldCache) {
 			try {
