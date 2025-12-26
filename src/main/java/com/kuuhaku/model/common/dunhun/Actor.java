@@ -380,6 +380,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		queue.addAll(getModifiers().getEffects().stream()
 				.map(EffectProperties::getEffect)
+				.filter(Objects::nonNull)
 				.filter(e -> !e.isClosed())
 				.toList()
 		);
