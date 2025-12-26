@@ -1,23 +1,28 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.github.ygimenez.model.ThrowingBiConsumer;
+import com.kuuhaku.model.common.dunhun.context.EffectContext;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
 
 public abstract class EffectBase {
-	public final long SERIAL = ThreadLocalRandom.current().nextLong();
+	private final EffectContext<?> source;
 	private final Actor<?> owner;
 	private final BiConsumer<EffectBase, CombatContext> effect;
 	private boolean closed = false;
 	private boolean lock = false;
 
-	public EffectBase(Actor<?> owner, ThrowingBiConsumer<EffectBase, CombatContext> effect) {
+	public EffectBase(EffectContext<?> source, Actor<?> owner, ThrowingBiConsumer<EffectBase, CombatContext> effect) {
+		this.source = source;
 		this.owner = owner;
 		this.effect = effect;
+	}
+
+	public EffectContext<?> getSource() {
+		return source;
 	}
 
 	@Nullable
@@ -51,14 +56,13 @@ public abstract class EffectBase {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		EffectBase that = (EffectBase) o;
-		return SERIAL == that.SERIAL;
+		return Objects.equals(source, that.source);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(SERIAL);
+		return Objects.hashCode(source);
 	}
 }

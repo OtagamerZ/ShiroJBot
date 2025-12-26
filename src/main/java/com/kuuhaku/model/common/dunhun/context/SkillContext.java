@@ -7,38 +7,32 @@ import com.ygimenez.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SkillContext extends EffectContext {
+public class SkillContext extends EffectContext<Usable> {
 	private final List<Actor<?>> validTargets = new ArrayList<>();
 
-	private final Actor<?> source;
+	private final Actor<?> origin;
 	private final Actor<?> target;
-	private final Usable usable;
 	private final List<Integer> values;
 	private final JSONObject vars;
 
-	public SkillContext(Actor<?> source, Actor<?> target, Usable usable) {
-		this(source, target, usable, List.of(), new JSONObject());
+	public SkillContext(Actor<?> origin, Actor<?> target, Usable usable) {
+		this(origin, target, usable, List.of(), new JSONObject());
 	}
 
-	public SkillContext(Actor<?> source, Actor<?> target, Usable usable, List<Integer> values, JSONObject vars) {
-		super(source.getGame());
-		this.source = source;
+	public SkillContext(Actor<?> origin, Actor<?> target, Usable usable, List<Integer> values, JSONObject vars) {
+		super(origin.getGame(), usable);
+		this.origin = origin;
 		this.target = target;
-		this.usable = usable;
 		this.values = values;
 		this.vars = vars;
 	}
 
-	public Actor<?> getSource() {
-		return source;
+	public Actor<?> getOrigin() {
+		return origin;
 	}
 
 	public Actor<?> getTarget() {
 		return target;
-	}
-
-	public Usable getUsable() {
-		return usable;
 	}
 
 	public List<Integer> getValues() {

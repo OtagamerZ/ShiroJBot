@@ -78,7 +78,7 @@ public class RunModifier extends DAO<RunModifier> {
 
 		try {
 			Object out = Utils.exec(id, effect, Map.of(
-					"ctx", new EffectContext(game)
+					"ctx", new EffectContext<>(game, this)
 			));
 			if (out instanceof EffectBase e) {
 				return effectCache = e;

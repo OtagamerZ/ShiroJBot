@@ -32,6 +32,12 @@ public class TimedMap<V> implements Iterable<Map.Entry<V, Integer>> {
 		});
 	}
 
+	public void addAll(TimedMap<V> other) {
+		for (Map.Entry<V, Integer> entry : other) {
+			add(entry.getKey(), entry.getValue());
+		}
+	}
+
 	public Set<V> getValues() {
 		return values.keySet();
 	}

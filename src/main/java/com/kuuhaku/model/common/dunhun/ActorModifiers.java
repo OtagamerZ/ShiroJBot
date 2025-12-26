@@ -20,6 +20,7 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.github.ygimenez.model.ThrowingBiConsumer;
 import com.kuuhaku.model.common.TimedMap;
+import com.kuuhaku.model.common.dunhun.context.EffectContext;
 import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.enums.shoukan.Trigger;
@@ -88,17 +89,17 @@ public class ActorModifiers implements Iterable<CumValue> {
 		return damageTaken;
 	}
 
-	public void addEffect(Actor<?> source, ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
-		addEffect(source, effect, -1, -1, triggers);
+	public void addEffect(EffectContext<?> source, Actor<?> owner, ThrowingBiConsumer<EffectBase, CombatContext> effect, Trigger... triggers) {
+		addEffect(source, owner, effect, -1, -1, triggers);
 	}
 
-	public void addEffect(Actor<?> source, ThrowingBiConsumer<EffectBase, CombatContext> effect, int duration, int limit, Trigger... triggers) {
+	public void addEffect(EffectContext<?> source, Actor<?> owner, ThrowingBiConsumer<EffectBase, CombatContext> effect, int duration, int limit, Trigger... triggers) {
 		if (triggers.length == 0 && duration < 0 && limit < 0) {
-			permEffects.add(new PersistentEffect(source, effect));
+			permEffects.add(new PersistentEffect(source, owner, effect));
 			return;
 		}
 
-		tempEffects.add(new TriggeredEffect(source, limit, effect, triggers), duration);
+		tempEffects.add(new TriggeredEffect(source, owner, limit, effect, triggers), duration);
 	}
 
 	public Set<EffectBase> getEffects() {

@@ -6,8 +6,7 @@ import com.kuuhaku.model.persistent.dunhun.Gear;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class GearContext extends EffectContext {
-	private final Gear gear;
+public class GearContext extends EffectContext<Gear> {
 	private final Actor<?> actor;
 	private final List<Integer> values;
 
@@ -16,14 +15,9 @@ public class GearContext extends EffectContext {
 	}
 
 	public GearContext(Gear gear, Actor<?> owner, List<Integer> values) {
-		super(owner != null ? owner.getGame() : null);
-		this.gear = gear;
+		super(owner != null ? owner.getGame() : null, gear);
 		this.actor = owner;
 		this.values = values;
-	}
-
-	public Gear getGear() {
-		return gear;
 	}
 
 	public void withActor(Consumer<Actor<?>> action) {
