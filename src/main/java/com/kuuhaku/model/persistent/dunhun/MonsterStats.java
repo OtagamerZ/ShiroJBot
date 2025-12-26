@@ -20,7 +20,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
-import com.kuuhaku.model.common.dunhun.context.MonsterContext;
+import com.kuuhaku.model.common.dunhun.context.LootContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -147,7 +147,7 @@ public class MonsterStats implements Serializable {
 
 		try {
 			Utils.exec(getClass().getSimpleName(), lootGenerator, Map.of(
-					"ctx", new MonsterContext(self, loot, getLootMultiplier(self))
+					"ctx", new LootContext(self, loot, getLootMultiplier(self))
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to generate loot for {}", m.getName(I18N.EN), e);

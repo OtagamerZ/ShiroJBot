@@ -1,13 +1,13 @@
 package com.kuuhaku.model.common.dunhun.context;
 
-import com.kuuhaku.model.common.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.records.dunhun.Loot;
 
-public class MonsterContext extends ActorContext {
+public class LootContext extends ActorContext {
 	private final Loot loot;
 	private final double mult;
 
-	public MonsterContext(Actor<?> actor, Loot loot, double mult) {
+	public LootContext(MonsterBase<?> actor, Loot loot, double mult) {
 		super(actor);
 		this.loot = loot;
 		this.mult = mult;

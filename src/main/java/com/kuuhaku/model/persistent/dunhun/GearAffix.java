@@ -22,7 +22,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.AffixModifiers;
-import com.kuuhaku.model.common.dunhun.context.ActorContext;
 import com.kuuhaku.model.common.dunhun.context.GearContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
@@ -165,11 +164,7 @@ public class GearAffix extends DAO<GearAffix> {
 
 		try {
 			if (Utils.equalsAny(affix.getType(), AffixType.monsterValues())) {
-				if (owner != null) {
-					Utils.exec(affix.getId(), affix.getEffect(), Map.of(
-							"ctx", new ActorContext(owner)
-					));
-				}
+				affix.apply(owner);
 			} else {
 				Utils.exec(affix.getId(), affix.getEffect(), Map.of(
 						"ctx", new GearContext(gear, owner, getValues())
