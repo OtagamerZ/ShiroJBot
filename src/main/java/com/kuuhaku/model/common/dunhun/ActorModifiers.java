@@ -57,6 +57,7 @@ public class ActorModifiers {
 				}
 			}
 
+			System.out.println(base + " + " + flat);
 			return (base + flat) * (1 + inc) * mult;
 		});
 	}
