@@ -23,6 +23,7 @@ import com.kuuhaku.model.common.shoukan.IncMod;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.persistent.dunhun.Gear;
+import com.kuuhaku.model.records.dunhun.CachedValue;
 
 import java.util.*;
 import java.util.function.Function;
@@ -31,7 +32,7 @@ import java.util.function.Predicate;
 public class ActorModifiers {
 	private final Set<EffectProperties<?>> effects = new HashSet<>();
 
-	private final Map<String, Double> cache = new HashMap<>();
+	private final Map<String, CachedValue> cache = new HashMap<>();
 	private int cacheHash = 0;
 
 	private double fetch(String field, double base, Function<EffectProperties<?>, ValueMod> extractor) {
@@ -57,9 +58,8 @@ public class ActorModifiers {
 				}
 			}
 
-			System.out.println(base + " + " + flat);
-			return (base + flat) * (1 + inc) * mult;
-		});
+			return new CachedValue(flat, inc, mult);
+		}).apply(base);
 	}
 
 	public double getMaxHp() {
