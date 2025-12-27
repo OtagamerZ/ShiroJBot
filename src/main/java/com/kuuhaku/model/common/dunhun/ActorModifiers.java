@@ -41,7 +41,7 @@ public class ActorModifiers {
 		}
 
 		return cache.computeIfAbsent(field, _ -> {
-			double flat = 0, inc = 1, mult = 1;
+			double flat = 0, inc = 0, mult = 1;
 			Iterator<ValueMod> it = effects.stream()
 					.map(extractor)
 					.filter(Objects::nonNull)
@@ -57,7 +57,6 @@ public class ActorModifiers {
 				}
 			}
 
-			System.out.println(base + " + " + flat);
 			return (base + flat) * (1 + inc) * mult;
 		});
 	}
