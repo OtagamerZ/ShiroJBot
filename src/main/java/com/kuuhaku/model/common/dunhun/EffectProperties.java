@@ -164,6 +164,10 @@ public class EffectProperties<T> {
 		return priority;
 	}
 
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+
 	public int getDuration() {
 		return duration;
 	}
