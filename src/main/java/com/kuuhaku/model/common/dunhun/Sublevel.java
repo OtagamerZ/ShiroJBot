@@ -106,7 +106,7 @@ public class Sublevel {
 			for (int i = 0; i < offsets.size(); i++) {
 				Node node = offsets.get(i);
 
-				node.getRenderPos().move(x + space * (i + 1), y);
+				node.getRenderPos().move(x + space * i, y);
 				node.setPathRendered(false);
 				node.setNodeRendered(false);
 			}
