@@ -400,7 +400,11 @@ public class AreaMap {
 				}
 			}
 
-			sublevels.getLast().getNode(0).addChildren(sublevels.getFirst().getNode(0));
+			if (sublevels.size() > 1) {
+				Node first = sublevels.getFirst().getNode(0);
+				Node last = sublevels.getLast().getNode(0);
+				last.addChildren(first);
+			}
 
 			int rests;
 			int areaLevel = game.getAreaLevel(fl);
