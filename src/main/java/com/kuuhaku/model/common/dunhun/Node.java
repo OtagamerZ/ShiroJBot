@@ -118,12 +118,16 @@ public class Node {
 	}
 
 	public int travelDistance(Node node) {
+		return travelDistance(node, this);
+	}
+
+	private int travelDistance(Node node, Node start) {
 		if (node == null || equals(node)) return 0;
 
 		for (Node parent : parents) {
-			if (depth() - parent.depth() >= sublevel.getFloor().size() / 2) continue;
+			if (parent.equals(start)) continue;
 
-			int dist = parent.travelDistance(node) + 1;
+			int dist = parent.travelDistance(node, start) + 1;
 			if (dist > 0) return dist;
 		}
 
