@@ -262,7 +262,7 @@ public class Node {
 
 				if (returning) {
 					int offset = (Node.NODE_RADIUS + Node.NODE_SPACING) * Sublevel.MAX_NODES / 2;
-					arrX = new int[]{renderPos.x, renderPos.x + offset, to.x + offset, to.x};
+					arrX = new int[]{renderPos.x, renderPos.x + offset, renderPos.x + offset, to.x};
 					arrY = new int[]{renderPos.y, renderPos.y, to.y, to.y};
 				} else {
 					Point middle = new Point(0, renderPos.y - (renderPos.y - to.y) / 2);
