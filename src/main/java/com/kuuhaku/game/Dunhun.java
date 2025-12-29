@@ -303,7 +303,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 						case NONE, DANGER -> runCombat(nextNode);
 						case EVENT -> runEvent(nextNode, Event.getRandom(nextNode));
 						case REST -> runEvent(nextNode, Event.find(Event.class, "REST"));
-						case RETURN -> runEvent(nextNode, Event.find(Event.class, "RETURN"));
+						case RETURN -> {
+							runEvent(nextNode, Event.find(Event.class, "RETURN"));
+							if (map.getPlayerNode() == nextNode) {
+								run.setNode(currNode);
+							}
+						}
 						case BOSS -> {
 							Set<String> pool = nextNode.getEnemyPool();
 							if (!pool.isEmpty()) {
