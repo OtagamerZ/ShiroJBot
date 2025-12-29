@@ -247,8 +247,9 @@ public class Node {
 			int strokeWidth = blocked ? 2 : 8;
 			if (blocked) {
 				color = new Color(255, 0, 0, 128);
-			} else {
-				color = reachable ? color : new Color(175, 175, 175, 128);
+			} else if (!reachable) {
+				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
+				color = Color.DARK_GRAY;
 			}
 
 			if (leap) {
@@ -277,7 +278,7 @@ public class Node {
 				g2d.drawPolyline(arrX, arrY, 3);
 			} else {
 				g2d.setColor(Color.BLACK);
-				g2d.setStroke(new BasicStroke(strokeWidth + 3));
+				g2d.setStroke(new BasicStroke(strokeWidth + 3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 1));
 				g2d.drawLine(renderPos.x, renderPos.y, to.x, to.y);
 
 				if (child.willBeRendered()) {
@@ -287,7 +288,7 @@ public class Node {
 					g2d.setPaint(new GradientPaint(renderPos, color, to, Color.BLACK));
 				}
 
-				g2d.setStroke(new BasicStroke(strokeWidth));
+				g2d.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 1));
 				g2d.drawLine(renderPos.x, renderPos.y, to.x, to.y);
 			}
 		}
