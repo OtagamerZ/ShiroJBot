@@ -121,7 +121,7 @@ public class Node {
 		if (node == null || equals(node)) return 0;
 
 		for (Node parent : parents) {
-			if (depth() - parent.depth() == sublevel.getFloor().size()) continue;
+			if (depth() - parent.depth() >= sublevel.getFloor().size() / 2) continue;
 
 			int dist = parent.travelDistance(node) + 1;
 			if (dist > 0) return dist;
@@ -241,7 +241,7 @@ public class Node {
 		for (Node child : children) {
 			Point to = child.getRenderPos();
 			boolean leap = child.depth() - depth() > 1;
-			boolean returning = depth() - child.depth() == sublevel.getFloor().size();
+			boolean returning = depth() - child.depth() >= sublevel.getFloor().size() / 2;
 			boolean blocked = this.blocked.contains(child);
 
 			Color color = colorForIndex(child.pathColor);
