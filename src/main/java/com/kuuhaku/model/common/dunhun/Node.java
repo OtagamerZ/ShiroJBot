@@ -119,9 +119,11 @@ public class Node {
 	public int travelDistance(Node node) {
 		if (node == null || equals(node)) return 0;
 
-		for (Node parent : parents) {
-			int dist = parent.travelDistance(node) + 1;
-			if (dist > 0) return dist;
+		if (!isReturnNode()) {
+			for (Node parent : parents) {
+				int dist = parent.travelDistance(node) + 1;
+				if (dist > 0) return dist;
+			}
 		}
 
 		return -1;
@@ -169,6 +171,16 @@ public class Node {
 
 	public boolean isSafeNode() {
 		return type == NodeType.BOSS || !sublevel.getFloor().isUnsafeArea();
+	}
+
+	public boolean isReturnNode() {
+		if (type != NodeType.BOSS) return false;
+
+		for (Node child : children) {
+			if (child.getSublevel().getSublevel() == 0) return true;
+		}
+
+		return false;
 	}
 
 	public BufferedImage getIcon() {

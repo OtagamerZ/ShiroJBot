@@ -401,9 +401,11 @@ public class AreaMap {
 			}
 
 			if (sublevels.size() > 1) {
-				Node first = sublevels.getFirst().getNode(0);
-				Node last = sublevels.getLast().getNode(0);
-				last.addChildren(first);
+				Sublevel first = sublevels.getFirst();
+				Sublevel last = sublevels.getLast();
+				if (first.size() == 1 && last.size() == 1) {
+					last.getNode(0).addChildren(first.getNode(0));
+				}
 			}
 
 			int rests;
