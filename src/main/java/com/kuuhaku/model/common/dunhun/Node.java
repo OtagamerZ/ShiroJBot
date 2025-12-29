@@ -253,7 +253,7 @@ public class Node {
 			if (blocked) {
 				color = new Color(255, 0, 0, 128);
 			} else if (!reachable) {
-				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
+				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.50f));
 				color = Color.DARK_GRAY;
 			}
 

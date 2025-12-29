@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 
 public class AreaMap {
 	public static final int RENDER_FLOORS = 1;
-	public static final int AREAS_PER_FLOOR = 10;
-	public static final int RENDER_DEPTH = 8;
+	public static final int LEVELS_PER_FLOOR = 10;
+	public static final int RENDER_DEPTH = LEVELS_PER_FLOOR;
 	public static final int AVATAR_RADIUS = 50;
 	private static final Point ZERO = new Point();
 
@@ -41,7 +41,7 @@ public class AreaMap {
 	}
 
 	public AreaMap(DungeonRun run) {
-		this(run, AREAS_PER_FLOOR, AreaMap::generateRandom);
+		this(run, LEVELS_PER_FLOOR, AreaMap::generateRandom);
 		this.renderFloor.set(run.getFloor());
 	}
 
