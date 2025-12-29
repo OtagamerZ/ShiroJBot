@@ -261,6 +261,7 @@ public class AreaMap {
 									float hue = switch (node.getType()) {
 										case EVENT -> 50;
 										case REST -> 100;
+										case RETURN -> 250;
 										case DANGER -> 20;
 										case BOSS -> 360;
 										default -> 0;

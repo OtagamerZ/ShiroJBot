@@ -164,7 +164,7 @@ public class Node {
 	}
 
 	public boolean isNodeOffset() {
-		return Bit32.on(renderState, 2);
+		return Bit32.on(renderState, 3);
 	}
 
 	public void setOffsetNode(boolean offset) {
