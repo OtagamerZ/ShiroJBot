@@ -90,9 +90,9 @@ public class Sublevel {
 			Node node = nodes.get(i);
 			int space = Node.NODE_RADIUS + spacing;
 			int offset = space * i - (nodes.size() - 1) * space / 2;
-			x += offset;
+			int posX = x + offset;
 
-			node.getRenderPos().move(x, y);
+			node.getRenderPos().move(posX, y);
 			node.setPathRendered(false);
 			node.setNodeRendered(false);
 		}
