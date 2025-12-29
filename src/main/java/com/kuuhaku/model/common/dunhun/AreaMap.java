@@ -418,7 +418,7 @@ public class AreaMap {
 				rests = 3;
 			}
 
-			fl.generateEvents(1 / 3d, rests);
+			fl.generateEvents(m.getRun(), 1 / 3d, rests);
 		}
 	}
 }

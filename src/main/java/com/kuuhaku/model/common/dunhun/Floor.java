@@ -2,6 +2,7 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.enums.dunhun.NodeType;
+import com.kuuhaku.model.persistent.dunhun.DungeonRun;
 import com.kuuhaku.model.persistent.dunhun.RunModifier;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
@@ -59,7 +60,7 @@ public class Floor {
 		return modifiers;
 	}
 
-	public void generateEvents(double eventRatio, int restSpots) {
+	public void generateEvents(DungeonRun run, double eventRatio, int restSpots) {
 		if (sublevels.length < 3) return;
 
 		Utils.withUnsafeRng(rng -> {
@@ -74,6 +75,8 @@ public class Floor {
 			int events = (int) (nodes.size() * eventRatio);
 			List<Node> eNodes = Utils.getRandomN(nodes, events, 1, rng);
 			for (Node n : eNodes) {
+				if (run.getVisitedNodes().contains(n.getId())) continue;
+
 				if (n.getParents().stream().anyMatch(p -> n.depth() - p.depth() > 1)) {
 					n.setType(NodeType.DANGER);
 				} else {
@@ -99,7 +102,10 @@ public class Floor {
 
 			for (List<Node> group : parts) {
 				if (group.isEmpty()) continue;
-				Utils.getRandomEntry(rng, group).setType(NodeType.REST);
+				Node n = Utils.getRandomEntry(rng, group);
+				if (!run.getVisitedNodes().contains(n.getId())) {
+					n.setType(NodeType.REST);
+				}
 			}
 
 			return null;
