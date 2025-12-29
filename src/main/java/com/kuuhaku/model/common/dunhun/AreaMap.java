@@ -204,12 +204,12 @@ public class AreaMap {
 					Floor prev = floors.get(fl.getFloor() - 1);
 					if (prev != null && prev.getFloor() >= 0) {
 						Sublevel last = prev.getSublevels().get(prev.size() - 1);
-						last.placeNodes(width, y - sliceHeight - 50);
+						last.placeNodes(width / 3 * 2, y - sliceHeight - 50);
 					}
 				}
 
 				for (Sublevel sub : fl.getSublevels()) {
-					sub.placeNodes(width, y + ((fl.getFloor() == 0 ? 25 : 0)));
+					sub.placeNodes(width / 3 * 2, y + ((fl.getFloor() == 0 ? 25 : 0)));
 
 					List<DungeonRun> runsHere = runs.get(sub.getSublevel());
 					if (runsHere != null) {
@@ -232,8 +232,6 @@ public class AreaMap {
 				}
 			}
 		}
-
-		g2d.translate(width / 2, 0);
 
 		List<Floor> floors = List.copyOf(this.floors.values());
 		Map<Floor, List<Node>> nodes = new TreeMap<>(Comparator.comparingInt(Floor::getFloor));

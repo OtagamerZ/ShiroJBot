@@ -84,13 +84,13 @@ public class Sublevel {
 		return false;
 	}
 
-	public void placeNodes(int width, int y) {
+	public void placeNodes(int x, int y) {
 		int spacing = 40;
 		for (int i = 0; i < nodes.size(); i++) {
 			Node node = nodes.get(i);
 			int space = Node.NODE_RADIUS + spacing;
 			int offset = space * i - (nodes.size() - 1) * space / 2;
-			int x = width / 2 + offset;
+			x += offset;
 
 			node.getRenderPos().move(x, y);
 			node.setPathRendered(false);
