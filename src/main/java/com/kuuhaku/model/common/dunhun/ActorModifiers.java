@@ -52,7 +52,7 @@ public class ActorModifiers {
 				switch (it.next()) {
 					case FlatMod m -> flat += m.getValue();
 					case IncMod m -> inc += m.getValue();
-					case MultMod m -> mult *= m.getValue();
+					case MultMod m -> mult *= 1 + m.getValue();
 					default -> {
 					}
 				}
