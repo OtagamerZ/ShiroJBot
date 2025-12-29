@@ -196,4 +196,21 @@ public class EffectProperties<T> {
 
 		return safe;
 	}
+
+	public EffectProperties<T> copy() {
+		try {
+			EffectProperties<T> clone = new EffectProperties<>(owner, duration);
+			clone.priority = priority;
+
+			for (Field field : fieldCache) {
+				if (field.get(this) instanceof ValueMod v) {
+					field.set(clone, v.copy());
+				}
+			}
+
+			return clone;
+		} catch (IllegalAccessException e) {
+			throw new AssertionError(e);
+		}
+	}
 }
