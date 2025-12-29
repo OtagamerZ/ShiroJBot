@@ -4,6 +4,8 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.shoukan.CardExtra;
+import com.kuuhaku.model.common.shoukan.FlatMod;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
@@ -495,7 +497,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			def += g.getDfs();
 		}
 
-		double mult = 1;
+		double mult;
 		if (getGame() != null && this instanceof MonsterBase<?> m) {
 			m.load();
 
@@ -507,20 +509,28 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				}
 				case MAGIC -> 1.25;
 				default -> 1;
-			} * MonsterBase.statTable[level];
-
-			if (getGame().getPartySize() > 1 && getTeam() == Team.KEEPERS) {
-				mult *= 1 + getGame().getPartySize() * 0.3;
-			}
+			} * MonsterBase.statTable[level] * (
+					getTeam() == Team.KEEPERS
+							? 0.7 + getGame().getPartySize() * 0.3
+							: 1
+			);
+		} else {
+			mult = 1;
 		}
 
-		CombatCardAttributes base = senshi.getBase();
-		base.setAtk((int) (modifiers.getDamage(dmg + wDmg) * mult));
-		base.setDfs((int) (modifiers.getDefense(def * (1 + total.str() * 0.01)) * mult));
-		base.setDodge((int) modifiers.getDodge(ddg + total.dex() / 2d));
-		base.setParry((int) modifiers.getParry(pry));
-		senshi.getStats().getPower().set(new MultMod(modifiers.getPower(pow)));
+		int baseDmg = dmg + wDmg;
+		int baseDef = (int) (def * (1 + total.str() * 0.01));
+		int baseDdg = ddg + total.dex() / 2;
+		int basePry = pry;
 
+		CardExtra stats = senshi.getStats();
+		stats.getAtk().set(new FlatMod(() -> modifiers.getDamage(baseDmg) * mult));
+		stats.getAtk().set(new FlatMod(() -> modifiers.getDefense(baseDef) * mult));
+		stats.getDodge().set(new FlatMod(() -> modifiers.getDodge(baseDdg)));
+		stats.getParry().set(new FlatMod(() -> modifiers.getParry(basePry)));
+		stats.getPower().set(new MultMod(() -> modifiers.getPower(pow)));
+
+		CombatCardAttributes base = senshi.getBase();
 		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();
 		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750 + effCost);
 		base.setSacrifices((base.getAtk() + base.getDfs()) / 3000);

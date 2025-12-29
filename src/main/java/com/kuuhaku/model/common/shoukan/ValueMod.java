@@ -26,30 +26,47 @@ import com.kuuhaku.util.Utils;
 
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Supplier;
 
 public abstract class ValueMod implements Cloneable {
 	private final Object source;
 	private final boolean permanent;
 	private final Side side;
 
-	private double value;
+	private Supplier<Number> value;
 	private int expiration;
 
 	public ValueMod(Number value) {
+		this(value::doubleValue);
+	}
+
+	public ValueMod(Supplier<Number> value) {
 		this(ThreadLocalRandom.current().nextInt(), value);
 	}
 
 	public ValueMod(Object source, Number value) {
+		this(source, value::doubleValue);
+	}
+
+	public ValueMod(Object source, Supplier<Number> value) {
 		this(source, value, -1);
 	}
 
 	public ValueMod(Number value, int expiration) {
+		this(value::doubleValue, expiration);
+	}
+
+	public ValueMod(Supplier<Number> value, int expiration) {
 		this(ThreadLocalRandom.current().nextInt(), value, expiration);
 	}
 
 	public ValueMod(Object source, Number value, int expiration) {
+		this(source, value::doubleValue, expiration);
+	}
+
+	public ValueMod(Object source, Supplier<Number> value, int expiration) {
 		this.source = source;
-		this.value = value.doubleValue();
+		this.value = value;
 		this.expiration = expiration;
 		this.side = source instanceof Drawable<?> d ? d.getSide() : null;
 
@@ -61,16 +78,20 @@ public abstract class ValueMod implements Cloneable {
 	}
 
 	public double getValue() {
-		return value;
+		return value.get().doubleValue();
 	}
 
 	public <T> T asType(Class<T> klass) {
 		if (ValueMod.class.isAssignableFrom(klass)) return klass.cast(this);
 
-		return Utils.fromNumber(klass, value);
+		return Utils.fromNumber(klass, getValue());
 	}
 
 	public void setValue(double value) {
+		this.value = () -> value;
+	}
+
+	public void setValue(Supplier<Number> value) {
 		this.value = value;
 	}
 
@@ -91,7 +112,7 @@ public abstract class ValueMod implements Cloneable {
 			}
 		}
 
-		return value == 0 || expiration == 0;
+		return getValue() == 0 || expiration == 0;
 	}
 
 	public boolean isPermanent() {
