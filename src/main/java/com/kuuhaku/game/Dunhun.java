@@ -215,7 +215,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						eb.addField(getLocale().get("str/dungeon_floor_modifiers"), sb.toString(), false);
 					}
 
-					BufferedImage bi = map.render(getLocale(), 1350, 900);
+					BufferedImage bi = map.render(getLocale(), 900, 900);
 					ButtonizeHelper helper = new ButtonizeHelper(true)
 							.setTimeout(5, TimeUnit.MINUTES)
 							.setCanInteract(u -> u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers()))
