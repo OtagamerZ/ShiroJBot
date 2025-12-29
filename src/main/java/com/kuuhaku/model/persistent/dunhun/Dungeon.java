@@ -75,7 +75,7 @@ public class Dungeon extends DAO<Dungeon> {
 	private int areaLevel = 1;
 
 	@Column(name = "areas_per_floor", nullable = false)
-	private int areasPerFloor = AreaMap.AREAS_PER_FLOOR;
+	private int areasPerFloor = AreaMap.LEVELS_PER_FLOOR;
 
 	@Column(name = "hardcore")
 	private boolean hardcore;
