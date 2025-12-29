@@ -400,7 +400,7 @@ public class AreaMap {
 				}
 			}
 
-			if (sublevels.size() > 1) {
+			if (false && sublevels.size() > 1) {
 				Sublevel first = sublevels.getFirst();
 				Sublevel last = sublevels.getLast();
 				if (first.size() == 1 && last.size() == 1) {
