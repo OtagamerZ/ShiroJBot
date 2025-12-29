@@ -42,8 +42,10 @@ public class ActorModifiers {
 	private double fetch(String field, double base, Function<EffectProperties<?>, ValueMod> extractor) {
 		if (effects.hashCode() != cacheHash) {
 			cache.clear();
+			System.out.println("<- " + cacheHash);
 			cacheHash = effects.hashCode();
-			parent.createSenshi();
+			System.out.println("-> " + effects.hashCode());
+//			parent.createSenshi();
 		}
 
 		return cache.computeIfAbsent(field, _ -> {

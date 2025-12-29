@@ -502,7 +502,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			int level = m.getLevel();
 			mult = switch (getRarityClass()) {
 				case RARE -> {
-					cache.getSenshi().setHueOffset(Calc.rng(90, 270, SERIAL));
+					senshi.setHueOffset(Calc.rng(90, 270, SERIAL));
 					yield 2;
 				}
 				case MAGIC -> 1.25;
