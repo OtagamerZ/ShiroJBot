@@ -196,29 +196,4 @@ public class EffectProperties<T> {
 
 		return safe;
 	}
-
-	public EffectProperties<T> copyWithOwner(EffectContext<T> source, Actor<?> owner) {
-		try {
-			EffectProperties<T> clone = new EffectProperties<>(source, duration);
-			clone.priority = priority;
-			if (effect != null) {
-				clone.setEffect(switch (effect) {
-					case PersistentEffect e -> new PersistentEffect(source, owner, e.getEffect());
-					case TriggeredEffect e ->
-							new TriggeredEffect(source, owner, e.getLimit(), e.getEffect(), e.getTriggers());
-					default -> null;
-				});
-			}
-
-			for (Field field : fieldCache) {
-				if (field.get(this) instanceof ValueMod v) {
-					field.set(clone, v.copy());
-				}
-			}
-
-			return clone;
-		} catch (IllegalAccessException e) {
-			throw new AssertionError(e);
-		}
-	}
 }

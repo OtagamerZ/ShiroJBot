@@ -139,11 +139,15 @@ public class Affix extends DAO<Affix> {
 	}
 
 	public void apply(Actor<?> actor) {
+		apply(actor, -1);
+	}
+
+	public void apply(Actor<?> actor, int duration) {
 		if (effect == null || !Utils.equalsAny(type, AffixType.monsterValues())) return;
 
 		try {
 			Utils.exec(id, effect, Map.of(
-					"ctx", new ActorAffixContext(actor, this)
+					"ctx", new ActorAffixContext(actor, this, duration)
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply actor modifier {}", id, e);
