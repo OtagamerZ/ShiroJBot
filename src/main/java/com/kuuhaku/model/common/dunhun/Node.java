@@ -30,10 +30,11 @@ public class Node {
 	private byte renderState = 0b1;
 	/*
 	0xF
-	  └ 000 0111
-	         ││└─ will not be rendered
-	         │└── path rendered
-	         └─── node rendered
+	  └ 000 1111
+	        │││└─ will not be rendered
+	        ││└── path rendered
+	        │└─── node rendered
+	        └──── offset node
 	 */
 
 	private NodeType type;
@@ -125,7 +126,7 @@ public class Node {
 		if (node == null || equals(node)) return 0;
 
 		for (Node parent : parents) {
-			if (parent.equals(start)) continue;
+			if (parent.equals(start)) break;
 
 			int dist = parent.travelDistance(node, start) + 1;
 			if (dist > 0) return dist;
@@ -160,6 +161,14 @@ public class Node {
 
 	public void setNodeRendered(boolean rendered) {
 		renderState = (byte) Bit32.set(renderState, 2, rendered);
+	}
+
+	public boolean isNodeOffset() {
+		return Bit32.on(renderState, 2);
+	}
+
+	public void setOffsetNode(boolean offset) {
+		renderState = (byte) Bit32.set(renderState, 3, offset);
 	}
 
 	public NodeType getType() {

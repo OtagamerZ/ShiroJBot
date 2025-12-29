@@ -4,7 +4,9 @@ import com.kuuhaku.model.enums.dunhun.NodeType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Sublevel {
 	public static final int MAX_NODES = 7;
@@ -85,11 +87,25 @@ public class Sublevel {
 	}
 
 	public void placeNodes(int x, int y) {
-		for (int i = 0; i < nodes.size(); i++) {
-			Node node = nodes.get(i);
-			int space = Node.NODE_RADIUS + Node.NODE_SPACING;
-			int offset = space * i - (nodes.size() - 1) * space / 2;
+		Map<Boolean, List<Node>> groups = nodes.stream().collect(Collectors.groupingBy(Node::isNodeOffset));
+		List<Node> normal = groups.get(false);
+		List<Node> offsets = groups.get(true);
+
+		int space = Node.NODE_RADIUS + Node.NODE_SPACING;
+		for (int i = 0; i < normal.size(); i++) {
+			Node node = normal.get(i);
+			int offset = space * i - (normal.size() - 1) * space / 2;
 			int posX = x + offset;
+
+			node.getRenderPos().move(posX, y);
+			node.setPathRendered(false);
+			node.setNodeRendered(false);
+		}
+
+		for (int i = 0; i < offsets.size(); i++) {
+			Node node = offsets.get(i);
+			int offset = space * (normal.size() - 1) - (offsets.size() - 1) * space / 2;
+			int posX = x + offset + space * i;
 
 			node.getRenderPos().move(posX, y);
 			node.setPathRendered(false);

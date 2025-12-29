@@ -400,11 +400,14 @@ public class AreaMap {
 				}
 			}
 
-			if (false && sublevels.size() > 1) {
-				Sublevel first = sublevels.getFirst();
+			if (sublevels.size() > 1) {
 				Sublevel last = sublevels.getLast();
-				if (first.size() == 1 && last.size() == 1) {
-					last.getNode(0).addChildren(first.getNode(0));
+				if (last.size() == 1) {
+					Node n = last.getNode(0);
+					if (n.getType() == NodeType.BOSS) {
+						Node ret = last.newNode(NodeType.RETURN, List.of(n));
+						ret.setOffsetNode(true);
+					}
 				}
 			}
 
