@@ -25,15 +25,15 @@ public class EffectProperties<T> {
 
 	public static final Field[] fieldCache = EffectProperties.class.getDeclaredFields();
 	private int priority;
-	private int duration;
+	private int expiration;
 
 	public EffectProperties(EffectContext<T> owner) {
 		this(owner, -1);
 	}
 
-	public EffectProperties(EffectContext<T> owner, int duration) {
+	public EffectProperties(EffectContext<T> owner, int expiration) {
 		this.owner = owner;
-		this.duration = duration;
+		this.expiration = expiration;
 	}
 
 	public EffectContext<T> getOwner() {
@@ -168,13 +168,16 @@ public class EffectProperties<T> {
 		this.priority = priority;
 	}
 
-	public int getDuration() {
-		return duration;
+	public int getExpiration() {
+		return expiration;
+	}
+
+	public void decExpiration() {
+		this.expiration--;
 	}
 
 	public boolean isSafeToRemove() {
-		if (duration > 0) duration--;
-		if (duration == 0) return true;
+		if (expiration == 0) return true;
 
 		boolean safe = true;
 		for (Field f : fieldCache) {
