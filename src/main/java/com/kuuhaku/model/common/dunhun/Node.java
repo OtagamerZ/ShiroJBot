@@ -278,7 +278,7 @@ public class Node {
 
 				g2d.setColor(Color.BLACK);
 				g2d.setStroke(new BasicStroke(strokeWidth + 3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 1, new float[]{17}, 0));
-				g2d.drawPolyline(arrX, arrY, 3);
+				g2d.drawPolyline(arrX, arrY, arrX.length);
 
 				if (child.willBeRendered()) {
 					g2d.setColor(color);
