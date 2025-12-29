@@ -400,6 +400,8 @@ public class AreaMap {
 				}
 			}
 
+			sublevels.getLast().getNode(0).addChildren(sublevels.getFirst().getNode(0));
+
 			int rests;
 			int areaLevel = game.getAreaLevel(fl);
 			if (areaLevel > Dunhun.LEVEL_BRUTAL) {
