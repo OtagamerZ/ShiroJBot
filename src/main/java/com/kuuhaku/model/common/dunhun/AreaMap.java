@@ -22,6 +22,7 @@ public class AreaMap {
 	public static final int RENDER_FLOORS = 1;
 	public static final int AREAS_PER_FLOOR = 10;
 	public static final int RENDER_DEPTH = 8;
+	public static final int AVATAR_RADIUS = 50;
 	private static final Point ZERO = new Point();
 
 	private final int areasPerFloor;
@@ -213,7 +214,6 @@ public class AreaMap {
 
 					List<DungeonRun> runsHere = runs.get(sub.getSublevel());
 					if (runsHere != null) {
-						int AVATAR_RADIUS = 50;
 						for (int i = 0; i < Math.min(runsHere.size(), 5); i++) {
 							DungeonRun run = runsHere.get(i);
 							Graph.applyTransformed(g2d, 5 + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2, g -> {
