@@ -120,7 +120,7 @@ public class Node {
 		if (node == null || equals(node)) return 0;
 
 		for (Node parent : parents) {
-			if (parent.isReturnNode()) continue;
+			if (depth() < parent.depth() && parent.isReturnNode()) continue;
 
 			int dist = parent.travelDistance(node) + 1;
 			if (dist > 0) return dist;
