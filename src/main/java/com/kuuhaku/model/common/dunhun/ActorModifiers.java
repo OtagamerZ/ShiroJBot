@@ -196,8 +196,8 @@ public class ActorModifiers {
 		}
 	}
 
-	public void expireMods(Actor<?> act) {
-		removeIf(act, mod -> {
+	public void expireMods() {
+		removeIf(mod -> {
 			if (mod.getExpiration() > 0) {
 				mod.decExpiration();
 			}
@@ -206,14 +206,12 @@ public class ActorModifiers {
 		});
 	}
 
-	public void clear(Actor<?> act) {
-		removeIf(act, _ -> true);
+	public void clear() {
+		removeIf(_ -> true);
 	}
 
-	public void removeIf(Actor<?> act, Predicate<ValueMod> check) {
-		act.getSenshi().getStats().removeIf(check);
-
-		for (Gear g : act.getEquipment()) {
+	public void removeIf(Predicate<ValueMod> check) {
+		for (Gear g : parent.getEquipment()) {
 			g.getModifiers().removeIf(check);
 		}
 

@@ -256,7 +256,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 					actor.setAp(actor.getMaxAp());
 					sen.setDefending(false);
-					actor.getModifiers().expireMods(actor);
+					actor.getModifiers().expireMods();
 
 					trigger(Trigger.ON_TURN_BEGIN, actor, actor, null);
 
@@ -327,7 +327,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		ButtonizeHelper helper;
 		for (Actor<?> a : getActors()) {
-			a.getModifiers().removeIf(a, m -> m.getExpiration() == 0);
+			a.getModifiers().removeIf(m -> m.getExpiration() == 0);
 		}
 
 		if (getCurrent() instanceof Hero h) {
@@ -812,7 +812,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public void trigger(Trigger t, Actor<?> source, Actor<?> target, Usable usable, AtomicInteger value) {
 		if (t == Trigger.ON_TICK) {
-			source.getModifiers().removeIf(source, ValueMod::isExpired);
+			source.getModifiers().removeIf(ValueMod::isExpired);
 		} else if (Utils.equalsAny(t, Trigger.ON_VICTORY, Trigger.ON_DEFEAT)) {
 			source.getRegDeg().clear();
 		}

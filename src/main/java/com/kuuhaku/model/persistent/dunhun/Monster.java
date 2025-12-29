@@ -147,7 +147,7 @@ public class Monster extends MonsterBase<Monster> {
 
 	@Override
 	public void load() {
-		getModifiers().clear(this);
+		getModifiers().clear();
 
 		for (Affix a : affixes) {
 			a.apply(this);
