@@ -587,7 +587,7 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				JSONArray req = s.getRequirements().tags();
-				if (req.isEmpty() && !tags.containsAll(req)) {
+				if (!req.isEmpty() && !tags.containsAll(req)) {
 					String reqTags = Utils.properlyJoin(getLocale(), req.stream()
 							.map(t -> LocalizedString.get(getLocale(), "tag/" + t, "???"))
 							.toList()
