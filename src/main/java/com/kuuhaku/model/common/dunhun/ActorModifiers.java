@@ -30,14 +30,19 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class ActorModifiers {
+	private final Actor<?> parent;
 	private final Set<EffectProperties<?>> effects = new HashSet<>();
-
 	private final Map<String, CachedValue> cache = new HashMap<>();
 	private int cacheHash = 0;
+
+	public ActorModifiers(Actor<?> parent) {
+		this.parent = parent;
+	}
 
 	private double fetch(String field, double base, Function<EffectProperties<?>, ValueMod> extractor) {
 		if (effects.hashCode() != cacheHash) {
 			cache.clear();
+			parent.getCache().setSenshi(null);
 			cacheHash = effects.hashCode();
 		}
 

@@ -44,7 +44,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	@Column(name = "id", nullable = false)
 	private String id;
 
-	private transient final ActorModifiers modifiers = new ActorModifiers();
+	private transient final ActorModifiers modifiers = new ActorModifiers(this);
 	private transient final ActorBinding binding = new ActorBinding();
 	private transient final ActorCache cache = new ActorCache(this);
 	private transient final RegDeg regDeg = new RegDeg(null);
@@ -423,7 +423,6 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		Senshi senshi = new Senshi(this);
 		cache.setSenshi(senshi);
 
-		modifiers.clear(this);
 		int dmg, def, ddg, pry;
 		double pow;
 
