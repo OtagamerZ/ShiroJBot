@@ -1,10 +1,8 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.enums.dunhun.NodeType;
-import com.kuuhaku.util.Bit32;
-import com.kuuhaku.util.Calc;
+import com.kuuhaku.util.*;
 import com.kuuhaku.util.IO;
-import com.kuuhaku.util.Utils;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.awt.*;
@@ -250,7 +248,7 @@ public class Node {
 			if (blocked) {
 				color = new Color(255, 0, 0, 128);
 			} else {
-				color = reachable ? color : Color.DARK_GRAY;
+				color = reachable ? color : new Color(175, 175, 175, 128);
 			}
 
 			if (leap) {
@@ -298,26 +296,22 @@ public class Node {
 	}
 
 	public void renderNode(Graphics2D g2d, Node playerNode, boolean reachable) {
-		BufferedImage nodeIcon;
-		if (sublevel.getFloor().areNodesHidden()) {
-			nodeIcon = ICON_PLAIN;
-		} else {
-			nodeIcon = getIcon();
-		}
-
-		BufferedImage icon = nodeIcon;
-		if (equals(playerNode)) {
-			icon = ICON_PLAYER;
-		} else if (!reachable) {
+		BufferedImage icon;
+		if (!reachable || sublevel.getFloor().areNodesHidden()) {
+			icon = new BufferedImage(ICON_PLAIN.getWidth(), ICON_PLAIN.getHeight(), BufferedImage.TYPE_INT_ARGB);
 			for (int y = 0; y < icon.getHeight(); y++) {
 				for (int x = 0; x < icon.getWidth(); x++) {
-					int rgb = nodeIcon.getRGB(x, y);
+					int rgb = ICON_PLAIN.getRGB(x, y);
 					int alpha = ((rgb >> 24) & 0xFF) / 2;
 					int tone = (rgb & 0xFF) / 3;
 
 					icon.setRGB(x, y, (alpha << 24) | tone << 16 | tone << 8 | tone);
 				}
 			}
+		} else if (equals(playerNode)) {
+			icon = ICON_PLAYER;
+		} else {
+			icon = getIcon();
 		}
 
 		g2d.drawImage(icon,
