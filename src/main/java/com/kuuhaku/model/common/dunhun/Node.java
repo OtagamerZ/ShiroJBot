@@ -234,6 +234,7 @@ public class Node {
 	}
 
 	public void renderPath(Graphics2D g2d, boolean reachable) {
+		Composite comp = g2d.getComposite();
 		for (Node child : children) {
 			Point to = child.getRenderPos();
 			boolean leap = child.depth() - depth() > 1;
@@ -293,6 +294,7 @@ public class Node {
 			}
 		}
 
+		g2d.setComposite(comp);
 		setPathRendered(true);
 	}
 
