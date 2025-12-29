@@ -233,6 +233,8 @@ public class AreaMap {
 			}
 		}
 
+		g2d.translate(width / 2, 0);
+
 		List<Floor> floors = List.copyOf(this.floors.values());
 		Map<Floor, List<Node>> nodes = new TreeMap<>(Comparator.comparingInt(Floor::getFloor));
 		for (int i = 0; i < 3; i++) {

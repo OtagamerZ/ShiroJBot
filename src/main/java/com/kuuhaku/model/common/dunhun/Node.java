@@ -250,6 +250,7 @@ public class Node {
 		for (Node child : children) {
 			Point to = child.getRenderPos();
 			boolean leap = child.depth() - depth() > 1;
+			boolean retNode = isReturnNode();
 			boolean blocked = this.blocked.contains(child);
 
 			Color color = colorForIndex(child.pathColor);
@@ -265,10 +266,10 @@ public class Node {
 				color = Color.DARK_GRAY;
 			}
 
-			if (leap) {
+			if (leap || retNode) {
 				int[] arrX, arrY;
 
-				if (isReturnNode()) {
+				if (retNode) {
 					arrX = new int[]{renderPos.x, width - 20, width - 20, to.x};
 					arrY = new int[]{renderPos.y, renderPos.y, to.y, to.y};
 				} else {
