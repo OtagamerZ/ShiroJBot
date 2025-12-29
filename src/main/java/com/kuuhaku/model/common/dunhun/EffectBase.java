@@ -6,15 +6,14 @@ import com.kuuhaku.model.records.dunhun.CombatContext;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
-import java.util.function.BiConsumer;
 
 public abstract class EffectBase {
-	private static final BiConsumer<EffectBase, CombatContext> NOTHING = (_, _) -> {
+	private static final ThrowingBiConsumer<EffectBase, CombatContext> NOTHING = (_, _) -> {
 	};
 
 	private final EffectContext<?> source;
 	private final Actor<?> owner;
-	private final BiConsumer<EffectBase, CombatContext> effect;
+	private final ThrowingBiConsumer<EffectBase, CombatContext> effect;
 	private boolean closed = false;
 	private boolean lock = false;
 
@@ -33,7 +32,7 @@ public abstract class EffectBase {
 		return owner;
 	}
 
-	public BiConsumer<EffectBase, CombatContext> getEffect() {
+	public ThrowingBiConsumer<EffectBase, CombatContext> getEffect() {
 		if (isClosed()) return NOTHING;
 
 		return effect;

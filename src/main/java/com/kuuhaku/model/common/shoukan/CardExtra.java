@@ -77,7 +77,7 @@ public class CardExtra implements Iterable<CumValue> {
 	private String description = null;
 	private String effect = null;
 
-	private static final Field[] fieldCache = CardExtra.class.getDeclaredFields();
+	public static final Field[] fieldCache = CardExtra.class.getDeclaredFields();
 
 	public CumValue getMana() {
 		return mana;

@@ -35,7 +35,7 @@ public class GearModifiers {
 
 	private final Set<String> addedTags = new HashSet<>();
 
-	private static final Field[] fieldCache = GearModifiers.class.getDeclaredFields();
+	public static final Field[] fieldCache = GearModifiers.class.getDeclaredFields();
 
 	public CumValue getAttack() {
 		return attack;

@@ -4,7 +4,7 @@ import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.persistent.dunhun.Affix;
 
 public class ActorAffixContext extends ActorContext {
-	private Affix affix;
+	private final Affix affix;
 
 	public ActorAffixContext(Actor<?> actor, Affix affix) {
 		super(actor);

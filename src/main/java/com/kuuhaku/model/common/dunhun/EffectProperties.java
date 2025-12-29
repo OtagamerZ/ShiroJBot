@@ -23,7 +23,7 @@ public class EffectProperties<T> {
 	private ValueMod damageTaken;
 	private EffectBase effect;
 
-	private static final Field[] fieldCache = EffectProperties.class.getDeclaredFields();
+	public static final Field[] fieldCache = EffectProperties.class.getDeclaredFields();
 	private int priority;
 	private int duration;
 
@@ -197,10 +197,16 @@ public class EffectProperties<T> {
 		return safe;
 	}
 
-	public EffectProperties<T> copy() {
+	public EffectProperties<T> copyWithOwner(EffectContext<T> source, Actor<?> owner) {
 		try {
-			EffectProperties<T> clone = new EffectProperties<>(owner, duration);
+			EffectProperties<T> clone = new EffectProperties<>(source, duration);
 			clone.priority = priority;
+			clone.effect = switch (effect) {
+				case PersistentEffect e -> new PersistentEffect(source, owner, e.getEffect());
+				case TriggeredEffect e ->
+						new TriggeredEffect(source, owner, e.getLimit(), e.getEffect(), e.getTriggers());
+				default -> null;
+			};
 
 			for (Field field : fieldCache) {
 				if (field.get(this) instanceof ValueMod v) {
