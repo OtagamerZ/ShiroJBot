@@ -45,7 +45,7 @@ public class ActorModifiers {
 			System.out.println("<- " + cacheHash);
 			cacheHash = effects.hashCode();
 			System.out.println("-> " + effects.hashCode());
-//			parent.createSenshi();
+			parent.createSenshi();
 		}
 
 		return cache.computeIfAbsent(field, _ -> {
