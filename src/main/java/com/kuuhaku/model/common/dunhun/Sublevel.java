@@ -88,10 +88,9 @@ public class Sublevel {
 
 	public void placeNodes(int x, int y) {
 		Map<Boolean, List<Node>> groups = nodes.stream().collect(Collectors.groupingBy(Node::isNodeOffset));
-		List<Node> normal = groups.get(false);
-		List<Node> offsets = groups.get(true);
-
 		int space = Node.NODE_RADIUS + Node.NODE_SPACING;
+
+		List<Node> normal = groups.get(false);
 		for (int i = 0; i < normal.size(); i++) {
 			Node node = normal.get(i);
 			int offset = space * i - (normal.size() - 1) * space / 2;
@@ -102,14 +101,17 @@ public class Sublevel {
 			node.setNodeRendered(false);
 		}
 
-		for (int i = 0; i < offsets.size(); i++) {
-			Node node = offsets.get(i);
-			int offset = space * (normal.size() - 1) - (offsets.size() - 1) * space / 2;
-			int posX = x + offset + space * i;
+		List<Node> offsets = groups.get(true);
+		if (offsets != null) {
+			for (int i = 0; i < offsets.size(); i++) {
+				Node node = offsets.get(i);
+				int offset = space * (normal.size() - 1) - (offsets.size() - 1) * space / 2;
+				int posX = x + offset + space * i;
 
-			node.getRenderPos().move(posX, y);
-			node.setPathRendered(false);
-			node.setNodeRendered(false);
+				node.getRenderPos().move(posX, y);
+				node.setPathRendered(false);
+				node.setNodeRendered(false);
+			}
 		}
 	}
 
