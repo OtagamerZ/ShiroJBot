@@ -85,10 +85,9 @@ public class Sublevel {
 	}
 
 	public void placeNodes(int x, int y) {
-		int spacing = 40;
 		for (int i = 0; i < nodes.size(); i++) {
 			Node node = nodes.get(i);
-			int space = Node.NODE_RADIUS + spacing;
+			int space = Node.NODE_RADIUS + Node.NODE_SPACING;
 			int offset = space * i - (nodes.size() - 1) * space / 2;
 			int posX = x + offset;
 

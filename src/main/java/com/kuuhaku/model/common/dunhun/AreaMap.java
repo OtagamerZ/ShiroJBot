@@ -204,12 +204,18 @@ public class AreaMap {
 					Floor prev = floors.get(fl.getFloor() - 1);
 					if (prev != null && prev.getFloor() >= 0) {
 						Sublevel last = prev.getSublevels().get(prev.size() - 1);
-						last.placeNodes(width / 3 * 2, y - sliceHeight - 50);
+						last.placeNodes(
+								width - (Node.NODE_RADIUS + Node.NODE_SPACING) * Sublevel.MAX_NODES,
+								y - sliceHeight - 50
+						);
 					}
 				}
 
 				for (Sublevel sub : fl.getSublevels()) {
-					sub.placeNodes(width / 3 * 2, y + ((fl.getFloor() == 0 ? 25 : 0)));
+					sub.placeNodes(
+							width - (Node.NODE_RADIUS + Node.NODE_SPACING) * Sublevel.MAX_NODES,
+							y + ((fl.getFloor() == 0 ? 25 : 0))
+					);
 
 					List<DungeonRun> runsHere = runs.get(sub.getSublevel());
 					if (runsHere != null) {

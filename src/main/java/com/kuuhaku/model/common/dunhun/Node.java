@@ -13,6 +13,7 @@ import java.util.List;
 
 public class Node {
 	public static final int NODE_RADIUS = 64;
+	public static final int NODE_SPACING = 40;
 	public static final BufferedImage ICON_PLAIN = new Node(null, NodeType.NONE).getIcon();
 	public static final BufferedImage ICON_PLAYER = new Node(null, NodeType.PLAYER).getIcon();
 
