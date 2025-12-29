@@ -290,12 +290,12 @@ public class AreaMap {
 						case 1 -> {
 							for (Node parent : node.getParents()) {
 								if (!parent.isPathRendered() && parent.isOccluded(width, height)) {
-									parent.renderPath(g2d, width, distance > 0);
+									parent.renderPath(g2d, distance > 0);
 								}
 							}
 
 							if (!node.isPathRendered()) {
-								node.renderPath(g2d, width, distance >= 0);
+								node.renderPath(g2d, distance >= 0);
 							}
 						}
 						case 2 -> {

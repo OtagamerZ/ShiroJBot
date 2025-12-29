@@ -121,7 +121,7 @@ public class Node {
 		if (node == null || equals(node)) return 0;
 
 		for (Node parent : parents) {
-			if (depth() < parent.depth() && parent.isReturnNode()) continue;
+			if (depth() - parent.depth() == sublevel.getFloor().size()) continue;
 
 			int dist = parent.travelDistance(node) + 1;
 			if (dist > 0) return dist;
@@ -172,16 +172,6 @@ public class Node {
 
 	public boolean isSafeNode() {
 		return type == NodeType.BOSS || !sublevel.getFloor().isUnsafeArea();
-	}
-
-	public boolean isReturnNode() {
-		if (type != NodeType.BOSS) return false;
-
-		for (Node child : children) {
-			if (child.getSublevel().getSublevel() == 0) return true;
-		}
-
-		return false;
 	}
 
 	public BufferedImage getIcon() {
@@ -246,12 +236,12 @@ public class Node {
 		return icon;
 	}
 
-	public void renderPath(Graphics2D g2d, int width, boolean reachable) {
+	public void renderPath(Graphics2D g2d, boolean reachable) {
 		Composite comp = g2d.getComposite();
 		for (Node child : children) {
 			Point to = child.getRenderPos();
 			boolean leap = child.depth() - depth() > 1;
-			boolean retNode = isReturnNode();
+			boolean returning = depth() - child.depth() == sublevel.getFloor().size();
 			boolean blocked = this.blocked.contains(child);
 
 			Color color = colorForIndex(child.pathColor);
@@ -267,16 +257,16 @@ public class Node {
 				color = Color.DARK_GRAY;
 			}
 
-			if (leap || retNode) {
+			if (leap || returning) {
 				int[] arrX, arrY;
 
-				if (retNode) {
+				if (returning) {
 					int offset = (Node.NODE_RADIUS + Node.NODE_SPACING) * Sublevel.MAX_NODES / 2;
 					arrX = new int[]{renderPos.x, renderPos.x + offset, to.x + offset, to.x};
 					arrY = new int[]{renderPos.y, renderPos.y, to.y, to.y};
 				} else {
 					Point middle = new Point(0, renderPos.y - (renderPos.y - to.y) / 2);
-					if (this.path >= sublevel.size() / 2d) {
+					if (path >= sublevel.size() / 2d) {
 						middle.x = Math.max(renderPos.x, to.x);
 					} else {
 						middle.x = Math.min(renderPos.x, to.x);
