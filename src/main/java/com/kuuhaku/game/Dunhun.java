@@ -9,6 +9,7 @@ import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.VoidException;
 import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.NullPhase;
@@ -79,6 +80,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final Loot loot = new Loot();
 	private final AreaMap map;
 	private final boolean duel;
+
+	private CompletableFuture<Void> lock;
 
 	public Dunhun(I18N locale, Dungeon dungeon, User... players) {
 		this(locale, dungeon, Arrays.stream(players).map(User::getId).toArray(String[]::new));
@@ -276,7 +279,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						requestChoice(eb, bi, helper, choices);
 						if (isClosed()) return;
 					} catch (Exception ignore) {
-						return;
+						continue;
 					}
 
 					int floor = run.getFloor();
@@ -630,7 +633,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public void requestChoice(EmbedBuilder eb, BufferedImage img, ButtonizeHelper helper, Set<Choice> choices) throws Exception {
-		CompletableFuture<Void> lock = new CompletableFuture<>();
+		lock = new CompletableFuture<>();
 
 		helper.clearActions();
 		if (choices.isEmpty()) {
@@ -716,6 +719,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 		});
 
 		lock.get(5, TimeUnit.MINUTES);
+		lock = null;
+
 		message.get().getFirst().delete().queue(null, Utils::doNothing);
 		message.set(null);
 	}
@@ -809,7 +814,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 			ButtonizeHelper helper = getMessage().getSecond();
 			if (helper != null) {
 				helper.apply(getMessage().getFirst().editMessageComponents())
-						.queue(s -> Pages.buttonize(s, helper));
+						.queue(s -> Pages.buttonize(s, helper), _ -> {
+							if (lock != null) {
+								lock.completeExceptionally(new VoidException());
+							}
+						});
 			}
 		}
 	}
