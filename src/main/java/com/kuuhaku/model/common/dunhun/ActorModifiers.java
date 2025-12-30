@@ -32,38 +32,29 @@ import java.util.function.Predicate;
 public class ActorModifiers {
 	private final Actor<?> parent;
 	private final Set<EffectProperties<?>> effects = new HashSet<>();
-	private final Map<String, CachedValue> cache = new HashMap<>();
-	private int cacheHash = 0;
 
 	public ActorModifiers(Actor<?> parent) {
 		this.parent = parent;
 	}
 
-	private double fetch(String field, double base, Function<EffectProperties<?>, ValueMod> extractor) {
-		if (effects.hashCode() != cacheHash) {
-			cache.clear();
-			cacheHash = effects.hashCode();
-		}
+	private double accumulate(double base, Function<EffectProperties<?>, ValueMod> extractor) {
+		Iterator<ValueMod> it = effects.stream()
+				.map(extractor)
+				.filter(Objects::nonNull)
+				.iterator();
 
-		return cache.computeIfAbsent(field, _ -> {
-			double flat = 0, inc = 0, mult = 1;
-			Iterator<ValueMod> it = effects.stream()
-					.map(extractor)
-					.filter(Objects::nonNull)
-					.iterator();
-
-			while (it.hasNext()) {
-				switch (it.next()) {
-					case FlatMod m -> flat += m.getValue();
-					case IncMod m -> inc += m.getValue();
-					case MultMod m -> mult *= 1 + m.getValue();
-					default -> {
-					}
+		double flat = 0, inc = 0, mult = 1;
+		while (it.hasNext()) {
+			switch (it.next()) {
+				case FlatMod m -> flat += m.getValue();
+				case IncMod m -> inc += m.getValue();
+				case MultMod m -> mult *= 1 + m.getValue();
+				default -> {
 				}
 			}
+		}
 
-			return new CachedValue(flat, inc, mult);
-		}).apply(base);
+		return (base + flat) * (1 + inc) * mult;
 	}
 
 	public double getMaxHp() {
@@ -71,7 +62,7 @@ public class ActorModifiers {
 	}
 
 	public double getMaxHp(double base) {
-		return fetch("maxhp", base, EffectProperties::getMaxHp);
+		return accumulate(base, EffectProperties::getMaxHp);
 	}
 
 	public double getMaxAp() {
@@ -79,7 +70,7 @@ public class ActorModifiers {
 	}
 
 	public double getMaxAp(double base) {
-		return fetch("maxap", base, EffectProperties::getMaxAp);
+		return accumulate(base, EffectProperties::getMaxAp);
 	}
 
 	public double getDamage() {
@@ -87,7 +78,7 @@ public class ActorModifiers {
 	}
 
 	public double getDamage(double base) {
-		return fetch("damage", base, EffectProperties::getDamage);
+		return accumulate(base, EffectProperties::getDamage);
 	}
 
 	public double getDefense() {
@@ -95,7 +86,7 @@ public class ActorModifiers {
 	}
 
 	public double getDefense(double base) {
-		return fetch("defense", base, EffectProperties::getDefense);
+		return accumulate(base, EffectProperties::getDefense);
 	}
 
 	public double getDodge() {
@@ -103,7 +94,7 @@ public class ActorModifiers {
 	}
 
 	public double getDodge(double base) {
-		return fetch("dodge", base, EffectProperties::getDodge);
+		return accumulate(base, EffectProperties::getDodge);
 	}
 
 	public double getParry() {
@@ -111,7 +102,7 @@ public class ActorModifiers {
 	}
 
 	public double getParry(double base) {
-		return fetch("parry", base, EffectProperties::getParry);
+		return accumulate(base, EffectProperties::getParry);
 	}
 
 	public double getPower() {
@@ -119,7 +110,7 @@ public class ActorModifiers {
 	}
 
 	public double getPower(double base) {
-		return fetch("power", base, EffectProperties::getPower);
+		return accumulate(base, EffectProperties::getPower);
 	}
 
 	public double getInitiative() {
@@ -127,7 +118,7 @@ public class ActorModifiers {
 	}
 
 	public double getInitiative(double base) {
-		return fetch("initiative", base, EffectProperties::getInitiative);
+		return accumulate(base, EffectProperties::getInitiative);
 	}
 
 	public double getCritical() {
@@ -135,7 +126,7 @@ public class ActorModifiers {
 	}
 
 	public double getCritical(double base) {
-		return fetch("critical", base, EffectProperties::getCritical);
+		return accumulate(base, EffectProperties::getCritical);
 	}
 
 	public double getSpellDamage() {
@@ -143,7 +134,7 @@ public class ActorModifiers {
 	}
 
 	public double getSpellDamage(double base) {
-		return fetch("spelldamage", base, EffectProperties::getSpellDamage);
+		return accumulate(base, EffectProperties::getSpellDamage);
 	}
 
 	public double getAggro() {
@@ -151,7 +142,7 @@ public class ActorModifiers {
 	}
 
 	public double getAggro(double base) {
-		return fetch("aggro", base, EffectProperties::getAggro);
+		return accumulate(base, EffectProperties::getAggro);
 	}
 
 	public double getMagicFind() {
@@ -159,7 +150,7 @@ public class ActorModifiers {
 	}
 
 	public double getMagicFind(double base) {
-		return fetch("magicfind", base, EffectProperties::getMagicFind);
+		return accumulate(base, EffectProperties::getMagicFind);
 	}
 
 	public double getHealing() {
@@ -167,7 +158,7 @@ public class ActorModifiers {
 	}
 
 	public double getHealing(double base) {
-		return fetch("healing", base, EffectProperties::getHealing);
+		return accumulate(base, EffectProperties::getHealing);
 	}
 
 	public double getDamageTaken() {
@@ -175,11 +166,11 @@ public class ActorModifiers {
 	}
 
 	public double getDamageTaken(double base) {
-		return fetch("damagetaken", base, EffectProperties::getDamageTaken);
+		return accumulate(base, EffectProperties::getDamageTaken);
 	}
 
 	public double getMaxSummons(double base) {
-		return fetch("maxsummons", base, EffectProperties::getMaxSummons);
+		return accumulate(base, EffectProperties::getMaxSummons);
 	}
 
 	public Set<EffectProperties<?>> getEffects() {
