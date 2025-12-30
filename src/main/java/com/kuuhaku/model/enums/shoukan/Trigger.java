@@ -210,6 +210,7 @@ public enum Trigger {
 
 	/**
 	 * On summoning a card
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_SUMMON,
 
