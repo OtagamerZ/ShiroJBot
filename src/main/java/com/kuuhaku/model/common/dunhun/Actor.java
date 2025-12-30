@@ -393,6 +393,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		for (EffectBase e : queue) {
 			if (e.isLocked()) continue;
 			else if (e instanceof TriggeredEffect te) {
+				System.out.println(te);
+				System.out.println(trigger);
 				System.out.println(Arrays.toString(te.getTriggers()));
 
 				if (!Utils.equalsAny(trigger, te.getTriggers())) continue;
@@ -400,6 +402,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			}
 
 			try {
+				System.out.println("exec");
 				e.lock();
 				e.getEffect().accept(e, context);
 			} finally {
