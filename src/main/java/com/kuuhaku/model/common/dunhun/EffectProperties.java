@@ -190,7 +190,7 @@ public class EffectProperties<T> {
 			try {
 				if (f.get(this) instanceof ValueMod v) {
 					v.decExpiration();
-					if (v.isExpired()) f.set(this, null);
+					if (v.getExpiration() == 0) f.set(this, null);
 				}
 			} catch (IllegalAccessException ignore) {
 			}
