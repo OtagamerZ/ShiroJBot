@@ -182,7 +182,10 @@ public class EffectProperties<T> {
 	}
 
 	public void decExpiration() {
-		this.expiration--;
+		if (expiration > 0) {
+			this.expiration--;
+		}
+
 		for (Field f : fieldCache) {
 			try {
 				if (f.get(this) instanceof ValueMod v) {

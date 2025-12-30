@@ -63,10 +63,7 @@ public class GearModifiers {
 
 	public void expireMods() {
 		removeIf(mod -> {
-			if (mod.getExpiration() > 0) {
-				mod.decExpiration();
-			}
-
+			mod.decExpiration();
 			return mod.isExpired();
 		});
 	}

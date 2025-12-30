@@ -100,7 +100,9 @@ public abstract class ValueMod implements Cloneable {
 	}
 
 	public void decExpiration() {
-		this.expiration--;
+		if (expiration > 0) {
+			this.expiration--;
+		}
 	}
 
 	public boolean isExpired() {

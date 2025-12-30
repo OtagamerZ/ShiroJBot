@@ -200,16 +200,11 @@ public class ActorModifiers {
 
 	public void expireMods() {
 		for (EffectProperties<?> effect : effects) {
-			if (effect.getExpiration() > 0) {
-				effect.decExpiration();
-			}
+			effect.decExpiration();
 		}
 
 		removeIf(mod -> {
-			if (mod.getExpiration() > 0) {
-				mod.decExpiration();
-			}
-
+			mod.decExpiration();
 			return mod.isExpired();
 		});
 	}
