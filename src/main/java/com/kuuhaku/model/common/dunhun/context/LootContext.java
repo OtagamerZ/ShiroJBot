@@ -8,7 +8,7 @@ public class LootContext extends ActorContext {
 	private final double mult;
 
 	public LootContext(MonsterBase<?> actor, Loot loot, double mult) {
-		super(actor);
+		super(actor, null);
 		this.loot = loot;
 		this.mult = mult;
 	}
