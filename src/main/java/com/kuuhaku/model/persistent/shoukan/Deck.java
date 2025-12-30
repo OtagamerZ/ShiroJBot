@@ -131,7 +131,6 @@ public class Deck extends DAO<Deck> {
 		Hero h = DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1", account.getUid());
 		if (h != null) {
 			h.getBinding().setLocale(locale);
-			h.getSenshi();
 		}
 
 		return h;
