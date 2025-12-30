@@ -61,10 +61,10 @@ public class Combat implements Renderer<BufferedImage> {
 	private final Node node;
 	private final InfiniteList<Actor<?>> actors = new InfiniteList<>();
 	private final BondedList<Actor<?>> hunters = new BondedList<>(
-			(a, it) -> onAddActor(a, Team.HUNTERS), this::onRemoveActor
+			(a, _) -> onAddActor(a, Team.HUNTERS), this::onRemoveActor
 	);
 	private final BondedList<Actor<?>> keepers = new BondedList<>(
-			(a, it) -> onAddActor(a, Team.KEEPERS), this::onRemoveActor
+			(a, _) -> onAddActor(a, Team.KEEPERS), this::onRemoveActor
 	);
 	private final List<String> history = new ArrayList<>();
 	private final RandomList<Actor<?>> rngList = new RandomList<>();
