@@ -199,6 +199,8 @@ public class ActorModifiers {
 
 			effects.remove(effect);
 			effects.add(effect);
+		} else {
+			effects.add(effect);
 		}
 	}
 
