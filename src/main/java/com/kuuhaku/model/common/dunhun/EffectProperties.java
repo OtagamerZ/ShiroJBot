@@ -203,8 +203,8 @@ public class EffectProperties<T> {
 
 		for (Field f : fieldCache) {
 			try {
-				if (f.get(this) instanceof ValueMod v) {
-					if (!v.isExpired()) return false;
+				if (f.get(this) instanceof ValueMod) {
+					return false;
 				}
 			} catch (IllegalAccessException ignore) {
 			}
