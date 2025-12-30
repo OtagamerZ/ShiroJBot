@@ -23,7 +23,6 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.ActorAffixContext;
-import com.kuuhaku.model.common.dunhun.context.GearContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -151,18 +150,6 @@ public class Affix extends DAO<Affix> {
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply actor modifier {}", id, e);
-		}
-	}
-
-	public void apply(Gear gear) {
-		if (effect == null || !Utils.equalsAny(type, AffixType.itemValues())) return;
-
-		try {
-			Utils.exec(id, effect, Map.of(
-					"ctx", new GearContext(gear)
-			));
-		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to apply item modifier {}", id, e);
 		}
 	}
 

@@ -100,7 +100,7 @@ public class Gear extends DAO<Gear> {
 
 		GearAffix impl = getImplicit();
 		if (impl != null) {
-			impl.apply(null);
+			impl.apply(this, null);
 		}
 	}
 
@@ -330,12 +330,12 @@ public class Gear extends DAO<Gear> {
 				continue;
 			}
 
-			ga.apply(owner);
+			ga.apply(this, owner);
 		}
 
 		if (!meta.isEmpty()) {
 			for (GearAffix ga : meta) {
-				ga.apply(owner);
+				ga.apply(this, owner);
 			}
 		}
 	}

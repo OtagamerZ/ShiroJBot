@@ -159,7 +159,7 @@ public class GearAffix extends DAO<GearAffix> {
 		return modifiers;
 	}
 
-	public void apply(Actor<?> owner) {
+	public void apply(Gear source, Actor<?> owner) {
 		if (affix.getEffect() == null) return;
 
 		try {
@@ -167,7 +167,7 @@ public class GearAffix extends DAO<GearAffix> {
 				if (owner != null) affix.apply(owner);
 			} else {
 				Utils.exec(affix.getId(), affix.getEffect(), Map.of(
-						"ctx", new GearContext(gear, owner, getValues())
+						"ctx", new GearContext(source, owner, getValues())
 				));
 			}
 		} catch (Exception e) {
