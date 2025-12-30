@@ -21,6 +21,7 @@ public class EffectProperties<T> {
 	private ValueMod magicFind;
 	private ValueMod healing;
 	private ValueMod damageTaken;
+	private ValueMod maxSummons;
 	private EffectBase effect;
 
 	public static final Field[] fieldCache = EffectProperties.class.getDeclaredFields();
@@ -150,6 +151,14 @@ public class EffectProperties<T> {
 
 	public void setDamageTaken(ValueMod damageTaken) {
 		this.damageTaken = damageTaken;
+	}
+
+	public ValueMod getMaxSummons() {
+		return maxSummons;
+	}
+
+	public void setMaxSummons(ValueMod maxSummons) {
+		this.maxSummons = maxSummons;
 	}
 
 	public EffectBase getEffect() {

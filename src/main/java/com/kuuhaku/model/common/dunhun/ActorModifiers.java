@@ -178,6 +178,10 @@ public class ActorModifiers {
 		return fetch("damagetaken", base, EffectProperties::getDamageTaken);
 	}
 
+	public double getMaxSummons(double base) {
+		return fetch("maxsummons", base, EffectProperties::getMaxSummons);
+	}
+
 	public Set<EffectProperties<?>> getEffects() {
 		return effects;
 	}

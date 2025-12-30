@@ -37,7 +37,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @MappedSuperclass
 public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	public static final int MAX_LEVEL = 100;
-	public static final int MAX_SUMMONS = 1;
 
 	@Transient
 	public final long SERIAL = ThreadLocalRandom.current().nextLong();
@@ -50,7 +49,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	private transient final ActorBinding binding = new ActorBinding();
 	private transient final ActorCache cache = new ActorCache(this);
 	private transient final RegDeg regDeg = new RegDeg(null);
-	private transient final Deque<Actor<?>> minions = new ArrayDeque<>(MAX_SUMMONS);
+	private transient final Deque<Actor<?>> minions = new ArrayDeque<>();
 	private transient Actor<?> killer;
 	private transient int hp = -1, ap;
 	private transient int maxHp = -1;

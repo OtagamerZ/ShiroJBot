@@ -146,8 +146,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 		if (master != null) {
 			Combat cbt = master.getGame().getCombat();
 
-			//noinspection SizeReplaceableByIsEmpty
-			while (master.getMinions().size() >= Actor.MAX_SUMMONS) {
+			while (master.getMinions().size() >= master.getModifiers().getMaxSummons(1)) {
 				Actor<?> old = master.getMinions().removeFirst();
 				if (cbt != null) {
 					cbt.getActors(old.getTeam()).remove(old);
