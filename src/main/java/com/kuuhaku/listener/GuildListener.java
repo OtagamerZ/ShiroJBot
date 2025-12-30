@@ -135,7 +135,7 @@ public class GuildListener extends ListenerAdapter {
 						}
 
 						if (!eb.isEmpty()) {
-							channel.sendMessage(":star: | " + author.getAsMention() + " " + event.getChannel().getAsMention())
+							channel.sendMessage(":star: | " + author.getAsMention() + " " + msg.getJumpUrl())
 									.setEmbeds(eb.build())
 									.queue();
 						}
