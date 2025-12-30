@@ -190,6 +190,7 @@ public class EffectProperties<T> {
 			try {
 				if (f.get(this) instanceof ValueMod v) {
 					v.decExpiration();
+					if (v.isExpired()) f.set(this, null);
 				}
 			} catch (IllegalAccessException ignore) {
 			}
@@ -198,23 +199,17 @@ public class EffectProperties<T> {
 
 	public boolean isSafeToRemove() {
 		if (expiration == 0) return true;
+		else if (effect != null) return false;
 
-		boolean safe = true;
 		for (Field f : fieldCache) {
 			try {
 				if (f.get(this) instanceof ValueMod v) {
-					if (v.isExpired()) f.set(this, null);
-					else safe = false;
+					if (!v.isExpired()) return false;
 				}
 			} catch (IllegalAccessException ignore) {
 			}
 		}
 
-		if (effect != null && effect.isClosed()) {
-			effect = null;
-			safe = false;
-		}
-
-		return safe;
+		return true;
 	}
 }
