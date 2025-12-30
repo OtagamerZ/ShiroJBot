@@ -316,7 +316,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public boolean isOutOfCombat() {
-		return fleed || getHp() <= 0;
+		return hasFleed() || getHp() <= 0;
 	}
 
 	public Dunhun getGame() {
