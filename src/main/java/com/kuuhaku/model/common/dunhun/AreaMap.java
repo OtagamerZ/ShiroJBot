@@ -242,7 +242,9 @@ public class AreaMap {
 					if (i == 1) node.calcColor();
 
 					int distance = node.travelDistance(playerNode);
-					boolean outsideView = visionLimit > 0 && (distance > visionLimit || (distance == -1 && !run.getVisitedNodes().contains(node.getId())));
+					boolean outsideView = visionLimit > 0
+							&& !run.getVisitedNodes().contains(node.getId())
+							&& (distance > visionLimit || distance == -1);
 					boolean occluded = node.isOccluded(width, height) || outsideView;
 					if (node.getRenderPos().equals(ZERO) || occluded) {
 						node.setWillBeRendered(false);
