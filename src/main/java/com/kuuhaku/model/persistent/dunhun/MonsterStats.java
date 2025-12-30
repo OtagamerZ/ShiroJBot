@@ -143,7 +143,7 @@ public class MonsterStats implements Serializable {
 
 	public Loot generateLoot(MonsterBase<?> self) {
 		Loot loot = new Loot();
-		if (!(self instanceof Monster m) || m.isMinion() || lootGenerator == null) return loot;
+		if (!(self instanceof MonsterBase<?> m) || m.isMinion() || lootGenerator == null) return loot;
 
 		try {
 			Utils.exec(getClass().getSimpleName(), lootGenerator, Map.of(

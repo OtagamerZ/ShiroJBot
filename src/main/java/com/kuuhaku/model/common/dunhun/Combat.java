@@ -122,6 +122,11 @@ public class Combat implements Renderer<BufferedImage> {
 		actor.setFleed(false);
 		actor.getSenshi().setAvailable(true);
 		trigger(Trigger.ON_INITIALIZE, actor, actor, null);
+
+		if (actor instanceof MonsterBase<?> m && m.getMaster() != null) {
+			trigger(Trigger.ON_SUMMON, m.getMaster(), m, null);
+		}
+
 		return true;
 	}
 
