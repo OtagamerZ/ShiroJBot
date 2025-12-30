@@ -256,7 +256,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 						cbt.trigger(Trigger.ON_KILL, source, this, usable);
 
 						Actor<?> killer = source;
-						if (source instanceof MonsterBase<?> m && m.getMaster() != null) {
+						if (source instanceof MonsterBase<?> m && m.isMinion()) {
 							killer = m.getMaster();
 						}
 
@@ -299,7 +299,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public boolean hasFleed() {
-		if (this instanceof MonsterBase<?> m && m.getMaster() != null) {
+		if (this instanceof MonsterBase<?> m && m.isMinion()) {
 			return m.getMaster().fleed;
 		}
 

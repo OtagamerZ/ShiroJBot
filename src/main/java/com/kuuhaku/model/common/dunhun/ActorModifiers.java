@@ -24,23 +24,29 @@ import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class ActorModifiers {
 	private final Actor<?> parent;
 	private final Set<EffectProperties<?>> effects = new HashSet<>();
+	private final ActorModifiers summon;
 
 	public ActorModifiers(Actor<?> parent) {
 		this.parent = parent;
+		this.summon = new ActorModifiers(parent);
 	}
 
 	private double accumulate(double base, Function<EffectProperties<?>, ValueMod> extractor) {
-		Iterator<ValueMod> it = effects.stream()
+		Set<EffectProperties<?>> inherited = Set.of();
+		if (parent instanceof MonsterBase<?> m && m.isMinion()) {
+			inherited = m.getMaster().getModifiers().getEffects();
+		}
+
+		Iterator<ValueMod> it = Stream.of(effects, inherited)
+				.flatMap(Set::stream)
 				.map(extractor)
 				.filter(Objects::nonNull)
 				.iterator();
@@ -183,6 +189,10 @@ public class ActorModifiers {
 
 	public Set<EffectProperties<?>> getEffects() {
 		return effects;
+	}
+
+	public ActorModifiers getSummon() {
+		return summon;
 	}
 
 	public void leftShift(EffectProperties<?> effect) {
