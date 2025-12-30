@@ -378,6 +378,11 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		List<EffectBase> queue = new ArrayList<>();
 		for (Gear g : getEquipment()) {
 			queue.addAll(g.getEffects().stream()
+					.peek(e -> {
+						System.out.println(trigger);
+						System.out.println(e);
+						System.out.println(e.isClosed());
+					})
 					.filter(e -> !e.isClosed())
 					.toList()
 			);
