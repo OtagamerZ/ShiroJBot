@@ -154,6 +154,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 				}
 			}
 
+			getBinding().bind(master.getBinding());
 			master.getMinions().add(this);
 			if (cbt != null) {
 				cbt.trigger(Trigger.ON_SUMMON, master, this, null);
