@@ -185,6 +185,10 @@ public class ActorModifiers {
 		return effects;
 	}
 
+	public void leftShift(EffectProperties<?> effect) {
+		addEffect(effect);
+	}
+
 	public void addEffect(EffectProperties<?> effect) {
 		EffectProperties<?> curr = effects.stream()
 				.filter(e -> Objects.equals(e, effect))
