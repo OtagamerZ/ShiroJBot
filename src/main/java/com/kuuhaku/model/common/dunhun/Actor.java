@@ -299,6 +299,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public boolean hasFleed() {
+		if (this instanceof Monster m && m.getMaster() != null) {
+			return m.getMaster().fleed;
+		}
+
 		return fleed;
 	}
 
