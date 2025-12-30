@@ -107,7 +107,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				throw new GameReport(GameReport.UNDERLEVELLED, h.getName());
 			}
 
-			h.getBinding().setLocale(locale);
+			h.getSenshi();
 			heroes.put(p, h);
 		}
 

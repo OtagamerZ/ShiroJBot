@@ -317,8 +317,6 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public void load(Actor<?> owner) {
-		System.out.println("Instance " + super.hashCode());
-		new RuntimeException().printStackTrace();
 		attributes = new Attributes();
 		modifiers.clear();
 		effects.clear();
