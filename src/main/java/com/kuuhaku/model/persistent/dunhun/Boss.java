@@ -46,7 +46,7 @@ public class Boss extends MonsterBase<Boss> {
 				enraged = true;
 				if (onEnrage != null) {
 					Utils.exec(getId(), onEnrage, Map.of(
-							"ctx", new ActorContext(this)
+							"ctx", new ActorContext(this, null)
 					));
 				}
 

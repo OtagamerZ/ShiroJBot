@@ -22,7 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.Actor;
-import com.kuuhaku.model.common.dunhun.context.ActorAffixContext;
+import com.kuuhaku.model.common.dunhun.context.ActorContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -146,7 +146,7 @@ public class Affix extends DAO<Affix> {
 
 		try {
 			Utils.exec(id, effect, Map.of(
-					"ctx", new ActorAffixContext(actor, this, duration)
+					"ctx", new ActorContext(actor, this, duration)
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply actor modifier {}", id, e);

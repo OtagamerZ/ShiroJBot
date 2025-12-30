@@ -167,7 +167,7 @@ public class GearAffix extends DAO<GearAffix> {
 				if (owner != null) affix.apply(owner);
 			} else {
 				Utils.exec(affix.getId(), affix.getEffect(), Map.of(
-						"ctx", new GearContext(source, owner, getValues())
+						"ctx", new GearContext(source, this, owner, getValues())
 				));
 			}
 		} catch (Exception e) {
