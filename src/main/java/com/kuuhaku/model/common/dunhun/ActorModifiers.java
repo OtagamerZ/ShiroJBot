@@ -23,9 +23,11 @@ import com.kuuhaku.model.common.shoukan.IncMod;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.records.dunhun.CachedValue;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -171,6 +173,12 @@ public class ActorModifiers {
 
 	public double getMaxSummons(double base) {
 		return accumulate(base, EffectProperties::getMaxSummons);
+	}
+
+	public UniqueProperties<?> getEffect(Object id) {
+		return (UniqueProperties<?>) effects.stream()
+				.filter(e -> e instanceof UniqueProperties<?> u && Objects.equals(u.getIdentifier(), id))
+				.findFirst().orElse(null);
 	}
 
 	public Set<EffectProperties<?>> getEffects() {
