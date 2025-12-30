@@ -5,7 +5,6 @@ import com.kuuhaku.model.common.dunhun.context.EffectContext;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 public abstract class EffectBase {
 	private static final ThrowingBiConsumer<EffectBase, CombatContext> NOTHING = (_, _) -> {
@@ -56,17 +55,5 @@ public abstract class EffectBase {
 
 	public void unlock() {
 		lock = false;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (o == null || getClass() != o.getClass()) return false;
-		EffectBase that = (EffectBase) o;
-		return Objects.equals(source, that.source);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(source);
 	}
 }
