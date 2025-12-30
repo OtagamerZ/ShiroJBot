@@ -216,15 +216,15 @@ public class ActorModifiers {
 	}
 
 	public void clear() {
+		effects.clear();
 		removeIf(_ -> true);
 	}
 
 	public void removeIf(Predicate<ValueMod> check) {
+		effects.removeIf(EffectProperties::isSafeToRemove);
 		for (Gear g : parent.getEquipment()) {
 			g.getModifiers().removeIf(check);
 		}
-
-		effects.removeIf(EffectProperties::isSafeToRemove);
 	}
 
 	public void copyFrom(ActorModifiers modifiers) {
