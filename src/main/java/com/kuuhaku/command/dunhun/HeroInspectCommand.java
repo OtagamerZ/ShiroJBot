@@ -84,7 +84,6 @@ public class HeroInspectCommand implements Executable {
 			return;
 		}
 
-		g.load(h);
 		GearType type = g.getBasetype().getStats().gearType();
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setThumbnail("attachment://thumb.png");
