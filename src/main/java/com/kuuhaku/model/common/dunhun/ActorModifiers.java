@@ -249,6 +249,6 @@ public class ActorModifiers {
 	}
 
 	public void copyFrom(ActorModifiers modifiers) {
-		effects.addAll(modifiers.getEffects());
+		effects.addAll(modifiers.effects);
 	}
 }

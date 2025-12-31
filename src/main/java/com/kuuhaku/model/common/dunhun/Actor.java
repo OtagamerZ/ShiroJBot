@@ -383,12 +383,14 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			);
 		}
 
+		System.out.println("-> " + queue);
 		queue.addAll(getModifiers().getEffects().stream()
 				.map(EffectProperties::getEffect)
 				.filter(Objects::nonNull)
 				.filter(e -> !e.isClosed())
 				.toList()
 		);
+		System.out.println("<- " + queue);
 
 		for (EffectBase e : queue) {
 			if (e.isLocked()) continue;
