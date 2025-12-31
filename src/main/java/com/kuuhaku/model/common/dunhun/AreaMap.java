@@ -359,10 +359,10 @@ public class AreaMap {
 
 					float part = ((float) prev.size() / nodeCount);
 					for (int k = 0; k < nodeCount; k++) {
-						List<Node> parents = prev.getNodes().stream()
-								.filter(p -> p.getType() != NodeType.RETURN)
-								.skip((int) (part * k)).limit((int) Math.ceil(part * (k + 1)))
-								.collect(Collectors.toCollection(ArrayList::new));
+						List<Node> parents = new ArrayList<>(prev.getNodes().subList(
+								(int) (part * k),
+								(int) Math.ceil(part * (k + 1))
+						));
 
 						List<Node> blkPar = parents.stream()
 								.filter(p -> !p.getChildren().isEmpty())
