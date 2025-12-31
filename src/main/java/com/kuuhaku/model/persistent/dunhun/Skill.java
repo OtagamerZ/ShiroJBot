@@ -124,6 +124,9 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 	}
 
 	public CpuRule canCpuUse(Actor<?> source, Actor<?> target) {
+		if (source.getUsableAp() < stats.getReservation() + 1) return CpuRule.PREVENT;
+		if (toggle != null) return CpuRule.PREVENT;
+
 		return stats.canCpuUse(this, source, target);
 	}
 
