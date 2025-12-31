@@ -46,4 +46,12 @@ public class SkillContext extends EffectContext<Usable> {
 	public List<Actor<?>> getValidTargets() {
 		return validTargets;
 	}
+
+	public List<Actor<?>> getAllies() {
+		return getGame().getCombat().getActors(origin.getTeam());
+	}
+
+	public List<Actor<?>> getEnemies() {
+		return getGame().getCombat().getActors(origin.getTeam().getOther());
+	}
 }
