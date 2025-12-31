@@ -33,10 +33,16 @@ public class ActorModifiers {
 	private final Actor<?> parent;
 	private final Set<EffectProperties<?>> effects = new HashSet<>();
 	private final ActorModifiers summon;
+	private final boolean minionStats;
 
 	public ActorModifiers(Actor<?> parent) {
+		this(parent, false);
+	}
+
+	public ActorModifiers(Actor<?> parent, boolean minionStats) {
 		this.parent = parent;
-		this.summon = new ActorModifiers(parent);
+		this.summon = minionStats ? null : new ActorModifiers(parent, true);
+		this.minionStats = minionStats;
 	}
 
 	private double accumulate(double base, Function<EffectProperties<?>, ValueMod> extractor) {
