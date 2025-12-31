@@ -58,6 +58,8 @@ public class ActorModifiers {
 		double flat = 0, inc = 0, mult = 1;
 		while (it.hasNext()) {
 			ValueMod mod = extractor.apply(it.next());
+			if (mod == null) continue;
+
 			switch (mod) {
 				case FlatMod m -> flat += m.getValue();
 				case IncMod m -> inc += m.getValue();
