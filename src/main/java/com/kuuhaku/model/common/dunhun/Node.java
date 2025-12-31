@@ -316,7 +316,7 @@ public class Node {
 
 	public void renderNode(Graphics2D g2d, Node playerNode, boolean reachable) {
 		BufferedImage icon;
-		if (!reachable || sublevel.getFloor().areNodesHidden()) {
+		if (!reachable) {
 			icon = new BufferedImage(ICON_PLAIN.getWidth(), ICON_PLAIN.getHeight(), BufferedImage.TYPE_INT_ARGB);
 			for (int y = 0; y < icon.getHeight(); y++) {
 				for (int x = 0; x < icon.getWidth(); x++) {
@@ -327,6 +327,8 @@ public class Node {
 					icon.setRGB(x, y, (alpha << 24) | tone << 16 | tone << 8 | tone);
 				}
 			}
+		} else if (sublevel.getFloor().areNodesHidden()) {
+			icon = ICON_PLAIN;
 		} else if (equals(playerNode)) {
 			icon = ICON_PLAYER;
 		} else {
