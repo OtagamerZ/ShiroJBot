@@ -204,6 +204,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public Tuple2<Integer, Boolean> modHp(Actor<?> source, Usable usable, int value, double critChance) {
+		boolean isAttack = usable instanceof Skill s && !s.getStats().isSpell();
 		boolean crit = Calc.chance(critChance);
 		if (crit) value *= 2;
 
@@ -230,7 +231,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 									cbt.trigger(Trigger.ON_DODGE, this, source, usable);
 
 									outcome = cbt.getLocale().get("str/actor_dodge", this.getName());
-								} else if (Calc.chance(tgtSen.getParry())) {
+								} else if (isAttack && Calc.chance(tgtSen.getParry())) {
 									cbt.trigger(Trigger.ON_PARRY, this, source, usable);
 
 									outcome = cbt.getLocale().get("str/actor_parry", this.getName());
