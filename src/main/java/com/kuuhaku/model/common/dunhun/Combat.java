@@ -385,10 +385,15 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					JSONArray tags = h.getEquipment().getWeaponTags();
-					if (!tags.containsAll(skill.getRequirements().tags())) {
-						game.getChannel().sendMessage(getLocale().get("error/invalid_weapon")).queue();
-						return;
+					List<JSONArray> wpnTags = h.getEquipment().getWeaponTags();
+					JSONArray req = skill.getRequirements().tags();
+					if (!req.isEmpty()) {
+						for (JSONArray tags : wpnTags) {
+							if (!tags.containsAll(req)) {
+								game.getChannel().sendMessage(getLocale().get("error/invalid_weapon")).queue();
+								return;
+							}
+						}
 					}
 
 					addSelector(w.getMessage(), helper, skill.getTargets(h),
@@ -583,7 +588,7 @@ public class Combat implements Renderer<BufferedImage> {
 					.setPlaceholder(getLocale().get("str/use_a_skill"))
 					.setMaxValues(1);
 
-			JSONArray tags = h.getEquipment().getWeaponTags();
+			List<JSONArray> wpnTags = h.getEquipment().getWeaponTags();
 			for (Skill s : skills) {
 				String extra = "";
 
@@ -597,13 +602,18 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				JSONArray req = s.getRequirements().tags();
-				if (!req.isEmpty() && !tags.containsAll(req)) {
-					String reqTags = Utils.properlyJoin(getLocale(), req.stream()
-							.map(t -> LocalizedString.get(getLocale(), "tag/" + t, "???"))
-							.toList()
-					);
+				if (!req.isEmpty()) {
+					for (JSONArray tags : wpnTags) {
+						if (!tags.containsAll(req)) {
+							String reqTags = Utils.properlyJoin(getLocale(), req.stream()
+									.map(t -> LocalizedString.get(getLocale(), "tag/" + t, "???"))
+									.toList()
+							);
 
-					extra += " [" + getLocale().get("str/requires", reqTags) + "]";
+							extra += " [" + getLocale().get("str/requires", reqTags) + "]";
+							break;
+						}
+					}
 				}
 
 				String cost = " " + StringUtils.repeat('◈', s.getStats().getCost());
@@ -827,7 +837,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void trigger(Trigger t, Actor<?> source, Actor<?> target, Usable usable, AtomicInteger value) {
-		CombatContext context = new CombatContext(t, source, target, usable, value);
+		CombatContext context = new CombatContext(this, t, source, target, usable, value);
 		Set<EffectBase> effects = new HashSet<>(this.effects.getValues());
 		for (RunModifier mod : game.getModifiers()) {
 			EffectBase e = mod.toEffect(game);
