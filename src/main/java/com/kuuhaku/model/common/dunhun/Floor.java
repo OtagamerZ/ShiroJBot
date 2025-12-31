@@ -187,7 +187,7 @@ public class Floor {
 	}
 
 	public int depth() {
-		if (floor < 0) return 0;
+		if (floor <= 0) return 0;
 		return (floor - 1) * map.getAreasPerFloor();
 	}
 
