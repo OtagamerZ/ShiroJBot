@@ -196,7 +196,7 @@ public class ActorModifiers {
 
 	public Collection<EffectProperties<?>> getEffects() {
 		if (parent instanceof MonsterBase<?> m && m.isMinion()) {
-			return CollectionUtils.union(effects, summon.effects);
+			return CollectionUtils.union(effects, m.getMaster().getModifiers().summon.effects);
 		}
 
 		return effects;
