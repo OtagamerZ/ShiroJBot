@@ -61,10 +61,12 @@ public class Combat implements Renderer<BufferedImage> {
 	private final Node node;
 	private final InfiniteList<Actor<?>> actors = new InfiniteList<>();
 	private final BondedList<Actor<?>> hunters = new BondedList<>(
-			(a, _) -> onAddActor(a, Team.HUNTERS), this::onRemoveActor
+			(a, it) -> onAddActor(a, it, Team.HUNTERS),
+			a -> onRemoveActor(a, getActors(Team.HUNTERS))
 	);
 	private final BondedList<Actor<?>> keepers = new BondedList<>(
-			(a, _) -> onAddActor(a, Team.KEEPERS), this::onRemoveActor
+			(a, it) -> onAddActor(a, it, Team.KEEPERS),
+			a -> onRemoveActor(a, getActors(Team.KEEPERS))
 	);
 	private final List<String> history = new ArrayList<>();
 	private final RandomList<Actor<?>> rngList = new RandomList<>();
@@ -79,8 +81,6 @@ public class Combat implements Renderer<BufferedImage> {
 		this.node = node;
 
 		hunters.addAll(game.getHeroes().values());
-		hunters.addAll(hunters.stream().flatMap(a -> a.getMinions().stream()).toList());
-
 		keepers.addAll(Stream.of(enemies)
 				.filter(Objects::nonNull)
 				.toList()
@@ -112,10 +112,11 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 	}
 
-	public boolean onAddActor(Actor<?> actor, Team team) {
+	public boolean onAddActor(Actor<?> actor, ListIterator<Actor<?>> it, Team team) {
 		if (getActors(team).size() >= 6) return false;
 
 		getActors(team.getOther()).remove(actor);
+
 		actor.getBinding().bind(getGame(), team);
 		actors.add(actor);
 
@@ -127,13 +128,21 @@ public class Combat implements Renderer<BufferedImage> {
 			trigger(Trigger.ON_SUMMON, m.getMaster(), m, null);
 		}
 
+		for (Actor<?> minion : actor.getMinions()) {
+			it.add(minion);
+		}
+
 		return true;
 	}
 
-	public void onRemoveActor(Actor<?> actor) {
+	public void onRemoveActor(Actor<?> actor, List<Actor<?>> list) {
 		trigger(Trigger.ON_REMOVE, actor, actor, null);
 		actor.getBinding().unbind();
 		actors.remove(actor);
+
+		for (Actor<?> minion : actor.getMinions()) {
+			list.remove(minion);
+		}
 	}
 
 	@Override
