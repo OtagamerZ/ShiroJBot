@@ -53,6 +53,7 @@ public record GearStats(
 ) implements Serializable {
 	public JSONArray allTags() {
 		JSONArray tags = new JSONArray();
+		tags.add(gearType.getId());
 		tags.addAll(gearType.getTags());
 
 		for (Object o : tags()) {

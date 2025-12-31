@@ -293,7 +293,6 @@ public class Gear extends DAO<Gear> {
 
 	public JSONArray getTags() {
 		JSONArray out = new JSONArray(basetype.getStats().allTags());
-		out.add(basetype.getId());
 		out.addAll(modifiers.getAddedTags());
 
 		return out;
