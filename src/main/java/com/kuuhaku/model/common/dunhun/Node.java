@@ -254,7 +254,7 @@ public class Node {
 		for (Node child : children) {
 			Point to = child.getRenderPos();
 			boolean leap = child.depth() - depth() > 1;
-			boolean returning = depth() - child.depth() >= sublevel.getFloor().size() / 2;
+			boolean returning = depth() - child.depth() > sublevel.getFloor().size() / 2;
 			boolean blocked = this.blocked.contains(child);
 
 			Color color = colorForIndex(child.pathColor);

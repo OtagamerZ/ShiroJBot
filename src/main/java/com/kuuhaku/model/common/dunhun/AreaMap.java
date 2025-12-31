@@ -286,7 +286,7 @@ public class AreaMap {
 								g2d.drawLine(0, ground, width, ground);
 
 								g2d.setColor(Color.DARK_GRAY);
-								g2d.setStroke(new BasicStroke(Node.NODE_RADIUS, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER));
+								g2d.setStroke(new BasicStroke(Node.NODE_RADIUS, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
 								g2d.drawLine(node.getRenderPos().x, 10, node.getRenderPos().x, ground);
 							}
 						}
