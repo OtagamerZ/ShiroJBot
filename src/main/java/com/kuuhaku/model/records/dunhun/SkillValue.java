@@ -23,8 +23,8 @@ public record SkillValue(int min, int max, boolean withAdded) {
 		);
 	}
 
-	public int withLevel(int level) {
-		return (int) (min + (max - min) * Calc.clamp(level, 0, 100) / 100.0);
+	public double withLevel(int level) {
+		return min + (max - min) * Calc.clamp(level, 0, 100) / 100d;
 	}
 
 	public int valueFor(Skill skill, Actor<?> source) {
@@ -33,9 +33,10 @@ public record SkillValue(int min, int max, boolean withAdded) {
 			mult = source.getSenshi().getPower();
 		}
 
+		int lvl = source.getLevel();
 		int added = 0;
-		if (withAdded && skill.getStats().getEfficiency() > 0) {
-			double eff = skill.getStats().getEfficiency();
+		if (withAdded && skill.getStats().getEfficiency(lvl) > 0) {
+			double eff = skill.getStats().getEfficiency(lvl);
 			if (skill.getStats().isSpell()) {
 				added = (int) (source.getModifiers().getSpellDamage() * eff);
 			} else {
@@ -43,7 +44,7 @@ public record SkillValue(int min, int max, boolean withAdded) {
 			}
 		}
 
-		return (int) ((withLevel(source.getLevel()) + added) * mult);
+		return (int) ((withLevel(lvl) + added) * mult);
 	}
 
 	@Override

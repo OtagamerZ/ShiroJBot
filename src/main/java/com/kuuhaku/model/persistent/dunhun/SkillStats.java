@@ -23,6 +23,7 @@ import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -70,8 +71,8 @@ public class SkillStats extends UsableStats {
 		return cooldown;
 	}
 
-	public double getEfficiency() {
-		return efficiency;
+	public double getEfficiency(int level) {
+		return efficiency * (1 + Calc.clamp(level, 0, 100) * 0.003);
 	}
 
 	public double getCritical() {
