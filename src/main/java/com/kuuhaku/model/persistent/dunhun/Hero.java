@@ -132,7 +132,7 @@ public class Hero extends Actor<Hero> {
 
 	@Override
 	public int getApCap() {
-		return (int) getModifiers().getMaxAp(5);
+		return (int) Math.min(getModifiers().getMaxAp(5), 10);
 	}
 
 	@Override

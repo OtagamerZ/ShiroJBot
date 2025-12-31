@@ -83,7 +83,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 
 	@Override
 	public int getApCap() {
-		return (int) getModifiers().getMaxAp(5 + getStats().getMaxAp());
+		return (int) Math.min(getModifiers().getMaxAp(5 + getStats().getMaxAp()), 10);
 	}
 
 	@Override
