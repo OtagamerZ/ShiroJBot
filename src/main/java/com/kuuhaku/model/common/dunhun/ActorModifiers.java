@@ -27,6 +27,7 @@ import com.kuuhaku.model.persistent.dunhun.Gear;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ActorModifiers {
@@ -194,6 +195,13 @@ public class ActorModifiers {
 	}
 
 	public Set<EffectProperties<?>> getEffects() {
+		if (parent instanceof MonsterBase<?> m && m.isMinion()) {
+			return Stream.of(effects, summon.effects)
+					.flatMap(Set::stream)
+					.filter(Objects::nonNull)
+					.collect(Collectors.toSet());
+		}
+
 		return effects;
 	}
 
