@@ -361,7 +361,8 @@ public class AreaMap {
 					for (int k = 0; k < nodeCount; k++) {
 						List<Node> parents;
 						if (prev.getFloor().getFloor() == m.areasPerFloor) {
-							parents = new ArrayList<>(List.of(prev.getNode(0)));
+							parents = new ArrayList<>();
+							parents.add(prev.getNode(0));
 						} else {
 							parents = new ArrayList<>(prev.getNodes().subList(
 									(int) (part * k),
