@@ -359,59 +359,58 @@ public class AreaMap {
 
 					float part = ((float) prev.size() / nodeCount);
 					for (int k = 0; k < nodeCount; k++) {
-						List<Node> parents = new ArrayList<>();
 						Node boss = prev.getNodes().stream()
 								.filter(n -> n.getType() == NodeType.BOSS)
 								.findFirst().orElse(null);
 
-						if (boss != null) {
-							parents.add(boss);
-						} else {
-							parents.addAll(prev.getNodes().subList(
+						if (boss == null) {
+							List<Node> parents = new ArrayList<>(prev.getNodes().subList(
 									(int) (part * k),
 									(int) Math.ceil(part * (k + 1))
 							));
-						}
 
-						List<Node> blkPar = parents.stream()
-								.filter(p -> !p.getChildren().isEmpty())
-								.toList();
+							List<Node> blkPar = parents.stream()
+									.filter(p -> !p.getChildren().isEmpty())
+									.toList();
 
-						if (!blkPar.isEmpty()) {
-							while (parents.size() > 1 && fl.getRng().nextDouble() > 1d / (parents.size() + 1)) {
-								Node parent = blkPar.get(fl.getRng().nextInt(0, blkPar.size()));
-								parents.remove(parent);
+							if (!blkPar.isEmpty()) {
+								while (parents.size() > 1 && fl.getRng().nextDouble() > 1d / (parents.size() + 1)) {
+									Node parent = blkPar.get(fl.getRng().nextInt(0, blkPar.size()));
+									parents.remove(parent);
+								}
 							}
-						}
 
-						if (sub.getSublevel() > 1 && j > 0) {
-							Sublevel leap = sublevels.get(sub.getSublevel() - 2);
-							if (leap.size() > 0 && !prev.hasLeapNode()) {
-								double leapRoll = fl.getRng().nextDouble();
-								if (leapRoll < 0.33) {
-									Node leapNode = null;
-									if (nodeCount > prev.size() && leap.size() > prev.size()) {
-										if (k == 0) {
-											leapNode = leap.getNode(0);
-										} else if (k == nodeCount - 1) {
-											leapNode = leap.getNode(leap.size() - 1);
+							if (sub.getSublevel() > 1 && j > 0) {
+								Sublevel leap = sublevels.get(sub.getSublevel() - 2);
+								if (leap.size() > 0 && !prev.hasLeapNode()) {
+									double leapRoll = fl.getRng().nextDouble();
+									if (leapRoll < 0.33) {
+										Node leapNode = null;
+										if (nodeCount > prev.size() && leap.size() > prev.size()) {
+											if (k == 0) {
+												leapNode = leap.getNode(0);
+											} else if (k == nodeCount - 1) {
+												leapNode = leap.getNode(leap.size() - 1);
+											}
 										}
-									}
 
-									if (nodeCount % 2 == 1 && k == nodeCount / 2 && leap.size() % 2 == 1) {
-										if (prev.size() % 2 != leap.size() % 2) {
-											leapNode = leap.getNode(leap.size() / 2);
+										if (nodeCount % 2 == 1 && k == nodeCount / 2 && leap.size() % 2 == 1) {
+											if (prev.size() % 2 != leap.size() % 2) {
+												leapNode = leap.getNode(leap.size() / 2);
+											}
 										}
-									}
 
-									if (leapNode != null && leapNode.getChildren().size() < 5) {
-										parents.add(leapNode);
+										if (leapNode != null && leapNode.getChildren().size() < 5) {
+											parents.add(leapNode);
+										}
 									}
 								}
 							}
-						}
 
-						sub.addNode(parents);
+							sub.addNode(parents);
+						} else {
+							sub.addNode(boss);
+						}
 					}
 				}
 			}
