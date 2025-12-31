@@ -360,7 +360,7 @@ public class AreaMap {
 					float part = ((float) prev.size() / nodeCount);
 					for (int k = 0; k < nodeCount; k++) {
 						List<Node> parents;
-						if (prev.getFloor().getFloor() == m.areasPerFloor) {
+						if (prev.getFloor().getFloor() == m.areasPerFloor - 1) {
 							parents = new ArrayList<>();
 							parents.add(prev.getNode(0));
 						} else {
