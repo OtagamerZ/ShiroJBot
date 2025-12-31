@@ -327,10 +327,10 @@ public class Node {
 					icon.setRGB(x, y, (alpha << 24) | tone << 16 | tone << 8 | tone);
 				}
 			}
-		} else if (sublevel.getFloor().areNodesHidden()) {
-			icon = ICON_PLAIN;
 		} else if (equals(playerNode)) {
 			icon = ICON_PLAYER;
+		} else if (sublevel.getFloor().areNodesHidden()) {
+			icon = ICON_PLAIN;
 		} else {
 			icon = getIcon();
 		}

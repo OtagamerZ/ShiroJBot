@@ -27,10 +27,7 @@ import com.ygimenez.json.JSONObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -165,29 +162,25 @@ public class Equipment implements Iterable<Gear> {
 		}
 	}
 
-	public JSONArray getWeaponTags() {
-		JSONArray out = new JSONArray();
+	public List<JSONArray> getWeaponTags() {
+		List<JSONArray> out = new ArrayList<>();
+		List<Gear> weapons = getWeapons().getEntries();
 
-		int weapons = 0;
 		boolean unarmed = true;
-		for (Gear g : getWeapons().getEntries()) {
+		for (Gear g : weapons) {
+			JSONArray tags = g.getTags();
 			if (g.isWeapon()) {
-				if (!g.getTags().contains("UNARMED")) unarmed = false;
-				weapons++;
+				if (!tags.contains("UNARMED")) unarmed = false;
 			}
 
-			out.addAll(g.getTags());
+			out.add(tags);
+			if (weapons.size() >= 2) {
+				tags.add("DUAL_WIELD");
+			}
 		}
 
 		if (unarmed) {
-			out.add("UNARMED");
-			if (!out.contains("MELEE")) {
-				out.add("MELEE");
-			}
-		}
-
-		if (weapons >= 2) {
-			out.add("DUAL_WIELD");
+			out.add(JSONArray.of("UNARMED", "MELEE", "BLUNT"));
 		}
 
 		return out;
