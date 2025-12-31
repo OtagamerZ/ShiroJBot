@@ -23,18 +23,17 @@ import com.kuuhaku.model.common.shoukan.IncMod;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.persistent.dunhun.Gear;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.IteratorUtils;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ActorModifiers {
 	private final Actor<?> parent;
 	private final Set<EffectProperties<?>> effects = new HashSet<>();
 	private final ActorModifiers summon;
-	private final boolean minionStats;
 
 	public ActorModifiers(Actor<?> parent) {
 		this(parent, false);
@@ -43,24 +42,23 @@ public class ActorModifiers {
 	public ActorModifiers(Actor<?> parent, boolean minionStats) {
 		this.parent = parent;
 		this.summon = minionStats ? null : new ActorModifiers(parent, true);
-		this.minionStats = minionStats;
 	}
 
 	private double accumulate(double base, Function<EffectProperties<?>, ValueMod> extractor) {
 		Set<EffectProperties<?>> inherited = Set.of();
 		if (parent instanceof MonsterBase<?> m && m.isMinion()) {
-			inherited = m.getMaster().getModifiers().getEffects();
+			inherited = m.getMaster().getModifiers().summon.effects;
 		}
 
-		Iterator<ValueMod> it = Stream.of(effects, inherited)
-				.flatMap(Set::stream)
-				.map(extractor)
-				.filter(Objects::nonNull)
-				.iterator();
+		Iterator<EffectProperties<?>> it = IteratorUtils.chainedIterator(
+				effects.iterator(),
+				inherited.iterator()
+		);
 
 		double flat = 0, inc = 0, mult = 1;
 		while (it.hasNext()) {
-			switch (it.next()) {
+			ValueMod mod = extractor.apply(it.next());
+			switch (mod) {
 				case FlatMod m -> flat += m.getValue();
 				case IncMod m -> inc += m.getValue();
 				case MultMod m -> mult *= 1 + m.getValue();
@@ -194,12 +192,9 @@ public class ActorModifiers {
 				.findFirst().orElse(null);
 	}
 
-	public Set<EffectProperties<?>> getEffects() {
+	public Collection<EffectProperties<?>> getEffects() {
 		if (parent instanceof MonsterBase<?> m && m.isMinion()) {
-			return Stream.of(effects, summon.effects)
-					.flatMap(Set::stream)
-					.filter(Objects::nonNull)
-					.collect(Collectors.toSet());
+			return CollectionUtils.union(effects, summon.effects);
 		}
 
 		return effects;
