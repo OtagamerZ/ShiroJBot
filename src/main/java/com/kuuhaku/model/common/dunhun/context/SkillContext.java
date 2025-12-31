@@ -53,7 +53,7 @@ public class SkillContext extends EffectContext<Usable> {
 			return s.getStats().getEfficiency(origin.getLevel());
 		}
 
-		return 0;
+		return 1;
 	}
 
 	public List<Actor<?>> getAllies() {
