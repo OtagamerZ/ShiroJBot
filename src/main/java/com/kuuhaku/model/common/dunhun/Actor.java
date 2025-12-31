@@ -317,6 +317,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public boolean isOutOfCombat() {
+		if (this instanceof MonsterBase<?> m && m.isMinion()) {
+			if (m.getMaster().isOutOfCombat()) return true;
+		}
+
 		return hasFleed() || getHp() <= 0;
 	}
 

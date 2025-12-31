@@ -171,13 +171,14 @@ public class BondedList<T> extends TreeList<T> {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public boolean remove(Object o) {
-		if (super.contains(o)) {
-			onRemove.accept((T) o);
+		int idx = indexOf(o);
+		if (idx > -1) {
+			remove(idx);
+			return true;
 		}
 
-		return super.remove(o);
+		return false;
 	}
 
 	@Override

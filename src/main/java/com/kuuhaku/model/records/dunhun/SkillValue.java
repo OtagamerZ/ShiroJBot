@@ -28,15 +28,16 @@ public record SkillValue(int min, int max, boolean withAdded) {
 	}
 
 	public int valueFor(Skill skill, Actor<?> source) {
+		int lvl = source.getLevel();
 		double mult = 1;
+		double eff = skill.getStats().getEfficiency(lvl);
 		if (skill.getStats().isSpell()) {
 			mult = source.getSenshi().getPower();
+			eff = skill.getStats().getEfficiency(0);
 		}
 
-		int lvl = source.getLevel();
 		int added = 0;
-		if (withAdded && skill.getStats().getEfficiency(lvl) > 0) {
-			double eff = skill.getStats().getEfficiency(lvl);
+		if (withAdded && eff > 0) {
 			if (skill.getStats().isSpell()) {
 				added = (int) (source.getModifiers().getSpellDamage() * eff);
 			} else {

@@ -136,14 +136,8 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 	}
 
 	public void setMaster(Actor<?> master) {
-		if (master instanceof MonsterBase<?> m) {
-			if (m.getMaster().equals(this)) {
-				m.master = null;
-			}
-		}
-
-		if (this.master != null) {
-			this.master.getMinions().remove(this);
+		if (master instanceof MonsterBase<?> m && m.getMaster().equals(this)) {
+			m.master = null;
 		}
 
 		this.master = master;
