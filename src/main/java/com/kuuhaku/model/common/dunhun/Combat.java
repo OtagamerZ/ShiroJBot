@@ -115,8 +115,8 @@ public class Combat implements Renderer<BufferedImage> {
 	public boolean onAddActor(Actor<?> actor, Team team) {
 		if (getActors(team).size() >= 6) return false;
 
-		actor.getBinding().bind(getGame(), team);
 		getActors(team.getOther()).remove(actor);
+		actor.getBinding().bind(getGame(), team);
 		actors.add(actor);
 
 		actor.setFleed(false);
