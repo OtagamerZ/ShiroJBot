@@ -2,6 +2,7 @@ package com.kuuhaku.model.common.dunhun.context;
 
 import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
+import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.ygimenez.json.JSONObject;
 
 import java.util.ArrayList;
@@ -45,6 +46,14 @@ public class SkillContext extends EffectContext<Usable> {
 
 	public List<Actor<?>> getValidTargets() {
 		return validTargets;
+	}
+
+	public double getEfficiency() {
+		if (getSource() instanceof Skill s) {
+			return s.getStats().getEfficiency(origin.getLevel());
+		}
+
+		return 0;
 	}
 
 	public List<Actor<?>> getAllies() {
