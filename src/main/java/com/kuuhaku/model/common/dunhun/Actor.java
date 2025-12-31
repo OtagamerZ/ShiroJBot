@@ -49,7 +49,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	private transient final ActorBinding binding = new ActorBinding();
 	private transient final ActorCache cache = new ActorCache(this);
 	private transient final RegDeg regDeg = new RegDeg(null);
-	private transient final Deque<Actor<?>> minions = new ArrayDeque<>();
+	private transient final Deque<MonsterBase<?>> minions = new ArrayDeque<>();
 	private transient Actor<?> killer;
 	private transient int hp = -1, ap;
 	private transient int maxHp = -1;
@@ -342,7 +342,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		setHp(getHp() + val.get());
 	}
 
-	public Deque<Actor<?>> getMinions() {
+	public Deque<MonsterBase<?>> getMinions() {
 		return minions;
 	}
 
