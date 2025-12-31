@@ -102,8 +102,13 @@ public class HeroSkillCommand implements Executable {
 			eb.appendDescription("-# " + locale.get("str/cooldown", locale.get("str/turns_inline", s.getStats().getCooldown())) + "\n");
 		}
 
-		if (s.getStats().getEfficiency(h.getLevel()) > 0) {
-			String eff = Utils.roundToString(s.getStats().getEfficiency(h.getLevel()) * 100, 0) + "%";
+		int lvl = h.getLevel();
+		if (s.getStats().isSpell()) {
+			lvl = 0;
+		}
+
+		if (s.getStats().getEfficiency(lvl) > 0) {
+			String eff = Utils.roundToString(s.getStats().getEfficiency(lvl) * 100, 0) + "%";
 			eb.appendDescription("-# " + locale.get("str/added_efficiency", eff) + "\n");
 		}
 
