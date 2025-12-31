@@ -254,7 +254,6 @@ public class Node {
 		for (Node child : children) {
 			Point to = child.getRenderPos();
 			boolean leap = child.depth() - depth() > 1;
-			boolean returning = depth() - child.depth() > sublevel.getFloor().size() / 2;
 			boolean blocked = this.blocked.contains(child);
 
 			Color color = colorForIndex(child.pathColor);
@@ -270,24 +269,16 @@ public class Node {
 				color = Color.DARK_GRAY;
 			}
 
-			if (leap || returning) {
-				int[] arrX, arrY;
-
-				if (returning) {
-					int offset = (Node.NODE_RADIUS + Node.NODE_SPACING) * Sublevel.MAX_NODES / 2;
-					arrX = new int[]{renderPos.x, renderPos.x + offset, renderPos.x + offset, to.x};
-					arrY = new int[]{renderPos.y, renderPos.y, to.y, to.y};
+			if (leap) {
+				Point middle = new Point(0, renderPos.y - (renderPos.y - to.y) / 2);
+				if (path >= sublevel.size() / 2d) {
+					middle.x = Math.max(renderPos.x, to.x);
 				} else {
-					Point middle = new Point(0, renderPos.y - (renderPos.y - to.y) / 2);
-					if (path >= sublevel.size() / 2d) {
-						middle.x = Math.max(renderPos.x, to.x);
-					} else {
-						middle.x = Math.min(renderPos.x, to.x);
-					}
-
-					arrX = new int[]{renderPos.x, middle.x, to.x};
-					arrY = new int[]{renderPos.y, middle.y, to.y};
+					middle.x = Math.min(renderPos.x, to.x);
 				}
+
+				int[] arrX = new int[]{renderPos.x, middle.x, to.x};
+				int[] arrY = new int[]{renderPos.y, middle.y, to.y};
 
 				g2d.setColor(Color.BLACK);
 				g2d.setStroke(new BasicStroke(strokeWidth + 3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 1, new float[]{17}, 0));
