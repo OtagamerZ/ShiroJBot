@@ -228,6 +228,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					Node currNode = map.getPlayerNode();
 					List<String> order = List.copyOf(ICONS.keySet());
 					List<Map.Entry<String, Node>> children = currNode.getChildren().stream()
+							.filter(n -> !currNode.getBlocked().contains(n))
 							.map(n -> Map.entry(currNode.getPathVerb(n), n))
 							.sorted(Comparator
 									.<Map.Entry<String, Node>>comparingInt(e -> order.indexOf(e.getKey()))
