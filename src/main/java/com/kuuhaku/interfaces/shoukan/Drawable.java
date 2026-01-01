@@ -428,7 +428,7 @@ public interface Drawable<T extends Drawable<T>> {
 						indicator = IO.getResourceAsImage(path + "/nerfed.png");
 					}
 
-					g2d.drawImage(indicator, 0, 0, null);
+					g2d.drawImage(indicator, -15, -15, null);
 				}
 			}
 
