@@ -574,7 +574,7 @@ public abstract class Utils {
 		return randomizer.get();
 	}
 
-	public static <T> List<T> getRandomN(List<T> list, int elements) {
+	public static <T> List<T> getRandomN(Collection<T> list, int elements) {
 		List<T> aux = new ArrayList<>(list);
 		List<T> out = new ArrayList<>();
 		RandomGenerator random = Constants.DEFAULT_RNG.get();
@@ -589,18 +589,18 @@ public abstract class Utils {
 		return out;
 	}
 
-	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances) {
+	public static <T> List<T> getRandomN(Collection<T> list, int elements, int maxInstances) {
 		return getRandomN(list, elements, maxInstances, Constants.DEFAULT_RNG.get());
 	}
 
-	public static synchronized <T> List<T> getRandomN(List<T> list, int elements, int maxInstances, long seed) {
+	public static synchronized <T> List<T> getRandomN(Collection<T> list, int elements, int maxInstances, long seed) {
 		return withUnsafeRng(rng -> {
 			rng.setSeed(seed);
 			return getRandomN(list, elements, maxInstances, rng);
 		});
 	}
 
-	public static <T> List<T> getRandomN(List<T> list, int elements, int maxInstances, RandomGenerator rng) {
+	public static <T> List<T> getRandomN(Collection<T> list, int elements, int maxInstances, RandomGenerator rng) {
 		List<T> aux = new ArrayList<>(list);
 		List<T> out = new ArrayList<>();
 
