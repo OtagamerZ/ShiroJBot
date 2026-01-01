@@ -333,7 +333,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default TriConsumer<String, Integer, Integer> highlightValues(Graphics2D g2d, boolean legacy) {
-		FrameSkin frame = getHand() == null ? DAO.find(FrameSkin.class, "PINK") : getHand().getUserDeck().getFrame();
+		FrameSkin frame = getOriginalHand() != null ? getOriginalHand().getUserDeck().getFrame() : DAO.find(FrameSkin.class, "PINK");
 		AtomicInteger lastVal = new AtomicInteger();
 		AtomicInteger line = new AtomicInteger();
 		TagBundle tags = getTagBundle();
@@ -430,7 +430,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	}
 
 	default void drawDescription(Graphics2D g2d, Hand h, I18N locale) {
-		FrameSkin frame = getHand() == null ? DAO.find(FrameSkin.class, "PINK") : getHand().getUserDeck().getFrame();
+		FrameSkin frame = getOriginalHand() != null ? getOriginalHand().getUserDeck().getFrame() : DAO.find(FrameSkin.class, "PINK");
 
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(11));
 		g2d.setColor(frame.getSecondaryColor());
