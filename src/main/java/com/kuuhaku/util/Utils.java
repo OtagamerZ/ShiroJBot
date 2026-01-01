@@ -522,12 +522,27 @@ public abstract class Utils {
 		return getRandomEntry(Constants.DEFAULT_RNG.get(), array);
 	}
 
+	public static <T> T getRandomEntry(long seed, Collection<T> col) {
+		return withUnsafeRng(rng -> {
+			rng.setSeed(seed);
+			return getRandomEntry(rng, col);
+		});
+	}
+
 	public static <T> T getRandomEntry(RandomGenerator random, Collection<T> col) {
 		if (col.isEmpty()) throw new IllegalArgumentException("Collection must not be empty");
 		else if (col.size() == 1) return col.iterator().next();
 
 		List<T> list = List.copyOf(col);
 		return list.get(Calc.rng(list.size() - 1, random));
+	}
+
+	@SafeVarargs
+	public static <T> T getRandomEntry(long seed, T... array) {
+		return withUnsafeRng(rng -> {
+			rng.setSeed(seed);
+			return getRandomEntry(rng, array);
+		});
 	}
 
 	@SafeVarargs
