@@ -382,8 +382,8 @@ public class Gear extends DAO<Gear> {
 
 		if (rarity == null) {
 			if (Calc.chance(1 * mult)) rarity = RarityClass.UNIQUE;
-			else if (Calc.chance(5 * mult)) rarity = RarityClass.RARE;
-			else if (Calc.chance(35 * mult)) rarity = RarityClass.MAGIC;
+			else if (Calc.chance(10 * mult)) rarity = RarityClass.RARE;
+			else if (Calc.chance(40 * mult)) rarity = RarityClass.MAGIC;
 			else rarity = RarityClass.NORMAL;
 		}
 
