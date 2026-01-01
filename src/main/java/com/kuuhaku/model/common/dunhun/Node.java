@@ -127,6 +127,7 @@ public class Node {
 
 		for (Node parent : parents) {
 			if (parent.equals(start)) break;
+			else if (parent.blocked.contains(this)) continue;
 
 			int dist = parent.travelDistance(node, start) + 1;
 			if (dist > 0) return dist;
