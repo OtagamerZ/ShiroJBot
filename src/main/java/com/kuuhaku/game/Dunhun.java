@@ -572,7 +572,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		combat.set(null);
 	}
 
-	public void runCombat(Node node) {
+	public boolean runCombat(Node node) {
 		combat.set(new Combat(this, node));
 
 		Set<String> pool = node.getEnemyPool();
@@ -591,10 +591,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		if (getCombat().getActors(Team.KEEPERS).isEmpty()) {
 			combat.set(null);
-			return;
+			return true;
 		}
 
 		getCombat().process();
+		return getCombat().isWin();
 	}
 
 	@SafeVarargs
