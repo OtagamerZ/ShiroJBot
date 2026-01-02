@@ -243,7 +243,6 @@ public class Hand {
 		d.reset();
 
 		if (d instanceof Proxy<?> p) {
-			d.reset();
 			it.add(p.getOriginal());
 			return false;
 		}

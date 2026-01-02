@@ -397,7 +397,7 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 
 	@Override
 	public void reset() {
-		state = 0b1;
+		state = (byte) ((state & 0b100) | 0b1);
 	}
 
 	@Override

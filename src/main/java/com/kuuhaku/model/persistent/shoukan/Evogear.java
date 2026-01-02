@@ -110,14 +110,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private transient Trigger currentTrigger = null;
 
 	@Transient
-	private short state = 0b1;
+	private byte state = 0b1;
 	/*
 	0xF F
-	  │ └ 000 1111
-	  │       │││└─ available
-	  │       ││└── flipped
-	  │       │└─── ethereal
-	  │       └──── manipulated
+	  │ └ 1111
+	  │   │││└─ available
+	  │   ││└── flipped
+	  │   │└─── ethereal
+	  │   └──── manipulated
 	  └ cooldown (0 - 15)
 	 */
 
@@ -415,7 +415,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void setAvailable(boolean available) {
-		state = (short) Bit32.set(state, 0, available);
+		state = (byte) Bit32.set(state, 0, available);
 	}
 
 	@Override
@@ -429,7 +429,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void setFlipped(boolean flipped) {
-		state = (short) Bit32.set(state, 1, flipped);
+		state = (byte) Bit32.set(state, 1, flipped);
 	}
 
 	@Override
@@ -439,7 +439,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void setEthereal(boolean ethereal) {
-		state = (short) Bit32.set(state, 2, ethereal);
+		state = (byte) Bit32.set(state, 2, ethereal);
 	}
 
 	@Override
@@ -449,7 +449,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void setManipulated(boolean manipulated) {
-		state = (short) Bit32.set(state, 3, manipulated);
+		state = (byte) Bit32.set(state, 3, manipulated);
 	}
 
 	@Override
@@ -459,13 +459,13 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public void setCooldown(int time) {
-		short curr = (short) Bit32.get(state, 1, 4);
-		state = (short) Bit32.set(state, 1, Math.max(curr, time), 4);
+		short curr = (byte) Bit32.get(state, 1, 4);
+		state = (byte) Bit32.set(state, 1, Math.max(curr, time), 4);
 	}
 
 	public void reduceCooldown(int time) {
-		short curr = (short) Bit32.get(state, 1, 4);
-		state = (short) Bit32.set(state, 1, Math.max(0, curr - time), 4);
+		short curr = (byte) Bit32.get(state, 1, 4);
+		state = (byte) Bit32.set(state, 1, Math.max(0, curr - time), 4);
 	}
 
 	public String getEffect() {
@@ -667,7 +667,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		equipper = null;
 		stats.clear();
 		base.unlockAll();
-		state = 0b1;
+		state = (byte) ((state & 0b100) | 0b1);
 	}
 
 	@Override

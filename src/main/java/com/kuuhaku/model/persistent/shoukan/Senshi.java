@@ -1534,7 +1534,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		base.unlockAll();
 		slot = null;
 		lastInteraction = null;
-		state = (state & 0b1000) | 0b1;
+		state = (state & 0b11000) | 0b1;
 	}
 
 	@Override

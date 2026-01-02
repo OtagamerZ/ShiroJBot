@@ -112,9 +112,6 @@ public class BondedList<T> extends TreeList<T> {
 		if (t == null) return false;
 		ListIterator<T> it = aux.listIterator();
 
-		System.out.println(t);
-		new RuntimeException().printStackTrace();
-
 		boolean ok = condition.apply(t, it);
 		if (!aux.isEmpty()) {
 			addAll(index, aux);

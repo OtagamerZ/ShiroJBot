@@ -86,12 +86,6 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 		if (d.getHand() == null) return false;
 		else if (getBanned(false).contains(d)) return false;
 
-		if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-			d.reset();
-			it.add(p.getOriginal());
-			return false;
-		}
-
 		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
 
 		if (d instanceof Senshi s) {
@@ -107,7 +101,6 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 		d.reset();
 
 		if (d instanceof Proxy<?> p) {
-			d.reset();
 			it.add(p.getOriginal());
 			return false;
 		}
@@ -520,9 +513,9 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 
 					int pad = Utils.getDigits(hand.getBase().hp());
 					String hpText = "HP: "
-									+ StringUtils.leftPad(String.valueOf(hand.getHP()), pad, "0")
-									+ "/"
-									+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), pad, "0");
+							+ StringUtils.leftPad(String.valueOf(hand.getHP()), pad, "0")
+							+ "/"
+							+ StringUtils.leftPad(String.valueOf(hand.getBase().hp()), pad, "0");
 					g2.setColor(Color.WHITE);
 					g2.setFont(Fonts.OPEN_SANS_BOLD.deriveBold((int) (BAR_SIZE.height / 2.5) * (demon ? 2 : 1)));
 
