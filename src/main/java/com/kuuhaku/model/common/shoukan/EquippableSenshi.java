@@ -43,6 +43,11 @@ public class EquippableSenshi extends Evogear implements Proxy<Senshi> {
 	}
 
 	@Override
+	public boolean hasOwnEffect() {
+		return false;
+	}
+
+	@Override
 	public BondedList<?> getCurrentStack() {
 		return original.getCurrentStack();
 	}

@@ -45,6 +45,11 @@ public class AugmentSenshi extends Senshi implements Proxy<Senshi> {
 	}
 
 	@Override
+	public boolean hasOwnEffect() {
+		return true;
+	}
+
+	@Override
 	public BondedList<?> getCurrentStack() {
 		return original.getCurrentStack();
 	}

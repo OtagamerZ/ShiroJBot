@@ -78,8 +78,7 @@ public class Hand {
 	private final BondedList<Drawable<?>> cards = new BondedList<>((d, it) -> {
 		if (getCards(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
-			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-				d.reset();
+			if (d instanceof Proxy<?> p && !p.hasOwnEffect()) {
 				it.add(p.getOriginal());
 				return false;
 			}
@@ -120,8 +119,7 @@ public class Hand {
 	private final BondedList<Drawable<?>> discard = new BondedList<>((d, it) -> {
 		if (getDiscard(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
-			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-				d.reset();
+			if (d instanceof Proxy<?> p && !p.hasOwnEffect()) {
 				it.add(p.getOriginal());
 				return false;
 			}
@@ -145,8 +143,7 @@ public class Hand {
 		if (getLockTime(Lock.DECK) > 0) return false;
 		else if (getRealDeck(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
-			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-				d.reset();
+			if (d instanceof Proxy<?> p && !p.hasOwnEffect()) {
 				it.add(p.getOriginal());
 				return false;
 			}
@@ -168,7 +165,6 @@ public class Hand {
 		d.reset();
 
 		if (d instanceof Proxy<?> p) {
-			d.reset();
 			it.add(p.getOriginal());
 			return false;
 		}
@@ -178,8 +174,7 @@ public class Hand {
 	private final BondedList<Drawable<?>> graveyard = new BondedList<>((d, it) -> {
 		if (getGraveyard(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
-			if (d instanceof Proxy<?> p && !(p instanceof Senshi)) {
-				d.reset();
+			if (d instanceof Proxy<?> p && !p.hasOwnEffect()) {
 				it.add(p.getOriginal());
 				return false;
 			}

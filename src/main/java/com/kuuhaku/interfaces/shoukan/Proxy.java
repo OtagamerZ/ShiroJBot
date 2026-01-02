@@ -20,4 +20,6 @@ package com.kuuhaku.interfaces.shoukan;
 
 public interface Proxy<T extends EffectHolder<T>> {
 	T getOriginal();
+
+	boolean hasOwnEffect();
 }

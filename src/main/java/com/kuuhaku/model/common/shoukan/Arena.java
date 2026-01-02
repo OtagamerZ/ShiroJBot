@@ -86,6 +86,11 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 		if (d.getHand() == null) return false;
 		else if (getBanned(false).contains(d)) return false;
 
+		if (d instanceof Proxy<?> p && !p.hasOwnEffect()) {
+			it.add(p.getOriginal());
+			return false;
+		}
+
 		getGame().trigger(Trigger.ON_BAN, d.asSource(Trigger.ON_BAN));
 
 		if (d instanceof Senshi s) {

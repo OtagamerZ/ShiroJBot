@@ -42,6 +42,11 @@ public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 	}
 
 	@Override
+	public boolean hasOwnEffect() {
+		return false;
+	}
+
+	@Override
 	public BondedList<?> getCurrentStack() {
 		return original.getCurrentStack();
 	}
