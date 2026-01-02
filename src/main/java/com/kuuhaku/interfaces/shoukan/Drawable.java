@@ -434,12 +434,12 @@ public interface Drawable<T extends Drawable<T>> {
 
 			if (this instanceof EffectHolder<?> eh && eh.hasFlag(Flag.EMPOWERED)) {
 				BufferedImage ovr = IO.getResourceAsImage(path + "/empowered.png");
-				g2d.drawImage(ovr, 0, 0, null);
+				g2d.drawImage(ovr, -15, -15, null);
 			}
 
 			if (isEthereal()) {
 				BufferedImage ovr = IO.getResourceAsImage(path + "/ethereal.png");
-				g2d.drawImage(ovr, 0, 0, null);
+				g2d.drawImage(ovr, -15, -15, null);
 			}
 
 			if (isManipulated()) {
