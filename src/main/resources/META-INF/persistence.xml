@@ -87,7 +87,7 @@
         <class>com.kuuhaku.model.persistent.dunhun.Event</class>
         <class>com.kuuhaku.model.persistent.dunhun.Dungeon</class>
         <class>com.kuuhaku.model.persistent.dunhun.Consumable</class>
-        <class>com.kuuhaku.model.persistent.dunhun.GlobalDrops</class>
+        <class>com.kuuhaku.model.persistent.dunhun.GlobalDrop</class>
         <class>com.kuuhaku.model.persistent.dunhun.GearType</class>
         <class>com.kuuhaku.model.persistent.dunhun.RaceBonus</class>
         <class>com.kuuhaku.model.persistent.dunhun.RunModifier</class>

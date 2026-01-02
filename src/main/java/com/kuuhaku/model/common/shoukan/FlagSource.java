@@ -21,6 +21,7 @@ package com.kuuhaku.model.common.shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 
 import java.util.Objects;
@@ -49,6 +50,8 @@ public class FlagSource {
 	public boolean isExpired() {
 		if (side != null) {
 			if (source instanceof Evogear e && !e.isSpell() && (e.getEquipper() == null || e.posHash() != hash)) {
+				return true;
+			} else if (source instanceof Field f && !f.equals(f.getGame().getArena().getField())) {
 				return true;
 			}
 

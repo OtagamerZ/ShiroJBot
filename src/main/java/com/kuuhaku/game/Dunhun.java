@@ -16,7 +16,6 @@ import com.kuuhaku.game.engine.NullPhase;
 import com.kuuhaku.game.engine.PlayerAction;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.InfiniteList;
-import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.*;
 import com.kuuhaku.model.enums.I18N;
@@ -256,7 +255,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						));
 					}
 
-					AtomicBoolean confirm = new  AtomicBoolean(currNode.isSafeNode());
+					AtomicBoolean confirm = new AtomicBoolean(currNode.isSafeNode());
 					choices.add(new Choice("leave", getLocale().get("str/leave_dungeon"), w -> {
 						if (!confirm.get()) {
 							getChannel().sendMessage(getLocale().get("alert/unsafe_area")).queue();
@@ -495,33 +494,19 @@ public class Dunhun extends GameInstance<NullPhase> {
 					dropFac /= 2;
 				}
 
-				List<Object[]> global = DAO.queryAllUnmapped("""
-						SELECT item_id
-							 , weight
-						FROM global_drops
-						WHERE weight > 0
-						"""
-				);
+				dropFac = 5 * switch (m.getRarityClass()) {
+					case NORMAL -> 1;
+					case MAGIC -> 1.2;
+					case RARE -> 1.5;
+					case UNIQUE -> 2.5;
+				} * mf;
 
-				if (!global.isEmpty()) {
-					RandomList<String> rl = new RandomList<>(nodeRng);
-					for (Object[] i : global) {
-						rl.add((String) i[0], ((Number) i[1]).intValue());
-					}
+				while (Calc.chance(dropFac)) {
+					GlobalDrop drop = GlobalDrop.getRandom(this);
+					if (drop == null) break;
 
-					if (!rl.entries().isEmpty()) {
-						dropFac = 5 * switch (m.getRarityClass()) {
-							case NORMAL -> 1;
-							case MAGIC -> 1.2;
-							case RARE -> 1.5;
-							case UNIQUE -> 2.5;
-						} * mf;
-
-						while (Calc.chance(dropFac)) {
-							lt.items().add(DAO.find(UserItem.class, rl.get()));
-							dropFac /= 2;
-						}
-					}
+					lt.items().add(drop.getItem());
+					dropFac /= 2;
 				}
 
 				loot.add(lt);
