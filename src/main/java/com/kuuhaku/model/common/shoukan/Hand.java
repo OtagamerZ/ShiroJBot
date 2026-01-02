@@ -1189,7 +1189,7 @@ public class Hand {
 				if (!ally) {
 					Graph.applyTransformed(g2d, x, y, g -> {
 						g.setClip(userDeck.getFrame().getBoundary());
-						g.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 0, 0, null);
+						g.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 15, 15, null);
 					});
 				}
 
