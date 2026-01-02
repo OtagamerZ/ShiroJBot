@@ -62,6 +62,7 @@ hs_err_pid*
 .idea/*.iml
 .idea/modules
 .idea/queries
+.idea/data_source_mapping.xml
 
 # CMake
 cmake-build-*/
