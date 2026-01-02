@@ -108,29 +108,20 @@ public class BondedList<T> extends TreeList<T> {
 		add(index, t, new ArrayList<>());
 	}
 
-	public boolean add(int index, T t, List<T> aux) {
+	private boolean add(int index, T t, List<T> aux) {
 		if (t == null) return false;
 		ListIterator<T> it = aux.listIterator();
 
-		int size = aux.size();
+		System.out.println(t);
 		boolean ok = condition.apply(t, it);
-		if (aux.size() != size) {
+		if (!aux.isEmpty()) {
 			addAll(index, aux);
 			aux.clear();
-
-			it = aux.listIterator();
 		}
 
 		if (ok) {
-			it.add(t);
-		}
-
-		it = aux.listIterator();
-		while (it.hasNext()) {
-			T next = it.next();
-			super.add(Math.min(index, size()), next);
-			onAdd.accept(next);
-			it.remove();
+			super.add(index, t);
+			onAdd.accept(t);
 		}
 
 		return ok;
