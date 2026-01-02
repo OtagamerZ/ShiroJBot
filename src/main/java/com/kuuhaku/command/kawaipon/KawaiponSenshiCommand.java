@@ -30,7 +30,6 @@ import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -54,7 +53,6 @@ import java.util.stream.Collectors;
 public class KawaiponSenshiCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck dk = data.profile().getAccount().getDeck();
 		if (!args.has("race")) {
 			int total = DAO.queryNative(Integer.class, "SELECT count(1) FROM senshi");
 
