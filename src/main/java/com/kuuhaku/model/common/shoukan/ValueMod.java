@@ -100,6 +100,10 @@ public abstract class ValueMod implements Cloneable {
 		return expiration;
 	}
 
+	public void setExpiration(int expiration) {
+		this.expiration = expiration;
+	}
+
 	public void decExpiration() {
 		if (expiration > 0) {
 			this.expiration--;
