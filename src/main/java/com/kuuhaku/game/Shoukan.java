@@ -1954,7 +1954,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				if (effect.isExpired() || isClosed()) {
+				if (!effect.isClosed() && (effect.isExpired() || isClosed())) {
 					effect.close();
 					eots.remove(effect);
 
