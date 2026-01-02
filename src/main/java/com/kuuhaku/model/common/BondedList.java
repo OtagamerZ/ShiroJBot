@@ -119,7 +119,7 @@ public class BondedList<T> extends TreeList<T> {
 		}
 
 		if (ok) {
-			super.add(index, t);
+			super.add(Math.min(index, size()), t);
 			onAdd.accept(t);
 		}
 
