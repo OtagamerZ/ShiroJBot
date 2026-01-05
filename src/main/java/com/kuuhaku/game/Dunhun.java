@@ -54,6 +54,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Dunhun extends GameInstance<NullPhase> {
@@ -502,7 +503,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public boolean runCombat(Node node) {
+		return runCombat(node, Utils::doNothing);
+	}
+
+	public boolean runCombat(Node node, Consumer<Combat> initializer) {
 		combat.set(new Combat(this, node));
+		initializer.accept(combat.get());
 
 		Set<String> pool = node.getEnemyPool();
 		for (int i = 0; i < 4; i++) {
@@ -864,10 +870,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public Combat getCombat() {
 		return combat.get();
-	}
-
-	public void setCombat(Combat combat) {
-		this.combat.set(combat);
 	}
 
 	public Random getNodeRng() {
