@@ -118,9 +118,9 @@ public class Floor {
 			modifiers.clear();
 
 			int mods = 0;
-			if (game.getAreaLevel() >= Dunhun.LEVEL_BRUTAL) {
+			if (game.getAreaLevel(this) >= Dunhun.LEVEL_BRUTAL) {
 				mods = 4;
-			} else if (game.getAreaLevel() >= Dunhun.LEVEL_HARD) {
+			} else if (game.getAreaLevel(this) >= Dunhun.LEVEL_HARD) {
 				mods = 2;
 			}
 
