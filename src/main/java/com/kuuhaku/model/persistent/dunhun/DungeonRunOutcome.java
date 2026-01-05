@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Entity
+@Table(name = "dungeon_run_outcome", schema = "dunhun")
 public class DungeonRunOutcome extends DAO<DungeonRunOutcome> {
 	@EmbeddedId
 	private DungeonRunOutcomeId id;
