@@ -866,6 +866,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 		return combat.get();
 	}
 
+	public void setCombat(Combat combat) {
+		this.combat.set(combat);
+	}
+
 	public Random getNodeRng() {
 		return map.getRun().getNodeRng();
 	}
