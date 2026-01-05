@@ -51,6 +51,10 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<DungeonRunPlayer> players = new HashSet<>();
 
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<DungeonRunOutcome> eventOutcomes = new HashSet<>();
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			schema = "dunhun",
@@ -160,6 +164,10 @@ public class DungeonRun extends DAO<DungeonRun> {
 
 	public Set<DungeonRunPlayer> getPlayers() {
 		return players;
+	}
+
+	public Set<DungeonRunOutcome> getEventOutcomes() {
+		return eventOutcomes;
 	}
 
 	public List<RunModifier> getModifiers() {

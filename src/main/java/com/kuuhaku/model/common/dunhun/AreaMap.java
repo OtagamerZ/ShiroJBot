@@ -5,6 +5,7 @@ import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.DungeonRun;
+import com.kuuhaku.model.persistent.dunhun.DungeonRunOutcome;
 import com.kuuhaku.model.persistent.dunhun.RunModifier;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
@@ -438,6 +439,10 @@ public class AreaMap {
 			fl.generateModifiers(game);
 			for (RunModifier mod : game.getModifiers()) {
 				mod.toEffect(game);
+			}
+
+			for (DungeonRunOutcome outcome : m.getRun().getEventOutcomes()) {
+				outcome.apply(fl);
 			}
 		}
 	}
