@@ -52,6 +52,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	private transient final ActorCache cache = new ActorCache(this);
 	private transient final RegDeg regDeg = new RegDeg(null);
 	private transient final Deque<MonsterBase<?>> minions = new ArrayDeque<>();
+	private transient final Map<String, Object> props = new HashMap<>();
 	private transient Actor<?> killer;
 	private transient int hp = -1, ap;
 	private transient int maxHp = -1;
@@ -393,6 +394,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public Deque<MonsterBase<?>> getMinions() {
 		return minions;
+	}
+
+	public Map<String, Object> getProps() {
+		return props;
 	}
 
 	public void addHpBar(XStringBuilder sb) {
