@@ -262,7 +262,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 						if (source instanceof MonsterBase<?> m) {
 							if (m.isMinion()) {
 								killer = m.getMaster();
-							} else if (!m.didDropLoot()) {
+							} else if (m.getStats().getKillXp() > 0 && !m.didDropLoot()) {
 								MonsterStats stats = m.getStats();
 								Loot lt = stats.generateLoot(m);
 								lt.xp().addAndGet(m.getKillXp());
