@@ -355,7 +355,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 					Constants.LOGGER.error(e, e);
 				}
 
-				boolean deadEnd = map.getPlayerNode().getChildren().isEmpty();
+				Node pNode = map.getPlayerNode();
+				boolean deadEnd = pNode.getBlocked().containsAll(pNode.getChildren());
 				if (dungeon.isInfinite()) {
 					DungeonRun run = map.getRun();
 
