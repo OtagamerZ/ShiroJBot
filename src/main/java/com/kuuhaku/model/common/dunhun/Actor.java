@@ -9,6 +9,7 @@ import com.kuuhaku.model.common.shoukan.FlatMod;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Flag;
@@ -20,6 +21,7 @@ import com.kuuhaku.model.persistent.shoukan.CombatCardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.CombatContext;
+import com.kuuhaku.model.records.dunhun.Loot;
 import com.kuuhaku.model.records.dunhun.RaceValues;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
@@ -257,8 +259,49 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 						cbt.trigger(Trigger.ON_KILL, source, this, usable);
 
 						Actor<?> killer = source;
-						if (source instanceof MonsterBase<?> m && m.isMinion()) {
-							killer = m.getMaster();
+						if (source instanceof MonsterBase<?> m) {
+							if (m.isMinion()) {
+								killer = m.getMaster();
+							} else if (!m.didDropLoot()) {
+								MonsterStats stats = m.getStats();
+								Loot lt = stats.generateLoot(m);
+								lt.xp().addAndGet(m.getKillXp());
+
+								double mf = m.getKiller() != null
+										? m.getKiller().getModifiers().getMagicFind(1)
+										: 1;
+
+								double dropFac = 20 * stats.getLootMultiplier(m) * mf * Math.pow(1.2, getGame().getModifiers().size());
+								if (getGame().getAreaType() == NodeType.DANGER) {
+									dropFac *= 1.5;
+								}
+
+								while (Calc.chance(dropFac)) {
+									Gear drop = Gear.getRandom(m);
+									if (drop != null) {
+										lt.gear().add(drop);
+									}
+
+									dropFac /= 2;
+								}
+
+								dropFac = 5 * switch (m.getRarityClass()) {
+									case NORMAL -> 1;
+									case MAGIC -> 1.2;
+									case RARE -> 1.5;
+									case UNIQUE -> 2.5;
+								} * mf;
+
+								while (Calc.chance(dropFac)) {
+									GlobalDrop drop = GlobalDrop.getRandom(getGame());
+									if (drop == null) break;
+
+									lt.items().add(drop.getItem());
+									dropFac /= 2;
+								}
+
+								cbt.getLoot().add(lt);
+							}
 						}
 
 						setKiller(killer);

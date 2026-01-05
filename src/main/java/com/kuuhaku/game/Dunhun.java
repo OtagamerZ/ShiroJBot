@@ -456,55 +456,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	private void grantCombatLoot() {
-		int xpGained = 0;
-
 		Loot loot = getCombat().getLoot();
-		for (Actor<?> a : getCombat().getActors(Team.KEEPERS)) {
-			if (a instanceof MonsterBase<?> m && m.getHp() == 0) {
-				if (m.isMinion()) continue;
-				xpGained += m.getKillXp();
-
-				MonsterStats stats = m.getStats();
-				Loot lt = stats.generateLoot(m);
-
-				double mf = m.getKiller() != null
-						? m.getKiller().getModifiers().getMagicFind(1)
-						: 1;
-
-				double dropFac = 20 * stats.getLootMultiplier(m) * mf * Math.pow(1.2, getModifiers().size());
-
-				if (getAreaType() == NodeType.DANGER) {
-					dropFac *= 1.5;
-				}
-
-				while (Calc.chance(dropFac)) {
-					Gear drop = Gear.getRandom(m);
-					if (drop != null) {
-						lt.gear().add(drop);
-					}
-
-					dropFac /= 2;
-				}
-
-				dropFac = 5 * switch (m.getRarityClass()) {
-					case NORMAL -> 1;
-					case MAGIC -> 1.2;
-					case RARE -> 1.5;
-					case UNIQUE -> 2.5;
-				} * mf;
-
-				while (Calc.chance(dropFac)) {
-					GlobalDrop drop = GlobalDrop.getRandom(this);
-					if (drop == null) break;
-
-					lt.items().add(drop.getItem());
-					dropFac /= 2;
-				}
-
-				loot.add(lt);
-			}
-		}
-
 		XStringBuilder sb = new XStringBuilder();
 		if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
 			this.loot.add(loot);
@@ -528,7 +480,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		for (Hero h : heroes.values()) {
-			int xp = Math.max(1, xpGained);
+			int xp = Math.max(1, loot.xp().get());
 			DAO.apply(Hero.class, h.getId(), n -> {
 				int gain = xp;
 

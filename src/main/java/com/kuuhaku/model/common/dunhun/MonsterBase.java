@@ -37,6 +37,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 	protected Set<LocalizedMonster> infos = new HashSet<>();
 
 	private transient Actor<?> master;
+	private transient boolean droppedLoot;
 
 	public MonsterBase() {
 	}
@@ -159,6 +160,14 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 
 	public boolean isMinion() {
 		return master != null;
+	}
+
+	public boolean didDropLoot() {
+		return droppedLoot;
+	}
+
+	public void setDroppedLoot(boolean droppedLoot) {
+		this.droppedLoot = droppedLoot;
 	}
 
 	public void load() {
