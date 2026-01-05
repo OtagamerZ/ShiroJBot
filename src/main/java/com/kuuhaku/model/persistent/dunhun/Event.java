@@ -81,7 +81,7 @@ public class Event extends DAO<Event> {
 				.orElseGet(() -> new LocalizedEvent(locale, id, id + ":" + locale));
 	}
 
-	public EventDescription parse(Dunhun game) {
+	public EventDescription parse(Dunhun game, Node node) {
 		String desc = getInfo(game.getLocale()).getDescription();
 
 		List<EventAction> out = new ArrayList<>();
@@ -95,7 +95,7 @@ public class Event extends DAO<Event> {
 		if (script != null) {
 			try {
 				Utils.exec(id, script, Map.of(
-						"ctx", new EventContext(game, this)
+						"ctx", new EventContext(game, this, node)
 				));
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to execute event {}", id, e);

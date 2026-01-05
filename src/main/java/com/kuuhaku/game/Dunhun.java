@@ -591,7 +591,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			return;
 		}
 
-		EventDescription ed = evt.parse(this);
+		EventDescription ed = evt.parse(this, node);
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setDescription(ed.description());
