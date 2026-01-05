@@ -1,6 +1,7 @@
 package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.dunhun.AreaMap;
 import com.kuuhaku.model.common.dunhun.Node;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -65,6 +66,9 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray visitedNodes = new JSONArray();
 
+	private transient final Random nodeRng = new Random();
+	private transient Dunhun game;
+
 	public DungeonRun() {
 	}
 
@@ -122,26 +126,36 @@ public class DungeonRun extends DAO<DungeonRun> {
 		return Objects.hash(floor, sublevel, path);
 	}
 
-	public void setNode(Node node) {
-		int newFloor = node.getSublevel().getFloor().getFloor();
-		int newSublevel = node.getSublevel().getSublevel();
-		int newPath = node.getPath();
+	public Random getNodeRng() {
+		return nodeRng;
+	}
 
-		if (newFloor != floor || newSublevel != sublevel || newPath != path) {
-			if (!visitedNodes.contains(node.getId())) {
-				visitedNodes.add(node.getId());
-			}
+	public Dunhun getGame() {
+		return game;
+	}
+
+	public void setGame(Dunhun game) {
+		this.game = game;
+	}
+
+	public void setNode(Node node) {
+		int prevFloor = floor;
+
+		floor = node.getSublevel().getFloor().getFloor();
+		sublevel = node.getSublevel().getSublevel();
+		path = node.getPath();
+
+		if (!visitedNodes.contains(node.getId())) {
+			visitedNodes.add(node.getId());
 		}
 
-		floor = newFloor;
-		sublevel = newSublevel;
-		path = newPath;
-
-		AreaMap map = node.getSublevel().getFloor().getMap();
+		AreaMap map = game.getMap();
 		map.getRenderFloor().set(floor);
 
-		int subOffset = sublevel / map.getAreasPerFloor();
-		map.getRenderSublevel().set(subOffset * map.getAreasPerFloor());
+		nodeRng.setSeed(node.getSeed());
+		if (prevFloor != floor) {
+			map.generate(game);
+		}
 	}
 
 	public Set<DungeonRunPlayer> getPlayers() {

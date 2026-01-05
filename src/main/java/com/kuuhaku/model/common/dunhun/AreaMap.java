@@ -109,10 +109,6 @@ public class AreaMap {
 		return renderFloor;
 	}
 
-	public AtomicInteger getRenderSublevel() {
-		return renderSublevel;
-	}
-
 	public void pan(int dy) {
 		int dir = (int) Math.signum(dy);
 		for (int i = Math.abs(dy); i > 0; i--) {

@@ -75,7 +75,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
 	private final AtomicReference<Pair<Message, ButtonizeHelper>> message = new AtomicReference<>();
-	private final Random nodeRng = new Random();
 	private final Loot loot = new Loot();
 	private final AreaMap map;
 	private final boolean duel;
@@ -115,8 +114,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 		} else {
 			Hero leader = heroes.get(players[0]);
 
+			DungeonRun run;
 			if (dungeon.isInfinite()) {
-				DungeonRun run = DAO.find(DungeonRun.class, new DungeonRunId(leader.getId(), dungeon.getId()));
+				run = DAO.find(DungeonRun.class, new DungeonRunId(leader.getId(), dungeon.getId()));
 				if (run == null) {
 					run = new DungeonRun(leader, dungeon);
 				}
@@ -143,9 +143,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 					run.setPath(sub.size() - 1);
 				}
 			} else {
-				this.map = dungeon.init(this, new DungeonRun(leader, dungeon));
+				this.map = dungeon.init(this, run = new DungeonRun(leader, dungeon));
 				this.map.generate(this);
 			}
+
+			run.setGame(this);
 		}
 
 		setTimeout(this::onTimeout, 5, TimeUnit.MINUTES);
@@ -248,7 +250,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 								Utils.parseEmoji(ICONS.get(path)),
 								_ -> {
 									run.setNode(node);
-									nodeRng.setSeed(node.getSeed());
 									chosenPath.set(getLocale().get("str/" + path));
 									return null;
 								}
@@ -313,7 +314,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						case BOSS -> {
 							Set<String> pool = nextNode.getEnemyPool();
 							if (!pool.isEmpty()) {
-								beginCombat(nextNode, DAO.find(Boss.class, Utils.getRandomEntry(nodeRng, pool)));
+								beginCombat(nextNode, DAO.find(Boss.class, Utils.getRandomEntry(getNodeRng(), pool)));
 							} else {
 								beginCombat(nextNode, Boss.getRandom());
 							}
@@ -563,10 +564,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 		Set<String> pool = node.getEnemyPool();
 		for (int i = 0; i < 4; i++) {
 			List<Actor<?>> keepers = getCombat().getActors(Team.KEEPERS);
-			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size(), nodeRng)) break;
+			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size(), getNodeRng())) break;
 
 			Monster chosen;
-			if (!pool.isEmpty()) chosen = Monster.getRandom(this, Utils.getRandomEntry(nodeRng, pool));
+			if (!pool.isEmpty()) chosen = Monster.getRandom(this, Utils.getRandomEntry(getNodeRng(), pool));
 			else chosen = Monster.getRandom(this);
 
 			if (chosen != null) {
@@ -923,7 +924,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public Random getNodeRng() {
-		return nodeRng;
+		return map.getRun().getNodeRng();
 	}
 
 	public Loot getLoot() {
