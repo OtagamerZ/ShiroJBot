@@ -198,7 +198,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 					if (!run.getModifiers().isEmpty()) {
 						XStringBuilder sb = new XStringBuilder();
 						for (RunModifier mod : run.getModifiers()) {
-							mod.toEffect(this);
 							sb.appendNewLine(mod.getInfo(getLocale()).getDescription());
 						}
 
@@ -206,11 +205,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					Floor fl = map.getFloor();
-					fl.generateModifiers(this);
-					for (RunModifier mod : getModifiers()) {
-						mod.toEffect(this);
-					}
-
 					if (!fl.getModifiers().isEmpty()) {
 						XStringBuilder sb = new XStringBuilder();
 						for (RunModifier mod : fl.getModifiers()) {
