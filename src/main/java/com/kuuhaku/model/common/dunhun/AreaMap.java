@@ -425,28 +425,28 @@ public class AreaMap {
 			}
 		}
 
-		for (Floor fl : m.getFloors()) {
-			int rests;
-			int areaLevel = game.getAreaLevel(fl);
-			if (areaLevel > Dunhun.LEVEL_BRUTAL) {
-				rests = Calc.chance(50, fl.getRng()) ? 1 : 0;
-			} else if (areaLevel > Dunhun.LEVEL_HARD) {
-				rests = Calc.rng(1, 2, fl.getRng());
-			} else {
-				rests = 3;
-			}
+		Floor fl = m.getFloor();
 
-			fl.generateEvents(m.getRun(), 1 / 3d, rests);
+		int rests;
+		int areaLevel = game.getAreaLevel(fl);
+		if (areaLevel > Dunhun.LEVEL_BRUTAL) {
+			rests = Calc.chance(50, fl.getRng()) ? 1 : 0;
+		} else if (areaLevel > Dunhun.LEVEL_HARD) {
+			rests = Calc.rng(1, 2, fl.getRng());
+		} else {
+			rests = 3;
+		}
 
-			fl.generateModifiers(game);
-			for (RunModifier mod : game.getModifiers()) {
-				mod.toEffect(game);
-			}
+		fl.generateEvents(m.getRun(), 1 / 3d, rests);
 
-			for (DungeonRunOutcome outcome : m.getRun().getEventOutcomes()) {
-				if (fl.getFloor() != outcome.getFloor()) continue;
-				outcome.apply(game);
-			}
+		fl.generateModifiers(game);
+		for (RunModifier mod : game.getModifiers()) {
+			mod.toEffect(game);
+		}
+
+		for (DungeonRunOutcome outcome : m.getRun().getEventOutcomes()) {
+			if (fl.getFloor() != outcome.getFloor()) continue;
+			outcome.apply(game);
 		}
 	}
 }
