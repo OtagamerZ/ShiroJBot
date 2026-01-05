@@ -2,8 +2,8 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.model.common.dunhun.Floor;
-import com.kuuhaku.model.common.dunhun.context.OutcomeContext;
+import com.kuuhaku.game.Dunhun;
+import com.kuuhaku.model.common.dunhun.context.EffectContext;
 import com.kuuhaku.model.records.id.DungeonRunOutcomeId;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
@@ -28,6 +28,9 @@ public class DungeonRunOutcome extends DAO<DungeonRunOutcome> {
 	@Fetch(FetchMode.JOIN)
 	private DungeonRun parent;
 
+	@Column(name = "floor", nullable = false)
+	private int floor;
+
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
@@ -37,6 +40,7 @@ public class DungeonRunOutcome extends DAO<DungeonRunOutcome> {
 
 	public DungeonRunOutcome(DungeonRun parent, @Language("Groovy") String effect) {
 		this.parent = parent;
+		this.floor = parent.getFloor();
 		this.effect = effect;
 	}
 
@@ -48,12 +52,16 @@ public class DungeonRunOutcome extends DAO<DungeonRunOutcome> {
 		return parent;
 	}
 
-	public void apply(Floor floor) {
+	public int getFloor() {
+		return floor;
+	}
+
+	public void apply(Dunhun game) {
 		if (effect == null) return;
 
 		try {
 			Utils.exec(id.toString(), effect, Map.of(
-					"ctx", new OutcomeContext(floor)
+					"ctx", new EffectContext<>(game, this)
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply modifier {}", id, e);

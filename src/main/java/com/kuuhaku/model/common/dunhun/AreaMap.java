@@ -442,7 +442,8 @@ public class AreaMap {
 			}
 
 			for (DungeonRunOutcome outcome : m.getRun().getEventOutcomes()) {
-				outcome.apply(fl);
+				if (fl.getFloor() != outcome.getFloor()) continue;
+				outcome.apply(game);
 			}
 		}
 	}
