@@ -70,7 +70,7 @@ public class Combat implements Renderer<BufferedImage> {
 	);
 	private final List<String> history = new ArrayList<>();
 	private final RandomList<Actor<?>> rngList = new RandomList<>();
-	private final TimedMap<EffectBase> effects = new TimedMap<>();
+	private final Set<EffectBase> effects = new HashSet<>();
 	private final Loot loot = new Loot();
 
 	private CompletableFuture<Runnable> lock;
@@ -755,7 +755,7 @@ public class Combat implements Renderer<BufferedImage> {
 		return lock;
 	}
 
-	public TimedMap<EffectBase> getEffects() {
+	public Set<EffectBase> getEffects() {
 		return effects;
 	}
 
@@ -838,7 +838,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public void trigger(Trigger t, Actor<?> source, Actor<?> target, Usable usable, AtomicInteger value) {
 		CombatContext context = new CombatContext(this, t, source, target, usable, value);
-		Set<EffectBase> effects = new HashSet<>(this.effects.getValues());
+		Set<EffectBase> effects = new HashSet<>(this.effects);
 		for (RunModifier mod : game.getModifiers()) {
 			EffectBase e = mod.toEffect(game);
 			if (e != null) {
@@ -864,7 +864,6 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 		}
 
-		this.effects.reduceTime();
 		if (source != null) {
 			source.trigger(t, Utils.getOr(target, source), usable, context.value());
 		}
