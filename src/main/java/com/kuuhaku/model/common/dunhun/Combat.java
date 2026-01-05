@@ -74,7 +74,8 @@ public class Combat implements Renderer<BufferedImage> {
 	private final Loot loot = new Loot();
 
 	private CompletableFuture<Runnable> lock;
-	private boolean done, win;
+	private boolean done;
+	private Boolean win;
 
 	public Combat(Dunhun game, Node node, MonsterBase<?>... enemies) {
 		this.game = game;
@@ -307,7 +308,7 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 		}
 
-		trigger(win ? Trigger.ON_VICTORY : Trigger.ON_DEFEAT);
+		trigger(win != null && win ? Trigger.ON_VICTORY : Trigger.ON_DEFEAT);
 		done = true;
 
 		if (game.getMessage() != null) {
@@ -317,9 +318,11 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	private boolean checkCombatEnd() {
-		if (win || game.isClosed()) return true;
-		else if (hunters.stream().allMatch(Actor::isOutOfCombat)) return true;
-		else if (keepers.stream().allMatch(Actor::isOutOfCombat)) {
+		if (win != null || game.isClosed()) return true;
+		else if (hunters.stream().allMatch(Actor::isOutOfCombat)) {
+			win = false;
+			return true;
+		} else if (keepers.stream().allMatch(Actor::isOutOfCombat)) {
 			win = true;
 			return true;
 		}
@@ -817,7 +820,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public boolean isWin() {
-		return win;
+		return win != null && win;
 	}
 
 	public void setWin(boolean win) {
