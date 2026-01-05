@@ -286,10 +286,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 					int floor = run.getFloor();
 					if (floor != fl.getFloor()) {
-						if (dungeon.isInfinite()) {
-							map.generate(this);
-						}
-
 						getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor",
 								chosenPath.get(),
 								floor, getLocale().get("str/" + (floor > 3 ? "n" : floor) + "_suffix")
