@@ -213,13 +213,9 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		boolean display = h == null;
 		boolean demon = !display && h.getOrigins().major() == Race.DEMON;
 
-		int equips;
 		EffectHolder<?> source = this;
 		if (this instanceof Evogear e && e.getEquipper() != null) {
 			source = e.getEquipper();
-			equips = e.getEquipper().getEquipments().size();
-		} else {
-			equips = 1;
 		}
 
 		Map<String, Object> values = Map.ofEntries(
@@ -276,7 +272,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 									power = 1;
 								}
 
-								int value = Calc.round(NumberUtils.toDouble(val) * power / equips);
+								int value = Calc.round(NumberUtils.toDouble(val) * power);
 
 								if (v == null) {
 									return PropValue.from(value);
