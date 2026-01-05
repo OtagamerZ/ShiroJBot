@@ -21,6 +21,7 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.Constants;
 import org.apache.commons.collections4.list.TreeList;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -195,6 +196,34 @@ public class BondedList<T> extends TreeList<T> {
 		}
 
 		return null;
+	}
+
+	@Override
+	public boolean removeAll(@NonNull Collection<?> c) {
+		boolean modified = false;
+
+		for (Object o : c) {
+			modified |= remove(o);
+		}
+
+		return modified;
+	}
+
+	@Override
+	public boolean removeIf(@NonNull Predicate<? super T> filter) {
+		boolean removed = false;
+
+		Iterator<T> it = iterator();
+		while (it.hasNext()) {
+			T t = it.next();
+			if (filter.test(t)) {
+				onRemove.accept(t);
+				it.remove();
+
+				removed = true;
+			}
+		}
+		return removed;
 	}
 
 	public T removeLast() {

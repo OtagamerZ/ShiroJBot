@@ -871,7 +871,7 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 		}
 
-		if (source != null && source.getBinding().isBound()) {
+		if (source != null) {
 			source.trigger(t, Utils.getOr(target, source), usable, context.value());
 		}
 	}
