@@ -87,6 +87,7 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 		else if (getBanned(false).contains(d)) return false;
 
 		if (d instanceof Proxy<?> p && !p.hasOwnEffect()) {
+			d.reset();
 			it.add(p.getOriginal());
 			return false;
 		}

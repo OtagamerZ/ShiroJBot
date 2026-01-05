@@ -79,6 +79,7 @@ public class Hand {
 		if (getCards(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
 			if (d instanceof Proxy<?> p && !p.hasOwnEffect()) {
+				d.reset();
 				it.add(p.getOriginal());
 				return false;
 			}
@@ -120,6 +121,7 @@ public class Hand {
 		if (getDiscard(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
 			if (d instanceof Proxy<?> p && !p.hasOwnEffect()) {
+				d.reset();
 				it.add(p.getOriginal());
 				return false;
 			}
@@ -144,6 +146,7 @@ public class Hand {
 		else if (getRealDeck(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
 			if (d instanceof Proxy<?> p && !p.hasOwnEffect()) {
+				d.reset();
 				it.add(p.getOriginal());
 				return false;
 			}
@@ -175,6 +178,7 @@ public class Hand {
 		if (getGraveyard(false).contains(d)) return false;
 		else if (d instanceof EffectHolder<?> eh) {
 			if (d instanceof Proxy<?> p && !p.hasOwnEffect()) {
+				d.reset();
 				it.add(p.getOriginal());
 				return false;
 			}
