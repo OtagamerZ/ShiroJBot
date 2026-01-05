@@ -301,6 +301,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 								}
 
 								cbt.getLoot().add(lt);
+								m.setDroppedLoot(true);
 							}
 						}
 
