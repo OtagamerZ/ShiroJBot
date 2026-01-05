@@ -423,7 +423,9 @@ public class AreaMap {
 					}
 				}
 			}
+		}
 
+		for (Floor fl : m.getFloors()) {
 			int rests;
 			int areaLevel = game.getAreaLevel(fl);
 			if (areaLevel > Dunhun.LEVEL_BRUTAL) {
