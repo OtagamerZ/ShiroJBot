@@ -317,7 +317,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	private boolean checkCombatEnd() {
-		if (game.isClosed()) return true;
+		if (win || game.isClosed()) return true;
 		else if (hunters.stream().allMatch(Actor::isOutOfCombat)) return true;
 		else if (keepers.stream().allMatch(Actor::isOutOfCombat)) {
 			win = true;
@@ -818,6 +818,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public boolean isWin() {
 		return win;
+	}
+
+	public void setWin(boolean win) {
+		this.win = win;
 	}
 
 	public void trigger(Trigger t) {
