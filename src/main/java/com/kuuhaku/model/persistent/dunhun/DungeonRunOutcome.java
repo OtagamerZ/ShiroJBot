@@ -4,7 +4,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.dunhun.Node;
-import com.kuuhaku.model.common.dunhun.context.EffectContext;
+import com.kuuhaku.model.common.dunhun.context.NodeContext;
 import com.kuuhaku.model.records.id.DungeonRunOutcomeId;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
@@ -58,12 +58,12 @@ public class DungeonRunOutcome extends DAO<DungeonRunOutcome> {
 		return floor;
 	}
 
-	public void apply(Dunhun game) {
+	public void apply(Dunhun game, Node node) {
 		if (effect == null) return;
 
 		try {
 			Utils.exec(id.toString(), effect, Map.of(
-					"ctx", new EffectContext<>(game, this)
+					"ctx", new NodeContext(game, node)
 			));
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply modifier {}", id, e);

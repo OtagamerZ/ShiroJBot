@@ -435,17 +435,21 @@ public class AreaMap {
 			}
 
 			fl.generateEvents(m.getRun(), 1 / 3d, rests);
+
+			fl.generateModifiers(game);
+			for (RunModifier mod : game.getModifiers()) {
+				mod.toEffect(game);
+			}
 		}
 
-		Floor fl = m.getFloor();
-		fl.generateModifiers(game);
-		for (RunModifier mod : game.getModifiers()) {
-			mod.toEffect(game);
-		}
-
-		for (DungeonRunOutcome outcome : m.getRun().getEventOutcomes()) {
-			if (fl.getFloor() != outcome.getFloor()) continue;
-			outcome.apply(game);
+		for (DungeonRunOutcome out : m.getRun().getEventOutcomes()) {
+			Floor fl = m.getFloor(out.getFloor());
+			if (fl != null) {
+				fl.getNodes().stream()
+						.filter(n -> n.getId().equals(out.getId().nodeId()))
+						.findFirst()
+						.ifPresent(node -> out.apply(game, node));
+			}
 		}
 	}
 }
