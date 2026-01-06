@@ -427,6 +427,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public void trigger(Trigger trigger, Actor<?> target, Usable usable, AtomicInteger value) {
+		if (!binding.isBound()) return;
+
 		CombatContext context = new CombatContext(getGame().getCombat(), trigger, this, target, usable, value);
 
 		List<EffectBase> queue = new ArrayList<>();
