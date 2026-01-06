@@ -224,6 +224,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 						Senshi tgtSen = getSenshi();
 						if (source.getTeam() != getTeam()) {
 							String outcome = null;
+							int histIdx = cbt.getHistory().size();
 							if (srcSen.isBlinded(true) && Calc.chance(50)) {
 								cbt.trigger(Trigger.ON_MISS, source, this, usable);
 
@@ -243,7 +244,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 							}
 
 							if (outcome != null) {
-								cbt.getHistory().add(outcome);
+								cbt.getHistory().add(histIdx, outcome);
 								return Tuple2.tuple(0, false);
 							}
 						}
