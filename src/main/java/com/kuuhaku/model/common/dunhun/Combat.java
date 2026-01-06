@@ -310,12 +310,11 @@ public class Combat implements Renderer<BufferedImage> {
 							action.run();
 						}
 					}
-
-					trigger(Trigger.ON_TURN_END, actor, actor, null);
 				} finally {
+					trigger(Trigger.ON_TURN_END, actor, actor, null);
 					sen.setAvailable(true);
 
-					if (!sen.isStasis()) {
+					if (actor.getBinding().isBound() && !sen.isStasis()) {
 						actor.applyRegDeg();
 					}
 				}
@@ -863,12 +862,12 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void trigger(Trigger t, Actor<?> source, Actor<?> target, Usable usable, AtomicInteger value) {
+		if (source == null || !source.getBinding().isBound()) return;
+
 		CombatContext context = new CombatContext(this, t, source, target, usable, value);
 		triggerGlobalEffects(t, context);
 
-		if (source != null) {
-			source.trigger(t, Utils.getOr(target, source), usable, context.value());
-		}
+		source.trigger(t, Utils.getOr(target, source), usable, context.value());
 	}
 
 	private void triggerGlobalEffects(Trigger t, CombatContext context) {
