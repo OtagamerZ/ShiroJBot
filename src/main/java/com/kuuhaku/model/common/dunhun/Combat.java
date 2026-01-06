@@ -132,7 +132,8 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public boolean onAddActor(Actor<?> actor, Team team) {
-		if (getActors(team).size() >= 6) return false;
+		List<Actor<?>> acts = getActors(team);
+		if (acts.size() >= 6) return false;
 
 		getActors(team.getOther()).remove(actor);
 
@@ -147,10 +148,7 @@ public class Combat implements Renderer<BufferedImage> {
 			trigger(Trigger.ON_SUMMON, m.getMaster(), m, null);
 		}
 
-		for (Actor<?> minion : actor.getMinions()) {
-			getActors(actor.getTeam()).add(minion);
-		}
-
+		acts.addAll(actor.getMinions());
 		return true;
 	}
 

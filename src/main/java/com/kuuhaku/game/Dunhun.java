@@ -115,13 +115,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 		} else {
 			Hero leader = heroes.get(players[0]);
 
-			DungeonRun run;
-			if (dungeon.isInfinite()) {
-				run = DAO.find(DungeonRun.class, new DungeonRunId(leader.getId(), dungeon.getId()));
-				if (run == null) {
-					run = new DungeonRun(leader, dungeon);
-				}
+			DungeonRun run = DAO.find(DungeonRun.class, new DungeonRunId(leader.getId(), dungeon.getId()));
+			if (run == null) {
+				run = new DungeonRun(leader, dungeon);
+				run.save();
+			}
 
+			if (dungeon.isInfinite()) {
 				Map<String, Integer> hps = new HashMap<>();
 				for (DungeonRunPlayer p : run.getPlayers()) {
 					hps.put(p.getId().playerId(), p.getHp());
@@ -144,7 +144,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					run.setPath(sub.size() - 1);
 				}
 			} else {
-				this.map = dungeon.init(this, run = new DungeonRun(leader, dungeon));
+				this.map = dungeon.init(this, run);
 				this.map.generate(this);
 			}
 

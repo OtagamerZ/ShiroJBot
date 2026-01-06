@@ -99,12 +99,17 @@ public class ListenableList<T> implements List<T> {
 
 	@Override
 	public boolean addAll(@NonNull Collection<? extends T> c) {
-		return internal.addAll(c);
+		return addAll(size(), c);
 	}
 
 	@Override
 	public boolean addAll(int index, @NonNull Collection<? extends T> c) {
-		return internal.addAll(index, c);
+		int hash = hashCode();
+		for (T t : c) {
+			add(index++, t);
+		}
+
+		return hash != hashCode();
 	}
 
 	@Override
