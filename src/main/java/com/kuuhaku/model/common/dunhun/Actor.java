@@ -269,11 +269,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 								Loot lt = stats.generateLoot(m);
 								lt.xp().addAndGet(m.getKillXp());
 
-								double mf = m.getKiller() != null
-										? m.getKiller().getModifiers().getMagicFind(1)
-										: 1;
-
-								double dropFac = 20 * stats.getLootMultiplier(m) * mf * Math.pow(1.2, getGame().getModifiers().size());
+								double mf = killer.getModifiers().getMagicFind(1);
+								double dropFac = 40 * stats.getLootMultiplier(m) * mf * Math.pow(1.2, getGame().getModifiers().size());
 								if (getGame().getAreaType() == NodeType.DANGER) {
 									dropFac *= 1.5;
 								}
@@ -287,7 +284,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 									dropFac /= 2;
 								}
 
-								dropFac = 5 * switch (m.getRarityClass()) {
+								dropFac = 20 * switch (m.getRarityClass()) {
 									case NORMAL -> 1;
 									case MAGIC -> 1.2;
 									case RARE -> 1.5;
