@@ -154,12 +154,8 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public void onRemoveActor(Actor<?> actor) {
 		trigger(Trigger.ON_REMOVE, actor, actor, null);
-		actor.getBinding().unbind();
 		actors.remove(actor);
-
-		for (Actor<?> minion : actor.getMinions()) {
-			getActors(minion.getTeam()).remove(minion);
-		}
+		actor.destroy();
 	}
 
 	@Override
@@ -291,13 +287,15 @@ public class Combat implements Renderer<BufferedImage> {
 
 					trigger(Trigger.ON_TURN_BEGIN, actor, actor, null);
 
-					while (actor == getCurrent() && actor.getAp() > 0) {
+					while (actor == getCurrent()) {
 						if (checkCombatEnd()) break combat;
 						else if (!sen.isAvailable() || actor.isOutOfCombat()) {
 							if (actor.isOutOfCombat() && actor instanceof MonsterBase<?> m && m.isMinion()) {
 								actors.remove(actor);
 							}
 
+							break;
+						} else if (actor.getAp() <= 0) {
 							break;
 						}
 
@@ -510,7 +508,7 @@ public class Combat implements Renderer<BufferedImage> {
 								.orElse(1);
 
 						double risk = threat / (curr.getHp() * (double) curr.getThreatScore() / curr.getMaxHp());
-						if (curr instanceof Monster && risk > 5 && Calc.chance(20)) {
+						if (curr instanceof Monster m && !m.isMinion() && risk > 5 && Calc.chance(20)) {
 							curr.setFleed(true);
 							game.getChannel().sendMessage(getLocale().get("str/actor_flee", curr.getName())).queue();
 							return;

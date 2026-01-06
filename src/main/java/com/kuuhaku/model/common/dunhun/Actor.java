@@ -633,6 +633,23 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		return List.of();
 	}
 
+	public void destroy() {
+		if (this instanceof MonsterBase<?> m && m.isMinion()) {
+			m.setMaster(null);
+		}
+
+		for (MonsterBase<?> m : getMinions()) {
+			m.destroy();
+		}
+
+		Combat cbt = getGame().getCombat();
+		if (cbt != null) {
+			cbt.getActors(getTeam()).remove(this);
+		}
+
+		binding.unbind();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
