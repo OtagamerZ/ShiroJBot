@@ -312,6 +312,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}
 					}
 
+					if (getMessage() != null) {
+						getMessage().getFirst().delete().queue(null, Utils::doNothing);
+						clearMessage();
+					}
+
 					if (getCombat() != null && getCombat().isDone()) {
 						if (getCombat().isWin()) {
 							grantCombatLoot();
