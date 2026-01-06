@@ -423,22 +423,21 @@ public class AreaMap {
 					}
 				}
 			}
+
+			int rests;
+			int areaLevel = game.getAreaLevel(fl);
+			if (areaLevel > Dunhun.LEVEL_BRUTAL) {
+				rests = Calc.chance(50, fl.getRng()) ? 1 : 0;
+			} else if (areaLevel > Dunhun.LEVEL_HARD) {
+				rests = Calc.rng(1, 2, fl.getRng());
+			} else {
+				rests = 3;
+			}
+
+			fl.generateEvents(m.getRun(), 1 / 3d, rests);
 		}
 
 		Floor fl = m.getFloor();
-
-		int rests;
-		int areaLevel = game.getAreaLevel(fl);
-		if (areaLevel > Dunhun.LEVEL_BRUTAL) {
-			rests = Calc.chance(50, fl.getRng()) ? 1 : 0;
-		} else if (areaLevel > Dunhun.LEVEL_HARD) {
-			rests = Calc.rng(1, 2, fl.getRng());
-		} else {
-			rests = 3;
-		}
-
-		fl.generateEvents(m.getRun(), 1 / 3d, rests);
-
 		fl.generateModifiers(game);
 		for (RunModifier mod : game.getModifiers()) {
 			mod.toEffect(game);
