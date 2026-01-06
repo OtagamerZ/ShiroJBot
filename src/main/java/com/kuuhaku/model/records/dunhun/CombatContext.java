@@ -15,6 +15,10 @@ public record CombatContext(
 		Usable usable,
 		AtomicInteger value
 ) {
+	public CombatContext(Combat combat, Trigger trigger) {
+		this(combat, trigger, null, null, null, null);
+	}
+
 	public boolean isEnemy() {
 		return source.getTeam() != target.getTeam();
 	}

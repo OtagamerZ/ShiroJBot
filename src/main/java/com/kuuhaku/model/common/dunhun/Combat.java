@@ -844,8 +844,11 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void trigger(Trigger t) {
+		CombatContext context = new CombatContext(this, t);
+		triggerGlobalEffects(t, context);
+
 		for (Actor<?> a : actors.values()) {
-			trigger(t, a, a, null);
+			a.trigger(t, a, null, null);
 		}
 
 		if (t == Trigger.ON_TICK) {
@@ -861,6 +864,14 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public void trigger(Trigger t, Actor<?> source, Actor<?> target, Usable usable, AtomicInteger value) {
 		CombatContext context = new CombatContext(this, t, source, target, usable, value);
+		triggerGlobalEffects(t, context);
+
+		if (source != null) {
+			source.trigger(t, Utils.getOr(target, source), usable, context.value());
+		}
+	}
+
+	private void triggerGlobalEffects(Trigger t, CombatContext context) {
 		Set<EffectBase> effects = new HashSet<>(this.effects);
 		for (RunModifier mod : game.getModifiers()) {
 			EffectBase e = mod.toEffect(game);
@@ -885,10 +896,6 @@ public class Combat implements Renderer<BufferedImage> {
 			} finally {
 				e.unlock();
 			}
-		}
-
-		if (source != null) {
-			source.trigger(t, Utils.getOr(target, source), usable, context.value());
 		}
 	}
 }
