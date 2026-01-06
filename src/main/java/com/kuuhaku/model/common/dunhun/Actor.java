@@ -270,11 +270,12 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 								lt.xp().addAndGet(m.getKillXp());
 
 								double mf = killer.getModifiers().getMagicFind(1);
-								double dropFac = 40 * stats.getLootMultiplier(m) * mf * Math.pow(1.2, getGame().getModifiers().size());
-								if (getGame().getAreaType() == NodeType.DANGER) {
-									dropFac *= 1.5;
-								}
+								double mult = mf
+										* stats.getLootMultiplier(m)
+										* Math.pow(1.2, getGame().getModifiers().size())
+										* (getGame().getAreaType() == NodeType.DANGER ? 1.5 : 1);
 
+								double dropFac = 40 * mult;
 								while (Calc.chance(dropFac)) {
 									Gear drop = Gear.getRandom(m);
 									if (drop != null) {
@@ -284,13 +285,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 									dropFac /= 2;
 								}
 
-								dropFac = 15 * switch (m.getRarityClass()) {
-									case NORMAL -> 1;
-									case MAGIC -> 1.2;
-									case RARE -> 1.5;
-									case UNIQUE -> 2.5;
-								} * mf;
-
+								dropFac = 15 * mult;
 								while (Calc.chance(dropFac)) {
 									GlobalDrop drop = GlobalDrop.getRandom(getGame());
 									if (drop == null) break;
