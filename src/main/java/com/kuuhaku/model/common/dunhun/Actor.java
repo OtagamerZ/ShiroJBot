@@ -284,7 +284,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 									dropFac /= 2;
 								}
 
-								dropFac = 20 * switch (m.getRarityClass()) {
+								dropFac = 15 * switch (m.getRarityClass()) {
 									case NORMAL -> 1;
 									case MAGIC -> 1.2;
 									case RARE -> 1.5;
