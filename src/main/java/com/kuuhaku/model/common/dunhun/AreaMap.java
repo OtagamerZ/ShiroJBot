@@ -435,11 +435,11 @@ public class AreaMap {
 			}
 
 			fl.generateEvents(m.getRun(), 1 / 3d, rests);
+		}
 
-			fl.generateModifiers(game);
-			for (RunModifier mod : game.getModifiers()) {
-				mod.toEffect(game);
-			}
+		m.getFloor().generateModifiers(game);
+		for (RunModifier mod : game.getModifiers()) {
+			mod.toEffect(game);
 		}
 
 		for (DungeonRunOutcome out : m.getRun().getEventOutcomes()) {
