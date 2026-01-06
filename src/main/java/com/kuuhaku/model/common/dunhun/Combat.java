@@ -60,13 +60,31 @@ public class Combat implements Renderer<BufferedImage> {
 	private final Dunhun game;
 	private final Node node;
 	private final InfiniteList<Actor<?>> actors = new InfiniteList<>();
-	private final BondedList<Actor<?>> hunters = new BondedList<>(
-			(a, it) -> onAddActor(a, it, Team.HUNTERS),
-			a -> onRemoveActor(a, getActors(Team.HUNTERS))
+	private final ListenableList<Actor<?>> hunters = new ListenableList<>(
+			new ListenableList.ListEvent<>() {
+				@Override
+				public boolean beforeAdd(Actor<?> elem) {
+					return onAddActor(elem, Team.HUNTERS);
+				}
+
+				@Override
+				public void afterRemove(Actor<?> elem) {
+					onRemoveActor(elem);
+				}
+			}
 	);
-	private final BondedList<Actor<?>> keepers = new BondedList<>(
-			(a, it) -> onAddActor(a, it, Team.KEEPERS),
-			a -> onRemoveActor(a, getActors(Team.KEEPERS))
+	private final ListenableList<Actor<?>> keepers = new ListenableList<>(
+			new ListenableList.ListEvent<>() {
+				@Override
+				public boolean beforeAdd(Actor<?> elem) {
+					return onAddActor(elem, Team.KEEPERS);
+				}
+
+				@Override
+				public void afterRemove(Actor<?> elem) {
+					onRemoveActor(elem);
+				}
+			}
 	);
 	private final List<String> history = new ArrayList<>();
 	private final RandomList<Actor<?>> rngList = new RandomList<>();
@@ -113,7 +131,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 	}
 
-	public boolean onAddActor(Actor<?> actor, ListIterator<Actor<?>> it, Team team) {
+	public boolean onAddActor(Actor<?> actor, Team team) {
 		if (getActors(team).size() >= 6) return false;
 
 		getActors(team.getOther()).remove(actor);
@@ -130,19 +148,19 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		for (Actor<?> minion : actor.getMinions()) {
-			it.add(minion);
+			getActors(actor.getTeam()).add(minion);
 		}
 
 		return true;
 	}
 
-	public void onRemoveActor(Actor<?> actor, List<Actor<?>> list) {
+	public void onRemoveActor(Actor<?> actor) {
 		trigger(Trigger.ON_REMOVE, actor, actor, null);
 		actor.getBinding().unbind();
 		actors.remove(actor);
 
 		for (Actor<?> minion : actor.getMinions()) {
-			list.remove(minion);
+			getActors(minion.getTeam()).remove(minion);
 		}
 	}
 
