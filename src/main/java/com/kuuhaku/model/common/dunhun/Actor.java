@@ -261,45 +261,44 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 						cbt.trigger(Trigger.ON_KILL, source, this, usable);
 
 						Actor<?> killer = source;
-						if (source instanceof MonsterBase<?> m) {
-							if (m.isMinion()) {
-								killer = m.getMaster();
-							} else if (m.getStats().getKillXp() > 0 && !m.didDropLoot()) {
-								MonsterStats stats = m.getStats();
-								Loot lt = stats.generateLoot(m);
-								lt.xp().addAndGet(m.getKillXp());
-
-								double mf = killer.getModifiers().getMagicFind(1);
-								double mult = mf
-										* stats.getLootMultiplier(m)
-										* Math.pow(1.2, getGame().getModifiers().size())
-										* (getGame().getAreaType() == NodeType.DANGER ? 1.5 : 1);
-
-								double dropFac = 40 * mult;
-								while (Calc.chance(dropFac)) {
-									Gear drop = Gear.getRandom(m);
-									if (drop != null) {
-										lt.gear().add(drop);
-									}
-
-									dropFac /= 2;
-								}
-
-								dropFac = 15 * mult;
-								while (Calc.chance(dropFac)) {
-									GlobalDrop drop = GlobalDrop.getRandom(getGame());
-									if (drop == null) break;
-
-									lt.items().add(drop.getItem());
-									dropFac /= 2;
-								}
-
-								cbt.getLoot().add(lt);
-								m.setDroppedLoot(true);
-							}
+						if (killer instanceof MonsterBase<?> m && m.isMinion()) {
+							killer = m.getMaster();
 						}
-
 						setKiller(killer);
+
+						if (this instanceof MonsterBase<?> m && m.getStats().getKillXp() > 0 && !m.didDropLoot()) {
+							MonsterStats stats = m.getStats();
+							Loot lt = stats.generateLoot(m);
+							lt.xp().addAndGet(m.getKillXp());
+
+							double mf = killer.getModifiers().getMagicFind(1);
+							double mult = mf
+									* stats.getLootMultiplier(m)
+									* Math.pow(1.2, getGame().getModifiers().size())
+									* (getGame().getAreaType() == NodeType.DANGER ? 1.5 : 1);
+
+							double dropFac = 20 * mult;
+							while (Calc.chance(dropFac)) {
+								Gear drop = Gear.getRandom(m);
+								if (drop != null) {
+									lt.gear().add(drop);
+								}
+
+								dropFac /= 2;
+							}
+
+							dropFac = 5 * mult;
+							while (Calc.chance(dropFac)) {
+								GlobalDrop drop = GlobalDrop.getRandom(getGame());
+								if (drop == null) break;
+
+								lt.items().add(drop.getItem());
+								dropFac /= 2;
+							}
+
+							cbt.getLoot().add(lt);
+							m.setDroppedLoot(true);
+						}
 					}
 				} else if (hp + val.get() > 0) {
 					cbt.trigger(Trigger.ON_REVIVE, this, this, usable);
