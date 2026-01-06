@@ -325,6 +325,11 @@ public class Combat implements Renderer<BufferedImage> {
 
 		trigger(win != null && win ? Trigger.ON_VICTORY : Trigger.ON_DEFEAT);
 		done = true;
+
+		if (game.getMessage() != null) {
+			game.getMessage().getFirst().delete().queue(null, Utils::doNothing);
+			game.clearMessage();
+		}
 	}
 
 	private boolean checkCombatEnd() {

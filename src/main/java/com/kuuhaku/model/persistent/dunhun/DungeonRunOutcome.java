@@ -3,6 +3,7 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
+import com.kuuhaku.model.common.dunhun.Node;
 import com.kuuhaku.model.common.dunhun.context.EffectContext;
 import com.kuuhaku.model.records.id.DungeonRunOutcomeId;
 import com.kuuhaku.util.Utils;
@@ -38,7 +39,8 @@ public class DungeonRunOutcome extends DAO<DungeonRunOutcome> {
 	public DungeonRunOutcome() {
 	}
 
-	public DungeonRunOutcome(DungeonRun parent, @Language("Groovy") String effect) {
+	public DungeonRunOutcome(DungeonRun parent, Node node, @Language("Groovy") String effect) {
+		this.id = new DungeonRunOutcomeId(parent.getId(), node.getId());
 		this.parent = parent;
 		this.floor = parent.getFloor();
 		this.effect = effect;

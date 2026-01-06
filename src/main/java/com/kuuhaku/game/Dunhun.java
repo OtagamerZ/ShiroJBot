@@ -312,11 +312,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}
 					}
 
-					if (getMessage() != null) {
-						getMessage().getFirst().delete().queue(null, Utils::doNothing);
-						clearMessage();
-					}
-
 					if (getCombat() != null && getCombat().isDone()) {
 						if (getCombat().isWin()) {
 							grantCombatLoot();
@@ -639,10 +634,23 @@ public class Dunhun extends GameInstance<NullPhase> {
 									Pages.finalizeEvent(s.getMessage(), Utils::doNothing);
 								});
 
-						fin.apply(w.getMessage().editMessageEmbeds(eb.build())).queue(s -> {
-							Pages.buttonize(s, fin);
-							message.set(new Pair<>(s, fin));
-						});
+						Message m = w.getMessage();
+						if (w.reloadMessage() != m) {
+							fin.apply(w.getMessage().editMessageEmbeds(eb.build())).queue(s -> {
+								Pages.buttonize(s, fin);
+								message.set(new Pair<>(s, fin));
+							});
+						} else {
+							ClusterAction ca = getChannel().sendEmbed(eb.build()).apply(helper::apply);
+							if (img != null) {
+								ca.addFile(IO.getBytes(img), "dungeon.jpg");
+							}
+
+							ca.queue(s -> {
+								Pages.buttonize(s, fin);
+								message.set(new Pair<>(s, fin));
+							});
+						}
 					} else {
 						lock.complete(null);
 						Pages.finalizeEvent(w.getMessage(), Utils::doNothing);
