@@ -5,8 +5,10 @@ import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.dunhun.AreaMap;
 import com.kuuhaku.model.common.dunhun.Node;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
+import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.records.id.DungeonRunId;
 import com.ygimenez.json.JSONArray;
+import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -70,6 +72,11 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray visitedNodes = new JSONArray();
 
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "context_vars", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONObjectConverter.class)
+	private JSONObject contextVars = new JSONObject();
+
 	private transient final Random nodeRng = new Random();
 	private transient Dunhun game;
 
@@ -92,10 +99,6 @@ public class DungeonRun extends DAO<DungeonRun> {
 
 	public Dungeon getDungeon() {
 		return dungeon;
-	}
-
-	public JSONArray getVisitedNodes() {
-		return visitedNodes;
 	}
 
 	public int getSeed() {
@@ -193,6 +196,14 @@ public class DungeonRun extends DAO<DungeonRun> {
 		}
 
 		return modifiers.add(modifier);
+	}
+
+	public JSONArray getVisitedNodes() {
+		return visitedNodes;
+	}
+
+	public JSONObject getContextVars() {
+		return contextVars;
 	}
 
 	public AreaMap getMap() {
