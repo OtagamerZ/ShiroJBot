@@ -256,7 +256,7 @@ public class Affix extends DAO<Affix> {
 		return DAO.find(Affix.class, rl.get());
 	}
 
-	public static Affix getRandom(Monster monster, AffixType type, int level) {
+	public static Affix getRandom(Monster monster, AffixType type) {
 		JSONArray affixes = new JSONArray();
 		List<String> groups = new ArrayList<>();
 
@@ -278,7 +278,7 @@ public class Affix extends DAO<Affix> {
 				  AND min_level <= ?2
 				  AND NOT has(get_affix_family(cast(?3 AS JSONB)), get_affix_family(id))
 				  AND (affix_group IS NULL OR affix_group NOT IN ?4)
-				""", tp, level, affixes.toString(), groups);
+				""", tp, monster.getLevel(), affixes.toString(), groups);
 		if (affs.isEmpty()) return null;
 
 		if (type == null) {
