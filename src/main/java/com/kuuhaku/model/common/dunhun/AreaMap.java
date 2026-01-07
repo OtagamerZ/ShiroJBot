@@ -443,12 +443,16 @@ public class AreaMap {
 		}
 
 		for (DungeonRunOutcome out : m.getRun().getEventOutcomes()) {
-			Floor fl = m.getFloor(out.getFloor());
-			if (fl != null) {
-				fl.getNodes().stream()
-						.filter(n -> n.getId().equals(out.getId().nodeId()))
-						.findFirst()
-						.ifPresent(node -> out.apply(game, node));
+			if (out.isGlobal()) {
+				out.apply(game, null);
+			} else {
+				Floor fl = m.getFloor(out.getFloor());
+				if (fl != null) {
+					fl.getNodes().stream()
+							.filter(n -> n.getId().equals(out.getId().nodeId()))
+							.findFirst()
+							.ifPresent(node -> out.apply(game, node));
+				}
 			}
 		}
 	}

@@ -168,7 +168,7 @@ public class Monster extends MonsterBase<Monster> {
 		return clone;
 	}
 
-	public static Monster getRandom(Dunhun game) {
+	public static String getRandomId(Dunhun game) {
 		List<Object[]> mons = DAO.queryAllUnmapped("SELECT id, weight FROM monster WHERE weight > 0");
 		if (mons.isEmpty()) return null;
 
@@ -177,7 +177,11 @@ public class Monster extends MonsterBase<Monster> {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}
 
-		return getRandom(game, rl.get());
+		return rl.get();
+	}
+
+	public static Monster getRandom(Dunhun game) {
+		return getRandom(game, getRandomId(game));
 	}
 
 	public static Monster getRandom(Dunhun game, String id) {
@@ -185,11 +189,8 @@ public class Monster extends MonsterBase<Monster> {
 	}
 
 	public static Monster getRandom(Dunhun game, String id, RarityClass rarity) {
-		if (id == null) return null;
-
-		int dropLevel = Integer.MAX_VALUE;
-		if (game != null) {
-			dropLevel = game.getAreaLevel() + 1;
+		if (id == null) {
+			id = getRandomId(game);
 		}
 
 		if (rarity == null) {
@@ -212,14 +213,14 @@ public class Monster extends MonsterBase<Monster> {
 		List<AffixType> rolled = Utils.getRandomN(pool, Calc.rng(min, min * 2), min);
 
 		for (AffixType type : rolled) {
-			Affix af = Affix.getRandom(mon, type, dropLevel);
+			Affix af = Affix.getRandom(mon, type);
 			if (af == null) continue;
 
 			mon.getAffixes().add(af);
 		}
 
 		if (rarity == RarityClass.RARE && mon.getRarityClass() != RarityClass.RARE) {
-			Affix af = Affix.getRandom(mon, Utils.getRandomEntry(pool), dropLevel);
+			Affix af = Affix.getRandom(mon, Utils.getRandomEntry(pool));
 			if (af != null) {
 				mon.getAffixes().add(af);
 			}

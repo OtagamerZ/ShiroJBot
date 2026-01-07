@@ -59,6 +59,7 @@ public enum Trigger {
 
 	/**
 	 * When defeat is imminent
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_DEFEAT,
 
