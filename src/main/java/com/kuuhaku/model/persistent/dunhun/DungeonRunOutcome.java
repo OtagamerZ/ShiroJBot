@@ -32,6 +32,9 @@ public class DungeonRunOutcome extends DAO<DungeonRunOutcome> {
 	@Column(name = "floor", nullable = false)
 	private int floor;
 
+	@Column(name = "global", nullable = false)
+	private boolean global;
+
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
@@ -39,10 +42,11 @@ public class DungeonRunOutcome extends DAO<DungeonRunOutcome> {
 	public DungeonRunOutcome() {
 	}
 
-	public DungeonRunOutcome(DungeonRun parent, Node node, @Language("Groovy") String effect) {
+	public DungeonRunOutcome(DungeonRun parent, Node node, boolean global, @Language("Groovy") String effect) {
 		this.id = new DungeonRunOutcomeId(parent.getId(), node.getId());
 		this.parent = parent;
 		this.floor = parent.getFloor();
+		this.global = global;
 		this.effect = effect;
 	}
 
@@ -56,6 +60,10 @@ public class DungeonRunOutcome extends DAO<DungeonRunOutcome> {
 
 	public int getFloor() {
 		return floor;
+	}
+
+	public boolean isGlobal() {
+		return global;
 	}
 
 	public void apply(Dunhun game, Node node) {
