@@ -168,7 +168,7 @@ public class Monster extends MonsterBase<Monster> {
 		return clone;
 	}
 
-	public static Monster getRandom(Dunhun game) {
+	public static String getRandomId(Dunhun game) {
 		List<Object[]> mons = DAO.queryAllUnmapped("SELECT id, weight FROM monster WHERE weight > 0");
 		if (mons.isEmpty()) return null;
 
@@ -177,7 +177,11 @@ public class Monster extends MonsterBase<Monster> {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}
 
-		return getRandom(game, rl.get());
+		return rl.get();
+	}
+
+	public static Monster getRandom(Dunhun game) {
+		return getRandom(game, getRandomId(game));
 	}
 
 	public static Monster getRandom(Dunhun game, String id) {
@@ -185,7 +189,9 @@ public class Monster extends MonsterBase<Monster> {
 	}
 
 	public static Monster getRandom(Dunhun game, String id, RarityClass rarity) {
-		if (id == null) return null;
+		if (id == null) {
+			id = getRandomId(game);
+		}
 
 		if (rarity == null) {
 			int rarityMult = 1;
