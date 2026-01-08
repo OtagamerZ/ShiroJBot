@@ -140,7 +140,7 @@ public class AreaMap {
 				WHERE id.dungeonId = ?1
 				  AND floor = ?2
 				  AND sublevel = ?3
-				  AND players.size = 1
+				  AND size(players) = 1
 				""", run.getId().dungeonId(), floor, sublevel);
 	}
 
