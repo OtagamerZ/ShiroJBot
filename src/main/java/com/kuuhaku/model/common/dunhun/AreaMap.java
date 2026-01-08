@@ -235,7 +235,7 @@ public class AreaMap {
 
 					List<Hero> runsHere = runs.get(sub.getNumber());
 					if (runsHere != null) {
-						runsHere.removeIf(h -> !run.getGame().getHeroes().containsKey(h.getAccount().getUid()));
+						runsHere.removeIf(h -> run.getGame().getHeroes().containsKey(h.getAccount().getUid()));
 
 						for (int i = 0; i < Math.min(runsHere.size(), 5); i++) {
 							Hero hero = runsHere.get(i);
