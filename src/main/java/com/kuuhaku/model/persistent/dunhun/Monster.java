@@ -191,6 +191,12 @@ public class Monster extends MonsterBase<Monster> {
 	public static Monster getRandom(Dunhun game, String id, RarityClass rarity) {
 		if (id == null) {
 			id = getRandomId(game);
+			if (id == null) return null;
+		}
+
+		int areaLevel = Integer.MAX_VALUE;
+		if (game != null) {
+			areaLevel = game.getAreaLevel();
 		}
 
 		if (rarity == null) {
@@ -213,14 +219,14 @@ public class Monster extends MonsterBase<Monster> {
 		List<AffixType> rolled = Utils.getRandomN(pool, Calc.rng(min, min * 2), min);
 
 		for (AffixType type : rolled) {
-			Affix af = Affix.getRandom(mon, type);
+			Affix af = Affix.getRandom(mon, type, areaLevel);
 			if (af == null) continue;
 
 			mon.getAffixes().add(af);
 		}
 
 		if (rarity == RarityClass.RARE && mon.getRarityClass() != RarityClass.RARE) {
-			Affix af = Affix.getRandom(mon, Utils.getRandomEntry(pool));
+			Affix af = Affix.getRandom(mon, Utils.getRandomEntry(pool), areaLevel);
 			if (af != null) {
 				mon.getAffixes().add(af);
 			}
