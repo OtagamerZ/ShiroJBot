@@ -22,50 +22,56 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.dunhun.Dungeon;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.model.records.rank.RankCurrencyEntry;
+import com.kuuhaku.model.records.rank.RankDungeonEntry;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import org.apache.commons.text.WordUtils;
 
 import java.util.List;
 
 @Command(
 		name = "rank",
-		path = "currency",
-		category = Category.INFO
+		path = "dungeon",
+		category = Category.STAFF
 )
+@Syntax("<dungeon:word:r>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class RankCurrencyCommand implements Executable {
+public class RankDungeonCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		List<RankCurrencyEntry> rank = DAO.queryAllUnmapped("""
-						SELECT rank() OVER (ORDER BY x.score DESC)  AS rank
-						     , x.uid
-						     , x.name
-						     , x.balance
-						     , x.gems
-						FROM (
-						     SELECT a.uid
-						          , a.name
-						          , a.balance
-						          , a.gems
-						          , (a.balance + a.gems * 20000) AS score
-						     FROM account a
-						              INNER JOIN account_settings s ON s.uid = a.uid
-						     WHERE NOT s.private
-						       AND a.balance > 0
-						     ) x
-						ORDER BY x.score DESC
-						LIMIT 10
-						""").stream()
-				.map(o -> Utils.map(RankCurrencyEntry.class, o))
+		Dungeon dungeon = DAO.find(Dungeon.class, args.getString("dungeon").toUpperCase());
+		if (dungeon == null) {
+			String sug = Utils.didYouMean(args.getString("dungeon"), "SELECT id AS value FROM dungeon");
+			if (sug == null) {
+				event.channel().sendMessage(locale.get("error/unknown_dungeon_none")).queue();
+			} else {
+				event.channel().sendMessage(locale.get("error/unknown_dungeon", sug)).queue();
+			}
+			return;
+		}
+
+		List<RankDungeonEntry> rank = DAO.queryAllUnmapped("""
+						SELECT r.rank
+							 , h.account_uid
+						     , a.name
+							 , h.id
+						     , r.floor
+						     , r.sublevel
+						FROM dungeon_ranking(?1) r
+						INNER JOIN hero h ON h.id = r.hero_id
+						INNER JOIN account a ON a.uid = h.account_uid
+						""", dungeon.getId()).stream()
+				.map(o -> Utils.map(RankDungeonEntry.class, o))
 				.toList();
 
 		if (rank.isEmpty()) {
@@ -74,13 +80,13 @@ public class RankCurrencyCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/rank_title", locale.get("str/currency_rank")))
+				.setTitle(locale.get("str/rank_title", locale.get("str/dungeon_rank")))
 				.setFooter(locale.get("str/rank_footer", data.config().getPrefix()));
 
 		for (int i = 0; i < rank.size(); i++) {
-			RankCurrencyEntry e = rank.get(i);
+			RankDungeonEntry e = rank.get(i);
 
-			String template = "%s - %s `💰%s - 💎%s`";
+			String template = "%s - %s (%s) `🏯%s-%s`";
 			if (i < 3) {
 				template = "**" + template + "**";
 			}
@@ -96,9 +102,10 @@ public class RankCurrencyCommand implements Executable {
 						case 2 -> "\uD83E\uDD49";
 						default -> i + 1;
 					},
+					WordUtils.capitalizeFully(e.hero().replace("_", " ")),
 					e.name(),
-					locale.separate(e.cr()),
-					locale.separate(e.gems())
+					e.floor(),
+					e.sublevel()
 			));
 
 			eb.appendDescription("\n\n");

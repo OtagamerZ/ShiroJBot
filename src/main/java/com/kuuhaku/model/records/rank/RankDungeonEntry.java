@@ -1,6 +1,6 @@
 /*
  * This file is part of Shiro J Bot.
- * Copyright (C) 2019-2023  Yago Gimenez (KuuHaKu)
+ * Copyright (C) 2019-2024  Yago Gimenez (KuuHaKu)
  *
  * Shiro J Bot is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,26 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-CREATE OR REPLACE FUNCTION dunhun.dungeon_ranking(VARCHAR)
-    RETURNS TABLE
-            (
-                rank     INT,
-                hero_id  VARCHAR,
-                floor    INT,
-                sublevel INT
-            )
-    LANGUAGE sql
-AS
-$body$
-SELECT rank() OVER (ORDER BY r.floor DESC, r.sublevel DESC)
-     , r.hero_id
-     , r.floor
-     , r.sublevel
-FROM dungeon_run r
-         INNER JOIN dungeon_run_player rp ON rp.dungeon_id = r.dungeon_id AND rp.hero_id = r.hero_id
-WHERE r.dungeon_id = $1
-GROUP BY r.hero_id, r.floor, r.sublevel
-HAVING count(rp.player_id) = 1
-ORDER BY r.floor DESC, r.sublevel DESC
-LIMIT 10
-$body$;
+package com.kuuhaku.model.records.rank;
+
+public record RankDungeonEntry(int pos, String uid, String name, String hero, int floor, int sublevel) {
+}
