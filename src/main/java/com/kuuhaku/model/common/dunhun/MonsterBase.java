@@ -3,6 +3,7 @@ package com.kuuhaku.model.common.dunhun;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.MonsterStats;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.records.dunhun.Loot;
@@ -13,6 +14,7 @@ import org.hibernate.annotations.FetchMode;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -150,6 +152,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 
 			getBinding().bind(master.getBinding());
 			master.getMinions().add(this);
+			master.trigger(Trigger.ON_SUMMON, this, null, new AtomicInteger());
 		}
 	}
 
