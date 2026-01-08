@@ -294,7 +294,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 					Node nextNode = map.getPlayerNode();
 					switch (nextNode.getType()) {
 						case NONE, DANGER -> runCombat(nextNode);
-						case EVENT -> runEvent(nextNode, Event.getRandom(nextNode));
+						case EVENT -> {
+							Sublevel level = nextNode.getSublevel();
+
+							List<Hero> heroes = map.getHeroesAt(level.getFloor().getNumber(), level.getNumber());
+							if (!heroes.isEmpty() && Calc.chance(50, getNodeRng())) {
+								runEvent(nextNode, Event.find(Event.class, "HERO_CONFLICT"));
+							} else {
+								runEvent(nextNode, Event.getRandom(nextNode));
+							}
+						}
 						case REST -> runEvent(nextNode, Event.find(Event.class, "REST"));
 						case RETURN -> {
 							runEvent(nextNode, Event.find(Event.class, "RETURN"));

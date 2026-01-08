@@ -6,6 +6,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.DungeonRun;
 import com.kuuhaku.model.persistent.dunhun.DungeonRunOutcome;
+import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.RunModifier;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
@@ -18,7 +19,6 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 public class AreaMap {
 	public static final int RENDER_FLOORS = 1;
@@ -133,6 +133,38 @@ public class AreaMap {
 		return run;
 	}
 
+	public List<Hero> getHeroesAt(int floor, int sublevel) {
+		return DAO.queryAll(Hero.class, """
+				SELECT hero
+				FROM DungeonRun r
+				WHERE id.dungeonId = ?1
+				  AND floor = ?2
+				  AND sublevel = ?3
+				  AND players.size = 1
+				""", run.getId().dungeonId(), floor, sublevel);
+	}
+
+	public Map<Integer, List<Hero>> getHeroesAt(int floor) {
+		List<Object[]> runs = DAO.queryAllUnmapped("""
+				SELECT r.sublevel
+				     , r.hero_id
+				FROM dungeon_run r
+				INNER JOIN dungeon_run_player rp ON rp.dungeon_id = r.dungeon_id AND rp.hero_id = r.hero_id
+				WHERE r.dungeon_id = ?1
+				  AND r.floor = ?2
+				GROUP BY r.hero_id, r.sublevel
+				HAVING count(rp.player_id) = 1
+				""", run.getId().dungeonId(), floor);
+
+		Map<Integer, List<Hero>> heroes = new HashMap<>();
+		for (Object[] o : runs) {
+			heroes.computeIfAbsent((Integer) o[0], _ -> new ArrayList<>())
+					.add(DAO.find(Hero.class, o[1]));
+		}
+
+		return heroes;
+	}
+
 	public void generate(Dunhun game) {
 		floors.clear();
 		generator.accept(game, this);
@@ -146,16 +178,7 @@ public class AreaMap {
 		int floorCount = floors.size();
 		if (floorCount == 0) return bi;
 
-		Map<Integer, List<DungeonRun>> runs = DAO.queryAll(DungeonRun.class, """
-						SELECT r
-						FROM DungeonRun r
-						WHERE id.dungeonId = ?1
-						  AND id.heroId <> ?2
-						  AND floor = ?3
-						""", run.getId().dungeonId(), run.getId().heroId(), run.getFloor())
-				.stream()
-				.filter(r -> r.getPlayers().size() == 1)
-				.collect(Collectors.groupingBy(DungeonRun::getSublevel));
+		Map<Integer, List<Hero>> runs = getHeroesAt(run.getFloor());
 
 		int sliceHeight = height / RENDER_DEPTH;
 		int missingHeight = Math.max(0, (sliceHeight * areasPerFloor) - height);
@@ -210,12 +233,12 @@ public class AreaMap {
 				for (Sublevel sub : fl.getSublevels()) {
 					sub.placeNodes(width / 2, y + ((fl.getNumber() == 0 ? 25 : 0)));
 
-					List<DungeonRun> runsHere = runs.get(sub.getNumber());
+					List<Hero> runsHere = runs.get(sub.getNumber());
 					if (runsHere != null) {
 						for (int i = 0; i < Math.min(runsHere.size(), 5); i++) {
-							DungeonRun run = runsHere.get(i);
+							Hero run = runsHere.get(i);
 							Graph.applyTransformed(g2d, 5 + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2, g -> {
-								BufferedImage avatar = run.getHero().getImage();
+								BufferedImage avatar = run.getImage();
 								if (avatar != null) {
 									g.drawImage(avatar, 0, 0,
 											AVATAR_RADIUS * avatar.getWidth() / 350, AVATAR_RADIUS,
