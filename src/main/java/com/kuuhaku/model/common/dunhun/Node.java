@@ -47,7 +47,7 @@ public class Node {
 	public Node(Sublevel sublevel, List<Node> parents) {
 		this(sublevel, NodeType.NONE, parents);
 
-		if (sublevel.getSublevel() == sublevel.getFloor().size() - 1) {
+		if (sublevel.getNumber() == sublevel.getFloor().size() - 1) {
 			this.type = NodeType.BOSS;
 		}
 	}
@@ -58,7 +58,7 @@ public class Node {
 		this.type = type;
 		this.seed = sublevel == null ? 0 : Utils.generateSeed(DigestUtils.getMd5Digest(),
 				sublevel.getFloor().getSeed(),
-				sublevel.getSublevel(),
+				sublevel.getNumber(),
 				path
 		);
 
@@ -69,7 +69,7 @@ public class Node {
 	}
 
 	public String getId() {
-		return sublevel.getFloor().getFloor() + "-" + sublevel.getSublevel() + "-" + path;
+		return sublevel.getFloor().getNumber() + "-" + sublevel.getNumber() + "-" + path;
 	}
 
 	public Sublevel getSublevel() {

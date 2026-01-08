@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class Floor {
 	private final AreaMap map;
-	private final int floor;
+	private final int number;
 	private final int seed;
 	private final Random rng;
 	private final Sublevel[] sublevels;
@@ -24,12 +24,12 @@ public class Floor {
 	private boolean hiddenNodes;
 	private boolean unsafeArea;
 
-	public Floor(AreaMap map, int floor) {
+	public Floor(AreaMap map, int number) {
 		this.map = map;
-		this.floor = floor;
-		this.seed = Utils.generateSeed(DigestUtils.getMd5Digest(), map.getSeed(), floor);
+		this.number = number;
+		this.seed = Utils.generateSeed(DigestUtils.getMd5Digest(), map.getSeed(), number);
 		this.rng = new Random(this.seed);
-		this.sublevels = new Sublevel[floor <= 0 ? 1 : map.getAreasPerFloor()];
+		this.sublevels = new Sublevel[number <= 0 ? 1 : map.getAreasPerFloor()];
 
 		for (int i = 0; i < this.sublevels.length; i++) {
 			this.sublevels[i] = new Sublevel(this, i);
@@ -90,7 +90,7 @@ public class Floor {
 				List<Node> group = new ArrayList<>();
 				for (; j < nodes.size(); j++) {
 					Node n = nodes.get(j);
-					if (n.getSublevel().getSublevel() / restSpots > i) {
+					if (n.getSublevel().getNumber() / restSpots > i) {
 						break;
 					}
 
@@ -170,8 +170,8 @@ public class Floor {
 				.toList();
 	}
 
-	public int getFloor() {
-		return floor;
+	public int getNumber() {
+		return number;
 	}
 
 	public int getSeed() {
@@ -187,19 +187,19 @@ public class Floor {
 	}
 
 	public int depth() {
-		if (floor <= 0) return 0;
-		return (floor - 1) * map.getAreasPerFloor();
+		if (number <= 0) return 0;
+		return (number - 1) * map.getAreasPerFloor();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		Floor floor1 = (Floor) o;
-		return floor == floor1.floor;
+		return number == floor1.number;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(floor);
+		return Objects.hashCode(number);
 	}
 }

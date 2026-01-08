@@ -12,12 +12,12 @@ public class Sublevel {
 	public static final int MAX_NODES = 7;
 
 	private final Floor floor;
-	private final int sublevel;
+	private final int number;
 	private final List<Node> nodes = new ArrayList<>(MAX_NODES);
 
-	public Sublevel(Floor floor, int sublevel) {
+	public Sublevel(Floor floor, int number) {
 		this.floor = floor;
-		this.sublevel = sublevel;
+		this.number = number;
 	}
 
 	public Floor getFloor() {
@@ -62,8 +62,8 @@ public class Sublevel {
 		nodes.add(new Node(this, type, parents));
 	}
 
-	public int getSublevel() {
-		return sublevel;
+	public int getNumber() {
+		return number;
 	}
 
 	public int size() {
@@ -71,7 +71,7 @@ public class Sublevel {
 	}
 
 	public int depth() {
-		return floor.depth() + sublevel + 1;
+		return floor.depth() + number + 1;
 	}
 
 	public boolean hasLeapNode() {
@@ -117,11 +117,11 @@ public class Sublevel {
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		Sublevel sublevel1 = (Sublevel) o;
-		return sublevel == sublevel1.sublevel && Objects.equals(floor, sublevel1.floor);
+		return number == sublevel1.number && Objects.equals(floor, sublevel1.floor);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(floor, sublevel);
+		return Objects.hash(floor, number);
 	}
 }

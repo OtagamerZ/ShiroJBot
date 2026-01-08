@@ -280,7 +280,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					int floor = run.getFloor();
-					if (floor != fl.getFloor()) {
+					if (floor != fl.getNumber()) {
 						getChannel().sendMessage(parsePlural(getLocale().get("str/dungeon_next_floor",
 								chosenPath.get(),
 								floor, getLocale().get("str/" + (floor > 3 ? "n" : floor) + "_suffix")
@@ -946,7 +946,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		int extraLevel = node != null ? node.getNodeLevel() : 0;
 
 		if (dungeon.getAreaLevel() == 0) {
-			int floor = fl.getFloor();
+			int floor = fl.getNumber();
 			return 1 + Math.min(floor * 83 / 25 * floor / (floor + 50), 83) + extraLevel;
 		}
 

@@ -148,8 +148,8 @@ public class DungeonRun extends DAO<DungeonRun> {
 	public void setNode(Node node) {
 		int prevFloor = floor;
 
-		floor = node.getSublevel().getFloor().getFloor();
-		sublevel = node.getSublevel().getSublevel();
+		floor = node.getSublevel().getFloor().getNumber();
+		sublevel = node.getSublevel().getNumber();
 		path = node.getPath();
 
 		if (!visitedNodes.contains(node.getId())) {

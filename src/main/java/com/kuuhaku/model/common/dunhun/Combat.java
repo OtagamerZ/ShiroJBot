@@ -224,7 +224,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		if (!game.isDuel()) {
 			eb.setAuthor(getLocale().get("str/dungeon_area",
-					node.getSublevel().getFloor().getFloor(), node.getSublevel().getSublevel() + 1
+					node.getSublevel().getFloor().getNumber(), node.getSublevel().getNumber() + 1
 			));
 		} else {
 			String teamA = Utils.properlyJoin(getLocale(), hunters.stream().map(Actor::getName).toList());
@@ -356,7 +356,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		ButtonizeHelper helper;
-		if (getCurrent() instanceof Hero h) {
+		if (getCurrent() instanceof Hero h && game.getHeroes().containsValue(h)) {
 			helper = new ButtonizeHelper(true)
 					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
 					.setCancellable(false);

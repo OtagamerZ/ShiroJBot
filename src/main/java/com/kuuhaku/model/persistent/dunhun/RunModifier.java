@@ -129,7 +129,7 @@ public class RunModifier extends DAO<RunModifier> {
 				WHERE weight > 0
 				  AND min_floor <= ?1
 				  AND NOT has(get_affix_family(cast(?2 AS JSONB)), get_affix_family(id))
-				""", floor.getFloor(), modifiers.toString());
+				""", floor.getNumber(), modifiers.toString());
 		if (mods.isEmpty()) return null;
 
 		RandomList<String> rl = new RandomList<>(rng);

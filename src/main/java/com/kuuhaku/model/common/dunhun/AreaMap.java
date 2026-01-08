@@ -73,7 +73,7 @@ public class AreaMap {
 	}
 
 	public void addFloor(Floor floor) {
-		floors.put(floor.getFloor(), floor);
+		floors.put(floor.getNumber(), floor);
 	}
 
 	public Floor getFloor() {
@@ -173,21 +173,21 @@ public class AreaMap {
 			if (missingHeight > 0) {
 				int floorSize = playerNode.getSublevel().getFloor().size();
 				if (floorSize == areasPerFloor) {
-					y -= playerNode.getSublevel().getSublevel() * missingHeight / (floorSize - 1);
+					y -= playerNode.getSublevel().getNumber() * missingHeight / (floorSize - 1);
 				}
 			}
 
 			for (Floor fl : floors.values()) {
-				if (fl.getFloor() < renderFloor.get()) continue;
+				if (fl.getNumber() < renderFloor.get()) continue;
 
-				boolean label = fl.getFloor() > 0;
+				boolean label = fl.getNumber() > 0;
 				if (label) {
 					g2d.setColor(Color.DARK_GRAY);
 					g2d.drawLine(0, y, width, y);
 
 					g2d.setFont(new Font("Arial", Font.BOLD, 25));
 
-					String text = locale.get("str/dungeon_floor", fl.getFloor());
+					String text = locale.get("str/dungeon_floor", fl.getNumber());
 					g2d.drawString(text,
 							width - g2d.getFontMetrics().stringWidth(text) - 5,
 							y + g2d.getFontMetrics().getHeight()
@@ -199,18 +199,18 @@ public class AreaMap {
 					y += 25;
 				}
 
-				if (fl.getFloor() == renderFloor.get()) {
-					Floor prev = floors.get(fl.getFloor() - 1);
-					if (prev != null && prev.getFloor() >= 0) {
+				if (fl.getNumber() == renderFloor.get()) {
+					Floor prev = floors.get(fl.getNumber() - 1);
+					if (prev != null && prev.getNumber() >= 0) {
 						Sublevel last = prev.getSublevels().get(prev.size() - 1);
 						last.placeNodes(width / 2, y - sliceHeight - 50);
 					}
 				}
 
 				for (Sublevel sub : fl.getSublevels()) {
-					sub.placeNodes(width / 2, y + ((fl.getFloor() == 0 ? 25 : 0)));
+					sub.placeNodes(width / 2, y + ((fl.getNumber() == 0 ? 25 : 0)));
 
-					List<DungeonRun> runsHere = runs.get(sub.getSublevel());
+					List<DungeonRun> runsHere = runs.get(sub.getNumber());
 					if (runsHere != null) {
 						for (int i = 0; i < Math.min(runsHere.size(), 5); i++) {
 							DungeonRun run = runsHere.get(i);
@@ -232,7 +232,7 @@ public class AreaMap {
 		}
 
 		List<Floor> floors = List.copyOf(this.floors.values());
-		Map<Floor, List<Node>> nodes = new TreeMap<>(Comparator.comparingInt(Floor::getFloor));
+		Map<Floor, List<Node>> nodes = new TreeMap<>(Comparator.comparingInt(Floor::getNumber));
 		for (int i = 0; i < 3; i++) {
 			for (Floor fl : floors) {
 				List<Node> nds = nodes.computeIfAbsent(fl, _ -> fl.getNodes());
@@ -252,7 +252,7 @@ public class AreaMap {
 					node.setWillBeRendered(true);
 					switch (i) {
 						case 0 -> {
-							if (fl.getFloor() > 0) {
+							if (fl.getNumber() > 0) {
 								Composite comp = g2d.getComposite();
 								if (distance == -1) {
 									g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
@@ -330,24 +330,24 @@ public class AreaMap {
 				}
 
 				Sublevel prev;
-				if (sub.getSublevel() == 0) {
-					Floor floor = m.getFloor(fl.getFloor() - 1);
+				if (sub.getNumber() == 0) {
+					Floor floor = m.getFloor(fl.getNumber() - 1);
 					if (floor != null) {
 						prev = floor.getSublevel(floor.size() - 1);
 					} else {
 						prev = null;
 					}
 				} else {
-					prev = sublevels.get(sub.getSublevel() - 1);
+					prev = sublevels.get(sub.getNumber() - 1);
 				}
 
 				if (prev != null) {
 					int nodeCount;
-					if (sub.getSublevel() == 0 || sub.getSublevel() == fl.size() - 1) {
+					if (sub.getNumber() == 0 || sub.getNumber() == fl.size() - 1) {
 						nodeCount = 1;
 					} else {
-						int min = Math.min(1 + fl.getFloor() / 20, Sublevel.MAX_NODES / 3);
-						int max = Math.min(3 + fl.getFloor() / 10, Sublevel.MAX_NODES);
+						int min = Math.min(1 + fl.getNumber() / 20, Sublevel.MAX_NODES / 3);
+						int max = Math.min(3 + fl.getNumber() / 10, Sublevel.MAX_NODES);
 						if (max > 5 && 5d / prev.size() > 1) {
 							max = 5;
 						}
@@ -378,8 +378,8 @@ public class AreaMap {
 								}
 							}
 
-							if (sub.getSublevel() > 1 && j > 0) {
-								Sublevel leap = sublevels.get(sub.getSublevel() - 2);
+							if (sub.getNumber() > 1 && j > 0) {
+								Sublevel leap = sublevels.get(sub.getNumber() - 2);
 								if (leap.size() > 0 && !prev.hasLeapNode()) {
 									double leapRoll = fl.getRng().nextDouble();
 									if (leapRoll < 0.33) {
