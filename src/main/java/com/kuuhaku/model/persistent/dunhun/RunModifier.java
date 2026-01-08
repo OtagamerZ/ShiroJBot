@@ -72,22 +72,22 @@ public class RunModifier extends DAO<RunModifier> {
 		return familyCache = Utils.regex(id, "_[IVX]+$").replaceAll("");
 	}
 
-	public EffectBase toEffect(Dunhun game) {
-		if (effect == null) return null;
-		else if (effectCache != null) return effectCache;
+	public EffectBase getEffect() {
+		return effectCache;
+	}
 
+	public void load(Dunhun game) {
 		try {
 			Object out = Utils.exec(id, effect, Map.of(
 					"ctx", new EffectContext<>(game, this)
 			));
+
 			if (out instanceof EffectBase e) {
-				return effectCache = e;
+				effectCache = e;
 			}
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply modifier {}", id, e);
 		}
-
-		return null;
 	}
 
 	@Override

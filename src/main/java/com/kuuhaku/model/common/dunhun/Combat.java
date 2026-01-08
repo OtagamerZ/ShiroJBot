@@ -867,7 +867,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private void triggerGlobalEffects(Trigger t, CombatContext context) {
 		Set<EffectBase> effects = new HashSet<>(this.effects);
 		for (RunModifier mod : game.getModifiers()) {
-			EffectBase e = mod.toEffect(game);
+			EffectBase e = mod.getEffect();
 			if (e != null) {
 				effects.add(e);
 			}

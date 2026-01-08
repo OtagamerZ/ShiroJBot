@@ -464,7 +464,7 @@ public class AreaMap {
 
 		m.getFloor().generateModifiers(game);
 		for (RunModifier mod : game.getModifiers()) {
-			mod.toEffect(game);
+			mod.load(game);
 		}
 
 		for (DungeonRunOutcome out : m.getRun().getEventOutcomes()) {
