@@ -144,10 +144,6 @@ public class Combat implements Renderer<BufferedImage> {
 		actor.getSenshi().setAvailable(true);
 		trigger(Trigger.ON_INITIALIZE, actor, actor, null);
 
-		if (actor instanceof MonsterBase<?> m && m.isMinion()) {
-			trigger(Trigger.ON_SUMMON, m.getMaster(), m, null);
-		}
-
 		acts.addAll(actor.getMinions());
 		return true;
 	}
