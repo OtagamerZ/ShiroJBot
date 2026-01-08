@@ -233,11 +233,12 @@ public class AreaMap {
 				for (Sublevel sub : fl.getSublevels()) {
 					sub.placeNodes(width / 2, y + ((fl.getNumber() == 0 ? 25 : 0)));
 
-					List<Hero> runsHere = runs.get(sub.getNumber()).stream()
-							.filter(run -> !run.getGame().getHeroes().containsValue(run))
-							.toList();
-
+					List<Hero> runsHere = runs.get(sub.getNumber());
 					if (runsHere != null) {
+						runsHere = runs.get(sub.getNumber()).stream()
+								.filter(run -> !run.getGame().getHeroes().containsValue(run))
+								.toList();
+
 						for (int i = 0; i < Math.min(runsHere.size(), 5); i++) {
 							Hero hero = runsHere.get(i);
 							Graph.applyTransformed(g2d, 5 + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2, g -> {
