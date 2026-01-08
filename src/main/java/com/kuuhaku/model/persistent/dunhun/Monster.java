@@ -49,6 +49,7 @@ public class Monster extends MonsterBase<Monster> {
 
 	private transient final Set<Affix> affixes = new LinkedHashSet<>();
 	private transient String nameCache;
+	private transient int nameHash = 0;
 
 	public Monster() {
 	}
@@ -59,11 +60,16 @@ public class Monster extends MonsterBase<Monster> {
 
 	@Override
 	public String getName(I18N locale) {
-		if (nameCache != null) return nameCache;
+		if (nameCache != null) {
+			if (nameHash == affixes.hashCode()) {
+				return nameCache;
+			}
+		}
 
 		AtomicReference<String> ending = new AtomicReference<>(Utils.getOr(getInfo(locale).getEnding(), "M"));
-		if (affixes.isEmpty()) return nameCache = getInfo(locale).getName();
-		else if (getRarityClass() == RarityClass.RARE) {
+		if (affixes.isEmpty()) {
+			nameCache = getInfo(locale).getName();
+		} else if (getRarityClass() == RarityClass.RARE) {
 			String loc = locale.getParent().name().toLowerCase();
 			String prefix = IO.getLine("dunhun/monster/prefix/" + loc + ".dict", Calc.rng(0, 32, SERIAL));
 			String suffix = IO.getLine("dunhun/monster/suffix/" + loc + ".dict", Calc.rng(0, 32, -SERIAL));
@@ -94,22 +100,25 @@ public class Monster extends MonsterBase<Monster> {
 				name.append(part);
 			}
 
-			return nameCache = name + ", " + prefix + " " + suffix;
+			nameCache = name + ", " + prefix + " " + suffix;
+		} else {
+			String template = switch (locale) {
+				case EN, UWU_EN -> "%2$s%1$s%3$s";
+				case PT, UWU_PT -> "%1$s%2$s%3$s";
+			};
+
+			String pref = "", suff = "";
+			for (Affix a : affixes) {
+				if (a.getType() == AffixType.MON_PREFIX) pref = " " + a.getInfo(locale).getName();
+				else suff = " " + a.getInfo(locale).getName();
+			}
+
+			nameCache = Utils.regex(template.formatted(getInfo(locale).getName(), pref, suff), "\\[(?<F>[^\\[\\]]*?)\\|(?<M>[^\\[\\]]*?)]")
+					.replaceAll(r -> r.group(ending.get()));
 		}
 
-		String template = switch (locale) {
-			case EN, UWU_EN -> "%2$s%1$s%3$s";
-			case PT, UWU_PT -> "%1$s%2$s%3$s";
-		};
-
-		String pref = "", suff = "";
-		for (Affix a : affixes) {
-			if (a.getType() == AffixType.MON_PREFIX) pref = " " + a.getInfo(locale).getName();
-			else suff = " " + a.getInfo(locale).getName();
-		}
-
-		return nameCache = Utils.regex(template.formatted(getInfo(locale).getName(), pref, suff), "\\[(?<F>[^\\[\\]]*?)\\|(?<M>[^\\[\\]]*?)]")
-				.replaceAll(r -> r.group(ending.get()));
+		nameHash = affixes.hashCode();
+		return nameCache;
 	}
 
 	@Override
