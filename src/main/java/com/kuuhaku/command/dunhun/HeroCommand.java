@@ -125,6 +125,7 @@ public class HeroCommand implements Executable {
 					attr.vit(), Utils.sign(extra.vit())
 			), true);
 
+			h.createSenshi();
 			helper.apply(m.editMessageComponents().setContent(null).setEmbeds(eb.build()))
 					.setFiles(FileUpload.fromData(IO.getBytes(h.render(locale), "png"), "card.png"))
 					.queue(s -> Pages.buttonize(s, helper));
