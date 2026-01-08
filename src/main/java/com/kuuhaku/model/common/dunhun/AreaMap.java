@@ -236,9 +236,14 @@ public class AreaMap {
 					List<Hero> runsHere = runs.get(sub.getNumber());
 					if (runsHere != null) {
 						for (int i = 0; i < Math.min(runsHere.size(), 5); i++) {
-							Hero run = runsHere.get(i);
+							Hero hero = runsHere.get(i);
+							if (run.getGame().getHeroes().containsValue(hero)) {
+								i--;
+								continue;
+							}
+
 							Graph.applyTransformed(g2d, 5 + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2, g -> {
-								BufferedImage avatar = run.getImage();
+								BufferedImage avatar = hero.getImage();
 								if (avatar != null) {
 									g.drawImage(avatar, 0, 0,
 											AVATAR_RADIUS * avatar.getWidth() / 350, AVATAR_RADIUS,
