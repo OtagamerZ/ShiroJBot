@@ -633,9 +633,12 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			m.destroy();
 		}
 
-		Combat cbt = getGame().getCombat();
-		if (cbt != null) {
-			cbt.getActors(getTeam()).remove(this);
+		Dunhun game = getGame();
+		if (game != null) {
+			Combat cbt = game.getCombat();
+			if (cbt != null) {
+				cbt.getActors(getTeam()).remove(this);
+			}
 		}
 
 		binding.unbind();
