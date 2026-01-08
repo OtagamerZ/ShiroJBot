@@ -298,7 +298,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							Sublevel level = nextNode.getSublevel();
 
 							List<Hero> heroes = map.getHeroesAt(level.getFloor().getNumber(), level.getNumber());
-							if (!heroes.isEmpty() && Calc.chance(50, getNodeRng())) {
+							if (!heroes.isEmpty()) {
 								runEvent(nextNode, Event.find(Event.class, "HERO_CONFLICT"));
 							} else {
 								runEvent(nextNode, Event.getRandom(nextNode));
