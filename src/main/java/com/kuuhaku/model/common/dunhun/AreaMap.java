@@ -236,7 +236,7 @@ public class AreaMap {
 					List<Hero> runsHere = runs.get(sub.getNumber());
 					if (runsHere != null) {
 						runsHere = runs.get(sub.getNumber()).stream()
-								.filter(run -> !run.getGame().getHeroes().containsValue(run))
+								.filter(h -> !run.getGame().getHeroes().containsValue(h))
 								.toList();
 
 						for (int i = 0; i < Math.min(runsHere.size(), 5); i++) {
