@@ -14,7 +14,6 @@ import org.hibernate.annotations.FetchMode;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -152,7 +151,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 
 			getBinding().bind(master.getBinding());
 			master.getMinions().add(this);
-			master.trigger(Trigger.ON_SUMMON, this, null, new AtomicInteger());
+			getGame().getCombat().trigger(Trigger.ON_SUMMON, master, this, null);
 		}
 	}
 
