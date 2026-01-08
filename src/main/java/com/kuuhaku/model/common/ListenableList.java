@@ -249,6 +249,11 @@ public class ListenableList<T> implements List<T> {
 	}
 
 	@Override
+	public String toString() {
+		return internal.toString();
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		ListenableList<?> that = (ListenableList<?>) o;
