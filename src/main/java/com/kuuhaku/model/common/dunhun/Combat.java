@@ -95,7 +95,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private boolean done;
 	private Boolean win;
 
-	public Combat(Dunhun game, Node node, MonsterBase<?>... enemies) {
+	public Combat(Dunhun game, Node node, Actor<?>... enemies) {
 		this.game = game;
 		this.node = node;
 

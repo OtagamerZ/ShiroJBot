@@ -543,7 +543,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	@SafeVarargs
-	public final <T extends MonsterBase<T>> void beginCombat(Node node, MonsterBase<T>... enemies) {
+	public final <T extends MonsterBase<T>> void beginCombat(Node node, Actor<T>... enemies) {
 		if (combat.get() != null) return;
 		combat.set(new Combat(this, node, enemies));
 
