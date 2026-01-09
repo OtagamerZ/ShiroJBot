@@ -80,7 +80,7 @@ public class RankDungeonCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/rank_title", locale.get("str/dungeon_rank")))
+				.setTitle(locale.get("str/rank_title", dungeon.getInfo(locale).getName()))
 				.setFooter(locale.get("str/rank_footer", data.config().getPrefix()));
 
 		for (int i = 0; i < rank.size(); i++) {
