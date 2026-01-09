@@ -29,6 +29,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.rank.RankCandiesEntry;
+import com.kuuhaku.model.records.rank.RankCurrencyEntry;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -79,28 +80,26 @@ public class RankCandiesCommand implements Executable {
 
 		for (int i = 0; i < rank.size(); i++) {
 			RankCandiesEntry e = rank.get(i);
+
+			String template = "%s - %s `🍬%s`";
 			if (i < 3) {
-				eb.appendDescription("**");
+				template = "**" + template + "**";
 			}
 
 			if (e.uid().equals(event.user().getId())) {
-				eb.appendDescription("__");
+				template = "__" + template + "__";
 			}
 
-			eb.appendDescription(switch (i) {
-				case 0 -> "\uD83E\uDD47";
-				case 1 -> "\uD83E\uDD48";
-				case 2 -> "\uD83E\uDD49";
-				default -> i + 1;
-			} + " - " + e.name() + " `🍬" + e.candies() + "`");
-
-			if (e.uid().equals(event.user().getId())) {
-				eb.appendDescription("__");
-			}
-
-			if (i < 3) {
-				eb.appendDescription("**");
-			}
+			eb.appendDescription(template.formatted(
+					switch (i) {
+						case 0 -> "\uD83E\uDD47";
+						case 1 -> "\uD83E\uDD48";
+						case 2 -> "\uD83E\uDD49";
+						default -> i + 1;
+					},
+					e.name(),
+					locale.separate(e.candies())
+			));
 
 			eb.appendDescription("\n\n");
 		}

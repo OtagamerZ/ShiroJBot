@@ -80,13 +80,13 @@ public class RankDungeonCommand implements Executable {
 		}
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setTitle(locale.get("str/rank_title", locale.get("str/dungeon_rank")))
+				.setTitle(locale.get("str/rank_title", dungeon.getInfo(locale).getName()))
 				.setFooter(locale.get("str/rank_footer", data.config().getPrefix()));
 
 		for (int i = 0; i < rank.size(); i++) {
 			RankDungeonEntry e = rank.get(i);
 
-			String template = "%s - %s (%s) `🏯%s-%s`";
+			String template = "%s - %s (%s) `%s`";
 			if (i < 3) {
 				template = "**" + template + "**";
 			}
@@ -104,8 +104,7 @@ public class RankDungeonCommand implements Executable {
 					},
 					WordUtils.capitalizeFully(e.hero().replace("_", " ")),
 					e.name(),
-					e.floor(),
-					e.sublevel()
+					locale.get("str/dungeon_area", e.floor(), e.sublevel())
 			));
 
 			eb.appendDescription("\n\n");
