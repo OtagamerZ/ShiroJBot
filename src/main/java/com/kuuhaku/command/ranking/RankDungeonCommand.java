@@ -104,7 +104,7 @@ public class RankDungeonCommand implements Executable {
 					},
 					WordUtils.capitalizeFully(e.hero().replace("_", " ")),
 					e.name(),
-					locale.get("str/dungeon_area", e.floor(), e.sublevel()),
+					locale.get("str/dungeon_area", e.floor(), e.sublevel())
 			));
 
 			eb.appendDescription("\n\n");
