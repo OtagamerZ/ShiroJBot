@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.dunhun;
 
+import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
@@ -88,6 +89,20 @@ public class HeroInspectCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setThumbnail("attachment://thumb.png");
 
+		MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
+
+		FileUpload img = makeEmbed(locale, g, eb, type);
+		if (img != null) {
+			ma.addFiles(img);
+		}
+
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.addAction()
+
+		ma.queue();
+	}
+
+	private static FileUpload makeEmbed(I18N locale, Gear g, EmbedBuilder eb, GearType type) {
 		if (g.getRarityClass().ordinal() >= RarityClass.RARE.ordinal()) {
 			eb.setTitle(g.getName(locale) + ", " + g.getBasetype().getInfo(locale).getName());
 		} else {
@@ -97,6 +112,8 @@ public class HeroInspectCommand implements Executable {
 		if (g.getUnique() != null) {
 			eb.setFooter(g.getUnique().getInfo(locale).getDescription());
 		}
+
+		eb.setDescription("");
 
 		JSONArray tags = g.getTags();
 		if (!tags.isEmpty()) {
@@ -191,7 +208,6 @@ public class HeroInspectCommand implements Executable {
 			eb.appendDescription(ga.getDescription(locale, true) + "\n\n");
 		}
 
-		MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
 		if (Utils.parseEmoji(type.getIcon()) instanceof CustomEmoji e) {
 			int[] color = Graph.unpackRGB((switch (g.getRarityClass()) {
 				case NORMAL -> Color.WHITE;
@@ -201,7 +217,7 @@ public class HeroInspectCommand implements Executable {
 			}).getRGB());
 
 			ThreadLocal<int[]> out = ThreadLocal.withInitial(() -> new int[4]);
-			BufferedImage icon = IO.getImage(e.getImageUrl());
+			BufferedImage icon = com.kuuhaku.util.IO.getImage(e.getImageUrl());
 			Graph.forEachPixel(icon, (x, y, rgb) -> {
 				double bright = (rgb & 0xFF) / 255d;
 				int[] aux = out.get();
@@ -214,9 +230,9 @@ public class HeroInspectCommand implements Executable {
 				return Graph.packRGB(aux);
 			});
 
-			ma.addFiles(FileUpload.fromData(IO.getBytes(icon, "png"), "thumb.png"));
+			return FileUpload.fromData(IO.getBytes(icon, "png"), "thumb.png");
 		}
 
-		ma.queue();
+		return null;
 	}
 }
