@@ -128,14 +128,10 @@ public class HeroInspectCommand implements Executable {
 
 		JSONArray tags = g.getTags();
 		if (!tags.isEmpty()) {
-			List<String> tgs = new ArrayList<>();
-			tgs.add(type.getInfo(locale).getName());
-
-			tgs.addAll(tags.stream()
+			List<String> tgs = tags.stream()
 					.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
 					.filter(t -> !t.isEmpty())
-					.toList()
-			);
+					.toList();
 
 			eb.appendDescription("-# " + String.join(", ", tgs) + "\n\n");
 		}
@@ -246,7 +242,7 @@ public class HeroInspectCommand implements Executable {
 		}
 
 		if (acc.getUid().equals(g.getOwner().getAccount().getUid())) {
-			Runnable update = () -> updateEmbed(locale, acc, g, eb, event, msg, mats);
+			Runnable update = () -> updateEmbed(locale, acc.refresh(), g, eb, event, msg, mats);
 			ButtonizeHelper helper = getButtons(locale, acc, g, mats, update);
 
 			RestAction<Message> act;
