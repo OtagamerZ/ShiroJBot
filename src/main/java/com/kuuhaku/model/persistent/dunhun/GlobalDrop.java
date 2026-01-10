@@ -1,16 +1,25 @@
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.common.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.context.ActorContext;
+import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.enums.dunhun.RarityClass;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.UserItem;
+import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.intellij.lang.annotations.Language;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -34,6 +43,14 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 	@Column(name = "min_level", nullable = false)
 	private int minLevel;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "max_rarity")
+	private RarityClass maxRarity;
+
+	@Language("Groovy")
+	@Column(name = "effect", columnDefinition = "TEXT")
+	private String effect;
+
 	public String getId() {
 		return id;
 	}
@@ -44,6 +61,23 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 
 	public int getMinLevel() {
 		return minLevel;
+	}
+
+	public RarityClass getMaxRarity() {
+		return maxRarity;
+	}
+
+	public void apply(Account acc, Gear gear) {
+		if (maxRarity == null || effect == null) return;
+
+		try {
+			Utils.exec(id, effect, Map.of(
+					"acc", acc,
+					"gear", gear
+			));
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to apply crafting item {}", id, e);
+		}
 	}
 
 	@Override

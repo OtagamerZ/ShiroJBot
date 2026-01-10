@@ -36,6 +36,7 @@ import com.kuuhaku.model.persistent.dunhun.GearType;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
@@ -47,8 +48,11 @@ import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
+import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.awt.*;
@@ -56,6 +60,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Command(
@@ -85,24 +90,16 @@ public class HeroInspectCommand implements Executable {
 			return;
 		}
 
-		GearType type = g.getBasetype().getStats().gearType();
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setThumbnail("attachment://thumb.png");
 
-		MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
+		AtomicReference<Message> msg = new  AtomicReference<>();
 
-		FileUpload img = makeEmbed(locale, g, eb, type);
-		if (img != null) {
-			ma.addFiles(img);
-		}
 
-		ButtonizeHelper helper = new ButtonizeHelper(true)
-				.addAction()
-
-		ma.queue();
 	}
 
-	private static FileUpload makeEmbed(I18N locale, Gear g, EmbedBuilder eb, GearType type) {
+	private static void updateEmbed(I18N locale, Account acc, Gear g, EmbedBuilder eb, MessageData.Guild event, AtomicReference<Message> msg) {
+		GearType type = g.getBasetype().getStats().gearType();
 		if (g.getRarityClass().ordinal() >= RarityClass.RARE.ordinal()) {
 			eb.setTitle(g.getName(locale) + ", " + g.getBasetype().getInfo(locale).getName());
 		} else {
@@ -208,6 +205,7 @@ public class HeroInspectCommand implements Executable {
 			eb.appendDescription(ga.getDescription(locale, true) + "\n\n");
 		}
 
+		FileUpload img = null;
 		if (Utils.parseEmoji(type.getIcon()) instanceof CustomEmoji e) {
 			int[] color = Graph.unpackRGB((switch (g.getRarityClass()) {
 				case NORMAL -> Color.WHITE;
@@ -230,9 +228,38 @@ public class HeroInspectCommand implements Executable {
 				return Graph.packRGB(aux);
 			});
 
-			return FileUpload.fromData(IO.getBytes(icon, "png"), "thumb.png");
+			img = FileUpload.fromData(IO.getBytes(icon, "png"), "thumb.png");
 		}
 
-		return null;
+		RestAction<Message> act;
+		if (msg.get() == null) {
+			MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
+			if (img != null) {
+				ma.setFiles(img);
+			}
+
+			act = ma;
+		} else {
+			MessageEditAction ma = msg.get().editMessageEmbeds(eb.build());
+			if (img != null) {
+				ma.setFiles(img);
+			}
+
+			act = ma;
+		}
+
+		act.queue(s -> {
+			msg.set(s);
+			addButtons(s, acc, g);
+		});
+	}
+
+	private static void addButtons(Message msg, Account acc, Gear g) {
+		RarityClass rarity = g.getRarityClass();
+
+		ButtonizeHelper helper = new ButtonizeHelper(true);
+		if (rarity != RarityClass.UNIQUE) {
+
+		}
 	}
 }
