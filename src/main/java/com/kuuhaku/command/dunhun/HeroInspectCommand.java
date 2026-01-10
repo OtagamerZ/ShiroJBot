@@ -245,30 +245,39 @@ public class HeroInspectCommand implements Executable {
 			img = FileUpload.fromData(IO.getBytes(icon, "png"), "thumb.png");
 		}
 
-		Runnable update = () -> updateEmbed(locale, acc, g, eb, event, msg, mats);
-		ButtonizeHelper helper = getButtons(locale, acc, g, mats, update);
+		if (acc.getUid().equals(g.getOwner().getAccount().getUid())) {
+			Runnable update = () -> updateEmbed(locale, acc, g, eb, event, msg, mats);
+			ButtonizeHelper helper = getButtons(locale, acc, g, mats, update);
 
-		RestAction<Message> act;
-		if (msg.get() == null) {
+			RestAction<Message> act;
+			if (msg.get() == null) {
+				MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
+				if (img != null) {
+					ma.setFiles(img);
+				}
+
+				act = helper.apply(ma);
+			} else {
+				MessageEditAction ma = msg.get().editMessageEmbeds(eb.build());
+				if (img != null) {
+					ma.setFiles(img);
+				}
+
+				act = helper.apply(ma);
+			}
+
+			act.queue(s -> {
+				msg.set(s);
+				Pages.buttonize(s, helper);
+			});
+		} else {
 			MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
 			if (img != null) {
 				ma.setFiles(img);
 			}
 
-			act = helper.apply(ma);
-		} else {
-			MessageEditAction ma = msg.get().editMessageEmbeds(eb.build());
-			if (img != null) {
-				ma.setFiles(img);
-			}
-
-			act = helper.apply(ma);
+			ma.queue();
 		}
-
-		act.queue(s -> {
-			msg.set(s);
-			Pages.buttonize(s, helper);
-		});
 	}
 
 	private static ButtonizeHelper getButtons(I18N locale, Account acc, Gear g, List<GlobalDrop> mats, Runnable update) {
