@@ -195,7 +195,7 @@ public class Affix extends DAO<Affix> {
 			}
 		}
 
-		AtomicReference<String> only = new AtomicReference<>();
+		AtomicReference<String> only = new AtomicReference<>("");
 		gear.hasAffix(a -> {
 			String tag = Utils.extract(a, "ONLY_ROLL_(\\w+)", 1);
 			if (tag != null) {
@@ -220,7 +220,7 @@ public class Affix extends DAO<Affix> {
 				  AND NOT (has(req_tags, 'WEAPON') AND has(cast(?3 AS JSONB), 'OFFHAND'))
 				  AND NOT has(get_affix_family(cast(?4 AS JSONB)), get_affix_family(id))
 				  AND (affix_group IS NULL OR affix_group NOT IN ?5)
-				  AND (cast(?6 AS VARCHAR) IS NULL OR has(tags, ?6))
+				  AND (cast(?6 AS VARCHAR) = '' OR has(tags, ?6))
 				""", tp, gear.getReqLevel(), tags.toString(), affixes.toString(), groups, only.get())
 		);
 		if (affs.isEmpty()) return null;
