@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.EmojiId;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.ItemUseException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
@@ -308,16 +309,26 @@ public class HeroInspectCommand implements Executable {
 			helper.addAction(
 					new EmojiId(Utils.parseEmoji(item.getIcon()), String.valueOf(acc.getItemCount(item.getId()))),
 					w -> {
-						if (!acc.consumeItem(item)) {
-							w.getChannel().sendMessage(locale.get("error/item_not_enough")).queue();
-							return;
-						}
+						try {
+							if (!acc.consumeItem(item)) {
+								w.getChannel().sendMessage(locale.get("error/item_not_enough")).queue();
+								return;
+							}
 
-						mat.apply(locale, w.getChannel(), acc, g);
-						if (g.isDestroyed()) {
-							w.getMessage().delete().queue(null, Utils::doNothing);
-						} else {
-							update.run();
+							mat.apply(locale, w.getChannel(), acc, g);
+							if (g.isDestroyed()) {
+								w.getMessage().delete().queue(null, Utils::doNothing);
+							} else {
+								update.run();
+							}
+						} catch (ItemUseException e) {
+							acc.addItem(item, 1);
+							String out = locale.get(e.getMessage(), e.getArgs());
+							if (out.isBlank() || out.equalsIgnoreCase(e.getMessage())) {
+								out = LocalizedString.get(locale, e.getMessage(), "").formatted(e.getArgs());
+							}
+
+							w.getChannel().sendMessage(Utils.getOr(out, e.getMessage())).queue();
 						}
 					}
 			);
