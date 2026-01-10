@@ -81,7 +81,7 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 	}
 
 	public int getMaxMods() {
-		return Utils.getOr(maxMods, RarityClass.RARE.getMaxMods());
+		return Utils.getOr(maxMods, Integer.MAX_VALUE);
 	}
 
 	public void apply(I18N locale, MessageChannel channel, Account acc, Gear gear) {
