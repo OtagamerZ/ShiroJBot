@@ -286,7 +286,7 @@ public class HeroInspectCommand implements Executable {
 				.setCanInteract(u -> u.getId().equals(acc.getUid()))
 				.setCancellable(false);
 
-		XStringBuilder sb = new XStringBuilder("\n\n");
+		XStringBuilder sb = new XStringBuilder("\n");
 
 		boolean valid = false;
 		for (GlobalDrop mat : mats) {
@@ -296,7 +296,7 @@ public class HeroInspectCommand implements Executable {
 			if (affs < mat.getMinMods() || affs >= mat.getMaxMods()) continue;
 
 			UserItem item = mat.getItem();
-			sb.appendNewLine("-# " + item.getIcon() + " " + item.getDescription(locale) + "\n");
+			sb.appendNewLine("-# " + item.getIcon() + " " + item.getDescription(locale));
 
 			helper.addAction(
 					new EmojiId(Utils.parseEmoji(item.getIcon()), String.valueOf(acc.getItemCount(item.getId()))),
