@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.dunhun;
 
+import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.EmojiId;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.controller.DAO;
@@ -245,24 +246,32 @@ public class HeroInspectCommand implements Executable {
 		}
 
 		Runnable update = () -> updateEmbed(locale, acc, g, eb, event, msg, mats);
+		ButtonizeHelper helper = getButtons(locale, acc, g, mats, update);
+
+		RestAction<Message> act;
 		if (msg.get() == null) {
 			MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
 			if (img != null) {
 				ma.setFiles(img);
 			}
 
-			addButtons(locale, ma, acc, g, mats, update).queue(msg::set);
+			act = helper.apply(ma);
 		} else {
 			MessageEditAction ma = msg.get().editMessageEmbeds(eb.build());
 			if (img != null) {
 				ma.setFiles(img);
 			}
 
-			addButtons(locale, ma, acc, g, mats, update).queue(msg::set);
+			act = helper.apply(ma);
 		}
+
+		act.queue(s -> {
+			msg.set(s);
+			Pages.buttonize(s, helper);
+		});
 	}
 
-	private static <T extends MessageRequest<T>> T addButtons(I18N locale, T act, Account acc, Gear g, List<GlobalDrop> mats, Runnable update) {
+	private static ButtonizeHelper getButtons(I18N locale, Account acc, Gear g, List<GlobalDrop> mats, Runnable update) {
 		RarityClass rarity = g.getRarityClass();
 
 		ButtonizeHelper helper = new ButtonizeHelper(true)
@@ -293,6 +302,6 @@ public class HeroInspectCommand implements Executable {
 			);
 		}
 
-		return helper.apply(act);
+		return helper;
 	}
 }
