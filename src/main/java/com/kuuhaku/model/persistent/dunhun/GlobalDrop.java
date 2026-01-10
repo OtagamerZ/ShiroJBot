@@ -107,17 +107,28 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 	}
 
 	public static GlobalDrop getRandom(Dunhun game) {
+		int level = Integer.MAX_VALUE;
+		if (game != null) {
+			level = game.getAreaLevel();
+		}
+
 		List<Object[]> drops = DAO.queryAllUnmapped("""
 				SELECT item_id
 				     , weight
 				FROM global_drop
 				WHERE weight > 0
 				  AND min_level <= ?1
-				""", game.getAreaLevel()
+				""", level
 		);
 		if (drops.isEmpty()) return null;
 
-		RandomList<String> rl = new RandomList<>(game.getNodeRng());
+		RandomList<String> rl;
+		if (game != null) {
+			rl = new RandomList<>(game.getNodeRng());
+		} else {
+			rl = new RandomList<>();
+		}
+
 		for (Object[] a : drops) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}
