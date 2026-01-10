@@ -252,19 +252,21 @@ public class HeroInspectCommand implements Executable {
 					ma.setFiles(img);
 				}
 
-				act = helper.apply(ma);
+				act = helper != null ? helper.apply(ma) : ma;
 			} else {
 				MessageEditAction ma = msg.get().editMessageEmbeds(eb.build());
 				if (img != null) {
 					ma.setFiles(img);
 				}
 
-				act = helper.apply(ma);
+				act = helper != null ? helper.apply(ma) : ma;
 			}
 
 			act.queue(s -> {
 				msg.set(s);
-				Pages.buttonize(s, helper);
+				if (helper != null) {
+					Pages.buttonize(s, helper);
+				}
 			});
 		} else {
 			MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
@@ -284,6 +286,7 @@ public class HeroInspectCommand implements Executable {
 				.setCanInteract(u -> u.getId().equals(acc.getUid()))
 				.setCancellable(false);
 
+		boolean valid = false;
 		for (GlobalDrop mat : mats) {
 			if (mat.getMaxRarity().ordinal() < rarity.ordinal()) continue;
 			else if (!Calc.between(g.getAffixes().size(), mat.getMinMods(), mat.getMaxMods())) continue;
@@ -305,8 +308,10 @@ public class HeroInspectCommand implements Executable {
 						}
 					}
 			);
+
+			valid = true;
 		}
 
-		return helper;
+		return valid ? helper : null;
 	}
 }
