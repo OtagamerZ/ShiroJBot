@@ -243,7 +243,7 @@ public class HeroInspectCommand implements Executable {
 
 		if (acc.getUid().equals(g.getOwner().getAccount().getUid())) {
 			Runnable update = () -> updateEmbed(locale, acc.refresh(), g, eb, event, msg, mats);
-			ButtonizeHelper helper = getButtons(locale, acc, g, mats, update);
+			ButtonizeHelper helper = getButtons(locale, acc, g, mats, eb, update);
 
 			RestAction<Message> act;
 			if (msg.get() == null) {
@@ -278,13 +278,15 @@ public class HeroInspectCommand implements Executable {
 		}
 	}
 
-	private static ButtonizeHelper getButtons(I18N locale, Account acc, Gear g, List<GlobalDrop> mats, Runnable update) {
+	private static ButtonizeHelper getButtons(I18N locale, Account acc, Gear g, List<GlobalDrop> mats, EmbedBuilder eb, Runnable update) {
 		RarityClass rarity = g.getRarityClass();
 
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(u -> u.getId().equals(acc.getUid()))
 				.setCancellable(false);
+
+		XStringBuilder sb = new XStringBuilder("\n\n");
 
 		boolean valid = false;
 		for (GlobalDrop mat : mats) {
@@ -294,8 +296,10 @@ public class HeroInspectCommand implements Executable {
 			if (affs < mat.getMinMods() || affs >= mat.getMaxMods()) continue;
 
 			UserItem item = mat.getItem();
+			sb.appendNewLine("-# " + item.getIcon() + " " + item.getDescription(locale) + "\n");
+
 			helper.addAction(
-					new EmojiId(Utils.parseEmoji(item.getIcon()), item.getName(locale) + " (" + acc.getItemCount(item.getId()) + ")"),
+					new EmojiId(Utils.parseEmoji(item.getIcon()), String.valueOf(acc.getItemCount(item.getId()))),
 					w -> {
 						if (!acc.consumeItem(item)) {
 							w.getChannel().sendMessage(locale.get("error/item_not_enough")).queue();
@@ -312,6 +316,10 @@ public class HeroInspectCommand implements Executable {
 			);
 
 			valid = true;
+		}
+
+		if (valid) {
+			eb.appendDescription(sb.toString());
 		}
 
 		return valid ? helper : null;
