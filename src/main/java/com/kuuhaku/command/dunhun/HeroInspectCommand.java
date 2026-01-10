@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.dunhun;
 
+import com.github.ygimenez.model.EmojiId;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
@@ -30,13 +31,11 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
-import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.persistent.dunhun.GearAffix;
-import com.kuuhaku.model.persistent.dunhun.GearType;
-import com.kuuhaku.model.persistent.dunhun.Hero;
+import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
@@ -54,6 +53,7 @@ import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.FileUpload;
+import net.dv8tion.jda.api.utils.messages.MessageRequest;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -93,12 +93,23 @@ public class HeroInspectCommand implements Executable {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setThumbnail("attachment://thumb.png");
 
-		AtomicReference<Message> msg = new  AtomicReference<>();
+		List<GlobalDrop> mats = DAO.queryAll(GlobalDrop.class, """
+				SELECT g
+				FROM GlobalDrop g
+				WHERE g.maxRarity IS NOT NULL
+				  AND g.effect IS NOT NULL
+				""");
+		mats.sort(Comparator
+				.<GlobalDrop>comparingInt(gd -> gd.getMaxRarity().ordinal())
+				.thenComparing(GlobalDrop::getId)
+		);
 
+		AtomicReference<Message> msg = new AtomicReference<>();
 
+		updateEmbed(locale, data.profile().getAccount(), g, eb, event, msg, mats);
 	}
 
-	private static void updateEmbed(I18N locale, Account acc, Gear g, EmbedBuilder eb, MessageData.Guild event, AtomicReference<Message> msg) {
+	private static void updateEmbed(I18N locale, Account acc, Gear g, EmbedBuilder eb, MessageData.Guild event, AtomicReference<Message> msg, List<GlobalDrop> mats) {
 		GearType type = g.getBasetype().getStats().gearType();
 		if (g.getRarityClass().ordinal() >= RarityClass.RARE.ordinal()) {
 			eb.setTitle(g.getName(locale) + ", " + g.getBasetype().getInfo(locale).getName());
@@ -231,35 +242,46 @@ public class HeroInspectCommand implements Executable {
 			img = FileUpload.fromData(IO.getBytes(icon, "png"), "thumb.png");
 		}
 
-		RestAction<Message> act;
+		Runnable update = () -> updateEmbed(locale, acc, g, eb, event, msg, mats);
 		if (msg.get() == null) {
 			MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
 			if (img != null) {
 				ma.setFiles(img);
 			}
 
-			act = ma;
+			addButtons(locale, ma, acc, g, mats, update).queue(msg::set);
 		} else {
 			MessageEditAction ma = msg.get().editMessageEmbeds(eb.build());
 			if (img != null) {
 				ma.setFiles(img);
 			}
 
-			act = ma;
+			addButtons(locale, ma, acc, g, mats, update).queue(msg::set);
 		}
-
-		act.queue(s -> {
-			msg.set(s);
-			addButtons(s, acc, g);
-		});
 	}
 
-	private static void addButtons(Message msg, Account acc, Gear g) {
+	private static <T extends MessageRequest<T>> T addButtons(I18N locale, T act, Account acc, Gear g, List<GlobalDrop> mats, Runnable update) {
 		RarityClass rarity = g.getRarityClass();
 
 		ButtonizeHelper helper = new ButtonizeHelper(true);
-		if (rarity != RarityClass.UNIQUE) {
+		for (GlobalDrop mat : mats) {
+			if (mat.getMaxRarity().ordinal() < rarity.ordinal()) continue;
 
+			UserItem item = mat.getItem();
+			helper.addAction(
+					new EmojiId(Utils.parseEmoji(item.getIcon()), item.getName(locale) + " (" + acc.getItemCount(item.getId()) + ")"),
+					w -> {
+						if (!acc.consumeItem(item)) {
+							w.getChannel().sendMessage(locale.get("error/item_not_enough")).queue();
+							return;
+						}
+
+						mat.apply(acc, g);
+						update.run();
+					}
+			);
 		}
+
+		return helper.apply(act);
 	}
 }
