@@ -61,6 +61,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -264,7 +265,11 @@ public class HeroInspectCommand implements Executable {
 	private static <T extends MessageRequest<T>> T addButtons(I18N locale, T act, Account acc, Gear g, List<GlobalDrop> mats, Runnable update) {
 		RarityClass rarity = g.getRarityClass();
 
-		ButtonizeHelper helper = new ButtonizeHelper(true);
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(1, TimeUnit.MINUTES)
+				.setCanInteract(u -> u.getId().equals(acc.getUid()))
+				.setCancellable(false);
+
 		for (GlobalDrop mat : mats) {
 			if (mat.getMaxRarity().ordinal() < rarity.ordinal()) continue;
 			else if (!Calc.between(g.getAffixes().size(), mat.getMinMods(), mat.getMaxMods())) continue;
