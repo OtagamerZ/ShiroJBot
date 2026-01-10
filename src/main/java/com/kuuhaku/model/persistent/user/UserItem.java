@@ -27,6 +27,7 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
@@ -121,7 +122,7 @@ public class UserItem extends DAO<UserItem> {
 		return syntax;
 	}
 
-	public void execute(I18N locale, GuildMessageChannel channel, Profile prof, JSONObject params) {
+	public void execute(I18N locale, MessageChannel channel, Profile prof, JSONObject params) {
 		if (effect == null) throw new PassiveItemException();
 
 		Utils.exec(getClass().getSimpleName(), effect, Map.of(

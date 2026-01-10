@@ -6,12 +6,15 @@ import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.ActorContext;
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
@@ -81,11 +84,13 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 		return Utils.getOr(maxMods, RarityClass.RARE.getMaxMods());
 	}
 
-	public void apply(Account acc, Gear gear) {
+	public void apply(I18N locale, MessageChannel channel, Account acc, Gear gear) {
 		if (maxRarity == null || effect == null) return;
 
 		try {
 			Utils.exec(id, effect, Map.of(
+					"locale", locale,
+					"channel", channel,
 					"acc", acc,
 					"gear", gear
 			));

@@ -278,7 +278,7 @@ public class HeroInspectCommand implements Executable {
 							return;
 						}
 
-						mat.apply(acc, g);
+						mat.apply(locale, w.getChannel(), acc, g);
 						if (g.isDestroyed()) {
 							w.getMessage().delete().queue(null, Utils::doNothing);
 						} else {
