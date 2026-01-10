@@ -52,7 +52,7 @@ BEGIN
                 , regexp_match(x.def, 'FOREIGN KEY \(([\w", ]+)\) REFERENCES ([\w"]+(?=\.))?([\w"]+)\(([\w", ]+?)\)') m
              WHERE x.schema NOT LIKE '%\_old'
              ) x
-        WHERE x.ref = 'card'
+        WHERE x.ref IN ('card', 'user_item')
            OR x.tgt_sch = 'dunhun'
         LOOP
             EXECUTE format($$
