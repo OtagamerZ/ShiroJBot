@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.info;
+package com.kuuhaku.command.moderation;
 
 import com.kuuhaku.Main;
 import com.kuuhaku.interfaces.Executable;
@@ -34,7 +34,7 @@ import java.util.Set;
 
 @Command(
 		name = "permissions",
-		category = Category.INFO
+		category = Category.MODERATION
 )
 public class PermissionsCommand implements Executable {
 	@Override
