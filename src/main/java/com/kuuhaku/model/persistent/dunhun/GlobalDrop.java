@@ -47,6 +47,12 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 	@Column(name = "max_rarity")
 	private RarityClass maxRarity;
 
+	@Column(name = "min_mods")
+	private Integer minMods;
+
+	@Column(name = "max_mods")
+	private Integer maxMods;
+
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
@@ -65,6 +71,14 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 
 	public RarityClass getMaxRarity() {
 		return maxRarity;
+	}
+
+	public int getMinMods() {
+		return Utils.getOr(minMods, 0);
+	}
+
+	public int getMaxMods() {
+		return Utils.getOr(maxMods, RarityClass.RARE.getMaxMods());
 	}
 
 	public void apply(Account acc, Gear gear) {
