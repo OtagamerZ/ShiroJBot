@@ -40,6 +40,7 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.GearStats;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -266,6 +267,7 @@ public class HeroInspectCommand implements Executable {
 		ButtonizeHelper helper = new ButtonizeHelper(true);
 		for (GlobalDrop mat : mats) {
 			if (mat.getMaxRarity().ordinal() < rarity.ordinal()) continue;
+			else if (!Calc.between(g.getAffixes().size(), mat.getMinMods(), mat.getMaxMods())) continue;
 
 			UserItem item = mat.getItem();
 			helper.addAction(
