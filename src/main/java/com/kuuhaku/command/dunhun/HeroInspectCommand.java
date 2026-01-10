@@ -277,7 +277,11 @@ public class HeroInspectCommand implements Executable {
 						}
 
 						mat.apply(acc, g);
-						update.run();
+						if (g.isDestroyed()) {
+							w.getMessage().delete().queue(null, Utils::doNothing);
+						} else {
+							update.run();
+						}
 					}
 			);
 		}

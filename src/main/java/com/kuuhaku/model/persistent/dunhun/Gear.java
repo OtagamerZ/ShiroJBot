@@ -85,6 +85,7 @@ public class Gear extends DAO<Gear> {
 	private transient final GearModifiers modifiers = new GearModifiers();
 	private transient final Set<EffectBase> effects = new HashSet<>();
 	private transient Attributes attributes;
+	private transient boolean destroyed;
 
 	public Gear() {
 	}
@@ -316,6 +317,10 @@ public class Gear extends DAO<Gear> {
 		return Calc.clamp(modifiers.getCritical().apply(base), 0, 100);
 	}
 
+	public boolean isDestroyed() {
+		return destroyed;
+	}
+
 	public void load(Actor<?> owner) {
 		attributes = new Attributes();
 		modifiers.clear();
@@ -412,5 +417,10 @@ public class Gear extends DAO<Gear> {
 		}
 
 		return out;
+	}
+
+	@Override
+	public void afterDelete() {
+		destroyed = true;
 	}
 }
