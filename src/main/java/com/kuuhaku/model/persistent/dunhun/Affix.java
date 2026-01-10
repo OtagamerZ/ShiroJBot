@@ -207,6 +207,13 @@ public class Affix extends DAO<Affix> {
 		});
 
 		String tp = type != null ? type.name() : "";
+		System.out.println(tp);
+		System.out.println(gear.getReqLevel());
+		System.out.println(tags);
+		System.out.println(affixes);
+		System.out.println(groups);
+		System.out.println(only.get());
+
 		List<Object[]> affs = new ArrayList<>(
 				DAO.queryAllUnmapped("""
 				SELECT id
