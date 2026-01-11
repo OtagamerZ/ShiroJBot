@@ -104,14 +104,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		getHand().getData().put("last_equipment", e);
 		getHand().getData().put("last_evogear", e);
 
-		if (getHand().getOrigins().synergy() == Race.SLIME) {
-			getStats().getAtk().set(new FlatMod(e.getDmg()));
-			getStats().getDfs().set(new FlatMod(e.getDfs()));
-			getStats().getDodge().set(new FlatMod(e.getDodge()));
-			getStats().getParry().set(new FlatMod(e.getParry()));
-			return false;
-		}
-
 		if (e.hasCharm(Charm.TIMEWARP)) {
 			int times = Charm.TIMEWARP.getValue(e.getTier());
 			for (int i = 0; i < times; i++) {
@@ -132,6 +124,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					s.setCooldown(1);
 				}
 			}));
+		}
+
+		if (getHand().getOrigins().synergy() == Race.SLIME) {
+			getStats().getAtk().set(new FlatMod(e.getDmg()));
+			getStats().getDfs().set(new FlatMod(e.getDfs()));
+			getStats().getDodge().set(new FlatMod(e.getDodge()));
+			getStats().getParry().set(new FlatMod(e.getParry()));
+			return false;
 		}
 
 		return true;
