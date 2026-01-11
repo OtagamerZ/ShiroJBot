@@ -62,6 +62,7 @@ import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.ON_DRAW_MULTIPLE;
@@ -528,7 +529,7 @@ public class Hand {
 		if (game.getArcade() == Arcade.DECK_ROYALE) return null;
 
 		BondedList<Drawable<?>> deck = getDeck();
-		Drawable<?> out = deck.removeFirst(d -> d instanceof Senshi s && s.getRace() == race);
+		Drawable<?> out = deck.removeFirst(d -> d instanceof Senshi s && s.getRace().isRace(race));
 		if (out != null) {
 			return addToHand(out, false);
 		}
@@ -663,7 +664,16 @@ public class Hand {
 
 		var reroll = cards.stream()
 				.filter(Drawable::isAvailable)
-				.toList();
+				.collect(Collectors.toCollection(ArrayList::new));
+
+		if (reroll.isEmpty()) return;
+		else if (origin.synergy() == Race.DJINN) {
+			Drawable<?> offer = Utils.getRandomEntry(reroll);
+			reroll.remove(offer);
+			cards.remove(offer);
+
+			getOther().cards.add(offer);
+		}
 
 		discard.addAll(reroll);
 		deck.addAll(reroll);
@@ -672,13 +682,8 @@ public class Hand {
 		Utils.shuffle(deck, game.getRng());
 
 		int draws = reroll.size();
-		if (origin.synergy() == Race.DJINN) {
-			consumeDraws(-(draws - 1));
-			manualDraw(draws - 1);
-		} else {
-			consumeDraws(-draws);
-			manualDraw(draws);
-		}
+		consumeDraws(-draws);
+		manualDraw(draws);
 	}
 
 	public void verifyCap() {

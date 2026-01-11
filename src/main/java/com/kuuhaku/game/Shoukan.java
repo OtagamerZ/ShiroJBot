@@ -131,7 +131,10 @@ public class Shoukan extends GameInstance<Phase> {
 		this.arena = new Arena(this);
 
 		setSingleplayer(p1.equals(p2));
-		this.hands = Map.of(Side.TOP, new Hand(p1, this, Side.TOP), Side.BOTTOM, new Hand(p2, this, Side.BOTTOM));
+		this.hands = Map.of(
+				Side.TOP, new Hand(p1, this, Side.TOP),
+				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
+		);
 
 		setTimeout(_ -> {
 			if (getCurrent().selectionPending() && isLocked()) {
