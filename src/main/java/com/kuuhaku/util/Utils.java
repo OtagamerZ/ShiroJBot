@@ -1437,4 +1437,47 @@ public abstract class Utils {
 			c.sendMessage(chn.locale().get(message, argGen.apply(chn.locale()).toArray())).queue();
 		}
 	}
+
+	private static int roman(char c) {
+		return switch (c) {
+			case 'i', 'I' -> 1;
+			case 'v', 'V' -> 5;
+			case 'x', 'X' -> 10;
+			case 'l', 'L' -> 50;
+			case 'c', 'C' -> 100;
+			case 'd', 'D' -> 500;
+			case 'm', 'M' -> 1000;
+			default -> 0;
+		};
+	}
+
+	public static int romanToInt(String str) {
+		int out = 0;
+		int len = str.length();
+		for (int i = 0; i < len; i++) {
+			if (i + 1 < len && roman(str.charAt(i)) < roman(str.charAt(i + 1))) {
+				out -= roman(str.charAt(i));
+			} else {
+				out += roman(str.charAt(i));
+			}
+		}
+
+		return out;
+	}
+
+	public static String intToRoman(int val) {
+		return StringUtils.repeat("I", val)
+				.replace("IIIII", "V")
+				.replace("IIII", "IV")
+				.replace("VV", "X")
+				.replace("VIV", "IX")
+				.replace("XXXXX", "L")
+				.replace("XXXX", "XL")
+				.replace("LL", "C")
+				.replace("LXL", "XC")
+				.replace("CCCCC", "D")
+				.replace("CCCC", "CD")
+				.replace("DD", "M")
+				.replace("DCD", "CM");
+	}
 }
