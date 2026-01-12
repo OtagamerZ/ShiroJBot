@@ -31,6 +31,7 @@ import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -379,7 +380,25 @@ public abstract class DAO<T extends DAO<T>> {
 				return (T) this;
 			} else {
 				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-				return (T) Utils.getOr(em.find(getClass(), key), this);
+				T t = (T) em.find(getClass(), key);
+				if (t != null) {
+					for (Field f : FieldUtils.getAllFields(getClass())) {
+						if (f.isAnnotationPresent(Id.class) || f.isAnnotationPresent(Transient.class) || Modifier.isTransient(f.getModifiers()) || Modifier.isFinal(f.getModifiers())) {
+							continue;
+						}
+
+						try {
+							Object val = FieldUtils.readField(f, t, true);
+							FieldUtils.writeField(f, this, val, true);
+						} catch (Exception e) {
+							Constants.LOGGER.warn("Failed to refresh field {} of entity {} [{}]: {}",
+									f.getName(), getClass().getSimpleName(), key, e.getMessage()
+							);
+						}
+					}
+				}
+
+				return (T) Utils.getOr(t, this);
 			}
 		});
 	}
