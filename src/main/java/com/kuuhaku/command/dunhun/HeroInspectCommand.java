@@ -99,13 +99,9 @@ public class HeroInspectCommand implements Executable {
 		List<GlobalDrop> mats = DAO.queryAll(GlobalDrop.class, """
 				SELECT g
 				FROM GlobalDrop g
-				WHERE g.maxRarity IS NOT NULL
-				  AND g.effect IS NOT NULL
+				WHERE g.effect IS NOT NULL
+				ORDER BY id
 				""");
-		mats.sort(Comparator
-				.<GlobalDrop>comparingInt(gd -> gd.getMaxRarity().ordinal())
-				.thenComparing(GlobalDrop::getId)
-		);
 
 		AtomicReference<Message> msg = new AtomicReference<>();
 

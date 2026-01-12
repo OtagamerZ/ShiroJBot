@@ -416,7 +416,6 @@ public class Gear extends DAO<Gear> {
 
 	@PostLoad
 	private void onPostLoad() {
-		System.out.println("init " + id);
 		load(null);
 	}
 
