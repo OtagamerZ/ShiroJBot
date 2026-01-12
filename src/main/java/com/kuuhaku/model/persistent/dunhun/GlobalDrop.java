@@ -2,6 +2,7 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.ItemUseException;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.enums.I18N;
@@ -75,6 +76,8 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 					"gear", gear
 			));
 		} catch (Exception e) {
+			if (e instanceof ItemUseException) throw e;
+
 			Constants.LOGGER.warn("Failed to apply crafting item {}", id, e);
 		}
 	}
