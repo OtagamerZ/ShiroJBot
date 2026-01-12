@@ -310,14 +310,17 @@ public class HeroInspectCommand implements Executable {
 							} else {
 								update.run();
 							}
-						} catch (ItemUseException e) {
-							acc.addItem(item, 1);
-							String out = locale.get(e.getMessage(), e.getArgs());
-							if (out.isBlank() || out.equalsIgnoreCase(e.getMessage())) {
-								out = locale.get("icon/error") + " | " + LocalizedString.get(locale, e.getMessage(), "").formatted(e.getArgs());
+						} catch (Exception e) {
+							if (e instanceof ItemUseException ex) {
+								String out = locale.get(ex.getMessage(), ex.getArgs());
+								if (out.isBlank() || out.equalsIgnoreCase(ex.getMessage())) {
+									out = locale.get("icon/error") + " | " + LocalizedString.get(locale, ex.getMessage(), "").formatted(ex.getArgs());
+								}
+
+								w.getChannel().sendMessage(Utils.getOr(out, e.getMessage())).queue();
 							}
 
-							w.getChannel().sendMessage(Utils.getOr(out, e.getMessage())).queue();
+							acc.addItem(item, 1);
 						}
 					}
 			);
