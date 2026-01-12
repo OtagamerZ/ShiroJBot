@@ -239,8 +239,8 @@ public class Affix extends DAO<Affix> {
 			int maxSuffs = (int) gear.getModifiers().getSuffixes().apply(affsPerType);
 
 			if (maxRarity == RarityClass.MAGIC) {
-				maxPrefs = Math.min(maxPrefs, 1);
-				maxSuffs = Math.min(maxSuffs, 1);
+				maxPrefs = Math.min(maxPrefs, affsPerType);
+				maxSuffs = Math.min(maxSuffs, affsPerType);
 			}
 
 			List<AffixType> left = new ArrayList<>();
