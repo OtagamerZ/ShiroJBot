@@ -358,7 +358,8 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public Gear copy() {
-		Gear clone = unique != null ? new Gear(owner, unique) : new Gear(owner, basetype);
+		Gear clone = new Gear(owner, basetype);
+		clone.unique = unique;
 		clone.roll = roll;
 		clone.seed = seed;
 
