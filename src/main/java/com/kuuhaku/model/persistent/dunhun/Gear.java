@@ -74,7 +74,7 @@ public class Gear extends DAO<Gear> {
 
 	@OneToMany(mappedBy = "gear", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<GearAffix> affixes = new LinkedHashSet<>();
+	private Set<GearAffix> affixes = new HashSet<>();
 
 	@Column(name = "base_roll", nullable = false)
 	private int roll = Calc.rng(Integer.MAX_VALUE);

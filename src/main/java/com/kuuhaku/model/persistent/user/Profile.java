@@ -72,6 +72,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 
 	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
+	@OrderBy("date")
 	private List<Warn> warns = new ArrayList<>();
 
 	@ManyToOne(optional = false)
