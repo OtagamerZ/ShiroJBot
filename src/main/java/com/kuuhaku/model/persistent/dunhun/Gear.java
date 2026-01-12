@@ -82,6 +82,9 @@ public class Gear extends DAO<Gear> {
 	@Column(name = "seed", nullable = false)
 	private int seed = Calc.rng(Integer.MAX_VALUE);
 
+	@Column(name = "immutable", nullable = false)
+	private boolean immutable = false;
+
 	private transient final GearModifiers modifiers = new GearModifiers();
 	private transient final Set<EffectBase> effects = new HashSet<>();
 	private transient Attributes attributes;
@@ -236,6 +239,14 @@ public class Gear extends DAO<Gear> {
 
 	public double getRoll() {
 		return roll;
+	}
+
+	public int getSeed() {
+		return seed;
+	}
+
+	public boolean isImmutable() {
+		return immutable;
 	}
 
 	public String getName(I18N locale) {

@@ -166,8 +166,14 @@ public class HeroInspectCommand implements Executable {
 		}
 
 		if (!attrs.isEmpty()) {
-			eb.appendDescription(String.join(" | ", attrs) + "\n\n");
+			eb.appendDescription(String.join(" | ", attrs) + "\n");
 		}
+
+		if (g.isImmutable()) {
+			eb.appendDescription("-# **" + locale.get("str/immutable") + "**\n");
+		}
+
+		eb.appendDescription("\n");
 
 		GearAffix imp = g.getImplicit();
 		if (imp != null) {
@@ -237,7 +243,7 @@ public class HeroInspectCommand implements Executable {
 			img = FileUpload.fromData(IO.getBytes(icon, "png"), "thumb.png");
 		}
 
-		if (acc.getUid().equals(g.getOwner().getAccount().getUid())) {
+		if (!g.isImmutable() && acc.getUid().equals(g.getOwner().getAccount().getUid())) {
 			Runnable update = () -> updateEmbed(locale, acc, g, eb, event, msg, mats);
 			ButtonizeHelper helper = getButtons(locale, acc, g, mats, update);
 
@@ -275,8 +281,6 @@ public class HeroInspectCommand implements Executable {
 	}
 
 	private static ButtonizeHelper getButtons(I18N locale, Account acc, Gear g, List<GlobalDrop> mats, Runnable update) {
-		RarityClass rarity = g.getRarityClass();
-
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(u -> u.getId().equals(acc.getUid()))
