@@ -357,6 +357,28 @@ public class Gear extends DAO<Gear> {
 		}
 	}
 
+	public Gear copy() {
+		Gear clone = new Gear(owner, unique);
+		clone.roll = roll;
+		clone.seed = seed;
+
+		for (GearAffix affix : affixes) {
+			clone.affixes.add(new GearAffix(clone, affix.getAffix(), affix.getRoll()));
+		}
+
+		return clone;
+	}
+
+	@PostLoad
+	private void onPostLoad() {
+		load(null);
+	}
+
+	@Override
+	public void afterDelete() {
+		destroyed = true;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -431,15 +453,5 @@ public class Gear extends DAO<Gear> {
 		}
 
 		return out;
-	}
-
-	@PostLoad
-	private void onPostLoad() {
-		load(null);
-	}
-
-	@Override
-	public void afterDelete() {
-		destroyed = true;
 	}
 }
