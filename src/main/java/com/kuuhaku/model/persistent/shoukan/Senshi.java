@@ -1140,25 +1140,25 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public Senshi getFrontline() {
-		if (slot == null || !isSupporting()) return null;
+		if (!isSupporting() || slot == null) return null;
 
 		return slot.getTop();
 	}
 
 	public void setFrontline(Senshi card) {
-		if (slot == null || !isSupporting()) return;
+		if (!isSupporting() || slot == null) return;
 
 		slot.setTop(card);
 	}
 
 	public Senshi getSupport() {
-		if (slot == null || isSupporting()) return null;
+		if (isSupporting() || slot == null) return null;
 
 		return slot.getBottom();
 	}
 
 	public void setSupport(Senshi card) {
-		if (slot == null || isSupporting()) return;
+		if (isSupporting() || slot == null) return;
 
 		slot.setBottom(card);
 	}
