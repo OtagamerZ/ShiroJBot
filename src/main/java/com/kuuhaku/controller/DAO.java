@@ -362,12 +362,7 @@ public abstract class DAO<T extends DAO<T>> {
 				return (T) this;
 			} else {
 				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-				T t = (T) em.find(getClass(), key);
-				if (t != null) {
-					em.refresh(t);
-				}
-
-				return (T) Utils.getOr(t, this);
+				return (T) Utils.getOr(em.find(getClass(), key), this);
 			}
 		});
 	}
