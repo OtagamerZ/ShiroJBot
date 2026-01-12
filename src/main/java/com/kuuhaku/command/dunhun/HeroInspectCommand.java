@@ -42,7 +42,6 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.GearStats;
-import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -51,19 +50,18 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.FileUpload;
-import net.dv8tion.jda.api.utils.messages.MessageRequest;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -244,27 +242,19 @@ public class HeroInspectCommand implements Executable {
 		}
 
 		if (acc.getUid().equals(g.getOwner().getAccount().getUid())) {
-			XStringBuilder table = new XStringBuilder();
 			Runnable update = () -> updateEmbed(locale, acc.refresh(), g, eb, event, msg, mats);
-			ButtonizeHelper helper = getButtons(locale, acc, g, mats, table, update);
-
-			List<MessageEmbed> embeds = new ArrayList<>();
-			embeds.add(eb.build());
-			if (!table.isEmpty()) {
-				EmbedBuilder tableEb = new ColorlessEmbedBuilder();
-				embeds.add(tableEb.setDescription(table.toString()).build());
-			}
+			ButtonizeHelper helper = getButtons(locale, acc, g, mats, update);
 
 			RestAction<Message> act;
 			if (msg.get() == null) {
-				MessageCreateAction ma = event.channel().sendMessageEmbeds(embeds);
+				MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
 				if (img != null) {
 					ma.setFiles(img);
 				}
 
 				act = helper != null ? helper.apply(ma) : ma;
 			} else {
-				MessageEditAction ma = msg.get().editMessageEmbeds(embeds);
+				MessageEditAction ma = msg.get().editMessageEmbeds(eb.build());
 				if (img != null) {
 					ma.setFiles(img);
 				}
@@ -288,13 +278,15 @@ public class HeroInspectCommand implements Executable {
 		}
 	}
 
-	private static ButtonizeHelper getButtons(I18N locale, Account acc, Gear g, List<GlobalDrop> mats, XStringBuilder table, Runnable update) {
+	private static ButtonizeHelper getButtons(I18N locale, Account acc, Gear g, List<GlobalDrop> mats, Runnable update) {
 		RarityClass rarity = g.getRarityClass();
 
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(u -> u.getId().equals(acc.getUid()))
 				.setCancellable(false);
+
+		EmbedBuilder table = new ColorlessEmbedBuilder();
 
 		boolean valid = false;
 		for (GlobalDrop mat : mats) {
@@ -304,7 +296,7 @@ public class HeroInspectCommand implements Executable {
 			if (affs < mat.getMinMods() || affs >= mat.getMaxMods()) continue;
 
 			UserItem item = mat.getItem();
-			table.appendNewLine("-# " + item.getIcon() + " " + item.getDescription(locale) + "\n");
+			table.appendDescription("-# " + item.getIcon() + " " + item.getDescription(locale) + "\n");
 
 			helper.addAction(
 					new EmojiId(Utils.parseEmoji(item.getIcon()), String.valueOf(acc.getItemCount(item.getId()))),
@@ -335,6 +327,13 @@ public class HeroInspectCommand implements Executable {
 
 			valid = true;
 		}
+
+		helper.addAction(locale.get("str/help"), w -> {
+			Objects.requireNonNull(w.getHook())
+					.setEphemeral(true)
+					.sendMessageEmbeds(table.build())
+					.queue();
+		});
 
 		return valid ? helper : null;
 	}
