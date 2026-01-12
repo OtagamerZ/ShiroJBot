@@ -84,7 +84,7 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 		else if (canUse == null) return true;
 
 		try {
-			Object out = Utils.exec(id, effect, Map.of("gear", gear));
+			Object out = Utils.exec(id, canUse, Map.of("gear", gear));
 			if (out instanceof Boolean b) {
 				return b;
 			}
