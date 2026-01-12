@@ -87,6 +87,8 @@ public class Affix extends DAO<Affix> {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();
 
+	private transient List<String> tierCache;
+
 	public String getId() {
 		return id;
 	}
@@ -116,9 +118,12 @@ public class Affix extends DAO<Affix> {
 	}
 
 	public List<String> getTiers() {
-		if (!Utils.regex(id, "_[IVX]+$").find()) return List.of();
+		if (tierCache != null) return tierCache;
+		else if (!Utils.regex(id, "_[IVX]+$").find()) {
+			return tierCache = List.of();
+		}
 
-		return DAO.queryAllNative(String.class, """
+		return tierCache = DAO.queryAllNative(String.class, """
 				SELECT id
 				FROM affix
 				WHERE get_affix_family(id) = get_affix_family(?1)
