@@ -4,16 +4,11 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
-import com.kuuhaku.model.common.dunhun.Actor;
-import com.kuuhaku.model.common.dunhun.context.ActorContext;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.AffixType;
-import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -46,19 +41,13 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 	@Column(name = "min_level", nullable = false)
 	private int minLevel;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "max_rarity")
-	private RarityClass maxRarity;
-
-	@Column(name = "min_mods")
-	private Integer minMods;
-
-	@Column(name = "max_mods")
-	private Integer maxMods;
-
 	@Language("Groovy")
 	@Column(name = "effect", columnDefinition = "TEXT")
 	private String effect;
+
+	@Language("Groovy")
+	@Column(name = "can_use", columnDefinition = "TEXT")
+	private String canUse;
 
 	public String getId() {
 		return id;
@@ -72,20 +61,8 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 		return minLevel;
 	}
 
-	public RarityClass getMaxRarity() {
-		return maxRarity;
-	}
-
-	public int getMinMods() {
-		return Utils.getOr(minMods, 0);
-	}
-
-	public int getMaxMods() {
-		return Utils.getOr(maxMods, Integer.MAX_VALUE);
-	}
-
 	public void apply(I18N locale, MessageChannel channel, Account acc, Gear gear) {
-		if (maxRarity == null || effect == null) return;
+		if (effect == null) return;
 
 		try {
 			Utils.exec(id, effect, Map.of(
@@ -97,6 +74,22 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to apply crafting item {}", id, e);
 		}
+	}
+
+	public boolean canUse(Gear gear) {
+		if (effect == null) return false;
+		else if (canUse == null) return true;
+
+		try {
+			Object out = Utils.exec(id, effect, Map.of("gear", gear));
+			if (out instanceof Boolean b) {
+				return b;
+			}
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to check usability of {}", id, e);
+		}
+
+		return false;
 	}
 
 	@Override

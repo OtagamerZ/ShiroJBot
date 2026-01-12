@@ -290,10 +290,7 @@ public class HeroInspectCommand implements Executable {
 
 		boolean valid = false;
 		for (GlobalDrop mat : mats) {
-			if (mat.getMaxRarity().ordinal() < rarity.ordinal()) continue;
-
-			int affs = g.getAffixes().size();
-			if (affs < mat.getMinMods() || affs >= mat.getMaxMods()) continue;
+			if (!mat.canUse(g)) continue;
 
 			UserItem item = mat.getItem();
 			table.appendDescription("-# " + item.getIcon() + " " + item.getDescription(locale) + "\n");
