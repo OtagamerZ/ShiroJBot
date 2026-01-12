@@ -100,7 +100,7 @@ public class HeroInspectCommand implements Executable {
 				SELECT g
 				FROM GlobalDrop g
 				WHERE g.effect IS NOT NULL
-				ORDER BY id
+				ORDER BY sorting
 				""");
 
 		AtomicReference<Message> msg = new AtomicReference<>();

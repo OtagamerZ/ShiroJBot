@@ -49,6 +49,9 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 	@Column(name = "can_use", columnDefinition = "TEXT")
 	private String canUse;
 
+	@Column(name = "sorting")
+	private Integer sorting;
+
 	public String getId() {
 		return id;
 	}
@@ -90,6 +93,10 @@ public class GlobalDrop extends DAO<GlobalDrop> {
 		}
 
 		return false;
+	}
+
+	public Integer getSorting() {
+		return sorting;
 	}
 
 	@Override
