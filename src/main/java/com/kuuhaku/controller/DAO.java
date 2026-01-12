@@ -348,7 +348,9 @@ public abstract class DAO<T extends DAO<T>> {
 
 			try {
 				beforeSave();
-				return em.merge((T) this);
+				T t = em.merge((T) this);
+				copyFields(t);
+				return t;
 			} finally {
 				afterSave();
 			}
@@ -381,22 +383,7 @@ public abstract class DAO<T extends DAO<T>> {
 			} else {
 				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
 				T t = (T) em.find(getClass(), key);
-				if (t != null) {
-					for (Field f : FieldUtils.getAllFields(getClass())) {
-						if (f.isAnnotationPresent(Id.class) || f.isAnnotationPresent(Transient.class) || Modifier.isTransient(f.getModifiers()) || Modifier.isFinal(f.getModifiers())) {
-							continue;
-						}
-
-						try {
-							Object val = FieldUtils.readField(f, t, true);
-							FieldUtils.writeField(f, this, val, true);
-						} catch (Exception e) {
-							Constants.LOGGER.warn("Failed to refresh field {} of entity {} [{}]: {}",
-									f.getName(), getClass().getSimpleName(), key, e.getMessage()
-							);
-						}
-					}
-				}
+				copyFields(t);
 
 				return (T) Utils.getOr(t, this);
 			}
@@ -456,5 +443,24 @@ public abstract class DAO<T extends DAO<T>> {
 	}
 
 	public void afterDelete() {
+	}
+
+	private void copyFields(T source) {
+		if (source == null || source == this) return;
+
+		for (Field f : FieldUtils.getAllFields(getClass())) {
+			if (f.isAnnotationPresent(Id.class) || f.isAnnotationPresent(Transient.class) || Modifier.isTransient(f.getModifiers()) || Modifier.isFinal(f.getModifiers())) {
+				continue;
+			}
+
+			try {
+				Object val = FieldUtils.readField(f, source, true);
+				FieldUtils.writeField(f, this, val, true);
+			} catch (Exception e) {
+				Constants.LOGGER.warn("Failed to copy field {} of entity {}: {}",
+						f.getName(), getClass().getSimpleName(), e.getMessage()
+				);
+			}
+		}
 	}
 }
