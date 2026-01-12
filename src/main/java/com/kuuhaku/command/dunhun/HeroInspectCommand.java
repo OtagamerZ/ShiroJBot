@@ -310,7 +310,7 @@ public class HeroInspectCommand implements Executable {
 							acc.addItem(item, 1);
 							String out = locale.get(e.getMessage(), e.getArgs());
 							if (out.isBlank() || out.equalsIgnoreCase(e.getMessage())) {
-								out = LocalizedString.get(locale, e.getMessage(), "").formatted(e.getArgs());
+								out = locale.get("icon/error") + " | " + LocalizedString.get(locale, e.getMessage(), "").formatted(e.getArgs());
 							}
 
 							w.getChannel().sendMessage(Utils.getOr(out, e.getMessage())).queue();
