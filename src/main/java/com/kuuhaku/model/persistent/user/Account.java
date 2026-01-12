@@ -56,7 +56,7 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -211,7 +211,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	public void addCR(long value, String reason) {
 		if (value <= 0) return;
 
-		apply(getClass(), uid, a -> {
+		apply(a -> {
 			long liquid = value;
 			if (a.getDebit() > 0) {
 				long deducted = Math.min(liquid, a.getDebit());
@@ -227,7 +227,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	public void consumeCR(long value, String reason) {
 		if (value <= 0) return;
 
-		apply(getClass(), uid, a -> {
+		apply(a -> {
 			a.setBalance(a.getBalance() - value);
 			if (a.getBalance() < 0) {
 				a.setDebit(-a.getBalance() + a.getDebit());
@@ -242,7 +242,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		if (value <= 0) return;
 
 		Account target = DAO.find(Account.class, uid);
-		apply(getClass(), this.uid, a -> {
+		apply(a -> {
 			a.setLastTransfer(ZonedDateTime.now(ZoneId.of("GMT-3")));
 			a.setBalance(a.getBalance() - value);
 			if (a.getBalance() < 0) {
@@ -266,7 +266,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	public void addGems(int value, String reason) {
 		if (value <= 0) return;
 
-		apply(getClass(), uid, a -> {
+		apply(a -> {
 			a.setGems(a.getGems() + value);
 			a.addTransaction(value, true, reason, Currency.GEM);
 		});
@@ -275,7 +275,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	public void consumeGems(int value, String reason) {
 		if (value <= 0) return;
 
-		apply(getClass(), uid, a -> {
+		apply(a -> {
 			a.setGems(a.getGems() - value);
 			a.addTransaction(value, false, reason, Currency.GEM);
 		});
@@ -448,13 +448,11 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	}
 
 	public void addItem(String id, int amount) {
-		apply(getClass(), uid, a ->
-				a.getInventory().compute(id.toUpperCase(), (k, v) -> {
-					if (v == null) return amount;
+		apply(a -> a.getInventory().compute(id.toUpperCase(), (k, v) -> {
+			if (v == null) return amount;
 
-					return ((Number) v).intValue() + amount;
-				})
-		);
+			return ((Number) v).intValue() + amount;
+		}));
 	}
 
 	public boolean consumeItem(UserItem item) {
@@ -476,8 +474,8 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	public boolean consumeItem(String id, int amount, boolean force) {
 		if (amount <= 0) return false;
 
-		AtomicBoolean consumed = new AtomicBoolean();
-		apply(getClass(), uid, a -> {
+		AtomicReference<Boolean> consumed = new AtomicReference<>();
+		apply(a -> {
 			int rem = a.getInventory().getInt(id.toUpperCase());
 			if (rem < amount && !force) return;
 
@@ -487,10 +485,12 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 				a.getInventory().put(id.toUpperCase(), rem - amount);
 			}
 
-			consumed.set(true);
+			if (consumed.get() == null) {
+				consumed.set(true);
+			}
 		});
 
-		return consumed.get();
+		return consumed.get() == true;
 	}
 
 	public Map<UserItem, Integer> getItems() {

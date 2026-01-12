@@ -491,7 +491,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		for (Hero h : heroes.values()) {
 			int xp = Math.max(1, loot.xp().get());
-			DAO.apply(Hero.class, h.getId(), n -> {
+			h.apply(n -> {
 				int gain = xp;
 
 				int lvl = n.getLevel();
@@ -856,7 +856,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}, Utils::doNothing);
 
 		for (Hero h : heroes.values()) {
-			DAO.apply(Hero.class, h.getId(), n -> {
+			h.apply(n -> {
 				for (Consumable c : h.getConsumables()) {
 					n.setConsumableCount(c.getId(), c.getCount());
 				}

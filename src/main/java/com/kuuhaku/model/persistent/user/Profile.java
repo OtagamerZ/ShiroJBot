@@ -163,7 +163,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 	}
 
 	public void warn(User issuer, String reason) {
-		apply(Profile.class, id, p -> p.warns.add(new Warn(p, issuer, reason)));
+		apply(p -> p.warns.add(new Warn(p, issuer, reason)));
 
 		AutoRule rule = null;
 		int mult = 0;

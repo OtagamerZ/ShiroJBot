@@ -242,7 +242,7 @@ public class HeroInspectCommand implements Executable {
 		}
 
 		if (acc.getUid().equals(g.getOwner().getAccount().getUid())) {
-			Runnable update = () -> updateEmbed(locale, acc.refresh(), g.refresh(), eb, event, msg, mats);
+			Runnable update = () -> updateEmbed(locale, acc, g.refresh(), eb, event, msg, mats);
 			ButtonizeHelper helper = getButtons(locale, acc, g, mats, update);
 
 			RestAction<Message> act;

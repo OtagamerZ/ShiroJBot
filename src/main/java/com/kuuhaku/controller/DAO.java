@@ -227,7 +227,6 @@ public abstract class DAO<T extends DAO<T>> {
 				if (lock.isBlacklisted()) return;
 			}
 
-			em.refresh(obj);
 			consumer.accept(obj);
 			em.merge(obj);
 		});
@@ -339,18 +338,36 @@ public abstract class DAO<T extends DAO<T>> {
 		});
 	}
 
-	public final void save() {
-		Manager.getFactory().runInTransaction(em -> {
+	@SuppressWarnings("unchecked")
+	public final T save() {
+		return Manager.getFactory().callInTransaction(em -> {
 			if (this instanceof Blacklistable lock) {
-				if (lock.isBlacklisted()) return;
+				if (lock.isBlacklisted()) return (T) this;
 			}
 
 			try {
 				beforeSave();
-				em.merge(this);
+				return em.merge((T) this);
 			} finally {
 				afterSave();
 			}
+		});
+	}
+
+	@SuppressWarnings("unchecked")
+	public void apply(@NotNull Consumer<T> consumer) {
+		Manager.getFactory().runInTransaction(em -> {
+			Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+
+			T t = (T) em.find(getClass(), key);
+			if (t == null) return;
+			else if (t instanceof Blacklistable lock) {
+				if (lock.isBlacklisted()) return;
+			}
+
+			consumer.accept(t);
+			consumer.accept((T) this);
+			em.merge(t);
 		});
 	}
 
