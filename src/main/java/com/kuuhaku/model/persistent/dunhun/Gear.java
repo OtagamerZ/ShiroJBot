@@ -107,6 +107,10 @@ public class Gear extends DAO<Gear> {
 		return id;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public Basetype getBasetype() {
 		return basetype;
 	}
@@ -247,6 +251,10 @@ public class Gear extends DAO<Gear> {
 
 	public boolean isImmutable() {
 		return immutable;
+	}
+
+	public void setImmutable(boolean immutable) {
+		this.immutable = immutable;
 	}
 
 	public String getName(I18N locale) {
