@@ -25,6 +25,7 @@ import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.ActorContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
+import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedAffix;
 import com.kuuhaku.model.records.dunhun.ValueRange;
@@ -186,7 +187,7 @@ public class Affix extends DAO<Affix> {
 		return Objects.hashCode(id);
 	}
 
-	public static Affix getRandom(Gear gear, AffixType type, int maxMods) {
+	public static Affix getRandom(Gear gear, AffixType type, RarityClass maxRarity) {
 		Basetype base = gear.getBasetype();
 
 		JSONArray tags = new JSONArray(base.getStats().allTags());
@@ -233,12 +234,18 @@ public class Affix extends DAO<Affix> {
 		if (affs.isEmpty()) return null;
 
 		if (type == null) {
-			int prefs = (int) gear.getModifiers().getPrefixes().apply(maxMods / 2d);
-			int suffs = (int) gear.getModifiers().getSuffixes().apply(maxMods / 2d);
+			int affsPerType = maxRarity.getMaxMods() / 2;
+			int maxPrefs = (int) gear.getModifiers().getPrefixes().apply(affsPerType);
+			int maxSuffs = (int) gear.getModifiers().getSuffixes().apply(affsPerType);
+
+			if (maxRarity == RarityClass.MAGIC) {
+				maxPrefs = Math.min(maxPrefs, 1);
+				maxSuffs = Math.min(maxSuffs, 1);
+			}
 
 			List<AffixType> left = new ArrayList<>();
-			left.addAll(Utils.generate(prefs, (_) -> AffixType.PREFIX));
-			left.addAll(Utils.generate(suffs, (_) -> AffixType.SUFFIX));
+			left.addAll(Utils.generate(maxPrefs, (_) -> AffixType.PREFIX));
+			left.addAll(Utils.generate(maxSuffs, (_) -> AffixType.SUFFIX));
 			left.removeIf(a -> affs.stream().noneMatch(o -> o[2].equals(a.name())));
 
 			for (GearAffix ga : gear.getAffixes()) {
