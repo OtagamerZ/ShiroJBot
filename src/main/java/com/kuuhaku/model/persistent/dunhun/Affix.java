@@ -115,18 +115,20 @@ public class Affix extends DAO<Affix> {
 		return group;
 	}
 
-	public int getTier() {
-		return DAO.queryNative(Integer.class, """
-				SELECT x.tier
-				FROM (
-				     SELECT id
-				          , row_number() OVER (ORDER BY id DESC) AS tier
-				     FROM affix
-				     WHERE get_affix_family(id) = get_affix_family(?1)
-				     ) x
-				WHERE x.id = ?1
+	public List<String> getTiers() {
+		if (!Utils.regex(id, "_[IVX]+$").find()) return List.of();
+
+		return DAO.queryAllNative(String.class, """
+				SELECT id
+				FROM affix
+				WHERE get_affix_family(id) = get_affix_family(?1)
+				ORDER BY get_roman_value(split_part(id, '_', -1)) DESC
 				""", id
 		);
+	}
+
+	public int getTier() {
+		return getTiers().indexOf(id) + 1;
 	}
 
 	public String getEffect() {
@@ -209,19 +211,19 @@ public class Affix extends DAO<Affix> {
 		String tp = type != null ? type.name() : "";
 		List<Object[]> affs = new ArrayList<>(
 				DAO.queryAllUnmapped("""
-				SELECT id
-				     , weight
-				     , type
-				FROM affix
-				WHERE ((?1 = '' OR type = ?1) AND type NOT LIKE 'MON\\_%')
-				  AND weight > 0
-				  AND (min_level <= ?2 OR has(cast(?3 AS JSONB), 'ACCESSORY'))
-				  AND req_tags <@ cast(?3 AS JSONB)
-				  AND NOT (has(req_tags, 'WEAPON') AND has(cast(?3 AS JSONB), 'OFFHAND'))
-				  AND NOT has(get_affix_family(cast(?4 AS JSONB)), get_affix_family(id))
-				  AND (affix_group IS NULL OR affix_group NOT IN ?5)
-				  AND (cast(?6 AS VARCHAR) = '' OR has(tags, ?6))
-				""", tp, gear.getReqLevel(), tags.toString(), affixes.toString(), groups, only.get())
+						SELECT id
+						     , weight
+						     , type
+						FROM affix
+						WHERE ((?1 = '' OR type = ?1) AND type NOT LIKE 'MON\\_%')
+						  AND weight > 0
+						  AND (min_level <= ?2 OR has(cast(?3 AS JSONB), 'ACCESSORY'))
+						  AND req_tags <@ cast(?3 AS JSONB)
+						  AND NOT (has(req_tags, 'WEAPON') AND has(cast(?3 AS JSONB), 'OFFHAND'))
+						  AND NOT has(get_affix_family(cast(?4 AS JSONB)), get_affix_family(id))
+						  AND (affix_group IS NULL OR affix_group NOT IN ?5)
+						  AND (cast(?6 AS VARCHAR) = '' OR has(tags, ?6))
+						""", tp, gear.getReqLevel(), tags.toString(), affixes.toString(), groups, only.get())
 		);
 		if (affs.isEmpty()) return null;
 

@@ -408,4 +408,31 @@ public abstract class Calc {
 	public static double interp(double min, double max, double fac) {
 		return min + (max - min) * fac;
 	}
+
+	private static int roman(char c) {
+		return switch (c) {
+			case 'i', 'I' -> 1;
+			case 'v', 'V' -> 5;
+			case 'x', 'X' -> 10;
+			case 'l', 'L' -> 50;
+			case 'c', 'C' -> 100;
+			case 'd', 'D' -> 500;
+			case 'm', 'M' -> 1000;
+			default -> 0;
+		};
+	}
+
+	public static int romanToInt(String str) {
+		int out = 0;
+		int len = str.length();
+		for (int i = 0; i < len; i++) {
+			if (i + 1 < len && roman(str.charAt(i)) < roman(str.charAt(i + 1))) {
+				out -= roman(str.charAt(i));
+			} else {
+				out += roman(str.charAt(i));
+			}
+		}
+
+		return out;
+	}
 }
