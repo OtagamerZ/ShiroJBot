@@ -98,11 +98,6 @@ public class Gear extends DAO<Gear> {
 	public Gear(Hero owner, Basetype basetype) {
 		this.basetype = basetype;
 		this.owner = owner;
-
-		GearAffix impl = getImplicit();
-		if (impl != null) {
-			impl.apply(this, null);
-		}
 	}
 
 	public int getId() {
@@ -417,6 +412,12 @@ public class Gear extends DAO<Gear> {
 		}
 
 		return out;
+	}
+
+	@PostLoad
+	private void onPostLoad() {
+		System.out.println("init " + id);
+		load(null);
 	}
 
 	@Override

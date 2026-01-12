@@ -323,4 +323,10 @@ public class Hero extends Actor<Hero> {
 
 		return clone;
 	}
+
+	@PostLoad
+	private void onPostLoad() {
+		System.out.println("init " + getId());
+		getSenshi();
+	}
 }
