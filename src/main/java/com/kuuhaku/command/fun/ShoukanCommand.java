@@ -89,8 +89,6 @@ public class ShoukanCommand implements Executable {
 									Constants.LOGGER.error(e, e);
 									event.channel().sendMessage(locale.get("error/error", e)).queue();
 								}
-
-								m.delete().queue(null, Utils::doNothing);
 							});
 				} catch (GameReport e) {
 					switch (e.getCode()) {
@@ -109,10 +107,9 @@ public class ShoukanCommand implements Executable {
 							}
 						}
 					}
-
-					m.delete().queue(null, Utils::doNothing);
 				}
 
+				m.delete().queue(null, Utils::doNothing);
 				return true;
 			};
 

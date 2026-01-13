@@ -72,7 +72,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.function.TriConsumer;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.commons.text.WordUtils;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.Nullable;
 
@@ -2118,9 +2117,9 @@ public class Shoukan extends GameInstance<Phase> {
 			ButtonizeHelper helper = getButtons();
 			AtomicBoolean registered = new AtomicBoolean();
 			if (buffer) {
-				getChannel().buffer(WordUtils.capitalize(getString(message, args), ' '));
+				getChannel().buffer(StringUtils.capitalize(getString(message, args)));
 			} else {
-				getChannel().sendMessage(WordUtils.capitalize(getString(message, args), ' '))
+				getChannel().sendMessage(StringUtils.capitalize(getString(message, args)))
 						.addFile(IO.getBytes(arena.getThumbnail(), "jpg"), "preview.jpg")
 						.apply(helper::apply)
 						.queue(m -> {
