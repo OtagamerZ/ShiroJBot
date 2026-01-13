@@ -108,8 +108,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			int times = Charm.TIMEWARP.getValue(e.getTier());
 			for (int i = 0; i < times; i++) {
 				getStats().getPower().set(new MultMod(e, -0.1 * (i + 1)));
-				game.trigger(ON_TURN_BEGIN, asSource(ON_TURN_BEGIN));
-				game.trigger(ON_TURN_END, asSource(ON_TURN_END));
+				execute(new EffectParameters(ON_TURN_BEGIN, getSide(), asSource(ON_TURN_BEGIN)));
+				execute(new EffectParameters(ON_TURN_END, getSide(), asSource(ON_TURN_END)));
 			}
 
 			getStats().getPower().set(new MultMod(e, 0));
