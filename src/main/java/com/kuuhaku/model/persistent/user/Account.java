@@ -490,7 +490,11 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 			}
 		});
 
-		return consumed.get() == true;
+		if (consumed.get() == null) {
+			consumed.set(false);
+		}
+
+		return consumed.get();
 	}
 
 	public Map<UserItem, Integer> getItems() {
