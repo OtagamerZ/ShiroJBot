@@ -319,7 +319,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		int flat = base.getDodge();
 
 		int min = 0;
-		if (hand != null && hand.getOrigins().synergy() == Race.GEIST) {
+		if (hand != null && hand.getOrigins().synergy() == Race.WEREBEAST) {
 			min += 10;
 		}
 

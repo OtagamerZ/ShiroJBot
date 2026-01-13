@@ -568,7 +568,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			switch (hand.getOrigins().synergy()) {
 				case ONI -> {
 					if (hand.isLowLife()) {
-						mult *= 1.2;
+						mult *= 1.3;
 					}
 				}
 				case CYBERBEAST -> {
@@ -641,7 +641,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public int getActiveAttr(boolean dbl) {
-		if (isDefending()) {
+		if (!hasAttributes()) return 0;
+		else if (isDefending()) {
 			if (dbl) {
 				return getDfs() * 2;
 			}
@@ -665,7 +666,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (hand != null) {
-			if (hand.getOrigins().synergy() == Race.GEIST) {
+			if (hand.getOrigins().synergy() == Race.WEREBEAST) {
 				min += 10;
 			}
 
@@ -729,9 +730,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				mult *= 1.5;
 			}
 
-			if (hand.getOrigins().synergy() == Race.REVENANT && !hasEffect()) {
-				mult *= 1.2;
-			} else if (hand.getOrigins().synergy() == Race.FABLED) {
+			if (hand.getOrigins().synergy() == Race.FABLED) {
 				mult *= getPower();
 			}
 		}
@@ -1019,6 +1018,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isBerserk() {
+		if (getGame() != null) {
+			if (getOriginalHand().getOrigins().synergy() == Race.REVENANT && !Objects.equals(getHand(), getOriginalHand())) {
+				return true;
+			}
+		}
+
 		return Bit64.on(state, 6, 4);
 	}
 
@@ -1454,6 +1459,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 	}
 
+	public boolean hasAttributes() {
+		return !isSupporting() || getHand().getOrigins().synergy() != Race.SENTINEL;
+	}
+
 	public int getDamage(Senshi target) {
 		if (target.isSupporting()) return 0;
 
@@ -1586,7 +1595,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 				if (!hasFlag(Flag.HIDE_STATS)) {
 					card.drawCosts(g1);
-					if (!isSupporting()) {
+					if (!hasAttributes()) {
 						card.drawAttributes(g1, !desc.isBlank());
 					}
 				}

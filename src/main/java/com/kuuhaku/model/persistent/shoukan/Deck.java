@@ -702,7 +702,7 @@ public class Deck extends DAO<Deck> {
 				}
 
 				if (origin.synergy() == Race.DRAGON) {
-					base += 1000;
+					base += 4000;
 				}
 
 				int bHP = (int) Calc.clamp(base * 1.5 - base * 0.3 * reduction, 10, base);

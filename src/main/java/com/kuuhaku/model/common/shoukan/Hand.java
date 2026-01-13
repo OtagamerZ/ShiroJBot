@@ -213,15 +213,8 @@ public class Hand {
 				op.addKill();
 				getGame().trigger(Trigger.ON_CONFIRMED_KILL, s.getLastInteraction().asSource(Trigger.ON_CONFIRMED_KILL), s.asTarget());
 
-				if (op.getKills() % 4 == 0 && op.getOrigins().synergy() == Race.SHINIGAMI) {
-					for (Drawable<?> r : op.getDeck()) {
-						if (r instanceof EffectHolder<?> eh) {
-							MultMod mod = eh.getStats().getCost().get(getGame().getArena().DEFAULT_FIELD, MultMod.class);
-							eh.getStats().getCost().set(new MultMod(Math.max(mod.getValue() - 0.1, -0.5)));
-						}
-					}
-
-					getGame().getArena().getBanned().add(s);
+				if (op.getOrigins().synergy() == Race.SHINIGAMI) {
+					op.getCards().add(s.withCopy(c -> c.setEthereal(true)));
 				} else if (op.getOrigins().synergy() == Race.REAPER) {
 					op.getDiscard().add(d.copy());
 				}
@@ -319,12 +312,6 @@ public class Hand {
 		if (origin.major() == Race.UNDEAD) {
 			regdeg.add(base.hp() / 2);
 		}
-
-		if (origin.synergy() == Race.REBORN) {
-			for (int i = 0; i < 3; i++) {
-				deck.add(DAO.find(Evogear.class, "REBIRTH"));
-			}
-		}
 	}
 
 	public void loadCards() {
@@ -345,7 +332,8 @@ public class Hand {
 					.map(DeckEntry::card);
 		}
 
-		deck.addAll(toAdd.parallel().peek(d -> {
+		BondedList<Drawable<?>> stack = getMainStack();
+		stack.addAll(toAdd.parallel().peek(d -> {
 			if (d instanceof Senshi s && origin.synergy() == Race.ELDRITCH && !s.hasEffect()) {
 				s.getStats().setSource(Senshi.getRandom(game.getRng(), "WHERE effect IS NOT NULL", "AND mana = " + s.getBase().getMana()));
 			}
@@ -356,10 +344,10 @@ public class Hand {
 			Senshi hero = h.createSenshi();
 			hero.getStats().getPower().set(new MultMod(h.getAttributes().wis() * 0.05));
 
-			deck.add(hero);
+			stack.add(hero);
 		}
 
-		Utils.shuffle(deck, game.getRng());
+		Utils.shuffle(stack, game.getRng());
 	}
 
 	public String getUid() {
@@ -419,6 +407,10 @@ public class Hand {
 		return deck;
 	}
 
+	public BondedList<Drawable<?>> getMainStack() {
+		return origin.synergy() == Race.LICH ? graveyard : deck;
+	}
+
 	public BondedList<Drawable<?>> getDeck() {
 		if (getLockTime(Lock.DECK) > 0) {
 			return fakeDeck;
@@ -431,39 +423,11 @@ public class Hand {
 		return manualDraw(true);
 	}
 
-	public Drawable<?> manualDraw(boolean trigger) {
-		if (cards.stream().noneMatch(d -> d instanceof Senshi)) {
-			Senshi out = (Senshi) deck.removeFirst(d -> d instanceof Senshi);
-			if (out != null) {
-				try {
-					return addToHand(out, true);
-				} finally {
-					if (trigger) {
-						game.trigger(ON_DRAW_SINGLE, getSide());
-					}
-				}
-			}
-		}
-
-		Drawable<?> d = deck.removeFirst();
-		if (d != null) {
-			try {
-				return addToHand(d, true);
-			} finally {
-				if (trigger) {
-					game.trigger(ON_DRAW_SINGLE, getSide());
-				}
-			}
-		}
-
-		return null;
-	}
-
 	public List<Drawable<?>> manualDraw(int value) {
 		if (value <= 0) return List.of();
 
 		List<Drawable<?>> out = new ArrayList<>();
-		for (int i = 0; i < Math.min(value, deck.size()); i++) {
+		for (int i = 0; i < Math.min(value, getMainStack().size()); i++) {
 			Drawable<?> d = manualDraw(false);
 			if (d != null) {
 				out.add(d);
@@ -473,6 +437,33 @@ public class Hand {
 		data.put("last_drawn_batch", List.copyOf(out));
 		game.trigger(ON_DRAW_MULTIPLE, getSide());
 		return out;
+	}
+
+	public Drawable<?> manualDraw(boolean trigger) {
+		BondedList<Drawable<?>> stack = getMainStack();
+
+		Drawable<?> out;
+		if (origin.synergy() == Race.GEIST) {
+			out = stack.removeFirst(d -> !(d instanceof Senshi));
+		} else {
+			if (cards.stream().noneMatch(d -> d instanceof Senshi)) {
+				out = stack.removeFirst(d -> d instanceof Senshi);
+			} else {
+				out = stack.removeFirst();
+			}
+		}
+
+		if (out != null) {
+			try {
+				return addToHand(out, true);
+			} finally {
+				if (trigger) {
+					game.trigger(ON_DRAW_SINGLE, getSide());
+				}
+			}
+		}
+
+		return null;
 	}
 
 	public Drawable<?> draw() {
@@ -888,14 +879,11 @@ public class Hand {
 	}
 
 	public boolean consumeHP(int value) {
-		if (origin.synergy() == Race.LICH) return true;
-
 		return consumeHP(value, false);
 	}
 
 	public boolean consumeHP(int value, boolean force) {
-		if (origin.synergy() == Race.LICH) return true;
-		else if (!force && this.hp <= value) return false;
+		if (!force && this.hp <= value) return false;
 
 		int before = this.hp;
 		this.hp = Math.max(1, this.hp - Math.max(0, value));
@@ -969,8 +957,6 @@ public class Hand {
 	}
 
 	public boolean consumeMP(int value) {
-		if (origin.synergy() == Race.LICH) return true;
-
 		if (origin.major() == Race.DEMON) {
 			int val = (int) (value * (base.hp() * 0.08));
 			if (origin.isPure()) {
@@ -997,13 +983,6 @@ public class Hand {
 
 	public List<Drawable<?>> consumeSC(int value) {
 		List<Drawable<?>> consumed = new ArrayList<>();
-		if (origin.synergy() == Race.LICH) {
-			for (int i = discard.size() - 1; i >= 0 && consumed.size() < value; i--) {
-				consumed.add(discard.get(i));
-			}
-
-			return consumed;
-		}
 
 		for (int i = 0; i < value && !discard.isEmpty(); i++) {
 			Drawable<?> card = discard.removeLast();
