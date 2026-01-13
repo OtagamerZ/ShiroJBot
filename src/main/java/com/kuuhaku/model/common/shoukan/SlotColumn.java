@@ -62,7 +62,7 @@ public class SlotColumn {
 
 	public Senshi getTop() {
 		if (top != null) {
-			if (!equals(top.getSlot())) {
+			if (!equals(top.getSlot()) || top.hasFlag(Flag.DESTROY)) {
 				top = null;
 			} else if (isLocked()) {
 				setTop(null);
@@ -82,7 +82,7 @@ public class SlotColumn {
 
 	public Senshi getBottom() {
 		if (bottom != null) {
-			if (!equals(bottom.getSlot())) {
+			if (!equals(bottom.getSlot()) || bottom.hasFlag(Flag.DESTROY)) {
 				bottom = null;
 			} else if (isLocked()) {
 				setBottom(null);
