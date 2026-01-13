@@ -2118,9 +2118,9 @@ public class Shoukan extends GameInstance<Phase> {
 			ButtonizeHelper helper = getButtons();
 			AtomicBoolean registered = new AtomicBoolean();
 			if (buffer) {
-				getChannel().buffer(WordUtils.capitalize(getString(message, args)));
+				getChannel().buffer(WordUtils.capitalize(getString(message, args), ' '));
 			} else {
-				getChannel().sendMessage(WordUtils.capitalize(getString(message, args)))
+				getChannel().sendMessage(WordUtils.capitalize(getString(message, args), ' '))
 						.addFile(IO.getBytes(arena.getThumbnail(), "jpg"), "preview.jpg")
 						.apply(helper::apply)
 						.queue(m -> {
