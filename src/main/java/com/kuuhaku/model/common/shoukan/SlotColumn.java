@@ -108,6 +108,10 @@ public class SlotColumn {
 		placeCard(card, top == null, false);
 	}
 
+	public void setCard(Senshi card, boolean top) {
+		placeCard(card, top, true);
+	}
+
 	private void placeCard(Senshi card, boolean top, boolean replace) {
 		Senshi current = top ? this.top : this.bottom;
 		if (Objects.equals(card, current)) return;

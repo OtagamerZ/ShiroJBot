@@ -1595,7 +1595,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 				if (!hasFlag(Flag.HIDE_STATS)) {
 					card.drawCosts(g1);
-					if (!hasAttributes()) {
+					if (hasAttributes()) {
 						card.drawAttributes(g1, !desc.isBlank());
 					}
 				}

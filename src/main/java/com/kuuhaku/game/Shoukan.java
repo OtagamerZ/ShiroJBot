@@ -1832,10 +1832,26 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
-			if (h.getOrigins().synergy() == Race.REBORN && (getTurn() / 2 + 1) % 3 == 0) {
-				Evogear reb = DAO.find(Evogear.class, "REBIRTH");
-				reb.setEthereal(true);
-				h.getCards().add(reb);
+			if (trigger == ON_TURN_BEGIN) {
+				if (h.getOrigins().synergy() == Race.REBORN && (getTurn() / 2 + 1) % 3 == 0) {
+					Evogear reb = DAO.find(Evogear.class, "REBIRTH");
+					reb.setEthereal(true);
+					h.getCards().add(reb);
+				} else if (h.getOrigins().synergy() == Race.GEIST) {
+					for (int i = 0; i < 3; i++) {
+						boolean top = Calc.chance(50);
+						List<SlotColumn> slts = getOpenSlots(side, top);
+						if (slts.isEmpty()) {
+							slts = getOpenSlots(side, top = !top);
+							if (slts.isEmpty()) break;
+						}
+
+						Senshi card = (Senshi) h.getRealDeck().removeFirst(d -> d instanceof Senshi);
+						if (card != null) {
+							Utils.getRandomEntry(slts).setCard(card, top);
+						}
+					}
+				}
 			}
 		} finally {
 			if (trigger == ON_TICK) {

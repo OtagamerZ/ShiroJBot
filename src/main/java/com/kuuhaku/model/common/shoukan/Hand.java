@@ -214,7 +214,10 @@ public class Hand {
 				getGame().trigger(Trigger.ON_CONFIRMED_KILL, s.getLastInteraction().asSource(Trigger.ON_CONFIRMED_KILL), s.asTarget());
 
 				if (op.getOrigins().synergy() == Race.SHINIGAMI) {
-					op.getCards().add(s.withCopy(c -> c.setEthereal(true)));
+					op.getCards().add(s.withCopy(c -> {
+						c.setEthereal(true);
+						c.getStats().getCost().set(new MultMod(0.5));
+					}));
 				} else if (op.getOrigins().synergy() == Race.REAPER) {
 					op.getDiscard().add(d.copy());
 				}
