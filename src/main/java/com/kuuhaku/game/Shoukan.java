@@ -169,7 +169,8 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				}
 
-				if (h.getCards().parallelStream().filter(d -> d instanceof Field).count() >= 3) {
+				int fields = (int) h.getCards().parallelStream().filter(d -> d instanceof Field).count();
+				if (fields >= 3 && h.getCards().stream().anyMatch(d -> d instanceof Senshi)) {
 					h.getAccount().setDynValue("cartographer", true);
 				}
 			}
