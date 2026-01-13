@@ -19,7 +19,6 @@
 package com.kuuhaku.model.common;
 
 import com.kuuhaku.Constants;
-import org.apache.commons.collections4.list.TreeList;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
@@ -29,7 +28,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.random.RandomGenerator;
 
-public class BondedList<T> extends TreeList<T> {
+public class BondedList<T> extends ArrayList<T> {
 	private final BiFunction<T, ListIterator<T>, Boolean> condition;
 	private final Consumer<T> onAdd;
 	private final Consumer<T> onRemove;
