@@ -43,10 +43,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 @Command(
 		name = "shoukan",
 		category = Category.FUN
@@ -57,8 +53,6 @@ import java.util.concurrent.TimeUnit;
 })
 @Requires(Permission.MESSAGE_ATTACH_FILES)
 public class ShoukanCommand implements Executable {
-	private static final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
-
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		if (GameInstance.PLAYERS.containsKey(event.user().getId())) {
@@ -98,8 +92,6 @@ public class ShoukanCommand implements Executable {
 
 								m.delete().queue(null, Utils::doNothing);
 							});
-
-					updateTip(locale, skn, m);
 				} catch (GameReport e) {
 					switch (e.getCode()) {
 						case GameReport.NO_DECK -> {
@@ -141,17 +133,5 @@ public class ShoukanCommand implements Executable {
 
 	private String getRandomTip(I18N locale) {
 		return locale.get("str/loading_tip_" + Calc.rng(7));
-	}
-
-	private void updateTip(I18N locale, Shoukan skn, Message m) {
-		exec.schedule(() -> {
-			if (!skn.isInitialized()) {
-				m.editMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))).queue(null, Utils::doNothing);
-				updateTip(locale, skn, m);
-				return;
-			}
-
-			m.delete().queue(null, Utils::doNothing);
-		}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
 	}
 }
