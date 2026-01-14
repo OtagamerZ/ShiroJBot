@@ -175,7 +175,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 					rule = r;
 					mult = 0;
 				} else {
-					mult = Math.min(mult + 1, 4);
+					mult = Math.min(mult + 1, 10);
 				}
 			}
 		}
@@ -201,7 +201,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 					.queue(null, Utils::doNothing);
 
 			switch (rule.getAction()) {
-				case MUTE -> m.timeoutFor((long) (1 * Math.pow(2, mult)), TimeUnit.MINUTES)
+				case MUTE -> m.timeoutFor((long) Math.pow(2, mult), TimeUnit.MINUTES)
 						.reason(cause + " (x" + (mult + 1) + ")")
 						.queue(null, Utils::doNothing);
 				case KICK -> m.kick()
