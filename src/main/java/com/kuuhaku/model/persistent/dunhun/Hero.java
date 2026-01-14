@@ -30,6 +30,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
@@ -252,7 +253,7 @@ public class Hero extends Actor<Hero> {
 
 	public int getConsumableCount() {
 		return stats.getConsumables().values().stream()
-				.mapToInt(o -> (int) o)
+				.mapToInt(o -> Utils.fromNumber(Integer.class, (Number) o))
 				.sum();
 	}
 
