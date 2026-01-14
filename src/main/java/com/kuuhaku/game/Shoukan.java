@@ -478,7 +478,7 @@ public class Shoukan extends GameInstance<Phase> {
 					default -> CardState.ATTACK;
 				};
 
-				blindFail(curr, d, "str/place_card_fail", curr.getName(), d, state.toString(getLocale()));
+				blindFail(curr, d, "str/place_card_fail", state.toString(getLocale()));
 				return true;
 			}
 
@@ -896,7 +896,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (isInvalidAction(curr, d)) return false;
 		} else {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
-				blindFail(curr, d, "str/activate_card_fail", d);
+				blindFail(curr, d, "str/activate_card_fail", null);
 				return true;
 			}
 
@@ -1222,7 +1222,7 @@ public class Shoukan extends GameInstance<Phase> {
 		return false;
 	}
 
-	private void blindFail(Hand curr, Drawable<?> card, String message, Object... args) {
+	private void blindFail(Hand curr, Drawable<?> card, String message, String state) {
 		curr.getGraveyard().add(card);
 		curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
@@ -1230,7 +1230,7 @@ public class Shoukan extends GameInstance<Phase> {
 			curr.setSummoned(true);
 		}
 
-		reportEvent(message, true, false, curr.getName(), args);
+		reportEvent(message, true, false, curr.getName(), card, state);
 	}
 
 	public boolean attack(Senshi source, Senshi target, SendMode... mode) {
