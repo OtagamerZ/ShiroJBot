@@ -388,8 +388,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				if (deadEnd) {
 					if (getAreaType() == NodeType.BOSS) {
 						for (Hero h : heroes.values()) {
-							h.getCompletedDungeons().add(dungeon);
-							h.save();
+							h.apply(n -> n.getCompletedDungeons().add(dungeon));
 						}
 
 						finish("str/dungeon_end", getHeroNames());
@@ -410,15 +409,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private boolean defeat() {
 		Collection<Hero> hs = heroes.values();
 		for (Hero h : hs) {
-			double xpPrcnt = 0;
+			double xpPrcnt;
 			if (getAreaLevel() >= LEVEL_BRUTAL) {
 				xpPrcnt = 0.4;
 			} else if (getAreaLevel() >= LEVEL_HARD) {
 				xpPrcnt = 0.2;
+			} else {
+				xpPrcnt = 0;
 			}
 
-			h.getStats().loseXp((int) (h.getStats().getLosableXp() * xpPrcnt));
-			h.save();
+			h.apply(n -> n.getStats().loseXp((int) (n.getStats().getLosableXp() * xpPrcnt)));
 		}
 
 		DungeonRun run = map.getRun();

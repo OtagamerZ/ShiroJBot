@@ -265,21 +265,19 @@ public class Hero extends Actor<Hero> {
 		return stats.getConsumables().getInt(id.toUpperCase());
 	}
 
-	public void setConsumableCount(String id, int count) {
-		if (count <= 0) {
-			stats.getConsumables().remove(id.toUpperCase());
-		} else {
-			stats.getConsumables().put(id.toUpperCase(), count);
-		}
-	}
-
 	public void modConsumableCount(Consumable item, int amount) {
 		modConsumableCount(item.getId(), amount);
 	}
 
 	public void modConsumableCount(String id, int amount) {
-		int total = getConsumableCount(id) + amount;
-		setConsumableCount(id, total);
+		apply(h -> {
+			int total = h.getConsumableCount(id) + amount;
+			if (total <= 0) {
+				h.stats.getConsumables().remove(id.toUpperCase());
+			} else {
+				h.stats.getConsumables().put(id.toUpperCase(), total);
+			}
+		});
 	}
 
 	public Consumable getConsumable(String id) {

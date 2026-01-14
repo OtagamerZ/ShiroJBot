@@ -67,7 +67,7 @@ public class HeroConsumablesCommand implements Executable {
 				.setAuthor(locale.get("str/hero_consumables", h.getName(), cons.size(), h.getConsumableCapacity()));
 
 		List<Page> pages = Utils.generatePages(eb, cons, 10, 5,
-				c -> c.getName(locale),
+				c -> c.getName(locale) + " (`" + c.getId() + "`)",
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 		);
 

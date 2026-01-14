@@ -443,11 +443,12 @@ public class Combat implements Renderer<BufferedImage> {
 
 					addSelector(w.getMessage(), helper, con.getTargets(h),
 							t -> lock.complete(() -> {
+								int lastHistor = history.size();
 								if (con.execute(game, h, t)) {
 									h.consumeAp(1);
 									trigger(Trigger.ON_CONSUMABLE, h, t, con);
 
-									history.add(getLocale().get(t.equals(h) ? "str/used_self" : "str/used",
+									history.add(lastHistor, getLocale().get(t.equals(h) ? "str/used_self" : "str/used",
 											h.getName(), con.getName(getLocale()), t.getName())
 									);
 								}
