@@ -106,7 +106,9 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 
 	@Override
 	public boolean execute(Dunhun game, Actor<?> source, Actor<?> target) {
-		if (!(source instanceof Hero h) || stats.getEffect() == null) return false;
+		if (!(source instanceof Hero h) || h.getConsumableCount(this) <= 0 || stats.getEffect() == null) {
+			return false;
+		}
 
 		try {
 			Utils.exec(id, stats.getEffect(), Map.of(
