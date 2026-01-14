@@ -432,7 +432,7 @@ public class Combat implements Renderer<BufferedImage> {
 					addSelector(w.getMessage(), helper, con.getTargets(h),
 							t -> lock.complete(() -> {
 								if (con.execute(game, h, t)) {
-									h.consumeAp(con.getStats().getCost());
+									h.consumeAp(1);
 									trigger(Trigger.ON_CONSUMABLE, h, t, con);
 
 									history.add(getLocale().get(t.equals(h) ? "str/used_self" : "str/used",

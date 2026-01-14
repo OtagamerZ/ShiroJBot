@@ -36,6 +36,9 @@ public class SkillStats extends UsableStats {
 	@Column(name = "reservation", nullable = false)
 	private int reservation;
 
+	@Column(name = "cost", nullable = false)
+	private int cost;
+
 	@Column(name = "cooldown", nullable = false)
 	private int cooldown;
 
@@ -56,7 +59,7 @@ public class SkillStats extends UsableStats {
 	}
 
 	public SkillStats(int cost, int cooldown, double efficiency, double critical, boolean spell) {
-		super(cost);
+		this.cost = cost;
 		this.cooldown = cooldown;
 		this.efficiency = efficiency;
 		this.critical = critical;
@@ -65,6 +68,10 @@ public class SkillStats extends UsableStats {
 
 	public int getReservation() {
 		return reservation;
+	}
+
+	public int getCost() {
+		return cost;
 	}
 
 	public int getCooldown() {

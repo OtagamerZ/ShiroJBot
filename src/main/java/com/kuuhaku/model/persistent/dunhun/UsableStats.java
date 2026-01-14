@@ -42,9 +42,6 @@ import java.util.Map;
 @Embeddable
 @MappedSuperclass
 public class UsableStats implements Serializable, Cloneable {
-	@Column(name = "cost", nullable = false)
-	private int cost;
-
 	@JdbcTypeCode(SqlTypes.JSON)
 	@Column(name = "values", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
@@ -59,14 +56,6 @@ public class UsableStats implements Serializable, Cloneable {
 	private String effect;
 
 	public UsableStats() {
-	}
-
-	public UsableStats(int cost) {
-		this.cost = cost;
-	}
-
-	public int getCost() {
-		return cost;
 	}
 
 	public List<SkillValue> getValues() {
