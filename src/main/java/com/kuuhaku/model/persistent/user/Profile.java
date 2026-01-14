@@ -170,13 +170,13 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		int mult = 0;
 		int total = getWarnCount();
 		for (AutoRule r : guild.getSettings().getAutoRules()) {
-			if (r.getThreshold() <= total) {
-				if (r.getAction() != RuleAction.AGGRAVATE) {
-					rule = r;
-					mult = 0;
-				} else {
-					mult = Math.min(mult + 1, 10);
-				}
+			if (r.getThreshold() > total) break;
+
+			if (r.getAction() != RuleAction.AGGRAVATE) {
+				rule = r;
+				mult = 0;
+			} else {
+				mult = Math.min(mult + 1, 10);
 			}
 		}
 
