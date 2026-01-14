@@ -289,6 +289,7 @@ public class Hero extends Actor<Hero> {
 		return stats.getConsumables().entrySet().parallelStream()
 				.map(e -> DAO.find(Consumable.class, e.getKey()))
 				.filter(Objects::nonNull)
+				.flatMap(c -> Collections.nCopies(getConsumableCount(c), c).stream())
 				.collect(Collectors.toCollection(() -> new TreeBag<>(Comparator.comparing(Consumable::getId))));
 	}
 
