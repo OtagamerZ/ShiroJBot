@@ -101,7 +101,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				throw new GameReport(GameReport.NO_HERO, p);
 			}
 
-			if (h.getInventory().size() > h.getInventoryCapacity()) {
+			if (h.getInventory().size() > h.getInventoryCapacity() || h.getConsumableCount() > h.getConsumableCapacity()) {
 				throw new GameReport(GameReport.OVERBURDENED, h.getName());
 			} else if (h.getLevel() < dungeon.getAreaLevel()) {
 				throw new GameReport(GameReport.UNDERLEVELLED, h.getName());

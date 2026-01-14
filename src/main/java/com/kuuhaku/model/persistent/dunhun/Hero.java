@@ -251,7 +251,9 @@ public class Hero extends Actor<Hero> {
 	}
 
 	public int getConsumableCount() {
-		return stats.getConsumables().size();
+		return stats.getConsumables().values().stream()
+				.mapToInt(o -> (int) o)
+				.sum();
 	}
 
 	public int getConsumableCount(Consumable cons) {
