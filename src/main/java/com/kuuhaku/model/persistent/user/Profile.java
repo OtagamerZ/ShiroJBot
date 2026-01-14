@@ -204,14 +204,6 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 				case MUTE -> m.timeoutFor((long) (1 * Math.pow(2, mult)), TimeUnit.MINUTES)
 						.reason(cause + " (A" + (mult + 1) + ")")
 						.queue(null, Utils::doNothing);
-				case LOSE_XP -> {
-					long range = getXpToLevel(getLevel(), getLevel() + 1);
-					xp = (long) (xp - (range * (0.05 * Math.pow(2, mult))));
-				}
-				case DELEVEL -> {
-					long range = getXpToLevel((int) (getLevel() - Math.pow(2, mult)), getLevel());
-					xp = Math.max(0, xp - range);
-				}
 				case KICK -> m.kick()
 						.reason(cause + " (x" + (mult + 1) + ")")
 						.queue(null, Utils::doNothing);

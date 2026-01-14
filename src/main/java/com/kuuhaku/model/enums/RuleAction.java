@@ -19,5 +19,5 @@
 package com.kuuhaku.model.enums;
 
 public enum RuleAction {
-	MUTE, AGGRAVATE, LOSE_XP, DELEVEL, KICK, BAN
+	MUTE, AGGRAVATE, KICK, BAN
 }
