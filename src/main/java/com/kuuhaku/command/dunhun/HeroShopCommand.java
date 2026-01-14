@@ -43,7 +43,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
-import java.util.TreeSet;
 
 @Command(
 		name = "hero",
@@ -110,7 +109,7 @@ public class HeroShopCommand implements Executable {
 				event.channel().sendMessage(locale.get("error/unknown_consumable", sug)).queue();
 			}
 			return;
-		} else if (h.getConsumableCount().size() + amount > 10) {
+		} else if (h.getConsumableCount() + amount > 10) {
 			event.channel().sendMessage(locale.get("error/consumables_full")).queue();
 			return;
 		} else if (!acc.hasEnough(amount * item.getPrice(), Currency.CR)) {
