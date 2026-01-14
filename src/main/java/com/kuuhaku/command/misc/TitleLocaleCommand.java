@@ -32,7 +32,7 @@ import net.dv8tion.jda.api.JDA;
 @Command(
 		name = "title",
 		path = "locale",
-		category = Category.MODERATION
+		category = Category.MISC
 )
 @Syntax("<locale:word>")
 public class TitleLocaleCommand implements Executable {
