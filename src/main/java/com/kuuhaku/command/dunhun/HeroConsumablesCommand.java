@@ -33,9 +33,9 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import org.apache.commons.collections4.Bag;
 
 import java.util.List;
-import java.util.Set;
 
 @Command(
 		name = "hero",
@@ -57,7 +57,7 @@ public class HeroConsumablesCommand implements Executable {
 			return;
 		}
 
-		Set<Consumable> cons = h.getConsumables();
+		Bag<Consumable> cons = h.getConsumables();
 		if (cons.isEmpty()) {
 			event.channel().sendMessage(locale.get("error/consumables_empty_hero", h.getName())).queue();
 			return;

@@ -651,7 +651,7 @@ public class Combat implements Renderer<BufferedImage> {
 			comps.add(ActionRow.of(b.build()));
 		}
 
-		Set<Consumable> cons = h.getConsumables();
+		Set<Consumable> cons = h.getConsumables().uniqueSet();
 		if (!cons.isEmpty()) {
 			StringSelectMenu.Builder b = StringSelectMenu.create("consumables")
 					.setPlaceholder(getLocale().get("str/use_a_consumable"))

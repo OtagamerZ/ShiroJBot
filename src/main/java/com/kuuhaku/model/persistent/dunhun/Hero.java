@@ -33,6 +33,7 @@ import com.kuuhaku.util.Graph;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
+import org.apache.commons.collections4.bag.TreeBag;
 import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -284,11 +285,11 @@ public class Hero extends Actor<Hero> {
 		return DAO.find(Consumable.class, id.toUpperCase());
 	}
 
-	public TreeSet<Consumable> getConsumables() {
+	public TreeBag<Consumable> getConsumables() {
 		return stats.getConsumables().entrySet().parallelStream()
 				.map(e -> DAO.find(Consumable.class, e.getKey()))
 				.filter(Objects::nonNull)
-				.collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Consumable::getId))));
+				.collect(Collectors.toCollection(() -> new TreeBag<>(Comparator.comparing(Consumable::getId))));
 	}
 
 	@Override
