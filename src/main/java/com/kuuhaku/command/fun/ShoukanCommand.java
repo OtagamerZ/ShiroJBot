@@ -18,7 +18,6 @@
 
 package com.kuuhaku.command.fun;
 
-import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
 import com.github.ygimenez.model.ThrowingFunction;
 import com.kuuhaku.Constants;
@@ -35,12 +34,10 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Arcade;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 
 @Command(
@@ -79,8 +76,6 @@ public class ShoukanCommand implements Executable {
 		try {
 			Arcade arcade = args.getEnum(Arcade.class, "arcade");
 			ThrowingFunction<ButtonWrapper, Boolean> act = w -> {
-				Message m = Pages.subGet(event.channel().sendMessage(Constants.LOADING.apply(locale.get("str/loading_game", getRandomTip(locale)))));
-
 				try {
 					Shoukan skn = new Shoukan(locale, arcade, event.user(), other);
 					skn.start(event.guild(), event.channel())
@@ -109,7 +104,6 @@ public class ShoukanCommand implements Executable {
 					}
 				}
 
-				m.delete().queue(null, Utils::doNothing);
 				return true;
 			};
 
@@ -126,9 +120,5 @@ public class ShoukanCommand implements Executable {
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
 		}
-	}
-
-	private String getRandomTip(I18N locale) {
-		return locale.get("str/loading_tip_" + Calc.rng(7));
 	}
 }
