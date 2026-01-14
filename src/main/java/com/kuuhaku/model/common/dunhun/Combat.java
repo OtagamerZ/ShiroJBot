@@ -429,6 +429,17 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
+					List<JSONArray> wpnTags = h.getEquipment().getWeaponTags();
+					JSONArray req = con.getReqTags();
+					if (!req.isEmpty()) {
+						for (JSONArray tags : wpnTags) {
+							if (!tags.containsAll(req)) {
+								game.getChannel().sendMessage(getLocale().get("error/invalid_weapon")).queue();
+								return;
+							}
+						}
+					}
+
 					addSelector(w.getMessage(), helper, con.getTargets(h),
 							t -> lock.complete(() -> {
 								if (con.execute(game, h, t)) {
@@ -593,6 +604,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private void addDropdowns(Hero h, MessageRequest<?> ma) {
 		List<MessageTopLevelComponent> comps = new ArrayList<>(ma.getComponents());
+		List<JSONArray> wpnTags = h.getEquipment().getWeaponTags();
 
 		List<Skill> skills = h.getSkills();
 		if (!skills.isEmpty()) {
@@ -600,7 +612,6 @@ public class Combat implements Renderer<BufferedImage> {
 					.setPlaceholder(getLocale().get("str/use_a_skill"))
 					.setMaxValues(1);
 
-			List<JSONArray> wpnTags = h.getEquipment().getWeaponTags();
 			for (Skill s : skills) {
 				String extra = "";
 
@@ -646,8 +657,25 @@ public class Combat implements Renderer<BufferedImage> {
 					.setMaxValues(1);
 
 			for (Consumable c : cons) {
+				String extra = " (x" + c.getCount() + ")";
+
+				JSONArray req = c.getReqTags();
+				if (!req.isEmpty()) {
+					for (JSONArray tags : wpnTags) {
+						if (!tags.containsAll(req)) {
+							String reqTags = Utils.properlyJoin(getLocale(), req.stream()
+									.map(t -> LocalizedString.get(getLocale(), "tag/" + t, "???"))
+									.toList()
+							);
+
+							extra += " [" + getLocale().get("str/requires", reqTags) + "]";
+							break;
+						}
+					}
+				}
+
 				b.addOption(
-						c.getName(getLocale()) + " (x" + c.getCount() + ")",
+						c.getName(getLocale()) + extra,
 						c.getId(),
 						StringUtils.abbreviate(c.getDescription(getLocale()), 100)
 				);

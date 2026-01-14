@@ -27,13 +27,14 @@ import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedConsumable;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.*;
 
@@ -55,6 +56,11 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<LocalizedConsumable> infos = new HashSet<>();
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "req_tags", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray reqTags = new JSONArray();
 
 	@Column(name = "price")
 	private Integer price;
@@ -86,6 +92,10 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 				.map(ld -> ld.setUwu(locale.isUwu()))
 				.findAny()
 				.orElseGet(() -> new LocalizedConsumable(locale, id, id + ":" + locale, id + ":" + locale));
+	}
+
+	public JSONArray getReqTags() {
+		return reqTags;
 	}
 
 	public int getPrice() {
