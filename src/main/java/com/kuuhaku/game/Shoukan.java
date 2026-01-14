@@ -1347,149 +1347,136 @@ public class Shoukan extends GameInstance<Phase> {
 					if (!ignore) {
 						target.setFlipped(false);
 
-						if (!target.hasAttributes()) {
-							outcome = getString("str/combat_success", dmg, 0);
+						boolean dbl = op.getOrigins().synergy() == Race.CYBERBEAST && chance(20);
+						boolean unstop = source.hasFlag(Flag.UNSTOPPABLE, true);
+						boolean support = target.isSupporting();
 
-							for (Senshi s : target.getNearby()) {
+						int enemyStats = target.getActiveAttr(dbl);
+						if (source.hasFlag(Flag.IGNORE_EQUIP, true)) {
+							enemyStats = Math.max(0, enemyStats - target.getActiveEquips(dbl));
+						}
+
+						if (!unstop && dmg < enemyStats) {
+							outcome = getString("str/combat_defeat", dmg, enemyStats);
+							trigger(ON_SUICIDE, source.asSource(ON_SUICIDE));
+
+							for (Senshi s : source.getNearby()) {
 								s.awaken();
 							}
 
-							op.getGraveyard().add(target);
-
-							dmg = 0;
-							win = true;
-						} else {
-							boolean dbl = op.getOrigins().synergy() == Race.CYBERBEAST && chance(20);
-							boolean unstop = source.hasFlag(Flag.UNSTOPPABLE, true);
-							boolean support = target.isSupporting();
-
-							int enemyStats = target.getActiveAttr(dbl);
-							if (source.hasFlag(Flag.IGNORE_EQUIP, true)) {
-								enemyStats = Math.max(0, enemyStats - target.getActiveEquips(dbl));
-							}
-
-							if (!unstop && dmg < enemyStats) {
-								outcome = getString("str/combat_defeat", dmg, enemyStats);
-								trigger(ON_SUICIDE, source.asSource(ON_SUICIDE));
-
-								for (Senshi s : source.getNearby()) {
-									s.awaken();
+							if (md.contains(SendMode.REGULAR)) {
+								if (!source.hasFlag(Flag.NO_DAMAGE, true)) {
+									you.modHP((int) -((enemyStats - dmg) * dmgMult));
 								}
 
-								if (md.contains(SendMode.REGULAR)) {
-									if (!source.hasFlag(Flag.NO_DAMAGE, true)) {
-										you.modHP((int) -((enemyStats - dmg) * dmgMult));
+								you.getGraveyard().add(source);
+							}
+
+							dmg = 0;
+						} else {
+							int parry = target.getParry();
+							int dodge = target.getDodge();
+							boolean tParry, tDodge;
+
+							if (!source.hasFlag(Flag.TRUE_STRIKE, true)) {
+								if (source.isBlinded(true) && chance(50)) {
+									outcome = getString("str/combat_miss");
+									trigger(ON_MISS, source.asSource(ON_MISS));
+
+									dmg = 0;
+									hit = false;
+								} else if (!unstop && target.isAvailable() && ((tDodge = target.hasFlag(Flag.TRUE_PARRY, true)) || chance(parry))) {
+									outcome = getString("str/combat_parry", parry);
+									if (tDodge) {
+										outcome += " **(" + getString("flag/true_parry") + ")**";
+									}
+
+									trigger(NONE, source.asSource(), target.asTarget(ON_PARRY));
+									attack(target, source);
+									source.setAvailable(false);
+
+									dmg = 0;
+									hit = false;
+								} else if ((tParry = target.hasFlag(Flag.TRUE_DODGE, true)) || chance(dodge)) {
+									outcome = getString("str/combat_dodge", dodge);
+									if (tParry) {
+										outcome += " **(" + getString("flag/true_dodge") + ")**";
+									}
+
+									trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
+
+									dmg = 0;
+									hit = false;
+								}
+							}
+
+							if (hit) {
+								if (unstop || dmg > enemyStats) {
+									outcome = getString("str/combat_success", dmg, enemyStats);
+									if (unstop) {
+										outcome += " **(" + getString("flag/unstoppable") + ")**";
+									}
+
+									trigger(ON_HIT, source.asSource(ON_HIT), target.asTarget(ON_LOSE));
+
+									if (target.isDefending() || target.hasFlag(Flag.NO_DAMAGE, true)) {
+										dmg = 0;
+									} else {
+										dmg = Math.max(0, dmg - enemyStats);
+									}
+
+									for (Senshi s : target.getNearby()) {
+										s.awaken();
+									}
+
+									if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
+										int duration;
+										if (enemyStats == 0) {
+											duration = 5;
+										} else {
+											duration = Utils.clamp(dmg / enemyStats, 1, 5);
+										}
+
+										if (you.getOrigins().synergy() == Race.ELEMENTAL) {
+											int earth = (int) getCards(you.getSide()).parallelStream()
+													.filter(s -> s.getElement() == ElementType.EARTH)
+													.count();
+
+											if (earth >= 4) {
+												duration *= 2;
+											}
+										}
+
+										target.setStun(duration);
+										dmg = 0;
+									} else {
+										op.getGraveyard().add(target);
+									}
+
+									win = true;
+								} else {
+									outcome = getString("str/combat_clash", dmg, enemyStats);
+									trigger(ON_CLASH, source.asSource(ON_SUICIDE), target.asTarget(ON_LOSE));
+
+									for (Senshi s : target.getNearby()) {
+										s.awaken();
+									}
+
+									op.getGraveyard().add(target);
+
+									for (Senshi s : source.getNearby()) {
+										s.awaken();
 									}
 
 									you.getGraveyard().add(source);
-								}
 
-								dmg = 0;
-							} else {
-								int parry = target.getParry();
-								int dodge = target.getDodge();
-								boolean tParry, tDodge;
-
-								if (!source.hasFlag(Flag.TRUE_STRIKE, true)) {
-									if (source.isBlinded(true) && chance(50)) {
-										outcome = getString("str/combat_miss");
-										trigger(ON_MISS, source.asSource(ON_MISS));
-
-										dmg = 0;
-										hit = false;
-									} else if (!unstop && target.isAvailable() && ((tDodge = target.hasFlag(Flag.TRUE_PARRY, true)) || chance(parry))) {
-										outcome = getString("str/combat_parry", parry);
-										if (tDodge) {
-											outcome += " **(" + getString("flag/true_parry") + ")**";
-										}
-
-										trigger(NONE, source.asSource(), target.asTarget(ON_PARRY));
-										attack(target, source);
-										source.setAvailable(false);
-
-										dmg = 0;
-										hit = false;
-									} else if ((tParry = target.hasFlag(Flag.TRUE_DODGE, true)) || chance(dodge)) {
-										outcome = getString("str/combat_dodge", dodge);
-										if (tParry) {
-											outcome += " **(" + getString("flag/true_dodge") + ")**";
-										}
-
-										trigger(ON_MISS, source.asSource(ON_MISS), target.asTarget(ON_DODGE));
-
-										dmg = 0;
-										hit = false;
-									}
-								}
-
-								if (hit) {
-									if (unstop || dmg > enemyStats) {
-										outcome = getString("str/combat_success", dmg, enemyStats);
-										if (unstop) {
-											outcome += " **(" + getString("flag/unstoppable") + ")**";
-										}
-
-										trigger(ON_HIT, source.asSource(ON_HIT), target.asTarget(ON_LOSE));
-
-										if (target.isDefending() || target.hasFlag(Flag.NO_DAMAGE, true)) {
-											dmg = 0;
-										} else {
-											dmg = Math.max(0, dmg - enemyStats);
-										}
-
-										for (Senshi s : target.getNearby()) {
-											s.awaken();
-										}
-
-										if (source.isDefending() && !source.hasFlag(Flag.ALWAYS_ATTACK, true)) {
-											int duration;
-											if (enemyStats == 0) {
-												duration = 5;
-											} else {
-												duration = Utils.clamp(dmg / enemyStats, 1, 5);
-											}
-
-											if (you.getOrigins().synergy() == Race.ELEMENTAL) {
-												int earth = (int) getCards(you.getSide()).parallelStream()
-														.filter(s -> s.getElement() == ElementType.EARTH)
-														.count();
-
-												if (earth >= 4) {
-													duration *= 2;
-												}
-											}
-
-											target.setStun(duration);
-											dmg = 0;
-										} else {
-											op.getGraveyard().add(target);
-										}
-
-										win = true;
-									} else {
-										outcome = getString("str/combat_clash", dmg, enemyStats);
-										trigger(ON_CLASH, source.asSource(ON_SUICIDE), target.asTarget(ON_LOSE));
-
-										for (Senshi s : target.getNearby()) {
-											s.awaken();
-										}
-
-										op.getGraveyard().add(target);
-
-										for (Senshi s : source.getNearby()) {
-											s.awaken();
-										}
-
-										you.getGraveyard().add(source);
-
-										dmg = 0;
-									}
+									dmg = 0;
 								}
 							}
+						}
 
-							if (support) {
-								dmg = 0;
-							}
+						if (support) {
+							dmg = 0;
 						}
 					} else {
 						hit = false;
@@ -2078,13 +2065,9 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 
 					if (hand.getOrigins().synergy() == Race.GOLEM) {
-						while (hand.getMP() > 0) {
-							int miss = hand.getBase().hp() - hand.getHP();
-							if (miss <= 0) break;
-
-							hand.modHP(miss / 10);
-							hand.consumeMP(hand.getMP());
-						}
+						int miss = hand.getBase().hp() - hand.getHP();
+						hand.modMP((int) (miss * (1 - Math.pow(0.9, hand.getMP()))));
+						hand.consumeMP(hand.getMP());
 					}
 
 					if (def == null && hand.getHP() > 0) {
