@@ -300,7 +300,7 @@ public class HeroInspectCommand implements Executable {
 					w -> {
 						try {
 							if (!acc.consumeItem(item)) {
-								w.getChannel().sendMessage(locale.get("error/item_not_enough")).queue();
+								w.getChannel().sendMessage(locale.get("error/insufficient_item")).queue();
 								return;
 							}
 

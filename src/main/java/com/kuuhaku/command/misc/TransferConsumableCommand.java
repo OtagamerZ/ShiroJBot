@@ -26,8 +26,10 @@ import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.persistent.dunhun.Consumable;
+import com.kuuhaku.model.persistent.dunhun.Hero;
+import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -36,17 +38,14 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
 
-import java.util.List;
-import java.util.Map;
-
 @Command(
 		name = "transfer",
-		path = "item",
-		category = Category.MISC
+		path = "consumable",
+		category = Category.STAFF
 )
-@Syntax("<user:user:r> <item:word:r> <amount:number>")
+@Syntax("<user:user:r> <consumable:word:r> <amount:number>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class TransferItemCommand implements Executable {
+public class TransferConsumableCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		User target = event.users(0);
@@ -58,51 +57,56 @@ public class TransferItemCommand implements Executable {
 			return;
 		}
 
-		Account acc = data.profile().getAccount();
-		Map<UserItem, Integer> items = acc.getItems();
-		if (items.isEmpty()) {
-			event.channel().sendMessage(locale.get("error/empty_inventory")).queue();
+		Deck d = data.profile().getAccount().getDeck();
+		if (d == null) {
+			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
 			return;
 		}
 
-		UserItem item = items.keySet().parallelStream()
-				.filter(i -> i.getId().equals(args.getString("item").toUpperCase()))
-				.findAny().orElse(null);
-
-		int qtd = args.getInt("amount", 1);
-		if (qtd < 1) {
-			event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
+		Deck tgt = DAO.find(Account.class, target.getId()).getDeck();
+		if (tgt == null) {
+			event.channel().sendMessage(locale.get("error/no_deck_target", target.getAsMention(), data.config().getPrefix())).queue();
 			return;
 		}
 
-		if (item == null) {
-			List<String> names = items.keySet().stream().map(UserItem::getId).toList();
+		Hero from = d.getHero(locale);
+		if (from == null) {
+			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
+			return;
+		}
 
-			String sug = Utils.didYouMean(args.getString("item").toUpperCase(), names);
-			event.channel().sendMessage(locale.get("error/item_not_found", sug)).queue();
+		Hero to = tgt.getHero(locale);
+		if (to == null) {
+			event.channel().sendMessage(locale.get("error/no_hero_target", target.getAsMention(), data.config().getPrefix())).queue();
 			return;
-		} else if (!items.containsKey(item)) {
-			event.channel().sendMessage(locale.get("error/item_not_have")).queue();
+		} else if (to.getInventory().size() > to.getInventoryCapacity()) {
+			event.channel().sendMessage(locale.get("error/overburdened", to.getName())).queue();
 			return;
-		} else if (item.isAccountBound()) {
-			event.channel().sendMessage(locale.get("error/item_account_bound")).queue();
+		}
+
+		Consumable cons = DAO.find(Consumable.class, args.getString("consumable").toUpperCase());
+		if (cons == null) {
+			event.channel().sendMessage(locale.get("error/invalid_consumable")).queue();
 			return;
-		} else if (acc.getItemCount(item.getId()) < qtd) {
-			event.channel().sendMessage(locale.get("error/insufficient_item")).queue();
+		}
+
+		int amount = args.getInt("amount", 1);
+		int owned = from.getConsumableCount(args.getString("consumable"));
+		if (amount <= 0) {
+			event.channel().sendMessage(locale.get("error/invalid_value_low", 0)).queue();
+			return;
+		} else if (owned < amount) {
+			event.channel().sendMessage(locale.get("error/consumable_not_found")).queue();
 			return;
 		}
 
 		try {
-			Utils.confirm(locale.get("question/transfer", item.getInfo(locale).getName(), target.getName()), event.channel(), w -> {
-						if (acc.hasChanged()) {
-							event.channel().sendMessage(locale.get("error/account_state_changed")).queue();
-							return true;
-						}
+			Utils.confirm(locale.get("question/transfer", cons.getName(locale), target.getName()), event.channel(), w -> {
+						from.modConsumableCount(cons, -amount);
+						from.save();
 
-						acc.addItem(item, -qtd);
-
-						Account tgt = DAO.find(Account.class, target.getId());
-						tgt.addItem(item, qtd);
+						to.modConsumableCount(cons, amount);
+						to.save();
 
 						event.channel().sendMessage(locale.get("success/transfer")).queue();
 						return true;
