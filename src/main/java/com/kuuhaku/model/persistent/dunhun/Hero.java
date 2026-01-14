@@ -215,6 +215,10 @@ public class Hero extends Actor<Hero> {
 		return 50;
 	}
 
+	public int getConsumableCapacity() {
+		return 10;
+	}
+
 	public List<Gear> getInventory() {
 		List<Integer> ids = DAO.queryAllNative(Integer.class, """
 				SELECT g.id
