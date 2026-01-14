@@ -22,31 +22,19 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
-import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
-import com.kuuhaku.model.records.dunhun.SkillValue;
 import com.kuuhaku.util.Utils;
-import com.ygimenez.json.JSONArray;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.MappedSuperclass;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Embeddable
 @MappedSuperclass
 public class UsableStats implements Serializable, Cloneable {
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "values", nullable = false, columnDefinition = "JSONB")
-	@Convert(converter = JSONArrayConverter.class)
-	private JSONArray values = new JSONArray();
-
 	@Language("Groovy")
 	@Column(name = "targeter", columnDefinition = "TEXT")
 	private String targeter;
@@ -56,15 +44,6 @@ public class UsableStats implements Serializable, Cloneable {
 	private String effect;
 
 	public UsableStats() {
-	}
-
-	public List<SkillValue> getValues() {
-		List<SkillValue> out = new ArrayList<>();
-		for (Object e : values) {
-			out.add(SkillValue.parse(String.valueOf(e)));
-		}
-
-		return out;
 	}
 
 	public List<Actor<?>> getTargets(Usable usable, Actor<?> source) {
@@ -86,10 +65,7 @@ public class UsableStats implements Serializable, Cloneable {
 
 	public UsableStats copy() {
 		try {
-			UsableStats clone = (UsableStats) clone();
-			clone.values = values.clone();
-
-			return clone;
+			return (UsableStats) clone();
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
