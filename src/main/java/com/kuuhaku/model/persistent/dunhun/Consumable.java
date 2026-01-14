@@ -68,8 +68,6 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 	@Column(name = "weight", nullable = false)
 	private int weight;
 
-	private transient int count;
-
 	public String getId() {
 		return id;
 	}
@@ -102,31 +100,19 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 		return price;
 	}
 
-	public int getCount() {
-		return count;
-	}
-
-	public void add(int amount) {
-		count += amount;
-	}
-
-	public void consume(int amount) {
-		count = Math.max(0, count - amount);
-	}
-
 	public List<Actor<?>> getTargets(Actor<?> source) {
 		return stats.getTargets(this, source);
 	}
 
 	@Override
 	public boolean execute(Dunhun game, Actor<?> source, Actor<?> target) {
-		if (count <= 0 || stats.getEffect() == null) return false;
+		if (!(source instanceof Hero h) || stats.getEffect() == null) return false;
 
 		try {
 			Utils.exec(id, stats.getEffect(), Map.of(
 					"ctx", new SkillContext(source, target, this)
 			));
-			count--;
+			h.modConsumableCount(this, -1);
 
 			return true;
 		} catch (ActivationException e) {

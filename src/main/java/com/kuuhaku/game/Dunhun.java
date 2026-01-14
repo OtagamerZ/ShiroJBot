@@ -856,14 +856,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 				}, Utils::doNothing);
 
-		for (Hero h : heroes.values()) {
-			h.apply(n -> {
-				for (Consumable c : h.getConsumables()) {
-					n.setConsumableCount(c.getId(), c.getCount());
-				}
-			});
-		}
-
 		close(code);
 	}
 

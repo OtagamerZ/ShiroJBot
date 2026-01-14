@@ -4,7 +4,6 @@ import com.github.ygimenez.listener.EventHandler;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.dunhun.Usable;
@@ -416,7 +415,7 @@ public class Combat implements Renderer<BufferedImage> {
 				});
 			}
 
-			if (!h.getConsumables().isEmpty()) {
+			if (h.getConsumableCount() > 0) {
 				helper.addAction(Utils.parseEmoji("🫙"), w -> {
 					EventHandler handle = Pages.getHandler();
 					List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("consumables");
@@ -425,7 +424,7 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					Consumable con = DAO.find(Consumable.class, String.valueOf(selected.getFirst()));
+					Consumable con = h.getConsumable(String.valueOf(selected.getFirst()));
 					if (con == null) {
 						game.getChannel().sendMessage(getLocale().get("error/invalid_consumable")).queue();
 						return;
@@ -659,7 +658,7 @@ public class Combat implements Renderer<BufferedImage> {
 					.setMaxValues(1);
 
 			for (Consumable c : cons) {
-				String extra = " (x" + c.getCount() + ")";
+				String extra = " (x" + h.getConsumableCount(c) + ")";
 
 				JSONArray req = c.getReqTags();
 				if (!req.isEmpty()) {

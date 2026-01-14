@@ -245,6 +245,14 @@ public class Hero extends Actor<Hero> {
 				.toList();
 	}
 
+	public int getConsumableCount() {
+		return stats.getConsumables().size();
+	}
+
+	public int getConsumableCount(Consumable cons) {
+		return getConsumableCount(cons.getId());
+	}
+
 	public int getConsumableCount(String id) {
 		return stats.getConsumables().getInt(id.toUpperCase());
 	}
@@ -266,16 +274,15 @@ public class Hero extends Actor<Hero> {
 		setConsumableCount(id, total);
 	}
 
+	public Consumable getConsumable(String id) {
+		if (getConsumableCount(id) <= 0) return null;
+
+		return DAO.find(Consumable.class, id.toUpperCase());
+	}
+
 	public TreeSet<Consumable> getConsumables() {
 		return stats.getConsumables().entrySet().parallelStream()
-				.map(e -> {
-					Consumable item = DAO.find(Consumable.class, e.getKey());
-					if (item != null) {
-						item.add(((Number) e.getValue()).intValue());
-					}
-
-					return item;
-				})
+				.map(e -> DAO.find(Consumable.class, e.getKey()))
 				.filter(Objects::nonNull)
 				.collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Consumable::getId))));
 	}
