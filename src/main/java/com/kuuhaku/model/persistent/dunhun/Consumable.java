@@ -120,7 +120,8 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 
 			return true;
 		} catch (ActivationException e) {
-			game.getChannel().sendMessage(game.getString(e.getMessage())).queue();
+			String msg = game.getLocale().get("icon/error") + " | " + game.getString(e.getMessage());
+			game.getChannel().sendMessage(msg).queue();
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to execute consumable {}", id, e);
 		}
