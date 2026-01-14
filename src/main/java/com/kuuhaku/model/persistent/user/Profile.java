@@ -202,7 +202,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 
 			switch (rule.getAction()) {
 				case MUTE -> m.timeoutFor((long) (1 * Math.pow(2, mult)), TimeUnit.MINUTES)
-						.reason(cause + " (A" + (mult + 1) + ")")
+						.reason(cause + " (x" + (mult + 1) + ")")
 						.queue(null, Utils::doNothing);
 				case KICK -> m.kick()
 						.reason(cause + " (x" + (mult + 1) + ")")
