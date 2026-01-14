@@ -76,7 +76,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
 	private final AtomicReference<Pair<Message, ButtonizeHelper>> message = new AtomicReference<>();
-	private final Loot loot = new Loot();
+	private final Loot loot;
 	private final AreaMap map;
 	private final boolean duel;
 
@@ -89,6 +89,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	public Dunhun(I18N locale, Dungeon dungeon, String... players) {
 		super(locale, players);
 		this.dungeon = dungeon;
+		this.loot = new Loot(locale);
 		this.duel = dungeon.equals(Dungeon.DUEL);
 		if (duel && players.length % 2 != 0) {
 			throw new GameReport(GameReport.INVALID_DUEL);

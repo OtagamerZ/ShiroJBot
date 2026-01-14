@@ -142,15 +142,15 @@ public class MonsterStats implements Serializable {
 	}
 
 	public Loot generateLoot(MonsterBase<?> self) {
-		Loot loot = new Loot();
-		if (!(self instanceof MonsterBase<?> m) || m.isMinion() || lootGenerator == null) return loot;
+		Loot loot = new Loot(self.getBinding().getLocale());
+		if (self.isMinion() || lootGenerator == null) return loot;
 
 		try {
 			Utils.exec(getClass().getSimpleName(), lootGenerator, Map.of(
 					"ctx", new LootContext(self, loot, getLootMultiplier(self))
 			));
 		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to generate loot for {}", m.getName(I18N.EN), e);
+			Constants.LOGGER.warn("Failed to generate loot for {}", self.getName(I18N.EN), e);
 		}
 
 		return loot;

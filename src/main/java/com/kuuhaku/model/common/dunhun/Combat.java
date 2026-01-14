@@ -89,7 +89,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final List<String> history = new ArrayList<>();
 	private final RandomList<Actor<?>> rngList = new RandomList<>();
 	private final Set<EffectBase> effects = new HashSet<>();
-	private final Loot loot = new Loot();
+	private final Loot loot;
 
 	private CompletableFuture<Runnable> lock;
 	private boolean done;
@@ -98,6 +98,7 @@ public class Combat implements Renderer<BufferedImage> {
 	public Combat(Dunhun game, Node node, Actor<?>... enemies) {
 		this.game = game;
 		this.node = node;
+		this.loot = new Loot(game.getLocale());
 
 		hunters.addAll(game.getHeroes().values());
 		keepers.addAll(Stream.of(enemies)
@@ -116,6 +117,7 @@ public class Combat implements Renderer<BufferedImage> {
 	public Combat(Dunhun game, Node node, Collection<Hero> duelists) {
 		this.game = game;
 		this.node = node;
+		this.loot = new Loot(game.getLocale());
 
 		List<Hero> sides = List.copyOf(duelists);
 		List<Actor<?>> team = hunters;
