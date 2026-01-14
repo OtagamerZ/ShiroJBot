@@ -1460,7 +1460,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean hasAttributes() {
-		return !isSupporting() || getHand().getOrigins().synergy() != Race.SENTINEL;
+		return !isSupporting() || getHand().getOrigins().synergy() == Race.SENTINEL;
 	}
 
 	public int getDamage(Senshi target) {
