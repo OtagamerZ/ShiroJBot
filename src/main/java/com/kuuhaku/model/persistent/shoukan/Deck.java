@@ -522,7 +522,7 @@ public class Deck extends DAO<Deck> {
 				g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
 				g1.setColor(Graph.mix(Arrays.stream(ori.minor()).map(Race::getColor).toArray(Color[]::new)));
 
-				String text = locale.get("str/deck_origin_mixed");
+				String text = locale.get("str/deck_origin_pure", ori.major().getName(locale));
 				if (ori.isPure(Race.MIXED)) {
 					g1.drawImage(ori.major().getBadge(), 0, 0, 150, 150, null);
 					Graph.drawOutlinedString(g1, text, 175, (150 + 75) / 2, 2, Color.BLACK);
