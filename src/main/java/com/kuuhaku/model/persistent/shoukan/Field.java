@@ -406,7 +406,7 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 		Graphics2D g2d = out.createGraphics();
 		g2d.setRenderingHints(Constants.HD_HINTS);
 
-		Deck deck = originalHand.getUserDeck();
+		Deck deck = Utils.getOr(originalHand, hand).getUserDeck();
 		Graph.applyTransformed(g2d, 15, 15, g1 -> {
 			if (isFlipped()) {
 				g1.drawImage(deck.getFrame().getBack(deck), 0, 0, null);
