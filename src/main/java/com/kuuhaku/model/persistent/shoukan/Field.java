@@ -99,7 +99,7 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 	private final transient CachedScriptManager cachedEffect = new CachedScriptManager();
 	private transient CardExtra stats = new CardExtra();
 	private transient StashedCard stashRef = null;
-	private transient BondedList<?> currentStack;
+	private transient BondedList<? extends Drawable<?>> currentStack;
 	private transient Trigger currentTrigger = null;
 
 	@Transient
@@ -386,12 +386,12 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 	}
 
 	@Override
-	public BondedList<?> getCurrentStack() {
+	public BondedList<? extends Drawable<?>> getCurrentStack() {
 		return currentStack;
 	}
 
 	@Override
-	public void setCurrentStack(BondedList<?> stack) {
+	public void setCurrentStack(BondedList<? extends Drawable<?>> stack) {
 		currentStack = stack;
 	}
 

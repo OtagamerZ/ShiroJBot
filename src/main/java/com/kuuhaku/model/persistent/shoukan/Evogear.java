@@ -106,7 +106,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private transient Hand hand = null;
 	private final transient CachedScriptManager cachedEffect = new CachedScriptManager();
 	private transient StashedCard stashRef = null;
-	private transient BondedList<?> currentStack;
+	private transient BondedList<? extends Drawable<?>> currentStack;
 	private transient Trigger currentTrigger = null;
 
 	@Transient
@@ -647,18 +647,12 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public BondedList<?> getCurrentStack() {
+	public BondedList<? extends Drawable<?>> getCurrentStack() {
 		return currentStack;
 	}
 
 	@Override
-	public void setCurrentStack(BondedList<?> stack) {
-		if (getTags().contains("STRATAGEM") && getGame().getArcade() != Arcade.CARDMASTER) {
-			executeAssert(ON_INITIALIZE);
-			getGame().getChannel().buffer(getGame().getString("str/stratagem_use", this));
-			return;
-		}
-
+	public void setCurrentStack(BondedList<? extends Drawable<?>> stack) {
 		currentStack = stack;
 	}
 

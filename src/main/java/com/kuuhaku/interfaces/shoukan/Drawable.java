@@ -208,9 +208,9 @@ public interface Drawable<T extends Drawable<T>> {
 
 	void setStashRef(StashedCard sc);
 
-	BondedList<?> getCurrentStack();
+	BondedList<? extends Drawable<?>> getCurrentStack();
 
-	void setCurrentStack(BondedList<?> stack);
+	void setCurrentStack(BondedList<? extends Drawable<?>> stack);
 
 	default boolean checkRemoval(Hand h, boolean allowEth, BondedList<Drawable<?>> stack) {
 		return (!allowEth && isEthereal())

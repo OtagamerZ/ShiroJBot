@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.common.shoukan;
 
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.Proxy;
 import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -47,12 +48,12 @@ public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 	}
 
 	@Override
-	public BondedList<?> getCurrentStack() {
+	public BondedList<? extends Drawable<?>> getCurrentStack() {
 		return original.getCurrentStack();
 	}
 
 	@Override
-	public void setCurrentStack(BondedList<?> stack) {
+	public void setCurrentStack(BondedList<? extends Drawable<?>> stack) {
 		original.setCurrentStack(stack);
 	}
 

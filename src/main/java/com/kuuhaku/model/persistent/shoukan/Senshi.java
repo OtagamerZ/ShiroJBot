@@ -43,6 +43,7 @@ import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
+import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.hibernate.annotations.Cache;
@@ -96,6 +97,23 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (getEquipments(false).contains(e)) return false;
 		else if (isSupporting()) return false;
 
+		if (getHand().getOrigins().synergy() == Race.SLIME) {
+			getStats().getAtk().set(new FlatMod(e.getDmg()));
+			getStats().getDfs().set(new FlatMod(e.getDfs()));
+			getStats().getDodge().set(new FlatMod(e.getDodge()));
+			getStats().getParry().set(new FlatMod(e.getParry()));
+
+			JSONArray ja = getStats().getData().getJSONArray("absorbed_equips", new JSONArray());
+			ja.add(e.getId());
+			getStats().getData().put("absorbed_equips", ja);
+
+			List<? extends Drawable<?>> stack = e.getCurrentStack();
+			if (stack != null) {
+				stack.remove(e);
+			}
+			return false;
+		}
+
 		e.setEquipper(this);
 		e.setHand(getHand());
 		e.executeAssert(ON_INITIALIZE);
@@ -126,14 +144,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}));
 		}
 
-		if (getHand().getOrigins().synergy() == Race.SLIME) {
-			getStats().getAtk().set(new FlatMod(e.getDmg()));
-			getStats().getDfs().set(new FlatMod(e.getDfs()));
-			getStats().getDodge().set(new FlatMod(e.getDodge()));
-			getStats().getParry().set(new FlatMod(e.getParry()));
-			return false;
-		}
-
 		return true;
 	}, e -> {
 		e.setCurrentStack(getEquipments(false));
@@ -153,7 +163,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient TargetType targetType = TargetType.NONE;
 	private transient ElementType element = null;
 	private transient StashedCard stashRef = null;
-	private transient BondedList<?> currentStack;
+	private transient BondedList<? extends Drawable<?>> currentStack;
 	private transient Trigger currentTrigger = null;
 	private transient int hueOffset = 0;
 
@@ -317,6 +327,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isEquipped(String id) {
+		if (getHand().getOrigins().synergy() == Race.SLIME) {
+			JSONArray equips = getStats().getData().getJSONArray("absorbed_equips");
+			if (equips != null && equips.contains(id)) return true;
+		}
+
 		return equipments.stream().anyMatch(e -> e.getCard().getId().equals(id));
 	}
 
@@ -1534,12 +1549,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public BondedList<?> getCurrentStack() {
+	public BondedList<? extends Drawable<?>> getCurrentStack() {
 		return currentStack;
 	}
 
 	@Override
-	public void setCurrentStack(BondedList<?> stack) {
+	public void setCurrentStack(BondedList<? extends Drawable<?>> stack) {
 		currentStack = stack;
 	}
 

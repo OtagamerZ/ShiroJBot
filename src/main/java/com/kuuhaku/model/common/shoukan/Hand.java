@@ -65,8 +65,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.kuuhaku.model.enums.shoukan.Trigger.ON_DRAW_MULTIPLE;
-import static com.kuuhaku.model.enums.shoukan.Trigger.ON_DRAW_SINGLE;
+import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 public class Hand {
 	private final long SERIAL = ThreadLocalRandom.current().nextLong();
@@ -213,6 +212,10 @@ public class Hand {
 				op.addKill();
 				getGame().trigger(Trigger.ON_CONFIRMED_KILL, s.getLastInteraction().asSource(Trigger.ON_CONFIRMED_KILL), s.asTarget());
 
+				if (op.getOrigins().hasMinor(Race.UNDEAD)) {
+					modHP((s.getDmg() + s.getDfs()) / 10);
+				}
+
 				if (op.getOrigins().synergy() == Race.SHINIGAMI) {
 					op.getCards().add(s.withCopy(c -> {
 						c.setEthereal(true);
@@ -351,6 +354,18 @@ public class Hand {
 		}
 
 		Utils.shuffle(stack, game.getRng());
+		if (getGame().getArcade() != Arcade.CARDMASTER) {
+			List<Evogear> strats = stack.stream()
+					.filter(d -> d instanceof Evogear e && e.getTags().contains("STRATAGEM"))
+					.map(d -> (Evogear) d)
+					.toList();
+
+			stack.removeAll(strats);
+			for (Evogear e : strats) {
+				e.executeAssert(ON_INITIALIZE);
+				getGame().getChannel().buffer(getGame().getString("str/stratagem_use", this));
+			}
+		}
 	}
 
 	public String getUid() {
@@ -835,16 +850,9 @@ public class Hand {
 
 			value = (value < 0 ? stats.getDamageMult() : stats.getHealMult()).apply(value);
 
-			Hand op = getOther();
-			if (value < 0) {
-				if (op.getOrigins().hasMinor(Race.UNDEAD)) {
-					value -= op.getGraveyard().parallelStream().mapToInt(d -> (d.getDmg() + d.getDfs()) / 50).sum();
-				}
-
-				if (origin.major() == Race.UNDEAD) {
-					regdeg.add(value);
-					value = 0;
-				}
+			if (value < 0 && origin.major() == Race.UNDEAD) {
+				regdeg.add(value);
+				value = 0;
 			}
 		}
 
