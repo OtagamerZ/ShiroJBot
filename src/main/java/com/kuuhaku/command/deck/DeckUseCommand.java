@@ -62,7 +62,7 @@ public class DeckUseCommand implements Executable {
 					.setTitle(locale.get("str/decks"));
 
 			AtomicInteger idx = new AtomicInteger();
-			List<Page> pages = Utils.generatePages(eb, acc.getDecks(), 10, 2,
+			List<Page> pages = Utils.generatePages(eb, acc.getDecks(), 9, 3,
 					deck -> new FieldMimic(
 							(deck.isCurrent() ? "✅ " : "") + "`" + idx.getAndIncrement() + " | " + deck.getName() + "`",
 							deck.toString(locale)
